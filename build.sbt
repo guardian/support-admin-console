@@ -21,8 +21,8 @@ publishArtifact in(Compile, packageDoc) := false
 enablePlugins(PlayScala, RiffRaffArtifact, JDebPackaging, SystemdPlugin)
 
 riffRaffPackageType := (packageBin in Debian).value
-riffRaffManifestProjectName := "support:support-admin-console"
-riffRaffPackageName := "support-admin-console"
+riffRaffManifestProjectName := "support:admin-console"
+riffRaffPackageName := "admin-console"
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
 riffRaffArtifactResources += (file("cloudformation.yaml"), "cfn/cfn.yaml")

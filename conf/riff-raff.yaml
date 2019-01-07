@@ -3,14 +3,14 @@ regions: [eu-west-1]
 deployments:
   cfn:
     type: cloud-formation
-    app: support-admin-console
+    app: admin-console
     parameters:
       templatePath: cfn.yaml
       amiTags:
         Recipe: xenial-membership
         AmigoStage: PROD
       amiEncrypted: true
-  support-admin-console:
+  admin-console:
     type: autoscaling
     dependencies: [cfn]
     parameters:
