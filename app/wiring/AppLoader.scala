@@ -19,7 +19,7 @@ class AppLoader extends ApplicationLoader with StrictLogging {
       val loadedConfig = ConfigurationLoader.load(identity) {
         case AwsIdentity(app, stack, stage, _) => SSMConfigurationLocation(s"/$app/$stage")
         case DevIdentity(app) =>
-          FileConfigurationLocation(new File(s"/etc/gu/$app.private.conf"))  //assume conf is available locally
+          FileConfigurationLocation(new File(s"/etc/gu/support-admin-console.private.conf"))  //assume conf is available locally
       }
 
       context.copy(initialConfiguration = context.initialConfiguration ++ Configuration(loadedConfig))
