@@ -15,7 +15,7 @@ class AppLoader extends ApplicationLoader with StrictLogging {
     new LogbackLoggerConfigurator().configure(context.environment)
 
     val newContext = {
-      val identity = AppIdentity.whoAmI(defaultAppName = "support-admin-console")
+      val identity = AppIdentity.whoAmI(defaultAppName = "admin-console")
       val loadedConfig = ConfigurationLoader.load(identity) {
         case AwsIdentity(app, stack, stage, _) => SSMConfigurationLocation(s"/$app/$stage")
         case DevIdentity(app) =>
