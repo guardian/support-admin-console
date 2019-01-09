@@ -100,8 +100,15 @@ Resources:
           Statement:
           - Effect: Allow
             Action:
-            - autoscaling:DescribeAutoScalingInstances
-            - autoscaling:DescribeAutoScalingGroups
+              - autoscaling:DescribeAutoScalingInstances
+              - autoscaling:DescribeAutoScalingGroups
+            Resource: "*"
+      - PolicyName: DescribeTags
+        PolicyDocument:
+          Version: 2012-10-17
+          Statement:
+          - Effect: Allow
+            Action: ec2:DescribeTags
             Resource: "*"
 
   InstanceProfile:
