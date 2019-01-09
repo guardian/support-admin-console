@@ -10,7 +10,7 @@ resolvers += "Guardian Platform Bintray" at "https://dl.bintray.com/guardian/pla
 libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2",
   "com.gu" %% "play-googleauth" % "0.7.7",
-  "com.gu" %% "simple-configuration-s3" % "1.4.1",
+  "com.gu" %% "simple-configuration-ssm" % "1.4.1",
   ws
 )
 

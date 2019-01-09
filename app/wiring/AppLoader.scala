@@ -7,7 +7,7 @@ import play.api.ApplicationLoader.Context
 import play.api._
 import play.api.libs.logback.LogbackLoggerConfigurator
 import com.gu.{AppIdentity, AwsIdentity, DevIdentity}
-import com.gu.conf.{ConfigurationLoader, FileConfigurationLocation, S3ConfigurationLocation}
+import com.gu.conf.{ConfigurationLoader, FileConfigurationLocation, SSMConfigurationLocation}
 
 class AppLoader extends ApplicationLoader with StrictLogging {
 
@@ -17,7 +17,7 @@ class AppLoader extends ApplicationLoader with StrictLogging {
     val newContext = {
       val identity = AppIdentity.whoAmI(defaultAppName = "support-admin-console")
       val loadedConfig = ConfigurationLoader.load(identity) {
-        case identity: AwsIdentity => S3ConfigurationLocation("membership-private", s"${identity.stage}/${identity.app}.private.conf")
+        case AwsIdentity(app, stack, stage, _) => SSMConfigurationLocation(s"/$app/$stage")
         case DevIdentity(app) =>
           FileConfigurationLocation(new File(s"/etc/gu/$app.private.conf"))  //assume conf is available locally
       }

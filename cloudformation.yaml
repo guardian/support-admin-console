@@ -80,19 +80,28 @@ Resources:
           Action:
           - sts:AssumeRole
       Policies:
-      - PolicyName: PrivateBucket
+      - PolicyName: ConfigLoad
         PolicyDocument:
           Version: 2012-10-17
           Statement:
           - Effect: Allow
-            Action: s3:GetObject
-            Resource: !Sub arn:aws:s3:::membership-private/${Stage}/support-admin-console.private.conf
+            Action: ssm:GetParametersByPath
+            Resource: !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${App}/${Stage}
       - PolicyName: SettingsBucket
         PolicyDocument:
           Version: 2012-10-17
           Statement:
           - Effect: Allow
             Action: s3:*
+            Resource: !Sub arn:aws:s3:::support-admin-console/${Stage}/*
+      - PolicyName: DescribeAutoScaling
+        PolicyDocument:
+          Version: 2012-10-17
+          Statement:
+          - Effect: Allow
+            Action:
+            - autoscaling:DescribeAutoScalingInstances
+            - autoscaling:DescribeAutoScalingGroups
             Resource: !Sub arn:aws:s3:::support-admin-console/${Stage}/*
 
   InstanceProfile:
