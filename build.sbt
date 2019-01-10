@@ -5,6 +5,7 @@ version := "1.0-SNAPSHOT"
 
 scalaVersion := "2.12.8"
 
+//Bintray for simple-configuration dependency
 resolvers += "Guardian Platform Bintray" at "https://dl.bintray.com/guardian/platforms"
 
 libraryDependencies ++= Seq(
