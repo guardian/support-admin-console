@@ -1,6 +1,13 @@
 <html>
-    <head><title></title></head>
+    <head>
+        <script src="@routes.Assets.at("build/elm.js")"></script>
+    </head>
     <body>
-        hello
+        <div id="elm-app">
+            Not an elm app
+        </div>
+        <script>
+            Elm.Main.init({ node: document.getElementById('elm-app') });
+        </script>
     </body>
 </html>

@@ -1,7 +1,7 @@
 # ----- System ----- #
 
 GET /healthcheck                                    controllers.Application.healthcheck
-GET /index                                          controllers.Application.index
+GET /                                               controllers.Application.index
 
 # ----- Authentication ----- #
 
@@ -9,3 +9,6 @@ GET  /login                                         controllers.Login.login
 GET  /loginAction                                   controllers.Login.loginAction
 GET  /oauth2callback                                controllers.Login.oauth2Callback
 GET  /logout                                        controllers.Login.logout
+
+# Map static resources from the /public folder to the /assets URL path
+GET  /assets/*file                                  controllers.Assets.at(path="/public", file)
