@@ -36,7 +36,7 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    div []
+    div [ Html.Attributes.class "elm-app"]
         [
           h1 [] [ text "This is an elm app!" ]
         ]
