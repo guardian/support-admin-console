@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "elm": "0.19.0",
+    "chokidar-cli": "1.2.1"
+  },
+  "scripts": {
+    "build": "elm make public/src/Main.elm --output public/build/elm.js",
+    "watch": "chokidar 'public/src/*.elm' -c 'elm make public/src/Main.elm --output public/build/elm.js'"
+  }
+}
