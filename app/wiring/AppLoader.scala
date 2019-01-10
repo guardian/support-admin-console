@@ -25,6 +25,13 @@ class AppLoader extends ApplicationLoader with StrictLogging {
       context.copy(initialConfiguration = context.initialConfiguration ++ Configuration(loadedConfig))
     }
 
-    new AppComponents(newContext).application
+    try {
+      new AppComponents(newContext).application
+    } catch {
+      case err: Throwable => {
+        logger.error("Could not start application", err)
+        throw err
+      }
+    }
   }
 }
