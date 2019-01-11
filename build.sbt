@@ -12,6 +12,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2",
   "com.gu" %% "play-googleauth" % "0.7.7",
   "com.gu" %% "simple-configuration-ssm" % "1.4.1",
+  "com.amazonaws" % "aws-java-sdk-s3" % "1.11.480",
   ws
 )
 

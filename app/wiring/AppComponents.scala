@@ -9,7 +9,7 @@ import play.api.mvc.AnyContent
 import play.api.{BuiltInComponentsFromContext, NoHttpFiltersComponents}
 import router.Routes
 
-class AppComponents(context: Context) extends BuiltInComponentsFromContext(context) with AhcWSComponents with NoHttpFiltersComponents with AssetsComponents {
+class AppComponents(context: Context, stage: String) extends BuiltInComponentsFromContext(context) with AhcWSComponents with NoHttpFiltersComponents with AssetsComponents {
 
   private val authConfig = {
     val clientId = configuration.get[String]("googleAuth.clientId")
@@ -27,6 +27,7 @@ class AppComponents(context: Context) extends BuiltInComponentsFromContext(conte
     httpErrorHandler,
     new Application(authAction, controllerComponents),
     new Login(authConfig, wsClient, controllerComponents),
-    assets
+    assets,
+    new SupportFrontend(authAction, controllerComponents, stage)
   )
 }

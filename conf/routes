@@ -10,5 +10,9 @@ GET  /loginAction                                   controllers.Login.loginActio
 GET  /oauth2callback                                controllers.Login.oauth2Callback
 GET  /logout                                        controllers.Login.logout
 
+# ----- support-frontend switches ----- #
+GET  /support-frontend/switches                     controllers.SupportFrontend.getSwitches
+PUT  /support-frontend/switches                     controllers.SupportFrontend.putSwitches
+
 # Map static resources from the /public folder to the /assets URL path
 GET  /assets/*file                                  controllers.Assets.at(path="/public", file)
