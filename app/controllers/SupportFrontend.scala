@@ -22,7 +22,7 @@ class SupportFrontend(authAction: AuthAction[AnyContent], components: Controller
   def setSwitches = authAction.async { request =>
     request.body.asText.map { body: String =>
       S3.put(bucket, switchesKey, body).map {
-        case Right(_) => Ok()
+        case Right(_) => Ok("")
         case Left(error) => InternalServerError(error)
       }
     } getOrElse Future.successful(BadRequest(""))

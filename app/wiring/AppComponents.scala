@@ -27,7 +27,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     httpErrorHandler,
     new Application(authAction, controllerComponents),
     new Login(authConfig, wsClient, controllerComponents),
-    assets,
-    new SupportFrontend(authAction, controllerComponents, stage)
+    new SupportFrontend(authAction, controllerComponents, stage),
+    assets
   )
 }
