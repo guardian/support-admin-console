@@ -1,0 +1,14 @@
+@(form: Form[VersionedSwitches])(implicit messages: Messages)
+
+<html>
+    <head>
+        <script src="@routes.Assets.at("build/elm.js")"></script>
+        <link rel="stylesheet" type="text/css" href="@routes.Assets.at("style.css")"/>
+    </head>
+    <body>
+        <h1>support-frontend switches</h1>
+        @helper.form(action = routes.SupportFrontend.setSwitches()) {
+            @helper.inputText(form("version"))
+        }
+    </body>
+</html>

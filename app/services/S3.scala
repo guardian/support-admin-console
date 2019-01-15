@@ -6,6 +6,8 @@ import com.typesafe.scalalogging.StrictLogging
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
+case class VersionedS3Data(value: String, version: String)
+
 object S3 extends StrictLogging {
   private val s3Client: AmazonS3 = AmazonS3ClientBuilder
     .standard()
@@ -13,20 +15,37 @@ object S3 extends StrictLogging {
     .withCredentials(Aws.credentialsProvider)
     .build()
 
-  def get(bucket: String, key: String)(implicit ec: ExecutionContext): Future[String] = Future {
-    val stream = s3Client.getObject(bucket, key).getObjectContent
+  def get(bucket: String, key: String)(implicit ec: ExecutionContext): Future[Either[String,VersionedS3Data]] = Future {
+    try {
+      val s3Object = s3Client.getObject(bucket, key)
 
-    val result = scala.io.Source.fromInputStream(stream).mkString
+      val version = s3Object.getObjectMetadata.getVersionId
+      println(s"version: $version")
 
-    stream.close()
+      val stream = s3Object.getObjectContent
+      val result = scala.io.Source.fromInputStream(stream).mkString
+      stream.close()
 
-    result
+      Right[String,VersionedS3Data](VersionedS3Data(result, version))
+
+    } catch {
+      case NonFatal(e) =>
+        logger.error(s"Error reading $bucket/$key from S3: ${e.getMessage}", e)
+        Left(s"Error reading from S3: ${e.getMessage}")
+    }
   }
 
-  def put(bucket: String, key: String, value: String)(implicit ec: ExecutionContext): Future[Either[String,Unit]] = Future {
+  def put(bucket: String, key: String, data: VersionedS3Data)(implicit ec: ExecutionContext): Future[Either[String,Unit]] = Future {
     try {
-      s3Client.putObject(bucket, key, value)
-      Right[String,Unit]{ () }
+      val currentVersion = s3Client.getObject(bucket, key).getObjectMetadata.getVersionId
+
+      if (currentVersion == data.version) {
+        s3Client.putObject(bucket, key, data.value)
+        Right[String, Unit] { () }
+      } else {
+        Left(s"Cannot update S3 object $bucket/$key because latest version does not match")
+      }
+
     } catch {
       case NonFatal(e) =>
         logger.error(s"Error writing $bucket/$key to S3: ${e.getMessage}", e)
