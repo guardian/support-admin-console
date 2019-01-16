@@ -32,7 +32,8 @@ case class PaymentMethodsSwitch(stripe: SwitchState, payPal: SwitchState, direct
 case class SupportFrontendSwitches(
   oneOffPaymentMethods: PaymentMethodsSwitch,
   recurringPaymentMethods: PaymentMethodsSwitch,
-  experiments: Set[ExperimentSwitch],
+  //TODO - make this a Set and add custom serializer for s3? Or change the file
+  experiments: Map[String, ExperimentSwitch],
   optimize: SwitchState
 )
 
@@ -56,6 +57,8 @@ object SupportFrontendSwitches {
       Map(key -> s)
     }
   }
+
+  def mapMapping[A](mapping: Mapping[A]): Mapping[Map[String,A]] = RepeatedMapping(mapping).transform(_.toMap, _.toList)
 
   val paymentMethodsSwitchMapping = mapping(
     "stripe" -> of[SwitchState],

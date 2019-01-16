@@ -16,21 +16,21 @@ import play.api.i18n.Lang
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class VersionedSwitches(switches: SupportFrontendSettings, version: String)
+case class VersionedSettings(settings: SupportFrontendSettings, version: String)
 
-case object VersionedSwitches {
-  def fromS3(s3Data: VersionedS3Data): Either[io.circe.Error, VersionedSwitches] = {
+case object VersionedSettings {
+  def fromS3(s3Data: VersionedS3Data): Either[io.circe.Error, VersionedSettings] = {
     println(s3Data.value)
 
-    decode[SupportFrontendSettings](s3Data.value).map { switches =>
-      VersionedSwitches(switches, s3Data.version)
+    decode[SupportFrontendSettings](s3Data.value).map { settings =>
+      VersionedSettings(settings, s3Data.version)
     }
   }
 
-  def toS3(versionedSwitches: VersionedSwitches): VersionedS3Data =
-    VersionedS3Data(versionedSwitches.asJson.spaces2, versionedSwitches.version)
+  def toS3(versionedSettings: VersionedSettings): VersionedS3Data =
+    VersionedS3Data(versionedSettings.settings.asJson.spaces2, versionedSettings.version)
 
-  val form: Form[VersionedSwitches] = Form(
+  val form: Form[VersionedSettings] = Form(
     mapping(
       "switches" -> SupportFrontendSwitches.supportFrontendSettingsMapping,
       "version" -> text
@@ -39,7 +39,7 @@ case object VersionedSwitches {
 }
 
 class SupportFrontend(authAction: AuthAction[AnyContent], components: ControllerComponents, stage: String)(implicit ec: ExecutionContext)
-  extends AbstractController(components) {
+  extends AbstractController(components) with Circe {
 
   private val bucket = "support-frontend-admin-console"
   private val switchesKey = s"$stage/settings.json"
@@ -49,10 +49,9 @@ class SupportFrontend(authAction: AuthAction[AnyContent], components: Controller
   def getSwitches = authAction.async {
     S3.get(bucket, switchesKey).map {
       case Right(s3Data) =>
-        VersionedSwitches.fromS3(s3Data) match {
-          case Right(switches) =>
-            val form = VersionedSwitches.form.fill(switches)
-            Ok(views.html.switches(form))
+        VersionedSettings.fromS3(s3Data) match {
+          case Right(settings) =>
+            Ok(views.html.switches(settings))
 
           case Left(e) =>
             println(s"Error: $e")
@@ -63,18 +62,13 @@ class SupportFrontend(authAction: AuthAction[AnyContent], components: Controller
   }
 
 
-  def setSwitches = authAction.async { implicit request =>
-    VersionedSwitches.form.bindFromRequest.fold(
-      formWithErrors => {
-        println(s"Errors: ${formWithErrors.errors}")
-        Future.successful(BadRequest("error!"))
-      },
-      versionedSwitches => {
-        S3.put(bucket, switchesKey, VersionedSwitches.toS3(versionedSwitches)).map {
-          case Right(_) => Ok("")
-          case Left(error) => InternalServerError(error)
-        }
-      }
-    )
+  def setSwitches = authAction.async { request =>
+    println(s"body: ${request.body.asFormUrlEncoded}")
+    request.body.asFormUrlEncoded.map(f => f)
+    Future.successful(Ok(""))
+//    S3.put(bucket, switchesKey, VersionedSettings.toS3(request.body)).map {
+//      case Right(_) => Ok("")
+//      case Left(error) => InternalServerError(error)
+//    }
   }
 }

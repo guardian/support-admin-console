@@ -1,14 +1,52 @@
-@(form: Form[VersionedSwitches])(implicit messages: Messages)
+@(versionedSwitches: VersionedSettings)
+
+@paymentMethods(paymentMethodsSwitch: PaymentMethodsSwitch, name: String) = {
+    <div class="paymentMethodsSwitch">
+        @name
+        <label>
+            <input
+                name="@name-stripe"
+                type="checkbox"
+                @{ if (paymentMethodsSwitch.stripe == On) "checked" } >
+            Stripe
+        </label>
+
+        <label>
+            <input
+            type="checkbox"
+                @{ if (paymentMethodsSwitch.payPal == On) "checked" } >
+            Paypal
+        </label>
+
+        @paymentMethodsSwitch.directDebit.map { directDebit =>
+            <label>
+                <input
+                type="checkbox"
+                    @{ if (directDebit == On) "checked" } >
+                Direct debit
+            </label>
+        }
+    </div>
+}
 
 <html>
     <head>
-        <script src="@routes.Assets.at("build/elm.js")"></script>
         <link rel="stylesheet" type="text/css" href="@routes.Assets.at("style.css")"/>
     </head>
     <body>
         <h1>support-frontend switches</h1>
         @helper.form(action = routes.SupportFrontend.setSwitches()) {
-            @helper.inputText(form("version"))
+            <div id="oneOffPaymentMethods">
+                @{paymentMethods(versionedSwitches.settings.switches.oneOffPaymentMethods, "One Off")}
+            </div>
+
+            <div id="recurringPaymentMethods">
+                @{paymentMethods(versionedSwitches.settings.switches.recurringPaymentMethods, "Recurring")}
+            </div>
+
+            <input name="version" disabled="disabled" value="@{versionedSwitches.version}"/>
+
+            <input type="submit" value="Submit">
         }
     </body>
 </html>

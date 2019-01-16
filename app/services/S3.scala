@@ -40,7 +40,9 @@ object S3 extends StrictLogging {
       val currentVersion = s3Client.getObject(bucket, key).getObjectMetadata.getVersionId
 
       if (currentVersion == data.version) {
-        s3Client.putObject(bucket, key, data.value)
+        println(s"I would be sending:")
+        println(data)
+        //s3Client.putObject(bucket, key, data.value)
         Right[String, Unit] { () }
       } else {
         Left(s"Cannot update S3 object $bucket/$key because latest version does not match")
