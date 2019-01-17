@@ -9,7 +9,6 @@ import Http
 import Json.Decode exposing (decodeString)
 
 import SupportConfig exposing (..)
-import Utils exposing (..)
 
 
 ---- MODEL ----
@@ -20,6 +19,7 @@ type Model =
     SupportConfig SupportConfigWithVersion
 
 ---- UPDATE ----
+
 
 type Msg = GotSupportConfig (Result Http.Error String)
     | LinkClicked Browser.UrlRequest
@@ -70,26 +70,6 @@ index = { title = "Support Admin Console"
         ]
     }
 
-switchInput : String -> String -> Switch -> Html Msg
-switchInput frequency method switch =
-    input [
-        Attr.type_ "text",
-        Attr.name (frequency ++ "_" ++ method),
-        Attr.value (switchToString switch)
-    ][]
-
-paymentMethodSwitchesDiv : PaymentMethodSwitches -> String -> Html Msg
-paymentMethodSwitchesDiv switches frequency =
-    div [] (
-        prependMaybeToList
-            (Maybe.map (switchInput frequency "directDebit") switches.directDebit)
-            [
-                div [] [ text (frequency ++ ":") ],
-                switchInput frequency "stripe" switches.stripe,
-                switchInput frequency "payPal" switches.payPal
-            ]
-    )
-
 supportPage : Maybe SupportConfigWithVersion -> Browser.Document Msg
 supportPage maybeSupportConfig =
     { title = "Switches"
@@ -101,17 +81,12 @@ supportPage maybeSupportConfig =
                     Just supportConfig ->
                         div [] [
                             text (Debug.toString supportConfig),
-
                             form [] [
-                                div [] [
-                                    div [] [ text "One-off payment methods:" ],
-                                    paymentMethodSwitchesDiv supportConfig.value.switches.oneOffPaymentMethods "oneoff"
-                                ],
                                 input [
                                     Attr.type_ "text",
                                     Attr.name "version",
                                     Attr.value supportConfig.version,
-                                    Attr.disabled True
+                                    Attr.disabled
                                 ]
                                 []
                             ]

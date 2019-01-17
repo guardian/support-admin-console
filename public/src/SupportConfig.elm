@@ -7,11 +7,6 @@ import Json.Decode.Pipeline
 ----- Support config models -----
 
 type Switch = On | Off
-switchToString : Switch -> String
-switchToString switch =
-    case switch of
-        On -> "On"
-        Off -> "Off"
 
 type alias PaymentMethodSwitches = {
        stripe: Switch,
@@ -32,7 +27,6 @@ type alias SupportConfigWithVersion = {
         version: String,
         value: SupportConfig
     }
-
 
 ----- Decoders -----
 
