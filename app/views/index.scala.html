@@ -1,14 +1,11 @@
+<!DOCTYPE html>
 <html>
-    <head>
-        <script src="@routes.Assets.at("build/elm.js")"></script>
-        <link rel="stylesheet" type="text/css" href="@routes.Assets.at("style.css")"/>
-    </head>
-    <body>
-        <div id="elm-app">
-            Not an elm app
-        </div>
-        <script>
-            Elm.Main.init({ node: document.getElementById('elm-app') });
-        </script>
-    </body>
+  <head>
+    <title>Support Admin Console</title>
+    <link rel="stylesheet" type="text/css" href="@routes.Assets.at("style.css")"/>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="@routes.Assets.at("build/app.bundle.js")"></script>
+</body>
 </html>
