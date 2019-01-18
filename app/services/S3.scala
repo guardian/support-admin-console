@@ -2,23 +2,34 @@ package services
 
 import com.amazonaws.services.s3.{AmazonS3, AmazonS3ClientBuilder}
 import com.typesafe.scalalogging.StrictLogging
-import io.circe.{Decoder, Encoder}
+import io.circe.{Decoder, Encoder, Json, Printer}
 import io.circe.parser.decode
 import io.circe.syntax._
+import services.S3Client.RawVersionedS3Data
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
 case class VersionedS3Data[T](value: T, version: String)
 
-object S3 extends StrictLogging {
+trait S3Client {
+  def get(bucket: String, key: String)(implicit ec: ExecutionContext): Future[Either[String,RawVersionedS3Data]]
+  def put(bucket: String, key: String, data: RawVersionedS3Data)(implicit ec: ExecutionContext): Future[Either[String,RawVersionedS3Data]]
+}
+
+object S3Client {
+  type RawVersionedS3Data = VersionedS3Data[String]
+}
+
+object S3 extends S3Client with StrictLogging {
+
   private val s3Client: AmazonS3 = AmazonS3ClientBuilder
     .standard()
     .withRegion(Aws.region)
     .withCredentials(Aws.credentialsProvider)
     .build()
 
-  def getFromJson[T : Decoder](bucket: String, key: String)(implicit ec: ExecutionContext): Future[Either[String,VersionedS3Data[T]]] = Future {
+  def get(bucket: String, key: String)(implicit ec: ExecutionContext): Future[Either[String,VersionedS3Data[String]]] = Future {
     try {
       val s3Object = s3Client.getObject(bucket, key)
 
@@ -28,12 +39,7 @@ object S3 extends StrictLogging {
       val raw: String = scala.io.Source.fromInputStream(stream).mkString
       stream.close()
 
-      decode[T](raw) match {
-        case Right(value) => Right(VersionedS3Data(value, version))
-        case Left(error) =>
-          logger.error(s"Error decoding json from S3 ($bucket/$key): ${error.getMessage}", error)
-          Left(s"Error decoding json from S3 ($bucket/$key): ${error.getMessage}")
-      }
+      Right[String,VersionedS3Data[String]](VersionedS3Data(raw, version))
 
     } catch {
       case NonFatal(e) =>
@@ -42,13 +48,13 @@ object S3 extends StrictLogging {
     }
   }
 
-  def putAsJson[T: Encoder](bucket: String, key: String, data: VersionedS3Data[T])(implicit ec: ExecutionContext): Future[Either[String,Unit]] = Future {
+  def put(bucket: String, key: String, data: VersionedS3Data[String])(implicit ec: ExecutionContext): Future[Either[String,RawVersionedS3Data]] = Future {
     try {
       val currentVersion = s3Client.getObject(bucket, key).getObjectMetadata.getVersionId
 
       if (currentVersion == data.version) {
-        s3Client.putObject(bucket, key, data.value.asJson.spaces2)
-        Right[String, Unit] { () }
+        s3Client.putObject(bucket, key, data.value)
+        Right[String, RawVersionedS3Data](data)
       } else {
         logger.warn(s"Cannot update S3 object $bucket/$key because provided version (${data.version}) does not match latest version ($currentVersion)")
         Left(s"Cannot update S3 object $bucket/$key because latest version does not match")
@@ -60,4 +66,29 @@ object S3 extends StrictLogging {
         Left(s"Error writing to S3: ${e.getMessage}")
     }
   }
+}
+
+object S3Json extends StrictLogging {
+
+  private val printer = Printer.spaces2.copy(dropNullValues = true)
+  def noNulls(json: Json): String = printer.pretty(json)
+
+  def getFromJson[T : Decoder](bucket: String, key: String)(s3: S3Client)(implicit ec: ExecutionContext): Future[Either[String,VersionedS3Data[T]]] =
+    s3.get(bucket, key).map { result: Either[String, RawVersionedS3Data] =>
+      result.flatMap { raw =>
+        decode[T](raw.value) match {
+          case Right(decoded) => Right(raw.copy(value = decoded))
+          case Left(error) =>
+            logger.error(s"Error decoding json from S3 ($bucket/$key): ${error.getMessage}", error)
+            Left(s"Error decoding json from S3 ($bucket/$key): ${error.getMessage}")
+        }
+      }
+    }
+
+  def putAsJson[T: Encoder](bucket: String, key: String, data: VersionedS3Data[T])(s3: S3Client)(implicit ec: ExecutionContext): Future[Either[String,RawVersionedS3Data]] =
+    s3.put(
+      bucket,
+      key,
+      data.copy(value = noNulls(data.value.asJson))
+    )
 }
