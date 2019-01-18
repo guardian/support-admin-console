@@ -2,7 +2,6 @@
 
 GET /healthcheck                                    controllers.Application.healthcheck
 GET /                                               controllers.Application.index
-GET /
 
 # ----- Authentication ----- #
 
@@ -12,7 +11,7 @@ GET  /oauth2callback                                controllers.Login.oauth2Call
 GET  /logout                                        controllers.Login.logout
 
 # ----- support-frontend switches ----- #
-GET  /support-frontend/switches                     controllers.SupportFrontend.getSwitches
+GET   /support-frontend/switches                    controllers.SupportFrontend.getSwitches
 POST  /support-frontend/switches/update             controllers.SupportFrontend.setSwitches
 
 # Map static resources from the /public folder to the /assets URL path
