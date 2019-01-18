@@ -1,10 +1,23 @@
 {
+  "devDependencies": {
+    "@types/material-ui": "^0.21.5",
+    "@types/react-dom": "^16.0.11",
+    "@types/react-router-dom": "^4.3.1",
+    "ts-loader": "^5.2.2",
+    "tsconfig-paths-webpack-plugin": "^3.2.0",
+    "typescript": "^3.1.3",
+    "webpack": "^4.5.0",
+    "webpack-cli": "^3.1.1",
+    "webpack-dev-server": "^3.1.3"
+  },
   "dependencies": {
-    "elm": "0.19.0",
-    "chokidar-cli": "1.2.1"
+    "@material-ui/core": "^3.9.0",
+    "@material-ui/icons": "^3.0.2",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
+    "react-router-dom": "^4.3.1"
   },
   "scripts": {
-    "build": "elm make public/src/Main.elm --output public/build/elm.js",
-    "watch": "chokidar 'public/src/*.elm' -c 'elm make public/src/Main.elm --output public/build/elm.js'"
+    "build": "webpack --config webpack.config.js"
   }
 }
