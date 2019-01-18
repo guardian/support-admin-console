@@ -8,11 +8,20 @@ scalaVersion := "2.12.8"
 //Bintray for simple-configuration dependency
 resolvers += "Guardian Platform Bintray" at "https://dl.bintray.com/guardian/platforms"
 
+val circeVersion = "0.10.0"
+
 libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2",
   "com.gu" %% "play-googleauth" % "0.7.7",
   "com.gu" %% "simple-configuration-ssm" % "1.4.1",
-  ws
+  "com.amazonaws" % "aws-java-sdk-s3" % "1.11.480",
+  "io.circe" %% "circe-core" % circeVersion,
+  "io.circe" %% "circe-generic" % circeVersion,
+  "io.circe" %% "circe-parser" % circeVersion,
+  "com.dripower" %% "play-circe" % "2610.0",
+  ws,
+  "org.scalatest" %% "scalatest" % "3.0.5" % "test",
+  "org.gnieh" %% "diffson-circe" % "3.1.0" % "test",
 )
 
 sources in(Compile, doc) := Seq.empty
