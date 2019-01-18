@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { Switchboard } from './components/switchboard';
 
 
 const Index = () => <h2>Home</h2>;
-const Switches = () => <h2>Switches</h2>;
 const ContributionTypes = () => <h2>Contribution Types</h2>;
 const Amounts = () => <h2>Amounts</h2>;
 
@@ -18,21 +18,21 @@ const AppRouter = () => (
             <Link to="/">Home</Link>
           </li>
           <li>
-            <Link to="/switches/">Switches</Link>
+            <Link to="/switches">Switches</Link>
           </li>
           <li>
-            <Link to="/contribution-types/">Contribution Types</Link>
+            <Link to="/contribution-types">Contribution Types</Link>
           </li>
           <li>
-            <Link to="/amounts/">Amounts</Link>
+            <Link to="/amounts">Amounts</Link>
           </li>
         </ul>
       </nav>
 
       <Route path="/" exact component={Index} />
-      <Route path="/switches/" component={Switches} />
-      <Route path="/contribution-types/" component={ContributionTypes} />
-      <Route path="/amounts/" component={Amounts} />
+      <Route path="/switches" component={Switchboard} />
+      <Route path="/contribution-types" component={ContributionTypes} />
+      <Route path="/amounts" component={Amounts} />
     </div>
   </Router>
 );
