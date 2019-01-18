@@ -29,7 +29,7 @@ object S3 extends S3Client with StrictLogging {
     .withCredentials(Aws.credentialsProvider)
     .build()
 
-  def get(bucket: String, key: String)(implicit ec: ExecutionContext): Future[Either[String,VersionedS3Data[String]]] = Future {
+  def get(bucket: String, key: String)(implicit ec: ExecutionContext): Future[Either[String,RawVersionedS3Data]] = Future {
     try {
       val s3Object = s3Client.getObject(bucket, key)
 
@@ -39,7 +39,7 @@ object S3 extends S3Client with StrictLogging {
       val raw: String = scala.io.Source.fromInputStream(stream).mkString
       stream.close()
 
-      Right[String,VersionedS3Data[String]](VersionedS3Data(raw, version))
+      Right[String,RawVersionedS3Data](VersionedS3Data(raw, version))
 
     } catch {
       case NonFatal(e) =>
@@ -48,7 +48,7 @@ object S3 extends S3Client with StrictLogging {
     }
   }
 
-  def put(bucket: String, key: String, data: VersionedS3Data[String])(implicit ec: ExecutionContext): Future[Either[String,RawVersionedS3Data]] = Future {
+  def put(bucket: String, key: String, data: RawVersionedS3Data)(implicit ec: ExecutionContext): Future[Either[String,RawVersionedS3Data]] = Future {
     try {
       val currentVersion = s3Client.getObject(bucket, key).getObjectMetadata.getVersionId
 
