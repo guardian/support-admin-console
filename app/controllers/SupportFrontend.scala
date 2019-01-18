@@ -18,6 +18,10 @@ class SupportFrontend(authAction: AuthAction[AnyContent], components: Controller
 
   private val s3Client = services.S3
 
+  /**
+    * Returns current version of the settings in s3 as json, with the version id.
+    * The s3 data is validated against the model.
+    */
   def getSwitches = authAction.async {
     S3Json.getFromJson[SupportFrontendSettings](bucket, switchesKey)(s3Client).map {
       case Right(s3Data) => Ok(S3Json.noNulls(s3Data.asJson))
@@ -25,6 +29,10 @@ class SupportFrontend(authAction: AuthAction[AnyContent], components: Controller
     }
   }
 
+  /**
+    * Updates the file in s3 if the supplied version matches the current version in s3.
+    * The POSTed json is validated against the model.
+    */
   def setSwitches = authAction.async(circe.json[VersionedS3Data[SupportFrontendSettings]]) { request =>
     S3Json.putAsJson(bucket, switchesKey, request.body)(s3Client).map {
       case Right(_) => Ok("updated")
