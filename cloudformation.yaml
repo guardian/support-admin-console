@@ -93,7 +93,7 @@ Resources:
           Statement:
           - Effect: Allow
             Action: s3:*
-            Resource: !Sub arn:aws:s3:::support-admin-console/${Stage}/*
+            Resource: !Sub arn:aws:s3:::support-frontend-admin-console/${Stage}/*
       - PolicyName: DescribeAutoScaling
         PolicyDocument:
           Version: 2012-10-17

@@ -1,10 +1,13 @@
 # Support Admin Console
 
 ### Running locally
-Build client code and watch for changes:
+Fetch DEV config by getting `membership` janus credentials and running:
+`./fetch-config.sh`
+
+Build the client:
 ```
 npm install
-npm run watch
+npm run build
 ```
 
 Run the play server:
