@@ -91,12 +91,14 @@ export class Switchboard extends React.Component {
       },
       body: JSON.stringify(newState),
     })
-      .then(() => {
-        alert('saved');
+      .then(resp => {
+        if (!resp.ok) {
+          resp.text().then(msg => alert(msg));
+        }
         this.fetchStateFromServer();
       })
-      .catch(() => {
-        alert('err');
+      .catch((resp) => {
+        alert('Error while saving');
         this.fetchStateFromServer();
       });
   };
