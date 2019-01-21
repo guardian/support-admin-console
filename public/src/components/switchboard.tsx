@@ -50,7 +50,7 @@ export class Switchboard extends React.Component {
     };
     this.previousStateFromServer = {};
   }
-  
+
   componentWillMount(): void {
     this.fetchStateFromServer();
   }
@@ -103,10 +103,10 @@ export class Switchboard extends React.Component {
 
   render(): React.ReactNode {
     return (
-      // as "div", as "label" typecasts are to get around this issue: https://github.com/mui-org/material-ui/issues/13744
-      <FormControl component={"fieldset" as "div"}>
-        <FormLabel component={"legend" as "label"}>One-off contributions</FormLabel>
-        <FormGroup>
+      <div>
+        {/* as "div", as "label" typecasts are to get around this issue: https://github.com/mui-org/material-ui/issues/13744 */}
+        <FormControl component={"fieldset" as "div"}>
+          <FormLabel component={"legend" as "label"}>One-off contributions</FormLabel>
           {Object.keys(this.state).filter(key => key.endsWith('OneOff')).map(switchName =>
             <FormControlLabel
               control={
@@ -120,9 +120,9 @@ export class Switchboard extends React.Component {
               label={switchName}
             />
           )}
-        </FormGroup>
-        <FormLabel component={"legend" as "label"}>Recurring contributions</FormLabel>
-        <FormGroup>
+        </FormControl>
+        <FormControl component={"fieldset" as "div"}>
+          <FormLabel component={"legend" as "label"}>Recurring contributions</FormLabel>
           {Object.keys(this.state).filter(key => key.endsWith('Recurring')).map(switchName =>
             <FormControlLabel
               control={
@@ -136,12 +136,12 @@ export class Switchboard extends React.Component {
               label={switchName}
             />
           )}
-        </FormGroup>
+        </FormControl>
         <Button variant="contained" onClick={this.saveSwitches}>
           <SaveIcon />
           Save
         </Button>
-      </FormControl>
+      </div>
     );
   }
 }
