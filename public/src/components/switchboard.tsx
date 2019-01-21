@@ -4,12 +4,61 @@ import set from 'lodash/set';
 
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
-import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import Button from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
 
+
+interface AmountsFromServer {
+  // TBC, just a placeholder for now
+  US: number[],
+  GB: number[],
+  AU: number[],
+  // ... and so on
+}
+
+enum ContributionType {
+  OneOff,
+  Monthly,
+  Annual
+}
+
+interface ContributionTypesFromServer {
+  // just a placeholder for now
+  US: ContributionType[],
+  GB: ContributionType[],
+  AU: ContributionType[],
+}
+
+enum SwitchState {
+  On, Off
+}
+
+interface SwitchesFromServer {
+  oneOffPaymentMethods: {
+    stripe: SwitchState,
+    payPal: SwitchState,
+  },
+  recurringPaymentMethods: {
+    stripe: SwitchState,
+    payPal: SwitchState,
+    directDebit: SwitchState,
+  },
+  optimize: SwitchState,
+  experiments: {
+    [featureSwitch: string]: {
+      name: string,
+      description: string,
+      state: SwitchState,
+    }
+  }
+}
+
+interface DataFromServer {
+  value: SwitchesFromServer | AmountsFromServer | ContributionTypesFromServer,
+  version: string,
+}
 
 interface Switches {
   [key: string]: boolean
@@ -37,6 +86,7 @@ function jsonToSwitches(json: object): Switches {
 
 export class Switchboard extends React.Component {
   state: Switches;
+  // we can make this type DataFromServer
   previousStateFromServer: object;
 
   constructor(props: {}) {
