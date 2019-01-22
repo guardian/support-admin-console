@@ -214,8 +214,8 @@ export class Switchboard extends React.Component<{}, Switches> {
               control={
                 <Switch
                   checked={switchStateToBoolean(switchState)}
-                  onChange={(ev) =>
-                    this.updateRecurringPaymentMethodSwitch(paymentMethod, booleanToSwitchState(ev.target.checked))
+                  onChange={(event) =>
+                    this.updateRecurringPaymentMethodSwitch(paymentMethod, booleanToSwitchState(event.target.checked))
                   }
                   value={paymentMethod}
                 />
@@ -231,8 +231,8 @@ export class Switchboard extends React.Component<{}, Switches> {
               control={
                 <Switch
                   checked={switchStateToBoolean(switchData.state)}
-                  onChange={(ev) =>
-                    this.updateFeatureSwitch(switchName, booleanToSwitchState(ev.target.checked))
+                  onChange={(event) =>
+                    this.updateFeatureSwitch(switchName, booleanToSwitchState(event.target.checked))
                   }
                   value={switchName}
                 />
