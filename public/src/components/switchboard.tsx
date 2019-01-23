@@ -7,7 +7,9 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import Button from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
+import RefreshIcon from '@material-ui/icons/Refresh';
 
+import { Theme, withStyles, createStyles, WithStyles } from '@material-ui/core/styles';
 
 interface AmountsFromServer {
   // TBC, just a placeholder for now
@@ -67,7 +69,7 @@ interface DataFromServer {
 }
 
 function booleanToSwitchState(b: boolean): SwitchState {
-  return b ? SwitchState.On : SwitchState.Off
+  return b ? SwitchState.On : SwitchState.Off;
 }
 
 function switchStateToBoolean(s: SwitchState): boolean {
@@ -83,11 +85,19 @@ function paymentMethodToHumanReadable(paymentMethod: string): string {
   }
 }
 
-export class Switchboard extends React.Component<{}, Switches> {
+const styles = ({ spacing }: Theme) => createStyles({
+  formControl: {
+    margin: spacing.unit * 3,
+  },
+});
+
+interface Props extends WithStyles<typeof styles> {}
+
+class Switchboard extends React.Component<Props, Switches> {
   state: Switches;
   previousStateFromServer: DataFromServer | null;
 
-  constructor(props: {}) {
+  constructor(props: Props) {
     super(props);
     this.state = {
       oneOffPaymentMethods: {
@@ -124,7 +134,7 @@ export class Switchboard extends React.Component<{}, Switches> {
         this.setState({
           ...serverData.value
         });
-      })
+      });
   }
 
   updateOneOffPaymentMethodSwitch(paymentMethod: string, switchState: SwitchState) {
@@ -161,7 +171,7 @@ export class Switchboard extends React.Component<{}, Switches> {
     fetch('/support-frontend/switches/update', {
       method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(newState),
     })
@@ -178,11 +188,13 @@ export class Switchboard extends React.Component<{}, Switches> {
   };
 
   render(): React.ReactNode {
+    const { classes } = this.props;
+
     return (
       <div>
         {/* as "div", as "label" typecasts are to get around this issue: https://github.com/mui-org/material-ui/issues/13744 */}
-        <FormControl component={"fieldset" as "div"}>
-          <FormLabel component={"legend" as "label"}>One-off contributions</FormLabel>
+        <FormControl component={'fieldset' as 'div'} className={classes.formControl}>
+          <FormLabel component={'legend' as 'label'}>One-off contributions</FormLabel>
           {/*
             It seems no matter how I set up the types, Object.entries and Object.keys
             give a string type to the object keys. This is a bit of a shame since it would be nice
@@ -204,8 +216,8 @@ export class Switchboard extends React.Component<{}, Switches> {
             />
           )}
         </FormControl>
-        <FormControl component={"fieldset" as "div"}>
-          <FormLabel component={"legend" as "label"}>Recurring contributions</FormLabel>
+        <FormControl component={'fieldset' as 'div'} className={classes.formControl}>
+          <FormLabel component={'legend' as 'label'}>Recurring contributions</FormLabel>
           {Object.entries(this.state.recurringPaymentMethods).map(([paymentMethod, switchState]) =>
             <FormControlLabel
               control={
@@ -221,8 +233,8 @@ export class Switchboard extends React.Component<{}, Switches> {
             />
           )}
         </FormControl>
-        <FormControl component={"fieldset" as "div"}>
-          <FormLabel component={"legend" as "label"}>Feature Switches</FormLabel>
+        <FormControl component={'fieldset' as 'div'} className={classes.formControl}>
+          <FormLabel component={'legend' as 'label'}>Feature Switches</FormLabel>
           {Object.entries(this.state.experiments).map(([switchName, switchData]) =>
             <FormControlLabel
               control={
@@ -238,8 +250,8 @@ export class Switchboard extends React.Component<{}, Switches> {
             />
           )}
         </FormControl>
-        <FormControl component={"fieldset" as "div"}>
-          <FormLabel component={"legend" as "label"}>Other Switches</FormLabel>
+        <FormControl component={'fieldset' as 'div'} className={classes.formControl}>
+          <FormLabel component={'legend' as 'label'}>Other Switches</FormLabel>
           <FormControlLabel
             control={
               <Switch
@@ -251,11 +263,19 @@ export class Switchboard extends React.Component<{}, Switches> {
             label="Google Optimize"
           />
         </FormControl>
-        <Button variant="contained" onClick={this.saveSwitches}>
-          <SaveIcon />
-          Save
-        </Button>
+        <div>
+          <Button variant="contained" onClick={this.saveSwitches}>
+            <SaveIcon />
+            Save
+          </Button>
+          <Button variant="contained" onClick={() => this.fetchStateFromServer()}>
+            <RefreshIcon />
+            Refresh
+          </Button>
+        </div>
       </div>
     );
   }
 }
+
+export default withStyles(styles)(Switchboard);
