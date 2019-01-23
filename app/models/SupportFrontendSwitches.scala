@@ -32,5 +32,3 @@ case class SupportFrontendSwitches(
   experiments: Map[String, ExperimentSwitch],
   optimize: SwitchState
 )
-
-case class SupportFrontendSettings(switches: SupportFrontendSwitches)

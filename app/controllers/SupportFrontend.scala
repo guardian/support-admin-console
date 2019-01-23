@@ -13,8 +13,8 @@ import scala.concurrent.ExecutionContext
 class SupportFrontend(authAction: AuthAction[AnyContent], components: ControllerComponents, stage: String)(implicit ec: ExecutionContext)
   extends AbstractController(components) with Circe {
 
-  private val bucket = "support-frontend-admin-console"
-  private val switchesKey = s"$stage/settings.json"
+  private val bucket = "support-admin-console"
+  private val switchesKey = s"$stage/switches.json"
 
   private val s3Client = services.S3
 
@@ -23,7 +23,7 @@ class SupportFrontend(authAction: AuthAction[AnyContent], components: Controller
     * The s3 data is validated against the model.
     */
   def getSwitches = authAction.async {
-    S3Json.getFromJson[SupportFrontendSettings](bucket, switchesKey)(s3Client).map {
+    S3Json.getFromJson[SupportFrontendSwitches](bucket, switchesKey)(s3Client).map {
       case Right(s3Data) => Ok(S3Json.noNulls(s3Data.asJson))
       case Left(error) => InternalServerError(error)
     }
@@ -33,7 +33,7 @@ class SupportFrontend(authAction: AuthAction[AnyContent], components: Controller
     * Updates the file in s3 if the supplied version matches the current version in s3.
     * The POSTed json is validated against the model.
     */
-  def setSwitches = authAction.async(circe.json[VersionedS3Data[SupportFrontendSettings]]) { request =>
+  def setSwitches = authAction.async(circe.json[VersionedS3Data[SupportFrontendSwitches]]) { request =>
     S3Json.putAsJson(bucket, switchesKey, request.body)(s3Client).map {
       case Right(_) => Ok("updated")
       case Left(error) => InternalServerError(error)
