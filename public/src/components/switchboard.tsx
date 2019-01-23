@@ -62,8 +62,7 @@ interface Switches {
 }
 
 interface DataFromServer {
-  // TODO: remove .switches when switch file is updated with Tom's changes
-  value: { switches: Switches } | AmountsFromServer | ContributionTypesFromServer,
+  value: Switches | AmountsFromServer | ContributionTypesFromServer,
   version: string,
 }
 
@@ -123,8 +122,7 @@ export class Switchboard extends React.Component<{}, Switches> {
       .then(serverData => {
         this.previousStateFromServer = serverData;
         this.setState({
-          // TODO: remove .switches when switch file is updated with Tom's changes
-          ...serverData.value.switches
+          ...serverData.value
         });
       })
   }
@@ -157,8 +155,7 @@ export class Switchboard extends React.Component<{}, Switches> {
 
   saveSwitches = () => {
     const newState = update(this.previousStateFromServer, {
-      // TODO: remove .switches when switch file is updated with Tom's changes
-      value: { switches: { $set: this.state } }
+      value: { $set: this.state }
     });
 
     fetch('/support-frontend/switches/update', {
