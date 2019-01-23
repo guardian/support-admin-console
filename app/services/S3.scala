@@ -57,7 +57,7 @@ object S3 extends S3Client with StrictLogging {
         Right[String, RawVersionedS3Data](data)
       } else {
         logger.warn(s"Cannot update S3 object $bucket/$key because provided version (${data.version}) does not match latest version ($currentVersion)")
-        Left(s"Cannot update S3 object $bucket/$key because latest version does not match")
+        Left(s"Can't save your settings because someone else has updated them since they were last fetched")
       }
 
     } catch {

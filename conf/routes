@@ -2,6 +2,9 @@
 
 GET /healthcheck                                    controllers.Application.healthcheck
 GET /                                               controllers.Application.index
+GET /switches                                       controllers.Application.index
+GET /contribution-types                             controllers.Application.index
+GET /amounts                                        controllers.Application.index
 
 # ----- Authentication ----- #
 
