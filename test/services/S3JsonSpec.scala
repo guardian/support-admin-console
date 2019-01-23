@@ -13,7 +13,6 @@ class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
   val expectedJson =
     """
       |{
-      |    "switches": {
       |      "oneOffPaymentMethods": {
       |        "stripe": "On",
       |        "payPal": "On"
@@ -31,18 +30,15 @@ class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
       |        }
       |      },
       |      "optimize": "Off"
-      |    }
       |}
     """.stripMargin
 
   val expectedDecoded = VersionedS3Data(
-    SupportFrontendSettings(
-      SupportFrontendSwitches(
-        PaymentMethodsSwitch(On,On,None),
-        PaymentMethodsSwitch(On,On,Some(On)),
-        experiments = Map("newFlow" -> ExperimentSwitch("newFlow","Redesign of the payment flow UI",On)),
-        optimize = Off
-      )
+    SupportFrontendSwitches(
+      PaymentMethodsSwitch(On,On,None),
+      PaymentMethodsSwitch(On,On,Some(On)),
+      experiments = Map("newFlow" -> ExperimentSwitch("newFlow","Redesign of the payment flow UI",On)),
+      optimize = Off
     ),
     version = "v1"
   )
@@ -64,7 +60,7 @@ class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
     import ExecutionContext.Implicits.global
 
     val result = Await.result(
-      S3Json.getFromJson[SupportFrontendSettings]("bucket", "key")(dummyS3Client),
+      S3Json.getFromJson[SupportFrontendSwitches]("bucket", "key")(dummyS3Client),
       1.second
     )
 
@@ -77,7 +73,7 @@ class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
     import ExecutionContext.Implicits.global
 
     val result = Await.result(
-      S3Json.putAsJson[SupportFrontendSettings]("bucket","key", expectedDecoded)(dummyS3Client),
+      S3Json.putAsJson[SupportFrontendSwitches]("bucket","key", expectedDecoded)(dummyS3Client),
       1.second
     )
     val diff = JsonDiff.diff(expectedJson, result.right.value.value, false)
