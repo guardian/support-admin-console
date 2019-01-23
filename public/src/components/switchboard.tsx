@@ -1,6 +1,5 @@
 import React from 'react';
-import get from 'lodash/get';
-import set from 'lodash/set';
+import update from 'immutability-helper';
 
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
@@ -32,18 +31,25 @@ interface ContributionTypesFromServer {
 }
 
 enum SwitchState {
-  On, Off
+  On = 'On', Off = 'Off'
 }
 
-interface SwitchesFromServer {
+enum OneOffPaymentMethod {
+  stripe = 'stripe', payPal = 'payPal'
+}
+
+enum RecurringPaymentMethod {
+  stripe = 'stripe', payPal = 'payPal', directDebit = 'directDebit'
+}
+
+type PaymentMethod = OneOffPaymentMethod | RecurringPaymentMethod;
+
+interface Switches {
   oneOffPaymentMethods: {
-    stripe: SwitchState,
-    payPal: SwitchState,
+    [p in OneOffPaymentMethod]: SwitchState
   },
   recurringPaymentMethods: {
-    stripe: SwitchState,
-    payPal: SwitchState,
-    directDebit: SwitchState,
+    [p in RecurringPaymentMethod]: SwitchState
   },
   optimize: SwitchState,
   experiments: {
@@ -56,49 +62,48 @@ interface SwitchesFromServer {
 }
 
 interface DataFromServer {
-  value: SwitchesFromServer | AmountsFromServer | ContributionTypesFromServer,
+  // TODO: remove .switches when switch file is updated with Tom's changes
+  value: { switches: Switches } | AmountsFromServer | ContributionTypesFromServer,
   version: string,
 }
 
-interface Switches {
-  [key: string]: boolean
-  stripeOneOff: boolean,
-  payPalOneOff: boolean,
-  stripeRecurring: boolean,
-  payPalRecurring: boolean,
-  directDebitRecurring: boolean
+function booleanToSwitchState(b: boolean): SwitchState {
+  return b ? SwitchState.On : SwitchState.Off
 }
 
-function safelyExtractSwitchValue(json: object, path: string): boolean {
-  const switchValue = get(json, path, false);
-  return switchValue === 'On';
+function switchStateToBoolean(s: SwitchState): boolean {
+  return s === SwitchState.On;
 }
 
-function jsonToSwitches(json: object): Switches {
-  return {
-    stripeOneOff: safelyExtractSwitchValue(json, 'value.switches.oneOffPaymentMethods.stripe'),
-    payPalOneOff: safelyExtractSwitchValue(json, 'value.switches.oneOffPaymentMethods.payPal'),
-    stripeRecurring: safelyExtractSwitchValue(json, 'value.switches.recurringPaymentMethods.stripe'),
-    payPalRecurring: safelyExtractSwitchValue(json, 'value.switches.recurringPaymentMethods.payPal'),
-    directDebitRecurring: safelyExtractSwitchValue(json, 'value.switches.recurringPaymentMethods.directDebit')
-  };
+function paymentMethodToHumanReadable(paymentMethod: string): string {
+  switch (paymentMethod) {
+    case RecurringPaymentMethod.directDebit: return 'Direct Debit';
+    case RecurringPaymentMethod.payPal: return 'PayPal';
+    case RecurringPaymentMethod.stripe: return 'Stripe';
+    default: return 'Unknown';
+  }
 }
 
-export class Switchboard extends React.Component {
+export class Switchboard extends React.Component<{}, Switches> {
   state: Switches;
-  // we can make this type DataFromServer
-  previousStateFromServer: object;
+  previousStateFromServer: DataFromServer | null;
 
   constructor(props: {}) {
     super(props);
     this.state = {
-      stripeOneOff: false,
-      payPalOneOff: false,
-      stripeRecurring: false,
-      payPalRecurring: false,
-      directDebitRecurring: false
+      oneOffPaymentMethods: {
+        stripe: SwitchState.Off,
+        payPal: SwitchState.Off,
+      },
+      recurringPaymentMethods: {
+        stripe: SwitchState.Off,
+        payPal: SwitchState.Off,
+        directDebit: SwitchState.Off,
+      },
+      optimize: SwitchState.Off,
+      experiments: {},
     };
-    this.previousStateFromServer = {};
+    this.previousStateFromServer = null;
   }
 
   componentWillMount(): void {
@@ -107,32 +112,54 @@ export class Switchboard extends React.Component {
 
   fetchStateFromServer(): void {
     fetch('/support-frontend/switches')
-      .then(resp => resp.json())
-      .then(json => {
-        this.previousStateFromServer = json;
-        return json;
+      .then(resp => {
+        if (!resp.ok) {
+          resp.text().then(msg => alert(msg));
+          throw new Error('Could not fetch initial server state');
+        }
+
+        return resp.json();
       })
-      .then(jsonToSwitches)
-      .then(switches => {
-        this.setState(switches);
-      });
+      .then(serverData => {
+        this.previousStateFromServer = serverData;
+        this.setState({
+          // TODO: remove .switches when switch file is updated with Tom's changes
+          ...serverData.value.switches
+        });
+      })
   }
 
-  updateSwitch = (switchName: string) => (event: React.FormEvent<HTMLInputElement>) => {
-    // it's annoying I have to do this type cast here
-    this.setState({ [switchName]: (event.target as HTMLInputElement).checked });
+  updateOneOffPaymentMethodSwitch(paymentMethod: string, switchState: SwitchState) {
+    this.setState((prevState) => update(prevState, {
+      oneOffPaymentMethods: {
+        [paymentMethod]: { $set: switchState }
+      },
+    }));
+  };
+
+  updateRecurringPaymentMethodSwitch(paymentMethod: string, switchState: SwitchState) {
+    this.setState((prevState) => update(prevState, {
+      recurringPaymentMethods: {
+        [paymentMethod]: { $set: switchState }
+      },
+    }));
+  };
+
+  updateFeatureSwitch(switchName: string, switchState: SwitchState) {
+    this.setState((prevState) => update(prevState, {
+      experiments: {
+        [switchName]: {
+          state: {$set: switchState }
+        },
+      }
+    }));
   };
 
   saveSwitches = () => {
-    const newState = {...this.previousStateFromServer};
-
-    // actually I'm not sure I like this technique since it bypasses the type system
-    // though in this case it doesn't matter since it's just an object type
-    set(newState, 'value.switches.oneOffPaymentMethods.stripe', this.state.stripeOneOff ? 'On' : 'Off');
-    set(newState, 'value.switches.oneOffPaymentMethods.payPal', this.state.payPalOneOff ? 'On' : 'Off');
-    set(newState, 'value.switches.recurringPaymentMethods.stripe', this.state.stripeRecurring ? 'On' : 'Off');
-    set(newState, 'value.switches.recurringPaymentMethods.payPal', this.state.payPalRecurring ? 'On' : 'Off');
-    set(newState, 'value.switches.recurringPaymentMethods.directDebit', this.state.directDebitRecurring ? 'On' : 'Off');
+    const newState = update(this.previousStateFromServer, {
+      // TODO: remove .switches when switch file is updated with Tom's changes
+      value: { switches: { $set: this.state } }
+    });
 
     fetch('/support-frontend/switches/update', {
       method: 'POST',
@@ -159,35 +186,73 @@ export class Switchboard extends React.Component {
         {/* as "div", as "label" typecasts are to get around this issue: https://github.com/mui-org/material-ui/issues/13744 */}
         <FormControl component={"fieldset" as "div"}>
           <FormLabel component={"legend" as "label"}>One-off contributions</FormLabel>
-          {Object.keys(this.state).filter(key => key.endsWith('OneOff')).map(switchName =>
+          {/*
+            It seems no matter how I set up the types, Object.entries and Object.keys
+            give a string type to the object keys. This is a bit of a shame since it would be nice
+            to have an enum type for paymentMethod and then set that type on arguments to
+            paymentMethodToHumanReadable and updateOneOffPaymentMethodSwitch.
+          */}
+          {Object.entries(this.state.oneOffPaymentMethods).map(([paymentMethod, switchState]) =>
             <FormControlLabel
               control={
                 <Switch
-                  checked={this.state[switchName]}
-                  onChange={this.updateSwitch(switchName)}
-                  value={switchName}
+                  checked={switchStateToBoolean(switchState)}
+                  onChange={(ev) =>
+                    this.updateOneOffPaymentMethodSwitch(paymentMethod, booleanToSwitchState(ev.target.checked))
+                  }
+                  value={paymentMethod}
                 />
               }
-              // todo: human-readable label
-              label={switchName}
+              label={paymentMethodToHumanReadable(paymentMethod)}
             />
           )}
         </FormControl>
         <FormControl component={"fieldset" as "div"}>
           <FormLabel component={"legend" as "label"}>Recurring contributions</FormLabel>
-          {Object.keys(this.state).filter(key => key.endsWith('Recurring')).map(switchName =>
+          {Object.entries(this.state.recurringPaymentMethods).map(([paymentMethod, switchState]) =>
             <FormControlLabel
               control={
                 <Switch
-                  checked={this.state[switchName]}
-                  onChange={this.updateSwitch(switchName)}
+                  checked={switchStateToBoolean(switchState)}
+                  onChange={(event) =>
+                    this.updateRecurringPaymentMethodSwitch(paymentMethod, booleanToSwitchState(event.target.checked))
+                  }
+                  value={paymentMethod}
+                />
+              }
+              label={paymentMethodToHumanReadable(paymentMethod)}
+            />
+          )}
+        </FormControl>
+        <FormControl component={"fieldset" as "div"}>
+          <FormLabel component={"legend" as "label"}>Feature Switches</FormLabel>
+          {Object.entries(this.state.experiments).map(([switchName, switchData]) =>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={switchStateToBoolean(switchData.state)}
+                  onChange={(event) =>
+                    this.updateFeatureSwitch(switchName, booleanToSwitchState(event.target.checked))
+                  }
                   value={switchName}
                 />
               }
-              // todo: human-readable label
-              label={switchName}
+              label={`${switchData.name}: ${switchData.description}`}
             />
           )}
+        </FormControl>
+        <FormControl component={"fieldset" as "div"}>
+          <FormLabel component={"legend" as "label"}>Other Switches</FormLabel>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={switchStateToBoolean(this.state.optimize)}
+                onChange={(event) => this.setState({optimize: booleanToSwitchState(event.target.checked)})}
+                value={switchStateToBoolean(this.state.optimize)}
+              />
+            }
+            label="Google Optimize"
+          />
         </FormControl>
         <Button variant="contained" onClick={this.saveSwitches}>
           <SaveIcon />
