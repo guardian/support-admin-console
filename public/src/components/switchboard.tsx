@@ -85,10 +85,23 @@ function paymentMethodToHumanReadable(paymentMethod: string): string {
   }
 }
 
-const styles = ({ spacing }: Theme) => createStyles({
+
+const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
   formControl: {
-    margin: spacing.unit * 3,
+    marginRight: spacing.unit * 4,
+    marginBottom: spacing.unit * 4,
+    paddingTop: spacing.unit,
+    paddingBottom: spacing.unit,
+    paddingLeft: spacing.unit * 2,
+    paddingRight: spacing.unit * 2,
+    border: `1px solid ${palette.grey['300']}`
   },
+  button: {
+    marginRight: spacing.unit * 2,
+  },
+  buttons: {
+    marginTop: spacing.unit * 2,
+  }
 });
 
 interface Props extends WithStyles<typeof styles> {}
@@ -191,89 +204,91 @@ class Switchboard extends React.Component<Props, Switches> {
     const { classes } = this.props;
 
     return (
-      <div>
-        {/* as "div", as "label" typecasts are to get around this issue: https://github.com/mui-org/material-ui/issues/13744 */}
-        <FormControl component={'fieldset' as 'div'} className={classes.formControl}>
-          <FormLabel component={'legend' as 'label'}>One-off contributions</FormLabel>
-          {/*
-            It seems no matter how I set up the types, Object.entries and Object.keys
-            give a string type to the object keys. This is a bit of a shame since it would be nice
-            to have an enum type for paymentMethod and then set that type on arguments to
-            paymentMethodToHumanReadable and updateOneOffPaymentMethodSwitch.
-          */}
-          {Object.entries(this.state.oneOffPaymentMethods).map(([paymentMethod, switchState]) =>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={switchStateToBoolean(switchState)}
-                  onChange={(ev) =>
-                    this.updateOneOffPaymentMethodSwitch(paymentMethod, booleanToSwitchState(ev.target.checked))
+        <form>
+          <div>
+            {/* as "div", as "label" typecasts are to get around this issue: https://github.com/mui-org/material-ui/issues/13744 */}
+            <FormControl component={'fieldset' as 'div'} className={classes.formControl}>
+              <FormLabel component={'legend' as 'label'}>One-off contributions</FormLabel>
+              {/*
+              It seems no matter how I set up the types, Object.entries and Object.keys
+              give a string type to the object keys. This is a bit of a shame since it would be nice
+              to have an enum type for paymentMethod and then set that type on arguments to
+              paymentMethodToHumanReadable and updateOneOffPaymentMethodSwitch.
+            */}
+              {Object.entries(this.state.oneOffPaymentMethods).map(([paymentMethod, switchState]) =>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={switchStateToBoolean(switchState)}
+                      onChange={(ev) =>
+                        this.updateOneOffPaymentMethodSwitch(paymentMethod, booleanToSwitchState(ev.target.checked))
+                      }
+                      value={paymentMethod}
+                    />
                   }
-                  value={paymentMethod}
+                  label={paymentMethodToHumanReadable(paymentMethod)}
                 />
-              }
-              label={paymentMethodToHumanReadable(paymentMethod)}
-            />
-          )}
-        </FormControl>
-        <FormControl component={'fieldset' as 'div'} className={classes.formControl}>
-          <FormLabel component={'legend' as 'label'}>Recurring contributions</FormLabel>
-          {Object.entries(this.state.recurringPaymentMethods).map(([paymentMethod, switchState]) =>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={switchStateToBoolean(switchState)}
-                  onChange={(event) =>
-                    this.updateRecurringPaymentMethodSwitch(paymentMethod, booleanToSwitchState(event.target.checked))
+              )}
+            </FormControl>
+            <FormControl component={'fieldset' as 'div'} className={classes.formControl}>
+              <FormLabel component={'legend' as 'label'}>Recurring contributions</FormLabel>
+              {Object.entries(this.state.recurringPaymentMethods).map(([paymentMethod, switchState]) =>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={switchStateToBoolean(switchState)}
+                      onChange={(event) =>
+                        this.updateRecurringPaymentMethodSwitch(paymentMethod, booleanToSwitchState(event.target.checked))
+                      }
+                      value={paymentMethod}
+                    />
                   }
-                  value={paymentMethod}
+                  label={paymentMethodToHumanReadable(paymentMethod)}
                 />
-              }
-              label={paymentMethodToHumanReadable(paymentMethod)}
-            />
-          )}
-        </FormControl>
-        <FormControl component={'fieldset' as 'div'} className={classes.formControl}>
-          <FormLabel component={'legend' as 'label'}>Feature Switches</FormLabel>
-          {Object.entries(this.state.experiments).map(([switchName, switchData]) =>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={switchStateToBoolean(switchData.state)}
-                  onChange={(event) =>
-                    this.updateFeatureSwitch(switchName, booleanToSwitchState(event.target.checked))
+              )}
+            </FormControl>
+            <FormControl component={'fieldset' as 'div'} className={classes.formControl}>
+              <FormLabel component={'legend' as 'label'}>Feature Switches</FormLabel>
+              {Object.entries(this.state.experiments).map(([switchName, switchData]) =>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={switchStateToBoolean(switchData.state)}
+                      onChange={(event) =>
+                        this.updateFeatureSwitch(switchName, booleanToSwitchState(event.target.checked))
+                      }
+                      value={switchName}
+                    />
                   }
-                  value={switchName}
+                  label={`${switchData.name}: ${switchData.description}`}
                 />
-              }
-              label={`${switchData.name}: ${switchData.description}`}
-            />
-          )}
-        </FormControl>
-        <FormControl component={'fieldset' as 'div'} className={classes.formControl}>
-          <FormLabel component={'legend' as 'label'}>Other Switches</FormLabel>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={switchStateToBoolean(this.state.optimize)}
-                onChange={(event) => this.setState({optimize: booleanToSwitchState(event.target.checked)})}
-                value={switchStateToBoolean(this.state.optimize)}
+              )}
+            </FormControl>
+            <FormControl component={'fieldset' as 'div'} className={classes.formControl}>
+              <FormLabel component={'legend' as 'label'}>Other Switches</FormLabel>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={switchStateToBoolean(this.state.optimize)}
+                    onChange={(event) => this.setState({optimize: booleanToSwitchState(event.target.checked)})}
+                    value={switchStateToBoolean(this.state.optimize)}
+                  />
+                }
+                label="Google Optimize"
               />
-            }
-            label="Google Optimize"
-          />
-        </FormControl>
-        <div>
-          <Button variant="contained" onClick={this.saveSwitches}>
-            <SaveIcon />
-            Save
-          </Button>
-          <Button variant="contained" onClick={() => this.fetchStateFromServer()}>
-            <RefreshIcon />
-            Refresh
-          </Button>
-        </div>
-      </div>
+            </FormControl>
+          </div>
+          <div className={classes.buttons}>
+            <Button variant="contained" onClick={this.saveSwitches} className={classes.button}>
+              <SaveIcon />
+              Save
+            </Button>
+            <Button variant="contained" onClick={() => this.fetchStateFromServer()} className={classes.button}>
+              <RefreshIcon />
+              Refresh
+            </Button>
+          </div>
+        </form>
     );
   }
 }
