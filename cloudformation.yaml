@@ -26,6 +26,10 @@ Parameters:
   CertificateARN:
     Description: SSL certificate ARN
     Type: String
+  KingsPlaceIP:
+    Description: Kings Place IP range
+    Type: String
+    Default: 77.91.248.0/21
 
 Resources:
   AutoScalingGroup:
@@ -178,7 +182,7 @@ Resources:
       - IpProtocol: tcp
         FromPort: 443
         ToPort: 443
-        CidrIp: 0.0.0.0/0
+        CidrIp: KingsPlaceIP
       SecurityGroupEgress:
       - IpProtocol: tcp
         FromPort: 9000
@@ -194,11 +198,11 @@ Resources:
       - IpProtocol: tcp
         FromPort: 22
         ToPort: 22
-        CidrIp: 77.91.248.0/21
+        CidrIp: KingsPlaceIP
       - IpProtocol: tcp
         FromPort: 9000
         ToPort: 9000
-        CidrIp: 77.91.248.0/21
+        CidrIp: KingsPlaceIP
       - IpProtocol: tcp
         FromPort: 9000
         ToPort: 9000
