@@ -182,7 +182,7 @@ Resources:
       - IpProtocol: tcp
         FromPort: 443
         ToPort: 443
-        CidrIp: KingsPlaceIP
+        CidrIp: !Ref KingsPlaceIP
       SecurityGroupEgress:
       - IpProtocol: tcp
         FromPort: 9000
@@ -198,11 +198,11 @@ Resources:
       - IpProtocol: tcp
         FromPort: 22
         ToPort: 22
-        CidrIp: KingsPlaceIP
+        CidrIp: !Ref KingsPlaceIP
       - IpProtocol: tcp
         FromPort: 9000
         ToPort: 9000
-        CidrIp: KingsPlaceIP
+        CidrIp: !Ref KingsPlaceIP
       - IpProtocol: tcp
         FromPort: 9000
         ToPort: 9000
