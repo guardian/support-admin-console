@@ -1,12 +1,12 @@
 package controllers
 
-import com.gu.googleauth.{AuthAction, GoogleGroupChecker}
+import com.gu.googleauth.AuthAction
+import io.circe.generic.auto._
+import io.circe.syntax._
 import models._
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, AnyContent, ControllerComponents}
 import services.{S3Json, VersionedS3Data}
-import io.circe.generic.auto._
-import io.circe.syntax._
 
 import scala.concurrent.ExecutionContext
 
