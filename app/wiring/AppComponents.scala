@@ -24,6 +24,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     GoogleAuthConfig(clientId, clientSecret, redirectUrl, domain, antiForgeryChecker = AntiForgeryChecker.borrowSettingsFromPlay(httpConfiguration))
   }
 
+  // https://github.com/guardian/play-googleauth#implement-googlegroups-based-access-control-using-the-directory-api
   private val googleGroupChecker = {
     val s3URI = new AmazonS3URI(configuration.get[String]("googleAuth.serviceAccount.certificateS3Path"))
     val stream = S3.s3Client
