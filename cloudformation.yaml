@@ -104,7 +104,7 @@ Resources:
           Statement:
           - Effect: Allow
             Action: s3:GetObject
-            Resource: !Sub arn:aws:s3:::support-admin-console/google-auth-service-account-certificate.json
+            Resource: arn:aws:s3:::support-admin-console/google-auth-service-account-certificate.json
       - PolicyName: DescribeAutoScaling
         PolicyDocument:
           Version: 2012-10-17
