@@ -1,16 +1,16 @@
 package controllers
 
 import com.gu.googleauth.AuthAction
+import io.circe.generic.auto._
+import io.circe.syntax._
 import models._
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, AnyContent, ControllerComponents}
 import services.{S3Json, VersionedS3Data}
-import io.circe.generic.auto._
-import io.circe.syntax._
 
 import scala.concurrent.ExecutionContext
 
-class SupportFrontend(authAction: AuthAction[AnyContent], components: ControllerComponents, stage: String)(implicit ec: ExecutionContext)
+class SupportFrontend(authAction: AuthAction[AnyContent], stage: String, components: ControllerComponents)(implicit ec: ExecutionContext)
   extends AbstractController(components) with Circe {
 
   private val bucket = "support-admin-console"

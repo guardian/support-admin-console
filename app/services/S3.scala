@@ -23,7 +23,7 @@ object S3Client {
 
 object S3 extends S3Client with StrictLogging {
 
-  private val s3Client: AmazonS3 = AmazonS3ClientBuilder
+  val s3Client: AmazonS3 = AmazonS3ClientBuilder
     .standard()
     .withRegion(Aws.region)
     .withCredentials(Aws.credentialsProvider)
