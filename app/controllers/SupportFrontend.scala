@@ -10,11 +10,7 @@ import io.circe.syntax._
 
 import scala.concurrent.ExecutionContext
 
-class SupportFrontend(
-  authAction: AuthAction[AnyContent],
-  stage: String,
-  components: ControllerComponents
-)(implicit ec: ExecutionContext)
+class SupportFrontend(authAction: AuthAction[AnyContent], stage: String, components: ControllerComponents)(implicit ec: ExecutionContext)
   extends AbstractController(components) with Circe {
 
   private val bucket = "support-admin-console"
