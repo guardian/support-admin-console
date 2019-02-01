@@ -24,24 +24,24 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     GoogleAuthConfig(clientId, clientSecret, redirectUrl, domain, antiForgeryChecker = AntiForgeryChecker.borrowSettingsFromPlay(httpConfiguration))
   }
 
-  // To create googleServiceAccount
-  private val googleServiceAccountCertificateS3Path = configuration.get[String]("googleAuth.serviceAccount.certificateS3Path")
-  private val s3URI = new AmazonS3URI(googleServiceAccountCertificateS3Path)
-  private val stream = S3.s3Client
-    .getObject(s3URI.getBucket, s3URI.getKey)
-    .getObjectContent
-  private val googleServiceAccountCredential = GoogleCredential.fromStream(stream)
-  stream.close()
+  private val googleGroupChecker = {
+    val s3URI = new AmazonS3URI(configuration.get[String]("googleAuth.serviceAccount.certificateS3Path"))
+    val stream = S3.s3Client
+      .getObject(s3URI.getBucket, s3URI.getKey)
+      .getObjectContent
 
-  // To create googleGroupChecker
-  private val googleServiceAccount = GoogleServiceAccount(
-    googleServiceAccountCredential.getServiceAccountId,
-    googleServiceAccountCredential.getServiceAccountPrivateKey,
-    configuration.get[String]("googleAuth.serviceAccount.impersonatedUser"),
-  )
+    val googleServiceAccountCredential = GoogleCredential.fromStream(stream)
+    stream.close()
 
-  // These are the ones that actually get passed into controllers
-  private val googleGroupChecker = new GoogleGroupChecker(googleServiceAccount)
+    val serviceAccount = GoogleServiceAccount(
+      googleServiceAccountCredential.getServiceAccountId,
+      googleServiceAccountCredential.getServiceAccountPrivateKey,
+      configuration.get[String]("googleAuth.serviceAccount.impersonatedUser"),
+    )
+
+    new GoogleGroupChecker(serviceAccount)
+  }
+
   private val requiredGoogleGroups: Set[String] = configuration.get[String]("googleAuth.requiredGroups").split(',').toSet
 
   private val authAction = new AuthAction[AnyContent](authConfig, routes.Login.loginAction(), controllerComponents.parsers.default)(executionContext)
