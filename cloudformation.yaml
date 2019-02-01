@@ -98,6 +98,13 @@ Resources:
           - Effect: Allow
             Action: s3:*
             Resource: !Sub arn:aws:s3:::support-admin-console/${Stage}/*
+      - PolicyName: GoogleServiceAccountCertificate
+        PolicyDocument:
+          Version: 2012-10-17
+          Statement:
+          - Effect: Allow
+            Action: s3:GetObject
+            Resource: arn:aws:s3:::support-admin-console/google-auth-service-account-certificate.json
       - PolicyName: DescribeAutoScaling
         PolicyDocument:
           Version: 2012-10-17
