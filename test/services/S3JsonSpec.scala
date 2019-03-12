@@ -20,7 +20,9 @@ class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
       |      "recurringPaymentMethods": {
       |        "stripe": "On",
       |        "payPal": "On",
-      |        "directDebit": "On"
+      |        "directDebit": "On",
+      |        "existingCard": "On",
+      |        "existingDirectDebit": "On"
       |      },
       |      "experiments": {
       |        "newFlow": {
@@ -35,8 +37,8 @@ class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
 
   val expectedDecoded = VersionedS3Data(
     SupportFrontendSwitches(
-      PaymentMethodsSwitch(On,On,None),
-      PaymentMethodsSwitch(On,On,Some(On)),
+      PaymentMethodsSwitch(On,On,None, None, None),
+      PaymentMethodsSwitch(On,On,Some(On), Some(On), Some(On)),
       experiments = Map("newFlow" -> ExperimentSwitch("newFlow","Redesign of the payment flow UI",On)),
       optimize = Off
     ),

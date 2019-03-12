@@ -41,7 +41,7 @@ enum OneOffPaymentMethod {
 }
 
 enum RecurringPaymentMethod {
-  stripe = 'stripe', payPal = 'payPal', directDebit = 'directDebit'
+  stripe = 'stripe', payPal = 'payPal', directDebit = 'directDebit', existingCard = 'existingCard', existingDirectDebit = 'existingDirectDebit'
 }
 
 type PaymentMethod = OneOffPaymentMethod | RecurringPaymentMethod;
@@ -81,6 +81,8 @@ function paymentMethodToHumanReadable(paymentMethod: string): string {
     case RecurringPaymentMethod.directDebit: return 'Direct Debit';
     case RecurringPaymentMethod.payPal: return 'PayPal';
     case RecurringPaymentMethod.stripe: return 'Stripe';
+    case RecurringPaymentMethod.existingCard: return 'Existing Card';
+    case RecurringPaymentMethod.existingDirectDebit: return 'Existing Direct Debit';
     default: return 'Unknown';
   }
 }
@@ -121,6 +123,8 @@ class Switchboard extends React.Component<Props, Switches> {
         stripe: SwitchState.Off,
         payPal: SwitchState.Off,
         directDebit: SwitchState.Off,
+        existingCard: SwitchState.Off,
+        existingDirectDebit: SwitchState.Off,
       },
       optimize: SwitchState.Off,
       experiments: {},

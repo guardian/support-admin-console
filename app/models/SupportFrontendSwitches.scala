@@ -24,7 +24,13 @@ case object SwitchState {
 
 case class ExperimentSwitch(name: String, description: String, state: SwitchState)
 
-case class PaymentMethodsSwitch(stripe: SwitchState, payPal: SwitchState, directDebit: Option[SwitchState])
+case class PaymentMethodsSwitch(
+  stripe: SwitchState,
+  payPal: SwitchState,
+  directDebit: Option[SwitchState],
+  existingCard: Option[SwitchState],
+  existingDirectDebit: Option[SwitchState]
+)
 
 case class SupportFrontendSwitches(
   oneOffPaymentMethods: PaymentMethodsSwitch,
