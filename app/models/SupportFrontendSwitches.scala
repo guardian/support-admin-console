@@ -1,6 +1,7 @@
 package models
 
 import io.circe.{Decoder, Encoder}
+import utils.Circe.decodeStringAndCollect
 
 /**
   * Based on https://github.com/guardian/support-frontend/blob/master/app/admin/Settings.scala
@@ -16,9 +17,9 @@ case object SwitchState {
     case Off => "Off"
   }
 
-  implicit val switchStateDecoder: Decoder[SwitchState] = Decoder.decodeString.map {
+  implicit val switchStateDecoder: Decoder[SwitchState] = decodeStringAndCollect {
     case "On" => On
-    case _ => Off
+    case "Off" => Off
   }
 }
 
