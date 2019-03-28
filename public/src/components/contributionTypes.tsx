@@ -24,19 +24,31 @@ interface ContributionTypeSetting {
   isDefault?: boolean
 }
 
-interface ContributionTypes {
-  GBPCountries: ContributionTypeSetting[],
-  UnitedStates: ContributionTypeSetting[],
-  EURCountries: ContributionTypeSetting[],
-  International: ContributionTypeSetting[],
-  Canada: ContributionTypeSetting[],
-  AUDCountries: ContributionTypeSetting[],
-  NZDCountries: ContributionTypeSetting[]
+enum Region {
+  GBPCountries = 'GBPCountries',
+  UnitedStates = 'UnitedStates',
+  EURCountries = 'EURCountries',
+  International = 'International',
+  Canada = 'Canada',
+  AUDCountries = 'AUDCountries',
+  NZDCountries = 'NZDCountries'
+}
+
+type ContributionTypes = {
+  [r in Region]: ContributionTypeSetting[]
 }
 
 interface DataFromServer {
   value: ContributionTypes,
   version: string,
+}
+
+function isRegion(s: string): s is Region {
+  return Object.values(Region).includes(s)
+}
+
+function isContributionType(s: string): s is ContributionType {
+  return Object.values(ContributionType).includes(s)
 }
 
 const allContributionTypes = [
@@ -52,15 +64,21 @@ const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
   },
   button: {
     marginRight: spacing.unit * 2,
+    marginBottom: spacing.unit * 2
   },
   buttons: {
     marginTop: spacing.unit * 2,
     marginLeft: spacing.unit * 4
   },
+  regions: {
+    display: 'flex',
+    flexWrap: 'wrap'
+  },
   region: {
     paddingRight: spacing.unit * 4,
     paddingLeft: spacing.unit * 4,
     borderBottom: `1px solid ${palette.grey['300']}`,
+    borderRight: `5px solid ${palette.grey['300']}`,
     marginBottom: spacing.unit * 4,
     flexDirection: 'row'
   },
@@ -155,7 +173,7 @@ class ContributionTypesComponent extends React.Component<Props, ContributionType
     return current.filter(c => c.contributionType !== toRemove);
   }
 
-  setContributionTypeOnOff(on: boolean, contributionType: ContributionType, region: string): void {
+  setContributionTypeOnOff(on: boolean, contributionType: ContributionType, region: Region): void {
     const newSettings = on ?
       this.addContributionType(this.state[region], {contributionType, isDefault: true}) :
       this.removeContributionType(this.state[region], contributionType);
@@ -165,7 +183,7 @@ class ContributionTypesComponent extends React.Component<Props, ContributionType
     }));
   }
 
-  setContributionTypeDefault(contributionType: ContributionType, region: string): void {
+  setContributionTypeDefault(contributionType: ContributionType, region: Region): void {
     const newSettings = this.state[region].map((c: ContributionTypeSetting) => {
       if (c.contributionType === contributionType) {
         return { contributionType: c.contributionType, isDefault: true }
@@ -179,7 +197,7 @@ class ContributionTypesComponent extends React.Component<Props, ContributionType
     }));
   }
 
-  renderOnOffs(settings: ContributionTypeSetting[], region: string): React.ReactNode {
+  renderOnOffs(settings: ContributionTypeSetting[], region: Region): React.ReactNode {
     return (
       <div className={this.props.classes.contributionTypes}>
       <div className={this.props.classes.label}>Enabled</div>
@@ -201,7 +219,7 @@ class ContributionTypesComponent extends React.Component<Props, ContributionType
     );
   }
 
-  renderDefaultRadios(current: ContributionType, region: string): React.ReactNode {
+  renderDefaultRadios(current: ContributionType, region: Region): React.ReactNode {
     return (
       <div className={this.props.classes.default}>
       <div className={this.props.classes.label}>Default</div>
@@ -209,7 +227,9 @@ class ContributionTypesComponent extends React.Component<Props, ContributionType
         aria-label="Default"
         name="default"
         value={current}
-        onChange={event => this.setContributionTypeDefault(event.target.value, region)}
+        onChange={(event, value) => {
+          if (isContributionType(value)) this.setContributionTypeDefault(value, region)
+        }}
       >
         {allContributionTypes.map(({contributionType, label}) =>
           <FormControlLabel value={contributionType} control={<Radio />} label=''/>
@@ -219,7 +239,7 @@ class ContributionTypesComponent extends React.Component<Props, ContributionType
     )
   }
 
-  renderContributionTypesSettings(settings: ContributionTypeSetting[], region: string): React.ReactNode {
+  renderContributionTypesSettings(settings: ContributionTypeSetting[], region: Region): React.ReactNode {
     const { classes } = this.props;
 
     const getDefault = (): ContributionType => {
@@ -249,8 +269,10 @@ class ContributionTypesComponent extends React.Component<Props, ContributionType
 
     return (
       <form className={classes.form}>
-        <div>
-          {Object.entries(this.state).map(([region, settings]) => this.renderContributionTypesSettings(settings, region))}
+        <div className={classes.regions}>
+          {Object.entries(this.state).map(([region, settings]) => {
+            if (isRegion(region)) return this.renderContributionTypesSettings(settings, region)
+          })}
         </div>
 
         <div className={classes.buttons}>
