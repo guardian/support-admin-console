@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import Switchboard from './components/switchboard';
+import ContributionTypesComponent from './components/contributionTypes';
 import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
@@ -45,7 +46,6 @@ const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
 });
 
 const Index = () => <h2>Home</h2>;
-const ContributionTypes = () => <h2>Contribution Types</h2>;
 const Amounts = () => <h2>Amounts</h2>;
 
 interface Props extends WithStyles<typeof styles> {}
@@ -89,7 +89,7 @@ const AppRouter = withStyles(styles)(({classes}: Props) => (
         <div className={classes.toolbar} />
         <Route path="/" exact component={Index} />
         <Route path="/switches" component={Switchboard} />
-        <Route path="/contribution-types" component={ContributionTypes} />
+        <Route path="/contribution-types" component={ContributionTypesComponent} />
         <Route path="/amounts" component={Amounts} />
       </main>
     </div>

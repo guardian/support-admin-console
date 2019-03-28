@@ -14,8 +14,12 @@ GET  /oauth2callback                                controllers.Login.oauth2Call
 GET  /logout                                        controllers.Login.logout
 
 # ----- support-frontend switches ----- #
-GET   /support-frontend/switches                    controllers.SupportFrontend.getSwitches
-POST  /support-frontend/switches/update             controllers.SupportFrontend.setSwitches
+GET   /support-frontend/switches                    controllers.SwitchesController.get
+POST  /support-frontend/switches/update             controllers.SwitchesController.set
+
+# ----- support-frontend contributionTypes ----- #
+GET   /support-frontend/contributionTypes           controllers.ContributionTypesController.get
+POST  /support-frontend/contributionTypes/update    controllers.ContributionTypesController.set
 
 # Map static resources from the /public folder to the /assets URL path
 GET  /assets/*file                                  controllers.Assets.at(path="/public", file)

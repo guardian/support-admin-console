@@ -51,7 +51,8 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     httpErrorHandler,
     new Application(authAction, controllerComponents),
     new Login(authConfig, wsClient, requiredGoogleGroups, googleGroupChecker, controllerComponents),
-    new SupportFrontend(authAction, stage, controllerComponents),
+    new SwitchesController(authAction, controllerComponents, stage),
+    new ContributionTypesController(authAction, controllerComponents, stage),
     assets
   )
 }
