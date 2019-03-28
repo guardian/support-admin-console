@@ -231,11 +231,10 @@ class ContributionTypesComponent extends React.Component<Props, ContributionType
     const { classes } = this.props;
 
     const getDefault = (): ContributionType => {
-      //array.find() is not available for some reason
-      const idx = settings.findIndex((c: ContributionTypeSetting) =>
+      const defaultType = settings.find((c: ContributionTypeSetting) =>
         typeof c.isDefault !== undefined && c.isDefault === true
       );
-      if (idx >= 0) return settings[idx].contributionType;
+      if (defaultType) return defaultType.contributionType;
       else return ContributionType.ONE_OFF;
     };
 
