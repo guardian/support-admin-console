@@ -1,7 +1,7 @@
 import React from 'react';
 import update from 'immutability-helper';
 
-import { Theme, withStyles, createStyles, WithStyles } from '@material-ui/core/styles';
+import {createStyles, Theme, withStyles, WithStyles} from '@material-ui/core/styles';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -12,6 +12,8 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import Button from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
 import RefreshIcon from '@material-ui/icons/Refresh';
+
+import {fetchSettings, saveSettings, SettingsType} from '../utils/requests';
 
 enum ContributionType {
   ONE_OFF = 'ONE_OFF',
@@ -122,15 +124,7 @@ class ContributionTypesComponent extends React.Component<Props, ContributionType
   }
 
   fetchStateFromServer(): void {
-    fetch('/support-frontend/contributionTypes')
-      .then(resp => {
-        if (!resp.ok) {
-          resp.text().then(msg => alert(msg));
-          throw new Error('Could not fetch initial server state');
-        }
-
-        return resp.json();
-      })
+    fetchSettings(SettingsType.contributionTypes)
       .then(serverData => {
         this.previousStateFromServer = serverData;
         this.setState({
@@ -139,18 +133,12 @@ class ContributionTypesComponent extends React.Component<Props, ContributionType
       });
   }
 
-  saveSwitches = () => {
+  save = () => {
     const newState = update(this.previousStateFromServer, {
       value: { $set: this.state }
     });
 
-    fetch('/support-frontend/contributionTypes/update', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newState),
-    })
+    saveSettings(SettingsType.contributionTypes, newState)
       .then(resp => {
         if (!resp.ok) {
           resp.text().then(msg => alert(msg));
@@ -276,7 +264,7 @@ class ContributionTypesComponent extends React.Component<Props, ContributionType
         </div>
 
         <div className={classes.buttons}>
-          <Button variant="contained" onClick={this.saveSwitches} className={classes.button}>
+          <Button variant="contained" onClick={this.save} className={classes.button}>
             <SaveIcon />
             Save
           </Button>

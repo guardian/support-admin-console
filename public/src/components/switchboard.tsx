@@ -11,6 +11,8 @@ import RefreshIcon from '@material-ui/icons/Refresh';
 
 import { Theme, withStyles, createStyles, WithStyles } from '@material-ui/core/styles';
 
+import {fetchSettings, saveSettings, SettingsType} from '../utils/requests';
+
 interface AmountsFromServer {
   // TBC, just a placeholder for now
   US: number[],
@@ -137,15 +139,7 @@ class Switchboard extends React.Component<Props, Switches> {
   }
 
   fetchStateFromServer(): void {
-    fetch('/support-frontend/switches')
-      .then(resp => {
-        if (!resp.ok) {
-          resp.text().then(msg => alert(msg));
-          throw new Error('Could not fetch initial server state');
-        }
-
-        return resp.json();
-      })
+    fetchSettings(SettingsType.switches)
       .then(serverData => {
         this.previousStateFromServer = serverData;
         this.setState({
@@ -185,13 +179,7 @@ class Switchboard extends React.Component<Props, Switches> {
       value: { $set: this.state }
     });
 
-    fetch('/support-frontend/switches/update', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newState),
-    })
+    saveSettings(SettingsType.switches,newState)
       .then(resp => {
         if (!resp.ok) {
           resp.text().then(msg => alert(msg));
