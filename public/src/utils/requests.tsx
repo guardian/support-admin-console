@@ -1,7 +1,8 @@
 
 export enum SettingsType {
   switches = 'switches',
-  contributionTypes = 'contributionTypes'
+  contributionTypes = 'contributionTypes',
+  amounts = 'amounts'
 }
 
 export function fetchSettings(settingsType: SettingsType): Promise<any> {

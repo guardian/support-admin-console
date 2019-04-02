@@ -13,27 +13,6 @@ import { Theme, withStyles, createStyles, WithStyles } from '@material-ui/core/s
 
 import {fetchSettings, saveSettings, SettingsType} from '../utils/requests';
 
-interface AmountsFromServer {
-  // TBC, just a placeholder for now
-  US: number[],
-  GB: number[],
-  AU: number[],
-  // ... and so on
-}
-
-enum ContributionType {
-  OneOff,
-  Monthly,
-  Annual
-}
-
-interface ContributionTypesFromServer {
-  // just a placeholder for now
-  US: ContributionType[],
-  GB: ContributionType[],
-  AU: ContributionType[],
-}
-
 enum SwitchState {
   On = 'On', Off = 'Off'
 }
@@ -66,7 +45,7 @@ interface Switches {
 }
 
 interface DataFromServer {
-  value: Switches | AmountsFromServer | ContributionTypesFromServer,
+  value: Switches,
   version: string,
 }
 
