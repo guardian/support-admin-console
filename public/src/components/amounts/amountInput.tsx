@@ -33,6 +33,12 @@ class AmountInputComponent extends React.Component<Props, EnteredAmount> {
     this.state = {value: ''};
   }
 
+  addAmount = (): void => {
+    if (!isNaN(parseInt(this.state.value))) {
+      this.props.addAmount(this.state.value);
+    }
+  };
+
   render() {
     const { classes } = this.props;
 
@@ -50,7 +56,7 @@ class AmountInputComponent extends React.Component<Props, EnteredAmount> {
         />
         <Button
           className={classes.addButton}
-          onClick={() => this.props.addAmount(this.state.value)}
+          onClick={this.addAmount}
         >
           +
         </Button>
