@@ -60,13 +60,11 @@ class AmountComponent extends React.Component<Props, AmountState> {
         <Button
           className={this.props.classes.amount + (this.props.amount.isDefault ? ` ${this.props.classes.isDefault}` : '') }
           onClick={this.onButtonClick}
-          aria-owns={this.state.anchor ? 'simple-menu' : undefined}
         >
           {this.props.amount.value}
         </Button>
 
         <Menu
-          id="simple-menu"
           open={Boolean(this.state.anchor)}
           onClose={event => {
             this.onClose()

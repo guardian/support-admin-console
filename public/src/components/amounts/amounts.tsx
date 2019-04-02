@@ -127,6 +127,40 @@ class AmountsComponent extends React.Component<Props, AmountsRegions> {
       });
   };
 
+  renderAmount(region: Region, contributionType: ContributionType, amount: Amount): React.ReactNode {
+    return (
+      <Amount
+        amount={amount}
+        deleteAmount={(amountToDelete => {
+          const updatedAmounts = this.state[region][contributionType]
+            .filter(a => a.value !== amountToDelete);
+
+          this.setState((prevState) => update(prevState, {
+            [region]: {
+              [contributionType]: {$set: updatedAmounts}
+            }
+          }));
+        })}
+        makeDefault={(defaultAmount => {
+          const updatedAmounts = this.state[region][contributionType]
+            .map(a => {
+              if (a.value === defaultAmount) return {
+                value: a.value,
+                isDefault: true
+              };
+              else return { value: a.value }
+            });
+
+          this.setState((prevState) => update(prevState, {
+            [region]: {
+              [contributionType]: {$set: updatedAmounts}
+            }
+          }));
+        })}
+      />
+    )
+  }
+
   renderAmounts(region: Region, contributionType: ContributionType, amounts: Amount[]): React.ReactNode {
     const { classes } = this.props;
 
@@ -134,39 +168,7 @@ class AmountsComponent extends React.Component<Props, AmountsRegions> {
       <div className={classes.ContributionType}>
         <span className={classes.ContributionTypeName}>{contributionType}</span>
 
-        { amounts.map(amount =>
-          <Amount
-            amount={amount}
-            deleteAmount={(amountToDelete => {
-              const updatedAmounts = this.state[region][contributionType]
-                .filter(a => a.value !== amountToDelete)
-
-              console.log("deleting", amountToDelete)
-              this.setState((prevState) => update(prevState, {
-                [region]: {
-                  [contributionType]: {$set: updatedAmounts}
-                }
-              }));
-            })}
-            makeDefault={(defaultAmount => {
-              const updatedAmounts = this.state[region][contributionType]
-                .map(a => {
-                  if (a.value === defaultAmount) return {
-                    value: a.value,
-                    isDefault: true
-                  };
-                  else return { value: a.value }
-                });
-
-              console.log("defaulting", defaultAmount)
-              this.setState((prevState) => update(prevState, {
-                [region]: {
-                  [contributionType]: {$set: updatedAmounts}
-                }
-              }));
-            })}
-          />
-        )}
+        { amounts.map(amount => this.renderAmount(region, contributionType, amount)) }
 
         <AmountInput
           addAmount={(value: string) => {
