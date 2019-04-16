@@ -59,7 +59,7 @@ const allContributionTypes = [
   {contributionType: ContributionType.ANNUAL, label: 'Annual'}
 ];
 
-const contributionTypesIndices = { ONE_OFF: 0, MONTHLY: 1, ANNUAL: 2};
+const contributionTypesIndices: { [c in ContributionType]: number } = { ONE_OFF: 0, MONTHLY: 1, ANNUAL: 2};
 const sortContributionTypeSettings = (settings: ContributionTypeSetting[]): ContributionTypeSetting[] =>
   settings.sort((a,b) => contributionTypesIndices[a.contributionType] - contributionTypesIndices[b.contributionType]);
 
