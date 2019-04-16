@@ -59,6 +59,10 @@ const allContributionTypes = [
   {contributionType: ContributionType.ANNUAL, label: 'Annual'}
 ];
 
+const contributionTypesIndices = { ONE_OFF: 0, MONTHLY: 1, ANNUAL: 2};
+const sortContributionTypeSettings = (settings: ContributionTypeSetting[]): ContributionTypeSetting[] =>
+  settings.sort((a,b) => contributionTypesIndices[a.contributionType] - contributionTypesIndices[b.contributionType]);
+
 const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
   form: {
     display: 'flex',
@@ -154,7 +158,7 @@ class ContributionTypesComponent extends React.Component<Props, ContributionType
   addContributionType(current: ContributionTypeSetting[], newSetting: ContributionTypeSetting): ContributionTypeSetting[] {
     return current.some(c => c.contributionType === newSetting.contributionType) ?
       current :
-      current.concat([newSetting]);
+      sortContributionTypeSettings(current.concat([newSetting]));
   }
 
   removeContributionType(current: ContributionTypeSetting[], toRemove: ContributionType): ContributionTypeSetting[] {
