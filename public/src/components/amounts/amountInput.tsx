@@ -7,13 +7,16 @@ import TextField from '@material-ui/core/TextField';
 const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
   amountInput: {
     display: 'inline',
-    marginLeft: spacing.unit * 4
+    marginLeft: 'auto',
+    paddingLeft: '8px',
+    borderLeft: `1px dotted ${palette.grey['300']}`
   },
   amountTextField: {
-    width: '30px'
+    width: '40px'
   },
   addButton: {
-    minWidth: '20px'
+    minWidth: '20px',
+    marginLeft: '5px'
   }
 });
 
@@ -47,6 +50,7 @@ class AmountInputComponent extends React.Component<Props, EnteredAmount> {
         <TextField
           className={classes.amountTextField}
           fullWidth={false}
+          type='number'
           onChange={event => {
             const newValue = event.target.value;
             this.setState((prevState) => {
@@ -57,6 +61,7 @@ class AmountInputComponent extends React.Component<Props, EnteredAmount> {
         <Button
           className={classes.addButton}
           onClick={this.addAmount}
+          variant='outlined'
         >
           +
         </Button>

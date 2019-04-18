@@ -10,7 +10,8 @@ import Button from "@material-ui/core/Button";
 
 const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
   amount: {
-    marginLeft: spacing.unit * 2,
+    marginLeft: spacing.unit,
+    marginRight: spacing.unit
   },
   isDefault: {
     color: 'red'
@@ -60,6 +61,7 @@ class AmountComponent extends React.Component<Props, AmountState> {
         <Button
           className={this.props.classes.amount + (this.props.amount.isDefault ? ` ${this.props.classes.isDefault}` : '') }
           onClick={this.onButtonClick}
+          variant='outlined'
         >
           {this.props.amount.value}
         </Button>
@@ -71,14 +73,16 @@ class AmountComponent extends React.Component<Props, AmountState> {
           }}
           anchorEl={this.state.anchor}
         >
-          <MenuItem
-            onClick={() => {
-              this.props.makeDefault(this.props.amount.value);
-              this.onClose();
-            }}
-          >
-            Make default
-          </MenuItem>
+          { this.props.amount.isDefault ? null :
+              <MenuItem
+                onClick={() => {
+                  this.props.makeDefault(this.props.amount.value);
+                  this.onClose();
+                }}
+              >
+                Make default
+              </MenuItem>
+          }
 
           <MenuItem
             onClick={() => {

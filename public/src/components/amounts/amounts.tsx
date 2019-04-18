@@ -67,10 +67,14 @@ const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
   },
   ContributionType: {
     margin: spacing.unit,
-    display: 'flex'
+    display: 'flex',
+    borderBottom: `1px dotted ${palette.grey['300']}`,
+    paddingBottom: '2px'
   },
   ContributionTypeName: {
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    marginTop: 'auto',
+    minWidth: '88px'
   }
 });
 
@@ -166,7 +170,7 @@ class AmountsComponent extends React.Component<Props, AmountsRegions> {
 
     return (
       <div className={classes.ContributionType}>
-        <span className={classes.ContributionTypeName}>{contributionType}</span>
+        <span className={classes.ContributionTypeName}>{contributionType}:</span>
 
         { amounts.map(amount => this.renderAmount(region, contributionType, amount)) }
 
