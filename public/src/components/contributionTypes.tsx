@@ -81,7 +81,10 @@ const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
     paddingLeft: spacing.unit * 4,
     borderBottom: `1px solid ${palette.grey['300']}`,
     borderRight: `5px solid ${palette.grey['300']}`,
-    marginBottom: spacing.unit * 4,
+    marginBottom: spacing.unit * 4
+  },
+  regionSettings: {
+    display: 'flex',
     flexDirection: 'row'
   },
   contributionTypes: {
@@ -243,9 +246,11 @@ class ContributionTypesComponent extends React.Component<Props, ContributionType
         <FormControl component={'fieldset' as 'div'} className={classes.region}>
           <FormLabel component={'legend' as 'label'}>{region}</FormLabel>
 
-          {this.renderOnOffs(settings, region)}
+          <div className={classes.regionSettings}>
+            {this.renderOnOffs(settings, region)}
 
-          {this.renderDefaultRadios(getDefault(), region)}
+            {this.renderDefaultRadios(getDefault(), region)}
+          </div>
         </FormControl>
       </div>
     );
