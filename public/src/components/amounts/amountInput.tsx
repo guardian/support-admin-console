@@ -12,7 +12,7 @@ const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
     borderLeft: `1px dotted ${palette.grey['300']}`
   },
   amountTextField: {
-    width: '40px'
+    width: '80px'
   },
   addButton: {
     minWidth: '20px',
