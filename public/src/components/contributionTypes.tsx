@@ -13,27 +13,12 @@ import Button from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
 import RefreshIcon from '@material-ui/icons/Refresh';
 
+import {ContributionType, Region} from '../utils/models';
 import {fetchSettings, saveSettings, SettingsType} from '../utils/requests';
-
-enum ContributionType {
-  ONE_OFF = 'ONE_OFF',
-  MONTHLY = 'MONTHLY',
-  ANNUAL = 'ANNUAL'
-}
 
 interface ContributionTypeSetting {
   contributionType: ContributionType,
   isDefault?: boolean
-}
-
-enum Region {
-  GBPCountries = 'GBPCountries',
-  UnitedStates = 'UnitedStates',
-  EURCountries = 'EURCountries',
-  International = 'International',
-  Canada = 'Canada',
-  AUDCountries = 'AUDCountries',
-  NZDCountries = 'NZDCountries'
 }
 
 type ContributionTypes = {
@@ -101,7 +86,7 @@ const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
 
 interface Props extends WithStyles<typeof styles> {}
 
-class ContributionTypesComponent extends React.Component<Props, ContributionTypes> {
+class ContributionTypesForm extends React.Component<Props, ContributionTypes> {
   state: ContributionTypes;
   previousStateFromServer: DataFromServer | null;
 
@@ -277,4 +262,4 @@ class ContributionTypesComponent extends React.Component<Props, ContributionType
   }
 }
 
-export default withStyles(styles)(ContributionTypesComponent);
+export default withStyles(styles)(ContributionTypesForm);

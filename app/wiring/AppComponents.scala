@@ -53,6 +53,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     new Login(authConfig, wsClient, requiredGoogleGroups, googleGroupChecker, controllerComponents),
     new SwitchesController(authAction, controllerComponents, stage),
     new ContributionTypesController(authAction, controllerComponents, stage),
+    new AmountsController(authAction, controllerComponents, stage),
     assets
   )
 }

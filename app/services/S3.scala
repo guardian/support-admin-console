@@ -53,8 +53,6 @@ object S3 extends S3Client with StrictLogging {
       val currentVersion = s3Client.getObject(bucket, key).getObjectMetadata.getVersionId
 
       if (currentVersion == data.version) {
-        println(s"putting:")
-        println(data)
         s3Client.putObject(bucket, key, data.value)
         Right[String, RawVersionedS3Data](data)
       } else {

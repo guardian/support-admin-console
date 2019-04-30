@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import Switchboard from './components/switchboard';
-import ContributionTypesComponent from './components/contributionTypes';
+import ContributionTypesForm from './components/contributionTypes';
+import AmountsForm from './components/amounts/amounts';
 import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
@@ -11,7 +12,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
-import ListItemLink from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import ListItem from '@material-ui/core/ListItem';
@@ -46,7 +46,6 @@ const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
 });
 
 const Index = () => <h2>Home</h2>;
-const Amounts = () => <h2>Amounts</h2>;
 
 interface Props extends WithStyles<typeof styles> {}
 
@@ -89,8 +88,8 @@ const AppRouter = withStyles(styles)(({classes}: Props) => (
         <div className={classes.toolbar} />
         <Route path="/" exact component={Index} />
         <Route path="/switches" component={Switchboard} />
-        <Route path="/contribution-types" component={ContributionTypesComponent} />
-        <Route path="/amounts" component={Amounts} />
+        <Route path="/contribution-types" component={ContributionTypesForm} />
+        <Route path="/amounts" component={AmountsForm} />
       </main>
     </div>
   </Router>
