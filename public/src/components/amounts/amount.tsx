@@ -26,6 +26,7 @@ interface Props extends WithStyles<typeof styles> {
 
 interface AmountState {
   amount: Amount,
+  //anchor determines where on the page the right-click menu should pop-up
   anchor: HTMLElement | null
 }
 
