@@ -80,7 +80,7 @@ const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
 
 interface Props extends WithStyles<typeof styles> {}
 
-class AmountsComponent extends React.Component<Props, AmountsRegions> {
+class AmountsForm extends React.Component<Props, AmountsRegions> {
   state: AmountsRegions;
   previousStateFromServer: DataFromServer | null;
 
@@ -235,4 +235,4 @@ class AmountsComponent extends React.Component<Props, AmountsRegions> {
   }
 }
 
-export default withStyles(styles)(AmountsComponent);
+export default withStyles(styles)(AmountsForm);

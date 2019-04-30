@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import Switchboard from './components/switchboard';
-import ContributionTypesComponent from './components/contributionTypes';
-import AmountsComponent from './components/amounts/amounts';
+import ContributionTypesForm from './components/contributionTypes';
+import AmountsForm from './components/amounts/amounts';
 import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
@@ -88,8 +88,8 @@ const AppRouter = withStyles(styles)(({classes}: Props) => (
         <div className={classes.toolbar} />
         <Route path="/" exact component={Index} />
         <Route path="/switches" component={Switchboard} />
-        <Route path="/contribution-types" component={ContributionTypesComponent} />
-        <Route path="/amounts" component={AmountsComponent} />
+        <Route path="/contribution-types" component={ContributionTypesForm} />
+        <Route path="/amounts" component={AmountsForm} />
       </main>
     </div>
   </Router>

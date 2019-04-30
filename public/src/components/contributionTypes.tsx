@@ -86,7 +86,7 @@ const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
 
 interface Props extends WithStyles<typeof styles> {}
 
-class ContributionTypesComponent extends React.Component<Props, ContributionTypes> {
+class ContributionTypesForm extends React.Component<Props, ContributionTypes> {
   state: ContributionTypes;
   previousStateFromServer: DataFromServer | null;
 
@@ -262,4 +262,4 @@ class ContributionTypesComponent extends React.Component<Props, ContributionType
   }
 }
 
-export default withStyles(styles)(ContributionTypesComponent);
+export default withStyles(styles)(ContributionTypesForm);
