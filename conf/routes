@@ -5,6 +5,7 @@ GET /                                               controllers.Application.inde
 GET /switches                                       controllers.Application.index
 GET /contribution-types                             controllers.Application.index
 GET /amounts                                        controllers.Application.index
+GET /epic-tests                                     controllers.Application.index
 
 # ----- Authentication ----- #
 
@@ -18,12 +19,16 @@ GET   /support-frontend/switches                    controllers.SwitchesControll
 POST  /support-frontend/switches/update             controllers.SwitchesController.set
 
 # ----- support-frontend contributionTypes ----- #
-GET   /support-frontend/contributionTypes           controllers.ContributionTypesController.get
-POST  /support-frontend/contributionTypes/update    controllers.ContributionTypesController.set
+GET   /support-frontend/contribution-types           controllers.ContributionTypesController.get
+POST  /support-frontend/contribution-types/update    controllers.ContributionTypesController.set
 
 # ----- support-frontend amounts ----- #
 GET   /support-frontend/amounts                     controllers.AmountsController.get
 POST  /support-frontend/amounts/update              controllers.AmountsController.set
+
+# ----- epic tests ----- #
+GET   /frontend/epic-tests                          controllers.EpicTestsController.get
+POST  /frontend/epic-tests/update                   controllers.EpicTestsController.set
 
 # Map static resources from the /public folder to the /assets URL path
 GET  /assets/*file                                  controllers.Assets.at(path="/public", file)

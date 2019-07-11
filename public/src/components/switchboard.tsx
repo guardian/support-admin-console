@@ -11,7 +11,7 @@ import RefreshIcon from '@material-ui/icons/Refresh';
 
 import { Theme, withStyles, createStyles, WithStyles } from '@material-ui/core/styles';
 
-import {fetchSettings, saveSettings, SettingsType} from '../utils/requests';
+import {fetchSupportFrontendSettings, saveSupportFrontendSettings, SupportFrontendSettingsType} from '../utils/requests';
 
 enum SwitchState {
   On = 'On', Off = 'Off'
@@ -118,7 +118,7 @@ class Switchboard extends React.Component<Props, Switches> {
   }
 
   fetchStateFromServer(): void {
-    fetchSettings(SettingsType.switches)
+    fetchSupportFrontendSettings(SupportFrontendSettingsType.switches)
       .then(serverData => {
         this.previousStateFromServer = serverData;
         this.setState({
@@ -158,7 +158,7 @@ class Switchboard extends React.Component<Props, Switches> {
       value: { $set: this.state }
     });
 
-    saveSettings(SettingsType.switches,newState)
+    saveSupportFrontendSettings(SupportFrontendSettingsType.switches,newState)
       .then(resp => {
         if (!resp.ok) {
           resp.text().then(msg => alert(msg));
