@@ -7,7 +7,7 @@ Fetch DEV config by getting `membership` janus credentials and running:
 Build the client:
 ```
 npm install
-npm run build
+npm run build-dev
 ```
 
 Run the play server:
