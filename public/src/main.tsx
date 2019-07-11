@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import Switchboard from './components/switchboard';
 import ContributionTypesForm from './components/contributionTypes';
 import AmountsForm from './components/amounts/amounts';
+import EpicTestsForm from './components/epicTests/epicTestsForm';
 import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
@@ -73,7 +74,7 @@ const AppRouter = withStyles(styles)(({classes}: Props) => (
           <Divider />
           {/* TODO: use link from react router to avoid a full page reload */}
           <List>
-            {[['/', 'Home'], ['/switches', 'Switches'], ['/contribution-types', 'Contribution Types'], ['/amounts', 'Amounts']].map(([href, name]) => (
+            {[['/', 'Home'], ['/switches', 'Switches'], ['/contribution-types', 'Contribution Types'], ['/amounts', 'Amounts'], ['/epic-tests', 'Epic tests']].map(([href, name]) => (
               <Link to={href} className={classes.link}>
                 <ListItem button key={name}>
                   <ListItemText primary={name} />
@@ -90,6 +91,7 @@ const AppRouter = withStyles(styles)(({classes}: Props) => (
         <Route path="/switches" component={Switchboard} />
         <Route path="/contribution-types" component={ContributionTypesForm} />
         <Route path="/amounts" component={AmountsForm} />
+        <Route path="/epic-tests" component={EpicTestsForm} />
       </main>
     </div>
   </Router>

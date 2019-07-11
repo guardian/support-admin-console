@@ -8,8 +8,8 @@ import Button from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
 import RefreshIcon from '@material-ui/icons/Refresh';
 
-import {fetchSettings, saveSettings, SettingsType} from '../../utils/requests';
 import {ContributionType, Region, isRegion} from '../../utils/models';
+import {fetchSupportFrontendSettings, saveSupportFrontendSettings, SupportFrontendSettingsType} from '../../utils/requests';
 import AmountInput from './amountInput';
 import Amount from './amount';
 
@@ -100,7 +100,7 @@ class AmountsForm extends React.Component<Props, AmountsRegions> {
   }
 
   fetchStateFromServer(): void {
-    fetchSettings(SettingsType.amounts)
+    fetchSupportFrontendSettings(SupportFrontendSettingsType.amounts)
       .then(serverData => {
         this.previousStateFromServer = serverData;
         this.setState({
@@ -114,7 +114,7 @@ class AmountsForm extends React.Component<Props, AmountsRegions> {
       value: { $set: this.state }
     });
 
-    saveSettings(SettingsType.amounts, newState)
+    saveSupportFrontendSettings(SupportFrontendSettingsType.amounts, newState)
       .then(resp => {
         if (!resp.ok) {
           resp.text().then(msg => alert(msg));

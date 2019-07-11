@@ -14,8 +14,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import RefreshIcon from '@material-ui/icons/Refresh';
 
 import {ContributionType, Region, isContributionType, isRegion} from '../utils/models';
-import {fetchSettings, saveSettings, SettingsType} from '../utils/requests';
-
+import {fetchSupportFrontendSettings, saveSupportFrontendSettings, SupportFrontendSettingsType} from '../utils/requests';
 interface ContributionTypeSetting {
   contributionType: ContributionType,
   isDefault?: boolean
@@ -108,7 +107,7 @@ class ContributionTypesForm extends React.Component<Props, ContributionTypes> {
   }
 
   fetchStateFromServer(): void {
-    fetchSettings(SettingsType.contributionTypes)
+    fetchSupportFrontendSettings(SupportFrontendSettingsType.contributionTypes)
       .then(serverData => {
         this.previousStateFromServer = serverData;
         this.setState({
@@ -122,7 +121,7 @@ class ContributionTypesForm extends React.Component<Props, ContributionTypes> {
       value: { $set: this.state }
     });
 
-    saveSettings(SettingsType.contributionTypes, newState)
+    saveSupportFrontendSettings(SupportFrontendSettingsType.contributionTypes, newState)
       .then(resp => {
         if (!resp.ok) {
           resp.text().then(msg => alert(msg));
