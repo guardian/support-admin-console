@@ -40,13 +40,12 @@ interface EpicTest {
   variants: EpicVariant[]
 }
 
-//Wrapper for the array of tests, as React state must be an object
 interface EpicTests {
   tests: EpicTest[]
 }
 
 interface DataFromServer {
-  value: EpicTest[],
+  value: EpicTests,
   version: string,
 }
 
@@ -74,14 +73,14 @@ class EpicTestsForm extends React.Component<Props, EpicTests> {
       .then(serverData => {
         this.previousStateFromServer = serverData;
         this.setState({
-          tests: serverData.value
+          ...serverData.value
         });
       });
   }
 
   save = () => {
     const newState = update(this.previousStateFromServer, {
-      value: { $set: this.state.tests }
+      value: { $set: this.state }
     });
 
     saveSupportFrontendSettings(SupportFrontendSettingsType.contributionTypes, newState)
