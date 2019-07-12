@@ -2,8 +2,8 @@ package controllers
 
 import com.gu.googleauth.AuthAction
 import play.api.mvc.{AnyContent, ControllerComponents}
-import io.circe.generic.auto._
 import models.EpicTest
+import models.EpicTest._
 
 import scala.concurrent.ExecutionContext
 
