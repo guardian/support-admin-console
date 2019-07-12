@@ -1,7 +1,11 @@
 package models
 
-import enumeratum.{CirceEnum, EnumEntry, Enum}
+import enumeratum.{CirceEnum, Enum, EnumEntry}
+import io.circe.{Decoder, Encoder}
+import io.circe.generic.extras.Configuration
+
 import scala.collection.immutable.IndexedSeq
+import io.circe.generic.extras.auto._
 
 sealed trait Region extends EnumEntry
 
@@ -52,3 +56,9 @@ case class EpicTest(
   hasCountryName: Boolean = false,
   variants: List[EpicVariant]
 )
+
+object EpicTest {
+  implicit val customConfig: Configuration = Configuration.default.withDefaults
+  implicit val epicTestDecoder = Decoder[EpicTest]
+  implicit val epicTestEncoder = Encoder[EpicTest]
+}

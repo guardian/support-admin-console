@@ -40,6 +40,11 @@ interface EpicTest {
   variants: EpicVariant[]
 }
 
+//Wrapper for the array of tests, as React state must be an object
+interface EpicTests {
+  tests: EpicTest[]
+}
+
 interface DataFromServer {
   value: EpicTest[],
   version: string,
@@ -50,13 +55,13 @@ const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
 
 interface Props extends WithStyles<typeof styles> {}
 
-class EpicTestsForm extends React.Component<Props, EpicTest[]> {
-  state: EpicTest[];
+class EpicTestsForm extends React.Component<Props, EpicTests> {
+  state: EpicTests;
   previousStateFromServer: DataFromServer | null;
 
   constructor(props: Props) {
     super(props);
-    this.state = [];
+    this.state = {tests: []};
     this.previousStateFromServer = null;
   }
 
@@ -69,14 +74,14 @@ class EpicTestsForm extends React.Component<Props, EpicTest[]> {
       .then(serverData => {
         this.previousStateFromServer = serverData;
         this.setState({
-          ...serverData.value
+          tests: serverData.value
         });
       });
   }
 
   save = () => {
     const newState = update(this.previousStateFromServer, {
-      value: { $set: this.state }
+      value: { $set: this.state.tests }
     });
 
     saveSupportFrontendSettings(SupportFrontendSettingsType.contributionTypes, newState)
@@ -95,7 +100,7 @@ class EpicTestsForm extends React.Component<Props, EpicTest[]> {
   //TODO - rendering a form
   render(): React.ReactNode {
     return (
-      <div>Epic tests</div>
+      <div>{this.state ? <span>{JSON.stringify(this.state.tests)}</span>: null}</div>
     )
   }
 }
