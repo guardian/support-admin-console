@@ -97,10 +97,24 @@ class EpicTestsForm extends React.Component<Props, EpicTests> {
       });
   };
 
+  renderTest(test: EpicTest): React.ReactNode {
+    return (
+      <div>
+        <h3>{test.name}</h3>
+        <ul>
+          {test.variants.map(variant => <li>{variant.name}</li>)}
+        </ul>
+      </div>
+    )
+  }
+
   //TODO - rendering a form
   render(): React.ReactNode {
     return (
-      <div>{this.state ? <span>{JSON.stringify(this.state.tests)}</span>: null}</div>
+      <div>
+        <h2>Epic tests</h2>
+        {this.state ? this.state.tests.map(this.renderTest): null}
+      </div>
     )
   }
 }
