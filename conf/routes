@@ -1,6 +1,7 @@
 # ----- System ----- #
-
 GET /healthcheck                                    controllers.Application.healthcheck
+
+# ----- Pages ----- #
 GET /                                               controllers.Application.index
 GET /switches                                       controllers.Application.index
 GET /contribution-types                             controllers.Application.index
@@ -8,7 +9,6 @@ GET /amounts                                        controllers.Application.inde
 GET /epic-tests                                     controllers.Application.index
 
 # ----- Authentication ----- #
-
 GET  /login                                         controllers.Login.login
 GET  /loginAction                                   controllers.Login.loginAction
 GET  /oauth2callback                                controllers.Login.oauth2Callback
@@ -19,8 +19,8 @@ GET   /support-frontend/switches                    controllers.SwitchesControll
 POST  /support-frontend/switches/update             controllers.SwitchesController.set
 
 # ----- support-frontend contributionTypes ----- #
-GET   /support-frontend/contribution-types           controllers.ContributionTypesController.get
-POST  /support-frontend/contribution-types/update    controllers.ContributionTypesController.set
+GET   /support-frontend/contribution-types          controllers.ContributionTypesController.get
+POST  /support-frontend/contribution-types/update   controllers.ContributionTypesController.set
 
 # ----- support-frontend amounts ----- #
 GET   /support-frontend/amounts                     controllers.AmountsController.get
