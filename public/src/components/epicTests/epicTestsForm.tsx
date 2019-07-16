@@ -21,7 +21,7 @@ enum UserCohort {
 
 export interface EpicVariant {
   name: string,
-  heading: string,
+  heading?: string,
   paragraphs: string[],
   highlightedText?: string,
   footer?: string,

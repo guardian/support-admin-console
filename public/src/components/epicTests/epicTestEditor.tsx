@@ -7,6 +7,8 @@ import {
 } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import EditableTextField from "../helpers/editableTextField"
+import Switch from "@material-ui/core/Switch";
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
   container: {
@@ -42,11 +44,12 @@ class EpicTestsEditor extends React.Component<Props, any> {
     super(props);
   }
 
-  onTagsChange = (updatedTags: string): void => {
+  onListChange = (fieldName: string) => (updatedString: string): void => {
     if (this.props.test) {
-      const updatedTest = update(this.props.test, {
-        tagIds: {$set: updatedTags.split(",")}
-      });
+      const updatedTest = {
+        ...this.props.test,
+        [fieldName]: updatedString.split(",")
+      };
       this.props.onChange(updatedTest)
     }
   };
@@ -68,8 +71,44 @@ class EpicTestsEditor extends React.Component<Props, any> {
         <div>
           <EditableTextField
             text={test.tagIds.join(",")}
-            onSubmit={this.onTagsChange}
+            onSubmit={this.onListChange("tagIds")}
             label="Tags"
+          />
+
+          <EditableTextField
+            text={test.excludedTagIds.join(",")}
+            onSubmit={this.onListChange("excludedTagIds")}
+            label="Excluded tags"
+          />
+
+          <EditableTextField
+            text={test.sections.join(",")}
+            onSubmit={this.onListChange("sections")}
+            label="Sections"
+          />
+
+          <EditableTextField
+            text={test.excludedSections.join(",")}
+            onSubmit={this.onListChange("excludedSections")}
+            label="Excluded sections"
+          />
+
+          <FormControlLabel
+            control={
+              <Switch
+                checked={test.alwaysAsk}
+                onChange={(event) => {
+                  if (this.props.test) {
+                    const updatedTest = {
+                      ...this.props.test,
+                      alwaysAsk: event.target.checked
+                    };
+                    this.props.onChange(updatedTest)
+                  }
+                }}
+              />
+            }
+            label="Always ask"
           />
         </div>
         <List>

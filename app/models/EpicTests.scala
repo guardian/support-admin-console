@@ -34,7 +34,7 @@ object UserCohort extends Enum[UserCohort] with CirceEnum[UserCohort] {
 
 case class EpicVariant(
   name: String,
-  heading: String,
+  heading: Option[String],
   paragraphs: List[String],
   highlightedText: Option[String] = None,
   footer: Option[String] = None,
