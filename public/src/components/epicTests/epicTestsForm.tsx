@@ -5,9 +5,13 @@ import {Region} from "../../utils/models";
 import {
   fetchFrontendSettings,
   FrontendSettingsType,
-  saveSupportFrontendSettings,
-  SupportFrontendSettingsType
+  saveFrontendSettings,
 } from "../../utils/requests";
+import EpicTestsList from "./epicTestsList"
+import EpicTestEditor from "./epicTestEditor"
+import SaveIcon from '@material-ui/icons/Save';
+import RefreshIcon from '@material-ui/icons/Refresh';
+import Button from "@material-ui/core/Button";
 
 enum UserCohort {
   OnlyExistingSupporters = 'OnlyExistingSupporters',
@@ -15,7 +19,7 @@ enum UserCohort {
   Everyone = 'Everyone'
 }
 
-interface EpicVariant {
+export interface EpicVariant {
   name: string,
   heading: string,
   paragraphs: string[],
@@ -27,7 +31,7 @@ interface EpicVariant {
   supportBaseURL?: string
 }
 
-interface EpicTest {
+export interface EpicTest {
   name: string,
   locations: Region[],
   tagIds: string[],
@@ -49,13 +53,28 @@ interface DataFromServer {
   version: string,
 }
 
+type EpicTestsFormState = EpicTests & {
+  selectedTestName?: string
+}
+
 const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
+  container: {
+    display: "flex"
+  },
+  buttons: {
+    marginTop: spacing.unit * 2,
+    marginBottom: spacing.unit * 4
+  },
+  button: {
+    marginRight: spacing.unit * 2,
+    marginBottom: spacing.unit * 2
+  }
 });
 
 interface Props extends WithStyles<typeof styles> {}
 
-class EpicTestsForm extends React.Component<Props, EpicTests> {
-  state: EpicTests;
+class EpicTestsForm extends React.Component<Props, EpicTestsFormState> {
+  state: EpicTestsFormState;
   previousStateFromServer: DataFromServer | null;
 
   constructor(props: Props) {
@@ -80,10 +99,13 @@ class EpicTestsForm extends React.Component<Props, EpicTests> {
 
   save = () => {
     const newState = update(this.previousStateFromServer, {
-      value: { $set: this.state }
+      value: {
+        tests: { $set: this.state.tests }
+      }
     });
+    console.log("UPDATING", newState)
 
-    saveSupportFrontendSettings(SupportFrontendSettingsType.contributionTypes, newState)
+    saveFrontendSettings(FrontendSettingsType.epicTests, newState)
       .then(resp => {
         if (!resp.ok) {
           resp.text().then(msg => alert(msg));
@@ -96,23 +118,52 @@ class EpicTestsForm extends React.Component<Props, EpicTests> {
       });
   };
 
-  renderTest(test: EpicTest): React.ReactNode {
-    return (
-      <div>
-        <h3>{test.name}</h3>
-        <ul>
-          {test.variants.map(variant => <li>{variant.name}</li>)}
-        </ul>
-      </div>
-    )
-  }
+  onTestSelected = (testName: string): void => {
+    this.setState({
+      tests: this.state.tests,
+      selectedTestName: testName
+    })
+  };
 
-  //TODO - rendering a form
+  onTestChange = (updatedTest: EpicTest): void => {
+    console.log(updatedTest)
+    const updatedTests = this.state.tests.map(test => test.name === updatedTest.name ? updatedTest : test);
+    this.setState((prevState) => {
+      return {
+        ...prevState,
+        tests: updatedTests
+      }
+    });
+  };
+
   render(): React.ReactNode {
+    const { classes } = this.props;
+
     return (
       <div>
         <h2>Epic tests</h2>
-        {this.state ? this.state.tests.map(this.renderTest): null}
+        <div className={classes.buttons}>
+          <Button variant="contained" onClick={this.save} className={classes.button}>
+            <SaveIcon />
+            Publish
+          </Button>
+          <Button variant="contained" onClick={() => this.fetchStateFromServer()} className={classes.button}>
+            <RefreshIcon />
+            Refresh
+          </Button>
+        </div>
+
+        <div className={classes.container}>
+          <EpicTestsList
+            testNames={this.state.tests.map(test => test.name)}
+            onTestSelected={this.onTestSelected}
+            selectedTestName={this.state.selectedTestName}
+          />
+          <EpicTestEditor
+            test={this.state.selectedTestName ? this.state.tests.find(test => test.name === this.state.selectedTestName) : undefined}
+            onChange={this.onTestChange}
+          />
+        </div>
       </div>
     )
   }
