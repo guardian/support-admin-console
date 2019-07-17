@@ -2,9 +2,18 @@ import React from 'react';
 import {createStyles, Theme, withStyles, WithStyles} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import TextField from '@material-ui/core/TextField';
-import InputLabel from "@material-ui/core/InputLabel";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import EditIcon from '@material-ui/icons/Edit';
+import SaveIcon from '@material-ui/icons/Save';
 
 const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
+  label: {
+    marginRight: "8px",
+    fontWeight: "bold"
+  },
+  container: {
+    marginLeft: 0
+  }
 });
 
 interface Props extends WithStyles<typeof styles> {
@@ -29,48 +38,61 @@ class EditableTextField extends React.Component<Props, EditableTextFieldState> {
     }
   }
 
+  componentDidUpdate(prevProps: Props) {
+    // If a different test is selected or 'refresh' is clicked then we should reset the field based on the new props
+    if (prevProps.text !== this.props.text) {
+      this.setState({
+        editMode: false,
+        currentText: this.props.text
+      })
+    }
+  }
+
   onClickButton = (): void => {
     if (this.state.editMode) {
       this.props.onSubmit(this.state.currentText);
 
-      this.setState((prevState) => {
-        return {
-          ...prevState,
-          editMode: false
-        }
+      this.setState({
+        editMode: false
       });
     } else {
-      this.setState((prevState) => {
-        return {
-          ...prevState,
-          editMode: true
-        }
+      this.setState({
+        editMode: true
       });
     }
   };
 
   render(): React.ReactNode {
+    const {classes} = this.props;
+
     return (
       <div>
-        <InputLabel htmlFor={this.props.label}>
-          {this.props.label}
-        </InputLabel>
-        <TextField
-          id={this.props.label}
-          disabled={!this.state.editMode}
-          value={this.state.currentText}
-          onChange={event => {
-            const newValue = event.target.value;
-            this.setState((prevState) => {
-              return {
-                ...prevState,
-                currentText: newValue
-              }
-            })
+        <FormControlLabel
+          className={classes.container}
+          control={
+            <TextField
+              name={this.props.label}
+              disabled={!this.state.editMode}
+              value={this.state.currentText}
+              onChange={event => {
+                const newValue = event.target.value;
+                this.setState({
+                  currentText: newValue
+                })
+              }}
+            />
+          }
+          label={this.props.label}
+          labelPlacement="start"
+          classes={{
+            label: classes.label
           }}
         />
-        <Button onClick={this.onClickButton}>{this.state.editMode ? "Save" : "Edit"}</Button>
+        <Button type="submit" onClick={this.onClickButton}>
+          {this.state.editMode ? <SaveIcon /> : <EditIcon />}
+        </Button>
       </div>
+
     )
   }
 }

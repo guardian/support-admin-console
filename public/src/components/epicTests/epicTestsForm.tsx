@@ -120,7 +120,6 @@ class EpicTestsForm extends React.Component<Props, EpicTestsFormState> {
 
   onTestSelected = (testName: string): void => {
     this.setState({
-      tests: this.state.tests,
       selectedTestName: testName
     })
   };
@@ -128,11 +127,8 @@ class EpicTestsForm extends React.Component<Props, EpicTestsFormState> {
   onTestChange = (updatedTest: EpicTest): void => {
     console.log(updatedTest)
     const updatedTests = this.state.tests.map(test => test.name === updatedTest.name ? updatedTest : test);
-    this.setState((prevState) => {
-      return {
-        ...prevState,
-        tests: updatedTests
-      }
+    this.setState({
+      tests: updatedTests
     });
   };
 
