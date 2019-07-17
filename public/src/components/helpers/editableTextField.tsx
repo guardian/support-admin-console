@@ -9,10 +9,16 @@ import SaveIcon from '@material-ui/icons/Save';
 const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
   label: {
     marginRight: "8px",
-    fontWeight: "bold"
+    fontWeight: "bold",
+    width: "180px"
   },
   container: {
-    marginLeft: 0
+    marginLeft: 0,
+    marginRight: "8px",
+    width: "80%"
+  },
+  row: {
+    margin: "10px 0 0 10px"
   }
 });
 
@@ -65,12 +71,14 @@ class EditableTextField extends React.Component<Props, EditableTextFieldState> {
   render(): React.ReactNode {
     const {classes} = this.props;
 
+
     return (
-      <div>
+      <div className={classes.row}>
         <FormControlLabel
           className={classes.container}
           control={
             <TextField
+              fullWidth
               name={this.props.label}
               disabled={!this.state.editMode}
               value={this.state.currentText}
@@ -88,8 +96,12 @@ class EditableTextField extends React.Component<Props, EditableTextFieldState> {
             label: classes.label
           }}
         />
-        <Button type="submit" onClick={this.onClickButton}>
-          {this.state.editMode ? <SaveIcon /> : <EditIcon />}
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          onClick={this.onClickButton}>
+            {this.state.editMode ? <SaveIcon /> : <EditIcon />}
         </Button>
       </div>
 
