@@ -1,11 +1,8 @@
 import React from 'react';
-import update from 'immutability-helper';
 import {EpicTest, EpicVariant} from "./epicTestsForm";
-import TextField from '@material-ui/core/TextField';
 import {
   List, ListItem, Theme, createStyles, WithStyles, withStyles
 } from "@material-ui/core";
-import Button from "@material-ui/core/Button";
 import EditableTextField from "../helpers/editableTextField"
 import Switch from "@material-ui/core/Switch";
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -13,7 +10,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
   container: {
     width: "80%",
-    borderTop: `2px solid ${palette.grey['300']}`
+    borderTop: `2px solid ${palette.grey['300']}`,
+    marginLeft: "15px"
   },
   variant: {
     display: "flex",
@@ -72,25 +70,25 @@ class EpicTestsEditor extends React.Component<Props, any> {
           <EditableTextField
             text={test.tagIds.join(",")}
             onSubmit={this.onListChange("tagIds")}
-            label="Tags"
+            label="Tags:"
           />
 
           <EditableTextField
             text={test.excludedTagIds.join(",")}
             onSubmit={this.onListChange("excludedTagIds")}
-            label="Excluded tags"
+            label="Excluded tags:"
           />
 
           <EditableTextField
             text={test.sections.join(",")}
             onSubmit={this.onListChange("sections")}
-            label="Sections"
+            label="Sections:"
           />
 
           <EditableTextField
             text={test.excludedSections.join(",")}
             onSubmit={this.onListChange("excludedSections")}
-            label="Excluded sections"
+            label="Excluded sections:"
           />
 
           <FormControlLabel
