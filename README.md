@@ -14,3 +14,8 @@ Run the play server:
 ```
 sbt run
 ```
+
+Refresh automatically:
+```
+npm run watch
+```
