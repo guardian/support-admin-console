@@ -40,12 +40,13 @@ class EditableTextField extends React.Component<Props, EditableTextFieldState> {
     super(props);
     this.state = {
       editMode: false,
-      currentText: this.props.text
+      currentText: props.text
     }
   }
 
   componentDidUpdate(prevProps: Props) {
     // If a different test is selected or 'refresh' is clicked then we should reset the field based on the new props
+    // TODO - if text is empty then editMode is not unset. This needs a better solution
     if (prevProps.text !== this.props.text) {
       this.setState({
         editMode: false,
