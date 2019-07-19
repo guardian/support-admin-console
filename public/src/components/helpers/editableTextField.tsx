@@ -34,15 +34,11 @@ interface EditableTextFieldState {
 }
 
 class EditableTextField extends React.Component<Props, EditableTextFieldState> {
-  state: EditableTextFieldState;
-
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      editMode: false,
-      currentText: props.text
-    }
-  }
+  
+  state: EditableTextFieldState =  {
+        editMode: false,
+        currentText: this.props.text
+      }
 
   componentDidUpdate(prevProps: Props) {
     // If a different test is selected or 'refresh' is clicked then we should reset the field based on the new props
