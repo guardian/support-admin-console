@@ -52,7 +52,7 @@ class EpicTestsEditor extends React.Component<Props, any> {
     }
   };
 
-  onUserCohortChange = (cohort: string) => {
+  onUserCohortChange = (cohort: UserCohort) => {
     if (this.props.test) {
       const updatedTest = {
         ...this.props.test,
@@ -105,11 +105,20 @@ class EpicTestsEditor extends React.Component<Props, any> {
             <InputLabel htmlFor="user-cohort">User cohort</InputLabel>
           <Select
             value={test.userCohort}
-            onChange={this.props.onChange()}
+            onChange={(event) => {
+              var val = event.target.value
+              if (
+                val === UserCohort.OnlyExistingSupporters ||
+                val === UserCohort.OnlyNonSupporters ||
+                val === UserCohort.Everyone
+              ) {
+                this.onUserCohortChange(val)
+              }
+            }}
           >
-            <MenuItem>{UserCohort.OnlyExistingSupporters}</MenuItem>
-            <MenuItem>{UserCohort.OnlyNonSupporters}</MenuItem>
-            <MenuItem>{UserCohort.Everyone}</MenuItem>
+            <MenuItem value={UserCohort.OnlyExistingSupporters}>{UserCohort.OnlyExistingSupporters}</MenuItem>
+            <MenuItem value={UserCohort.OnlyNonSupporters}>{UserCohort.OnlyNonSupporters}</MenuItem>
+            <MenuItem value={UserCohort.Everyone}>{UserCohort.Everyone}</MenuItem>
 
           </Select>
           </FormControl>
