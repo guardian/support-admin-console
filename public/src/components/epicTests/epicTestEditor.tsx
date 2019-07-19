@@ -1,11 +1,11 @@
 import React from 'react';
-import {EpicTest, EpicVariant} from "./epicTestsForm";
+import {EpicTest, EpicVariant, UserCohort} from "./epicTestsForm";
 import {
-  List, ListItem, Theme, createStyles, WithStyles, withStyles
+  List, ListItem, Theme, createStyles, WithStyles, withStyles, Select, FormControl, InputLabel, MenuItem
 } from "@material-ui/core";
 import EditableTextField from "../helpers/editableTextField"
 import Switch from "@material-ui/core/Switch";
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
   container: {
@@ -28,6 +28,9 @@ const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
   },
   variantListHeading: {
     fontWeight: "bold"
+  },
+  userCohortSelect: {
+    width: "50%"
   }
 });
 
@@ -38,15 +41,22 @@ interface Props extends WithStyles<typeof styles> {
 
 class EpicTestsEditor extends React.Component<Props, any> {
 
-  constructor(props: Props) {
-    super(props);
-  }
 
   onListChange = (fieldName: string) => (updatedString: string): void => {
     if (this.props.test) {
       const updatedTest = {
         ...this.props.test,
         [fieldName]: updatedString.split(",")
+      };
+      this.props.onChange(updatedTest)
+    }
+  };
+
+  onUserCohortChange = (cohort: string) => {
+    if (this.props.test) {
+      const updatedTest = {
+        ...this.props.test,
+        userCohort: cohort
       };
       this.props.onChange(updatedTest)
     }
@@ -90,6 +100,21 @@ class EpicTestsEditor extends React.Component<Props, any> {
             onSubmit={this.onListChange("excludedSections")}
             label="Excluded sections:"
           />
+          <div>
+          <FormControl className={classes.userCohortSelect}>
+            <InputLabel htmlFor="user-cohort">User cohort</InputLabel>
+          <Select
+            value={test.userCohort}
+            onChange={this.props.onChange()}
+          >
+            <MenuItem>{UserCohort.OnlyExistingSupporters}</MenuItem>
+            <MenuItem>{UserCohort.OnlyNonSupporters}</MenuItem>
+            <MenuItem>{UserCohort.Everyone}</MenuItem>
+
+          </Select>
+          </FormControl>
+          </div>
+
 
           <FormControlLabel
             control={
@@ -108,6 +133,26 @@ class EpicTestsEditor extends React.Component<Props, any> {
             }
             label="Always ask"
           />
+
+
+          <FormControlLabel
+            control={
+              <Switch
+                checked={test.isLiveBlog}
+                onChange={(event) => {
+                  if (this.props.test) {
+                    const updatedTest = {
+                      ...this.props.test,
+                      isLiveBlog: event.target.checked
+                    };
+                    this.props.onChange(updatedTest)
+                  }
+                }}
+              />
+            }
+            label="Is live blog"
+          />
+
         </div>
         <h3>Variants</h3>
         <List>
