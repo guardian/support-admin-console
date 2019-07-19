@@ -53,6 +53,7 @@ case class EpicTest(
   excludedSections: List[String] = Nil,
   alwaysAsk: Boolean = false,
   userCohort: Option[UserCohort] = None,
+  isLiveBlog: Boolean = false,
   hasCountryName: Boolean = false,
   variants: List[EpicVariant]
 )

@@ -13,7 +13,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import Button from "@material-ui/core/Button";
 
-enum UserCohort {
+export enum UserCohort {
   OnlyExistingSupporters = 'OnlyExistingSupporters',
   OnlyNonSupporters = 'OnlyNonSupporters',
   Everyone = 'Everyone'
@@ -40,6 +40,7 @@ export interface EpicTest {
   excludedSections: string[],
   alwaysAsk: boolean,
   userCohort?: UserCohort,
+  isLiveBlog: boolean,
   hasCountryName: boolean,
   variants: EpicVariant[]
 }
