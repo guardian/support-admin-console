@@ -106,13 +106,10 @@ class EpicTestsEditor extends React.Component<Props, any> {
           <Select
             value={test.userCohort}
             onChange={(event) => {
-              var val = event.target.value
-              if (
-                val === UserCohort.OnlyExistingSupporters ||
-                val === UserCohort.OnlyNonSupporters ||
-                val === UserCohort.Everyone
-              ) {
-                this.onUserCohortChange(val)
+              let selectedValue = event.target.value;
+              if (selectedValue in UserCohort)
+              {
+                this.onUserCohortChange(selectedValue as UserCohort)
               }
             }}
           >
