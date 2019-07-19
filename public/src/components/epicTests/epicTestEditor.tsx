@@ -109,6 +109,7 @@ class EpicTestsEditor extends React.Component<Props, any> {
             label="Always ask"
           />
         </div>
+        <h3>Variants</h3>
         <List>
           <ListItem className={`${classes.variant} ${classes.variantListHeading}`}>
             <span className={classes.variantName}>Name</span>
