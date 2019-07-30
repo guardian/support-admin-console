@@ -1,13 +1,15 @@
 import React from 'react';
 import {EpicTest, EpicVariant, UserCohort} from "./epicTestsForm";
 import {
-  List, ListItem, Theme, createStyles, WithStyles, withStyles, Select, FormControl, InputLabel, MenuItem
+  List, ListItem, Theme, createStyles, WithStyles, withStyles, Select, FormControl, InputLabel, MenuItem, Input, Checkbox, ListItemText
 } from "@material-ui/core";
 import EditableTextField from "../helpers/editableTextField"
 import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import { Region } from '../../utils/models';
+import { MenuProps } from 'material-ui';
 
-const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
+const styles = ({ palette, spacing }: Theme) => createStyles({
   container: {
     width: "80%",
     borderTop: `2px solid ${palette.grey['300']}`,
@@ -29,11 +31,24 @@ const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
   variantListHeading: {
     fontWeight: "bold"
   },
-  userCohortSelect: {
-    width: "50%"
+  formControl: {
+    marginTop: spacing.unit * 2,
+    marginBottom: spacing.unit,
+    minWidth: "60%",
+    maxWidth: "100%",
+    display: "block",
   }
 });
-
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
 interface Props extends WithStyles<typeof styles> {
   test?: EpicTest,
   onChange: (updatedTest: EpicTest) => void
@@ -61,6 +76,17 @@ class EpicTestEditor extends React.Component<Props, any> {
       this.props.onChange(updatedTest)
     }
   };
+
+  onLocationsChange = (locations: Region[]) => {
+    if (this.props.test) {
+      const updatedTest = {
+        ...this.props.test,
+        locations
+      };
+      this.props.onChange(updatedTest)
+    }
+
+  }
 
   renderVariant = (variant: EpicVariant): React.ReactNode => {
     const {classes} = this.props;
@@ -101,19 +127,49 @@ class EpicTestEditor extends React.Component<Props, any> {
             label="Excluded sections:"
           />
           <div>
-          <FormControl className={classes.userCohortSelect}>
+
+            <FormControl className={classes.formControl}>
+            <InputLabel htmlFor="locations-select-multiple-checkbox">Locations</InputLabel>
+            <Select
+              multiple
+              value={test.locations}
+              onChange={(event: React.ChangeEvent<{ value: unknown }>) => {
+                const { options } = event.target as HTMLSelectElement;
+                const selectedLocations: Region[] = [];
+                for (let i=0, l = options.length; i < l; i++) {
+                  if (options[i].selected) {
+                    selectedLocations.push(options[i].value as Region)
+                  }
+                }
+                this.onLocationsChange(selectedLocations);
+
+              }}
+              input={<Input id="locations-select-multiple-checkbox" />}
+              renderValue={selected => (selected as string[]).join(', ')}
+              MenuProps={MenuProps}
+            >
+              {Object.values(Region).map(region => (
+                <MenuItem key={region} value={region}>
+                  <Checkbox checked={test.locations.indexOf(region) > -1} />
+                  <ListItemText primary={region} />
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <FormControl className={classes.formControl}>
             <InputLabel htmlFor="user-cohort">User cohort</InputLabel>
           <Select
             value={test.userCohort}
             onChange={(event) => {
               let selectedValue = event.target.value;
-              if (selectedValue in UserCohort)
+              if (selectedValue && selectedValue in UserCohort)
               {
                 this.onUserCohortChange(selectedValue as UserCohort)
               }
             }}
           >
-            
+
             {Object.values(UserCohort).map(cohort => <MenuItem key={cohort} value={cohort}>{cohort}</MenuItem>)}
 
           </Select>
