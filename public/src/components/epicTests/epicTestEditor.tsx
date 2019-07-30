@@ -39,7 +39,7 @@ interface Props extends WithStyles<typeof styles> {
   onChange: (updatedTest: EpicTest) => void
 }
 
-class EpicTestsEditor extends React.Component<Props, any> {
+class EpicTestEditor extends React.Component<Props, any> {
 
 
   onListChange = (fieldName: string) => (updatedString: string): void => {
@@ -183,4 +183,4 @@ class EpicTestsEditor extends React.Component<Props, any> {
   }
 }
 
-export default withStyles(styles)(EpicTestsEditor);
+export default withStyles(styles)(EpicTestEditor);
