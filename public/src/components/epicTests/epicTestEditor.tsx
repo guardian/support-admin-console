@@ -113,9 +113,8 @@ class EpicTestEditor extends React.Component<Props, any> {
               }
             }}
           >
-            <MenuItem value={UserCohort.OnlyExistingSupporters}>{UserCohort.OnlyExistingSupporters}</MenuItem>
-            <MenuItem value={UserCohort.OnlyNonSupporters}>{UserCohort.OnlyNonSupporters}</MenuItem>
-            <MenuItem value={UserCohort.Everyone}>{UserCohort.Everyone}</MenuItem>
+            
+            {Object.values(UserCohort).map(cohort => <MenuItem key={cohort} value={cohort}>{cohort}</MenuItem>)}
 
           </Select>
           </FormControl>
