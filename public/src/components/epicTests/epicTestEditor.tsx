@@ -133,16 +133,9 @@ class EpicTestEditor extends React.Component<Props, any> {
             <Select
               multiple
               value={test.locations}
-              onChange={(event: React.ChangeEvent<{ value: unknown }>) => {
-                const { options } = event.target as HTMLSelectElement;
-                const selectedLocations: Region[] = [];
-                for (let i=0, l = options.length; i < l; i++) {
-                  if (options[i].selected) {
-                    selectedLocations.push(options[i].value as Region)
-                  }
-                }
+              onChange={(event: any) => { // this should be React.ChangeEvent<HTMLSelectElement> but event.target.value is an array of strings if it's a multi-select event
+                const selectedLocations = event.target.value as Region[];
                 this.onLocationsChange(selectedLocations);
-
               }}
               input={<Input id="locations-select-multiple-checkbox" />}
               renderValue={selected => (selected as string[]).join(', ')}
