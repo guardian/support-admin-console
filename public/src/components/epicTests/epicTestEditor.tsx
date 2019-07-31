@@ -56,39 +56,28 @@ interface Props extends WithStyles<typeof styles> {
 
 class EpicTestEditor extends React.Component<Props, any> {
 
+  updateTest = (fieldName: string, updatedData: string | string[]) => {
+    if (this.props.test) {
+      const updatedTest = {
+        ...this.props.test,
+        [fieldName]: updatedData
+      };
+      this.props.onChange(updatedTest)
+    }
+  }
 
   onListChange = (fieldName: string) => (updatedString: string): void => {
-    if (this.props.test) {
-      const updatedTest = {
-        ...this.props.test,
-        [fieldName]: updatedString.split(",")
-      };
-      this.props.onChange(updatedTest)
-    }
+    this.updateTest(fieldName, updatedString.split(","));
   };
 
-  onUserCohortChange = (event: any) => {
-    let selectedCohort = event.target.value;
-    if (selectedCohort && selectedCohort in UserCohort) {
-      if (this.props.test) {
-        const updatedTest = {
-          ...this.props.test,
-          userCohort: selectedCohort
-        };
-        this.props.onChange(updatedTest)
-      }
-    }
+  onUserCohortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    let selectedCohort = event.target.value as UserCohort;
+    this.updateTest("userCohort", selectedCohort);
   };
 
-  onLocationsChange = (locations: Region[]) => {
-    if (this.props.test) {
-      const updatedTest = {
-        ...this.props.test,
-        locations
-      };
-      this.props.onChange(updatedTest)
-    }
-
+  onLocationsChange = (event: any) => { // this should be React.ChangeEvent<HTMLSelectElement> but event.target.value is an array of strings if it's a multi-select event
+    const selectedLocations = event.target.value as Region[];
+    this.updateTest("locations", selectedLocations);
   }
 
   renderVariant = (variant: EpicVariant): React.ReactNode => {
@@ -135,10 +124,7 @@ class EpicTestEditor extends React.Component<Props, any> {
               <Select
                 multiple
                 value={test.locations}
-                onChange={(event: any) => { // this should be React.ChangeEvent<HTMLSelectElement> but event.target.value is an array of strings if it's a multi-select event
-                  const selectedLocations = event.target.value as Region[];
-                  this.onLocationsChange(selectedLocations);
-                }}
+                onChange={this.onLocationsChange}
                 input={<Input id="locations-select-multiple-checkbox" />}
                 renderValue={selected => (selected as string[]).join(', ')}
                 MenuProps={MenuProps}
