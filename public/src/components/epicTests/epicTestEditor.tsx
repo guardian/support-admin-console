@@ -67,13 +67,16 @@ class EpicTestEditor extends React.Component<Props, any> {
     }
   };
 
-  onUserCohortChange = (cohort: UserCohort) => {
-    if (this.props.test) {
-      const updatedTest = {
-        ...this.props.test,
-        userCohort: cohort
-      };
-      this.props.onChange(updatedTest)
+  onUserCohortChange = (event: any) => {
+    let selectedCohort = event.target.value;
+    if (selectedCohort && selectedCohort in UserCohort) {
+      if (this.props.test) {
+        const updatedTest = {
+          ...this.props.test,
+          userCohort: selectedCohort
+        };
+        this.props.onChange(updatedTest)
+      }
     }
   };
 
@@ -126,49 +129,38 @@ class EpicTestEditor extends React.Component<Props, any> {
             onSubmit={this.onListChange("excludedSections")}
             label="Excluded sections:"
           />
-          <div>
 
             <FormControl className={classes.formControl}>
-            <InputLabel htmlFor="locations-select-multiple-checkbox">Locations</InputLabel>
-            <Select
-              multiple
-              value={test.locations}
-              onChange={(event: any) => { // this should be React.ChangeEvent<HTMLSelectElement> but event.target.value is an array of strings if it's a multi-select event
-                const selectedLocations = event.target.value as Region[];
-                this.onLocationsChange(selectedLocations);
-              }}
-              input={<Input id="locations-select-multiple-checkbox" />}
-              renderValue={selected => (selected as string[]).join(', ')}
-              MenuProps={MenuProps}
-            >
-              {Object.values(Region).map(region => (
-                <MenuItem key={region} value={region}>
-                  <Checkbox checked={test.locations.indexOf(region) > -1} />
-                  <ListItemText primary={region} />
-                </MenuItem>
-              ))}
-            </Select>
+              <InputLabel htmlFor="locations-select-multiple-checkbox">Locations</InputLabel>
+              <Select
+                multiple
+                value={test.locations}
+                onChange={(event: any) => { // this should be React.ChangeEvent<HTMLSelectElement> but event.target.value is an array of strings if it's a multi-select event
+                  const selectedLocations = event.target.value as Region[];
+                  this.onLocationsChange(selectedLocations);
+                }}
+                input={<Input id="locations-select-multiple-checkbox" />}
+                renderValue={selected => (selected as string[]).join(', ')}
+                MenuProps={MenuProps}
+              >
+                {Object.values(Region).map(region => (
+                  <MenuItem key={region} value={region}>
+                    <Checkbox checked={test.locations.indexOf(region) > -1} />
+                    <ListItemText primary={region} />
+                  </MenuItem>
+                ))}
+              </Select>
           </FormControl>
 
           <FormControl className={classes.formControl}>
             <InputLabel htmlFor="user-cohort">User cohort</InputLabel>
-          <Select
-            value={test.userCohort}
-            onChange={(event) => {
-              let selectedValue = event.target.value;
-              if (selectedValue && selectedValue in UserCohort)
-              {
-                this.onUserCohortChange(selectedValue as UserCohort)
-              }
-            }}
-          >
-
-            {Object.values(UserCohort).map(cohort => <MenuItem key={cohort} value={cohort}>{cohort}</MenuItem>)}
-
-          </Select>
+            <Select
+              value={test.userCohort}
+              onChange={this.onUserCohortChange}
+            >
+              {Object.values(UserCohort).map(cohort => <MenuItem key={cohort} value={cohort}>{cohort}</MenuItem>)}
+            </Select>
           </FormControl>
-          </div>
-
 
           <FormControlLabel
             control={
