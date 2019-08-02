@@ -1,5 +1,5 @@
 import React from 'react';
-import {EpicTest, EpicVariant, UserCohort} from "./epicTestsForm";
+import { EpicTest, EpicVariant, UserCohort } from "./epicTestsForm";
 import {
   List, ListItem, Theme, createStyles, WithStyles, withStyles, Select, FormControl, InputLabel, MenuItem, Input, Checkbox, ListItemText
 } from "@material-ui/core";
@@ -8,6 +8,8 @@ import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { Region } from '../../utils/models';
 import { MenuProps } from 'material-ui';
+import EpicTestVariantEditor from './epicTestVariantEditor';
+import EpicTestVariantsList from './epicTestVariantsList';
 
 const styles = ({ palette, spacing }: Theme) => createStyles({
   container: {
@@ -49,6 +51,10 @@ const MenuProps = {
     },
   },
 };
+
+interface EpicTestVariants {
+  variants: EpicVariant[]
+}
 interface Props extends WithStyles<typeof styles> {
   test?: EpicTest,
   onChange: (updatedTest: EpicTest) => void
@@ -67,6 +73,15 @@ enum TestFieldNames {
   variants = "variants"
 }
 class EpicTestEditor extends React.Component<Props, any> {
+
+  state = { selectedVariantName: undefined}
+
+  onVariantSelected = (variantName: string): void => {
+    this.setState({
+      selectedVariantName: variantName
+    })
+  };
+
 
   updateTest = (fieldName: TestFieldNames, updatedData: string | string[]) => {
     if (this.props.test) {
@@ -95,7 +110,7 @@ class EpicTestEditor extends React.Component<Props, any> {
   renderVariant = (variant: EpicVariant): React.ReactNode => {
     const {classes} = this.props;
     return (
-      <ListItem className={classes.variant}>
+      <ListItem className={classes.variant} key={variant.name}>
         <span className={classes.variantName}>{variant.name}</span>
         <span className={classes.variantHeading}>{variant.heading}</span>
       </ListItem>
@@ -206,6 +221,19 @@ class EpicTestEditor extends React.Component<Props, any> {
           </ListItem>
           {test.variants.map(this.renderVariant)}
         </List>
+
+        <div className={classes.container}>
+          <EpicTestVariantsList
+            variantNames={test.variants.map(variant => variant.name)}
+            variantHeadings={test.variants.map(variant => variant.heading ? variant.heading : "")}
+            onVariantSelected={this.onVariantSelected}
+            selectedVariantName={this.state.selectedVariantName}
+          />
+          <EpicTestVariantEditor
+            variant={this.state.selectedVariantName ? this.state.selectedVariantName : undefined}
+            // onChange={this.onVariantChange}
+           />
+        </div>
       </div>
     )
   };

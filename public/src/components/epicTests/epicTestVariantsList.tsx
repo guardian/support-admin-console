@@ -4,36 +4,33 @@ import {
   List, ListItem, Theme, createStyles, WithStyles, withStyles
 } from "@material-ui/core";
 
-
-const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
-  testsList: {
+const styles = ({ palette }: Theme) => createStyles({
+  variantsList: {
     width: "20%",
     borderRight: `2px solid ${palette.grey['300']}`,
     borderTop: `2px solid ${palette.grey['300']}`,
     padding: 0
   },
-  test: {
+  variant: {
     borderBottom: `1px solid ${palette.grey['300']}`,
   },
-  selectedTest: {
+  selectedVariant: {
     backgroundColor: palette.grey['400'],
     fontWeight: 'bold'
   }
 });
 
 interface Props extends WithStyles<typeof styles> {
-  testNames: string[],
-  onTestSelected: (testName: string) => void,
-  selectedTestName?: string
+  variantNames: string[],
+  variantHeadings?: string[],
+  onVariantSelected: (variantName: string) => void,
+  selectedVariantName?: string
 }
 
-class EpicTestsList extends React.Component<Props, any> {
-  constructor(props: Props) {
-    super(props);
-  }
+class EpicTestVariantsList extends React.Component<Props, any> {
 
   onClick = (event: React.MouseEvent<HTMLInputElement>): void => {
-    this.props.onTestSelected(event.currentTarget.innerText)
+    this.props.onVariantSelected(event.currentTarget.innerText)
   };
 
   render(): React.ReactNode {
@@ -41,20 +38,20 @@ class EpicTestsList extends React.Component<Props, any> {
 
 
     return (
-      <List className={classes.testsList} component="nav">
-        {this.props.testNames.map(testName => {
-          const classNames = this.props.selectedTestName === testName ?
-            `${classes.test} ${classes.selectedTest}`
-            : classes.test;
+      <List className={classes.variantsList} component="nav">
+        {this.props.variantNames.map(variantName => {
+          const classNames = this.props.selectedVariantName === variantName ?
+            `${classes.variant} ${classes.selectedVariant}`
+            : classes.variant;
 
           return (
             <ListItem
               className={classNames}
               button
               onClick={this.onClick}
-              key={testName}
+              key={variantName}
             >
-              {testName}
+              <span>{variantName}</span>
             </ListItem>
           )
         })}
@@ -63,4 +60,4 @@ class EpicTestsList extends React.Component<Props, any> {
   }
 }
 
-export default withStyles(styles)(EpicTestsList);
+export default withStyles(styles)(EpicTestVariantsList);

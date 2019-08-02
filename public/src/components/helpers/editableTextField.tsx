@@ -34,7 +34,7 @@ interface EditableTextFieldState {
 }
 
 class EditableTextField extends React.Component<Props, EditableTextFieldState> {
-  
+
   state: EditableTextFieldState =  {
         editMode: false,
         currentText: this.props.text
