@@ -54,9 +54,21 @@ interface Props extends WithStyles<typeof styles> {
   onChange: (updatedTest: EpicTest) => void
 }
 
+enum TestFieldNames {
+  locations = "locations",
+  tagIds = "tagIds",
+  sections = "sections",
+  excludedTagIds = "excludedTagIds",
+  excludedSections = "excludedSections",
+  alwaysAsk = "alwaysAsk",
+  userCohort = "userCohort",
+  isLiveBlog = "isLiveBlog",
+  hasCountryName = "hasCountryName",
+  variants = "variants"
+}
 class EpicTestEditor extends React.Component<Props, any> {
 
-  updateTest = (fieldName: string, updatedData: string | string[]) => {
+  updateTest = (fieldName: TestFieldNames, updatedData: string | string[]) => {
     if (this.props.test) {
       const updatedTest = {
         ...this.props.test,
@@ -66,18 +78,18 @@ class EpicTestEditor extends React.Component<Props, any> {
     }
   }
 
-  onListChange = (fieldName: string) => (updatedString: string): void => {
+  onListChange = (fieldName: TestFieldNames) => (updatedString: string): void => {
     this.updateTest(fieldName, updatedString.split(","));
   };
 
   onUserCohortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     let selectedCohort = event.target.value as UserCohort;
-    this.updateTest("userCohort", selectedCohort);
+    this.updateTest(TestFieldNames.userCohort, selectedCohort);
   };
 
   onLocationsChange = (event: any) => { // this should be React.ChangeEvent<HTMLSelectElement> but event.target.value is an array of strings if it's a multi-select event
     const selectedLocations = event.target.value as Region[];
-    this.updateTest("locations", selectedLocations);
+    this.updateTest(TestFieldNames.locations, selectedLocations);
   }
 
   renderVariant = (variant: EpicVariant): React.ReactNode => {
@@ -97,25 +109,25 @@ class EpicTestEditor extends React.Component<Props, any> {
         <div>
           <EditableTextField
             text={test.tagIds.join(",")}
-            onSubmit={this.onListChange("tagIds")}
+            onSubmit={this.onListChange(TestFieldNames.tagIds)}
             label="Tags:"
           />
 
           <EditableTextField
             text={test.excludedTagIds.join(",")}
-            onSubmit={this.onListChange("excludedTagIds")}
+            onSubmit={this.onListChange(TestFieldNames.excludedTagIds)}
             label="Excluded tags:"
           />
 
           <EditableTextField
             text={test.sections.join(",")}
-            onSubmit={this.onListChange("sections")}
+            onSubmit={this.onListChange(TestFieldNames.sections)}
             label="Sections:"
           />
 
           <EditableTextField
             text={test.excludedSections.join(",")}
-            onSubmit={this.onListChange("excludedSections")}
+            onSubmit={this.onListChange(TestFieldNames.excludedSections)}
             label="Excluded sections:"
           />
 
