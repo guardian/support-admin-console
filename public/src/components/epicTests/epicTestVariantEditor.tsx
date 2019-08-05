@@ -51,7 +51,7 @@ const MenuProps = {
 };
 interface Props extends WithStyles<typeof styles> {
   variant?: EpicVariant,
-  // onChange: (updatedTest: EpicTest) => void
+  onVariantChange: (updatedVariant: EpicVariant) => void
 }
 
 enum VariantFieldNames {
@@ -67,9 +67,24 @@ enum VariantFieldNames {
 }
 class EpicTestVariantEditor extends React.Component<Props, any> {
 
-    onListChange = (fieldName: VariantFieldNames) => (updatedString: string): void => {
-    console.log("variant updated. fieldname: " + fieldName + ", data: " + updatedString);
+  updateVariant = (fieldName: VariantFieldNames, updatedData: string | string[] | boolean) => {
+    if (this.props.variant) {
+      const updatedVariant = {
+        ...this.props.variant,
+        [fieldName]: updatedData
+      };
+      this.props.onVariantChange(updatedVariant);
+    }
+  }
+
+  onTestChange = (fieldName: VariantFieldNames) => (updatedString: string): void => {
+    this.updateVariant(fieldName, updatedString);
   };
+
+  onParagraphsChange = (fieldName: VariantFieldNames) => (updatedParagraphs: string): void => {
+    this.updateVariant(fieldName, updatedParagraphs.split("\n"));
+  }
+
 
   renderVariantEditor = (variant: EpicVariant): React.ReactNode => {
     const {classes} = this.props;
@@ -77,33 +92,27 @@ class EpicTestVariantEditor extends React.Component<Props, any> {
 
         <div>
           <EditableTextField
-            text={variant.name}
-            onSubmit={this.onListChange(VariantFieldNames.name)}
-            label="Name:"
-          />
-
-          <EditableTextField
             text={variant.heading || ""}
-            onSubmit={this.onListChange(VariantFieldNames.heading)}
+            onSubmit={this.onTestChange(VariantFieldNames.heading)}
             label="Heading:"
           />
 
           <EditableTextField
-            text={variant.paragraphs[0] || ""}
+            text={variant.paragraphs.join("\n") || ""}
             textarea={true}
-            onSubmit={this.onListChange(VariantFieldNames.paragraphs)}
+            onSubmit={this.onParagraphsChange(VariantFieldNames.paragraphs)}
             label="Paragraphs:"
           />
 
           <EditableTextField
             text={variant.highlightedText || ""}
-            onSubmit={this.onListChange(VariantFieldNames.highlightedText)}
+            onSubmit={this.onTestChange(VariantFieldNames.highlightedText)}
             label="Highlighted text:"
           />
 
           <EditableTextField
             text={variant.footer || ""}
-            onSubmit={this.onListChange(VariantFieldNames.footer)}
+            onSubmit={this.onTestChange(VariantFieldNames.footer)}
             label="Footer:"
           />
 
@@ -113,14 +122,9 @@ class EpicTestVariantEditor extends React.Component<Props, any> {
                 <Switch
                   checked={variant.showTicker}
                   onChange={(event) => {
-                    if (this.props.variant) {
-                      const updatedVariant = {
-                        ...this.props.variant,
-                        showTicker: event.target.checked
-                      };
-                      // this.props.onChange(updatedVariant)
+                      this.updateVariant(VariantFieldNames.showTicker, event.target.checked)
                     }
-                  }}
+                  }
                 />
               }
               label="Show ticker"
@@ -130,19 +134,19 @@ class EpicTestVariantEditor extends React.Component<Props, any> {
 
           <EditableTextField
             text={variant.backgroundImageUrl || ""}
-            onSubmit={this.onListChange(VariantFieldNames.backgroundImageUrl)}
+            onSubmit={this.onTestChange(VariantFieldNames.backgroundImageUrl)}
             label="Background image URL:"
           />
 
           <EditableTextField
             text={variant.ctaText || ""}
-            onSubmit={this.onListChange(VariantFieldNames.ctaText)}
+            onSubmit={this.onTestChange(VariantFieldNames.ctaText)}
             label="CTA text:"
           />
 
           <EditableTextField
             text={variant.supportBaseURL || ""}
-            onSubmit={this.onListChange(VariantFieldNames.supportBaseURL)}
+            onSubmit={this.onTestChange(VariantFieldNames.supportBaseURL)}
             label="Support base URL:"
           />
 

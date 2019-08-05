@@ -104,7 +104,6 @@ class EpicTestsForm extends React.Component<Props, EpicTestsFormState> {
         tests: { $set: this.state.tests }
       }
     });
-    console.log("UPDATING", newState)
 
     saveFrontendSettings(FrontendSettingsType.epicTests, newState)
       .then(resp => {
@@ -126,7 +125,6 @@ class EpicTestsForm extends React.Component<Props, EpicTestsFormState> {
   };
 
   onTestChange = (updatedTest: EpicTest): void => {
-    console.log(updatedTest)
     const updatedTests = this.state.tests.map(test => test.name === updatedTest.name ? updatedTest : test);
     this.setState({
       tests: updatedTests

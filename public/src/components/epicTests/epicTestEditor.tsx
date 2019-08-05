@@ -52,8 +52,8 @@ const MenuProps = {
   },
 };
 
-interface EpicTestVariants {
-  variants: EpicVariant[]
+type EpicTestVariantsState = {
+  selectedVariantName?: string
 }
 interface Props extends WithStyles<typeof styles> {
   test?: EpicTest,
@@ -74,7 +74,7 @@ enum TestFieldNames {
 }
 class EpicTestEditor extends React.Component<Props, any> {
 
-  state = { selectedVariantName: undefined}
+  state: EpicTestVariantsState = { selectedVariantName: undefined}
 
   onVariantSelected = (variantName: string): void => {
     this.setState({
@@ -83,7 +83,7 @@ class EpicTestEditor extends React.Component<Props, any> {
   };
 
 
-  updateTest = (fieldName: TestFieldNames, updatedData: string | string[]) => {
+  updateTest = (fieldName: TestFieldNames, updatedData: string | (string | EpicVariant)[] | boolean) => {
     if (this.props.test) {
       const updatedTest = {
         ...this.props.test,
@@ -92,6 +92,15 @@ class EpicTestEditor extends React.Component<Props, any> {
       this.props.onChange(updatedTest)
     }
   }
+
+  onVariantChange = (updatedVariant: EpicVariant): void => {
+      if (this.props.test) {
+        const updatedVariantList: EpicVariant[] = this.props.test.variants.map(variant => variant.name === updatedVariant.name ? updatedVariant : variant);
+        this.updateTest(TestFieldNames.variants, updatedVariantList);
+      }
+
+  };
+
 
   onListChange = (fieldName: TestFieldNames) => (updatedString: string): void => {
     this.updateTest(fieldName, updatedString.split(","));
@@ -179,15 +188,7 @@ class EpicTestEditor extends React.Component<Props, any> {
             control={
               <Switch
                 checked={test.alwaysAsk}
-                onChange={(event) => {
-                  if (this.props.test) {
-                    const updatedTest = {
-                      ...this.props.test,
-                      alwaysAsk: event.target.checked
-                    };
-                    this.props.onChange(updatedTest)
-                  }
-                }}
+                onChange={(event) => this.updateTest(TestFieldNames.alwaysAsk, event.target.checked)}
               />
             }
             label="Always ask"
@@ -198,15 +199,7 @@ class EpicTestEditor extends React.Component<Props, any> {
             control={
               <Switch
                 checked={test.isLiveBlog}
-                onChange={(event) => {
-                  if (this.props.test) {
-                    const updatedTest = {
-                      ...this.props.test,
-                      isLiveBlog: event.target.checked
-                    };
-                    this.props.onChange(updatedTest)
-                  }
-                }}
+                onChange={(event) => this.updateTest(TestFieldNames.isLiveBlog, event.target.checked)}
               />
             }
             label="Is live blog"
@@ -226,12 +219,13 @@ class EpicTestEditor extends React.Component<Props, any> {
           <EpicTestVariantsList
             variantNames={test.variants.map(variant => variant.name)}
             variantHeadings={test.variants.map(variant => variant.heading ? variant.heading : "")}
+            // onVariantChange={this.onVariantChange}
             onVariantSelected={this.onVariantSelected}
             selectedVariantName={this.state.selectedVariantName}
           />
           <EpicTestVariantEditor
             variant={this.state.selectedVariantName ? test.variants.find(variant => variant.name === this.state.selectedVariantName) : undefined}
-            // onChange={this.onVariantChange}
+            onVariantChange={this.onVariantChange}
            />
         </div>
       </div>
