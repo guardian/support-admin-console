@@ -90,6 +90,7 @@ class EpicTestVariantEditor extends React.Component<Props, any> {
 
           <EditableTextField
             text={variant.paragraphs[0] || ""}
+            textarea={true}
             onSubmit={this.onListChange(VariantFieldNames.paragraphs)}
             label="Paragraphs:"
           />
