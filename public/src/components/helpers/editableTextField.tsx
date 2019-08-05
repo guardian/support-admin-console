@@ -25,6 +25,7 @@ const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
 interface Props extends WithStyles<typeof styles> {
   text: string,
   label: string,
+  textarea?: boolean,
   onSubmit: (updatedText: string) => void
 }
 
@@ -75,6 +76,7 @@ class EditableTextField extends React.Component<Props, EditableTextFieldState> {
           className={classes.container}
           control={
             <TextField
+              multiline={this.props.textarea}
               fullWidth
               name={this.props.label}
               disabled={!this.state.editMode}
