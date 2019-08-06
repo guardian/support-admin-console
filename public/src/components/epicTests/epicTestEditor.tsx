@@ -207,19 +207,18 @@ class EpicTestEditor extends React.Component<Props, any> {
 
         </div>
         <h3>Variants</h3>
-        <List>
+        {/* <List>
           <ListItem className={`${classes.variant} ${classes.variantListHeading}`}>
             <span className={classes.variantName}>Name</span>
             <span className={classes.variantHeading}>Heading</span>
           </ListItem>
           {test.variants.map(this.renderVariant)}
-        </List>
+        </List> */}
 
         <div className={classes.container}>
           <EpicTestVariantsList
             variantNames={test.variants.map(variant => variant.name)}
             variantHeadings={test.variants.map(variant => variant.heading ? variant.heading : "")}
-            // onVariantChange={this.onVariantChange}
             onVariantSelected={this.onVariantSelected}
             selectedVariantName={this.state.selectedVariantName}
           />
