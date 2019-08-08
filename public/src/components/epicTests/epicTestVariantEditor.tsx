@@ -65,24 +65,34 @@ enum VariantFieldNames {
 }
 class EpicTestVariantEditor extends React.Component<Props, any> {
 
-  updateVariant = (fieldName: VariantFieldNames, updatedData: string | string[] | boolean) => {
+  // updateVariant = (fieldName: VariantFieldNames, updatedData: string | string[] | boolean) => {
+  //   if (this.props.variant) {
+  //     const updatedVariant = {
+  //       ...this.props.variant,
+  //       [fieldName]: updatedData
+  //     };
+  //     this.props.onVariantChange(updatedVariant);
+  //   }
+  // }
+
+  updateVariant = (update: (variant: EpicVariant) => EpicVariant) => {
     if (this.props.variant) {
-      const updatedVariant = {
-        ...this.props.variant,
-        [fieldName]: updatedData
-      };
-      this.props.onVariantChange(updatedVariant);
+      this.props.onVariantChange(update(this.props.variant));
     }
   }
 
-  onTextChange = (fieldName: VariantFieldNames) => (updatedString: string): void => {
-    this.updateVariant(fieldName, updatedString);
+  onTextChange = (fieldName: string) => (updatedString: string): void => {
+    this.updateVariant(variant => ({...variant, [fieldName]: updatedString}));
   };
 
-  onParagraphsChange = (fieldName: VariantFieldNames) => (updatedParagraphs: string): void => {
-    this.updateVariant(fieldName, updatedParagraphs.split("\n"));
+  onParagraphsChange = (fieldName: string) => (updatedParagraphs: string): void => {
+    this.updateVariant(variant => ({...variant, [fieldName]: updatedParagraphs.split("\n")}));
   }
 
+  onSwitchChange = (fieldName: string) => (event: React.ChangeEvent<HTMLInputElement>):void =>  {
+    const updatedBool = event.target.checked;
+    this.updateVariant(variant => ({...variant, [fieldName]: updatedBool}))
+  };
 
   renderVariantEditor = (variant: EpicVariant): React.ReactNode => {
     const {classes} = this.props;
@@ -91,26 +101,26 @@ class EpicTestVariantEditor extends React.Component<Props, any> {
         <div>
           <EditableTextField
             text={variant.heading || ""}
-            onSubmit={this.onTextChange(VariantFieldNames.heading)}
+            onSubmit={this.onTextChange("heading")}
             label="Heading:"
           />
 
           <EditableTextField
             text={variant.paragraphs.join("\n") || ""}
             textarea={true}
-            onSubmit={this.onParagraphsChange(VariantFieldNames.paragraphs)}
+            onSubmit={this.onParagraphsChange("paragraphs")}
             label="Paragraphs:"
           />
 
           <EditableTextField
             text={variant.highlightedText || ""}
-            onSubmit={this.onTextChange(VariantFieldNames.highlightedText)}
+            onSubmit={this.onTextChange("highlightedText")}
             label="Highlighted text:"
           />
 
           <EditableTextField
             text={variant.footer || ""}
-            onSubmit={this.onTextChange(VariantFieldNames.footer)}
+            onSubmit={this.onTextChange("footer")}
             label="Footer:"
           />
 
@@ -119,10 +129,7 @@ class EpicTestVariantEditor extends React.Component<Props, any> {
               control={
                 <Switch
                   checked={variant.showTicker}
-                  onChange={(event) => {
-                      this.updateVariant(VariantFieldNames.showTicker, event.target.checked)
-                    }
-                  }
+                  onChange={this.onSwitchChange("showTicker")}
                 />
               }
               label="Show ticker"

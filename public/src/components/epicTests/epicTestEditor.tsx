@@ -7,7 +7,6 @@ import EditableTextField from "../helpers/editableTextField"
 import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { Region } from '../../utils/models';
-import { MenuProps } from 'material-ui';
 import EpicTestVariantEditor from './epicTestVariantEditor';
 import EpicTestVariantsList from './epicTestVariantsList';
 
@@ -34,23 +33,14 @@ const styles = ({ palette, spacing }: Theme) => createStyles({
     fontWeight: "bold"
   },
   formControl: {
-    marginTop: spacing.unit * 2,
+    marginTop: spacing.unit,
     marginBottom: spacing.unit,
-    minWidth: "60%",
-    maxWidth: "100%",
     display: "block",
+  },
+  menu: {
+    width: "500px"
   }
 });
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
 
 type EpicTestVariantsState = {
   selectedVariantName?: string
@@ -60,18 +50,6 @@ interface Props extends WithStyles<typeof styles> {
   onChange: (updatedTest: EpicTest) => void
 }
 
-enum TestFieldNames {
-  locations = "locations",
-  tagIds = "tagIds",
-  sections = "sections",
-  excludedTagIds = "excludedTagIds",
-  excludedSections = "excludedSections",
-  alwaysAsk = "alwaysAsk",
-  userCohort = "userCohort",
-  isLiveBlog = "isLiveBlog",
-  hasCountryName = "hasCountryName",
-  variants = "variants"
-}
 class EpicTestEditor extends React.Component<Props, any> {
 
   state: EpicTestVariantsState = { selectedVariantName: undefined}
@@ -82,38 +60,37 @@ class EpicTestEditor extends React.Component<Props, any> {
     })
   };
 
-
-  updateTest = (fieldName: TestFieldNames, updatedData: string | (string | EpicVariant)[] | boolean) => {
+  updateTest = (update: (test: EpicTest) => EpicTest) => {
     if (this.props.test) {
-      const updatedTest = {
-        ...this.props.test,
-        [fieldName]: updatedData
-      };
-      this.props.onChange(updatedTest)
+      this.props.onChange(update(this.props.test))
     }
   }
 
   onVariantChange = (updatedVariant: EpicVariant): void => {
       if (this.props.test) {
         const updatedVariantList: EpicVariant[] = this.props.test.variants.map(variant => variant.name === updatedVariant.name ? updatedVariant : variant);
-        this.updateTest(TestFieldNames.variants, updatedVariantList);
+        this.updateTest(test => ({...test, "variants": updatedVariantList}));
       }
-
   };
 
+  onListChange = (fieldName: string) => (updatedString: string): void => {
+    this.updateTest(test => ({...test, [fieldName]: updatedString.split(",")}));
+  };
 
-  onListChange = (fieldName: TestFieldNames) => (updatedString: string): void => {
-    this.updateTest(fieldName, updatedString.split(","));
+  onSwitchChange = (fieldName: string) => (event: React.ChangeEvent<HTMLInputElement>):void =>  {
+    const updatedBool = event.target.checked;
+    this.updateTest(test => ({...test, [fieldName]: updatedBool}))
   };
 
   onUserCohortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     let selectedCohort = event.target.value as UserCohort;
-    this.updateTest(TestFieldNames.userCohort, selectedCohort);
+    this.updateTest(test => ({...test, "userCohort": selectedCohort}));
   };
 
   onLocationsChange = (event: any) => { // this should be React.ChangeEvent<HTMLSelectElement> but event.target.value is an array of strings if it's a multi-select event
     const selectedLocations = event.target.value as Region[];
-    this.updateTest(TestFieldNames.locations, selectedLocations);
+    this.updateTest(test => ({...test, "locations": selectedLocations}));
+
   }
 
   renderVariant = (variant: EpicVariant): React.ReactNode => {
@@ -133,25 +110,25 @@ class EpicTestEditor extends React.Component<Props, any> {
         <div>
           <EditableTextField
             text={test.tagIds.join(",")}
-            onSubmit={this.onListChange(TestFieldNames.tagIds)}
+            onSubmit={this.onListChange("tagIds")}
             label="Tags:"
           />
 
           <EditableTextField
             text={test.excludedTagIds.join(",")}
-            onSubmit={this.onListChange(TestFieldNames.excludedTagIds)}
+            onSubmit={this.onListChange("excludedTagIds")}
             label="Excluded tags:"
           />
 
           <EditableTextField
             text={test.sections.join(",")}
-            onSubmit={this.onListChange(TestFieldNames.sections)}
+            onSubmit={this.onListChange("sections")}
             label="Sections:"
           />
 
           <EditableTextField
             text={test.excludedSections.join(",")}
-            onSubmit={this.onListChange(TestFieldNames.excludedSections)}
+            onSubmit={this.onListChange("excludedSections")}
             label="Excluded sections:"
           />
 
@@ -163,10 +140,10 @@ class EpicTestEditor extends React.Component<Props, any> {
                 onChange={this.onLocationsChange}
                 input={<Input id="locations-select-multiple-checkbox" />}
                 renderValue={selected => (selected as string[]).join(', ')}
-                MenuProps={MenuProps}
+                // className={classes.menu}
               >
                 {Object.values(Region).map(region => (
-                  <MenuItem key={region} value={region}>
+                  <MenuItem key={region} value={region} >
                     <Checkbox checked={test.locations.indexOf(region) > -1} />
                     <ListItemText primary={region} />
                   </MenuItem>
@@ -188,18 +165,17 @@ class EpicTestEditor extends React.Component<Props, any> {
             control={
               <Switch
                 checked={test.alwaysAsk}
-                onChange={(event) => this.updateTest(TestFieldNames.alwaysAsk, event.target.checked)}
+                onChange={this.onSwitchChange("alwaysAsk")}
               />
             }
             label="Always ask"
           />
 
-
           <FormControlLabel
             control={
               <Switch
                 checked={test.isLiveBlog}
-                onChange={(event) => this.updateTest(TestFieldNames.isLiveBlog, event.target.checked)}
+                onChange={this.onSwitchChange("isLiveBlog")}
               />
             }
             label="Is live blog"
@@ -207,13 +183,6 @@ class EpicTestEditor extends React.Component<Props, any> {
 
         </div>
         <h3>Variants</h3>
-        {/* <List>
-          <ListItem className={`${classes.variant} ${classes.variantListHeading}`}>
-            <span className={classes.variantName}>Name</span>
-            <span className={classes.variantHeading}>Heading</span>
-          </ListItem>
-          {test.variants.map(this.renderVariant)}
-        </List> */}
 
         <div className={classes.container}>
           <EpicTestVariantsList
