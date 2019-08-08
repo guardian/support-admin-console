@@ -6,8 +6,6 @@ import {
 import EditableTextField from "../helpers/editableTextField"
 import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import { Region } from '../../utils/models';
-import { MenuProps } from 'material-ui';
 
 const styles = ({ palette, spacing }: Theme) => createStyles({
   container: {
@@ -45,7 +43,7 @@ const MenuProps = {
   PaperProps: {
     style: {
       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
+      width: 500,
     },
   },
 };
@@ -77,7 +75,7 @@ class EpicTestVariantEditor extends React.Component<Props, any> {
     }
   }
 
-  onTestChange = (fieldName: VariantFieldNames) => (updatedString: string): void => {
+  onTextChange = (fieldName: VariantFieldNames) => (updatedString: string): void => {
     this.updateVariant(fieldName, updatedString);
   };
 
@@ -93,7 +91,7 @@ class EpicTestVariantEditor extends React.Component<Props, any> {
         <div>
           <EditableTextField
             text={variant.heading || ""}
-            onSubmit={this.onTestChange(VariantFieldNames.heading)}
+            onSubmit={this.onTextChange(VariantFieldNames.heading)}
             label="Heading:"
           />
 
@@ -106,13 +104,13 @@ class EpicTestVariantEditor extends React.Component<Props, any> {
 
           <EditableTextField
             text={variant.highlightedText || ""}
-            onSubmit={this.onTestChange(VariantFieldNames.highlightedText)}
+            onSubmit={this.onTextChange(VariantFieldNames.highlightedText)}
             label="Highlighted text:"
           />
 
           <EditableTextField
             text={variant.footer || ""}
-            onSubmit={this.onTestChange(VariantFieldNames.footer)}
+            onSubmit={this.onTextChange(VariantFieldNames.footer)}
             label="Footer:"
           />
 
@@ -134,19 +132,19 @@ class EpicTestVariantEditor extends React.Component<Props, any> {
 
           <EditableTextField
             text={variant.backgroundImageUrl || ""}
-            onSubmit={this.onTestChange(VariantFieldNames.backgroundImageUrl)}
+            onSubmit={this.onTextChange(VariantFieldNames.backgroundImageUrl)}
             label="Background image URL:"
           />
 
           <EditableTextField
             text={variant.ctaText || ""}
-            onSubmit={this.onTestChange(VariantFieldNames.ctaText)}
+            onSubmit={this.onTextChange(VariantFieldNames.ctaText)}
             label="CTA text:"
           />
 
           <EditableTextField
             text={variant.supportBaseURL || ""}
-            onSubmit={this.onTestChange(VariantFieldNames.supportBaseURL)}
+            onSubmit={this.onTextChange(VariantFieldNames.supportBaseURL)}
             label="Support base URL:"
           />
 
