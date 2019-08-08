@@ -1,6 +1,6 @@
 import React from 'react';
 import update from 'immutability-helper';
-import {createStyles, Theme, withStyles, WithStyles} from "@material-ui/core";
+import {createStyles, Theme, withStyles, WithStyles, CssBaseline} from "@material-ui/core";
 import {Region} from "../../utils/models";
 import {
   fetchFrontendSettings,
@@ -135,7 +135,7 @@ class EpicTestsForm extends React.Component<Props, EpicTestsFormState> {
     const { classes } = this.props;
 
     return (
-      <div>
+      <>
         <h2>Epic tests</h2>
         <div className={classes.buttons}>
           <Button variant="contained" onClick={this.save} className={classes.button}>
@@ -159,7 +159,7 @@ class EpicTestsForm extends React.Component<Props, EpicTestsFormState> {
             onChange={this.onTestChange}
           />
         </div>
-      </div>
+      </>
     )
   }
 }
