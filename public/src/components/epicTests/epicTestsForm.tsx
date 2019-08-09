@@ -1,6 +1,6 @@
 import React from 'react';
 import update from 'immutability-helper';
-import {createStyles, Theme, withStyles, WithStyles, CssBaseline} from "@material-ui/core";
+import {createStyles, Theme, withStyles, WithStyles, CssBaseline, Popover, Typography} from "@material-ui/core";
 import {Region} from "../../utils/models";
 import {
   fetchFrontendSettings,
@@ -11,7 +11,9 @@ import EpicTestsList from "./epicTestsList"
 import EpicTestEditor from "./epicTestEditor"
 import SaveIcon from '@material-ui/icons/Save';
 import RefreshIcon from '@material-ui/icons/Refresh';
+import AddIcon from '@material-ui/icons/Add';
 import Button from "@material-ui/core/Button";
+import EditableTextField from '../helpers/editableTextField';
 
 export enum UserCohort {
   OnlyExistingSupporters = 'OnlyExistingSupporters',
@@ -56,10 +58,11 @@ interface DataFromServer {
 }
 
 type EpicTestsFormState = EpicTests & {
-  selectedTestName?: string
+  selectedTestName?: string,
+  newTestPopoverOpen: boolean
 }
 
-const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
+const styles = ({ spacing }: Theme) => createStyles({
   container: {
     display: "flex"
   },
@@ -70,6 +73,9 @@ const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
   button: {
     marginRight: spacing.unit * 2,
     marginBottom: spacing.unit * 2
+  },
+  typography: {
+    padding: spacing.unit * 2
   }
 });
 
@@ -81,7 +87,10 @@ class EpicTestsForm extends React.Component<Props, EpicTestsFormState> {
 
   constructor(props: Props) {
     super(props);
-    this.state = {tests: []};
+    this.state = {
+      tests: [],
+      newTestPopoverOpen: false
+    };
     this.previousStateFromServer = null;
   }
 
@@ -97,6 +106,39 @@ class EpicTestsForm extends React.Component<Props, EpicTestsFormState> {
           ...serverData.value
         });
       });
+  };
+
+  onNewTest = () =>  {
+    this.setState({
+      newTestPopoverOpen: true
+    })
+    console.log('onNewTest clicked');
+  }
+
+  createTest = (newTestName: string) => {
+    const newTest: EpicTest = {
+      name: newTestName,
+      isOn: false,
+      locations: [],
+      tagIds: [],
+      sections: [],
+      excludedTagIds: [],
+      excludedSections: [],
+      alwaysAsk: false,
+      userCohort: undefined,
+      isLiveBlog: false,
+      hasCountryName: false,
+      variants: []
+    }
+
+    const testNames = this.state.tests.map(test => test.name);
+    console.log('testnames', testNames.indexOf("testAd") >= 0, testNames);
+
+    const newTestList: EpicTest[] = [...this.state.tests, newTest];
+
+    this.setState({
+      tests: newTestList
+    });
   }
 
   save = () => {
@@ -147,6 +189,33 @@ class EpicTestsForm extends React.Component<Props, EpicTestsFormState> {
             <RefreshIcon />
             Refresh
           </Button>
+          <Button id="newTestButton" variant="contained" onClick={this.onNewTest} className={classes.button}>
+            <AddIcon />
+            New test
+          </Button>
+          <Popover
+            // id=
+            open={this.state.newTestPopoverOpen}
+            anchorEl={document.getElementById('newTestButton')}
+            // onClose={handleClose}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'center',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'center',
+            }}
+
+          >
+            {/* <Typography className={classes.typography}> */}
+              <EditableTextField
+                text=""
+                onSubmit={this.createTest}
+                label="Test name:"
+              />
+            {/* </Typography> */}
+          </Popover>
         </div>
 
         <div className={classes.container}>
