@@ -93,16 +93,6 @@ class EpicTestEditor extends React.Component<Props, any> {
 
   }
 
-  renderVariant = (variant: EpicVariant): React.ReactNode => {
-    const {classes} = this.props;
-    return (
-      <ListItem className={classes.variant} key={variant.name}>
-        <span className={classes.variantName}>{variant.name}</span>
-        <span className={classes.variantHeading}>{variant.heading}</span>
-      </ListItem>
-    )
-  };
-
   renderEditor = (test: EpicTest): React.ReactNode => {
     const {classes} = this.props;
     return (
