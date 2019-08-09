@@ -65,16 +65,6 @@ enum VariantFieldNames {
 }
 class EpicTestVariantEditor extends React.Component<Props, any> {
 
-  // updateVariant = (fieldName: VariantFieldNames, updatedData: string | string[] | boolean) => {
-  //   if (this.props.variant) {
-  //     const updatedVariant = {
-  //       ...this.props.variant,
-  //       [fieldName]: updatedData
-  //     };
-  //     this.props.onVariantChange(updatedVariant);
-  //   }
-  // }
-
   updateVariant = (update: (variant: EpicVariant) => EpicVariant) => {
     if (this.props.variant) {
       this.props.onVariantChange(update(this.props.variant));
