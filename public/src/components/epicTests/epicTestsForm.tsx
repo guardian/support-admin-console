@@ -33,6 +33,7 @@ export interface EpicVariant {
 
 export interface EpicTest {
   name: string,
+  isOn: boolean,
   locations: Region[],
   tagIds: string[],
   sections: string[],

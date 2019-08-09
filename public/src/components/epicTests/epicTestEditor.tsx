@@ -106,8 +106,18 @@ class EpicTestEditor extends React.Component<Props, any> {
   renderEditor = (test: EpicTest): React.ReactNode => {
     const {classes} = this.props;
     return (
-      <div>
+      <>
         <div>
+        <FormControlLabel
+            control={
+              <Switch
+                checked={test.isOn}
+                onChange={this.onSwitchChange("isOn")}
+              />
+            }
+            label="Test is on"
+          />
+
           <EditableTextField
             text={test.tagIds.join(",")}
             onSubmit={this.onListChange("tagIds")}
@@ -132,23 +142,23 @@ class EpicTestEditor extends React.Component<Props, any> {
             label="Excluded sections:"
           />
 
-            <FormControl className={classes.formControl}>
-              <InputLabel htmlFor="locations-select-multiple-checkbox">Locations</InputLabel>
-              <Select
-                multiple
-                value={test.locations}
-                onChange={this.onLocationsChange}
-                input={<Input id="locations-select-multiple-checkbox" />}
-                renderValue={selected => (selected as string[]).join(', ')}
-                // className={classes.menu}
-              >
-                {Object.values(Region).map(region => (
-                  <MenuItem key={region} value={region} >
-                    <Checkbox checked={test.locations.indexOf(region) > -1} />
-                    <ListItemText primary={region} />
-                  </MenuItem>
-                ))}
-              </Select>
+          <FormControl className={classes.formControl}>
+            <InputLabel htmlFor="locations-select-multiple-checkbox">Locations</InputLabel>
+            <Select
+              multiple
+              value={test.locations}
+              onChange={this.onLocationsChange}
+              input={<Input id="locations-select-multiple-checkbox" />}
+              renderValue={selected => (selected as string[]).join(', ')}
+              // className={classes.menu}
+            >
+              {Object.values(Region).map(region => (
+                <MenuItem key={region} value={region} >
+                  <Checkbox checked={test.locations.indexOf(region) > -1} />
+                  <ListItemText primary={region} />
+                </MenuItem>
+              ))}
+            </Select>
           </FormControl>
 
           <FormControl className={classes.formControl}>
@@ -196,7 +206,7 @@ class EpicTestEditor extends React.Component<Props, any> {
             onVariantChange={this.onVariantChange}
            />
         </div>
-      </div>
+      </>
     )
   };
 

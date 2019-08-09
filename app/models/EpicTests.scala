@@ -46,6 +46,7 @@ case class EpicVariant(
 
 case class EpicTest(
   name: String,
+  isOn: Boolean,
   locations: List[Region] = Nil,
   tagIds: List[String] = Nil,
   sections: List[String] = Nil,
