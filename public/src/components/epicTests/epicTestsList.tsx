@@ -3,6 +3,8 @@ import React from 'react';
 import {
   List, ListItem, Theme, createStyles, WithStyles, withStyles
 } from "@material-ui/core";
+import { EpicTest } from './epicTestsForm';
+import EpicTestEditor from './epicTestEditor';
 
 
 const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
@@ -22,28 +24,39 @@ const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
 });
 
 interface Props extends WithStyles<typeof styles> {
-  testNames: string[],
-  onTestSelected: (testName: string) => void,
+  tests: EpicTest[],
+  onUpdate: (tests: EpicTest[]) => void
+}
+
+interface EpicTestsListState {
   selectedTestName?: string
 }
 
-class EpicTestsList extends React.Component<Props, any> {
-  constructor(props: Props) {
-    super(props);
-  }
+class EpicTestsList extends React.Component<Props, EpicTestsListState> {
 
-  onClick = (event: React.MouseEvent<HTMLInputElement>): void => {
-    this.props.onTestSelected(event.currentTarget.innerText)
+  state: EpicTestsListState = {}
+
+  onTestSelected = (event: React.MouseEvent<HTMLInputElement>): void => {
+    this.setState({
+      selectedTestName: event.currentTarget.innerText
+    })
   };
+
+  onTestChange = (updatedTest: EpicTest): void => {
+    const updatedTests = this.props.tests.map(test => test.name === updatedTest.name ? updatedTest : test);
+    this.props.onUpdate;
+  };
+
 
   render(): React.ReactNode {
     const { classes } = this.props;
 
 
     return (
+      <>
       <List className={classes.testsList} component="nav">
-        {this.props.testNames.map(testName => {
-          const classNames = this.props.selectedTestName === testName ?
+        {this.props.tests.map(test => {
+          const classNames = this.state.selectedTestName === test.name ?
             `${classes.test} ${classes.selectedTest}`
             : classes.test;
 
@@ -51,14 +64,21 @@ class EpicTestsList extends React.Component<Props, any> {
             <ListItem
               className={classNames}
               button
-              onClick={this.onClick}
-              key={testName}
+              onClick={this.onTestSelected}
+              key={test.name}
             >
-              {testName}
+              {test.name}
             </ListItem>
           )
         })}
       </List>
+
+      <EpicTestEditor
+        test={this.state.selectedTestName ? this.props.tests.find(test => test.name === this.state.selectedTestName) : undefined}
+        onChange={this.onTestChange}
+      />
+
+    </>
     )
   }
 }

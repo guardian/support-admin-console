@@ -50,7 +50,7 @@ interface Props extends WithStyles<typeof styles> {
   onChange: (updatedTest: EpicTest) => void
 }
 
-class EpicTestEditor extends React.Component<Props, any> {
+class EpicTestEditor extends React.Component<Props, EpicTestVariantsState> {
 
   state: EpicTestVariantsState = { selectedVariantName: undefined}
 

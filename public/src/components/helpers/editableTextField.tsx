@@ -88,6 +88,7 @@ class EditableTextField extends React.Component<Props, EditableTextFieldState> {
                   currentText: newValue
                 })
               }}
+              helperText="some helper text!!"
             />
           }
           label={this.props.label}

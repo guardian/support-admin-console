@@ -58,7 +58,6 @@ interface DataFromServer {
 }
 
 type EpicTestsFormState = EpicTests & {
-  selectedTestName?: string,
   newTestPopoverOpen: boolean,
   anchorElForPopover?: HTMLAnchorElement
 }
@@ -117,7 +116,6 @@ class EpicTestsForm extends React.Component<Props, EpicTestsFormState> {
     this.setState({ newTestPopoverOpen: false });
   }
 
-
   isDuplicateName = (newName: string) => {
     const isDuplicate = this.state.tests.map(test => test.name).includes(newName);
     console.log('checkDuplicateTestName', isDuplicate);
@@ -154,7 +152,6 @@ class EpicTestsForm extends React.Component<Props, EpicTestsFormState> {
   this.setState({
     tests: newTestList,
     newTestPopoverOpen: false,
-    selectedTestName: newTest.name
   });
 
   }
@@ -179,14 +176,7 @@ class EpicTestsForm extends React.Component<Props, EpicTestsFormState> {
       });
   };
 
-  onTestSelected = (testName: string): void => {
-    this.setState({
-      selectedTestName: testName
-    })
-  };
-
-  onTestChange = (updatedTest: EpicTest): void => {
-    const updatedTests = this.state.tests.map(test => test.name === updatedTest.name ? updatedTest : test);
+  onTestsChange = (updatedTests: EpicTest[]): void => {
     this.setState({
       tests: updatedTests
     });
@@ -239,13 +229,8 @@ class EpicTestsForm extends React.Component<Props, EpicTestsFormState> {
 
         <div className={classes.container}>
           <EpicTestsList
-            testNames={this.state.tests.map(test => test.name)}
-            onTestSelected={this.onTestSelected}
-            selectedTestName={this.state.selectedTestName}
-          />
-          <EpicTestEditor
-            test={this.state.selectedTestName ? this.state.tests.find(test => test.name === this.state.selectedTestName) : undefined}
-            onChange={this.onTestChange}
+            tests={this.state.tests}
+            onUpdate={this.onTestsChange}
           />
         </div>
       </>
