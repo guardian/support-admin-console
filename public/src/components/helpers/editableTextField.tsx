@@ -1,5 +1,5 @@
 import React from 'react';
-import {createStyles, Theme, withStyles, WithStyles} from "@material-ui/core";
+import {createStyles, Theme, withStyles, WithStyles, Typography} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -26,7 +26,8 @@ interface Props extends WithStyles<typeof styles> {
   text: string,
   label: string,
   textarea?: boolean,
-  onSubmit: (updatedText: string) => void
+  onSubmit: (updatedText: string) => void,
+  startInEditMode?: boolean
 }
 
 interface EditableTextFieldState {
@@ -37,7 +38,7 @@ interface EditableTextFieldState {
 class EditableTextField extends React.Component<Props, EditableTextFieldState> {
 
   state: EditableTextFieldState =  {
-        editMode: false,
+        editMode: this.props.startInEditMode || false,
         currentText: this.props.text
       }
 
