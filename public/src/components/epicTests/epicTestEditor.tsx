@@ -1,7 +1,7 @@
 import React from 'react';
 import { EpicTest, EpicVariant, UserCohort } from "./epicTestsForm";
 import {
-  List, ListItem, Theme, createStyles, WithStyles, withStyles, Select, FormControl, InputLabel, MenuItem, Input, Checkbox, ListItemText
+  List, ListItem, Theme, createStyles, WithStyles, withStyles, Select, FormControl, InputLabel, MenuItem, Input, Checkbox, ListItemText, Typography
 } from "@material-ui/core";
 import EditableTextField from "../helpers/editableTextField"
 import Switch from "@material-ui/core/Switch";
@@ -97,15 +97,20 @@ class EpicTestEditor extends React.Component<Props, any> {
     const {classes} = this.props;
     return (
       <>
+        <Typography
+        variant={'h4'}
+        >
+          {this.props.test && this.props.test.name}
+        </Typography>
         <div>
-        <FormControlLabel
-            control={
-              <Switch
-                checked={test.isOn}
-                onChange={this.onSwitchChange("isOn")}
-              />
-            }
-            label="Test is on"
+          <FormControlLabel
+              control={
+                <Switch
+                  checked={test.isOn}
+                  onChange={this.onSwitchChange("isOn")}
+                />
+              }
+              label="Test is on"
           />
 
           <EditableTextField
@@ -180,7 +185,6 @@ class EpicTestEditor extends React.Component<Props, any> {
             }
             label="Is live blog"
           />
-
         </div>
         <h3>Variants</h3>
 

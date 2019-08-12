@@ -74,9 +74,6 @@ const styles = ({ spacing }: Theme) => createStyles({
   button: {
     marginRight: spacing.unit * 2,
     marginBottom: spacing.unit * 2
-  },
-  typography: {
-    padding: spacing.unit * 2
   }
 });
 
@@ -114,7 +111,26 @@ class EpicTestsForm extends React.Component<Props, EpicTestsFormState> {
       newTestPopoverOpen: true,
       anchorElForPopover: event.currentTarget
     })
-    console.log('onNewTest clicked');
+  }
+
+  handleCancel = () => {
+    this.setState({ newTestPopoverOpen: false });
+  }
+
+
+  isDuplicateName = (newName: string) => {
+    const isDuplicate = this.state.tests.map(test => test.name).includes(newName);
+    console.log('checkDuplicateTestName', isDuplicate);
+    return isDuplicate;
+  }
+
+  handleName = (newTestName: string) => {
+    if (this.isDuplicateName(newTestName)) {
+      console.log("DUPLICATE NAME");
+      return;
+    } else {
+      this.createTest(newTestName);
+    }
   }
 
   createTest = (newTestName: string) => {
@@ -131,17 +147,16 @@ class EpicTestsForm extends React.Component<Props, EpicTestsFormState> {
       isLiveBlog: false,
       hasCountryName: false,
       variants: []
-    }
+  }
 
-    const testNames = this.state.tests.map(test => test.name);
-    console.log('testnames', testNames.indexOf("testAd") >= 0, testNames);
+  const newTestList: EpicTest[] = [...this.state.tests, newTest];
 
-    const newTestList: EpicTest[] = [...this.state.tests, newTest];
+  this.setState({
+    tests: newTestList,
+    newTestPopoverOpen: false,
+    selectedTestName: newTest.name
+  });
 
-    this.setState({
-      tests: newTestList,
-      newTestPopoverOpen: false
-    });
   }
 
   save = () => {
@@ -182,7 +197,7 @@ class EpicTestsForm extends React.Component<Props, EpicTestsFormState> {
 
     return (
       <>
-        <h2>Epic tests</h2>
+        <Typography variant={'h2'}>Epic tests</Typography>
         <div className={classes.buttons}>
           <Button variant="contained" onClick={this.save} className={classes.button}>
             <SaveIcon />
@@ -211,13 +226,14 @@ class EpicTestsForm extends React.Component<Props, EpicTestsFormState> {
             }}
 
           >
-            {/* <Typography className={classes.typography}> */}
-              <EditableTextField
-                text=""
-                onSubmit={this.createTest}
-                label="Test name:"
-              />
-            {/* </Typography> */}
+            <EditableTextField
+              text=""
+              onSubmit={this.handleName}
+              label="Test name:"
+              startInEditMode
+            />
+            <Typography variant={'body1'}>error message</Typography>
+            <Button onClick={this.handleCancel}>Cancel</Button>
           </Popover>
         </div>
 
