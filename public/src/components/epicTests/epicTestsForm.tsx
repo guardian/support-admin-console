@@ -59,7 +59,8 @@ interface DataFromServer {
 
 type EpicTestsFormState = EpicTests & {
   selectedTestName?: string,
-  newTestPopoverOpen: boolean
+  newTestPopoverOpen: boolean,
+  anchorElForPopover?: HTMLAnchorElement
 }
 
 const styles = ({ spacing }: Theme) => createStyles({
@@ -108,9 +109,10 @@ class EpicTestsForm extends React.Component<Props, EpicTestsFormState> {
       });
   };
 
-  onNewTest = () =>  {
+  onNewTestButtonClick = (event: any) =>  {
     this.setState({
-      newTestPopoverOpen: true
+      newTestPopoverOpen: true,
+      anchorElForPopover: event.currentTarget
     })
     console.log('onNewTest clicked');
   }
@@ -137,7 +139,8 @@ class EpicTestsForm extends React.Component<Props, EpicTestsFormState> {
     const newTestList: EpicTest[] = [...this.state.tests, newTest];
 
     this.setState({
-      tests: newTestList
+      tests: newTestList,
+      newTestPopoverOpen: false
     });
   }
 
@@ -189,14 +192,14 @@ class EpicTestsForm extends React.Component<Props, EpicTestsFormState> {
             <RefreshIcon />
             Refresh
           </Button>
-          <Button id="newTestButton" variant="contained" onClick={this.onNewTest} className={classes.button}>
+          <Button variant="contained" onClick={this.onNewTestButtonClick} className={classes.button}>
             <AddIcon />
             New test
           </Button>
           <Popover
             // id=
             open={this.state.newTestPopoverOpen}
-            anchorEl={document.getElementById('newTestButton')}
+            anchorEl={this.state.anchorElForPopover}
             // onClose={handleClose}
             anchorOrigin={{
               vertical: 'bottom',
