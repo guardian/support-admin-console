@@ -27,7 +27,9 @@ interface Props extends WithStyles<typeof styles> {
   label: string,
   textarea?: boolean,
   onSubmit: (updatedText: string) => void,
-  startInEditMode?: boolean
+  startInEditMode?: boolean,
+  errorMessage?: string,
+  helperText?: string
 }
 
 interface EditableTextFieldState {
@@ -72,6 +74,7 @@ class EditableTextField extends React.Component<Props, EditableTextFieldState> {
 
 
     return (
+      <>
       <div className={classes.row}>
         <FormControlLabel
           className={classes.container}
@@ -88,7 +91,7 @@ class EditableTextField extends React.Component<Props, EditableTextFieldState> {
                   currentText: newValue
                 })
               }}
-              helperText="some helper text!!"
+              helperText={this.props.helperText}
             />
           }
           label={this.props.label}
@@ -105,6 +108,8 @@ class EditableTextField extends React.Component<Props, EditableTextFieldState> {
             {this.state.editMode ? <SaveIcon /> : <EditIcon />}
         </Button>
       </div>
+      <Typography className={classes.row} color={'error'} variant={'body1'}>{this.props.errorMessage}</Typography>
+      </>
 
     )
   }

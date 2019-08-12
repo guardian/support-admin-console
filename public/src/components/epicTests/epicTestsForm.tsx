@@ -222,7 +222,6 @@ class EpicTestsForm extends React.Component<Props, EpicTestsFormState> {
               label="Test name:"
               startInEditMode
             />
-            <Typography variant={'body1'}>error message</Typography>
             <Button onClick={this.handleCancel}>Cancel</Button>
           </Popover>
         </div>
