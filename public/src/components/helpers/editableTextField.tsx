@@ -22,14 +22,15 @@ const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
   }
 });
 
-interface Props extends WithStyles<typeof styles> {
+interface EditableTextFieldProps extends WithStyles<typeof styles> {
   text: string,
   label: string,
   textarea?: boolean,
   onSubmit: (updatedText: string) => void,
   startInEditMode?: boolean,
   errorMessage?: string,
-  helperText?: string
+  helperText?: string,
+  autoFocus?: boolean
 }
 
 interface EditableTextFieldState {
@@ -37,17 +38,18 @@ interface EditableTextFieldState {
   currentText: string
 }
 
-class EditableTextField extends React.Component<Props, EditableTextFieldState> {
+class EditableTextField extends React.Component<EditableTextFieldProps, EditableTextFieldState> {
 
   state: EditableTextFieldState =  {
         editMode: this.props.startInEditMode || false,
         currentText: this.props.text
       }
 
-  componentDidUpdate(prevProps: Props) {
+  componentDidUpdate(prevProps: EditableTextFieldProps) {
     // If a different test is selected or 'refresh' is clicked then we should reset the field based on the new props
     // TODO - if text is empty then editMode is not unset. This needs a better solution
     if (prevProps.text !== this.props.text) {
+      // if (prevProps.text !== this.props.text || prevProps.text === "") {
       this.setState({
         editMode: false,
         currentText: this.props.text
@@ -92,6 +94,7 @@ class EditableTextField extends React.Component<Props, EditableTextFieldState> {
                 })
               }}
               helperText={this.props.helperText}
+              autoFocus={this.props.autoFocus}
             />
           }
           label={this.props.label}

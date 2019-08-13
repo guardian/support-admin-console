@@ -102,16 +102,35 @@ class EpicTestEditor extends React.Component<Props, EpicTestVariantsState> {
         >
           {this.props.test && this.props.test.name}
         </Typography>
-        <div>
-          <FormControlLabel
-              control={
-                <Switch
-                  checked={test.isOn}
-                  onChange={this.onSwitchChange("isOn")}
-                />
-              }
-              label="Test is on"
+
+        <FormControlLabel
+          control={
+            <Switch
+              checked={test.isOn}
+              onChange={this.onSwitchChange("isOn")}
+            />
+          }
+          label="Test is on"
+        />
+
+        <Typography variant={'h5'}>Variants</Typography>
+
+        <div className={classes.container}>
+          <EpicTestVariantsList
+            variantNames={test.variants.map(variant => variant.name)}
+            variantHeadings={test.variants.map(variant => variant.heading ? variant.heading : "")}
+            onVariantSelected={this.onVariantSelected}
+            selectedVariantName={this.state.selectedVariantName}
           />
+          <EpicTestVariantEditor
+            variant={this.state.selectedVariantName ? test.variants.find(variant => variant.name === this.state.selectedVariantName) : undefined}
+            onVariantChange={this.onVariantChange}
+          />
+        </div>
+
+        <Typography variant={'h5'}>Editorial tags</Typography>
+        <div>
+
 
           <EditableTextField
             text={test.tagIds.join(",")}
@@ -137,6 +156,7 @@ class EpicTestEditor extends React.Component<Props, EpicTestVariantsState> {
             label="Excluded sections:"
           />
 
+          <Typography variant={'h5'}>Audience</Typography>
           <FormControl className={classes.formControl}>
             <InputLabel htmlFor="locations-select-multiple-checkbox">Locations</InputLabel>
             <Select
@@ -145,7 +165,6 @@ class EpicTestEditor extends React.Component<Props, EpicTestVariantsState> {
               onChange={this.onLocationsChange}
               input={<Input id="locations-select-multiple-checkbox" />}
               renderValue={selected => (selected as string[]).join(', ')}
-              // className={classes.menu}
             >
               {Object.values(Region).map(region => (
                 <MenuItem key={region} value={region} >
@@ -186,20 +205,7 @@ class EpicTestEditor extends React.Component<Props, EpicTestVariantsState> {
             label="Is live blog"
           />
         </div>
-        <h3>Variants</h3>
 
-        <div className={classes.container}>
-          <EpicTestVariantsList
-            variantNames={test.variants.map(variant => variant.name)}
-            variantHeadings={test.variants.map(variant => variant.heading ? variant.heading : "")}
-            onVariantSelected={this.onVariantSelected}
-            selectedVariantName={this.state.selectedVariantName}
-          />
-          <EpicTestVariantEditor
-            variant={this.state.selectedVariantName ? test.variants.find(variant => variant.name === this.state.selectedVariantName) : undefined}
-            onVariantChange={this.onVariantChange}
-           />
-        </div>
       </>
     )
   };

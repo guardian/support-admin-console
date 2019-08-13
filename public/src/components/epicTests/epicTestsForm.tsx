@@ -1,6 +1,6 @@
 import React from 'react';
 import update from 'immutability-helper';
-import {createStyles, Theme, withStyles, WithStyles, CssBaseline, Popover, Typography} from "@material-ui/core";
+import {createStyles, Theme, withStyles, WithStyles, CssBaseline, Typography} from "@material-ui/core";
 import {Region} from "../../utils/models";
 import {
   fetchFrontendSettings,
@@ -8,7 +8,6 @@ import {
   saveFrontendSettings,
 } from "../../utils/requests";
 import EpicTestsList from "./epicTestsList"
-import EpicTestEditor from "./epicTestEditor"
 import SaveIcon from '@material-ui/icons/Save';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import AddIcon from '@material-ui/icons/Add';
@@ -58,13 +57,14 @@ interface DataFromServer {
 }
 
 type EpicTestsFormState = EpicTests & {
-  newTestPopoverOpen: boolean,
-  anchorElForPopover?: HTMLAnchorElement
+  // newTestPopoverOpen: boolean,
+  // anchorElForPopover?: HTMLAnchorElement
 }
 
 const styles = ({ spacing }: Theme) => createStyles({
   container: {
-    display: "flex"
+    display: "block",
+    outline: "2px solid green"
   },
   buttons: {
     marginTop: spacing.unit * 2,
@@ -76,17 +76,16 @@ const styles = ({ spacing }: Theme) => createStyles({
   }
 });
 
-interface Props extends WithStyles<typeof styles> {}
+interface EpicTestFormProps extends WithStyles<typeof styles> {}
 
-class EpicTestsForm extends React.Component<Props, EpicTestsFormState> {
+class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormState> {
   state: EpicTestsFormState;
   previousStateFromServer: DataFromServer | null;
 
-  constructor(props: Props) {
+  constructor(props: EpicTestFormProps) {
     super(props);
     this.state = {
-      tests: [],
-      newTestPopoverOpen: false
+      tests: []
     };
     this.previousStateFromServer = null;
   }
@@ -105,56 +104,7 @@ class EpicTestsForm extends React.Component<Props, EpicTestsFormState> {
       });
   };
 
-  onNewTestButtonClick = (event: any) =>  {
-    this.setState({
-      newTestPopoverOpen: true,
-      anchorElForPopover: event.currentTarget
-    })
-  }
 
-  handleCancel = () => {
-    this.setState({ newTestPopoverOpen: false });
-  }
-
-  isDuplicateName = (newName: string) => {
-    const isDuplicate = this.state.tests.map(test => test.name).includes(newName);
-    console.log('checkDuplicateTestName', isDuplicate);
-    return isDuplicate;
-  }
-
-  handleName = (newTestName: string) => {
-    if (this.isDuplicateName(newTestName)) {
-      console.log("DUPLICATE NAME");
-      return;
-    } else {
-      this.createTest(newTestName);
-    }
-  }
-
-  createTest = (newTestName: string) => {
-    const newTest: EpicTest = {
-      name: newTestName,
-      isOn: false,
-      locations: [],
-      tagIds: [],
-      sections: [],
-      excludedTagIds: [],
-      excludedSections: [],
-      alwaysAsk: false,
-      userCohort: undefined,
-      isLiveBlog: false,
-      hasCountryName: false,
-      variants: []
-  }
-
-  const newTestList: EpicTest[] = [...this.state.tests, newTest];
-
-  this.setState({
-    tests: newTestList,
-    newTestPopoverOpen: false,
-  });
-
-  }
 
   save = () => {
     const newState = update(this.previousStateFromServer, {
@@ -195,38 +145,11 @@ class EpicTestsForm extends React.Component<Props, EpicTestsFormState> {
           </Button>
           <Button variant="contained" onClick={() => this.fetchStateFromServer()} className={classes.button}>
             <RefreshIcon />
-            Refresh
+            Reload data from server
           </Button>
-          <Button variant="contained" onClick={this.onNewTestButtonClick} className={classes.button}>
-            <AddIcon />
-            New test
-          </Button>
-          <Popover
-            // id=
-            open={this.state.newTestPopoverOpen}
-            anchorEl={this.state.anchorElForPopover}
-            // onClose={handleClose}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'center',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'center',
-            }}
-
-          >
-            <EditableTextField
-              text=""
-              onSubmit={this.handleName}
-              label="Test name:"
-              startInEditMode
-            />
-            <Button onClick={this.handleCancel}>Cancel</Button>
-          </Popover>
         </div>
 
-        <div className={classes.container}>
+        <div>
           <EpicTestsList
             tests={this.state.tests}
             onUpdate={this.onTestsChange}
