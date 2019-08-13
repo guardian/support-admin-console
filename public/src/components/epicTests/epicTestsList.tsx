@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {
-  List, ListItem, Theme, createStyles, WithStyles, withStyles
+  List, ListItem, Theme, createStyles, WithStyles, withStyles, Typography
 } from "@material-ui/core";
 import { EpicTest } from './epicTestsForm';
 import EpicTestEditor from './epicTestEditor';
@@ -67,7 +67,12 @@ class EpicTestsList extends React.Component<Props, EpicTestsListState> {
       variants: []
     }
     const newTestList = [...this.props.tests, newTest];
+
     this.props.onUpdate(newTestList);
+
+    this.setState({
+      selectedTestName: newTest.name
+    })
   }
 
   render(): React.ReactNode {
@@ -91,7 +96,7 @@ class EpicTestsList extends React.Component<Props, EpicTestsListState> {
                   onClick={this.onTestSelected}
                   key={test.name}
                 >
-                  {test.name}
+                  <Typography>{test.name}</Typography>
                 </ListItem>
               )
             })}

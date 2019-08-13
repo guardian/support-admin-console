@@ -119,9 +119,7 @@ class EpicTestEditor extends React.Component<Props, EpicTestVariantsState> {
 
   renderVariantListAndEditor = (test: EpicTest): React.ReactNode => {
     return (
-<div
-// className={classes.container}
->
+<div>
           <EpicTestVariantsList
             variantNames={test.variants.map(variant => variant.name)}
             variantHeadings={test.variants.map(variant => variant.heading ? variant.heading : "")}
@@ -176,19 +174,6 @@ class EpicTestEditor extends React.Component<Props, EpicTestVariantsState> {
         <NewNameCreator text="variant" existingNames={this.props.test ? this.props.test.variants.map(variant => variant.name) : []} onValidName={this.createVariant} />
 
         {test.variants.length > 0 ? this.renderVariantListAndEditor(test) : this.renderNoVariants()}
-
-        {/* <div className={classes.container}>
-          <EpicTestVariantsList
-            variantNames={test.variants.map(variant => variant.name)}
-            variantHeadings={test.variants.map(variant => variant.heading ? variant.heading : "")}
-            onVariantSelected={this.onVariantSelected}
-            selectedVariantName={this.state.selectedVariantName}
-          />
-          <EpicTestVariantEditor
-            variant={this.state.selectedVariantName ? test.variants.find(variant => variant.name === this.state.selectedVariantName) : undefined}
-            onVariantChange={this.onVariantChange}
-          />
-        </div> */}
 
         <Typography variant={'h5'}>Editorial tags</Typography>
         <div>
@@ -277,7 +262,7 @@ class EpicTestEditor extends React.Component<Props, EpicTestVariantsState> {
 
     return (
       <div className={classes.container}>
-        {this.props.test ? this.renderEditor(this.props.test) : <div>No test selected</div>}
+        {this.props.test ? this.renderEditor(this.props.test) : <Typography>Please select a test from the list on the left.</Typography>}
       </div>
     )
   }

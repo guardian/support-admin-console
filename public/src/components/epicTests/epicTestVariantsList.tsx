@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {
-  List, ListItem, Theme, createStyles, WithStyles, withStyles
+  List, ListItem, Theme, createStyles, WithStyles, withStyles, Typography
 } from "@material-ui/core";
 
 const styles = ({ palette }: Theme) => createStyles({
@@ -20,14 +20,14 @@ const styles = ({ palette }: Theme) => createStyles({
   }
 });
 
-interface Props extends WithStyles<typeof styles> {
+interface VariantListProps extends WithStyles<typeof styles> {
   variantNames: string[],
   variantHeadings?: string[],
   onVariantSelected: (variantName: string) => void,
   selectedVariantName?: string
 }
 
-class EpicTestVariantsList extends React.Component<Props, any> {
+class EpicTestVariantsList extends React.Component<VariantListProps, any> {
 
   onClick = (event: React.MouseEvent<HTMLInputElement>): void => {
     this.props.onVariantSelected(event.currentTarget.innerText)
@@ -51,7 +51,7 @@ class EpicTestVariantsList extends React.Component<Props, any> {
               onClick={this.onClick}
               key={variantName}
             >
-              <span>{variantName}</span>
+              <Typography>{variantName}</Typography>
             </ListItem>
           )
         })}
