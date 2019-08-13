@@ -9,6 +9,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { Region } from '../../utils/models';
 import EpicTestVariantEditor from './epicTestVariantEditor';
 import EpicTestVariantsList from './epicTestVariantsList';
+import NewNameCreator from './newNameCreator';
 
 const styles = ({ palette, spacing }: Theme) => createStyles({
   container: {
@@ -66,6 +67,25 @@ class EpicTestEditor extends React.Component<Props, EpicTestVariantsState> {
     }
   }
 
+  createVariant = (newVariantName: string) => {
+    const newVariant: EpicVariant = {
+      name: newVariantName,
+      heading: "",
+      paragraphs: [],
+      highlightedText: "",
+      footer: "",
+      showTicker: false,
+      backgroundImageUrl: "",
+      ctaText: "",
+      supportBaseURL: ""
+    }
+
+      if (this.props.test) {
+        const newVariantList: EpicVariant[] = [...this.props.test.variants, newVariant];
+        this.updateTest(test => ({...test, "variants": newVariantList}));
+      }
+  }
+
   onVariantChange = (updatedVariant: EpicVariant): void => {
       if (this.props.test) {
         const updatedVariantList: EpicVariant[] = this.props.test.variants.map(variant => variant.name === updatedVariant.name ? updatedVariant : variant);
@@ -93,6 +113,44 @@ class EpicTestEditor extends React.Component<Props, EpicTestVariantsState> {
 
   }
 
+  onVariantNameCreation = (name: string) => {
+    this.createVariant(name);
+  }
+
+  renderVariantListAndEditor = (test: EpicTest): React.ReactNode => {
+    return (
+<div
+// className={classes.container}
+>
+          <EpicTestVariantsList
+            variantNames={test.variants.map(variant => variant.name)}
+            variantHeadings={test.variants.map(variant => variant.heading ? variant.heading : "")}
+            onVariantSelected={this.onVariantSelected}
+            selectedVariantName={this.state.selectedVariantName}
+          />
+          <EpicTestVariantEditor
+            variant={this.state.selectedVariantName ? test.variants.find(variant => variant.name === this.state.selectedVariantName) : undefined}
+            onVariantChange={this.onVariantChange}
+          />
+        </div>
+    );
+  }
+
+  renderNoVariants = (): React.ReactNode => {
+    return (
+      <>
+        <Typography variant={'subtitle1'} color={'textPrimary'}>Create the first variant for this test</Typography>
+        <Typography variant={'body1'}>(each test must have at least one variant)</Typography>
+        <EditableTextField
+            text=""
+            onSubmit={this.onVariantNameCreation}
+            label="First variant name:"
+            startInEditMode={true}
+          />
+      </>
+    );
+  }
+
   renderEditor = (test: EpicTest): React.ReactNode => {
     const {classes} = this.props;
     return (
@@ -115,7 +173,11 @@ class EpicTestEditor extends React.Component<Props, EpicTestVariantsState> {
 
         <Typography variant={'h5'}>Variants</Typography>
 
-        <div className={classes.container}>
+        <NewNameCreator text="variant" existingNames={this.props.test ? this.props.test.variants.map(variant => variant.name) : []} onValidName={this.createVariant} />
+
+        {test.variants.length > 0 ? this.renderVariantListAndEditor(test) : this.renderNoVariants()}
+
+        {/* <div className={classes.container}>
           <EpicTestVariantsList
             variantNames={test.variants.map(variant => variant.name)}
             variantHeadings={test.variants.map(variant => variant.heading ? variant.heading : "")}
@@ -126,7 +188,7 @@ class EpicTestEditor extends React.Component<Props, EpicTestVariantsState> {
             variant={this.state.selectedVariantName ? test.variants.find(variant => variant.name === this.state.selectedVariantName) : undefined}
             onVariantChange={this.onVariantChange}
           />
-        </div>
+        </div> */}
 
         <Typography variant={'h5'}>Editorial tags</Typography>
         <div>

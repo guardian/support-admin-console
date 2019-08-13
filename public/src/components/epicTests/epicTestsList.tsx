@@ -47,13 +47,11 @@ class EpicTestsList extends React.Component<Props, EpicTestsListState> {
   };
 
   onTestChange = (updatedTest: EpicTest): void => {
-    console.log('onTestChange called in epicTestList', updatedTest);
     const updatedTests = this.props.tests.map(test => test.name === updatedTest.name ? updatedTest : test);
     this.props.onUpdate(updatedTests);
   };
 
   createTest = (newTestName: string) => {
-    console.log('createTest called from epicTestList with testName', newTestName);
     const newTest: EpicTest = {
       name: newTestName,
       isOn: false,
@@ -62,13 +60,12 @@ class EpicTestsList extends React.Component<Props, EpicTestsListState> {
       sections: [],
       excludedTagIds: [],
       excludedSections: [],
-      alwaysAsk: false,
+      alwaysAsk: true,
       userCohort: undefined,
       isLiveBlog: false,
       hasCountryName: false,
       variants: []
     }
-    console.log('new test created', newTest);
     const newTestList = [...this.props.tests, newTest];
     this.props.onUpdate(newTestList);
   }
@@ -78,7 +75,7 @@ class EpicTestsList extends React.Component<Props, EpicTestsListState> {
 
     return (
       <>
-        <NewNameCreator text="New test" existingNames={ this.props.tests.map(test => test.name) } onValidName={this.createTest}/>
+        <NewNameCreator text="test" existingNames={ this.props.tests.map(test => test.name) } onValidName={this.createTest}/>
 
         <div className={classes.testListAndEditor}>
           <List className={classes.testsList} component="nav">

@@ -67,13 +67,11 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
       <div>
         <Button variant="contained" color="primary" onClick={this.onNewTestButtonClick} className={classes.button}>
             <AddIcon />
-            {this.props.text}
+            New {this.props.text}
           </Button>
           <Popover
-            // id=
             open={this.state.newTestPopoverOpen}
             anchorEl={this.state.anchorElForPopover}
-            // onClose={handleClose}
             anchorOrigin={{
               vertical: 'bottom',
               horizontal: 'center',
@@ -87,7 +85,7 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
             <EditableTextField
               text=""
               onSubmit={this.handleName}
-              label="Test name:"
+              label={this.props.text[0].toUpperCase() + this.props.text.substr(1,) + " name:"}
               startInEditMode
               autoFocus
             />
