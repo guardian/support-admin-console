@@ -166,8 +166,21 @@ class EpicTestEditor extends React.Component<Props, EpicTestVariantsState> {
               onChange={this.onSwitchChange("isOn")}
             />
           }
-          label="Test is on"
+          label={`Test is ${test.isOn ? "on" : "off"}`}
         />
+
+        <div>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={test.isLiveBlog}
+                onChange={this.onSwitchChange("isLiveBlog")}
+              />
+            }
+            label="Liveblog Epic"
+          />
+        </div>
+
 
         <Typography variant={'h5'}>Variants</Typography>
 
@@ -180,21 +193,21 @@ class EpicTestEditor extends React.Component<Props, EpicTestVariantsState> {
 
 
           <EditableTextField
-            text={test.tagIds.join(",")}
+            text={test.tagIds.join(",") || "Separate each tag with a comma"}
             onSubmit={this.onListChange("tagIds")}
-            label="Tags:"
+            label="Display on tags:"
+          />
+
+          <EditableTextField
+            text={test.sections.join(",") || "Separate each section with a comma"}
+            onSubmit={this.onListChange("sections")}
+            label="Display on sections:"
           />
 
           <EditableTextField
             text={test.excludedTagIds.join(",")}
             onSubmit={this.onListChange("excludedTagIds")}
             label="Excluded tags:"
-          />
-
-          <EditableTextField
-            text={test.sections.join(",")}
-            onSubmit={this.onListChange("sections")}
-            label="Sections:"
           />
 
           <EditableTextField
@@ -239,17 +252,7 @@ class EpicTestEditor extends React.Component<Props, EpicTestVariantsState> {
                 onChange={this.onSwitchChange("alwaysAsk")}
               />
             }
-            label="Always ask"
-          />
-
-          <FormControlLabel
-            control={
-              <Switch
-                checked={test.isLiveBlog}
-                onChange={this.onSwitchChange("isLiveBlog")}
-              />
-            }
-            label="Is live blog"
+            label={`Always Ask is ${test.alwaysAsk ? "on" : "off"}`}
           />
         </div>
 

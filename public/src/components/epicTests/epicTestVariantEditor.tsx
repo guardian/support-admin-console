@@ -1,7 +1,7 @@
 import React from 'react';
 import { EpicVariant, EpicTest } from "./epicTestsForm";
 import {
-  List, ListItem, Theme, createStyles, WithStyles, withStyles, Select, FormControl, InputLabel, MenuItem, Input, Checkbox, ListItemText
+  List, ListItem, Theme, createStyles, WithStyles, withStyles, Select, FormControl, InputLabel, MenuItem, Input, Checkbox, ListItemText, Typography
 } from "@material-ui/core";
 import EditableTextField from "../helpers/editableTextField"
 import Switch from "@material-ui/core/Switch";
@@ -87,31 +87,49 @@ class EpicTestVariantEditor extends React.Component<Props, any> {
   renderVariantEditor = (variant: EpicVariant): React.ReactNode => {
     const {classes} = this.props;
     return (
-
         <div>
+
+          <Typography variant={'h6'}>Required</Typography>
+          <Typography>Fill out each field before publishing your test</Typography>
+
           <EditableTextField
-            text={variant.heading || ""}
+            text={variant.heading || "Since you're here..."}
             onSubmit={this.onTextChange("heading")}
-            label="Heading:"
+            label="Hook:"
           />
 
           <EditableTextField
-            text={variant.paragraphs.join("\n") || ""}
+            text={variant.paragraphs.join("\n") || "... I’m the second half of your opening line."}
             textarea={true}
             onSubmit={this.onParagraphsChange("paragraphs")}
             label="Paragraphs:"
           />
 
           <EditableTextField
-            text={variant.highlightedText || ""}
-            onSubmit={this.onTextChange("highlightedText")}
-            label="Highlighted text:"
+            text={variant.ctaText || "Support The Guardian"}
+            onSubmit={this.onTextChange(VariantFieldNames.ctaText)}
+            label="Button text:"
           />
 
           <EditableTextField
-            text={variant.footer || ""}
-            onSubmit={this.onTextChange("footer")}
-            label="Footer:"
+            text={variant.supportBaseURL || "https://support.theguardian.com/contribute"}
+            onSubmit={this.onTextChange(VariantFieldNames.supportBaseURL)}
+            label="Button destination:"
+          />
+
+          <Typography variant={'h6'}>Optional</Typography>
+          <Typography>Extra fields to add or remove, often during campaigns</Typography>
+
+          <EditableTextField
+            text={variant.highlightedText || "Support The Guardian from as little as %%CURRENCY_SYMBOL%%1 – and it only takes a minute. Thank you."}
+            onSubmit={this.onTextChange("highlightedText")}
+            label="Highlighted text"
+          />
+
+          <EditableTextField
+            text={variant.backgroundImageUrl || ""}
+            onSubmit={this.onTextChange(VariantFieldNames.backgroundImageUrl)}
+            label="Image URL"
           />
 
           <div>
@@ -122,28 +140,19 @@ class EpicTestVariantEditor extends React.Component<Props, any> {
                   onChange={this.onSwitchChange("showTicker")}
                 />
               }
-              label="Show ticker"
+              label="Ticker is on"
             />
-
           </div>
 
           <EditableTextField
-            text={variant.backgroundImageUrl || ""}
-            onSubmit={this.onTextChange(VariantFieldNames.backgroundImageUrl)}
-            label="Background image URL:"
+            text={variant.footer || ""}
+            onSubmit={this.onTextChange("footer")}
+            label="Footer:"
           />
 
-          <EditableTextField
-            text={variant.ctaText || ""}
-            onSubmit={this.onTextChange(VariantFieldNames.ctaText)}
-            label="CTA text:"
-          />
 
-          <EditableTextField
-            text={variant.supportBaseURL || ""}
-            onSubmit={this.onTextChange(VariantFieldNames.supportBaseURL)}
-            label="Support base URL:"
-          />
+
+
 
         </div>
 

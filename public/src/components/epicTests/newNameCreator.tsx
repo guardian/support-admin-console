@@ -4,9 +4,7 @@ import {
   List, ListItem, Theme, createStyles, WithStyles, withStyles, Button, Popover
 } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
-import { EpicTest } from './epicTestsForm';
 import EditableTextField from '../helpers/editableTextField';
-
 
 const styles = ({ spacing }: Theme) => createStyles({
   button: {

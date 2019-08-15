@@ -10,9 +10,7 @@ import {
 import EpicTestsList from "./epicTestsList"
 import SaveIcon from '@material-ui/icons/Save';
 import RefreshIcon from '@material-ui/icons/Refresh';
-import AddIcon from '@material-ui/icons/Add';
 import Button from "@material-ui/core/Button";
-import EditableTextField from '../helpers/editableTextField';
 
 export enum UserCohort {
   OnlyExistingSupporters = 'OnlyExistingSupporters',
