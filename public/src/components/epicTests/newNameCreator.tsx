@@ -21,14 +21,16 @@ interface NewNameCreatorProps extends WithStyles<typeof styles> {
 
 interface NewNameCreatorState {
   newTestPopoverOpen: boolean,
-  anchorElForPopover?: HTMLAnchorElement
+  anchorElForPopover?: HTMLAnchorElement,
+  errorMode: boolean
 }
 
 class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreatorState> {
 
   state = {
     newTestPopoverOpen: false,
-    anchorElForPopover: undefined
+    anchorElForPopover: undefined,
+    errorMode: false
   }
 
   onNewTestButtonClick = (event: any) =>  {
@@ -44,13 +46,12 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
 
   isDuplicateName = (newName: string) => {
     const isDuplicate = this.props.existingNames.includes(newName);
-    console.log('checkDuplicateTestName', isDuplicate);
     return isDuplicate;
   }
 
   handleName = (newTestName: string) => {
     if (this.isDuplicateName(newTestName)) {
-      console.log("DUPLICATE NAME");
+      this.setState( { errorMode: true })
       return;
     } else {
       this.setState({ newTestPopoverOpen: false })
@@ -86,6 +87,7 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
               label={this.props.text[0].toUpperCase() + this.props.text.substr(1,) + " name:"}
               startInEditMode
               autoFocus
+              errorMessage={this.state.errorMode ? "Name already exists - please try another" : ""}
             />
             <Button onClick={this.handleCancel}>Cancel</Button>
           </Popover>

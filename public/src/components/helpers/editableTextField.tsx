@@ -111,7 +111,7 @@ class EditableTextField extends React.Component<EditableTextFieldProps, Editable
             {this.state.editMode ? <SaveIcon /> : <EditIcon />}
         </Button>
       </div>
-      <Typography className={classes.row} color={'error'} variant={'body1'}>{this.props.errorMessage}</Typography>
+      <Typography className={classes.row} color={'error'} variant={'body2'}>{this.props.errorMessage}</Typography>
       </>
 
     )
