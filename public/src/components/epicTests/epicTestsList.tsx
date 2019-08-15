@@ -3,6 +3,8 @@ import React from 'react';
 import {
   List, ListItem, Theme, createStyles, WithStyles, withStyles, Typography, Button
 } from "@material-ui/core";
+import ArrowUpward from '@material-ui/icons/ArrowUpward';
+import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import { EpicTest } from './epicTestsForm';
 import EpicTestEditor from './epicTestEditor';
 import NewNameCreator from './newNameCreator';
@@ -10,13 +12,14 @@ import NewNameCreator from './newNameCreator';
 
 const styles = ({ palette }: Theme) => createStyles({
   testsList: {
-    width: "20%",
+    minWidth: "20%",
     borderRight: `2px solid ${palette.grey['300']}`,
     borderTop: `2px solid ${palette.grey['300']}`,
-    padding: 0
+    padding: 0,
   },
   test: {
     borderBottom: `1px solid ${palette.grey['300']}`,
+    minWidth: "100%"
   },
   selectedTest: {
     backgroundColor: palette.grey['400'],
@@ -26,15 +29,19 @@ const styles = ({ palette }: Theme) => createStyles({
     display: "flex"
   },
   arrowButton: {
-    padding: "1px",
-    margin: 0,
+    padding: "2px",
+    margin: "2px 0 2px 0",
     width: "20px",
     height: "20px",
     borderRadius: "50%",
     minWidth: "20px"
   },
-  buttonContainer: {
-    marginLeft: "20px"
+  singleButtonContainer: {
+    display: "block"
+  },
+  buttonsContainer: {
+    marginRight: "10px",
+    width: "20px",
   }
 });
 
@@ -129,11 +136,19 @@ class EpicTestsList extends React.Component<Props, EpicTestsListState> {
                   onClick={this.onTestSelected}
                   key={test.name}
                 >
-                 <Typography>{test.name}</Typography>
-                 <div className={classes.buttonContainer}>
-                    {index > 0 ? <Button className={classes.arrowButton} variant={'outlined'} onClick={() => this.moveTestUp(test.name)}>↑</Button> : null}
-                    {index <  this.props.tests.length - 1 ? <Button className={classes.arrowButton} variant={'outlined'} onClick={() => this.moveTestDown(test.name)}>↓</Button> : null}
+                  <div className={classes.buttonsContainer}>
+                    <div className={classes.singleButtonContainer}>
+                      {index > 0 ? <Button color={'default'} className={classes.arrowButton} variant={'contained'} onClick={() => this.moveTestUp(test.name)}><ArrowUpward /></Button> : null}
+                    </div>
+                    <div className={classes.singleButtonContainer}>
+                      {index <  this.props.tests.length - 1 ? <Button color={'default'} className={classes.arrowButton} variant={'contained'} onClick={() => this.moveTestDown(test.name)}><ArrowDownward /></Button> : null}
+                    </div>
                   </div>
+                  <div>
+                    <Typography>{test.name}</Typography>
+                  </div>
+
+
                 </ListItem>
               )
             })}
