@@ -126,6 +126,7 @@ class EpicTestEditor extends React.Component<Props, EpicTestVariantsState> {
           variantHeadings={test.variants.map(variant => variant.heading ? variant.heading : "")}
           onVariantSelected={this.onVariantSelected}
           selectedVariantName={this.state.selectedVariantName}
+          variants={test.variants}
         />
         <EpicTestVariantEditor
           variant={this.state.selectedVariantName ? test.variants.find(variant => variant.name === this.state.selectedVariantName) : undefined}
