@@ -119,17 +119,18 @@ class EpicTestEditor extends React.Component<Props, EpicTestVariantsState> {
 
   renderVariantListAndEditor = (test: EpicTest): React.ReactNode => {
     return (
-<div>
-          <EpicTestVariantsList
-            variantNames={test.variants.map(variant => variant.name)}
-            variantHeadings={test.variants.map(variant => variant.heading ? variant.heading : "")}
-            onVariantSelected={this.onVariantSelected}
-            selectedVariantName={this.state.selectedVariantName}
-          />
-          <EpicTestVariantEditor
-            variant={this.state.selectedVariantName ? test.variants.find(variant => variant.name === this.state.selectedVariantName) : undefined}
-            onVariantChange={this.onVariantChange}
-          />
+      <div>
+        <NewNameCreator text="variant" existingNames={test ? test.variants.map(variant => variant.name) : []} onValidName={this.createVariant} />
+        <EpicTestVariantsList
+          variantNames={test.variants.map(variant => variant.name)}
+          variantHeadings={test.variants.map(variant => variant.heading ? variant.heading : "")}
+          onVariantSelected={this.onVariantSelected}
+          selectedVariantName={this.state.selectedVariantName}
+        />
+        <EpicTestVariantEditor
+          variant={this.state.selectedVariantName ? test.variants.find(variant => variant.name === this.state.selectedVariantName) : undefined}
+          onVariantChange={this.onVariantChange}
+        />
         </div>
     );
   }
@@ -184,7 +185,7 @@ class EpicTestEditor extends React.Component<Props, EpicTestVariantsState> {
 
         <Typography variant={'h5'}>Variants</Typography>
 
-        <NewNameCreator text="variant" existingNames={this.props.test ? this.props.test.variants.map(variant => variant.name) : []} onValidName={this.createVariant} />
+
 
         {test.variants.length > 0 ? this.renderVariantListAndEditor(test) : this.renderNoVariants()}
 
