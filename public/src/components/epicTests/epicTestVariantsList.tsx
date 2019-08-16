@@ -58,8 +58,9 @@ class EpicTestVariantsList extends React.Component<VariantListProps, any> {
             <ExpansionPanel>
               <ExpansionPanelSummary
                 expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
+                aria-controls="variant-control"
+                id="variant-header"
+                key={variant.name}
               >
                 <Typography className={classes.heading}>{variant.name}</Typography>
               </ExpansionPanelSummary>
