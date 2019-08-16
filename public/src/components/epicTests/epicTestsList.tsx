@@ -45,7 +45,7 @@ const styles = ({ palette }: Theme) => createStyles({
   }
 });
 
-interface Props extends WithStyles<typeof styles> {
+interface EpicTestListProps extends WithStyles<typeof styles> {
   tests: EpicTest[],
   onUpdate: (tests: EpicTest[]) => void
 }
@@ -54,7 +54,7 @@ interface EpicTestsListState {
   selectedTestName?: string
 }
 
-class EpicTestsList extends React.Component<Props, EpicTestsListState> {
+class EpicTestsList extends React.Component<EpicTestListProps, EpicTestsListState> {
 
   state: EpicTestsListState = {}
 

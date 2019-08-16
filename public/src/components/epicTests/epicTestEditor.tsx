@@ -1,13 +1,12 @@
 import React from 'react';
 import { EpicTest, EpicVariant, UserCohort } from "./epicTestsForm";
 import {
-  List, ListItem, Theme, createStyles, WithStyles, withStyles, Select, FormControl, InputLabel, MenuItem, Input, Checkbox, ListItemText, Typography
+  Theme, createStyles, WithStyles, withStyles, Select, FormControl, InputLabel, MenuItem, Input, Checkbox, ListItemText, Typography
 } from "@material-ui/core";
 import EditableTextField from "../helpers/editableTextField"
 import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { Region } from '../../utils/models';
-import EpicTestVariantEditor from './epicTestVariantEditor';
 import EpicTestVariantsList from './epicTestVariantsList';
 import NewNameCreator from './newNameCreator';
 
@@ -99,7 +98,7 @@ class EpicTestEditor extends React.Component<Props, EpicTestVariantsState> {
 
   onSwitchChange = (fieldName: string) => (event: React.ChangeEvent<HTMLInputElement>):void =>  {
     const updatedBool = event.target.checked;
-    this.updateTest(test => ({...test, [fieldName]: updatedBool}))
+    this.updateTest(test => ({...test, [fieldName]: updatedBool}));
   };
 
   onUserCohortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -127,6 +126,7 @@ class EpicTestEditor extends React.Component<Props, EpicTestVariantsState> {
           onVariantSelected={this.onVariantSelected}
           selectedVariantName={this.state.selectedVariantName}
           variants={test.variants}
+          onVariantChange={this.onVariantChange}
         />
         </div>
     );

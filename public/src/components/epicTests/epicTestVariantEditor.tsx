@@ -79,7 +79,7 @@ class EpicTestVariantEditor extends React.Component<Props, any> {
     this.updateVariant(variant => ({...variant, [fieldName]: updatedParagraphs.split("\n")}));
   }
 
-  onSwitchChange = (fieldName: string) => (event: React.ChangeEvent<HTMLInputElement>):void =>  {
+  onVariantSwitchChange = (fieldName: string) => (event: React.ChangeEvent<HTMLInputElement>):void =>  {
     const updatedBool = event.target.checked;
     this.updateVariant(variant => ({...variant, [fieldName]: updatedBool}))
   };
@@ -137,10 +137,10 @@ class EpicTestVariantEditor extends React.Component<Props, any> {
               control={
                 <Switch
                   checked={variant.showTicker}
-                  onChange={this.onSwitchChange("showTicker")}
+                  onChange={this.onVariantSwitchChange("showTicker")}
                 />
               }
-              label="Ticker is on"
+              label={`Ticker is ${variant.showTicker ? "on" : "off"}`}
             />
           </div>
 
@@ -149,10 +149,6 @@ class EpicTestVariantEditor extends React.Component<Props, any> {
             onSubmit={this.onTextChange("footer")}
             label="Footer:"
           />
-
-
-
-
 
         </div>
 

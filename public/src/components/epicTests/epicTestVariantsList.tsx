@@ -30,18 +30,17 @@ const styles = ({ palette, typography }: Theme) => createStyles({
   }
 });
 
-interface VariantListProps extends WithStyles<typeof styles> {
-  variantNames: string[],
-  variantHeadings?: string[],
+interface EpicTestVariantListProps extends WithStyles<typeof styles> {
+  variantNames: string[], // TODO: remove?
+  variantHeadings?: string[], // TODO: remove?
   onVariantSelected: (variantName: string) => void,
   selectedVariantName?: string,
-  variants: EpicVariant[]
+  variants: EpicVariant[],
+  onVariantChange: (variant: EpicVariant) => void
 }
 
 
-class EpicTestVariantsList extends React.Component<VariantListProps, any> {
-
-
+class EpicTestVariantsList extends React.Component<EpicTestVariantListProps, any> {
 
   onClick = (event: React.MouseEvent<HTMLInputElement>): void => {
     this.props.onVariantSelected(event.currentTarget.innerText)
@@ -67,7 +66,7 @@ class EpicTestVariantsList extends React.Component<VariantListProps, any> {
               <ExpansionPanelDetails>
                 <EpicTestVariantEditor
                   variant={variant}
-                  onVariantChange={() => {null}}
+                  onVariantChange={this.props.onVariantChange}
                 />
               </ExpansionPanelDetails>
             </ExpansionPanel>
