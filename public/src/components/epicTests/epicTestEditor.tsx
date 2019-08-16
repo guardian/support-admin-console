@@ -191,15 +191,17 @@ class EpicTestEditor extends React.Component<Props, EpicTestVariantsState> {
 
 
           <EditableTextField
-            text={test.tagIds.join(",") || "Separate each tag with a comma"}
+            text={test.tagIds.join(",")}
             onSubmit={this.onListChange("tagIds")}
             label="Display on tags:"
+            helperText="Separate each tag with a comma"
           />
 
           <EditableTextField
-            text={test.sections.join(",") || "Separate each section with a comma"}
+            text={test.sections.join(",")}
             onSubmit={this.onListChange("sections")}
             label="Display on sections:"
+            helperText="Separate each section with a comma"
           />
 
           <EditableTextField
