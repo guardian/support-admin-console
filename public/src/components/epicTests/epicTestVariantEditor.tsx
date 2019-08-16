@@ -9,7 +9,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 const styles = ({ palette, spacing }: Theme) => createStyles({
   container: {
-    width: "80%",
+    width: "100%",
     borderTop: `2px solid ${palette.grey['300']}`,
     marginLeft: "15px"
   },

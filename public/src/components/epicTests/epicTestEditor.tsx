@@ -128,10 +128,6 @@ class EpicTestEditor extends React.Component<Props, EpicTestVariantsState> {
           selectedVariantName={this.state.selectedVariantName}
           variants={test.variants}
         />
-        <EpicTestVariantEditor
-          variant={this.state.selectedVariantName ? test.variants.find(variant => variant.name === this.state.selectedVariantName) : undefined}
-          onVariantChange={this.onVariantChange}
-        />
         </div>
     );
   }
