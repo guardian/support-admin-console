@@ -121,10 +121,7 @@ class EpicTestEditor extends React.Component<Props, EpicTestVariantsState> {
       <div>
         <NewNameCreator text="variant" existingNames={test ? test.variants.map(variant => variant.name) : []} onValidName={this.createVariant} />
         <EpicTestVariantsList
-          variantNames={test.variants.map(variant => variant.name)}
-          variantHeadings={test.variants.map(variant => variant.heading ? variant.heading : "")}
           onVariantSelected={this.onVariantSelected}
-          selectedVariantName={this.state.selectedVariantName}
           variants={test.variants}
           onVariantChange={this.onVariantChange}
         />

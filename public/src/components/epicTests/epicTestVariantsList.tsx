@@ -31,10 +31,7 @@ const styles = ({ palette, typography }: Theme) => createStyles({
 });
 
 interface EpicTestVariantListProps extends WithStyles<typeof styles> {
-  variantNames: string[], // TODO: remove?
-  variantHeadings?: string[], // TODO: remove?
   onVariantSelected: (variantName: string) => void,
-  selectedVariantName?: string,
   variants: EpicVariant[],
   onVariantChange: (variant: EpicVariant) => void
 }
