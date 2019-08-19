@@ -11,22 +11,32 @@ import NewNameCreator from './newNameCreator';
 
 
 const styles = ({ palette }: Theme) => createStyles({
-  testsList: {
-    minWidth: "20%",
-    borderRight: `2px solid ${palette.grey['300']}`,
-    borderTop: `2px solid ${palette.grey['300']}`,
-    padding: 0,
-  },
-  test: {
-    borderBottom: `1px solid ${palette.grey['300']}`,
-    minWidth: "100%"
-  },
-  selectedTest: {
-    backgroundColor: palette.grey['400'],
-    fontWeight: 'bold'
-  },
   testListAndEditor: {
     display: "flex"
+  },
+  testsList: {
+    minWidth: "250px",
+    borderRight: `2px solid ${palette.grey['300']}`,
+    borderTop: `2px solid ${palette.grey['300']}`,
+    padding: 0
+  },
+  test: {
+    borderBottom: `1px solid #999999`,
+    display: "flex",
+    justifyContent: "space-between",
+    padding: "5px",
+    height: "60px",
+  },
+  selectedTest: {
+    backgroundColor: "#dcdcdc",
+    fontWeight: 'bold'
+  },
+  singleButtonContainer: {
+    display: "block"
+  },
+  buttonsContainer: {
+    marginRight: "10px",
+    width: "20px",
   },
   arrowButton: {
     padding: "2px",
@@ -36,12 +46,18 @@ const styles = ({ palette }: Theme) => createStyles({
     borderRadius: "50%",
     minWidth: "20px"
   },
-  singleButtonContainer: {
-    display: "block"
+  testText: {
+    textAlign: "left",
+    width: "200px",
+    marginRight: "10px"
   },
-  buttonsContainer: {
-    marginRight: "10px",
+  testIndicator: {
     width: "20px",
+    height: "20px"
+  },
+  testIsOn: {
+    backgroundColor: "#ffe500",
+    borderRadius: "50%"
   }
 });
 
@@ -125,16 +141,17 @@ class EpicTestsList extends React.Component<EpicTestListProps, EpicTestsListStat
         <div className={classes.testListAndEditor}>
           <List className={classes.testsList} component="nav">
             {this.props.tests.map((test, index) => {
-              const classNames = this.state.selectedTestName === test.name ?
-                `${classes.test} ${classes.selectedTest}`
-                : classes.test;
+              const classNames = this.state.selectedTestName === test.name ? `${classes.test} ${classes.selectedTest}` :
+                `${classes.test}`;
+
+
 
               return (
                 <ListItem
                   className={classNames}
                   button
                   onClick={this.onTestSelected}
-                  key={test.name}
+                  key={index}
                 >
                   <div className={classes.buttonsContainer}>
                     <div className={classes.singleButtonContainer}>
@@ -144,10 +161,10 @@ class EpicTestsList extends React.Component<EpicTestListProps, EpicTestsListStat
                       {index <  this.props.tests.length - 1 ? <Button color={'default'} className={classes.arrowButton} variant={'contained'} onClick={() => this.moveTestDown(test.name)}><ArrowDownward /></Button> : null}
                     </div>
                   </div>
-                  <div>
+                  <div className={classes.testText}>
                     <Typography>{test.name}</Typography>
                   </div>
-
+                  <div className={ `${classes.testIndicator} ${test.isOn ? classes.testIsOn : null}` }></div>
 
                 </ListItem>
               )
