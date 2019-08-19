@@ -7,7 +7,7 @@ import EditableTextField from "../helpers/editableTextField"
 import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 
-const styles = ({ palette, spacing }: Theme) => createStyles({
+const styles = ({ palette, spacing, typography }: Theme) => createStyles({
   container: {
     width: "100%",
     borderTop: `2px solid ${palette.grey['300']}`,
@@ -35,6 +35,10 @@ const styles = ({ palette, spacing }: Theme) => createStyles({
     minWidth: "60%",
     maxWidth: "100%",
     display: "block",
+  },
+  h5: {
+    fontSize: typography.pxToRem(18),
+    margin: "20px 0 10px 0"
   }
 });
 const ITEM_HEIGHT = 48;
@@ -89,7 +93,7 @@ class EpicTestVariantEditor extends React.Component<Props, any> {
     return (
         <div>
 
-          <Typography variant={'h6'}>Required</Typography>
+          <Typography variant={'h5'} className={classes.h5}>Required</Typography>
           <Typography>Fill out each field before publishing your test</Typography>
 
           <EditableTextField
@@ -117,7 +121,7 @@ class EpicTestVariantEditor extends React.Component<Props, any> {
             label="Button destination:"
           />
 
-          <Typography variant={'h6'}>Optional</Typography>
+          <Typography variant={'h5'} className={classes.h5}>Optional</Typography>
           <Typography>Extra fields to add or remove, often during campaigns</Typography>
 
           <EditableTextField

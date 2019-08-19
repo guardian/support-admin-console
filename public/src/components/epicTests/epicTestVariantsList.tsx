@@ -3,72 +3,133 @@ import {
   Theme, createStyles, WithStyles, withStyles, Typography, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails
 } from "@material-ui/core";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import EditableTextField from "../helpers/editableTextField"
 import EpicTestVariantEditor from './epicTestVariantEditor';
 import { EpicVariant } from './epicTestsForm';
+import NewNameCreator from './newNameCreator';
 
 
-const styles = ({ palette, typography }: Theme) => createStyles({
-  variantsList: {
-    width: "20%",
-    borderRight: `2px solid ${palette.grey['300']}`,
-    borderTop: `2px solid ${palette.grey['300']}`,
-    padding: 0
-  },
-  variant: {
-    borderBottom: `1px solid ${palette.grey['300']}`,
-  },
-  selectedVariant: {
-    backgroundColor: palette.grey['400'],
-    fontWeight: 'bold'
-  },
-  root: {
-    width: '100%',
-  },
-  heading: {
-    fontSize: typography.pxToRem(16),
+const styles = ({ typography }: Theme) => createStyles({
+  h4: {
+    fontSize: typography.pxToRem(20),
     fontWeight: typography.fontWeightMedium,
   }
 });
 
-interface EpicTestVariantListProps extends WithStyles<typeof styles> {
-  onVariantSelected: (variantName: string) => void,
+interface EpicTestVariantsListProps extends WithStyles<typeof styles> {
   variants: EpicVariant[],
-  onVariantChange: (variant: EpicVariant) => void
+  onVariantsListChange: (variantList: EpicVariant[]) => void,
 }
 
+type EpicTestVariantsListState = {
+  expandedVariantName?: string
+}
 
-class EpicTestVariantsList extends React.Component<EpicTestVariantListProps, any> {
+class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, EpicTestVariantsListState> {
 
-  onClick = (event: React.MouseEvent<HTMLInputElement>): void => {
-    this.props.onVariantSelected(event.currentTarget.innerText)
+  state: EpicTestVariantsListState = { expandedVariantName: undefined}
+
+  onVariantSelected = (variantName: string): void => {
+    this.setState({
+      expandedVariantName: variantName
+    })
   };
 
-  render(): React.ReactNode {
-    const { classes } = this.props;
+  onVariantChange = (updatedVariant: EpicVariant): void => {
+    const updatedVariantList: EpicVariant[] = this.props.variants.map(variant => variant.name === updatedVariant.name ? updatedVariant : variant);
+    this.props.onVariantsListChange(updatedVariantList);
+  }
 
+  onVariantNameCreation = (name: string) => {
+    this.createVariant(name);
+  }
+
+  onExpansionPanelChange = (variantName: string) => (event: React.ChangeEvent<{}>) => {
+    this.state.expandedVariantName === variantName ? this.setState({
+      expandedVariantName: undefined
+    })
+    :
+    this.setState({
+      expandedVariantName: variantName
+    })
+  }
+
+  createVariant = (newVariantName: string) => {
+    const newVariant: EpicVariant = {
+      name: newVariantName,
+      heading: "",
+      paragraphs: [],
+      highlightedText: "",
+      footer: "",
+      showTicker: false,
+      backgroundImageUrl: "",
+      ctaText: "",
+      supportBaseURL: ""
+    }
+
+      this.props.onVariantsListChange([...this.props.variants, newVariant]);
+
+      this.onVariantSelected(newVariant.name);
+  }
+
+  renderNoVariants = (): React.ReactNode => {
+    return (
+      <>
+        <Typography variant={'subtitle1'} color={'textPrimary'}>Create the first variant for this test</Typography>
+        <Typography variant={'body1'}>(each test must have at least one variant)</Typography>
+        <EditableTextField
+            text=""
+            onSubmit={this.onVariantNameCreation}
+            label="First variant name:"
+            startInEditMode={true}
+          />
+      </>
+    );
+  }
+
+  renderVariants = (): React.ReactNode => {
+    const { classes } = this.props;
 
     return (
       <>
+        <NewNameCreator text="variant" existingNames={this.props.variants.map(variant => variant.name)} onValidName={this.createVariant} />
         {this.props.variants.map(variant => {
+          console.log('renderVariants()',this.state.expandedVariantName === variant.name, this.state.expandedVariantName, variant.name);
           return (
-            <ExpansionPanel>
+            <ExpansionPanel
+              key={variant.name}
+              expanded={this.state.expandedVariantName === variant.name}
+              onChange={this.onExpansionPanelChange(variant.name)}
+            >
               <ExpansionPanelSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="variant-control"
                 id="variant-header"
-                key={variant.name}
               >
-                <Typography className={classes.heading}>{variant.name}</Typography>
+                <Typography variant={'h4'} className={classes.h4}>{variant.name}</Typography>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
                 <EpicTestVariantEditor
                   variant={variant}
-                  onVariantChange={this.props.onVariantChange}
+                  onVariantChange={this.onVariantChange}
                 />
               </ExpansionPanelDetails>
             </ExpansionPanel>
-          )
+          );
         })}
+      </>
+    );
+  }
+
+  onClick = (event: React.MouseEvent<HTMLInputElement>): void => {
+    this.onVariantSelected(event.currentTarget.innerText)
+  };
+
+  render(): React.ReactNode {
+
+    return (
+      <>
+        {this.props.variants.length > 0 ? this.renderVariants() : this.renderNoVariants() }
       </>
     )
   }

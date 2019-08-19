@@ -8,57 +8,36 @@ import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { Region } from '../../utils/models';
 import EpicTestVariantsList from './epicTestVariantsList';
-import NewNameCreator from './newNameCreator';
 
-const styles = ({ palette, spacing }: Theme) => createStyles({
+const styles = ({ palette, spacing, typography}: Theme) => createStyles({
   container: {
     width: "80%",
     borderTop: `2px solid ${palette.grey['300']}`,
     marginLeft: "15px"
-  },
-  variant: {
-    display: "flex",
-    "& span": {
-      marginLeft: "4px",
-      marginRight: "4px"
-    }
-  },
-  variantName: {
-    width: "10%"
-  },
-  variantHeading: {
-    width: "20%"
-  },
-  variantListHeading: {
-    fontWeight: "bold"
   },
   formControl: {
     marginTop: spacing.unit,
     marginBottom: spacing.unit,
     display: "block",
   },
-  menu: {
-    width: "500px"
+  h2: {
+    fontSize: typography.pxToRem(28),
+    fontWeight: typography.fontWeightMedium,
+    margin: "10px 0 15px 0"
+  },
+  h3: {
+    fontSize: typography.pxToRem(24),
+    fontWeight: typography.fontWeightMedium,
+    margin: "20px 0 15px 0"
   }
 });
 
-type EpicTestVariantsState = {
-  selectedVariantName?: string
-}
 interface Props extends WithStyles<typeof styles> {
   test?: EpicTest,
   onChange: (updatedTest: EpicTest) => void
 }
 
-class EpicTestEditor extends React.Component<Props, EpicTestVariantsState> {
-
-  state: EpicTestVariantsState = { selectedVariantName: undefined}
-
-  onVariantSelected = (variantName: string): void => {
-    this.setState({
-      selectedVariantName: variantName
-    })
-  };
+class EpicTestEditor extends React.Component<Props> {
 
   updateTest = (update: (test: EpicTest) => EpicTest) => {
     if (this.props.test) {
@@ -66,28 +45,8 @@ class EpicTestEditor extends React.Component<Props, EpicTestVariantsState> {
     }
   }
 
-  createVariant = (newVariantName: string) => {
-    const newVariant: EpicVariant = {
-      name: newVariantName,
-      heading: "",
-      paragraphs: [],
-      highlightedText: "",
-      footer: "",
-      showTicker: false,
-      backgroundImageUrl: "",
-      ctaText: "",
-      supportBaseURL: ""
-    }
-
+  onVariantsChange = (updatedVariantList: EpicVariant[]): void => {
       if (this.props.test) {
-        const newVariantList: EpicVariant[] = [...this.props.test.variants, newVariant];
-        this.updateTest(test => ({...test, "variants": newVariantList}));
-      }
-  }
-
-  onVariantChange = (updatedVariant: EpicVariant): void => {
-      if (this.props.test) {
-        const updatedVariantList: EpicVariant[] = this.props.test.variants.map(variant => variant.name === updatedVariant.name ? updatedVariant : variant);
         this.updateTest(test => ({...test, "variants": updatedVariantList}));
       }
   };
@@ -112,45 +71,11 @@ class EpicTestEditor extends React.Component<Props, EpicTestVariantsState> {
 
   }
 
-  onVariantNameCreation = (name: string) => {
-    this.createVariant(name);
-  }
-
-  renderVariantListAndEditor = (test: EpicTest): React.ReactNode => {
-    return (
-      <div>
-        <NewNameCreator text="variant" existingNames={test ? test.variants.map(variant => variant.name) : []} onValidName={this.createVariant} />
-        <EpicTestVariantsList
-          onVariantSelected={this.onVariantSelected}
-          variants={test.variants}
-          onVariantChange={this.onVariantChange}
-        />
-        </div>
-    );
-  }
-
-  renderNoVariants = (): React.ReactNode => {
-    return (
-      <>
-        <Typography variant={'subtitle1'} color={'textPrimary'}>Create the first variant for this test</Typography>
-        <Typography variant={'body1'}>(each test must have at least one variant)</Typography>
-        <EditableTextField
-            text=""
-            onSubmit={this.onVariantNameCreation}
-            label="First variant name:"
-            startInEditMode={true}
-          />
-      </>
-    );
-  }
-
   renderEditor = (test: EpicTest): React.ReactNode => {
     const {classes} = this.props;
     return (
       <>
-        <Typography
-        variant={'h4'}
-        >
+        <Typography variant={'h2'} className={classes.h2}>
           {this.props.test && this.props.test.name}
         </Typography>
 
@@ -177,13 +102,16 @@ class EpicTestEditor extends React.Component<Props, EpicTestVariantsState> {
         </div>
 
 
-        <Typography variant={'h5'}>Variants</Typography>
+        <Typography variant={'h3'} className={classes.h3}>Variants</Typography>
 
+        <div>
+          <EpicTestVariantsList
+            variants={test.variants}
+            onVariantsListChange={this.onVariantsChange}
+          />
+        </div>
 
-
-        {test.variants.length > 0 ? this.renderVariantListAndEditor(test) : this.renderNoVariants()}
-
-        <Typography variant={'h5'}>Editorial tags</Typography>
+        <Typography variant={'h3'} className={classes.h3}>Editorial tags</Typography>
         <div>
 
 
@@ -213,7 +141,7 @@ class EpicTestEditor extends React.Component<Props, EpicTestVariantsState> {
             label="Excluded sections:"
           />
 
-          <Typography variant={'h5'}>Audience</Typography>
+          <Typography variant={'h3'} className={classes.h3}>Audience</Typography>
           <FormControl className={classes.formControl}>
             <InputLabel htmlFor="locations-select-multiple-checkbox">Locations</InputLabel>
             <Select
