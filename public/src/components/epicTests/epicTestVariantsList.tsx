@@ -94,7 +94,6 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
       <>
         <NewNameCreator text="variant" existingNames={this.props.variants.map(variant => variant.name)} onValidName={this.createVariant} />
         {this.props.variants.map(variant => {
-          console.log('renderVariants()',this.state.expandedVariantName === variant.name, this.state.expandedVariantName, variant.name);
           return (
             <ExpansionPanel
               key={variant.name}
