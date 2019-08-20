@@ -19,19 +19,19 @@ const styles = ({ typography }: Theme) => createStyles({
 interface EpicTestVariantsListProps extends WithStyles<typeof styles> {
   variants: EpicVariant[],
   onVariantsListChange: (variantList: EpicVariant[]) => void,
+  testName: string
 }
 
 type EpicTestVariantsListState = {
-  expandedVariantName?: string
+  expandedVariantKey?: string
 }
-
 class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, EpicTestVariantsListState> {
 
-  state: EpicTestVariantsListState = { expandedVariantName: undefined}
+  state: EpicTestVariantsListState = { expandedVariantKey: undefined}
 
-  onVariantSelected = (variantName: string): void => {
+  onVariantSelected = (key: string): void => {
     this.setState({
-      expandedVariantName: variantName
+      expandedVariantKey: key
     })
   };
 
@@ -44,14 +44,18 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
     this.createVariant(name);
   }
 
-  onExpansionPanelChange = (variantName: string) => (event: React.ChangeEvent<{}>) => {
-    this.state.expandedVariantName === variantName ? this.setState({
-      expandedVariantName: undefined
+  onExpansionPanelChange = (key: string) => (event: React.ChangeEvent<{}>) => {
+    this.state.expandedVariantKey === key ? this.setState({
+      expandedVariantKey: undefined
     })
     :
     this.setState({
-      expandedVariantName: variantName
+      expandedVariantKey: key
     })
+  }
+
+  createVariantKey = (variantName: string): string => {
+    return `${this.props.testName}${variantName}`
   }
 
   createVariant = (newVariantName: string) => {
@@ -69,7 +73,9 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
 
       this.props.onVariantsListChange([...this.props.variants, newVariant]);
 
-      this.onVariantSelected(newVariant.name);
+      const key = this.createVariantKey(newVariant.name);
+
+      this.onVariantSelected(key);
   }
 
   renderNoVariants = (): React.ReactNode => {
@@ -94,11 +100,12 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
       <>
         <NewNameCreator text="variant" existingNames={this.props.variants.map(variant => variant.name)} onValidName={this.createVariant} />
         {this.props.variants.map(variant => {
+          const key = this.createVariantKey(variant.name);
           return (
             <ExpansionPanel
-              key={variant.name}
-              expanded={this.state.expandedVariantName === variant.name}
-              onChange={this.onExpansionPanelChange(variant.name)}
+              key={key}
+              expanded={this.state.expandedVariantKey === key}
+              onChange={this.onExpansionPanelChange(key)}
             >
               <ExpansionPanelSummary
                 expandIcon={<ExpandMoreIcon />}

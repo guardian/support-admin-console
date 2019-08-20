@@ -108,6 +108,7 @@ class EpicTestEditor extends React.Component<Props> {
           <EpicTestVariantsList
             variants={test.variants}
             onVariantsListChange={this.onVariantsChange}
+            testName={test.name}
           />
         </div>
 
