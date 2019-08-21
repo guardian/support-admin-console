@@ -9,14 +9,14 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { Region } from '../../utils/models';
 import EpicTestVariantsList from './epicTestVariantsList';
 
-const styles = ({ palette, spacing, typography}: Theme) => createStyles({
+const styles = ({ spacing, typography}: Theme) => createStyles({
   container: {
     width: "80%",
-    borderTop: `2px solid ${palette.grey['300']}`,
+    borderTop: `2px solid #999999`,
     marginLeft: "15px"
   },
   formControl: {
-    marginTop: spacing.unit,
+    marginTop: spacing.unit * 2,
     marginBottom: spacing.unit,
     display: "block",
   },
@@ -29,6 +29,16 @@ const styles = ({ palette, spacing, typography}: Theme) => createStyles({
     fontSize: typography.pxToRem(24),
     fontWeight: typography.fontWeightMedium,
     margin: "20px 0 15px 0"
+  },
+  select: {
+    minWidth: "300px",
+    paddingTop: "10px",
+    marginBottom: "20px"
+  },
+  selectLabel: {
+    fontSize: typography.pxToRem(22),
+    fontWeight: typography.fontWeightMedium,
+    color: "black"
   }
 });
 
@@ -134,18 +144,28 @@ class EpicTestEditor extends React.Component<Props> {
             text={test.excludedTagIds.join(",")}
             onSubmit={this.onListChange("excludedTagIds")}
             label="Excluded tags:"
+            helperText="Separate each tag with a comma"
+
           />
 
           <EditableTextField
             text={test.excludedSections.join(",")}
             onSubmit={this.onListChange("excludedSections")}
             label="Excluded sections:"
+            helperText="Separate each section with a comma"
+
           />
 
           <Typography variant={'h3'} className={classes.h3}>Audience</Typography>
           <FormControl className={classes.formControl}>
-            <InputLabel htmlFor="locations-select-multiple-checkbox">Locations</InputLabel>
+            <InputLabel
+              className={classes.selectLabel}
+              shrink
+              htmlFor="locations-select-multiple-checkbox">
+                Locations
+            </InputLabel>
             <Select
+              className={classes.select}
               multiple
               value={test.locations}
               onChange={this.onLocationsChange}
@@ -162,10 +182,17 @@ class EpicTestEditor extends React.Component<Props> {
           </FormControl>
 
           <FormControl className={classes.formControl}>
-            <InputLabel htmlFor="user-cohort">User cohort</InputLabel>
+            <InputLabel
+              className={classes.selectLabel}
+              shrink
+              htmlFor="user-cohort">
+                User cohort
+            </InputLabel>
             <Select
+              className={classes.select}
               value={test.userCohort}
               onChange={this.onUserCohortChange}
+              displayEmpty
             >
               {Object.values(UserCohort).map(cohort => <MenuItem key={cohort} value={cohort}>{cohort}</MenuItem>)}
             </Select>

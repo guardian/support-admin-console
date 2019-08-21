@@ -16,20 +16,22 @@ const styles = ({ palette }: Theme) => createStyles({
   },
   testsList: {
     minWidth: "250px",
-    borderRight: `2px solid #dcdcdc`,
-    borderTop: `2px solid #dcdcdc`,
+    borderRight: `2px solid #999999`,
+    borderTop: `2px solid #999999`,
     padding: 0
   },
   test: {
-    borderBottom: `1px solid #dcdcdc`,
+    borderBottom: `1px solid #999999`,
     display: "flex",
     justifyContent: "space-between",
     padding: "5px",
     height: "60px",
+    "&:hover": {
+      background: "#ededed"
+    }
   },
   selectedTest: {
-    backgroundColor: "#dcdcdc",
-    fontWeight: 'bold'
+    background: "#dcdcdc"
   },
   singleButtonContainer: {
     display: "block"
@@ -153,7 +155,6 @@ class EpicTestsList extends React.Component<EpicTestListProps, EpicTestsListStat
               return (
                 <ListItem
                   className={classNames}
-                  button
                   onClick={this.onTestSelected}
                   key={index}
                 >
