@@ -11,7 +11,7 @@ import EpicTestVariantsList from './epicTestVariantsList';
 
 const styles = ({ spacing, typography}: Theme) => createStyles({
   container: {
-    width: "80%",
+    width: "100%",
     borderTop: `2px solid #999999`,
     marginLeft: "15px"
   },
@@ -157,45 +157,49 @@ class EpicTestEditor extends React.Component<Props> {
           />
 
           <Typography variant={'h3'} className={classes.h3}>Audience</Typography>
-          <FormControl className={classes.formControl}>
-            <InputLabel
-              className={classes.selectLabel}
-              shrink
-              htmlFor="locations-select-multiple-checkbox">
-                Locations
-            </InputLabel>
-            <Select
-              className={classes.select}
-              multiple
-              value={test.locations}
-              onChange={this.onLocationsChange}
-              input={<Input id="locations-select-multiple-checkbox" />}
-              renderValue={selected => (selected as string[]).join(', ')}
-            >
-              {Object.values(Region).map(region => (
-                <MenuItem key={region} value={region} >
-                  <Checkbox checked={test.locations.indexOf(region) > -1} />
-                  <ListItemText primary={region} />
-                </MenuItem>
-              ))}
-            </Select>
+          <FormControl
+            required
+            className={classes.formControl}>
+              <InputLabel
+                className={classes.selectLabel}
+                shrink
+                htmlFor="locations-select-multiple-checkbox">
+                  Locations
+              </InputLabel>
+              <Select
+                className={classes.select}
+                multiple
+                value={test.locations}
+                onChange={this.onLocationsChange}
+                input={<Input id="locations-select-multiple-checkbox" />}
+                renderValue={selected => (selected as string[]).join(', ')}
+              >
+                {Object.values(Region).map(region => (
+                  <MenuItem key={region} value={region} >
+                    <Checkbox checked={test.locations.indexOf(region) > -1} />
+                    <ListItemText primary={region} />
+                  </MenuItem>
+                ))}
+              </Select>
           </FormControl>
 
-          <FormControl className={classes.formControl}>
-            <InputLabel
-              className={classes.selectLabel}
-              shrink
-              htmlFor="user-cohort">
-                User cohort
-            </InputLabel>
-            <Select
-              className={classes.select}
-              value={test.userCohort}
-              onChange={this.onUserCohortChange}
-              displayEmpty
-            >
-              {Object.values(UserCohort).map(cohort => <MenuItem key={cohort} value={cohort}>{cohort}</MenuItem>)}
-            </Select>
+          <FormControl
+            required
+            className={classes.formControl}>
+              <InputLabel
+                className={classes.selectLabel}
+                shrink
+                htmlFor="user-cohort">
+                  User cohort
+              </InputLabel>
+              <Select
+                className={classes.select}
+                value={test.userCohort}
+                onChange={this.onUserCohortChange}
+                displayEmpty
+              >
+                {Object.values(UserCohort).map(cohort => <MenuItem key={cohort} value={cohort}>{cohort}</MenuItem>)}
+              </Select>
           </FormControl>
 
           <FormControlLabel

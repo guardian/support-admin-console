@@ -1,24 +1,34 @@
 import React from 'react';
-import {createStyles, Theme, withStyles, WithStyles, Typography} from "@material-ui/core";
+import {createStyles, Theme, withStyles, WithStyles, Typography, FormControl, InputLabel} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from "@material-ui/core/FormControlLabel";
 import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 
-const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
-  label: {
-    marginRight: "8px",
-    fontWeight: "bold",
-    width: "180px"
-  },
+const styles = ({ typography, spacing }: Theme) => createStyles({
   container: {
     marginLeft: 0,
     marginRight: "8px",
-    width: "80%"
+    width: "100%",
+    display: "flex",
+    "justify-content": "space-between"
   },
-  row: {
-    margin: "10px 0 0 10px"
+  formControl: {
+    marginTop: spacing.unit * 2,
+    marginBottom: spacing.unit,
+    width: "100%"
+  },
+  label: {
+    fontSize: typography.pxToRem(22),
+    fontWeight: typography.fontWeightMedium,
+    color: "black"
+  },
+  textField: {
+    marginTop: "20px"
+  },
+  button: {
+    marginTop: "30px",
+    height: "36px"
   }
 });
 
@@ -30,7 +40,8 @@ interface EditableTextFieldProps extends WithStyles<typeof styles> {
   startInEditMode?: boolean,
   errorMessage?: string,
   helperText?: string,
-  autoFocus?: boolean
+  autoFocus?: boolean,
+  required?: boolean
 }
 
 interface EditableTextFieldState {
@@ -77,11 +88,19 @@ class EditableTextField extends React.Component<EditableTextFieldProps, Editable
 
     return (
       <>
-      <div className={classes.row}>
-        <FormControlLabel
-          className={classes.container}
-          control={
+        <div className={classes.container}>
+          <FormControl
+            required={this.props.required}
+            className={classes.formControl}
+          >
+            <InputLabel
+              className={classes.label}
+              shrink
+            >
+              {this.props.label}
+            </InputLabel>
             <TextField
+              className={classes.textField}
               multiline={this.props.textarea}
               fullWidth
               name={this.props.label}
@@ -96,22 +115,17 @@ class EditableTextField extends React.Component<EditableTextFieldProps, Editable
               helperText={this.props.helperText}
               autoFocus={this.props.autoFocus}
             />
-          }
-          label={this.props.label}
-          labelPlacement="start"
-          classes={{
-            label: classes.label
-          }}
-        />
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          onClick={this.onClickButton}>
-            {this.state.editMode ? <SaveIcon /> : <EditIcon />}
-        </Button>
-      </div>
-      <Typography className={classes.row} color={'error'} variant={'body2'}>{this.props.errorMessage}</Typography>
+          </FormControl>
+          <Button
+            className={classes.button}
+            type="submit"
+            variant="contained"
+            color="primary"
+            onClick={this.onClickButton}>
+              {this.state.editMode ? <SaveIcon /> : <EditIcon />}
+            </Button>
+        </div>
+        <Typography color={'error'} variant={'body2'}>{this.props.errorMessage}</Typography>
       </>
 
     )

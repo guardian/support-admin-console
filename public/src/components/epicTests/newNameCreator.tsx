@@ -82,6 +82,7 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
 
           >
             <EditableTextField
+              required
               text=""
               onSubmit={this.handleName}
               label={this.props.text[0].toUpperCase() + this.props.text.substr(1,) + " name:"}

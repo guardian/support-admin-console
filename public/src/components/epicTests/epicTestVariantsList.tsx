@@ -84,6 +84,7 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
         <Typography variant={'subtitle1'} color={'textPrimary'}>Create the first variant for this test</Typography>
         <Typography variant={'body1'}>(each test must have at least one variant)</Typography>
         <EditableTextField
+            required
             text=""
             onSubmit={this.onVariantNameCreation}
             label="First variant name:"
