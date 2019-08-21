@@ -16,12 +16,12 @@ const styles = ({ palette }: Theme) => createStyles({
   },
   testsList: {
     minWidth: "250px",
-    borderRight: `2px solid #999999`,
-    borderTop: `2px solid #999999`,
     padding: 0
   },
   test: {
-    borderBottom: `1px solid #999999`,
+    border: "1px solid #999999",
+    borderRadius: "10px",
+    marginBottom: "5px",
     display: "flex",
     justifyContent: "space-between",
     padding: "5px",
