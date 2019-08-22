@@ -1,16 +1,18 @@
 import React from 'react';
 import update from 'immutability-helper';
 import {createStyles, Theme, withStyles, WithStyles, CssBaseline, Typography} from "@material-ui/core";
+import SaveIcon from '@material-ui/icons/Save';
+import RefreshIcon from '@material-ui/icons/Refresh';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import Button from "@material-ui/core/Button";
 import {Region} from "../../utils/models";
 import {
   fetchFrontendSettings,
   FrontendSettingsType,
   saveFrontendSettings,
 } from "../../utils/requests";
-import EpicTestsList from "./epicTestsList"
-import SaveIcon from '@material-ui/icons/Save';
-import RefreshIcon from '@material-ui/icons/Refresh';
-import Button from "@material-ui/core/Button";
+import EpicTestsList from "./epicTestsList";
+import ButtonWithConfirmationPopup from '../helpers/buttonWithConfirmationPopup';
 
 export enum UserCohort {
   OnlyExistingSupporters = 'OnlyExistingSupporters',
@@ -99,8 +101,6 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
       });
   };
 
-
-
   save = () => {
     const newState = update(this.previousStateFromServer, {
       value: {
@@ -134,14 +134,19 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
       <>
         <Typography variant={'h2'}>Epic tests</Typography>
         <div className={classes.buttons}>
-          <Button variant="contained" onClick={this.save} className={classes.button}>
-            <SaveIcon />
-            Publish
-          </Button>
-          <Button variant="contained" onClick={() => this.fetchStateFromServer()} className={classes.button}>
-            <RefreshIcon />
-            Reload data from server
-          </Button>
+          <ButtonWithConfirmationPopup
+            buttonText="Publish"
+            confirmationText="Are you sure? This will replace all live tests!"
+            onConfirm={this.save}
+            icon={<CloudUploadIcon />}
+          />
+
+          <ButtonWithConfirmationPopup
+            buttonText="Reload data"
+            confirmationText="Are you sure? All unpublished data will be lost!"
+            onConfirm={() => this.fetchStateFromServer()}
+            icon={<RefreshIcon />}
+          />
         </div>
 
         <div>
