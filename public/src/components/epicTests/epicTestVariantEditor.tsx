@@ -127,14 +127,14 @@ class EpicTestVariantEditor extends React.Component<Props, any> {
           <EditableTextField
             text={variant.highlightedText || "Support The Guardian from as little as %%CURRENCY_SYMBOL%%1 – and it only takes a minute. Thank you."}
             onSubmit={this.onTextChange("highlightedText")}
-            label="Highlighted text"
+            label="Highlighted text:"
             helperText="This will appear as the last sentence"
           />
 
           <EditableTextField
             text={variant.backgroundImageUrl || ""}
             onSubmit={this.onTextChange(VariantFieldNames.backgroundImageUrl)}
-            label="Image URL"
+            label="Image URL:"
             helperText="This will appear above everything except a ticker"
           />
 

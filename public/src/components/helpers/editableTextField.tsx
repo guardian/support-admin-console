@@ -16,6 +16,7 @@ const styles = ({ typography, spacing }: Theme) => createStyles({
   formControl: {
     marginTop: spacing.unit * 2,
     marginBottom: spacing.unit,
+    marginRight: spacing.unit,
     width: "100%"
   },
   label: {

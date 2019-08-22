@@ -31,7 +31,7 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
     margin: "20px 0 15px 0"
   },
   select: {
-    minWidth: "300px",
+    minWidth: "500px",
     paddingTop: "10px",
     marginBottom: "20px"
   },
@@ -164,7 +164,7 @@ class EpicTestEditor extends React.Component<Props> {
                 className={classes.selectLabel}
                 shrink
                 htmlFor="locations-select-multiple-checkbox">
-                  Locations
+                  Locations:
               </InputLabel>
               <Select
                 className={classes.select}
@@ -190,7 +190,7 @@ class EpicTestEditor extends React.Component<Props> {
                 className={classes.selectLabel}
                 shrink
                 htmlFor="user-cohort">
-                  User cohort
+                  User cohort:
               </InputLabel>
               <Select
                 className={classes.select}

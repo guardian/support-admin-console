@@ -54,10 +54,7 @@ interface DataFromServer {
   version: string,
 }
 
-type EpicTestsFormState = EpicTests & {
-  // newTestPopoverOpen: boolean,
-  // anchorElForPopover?: HTMLAnchorElement
-}
+type EpicTestsFormState = EpicTests;
 
 const styles = ({ spacing }: Theme) => createStyles({
   container: {

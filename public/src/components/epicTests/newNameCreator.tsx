@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {
-  List, ListItem, Theme, createStyles, WithStyles, withStyles, Button, Popover
+  Theme, createStyles, WithStyles, withStyles, Button, Popover
 } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
 import EditableTextField from '../helpers/editableTextField';
@@ -10,6 +10,10 @@ const styles = ({ spacing }: Theme) => createStyles({
   button: {
     marginRight: spacing.unit * 2,
     marginBottom: spacing.unit * 2
+  },
+  popover: {
+    padding: "10px",
+    width: "450px"
   }
 });
 
@@ -81,6 +85,7 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
             }}
 
           >
+            <div className={classes.popover}>
             <EditableTextField
               required
               text=""
@@ -91,6 +96,7 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
               errorMessage={this.state.errorMode ? "Name already exists - please try another" : ""}
             />
             <Button onClick={this.handleCancel}>Cancel</Button>
+            </div>
           </Popover>
     </div>
     )
