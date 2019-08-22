@@ -97,12 +97,14 @@ class EpicTestVariantEditor extends React.Component<Props, any> {
           <Typography>Fill out each field before publishing your test</Typography>
 
           <EditableTextField
+            required
             text={variant.heading || "Since you're here..."}
             onSubmit={this.onTextChange("heading")}
             label="Hook:"
           />
 
           <EditableTextField
+            required
             text={variant.paragraphs.join("\n") || "... I’m the second half of your opening line."}
             textarea={true}
             onSubmit={this.onParagraphsChange("paragraphs")}
@@ -110,12 +112,14 @@ class EpicTestVariantEditor extends React.Component<Props, any> {
           />
 
           <EditableTextField
+            required
             text={variant.ctaText || "Support The Guardian"}
             onSubmit={this.onTextChange(VariantFieldNames.ctaText)}
             label="Button text:"
           />
 
           <EditableTextField
+            required
             text={variant.supportBaseURL || "https://support.theguardian.com/contribute"}
             onSubmit={this.onTextChange(VariantFieldNames.supportBaseURL)}
             label="Button destination:"

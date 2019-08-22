@@ -158,7 +158,6 @@ class EpicTestEditor extends React.Component<Props> {
 
           <Typography variant={'h3'} className={classes.h3}>Audience</Typography>
           <FormControl
-            required
             className={classes.formControl}>
               <InputLabel
                 className={classes.selectLabel}
@@ -184,7 +183,6 @@ class EpicTestEditor extends React.Component<Props> {
           </FormControl>
 
           <FormControl
-            required
             className={classes.formControl}>
               <InputLabel
                 className={classes.selectLabel}
