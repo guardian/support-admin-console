@@ -1,11 +1,24 @@
 import React from 'react';
 import { EpicTest, EpicVariant, UserCohort } from "./epicTestsForm";
 import {
-  Theme, createStyles, WithStyles, withStyles, Select, FormControl, InputLabel, MenuItem, Input, Checkbox, ListItemText, Typography
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  Input,
+  InputLabel,
+  ListItemText,
+  MenuItem,
+  Radio,
+  RadioGroup,
+  Select,
+  Switch,
+  Theme,
+  Typography,
+  WithStyles,
+  createStyles,
+  withStyles
 } from "@material-ui/core";
 import EditableTextField from "../helpers/editableTextField"
-import Switch from "@material-ui/core/Switch";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { Region } from '../../utils/models';
 import EpicTestVariantsList from './epicTestVariantsList';
 
@@ -70,7 +83,7 @@ class EpicTestEditor extends React.Component<Props> {
     this.updateTest(test => ({...test, [fieldName]: updatedBool}));
   };
 
-  onUserCohortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  onUserCohortChange = (event: React.ChangeEvent<{}>) => {
     let selectedCohort = event.target.value as UserCohort;
     this.updateTest(test => ({...test, "userCohort": selectedCohort}));
   };
@@ -78,7 +91,6 @@ class EpicTestEditor extends React.Component<Props> {
   onLocationsChange = (event: any) => { // this should be React.ChangeEvent<HTMLSelectElement> but event.target.value is an array of strings if it's a multi-select event
     const selectedLocations = event.target.value as Region[];
     this.updateTest(test => ({...test, "locations": selectedLocations}));
-
   }
 
   renderEditor = (test: EpicTest): React.ReactNode => {
@@ -173,10 +185,10 @@ class EpicTestEditor extends React.Component<Props> {
                 input={<Input id="locations-select-multiple-checkbox" />}
                 renderValue={selected => (selected as string[]).join(', ')}
               >
-                {Object.values(Region).map(region => (
+                {Object.keys(Region).map(region => (
                   <MenuItem key={region} value={region} >
                     <Checkbox checked={test.locations.indexOf(region) > -1} />
-                    <ListItemText primary={region} />
+                    <ListItemText primary={Region[region]} />
                   </MenuItem>
                 ))}
               </Select>
@@ -190,14 +202,16 @@ class EpicTestEditor extends React.Component<Props> {
                 htmlFor="user-cohort">
                   User cohort:
               </InputLabel>
-              <Select
+              <RadioGroup
                 className={classes.select}
                 value={test.userCohort}
                 onChange={this.onUserCohortChange}
                 displayEmpty
               >
-                {Object.values(UserCohort).map(cohort => <MenuItem key={cohort} value={cohort}>{cohort}</MenuItem>)}
-              </Select>
+                {Object.keys(UserCohort).map(cohort =>
+                  <FormControlLabel value={cohort} control={<Radio />} label={UserCohort[cohort]} />
+                )}
+              </RadioGroup>
           </FormControl>
 
           <FormControlLabel
