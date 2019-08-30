@@ -183,7 +183,7 @@ class EpicTestEditor extends React.Component<Props> {
                 value={test.locations}
                 onChange={this.onLocationsChange}
                 input={<Input id="locations-select-multiple-checkbox" />}
-                renderValue={selected => (selected as string[]).join(', ')}
+                renderValue={selected => selected.map(regionKey => Region[regionKey]).join(', ')}
               >
                 {Object.keys(Region).map(region => (
                   <MenuItem key={region} value={region} >
@@ -221,7 +221,7 @@ class EpicTestEditor extends React.Component<Props> {
                 onChange={this.onSwitchChange("alwaysAsk")}
               />
             }
-            label={`Always Ask is ${test.alwaysAsk ? "on" : "off"}`}
+            label={`Turn ${test.alwaysAsk ? "off" : "on"} Always Ask`}
           />
         </div>
 
