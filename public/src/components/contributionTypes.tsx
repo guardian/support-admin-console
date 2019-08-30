@@ -39,7 +39,7 @@ function isContributionType(s: string): s is ContributionType {
 }
 
 const allContributionTypes = [
-  {contributionType: ContributionType.ONE_OFF, label: 'One-off'},
+  {contributionType: ContributionType.ONE_OFF, label: 'Single'},
   {contributionType: ContributionType.MONTHLY, label: 'Monthly'},
   {contributionType: ContributionType.ANNUAL, label: 'Annual'}
 ];

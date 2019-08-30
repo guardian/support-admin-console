@@ -31,7 +31,8 @@ class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
       |          "state": "On"
       |        }
       |      },
-      |      "optimize": "Off"
+      |      "optimize": "Off",
+      |      "usStripeAccount": "On"
       |}
     """.stripMargin
 
@@ -40,7 +41,8 @@ class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
       PaymentMethodsSwitch(On,On,None, None, None),
       PaymentMethodsSwitch(On,On,Some(On), Some(On), Some(On)),
       experiments = Map("newFlow" -> ExperimentSwitch("newFlow","Redesign of the payment flow UI",On)),
-      optimize = Off
+      optimize = Off,
+      usStripeAccount = On
     ),
     version = "v1"
   )

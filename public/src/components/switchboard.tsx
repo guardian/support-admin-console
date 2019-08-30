@@ -35,6 +35,7 @@ interface Switches {
     [p in RecurringPaymentMethod]: SwitchState
   },
   optimize: SwitchState,
+  usStripeAccount: SwitchState,
   experiments: {
     [featureSwitch: string]: {
       name: string,
@@ -108,6 +109,7 @@ class Switchboard extends React.Component<Props, Switches> {
         existingDirectDebit: SwitchState.Off,
       },
       optimize: SwitchState.Off,
+      usStripeAccount: SwitchState.Off,
       experiments: {},
     };
     this.previousStateFromServer = null;
@@ -179,7 +181,7 @@ class Switchboard extends React.Component<Props, Switches> {
           <div>
             {/* as "div", as "label" typecasts are to get around this issue: https://github.com/mui-org/material-ui/issues/13744 */}
             <FormControl component={'fieldset' as 'div'} className={classes.formControl}>
-              <FormLabel component={'legend' as 'label'}>One-off contributions</FormLabel>
+              <FormLabel component={'legend' as 'label'}>Single contributions</FormLabel>
               {/*
               It seems no matter how I set up the types, Object.entries and Object.keys
               give a string type to the object keys. This is a bit of a shame since it would be nice
@@ -246,6 +248,16 @@ class Switchboard extends React.Component<Props, Switches> {
                   />
                 }
                 label="Google Optimize"
+              />
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={switchStateToBoolean(this.state.usStripeAccount)}
+                    onChange={(event) => this.setState({usStripeAccount: booleanToSwitchState(event.target.checked)})}
+                    value={switchStateToBoolean(this.state.usStripeAccount)}
+                  />
+                }
+                label="US Stripe Account for Single contributions"
               />
             </FormControl>
           </div>

@@ -37,5 +37,6 @@ case class SupportFrontendSwitches(
   oneOffPaymentMethods: PaymentMethodsSwitch,
   recurringPaymentMethods: PaymentMethodsSwitch,
   experiments: Map[String, ExperimentSwitch],
-  optimize: SwitchState
+  optimize: SwitchState,
+  usStripeAccount: SwitchState
 )
