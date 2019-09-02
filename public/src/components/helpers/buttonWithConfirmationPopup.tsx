@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import {createStyles, Theme, withStyles, WithStyles, Popover, Typography} from "@material-ui/core";
 import Button, { ButtonProps } from "@material-ui/core/Button";
+import { SvgIcon } from 'material-ui';
+import { SvgIconProps } from '@material-ui/core/SvgIcon';
 
 const styles = ({ spacing, typography }: Theme) => createStyles({
   button: {
@@ -22,7 +24,7 @@ interface ButtonWithConfirmationPopupProps extends WithStyles<typeof styles> {
   confirmationText: string,
   onConfirm: () => void,
   color?: ButtonProps["color"],
-  icon: any // TODO: can we be more specific?
+  icon: ReactElement<SvgIconProps>
 }
 
 interface ButtonWithConfirmationPopupState {
