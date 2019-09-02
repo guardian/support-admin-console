@@ -208,7 +208,7 @@ class EpicTestEditor extends React.Component<Props> {
                 onChange={this.onUserCohortChange}
               >
                 {Object.values(UserCohort).map(cohort =>
-                  <FormControlLabel value={UserCohort[cohort]} control={<Radio />} label={cohort} />
+                  <FormControlLabel value={cohort} key={cohort} control={<Radio />} label={cohort} />
                 )}
               </RadioGroup>
           </FormControl>
