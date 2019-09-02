@@ -5,13 +5,13 @@ export enum ContributionType {
 }
 
 export enum Region {
+  AUDCountries = 'AUDCountries',
+  Canada = 'Canada',
+  EURCountries = 'EURCountries',
+  NZDCountries = 'NZDCountries',
   GBPCountries = 'GBPCountries',
   UnitedStates = 'UnitedStates',
-  EURCountries = 'EURCountries',
-  International = 'International',
-  Canada = 'Canada',
-  AUDCountries = 'AUDCountries',
-  NZDCountries = 'NZDCountries'
+  International = 'International'
 }
 
 export function isRegion(s: string): s is Region {

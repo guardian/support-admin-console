@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import Switchboard from './components/switchboard';
 import ContributionTypesForm from './components/contributionTypes';
 import AmountsForm from './components/amounts/amounts';
+import EpicTestsForm from './components/epicTests/epicTestsForm';
 import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
@@ -16,8 +17,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import ListItem from '@material-ui/core/ListItem';
 
-const drawerWidth = 240;
+import { FeatureFlags } from '../../conf/frontend-flags';
 
+const drawerWidth = 240;
 
 const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
   root: {
@@ -44,6 +46,21 @@ const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
     textDecoration: 'none',
   }
 });
+
+const getLinkPathsAndNames = (): string[][] => {
+  const baseList = [
+    ['/', 'Home'],
+    ['/switches', 'Switches'],
+    ['/contribution-types', 'Contribution Types'],
+    ['/amounts', 'Amounts']
+  ]
+
+  if (FeatureFlags.show_epic_dashboard) {
+    baseList.push(['/epic-tests', 'Epic Tests'])
+  }
+
+  return baseList;
+}
 
 const Index = () => <h2>Home</h2>;
 
@@ -73,7 +90,7 @@ const AppRouter = withStyles(styles)(({classes}: Props) => (
           <Divider />
           {/* TODO: use link from react router to avoid a full page reload */}
           <List>
-            {[['/', 'Home'], ['/switches', 'Switches'], ['/contribution-types', 'Contribution Types'], ['/amounts', 'Amounts']].map(([href, name]) => (
+            {getLinkPathsAndNames().map(([href, name]) => (
               <Link to={href} className={classes.link}>
                 <ListItem button key={name}>
                   <ListItemText primary={name} />
@@ -90,6 +107,9 @@ const AppRouter = withStyles(styles)(({classes}: Props) => (
         <Route path="/switches" component={Switchboard} />
         <Route path="/contribution-types" component={ContributionTypesForm} />
         <Route path="/amounts" component={AmountsForm} />
+        {FeatureFlags.show_epic_dashboard ?
+          <Route path="/epic-tests" component={EpicTestsForm} /> : null
+        }
       </main>
     </div>
   </Router>

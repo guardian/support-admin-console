@@ -1,28 +1,48 @@
-
-export enum SettingsType {
+export enum SupportFrontendSettingsType {
   switches = 'switches',
-  contributionTypes = 'contributionTypes',
+  contributionTypes = 'contribution-types',
   amounts = 'amounts'
 }
 
-export function fetchSettings(settingsType: SettingsType): Promise<any> {
-  return fetch(`/support-frontend/${settingsType}`)
+export enum FrontendSettingsType {
+  epicTests = 'epic-tests'
+}
+
+function fetchSettings(path: string): Promise<any> {
+  return fetch(path)
     .then(resp => {
       if (!resp.ok) {
         resp.text().then(msg => alert(msg));
-        throw new Error(`Could not fetch ${settingsType} settings from server`);
+        throw new Error(`Could not fetch ${path} settings from server`);
       }
 
       return resp.json();
     });
 }
 
-export function saveSettings(settingsType: SettingsType, data: any): Promise<Response> {
-  return fetch(`/support-frontend/${settingsType}/update`, {
+function saveSettings(path: string, data: any): Promise<Response> {
+  return fetch(path, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(data),
   })
+}
+
+
+export function fetchSupportFrontendSettings(settingsType: SupportFrontendSettingsType): Promise<any> {
+  return fetchSettings(`/support-frontend/${settingsType}`);
+}
+
+export function saveSupportFrontendSettings(settingsType: SupportFrontendSettingsType, data: any): Promise<Response> {
+  return saveSettings(`/support-frontend/${settingsType}/update`, data);
+}
+
+export function fetchFrontendSettings(settingsType: FrontendSettingsType): Promise<any> {
+  return fetchSettings(`/frontend/${settingsType}`);
+}
+
+export function saveFrontendSettings(settingsType: FrontendSettingsType, data: any): Promise<Response> {
+  return saveSettings(`/frontend/${settingsType}/update`, data);
 }
