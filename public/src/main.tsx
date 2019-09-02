@@ -17,8 +17,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import ListItem from '@material-ui/core/ListItem';
 
-const drawerWidth = 240;
+import { FeatureFlags } from '../../conf/frontend-flags';
 
+const drawerWidth = 240;
 
 const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
   root: {
@@ -45,6 +46,21 @@ const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
     textDecoration: 'none',
   }
 });
+
+const getLinkPathsAndNames = (): any[] => {
+  const baseList = [
+    ['/', 'Home'],
+    ['/switches', 'Switches'],
+    ['/contribution-types', 'Contribution Types'],
+    ['/amounts', 'Amounts']
+  ]
+
+  if (FeatureFlags.show_epic_dashboard) {
+    baseList.push(['/epic-tests', 'Epic Tests'])
+  }
+
+  return baseList;
+}
 
 const Index = () => <h2>Home</h2>;
 
@@ -74,7 +90,7 @@ const AppRouter = withStyles(styles)(({classes}: Props) => (
           <Divider />
           {/* TODO: use link from react router to avoid a full page reload */}
           <List>
-            {[['/', 'Home'], ['/switches', 'Switches'], ['/contribution-types', 'Contribution Types'], ['/amounts', 'Amounts'], ['/epic-tests', 'Epic tests']].map(([href, name]) => (
+            {getLinkPathsAndNames().map(([href, name]) => (
               <Link to={href} className={classes.link}>
                 <ListItem button key={name}>
                   <ListItemText primary={name} />
@@ -91,7 +107,9 @@ const AppRouter = withStyles(styles)(({classes}: Props) => (
         <Route path="/switches" component={Switchboard} />
         <Route path="/contribution-types" component={ContributionTypesForm} />
         <Route path="/amounts" component={AmountsForm} />
-        <Route path="/epic-tests" component={EpicTestsForm} />
+        {FeatureFlags.show_epic_dashboard ?
+          <Route path="/epic-tests" component={EpicTestsForm} /> : null
+        }
       </main>
     </div>
   </Router>
