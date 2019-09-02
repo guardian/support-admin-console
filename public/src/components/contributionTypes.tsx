@@ -31,11 +31,11 @@ interface DataFromServer {
 }
 
 function isRegion(s: string): s is Region {
-  return Object.values(Region).includes(s)
+  return Object.values(Region).includes(s as Region)
 }
 
 function isContributionType(s: string): s is ContributionType {
-  return Object.values(ContributionType).includes(s)
+  return Object.values(ContributionType).includes(s as ContributionType)
 }
 
 const allContributionTypes = [

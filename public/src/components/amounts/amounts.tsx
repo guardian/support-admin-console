@@ -32,7 +32,7 @@ interface DataFromServer {
 }
 
 function isRegion(s: string): s is Region {
-  return Object.values(Region).includes(s)
+  return Object.values(Region).includes(s as Region)
 }
 
 const emptyAmounts: Amounts = {
