@@ -13,7 +13,7 @@ import Button from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
 import RefreshIcon from '@material-ui/icons/Refresh';
 
-import {ContributionType, Region} from '../utils/models';
+import {ContributionType, Region, isContributionType, isRegion} from '../utils/models';
 import {fetchSettings, saveSettings, SettingsType} from '../utils/requests';
 
 interface ContributionTypeSetting {
@@ -28,14 +28,6 @@ type ContributionTypes = {
 interface DataFromServer {
   value: ContributionTypes,
   version: string,
-}
-
-function isRegion(s: string): s is Region {
-  return Object.values(Region).includes(s)
-}
-
-function isContributionType(s: string): s is ContributionType {
-  return Object.values(ContributionType).includes(s)
 }
 
 const allContributionTypes = [

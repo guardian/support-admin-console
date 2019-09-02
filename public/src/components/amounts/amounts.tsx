@@ -9,7 +9,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import RefreshIcon from '@material-ui/icons/Refresh';
 
 import {fetchSettings, saveSettings, SettingsType} from '../../utils/requests';
-import {ContributionType, Region} from '../../utils/models';
+import {ContributionType, Region, isRegion} from '../../utils/models';
 import AmountInput from './amountInput';
 import Amount from './amount';
 
@@ -29,10 +29,6 @@ type AmountsRegions = {
 interface DataFromServer {
   value: AmountsRegions,
   version: string,
-}
-
-function isRegion(s: string): s is Region {
-  return Object.values(Region).includes(s)
 }
 
 const emptyAmounts: Amounts = {
