@@ -47,7 +47,7 @@ const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
   }
 });
 
-const getLinkPathsAndNames = (): any[] => {
+const getLinkPathsAndNames = (): string[][] => {
   const baseList = [
     ['/', 'Home'],
     ['/switches', 'Switches'],
