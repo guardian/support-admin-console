@@ -8,8 +8,8 @@ import Button from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
 import RefreshIcon from '@material-ui/icons/Refresh';
 
-import {ContributionType, Region, isRegion} from '../../utils/models';
 import {fetchSupportFrontendSettings, saveSupportFrontendSettings, SupportFrontendSettingsType} from '../../utils/requests';
+import {ContributionType, Region, isRegion} from '../../utils/models';
 import AmountInput from './amountInput';
 import Amount from './amount';
 
@@ -82,7 +82,6 @@ class AmountsForm extends React.Component<Props, AmountsRegions> {
 
   constructor(props: Props) {
     super(props);
-    this.state =
     this.state = {
       GBPCountries: emptyAmounts,
       UnitedStates: emptyAmounts,

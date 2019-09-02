@@ -15,9 +15,9 @@ import EpicTestsList from "./epicTestsList";
 import ButtonWithConfirmationPopup from '../helpers/buttonWithConfirmationPopup';
 
 export enum UserCohort {
-  Everyone = 'Everyone',
-  OnlyNonSupporters = 'Non-supporters',
-  OnlyExistingSupporters = 'Existing supporters'
+  'Everyone' = 'Everyone',
+  'Non-supporters' = 'OnlyNonSupporters',
+  'Existing supporters' = 'OnlyExistingSupporters'
 }
 
 export interface EpicVariant {

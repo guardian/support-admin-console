@@ -19,7 +19,7 @@ import {
   withStyles
 } from "@material-ui/core";
 import EditableTextField from "../helpers/editableTextField"
-import { Region } from '../../utils/models';
+import { Region, isRegion } from '../../utils/models';
 import EpicTestVariantsList from './epicTestVariantsList';
 
 const styles = ({ spacing, typography}: Theme) => createStyles({
@@ -83,7 +83,7 @@ class EpicTestEditor extends React.Component<Props> {
     this.updateTest(test => ({...test, [fieldName]: updatedBool}));
   };
 
-  onUserCohortChange = (event: React.ChangeEvent<{}>) => {
+  onUserCohortChange = (event: any) => {
     let selectedCohort = event.target.value as UserCohort;
     this.updateTest(test => ({...test, "userCohort": selectedCohort}));
   };
@@ -183,12 +183,12 @@ class EpicTestEditor extends React.Component<Props> {
                 value={test.locations}
                 onChange={this.onLocationsChange}
                 input={<Input id="locations-select-multiple-checkbox" />}
-                renderValue={selected => selected.map(regionKey => Region[regionKey]).join(', ')}
+                renderValue={selected => (selected as string[]).join(', ')}
               >
-                {Object.keys(Region).map(region => (
+                {Object.values(Region).map(region => (
                   <MenuItem key={region} value={region} >
                     <Checkbox checked={test.locations.indexOf(region) > -1} />
-                    <ListItemText primary={Region[region]} />
+                    <ListItemText primary={region} />
                   </MenuItem>
                 ))}
               </Select>
@@ -206,10 +206,9 @@ class EpicTestEditor extends React.Component<Props> {
                 className={classes.select}
                 value={test.userCohort}
                 onChange={this.onUserCohortChange}
-                displayEmpty
               >
-                {Object.keys(UserCohort).map(cohort =>
-                  <FormControlLabel value={cohort} control={<Radio />} label={UserCohort[cohort]} />
+                {Object.values(UserCohort).map(cohort =>
+                  <FormControlLabel value={UserCohort[cohort]} control={<Radio />} label={cohort} />
                 )}
               </RadioGroup>
           </FormControl>

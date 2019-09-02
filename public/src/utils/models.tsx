@@ -4,15 +4,26 @@ export enum ContributionType {
   ANNUAL = 'ANNUAL'
 }
 
+// export enum Region {
+//   AUDCountries = 'Australia',
+//   Canada = 'Canada',
+//   EURCountries = 'Europe',
+//   NZDCountries = 'New Zealand',
+//   GBPCountries = 'United Kingdom',
+//   UnitedStates = 'United States',
+//   International = 'International',
+// }
+
 export enum Region {
-  AUDCountries = 'Australia',
-  Canada = 'Canada',
-  EURCountries = 'Europe',
-  NZDCountries = 'New Zealand',
-  GBPCountries = 'United Kingdom',
-  UnitedStates = 'United States',
-  International = 'International',
+  'Australia' = 'AUDCountries',
+  'Canada' = 'Canada',
+  'Europe' = 'EURCountries',
+  'New Zealand' = 'NZDCountries',
+  'United Kingdom' = 'GBPCountries',
+  'United States' = 'UnitedStates',
+  'International' = 'International',
 }
+
 
 export function isRegion(s: string): s is Region {
   return Object.values(Region).includes(s as Region)
