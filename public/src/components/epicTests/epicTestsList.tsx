@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {
-  List, ListItem, Theme, createStyles, WithStyles, withStyles, Typography, Button
+  List, ListItem, createStyles, WithStyles, withStyles, Typography, Button
 } from "@material-ui/core";
 import ArrowUpward from '@material-ui/icons/ArrowUpward';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
@@ -10,7 +10,7 @@ import EpicTestEditor from './epicTestEditor';
 import NewNameCreator from './newNameCreator';
 
 
-const styles = ({ palette }: Theme) => createStyles({
+const styles = () => createStyles({
   testListAndEditor: {
     display: "flex"
   },
