@@ -52,6 +52,10 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
     fontSize: typography.pxToRem(22),
     fontWeight: typography.fontWeightMedium,
     color: "black"
+  },
+  radio: {
+    paddingTop: "20px",
+    marginBottom: "10px"
   }
 });
 
@@ -203,7 +207,7 @@ class EpicTestEditor extends React.Component<Props> {
                   User cohort:
               </InputLabel>
               <RadioGroup
-                className={classes.select}
+                className={classes.radio}
                 value={test.userCohort}
                 onChange={this.onUserCohortChange}
               >
