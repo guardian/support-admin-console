@@ -37,7 +37,7 @@ class ButtonWithConfirmationPopup extends React.Component<ButtonWithConfirmation
   anchorElement: undefined
 }
 
-onClick = (event: any) =>  {
+onClick = (event: React.MouseEvent<HTMLAnchorElement>) =>  {
   this.setState({
     popoverOpen: true,
     anchorElement: event.currentTarget

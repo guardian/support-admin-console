@@ -67,7 +67,7 @@ enum VariantFieldNames {
   ctaText = "ctaText",
   supportBaseURL = "supportBaseURL"
 }
-class EpicTestVariantEditor extends React.Component<Props, any> {
+class EpicTestVariantEditor extends React.Component<Props> {
 
   updateVariant = (update: (variant: EpicVariant) => EpicVariant) => {
     if (this.props.variant) {
