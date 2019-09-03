@@ -78,18 +78,18 @@ class EpicTestEditor extends React.Component<Props> {
     this.updateTest(test => ({...test, [fieldName]: updatedString.split(",")}));
   };
 
-  onSwitchChange = (fieldName: string) => (event: React.ChangeEvent<HTMLInputElement>):void =>  {
+  onSwitchChange = (fieldName: string) => (event: React.ChangeEvent<HTMLInputElement>): void =>  {
     const updatedBool = event.target.checked;
     this.updateTest(test => ({...test, [fieldName]: updatedBool}));
   };
 
-  onUserCohortChange = (event: any) => {
-    let selectedCohort = event.target.value as UserCohort;
+  onUserCohortChange = (event: React.ChangeEvent<{}>, value: string): void => {
+    let selectedCohort = value as UserCohort;
     this.updateTest(test => ({...test, "userCohort": selectedCohort}));
   };
 
-  onLocationsChange = (event: any) => { // this should be React.ChangeEvent<HTMLSelectElement> but event.target.value is an array of strings if it's a multi-select event
-    const selectedLocations = event.target.value as Region[];
+  onLocationsChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedLocations = [...event.target.value] as Region[];
     this.updateTest(test => ({...test, "locations": selectedLocations}));
   }
 
