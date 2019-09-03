@@ -69,22 +69,13 @@ const styles = ({ palette }: Theme) => createStyles({
 
 interface EpicTestListProps extends WithStyles<typeof styles> {
   tests: EpicTest[],
-  onUpdate: (tests: EpicTest[]) => void
+  selectedTestName: string | undefined,
+  onUpdate: (tests: EpicTest[]) => void,
+  onSelectedTestName: (testName: string) => void
 }
 
-interface EpicTestsListState {
-  selectedTestName?: string
-}
+class EpicTestsList extends React.Component<EpicTestListProps> {
 
-class EpicTestsList extends React.Component<EpicTestListProps, EpicTestsListState> {
-
-  state: EpicTestsListState = {}
-
-  onTestSelected = (event: React.MouseEvent<HTMLInputElement>): void => {
-    this.setState({
-      selectedTestName: event.currentTarget.innerText
-    })
-  };
 
   onTestChange = (updatedTest: EpicTest): void => {
     const updatedTests = this.props.tests.map(test => test.name === updatedTest.name ? updatedTest : test);
@@ -110,10 +101,12 @@ class EpicTestsList extends React.Component<EpicTestListProps, EpicTestsListStat
 
     this.props.onUpdate(newTestList);
 
-    this.setState({
-      selectedTestName: newTest.name
-    })
+    this.props.onSelectedTestName(newTest.name);
   }
+
+  onTestSelected = (event: React.MouseEvent<HTMLInputElement>): void => {
+    this.props.onSelectedTestName(event.currentTarget.innerText)
+  };
 
   moveTestUp = (name: string) => {
     const newTests = [...this.props.tests];
@@ -147,10 +140,8 @@ class EpicTestsList extends React.Component<EpicTestListProps, EpicTestsListStat
         <div className={classes.testListAndEditor}>
           <List className={classes.testsList} component="nav">
             {this.props.tests.map((test, index) => {
-              const classNames = this.state.selectedTestName === test.name ? `${classes.test} ${classes.selectedTest}` :
+              const classNames = this.props.selectedTestName === test.name ? `${classes.test} ${classes.selectedTest}` :
                 `${classes.test}`;
-
-
 
               return (
                 <ListItem
@@ -177,7 +168,7 @@ class EpicTestsList extends React.Component<EpicTestListProps, EpicTestsListStat
           </List>
 
           <EpicTestEditor
-            test={this.state.selectedTestName ? this.props.tests.find(test => test.name === this.state.selectedTestName) : undefined}
+            test={this.props.selectedTestName ? this.props.tests.find(test => test.name === this.props.selectedTestName) : undefined}
             onChange={this.onTestChange}
           />
         </div>

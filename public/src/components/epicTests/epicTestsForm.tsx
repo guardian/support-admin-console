@@ -56,7 +56,9 @@ interface DataFromServer {
   version: string,
 }
 
-type EpicTestsFormState = EpicTests;
+type EpicTestsFormState = EpicTests & {
+  selectedTestName?: string
+};
 
 const styles = ({ spacing }: Theme) => createStyles({
   container: {
@@ -82,7 +84,8 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
   constructor(props: EpicTestFormProps) {
     super(props);
     this.state = {
-      tests: []
+      tests: [],
+      selectedTestName: undefined
     };
     this.previousStateFromServer = null;
   }
@@ -127,6 +130,12 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
     });
   };
 
+  onSelectedTestName = (testName: string): void => {
+      this.setState({
+        selectedTestName: testName
+      })
+  }
+
   render(): React.ReactNode {
     const { classes } = this.props;
 
@@ -152,7 +161,9 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
         <div>
           <EpicTestsList
             tests={this.state.tests}
+            selectedTestName={this.state.selectedTestName}
             onUpdate={this.onTestsChange}
+            onSelectedTestName={this.onSelectedTestName}
           />
         </div>
       </>
