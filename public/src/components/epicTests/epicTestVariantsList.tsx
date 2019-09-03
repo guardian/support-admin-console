@@ -121,10 +121,6 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
     );
   }
 
-  onClick = (event: React.MouseEvent<HTMLInputElement>): void => {
-    this.onVariantSelected(event.currentTarget.innerText)
-  };
-
   render(): React.ReactNode {
 
     return (
