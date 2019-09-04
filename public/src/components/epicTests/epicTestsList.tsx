@@ -167,10 +167,13 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
             })}
           </List>
 
-          <EpicTestEditor
-            test={this.props.selectedTestName ? this.props.tests.find(test => test.name === this.props.selectedTestName) : undefined}
+          {this.props.tests.map(test => (<EpicTestEditor
+            test={this.props.tests.find(test => test.name === this.props.selectedTestName)}
             onChange={this.onTestChange}
-          />
+            visible={test.name === this.props.selectedTestName}
+            key={test.name}
+          />))}
+
         </div>
       </>
     )
