@@ -44,7 +44,8 @@ export interface EpicTest {
   userCohort?: UserCohort,
   isLiveBlog: boolean,
   hasCountryName: boolean,
-  variants: EpicVariant[]
+  variants: EpicVariant[],
+  highPriority: boolean
 }
 
 interface EpicTests {

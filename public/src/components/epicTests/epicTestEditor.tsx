@@ -105,15 +105,17 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps> {
       <div className={classes.container}>
         <Typography variant={'h2'} className={classes.h2}>{this.props.test && this.props.test.name}</Typography>
 
-        <FormControlLabel
-          control={
-            <Switch
-              checked={test.isOn}
-              onChange={this.onSwitchChange("isOn")}
-            />
-          }
-          label={`Test is ${test.isOn ? "on" : "off"}`}
-        />
+        <div>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={test.isOn}
+                onChange={this.onSwitchChange("isOn")}
+              />
+            }
+            label={`Test is ${test.isOn ? "on" : "off"}`}
+          />
+        </div>
 
         <div>
           <FormControlLabel
@@ -127,8 +129,20 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps> {
           />
         </div>
 
+        <div>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={test.highPriority}
+                onChange={this.onSwitchChange("highPriority")}
+              />
+            }
+            label="High priority"
+          />
+        </div>
+
         <Typography variant={'h3'} className={classes.h3}>Variants</Typography>
-        // TODO: add validation to ensure at least one variant exists before publishing is allowed
+        {/* TODO: add validation to ensure at least one variant exists before publishing is allowed */}
         <div>
           <EpicTestVariantsList
             variants={test.variants}

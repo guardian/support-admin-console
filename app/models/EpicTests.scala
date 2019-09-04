@@ -56,7 +56,8 @@ case class EpicTest(
   userCohort: Option[UserCohort] = None,
   isLiveBlog: Boolean = false,
   hasCountryName: Boolean = false,
-  variants: List[EpicVariant]
+  variants: List[EpicVariant],
+  highPriority: Boolean = false
 )
 
 case class EpicTests(tests: List[EpicTest])

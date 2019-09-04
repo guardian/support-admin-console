@@ -95,7 +95,8 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
       userCohort: undefined,
       isLiveBlog: false,
       hasCountryName: false,
-      variants: []
+      variants: [],
+      highPriority: false
     }
     const newTestList = [...this.props.tests, newTest];
 
