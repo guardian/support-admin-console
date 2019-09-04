@@ -26,10 +26,10 @@ sealed trait UserCohort extends EnumEntry
 object UserCohort extends Enum[UserCohort] with CirceEnum[UserCohort] {
   override val values: IndexedSeq[UserCohort] = findValues
 
-  case object OnlyExistingSupporters extends UserCohort
-  case object OnlyNonSupporters extends UserCohort
+  case object AllExistingSupporters extends UserCohort
+  case object AllNonSupporters extends UserCohort
   case object Everyone extends UserCohort
-
+  case object PostAskPauseSingleContributors extends UserCohort
 }
 
 case class EpicVariant(

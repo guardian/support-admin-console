@@ -16,8 +16,9 @@ import ButtonWithConfirmationPopup from '../helpers/buttonWithConfirmationPopup'
 
 export enum UserCohort {
   Everyone = 'Everyone',
-  OnlyNonSupporters = 'OnlyNonSupporters',
-  OnlyExistingSupporters = 'OnlyExistingSupporters'
+  AllExistingSupporters = 'AllExistingSupporters',
+  AllNonSupporters = 'AllNonSupporters',
+  PostAskPauseSingleContributors = 'PostAskPauseSingleContributors'
 }
 
 export interface EpicVariant {
