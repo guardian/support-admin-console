@@ -42,48 +42,61 @@ interface EditableTextFieldProps extends WithStyles<typeof styles> {
   errorMessage?: string,
   helperText?: string,
   autoFocus?: boolean,
-  required?: boolean
+  required?: boolean,
+  editEnabled: boolean
 }
 
 interface EditableTextFieldState {
-  editMode: boolean,
+  fieldEditMode: boolean,
   currentText: string,
 }
 
 class EditableTextField extends React.Component<EditableTextFieldProps, EditableTextFieldState> {
 
   state: EditableTextFieldState =  {
-        editMode: this.props.startInEditMode || false,
+        fieldEditMode: this.props.startInEditMode || false,
         currentText: this.props.text,
       }
 
   componentDidUpdate(prevProps: EditableTextFieldProps) {
     if (prevProps.text !== this.props.text) {
       this.setState({
-        editMode: false,
+        fieldEditMode: false,
         currentText: this.props.text
       })
     }
   }
 
   onClickButton = (): void => {
-    if (this.state.editMode) {
+    if (this.state.fieldEditMode) {
       this.props.onSubmit(this.state.currentText);
 
       this.setState({
-        editMode: false
+        fieldEditMode: false
       });
     } else {
       this.setState({
-        editMode: true
+        fieldEditMode: true
       });
     }
   };
 
+  showButton = (): React.ReactFragment | null => {
+    const {classes} = this.props;
+    return this.props.editEnabled && (
+      <Button
+      className={classes.button}
+      type="submit"
+      variant="contained"
+      color="primary"
+      onClick={this.onClickButton}>
+        {this.state.fieldEditMode ? <SaveIcon /> : <EditIcon />}
+      </Button>
+    )
+  }
+
   render(): React.ReactNode {
     const {classes} = this.props;
-
-
     return (
       <>
         <div className={classes.container}>
@@ -102,7 +115,7 @@ class EditableTextField extends React.Component<EditableTextFieldProps, Editable
               multiline={this.props.textarea}
               fullWidth
               name={this.props.label}
-              disabled={!this.state.editMode}
+              disabled={!this.state.fieldEditMode}
               value={this.state.currentText}
               onChange={event => {
                 const newValue = event.target.value;
@@ -114,14 +127,7 @@ class EditableTextField extends React.Component<EditableTextFieldProps, Editable
               autoFocus={this.props.autoFocus}
             />
           </FormControl>
-          <Button
-            className={classes.button}
-            type="submit"
-            variant="contained"
-            color="primary"
-            onClick={this.onClickButton}>
-              {this.state.editMode ? <SaveIcon /> : <EditIcon />}
-            </Button>
+         {this.showButton()}
         </div>
         <Typography color={'error'} variant={'body2'}>{this.props.errorMessage}</Typography>
       </>

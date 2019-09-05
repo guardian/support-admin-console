@@ -71,11 +71,11 @@ interface EpicTestListProps extends WithStyles<typeof styles> {
   tests: EpicTest[],
   selectedTestName: string | undefined,
   onUpdate: (tests: EpicTest[]) => void,
-  onSelectedTestName: (testName: string) => void
+  onSelectedTestName: (testName: string) => void,
+  editMode: boolean
 }
 
 class EpicTestsList extends React.Component<EpicTestListProps> {
-
 
   onTestChange = (updatedTest: EpicTest): void => {
     const updatedTests = this.props.tests.map(test => test.name === updatedTest.name ? updatedTest : test);
@@ -173,6 +173,7 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
             onChange={this.onTestChange}
             visible={test.name === this.props.selectedTestName}
             key={test.name}
+            editMode={this.props.editMode}
           />))}
 
         </div>

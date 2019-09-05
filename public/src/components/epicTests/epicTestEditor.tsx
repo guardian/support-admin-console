@@ -62,7 +62,8 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
 interface EpicTestEditorProps extends WithStyles<typeof styles> {
   test?: EpicTest,
   onChange: (updatedTest: EpicTest) => void,
-  visible: boolean
+  visible: boolean,
+  editMode: boolean
 }
 
 class EpicTestEditor extends React.Component<EpicTestEditorProps> {
@@ -148,6 +149,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps> {
             variants={test.variants}
             onVariantsListChange={this.onVariantsChange}
             testName={test.name}
+            editMode={this.props.editMode}
           />
         </div>
 
@@ -159,6 +161,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps> {
             onSubmit={this.onListChange("tagIds")}
             label="Display on tags:"
             helperText="Separate each tag with a comma"
+            editEnabled={this.props.editMode}
           />
 
           <EditableTextField
@@ -166,6 +169,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps> {
             onSubmit={this.onListChange("sections")}
             label="Display on sections:"
             helperText="Separate each section with a comma"
+            editEnabled={this.props.editMode}
           />
 
           <EditableTextField
@@ -173,6 +177,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps> {
             onSubmit={this.onListChange("excludedTagIds")}
             label="Excluded tags:"
             helperText="Separate each tag with a comma"
+            editEnabled={this.props.editMode}
           />
 
           <EditableTextField
@@ -180,6 +185,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps> {
             onSubmit={this.onListChange("excludedSections")}
             label="Excluded sections:"
             helperText="Separate each section with a comma"
+            editEnabled={this.props.editMode}
           />
 
           <Typography variant={'h3'} className={classes.h3}>Audience</Typography>

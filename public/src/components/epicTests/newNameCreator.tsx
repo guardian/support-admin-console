@@ -98,6 +98,7 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
                 startInEditMode
                 autoFocus
                 errorMessage={this.state.errorMessage}
+                editEnabled={true}
               />
               <Button onClick={this.handleCancel}>Cancel</Button>
             </div>

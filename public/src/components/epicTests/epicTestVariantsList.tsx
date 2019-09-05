@@ -18,7 +18,8 @@ const styles = ({ typography }: Theme) => createStyles({
 interface EpicTestVariantsListProps extends WithStyles<typeof styles> {
   variants: EpicVariant[],
   onVariantsListChange: (variantList: EpicVariant[]) => void,
-  testName: string
+  testName: string,
+  editMode: boolean
 }
 
 type EpicTestVariantsListState = {
@@ -111,6 +112,7 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
                 <EpicTestVariantEditor
                   variant={variant}
                   onVariantChange={this.onVariantChange}
+                  editMode={this.props.editMode}
                 />
               </ExpansionPanelDetails>
             </ExpansionPanel>
