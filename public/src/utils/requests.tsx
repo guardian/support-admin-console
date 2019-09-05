@@ -30,6 +30,17 @@ function saveSettings(path: string, data: any): Promise<Response> {
   })
 }
 
+export function requestLock(settingsType: FrontendSettingsType): Promise<Response> {
+  return fetch(`/frontend/${settingsType}/lock`, {
+    method: 'POST'
+  });
+}
+
+export function requestTakeControl(settingsType: FrontendSettingsType): Promise<Response> {
+  return fetch(`/frontend/${settingsType}/takecontrol`, {
+    method: 'POST'
+  });
+}
 
 export function fetchSupportFrontendSettings(settingsType: SupportFrontendSettingsType): Promise<any> {
   return fetchSettings(`/support-frontend/${settingsType}`);

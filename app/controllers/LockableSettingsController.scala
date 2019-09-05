@@ -122,4 +122,13 @@ class LockableSettingsController[T : Decoder : Encoder](
     }
   }
 
+  def takecontrol = authAction.async { request =>
+     withLockStatus { case VersionedS3Data(lockStatus, lockFileVersion) =>
+      setLockStatus(VersionedS3Data(LockStatus.locked(request.user.email), lockFileVersion)) map {
+        case Right(_) => Ok("unlocked")
+        case Left(error) => InternalServerError(error)
+      }
+    }
+  }
+
 }
