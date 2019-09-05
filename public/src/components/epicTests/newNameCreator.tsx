@@ -37,7 +37,7 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
     errorMessage: ""
   }
 
-  onNewTestButtonClick = (event: any) =>  {
+  onNewTestButtonClick = (event: React.MouseEvent<HTMLAnchorElement>) =>  {
     this.setState({
       newNamePopoverOpen: true,
       anchorElForPopover: event.currentTarget

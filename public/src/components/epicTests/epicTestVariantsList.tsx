@@ -3,7 +3,6 @@ import {
   Theme, createStyles, WithStyles, withStyles, Typography, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails
 } from "@material-ui/core";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import EditableTextField from "../helpers/editableTextField"
 import EpicTestVariantEditor from './epicTestVariantEditor';
 import { EpicVariant } from './epicTestsForm';
 import NewNameCreator from './newNameCreator';
@@ -120,10 +119,6 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
       </>
     );
   }
-
-  onClick = (event: React.MouseEvent<HTMLInputElement>): void => {
-    this.onVariantSelected(event.currentTarget.innerText)
-  };
 
   render(): React.ReactNode {
 

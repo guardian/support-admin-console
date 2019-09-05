@@ -47,21 +47,18 @@ interface EditableTextFieldProps extends WithStyles<typeof styles> {
 
 interface EditableTextFieldState {
   editMode: boolean,
-  currentText: string
+  currentText: string,
 }
 
 class EditableTextField extends React.Component<EditableTextFieldProps, EditableTextFieldState> {
 
   state: EditableTextFieldState =  {
         editMode: this.props.startInEditMode || false,
-        currentText: this.props.text
+        currentText: this.props.text,
       }
 
   componentDidUpdate(prevProps: EditableTextFieldProps) {
-    // If a different test is selected or 'refresh' is clicked then we should reset the field based on the new props
-    // TODO - if text is empty then editMode is not unset. This needs a better solution
     if (prevProps.text !== this.props.text) {
-      // if (prevProps.text !== this.props.text || prevProps.text === "") {
       this.setState({
         editMode: false,
         currentText: this.props.text
