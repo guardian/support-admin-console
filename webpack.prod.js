@@ -22,13 +22,7 @@ module.exports = {
         extensions: ['.ts', '.tsx', '.js']
     },
 
-    // Currently hardcoded for development
-    mode: 'development',
-    devtool: 'cheap-module-eval-source-map',
-    devServer: {
-        contentBase: path.join(__dirname, '/public/build'),
-        compress: true,
-        port: 9001,
-        publicPath: '/public/build'
-    }
+    mode: 'production',
+    devtool: 'cheap-module-eval-source-map'
 };
+
