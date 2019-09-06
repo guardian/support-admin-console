@@ -1,3 +1,3 @@
 export const FeatureFlags = {
-  show_epic_dashboard: false
+  show_epic_dashboard: true
 }
