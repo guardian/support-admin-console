@@ -167,7 +167,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
   requestEpicTestsLock = () => {
     requestLock(FrontendSettingsType.epicTests).then(
       response => {
-        response.ok ? this.setState({ editMode: true }) : alert("Error - can request lock!");
+        response.ok ? this.setState({ editMode: true }) : alert("Error - can't request lock!");
       }
     );
   }
