@@ -155,6 +155,7 @@ class EpicTestVariantEditor extends React.Component<Props> {
                 <Switch
                   checked={variant.showTicker}
                   onChange={this.onVariantSwitchChange("showTicker")}
+                  disabled={!this.props.editMode}
                 />
               }
               label={`Ticker is ${variant.showTicker ? "on" : "off"}`}

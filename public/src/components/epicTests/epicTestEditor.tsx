@@ -112,6 +112,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps> {
               <Switch
                 checked={test.isOn}
                 onChange={this.onSwitchChange("isOn")}
+                disabled={!this.props.editMode}
               />
             }
             label={`Test is ${test.isOn ? "on" : "off"}`}
@@ -124,6 +125,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps> {
               <Switch
                 checked={test.isLiveBlog}
                 onChange={this.onSwitchChange("isLiveBlog")}
+                disabled={!this.props.editMode}
               />
             }
             label="Liveblog Epic"
@@ -136,6 +138,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps> {
               <Switch
                 checked={test.highPriority}
                 onChange={this.onSwitchChange("highPriority")}
+                disabled={!this.props.editMode}
               />
             }
             label="High priority"
@@ -205,6 +208,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps> {
                 onChange={this.onLocationsChange}
                 input={<Input id="locations-select-multiple-checkbox" />}
                 renderValue={selected => (selected as string[]).join(', ')}
+                disabled={!this.props.editMode}
               >
                 {Object.values(Region).map(region => (
                   <MenuItem key={region} value={region} >
@@ -229,7 +233,13 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps> {
                 onChange={this.onUserCohortChange}
               >
                 {Object.values(UserCohort).map(cohort =>
-                  <FormControlLabel value={cohort} key={cohort} control={<Radio />} label={cohort} />
+                  <FormControlLabel
+                    value={cohort}
+                    key={cohort}
+                    control={<Radio />}
+                    label={cohort}
+                    disabled={!this.props.editMode}
+                  />
                 )}
               </RadioGroup>
           </FormControl>
@@ -239,6 +249,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps> {
               <Switch
                 checked={test.alwaysAsk}
                 onChange={this.onSwitchChange("alwaysAsk")}
+                disabled={!this.props.editMode}
               />
             }
             label={`Turn ${test.alwaysAsk ? "off" : "on"} Always Ask`}
