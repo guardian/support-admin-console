@@ -12,7 +12,8 @@ import {
   FrontendSettingsType,
   saveFrontendSettings,
   requestLock,
-  requestTakeControl
+  requestTakeControl,
+  requestUnlock
 } from "../../utils/requests";
 import EpicTestsList from "./epicTestsList";
 import ButtonWithConfirmationPopup from '../helpers/buttonWithConfirmationPopup';
@@ -123,6 +124,13 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
       });
   };
 
+  cancel(): void {
+    requestUnlock(FrontendSettingsType.epicTests).then( response => {
+      response.ok ? this.setState({ editMode: false }) : alert("Error - can't request lock!");
+        this.fetchStateFromServer();
+      });
+  };
+
   save = () => {
     const newState = update(this.previousStateFromServer, {
       value: {
@@ -136,6 +144,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
           resp.text().then(msg => alert(msg));
         }
         this.fetchStateFromServer();
+        this.setState({ editMode: false });
       })
       .catch((resp) => {
         alert('Error while saving');
@@ -158,7 +167,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
   requestEpicTestsLock = () => {
     requestLock(FrontendSettingsType.epicTests).then(
       response => {
-        response.status === 200 ? this.setState({ editMode: true }) : alert("Error!!!");
+        response.ok ? this.setState({ editMode: true }) : alert("Error - can request lock!");
       }
     );
   }
@@ -166,7 +175,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
   requestTakeControl = () => {
     requestTakeControl(FrontendSettingsType.epicTests).then(
       response => {
-        response.status === 200 ? this.setState({ editMode: true }) : alert("Can't take back control!!!");
+        response.ok ? this.setState({ editMode: true }) : alert("Error - can't take back control!");
       }
     )
   }
@@ -184,7 +193,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
               <ButtonWithConfirmationPopup
                 buttonText="Take control"
                 confirmationText={`Are you sure? Please tell ${friendlyName} that their unpublished changes will be lost.`}
-                onConfirm={this.save}
+                onConfirm={this.requestTakeControl}
                 icon={<LockOpenIcon />}
               />
             </div>
@@ -210,7 +219,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
         <ButtonWithConfirmationPopup
         buttonText="Cancel"
         confirmationText="Are you sure? All unpublished data will be lost!"
-        onConfirm={() => this.fetchStateFromServer()}
+        onConfirm={() => this.cancel()}
         icon={<RefreshIcon />}
         />
         </div>

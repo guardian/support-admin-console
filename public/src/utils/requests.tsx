@@ -36,6 +36,12 @@ export function requestLock(settingsType: FrontendSettingsType): Promise<Respons
   });
 }
 
+export function requestUnlock(settingsType: FrontendSettingsType): Promise<Response> {
+  return fetch(`/frontend/${settingsType}/unlock`, {
+    method: 'POST'
+  });
+}
+
 export function requestTakeControl(settingsType: FrontendSettingsType): Promise<Response> {
   return fetch(`/frontend/${settingsType}/takecontrol`, {
     method: 'POST'

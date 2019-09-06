@@ -38,11 +38,11 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
   onVariantChange = (updatedVariant: EpicVariant): void => {
     const updatedVariantList: EpicVariant[] = this.props.variants.map(variant => variant.name === updatedVariant.name ? updatedVariant : variant);
     this.props.onVariantsListChange(updatedVariantList);
-  }
+  };
 
   onVariantNameCreation = (name: string) => {
     this.createVariant(name);
-  }
+  };
 
   onExpansionPanelChange = (key: string) => (event: React.ChangeEvent<{}>) => {
     this.state.expandedVariantKey === key ? this.setState({
@@ -52,11 +52,11 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
     this.setState({
       expandedVariantKey: key
     })
-  }
+  };
 
   createVariantKey = (variantName: string): string => {
     return `${this.props.testName}${variantName}`
-  }
+  };
 
   createVariant = (newVariantName: string) => {
     const newVariant: EpicVariant = {
@@ -69,30 +69,34 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
       backgroundImageUrl: "",
       ctaText: "",
       supportBaseURL: ""
-    }
+    };
 
-      this.props.onVariantsListChange([...this.props.variants, newVariant]);
+    this.props.onVariantsListChange([...this.props.variants, newVariant]);
 
-      const key = this.createVariantKey(newVariant.name);
+    const key = this.createVariantKey(newVariant.name);
 
-      this.onVariantSelected(key);
+    this.onVariantSelected(key);
+  };
+
+  renderNoVariantMessage = (): React.ReactNode => (
+      <Typography variant={'subtitle1'} color={'textPrimary'}>Create the first variant for this test (each test must have at least one variant)<sup>*</sup></Typography>
+  );
+
+  renderNewVariantButton = (): React.ReactNode => {
+    return this.props.editMode ? (
+      <NewNameCreator
+        text="variant"
+        existingNames={this.props.variants.map(variant => variant.name)}
+        onValidName={this.createVariant}
+        editEnabled={this.props.editMode}
+      />
+    ) : null;
   }
 
-  renderNoVariants = (): React.ReactNode => {
-    return (
-      <>
-        <Typography variant={'subtitle1'} color={'textPrimary'}>Create the first variant for this test (each test must have at least one variant)<sup>*</sup></Typography>
-        <NewNameCreator text="variant" existingNames={[]} onValidName={this.createVariant} />
-      </>
-    );
-  }
-
-  renderVariants = (): React.ReactNode => {
+  renderVariantsList = (): React.ReactNode => {
     const { classes } = this.props;
-
     return (
       <>
-        <NewNameCreator text="variant" existingNames={this.props.variants.map(variant => variant.name)} onValidName={this.createVariant} />
         {this.props.variants.map(variant => {
           const key = this.createVariantKey(variant.name);
           return (
@@ -120,16 +124,26 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
         })}
       </>
     );
-  }
+  };
+
+  renderVariants = (): React.ReactNode => (
+    <>
+      {this.props.variants.length < 1 && this.renderNoVariantMessage()}
+
+      {this.renderNewVariantButton()}
+
+      {this.props.variants.length > 0 && this.renderVariantsList()}
+    </>
+  );
+
 
   render(): React.ReactNode {
-
-    return (
-      <>
-        {this.props.variants.length > 0 ? this.renderVariants() : this.renderNoVariants() }
-      </>
-    )
-  }
+   return(
+    <>
+      {this.renderVariants()}
+    </>
+   )
+  };
 }
 
 export default withStyles(styles)(EpicTestVariantsList);

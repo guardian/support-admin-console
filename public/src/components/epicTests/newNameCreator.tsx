@@ -20,7 +20,8 @@ const styles = ({ spacing }: Theme) => createStyles({
 interface NewNameCreatorProps extends WithStyles<typeof styles> {
   existingNames: string[],
   text: string,
-  onValidName: (name: string) => void
+  onValidName: (name: string) => void,
+  editEnabled: boolean
 }
 
 interface NewNameCreatorState {
@@ -67,6 +68,12 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
     }
   }
 
+  showButton = (): React.ReactFragment | null => {
+    return this.props.editEnabled && (
+      <Button onClick={this.handleCancel}>Cancel</Button>
+    )
+  }
+
   render(): React.ReactNode {
     const { classes } = this.props;
 
@@ -100,7 +107,7 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
                 errorMessage={this.state.errorMessage}
                 editEnabled={true}
               />
-              <Button onClick={this.handleCancel}>Cancel</Button>
+              {this.showButton()}
             </div>
           </Popover>
     </div>
