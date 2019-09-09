@@ -24,7 +24,7 @@ object LockStatus {
 
 object LockableSettingsController {
   // The model returned by this controller for GET requests
-  case class LockableSettingsResponse[T](value: T, version: String, status: LockStatus)
+  case class LockableSettingsResponse[T](value: T, version: String, status: LockStatus, userEmail: String)
 }
 
 class LockableSettingsController[T : Decoder : Encoder](
@@ -55,11 +55,11 @@ class LockableSettingsController[T : Decoder : Encoder](
     * Returns current version of the settings in s3 as json, with the lock status.
     * The s3 data is validated against the model.
     */
-  def get= authAction.async {
+  def get= authAction.async { request =>
     withLockStatus { case VersionedS3Data(lockStatus, _) =>
       S3Json.getFromJson[T](dataBucket, dataKey)(s3Client).map {
         case Right(VersionedS3Data(value, version)) =>
-          Ok(S3Json.noNulls(LockableSettingsResponse(value, version, lockStatus).asJson))
+          Ok(S3Json.noNulls(LockableSettingsResponse(value, version, lockStatus, request.user.email).asJson))
 
         case Left(error) => InternalServerError(error)
       }
