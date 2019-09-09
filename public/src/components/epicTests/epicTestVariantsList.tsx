@@ -126,21 +126,14 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
     );
   };
 
-  renderVariants = (): React.ReactNode => (
+  render(): React.ReactNode {
+   return(
     <>
       {this.props.variants.length < 1 && this.renderNoVariantMessage()}
 
       {this.renderNewVariantButton()}
 
       {this.props.variants.length > 0 && this.renderVariantsList()}
-    </>
-  );
-
-
-  render(): React.ReactNode {
-   return(
-    <>
-      {this.renderVariants()}
     </>
    )
   };
