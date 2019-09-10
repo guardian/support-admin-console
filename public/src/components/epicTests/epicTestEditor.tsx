@@ -99,6 +99,13 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps> {
     this.updateTest(test => ({...test, "locations": selectedLocations}));
   }
 
+  onNumberChange = (fieldName: string) => (updatedString: string): void => {
+    Number.isNaN(Number(updatedString)) ? alert("Only numbers are allowed!") : this.updateTest( test=> ({
+      ...test,
+      [fieldName]: Number(updatedString) })
+    );
+  }
+
   renderEditor = (test: EpicTest): React.ReactNode => {
     const {classes} = this.props;
 
@@ -243,6 +250,14 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps> {
                 )}
               </RadioGroup>
           </FormControl>
+
+          <EditableTextField
+            text={test.maxViewsCount.toString()}
+            onSubmit={this.onNumberChange("maxViewsCount")}
+            label="Max views count"
+            helperText="Must be a number"
+            editEnabled={this.props.editMode}
+          />
 
           <FormControlLabel
             control={

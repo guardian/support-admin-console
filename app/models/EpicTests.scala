@@ -57,7 +57,8 @@ case class EpicTest(
   isLiveBlog: Boolean = false,
   hasCountryName: Boolean = false,
   variants: List[EpicVariant],
-  highPriority: Boolean = false
+  highPriority: Boolean = false,
+  maxViewsCount: Int
 )
 
 case class EpicTests(tests: List[EpicTest])
