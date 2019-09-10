@@ -229,10 +229,9 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
     return `${datetime.getHours()}:${datetime.getMinutes()} on ${datetime.getDate()}/${datetime.getMonth() + 1}/${datetime.getFullYear()}`;
   }
 
-  makeFriendlyName = (email: string): string => {
-    const firstName = email.split('.')[0];
-    const lastName = email.split('.')[1].split('@')[0];
-    return `${firstName[0].toUpperCase()}${firstName.slice(1,)} ${lastName[0].toUpperCase()}${lastName.slice(1,)}`;
+  makeFriendlyName = (email: string): string | undefined => {
+    const nameArr: RegExpMatchArray | null = email.match(/^([a-z]*)\.([a-z]*).*@.*/);
+    return nameArr ? `${nameArr[1][0].toUpperCase()}${nameArr[1].slice(1,)} ${nameArr[2][0].toUpperCase()}${nameArr[2].slice(1,)}` : undefined;
   }
 
   render(): React.ReactNode {
