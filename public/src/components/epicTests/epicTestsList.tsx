@@ -31,6 +31,9 @@ const styles = () => createStyles({
   selectedTest: {
     background: "#dcdcdc"
   },
+  modifiedTest: {
+    border: "1px solid red"
+  },
   singleButtonContainer: {
     display: "block"
   },
@@ -67,6 +70,7 @@ const styles = () => createStyles({
 
 interface EpicTestListProps extends WithStyles<typeof styles> {
   tests: EpicTest[],
+  modifiedTestNames: string[],
   selectedTestName: string | undefined,
   onUpdate: (tests: EpicTest[]) => void,
   onSelectedTestName: (testName: string) => void,
@@ -143,8 +147,12 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
 
           <List className={classes.testsList} component="nav">
             {this.props.tests.map((test, index) => {
-              const classNames = this.props.selectedTestName === test.name ? `${classes.test} ${classes.selectedTest}` :
-                `${classes.test}`;
+
+              const classNames = [
+                classes.test,
+                this.props.modifiedTestNames.includes(test.name) ? classes.modifiedTest : '',
+                this.props.selectedTestName === test.name ? classes.selectedTest : '',
+              ].join(' ');
 
               return (
                 <ListItem
