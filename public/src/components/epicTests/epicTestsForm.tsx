@@ -51,7 +51,8 @@ export interface EpicTest {
   hasCountryName: boolean,
   variants: EpicVariant[],
   highPriority: boolean,
-  maxViewsCount: number
+  maxViewsCount: number,
+  useLocalViewLog: boolean
 }
 
 interface EpicTests {

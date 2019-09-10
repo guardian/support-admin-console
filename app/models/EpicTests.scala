@@ -58,7 +58,8 @@ case class EpicTest(
   hasCountryName: Boolean = false,
   variants: List[EpicVariant],
   highPriority: Boolean = false,
-  maxViewsCount: Int
+  maxViewsCount: Int,
+  useLocalViewLog: Boolean = false
 )
 
 case class EpicTests(tests: List[EpicTest])

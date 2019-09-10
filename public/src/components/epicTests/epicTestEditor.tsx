@@ -259,16 +259,31 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps> {
             editEnabled={this.props.editMode}
           />
 
-          <FormControlLabel
-            control={
-              <Switch
-                checked={test.alwaysAsk}
-                onChange={this.onSwitchChange("alwaysAsk")}
-                disabled={!this.props.editMode}
-              />
-            }
-            label={`Turn ${test.alwaysAsk ? "off" : "on"} Always Ask`}
-          />
+          <div>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={test.alwaysAsk}
+                  onChange={this.onSwitchChange("alwaysAsk")}
+                  disabled={!this.props.editMode}
+                />
+              }
+              label={`Always ask`}
+            />
+          </div>
+
+          <div>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={test.useLocalViewLog}
+                  onChange={this.onSwitchChange("useLocalViewLog")}
+                  disabled={!this.props.editMode}
+                />
+              }
+              label={`Use local view log`}
+            />
+          </div>
         </div>
       </div>
     )
