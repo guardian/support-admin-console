@@ -17,8 +17,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import ListItem from '@material-ui/core/ListItem';
 
-import { FeatureFlags } from '../../conf/frontend-flags';
-
 const drawerWidth = 240;
 
 const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
@@ -47,20 +45,13 @@ const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
   }
 });
 
-const getLinkPathsAndNames = (): string[][] => {
-  const baseList = [
+const getLinkPathsAndNames = (): string[][] =>
+  [
     ['/', 'Home'],
     ['/switches', 'Switches'],
     ['/contribution-types', 'Contribution Types'],
     ['/amounts', 'Amounts']
-  ]
-
-  if (FeatureFlags.show_epic_dashboard) {
-    baseList.push(['/epic-tests', 'Epic Tests'])
-  }
-
-  return baseList;
-}
+  ];
 
 const Index = () => <h2>Home</h2>;
 
@@ -107,9 +98,7 @@ const AppRouter = withStyles(styles)(({classes}: Props) => (
         <Route path="/switches" component={Switchboard} />
         <Route path="/contribution-types" component={ContributionTypesForm} />
         <Route path="/amounts" component={AmountsForm} />
-        {FeatureFlags.show_epic_dashboard ?
-          <Route path="/epic-tests" component={EpicTestsForm} /> : null
-        }
+        <Route path="/epic-tests" component={EpicTestsForm} />
       </main>
     </div>
   </Router>
