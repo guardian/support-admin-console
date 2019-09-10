@@ -50,7 +50,9 @@ export interface EpicTest {
   isLiveBlog: boolean,
   hasCountryName: boolean,
   variants: EpicVariant[],
-  highPriority: boolean
+  highPriority: boolean,
+  maxViewsCount: number,
+  useLocalViewLog: boolean
 }
 
 interface EpicTests {
@@ -212,13 +214,13 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
           confirmationText="Are you sure? This will replace all live tests!"
           onConfirm={this.save}
           icon={<CloudUploadIcon />}
-        />
-        <ButtonWithConfirmationPopup
-        buttonText="Cancel"
-        confirmationText="Are you sure? All unpublished data will be lost!"
-        onConfirm={() => this.cancel()}
-        icon={<RefreshIcon />}
-        />
+          />
+          <ButtonWithConfirmationPopup
+          buttonText="Cancel"
+          confirmationText="Are you sure? All unpublished data will be lost!"
+          onConfirm={() => this.cancel()}
+          icon={<RefreshIcon />}
+          />
         </div>
         )
     }
