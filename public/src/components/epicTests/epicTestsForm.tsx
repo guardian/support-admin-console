@@ -261,6 +261,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
           />
         </div>
 
+        {/*TODO - fix positioning, flexbox?*/}
         {this.state.tests.map(test => (<EpicTestEditor
           test={this.state.tests.find(test => test.name === this.state.selectedTestName)}
           onChange={this.onTestChange}
