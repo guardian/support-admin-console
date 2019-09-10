@@ -60,6 +60,8 @@ interface EpicTests {
 interface DataFromServer {
   value: EpicTests,
   version: string,
+  lockStatus: LockStatus,
+  userEmail: string,
 };
 
 interface LockStatus {
@@ -119,16 +121,16 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
         this.previousStateFromServer = serverData;
         this.setState({
           ...serverData.value,
-          lockStatus: serverData.status
+          lockStatus: serverData.status,
+          editMode: serverData.status.email === serverData.userEmail
         });
       });
   };
 
   cancel(): void {
-    requestUnlock(FrontendSettingsType.epicTests).then( response => {
-      response.ok ? this.setState({ editMode: false }) : alert("Error - can't request lock!");
-        this.fetchStateFromServer();
-      });
+    requestUnlock(FrontendSettingsType.epicTests).then( response =>
+      response.ok ? this.fetchStateFromServer() : alert("Error - can't request lock!")
+    )
   };
 
   save = () => {
@@ -144,7 +146,6 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
           resp.text().then(msg => alert(msg));
         }
         this.fetchStateFromServer();
-        this.setState({ editMode: false });
       })
       .catch((resp) => {
         alert('Error while saving');
@@ -165,19 +166,15 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
   }
 
   requestEpicTestsLock = () => {
-    requestLock(FrontendSettingsType.epicTests).then(
-      response => {
-        response.ok ? this.setState({ editMode: true }) : alert("Error - can't request lock!");
-      }
+    requestLock(FrontendSettingsType.epicTests).then(response =>
+      response.ok ? this.fetchStateFromServer() : alert("Error - can't request lock!")
     );
   }
 
   requestTakeControl = () => {
-    requestTakeControl(FrontendSettingsType.epicTests).then(
-      response => {
-        response.ok ? this.setState({ editMode: true }) : alert("Error - can't take back control!");
-      }
-    )
+    requestTakeControl(FrontendSettingsType.epicTests).then(response =>
+      response.ok ? this.fetchStateFromServer() : alert("Error - can't take back control!")
+    );
   }
 
   renderButtonsBar = () => {
