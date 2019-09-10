@@ -6,7 +6,6 @@ import {
 import ArrowUpward from '@material-ui/icons/ArrowUpward';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import { EpicTest } from './epicTestsForm';
-import EpicTestEditor from './epicTestEditor';
 import NewNameCreator from './newNameCreator';
 
 
@@ -76,11 +75,6 @@ interface EpicTestListProps extends WithStyles<typeof styles> {
 }
 
 class EpicTestsList extends React.Component<EpicTestListProps> {
-
-  onTestChange = (updatedTest: EpicTest): void => {
-    const updatedTests = this.props.tests.map(test => test.name === updatedTest.name ? updatedTest : test);
-    this.props.onUpdate(updatedTests);
-  };
 
   createTest = (newTestName: string) => {
     const newTest: EpicTest = {
@@ -176,15 +170,6 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
               )
             })}
           </List>
-
-          {this.props.tests.map(test => (<EpicTestEditor
-            test={this.props.tests.find(test => test.name === this.props.selectedTestName)}
-            onChange={this.onTestChange}
-            visible={test.name === this.props.selectedTestName}
-            key={test.name}
-            editMode={this.props.editMode}
-          />))}
-
         </div>
       </>
     )
