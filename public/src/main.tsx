@@ -47,7 +47,6 @@ const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
 
 const getLinkPathsAndNames = (): string[][] =>
   [
-    ['/', 'Home'],
     ['/switches', 'Switches'],
     ['/contribution-types', 'Contribution Types'],
     ['/amounts', 'Amounts']
