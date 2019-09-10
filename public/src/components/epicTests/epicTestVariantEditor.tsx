@@ -53,7 +53,8 @@ const MenuProps = {
 };
 interface Props extends WithStyles<typeof styles> {
   variant?: EpicVariant,
-  onVariantChange: (updatedVariant: EpicVariant) => void
+  onVariantChange: (updatedVariant: EpicVariant) => void,
+  editMode: boolean
 }
 
 enum VariantFieldNames {
@@ -101,6 +102,7 @@ class EpicTestVariantEditor extends React.Component<Props> {
             text={variant.heading || "Since you're here..."}
             onSubmit={this.onTextChange("heading")}
             label="Hook:"
+            editEnabled={this.props.editMode}
           />
 
           <EditableTextField
@@ -109,6 +111,7 @@ class EpicTestVariantEditor extends React.Component<Props> {
             textarea={true}
             onSubmit={this.onParagraphsChange("paragraphs")}
             label="Paragraphs:"
+            editEnabled={this.props.editMode}
           />
 
           <EditableTextField
@@ -116,6 +119,7 @@ class EpicTestVariantEditor extends React.Component<Props> {
             text={variant.ctaText || "Support The Guardian"}
             onSubmit={this.onTextChange(VariantFieldNames.ctaText)}
             label="Button text:"
+            editEnabled={this.props.editMode}
           />
 
           <EditableTextField
@@ -123,6 +127,7 @@ class EpicTestVariantEditor extends React.Component<Props> {
             text={variant.supportBaseURL || "https://support.theguardian.com/contribute"}
             onSubmit={this.onTextChange(VariantFieldNames.supportBaseURL)}
             label="Button destination:"
+            editEnabled={this.props.editMode}
           />
 
           <Typography variant={'h5'} className={classes.h5}>Optional</Typography>
@@ -133,6 +138,7 @@ class EpicTestVariantEditor extends React.Component<Props> {
             onSubmit={this.onTextChange("highlightedText")}
             label="Highlighted text:"
             helperText="This will appear as the last sentence"
+            editEnabled={this.props.editMode}
           />
 
           <EditableTextField
@@ -140,6 +146,7 @@ class EpicTestVariantEditor extends React.Component<Props> {
             onSubmit={this.onTextChange(VariantFieldNames.backgroundImageUrl)}
             label="Image URL:"
             helperText="This will appear above everything except a ticker"
+            editEnabled={this.props.editMode}
           />
 
           <div>
@@ -148,6 +155,7 @@ class EpicTestVariantEditor extends React.Component<Props> {
                 <Switch
                   checked={variant.showTicker}
                   onChange={this.onVariantSwitchChange("showTicker")}
+                  disabled={!this.props.editMode}
                 />
               }
               label={`Ticker is ${variant.showTicker ? "on" : "off"}`}
@@ -159,6 +167,7 @@ class EpicTestVariantEditor extends React.Component<Props> {
             onSubmit={this.onTextChange("footer")}
             label="Footer:"
             helperText="Bold text that appears below the button"
+            editEnabled={this.props.editMode}
           />
 
         </div>

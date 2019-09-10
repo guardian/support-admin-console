@@ -2,6 +2,7 @@ import React from 'react';
 import update from 'immutability-helper';
 import {createStyles, Theme, withStyles, WithStyles, CssBaseline, Typography} from "@material-ui/core";
 import SaveIcon from '@material-ui/icons/Save';
+import LockOpenIcon from '@material-ui/icons/LockOpen'
 import RefreshIcon from '@material-ui/icons/Refresh';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import Button from "@material-ui/core/Button";
@@ -10,6 +11,9 @@ import {
   fetchFrontendSettings,
   FrontendSettingsType,
   saveFrontendSettings,
+  requestLock,
+  requestTakeControl,
+  requestUnlock
 } from "../../utils/requests";
 import EpicTestsList from "./epicTestsList";
 import ButtonWithConfirmationPopup from '../helpers/buttonWithConfirmationPopup';
@@ -56,13 +60,23 @@ interface EpicTests {
 interface DataFromServer {
   value: EpicTests,
   version: string,
-}
-
-type EpicTestsFormState = EpicTests & {
-  selectedTestName?: string
+  lockStatus: LockStatus,
+  userEmail: string,
 };
 
-const styles = ({ spacing }: Theme) => createStyles({
+interface LockStatus {
+  locked: boolean,
+  email?: string,
+  timestamp?: string
+};
+
+type EpicTestsFormState = EpicTests & {
+  selectedTestName?: string,
+  editMode: boolean,
+  lockStatus: LockStatus
+};
+
+const styles = ({ spacing, typography }: Theme) => createStyles({
   container: {
     display: "block",
     outline: "2px solid green"
@@ -74,6 +88,9 @@ const styles = ({ spacing }: Theme) => createStyles({
   button: {
     marginRight: spacing.unit * 2,
     marginBottom: spacing.unit * 2
+  },
+  warning: {
+    fontSize: typography.pxToRem(20),
   }
 });
 
@@ -87,7 +104,9 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
     super(props);
     this.state = {
       tests: [],
-      selectedTestName: undefined
+      selectedTestName: undefined,
+      editMode: false,
+      lockStatus: { locked: false }
     };
     this.previousStateFromServer = null;
   }
@@ -101,9 +120,17 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
       .then(serverData => {
         this.previousStateFromServer = serverData;
         this.setState({
-          ...serverData.value
+          ...serverData.value,
+          lockStatus: serverData.status,
+          editMode: serverData.status.email === serverData.userEmail
         });
       });
+  };
+
+  cancel(): void {
+    requestUnlock(FrontendSettingsType.epicTests).then( response =>
+      response.ok ? this.fetchStateFromServer() : alert("Error - can't request lock!")
+    )
   };
 
   save = () => {
@@ -138,6 +165,75 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
       })
   }
 
+  requestEpicTestsLock = () => {
+    requestLock(FrontendSettingsType.epicTests).then(response =>
+      response.ok ? this.fetchStateFromServer() : alert("Error - can't request lock!")
+    );
+  }
+
+  requestTakeControl = () => {
+    requestTakeControl(FrontendSettingsType.epicTests).then(response =>
+      response.ok ? this.fetchStateFromServer() : alert("Error - can't take back control!")
+    );
+  }
+
+  renderButtonsBar = () => {
+    const {classes} = this.props;
+    if (!this.state.editMode) {
+      if (this.state.lockStatus.locked) {
+        const friendlyName: string | undefined = this.state.lockStatus.email && this.makeFriendlyName(this.state.lockStatus.email);
+        const friendlyTimestamp: string | undefined = this.state.lockStatus.timestamp && this.makeFriendlyDate(this.state.lockStatus.timestamp);
+        return (
+          <>
+            <Typography className={classes.warning}>File locked for editing by {friendlyName} (<a href={"mailto:" + this.state.lockStatus.email}>{this.state.lockStatus.email}</a>) at {friendlyTimestamp}</Typography>
+            <div className={classes.buttons}>
+              <ButtonWithConfirmationPopup
+                buttonText="Take control"
+                confirmationText={`Are you sure? Please tell ${friendlyName} that their unpublished changes will be lost.`}
+                onConfirm={this.requestTakeControl}
+                icon={<LockOpenIcon />}
+              />
+            </div>
+          </>
+        );
+      } else {
+        return (
+          <Button
+            onClick={this.requestEpicTestsLock}
+            variant="contained" color="primary"
+          >Edit</Button>
+        )
+      }
+    } else {
+      return (
+        <div>
+          <ButtonWithConfirmationPopup
+          buttonText="Publish"
+          confirmationText="Are you sure? This will replace all live tests!"
+          onConfirm={this.save}
+          icon={<CloudUploadIcon />}
+        />
+        <ButtonWithConfirmationPopup
+        buttonText="Cancel"
+        confirmationText="Are you sure? All unpublished data will be lost!"
+        onConfirm={() => this.cancel()}
+        icon={<RefreshIcon />}
+        />
+        </div>
+        )
+    }
+  }
+
+  makeFriendlyDate = (timestamp: string): string => {
+    const datetime = new Date(timestamp);
+    return `${datetime.getHours()}:${datetime.getMinutes()} on ${datetime.getDate()}/${datetime.getMonth() + 1}/${datetime.getFullYear()}`;
+  }
+
+  makeFriendlyName = (email: string): string | undefined => {
+    const nameArr: RegExpMatchArray | null = email.match(/^([a-z]*)\.([a-z]*).*@.*/);
+    return nameArr ? `${nameArr[1][0].toUpperCase()}${nameArr[1].slice(1,)} ${nameArr[2][0].toUpperCase()}${nameArr[2].slice(1,)}` : undefined;
+  }
+
   render(): React.ReactNode {
     const { classes } = this.props;
 
@@ -145,19 +241,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
       <>
         <Typography variant={'h2'}>Epic tests</Typography>
         <div className={classes.buttons}>
-          <ButtonWithConfirmationPopup
-            buttonText="Publish"
-            confirmationText="Are you sure? This will replace all live tests!"
-            onConfirm={this.save}
-            icon={<CloudUploadIcon />}
-          />
-
-          <ButtonWithConfirmationPopup
-            buttonText="Reload data"
-            confirmationText="Are you sure? All unpublished data will be lost!"
-            onConfirm={() => this.fetchStateFromServer()}
-            icon={<RefreshIcon />}
-          />
+          {this.renderButtonsBar()}
         </div>
 
         <div>
@@ -166,6 +250,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
             selectedTestName={this.state.selectedTestName}
             onUpdate={this.onTestsChange}
             onSelectedTestName={this.onSelectedTestName}
+            editMode={this.state.editMode}
           />
         </div>
       </>
