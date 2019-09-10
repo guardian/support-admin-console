@@ -233,9 +233,9 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
   }
 
   makeFriendlyName = (email: string): string => {
-    const name = email.split('.')[0];
-    const friendlyName = name[0].toUpperCase() + name.slice(1,);
-    return friendlyName;
+    const firstName = email.split('.')[0];
+    const lastName = email.split('.')[1].split('@')[0];
+    return `${firstName[0].toUpperCase()}${firstName.slice(1,)} ${lastName[0].toUpperCase()}${lastName.slice(1,)}`;
   }
 
   render(): React.ReactNode {
