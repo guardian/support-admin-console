@@ -99,7 +99,7 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
     }
     const newTestList = [...this.props.tests, newTest];
 
-    this.props.onUpdate(newTestList);
+    this.props.onUpdate(newTestList, newTestName);
 
     this.props.onSelectedTestName(newTest.name);
   }
