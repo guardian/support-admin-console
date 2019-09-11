@@ -152,14 +152,21 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
                   onClick={this.onTestSelected}
                   key={index}
                 >
-                  <div className={classes.buttonsContainer}>
-                    <div className={classes.singleButtonContainer}>
-                      {index > 0 ? <Button color={'default'} className={classes.arrowButton} variant={'contained'} onClick={() => this.moveTestUp(test.name)}><ArrowUpward className={classes.arrowIcon} /></Button> : null}
+                  { this.props.editMode &&
+                    <div className={classes.buttonsContainer}>
+                      <div className={classes.singleButtonContainer}>
+                        {index > 0 ? <Button color={'default'} className={classes.arrowButton} variant={'contained'}
+                                             onClick={() => this.moveTestUp(test.name)}><ArrowUpward
+                          className={classes.arrowIcon}/></Button> : null}
+                      </div>
+                      <div className={classes.singleButtonContainer}>
+                        {index < this.props.tests.length - 1 ?
+                          <Button color={'default'} className={classes.arrowButton} variant={'contained'}
+                                  onClick={() => this.moveTestDown(test.name)}><ArrowDownward
+                            className={classes.arrowIcon}/></Button> : null}
+                      </div>
                     </div>
-                    <div className={classes.singleButtonContainer}>
-                      {index <  this.props.tests.length - 1 ? <Button color={'default'} className={classes.arrowButton} variant={'contained'} onClick={() => this.moveTestDown(test.name)}><ArrowDownward className={classes.arrowIcon} /></Button> : null}
-                    </div>
-                  </div>
+                  }
                   <div className={classes.testText}>
                     <Typography>{test.name}</Typography>
                   </div>
