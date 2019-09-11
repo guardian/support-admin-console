@@ -25,6 +25,7 @@ interface ButtonWithConfirmationPopupProps extends WithStyles<typeof styles> {
   onConfirm: () => void,
   color?: ButtonProps["color"],
   icon: ReactElement<SvgIconProps>,
+  disabled?: boolean
 }
 
 interface ButtonWithConfirmationPopupState {
@@ -59,7 +60,12 @@ class ButtonWithConfirmationPopup extends React.Component<ButtonWithConfirmation
 
     return (
       <>
-        <Button variant="contained" color={this.props.color} onClick={this.onClick} className={classes.button}>
+        <Button
+          disabled={this.props.disabled}
+          variant="contained"
+          color={this.props.color}
+          onClick={this.onClick}
+          className={classes.button}>
             {this.props.icon}&nbsp;{this.props.buttonText}
         </Button>
         <Popover

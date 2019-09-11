@@ -227,9 +227,10 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
         <div>
           <ButtonWithConfirmationPopup
           buttonText="Publish"
-          confirmationText={`Are you sure? This will update ${this.state.modifiedTestNames.length} tests!`}
+          confirmationText={`Are you sure? This will update ${this.state.modifiedTestNames.length} test(s)!`}
           onConfirm={this.save}
           icon={<CloudUploadIcon />}
+          disabled={this.state.modifiedTestNames.length === 0}
           />
           <ButtonWithConfirmationPopup
           buttonText="Cancel"
