@@ -1,7 +1,7 @@
 import React from 'react';
 import update from 'immutability-helper';
 import {createStyles, Theme, withStyles, WithStyles, CssBaseline, Typography} from "@material-ui/core";
-import SaveIcon from '@material-ui/icons/Save';
+import EpicTestEditor from './epicTestEditor';
 import LockOpenIcon from '@material-ui/icons/LockOpen'
 import RefreshIcon from '@material-ui/icons/Refresh';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
@@ -93,7 +93,10 @@ const styles = ({ spacing, typography }: Theme) => createStyles({
   },
   warning: {
     fontSize: typography.pxToRem(20),
-  }
+  },
+  testListAndEditor: {
+    display: "flex"
+  },
 });
 
 interface EpicTestFormProps extends WithStyles<typeof styles> {}
@@ -159,6 +162,11 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
     this.setState({
       tests: updatedTests
     });
+  };
+
+  onTestChange = (updatedTest: EpicTest): void => {
+    const updatedTests = this.state.tests.map(test => test.name === updatedTest.name ? updatedTest : test);
+    this.onTestsChange(updatedTests);
   };
 
   onSelectedTestName = (testName: string): void => {
@@ -246,7 +254,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
           {this.renderButtonsBar()}
         </div>
 
-        <div>
+        <div className={classes.testListAndEditor}>
           <EpicTestsList
             tests={this.state.tests}
             selectedTestName={this.state.selectedTestName}
@@ -254,6 +262,16 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
             onSelectedTestName={this.onSelectedTestName}
             editMode={this.state.editMode}
           />
+
+          {this.state.tests.map(test =>
+            (<EpicTestEditor
+              test={this.state.tests.find(test => test.name === this.state.selectedTestName)}
+              onChange={this.onTestChange}
+              visible={test.name === this.state.selectedTestName}
+              key={test.name}
+              editMode={this.state.editMode}
+            />)
+          )}
         </div>
       </>
     )
