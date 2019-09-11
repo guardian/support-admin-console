@@ -161,23 +161,20 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
       });
   };
 
-  onTestsChange = (updatedTests: EpicTest[]): void => {
+  onTestsChange = (updatedTests: EpicTest[], modifiedTestName?: string): void => {
+    const modifiedTestNames = modifiedTestName && !this.state.modifiedTestNames.includes(modifiedTestName) ?
+      this.state.modifiedTestNames.concat([modifiedTestName]) :
+      this.state.modifiedTestNames;
+
     this.setState({
-      tests: updatedTests
+      tests: updatedTests,
+      modifiedTestNames
     });
   };
 
   onTestChange = (updatedTest: EpicTest): void => {
-    const modifiedTestNames = this.state.modifiedTestNames.includes(updatedTest.name) ?
-      this.state.modifiedTestNames :
-      this.state.modifiedTestNames.concat([updatedTest.name]);
-
     const updatedTests = this.state.tests.map(test => test.name === updatedTest.name ? updatedTest : test);
-
-    this.setState({
-      tests: updatedTests,
-      modifiedTestNames: modifiedTestNames
-    });
+    this.onTestsChange(updatedTests, updatedTest.name);
   };
 
   onSelectedTestName = (testName: string): void => {
@@ -230,7 +227,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
         <div>
           <ButtonWithConfirmationPopup
           buttonText="Publish"
-          confirmationText="Are you sure? This will replace all live tests!"
+          confirmationText={`Are you sure? This will update ${this.state.modifiedTestNames.length} tests!`}
           onConfirm={this.save}
           icon={<CloudUploadIcon />}
           />

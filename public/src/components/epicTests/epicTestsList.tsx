@@ -72,7 +72,7 @@ interface EpicTestListProps extends WithStyles<typeof styles> {
   tests: EpicTest[],
   modifiedTestNames: string[],
   selectedTestName: string | undefined,
-  onUpdate: (tests: EpicTest[]) => void,
+  onUpdate: (tests: EpicTest[], modifiedTestName?: string) => void,
   onSelectedTestName: (testName: string) => void,
   editMode: boolean
 }
@@ -112,22 +112,22 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
     const newTests = [...this.props.tests];
     const indexOfName = newTests.findIndex(test => test.name === name);
     if (indexOfName > 0) {
-      const beforeElement = newTests[indexOfName - 1]
+      const beforeElement = newTests[indexOfName - 1];
       newTests[indexOfName-1] = newTests[indexOfName];
       newTests[indexOfName] = beforeElement;
     }
-    this.props.onUpdate(newTests);
+    this.props.onUpdate(newTests, name);
   }
 
   moveTestDown = (name: string) => {
     const newTests = [...this.props.tests];
     const indexOfName = newTests.findIndex(test => test.name === name);
     if (indexOfName < newTests.length - 1) {
-      const afterElement = newTests[indexOfName + 1]
+      const afterElement = newTests[indexOfName + 1];
       newTests[indexOfName + 1] = newTests[indexOfName];
       newTests[indexOfName] = afterElement;
     }
-    this.props.onUpdate(newTests);
+    this.props.onUpdate(newTests, name);
   }
 
   render(): React.ReactNode {
