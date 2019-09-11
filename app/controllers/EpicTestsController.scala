@@ -4,6 +4,7 @@ import com.gu.googleauth.AuthAction
 import play.api.mvc.{AnyContent, ControllerComponents}
 import models.EpicTests
 import models.EpicTests._
+import services.S3Client.S3ObjectSettings
 
 import scala.concurrent.ExecutionContext
 
@@ -12,7 +13,10 @@ class EpicTestsController(authAction: AuthAction[AnyContent], components: Contro
     authAction,
     components,
     stage,
-    dataBucket = "support-admin-console", //TODO - use a different bucket for public data
-    dataFilename = "epic-tests.json",
-    lockFilename = "epic-tests.lock") {
+    name = "epic-tests",
+    dataObjectSettings = S3ObjectSettings(
+      bucket = "gu-contributions-public",
+      key = s"epic/$stage/epic-tests.json",
+      publicRead = true)  // This data will be requested by dotcom
+  ) {
 }

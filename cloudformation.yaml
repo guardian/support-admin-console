@@ -99,6 +99,13 @@ Resources:
           - Effect: Allow
             Action: s3:*
             Resource: !Sub arn:aws:s3:::support-admin-console/${Stage}/*
+      - PolicyName: PublicSettingsBucket
+        PolicyDocument:
+          Version: 2012-10-17
+          Statement:
+          - Effect: Allow
+            Action: s3:*
+            Resource: !Sub arn:aws:s3:::gu-contributions-public/${Stage}/*
       - PolicyName: GoogleServiceAccountCertificate
         PolicyDocument:
           Version: 2012-10-17
