@@ -10,11 +10,10 @@ import NewNameCreator from './newNameCreator';
 
 
 const styles = () => createStyles({
-  testListAndEditor: {
-    display: "flex"
+  root: {
+    width: "250px",
   },
   testsList: {
-    minWidth: "250px",
     padding: 0
   },
   test: {
@@ -132,16 +131,16 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
 
     return (
       <>
-        {this.props.editMode && (
-          <NewNameCreator
-            text="test"
-            existingNames={ this.props.tests.map(test => test.name) }
-            onValidName={this.createTest}
-            editEnabled={this.props.editMode}
-          />
-        )}
+        <div className={classes.root}>
+          {this.props.editMode && (
+            <NewNameCreator
+              text="test"
+              existingNames={ this.props.tests.map(test => test.name) }
+              onValidName={this.createTest}
+              editEnabled={this.props.editMode}
+            />
+          )}
 
-        <div className={classes.testListAndEditor}>
           <List className={classes.testsList} component="nav">
             {this.props.tests.map((test, index) => {
               const classNames = this.props.selectedTestName === test.name ? `${classes.test} ${classes.selectedTest}` :

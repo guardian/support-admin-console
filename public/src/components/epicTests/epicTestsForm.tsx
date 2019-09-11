@@ -93,7 +93,14 @@ const styles = ({ spacing, typography }: Theme) => createStyles({
   },
   warning: {
     fontSize: typography.pxToRem(20),
-  }
+  },
+  testListAndEditor: {
+    display: "flex"
+  },
+  testsList: {
+    minWidth: "250px",
+    padding: 0
+  },
 });
 
 interface EpicTestFormProps extends WithStyles<typeof styles> {}
@@ -251,7 +258,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
           {this.renderButtonsBar()}
         </div>
 
-        <div>
+        <div className={classes.testListAndEditor}>
           <EpicTestsList
             tests={this.state.tests}
             selectedTestName={this.state.selectedTestName}
@@ -259,16 +266,17 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
             onSelectedTestName={this.onSelectedTestName}
             editMode={this.state.editMode}
           />
-        </div>
 
-        {/*TODO - fix positioning, flexbox?*/}
-        {this.state.tests.map(test => (<EpicTestEditor
-          test={this.state.tests.find(test => test.name === this.state.selectedTestName)}
-          onChange={this.onTestChange}
-          visible={test.name === this.state.selectedTestName}
-          key={test.name}
-          editMode={this.state.editMode}
-        />))}
+          {this.state.tests.map(test =>
+            (<EpicTestEditor
+              test={this.state.tests.find(test => test.name === this.state.selectedTestName)}
+              onChange={this.onTestChange}
+              visible={test.name === this.state.selectedTestName}
+              key={test.name}
+              editMode={this.state.editMode}
+            />)
+          )}
+        </div>
       </>
     )
   }
