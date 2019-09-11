@@ -97,10 +97,6 @@ const styles = ({ spacing, typography }: Theme) => createStyles({
   testListAndEditor: {
     display: "flex"
   },
-  testsList: {
-    minWidth: "250px",
-    padding: 0
-  },
 });
 
 interface EpicTestFormProps extends WithStyles<typeof styles> {}
