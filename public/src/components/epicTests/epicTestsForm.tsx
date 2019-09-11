@@ -75,7 +75,8 @@ interface LockStatus {
 type EpicTestsFormState = EpicTests & {
   selectedTestName?: string,
   editMode: boolean,
-  lockStatus: LockStatus
+  lockStatus: LockStatus,
+  modifiedTestNames: string[]
 };
 
 const styles = ({ spacing, typography }: Theme) => createStyles({
@@ -111,7 +112,8 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
       tests: [],
       selectedTestName: undefined,
       editMode: false,
-      lockStatus: { locked: false }
+      lockStatus: { locked: false },
+      modifiedTestNames: [],
     };
     this.previousStateFromServer = null;
   }
@@ -127,7 +129,8 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
         this.setState({
           ...serverData.value,
           lockStatus: serverData.status,
-          editMode: serverData.status.email === serverData.userEmail
+          editMode: serverData.status.email === serverData.userEmail,
+          modifiedTestNames: []
         });
       });
   };
@@ -158,15 +161,20 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
       });
   };
 
-  onTestsChange = (updatedTests: EpicTest[]): void => {
+  onTestsChange = (updatedTests: EpicTest[], modifiedTestName?: string): void => {
+    const modifiedTestNames = modifiedTestName && !this.state.modifiedTestNames.includes(modifiedTestName) ?
+      this.state.modifiedTestNames.concat([modifiedTestName]) :
+      this.state.modifiedTestNames;
+
     this.setState({
-      tests: updatedTests
+      tests: updatedTests,
+      modifiedTestNames
     });
   };
 
   onTestChange = (updatedTest: EpicTest): void => {
     const updatedTests = this.state.tests.map(test => test.name === updatedTest.name ? updatedTest : test);
-    this.onTestsChange(updatedTests);
+    this.onTestsChange(updatedTests, updatedTest.name);
   };
 
   onSelectedTestName = (testName: string): void => {
@@ -219,9 +227,10 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
         <div>
           <ButtonWithConfirmationPopup
           buttonText="Publish"
-          confirmationText="Are you sure? This will replace all live tests!"
+          confirmationText={`Are you sure? This will update ${this.state.modifiedTestNames.length} test(s)!`}
           onConfirm={this.save}
           icon={<CloudUploadIcon />}
+          disabled={this.state.modifiedTestNames.length === 0}
           />
           <ButtonWithConfirmationPopup
           buttonText="Cancel"
@@ -257,6 +266,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
         <div className={classes.testListAndEditor}>
           <EpicTestsList
             tests={this.state.tests}
+            modifiedTestNames={this.state.modifiedTestNames}
             selectedTestName={this.state.selectedTestName}
             onUpdate={this.onTestsChange}
             onSelectedTestName={this.onSelectedTestName}
@@ -266,6 +276,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
           {this.state.tests.map(test =>
             (<EpicTestEditor
               test={this.state.tests.find(test => test.name === this.state.selectedTestName)}
+              hasChanged={this.state.modifiedTestNames.includes(test.name)}
               onChange={this.onTestChange}
               visible={test.name === this.state.selectedTestName}
               key={test.name}

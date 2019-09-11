@@ -31,6 +31,9 @@ const styles = () => createStyles({
   selectedTest: {
     background: "#dcdcdc"
   },
+  modifiedTest: {
+    border: "1px solid red"
+  },
   singleButtonContainer: {
     display: "block"
   },
@@ -67,8 +70,9 @@ const styles = () => createStyles({
 
 interface EpicTestListProps extends WithStyles<typeof styles> {
   tests: EpicTest[],
+  modifiedTestNames: string[],
   selectedTestName: string | undefined,
-  onUpdate: (tests: EpicTest[]) => void,
+  onUpdate: (tests: EpicTest[], modifiedTestName?: string) => void,
   onSelectedTestName: (testName: string) => void,
   editMode: boolean
 }
@@ -95,7 +99,7 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
     }
     const newTestList = [...this.props.tests, newTest];
 
-    this.props.onUpdate(newTestList);
+    this.props.onUpdate(newTestList, newTestName);
 
     this.props.onSelectedTestName(newTest.name);
   }
@@ -108,22 +112,22 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
     const newTests = [...this.props.tests];
     const indexOfName = newTests.findIndex(test => test.name === name);
     if (indexOfName > 0) {
-      const beforeElement = newTests[indexOfName - 1]
+      const beforeElement = newTests[indexOfName - 1];
       newTests[indexOfName-1] = newTests[indexOfName];
       newTests[indexOfName] = beforeElement;
     }
-    this.props.onUpdate(newTests);
+    this.props.onUpdate(newTests, name);
   }
 
   moveTestDown = (name: string) => {
     const newTests = [...this.props.tests];
     const indexOfName = newTests.findIndex(test => test.name === name);
     if (indexOfName < newTests.length - 1) {
-      const afterElement = newTests[indexOfName + 1]
+      const afterElement = newTests[indexOfName + 1];
       newTests[indexOfName + 1] = newTests[indexOfName];
       newTests[indexOfName] = afterElement;
     }
-    this.props.onUpdate(newTests);
+    this.props.onUpdate(newTests, name);
   }
 
   render(): React.ReactNode {
@@ -143,8 +147,12 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
 
           <List className={classes.testsList} component="nav">
             {this.props.tests.map((test, index) => {
-              const classNames = this.props.selectedTestName === test.name ? `${classes.test} ${classes.selectedTest}` :
-                `${classes.test}`;
+
+              const classNames = [
+                classes.test,
+                this.props.modifiedTestNames.includes(test.name) ? classes.modifiedTest : '',
+                this.props.selectedTestName === test.name ? classes.selectedTest : '',
+              ].join(' ');
 
               return (
                 <ListItem

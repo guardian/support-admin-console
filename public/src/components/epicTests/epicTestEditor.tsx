@@ -38,6 +38,9 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
     fontWeight: typography.fontWeightMedium,
     margin: "10px 0 15px 0"
   },
+  hasChanged: {
+    color: 'red'
+  },
   h3: {
     fontSize: typography.pxToRem(24),
     fontWeight: typography.fontWeightMedium,
@@ -61,6 +64,7 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
 
 interface EpicTestEditorProps extends WithStyles<typeof styles> {
   test?: EpicTest,
+  hasChanged: boolean,
   onChange: (updatedTest: EpicTest) => void,
   visible: boolean,
   editMode: boolean
@@ -111,7 +115,10 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps> {
 
     return (
       <div className={classes.container}>
-        <Typography variant={'h2'} className={classes.h2}>{this.props.test && this.props.test.name}</Typography>
+        <Typography variant={'h2'} className={classes.h2}>
+          {this.props.test && this.props.test.name}
+          { this.props.hasChanged && <span className={classes.hasChanged}>&nbsp;(modified)</span> }
+        </Typography>
 
         <div>
           <FormControlLabel
