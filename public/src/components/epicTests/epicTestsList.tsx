@@ -130,15 +130,26 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
     return (
       <div className={this.props.classes.buttonsContainer}>
         <div className={this.props.classes.singleButtonContainer}>
-          {index > 0 ? <Button color={'default'} className={this.props.classes.arrowButton} variant={'contained'}
-                               onClick={() => this.moveTestUp(testName)}><ArrowUpward
-            className={this.props.classes.arrowIcon}/></Button> : null}
+          {index > 0 &&
+            <Button
+              color={'default'}
+              className={this.props.classes.arrowButton}
+              variant={'contained'}
+              onClick={() => this.moveTestUp(testName)}>
+              <ArrowUpward className={this.props.classes.arrowIcon}/>
+            </Button>
+          }
         </div>
         <div className={this.props.classes.singleButtonContainer}>
-          {index < this.props.tests.length - 1 ?
-            <Button color={'default'} className={this.props.classes.arrowButton} variant={'contained'}
-                    onClick={() => this.moveTestDown(testName)}><ArrowDownward
-              className={this.props.classes.arrowIcon}/></Button> : null}
+          {index < this.props.tests.length - 1 &&
+            <Button
+              color={'default'}
+              className={this.props.classes.arrowButton}
+              variant={'contained'}
+              onClick={() => this.moveTestDown(testName)}>
+                <ArrowDownward className={this.props.classes.arrowIcon}/>
+            </Button>
+          }
         </div>
       </div>
     )
