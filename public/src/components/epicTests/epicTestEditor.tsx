@@ -117,7 +117,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps> {
       <div className={classes.container}>
         <Typography variant={'h2'} className={classes.h2}>
           {this.props.test && this.props.test.name}
-          { this.props.hasChanged && <span className={classes.hasChanged}>(modified)</span> }
+          { this.props.hasChanged && <span className={classes.hasChanged}>&nbsp;(modified)</span> }
         </Typography>
 
         <div>
