@@ -24,7 +24,7 @@ trait S3Client {
 object S3Client {
   type RawVersionedS3Data = VersionedS3Data[String]
 
-  case class S3ObjectSettings(bucket: String, key: String, publicRead: Boolean)
+  case class S3ObjectSettings(bucket: String, key: String, publicRead: Boolean, cacheControl: Option[String])
 }
 
 object S3 extends S3Client with StrictLogging {
@@ -59,11 +59,14 @@ object S3 extends S3Client with StrictLogging {
       val currentVersion = s3Client.getObject(objectSettings.bucket, objectSettings.key).getObjectMetadata.getVersionId
 
       if (currentVersion == data.version) {
+        val metadata = new ObjectMetadata()
+        objectSettings.cacheControl.foreach(metadata.setCacheControl)
+
         val request = new PutObjectRequest(
           objectSettings.bucket,
           objectSettings.key,
           new ByteArrayInputStream(data.value.getBytes(StandardCharsets.UTF_8)),
-          new ObjectMetadata()
+          metadata
         )
 
         s3Client.putObject(
