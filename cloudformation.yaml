@@ -105,7 +105,7 @@ Resources:
           Statement:
           - Effect: Allow
             Action: s3:*
-            Resource: !Sub arn:aws:s3:::gu-contributions-public/${Stage}/*
+            Resource: !Sub arn:aws:s3:::gu-contributions-public/epic/${Stage}/*
       - PolicyName: GoogleServiceAccountCertificate
         PolicyDocument:
           Version: 2012-10-17
