@@ -48,7 +48,8 @@ class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
   val objectSettings = S3ObjectSettings(
     bucket = "bucket",
     key = "key",
-    publicRead = false
+    publicRead = false,
+    cacheControl = None
   )
 
   val dummyS3Client = new S3Client {
