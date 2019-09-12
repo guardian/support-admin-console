@@ -59,8 +59,10 @@ object S3 extends S3Client with StrictLogging {
       val currentVersion = s3Client.getObject(objectSettings.bucket, objectSettings.key).getObjectMetadata.getVersionId
 
       if (currentVersion == data.version) {
+
         val metadata = new ObjectMetadata()
-        objectSettings.cacheControl.foreach(metadata.setCacheControl)
+        // https://docs.fastly.com/en/guides/how-caching-and-cdns-work#surrogate-headers
+        objectSettings.cacheControl.foreach(cc => metadata.addUserMetadata("surrogate-control", cc))
 
         val request = new PutObjectRequest(
           objectSettings.bucket,
