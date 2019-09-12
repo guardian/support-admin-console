@@ -6,6 +6,7 @@ import io.circe.generic.auto._
 import io.circe.syntax._
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, AnyContent, ControllerComponents}
+import services.S3Client.S3ObjectSettings
 import services.{S3Json, VersionedS3Data}
 
 import scala.concurrent.ExecutionContext
@@ -13,8 +14,11 @@ import scala.concurrent.ExecutionContext
 abstract class SettingsController[T : Decoder : Encoder](authAction: AuthAction[AnyContent], components: ControllerComponents, stage: String, filename: String)(implicit ec: ExecutionContext)
   extends AbstractController(components) with Circe {
 
-  private val bucket = "support-admin-console"
-  private val key = s"$stage/$filename"
+  private val dataObjectSettings = S3ObjectSettings(
+    bucket = "support-admin-console",
+    key = s"$stage/$filename",
+    publicRead = false
+  )
   private val s3Client = services.S3
 
   /**
@@ -22,7 +26,7 @@ abstract class SettingsController[T : Decoder : Encoder](authAction: AuthAction[
     * The s3 data is validated against the model.
     */
   def get = authAction.async {
-    S3Json.getFromJson[T](bucket, key)(s3Client).map {
+    S3Json.getFromJson[T](dataObjectSettings)(s3Client).map {
       case Right(s3Data) => Ok(S3Json.noNulls(s3Data.asJson))
       case Left(error) => InternalServerError(error)
     }
@@ -33,7 +37,7 @@ abstract class SettingsController[T : Decoder : Encoder](authAction: AuthAction[
     * The POSTed json is validated against the model.
     */
   def set = authAction.async(circe.json[VersionedS3Data[T]]) { request =>
-    S3Json.putAsJson(bucket, key, request.body)(s3Client).map {
+    S3Json.putAsJson(dataObjectSettings, request.body)(s3Client).map {
       case Right(_) => Ok("updated")
       case Left(error) => InternalServerError(error)
     }

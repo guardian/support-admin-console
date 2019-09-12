@@ -11,6 +11,7 @@ import io.circe.syntax._
 import io.circe.generic.auto._
 import play.api.libs.circe.Circe
 import play.api.mvc._
+import services.S3Client.S3ObjectSettings
 import services.{S3Json, VersionedS3Data}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -31,25 +32,26 @@ class LockableSettingsController[T : Decoder : Encoder](
   authAction: AuthAction[AnyContent],
   components: ControllerComponents,
   stage: String,
-  dataBucket: String,
-  dataFilename: String,
-  lockFilename: String)(implicit ec: ExecutionContext) extends AbstractController(components) with Circe {
+  name: String,
+  dataObjectSettings: S3ObjectSettings
+)(implicit ec: ExecutionContext) extends AbstractController(components) with Circe {
 
-  private val lockBucket = "support-admin-console"
-  private val lockKey = s"$stage/locks/$lockFilename"
-
-  private val dataKey = s"$stage/$dataFilename"
+  private val lockObjectSettings = S3ObjectSettings(
+    bucket = "support-admin-console",
+    key = s"$stage/locks/$name.lock",
+    publicRead = false
+  )
 
   private val s3Client = services.S3
 
   private def withLockStatus(f: VersionedS3Data[LockStatus] => Future[Result]): Future[Result] =
-    S3Json.getFromJson[LockStatus](lockBucket, lockKey)(s3Client).flatMap {
+    S3Json.getFromJson[LockStatus](lockObjectSettings)(s3Client).flatMap {
       case Right(fromS3) => f(fromS3)
       case Left(error) => Future.successful(InternalServerError(error))
     }
 
   private def setLockStatus(lockStatus: VersionedS3Data[LockStatus]) =
-    S3Json.putAsJson(lockBucket, lockKey, lockStatus)(s3Client)
+    S3Json.putAsJson(lockObjectSettings, lockStatus)(s3Client)
 
   /**
     * Returns current version of the settings in s3 as json, with the lock status.
@@ -57,7 +59,7 @@ class LockableSettingsController[T : Decoder : Encoder](
     */
   def get= authAction.async { request =>
     withLockStatus { case VersionedS3Data(lockStatus, _) =>
-      S3Json.getFromJson[T](dataBucket, dataKey)(s3Client).map {
+      S3Json.getFromJson[T](dataObjectSettings)(s3Client).map {
         case Right(VersionedS3Data(value, version)) =>
           Ok(S3Json.noNulls(LockableSettingsResponse(value, version, lockStatus, request.user.email).asJson))
 
@@ -74,7 +76,7 @@ class LockableSettingsController[T : Decoder : Encoder](
     withLockStatus { case VersionedS3Data(lockStatus, lockFileVersion) =>
       if (lockStatus.email.contains(request.user.email)) {
         val result: EitherT[Future, String, Unit] = for {
-          _ <- EitherT(S3Json.putAsJson(dataBucket, dataKey, request.body)(s3Client))
+          _ <- EitherT(S3Json.putAsJson(dataObjectSettings, request.body)(s3Client))
           _ <- EitherT(setLockStatus(VersionedS3Data(LockStatus.unlocked, lockFileVersion)))
         } yield ()
 
@@ -83,7 +85,7 @@ class LockableSettingsController[T : Decoder : Encoder](
           case Left(error) => InternalServerError(error)
         }
       } else {
-        Future.successful(Conflict(s"You do not currently have $dataFilename open for edit"))
+        Future.successful(Conflict(s"You do not currently have ${dataObjectSettings.key} open for edit"))
       }
     }
   }
@@ -101,7 +103,7 @@ class LockableSettingsController[T : Decoder : Encoder](
           case Left(error) => InternalServerError(error)
         }
       } else {
-        Future.successful(Conflict(s"File $dataFilename is already locked"))
+        Future.successful(Conflict(s"File ${dataObjectSettings.key} is already locked"))
       }
     }
   }
@@ -117,7 +119,7 @@ class LockableSettingsController[T : Decoder : Encoder](
           case Left(error) => InternalServerError(error)
         }
       } else {
-        Future.successful(BadRequest(s"File $dataFilename is not currently locked by this user"))
+        Future.successful(BadRequest(s"File ${dataObjectSettings.key} is not currently locked by this user"))
       }
     }
   }

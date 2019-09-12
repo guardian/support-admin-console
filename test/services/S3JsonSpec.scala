@@ -2,7 +2,7 @@ package services
 
 import models._
 import org.scalatest.{EitherValues, FlatSpec, Matchers}
-import services.S3Client.RawVersionedS3Data
+import services.S3Client.{RawVersionedS3Data, S3ObjectSettings}
 import io.circe.generic.auto._
 import gnieh.diffson.circe._
 
@@ -45,8 +45,14 @@ class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
     version = "v1"
   )
 
+  val objectSettings = S3ObjectSettings(
+    bucket = "bucket",
+    key = "key",
+    publicRead = false
+  )
+
   val dummyS3Client = new S3Client {
-    def get(bucket: String, key: String)(implicit ec: ExecutionContext): Future[Either[String,RawVersionedS3Data]] = Future {
+    def get(objectSettings: S3ObjectSettings)(implicit ec: ExecutionContext): Future[Either[String,RawVersionedS3Data]] = Future {
       Right {
         VersionedS3Data[String](
           expectedJson,
@@ -55,14 +61,14 @@ class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
       }
     }
 
-    def put(bucket: String, key: String, data: RawVersionedS3Data)(implicit ec: ExecutionContext): Future[Either[String,RawVersionedS3Data]] = Future(Right(data))
+    def put(objectSettings: S3ObjectSettings, data: RawVersionedS3Data)(implicit ec: ExecutionContext): Future[Either[String,RawVersionedS3Data]] = Future(Right(data))
   }
 
   it should "decode from json" in {
     import ExecutionContext.Implicits.global
 
     val result = Await.result(
-      S3Json.getFromJson[SupportFrontendSwitches]("bucket", "key")(dummyS3Client),
+      S3Json.getFromJson[SupportFrontendSwitches](objectSettings)(dummyS3Client),
       1.second
     )
 
@@ -75,7 +81,7 @@ class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
     import ExecutionContext.Implicits.global
 
     val result = Await.result(
-      S3Json.putAsJson[SupportFrontendSwitches]("bucket","key", expectedDecoded)(dummyS3Client),
+      S3Json.putAsJson[SupportFrontendSwitches](objectSettings, expectedDecoded)(dummyS3Client),
       1.second
     )
     val diff = JsonDiff.diff(expectedJson, result.right.value.value, false)
