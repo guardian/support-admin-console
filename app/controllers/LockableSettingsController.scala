@@ -12,7 +12,7 @@ import io.circe.generic.auto._
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.S3Client.S3ObjectSettings
-import services.{S3Json, VersionedS3Data}
+import services.{FastlyPurger, S3Json, VersionedS3Data}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -33,7 +33,8 @@ class LockableSettingsController[T : Decoder : Encoder](
   components: ControllerComponents,
   stage: String,
   name: String,
-  dataObjectSettings: S3ObjectSettings
+  dataObjectSettings: S3ObjectSettings,
+  fastlyPurger: Option[FastlyPurger]
 )(implicit ec: ExecutionContext) extends AbstractController(components) with Circe {
 
   private val lockObjectSettings = S3ObjectSettings(
@@ -53,6 +54,11 @@ class LockableSettingsController[T : Decoder : Encoder](
 
   private def setLockStatus(lockStatus: VersionedS3Data[LockStatus]) =
     S3Json.putAsJson(lockObjectSettings, lockStatus)(s3Client)
+
+  private def purgeFastlyCache: EitherT[Future,String,Unit] =
+    fastlyPurger
+      .map(purger => EitherT(purger.purge))
+      .getOrElse(EitherT.pure[Future,String](()))
 
   /**
     * Returns current version of the settings in s3 as json, with the lock status.
@@ -79,10 +85,13 @@ class LockableSettingsController[T : Decoder : Encoder](
         val result: EitherT[Future, String, Unit] = for {
           _ <- EitherT(S3Json.putAsJson(dataObjectSettings, request.body)(s3Client))
           _ <- EitherT(setLockStatus(VersionedS3Data(LockStatus.unlocked, lockFileVersion)))
+          _ <- purgeFastlyCache
         } yield ()
 
         result.value.map {
-          case Right(_) => Ok("updated")
+          case Right(_) =>
+            fastlyPurger.foreach(_.purge)
+            Ok("updated")
           case Left(error) => InternalServerError(error)
         }
       } else {

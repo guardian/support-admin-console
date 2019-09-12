@@ -54,7 +54,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     new SwitchesController(authAction, controllerComponents, stage),
     new ContributionTypesController(authAction, controllerComponents, stage),
     new AmountsController(authAction, controllerComponents, stage),
-    new EpicTestsController(authAction, controllerComponents, stage),
+    new EpicTestsController(authAction, controllerComponents, wsClient, stage),
     assets
   )
 }
