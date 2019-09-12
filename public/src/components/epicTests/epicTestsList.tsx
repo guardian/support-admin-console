@@ -129,6 +129,35 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
     }
     this.props.onUpdate(newTests, name);
   }
+  
+  renderReorderButtons = (testName: string, index: number) => {
+    return (
+      <div className={this.props.classes.buttonsContainer}>
+        <div className={this.props.classes.singleButtonContainer}>
+          {index > 0 &&
+            <Button
+              color={'default'}
+              className={this.props.classes.arrowButton}
+              variant={'contained'}
+              onClick={() => this.moveTestUp(testName)}>
+              <ArrowUpward className={this.props.classes.arrowIcon}/>
+            </Button>
+          }
+        </div>
+        <div className={this.props.classes.singleButtonContainer}>
+          {index < this.props.tests.length - 1 &&
+            <Button
+              color={'default'}
+              className={this.props.classes.arrowButton}
+              variant={'contained'}
+              onClick={() => this.moveTestDown(testName)}>
+                <ArrowDownward className={this.props.classes.arrowIcon}/>
+            </Button>
+          }
+        </div>
+      </div>
+    )
+  }
 
   render(): React.ReactNode {
     const { classes } = this.props;
@@ -160,14 +189,7 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
                   onClick={this.onTestSelected}
                   key={index}
                 >
-                  <div className={classes.buttonsContainer}>
-                    <div className={classes.singleButtonContainer}>
-                      {index > 0 ? <Button color={'default'} className={classes.arrowButton} variant={'contained'} onClick={() => this.moveTestUp(test.name)}><ArrowUpward className={classes.arrowIcon} /></Button> : null}
-                    </div>
-                    <div className={classes.singleButtonContainer}>
-                      {index <  this.props.tests.length - 1 ? <Button color={'default'} className={classes.arrowButton} variant={'contained'} onClick={() => this.moveTestDown(test.name)}><ArrowDownward className={classes.arrowIcon} /></Button> : null}
-                    </div>
-                  </div>
+                  { this.props.editMode && this.renderReorderButtons(test.name, index) }
                   <div className={classes.testText}>
                     <Typography>{test.name}</Typography>
                   </div>
