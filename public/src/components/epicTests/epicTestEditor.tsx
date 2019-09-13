@@ -19,8 +19,10 @@ import {
   withStyles
 } from "@material-ui/core";
 import EditableTextField from "../helpers/editableTextField"
-import { Region, isRegion } from '../../utils/models';
+import { Region } from '../../utils/models';
 import EpicTestVariantsList from './epicTestVariantsList';
+import { renderVisibilityIcons, renderVisibilityHelpText } from './utilities';
+
 
 const styles = ({ spacing, typography}: Theme) => createStyles({
   container: {
@@ -59,6 +61,16 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
   radio: {
     paddingTop: "20px",
     marginBottom: "10px"
+  },
+  visibilityIcons: {
+    marginTop: spacing.unit * 1.5
+  },
+  switchWithIcon: {
+    display: "flex"
+  },
+  visibilityHelperText: {
+    marginTop: spacing.unit * 1.8,
+    marginLeft: spacing.unit
   }
 });
 
@@ -120,7 +132,8 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps> {
           { this.props.hasChanged && <span className={classes.hasChanged}>&nbsp;(modified)</span> }
         </Typography>
 
-        <div>
+        <div className={classes.switchWithIcon}>
+          <div>
           <FormControlLabel
             control={
               <Switch
@@ -129,8 +142,13 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps> {
                 disabled={!this.props.editMode}
               />
             }
-            label={`Test is ${test.isOn ? "on" : "off"}`}
+            label={`Test is ${test.isOn ? "live" : "draft"}`}
           />
+          </div>
+
+          <div className={classes.visibilityIcons}>{renderVisibilityIcons(test.isOn)}</div>
+          <div className={classes.visibilityHelperText}>{renderVisibilityHelpText(test.isOn)}</div>
+
         </div>
 
         <div>
