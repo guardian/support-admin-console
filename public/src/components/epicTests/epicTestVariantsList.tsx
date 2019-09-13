@@ -41,6 +41,12 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
     this.props.onVariantsListChange(updatedVariantList);
   };
 
+  onVariantDelete = (variantName: string): void => {
+    const variantNameList: string[] = this.props.variants.map(variant => variant.name);
+    const updatedVariantList: EpicVariant[] = Array.from(this.props.variants).splice(variantNameList.indexOf(variantName), 1);
+    this.props.onVariantsListChange(updatedVariantList);
+  }
+
   onVariantNameCreation = (name: string) => {
     this.createVariant(name);
   };
@@ -117,6 +123,7 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
                   variant={variant}
                   onVariantChange={this.onVariantChange}
                   editMode={this.props.editMode}
+                  onDelete={this.onVariantDelete}
                 />
               </ExpansionPanelDetails>
             </ExpansionPanel>

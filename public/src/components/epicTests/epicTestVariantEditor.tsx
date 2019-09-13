@@ -1,10 +1,12 @@
 import React from 'react';
-import {EpicVariant, EpicTest, Cta} from "./epicTestsForm";
+import {EpicVariant, Cta} from "./epicTestsForm";
 import {Theme, createStyles, WithStyles, withStyles, Typography} from "@material-ui/core";
 import EditableTextField from "../helpers/editableTextField";
 import CtaEditor from "./ctaEditor";
 import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import ButtonWithConfirmationPopup from '../helpers/buttonWithConfirmationPopup';
+import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 
 const styles = ({ palette, spacing, typography }: Theme) => createStyles({
   container: {
@@ -53,7 +55,8 @@ const MenuProps = {
 interface Props extends WithStyles<typeof styles> {
   variant?: EpicVariant,
   onVariantChange: (updatedVariant: EpicVariant) => void,
-  editMode: boolean
+  editMode: boolean,
+  onDelete: (variantName: string) => void
 }
 
 enum VariantFieldNames {
@@ -93,8 +96,7 @@ class EpicTestVariantEditor extends React.Component<Props> {
   renderVariantEditor = (variant: EpicVariant): React.ReactNode => {
     const {classes} = this.props;
     return (
-        <div>
-
+        <>
           <Typography variant={'h5'} className={classes.h5}>Required</Typography>
           <Typography>Fill out each field before publishing your test</Typography>
 
@@ -161,8 +163,16 @@ class EpicTestVariantEditor extends React.Component<Props> {
             editEnabled={this.props.editMode}
           />
 
-        </div>
+          <ButtonWithConfirmationPopup
+            buttonText="Delete variant"
+            confirmationText={`Are you sure?`}
+            onConfirm={() => this.props.onDelete(variant.name)}
+            icon={<DeleteSweepIcon />}
+            color={'secondary'}
+            disabled={!this.props.editMode}
+          />
 
+        </>
     )
   };
 
