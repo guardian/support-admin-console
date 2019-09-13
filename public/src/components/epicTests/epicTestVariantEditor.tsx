@@ -1,10 +1,12 @@
 import React from 'react';
-import {EpicVariant, EpicTest, Cta} from "./epicTestsForm";
+import {EpicVariant, Cta} from "./epicTestsForm";
 import {Theme, createStyles, WithStyles, withStyles, Typography} from "@material-ui/core";
 import EditableTextField from "../helpers/editableTextField";
 import CtaEditor from "./ctaEditor";
 import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import ButtonWithConfirmationPopup from '../helpers/buttonWithConfirmationPopup';
+import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 
 const styles = ({ palette, spacing, typography }: Theme) => createStyles({
   container: {
@@ -38,6 +40,10 @@ const styles = ({ palette, spacing, typography }: Theme) => createStyles({
   h5: {
     fontSize: typography.pxToRem(18),
     margin: "20px 0 10px 0"
+  },
+  deleteButton: {
+    marginTop: spacing.unit * 2,
+    float: "right"
   }
 });
 const ITEM_HEIGHT = 48;
@@ -53,7 +59,8 @@ const MenuProps = {
 interface Props extends WithStyles<typeof styles> {
   variant?: EpicVariant,
   onVariantChange: (updatedVariant: EpicVariant) => void,
-  editMode: boolean
+  editMode: boolean,
+  onDelete: (variantName: string) => void
 }
 
 enum VariantFieldNames {
@@ -90,11 +97,22 @@ class EpicTestVariantEditor extends React.Component<Props> {
     this.updateVariant(variant => ({...variant, [fieldName]: updatedBool}))
   };
 
+  renderDeleteButton = (variantName: string) => {
+    return this.props.editMode && (
+      <ButtonWithConfirmationPopup
+        buttonText="Delete variant"
+        confirmationText={`Are you sure?`}
+        onConfirm={() => this.props.onDelete(variantName)}
+        icon={<DeleteSweepIcon />}
+        color={'secondary'}
+      />
+    );
+  }
+
   renderVariantEditor = (variant: EpicVariant): React.ReactNode => {
     const {classes} = this.props;
     return (
-        <div>
-
+        <>
           <Typography variant={'h5'} className={classes.h5}>Required</Typography>
           <Typography>Fill out each field before publishing your test</Typography>
 
@@ -161,8 +179,9 @@ class EpicTestVariantEditor extends React.Component<Props> {
             editEnabled={this.props.editMode}
           />
 
-        </div>
+          <div className={classes.deleteButton}>{this.renderDeleteButton(variant.name)}</div>
 
+        </>
     )
   };
 
