@@ -6,6 +6,7 @@ import LockOpenIcon from '@material-ui/icons/LockOpen'
 import RefreshIcon from '@material-ui/icons/Refresh';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import Button from "@material-ui/core/Button";
+import CircularProgress from '@material-ui/core/CircularProgress';
 import {Region} from "../../utils/models";
 import {
   fetchFrontendSettings,
@@ -73,6 +74,7 @@ interface LockStatus {
 };
 
 type EpicTestsFormState = EpicTests & {
+  previousStateFromServer: DataFromServer | null,
   selectedTestName?: string,
   editMode: boolean,
   lockStatus: LockStatus,
@@ -104,18 +106,17 @@ interface EpicTestFormProps extends WithStyles<typeof styles> {}
 
 class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormState> {
   state: EpicTestsFormState;
-  previousStateFromServer: DataFromServer | null;
 
   constructor(props: EpicTestFormProps) {
     super(props);
     this.state = {
       tests: [],
+      previousStateFromServer: null,
       selectedTestName: undefined,
       editMode: false,
       lockStatus: { locked: false },
       modifiedTestNames: [],
     };
-    this.previousStateFromServer = null;
   }
 
   componentWillMount(): void {
@@ -125,9 +126,9 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
   fetchStateFromServer(): void {
     fetchFrontendSettings(FrontendSettingsType.epicTests)
       .then(serverData => {
-        this.previousStateFromServer = serverData;
         this.setState({
           ...serverData.value,
+          previousStateFromServer: serverData,
           lockStatus: serverData.status,
           editMode: serverData.status.email === serverData.userEmail,
           modifiedTestNames: []
@@ -142,7 +143,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
   };
 
   save = () => {
-    const newState = update(this.previousStateFromServer, {
+    const newState = update(this.state.previousStateFromServer, {
       value: {
         tests: { $set: this.state.tests }
       }
@@ -260,7 +261,11 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
       <>
         <Typography variant={'h2'}>Epic tests</Typography>
         <div className={classes.buttons}>
-          {this.renderButtonsBar()}
+          {
+            this.state.previousStateFromServer ?
+              this.renderButtonsBar() :
+              <CircularProgress/>
+          }
         </div>
 
         <div className={classes.testListAndEditor}>
