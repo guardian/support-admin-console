@@ -39,7 +39,8 @@ class LockableSettingsController[T : Decoder : Encoder](
   private val lockObjectSettings = S3ObjectSettings(
     bucket = "support-admin-console",
     key = s"$stage/locks/$name.lock",
-    publicRead = false
+    publicRead = false,
+    cacheControl = None
   )
 
   private val s3Client = services.S3

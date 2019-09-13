@@ -24,7 +24,13 @@ trait S3Client {
 object S3Client {
   type RawVersionedS3Data = VersionedS3Data[String]
 
-  case class S3ObjectSettings(bucket: String, key: String, publicRead: Boolean)
+  case class S3ObjectSettings(
+    bucket: String,
+    key: String,
+    publicRead: Boolean,
+    cacheControl: Option[String] = None,
+    surrogateControl: Option[String] = None
+  )
 }
 
 object S3 extends S3Client with StrictLogging {
@@ -59,11 +65,17 @@ object S3 extends S3Client with StrictLogging {
       val currentVersion = s3Client.getObject(objectSettings.bucket, objectSettings.key).getObjectMetadata.getVersionId
 
       if (currentVersion == data.version) {
+
+        val metadata = new ObjectMetadata()
+        // https://docs.fastly.com/en/guides/how-caching-and-cdns-work#surrogate-headers
+        objectSettings.cacheControl.foreach(metadata.setCacheControl)
+        objectSettings.surrogateControl.foreach(cc => metadata.addUserMetadata("surrogate-control", cc))
+
         val request = new PutObjectRequest(
           objectSettings.bucket,
           objectSettings.key,
           new ByteArrayInputStream(data.value.getBytes(StandardCharsets.UTF_8)),
-          new ObjectMetadata()
+          metadata
         )
 
         s3Client.putObject(

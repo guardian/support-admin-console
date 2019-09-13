@@ -17,7 +17,8 @@ abstract class SettingsController[T : Decoder : Encoder](authAction: AuthAction[
   private val dataObjectSettings = S3ObjectSettings(
     bucket = "support-admin-console",
     key = s"$stage/$filename",
-    publicRead = false
+    publicRead = false,
+    cacheControl = None
   )
   private val s3Client = services.S3
 
