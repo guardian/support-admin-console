@@ -32,6 +32,8 @@ object UserCohort extends Enum[UserCohort] with CirceEnum[UserCohort] {
   case object PostAskPauseSingleContributors extends UserCohort
 }
 
+case class Cta(text: Option[String], baseUrl: Option[String])
+
 case class EpicVariant(
   name: String,
   heading: Option[String],
@@ -40,8 +42,7 @@ case class EpicVariant(
   footer: Option[String] = None,
   showTicker: Boolean = false,
   backgroundImageUrl: Option[String] = None,
-  ctaText: Option[String] = None,
-  supportBaseURL: Option[String] = None
+  cta: Option[Cta]
 )
 
 case class EpicTest(

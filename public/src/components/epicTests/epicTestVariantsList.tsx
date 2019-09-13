@@ -6,6 +6,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import EpicTestVariantEditor from './epicTestVariantEditor';
 import { EpicVariant } from './epicTestsForm';
 import NewNameCreator from './newNameCreator';
+import {defaultCta} from "./ctaEditor";
 
 
 const styles = ({ typography }: Theme) => createStyles({
@@ -67,8 +68,7 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
       footer: "",
       showTicker: false,
       backgroundImageUrl: "",
-      ctaText: "",
-      supportBaseURL: ""
+      cta: defaultCta
     };
 
     this.props.onVariantsListChange([...this.props.variants, newVariant]);
