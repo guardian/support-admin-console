@@ -85,6 +85,16 @@ Resources:
           Action:
           - sts:AssumeRole
       Policies:
+      - PolicyName: CloudwatchLogs
+        PolicyDocument:
+          Version: 2012-10-17
+          Statement:
+          - Effect: Allow
+            Action:
+              - logs:CreateLogGroup
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Resource: !GetAtt LogGroup.Arn
       - PolicyName: ConfigLoad
         PolicyDocument:
           Version: 2012-10-17
@@ -227,3 +237,9 @@ Resources:
         FromPort: 443
         ToPort: 443
         CidrIp: 0.0.0.0/0
+
+  LogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub ${Stack}-${App}-${Stage}
+      RetentionInDays: 14
