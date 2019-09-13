@@ -5,8 +5,7 @@ import {
 } from "@material-ui/core";
 import ArrowUpward from '@material-ui/icons/ArrowUpward';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+import { renderVisibilityIcons } from './utilities';
 import { EpicTest } from './epicTestsForm';
 import NewNameCreator from './newNameCreator';
 
@@ -157,15 +156,6 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
     )
   }
 
-  renderVisibilityIcons = (isOn: boolean) => {
-    return (
-      isOn ?
-        <VisibilityIcon color={'action'} />
-        :
-        <VisibilityOffIcon color={'disabled'} />
-    );
-  }
-
   render(): React.ReactNode {
     const { classes } = this.props;
 
@@ -200,7 +190,7 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
                   <div className={classes.testText}>
                     <Typography>{test.name}</Typography>
                   </div>
-                  {this.renderVisibilityIcons(test.isOn)}
+                  {renderVisibilityIcons(test.isOn)}
                 </ListItem>
               )
             })}
