@@ -40,6 +40,10 @@ const styles = ({ palette, spacing, typography }: Theme) => createStyles({
   h5: {
     fontSize: typography.pxToRem(18),
     margin: "20px 0 10px 0"
+  },
+  deleteButton: {
+    marginTop: spacing.unit * 2,
+    float: "right"
   }
 });
 const ITEM_HEIGHT = 48;
@@ -92,6 +96,18 @@ class EpicTestVariantEditor extends React.Component<Props> {
     const updatedBool = event.target.checked;
     this.updateVariant(variant => ({...variant, [fieldName]: updatedBool}))
   };
+
+  renderDeleteButton = (variantName: string) => {
+    return this.props.editMode && (
+      <ButtonWithConfirmationPopup
+        buttonText="Delete variant"
+        confirmationText={`Are you sure?`}
+        onConfirm={() => this.props.onDelete(variantName)}
+        icon={<DeleteSweepIcon />}
+        color={'secondary'}
+      />
+    );
+  }
 
   renderVariantEditor = (variant: EpicVariant): React.ReactNode => {
     const {classes} = this.props;
@@ -163,14 +179,7 @@ class EpicTestVariantEditor extends React.Component<Props> {
             editEnabled={this.props.editMode}
           />
 
-          <ButtonWithConfirmationPopup
-            buttonText="Delete variant"
-            confirmationText={`Are you sure?`}
-            onConfirm={() => this.props.onDelete(variant.name)}
-            icon={<DeleteSweepIcon />}
-            color={'secondary'}
-            disabled={!this.props.editMode}
-          />
+          <div className={classes.deleteButton}>{this.renderDeleteButton(variant.name)}</div>
 
         </>
     )
