@@ -1,9 +1,8 @@
 import React from 'react';
-import { EpicVariant, EpicTest } from "./epicTestsForm";
-import {
-  List, ListItem, Theme, createStyles, WithStyles, withStyles, Select, FormControl, InputLabel, MenuItem, Input, Checkbox, ListItemText, Typography
-} from "@material-ui/core";
-import EditableTextField from "../helpers/editableTextField"
+import {EpicVariant, EpicTest, Cta} from "./epicTestsForm";
+import {Theme, createStyles, WithStyles, withStyles, Typography} from "@material-ui/core";
+import EditableTextField from "../helpers/editableTextField";
+import CtaEditor from "./ctaEditor";
 import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 
@@ -64,9 +63,7 @@ enum VariantFieldNames {
   highlightedText = "highlightedText",
   footer = "footer",
   showTicker = "showTicker",
-  backgroundImageUrl = "backgroundImageUrl",
-  ctaText = "ctaText",
-  supportBaseURL = "supportBaseURL"
+  backgroundImageUrl = "backgroundImageUrl"
 }
 class EpicTestVariantEditor extends React.Component<Props> {
 
@@ -74,7 +71,11 @@ class EpicTestVariantEditor extends React.Component<Props> {
     if (this.props.variant) {
       this.props.onVariantChange(update(this.props.variant));
     }
-  }
+  };
+
+  onCtaUpdate = (cta?: Cta): void => {
+    this.updateVariant(variant => ({...variant, cta}));
+  };
 
   onTextChange = (fieldName: string) => (updatedString: string): void => {
     this.updateVariant(variant => ({...variant, [fieldName]: updatedString}));
@@ -82,7 +83,7 @@ class EpicTestVariantEditor extends React.Component<Props> {
 
   onParagraphsChange = (fieldName: string) => (updatedParagraphs: string): void => {
     this.updateVariant(variant => ({...variant, [fieldName]: updatedParagraphs.split("\n")}));
-  }
+  };
 
   onVariantSwitchChange = (fieldName: string) => (event: React.ChangeEvent<HTMLInputElement>):void =>  {
     const updatedBool = event.target.checked;
@@ -114,20 +115,10 @@ class EpicTestVariantEditor extends React.Component<Props> {
             editEnabled={this.props.editMode}
           />
 
-          <EditableTextField
-            required
-            text={variant.ctaText || "Support The Guardian"}
-            onSubmit={this.onTextChange(VariantFieldNames.ctaText)}
-            label="Button text:"
-            editEnabled={this.props.editMode}
-          />
-
-          <EditableTextField
-            required
-            text={variant.supportBaseURL || "https://support.theguardian.com/contribute"}
-            onSubmit={this.onTextChange(VariantFieldNames.supportBaseURL)}
-            label="Button destination:"
-            editEnabled={this.props.editMode}
+          <CtaEditor
+            cta={variant.cta}
+            update={this.onCtaUpdate}
+            editMode={this.props.editMode}
           />
 
           <Typography variant={'h5'} className={classes.h5}>Optional</Typography>

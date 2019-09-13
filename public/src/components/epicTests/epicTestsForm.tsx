@@ -26,6 +26,11 @@ export enum UserCohort {
   PostAskPauseSingleContributors = 'PostAskPauseSingleContributors'
 }
 
+export interface Cta {
+  text?: string,
+  baseUrl?: string
+}
+
 export interface EpicVariant {
   name: string,
   heading?: string,
@@ -34,8 +39,7 @@ export interface EpicVariant {
   footer?: string,
   showTicker: boolean,
   backgroundImageUrl?: string,
-  ctaText?: string,
-  supportBaseURL?: string
+  cta?: Cta
 }
 
 export interface EpicTest {
