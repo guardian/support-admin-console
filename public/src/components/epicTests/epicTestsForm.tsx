@@ -19,6 +19,7 @@ import {
 import EpicTestsList from "./epicTestsList";
 import ButtonWithConfirmationPopup from '../helpers/buttonWithConfirmationPopup';
 
+
 export enum UserCohort {
   Everyone = 'Everyone',
   AllExistingSupporters = 'AllExistingSupporters',
@@ -110,7 +111,7 @@ const styles = ({ spacing, typography }: Theme) => createStyles({
   },
   testListAndEditor: {
     display: "flex"
-  },
+  }
 });
 
 interface EpicTestFormProps extends WithStyles<typeof styles> {}
@@ -203,6 +204,13 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
       })
     }
   };
+
+  onTestDelete = (testName: string): void => {
+    const updatedTests = this.state.tests.filter(test => test.name !== testName);
+    this.setState({
+      tests: updatedTests
+    });
+  }
 
   onSelectedTestName = (testName: string): void => {
       this.setState({
@@ -316,9 +324,11 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
               visible={test.name === this.state.selectedTestName}
               key={test.name}
               editMode={this.state.editMode}
+              onDelete={this.onTestDelete}
             />)
           )}
         </div>
+
       </>
     )
   }

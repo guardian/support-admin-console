@@ -23,6 +23,8 @@ import { Region } from '../../utils/models';
 import EpicTestVariantsList from './epicTestVariantsList';
 import { renderVisibilityIcons, renderVisibilityHelpText } from './utilities';
 import {onFieldValidationChange, ValidationStatus} from '../helpers/validation';
+import ButtonWithConfirmationPopup from '../helpers/buttonWithConfirmationPopup';
+import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 
 const isNumber = (value: string): boolean => !Number.isNaN(Number(value));
 
@@ -73,6 +75,10 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
   visibilityHelperText: {
     marginTop: spacing.unit * 1.8,
     marginLeft: spacing.unit
+  },
+  deleteButton: {
+    marginTop: spacing.unit * 2,
+    float: "right"
   }
 });
 
@@ -82,7 +88,8 @@ interface EpicTestEditorProps extends WithStyles<typeof styles> {
   onChange: (updatedTest: EpicTest) => void,
   onValidationChange: (isValid: boolean) => void,
   visible: boolean,
-  editMode: boolean
+  editMode: boolean,
+  onDelete: (testName: string) => void
 }
 
 interface EpicTestEditorState {
@@ -125,6 +132,18 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
   onLocationsChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedLocations = [...event.target.value] as Region[];
     this.updateTest(test => ({...test, "locations": selectedLocations}));
+  };
+
+  renderDeleteTestButton = (testName: string) => {
+    return this.props.editMode && (
+      <ButtonWithConfirmationPopup
+        buttonText="Delete test"
+        confirmationText={`Are you sure? This cannot be undone!`}
+        onConfirm={() => this.props.onDelete(testName)}
+        icon={<DeleteSweepIcon />}
+        color={'secondary'}
+      />
+    );
   };
 
   renderEditor = (test: EpicTest): React.ReactNode => {
@@ -327,6 +346,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
               label={`Use local view log`}
             />
           </div>
+          <div className={classes.deleteButton}>{this.renderDeleteTestButton(test.name)}</div>
         </div>
       </div>
     )
@@ -336,7 +356,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
     return (
       this.props.test ? this.props.visible && this.renderEditor(this.props.test) : null
     )
-  }
+  };
 }
 
 export default withStyles(styles)(EpicTestEditor);
