@@ -7,6 +7,7 @@ import EpicTestVariantEditor from './epicTestVariantEditor';
 import { EpicVariant } from './epicTestsForm';
 import NewNameCreator from './newNameCreator';
 import {defaultCta} from "./ctaEditor";
+import {ValidationComponent} from "./validationComponent";
 
 
 const styles = ({ typography }: Theme) => createStyles({
@@ -20,15 +21,22 @@ interface EpicTestVariantsListProps extends WithStyles<typeof styles> {
   variants: EpicVariant[],
   onVariantsListChange: (variantList: EpicVariant[]) => void,
   testName: string,
-  editMode: boolean
+  editMode: boolean,
+  onValidationChange: (isValid: boolean) => void
 }
 
 type EpicTestVariantsListState = {
-  expandedVariantKey?: string
+  expandedVariantKey?: string,
+  validationStatus: {
+    [fieldName: string]: boolean
+  }
 }
-class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, EpicTestVariantsListState> {
+class EpicTestVariantsList extends ValidationComponent<EpicTestVariantsListProps, EpicTestVariantsListState> {
 
-  state: EpicTestVariantsListState = { expandedVariantKey: undefined}
+  state: EpicTestVariantsListState = {
+    expandedVariantKey: undefined,
+    validationStatus: {}
+  };
 
   onVariantSelected = (key: string): void => {
     this.setState({
@@ -123,6 +131,7 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
                   onVariantChange={this.onVariantChange}
                   editMode={this.props.editMode}
                   onDelete={this.onVariantDelete}
+                  onValidationChange={this.onFieldValidationChange(variant.name)}
                 />
               </ExpansionPanelDetails>
             </ExpansionPanel>

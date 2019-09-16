@@ -7,6 +7,7 @@ import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import ButtonWithConfirmationPopup from '../helpers/buttonWithConfirmationPopup';
 import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
+import {ValidationComponent, ValidationComponentState, ValidationStatus} from "./validationComponent";
 
 const styles = ({ palette, spacing, typography }: Theme) => createStyles({
   container: {
@@ -46,21 +47,17 @@ const styles = ({ palette, spacing, typography }: Theme) => createStyles({
     float: "right"
   }
 });
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 500,
-    },
-  },
-};
+
 interface Props extends WithStyles<typeof styles> {
   variant?: EpicVariant,
   onVariantChange: (updatedVariant: EpicVariant) => void,
   editMode: boolean,
   onDelete: (variantName: string) => void
+  onValidationChange: (isValid: boolean) => void
+}
+
+interface State {
+  validationStatus: ValidationStatus
 }
 
 enum VariantFieldNames {
@@ -72,7 +69,11 @@ enum VariantFieldNames {
   showTicker = "showTicker",
   backgroundImageUrl = "backgroundImageUrl"
 }
-class EpicTestVariantEditor extends React.Component<Props> {
+class EpicTestVariantEditor extends ValidationComponent<Props, State> {
+
+  state: State = {
+    validationStatus: {}
+  };
 
   updateVariant = (update: (variant: EpicVariant) => EpicVariant) => {
     if (this.props.variant) {
@@ -117,8 +118,7 @@ class EpicTestVariantEditor extends React.Component<Props> {
           <Typography>Fill out each field before publishing your test</Typography>
 
           <EditableTextField
-            required
-            text={variant.heading || "Since you're here..."}
+            text={variant.heading || ''}
             onSubmit={this.onTextChange("heading")}
             label="Hook:"
             editEnabled={this.props.editMode}
@@ -126,11 +126,17 @@ class EpicTestVariantEditor extends React.Component<Props> {
 
           <EditableTextField
             required
-            text={variant.paragraphs.join("\n") || "... I’m the second half of your opening line."}
+            text={variant.paragraphs.join("\n")}
             textarea={true}
             onSubmit={this.onParagraphsChange("paragraphs")}
             label="Paragraphs:"
             editEnabled={this.props.editMode}
+            validation={
+              {
+                isValid: (value: string) => value !== '',
+                onChange: this.onFieldValidationChange("paragraphs")
+              }
+            }
           />
 
           <CtaEditor

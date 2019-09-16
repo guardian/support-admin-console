@@ -6,7 +6,7 @@ import {
 import ArrowUpward from '@material-ui/icons/ArrowUpward';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import { renderVisibilityIcons } from './utilities';
-import { EpicTest } from './epicTestsForm';
+import {EpicTest, ModifiedTests} from './epicTestsForm';
 import NewNameCreator from './newNameCreator';
 
 
@@ -32,8 +32,11 @@ const styles = () => createStyles({
   selectedTest: {
     background: "#dcdcdc"
   },
-  modifiedTest: {
-    border: "1px solid red"
+  validTest: {
+    border: "2px solid green"
+  },
+  invalidTest: {
+    border: "2px solid red"
   },
   singleButtonContainer: {
     display: "block"
@@ -67,7 +70,7 @@ const styles = () => createStyles({
 
 interface EpicTestListProps extends WithStyles<typeof styles> {
   tests: EpicTest[],
-  modifiedTestNames: string[],
+  modifiedTests: ModifiedTests,
   selectedTestName: string | undefined,
   onUpdate: (tests: EpicTest[], modifiedTestName?: string) => void,
   onSelectedTestName: (testName: string) => void,
@@ -174,9 +177,12 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
           <List className={classes.testsList} component="nav">
             {this.props.tests.map((test, index) => {
 
+              const testStatus = this.props.modifiedTests[test.name];
+
               const classNames = [
                 classes.test,
-                this.props.modifiedTestNames.includes(test.name) ? classes.modifiedTest : '',
+                testStatus && testStatus.isValid ? classes.validTest : '',
+                testStatus && !testStatus.isValid ? classes.invalidTest : '',
                 this.props.selectedTestName === test.name ? classes.selectedTest : '',
               ].join(' ');
 

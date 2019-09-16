@@ -22,6 +22,7 @@ import EditableTextField from "../helpers/editableTextField"
 import { Region } from '../../utils/models';
 import EpicTestVariantsList from './epicTestVariantsList';
 import { renderVisibilityIcons, renderVisibilityHelpText } from './utilities';
+import {ValidationComponent} from "./validationComponent";
 
 
 const styles = ({ spacing, typography}: Theme) => createStyles({
@@ -78,22 +79,34 @@ interface EpicTestEditorProps extends WithStyles<typeof styles> {
   test?: EpicTest,
   hasChanged: boolean,
   onChange: (updatedTest: EpicTest) => void,
+  onValidationChange: (isValid: boolean) => void,
   visible: boolean,
   editMode: boolean
 }
 
-class EpicTestEditor extends React.Component<EpicTestEditorProps> {
+interface EpicTestEditorState {
+  validationStatus: {
+    [fieldName: string]: boolean
+  }
+}
 
+class EpicTestEditor extends ValidationComponent<EpicTestEditorProps, EpicTestEditorState> {
+
+  state: EpicTestEditorState = {
+    validationStatus: {}
+  };
+
+  // TODO - set hasCountryName
   updateTest = (update: (test: EpicTest) => EpicTest) => {
     if (this.props.test) {
       this.props.onChange(update(this.props.test))
     }
-  }
+  };
 
   onVariantsChange = (updatedVariantList: EpicVariant[]): void => {
-      if (this.props.test) {
-        this.updateTest(test => ({...test, "variants": updatedVariantList}));
-      }
+    if (this.props.test) {
+      this.updateTest(test => ({...test, "variants": updatedVariantList}));
+    }
   };
 
   onListChange = (fieldName: string) => (updatedString: string): void => {
@@ -113,14 +126,15 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps> {
   onLocationsChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedLocations = [...event.target.value] as Region[];
     this.updateTest(test => ({...test, "locations": selectedLocations}));
-  }
+  };
 
+  // TODO - move this inside the field's isValid?
   onNumberChange = (fieldName: string) => (updatedString: string): void => {
     Number.isNaN(Number(updatedString)) ? alert("Only numbers are allowed!") : this.updateTest( test=> ({
       ...test,
       [fieldName]: Number(updatedString) })
     );
-  }
+  };
 
   renderEditor = (test: EpicTest): React.ReactNode => {
     const {classes} = this.props;
@@ -185,6 +199,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps> {
             onVariantsListChange={this.onVariantsChange}
             testName={test.name}
             editMode={this.props.editMode}
+            onValidationChange={this.onFieldValidationChange('variantsList')}
           />
         </div>
 

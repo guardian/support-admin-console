@@ -77,12 +77,19 @@ interface LockStatus {
   timestamp?: string
 };
 
+// Stores tests which have been modified
+export type ModifiedTests = {
+  [testName: string]: {
+    isValid: boolean
+  }
+};
+
 type EpicTestsFormState = EpicTests & {
   previousStateFromServer: DataFromServer | null,
   selectedTestName?: string,
   editMode: boolean,
   lockStatus: LockStatus,
-  modifiedTestNames: string[]
+  modifiedTests: ModifiedTests
 };
 
 const styles = ({ spacing, typography }: Theme) => createStyles({
@@ -119,7 +126,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
       selectedTestName: undefined,
       editMode: false,
       lockStatus: { locked: false },
-      modifiedTestNames: [],
+      modifiedTests: {},
     };
   }
 
@@ -135,7 +142,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
           previousStateFromServer: serverData,
           lockStatus: serverData.status,
           editMode: serverData.status.email === serverData.userEmail,
-          modifiedTestNames: []
+          modifiedTests: {}
         });
       });
   };
@@ -167,13 +174,16 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
   };
 
   onTestsChange = (updatedTests: EpicTest[], modifiedTestName?: string): void => {
-    const modifiedTestNames = modifiedTestName && !this.state.modifiedTestNames.includes(modifiedTestName) ?
-      this.state.modifiedTestNames.concat([modifiedTestName]) :
-      this.state.modifiedTestNames;
+    if (modifiedTestName && !this.state.modifiedTests[modifiedTestName]) {
+      this.setState({
+        modifiedTests: update(this.state.modifiedTests, {
+          $merge: {[modifiedTestName]: {isValid: true}}  // not already modified, assume it's valid until told otherwise
+        })
+      })
+    }
 
     this.setState({
-      tests: updatedTests,
-      modifiedTestNames
+      tests: updatedTests
     });
   };
 
@@ -182,23 +192,31 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
     this.onTestsChange(updatedTests, updatedTest.name);
   };
 
+  onTestErrorStatusChange = (testName: string) => (isValid: boolean): void => {
+    this.setState({
+      modifiedTests: update(this.state.modifiedTests, {
+        $merge: { [testName]: {isValid} }
+      })
+    })
+  };
+
   onSelectedTestName = (testName: string): void => {
       this.setState({
         selectedTestName: testName
       })
-  }
+  };
 
   requestEpicTestsLock = () => {
     requestLock(FrontendSettingsType.epicTests).then(response =>
       response.ok ? this.fetchStateFromServer() : alert("Error - can't request lock!")
     );
-  }
+  };
 
   requestTakeControl = () => {
     requestTakeControl(FrontendSettingsType.epicTests).then(response =>
       response.ok ? this.fetchStateFromServer() : alert("Error - can't take back control!")
     );
-  }
+  };
 
   renderButtonsBar = () => {
     const {classes} = this.props;
@@ -232,10 +250,13 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
         <div>
           <ButtonWithConfirmationPopup
           buttonText="Publish"
-          confirmationText={`Are you sure? This will update ${this.state.modifiedTestNames.length} test(s)!`}
+          confirmationText={`Are you sure? This will update ${Object.keys(this.state.modifiedTests).length} test(s)!`}
           onConfirm={this.save}
           icon={<CloudUploadIcon />}
-          disabled={this.state.modifiedTestNames.length === 0}
+          disabled={
+            Object.keys(this.state.modifiedTests).length === 0 ||
+            Object.keys(this.state.modifiedTests).some(name => !this.state.modifiedTests[name].isValid)
+          }
           />
           <ButtonWithConfirmationPopup
           buttonText="Cancel"
@@ -275,7 +296,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
         <div className={classes.testListAndEditor}>
           <EpicTestsList
             tests={this.state.tests}
-            modifiedTestNames={this.state.modifiedTestNames}
+            modifiedTests={this.state.modifiedTests}
             selectedTestName={this.state.selectedTestName}
             onUpdate={this.onTestsChange}
             onSelectedTestName={this.onSelectedTestName}
@@ -285,8 +306,9 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
           {this.state.tests.map(test =>
             (<EpicTestEditor
               test={this.state.tests.find(test => test.name === this.state.selectedTestName)}
-              hasChanged={this.state.modifiedTestNames.includes(test.name)}
+              hasChanged={!!this.state.modifiedTests[test.name]}
               onChange={this.onTestChange}
+              onValidationChange={this.onTestErrorStatusChange(test.name)}
               visible={test.name === this.state.selectedTestName}
               key={test.name}
               editMode={this.state.editMode}
