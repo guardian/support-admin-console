@@ -141,7 +141,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
           ...serverData.value,
           previousStateFromServer: serverData,
           lockStatus: serverData.status,
-          editMode: serverData.status.email === serverData.userEmail,
+          editMode: true, //serverData.status.email === serverData.userEmail,
           modifiedTests: {}
         });
       });

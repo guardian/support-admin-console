@@ -22,7 +22,7 @@ import EditableTextField from "../helpers/editableTextField"
 import { Region } from '../../utils/models';
 import EpicTestVariantsList from './epicTestVariantsList';
 import { renderVisibilityIcons, renderVisibilityHelpText } from './utilities';
-import {ValidationComponent} from "./validationComponent";
+import {ValidationComponent, ValidationStatus} from "./validationComponent";
 
 
 const styles = ({ spacing, typography}: Theme) => createStyles({
@@ -85,15 +85,26 @@ interface EpicTestEditorProps extends WithStyles<typeof styles> {
 }
 
 interface EpicTestEditorState {
-  validationStatus: {
-    [fieldName: string]: boolean
-  }
+  validationStatus: ValidationStatus
 }
 
-class EpicTestEditor extends ValidationComponent<EpicTestEditorProps, EpicTestEditorState> {
+class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditorState> {
 
   state: EpicTestEditorState = {
     validationStatus: {}
+  };
+
+  onFieldValidationChange = (fieldName: string) => (valid: boolean): void => {
+    this.setState((state) => {
+      const newValidationStatus: ValidationStatus = Object.assign({}, state.validationStatus);
+      newValidationStatus[fieldName] = valid;
+      return { validationStatus: newValidationStatus }
+    }, () => {
+      const hasInvalidField = Object.keys(this.state.validationStatus)
+        .some(name => this.state.validationStatus[name] === false);
+
+      this.props.onValidationChange(!hasInvalidField);
+    });
   };
 
   // TODO - set hasCountryName

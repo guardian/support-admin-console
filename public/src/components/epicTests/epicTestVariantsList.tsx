@@ -7,14 +7,17 @@ import EpicTestVariantEditor from './epicTestVariantEditor';
 import { EpicVariant } from './epicTestsForm';
 import NewNameCreator from './newNameCreator';
 import {defaultCta} from "./ctaEditor";
-import {ValidationComponent} from "./validationComponent";
+import {ValidationComponent, ValidationStatus} from "./validationComponent";
 
 
 const styles = ({ typography }: Theme) => createStyles({
   h4: {
     fontSize: typography.pxToRem(20),
     fontWeight: typography.fontWeightMedium,
-  }
+  },
+  error: {
+    border: "2px solid red"
+  },
 });
 
 interface EpicTestVariantsListProps extends WithStyles<typeof styles> {
@@ -27,15 +30,26 @@ interface EpicTestVariantsListProps extends WithStyles<typeof styles> {
 
 type EpicTestVariantsListState = {
   expandedVariantKey?: string,
-  validationStatus: {
-    [fieldName: string]: boolean
-  }
+  validationStatus: ValidationStatus
 }
-class EpicTestVariantsList extends ValidationComponent<EpicTestVariantsListProps, EpicTestVariantsListState> {
+class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, EpicTestVariantsListState> {
 
   state: EpicTestVariantsListState = {
     expandedVariantKey: undefined,
     validationStatus: {}
+  };
+
+  onFieldValidationChange = (fieldName: string) => (valid: boolean): void => {
+    this.setState((state) => {
+      const newValidationStatus: ValidationStatus = Object.assign({}, state.validationStatus);
+      newValidationStatus[fieldName] = valid;
+      return { validationStatus: newValidationStatus }
+    }, () => {
+      const hasInvalidField = Object.keys(this.state.validationStatus)
+        .some(name => this.state.validationStatus[name] === false);
+
+      this.props.onValidationChange(!hasInvalidField);
+    });
   };
 
   onVariantSelected = (key: string): void => {
@@ -108,15 +122,20 @@ class EpicTestVariantsList extends ValidationComponent<EpicTestVariantsListProps
 
   renderVariantsList = (): React.ReactNode => {
     const { classes } = this.props;
+    console.log("this.state.validationStatus",this.state.validationStatus)
     return (
       <>
         {this.props.variants.map(variant => {
           const key = this.createVariantKey(variant.name);
+
           return (
             <ExpansionPanel
               key={key}
               expanded={this.state.expandedVariantKey === key}
               onChange={this.onExpansionPanelChange(key)}
+              className={
+                this.state.validationStatus[variant.name] === false ? classes.error : ''
+              }
             >
               <ExpansionPanelSummary
                 expandIcon={<ExpandMoreIcon />}

@@ -1,6 +1,7 @@
 import React from 'react';
 
 export interface ValidationComponentProps {
+  // Call this when the validation status of the component as a whole changes
   onValidationChange: (isValid: boolean) => void
 }
 
@@ -12,27 +13,19 @@ export interface ValidationComponentState {
   validationStatus: ValidationStatus
 }
 
-export class ValidationComponent<
-  P extends ValidationComponentProps,
-  S extends ValidationComponentState> extends React.Component<P, S> {
+export class ValidationComponent extends React.Component<ValidationComponentProps, ValidationComponentState> {
 
-  reportValidationStatus = (validationStatus: ValidationStatus): void => {
-    const hasInvalidField = Object.keys(validationStatus)
-      .some(name => validationStatus[name] === false);
-
-    this.props.onValidationChange(!hasInvalidField);
-  };
-
+  // Call this when a single field in the component updates
   onFieldValidationChange = (fieldName: string) => (valid: boolean): void => {
-    const newValidationStatus = {
-      ...this.state.validationStatus,
-      [fieldName]: valid
-    };
+    this.setState((state) => {
+      const newValidationStatus: ValidationStatus = Object.assign({}, state.validationStatus);
+      newValidationStatus[fieldName] = valid;
+      return { validationStatus: newValidationStatus }
+    }, () => {
+      const hasInvalidField = Object.keys(this.state.validationStatus)
+        .some(name => this.state.validationStatus[name] === false);
 
-    this.reportValidationStatus(newValidationStatus);
-
-    this.setState({
-      validationStatus: newValidationStatus
+      this.props.onValidationChange(!hasInvalidField);
     });
   };
 }

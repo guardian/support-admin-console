@@ -67,6 +67,7 @@ class EditableTextField extends React.Component<EditableTextFieldProps, Editable
   componentDidMount() {
     if (this.props.validation) {
       // Report initial validation status
+      console.log("componentDidMount", this.props.label, this.props.validation.isValid(this.state.currentText))
       this.props.validation.onChange(this.props.validation.isValid(this.state.currentText))
     }
   }

@@ -69,7 +69,8 @@ enum VariantFieldNames {
   showTicker = "showTicker",
   backgroundImageUrl = "backgroundImageUrl"
 }
-class EpicTestVariantEditor extends ValidationComponent<Props, State> {
+
+class EpicTestVariantEditor extends React.Component<Props, State> {
 
   state: State = {
     validationStatus: {}
@@ -79,6 +80,19 @@ class EpicTestVariantEditor extends ValidationComponent<Props, State> {
     if (this.props.variant) {
       this.props.onVariantChange(update(this.props.variant));
     }
+  };
+
+  onFieldValidationChange = (fieldName: string) => (valid: boolean): void => {
+    this.setState((state) => {
+      const newValidationStatus: ValidationStatus = Object.assign({}, state.validationStatus);
+      newValidationStatus[fieldName] = valid;
+      return { validationStatus: newValidationStatus }
+    }, () => {
+      const hasInvalidField = Object.keys(this.state.validationStatus)
+        .some(name => this.state.validationStatus[name] === false);
+
+      this.props.onValidationChange(!hasInvalidField);
+    });
   };
 
   onCtaUpdate = (cta?: Cta): void => {
