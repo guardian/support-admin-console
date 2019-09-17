@@ -65,6 +65,9 @@ const styles = () => createStyles({
   arrowIcon: {
     height: "20px",
     "flex-shrink": "1"
+  },
+  deleted: {
+    backgroundColor: "#767676"
   }
 });
 
@@ -184,6 +187,7 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
                 testStatus && testStatus.isValid ? classes.validTest : '',
                 testStatus && !testStatus.isValid ? classes.invalidTest : '',
                 this.props.selectedTestName === test.name ? classes.selectedTest : '',
+                testStatus && testStatus.isDeleted ? classes.deleted : ''
               ].join(' ');
 
               return (

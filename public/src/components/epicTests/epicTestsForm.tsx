@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import update from 'immutability-helper';
 import {createStyles, Theme, withStyles, WithStyles, CssBaseline, Typography} from "@material-ui/core";
 import EpicTestEditor from './epicTestEditor';
@@ -81,7 +81,8 @@ interface LockStatus {
 // Stores tests which have been modified
 export type ModifiedTests = {
   [testName: string]: {
-    isValid: boolean
+    isValid: boolean,
+    isDeleted: boolean
   }
 };
 
@@ -155,9 +156,11 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
   };
 
   save = () => {
+    const updatedTests = this.state.tests.filter(test =>
+      !(this.state.modifiedTests[test.name] && this.state.modifiedTests[test.name].isDeleted));
     const newState = update(this.state.previousStateFromServer, {
       value: {
-        tests: { $set: this.state.tests }
+        tests: { $set: updatedTests }
       }
     });
 
@@ -179,7 +182,10 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
       this.setState({
         modifiedTests: {
           ...this.state.modifiedTests,
-          [modifiedTestName]: {isValid: true}  // not already modified, assume it's valid until told otherwise
+          [modifiedTestName]: {
+            isValid: true, // not already modified, assume it's valid until told otherwise
+            isDeleted: false
+          }
         }
       })
     }
@@ -199,16 +205,25 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
       this.setState({
         modifiedTests: {
           ...this.state.modifiedTests,
-          [testName]: {isValid}
+          [testName]: {
+            ...this.state.modifiedTests[testName],
+            isValid
+          }
         }
-      })
+      });
     }
   };
 
   onTestDelete = (testName: string): void => {
-    const updatedTests = this.state.tests.filter(test => test.name !== testName);
+    const updatedState = this.state.modifiedTests[testName] ?
+      { ...this.state.modifiedTests[testName], isDeleted: true } :
+      { isValid: true, isDeleted: true};
+
     this.setState({
-      tests: updatedTests
+      modifiedTests: {
+        ...this.state.modifiedTests,
+        [testName]: updatedState
+      }
     });
   }
 
@@ -227,6 +242,16 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
   requestTakeControl = () => {
     requestTakeControl(FrontendSettingsType.epicTests).then(response =>
       response.ok ? this.fetchStateFromServer() : alert("Error - can't take back control!")
+    );
+  };
+
+  buildConfirmationText = (modifiedTests: ModifiedTests): ReactElement => {
+    const numberModified = Object.keys(this.state.modifiedTests).filter(key => !this.state.modifiedTests[key].isDeleted).length;
+    const numberDeleted = Object.keys(this.state.modifiedTests).filter(key => this.state.modifiedTests[key].isDeleted).length;
+    return (
+      <div>Are you sure? This will:
+          <br />&bull; update {`${numberModified} test${numberModified > 1 ? "s" : ""}`}
+          <br />&bull; delete {`${numberDeleted} test${numberDeleted > 1 ? "s" : ""}`}</div>
     );
   };
 
@@ -262,7 +287,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
         <div>
           <ButtonWithConfirmationPopup
           buttonText="Publish"
-          confirmationText={`Are you sure? This will update ${Object.keys(this.state.modifiedTests).length} test(s)!`}
+          confirmationText={this.buildConfirmationText(this.state.modifiedTests)}
           onConfirm={this.save}
           icon={<CloudUploadIcon />}
           disabled={
