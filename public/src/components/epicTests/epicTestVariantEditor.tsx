@@ -115,9 +115,6 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
     const {classes} = this.props;
     return (
         <>
-          <Typography variant={'h5'} className={classes.h5}>Required</Typography>
-          <Typography>Fill out each field before publishing your test</Typography>
-
           <EditableTextField
             text={variant.heading || ''}
             onSubmit={this.onTextChange("heading")}
@@ -146,9 +143,6 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
             update={this.onCtaUpdate}
             editMode={this.props.editMode}
           />
-
-          <Typography variant={'h5'} className={classes.h5}>Optional</Typography>
-          <Typography>Extra fields to add or remove, often during campaigns</Typography>
 
           <EditableTextField
             text={variant.highlightedText || "Support The Guardian from as little as %%CURRENCY_SYMBOL%%1 – and it only takes a minute. Thank you."}
