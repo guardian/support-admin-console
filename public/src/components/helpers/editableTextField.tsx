@@ -9,9 +9,14 @@ const styles = ({ typography, spacing }: Theme) => createStyles({
   container: {
     marginLeft: 0,
     marginRight: "8px",
-    width: "100%",
     display: "flex",
     "justify-content": "space-between"
+  },
+  numberContainer: {
+    width: "30%"
+  },
+  textContainer: {
+    width: "100%"
   },
   formControl: {
     marginTop: spacing.unit * 2,
@@ -50,6 +55,7 @@ interface EditableTextFieldProps extends WithStyles<typeof styles> {
   required?: boolean,
   editEnabled: boolean,
   validation?: Validation
+  isNumberField?: boolean
 }
 
 interface EditableTextFieldState {
@@ -124,7 +130,7 @@ class EditableTextField extends React.Component<EditableTextFieldProps, Editable
     const {classes} = this.props;
     return (
       <>
-        <div className={classes.container}>
+        <div className={`${classes.container} ${this.props.isNumberField ? classes.numberContainer : classes.textContainer}`}>
           <FormControl
             required={this.props.required}
             className={classes.formControl}
