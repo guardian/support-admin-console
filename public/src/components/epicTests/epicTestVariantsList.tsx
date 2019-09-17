@@ -109,7 +109,7 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
 
   renderVariantsList = (): React.ReactNode => {
     const { classes } = this.props;
-    console.log("this.state.validationStatus",this.state.validationStatus)
+
     return (
       <>
         {this.props.variants.map(variant => {
