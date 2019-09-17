@@ -67,7 +67,6 @@ class EditableTextField extends React.Component<EditableTextFieldProps, Editable
   componentDidMount() {
     if (this.props.validation) {
       // Report initial validation status
-      console.log("componentDidMount", this.props.label, this.props.validation.isValid(this.state.currentText))
       this.props.validation.onChange(this.props.validation.isValid(this.state.currentText))
     }
   }
@@ -95,13 +94,11 @@ class EditableTextField extends React.Component<EditableTextFieldProps, Editable
         this.props.validation.onChange(this.props.validation.isValid(this.state.currentText));
       }
 
-      if (!this.props.validation || this.props.validation.isValid(this.state.currentText)) {
-        this.props.onSubmit(this.state.currentText);
+      this.props.onSubmit(this.state.currentText);
 
-        this.setState({
-          fieldEditMode: false
-        });
-      }
+      this.setState({
+        fieldEditMode: false
+      });
     } else {
       this.setState({
         fieldEditMode: true

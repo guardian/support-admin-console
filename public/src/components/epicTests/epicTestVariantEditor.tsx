@@ -7,7 +7,7 @@ import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import ButtonWithConfirmationPopup from '../helpers/buttonWithConfirmationPopup';
 import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
-import {ValidationComponent, ValidationComponentState, ValidationStatus} from "./validationComponent";
+import {onFieldValidationChange, ValidationStatus} from '../helpers/validation';
 
 const styles = ({ palette, spacing, typography }: Theme) => createStyles({
   container: {
@@ -82,19 +82,6 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
     }
   };
 
-  onFieldValidationChange = (fieldName: string) => (valid: boolean): void => {
-    this.setState((state) => {
-      const newValidationStatus: ValidationStatus = Object.assign({}, state.validationStatus);
-      newValidationStatus[fieldName] = valid;
-      return { validationStatus: newValidationStatus }
-    }, () => {
-      const hasInvalidField = Object.keys(this.state.validationStatus)
-        .some(name => this.state.validationStatus[name] === false);
-
-      this.props.onValidationChange(!hasInvalidField);
-    });
-  };
-
   onCtaUpdate = (cta?: Cta): void => {
     this.updateVariant(variant => ({...variant, cta}));
   };
@@ -148,7 +135,7 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
             validation={
               {
                 isValid: (value: string) => value !== '',
-                onChange: this.onFieldValidationChange("paragraphs")
+                onChange: onFieldValidationChange(this)("paragraphs")
               }
             }
           />

@@ -141,7 +141,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
           ...serverData.value,
           previousStateFromServer: serverData,
           lockStatus: serverData.status,
-          editMode: true, //serverData.status.email === serverData.userEmail,
+          editMode: serverData.status.email === serverData.userEmail,
           modifiedTests: {}
         });
       });
@@ -193,11 +193,13 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
   };
 
   onTestErrorStatusChange = (testName: string) => (isValid: boolean): void => {
-    this.setState({
-      modifiedTests: update(this.state.modifiedTests, {
-        $merge: { [testName]: {isValid} }
+    if (this.state.modifiedTests[testName]) {
+      this.setState({
+        modifiedTests: update(this.state.modifiedTests, {
+          $merge: {[testName]: {isValid}}
+        })
       })
-    })
+    }
   };
 
   onSelectedTestName = (testName: string): void => {

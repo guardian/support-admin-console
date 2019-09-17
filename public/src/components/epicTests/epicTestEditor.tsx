@@ -22,7 +22,7 @@ import EditableTextField from "../helpers/editableTextField"
 import { Region } from '../../utils/models';
 import EpicTestVariantsList from './epicTestVariantsList';
 import { renderVisibilityIcons, renderVisibilityHelpText } from './utilities';
-import {ValidationComponent, ValidationStatus} from "./validationComponent";
+import {onFieldValidationChange, ValidationStatus} from '../helpers/validation';
 
 
 const styles = ({ spacing, typography}: Theme) => createStyles({
@@ -42,7 +42,7 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
     margin: "10px 0 15px 0"
   },
   hasChanged: {
-    color: 'red'
+    color: 'orange'
   },
   h3: {
     fontSize: typography.pxToRem(24),
@@ -92,19 +92,6 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
 
   state: EpicTestEditorState = {
     validationStatus: {}
-  };
-
-  onFieldValidationChange = (fieldName: string) => (valid: boolean): void => {
-    this.setState((state) => {
-      const newValidationStatus: ValidationStatus = Object.assign({}, state.validationStatus);
-      newValidationStatus[fieldName] = valid;
-      return { validationStatus: newValidationStatus }
-    }, () => {
-      const hasInvalidField = Object.keys(this.state.validationStatus)
-        .some(name => this.state.validationStatus[name] === false);
-
-      this.props.onValidationChange(!hasInvalidField);
-    });
   };
 
   // TODO - set hasCountryName
@@ -210,7 +197,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
             onVariantsListChange={this.onVariantsChange}
             testName={test.name}
             editMode={this.props.editMode}
-            onValidationChange={this.onFieldValidationChange('variantsList')}
+            onValidationChange={onFieldValidationChange(this)('variantsList')}
           />
         </div>
 
