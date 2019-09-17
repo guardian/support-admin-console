@@ -33,6 +33,11 @@ const styles = ({ typography, spacing }: Theme) => createStyles({
   }
 });
 
+interface Validation {
+  isValid: (value: string) => boolean,
+  onChange: (valid: boolean) => void  //called every time the validation status of this field changes
+}
+
 interface EditableTextFieldProps extends WithStyles<typeof styles> {
   text: string,
   label: string,
@@ -43,20 +48,28 @@ interface EditableTextFieldProps extends WithStyles<typeof styles> {
   helperText?: string,
   autoFocus?: boolean,
   required?: boolean,
-  editEnabled: boolean
+  editEnabled: boolean,
+  validation?: Validation
 }
 
 interface EditableTextFieldState {
   fieldEditMode: boolean,
-  currentText: string,
+  currentText: string
 }
 
 class EditableTextField extends React.Component<EditableTextFieldProps, EditableTextFieldState> {
 
   state: EditableTextFieldState =  {
-        fieldEditMode: this.props.startInEditMode || false,
-        currentText: this.props.text,
-      }
+    fieldEditMode: this.props.startInEditMode || false,
+    currentText: this.props.text
+  };
+
+  componentDidMount() {
+    if (this.props.validation) {
+      // Report initial validation status
+      this.props.validation.onChange(this.props.validation.isValid(this.state.currentText))
+    }
+  }
 
   componentDidUpdate(prevProps: EditableTextFieldProps) {
     if (prevProps.text !== this.props.text) {
@@ -67,8 +80,20 @@ class EditableTextField extends React.Component<EditableTextFieldProps, Editable
     }
   }
 
+  onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = event.target.value;
+
+    this.setState({
+      currentText: newValue
+    })
+  };
+
   onClickButton = (): void => {
     if (this.state.fieldEditMode) {
+      if (this.props.validation) {
+        this.props.validation.onChange(this.props.validation.isValid(this.state.currentText));
+      }
+
       this.props.onSubmit(this.state.currentText);
 
       this.setState({
@@ -117,14 +142,10 @@ class EditableTextField extends React.Component<EditableTextFieldProps, Editable
               name={this.props.label}
               disabled={!this.state.fieldEditMode}
               value={this.state.currentText}
-              onChange={event => {
-                const newValue = event.target.value;
-                this.setState({
-                  currentText: newValue
-                })
-              }}
+              onChange={this.onChange}
               helperText={this.props.helperText}
               autoFocus={this.props.autoFocus}
+              error={this.props.validation ? !this.props.validation.isValid(this.state.currentText) : false}
             />
           </FormControl>
          {this.showButton()}

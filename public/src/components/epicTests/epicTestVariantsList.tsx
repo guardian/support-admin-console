@@ -7,28 +7,37 @@ import EpicTestVariantEditor from './epicTestVariantEditor';
 import { EpicVariant } from './epicTestsForm';
 import NewNameCreator from './newNameCreator';
 import {defaultCta} from "./ctaEditor";
+import {onFieldValidationChange, ValidationStatus} from '../helpers/validation';
 
 
 const styles = ({ typography }: Theme) => createStyles({
   h4: {
     fontSize: typography.pxToRem(20),
     fontWeight: typography.fontWeightMedium,
-  }
+  },
+  error: {
+    border: "2px solid red"
+  },
 });
 
 interface EpicTestVariantsListProps extends WithStyles<typeof styles> {
   variants: EpicVariant[],
   onVariantsListChange: (variantList: EpicVariant[]) => void,
   testName: string,
-  editMode: boolean
+  editMode: boolean,
+  onValidationChange: (isValid: boolean) => void
 }
 
 type EpicTestVariantsListState = {
-  expandedVariantKey?: string
+  expandedVariantKey?: string,
+  validationStatus: ValidationStatus
 }
 class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, EpicTestVariantsListState> {
 
-  state: EpicTestVariantsListState = { expandedVariantKey: undefined}
+  state: EpicTestVariantsListState = {
+    expandedVariantKey: undefined,
+    validationStatus: {}
+  };
 
   onVariantSelected = (key: string): void => {
     this.setState({
@@ -100,15 +109,20 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
 
   renderVariantsList = (): React.ReactNode => {
     const { classes } = this.props;
+
     return (
       <>
         {this.props.variants.map(variant => {
           const key = this.createVariantKey(variant.name);
+
           return (
             <ExpansionPanel
               key={key}
               expanded={this.state.expandedVariantKey === key}
               onChange={this.onExpansionPanelChange(key)}
+              className={
+                this.state.validationStatus[variant.name] === false ? classes.error : ''
+              }
             >
               <ExpansionPanelSummary
                 expandIcon={<ExpandMoreIcon />}
@@ -123,6 +137,7 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
                   onVariantChange={this.onVariantChange}
                   editMode={this.props.editMode}
                   onDelete={this.onVariantDelete}
+                  onValidationChange={onFieldValidationChange(this)(variant.name)}
                 />
               </ExpansionPanelDetails>
             </ExpansionPanel>

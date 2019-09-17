@@ -22,7 +22,9 @@ import EditableTextField from "../helpers/editableTextField"
 import { Region } from '../../utils/models';
 import EpicTestVariantsList from './epicTestVariantsList';
 import { renderVisibilityIcons, renderVisibilityHelpText } from './utilities';
+import {onFieldValidationChange, ValidationStatus} from '../helpers/validation';
 
+const isNumber = (value: string): boolean => !Number.isNaN(Number(value));
 
 const styles = ({ spacing, typography}: Theme) => createStyles({
   container: {
@@ -41,7 +43,7 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
     margin: "10px 0 15px 0"
   },
   hasChanged: {
-    color: 'red'
+    color: 'orange'
   },
   h3: {
     fontSize: typography.pxToRem(24),
@@ -78,22 +80,32 @@ interface EpicTestEditorProps extends WithStyles<typeof styles> {
   test?: EpicTest,
   hasChanged: boolean,
   onChange: (updatedTest: EpicTest) => void,
+  onValidationChange: (isValid: boolean) => void,
   visible: boolean,
   editMode: boolean
 }
 
-class EpicTestEditor extends React.Component<EpicTestEditorProps> {
+interface EpicTestEditorState {
+  validationStatus: ValidationStatus
+}
 
+class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditorState> {
+
+  state: EpicTestEditorState = {
+    validationStatus: {}
+  };
+
+  // TODO - set hasCountryName
   updateTest = (update: (test: EpicTest) => EpicTest) => {
     if (this.props.test) {
       this.props.onChange(update(this.props.test))
     }
-  }
+  };
 
   onVariantsChange = (updatedVariantList: EpicVariant[]): void => {
-      if (this.props.test) {
-        this.updateTest(test => ({...test, "variants": updatedVariantList}));
-      }
+    if (this.props.test) {
+      this.updateTest(test => ({...test, "variants": updatedVariantList}));
+    }
   };
 
   onListChange = (fieldName: string) => (updatedString: string): void => {
@@ -113,14 +125,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps> {
   onLocationsChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedLocations = [...event.target.value] as Region[];
     this.updateTest(test => ({...test, "locations": selectedLocations}));
-  }
-
-  onNumberChange = (fieldName: string) => (updatedString: string): void => {
-    Number.isNaN(Number(updatedString)) ? alert("Only numbers are allowed!") : this.updateTest( test=> ({
-      ...test,
-      [fieldName]: Number(updatedString) })
-    );
-  }
+  };
 
   renderEditor = (test: EpicTest): React.ReactNode => {
     const {classes} = this.props;
@@ -178,13 +183,13 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps> {
         </div>
 
         <Typography variant={'h3'} className={classes.h3}>Variants</Typography>
-        {/* TODO: add validation to ensure at least one variant exists before publishing is allowed */}
         <div>
           <EpicTestVariantsList
             variants={test.variants}
             onVariantsListChange={this.onVariantsChange}
             testName={test.name}
             editMode={this.props.editMode}
+            onValidationChange={onFieldValidationChange(this)('variantsList')}
           />
         </div>
 
@@ -278,10 +283,23 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps> {
 
           <EditableTextField
             text={test.maxViewsCount.toString()}
-            onSubmit={this.onNumberChange("maxViewsCount")}
+            onSubmit={ value => {
+              if (isNumber(value)) {
+                this.updateTest(test => ({
+                  ...test,
+                  maxViewsCount: Number(value)
+                }))
+              }
+            }}
             label="Max views count"
             helperText="Must be a number"
             editEnabled={this.props.editMode}
+            validation={
+              {
+                isValid: (value: string) => isNumber(value),
+                onChange: onFieldValidationChange(this)("maxViewsCount")
+              }
+            }
           />
 
           <div>
