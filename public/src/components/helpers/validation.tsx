@@ -16,7 +16,10 @@ import React from "react";
  *
  *   <Input
  *     label="email"
- *     onChange={onFieldValidationChange(this)('email')}
+ *     onChange={value => {
+ *       const isValid = value !== '';
+ *       onFieldValidationChange(this)('email')(isValid)
+*      }}
  *   />
  * }
  *
