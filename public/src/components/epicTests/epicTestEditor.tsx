@@ -24,6 +24,7 @@ import EpicTestVariantsList from './epicTestVariantsList';
 import { renderVisibilityIcons, renderVisibilityHelpText } from './utilities';
 import {onFieldValidationChange, ValidationStatus} from '../helpers/validation';
 
+const isNumber = (value: string): boolean => !Number.isNaN(Number(value));
 
 const styles = ({ spacing, typography}: Theme) => createStyles({
   container: {
@@ -126,14 +127,6 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
     this.updateTest(test => ({...test, "locations": selectedLocations}));
   };
 
-  // TODO - move this inside the field's isValid?
-  onNumberChange = (fieldName: string) => (updatedString: string): void => {
-    Number.isNaN(Number(updatedString)) ? alert("Only numbers are allowed!") : this.updateTest( test=> ({
-      ...test,
-      [fieldName]: Number(updatedString) })
-    );
-  };
-
   renderEditor = (test: EpicTest): React.ReactNode => {
     const {classes} = this.props;
 
@@ -190,7 +183,6 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
         </div>
 
         <Typography variant={'h3'} className={classes.h3}>Variants</Typography>
-        {/* TODO: add validation to ensure at least one variant exists before publishing is allowed */}
         <div>
           <EpicTestVariantsList
             variants={test.variants}
@@ -291,10 +283,23 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
 
           <EditableTextField
             text={test.maxViewsCount.toString()}
-            onSubmit={this.onNumberChange("maxViewsCount")}
+            onSubmit={ value => {
+              if (isNumber(value)) {
+                this.updateTest(test => ({
+                  ...test,
+                  maxViewsCount: Number(value)
+                }))
+              }
+            }}
             label="Max views count"
             helperText="Must be a number"
             editEnabled={this.props.editMode}
+            validation={
+              {
+                isValid: (value: string) => isNumber(value),
+                onChange: onFieldValidationChange(this)("maxViewsCount")
+              }
+            }
           />
 
           <div>
