@@ -176,9 +176,10 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
   onTestsChange = (updatedTests: EpicTest[], modifiedTestName?: string): void => {
     if (modifiedTestName && !this.state.modifiedTests[modifiedTestName]) {
       this.setState({
-        modifiedTests: update(this.state.modifiedTests, {
-          $merge: {[modifiedTestName]: {isValid: true}}  // not already modified, assume it's valid until told otherwise
-        })
+        modifiedTests: {
+          ...this.state.modifiedTests,
+          [modifiedTestName]: {isValid: true}  // not already modified, assume it's valid until told otherwise
+        }
       })
     }
 
@@ -195,9 +196,10 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
   onTestErrorStatusChange = (testName: string) => (isValid: boolean): void => {
     if (this.state.modifiedTests[testName]) {
       this.setState({
-        modifiedTests: update(this.state.modifiedTests, {
-          $merge: {[testName]: {isValid}}
-        })
+        modifiedTests: {
+          ...this.state.modifiedTests,
+          [testName]: {isValid}
+        }
       })
     }
   };

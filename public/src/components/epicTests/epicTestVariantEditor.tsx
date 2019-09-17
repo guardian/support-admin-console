@@ -132,6 +132,7 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
             onSubmit={this.onParagraphsChange("paragraphs")}
             label="Paragraphs:"
             editEnabled={this.props.editMode}
+            helperText="Must not be empty"
             validation={
               {
                 isValid: (value: string) => value !== '',
