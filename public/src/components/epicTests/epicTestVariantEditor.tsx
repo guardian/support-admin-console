@@ -9,6 +9,7 @@ import ButtonWithConfirmationPopup from '../helpers/buttonWithConfirmationPopup'
 import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 import {onFieldValidationChange, ValidationStatus} from '../helpers/validation';
 
+
 const styles = ({ palette, spacing, typography }: Theme) => createStyles({
   container: {
     width: "100%",
@@ -99,11 +100,11 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
     this.updateVariant(variant => ({...variant, [fieldName]: updatedBool}))
   };
 
-  renderDeleteButton = (variantName: string) => {
+  renderDeleteVariantButton = (variantName: string) => {
     return this.props.editMode && (
       <ButtonWithConfirmationPopup
         buttonText="Delete variant"
-        confirmationText={`Are you sure?`}
+        confirmationText={`Are you sure? This cannot be undone!`}
         onConfirm={() => this.props.onDelete(variantName)}
         icon={<DeleteSweepIcon />}
         color={'secondary'}
@@ -181,7 +182,7 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
             editEnabled={this.props.editMode}
           />
 
-          <div className={classes.deleteButton}>{this.renderDeleteButton(variant.name)}</div>
+          <div className={classes.deleteButton}>{this.renderDeleteVariantButton(variant.name)}</div>
 
         </>
     )
