@@ -1,16 +1,15 @@
 import React from 'react';
-
 import {
-  List, ListItem, createStyles, WithStyles, withStyles, Typography, Button
+  List, ListItem, createStyles, WithStyles, withStyles, Typography, Button, Theme
 } from "@material-ui/core";
 import ArrowUpward from '@material-ui/icons/ArrowUpward';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
-import { renderVisibilityIcons } from './utilities';
+import { renderVisibilityIcons, renderDeleteIcon } from './utilities';
 import {EpicTest, ModifiedTests} from './epicTestsForm';
 import NewNameCreator from './newNameCreator';
 
 
-const styles = () => createStyles({
+const styles = ( { typography }: Theme ) => createStyles({
   root: {
     width: "250px",
   },
@@ -67,7 +66,22 @@ const styles = () => createStyles({
     "flex-shrink": "1"
   },
   deleted: {
-    backgroundColor: "#767676"
+    backgroundColor: "#999999"
+  },
+  deletedLabel: {
+    backgroundColor: "red",
+    borderRadius: "2px",
+    padding: "2px",
+    margin: "2px 0 0 0"
+  },
+  toBeDeleted: {
+    fontSize: typography.pxToRem(10),
+    fontWeight: typography.fontWeightMedium,
+    backgroundColor: "#f44336",
+    borderRadius: "2px",
+    padding: "2px",
+    width: "75px",
+    textAlign: "center"
   }
 });
 
@@ -184,7 +198,7 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
 
               const classNames = [
                 classes.test,
-                testStatus && testStatus.isValid ? classes.validTest : '',
+                testStatus && testStatus.isValid && !testStatus.isDeleted? classes.validTest : '',
                 testStatus && !testStatus.isValid ? classes.invalidTest : '',
                 this.props.selectedTestName === test.name ? classes.selectedTest : '',
                 testStatus && testStatus.isDeleted ? classes.deleted : ''
@@ -199,8 +213,9 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
                   { this.props.editMode && this.renderReorderButtons(test.name, index) }
                   <div className={classes.testText}>
                     <Typography>{test.name}</Typography>
+                    {(testStatus && testStatus.isDeleted) && (<div><Typography className={classes.toBeDeleted}>To be deleted</Typography></div>)}
                   </div>
-                  {renderVisibilityIcons(test.isOn)}
+                  {testStatus && testStatus.isDeleted ? renderDeleteIcon() : renderVisibilityIcons(test.isOn)}
                 </ListItem>
               )
             })}

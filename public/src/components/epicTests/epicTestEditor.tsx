@@ -89,7 +89,8 @@ interface EpicTestEditorProps extends WithStyles<typeof styles> {
   onValidationChange: (isValid: boolean) => void,
   visible: boolean,
   editMode: boolean,
-  onDelete: (testName: string) => void
+  onDelete: (testName: string) => void,
+  isDeleted: boolean
 }
 
 interface EpicTestEditorState {

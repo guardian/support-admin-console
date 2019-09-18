@@ -1,6 +1,7 @@
 import React from 'react';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { Typography } from "@material-ui/core";
 
 export const renderVisibilityIcons = (isOn: boolean) => {
@@ -19,4 +20,10 @@ export const renderVisibilityHelpText = (isOn: boolean) => {
     :
     <Typography color={'textSecondary'}>(Visible at <a href="https://www.theguardian.com#show-draft-epics">theguardian.com#show-draft-epics</a>)</Typography>
   );
+}
+
+export const renderDeleteIcon = () => {
+  return (
+    <DeleteForeverIcon color={'error'} />
+  )
 }

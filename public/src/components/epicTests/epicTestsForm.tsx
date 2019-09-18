@@ -350,6 +350,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
               key={test.name}
               editMode={this.state.editMode}
               onDelete={this.onTestDelete}
+              isDeleted={this.state.modifiedTests[test.name] && this.state.modifiedTests[test.name].isDeleted}
             />)
           )}
         </div>
