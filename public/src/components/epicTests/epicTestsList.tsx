@@ -212,7 +212,7 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
                 >
                   { this.props.editMode && this.renderReorderButtons(test.name, index) }
                   <div className={classes.testText}>
-                    <Typography>{test.name}</Typography>
+                    <Typography noWrap={true}>{test.name}</Typography>
                     {(testStatus && testStatus.isDeleted) && (<div><Typography className={classes.toBeDeleted}>To be deleted</Typography></div>)}
                   </div>
                   {testStatus && testStatus.isDeleted ? renderDeleteIcon() : renderVisibilityIcons(test.isOn)}
