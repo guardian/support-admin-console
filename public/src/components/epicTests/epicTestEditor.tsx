@@ -21,7 +21,7 @@ import {
 import EditableTextField from "../helpers/editableTextField"
 import { Region } from '../../utils/models';
 import EpicTestVariantsList from './epicTestVariantsList';
-import { renderVisibilityIcons, renderVisibilityHelpText } from './utilities';
+import { renderVisibilityIcons, renderVisibilityHelpText, renderDeleteIcon } from './utilities';
 import {onFieldValidationChange, ValidationStatus} from '../helpers/validation';
 import ButtonWithConfirmationPopup from '../helpers/buttonWithConfirmationPopup';
 import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
@@ -79,6 +79,9 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
   deleteButton: {
     marginTop: spacing.unit * 2,
     float: "right"
+  },
+  isDeleted: {
+    color: "#f44336"
   }
 });
 
@@ -102,6 +105,10 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
   state: EpicTestEditorState = {
     validationStatus: {}
   };
+
+  isEditable = () => {
+    return this.props.editMode && !this.props.isDeleted;
+  }
 
   // TODO - set hasCountryName
   updateTest = (update: (test: EpicTest) => EpicTest) => {
@@ -136,10 +143,10 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
   };
 
   renderDeleteTestButton = (testName: string) => {
-    return this.props.editMode && (
+    return this.isEditable() && (
       <ButtonWithConfirmationPopup
         buttonText="Delete test"
-        confirmationText={`Are you sure? This cannot be undone!`}
+        confirmationText={`Are you sure? This can't be undone without cancelling entire edit session!`}
         onConfirm={() => this.props.onDelete(testName)}
         icon={<DeleteSweepIcon />}
         color={'secondary'}
@@ -154,7 +161,8 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
       <div className={classes.container}>
         <Typography variant={'h2'} className={classes.h2}>
           {this.props.test && this.props.test.name}
-          { this.props.hasChanged && <span className={classes.hasChanged}>&nbsp;(modified)</span> }
+          { (this.props.hasChanged && !this.props.isDeleted) && <span className={classes.hasChanged}>&nbsp;(modified)</span> }
+          { this.props.isDeleted && <span className={classes.isDeleted}>&nbsp;(to be deleted)</span>}
         </Typography>
 
         <div className={classes.switchWithIcon}>
@@ -164,7 +172,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
               <Switch
                 checked={test.isOn}
                 onChange={this.onSwitchChange("isOn")}
-                disabled={!this.props.editMode}
+                disabled={!this.isEditable()}
               />
             }
             label={`Test is ${test.isOn ? "live" : "draft"}`}
@@ -182,7 +190,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
               <Switch
                 checked={test.isLiveBlog}
                 onChange={this.onSwitchChange("isLiveBlog")}
-                disabled={!this.props.editMode}
+                disabled={!this.isEditable()}
               />
             }
             label="Liveblog Epic"
@@ -195,7 +203,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
               <Switch
                 checked={test.highPriority}
                 onChange={this.onSwitchChange("highPriority")}
-                disabled={!this.props.editMode}
+                disabled={!this.isEditable()}
               />
             }
             label="High priority"
@@ -208,7 +216,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
             variants={test.variants}
             onVariantsListChange={this.onVariantsChange}
             testName={test.name}
-            editMode={this.props.editMode}
+            editMode={this.isEditable()}
             onValidationChange={onFieldValidationChange(this)('variantsList')}
           />
         </div>
@@ -221,7 +229,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
             onSubmit={this.onListChange("tagIds")}
             label="Display on tags:"
             helperText="Separate each tag with a comma"
-            editEnabled={this.props.editMode}
+            editEnabled={this.isEditable()}
           />
 
           <EditableTextField
@@ -229,7 +237,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
             onSubmit={this.onListChange("sections")}
             label="Display on sections:"
             helperText="Separate each section with a comma"
-            editEnabled={this.props.editMode}
+            editEnabled={this.isEditable()}
           />
 
           <EditableTextField
@@ -237,7 +245,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
             onSubmit={this.onListChange("excludedTagIds")}
             label="Excluded tags:"
             helperText="Separate each tag with a comma"
-            editEnabled={this.props.editMode}
+            editEnabled={this.isEditable()}
           />
 
           <EditableTextField
@@ -245,7 +253,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
             onSubmit={this.onListChange("excludedSections")}
             label="Excluded sections:"
             helperText="Separate each section with a comma"
-            editEnabled={this.props.editMode}
+            editEnabled={this.isEditable()}
           />
 
           <Typography variant={'h3'} className={classes.h3}>Audience</Typography>
@@ -265,7 +273,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
                 onChange={this.onLocationsChange}
                 input={<Input id="locations-select-multiple-checkbox" />}
                 renderValue={selected => (selected as string[]).join(', ')}
-                disabled={!this.props.editMode}
+                disabled={!this.isEditable()}
               >
                 {Object.values(Region).map(region => (
                   <MenuItem key={region} value={region} >
@@ -295,7 +303,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
                     key={cohort}
                     control={<Radio />}
                     label={cohort}
-                    disabled={!this.props.editMode}
+                    disabled={!this.isEditable()}
                   />
                 )}
               </RadioGroup>
@@ -313,7 +321,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
             }}
             label="Max views count"
             helperText="Must be a number"
-            editEnabled={this.props.editMode}
+            editEnabled={this.isEditable()}
             validation={
               {
                 isValid: (value: string) => isNumber(value),
@@ -328,7 +336,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
                 <Switch
                   checked={test.alwaysAsk}
                   onChange={this.onSwitchChange("alwaysAsk")}
-                  disabled={!this.props.editMode}
+                  disabled={!this.isEditable()}
                 />
               }
               label={`Always ask`}
@@ -341,7 +349,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
                 <Switch
                   checked={test.useLocalViewLog}
                   onChange={this.onSwitchChange("useLocalViewLog")}
-                  disabled={!this.props.editMode}
+                  disabled={!this.isEditable()}
                 />
               }
               label={`Use local view log`}

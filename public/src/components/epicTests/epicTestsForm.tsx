@@ -250,8 +250,8 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
     const numberDeleted = Object.keys(this.state.modifiedTests).filter(key => this.state.modifiedTests[key].isDeleted).length;
     return (
       <div>Are you sure? This will:
-          <br />&bull; update {`${numberModified} test${numberModified > 1 ? "s" : ""}`}
-          <br />&bull; delete {`${numberDeleted} test${numberDeleted > 1 ? "s" : ""}`}</div>
+          <br />&bull; update {`${numberModified} test${numberModified !== 1 ? "s" : ""}`}
+          <br />&bull; delete {`${numberDeleted} test${numberDeleted !== 1 ? "s" : ""}`}</div>
     );
   };
 
@@ -297,7 +297,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
           />
           <ButtonWithConfirmationPopup
           buttonText="Cancel"
-          confirmationText="Are you sure? All unpublished data will be lost!"
+          confirmationText="Are you sure? All modified and deleted tests will be lost!"
           onConfirm={() => this.cancel()}
           icon={<RefreshIcon />}
           />
