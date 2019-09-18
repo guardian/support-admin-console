@@ -308,7 +308,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
 
   makeFriendlyDate = (timestamp: string): string => {
     const datetime = new Date(timestamp);
-    return `${datetime.getHours()}:${datetime.getMinutes()} on ${datetime.getDate()}/${datetime.getMonth() + 1}/${datetime.getFullYear()}`;
+    return `${datetime.getHours() < 10 ? "0" : ""}${datetime.getHours()}:${datetime.getMinutes() < 10 ? "0": ""}${datetime.getMinutes()} on ${datetime.getDate()}/${datetime.getMonth() + 1}/${datetime.getFullYear()}`;
   }
 
   makeFriendlyName = (email: string): string | undefined => {
