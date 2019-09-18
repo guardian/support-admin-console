@@ -121,8 +121,8 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
     this.props.onSelectedTestName(newTest.name);
   }
 
-  onTestSelected = (event: React.MouseEvent<HTMLInputElement>): void => {
-    this.props.onSelectedTestName(event.currentTarget.innerText)
+  onTestSelected = (testName: string) => (event: React.MouseEvent<HTMLInputElement>): void => {
+    this.props.onSelectedTestName(testName);
   };
 
   moveTestUp = (name: string) => {
@@ -207,7 +207,7 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
               return (
                 <ListItem
                   className={classNames}
-                  onClick={this.onTestSelected}
+                  onClick={this.onTestSelected(test.name)}
                   key={index}
                 >
                   { this.props.editMode && this.renderReorderButtons(test.name, index) }
