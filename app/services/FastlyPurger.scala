@@ -10,7 +10,7 @@ class FastlyPurger(url: String, ws: WSClient)(implicit val ec: ExecutionContext)
   private def errorMessage = s"Update succeeded but failed to purge the fastly cache, speak to a Developer!"
 
   def purge: Future[Either[String,Unit]] = {
-    val result = ws.url(url).get.map { result =>
+    val result = ws.url(url).execute("PURGE").map { result =>
       result.status match {
         case 200 =>
           logger.info(s"Purged fastly cache for $url")
