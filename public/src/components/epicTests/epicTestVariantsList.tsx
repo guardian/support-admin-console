@@ -136,7 +136,10 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
                   variant={variant}
                   onVariantChange={this.onVariantChange}
                   editMode={this.props.editMode}
-                  onDelete={this.onVariantDelete}
+                  onDelete={() => {
+                    this.onVariantDelete(variant.name);
+                    onFieldValidationChange(this)(variant.name)(true)
+                  }}
                   onValidationChange={onFieldValidationChange(this)(variant.name)}
                 />
               </ExpansionPanelDetails>

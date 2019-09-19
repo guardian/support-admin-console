@@ -53,7 +53,7 @@ interface Props extends WithStyles<typeof styles> {
   variant?: EpicVariant,
   onVariantChange: (updatedVariant: EpicVariant) => void,
   editMode: boolean,
-  onDelete: (variantName: string) => void
+  onDelete: () => void
   onValidationChange: (isValid: boolean) => void
 }
 
@@ -105,7 +105,7 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
       <ButtonWithConfirmationPopup
         buttonText="Delete variant"
         confirmationText={`Are you sure? This cannot be undone!`}
-        onConfirm={() => this.props.onDelete(variantName)}
+        onConfirm={() => this.props.onDelete()}
         icon={<DeleteSweepIcon />}
         color={'secondary'}
       />
