@@ -21,7 +21,7 @@ const styles = ({ spacing, typography }: Theme) => createStyles({
 
 interface ButtonWithConfirmationPopupProps extends WithStyles<typeof styles> {
   buttonText: string,
-  confirmationText: string | ReactElement,
+  confirmationText: string | ReactElement<any>,
   onConfirm: () => void,
   color?: ButtonProps["color"],
   icon: ReactElement<SvgIconProps>,
