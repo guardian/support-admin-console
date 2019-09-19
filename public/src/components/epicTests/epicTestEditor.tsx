@@ -85,6 +85,8 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
   }
 });
 
+const countryNameTemplate = '%%COUNTRY_NAME%%';
+
 interface EpicTestEditorProps extends WithStyles<typeof styles> {
   test?: EpicTest,
   hasChanged: boolean,
@@ -108,12 +110,22 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
 
   isEditable = () => {
     return this.props.editMode && !this.props.isDeleted;
-  }
+  };
 
-  // TODO - set hasCountryName
+  // To save dotcom from having to work this out
+  hasCountryName = (test: EpicTest): boolean => test.variants.some(variant =>
+    variant.heading && variant.heading.includes(countryNameTemplate) ||
+      variant.paragraphs.some(para => para.includes(countryNameTemplate))
+  );
+
   updateTest = (update: (test: EpicTest) => EpicTest) => {
     if (this.props.test) {
-      this.props.onChange(update(this.props.test))
+      const updatedTest = update(this.props.test);
+
+      this.props.onChange({
+        ...updatedTest,
+        hasCountryName: this.hasCountryName(updatedTest)
+      })
     }
   };
 
