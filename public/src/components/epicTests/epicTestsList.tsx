@@ -106,7 +106,7 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
       sections: [],
       excludedTagIds: [],
       excludedSections: [],
-      alwaysAsk: true,
+      alwaysAsk: false,
       userCohort: undefined,
       isLiveBlog: false,
       hasCountryName: false,
