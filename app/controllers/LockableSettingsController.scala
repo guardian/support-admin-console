@@ -5,6 +5,7 @@ import java.time.OffsetDateTime
 import cats.data.EitherT
 import cats.implicits._
 import com.gu.googleauth.AuthAction
+import com.typesafe.scalalogging.StrictLogging
 import controllers.LockableSettingsController.LockableSettingsResponse
 import io.circe.{Decoder, Encoder}
 import io.circe.syntax._
@@ -35,7 +36,7 @@ class LockableSettingsController[T : Decoder : Encoder](
   name: String,
   dataObjectSettings: S3ObjectSettings,
   fastlyPurger: Option[FastlyPurger]
-)(implicit ec: ExecutionContext) extends AbstractController(components) with Circe {
+)(implicit ec: ExecutionContext) extends AbstractController(components) with Circe with StrictLogging {
 
   private val lockObjectSettings = S3ObjectSettings(
     bucket = "support-admin-console",
@@ -85,14 +86,16 @@ class LockableSettingsController[T : Decoder : Encoder](
         val result: EitherT[Future, String, Unit] = for {
           _ <- EitherT(S3Json.putAsJson(dataObjectSettings, request.body)(s3Client))
           _ <- EitherT(setLockStatus(VersionedS3Data(LockStatus.unlocked, lockFileVersion)))
-          _ <- purgeFastlyCache
         } yield ()
 
         result.value.map {
           case Right(_) =>
             fastlyPurger.foreach(_.purge)
+            logger.info(s"Successfully published ${dataObjectSettings.key} (user ${request.user.email}")
             Ok("updated")
-          case Left(error) => InternalServerError(error)
+          case Left(error) =>
+            logger.error(s"Failed to publish ${dataObjectSettings.key} (user ${request.user.email}: $error")
+            InternalServerError(error)
         }
       } else {
         Future.successful(Conflict(s"You do not currently have ${dataObjectSettings.key} open for edit"))
@@ -109,10 +112,13 @@ class LockableSettingsController[T : Decoder : Encoder](
         val newLockStatus = LockStatus.locked(request.user.email)
 
         setLockStatus(VersionedS3Data(newLockStatus, lockFileVersion)).map {
-          case Right(_) => Ok("locked")
+          case Right(_) =>
+            logger.info(s"User ${request.user.email} took control of ${dataObjectSettings.key}")
+            Ok("locked")
           case Left(error) => InternalServerError(error)
         }
       } else {
+        logger.info(s"User ${request.user.email} failed to take control of ${dataObjectSettings.key} because it was already locked")
         Future.successful(Conflict(s"File ${dataObjectSettings.key} is already locked"))
       }
     }
@@ -125,10 +131,13 @@ class LockableSettingsController[T : Decoder : Encoder](
     withLockStatus { case VersionedS3Data(lockStatus, lockFileVersion) =>
       if (lockStatus.email.contains(request.user.email)) {
         setLockStatus(VersionedS3Data(LockStatus.unlocked, lockFileVersion)) map {
-          case Right(_) => Ok("unlocked")
+          case Right(_) =>
+            logger.info(s"User ${request.user.email} unlocked ${dataObjectSettings.key}")
+            Ok("unlocked")
           case Left(error) => InternalServerError(error)
         }
       } else {
+        logger.info(s"User ${request.user.email} tried to unlock ${dataObjectSettings.key}, but they did not have a lock")
         Future.successful(BadRequest(s"File ${dataObjectSettings.key} is not currently locked by this user"))
       }
     }
@@ -137,7 +146,9 @@ class LockableSettingsController[T : Decoder : Encoder](
   def takecontrol = authAction.async { request =>
      withLockStatus { case VersionedS3Data(lockStatus, lockFileVersion) =>
       setLockStatus(VersionedS3Data(LockStatus.locked(request.user.email), lockFileVersion)) map {
-        case Right(_) => Ok("unlocked")
+        case Right(_) =>
+          logger.info(s"User ${request.user.email} force-unlocked ${dataObjectSettings.key}, taking it from ${lockStatus.email}")
+          Ok("unlocked")
         case Left(error) => InternalServerError(error)
       }
     }
