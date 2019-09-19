@@ -340,6 +340,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
                 onChange: onFieldValidationChange(this)("maxViewsCount")
               }
             }
+            isNumberField
           />
 
           <div>

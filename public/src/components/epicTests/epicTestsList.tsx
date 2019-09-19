@@ -42,7 +42,7 @@ const styles = ( { typography }: Theme ) => createStyles({
   },
   buttonsContainer: {
     marginRight: "10px",
-    width: "20px",
+    minWidth: "20px"
   },
   arrowButton: {
     padding: "2px",
@@ -54,7 +54,8 @@ const styles = ( { typography }: Theme ) => createStyles({
   },
   testText: {
     textAlign: "left",
-    width: "200px",
+    minWidth: "160px",
+    maxWidth: "160px",
     marginRight: "10px"
   },
   testIndicator: {
@@ -210,7 +211,7 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
                   onClick={this.onTestSelected(test.name)}
                   key={index}
                 >
-                  { this.props.editMode && this.renderReorderButtons(test.name, index) }
+                  { this.props.editMode ? this.renderReorderButtons(test.name, index) : <div className={classes.buttonsContainer}></div>}
                   <div className={classes.testText}>
                     <Typography noWrap={true}>{test.name}</Typography>
                     {(testStatus && testStatus.isDeleted) && (<div><Typography className={classes.toBeDeleted}>To be deleted</Typography></div>)}

@@ -256,6 +256,22 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
     );
   };
 
+  makeFriendlyDate = (timestamp: string): string => {
+    const datetime = new Date(timestamp);
+    const hours = `${datetime.getHours() < 10 ? "0" : ""}${datetime.getHours()}`;
+    const minutes = `${datetime.getMinutes() < 10 ? "0": ""}${datetime.getMinutes()}`;
+    const date = datetime.getDate();
+    const month = datetime.getMonth() + 1;
+    const year = datetime.getFullYear();
+
+    return `${hours}:${minutes} on ${date}/${month}/${year}`;
+  }
+
+  makeFriendlyName = (email: string): string | undefined => {
+    const nameArr: RegExpMatchArray | null = email.match(/^([a-z]*)\.([a-z]*).*@.*/);
+    return nameArr ? `${nameArr[1][0].toUpperCase()}${nameArr[1].slice(1,)} ${nameArr[2][0].toUpperCase()}${nameArr[2].slice(1,)}` : undefined;
+  }
+
   renderButtonsBar = () => {
     const {classes} = this.props;
     if (!this.state.editMode) {
@@ -307,15 +323,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
     }
   }
 
-  makeFriendlyDate = (timestamp: string): string => {
-    const datetime = new Date(timestamp);
-    return `${datetime.getHours()}:${datetime.getMinutes()} on ${datetime.getDate()}/${datetime.getMonth() + 1}/${datetime.getFullYear()}`;
-  }
 
-  makeFriendlyName = (email: string): string | undefined => {
-    const nameArr: RegExpMatchArray | null = email.match(/^([a-z]*)\.([a-z]*).*@.*/);
-    return nameArr ? `${nameArr[1][0].toUpperCase()}${nameArr[1].slice(1,)} ${nameArr[2][0].toUpperCase()}${nameArr[2].slice(1,)}` : undefined;
-  }
 
   render(): React.ReactNode {
     const { classes } = this.props;
