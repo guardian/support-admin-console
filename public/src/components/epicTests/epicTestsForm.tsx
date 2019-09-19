@@ -246,8 +246,8 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
   };
 
   buildConfirmationText = (modifiedTests: ModifiedTests): ReactElement<any> => {
-    const numberModified = Object.keys(this.state.modifiedTests).filter(key => !this.state.modifiedTests[key].isDeleted).length;
-    const numberDeleted = Object.keys(this.state.modifiedTests).filter(key => this.state.modifiedTests[key].isDeleted).length;
+    const numberModified = Object.keys(modifiedTests).filter(key => !modifiedTests[key].isDeleted).length;
+    const numberDeleted = Object.keys(modifiedTests).filter(key => modifiedTests[key].isDeleted).length;
     return (
       <div>Are you sure? This will:
           <br />&bull; update {`${numberModified} test${numberModified !== 1 ? "s" : ""}`}
