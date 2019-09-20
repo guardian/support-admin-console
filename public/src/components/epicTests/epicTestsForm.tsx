@@ -261,7 +261,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
 
     const statusLine = (status: 'deleted' | 'created' | 'modified') => counts[status] > 0 &&
       <span>
-        <br />&bull; {status} {`${counts[status]} test${counts[status] !== 1 ? "s" : ""}`}
+        <br />&bull; {`${counts[status]} test${counts[status] !== 1 ? "s" : ""} (${status})`}
       </span>;
 
     return (
