@@ -51,8 +51,7 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
 
   isDuplicateName = (newName: string) => {
     const newLowerCase: string = newName.toLowerCase();
-    const existingLowerCase: string[] = this.props.existingNames.map(name => name.toLowerCase());
-    const isDuplicate = existingLowerCase.includes(newLowerCase);
+    const isDuplicate = this.props.existingNames.some(name => name.toLowerCase() === newLowerCase);
     return isDuplicate;
   }
 
