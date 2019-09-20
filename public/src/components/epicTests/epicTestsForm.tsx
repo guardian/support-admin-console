@@ -309,7 +309,9 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
           icon={<CloudUploadIcon />}
           disabled={
             Object.keys(this.state.modifiedTests).length === 0 ||
-            Object.keys(this.state.modifiedTests).some(name => !this.state.modifiedTests[name].isValid)
+            Object.keys(this.state.modifiedTests).some(name =>
+              !this.state.modifiedTests[name].isValid && !this.state.modifiedTests[name].isDeleted
+            )
           }
           />
           <ButtonWithConfirmationPopup
