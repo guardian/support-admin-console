@@ -82,7 +82,8 @@ interface LockStatus {
 export type ModifiedTests = {
   [testName: string]: {
     isValid: boolean,
-    isDeleted: boolean
+    isDeleted: boolean,
+    isNew: boolean
   }
 };
 
@@ -184,7 +185,8 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
           ...this.state.modifiedTests,
           [modifiedTestName]: {
             isValid: true, // not already modified, assume it's valid until told otherwise
-            isDeleted: false
+            isDeleted: false,
+            isNew: !this.state.tests.some(test => test.name === modifiedTestName)
           }
         }
       })
@@ -217,7 +219,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
   onTestDelete = (testName: string): void => {
     const updatedState = this.state.modifiedTests[testName] ?
       { ...this.state.modifiedTests[testName], isDeleted: true } :
-      { isValid: true, isDeleted: true};
+      { isValid: true, isDeleted: true, isNew: false};
 
     this.setState({
       modifiedTests: {
@@ -225,7 +227,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
         [testName]: updatedState
       }
     });
-  }
+  };
 
   onSelectedTestName = (testName: string): void => {
       this.setState({
@@ -246,12 +248,27 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
   };
 
   buildConfirmationText = (modifiedTests: ModifiedTests): ReactElement<any> => {
-    const numberModified = Object.keys(modifiedTests).filter(key => !modifiedTests[key].isDeleted).length;
-    const numberDeleted = Object.keys(modifiedTests).filter(key => modifiedTests[key].isDeleted).length;
+    const counts = {
+      deleted: 0,
+      created: 0,
+      modified: 0
+    };
+    Object.keys(modifiedTests).forEach(key => {
+      if (modifiedTests[key].isDeleted) counts.deleted++;
+      else if (modifiedTests[key].isNew) counts.created++;
+      else counts.modified++;
+    });
+
+    const statusLine = (status: 'deleted' | 'created' | 'modified') => counts[status] > 0 &&
+      <span>
+        <br />&bull; {`${counts[status]} test${counts[status] !== 1 ? "s" : ""} ${status}`}
+      </span>;
+
     return (
-      <div>Are you sure? This will:
-          <br />&bull; update {`${numberModified} test${numberModified !== 1 ? "s" : ""}`}
-          <br />&bull; delete {`${numberDeleted} test${numberDeleted !== 1 ? "s" : ""}`}
+      <div>Are you sure you want to save these changes?
+        {statusLine('deleted')}
+        {statusLine('created')}
+        {statusLine('modified')}
       </div>
     );
   };
@@ -362,6 +379,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
               editMode={this.state.editMode}
               onDelete={this.onTestDelete}
               isDeleted={this.state.modifiedTests[test.name] && this.state.modifiedTests[test.name].isDeleted}
+              isNew={this.state.modifiedTests[test.name] && this.state.modifiedTests[test.name].isNew}
             />)
           )}
         </div>

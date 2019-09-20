@@ -95,7 +95,8 @@ interface EpicTestEditorProps extends WithStyles<typeof styles> {
   visible: boolean,
   editMode: boolean,
   onDelete: (testName: string) => void,
-  isDeleted: boolean
+  isDeleted: boolean,
+  isNew: boolean
 }
 
 interface EpicTestEditorState {
@@ -169,12 +170,17 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
   renderEditor = (test: EpicTest): React.ReactNode => {
     const {classes} = this.props;
 
+    const statusText = () => {
+      if (this.props.isDeleted) return <span className={classes.isDeleted}>&nbsp;(to be deleted)</span>;
+      else if (this.props.isNew) return <span className={classes.hasChanged}>&nbsp;(new)</span>;
+      else if (this.props.hasChanged) return <span className={classes.hasChanged}>&nbsp;(modified)</span>;
+    };
+
     return (
       <div className={classes.container}>
         <Typography variant={'h2'} className={classes.h2}>
           {this.props.test && this.props.test.name}
-          { (this.props.hasChanged && !this.props.isDeleted) && <span className={classes.hasChanged}>&nbsp;(modified)</span> }
-          { this.props.isDeleted && <span className={classes.isDeleted}>&nbsp;(to be deleted)</span>}
+          {statusText()}
         </Typography>
 
         <div className={classes.switchWithIcon}>
