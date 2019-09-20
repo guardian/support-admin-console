@@ -32,7 +32,8 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
   container: {
     width: "100%",
     borderTop: `2px solid #999999`,
-    marginLeft: "15px"
+    marginLeft: spacing.unit * 2,
+    marginTop: spacing.unit * 6
   },
   formControl: {
     marginTop: spacing.unit * 2,
@@ -162,7 +163,6 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
         confirmationText={`Are you sure? This can't be undone without cancelling entire edit session!`}
         onConfirm={() => this.props.onDelete(testName)}
         icon={<DeleteSweepIcon />}
-        color={'secondary'}
       />
     );
   };

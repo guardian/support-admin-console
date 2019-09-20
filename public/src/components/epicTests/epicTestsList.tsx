@@ -7,7 +7,7 @@ import {EpicTest, ModifiedTests, UserCohort} from './epicTestsForm';
 import NewNameCreator from './newNameCreator';
 
 
-const styles = ( { typography }: Theme ) => createStyles({
+const styles = ( { typography, spacing }: Theme ) => createStyles({
   root: {
     width: "250px",
   },
@@ -81,6 +81,9 @@ const styles = ( { typography }: Theme ) => createStyles({
     padding: "2px",
     width: "75px",
     textAlign: "center"
+  },
+  spacer: {
+    minHeight: spacing.unit * 6
   }
 });
 
@@ -181,14 +184,14 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
     return (
       <>
         <div className={classes.root}>
-          {this.props.editMode && (
+          {this.props.editMode ? (
             <NewNameCreator
               text="test"
               existingNames={ this.props.tests.map(test => test.name) }
               onValidName={this.createTest}
               editEnabled={this.props.editMode}
             />
-          )}
+          ): (<div className={classes.spacer}>&nbsp;</div>)}
 
           <List className={classes.testsList} component="nav">
             {this.props.tests.map((test, index) => {
