@@ -18,6 +18,11 @@ const styles = ({ typography }: Theme) => createStyles({
   error: {
     border: "2px solid red"
   },
+  heading: {
+    fontSize: typography.pxToRem(14),
+    fontWeight: 'normal',
+    fontStyle: 'italic'
+  }
 });
 
 interface EpicTestVariantsListProps extends WithStyles<typeof styles> {
@@ -129,7 +134,9 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
                 aria-controls="variant-control"
                 id="variant-header"
               >
-                <Typography variant={'h4'} className={classes.h4}>{variant.name}</Typography>
+                <Typography variant={'h4'} className={classes.h4}>
+                  {variant.name} {variant.heading && <span className={classes.heading}>- "{variant.heading}"</span>}
+                </Typography>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
                 <EpicTestVariantEditor
