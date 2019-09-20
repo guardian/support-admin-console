@@ -66,7 +66,11 @@ object S3 extends S3Client with StrictLogging {
 
       if (currentVersion == data.version) {
 
+        val bytes = data.value.getBytes(StandardCharsets.UTF_8)
+        val stream = new ByteArrayInputStream(bytes)
+
         val metadata = new ObjectMetadata()
+        metadata.setContentLength(bytes.length)
         // https://docs.fastly.com/en/guides/how-caching-and-cdns-work#surrogate-headers
         objectSettings.cacheControl.foreach(metadata.setCacheControl)
         objectSettings.surrogateControl.foreach(cc => metadata.addUserMetadata("surrogate-control", cc))
@@ -74,14 +78,18 @@ object S3 extends S3Client with StrictLogging {
         val request = new PutObjectRequest(
           objectSettings.bucket,
           objectSettings.key,
-          new ByteArrayInputStream(data.value.getBytes(StandardCharsets.UTF_8)),
+          stream,
           metadata
         )
 
-        s3Client.putObject(
-          if (objectSettings.publicRead) request.withCannedAcl(CannedAccessControlList.PublicRead)
-          else request
-        )
+        try {
+          s3Client.putObject(
+            if (objectSettings.publicRead) request.withCannedAcl(CannedAccessControlList.PublicRead)
+            else request
+          )
+        } finally { // catch any exceptions higher up
+          stream.close()
+        }
         Right[String, RawVersionedS3Data](data)
       } else {
         logger.warn(s"Cannot update S3 object $objectSettings because provided version (${data.version}) does not match latest version ($currentVersion)")
