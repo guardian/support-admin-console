@@ -11,6 +11,7 @@ import {
   Radio,
   RadioGroup,
   Select,
+  Slider,
   Switch,
   Theme,
   Typography,
@@ -373,6 +374,9 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
               }
               label={`Use local view log`}
             />
+          </div>
+          <div>
+            <Slider></Slider>
           </div>
           <div className={classes.deleteButton}>{this.renderDeleteTestButton(test.name)}</div>
         </div>

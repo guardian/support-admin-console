@@ -1,13 +1,13 @@
 import React, { ReactElement } from 'react';
 import update from 'immutability-helper';
-import {createStyles, Theme, withStyles, WithStyles, CssBaseline, Typography} from "@material-ui/core";
+import { createStyles, Theme, withStyles, WithStyles, Typography } from "@material-ui/core";
 import EpicTestEditor from './epicTestEditor';
 import LockOpenIcon from '@material-ui/icons/LockOpen'
 import RefreshIcon from '@material-ui/icons/Refresh';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import Button from "@material-ui/core/Button";
 import CircularProgress from '@material-ui/core/CircularProgress';
-import {Region} from "../../utils/models";
+import { Region } from "../../utils/models";
 import {
   fetchFrontendSettings,
   FrontendSettingsType,
@@ -58,7 +58,9 @@ export interface EpicTest {
   variants: EpicVariant[],
   highPriority: boolean,
   maxViewsCount: number,
-  useLocalViewLog: boolean
+  useLocalViewLog: boolean,
+  audience: number,
+  audienceOffset: number
 }
 
 interface EpicTests {

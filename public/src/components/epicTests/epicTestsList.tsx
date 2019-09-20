@@ -114,7 +114,9 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
       variants: [],
       highPriority: false,
       maxViewsCount: 4,
-      useLocalViewLog: false
+      useLocalViewLog: false,
+      audience: 1.0,
+      audienceOffset: 0.0
     }
     const newTestList = [...this.props.tests, newTest];
 

@@ -60,7 +60,9 @@ case class EpicTest(
   variants: List[EpicVariant],
   highPriority: Boolean = false,
   maxViewsCount: Int,
-  useLocalViewLog: Boolean = false
+  useLocalViewLog: Boolean = false,
+  audience: Float = 1.0,
+  audienceOffset: Float = 0.0
 )
 
 case class EpicTests(tests: List[EpicTest])
