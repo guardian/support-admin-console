@@ -1,11 +1,9 @@
 import React from 'react';
-import {
-  List, ListItem, createStyles, WithStyles, withStyles, Typography, Button, Theme
-} from "@material-ui/core";
+import {Button, createStyles, List, ListItem, Theme, Typography, withStyles, WithStyles} from "@material-ui/core";
 import ArrowUpward from '@material-ui/icons/ArrowUpward';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
-import { renderVisibilityIcons, renderDeleteIcon } from './utilities';
-import {EpicTest, ModifiedTests} from './epicTestsForm';
+import {renderDeleteIcon, renderVisibilityIcons} from './utilities';
+import {EpicTest, ModifiedTests, UserCohort} from './epicTestsForm';
 import NewNameCreator from './newNameCreator';
 
 
@@ -110,7 +108,7 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
       excludedTagIds: [],
       excludedSections: [],
       alwaysAsk: false,
-      userCohort: undefined,
+      userCohort: UserCohort.AllNonSupporters,  // matches the default in dotcom
       isLiveBlog: false,
       hasCountryName: false,
       variants: [],
