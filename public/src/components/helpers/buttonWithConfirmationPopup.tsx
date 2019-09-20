@@ -1,12 +1,11 @@
 import React, { ReactElement } from 'react';
 import {createStyles, Theme, withStyles, WithStyles, Popover, Typography} from "@material-ui/core";
 import Button, { ButtonProps } from "@material-ui/core/Button";
-import { SvgIcon } from 'material-ui';
 import { SvgIconProps } from '@material-ui/core/SvgIcon';
 
 const styles = ({ spacing, typography }: Theme) => createStyles({
   button: {
-    marginRight: spacing.unit * 2,
+    marginLeft: spacing.unit * 2,
     marginBottom: spacing.unit * 2
   },
   popover: {

@@ -100,18 +100,61 @@ const styles = ({ spacing, typography }: Theme) => createStyles({
     outline: "2px solid green"
   },
   buttons: {
-    marginTop: spacing.unit * 2,
-    marginBottom: spacing.unit * 4
+    marginTop: spacing.unit * 2
   },
   button: {
     marginRight: spacing.unit * 2,
     marginBottom: spacing.unit * 2
   },
-  warning: {
-    fontSize: typography.pxToRem(20),
-  },
   testListAndEditor: {
     display: "flex"
+  },
+  actionBar: {
+    marginBottom: spacing.unit * 2,
+    borderRadius: "5px",
+    paddingTop: spacing.unit * 2,
+    display: "flex",
+    justifyContent: "space-between",
+    minHeight: spacing.unit * 9
+  },
+  actionBarText: {
+    fontSize: typography.pxToRem(20),
+    marginLeft: spacing.unit * 2,
+    marginTop: spacing.unit
+  },
+  actionBarButtons: {
+    marginLeft: spacing.unit * 2,
+    marginRight: spacing.unit * 2
+  },
+  editModeColour: {
+    backgroundColor: "#ffe500"
+  },
+  readOnlyModeColour: {
+    backgroundColor: "#dcdcdc"
+  },
+  modeTag: {
+    marginLeft: spacing.unit * 2,
+    marginBottom: spacing.unit * 2,
+    padding: spacing.unit,
+    borderRadius: "5px"
+  },
+  editModeTagColour: {
+    backgroundColor: "#ffbb50"
+  },
+  readOnlyModeTagColour: {
+    backgroundColor: "#f6f6f6"
+  },
+  modeTagText: {
+    fontSize: typography.pxToRem(18),
+    fontWeight: typography.fontWeightMedium
+  },
+  viewTextBox: {
+    height: spacing.unit * 3,
+  },
+  viewText: {
+    marginTop: spacing.unit * 7,
+    marginLeft: spacing.unit * 2,
+    fontSize: typography.pxToRem(20)
   }
 });
 
@@ -272,58 +315,92 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
     return nameArr ? `${nameArr[1][0].toUpperCase()}${nameArr[1].slice(1,)} ${nameArr[2][0].toUpperCase()}${nameArr[2].slice(1,)}` : undefined;
   }
 
-  renderButtonsBar = () => {
+  renderLockedMessageAndButton = () => {
+    const friendlyName: string | undefined = this.state.lockStatus.email && this.makeFriendlyName(this.state.lockStatus.email);
+    const friendlyTimestamp: string | undefined = this.state.lockStatus.timestamp && this.makeFriendlyDate(this.state.lockStatus.timestamp);
     const {classes} = this.props;
-    if (!this.state.editMode) {
-      if (this.state.lockStatus.locked) {
-        const friendlyName: string | undefined = this.state.lockStatus.email && this.makeFriendlyName(this.state.lockStatus.email);
-        const friendlyTimestamp: string | undefined = this.state.lockStatus.timestamp && this.makeFriendlyDate(this.state.lockStatus.timestamp);
-        return (
-          <>
-            <Typography className={classes.warning}>File locked for editing by {friendlyName} (<a href={"mailto:" + this.state.lockStatus.email}>{this.state.lockStatus.email}</a>) at {friendlyTimestamp}</Typography>
-            <div className={classes.buttons}>
-              <ButtonWithConfirmationPopup
-                buttonText="Take control"
-                confirmationText={`Are you sure? Please tell ${friendlyName} that their unpublished changes will be lost.`}
-                onConfirm={this.requestTakeControl}
-                icon={<LockOpenIcon />}
-              />
-            </div>
-          </>
-        );
-      } else {
-        return (
-          <Button
-            onClick={this.requestEpicTestsLock}
-            variant="contained" color="primary"
-          >Edit</Button>
-        )
-      }
-    } else {
-      return (
-        <div>
+    return (
+      <>
+        <Typography className={classes.modeTagText}>File locked for editing by {friendlyName} (<a href={"mailto:" + this.state.lockStatus.email}>{this.state.lockStatus.email}</a>) at {friendlyTimestamp}</Typography>
+        <div className={classes.actionBarButtons}>
           <ButtonWithConfirmationPopup
-          buttonText="Publish"
-          confirmationText={this.buildConfirmationText(this.state.modifiedTests)}
-          onConfirm={this.save}
-          icon={<CloudUploadIcon />}
-          disabled={
-            Object.keys(this.state.modifiedTests).length === 0 ||
-            Object.keys(this.state.modifiedTests).some(name => !this.state.modifiedTests[name].isValid)
-          }
-          />
-          <ButtonWithConfirmationPopup
-          buttonText="Cancel"
-          confirmationText="Are you sure? All modified and deleted tests will be lost!"
-          onConfirm={() => this.cancel()}
-          icon={<RefreshIcon />}
+            buttonText="Take control"
+            confirmationText={`Are you sure? Please tell ${friendlyName} that their unpublished changes will be lost.`}
+            onConfirm={this.requestTakeControl}
+            icon={<LockOpenIcon />}
           />
         </div>
-        )
-    }
+      </>
+    )
+  };
+
+  renderEditButton = () => {
+    const {classes} = this.props;
+
+    return (
+      <>
+        <div className={`${classes.modeTag} ${classes.readOnlyModeTagColour}`}><Typography className={classes.modeTagText}>Read-only mode</Typography></div>
+        <Typography className={classes.actionBarText}>Click the button on the right to create and edit tests.</Typography>
+        <div className={classes.actionBarButtons}>
+          <Button
+            onClick={this.requestEpicTestsLock}
+            variant="contained"
+            color="primary"
+          >
+            Create & edit tests
+          </Button>
+        </div>
+      </>
+    );
+  };
+
+  renderPublishButtons = () => {
+    const {classes} = this.props;
+    return (
+    <>
+      <div className={`${classes.modeTag} ${classes.editModeTagColour}`}><Typography className={classes.modeTagText}>Edit mode</Typography></div>
+      <div><Typography className={classes.actionBarText}>WARNING: Any changes you make will be lost if you refresh the page.</Typography></div>
+      <div className={classes.actionBarButtons}>
+        <ButtonWithConfirmationPopup
+        buttonText="Save all"
+        confirmationText={this.buildConfirmationText(this.state.modifiedTests)}
+        onConfirm={this.save}
+        icon={<CloudUploadIcon />}
+        disabled={
+          Object.keys(this.state.modifiedTests).length === 0 ||
+          Object.keys(this.state.modifiedTests).some(name => !this.state.modifiedTests[name].isValid)
+        }
+        color={'primary'}
+        />
+        <ButtonWithConfirmationPopup
+        buttonText="Discard all"
+        confirmationText="Are you sure? All new, modified and deleted tests will be lost!"
+        onConfirm={() => this.cancel()}
+        icon={<RefreshIcon />}
+        color={'primary'}
+        />
+      </div>
+    </>
+  );
+  };
+
+
+  renderActionBar = () => {
+    const {classes} = this.props;
+    const classNames = [
+      classes.actionBar,
+      this.state.editMode && classes.editModeColour,
+      !this.state.editMode && classes.readOnlyModeColour
+    ].join(' ');
+
+    return (
+      <div className={classNames}>
+        {!this.state.editMode ? (
+          this.state.lockStatus.locked ? this.renderLockedMessageAndButton() : this.renderEditButton()
+        ) : this.renderPublishButtons()}
+      </div>
+    )
   }
-
-
 
   render(): React.ReactNode {
     const { classes } = this.props;
@@ -334,7 +411,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
         <div className={classes.buttons}>
           {
             this.state.previousStateFromServer ?
-              this.renderButtonsBar() :
+              this.renderActionBar() :
               <CircularProgress/>
           }
         </div>
@@ -349,7 +426,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
             editMode={this.state.editMode}
           />
 
-          {this.state.tests.map(test =>
+          {this.state.selectedTestName ? this.state.tests.map(test =>
             (<EpicTestEditor
               test={this.state.tests.find(test => test.name === this.state.selectedTestName)}
               hasChanged={!!this.state.modifiedTests[test.name]}
@@ -361,9 +438,8 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
               onDelete={this.onTestDelete}
               isDeleted={this.state.modifiedTests[test.name] && this.state.modifiedTests[test.name].isDeleted}
             />)
-          )}
+          ) : (<Typography className={classes.viewText}>Click on a test on the left to view contents.</Typography>)}
         </div>
-
       </>
     )
   }
