@@ -95,21 +95,12 @@ type EpicTestsFormState = EpicTests & {
 };
 
 const styles = ({ spacing, typography }: Theme) => createStyles({
-  container: {
-    display: "block",
-    outline: "2px solid green"
-  },
-  buttons: {
-    marginTop: spacing.unit * 2
-  },
-  button: {
-    marginRight: spacing.unit * 2,
-    marginBottom: spacing.unit * 2
-  },
   testListAndEditor: {
-    display: "flex"
+    display: "flex",
+    padding: spacing.unit
   },
   actionBar: {
+    marginTop: spacing.unit * 2,
     marginBottom: spacing.unit * 2,
     borderRadius: "5px",
     paddingTop: spacing.unit * 2,
@@ -118,7 +109,7 @@ const styles = ({ spacing, typography }: Theme) => createStyles({
     minHeight: spacing.unit * 9
   },
   actionBarText: {
-    fontSize: typography.pxToRem(20),
+    fontSize: typography.pxToRem(18),
     marginLeft: spacing.unit * 2,
     marginTop: spacing.unit
   },
@@ -148,13 +139,16 @@ const styles = ({ spacing, typography }: Theme) => createStyles({
     fontSize: typography.pxToRem(18),
     fontWeight: typography.fontWeightMedium
   },
-  viewTextBox: {
-    height: spacing.unit * 3,
-  },
   viewText: {
-    marginTop: spacing.unit * 7,
+    marginTop: spacing.unit * 6,
     marginLeft: spacing.unit * 2,
-    fontSize: typography.pxToRem(20)
+    fontSize: typography.pxToRem(16)
+  },
+  editModeBorder: {
+    border: "4px solid #ffe500"
+  },
+  readOnlyModeBorder: {
+    border: "4px solid #dcdcdc"
   }
 });
 
@@ -321,13 +315,15 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
     const {classes} = this.props;
     return (
       <>
-        <Typography className={classes.modeTagText}>File locked for editing by {friendlyName} (<a href={"mailto:" + this.state.lockStatus.email}>{this.state.lockStatus.email}</a>) at {friendlyTimestamp}</Typography>
+        <div className={`${classes.modeTag} ${classes.readOnlyModeTagColour}`}><Typography className={classes.modeTagText}>Read-only (locked)</Typography></div>
+        <Typography className={classes.actionBarText}>File locked for editing by {friendlyName} (<a href={"mailto:" + this.state.lockStatus.email}>{this.state.lockStatus.email}</a>) at {friendlyTimestamp}.</Typography>
         <div className={classes.actionBarButtons}>
           <ButtonWithConfirmationPopup
             buttonText="Take control"
             confirmationText={`Are you sure? Please tell ${friendlyName} that their unpublished changes will be lost.`}
             onConfirm={this.requestTakeControl}
             icon={<LockOpenIcon />}
+            color={'primary'}
           />
         </div>
       </>
@@ -404,11 +400,16 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
 
   render(): React.ReactNode {
     const { classes } = this.props;
+    const listAndEditorClassNames = [
+      classes.testListAndEditor,
+      this.state.editMode && classes.editModeBorder,
+      !this.state.editMode && classes.readOnlyModeBorder
+    ].join(' ');
 
     return (
       <>
         <Typography variant={'h2'}>Epic tests</Typography>
-        <div className={classes.buttons}>
+        <div>
           {
             this.state.previousStateFromServer ?
               this.renderActionBar() :
@@ -416,7 +417,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
           }
         </div>
 
-        <div className={classes.testListAndEditor}>
+        <div className={listAndEditorClassNames}>
           <EpicTestsList
             tests={this.state.tests}
             modifiedTests={this.state.modifiedTests}
