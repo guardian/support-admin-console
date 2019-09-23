@@ -105,7 +105,7 @@ class EpicTestActionBar extends React.Component<ActionBarProps> {
     return (
       <>
         <div className={`${classes.modeTag} ${classes.readOnlyModeTagColour}`}><Typography className={classes.modeTagText}>Read-only mode</Typography></div>
-        <Typography className={classes.actionBarText}>Click the button on the right to create and edit tests.</Typography>
+        <Typography className={classes.actionBarText}>Click the button on the right to create and edit tests</Typography>
         <div className={classes.actionBarButtons}>
           <Button
             onClick={this.props.requestLock}
