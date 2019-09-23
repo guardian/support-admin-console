@@ -107,7 +107,6 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
         confirmationText={`Are you sure? This cannot be undone!`}
         onConfirm={() => this.props.onDelete()}
         icon={<DeleteSweepIcon />}
-        color={'secondary'}
       />
     );
   }
