@@ -1,5 +1,5 @@
 import React from 'react';
-import { EpicTest, EpicVariant, UserCohort } from "./epicTestsForm";
+import { EpicTest, EpicVariant, UserCohort, MaxViews } from "./epicTestsForm";
 import {
   Checkbox,
   FormControl,
@@ -21,12 +21,11 @@ import {
 import EditableTextField from "../helpers/editableTextField"
 import { Region } from '../../utils/models';
 import EpicTestVariantsList from './epicTestVariantsList';
+import MaxViewsEditor from './maxViewsEditor';
 import { renderVisibilityIcons, renderVisibilityHelpText, renderDeleteIcon } from './utilities';
 import {onFieldValidationChange, ValidationStatus} from '../helpers/validation';
 import ButtonWithConfirmationPopup from '../helpers/buttonWithConfirmationPopup';
 import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
-
-const isNumber = (value: string): boolean => !Number.isNaN(Number(value));
 
 const styles = ({ spacing, typography}: Theme) => createStyles({
   container: {
@@ -327,53 +326,28 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
               </RadioGroup>
           </FormControl>
 
-          <EditableTextField
-            text={test.maxViewsCount.toString()}
-            onSubmit={ value => {
-              if (isNumber(value)) {
-                this.updateTest(test => ({
-                  ...test,
-                  maxViewsCount: Number(value)
-                }))
-              }
-            }}
-            label="Max views count"
-            helperText="Must be a number"
-            editEnabled={this.isEditable()}
-            validation={
-              {
-                isValid: (value: string) => isNumber(value),
-                onChange: onFieldValidationChange(this)("maxViewsCount")
-              }
+          <Typography variant={'h3'} className={this.props.classes.h3}>View frequency settings:</Typography>
+
+          <FormControlLabel
+            control={
+              <Switch
+                checked={test.useLocalViewLog}
+                onChange={this.onSwitchChange("useLocalViewLog")}
+                disabled={!this.isEditable()}
+              />
             }
-            isNumberField
+            label={`Use private view counter for this test (instead of the global one)`}
           />
 
-          <div>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={test.alwaysAsk}
-                  onChange={this.onSwitchChange("alwaysAsk")}
-                  disabled={!this.isEditable()}
-                />
-              }
-              label={`Always ask`}
-            />
-          </div>
+          <MaxViewsEditor
+            test={test}
+            editMode={this.isEditable()}
+            onChange={(alwaysAsk: boolean, maxViews: MaxViews) =>
+              this.updateTest(test => ({ ...test, alwaysAsk, maxViews }))
+            }
+            onValidationChange={onFieldValidationChange(this)('maxViews')}
+          />
 
-          <div>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={test.useLocalViewLog}
-                  onChange={this.onSwitchChange("useLocalViewLog")}
-                  disabled={!this.isEditable()}
-                />
-              }
-              label={`Use local view log`}
-            />
-          </div>
           <div className={classes.deleteButton}>{this.renderDeleteTestButton(test.name)}</div>
         </div>
       </div>

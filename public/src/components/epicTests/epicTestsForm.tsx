@@ -43,6 +43,12 @@ export interface EpicVariant {
   cta?: Cta
 }
 
+export interface MaxViews {
+  maxViewsCount: number,
+  maxViewsDays: number,
+  minDaysBetweenViews: number
+}
+
 export interface EpicTest {
   name: string,
   isOn: boolean,
@@ -52,12 +58,12 @@ export interface EpicTest {
   excludedTagIds: string[],
   excludedSections: string[],
   alwaysAsk: boolean,
+  maxViews?: MaxViews,
   userCohort?: UserCohort,
   isLiveBlog: boolean,
   hasCountryName: boolean,
   variants: EpicVariant[],
   highPriority: boolean,
-  maxViewsCount: number,
   useLocalViewLog: boolean
 }
 
