@@ -17,6 +17,7 @@ const isNumber = (value: string): boolean => !Number.isNaN(Number(value));
 export const MaxViewsDefaults: MaxViews = {
   maxViewsCount: 4,
   maxViewsDays: 30,
+  // This is not available in the UI because we currently never change it. We can add it later if it's needed
   minDaysBetweenViews: 0
 };
 
@@ -142,7 +143,6 @@ class MaxViewsEditor extends React.Component<Props, State> {
           <div className={classes.maxViewsContainer}>
             {this.buildField('maxViewsCount', 'Max views count')}
             {this.buildField('maxViewsDays', 'Number of days')}
-            {this.buildField('minDaysBetweenViews', 'Min days between views')}
           </div>
         }
       </>
