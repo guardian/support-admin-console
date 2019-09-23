@@ -45,6 +45,12 @@ case class EpicVariant(
   cta: Option[Cta]
 )
 
+case class MaxViews(
+  maxViewsCount: Int,
+  maxViewsDays: Int,
+  minDaysBetweenViews: Int
+)
+
 case class EpicTest(
   name: String,
   isOn: Boolean,
@@ -54,12 +60,12 @@ case class EpicTest(
   excludedTagIds: List[String] = Nil,
   excludedSections: List[String] = Nil,
   alwaysAsk: Boolean = false,
+  maxViews: Option[MaxViews],
   userCohort: Option[UserCohort] = None,
   isLiveBlog: Boolean = false,
   hasCountryName: Boolean = false,
   variants: List[EpicVariant],
   highPriority: Boolean = false,
-  maxViewsCount: Int,
   useLocalViewLog: Boolean = false
 )
 

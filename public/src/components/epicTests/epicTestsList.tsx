@@ -5,6 +5,7 @@ import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import {renderDeleteIcon, renderVisibilityIcons} from './utilities';
 import {EpicTest, ModifiedTests, UserCohort} from './epicTestsForm';
 import NewNameCreator from './newNameCreator';
+import {MaxViewsDefaults} from "./maxViewsEditor";
 
 
 const styles = ( { typography }: Theme ) => createStyles({
@@ -105,12 +106,12 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
       excludedTagIds: [],
       excludedSections: [],
       alwaysAsk: false,
+      maxViews: MaxViewsDefaults,
       userCohort: UserCohort.AllNonSupporters,  // matches the default in dotcom
       isLiveBlog: false,
       hasCountryName: false,
       variants: [],
       highPriority: false,
-      maxViewsCount: 4,
       useLocalViewLog: false
     }
     const newTestList = [...this.props.tests, newTest];
