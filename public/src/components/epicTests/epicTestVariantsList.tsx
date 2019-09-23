@@ -97,9 +97,9 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
     this.onVariantSelected(key);
   };
 
-  renderNoVariantMessage = (): React.ReactNode => (
-      <Typography variant={'subtitle1'} color={'textPrimary'}>Create the first variant for this test (each test must have at least one variant)<sup>*</sup></Typography>
-  );
+  renderNoVariantMessage = (): React.ReactNode => {
+    return this.props.editMode ? <Typography variant={'subtitle1'} color={'textPrimary'}>Create the first variant for this test (each test must have at least one variant)<sup>*</sup></Typography> : <Typography>No variants yet.</Typography>
+  };
 
   renderNewVariantButton = (): React.ReactNode => {
     return this.props.editMode ? (
