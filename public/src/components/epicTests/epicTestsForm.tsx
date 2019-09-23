@@ -259,43 +259,45 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
         <div>
           {
             this.state.previousStateFromServer ?
-              <EpicTestActionBar
-                modifiedTests={this.state.modifiedTests}
-                lockStatus={this.state.lockStatus}
-                editMode={this.state.editMode}
-                requestTakeControl={this.requestTakeControl}
-                requestLock={this.requestEpicTestsLock}
-                cancel={this.cancel}
-                save={this.save}
-              /> :
+              <>
+                <EpicTestActionBar
+                  modifiedTests={this.state.modifiedTests}
+                  lockStatus={this.state.lockStatus}
+                  editMode={this.state.editMode}
+                  requestTakeControl={this.requestTakeControl}
+                  requestLock={this.requestEpicTestsLock}
+                  cancel={this.cancel}
+                  save={this.save}
+                />
+                <div className={listAndEditorClassNames}>
+                  <EpicTestsList
+                    tests={this.state.tests}
+                    modifiedTests={this.state.modifiedTests}
+                    selectedTestName={this.state.selectedTestName}
+                    onUpdate={this.onTestsChange}
+                    onSelectedTestName={this.onSelectedTestName}
+                    editMode={this.state.editMode}
+                  />
+
+                  {this.state.selectedTestName ? this.state.tests.map(test =>
+                    (<EpicTestEditor
+                      test={this.state.tests.find(test => test.name === this.state.selectedTestName)}
+                      hasChanged={!!this.state.modifiedTests[test.name]}
+                      onChange={this.onTestChange}
+                      onValidationChange={this.onTestErrorStatusChange(test.name)}
+                      visible={test.name === this.state.selectedTestName}
+                      key={test.name}
+                      editMode={this.state.editMode}
+                      onDelete={this.onTestDelete}
+                      isDeleted={this.state.modifiedTests[test.name] && this.state.modifiedTests[test.name].isDeleted}
+                      isNew={this.state.modifiedTests[test.name] && this.state.modifiedTests[test.name].isNew}
+                    />)
+                  ) : (<Typography className={classes.viewText}>Click on a test on the left to view contents.</Typography>)}
+                </div>
+              </>
+               :
               <CircularProgress/>
           }
-        </div>
-
-        <div className={listAndEditorClassNames}>
-          <EpicTestsList
-            tests={this.state.tests}
-            modifiedTests={this.state.modifiedTests}
-            selectedTestName={this.state.selectedTestName}
-            onUpdate={this.onTestsChange}
-            onSelectedTestName={this.onSelectedTestName}
-            editMode={this.state.editMode}
-          />
-
-          {this.state.selectedTestName ? this.state.tests.map(test =>
-            (<EpicTestEditor
-              test={this.state.tests.find(test => test.name === this.state.selectedTestName)}
-              hasChanged={!!this.state.modifiedTests[test.name]}
-              onChange={this.onTestChange}
-              onValidationChange={this.onTestErrorStatusChange(test.name)}
-              visible={test.name === this.state.selectedTestName}
-              key={test.name}
-              editMode={this.state.editMode}
-              onDelete={this.onTestDelete}
-              isDeleted={this.state.modifiedTests[test.name] && this.state.modifiedTests[test.name].isDeleted}
-              isNew={this.state.modifiedTests[test.name] && this.state.modifiedTests[test.name].isNew}
-            />)
-          ) : (<Typography className={classes.viewText}>Click on a test on the left to view contents.</Typography>)}
         </div>
       </>
     )
