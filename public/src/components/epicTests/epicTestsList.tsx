@@ -31,10 +31,10 @@ const styles = ( { typography, spacing }: Theme ) => createStyles({
     background: "#dcdcdc"
   },
   validTest: {
-    border: "2px solid green"
+    boxShadow: "0 0 10px green"
   },
   invalidTest: {
-    border: "2px solid red"
+    boxShadow: "0 0 10px red"
   },
   singleButtonContainer: {
     display: "block"
