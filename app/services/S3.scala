@@ -50,6 +50,7 @@ object S3 extends S3Client with StrictLogging {
       val stream = s3Object.getObjectContent
       val raw: String = scala.io.Source.fromInputStream(stream).mkString
       stream.close()
+      s3Object.close()
 
       Right[String,RawVersionedS3Data](VersionedS3Data(raw, version))
 
