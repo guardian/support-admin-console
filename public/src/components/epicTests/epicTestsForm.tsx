@@ -1,11 +1,8 @@
-import React, { ReactElement } from 'react';
+import React from 'react';
 import update from 'immutability-helper';
-import {createStyles, Theme, withStyles, WithStyles, CssBaseline, Typography} from "@material-ui/core";
+import {createStyles, Theme, withStyles, WithStyles, Typography} from "@material-ui/core";
 import EpicTestEditor from './epicTestEditor';
-import LockOpenIcon from '@material-ui/icons/LockOpen'
-import RefreshIcon from '@material-ui/icons/Refresh';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import Button from "@material-ui/core/Button";
+import EpicTestActionBar from './epicTestActionBar';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {Region} from "../../utils/models";
 import {
@@ -17,8 +14,6 @@ import {
   requestUnlock
 } from "../../utils/requests";
 import EpicTestsList from "./epicTestsList";
-import ButtonWithConfirmationPopup from '../helpers/buttonWithConfirmationPopup';
-
 
 export enum UserCohort {
   Everyone = 'Everyone',
@@ -78,7 +73,7 @@ interface DataFromServer {
   userEmail: string,
 };
 
-interface LockStatus {
+export interface LockStatus {
   locked: boolean,
   email?: string,
   timestamp?: string
@@ -105,46 +100,6 @@ const styles = ({ spacing, typography }: Theme) => createStyles({
   testListAndEditor: {
     display: "flex",
     padding: spacing.unit
-  },
-  actionBar: {
-    marginTop: spacing.unit * 2,
-    marginBottom: spacing.unit * 2,
-    borderRadius: "5px",
-    paddingTop: spacing.unit * 2,
-    display: "flex",
-    justifyContent: "space-between",
-    minHeight: spacing.unit * 9
-  },
-  actionBarText: {
-    fontSize: typography.pxToRem(18),
-    marginLeft: spacing.unit * 2,
-    marginTop: spacing.unit
-  },
-  actionBarButtons: {
-    marginLeft: spacing.unit * 2,
-    marginRight: spacing.unit * 2
-  },
-  editModeColour: {
-    backgroundColor: "#ffe500"
-  },
-  readOnlyModeColour: {
-    backgroundColor: "#dcdcdc"
-  },
-  modeTag: {
-    marginLeft: spacing.unit * 2,
-    marginBottom: spacing.unit * 2,
-    padding: spacing.unit,
-    borderRadius: "5px"
-  },
-  editModeTagColour: {
-    backgroundColor: "#ffbb50"
-  },
-  readOnlyModeTagColour: {
-    backgroundColor: "#f6f6f6"
-  },
-  modeTagText: {
-    fontSize: typography.pxToRem(18),
-    fontWeight: typography.fontWeightMedium
   },
   viewText: {
     marginTop: spacing.unit * 6,
@@ -174,13 +129,13 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
       lockStatus: { locked: false },
       modifiedTests: {},
     };
-  }
+  };
 
   componentWillMount(): void {
     this.fetchStateFromServer()
-  }
+  };
 
-  fetchStateFromServer(): void {
+  fetchStateFromServer = (): void => {
     fetchFrontendSettings(FrontendSettingsType.epicTests)
       .then(serverData => {
         this.setState({
@@ -193,13 +148,13 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
       });
   };
 
-  cancel(): void {
+  cancel = (): void => {
     requestUnlock(FrontendSettingsType.epicTests).then( response =>
       response.ok ? this.fetchStateFromServer() : alert("Error - can't request lock!")
     )
   };
 
-  save = () => {
+  save = (): void => {
     const updatedTests = this.state.tests.filter(test =>
       !(this.state.modifiedTests[test.name] && this.state.modifiedTests[test.name].isDeleted));
     const newState = update(this.state.previousStateFromServer, {
@@ -290,139 +245,6 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
     );
   };
 
-  buildConfirmationText = (modifiedTests: ModifiedTests): ReactElement<any> => {
-    const counts = {
-      deleted: 0,
-      created: 0,
-      modified: 0
-    };
-    Object.keys(modifiedTests).forEach(key => {
-      if (modifiedTests[key].isDeleted) counts.deleted++;
-      else if (modifiedTests[key].isNew) counts.created++;
-      else counts.modified++;
-    });
-
-    const statusLine = (status: 'deleted' | 'created' | 'modified') => counts[status] > 0 &&
-      <span>
-        <br />&bull; {`${counts[status]} test${counts[status] !== 1 ? "s" : ""} ${status}`}
-      </span>;
-
-    return (
-      <div>Are you sure you want to save these changes?
-        {statusLine('deleted')}
-        {statusLine('created')}
-        {statusLine('modified')}
-      </div>
-    );
-  };
-
-  makeFriendlyDate = (timestamp: string): string => {
-    const datetime = new Date(timestamp);
-    const hours = `${datetime.getHours() < 10 ? "0" : ""}${datetime.getHours()}`;
-    const minutes = `${datetime.getMinutes() < 10 ? "0": ""}${datetime.getMinutes()}`;
-    const date = datetime.getDate();
-    const month = datetime.getMonth() + 1;
-    const year = datetime.getFullYear();
-
-    return `${hours}:${minutes} on ${date}/${month}/${year}`;
-  }
-
-  makeFriendlyName = (email: string): string | undefined => {
-    const nameArr: RegExpMatchArray | null = email.match(/^([a-z]*)\.([a-z]*).*@.*/);
-    return nameArr ? `${nameArr[1][0].toUpperCase()}${nameArr[1].slice(1,)} ${nameArr[2][0].toUpperCase()}${nameArr[2].slice(1,)}` : undefined;
-  }
-
-  renderLockedMessageAndButton = () => {
-    const friendlyName: string | undefined = this.state.lockStatus.email && this.makeFriendlyName(this.state.lockStatus.email);
-    const friendlyTimestamp: string | undefined = this.state.lockStatus.timestamp && this.makeFriendlyDate(this.state.lockStatus.timestamp);
-    const {classes} = this.props;
-    return (
-      <>
-        <div className={`${classes.modeTag} ${classes.readOnlyModeTagColour}`}><Typography className={classes.modeTagText}>Read-only (locked)</Typography></div>
-        <Typography className={classes.actionBarText}>File locked for editing by {friendlyName} (<a href={"mailto:" + this.state.lockStatus.email}>{this.state.lockStatus.email}</a>) at {friendlyTimestamp}.</Typography>
-        <div className={classes.actionBarButtons}>
-          <ButtonWithConfirmationPopup
-            buttonText="Take control"
-            confirmationText={`Are you sure? Please tell ${friendlyName} that their unpublished changes will be lost.`}
-            onConfirm={this.requestTakeControl}
-            icon={<LockOpenIcon />}
-            color={'primary'}
-          />
-        </div>
-      </>
-    )
-  };
-
-  renderEditButton = () => {
-    const {classes} = this.props;
-
-    return (
-      <>
-        <div className={`${classes.modeTag} ${classes.readOnlyModeTagColour}`}><Typography className={classes.modeTagText}>Read-only mode</Typography></div>
-        <Typography className={classes.actionBarText}>Click the button on the right to create and edit tests.</Typography>
-        <div className={classes.actionBarButtons}>
-          <Button
-            onClick={this.requestEpicTestsLock}
-            variant="contained"
-            color="primary"
-          >
-            Create & edit tests
-          </Button>
-        </div>
-      </>
-    );
-  };
-
-  renderPublishButtons = () => {
-    const {classes} = this.props;
-    return (
-    <>
-      <div className={`${classes.modeTag} ${classes.editModeTagColour}`}><Typography className={classes.modeTagText}>Edit mode</Typography></div>
-      <div><Typography className={classes.actionBarText}>WARNING: Any changes you make will be lost if you refresh the page.</Typography></div>
-      <div className={classes.actionBarButtons}>
-        <ButtonWithConfirmationPopup
-        buttonText="Save all"
-        confirmationText={this.buildConfirmationText(this.state.modifiedTests)}
-        onConfirm={this.save}
-        icon={<CloudUploadIcon />}
-        disabled={
-          Object.keys(this.state.modifiedTests).length === 0 ||
-          Object.keys(this.state.modifiedTests).some(name =>
-            !this.state.modifiedTests[name].isValid && !this.state.modifiedTests[name].isDeleted
-          )
-        }
-        color={'primary'}
-        />
-        <ButtonWithConfirmationPopup
-        buttonText="Discard all"
-        confirmationText="Are you sure? All new, modified and deleted tests will be lost!"
-        onConfirm={() => this.cancel()}
-        icon={<RefreshIcon />}
-        color={'primary'}
-        />
-      </div>
-    </>
-  );
-  };
-
-
-  renderActionBar = () => {
-    const {classes} = this.props;
-    const classNames = [
-      classes.actionBar,
-      this.state.editMode && classes.editModeColour,
-      !this.state.editMode && classes.readOnlyModeColour
-    ].join(' ');
-
-    return (
-      <div className={classNames}>
-        {!this.state.editMode ? (
-          this.state.lockStatus.locked ? this.renderLockedMessageAndButton() : this.renderEditButton()
-        ) : this.renderPublishButtons()}
-      </div>
-    )
-  }
-
   render(): React.ReactNode {
     const { classes } = this.props;
     const listAndEditorClassNames = [
@@ -437,7 +259,15 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
         <div>
           {
             this.state.previousStateFromServer ?
-              this.renderActionBar() :
+              <EpicTestActionBar
+                modifiedTests={this.state.modifiedTests}
+                lockStatus={this.state.lockStatus}
+                editMode={this.state.editMode}
+                requestTakeControl={this.requestTakeControl}
+                requestLock={this.requestEpicTestsLock}
+                cancel={this.cancel}
+                save={this.save}
+              /> :
               <CircularProgress/>
           }
         </div>
