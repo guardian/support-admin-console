@@ -53,7 +53,7 @@ interface Props extends WithStyles<typeof styles> {
   variant?: EpicVariant,
   onVariantChange: (updatedVariant: EpicVariant) => void,
   editMode: boolean,
-  onDelete: () => void
+  onDelete: () => void,
   onValidationChange: (isValid: boolean) => void
 }
 
