@@ -89,7 +89,7 @@ class EpicTestActionBar extends React.Component<ActionBarProps> {
         <div className={classes.actionBarButtons}>
           <ButtonWithConfirmationPopup
             buttonText="Take control"
-            confirmationText={`Are you sure? Please tell ${friendlyName} that their unpublished changes will be lost.`}
+            confirmationText={`Are you sure? Please tell ${friendlyName} that their unpublished changes will be lost`}
             onConfirm={this.props.requestTakeControl}
             icon={<LockOpenIcon />}
             color={'primary'}
@@ -126,7 +126,7 @@ class EpicTestActionBar extends React.Component<ActionBarProps> {
     return (
     <>
       <div className={`${classes.modeTag} ${classes.editModeTagColour}`}><Typography className={classes.modeTagText}>Edit mode</Typography></div>
-      <div><Typography className={classes.actionBarText}>WARNING: Any changes you make will be lost if you refresh the page.</Typography></div>
+      <div><Typography className={classes.actionBarText}>{unmodified ?  "You haven't made any changes yet" : "WARNING: Any changes you make will be lost if you refresh the page"}</Typography></div>
       <div className={classes.actionBarButtons}>
         <ButtonWithConfirmationPopup
         buttonText="Save all"
