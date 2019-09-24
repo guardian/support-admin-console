@@ -49,7 +49,8 @@ const getLinkPathsAndNames = (): string[][] =>
   [
     ['/switches', 'Switches'],
     ['/contribution-types', 'Contribution Types'],
-    ['/amounts', 'Amounts']
+    ['/amounts', 'Amounts'],
+    ['/epic-tests', 'Epic Tests']
   ];
 
 const Index = () => <h2>Home</h2>;
