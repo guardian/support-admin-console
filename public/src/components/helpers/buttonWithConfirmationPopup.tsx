@@ -14,7 +14,8 @@ const styles = ({ spacing, typography }: Theme) => createStyles({
   },
   message: {
     fontSize: typography.pxToRem(18),
-    fontWeight: typography.fontWeightMedium
+    fontWeight: typography.fontWeightMedium,
+    marginBottom: spacing.unit
   }
 });
 
