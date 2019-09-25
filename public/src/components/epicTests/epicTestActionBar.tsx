@@ -9,22 +9,22 @@ import { LockStatus, ModifiedTests } from './epicTestsForm';
 
 const styles = ({ spacing, typography }: Theme) => createStyles({
  actionBar: {
-    marginTop: spacing.unit * 2,
-    marginBottom: spacing.unit * 2,
+    marginTop: spacing(2),
+    marginBottom: spacing(2),
     borderRadius: "5px",
-    paddingTop: spacing.unit * 2,
+    paddingTop: spacing(2),
     display: "flex",
     justifyContent: "space-between",
-    minHeight: spacing.unit * 9
+    minHeight: spacing(9)
   },
   actionBarText: {
     fontSize: typography.pxToRem(18),
-    marginLeft: spacing.unit * 2,
-    marginTop: spacing.unit
+    marginLeft: spacing(2),
+    marginTop: spacing(1)
   },
   actionBarButtons: {
-    marginLeft: spacing.unit * 2,
-    marginRight: spacing.unit * 2
+    marginLeft: spacing(2),
+    marginRight: spacing(2)
   },
   editModeColour: {
     backgroundColor: "#ffe500"
@@ -33,9 +33,9 @@ const styles = ({ spacing, typography }: Theme) => createStyles({
     backgroundColor: "#dcdcdc"
   },
   modeTag: {
-    marginLeft: spacing.unit * 2,
-    marginBottom: spacing.unit * 2,
-    padding: spacing.unit,
+    marginLeft: spacing(2),
+    marginBottom: spacing(2),
+    padding: spacing(1),
     borderRadius: "5px"
   },
   editModeTagColour: {

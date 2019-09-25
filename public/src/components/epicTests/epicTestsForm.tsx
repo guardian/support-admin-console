@@ -99,11 +99,11 @@ type EpicTestsFormState = EpicTests & {
 const styles = ({ spacing, typography }: Theme) => createStyles({
   testListAndEditor: {
     display: "flex",
-    padding: spacing.unit
+    padding: spacing(1)
   },
   viewText: {
-    marginTop: spacing.unit * 6,
-    marginLeft: spacing.unit * 2,
+    marginTop: spacing(6),
+    marginLeft: spacing(2),
     fontSize: typography.pxToRem(16)
   },
   editModeBorder: {

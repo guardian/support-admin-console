@@ -71,19 +71,19 @@ function paymentMethodToHumanReadable(paymentMethod: string): string {
 
 const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
   formControl: {
-    marginRight: spacing.unit * 4,
-    marginBottom: spacing.unit * 4,
-    paddingTop: spacing.unit,
-    paddingBottom: spacing.unit,
-    paddingLeft: spacing.unit * 2,
-    paddingRight: spacing.unit * 2,
+    marginRight: spacing(4),
+    marginBottom: spacing(4),
+    paddingTop: spacing(1),
+    paddingBottom: spacing(1),
+    paddingLeft: spacing(2),
+    paddingRight: spacing(2),
     border: `1px solid ${palette.grey['300']}`
   },
   button: {
-    marginRight: spacing.unit * 2,
+    marginRight: spacing(2),
   },
   buttons: {
-    marginTop: spacing.unit * 2,
+    marginTop: spacing(2),
   }
 });
 

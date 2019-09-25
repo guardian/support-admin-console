@@ -38,7 +38,7 @@ const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
   content: {
     flexGrow: 1,
     backgroundColor: palette.background.default,
-    padding: spacing.unit * 3,
+    padding: spacing(3),
   },
   link: {
     textDecoration: 'none',

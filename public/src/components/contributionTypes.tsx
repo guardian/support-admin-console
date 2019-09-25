@@ -43,23 +43,23 @@ const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
     flexDirection: 'row'
   },
   button: {
-    marginRight: spacing.unit * 2,
-    marginBottom: spacing.unit * 2
+    marginRight: spacing(2),
+    marginBottom: spacing(2)
   },
   buttons: {
-    marginTop: spacing.unit * 2,
-    marginLeft: spacing.unit * 4
+    marginTop: spacing(2),
+    marginLeft: spacing(4)
   },
   regions: {
     display: 'flex',
     flexWrap: 'wrap'
   },
   region: {
-    paddingRight: spacing.unit * 4,
-    paddingLeft: spacing.unit * 4,
+    paddingRight: spacing(4),
+    paddingLeft: spacing(4),
     borderBottom: `1px solid ${palette.grey['300']}`,
     borderRight: `5px solid ${palette.grey['300']}`,
-    marginBottom: spacing.unit * 4
+    marginBottom: spacing(4)
   },
   regionSettings: {
     display: 'flex',
@@ -69,14 +69,14 @@ const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
     flexDirection: 'column',
     display: 'flex',
     borderRight: `1px solid ${palette.grey['300']}`,
-    marginRight: spacing.unit * 4
+    marginRight: spacing(4)
   },
   default: {
     flexDirection: 'column',
     display: 'flex'
   },
   label: {
-    marginTop: spacing.unit * 4
+    marginTop: spacing(4)
   }
 });
 

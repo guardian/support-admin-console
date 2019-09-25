@@ -8,8 +8,8 @@ import EditableTextField from '../helpers/editableTextField';
 
 const styles = ({ spacing }: Theme) => createStyles({
   button: {
-    marginRight: spacing.unit * 2,
-    marginBottom: spacing.unit * 2
+    marginRight: spacing(2),
+    marginBottom: spacing(2)
   },
   popover: {
     padding: "10px",
@@ -80,7 +80,7 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
 
     return (
       <div>
-        <Button variant="contained" color="primary" onClick={this.onNewTestButtonClick} className={classes.button}>
+        <Button variant="contained" color="primary" onClick={() => this.onNewTestButtonClick} className={classes.button}>
             <AddIcon />
             New {this.props.text}
           </Button>

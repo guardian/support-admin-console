@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode, ChangeEvent } from 'react';
 import { EpicTest, EpicVariant, UserCohort, MaxViews } from "./epicTestsForm";
 import {
   Checkbox,
@@ -31,12 +31,12 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
   container: {
     width: "100%",
     borderTop: `2px solid #999999`,
-    marginLeft: spacing.unit * 2,
-    marginTop: spacing.unit * 6
+    marginLeft: spacing(2),
+    marginTop: spacing(6)
   },
   formControl: {
-    marginTop: spacing.unit * 2,
-    marginBottom: spacing.unit,
+    marginTop: spacing(2),
+    marginBottom: spacing(1),
     display: "block",
   },
   h2: {
@@ -67,17 +67,17 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
     marginBottom: "10px"
   },
   visibilityIcons: {
-    marginTop: spacing.unit * 1.5
+    marginTop: spacing(1.5)
   },
   switchWithIcon: {
     display: "flex"
   },
   visibilityHelperText: {
-    marginTop: spacing.unit * 1.8,
-    marginLeft: spacing.unit
+    marginTop: spacing(1.8),
+    marginLeft: spacing(1)
   },
   deleteButton: {
-    marginTop: spacing.unit * 2,
+    marginTop: spacing(2),
     float: "right"
   },
   isDeleted: {
@@ -150,7 +150,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
     this.updateTest(test => ({...test, "userCohort": selectedCohort}));
   };
 
-  onLocationsChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  onLocationsChange = (event: React.ChangeEvent<HTMLSelectElement>, child: ReactNode) => {
     const selectedLocations = [...event.target.value] as Region[];
     this.updateTest(test => ({...test, "locations": selectedLocations}));
   };
@@ -287,7 +287,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
                 className={classes.select}
                 multiple
                 value={test.locations}
-                onChange={this.onLocationsChange}
+                onChange={() => this.onLocationsChange}
                 input={<Input id="locations-select-multiple-checkbox" />}
                 renderValue={selected => (selected as string[]).join(', ')}
                 disabled={!this.isEditable()}

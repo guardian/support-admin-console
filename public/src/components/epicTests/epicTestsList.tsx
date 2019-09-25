@@ -84,7 +84,7 @@ const styles = ( { typography, spacing }: Theme ) => createStyles({
     textAlign: "center"
   },
   spacer: {
-    minHeight: spacing.unit * 6
+    minHeight: spacing(6)
   }
 });
 
@@ -212,6 +212,7 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
                   className={classNames}
                   onClick={this.onTestSelected(test.name)}
                   key={index}
+                  button={true}
                 >
                   { this.props.editMode ? this.renderReorderButtons(test.name, index) : <div className={classes.buttonsContainer}></div>}
                   <div className={classes.testText}>

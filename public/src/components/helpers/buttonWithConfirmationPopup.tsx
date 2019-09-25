@@ -5,8 +5,8 @@ import { SvgIconProps } from '@material-ui/core/SvgIcon';
 
 const styles = ({ spacing, typography }: Theme) => createStyles({
   button: {
-    marginLeft: spacing.unit * 2,
-    marginBottom: spacing.unit * 2
+    marginLeft: spacing(2),
+    marginBottom: spacing(2)
   },
   popover: {
     padding: "10px",
@@ -64,7 +64,7 @@ class ButtonWithConfirmationPopup extends React.Component<ButtonWithConfirmation
           disabled={this.props.disabled}
           variant="contained"
           color={this.props.color}
-          onClick={this.onClick}
+          onClick={() => this.onClick}
           className={classes.button}>
             {this.props.icon}&nbsp;{this.props.buttonText}
         </Button>
