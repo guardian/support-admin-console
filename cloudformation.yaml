@@ -32,6 +32,9 @@ Parameters:
     Description: Kings Place IP range
     Type: String
     Default: 77.91.248.0/21
+  BastionSecurityGroup:
+    Description: Bastion's security group for SSH
+    Type: String
 
 Resources:
   AutoScalingGroup:
@@ -223,7 +226,7 @@ Resources:
       - IpProtocol: tcp
         FromPort: 22
         ToPort: 22
-        CidrIp: !Ref KingsPlaceIP
+        SourceSecurityGroupId: !Ref BastionSecurityGroup
       - IpProtocol: tcp
         FromPort: 9000
         ToPort: 9000
