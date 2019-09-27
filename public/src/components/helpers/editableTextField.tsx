@@ -39,7 +39,7 @@ const styles = ({ typography, spacing }: Theme) => createStyles({
 });
 
 interface Validation {
-  getError: (value: string) => string | null,
+  getError: (value: string) => string | null, //return null if no errors
   onChange: (valid: boolean) => void  //called every time the validation status of this field changes
 }
 
