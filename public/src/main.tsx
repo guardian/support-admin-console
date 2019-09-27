@@ -19,7 +19,7 @@ import ListItem from '@material-ui/core/ListItem';
 
 const drawerWidth = 240;
 
-const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
+const styles = ({ palette, spacing, mixins, typography }: Theme) => createStyles({
   root: {
     display: 'flex',
   },
@@ -42,15 +42,19 @@ const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
   },
   link: {
     textDecoration: 'none',
+  },
+  heading: {
+    fontSize: typography.pxToRem(24),
+    fontWeight: typography.fontWeightMedium
   }
 });
 
 const getLinkPathsAndNames = (): string[][] =>
   [
     ['/switches', 'Switches'],
-    ['/contribution-types', 'Contribution Types'],
+    ['/contribution-types', 'Contribution types'],
     ['/amounts', 'Amounts'],
-    ['/epic-tests', 'Epic Tests']
+    ['/epic-tests', 'Epic tests']
   ];
 
 const Index = () => <h2>Home</h2>;
@@ -64,7 +68,7 @@ const AppRouter = withStyles(styles)(({classes}: Props) => (
       <nav>
         <AppBar position="fixed" className={classes.appBar}>
           <Toolbar>
-            <Typography variant="h6" color="inherit" noWrap>
+            <Typography className={classes.heading} variant="h1" color="inherit" noWrap>
               Support Admin Console
             </Typography>
           </Toolbar>

@@ -39,7 +39,7 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
     marginBottom: spacing(1),
     display: "block",
   },
-  h2: {
+  h3: {
     fontSize: typography.pxToRem(28),
     fontWeight: typography.fontWeightMedium,
     margin: "10px 0 15px 0"
@@ -47,7 +47,7 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
   hasChanged: {
     color: 'orange'
   },
-  h3: {
+  h4: {
     fontSize: typography.pxToRem(24),
     fontWeight: typography.fontWeightMedium,
     margin: "20px 0 15px 0"
@@ -177,7 +177,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
 
     return (
       <div className={classes.container}>
-        <Typography variant={'h2'} className={classes.h2}>
+        <Typography variant={'h3'} className={classes.h3}>
           {this.props.test && this.props.test.name}
           {statusText()}
         </Typography>
@@ -227,7 +227,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
           />
         </div>
 
-        <Typography variant={'h3'} className={classes.h3}>Variants</Typography>
+        <Typography variant={'h4'} className={classes.h4}>Variants</Typography>
         <div>
           <EpicTestVariantsList
             variants={test.variants}
@@ -238,7 +238,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
           />
         </div>
 
-        <Typography variant={'h3'} className={classes.h3}>Editorial tags</Typography>
+        <Typography variant={'h4'} className={classes.h4}>Editorial tags</Typography>
 
         <div>
           <EditableTextField
@@ -273,7 +273,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
             editEnabled={this.isEditable()}
           />
 
-          <Typography variant={'h3'} className={classes.h3}>Audience</Typography>
+          <Typography variant={'h4'} className={classes.h4}>Audience</Typography>
 
           <FormControl
             className={classes.formControl}>
@@ -326,7 +326,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
               </RadioGroup>
           </FormControl>
 
-          <Typography variant={'h3'} className={this.props.classes.h3}>View frequency settings:</Typography>
+          <Typography variant={'h4'} className={this.props.classes.h4}>View frequency settings</Typography>
 
           <FormControlLabel
             control={
