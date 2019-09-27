@@ -111,6 +111,9 @@ const styles = ({ spacing, typography }: Theme) => createStyles({
   },
   readOnlyModeBorder: {
     border: "4px solid #dcdcdc"
+  },
+  h2: {
+    fontSize: '3rem'
   }
 });
 
@@ -255,7 +258,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
 
     return (
       <>
-        <Typography variant={'h2'}>Epic tests</Typography>
+        <Typography className={classes.h2} variant={'h2'}>Epic tests</Typography>
         <div>
           {
             this.state.previousStateFromServer ?
