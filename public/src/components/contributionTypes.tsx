@@ -37,7 +37,7 @@ const contributionTypesIndices: { [c in ContributionType]: number } = { ONE_OFF:
 const sortContributionTypeSettings = (settings: ContributionTypeSetting[]): ContributionTypeSetting[] =>
   settings.sort((a,b) => contributionTypesIndices[a.contributionType] - contributionTypesIndices[b.contributionType]);
 
-const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
+const styles = ({ palette, spacing }: Theme) => createStyles({
   form: {
     display: 'flex',
     flexDirection: 'row'
@@ -76,7 +76,11 @@ const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
     display: 'flex'
   },
   label: {
-    marginTop: spacing(4)
+    marginTop: spacing(2),
+    fontSize: '1.1rem'
+  },
+  switch: {
+    marginBottom: spacing(0.7)
   }
 });
 
@@ -172,6 +176,7 @@ class ContributionTypesForm extends React.Component<Props, ContributionTypes> {
       <div className={this.props.classes.label}>Enabled</div>
       {allContributionTypes.map(({contributionType, label}) =>
         <FormControlLabel
+        className={this.props.classes.switch}
           control={
             <Switch
               checked={settings.some(c => c.contributionType === contributionType)}
