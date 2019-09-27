@@ -41,11 +41,19 @@ const styles = ({ palette, spacing, mixins, typography }: Theme) => createStyles
     padding: spacing(3),
   },
   link: {
-    textDecoration: 'none',
+    textDecoration: 'none'
   },
   heading: {
     fontSize: typography.pxToRem(24),
     fontWeight: typography.fontWeightMedium
+  },
+  listItem: {
+    '&:hover': {
+      backgroundColor: '#ededed'
+    },
+    '&:focus': {
+      backgroundColor: '#dcdcdc'
+    },
   }
 });
 
@@ -87,7 +95,7 @@ const AppRouter = withStyles(styles)(({classes}: Props) => (
           <List>
             {getLinkPathsAndNames().map(([href, name]) => (
               <Link to={href} className={classes.link}>
-                <ListItem button key={name}>
+                <ListItem className={classes.listItem} button key={name}>
                   <ListItemText primary={name} />
                 </ListItem>
               </Link>
