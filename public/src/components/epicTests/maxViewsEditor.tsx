@@ -85,7 +85,7 @@ class MaxViewsEditor extends React.Component<Props, State> {
       editEnabled={this.props.editMode}
       validation={
         {
-          isValid: (value: string) => isNumber(value),
+          getError: (value: string) => isNumber(value) ? null : 'Must be a number',
           onChange: onFieldValidationChange(this)(fieldName)
         }
       }
