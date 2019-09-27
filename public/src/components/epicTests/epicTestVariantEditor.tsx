@@ -12,7 +12,7 @@ import {onFieldValidationChange, ValidationStatus} from '../helpers/validation';
 
 const validTemplates = ["%%CURRENCY_SYMBOL%%", "%%COUNTRY_NAME%%"];
 
-const getInvalidTemplateError = (text: string): string | null => {
+export const getInvalidTemplateError = (text: string): string | null => {
   const templates: string[] | null = text.match(/%%[A-Z_]*%%/g);
 
   if (templates !== null) {
