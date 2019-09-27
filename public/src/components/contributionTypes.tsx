@@ -176,7 +176,8 @@ class ContributionTypesForm extends React.Component<Props, ContributionTypes> {
       <div className={this.props.classes.label}>Enabled</div>
       {allContributionTypes.map(({contributionType, label}) =>
         <FormControlLabel
-        className={this.props.classes.switch}
+          key={contributionType}
+          className={this.props.classes.switch}
           control={
             <Switch
               checked={settings.some(c => c.contributionType === contributionType)}
@@ -206,7 +207,7 @@ class ContributionTypesForm extends React.Component<Props, ContributionTypes> {
         }}
       >
         {allContributionTypes.map(({contributionType, label}) =>
-          <FormControlLabel value={contributionType} control={<Radio />} label=''/>
+          <FormControlLabel key={contributionType} value={contributionType} control={<Radio />} label=''/>
         )}
       </RadioGroup>
     </div>
@@ -225,7 +226,7 @@ class ContributionTypesForm extends React.Component<Props, ContributionTypes> {
     };
 
     return (
-      <div>
+      <div key={region}>
         <FormControl component={'fieldset' as 'div'} className={classes.region}>
           <FormLabel component={'legend' as 'label'}>{region}</FormLabel>
 

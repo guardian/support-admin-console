@@ -94,7 +94,7 @@ const AppRouter = withStyles(styles)(({classes}: Props) => (
           {/* TODO: use link from react router to avoid a full page reload */}
           <List>
             {getLinkPathsAndNames().map(([href, name]) => (
-              <Link to={href} className={classes.link}>
+              <Link key={name} to={href} className={classes.link}>
                 <ListItem className={classes.listItem} button key={name}>
                   <ListItemText primary={name} />
                 </ListItem>
