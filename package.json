@@ -22,7 +22,7 @@
     "react-router-dom": "^4.3.1"
   },
   "scripts": {
-    "build": "webpack --config webpack.prod.js",
+    "build": "webpack --config webpack.prod.js && npm run test",
     "build-dev": "webpack --config webpack.dev.js",
     "watch": "webpack --config webpack.dev.js --watch",
     "test": "echo 'Running JS tests' && jest"
