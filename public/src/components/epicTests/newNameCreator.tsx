@@ -82,7 +82,7 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
       <div>
         <Button variant="contained" color="primary" onClick={this.onNewNameButtonClick} className={classes.button}>
             <AddIcon />
-            New! {this.props.text}
+            New {this.props.text}
         </Button>
         <Popover
       open={this.state.newNamePopoverOpen}
