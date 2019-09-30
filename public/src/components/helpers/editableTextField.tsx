@@ -13,7 +13,7 @@ const styles = ({ typography, spacing }: Theme) => createStyles({
     "justify-content": "space-between"
   },
   numberContainer: {
-    width: "30%"
+    width: "40%"
   },
   textContainer: {
     width: "100%"
