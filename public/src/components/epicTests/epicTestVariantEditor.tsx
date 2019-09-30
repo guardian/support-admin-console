@@ -10,6 +10,21 @@ import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 import {onFieldValidationChange, ValidationStatus} from '../helpers/validation';
 
 
+const validTemplates = ["%%CURRENCY_SYMBOL%%", "%%COUNTRY_NAME%%"];
+
+export const getInvalidTemplateError = (text: string): string | null => {
+  const templates: string[] | null = text.match(/%%[A-Z_]*%%/g);
+
+  if (templates !== null) {
+    const invalidTemplate: string | undefined =
+      templates.find(template => !validTemplates.includes(template));
+    if (invalidTemplate) return `Invalid template: ${invalidTemplate}`;
+    else return null;
+  } else {
+    return null
+  }
+};
+
 const styles = ({ palette, spacing, typography }: Theme) => createStyles({
   container: {
     width: "100%",
@@ -120,6 +135,12 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
             onSubmit={this.onTextChange("heading")}
             label="Hook:"
             editEnabled={this.props.editMode}
+            validation={
+              {
+                getError: (value: string) => getInvalidTemplateError(value),
+                onChange: onFieldValidationChange(this)("heading")
+              }
+            }
           />
 
           <EditableTextField
@@ -129,10 +150,12 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
             onSubmit={this.onParagraphsChange("paragraphs")}
             label="Paragraphs:"
             editEnabled={this.props.editMode}
-            helperText="Must not be empty"
             validation={
               {
-                isValid: (value: string) => value !== '',
+                getError: (value: string) => {
+                  if (value.trim() === '') return "Field must not be empty";
+                  else return getInvalidTemplateError(value);
+                },
                 onChange: onFieldValidationChange(this)("paragraphs")
               }
             }
@@ -150,6 +173,12 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
             label="Highlighted text:"
             helperText="This will appear as the last sentence"
             editEnabled={this.props.editMode}
+            validation={
+              {
+                getError: (value: string) => getInvalidTemplateError(value),
+                onChange: onFieldValidationChange(this)("highlightedText")
+              }
+            }
           />
 
           <EditableTextField

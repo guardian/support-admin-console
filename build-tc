@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Exit if any of these commands fail
+set -e
+
+npm install
+npm run test
+npm run build
+
