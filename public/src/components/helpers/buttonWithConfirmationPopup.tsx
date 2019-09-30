@@ -15,7 +15,7 @@ const styles = ({ spacing, typography }: Theme) => createStyles({
   message: {
     fontSize: typography.pxToRem(18),
     fontWeight: typography.fontWeightMedium,
-    marginBottom: spacing.unit
+    marginBottom: spacing(1)
   }
 });
 
@@ -30,7 +30,7 @@ interface ButtonWithConfirmationPopupProps extends WithStyles<typeof styles> {
 
 interface ButtonWithConfirmationPopupState {
   popoverOpen: boolean,
-  anchorElement?: HTMLAnchorElement
+  anchorElement?: HTMLButtonElement
 }
 
 class ButtonWithConfirmationPopup extends React.Component<ButtonWithConfirmationPopupProps, ButtonWithConfirmationPopupState> {
@@ -39,7 +39,7 @@ class ButtonWithConfirmationPopup extends React.Component<ButtonWithConfirmation
     anchorElement: undefined
   }
 
-  onClick = (event: React.MouseEvent<HTMLAnchorElement>) =>  {
+  onClick = (event: React.MouseEvent<HTMLButtonElement>) =>  {
     this.setState({
       popoverOpen: true,
       anchorElement: event.currentTarget
@@ -64,7 +64,7 @@ class ButtonWithConfirmationPopup extends React.Component<ButtonWithConfirmation
           disabled={this.props.disabled}
           variant="contained"
           color={this.props.color}
-          onClick={() => this.onClick}
+          onClick={this.onClick}
           className={classes.button}>
             {this.props.icon}&nbsp;{this.props.buttonText}
         </Button>

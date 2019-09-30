@@ -26,7 +26,7 @@ interface NewNameCreatorProps extends WithStyles<typeof styles> {
 
 interface NewNameCreatorState {
   newNamePopoverOpen: boolean,
-  anchorElForPopover?: HTMLAnchorElement,
+  anchorElForPopover?: HTMLButtonElement,
   errorMessage: string
 }
 
@@ -38,11 +38,11 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
     errorMessage: ""
   }
 
-  onNewTestButtonClick = (event: React.MouseEvent<HTMLAnchorElement>) =>  {
+  onNewNameButtonClick = (event: React.MouseEvent<HTMLButtonElement>) =>  {
     this.setState({
       newNamePopoverOpen: true,
       anchorElForPopover: event.currentTarget
-    })
+    });
   }
 
   handleCancel = () => {
@@ -80,37 +80,37 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
 
     return (
       <div>
-        <Button variant="contained" color="primary" onClick={() => this.onNewTestButtonClick} className={classes.button}>
+        <Button variant="contained" color="primary" onClick={this.onNewNameButtonClick} className={classes.button}>
             <AddIcon />
-            New {this.props.text}
-          </Button>
-          <Popover
-            open={this.state.newNamePopoverOpen}
-            anchorEl={this.state.anchorElForPopover}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'center',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'center',
-            }}
+            New! {this.props.text}
+        </Button>
+        <Popover
+      open={this.state.newNamePopoverOpen}
+      anchorEl={this.state.anchorElForPopover}
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'center',
+      }}
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'center',
+      }}
 
-          >
-            <div className={classes.popover}>
-              <EditableTextField
-                required
-                text=""
-                onSubmit={this.handleName}
-                label={this.props.text[0].toUpperCase() + this.props.text.substr(1,) + " name:"}
-                startInEditMode
-                autoFocus
-                errorMessage={this.state.errorMessage}
-                editEnabled={true}
-              />
-              {this.showButton()}
-            </div>
-          </Popover>
+    >
+      <div className={classes.popover}>
+        <EditableTextField
+          required
+          text=""
+          onSubmit={this.handleName}
+          label={this.props.text[0].toUpperCase() + this.props.text.substr(1,) + " name:"}
+          startInEditMode
+          autoFocus
+          errorMessage={this.state.errorMessage}
+          editEnabled={true}
+        />
+        {this.showButton()}
+      </div>
+    </Popover>
     </div>
     )
   }
