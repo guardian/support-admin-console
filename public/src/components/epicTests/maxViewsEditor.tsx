@@ -25,8 +25,8 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
     marginTop: '20px'
   },
   formControl: {
-    marginTop: spacing.unit * 2,
-    marginBottom: spacing.unit,
+    marginTop: spacing(2),
+    marginBottom: spacing(1),
     display: "block",
   },
   selectLabel: {

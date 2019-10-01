@@ -5,8 +5,8 @@ import { SvgIconProps } from '@material-ui/core/SvgIcon';
 
 const styles = ({ spacing, typography }: Theme) => createStyles({
   button: {
-    marginLeft: spacing.unit * 2,
-    marginBottom: spacing.unit * 2
+    marginLeft: spacing(2),
+    marginBottom: spacing(2)
   },
   popover: {
     padding: "10px",
@@ -15,7 +15,7 @@ const styles = ({ spacing, typography }: Theme) => createStyles({
   message: {
     fontSize: typography.pxToRem(18),
     fontWeight: typography.fontWeightMedium,
-    marginBottom: spacing.unit
+    marginBottom: spacing(1)
   }
 });
 
@@ -30,7 +30,7 @@ interface ButtonWithConfirmationPopupProps extends WithStyles<typeof styles> {
 
 interface ButtonWithConfirmationPopupState {
   popoverOpen: boolean,
-  anchorElement?: HTMLAnchorElement
+  anchorElement?: HTMLButtonElement
 }
 
 class ButtonWithConfirmationPopup extends React.Component<ButtonWithConfirmationPopupProps, ButtonWithConfirmationPopupState> {
@@ -39,7 +39,7 @@ class ButtonWithConfirmationPopup extends React.Component<ButtonWithConfirmation
     anchorElement: undefined
   }
 
-  onClick = (event: React.MouseEvent<HTMLAnchorElement>) =>  {
+  onClick = (event: React.MouseEvent<HTMLButtonElement>) =>  {
     this.setState({
       popoverOpen: true,
       anchorElement: event.currentTarget

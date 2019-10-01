@@ -37,29 +37,29 @@ const contributionTypesIndices: { [c in ContributionType]: number } = { ONE_OFF:
 const sortContributionTypeSettings = (settings: ContributionTypeSetting[]): ContributionTypeSetting[] =>
   settings.sort((a,b) => contributionTypesIndices[a.contributionType] - contributionTypesIndices[b.contributionType]);
 
-const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
+const styles = ({ palette, spacing }: Theme) => createStyles({
   form: {
     display: 'flex',
     flexDirection: 'row'
   },
   button: {
-    marginRight: spacing.unit * 2,
-    marginBottom: spacing.unit * 2
+    marginRight: spacing(2),
+    marginBottom: spacing(2)
   },
   buttons: {
-    marginTop: spacing.unit * 2,
-    marginLeft: spacing.unit * 4
+    marginTop: spacing(2),
+    marginLeft: spacing(4)
   },
   regions: {
     display: 'flex',
     flexWrap: 'wrap'
   },
   region: {
-    paddingRight: spacing.unit * 4,
-    paddingLeft: spacing.unit * 4,
+    paddingRight: spacing(4),
+    paddingLeft: spacing(4),
     borderBottom: `1px solid ${palette.grey['300']}`,
     borderRight: `5px solid ${palette.grey['300']}`,
-    marginBottom: spacing.unit * 4
+    marginBottom: spacing(4)
   },
   regionSettings: {
     display: 'flex',
@@ -69,14 +69,18 @@ const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
     flexDirection: 'column',
     display: 'flex',
     borderRight: `1px solid ${palette.grey['300']}`,
-    marginRight: spacing.unit * 4
+    marginRight: spacing(4)
   },
   default: {
     flexDirection: 'column',
     display: 'flex'
   },
   label: {
-    marginTop: spacing.unit * 4
+    marginTop: spacing(2),
+    fontSize: '1.1rem'
+  },
+  switch: {
+    marginBottom: spacing(0.7)
   }
 });
 
@@ -172,6 +176,8 @@ class ContributionTypesForm extends React.Component<Props, ContributionTypes> {
       <div className={this.props.classes.label}>Enabled</div>
       {allContributionTypes.map(({contributionType, label}) =>
         <FormControlLabel
+          key={contributionType}
+          className={this.props.classes.switch}
           control={
             <Switch
               checked={settings.some(c => c.contributionType === contributionType)}
@@ -201,7 +207,7 @@ class ContributionTypesForm extends React.Component<Props, ContributionTypes> {
         }}
       >
         {allContributionTypes.map(({contributionType, label}) =>
-          <FormControlLabel value={contributionType} control={<Radio />} label=''/>
+          <FormControlLabel key={contributionType} value={contributionType} control={<Radio />} label=''/>
         )}
       </RadioGroup>
     </div>
@@ -220,7 +226,7 @@ class ContributionTypesForm extends React.Component<Props, ContributionTypes> {
     };
 
     return (
-      <div>
+      <div key={region}>
         <FormControl component={'fieldset' as 'div'} className={classes.region}>
           <FormLabel component={'legend' as 'label'}>{region}</FormLabel>
 

@@ -99,11 +99,11 @@ type EpicTestsFormState = EpicTests & {
 const styles = ({ spacing, typography }: Theme) => createStyles({
   testListAndEditor: {
     display: "flex",
-    padding: spacing.unit
+    padding: spacing(1)
   },
   viewText: {
-    marginTop: spacing.unit * 6,
-    marginLeft: spacing.unit * 2,
+    marginTop: spacing(6),
+    marginLeft: spacing(2),
     fontSize: typography.pxToRem(16)
   },
   editModeBorder: {
@@ -111,6 +111,9 @@ const styles = ({ spacing, typography }: Theme) => createStyles({
   },
   readOnlyModeBorder: {
     border: "4px solid #dcdcdc"
+  },
+  h2: {
+    fontSize: '3rem'
   }
 });
 
@@ -255,7 +258,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
 
     return (
       <>
-        <Typography variant={'h2'}>Epic tests</Typography>
+        <Typography className={classes.h2} variant={'h2'}>Epic tests</Typography>
         <div>
           {
             this.state.previousStateFromServer ?

@@ -43,26 +43,26 @@ const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
     flexDirection: 'row'
   },
   button: {
-    marginRight: spacing.unit * 2,
-    marginBottom: spacing.unit * 2
+    marginRight: spacing(2),
+    marginBottom: spacing(2)
   },
   buttons: {
-    marginTop: spacing.unit * 2,
-    marginLeft: spacing.unit * 4
+    marginTop: spacing(2),
+    marginLeft: spacing(4)
   },
   regions: {
     display: 'flex',
     flexDirection: 'column'
   },
   region: {
-    paddingRight: spacing.unit * 4,
-    paddingLeft: spacing.unit * 4,
+    paddingRight: spacing(4),
+    paddingLeft: spacing(4),
     borderBottom: `1px solid ${palette.grey['300']}`,
-    marginBottom: spacing.unit * 4,
+    marginBottom: spacing(4),
     flexDirection: 'column'
   },
   ContributionType: {
-    margin: spacing.unit,
+    margin: spacing(1),
     display: 'flex',
     borderBottom: `1px dotted ${palette.grey['300']}`,
     paddingBottom: '2px'

@@ -8,10 +8,10 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
 
 
-const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
+const styles = ({ spacing }: Theme) => createStyles({
   amount: {
-    marginLeft: spacing.unit,
-    marginRight: spacing.unit
+    marginLeft: spacing(1),
+    marginRight: spacing(1)
   },
   isDefault: {
     color: 'red'
@@ -41,7 +41,7 @@ class AmountComponent extends React.Component<Props, AmountState> {
     };
   }
 
-  onButtonClick = (event: React.MouseEvent<HTMLInputElement>): void => {
+  onButtonClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
     this.setState({
       anchor: event.currentTarget,
       amount: this.state.amount
@@ -55,7 +55,6 @@ class AmountComponent extends React.Component<Props, AmountState> {
   }
 
   render() {
-    const { classes } = this.props;
 
     return (
       <div>

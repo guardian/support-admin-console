@@ -48,8 +48,8 @@ const styles = ({ palette, spacing, typography }: Theme) => createStyles({
     fontWeight: "bold"
   },
   formControl: {
-    marginTop: spacing.unit * 2,
-    marginBottom: spacing.unit,
+    marginTop: spacing(2),
+    marginBottom: spacing(1),
     minWidth: "60%",
     maxWidth: "100%",
     display: "block",
@@ -59,7 +59,7 @@ const styles = ({ palette, spacing, typography }: Theme) => createStyles({
     margin: "20px 0 10px 0"
   },
   deleteButton: {
-    marginTop: spacing.unit * 2,
+    marginTop: spacing(2),
     float: "right"
   }
 });

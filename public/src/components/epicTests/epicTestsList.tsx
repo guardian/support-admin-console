@@ -84,7 +84,10 @@ const styles = ( { typography, spacing }: Theme ) => createStyles({
     textAlign: "center"
   },
   spacer: {
-    minHeight: spacing.unit * 6
+    minHeight: spacing(6)
+  },
+  testName: {
+    fontSize: "0.875rem"
   }
 });
 
@@ -212,10 +215,11 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
                   className={classNames}
                   onClick={this.onTestSelected(test.name)}
                   key={index}
+                  button={true}
                 >
                   { this.props.editMode ? this.renderReorderButtons(test.name, index) : <div className={classes.buttonsContainer}></div>}
                   <div className={classes.testText}>
-                    <Typography noWrap={true}>{test.name}</Typography>
+                    <Typography className={classes.testName}noWrap={true}>{test.name}</Typography>
                     {(testStatus && testStatus.isDeleted) && (<div><Typography className={classes.toBeDeleted}>To be deleted</Typography></div>)}
                   </div>
                   {testStatus && testStatus.isDeleted ? renderDeleteIcon() : renderVisibilityIcons(test.isOn)}
