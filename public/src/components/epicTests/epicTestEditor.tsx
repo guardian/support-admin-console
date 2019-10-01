@@ -67,13 +67,13 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
     marginBottom: "10px"
   },
   visibilityIcons: {
-    marginTop: spacing(1.5)
+    marginTop: spacing(1)
   },
   switchWithIcon: {
     display: "flex"
   },
   visibilityHelperText: {
-    marginTop: spacing(1.8),
+    marginTop: spacing(1),
     marginLeft: spacing(1)
   },
   deleteButton: {
