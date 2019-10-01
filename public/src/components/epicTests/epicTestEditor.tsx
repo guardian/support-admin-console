@@ -150,8 +150,8 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
     this.updateTest(test => ({...test, "userCohort": selectedCohort}));
   };
 
-  onLocationsChange = (event: React.ChangeEvent<HTMLSelectElement>, child: ReactNode) => {
-    const selectedLocations = [...event.target.value] as Region[];
+  onLocationsChange = (event: React.ChangeEvent<{ name?: string | undefined; value: unknown; }>, child: ReactNode) => {
+    const selectedLocations = event.target.value as Region[];
     this.updateTest(test => ({...test, "locations": selectedLocations}));
   };
 
@@ -287,7 +287,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
                 className={classes.select}
                 multiple
                 value={test.locations}
-                onChange={() => this.onLocationsChange}
+                onChange={this.onLocationsChange}
                 input={<Input id="locations-select-multiple-checkbox" />}
                 renderValue={selected => (selected as string[]).join(', ')}
                 disabled={!this.isEditable()}
