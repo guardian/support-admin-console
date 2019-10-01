@@ -16,14 +16,14 @@ export const renderVisibilityIcons = (isOn: boolean) => {
 export const renderVisibilityHelpText = (isOn: boolean) => {
   return (
     isOn ?
-    <Typography color={'textSecondary'}>(Visible at <a href="https://www.theguardian.com/">theguardian.com</a>)</Typography>
+    <Typography color={'textSecondary'}>(Visible to readers at <a href="https://www.theguardian.com">theguardian.com</a>)</Typography>
     :
-    <Typography color={'textSecondary'}>(Visible at <a href="https://www.theguardian.com#show-draft-epics">theguardian.com#show-draft-epics</a>)</Typography>
+    <Typography color={'textSecondary'}>(Only visible at <a href="https://www.theguardian.com">theguardian.com</a> if you add <em>#show-draft-epics</em> at the end of the url)</Typography>
   );
-}
+};
 
 export const renderDeleteIcon = () => {
   return (
     <DeleteForeverIcon color={'error'} />
   )
-}
+};
