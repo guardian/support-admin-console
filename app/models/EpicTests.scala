@@ -42,7 +42,8 @@ case class EpicVariant(
   footer: Option[String] = None,
   showTicker: Boolean = false,
   backgroundImageUrl: Option[String] = None,
-  cta: Option[Cta]
+  cta: Option[Cta],
+  classNames: List[String] = Nil
 )
 
 case class MaxViews(
