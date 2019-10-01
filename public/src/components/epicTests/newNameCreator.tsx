@@ -85,18 +85,18 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
             New {this.props.text}
         </Button>
         <Popover
-      open={this.state.newNamePopoverOpen}
-      anchorEl={this.state.anchorElForPopover}
-      anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'center',
-      }}
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'center',
-      }}
+          open={this.state.newNamePopoverOpen}
+          anchorEl={this.state.anchorElForPopover}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
 
-    >
+        >
       <div className={classes.popover}>
         <EditableTextField
           required
