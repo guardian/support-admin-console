@@ -157,15 +157,17 @@ class EpicTestActionBar extends React.Component<ActionBarProps> {
     const counts = {
       deleted: 0,
       created: 0,
-      modified: 0
+      modified: 0,
+      archived: 0
     };
     Object.keys(modifiedTests).forEach(key => {
       if (modifiedTests[key].isDeleted) counts.deleted++;
       else if (modifiedTests[key].isNew) counts.created++;
+      else if (modifiedTests[key].isArchived) counts.archived++;
       else counts.modified++;
     });
 
-    const statusLine = (status: 'deleted' | 'created' | 'modified') => counts[status] > 0 &&
+    const statusLine = (status: 'deleted' | 'created' | 'modified' | 'archived') => counts[status] > 0 &&
       <span>
         <br />&bull; {`${counts[status]} test${counts[status] !== 1 ? "s" : ""} ${status}`}
       </span>;
@@ -176,6 +178,7 @@ class EpicTestActionBar extends React.Component<ActionBarProps> {
         {statusLine('deleted')}
         {statusLine('created')}
         {statusLine('modified')}
+        {statusLine('archived')}
       </>
     );
   };

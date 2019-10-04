@@ -84,7 +84,8 @@ export type ModifiedTests = {
   [testName: string]: {
     isValid: boolean,
     isDeleted: boolean,
-    isNew: boolean
+    isNew: boolean,
+    isArchived: boolean
   }
 };
 
@@ -187,6 +188,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
           [modifiedTestName]: {
             isValid: true, // not already modified, assume it's valid until told otherwise
             isDeleted: false,
+            isArchived: false,
             isNew: !this.state.tests.some(test => test.name === modifiedTestName)
           }
         }
@@ -220,7 +222,12 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
   onTestDelete = (testName: string): void => {
     const updatedState = this.state.modifiedTests[testName] ?
       { ...this.state.modifiedTests[testName], isDeleted: true } :
-      { isValid: true, isDeleted: true, isNew: false};
+      {
+        isValid: true,
+        isDeleted: true,
+        isNew: false,
+        isArchived: false
+      };
 
     this.setState({
       modifiedTests: {
@@ -229,6 +236,24 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
       }
     });
   };
+
+  onTestArchive = (testName: string): void => {
+    const updatedState = this.state.modifiedTests[testName] ?
+    { ...this.state.modifiedTests[testName], isArchived: true } :
+    {
+      isValid: true,
+      isDeleted: false,
+      isNew: false,
+      isArchived: true
+    };
+
+    this.setState({
+      modifiedTests: {
+        ...this.state.modifiedTests,
+        [testName]: updatedState
+      }
+    });
+  }
 
   onSelectedTestName = (testName: string): void => {
       this.setState({
@@ -292,7 +317,9 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
                       key={test.name}
                       editMode={this.state.editMode}
                       onDelete={this.onTestDelete}
+                      onArchive={this.onTestArchive}
                       isDeleted={this.state.modifiedTests[test.name] && this.state.modifiedTests[test.name].isDeleted}
+                      isArchived={this.state.modifiedTests[test.name] && this.state.modifiedTests[test.name].isArchived}
                       isNew={this.state.modifiedTests[test.name] && this.state.modifiedTests[test.name].isNew}
                     />)
                   ) : (<Typography className={classes.viewText}>Click on a test on the left to view contents.</Typography>)}

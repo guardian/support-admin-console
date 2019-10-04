@@ -22,14 +22,15 @@ import EditableTextField from "../helpers/editableTextField"
 import { Region } from '../../utils/models';
 import EpicTestVariantsList from './epicTestVariantsList';
 import MaxViewsEditor from './maxViewsEditor';
-import { renderVisibilityIcons, renderVisibilityHelpText, renderDeleteIcon } from './utilities';
+import { renderVisibilityIcons, renderVisibilityHelpText } from './utilities';
 import {onFieldValidationChange, ValidationStatus} from '../helpers/validation';
 import ButtonWithConfirmationPopup from '../helpers/buttonWithConfirmationPopup';
 import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
+import ArchiveIcon from '@material-ui/icons/Archive';
 
 const styles = ({ spacing, typography}: Theme) => createStyles({
   container: {
-    width: "100%",
+    width: '100%',
     borderTop: `2px solid #999999`,
     marginLeft: spacing(2),
     marginTop: spacing(6)
@@ -37,12 +38,12 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
   formControl: {
     marginTop: spacing(2),
     marginBottom: spacing(1),
-    display: "block",
+    display: 'block',
   },
   h3: {
     fontSize: typography.pxToRem(28),
     fontWeight: typography.fontWeightMedium,
-    margin: "10px 0 15px 0"
+    margin: '10px 0 15px 0'
   },
   hasChanged: {
     color: 'orange'
@@ -50,7 +51,7 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
   h4: {
     fontSize: typography.pxToRem(24),
     fontWeight: typography.fontWeightMedium,
-    margin: "20px 0 15px 0"
+    margin: '20px 0 15px 0'
   },
   select: {
     minWidth: "460px",
@@ -60,28 +61,35 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
   selectLabel: {
     fontSize: typography.pxToRem(22),
     fontWeight: typography.fontWeightMedium,
-    color: "black"
+    color: 'black'
   },
   radio: {
-    paddingTop: "20px",
-    marginBottom: "10px"
+    paddingTop: '20px',
+    marginBottom: '10px'
   },
   visibilityIcons: {
     marginTop: spacing(1)
   },
   switchWithIcon: {
-    display: "flex"
+    display: 'flex'
   },
   visibilityHelperText: {
     marginTop: spacing(1),
     marginLeft: spacing(1)
   },
-  deleteButton: {
+  buttons: {
+    display: 'flex',
+    justifyContent: 'flex-end'
+  },
+  button: {
     marginTop: spacing(2),
-    float: "right"
+    float: 'right'
   },
   isDeleted: {
-    color: "#f44336"
+    color: '#f44336'
+  },
+  isArchived: {
+    color: '#a1845c'
   }
 });
 
@@ -95,7 +103,9 @@ interface EpicTestEditorProps extends WithStyles<typeof styles> {
   visible: boolean,
   editMode: boolean,
   onDelete: (testName: string) => void,
+  onArchive: (testName: string) => void,
   isDeleted: boolean,
+  isArchived: boolean,
   isNew: boolean
 }
 
@@ -109,15 +119,17 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
     validationStatus: {}
   };
 
+  areYouSure = `Are you sure? This can't be undone without cancelling entire edit session!`;
+
   isEditable = () => {
-    return this.props.editMode && !this.props.isDeleted;
-  };
+    return this.props.editMode && !this.props.isDeleted && !this.props.isArchived;
+  }
 
   // To save dotcom from having to work this out
   hasCountryName = (test: EpicTest): boolean => test.variants.some(variant =>
     variant.heading && variant.heading.includes(countryNameTemplate) ||
       variant.paragraphs.some(para => para.includes(countryNameTemplate))
-  );
+  )
 
   updateTest = (update: (test: EpicTest) => EpicTest) => {
     if (this.props.test) {
@@ -128,49 +140,61 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
         hasCountryName: this.hasCountryName(updatedTest)
       })
     }
-  };
+  }
 
   onVariantsChange = (updatedVariantList: EpicVariant[]): void => {
     if (this.props.test) {
       this.updateTest(test => ({...test, "variants": updatedVariantList}));
     }
-  };
+  }
 
   onListChange = (fieldName: string) => (updatedString: string): void => {
     this.updateTest(test => ({...test, [fieldName]: updatedString.split(",")}));
-  };
+  }
 
   onSwitchChange = (fieldName: string) => (event: React.ChangeEvent<HTMLInputElement>): void =>  {
     const updatedBool = event.target.checked;
     this.updateTest(test => ({...test, [fieldName]: updatedBool}));
-  };
+  }
 
   onUserCohortChange = (event: React.ChangeEvent<{}>, value: string): void => {
     let selectedCohort = value as UserCohort;
     this.updateTest(test => ({...test, "userCohort": selectedCohort}));
-  };
+  }
 
   onLocationsChange = (event: React.ChangeEvent<{ name?: string | undefined; value: unknown; }>, child: ReactNode) => {
     const selectedLocations = event.target.value as Region[];
     this.updateTest(test => ({...test, "locations": selectedLocations}));
-  };
+  }
 
   renderDeleteTestButton = (testName: string) => {
     return this.isEditable() && (
       <ButtonWithConfirmationPopup
         buttonText="Delete test"
-        confirmationText={`Are you sure? This can't be undone without cancelling entire edit session!`}
+        confirmationText={this.areYouSure}
         onConfirm={() => this.props.onDelete(testName)}
         icon={<DeleteSweepIcon />}
       />
     );
   };
 
+  renderArchiveButton = (testName: string) => {
+    return this.isEditable() && (
+      <ButtonWithConfirmationPopup
+        buttonText="Archive test"
+        confirmationText={this.areYouSure}
+        onConfirm={() => this.props.onArchive(testName)}
+        icon={<ArchiveIcon />}
+      />
+    )
+  }
+
   renderEditor = (test: EpicTest): React.ReactNode => {
     const {classes} = this.props;
 
     const statusText = () => {
       if (this.props.isDeleted) return <span className={classes.isDeleted}>&nbsp;(to be deleted)</span>;
+      else if (this.props.isArchived) return <span className={classes.isArchived}>&nbsp;(to be archived)</span>;
       else if (this.props.isNew) return <span className={classes.hasChanged}>&nbsp;(new)</span>;
       else if (this.props.hasChanged) return <span className={classes.hasChanged}>&nbsp;(modified)</span>;
     };
@@ -348,17 +372,21 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
             onValidationChange={onFieldValidationChange(this)('maxViews')}
           />
 
-          <div className={classes.deleteButton}>{this.renderDeleteTestButton(test.name)}</div>
+          <div className={classes.buttons}>
+            <div className={classes.button}>{this.renderArchiveButton(test.name)}</div>
+            <div className={classes.button}>{this.renderDeleteTestButton(test.name)}</div>
+          </div>
+
         </div>
       </div>
     )
-  };
+  }
 
   render(): React.ReactNode {
     return (
       this.props.test ? this.props.visible && this.renderEditor(this.props.test) : null
     )
-  };
+  }
 }
 
 export default withStyles(styles)(EpicTestEditor);
