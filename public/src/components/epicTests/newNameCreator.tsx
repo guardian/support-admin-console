@@ -38,40 +38,52 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
     errorMessage: ""
   }
 
-  onNewNameButtonClick = (event: React.MouseEvent<HTMLButtonElement>) =>  {
+  onNewNameButtonClick = (event: React.MouseEvent<HTMLButtonElement>): void =>  {
     this.setState({
       newNamePopoverOpen: true,
       anchorElForPopover: event.currentTarget
     });
   }
 
-  handleCancel = () => {
-    this.setState({ newNamePopoverOpen: false });
+  closePopover = (): void => {
+    this.setState(
+      {
+        newNamePopoverOpen: false,
+        errorMessage: ""
+      }
+    );
   }
 
-  isDuplicateName = (newName: string) => {
+  setErrorMessage = (message: string): void => {
+    this.setState( {errorMessage: message });
+  };
+
+  isDuplicateName = (newName: string): boolean => {
     const newLowerCase: string = newName.toLowerCase();
     const isDuplicate = this.props.existingNames.some(name => name.toLowerCase() === newLowerCase);
     return isDuplicate;
-  }
+  };
 
-  handleName = (newTestName: string) => {
+  containsInvalidChars = (newName: string): boolean => {
+    return (/[^\w-]/.test(newName));
+  };
+
+  handleName = (newTestName: string): void => {
     if (newTestName === "") {
-      this.setState( { errorMessage: "Name cannot be empty - please enter some text"});
-      return;
-    }
-    else if (this.isDuplicateName(newTestName)) {
-      this.setState( { errorMessage: "Name already exists - please try another" });
-      return;
+      this.setErrorMessage("Name cannot be empty - please enter some text");
+    } else if (this.isDuplicateName(newTestName)) {
+      this.setErrorMessage("Name already exists - please try another");
+    } else if (this.containsInvalidChars(newTestName)) {
+      this.setErrorMessage("Only letters, numbers, underscores and hyphens are allowed");
     } else {
-      this.setState({ newNamePopoverOpen: false })
+      this.closePopover();
       this.props.onValidName(newTestName);
     }
   }
 
   showButton = (): React.ReactFragment | null => {
     return this.props.editEnabled && (
-      <Button onClick={this.handleCancel}>Cancel</Button>
+      <Button onClick={this.closePopover}>Cancel</Button>
     )
   }
 
