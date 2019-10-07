@@ -12,8 +12,9 @@ import io.circe.syntax._
 import io.circe.generic.auto._
 import play.api.libs.circe.Circe
 import play.api.mvc._
-import services.S3Client.S3ObjectSettings
+import services.S3Client.{S3IO, S3ObjectSettings, S3RawIO}
 import services.{FastlyPurger, S3Json, VersionedS3Data}
+import zio.ZIO
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -38,6 +39,11 @@ class LockableSettingsController[T : Decoder : Encoder](
   fastlyPurger: Option[FastlyPurger]
 )(implicit ec: ExecutionContext) extends AbstractController(components) with Circe with StrictLogging {
 
+  private val runtime = new zio.Runtime[S3ObjectSettings] {
+    val Environment = dataObjectSettings
+    val Platform = zio.internal.PlatformLive.Default
+  }
+
   private val lockObjectSettings = S3ObjectSettings(
     bucket = "support-admin-console",
     key = s"$stage/locks/$name.lock",
@@ -47,14 +53,17 @@ class LockableSettingsController[T : Decoder : Encoder](
 
   private val s3Client = services.S3
 
-  private def withLockStatus(f: VersionedS3Data[LockStatus] => Future[Result]): Future[Result] =
-    S3Json.getFromJson[LockStatus](lockObjectSettings)(s3Client).flatMap {
-      case Right(fromS3) => f(fromS3)
-      case Left(error) => Future.successful(InternalServerError(error))
+  private def withLockStatus(f: VersionedS3Data[LockStatus] => ZIO[S3ObjectSettings, Throwable, Result]): Future[Result] =
+    runtime.unsafeRunToFuture {
+      S3Json.getFromJson[LockStatus](s3Client)
+        .provide(lockObjectSettings)
+        .flatMap(f)
+        .catchAll(error => ZIO.succeed(InternalServerError(error.getMessage)))
     }
 
-  private def setLockStatus(lockStatus: VersionedS3Data[LockStatus]) =
-    S3Json.putAsJson(lockObjectSettings, lockStatus)(s3Client)
+  private def setLockStatus(lockStatus: VersionedS3Data[LockStatus]): S3RawIO =
+    S3Json.putAsJson(lockStatus)(s3Client)
+      .provide(lockObjectSettings)
 
   private def purgeFastlyCache: EitherT[Future,String,Unit] =
     fastlyPurger
@@ -65,14 +74,14 @@ class LockableSettingsController[T : Decoder : Encoder](
     * Returns current version of the settings in s3 as json, with the lock status.
     * The s3 data is validated against the model.
     */
-  def get= authAction.async { request =>
+  def get = authAction.async { request =>
     withLockStatus { case VersionedS3Data(lockStatus, _) =>
-      S3Json.getFromJson[T](dataObjectSettings)(s3Client).map {
-        case Right(VersionedS3Data(value, version)) =>
+      S3Json.getFromJson[T](s3Client)
+        .provide(dataObjectSettings)
+        .map { case VersionedS3Data(value, version) =>
           Ok(S3Json.noNulls(LockableSettingsResponse(value, version, lockStatus, request.user.email).asJson))
-
-        case Left(error) => InternalServerError(error)
-      }
+        }
+        .catchAll(error => ZIO.succeed(InternalServerError(error)))
     }
   }
 
@@ -83,23 +92,49 @@ class LockableSettingsController[T : Decoder : Encoder](
   def set = authAction.async(circe.json[VersionedS3Data[T]]) { request =>
     withLockStatus { case VersionedS3Data(lockStatus, lockFileVersion) =>
       if (lockStatus.email.contains(request.user.email)) {
-        val result: EitherT[Future, String, Unit] = for {
-          _ <- EitherT(S3Json.putAsJson(dataObjectSettings, request.body)(s3Client))
-          _ <- EitherT(setLockStatus(VersionedS3Data(LockStatus.unlocked, lockFileVersion)))
+        val result = for {
+          _ <- S3Json.putAsJson(request.body) (s3Client).provide(dataObjectSettings)
+          _ <- setLockStatus(VersionedS3Data(LockStatus.unlocked, lockFileVersion))
         } yield ()
 
-        result.value.map {
-          case Right(_) =>
-            fastlyPurger.foreach(_.purge)
-            logger.info(s"Successfully published ${dataObjectSettings.key} (user ${request.user.email}")
-            Ok("updated")
-          case Left(error) =>
+        result
+          .flatMap { _ =>
+            //TODO - this is crap
+            // Even if purging fails, we have successfully published the change
+            fastlyPurger match {
+              case Some(purger) =>
+                purger.purge
+                  .map(_ => Ok("updated"))
+              case None =>
+                logger.info(s"Successfully published ${dataObjectSettings.key} (user ${request.user.email}")
+                ZIO.succeed(Ok("updated"))
+            }
+          }
+          .catchAll { error =>
             logger.error(s"Failed to publish ${dataObjectSettings.key} (user ${request.user.email}: $error")
-            InternalServerError(error)
-        }
+            ZIO.succeed(InternalServerError(error))
+          }
       } else {
-        Future.successful(Conflict(s"You do not currently have ${dataObjectSettings.key} open for edit"))
+        ZIO.succeed(Conflict(s"You do not currently have ${dataObjectSettings.key} open for edit"))
       }
+//          val result: EitherT[Future, String, Unit] = for {
+//            _ <- EitherT(S3Json.putAsJson(dataObjectSettings, request.body)(s3Client))
+//            _ <- EitherT(setLockStatus(VersionedS3Data(LockStatus.unlocked, lockFileVersion)))
+//          } yield ()
+//        }
+//
+//        result.value.map {
+//          case Right(_) =>
+//            fastlyPurger.foreach(_.purge)
+//            logger.info(s"Successfully published ${dataObjectSettings.key} (user ${request.user.email}")
+//            Ok("updated")
+//          case Left(error) =>
+//            logger.error(s"Failed to publish ${dataObjectSettings.key} (user ${request.user.email}: $error")
+//            InternalServerError(error)
+//        }
+//      } else {
+//        Future.successful(Conflict(s"You do not currently have ${dataObjectSettings.key} open for edit"))
+//      }
     }
   }
 
