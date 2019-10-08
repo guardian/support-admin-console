@@ -99,7 +99,7 @@ object S3 extends S3Client with StrictLogging {
   private def writeObject(data: RawVersionedS3Data): S3ObjectSettings => S3IO[Throwable, String] = { objectSettings =>
     val bytes = data.value.getBytes(StandardCharsets.UTF_8)
 
-    ZIO(new ByteArrayInputStream(bytes))
+    IO(new ByteArrayInputStream(bytes))
       .bracket(stream => UIO(stream.close()))
       .apply { stream =>
         val metadata = new ObjectMetadata()
@@ -120,7 +120,7 @@ object S3 extends S3Client with StrictLogging {
           else request
         )
 
-        ZIO.succeed(data)
+        IO.succeed(data)
       }
   }
 }

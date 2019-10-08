@@ -58,7 +58,7 @@ class LockableSettingsController[T : Decoder : Encoder](
         .flatMap(f)
         .catchAll(error => {
           logger.error(s"Returning InternalServerError to client: ${error.getMessage}", error)
-          ZIO.succeed(InternalServerError(error.getMessage))
+          IO.succeed(InternalServerError(error.getMessage))
         })
     }
 
@@ -98,14 +98,14 @@ class LockableSettingsController[T : Decoder : Encoder](
 
             fastlyPurger
               .map(_.purge.map(_ => Ok("updated")))
-              .getOrElse(ZIO.succeed(Ok("updated")))
+              .getOrElse(IO.succeed(Ok("updated")))
           }
           .mapError { error =>
             logger.error(s"Failed to publish ${dataObjectSettings.key} (user ${request.user.email}: $error")
             error
           }
       } else {
-        ZIO.succeed(Conflict(s"You do not currently have ${dataObjectSettings.key} open for edit"))
+        IO.succeed(Conflict(s"You do not currently have ${dataObjectSettings.key} open for edit"))
       }
     }
   }
@@ -124,7 +124,7 @@ class LockableSettingsController[T : Decoder : Encoder](
         }
       } else {
         logger.info(s"User ${request.user.email} failed to take control of ${dataObjectSettings.key} because it was already locked")
-        ZIO.succeed(Conflict(s"File ${dataObjectSettings.key} is already locked"))
+        IO.succeed(Conflict(s"File ${dataObjectSettings.key} is already locked"))
       }
     }
   }
@@ -141,7 +141,7 @@ class LockableSettingsController[T : Decoder : Encoder](
         }
       } else {
         logger.info(s"User ${request.user.email} tried to unlock ${dataObjectSettings.key}, but they did not have a lock")
-        ZIO.succeed(BadRequest(s"File ${dataObjectSettings.key} is not currently locked by this user"))
+        IO.succeed(BadRequest(s"File ${dataObjectSettings.key} is not currently locked by this user"))
       }
     }
   }
