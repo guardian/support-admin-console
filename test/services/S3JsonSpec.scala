@@ -2,14 +2,21 @@ package services
 
 import models._
 import org.scalatest.{EitherValues, FlatSpec, Matchers}
-import services.S3Client.{RawVersionedS3Data, S3ObjectSettings}
+import services.S3Client.{RawVersionedS3Data, S3Action, S3ObjectSettings}
 import io.circe.generic.auto._
 import gnieh.diffson.circe._
+import zio.IO
 
 import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.concurrent.duration._
 
 class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
+
+  val runtime = new zio.Runtime[Unit] {
+    val Environment = ()
+    val Platform = zio.internal.PlatformLive.Default
+  }
+
   val expectedJson =
     """
       |{
@@ -53,8 +60,8 @@ class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
   )
 
   val dummyS3Client = new S3Client {
-    def get(objectSettings: S3ObjectSettings)(implicit ec: ExecutionContext): Future[Either[String,RawVersionedS3Data]] = Future {
-      Right {
+    def get: S3Action = { _ =>
+      IO.succeed {
         VersionedS3Data[String](
           expectedJson,
           "v1"
@@ -62,30 +69,34 @@ class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
       }
     }
 
-    def put(objectSettings: S3ObjectSettings, data: RawVersionedS3Data)(implicit ec: ExecutionContext): Future[Either[String,RawVersionedS3Data]] = Future(Right(data))
+    def put(data: RawVersionedS3Data): S3Action = { _ =>
+      IO.succeed(data)
+    }
   }
 
   it should "decode from json" in {
     import ExecutionContext.Implicits.global
 
     val result = Await.result(
-      S3Json.getFromJson[SupportFrontendSwitches](objectSettings)(dummyS3Client),
+      runtime.unsafeRunToFuture {
+        S3Json.getFromJson[SupportFrontendSwitches](dummyS3Client).apply(objectSettings)
+      },
       1.second
     )
 
-    result should be(Right(
-      expectedDecoded
-    ))
+    result should be(expectedDecoded)
   }
 
   it should "encode as json" in {
     import ExecutionContext.Implicits.global
 
     val result = Await.result(
-      S3Json.putAsJson[SupportFrontendSwitches](objectSettings, expectedDecoded)(dummyS3Client),
+      runtime.unsafeRunToFuture {
+        S3Json.putAsJson[SupportFrontendSwitches](expectedDecoded)(dummyS3Client).apply(objectSettings)
+      },
       1.second
     )
-    val diff = JsonDiff.diff(expectedJson, result.right.value.value, false)
+    val diff = JsonDiff.diff(expectedJson, result.value, false)
 
     diff should be(JsonPatch(Nil))
   }
