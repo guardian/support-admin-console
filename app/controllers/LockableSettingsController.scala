@@ -38,7 +38,7 @@ class LockableSettingsController[T : Decoder : Encoder](
 )(implicit ec: ExecutionContext) extends AbstractController(components) with Circe with StrictLogging {
 
   private val runtime = new zio.Runtime[S3ObjectSettings] {
-    val Environment = dataObjectSettings
+    val Environment = dataObjectSettings  //TODO what's the point of this?
     val Platform = zio.internal.PlatformLive.Default
   }
 
@@ -56,7 +56,10 @@ class LockableSettingsController[T : Decoder : Encoder](
       S3Json.getFromJson[LockStatus](s3Client)
         .provide(lockObjectSettings)
         .flatMap(f)
-        .catchAll(error => ZIO.succeed(InternalServerError(error.getMessage)))
+        .catchAll(error => {
+          logger.error(s"Returning InternalServerError to client: ${error.getMessage}", error)
+          ZIO.succeed(InternalServerError(error.getMessage))
+        })
     }
 
   private def setLockStatus(lockStatus: VersionedS3Data[LockStatus]): S3RawIO =
@@ -85,7 +88,7 @@ class LockableSettingsController[T : Decoder : Encoder](
     withLockStatus { case VersionedS3Data(lockStatus, lockFileVersion) =>
       if (lockStatus.email.contains(request.user.email)) {
         val result = for {
-          _ <- S3Json.putAsJson(request.body) (s3Client).provide(dataObjectSettings)
+          _ <- S3Json.putAsJson(request.body)(s3Client).provide(dataObjectSettings)
           _ <- setLockStatus(VersionedS3Data(LockStatus.unlocked, lockFileVersion))
         } yield ()
 

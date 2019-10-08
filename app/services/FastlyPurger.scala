@@ -11,13 +11,11 @@ object FastlyPurger {
   case class FastlyPurgerError(error: String) extends Throwable
 }
 
-//TODO - should ec be passed in as environment?
 class FastlyPurger(url: String, ws: WSClient)(implicit val ec: ExecutionContext) extends StrictLogging {
 
   private def errorMessage = s"Update succeeded but failed to purge the fastly cache, speak to a Developer!"
 
   //TODO - narrow error type to FastlyPurgerError
-  //TODO - do we have to use Eithers here?
   def purge: IO[Throwable, Unit] = {
     IO.fromFuture { implicit ec =>
       val result = ws.url(url).execute("PURGE").map { result =>

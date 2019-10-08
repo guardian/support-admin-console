@@ -75,8 +75,28 @@ object S3 extends S3Client with StrictLogging {
       }
   }
 
-  //TODO - use this below
-  private def write(data: RawVersionedS3Data): S3RawIO = ZIO.accessM { objectSettings =>
+  def put(data: RawVersionedS3Data): S3RawIO = ZIO.accessM { objectSettings =>
+    Task(s3Client.getObject(objectSettings.bucket, objectSettings.key))
+      .bracket(s3Object => UIO(s3Object.close()))
+      .apply { s3Object =>
+        val currentVersion = s3Object.getObjectMetadata.getVersionId
+
+        if (currentVersion == data.version) {
+          writeObject(data)
+        } else {
+          logger.warn(s"Cannot update S3 object $objectSettings because provided version (${data.version}) does not match latest version ($currentVersion)")
+          IO.fail(S3VersionMatchError)
+        }
+      }
+      .mapError {
+        case e: S3ClientError => e
+        case e =>
+          logger.error(s"Error writing $objectSettings to S3: ${e.getMessage}", e)
+          S3PutObjectError(e)
+      }
+  }
+
+  private def writeObject(data: RawVersionedS3Data): S3IO[Throwable,String] = ZIO.accessM { objectSettings =>
     val bytes = data.value.getBytes(StandardCharsets.UTF_8)
 
     ZIO(new ByteArrayInputStream(bytes))
@@ -101,56 +121,6 @@ object S3 extends S3Client with StrictLogging {
         )
 
         ZIO.succeed(data)
-      }
-      //TODO - what happens to this error?
-      .mapError { e =>
-        logger.error(s"Error writing $objectSettings to S3: ${e.getMessage}", e)
-        S3PutObjectError(e)
-      }
-  }
-
-  def put(data: RawVersionedS3Data): S3RawIO = ZIO.accessM { objectSettings =>
-    Task(s3Client.getObject(objectSettings.bucket, objectSettings.key))
-      .bracket(s3Object => UIO(s3Object.close()))
-      .apply { s3Object =>
-        val currentVersion = s3Object.getObjectMetadata.getVersionId
-
-        if (currentVersion == data.version) {
-          val bytes = data.value.getBytes(StandardCharsets.UTF_8)
-
-          Task(new ByteArrayInputStream(bytes))
-            .bracket(stream => UIO(stream.close()))
-            .apply { stream =>
-              val metadata = new ObjectMetadata()
-              metadata.setContentLength(bytes.length)
-              // https://docs.fastly.com/en/guides/how-caching-and-cdns-work#surrogate-headers
-              objectSettings.cacheControl.foreach(metadata.setCacheControl)
-              objectSettings.surrogateControl.foreach(cc => metadata.addUserMetadata("surrogate-control", cc))
-
-              val request = new PutObjectRequest(
-                objectSettings.bucket,
-                objectSettings.key,
-                stream,
-                metadata
-              )
-
-              s3Client.putObject(
-                if (objectSettings.publicRead) request.withCannedAcl(CannedAccessControlList.PublicRead)
-                else request
-              )
-
-              IO.succeed(data)
-            }
-        } else {
-          logger.warn(s"Cannot update S3 object $objectSettings because provided version (${data.version}) does not match latest version ($currentVersion)")
-
-          // TODO - what happens to this error?
-          IO.fail(S3VersionMatchError)
-        }
-      }
-      .mapError { e =>
-        logger.error(s"Error writing $objectSettings to S3: ${e.getMessage}", e)
-        S3PutObjectError(e)
       }
   }
 }
