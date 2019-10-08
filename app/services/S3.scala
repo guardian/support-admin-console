@@ -15,14 +15,14 @@ import zio._
 case class VersionedS3Data[T](value: T, version: String)
 
 trait S3Client {
-  def get: S3RawIO
-  def put(data: RawVersionedS3Data): S3RawIO
+  def get: S3Action
+  def put(data: RawVersionedS3Data): S3Action
 }
 
 object S3Client {
   type RawVersionedS3Data = VersionedS3Data[String]
-  type S3IO[E,T] = ZIO[S3ObjectSettings, E, VersionedS3Data[T]]
-  type S3RawIO = S3IO[S3ClientError,String]
+  type S3IO[E, T] = IO[E, VersionedS3Data[T]]
+  type S3Action = S3ObjectSettings => S3IO[S3ClientError, String]
 
   case class S3ObjectSettings(
     bucket: String,
@@ -52,7 +52,7 @@ object S3 extends S3Client with StrictLogging {
     .withCredentials(Aws.credentialsProvider)
     .build()
 
-  def get: S3RawIO = ZIO.accessM { objectSettings =>
+  def get: S3Action = { objectSettings =>
     Task(s3Client.getObject(objectSettings.bucket, objectSettings.key))
       .bracket(s3Object => UIO(s3Object.close()))
       .apply { s3Object =>
@@ -75,14 +75,14 @@ object S3 extends S3Client with StrictLogging {
       }
   }
 
-  def put(data: RawVersionedS3Data): S3RawIO = ZIO.accessM { objectSettings =>
+  def put(data: RawVersionedS3Data): S3Action = { objectSettings =>
     Task(s3Client.getObject(objectSettings.bucket, objectSettings.key))
       .bracket(s3Object => UIO(s3Object.close()))
       .apply { s3Object =>
         val currentVersion = s3Object.getObjectMetadata.getVersionId
 
         if (currentVersion == data.version) {
-          writeObject(data)
+          writeObject(data)(objectSettings)
         } else {
           logger.warn(s"Cannot update S3 object $objectSettings because provided version (${data.version}) does not match latest version ($currentVersion)")
           IO.fail(S3VersionMatchError)
@@ -96,7 +96,7 @@ object S3 extends S3Client with StrictLogging {
       }
   }
 
-  private def writeObject(data: RawVersionedS3Data): S3IO[Throwable,String] = ZIO.accessM { objectSettings =>
+  private def writeObject(data: RawVersionedS3Data): S3ObjectSettings => S3IO[Throwable, String] = { objectSettings =>
     val bytes = data.value.getBytes(StandardCharsets.UTF_8)
 
     ZIO(new ByteArrayInputStream(bytes))
@@ -134,9 +134,9 @@ object S3Json extends StrictLogging {
   private val printer = Printer.spaces2.copy(dropNullValues = true)
   def noNulls(json: Json): String = printer.pretty(json)
 
-  def getFromJson[T : Decoder](s3: S3Client): S3IO[Throwable, T] = ZIO.accessM { objectSettings =>
-    s3.get.flatMap { raw =>
-      ZIO(decode[T](raw.value))
+  def getFromJson[T : Decoder](s3: S3Client): S3ObjectSettings => S3IO[Throwable, T] = { objectSettings =>
+    s3.get(objectSettings).flatMap { raw =>
+      IO(decode[T](raw.value))
         .absolve
         .map(decoded => raw.copy(value = decoded))
         .mapError { error =>
@@ -146,6 +146,6 @@ object S3Json extends StrictLogging {
     }
   }
 
-  def putAsJson[T: Encoder](data: VersionedS3Data[T])(s3: S3Client): S3RawIO =
-    s3.put(data.copy(value = noNulls(data.value.asJson)))
+  def putAsJson[T: Encoder](data: VersionedS3Data[T])(s3: S3Client): S3ObjectSettings => S3IO[Throwable, String] =
+    s3.put(data.copy(value = noNulls(data.value.asJson)))(_)
 }

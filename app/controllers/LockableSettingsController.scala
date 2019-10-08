@@ -10,9 +10,9 @@ import io.circe.syntax._
 import io.circe.generic.auto._
 import play.api.libs.circe.Circe
 import play.api.mvc._
-import services.S3Client.{S3ObjectSettings, S3RawIO}
+import services.S3Client.{S3IO, S3ObjectSettings}
 import services.{FastlyPurger, S3Json, VersionedS3Data}
-import zio.ZIO
+import zio.{IO, ZIO}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -37,11 +37,6 @@ class LockableSettingsController[T : Decoder : Encoder](
   fastlyPurger: Option[FastlyPurger]
 )(implicit ec: ExecutionContext) extends AbstractController(components) with Circe with StrictLogging {
 
-  private val runtime = new zio.Runtime[S3ObjectSettings] {
-    val Environment = dataObjectSettings  //TODO what's the point of this?
-    val Platform = zio.internal.PlatformLive.Default
-  }
-
   private val lockObjectSettings = S3ObjectSettings(
     bucket = "support-admin-console",
     key = s"$stage/locks/$name.lock",
@@ -51,10 +46,15 @@ class LockableSettingsController[T : Decoder : Encoder](
 
   private val s3Client = services.S3
 
-  private def withLockStatus(f: VersionedS3Data[LockStatus] => ZIO[S3ObjectSettings, Throwable, Result]): Future[Result] =
+  private val runtime = new zio.Runtime[Unit] {
+    val Environment = ()
+    val Platform = zio.internal.PlatformLive.Default
+  }
+
+  private def runWithLockStatus(f: VersionedS3Data[LockStatus] => IO[Throwable, Result]): Future[Result] =
     runtime.unsafeRunToFuture {
       S3Json.getFromJson[LockStatus](s3Client)
-        .provide(lockObjectSettings)
+        .apply(lockObjectSettings)
         .flatMap(f)
         .catchAll(error => {
           logger.error(s"Returning InternalServerError to client: ${error.getMessage}", error)
@@ -62,18 +62,17 @@ class LockableSettingsController[T : Decoder : Encoder](
         })
     }
 
-  private def setLockStatus(lockStatus: VersionedS3Data[LockStatus]): S3RawIO =
-    S3Json.putAsJson(lockStatus)(s3Client)
-      .provide(lockObjectSettings)
+  private def setLockStatus(lockStatus: VersionedS3Data[LockStatus]): S3IO[Throwable, String] =
+    S3Json.putAsJson(lockStatus)(s3Client).apply(lockObjectSettings)
 
   /**
     * Returns current version of the settings in s3 as json, with the lock status.
     * The s3 data is validated against the model.
     */
   def get = authAction.async { request =>
-    withLockStatus { case VersionedS3Data(lockStatus, _) =>
+    runWithLockStatus { case VersionedS3Data(lockStatus, _) =>
       S3Json.getFromJson[T](s3Client)
-        .provide(dataObjectSettings)
+        .apply(dataObjectSettings)
         .map { case VersionedS3Data(value, version) =>
           Ok(S3Json.noNulls(LockableSettingsResponse(value, version, lockStatus, request.user.email).asJson))
         }
@@ -85,10 +84,10 @@ class LockableSettingsController[T : Decoder : Encoder](
     * The POSTed json is validated against the model.
     */
   def set = authAction.async(circe.json[VersionedS3Data[T]]) { request =>
-    withLockStatus { case VersionedS3Data(lockStatus, lockFileVersion) =>
+    runWithLockStatus { case VersionedS3Data(lockStatus, lockFileVersion) =>
       if (lockStatus.email.contains(request.user.email)) {
         val result = for {
-          _ <- S3Json.putAsJson(request.body)(s3Client).provide(dataObjectSettings)
+          _ <- S3Json.putAsJson(request.body)(s3Client).apply(dataObjectSettings)
           _ <- setLockStatus(VersionedS3Data(LockStatus.unlocked, lockFileVersion))
         } yield ()
 
@@ -115,7 +114,7 @@ class LockableSettingsController[T : Decoder : Encoder](
     * Updates the lock file if there is not already a lock
     */
   def lock = authAction.async { request =>
-    withLockStatus { case VersionedS3Data(lockStatus, lockFileVersion) =>
+    runWithLockStatus { case VersionedS3Data(lockStatus, lockFileVersion) =>
       if (!lockStatus.locked) {
         val newLockStatus = LockStatus.locked(request.user.email)
 
@@ -134,7 +133,7 @@ class LockableSettingsController[T : Decoder : Encoder](
     * Updates the lock file to an unlocked status if this user currently has a lock
     */
   def unlock = authAction.async { request =>
-    withLockStatus { case VersionedS3Data(lockStatus, lockFileVersion) =>
+    runWithLockStatus { case VersionedS3Data(lockStatus, lockFileVersion) =>
       if (lockStatus.email.contains(request.user.email)) {
         setLockStatus(VersionedS3Data(LockStatus.unlocked, lockFileVersion)) map { _ =>
           logger.info(s"User ${request.user.email} unlocked ${dataObjectSettings.key}")
@@ -148,7 +147,7 @@ class LockableSettingsController[T : Decoder : Encoder](
   }
 
   def takecontrol = authAction.async { request =>
-     withLockStatus { case VersionedS3Data(lockStatus, lockFileVersion) =>
+     runWithLockStatus { case VersionedS3Data(lockStatus, lockFileVersion) =>
       setLockStatus(VersionedS3Data(LockStatus.locked(request.user.email), lockFileVersion)) map { _ =>
         logger.info(s"User ${request.user.email} force-unlocked ${dataObjectSettings.key}, taking it from ${lockStatus.email}")
         Ok("unlocked")

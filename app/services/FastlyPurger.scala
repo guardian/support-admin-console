@@ -16,8 +16,8 @@ class FastlyPurger(url: String, ws: WSClient)(implicit val ec: ExecutionContext)
   private def errorMessage = s"Update succeeded but failed to purge the fastly cache, speak to a Developer!"
 
   //TODO - narrow error type to FastlyPurgerError
-  def purge: IO[Throwable, Unit] = {
-    IO.fromFuture { implicit ec =>
+  def purge: IO[Throwable, Unit] = IO
+    .fromFuture { implicit ec =>
       val result = ws.url(url).execute("PURGE").map { result =>
         result.status match {
           case 200 =>
@@ -33,6 +33,6 @@ class FastlyPurger(url: String, ws: WSClient)(implicit val ec: ExecutionContext)
         logger.error(s"Failed to purge fastly cache for $url. Error: ${error.getMessage}", error)
         Left(FastlyPurgerError(errorMessage))
       }
-    }.flatMap(IO.fromEither)
-  }
+    }
+    .flatMap(result => IO.fromEither(result))
 }
