@@ -102,8 +102,12 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
     this.updateVariant(variant => ({...variant, cta}));
   };
 
-  onTextChange = (fieldName: string) => (updatedString: string): void => {
-    this.updateVariant(variant => ({...variant, [fieldName]: updatedString}));
+  onOptionalTextChange = (fieldName: string) => (updatedString: string): void => {
+    //For optional fields, an empty string means it's unset
+    this.updateVariant(variant => ({
+      ...variant,
+      [fieldName]: updatedString === "" ? undefined : updatedString
+    }));
   };
 
   onParagraphsChange = (fieldName: string) => (updatedParagraphs: string): void => {
@@ -131,8 +135,8 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
     return (
         <>
           <EditableTextField
-            text={variant.heading || ''}
-            onSubmit={this.onTextChange("heading")}
+            text={variant.heading || ""}
+            onSubmit={this.onOptionalTextChange("heading")}
             label="Hook:"
             editEnabled={this.props.editMode}
             validation={
@@ -168,8 +172,8 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
           />
 
           <EditableTextField
-            text={variant.highlightedText || "Support The Guardian from as little as %%CURRENCY_SYMBOL%%1 – and it only takes a minute. Thank you."}
-            onSubmit={this.onTextChange("highlightedText")}
+            text={variant.highlightedText || ""}
+            onSubmit={this.onOptionalTextChange("highlightedText")}
             label="Highlighted text:"
             helperText="This will appear as the last sentence"
             editEnabled={this.props.editMode}
@@ -183,7 +187,7 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
 
           <EditableTextField
             text={variant.backgroundImageUrl || ""}
-            onSubmit={this.onTextChange(VariantFieldNames.backgroundImageUrl)}
+            onSubmit={this.onOptionalTextChange(VariantFieldNames.backgroundImageUrl)}
             label="Image URL:"
             helperText="This will appear above everything except a ticker"
             editEnabled={this.props.editMode}
@@ -204,7 +208,7 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
 
           <EditableTextField
             text={variant.footer || ""}
-            onSubmit={this.onTextChange("footer")}
+            onSubmit={this.onOptionalTextChange("footer")}
             label="Footer:"
             helperText="Bold text that appears below the button"
             editEnabled={this.props.editMode}
