@@ -81,12 +81,12 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
   createVariant = (newVariantName: string) => {
     const newVariant: EpicVariant = {
       name: newVariantName,
-      heading: "",
+      heading: undefined,
       paragraphs: [],
-      highlightedText: "",
-      footer: "",
+      highlightedText: "Support The Guardian from as little as %%CURRENCY_SYMBOL%%1 – and it only takes a minute. Thank you.",
+      footer: undefined,
       showTicker: false,
-      backgroundImageUrl: "",
+      backgroundImageUrl: undefined,
       cta: defaultCta
     };
 
