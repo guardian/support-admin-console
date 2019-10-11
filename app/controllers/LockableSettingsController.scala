@@ -45,7 +45,7 @@ class LockableSettingsController[T : Decoder : Encoder](
     cacheControl = None
   )
 
-  private val s3Client = services.S3
+  val s3Client = services.S3
 
   private def withLockStatus(f: VersionedS3Data[LockStatus] => Future[Result]): Future[Result] =
     S3Json.getFromJson[LockStatus](lockObjectSettings)(s3Client).flatMap {
