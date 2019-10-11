@@ -7,6 +7,8 @@ import play.api.libs.ws.WSClient
 import services.{FastlyPurger, S3Json, VersionedS3Data}
 import services.S3Client.S3ObjectSettings
 import io.circe.generic.auto._
+import io.circe.syntax._
+import play.api.libs.circe.Circe
 
 import scala.concurrent.ExecutionContext
 
@@ -34,7 +36,7 @@ class EpicTestsController(authAction: AuthAction[AnyContent], components: Contro
       surrogateControl = Some("max-age=86400")  // Cache for a day, and use cache purging after updates
     ),
     fastlyPurger = EpicTestsController.fastlyPurger(stage, ws)
-  ) {
+  ) with Circe {
 
   /**
     * Saves a single test to a new file. The file name will be the test's name.
@@ -53,6 +55,25 @@ class EpicTestsController(authAction: AuthAction[AnyContent], components: Contro
       case Right(_) => Ok("archived")
       case Left(error) =>
         logger.error(s"Failed to archive test: $testData. Error was: $error")
+        InternalServerError(error)
+    }
+  }
+
+  def archivedTestNames = authAction.async { request =>
+    s3Client.listKeys(S3ObjectSettings(
+      bucket = "support-admin-console",
+      key = s"$stage/archived-epic-tests/",
+      publicRead = false
+    )).map {
+      case Right(list) =>
+        val files: List[String] = list.collect { case key if key.endsWith(".json") =>
+          key.split('/').lastOption
+        }.flatten
+
+        Ok(S3Json.noNulls(files.asJson))
+
+      case Left(error) =>
+        logger.error(s"Failed to fetch list of archived test names: $error")
         InternalServerError(error)
     }
   }

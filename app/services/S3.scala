@@ -13,12 +13,14 @@ import services.S3Client.{RawVersionedS3Data, S3ObjectSettings}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
+import scala.collection.JavaConverters._
 
 case class VersionedS3Data[T](value: T, version: String)
 
 trait S3Client {
   def get(objectSettings: S3ObjectSettings)(implicit ec: ExecutionContext): Future[Either[String,RawVersionedS3Data]]
   def put(objectSettings: S3ObjectSettings, data: RawVersionedS3Data)(implicit ec: ExecutionContext): Future[Either[String,RawVersionedS3Data]]
+  def listKeys(objectSettings: S3ObjectSettings)(implicit ec: ExecutionContext): Future[Either[String, List[String]]]
 }
 
 object S3Client {
@@ -104,6 +106,15 @@ object S3 extends S3Client with StrictLogging {
       case NonFatal(e) =>
         logger.error(s"Error writing $objectSettings to S3: ${e.getMessage}", e)
         Left(s"Error writing to S3: ${e.getMessage}")
+    }
+  }
+
+  def listKeys(objectSettings: S3ObjectSettings)(implicit ec: ExecutionContext): Future[Either[String, List[String]]] = {
+    Future {
+      val result = s3Client.listObjects(objectSettings.bucket, objectSettings.key)
+      Right[String, List[String]](result.getObjectSummaries.asScala.toList.map(_.getKey))
+    }.recover {
+      case NonFatal(e) => Left(s"Error listing S3 objects for $objectSettings: ${e.getMessage}")
     }
   }
 }

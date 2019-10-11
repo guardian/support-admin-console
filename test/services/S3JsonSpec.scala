@@ -63,6 +63,8 @@ class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
     }
 
     def put(objectSettings: S3ObjectSettings, data: RawVersionedS3Data)(implicit ec: ExecutionContext): Future[Either[String,RawVersionedS3Data]] = Future(Right(data))
+
+    def listKeys(objectSettings: S3ObjectSettings)(implicit ec: ExecutionContext): Future[Either[String, List[String]]] = Future(Right(Nil))
   }
 
   it should "decode from json" in {
