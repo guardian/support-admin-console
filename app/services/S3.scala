@@ -66,9 +66,7 @@ object S3 extends S3Client with StrictLogging {
 
   def put(objectSettings: S3ObjectSettings, data: RawVersionedS3Data)(implicit ec: ExecutionContext): Future[Either[String,RawVersionedS3Data]] = Future {
     try {
-      val currentObject = s3Client.getObject(objectSettings.bucket, objectSettings.key)
-      val currentVersion = currentObject.getObjectMetadata.getVersionId
-      currentObject.close()
+      val currentVersion = s3Client.getObjectMetadata(objectSettings.bucket, objectSettings.key).getVersionId
 
       if (currentVersion == data.version) {
 
