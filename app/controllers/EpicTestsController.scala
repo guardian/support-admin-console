@@ -2,10 +2,11 @@ package controllers
 
 import com.gu.googleauth.AuthAction
 import play.api.mvc.{AnyContent, ControllerComponents}
-import models.EpicTests
+import models.{EpicTest, EpicTests}
 import play.api.libs.ws.WSClient
-import services.FastlyPurger
+import services.{FastlyPurger, S3Json, VersionedS3Data}
 import services.S3Client.S3ObjectSettings
+import io.circe.generic.auto._
 
 import scala.concurrent.ExecutionContext
 
@@ -34,4 +35,25 @@ class EpicTestsController(authAction: AuthAction[AnyContent], components: Contro
     ),
     fastlyPurger = EpicTestsController.fastlyPurger(stage, ws)
   ) {
+
+  /**
+    * Saves a single test to a new file. The file name will be the test's name.
+    * Overwrites any existing archived test of the same name.
+    * Removing the test from the current active tests list is done separately.
+    */
+  def archive = authAction.async(circe.json[VersionedS3Data[EpicTest]]) { request =>
+    val testData = request.body
+    val objectSettings = S3ObjectSettings(
+      bucket = "support-admin-console",
+      key = s"$stage/archived-epic-tests/${testData.value.name}.json",
+      publicRead = false
+    )
+
+    S3Json.putAsJson(objectSettings, testData)(s3Client).map {
+      case Right(_) => Ok("archived")
+      case Left(error) =>
+        logger.error(s"Failed to archive test: $testData. Error was: $error")
+        InternalServerError(error)
+    }
+  }
 }
