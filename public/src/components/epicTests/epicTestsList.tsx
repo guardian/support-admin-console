@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, createStyles, List, ListItem, Theme, Typography, withStyles, WithStyles} from "@material-ui/core";
+import {Button, createStyles, List, ListItem, Theme, Typography, withStyles, WithStyles, Tooltip, createMuiTheme, MuiThemeProvider} from "@material-ui/core";
 import ArrowUpward from '@material-ui/icons/ArrowUpward';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import {renderDeleteIcon, renderVisibilityIcons} from './utilities';
@@ -88,6 +88,18 @@ const styles = ( { typography, spacing }: Theme ) => createStyles({
   },
   testName: {
     fontSize: "0.875rem"
+  }
+});
+
+const theme = createMuiTheme({
+  overrides: {
+    MuiTooltip: {
+      tooltip: {
+        fontSize: '1rem',
+        color: 'white',
+        backgroundColor: '#333333'
+      }
+    }
   }
 });
 
@@ -211,19 +223,27 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
               ].join(' ');
 
               return (
-                <ListItem
-                  className={classNames}
-                  onClick={this.onTestSelected(test.name)}
-                  key={index}
-                  button={true}
-                >
-                  { this.props.editMode ? this.renderReorderButtons(test.name, index) : <div className={classes.buttonsContainer}></div>}
-                  <div className={classes.testText}>
-                    <Typography className={classes.testName}noWrap={true}>{test.name}</Typography>
-                    {(testStatus && testStatus.isDeleted) && (<div><Typography className={classes.toBeDeleted}>To be deleted</Typography></div>)}
-                  </div>
-                  {testStatus && testStatus.isDeleted ? renderDeleteIcon() : renderVisibilityIcons(test.isOn)}
-                </ListItem>
+                <MuiThemeProvider theme={theme}>
+                  <Tooltip
+                    title={test.name}
+                    aria-label="test name"
+                    placement="right"
+                  >
+                    <ListItem
+                      className={classNames}
+                      onClick={this.onTestSelected(test.name)}
+                      key={index}
+                      button={true}
+                    >
+                      { this.props.editMode ? this.renderReorderButtons(test.name, index) : <div className={classes.buttonsContainer}></div>}
+                      <div className={classes.testText}>
+                        <Typography className={classes.testName}noWrap={true}>{test.name}</Typography>
+                        {(testStatus && testStatus.isDeleted) && (<div><Typography className={classes.toBeDeleted}>To be deleted</Typography></div>)}
+                      </div>
+                      {testStatus && testStatus.isDeleted ? renderDeleteIcon() : renderVisibilityIcons(test.isOn)}
+                    </ListItem>
+                  </Tooltip>
+                </MuiThemeProvider>
               )
             })}
           </List>
