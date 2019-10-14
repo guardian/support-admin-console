@@ -10,7 +10,7 @@ import {MaxViewsDefaults} from "./maxViewsEditor";
 
 const styles = ( { typography, spacing }: Theme ) => createStyles({
   root: {
-    width: "250px",
+    width: "300px",
   },
   testsList: {
     padding: 0
@@ -53,8 +53,8 @@ const styles = ( { typography, spacing }: Theme ) => createStyles({
   },
   testText: {
     textAlign: "left",
-    minWidth: "160px",
-    maxWidth: "160px",
+    minWidth: "200px",
+    maxWidth: "200px",
     marginRight: "10px"
   },
   testIndicator: {
