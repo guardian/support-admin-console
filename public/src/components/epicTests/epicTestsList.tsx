@@ -224,7 +224,10 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
               ].join(' ');
 
               return (
-                <MuiThemeProvider theme={theme}>
+                <MuiThemeProvider
+                  theme={theme} 
+                  key={index}
+                >
                   <Tooltip
                     title={test.name}
                     aria-label="test name"
@@ -233,7 +236,6 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
                     <ListItem
                       className={classNames}
                       onClick={this.onTestSelected(test.name)}
-                      key={index}
                       button={true}
                     >
                       { this.props.editMode ? this.renderReorderButtons(test.name, index) : <div className={classes.buttonsContainer}></div>}
