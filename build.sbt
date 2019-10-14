@@ -9,12 +9,20 @@ scalaVersion := "2.12.8"
 resolvers += "Guardian Platform Bintray" at "https://dl.bintray.com/guardian/platforms"
 
 val circeVersion = "0.10.0"
+val jacksonVersion = "2.10.0"
 
 libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2",
-  "com.gu" %% "play-googleauth" % "0.7.7",
+  "com.gu.play-googleauth" %% "play-v26" % "1.0.2",
   "com.gu" %% "simple-configuration-ssm" % "1.4.1",
-  "com.amazonaws" % "aws-java-sdk-s3" % "1.11.480",
+  "com.amazonaws" % "aws-java-sdk-s3" % "1.11.641",
+  // Override jackson because the version used by AWS is always out of date and has security issues
+  "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
+  "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
+  "com.fasterxml.jackson.core" % "jackson-core" % jacksonVersion,
+  "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % jacksonVersion,
+  "com.fasterxml.jackson.datatype" % "jackson-datatype-jdk8" % jacksonVersion,
+  "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % jacksonVersion,
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
