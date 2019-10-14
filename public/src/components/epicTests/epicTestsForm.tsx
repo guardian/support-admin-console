@@ -139,9 +139,6 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
   };
 
   fetchStateFromServer = (): void => {
-    fetch('/frontend/epic-tests/archived-test-names').then(result => {
-      return result
-    });
     fetchFrontendSettings(FrontendSettingsType.epicTests)
       .then(serverData => {
         this.setState({

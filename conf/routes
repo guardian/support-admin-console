@@ -33,6 +33,7 @@ POST  /frontend/epic-tests/lock                     controllers.EpicTestsControl
 POST  /frontend/epic-tests/unlock                   controllers.EpicTestsController.unlock
 POST  /frontend/epic-tests/takecontrol              controllers.EpicTestsController.takecontrol
 POST  /frontend/epic-tests/archive                  controllers.EpicTestsController.archive
+GET   /frontend/epic-tests/archive/:testName        controllers.EpicTestsController.getArchivedTest(testName: String)
 GET   /frontend/epic-tests/archived-test-names      controllers.EpicTestsController.archivedTestNames
 
 # Map static resources from the /public folder to the /assets URL path
