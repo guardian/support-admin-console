@@ -62,7 +62,9 @@ class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
       }
     }
 
-    def put(objectSettings: S3ObjectSettings, data: RawVersionedS3Data)(implicit ec: ExecutionContext): Future[Either[String,RawVersionedS3Data]] = Future(Right(data))
+    def update(objectSettings: S3ObjectSettings, data: RawVersionedS3Data)(implicit ec: ExecutionContext): Future[Either[String,RawVersionedS3Data]] = Future(Right(data))
+
+    def create(objectSettings: S3ObjectSettings, data: String)(implicit ec: ExecutionContext): Future[Either[String,String]] = Future(Right(data))
 
     def listKeys(objectSettings: S3ObjectSettings)(implicit ec: ExecutionContext): Future[Either[String, List[String]]] = Future(Right(Nil))
   }
@@ -84,7 +86,7 @@ class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
     import ExecutionContext.Implicits.global
 
     val result = Await.result(
-      S3Json.putAsJson[SupportFrontendSwitches](objectSettings, expectedDecoded)(dummyS3Client),
+      S3Json.updateAsJson[SupportFrontendSwitches](objectSettings, expectedDecoded)(dummyS3Client),
       1.second
     )
     val diff = JsonDiff.diff(expectedJson, result.right.value.value, false)

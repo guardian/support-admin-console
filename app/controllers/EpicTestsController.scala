@@ -58,11 +58,11 @@ class EpicTestsController(authAction: AuthAction[AnyContent], components: Contro
     * Overwrites any existing archived test of the same name.
     * Removing the test from the current active tests list is done separately.
     */
-  def archive = authAction.async(circe.json[VersionedS3Data[EpicTest]]) { request =>
+  def archive = authAction.async(circe.json[EpicTest]) { request =>
     val testData = request.body
-    val objectSettings = archiveObjectSettings(stage, s"${testData.value.name}.json")
+    val objectSettings = archiveObjectSettings(stage, s"${testData.name}.json")
 
-    S3Json.putAsJson(objectSettings, testData)(s3Client).map {
+    S3Json.createAsJson(objectSettings, testData)(s3Client).map {
       case Right(_) => Ok("archived")
       case Left(error) =>
         logger.error(s"Failed to archive test: $testData. Error was: $error")

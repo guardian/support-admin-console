@@ -19,7 +19,8 @@ case class VersionedS3Data[T](value: T, version: String)
 
 trait S3Client {
   def get(objectSettings: S3ObjectSettings)(implicit ec: ExecutionContext): Future[Either[String,RawVersionedS3Data]]
-  def put(objectSettings: S3ObjectSettings, data: RawVersionedS3Data)(implicit ec: ExecutionContext): Future[Either[String,RawVersionedS3Data]]
+  def update(objectSettings: S3ObjectSettings, data: RawVersionedS3Data)(implicit ec: ExecutionContext): Future[Either[String,RawVersionedS3Data]]
+  def create(objectSettings: S3ObjectSettings, data: String)(implicit ec: ExecutionContext): Future[Either[String,String]]
   def listKeys(objectSettings: S3ObjectSettings)(implicit ec: ExecutionContext): Future[Either[String, List[String]]]
 }
 
@@ -66,37 +67,42 @@ object S3 extends S3Client with StrictLogging {
     }
   }
 
-  def put(objectSettings: S3ObjectSettings, data: RawVersionedS3Data)(implicit ec: ExecutionContext): Future[Either[String,RawVersionedS3Data]] = Future {
+  private def put(objectSettings: S3ObjectSettings, data: String)(implicit ec: ExecutionContext): Either[String,Unit] = {
+    val bytes = data.getBytes(StandardCharsets.UTF_8)
+    val stream = new ByteArrayInputStream(bytes)
+
+    val metadata = new ObjectMetadata()
+    metadata.setContentLength(bytes.length)
+    // https://docs.fastly.com/en/guides/how-caching-and-cdns-work#surrogate-headers
+    objectSettings.cacheControl.foreach(metadata.setCacheControl)
+    objectSettings.surrogateControl.foreach(cc => metadata.addUserMetadata("surrogate-control", cc))
+
+    val request = new PutObjectRequest(
+      objectSettings.bucket,
+      objectSettings.key,
+      stream,
+      metadata
+    )
+
+    try {
+      s3Client.putObject(
+        if (objectSettings.publicRead) request.withCannedAcl(CannedAccessControlList.PublicRead)
+        else request
+      )
+    } catch { case NonFatal(e) =>
+      logger.error(s"Error writing $objectSettings to S3: ${e.getMessage}", e)
+    } finally {
+      stream.close()
+    }
+    Right(())
+  }
+
+  def update(objectSettings: S3ObjectSettings, data: RawVersionedS3Data)(implicit ec: ExecutionContext): Future[Either[String,RawVersionedS3Data]] = Future {
     try {
       val currentVersion = s3Client.getObjectMetadata(objectSettings.bucket, objectSettings.key).getVersionId
 
       if (currentVersion == data.version) {
-
-        val bytes = data.value.getBytes(StandardCharsets.UTF_8)
-        val stream = new ByteArrayInputStream(bytes)
-
-        val metadata = new ObjectMetadata()
-        metadata.setContentLength(bytes.length)
-        // https://docs.fastly.com/en/guides/how-caching-and-cdns-work#surrogate-headers
-        objectSettings.cacheControl.foreach(metadata.setCacheControl)
-        objectSettings.surrogateControl.foreach(cc => metadata.addUserMetadata("surrogate-control", cc))
-
-        val request = new PutObjectRequest(
-          objectSettings.bucket,
-          objectSettings.key,
-          stream,
-          metadata
-        )
-
-        try {
-          s3Client.putObject(
-            if (objectSettings.publicRead) request.withCannedAcl(CannedAccessControlList.PublicRead)
-            else request
-          )
-        } finally { // catch any exceptions higher up
-          stream.close()
-        }
-        Right[String, RawVersionedS3Data](data)
+        put(objectSettings, data.value).map(_ => data)
       } else {
         logger.warn(s"Cannot update S3 object $objectSettings because provided version (${data.version}) does not match latest version ($currentVersion)")
         Left(s"Can't save your settings because someone else has updated them since they were last fetched")
@@ -104,10 +110,13 @@ object S3 extends S3Client with StrictLogging {
 
     } catch {
       case NonFatal(e) =>
-        logger.error(s"Error writing $objectSettings to S3: ${e.getMessage}", e)
-        Left(s"Error writing to S3: ${e.getMessage}")
+        logger.error(s"Error updating $objectSettings in S3: ${e.getMessage}", e)
+        Left(s"Error updating in S3: ${e.getMessage}")
     }
   }
+
+  def create(objectSettings: S3ObjectSettings, data: String)(implicit ec: ExecutionContext): Future[Either[String,String]] =
+    Future(put(objectSettings, data).map(_ => data))
 
   def listKeys(objectSettings: S3ObjectSettings)(implicit ec: ExecutionContext): Future[Either[String, List[String]]] = {
     Future {
@@ -136,9 +145,15 @@ object S3Json extends StrictLogging {
       }
     }
 
-  def putAsJson[T: Encoder](objectSettings: S3ObjectSettings, data: VersionedS3Data[T])(s3: S3Client)(implicit ec: ExecutionContext): Future[Either[String,RawVersionedS3Data]] =
-    s3.put(
+  def updateAsJson[T: Encoder](objectSettings: S3ObjectSettings, data: VersionedS3Data[T])(s3: S3Client)(implicit ec: ExecutionContext): Future[Either[String,RawVersionedS3Data]] =
+    s3.update(
       objectSettings,
       data.copy(value = noNulls(data.value.asJson))
+    )
+
+  def createAsJson[T: Encoder](objectSettings: S3ObjectSettings, data: T)(s3: S3Client)(implicit ec: ExecutionContext): Future[Either[String,String]] =
+    s3.create(
+      objectSettings,
+      noNulls(data.asJson)
     )
 }
