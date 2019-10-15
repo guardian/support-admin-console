@@ -10,7 +10,7 @@ import {MaxViewsDefaults} from "./maxViewsEditor";
 
 const styles = ( { typography, spacing }: Theme ) => createStyles({
   root: {
-    width: "250px",
+    width: "300px",
   },
   testsList: {
     padding: 0
@@ -53,8 +53,8 @@ const styles = ( { typography, spacing }: Theme ) => createStyles({
   },
   testText: {
     textAlign: "left",
-    minWidth: "160px",
-    maxWidth: "160px",
+    minWidth: "200px",
+    maxWidth: "200px",
     marginRight: "10px"
   },
   testIndicator: {
@@ -213,6 +213,7 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
             {this.props.tests.map((test, index) => {
 
               const testStatus = this.props.modifiedTests[test.name];
+              const toStrip = /^\d{4}-\d{2}-\d{2}_(contribs*_|moment_)*/;
 
               const classNames = [
                 classes.test,
@@ -223,7 +224,10 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
               ].join(' ');
 
               return (
-                <MuiThemeProvider theme={theme}>
+                <MuiThemeProvider
+                  theme={theme} 
+                  key={index}
+                >
                   <Tooltip
                     title={test.name}
                     aria-label="test name"
@@ -232,12 +236,12 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
                     <ListItem
                       className={classNames}
                       onClick={this.onTestSelected(test.name)}
-                      key={index}
                       button={true}
                     >
                       { this.props.editMode ? this.renderReorderButtons(test.name, index) : <div className={classes.buttonsContainer}></div>}
                       <div className={classes.testText}>
-                        <Typography className={classes.testName}noWrap={true}>{test.name}</Typography>
+                        <Typography className={classes.testName}noWrap={true}>{test.name.replace(toStrip, '')}</Typography>
+
                         {(testStatus && testStatus.isDeleted) && (<div><Typography className={classes.toBeDeleted}>To be deleted</Typography></div>)}
                       </div>
                       {testStatus && testStatus.isDeleted ? renderDeleteIcon() : renderVisibilityIcons(test.isOn)}

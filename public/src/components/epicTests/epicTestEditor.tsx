@@ -53,7 +53,7 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
     margin: "20px 0 15px 0"
   },
   select: {
-    minWidth: "500px",
+    minWidth: "460px",
     paddingTop: "10px",
     marginBottom: "20px"
   },
