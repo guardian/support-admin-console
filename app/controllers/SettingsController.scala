@@ -38,7 +38,7 @@ abstract class SettingsController[T : Decoder : Encoder](authAction: AuthAction[
     * The POSTed json is validated against the model.
     */
   def set = authAction.async(circe.json[VersionedS3Data[T]]) { request =>
-    S3Json.putAsJson(dataObjectSettings, request.body)(s3Client).map {
+    S3Json.updateAsJson(dataObjectSettings, request.body)(s3Client).map {
       case Right(_) => Ok("updated")
       case Left(error) => InternalServerError(error)
     }

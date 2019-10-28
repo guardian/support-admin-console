@@ -54,7 +54,7 @@ class LockableSettingsController[T : Decoder : Encoder](
     }
 
   private def setLockStatus(lockStatus: VersionedS3Data[LockStatus]) =
-    S3Json.putAsJson(lockObjectSettings, lockStatus)(s3Client)
+    S3Json.updateAsJson(lockObjectSettings, lockStatus)(s3Client)
 
   private def purgeFastlyCache: EitherT[Future,String,Unit] =
     fastlyPurger
@@ -84,7 +84,7 @@ class LockableSettingsController[T : Decoder : Encoder](
     withLockStatus { case VersionedS3Data(lockStatus, lockFileVersion) =>
       if (lockStatus.email.contains(request.user.email)) {
         val result: EitherT[Future, String, Unit] = for {
-          _ <- EitherT(S3Json.putAsJson(dataObjectSettings, request.body)(s3Client))
+          _ <- EitherT(S3Json.updateAsJson(dataObjectSettings, request.body)(s3Client))
           _ <- EitherT(setLockStatus(VersionedS3Data(LockStatus.unlocked, lockFileVersion)))
         } yield ()
 
