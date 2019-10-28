@@ -68,13 +68,17 @@ const styles = ( { typography, spacing }: Theme ) => createStyles({
     'flex-shrink': '1'
   },
   deleted: {
-    backgroundColor: '#999999'
+    backgroundColor: '#dcdcdc',
+    '&:hover': {
+      backgroundColor: '#ededed'
+    }
   },
   deletedLabel: {
-    backgroundColor: 'red',
+    backgroundColor: '#ab0613',
     borderRadius: '2px',
     padding: '2px',
-    margin: '2px 0 0 0'
+    margin: '2px 0 0 0',
+    color: 'white'
   },
   toBeDeleted: {
     fontSize: typography.pxToRem(10),
@@ -85,8 +89,14 @@ const styles = ( { typography, spacing }: Theme ) => createStyles({
     width: '75px',
     textAlign: 'center'
   },
+  deletedIcon: {
+    color: '#ab0613'
+  },
   archived: {
-    backgroundColor: '#e7d4b9'
+    backgroundColor: '#e7d4b9',
+    '&:hover': {
+      backgroundColor: '#eacca0'
+    }
   },
   toBeArchived: {
     fontSize: typography.pxToRem(10),
@@ -220,11 +230,12 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
   }
 
   renderDeletedOrArchivedIcon = (testStatus: TestStatus): React.ReactNode => {
+    const { classes } = this.props;
     if (testStatus.isDeleted) {
-      return <DeleteForeverIcon color={'error'} />;
+      return <DeleteForeverIcon className={classes.deletedIcon} />;
     }
     else if (testStatus.isArchived) {
-      return <ArchiveIcon className={this.props.classes.archiveIcon} />;
+      return <ArchiveIcon className={classes.archiveIcon} />;
     }
     return null;
   }
