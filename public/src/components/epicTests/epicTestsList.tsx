@@ -86,21 +86,20 @@ const styles = ( { typography, spacing }: Theme ) => createStyles({
     textAlign: 'center'
   },
   archived: {
-    backgroundColor: '#6b5840',
-    color: 'white'
+    backgroundColor: '#e7d4b9'
   },
-  tobeArchived: {
+  toBeArchived: {
     fontSize: typography.pxToRem(10),
     fontWeight: typography.fontWeightMedium,
-    backgroundColor: '#eacca0',
+    backgroundColor: '#a1845c',
     borderRadius: '2px',
     padding: '2px',
     width: '75px',
     textAlign: 'center',
-    color: 'black'
+    color: 'white'
   },
   archiveIcon: {
-    color: '#eacca0'
+    color: '#a1845c'
   },
   spacer: {
     minHeight: spacing(6)
@@ -280,6 +279,8 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
                         <Typography className={classes.testName}noWrap={true}>{test.name.replace(toStrip, '')}</Typography>
 
                         {(testStatus && testStatus.isDeleted) && (<div><Typography className={classes.toBeDeleted}>To be deleted</Typography></div>)}
+
+                        {(testStatus && testStatus.isArchived) && (<div><Typography className={classes.toBeArchived}>To be archived</Typography></div>)}
                       </div>
                       {testStatus && (testStatus.isDeleted || testStatus.isArchived) ? this.renderDeletedOrArchivedIcon(testStatus) : renderVisibilityIcons(test.isOn)}
                     </ListItem>
