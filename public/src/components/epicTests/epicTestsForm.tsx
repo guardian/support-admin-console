@@ -11,7 +11,8 @@ import {
   saveFrontendSettings,
   requestLock,
   requestTakeControl,
-  requestUnlock
+  requestUnlock,
+  archiveEpicTest
 } from "../../utils/requests";
 import EpicTestsList from "./epicTestsList";
 
@@ -159,25 +160,33 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
   };
 
   save = (): void => {
-    const updatedTests = this.state.tests.filter(test =>
-      !(this.state.modifiedTests[test.name] && this.state.modifiedTests[test.name].isDeleted));
-    const newState = update(this.state.previousStateFromServer, {
-      value: {
-        tests: { $set: updatedTests }
-      }
-    });
+    const testsToArchive: EpicTest[] = this.state.tests.filter(test =>
+      this.state.modifiedTests[test.name] && this.state.modifiedTests[test.name].isArchived
+    );
 
-    saveFrontendSettings(FrontendSettingsType.epicTests, newState)
-      .then(resp => {
-        if (!resp.ok) {
-          resp.text().then(msg => alert(msg));
+    Promise.all(testsToArchive.map(test => archiveEpicTest(test))).then(result => {
+      console.log('result', result);
+      // TODO: check that every single result is OK - otherwise error and not proceed
+      const updatedTests: EpicTest[] = this.state.tests.filter(test =>
+        !(this.state.modifiedTests[test.name] && this.state.modifiedTests[test.name].isDeleted)); // TODO: remove archived tests
+      const newState = update(this.state.previousStateFromServer, {
+        value: {
+          tests: { $set: updatedTests }
         }
-        this.fetchStateFromServer();
-      })
-      .catch((resp) => {
-        alert('Error while saving');
-        this.fetchStateFromServer();
       });
+
+      saveFrontendSettings(FrontendSettingsType.epicTests, newState)
+        .then(resp => {
+          if (!resp.ok) {
+            resp.text().then(msg => alert(msg));
+          }
+          this.fetchStateFromServer();
+        })
+        .catch((resp) => {
+          alert('Error while saving');
+          this.fetchStateFromServer();
+        });
+    });
   };
 
   onTestsChange = (updatedTests: EpicTest[], modifiedTestName?: string): void => {
