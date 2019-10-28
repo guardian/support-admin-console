@@ -62,7 +62,7 @@ class EpicTestsController(authAction: AuthAction[AnyContent], components: Contro
     val testData = request.body
     val objectSettings = archiveObjectSettings(stage, s"${testData.name}.json")
 
-    S3Json.createAsJson(objectSettings, testData)(s3Client).map {
+    S3Json.createOrUpdateAsJson(objectSettings, testData)(s3Client).map {
       case Right(_) => Ok("archived")
       case Left(error) =>
         logger.error(s"Failed to archive test: $testData. Error was: $error")

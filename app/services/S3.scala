@@ -20,7 +20,7 @@ case class VersionedS3Data[T](value: T, version: String)
 trait S3Client {
   def get(objectSettings: S3ObjectSettings)(implicit ec: ExecutionContext): Future[Either[String,RawVersionedS3Data]]
   def update(objectSettings: S3ObjectSettings, data: RawVersionedS3Data)(implicit ec: ExecutionContext): Future[Either[String,RawVersionedS3Data]]
-  def create(objectSettings: S3ObjectSettings, data: String)(implicit ec: ExecutionContext): Future[Either[String,String]]
+  def createOrUpdate(objectSettings: S3ObjectSettings, data: String)(implicit ec: ExecutionContext): Future[Either[String,String]]
   def listKeys(objectSettings: S3ObjectSettings)(implicit ec: ExecutionContext): Future[Either[String, List[String]]]
 }
 
@@ -115,7 +115,7 @@ object S3 extends S3Client with StrictLogging {
     }
   }
 
-  def create(objectSettings: S3ObjectSettings, data: String)(implicit ec: ExecutionContext): Future[Either[String,String]] =
+  def createOrUpdate(objectSettings: S3ObjectSettings, data: String)(implicit ec: ExecutionContext): Future[Either[String,String]] =
     Future(put(objectSettings, data).map(_ => data))
 
   def listKeys(objectSettings: S3ObjectSettings)(implicit ec: ExecutionContext): Future[Either[String, List[String]]] = {
@@ -151,8 +151,8 @@ object S3Json extends StrictLogging {
       data.copy(value = noNulls(data.value.asJson))
     )
 
-  def createAsJson[T: Encoder](objectSettings: S3ObjectSettings, data: T)(s3: S3Client)(implicit ec: ExecutionContext): Future[Either[String,String]] =
-    s3.create(
+  def createOrUpdateAsJson[T: Encoder](objectSettings: S3ObjectSettings, data: T)(s3: S3Client)(implicit ec: ExecutionContext): Future[Either[String,String]] =
+    s3.createOrUpdate(
       objectSettings,
       noNulls(data.asJson)
     )
