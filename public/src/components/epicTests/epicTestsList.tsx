@@ -70,24 +70,18 @@ const styles = ( { typography, spacing }: Theme ) => createStyles({
   deleted: {
     backgroundColor: '#dcdcdc',
     '&:hover': {
-      backgroundColor: '#ededed'
+      backgroundColor: '#999999'
     }
-  },
-  deletedLabel: {
-    backgroundColor: '#ab0613',
-    borderRadius: '2px',
-    padding: '2px',
-    margin: '2px 0 0 0',
-    color: 'white'
   },
   toBeDeleted: {
     fontSize: typography.pxToRem(10),
     fontWeight: typography.fontWeightMedium,
-    backgroundColor: '#f44336',
+    backgroundColor: '#ab0613',
     borderRadius: '2px',
     padding: '2px',
     width: '75px',
-    textAlign: 'center'
+    textAlign: 'center',
+    color: 'white'
   },
   deletedIcon: {
     color: '#ab0613'

@@ -86,7 +86,7 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
     float: 'right'
   },
   isDeleted: {
-    color: '#f44336'
+    color: '#ab0613'
   },
   isArchived: {
     color: '#a1845c'
