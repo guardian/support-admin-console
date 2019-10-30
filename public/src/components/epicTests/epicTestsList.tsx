@@ -5,7 +5,7 @@ import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import ArchiveIcon from '@material-ui/icons/Archive';
 import { renderVisibilityIcons } from './utilities';
-import {EpicTest, ModifiedTests, UserCohort} from './epicTestsForm';
+import {EpicTest, ModifiedTests, UserCohort, TestStatus} from './epicTestsForm';
 import NewNameCreator from './newNameCreator';
 import { MaxViewsDefaults } from './maxViewsEditor';
 
@@ -133,14 +133,6 @@ interface EpicTestListProps extends WithStyles<typeof styles> {
   onSelectedTestName: (testName: string) => void,
   editMode: boolean
 }
-
-interface TestStatus {
-  isValid: boolean,
-  isDeleted: boolean,
-  isNew: boolean,
-  isArchived: boolean
-}
-
 class EpicTestsList extends React.Component<EpicTestListProps> {
 
   createTest = (newTestName: string) => {

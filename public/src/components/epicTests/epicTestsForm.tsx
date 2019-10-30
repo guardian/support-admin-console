@@ -80,14 +80,17 @@ export interface LockStatus {
   timestamp?: string
 };
 
+
+export interface TestStatus {
+  isValid: boolean,
+  isDeleted: boolean,
+  isNew: boolean,
+  isArchived: boolean
+}
+
 // Stores tests which have been modified
 export type ModifiedTests = {
-  [testName: string]: {
-    isValid: boolean,
-    isDeleted: boolean,
-    isNew: boolean,
-    isArchived: boolean
-  }
+  [testName: string]: TestStatus
 };
 
 type EpicTestsFormState = EpicTests & {
