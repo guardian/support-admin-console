@@ -164,28 +164,34 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
       this.state.modifiedTests[test.name] && this.state.modifiedTests[test.name].isArchived
     );
 
-    Promise.all(testsToArchive.map(test => archiveEpicTest(test))).then(result => {
-      console.log('result', result);
-      // TODO: check that every single result is OK - otherwise error and not proceed
-      const updatedTests: EpicTest[] = this.state.tests.filter(test =>
-        !(this.state.modifiedTests[test.name] && this.state.modifiedTests[test.name].isDeleted)); // TODO: remove archived tests
-      const newState = update(this.state.previousStateFromServer, {
-        value: {
-          tests: { $set: updatedTests }
-        }
-      });
-
-      saveFrontendSettings(FrontendSettingsType.epicTests, newState)
-        .then(resp => {
-          if (!resp.ok) {
-            resp.text().then(msg => alert(msg));
-          }
-          this.fetchStateFromServer();
-        })
-        .catch((resp) => {
-          alert('Error while saving');
-          this.fetchStateFromServer();
+    Promise.all(testsToArchive.map(test => archiveEpicTest(test))).then(results => {
+      const notOk = results.some(result => !result.ok);
+      const numTestsToArchive = testsToArchive.length;
+      if (notOk) {
+        alert(`Failed to archive ${numTestsToArchive} test${numTestsToArchive !== 1 ? 's' : ''}`);
+      } else {
+        const updatedTests: EpicTest[] = this.state.tests.filter(test => {
+          const modifiedTestData = this.state.modifiedTests[test.name];
+          return !(modifiedTestData && (modifiedTestData.isDeleted || modifiedTestData.isArchived));
         });
+        const newState = update(this.state.previousStateFromServer, {
+          value: {
+            tests: { $set: updatedTests }
+          }
+        });
+
+        saveFrontendSettings(FrontendSettingsType.epicTests, newState)
+          .then(resp => {
+            if (!resp.ok) {
+              resp.text().then(msg => alert(msg));
+            }
+            this.fetchStateFromServer();
+          })
+          .catch((resp) => {
+            alert('Error while saving');
+            this.fetchStateFromServer();
+          });
+      }
     });
   };
 
