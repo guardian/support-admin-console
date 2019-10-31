@@ -1,3 +1,5 @@
+import { EpicTest } from "../components/epicTests/epicTestsForm";
+
 export enum SupportFrontendSettingsType {
   switches = 'switches',
   contributionTypes = 'contribution-types',
@@ -62,4 +64,8 @@ export function fetchFrontendSettings(settingsType: FrontendSettingsType): Promi
 
 export function saveFrontendSettings(settingsType: FrontendSettingsType, data: any): Promise<Response> {
   return saveSettings(`/frontend/${settingsType}/update`, data);
+}
+
+export function archiveEpicTest(test: EpicTest): Promise<Response> {
+  return saveSettings('/frontend/epic-tests/archive', test);
 }
