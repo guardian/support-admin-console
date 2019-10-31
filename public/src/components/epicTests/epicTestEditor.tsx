@@ -43,7 +43,7 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
   h3: {
     fontSize: typography.pxToRem(28),
     fontWeight: typography.fontWeightMedium,
-    margin: '10px 0 15px 0'
+    margin: '10px 0 15px'
   },
   hasChanged: {
     color: 'orange'
@@ -51,7 +51,7 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
   h4: {
     fontSize: typography.pxToRem(24),
     fontWeight: typography.fontWeightMedium,
-    margin: '20px 0 15px 0'
+    margin: '20px 0 15px'
   },
   select: {
     minWidth: "460px",
@@ -113,13 +113,13 @@ interface EpicTestEditorState {
   validationStatus: ValidationStatus
 }
 
+const areYouSure = `Are you sure? This can't be undone without cancelling entire edit session!`;
+
 class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditorState> {
 
   state: EpicTestEditorState = {
     validationStatus: {}
   };
-
-  areYouSure = `Are you sure? This can't be undone without cancelling entire edit session!`;
 
   isEditable = () => {
     return this.props.editMode && !this.props.isDeleted && !this.props.isArchived;
@@ -171,7 +171,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
     return this.isEditable() && (
       <ButtonWithConfirmationPopup
         buttonText="Delete test"
-        confirmationText={this.areYouSure}
+        confirmationText={areYouSure}
         onConfirm={() => this.props.onDelete(testName)}
         icon={<DeleteSweepIcon />}
       />
@@ -182,7 +182,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
     return this.isEditable() && (
       <ButtonWithConfirmationPopup
         buttonText="Archive test"
-        confirmationText={this.areYouSure}
+        confirmationText={areYouSure}
         onConfirm={() => this.props.onArchive(testName)}
         icon={<ArchiveIcon />}
       />
