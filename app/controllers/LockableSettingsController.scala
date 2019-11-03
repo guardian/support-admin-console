@@ -10,9 +10,9 @@ import io.circe.syntax._
 import io.circe.generic.auto._
 import play.api.libs.circe.Circe
 import play.api.mvc._
-import services.S3Client.{S3IO, S3ObjectSettings}
+import services.S3Client.{S3ClientError, S3ObjectSettings}
 import services.{FastlyPurger, S3Json, VersionedS3Data}
-import zio.{IO, ZIO}
+import zio.IO
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -44,16 +44,17 @@ class LockableSettingsController[T : Decoder : Encoder](
     cacheControl = None
   )
 
-  private val s3Client = services.S3
+  val s3Client = services.S3
 
-  private val runtime = new zio.Runtime[Unit] {
+  protected val runtime = new zio.Runtime[Unit] {
     val Environment = ()
     val Platform = zio.internal.PlatformLive.Default
   }
 
   private def runWithLockStatus(f: VersionedS3Data[LockStatus] => IO[Throwable, Result]): Future[Result] =
     runtime.unsafeRunToFuture {
-      S3Json.getFromJson[LockStatus](s3Client)
+      S3Json
+        .getFromJson[LockStatus](s3Client)
         .apply(lockObjectSettings)
         .flatMap(f)
         .catchAll(error => {
@@ -62,8 +63,10 @@ class LockableSettingsController[T : Decoder : Encoder](
         })
     }
 
-  private def setLockStatus(lockStatus: VersionedS3Data[LockStatus]): S3IO[Throwable, String] =
-    S3Json.putAsJson(lockStatus)(s3Client).apply(lockObjectSettings)
+  private def setLockStatus(lockStatus: VersionedS3Data[LockStatus]): IO[S3ClientError, Unit] =
+    S3Json
+      .updateAsJson(lockStatus)(s3Client)
+      .apply(lockObjectSettings)
 
   /**
     * Returns current version of the settings in s3 as json, with the lock status.
@@ -71,7 +74,8 @@ class LockableSettingsController[T : Decoder : Encoder](
     */
   def get = authAction.async { request =>
     runWithLockStatus { case VersionedS3Data(lockStatus, _) =>
-      S3Json.getFromJson[T](s3Client)
+      S3Json
+        .getFromJson[T](s3Client)
         .apply(dataObjectSettings)
         .map { case VersionedS3Data(value, version) =>
           Ok(S3Json.noNulls(LockableSettingsResponse(value, version, lockStatus, request.user.email).asJson))
@@ -87,7 +91,7 @@ class LockableSettingsController[T : Decoder : Encoder](
     runWithLockStatus { case VersionedS3Data(lockStatus, lockFileVersion) =>
       if (lockStatus.email.contains(request.user.email)) {
         val result = for {
-          _ <- S3Json.putAsJson(request.body)(s3Client).apply(dataObjectSettings)
+          _ <- S3Json.updateAsJson(request.body)(s3Client).apply(dataObjectSettings)
           _ <- setLockStatus(VersionedS3Data(LockStatus.unlocked, lockFileVersion))
         } yield ()
 

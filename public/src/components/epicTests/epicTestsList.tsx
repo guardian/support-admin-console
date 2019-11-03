@@ -1,90 +1,127 @@
 import React from 'react';
-import {Button, createStyles, List, ListItem, Theme, Typography, withStyles, WithStyles} from "@material-ui/core";
+import {Button, createStyles, List, ListItem, Theme, Typography, withStyles, WithStyles, Tooltip, createMuiTheme, MuiThemeProvider} from "@material-ui/core";
 import ArrowUpward from '@material-ui/icons/ArrowUpward';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
-import {renderDeleteIcon, renderVisibilityIcons} from './utilities';
-import {EpicTest, ModifiedTests, UserCohort} from './epicTestsForm';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import ArchiveIcon from '@material-ui/icons/Archive';
+import { renderVisibilityIcons } from './utilities';
+import {EpicTest, ModifiedTests, UserCohort, TestStatus} from './epicTestsForm';
 import NewNameCreator from './newNameCreator';
-import {MaxViewsDefaults} from "./maxViewsEditor";
+import { MaxViewsDefaults } from './maxViewsEditor';
 
 
 const styles = ( { typography, spacing }: Theme ) => createStyles({
   root: {
-    width: "250px",
+    width: "300px",
   },
   testsList: {
     padding: 0
   },
   test: {
-    border: "1px solid #999999",
-    borderRadius: "10px",
-    marginBottom: "5px",
-    display: "flex",
-    justifyContent: "space-between",
-    padding: "5px",
-    height: "60px",
-    "&:hover": {
-      background: "#ededed"
+    border: '1px solid #999999',
+    borderRadius: '10px',
+    marginBottom: '5px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    padding: '5px',
+    height: '60px',
+    '&:hover': {
+      background: '#ededed'
     }
   },
   selectedTest: {
-    background: "#dcdcdc"
+    background: '#dcdcdc'
   },
   validTest: {
-    boxShadow: "0 0 10px green"
+    boxShadow: '0 0 10px green'
   },
   invalidTest: {
-    boxShadow: "0 0 10px red"
+    boxShadow: '0 0 10px red'
   },
   singleButtonContainer: {
-    display: "block"
+    display: 'block'
   },
   buttonsContainer: {
-    marginRight: "10px",
-    minWidth: "20px"
+    marginRight: '10px',
+    minWidth: '20px'
   },
   arrowButton: {
-    padding: "2px",
-    margin: "2px 0 2px 0",
-    width: "20px",
-    height: "20px",
-    borderRadius: "50%",
-    minWidth: "20px"
+    padding: '2px',
+    margin: '2px 0 2px 0',
+    width: '20px',
+    height: '20px',
+    borderRadius: '50%',
+    minWidth: '20px'
   },
   testText: {
     textAlign: "left",
-    minWidth: "160px",
-    maxWidth: "160px",
+    minWidth: "200px",
+    maxWidth: "200px",
     marginRight: "10px"
   },
   testIndicator: {
-    width: "20px",
-    height: "20px"
+    width: '20px',
+    height: '20px'
   },
   arrowIcon: {
-    height: "20px",
-    "flex-shrink": "1"
+    height: '20px',
+    'flex-shrink': '1'
   },
   deleted: {
-    backgroundColor: "#999999"
-  },
-  deletedLabel: {
-    backgroundColor: "red",
-    borderRadius: "2px",
-    padding: "2px",
-    margin: "2px 0 0 0"
+    backgroundColor: '#dcdcdc',
+    '&:hover': {
+      backgroundColor: '#999999'
+    }
   },
   toBeDeleted: {
     fontSize: typography.pxToRem(10),
     fontWeight: typography.fontWeightMedium,
-    backgroundColor: "#f44336",
-    borderRadius: "2px",
-    padding: "2px",
-    width: "75px",
-    textAlign: "center"
+    backgroundColor: '#ab0613',
+    borderRadius: '2px',
+    padding: '2px',
+    width: '75px',
+    textAlign: 'center',
+    color: 'white'
+  },
+  deletedIcon: {
+    color: '#ab0613'
+  },
+  archived: {
+    backgroundColor: '#e7d4b9',
+    '&:hover': {
+      backgroundColor: '#eacca0'
+    }
+  },
+  toBeArchived: {
+    fontSize: typography.pxToRem(10),
+    fontWeight: typography.fontWeightMedium,
+    backgroundColor: '#a1845c',
+    borderRadius: '2px',
+    padding: '2px',
+    width: '75px',
+    textAlign: 'center',
+    color: 'white'
+  },
+  archiveIcon: {
+    color: '#a1845c'
   },
   spacer: {
-    minHeight: spacing.unit * 6
+    minHeight: spacing(6)
+  },
+  testName: {
+    fontSize: '0.875rem'
+  }
+});
+
+const theme = createMuiTheme({
+  overrides: {
+    MuiTooltip: {
+      tooltip: {
+        fontSize: '1rem',
+        color: 'white',
+        backgroundColor: '#333333'
+      }
+    }
   }
 });
 
@@ -96,7 +133,6 @@ interface EpicTestListProps extends WithStyles<typeof styles> {
   onSelectedTestName: (testName: string) => void,
   editMode: boolean
 }
-
 class EpicTestsList extends React.Component<EpicTestListProps> {
 
   createTest = (newTestName: string) => {
@@ -128,7 +164,7 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
     this.props.onSelectedTestName(testName);
   };
 
-  moveTestUp = (name: string) => {
+  moveTestUp = (name: string): void => {
     const newTests = [...this.props.tests];
     const indexOfName = newTests.findIndex(test => test.name === name);
     if (indexOfName > 0) {
@@ -139,7 +175,7 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
     this.props.onUpdate(newTests, name);
   }
 
-  moveTestDown = (name: string) => {
+  moveTestDown = (name: string): void => {
     const newTests = [...this.props.tests];
     const indexOfName = newTests.findIndex(test => test.name === name);
     if (indexOfName < newTests.length - 1) {
@@ -179,6 +215,17 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
     )
   }
 
+  renderDeletedOrArchivedIcon = (testStatus: TestStatus): React.ReactNode => {
+    const { classes } = this.props;
+    if (testStatus.isDeleted) {
+      return <DeleteForeverIcon className={classes.deletedIcon} />;
+    }
+    else if (testStatus.isArchived) {
+      return <ArchiveIcon className={classes.archiveIcon} />;
+    }
+    return null;
+  }
+
   render(): React.ReactNode {
     const { classes } = this.props;
 
@@ -198,28 +245,44 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
             {this.props.tests.map((test, index) => {
 
               const testStatus = this.props.modifiedTests[test.name];
+              const toStrip = /^\d{4}-\d{2}-\d{2}_(contribs*_|moment_)*/;
 
               const classNames = [
                 classes.test,
-                testStatus && testStatus.isValid && !testStatus.isDeleted? classes.validTest : '',
+                testStatus && testStatus.isValid && !testStatus.isDeleted && !testStatus.isArchived ? classes.validTest : '',
                 testStatus && !testStatus.isValid ? classes.invalidTest : '',
                 this.props.selectedTestName === test.name ? classes.selectedTest : '',
-                testStatus && testStatus.isDeleted ? classes.deleted : ''
+                testStatus && testStatus.isDeleted ? classes.deleted : '',
+                testStatus && testStatus.isArchived ? classes.archived : ''
               ].join(' ');
 
               return (
-                <ListItem
-                  className={classNames}
-                  onClick={this.onTestSelected(test.name)}
+                <MuiThemeProvider
+                  theme={theme}
                   key={index}
                 >
-                  { this.props.editMode ? this.renderReorderButtons(test.name, index) : <div className={classes.buttonsContainer}></div>}
-                  <div className={classes.testText}>
-                    <Typography noWrap={true}>{test.name}</Typography>
-                    {(testStatus && testStatus.isDeleted) && (<div><Typography className={classes.toBeDeleted}>To be deleted</Typography></div>)}
-                  </div>
-                  {testStatus && testStatus.isDeleted ? renderDeleteIcon() : renderVisibilityIcons(test.isOn)}
-                </ListItem>
+                  <Tooltip
+                    title={test.name}
+                    aria-label="test name"
+                    placement="right"
+                  >
+                    <ListItem
+                      className={classNames}
+                      onClick={this.onTestSelected(test.name)}
+                      button={true}
+                    >
+                      { this.props.editMode ? this.renderReorderButtons(test.name, index) : <div className={classes.buttonsContainer}></div>}
+                      <div className={classes.testText}>
+                        <Typography className={classes.testName}noWrap={true}>{test.name.replace(toStrip, '')}</Typography>
+
+                        {(testStatus && testStatus.isDeleted) && (<div><Typography className={classes.toBeDeleted}>To be deleted</Typography></div>)}
+
+                        {(testStatus && testStatus.isArchived) && (<div><Typography className={classes.toBeArchived}>To be archived</Typography></div>)}
+                      </div>
+                      {testStatus && (testStatus.isDeleted || testStatus.isArchived) ? this.renderDeletedOrArchivedIcon(testStatus) : renderVisibilityIcons(test.isOn)}
+                    </ListItem>
+                  </Tooltip>
+                </MuiThemeProvider>
               )
             })}
           </List>

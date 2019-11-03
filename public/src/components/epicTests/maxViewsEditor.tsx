@@ -25,8 +25,8 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
     marginTop: '20px'
   },
   formControl: {
-    marginTop: spacing.unit * 2,
-    marginBottom: spacing.unit,
+    marginTop: spacing(2),
+    marginBottom: spacing(1),
     display: "block",
   },
   selectLabel: {
@@ -85,7 +85,7 @@ class MaxViewsEditor extends React.Component<Props, State> {
       editEnabled={this.props.editMode}
       validation={
         {
-          isValid: (value: string) => isNumber(value),
+          getError: (value: string) => isNumber(value) ? null : 'Must be a number',
           onChange: onFieldValidationChange(this)(fieldName)
         }
       }

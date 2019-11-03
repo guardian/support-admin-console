@@ -19,7 +19,7 @@ import ListItem from '@material-ui/core/ListItem';
 
 const drawerWidth = 240;
 
-const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
+const styles = ({ palette, spacing, mixins, typography }: Theme) => createStyles({
   root: {
     display: 'flex',
   },
@@ -38,19 +38,31 @@ const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
   content: {
     flexGrow: 1,
     backgroundColor: palette.background.default,
-    padding: spacing.unit * 3,
+    padding: spacing(3),
   },
   link: {
-    textDecoration: 'none',
+    textDecoration: 'none'
+  },
+  heading: {
+    fontSize: typography.pxToRem(24),
+    fontWeight: typography.fontWeightMedium
+  },
+  listItem: {
+    '&:hover': {
+      backgroundColor: '#ededed'
+    },
+    '&:focus': {
+      backgroundColor: '#dcdcdc'
+    },
   }
 });
 
 const getLinkPathsAndNames = (): string[][] =>
   [
     ['/switches', 'Switches'],
-    ['/contribution-types', 'Contribution Types'],
+    ['/contribution-types', 'Contribution types'],
     ['/amounts', 'Amounts'],
-    ['/epic-tests', 'Epic Tests']
+    ['/epic-tests', 'Epic tests']
   ];
 
 const Index = () => <h2>Home</h2>;
@@ -64,7 +76,7 @@ const AppRouter = withStyles(styles)(({classes}: Props) => (
       <nav>
         <AppBar position="fixed" className={classes.appBar}>
           <Toolbar>
-            <Typography variant="h6" color="inherit" noWrap>
+            <Typography className={classes.heading} variant="h1" color="inherit" noWrap>
               Support Admin Console
             </Typography>
           </Toolbar>
@@ -82,8 +94,8 @@ const AppRouter = withStyles(styles)(({classes}: Props) => (
           {/* TODO: use link from react router to avoid a full page reload */}
           <List>
             {getLinkPathsAndNames().map(([href, name]) => (
-              <Link to={href} className={classes.link}>
-                <ListItem button key={name}>
+              <Link key={name} to={href} className={classes.link}>
+                <ListItem className={classes.listItem} button key={name}>
                   <ListItemText primary={name} />
                 </ListItem>
               </Link>

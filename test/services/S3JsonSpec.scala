@@ -7,7 +7,7 @@ import io.circe.generic.auto._
 import gnieh.diffson.circe._
 import zio.IO
 
-import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.Await
 import scala.concurrent.duration._
 
 class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
@@ -60,7 +60,9 @@ class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
   )
 
   val dummyS3Client = new S3Client {
-    def get: S3Action = { _ =>
+    var mockStore: Option[RawVersionedS3Data] = None
+
+    def get: S3Action[RawVersionedS3Data] = { _ =>
       IO.succeed {
         VersionedS3Data[String](
           expectedJson,
@@ -68,15 +70,15 @@ class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
         )
       }
     }
-
-    def put(data: RawVersionedS3Data): S3Action = { _ =>
-      IO.succeed(data)
+    def update(data: RawVersionedS3Data): S3Action[Unit] = _ => {
+      mockStore = Some(data)
+      IO.succeed(())
     }
+    def createOrUpdate(data: String): S3Action[Unit] = _ => IO.succeed(())
+    def listKeys: S3Action[List[String]] = _ => IO.succeed(Nil)
   }
 
   it should "decode from json" in {
-    import ExecutionContext.Implicits.global
-
     val result = Await.result(
       runtime.unsafeRunToFuture {
         S3Json.getFromJson[SupportFrontendSwitches](dummyS3Client).apply(objectSettings)
@@ -88,15 +90,13 @@ class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
   }
 
   it should "encode as json" in {
-    import ExecutionContext.Implicits.global
-
-    val result = Await.result(
+    Await.result(
       runtime.unsafeRunToFuture {
-        S3Json.putAsJson[SupportFrontendSwitches](expectedDecoded)(dummyS3Client).apply(objectSettings)
+        S3Json.updateAsJson[SupportFrontendSwitches](expectedDecoded)(dummyS3Client).apply(objectSettings)
       },
       1.second
     )
-    val diff = JsonDiff.diff(expectedJson, result.value, false)
+    val diff = JsonDiff.diff(expectedJson, dummyS3Client.mockStore.get.value, false)
 
     diff should be(JsonPatch(Nil))
   }

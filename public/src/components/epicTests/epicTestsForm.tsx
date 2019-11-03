@@ -11,7 +11,8 @@ import {
   saveFrontendSettings,
   requestLock,
   requestTakeControl,
-  requestUnlock
+  requestUnlock,
+  archiveEpicTest
 } from "../../utils/requests";
 import EpicTestsList from "./epicTestsList";
 
@@ -79,13 +80,17 @@ export interface LockStatus {
   timestamp?: string
 };
 
+
+export interface TestStatus {
+  isValid: boolean,
+  isDeleted: boolean,
+  isNew: boolean,
+  isArchived: boolean
+}
+
 // Stores tests which have been modified
 export type ModifiedTests = {
-  [testName: string]: {
-    isValid: boolean,
-    isDeleted: boolean,
-    isNew: boolean
-  }
+  [testName: string]: TestStatus
 };
 
 type EpicTestsFormState = EpicTests & {
@@ -99,11 +104,11 @@ type EpicTestsFormState = EpicTests & {
 const styles = ({ spacing, typography }: Theme) => createStyles({
   testListAndEditor: {
     display: "flex",
-    padding: spacing.unit
+    padding: spacing(1)
   },
   viewText: {
-    marginTop: spacing.unit * 6,
-    marginLeft: spacing.unit * 2,
+    marginTop: spacing(6),
+    marginLeft: spacing(2),
     fontSize: typography.pxToRem(16)
   },
   editModeBorder: {
@@ -111,6 +116,9 @@ const styles = ({ spacing, typography }: Theme) => createStyles({
   },
   readOnlyModeBorder: {
     border: "4px solid #dcdcdc"
+  },
+  h2: {
+    fontSize: '3rem'
   }
 });
 
@@ -155,25 +163,39 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
   };
 
   save = (): void => {
-    const updatedTests = this.state.tests.filter(test =>
-      !(this.state.modifiedTests[test.name] && this.state.modifiedTests[test.name].isDeleted));
-    const newState = update(this.state.previousStateFromServer, {
-      value: {
-        tests: { $set: updatedTests }
+    const testsToArchive: EpicTest[] = this.state.tests.filter(test =>
+      this.state.modifiedTests[test.name] && this.state.modifiedTests[test.name].isArchived
+    );
+
+    Promise.all(testsToArchive.map(test => archiveEpicTest(test))).then(results => {
+      const notOk = results.some(result => !result.ok);
+      const numTestsToArchive = testsToArchive.length;
+      if (notOk) {
+        alert(`Failed to archive ${numTestsToArchive} test${numTestsToArchive !== 1 ? 's' : ''}`);
+      } else {
+        const updatedTests: EpicTest[] = this.state.tests.filter(test => {
+          const modifiedTestData = this.state.modifiedTests[test.name];
+          return !(modifiedTestData && (modifiedTestData.isDeleted || modifiedTestData.isArchived));
+        });
+        const newState = update(this.state.previousStateFromServer, {
+          value: {
+            tests: { $set: updatedTests }
+          }
+        });
+
+        saveFrontendSettings(FrontendSettingsType.epicTests, newState)
+          .then(resp => {
+            if (!resp.ok) {
+              resp.text().then(msg => alert(msg));
+            }
+            this.fetchStateFromServer();
+          })
+          .catch((resp) => {
+            alert('Error while saving');
+            this.fetchStateFromServer();
+          });
       }
     });
-
-    saveFrontendSettings(FrontendSettingsType.epicTests, newState)
-      .then(resp => {
-        if (!resp.ok) {
-          resp.text().then(msg => alert(msg));
-        }
-        this.fetchStateFromServer();
-      })
-      .catch((resp) => {
-        alert('Error while saving');
-        this.fetchStateFromServer();
-      });
   };
 
   onTestsChange = (updatedTests: EpicTest[], modifiedTestName?: string): void => {
@@ -184,6 +206,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
           [modifiedTestName]: {
             isValid: true, // not already modified, assume it's valid until told otherwise
             isDeleted: false,
+            isArchived: false,
             isNew: !this.state.tests.some(test => test.name === modifiedTestName)
           }
         }
@@ -217,7 +240,12 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
   onTestDelete = (testName: string): void => {
     const updatedState = this.state.modifiedTests[testName] ?
       { ...this.state.modifiedTests[testName], isDeleted: true } :
-      { isValid: true, isDeleted: true, isNew: false};
+      {
+        isValid: true,
+        isDeleted: true,
+        isNew: false,
+        isArchived: false
+      };
 
     this.setState({
       modifiedTests: {
@@ -226,6 +254,24 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
       }
     });
   };
+
+  onTestArchive = (testName: string): void => {
+    const updatedState = this.state.modifiedTests[testName] ?
+    { ...this.state.modifiedTests[testName], isArchived: true } :
+    {
+      isValid: true,
+      isDeleted: false,
+      isNew: false,
+      isArchived: true
+    };
+
+    this.setState({
+      modifiedTests: {
+        ...this.state.modifiedTests,
+        [testName]: updatedState
+      }
+    });
+  }
 
   onSelectedTestName = (testName: string): void => {
       this.setState({
@@ -255,7 +301,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
 
     return (
       <>
-        <Typography variant={'h2'}>Epic tests</Typography>
+        <Typography className={classes.h2} variant={'h2'}>Epic tests</Typography>
         <div>
           {
             this.state.previousStateFromServer ?
@@ -289,7 +335,9 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
                       key={test.name}
                       editMode={this.state.editMode}
                       onDelete={this.onTestDelete}
+                      onArchive={this.onTestArchive}
                       isDeleted={this.state.modifiedTests[test.name] && this.state.modifiedTests[test.name].isDeleted}
+                      isArchived={this.state.modifiedTests[test.name] && this.state.modifiedTests[test.name].isArchived}
                       isNew={this.state.modifiedTests[test.name] && this.state.modifiedTests[test.name].isNew}
                     />)
                   ) : (<Typography className={classes.viewText}>Click on a test on the left to view contents.</Typography>)}

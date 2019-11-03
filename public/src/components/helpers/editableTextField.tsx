@@ -13,15 +13,15 @@ const styles = ({ typography, spacing }: Theme) => createStyles({
     "justify-content": "space-between"
   },
   numberContainer: {
-    width: "30%"
+    width: "40%"
   },
   textContainer: {
     width: "100%"
   },
   formControl: {
-    marginTop: spacing.unit * 2,
-    marginBottom: spacing.unit,
-    marginRight: spacing.unit,
+    marginTop: spacing(2),
+    marginBottom: spacing(1),
+    marginRight: spacing(1),
     width: "100%"
   },
   label: {
@@ -39,7 +39,7 @@ const styles = ({ typography, spacing }: Theme) => createStyles({
 });
 
 interface Validation {
-  isValid: (value: string) => boolean,
+  getError: (value: string) => string | null, //return null if no errors
   onChange: (valid: boolean) => void  //called every time the validation status of this field changes
 }
 
@@ -73,7 +73,7 @@ class EditableTextField extends React.Component<EditableTextFieldProps, Editable
   componentDidMount() {
     if (this.props.validation) {
       // Report initial validation status
-      this.props.validation.onChange(this.props.validation.isValid(this.state.currentText))
+      this.props.validation.onChange(this.isValid())
     }
   }
 
@@ -86,6 +86,10 @@ class EditableTextField extends React.Component<EditableTextFieldProps, Editable
     }
   }
 
+  isValid = (): boolean =>
+    !this.props.validation ||
+    this.props.validation.getError(this.state.currentText) === null;
+
   onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
 
@@ -97,7 +101,7 @@ class EditableTextField extends React.Component<EditableTextFieldProps, Editable
   onClickButton = (): void => {
     if (this.state.fieldEditMode) {
       if (this.props.validation) {
-        this.props.validation.onChange(this.props.validation.isValid(this.state.currentText));
+        this.props.validation.onChange(this.isValid());
       }
 
       this.props.onSubmit(this.state.currentText);
@@ -128,6 +132,10 @@ class EditableTextField extends React.Component<EditableTextFieldProps, Editable
 
   render(): React.ReactNode {
     const {classes} = this.props;
+
+    const error = this.props.errorMessage ||
+      (this.props.validation && this.props.validation.getError(this.state.currentText));
+
     return (
       <>
         <div className={`${classes.container} ${this.props.isNumberField ? classes.numberContainer : classes.textContainer}`}>
@@ -151,12 +159,14 @@ class EditableTextField extends React.Component<EditableTextFieldProps, Editable
               onChange={this.onChange}
               helperText={this.props.helperText}
               autoFocus={this.props.autoFocus}
-              error={this.props.validation ? !this.props.validation.isValid(this.state.currentText) : false}
+              error={this.props.validation ? !this.isValid() : false}
             />
           </FormControl>
          {this.showButton()}
         </div>
-        <Typography color={'error'} variant={'body2'}>{this.props.errorMessage}</Typography>
+        {error && (
+          <Typography color={'error'} variant={'body2'}>{error}</Typography>
+        )}
       </>
 
     )

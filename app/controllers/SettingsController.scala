@@ -41,7 +41,8 @@ abstract class SettingsController[T : Decoder : Encoder](authAction: AuthAction[
     */
   def get = authAction.async {
     run {
-      S3Json.getFromJson[T](s3Client)
+      S3Json
+        .getFromJson[T](s3Client)
         .apply(dataObjectSettings)
         .map { s3Data =>
           Ok(S3Json.noNulls(s3Data.asJson))
@@ -55,7 +56,8 @@ abstract class SettingsController[T : Decoder : Encoder](authAction: AuthAction[
     */
   def set = authAction.async(circe.json[VersionedS3Data[T]]) { request =>
     run {
-      S3Json.putAsJson(request.body)(s3Client)
+      S3Json
+        .updateAsJson(request.body)(s3Client)
         .apply(dataObjectSettings)
         .map(_ => Ok("updated"))
     }
