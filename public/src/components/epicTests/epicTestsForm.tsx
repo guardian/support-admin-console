@@ -45,6 +45,12 @@ export interface MaxViews {
   minDaysBetweenViews: number
 }
 
+export interface ArticlesViewedSettings {
+  minViews?: number,
+  maxViewed?: number,
+  periodInWeeks: number
+}
+
 export interface EpicTest {
   name: string,
   isOn: boolean,
@@ -60,7 +66,8 @@ export interface EpicTest {
   hasCountryName: boolean,
   variants: EpicVariant[],
   highPriority: boolean,
-  useLocalViewLog: boolean
+  useLocalViewLog: boolean,
+  articlesViewedSettings?: ArticlesViewedSettings
 }
 
 interface EpicTests {

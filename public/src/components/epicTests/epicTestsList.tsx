@@ -151,7 +151,11 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
       hasCountryName: false,
       variants: [],
       highPriority: false,
-      useLocalViewLog: false
+      useLocalViewLog: false,
+      articlesViewedSettings: {
+        minViews: 5,
+        periodInWeeks: 4
+      }
     }
     const newTestList = [...this.props.tests, newTest];
 
