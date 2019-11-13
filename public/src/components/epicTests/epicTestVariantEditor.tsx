@@ -10,7 +10,10 @@ import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 import {onFieldValidationChange, ValidationStatus} from '../helpers/validation';
 
 
-const validTemplates = ["%%CURRENCY_SYMBOL%%", "%%COUNTRY_NAME%%", "%%ARTICLE_COUNT%%"];
+const currencyTemplate = "%%CURRENCY_SYMBOL%%";
+export const countryNameTemplate = "%%COUNTRY_NAME%%";
+export const articleCountTemplate = "%%ARTICLE_COUNT%%";
+const validTemplates = [currencyTemplate, countryNameTemplate, articleCountTemplate];
 
 export const getInvalidTemplateError = (text: string): string | null => {
   const templates: string[] | null = text.match(/%%[A-Z_]*%%/g);

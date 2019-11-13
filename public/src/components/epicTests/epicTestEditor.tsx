@@ -27,6 +27,7 @@ import {onFieldValidationChange, ValidationStatus} from '../helpers/validation';
 import ButtonWithConfirmationPopup from '../helpers/buttonWithConfirmationPopup';
 import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 import ArchiveIcon from '@material-ui/icons/Archive';
+import {articleCountTemplate, countryNameTemplate} from "./epicTestVariantEditor";
 
 const styles = ({ spacing, typography}: Theme) => createStyles({
   container: {
@@ -140,9 +141,9 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
       this.props.onChange({
         ...updatedTest,
         // To save dotcom from having to work this out
-        hasCountryName: copyHasTemplate(updatedTest, "%%COUNTRY_NAME%%"),
+        hasCountryName: copyHasTemplate(updatedTest, countryNameTemplate),
         // Temporarily hardcode a default articlesViewedSettings. We can add a UI for configuring this later
-        articlesViewedSettings: copyHasTemplate(updatedTest, "%%ARTICLE_COUNT%%") ? defaultArticlesViewedSettings : undefined
+        articlesViewedSettings: copyHasTemplate(updatedTest, articleCountTemplate) ? defaultArticlesViewedSettings : undefined
       })
     }
   }
