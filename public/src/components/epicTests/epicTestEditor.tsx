@@ -1,5 +1,5 @@
 import React, { ReactNode, ChangeEvent } from 'react';
-import { EpicTest, EpicVariant, UserCohort, MaxViews } from "./epicTestsForm";
+import {EpicTest, EpicVariant, UserCohort, MaxViews, ArticlesViewedSettings} from "./epicTestsForm";
 import {
   Checkbox,
   FormControl,
@@ -27,6 +27,7 @@ import {onFieldValidationChange, ValidationStatus} from '../helpers/validation';
 import ButtonWithConfirmationPopup from '../helpers/buttonWithConfirmationPopup';
 import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 import ArchiveIcon from '@material-ui/icons/Archive';
+import {articleCountTemplate, countryNameTemplate} from "./epicTestVariantEditor";
 
 const styles = ({ spacing, typography}: Theme) => createStyles({
   container: {
@@ -93,7 +94,15 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
   }
 });
 
-const countryNameTemplate = '%%COUNTRY_NAME%%';
+const copyHasTemplate = (test: EpicTest, template: string): boolean => test.variants.some(variant =>
+  variant.heading && variant.heading.includes(template) ||
+  variant.paragraphs.some(para => para.includes(template))
+);
+
+const defaultArticlesViewedSettings: ArticlesViewedSettings = {
+  minViews: 5,
+  periodInWeeks: 4
+};
 
 interface EpicTestEditorProps extends WithStyles<typeof styles> {
   test?: EpicTest,
@@ -125,19 +134,16 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
     return this.props.editMode && !this.props.isDeleted && !this.props.isArchived;
   }
 
-  // To save dotcom from having to work this out
-  hasCountryName = (test: EpicTest): boolean => test.variants.some(variant =>
-    variant.heading && variant.heading.includes(countryNameTemplate) ||
-      variant.paragraphs.some(para => para.includes(countryNameTemplate))
-  )
-
   updateTest = (update: (test: EpicTest) => EpicTest) => {
     if (this.props.test) {
       const updatedTest = update(this.props.test);
 
       this.props.onChange({
         ...updatedTest,
-        hasCountryName: this.hasCountryName(updatedTest)
+        // To save dotcom from having to work this out
+        hasCountryName: copyHasTemplate(updatedTest, countryNameTemplate),
+        // Temporarily hardcode a default articlesViewedSettings. We can add a UI for configuring this later
+        articlesViewedSettings: copyHasTemplate(updatedTest, articleCountTemplate) ? defaultArticlesViewedSettings : undefined
       })
     }
   }

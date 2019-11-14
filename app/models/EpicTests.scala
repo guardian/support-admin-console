@@ -51,6 +51,12 @@ case class MaxViews(
   minDaysBetweenViews: Int
 )
 
+case class ArticlesViewedSettings(
+  minViews: Option[Int],
+  maxViews: Option[Int],
+  periodInWeeks: Int
+)
+
 case class EpicTest(
   name: String,
   isOn: Boolean,
@@ -66,7 +72,8 @@ case class EpicTest(
   hasCountryName: Boolean = false,
   variants: List[EpicVariant],
   highPriority: Boolean = false,
-  useLocalViewLog: Boolean = false
+  useLocalViewLog: Boolean = false,
+  articlesViewedSettings: Option[ArticlesViewedSettings] = None
 )
 
 case class EpicTests(tests: List[EpicTest])
