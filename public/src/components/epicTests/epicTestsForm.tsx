@@ -36,7 +36,8 @@ export interface EpicVariant {
   footer?: string,
   showTicker: boolean,
   backgroundImageUrl?: string,
-  cta?: Cta
+  cta?: Cta,
+  secondaryCta?: Cta,
 }
 
 export interface MaxViews {

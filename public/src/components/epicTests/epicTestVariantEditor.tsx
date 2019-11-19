@@ -28,6 +28,11 @@ export const getInvalidTemplateError = (text: string): string | null => {
   }
 };
 
+export const defaultCta = {
+  text: "Support The Guardian",
+  baseUrl: "https://support.theguardian.com/contribute"
+};
+
 const styles = ({ palette, spacing, typography }: Theme) => createStyles({
   container: {
     width: "100%",
@@ -64,6 +69,15 @@ const styles = ({ palette, spacing, typography }: Theme) => createStyles({
   deleteButton: {
     marginTop: spacing(2),
     float: "right"
+  },
+  label: {
+    fontSize: typography.pxToRem(16),
+    fontWeight: typography.fontWeightMedium,
+    color: "black"
+  },
+  ctaContainer: {
+    marginTop: "15px",
+    marginBottom: "15px"
   }
 });
 
@@ -99,10 +113,6 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
     if (this.props.variant) {
       this.props.onVariantChange(update(this.props.variant));
     }
-  };
-
-  onCtaUpdate = (cta?: Cta): void => {
-    this.updateVariant(variant => ({...variant, cta}));
   };
 
   onOptionalTextChange = (fieldName: string) => (updatedString: string): void => {
@@ -168,11 +178,28 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
             }
           />
 
-          <CtaEditor
-            cta={variant.cta}
-            update={this.onCtaUpdate}
-            editMode={this.props.editMode}
-          />
+          <div className={classes.ctaContainer}>
+            <span className={classes.label}>Buttons:</span>
+            <CtaEditor
+              cta={variant.cta}
+              update={(cta?: Cta) =>
+                this.updateVariant(variant => ({...variant, cta}))
+              }
+              editMode={this.props.editMode}
+              label="Has a button linking to the landing page"
+              defaultText={defaultCta.text}
+              defaultBaseUrl={defaultCta.baseUrl}
+            />
+
+            <CtaEditor
+              cta={variant.secondaryCta}
+              update={(cta?: Cta) =>
+                this.updateVariant(variant => ({...variant, secondaryCta: cta}))
+              }
+              editMode={this.props.editMode}
+              label={"Has a secondary button"}
+            />
+          </div>
 
           <EditableTextField
             text={variant.highlightedText || ""}
