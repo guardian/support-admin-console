@@ -6,7 +6,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import EpicTestVariantEditor from './epicTestVariantEditor';
 import { EpicVariant } from './epicTestsForm';
 import NewNameCreator from './newNameCreator';
-import {defaultCta} from "./ctaEditor";
+import {defaultCta} from "./epicTestVariantEditor";
 import {onFieldValidationChange, ValidationStatus} from '../helpers/validation';
 
 
