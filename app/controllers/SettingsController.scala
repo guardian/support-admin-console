@@ -8,7 +8,8 @@ import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, AnyContent, ControllerComponents, Result}
 import services.S3Client.S3ObjectSettings
 import services.{S3Json, VersionedS3Data}
-import zio.{IO, Task}
+import zio.blocking.Blocking
+import zio.{DefaultRuntime, IO, ZIO}
 
 import scala.concurrent.ExecutionContext
 
@@ -23,12 +24,9 @@ abstract class SettingsController[T : Decoder : Encoder](authAction: AuthAction[
   )
   private val s3Client = services.S3
 
-  private val runtime = new zio.Runtime[Unit] {
-    val Environment = ()
-    val Platform = zio.internal.PlatformLive.Default
-  }
+  protected val runtime = new DefaultRuntime {}
 
-  private def run(f: => Task[Result]) =
+  private def run(f: => ZIO[Blocking, Throwable, Result]) =
     runtime.unsafeRunToFuture {
       f.catchAll { error =>
         IO.succeed(InternalServerError(error.getMessage))

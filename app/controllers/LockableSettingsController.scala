@@ -12,7 +12,8 @@ import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.S3Client.{S3ClientError, S3ObjectSettings}
 import services.{FastlyPurger, S3Json, VersionedS3Data}
-import zio.IO
+import zio.blocking.Blocking
+import zio.{DefaultRuntime, IO, ZIO}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -46,12 +47,9 @@ class LockableSettingsController[T : Decoder : Encoder](
 
   val s3Client = services.S3
 
-  protected val runtime = new zio.Runtime[Unit] {
-    val Environment = ()
-    val Platform = zio.internal.PlatformLive.Default
-  }
+  protected val runtime = new DefaultRuntime {}
 
-  private def runWithLockStatus(f: VersionedS3Data[LockStatus] => IO[Throwable, Result]): Future[Result] =
+  private def runWithLockStatus(f: VersionedS3Data[LockStatus] => ZIO[Blocking, Throwable, Result]): Future[Result] =
     runtime.unsafeRunToFuture {
       S3Json
         .getFromJson[LockStatus](s3Client)
@@ -63,7 +61,7 @@ class LockableSettingsController[T : Decoder : Encoder](
         })
     }
 
-  private def setLockStatus(lockStatus: VersionedS3Data[LockStatus]): IO[S3ClientError, Unit] =
+  private def setLockStatus(lockStatus: VersionedS3Data[LockStatus]): ZIO[Blocking, S3ClientError, Unit] =
     S3Json
       .updateAsJson(lockStatus)(s3Client)
       .apply(lockObjectSettings)

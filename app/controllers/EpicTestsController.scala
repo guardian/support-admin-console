@@ -10,7 +10,8 @@ import services.S3Client.S3ObjectSettings
 import io.circe.generic.auto._
 import io.circe.syntax._
 import play.api.libs.circe.Circe
-import zio.{IO, Task}
+import zio.blocking.Blocking
+import zio.{IO, ZIO}
 
 import scala.concurrent.ExecutionContext
 
@@ -54,7 +55,7 @@ class EpicTestsController(authAction: AuthAction[AnyContent], components: Contro
     fastlyPurger = EpicTestsController.fastlyPurger(stage, ws)
   ) with Circe {
 
-  private def run(f: => Task[Result]) =
+  private def run(f: => ZIO[Blocking, Throwable, Result]) =
     runtime.unsafeRunToFuture {
       f.catchAll { error =>
         IO.succeed(InternalServerError(error.getMessage))

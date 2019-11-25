@@ -5,17 +5,14 @@ import org.scalatest.{EitherValues, FlatSpec, Matchers}
 import services.S3Client.{RawVersionedS3Data, S3Action, S3ObjectSettings}
 import io.circe.generic.auto._
 import gnieh.diffson.circe._
-import zio.IO
+import zio.{DefaultRuntime, IO}
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
 
 class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
 
-  val runtime = new zio.Runtime[Unit] {
-    val Environment = ()
-    val Platform = zio.internal.PlatformLive.Default
-  }
+  val runtime = new DefaultRuntime {}
 
   val expectedJson =
     """

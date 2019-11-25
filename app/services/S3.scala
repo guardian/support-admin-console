@@ -11,6 +11,7 @@ import io.circe.parser.decode
 import io.circe.syntax._
 import services.S3Client._
 import zio._
+import zio.blocking.{Blocking, effectBlocking}
 
 import scala.collection.JavaConverters._
 
@@ -26,7 +27,7 @@ trait S3Client {
 
 object S3Client {
   type RawVersionedS3Data = VersionedS3Data[String]
-  type S3Action[T] = S3ObjectSettings => IO[S3ClientError,T]
+  type S3Action[T] = S3ObjectSettings => ZIO[Blocking, S3ClientError,T]
 
   case class S3ObjectSettings(
     bucket: String,
@@ -60,30 +61,26 @@ object S3 extends S3Client with StrictLogging {
     .build()
 
   def get: S3Action[RawVersionedS3Data] = { objectSettings =>
-    Task(s3Client.getObject(objectSettings.bucket, objectSettings.key))
-      .bracket(s3Object => UIO(s3Object.close()))
-      .apply { s3Object =>
-        val version = s3Object.getObjectMetadata.getVersionId
+    val s3ObjectAndStream = for {
+      s3Object <- ZManaged.fromAutoCloseable(effectBlocking(s3Client.getObject(objectSettings.bucket, objectSettings.key)))
+      stream <- ZManaged.fromAutoCloseable(effectBlocking(s3Object.getObjectContent))
+    } yield (s3Object, stream)
 
-        Task(s3Object.getObjectContent)
-          .bracket(stream => UIO(stream.close()))
-          .apply { stream =>
-            IO.succeed(
-              VersionedS3Data(
-                value = scala.io.Source.fromInputStream(stream).mkString,
-                version
-              )
-            )
-          }
+    s3ObjectAndStream.use { case (s3Object, stream) =>
+      Task {
+        VersionedS3Data(
+          value = scala.io.Source.fromInputStream(stream).mkString,
+          version = s3Object.getObjectMetadata.getVersionId
+        )
       }
-      .mapError { e =>
-        logger.error(s"Error reading $objectSettings from S3: ${e.getMessage}", e)
-        S3GetObjectError(e)
-      }
+    }.mapError { e =>
+      logger.error(s"Error reading $objectSettings from S3: ${e.getMessage}", e)
+      S3GetObjectError(e)
+    }
   }
 
   def update(data: RawVersionedS3Data): S3Action[Unit] = { objectSettings =>
-    Task(s3Client.getObjectMetadata(objectSettings.bucket, objectSettings.key).getVersionId)
+    effectBlocking(s3Client.getObjectMetadata(objectSettings.bucket, objectSettings.key).getVersionId)
       .mapError(e => {
         logger.error(s"Error getting object metadata for $objectSettings: ${e.getMessage}", e)
         S3GetObjectError(e)
@@ -101,28 +98,31 @@ object S3 extends S3Client with StrictLogging {
   def createOrUpdate(data: String): S3Action[Unit] = { objectSettings =>
     val bytes = data.getBytes(StandardCharsets.UTF_8)
 
-    IO(new ByteArrayInputStream(bytes))
+    Task(new ByteArrayInputStream(bytes))
       .bracket(stream => UIO(stream.close()))
       .apply { stream =>
-        val metadata = new ObjectMetadata()
-        metadata.setContentLength(bytes.length)
-        // https://docs.fastly.com/en/guides/how-caching-and-cdns-work#surrogate-headers
-        objectSettings.cacheControl.foreach(metadata.setCacheControl)
-        objectSettings.surrogateControl.foreach(cc => metadata.addUserMetadata("surrogate-control", cc))
 
-        val request = new PutObjectRequest(
-          objectSettings.bucket,
-          objectSettings.key,
-          stream,
-          metadata
-        )
+        UIO.effectTotal {
+          val metadata = new ObjectMetadata()
+          metadata.setContentLength(bytes.length)
+          // https://docs.fastly.com/en/guides/how-caching-and-cdns-work#surrogate-headers
+          objectSettings.cacheControl.foreach(metadata.setCacheControl)
+          objectSettings.surrogateControl.foreach(cc => metadata.addUserMetadata("surrogate-control", cc))
 
-        s3Client.putObject(
-          if (objectSettings.publicRead) request.withCannedAcl(CannedAccessControlList.PublicRead)
-          else request
-        )
-
-        IO.succeed(())
+          new PutObjectRequest(
+            objectSettings.bucket,
+            objectSettings.key,
+            stream,
+            metadata
+          )
+        }.flatMap { request =>
+          effectBlocking {
+            s3Client.putObject(
+              if (objectSettings.publicRead) request.withCannedAcl(CannedAccessControlList.PublicRead)
+              else request
+            )
+          }.unit
+        }
       }
       .mapError { e =>
         logger.error(s"Error writing $objectSettings to S3: ${e.getMessage}", e)
@@ -131,7 +131,7 @@ object S3 extends S3Client with StrictLogging {
   }
 
   def listKeys: S3Action[List[String]] = { objectSettings =>
-    Task {
+    effectBlocking {
       val result = s3Client.listObjects(objectSettings.bucket, objectSettings.key)
       result.getObjectSummaries.asScala.toList.map(_.getKey)
     }.mapError { e =>
@@ -150,14 +150,14 @@ object S3Json extends StrictLogging {
   private val printer = Printer.spaces2.copy(dropNullValues = true)
   def noNulls(json: Json): String = printer.pretty(json)
 
-  def getFromJson[T : Decoder](s3: S3Client): S3ObjectSettings => IO[Throwable,VersionedS3Data[T]] = { objectSettings =>
+  def getFromJson[T : Decoder](s3: S3Client): S3ObjectSettings => ZIO[Blocking,Throwable,VersionedS3Data[T]] = { objectSettings =>
     s3.get(objectSettings).flatMap { raw =>
       IO(decode[T](raw.value))
         .absolve
         .map(decoded => raw.copy(value = decoded))
         .mapError { error =>
           logger.error(s"Error decoding json from S3 ($objectSettings): ${error.getMessage}", error)
-          S3JsonError(objectSettings, error.asInstanceOf[io.circe.Error]) //TODO - how to get correct error type with absolve?
+          S3JsonError(objectSettings, error.asInstanceOf[io.circe.Error])
         }
     }
   }
