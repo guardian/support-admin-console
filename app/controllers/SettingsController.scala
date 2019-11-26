@@ -11,7 +11,7 @@ import services.{S3Json, VersionedS3Data}
 import zio.blocking.Blocking
 import zio.{DefaultRuntime, IO, ZIO}
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 abstract class SettingsController[T : Decoder : Encoder](authAction: AuthAction[AnyContent], components: ControllerComponents, stage: String, filename: String)(implicit ec: ExecutionContext)
   extends AbstractController(components) with Circe {
@@ -26,7 +26,7 @@ abstract class SettingsController[T : Decoder : Encoder](authAction: AuthAction[
 
   protected val runtime = new DefaultRuntime {}
 
-  private def run(f: => ZIO[Blocking, Throwable, Result]) =
+  private def run(f: => ZIO[Blocking, Throwable, Result]): Future[Result] =
     runtime.unsafeRunToFuture {
       f.catchAll { error =>
         IO.succeed(InternalServerError(error.getMessage))

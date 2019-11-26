@@ -13,7 +13,7 @@ import play.api.libs.circe.Circe
 import zio.blocking.Blocking
 import zio.{IO, ZIO}
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 object EpicTestsController {
   def fastlyPurger(stage: String, ws: WSClient)(implicit ec: ExecutionContext): Option[FastlyPurger] = {
@@ -55,7 +55,7 @@ class EpicTestsController(authAction: AuthAction[AnyContent], components: Contro
     fastlyPurger = EpicTestsController.fastlyPurger(stage, ws)
   ) with Circe {
 
-  private def run(f: => ZIO[Blocking, Throwable, Result]) =
+  private def run(f: => ZIO[Blocking, Throwable, Result]): Future[Result] =
     runtime.unsafeRunToFuture {
       f.catchAll { error =>
         IO.succeed(InternalServerError(error.getMessage))
