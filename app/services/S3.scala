@@ -87,7 +87,7 @@ object S3 extends S3Client with StrictLogging {
       })
       .flatMap(currentVersion => {
         if (currentVersion == data.version) {
-          createOrUpdate(data.value)(objectSettings).map(_ => data)
+          createOrUpdate(data.value)(objectSettings)
         } else {
           logger.warn(s"Cannot update S3 object $objectSettings because provided version (${data.version}) does not match latest version ($currentVersion)")
           IO.fail(S3VersionMatchError)
