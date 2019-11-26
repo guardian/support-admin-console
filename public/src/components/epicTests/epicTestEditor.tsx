@@ -101,7 +101,7 @@ const copyHasTemplate = (test: EpicTest, template: string): boolean => test.vari
 
 const defaultArticlesViewedSettings: ArticlesViewedSettings = {
   minViews: 5,
-  periodInWeeks: 4
+  periodInWeeks: 8
 };
 
 interface EpicTestEditorProps extends WithStyles<typeof styles> {
