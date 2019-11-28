@@ -31,7 +31,6 @@ import {articleCountTemplate, countryNameTemplate} from "./epicTestVariantEditor
 import ArticlesViewedEditor, {defaultArticlesViewedSettings} from "./articlesViewedEditor";
 
 const styles = ({ spacing, typography}: Theme) => createStyles({
-
   container: {
     width: '100%',
     borderTop: `2px solid #999999`,

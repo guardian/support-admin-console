@@ -155,7 +155,7 @@ class EditableTextField extends React.Component<EditableTextFieldProps, Editable
               fullWidth
               name={this.props.label}
               disabled={!this.state.fieldEditMode}
-              value={this.state.currentText || ''}
+              value={this.state.currentText}
               onChange={this.onChange}
               helperText={this.props.helperText}
               autoFocus={this.props.autoFocus}
