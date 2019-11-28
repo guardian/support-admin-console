@@ -7,7 +7,7 @@ import ArchiveIcon from '@material-ui/icons/Archive';
 import { renderVisibilityIcons } from './utilities';
 import {EpicTest, ModifiedTests, UserCohort, TestStatus} from './epicTestsForm';
 import NewNameCreator from './newNameCreator';
-import { MaxViewsDefaults } from './maxViewsEditor';
+import { MaxEpicViewsDefaults } from './maxEpicViewsEditor';
 
 
 const styles = ( { typography, spacing }: Theme ) => createStyles({
@@ -145,7 +145,7 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
       excludedTagIds: [],
       excludedSections: [],
       alwaysAsk: false,
-      maxViews: MaxViewsDefaults,
+      maxViews: MaxEpicViewsDefaults,
       userCohort: UserCohort.AllNonSupporters,  // matches the default in dotcom
       isLiveBlog: false,
       hasCountryName: false,
