@@ -44,7 +44,7 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
   }
 });
 
-type ArticleViewsFieldName = 'minArticleViews' | 'maxArticleViews' | 'periodInWeeks';
+type ArticleViewsFieldName = 'minViews' | 'maxViews' | 'periodInWeeks';
 
 interface Props extends WithStyles<typeof styles> {
   articlesViewedSettings?: ArticlesViewedSettings,
@@ -108,6 +108,7 @@ class ArticlesViewedEditor extends React.Component<Props, State> {
           <FormControlLabel
               control={
                 <Switch
+                  checked={!!this.props.articlesViewedSettings}
                   disabled={!this.props.editMode}
                   onChange={(event) => {
                     this.onArticlesViewedEditorSwitchChange(event.target.checked);
@@ -120,8 +121,8 @@ class ArticlesViewedEditor extends React.Component<Props, State> {
 
         { this.props.articlesViewedSettings &&
           <div className={classes.articlesViewsContainer}>
-            {this.buildField('minArticleViews', 'Min articles viewed', this.props.articlesViewedSettings)}
-            {this.buildField('maxArticleViews', 'Max articles viewed', this.props.articlesViewedSettings)}
+            {this.buildField('minViews', 'Min articles viewed', this.props.articlesViewedSettings)}
+            {this.buildField('maxViews', 'Max articles viewed', this.props.articlesViewedSettings)}
             {this.buildField('periodInWeeks', 'Time period in weeks', this.props.articlesViewedSettings)}
           </div>
         }
