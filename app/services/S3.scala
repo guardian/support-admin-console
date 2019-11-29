@@ -152,12 +152,12 @@ object S3Json extends StrictLogging {
 
   def getFromJson[T : Decoder](s3: S3Client): S3ObjectSettings => ZIO[Blocking,Throwable,VersionedS3Data[T]] = { objectSettings =>
     s3.get(objectSettings).flatMap { raw =>
-      IO(decode[T](raw.value))
-        .absolve
+
+      IO.fromEither(decode[T](raw.value))
         .map(decoded => raw.copy(value = decoded))
         .mapError { error =>
           logger.error(s"Error decoding json from S3 ($objectSettings): ${error.getMessage}", error)
-          S3JsonError(objectSettings, error.asInstanceOf[io.circe.Error])
+          S3JsonError(objectSettings, error)
         }
     }
   }
