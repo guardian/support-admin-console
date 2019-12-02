@@ -62,7 +62,7 @@ class ArticlesViewedEditor extends React.Component<Props, State> {
     validationStatus: {}
   };
 
-  buildField = (fieldName: ArticleViewsFieldName, label: string, articlesViewedSettings: ArticlesViewedSettings) => {
+  buildField = (fieldName: ArticleViewsFieldName, label: string, articlesViewedSettings: ArticlesViewedSettings, isRequired: boolean) => {
     const setting: number | null = articlesViewedSettings[fieldName];
 
     return (<EditableTextField
@@ -77,6 +77,7 @@ class ArticlesViewedEditor extends React.Component<Props, State> {
           )
         }
       }}
+      required={isRequired}
       label={label}
       helperText="Must be a number"
       editEnabled={this.props.editMode}
@@ -121,9 +122,9 @@ class ArticlesViewedEditor extends React.Component<Props, State> {
 
         { this.props.articlesViewedSettings &&
           <div className={classes.articlesViewsContainer}>
-            {this.buildField('minViews', 'Min articles viewed', this.props.articlesViewedSettings)}
-            {this.buildField('maxViews', 'Max articles viewed', this.props.articlesViewedSettings)}
-            {this.buildField('periodInWeeks', 'Time period in weeks', this.props.articlesViewedSettings)}
+            {this.buildField('minViews', 'Min articles viewed', this.props.articlesViewedSettings, false)}
+            {this.buildField('maxViews', 'Max articles viewed', this.props.articlesViewedSettings, false)}
+            {this.buildField('periodInWeeks', 'Time period in weeks', this.props.articlesViewedSettings, true)}
           </div>
         }
       </>
