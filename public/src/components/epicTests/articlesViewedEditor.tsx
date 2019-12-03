@@ -72,7 +72,7 @@ class ArticlesViewedEditor extends React.Component<Props, State> {
           this.props.onChange(
             {
               ...articlesViewedSettings || defaultArticlesViewedSettings,
-              [fieldName]: value !== null ? Number(value) : null;
+              [fieldName]: value !== null ? Number(value) : null,
             }
           )
         }
