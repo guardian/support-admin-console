@@ -68,11 +68,11 @@ class ArticlesViewedEditor extends React.Component<Props, State> {
     return (<EditableTextField
       text={ setting ? setting.toString() : ''}
       onSubmit={ (value: string) => {
-        if (isNumber(value)) {
+        if (value === null || isNumber(value)) {
           this.props.onChange(
             {
               ...articlesViewedSettings || defaultArticlesViewedSettings,
-              [fieldName]: Number(value)
+              [fieldName]: value !== null ? Number(value) : null;
             }
           )
         }
