@@ -1,5 +1,5 @@
 import React, { ReactNode, ChangeEvent } from 'react';
-import {EpicTest, EpicVariant, UserCohort, MaxViews, ArticlesViewedSettings} from "./epicTestsForm";
+import {EpicTest, EpicVariant, UserCohort, MaxEpicViews, ArticlesViewedSettings} from "./epicTestsForm";
 import {
   Checkbox,
   FormControl,
@@ -21,13 +21,15 @@ import {
 import EditableTextField from "../helpers/editableTextField"
 import { Region } from '../../utils/models';
 import EpicTestVariantsList from './epicTestVariantsList';
-import MaxViewsEditor from './maxViewsEditor';
+import MaxEpicViewsEditor from './maxEpicViewsEditor';
 import { renderVisibilityIcons, renderVisibilityHelpText } from './utilities';
 import {onFieldValidationChange, ValidationStatus} from '../helpers/validation';
 import ButtonWithConfirmationPopup from '../helpers/buttonWithConfirmationPopup';
 import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 import ArchiveIcon from '@material-ui/icons/Archive';
 import {articleCountTemplate, countryNameTemplate} from "./epicTestVariantEditor";
+import ArticlesViewedEditor, {defaultArticlesViewedSettings} from "./articlesViewedEditor";
+import articlesViewedEditor from "./articlesViewedEditor";
 
 const styles = ({ spacing, typography}: Theme) => createStyles({
   container: {
@@ -99,11 +101,6 @@ const copyHasTemplate = (test: EpicTest, template: string): boolean => test.vari
   variant.paragraphs.some(para => para.includes(template))
 );
 
-const defaultArticlesViewedSettings: ArticlesViewedSettings = {
-  minViews: 5,
-  periodInWeeks: 8
-};
-
 interface EpicTestEditorProps extends WithStyles<typeof styles> {
   test?: EpicTest,
   hasChanged: boolean,
@@ -134,6 +131,16 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
     return this.props.editMode && !this.props.isDeleted && !this.props.isArchived;
   }
 
+  getArticlesViewedSettings = (test: EpicTest): ArticlesViewedSettings | undefined => {
+    if (!!test.articlesViewedSettings) {
+      return test.articlesViewedSettings;
+    }
+    if (copyHasTemplate(test, articleCountTemplate)) {
+      return defaultArticlesViewedSettings
+    }
+    return undefined;
+  }
+
   updateTest = (update: (test: EpicTest) => EpicTest) => {
     if (this.props.test) {
       const updatedTest = update(this.props.test);
@@ -142,8 +149,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
         ...updatedTest,
         // To save dotcom from having to work this out
         hasCountryName: copyHasTemplate(updatedTest, countryNameTemplate),
-        // Temporarily hardcode a default articlesViewedSettings. We can add a UI for configuring this later
-        articlesViewedSettings: copyHasTemplate(updatedTest, articleCountTemplate) ? defaultArticlesViewedSettings : undefined
+        articlesViewedSettings: this.getArticlesViewedSettings(updatedTest),
       })
     }
   }
@@ -369,13 +375,25 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
             label={`Use private view counter for this test (instead of the global one)`}
           />
 
-          <MaxViewsEditor
+          <MaxEpicViewsEditor
             test={test}
             editMode={this.isEditable()}
-            onChange={(alwaysAsk: boolean, maxViews: MaxViews) =>
-              this.updateTest(test => ({ ...test, alwaysAsk, maxViews }))
+            onChange={(alwaysAsk: boolean, maxEpicViews: MaxEpicViews) =>
+              this.updateTest(test => ({ ...test, alwaysAsk, maxViews: maxEpicViews }))
             }
             onValidationChange={onFieldValidationChange(this)('maxViews')}
+          />
+
+          <Typography variant={'h4'} className={this.props.classes.h4}>Articles count settings</Typography>
+          <ArticlesViewedEditor
+            articlesViewedSettings={test.articlesViewedSettings}
+            editMode={this.isEditable()}
+            onChange={(articlesViewedSettings?: ArticlesViewedSettings) => {
+              this.updateTest(test => ({ ...test, articlesViewedSettings }))
+            }
+
+            }
+            onValidationChange={onFieldValidationChange(this)('articlesViewedEditor')}
           />
 
           <div className={classes.buttons}>

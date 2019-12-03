@@ -40,15 +40,15 @@ export interface EpicVariant {
   secondaryCta?: Cta,
 }
 
-export interface MaxViews {
+export interface MaxEpicViews {
   maxViewsCount: number,
   maxViewsDays: number,
   minDaysBetweenViews: number
 }
 
 export interface ArticlesViewedSettings {
-  minViews?: number,
-  maxViewed?: number,
+  minViews: number | null,
+  maxViews: number | null,
   periodInWeeks: number
 }
 
@@ -61,7 +61,7 @@ export interface EpicTest {
   excludedTagIds: string[],
   excludedSections: string[],
   alwaysAsk: boolean,
-  maxViews?: MaxViews,
+  maxViews?: MaxEpicViews,
   userCohort?: UserCohort,
   isLiveBlog: boolean,
   hasCountryName: boolean,
