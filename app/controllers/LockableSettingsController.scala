@@ -35,7 +35,8 @@ class LockableSettingsController[T : Decoder : Encoder](
   stage: String,
   name: String,
   dataObjectSettings: S3ObjectSettings,
-  fastlyPurger: Option[FastlyPurger]
+  fastlyPurger: Option[FastlyPurger],
+  runtime: DefaultRuntime
 )(implicit ec: ExecutionContext) extends AbstractController(components) with Circe with StrictLogging {
 
   private val lockObjectSettings = S3ObjectSettings(
@@ -46,8 +47,6 @@ class LockableSettingsController[T : Decoder : Encoder](
   )
 
   val s3Client = services.S3
-
-  protected val runtime = new DefaultRuntime {}
 
   private def runWithLockStatus(f: VersionedS3Data[LockStatus] => ZIO[Blocking, Throwable, Result]): Future[Result] =
     runtime.unsafeRunToFuture {

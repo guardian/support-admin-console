@@ -11,7 +11,7 @@ import io.circe.generic.auto._
 import io.circe.syntax._
 import play.api.libs.circe.Circe
 import zio.blocking.Blocking
-import zio.{IO, ZIO}
+import zio.{DefaultRuntime, IO, ZIO}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -39,8 +39,12 @@ object EpicTestsController {
   )
 }
 
-class EpicTestsController(authAction: AuthAction[AnyContent], components: ControllerComponents, ws: WSClient, stage: String)(implicit ec: ExecutionContext)
-  extends LockableSettingsController[EpicTests](
+class EpicTestsController(
+  authAction: AuthAction[AnyContent],
+  components: ControllerComponents,
+  ws: WSClient, stage: String,
+  runtime: DefaultRuntime
+)(implicit ec: ExecutionContext) extends LockableSettingsController[EpicTests](
     authAction,
     components,
     stage,
@@ -52,7 +56,8 @@ class EpicTestsController(authAction: AuthAction[AnyContent], components: Contro
       cacheControl = Some("max-age=30"),
       surrogateControl = Some("max-age=86400")  // Cache for a day, and use cache purging after updates
     ),
-    fastlyPurger = EpicTestsController.fastlyPurger(stage, ws)
+    fastlyPurger = EpicTestsController.fastlyPurger(stage, ws),
+    runtime = runtime
   ) with Circe {
 
   private def run(f: => ZIO[Blocking, Throwable, Result]): Future[Result] =

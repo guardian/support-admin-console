@@ -13,8 +13,12 @@ import zio.{DefaultRuntime, IO, ZIO}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-abstract class SettingsController[T : Decoder : Encoder](authAction: AuthAction[AnyContent], components: ControllerComponents, stage: String, filename: String)(implicit ec: ExecutionContext)
-  extends AbstractController(components) with Circe {
+abstract class SettingsController[T : Decoder : Encoder](
+  authAction: AuthAction[AnyContent],
+  components: ControllerComponents,
+  stage: String,
+  filename: String,
+  val runtime: DefaultRuntime)(implicit ec: ExecutionContext) extends AbstractController(components) with Circe {
 
   private val dataObjectSettings = S3ObjectSettings(
     bucket = "support-admin-console",
@@ -23,8 +27,6 @@ abstract class SettingsController[T : Decoder : Encoder](authAction: AuthAction[
     cacheControl = None
   )
   private val s3Client = services.S3
-
-  protected val runtime = new DefaultRuntime {}
 
   private def run(f: => ZIO[Blocking, Throwable, Result]): Future[Result] =
     runtime.unsafeRunToFuture {
