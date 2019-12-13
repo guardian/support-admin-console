@@ -17,6 +17,7 @@ interface Props extends WithStyles<typeof styles> {
   label: string,
   defaultText?: string,
   defaultBaseUrl?: string,
+  manualCampaignCode: boolean
 }
 
 class CtaEditor extends React.Component<Props> {
@@ -42,6 +43,10 @@ class CtaEditor extends React.Component<Props> {
           }
           label="Button destination:"
           editEnabled={this.props.editMode}
+          helperText={ this.props.manualCampaignCode ?
+            'Note - tracking code must be added manually to this url, e.g. theguardian.com/article?INTCMP=my-campaign-code' :
+            undefined
+          }
         />
       </div>
     )
