@@ -5,7 +5,6 @@ import { SvgIconProps } from '@material-ui/core/SvgIcon';
 
 const styles = ({ spacing, typography }: Theme) => createStyles({
   button: {
-    marginLeft: spacing(2),
     marginBottom: spacing(2)
   },
   popover: {

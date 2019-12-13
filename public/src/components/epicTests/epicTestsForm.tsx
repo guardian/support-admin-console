@@ -347,6 +347,11 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
                       isDeleted={this.state.modifiedTests[test.name] && this.state.modifiedTests[test.name].isDeleted}
                       isArchived={this.state.modifiedTests[test.name] && this.state.modifiedTests[test.name].isArchived}
                       isNew={this.state.modifiedTests[test.name] && this.state.modifiedTests[test.name].isNew}
+                      createTest={(newTest: EpicTest) => {
+                        const newTests = [...this.state.tests, newTest];
+                        this.onTestsChange(newTests, newTest.name)
+                      }}
+                      testNames={this.state.tests.map(test => test.name)}
                     />)
                   ) : (<Typography className={classes.viewText}>Click on a test on the left to view contents.</Typography>)}
                 </div>

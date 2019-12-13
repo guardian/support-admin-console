@@ -24,7 +24,10 @@ const styles = ({ spacing, typography }: Theme) => createStyles({
   },
   actionBarButtons: {
     marginLeft: spacing(2),
-    marginRight: spacing(2)
+    marginRight: spacing(2),
+    '& button': {
+      marginLeft: spacing(2)
+    }
   },
   editModeColour: {
     backgroundColor: "#ffe500"

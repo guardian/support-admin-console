@@ -234,7 +234,8 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
         <div className={classes.root}>
           {this.props.editMode ? (
             <NewNameCreator
-              text="test"
+              type="test"
+              action="New"
               existingNames={ this.props.tests.map(test => test.name) }
               onValidName={this.createTest}
               editEnabled={this.props.editMode}
