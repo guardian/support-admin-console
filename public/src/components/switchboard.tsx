@@ -64,6 +64,7 @@ function paymentMethodToHumanReadable(paymentMethod: string): string {
     case RecurringPaymentMethod.stripe: return 'Stripe';
     case RecurringPaymentMethod.existingCard: return 'Existing Card';
     case RecurringPaymentMethod.existingDirectDebit: return 'Existing Direct Debit';
+    case OneOffPaymentMethod.amazonPay: return 'Amazon Pay';
     default: return 'Unknown';
   }
 }
