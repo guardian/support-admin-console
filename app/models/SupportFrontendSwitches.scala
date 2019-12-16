@@ -28,6 +28,7 @@ case class ExperimentSwitch(name: String, description: String, state: SwitchStat
 case class PaymentMethodsSwitch(
   stripe: SwitchState,
   payPal: SwitchState,
+  amazonPay: Option[SwitchState],
   directDebit: Option[SwitchState],
   existingCard: Option[SwitchState],
   existingDirectDebit: Option[SwitchState]

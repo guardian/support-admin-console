@@ -18,7 +18,7 @@ enum SwitchState {
 }
 
 enum OneOffPaymentMethod {
-  stripe = 'stripe', payPal = 'payPal'
+  stripe = 'stripe', payPal = 'payPal', amazonPay = 'amazonPay'
 }
 
 enum RecurringPaymentMethod {
@@ -99,6 +99,7 @@ class Switchboard extends React.Component<Props, Switches> {
       oneOffPaymentMethods: {
         stripe: SwitchState.Off,
         payPal: SwitchState.Off,
+        amazonPay: SwitchState.Off,
       },
       recurringPaymentMethods: {
         stripe: SwitchState.Off,
