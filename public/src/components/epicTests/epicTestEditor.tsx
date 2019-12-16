@@ -192,7 +192,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
     this.updateTest(test => ({...test, "locations": selectedLocations}));
   }
 
-  renderBottomButtons = () => (
+  renderBottomButtons = (test: EpicTest) => (
     <div className={this.props.classes.buttons}>
       <div className={this.props.classes.button}>
         <ButtonWithConfirmationPopup
@@ -217,7 +217,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
           existingNames={ this.props.testNames }
           onValidName={this.copyTest}
           editEnabled={this.props.editMode}
-          initialValue={this.props.test ? this.props.test.name : undefined }
+          initialValue={test.name}
         />
       </div>
     </div>
@@ -418,7 +418,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
             onValidationChange={onFieldValidationChange(this)('articlesViewedEditor')}
           />
 
-          { this.isEditable() && this.renderBottomButtons() }
+          { this.isEditable() && this.props.test && this.renderBottomButtons(this.props.test) }
 
         </div>
       </div>
