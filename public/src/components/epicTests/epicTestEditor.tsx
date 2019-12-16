@@ -88,7 +88,6 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
   button: {
     marginTop: spacing(2),
     marginLeft: spacing(2),
-    float: 'right'
   },
   isDeleted: {
     color: '#ab0613'
