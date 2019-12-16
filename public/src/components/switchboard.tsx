@@ -18,7 +18,7 @@ enum SwitchState {
 }
 
 enum OneOffPaymentMethod {
-  stripe = 'stripe', payPal = 'payPal'
+  stripe = 'stripe', payPal = 'payPal', amazonPay = 'amazonPay'
 }
 
 enum RecurringPaymentMethod {
@@ -64,6 +64,7 @@ function paymentMethodToHumanReadable(paymentMethod: string): string {
     case RecurringPaymentMethod.stripe: return 'Stripe';
     case RecurringPaymentMethod.existingCard: return 'Existing Card';
     case RecurringPaymentMethod.existingDirectDebit: return 'Existing Direct Debit';
+    case OneOffPaymentMethod.amazonPay: return 'Amazon Pay';
     default: return 'Unknown';
   }
 }
@@ -99,6 +100,7 @@ class Switchboard extends React.Component<Props, Switches> {
       oneOffPaymentMethods: {
         stripe: SwitchState.Off,
         payPal: SwitchState.Off,
+        amazonPay: SwitchState.Off,
       },
       recurringPaymentMethods: {
         stripe: SwitchState.Off,
