@@ -189,6 +189,7 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
               label="Has a button linking to the landing page"
               defaultText={defaultCta.text}
               defaultBaseUrl={defaultCta.baseUrl}
+              manualCampaignCode={false}
             />
 
             <CtaEditor
@@ -198,6 +199,7 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
               }
               editMode={this.props.editMode}
               label={"Has a secondary button"}
+              manualCampaignCode={true}
             />
           </div>
 
