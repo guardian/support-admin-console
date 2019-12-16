@@ -104,7 +104,8 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
   renderNewVariantButton = (): React.ReactNode => {
     return this.props.editMode ? (
       <NewNameCreator
-        text="variant"
+        type="variant"
+        action="New"
         existingNames={this.props.variants.map(variant => variant.name)}
         onValidName={this.createVariant}
         editEnabled={this.props.editMode}

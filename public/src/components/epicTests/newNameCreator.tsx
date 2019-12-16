@@ -19,9 +19,11 @@ const styles = ({ spacing }: Theme) => createStyles({
 
 interface NewNameCreatorProps extends WithStyles<typeof styles> {
   existingNames: string[],
-  text: string,
+  type: 'test' | 'variant',
+  action: 'New' | 'Copy',
   onValidName: (name: string) => void,
-  editEnabled: boolean
+  editEnabled: boolean,
+  initialValue?: string
 }
 
 interface NewNameCreatorState {
@@ -94,7 +96,7 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
       <div>
         <Button variant="contained" color="primary" onClick={this.onNewNameButtonClick} className={classes.button}>
             <AddIcon />
-            New {this.props.text}
+            {this.props.action} {this.props.type}
         </Button>
         <Popover
           open={this.state.newNamePopoverOpen}
@@ -112,9 +114,9 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
       <div className={classes.popover}>
         <EditableTextField
           required
-          text=""
+          text={this.props.initialValue ? this.props.initialValue : ""}
           onSubmit={this.handleName}
-          label={this.props.text[0].toUpperCase() + this.props.text.substr(1,) + " name:"}
+          label={this.props.type[0].toUpperCase() + this.props.type.substr(1,) + " name:"}
           startInEditMode
           autoFocus
           errorMessage={this.state.errorMessage}

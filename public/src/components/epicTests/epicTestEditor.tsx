@@ -30,6 +30,7 @@ import ArchiveIcon from '@material-ui/icons/Archive';
 import {articleCountTemplate, countryNameTemplate} from "./epicTestVariantEditor";
 import ArticlesViewedEditor, {defaultArticlesViewedSettings} from "./articlesViewedEditor";
 import articlesViewedEditor from "./articlesViewedEditor";
+import NewNameCreator from "./newNameCreator";
 
 const styles = ({ spacing, typography}: Theme) => createStyles({
   container: {
@@ -86,7 +87,7 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
   },
   button: {
     marginTop: spacing(2),
-    float: 'right'
+    marginLeft: spacing(2),
   },
   isDeleted: {
     color: '#ab0613'
@@ -112,7 +113,9 @@ interface EpicTestEditorProps extends WithStyles<typeof styles> {
   onArchive: (testName: string) => void,
   isDeleted: boolean,
   isArchived: boolean,
-  isNew: boolean
+  isNew: boolean,
+  testNames: string[],
+  createTest: (newTest: EpicTest) => void
 }
 
 interface EpicTestEditorState {
@@ -154,6 +157,16 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
     }
   }
 
+  copyTest = (newTestName: string): void => {
+    if (this.props.test) {
+      const newTest: EpicTest = {
+        ...this.props.test,
+        name: newTestName
+      };
+      this.props.createTest(newTest)
+    }
+  }
+
   onVariantsChange = (updatedVariantList: EpicVariant[]): void => {
     if (this.props.test) {
       this.updateTest(test => ({...test, "variants": updatedVariantList}));
@@ -179,27 +192,36 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
     this.updateTest(test => ({...test, "locations": selectedLocations}));
   }
 
-  renderDeleteTestButton = (testName: string) => {
-    return this.isEditable() && (
-      <ButtonWithConfirmationPopup
-        buttonText="Delete test"
-        confirmationText={areYouSure}
-        onConfirm={() => this.props.onDelete(testName)}
-        icon={<DeleteSweepIcon />}
-      />
-    );
-  };
-
-  renderArchiveButton = (testName: string) => {
-    return this.isEditable() && (
-      <ButtonWithConfirmationPopup
-        buttonText="Archive test"
-        confirmationText={areYouSure}
-        onConfirm={() => this.props.onArchive(testName)}
-        icon={<ArchiveIcon />}
-      />
-    )
-  }
+  renderBottomButtons = () => (
+    <div className={this.props.classes.buttons}>
+      <div className={this.props.classes.button}>
+        <ButtonWithConfirmationPopup
+          buttonText="Archive test"
+          confirmationText={areYouSure}
+          onConfirm={() => this.props.onArchive(test.name)}
+          icon={<ArchiveIcon />}
+        />
+      </div>
+      <div className={this.props.classes.button}>
+        <ButtonWithConfirmationPopup
+          buttonText="Delete test"
+          confirmationText={areYouSure}
+          onConfirm={() => this.props.onDelete(test.name)}
+          icon={<DeleteSweepIcon />}
+        />
+      </div>
+      <div className={this.props.classes.button}>
+        <NewNameCreator
+          type="test"
+          action="Copy"
+          existingNames={ this.props.testNames }
+          onValidName={this.copyTest}
+          editEnabled={this.props.editMode}
+          initialValue={this.props.test ? this.props.test.name : undefined }
+        />
+      </div>
+    </div>
+  )
 
   renderEditor = (test: EpicTest): React.ReactNode => {
     const {classes} = this.props;
@@ -396,10 +418,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
             onValidationChange={onFieldValidationChange(this)('articlesViewedEditor')}
           />
 
-          <div className={classes.buttons}>
-            <div className={classes.button}>{this.renderArchiveButton(test.name)}</div>
-            <div className={classes.button}>{this.renderDeleteTestButton(test.name)}</div>
-          </div>
+          { this.isEditable() && this.renderBottomButtons() }
 
         </div>
       </div>
