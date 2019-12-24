@@ -58,12 +58,12 @@ function switchStateToBoolean(s: SwitchState): boolean {
 function paymentMethodToHumanReadable(paymentMethod: string): string {
   switch (paymentMethod) {
     case OneOffPaymentMethod.amazonPay: return 'Amazon Pay';
-    case OneOffPaymentMethod.stripe: return 'Stripe - All methods';
+    case OneOffPaymentMethod.stripe: return 'Stripe - Credit/Debit card';
     case OneOffPaymentMethod.stripeApplePay: return 'Stripe - Apple Pay';
     case OneOffPaymentMethod.stripePaymentRequestButton: return 'Stripe - Payment Request Button';
     case RecurringPaymentMethod.directDebit: return 'GoCardless - Direct Debit';
     case RecurringPaymentMethod.payPal: return 'PayPal';
-    case RecurringPaymentMethod.stripe: return 'Stripe - All methods';
+    case RecurringPaymentMethod.stripe: return 'Stripe - Credit/Debit card';
     case RecurringPaymentMethod.existingCard: return 'Stripe - Existing Card';
     case RecurringPaymentMethod.existingDirectDebit: return 'GoCardless - Existing Direct Debit';
     case RecurringPaymentMethod.stripeApplePay: return 'Stripe - Apple Pay';
