@@ -18,14 +18,12 @@ enum SwitchState {
 }
 
 enum OneOffPaymentMethod {
-  stripe = 'stripe', payPal = 'payPal', amazonPay = 'amazonPay'
+  stripe = 'stripe', payPal = 'payPal', amazonPay = 'amazonPay', stripeApplePay = 'stripeApplePay', stripePaymentRequestButton = 'stripePaymentRequestButton'
 }
 
 enum RecurringPaymentMethod {
-  stripe = 'stripe', payPal = 'payPal', directDebit = 'directDebit', existingCard = 'existingCard', existingDirectDebit = 'existingDirectDebit'
+  stripe = 'stripe', payPal = 'payPal', directDebit = 'directDebit', existingCard = 'existingCard', existingDirectDebit = 'existingDirectDebit', stripeApplePay = 'stripeApplePay', stripePaymentRequestButton = 'stripePaymentRequestButton'
 }
-
-type PaymentMethod = OneOffPaymentMethod | RecurringPaymentMethod;
 
 interface Switches {
   oneOffPaymentMethods: {
@@ -59,18 +57,23 @@ function switchStateToBoolean(s: SwitchState): boolean {
 
 function paymentMethodToHumanReadable(paymentMethod: string): string {
   switch (paymentMethod) {
-    case RecurringPaymentMethod.directDebit: return 'Direct Debit';
-    case RecurringPaymentMethod.payPal: return 'PayPal';
-    case RecurringPaymentMethod.stripe: return 'Stripe';
-    case RecurringPaymentMethod.existingCard: return 'Existing Card';
-    case RecurringPaymentMethod.existingDirectDebit: return 'Existing Direct Debit';
     case OneOffPaymentMethod.amazonPay: return 'Amazon Pay';
+    case OneOffPaymentMethod.stripe: return 'Stripe - All methods';
+    case OneOffPaymentMethod.stripeApplePay: return 'Stripe - Apple Pay';
+    case OneOffPaymentMethod.stripePaymentRequestButton: return 'Stripe - Payment Request Button';
+    case RecurringPaymentMethod.directDebit: return 'GoCardless - Direct Debit';
+    case RecurringPaymentMethod.payPal: return 'PayPal';
+    case RecurringPaymentMethod.stripe: return 'Stripe - All methods';
+    case RecurringPaymentMethod.existingCard: return 'Stripe - Existing Card';
+    case RecurringPaymentMethod.existingDirectDebit: return 'GoCardless - Existing Direct Debit';
+    case RecurringPaymentMethod.stripeApplePay: return 'Stripe - Apple Pay';
+    case RecurringPaymentMethod.stripePaymentRequestButton: return 'Stripe - Payment Request Button';
     default: return 'Unknown';
   }
 }
 
 
-const styles = ({ palette, spacing, mixins }: Theme) => createStyles({
+const styles = ({ palette, spacing}: Theme) => createStyles({
   formControl: {
     marginRight: spacing(4),
     marginBottom: spacing(4),
@@ -99,11 +102,15 @@ class Switchboard extends React.Component<Props, Switches> {
     this.state = {
       oneOffPaymentMethods: {
         stripe: SwitchState.Off,
+        stripeApplePay: SwitchState.Off,
+        stripePaymentRequestButton: SwitchState.Off,
         payPal: SwitchState.Off,
         amazonPay: SwitchState.Off,
       },
       recurringPaymentMethods: {
         stripe: SwitchState.Off,
+        stripeApplePay: SwitchState.Off,
+        stripePaymentRequestButton: SwitchState.Off,
         payPal: SwitchState.Off,
         directDebit: SwitchState.Off,
         existingCard: SwitchState.Off,
@@ -168,7 +175,7 @@ class Switchboard extends React.Component<Props, Switches> {
         this.fetchStateFromServer();
       })
       .catch((resp) => {
-        alert('Error while saving');
+        alert(`Error while saving: ${resp}`);
         this.fetchStateFromServer();
       });
   };
@@ -188,7 +195,9 @@ class Switchboard extends React.Component<Props, Switches> {
               to have an enum type for paymentMethod and then set that type on arguments to
               paymentMethodToHumanReadable and updateOneOffPaymentMethodSwitch.
             */}
-              {Object.entries(this.state.oneOffPaymentMethods).map(([paymentMethod, switchState]) =>
+              {Object.entries(this.state.oneOffPaymentMethods)
+                .sort(([pm1], [pm2]) => paymentMethodToHumanReadable(pm1).localeCompare(paymentMethodToHumanReadable(pm2)))
+                .map(([paymentMethod, switchState]) =>
                 <FormControlLabel
                   control={
                     <Switch
@@ -205,7 +214,9 @@ class Switchboard extends React.Component<Props, Switches> {
             </FormControl>
             <FormControl component={'fieldset' as 'div'} className={classes.formControl}>
               <FormLabel component={'legend' as 'label'}>Recurring contributions</FormLabel>
-              {Object.entries(this.state.recurringPaymentMethods).map(([paymentMethod, switchState]) =>
+              {Object.entries(this.state.recurringPaymentMethods)
+                .sort(([pm1], [pm2]) => paymentMethodToHumanReadable(pm1).localeCompare(paymentMethodToHumanReadable(pm2)))
+                .map(([paymentMethod, switchState]) =>
                 <FormControlLabel
                   control={
                     <Switch
@@ -222,7 +233,9 @@ class Switchboard extends React.Component<Props, Switches> {
             </FormControl>
             <FormControl component={'fieldset' as 'div'} className={classes.formControl}>
               <FormLabel component={'legend' as 'label'}>Feature Switches</FormLabel>
-              {Object.entries(this.state.experiments).map(([switchName, switchData]) =>
+              {Object.entries(this.state.experiments)
+                .sort(([switchName1], [switchName2]) => switchName1.localeCompare(switchName2))
+                .map(([switchName, switchData]) =>
                 <FormControlLabel
                   control={
                     <Switch
