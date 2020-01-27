@@ -178,7 +178,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
       }
 
       const timeoutAlertId = window.setTimeout(() => {
-        alert("You've had this editing session open for 20 minutes - if you leave it much longer then you may lose any unsaved work!\nIf you've finished then please click 'Cancel'.");
+        alert("You've had this editing session open for 20 minutes - if you leave it much longer then you may lose any unsaved work!\nIf you've finished then please either save or cancel.");
         this.setState({ timeoutAlertId: null });
       }, 60 * 20 * 1000);
 
