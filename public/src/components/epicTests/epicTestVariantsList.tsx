@@ -83,7 +83,7 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
       name: newVariantName,
       heading: undefined,
       paragraphs: [],
-      highlightedText: "Support The Guardian from as little as %%CURRENCY_SYMBOL%%1 – and it only takes a minute. Thank you.",
+      highlightedText: "Support the Guardian from as little as %%CURRENCY_SYMBOL%%1 – and it only takes a minute. Thank you.",
       footer: undefined,
       showTicker: false,
       backgroundImageUrl: undefined,
