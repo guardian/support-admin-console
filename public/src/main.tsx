@@ -6,7 +6,7 @@ import Switchboard from './components/switchboard';
 import ContributionTypesForm from './components/contributionTypes';
 import AmountsForm from './components/amounts/amounts';
 import EpicTestsForm from './components/epicTests/epicTestsForm';
-import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core';
+import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -16,6 +16,7 @@ import Divider from '@material-ui/core/Divider';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import ListItem from '@material-ui/core/ListItem';
+import {CSSProperties} from "@material-ui/core/styles/withStyles";
 
 const drawerWidth = 240;
 
@@ -34,7 +35,7 @@ const styles = ({ palette, spacing, mixins, typography }: Theme) => createStyles
   drawerPaper: {
     width: drawerWidth,
   },
-  toolbar: mixins.toolbar,
+  toolbar: mixins.toolbar as CSSProperties, // createStyles expects material-ui's CSSProperties type, not react's
   content: {
     flexGrow: 1,
     backgroundColor: palette.background.default,
