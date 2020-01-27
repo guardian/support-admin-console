@@ -16,6 +16,7 @@ import Divider from '@material-ui/core/Divider';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import ListItem from '@material-ui/core/ListItem';
+import {CreateCSSProperties} from "@material-ui/core/styles/withStyles";
 
 const drawerWidth = 240;
 
@@ -34,7 +35,7 @@ const styles = ({ palette, spacing, mixins, typography }: Theme) => createStyles
   drawerPaper: {
     width: drawerWidth,
   },
-  toolbar: mixins.toolbar,
+  toolbar: mixins.toolbar as CreateCSSProperties<{}>,
   content: {
     flexGrow: 1,
     backgroundColor: palette.background.default,
