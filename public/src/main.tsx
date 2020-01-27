@@ -6,7 +6,7 @@ import Switchboard from './components/switchboard';
 import ContributionTypesForm from './components/contributionTypes';
 import AmountsForm from './components/amounts/amounts';
 import EpicTestsForm from './components/epicTests/epicTestsForm';
-import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core';
+import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
