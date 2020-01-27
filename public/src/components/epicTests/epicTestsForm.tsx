@@ -170,6 +170,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
       });
   };
 
+  // Maintains an alert if tool is left open for edit for 20 minutes
   updateWarningTimeout = (editMode: boolean): void => {
     if (editMode) {
       if (this.state.timeoutAlertId) {
@@ -179,7 +180,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
       const timeoutAlertId = window.setTimeout(() => {
         alert("You've had this editing session open for 20 minutes - if you leave it much longer then you may lose any unsaved work!\nIf you've finished then please click 'Cancel'.");
         this.setState({ timeoutAlertId: null });
-      }, 10000);
+      }, 60 * 20 * 1000);
 
       this.setState({ timeoutAlertId });
 
