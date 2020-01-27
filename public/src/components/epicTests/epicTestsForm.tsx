@@ -106,7 +106,8 @@ type EpicTestsFormState = EpicTests & {
   selectedTestName?: string,
   editMode: boolean,
   lockStatus: LockStatus,
-  modifiedTests: ModifiedTests
+  modifiedTests: ModifiedTests,
+  timeoutAlertId: number | null,  // A timeout for warning about being open for edit for too long
 };
 
 const styles = ({ spacing, typography }: Theme) => createStyles({
@@ -144,6 +145,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
       editMode: false,
       lockStatus: { locked: false },
       modifiedTests: {},
+      timeoutAlertId: null,
     };
   };
 
@@ -154,14 +156,37 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
   fetchStateFromServer = (): void => {
     fetchFrontendSettings(FrontendSettingsType.epicTests)
       .then(serverData => {
+        const editMode = serverData.status.email === serverData.userEmail;
+
+        this.updateWarningTimeout(editMode);
+
         this.setState({
           ...serverData.value,
           previousStateFromServer: serverData,
           lockStatus: serverData.status,
-          editMode: serverData.status.email === serverData.userEmail,
+          editMode: editMode,
           modifiedTests: {}
         });
       });
+  };
+
+  updateWarningTimeout = (editMode: boolean): void => {
+    if (editMode) {
+      if (this.state.timeoutAlertId) {
+        window.clearTimeout(this.state.timeoutAlertId);
+      }
+
+      const timeoutAlertId = window.setTimeout(() => {
+        alert("You've had this editing session open for 20 minutes - if you leave it much longer then you may lose any unsaved work!\nIf you've finished then please click 'Cancel'.");
+        this.setState({ timeoutAlertId: null });
+      }, 10000);
+
+      this.setState({ timeoutAlertId });
+
+    } else if (this.state.timeoutAlertId) {
+      window.clearTimeout(this.state.timeoutAlertId);
+      this.setState({ timeoutAlertId: null });
+    }
   };
 
   cancel = (): void => {
