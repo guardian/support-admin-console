@@ -49,7 +49,10 @@ export interface MaxEpicViews {
 export interface ArticlesViewedSettings {
   minViews: number | null,
   maxViews: number | null,
-  periodInWeeks: number
+  // periodInWeeks is required in server-side model, but optional here because we have to automatically add
+  // a blank ArticlesViewedSettings when the %%ARTICLE_COUNT%% template is detected. Validation in the
+  // articlesViewedEditor will immediately report the error, preventing use of the save button.
+  periodInWeeks: number | null,
 }
 
 export interface EpicTest {

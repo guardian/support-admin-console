@@ -16,8 +16,8 @@ const isNumber = (value: string): boolean => !Number.isNaN(Number(value));
 
 export const defaultArticlesViewedSettings: ArticlesViewedSettings = {
   maxViews: null,
-  minViews: 5,
-  periodInWeeks: 8,
+  minViews: null,
+  periodInWeeks: null, //By initialising this to null we require the user to enter a value before the test can be valid
 };
 
 const styles = ({ spacing, typography}: Theme) => createStyles({
@@ -83,7 +83,15 @@ class ArticlesViewedEditor extends React.Component<Props, State> {
       editEnabled={this.props.editMode}
       validation={
         {
-          getError: (value: string) => isNumber(value) ? null : 'Must be a number',
+          getError: (value: string) => {
+            if (isRequired && !value) {
+              return 'This field is required'
+            }
+            else if (!isNumber(value)) {
+              return 'Must be a number';
+            }
+            else return null;
+          },
           onChange: onFieldValidationChange(this)(fieldName)
         }
       }
