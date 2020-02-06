@@ -16,8 +16,8 @@ const isNumber = (value: string): boolean => !Number.isNaN(Number(value));
 
 export const defaultArticlesViewedSettings: ArticlesViewedSettings = {
   maxViews: null,
-  minViews: null,
-  periodInWeeks: null, //By initialising this to null we require the user to enter a value before the test can be valid
+  minViews: 5,
+  periodInWeeks: 52,
 };
 
 const styles = ({ spacing, typography}: Theme) => createStyles({
