@@ -49,7 +49,7 @@ export interface MaxEpicViews {
 export interface ArticlesViewedSettings {
   minViews: number | null,
   maxViews: number | null,
-  periodInWeeks: number
+  periodInWeeks: number,
 }
 
 export interface EpicTest {

@@ -410,10 +410,8 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
           <ArticlesViewedEditor
             articlesViewedSettings={test.articlesViewedSettings}
             editMode={this.isEditable()}
-            onChange={(articlesViewedSettings?: ArticlesViewedSettings) => {
+            onChange={(articlesViewedSettings?: ArticlesViewedSettings) =>
               this.updateTest(test => ({ ...test, articlesViewedSettings }))
-            }
-
             }
             onValidationChange={onFieldValidationChange(this)('articlesViewedEditor')}
           />
