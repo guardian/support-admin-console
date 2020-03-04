@@ -195,6 +195,11 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
     this.updateTest(test => ({...test, "locations": selectedLocations}));
   }
 
+  onLiveBlogChange = (event: React.ChangeEvent<{}>, value: string): void => {
+    const isLiveBlog = value === 'true' ? true : false;
+    this.updateTest(test => ({...test, "isLiveBlog": isLiveBlog}))
+  }
+
   renderBottomButtons = (test: EpicTest) => (
     <div className={this.props.classes.buttons}>
       <div className={this.props.classes.button}>
@@ -253,18 +258,35 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
 
         </div>
 
-        <div>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={test.isLiveBlog}
-                onChange={this.onSwitchChange("isLiveBlog")}
-                disabled={!this.isEditable()}
-              />
-            }
-            label="Liveblog Epic"
-          />
-        </div>
+        <hr />
+
+        <FormControl
+            className={classes.formControl}>
+              <InputLabel
+                className={classes.selectLabel}
+                shrink
+                htmlFor="epic-type">
+                  Epic type
+              </InputLabel>
+              <RadioGroup
+                className={classes.radio}
+                value={test.isLiveBlog}
+                onChange={this.onLiveBlogChange}
+              >
+                 <FormControlLabel
+                    value={false}
+                    control={<Radio />}
+                    label="Below articles"
+                    disabled={!this.isEditable()}
+                />
+                <FormControlLabel
+                    value={true}
+                    control={<Radio />}
+                    label="In liveblogs"
+                    disabled={!this.isEditable()}
+                />
+              </RadioGroup>
+          </FormControl>
 
         <Typography variant={'h4'} className={classes.h4}>Variants</Typography>
         <div>
