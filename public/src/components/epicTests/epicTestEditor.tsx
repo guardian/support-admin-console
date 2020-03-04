@@ -1,4 +1,4 @@
-import React, { ReactNode, ChangeEvent } from 'react';
+import React, { ReactNode } from 'react';
 import {EpicTest, EpicVariant, UserCohort, MaxEpicViews, ArticlesViewedSettings} from "./epicTestsForm";
 import {
   Checkbox,
@@ -22,14 +22,12 @@ import EditableTextField from "../helpers/editableTextField"
 import { Region } from '../../utils/models';
 import EpicTestVariantsList from './epicTestVariantsList';
 import MaxEpicViewsEditor from './maxEpicViewsEditor';
-import { renderVisibilityIcons, renderVisibilityHelpText } from './utilities';
 import {onFieldValidationChange, ValidationStatus} from '../helpers/validation';
 import ButtonWithConfirmationPopup from '../helpers/buttonWithConfirmationPopup';
 import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 import ArchiveIcon from '@material-ui/icons/Archive';
 import {articleCountTemplate, countryNameTemplate} from "./epicTestVariantEditor";
 import ArticlesViewedEditor, {defaultArticlesViewedSettings} from "./articlesViewedEditor";
-import articlesViewedEditor from "./articlesViewedEditor";
 import NewNameCreator from "./newNameCreator";
 
 const styles = ({ spacing, typography}: Theme) => createStyles({
@@ -94,7 +92,12 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
   },
   isArchived: {
     color: '#a1845c'
-  }
+  },
+  switchLabel: {
+    marginTop: spacing(0.6),
+    marginRight: spacing(6),
+    fontSize: typography.pxToRem(18),
+  },
 });
 
 const copyHasTemplate = (test: EpicTest, template: string): boolean => test.variants.some(variant =>
@@ -241,21 +244,12 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
         </Typography>
 
         <div className={classes.switchWithIcon}>
-          <div>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={test.isOn}
-                onChange={this.onSwitchChange("isOn")}
-                disabled={!this.isEditable()}
-              />
-            }
-            label={`Test is ${test.isOn ? "live" : "draft"}`}
+          <Typography className={classes.switchLabel}>Live on theguardian.com</Typography>
+          <Switch
+            checked={test.isOn}
+            onChange={this.onSwitchChange("isOn")}
+            disabled={!this.isEditable()}
           />
-          </div>
-
-          <div className={classes.visibilityIcons}>{renderVisibilityIcons(test.isOn)}</div>
-          <div className={classes.visibilityHelperText}>{renderVisibilityHelpText(test.isOn)}</div>
 
         </div>
 
@@ -269,19 +263,6 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
               />
             }
             label="Liveblog Epic"
-          />
-        </div>
-
-        <div>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={test.highPriority}
-                onChange={this.onSwitchChange("highPriority")}
-                disabled={!this.isEditable()}
-              />
-            }
-            label="High priority"
           />
         </div>
 
