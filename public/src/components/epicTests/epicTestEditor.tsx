@@ -4,13 +4,12 @@ import {
   Checkbox,
   FormControl,
   FormControlLabel,
-  Input,
+  FormGroup,
   InputLabel,
   ListItemText,
   MenuItem,
   Radio,
   RadioGroup,
-  Select,
   Switch,
   Theme,
   Typography,
@@ -29,6 +28,7 @@ import ArchiveIcon from '@material-ui/icons/Archive';
 import {articleCountTemplate, countryNameTemplate} from "./epicTestVariantEditor";
 import ArticlesViewedEditor, {defaultArticlesViewedSettings} from "./articlesViewedEditor";
 import NewNameCreator from "./newNameCreator";
+import EpicTypeComponent, {EpicType} from "./EpicTypeComponent";
 
 const styles = ({ spacing, typography}: Theme) => createStyles({
   container: {
@@ -190,13 +190,14 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
     this.updateTest(test => ({...test, "userCohort": selectedCohort}));
   }
 
-  onLocationsChange = (event: React.ChangeEvent<{ name?: string | undefined; value: unknown; }>, child: ReactNode) => {
+  onTargetRegionsChange = (region: Region) => {
+    console.log({region});
     const selectedLocations = event.target.value as Region[];
     this.updateTest(test => ({...test, "locations": selectedLocations}));
   }
 
-  onLiveBlogChange = (event: React.ChangeEvent<{}>, value: string): void => {
-    const isLiveBlog = value === 'true' ? true : false;
+  onEpicTypeChange = (epicType: EpicType): void => {
+    const isLiveBlog = epicType === 'LiveBlog';
     this.updateTest(test => ({...test, "isLiveBlog": isLiveBlog}))
   }
 
@@ -260,33 +261,11 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
 
         <hr />
 
-        <FormControl
-            className={classes.formControl}>
-              <InputLabel
-                className={classes.selectLabel}
-                shrink
-                htmlFor="epic-type">
-                  Epic type
-              </InputLabel>
-              <RadioGroup
-                className={classes.radio}
-                value={test.isLiveBlog}
-                onChange={this.onLiveBlogChange}
-              >
-                 <FormControlLabel
-                    value={false}
-                    control={<Radio />}
-                    label="Below articles"
-                    disabled={!this.isEditable()}
-                />
-                <FormControlLabel
-                    value={true}
-                    control={<Radio />}
-                    label="In liveblogs"
-                    disabled={!this.isEditable()}
-                />
-              </RadioGroup>
-          </FormControl>
+        <EpicTypeComponent
+          epicType={test.isLiveBlog ? 'LiveBlog' : 'Standard'}
+          isEditable={this.isEditable()}
+          onEpicTypeChange={this.onEpicTypeChange}
+        />
 
         <Typography variant={'h4'} className={classes.h4}>Variants</Typography>
         <div>
@@ -336,15 +315,30 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
 
           <Typography variant={'h4'} className={classes.h4}>Audience</Typography>
 
+          {/* <TargetRegionsComponent /> */}
+
           <FormControl
-            className={classes.formControl}>
+            className={classes.formControl}
+          >
               <InputLabel
                 className={classes.selectLabel}
                 shrink
                 htmlFor="locations-select-multiple-checkbox">
-                  Locations:
+                  Target regions:
               </InputLabel>
-              <Select
+              <FormGroup>
+                {Object.values(Region).map(region => (
+                  <MenuItem key={region} value={region} >
+                    <Checkbox
+                      checked={test.locations.indexOf(region) > -1}
+                      onChange={this.onLocationsChange}
+                    />
+                    <ListItemText primary={region} />
+                  </MenuItem>
+                ))}
+              </FormGroup>
+
+              {/* <Select
                 className={classes.select}
                 multiple
                 value={test.locations}
@@ -359,7 +353,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
                     <ListItemText primary={region} />
                   </MenuItem>
                 ))}
-              </Select>
+              </Select> */}
           </FormControl>
 
           <FormControl
