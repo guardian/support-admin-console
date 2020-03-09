@@ -5,8 +5,10 @@ import {
   FormControl,
   FormControlLabel,
   FormGroup,
-  InputLabel,
+  Radio,
+  RadioGroup,
   Theme,
+  Typography,
   WithStyles,
   createStyles,
   withStyles
@@ -14,22 +16,23 @@ import {
 import { Region } from '../../utils/models';
 
 const styles = ({ spacing, typography }: Theme) => createStyles({
-  formControl: {
-    marginTop: spacing(2),
-    marginBottom: spacing(1),
-    display: 'block',
-  },
-  select: {
-    minWidth: "460px",
-    paddingTop: "10px",
-    marginBottom: "20px"
-  },
   selectLabel: {
     fontSize: typography.pxToRem(22),
     fontWeight: typography.fontWeightMedium,
-    color: 'black'
+    color: 'black',
+    // marginBottom: "120px",
   },
 });
+
+const regionLabels = {
+  AUDCountries: 'Australia',
+  Canada: 'Canada',
+  EURCountries: 'Europe',
+  NZDCountries: 'New Zealand',
+  GBPCountries: 'the UK',
+  UnitedStates: 'the US',
+  International: 'Rest-of-world'
+}
 
 interface TargetRegionsSelectorProps extends WithStyles<typeof styles> {
   regions: Region[],
@@ -39,12 +42,50 @@ interface TargetRegionsSelectorProps extends WithStyles<typeof styles> {
 
 interface TargetRegionsSelectorState {
   selectedRegions: Region[],
+  targetRegion: TargetRegion | null,
 }
+
+type TargetRegion = 'Global' | 'Select'
 
 class TargetRegionsSelector extends React.Component<TargetRegionsSelectorProps, TargetRegionsSelectorState> {
 
   state: TargetRegionsSelectorState = {
     selectedRegions: this.props.regions,
+    targetRegion: null
+  }
+
+  allRegions = Object.values(Region);
+
+  renderRegions = () => (
+    <FormGroup>
+      {Object.values(Region).map(region => (
+        <FormControlLabel
+          key={region}
+          control={
+            <Checkbox
+              checked={this.state.selectedRegions.indexOf(region) > -1}
+              onChange={this.onRegionChange}
+              value={region} />
+          }
+          label={regionLabels[region]}
+          disabled={!this.props.isEditable}
+        />
+      ))}
+    </FormGroup>
+  );
+
+  onRadioChange = (targetRegion: TargetRegion): void => {
+    this.setState({
+      targetRegion
+    });
+    if (targetRegion === 'Global') {
+      this.setState({
+        selectedRegions: Object.values(Region)
+      }),
+      () => {
+        this.props.onRegionsUpdate(this.state.selectedRegions); // TODO
+      }
+    }
   }
 
   onRegionChange = (event: React.ChangeEvent<{ value: string; checked: boolean }>) => {
@@ -72,32 +113,30 @@ class TargetRegionsSelector extends React.Component<TargetRegionsSelectorProps, 
     const { classes } = this.props;
 
     return (
-      <FormControl
-            className={classes.formControl}
-          >
-              <InputLabel
-                className={classes.selectLabel}
-                shrink
-                htmlFor="locations-select-multiple-checkbox">
-                  Target regions:
-              </InputLabel>
-              <FormGroup>
-                {Object.values(Region).map(region => (
-                  <FormControlLabel
-                    key={region}
-                    control={
-                      <Checkbox
-                        checked={this.state.selectedRegions.indexOf(region) > -1}
-                        onChange={this.onRegionChange}
-                        value={region} />
-                    }
-                    label={region}
-                    disabled={!this.props.isEditable}
-                  />
-                ))
-                }
-              </FormGroup>
-          </FormControl>
+      <>
+      <Typography>Target regions</Typography>
+
+        <RadioGroup
+          value={this.state.targetRegion}
+          onChange={(event, value) => this.onRadioChange(value as TargetRegion)}
+        >
+          <FormControlLabel
+              value={'Global'}
+              control={<Radio />}
+              label={'International (ALL)'}
+              disabled={!this.props.isEditable}
+            />
+          <FormControlLabel
+            value={'Select'}
+            control={<Radio />}
+            label={'Select region(s)'}
+            disabled={!this.props.isEditable}
+          />
+        </RadioGroup>
+        <FormControl>
+        {this.state.targetRegion === 'Select' && this.renderRegions()}
+      </FormControl>
+      </>
     )
   }
 }
