@@ -48,27 +48,25 @@ class TargetRegionsSelector extends React.Component<TargetRegionsSelectorProps, 
   }
 
   onRegionChange = (event: React.ChangeEvent<{ value: string; checked: boolean }>) => {
-    console.log('selectedRegions before', this.state.selectedRegions);
     const checked = event.target.checked;
-    console.log({checked});
     const changedRegion = event.target.value as Region;
-    console.log({changedRegion})
-    const indexOfRegion = this.state.selectedRegions.indexOf(changedRegion);
-    console.log({indexOfRegion});
-    if (indexOfRegion < 0){
-      this.setState(prevState => ({
-        ...prevState,
-        selectedRegions: [...prevState.selectedRegions, changedRegion]
-      }));
-      console.log('selected regions after spread', this.state.selectedRegions);
+
+    if (checked){
+      this.setState({
+        selectedRegions: [...this.state.selectedRegions, changedRegion]
+      },
+      () => {
+        this.props.onRegionsUpdate(this.state.selectedRegions);
+      });
     } else {
-      this.setState(prevState => ({
-        ...prevState,
-        selectedRegions: prevState.selectedRegions.filter(r => r !== changedRegion) }));
-      console.log('selectedRegions after splice', this.state.selectedRegions);
+      let regionIndex = this.state.selectedRegions.indexOf(changedRegion);
+      this.setState({
+        selectedRegions: this.state.selectedRegions.filter((_, index) => index !== regionIndex)
+      }, () => {
+        this.props.onRegionsUpdate(this.state.selectedRegions);
+      });
     }
   }
-
 
   render(): React.ReactNode {
     const { classes } = this.props;
@@ -99,27 +97,7 @@ class TargetRegionsSelector extends React.Component<TargetRegionsSelectorProps, 
                 ))
                 }
               </FormGroup>
-{/*
-              <Select
-                className={classes.select}
-                multiple
-                value={this.state.selectedRegions}
-                onChange={this.onRegionChange}
-                input={<Input id="locations-select-multiple-checkbox" />}
-                renderValue={selected => (selected as string[]).join(', ')}
-                disabled={!this.props.isEditable}
-                open
-                displayEmpty
-              >
-                {Object.values(Region).map(region => (
-                  <MenuItem key={region} value={region} >
-                    <Checkbox checked={this.props.regions.indexOf(region) > -1} />
-                    <ListItemText primary={region} />
-                  </MenuItem>
-                ))}
-              </Select> */}
           </FormControl>
-
     )
   }
 }
