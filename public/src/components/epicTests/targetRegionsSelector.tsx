@@ -48,50 +48,39 @@ class TargetRegionsSelector extends React.Component<TargetRegionsSelectorProps, 
     allRegions: false,
   }
 
-  allRegions = Object.values(Region);
+  allRegions: Region[] = Object.values(Region);
+  allRegionsLength: number = this.allRegions.length;
+  isIndeterminate = this.state.selectedRegions.length < this.allRegionsLength;
 
-  onAllRegionsChange = (event: React.ChangeEvent<{ value: string; checked: boolean }>): void => {
-    if (event.target.checked) {
-      this.setState({
-        selectedRegions: Object.values(Region),
-        allRegions: true,
-      }),
-      () => {
-        this.props.onRegionsUpdate(this.state.selectedRegions);
-      }
-    } else {
-      this.setState({
-        selectedRegions: [],
-        allRegions: false,
-      }),
-      () => {
-        this.props.onRegionsUpdate(this.state.selectedRegions);
-      }
-    }
-  }
-
+  // TODO: add logic to check allRegions if all regions have been ticked separately and vice versa, also to update 'allRegions' in state.
+  // Should 'isIndeterminate' be in state also?
 
   onRegionChange = (event: React.ChangeEvent<{ value: string; checked: boolean }>) => {
     const checked = event.target.checked;
-    const changedRegion = event.target.value as Region;
+    const changedRegion = event.target.value;
 
-    if (checked){
-      if (this.state.selectedRegions.length === Object.values(Region).length) {
-      }
+    console.log({checked}, 'indeterminate', 'not allRegions', !this.state.allRegions, this.state.selectedRegions.length)
+
+    if (checked) {
       this.setState({
-        selectedRegions: [...this.state.selectedRegions, changedRegion]
+        selectedRegions: changedRegion === 'allRegions' ? this.allRegions : [...this.state.selectedRegions, changedRegion as Region]
       },
       () => {
         this.props.onRegionsUpdate(this.state.selectedRegions);
+        changedRegion === 'allRegions' ? this.isIndeterminate = false : this.isIndeterminate = true;
       });
     } else {
-      let regionIndex = this.state.selectedRegions.indexOf(changedRegion);
+      let regionIndex = this.state.selectedRegions.indexOf(changedRegion as Region);
       this.setState({
-        selectedRegions: this.state.selectedRegions.filter((_, index) => index !== regionIndex)
+        selectedRegions: changedRegion === 'allRegions' ? [] : this.state.selectedRegions.filter((_, index) => index !== regionIndex)
       }, () => {
         this.props.onRegionsUpdate(this.state.selectedRegions);
+        changedRegion === 'allRegions' ? this.isIndeterminate = false : this.isIndeterminate = true;
       });
     }
+    this.setState({
+      allRegions: checked && changedRegion === 'allRegions'
+    });
   }
 
   render(): React.ReactNode {
@@ -100,20 +89,20 @@ class TargetRegionsSelector extends React.Component<TargetRegionsSelectorProps, 
     return (
       <>
         <Typography className={classes.selectLabel}>Target regions</Typography>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={this.state.allRegions || this.state.selectedRegions.length === Object.values(Region).length}
-                onChange={this.onAllRegionsChange}
-                value={'Global'}
-                indeterminate={!this.state.allRegions && this.state.selectedRegions.length > 0 && this.state.selectedRegions.length !== Object.values(Region).length}
-              />
-            }
-            label={'All regions'}
-            disabled={!this.props.isEditable}
-          />
           <FormGroup>
-            {Object.values(Region).map(region => (
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={this.state.allRegions}
+                  onChange={this.onRegionChange}
+                  value={'allRegions'}
+                  indeterminate={this.isIndeterminate}
+                />
+              }
+              label={'All regions'}
+              disabled={!this.props.isEditable}
+            />
+            {this.allRegions.map(region => (
               <FormControlLabel
                 key={region}
                 control={
