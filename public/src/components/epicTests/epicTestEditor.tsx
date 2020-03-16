@@ -30,7 +30,7 @@ import ArchiveIcon from '@material-ui/icons/Archive';
 import {articleCountTemplate, countryNameTemplate} from './epicTestVariantEditor';
 import ArticlesViewedEditor, {defaultArticlesViewedSettings} from './articlesViewedEditor';
 import NewNameCreator from './newNameCreator';
-import EpicTypeComponent, {EpicType} from './EpicTypeComponent';
+import EpicTypeComponent, {EpicType} from './epicTypeComponent';
 import TargetRegionsSelector from './targetRegionsSelector';
 
 const styles = ({ spacing, typography}: Theme) => createStyles({
