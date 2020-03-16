@@ -12,12 +12,15 @@ import {
 } from "@material-ui/core";
 import { Region } from '../../utils/models';
 
-const styles = ({ typography }: Theme) => createStyles({
+const styles = ({ spacing, typography }: Theme) => createStyles({
   selectLabel: {
     fontSize: typography.pxToRem(18),
     fontWeight: typography.fontWeightMedium,
     color: 'black',
   },
+  indentedCheckbox: {
+    marginLeft: spacing(3),
+  }
 });
 
 const regionLabels = {
@@ -39,48 +42,88 @@ interface TargetRegionsSelectorProps extends WithStyles<typeof styles> {
 interface TargetRegionsSelectorState {
   selectedRegions: Region[],
   allRegions: boolean,
+  indeterminate: boolean,
 }
 
 class TargetRegionsSelector extends React.Component<TargetRegionsSelectorProps, TargetRegionsSelectorState> {
 
-  state: TargetRegionsSelectorState = {
-    selectedRegions: this.props.regions,
-    allRegions: false,
-  }
-
   allRegions: Region[] = Object.values(Region);
   allRegionsLength: number = this.allRegions.length;
-  isIndeterminate = this.state.selectedRegions.length < this.allRegionsLength;
 
-  // TODO: add logic to check allRegions if all regions have been ticked separately and vice versa, also to update 'allRegions' in state.
-  // Should 'isIndeterminate' be in state also?
+  setAllRegions = (all: boolean) => {
+    this.setState({
+      allRegions: all
+    });
+  }
 
-  onRegionChange = (event: React.ChangeEvent<{ value: string; checked: boolean }>) => {
+  setAllOrNoSelectedRegions = (all: boolean) => {
+    this.setState({
+      selectedRegions: all ? this.allRegions : [],
+    })
+  }
+
+  setIndeterminate = (checked: boolean) => {
+    this.setState({
+      indeterminate: checked
+    })
+  }
+
+  allRegionsStatus = (checkedRegions: Region[]): boolean => checkedRegions.length === this.allRegionsLength;
+
+  indeterminateStatus = (checkedRegions: Region[]): boolean => checkedRegions.length > 0 && checkedRegions.length < this.allRegionsLength;
+
+  state: TargetRegionsSelectorState = {
+    selectedRegions: this.props.regions,
+    allRegions: this.allRegionsStatus(this.props.regions),
+    indeterminate: this.indeterminateStatus(this.props.regions),
+  }
+
+  onAllRegionsChange = (event: React.ChangeEvent<{ value: string; checked: boolean }>) => {
+    if (event.target.checked) {
+      this.setAllRegions(true);
+      this.setAllOrNoSelectedRegions(true);
+      this.props.onRegionsUpdate(this.allRegions);
+    } else {
+      this.setAllRegions(false);
+      this.setAllOrNoSelectedRegions(false);
+      this.props.onRegionsUpdate([]);
+    }
+    this.setIndeterminate(false);
+  }
+
+  onSingleRegionChange = (event: React.ChangeEvent<{ value: string; checked: boolean }>) => {
     const checked = event.target.checked;
     const changedRegion = event.target.value;
 
-    console.log({checked}, 'indeterminate', 'not allRegions', !this.state.allRegions, this.state.selectedRegions.length)
-
     if (checked) {
       this.setState({
-        selectedRegions: changedRegion === 'allRegions' ? this.allRegions : [...this.state.selectedRegions, changedRegion as Region]
+        selectedRegions: [...this.state.selectedRegions, changedRegion as Region]
       },
       () => {
+        if (this.allRegionsStatus(this.state.selectedRegions)) {
+          this.setAllRegions(true);
+          this.setIndeterminate(false);
+        } else {
+          this.setAllRegions(false);
+          this.setIndeterminate(true);
+        }
         this.props.onRegionsUpdate(this.state.selectedRegions);
-        changedRegion === 'allRegions' ? this.isIndeterminate = false : this.isIndeterminate = true;
       });
     } else {
       let regionIndex = this.state.selectedRegions.indexOf(changedRegion as Region);
       this.setState({
-        selectedRegions: changedRegion === 'allRegions' ? [] : this.state.selectedRegions.filter((_, index) => index !== regionIndex)
+        selectedRegions: this.state.selectedRegions.filter((_, index) => index !== regionIndex)
       }, () => {
+        if (this.state.selectedRegions.length === 0) {
+          this.setAllRegions(false);
+          this.setIndeterminate(false);
+        } else {
+          this.setAllRegions(false);
+          this.setIndeterminate(true);
+        }
         this.props.onRegionsUpdate(this.state.selectedRegions);
-        changedRegion === 'allRegions' ? this.isIndeterminate = false : this.isIndeterminate = true;
       });
     }
-    this.setState({
-      allRegions: checked && changedRegion === 'allRegions'
-    });
   }
 
   render(): React.ReactNode {
@@ -94,9 +137,9 @@ class TargetRegionsSelector extends React.Component<TargetRegionsSelectorProps, 
               control={
                 <Checkbox
                   checked={this.state.allRegions}
-                  onChange={this.onRegionChange}
+                  onChange={this.onAllRegionsChange}
                   value={'allRegions'}
-                  indeterminate={this.isIndeterminate}
+                  indeterminate={this.state.indeterminate}
                 />
               }
               label={'All regions'}
@@ -107,8 +150,9 @@ class TargetRegionsSelector extends React.Component<TargetRegionsSelectorProps, 
                 key={region}
                 control={
                   <Checkbox
+                    className={classes.indentedCheckbox}
                     checked={this.state.selectedRegions.indexOf(region) > -1}
-                    onChange={this.onRegionChange}
+                    onChange={this.onSingleRegionChange}
                     value={region}
                   />
                 }
