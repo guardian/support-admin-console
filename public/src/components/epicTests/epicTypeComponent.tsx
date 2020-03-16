@@ -23,6 +23,7 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
     color: 'black'
   },
   radio: {
+    display: 'inline-block',
     paddingTop: '20px',
     marginBottom: '10px'
   },
