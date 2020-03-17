@@ -199,7 +199,6 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
   }
 
   onTargetRegionsChange = (selectedRegions: Region[]): void => {
-    console.log('onTargetRegionsChange', selectedRegions)
     this.updateTest(test => ({...test, 'locations': selectedRegions}));
   }
 
