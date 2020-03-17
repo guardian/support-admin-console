@@ -1,9 +1,11 @@
-import React, { ReactNode, ChangeEvent } from 'react';
+import React, { ReactNode } from 'react';
+import { Region } from '../../utils/models';
 import {EpicTest, EpicVariant, UserCohort, MaxEpicViews, ArticlesViewedSettings} from "./epicTestsForm";
 import {
   Checkbox,
   FormControl,
   FormControlLabel,
+  FormGroup,
   Input,
   InputLabel,
   ListItemText,
@@ -18,19 +20,18 @@ import {
   createStyles,
   withStyles
 } from "@material-ui/core";
-import EditableTextField from "../helpers/editableTextField"
-import { Region } from '../../utils/models';
+import EditableTextField from '../helpers/editableTextField';
 import EpicTestVariantsList from './epicTestVariantsList';
 import MaxEpicViewsEditor from './maxEpicViewsEditor';
-import { renderVisibilityIcons, renderVisibilityHelpText } from './utilities';
 import {onFieldValidationChange, ValidationStatus} from '../helpers/validation';
 import ButtonWithConfirmationPopup from '../helpers/buttonWithConfirmationPopup';
 import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 import ArchiveIcon from '@material-ui/icons/Archive';
-import {articleCountTemplate, countryNameTemplate} from "./epicTestVariantEditor";
-import ArticlesViewedEditor, {defaultArticlesViewedSettings} from "./articlesViewedEditor";
-import articlesViewedEditor from "./articlesViewedEditor";
-import NewNameCreator from "./newNameCreator";
+import {articleCountTemplate, countryNameTemplate} from './epicTestVariantEditor';
+import ArticlesViewedEditor, {defaultArticlesViewedSettings} from './articlesViewedEditor';
+import NewNameCreator from './newNameCreator';
+import EpicTypeComponent, {EpicType} from './epicTypeComponent';
+import TargetRegionsSelector from './targetRegionsSelector';
 
 const styles = ({ spacing, typography}: Theme) => createStyles({
   container: {
@@ -94,7 +95,12 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
   },
   isArchived: {
     color: '#a1845c'
-  }
+  },
+  switchLabel: {
+    marginTop: spacing(0.6),
+    marginRight: spacing(6),
+    fontSize: typography.pxToRem(18),
+  },
 });
 
 const copyHasTemplate = (test: EpicTest, template: string): boolean => test.variants.some(variant =>
@@ -187,9 +193,13 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
     this.updateTest(test => ({...test, "userCohort": selectedCohort}));
   }
 
-  onLocationsChange = (event: React.ChangeEvent<{ name?: string | undefined; value: unknown; }>, child: ReactNode) => {
-    const selectedLocations = event.target.value as Region[];
-    this.updateTest(test => ({...test, "locations": selectedLocations}));
+  onEpicTypeChange = (epicType: EpicType): void => {
+    const isLiveBlog = epicType === 'LiveBlog';
+    this.updateTest(test => ({...test, "isLiveBlog": isLiveBlog}))
+  }
+
+  onTargetRegionsChange = (selectedRegions: Region[]): void => {
+    this.updateTest(test => ({...test, 'locations': selectedRegions}));
   }
 
   renderBottomButtons = (test: EpicTest) => (
@@ -241,49 +251,22 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
         </Typography>
 
         <div className={classes.switchWithIcon}>
-          <div>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={test.isOn}
-                onChange={this.onSwitchChange("isOn")}
-                disabled={!this.isEditable()}
-              />
-            }
-            label={`Test is ${test.isOn ? "live" : "draft"}`}
+          <Typography className={classes.switchLabel}>Live on theguardian.com</Typography>
+          <Switch
+            checked={test.isOn}
+            onChange={this.onSwitchChange('isOn')}
+            disabled={!this.isEditable()}
           />
-          </div>
-
-          <div className={classes.visibilityIcons}>{renderVisibilityIcons(test.isOn)}</div>
-          <div className={classes.visibilityHelperText}>{renderVisibilityHelpText(test.isOn)}</div>
 
         </div>
 
-        <div>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={test.isLiveBlog}
-                onChange={this.onSwitchChange("isLiveBlog")}
-                disabled={!this.isEditable()}
-              />
-            }
-            label="Liveblog Epic"
-          />
-        </div>
+        <hr />
 
-        <div>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={test.highPriority}
-                onChange={this.onSwitchChange("highPriority")}
-                disabled={!this.isEditable()}
-              />
-            }
-            label="High priority"
-          />
-        </div>
+        <EpicTypeComponent
+          epicType={test.isLiveBlog ? 'LiveBlog' : 'Standard'}
+          isEditable={this.isEditable()}
+          onEpicTypeChange={this.onEpicTypeChange}
+        />
 
         <Typography variant={'h4'} className={classes.h4}>Variants</Typography>
         <div>
@@ -301,7 +284,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
         <div>
           <EditableTextField
             text={test.tagIds.join(",")}
-            onSubmit={this.onListChange("tagIds")}
+            onSubmit={this.onListChange('tagIds')}
             label="Display on tags:"
             helperText="Separate each tag with a comma"
             editEnabled={this.isEditable()}
@@ -309,7 +292,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
 
           <EditableTextField
             text={test.sections.join(",")}
-            onSubmit={this.onListChange("sections")}
+            onSubmit={this.onListChange('sections')}
             label="Display on sections:"
             helperText="Separate each section with a comma"
             editEnabled={this.isEditable()}
@@ -317,7 +300,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
 
           <EditableTextField
             text={test.excludedTagIds.join(",")}
-            onSubmit={this.onListChange("excludedTagIds")}
+            onSubmit={this.onListChange('excludedTagIds')}
             label="Excluded tags:"
             helperText="Separate each tag with a comma"
             editEnabled={this.isEditable()}
@@ -325,7 +308,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
 
           <EditableTextField
             text={test.excludedSections.join(",")}
-            onSubmit={this.onListChange("excludedSections")}
+            onSubmit={this.onListChange('excludedSections')}
             label="Excluded sections:"
             helperText="Separate each section with a comma"
             editEnabled={this.isEditable()}
@@ -333,31 +316,12 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
 
           <Typography variant={'h4'} className={classes.h4}>Audience</Typography>
 
-          <FormControl
-            className={classes.formControl}>
-              <InputLabel
-                className={classes.selectLabel}
-                shrink
-                htmlFor="locations-select-multiple-checkbox">
-                  Locations:
-              </InputLabel>
-              <Select
-                className={classes.select}
-                multiple
-                value={test.locations}
-                onChange={this.onLocationsChange}
-                input={<Input id="locations-select-multiple-checkbox" />}
-                renderValue={selected => (selected as string[]).join(', ')}
-                disabled={!this.isEditable()}
-              >
-                {Object.values(Region).map(region => (
-                  <MenuItem key={region} value={region} >
-                    <Checkbox checked={test.locations.indexOf(region) > -1} />
-                    <ListItemText primary={region} />
-                  </MenuItem>
-                ))}
-              </Select>
-          </FormControl>
+          <TargetRegionsSelector
+            regions={test.locations}
+            onRegionsUpdate={this.onTargetRegionsChange}
+            isEditable={this.isEditable()}
+          />
+
 
           <FormControl
             className={classes.formControl}>
@@ -390,7 +354,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
             control={
               <Switch
                 checked={test.useLocalViewLog}
-                onChange={this.onSwitchChange("useLocalViewLog")}
+                onChange={this.onSwitchChange('useLocalViewLog')}
                 disabled={!this.isEditable()}
               />
             }

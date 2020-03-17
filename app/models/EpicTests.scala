@@ -72,7 +72,7 @@ case class EpicTest(
   isLiveBlog: Boolean = false,
   hasCountryName: Boolean = false,
   variants: List[EpicVariant],
-  highPriority: Boolean = false,
+  highPriority: Boolean = false, // has been removed from form, but might be used in future
   useLocalViewLog: Boolean = false,
   articlesViewedSettings: Option[ArticlesViewedSettings] = None
 )

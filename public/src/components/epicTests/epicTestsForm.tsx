@@ -66,7 +66,7 @@ export interface EpicTest {
   isLiveBlog: boolean,
   hasCountryName: boolean,
   variants: EpicVariant[],
-  highPriority: boolean,
+  highPriority: boolean, // has been removed from form, but might be used in future
   useLocalViewLog: boolean,
   articlesViewedSettings?: ArticlesViewedSettings
 }
