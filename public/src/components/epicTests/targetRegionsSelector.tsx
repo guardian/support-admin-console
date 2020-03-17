@@ -47,8 +47,6 @@ class TargetRegionsSelector extends React.Component<TargetRegionsSelectorProps, 
 
   allRegions: Region[] = Object.values(Region);
 
-  allRegionsStatus = (checkedRegions: Region[]): boolean => checkedRegions.length === this.allRegions.length;
-
   indeterminateStatus = (): boolean => this.state.selectedRegions.length > 0 && this.state.selectedRegions.length < this.allRegions.length;
 
   state: TargetRegionsSelectorState = {
