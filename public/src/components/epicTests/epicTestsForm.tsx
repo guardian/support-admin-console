@@ -54,6 +54,7 @@ export interface ArticlesViewedSettings {
 
 export interface EpicTest {
   name: string,
+  nickname: string,
   isOn: boolean,
   locations: Region[],
   tagIds: string[],

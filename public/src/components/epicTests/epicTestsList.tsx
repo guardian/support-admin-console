@@ -135,9 +135,10 @@ interface EpicTestListProps extends WithStyles<typeof styles> {
 }
 class EpicTestsList extends React.Component<EpicTestListProps> {
 
-  createTest = (newTestName: string) => {
+  createTest = (newTestName: string, newTestNickname: string) => {
     const newTest: EpicTest = {
       name: newTestName,
+      nickname: newTestNickname,
       isOn: false,
       locations: [],
       tagIds: [],

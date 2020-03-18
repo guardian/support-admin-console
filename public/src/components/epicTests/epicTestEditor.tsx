@@ -163,11 +163,12 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
     }
   }
 
-  copyTest = (newTestName: string): void => {
+  copyTest = (newTestName: string, newTestNickname: string): void => {
     if (this.props.test) {
       const newTest: EpicTest = {
         ...this.props.test,
-        name: newTestName
+        name: newTestName,
+        nickname: newTestNickname,
       };
       this.props.createTest(newTest)
     }
