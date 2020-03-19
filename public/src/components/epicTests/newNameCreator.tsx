@@ -177,6 +177,24 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
     this.setDefaultText(nameType);
   }
 
+  nicknameHasErrors = (nickname: string): boolean => {
+    return this.emptyString(nickname, 'nickname') || this.duplicateName(nickname, this.props.existingNicknames, 'nickname');
+  }
+
+  onNameFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = event.target.value.toUpperCase();
+    this.setState({
+      currentNameText: newValue
+    })
+  };
+
+  onNicknameFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = event.target.value.toUpperCase();
+    this.setState({
+      currentNicknameText: newValue
+    })
+  };
+
   handleNewTestName = (newTestName: string, newTestNickname: string): void => {
     const nameHasErrors = this.hasErrors(newTestName, 'name')
     const nicknameHasErrors = this.hasErrors(newTestNickname, 'nickname');
