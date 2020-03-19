@@ -121,6 +121,7 @@ interface EpicTestEditorProps extends WithStyles<typeof styles> {
   isArchived: boolean,
   isNew: boolean,
   testNames: string[],
+  testNicknames: string[],
   createTest: (newTest: EpicTest) => void
 }
 
@@ -226,6 +227,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
           type="test"
           action="Copy"
           existingNames={ this.props.testNames }
+          existingNicknames={this.props.testNicknames}
           onValidName={this.copyTest}
           editEnabled={this.props.editMode}
           initialValue={test.name}

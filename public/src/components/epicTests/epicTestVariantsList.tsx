@@ -107,6 +107,7 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
         type="variant"
         action="New"
         existingNames={this.props.variants.map(variant => variant.name)}
+        existingNicknames={[]}
         onValidName={this.createVariant}
         editEnabled={this.props.editMode}
       />
