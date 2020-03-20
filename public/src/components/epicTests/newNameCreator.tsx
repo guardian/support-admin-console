@@ -1,13 +1,12 @@
 import React from 'react';
 
 import {
-  Theme, createStyles, WithStyles, withStyles, Button, Popover, Dialog, TextField
+  Theme, createStyles, WithStyles, withStyles, Button, Dialog, TextField
 } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
-import EditableTextField from '../helpers/editableTextField';
 
 const styles = ({ spacing }: Theme) => createStyles({
-  button: {
+  newButton: {
     marginRight: spacing(2),
     marginBottom: spacing(2)
   },
@@ -20,11 +19,16 @@ const styles = ({ spacing }: Theme) => createStyles({
     margin: '0 auto',
   },
   textField: {
-    margin:'0 auto',
     marginTop: spacing(2),
     marginBottom: spacing(2),
     marginLeft: spacing(3),
     marginRight: spacing(3),
+  },
+  createButton: {
+    marginTop: spacing(1),
+    marginBottom: spacing(2),
+    marginLeft: 'auto',
+    marginRight: 'auto',
   }
 });
 
@@ -54,7 +58,7 @@ type nameType = 'name' | 'nickname';
 class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreatorState> {
 
   messages = {
-    defaultNameHelperText: 'Date format: YYYY-MM-DD_TEST_NAME',
+    defaultNameHelperText: this.props.type === 'test' ? 'Date format: YYYY-MM-DD_TEST_NAME' : '',
     defaultNicknameHelperText: 'Pick a name for your test that\'s easy to recognise',
     errorEmpty: 'Field cannot be empty - please enter some text',
     errorDuplicate: 'Name already exists - please try another',
@@ -189,18 +193,44 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
     }
   }
 
-  showButton = (buttonText: string, onClick: () => void): React.ReactFragment | null => {
+  showCreateButton = (buttonText: string, onClick: () => void): React.ReactFragment | null => {
     return this.props.editEnabled && (
-    <Button onClick={onClick}>{buttonText}</Button>
+      <Button
+        className={this.props.classes.createButton}
+        onClick={onClick}
+        color={'primary'}
+        variant={'contained'}
+        size={'medium'}
+      >
+        {buttonText}
+      </Button>
     )
   }
 
   render(): React.ReactNode {
     const { classes } = this.props;
 
-    const renderTestNameCreator = () => (
+    const renderNicknameFieldAndButton = (): React.ReactNode => (
       <>
-        <Button variant="contained" color="primary" onClick={this.onNewNameButtonClick} className={classes.button}>
+        <TextField
+          label="Nickname"
+          className={classes.textField}
+          margin={'normal'}
+          variant={'outlined'}
+          value={this.state.currentNicknameText}
+          onChange={this.onNicknameFieldChange}
+          helperText={this.state.nicknameHelperText}
+          error={this.state.nicknameError}
+        />
+        {this.showCreateButton('Create your test', () => this.handleNewTestName(this.state.currentNameText, this.state.currentNicknameText))}
+      </>
+    );
+
+    const renderVariantButton = (): React.ReactNode => this.showCreateButton('Create variant', () => this.handleNewVariantName(this.state.currentNameText));
+
+    return (
+      <>
+        <Button variant="contained" color="primary" onClick={this.onNewNameButtonClick} className={classes.newButton}>
             <AddIcon />
             {this.props.action} {this.props.type}
         </Button>
@@ -211,7 +241,7 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
           fullWidth
         >
           <TextField
-            label="Full test name"
+            label={this.props.type === 'test' ? 'Full test name' : 'Variant name'}
             autoFocus
             className={classes.textField}
             margin={'normal'}
@@ -221,60 +251,11 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
             helperText={this.state.nameHelperText}
             error={this.state.nameError}
          />
-          <TextField
-            label="Nickname"
-            className={classes.textField}
-            margin={'normal'}
-            variant={'outlined'}
-            value={this.state.currentNicknameText}
-            onChange={this.onNicknameFieldChange}
-            helperText={this.state.nicknameHelperText}
-            error={this.state.nicknameError}
-          />
+         {this.props.type === 'test' ? renderNicknameFieldAndButton() : renderVariantButton()}
 
-          {this.showButton('Create your test', () => this.handleNewTestName(this.state.currentNameText, this.state.currentNicknameText))}
         </Dialog>
       </>
     );
-
-  const renderVariantNameCreator = () => (
-    <>
-      <Button variant="contained" color="primary" onClick={this.onNewNameButtonClick} className={classes.button}>
-          <AddIcon />
-          {this.props.action} {this.props.type}
-      </Button>
-      <Popover
-        open={this.state.newNamePopoverOpen}
-        anchorEl={this.state.anchorElForPopover}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
-        }}
-
-      >
-    <div className={classes.popover}>
-      <EditableTextField
-        required
-        text={this.props.initialValue ? this.props.initialValue : ""}
-        onSubmit={this.handleNewVariantName}
-        label={this.props.type[0].toUpperCase() + this.props.type.substr(1,) + " name:"}
-        startInEditMode
-        autoFocus
-        helperText={this.state.nameHelperText}
-        editEnabled={true}
-      />
-
-      {this.showButton('Cancel', this.closePopover)}
-    </div>
-  </Popover>
-  </>
-  );
-
-    return this.props.type === 'test' ? renderTestNameCreator() : renderVariantNameCreator();
   }
 }
 
