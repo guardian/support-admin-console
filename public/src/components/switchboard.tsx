@@ -32,7 +32,7 @@ interface Switches {
   recurringPaymentMethods: {
     [p in RecurringPaymentMethod]: SwitchState
   },
-  optimize: SwitchState,
+  useDotcomContactPage: SwitchState,
   experiments: {
     [featureSwitch: string]: {
       name: string,
@@ -116,7 +116,7 @@ class Switchboard extends React.Component<Props, Switches> {
         existingCard: SwitchState.Off,
         existingDirectDebit: SwitchState.Off,
       },
-      optimize: SwitchState.Off,
+      useDotcomContactPage: SwitchState.Off,
       experiments: {},
     };
     this.previousStateFromServer = null;
@@ -255,12 +255,12 @@ class Switchboard extends React.Component<Props, Switches> {
               <FormControlLabel
                 control={
                   <Switch
-                    checked={switchStateToBoolean(this.state.optimize)}
-                    onChange={(event) => this.setState({optimize: booleanToSwitchState(event.target.checked)})}
-                    value={switchStateToBoolean(this.state.optimize)}
+                    checked={switchStateToBoolean(this.state.useDotcomContactPage)}
+                    onChange={(event) => this.setState({useDotcomContactPage: booleanToSwitchState(event.target.checked)})}
+                    value={switchStateToBoolean(this.state.useDotcomContactPage)}
                   />
                 }
-                label="Google Optimize"
+                label="Use emergency contact page on dotcom"
               />
             </FormControl>
           </div>
