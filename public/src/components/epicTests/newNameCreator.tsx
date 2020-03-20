@@ -61,7 +61,7 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
     errorInvalidChars: 'Only letters, numbers, underscores and hyphens are allowed',
   }
 
-  state: NewNameCreatorState = {
+  defaultState: NewNameCreatorState = {
     currentNameText: "",
     currentNicknameText: "",
     newNamePopoverOpen: false,
@@ -72,6 +72,13 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
     nicknameError: false
   }
 
+  state: NewNameCreatorState = this.defaultState;
+
+
+  resetState = (): void => {
+    this.setState(this.defaultState);
+  }
+
   onNewNameButtonClick = (event: React.MouseEvent<HTMLButtonElement>): void =>  {
     this.setState({
       newNamePopoverOpen: true,
@@ -80,12 +87,7 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
   }
 
   closePopover = (): void => {
-    this.setState(
-      {
-        newNamePopoverOpen: false,
-        nameHelperText: ""
-      }
-    );
+    this.resetState();
   }
 
   setNameHelperText = (message: string): void => {
@@ -100,24 +102,30 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
     if (text === "") {
       nameType === 'name' ? this.setNameHelperText(this.messages.errorEmpty) : this.setNicknameHelperText(this.messages.errorEmpty);
       return true;
+    } else {
+      nameType === 'name' ? this.setNameHelperText(this.messages.defaultNameHelperText) : this.setNicknameHelperText(this.messages.defaultNicknameHelperText);
+      return false;
     }
-    return false;
   }
 
   duplicateName = (newName: string, existingNames: string[], nameType: nameType): boolean => {
     if (existingNames.some(existingName => existingName.toUpperCase() === newName.toUpperCase())) {
       nameType === 'name' ? this.setNameHelperText(this.messages.errorDuplicate) : this.setNicknameHelperText(this.messages.errorDuplicate);
       return true;
+    } else {
+      nameType === 'name' ? this.setNameHelperText(this.messages.defaultNameHelperText) : this.setNicknameHelperText(this.messages.defaultNicknameHelperText);
+      return false;
     }
-    return false;
   };
 
   invalidChars = (newName: string, nameType: nameType): boolean => {
     if (/[^\w-]/.test(newName)) {
       nameType === 'name' ? this.setNameHelperText(this.messages.errorInvalidChars) : this.setNicknameHelperText(this.messages.errorInvalidChars);
       return true;
+    } else {
+      nameType === 'name' ? this.setNameHelperText(this.messages.defaultNameHelperText) : this.setNicknameHelperText(this.messages.defaultNicknameHelperText);
+      return false;
     }
-    return false;
   };
 
   nameHasErrors = (name: string): boolean => {
@@ -157,13 +165,21 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
         this.setState({
           nameError: true
         });
+      } else {
+        this.setState({
+          nameError: false
+        });
       }
       if (nicknameHasErrors) {
         this.setState({
           nicknameError: true
-        })
+        });
+      } else {
+        this.setState({
+          nicknameError: false
+        });
       }
-     }
+    }
   }
 
   handleNewVariantName = (newVariantName: string): void => {
@@ -202,7 +218,7 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
             variant={'outlined'}
             value={this.state.currentNameText}
             onChange={this.onNameFieldChange}
-            helperText={this.state.nameHelperText }
+            helperText={this.state.nameHelperText}
             error={this.state.nameError}
          />
           <TextField
