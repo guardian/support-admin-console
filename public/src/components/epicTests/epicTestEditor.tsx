@@ -252,6 +252,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
           {this.props.test && this.props.test.name}
           {statusText()}
         </Typography>
+        <Typography variant={'h4'} className={classes.h4}>{this.props.test && this.props.test.nickname}</Typography>
 
         <div className={classes.switchWithIcon}>
           <Typography className={classes.switchLabel}>Live on theguardian.com</Typography>

@@ -276,7 +276,7 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
                     >
                       { this.props.editMode ? this.renderReorderButtons(test.name, index) : <div className={classes.buttonsContainer}></div>}
                       <div className={classes.testText}>
-                        <Typography className={classes.testName}noWrap={true}>{test.name.replace(toStrip, '')}</Typography>
+                        <Typography className={classes.testName}noWrap={true}>{test.nickname !== '' ? test.nickname : test.name.replace(toStrip, '')}</Typography>
 
                         {(testStatus && testStatus.isDeleted) && (<div><Typography className={classes.toBeDeleted}>To be deleted</Typography></div>)}
 
