@@ -1,9 +1,10 @@
 import React from 'react';
 
 import {
-  Theme, createStyles, WithStyles, withStyles, Button, Dialog, TextField
+  Theme, createStyles, WithStyles, withStyles, Button, Dialog, TextField, IconButton
 } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
+import CancelIcon from '@material-ui/icons/Cancel';
 
 const styles = ({ spacing }: Theme) => createStyles({
   newButton: {
@@ -29,7 +30,11 @@ const styles = ({ spacing }: Theme) => createStyles({
     marginBottom: spacing(2),
     marginLeft: 'auto',
     marginRight: 'auto',
-  }
+  },
+  topDialog: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+  },
 });
 
 interface NewNameCreatorProps extends WithStyles<typeof styles> {
@@ -58,9 +63,14 @@ type ErrorType = 'empty' | 'duplicate' | 'invalid';
 
 class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreatorState> {
 
+  nameMessages = {
+    test: 'Date format: YYYY-MM-DD_TEST_NAME',
+    variant: 'Format: \'control\' or \'v1_name\''
+  }
+
   messages = {
     default: {
-      name: this.props.type === 'test' ? 'Date format: YYYY-MM-DD_TEST_NAME' : '',
+      name: this.props.type === 'test' ? this.nameMessages.test : this.nameMessages.variant,
       nickname: 'Pick a name for your test that\'s easy to recognise',
     },
     error: {
@@ -94,7 +104,7 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
     });
   }
 
-  closePopover = (): void => {
+  closeDialog = (): void => {
     this.resetState();
   }
 
@@ -176,7 +186,7 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
         nameError: false,
         nicknameError: false
       });
-      this.closePopover();
+      this.closeDialog();
       this.props.onValidName(newTestName, newTestNickname);
     } else {
       if (nameHasErrors) {
@@ -202,7 +212,7 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
 
   handleNewVariantName = (newVariantName: string): void => {
     if (!this.hasErrors(newVariantName, 'name')) {
-      this.closePopover();
+      this.closeDialog();
       this.props.onValidName(newVariantName, "");
     }
   }
@@ -251,9 +261,18 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
         <Dialog
           className={classes.dialog}
           open={this.state.newNamePopoverOpen}
-          onBackdropClick={this.closePopover}
+          onBackdropClick={this.closeDialog}
           fullWidth
         >
+          <div className={classes.topDialog}>
+            <IconButton
+              color={'primary'}
+              onClick={() => this.closeDialog()}
+              children={<CancelIcon
+              />}
+            />
+          </div>
+
           <TextField
             label={this.props.type === 'test' ? 'Full test name' : 'Variant name'}
             autoFocus
