@@ -16,7 +16,6 @@ const styles = ({ spacing }: Theme) => createStyles({
     width: '450px'
   },
   dialog: {
-    maxWidth: '600px',
     margin: '0 auto',
   },
   textField: {
