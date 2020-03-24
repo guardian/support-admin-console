@@ -60,6 +60,7 @@ case class ArticlesViewedSettings(
 
 case class EpicTest(
   name: String,
+  nickname: Option[String] = None,
   isOn: Boolean,
   locations: List[Region] = Nil,
   tagIds: List[String] = Nil,

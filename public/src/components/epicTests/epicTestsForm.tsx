@@ -54,6 +54,7 @@ export interface ArticlesViewedSettings {
 
 export interface EpicTest {
   name: string,
+  nickname: string,
   isOn: boolean,
   locations: Region[],
   tagIds: string[],
@@ -378,6 +379,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
                         this.onTestsChange(newTests, newTest.name)
                       }}
                       testNames={this.state.tests.map(test => test.name)}
+                      testNicknames={this.state.tests.map(test => test.nickname)}
                     />)
                   ) : (<Typography className={classes.viewText}>Click on a test on the left to view contents.</Typography>)}
                 </div>

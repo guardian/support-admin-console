@@ -135,9 +135,10 @@ interface EpicTestListProps extends WithStyles<typeof styles> {
 }
 class EpicTestsList extends React.Component<EpicTestListProps> {
 
-  createTest = (newTestName: string) => {
+  createTest = (newTestName: string, newTestNickname: string) => {
     const newTest: EpicTest = {
       name: newTestName,
+      nickname: newTestNickname,
       isOn: false,
       locations: [],
       tagIds: [],
@@ -236,7 +237,8 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
             <NewNameCreator
               type="test"
               action="New"
-              existingNames={ this.props.tests.map(test => test.name) }
+              existingNames={this.props.tests.map(test => test.name)}
+              existingNicknames={this.props.tests.map(test => test.nickname)}
               onValidName={this.createTest}
               editEnabled={this.props.editMode}
             />
@@ -274,7 +276,7 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
                     >
                       { this.props.editMode ? this.renderReorderButtons(test.name, index) : <div className={classes.buttonsContainer}></div>}
                       <div className={classes.testText}>
-                        <Typography className={classes.testName}noWrap={true}>{test.name.replace(toStrip, '')}</Typography>
+                        <Typography className={classes.testName}noWrap={true}>{test.nickname !== '' ? test.nickname : test.name.replace(toStrip, '')}</Typography>
 
                         {(testStatus && testStatus.isDeleted) && (<div><Typography className={classes.toBeDeleted}>To be deleted</Typography></div>)}
 

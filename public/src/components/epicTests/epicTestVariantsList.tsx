@@ -61,7 +61,7 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
   }
 
   onVariantNameCreation = (name: string) => {
-    this.createVariant(name);
+    this.createVariant(name, "");
   };
 
   onExpansionPanelChange = (key: string) => (event: React.ChangeEvent<{}>) => {
@@ -78,7 +78,7 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
     return `${this.props.testName}${variantName}`
   };
 
-  createVariant = (newVariantName: string) => {
+  createVariant = (newVariantName: string, nickname: string) => {
     const newVariant: EpicVariant = {
       name: newVariantName,
       heading: undefined,
@@ -107,6 +107,7 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
         type="variant"
         action="New"
         existingNames={this.props.variants.map(variant => variant.name)}
+        existingNicknames={[]}
         onValidName={this.createVariant}
         editEnabled={this.props.editMode}
       />
