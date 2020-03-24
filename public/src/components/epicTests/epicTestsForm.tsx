@@ -379,7 +379,11 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
                         this.onTestsChange(newTests, newTest.name)
                       }}
                       testNames={this.state.tests.map(test => test.name)}
-                      testNicknames={this.state.tests.map(test => test.nickname ? test.nickname : '')}
+                      testNicknames={
+                        this.state.tests
+                          .map(test => test.nickname)
+                          .filter(nickname => !!nickname) as string[]
+                      }
                     />)
                   ) : (<Typography className={classes.viewText}>Click on a test on the left to view contents.</Typography>)}
                 </div>

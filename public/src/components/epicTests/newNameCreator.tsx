@@ -134,8 +134,8 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
     }
   }
 
-  duplicateName = (newName: string, existingNames: (string | undefined)[], nameType: NameType): boolean => {
-    if (existingNames.some(existingName => existingName && existingName.toUpperCase() === newName.toUpperCase())) {
+  duplicateName = (newName: string, existingNames: string[], nameType: NameType): boolean => {
+    if (existingNames.some(existingName => existingName.toUpperCase() === newName.toUpperCase())) {
       this.setErrorText('duplicate', nameType);
       return true;
     } else {
