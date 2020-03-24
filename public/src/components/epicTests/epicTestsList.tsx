@@ -279,7 +279,7 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
                         <Typography
                           className={classes.testName}
                           noWrap={true}>
-                            {test.nickname !== '' ? test.nickname : test.name.replace(toStrip, '')}
+                            {test.nickname ? test.nickname : test.name.replace(toStrip, '')}
                         </Typography>
 
                         {(testStatus && testStatus.isDeleted) && (<div><Typography className={classes.toBeDeleted}>To be deleted</Typography></div>)}
