@@ -47,3 +47,5 @@ riffRaffPackageName := "admin-console"
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
 riffRaffArtifactResources += (file("cloudformation.yaml"), "cfn/cfn.yaml")
+
+javaOptions in run ++= Seq("-Xms2G", "-Xmx2G", "-Xss4M")
