@@ -38,7 +38,7 @@ const styles = ({ spacing }: Theme) => createStyles({
 
 interface NewNameCreatorProps extends WithStyles<typeof styles> {
   existingNames: string[],
-  existingNicknames: (string | undefined)[],
+  existingNicknames: string[],
   type: 'test' | 'variant',
   action: 'New' | 'Copy',
   onValidName: (name: string, nickname: string) => void,
