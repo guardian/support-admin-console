@@ -10,7 +10,7 @@ import {defaultCta} from "./epicTestVariantEditor";
 import {onFieldValidationChange, ValidationStatus} from '../helpers/validation';
 
 
-const styles = ({ typography }: Theme) => createStyles({
+const styles = ({ typography, spacing }: Theme) => createStyles({
   h4: {
     fontSize: typography.pxToRem(20),
     fontWeight: typography.fontWeightMedium,
@@ -22,6 +22,9 @@ const styles = ({ typography }: Theme) => createStyles({
     fontSize: typography.pxToRem(14),
     fontWeight: 'normal',
     fontStyle: 'italic'
+  },
+  newVariantButton: {
+    marginTop: spacing(2)
   }
 });
 
@@ -102,7 +105,9 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
   };
 
   renderNewVariantButton = (): React.ReactNode => {
+    const {classes} = this.props;
     return this.props.editMode ? (
+      <div className={classes.newVariantButton}>
       <NewNameCreator
         type="variant"
         action="New"
@@ -111,6 +116,7 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
         onValidName={this.createVariant}
         editEnabled={this.props.editMode}
       />
+      </div>
     ) : null;
   }
 
@@ -162,11 +168,11 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
   render(): React.ReactNode {
    return(
     <>
+      {this.props.variants.length > 0 && this.renderVariantsList()}
+
       {this.props.variants.length < 1 && this.renderNoVariantMessage()}
 
       {this.renderNewVariantButton()}
-
-      {this.props.variants.length > 0 && this.renderVariantsList()}
     </>
    )
   };
