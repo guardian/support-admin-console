@@ -78,6 +78,9 @@ const styles = ({ palette, spacing, typography }: Theme) => createStyles({
   ctaContainer: {
     marginTop: "15px",
     marginBottom: "15px"
+  },
+  hook: {
+    maxWidth: '400px'
   }
 });
 
@@ -147,18 +150,20 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
     const {classes} = this.props;
     return (
         <>
-          <EditableTextField
-            text={variant.heading || ""}
-            onSubmit={this.onOptionalTextChange("heading")}
-            label="Hook:"
-            editEnabled={this.props.editMode}
-            validation={
-              {
-                getError: (value: string) => getInvalidTemplateError(value),
-                onChange: onFieldValidationChange(this)("heading")
+          <div className={classes.hook}>
+            <EditableTextField
+              text={variant.heading || ""}
+              onSubmit={this.onOptionalTextChange("heading")}
+              label="Hook:"
+              editEnabled={this.props.editMode}
+              validation={
+                {
+                  getError: (value: string) => getInvalidTemplateError(value),
+                  onChange: onFieldValidationChange(this)("heading")
+                }
               }
-            }
-          />
+            />
+          </div>
 
           <EditableTextField
             required
