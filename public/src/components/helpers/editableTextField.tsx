@@ -1,5 +1,5 @@
 import React from 'react';
-import {createStyles, Theme, withStyles, WithStyles, FormControl} from "@material-ui/core";
+import {createStyles, Theme, withStyles, WithStyles, Typography} from "@material-ui/core";
 import TextField from '@material-ui/core/TextField';
 
 const styles = ({ typography, spacing }: Theme) => createStyles({
@@ -42,7 +42,6 @@ interface EditableTextFieldProps extends WithStyles<typeof styles> {
   label: string,
   textarea?: boolean,
   onSubmit: (updatedText: string) => void,
-  startInEditMode?: boolean,
   errorMessage?: string,
   helperText?: string,
   autoFocus?: boolean,
@@ -58,7 +57,7 @@ interface EditableTextFieldState {
 
 class EditableTextField extends React.Component<EditableTextFieldProps, EditableTextFieldState> {
 
-  state: EditableTextFieldState =  {
+  state: EditableTextFieldState = {
     currentText: this.props.text
   };
 
@@ -100,17 +99,14 @@ class EditableTextField extends React.Component<EditableTextFieldProps, Editable
   render(): React.ReactNode {
     const {classes} = this.props;
 
-    const error = this.props.errorMessage ||
+    const error: string | null | undefined = this.props.errorMessage ||
       (this.props.validation && this.props.validation.getError(this.state.currentText));
 
     return (
       <>
         <div className={`${classes.container} ${this.props.isNumberField ? classes.numberContainer : classes.textContainer}`}>
-          <FormControl
-            required={this.props.required}
-            className={classes.formControl}
-          >
             <TextField
+              className={classes.formControl}
               label={this.props.label}
               variant={'outlined'}
               required={this.props.required}
@@ -120,16 +116,12 @@ class EditableTextField extends React.Component<EditableTextFieldProps, Editable
               disabled={!this.props.editEnabled}
               value={this.state.currentText}
               onChange={this.onChange}
-              helperText={this.props.helperText} // TODO: display error messages here
+              helperText={error ? error : this.props.helperText}
               autoFocus={this.props.autoFocus}
               error={this.props.validation ? !this.isValid() : false}
               onBlur={this.onExitField}
             />
-          </FormControl>
         </div>
-        {/* {error && (
-          <Typography color={'error'} variant={'body2'}>{error}</Typography>
-        )} */}
       </>
 
     )
