@@ -41,14 +41,15 @@ interface EditableTextFieldProps extends WithStyles<typeof styles> {
   text: string,
   label: string,
   textarea?: boolean,
+  height?: number,
   onSubmit: (updatedText: string) => void,
   errorMessage?: string,
   helperText?: string,
   autoFocus?: boolean,
   required?: boolean,
   editEnabled: boolean,
-  validation?: Validation
-  isNumberField?: boolean
+  validation?: Validation,
+  isNumberField?: boolean,
 }
 
 interface EditableTextFieldState {
@@ -111,6 +112,7 @@ class EditableTextField extends React.Component<EditableTextFieldProps, Editable
               variant={'outlined'}
               required={this.props.required}
               multiline={this.props.textarea}
+              rows={this.props.height}
               fullWidth
               name={this.props.label}
               disabled={!this.props.editEnabled}
