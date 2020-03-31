@@ -53,10 +53,10 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
   hasChanged: {
     color: 'orange'
   },
-  h4: {
-    fontSize: typography.pxToRem(24),
-    fontWeight: typography.fontWeightMedium,
-    margin: '20px 0 15px'
+  boldHeading: {
+    fontSize: typography.pxToRem(17),
+    fontWeight: typography.fontWeightBold,
+    margin: '20px 0 10px'
   },
   select: {
     minWidth: "460px",
@@ -65,8 +65,7 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
   },
   selectLabel: {
     fontSize: typography.pxToRem(22),
-    fontWeight: typography.fontWeightMedium,
-    color: 'black'
+    color: 'black',
   },
   radio: {
     paddingTop: '20px',
@@ -252,7 +251,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
           {this.props.test && this.props.test.name}
           {statusText()}
         </Typography>
-        <Typography variant={'h4'} className={classes.h4}>{this.props.test && this.props.test.nickname}</Typography>
+        <Typography variant={'h4'} className={classes.boldHeading}>{this.props.test && this.props.test.nickname}</Typography>
 
         <div className={classes.switchWithIcon}>
           <Typography className={classes.switchLabel}>Live on theguardian.com</Typography>
@@ -272,7 +271,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
           onEpicTypeChange={this.onEpicTypeChange}
         />
 
-        <Typography variant={'h4'} className={classes.h4}>Variants</Typography>
+        <Typography variant={'h4'} className={classes.boldHeading}>Variants</Typography>
         <div>
           <EpicTestVariantsList
             variants={test.variants}
@@ -283,42 +282,42 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
           />
         </div>
 
-        <Typography variant={'h4'} className={classes.h4}>Editorial tags</Typography>
+        <Typography variant={'h4'} className={classes.boldHeading}>Target content</Typography>
 
         <div>
           <EditableTextField
             text={test.tagIds.join(",")}
             onSubmit={this.onListChange('tagIds')}
-            label="Display on tags:"
-            helperText="Separate each tag with a comma"
+            label="Target tags"
+            helperText="Format: environment/wildlife,business/economics"
             editEnabled={this.isEditable()}
           />
 
           <EditableTextField
             text={test.sections.join(",")}
             onSubmit={this.onListChange('sections')}
-            label="Display on sections:"
-            helperText="Separate each section with a comma"
+            label="Target sections"
+            helperText="Format: environment,business"
             editEnabled={this.isEditable()}
           />
 
           <EditableTextField
             text={test.excludedTagIds.join(",")}
             onSubmit={this.onListChange('excludedTagIds')}
-            label="Excluded tags:"
-            helperText="Separate each tag with a comma"
+            label="Excluded tags"
+            helperText="Format: environment/wildlife,business/economics"
             editEnabled={this.isEditable()}
           />
 
           <EditableTextField
             text={test.excludedSections.join(",")}
             onSubmit={this.onListChange('excludedSections')}
-            label="Excluded sections:"
-            helperText="Separate each section with a comma"
+            label="Excluded sections"
+            helperText="Format: environment,business"
             editEnabled={this.isEditable()}
           />
 
-          <Typography variant={'h4'} className={classes.h4}>Audience</Typography>
+          <Typography variant={'h4'} className={classes.boldHeading}>Target audience</Typography>
 
           <TargetRegionsSelector
             regions={test.locations}
@@ -326,14 +325,13 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
             isEditable={this.isEditable()}
           />
 
-
           <FormControl
             className={classes.formControl}>
               <InputLabel
                 className={classes.selectLabel}
                 shrink
                 htmlFor="user-cohort">
-                  User cohort:
+                  Supporter status
               </InputLabel>
               <RadioGroup
                 className={classes.radio}
@@ -352,7 +350,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
               </RadioGroup>
           </FormControl>
 
-          <Typography variant={'h4'} className={this.props.classes.h4}>View frequency settings</Typography>
+          <Typography variant={'h4'} className={this.props.classes.boldHeading}>View frequency settings</Typography>
 
           <FormControlLabel
             control={
@@ -374,7 +372,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
             onValidationChange={onFieldValidationChange(this)('maxViews')}
           />
 
-          <Typography variant={'h4'} className={this.props.classes.h4}>Articles count settings</Typography>
+          <Typography variant={'h4'} className={this.props.classes.boldHeading}>Article count</Typography>
           <ArticlesViewedEditor
             articlesViewedSettings={test.articlesViewedSettings}
             editMode={this.isEditable()}

@@ -130,8 +130,8 @@ class ArticlesViewedEditor extends React.Component<Props, State> {
 
         { this.props.articlesViewedSettings &&
           <div className={classes.articlesViewsContainer}>
-            {this.buildField('minViews', 'Min articles viewed', this.props.articlesViewedSettings, false)}
-            {this.buildField('maxViews', 'Max articles viewed', this.props.articlesViewedSettings, false)}
+            {this.buildField('minViews', 'Minimum number of articles viewed', this.props.articlesViewedSettings, false)}
+            {this.buildField('maxViews', 'Maximum articles viewed', this.props.articlesViewedSettings, false)}
             {this.buildField('periodInWeeks', 'Time period in weeks', this.props.articlesViewedSettings, true)}
           </div>
         }

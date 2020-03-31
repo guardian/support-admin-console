@@ -140,9 +140,9 @@ class MaxEpicViewsEditor extends React.Component<Props, State> {
 
         { !this.props.test.alwaysAsk &&
           <div className={classes.maxEpicViewsContainer}>
-            {this.buildField('maxViewsCount', 'Max views count')}
+            {this.buildField('maxViewsCount', 'Maximum view counts')}
             {this.buildField('maxViewsDays', 'Number of days')}
-            {this.buildField('minDaysBetweenViews', 'Min days between views')}
+            {this.buildField('minDaysBetweenViews', 'Minimum days between views')}
           </div>
         }
       </>

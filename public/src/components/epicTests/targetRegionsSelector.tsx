@@ -14,8 +14,7 @@ import { Region } from '../../utils/models';
 
 const styles = ({ spacing, typography }: Theme) => createStyles({
   selectLabel: {
-    fontSize: typography.pxToRem(18),
-    fontWeight: typography.fontWeightMedium,
+    fontSize: typography.pxToRem(17),
     color: 'black',
   },
   indentedCheckbox: {
@@ -86,7 +85,7 @@ class TargetRegionsSelector extends React.Component<TargetRegionsSelectorProps, 
 
     return (
       <>
-        <Typography className={classes.selectLabel}>Target regions</Typography>
+        <Typography className={classes.selectLabel}>Region</Typography>
           <FormGroup>
             <FormControlLabel
               control={

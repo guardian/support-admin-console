@@ -1,6 +1,6 @@
 import React from 'react';
 import {EpicVariant, Cta} from "./epicTestsForm";
-import {Theme, createStyles, WithStyles, withStyles, Typography} from "@material-ui/core";
+import {Theme, createStyles, WithStyles, withStyles} from "@material-ui/core";
 import EditableTextField from "../helpers/editableTextField";
 import CtaEditor from "./ctaEditor";
 import Switch from "@material-ui/core/Switch";
@@ -62,10 +62,6 @@ const styles = ({ palette, spacing, typography }: Theme) => createStyles({
     maxWidth: "100%",
     display: "block",
   },
-  h5: {
-    fontSize: typography.pxToRem(18),
-    margin: "20px 0 10px 0"
-  },
   deleteButton: {
     marginTop: spacing(2),
     float: "right"
@@ -78,6 +74,9 @@ const styles = ({ palette, spacing, typography }: Theme) => createStyles({
   ctaContainer: {
     marginTop: "15px",
     marginBottom: "15px"
+  },
+  hook: {
+    maxWidth: '400px'
   }
 });
 
@@ -147,26 +146,31 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
     const {classes} = this.props;
     return (
         <>
-          <EditableTextField
-            text={variant.heading || ""}
-            onSubmit={this.onOptionalTextChange("heading")}
-            label="Hook:"
-            editEnabled={this.props.editMode}
-            validation={
-              {
-                getError: (value: string) => getInvalidTemplateError(value),
-                onChange: onFieldValidationChange(this)("heading")
+          <div className={classes.hook}>
+            <EditableTextField
+              text={variant.heading || ''}
+              onSubmit={this.onOptionalTextChange('heading')}
+              label="Hook"
+              editEnabled={this.props.editMode}
+              helperText="e.g. Since you're here"
+              validation={
+                {
+                  getError: (value: string) => getInvalidTemplateError(value),
+                  onChange: onFieldValidationChange(this)("heading")
+                }
               }
-            }
-          />
+            />
+          </div>
 
           <EditableTextField
             required
+            textarea
+            height={10}
             text={variant.paragraphs.join("\n")}
-            textarea={true}
             onSubmit={this.onParagraphsChange("paragraphs")}
-            label="Paragraphs:"
+            label="Body copy"
             editEnabled={this.props.editMode}
+            helperText="Main Epic message, including paragraph breaks"
             validation={
               {
                 getError: (value: string) => {
@@ -178,8 +182,23 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
             }
           />
 
+          <EditableTextField
+            text={variant.highlightedText || ""}
+            onSubmit={this.onOptionalTextChange("highlightedText")}
+            label="Highlighted text"
+            helperText="Final sentence, highlighted in yellow"
+            editEnabled={this.props.editMode}
+            validation={
+              {
+                getError: (value: string) => getInvalidTemplateError(value),
+                onChange: onFieldValidationChange(this)("highlightedText")
+              }
+            }
+          />
+
+
           <div className={classes.ctaContainer}>
-            <span className={classes.label}>Buttons:</span>
+            <span className={classes.label}>Buttons</span>
             <CtaEditor
               cta={variant.cta}
               update={(cta?: Cta) =>
@@ -203,28 +222,6 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
             />
           </div>
 
-          <EditableTextField
-            text={variant.highlightedText || ""}
-            onSubmit={this.onOptionalTextChange("highlightedText")}
-            label="Highlighted text:"
-            helperText="This will appear as the last sentence"
-            editEnabled={this.props.editMode}
-            validation={
-              {
-                getError: (value: string) => getInvalidTemplateError(value),
-                onChange: onFieldValidationChange(this)("highlightedText")
-              }
-            }
-          />
-
-          <EditableTextField
-            text={variant.backgroundImageUrl || ""}
-            onSubmit={this.onOptionalTextChange(VariantFieldNames.backgroundImageUrl)}
-            label="Image URL:"
-            helperText="This will appear above everything except a ticker"
-            editEnabled={this.props.editMode}
-          />
-
           <div>
             <FormControlLabel
               control={
@@ -239,9 +236,17 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
           </div>
 
           <EditableTextField
+            text={variant.backgroundImageUrl || ""}
+            onSubmit={this.onOptionalTextChange(VariantFieldNames.backgroundImageUrl)}
+            label="Image URL"
+            helperText="This will appear above everything except a ticker"
+            editEnabled={this.props.editMode}
+          />
+
+          <EditableTextField
             text={variant.footer || ""}
             onSubmit={this.onOptionalTextChange("footer")}
-            label="Footer:"
+            label="Footer"
             helperText="Bold text that appears below the button"
             editEnabled={this.props.editMode}
           />
