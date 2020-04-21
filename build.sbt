@@ -31,6 +31,7 @@ libraryDependencies ++= Seq(
   "com.beachape" %% "enumeratum" % "1.5.13",
   "com.beachape" %% "enumeratum-circe" % "1.5.13",
   ws,
+  "dev.zio" %% "zio" % "1.0.0-RC17",
   "org.scalatest" %% "scalatest" % "3.0.5" % "test",
   "org.gnieh" %% "diffson-circe" % "3.1.0" % "test",
 )

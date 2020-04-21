@@ -2,14 +2,18 @@ package services
 
 import models._
 import org.scalatest.{EitherValues, FlatSpec, Matchers}
-import services.S3Client.{RawVersionedS3Data, S3ObjectSettings}
+import services.S3Client.{RawVersionedS3Data, S3Action, S3ObjectSettings}
 import io.circe.generic.auto._
 import gnieh.diffson.circe._
+import zio.{DefaultRuntime, IO}
 
-import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.Await
 import scala.concurrent.duration._
 
 class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
+
+  val runtime = new DefaultRuntime {}
+
   val expectedJson: String =
     """
       |{
@@ -75,44 +79,44 @@ class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
     cacheControl = None
   )
 
-  val dummyS3Client: S3Client = new S3Client {
-    def get(objectSettings: S3ObjectSettings)(implicit ec: ExecutionContext): Future[Either[String,RawVersionedS3Data]] = Future {
-      Right {
+  val dummyS3Client = new S3Client {
+    var mockStore: Option[RawVersionedS3Data] = None
+
+    def get: S3Action[RawVersionedS3Data] = { _ =>
+      IO.succeed {
         VersionedS3Data[String](
           expectedJson,
           "v1"
         )
       }
     }
-
-    def update(objectSettings: S3ObjectSettings, data: RawVersionedS3Data)(implicit ec: ExecutionContext): Future[Either[String,RawVersionedS3Data]] = Future(Right(data))
-
-    def createOrUpdate(objectSettings: S3ObjectSettings, data: String)(implicit ec: ExecutionContext): Future[Either[String,String]] = Future(Right(data))
-
-    def listKeys(objectSettings: S3ObjectSettings)(implicit ec: ExecutionContext): Future[Either[String, List[String]]] = Future(Right(Nil))
+    def update(data: RawVersionedS3Data): S3Action[Unit] = _ => {
+      mockStore = Some(data)
+      IO.succeed(())
+    }
+    def createOrUpdate(data: String): S3Action[Unit] = _ => IO.succeed(())
+    def listKeys: S3Action[List[String]] = _ => IO.succeed(Nil)
   }
 
   it should "decode from json" in {
-    import ExecutionContext.Implicits.global
-
     val result = Await.result(
-      S3Json.getFromJson[SupportFrontendSwitches](objectSettings)(dummyS3Client),
+      runtime.unsafeRunToFuture {
+        S3Json.getFromJson[SupportFrontendSwitches](dummyS3Client).apply(objectSettings)
+      },
       1.second
     )
 
-    result should be(Right(
-      expectedDecoded
-    ))
+    result should be(expectedDecoded)
   }
 
   it should "encode as json" in {
-    import ExecutionContext.Implicits.global
-
-    val result = Await.result(
-      S3Json.updateAsJson[SupportFrontendSwitches](objectSettings, expectedDecoded)(dummyS3Client),
+    Await.result(
+      runtime.unsafeRunToFuture {
+        S3Json.updateAsJson[SupportFrontendSwitches](expectedDecoded)(dummyS3Client).apply(objectSettings)
+      },
       1.second
     )
-    val diff = JsonDiff.diff(expectedJson, result.right.value.value, remember = false)
+    val diff = JsonDiff.diff(expectedJson, dummyS3Client.mockStore.get.value, false)
 
     diff should be(JsonPatch(Nil))
   }

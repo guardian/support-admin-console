@@ -2,8 +2,6 @@ package controllers
 
 import java.time.OffsetDateTime
 
-import cats.data.EitherT
-import cats.implicits._
 import com.gu.googleauth.AuthAction
 import com.typesafe.scalalogging.StrictLogging
 import controllers.LockableSettingsController.LockableSettingsResponse
@@ -12,8 +10,10 @@ import io.circe.syntax._
 import io.circe.generic.auto._
 import play.api.libs.circe.Circe
 import play.api.mvc._
-import services.S3Client.S3ObjectSettings
+import services.S3Client.{S3ClientError, S3ObjectSettings}
 import services.{FastlyPurger, S3Json, VersionedS3Data}
+import zio.blocking.Blocking
+import zio.{DefaultRuntime, IO, ZIO}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -35,7 +35,8 @@ class LockableSettingsController[T : Decoder : Encoder](
   stage: String,
   name: String,
   dataObjectSettings: S3ObjectSettings,
-  fastlyPurger: Option[FastlyPurger]
+  fastlyPurger: Option[FastlyPurger],
+  runtime: DefaultRuntime
 )(implicit ec: ExecutionContext) extends AbstractController(components) with Circe with StrictLogging {
 
   private val lockObjectSettings = S3ObjectSettings(
@@ -47,32 +48,35 @@ class LockableSettingsController[T : Decoder : Encoder](
 
   val s3Client = services.S3
 
-  private def withLockStatus(f: VersionedS3Data[LockStatus] => Future[Result]): Future[Result] =
-    S3Json.getFromJson[LockStatus](lockObjectSettings)(s3Client).flatMap {
-      case Right(fromS3) => f(fromS3)
-      case Left(error) => Future.successful(InternalServerError(error))
+  private def runWithLockStatus(f: VersionedS3Data[LockStatus] => ZIO[Blocking, Throwable, Result]): Future[Result] =
+    runtime.unsafeRunToFuture {
+      S3Json
+        .getFromJson[LockStatus](s3Client)
+        .apply(lockObjectSettings)
+        .flatMap(f)
+        .catchAll(error => {
+          logger.error(s"Returning InternalServerError to client: ${error.getMessage}", error)
+          IO.succeed(InternalServerError(error.getMessage))
+        })
     }
 
-  private def setLockStatus(lockStatus: VersionedS3Data[LockStatus]) =
-    S3Json.updateAsJson(lockObjectSettings, lockStatus)(s3Client)
-
-  private def purgeFastlyCache: EitherT[Future,String,Unit] =
-    fastlyPurger
-      .map(purger => EitherT(purger.purge))
-      .getOrElse(EitherT.pure[Future,String](()))
+  private def setLockStatus(lockStatus: VersionedS3Data[LockStatus]): ZIO[Blocking, S3ClientError, Unit] =
+    S3Json
+      .updateAsJson(lockStatus)(s3Client)
+      .apply(lockObjectSettings)
 
   /**
     * Returns current version of the settings in s3 as json, with the lock status.
     * The s3 data is validated against the model.
     */
-  def get= authAction.async { request =>
-    withLockStatus { case VersionedS3Data(lockStatus, _) =>
-      S3Json.getFromJson[T](dataObjectSettings)(s3Client).map {
-        case Right(VersionedS3Data(value, version)) =>
+  def get = authAction.async { request =>
+    runWithLockStatus { case VersionedS3Data(lockStatus, _) =>
+      S3Json
+        .getFromJson[T](s3Client)
+        .apply(dataObjectSettings)
+        .map { case VersionedS3Data(value, version) =>
           Ok(S3Json.noNulls(LockableSettingsResponse(value, version, lockStatus, request.user.email).asJson))
-
-        case Left(error) => InternalServerError(error)
-      }
+        }
     }
   }
 
@@ -81,24 +85,28 @@ class LockableSettingsController[T : Decoder : Encoder](
     * The POSTed json is validated against the model.
     */
   def set = authAction.async(circe.json[VersionedS3Data[T]]) { request =>
-    withLockStatus { case VersionedS3Data(lockStatus, lockFileVersion) =>
+    runWithLockStatus { case VersionedS3Data(lockStatus, lockFileVersion) =>
       if (lockStatus.email.contains(request.user.email)) {
-        val result: EitherT[Future, String, Unit] = for {
-          _ <- EitherT(S3Json.updateAsJson(dataObjectSettings, request.body)(s3Client))
-          _ <- EitherT(setLockStatus(VersionedS3Data(LockStatus.unlocked, lockFileVersion)))
+        val result = for {
+          _ <- S3Json.updateAsJson(request.body)(s3Client).apply(dataObjectSettings)
+          _ <- setLockStatus(VersionedS3Data(LockStatus.unlocked, lockFileVersion))
         } yield ()
 
-        result.value.map {
-          case Right(_) =>
-            fastlyPurger.foreach(_.purge)
+        result
+          .flatMap { _ =>
+            // Even if purging fails, we have successfully published the change
             logger.info(s"Successfully published ${dataObjectSettings.key} (user ${request.user.email}")
-            Ok("updated")
-          case Left(error) =>
+
+            fastlyPurger
+              .map(_.purge.map(_ => Ok("updated")))
+              .getOrElse(IO.succeed(Ok("updated")))
+          }
+          .mapError { error =>
             logger.error(s"Failed to publish ${dataObjectSettings.key} (user ${request.user.email}: $error")
-            InternalServerError(error)
-        }
+            error
+          }
       } else {
-        Future.successful(Conflict(s"You do not currently have ${dataObjectSettings.key} open for edit"))
+        IO.succeed(Conflict(s"You do not currently have ${dataObjectSettings.key} open for edit"))
       }
     }
   }
@@ -107,19 +115,17 @@ class LockableSettingsController[T : Decoder : Encoder](
     * Updates the lock file if there is not already a lock
     */
   def lock = authAction.async { request =>
-    withLockStatus { case VersionedS3Data(lockStatus, lockFileVersion) =>
+    runWithLockStatus { case VersionedS3Data(lockStatus, lockFileVersion) =>
       if (!lockStatus.locked) {
         val newLockStatus = LockStatus.locked(request.user.email)
 
-        setLockStatus(VersionedS3Data(newLockStatus, lockFileVersion)).map {
-          case Right(_) =>
-            logger.info(s"User ${request.user.email} took control of ${dataObjectSettings.key}")
-            Ok("locked")
-          case Left(error) => InternalServerError(error)
+        setLockStatus(VersionedS3Data(newLockStatus, lockFileVersion)).map { _ =>
+          logger.info(s"User ${request.user.email} took control of ${dataObjectSettings.key}")
+          Ok("locked")
         }
       } else {
         logger.info(s"User ${request.user.email} failed to take control of ${dataObjectSettings.key} because it was already locked")
-        Future.successful(Conflict(s"File ${dataObjectSettings.key} is already locked"))
+        IO.succeed(Conflict(s"File ${dataObjectSettings.key} is already locked"))
       }
     }
   }
@@ -128,28 +134,24 @@ class LockableSettingsController[T : Decoder : Encoder](
     * Updates the lock file to an unlocked status if this user currently has a lock
     */
   def unlock = authAction.async { request =>
-    withLockStatus { case VersionedS3Data(lockStatus, lockFileVersion) =>
+    runWithLockStatus { case VersionedS3Data(lockStatus, lockFileVersion) =>
       if (lockStatus.email.contains(request.user.email)) {
-        setLockStatus(VersionedS3Data(LockStatus.unlocked, lockFileVersion)) map {
-          case Right(_) =>
-            logger.info(s"User ${request.user.email} unlocked ${dataObjectSettings.key}")
-            Ok("unlocked")
-          case Left(error) => InternalServerError(error)
+        setLockStatus(VersionedS3Data(LockStatus.unlocked, lockFileVersion)) map { _ =>
+          logger.info(s"User ${request.user.email} unlocked ${dataObjectSettings.key}")
+          Ok("unlocked")
         }
       } else {
         logger.info(s"User ${request.user.email} tried to unlock ${dataObjectSettings.key}, but they did not have a lock")
-        Future.successful(BadRequest(s"File ${dataObjectSettings.key} is not currently locked by this user"))
+        IO.succeed(BadRequest(s"File ${dataObjectSettings.key} is not currently locked by this user"))
       }
     }
   }
 
   def takecontrol = authAction.async { request =>
-     withLockStatus { case VersionedS3Data(lockStatus, lockFileVersion) =>
-      setLockStatus(VersionedS3Data(LockStatus.locked(request.user.email), lockFileVersion)) map {
-        case Right(_) =>
-          logger.info(s"User ${request.user.email} force-unlocked ${dataObjectSettings.key}, taking it from ${lockStatus.email}")
-          Ok("unlocked")
-        case Left(error) => InternalServerError(error)
+     runWithLockStatus { case VersionedS3Data(lockStatus, lockFileVersion) =>
+      setLockStatus(VersionedS3Data(LockStatus.locked(request.user.email), lockFileVersion)) map { _ =>
+        logger.info(s"User ${request.user.email} force-unlocked ${dataObjectSettings.key}, taking it from ${lockStatus.email}")
+        Ok("unlocked")
       }
     }
   }

@@ -5,14 +5,20 @@ import io.circe.{Decoder, Encoder}
 import io.circe.generic.auto._
 import io.circe.syntax._
 import play.api.libs.circe.Circe
-import play.api.mvc.{AbstractController, AnyContent, ControllerComponents}
+import play.api.mvc.{AbstractController, AnyContent, ControllerComponents, Result}
 import services.S3Client.S3ObjectSettings
 import services.{S3Json, VersionedS3Data}
+import zio.blocking.Blocking
+import zio.{DefaultRuntime, IO, ZIO}
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
-abstract class SettingsController[T : Decoder : Encoder](authAction: AuthAction[AnyContent], components: ControllerComponents, stage: String, filename: String)(implicit ec: ExecutionContext)
-  extends AbstractController(components) with Circe {
+abstract class SettingsController[T : Decoder : Encoder](
+  authAction: AuthAction[AnyContent],
+  components: ControllerComponents,
+  stage: String,
+  filename: String,
+  val runtime: DefaultRuntime)(implicit ec: ExecutionContext) extends AbstractController(components) with Circe {
 
   private val dataObjectSettings = S3ObjectSettings(
     bucket = "support-admin-console",
@@ -22,14 +28,25 @@ abstract class SettingsController[T : Decoder : Encoder](authAction: AuthAction[
   )
   private val s3Client = services.S3
 
+  private def run(f: => ZIO[Blocking, Throwable, Result]): Future[Result] =
+    runtime.unsafeRunToFuture {
+      f.catchAll { error =>
+        IO.succeed(InternalServerError(error.getMessage))
+      }
+    }
+
   /**
     * Returns current version of the settings in s3 as json, with the version id.
     * The s3 data is validated against the model.
     */
   def get = authAction.async {
-    S3Json.getFromJson[T](dataObjectSettings)(s3Client).map {
-      case Right(s3Data) => Ok(S3Json.noNulls(s3Data.asJson))
-      case Left(error) => InternalServerError(error)
+    run {
+      S3Json
+        .getFromJson[T](s3Client)
+        .apply(dataObjectSettings)
+        .map { s3Data =>
+          Ok(S3Json.noNulls(s3Data.asJson))
+        }
     }
   }
 
@@ -38,9 +55,11 @@ abstract class SettingsController[T : Decoder : Encoder](authAction: AuthAction[
     * The POSTed json is validated against the model.
     */
   def set = authAction.async(circe.json[VersionedS3Data[T]]) { request =>
-    S3Json.updateAsJson(dataObjectSettings, request.body)(s3Client).map {
-      case Right(_) => Ok("updated")
-      case Left(error) => InternalServerError(error)
+    run {
+      S3Json
+        .updateAsJson(request.body)(s3Client)
+        .apply(dataObjectSettings)
+        .map(_ => Ok("updated"))
     }
   }
 }

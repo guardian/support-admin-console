@@ -11,6 +11,7 @@ import play.api.mvc.AnyContent
 import play.api.{BuiltInComponentsFromContext, NoHttpFiltersComponents}
 import router.Routes
 import services.S3
+import zio.DefaultRuntime
 
 class AppComponents(context: Context, stage: String) extends BuiltInComponentsFromContext(context) with AhcWSComponents with NoHttpFiltersComponents with AssetsComponents {
 
@@ -47,14 +48,16 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
 
   private val authAction = new AuthAction[AnyContent](authConfig, routes.Login.loginAction(), controllerComponents.parsers.default)(executionContext)
 
+  private val runtime = new DefaultRuntime {}
+
   override lazy val router: Router = new Routes(
     httpErrorHandler,
     new Application(authAction, controllerComponents),
     new Login(authConfig, wsClient, requiredGoogleGroups, googleGroupChecker, controllerComponents),
-    new SwitchesController(authAction, controllerComponents, stage),
-    new ContributionTypesController(authAction, controllerComponents, stage),
-    new AmountsController(authAction, controllerComponents, stage),
-    new EpicTestsController(authAction, controllerComponents, wsClient, stage),
+    new SwitchesController(authAction, controllerComponents, stage, runtime),
+    new ContributionTypesController(authAction, controllerComponents, stage, runtime),
+    new AmountsController(authAction, controllerComponents, stage, runtime),
+    new EpicTestsController(authAction, controllerComponents, wsClient, stage, runtime),
     assets
   )
 }

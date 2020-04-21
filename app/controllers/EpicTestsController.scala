@@ -1,7 +1,7 @@
 package controllers
 
 import com.gu.googleauth.AuthAction
-import play.api.mvc.{AnyContent, ControllerComponents}
+import play.api.mvc.{AnyContent, ControllerComponents, Result}
 import models.{EpicTest, EpicTests}
 import EpicTestsController._
 import play.api.libs.ws.WSClient
@@ -10,8 +10,10 @@ import services.S3Client.S3ObjectSettings
 import io.circe.generic.auto._
 import io.circe.syntax._
 import play.api.libs.circe.Circe
+import zio.blocking.Blocking
+import zio.{DefaultRuntime, IO, ZIO}
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 object EpicTestsController {
   def fastlyPurger(stage: String, ws: WSClient)(implicit ec: ExecutionContext): Option[FastlyPurger] = {
@@ -37,8 +39,12 @@ object EpicTestsController {
   )
 }
 
-class EpicTestsController(authAction: AuthAction[AnyContent], components: ControllerComponents, ws: WSClient, stage: String)(implicit ec: ExecutionContext)
-  extends LockableSettingsController[EpicTests](
+class EpicTestsController(
+  authAction: AuthAction[AnyContent],
+  components: ControllerComponents,
+  ws: WSClient, stage: String,
+  runtime: DefaultRuntime
+)(implicit ec: ExecutionContext) extends LockableSettingsController[EpicTests](
     authAction,
     components,
     stage,
@@ -50,8 +56,16 @@ class EpicTestsController(authAction: AuthAction[AnyContent], components: Contro
       cacheControl = Some("max-age=30"),
       surrogateControl = Some("max-age=86400")  // Cache for a day, and use cache purging after updates
     ),
-    fastlyPurger = EpicTestsController.fastlyPurger(stage, ws)
+    fastlyPurger = EpicTestsController.fastlyPurger(stage, ws),
+    runtime = runtime
   ) with Circe {
+
+  private def run(f: => ZIO[Blocking, Throwable, Result]): Future[Result] =
+    runtime.unsafeRunToFuture {
+      f.catchAll { error =>
+        IO.succeed(InternalServerError(error.getMessage))
+      }
+    }
 
   /**
     * Saves a single test to a new file. The file name will be the test's name.
@@ -62,11 +76,15 @@ class EpicTestsController(authAction: AuthAction[AnyContent], components: Contro
     val testData = request.body
     val objectSettings = archiveObjectSettings(stage, s"${testData.name}.json")
 
-    S3Json.createOrUpdateAsJson(objectSettings, testData)(s3Client).map {
-      case Right(_) => Ok("archived")
-      case Left(error) =>
-        logger.error(s"Failed to archive test: $testData. Error was: $error")
-        InternalServerError(error)
+    run {
+      S3Json
+        .createOrUpdateAsJson(testData)(s3Client)
+        .apply(objectSettings)
+        .map(_ => Ok("archived"))
+        .mapError { error =>
+          logger.error(s"Failed to archive test: $testData. Error was: $error")
+          error
+        }
     }
   }
 
@@ -76,14 +94,17 @@ class EpicTestsController(authAction: AuthAction[AnyContent], components: Contro
   def archivedTestNames = authAction.async { request =>
     val objectSettings = archiveObjectSettings(stage, fileName = "")
 
-    s3Client.listKeys(objectSettings).map {
-      case Right(keys) =>
-        val testNames: List[String] = keys.flatMap(extractTestName)
-        Ok(S3Json.noNulls(testNames.asJson))
-
-      case Left(error) =>
-        logger.error(s"Failed to fetch list of archived test names: $error")
-        InternalServerError(error)
+    run {
+      s3Client
+        .listKeys(objectSettings)
+        .map { keys =>
+          val testNames: List[String] = keys.flatMap(extractTestName)
+          Ok(S3Json.noNulls(testNames.asJson))
+        }
+        .mapError { error =>
+          logger.error(s"Failed to fetch list of archived test names: $error")
+          error
+        }
     }
   }
 
@@ -93,11 +114,15 @@ class EpicTestsController(authAction: AuthAction[AnyContent], components: Contro
   def getArchivedTest(testName: String) = authAction.async { request =>
     val objectSettings = archiveObjectSettings(stage, s"$testName.json")
 
-    S3Json.getFromJson[EpicTest](objectSettings)(s3Client) map {
-      case Right(VersionedS3Data(test, _)) => Ok(test.asJson)
-      case Left(error) =>
-        logger.error(s"Failed to get archived test $testName: $error")
-        InternalServerError(error)
+    run {
+      S3Json
+        .getFromJson[EpicTest](s3Client)
+        .apply(objectSettings)
+        .map { case VersionedS3Data(test, _) => Ok(test.asJson) }
+        .mapError { error =>
+          logger.error(s"Failed to get archived test $testName: $error")
+          error
+        }
     }
   }
 }
