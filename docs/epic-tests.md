@@ -5,7 +5,7 @@ This page is for configuring the epic test rules, which are used by theguardian.
 Users' browsers request the rules from support.theguardian.com/epic-tests.json. This file is served by Fastly, and the origin is in the gu-contributions-public S3 bucket.
 
 ##### Caching
-When the server writes to S3 it sets to cache headers:
+When the server writes to S3 it sets two cache headers:
 - cache-control, a short max-age for browsers
 - surrogate-control, a much longer max-age (24 hours) to be used by Fastly
 

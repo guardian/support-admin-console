@@ -25,17 +25,20 @@ case object SwitchState {
 
 case class ExperimentSwitch(name: String, description: String, state: SwitchState)
 
-case class PaymentMethodsSwitch(
+case class PaymentMethodSwitches(
   stripe: SwitchState,
+  stripeApplePay: SwitchState,
+  stripePaymentRequestButton: SwitchState,
   payPal: SwitchState,
+  amazonPay: Option[SwitchState],
   directDebit: Option[SwitchState],
   existingCard: Option[SwitchState],
   existingDirectDebit: Option[SwitchState]
 )
 
 case class SupportFrontendSwitches(
-  oneOffPaymentMethods: PaymentMethodsSwitch,
-  recurringPaymentMethods: PaymentMethodsSwitch,
+  oneOffPaymentMethods: PaymentMethodSwitches,
+  recurringPaymentMethods: PaymentMethodSwitches,
   experiments: Map[String, ExperimentSwitch],
-  optimize: SwitchState
+  useDotcomContactPage: SwitchState
 )

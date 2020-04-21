@@ -10,11 +10,11 @@ import {
 } from "@material-ui/core";
 import EditableTextField from "../helpers/editableTextField"
 import {onFieldValidationChange, ValidationStatus} from "../helpers/validation";
-import {EpicTest, MaxViews} from "./epicTestsForm";
+import {EpicTest, MaxEpicViews} from "./epicTestsForm";
 
 const isNumber = (value: string): boolean => !Number.isNaN(Number(value));
 
-export const MaxViewsDefaults: MaxViews = {
+export const MaxEpicViewsDefaults: MaxEpicViews = {
   maxViewsCount: 4,
   maxViewsDays: 30,
   minDaysBetweenViews: 0
@@ -38,20 +38,20 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
     paddingTop: "20px",
     marginBottom: "10px"
   },
-  maxViewsContainer: {
+  maxEpicViewsContainer: {
     marginTop: '10px',
     marginLeft: '20px'
   }
 });
 
-type AskStrategy = 'AlwaysAsk' | 'MaxViews';
+type AskStrategy = 'AlwaysAsk' | 'MaxEpicViews';
 
-type MaxViewsFieldName = 'maxViewsCount' | 'maxViewsDays' | 'minDaysBetweenViews';
+type MaxEpicViewsFieldName = 'maxViewsCount' | 'maxViewsDays' | 'minDaysBetweenViews';
 
 interface Props extends WithStyles<typeof styles> {
   test: EpicTest,
   editMode: boolean,
-  onChange: (alwaysAsk: boolean, maxViews: MaxViews) => void,
+  onChange: (alwaysAsk: boolean, maxEpicViews: MaxEpicViews) => void,
   onValidationChange: (isValid: boolean) => void
 }
 
@@ -59,22 +59,22 @@ interface State {
   validationStatus: ValidationStatus
 }
 
-class MaxViewsEditor extends React.Component<Props, State> {
+class MaxEpicViewsEditor extends React.Component<Props, State> {
   state: State = {
     validationStatus: {}
   };
 
-  buildField = (fieldName: MaxViewsFieldName, label: string) => {
+  buildField = (fieldName: MaxEpicViewsFieldName, label: string) => {
     const test = this.props.test;
 
     return (<EditableTextField
-      text={test.maxViews ? test.maxViews[fieldName].toString() : MaxViewsDefaults[fieldName].toString()}
+      text={test.maxViews ? test.maxViews[fieldName].toString() : MaxEpicViewsDefaults[fieldName].toString()}
       onSubmit={ (value: string) => {
         if (isNumber(value)) {
           this.props.onChange(
             this.props.test.alwaysAsk,
             {
-              ...this.props.test.maxViews || MaxViewsDefaults,
+              ...this.props.test.maxViews || MaxEpicViewsDefaults,
               [fieldName]: Number(value)
             }
           )
@@ -96,7 +96,7 @@ class MaxViewsEditor extends React.Component<Props, State> {
   onRadioChange(askStrategy: AskStrategy) {
     this.props.onChange(
       askStrategy === 'AlwaysAsk',
-      this.props.test.maxViews || MaxViewsDefaults
+      this.props.test.maxViews || MaxEpicViewsDefaults
     )
   }
 
@@ -116,9 +116,9 @@ class MaxViewsEditor extends React.Component<Props, State> {
 
           <RadioGroup
             className={classes.radio}
-            value={this.props.test.alwaysAsk ? 'AlwaysAsk' : 'MaxViews'}
+            value={this.props.test.alwaysAsk ? 'AlwaysAsk' : 'MaxEpicViews'}
             onChange={(event, value) => {
-              if (value === 'AlwaysAsk' || value === 'MaxViews') this.onRadioChange(value)
+              if (value === 'AlwaysAsk' || value === 'MaxEpicViews') this.onRadioChange(value)
             }}
           >
             <FormControlLabel
@@ -129,8 +129,8 @@ class MaxViewsEditor extends React.Component<Props, State> {
               disabled={!this.props.editMode}
             />
             <FormControlLabel
-              value={'MaxViews'}
-              key={'MaxViews'}
+              value={'MaxEpicViews'}
+              key={'MaxEpicViews'}
               control={<Radio />}
               label={'Use max views settings...'}
               disabled={!this.props.editMode}
@@ -139,10 +139,10 @@ class MaxViewsEditor extends React.Component<Props, State> {
         </FormControl>
 
         { !this.props.test.alwaysAsk &&
-          <div className={classes.maxViewsContainer}>
-            {this.buildField('maxViewsCount', 'Max views count')}
+          <div className={classes.maxEpicViewsContainer}>
+            {this.buildField('maxViewsCount', 'Maximum view counts')}
             {this.buildField('maxViewsDays', 'Number of days')}
-            {this.buildField('minDaysBetweenViews', 'Min days between views')}
+            {this.buildField('minDaysBetweenViews', 'Minimum days between views')}
           </div>
         }
       </>
@@ -150,4 +150,4 @@ class MaxViewsEditor extends React.Component<Props, State> {
   }
 }
 
-export default withStyles(styles)(MaxViewsEditor);
+export default withStyles(styles)(MaxEpicViewsEditor);

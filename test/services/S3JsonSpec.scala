@@ -14,15 +14,20 @@ class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
 
   val runtime = new DefaultRuntime {}
 
-  val expectedJson =
+  val expectedJson: String =
     """
       |{
       |      "oneOffPaymentMethods": {
       |        "stripe": "On",
-      |        "payPal": "On"
+      |        "stripeApplePay": "On",
+      |        "stripePaymentRequestButton": "On",
+      |        "payPal": "On",
+      |        "amazonPay": "On"
       |      },
       |      "recurringPaymentMethods": {
       |        "stripe": "On",
+      |        "stripeApplePay": "On",
+      |        "stripePaymentRequestButton": "On",
       |        "payPal": "On",
       |        "directDebit": "On",
       |        "existingCard": "On",
@@ -35,21 +40,39 @@ class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
       |          "state": "On"
       |        }
       |      },
-      |      "optimize": "Off"
+      |      "useDotcomContactPage": "Off"
       |}
     """.stripMargin
 
-  val expectedDecoded = VersionedS3Data(
+  val expectedDecoded: VersionedS3Data[SupportFrontendSwitches] = VersionedS3Data(
     SupportFrontendSwitches(
-      PaymentMethodsSwitch(On,On,None, None, None),
-      PaymentMethodsSwitch(On,On,Some(On), Some(On), Some(On)),
+      PaymentMethodSwitches(
+        stripe = On,
+        payPal = On,
+        amazonPay = Some(On),
+        directDebit = None,
+        existingCard = None,
+        existingDirectDebit = None,
+        stripeApplePay = On,
+        stripePaymentRequestButton = On
+      ),
+      PaymentMethodSwitches(
+        stripe = On,
+        payPal = On,
+        amazonPay = None,
+        directDebit = Some(On),
+        existingCard = Some(On),
+        existingDirectDebit = Some(On),
+        stripeApplePay = On,
+        stripePaymentRequestButton = On
+      ),
       experiments = Map("newFlow" -> ExperimentSwitch("newFlow","Redesign of the payment flow UI",On)),
-      optimize = Off
+      useDotcomContactPage = Off
     ),
     version = "v1"
   )
 
-  val objectSettings = S3ObjectSettings(
+  val objectSettings: S3ObjectSettings = S3ObjectSettings(
     bucket = "bucket",
     key = "key",
     publicRead = false,

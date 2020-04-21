@@ -42,7 +42,8 @@ case class EpicVariant(
   footer: Option[String] = None,
   showTicker: Boolean = false,
   backgroundImageUrl: Option[String] = None,
-  cta: Option[Cta]
+  cta: Option[Cta],
+  secondaryCta: Option[Cta]
 )
 
 case class MaxViews(
@@ -51,8 +52,15 @@ case class MaxViews(
   minDaysBetweenViews: Int
 )
 
+case class ArticlesViewedSettings(
+  minViews: Option[Int],
+  maxViews: Option[Int],
+  periodInWeeks: Int
+)
+
 case class EpicTest(
   name: String,
+  nickname: Option[String],
   isOn: Boolean,
   locations: List[Region] = Nil,
   tagIds: List[String] = Nil,
@@ -65,8 +73,9 @@ case class EpicTest(
   isLiveBlog: Boolean = false,
   hasCountryName: Boolean = false,
   variants: List[EpicVariant],
-  highPriority: Boolean = false,
-  useLocalViewLog: Boolean = false
+  highPriority: Boolean = false, // has been removed from form, but might be used in future
+  useLocalViewLog: Boolean = false,
+  articlesViewedSettings: Option[ArticlesViewedSettings] = None
 )
 
 case class EpicTests(tests: List[EpicTest])

@@ -7,7 +7,7 @@ import ArchiveIcon from '@material-ui/icons/Archive';
 import { renderVisibilityIcons } from './utilities';
 import {EpicTest, ModifiedTests, UserCohort, TestStatus} from './epicTestsForm';
 import NewNameCreator from './newNameCreator';
-import { MaxViewsDefaults } from './maxViewsEditor';
+import { MaxEpicViewsDefaults } from './maxEpicViewsEditor';
 
 
 const styles = ( { typography, spacing }: Theme ) => createStyles({
@@ -135,9 +135,10 @@ interface EpicTestListProps extends WithStyles<typeof styles> {
 }
 class EpicTestsList extends React.Component<EpicTestListProps> {
 
-  createTest = (newTestName: string) => {
+  createTest = (newTestName: string, newTestNickname: string) => {
     const newTest: EpicTest = {
       name: newTestName,
+      nickname: newTestNickname,
       isOn: false,
       locations: [],
       tagIds: [],
@@ -145,13 +146,13 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
       excludedTagIds: [],
       excludedSections: [],
       alwaysAsk: false,
-      maxViews: MaxViewsDefaults,
+      maxViews: MaxEpicViewsDefaults,
       userCohort: UserCohort.AllNonSupporters,  // matches the default in dotcom
       isLiveBlog: false,
       hasCountryName: false,
       variants: [],
-      highPriority: false,
-      useLocalViewLog: false
+      highPriority: false, // has been removed from form, but might be used in future
+      useLocalViewLog: false,
     }
     const newTestList = [...this.props.tests, newTest];
 
@@ -234,8 +235,14 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
         <div className={classes.root}>
           {this.props.editMode ? (
             <NewNameCreator
-              text="test"
-              existingNames={ this.props.tests.map(test => test.name) }
+              type="test"
+              action="New"
+              existingNames={this.props.tests.map(test => test.name)}
+              existingNicknames={
+                this.props.tests
+                  .map(test => test.nickname)
+                  .filter(nickname => !!nickname) as string[]
+              }
               onValidName={this.createTest}
               editEnabled={this.props.editMode}
             />
@@ -273,7 +280,11 @@ class EpicTestsList extends React.Component<EpicTestListProps> {
                     >
                       { this.props.editMode ? this.renderReorderButtons(test.name, index) : <div className={classes.buttonsContainer}></div>}
                       <div className={classes.testText}>
-                        <Typography className={classes.testName}noWrap={true}>{test.name.replace(toStrip, '')}</Typography>
+                        <Typography
+                          className={classes.testName}
+                          noWrap={true}>
+                            {test.nickname ? test.nickname : test.name.replace(toStrip, '')}
+                        </Typography>
 
                         {(testStatus && testStatus.isDeleted) && (<div><Typography className={classes.toBeDeleted}>To be deleted</Typography></div>)}
 

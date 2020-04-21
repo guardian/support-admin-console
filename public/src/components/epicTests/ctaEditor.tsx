@@ -10,18 +10,14 @@ const styles = ({ palette, spacing, typography }: Theme) => createStyles({
   }
 });
 
-const defaultText = "Support The Guardian";
-const defaultBaseUrl = "https://support.theguardian.com/contribute";
-
-export const defaultCta = {
-  text: defaultText,
-  baseUrl: defaultBaseUrl
-};
-
 interface Props extends WithStyles<typeof styles> {
   cta?: Cta,
   update: (cta?: Cta) => void,
-  editMode: boolean
+  editMode: boolean,
+  label: string,
+  defaultText?: string,
+  defaultBaseUrl?: string,
+  manualCampaignCode: boolean
 }
 
 class CtaEditor extends React.Component<Props> {
@@ -31,7 +27,7 @@ class CtaEditor extends React.Component<Props> {
       <div className={this.props.classes.fields}>
         <EditableTextField
           required
-          text={cta.text || defaultText}
+          text={cta.text || this.props.defaultText || ""}
           onSubmit={(value) =>
             this.props.update({...cta, text: value})
           }
@@ -41,12 +37,16 @@ class CtaEditor extends React.Component<Props> {
 
         <EditableTextField
           required
-          text={cta.baseUrl || defaultBaseUrl}
+          text={cta.baseUrl || this.props.defaultBaseUrl || ""}
           onSubmit={(value) =>
             this.props.update({...cta, baseUrl: value})
           }
           label="Button destination:"
           editEnabled={this.props.editMode}
+          helperText={ this.props.manualCampaignCode ?
+            'Note - tracking code must be added manually to this url, e.g. theguardian.com/article?INTCMP=my-campaign-code' :
+            undefined
+          }
         />
       </div>
     )
@@ -55,7 +55,10 @@ class CtaEditor extends React.Component<Props> {
   toggleCta = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const ctaEnabled = event.target.checked;
     if (ctaEnabled) {
-      this.props.update(defaultCta)
+      this.props.update({
+        text: this.props.defaultText || "",
+        baseUrl: this.props.defaultBaseUrl || ""
+      })
     } else {
       this.props.update(undefined)
     }
@@ -72,7 +75,7 @@ class CtaEditor extends React.Component<Props> {
               disabled={!this.props.editMode}
             />
           }
-          label="Has CTA button"
+          label={this.props.label}
         />
         { this.props.cta && this.renderFields(this.props.cta) }
       </div>

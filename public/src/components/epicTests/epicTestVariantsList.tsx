@@ -6,11 +6,11 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import EpicTestVariantEditor from './epicTestVariantEditor';
 import { EpicVariant } from './epicTestsForm';
 import NewNameCreator from './newNameCreator';
-import {defaultCta} from "./ctaEditor";
+import {defaultCta} from "./epicTestVariantEditor";
 import {onFieldValidationChange, ValidationStatus} from '../helpers/validation';
 
 
-const styles = ({ typography }: Theme) => createStyles({
+const styles = ({ typography, spacing }: Theme) => createStyles({
   h4: {
     fontSize: typography.pxToRem(20),
     fontWeight: typography.fontWeightMedium,
@@ -22,6 +22,9 @@ const styles = ({ typography }: Theme) => createStyles({
     fontSize: typography.pxToRem(14),
     fontWeight: 'normal',
     fontStyle: 'italic'
+  },
+  newVariantButton: {
+    marginTop: spacing(2)
   }
 });
 
@@ -61,7 +64,7 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
   }
 
   onVariantNameCreation = (name: string) => {
-    this.createVariant(name);
+    this.createVariant(name, "");
   };
 
   onExpansionPanelChange = (key: string) => (event: React.ChangeEvent<{}>) => {
@@ -78,12 +81,12 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
     return `${this.props.testName}${variantName}`
   };
 
-  createVariant = (newVariantName: string) => {
+  createVariant = (newVariantName: string, nickname: string) => {
     const newVariant: EpicVariant = {
       name: newVariantName,
       heading: undefined,
       paragraphs: [],
-      highlightedText: "Support The Guardian from as little as %%CURRENCY_SYMBOL%%1 – and it only takes a minute. Thank you.",
+      highlightedText: "Support the Guardian from as little as %%CURRENCY_SYMBOL%%1 – and it only takes a minute. Thank you.",
       footer: undefined,
       showTicker: false,
       backgroundImageUrl: undefined,
@@ -102,13 +105,18 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
   };
 
   renderNewVariantButton = (): React.ReactNode => {
+    const {classes} = this.props;
     return this.props.editMode ? (
+      <div className={classes.newVariantButton}>
       <NewNameCreator
-        text="variant"
+        type="variant"
+        action="New"
         existingNames={this.props.variants.map(variant => variant.name)}
+        existingNicknames={[]}
         onValidName={this.createVariant}
         editEnabled={this.props.editMode}
       />
+      </div>
     ) : null;
   }
 
@@ -160,11 +168,11 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
   render(): React.ReactNode {
    return(
     <>
+      {this.props.variants.length > 0 && this.renderVariantsList()}
+
       {this.props.variants.length < 1 && this.renderNoVariantMessage()}
 
       {this.renderNewVariantButton()}
-
-      {this.props.variants.length > 0 && this.renderVariantsList()}
     </>
    )
   };

@@ -36,17 +36,25 @@ export interface EpicVariant {
   footer?: string,
   showTicker: boolean,
   backgroundImageUrl?: string,
-  cta?: Cta
+  cta?: Cta,
+  secondaryCta?: Cta,
 }
 
-export interface MaxViews {
+export interface MaxEpicViews {
   maxViewsCount: number,
   maxViewsDays: number,
   minDaysBetweenViews: number
 }
 
+export interface ArticlesViewedSettings {
+  minViews: number | null,
+  maxViews: number | null,
+  periodInWeeks: number,
+}
+
 export interface EpicTest {
   name: string,
+  nickname?: string,
   isOn: boolean,
   locations: Region[],
   tagIds: string[],
@@ -54,13 +62,14 @@ export interface EpicTest {
   excludedTagIds: string[],
   excludedSections: string[],
   alwaysAsk: boolean,
-  maxViews?: MaxViews,
+  maxViews?: MaxEpicViews,
   userCohort?: UserCohort,
   isLiveBlog: boolean,
   hasCountryName: boolean,
   variants: EpicVariant[],
-  highPriority: boolean,
-  useLocalViewLog: boolean
+  highPriority: boolean, // has been removed from form, but might be used in future
+  useLocalViewLog: boolean,
+  articlesViewedSettings?: ArticlesViewedSettings
 }
 
 interface EpicTests {
@@ -98,7 +107,8 @@ type EpicTestsFormState = EpicTests & {
   selectedTestName?: string,
   editMode: boolean,
   lockStatus: LockStatus,
-  modifiedTests: ModifiedTests
+  modifiedTests: ModifiedTests,
+  timeoutAlertId: number | null,  // A timeout for warning about being open for edit for too long
 };
 
 const styles = ({ spacing, typography }: Theme) => createStyles({
@@ -136,6 +146,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
       editMode: false,
       lockStatus: { locked: false },
       modifiedTests: {},
+      timeoutAlertId: null,
     };
   };
 
@@ -146,14 +157,38 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
   fetchStateFromServer = (): void => {
     fetchFrontendSettings(FrontendSettingsType.epicTests)
       .then(serverData => {
+        const editMode = serverData.status.email === serverData.userEmail;
+
+        this.updateWarningTimeout(editMode);
+
         this.setState({
           ...serverData.value,
           previousStateFromServer: serverData,
           lockStatus: serverData.status,
-          editMode: serverData.status.email === serverData.userEmail,
+          editMode: editMode,
           modifiedTests: {}
         });
       });
+  };
+
+  // Maintains an alert if tool is left open for edit for 20 minutes
+  updateWarningTimeout = (editMode: boolean): void => {
+    if (editMode) {
+      if (this.state.timeoutAlertId) {
+        window.clearTimeout(this.state.timeoutAlertId);
+      }
+
+      const timeoutAlertId = window.setTimeout(() => {
+        alert("You've had this editing session open for 20 minutes - if you leave it much longer then you may lose any unsaved work!\nIf you've finished then please either save or cancel.");
+        this.setState({ timeoutAlertId: null });
+      }, 60 * 20 * 1000);
+
+      this.setState({ timeoutAlertId });
+
+    } else if (this.state.timeoutAlertId) {
+      window.clearTimeout(this.state.timeoutAlertId);
+      this.setState({ timeoutAlertId: null });
+    }
   };
 
   cancel = (): void => {
@@ -339,6 +374,16 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
                       isDeleted={this.state.modifiedTests[test.name] && this.state.modifiedTests[test.name].isDeleted}
                       isArchived={this.state.modifiedTests[test.name] && this.state.modifiedTests[test.name].isArchived}
                       isNew={this.state.modifiedTests[test.name] && this.state.modifiedTests[test.name].isNew}
+                      createTest={(newTest: EpicTest) => {
+                        const newTests = [...this.state.tests, newTest];
+                        this.onTestsChange(newTests, newTest.name)
+                      }}
+                      testNames={this.state.tests.map(test => test.name)}
+                      testNicknames={
+                        this.state.tests
+                          .map(test => test.nickname)
+                          .filter(nickname => !!nickname) as string[]
+                      }
                     />)
                   ) : (<Typography className={classes.viewText}>Click on a test on the left to view contents.</Typography>)}
                 </div>
