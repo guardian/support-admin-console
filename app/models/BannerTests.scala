@@ -1,19 +1,20 @@
 package models
 
 import enumeratum.{CirceEnum, Enum, EnumEntry}
-import io.circe.{Decoder, Encoder}
 import io.circe.generic.extras.Configuration
+import io.circe.generic.extras.auto._
+import io.circe.{Decoder, Encoder}
 
 import scala.collection.immutable.IndexedSeq
-import io.circe.generic.extras.auto._
 
 case class AbTest(
   name: String,
   variant: String
 )
+sealed trait OphanProduct extends EnumEntry
 
-object Product extends Enum[Product] with CirceEnum[Product] {
-  override val values: IndexedSeq[Product] = findValues
+object OphanProduct extends Enum[OphanProduct] with CirceEnum[OphanProduct] {
+  override val values: IndexedSeq[OphanProduct] = findValues
 
   case object CONTRIBUTION extends Product
   case object RECURRING_CONTRIBUTION extends Product
@@ -25,9 +26,9 @@ object Product extends Enum[Product] with CirceEnum[Product] {
 }
 
 case class BannerTest(
+  name: String,
   campaignCode: String,
   pageviewId: String,
-  products: List[Product],
   isHardcodedFallback: Boolean,
   minArticlesBeforeShowingBanner: Int,
   userCohort: UserCohort,
@@ -46,7 +47,7 @@ case class BannerTest(
   secondaryLinkUrl: Option[String],
   secondaryLinkLabel: Option[String],
   subsLinkUrl: Option[String],
-  products: Option[List[Product]],
+  products: Option[List[OphanProduct]]
 )
 
 case class BannerTests(tests: List[BannerTest])
