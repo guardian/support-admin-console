@@ -1,7 +1,6 @@
 package models
 
 import enumeratum.{CirceEnum, Enum, EnumEntry}
-import models.Region.findValues
 
 import scala.collection.immutable.IndexedSeq
 

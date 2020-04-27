@@ -29,6 +29,7 @@ case class BannerTest(
   name: String,
   campaignCode: String,
   pageviewId: String,
+  isOn: Boolean,
   isHardcodedFallback: Boolean,
   minArticlesBeforeShowingBanner: Int,
   userCohort: UserCohort,
@@ -47,7 +48,8 @@ case class BannerTest(
   secondaryLinkUrl: Option[String],
   secondaryLinkLabel: Option[String],
   subsLinkUrl: Option[String],
-  products: Option[List[OphanProduct]]
+  products: Option[List[OphanProduct]],
+  locations: List[Region] = Nil
 )
 
 case class BannerTests(tests: List[BannerTest])
