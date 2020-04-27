@@ -58,6 +58,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     new ContributionTypesController(authAction, controllerComponents, stage, runtime),
     new AmountsController(authAction, controllerComponents, stage, runtime),
     new EpicTestsController(authAction, controllerComponents, wsClient, stage, runtime),
+    new BannerTestsController(authAction, controllerComponents, wsClient, stage, runtime),
     assets
   )
 }
