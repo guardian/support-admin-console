@@ -7,10 +7,6 @@ import io.circe.{Decoder, Encoder}
 
 import scala.collection.immutable.IndexedSeq
 
-case class AbTest(
-  name: String,
-  variant: String
-)
 sealed trait OphanProduct extends EnumEntry
 
 object OphanProduct extends Enum[OphanProduct] with CirceEnum[OphanProduct] {
@@ -25,20 +21,12 @@ object OphanProduct extends Enum[OphanProduct] with CirceEnum[OphanProduct] {
   case object PRINT_SUBSCRIPTION extends Product
 }
 
-case class BannerTest(
+case class BannerVariant(
   name: String,
-  campaignCode: String,
-  pageviewId: String,
-  isOn: Boolean,
-  isHardcodedFallback: Boolean,
-  minArticlesBeforeShowingBanner: Int,
-  userCohort: UserCohort,
-  bannerModifierClass: Option[String],
-  abTest: AbTest,
   titles: Option[List[String]],
   leadSentence: Option[String],
-  closingSentence: Option[String],
   messageText: String,
+  closingSentence: Option[String],
   ctaText: String,
   buttonCaption: String,
   linkUrl: String,
@@ -47,9 +35,24 @@ case class BannerTest(
   signInUrl: String,
   secondaryLinkUrl: Option[String],
   secondaryLinkLabel: Option[String],
-  subsLinkUrl: Option[String],
+  subsLinkUrl: Option[String]
+)
+
+case class BannerTest(
+  name: String,
+  nickname: Option[String],
+  campaignCode: String,
+  pageviewId: String,
+  isOn: Boolean,
+  isHardcodedFallback: Boolean,
+  minArticlesBeforeShowingBanner: Int,
+  userCohort: UserCohort,
+  bannerModifierClass: Option[String],
   products: Option[List[OphanProduct]],
-  locations: List[Region] = Nil
+  locations: List[Region] = Nil,
+  variants: List[BannerVariant],
+  template: String,
+  articlesViewedSettings: Option[ArticlesViewedSettings] = None
 )
 
 case class BannerTests(tests: List[BannerTest])
