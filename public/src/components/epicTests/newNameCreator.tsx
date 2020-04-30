@@ -157,22 +157,29 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
   hasErrors = (newName: string, nameType: NameType): boolean => {
     return nameType === 'name' ?
       this.emptyString(newName, nameType) || this.duplicateName(newName, this.props.existingNames, nameType) || this.invalidChars(newName, nameType)
-    :
+      :
       this.emptyString(newName, nameType) || this.duplicateName(newName, this.props.existingNicknames, nameType);
   }
 
   onFieldChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, nameType: NameType) => {
-    const newValue = event.target.value.toUpperCase();
+    const input = event.target;
+    const start = input.selectionStart || 0;
+    const end = input.selectionEnd || 0;
+
     if (nameType === 'name') {
       this.setState({
-        currentNameText: newValue,
-        nameError: false
-      });
+          currentNameText: input.value.toUpperCase(),
+          nameError: false
+        },
+        () => input.setSelectionRange(start, end)
+      );
     } else {
       this.setState({
-        currentNicknameText: newValue,
-        nicknameError: false
-      })
+          currentNicknameText: input.value.toUpperCase(),
+          nicknameError: false
+        },
+        () => input.setSelectionRange(start, end)
+      )
     }
     this.setDefaultText(nameType);
   }
@@ -254,8 +261,8 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
     return (
       <>
         <Button variant="contained" color="primary" onClick={this.onNewNameButtonClick} className={classes.newButton}>
-            <AddIcon />
-            {this.props.action} {this.props.type}
+          <AddIcon />
+          {this.props.action} {this.props.type}
         </Button>
         <Dialog
           className={classes.dialog}
@@ -282,8 +289,8 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
             onChange={(event) => this.onFieldChange(event, 'name')}
             helperText={this.state.nameHelperText}
             error={this.state.nameError}
-         />
-         {this.props.type === 'test' ? renderNicknameFieldAndButton() : renderVariantButton()}
+          />
+          {this.props.type === 'test' ? renderNicknameFieldAndButton() : renderVariantButton()}
 
         </Dialog>
       </>
