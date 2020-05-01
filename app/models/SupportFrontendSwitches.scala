@@ -6,7 +6,7 @@ import io.circe.{Decoder, Encoder}
 import utils.Circe.decodeStringAndCollect
 
 /**
-  * Based on https://github.com/guardian/support-frontend/blob/master/app/admin/Settings.scala
+  * Based on https://github.com/guardian/support-frontend/blob/master/support-frontend/app/admin/settings/
   */
 
 sealed trait SwitchState
