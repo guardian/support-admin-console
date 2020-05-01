@@ -40,7 +40,9 @@ class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
       |          "state": "On"
       |        }
       |      },
-      |      "useDotcomContactPage": "Off"
+      |      "useDotcomContactPage": "Off",
+      |      "enableRecaptchaBackend" : "On",
+      |      "enableRecaptchaFrontend" : "On"
       |}
     """.stripMargin
 
@@ -67,7 +69,9 @@ class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
         stripePaymentRequestButton = On
       ),
       experiments = Map("newFlow" -> ExperimentSwitch("newFlow","Redesign of the payment flow UI",On)),
-      useDotcomContactPage = Off
+      useDotcomContactPage = Off,
+      enableRecaptchaBackend = On,
+      enableRecaptchaFrontend = On
     ),
     version = "v1"
   )
