@@ -266,6 +266,8 @@ class Switchboard extends React.Component<Props, Switches> {
                 }
                 label="Enable recaptcha on backend"
               />
+              <FormControlLabel
+              control={
               <Switch
                 checked={switchStateToBoolean(this.state.enableRecaptchaFrontend)}
                 onChange={(event) => this.setState({enableRecaptchaFrontend: booleanToSwitchState(event.target.checked)})}
