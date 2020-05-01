@@ -1,5 +1,7 @@
 package models
 
+import io.circe.generic.extras.Configuration
+import io.circe.generic.extras.auto._
 import io.circe.{Decoder, Encoder}
 import utils.Circe.decodeStringAndCollect
 
@@ -44,3 +46,9 @@ case class SupportFrontendSwitches(
   enableRecaptchaBackend: SwitchState,
   enableRecaptchaFrontend: SwitchState
 )
+
+object SupportFrontendSwitches {
+  implicit val customConfig: Configuration = Configuration.default.withDefaults
+  implicit val SupportFrontendSwitchesDecoder = Decoder[SupportFrontendSwitches]
+  implicit val SupportFrontendSwitchesEncoder = Encoder[SupportFrontendSwitches]
+}
