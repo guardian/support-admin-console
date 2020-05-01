@@ -264,7 +264,7 @@ class Switchboard extends React.Component<Props, Switches> {
                     value={switchStateToBoolean(this.state.enableRecaptchaBackend)}
                   />
                 }
-                label="Enable recaptcha on backend"
+                label="Enable recaptcha on backend [Always Disable First then wait 2 mins]"
               />
               <FormControlLabel
               control={
@@ -274,7 +274,7 @@ class Switchboard extends React.Component<Props, Switches> {
                 value={switchStateToBoolean(this.state.enableRecaptchaFrontend)}
               />
               }
-              label="Enable recaptcha on frontend"
+              label="Enable recaptcha on frontend [Always Enable First then wait 2 mins]"
               />
             </FormControl>
             <FormControl component={'fieldset' as 'div'} className={classes.formControl}>
