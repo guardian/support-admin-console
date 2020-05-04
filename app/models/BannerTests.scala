@@ -42,16 +42,12 @@ case class BannerTest(
   name: String,
   nickname: Option[String],
   campaignCode: String,
-  pageviewId: String,
   isOn: Boolean,
-  isHardcodedFallback: Boolean,
   minArticlesBeforeShowingBanner: Int,
   userCohort: UserCohort,
-  bannerModifierClass: Option[String],
   products: Option[List[OphanProduct]],
   locations: List[Region] = Nil,
   variants: List[BannerVariant],
-  template: String,
   articlesViewedSettings: Option[ArticlesViewedSettings] = None
 )
 
