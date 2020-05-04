@@ -34,7 +34,6 @@ case class BannerVariant(
 case class BannerTest(
   name: String,
   nickname: Option[String],
-  campaignCode: String,
   isOn: Boolean,
   minArticlesBeforeShowingBanner: Int,
   userCohort: UserCohort,
