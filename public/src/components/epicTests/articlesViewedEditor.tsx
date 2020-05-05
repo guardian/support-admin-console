@@ -106,7 +106,6 @@ class ArticlesViewedEditor extends React.Component<Props, State> {
       this.props.onChange(undefined);
     }
   }
-
   render(): React.ReactNode {
     const classes = this.props.classes;
 
