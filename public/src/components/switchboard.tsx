@@ -33,6 +33,8 @@ interface Switches {
     [p in RecurringPaymentMethod]: SwitchState
   },
   useDotcomContactPage: SwitchState,
+  enableRecaptchaBackend: SwitchState,
+  enableRecaptchaFrontend: SwitchState,
   experiments: {
     [featureSwitch: string]: {
       name: string,
@@ -117,6 +119,8 @@ class Switchboard extends React.Component<Props, Switches> {
         existingDirectDebit: SwitchState.Off,
       },
       useDotcomContactPage: SwitchState.Off,
+      enableRecaptchaBackend: SwitchState.Off,
+      enableRecaptchaFrontend: SwitchState.Off,
       experiments: {},
     };
     this.previousStateFromServer = null;
@@ -249,6 +253,29 @@ class Switchboard extends React.Component<Props, Switches> {
                   label={`${switchData.name}: ${switchData.description}`}
                 />
               )}
+            </FormControl>
+            <FormControl component={'fieldset' as 'div'} className={classes.formControl}>
+              <FormLabel component={'legend' as 'label'}>Recaptcha Switches</FormLabel>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={switchStateToBoolean(this.state.enableRecaptchaBackend)}
+                    onChange={(event) => this.setState({enableRecaptchaBackend: booleanToSwitchState(event.target.checked)})}
+                    value={switchStateToBoolean(this.state.enableRecaptchaBackend)}
+                  />
+                }
+                label="Enable recaptcha on backend [Always Disable First then wait 2 mins]"
+              />
+              <FormControlLabel
+              control={
+              <Switch
+                checked={switchStateToBoolean(this.state.enableRecaptchaFrontend)}
+                onChange={(event) => this.setState({enableRecaptchaFrontend: booleanToSwitchState(event.target.checked)})}
+                value={switchStateToBoolean(this.state.enableRecaptchaFrontend)}
+              />
+              }
+              label="Enable recaptcha on frontend [Always Enable First then wait 2 mins]"
+              />
             </FormControl>
             <FormControl component={'fieldset' as 'div'} className={classes.formControl}>
               <FormLabel component={'legend' as 'label'}>Other Switches</FormLabel>

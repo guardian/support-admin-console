@@ -3,7 +3,8 @@ package controllers
 import com.gu.googleauth.AuthAction
 import models.SupportFrontendSwitches
 import play.api.mvc.{AnyContent, ControllerComponents}
-import io.circe.generic.auto._
+import models.SupportFrontendSwitches.SupportFrontendSwitchesDecoder
+import models.SupportFrontendSwitches.SupportFrontendSwitchesEncoder
 import zio.DefaultRuntime
 
 import scala.concurrent.ExecutionContext

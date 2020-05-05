@@ -1,10 +1,12 @@
 package models
 
+import io.circe.generic.extras.Configuration
+import io.circe.generic.extras.auto._
 import io.circe.{Decoder, Encoder}
 import utils.Circe.decodeStringAndCollect
 
 /**
-  * Based on https://github.com/guardian/support-frontend/blob/master/app/admin/Settings.scala
+  * Based on https://github.com/guardian/support-frontend/blob/master/support-frontend/app/admin/settings/
   */
 
 sealed trait SwitchState
@@ -40,5 +42,13 @@ case class SupportFrontendSwitches(
   oneOffPaymentMethods: PaymentMethodSwitches,
   recurringPaymentMethods: PaymentMethodSwitches,
   experiments: Map[String, ExperimentSwitch],
-  useDotcomContactPage: SwitchState
+  useDotcomContactPage: SwitchState,
+  enableRecaptchaBackend: SwitchState,
+  enableRecaptchaFrontend: SwitchState
 )
+
+object SupportFrontendSwitches {
+  implicit val customConfig: Configuration = Configuration.default.withDefaults
+  implicit val SupportFrontendSwitchesDecoder = Decoder[SupportFrontendSwitches]
+  implicit val SupportFrontendSwitchesEncoder = Encoder[SupportFrontendSwitches]
+}
