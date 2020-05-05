@@ -210,7 +210,7 @@ Resources:
       - IpProtocol: tcp
         FromPort: 443
         ToPort: 443
-        CidrIp: !Ref KingsPlaceIP
+        CidrIp: 0.0.0.0/0
       SecurityGroupEgress:
       - IpProtocol: tcp
         FromPort: 9000
