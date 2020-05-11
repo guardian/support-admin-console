@@ -38,6 +38,7 @@ export default function TemporaryDrawer() {
   const classes = useStyles();
   const [state, setState] = React.useState({
     left: false,
+    title: "Reader Revenue Mission Control"
   });
 
   const toggleDrawer = (anchor: string, open: boolean) => (
@@ -63,7 +64,7 @@ export default function TemporaryDrawer() {
     >
       <List>
 
-Channel Tests
+        <h2>Channel Tests</h2>
         <Divider />
         <Link key='Epic tests' to='/epic-tests' className={classes.link}>
           <ListItem className={classes.listItem} button key='Epic tests'>
@@ -72,7 +73,7 @@ Channel Tests
         </Link>
         <Divider />
 
-Admin Console
+        <h2>Admin Console</h2>
         <Divider/>
         <Link key='Switches' to='/switches' className={classes.link}>
           <ListItem className={classes.listItem} button key='Switches'>
@@ -99,7 +100,7 @@ Admin Console
         </Link>
       </List>
       <Divider/>
-      Help Centre
+      <h2>Help Centre</h2>
       <Link key='Testing FAQ' to='https://docs.google.com/document/d/1PT-xQRrk9g-w-Tv9Du2G6aEXenSc806hEcQlZsvaJS0' className={classes.link}>
         <ListItem className={classes.listItem} button key='Testing FAQ'>
           <ListItemText primary='Testing FAQ'/>
@@ -128,7 +129,7 @@ Admin Console
         </React.Fragment>
     </div>
       <Typography className={classes.heading} variant="h1" color="inherit" noWrap>
-        Support Admin Console
+        {state.title}   {/*/* To Do make this update based on current page*/}
       </Typography>
     </Toolbar>
 
