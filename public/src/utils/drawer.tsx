@@ -1,19 +1,16 @@
 import React from 'react';
 import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import {Link} from "react-router-dom";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
-import IconButton from '@material-ui/core/IconButton';
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import makeStyles from "@material-ui/core/styles/makeStyles";
 
 const useStyles = makeStyles({
   list: {
@@ -21,6 +18,9 @@ const useStyles = makeStyles({
   },
   fullList: {
     width: 'auto',
+  },
+  heading: {
+    fontSize: 24
   },
 });
 
@@ -67,38 +67,56 @@ export default function TemporaryDrawer() {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {getLinkPathsAndNames().map(([href, name]) => (
-          <Link key={name} to={href} className={classes.link}>
-            <ListItem className={classes.listItem} button key={name}>
-              <ListItemText primary={name} />
-            </ListItem>
-          </Link>
 
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-            <ListItemText primary={text} />
+Channel Tests
+        <Divider />
+        <Link key='Epic tests' to='/epic-tests' className={classes.link}>
+          <ListItem className={classes.listItem} button key='Epic tests'>
+            <ListItemText primary='Epic tests' />
           </ListItem>
-        ))}
-      </List>
+        </Link>
+        <Divider />
 
-      <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-            <ListItemText primary={text} />
+Admin Console
+        <Divider/>
+        <Link key='Switches' to='/switches' className={classes.link}>
+          <ListItem className={classes.listItem} button key='Switches'>
+            <ListItemText primary='Switches' />
           </ListItem>
-        ))}
+        </Link>
+        <Divider/>
+        <Link key='Amounts' to='/amounts' className={classes.link}>
+          <ListItem className={classes.listItem} button key='Amounts'>
+            <ListItemText primary='Amounts' />
+          </ListItem>
+        </Link>
+        <Divider/>
+        <Link key='Contribution Types' to='/contribution-types' className={classes.link}>
+          <ListItem className={classes.listItem} button key='Contribution Types'>
+            <ListItemText primary='Contribution Types' />
+          </ListItem>
+        </Link>
+        <Divider/>
+        <Link key='Contribution Types' to='/contribution-types' className={classes.link}>
+          <ListItem className={classes.listItem} button key='Contribution Types'>
+            <ListItemText primary='Contribution Types' />
+          </ListItem>
+        </Link>
       </List>
+      <Divider/>
+      Help Centre
+      <Link key='Testing FAQ' to='https://docs.google.com/document/d/1PT-xQRrk9g-w-Tv9Du2G6aEXenSc806hEcQlZsvaJS0' className={classes.link}>
+        <ListItem className={classes.listItem} button key='Testing FAQ'>
+          <ListItemText primary='Testing FAQ'/>
+        </ListItem>
+      </Link>
     </div>
   );
 
   const anchor = 'left';
   return (
+    <Toolbar>
+
     <div>
         <React.Fragment key={anchor}>
           <IconButton
@@ -115,5 +133,10 @@ export default function TemporaryDrawer() {
           </Drawer>
         </React.Fragment>
     </div>
+      <Typography className={classes.heading} variant="h1" color="inherit" noWrap>
+        Support Admin Console
+      </Typography>
+    </Toolbar>
+
   );
 }
