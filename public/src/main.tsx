@@ -79,7 +79,7 @@ const AppRouter = withStyles(styles)(({classes}: Props) => (
             [classes.appBarShift]: open,
           })}
         >
-          <TemporaryDrawer/>
+         <TemporaryDrawer/>
         </AppBar>
 
       </nav>

@@ -24,7 +24,7 @@ const useStyles = makeStyles({
   },
 });
 
-type Anchor = 'top' | 'left' | 'bottom' | 'right';
+const anchor = 'left';
 
 const getLinkPathsAndNames = (): string[][] =>
   [
@@ -37,13 +37,10 @@ const getLinkPathsAndNames = (): string[][] =>
 export default function TemporaryDrawer() {
   const classes = useStyles();
   const [state, setState] = React.useState({
-    top: false,
     left: false,
-    bottom: false,
-    right: false,
   });
 
-  const toggleDrawer = (anchor: Anchor, open: boolean) => (
+  const toggleDrawer = (anchor: string, open: boolean) => (
     event: React.KeyboardEvent | React.MouseEvent,
   ) => {
     if (
@@ -57,11 +54,9 @@ export default function TemporaryDrawer() {
     setState({ ...state, [anchor]: open });
   };
 
-  const list = (anchor: Anchor) => (
+  const list = (anchor: string) => (
     <div
-      className={clsx(classes.list, {
-        [classes.fullList]: anchor === 'top' || anchor === 'bottom',
-      })}
+      className={clsx(classes.list)}
       role="presentation"
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
@@ -113,7 +108,6 @@ Admin Console
     </div>
   );
 
-  const anchor = 'left';
   return (
     <Toolbar>
 
