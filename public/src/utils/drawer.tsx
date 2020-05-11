@@ -62,8 +62,8 @@ export default function TemporaryDrawer() {
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
+      <h1>Support Station</h1>
       <List>
-
         <h2>Channel Tests</h2>
         <Divider />
         <Link key='Epic tests' to='/epic-tests' className={classes.link}>
