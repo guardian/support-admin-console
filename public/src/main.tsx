@@ -17,19 +17,27 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import ListItem from '@material-ui/core/ListItem';
 import {CSSProperties} from "@material-ui/core/styles/withStyles";
+import {Menu} from "@material-ui/core";
+import MenuItem from "@material-ui/core/MenuItem";
+import SimpleMenu from "./utils/menu";
+import TemporaryDrawer from "./utils/drawer";
+import PersistentDrawerLeft from "./utils/persistentDrawer";
+import clsx from "clsx";
 
 const drawerWidth = 240;
 
-const styles = ({ palette, spacing, mixins, typography }: Theme) => createStyles({
+const styles = ({ palette, spacing, mixins, typography, transitions }: Theme) => createStyles({
   root: {
     display: 'flex',
   },
   appBar: {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: drawerWidth,
+    transition: transitions.create(['margin', 'width'], {
+      easing: transitions.easing.sharp,
+      duration: transitions.duration.leavingScreen,
+    }),
   },
   drawer: {
-    width: drawerWidth,
+    width: drawerWidth, 
     flexShrink: 0,
   },
   drawerPaper: {
@@ -71,38 +79,25 @@ const Index = () => <h2>Home</h2>;
 interface Props extends WithStyles<typeof styles> {}
 
 const AppRouter = withStyles(styles)(({classes}: Props) => (
+
   <Router>
     <div className={classes.root}>
       <CssBaseline />
       <nav>
-        <AppBar position="fixed" className={classes.appBar}>
+        <AppBar
+          position="fixed"
+          className={clsx(classes.appBar, {
+            [classes.appBarShift]: open,
+          })}
+        >
           <Toolbar>
+            <TemporaryDrawer/>
             <Typography className={classes.heading} variant="h1" color="inherit" noWrap>
               Support Admin Console
             </Typography>
           </Toolbar>
         </AppBar>
-        <Drawer
-          className={classes.drawer}
-          variant="permanent"
-          classes={{
-            paper: classes.drawerPaper,
-          }}
-          anchor="left"
-        >
-          <div className={classes.toolbar} />
-          <Divider />
-          {/* TODO: use link from react router to avoid a full page reload */}
-          <List>
-            {getLinkPathsAndNames().map(([href, name]) => (
-              <Link key={name} to={href} className={classes.link}>
-                <ListItem className={classes.listItem} button key={name}>
-                  <ListItemText primary={name} />
-                </ListItem>
-              </Link>
-            ))}
-          </List>
-        </Drawer>
+
       </nav>
 
       <main className={classes.content}>
