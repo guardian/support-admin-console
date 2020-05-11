@@ -11,6 +11,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import RoundelSVG from "./roundel";
 
 const useStyles = makeStyles({
   list: {
@@ -62,6 +63,7 @@ export default function TemporaryDrawer() {
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
+      <RoundelSVG/>
       <h1>Support Station</h1>
       <List>
         <h2>Channel Tests</h2>
@@ -129,7 +131,7 @@ export default function TemporaryDrawer() {
         </React.Fragment>
     </div>
       <Typography className={classes.heading} variant="h1" color="inherit" noWrap>
-        {state.title}   {/*/* To Do make this update based on current page*/}
+         {state.title}{/*/* To Do make this update based on current page*/}
       </Typography>
     </Toolbar>
 
