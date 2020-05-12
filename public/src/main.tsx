@@ -55,14 +55,6 @@ const styles = ({ palette, spacing, mixins, typography, transitions }: Theme) =>
   }
 });
 
-const getLinkPathsAndNames = (): string[][] =>
-  [
-    ['/switches', 'Switches'],
-    ['/contribution-types', 'Contribution types'],
-    ['/amounts', 'Amounts'],
-    ['/epic-tests', 'Epic tests']
-  ];
-
 const Index = () => <h2>Home</h2>;
 
 interface Props extends WithStyles<typeof styles> {}
