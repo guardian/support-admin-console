@@ -26,7 +26,7 @@ const useStyles = makeStyles({
   },
   link: {
     textDecoration: 'none',
-    textColor: '#ededed'
+    color: '#616161'
   },
   listItem: {
     '&:hover': {
