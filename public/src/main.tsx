@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 
 import {BrowserRouter as Router, Route} from 'react-router-dom';
@@ -10,7 +10,7 @@ import {createStyles, Theme, WithStyles, withStyles} from '@material-ui/core/sty
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import {CSSProperties} from "@material-ui/core/styles/withStyles";
-import TemporaryDrawer from "./utils/drawer";
+import NavDrawer from "./utils/drawer";
 import clsx from "clsx";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -44,24 +44,19 @@ interface Props extends WithStyles<typeof styles> {}
 
 const AppRouter = withStyles(styles)(({classes}: Props) => {
 
-  const createComponent = (component, displayName: string) => (
+  const createComponent = (component: JSX.Element, displayName: string) => (
     <div>
-        <AppBar
-          position="fixed"
-          className={clsx(classes.appBar)}
-        >
-          <Toolbar>
-            <TemporaryDrawer/>
-            <Typography className={classes.heading} variant="h1" color="inherit" noWrap>
-              {displayName}
-            </Typography>
-          </Toolbar>
-        </AppBar>
-
+      <AppBar position="fixed" className={clsx(classes.appBar)}>
+        <Toolbar>
+          <NavDrawer/>
+          <Typography className={classes.heading} variant="h1" color="inherit" noWrap>
+            {displayName}
+          </Typography>
+        </Toolbar>
+      </AppBar>
       <main className={classes.content}>
         {component}
       </main>
-
     </div>
   );
 

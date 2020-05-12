@@ -44,7 +44,7 @@ const useStyles = makeStyles({
 
 const anchor = 'left';
 
-export default function TemporaryDrawer() {
+export default function NavDrawer() {
   const classes = useStyles();
   const [state, setState] = React.useState({
     left: false
