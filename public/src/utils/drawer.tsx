@@ -24,7 +24,7 @@ const useStyles = makeStyles({
     fontSize: 24
   },
   link: {
-    textDecoration: 'none'
+    textDecoration: 'none',
   },
   listItem: {
     '&:hover': {
@@ -110,11 +110,11 @@ export default function TemporaryDrawer() {
       </List>
       <Divider/>
       <h2>Help Centre</h2>
-      <Link key='Testing FAQ' to='https://docs.google.com/document/d/1PT-xQRrk9g-w-Tv9Du2G6aEXenSc806hEcQlZsvaJS0' className={classes.link}>
+      <a href='https://docs.google.com/document/d/1PT-xQRrk9g-w-Tv9Du2G6aEXenSc806hEcQlZsvaJS0' key='Testing FAQ' className={classes.link}>
         <ListItem className={classes.listItem} button key='Testing FAQ'>
           <ListItemText primary='Testing FAQ'/>
         </ListItem>
-      </Link>
+      </a>
     </div>
   );
 
