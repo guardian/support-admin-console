@@ -12,6 +12,8 @@ import AppBar from '@material-ui/core/AppBar';
 import {CSSProperties} from "@material-ui/core/styles/withStyles";
 import TemporaryDrawer from "./utils/drawer";
 import clsx from "clsx";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
 
 const styles = ({ palette, spacing, mixins, typography, transitions }: Theme) => createStyles({
   root: {
@@ -27,7 +29,7 @@ const styles = ({ palette, spacing, mixins, typography, transitions }: Theme) =>
   content: {
     flexGrow: 1,
     backgroundColor: palette.background.default,
-    padding: spacing(3),
+    padding: spacing(10),
   },
   heading: {
     fontSize: typography.pxToRem(24),
@@ -39,32 +41,44 @@ const Index = () => <h2>Home</h2>;
 
 interface Props extends WithStyles<typeof styles> {}
 
-const AppRouter = withStyles(styles)(({classes}: Props) => (
 
-  <Router>
-    <div className={classes.root}>
-      <CssBaseline />
-      <nav>
+const AppRouter = withStyles(styles)(({classes}: Props) => {
+
+  const createComponent = (component, displayName: string) => (
+    <div>
         <AppBar
           position="fixed"
           className={clsx(classes.appBar)}
         >
-         <TemporaryDrawer/>
+          <Toolbar>
+            <TemporaryDrawer/>
+            <Typography className={classes.heading} variant="h1" color="inherit" noWrap>
+              {displayName}
+            </Typography>
+          </Toolbar>
         </AppBar>
 
-      </nav>
-
       <main className={classes.content}>
-        <div className={classes.toolbar} />
-        <Route path="/" exact component={Index} />
-        <Route path="/switches" component={Switchboard} />
-        <Route path="/contribution-types" component={ContributionTypesForm} />
-        <Route path="/amounts" component={AmountsForm} />
-        <Route path="/epic-tests" component={EpicTestsForm} />
+        {component}
       </main>
+
     </div>
-  </Router>
-));
+  );
+
+  return (
+    <Router>
+      <div className={classes.root}>
+        <CssBaseline />
+        <Route path="/" exact component={Index}/>
+          <Route path="/switches" render={() => createComponent(<Switchboard/>, 'Switches')}/>
+          <Route path="/contribution-types" render={() => createComponent(<ContributionTypesForm/>, 'Contribution Types')} />
+          <Route path="/amounts" render={() => createComponent(<AmountsForm/>, 'Amounts')} />
+          <Route path="/epic-tests" render={() => createComponent(<EpicTestsForm/>, 'Epic Tests')} />
+      </div>
+    </Router>
+  );
+
+});
 
 ReactDOM.render(
   <AppRouter />,

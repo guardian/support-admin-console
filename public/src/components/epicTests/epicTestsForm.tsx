@@ -336,7 +336,6 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
 
     return (
       <>
-        <Typography className={classes.h2} variant={'h2'}>Epic tests</Typography>
         <div>
           {
             this.state.previousStateFromServer ?

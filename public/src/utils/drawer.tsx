@@ -16,15 +16,17 @@ import RoundelSVG from "./roundel";
 const useStyles = makeStyles({
   list: {
     width: 250,
+    margin: 40
   },
   fullList: {
     width: 'auto',
   },
   heading: {
-    fontSize: 24
+    fontSize: 20
   },
   link: {
     textDecoration: 'none',
+    textColor: '#ededed'
   },
   listItem: {
     '&:hover': {
@@ -45,8 +47,7 @@ const anchor = 'left';
 export default function TemporaryDrawer() {
   const classes = useStyles();
   const [state, setState] = React.useState({
-    left: false,
-    title: "Reader Revenue Mission Control"
+    left: false
   });
 
   const toggleDrawer = (anchor: string, open: boolean) => (
@@ -71,13 +72,14 @@ export default function TemporaryDrawer() {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <RoundelSVG/>
-      <h1>Support Station</h1>
+      <h2>Support Station</h2>
+      <Divider/>
       <List>
         <h2>Channel Tests</h2>
         <Divider />
         <Link key='Epic tests' to='/epic-tests' className={classes.link}>
           <ListItem className={classes.listItem} button key='Epic tests'>
-            <ListItemText primary='Epic tests' />
+            <ListItemText primary='Epic tests'/>
           </ListItem>
         </Link>
         <Divider />
@@ -96,13 +98,7 @@ export default function TemporaryDrawer() {
           </ListItem>
         </Link>
         <Divider/>
-        <Link key='Contribution Types' to='/contribution-types' className={classes.link}>
-          <ListItem className={classes.listItem} button key='Contribution Types'>
-            <ListItemText primary='Contribution Types' />
-          </ListItem>
-        </Link>
-        <Divider/>
-        <Link key='Contribution Types' to='/contribution-types' className={classes.link}>
+        <Link key='Contribution Types' to='/contribution-types' className={classes.link} >
           <ListItem className={classes.listItem} button key='Contribution Types'>
             <ListItemText primary='Contribution Types' />
           </ListItem>
@@ -119,8 +115,6 @@ export default function TemporaryDrawer() {
   );
 
   return (
-    <Toolbar>
-
     <div>
         <React.Fragment key={anchor}>
           <IconButton
@@ -137,10 +131,5 @@ export default function TemporaryDrawer() {
           </Drawer>
         </React.Fragment>
     </div>
-      <Typography className={classes.heading} variant="h1" color="inherit" noWrap>
-         {state.title}{/*/* To Do make this update based on current page*/}
-      </Typography>
-    </Toolbar>
-
   );
 }
