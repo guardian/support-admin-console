@@ -23,17 +23,24 @@ const useStyles = makeStyles({
   heading: {
     fontSize: 24
   },
+  link: {
+    textDecoration: 'none'
+  },
+  listItem: {
+    '&:hover': {
+      backgroundColor: '#ededed'
+    },
+    '&:focus': {
+      backgroundColor: '#dcdcdc'
+    },
+  },
+
+  menuButton: {
+    marginRight: 20,
+  },
 });
 
 const anchor = 'left';
-
-const getLinkPathsAndNames = (): string[][] =>
-  [
-    ['/switches', 'Switches'],
-    ['/contribution-types', 'Contribution types'],
-    ['/amounts', 'Amounts'],
-    ['/epic-tests', 'Epic tests']
-  ];
 
 export default function TemporaryDrawer() {
   const classes = useStyles();
@@ -121,7 +128,7 @@ export default function TemporaryDrawer() {
             aria-label="open drawer"
             onClick={toggleDrawer(anchor, true)}
             edge="start"
-            className={clsx(classes.menuButton, open && classes.hide)}
+            className={clsx(classes.menuButton)}
           >
             <MenuIcon />
           </IconButton>

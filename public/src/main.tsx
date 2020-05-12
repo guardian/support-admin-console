@@ -13,8 +13,6 @@ import {CSSProperties} from "@material-ui/core/styles/withStyles";
 import TemporaryDrawer from "./utils/drawer";
 import clsx from "clsx";
 
-const drawerWidth = 240;
-
 const styles = ({ palette, spacing, mixins, typography, transitions }: Theme) => createStyles({
   root: {
     display: 'flex',
@@ -25,34 +23,16 @@ const styles = ({ palette, spacing, mixins, typography, transitions }: Theme) =>
       duration: transitions.duration.leavingScreen,
     }),
   },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-  },
-  drawerPaper: {
-    width: drawerWidth,
-  },
   toolbar: mixins.toolbar as CSSProperties, // createStyles expects material-ui's CSSProperties type, not react's
   content: {
     flexGrow: 1,
     backgroundColor: palette.background.default,
     padding: spacing(3),
   },
-  link: {
-    textDecoration: 'none'
-  },
   heading: {
     fontSize: typography.pxToRem(24),
     fontWeight: typography.fontWeightMedium
   },
-  listItem: {
-    '&:hover': {
-      backgroundColor: '#ededed'
-    },
-    '&:focus': {
-      backgroundColor: '#dcdcdc'
-    },
-  }
 });
 
 const Index = () => <h2>Home</h2>;
@@ -67,9 +47,7 @@ const AppRouter = withStyles(styles)(({classes}: Props) => (
       <nav>
         <AppBar
           position="fixed"
-          className={clsx(classes.appBar, {
-            [classes.appBarShift]: open,
-          })}
+          className={clsx(classes.appBar)}
         >
          <TemporaryDrawer/>
         </AppBar>
