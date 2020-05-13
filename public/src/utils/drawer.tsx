@@ -15,14 +15,12 @@ import RoundelSVG from "./roundel";
 
 const useStyles = makeStyles({
   list: {
-    width: 250,
-    margin: 40
+    margin: 10
   },
-  fullList: {
-    width: 'auto',
-  },
-  heading: {
-    fontSize: 20
+  drawerHeading: {
+    fontSize: 20,
+    display: 'inline-block',
+    padding: 20
   },
   link: {
     textDecoration: 'none',
@@ -72,7 +70,7 @@ export default function NavDrawer() {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <RoundelSVG/>
-      <h2>Support Station</h2>
+      <h2 className={classes.drawerHeading}>Support Station</h2>
       <Divider/>
       <List>
         <h2>Channel Tests</h2>
@@ -80,6 +78,12 @@ export default function NavDrawer() {
         <Link key='Epic tests' to='/epic-tests' className={classes.link}>
           <ListItem className={classes.listItem} button key='Epic tests'>
             <ListItemText primary='Epic tests'/>
+          </ListItem>
+        </Link>
+        <Divider />
+        <Link key='Banner Tool' to='/epic-tests' className={classes.link}>
+          <ListItem className={classes.listItem} button key='Banner Tool'>
+            <ListItemText primary='Banner Tool'/>
           </ListItem>
         </Link>
         <Divider />
