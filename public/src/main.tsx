@@ -48,7 +48,7 @@ const AppRouter = withStyles(styles)(({classes}: Props) => {
 
   const createComponent = (component: JSX.Element, displayName: string) => (
     <div>
-      <AppBar position="fixed" className={clsx(classes.appBar)}>
+      <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <NavDrawer/>
           <Typography className={classes.heading} variant="h1" color="inherit" noWrap>

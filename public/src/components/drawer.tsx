@@ -112,7 +112,7 @@ export default function NavDrawer() {
 
   const list = (anchor: string) => (
     <div
-      className={clsx(classes.list)}
+      className={classes.list}
       role="presentation"
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
