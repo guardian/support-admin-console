@@ -12,21 +12,44 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import RoundelSVG from "./roundel";
+import RRControlPanelLogo from "./roundel";
 
 const useStyles = makeStyles({
   list: {
-    margin: 10
+    width: '20vw',
+    minWidth: '260px'
   },
+
   drawerHeading: {
-    fontSize: 20,
-    display: 'inline-block',
-    padding: 20
+    top: '0',
+    left: '0',
+    width: '100%',
+    minHeight: '64px',
+    paddingTop: '10px',
+    paddingLeft: '10px',
+    marginBottom: '12%',
+    boxSizing: 'border-box',
+    borderBottom: '1px solid #616161'
   },
+
   link: {
     textDecoration: 'none',
     color: '#616161'
   },
+
+  disabledListItem: {
+    borderTop: '1px solid #E0E0E0',
+    marginLeft: '15%',
+    width: '85%',
+    '&:after': {
+      content: ' (disabled)'
+    }
+  },
+
   listItem: {
+    borderTop: '1px solid #E0E0E0',
+    marginLeft: '15%',
+    width: '85%',
     '&:hover': {
       backgroundColor: '#ededed'
     },
@@ -38,6 +61,36 @@ const useStyles = makeStyles({
   menuButton: {
     marginRight: 20,
   },
+
+  fullWidthRule: {
+    width: "100%",
+    borderTop: "1px solid #616161"
+  },
+
+  sectionHeader: {
+    borderTop: '1px solid #616161',
+    width: '100%',
+    paddingLeft: '5%',
+    paddingTop: '7%',
+    marginTop: '13%',
+    fontFamily: 'Roboto',
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    fontSize: '18px',
+    lineHeight: '20px'
+  },
+
+  topSectionHeader: {
+    width: '100%',
+    paddingLeft: '5%',
+    paddingTop: '7%',
+    fontFamily: 'Roboto',
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    fontSize: '18px',
+    lineHeight: '20px'
+  }
+
 });
 
 const anchor = 'left';
@@ -69,53 +122,51 @@ export default function NavDrawer() {
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
-      <RoundelSVG/>
-      <h2 className={classes.drawerHeading}>Support Station</h2>
-      <Divider/>
-      <List>
-        <h2>Channel Tests</h2>
-        <Divider/>
-        <Link key='Epic tests' to='/epic-tests' className={classes.link}>
-          <ListItem className={classes.listItem} button key='Epic tests'>
-            <ListItemText primary='Epic tests'/>
-          </ListItem>
-        </Link>
-        <Divider />
-        <Link key='Banner Tool' to='/epic-tests' className={classes.link}>
-          <ListItem className={classes.listItem} button key='Banner Tool'>
-            <ListItemText primary='Banner Tool'/>
-          </ListItem>
-        </Link>
-        <Divider />
+      <div className={classes.drawerHeading}>
+        <RRControlPanelLogo />
+      </div>
 
-        <h2>Admin Console</h2>
-        <Divider/>
+      <div>
+        <h2 className={classes.topSectionHeader}>Channel Management</h2>
+        <Link key='Epic' to='/epic-tests' className={classes.link}>
+          <ListItem className={classes.listItem} button key='Epic'>
+            <ListItemText primary='Epic'/>
+          </ListItem>
+        </Link>
+        <Link key='Banner' to='/epic-tests' className={classes.link}>
+          <ListItem className={classes.listItem} button key='Banner'>
+            <ListItemText primary='Banner'/>
+          </ListItem>
+        </Link>
+      </div>
+
+      <div>
+        <h2 className={classes.sectionHeader}>Admin Console</h2>
         <Link key='Switches' to='/switches' className={classes.link}>
           <ListItem className={classes.listItem} button key='Switches'>
             <ListItemText primary='Switches' />
           </ListItem>
         </Link>
-        <Divider/>
         <Link key='Amounts' to='/amounts' className={classes.link}>
           <ListItem className={classes.listItem} button key='Amounts'>
             <ListItemText primary='Amounts' />
           </ListItem>
         </Link>
-        <Divider/>
         <Link key='Contribution Types' to='/contribution-types' className={classes.link} >
           <ListItem className={classes.listItem} button key='Contribution Types'>
             <ListItemText primary='Contribution Types' />
           </ListItem>
         </Link>
-      </List>
-      <Divider/>
-      <h2>Help Centre</h2>
-      <Divider />
-      <a href='https://docs.google.com/document/d/1PT-xQRrk9g-w-Tv9Du2G6aEXenSc806hEcQlZsvaJS0' key='Testing FAQ' className={classes.link}>
-        <ListItem className={classes.listItem} button key='Testing FAQ'>
-          <ListItemText primary='Testing FAQ'/>
-        </ListItem>
-      </a>
+      </div>
+
+      <div>
+        <h2 className={classes.sectionHeader}>Help Centre</h2>
+        <a href='https://docs.google.com/document/d/1PT-xQRrk9g-w-Tv9Du2G6aEXenSc806hEcQlZsvaJS0' key='Testing FAQ' className={classes.link}>
+          <ListItem className={classes.listItem} button key='Testing FAQ'>
+            <ListItemText primary='Testing FAQ'/>
+          </ListItem>
+        </a>
+      </div>
     </div>
   );
 
