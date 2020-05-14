@@ -10,10 +10,12 @@ import {createStyles, Theme, WithStyles, withStyles} from '@material-ui/core/sty
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import {CSSProperties} from "@material-ui/core/styles/withStyles";
-import NavDrawer from "./utils/drawer";
+import NavDrawer from "./components/drawer";
 import clsx from "clsx";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
+import IndexPage from "./components/indexPage";
+import BannerToolPlaceHolder from "./components/bannerToolPlaceholder";
 
 const styles = ({ palette, spacing, mixins, typography, transitions }: Theme) => createStyles({
   root: {
@@ -64,11 +66,12 @@ const AppRouter = withStyles(styles)(({classes}: Props) => {
     <Router>
       <div className={classes.root}>
         <CssBaseline />
-        <Route path="/" exact component={Index}/>
+        <Route exact path="/" render={() => createComponent(<IndexPage/>, 'Home Page')}/>
           <Route path="/switches" render={() => createComponent(<Switchboard/>, 'Switches')}/>
           <Route path="/contribution-types" render={() => createComponent(<ContributionTypesForm/>, 'Contribution Types')} />
           <Route path="/amounts" render={() => createComponent(<AmountsForm/>, 'Amounts')} />
           <Route path="/epic-tests" render={() => createComponent(<EpicTestsForm/>, 'Epic Tests')} />
+          <Route path="/banner-tests" render={() => createComponent(<BannerToolPlaceHolder/>, 'Banner Tests')} />
       </div>
     </Router>
   );

@@ -1,18 +1,13 @@
 import React from 'react';
 import clsx from 'clsx';
 import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import {Link} from "react-router-dom";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import RoundelSVG from "./roundel";
-import RRControlPanelLogo from "./roundel";
+import RRControlPanelLogo from "./rrControlPanelLogo";
 
 const useStyles = makeStyles({
   list: {
@@ -133,7 +128,7 @@ export default function NavDrawer() {
             <ListItemText primary='Epic'/>
           </ListItem>
         </Link>
-        <Link key='Banner' to='/epic-tests' className={classes.link}>
+        <Link key='Banner' to='/banner-tests' className={classes.link}>
           <ListItem className={classes.listItem} button key='Banner'>
             <ListItemText primary='Banner'/>
           </ListItem>
