@@ -1,5 +1,4 @@
 import React from 'react';
-import clsx from 'clsx';
 import Drawer from '@material-ui/core/Drawer';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -173,7 +172,7 @@ export default function NavDrawer() {
             aria-label="open drawer"
             onClick={toggleDrawer(anchor, true)}
             edge="start"
-            className={clsx(classes.menuButton)}
+            className={classes.menuButton}
           >
             <MenuIcon />
           </IconButton>
