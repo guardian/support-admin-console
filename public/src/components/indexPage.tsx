@@ -29,7 +29,7 @@ export default function IndexPage() {
   return (
     <div className={classes.body}>
       <p className={classes.content}>
-        Welcome to the Guardian's Support Station.
+        Welcome to the Reader Revenue Control Panel.
       </p>
       <p className={classes.content}>
         To begin, select a tool from the menu.
