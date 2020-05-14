@@ -74,7 +74,7 @@ export default function NavDrawer() {
       <Divider/>
       <List>
         <h2>Channel Tests</h2>
-        <Divider />
+        <Divider/>
         <Link key='Epic tests' to='/epic-tests' className={classes.link}>
           <ListItem className={classes.listItem} button key='Epic tests'>
             <ListItemText primary='Epic tests'/>
@@ -110,6 +110,7 @@ export default function NavDrawer() {
       </List>
       <Divider/>
       <h2>Help Centre</h2>
+      <Divider />
       <a href='https://docs.google.com/document/d/1PT-xQRrk9g-w-Tv9Du2G6aEXenSc806hEcQlZsvaJS0' key='Testing FAQ' className={classes.link}>
         <ListItem className={classes.listItem} button key='Testing FAQ'>
           <ListItemText primary='Testing FAQ'/>
