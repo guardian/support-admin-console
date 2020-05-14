@@ -11,7 +11,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import {CSSProperties} from "@material-ui/core/styles/withStyles";
 import NavDrawer from "./components/drawer";
-import clsx from "clsx";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import IndexPage from "./components/indexPage";
@@ -48,7 +47,7 @@ const AppRouter = withStyles(styles)(({classes}: Props) => {
 
   const createComponent = (component: JSX.Element, displayName: string) => (
     <div>
-      <AppBar position="fixed" className={clsx(classes.appBar)}>
+      <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <NavDrawer/>
           <Typography className={classes.heading} variant="h1" color="inherit" noWrap>
