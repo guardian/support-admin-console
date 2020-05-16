@@ -35,12 +35,14 @@ case class EpicTest(
   highPriority: Boolean = false, // has been removed from form, but might be used in future
   useLocalViewLog: Boolean = false,
   articlesViewedSettings: Option[ArticlesViewedSettings] = None
-)
+) extends Test
 
 case class EpicTests(tests: List[EpicTest])
 
 object EpicTests {
   implicit val customConfig: Configuration = Configuration.default.withDefaults
+  implicit val epicTestDecoder = Decoder[EpicTest]
+  implicit val epicTestEncoder = Encoder[EpicTest]
   implicit val epicTestsDecoder = Decoder[EpicTests]
   implicit val epicTestsEncoder = Encoder[EpicTests]
 }
