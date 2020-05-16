@@ -35,7 +35,7 @@ case class EpicTest(
   highPriority: Boolean = false, // has been removed from form, but might be used in future
   useLocalViewLog: Boolean = false,
   articlesViewedSettings: Option[ArticlesViewedSettings] = None
-) extends Test
+)
 
 case class EpicTests(tests: List[EpicTest])
 

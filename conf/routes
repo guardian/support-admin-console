@@ -32,9 +32,9 @@ POST  /frontend/epic-tests/update                   controllers.EpicTestsControl
 POST  /frontend/epic-tests/lock                     controllers.EpicTestsController.lock
 POST  /frontend/epic-tests/unlock                   controllers.EpicTestsController.unlock
 POST  /frontend/epic-tests/takecontrol              controllers.EpicTestsController.takecontrol
-POST  /frontend/epic-tests/archive                  controllers.EpicTestsController.archive
-GET   /frontend/epic-tests/archive/:testName        controllers.EpicTestsController.getArchivedTest(testName: String)
-GET   /frontend/epic-tests/archived-test-names      controllers.EpicTestsController.archivedTestNames
+POST  /frontend/epic-tests/archive                  controllers.EpicTestArchiveController.set
+GET   /frontend/epic-tests/archive/:testName        controllers.EpicTestArchiveController.get(testName: String)
+GET   /frontend/epic-tests/archived-test-names      controllers.EpicTestArchiveController.list
 
 # ----- banner tests ----- #
 GET   /frontend/banner-tests                          controllers.BannerTestsController.get
@@ -42,9 +42,9 @@ POST  /frontend/banner-tests/update                   controllers.BannerTestsCon
 POST  /frontend/banner-tests/lock                     controllers.BannerTestsController.lock
 POST  /frontend/banner-tests/unlock                   controllers.BannerTestsController.unlock
 POST  /frontend/banner-tests/takecontrol              controllers.BannerTestsController.takecontrol
-POST  /frontend/banner-tests/archive                  controllers.BannerTestsController.archive
-GET   /frontend/banner-tests/archive/:testName        controllers.BannerTestsController.getArchivedTest(testName: String)
-GET   /frontend/banner-tests/archived-test-names      controllers.BannerTestsController.archivedTestNames
+POST  /frontend/banner-tests/archive                  controllers.BannerTestArchiveController.set
+GET   /frontend/banner-tests/archive/:testName        controllers.BannerTestArchiveController.get(testName: String)
+GET   /frontend/banner-tests/archived-test-names      controllers.BannerTestArchiveController.list
 
 # Map static resources from the /public folder to the /assets URL path
 GET  /assets/*file                                  controllers.Assets.at(path="/public", file)

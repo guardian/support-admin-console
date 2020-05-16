@@ -4,7 +4,7 @@ import java.time.OffsetDateTime
 
 import com.gu.googleauth.AuthAction
 import com.typesafe.scalalogging.StrictLogging
-import controllers.LockableSettingsController.LockableSettingsResponse
+import controllers.LockableS3ObjectController.LockableS3ObjectResponse
 import io.circe.{Decoder, Encoder}
 import io.circe.syntax._
 import io.circe.generic.auto._
@@ -24,12 +24,15 @@ object LockStatus {
   def locked(email: String) = LockStatus(locked = true, Some(email), Some(OffsetDateTime.now))
 }
 
-object LockableSettingsController {
+object LockableS3ObjectController {
   // The model returned by this controller for GET requests
-  case class LockableSettingsResponse[T](value: T, version: String, status: LockStatus, userEmail: String)
+  case class LockableS3ObjectResponse[T](value: T, version: String, status: LockStatus, userEmail: String)
 }
 
-class LockableSettingsController[T : Decoder : Encoder](
+/**
+  * Controller for managing JSON data in a single object in S3, with lock protection to prevent concurrent editing:
+  */
+abstract class LockableS3ObjectController[T : Decoder : Encoder](
   authAction: AuthAction[AnyContent],
   components: ControllerComponents,
   stage: String,
@@ -66,7 +69,7 @@ class LockableSettingsController[T : Decoder : Encoder](
       .apply(lockObjectSettings)
 
   /**
-    * Returns current version of the settings in s3 as json, with the lock status.
+    * Returns current version of the object in s3 as json, with the lock status.
     * The s3 data is validated against the model.
     */
   def get = authAction.async { request =>
@@ -75,7 +78,7 @@ class LockableSettingsController[T : Decoder : Encoder](
         .getFromJson[T](s3Client)
         .apply(dataObjectSettings)
         .map { case VersionedS3Data(value, version) =>
-          Ok(S3Json.noNulls(LockableSettingsResponse(value, version, lockStatus, request.user.email).asJson))
+          Ok(S3Json.noNulls(LockableS3ObjectResponse(value, version, lockStatus, request.user.email).asJson))
         }
     }
   }

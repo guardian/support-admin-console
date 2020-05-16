@@ -10,10 +10,10 @@ import scala.concurrent.ExecutionContext
 object FastlyPurger {
   case class FastlyPurgerError(error: String) extends Throwable
 
-  def fastlyPurger(stage: String, name: String, ws: WSClient)(implicit ec: ExecutionContext): Option[FastlyPurger] = {
+  def fastlyPurger(stage: String, path: String, ws: WSClient)(implicit ec: ExecutionContext): Option[FastlyPurger] = {
     stage match {
-      case "PROD" => Some(new FastlyPurger(s"https://support.theguardian.com/$name.json", ws))
-      case "CODE" => Some(new FastlyPurger(s"https://support.code.dev-theguardian.com/$name.json", ws))
+      case "PROD" => Some(new FastlyPurger(s"https://support.theguardian.com/$path", ws))
+      case "CODE" => Some(new FastlyPurger(s"https://support.code.dev-theguardian.com/$path", ws))
       case _ => None
     }
   }

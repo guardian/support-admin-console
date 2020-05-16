@@ -41,7 +41,7 @@ case class BannerTest(
   locations: List[Region] = Nil,
   variants: List[BannerVariant],
   articlesViewedSettings: Option[ArticlesViewedSettings] = None
-) extends Test
+)
 
 case class BannerTests(tests: List[BannerTest])
 

@@ -9,5 +9,5 @@ import zio.DefaultRuntime
 import scala.concurrent.ExecutionContext
 
 class AmountsController(authAction: AuthAction[AnyContent], components: ControllerComponents, stage: String, runtime: DefaultRuntime)(implicit ec: ExecutionContext)
-  extends SettingsController[AmountsRegions](authAction, components, stage, filename = "amounts.json", runtime) {
+  extends S3ObjectController[AmountsRegions](authAction, components, stage, filename = "amounts.json", runtime) {
 }

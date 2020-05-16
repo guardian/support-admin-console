@@ -2,7 +2,7 @@ package controllers
 
 import com.gu.googleauth.AuthAction
 import play.api.mvc.{AnyContent, ControllerComponents}
-import models.{BannerTest, BannerTests}
+import models.BannerTests
 import play.api.libs.ws.WSClient
 import services.FastlyPurger
 import services.S3Client.S3ObjectSettings
@@ -16,15 +16,15 @@ object BannerTestsController {
 }
 
 class BannerTestsController(
-  val authAction: AuthAction[AnyContent],
+  authAction: AuthAction[AnyContent],
   components: ControllerComponents,
-  ws: WSClient, val stage: String,
-  val runtime: DefaultRuntime
-)(implicit ec: ExecutionContext) extends LockableSettingsController[BannerTests](
+  ws: WSClient, stage: String,
+  runtime: DefaultRuntime
+)(implicit ec: ExecutionContext) extends LockableS3ObjectController[BannerTests](
     authAction,
     components,
     stage,
-    name = "banner-tests",
+    name = BannerTestsController.name,
     dataObjectSettings = S3ObjectSettings(
       bucket = "gu-contributions-public",
       key = s"banner/$stage/${BannerTestsController.name}.json",
@@ -32,13 +32,6 @@ class BannerTestsController(
       cacheControl = Some("max-age=30"),
       surrogateControl = Some("max-age=86400")  // Cache for a day, and use cache purging after updates
     ),
-    fastlyPurger = FastlyPurger.fastlyPurger(stage, BannerTestsController.name, ws),
+    fastlyPurger = FastlyPurger.fastlyPurger(stage, s"${BannerTestsController.name}.json", ws),
     runtime = runtime
-  ) with Circe with ArchiveController {
-
-  // For the ArchiveController trait
-  type T = BannerTest
-  override val name = BannerTestsController.name
-  override implicit val encoder = BannerTests.bannerTestEncoder
-  override implicit val decoder = BannerTests.bannerTestDecoder
-}
+  ) with Circe

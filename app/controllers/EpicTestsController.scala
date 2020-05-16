@@ -2,7 +2,7 @@ package controllers
 
 import com.gu.googleauth.AuthAction
 import play.api.mvc._
-import models.{EpicTest, EpicTests}
+import models.EpicTests
 import play.api.libs.ws.WSClient
 import services.FastlyPurger
 import services.S3Client.S3ObjectSettings
@@ -17,11 +17,11 @@ object EpicTestsController {
 }
 
 class EpicTestsController(
-  val authAction: AuthAction[AnyContent],
+  authAction: AuthAction[AnyContent],
   components: ControllerComponents,
-  ws: WSClient, val stage: String,
-  val runtime: DefaultRuntime
-)(implicit ec: ExecutionContext) extends LockableSettingsController[EpicTests](
+  ws: WSClient, stage: String,
+  runtime: DefaultRuntime
+)(implicit ec: ExecutionContext) extends LockableS3ObjectController[EpicTests](
     authAction,
     components,
     stage,
@@ -33,13 +33,6 @@ class EpicTestsController(
       cacheControl = Some("max-age=30"),
       surrogateControl = Some("max-age=86400")  // Cache for a day, and use cache purging after updates
     ),
-    fastlyPurger = FastlyPurger.fastlyPurger(stage, EpicTestsController.name, ws),
+    fastlyPurger = FastlyPurger.fastlyPurger(stage, s"${EpicTestsController.name}.json", ws),
     runtime = runtime
-  ) with Circe with ArchiveController {
-
-  // For the ArchiveController trait
-  type T = EpicTest
-  override val name = EpicTestsController.name
-  override implicit val encoder = EpicTests.epicTestEncoder
-  override implicit val decoder = EpicTests.epicTestDecoder
-}
+  ) with Circe
