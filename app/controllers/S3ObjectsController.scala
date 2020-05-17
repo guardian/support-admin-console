@@ -74,7 +74,7 @@ abstract class S3ObjectsController[T : Decoder : Encoder](
   }
 
   /**
-    * Fetches all object keys from S3 and returns just the test names
+    * Fetches all object keys from S3 and returns just the names
     */
   def list = authAction.async { request =>
     val objectSettings = buildObjectSettings("")  //empty string means list all files
@@ -83,8 +83,8 @@ abstract class S3ObjectsController[T : Decoder : Encoder](
       s3Client
         .listKeys(objectSettings)
         .map { keys =>
-          val testNames: List[String] = keys.flatMap(extractFilename)
-          Ok(S3Json.noNulls(testNames.asJson))
+          val names: List[String] = keys.flatMap(extractFilename)
+          Ok(S3Json.noNulls(names.asJson))
         }
         .mapError { error =>
           logger.error(s"Failed to fetch list of object names: $error")
@@ -103,7 +103,7 @@ abstract class S3ObjectsController[T : Decoder : Encoder](
       S3Json
         .getFromJson[T](s3Client)
         .apply(objectSettings)
-        .map { case VersionedS3Data(test, _) => Ok(test.asJson) }
+        .map { case VersionedS3Data(data, _) => Ok(data.asJson) }
         .mapError { error =>
           logger.error(s"Failed to get object ${objectSettings.key}: $error")
           error
