@@ -47,6 +47,8 @@ case class BannerTests(tests: List[BannerTest])
 
 object BannerTests {
   implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val epicTestsDecoder = Decoder[BannerTests]
-  implicit val epicTestsEncoder = Encoder[BannerTests]
+  implicit val bannerTestDecoder = Decoder[BannerTest]
+  implicit val bannerTestEncoder = Encoder[BannerTest]
+  implicit val bannerTestsDecoder = Decoder[BannerTests]
+  implicit val bannerTestsEncoder = Encoder[BannerTests]
 }

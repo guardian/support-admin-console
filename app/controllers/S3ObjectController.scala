@@ -13,7 +13,10 @@ import zio.{DefaultRuntime, IO, ZIO}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-abstract class SettingsController[T : Decoder : Encoder](
+/**
+  * Controller for managing JSON data in a single object in S3
+  */
+abstract class S3ObjectController[T : Decoder : Encoder](
   authAction: AuthAction[AnyContent],
   components: ControllerComponents,
   stage: String,
@@ -36,7 +39,7 @@ abstract class SettingsController[T : Decoder : Encoder](
     }
 
   /**
-    * Returns current version of the settings in s3 as json, with the version id.
+    * Returns current version of the object in s3 as json, with the version id.
     * The s3 data is validated against the model.
     */
   def get = authAction.async {
@@ -51,7 +54,7 @@ abstract class SettingsController[T : Decoder : Encoder](
   }
 
   /**
-    * Updates the file in s3 if the supplied version matches the current version in s3.
+    * Updates the object in s3 if the supplied version matches the current version in s3.
     * The POSTed json is validated against the model.
     */
   def set = authAction.async(circe.json[VersionedS3Data[T]]) { request =>

@@ -41,6 +41,8 @@ case class EpicTests(tests: List[EpicTest])
 
 object EpicTests {
   implicit val customConfig: Configuration = Configuration.default.withDefaults
+  implicit val epicTestDecoder = Decoder[EpicTest]
+  implicit val epicTestEncoder = Encoder[EpicTest]
   implicit val epicTestsDecoder = Decoder[EpicTests]
   implicit val epicTestsEncoder = Encoder[EpicTests]
 }

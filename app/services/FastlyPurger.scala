@@ -9,6 +9,14 @@ import scala.concurrent.ExecutionContext
 
 object FastlyPurger {
   case class FastlyPurgerError(error: String) extends Throwable
+
+  def fastlyPurger(stage: String, path: String, ws: WSClient)(implicit ec: ExecutionContext): Option[FastlyPurger] = {
+    stage match {
+      case "PROD" => Some(new FastlyPurger(s"https://support.theguardian.com/$path", ws))
+      case "CODE" => Some(new FastlyPurger(s"https://support.code.dev-theguardian.com/$path", ws))
+      case _ => None
+    }
+  }
 }
 
 class FastlyPurger(url: String, ws: WSClient)(implicit val ec: ExecutionContext) extends StrictLogging {
