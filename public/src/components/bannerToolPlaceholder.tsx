@@ -32,7 +32,7 @@ export default function BannerToolPlaceHolder() {
         🚧 Apologies, our Banner Tool is still under construction. 🚧
       </p>
       <p className={classes.content}>
-        Please select a tool from the menu.
+        Please select another tool from the menu.
       </p>
     </div>
   )
