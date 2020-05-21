@@ -181,7 +181,8 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, EpicTestEditor
   }
 
   onListChange = (fieldName: string) => (updatedString: string): void => {
-    this.updateTest(test => ({...test, [fieldName]: updatedString.split(",")}));
+    const updatedList = updatedString === '' ? [] : updatedString.split(",");
+    this.updateTest(test => ({...test, [fieldName]: updatedList}));
   }
 
   onSwitchChange = (fieldName: string) => (event: React.ChangeEvent<HTMLInputElement>): void =>  {
