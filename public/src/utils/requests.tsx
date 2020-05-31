@@ -10,19 +10,19 @@ export enum FrontendSettingsType {
   epicTests = 'epic-tests'
 }
 
-function fetchSettings(path: string): Promise<any> {
+export function fetchJson(path: string): Promise<any> {
   return fetch(path)
     .then(resp => {
       if (!resp.ok) {
         resp.text().then(msg => alert(msg));
-        throw new Error(`Could not fetch ${path} settings from server`);
+        throw new Error(`Could not fetch ${path} json from server`);
       }
 
       return resp.json();
     });
 }
 
-function saveSettings(path: string, data: any): Promise<Response> {
+export function saveJson(path: string, data: any): Promise<Response> {
   return fetch(path, {
     method: 'POST',
     headers: {
@@ -51,21 +51,21 @@ export function requestTakeControl(settingsType: FrontendSettingsType): Promise<
 }
 
 export function fetchSupportFrontendSettings(settingsType: SupportFrontendSettingsType): Promise<any> {
-  return fetchSettings(`/support-frontend/${settingsType}`);
+  return fetchJson(`/support-frontend/${settingsType}`);
 }
 
 export function saveSupportFrontendSettings(settingsType: SupportFrontendSettingsType, data: any): Promise<Response> {
-  return saveSettings(`/support-frontend/${settingsType}/update`, data);
+  return saveJson(`/support-frontend/${settingsType}/update`, data);
 }
 
 export function fetchFrontendSettings(settingsType: FrontendSettingsType): Promise<any> {
-  return fetchSettings(`/frontend/${settingsType}`);
+  return fetchJson(`/frontend/${settingsType}`);
 }
 
 export function saveFrontendSettings(settingsType: FrontendSettingsType, data: any): Promise<Response> {
-  return saveSettings(`/frontend/${settingsType}/update`, data);
+  return saveJson(`/frontend/${settingsType}/update`, data);
 }
 
 export function archiveEpicTest(test: EpicTest): Promise<Response> {
-  return saveSettings('/frontend/epic-tests/archive', test);
+  return saveJson('/frontend/epic-tests/archive', test);
 }

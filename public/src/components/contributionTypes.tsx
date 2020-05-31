@@ -13,6 +13,8 @@ import SaveIcon from '@material-ui/icons/Save';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import {ContributionType, Region, isContributionType, isRegion} from '../utils/models';
 import {fetchSupportFrontendSettings, saveSupportFrontendSettings, SupportFrontendSettingsType} from '../utils/requests';
+import {Editor} from './editor';
+
 interface ContributionTypeSetting {
   contributionType: ContributionType,
   isDefault?: boolean
@@ -86,55 +88,10 @@ const styles = ({ palette, spacing }: Theme) => createStyles({
 
 interface Props extends WithStyles<typeof styles> {}
 
-class ContributionTypesForm extends React.Component<Props, ContributionTypes> {
-  state: ContributionTypes;
-  previousStateFromServer: DataFromServer | null;
-
+class ContributionTypesForm extends Editor<Props, ContributionTypes> {
   constructor(props: Props) {
-    super(props);
-    this.state = {
-      GBPCountries: [],
-      UnitedStates: [],
-      EURCountries: [],
-      International: [],
-      Canada: [],
-      AUDCountries: [],
-      NZDCountries: []
-    };
-    this.previousStateFromServer = null;
+    super(props, '/support-frontend/contribution-types')
   }
-
-  componentWillMount(): void {
-    this.fetchStateFromServer();
-  }
-
-  fetchStateFromServer(): void {
-    fetchSupportFrontendSettings(SupportFrontendSettingsType.contributionTypes)
-      .then(serverData => {
-        this.previousStateFromServer = serverData;
-        this.setState({
-          ...serverData.value
-        });
-      });
-  }
-
-  save = () => {
-    const newState = update(this.previousStateFromServer, {
-      value: { $set: this.state }
-    });
-
-    saveSupportFrontendSettings(SupportFrontendSettingsType.contributionTypes, newState)
-      .then(resp => {
-        if (!resp.ok) {
-          resp.text().then(msg => alert(msg));
-        }
-        this.fetchStateFromServer();
-      })
-      .catch((resp) => {
-        alert('Error while saving');
-        this.fetchStateFromServer();
-      });
-  };
 
   addContributionType(current: ContributionTypeSetting[], newSetting: ContributionTypeSetting): ContributionTypeSetting[] {
     return current.some(c => c.contributionType === newSetting.contributionType) ?
@@ -146,18 +103,18 @@ class ContributionTypesForm extends React.Component<Props, ContributionTypes> {
     return current.filter(c => c.contributionType !== toRemove);
   }
 
-  setContributionTypeOnOff(on: boolean, contributionType: ContributionType, region: Region): void {
+  setContributionTypeOnOff(current: ContributionTypeSetting[], on: boolean, contributionType: ContributionType, region: Region): void {
     const newSettings = on ?
-      this.addContributionType(this.state[region], {contributionType, isDefault: true}) :
-      this.removeContributionType(this.state[region], contributionType);
+      this.addContributionType(current, {contributionType, isDefault: true}) :
+      this.removeContributionType(current, contributionType);
 
     this.setState((prevState) => update(prevState, {
       [region]: { $set: newSettings }
     }));
   }
 
-  setContributionTypeDefault(contributionType: ContributionType, region: Region): void {
-    const newSettings = this.state[region].map((c: ContributionTypeSetting) => {
+  setContributionTypeDefault(settings: ContributionTypeSetting[], contributionType: ContributionType, region: Region): void {
+    const newSettings = settings.map((c: ContributionTypeSetting) => {
       if (c.contributionType === contributionType) {
         return { contributionType: c.contributionType, isDefault: true }
       } else {
@@ -183,7 +140,7 @@ class ContributionTypesForm extends React.Component<Props, ContributionTypes> {
               checked={settings.some(c => c.contributionType === contributionType)}
               value={contributionType}
               onChange={event =>
-                this.setContributionTypeOnOff(event.target.checked, contributionType, region)
+                this.setContributionTypeOnOff(settings, event.target.checked, contributionType, region)
               }
             />
           }
@@ -194,7 +151,7 @@ class ContributionTypesForm extends React.Component<Props, ContributionTypes> {
     );
   }
 
-  renderDefaultRadios(current: ContributionType, region: Region): React.ReactNode {
+  renderDefaultRadios(settings: ContributionTypeSetting[], current: ContributionType, region: Region): React.ReactNode {
     return (
       <div className={this.props.classes.default}>
       <div className={this.props.classes.label}>Default</div>
@@ -203,7 +160,7 @@ class ContributionTypesForm extends React.Component<Props, ContributionTypes> {
         name="default"
         value={current}
         onChange={(event, value) => {
-          if (isContributionType(value)) this.setContributionTypeDefault(value, region)
+          if (isContributionType(value)) this.setContributionTypeDefault(settings, value, region)
         }}
       >
         {allContributionTypes.map(({contributionType, label}) =>
@@ -233,7 +190,7 @@ class ContributionTypesForm extends React.Component<Props, ContributionTypes> {
           <div className={classes.regionSettings}>
             {this.renderOnOffs(settings, region)}
 
-            {this.renderDefaultRadios(getDefault(), region)}
+            {this.renderDefaultRadios(settings, getDefault(), region)}
           </div>
         </FormControl>
       </div>
@@ -243,26 +200,30 @@ class ContributionTypesForm extends React.Component<Props, ContributionTypes> {
   render(): React.ReactNode {
     const { classes } = this.props;
 
-    return (
-      <form className={classes.form}>
-        <div className={classes.regions}>
-          {Object.entries(this.state).map(([region, settings]) => {
-            if (isRegion(region)) return this.renderContributionTypesSettings(settings, region)
-          })}
-        </div>
+    if (this.state) {
+      return (
+        <form className={classes.form}>
+          <div className={classes.regions}>
+            {Object.entries(this.state.value).map(([region, settings]) => {
+              if (isRegion(region)) return this.renderContributionTypesSettings(settings, region)
+            })}
+          </div>
 
-        <div className={classes.buttons}>
-          <Button variant="contained" onClick={this.save} className={classes.button}>
-            <SaveIcon />
-            Save
-          </Button>
-          <Button variant="contained" onClick={() => this.fetchStateFromServer()} className={classes.button}>
-            <RefreshIcon />
-            Refresh
-          </Button>
-        </div>
-      </form>
-    );
+          <div className={classes.buttons}>
+            <Button variant="contained" onClick={this.save} className={classes.button}>
+              <SaveIcon/>
+              Save
+            </Button>
+            <Button variant="contained" onClick={() => this.fetch()} className={classes.button}>
+              <RefreshIcon/>
+              Refresh
+            </Button>
+          </div>
+        </form>
+      );
+    } else {
+      return null;
+    }
   }
 }
 
