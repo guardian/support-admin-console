@@ -12,13 +12,13 @@ sealed trait OphanProduct extends EnumEntry
 object OphanProduct extends Enum[OphanProduct] with CirceEnum[OphanProduct] {
   override val values: IndexedSeq[OphanProduct] = findValues
 
-  case object CONTRIBUTION extends Product
-  case object RECURRING_CONTRIBUTION extends Product
-  case object MEMBERSHIP_SUPPORTER extends Product
-  case object MEMBERSHIP_PATRON extends Product
-  case object MEMBERSHIP_PARTNER extends Product
-  case object DIGITAL_SUBSCRIPTION extends Product
-  case object PRINT_SUBSCRIPTION extends Product
+  case object CONTRIBUTION extends OphanProduct
+  case object RECURRING_CONTRIBUTION extends OphanProduct
+  case object MEMBERSHIP_SUPPORTER extends OphanProduct
+  case object MEMBERSHIP_PATRON extends OphanProduct
+  case object MEMBERSHIP_PARTNER extends OphanProduct
+  case object DIGITAL_SUBSCRIPTION extends OphanProduct
+  case object PRINT_SUBSCRIPTION extends OphanProduct
 }
 
 case class BannerVariant(

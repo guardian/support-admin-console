@@ -14,7 +14,7 @@ import NavDrawer from "./components/drawer";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import IndexPage from "./components/indexPage";
-import BannerToolPlaceHolder from "./components/bannerToolPlaceholder";
+import BannerTestsForm from "./components/bannerTests/bannerTestsForm";
 
 const styles = ({ palette, spacing, mixins, typography, transitions }: Theme) => createStyles({
   root: {
@@ -70,7 +70,7 @@ const AppRouter = withStyles(styles)(({classes}: Props) => {
           <Route path="/contribution-types" render={() => createComponent(<ContributionTypesForm/>, 'Contribution Types')} />
           <Route path="/amounts" render={() => createComponent(<AmountsForm/>, 'Amounts')} />
           <Route path="/epic-tests" render={() => createComponent(<EpicTestsForm/>, 'Epic Tests')} />
-          <Route path="/banner-tests" render={() => createComponent(<BannerToolPlaceHolder/>, 'Banner Tests')} />
+          <Route path="/banner-tests" render={() => createComponent(<BannerTestsForm/>, 'Banner Tests')} />
       </div>
     </Router>
   );
