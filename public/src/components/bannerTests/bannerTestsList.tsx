@@ -3,7 +3,7 @@ import {createStyles, List, ListItem, Theme, Typography, withStyles, WithStyles,
 
 import { BannerTest } from './bannerTestsForm';
 import NewNameCreator from '.././epicTests/newNameCreator';
-import { MaxEpicViewsDefaults } from './maxEpicViewsEditor';
+import { ModifiedTests, UserCohort } from '.././epicTests/epicTestsForm';
 
 
 const styles = ( { typography, spacing }: Theme ) => createStyles({
@@ -122,12 +122,12 @@ const theme = createMuiTheme({
 });
 
 interface BannerTestListProps extends WithStyles<typeof styles> {
-  bannerTests: BannerTest[],
-  // modifiedTests: ModifiedTests,
+  tests: BannerTest[],
+  modifiedTests: ModifiedTests,
   selectedTestName: string | undefined,
   onUpdate: (tests: BannerTest[], modifiedTestName?: string) => void,
   onSelectedTestName: (testName: string) => void,
-  // editMode: boolean
+  editMode: boolean
 }
 class BannerTestsList extends React.Component<BannerTestListProps> {
 
@@ -143,7 +143,7 @@ class BannerTestsList extends React.Component<BannerTestListProps> {
       variants: [],
       articlesViewedSettings: undefined,
     }
-    const newBannerTestList = [...this.props.bannerTests, newTest];
+    const newBannerTestList = [...this.props.tests, newTest];
 
     this.props.onUpdate(newBannerTestList, newBannerTestName);
 
@@ -172,4 +172,4 @@ class BannerTestsList extends React.Component<BannerTestListProps> {
   }
 }
 
-export default withStyles(styles)(EpicTestsList);
+export default withStyles(styles)(BannerTestsList);
