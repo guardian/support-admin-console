@@ -12,8 +12,7 @@ import Button from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import {ContributionType, Region, isContributionType, isRegion} from '../utils/models';
-import {fetchSupportFrontendSettings, saveSupportFrontendSettings, SupportFrontendSettingsType} from '../utils/requests';
-import {Editor} from './editor';
+import {VersionedDataState} from './editor';
 
 interface ContributionTypeSetting {
   contributionType: ContributionType,
@@ -88,9 +87,13 @@ const styles = ({ palette, spacing }: Theme) => createStyles({
 
 interface Props extends WithStyles<typeof styles> {}
 
-class ContributionTypesForm extends Editor<Props, ContributionTypes> {
+class ContributionTypesForm extends React.Component<Props, VersionedDataState<ContributionTypes>> {
+  state: VersionedDataState<ContributionTypes>;
+
   constructor(props: Props) {
-    super(props, '/support-frontend/contribution-types')
+    super(props);
+
+    this.state = 'Pending';
   }
 
   addContributionType(current: ContributionTypeSetting[], newSetting: ContributionTypeSetting): ContributionTypeSetting[] {
@@ -200,31 +203,37 @@ class ContributionTypesForm extends Editor<Props, ContributionTypes> {
   render(): React.ReactNode {
     const { classes } = this.props;
 
-    if (this.state) {
-      return (
-        <form className={classes.form}>
-          <div className={classes.regions}>
-            {Object.entries(this.state.value).map(([region, settings]) => {
-              if (isRegion(region)) return this.renderContributionTypesSettings(settings, region)
-            })}
-          </div>
+    return (
+      <form className={classes.form}>
+        <div className={classes.regions}>
+          {Object.entries(this.props.contributionTypes).map(([region, settings]) => {
+            if (isRegion(region)) return this.renderContributionTypesSettings(settings, region)
+          })}
+        </div>
 
-          <div className={classes.buttons}>
-            <Button variant="contained" onClick={this.save} className={classes.button}>
-              <SaveIcon/>
-              Save
-            </Button>
-            <Button variant="contained" onClick={() => this.fetch()} className={classes.button}>
-              <RefreshIcon/>
-              Refresh
-            </Button>
-          </div>
-        </form>
-      );
-    } else {
-      return null;
-    }
+        <div className={classes.buttons}>
+          <Button variant="contained" onClick={this.save} className={classes.button}>
+            <SaveIcon/>
+            Save
+          </Button>
+          <Button variant="contained" onClick={() => this.fetch()} className={classes.button}>
+            <RefreshIcon/>
+            Refresh
+          </Button>
+        </div>
+      </form>
+    );
   }
 }
 
-export default withStyles(styles)(ContributionTypesForm);
+const FormWithStyles = withStyles(styles)(ContributionTypesForm);
+
+export default <Editor<ContributionTypes>
+  component={FormWithStyles}
+  // componentBuilder={(contributionTypes) =>
+  //   <FormWithStyles
+  //     contributionTypes={contributionTypes}
+  //     save={this.save}
+  //   />
+  // }
+/>;
