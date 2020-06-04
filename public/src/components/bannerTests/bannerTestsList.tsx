@@ -1,10 +1,15 @@
 import React from 'react';
-import {createStyles, List, ListItem, Theme, Typography, withStyles, WithStyles, Tooltip, createMuiTheme, MuiThemeProvider} from "@material-ui/core";
+import {Button, createStyles, List, ListItem, Theme, Typography, withStyles, WithStyles, Tooltip, createMuiTheme, MuiThemeProvider} from "@material-ui/core";
 
 import { BannerTest } from './bannerTestsForm';
 import NewNameCreator from '.././epicTests/newNameCreator';
-import { ModifiedTests, UserCohort } from '.././epicTests/epicTestsForm';
-
+import ArrowUpward from '@material-ui/icons/ArrowUpward';
+import ArrowDownward from '@material-ui/icons/ArrowDownward';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import ArchiveIcon from '@material-ui/icons/Archive';
+import { renderVisibilityIcons } from '.././epicTests/utilities';
+import { ModifiedTests, UserCohort, TestStatus} from '.././epicTests/epicTestsForm';
+import { MaxEpicViewsDefaults } from '.././epicTests/maxEpicViewsEditor';
 
 const styles = ( { typography, spacing }: Theme ) => createStyles({
   root: {
@@ -149,12 +154,79 @@ class BannerTestsList extends React.Component<BannerTestListProps> {
 
   }
 
+  onTestSelected = (testName: string) => (event: React.MouseEvent<HTMLInputElement>): void => {
+    this.props.onSelectedTestName(testName);
+  };
+
+  moveTestUp = (name: string): void => {
+    const newTests = [...this.props.tests];
+    const indexOfName = newTests.findIndex(test => test.name === name);
+    if (indexOfName > 0) {
+      const beforeElement = newTests[indexOfName - 1];
+      newTests[indexOfName-1] = newTests[indexOfName];
+      newTests[indexOfName] = beforeElement;
+    }
+    this.props.onUpdate(newTests, name);
+  }
+
+  moveTestDown = (name: string): void => {
+    const newTests = [...this.props.tests];
+    const indexOfName = newTests.findIndex(test => test.name === name);
+    if (indexOfName < newTests.length - 1) {
+      const afterElement = newTests[indexOfName + 1];
+      newTests[indexOfName + 1] = newTests[indexOfName];
+      newTests[indexOfName] = afterElement;
+    }
+    this.props.onUpdate(newTests, name);
+  }
+
+  renderReorderButtons = (testName: string, index: number) => {
+    return (
+      <div className={this.props.classes.buttonsContainer}>
+        <div className={this.props.classes.singleButtonContainer}>
+          {index > 0 &&
+            <Button
+              color={'default'}
+              className={this.props.classes.arrowButton}
+              variant={'contained'}
+              onClick={() => this.moveTestUp(testName)}>
+              <ArrowUpward className={this.props.classes.arrowIcon}/>
+            </Button>
+          }
+        </div>
+        <div className={this.props.classes.singleButtonContainer}>
+          {index < this.props.tests.length - 1 &&
+            <Button
+              color={'default'}
+              className={this.props.classes.arrowButton}
+              variant={'contained'}
+              onClick={() => this.moveTestDown(testName)}>
+                <ArrowDownward className={this.props.classes.arrowIcon}/>
+            </Button>
+          }
+        </div>
+      </div>
+    )
+  }
+
+  renderDeletedOrArchivedIcon = (testStatus: TestStatus): React.ReactNode => {
+    const { classes } = this.props;
+    if (testStatus.isDeleted) {
+      return <DeleteForeverIcon className={classes.deletedIcon} />;
+    }
+    else if (testStatus.isArchived) {
+      return <ArchiveIcon className={classes.archiveIcon} />;
+    }
+    return null;
+  }
+
   render(): React.ReactNode {
     const { classes } = this.props;
 
     return (
+      <>
         <div className={classes.root}>
-          {/* {this.props.editMode ? ( */}
+          {this.props.editMode ? (
             <NewNameCreator
               type="test"
               action="New"
@@ -167,8 +239,60 @@ class BannerTestsList extends React.Component<BannerTestListProps> {
               onValidName={this.createTest}
               editEnabled={this.props.editMode}
             />
-          </div>
-          );
+          ): (<div className={classes.spacer}>&nbsp;</div>)}
+
+          <List className={classes.testsList} component="nav">
+            {this.props.tests.map((test, index) => {
+
+              const testStatus = this.props.modifiedTests[test.name];
+              const toStrip = /^\d{4}-\d{2}-\d{2}_(contribs*_|moment_)*/;
+
+              const classNames = [
+                classes.test,
+                testStatus && testStatus.isValid && !testStatus.isDeleted && !testStatus.isArchived ? classes.validTest : '',
+                testStatus && !testStatus.isValid ? classes.invalidTest : '',
+                this.props.selectedTestName === test.name ? classes.selectedTest : '',
+                testStatus && testStatus.isDeleted ? classes.deleted : '',
+                testStatus && testStatus.isArchived ? classes.archived : ''
+              ].join(' ');
+
+              return (
+                <MuiThemeProvider
+                  theme={theme}
+                  key={index}
+                >
+                  <Tooltip
+                    title={test.name}
+                    aria-label="test name"
+                    placement="right"
+                  >
+                    <ListItem
+                      className={classNames}
+                      onClick={this.onTestSelected(test.name)}
+                      button={true}
+                    >
+                      { this.props.editMode ? this.renderReorderButtons(test.name, index) : <div className={classes.buttonsContainer}></div>}
+                      <div className={classes.testText}>
+                        <Typography
+                          className={classes.testName}
+                          noWrap={true}>
+                            {test.nickname ? test.nickname : test.name.replace(toStrip, '')}
+                        </Typography>
+
+                        {(testStatus && testStatus.isDeleted) && (<div><Typography className={classes.toBeDeleted}>To be deleted</Typography></div>)}
+
+                        {(testStatus && testStatus.isArchived) && (<div><Typography className={classes.toBeArchived}>To be archived</Typography></div>)}
+                      </div>
+                      {testStatus && (testStatus.isDeleted || testStatus.isArchived) ? this.renderDeletedOrArchivedIcon(testStatus) : renderVisibilityIcons(test.isOn)}
+                    </ListItem>
+                  </Tooltip>
+                </MuiThemeProvider>
+              )
+            })}
+          </List>
+        </div>
+      </>
+    )
   }
 }
 
