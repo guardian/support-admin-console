@@ -27,8 +27,8 @@ const styles = ({ spacing }: Theme) => createStyles({
   createButton: {
     marginTop: spacing(1),
     marginBottom: spacing(2),
-    marginLeft: 'auto',
-    marginRight: 'auto',
+    marginRight: spacing(3),
+    'justify-content': 'right',
   },
   topDialog: {
     display: 'flex',
@@ -229,7 +229,7 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
         className={this.props.classes.createButton}
         onClick={onClick}
         color={'primary'}
-        variant={'contained'}
+        // variant={'contained'}
         size={'medium'}
       >
         {buttonText}
