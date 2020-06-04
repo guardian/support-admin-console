@@ -1,10 +1,10 @@
 import React from 'react';
 
 import {
-  Theme, createStyles, WithStyles, withStyles, Button, Dialog, TextField, IconButton
+  Theme, createStyles, WithStyles, withStyles, Button, Dialog, TextField, IconButton, Typography
 } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
-import CancelIcon from '@material-ui/icons/Cancel';
+import CloseIcon from '@material-ui/icons/Close';
 
 const styles = ({ spacing }: Theme) => createStyles({
   newButton: {
@@ -25,15 +25,30 @@ const styles = ({ spacing }: Theme) => createStyles({
     marginRight: spacing(3),
   },
   createButton: {
-    marginTop: spacing(1),
-    marginBottom: spacing(2),
+    marginBottom: spacing(1),
     marginRight: spacing(3),
-    'justify-content': 'right',
+    justifyContent: 'right',
   },
   topDialog: {
+    marginTop: spacing(1),
     display: 'flex',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
+  dialogTitle: {
+    paddingLeft: spacing(3),
+    fontSize: '20px',
+    fontWeight: 500,
+  },
+  hr: {
+    width: '100%',
+    height: '1px',
+    border: 'none',
+    backgroundColor: '#9E9E9E',
+  },
+  closeIcon: {
+    color: '#9E9E9E',
+  }
 });
 
 interface NewNameCreatorProps extends WithStyles<typeof styles> {
@@ -229,7 +244,6 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
         className={this.props.classes.createButton}
         onClick={onClick}
         color={'primary'}
-        // variant={'contained'}
         size={'medium'}
       >
         {buttonText}
@@ -252,7 +266,8 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
           helperText={this.state.nicknameHelperText}
           error={this.state.nicknameError}
         />
-        {this.showCreateButton('Create your test', () => this.handleNewTestName(this.state.currentNameText, this.state.currentNicknameText))}
+        <hr className={classes.hr} />
+        {this.showCreateButton('Create test', () => this.handleNewTestName(this.state.currentNameText, this.state.currentNicknameText))}
       </>
     );
 
@@ -271,13 +286,16 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
           fullWidth
         >
           <div className={classes.topDialog}>
+            <Typography className={classes.dialogTitle}>Create a new test</Typography>
             <IconButton
               color={'primary'}
               onClick={() => this.closeDialog()}
-              children={<CancelIcon
+              children={<CloseIcon
+                className={classes.closeIcon}
               />}
             />
           </div>
+          <hr className={classes.hr} />
 
           <TextField
             label={this.props.type === 'test' ? 'Full test name' : 'Variant name'}
