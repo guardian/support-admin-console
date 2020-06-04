@@ -9,7 +9,14 @@ import CloseIcon from '@material-ui/icons/Close';
 const styles = ({ spacing }: Theme) => createStyles({
   newButton: {
     marginRight: spacing(2),
-    marginBottom: spacing(2)
+    marginBottom: spacing(2),
+    paddingTop: spacing(1),
+    paddingBottom: spacing(1),
+    width: '300px',
+    height: '50px',
+    border: '1px dotted black',
+    color: '#212121',
+    justifyContent: 'left',
   },
   popover: {
     padding: '10px',
@@ -48,6 +55,9 @@ const styles = ({ spacing }: Theme) => createStyles({
   },
   closeIcon: {
     color: '#9E9E9E',
+  },
+  addIcon: {
+    marginRight: spacing(2),
   }
 });
 
@@ -55,7 +65,7 @@ interface NewNameCreatorProps extends WithStyles<typeof styles> {
   existingNames: string[],
   existingNicknames: string[],
   type: 'test' | 'variant',
-  action: 'New' | 'Copy',
+  action: 'New' | 'Copy' | 'Create a new',
   onValidName: (name: string, nickname: string) => void,
   editEnabled: boolean,
   initialValue?: string
@@ -275,8 +285,8 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
 
     return (
       <>
-        <Button variant="contained" color="primary" onClick={this.onNewNameButtonClick} className={classes.newButton}>
-          <AddIcon />
+        <Button variant="outlined" color="primary" onClick={this.onNewNameButtonClick} className={classes.newButton}>
+          <AddIcon className={classes.addIcon} />
           {this.props.action} {this.props.type}
         </Button>
         <Dialog

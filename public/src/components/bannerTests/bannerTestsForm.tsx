@@ -80,7 +80,8 @@ const styles = ({ spacing, typography }: Theme) => createStyles({
     fontSize: typography.pxToRem(16)
   },
   editModeBorder: {
-    border: "4px solid #ffe500"
+    // border: "4px solid #ffe500"
+    border: 'none',
   },
   readOnlyModeBorder: {
     border: "4px solid #dcdcdc"
@@ -297,15 +298,7 @@ requestTakeControl = () => {
           {
             this.state.previousStateFromServer ?
               <>
-                <EpicTestActionBar
-                  modifiedTests={this.state.modifiedTests}
-                  lockStatus={this.state.lockStatus}
-                  editMode={this.state.editMode}
-                  requestTakeControl={this.requestTakeControl}
-                  requestLock={this.requestBannerTestsLock}
-                  cancel={this.cancel}
-                  save={this.save}
-                />
+
                 <div className={listAndEditorClassNames}>
                   <BannerTestsList
                     tests={this.state.tests}
@@ -317,9 +310,21 @@ requestTakeControl = () => {
                   />
 
                   {this.state.selectedTestName ? this.state.tests.map(test =>
-                    (<div>Banner test editor will appear here!</div>)
-                  ) : (<Typography className={classes.viewText}>Click on a test on the left to view contents.</Typography>)}
+                    (<div>&nbsp;</div>)
+                  ) : (
+                    // <Typography className={classes.viewText}>Click on a test on the left to view contents.</Typography>
+                    <div>&nbsp;</div>
+                  )}
                 </div>
+                {/* <EpicTestActionBar
+                  modifiedTests={this.state.modifiedTests}
+                  lockStatus={this.state.lockStatus}
+                  editMode={this.state.editMode}
+                  requestTakeControl={this.requestTakeControl}
+                  requestLock={this.requestBannerTestsLock}
+                  cancel={this.cancel}
+                  save={this.save}
+                /> */}
               </>
                :
               <CircularProgress/>
