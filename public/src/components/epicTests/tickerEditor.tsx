@@ -69,9 +69,8 @@ class TickerEditor extends React.Component<Props, State> {
   renderFields(tickerSettings: TickerSettings) {
     const classes = this.props.classes;
 
-    const onChange = (updatedTickerSettings: TickerSettings) => this.props.onChange(updatedTickerSettings);
     const onCopyFieldChange = (fieldName: string) => (value: string) =>
-      onChange({
+      this.props.onChange({
         ...tickerSettings,
         copy: {
           ...tickerSettings.copy,
@@ -110,7 +109,7 @@ class TickerEditor extends React.Component<Props, State> {
           <EditableTextField
             text={tickerSettings.currencySymbol}
             label="Currency"
-            onSubmit={value => onChange({
+            onSubmit={value => this.props.onChange({
               ...tickerSettings,
               currencySymbol: value
             })}
@@ -137,7 +136,7 @@ class TickerEditor extends React.Component<Props, State> {
             className={classes.radio}
             value={tickerSettings.countType}
             onChange={(event, value: string) =>
-              onChange({
+              this.props.onChange({
                 ...tickerSettings,
                 countType: (value as TickerCountType)
               })
@@ -167,7 +166,7 @@ class TickerEditor extends React.Component<Props, State> {
             className={classes.radio}
             value={tickerSettings.endType}
             onChange={(event, value: string) =>
-              onChange({
+              this.props.onChange({
                 ...tickerSettings,
                 endType: (value as TickerEndType)
               })
