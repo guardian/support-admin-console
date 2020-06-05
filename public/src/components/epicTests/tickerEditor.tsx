@@ -60,7 +60,7 @@ class TickerEditor extends React.Component<Props, State> {
     endType: TickerEndType.unlimited,
     countType: TickerCountType.money,
     copy: {
-      countLabel: 'contributors',
+      countLabel: 'contributions',
       goalReachedPrimary: 'We\'ve hit our goal!',
       goalReachedSecondary: 'but you can still support us',
     },
