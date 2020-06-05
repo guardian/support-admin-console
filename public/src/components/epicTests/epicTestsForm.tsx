@@ -28,6 +28,27 @@ export interface Cta {
   baseUrl?: string
 }
 
+export enum TickerEndType {
+  unlimited = 'unlimited',
+  hardstop = 'hardstop'
+}
+export enum TickerCountType {
+  money = 'money',
+  people = 'people'
+}
+interface TickerCopy {
+  countLabel: string,
+  goalReachedPrimary: string,
+  goalReachedSecondary: string
+}
+
+export interface TickerSettings {
+  endType: TickerEndType,
+  countType: TickerCountType,
+  currencySymbol: string,
+  copy: TickerCopy
+}
+
 export interface EpicVariant {
   name: string,
   heading?: string,
@@ -35,6 +56,7 @@ export interface EpicVariant {
   highlightedText?: string,
   footer?: string,
   showTicker: boolean,
+  tickerSettings?: TickerSettings,
   backgroundImageUrl?: string,
   cta?: Cta,
   secondaryCta?: Cta,

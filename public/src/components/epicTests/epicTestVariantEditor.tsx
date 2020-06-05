@@ -1,10 +1,9 @@
 import React from 'react';
-import {EpicVariant, Cta} from "./epicTestsForm";
+import {EpicVariant, Cta, TickerSettings} from "./epicTestsForm";
 import {Theme, createStyles, WithStyles, withStyles} from "@material-ui/core";
 import EditableTextField from "../helpers/editableTextField";
 import CtaEditor from "./ctaEditor";
-import Switch from "@material-ui/core/Switch";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
+import TickerEditor from './tickerEditor';
 import ButtonWithConfirmationPopup from '../helpers/buttonWithConfirmationPopup';
 import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 import {onFieldValidationChange, ValidationStatus} from '../helpers/validation';
@@ -223,15 +222,11 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
           </div>
 
           <div>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={variant.showTicker}
-                  onChange={this.onVariantSwitchChange("showTicker")}
-                  disabled={!this.props.editMode}
-                />
-              }
-              label={`Ticker is ${variant.showTicker ? "on" : "off"}`}
+            <TickerEditor
+              editMode={this.props.editMode}
+              tickerSettings={variant.tickerSettings}
+              onChange={(tickerSettings) => this.updateVariant(variant => ({...variant, tickerSettings}))}
+              onValidationChange={onFieldValidationChange(this)('tickerSettings')}
             />
           </div>
 

@@ -1,10 +1,41 @@
 package models
 
+import enumeratum.{CirceEnum, Enum, EnumEntry}
 import io.circe.generic.extras.Configuration
 import io.circe.generic.extras.auto._
 import io.circe.{Decoder, Encoder}
+import scala.collection.immutable.IndexedSeq
 
 case class Cta(text: Option[String], baseUrl: Option[String])
+
+sealed trait TickerEndType extends EnumEntry
+object TickerEndType extends Enum[TickerEndType] with CirceEnum[TickerEndType] {
+  override val values: IndexedSeq[TickerEndType] = findValues
+
+  case object unlimited extends TickerEndType
+  case object hardstop extends TickerEndType
+}
+
+sealed trait TickerCountType extends EnumEntry
+object TickerCountType extends Enum[TickerCountType] with CirceEnum[TickerCountType] {
+  override val values: IndexedSeq[TickerCountType] = findValues
+
+  case object money extends TickerCountType
+  case object people extends TickerCountType
+}
+
+case class TickerCopy(
+  countLabel: String,
+  goalReachedPrimary: String,
+  goalReachedSecondary: String
+)
+
+case class TickerSettings(
+  endType: TickerEndType,
+  countType: TickerCountType,
+  currencySymbol: String,
+  copy: TickerCopy
+)
 
 case class EpicVariant(
   name: String,
@@ -12,7 +43,8 @@ case class EpicVariant(
   paragraphs: List[String],
   highlightedText: Option[String] = None,
   footer: Option[String] = None,
-  showTicker: Boolean = false,
+  showTicker: Boolean = false,  // Deprecated - use tickerSettings instead
+  tickerSettings: Option[TickerSettings] = None,
   backgroundImageUrl: Option[String] = None,
   cta: Option[Cta],
   secondaryCta: Option[Cta]
