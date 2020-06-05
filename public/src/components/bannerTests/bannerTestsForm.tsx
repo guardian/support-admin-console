@@ -348,7 +348,7 @@ requestTakeControl = () => {
                     <Typography className={classes.viewText}>Click on a test on the left to view contents.</Typography>
                   )}
                 </div>
-                {/* <EpicTestActionBar
+                {<EpicTestActionBar
                   modifiedTests={this.state.modifiedTests}
                   lockStatus={this.state.lockStatus}
                   editMode={this.state.editMode}
@@ -356,7 +356,7 @@ requestTakeControl = () => {
                   requestLock={this.requestBannerTestsLock}
                   cancel={this.cancel}
                   save={this.save}
-                /> */}
+                /> }
               </>
                :
               <CircularProgress/>

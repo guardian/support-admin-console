@@ -24,6 +24,8 @@ import TargetRegionsSelector from "../epicTests/targetRegionsSelector";
 import ArticlesViewedEditor, {defaultArticlesViewedSettings} from "../epicTests/articlesViewedEditor";
 import {articleCountTemplate} from "../epicTests/epicTestVariantEditor";
 import NewNameCreator from "../epicTests/newNameCreator";
+import EpicTestVariantsList from "../epicTests/epicTestVariantsList";
+import BannerTestVariantsList from "./bannerTestVariantsList";
 
 const styles = ({ spacing, typography}: Theme) => createStyles({
   container: {
@@ -253,6 +255,13 @@ class BannerTestEditor extends React.Component<BannerTestEditorProps, TestEditor
 
         <Typography variant={'h4'} className={classes.boldHeading}>Variants</Typography>
         <div>
+            <BannerTestVariantsList
+              variants={test.variants}
+              onVariantsListChange={this.onVariantsChange}
+              testName={test.name}
+              editMode={this.isEditable()}
+              onValidationChange={onFieldValidationChange(this)('variantsList')}
+            />
         </div>
 
         <Typography variant={'h4'} className={classes.boldHeading}>Target content</Typography>
@@ -324,8 +333,6 @@ class BannerTestEditor extends React.Component<BannerTestEditorProps, TestEditor
           </FormControl>
 
           <Typography variant={'h4'} className={this.props.classes.boldHeading}>View frequency settings</Typography>
-
-          <Typography variant={'h4'} className={this.props.classes.boldHeading}>Article count</Typography>
           <ArticlesViewedEditor
             articlesViewedSettings={test.articlesViewedSettings}
             editMode={this.isEditable()}
