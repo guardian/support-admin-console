@@ -14,7 +14,6 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import {TickerCountType, TickerEndType, TickerSettings} from "./epicTestsForm";
 import EditableTextField from "../helpers/editableTextField"
 import {onFieldValidationChange, ValidationStatus} from "../helpers/validation";
-import {getInvalidTemplateError} from "./epicTestVariantEditor";
 
 const styles = ({ spacing, typography}: Theme) => createStyles({
   formControl: {
@@ -80,6 +79,11 @@ class TickerEditor extends React.Component<Props, State> {
         }
       });
 
+    const emptyFieldCheck = (value: string): string | null => {
+      if (value.trim() === '') return "Field must not be empty";
+      else return null;
+    };
+
     const renderTextField = (value: string, fieldName: string, label: string) => (
       <EditableTextField
         text={value}
@@ -89,10 +93,7 @@ class TickerEditor extends React.Component<Props, State> {
         required={true}
         validation={
           {
-            getError: (value: string) => {
-              if (value.trim() === '') return "Field must not be empty";
-              else return getInvalidTemplateError(value);
-            },
+            getError: emptyFieldCheck,
             onChange: onFieldValidationChange(this)(fieldName)
           }
         }
@@ -117,10 +118,7 @@ class TickerEditor extends React.Component<Props, State> {
             required={true}
             validation={
               {
-                getError: (value: string) => {
-                  if (value.trim() === '') return "Field must not be empty";
-                  else return getInvalidTemplateError(value);
-                },
+                getError: emptyFieldCheck,
                 onChange: onFieldValidationChange(this)('currencySymbol')
               }
             }
