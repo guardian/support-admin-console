@@ -257,37 +257,36 @@ class BannerTestsList extends React.Component<BannerTestListProps> {
               ].join(' ');
 
               return (
-                <div>&nbsp;</div>
-                // <MuiThemeProvider
-                //   theme={theme}
-                //   key={index}
-                // >
-                //   <Tooltip
-                //     title={test.name}
-                //     aria-label="test name"
-                //     placement="right"
-                //   >
-                //     <ListItem
-                //       className={classNames}
-                //       onClick={this.onTestSelected(test.name)}
-                //       button={true}
-                //     >
-                //       { this.props.editMode ? this.renderReorderButtons(test.name, index) : <div className={classes.buttonsContainer}></div>}
-                //       <div className={classes.testText}>
-                //         <Typography
-                //           className={classes.testName}
-                //           noWrap={true}>
-                //             {test.nickname ? test.nickname : test.name.replace(toStrip, '')}
-                //         </Typography>
+                <MuiThemeProvider
+                  theme={theme}
+                  key={index}
+                >
+                  <Tooltip
+                    title={test.name}
+                    aria-label="test name"
+                    placement="right"
+                  >
+                    <ListItem
+                      className={classNames}
+                      onClick={this.onTestSelected(test.name)}
+                      button={true}
+                    >
+                      { this.props.editMode ? this.renderReorderButtons(test.name, index) : <div className={classes.buttonsContainer}></div>}
+                      <div className={classes.testText}>
+                        <Typography
+                          className={classes.testName}
+                          noWrap={true}>
+                            {test.nickname ? test.nickname : test.name.replace(toStrip, '')}
+                        </Typography>
 
-                //         {(testStatus && testStatus.isDeleted) && (<div><Typography className={classes.toBeDeleted}>To be deleted</Typography></div>)}
+                        {(testStatus && testStatus.isDeleted) && (<div><Typography className={classes.toBeDeleted}>To be deleted</Typography></div>)}
 
-                //         {(testStatus && testStatus.isArchived) && (<div><Typography className={classes.toBeArchived}>To be archived</Typography></div>)}
-                //       </div>
-                //       {testStatus && (testStatus.isDeleted || testStatus.isArchived) ? this.renderDeletedOrArchivedIcon(testStatus) : renderVisibilityIcons(test.isOn)}
-                //     </ListItem>
-                //   </Tooltip>
-                // </MuiThemeProvider>
+                        {(testStatus && testStatus.isArchived) && (<div><Typography className={classes.toBeArchived}>To be archived</Typography></div>)}
+                      </div>
+                      {testStatus && (testStatus.isDeleted || testStatus.isArchived) ? this.renderDeletedOrArchivedIcon(testStatus) : renderVisibilityIcons(test.isOn)}
+                    </ListItem>
+                  </Tooltip>
+                </MuiThemeProvider>
               )
             })}
           </List>

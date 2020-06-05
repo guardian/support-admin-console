@@ -15,7 +15,17 @@ import {
   archiveBannerTest
 } from "../../utils/requests";
 import BannerTestsList from "./BannerTestsList";
-import { UserCohort, Cta, ArticlesViewedSettings, LockStatus, TestStatus, ModifiedTests } from ".././epicTests/epicTestsForm";
+import {
+  UserCohort,
+  Cta,
+  ArticlesViewedSettings,
+  LockStatus,
+  TestStatus,
+  ModifiedTests,
+  EpicTest
+} from ".././epicTests/epicTestsForm";
+import EpicTestEditor from "../epicTests/epicTestEditor";
+import BannerTestEditor from "./bannerTestEditor";
 
 interface BannerTests {
   tests: BannerTest[]
@@ -310,10 +320,32 @@ requestTakeControl = () => {
                   />
 
                   {this.state.selectedTestName ? this.state.tests.map(test =>
-                    (<div>&nbsp;</div>)
+                    (<BannerTestEditor
+                      test={this.state.tests.find(test => test.name === this.state.selectedTestName)}
+                      hasChanged={!!this.state.modifiedTests[test.name]}
+                      onChange={this.onTestChange}
+                      onValidationChange={this.onTestErrorStatusChange(test.name)}
+                      visible={test.name === this.state.selectedTestName}
+                      key={test.name}
+                      editMode={this.state.editMode}
+                      onDelete={this.onTestDelete}
+                      onArchive={this.onTestArchive}
+                      isDeleted={this.state.modifiedTests[test.name] && this.state.modifiedTests[test.name].isDeleted}
+                      isArchived={this.state.modifiedTests[test.name] && this.state.modifiedTests[test.name].isArchived}
+                      isNew={this.state.modifiedTests[test.name] && this.state.modifiedTests[test.name].isNew}
+                      createTest={(newTest: BannerTest) => {
+                        const newTests = [...this.state.tests, newTest];
+                        this.onTestsChange(newTests, newTest.name)
+                      }}
+                      testNames={this.state.tests.map(test => test.name)}
+                      testNicknames={
+                        this.state.tests
+                          .map(test => test.nickname)
+                          .filter(nickname => !!nickname) as string[]
+                      }
+                    />)
                   ) : (
-                    // <Typography className={classes.viewText}>Click on a test on the left to view contents.</Typography>
-                    <div>&nbsp;</div>
+                    <Typography className={classes.viewText}>Click on a test on the left to view contents.</Typography>
                   )}
                 </div>
                 {/* <EpicTestActionBar
