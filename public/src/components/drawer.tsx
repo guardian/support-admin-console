@@ -155,7 +155,7 @@ export default function NavDrawer() {
 
       <div>
         <h2 className={classes.sectionHeader}>Help Centre</h2>
-        <a href='https://docs.google.com/document/d/1PT-xQRrk9g-w-Tv9Du2G6aEXenSc806hEcQlZsvaJS0' key='Testing FAQ' className={classes.link}>
+        <a href='https://docs.google.com/document/d/15XeUDHMSt7Urv0I3LyAAhC8kcC2JRWtkiD1xlEVitcE' key='Testing FAQ' className={classes.link}>
           <ListItem className={classes.listItem} button key='Testing FAQ'>
             <ListItemText primary='Testing FAQ'/>
           </ListItem>
