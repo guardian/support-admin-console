@@ -41,7 +41,7 @@ export interface BannerTest {
   nickname?: string,
   isOn: boolean,
   minArticlesBeforeShowingBanner: number,
-  userCohort: UserCohort[],
+  userCohort: UserCohort,
   products?: OphanProduct[],
   locations: Region[],
   variants: BannerVariant[],

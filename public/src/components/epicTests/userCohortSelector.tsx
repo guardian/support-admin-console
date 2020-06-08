@@ -23,112 +23,127 @@ const styles = ({ spacing, typography }: Theme) => createStyles({
 });
 
 interface UserCohortSelectorProps extends WithStyles<typeof styles> {
-  cohorts: UserCohort,
+  cohort: UserCohort,
   onCohortsUpdate: (selectedCohort: UserCohort) => void,
   isEditable: boolean,
 }
 
 interface UserCohortSelectorState {
-  selectedCohorts: UserCohort[],
+  // selectedCohorts: UserCohort[],
+  Everyone: boolean,
+  AllExistingSupporters: boolean,
+  AllNonSupporters: boolean,
+  PostAskPauseSingleContributors: boolean,
 }
 
 class UserCohortSelector extends React.Component<UserCohortSelectorProps, UserCohortSelectorState> {
 
-  allCohorts: UserCohort[] = Object.values(UserCohort);
+  defaultCohort = UserCohort['AllNonSupporters'];
 
-  indeterminateStatus = (): boolean => this.state.selectedCohorts.length > 0 && this.state.selectedCohorts.length < this.allCohorts.length;
+  currentCohort = this.props.cohort;
+
+  indeterminateStatus = (): boolean => !this.state.Everyone;
+
+  getUserCohort = (): UserCohort => {
+    switch(true) {
+      case this.state.Everyone: {
+        return UserCohort['Everyone']
+      }
+      case this.state.AllExistingSupporters: {
+        return UserCohort['AllExistingSupporters']
+      }
+      case this.state.AllNonSupporters: {
+        return UserCohort['AllNonSupporters']
+      }
+      default: {
+        return this.defaultCohort
+      }
+    }
+  }
 
   state: UserCohortSelectorState = {
-    selectedCohorts: this.props.cohorts,
+    // selectedCohorts: [this.currentCohort],
+    Everyone: this.currentCohort === UserCohort['Everyone'],
+    AllExistingSupporters: this.currentCohort === UserCohort['AllExistingSupporters'],
+    AllNonSupporters: this.currentCohort === UserCohort['AllNonSupporters'],
+    PostAskPauseSingleContributors: false,
   }
 
   onAllCohortsChange = (event: React.ChangeEvent<{ value: string; checked: boolean }>) => {
       this.setState({
-        selectedCohorts: event.target.checked ? this.allCohorts : []
+        Everyone: event.target.checked,
+        AllExistingSupporters: event.target.checked,
+        AllNonSupporters: true,
       },
-        () => this.props.onCohortsUpdate(this.state.selectedCohorts)
+        () => this.props.onCohortsUpdate(this.state.Everyone ? UserCohort['Everyone'] : this.defaultCohort)
       );
   }
 
-  onSingleCohortChange = (event: React.ChangeEvent<{ value: string; checked: boolean }>) => {
+  onSingleCohortChange = (event: React.ChangeEvent<{ value: string; checked: boolean }>, cohort: UserCohort) => {
     const checked = event.target.checked;
     const changedCohort = event.target.value;
 
-    const newSelectedCohorts = () => {
-      if (checked) {
-        return [...this.state.selectedCohorts, changedCohort as UserCohort]
-      } else {
-        const cohortIndex = this.state.selectedCohorts.indexOf(changedCohort as UserCohort);
-        return this.state.selectedCohorts.filter((_, index) => index !== cohortIndex)
-      }
-    };
+    // const newSelectedCohorts = () => {
+    //   if (checked) {
+    //     return [...this.state.selectedCohorts, changedCohort as UserCohort]
+    //   } else {
+    //     const cohortIndex = this.state.selectedCohorts.indexOf(changedCohort as UserCohort);
+    //     return this.state.selectedCohorts.filter((_, index) => index !== cohortIndex)
+    //   }
+    // };
 
     this.setState({
-      selectedCohorts: newSelectedCohorts()
+      AllExistingSupporters: checked ? changedCohort === cohort : false,
+      AllNonSupporters: checked ? changedCohort === cohort : false,
     },
-      () => this.props.onCohortsUpdate(this.state.selectedCohorts)
+      () => {
+        this.setState({
+          Everyone: this.state.AllExistingSupporters && this.state.AllNonSupporters
+        })
+        this.props.onCohortsUpdate(this.getUserCohort())}
     );
   }
 
   render(): React.ReactNode {
     const { classes } = this.props;
 
-  //   <FormControl
-  //   className={classes.formControl}>
-  //   <InputLabel
-  //     className={classes.selectLabel}
-  //     shrink
-  //     htmlFor="user-cohort">
-  //     Supporter status
-  //   </InputLabel>
-  //   <RadioGroup
-  //     className={classes.radio}
-  //     value={test.userCohort}
-  //     onChange={this.onUserCohortChange}
-  //   >
-  //     {Object.values(UserCohort).map(cohort =>
-  //       <FormControlLabel
-  //         value={cohort}
-  //         key={cohort}
-  //         control={<Radio />}
-  //         label={cohort}
-  //         disabled={!this.isEditable()}
-  //       />
-  //     )}
-  //   </RadioGroup>
-  // </FormControl>
-
     return (
       <>
         <Typography className={classes.selectLabel}>Cohort</Typography>
           <FormGroup>
-            <FormControlLabel
+            {Object.values(UserCohort).map(cohort => (
+            cohort === 'Everyone' ? (
+              <FormControlLabel
+              key={cohort}
               control={
                 <Checkbox
-                  checked={this.state.selectedCohorts.length === this.allCohorts.length}
+                  checked={this.state.Everyone}
                   onChange={this.onAllCohortsChange}
-                  value={'allCohorts'}
-                  indeterminate={this.indeterminateStatus()}
+                  value={cohort}
+                  // indeterminate={this.indeterminateStatus()}
+                  indeterminate={false}
                 />
               }
-              label={'All cohorts'}
+              label={'Everyone'}
               disabled={!this.props.isEditable}
-            />
-            {this.allCohorts.map(cohort => (
-              <FormControlLabel
+              />
+            ) :
+            (
+              cohort !== 'PostAskPauseSingleContributors' && (
+                <FormControlLabel
                 key={cohort}
                 control={
                   <Checkbox
                     className={classes.indentedCheckbox}
-                    checked={this.state.selectedCohorts.indexOf(cohort) > -1}
-                    onChange={this.onSingleCohortChange}
+                    checked={cohort === UserCohort['AllNonSupporters'] ? this.state[cohort] || (!this.state[cohort] && !this.state.Everyone && !this.state.AllExistingSupporters) : this.state[cohort]}
+                    onChange={event => this.onSingleCohortChange(event, cohort)}
                     value={cohort}
                   />
                 }
                 label={UserCohort[cohort]}
                 disabled={!this.props.isEditable}
               />
-            ))}
+              ))))}
         </FormGroup>
       </>
     )

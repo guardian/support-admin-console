@@ -186,10 +186,9 @@ class BannerTestEditor extends React.Component<BannerTestEditorProps, TestEditor
     this.updateTest(test => ({...test, [fieldName]: updatedBool}));
   }
 
-  onUserCohortChange = (selectedCohorts: UserCohort[]): void => {
-    this.updateTest(test => ({...test, 'userCohort': selectedCohorts}));
+  onUserCohortChange = (selectedCohort: UserCohort): void => {
+    this.updateTest(test => ({...test, "userCohort": selectedCohort}));
   }
-
 
   onTargetRegionsChange = (selectedRegions: Region[]): void => {
     this.updateTest(test => ({...test, 'locations': selectedRegions}));
@@ -278,7 +277,7 @@ class BannerTestEditor extends React.Component<BannerTestEditorProps, TestEditor
           />
 
           <UserCohortSelector
-            cohorts={test.userCohort}
+            cohort={test.userCohort}
             onCohortsUpdate={this.onUserCohortChange}
             isEditable={this.isEditable()}
           />
