@@ -184,7 +184,7 @@ class BannerTestsForm extends React.Component<BannerTestFormProps, BannerTestFor
           }
         });
 
-        saveFrontendSettings(FrontendSettingsType.epicTests, newState)
+        saveFrontendSettings(FrontendSettingsType.bannerTests, newState)
           .then(resp => {
             if (!resp.ok) {
               resp.text().then(msg => alert(msg));
