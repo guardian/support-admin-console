@@ -22,7 +22,6 @@ import {
   LockStatus,
   TestStatus,
   ModifiedTests,
-  EpicTest
 } from ".././epicTests/epicTestsForm";
 import EpicTestEditor from "../epicTests/epicTestEditor";
 import BannerTestEditor from "./bannerTestEditor";
@@ -37,7 +36,17 @@ interface BannerDataFromServer {
   lockStatus: LockStatus,
   userEmail: string,
 };
-
+export interface BannerTest {
+  name: string,
+  nickname?: string,
+  isOn: boolean,
+  minArticlesBeforeShowingBanner: number,
+  userCohort: UserCohort[],
+  products?: OphanProduct[],
+  locations: Region[],
+  variants: BannerVariant[],
+  articlesViewedSettings?: ArticlesViewedSettings,
+}
 export interface BannerVariant {
   name: string,
   headline?: string,
@@ -48,6 +57,15 @@ export interface BannerVariant {
   hasTicker: boolean,
 }
 
+type BannerTestFormState = BannerTests & {
+  previousStateFromServer: BannerDataFromServer | null,
+  selectedTestName?: string,
+  editMode: boolean,
+  lockStatus: LockStatus,
+  modifiedTests: ModifiedTests,
+  timeoutAlertId: number | null,  // A timeout for warning about being open for edit for too long
+};
+
 export enum OphanProduct {
   CONTRIBUTION = 'CONTRIBUTION',
   RECURRING_CONTRIBUTION = 'RECURRING_CONTRIBUTION',
@@ -57,27 +75,6 @@ export enum OphanProduct {
   DIGITAL_SUBSCRIPTION = 'DIGITAL_SUBSCRIPTION',
   PRINT_SUBSCRIPTION = 'PRINT_SUBSCRIPTION',
 }
-
-export interface BannerTest {
-  name: string,
-  nickname?: string,
-  isOn: boolean,
-  minArticlesBeforeShowingBanner: number,
-  userCohort: UserCohort,
-  products?: OphanProduct[],
-  locations: Region[],
-  variants: BannerVariant[],
-  articlesViewedSettings?: ArticlesViewedSettings,
-}
-
-type BannerTestFormState = BannerTests & {
-  previousStateFromServer: BannerDataFromServer | null,
-  selectedTestName?: string,
-  editMode: boolean,
-  lockStatus: LockStatus,
-  modifiedTests: ModifiedTests,
-  timeoutAlertId: number | null,  // A timeout for warning about being open for edit for too long
-};
 
 const styles = ({ spacing, typography }: Theme) => createStyles({
   testListAndEditor: {

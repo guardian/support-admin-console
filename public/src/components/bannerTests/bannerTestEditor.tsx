@@ -12,7 +12,9 @@ import {
   Theme,
   Typography,
   WithStyles,
-  withStyles
+  withStyles,
+  FormGroup,
+  Checkbox,
 } from "@material-ui/core";
 import {onFieldValidationChange} from '../helpers/validation';
 import ButtonWithConfirmationPopup from '../helpers/buttonWithConfirmationPopup';
@@ -24,8 +26,8 @@ import TargetRegionsSelector from "../epicTests/targetRegionsSelector";
 import ArticlesViewedEditor, {defaultArticlesViewedSettings} from "../epicTests/articlesViewedEditor";
 import {articleCountTemplate} from "../epicTests/epicTestVariantEditor";
 import NewNameCreator from "../epicTests/newNameCreator";
-import EpicTestVariantsList from "../epicTests/epicTestVariantsList";
 import BannerTestVariantsList from "./bannerTestVariantsList";
+import UserCohortSelector from ".././epicTests/userCohortSelector";
 
 const styles = ({ spacing, typography}: Theme) => createStyles({
   container: {
@@ -94,6 +96,9 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
     marginRight: spacing(6),
     fontSize: typography.pxToRem(18),
   },
+  hr: {
+    width: '100%',
+  }
 });
 
 const copyHasTemplate = (test: BannerTest, template: string): boolean => test.variants.some(variant =>
@@ -181,9 +186,8 @@ class BannerTestEditor extends React.Component<BannerTestEditorProps, TestEditor
     this.updateTest(test => ({...test, [fieldName]: updatedBool}));
   }
 
-  onUserCohortChange = (event: React.ChangeEvent<{}>, value: string): void => {
-    let selectedCohort = value as UserCohort;
-    this.updateTest(test => ({...test, "userCohort": selectedCohort}));
+  onUserCohortChange = (selectedCohorts: UserCohort[]): void => {
+    this.updateTest(test => ({...test, 'userCohort': selectedCohorts}));
   }
 
 
@@ -264,41 +268,7 @@ class BannerTestEditor extends React.Component<BannerTestEditorProps, TestEditor
             />
         </div>
 
-        <Typography variant={'h4'} className={classes.boldHeading}>Target content</Typography>
-
         <div>
-          {/*<EditableTextField*/}
-          {/*  text={test.join(",")}*/}
-          {/*  onSubmit={this.onListChange('tagIds')}*/}
-          {/*  label="Target tags"*/}
-          {/*  helperText="Format: environment/wildlife,business/economics"*/}
-          {/*  editEnabled={this.isEditable()}*/}
-          {/*/>*/}
-
-          {/*<EditableTextField*/}
-          {/*  text={test.sections.join(",")}*/}
-          {/*  onSubmit={this.onListChange('sections')}*/}
-          {/*  label="Target sections"*/}
-          {/*  helperText="Format: environment,business"*/}
-          {/*  editEnabled={this.isEditable()}*/}
-          {/*/>*/}
-
-          {/*<EditableTextField*/}
-          {/*  text={test.excludedTagIds.join(",")}*/}
-          {/*  onSubmit={this.onListChange('excludedTagIds')}*/}
-          {/*  label="Excluded tags"*/}
-          {/*  helperText="Format: environment/wildlife,business/economics"*/}
-          {/*  editEnabled={this.isEditable()}*/}
-          {/*/>*/}
-
-          {/*<EditableTextField*/}
-          {/*  text={test.excludedSections.join(",")}*/}
-          {/*  onSubmit={this.onListChange('excludedSections')}*/}
-          {/*  label="Excluded sections"*/}
-          {/*  helperText="Format: environment,business"*/}
-          {/*  editEnabled={this.isEditable()}*/}
-          {/*/>*/}
-
           <Typography variant={'h4'} className={classes.boldHeading}>Target audience</Typography>
 
           <TargetRegionsSelector
@@ -307,32 +277,15 @@ class BannerTestEditor extends React.Component<BannerTestEditorProps, TestEditor
             isEditable={this.isEditable()}
           />
 
-          <FormControl
-            className={classes.formControl}>
-            <InputLabel
-              className={classes.selectLabel}
-              shrink
-              htmlFor="user-cohort">
-              Supporter status
-            </InputLabel>
-            <RadioGroup
-              className={classes.radio}
-              value={test.userCohort}
-              onChange={this.onUserCohortChange}
-            >
-              {Object.values(UserCohort).map(cohort =>
-                <FormControlLabel
-                  value={cohort}
-                  key={cohort}
-                  control={<Radio />}
-                  label={cohort}
-                  disabled={!this.isEditable()}
-                />
-              )}
-            </RadioGroup>
-          </FormControl>
+          <UserCohortSelector
+            cohorts={test.userCohort}
+            onCohortsUpdate={this.onUserCohortChange}
+            isEditable={this.isEditable()}
+          />
 
-          <Typography variant={'h4'} className={this.props.classes.boldHeading}>View frequency settings</Typography>
+
+
+          <hr className={classes.hr} />
           <ArticlesViewedEditor
             articlesViewedSettings={test.articlesViewedSettings}
             editMode={this.isEditable()}
