@@ -5,7 +5,7 @@ import {
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {onFieldValidationChange, ValidationStatus} from '../helpers/validation';
 import {BannerVariant} from "./bannerTestsForm";
-import BannerTestVariantEditor, {defaultCta} from "./BannerTestVariantEditor";
+import BannerTestVariantEditor, {defaultCta} from "./bannerTestVariantEditor";
 import NewNameCreator from "../epicTests/newNameCreator";
 
 
@@ -39,7 +39,7 @@ type BannerTestVariantsListState = {
   expandedVariantKey?: string,
   validationStatus: ValidationStatus
 }
-class BannerTestVariantsList extends React.Component<BannerTestVariantsListProps, EpicTestVariantsListState> {
+class BannerTestVariantsList extends React.Component<BannerTestVariantsListProps, BannerTestVariantsListState> {
 
   state: BannerTestVariantsListState = {
     expandedVariantKey: undefined,
