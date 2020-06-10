@@ -29,7 +29,6 @@ interface UserCohortSelectorProps extends WithStyles<typeof styles> {
 }
 
 interface UserCohortSelectorState {
-  // selectedCohorts: UserCohort[],
   Everyone: boolean,
   AllExistingSupporters: boolean,
   AllNonSupporters: boolean,
@@ -62,7 +61,6 @@ class UserCohortSelector extends React.Component<UserCohortSelectorProps, UserCo
   }
 
   state: UserCohortSelectorState = {
-    // selectedCohorts: [this.currentCohort],
     Everyone: this.currentCohort === UserCohort['Everyone'],
     AllExistingSupporters: this.currentCohort === UserCohort['AllExistingSupporters'],
     AllNonSupporters: this.currentCohort === UserCohort['AllNonSupporters'],
@@ -80,28 +78,56 @@ class UserCohortSelector extends React.Component<UserCohortSelectorProps, UserCo
   }
 
   onSingleCohortChange = (event: React.ChangeEvent<{ value: string; checked: boolean }>, cohort: UserCohort) => {
-    const checked = event.target.checked;
-    const changedCohort = event.target.value;
+    const checked = event.target.checked; //whether ticked or unticked
+    const changedCohort = event.target.value; //the name of the checkbox
 
-    // const newSelectedCohorts = () => {
-    //   if (checked) {
-    //     return [...this.state.selectedCohorts, changedCohort as UserCohort]
-    //   } else {
-    //     const cohortIndex = this.state.selectedCohorts.indexOf(changedCohort as UserCohort);
-    //     return this.state.selectedCohorts.filter((_, index) => index !== cohortIndex)
-    //   }
-    // };
-
-    this.setState({
-      AllExistingSupporters: checked ? changedCohort === cohort : false,
-      AllNonSupporters: checked ? changedCohort === cohort : false,
-    },
-      () => {
+    if (changedCohort === UserCohort['AllExistingSupporters']){
+      if (checked){
+        if (this.state.AllNonSupporters){
+          this.setState({
+            Everyone: true,
+            AllExistingSupporters: true,
+            AllNonSupporters: true,
+          })
+        }
+      } else {
+        if (this.state.AllNonSupporters){
+          this.setState({
+            Everyone: false,
+            AllExistingSupporters: false,
+          })
+        } else {
+          this.setState({
+            Everyone: false,
+            AllExistingSupporters: false,
+            AllNonSupporters: true,
+          })
+        }
+      }
+    } else {
+      if (checked){
+        if (this.state.AllExistingSupporters) {
+          this.setState({
+            Everyone: true,
+            AllExistingSupporters: true,
+            AllNonSupporters: true,
+          })
+        }
+        else { //all existing supporters unchecked
+          this.setState({
+            Everyone: false,
+            AllExistingSupporters: false,
+            AllNonSupporters: true,
+          })
+        }
+      } else {
         this.setState({
-          Everyone: this.state.AllExistingSupporters && this.state.AllNonSupporters
+          Everyone: false,
+          AllExistingSupporters: true,
+          AllNonSupporters: false,
         })
-        this.props.onCohortsUpdate(this.getUserCohort())}
-    );
+      }
+    }
   }
 
   render(): React.ReactNode {
@@ -120,7 +146,6 @@ class UserCohortSelector extends React.Component<UserCohortSelectorProps, UserCo
                   checked={this.state.Everyone}
                   onChange={this.onAllCohortsChange}
                   value={cohort}
-                  // indeterminate={this.indeterminateStatus()}
                   indeterminate={false}
                 />
               }
@@ -135,7 +160,7 @@ class UserCohortSelector extends React.Component<UserCohortSelectorProps, UserCo
                 control={
                   <Checkbox
                     className={classes.indentedCheckbox}
-                    checked={cohort === UserCohort['AllNonSupporters'] ? this.state[cohort] || (!this.state[cohort] && !this.state.Everyone && !this.state.AllExistingSupporters) : this.state[cohort]}
+                    checked={this.state[cohort]}
                     onChange={event => this.onSingleCohortChange(event, cohort)}
                     value={cohort}
                   />
