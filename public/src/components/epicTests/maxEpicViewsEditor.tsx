@@ -9,10 +9,10 @@ import {
   WithStyles
 } from "@material-ui/core";
 import EditableTextField from "../helpers/editableTextField"
-import {onFieldValidationChange, ValidationStatus} from "../helpers/validation";
+import {onFieldValidationChange, ValidationStatus, isNumber} from "../helpers/validation";
 import {EpicTest, MaxEpicViews} from "./epicTestsForm";
 
-const isNumber = (value: string): boolean => !Number.isNaN(Number(value));
+
 
 export const MaxEpicViewsDefaults: MaxEpicViews = {
   maxViewsCount: 4,

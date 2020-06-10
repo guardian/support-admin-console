@@ -16,7 +16,7 @@ import {
   FormGroup,
   Checkbox,
 } from "@material-ui/core";
-import {onFieldValidationChange} from '../helpers/validation';
+import {onFieldValidationChange, isNumber} from '../helpers/validation';
 import ButtonWithConfirmationPopup from '../helpers/buttonWithConfirmationPopup';
 import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 import ArchiveIcon from '@material-ui/icons/Archive';
@@ -28,6 +28,8 @@ import {articleCountTemplate} from "../epicTests/epicTestVariantEditor";
 import NewNameCreator from "../epicTests/newNameCreator";
 import BannerTestVariantsList from "./bannerTestVariantsList";
 import UserCohortSelector from ".././epicTests/userCohortSelector";
+import EditableTextField from "../helpers/editableTextField"
+
 
 const styles = ({ spacing, typography}: Theme) => createStyles({
   container: {
@@ -151,10 +153,10 @@ class BannerTestEditor extends React.Component<BannerTestEditorProps, TestEditor
 
       this.props.onChange({
         ...updatedTest,
+        // TODO: Ask Tom about this
         // To save dotcom from having to work this out
         // hasCountryName: copyHasTemplate(updatedTest, countryNameTemplate),
         articlesViewedSettings: this.getArticlesViewedSettings(updatedTest),
-        minArticlesBeforeShowingBanner: 5,
       })
     }
   }
@@ -268,6 +270,27 @@ class BannerTestEditor extends React.Component<BannerTestEditorProps, TestEditor
         </div>
 
         <div>
+          <Typography variant={'h4'} className={classes.boldHeading}>Display rules</Typography>
+          <EditableTextField
+            text={test.minArticlesBeforeShowingBanner.toString()}
+            onSubmit={(pageViews: string) =>
+              this.updateTest(test => ({ ...test, minArticlesBeforeShowingBanner: Number(pageViews)}))
+            }
+            label={'Show the banner on'}
+            helperText="Must be a number"
+            editEnabled={this.props.editMode}
+            validation={
+              {
+                getError: (value: string) => isNumber(value) ? null : 'Must be a number',
+                onChange: onFieldValidationChange(this)('minArticlesBeforeShowingBanner')
+              }
+            }
+            isNumberField
+        />
+        <Typography>page views</Typography>
+        </div>
+
+        <div>
           <Typography variant={'h4'} className={classes.boldHeading}>Target audience</Typography>
 
           <TargetRegionsSelector
@@ -281,8 +304,6 @@ class BannerTestEditor extends React.Component<BannerTestEditorProps, TestEditor
             onCohortsUpdate={this.onUserCohortChange}
             isEditable={this.isEditable()}
           />
-
-
 
           <hr className={classes.hr} />
           <ArticlesViewedEditor

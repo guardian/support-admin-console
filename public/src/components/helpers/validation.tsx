@@ -54,3 +54,5 @@ export const onFieldValidationChange = <
     component.props.onValidationChange(!hasInvalidField);
   });
 };
+
+export const isNumber = (value: string): boolean => !Number.isNaN(Number(value));
