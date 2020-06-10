@@ -41,8 +41,6 @@ class UserCohortSelector extends React.Component<UserCohortSelectorProps, UserCo
 
   currentCohort = this.props.cohort;
 
-  indeterminateStatus = (): boolean => !this.state.Everyone;
-
   getUserCohort = (): UserCohort => {
     switch(true) {
       case this.state.Everyone: {
@@ -62,8 +60,8 @@ class UserCohortSelector extends React.Component<UserCohortSelectorProps, UserCo
 
   state: UserCohortSelectorState = {
     Everyone: this.currentCohort === UserCohort['Everyone'],
-    AllExistingSupporters: this.currentCohort === UserCohort['AllExistingSupporters'],
-    AllNonSupporters: this.currentCohort === UserCohort['AllNonSupporters'],
+    AllExistingSupporters: this.currentCohort === UserCohort['AllExistingSupporters'] || this.currentCohort === UserCohort['Everyone'] ,
+    AllNonSupporters: this.currentCohort === UserCohort['AllNonSupporters'] || this.currentCohort === UserCohort['Everyone'],
     PostAskPauseSingleContributors: false,
   }
 
@@ -81,53 +79,52 @@ class UserCohortSelector extends React.Component<UserCohortSelectorProps, UserCo
     const checked = event.target.checked; //whether ticked or unticked
     const changedCohort = event.target.value; //the name of the checkbox
 
-    if (changedCohort === UserCohort['AllExistingSupporters']){
-      if (checked){
-        if (this.state.AllNonSupporters){
-          this.setState({
-            Everyone: true,
-            AllExistingSupporters: true,
-            AllNonSupporters: true,
-          })
+    const updateState = (save?: () => void) => {
+      if (changedCohort === UserCohort['AllExistingSupporters']) {
+        if (checked) {
+          if (this.state.AllNonSupporters) {
+            this.setState({
+              Everyone: true,
+              AllExistingSupporters: true,
+            }, save)
+          }
+        } else {
+          if (this.state.AllNonSupporters) {
+            this.setState({
+              Everyone: false,
+              AllExistingSupporters: false,
+            },save)
+          } else {
+            this.setState({
+              Everyone: false,
+              AllExistingSupporters: false,
+              AllNonSupporters: true,
+            },save)
+          }
         }
       } else {
-        if (this.state.AllNonSupporters){
-          this.setState({
-            Everyone: false,
-            AllExistingSupporters: false,
-          })
+        if (checked) {
+          if (this.state.AllExistingSupporters) {
+            this.setState({
+              Everyone: true,
+              AllNonSupporters: true,
+            },save)
+          } else { //all existing supporters unchecked
+            this.setState({
+              Everyone: false,
+              AllNonSupporters: true,
+            },save)
+          }
         } else {
           this.setState({
             Everyone: false,
-            AllExistingSupporters: false,
-            AllNonSupporters: true,
-          })
-        }
-      }
-    } else {
-      if (checked){
-        if (this.state.AllExistingSupporters) {
-          this.setState({
-            Everyone: true,
             AllExistingSupporters: true,
-            AllNonSupporters: true,
-          })
+            AllNonSupporters: false,
+          },save)
         }
-        else { //all existing supporters unchecked
-          this.setState({
-            Everyone: false,
-            AllExistingSupporters: false,
-            AllNonSupporters: true,
-          })
-        }
-      } else {
-        this.setState({
-          Everyone: false,
-          AllExistingSupporters: true,
-          AllNonSupporters: false,
-        })
       }
     }
+    updateState(() => this.props.onCohortsUpdate(this.getUserCohort()))
   }
 
   render(): React.ReactNode {
