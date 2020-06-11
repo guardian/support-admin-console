@@ -2,9 +2,9 @@ import React from 'react';
 import update from 'immutability-helper';
 import {createStyles, Theme, withStyles, WithStyles, Typography} from "@material-ui/core";
 // import EpicTestEditor from './epicTestEditor';
-import EpicTestActionBar from '.././epicTests/epicTestActionBar';
+import EpicTestActionBar from '../epicTests/epicTestActionBar';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import {Region} from "../../utils/models";
+import {Region} from "../../../utils/models";
 import {
   fetchFrontendSettings,
   FrontendSettingsType,
@@ -13,7 +13,7 @@ import {
   requestTakeControl,
   requestUnlock,
   archiveBannerTest
-} from "../../utils/requests";
+} from "../../../utils/requests";
 import BannerTestsList from "./BannerTestsList";
 import {
   UserCohort,
@@ -22,7 +22,7 @@ import {
   LockStatus,
   TestStatus,
   ModifiedTests,
-} from ".././epicTests/epicTestsForm";
+} from "../epicTests/epicTestsForm";
 import EpicTestEditor from "../epicTests/epicTestEditor";
 import BannerTestEditor from "./bannerTestEditor";
 

@@ -1,37 +1,35 @@
-import React, { ReactNode } from 'react';
-import { Region } from '../../utils/models';
-import {EpicTest, EpicVariant, UserCohort, MaxEpicViews, ArticlesViewedSettings} from "./epicTestsForm";
+import React from 'react';
+import {Region} from '../../../utils/models';
+import {ArticlesViewedSettings, UserCohort} from "../epicTests/epicTestsForm"; //toDo make all shared
 import {
-  Checkbox,
+  createStyles,
   FormControl,
   FormControlLabel,
-  FormGroup,
-  Input,
   InputLabel,
-  ListItemText,
-  MenuItem,
   Radio,
   RadioGroup,
-  Select,
   Switch,
   Theme,
   Typography,
   WithStyles,
-  createStyles,
-  withStyles
+  withStyles,
+  FormGroup,
+  Checkbox,
 } from "@material-ui/core";
-import EditableTextField from '../helpers/editableTextField';
-import EpicTestVariantsList from './epicTestVariantsList';
-import MaxEpicViewsEditor from './maxEpicViewsEditor';
-import {onFieldValidationChange, ValidationStatus} from '../helpers/validation';
+import {onFieldValidationChange, isNumber} from '../helpers/validation';
 import ButtonWithConfirmationPopup from '../helpers/buttonWithConfirmationPopup';
 import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 import ArchiveIcon from '@material-ui/icons/Archive';
-import {articleCountTemplate, countryNameTemplate} from './epicTestVariantEditor';
-import ArticlesViewedEditor, {defaultArticlesViewedSettings} from './articlesViewedEditor';
-import NewNameCreator from './newNameCreator';
-import EpicTypeComponent, {EpicType} from './epicTypeComponent';
-import TargetRegionsSelector from './targetRegionsSelector';
+import {TestEditorState} from "../epicTests/epicTestEditor";
+import {BannerTest, BannerVariant} from "./bannerTestsForm";
+import TargetRegionsSelector from "../epicTests/targetRegionsSelector";
+import ArticlesViewedEditor, {defaultArticlesViewedSettings} from "../epicTests/articlesViewedEditor";
+import {articleCountTemplate} from "../epicTests/epicTestVariantEditor";
+import NewNameCreator from "../epicTests/newNameCreator";
+import BannerTestVariantsList from "./bannerTestVariantsList";
+import UserCohortSelector from "../epicTests/userCohortSelector";
+import EditableTextField from "../helpers/editableTextField"
+
 
 const styles = ({ spacing, typography}: Theme) => createStyles({
   container: {
@@ -100,17 +98,20 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
     marginRight: spacing(6),
     fontSize: typography.pxToRem(18),
   },
+  hr: {
+    width: '100%',
+  }
 });
 
-const copyHasTemplate = (test: EpicTest, template: string): boolean => test.variants.some(variant =>
+const copyHasTemplate = (test: BannerTest, template: string): boolean => test.variants.some(variant =>
   variant.heading && variant.heading.includes(template) ||
-  variant.paragraphs.some(para => para.includes(template))
+  variant.body.includes(template)
 );
 
-interface EpicTestEditorProps extends WithStyles<typeof styles> {
-  test?: EpicTest,
+interface BannerTestEditorProps extends WithStyles<typeof styles> {
+  test?: BannerTest,
   hasChanged: boolean,
-  onChange: (updatedTest: EpicTest) => void,
+  onChange: (updatedTest: BannerTest) => void,
   onValidationChange: (isValid: boolean) => void,
   visible: boolean,
   editMode: boolean,
@@ -121,16 +122,12 @@ interface EpicTestEditorProps extends WithStyles<typeof styles> {
   isNew: boolean,
   testNames: string[],
   testNicknames: string[],
-  createTest: (newTest: EpicTest) => void
-}
-//todo move to shared
-export interface TestEditorState {
-  validationStatus: ValidationStatus
+  createTest: (newTest: BannerTest) => void
 }
 
 const areYouSure = `Are you sure? This can't be undone without cancelling entire edit session!`;
 
-class EpicTestEditor extends React.Component<EpicTestEditorProps, TestEditorState> {
+class BannerTestEditor extends React.Component<BannerTestEditorProps, TestEditorState> {
 
   state: TestEditorState = {
     validationStatus: {}
@@ -140,7 +137,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, TestEditorStat
     return this.props.editMode && !this.props.isDeleted && !this.props.isArchived;
   }
 
-  getArticlesViewedSettings = (test: EpicTest): ArticlesViewedSettings | undefined => {
+  getArticlesViewedSettings = (test: BannerTest): ArticlesViewedSettings | undefined => {
     if (!!test.articlesViewedSettings) {
       return test.articlesViewedSettings;
     }
@@ -150,14 +147,13 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, TestEditorStat
     return undefined;
   }
 
-  updateTest = (update: (test: EpicTest) => EpicTest) => {
+  updateTest = (update: (test: BannerTest) => BannerTest) => {
     if (this.props.test) {
       const updatedTest = update(this.props.test);
 
       this.props.onChange({
         ...updatedTest,
         // To save dotcom from having to work this out
-        hasCountryName: copyHasTemplate(updatedTest, countryNameTemplate),
         articlesViewedSettings: this.getArticlesViewedSettings(updatedTest),
       })
     }
@@ -165,7 +161,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, TestEditorStat
 
   copyTest = (newTestName: string, newTestNickname: string): void => {
     if (this.props.test) {
-      const newTest: EpicTest = {
+      const newTest: BannerTest = {
         ...this.props.test,
         name: newTestName,
         nickname: newTestNickname,
@@ -174,7 +170,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, TestEditorStat
     }
   }
 
-  onVariantsChange = (updatedVariantList: EpicVariant[]): void => {
+  onVariantsChange = (updatedVariantList: BannerVariant[]): void => {
     if (this.props.test) {
       this.updateTest(test => ({...test, "variants": updatedVariantList}));
     }
@@ -190,21 +186,15 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, TestEditorStat
     this.updateTest(test => ({...test, [fieldName]: updatedBool}));
   }
 
-  onUserCohortChange = (event: React.ChangeEvent<{}>, value: string): void => {
-    let selectedCohort = value as UserCohort;
+  onUserCohortChange = (selectedCohort: UserCohort): void => {
     this.updateTest(test => ({...test, "userCohort": selectedCohort}));
-  }
-
-  onEpicTypeChange = (epicType: EpicType): void => {
-    const isLiveBlog = epicType === 'LiveBlog';
-    this.updateTest(test => ({...test, "isLiveBlog": isLiveBlog}))
   }
 
   onTargetRegionsChange = (selectedRegions: Region[]): void => {
     this.updateTest(test => ({...test, 'locations': selectedRegions}));
   }
 
-  renderBottomButtons = (test: EpicTest) => (
+  renderBottomButtons = (test: BannerTest) => (
     <div className={this.props.classes.buttons}>
       <div className={this.props.classes.button}>
         <ButtonWithConfirmationPopup
@@ -236,7 +226,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, TestEditorStat
     </div>
   )
 
-  renderEditor = (test: EpicTest): React.ReactNode => {
+  renderEditor = (test: BannerTest): React.ReactNode => {
     const {classes} = this.props;
 
     const statusText = () => {
@@ -266,58 +256,39 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, TestEditorStat
 
         <hr />
 
-        <EpicTypeComponent
-          epicType={test.isLiveBlog ? 'LiveBlog' : 'Standard'}
-          isEditable={this.isEditable()}
-          onEpicTypeChange={this.onEpicTypeChange}
-        />
-
         <Typography variant={'h4'} className={classes.boldHeading}>Variants</Typography>
         <div>
-          <EpicTestVariantsList
-            variants={test.variants}
-            onVariantsListChange={this.onVariantsChange}
-            testName={test.name}
-            editMode={this.isEditable()}
-            onValidationChange={onFieldValidationChange(this)('variantsList')}
-          />
+            <BannerTestVariantsList
+              variants={test.variants}
+              onVariantsListChange={this.onVariantsChange}
+              testName={test.name}
+              editMode={this.isEditable()}
+              onValidationChange={onFieldValidationChange(this)('variantsList')}
+            />
         </div>
 
-        <Typography variant={'h4'} className={classes.boldHeading}>Target content</Typography>
+        <div>
+          <Typography variant={'h4'} className={classes.boldHeading}>Display rules</Typography>
+          <EditableTextField
+            text={test.minArticlesBeforeShowingBanner.toString()}
+            onSubmit={(pageViews: string) =>
+              this.updateTest(test => ({ ...test, minArticlesBeforeShowingBanner: Number(pageViews)}))
+            }
+            label={'Show the banner on'}
+            helperText="Must be a number"
+            editEnabled={this.props.editMode}
+            validation={
+              {
+                getError: (value: string) => isNumber(value) ? null : 'Must be a number',
+                onChange: onFieldValidationChange(this)('minArticlesBeforeShowingBanner')
+              }
+            }
+            isNumberField
+        />
+        <Typography>page views</Typography>
+        </div>
 
         <div>
-          <EditableTextField
-            text={test.tagIds.join(",")}
-            onSubmit={this.onListChange('tagIds')}
-            label="Target tags"
-            helperText="Format: environment/wildlife,business/economics"
-            editEnabled={this.isEditable()}
-          />
-
-          <EditableTextField
-            text={test.sections.join(",")}
-            onSubmit={this.onListChange('sections')}
-            label="Target sections"
-            helperText="Format: environment,business"
-            editEnabled={this.isEditable()}
-          />
-
-          <EditableTextField
-            text={test.excludedTagIds.join(",")}
-            onSubmit={this.onListChange('excludedTagIds')}
-            label="Excluded tags"
-            helperText="Format: environment/wildlife,business/economics"
-            editEnabled={this.isEditable()}
-          />
-
-          <EditableTextField
-            text={test.excludedSections.join(",")}
-            onSubmit={this.onListChange('excludedSections')}
-            label="Excluded sections"
-            helperText="Format: environment,business"
-            editEnabled={this.isEditable()}
-          />
-
           <Typography variant={'h4'} className={classes.boldHeading}>Target audience</Typography>
 
           <TargetRegionsSelector
@@ -326,54 +297,13 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, TestEditorStat
             isEditable={this.isEditable()}
           />
 
-          <FormControl
-            className={classes.formControl}>
-              <InputLabel
-                className={classes.selectLabel}
-                shrink
-                htmlFor="user-cohort">
-                  Supporter status
-              </InputLabel>
-              <RadioGroup
-                className={classes.radio}
-                value={test.userCohort}
-                onChange={this.onUserCohortChange}
-              >
-                {Object.values(UserCohort).map(cohort =>
-                  <FormControlLabel
-                    value={cohort}
-                    key={cohort}
-                    control={<Radio />}
-                    label={cohort}
-                    disabled={!this.isEditable()}
-                  />
-                )}
-              </RadioGroup>
-          </FormControl>
-
-          <Typography variant={'h4'} className={this.props.classes.boldHeading}>View frequency settings</Typography>
-
-          <FormControlLabel
-            control={
-              <Switch
-                checked={test.useLocalViewLog}
-                onChange={this.onSwitchChange('useLocalViewLog')}
-                disabled={!this.isEditable()}
-              />
-            }
-            label={`Use private view counter for this test (instead of the global one)`}
+          <UserCohortSelector
+            cohort={test.userCohort}
+            onCohortsUpdate={this.onUserCohortChange}
+            isEditable={this.isEditable()}
           />
 
-          <MaxEpicViewsEditor
-            test={test}
-            editMode={this.isEditable()}
-            onChange={(alwaysAsk: boolean, maxEpicViews: MaxEpicViews) =>
-              this.updateTest(test => ({ ...test, alwaysAsk, maxViews: maxEpicViews }))
-            }
-            onValidationChange={onFieldValidationChange(this)('maxViews')}
-          />
-
-          <Typography variant={'h4'} className={this.props.classes.boldHeading}>Article count</Typography>
+          <hr className={classes.hr} />
           <ArticlesViewedEditor
             articlesViewedSettings={test.articlesViewedSettings}
             editMode={this.isEditable()}
@@ -397,4 +327,4 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, TestEditorStat
   }
 }
 
-export default withStyles(styles)(EpicTestEditor);
+export default withStyles(styles)(BannerTestEditor);

@@ -4,7 +4,7 @@ import {createStyles, Theme, withStyles, WithStyles, Typography} from "@material
 import EpicTestEditor from './epicTestEditor';
 import EpicTestActionBar from './epicTestActionBar';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import {Region} from "../../utils/models";
+import {Region} from "../../../utils/models";
 import {
   fetchFrontendSettings,
   FrontendSettingsType,
@@ -13,7 +13,7 @@ import {
   requestTakeControl,
   requestUnlock,
   archiveEpicTest
-} from "../../utils/requests";
+} from "../../../utils/requests";
 import EpicTestsList from "./epicTestsList";
 
 export enum UserCohort {

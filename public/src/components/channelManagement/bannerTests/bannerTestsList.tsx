@@ -2,14 +2,14 @@ import React from 'react';
 import {Button, createStyles, List, ListItem, Theme, Typography, withStyles, WithStyles, Tooltip, createMuiTheme, MuiThemeProvider} from "@material-ui/core";
 
 import { BannerTest } from './bannerTestsForm';
-import NewNameCreator from '.././epicTests/newNameCreator';
+import NewNameCreator from '../epicTests/newNameCreator';
 import ArrowUpward from '@material-ui/icons/ArrowUpward';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import ArchiveIcon from '@material-ui/icons/Archive';
-import { renderVisibilityIcons } from '.././epicTests/utilities';
-import { ModifiedTests, UserCohort, TestStatus} from '.././epicTests/epicTestsForm';
-import { MaxEpicViewsDefaults } from '.././epicTests/maxEpicViewsEditor';
+import { renderVisibilityIcons } from '../epicTests/utilities';
+import { ModifiedTests, UserCohort, TestStatus} from '../epicTests/epicTestsForm';
+import { MaxEpicViewsDefaults } from '../epicTests/maxEpicViewsEditor';
 
 const styles = ( { typography, spacing }: Theme ) => createStyles({
   root: {

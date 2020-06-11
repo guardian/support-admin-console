@@ -1,5 +1,5 @@
-import { EpicTest } from '../components/epicTests/epicTestsForm';
-import { BannerTest } from '../components/bannerTests/bannerTestsForm';
+import { EpicTest } from '../components/channelManagement/epicTests/epicTestsForm';
+import { BannerTest } from '../components/channelManagement/bannerTests/bannerTestsForm';
 
 export enum SupportFrontendSettingsType {
   switches = 'switches',
