@@ -10,7 +10,7 @@ import {
   createStyles,
   withStyles
 } from "@material-ui/core";
-import { UserCohort } from "../epicTests/epicTestsForm"; //toDo make all shared
+import { UserCohort } from "../helpers/shared";
 
 const styles = ({ spacing, typography }: Theme) => createStyles({
   selectLabel: {
