@@ -1,20 +1,13 @@
 import React from 'react';
 import {Region} from '../../../utils/models';
-import {ArticlesViewedSettings, UserCohort} from "../epicTests/epicTestsForm"; //toDo make all shared
+import {ArticlesViewedSettings, UserCohort} from "../helpers/shared";
 import {
   createStyles,
-  FormControl,
-  FormControlLabel,
-  InputLabel,
-  Radio,
-  RadioGroup,
   Switch,
   Theme,
   Typography,
   WithStyles,
   withStyles,
-  FormGroup,
-  Checkbox,
 } from "@material-ui/core";
 import {onFieldValidationChange, isNumber} from '../helpers/validation';
 import ButtonWithConfirmationPopup from '../helpers/buttonWithConfirmationPopup';
@@ -23,7 +16,7 @@ import ArchiveIcon from '@material-ui/icons/Archive';
 import {TestEditorState} from "../epicTests/epicTestEditor";
 import {BannerTest, BannerVariant} from "./bannerTestsForm";
 import TargetRegionsSelector from "../epicTests/targetRegionsSelector";
-import ArticlesViewedEditor, {defaultArticlesViewedSettings} from "../epicTests/articlesViewedEditor";
+import ArticlesViewedEditor, {defaultArticlesViewedSettings} from "../articlesViewedEditor";
 import {articleCountTemplate} from "../epicTests/epicTestVariantEditor";
 import NewNameCreator from "../epicTests/newNameCreator";
 import BannerTestVariantsList from "./bannerTestVariantsList";

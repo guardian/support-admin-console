@@ -2,7 +2,7 @@ import React from 'react';
 import update from 'immutability-helper';
 import {createStyles, Theme, withStyles, WithStyles, Typography} from "@material-ui/core";
 import EpicTestEditor from './epicTestEditor';
-import EpicTestActionBar from './epicTestActionBar';
+import TestActionBar from '../testActionBar';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {Region} from "../../../utils/models";
 import {
@@ -15,18 +15,13 @@ import {
   archiveEpicTest
 } from "../../../utils/requests";
 import EpicTestsList from "./epicTestsList";
-
-export enum UserCohort {
-  Everyone = 'Everyone',
-  AllExistingSupporters = 'AllExistingSupporters',
-  AllNonSupporters = 'AllNonSupporters',
-  PostAskPauseSingleContributors = 'PostAskPauseSingleContributors'
-}
-
-export interface Cta {
-  text?: string,
-  baseUrl?: string
-}
+import {
+  UserCohort,
+  Cta,
+  ArticlesViewedSettings,
+  LockStatus,
+  ModifiedTests,
+} from "../helpers/shared";
 
 export enum TickerEndType {
   unlimited = 'unlimited',
@@ -41,14 +36,12 @@ interface TickerCopy {
   goalReachedPrimary: string,
   goalReachedSecondary: string
 }
-
 export interface TickerSettings {
   endType: TickerEndType,
   countType: TickerCountType,
   currencySymbol: string,
   copy: TickerCopy
 }
-
 export interface EpicVariant {
   name: string,
   heading?: string,
@@ -66,12 +59,6 @@ export interface MaxEpicViews {
   maxViewsCount: number,
   maxViewsDays: number,
   minDaysBetweenViews: number
-}
-
-export interface ArticlesViewedSettings {
-  minViews: number | null,
-  maxViews: number | null,
-  periodInWeeks: number,
 }
 
 export interface EpicTest {
@@ -103,25 +90,6 @@ interface DataFromServer {
   version: string,
   lockStatus: LockStatus,
   userEmail: string,
-};
-
-export interface LockStatus {
-  locked: boolean,
-  email?: string,
-  timestamp?: string
-};
-
-
-export interface TestStatus {
-  isValid: boolean,
-  isDeleted: boolean,
-  isNew: boolean,
-  isArchived: boolean
-}
-
-// Stores tests which have been modified
-export type ModifiedTests = {
-  [testName: string]: TestStatus
 };
 
 type EpicTestsFormState = EpicTests & {
@@ -362,7 +330,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
           {
             this.state.previousStateFromServer ?
               <>
-                <EpicTestActionBar
+                <TestActionBar
                   modifiedTests={this.state.modifiedTests}
                   lockStatus={this.state.lockStatus}
                   editMode={this.state.editMode}

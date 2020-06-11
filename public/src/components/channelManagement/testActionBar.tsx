@@ -4,8 +4,8 @@ import LockOpenIcon from '@material-ui/icons/LockOpen'
 import RefreshIcon from '@material-ui/icons/Refresh';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import Button from "@material-ui/core/Button";
-import ButtonWithConfirmationPopup from '../helpers/buttonWithConfirmationPopup';
-import { LockStatus, ModifiedTests } from './epicTestsForm';
+import ButtonWithConfirmationPopup from './helpers/buttonWithConfirmationPopup';
+import { LockStatus, ModifiedTests } from './helpers/shared';
 
 const styles = ({ spacing, typography }: Theme) => createStyles({
  actionBar: {
@@ -63,7 +63,7 @@ interface ActionBarProps extends WithStyles<typeof styles> {
   save: () => void
 };
 
-class EpicTestActionBar extends React.Component<ActionBarProps> {
+class TestActionBar extends React.Component<ActionBarProps> {
 
   makeFriendlyDate = (timestamp: string): string => {
     const datetime = new Date(timestamp);
@@ -204,4 +204,4 @@ class EpicTestActionBar extends React.Component<ActionBarProps> {
   }
 }
 
-export default withStyles(styles)(EpicTestActionBar);
+export default withStyles(styles)(TestActionBar);

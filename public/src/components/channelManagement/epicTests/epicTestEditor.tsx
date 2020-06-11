@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import { Region } from '../../../utils/models';
-import {EpicTest, EpicVariant, UserCohort, MaxEpicViews, ArticlesViewedSettings} from "./epicTestsForm";
+import { EpicTest, EpicVariant, MaxEpicViews } from "./epicTestsForm";
+import { UserCohort, ArticlesViewedSettings } from "../helpers/shared";
 import {
   Checkbox,
   FormControl,
@@ -28,7 +29,7 @@ import ButtonWithConfirmationPopup from '../helpers/buttonWithConfirmationPopup'
 import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 import ArchiveIcon from '@material-ui/icons/Archive';
 import {articleCountTemplate, countryNameTemplate} from './epicTestVariantEditor';
-import ArticlesViewedEditor, {defaultArticlesViewedSettings} from './articlesViewedEditor';
+import ArticlesViewedEditor, {defaultArticlesViewedSettings} from '../articlesViewedEditor';
 import NewNameCreator from './newNameCreator';
 import EpicTypeComponent, {EpicType} from './epicTypeComponent';
 import TargetRegionsSelector from './targetRegionsSelector';

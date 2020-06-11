@@ -1,5 +1,6 @@
 import React from 'react';
-import {EpicVariant, Cta, TickerSettings} from "./epicTestsForm";
+import {EpicVariant, TickerSettings} from './epicTestsForm';
+import { Cta } from '../helpers/shared';
 import {Theme, createStyles, WithStyles, withStyles} from "@material-ui/core";
 import EditableTextField from "../helpers/editableTextField";
 import CtaEditor from "./ctaEditor";

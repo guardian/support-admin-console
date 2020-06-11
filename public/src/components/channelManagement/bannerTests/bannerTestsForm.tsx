@@ -1,8 +1,7 @@
 import React from 'react';
 import update from 'immutability-helper';
 import {createStyles, Theme, withStyles, WithStyles, Typography} from "@material-ui/core";
-// import EpicTestEditor from './epicTestEditor';
-import EpicTestActionBar from '../epicTests/epicTestActionBar';
+import TestActionBar from '../testActionBar';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {Region} from "../../../utils/models";
 import {
@@ -20,10 +19,8 @@ import {
   Cta,
   ArticlesViewedSettings,
   LockStatus,
-  TestStatus,
   ModifiedTests,
-} from "../epicTests/epicTestsForm";
-import EpicTestEditor from "../epicTests/epicTestEditor";
+} from "../helpers/shared";
 import BannerTestEditor from "./bannerTestEditor";
 
 interface BannerTests {
@@ -345,7 +342,7 @@ requestTakeControl = () => {
                     <Typography className={classes.viewText}>Click on a test on the left to view contents.</Typography>
                   )}
                 </div>
-                {<EpicTestActionBar
+                {<TestActionBar
                   modifiedTests={this.state.modifiedTests}
                   lockStatus={this.state.lockStatus}
                   editMode={this.state.editMode}

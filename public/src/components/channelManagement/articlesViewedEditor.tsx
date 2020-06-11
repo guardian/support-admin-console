@@ -9,9 +9,9 @@ import {
   RadioGroup,
   Radio,
 } from "@material-ui/core";
-import EditableTextField from "../../helpers/editableTextField"
-import {onFieldValidationChange, ValidationStatus} from "../../helpers/validation";
-import {ArticlesViewedSettings} from "./epicTestsForm";
+import EditableTextField from "./helpers/editableTextField"
+import {onFieldValidationChange, ValidationStatus} from "./helpers/validation";
+import {ArticlesViewedSettings} from "./helpers/shared";
 
 const isNumber = (value: string): boolean => !Number.isNaN(Number(value));
 

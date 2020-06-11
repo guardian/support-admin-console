@@ -8,7 +8,7 @@ import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import ArchiveIcon from '@material-ui/icons/Archive';
 import { renderVisibilityIcons } from '../epicTests/utilities';
-import { ModifiedTests, UserCohort, TestStatus} from '../epicTests/epicTestsForm';
+import { ModifiedTests, UserCohort, TestStatus } from '../helpers/shared';
 import { MaxEpicViewsDefaults } from '../epicTests/maxEpicViewsEditor';
 
 const styles = ( { typography, spacing }: Theme ) => createStyles({

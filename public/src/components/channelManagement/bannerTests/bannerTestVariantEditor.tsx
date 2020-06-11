@@ -8,7 +8,7 @@ import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 import {onFieldValidationChange, ValidationStatus} from '../helpers/validation';
 import {BannerVariant} from "./bannerTestsForm";
 import CtaEditor from "../epicTests/ctaEditor";
-import {Cta} from "../epicTests/epicTestsForm";
+import {Cta} from "../helpers/shared";
 
 
 const currencyTemplate = "%%CURRENCY_SYMBOL%%";
