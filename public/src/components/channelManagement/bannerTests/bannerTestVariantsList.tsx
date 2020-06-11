@@ -5,8 +5,9 @@ import {
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {onFieldValidationChange, ValidationStatus} from '../helpers/validation';
 import {BannerVariant} from "./bannerTestsForm";
-import BannerTestVariantEditor, {defaultCta} from "./bannerTestVariantEditor";
-import NewNameCreator from "../epicTests/newNameCreator";
+import BannerTestVariantEditor from "./bannerTestVariantEditor";
+import NewNameCreator from "../newNameCreator";
+import {defaultCta} from "../helpers/shared";
 
 
 const styles = ({ typography, spacing }: Theme) => createStyles({

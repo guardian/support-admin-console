@@ -10,7 +10,7 @@ import {
   createStyles,
   withStyles
 } from "@material-ui/core";
-import { Region } from '../../../utils/models';
+import { Region } from '../../utils/models';
 
 const styles = ({ spacing, typography }: Theme) => createStyles({
   selectLabel: {

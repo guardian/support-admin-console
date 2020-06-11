@@ -7,8 +7,8 @@ import ButtonWithConfirmationPopup from '../helpers/buttonWithConfirmationPopup'
 import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 import {onFieldValidationChange, ValidationStatus} from '../helpers/validation';
 import {BannerVariant} from "./bannerTestsForm";
-import CtaEditor from "../epicTests/ctaEditor";
-import {Cta} from "../helpers/shared";
+import CtaEditor from "../ctaEditor";
+import {Cta, defaultCta} from "../helpers/shared";
 
 
 const currencyTemplate = "%%CURRENCY_SYMBOL%%";
@@ -27,12 +27,6 @@ export const getInvalidTemplateError = (text: string): string | null => {
   } else {
     return null
   }
-};
-
-//TODO: check if this can be shared with Epic
-export const defaultCta = {
-  text: "Support The Guardian",
-  baseUrl: "https://support.theguardian.com/contribute"
 };
 
 const styles = ({ palette, spacing, typography }: Theme) => createStyles({

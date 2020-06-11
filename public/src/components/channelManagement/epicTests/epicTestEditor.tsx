@@ -1,38 +1,37 @@
-import React, { ReactNode } from 'react';
-import { Region } from '../../../utils/models';
-import { EpicTest, EpicVariant, MaxEpicViews } from "./epicTestsForm";
-import { UserCohort, ArticlesViewedSettings } from "../helpers/shared";
+import React from 'react';
+import {Region} from '../../../utils/models';
+import {EpicTest, EpicVariant, MaxEpicViews} from "./epicTestsForm";
 import {
-  Checkbox,
+  articleCountTemplate,
+  ArticlesViewedSettings,
+  countryNameTemplate,
+  TestEditorState,
+  UserCohort
+} from "../helpers/shared";
+import {
+  createStyles,
   FormControl,
   FormControlLabel,
-  FormGroup,
-  Input,
   InputLabel,
-  ListItemText,
-  MenuItem,
   Radio,
   RadioGroup,
-  Select,
   Switch,
   Theme,
   Typography,
   WithStyles,
-  createStyles,
   withStyles
 } from "@material-ui/core";
 import EditableTextField from '../helpers/editableTextField';
 import EpicTestVariantsList from './epicTestVariantsList';
 import MaxEpicViewsEditor from './maxEpicViewsEditor';
-import {onFieldValidationChange, ValidationStatus} from '../helpers/validation';
+import {onFieldValidationChange} from '../helpers/validation';
 import ButtonWithConfirmationPopup from '../helpers/buttonWithConfirmationPopup';
 import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 import ArchiveIcon from '@material-ui/icons/Archive';
-import {articleCountTemplate, countryNameTemplate} from './epicTestVariantEditor';
 import ArticlesViewedEditor, {defaultArticlesViewedSettings} from '../articlesViewedEditor';
-import NewNameCreator from './newNameCreator';
+import NewNameCreator from '../newNameCreator';
 import EpicTypeComponent, {EpicType} from './epicTypeComponent';
-import TargetRegionsSelector from './targetRegionsSelector';
+import TargetRegionsSelector from '../targetRegionsSelector';
 
 const styles = ({ spacing, typography}: Theme) => createStyles({
   container: {
@@ -123,10 +122,6 @@ interface EpicTestEditorProps extends WithStyles<typeof styles> {
   testNames: string[],
   testNicknames: string[],
   createTest: (newTest: EpicTest) => void
-}
-//todo move to shared
-export interface TestEditorState {
-  validationStatus: ValidationStatus
 }
 
 const areYouSure = `Are you sure? This can't be undone without cancelling entire edit session!`;

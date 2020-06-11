@@ -1,18 +1,15 @@
 import React from 'react';
-import {EpicVariant, TickerSettings} from './epicTestsForm';
-import { Cta } from '../helpers/shared';
+import {EpicVariant} from './epicTestsForm';
+import {countryNameTemplate, currencyTemplate, articleCountTemplate, Cta, defaultCta} from '../helpers/shared';
 import {Theme, createStyles, WithStyles, withStyles} from "@material-ui/core";
 import EditableTextField from "../helpers/editableTextField";
-import CtaEditor from "./ctaEditor";
-import TickerEditor from './tickerEditor';
+import CtaEditor from "../ctaEditor";
+import TickerEditor from '../tickerEditor';
 import ButtonWithConfirmationPopup from '../helpers/buttonWithConfirmationPopup';
 import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 import {onFieldValidationChange, ValidationStatus} from '../helpers/validation';
 
 
-const currencyTemplate = "%%CURRENCY_SYMBOL%%";
-export const countryNameTemplate = "%%COUNTRY_NAME%%";
-export const articleCountTemplate = "%%ARTICLE_COUNT%%"; // TODO: move to shared file
 const validTemplates = [currencyTemplate, countryNameTemplate, articleCountTemplate];
 
 export const getInvalidTemplateError = (text: string): string | null => {
@@ -26,11 +23,6 @@ export const getInvalidTemplateError = (text: string): string | null => {
   } else {
     return null
   }
-};
-
-export const defaultCta = {
-  text: "Support The Guardian",
-  baseUrl: "https://support.theguardian.com/contribute"
 };
 
 const styles = ({ palette, spacing, typography }: Theme) => createStyles({

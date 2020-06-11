@@ -5,9 +5,9 @@ import {
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import EpicTestVariantEditor from './epicTestVariantEditor';
 import { EpicVariant } from './epicTestsForm';
-import NewNameCreator from './newNameCreator';
-import {defaultCta} from "./epicTestVariantEditor";
+import NewNameCreator from '../newNameCreator';
 import {onFieldValidationChange, ValidationStatus} from '../helpers/validation';
+import {defaultCta} from "../helpers/shared";
 
 
 const styles = ({ typography, spacing }: Theme) => createStyles({

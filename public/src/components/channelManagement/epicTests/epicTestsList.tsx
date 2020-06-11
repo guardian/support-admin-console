@@ -4,10 +4,10 @@ import ArrowUpward from '@material-ui/icons/ArrowUpward';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import ArchiveIcon from '@material-ui/icons/Archive';
-import { renderVisibilityIcons } from './utilities';
+import { renderVisibilityIcons } from '../helpers/utilities';
 import { EpicTest } from './epicTestsForm';
 import { ModifiedTests, UserCohort, TestStatus } from '../helpers/shared';
-import NewNameCreator from './newNameCreator';
+import NewNameCreator from '../newNameCreator';
 import { MaxEpicViewsDefaults } from './maxEpicViewsEditor';
 
 
