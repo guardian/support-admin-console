@@ -13,7 +13,7 @@ import {
   requestUnlock,
   archiveBannerTest
 } from "../../../utils/requests";
-import BannerTestsList from "./BannerTestsList";
+import BannerTestsList from "./bannerTestsList";
 import {
   UserCohort,
   Cta,
