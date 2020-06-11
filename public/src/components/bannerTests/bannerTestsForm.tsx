@@ -49,12 +49,12 @@ export interface BannerTest {
 }
 export interface BannerVariant {
   name: string,
-  headline?: string,
+  heading?: string,
   body: string,
   highlightedText: string,
   cta?: Cta,
   secondaryCta?: Cta,
-  hasTicker: boolean,
+  showTicker: boolean,
 }
 
 type BannerTestFormState = BannerTests & {

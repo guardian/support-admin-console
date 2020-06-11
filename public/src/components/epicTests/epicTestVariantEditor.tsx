@@ -11,7 +11,7 @@ import {onFieldValidationChange, ValidationStatus} from '../helpers/validation';
 
 const currencyTemplate = "%%CURRENCY_SYMBOL%%";
 export const countryNameTemplate = "%%COUNTRY_NAME%%";
-export const articleCountTemplate = "%%ARTICLE_COUNT%%";
+export const articleCountTemplate = "%%ARTICLE_COUNT%%"; // TODO: move to shared file
 const validTemplates = [currencyTemplate, countryNameTemplate, articleCountTemplate];
 
 export const getInvalidTemplateError = (text: string): string | null => {

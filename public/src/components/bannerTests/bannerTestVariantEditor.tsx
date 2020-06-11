@@ -29,6 +29,7 @@ export const getInvalidTemplateError = (text: string): string | null => {
   }
 };
 
+//TODO: check if this can be shared with Epic
 export const defaultCta = {
   text: "Support The Guardian",
   baseUrl: "https://support.theguardian.com/contribute"
@@ -95,7 +96,7 @@ interface State {
 
 enum VariantFieldNames {
   name = "name",
-  headline = "headline",
+  heading = "heading",
   body = "body",
   highlightedText = "highlightedText",
   footer = "footer",
@@ -149,15 +150,15 @@ class BannerTestVariantEditor extends React.Component<Props, State> {
         <>
           <div className={classes.hook}>
             <EditableTextField
-              text={variant.headline || ''}
-              onSubmit={this.onOptionalTextChange('headline')}
-              label="Hook"
+              text={variant.heading || ''}
+              onSubmit={this.onOptionalTextChange('heading')}
+              label="Header"
               editEnabled={this.props.editMode}
               helperText="e.g. Since you're here"
               validation={
                 {
                   getError: (value: string) => getInvalidTemplateError(value),
-                  onChange: onFieldValidationChange(this)("headline")
+                  onChange: onFieldValidationChange(this)("heading")
                 }
               }
             />
@@ -227,12 +228,12 @@ class BannerTestVariantEditor extends React.Component<Props, State> {
             <FormControlLabel
               control={
                 <Switch
-                  checked={variant.hasTicker}
+                  checked={variant.showTicker}
                   onChange={this.onVariantSwitchChange("showTicker")}
                   disabled={!this.props.editMode}
                 />
               }
-              label={`Ticker is ${variant.hasTicker ? "on" : "off"}`}
+              label={`Ticker is ${variant.showTicker ? "on" : "off"}`}
             />
           </div>
 

@@ -104,8 +104,8 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
 });
 
 const copyHasTemplate = (test: BannerTest, template: string): boolean => test.variants.some(variant =>
-  variant.headline && variant.headline.includes(template) ||
-  variant.body.includes(template) // to do is this right ?
+  variant.heading && variant.heading.includes(template) ||
+  variant.body.includes(template)
 );
 
 interface BannerTestEditorProps extends WithStyles<typeof styles> {
@@ -153,9 +153,7 @@ class BannerTestEditor extends React.Component<BannerTestEditorProps, TestEditor
 
       this.props.onChange({
         ...updatedTest,
-        // TODO: Ask Tom about this
         // To save dotcom from having to work this out
-        // hasCountryName: copyHasTemplate(updatedTest, countryNameTemplate),
         articlesViewedSettings: this.getArticlesViewedSettings(updatedTest),
       })
     }

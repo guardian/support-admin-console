@@ -83,11 +83,11 @@ class BannerTestVariantsList extends React.Component<BannerTestVariantsListProps
   createVariant = (newVariantName: string, nickname: string) => {
     const newVariant: BannerVariant = {
       name: newVariantName,
-      headline: undefined,
+      heading: undefined,
       body: '',
       highlightedText: "Support the Guardian from as little as %%CURRENCY_SYMBOL%%1 – and it only takes a minute. Thank you.",
-      hasTicker: false,
-      cta: defaultCta //todo defaul
+      showTicker: false,
+      cta: defaultCta
     };
 
     this.props.onVariantsListChange([...this.props.variants, newVariant]);
@@ -140,7 +140,7 @@ class BannerTestVariantsList extends React.Component<BannerTestVariantsListProps
                 id="variant-header"
               >
                 <Typography variant={'h4'} className={classes.h4}>
-                  {variant.name} {variant.headline && <span className={classes.heading}>- "{variant.headline}"</span>}
+                  {variant.name} {variant.heading && <span className={classes.heading}>- "{variant.heading}"</span>}
                 </Typography>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>

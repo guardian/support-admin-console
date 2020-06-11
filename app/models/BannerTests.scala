@@ -23,12 +23,12 @@ object OphanProduct extends Enum[OphanProduct] with CirceEnum[OphanProduct] {
 
 case class BannerVariant(
   name: String,
-  headline: Option[String],
+  heading: Option[String],
   body: String,
   highlightedText: String,
   cta: Option[Cta],
   secondaryCta: Option[Cta],
-  hasTicker: Boolean
+  showTicker: Boolean
 )
 
 case class BannerTest(
