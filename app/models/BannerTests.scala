@@ -9,7 +9,7 @@ case class BannerVariant(
   name: String,
   heading: Option[String],
   body: String,
-  highlightedText: String,
+  highlightedText: Option[String],
   cta: Option[Cta],
   secondaryCta: Option[Cta]
 )

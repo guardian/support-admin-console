@@ -32,7 +32,7 @@ interface BannerDataFromServer {
   version: string,
   lockStatus: LockStatus,
   userEmail: string,
-};
+}
 export interface BannerTest {
   name: string,
   nickname?: string,
@@ -47,13 +47,13 @@ export interface BannerVariant {
   name: string,
   heading?: string,
   body: string,
-  highlightedText: string,
+  highlightedText?: string,
   cta?: Cta,
   secondaryCta?: Cta,
 }
 
 type BannerTestFormState = BannerTests & {
-  previousStateFromServer: BannerDataFromServer | null,
+  version: string | null,
   selectedTestName?: string,
   editMode: boolean,
   lockStatus: LockStatus,
@@ -72,7 +72,6 @@ const styles = ({ spacing, typography }: Theme) => createStyles({
     fontSize: typography.pxToRem(16)
   },
   editModeBorder: {
-    // border: "4px solid #ffe500"
     border: 'none',
   },
   readOnlyModeBorder: {
@@ -90,7 +89,7 @@ class BannerTestsForm extends React.Component<BannerTestFormProps, BannerTestFor
 
   state: BannerTestFormState = {
     tests: [],
-    previousStateFromServer: null,
+    version: null,
     selectedTestName: undefined,
     editMode: false,
     lockStatus: { locked: false },
@@ -111,7 +110,7 @@ class BannerTestsForm extends React.Component<BannerTestFormProps, BannerTestFor
 
         this.setState({
           ...serverData.value,
-          previousStateFromServer: serverData,
+          version: serverData.version,
           lockStatus: serverData.status,
           editMode: editMode,
           modifiedTests: {}
@@ -160,13 +159,15 @@ class BannerTestsForm extends React.Component<BannerTestFormProps, BannerTestFor
           const modifiedTestData = this.state.modifiedTests[test.name];
           return !(modifiedTestData && (modifiedTestData.isDeleted || modifiedTestData.isArchived));
         });
-        const newState = update(this.state.previousStateFromServer, {
-          value: {
-            tests: { $set: updatedTests }
-          }
-        });
 
-        saveFrontendSettings(FrontendSettingsType.bannerTests, newState)
+        const postData = {
+          version: this.state.version,
+          value: {
+            tests: updatedTests
+          }
+        };
+
+        saveFrontendSettings(FrontendSettingsType.bannerTests, postData)
           .then(resp => {
             if (!resp.ok) {
               resp.text().then(msg => alert(msg));
@@ -288,7 +289,7 @@ requestTakeControl = () => {
       <>
         <div>
           {
-            this.state.previousStateFromServer ?
+            this.state.version ?
               <>
 
                 <div className={listAndEditorClassNames}>
