@@ -1,5 +1,4 @@
 import React from 'react';
-import update from 'immutability-helper';
 import {createStyles, Theme, withStyles, WithStyles, Typography} from "@material-ui/core";
 import TestActionBar from '../testActionBar';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -30,7 +29,7 @@ interface BannerTests {
 interface BannerDataFromServer {
   value: BannerTests,
   version: string,
-  lockStatus: LockStatus,
+  status: LockStatus,
   userEmail: string,
 }
 export interface BannerTest {
@@ -103,7 +102,7 @@ class BannerTestsForm extends React.Component<BannerTestFormProps, BannerTestFor
 
   fetchStateFromServer = (): void => {
     fetchFrontendSettings(FrontendSettingsType.bannerTests)
-      .then(serverData => {
+      .then((serverData: BannerDataFromServer) => {
         const editMode = serverData.status.email === serverData.userEmail;
 
         this.updateWarningTimeout(editMode);
