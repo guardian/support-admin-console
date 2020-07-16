@@ -61,16 +61,6 @@ type BannerTestFormState = BannerTests & {
   timeoutAlertId: number | null,  // A timeout for warning about being open for edit for too long
 };
 
-export enum OphanProduct {
-  CONTRIBUTION = 'CONTRIBUTION',
-  RECURRING_CONTRIBUTION = 'RECURRING_CONTRIBUTION',
-  MEMBERSHIP_SUPPORTER = 'MEMBERSHIP_SUPPORTER',
-  MEMBERSHIP_PATRON = 'MEMBERSHIP_PATRON',
-  MEMBERSHIP_PARTNER = 'MEMBERSHIP_PARTNER',
-  DIGITAL_SUBSCRIPTION = 'DIGITAL_SUBSCRIPTION',
-  PRINT_SUBSCRIPTION = 'PRINT_SUBSCRIPTION',
-}
-
 const styles = ({ spacing, typography }: Theme) => createStyles({
   testListAndEditor: {
     display: "flex",
