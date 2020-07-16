@@ -260,21 +260,19 @@ class BannerTestsForm extends React.Component<BannerTestFormProps, BannerTestFor
     this.setState({
       selectedTestName: testName
     })
-};
+  };
 
-requestBannerTestsLock = () => {
-  requestLock(FrontendSettingsType.bannerTests).then(response =>
-    response.ok ? this.fetchStateFromServer() : alert("Error - can't request lock!")
-  );
-};
+  requestBannerTestsLock = () => {
+    requestLock(FrontendSettingsType.bannerTests).then(response =>
+      response.ok ? this.fetchStateFromServer() : alert("Error - can't request lock!")
+    );
+  };
 
-requestTakeControl = () => {
-  requestTakeControl(FrontendSettingsType.bannerTests).then(response =>
-    response.ok ? this.fetchStateFromServer() : alert("Error - can't take back control!")
-  );
-};
-
-  createBannerTest = () => undefined;
+  requestTakeControl = () => {
+    requestTakeControl(FrontendSettingsType.bannerTests).then(response =>
+      response.ok ? this.fetchStateFromServer() : alert("Error - can't take back control!")
+    );
+  };
 
   render(): React.ReactNode {
     const { classes } = this.props;
