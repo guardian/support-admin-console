@@ -88,12 +88,12 @@ interface EpicTests {
 interface DataFromServer {
   value: EpicTests,
   version: string,
-  lockStatus: LockStatus,
+  status: LockStatus,
   userEmail: string,
 };
 
 type EpicTestsFormState = EpicTests & {
-  previousStateFromServer: DataFromServer | null,
+  version: string | null,
   selectedTestName?: string,
   editMode: boolean,
   lockStatus: LockStatus,
@@ -131,7 +131,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
     super(props);
     this.state = {
       tests: [],
-      previousStateFromServer: null,
+      version: null,
       selectedTestName: undefined,
       editMode: false,
       lockStatus: { locked: false },
@@ -146,14 +146,14 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
 
   fetchStateFromServer = (): void => {
     fetchFrontendSettings(FrontendSettingsType.epicTests)
-      .then(serverData => {
+      .then((serverData: DataFromServer) => {
         const editMode = serverData.status.email === serverData.userEmail;
 
         this.updateWarningTimeout(editMode);
 
         this.setState({
           ...serverData.value,
-          previousStateFromServer: serverData,
+          version: serverData.version,
           lockStatus: serverData.status,
           editMode: editMode,
           modifiedTests: {}
@@ -202,13 +202,15 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
           const modifiedTestData = this.state.modifiedTests[test.name];
           return !(modifiedTestData && (modifiedTestData.isDeleted || modifiedTestData.isArchived));
         });
-        const newState = update(this.state.previousStateFromServer, {
-          value: {
-            tests: { $set: updatedTests }
-          }
-        });
 
-        saveFrontendSettings(FrontendSettingsType.epicTests, newState)
+        const postData = {
+          version: this.state.version,
+          value: {
+            tests: updatedTests
+          }
+        };
+
+        saveFrontendSettings(FrontendSettingsType.epicTests, postData)
           .then(resp => {
             if (!resp.ok) {
               resp.text().then(msg => alert(msg));
@@ -328,7 +330,7 @@ class EpicTestsForm extends React.Component<EpicTestFormProps, EpicTestsFormStat
       <>
         <div>
           {
-            this.state.previousStateFromServer ?
+            this.state.version ?
               <>
                 <TestActionBar
                   modifiedTests={this.state.modifiedTests}
