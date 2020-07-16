@@ -87,7 +87,6 @@ class BannerTestVariantsList extends React.Component<BannerTestVariantsListProps
       heading: undefined,
       body: '',
       highlightedText: "Support the Guardian from as little as %%CURRENCY_SYMBOL%%1 – and it only takes a minute. Thank you.",
-      showTicker: false,
       cta: defaultCta
     };
 

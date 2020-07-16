@@ -142,7 +142,6 @@ class BannerTestsList extends React.Component<BannerTestListProps> {
       isOn: false,
       minArticlesBeforeShowingBanner: 0,
       userCohort: UserCohort.AllNonSupporters,
-      products: undefined,
       locations: [],
       variants: [],
       articlesViewedSettings: undefined,

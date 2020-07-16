@@ -39,7 +39,6 @@ export interface BannerTest {
   isOn: boolean,
   minArticlesBeforeShowingBanner: number,
   userCohort: UserCohort,
-  products?: OphanProduct[],
   locations: Region[],
   variants: BannerVariant[],
   articlesViewedSettings?: ArticlesViewedSettings,
@@ -51,7 +50,6 @@ export interface BannerVariant {
   highlightedText: string,
   cta?: Cta,
   secondaryCta?: Cta,
-  showTicker: boolean,
 }
 
 type BannerTestFormState = BannerTests & {

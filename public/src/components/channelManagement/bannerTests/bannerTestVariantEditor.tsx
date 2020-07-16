@@ -94,7 +94,6 @@ enum VariantFieldNames {
   body = "body",
   highlightedText = "highlightedText",
   footer = "footer",
-  showTicker = "showTicker",
   backgroundImageUrl = "backgroundImageUrl"
 }
 
@@ -215,19 +214,6 @@ class BannerTestVariantEditor extends React.Component<Props, State> {
               editMode={this.props.editMode}
               label={"Has a secondary button"}
               manualCampaignCode={true}
-            />
-          </div>
-
-          <div>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={variant.showTicker}
-                  onChange={this.onVariantSwitchChange("showTicker")}
-                  disabled={!this.props.editMode}
-                />
-              }
-              label={`Ticker is ${variant.showTicker ? "on" : "off"}`}
             />
           </div>
 
