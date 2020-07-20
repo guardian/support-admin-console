@@ -1,5 +1,6 @@
 import { EpicTest } from '../components/channelManagement/epicTests/epicTestsForm';
 import { BannerTest } from '../components/channelManagement/bannerTests/bannerTestsForm';
+import {Test} from "../components/channelManagement/helpers/shared";
 
 export enum SupportFrontendSettingsType {
   switches = 'switches',
@@ -74,4 +75,8 @@ export function archiveEpicTest(test: EpicTest): Promise<Response> {
 
 export function archiveBannerTest(test: BannerTest): Promise<Response> {
   return saveSettings('/frontend/banner-tests/archive', test);
+}
+
+export function archiveTest(test: Test, settingsType: FrontendSettingsType): Promise<Response> {
+  return saveSettings(`/frontend/${settingsType}/archive`, test);
 }
