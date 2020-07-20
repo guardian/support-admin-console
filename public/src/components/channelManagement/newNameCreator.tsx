@@ -283,6 +283,7 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
 
     const renderVariantButton = (): React.ReactNode => this.showCreateButton('Create variant', () => this.handleNewVariantName(this.state.currentNameText));
 
+    // TODO - change styling for the 'Copy' button
     return (
       <>
         <Button variant="outlined" color="primary" onClick={this.onNewNameButtonClick} className={classes.newButton}>
