@@ -1,4 +1,4 @@
-import {getInvalidTemplateError} from "../epicTestVariantEditor";
+import {getInvalidTemplateError} from "../../helpers/copyTemplates";
 
 describe('maxViewsEditor tests', () => {
   describe('getInvalidTemplateError tests', () => {
