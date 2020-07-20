@@ -3,14 +3,15 @@ import {
   createStyles, FormControl,
   FormControlLabel,
   InputLabel,
-  Switch,
-  Theme, Typography,
+  Theme,
   withStyles,
-  WithStyles
+  WithStyles,
+  RadioGroup,
+  Radio,
 } from "@material-ui/core";
-import EditableTextField from "../helpers/editableTextField"
-import {onFieldValidationChange, ValidationStatus} from "../helpers/validation";
-import {ArticlesViewedSettings, EpicTest} from "./epicTestsForm";
+import EditableTextField from "./editableTextField"
+import {onFieldValidationChange, ValidationStatus} from "./helpers/validation";
+import {ArticlesViewedSettings} from "./helpers/shared";
 
 const isNumber = (value: string): boolean => !Number.isNaN(Number(value));
 
@@ -112,20 +113,36 @@ class ArticlesViewedEditor extends React.Component<Props, State> {
     return (
       <>
         <FormControl
-          className={classes.formControl}>
+        className={classes.formControl}>
+        <InputLabel
+          className={classes.selectLabel}
+          shrink
+          htmlFor="ask-strategy">
+          Article Count:
+        </InputLabel>
+
+        <RadioGroup
+          className={classes.radio}
+          value={this.props.articlesViewedSettings ? 'enable' : 'disable'}
+          onChange={(event, showArticleCount) => this.onArticlesViewedEditorSwitchChange(showArticleCount === 'enable')}
+        >
           <FormControlLabel
-              control={
-                <Switch
-                  checked={!!this.props.articlesViewedSettings}
-                  disabled={!this.props.editMode}
-                  onChange={(event) => {
-                    this.onArticlesViewedEditorSwitchChange(event.target.checked);
-                  }}
-                />
-              }
-              label={`Enable article count conditions`}
-            />
-        </FormControl>
+            value={'disable'}
+            key={'disable'}
+            control={<Radio />}
+            label={'Do not show user\'s article count'}
+            disabled={!this.props.editMode}
+          />
+          <FormControlLabel
+            value={'enable'}
+            key={'enable'}
+            control={<Radio />}
+            label={'Show user\'s article count...'}
+            disabled={!this.props.editMode}
+          />
+        </RadioGroup>
+      </FormControl>
+
 
         { this.props.articlesViewedSettings &&
           <div className={classes.articlesViewsContainer}>
@@ -135,6 +152,7 @@ class ArticlesViewedEditor extends React.Component<Props, State> {
           </div>
         }
       </>
+
     )
   }
 }

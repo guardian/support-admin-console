@@ -11,9 +11,9 @@ import {
 } from "@material-ui/core";
 import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import {TickerCountType, TickerEndType, TickerSettings} from "./epicTestsForm";
-import EditableTextField from "../helpers/editableTextField"
-import {onFieldValidationChange, ValidationStatus} from "../helpers/validation";
+import {TickerCountType, TickerEndType, TickerSettings} from "./helpers/shared";
+import EditableTextField from "./editableTextField"
+import {onFieldValidationChange, ValidationStatus} from "./helpers/validation";
 
 const styles = ({ spacing, typography}: Theme) => createStyles({
   formControl: {

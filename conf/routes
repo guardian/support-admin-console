@@ -7,6 +7,7 @@ GET /switches                                       controllers.Application.inde
 GET /contribution-types                             controllers.Application.index
 GET /amounts                                        controllers.Application.index
 GET /epic-tests                                     controllers.Application.index
+GET /banner-tests                                   controllers.Application.index
 
 # ----- Authentication ----- #
 GET  /login                                         controllers.Login.login

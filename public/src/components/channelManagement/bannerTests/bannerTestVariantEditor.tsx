@@ -1,36 +1,13 @@
 import React from 'react';
-import {EpicVariant, Cta, TickerSettings} from "./epicTestsForm";
 import {Theme, createStyles, WithStyles, withStyles} from "@material-ui/core";
-import EditableTextField from "../helpers/editableTextField";
-import CtaEditor from "./ctaEditor";
-import TickerEditor from './tickerEditor';
-import ButtonWithConfirmationPopup from '../helpers/buttonWithConfirmationPopup';
+import EditableTextField from "../editableTextField";
+import ButtonWithConfirmationPopup from '../buttonWithConfirmationPopup';
 import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 import {onFieldValidationChange, ValidationStatus} from '../helpers/validation';
-
-
-const currencyTemplate = "%%CURRENCY_SYMBOL%%";
-export const countryNameTemplate = "%%COUNTRY_NAME%%";
-export const articleCountTemplate = "%%ARTICLE_COUNT%%";
-const validTemplates = [currencyTemplate, countryNameTemplate, articleCountTemplate];
-
-export const getInvalidTemplateError = (text: string): string | null => {
-  const templates: string[] | null = text.match(/%%[A-Z_]*%%/g);
-
-  if (templates !== null) {
-    const invalidTemplate: string | undefined =
-      templates.find(template => !validTemplates.includes(template));
-    if (invalidTemplate) return `Invalid template: ${invalidTemplate}`;
-    else return null;
-  } else {
-    return null
-  }
-};
-
-export const defaultCta = {
-  text: "Support The Guardian",
-  baseUrl: "https://support.theguardian.com/contribute"
-};
+import {BannerVariant} from "./bannerTestsForm";
+import CtaEditor from "../ctaEditor";
+import {Cta, defaultCta} from "../helpers/shared";
+import {getInvalidTemplateError} from '../helpers/copyTemplates';
 
 const styles = ({ palette, spacing, typography }: Theme) => createStyles({
   container: {
@@ -80,8 +57,8 @@ const styles = ({ palette, spacing, typography }: Theme) => createStyles({
 });
 
 interface Props extends WithStyles<typeof styles> {
-  variant?: EpicVariant,
-  onVariantChange: (updatedVariant: EpicVariant) => void,
+  variant?: BannerVariant,
+  onVariantChange: (updatedVariant: BannerVariant) => void,
   editMode: boolean,
   onDelete: () => void,
   onValidationChange: (isValid: boolean) => void
@@ -94,20 +71,19 @@ interface State {
 enum VariantFieldNames {
   name = "name",
   heading = "heading",
-  paragraphs = "paragraphs",
+  body = "body",
   highlightedText = "highlightedText",
   footer = "footer",
-  showTicker = "showTicker",
   backgroundImageUrl = "backgroundImageUrl"
 }
 
-class EpicTestVariantEditor extends React.Component<Props, State> {
+class BannerTestVariantEditor extends React.Component<Props, State> {
 
   state: State = {
     validationStatus: {}
   };
 
-  updateVariant = (update: (variant: EpicVariant) => EpicVariant) => {
+  updateVariant = (update: (variant: BannerVariant) => BannerVariant) => {
     if (this.props.variant) {
       this.props.onVariantChange(update(this.props.variant));
     }
@@ -121,8 +97,8 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
     }));
   };
 
-  onParagraphsChange = (fieldName: string) => (updatedParagraphs: string): void => {
-    this.updateVariant(variant => ({...variant, [fieldName]: updatedParagraphs.split("\n")}));
+  onBodyChange = (fieldName: string) => (updatedBody: string): void => {
+    this.updateVariant(variant => ({...variant, [fieldName]: updatedBody}));
   };
 
   onVariantSwitchChange = (fieldName: string) => (event: React.ChangeEvent<HTMLInputElement>):void =>  {
@@ -141,7 +117,7 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
     );
   }
 
-  renderVariantEditor = (variant: EpicVariant): React.ReactNode => {
+  renderVariantEditor = (variant: BannerVariant): React.ReactNode => {
     const {classes} = this.props;
     return (
         <>
@@ -149,7 +125,7 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
             <EditableTextField
               text={variant.heading || ''}
               onSubmit={this.onOptionalTextChange('heading')}
-              label="Hook"
+              label="Header"
               editEnabled={this.props.editMode}
               helperText="e.g. Since you're here"
               validation={
@@ -165,18 +141,18 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
             required
             textarea
             height={10}
-            text={variant.paragraphs.join("\n")}
-            onSubmit={this.onParagraphsChange("paragraphs")}
+            text={variant.body}
+            onSubmit={this.onBodyChange("body")}
             label="Body copy"
             editEnabled={this.props.editMode}
-            helperText="Main Epic message, including paragraph breaks"
+            helperText="Main Banner message, including paragraph breaks"
             validation={
               {
                 getError: (value: string) => {
                   if (value.trim() === '') return "Field must not be empty";
                   else return getInvalidTemplateError(value);
                 },
-                onChange: onFieldValidationChange(this)("paragraphs")
+                onChange: onFieldValidationChange(this)("body")
               }
             }
           />
@@ -221,31 +197,6 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
             />
           </div>
 
-          <div>
-            <TickerEditor
-              editMode={this.props.editMode}
-              tickerSettings={variant.tickerSettings}
-              onChange={(tickerSettings) => this.updateVariant(variant => ({...variant, tickerSettings}))}
-              onValidationChange={onFieldValidationChange(this)('tickerSettings')}
-            />
-          </div>
-
-          <EditableTextField
-            text={variant.backgroundImageUrl || ""}
-            onSubmit={this.onOptionalTextChange(VariantFieldNames.backgroundImageUrl)}
-            label="Image URL"
-            helperText="This will appear above everything except a ticker"
-            editEnabled={this.props.editMode}
-          />
-
-          <EditableTextField
-            text={variant.footer || ""}
-            onSubmit={this.onOptionalTextChange("footer")}
-            label="Footer"
-            helperText="Bold text that appears below the button"
-            editEnabled={this.props.editMode}
-          />
-
           <div className={classes.deleteButton}>{this.renderDeleteVariantButton(variant.name)}</div>
 
         </>
@@ -263,4 +214,4 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
   }
 }
 
-export default withStyles(styles)(EpicTestVariantEditor);
+export default withStyles(styles)(BannerTestVariantEditor);

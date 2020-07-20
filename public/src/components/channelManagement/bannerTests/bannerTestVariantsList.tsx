@@ -3,11 +3,11 @@ import {
   Theme, createStyles, WithStyles, withStyles, Typography, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails
 } from "@material-ui/core";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import EpicTestVariantEditor from './epicTestVariantEditor';
-import { EpicVariant } from './epicTestsForm';
-import NewNameCreator from './newNameCreator';
-import {defaultCta} from "./epicTestVariantEditor";
 import {onFieldValidationChange, ValidationStatus} from '../helpers/validation';
+import {BannerVariant} from "./bannerTestsForm";
+import BannerTestVariantEditor from "./bannerTestVariantEditor";
+import NewNameCreator from "../newNameCreator";
+import {defaultCta} from "../helpers/shared";
 
 
 const styles = ({ typography, spacing }: Theme) => createStyles({
@@ -28,21 +28,21 @@ const styles = ({ typography, spacing }: Theme) => createStyles({
   }
 });
 
-interface EpicTestVariantsListProps extends WithStyles<typeof styles> {
-  variants: EpicVariant[],
-  onVariantsListChange: (variantList: EpicVariant[]) => void,
+interface BannerTestVariantsListProps extends WithStyles<typeof styles> {
+  variants: BannerVariant[],
+  onVariantsListChange: (variantList: BannerVariant[]) => void,
   testName: string,
   editMode: boolean,
   onValidationChange: (isValid: boolean) => void
 }
 
-type EpicTestVariantsListState = {
+type BannerTestVariantsListState = {
   expandedVariantKey?: string,
   validationStatus: ValidationStatus
 }
-class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, EpicTestVariantsListState> {
+class BannerTestVariantsList extends React.Component<BannerTestVariantsListProps, BannerTestVariantsListState> {
 
-  state: EpicTestVariantsListState = {
+  state: BannerTestVariantsListState = {
     expandedVariantKey: undefined,
     validationStatus: {}
   };
@@ -53,8 +53,8 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
     })
   };
 
-  onVariantChange = (updatedVariant: EpicVariant): void => {
-    const updatedVariantList: EpicVariant[] = this.props.variants.map(variant => variant.name === updatedVariant.name ? updatedVariant : variant);
+  onVariantChange = (updatedVariant: BannerVariant): void => {
+    const updatedVariantList: BannerVariant[] = this.props.variants.map(variant => variant.name === updatedVariant.name ? updatedVariant : variant);
     this.props.onVariantsListChange(updatedVariantList);
   };
 
@@ -82,14 +82,11 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
   };
 
   createVariant = (newVariantName: string, nickname: string) => {
-    const newVariant: EpicVariant = {
+    const newVariant: BannerVariant = {
       name: newVariantName,
       heading: undefined,
-      paragraphs: [],
+      body: '',
       highlightedText: "Support the Guardian from as little as %%CURRENCY_SYMBOL%%1 – and it only takes a minute. Thank you.",
-      footer: undefined,
-      showTicker: false,
-      backgroundImageUrl: undefined,
       cta: defaultCta
     };
 
@@ -147,7 +144,7 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
                 </Typography>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
-                <EpicTestVariantEditor
+                <BannerTestVariantEditor
                   variant={variant}
                   onVariantChange={this.onVariantChange}
                   editMode={this.props.editMode}
@@ -178,4 +175,4 @@ class EpicTestVariantsList extends React.Component<EpicTestVariantsListProps, Ep
   };
 }
 
-export default withStyles(styles)(EpicTestVariantsList);
+export default withStyles(styles)(BannerTestVariantsList);

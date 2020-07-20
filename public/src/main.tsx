@@ -5,7 +5,8 @@ import {BrowserRouter as Router, Route} from 'react-router-dom';
 import Switchboard from './components/switchboard';
 import ContributionTypesForm from './components/contributionTypes';
 import AmountsForm from './components/amounts/amounts';
-import EpicTestsForm from './components/epicTests/epicTestsForm';
+import EpicTestsForm from './components/channelManagement/epicTests/epicTestsForm';
+import BannerTestsForm from "./components/channelManagement/bannerTests/bannerTestsForm";
 import {createStyles, Theme, WithStyles, withStyles} from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
@@ -14,7 +15,6 @@ import NavDrawer from "./components/drawer";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import IndexPage from "./components/indexPage";
-import BannerToolPlaceHolder from "./components/bannerToolPlaceholder";
 
 const styles = ({ palette, spacing, mixins, typography, transitions }: Theme) => createStyles({
   root: {
@@ -70,7 +70,7 @@ const AppRouter = withStyles(styles)(({classes}: Props) => {
           <Route path="/contribution-types" render={() => createComponent(<ContributionTypesForm/>, 'Contribution Types')} />
           <Route path="/amounts" render={() => createComponent(<AmountsForm/>, 'Amounts')} />
           <Route path="/epic-tests" render={() => createComponent(<EpicTestsForm/>, 'Epic Tests')} />
-          <Route path="/banner-tests" render={() => createComponent(<BannerToolPlaceHolder/>, 'Banner Tests')} />
+          <Route path="/banner-tests" render={() => createComponent(<BannerTestsForm/>, 'Banner Tests')} />
       </div>
     </Router>
   );

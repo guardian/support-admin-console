@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { Cta } from "./epicTestsForm";
+import { Cta } from "./helpers/shared";
 import {createStyles, FormControlLabel, Switch, Theme, withStyles, WithStyles} from "@material-ui/core";
-import EditableTextField from "../helpers/editableTextField"
+import EditableTextField from "./editableTextField"
 
 const styles = ({ palette, spacing, typography }: Theme) => createStyles({
   fields: {

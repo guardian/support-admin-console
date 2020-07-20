@@ -1,4 +1,6 @@
-import { EpicTest } from "../components/epicTests/epicTestsForm";
+import { EpicTest } from '../components/channelManagement/epicTests/epicTestsForm';
+import { BannerTest } from '../components/channelManagement/bannerTests/bannerTestsForm';
+import {Test} from "../components/channelManagement/helpers/shared";
 
 export enum SupportFrontendSettingsType {
   switches = 'switches',
@@ -7,7 +9,8 @@ export enum SupportFrontendSettingsType {
 }
 
 export enum FrontendSettingsType {
-  epicTests = 'epic-tests'
+  epicTests = 'epic-tests',
+  bannerTests = 'banner-tests',
 }
 
 function fetchSettings(path: string): Promise<any> {
@@ -66,6 +69,6 @@ export function saveFrontendSettings(settingsType: FrontendSettingsType, data: a
   return saveSettings(`/frontend/${settingsType}/update`, data);
 }
 
-export function archiveEpicTest(test: EpicTest): Promise<Response> {
-  return saveSettings('/frontend/epic-tests/archive', test);
+export function archiveTest(test: Test, settingsType: FrontendSettingsType): Promise<Response> {
+  return saveSettings(`/frontend/${settingsType}/archive`, test);
 }

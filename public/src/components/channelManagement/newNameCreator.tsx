@@ -1,15 +1,22 @@
 import React from 'react';
 
 import {
-  Theme, createStyles, WithStyles, withStyles, Button, Dialog, TextField, IconButton
+  Theme, createStyles, WithStyles, withStyles, Button, Dialog, TextField, IconButton, Typography
 } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
-import CancelIcon from '@material-ui/icons/Cancel';
+import CloseIcon from '@material-ui/icons/Close';
 
 const styles = ({ spacing }: Theme) => createStyles({
   newButton: {
     marginRight: spacing(2),
-    marginBottom: spacing(2)
+    marginBottom: spacing(2),
+    paddingTop: spacing(1),
+    paddingBottom: spacing(1),
+    width: '300px',
+    height: '50px',
+    border: '1px dotted black',
+    color: '#212121',
+    justifyContent: 'left',
   },
   popover: {
     padding: '10px',
@@ -25,22 +32,40 @@ const styles = ({ spacing }: Theme) => createStyles({
     marginRight: spacing(3),
   },
   createButton: {
-    marginTop: spacing(1),
-    marginBottom: spacing(2),
-    marginLeft: 'auto',
-    marginRight: 'auto',
+    marginBottom: spacing(1),
+    marginRight: spacing(3),
+    justifyContent: 'right',
   },
   topDialog: {
+    marginTop: spacing(1),
     display: 'flex',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
+  dialogTitle: {
+    paddingLeft: spacing(3),
+    fontSize: '20px',
+    fontWeight: 500,
+  },
+  hr: {
+    width: '100%',
+    height: '1px',
+    border: 'none',
+    backgroundColor: '#9E9E9E',
+  },
+  closeIcon: {
+    color: '#9E9E9E',
+  },
+  addIcon: {
+    marginRight: spacing(2),
+  }
 });
 
 interface NewNameCreatorProps extends WithStyles<typeof styles> {
   existingNames: string[],
   existingNicknames: string[],
   type: 'test' | 'variant',
-  action: 'New' | 'Copy',
+  action: 'New' | 'Copy' | 'Create a new',
   onValidName: (name: string, nickname: string) => void,
   editEnabled: boolean,
   initialValue?: string
@@ -229,7 +254,6 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
         className={this.props.classes.createButton}
         onClick={onClick}
         color={'primary'}
-        variant={'contained'}
         size={'medium'}
       >
         {buttonText}
@@ -252,7 +276,8 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
           helperText={this.state.nicknameHelperText}
           error={this.state.nicknameError}
         />
-        {this.showCreateButton('Create your test', () => this.handleNewTestName(this.state.currentNameText, this.state.currentNicknameText))}
+        <hr className={classes.hr} />
+        {this.showCreateButton('Create test', () => this.handleNewTestName(this.state.currentNameText, this.state.currentNicknameText))}
       </>
     );
 
@@ -260,8 +285,8 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
 
     return (
       <>
-        <Button variant="contained" color="primary" onClick={this.onNewNameButtonClick} className={classes.newButton}>
-          <AddIcon />
+        <Button variant="outlined" color="primary" onClick={this.onNewNameButtonClick} className={classes.newButton}>
+          <AddIcon className={classes.addIcon} />
           {this.props.action} {this.props.type}
         </Button>
         <Dialog
@@ -271,13 +296,16 @@ class NewNameCreator extends React.Component<NewNameCreatorProps, NewNameCreator
           fullWidth
         >
           <div className={classes.topDialog}>
+            <Typography className={classes.dialogTitle}>Create a new test</Typography>
             <IconButton
               color={'primary'}
               onClick={() => this.closeDialog()}
-              children={<CancelIcon
+              children={<CloseIcon
+                className={classes.closeIcon}
               />}
             />
           </div>
+          <hr className={classes.hr} />
 
           <TextField
             label={this.props.type === 'test' ? 'Full test name' : 'Variant name'}
