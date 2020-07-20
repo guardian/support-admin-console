@@ -1,6 +1,6 @@
 import React from 'react';
 import {EpicVariant} from './epicTestsForm';
-import {countryNameTemplate, currencyTemplate, articleCountTemplate, Cta, defaultCta} from '../helpers/shared';
+import {Cta, defaultCta} from '../helpers/shared';
 import {Theme, createStyles, WithStyles, withStyles} from "@material-ui/core";
 import EditableTextField from "../helpers/editableTextField";
 import CtaEditor from "../ctaEditor";
@@ -8,22 +8,7 @@ import TickerEditor from '../tickerEditor';
 import ButtonWithConfirmationPopup from '../helpers/buttonWithConfirmationPopup';
 import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 import {onFieldValidationChange, ValidationStatus} from '../helpers/validation';
-
-
-const validTemplates = [currencyTemplate, countryNameTemplate, articleCountTemplate];
-
-export const getInvalidTemplateError = (text: string): string | null => {
-  const templates: string[] | null = text.match(/%%[A-Z_]*%%/g);
-
-  if (templates !== null) {
-    const invalidTemplate: string | undefined =
-      templates.find(template => !validTemplates.includes(template));
-    if (invalidTemplate) return `Invalid template: ${invalidTemplate}`;
-    else return null;
-  } else {
-    return null
-  }
-};
+import {getInvalidTemplateError} from '../helpers/copyTemplates';
 
 const styles = ({ palette, spacing, typography }: Theme) => createStyles({
   container: {

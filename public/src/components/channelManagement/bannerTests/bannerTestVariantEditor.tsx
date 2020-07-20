@@ -1,33 +1,13 @@
 import React from 'react';
 import {Theme, createStyles, WithStyles, withStyles} from "@material-ui/core";
 import EditableTextField from "../helpers/editableTextField";
-import Switch from "@material-ui/core/Switch";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
 import ButtonWithConfirmationPopup from '../helpers/buttonWithConfirmationPopup';
 import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 import {onFieldValidationChange, ValidationStatus} from '../helpers/validation';
 import {BannerVariant} from "./bannerTestsForm";
 import CtaEditor from "../ctaEditor";
 import {Cta, defaultCta} from "../helpers/shared";
-
-
-const currencyTemplate = "%%CURRENCY_SYMBOL%%";
-export const countryNameTemplate = "%%COUNTRY_NAME%%";
-export const articleCountTemplate = "%%ARTICLE_COUNT%%";
-const validTemplates = [currencyTemplate, countryNameTemplate, articleCountTemplate];
-
-export const getInvalidTemplateError = (text: string): string | null => {
-  const templates: string[] | null = text.match(/%%[A-Z_]*%%/g);
-
-  if (templates !== null) {
-    const invalidTemplate: string | undefined =
-      templates.find(template => !validTemplates.includes(template));
-    if (invalidTemplate) return `Invalid template: ${invalidTemplate}`;
-    else return null;
-  } else {
-    return null
-  }
-};
+import {getInvalidTemplateError} from '../helpers/copyTemplates';
 
 const styles = ({ palette, spacing, typography }: Theme) => createStyles({
   container: {

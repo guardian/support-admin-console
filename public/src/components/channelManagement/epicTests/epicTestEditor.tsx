@@ -2,9 +2,7 @@ import React from 'react';
 import {Region} from '../../../utils/models';
 import {EpicTest, EpicVariant, MaxEpicViews} from "./epicTestsForm";
 import {
-  articleCountTemplate,
   ArticlesViewedSettings,
-  countryNameTemplate,
   TestEditorState,
   UserCohort
 } from "../helpers/shared";
@@ -32,6 +30,7 @@ import ArticlesViewedEditor, {defaultArticlesViewedSettings} from '../articlesVi
 import NewNameCreator from '../newNameCreator';
 import EpicTypeComponent, {EpicType} from './epicTypeComponent';
 import TargetRegionsSelector from '../targetRegionsSelector';
+import {articleCountTemplate, countryNameTemplate} from '../helpers/copyTemplates';
 
 const styles = ({ spacing, typography}: Theme) => createStyles({
   container: {

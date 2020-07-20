@@ -1,6 +1,7 @@
 import React from 'react';
 import {Region} from '../../../utils/models';
-import {articleCountTemplate, ArticlesViewedSettings, TestEditorState, UserCohort} from "../helpers/shared";
+import {ArticlesViewedSettings, TestEditorState, UserCohort} from "../helpers/shared";
+import {articleCountTemplate} from '../helpers/copyTemplates';
 import {
   createStyles,
   Switch,

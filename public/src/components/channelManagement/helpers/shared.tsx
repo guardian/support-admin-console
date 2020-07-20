@@ -1,8 +1,10 @@
 import {ValidationStatus} from "./validation";
 
-export const currencyTemplate = "%%CURRENCY_SYMBOL%%";
-export const countryNameTemplate = "%%COUNTRY_NAME%%";
-export const articleCountTemplate = "%%ARTICLE_COUNT%%";
+export interface Test {
+  name: string,
+  nickname?: string,
+  isOn: boolean,
+}
 
 export interface Test {
   name: string,
@@ -14,7 +16,7 @@ export interface LockStatus {
   locked: boolean,
   email?: string,
   timestamp?: string
-};
+}
 
 export interface TestStatus {
   isValid: boolean,
