@@ -69,14 +69,6 @@ export function saveFrontendSettings(settingsType: FrontendSettingsType, data: a
   return saveSettings(`/frontend/${settingsType}/update`, data);
 }
 
-export function archiveEpicTest(test: EpicTest): Promise<Response> {
-  return saveSettings('/frontend/epic-tests/archive', test);
-}
-
-export function archiveBannerTest(test: BannerTest): Promise<Response> {
-  return saveSettings('/frontend/banner-tests/archive', test);
-}
-
 export function archiveTest(test: Test, settingsType: FrontendSettingsType): Promise<Response> {
   return saveSettings(`/frontend/${settingsType}/archive`, test);
 }
