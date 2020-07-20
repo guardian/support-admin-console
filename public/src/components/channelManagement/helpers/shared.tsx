@@ -10,6 +10,11 @@ export interface Test {
   isOn: boolean,
 }
 
+export interface Variant {
+  name: string,
+  heading?: string
+}
+
 export interface LockStatus {
   locked: boolean,
   email?: string,

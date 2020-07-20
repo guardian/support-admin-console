@@ -1,6 +1,6 @@
 import React from 'react';
 import {Region} from '../../../utils/models';
-import {articleCountTemplate, ArticlesViewedSettings, TestEditorState, UserCohort} from "../helpers/shared";
+import {articleCountTemplate, ArticlesViewedSettings, defaultCta, TestEditorState, UserCohort} from "../helpers/shared";
 import {
   createStyles,
   Switch,
@@ -17,9 +17,11 @@ import {BannerTest, BannerVariant} from "./bannerTestsForm";
 import TargetRegionsSelector from "../targetRegionsSelector";
 import ArticlesViewedEditor, {defaultArticlesViewedSettings} from "../articlesViewedEditor";
 import NewNameCreator from "../newNameCreator";
-import BannerTestVariantsList from "./bannerTestVariantsList";
+import TestVariantsListWrapper from "../testVariantsList";
 import UserCohortSelector from "../userCohortSelector";
 import EditableTextField from "../helpers/editableTextField"
+
+import BannerTestVariantEditor from "./bannerTestVariantEditor";
 
 
 const styles = ({ spacing, typography}: Theme) => createStyles({
@@ -92,6 +94,14 @@ const styles = ({ spacing, typography}: Theme) => createStyles({
   hr: {
     width: '100%',
   }
+});
+
+const createDefaultVariant = (newVariantName: string): BannerVariant => ({
+    name: newVariantName,
+    heading: undefined,
+    body: '',
+    highlightedText: "Support the Guardian from as little as %%CURRENCY_SYMBOL%%1 – and it only takes a minute. Thank you.",
+    cta: defaultCta
 });
 
 const copyHasTemplate = (test: BannerTest, template: string): boolean => test.variants.some(variant =>
@@ -227,6 +237,8 @@ class BannerTestEditor extends React.Component<BannerTestEditorProps, TestEditor
       else if (this.props.hasChanged) return <span className={classes.hasChanged}>&nbsp;(modified)</span>;
     };
 
+    const TestVariantsList = TestVariantsListWrapper(BannerTestVariantEditor);
+
     return (
       <div className={classes.container}>
         <Typography variant={'h3'} className={classes.h3}>
@@ -249,12 +261,13 @@ class BannerTestEditor extends React.Component<BannerTestEditorProps, TestEditor
 
         <Typography variant={'h4'} className={classes.boldHeading}>Variants</Typography>
         <div>
-            <BannerTestVariantsList
+            <TestVariantsList<BannerVariant>
               variants={test.variants}
               onVariantsListChange={this.onVariantsChange}
               testName={test.name}
               editMode={this.isEditable()}
               onValidationChange={onFieldValidationChange(this)('variantsList')}
+              createDefaultVariant={createDefaultVariant}
             />
         </div>
 
