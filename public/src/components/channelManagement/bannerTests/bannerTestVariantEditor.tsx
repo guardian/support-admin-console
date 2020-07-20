@@ -1,7 +1,7 @@
 import React from 'react';
 import {Theme, createStyles, WithStyles, withStyles} from "@material-ui/core";
-import EditableTextField from "../helpers/editableTextField";
-import ButtonWithConfirmationPopup from '../helpers/buttonWithConfirmationPopup';
+import EditableTextField from "../editableTextField";
+import ButtonWithConfirmationPopup from '../buttonWithConfirmationPopup';
 import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 import {onFieldValidationChange, ValidationStatus} from '../helpers/validation';
 import {BannerVariant} from "./bannerTestsForm";

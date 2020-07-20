@@ -8,7 +8,7 @@ import {
   withStyles,
   WithStyles
 } from "@material-ui/core";
-import EditableTextField from "../helpers/editableTextField"
+import EditableTextField from "../editableTextField"
 import {onFieldValidationChange, ValidationStatus, isNumber} from "../helpers/validation";
 import {EpicTest, MaxEpicViews} from "./epicTestsForm";
 

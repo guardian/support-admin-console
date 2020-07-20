@@ -12,7 +12,7 @@ import {
 import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import {TickerCountType, TickerEndType, TickerSettings} from "./helpers/shared";
-import EditableTextField from "./helpers/editableTextField"
+import EditableTextField from "./editableTextField"
 import {onFieldValidationChange, ValidationStatus} from "./helpers/validation";
 
 const styles = ({ spacing, typography}: Theme) => createStyles({

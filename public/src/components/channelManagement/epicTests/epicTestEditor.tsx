@@ -19,11 +19,11 @@ import {
   WithStyles,
   withStyles
 } from "@material-ui/core";
-import EditableTextField from '../helpers/editableTextField';
+import EditableTextField from '../editableTextField';
 import EpicTestVariantsList from './epicTestVariantsList';
 import MaxEpicViewsEditor from './maxEpicViewsEditor';
 import {onFieldValidationChange} from '../helpers/validation';
-import ButtonWithConfirmationPopup from '../helpers/buttonWithConfirmationPopup';
+import ButtonWithConfirmationPopup from '../buttonWithConfirmationPopup';
 import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 import ArchiveIcon from '@material-ui/icons/Archive';
 import ArticlesViewedEditor, {defaultArticlesViewedSettings} from '../articlesViewedEditor';

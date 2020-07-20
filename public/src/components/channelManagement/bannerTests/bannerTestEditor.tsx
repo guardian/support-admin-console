@@ -11,7 +11,7 @@ import {
   withStyles,
 } from "@material-ui/core";
 import {onFieldValidationChange, isNumber} from '../helpers/validation';
-import ButtonWithConfirmationPopup from '../helpers/buttonWithConfirmationPopup';
+import ButtonWithConfirmationPopup from '../buttonWithConfirmationPopup';
 import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 import ArchiveIcon from '@material-ui/icons/Archive';
 import {BannerTest, BannerVariant} from "./bannerTestsForm";
@@ -20,7 +20,7 @@ import ArticlesViewedEditor, {defaultArticlesViewedSettings} from "../articlesVi
 import NewNameCreator from "../newNameCreator";
 import BannerTestVariantsList from "./bannerTestVariantsList";
 import UserCohortSelector from "../userCohortSelector";
-import EditableTextField from "../helpers/editableTextField"
+import EditableTextField from "../editableTextField"
 
 
 const styles = ({ spacing, typography}: Theme) => createStyles({

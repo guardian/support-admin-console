@@ -9,7 +9,7 @@ import {
   RadioGroup,
   Radio,
 } from "@material-ui/core";
-import EditableTextField from "./helpers/editableTextField"
+import EditableTextField from "./editableTextField"
 import {onFieldValidationChange, ValidationStatus} from "./helpers/validation";
 import {ArticlesViewedSettings} from "./helpers/shared";
 

@@ -4,7 +4,7 @@ import LockOpenIcon from '@material-ui/icons/LockOpen'
 import RefreshIcon from '@material-ui/icons/Refresh';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import Button from "@material-ui/core/Button";
-import ButtonWithConfirmationPopup from './helpers/buttonWithConfirmationPopup';
+import ButtonWithConfirmationPopup from './buttonWithConfirmationPopup';
 import { LockStatus, ModifiedTests } from './helpers/shared';
 
 const styles = ({ spacing, typography }: Theme) => createStyles({
