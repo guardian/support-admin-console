@@ -135,63 +135,64 @@ interface TestListProps<T extends Test>  {
   editMode: boolean
 }
 
-class TestsList<T extends Test> extends React.Component<TestListProps<T> & WithStyles<typeof styles>> {
+const TestsList = <T extends Test>(props: TestListProps<T> & WithStyles<typeof styles>) => {
+  const { classes } = props;
 
-  createTest = (newTestName: string, newTestNickname: string) => {
-    const newTest = this.props.createDefaultTest(newTestName, newTestNickname);
-    const newTestList = [...this.props.tests, newTest];
+  const createTest = (newTestName: string, newTestNickname: string) => {
+    const newTest = props.createDefaultTest(newTestName, newTestNickname);
+    const newTestList = [...props.tests, newTest];
 
-    this.props.onUpdate(newTestList, newTestName);
+    props.onUpdate(newTestList, newTestName);
   };
 
-  onTestSelected = (testName: string) => (event: React.MouseEvent<HTMLInputElement>): void => {
-    this.props.onSelectedTestName(testName);
+  const onTestSelected = (testName: string) => (event: React.MouseEvent<HTMLInputElement>): void => {
+    props.onSelectedTestName(testName);
   };
 
-  moveTestUp = (name: string): void => {
-    const newTests = [...this.props.tests];
+  const moveTestUp = (name: string): void => {
+    const newTests = [...props.tests];
     const indexOfName = newTests.findIndex(test => test.name === name);
     if (indexOfName > 0) {
       const beforeElement = newTests[indexOfName - 1];
       newTests[indexOfName-1] = newTests[indexOfName];
       newTests[indexOfName] = beforeElement;
     }
-    this.props.onUpdate(newTests, name);
+    props.onUpdate(newTests, name);
   };
 
-  moveTestDown = (name: string): void => {
-    const newTests = [...this.props.tests];
+  const moveTestDown = (name: string): void => {
+    const newTests = [...props.tests];
     const indexOfName = newTests.findIndex(test => test.name === name);
     if (indexOfName < newTests.length - 1) {
       const afterElement = newTests[indexOfName + 1];
       newTests[indexOfName + 1] = newTests[indexOfName];
       newTests[indexOfName] = afterElement;
     }
-    this.props.onUpdate(newTests, name);
+    props.onUpdate(newTests, name);
   };
 
-  renderReorderButtons = (testName: string, index: number) => {
+  const renderReorderButtons = (testName: string, index: number) => {
     return (
-      <div className={this.props.classes.buttonsContainer}>
-        <div className={this.props.classes.singleButtonContainer}>
+      <div className={props.classes.buttonsContainer}>
+        <div className={props.classes.singleButtonContainer}>
           {index > 0 &&
           <Button
             color={'default'}
-            className={this.props.classes.arrowButton}
+            className={props.classes.arrowButton}
             variant={'contained'}
-            onClick={() => this.moveTestUp(testName)}>
-            <ArrowUpward className={this.props.classes.arrowIcon}/>
+            onClick={() => moveTestUp(testName)}>
+            <ArrowUpward className={props.classes.arrowIcon}/>
           </Button>
           }
         </div>
-        <div className={this.props.classes.singleButtonContainer}>
-          {index < this.props.tests.length - 1 &&
+        <div className={props.classes.singleButtonContainer}>
+          {index < props.tests.length - 1 &&
           <Button
             color={'default'}
-            className={this.props.classes.arrowButton}
+            className={props.classes.arrowButton}
             variant={'contained'}
-            onClick={() => this.moveTestDown(testName)}>
-            <ArrowDownward className={this.props.classes.arrowIcon}/>
+            onClick={() => moveTestDown(testName)}>
+            <ArrowDownward className={props.classes.arrowIcon}/>
           </Button>
           }
         </div>
@@ -199,8 +200,8 @@ class TestsList<T extends Test> extends React.Component<TestListProps<T> & WithS
     )
   };
 
-  renderDeletedOrArchivedIcon = (testStatus: TestStatus): React.ReactNode => {
-    const { classes } = this.props;
+  const renderDeletedOrArchivedIcon = (testStatus: TestStatus): React.ReactNode => {
+    const { classes } = props;
     if (testStatus.isDeleted) {
       return <DeleteForeverIcon className={classes.deletedIcon} />;
     }
@@ -210,81 +211,77 @@ class TestsList<T extends Test> extends React.Component<TestListProps<T> & WithS
     return null;
   };
 
-  render(): React.ReactNode {
-    const { classes } = this.props;
+  return (
+    <>
+      <div className={classes.root}>
+        {props.editMode ? (
+          <NewNameCreator
+            type="test"
+            action="Create a new"
+            existingNames={props.tests.map(test => test.name)}
+            existingNicknames={
+              props.tests
+                .map(test => test.nickname)
+                .filter(nickname => !!nickname) as string[]
+            }
+            onValidName={createTest}
+            editEnabled={props.editMode}
+          />
+        ): (<div className={classes.spacer}>&nbsp;</div>)}
 
-    return (
-      <>
-        <div className={classes.root}>
-          {this.props.editMode ? (
-            <NewNameCreator
-              type="test"
-              action="Create a new"
-              existingNames={this.props.tests.map(test => test.name)}
-              existingNicknames={
-                this.props.tests
-                  .map(test => test.nickname)
-                  .filter(nickname => !!nickname) as string[]
-              }
-              onValidName={this.createTest}
-              editEnabled={this.props.editMode}
-            />
-          ): (<div className={classes.spacer}>&nbsp;</div>)}
+        <List className={classes.testsList} component="nav">
+          {props.tests.map((test, index) => {
 
-          <List className={classes.testsList} component="nav">
-            {this.props.tests.map((test, index) => {
+            const testStatus = props.modifiedTests[test.name];
+            const toStrip = /^\d{4}-\d{2}-\d{2}_(contribs*_|moment_)*/;
 
-              const testStatus = this.props.modifiedTests[test.name];
-              const toStrip = /^\d{4}-\d{2}-\d{2}_(contribs*_|moment_)*/;
+            const classNames = [
+              classes.test,
+              testStatus && testStatus.isValid && !testStatus.isDeleted && !testStatus.isArchived ? classes.validTest : '',
+              testStatus && !testStatus.isValid ? classes.invalidTest : '',
+              props.selectedTestName === test.name ? classes.selectedTest : '',
+              testStatus && testStatus.isDeleted ? classes.deleted : '',
+              testStatus && testStatus.isArchived ? classes.archived : ''
+            ].join(' ');
 
-              const classNames = [
-                classes.test,
-                testStatus && testStatus.isValid && !testStatus.isDeleted && !testStatus.isArchived ? classes.validTest : '',
-                testStatus && !testStatus.isValid ? classes.invalidTest : '',
-                this.props.selectedTestName === test.name ? classes.selectedTest : '',
-                testStatus && testStatus.isDeleted ? classes.deleted : '',
-                testStatus && testStatus.isArchived ? classes.archived : ''
-              ].join(' ');
-
-              return (
-                <MuiThemeProvider
-                  theme={theme}
-                  key={index}
+            return (
+              <MuiThemeProvider
+                theme={theme}
+                key={index}
+              >
+                <Tooltip
+                  title={test.name}
+                  aria-label="test name"
+                  placement="right"
                 >
-                  <Tooltip
-                    title={test.name}
-                    aria-label="test name"
-                    placement="right"
+                  <ListItem
+                    className={classNames}
+                    onClick={onTestSelected(test.name)}
+                    button={true}
                   >
-                    <ListItem
-                      className={classNames}
-                      onClick={this.onTestSelected(test.name)}
-                      button={true}
-                    >
-                      { this.props.editMode ? this.renderReorderButtons(test.name, index) : <div className={classes.buttonsContainer}></div>}
-                      <div className={classes.testText}>
-                        <Typography
-                          className={classes.testName}
-                          noWrap={true}>
-                          {test.nickname ? test.nickname : test.name.replace(toStrip, '')}
-                        </Typography>
+                    { props.editMode ? renderReorderButtons(test.name, index) : <div className={classes.buttonsContainer}/>}
+                    <div className={classes.testText}>
+                      <Typography
+                        className={classes.testName}
+                        noWrap={true}>
+                        {test.nickname ? test.nickname : test.name.replace(toStrip, '')}
+                      </Typography>
 
-                        {(testStatus && testStatus.isDeleted) && (<div><Typography className={classes.toBeDeleted}>To be deleted</Typography></div>)}
+                      {(testStatus && testStatus.isDeleted) && (<div><Typography className={classes.toBeDeleted}>To be deleted</Typography></div>)}
 
-                        {(testStatus && testStatus.isArchived) && (<div><Typography className={classes.toBeArchived}>To be archived</Typography></div>)}
-                      </div>
-                      {testStatus && (testStatus.isDeleted || testStatus.isArchived) ? this.renderDeletedOrArchivedIcon(testStatus) : renderVisibilityIcons(test.isOn)}
-                    </ListItem>
-                  </Tooltip>
-                </MuiThemeProvider>
-              )
-            })}
-          </List>
-        </div>
-      </>
-    )
-  }
-}
+                      {(testStatus && testStatus.isArchived) && (<div><Typography className={classes.toBeArchived}>To be archived</Typography></div>)}
+                    </div>
+                    {testStatus && (testStatus.isDeleted || testStatus.isArchived) ? renderDeletedOrArchivedIcon(testStatus) : renderVisibilityIcons(test.isOn)}
+                  </ListItem>
+                </Tooltip>
+              </MuiThemeProvider>
+            )
+          })}
+        </List>
+      </div>
+    </>
+  )
+};
 
 // Hack to work around material UI breaking type checking when class has type parameters - https://stackoverflow.com/q/52567697
 export default function WrappedTestsList<T extends Test>(props: TestListProps<T>): React.ReactElement<TestListProps<T>> {
