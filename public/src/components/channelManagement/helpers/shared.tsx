@@ -4,6 +4,12 @@ export const currencyTemplate = "%%CURRENCY_SYMBOL%%";
 export const countryNameTemplate = "%%COUNTRY_NAME%%";
 export const articleCountTemplate = "%%ARTICLE_COUNT%%";
 
+export interface Test {
+  name: string,
+  nickname?: string,
+  isOn: boolean,
+}
+
 export interface LockStatus {
   locked: boolean,
   email?: string,
@@ -48,4 +54,24 @@ export interface ArticlesViewedSettings {
 
 export interface TestEditorState {
     validationStatus: ValidationStatus
+}
+
+export enum TickerEndType {
+  unlimited = 'unlimited',
+  hardstop = 'hardstop'
+}
+export enum TickerCountType {
+  money = 'money',
+  people = 'people'
+}
+interface TickerCopy {
+  countLabel: string,
+  goalReachedPrimary: string,
+  goalReachedSecondary: string
+}
+export interface TickerSettings {
+  endType: TickerEndType,
+  countType: TickerCountType,
+  currencySymbol: string,
+  copy: TickerCopy
 }

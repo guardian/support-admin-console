@@ -1,14 +1,14 @@
 import React from 'react';
 import {Button, createStyles, List, ListItem, Theme, Typography, withStyles, WithStyles, Tooltip, createMuiTheme, MuiThemeProvider} from "@material-ui/core";
 
-import { BannerTest } from './bannerTestsForm';
-import NewNameCreator from '../newNameCreator';
+import NewNameCreator from './newNameCreator';
 import ArrowUpward from '@material-ui/icons/ArrowUpward';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import ArchiveIcon from '@material-ui/icons/Archive';
-import { renderVisibilityIcons } from '../helpers/utilities';
-import { ModifiedTests, UserCohort, TestStatus } from '../helpers/shared';
+import { renderVisibilityIcons } from './helpers/utilities';
+import { ModifiedTests, TestStatus } from './helpers/shared';
+import {Test} from "./helpers/shared";
 
 const styles = ( { typography, spacing }: Theme ) => createStyles({
   root: {
@@ -125,32 +125,24 @@ const theme = createMuiTheme({
   }
 });
 
-interface BannerTestListProps extends WithStyles<typeof styles> {
-  tests: BannerTest[],
+interface TestListProps<T extends Test>  {
+  tests: T[],
   modifiedTests: ModifiedTests,
-  selectedTestName: string | undefined,
-  onUpdate: (tests: BannerTest[], modifiedTestName?: string) => void,
+  selectedTestName?: string,
+  onUpdate: (tests: T[], modifiedTestName?: string) => void,
+  createDefaultTest: (newTestName: string, newTestNickname: string) => T,
   onSelectedTestName: (testName: string) => void,
   editMode: boolean
 }
-class BannerTestsList extends React.Component<BannerTestListProps> {
 
-  createTest = (newBannerTestName: string, newBannerTestNickname: string) => {
-    const newTest: BannerTest = {
-      name: newBannerTestName,
-      nickname: newBannerTestNickname,
-      isOn: false,
-      minArticlesBeforeShowingBanner: 0,
-      userCohort: UserCohort.AllNonSupporters,
-      locations: [],
-      variants: [],
-      articlesViewedSettings: undefined,
-    }
-    const newBannerTestList = [...this.props.tests, newTest];
+class TestsList<T extends Test> extends React.Component<TestListProps<T> & WithStyles<typeof styles>> {
 
-    this.props.onUpdate(newBannerTestList, newBannerTestName);
+  createTest = (newTestName: string, newTestNickname: string) => {
+    const newTest = this.props.createDefaultTest(newTestName, newTestNickname);
+    const newTestList = [...this.props.tests, newTest];
 
-  }
+    this.props.onUpdate(newTestList, newTestName);
+  };
 
   onTestSelected = (testName: string) => (event: React.MouseEvent<HTMLInputElement>): void => {
     this.props.onSelectedTestName(testName);
@@ -165,7 +157,7 @@ class BannerTestsList extends React.Component<BannerTestListProps> {
       newTests[indexOfName] = beforeElement;
     }
     this.props.onUpdate(newTests, name);
-  }
+  };
 
   moveTestDown = (name: string): void => {
     const newTests = [...this.props.tests];
@@ -176,36 +168,36 @@ class BannerTestsList extends React.Component<BannerTestListProps> {
       newTests[indexOfName] = afterElement;
     }
     this.props.onUpdate(newTests, name);
-  }
+  };
 
   renderReorderButtons = (testName: string, index: number) => {
     return (
       <div className={this.props.classes.buttonsContainer}>
         <div className={this.props.classes.singleButtonContainer}>
           {index > 0 &&
-            <Button
-              color={'default'}
-              className={this.props.classes.arrowButton}
-              variant={'contained'}
-              onClick={() => this.moveTestUp(testName)}>
-              <ArrowUpward className={this.props.classes.arrowIcon}/>
-            </Button>
+          <Button
+            color={'default'}
+            className={this.props.classes.arrowButton}
+            variant={'contained'}
+            onClick={() => this.moveTestUp(testName)}>
+            <ArrowUpward className={this.props.classes.arrowIcon}/>
+          </Button>
           }
         </div>
         <div className={this.props.classes.singleButtonContainer}>
           {index < this.props.tests.length - 1 &&
-            <Button
-              color={'default'}
-              className={this.props.classes.arrowButton}
-              variant={'contained'}
-              onClick={() => this.moveTestDown(testName)}>
-                <ArrowDownward className={this.props.classes.arrowIcon}/>
-            </Button>
+          <Button
+            color={'default'}
+            className={this.props.classes.arrowButton}
+            variant={'contained'}
+            onClick={() => this.moveTestDown(testName)}>
+            <ArrowDownward className={this.props.classes.arrowIcon}/>
+          </Button>
           }
         </div>
       </div>
     )
-  }
+  };
 
   renderDeletedOrArchivedIcon = (testStatus: TestStatus): React.ReactNode => {
     const { classes } = this.props;
@@ -216,7 +208,7 @@ class BannerTestsList extends React.Component<BannerTestListProps> {
       return <ArchiveIcon className={classes.archiveIcon} />;
     }
     return null;
-  }
+  };
 
   render(): React.ReactNode {
     const { classes } = this.props;
@@ -274,7 +266,7 @@ class BannerTestsList extends React.Component<BannerTestListProps> {
                         <Typography
                           className={classes.testName}
                           noWrap={true}>
-                            {test.nickname ? test.nickname : test.name.replace(toStrip, '')}
+                          {test.nickname ? test.nickname : test.name.replace(toStrip, '')}
                         </Typography>
 
                         {(testStatus && testStatus.isDeleted) && (<div><Typography className={classes.toBeDeleted}>To be deleted</Typography></div>)}
@@ -294,4 +286,11 @@ class BannerTestsList extends React.Component<BannerTestListProps> {
   }
 }
 
-export default withStyles(styles)(BannerTestsList);
+// Hack to work around material UI breaking type checking when class has type parameters - https://stackoverflow.com/q/52567697
+export default function WrappedTestsList<T extends Test>(props: TestListProps<T>): React.ReactElement<TestListProps<T>> {
+  const wrapper = withStyles(styles)(
+    TestsList
+  ) as any;
+
+  return React.createElement(wrapper, props);
+}
