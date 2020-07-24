@@ -7,7 +7,12 @@ import {
   withStyles,
   WithStyles,
 } from "@material-ui/core";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from "react-beautiful-dnd";
 
 import { Test } from "./helpers/shared";
 import TestListTest from "./testListTest";
@@ -33,19 +38,32 @@ const styles = ({}: Theme) =>
 interface TestListProps<T extends Test> {
   tests: T[];
   isInEditMode: boolean;
+  onUpdate: (tests: T[], modifiedTestName?: string) => void;
 }
 
 const TestList = <T extends Test>({
   classes,
   tests,
   isInEditMode,
+  onUpdate,
 }: TestListProps<T> & WithStyles<typeof styles>) => {
+  const onDragEnd = ({ destination, source }: DropResult) => {
+    if (destination) {
+      const newTests = [...tests];
+      const movedTest = { ...tests[source.index] };
+      newTests.splice(source.index, 1);
+      newTests.splice(destination.index, 0, movedTest);
+
+      onUpdate(newTests, movedTest.name);
+    }
+  };
+
   return (
     <div className={classes.container}>
       <Typography className={classes.header}>
         Tests in priority order
       </Typography>
-      <DragDropContext onDragEnd={() => console.log("dragEnd")}>
+      <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="droppable">
           {(provided) => (
             <List

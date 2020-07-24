@@ -49,12 +49,17 @@ const TestListContainer = <T extends Test>({
   classes,
   tests,
   isInEditMode,
+  onUpdate,
 }: TestListContainerProps<T> & WithStyles<typeof styles>) => {
   return (
     <div className={classes.root}>
       <div className={classes.listsContainer}>
         <TestPriorityLabelList numTests={tests.length} />
-        <TestList tests={tests} isInEditMode={isInEditMode} />
+        <TestList
+          tests={tests}
+          isInEditMode={isInEditMode}
+          onUpdate={onUpdate}
+        />
       </div>
     </div>
   );
