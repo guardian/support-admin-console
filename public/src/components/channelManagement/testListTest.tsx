@@ -47,11 +47,13 @@ const styles = ({ spacing, palette }: Theme) =>
 
 interface TestListTestProps extends WithStyles<typeof styles> {
   test: Test;
+  onClick: () => void;
 }
 
 const TestListTest: React.FC<TestListTestProps> = ({
   classes,
   test,
+  onClick,
 }: TestListTestProps) => {
   const hasArticleCount = test.articlesViewedSettings !== undefined;
 
@@ -61,7 +63,7 @@ const TestListTest: React.FC<TestListTestProps> = ({
   ].join(" ");
 
   return (
-    <ListItem className={testClasses} button={true}>
+    <ListItem className={testClasses} button={true} onClick={onClick}>
       <div className={classes.labelAndNameContainer}>
         <TestListTestLiveLabel isLive={test.isOn} />
         <TestListTestName name={test.name} nickname={test.nickname} />

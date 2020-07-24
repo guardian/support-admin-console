@@ -142,6 +142,7 @@ class EpicTestsForm extends React.Component<Props> {
           tests={this.props.tests}
           isInEditMode={this.props.editMode}
           onUpdate={this.props.onTestsChange}
+          onTestSelected={this.props.onSelectedTestName}
         />
 
         {this.props.selectedTestName ? (

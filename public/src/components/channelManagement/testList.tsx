@@ -39,6 +39,7 @@ interface TestListProps<T extends Test> {
   tests: T[];
   isInEditMode: boolean;
   onUpdate: (tests: T[], modifiedTestName?: string) => void;
+  onTestSelected: (testName: string) => void;
 }
 
 const TestList = <T extends Test>({
@@ -46,6 +47,7 @@ const TestList = <T extends Test>({
   tests,
   isInEditMode,
   onUpdate,
+  onTestSelected,
 }: TestListProps<T> & WithStyles<typeof styles>) => {
   const onDragEnd = ({ destination, source }: DropResult) => {
     if (destination) {
@@ -84,12 +86,19 @@ const TestList = <T extends Test>({
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
                       >
-                        <TestListTest test={test} />
+                        <TestListTest
+                          test={test}
+                          onClick={() => onTestSelected(test.name)}
+                        />
                       </div>
                     )}
                   </Draggable>
                 ) : (
-                  <TestListTest key={test.name} test={test} />
+                  <TestListTest
+                    key={test.name}
+                    test={test}
+                    onClick={() => onTestSelected(test.name)}
+                  />
                 )
               )}
             </List>
