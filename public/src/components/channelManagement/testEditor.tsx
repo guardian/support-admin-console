@@ -1,5 +1,5 @@
-import React from 'react';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import React from "react";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import {
   fetchFrontendSettings,
   FrontendSettingsType,
@@ -7,48 +7,50 @@ import {
   requestLock,
   requestTakeControl,
   requestUnlock,
-  archiveTest
+  archiveTest,
 } from "../../utils/requests";
-import {
-  LockStatus,
-  ModifiedTests, Test,
-} from "./helpers/shared";
+import { LockStatus, ModifiedTests, Test } from "./helpers/shared";
 import TestActionBar from "./testActionBar";
 
-export const updateTest = <T extends Test>(currentTests: T[], updatedTest: T): T[] =>
-  currentTests.map(test => test.name === updatedTest.name ? updatedTest : test);
+export const updateTest = <T extends Test>(
+  currentTests: T[],
+  updatedTest: T
+): T[] =>
+  currentTests.map((test) =>
+    test.name === updatedTest.name ? updatedTest : test
+  );
 
 // The inner component's props must extend this type
 export interface InnerComponentProps<T extends Test> {
-  tests: T[],
-  modifiedTests: ModifiedTests,
-  selectedTestName?: string,
-  onTestsChange: (updatedTests: T[], modifiedTestName?: string) => void,
-  onTestDelete: (testName: string) => void,
-  onTestArchive: (testName: string) => void,
-  onSelectedTestName: (testName: string) => void,
-  onTestErrorStatusChange: (testName: string) => (isValid: boolean) => void
-  cancel: () => void,
-  editMode: boolean
+  tests: T[];
+  modifiedTests: ModifiedTests;
+  selectedTestName?: string;
+  onTestsChange: (updatedTests: T[], modifiedTestName?: string) => void;
+  onTestDelete: (testName: string) => void;
+  onTestArchive: (testName: string) => void;
+  onSelectedTestName: (testName: string) => void;
+  onTestErrorStatusChange: (testName: string) => (isValid: boolean) => void;
+  cancel: () => void;
+  editMode: boolean;
 }
 
 interface DataFromServer<T extends Test> {
   value: {
-    tests: T[]
-  },
-  version: string,
-  status: LockStatus,
-  userEmail: string,
+    tests: T[];
+  };
+  version: string;
+  status: LockStatus;
+  userEmail: string;
 }
 
 interface TestFormState<T extends Test> {
-  tests: T[] | null,
-  version: string | null,
-  selectedTestName?: string,
-  editMode: boolean,
-  lockStatus: LockStatus,
-  modifiedTests: ModifiedTests,
-  timeoutAlertId: number | null,  // A timeout for warning about being open for edit for too long
+  tests: T[] | null;
+  version: string | null;
+  selectedTestName?: string;
+  editMode: boolean;
+  lockStatus: LockStatus;
+  modifiedTests: ModifiedTests;
+  timeoutAlertId: number | null; // A timeout for warning about being open for edit for too long
 }
 
 interface Props {}
@@ -62,7 +64,6 @@ const TestEditor = <T extends Test>(
   settingsType: FrontendSettingsType
 ) =>
   class extends React.Component<Props, TestFormState<T>> {
-
     state: TestFormState<T> = {
       tests: null,
       version: null,
@@ -74,12 +75,12 @@ const TestEditor = <T extends Test>(
     };
 
     componentWillMount(): void {
-      this.fetchStateFromServer()
-    };
+      this.fetchStateFromServer();
+    }
 
     fetchStateFromServer = (): void => {
-      fetchFrontendSettings(settingsType)
-        .then((serverData: DataFromServer<T>) => {
+      fetchFrontendSettings(settingsType).then(
+        (serverData: DataFromServer<T>) => {
           const editMode = serverData.status.email === serverData.userEmail;
 
           this.updateWarningTimeout(editMode);
@@ -89,9 +90,10 @@ const TestEditor = <T extends Test>(
             version: serverData.version,
             lockStatus: serverData.status,
             editMode: editMode,
-            modifiedTests: {}
+            modifiedTests: {},
           });
-        });
+        }
+      );
     };
 
     // Maintains an alert if tool is left open for edit for 20 minutes
@@ -102,12 +104,13 @@ const TestEditor = <T extends Test>(
         }
 
         const timeoutAlertId = window.setTimeout(() => {
-          alert("You've had this editing session open for 20 minutes - if you leave it much longer then you may lose any unsaved work!\nIf you've finished then please either save or cancel.");
+          alert(
+            "You've had this editing session open for 20 minutes - if you leave it much longer then you may lose any unsaved work!\nIf you've finished then please either save or cancel."
+          );
           this.setState({ timeoutAlertId: null });
         }, 60 * 20 * 1000);
 
         this.setState({ timeoutAlertId });
-
       } else if (this.state.timeoutAlertId) {
         window.clearTimeout(this.state.timeoutAlertId);
         this.setState({ timeoutAlertId: null });
@@ -115,43 +118,56 @@ const TestEditor = <T extends Test>(
     };
 
     cancel = (): void => {
-      requestUnlock(settingsType).then( response =>
-        response.ok ? this.fetchStateFromServer() : alert("Error - can't request lock!")
-      )
+      requestUnlock(settingsType).then((response) =>
+        response.ok
+          ? this.fetchStateFromServer()
+          : alert("Error - can't request lock!")
+      );
     };
 
     save = (tests: T[]) => (): void => {
-      const testsToArchive: T[] = tests.filter(test =>
-        this.state.modifiedTests[test.name] && this.state.modifiedTests[test.name].isArchived
+      const testsToArchive: T[] = tests.filter(
+        (test) =>
+          this.state.modifiedTests[test.name] &&
+          this.state.modifiedTests[test.name].isArchived
       );
 
-      Promise.all(testsToArchive.map(test => archiveTest(test, settingsType))).then(results => {
-        const notOk = results.some(result => !result.ok);
+      Promise.all(
+        testsToArchive.map((test) => archiveTest(test, settingsType))
+      ).then((results) => {
+        const notOk = results.some((result) => !result.ok);
         const numTestsToArchive = testsToArchive.length;
         if (notOk) {
-          alert(`Failed to archive ${numTestsToArchive} test${numTestsToArchive !== 1 ? 's' : ''}`);
+          alert(
+            `Failed to archive ${numTestsToArchive} test${
+              numTestsToArchive !== 1 ? "s" : ""
+            }`
+          );
         } else {
-          const updatedTests: T[] = tests.filter(test => {
+          const updatedTests: T[] = tests.filter((test) => {
             const modifiedTestData = this.state.modifiedTests[test.name];
-            return !(modifiedTestData && (modifiedTestData.isDeleted || modifiedTestData.isArchived));
+            return !(
+              modifiedTestData &&
+              (modifiedTestData.isDeleted || modifiedTestData.isArchived)
+            );
           });
 
           const postData = {
             version: this.state.version,
             value: {
-              tests: updatedTests
-            }
+              tests: updatedTests,
+            },
           };
 
           saveFrontendSettings(settingsType, postData)
-            .then(resp => {
+            .then((resp) => {
               if (!resp.ok) {
-                resp.text().then(msg => alert(msg));
+                resp.text().then((msg) => alert(msg));
               }
               this.fetchStateFromServer();
             })
             .catch((resp) => {
-              alert('Error while saving');
+              alert("Error while saving");
               this.fetchStateFromServer();
             });
         }
@@ -167,123 +183,118 @@ const TestEditor = <T extends Test>(
               isValid: true, // not already modified, assume it's valid until told otherwise
               isDeleted: false,
               isArchived: false,
-              isNew: !(this.state.tests && this.state.tests.some(test => test.name === modifiedTestName))
-            }
-          }
-        })
+              isNew: !(
+                this.state.tests &&
+                this.state.tests.some((test) => test.name === modifiedTestName)
+              ),
+            },
+          },
+        });
       }
 
       this.setState({
-        tests: updatedTests
+        tests: updatedTests,
       });
     };
 
-    onTestErrorStatusChange = (testName: string) => (isValid: boolean): void => {
+    onTestErrorStatusChange = (testName: string) => (
+      isValid: boolean
+    ): void => {
       if (this.state.modifiedTests[testName]) {
         this.setState({
           modifiedTests: {
             ...this.state.modifiedTests,
             [testName]: {
               ...this.state.modifiedTests[testName],
-              isValid
-            }
-          }
+              isValid,
+            },
+          },
         });
       }
     };
 
     onTestDelete = (testName: string): void => {
-      const updatedState = this.state.modifiedTests[testName] ?
-        { ...this.state.modifiedTests[testName], isDeleted: true } :
-        {
-          isValid: true,
-          isDeleted: true,
-          isNew: false,
-          isArchived: false
-        };
+      const updatedState = this.state.modifiedTests[testName]
+        ? { ...this.state.modifiedTests[testName], isDeleted: true }
+        : {
+            isValid: true,
+            isDeleted: true,
+            isNew: false,
+            isArchived: false,
+          };
 
       this.setState({
         modifiedTests: {
           ...this.state.modifiedTests,
-          [testName]: updatedState
-        }
+          [testName]: updatedState,
+        },
       });
     };
 
     onTestArchive = (testName: string): void => {
-      const updatedState = this.state.modifiedTests[testName] ?
-        { ...this.state.modifiedTests[testName], isArchived: true } :
-        {
-          isValid: true,
-          isDeleted: false,
-          isNew: false,
-          isArchived: true
-        };
+      const updatedState = this.state.modifiedTests[testName]
+        ? { ...this.state.modifiedTests[testName], isArchived: true }
+        : {
+            isValid: true,
+            isDeleted: false,
+            isNew: false,
+            isArchived: true,
+          };
 
       this.setState({
         modifiedTests: {
           ...this.state.modifiedTests,
-          [testName]: updatedState
-        }
+          [testName]: updatedState,
+        },
       });
     };
 
     onSelectedTestName = (testName: string): void => {
       this.setState({
-        selectedTestName: testName
-      })
+        selectedTestName: testName,
+      });
     };
 
     requestTestsLock = () => {
-      requestLock(settingsType).then(response =>
-        response.ok ? this.fetchStateFromServer() : alert("Error - can't request lock!")
+      requestLock(settingsType).then((response) =>
+        response.ok
+          ? this.fetchStateFromServer()
+          : alert("Error - can't request lock!")
       );
     };
 
     requestTestsTakeControl = () => {
-      requestTakeControl(settingsType).then(response =>
-        response.ok ? this.fetchStateFromServer() : alert("Error - can't take back control!")
+      requestTakeControl(settingsType).then((response) =>
+        response.ok
+          ? this.fetchStateFromServer()
+          : alert("Error - can't take back control!")
       );
     };
 
     render(): React.ReactNode {
       return (
         <>
-          <div>
-            {
-              this.state.tests !== null ?
-                <>
-                  <TestActionBar
-                    modifiedTests={this.state.modifiedTests}
-                    lockStatus={this.state.lockStatus}
-                    editMode={this.state.editMode}
-                    requestTakeControl={this.requestTestsTakeControl}
-                    requestLock={this.requestTestsLock}
-                    cancel={this.cancel}
-                    save={this.save(this.state.tests)}
-                  />
-
-                  <InnerComponent
-                    tests={this.state.tests}
-                    modifiedTests={this.state.modifiedTests}
-                    selectedTestName={this.state.selectedTestName}
-                    onTestsChange={this.onTestsChange}
-                    onTestDelete={this.onTestDelete}
-                    onTestArchive={this.onTestArchive}
-                    onSelectedTestName={this.onSelectedTestName}
-                    onTestErrorStatusChange={this.onTestErrorStatusChange}
-                    cancel={this.cancel}
-                    editMode={this.state.editMode}
-                  />
-                </>
-                :
-                <CircularProgress/>
-            }
-          </div>
+          {this.state.tests !== null ? (
+            <>
+              <InnerComponent
+                tests={this.state.tests}
+                modifiedTests={this.state.modifiedTests}
+                selectedTestName={this.state.selectedTestName}
+                onTestsChange={this.onTestsChange}
+                onTestDelete={this.onTestDelete}
+                onTestArchive={this.onTestArchive}
+                onSelectedTestName={this.onSelectedTestName}
+                onTestErrorStatusChange={this.onTestErrorStatusChange}
+                cancel={this.cancel}
+                editMode={this.state.editMode}
+              />
+            </>
+          ) : (
+            <CircularProgress />
+          )}
         </>
-      )
+      );
     }
-
   };
 
 export default TestEditor;
