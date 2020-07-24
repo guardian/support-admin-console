@@ -38,7 +38,7 @@ const TestPriorityLabelList: React.FC<TestPriorityLabelListProps> = ({
   return (
     <List className={classes.list}>
       {[...Array(maxPriorityLabel).keys()].map((priority) => (
-        <TestPriorityLabelListLabel priority={priority} />
+        <TestPriorityLabelListLabel key={priority} priority={priority} />
       ))}
     </List>
   );

@@ -73,7 +73,11 @@ const TestList = <T extends Test>({
             >
               {tests.map((test, index) =>
                 isInEditMode ? (
-                  <Draggable key={index} draggableId={test.name} index={index}>
+                  <Draggable
+                    key={test.name}
+                    draggableId={test.name}
+                    index={index}
+                  >
                     {(provided) => (
                       <div
                         ref={provided.innerRef}
@@ -85,7 +89,7 @@ const TestList = <T extends Test>({
                     )}
                   </Draggable>
                 ) : (
-                  <TestListTest test={test} />
+                  <TestListTest key={test.name} test={test} />
                 )
               )}
             </List>
