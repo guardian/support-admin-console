@@ -32,11 +32,13 @@ const styles = ({}: Theme) =>
 
 interface TestListProps<T extends Test> {
   tests: T[];
+  isInEditMode: boolean;
 }
 
 const TestList = <T extends Test>({
   classes,
   tests,
+  isInEditMode,
 }: TestListProps<T> & WithStyles<typeof styles>) => {
   return (
     <div className={classes.container}>
@@ -45,25 +47,29 @@ const TestList = <T extends Test>({
       </Typography>
       <DragDropContext onDragEnd={() => console.log("dragEnd")}>
         <Droppable droppableId="droppable">
-          {(provided, snapshot) => (
+          {(provided) => (
             <List
               className={classes.list}
               ref={provided.innerRef}
               {...provided.droppableProps}
             >
-              {tests.map((test, index) => (
-                <Draggable key={index} draggableId={test.name} index={index}>
-                  {(provided, snapshot) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                    >
-                      <TestListTest test={test} />
-                    </div>
-                  )}
-                </Draggable>
-              ))}
+              {tests.map((test, index) =>
+                isInEditMode ? (
+                  <Draggable key={index} draggableId={test.name} index={index}>
+                    {(provided) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                      >
+                        <TestListTest test={test} />
+                      </div>
+                    )}
+                  </Draggable>
+                ) : (
+                  <TestListTest test={test} />
+                )
+              )}
             </List>
           )}
         </Droppable>

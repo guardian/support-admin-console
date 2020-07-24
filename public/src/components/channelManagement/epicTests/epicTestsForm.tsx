@@ -138,7 +138,10 @@ class EpicTestsForm extends React.Component<Props> {
 
     return (
       <div className={listAndEditorClassNames}>
-        <TestsList<EpicTest> tests={this.props.tests} />
+        <TestsList<EpicTest>
+          tests={this.props.tests}
+          isInEditMode={this.props.editMode}
+        />
 
         {this.props.selectedTestName ? (
           this.props.tests.map((test) => (

@@ -114,7 +114,7 @@ const BannerTestsForm: React.FC<Props> = ({
             onUpdate={onTestsChange}
             createDefaultTest={createDefaultBannerTest}
             onSelectedTestName={onSelectedTestName}
-            editMode={editMode}
+            isInEditMode={editMode}
           />
         </div>
 

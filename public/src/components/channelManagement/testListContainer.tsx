@@ -42,18 +42,19 @@ interface TestListContainerProps<T extends Test> {
   onUpdate: (tests: T[], modifiedTestName?: string) => void;
   createDefaultTest: (newTestName: string, newTestNickname: string) => T;
   onSelectedTestName: (testName: string) => void;
-  editMode: boolean;
+  isInEditMode: boolean;
 }
 
 const TestListContainer = <T extends Test>({
   classes,
   tests,
+  isInEditMode,
 }: TestListContainerProps<T> & WithStyles<typeof styles>) => {
   return (
     <div className={classes.root}>
       <div className={classes.listsContainer}>
         <TestPriorityLabelList numTests={tests.length} />
-        <TestList tests={tests} />
+        <TestList tests={tests} isInEditMode={isInEditMode} />
       </div>
     </div>
   );
@@ -67,4 +68,3 @@ export default function WrappedTestListContainer<T extends Test>(
 
   return React.createElement(wrapper, props);
 }
-// export default withStyles(styles)(TestListContainer);
