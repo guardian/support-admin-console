@@ -31,6 +31,8 @@ export interface InnerComponentProps<T extends Test> {
   onSelectedTestName: (testName: string) => void;
   onTestErrorStatusChange: (testName: string) => (isValid: boolean) => void;
   cancel: () => void;
+  save: () => void;
+  requestLock: () => void;
   editMode: boolean;
 }
 
@@ -285,6 +287,8 @@ const TestEditor = <T extends Test>(
                 onTestArchive={this.onTestArchive}
                 onSelectedTestName={this.onSelectedTestName}
                 onTestErrorStatusChange={this.onTestErrorStatusChange}
+                requestLock={this.requestTestsLock}
+                save={this.save(this.state.tests)}
                 cancel={this.cancel}
                 editMode={this.state.editMode}
               />

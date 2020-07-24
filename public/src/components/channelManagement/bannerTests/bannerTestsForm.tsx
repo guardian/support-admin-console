@@ -10,6 +10,7 @@ import {
 } from "@material-ui/core";
 import TestsListContainer from "../testListContainer";
 import BannerTestEditor from "./bannerTestEditor";
+import StickyBottomBar from "../stickyBottomBar";
 import {
   ArticlesViewedSettings,
   Cta,
@@ -98,63 +99,80 @@ const BannerTestsForm: React.FC<Props> = ({
   onTestDelete,
   onTestArchive,
   onTestErrorStatusChange,
+  requestLock,
+  save,
   editMode,
 }) => {
   return (
-    <div className={classes.body}>
-      <div className={classes.leftCol}>
-        <TestsListContainer<BannerTest>
-          tests={tests}
-          modifiedTests={modifiedTests}
-          selectedTestName={selectedTestName}
-          onUpdate={onTestsChange}
-          createDefaultTest={createDefaultBannerTest}
-          onSelectedTestName={onSelectedTestName}
-          editMode={editMode}
-        />
+    <>
+      <div className={classes.body}>
+        <div className={classes.leftCol}>
+          <TestsListContainer<BannerTest>
+            tests={tests}
+            modifiedTests={modifiedTests}
+            selectedTestName={selectedTestName}
+            onUpdate={onTestsChange}
+            createDefaultTest={createDefaultBannerTest}
+            onSelectedTestName={onSelectedTestName}
+            editMode={editMode}
+          />
+        </div>
+
+        <div className={classes.rightCol}>
+          {selectedTestName ? (
+            tests.map((test) => (
+              <BannerTestEditor
+                test={tests.find((test) => test.name === selectedTestName)}
+                hasChanged={!!modifiedTests[test.name]}
+                onChange={(updatedTest) =>
+                  onTestsChange(
+                    updateTest(tests, updatedTest),
+                    updatedTest.name
+                  )
+                }
+                onValidationChange={onTestErrorStatusChange(test.name)}
+                visible={test.name === selectedTestName}
+                key={test.name}
+                editMode={editMode}
+                onDelete={onTestDelete}
+                onArchive={onTestArchive}
+                isDeleted={
+                  modifiedTests[test.name] && modifiedTests[test.name].isDeleted
+                }
+                isArchived={
+                  modifiedTests[test.name] &&
+                  modifiedTests[test.name].isArchived
+                }
+                isNew={
+                  modifiedTests[test.name] && modifiedTests[test.name].isNew
+                }
+                createTest={(newTest: BannerTest) => {
+                  const newTests = [...tests, newTest];
+                  onTestsChange(newTests, newTest.name);
+                }}
+                testNames={tests.map((test) => test.name)}
+                testNicknames={
+                  tests
+                    .map((test) => test.nickname)
+                    .filter((nickname) => !!nickname) as string[]
+                }
+              />
+            ))
+          ) : (
+            <Typography className={classes.viewText}>
+              Click on a test on the left to view contents.
+            </Typography>
+          )}
+        </div>
       </div>
 
-      <div className={classes.rightCol}>
-        {selectedTestName ? (
-          tests.map((test) => (
-            <BannerTestEditor
-              test={tests.find((test) => test.name === selectedTestName)}
-              hasChanged={!!modifiedTests[test.name]}
-              onChange={(updatedTest) =>
-                onTestsChange(updateTest(tests, updatedTest), updatedTest.name)
-              }
-              onValidationChange={onTestErrorStatusChange(test.name)}
-              visible={test.name === selectedTestName}
-              key={test.name}
-              editMode={editMode}
-              onDelete={onTestDelete}
-              onArchive={onTestArchive}
-              isDeleted={
-                modifiedTests[test.name] && modifiedTests[test.name].isDeleted
-              }
-              isArchived={
-                modifiedTests[test.name] && modifiedTests[test.name].isArchived
-              }
-              isNew={modifiedTests[test.name] && modifiedTests[test.name].isNew}
-              createTest={(newTest: BannerTest) => {
-                const newTests = [...tests, newTest];
-                onTestsChange(newTests, newTest.name);
-              }}
-              testNames={tests.map((test) => test.name)}
-              testNicknames={
-                tests
-                  .map((test) => test.nickname)
-                  .filter((nickname) => !!nickname) as string[]
-              }
-            />
-          ))
-        ) : (
-          <Typography className={classes.viewText}>
-            Click on a test on the left to view contents.
-          </Typography>
-        )}
-      </div>
-    </div>
+      <StickyBottomBar
+        isInEditMode={editMode}
+        hasTestSelected={selectedTestName !== undefined}
+        requestLock={requestLock}
+        save={save}
+      />
+    </>
   );
 };
 
