@@ -212,7 +212,7 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
             text={variant.backgroundImageUrl || ""}
             onSubmit={this.onOptionalTextChange(VariantFieldNames.backgroundImageUrl)}
             label="Image URL"
-            helperText="This will appear above everything except a ticker"
+            helperText="Image ratio should be 2.5:1. This will appear above everything except a ticker"
             editEnabled={this.props.editMode}
           />
 
