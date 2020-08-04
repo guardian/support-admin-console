@@ -59,9 +59,14 @@ const styles = ({ spacing, typography }: Theme) =>
       display: "flex",
       padding: spacing(1),
     },
+    viewTextContainer: {
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: "-50px",
+    },
     viewText: {
-      marginTop: spacing(6),
-      marginLeft: spacing(2),
       fontSize: typography.pxToRem(16),
     },
     editModeBorder: {
@@ -82,7 +87,11 @@ const styles = ({ spacing, typography }: Theme) =>
       paddingLeft: spacing(6),
       paddingRight: spacing(6),
     },
-    rightCol: {},
+    rightCol: {
+      flexGrow: 1,
+      display: "flex",
+      justifyContent: "center",
+    },
   });
 
 interface Props
@@ -159,9 +168,14 @@ const BannerTestsForm: React.FC<Props> = ({
               />
             ))
           ) : (
-            <Typography className={classes.viewText}>
-              Click on a test on the left to view contents.
-            </Typography>
+            <div className={classes.viewTextContainer}>
+              <Typography className={classes.viewText}>
+                Select an existing test from the menu,
+              </Typography>
+              <Typography className={classes.viewText}>
+                or create a new one
+              </Typography>
+            </div>
           )}
         </div>
       </div>
