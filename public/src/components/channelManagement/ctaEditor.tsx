@@ -44,7 +44,7 @@ class CtaEditor extends React.Component<Props> {
           label="Button destination:"
           editEnabled={this.props.editMode}
           helperText={ this.props.manualCampaignCode ?
-            'Note - tracking code must be added manually to this url, e.g. theguardian.com/article?INTCMP=my-campaign-code' :
+            'Note - if this is not a support.theguardian.com url then tracking code must be added manually, e.g. theguardian.com/article?INTCMP=my-campaign-code' :
             undefined
           }
         />
