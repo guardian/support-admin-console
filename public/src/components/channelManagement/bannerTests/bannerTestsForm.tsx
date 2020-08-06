@@ -8,6 +8,7 @@ import {
   withStyles,
   WithStyles,
 } from "@material-ui/core";
+import Sidebar from "../sidebar";
 import TestsListContainer from "../testListContainer";
 import BannerTestEditor from "./bannerTestEditor";
 import StickyBottomBar from "../stickyBottomBar";
@@ -112,17 +113,22 @@ const BannerTestsForm: React.FC<Props> = ({
   save,
   editMode,
 }) => {
+  const createTest = (name: string, nickname: string) => {
+    const newTests = [...tests, createDefaultBannerTest(name, nickname)];
+    onTestsChange(newTests, name);
+  };
+
   return (
     <>
       <div className={classes.body}>
         <div className={classes.leftCol}>
-          <TestsListContainer<BannerTest>
+          <Sidebar<BannerTest>
             tests={tests}
             modifiedTests={modifiedTests}
             selectedTestName={selectedTestName}
             onUpdate={onTestsChange}
-            createDefaultTest={createDefaultBannerTest}
             onSelectedTestName={onSelectedTestName}
+            createTest={createTest}
             isInEditMode={editMode}
           />
         </div>

@@ -3,7 +3,6 @@ import {
   createStyles,
   List,
   Theme,
-  Typography,
   withStyles,
   WithStyles,
 } from "@material-ui/core";
@@ -19,13 +18,7 @@ import TestListTest from "./testListTest";
 
 const styles = ({}: Theme) =>
   createStyles({
-    container: {
-      marginTop: "-30px",
-    },
-    header: {
-      height: "30px",
-      fontSize: "14px",
-    },
+    container: {},
     list: {
       marginTop: 0,
       padding: 0,
@@ -62,9 +55,6 @@ const TestList = <T extends Test>({
 
   return (
     <div className={classes.container}>
-      <Typography className={classes.header}>
-        Tests in priority order
-      </Typography>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="droppable">
           {(provided) => (
