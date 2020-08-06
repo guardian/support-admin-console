@@ -55,11 +55,13 @@ const Sidebar = <T extends Test>({
 }: SidebarProps<T> & WithStyles<typeof styles>) => {
   return (
     <div className={classes.root}>
-      <NewTestCreator
-        existingNames={tests.map((t) => t.name)}
-        existingNicknames={tests.map((t) => t.nickname || "")}
-        createTest={createTest}
-      />
+      {isInEditMode && (
+        <NewTestCreator
+          existingNames={tests.map((t) => t.name)}
+          existingNicknames={tests.map((t) => t.nickname || "")}
+          createTest={createTest}
+        />
+      )}
       <Typography className={classes.header}>
         Tests in priority order
       </Typography>
