@@ -111,6 +111,7 @@ const BannerTestsForm: React.FC<Props> = ({
   onTestErrorStatusChange,
   requestLock,
   save,
+  cancel,
   editMode,
 }) => {
   const createTest = (name: string, nickname: string) => {
@@ -191,6 +192,7 @@ const BannerTestsForm: React.FC<Props> = ({
         hasTestSelected={selectedTestName !== undefined}
         requestLock={requestLock}
         save={save}
+        cancel={cancel}
       />
     </>
   );

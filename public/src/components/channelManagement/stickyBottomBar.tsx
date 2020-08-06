@@ -37,6 +37,7 @@ const styles = ({ palette, spacing, mixins, typography, transitions }: Theme) =>
       position: "absolute",
       top: 0,
       bottom: 0,
+      left: "100px",
       right: "100px",
       display: "flex",
       alignItems: "center",
@@ -48,11 +49,12 @@ interface StickyBottomBarProps {
   hasTestSelected: boolean;
   requestLock: () => void;
   save: () => void;
+  cancel: () => void;
 }
 
 const StickyBottomBar: React.FC<
   StickyBottomBarProps & WithStyles<typeof styles>
-> = ({ classes, isInEditMode, hasTestSelected, requestLock, save }) => {
+> = ({ classes, isInEditMode, hasTestSelected, requestLock, save, cancel }) => {
   const containerClasses = [
     classes.container,
     isInEditMode ? classes.containerEditMode : classes.containerReadOnlyMode,
@@ -71,6 +73,7 @@ const StickyBottomBar: React.FC<
           hasTestSelected={hasTestSelected}
           requestLock={requestLock}
           save={save}
+          cancel={cancel}
         />
       </div>
     </AppBar>
