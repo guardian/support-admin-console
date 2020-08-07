@@ -188,7 +188,7 @@ const BannerTestsForm: React.FC<Props> = ({
 
       <StickyBottomBar
         isInEditMode={editMode}
-        hasTestSelected={selectedTestName !== undefined}
+        selectedTestName={selectedTestName}
         requestLock={requestLock}
         save={save}
         cancel={cancel}

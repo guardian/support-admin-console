@@ -46,7 +46,7 @@ const styles = ({ palette, spacing, mixins, typography, transitions }: Theme) =>
 
 interface StickyBottomBarProps {
   isInEditMode: boolean;
-  hasTestSelected: boolean;
+  selectedTestName?: string;
   requestLock: () => void;
   save: () => void;
   cancel: () => void;
@@ -54,7 +54,14 @@ interface StickyBottomBarProps {
 
 const StickyBottomBar: React.FC<
   StickyBottomBarProps & WithStyles<typeof styles>
-> = ({ classes, isInEditMode, hasTestSelected, requestLock, save, cancel }) => {
+> = ({
+  classes,
+  isInEditMode,
+  selectedTestName,
+  requestLock,
+  save,
+  cancel,
+}) => {
   const containerClasses = [
     classes.container,
     isInEditMode ? classes.containerEditMode : classes.containerReadOnlyMode,
@@ -64,13 +71,16 @@ const StickyBottomBar: React.FC<
     <AppBar position="fixed" className={classes.appBar}>
       <div className={containerClasses}>
         <StickyBottomBarStatus isInEditMode={isInEditMode} />
-        <StickyBottomBarDetail isInEditMode={isInEditMode} />
+        <StickyBottomBarDetail
+          isInEditMode={isInEditMode}
+          selectedTestName={selectedTestName}
+        />
       </div>
 
       <div className={classes.actionButtonContainer}>
         <StickyBottomBarActionButtons
           isInEditMode={isInEditMode}
-          hasTestSelected={hasTestSelected}
+          hasTestSelected={selectedTestName !== undefined}
           requestLock={requestLock}
           save={save}
           cancel={cancel}

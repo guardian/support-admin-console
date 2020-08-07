@@ -19,19 +19,22 @@ const styles = ({}: Theme) =>
 
 interface StickyBottomBarDetailProps {
   isInEditMode: boolean;
+  selectedTestName?: string;
 }
 
-const READ_ONLY_MODE_TEXT =
+const READ_ONLY_MODE_DEFAULT_TEXT =
   "— View live and draft tests using the left-hand menu";
-const EDIT_MODE_TEXT = "";
 
 const StickyBottomBarDetail: React.FC<
   StickyBottomBarDetailProps & WithStyles<typeof styles>
-> = ({ classes, isInEditMode }) => {
+> = ({ classes, isInEditMode, selectedTestName }) => {
+  const editModeText =
+    selectedTestName === undefined ? "" : `- ${selectedTestName}`;
+
   return (
     <div>
       <Typography className={classes.text}>
-        {isInEditMode ? EDIT_MODE_TEXT : READ_ONLY_MODE_TEXT}
+        {isInEditMode ? editModeText : READ_ONLY_MODE_DEFAULT_TEXT}
       </Typography>
     </div>
   );
