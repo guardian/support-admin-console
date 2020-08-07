@@ -123,8 +123,6 @@ const NewTestCreator = ({
     text: string,
     onError: () => void
   ): boolean => {
-    console.log(text);
-    console.log(INVALID_CHARACTERS_REGEX.test(text));
     return check(!INVALID_CHARACTERS_REGEX.test(text), onError);
   };
 
