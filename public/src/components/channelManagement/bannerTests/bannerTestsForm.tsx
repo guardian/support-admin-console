@@ -9,7 +9,6 @@ import {
   WithStyles,
 } from "@material-ui/core";
 import Sidebar from "../sidebar";
-import TestsListContainer from "../testListContainer";
 import BannerTestEditor from "./bannerTestEditor";
 import StickyBottomBar from "../stickyBottomBar";
 import {
