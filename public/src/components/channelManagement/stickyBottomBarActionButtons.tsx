@@ -1,7 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Button,
   createStyles,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Theme,
   Typography,
   WithStyles,
@@ -53,16 +58,43 @@ interface StickyBottomBarActionButtonsProps {
 const StickyBottomBarActionButtons: React.FC<
   StickyBottomBarActionButtonsProps & WithStyles<typeof styles>
 > = ({ classes, isInEditMode, hasTestSelected, requestLock, save, cancel }) => {
-  const CancelButton = () => (
-    <Button
-      variant="outlined"
-      className={classes.button}
-      startIcon={<CloseIcon />}
-      onClick={cancel}
-    >
-      <Typography className={classes.buttonText}>Cancel</Typography>
-    </Button>
-  );
+  const CancelButton = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    return (
+      <>
+        <Button
+          variant="outlined"
+          className={classes.button}
+          startIcon={<CloseIcon />}
+          onClick={() => setIsOpen(true)}
+        >
+          <Typography className={classes.buttonText}>Cancel</Typography>
+        </Button>
+        <Dialog
+          open={isOpen}
+          onClose={() => setIsOpen(false)}
+          aria-labelledby="cancel-dialog-title"
+          aria-describedby="cancel-dialog-description"
+        >
+          <DialogTitle id="cancel-dialog-title">Cancel changes?</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              You have unsaved changes - these will be lost if you move on.
+              Please consider saving your work now.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={cancel} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={save} color="primary" autoFocus>
+              Save changes
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </>
+    );
+  };
 
   const PreviewButton = () => (
     <Button
