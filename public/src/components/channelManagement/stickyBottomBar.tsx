@@ -68,7 +68,7 @@ const StickyBottomBar: React.FC<
   ].join(" ");
 
   return (
-    <AppBar position="fixed" className={classes.appBar}>
+    <AppBar position="relative" className={classes.appBar}>
       <div className={containerClasses}>
         <StickyBottomBarStatus isInEditMode={isInEditMode} />
         <StickyBottomBarDetail

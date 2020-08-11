@@ -77,6 +77,8 @@ const styles = ({ spacing, typography }: Theme) =>
     },
     body: {
       display: "flex",
+      overflow: "hidden",
+      flexGrow: 1,
       width: "100%",
       height: "100%",
     },
@@ -88,6 +90,7 @@ const styles = ({ spacing, typography }: Theme) =>
       paddingRight: spacing(6),
     },
     rightCol: {
+      overflowY: "auto",
       flexGrow: 1,
       display: "flex",
       justifyContent: "center",
