@@ -1,15 +1,7 @@
 import React from "react";
-import {
-  createStyles,
-  Theme,
-  withStyles,
-  WithStyles,
-  Typography,
-} from "@material-ui/core";
 import EpicTestEditor from "./epicTestEditor";
 import { Region } from "../../../utils/models";
 
-import TestsList from "../testList";
 import {
   UserCohort,
   Cta,
@@ -18,6 +10,8 @@ import {
 } from "../helpers/shared";
 import { InnerComponentProps, updateTest } from "../testEditor";
 import TestsForm from "../testEditor";
+import TestsFormLayout from "../testsFormLayout";
+import Sidebar from "../sidebar";
 import { FrontendSettingsType } from "../../../utils/requests";
 import { MaxEpicViewsDefaults } from "./maxEpicViewsEditor";
 
@@ -101,102 +95,84 @@ const createDefaultEpicTest = (
   useLocalViewLog: false,
 });
 
-const styles = ({ spacing, typography }: Theme) =>
-  createStyles({
-    testListAndEditor: {
-      display: "flex",
-      padding: spacing(1),
-    },
-    viewText: {
-      marginTop: spacing(6),
-      marginLeft: spacing(2),
-      fontSize: typography.pxToRem(16),
-    },
-    editModeBorder: {
-      border: "4px solid #ffe500",
-    },
-    readOnlyModeBorder: {
-      border: "4px solid #dcdcdc",
-    },
-    h2: {
-      fontSize: "3rem",
-    },
-  });
+type Props = InnerComponentProps<EpicTest>;
 
-interface Props
-  extends InnerComponentProps<EpicTest>,
-    WithStyles<typeof styles> {}
-
-class EpicTestsForm extends React.Component<Props> {
-  render(): React.ReactNode {
-    const { classes } = this.props;
-    const listAndEditorClassNames = [
-      classes.testListAndEditor,
-      this.props.editMode && classes.editModeBorder,
-      !this.props.editMode && classes.readOnlyModeBorder,
-    ].join(" ");
-
-    return (
-      <div className={listAndEditorClassNames}>
-        <TestsList<EpicTest>
-          tests={this.props.tests}
-          isInEditMode={this.props.editMode}
-          onUpdate={this.props.onTestsChange}
-          onTestSelected={this.props.onSelectedTestName}
+const EpicTestsForm: React.FC<Props> = ({
+  tests,
+  modifiedTests,
+  selectedTestName,
+  onTestsChange,
+  onSelectedTestName,
+  onTestDelete,
+  onTestArchive,
+  onTestErrorStatusChange,
+  requestLock,
+  save,
+  cancel,
+  editMode,
+}) => {
+  const createTest = (name: string, nickname: string) => {
+    const newTests = [...tests, createDefaultEpicTest(name, nickname)];
+    onTestsChange(newTests, name);
+  };
+  return (
+    <TestsFormLayout
+      sidebar={
+        <Sidebar<EpicTest>
+          tests={tests}
+          modifiedTests={modifiedTests}
+          selectedTestName={selectedTestName}
+          onUpdate={onTestsChange}
+          onSelectedTestName={onSelectedTestName}
+          createTest={createTest}
+          isInEditMode={editMode}
         />
+      }
+      testEditor={
+        selectedTestName ? (
+          <EpicTestEditor
+            test={tests.find((test) => test.name === selectedTestName)}
+            hasChanged={!!modifiedTests[selectedTestName]}
+            onChange={(updatedTest) =>
+              onTestsChange(updateTest(tests, updatedTest), updatedTest.name)
+            }
+            onValidationChange={onTestErrorStatusChange(selectedTestName)}
+            visible
+            editMode={editMode}
+            onDelete={onTestDelete}
+            onArchive={onTestArchive}
+            isDeleted={
+              modifiedTests[selectedTestName] &&
+              modifiedTests[selectedTestName].isDeleted
+            }
+            isArchived={
+              modifiedTests[selectedTestName] &&
+              modifiedTests[selectedTestName].isArchived
+            }
+            isNew={
+              modifiedTests[selectedTestName] &&
+              modifiedTests[selectedTestName].isNew
+            }
+            createTest={(newTest: EpicTest) => {
+              const newTests = [...tests, newTest];
+              onTestsChange(newTests, newTest.name);
+            }}
+            testNames={tests.map((test) => test.name)}
+            testNicknames={
+              tests
+                .map((test) => test.nickname)
+                .filter((nickname) => !!nickname) as string[]
+            }
+          />
+        ) : null
+      }
+      selectedTestName={selectedTestName}
+      requestLock={requestLock}
+      save={save}
+      cancel={cancel}
+      editMode={editMode}
+    />
+  );
+};
 
-        {this.props.selectedTestName ? (
-          this.props.tests.map((test) => (
-            <EpicTestEditor
-              test={this.props.tests.find(
-                (test) => test.name === this.props.selectedTestName
-              )}
-              hasChanged={!!this.props.modifiedTests[test.name]}
-              onChange={(updatedTest) =>
-                this.props.onTestsChange(
-                  updateTest(this.props.tests, updatedTest),
-                  updatedTest.name
-                )
-              }
-              onValidationChange={this.props.onTestErrorStatusChange(test.name)}
-              visible={test.name === this.props.selectedTestName}
-              key={test.name}
-              editMode={this.props.editMode}
-              onDelete={this.props.onTestDelete}
-              onArchive={this.props.onTestArchive}
-              isDeleted={
-                this.props.modifiedTests[test.name] &&
-                this.props.modifiedTests[test.name].isDeleted
-              }
-              isArchived={
-                this.props.modifiedTests[test.name] &&
-                this.props.modifiedTests[test.name].isArchived
-              }
-              isNew={
-                this.props.modifiedTests[test.name] &&
-                this.props.modifiedTests[test.name].isNew
-              }
-              createTest={(newTest: EpicTest) => {
-                const newTests = [...this.props.tests, newTest];
-                this.props.onTestsChange(newTests, newTest.name);
-              }}
-              testNames={this.props.tests.map((test) => test.name)}
-              testNicknames={
-                this.props.tests
-                  .map((test) => test.nickname)
-                  .filter((nickname) => !!nickname) as string[]
-              }
-            />
-          ))
-        ) : (
-          <Typography className={classes.viewText}>
-            Click on a test on the left to view contents.
-          </Typography>
-        )}
-      </div>
-    );
-  }
-}
-
-const styled = withStyles(styles)(EpicTestsForm);
-export default TestsForm(styled, FrontendSettingsType.epicTests);
+export default TestsForm(EpicTestsForm, FrontendSettingsType.epicTests);
