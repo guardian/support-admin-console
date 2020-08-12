@@ -31,6 +31,7 @@ const styles = ({}: Theme) =>
 interface TestListProps<T extends Test> {
   tests: T[];
   isInEditMode: boolean;
+  selectedTestName?: string;
   onUpdate: (tests: T[], modifiedTestName?: string) => void;
   onTestSelected: (testName: string) => void;
 }
@@ -39,6 +40,7 @@ const TestList = <T extends Test>({
   classes,
   tests,
   isInEditMode,
+  selectedTestName,
   onUpdate,
   onTestSelected,
 }: TestListProps<T> & WithStyles<typeof styles>) => {
@@ -78,6 +80,7 @@ const TestList = <T extends Test>({
                       >
                         <TestListTest
                           test={test}
+                          isSelected={test.name === selectedTestName}
                           onClick={() => onTestSelected(test.name)}
                         />
                       </div>
@@ -87,6 +90,7 @@ const TestList = <T extends Test>({
                   <TestListTest
                     key={test.name}
                     test={test}
+                    isSelected={test.name === selectedTestName}
                     onClick={() => onTestSelected(test.name)}
                   />
                 )

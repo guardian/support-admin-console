@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   ListItem,
   createStyles,
@@ -6,12 +6,14 @@ import {
   WithStyles,
   Theme,
 } from "@material-ui/core";
+import { red } from "@material-ui/core/colors";
 import { Test } from "./helpers/shared";
 import TestListTestLiveLabel from "./testListTestLiveLabel";
 import TestListTestName from "./testListTestName";
 import TestListTestArticleCountLabel from "./testListTestArticleCountLabel";
+import useHover from "../../hooks/useHover";
 
-const styles = ({ spacing, palette }: Theme) =>
+const styles = ({ palette }: Theme) =>
   createStyles({
     test: {
       position: "relative",
@@ -24,11 +26,25 @@ const styles = ({ spacing, palette }: Theme) =>
       borderRadius: "4px",
       padding: "0 12px",
     },
-    testLive: {
-      border: `1px solid #f2453d`,
+    live: {
+      border: `1px solid ${red[500]}`,
+
+      "&:hover": {
+        background: `${red[500]}`,
+      },
     },
-    testDraft: {
+    liveInverted: {
+      background: `${red[500]}`,
+    },
+    draft: {
       border: `1px solid ${palette.grey[700]}`,
+
+      "&:hover": {
+        background: `${palette.grey[700]}`,
+      },
+    },
+    draftInverted: {
+      background: `${palette.grey[700]}`,
     },
     priorityLabelContainer: {
       position: "absolute",
@@ -47,26 +63,47 @@ const styles = ({ spacing, palette }: Theme) =>
 
 interface TestListTestProps extends WithStyles<typeof styles> {
   test: Test;
+  isSelected: boolean;
   onClick: () => void;
 }
 
 const TestListTest: React.FC<TestListTestProps> = ({
   classes,
   test,
+  isSelected,
   onClick,
 }: TestListTestProps) => {
   const hasArticleCount = test.articlesViewedSettings !== undefined;
 
-  const testClasses = [
-    classes.test,
-    test.isOn ? classes.testLive : classes.testDraft,
-  ].join(" ");
+  const [ref, isHovered] = useHover<HTMLDivElement>();
+
+  const shouldInvertColor = isHovered || isSelected;
+
+  const containerClasses = [classes.test];
+  containerClasses.push(test.isOn ? classes.live : classes.draft);
+  if (shouldInvertColor) {
+    containerClasses.push(
+      test.isOn ? classes.liveInverted : classes.draftInverted
+    );
+  }
 
   return (
-    <ListItem className={testClasses} button={true} onClick={onClick}>
+    <ListItem
+      className={containerClasses.join(" ")}
+      button={true}
+      onClick={onClick}
+      ref={ref}
+    >
       <div className={classes.labelAndNameContainer}>
-        <TestListTestLiveLabel isLive={test.isOn} />
-        <TestListTestName name={test.name} nickname={test.nickname} />
+        <TestListTestLiveLabel
+          isLive={test.isOn}
+          shouldInvertColor={shouldInvertColor}
+        />
+        <TestListTestName
+          name={test.name}
+          nickname={test.nickname}
+          shouldInverColor={shouldInvertColor}
+        />
       </div>
 
       {hasArticleCount && <TestListTestArticleCountLabel />}

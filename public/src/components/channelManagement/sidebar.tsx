@@ -49,6 +49,7 @@ const Sidebar = <T extends Test>({
   classes,
   tests,
   isInEditMode,
+  selectedTestName,
   onUpdate,
   onSelectedTestName,
   createTest,
@@ -72,6 +73,7 @@ const Sidebar = <T extends Test>({
         <TestList
           tests={tests}
           isInEditMode={isInEditMode}
+          selectedTestName={selectedTestName}
           onUpdate={onUpdate}
           onTestSelected={onSelectedTestName}
         />
