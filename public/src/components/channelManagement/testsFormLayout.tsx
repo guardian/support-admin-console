@@ -29,6 +29,7 @@ const styles = ({ spacing, typography }: Theme) =>
     },
     leftCol: {
       height: "100%",
+      overflowY: "auto",
       background: "white",
       paddingTop: spacing(6),
       paddingLeft: spacing(6),
