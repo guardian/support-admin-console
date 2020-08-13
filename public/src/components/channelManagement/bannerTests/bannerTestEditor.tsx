@@ -28,14 +28,23 @@ import BannerTestVariantsList from "./bannerTestVariantsList";
 import UserCohortSelector from "../userCohortSelector";
 import EditableTextField from "../editableTextField";
 import TestEditorHeader from "../testEditorHeader";
+import TestEditorLiveSwitch from "../testEditorLiveSwitch";
 
-const styles = ({ spacing, typography }: Theme) =>
+const styles = ({ spacing, palette, typography }: Theme) =>
   createStyles({
     container: {
       width: "100%",
       background: "#FFFFFF",
       paddingTop: spacing(6),
       paddingRight: spacing(12),
+    },
+    headerAndSwitchContainer: {
+      paddingBottom: spacing(3),
+      borderBottom: `1px solid ${palette.grey[500]}`,
+
+      "& > * + *": {
+        marginTop: spacing(2),
+      },
     },
     formControl: {
       marginTop: spacing(2),
@@ -181,11 +190,8 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = (
     updateTest((test) => ({ ...test, [fieldName]: updatedList }));
   };
 
-  const onSwitchChange = (fieldName: string) => (
-    event: React.ChangeEvent<HTMLInputElement>
-  ): void => {
-    const updatedBool = event.target.checked;
-    updateTest((test) => ({ ...test, [fieldName]: updatedBool }));
+  const onLiveSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    updateTest((test) => ({ ...test, isOn: event.target.checked }));
   };
 
   const onUserCohortChange = (selectedCohort: UserCohort): void => {
@@ -254,23 +260,18 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = (
 
     return (
       <div className={classes.container}>
-        <TestEditorHeader
-          name={props.test.name}
-          nickname={props.test.nickname}
-        />
+        <div className={classes.headerAndSwitchContainer}>
+          <TestEditorHeader
+            name={props.test.name}
+            nickname={props.test.nickname}
+          />
 
-        <div className={classes.switchWithIcon}>
-          <Typography className={classes.switchLabel}>
-            Live on theguardian.com
-          </Typography>
-          <Switch
-            checked={test.isOn}
-            onChange={onSwitchChange("isOn")}
-            disabled={!isEditable()}
+          <TestEditorLiveSwitch
+            isChecked={test.isOn}
+            isDisabled={!isEditable()}
+            onChange={onLiveSwitchChange}
           />
         </div>
-
-        <hr />
 
         <Typography variant={"h4"} className={classes.boldHeading}>
           Variants
