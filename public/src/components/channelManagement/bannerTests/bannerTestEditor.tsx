@@ -27,14 +27,15 @@ import NewNameCreator from "../newNameCreator";
 import BannerTestVariantsList from "./bannerTestVariantsList";
 import UserCohortSelector from "../userCohortSelector";
 import EditableTextField from "../editableTextField";
+import TestEditorHeader from "../testEditorHeader";
 
 const styles = ({ spacing, typography }: Theme) =>
   createStyles({
     container: {
       width: "100%",
-      borderTop: `2px solid #999999`,
-      marginLeft: spacing(2),
-      marginTop: spacing(6),
+      background: "#FFFFFF",
+      paddingTop: spacing(6),
+      paddingRight: spacing(12),
     },
     formControl: {
       marginTop: spacing(2),
@@ -109,7 +110,7 @@ const copyHasTemplate = (test: BannerTest, template: string): boolean =>
   );
 
 interface BannerTestEditorProps extends WithStyles<typeof styles> {
-  test?: BannerTest;
+  test: BannerTest;
   hasChanged: boolean;
   onChange: (updatedTest: BannerTest) => void;
   onValidationChange: (isValid: boolean) => void;
@@ -253,13 +254,10 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = (
 
     return (
       <div className={classes.container}>
-        <Typography variant={"h3"} className={classes.h3}>
-          {props.test && props.test.name}
-          {statusText()}
-        </Typography>
-        <Typography variant={"h4"} className={classes.boldHeading}>
-          {props.test && props.test.nickname}
-        </Typography>
+        <TestEditorHeader
+          name={props.test.name}
+          nickname={props.test.nickname}
+        />
 
         <div className={classes.switchWithIcon}>
           <Typography className={classes.switchLabel}>
