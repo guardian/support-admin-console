@@ -34,6 +34,7 @@ const styles = ({ spacing, palette, typography }: Theme) =>
   createStyles({
     container: {
       width: "100%",
+      height: "max-content",
       background: "#FFFFFF",
       paddingTop: spacing(6),
       paddingRight: spacing(12),
@@ -44,6 +45,15 @@ const styles = ({ spacing, palette, typography }: Theme) =>
 
       "& > * + *": {
         marginTop: spacing(2),
+      },
+    },
+    variantsContainer: {
+      paddingTop: spacing(1),
+      paddingBottom: spacing(6),
+      borderBottom: `1px solid ${palette.grey[500]}`,
+
+      "& > * + *": {
+        marginTop: spacing(4),
       },
     },
     formControl: {
@@ -59,10 +69,10 @@ const styles = ({ spacing, palette, typography }: Theme) =>
     hasChanged: {
       color: "orange",
     },
-    boldHeading: {
-      fontSize: typography.pxToRem(17),
-      fontWeight: typography.fontWeightBold,
-      margin: "20px 0 10px",
+    sectionHeader: {
+      fontSize: 16,
+      fontWeight: 500,
+      color: palette.grey[700],
     },
     select: {
       minWidth: "460px",
@@ -156,16 +166,12 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = (
     return undefined;
   };
 
-  const updateTest = (update: (test: BannerTest) => BannerTest) => {
-    if (props.test) {
-      const updatedTest = update(props.test);
-
-      props.onChange({
-        ...updatedTest,
-        // To save dotcom from having to work this out
-        articlesViewedSettings: getArticlesViewedSettings(updatedTest),
-      });
-    }
+  const updateTest = (updatedTest: BannerTest) => {
+    props.onChange({
+      ...updatedTest,
+      // To save dotcom from having to work this out
+      articlesViewedSettings: getArticlesViewedSettings(updatedTest),
+    });
   };
 
   const copyTest = (newTestName: string, newTestNickname: string): void => {
@@ -180,26 +186,27 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = (
   };
 
   const onVariantsChange = (updatedVariantList: BannerVariant[]): void => {
-    if (props.test) {
-      updateTest((test) => ({ ...test, variants: updatedVariantList }));
-    }
+    updateTest({ ...props.test, variants: updatedVariantList });
+    // if (props.test) {
+    //   updateTest((test) => ({ ...test, variants: updatedVariantList }));
+    // }
   };
 
   const onListChange = (fieldName: string) => (updatedString: string): void => {
     const updatedList = updatedString === "" ? [] : updatedString.split(",");
-    updateTest((test) => ({ ...test, [fieldName]: updatedList }));
+    // updateTest((test) => ({ ...test, [fieldName]: updatedList }));
   };
 
   const onLiveSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    updateTest((test) => ({ ...test, isOn: event.target.checked }));
+    // updateTest((test) => ({ ...test, isOn: event.target.checked }));
   };
 
   const onUserCohortChange = (selectedCohort: UserCohort): void => {
-    updateTest((test) => ({ ...test, userCohort: selectedCohort }));
+    // updateTest((test) => ({ ...test, userCohort: selectedCohort }));
   };
 
   const onTargetRegionsChange = (selectedRegions: Region[]): void => {
-    updateTest((test) => ({ ...test, locations: selectedRegions }));
+    // updateTest((test) => ({ ...test, locations: selectedRegions }));
   };
 
   interface BottomButtonsProps {
@@ -273,32 +280,37 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = (
           />
         </div>
 
-        <Typography variant={"h4"} className={classes.boldHeading}>
-          Variants
-        </Typography>
-        <div>
-          <BannerTestVariantsList
-            variants={test.variants}
-            onVariantsListChange={onVariantsChange}
-            testName={test.name}
-            editMode={isEditable()}
-            // onValidationChange={onFieldValidationChange(this)('variantsList')}
-            onValidationChange={() => null}
-          />
+        <div className={classes.variantsContainer}>
+          <Typography variant={"h3"} className={classes.sectionHeader}>
+            Variants
+          </Typography>
+          <div>
+            <BannerTestVariantsList
+              variants={test.variants}
+              onVariantsListChange={onVariantsChange}
+              testName={test.name}
+              editMode={isEditable()}
+              // onValidationChange={onFieldValidationChange(this)('variantsList')}
+              onValidationChange={() => null}
+            />
+          </div>
         </div>
 
         <div>
-          <Typography variant={"h4"} className={classes.boldHeading}>
+          <Typography variant={"h4"} className={classes.sectionHeader}>
             Display rules
           </Typography>
           <EditableTextField
             text={test.minArticlesBeforeShowingBanner.toString()}
-            onSubmit={(pageViews: string) =>
-              updateTest((test) => ({
-                ...test,
-                minArticlesBeforeShowingBanner: Number(pageViews),
-              }))
-            }
+            onSubmit={() => {
+              null;
+            }}
+            // onSubmit={(pageViews: string) =>
+            //   updateTest((test) => ({
+            //     ...test,
+            //     minArticlesBeforeShowingBanner: Number(pageViews),
+            //   }))
+            // }
             label={"Show the banner on"}
             helperText="Must be a number"
             editEnabled={props.editMode}
@@ -314,7 +326,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = (
         </div>
 
         <div>
-          <Typography variant={"h4"} className={classes.boldHeading}>
+          <Typography variant={"h4"} className={classes.sectionHeader}>
             Target audience
           </Typography>
 
@@ -334,9 +346,10 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = (
           <ArticlesViewedEditor
             articlesViewedSettings={test.articlesViewedSettings}
             editMode={isEditable()}
-            onChange={(articlesViewedSettings?: ArticlesViewedSettings) =>
-              updateTest((test) => ({ ...test, articlesViewedSettings }))
-            }
+            onChange={() => null}
+            // onChange={(articlesViewedSettings?: ArticlesViewedSettings) =>
+            //   updateTest((test) => ({ ...test, articlesViewedSettings }))
+            // }
             // onValidationChange={onFieldValidationChange(this)('articlesViewedEditor')}
             onValidationChange={() => null}
           />
