@@ -19,19 +19,28 @@ const styles = ({}: Theme) =>
 
 interface StickyBottomBarStatusProps {
   isInEditMode: boolean;
+  isLocked: boolean;
 }
 
+const LOCKED_TEXT = "Locked for editing";
 const READ_ONLY_MODE_TEXT = "Read only mode";
 const EDIT_MODE_TEXT = "Edit mode";
 
 const StickyBottomBarStatus: React.FC<
   StickyBottomBarStatusProps & WithStyles<typeof styles>
-> = ({ classes, isInEditMode }) => {
+> = ({ classes, isInEditMode, isLocked }) => {
+  let text = "";
+  if (isInEditMode) {
+    text = EDIT_MODE_TEXT;
+  } else if (isLocked) {
+    text = LOCKED_TEXT;
+  } else {
+    text = READ_ONLY_MODE_TEXT;
+  }
+
   return (
     <div>
-      <Typography className={classes.text}>
-        {isInEditMode ? EDIT_MODE_TEXT : READ_ONLY_MODE_TEXT}
-      </Typography>
+      <Typography className={classes.text}>{text}</Typography>
     </div>
   );
 };

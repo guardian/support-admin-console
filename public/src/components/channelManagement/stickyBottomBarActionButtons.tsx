@@ -17,6 +17,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import SaveIcon from "@material-ui/icons/Save";
 import EditIcon from "@material-ui/icons/Edit";
+import LockIcon from "@material-ui/icons/Lock";
 
 const styles = ({ spacing }: Theme) =>
   createStyles({
@@ -50,6 +51,8 @@ const SAVE_BUTTON_TEST_NOT_SELECTED_TEXT = "Save changes";
 interface StickyBottomBarActionButtonsProps {
   isInEditMode: boolean;
   hasTestSelected: boolean;
+  isLocked: boolean;
+  requestTakeControl: () => void;
   requestLock: () => void;
   save: () => void;
   cancel: () => void;
@@ -57,7 +60,16 @@ interface StickyBottomBarActionButtonsProps {
 
 const StickyBottomBarActionButtons: React.FC<
   StickyBottomBarActionButtonsProps & WithStyles<typeof styles>
-> = ({ classes, isInEditMode, hasTestSelected, requestLock, save, cancel }) => {
+> = ({
+  classes,
+  isInEditMode,
+  hasTestSelected,
+  isLocked,
+  requestTakeControl,
+  requestLock,
+  save,
+  cancel,
+}) => {
   const CancelButton = () => {
     const [isOpen, setIsOpen] = useState(false);
     return (
@@ -132,6 +144,17 @@ const StickyBottomBarActionButtons: React.FC<
       <Typography className={classes.buttonText}>Enter edit mode</Typography>
     </Button>
   );
+
+  const TakeControlButton = () => (
+    <Button
+      variant="outlined"
+      className={classes.button}
+      startIcon={<LockIcon />}
+      onClick={requestTakeControl}
+    >
+      <Typography className={classes.buttonText}>Take control</Typography>
+    </Button>
+  );
   return (
     <div className={classes.container}>
       <div className={classes.leftContainer}>
@@ -150,8 +173,11 @@ const StickyBottomBarActionButtons: React.FC<
             // Edit mode + no test selected
             <SaveButton />
           )
+        ) : isLocked ? (
+          // Read only mode + locked
+          <TakeControlButton />
         ) : (
-          // Read only mode
+          // Read only mode + not locked
           <EditButton />
         )}
       </div>

@@ -106,6 +106,8 @@ const EpicTestsForm: React.FC<Props> = ({
   onTestDelete,
   onTestArchive,
   onTestErrorStatusChange,
+  lockStatus,
+  requestTakeControl,
   requestLock,
   save,
   cancel,
@@ -167,6 +169,8 @@ const EpicTestsForm: React.FC<Props> = ({
         ) : null
       }
       selectedTestName={selectedTestName}
+      lockStatus={lockStatus}
+      requestTakeControl={requestTakeControl}
       requestLock={requestLock}
       save={save}
       cancel={cancel}
