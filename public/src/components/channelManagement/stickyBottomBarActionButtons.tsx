@@ -90,7 +90,7 @@ const StickyBottomBarActionButtons: React.FC<
         >
           <DialogTitle id="cancel-dialog-title">Cancel changes?</DialogTitle>
           <DialogContent>
-            <DialogContentText id="alert-dialog-description">
+            <DialogContentText id="cancel-dialog-description">
               You have unsaved changes - these will be lost if you move on.
               Please consider saving your work now.
             </DialogContentText>
@@ -145,16 +145,45 @@ const StickyBottomBarActionButtons: React.FC<
     </Button>
   );
 
-  const TakeControlButton = () => (
-    <Button
-      variant="outlined"
-      className={classes.button}
-      startIcon={<LockIcon />}
-      onClick={requestTakeControl}
-    >
-      <Typography className={classes.buttonText}>Take control</Typography>
-    </Button>
-  );
+  const TakeControlButton = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    return (
+      <>
+        <Button
+          variant="outlined"
+          className={classes.button}
+          startIcon={<LockIcon />}
+          onClick={() => setIsOpen(true)}
+        >
+          <Typography className={classes.buttonText}>Take control</Typography>
+        </Button>
+        <Dialog
+          open={isOpen}
+          onClose={() => setIsOpen(false)}
+          aria-labelledby="take-control-dialog-title"
+          aria-describedby="take-control-dialog-description"
+        >
+          <DialogTitle id="take-control-dialog-title">
+            Take control?
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="take-control-dialog-description">
+              The current editor will lose any unsaved work if you take control.
+              If they were live recently, please check with them first.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setIsOpen(false)} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={requestTakeControl} color="primary" autoFocus>
+              Proceed
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </>
+    );
+  };
   return (
     <div className={classes.container}>
       <div className={classes.leftContainer}>
