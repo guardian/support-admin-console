@@ -7,6 +7,7 @@ import {
   WithStyles,
 } from "@material-ui/core";
 import StickyBottomBar from "./stickyBottomBar";
+import { LockStatus } from "./helpers/shared";
 
 const styles = ({ spacing, typography }: Theme) =>
   createStyles({
@@ -48,6 +49,8 @@ interface Props {
   testEditor: JSX.Element | null;
   selectedTestName?: string;
   editMode: boolean;
+  lockStatus: LockStatus;
+  requestTakeControl: () => void;
   requestLock: () => void;
   save: () => void;
   cancel: () => void;
@@ -61,7 +64,9 @@ const TestsFormLayout: React.FC<Props & WithStyles<typeof styles>> = ({
   save,
   cancel,
   editMode,
+  requestTakeControl,
   requestLock,
+  lockStatus,
 }) => {
   return (
     <>
@@ -87,6 +92,8 @@ const TestsFormLayout: React.FC<Props & WithStyles<typeof styles>> = ({
       <StickyBottomBar
         isInEditMode={editMode}
         selectedTestName={selectedTestName}
+        lockStatus={lockStatus}
+        requestTakeControl={requestTakeControl}
         requestLock={requestLock}
         save={save}
         cancel={cancel}

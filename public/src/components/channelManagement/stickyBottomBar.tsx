@@ -8,6 +8,8 @@ import {
   withStyles,
 } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
+import { LockStatus } from "./helpers/shared";
+
 import StickyBottomBarStatus from "./stickyBottomBarStatus";
 import StickyBottomBarDetail from "./stickyBottomBarDetail";
 import StickyBottomBarActionButtons from "./stickyBottomBarActionButtons";
@@ -47,6 +49,8 @@ const styles = ({ palette, spacing, mixins, typography, transitions }: Theme) =>
 interface StickyBottomBarProps {
   isInEditMode: boolean;
   selectedTestName?: string;
+  lockStatus: LockStatus;
+  requestTakeControl: () => void;
   requestLock: () => void;
   save: () => void;
   cancel: () => void;
@@ -58,6 +62,8 @@ const StickyBottomBar: React.FC<
   classes,
   isInEditMode,
   selectedTestName,
+  lockStatus,
+  requestTakeControl,
   requestLock,
   save,
   cancel,
@@ -70,10 +76,14 @@ const StickyBottomBar: React.FC<
   return (
     <AppBar position="relative" className={classes.appBar}>
       <div className={containerClasses}>
-        <StickyBottomBarStatus isInEditMode={isInEditMode} />
+        <StickyBottomBarStatus
+          isInEditMode={isInEditMode}
+          isLocked={lockStatus.locked}
+        />
         <StickyBottomBarDetail
           isInEditMode={isInEditMode}
           selectedTestName={selectedTestName}
+          lockStatus={lockStatus}
         />
       </div>
 
@@ -81,6 +91,8 @@ const StickyBottomBar: React.FC<
         <StickyBottomBarActionButtons
           isInEditMode={isInEditMode}
           hasTestSelected={selectedTestName !== undefined}
+          isLocked={lockStatus.locked}
+          requestTakeControl={requestTakeControl}
           requestLock={requestLock}
           save={save}
           cancel={cancel}
