@@ -26,7 +26,7 @@ export interface Cta {
 }
 
 export const defaultCta = {
-  text: "Support The Guardian",
+  text: "Support the Guardian",
   baseUrl: "https://support.theguardian.com/contribute",
 };
 
