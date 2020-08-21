@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   createStyles,
   Theme,
@@ -10,14 +10,11 @@ import EditableTextField from "../editableTextField";
 import ButtonWithConfirmationPopup from "../buttonWithConfirmationPopup";
 import VariantEditorButtonsEditor from "../variantEditorButtonsEditor";
 import DeleteSweepIcon from "@material-ui/icons/DeleteSweep";
-import {
-  onFieldValidationChange,
-  ValidationStatus,
-} from "../helpers/validation";
 import { BannerVariant } from "./bannerTestsForm";
 import CtaEditor from "../ctaEditor";
 import { Cta, defaultCta } from "../helpers/shared";
 import { getInvalidTemplateError } from "../helpers/copyTemplates";
+import useValidation from "../hooks/useValidation";
 
 const styles = ({ palette, spacing }: Theme) =>
   createStyles({
@@ -56,6 +53,16 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
   onDelete,
   onValidationChange,
 }: BannerTestVariantEditorProps) => {
+  const setValidationStatusForField = useValidation(onValidationChange);
+
+  const getHeadingError = getInvalidTemplateError;
+  const onHeadingChanged = (isValid: boolean) =>
+    setValidationStatusForField("heading", isValid);
+
+  const getBodyError = getInvalidTemplateError;
+  const onBodyChanged = (isValid: boolean) =>
+    setValidationStatusForField("body", isValid);
+
   return (
     <div className={classes.container}>
       <EditableTextField
@@ -71,6 +78,10 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
           onSubmit={() => null}
           label="Header"
           editEnabled={editMode}
+          validation={{
+            getError: getHeadingError,
+            onChange: onHeadingChanged,
+          }}
           helperText="Format: 'control' or 'v1_name'"
         />
       </div>
@@ -83,6 +94,10 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
         onSubmit={() => null}
         label="Body copy"
         editEnabled={editMode}
+        validation={{
+          getError: getBodyError,
+          onChange: onBodyChanged,
+        }}
         helperText="Main Banner message, including paragraph breaks"
       />
 

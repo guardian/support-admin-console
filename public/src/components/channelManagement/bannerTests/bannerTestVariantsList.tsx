@@ -9,16 +9,13 @@ import {
   ExpansionPanelDetails,
   ExpansionPanelActions,
 } from "@material-ui/core";
-import {
-  onFieldValidationChange,
-  ValidationStatus,
-} from "../helpers/validation";
 import { BannerVariant } from "./bannerTestsForm";
 import BannerTestVariantEditor from "./bannerTestVariantEditor";
 import NewNameCreator from "../newNameCreator";
 import { defaultCta } from "../helpers/shared";
 import TestEditorVariantSummary from "../testEditorVariantSummary";
 import VariantDeleteButton from "../variantDeleteButton";
+import useValidation from "../hooks/useValidation";
 
 const styles = ({ typography, spacing, palette }: Theme) =>
   createStyles({
@@ -62,9 +59,7 @@ const BannerTestVariantsList: React.FC<BannerTestVariantsListProps> = (
 ) => {
   const [expandedVariantKey, setExpandedVariantKey] = useState(-1);
 
-  const [validationStatus, setValidationStatus] = useState<ValidationStatus>(
-    {}
-  );
+  const setValidationStatusForField = useValidation(props.onValidationChange);
 
   const onVariantSelected = (key: number): void => {
     setExpandedVariantKey(key);
@@ -158,10 +153,9 @@ const BannerTestVariantsList: React.FC<BannerTestVariantsListProps> = (
                   onVariantDelete(variant.name);
                   // onFieldValidationChange(this)(variant.name)(true);
                 }}
-                // onValidationChange={onFieldValidationChange(this)(
-                //   variant.name
-                // )}
-                onValidationChange={(b: boolean) => null}
+                onValidationChange={(isValid: boolean) =>
+                  setValidationStatusForField(variant.name, isValid)
+                }
               />
             </ExpansionPanelDetails>
             <ExpansionPanelActions>

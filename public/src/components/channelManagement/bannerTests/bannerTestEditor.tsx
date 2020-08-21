@@ -14,7 +14,7 @@ import {
   WithStyles,
   withStyles,
 } from "@material-ui/core";
-import { onFieldValidationChange, isNumber } from "../helpers/validation";
+import { isNumber } from "../helpers/validation";
 import ButtonWithConfirmationPopup from "../buttonWithConfirmationPopup";
 import DeleteSweepIcon from "@material-ui/icons/DeleteSweep";
 import ArchiveIcon from "@material-ui/icons/Archive";
@@ -29,6 +29,7 @@ import UserCohortSelector from "../userCohortSelector";
 import EditableTextField from "../editableTextField";
 import TestEditorHeader from "../testEditorHeader";
 import TestEditorLiveSwitch from "../testEditorLiveSwitch";
+import useValidation from "../hooks/useValidation";
 
 const styles = ({ spacing, palette, typography }: Theme) =>
   createStyles({
@@ -153,6 +154,11 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = (
   const isEditable = () => {
     return props.editMode && !props.isDeleted && !props.isArchived;
   };
+
+  const setValidationStatusForField = useValidation(props.onValidationChange);
+
+  const onVariantsListValidationChange = (isValid: boolean) =>
+    setValidationStatusForField("variantsList", isValid);
 
   const getArticlesViewedSettings = (
     test: BannerTest
@@ -290,8 +296,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = (
               onVariantsListChange={onVariantsChange}
               testName={test.name}
               editMode={isEditable()}
-              // onValidationChange={onFieldValidationChange(this)('variantsList')}
-              onValidationChange={() => null}
+              onValidationChange={onVariantsListValidationChange}
             />
           </div>
         </div>
