@@ -4,20 +4,17 @@ import {
   createStyles,
   WithStyles,
   withStyles,
-  Typography,
   ExpansionPanel,
   ExpansionPanelDetails,
   ExpansionPanelActions,
 } from "@material-ui/core";
 import { BannerVariant } from "./bannerTestsForm";
 import BannerTestVariantEditor from "./bannerTestVariantEditor";
-import NewNameCreator from "../newNameCreator";
-import { defaultCta } from "../helpers/shared";
 import TestEditorVariantSummary from "../testEditorVariantSummary";
 import VariantDeleteButton from "../variantDeleteButton";
 import useValidation from "../hooks/useValidation";
 
-const styles = ({ typography, spacing, palette }: Theme) =>
+const styles = ({ spacing, palette }: Theme) =>
   createStyles({
     expansionPanelsContainer: {
       "& > * + *": {
@@ -28,21 +25,6 @@ const styles = ({ typography, spacing, palette }: Theme) =>
       border: `1px solid ${palette.grey[700]}`,
       borderRadius: 4,
       boxShadow: "none",
-    },
-    h4: {
-      fontSize: typography.pxToRem(20),
-      fontWeight: typography.fontWeightMedium,
-    },
-    error: {
-      border: "2px solid red",
-    },
-    heading: {
-      fontSize: typography.pxToRem(14),
-      fontWeight: "normal",
-      fontStyle: "italic",
-    },
-    newVariantButton: {
-      marginTop: spacing(2),
     },
   });
 
@@ -61,10 +43,6 @@ const BannerTestVariantsList: React.FC<BannerTestVariantsListProps> = (
 
   const setValidationStatusForField = useValidation(props.onValidationChange);
 
-  const onVariantSelected = (key: number): void => {
-    setExpandedVariantKey(key);
-  };
-
   const onVariantChange = (updatedVariant: BannerVariant): void => {
     const updatedVariantList: BannerVariant[] = props.variants.map((variant) =>
       variant.name === updatedVariant.name ? updatedVariant : variant
@@ -79,10 +57,6 @@ const BannerTestVariantsList: React.FC<BannerTestVariantsListProps> = (
     props.onVariantsListChange(updatedVariantList);
   };
 
-  // const onVariantNameCreation = (name: string) => {
-  //   createVariant(name, "");
-  // };
-
   const onExpansionPanelChange = (key: number) => (
     event: React.ChangeEvent<{}>
   ) => {
@@ -91,54 +65,16 @@ const BannerTestVariantsList: React.FC<BannerTestVariantsListProps> = (
       : setExpandedVariantKey(key);
   };
 
-  const createVariantKey = (variantName: string): string => {
-    return `${props.testName}${variantName}`;
-  };
-
-  const createVariant = (newVariantName: string, nickname: string) => {
-    const newVariant: BannerVariant = {
-      name: newVariantName,
-      heading: undefined,
-      body: "",
-      highlightedText:
-        "Support the Guardian from as little as %%CURRENCY_SYMBOL%%1 – and it only takes a minute. Thank you.",
-      cta: defaultCta,
-    };
-
-    props.onVariantsListChange([...props.variants, newVariant]);
-
-    // const key = createVariantKey(newVariant.name);
-
-    // onVariantSelected(key);
-  };
-
-  // renderNewVariantButton = (): React.ReactNode => {
-  //   const { classes } = this.props;
-  //   return this.props.editMode ? (
-  //     <div className={classes.newVariantButton}>
-  //       <NewNameCreator
-  //         type="variant"
-  //         action="New"
-  //         existingNames={this.props.variants.map((variant) => variant.name)}
-  //         existingNicknames={[]}
-  //         onValidName={this.createVariant}
-  //         editEnabled={this.props.editMode}
-  //       />
-  //     </div>
-  //   ) : null;
-  // };
-
   const { classes } = props;
 
   return (
     <div className={classes.expansionPanelsContainer}>
       {props.variants.map((variant, index) => {
-        // const key = createVariantKey(variant.name);
         const key = index;
 
         return (
           <ExpansionPanel
-            key={key}
+            key={index}
             expanded={expandedVariantKey === key}
             onChange={onExpansionPanelChange(key)}
             className={classes.expansionPanel}
@@ -151,7 +87,7 @@ const BannerTestVariantsList: React.FC<BannerTestVariantsListProps> = (
                 editMode={props.editMode}
                 onDelete={() => {
                   onVariantDelete(variant.name);
-                  // onFieldValidationChange(this)(variant.name)(true);
+                  setValidationStatusForField(variant.name, true);
                 }}
                 onValidationChange={(isValid: boolean) =>
                   setValidationStatusForField(variant.name, isValid)
