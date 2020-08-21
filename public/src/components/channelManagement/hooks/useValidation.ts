@@ -10,8 +10,14 @@ const useValidation = (onValidationChanged: (isValid: boolean) => void) => {
     {}
   );
 
+  const [wasValid, setWasValid] = useState(true);
+
   useEffect(() => {
-    onValidationChanged(allValid(validationStatus));
+    const isValid = allValid(validationStatus);
+    if (isValid !== wasValid) {
+      setWasValid(isValid);
+      onValidationChanged(allValid(validationStatus));
+    }
   }, [validationStatus]);
 
   const setValidationStatusForField = (field: string, isValid: boolean) => {
