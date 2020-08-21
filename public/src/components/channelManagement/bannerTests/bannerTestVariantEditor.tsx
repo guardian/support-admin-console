@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   createStyles,
   Theme,
@@ -7,12 +7,8 @@ import {
   withStyles,
 } from "@material-ui/core";
 import EditableTextField from "../editableTextField";
-import ButtonWithConfirmationPopup from "../buttonWithConfirmationPopup";
 import VariantEditorButtonsEditor from "../variantEditorButtonsEditor";
-import DeleteSweepIcon from "@material-ui/icons/DeleteSweep";
 import { BannerVariant } from "./bannerTestsForm";
-import CtaEditor from "../ctaEditor";
-import { Cta, defaultCta } from "../helpers/shared";
 import { getInvalidTemplateError } from "../helpers/copyTemplates";
 import useValidation from "../hooks/useValidation";
 
@@ -48,9 +44,7 @@ interface BannerTestVariantEditorProps extends WithStyles<typeof styles> {
 const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
   classes,
   variant,
-  onVariantChange,
   editMode,
-  onDelete,
   onValidationChange,
 }: BannerTestVariantEditorProps) => {
   const setValidationStatusForField = useValidation(onValidationChange);
@@ -59,9 +53,16 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
   const onHeadingChanged = (isValid: boolean) =>
     setValidationStatusForField("heading", isValid);
 
-  const getBodyError = getInvalidTemplateError;
+  const getEmptyTextError = (text: string) =>
+    text.trim() === "" ? "Field must not be empty" : null;
+
+  const getBodyError = getEmptyTextError || getInvalidTemplateError;
   const onBodyChanged = (isValid: boolean) =>
     setValidationStatusForField("body", isValid);
+
+  const getHighlightedTextError = getInvalidTemplateError;
+  const onHighLightedTextChange = (isValid: boolean) =>
+    setValidationStatusForField("highlightedText", isValid);
 
   return (
     <div className={classes.container}>
@@ -105,8 +106,12 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
         text={variant.highlightedText || ""}
         onSubmit={() => null}
         label="Highlighted text"
-        helperText="Final sentence of body copy"
         editEnabled={editMode}
+        validation={{
+          getError: getHighlightedTextError,
+          onChange: onHighLightedTextChange,
+        }}
+        helperText="Final sentence of body copy"
       />
 
       <div className={classes.buttonsSectionContainer}>
