@@ -16,6 +16,15 @@ import {
 import AddIcon from "@material-ui/icons/Add";
 import CloseIcon from "@material-ui/icons/Close";
 
+import useOpenable from "../../hooks/useOpenable";
+import useValidatableField from "../../hooks/useValidatableField";
+
+import {
+  getInvalidCharactersError,
+  getEmptyError,
+  createGetDuplicateError,
+} from "./helpers/validation";
+
 const styles = ({}: Theme) =>
   createStyles({
     button: {
@@ -37,38 +46,13 @@ const styles = ({}: Theme) =>
     },
   });
 
-const NEW_NAME_DEFAULT_HELPER_TEXT = "Date format: YYYY-MM-DD_TEST_NAME";
-const NEW_NICKNAME_DEFAULT_HELPER_TEXT =
+const NAME_DEFAULT_HELPER_TEXT = "Date format: YYYY-MM-DD_TEST_NAME";
+const NICKNAME_DEFAULT_HELPER_TEXT =
   "Pick a name for your test that's easy to recognise";
-const EMPTY_ERROR_HELPER_TEXT =
-  "Field cannot be empty - please enter some text";
-const DUPLICATE_ERROR_HELPER_TEXT = "Name already exists - please try another";
-const INVALID_ERROR_HELPER_TEXT =
-  "Only letters, numbers, underscores and hyphens are allowed";
-const INVALID_CHARACTERS_REGEX = /[^\w-]/;
-
-const useHelperTextAndError = (
-  defaultHelperText: string
-): [string, boolean, () => void, (helperText: string) => void] => {
-  const [helperText, setHelperText] = useState(defaultHelperText);
-  const [hasError, setHasError] = useState(false);
-
-  const setDefaultHelperText = () => {
-    setHelperText(defaultHelperText);
-    setHasError(false);
-  };
-
-  const setErrorHelperText = (helperText: string) => {
-    setHelperText(helperText);
-    setHasError(true);
-  };
-
-  return [helperText, hasError, setDefaultHelperText, setErrorHelperText];
-};
 
 interface NewTestCreatorProps {
-  existingNames: Array<string>;
-  existingNicknames: Array<string>;
+  existingNames: string[];
+  existingNicknames: string[];
   createTest: (name: string, nickname: string) => void;
 }
 
@@ -78,100 +62,53 @@ const NewTestCreator = ({
   existingNicknames,
   createTest,
 }: NewTestCreatorProps & WithStyles<typeof styles>) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, open, close] = useOpenable();
 
-  const openDialog = () => setIsOpen(true);
-  const closeDialog = () => setIsOpen(false);
+  const getDuplicateNameError = createGetDuplicateError(existingNames);
+  const getNameError = (value: string) =>
+    getInvalidCharactersError(value) ||
+    getEmptyError(value) ||
+    getDuplicateNameError(value);
 
-  const [newName, setNewName] = useState("");
   const [
-    newNameHelperText,
-    newNameHasError,
-    setNewNameDefaultHelperText,
-    setNewNameErrorHelperText,
-  ] = useHelperTextAndError(NEW_NAME_DEFAULT_HELPER_TEXT);
+    name,
+    setName,
+    nameHasError,
+    nameHelperText,
+    checkName,
+  ] = useValidatableField(NAME_DEFAULT_HELPER_TEXT, getNameError);
 
-  const [newNickname, setNewNickname] = useState("");
+  const getDuplicateNicknameError = createGetDuplicateError(existingNicknames);
+  const getNicknameError = (value: string) =>
+    getEmptyError(value) || getDuplicateNicknameError(value);
+
   const [
-    newNicknameHelperText,
-    newNicknameHasError,
-    setNewNicknameDefaultHelperText,
-    setNewNicknameErrorHelperText,
-  ] = useHelperTextAndError(NEW_NICKNAME_DEFAULT_HELPER_TEXT);
+    nickname,
+    setNickname,
+    nicknameHasError,
+    nicknameHelperText,
+    checkNickname,
+  ] = useValidatableField(NICKNAME_DEFAULT_HELPER_TEXT, getNicknameError);
 
-  const check = (isValid: boolean, onError: () => void) => {
-    if (!isValid) {
-      onError();
-      return false;
-    }
-    return true;
-  };
-
-  const checkIsntEmpty = (text: string, onError: () => void): boolean => {
-    return check(text !== "", onError);
-  };
-
-  const checkIsntAlreadyTaken = (
-    text: string,
-    existing: string[],
-    onError: () => void
-  ): boolean => {
-    return check(!existing.includes(text), onError);
-  };
-
-  const checkDoesntContainInvalidCharacters = (
-    text: string,
-    onError: () => void
-  ): boolean => {
-    return check(!INVALID_CHARACTERS_REGEX.test(text), onError);
-  };
-
-  const checkNameValidity = (): boolean => {
-    return (
-      checkIsntEmpty(newName, () =>
-        setNewNameErrorHelperText(EMPTY_ERROR_HELPER_TEXT)
-      ) &&
-      checkIsntAlreadyTaken(newName, existingNames, () =>
-        setNewNameErrorHelperText(DUPLICATE_ERROR_HELPER_TEXT)
-      ) &&
-      checkDoesntContainInvalidCharacters(newName, () =>
-        setNewNameErrorHelperText(INVALID_ERROR_HELPER_TEXT)
-      )
-    );
-  };
-
-  const checkNicknameValidity = (): boolean => {
-    return (
-      checkIsntEmpty(newNickname, () =>
-        setNewNicknameErrorHelperText(EMPTY_ERROR_HELPER_TEXT)
-      ) &&
-      checkIsntAlreadyTaken(newNickname, existingNicknames, () =>
-        setNewNicknameErrorHelperText(DUPLICATE_ERROR_HELPER_TEXT)
-      )
-    );
-  };
-
-  const checkValidity = (): boolean => {
-    const nameIsValid = checkNameValidity();
-    const nicknameIsValid = checkNicknameValidity();
+  const check = (): boolean => {
+    const nameIsValid = checkName();
+    const nicknameIsValid = checkNickname();
 
     return nameIsValid && nicknameIsValid;
   };
 
   const submit = () => {
-    if (checkValidity()) {
-      createTest(newName, newNickname);
-      closeDialog();
+    if (check()) {
+      createTest(name, nickname);
+      close();
     }
   };
 
   const updateName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewName(event.target.value.toUpperCase());
-    setNewNameDefaultHelperText();
+    setName(event.target.value);
   };
   const updateNickname = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewNickname(event.target.value.toUpperCase());
-    setNewNicknameDefaultHelperText();
+    setNickname(event.target.value);
   };
 
   return (
@@ -180,27 +117,23 @@ const NewTestCreator = ({
         variant="outlined"
         className={classes.button}
         startIcon={<AddIcon />}
-        onClick={openDialog}
+        onClick={open}
       >
         <Typography className={classes.text}>Create a new test</Typography>
       </Button>
-      <Dialog
-        open={isOpen}
-        onClose={closeDialog}
-        aria-labelledby="form-dialog-title"
-      >
+      <Dialog open={isOpen} onClose={close} aria-labelledby="form-dialog-title">
         <div className={classes.dialogHeader}>
           <DialogTitle id="form-dialog-title">Create a new test</DialogTitle>
-          <IconButton onClick={closeDialog} aria-label="close">
+          <IconButton onClick={close} aria-label="close">
             <CloseIcon />
           </IconButton>
         </div>
         <DialogContent dividers>
           <TextField
-            value={newName}
+            value={name}
             onChange={updateName}
-            error={newNameHasError}
-            helperText={newNameHelperText}
+            error={nameHasError}
+            helperText={nameHelperText}
             label="Full test name"
             margin="normal"
             variant="outlined"
@@ -208,10 +141,10 @@ const NewTestCreator = ({
             fullWidth
           />
           <TextField
-            value={newNickname}
+            value={nickname}
             onChange={updateNickname}
-            error={newNicknameHasError}
-            helperText={newNicknameHelperText}
+            error={nicknameHasError}
+            helperText={nicknameHelperText}
             label="Nickname"
             margin="normal"
             variant="outlined"
