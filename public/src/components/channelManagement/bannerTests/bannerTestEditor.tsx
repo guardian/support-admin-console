@@ -29,6 +29,7 @@ import UserCohortSelector from "../userCohortSelector";
 import EditableTextField from "../editableTextField";
 import TestEditorHeader from "../testEditorHeader";
 import TestEditorLiveSwitch from "../testEditorLiveSwitch";
+import TestEditorMinArticlesViewedInput from "../testEditorMinArticlesViewedInput";
 import useValidation from "../hooks/useValidation";
 
 const styles = ({ spacing, palette, typography }: Theme) =>
@@ -48,7 +49,7 @@ const styles = ({ spacing, palette, typography }: Theme) =>
         marginTop: spacing(2),
       },
     },
-    variantsContainer: {
+    sectionContainer: {
       paddingTop: spacing(1),
       paddingBottom: spacing(6),
       borderBottom: `1px solid ${palette.grey[500]}`,
@@ -159,6 +160,9 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = (
 
   const onVariantsListValidationChange = (isValid: boolean) =>
     setValidationStatusForField("variantsList", isValid);
+
+  const onMinArticlesViewedValidationChanged = (isValid: boolean) =>
+    setValidationStatusForField("minArticlesViewed", isValid);
 
   const getArticlesViewedSettings = (
     test: BannerTest
@@ -286,7 +290,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = (
           />
         </div>
 
-        <div className={classes.variantsContainer}>
+        <div className={classes.sectionContainer}>
           <Typography variant={"h3"} className={classes.sectionHeader}>
             Variants
           </Typography>
@@ -301,33 +305,16 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = (
           </div>
         </div>
 
-        <div>
-          <Typography variant={"h4"} className={classes.sectionHeader}>
+        <div className={classes.sectionContainer}>
+          <Typography variant={"h3"} className={classes.sectionHeader}>
             Display rules
           </Typography>
-          <EditableTextField
-            text={test.minArticlesBeforeShowingBanner.toString()}
-            onSubmit={() => {
-              null;
-            }}
-            // onSubmit={(pageViews: string) =>
-            //   updateTest((test) => ({
-            //     ...test,
-            //     minArticlesBeforeShowingBanner: Number(pageViews),
-            //   }))
-            // }
-            label={"Show the banner on"}
-            helperText="Must be a number"
-            editEnabled={props.editMode}
-            validation={{
-              getError: (value: string) =>
-                isNumber(value) ? null : "Must be a number",
-              // onChange: onFieldValidationChange(this)('minArticlesBeforeShowingBanner')
-              onChange: () => null,
-            }}
-            isNumberField
+
+          <TestEditorMinArticlesViewedInput
+            minArticles={test.minArticlesBeforeShowingBanner}
+            isDisabled={!isEditable()}
+            onValidationChange={onMinArticlesViewedValidationChanged}
           />
-          <Typography>page views</Typography>
         </div>
 
         <div>

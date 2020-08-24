@@ -16,7 +16,13 @@ const styles = ({ palette, spacing }: Theme) =>
   createStyles({
     container: {
       width: "100%",
-      marginLeft: "15px",
+      paddingTop: spacing(2),
+      paddingLeft: spacing(4),
+      paddingRight: spacing(10),
+
+      "& > * + *": {
+        marginTop: spacing(3),
+      },
     },
     hook: {
       maxWidth: "400px",
@@ -56,7 +62,8 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
   const getEmptyTextError = (text: string) =>
     text.trim() === "" ? "Field must not be empty" : null;
 
-  const getBodyError = getEmptyTextError || getInvalidTemplateError;
+  const getBodyError = (text: string) =>
+    getEmptyTextError(text) || getInvalidTemplateError(text);
   const onBodyChanged = (isValid: boolean) =>
     setValidationStatusForField("body", isValid);
 
