@@ -88,7 +88,6 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
       </div>
 
       <EditableTextField
-        required
         textarea
         height={10}
         text={variant.body}

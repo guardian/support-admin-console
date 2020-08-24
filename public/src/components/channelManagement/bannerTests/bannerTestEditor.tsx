@@ -24,7 +24,7 @@ import ArticlesViewedEditor, {
   defaultArticlesViewedSettings,
 } from "../articlesViewedEditor";
 import NewNameCreator from "../newNameCreator";
-import BannerTestVariantsList from "./bannerTestVariantsList";
+import BannerTestVariantsEditor from "./bannerTestVariantsEditor";
 import UserCohortSelector from "../userCohortSelector";
 import EditableTextField from "../editableTextField";
 import TestEditorHeader from "../testEditorHeader";
@@ -291,7 +291,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = (
             Variants
           </Typography>
           <div>
-            <BannerTestVariantsList
+            <BannerTestVariantsEditor
               variants={test.variants}
               onVariantsListChange={onVariantsChange}
               testName={test.name}

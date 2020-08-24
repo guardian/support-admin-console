@@ -33,6 +33,41 @@ export type ValidationStatus = {
   [fieldName: string]: boolean;
 };
 
+const INVALID_CHARACTERS_ERROR_HELPER_TEXT =
+  "Only letters, numbers, underscores and hyphens are allowed";
+const INVALID_CHARACTERS_REGEX = /[^\w-]/;
+
+export const getInvalidCharactersError = (text: string): string | null => {
+  if (INVALID_CHARACTERS_REGEX.test(text)) {
+    return INVALID_CHARACTERS_ERROR_HELPER_TEXT;
+  }
+  return null;
+};
+
+const EMPTY_ERROR_HELPER_TEXT =
+  "Field cannot be empty - please enter some text";
+
+export const getEmptyError = (text: string): string | null => {
+  if (text.trim() === "") {
+    return EMPTY_ERROR_HELPER_TEXT;
+  }
+  return null;
+};
+
+const DUPLICATE_ERROR_HELPER_TEXT = "Name already exists - please try another";
+
+export const createGetDuplicateError = (
+  existing: string[]
+): ((text: string) => string | null) => {
+  const getDuplicateError = (text: string): string | null => {
+    if (existing.includes(text)) {
+      return DUPLICATE_ERROR_HELPER_TEXT;
+    }
+    return null;
+  };
+  return getDuplicateError;
+};
+
 export interface ValidationComponentState {
   validationStatus: ValidationStatus;
 }
