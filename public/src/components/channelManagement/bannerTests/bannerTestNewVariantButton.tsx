@@ -62,12 +62,14 @@ const NAME_DEFAULT_HELPER_TEXT = "Format: 'control' or 'v1_name'";
 interface BannerTestNewVariantButtonProps extends WithStyles<typeof styles> {
   existingNames: string[];
   createVariant: (name: string) => void;
+  isDisabled: boolean;
 }
 
 const BannerTestNewVariantButton: React.FC<BannerTestNewVariantButtonProps> = ({
   classes,
   existingNames,
   createVariant,
+  isDisabled,
 }: BannerTestNewVariantButtonProps) => {
   const [isOpen, open, close] = useOpenable();
 
@@ -95,7 +97,7 @@ const BannerTestNewVariantButton: React.FC<BannerTestNewVariantButtonProps> = ({
 
   return (
     <>
-      <Button className={classes.button} onClick={open}>
+      <Button className={classes.button} onClick={open} disabled={isDisabled}>
         <div className={classes.container}>
           <AddIcon />
           <Typography className={classes.text}>New variant</Typography>

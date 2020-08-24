@@ -56,6 +56,7 @@ const BannerTestVariantsEditor: React.FC<BannerTestVariantsEditorProps> = ({
       <BannerTestNewVariantButton
         existingNames={variants.map((variant) => variant.name)}
         createVariant={createVariant}
+        isDisabled={!editMode}
       />
     </div>
   );
