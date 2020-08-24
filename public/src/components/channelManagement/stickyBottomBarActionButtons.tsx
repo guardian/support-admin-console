@@ -18,6 +18,8 @@ import VisibilityIcon from "@material-ui/icons/Visibility";
 import SaveIcon from "@material-ui/icons/Save";
 import EditIcon from "@material-ui/icons/Edit";
 
+import useOpenable from "../../hooks/useOpenable";
+
 const styles = ({ spacing }: Theme) =>
   createStyles({
     container: {
@@ -59,20 +61,21 @@ const StickyBottomBarActionButtons: React.FC<
   StickyBottomBarActionButtonsProps & WithStyles<typeof styles>
 > = ({ classes, isInEditMode, hasTestSelected, requestLock, save, cancel }) => {
   const CancelButton = () => {
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, open, close] = useOpenable();
+
     return (
       <>
         <Button
           variant="outlined"
           className={classes.button}
           startIcon={<CloseIcon />}
-          onClick={() => setIsOpen(true)}
+          onClick={open}
         >
           <Typography className={classes.buttonText}>Cancel</Typography>
         </Button>
         <Dialog
           open={isOpen}
-          onClose={() => setIsOpen(false)}
+          onClose={close}
           aria-labelledby="cancel-dialog-title"
           aria-describedby="cancel-dialog-description"
         >
