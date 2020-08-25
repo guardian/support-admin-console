@@ -10,15 +10,13 @@ import {
   withStyles,
 } from "@material-ui/core";
 import { BannerTest, BannerVariant } from "./bannerTestsForm";
-import ArticlesViewedEditor, {
-  defaultArticlesViewedSettings,
-} from "../articlesViewedEditor";
+import { defaultArticlesViewedSettings } from "../articlesViewedEditor";
 import BannerTestVariantsEditor from "./bannerTestVariantsEditor";
-import UserCohortSelector from "../userCohortSelector";
 import TestEditorHeader from "../testEditorHeader";
 import TestEditorLiveSwitch from "../testEditorLiveSwitch";
 import TestEditorMinArticlesViewedInput from "../testEditorMinArticlesViewedInput";
 import TestEditorTargetAudienceSelector from "../testEditorTargetAudienceSelector";
+import TestEditorArticleCountEditor from "../testEditorArticleCountEditor";
 import useValidation from "../hooks/useValidation";
 
 const styles = ({ spacing, palette }: Theme) =>
@@ -102,6 +100,9 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
   const onMinArticlesViewedValidationChanged = (isValid: boolean) =>
     setValidationStatusForField("minArticlesViewed", isValid);
 
+  const onArticlesViewedSettingsValidationChanged = (isValid: boolean) =>
+    setValidationStatusForField("articlesViewedSettings", isValid);
+
   const getArticlesViewedSettings = (
     test: BannerTest
   ): ArticlesViewedSettings | undefined => {
@@ -143,6 +144,15 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
 
   const onCohortChange = (updatedCohort: UserCohort): void => {
     updateTest({ ...test, userCohort: updatedCohort });
+  };
+
+  const onArticlesViewedSettingsChange = (
+    updatedArticlesViewedSettings?: ArticlesViewedSettings
+  ): void => {
+    updateTest({
+      ...test,
+      articlesViewedSettings: updatedArticlesViewedSettings,
+    });
   };
 
   if (test && visible) {
@@ -200,12 +210,16 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
           />
         </div>
 
-        <div>
-          <ArticlesViewedEditor
+        <div className={classes.sectionContainer}>
+          <Typography variant={"h3"} className={classes.sectionHeader}>
+            Article count
+          </Typography>
+
+          <TestEditorArticleCountEditor
             articlesViewedSettings={test.articlesViewedSettings}
-            editMode={isEditable()}
-            onChange={() => null}
-            onValidationChange={() => null}
+            onArticlesViewedSettingsChanged={onArticlesViewedSettingsChange}
+            onValidationChange={onArticlesViewedSettingsValidationChanged}
+            isDisabled={!isEditable()}
           />
         </div>
       </div>

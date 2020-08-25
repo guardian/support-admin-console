@@ -88,6 +88,7 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
           onChange: onHeadingChanged,
         }}
         helperText="Assistive text"
+        fullWidth
       />
 
       <EditableTextField
@@ -102,6 +103,7 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
           onChange: onBodyChanged,
         }}
         helperText="Main Banner message, including paragraph breaks"
+        fullWidth
       />
 
       <EditableTextField
@@ -114,6 +116,7 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
           onChange: onHighLightedTextChange,
         }}
         helperText="Final sentence of body copy"
+        fullWidth
       />
 
       <div className={classes.buttonsSectionContainer}>

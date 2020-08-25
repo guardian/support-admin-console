@@ -116,7 +116,7 @@ class EditableTextField extends React.Component<
             required={this.props.required}
             multiline={this.props.textarea}
             rows={this.props.height}
-            fullWidth={this.props.fullWidth || true}
+            fullWidth={this.props.fullWidth}
             name={this.props.label}
             disabled={!this.props.editEnabled}
             value={this.state.currentText}
