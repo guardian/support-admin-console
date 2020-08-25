@@ -128,6 +128,13 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
     updateTest({ ...test, variants: updatedVariantList });
   };
 
+  const onMinArticlesViewedChange = (updatedMinArticles: number): void => {
+    updateTest({
+      ...test,
+      minArticlesBeforeShowingBanner: updatedMinArticles,
+    });
+  };
+
   if (test && visible) {
     return (
       <div className={classes.container}>
@@ -165,6 +172,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
             minArticles={test.minArticlesBeforeShowingBanner}
             isDisabled={!isEditable()}
             onValidationChange={onMinArticlesViewedValidationChanged}
+            onUpdate={onMinArticlesViewedChange}
           />
         </div>
 

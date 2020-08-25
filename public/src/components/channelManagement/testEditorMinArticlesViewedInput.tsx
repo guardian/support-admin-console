@@ -28,6 +28,7 @@ interface TestEditorMinArticlesViewedInputProps
   minArticles: number;
   isDisabled: boolean;
   onValidationChange: (isValid: boolean) => void;
+  onUpdate: (updatedMinArticles: number) => void;
 }
 
 const TestEditorMinArticlesViewedInput: React.FC<TestEditorMinArticlesViewedInputProps> = ({
@@ -35,20 +36,25 @@ const TestEditorMinArticlesViewedInput: React.FC<TestEditorMinArticlesViewedInpu
   minArticles,
   isDisabled,
   onValidationChange,
+  onUpdate,
 }: TestEditorMinArticlesViewedInputProps) => {
   const setValidationStatusForField = useValidation(onValidationChange);
 
   const getError = getNotNumberError;
   const onChange = (isValid: boolean) =>
     setValidationStatusForField("minArticlesViewedInput", isValid);
+  const onSubmit = (updatedMinArticles: string) => {
+    const number = Number(updatedMinArticles);
+    if (!Number.isNaN(number)) {
+      onUpdate(number);
+    }
+  };
 
   return (
     <div className={classes.container}>
       <EditableTextField
         text={minArticles.toString()}
-        onSubmit={() => {
-          null;
-        }}
+        onSubmit={onSubmit}
         label="Show the banner on"
         helperText="Must be a number"
         editEnabled={!isDisabled}
