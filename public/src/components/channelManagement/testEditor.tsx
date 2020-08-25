@@ -243,12 +243,20 @@ const TestEditor = <T extends Test>(
             isArchived: true,
           };
 
-      this.setState({
-        modifiedTests: {
-          ...this.state.modifiedTests,
-          [testName]: updatedState,
+      this.setState(
+        {
+          modifiedTests: {
+            ...this.state.modifiedTests,
+            [testName]: updatedState,
+          },
         },
-      });
+        () => {
+          console.log(this.state.modifiedTests);
+          console.log(this.state.tests);
+        }
+        // () => this.state.tests && this.save(this.state.tests)
+      );
+      // this.state.tests && this.save(this.state.tests);
     };
 
     onSelectedTestName = (testName: string): void => {

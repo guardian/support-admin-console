@@ -17,6 +17,7 @@ import TestEditorLiveSwitch from "../testEditorLiveSwitch";
 import TestEditorMinArticlesViewedInput from "../testEditorMinArticlesViewedInput";
 import TestEditorTargetAudienceSelector from "../testEditorTargetAudienceSelector";
 import TestEditorArticleCountEditor from "../testEditorArticleCountEditor";
+import TestEditorActionButtons from "../testEditorActionButtons";
 import useValidation from "../hooks/useValidation";
 
 const styles = ({ spacing, palette }: Theme) =>
@@ -52,6 +53,10 @@ const styles = ({ spacing, palette }: Theme) =>
       fontWeight: 500,
       color: palette.grey[700],
     },
+    buttonsContainer: {
+      paddingTop: spacing(4),
+      paddingBottom: spacing(12),
+    },
   });
 
 const copyHasTemplate = (test: BannerTest, template: string): boolean =>
@@ -69,7 +74,7 @@ interface BannerTestEditorProps extends WithStyles<typeof styles> {
   visible: boolean;
   editMode: boolean;
   onDelete: (testName: string) => void;
-  onArchive: (testName: string) => void;
+  onArchive: () => void;
   isDeleted: boolean;
   isArchived: boolean;
   isNew: boolean;
@@ -87,6 +92,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
   editMode,
   isDeleted,
   isArchived,
+  onArchive,
 }: BannerTestEditorProps) => {
   const isEditable = () => {
     return editMode && !isDeleted && !isArchived;
@@ -220,6 +226,12 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
             onArticlesViewedSettingsChanged={onArticlesViewedSettingsChange}
             onValidationChange={onArticlesViewedSettingsValidationChanged}
             isDisabled={!isEditable()}
+          />
+        </div>
+        <div className={classes.buttonsContainer}>
+          <TestEditorActionButtons
+            isDisabled={!isEditable()}
+            archive={onArchive}
           />
         </div>
       </div>

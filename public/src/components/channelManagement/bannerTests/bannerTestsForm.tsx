@@ -95,7 +95,7 @@ const BannerTestsForm: React.FC<Props> = ({
             visible
             editMode={editMode}
             onDelete={onTestDelete}
-            onArchive={onTestArchive}
+            onArchive={() => onTestArchive(selectedTestName)}
             isDeleted={
               modifiedTests[selectedTestName] &&
               modifiedTests[selectedTestName].isDeleted
