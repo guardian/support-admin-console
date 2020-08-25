@@ -37,27 +37,32 @@ interface BannerTestVariantEditorsAccordionProps
   onValidationChange: (isValid: boolean) => void;
 }
 
-const BannerTestVariantEditorsAccordion: React.FC<BannerTestVariantEditorsAccordionProps> = (
-  props: BannerTestVariantEditorsAccordionProps
-) => {
+const BannerTestVariantEditorsAccordion: React.FC<BannerTestVariantEditorsAccordionProps> = ({
+  classes,
+  variants,
+  onVariantsListChange,
+  testName,
+  editMode,
+  onValidationChange,
+}: BannerTestVariantEditorsAccordionProps) => {
   const [expandedVariantKey, setExpandedVariantKey] = useState<
     string | undefined
   >(undefined);
 
-  const setValidationStatusForField = useValidation(props.onValidationChange);
+  const setValidationStatusForField = useValidation(onValidationChange);
 
   const onVariantChange = (updatedVariant: BannerVariant): void => {
-    const updatedVariantList: BannerVariant[] = props.variants.map((variant) =>
+    const updatedVariantList: BannerVariant[] = variants.map((variant) =>
       variant.name === updatedVariant.name ? updatedVariant : variant
     );
-    props.onVariantsListChange(updatedVariantList);
+    onVariantsListChange(updatedVariantList);
   };
 
   const onVariantDelete = (variantName: string): void => {
-    const updatedVariantList = props.variants.filter(
+    const updatedVariantList = variants.filter(
       (variant) => variant.name !== variantName
     );
-    props.onVariantsListChange(updatedVariantList);
+    onVariantsListChange(updatedVariantList);
   };
 
   const onExpansionPanelChange = (key: string) => (
@@ -69,14 +74,12 @@ const BannerTestVariantEditorsAccordion: React.FC<BannerTestVariantEditorsAccord
   };
 
   const createVariantKey = (variantName: string): string => {
-    return `${props.testName}${variantName}`;
+    return `${testName}${variantName}`;
   };
-
-  const { classes } = props;
 
   return (
     <div className={classes.expansionPanelsContainer}>
-      {props.variants.map((variant, index) => {
+      {variants.map((variant, index) => {
         const key = createVariantKey(variant.name);
 
         return (
@@ -91,7 +94,7 @@ const BannerTestVariantEditorsAccordion: React.FC<BannerTestVariantEditorsAccord
               <BannerTestVariantEditor
                 variant={variant}
                 onVariantChange={onVariantChange}
-                editMode={props.editMode}
+                editMode={editMode}
                 onDelete={() => {
                   onVariantDelete(variant.name);
                   setValidationStatusForField(variant.name, true);
@@ -102,7 +105,7 @@ const BannerTestVariantEditorsAccordion: React.FC<BannerTestVariantEditorsAccord
               />
             </ExpansionPanelDetails>
             <ExpansionPanelActions>
-              <VariantDeleteButton isDisabled={!props.editMode} />
+              <VariantDeleteButton isDisabled={!editMode} />
             </ExpansionPanelActions>
           </ExpansionPanel>
         );
