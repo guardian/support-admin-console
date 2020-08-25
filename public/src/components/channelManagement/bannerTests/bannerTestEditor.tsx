@@ -21,7 +21,7 @@ import TestEditorLiveSwitch from "../testEditorLiveSwitch";
 import TestEditorMinArticlesViewedInput from "../testEditorMinArticlesViewedInput";
 import useValidation from "../hooks/useValidation";
 
-const styles = ({ spacing, palette, typography }: Theme) =>
+const styles = ({ spacing, palette }: Theme) =>
   createStyles({
     container: {
       width: "100%",
@@ -87,7 +87,6 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
   editMode,
   isDeleted,
   isArchived,
-  createTest,
 }: BannerTestEditorProps) => {
   const isEditable = () => {
     return editMode && !isDeleted && !isArchived;
@@ -121,42 +120,12 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
     });
   };
 
-  const copyTest = (newTestName: string, newTestNickname: string): void => {
-    if (test) {
-      const newTest: BannerTest = {
-        ...test,
-
-        name: newTestName,
-        nickname: newTestNickname,
-      };
-      createTest(newTest);
-    }
+  const onLiveSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    updateTest({ ...test, isOn: event.target.checked });
   };
 
   const onVariantsChange = (updatedVariantList: BannerVariant[]): void => {
     updateTest({ ...test, variants: updatedVariantList });
-
-    // if (test) {
-
-    //   updateTest((test) => ({ ...test, variants: updatedVariantList }));
-    // }
-  };
-
-  const onListChange = (fieldName: string) => (updatedString: string): void => {
-    const updatedList = updatedString === "" ? [] : updatedString.split(",");
-    // updateTest((test) => ({ ...test, [fieldName]: updatedList }));
-  };
-
-  const onLiveSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // updateTest((test) => ({ ...test, isOn: event.target.checked }));
-  };
-
-  const onUserCohortChange = (selectedCohort: UserCohort): void => {
-    // updateTest((test) => ({ ...test, userCohort: selectedCohort }));
-  };
-
-  const onTargetRegionsChange = (selectedRegions: Region[]): void => {
-    // updateTest((test) => ({ ...test, locations: selectedRegions }));
   };
 
   if (test && visible) {
@@ -206,13 +175,13 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
 
           <TargetRegionsSelector
             regions={test.locations}
-            onRegionsUpdate={onTargetRegionsChange}
+            onRegionsUpdate={() => null}
             isEditable={isEditable()}
           />
 
           <UserCohortSelector
             cohort={test.userCohort}
-            onCohortsUpdate={onUserCohortChange}
+            onCohortsUpdate={() => null}
             isEditable={isEditable()}
           />
 
@@ -220,10 +189,6 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
             articlesViewedSettings={test.articlesViewedSettings}
             editMode={isEditable()}
             onChange={() => null}
-            // onChange={(articlesViewedSettings?: ArticlesViewedSettings) =>
-            //   updateTest((test) => ({ ...test, articlesViewedSettings }))
-            // }
-            // onValidationChange={onFieldValidationChange(this)('articlesViewedEditor')}
             onValidationChange={() => null}
           />
         </div>
