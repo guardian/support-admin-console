@@ -10,7 +10,6 @@ import {
   withStyles,
 } from "@material-ui/core";
 import { BannerTest, BannerVariant } from "./bannerTestsForm";
-import TargetRegionsSelector from "../targetRegionsSelector";
 import ArticlesViewedEditor, {
   defaultArticlesViewedSettings,
 } from "../articlesViewedEditor";
@@ -19,6 +18,7 @@ import UserCohortSelector from "../userCohortSelector";
 import TestEditorHeader from "../testEditorHeader";
 import TestEditorLiveSwitch from "../testEditorLiveSwitch";
 import TestEditorMinArticlesViewedInput from "../testEditorMinArticlesViewedInput";
+import TestEditorTargetRegionsSelector from "../testEditorTargetRegionsSelector";
 import useValidation from "../hooks/useValidation";
 
 const styles = ({ spacing, palette }: Theme) =>
@@ -29,6 +29,8 @@ const styles = ({ spacing, palette }: Theme) =>
       background: "#FFFFFF",
       paddingTop: spacing(6),
       paddingRight: spacing(12),
+      paddingLeft: spacing(3),
+      marginLeft: -spacing(3),
     },
     headerAndSwitchContainer: {
       paddingBottom: spacing(3),
@@ -135,6 +137,10 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
     });
   };
 
+  const onRegionsChange = (updatedRegions: Region[]): void => {
+    updateTest({ ...test, locations: updatedRegions });
+  };
+
   if (test && visible) {
     return (
       <div className={classes.container}>
@@ -176,15 +182,15 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
           />
         </div>
 
-        <div>
-          <Typography variant={"h4"} className={classes.sectionHeader}>
+        <div className={classes.sectionContainer}>
+          <Typography variant={"h3"} className={classes.sectionHeader}>
             Target audience
           </Typography>
 
-          <TargetRegionsSelector
-            regions={test.locations}
-            onRegionsUpdate={() => null}
-            isEditable={isEditable()}
+          <TestEditorTargetRegionsSelector
+            selectedRegions={test.locations}
+            onRegionsUpdate={onRegionsChange}
+            isDisabled={!isEditable()}
           />
 
           <UserCohortSelector
@@ -192,7 +198,9 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
             onCohortsUpdate={() => null}
             isEditable={isEditable()}
           />
+        </div>
 
+        <div>
           <ArticlesViewedEditor
             articlesViewedSettings={test.articlesViewedSettings}
             editMode={isEditable()}
