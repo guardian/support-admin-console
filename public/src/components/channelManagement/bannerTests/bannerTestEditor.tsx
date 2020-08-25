@@ -18,7 +18,7 @@ import UserCohortSelector from "../userCohortSelector";
 import TestEditorHeader from "../testEditorHeader";
 import TestEditorLiveSwitch from "../testEditorLiveSwitch";
 import TestEditorMinArticlesViewedInput from "../testEditorMinArticlesViewedInput";
-import TestEditorTargetRegionsSelector from "../testEditorTargetRegionsSelector";
+import TestEditorTargetAudienceSelector from "../testEditorTargetAudienceSelector";
 import useValidation from "../hooks/useValidation";
 
 const styles = ({ spacing, palette }: Theme) =>
@@ -141,6 +141,10 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
     updateTest({ ...test, locations: updatedRegions });
   };
 
+  const onCohortChange = (updatedCohort: UserCohort): void => {
+    updateTest({ ...test, userCohort: updatedCohort });
+  };
+
   if (test && visible) {
     return (
       <div className={classes.container}>
@@ -187,16 +191,12 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
             Target audience
           </Typography>
 
-          <TestEditorTargetRegionsSelector
+          <TestEditorTargetAudienceSelector
             selectedRegions={test.locations}
             onRegionsUpdate={onRegionsChange}
+            selectedCohort={test.userCohort}
+            onCohortChange={onCohortChange}
             isDisabled={!isEditable()}
-          />
-
-          <UserCohortSelector
-            cohort={test.userCohort}
-            onCohortsUpdate={() => null}
-            isEditable={isEditable()}
           />
         </div>
 
