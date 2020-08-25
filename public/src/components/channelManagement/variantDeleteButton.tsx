@@ -10,22 +10,26 @@ import {
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 
+import useOpenable from "../../hooks/useOpenable";
+
 interface VariantEditorButtonsEditorProps {
   isDisabled: boolean;
+  onConfirm: () => void;
 }
 
 const VariantEditorButtonsEditor: React.FC<VariantEditorButtonsEditorProps> = ({
   isDisabled,
+  onConfirm,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, open, close] = useOpenable();
   return (
     <>
-      <IconButton onClick={() => setIsOpen(true)} disabled={isDisabled}>
+      <IconButton onClick={open} disabled={isDisabled}>
         <DeleteIcon />
       </IconButton>
       <Dialog
         open={isOpen}
-        onClose={() => setIsOpen(false)}
+        onClose={close}
         aria-labelledby="delete-variant-dialog-title"
         aria-describedby="delete-variant-dialog-description"
       >
@@ -38,8 +42,10 @@ const VariantEditorButtonsEditor: React.FC<VariantEditorButtonsEditorProps> = ({
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button color="primary">Cancel</Button>
-          <Button color="primary" autoFocus>
+          <Button color="primary" onClick={close}>
+            Cancel
+          </Button>
+          <Button color="primary" onClick={onConfirm}>
             Delete variant
           </Button>
         </DialogActions>

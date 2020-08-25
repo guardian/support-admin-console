@@ -105,7 +105,10 @@ const BannerTestVariantEditorsAccordion: React.FC<BannerTestVariantEditorsAccord
               />
             </ExpansionPanelDetails>
             <ExpansionPanelActions>
-              <VariantDeleteButton isDisabled={!editMode} />
+              <VariantDeleteButton
+                isDisabled={!editMode}
+                onConfirm={() => onVariantDelete(variant.name)}
+              />
             </ExpansionPanelActions>
           </ExpansionPanel>
         );
