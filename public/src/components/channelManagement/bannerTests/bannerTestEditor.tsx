@@ -1,32 +1,21 @@
 import React from "react";
 import { Region } from "../../../utils/models";
-import {
-  ArticlesViewedSettings,
-  TestEditorState,
-  UserCohort,
-} from "../helpers/shared";
+import { ArticlesViewedSettings, UserCohort } from "../helpers/shared";
 import { articleCountTemplate } from "../helpers/copyTemplates";
 import {
   createStyles,
-  Switch,
   Theme,
   Typography,
   WithStyles,
   withStyles,
 } from "@material-ui/core";
-import { isNumber } from "../helpers/validation";
-import ButtonWithConfirmationPopup from "../buttonWithConfirmationPopup";
-import DeleteSweepIcon from "@material-ui/icons/DeleteSweep";
-import ArchiveIcon from "@material-ui/icons/Archive";
 import { BannerTest, BannerVariant } from "./bannerTestsForm";
 import TargetRegionsSelector from "../targetRegionsSelector";
 import ArticlesViewedEditor, {
   defaultArticlesViewedSettings,
 } from "../articlesViewedEditor";
-import NewNameCreator from "../newNameCreator";
 import BannerTestVariantsEditor from "./bannerTestVariantsEditor";
 import UserCohortSelector from "../userCohortSelector";
-import EditableTextField from "../editableTextField";
 import TestEditorHeader from "../testEditorHeader";
 import TestEditorLiveSwitch from "../testEditorLiveSwitch";
 import TestEditorMinArticlesViewedInput from "../testEditorMinArticlesViewedInput";
@@ -58,68 +47,10 @@ const styles = ({ spacing, palette, typography }: Theme) =>
         marginTop: spacing(4),
       },
     },
-    formControl: {
-      marginTop: spacing(2),
-      marginBottom: spacing(1),
-      display: "block",
-    },
-    h3: {
-      fontSize: typography.pxToRem(28),
-      fontWeight: typography.fontWeightMedium,
-      margin: "10px 0 15px",
-    },
-    hasChanged: {
-      color: "orange",
-    },
     sectionHeader: {
       fontSize: 16,
       fontWeight: 500,
       color: palette.grey[700],
-    },
-    select: {
-      minWidth: "460px",
-      paddingTop: "10px",
-      marginBottom: "20px",
-    },
-    selectLabel: {
-      fontSize: typography.pxToRem(22),
-      color: "black",
-    },
-    radio: {
-      paddingTop: "20px",
-      marginBottom: "10px",
-    },
-    visibilityIcons: {
-      marginTop: spacing(1),
-    },
-    switchWithIcon: {
-      display: "flex",
-    },
-    visibilityHelperText: {
-      marginTop: spacing(1),
-      marginLeft: spacing(1),
-    },
-    buttons: {
-      display: "flex",
-      justifyContent: "flex-end",
-    },
-    button: {
-      marginTop: spacing(2),
-      marginLeft: spacing(2),
-    },
-    isDeleted: {
-      color: "#ab0613",
-    },
-    isArchived: {
-      color: "#a1845c",
-    },
-    switchLabel: {
-      marginTop: spacing(0.6),
-      marginRight: spacing(6),
-      fontSize: typography.pxToRem(18),
-    },
-    hr: {
-      width: "100%",
     },
   });
 
@@ -147,16 +78,22 @@ interface BannerTestEditorProps extends WithStyles<typeof styles> {
   createTest: (newTest: BannerTest) => void;
 }
 
-const areYouSure = `Are you sure? This can't be undone without cancelling entire edit session!`;
-
-const BannerTestEditor: React.FC<BannerTestEditorProps> = (
-  props: BannerTestEditorProps
-) => {
+const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
+  classes,
+  test,
+  onChange,
+  onValidationChange,
+  visible,
+  editMode,
+  isDeleted,
+  isArchived,
+  createTest,
+}: BannerTestEditorProps) => {
   const isEditable = () => {
-    return props.editMode && !props.isDeleted && !props.isArchived;
+    return editMode && !isDeleted && !isArchived;
   };
 
-  const setValidationStatusForField = useValidation(props.onValidationChange);
+  const setValidationStatusForField = useValidation(onValidationChange);
 
   const onVariantsListValidationChange = (isValid: boolean) =>
     setValidationStatusForField("variantsList", isValid);
@@ -177,7 +114,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = (
   };
 
   const updateTest = (updatedTest: BannerTest) => {
-    props.onChange({
+    onChange({
       ...updatedTest,
       // To save dotcom from having to work this out
       articlesViewedSettings: getArticlesViewedSettings(updatedTest),
@@ -185,19 +122,22 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = (
   };
 
   const copyTest = (newTestName: string, newTestNickname: string): void => {
-    if (props.test) {
+    if (test) {
       const newTest: BannerTest = {
-        ...props.test,
+        ...test,
+
         name: newTestName,
         nickname: newTestNickname,
       };
-      props.createTest(newTest);
+      createTest(newTest);
     }
   };
 
   const onVariantsChange = (updatedVariantList: BannerVariant[]): void => {
-    updateTest({ ...props.test, variants: updatedVariantList });
-    // if (props.test) {
+    updateTest({ ...test, variants: updatedVariantList });
+
+    // if (test) {
+
     //   updateTest((test) => ({ ...test, variants: updatedVariantList }));
     // }
   };
@@ -219,69 +159,11 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = (
     // updateTest((test) => ({ ...test, locations: selectedRegions }));
   };
 
-  interface BottomButtonsProps {
-    test: BannerTest;
-  }
-
-  const BottomButtons = ({ test }: BottomButtonsProps) => (
-    <div className={props.classes.buttons}>
-      <div className={props.classes.button}>
-        <ButtonWithConfirmationPopup
-          buttonText="Archive test"
-          confirmationText={areYouSure}
-          onConfirm={() => props.onArchive(test.name)}
-          icon={<ArchiveIcon />}
-        />
-      </div>
-      <div className={props.classes.button}>
-        <ButtonWithConfirmationPopup
-          buttonText="Delete test"
-          confirmationText={areYouSure}
-          onConfirm={() => props.onDelete(test.name)}
-          icon={<DeleteSweepIcon />}
-        />
-      </div>
-      <div className={props.classes.button}>
-        <NewNameCreator
-          type="test"
-          action="Copy"
-          existingNames={props.testNames}
-          existingNicknames={props.testNicknames}
-          onValidName={copyTest}
-          editEnabled={props.editMode}
-          initialValue={test.name}
-        />
-      </div>
-    </div>
-  );
-
-  interface EditorProps {
-    test: BannerTest;
-  }
-
-  const Editor = ({ test }: EditorProps) => {
-    const { classes } = props;
-
-    const statusText = () => {
-      if (props.isDeleted)
-        return <span className={classes.isDeleted}>&nbsp;(to be deleted)</span>;
-      else if (props.isArchived)
-        return (
-          <span className={classes.isArchived}>&nbsp;(to be archived)</span>
-        );
-      else if (props.isNew)
-        return <span className={classes.hasChanged}>&nbsp;(new)</span>;
-      else if (props.hasChanged)
-        return <span className={classes.hasChanged}>&nbsp;(modified)</span>;
-    };
-
+  if (test && visible) {
     return (
       <div className={classes.container}>
         <div className={classes.headerAndSwitchContainer}>
-          <TestEditorHeader
-            name={props.test.name}
-            nickname={props.test.nickname}
-          />
+          <TestEditorHeader name={test.name} nickname={test.nickname} />
 
           <TestEditorLiveSwitch
             isChecked={test.isOn}
@@ -334,7 +216,6 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = (
             isEditable={isEditable()}
           />
 
-          <hr className={classes.hr} />
           <ArticlesViewedEditor
             articlesViewedSettings={test.articlesViewedSettings}
             editMode={isEditable()}
@@ -345,15 +226,9 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = (
             // onValidationChange={onFieldValidationChange(this)('articlesViewedEditor')}
             onValidationChange={() => null}
           />
-
-          {isEditable() && props.test && <BottomButtons test={props.test} />}
         </div>
       </div>
     );
-  };
-
-  if (props.test && props.visible) {
-    return <Editor test={props.test} />;
   }
   return null;
 };

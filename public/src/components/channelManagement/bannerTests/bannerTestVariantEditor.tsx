@@ -10,6 +10,7 @@ import EditableTextField from "../editableTextField";
 import VariantEditorButtonsEditor from "../variantEditorButtonsEditor";
 import { BannerVariant } from "./bannerTestsForm";
 import { getInvalidTemplateError } from "../helpers/copyTemplates";
+import { getEmptyError } from "../helpers/validation";
 import useValidation from "../hooks/useValidation";
 
 const styles = ({ palette, spacing }: Theme) =>
@@ -52,53 +53,48 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
   variant,
   editMode,
   onValidationChange,
+  onVariantChange,
 }: BannerTestVariantEditorProps) => {
   const setValidationStatusForField = useValidation(onValidationChange);
 
   const getHeadingError = getInvalidTemplateError;
   const onHeadingChanged = (isValid: boolean) =>
     setValidationStatusForField("heading", isValid);
-
-  const getEmptyTextError = (text: string) =>
-    text.trim() === "" ? "Field must not be empty" : null;
+  const onHeadingSubmit = (updatedHeading: string) =>
+    onVariantChange({ ...variant, heading: updatedHeading });
 
   const getBodyError = (text: string) =>
-    getEmptyTextError(text) || getInvalidTemplateError(text);
+    getEmptyError(text) || getInvalidTemplateError(text);
   const onBodyChanged = (isValid: boolean) =>
     setValidationStatusForField("body", isValid);
+  const onBodySubmit = (updatedBody: string) =>
+    onVariantChange({ ...variant, body: updatedBody });
 
   const getHighlightedTextError = getInvalidTemplateError;
   const onHighLightedTextChange = (isValid: boolean) =>
     setValidationStatusForField("highlightedText", isValid);
+  const onHighlightedTextSubmit = (updatedHighlightedText: string) =>
+    onVariantChange({ ...variant, highlightedText: updatedHighlightedText });
 
   return (
     <div className={classes.container}>
       <EditableTextField
-        text={variant.name}
-        onSubmit={() => null}
-        label="Variant name"
+        text={variant.heading || ""}
+        onSubmit={onHeadingSubmit}
+        label="Header"
         editEnabled={editMode}
+        validation={{
+          getError: getHeadingError,
+          onChange: onHeadingChanged,
+        }}
+        helperText="Assistive text"
       />
-
-      <div className={classes.hook}>
-        <EditableTextField
-          text={variant.heading || ""}
-          onSubmit={() => null}
-          label="Header"
-          editEnabled={editMode}
-          validation={{
-            getError: getHeadingError,
-            onChange: onHeadingChanged,
-          }}
-          helperText="Format: 'control' or 'v1_name'"
-        />
-      </div>
 
       <EditableTextField
         textarea
         height={10}
         text={variant.body}
-        onSubmit={() => null}
+        onSubmit={onBodySubmit}
         label="Body copy"
         editEnabled={editMode}
         validation={{
@@ -110,7 +106,7 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
 
       <EditableTextField
         text={variant.highlightedText || ""}
-        onSubmit={() => null}
+        onSubmit={onHighlightedTextSubmit}
         label="Highlighted text"
         editEnabled={editMode}
         validation={{

@@ -28,7 +28,8 @@ const styles = ({ spacing, palette }: Theme) =>
     },
   });
 
-interface BannerTestVariantsListProps extends WithStyles<typeof styles> {
+interface BannerTestVariantEditorsAccordionProps
+  extends WithStyles<typeof styles> {
   variants: BannerVariant[];
   onVariantsListChange: (variantList: BannerVariant[]) => void;
   testName: string;
@@ -36,10 +37,12 @@ interface BannerTestVariantsListProps extends WithStyles<typeof styles> {
   onValidationChange: (isValid: boolean) => void;
 }
 
-const BannerTestVariantsList: React.FC<BannerTestVariantsListProps> = (
-  props: BannerTestVariantsListProps
+const BannerTestVariantEditorsAccordion: React.FC<BannerTestVariantEditorsAccordionProps> = (
+  props: BannerTestVariantEditorsAccordionProps
 ) => {
-  const [expandedVariantKey, setExpandedVariantKey] = useState(-1);
+  const [expandedVariantKey, setExpandedVariantKey] = useState<
+    string | undefined
+  >(undefined);
 
   const setValidationStatusForField = useValidation(props.onValidationChange);
 
@@ -57,12 +60,16 @@ const BannerTestVariantsList: React.FC<BannerTestVariantsListProps> = (
     props.onVariantsListChange(updatedVariantList);
   };
 
-  const onExpansionPanelChange = (key: number) => (
+  const onExpansionPanelChange = (key: string) => (
     event: React.ChangeEvent<{}>
   ) => {
     expandedVariantKey === key
-      ? setExpandedVariantKey(-1)
+      ? setExpandedVariantKey(undefined)
       : setExpandedVariantKey(key);
+  };
+
+  const createVariantKey = (variantName: string): string => {
+    return `${props.testName}${variantName}`;
   };
 
   const { classes } = props;
@@ -70,7 +77,7 @@ const BannerTestVariantsList: React.FC<BannerTestVariantsListProps> = (
   return (
     <div className={classes.expansionPanelsContainer}>
       {props.variants.map((variant, index) => {
-        const key = index;
+        const key = createVariantKey(variant.name);
 
         return (
           <ExpansionPanel
@@ -104,4 +111,4 @@ const BannerTestVariantsList: React.FC<BannerTestVariantsListProps> = (
   );
 };
 
-export default withStyles(styles)(BannerTestVariantsList);
+export default withStyles(styles)(BannerTestVariantEditorsAccordion);
