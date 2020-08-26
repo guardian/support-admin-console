@@ -80,7 +80,7 @@ const StickyBottomBarActionButtons: React.FC<
           startIcon={<CloseIcon />}
           onClick={() => setIsOpen(true)}
         >
-          <Typography className={classes.buttonText}>Cancel</Typography>
+          <Typography className={classes.buttonText}>Discard</Typography>
         </Button>
         <Dialog
           open={isOpen}
@@ -88,7 +88,7 @@ const StickyBottomBarActionButtons: React.FC<
           aria-labelledby="cancel-dialog-title"
           aria-describedby="cancel-dialog-description"
         >
-          <DialogTitle id="cancel-dialog-title">Cancel changes?</DialogTitle>
+          <DialogTitle id="cancel-dialog-title">Discard changes?</DialogTitle>
           <DialogContent>
             <DialogContentText id="cancel-dialog-description">
               You have unsaved changes - these will be lost if you move on.
@@ -97,10 +97,13 @@ const StickyBottomBarActionButtons: React.FC<
           </DialogContent>
           <DialogActions>
             <Button onClick={cancel} color="primary">
-              Cancel
+              Discard changes
             </Button>
             <Button onClick={save} color="primary" autoFocus>
               Save changes
+            </Button>
+            <Button onClick={() => setIsOpen(false)} color="primary" autoFocus>
+              Cancel
             </Button>
           </DialogActions>
         </Dialog>
