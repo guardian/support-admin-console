@@ -225,12 +225,19 @@ const TestEditor = <T extends Test>(
             isArchived: false,
           };
 
-      this.setState({
-        modifiedTests: {
-          ...this.state.modifiedTests,
-          [testName]: updatedState,
+      this.setState(
+        {
+          modifiedTests: {
+            ...this.state.modifiedTests,
+            [testName]: updatedState,
+          },
         },
-      });
+        () => {
+          if (this.state.tests !== null) {
+            this.save(this.state.tests)();
+          }
+        }
+      );
     };
 
     onTestArchive = (testName: string): void => {
@@ -251,12 +258,11 @@ const TestEditor = <T extends Test>(
           },
         },
         () => {
-          console.log(this.state.modifiedTests);
-          console.log(this.state.tests);
+          if (this.state.tests !== null) {
+            this.save(this.state.tests)();
+          }
         }
-        // () => this.state.tests && this.save(this.state.tests)
       );
-      // this.state.tests && this.save(this.state.tests);
     };
 
     onSelectedTestName = (testName: string): void => {

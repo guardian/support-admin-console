@@ -73,7 +73,7 @@ interface BannerTestEditorProps extends WithStyles<typeof styles> {
   onValidationChange: (isValid: boolean) => void;
   visible: boolean;
   editMode: boolean;
-  onDelete: (testName: string) => void;
+  onDelete: () => void;
   onArchive: () => void;
   isDeleted: boolean;
   isArchived: boolean;
@@ -93,6 +93,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
   isDeleted,
   isArchived,
   onArchive,
+  onDelete,
 }: BannerTestEditorProps) => {
   const isEditable = () => {
     return editMode && !isDeleted && !isArchived;
@@ -231,7 +232,8 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
         <div className={classes.buttonsContainer}>
           <TestEditorActionButtons
             isDisabled={!isEditable()}
-            archive={onArchive}
+            onArchive={onArchive}
+            onDelete={onDelete}
           />
         </div>
       </div>

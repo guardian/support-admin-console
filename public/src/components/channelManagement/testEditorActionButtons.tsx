@@ -40,13 +40,15 @@ const styles = ({ spacing, palette }: Theme) =>
   });
 
 interface TestEditorActionButtonsProps extends WithStyles<typeof styles> {
-  archive: () => void;
+  onArchive: () => void;
+  onDelete: () => void;
   isDisabled: boolean;
 }
 
 const TestEditorActionButtons: React.FC<TestEditorActionButtonsProps> = ({
   classes,
-  archive,
+  onArchive,
+  onDelete,
   isDisabled,
 }: TestEditorActionButtonsProps) => {
   const DeleteButton = () => {
@@ -77,8 +79,10 @@ const TestEditorActionButtons: React.FC<TestEditorActionButtonsProps> = ({
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button color="primary">Cancel</Button>
-            <Button color="primary" autoFocus>
+            <Button color="primary" onClick={close}>
+              Cancel
+            </Button>
+            <Button color="primary" onClick={onDelete}>
               Delete test
             </Button>
           </DialogActions>
@@ -120,7 +124,7 @@ const TestEditorActionButtons: React.FC<TestEditorActionButtonsProps> = ({
             <Button color="primary" onClick={close}>
               Cancel
             </Button>
-            <Button color="primary" onClick={archive}>
+            <Button color="primary" onClick={onArchive}>
               Archive test
             </Button>
           </DialogActions>
