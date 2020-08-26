@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Checkbox,
   createStyles,
@@ -8,6 +8,7 @@ import {
   withStyles,
 } from "@material-ui/core";
 import EditableTextField from "./editableTextField";
+import { Cta } from "./helpers/shared";
 
 const styles = ({ spacing }: Theme) =>
   createStyles({
@@ -16,20 +17,41 @@ const styles = ({ spacing }: Theme) =>
         marginTop: spacing(1),
       },
     },
+    fieldsContainer: {
+      "& > * + *": {
+        marginTop: spacing(3),
+      },
+    },
   });
 
 interface VariantEditorButtonEditorProps {
   label: string;
+  cta?: Cta;
+  updateCta: (updatedCta?: Cta) => void;
+  defaultCta: Cta;
   isDisabled: boolean;
 }
 
 const VariantEditorButtonEditor: React.FC<
   VariantEditorButtonEditorProps & WithStyles<typeof styles>
-> = ({ classes, label, isDisabled }) => {
-  const [isChecked, setIsChecked] = useState(false);
+> = ({ classes, label, cta, updateCta, defaultCta, isDisabled }) => {
+  const isChecked = cta !== undefined;
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setIsChecked(event.target.checked);
+  const onCheckboxChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const isChecked = event.target.checked;
+    if (isChecked) {
+      updateCta(defaultCta);
+    } else {
+      updateCta(undefined);
+    }
+  };
+
+  const onTextChanged = (updatedText: string) => {
+    updateCta({ ...cta, text: updatedText });
+  };
+
+  const onBaseUrlChanged = (updatedBaseUrl: string) => {
+    updateCta({ ...cta, baseUrl: updatedBaseUrl });
   };
 
   return (
@@ -38,7 +60,7 @@ const VariantEditorButtonEditor: React.FC<
         control={
           <Checkbox
             checked={isChecked}
-            onChange={handleChange}
+            onChange={onCheckboxChanged}
             color="primary"
             disabled={isDisabled}
           />
@@ -47,18 +69,20 @@ const VariantEditorButtonEditor: React.FC<
       />
 
       {isChecked && (
-        <div>
+        <div className={classes.fieldsContainer}>
           <EditableTextField
-            text="Support the Guardian"
-            onSubmit={() => null}
+            text={cta?.text || ""}
+            onSubmit={onTextChanged}
             label="Button copy"
             editEnabled={!isDisabled}
+            fullWidth
           />
           <EditableTextField
-            text="https://support.theguardian.com/contribute"
-            onSubmit={() => null}
+            text={cta?.baseUrl || ""}
+            onSubmit={onBaseUrlChanged}
             label="Button destination"
             editEnabled={!isDisabled}
+            fullWidth
           />
         </div>
       )}

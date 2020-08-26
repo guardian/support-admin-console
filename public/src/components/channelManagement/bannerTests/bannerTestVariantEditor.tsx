@@ -12,6 +12,7 @@ import { BannerVariant } from "./bannerTestsForm";
 import { getInvalidTemplateError } from "../helpers/copyTemplates";
 import { getEmptyError } from "../helpers/validation";
 import useValidation from "../hooks/useValidation";
+import { Cta } from "../helpers/shared";
 
 const styles = ({ palette, spacing }: Theme) =>
   createStyles({
@@ -76,6 +77,14 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
   const onHighlightedTextSubmit = (updatedHighlightedText: string) =>
     onVariantChange({ ...variant, highlightedText: updatedHighlightedText });
 
+  const updatePrimaryCta = (updatedCta?: Cta) => {
+    onVariantChange({ ...variant, cta: updatedCta });
+  };
+
+  const updateSecondaryCta = (updatedCta?: Cta) => {
+    onVariantChange({ ...variant, secondaryCta: updatedCta });
+  };
+
   return (
     <div className={classes.container}>
       <EditableTextField
@@ -124,7 +133,13 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
           Buttons
         </Typography>
 
-        <VariantEditorButtonsEditor isDisabled={!editMode} />
+        <VariantEditorButtonsEditor
+          primaryCta={variant.cta}
+          secondaryCta={variant.secondaryCta}
+          updatePrimaryCta={updatePrimaryCta}
+          updateSecondaryCta={updateSecondaryCta}
+          isDisabled={!editMode}
+        />
       </div>
     </div>
   );
