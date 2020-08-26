@@ -94,6 +94,9 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
   isArchived,
   onArchive,
   onDelete,
+  testNames,
+  testNicknames,
+  createTest,
 }: BannerTestEditorProps) => {
   const isEditable = () => {
     return editMode && !isDeleted && !isArchived;
@@ -160,6 +163,10 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
       ...test,
       articlesViewedSettings: updatedArticlesViewedSettings,
     });
+  };
+
+  const onCopy = (name: string, nickname: string) => {
+    createTest({ ...test, name: name, nickname: nickname });
   };
 
   if (test && visible) {
@@ -231,9 +238,14 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
         </div>
         <div className={classes.buttonsContainer}>
           <TestEditorActionButtons
+            existingNames={testNames}
+            existingNicknames={testNicknames}
+            testName={test.name}
+            testNickname={test.nickname}
             isDisabled={!isEditable()}
             onArchive={onArchive}
             onDelete={onDelete}
+            onCopy={onCopy}
           />
         </div>
       </div>

@@ -11,7 +11,7 @@ import { ModifiedTests } from "./helpers/shared";
 import { Test } from "./helpers/shared";
 import TestList from "./testList";
 import TestPriorityLabelList from "./testPriorityLabelList";
-import NewTestCreator from "./newTestCreator";
+import NewTestButton from "./newTestButton";
 
 const styles = ({}: Theme) =>
   createStyles({
@@ -57,7 +57,7 @@ const Sidebar = <T extends Test>({
   return (
     <div className={classes.root}>
       {isInEditMode && (
-        <NewTestCreator
+        <NewTestButton
           existingNames={tests.map((t) => t.name)}
           existingNicknames={tests.map((t) => t.nickname || "")}
           createTest={createTest}

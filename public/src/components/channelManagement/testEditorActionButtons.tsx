@@ -16,6 +16,7 @@ import { grey } from "@material-ui/core/colors";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ArchiveIcon from "@material-ui/icons/Archive";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
+import CreateTestDialog from "./createTestDialog";
 import useOpenable from "../../hooks/useOpenable";
 
 const styles = ({ spacing, palette }: Theme) =>
@@ -40,16 +41,26 @@ const styles = ({ spacing, palette }: Theme) =>
   });
 
 interface TestEditorActionButtonsProps extends WithStyles<typeof styles> {
+  existingNames: string[];
+  existingNicknames: string[];
   onArchive: () => void;
   onDelete: () => void;
   isDisabled: boolean;
+  testName: string;
+  testNickname?: string;
+  onCopy: (name: string, nickname: string) => void;
 }
 
 const TestEditorActionButtons: React.FC<TestEditorActionButtonsProps> = ({
   classes,
+  existingNames,
+  existingNicknames,
   onArchive,
   onDelete,
   isDisabled,
+  testName,
+  testNickname,
+  onCopy,
 }: TestEditorActionButtonsProps) => {
   const DeleteButton = () => {
     const [isOpen, open, close] = useOpenable();
@@ -134,15 +145,29 @@ const TestEditorActionButtons: React.FC<TestEditorActionButtonsProps> = ({
   };
 
   const CopyButton = () => {
+    const [isOpen, open, close] = useOpenable();
     return (
-      <Button
-        variant="outlined"
-        startIcon={<FileCopyIcon style={{ color: grey[700] }} />}
-        size="medium"
-        disabled={isDisabled}
-      >
-        <Typography className={classes.buttonText}>Copy test</Typography>
-      </Button>
+      <>
+        <Button
+          onClick={open}
+          variant="outlined"
+          startIcon={<FileCopyIcon style={{ color: grey[700] }} />}
+          size="medium"
+          disabled={isDisabled}
+        >
+          <Typography className={classes.buttonText}>Copy test</Typography>
+        </Button>
+        <CreateTestDialog
+          isOpen={isOpen}
+          close={close}
+          existingNames={existingNames}
+          existingNicknames={existingNicknames}
+          mode="COPY"
+          copiedTestName={testName}
+          copiedTestNickname={testNickname}
+          createTest={onCopy}
+        />
+      </>
     );
   };
   return (
