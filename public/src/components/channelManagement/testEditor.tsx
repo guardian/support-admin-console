@@ -255,7 +255,7 @@ const TestEditor = <T extends Test>(
 
     onSelectedTestName = (testName: string): void => {
       if (this.state.selectedTestName && this.state.editMode) {
-        alert("Please either save or cancel before selecting another test.")
+        alert("Please either save or discard before selecting another test.")
       } else {
         this.setState({
           selectedTestName: testName,
