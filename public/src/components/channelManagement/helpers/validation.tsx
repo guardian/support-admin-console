@@ -19,40 +19,90 @@ import React from "react";
  *     onChange={value => {
  *       const isValid = value !== '';
  *       onFieldValidationChange(this)('email')(isValid)
-*      }}
+ *      }}
  *   />
  * }
  *
  */
 
 export interface ValidationComponentProps {
-  onValidationChange: (isValid: boolean) => void
+  onValidationChange: (isValid: boolean) => void;
 }
 
 export type ValidationStatus = {
-  [fieldName: string]: boolean
-}
+  [fieldName: string]: boolean;
+};
+
+const INVALID_CHARACTERS_ERROR_HELPER_TEXT =
+  "Only letters, numbers, underscores and hyphens are allowed";
+const INVALID_CHARACTERS_REGEX = /[^\w-]/;
+
+export const getInvalidCharactersError = (text: string): string | null => {
+  if (INVALID_CHARACTERS_REGEX.test(text)) {
+    return INVALID_CHARACTERS_ERROR_HELPER_TEXT;
+  }
+  return null;
+};
+
+const EMPTY_ERROR_HELPER_TEXT =
+  "Field cannot be empty - please enter some text";
+
+export const getEmptyError = (text: string): string | null => {
+  if (text.trim() === "") {
+    return EMPTY_ERROR_HELPER_TEXT;
+  }
+  return null;
+};
+
+const NOT_NUMBER_ERROR_HELPER_TEXT = "Must be a number";
+
+export const getNotNumberError = (text: string): string | null =>
+  Number.isNaN(Number(text)) ? NOT_NUMBER_ERROR_HELPER_TEXT : null;
+
+const DUPLICATE_ERROR_HELPER_TEXT = "Name already exists - please try another";
+
+export const createGetDuplicateError = (
+  existing: string[]
+): ((text: string) => string | null) => {
+  const getDuplicateError = (text: string): string | null => {
+    if (existing.includes(text)) {
+      return DUPLICATE_ERROR_HELPER_TEXT;
+    }
+    return null;
+  };
+  return getDuplicateError;
+};
 
 export interface ValidationComponentState {
-  validationStatus: ValidationStatus
+  validationStatus: ValidationStatus;
 }
 
 // Call this when a single field in the component updates
 export const onFieldValidationChange = <
   P extends ValidationComponentProps,
   S extends ValidationComponentState
->(component: React.Component<P,S>) => (fieldName: string) => (isValid: boolean): void => {
+>(
+  component: React.Component<P, S>
+) => (fieldName: string) => (isValid: boolean): void => {
+  component.setState(
+    (state) => {
+      const newValidationStatus: ValidationStatus = Object.assign(
+        {},
+        state.validationStatus
+      );
+      newValidationStatus[fieldName] = isValid;
+      return { validationStatus: newValidationStatus };
+    },
+    () => {
+      const hasInvalidField = Object.keys(
+        component.state.validationStatus
+      ).some((name) => component.state.validationStatus[name] === false);
 
-  component.setState((state) => {
-    const newValidationStatus: ValidationStatus = Object.assign({}, state.validationStatus);
-    newValidationStatus[fieldName] = isValid;
-    return { validationStatus: newValidationStatus }
-  }, () => {
-    const hasInvalidField = Object.keys(component.state.validationStatus)
-      .some(name => component.state.validationStatus[name] === false);
-
-    component.props.onValidationChange(!hasInvalidField);
-  });
+      component.props.onValidationChange(!hasInvalidField);
+    }
+  );
 };
 
-export const isNumber = (value: string): boolean => !Number.isNaN(Number(value));
+// const onFieldValidationChangeTemp = (setValidation, )
+export const isNumber = (value: string): boolean =>
+  !Number.isNaN(Number(value));

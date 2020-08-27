@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   createStyles,
   FormControl,
@@ -7,63 +7,74 @@ import {
   RadioGroup,
   Theme,
   withStyles,
-  WithStyles
+  WithStyles,
 } from "@material-ui/core";
 import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import {TickerCountType, TickerEndType, TickerSettings} from "./helpers/shared";
-import EditableTextField from "./editableTextField"
-import {onFieldValidationChange, ValidationStatus} from "./helpers/validation";
+import {
+  TickerCountType,
+  TickerEndType,
+  TickerSettings,
+} from "./helpers/shared";
+import EditableTextField from "./editableTextField";
+import {
+  onFieldValidationChange,
+  ValidationStatus,
+} from "./helpers/validation";
 
-const styles = ({ spacing, typography}: Theme) => createStyles({
-  formControl: {
-    marginTop: spacing(2),
-    marginBottom: spacing(1),
-    display: 'block',
-  },
-  selectLabel: {
-    fontSize: typography.pxToRem(22),
-    color: 'black',
-  },
-  radio: {
-    paddingTop: '20px',
-    marginBottom: '10px'
-  },
-  fieldsContainer: {
-    marginLeft: '30px',
-    marginBottom: '20px',
-    borderRadius: '4px',
-    border: '1px solid #dcdcdc',
-    padding: '2px 2px 0px 10px',
-  }
-});
+const styles = ({ spacing, typography }: Theme) =>
+  createStyles({
+    formControl: {
+      marginTop: spacing(2),
+      marginBottom: spacing(1),
+      display: "block",
+    },
+    selectLabel: {
+      fontSize: typography.pxToRem(22),
+      color: "black",
+    },
+    radio: {
+      paddingTop: "20px",
+      marginBottom: "10px",
+    },
+    fieldsContainer: {
+      marginLeft: "30px",
+      marginBottom: "20px",
+      borderRadius: "4px",
+      border: "1px solid #dcdcdc",
+      padding: "2px 2px 0px 10px",
+
+      "& > *": {
+        marginTop: spacing(3),
+      },
+    },
+  });
 
 interface Props extends WithStyles<typeof styles> {
-  editMode: boolean,
-  tickerSettings?: TickerSettings,
-  onChange: (tickerSettings: TickerSettings | undefined) => void,
-  onValidationChange: (isValid: boolean) => void
+  editMode: boolean;
+  tickerSettings?: TickerSettings;
+  onChange: (tickerSettings: TickerSettings | undefined) => void;
+  onValidationChange: (isValid: boolean) => void;
 }
 
 interface State {
-  validationStatus: ValidationStatus
+  validationStatus: ValidationStatus;
 }
 
 class TickerEditor extends React.Component<Props, State> {
-
   state: State = {
-    validationStatus: {}
+    validationStatus: {},
   };
 
   defaultTickerSettings: TickerSettings = {
     endType: TickerEndType.unlimited,
     countType: TickerCountType.money,
     copy: {
-      countLabel: 'contributions',
-      goalReachedPrimary: 'We\'ve hit our goal!',
-      goalReachedSecondary: 'but you can still support us',
+      countLabel: "contributions",
+      goalReachedPrimary: "We've hit our goal!",
+      goalReachedSecondary: "but you can still support us",
     },
-    currencySymbol: '$',
+    currencySymbol: "$",
   };
 
   renderFields(tickerSettings: TickerSettings) {
@@ -74,62 +85,78 @@ class TickerEditor extends React.Component<Props, State> {
         ...tickerSettings,
         copy: {
           ...tickerSettings.copy,
-          [fieldName]: value
-        }
+          [fieldName]: value,
+        },
       });
 
     const emptyFieldCheck = (value: string): string | null => {
-      if (value.trim() === '') return "Field must not be empty";
+      if (value.trim() === "") return "Field must not be empty";
       else return null;
     };
 
-    const renderTextField = (value: string, fieldName: string, label: string) => (
+    const renderTextField = (
+      value: string,
+      fieldName: string,
+      label: string
+    ) => (
       <EditableTextField
         text={value}
         label={label}
         onSubmit={onCopyFieldChange(fieldName)}
         editEnabled={this.props.editMode}
         required={true}
-        validation={
-          {
-            getError: emptyFieldCheck,
-            onChange: onFieldValidationChange(this)(fieldName)
-          }
-        }
+        validation={{
+          getError: emptyFieldCheck,
+          onChange: onFieldValidationChange(this)(fieldName),
+        }}
+        fullWidth
       />
     );
 
     return (
       <div className={classes.fieldsContainer}>
-        {renderTextField(tickerSettings.copy.countLabel, 'countLabel', 'Count label')}
-        {renderTextField(tickerSettings.copy.goalReachedPrimary, 'goalReachedPrimary', 'Goal reached primary text')}
-        {renderTextField(tickerSettings.copy.goalReachedSecondary, 'goalReachedSecondary', 'Goal reached secondary text')}
+        {renderTextField(
+          tickerSettings.copy.countLabel,
+          "countLabel",
+          "Count label"
+        )}
+        {renderTextField(
+          tickerSettings.copy.goalReachedPrimary,
+          "goalReachedPrimary",
+          "Goal reached primary text"
+        )}
+        {renderTextField(
+          tickerSettings.copy.goalReachedSecondary,
+          "goalReachedSecondary",
+          "Goal reached secondary text"
+        )}
 
-        { tickerSettings.countType === 'money' &&
+        {tickerSettings.countType === "money" && (
           <EditableTextField
             text={tickerSettings.currencySymbol}
             label="Currency"
-            onSubmit={value => this.props.onChange({
-              ...tickerSettings,
-              currencySymbol: value
-            })}
+            onSubmit={(value) =>
+              this.props.onChange({
+                ...tickerSettings,
+                currencySymbol: value,
+              })
+            }
             editEnabled={this.props.editMode}
             required={true}
-            validation={
-              {
-                getError: emptyFieldCheck,
-                onChange: onFieldValidationChange(this)('currencySymbol')
-              }
-            }
+            validation={{
+              getError: emptyFieldCheck,
+              onChange: onFieldValidationChange(this)("currencySymbol"),
+            }}
+            fullWidth
           />
-        }
+        )}
 
-        <FormControl
-          className={classes.formControl}>
+        <FormControl className={classes.formControl}>
           <InputLabel
             className={classes.selectLabel}
             shrink
-            htmlFor="count-type">
+            htmlFor="count-type"
+          >
             Ticker count type - are we fund-raising or accumulating supporters?
           </InputLabel>
           <RadioGroup
@@ -138,11 +165,11 @@ class TickerEditor extends React.Component<Props, State> {
             onChange={(event, value: string) =>
               this.props.onChange({
                 ...tickerSettings,
-                countType: (value as TickerCountType)
+                countType: value as TickerCountType,
               })
             }
           >
-            {Object.values(TickerCountType).map(countType =>
+            {Object.values(TickerCountType).map((countType) => (
               <FormControlLabel
                 value={countType}
                 key={countType}
@@ -150,16 +177,12 @@ class TickerEditor extends React.Component<Props, State> {
                 label={countType}
                 disabled={!this.props.editMode}
               />
-            )}
+            ))}
           </RadioGroup>
         </FormControl>
 
-        <FormControl
-          className={classes.formControl}>
-          <InputLabel
-            className={classes.selectLabel}
-            shrink
-            htmlFor="end-type">
+        <FormControl className={classes.formControl}>
+          <InputLabel className={classes.selectLabel} shrink htmlFor="end-type">
             Ticker end type - the behaviour when the goal is reached
           </InputLabel>
           <RadioGroup
@@ -168,11 +191,11 @@ class TickerEditor extends React.Component<Props, State> {
             onChange={(event, value: string) =>
               this.props.onChange({
                 ...tickerSettings,
-                endType: (value as TickerEndType)
+                endType: value as TickerEndType,
               })
             }
           >
-            {Object.values(TickerEndType).map(endType =>
+            {Object.values(TickerEndType).map((endType) => (
               <FormControlLabel
                 value={endType}
                 key={endType}
@@ -180,11 +203,11 @@ class TickerEditor extends React.Component<Props, State> {
                 label={endType}
                 disabled={!this.props.editMode}
               />
-            )}
+            ))}
           </RadioGroup>
         </FormControl>
       </div>
-    )
+    );
   }
 
   render() {
@@ -196,7 +219,11 @@ class TickerEditor extends React.Component<Props, State> {
               <Switch
                 checked={!!this.props.tickerSettings}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                  this.props.onChange(event.target.checked ? this.defaultTickerSettings : undefined)
+                  this.props.onChange(
+                    event.target.checked
+                      ? this.defaultTickerSettings
+                      : undefined
+                  )
                 }
                 disabled={!this.props.editMode}
               />
@@ -205,11 +232,10 @@ class TickerEditor extends React.Component<Props, State> {
           />
         </FormControl>
 
-        {
-          !!this.props.tickerSettings && this.renderFields(this.props.tickerSettings)
-        }
+        {!!this.props.tickerSettings &&
+          this.renderFields(this.props.tickerSettings)}
       </>
-    )
+    );
   }
 }
 

@@ -69,6 +69,8 @@ const BannerTestsForm: React.FC<Props> = ({
     onTestsChange(newTests, name);
   };
 
+  const selectedTest = tests.find((t) => t.name === selectedTestName);
+
   return (
     <TestsFormLayout
       sidebar={
@@ -83,9 +85,10 @@ const BannerTestsForm: React.FC<Props> = ({
         />
       }
       testEditor={
-        selectedTestName ? (
+        // needed to convince typescript neither are undefined
+        selectedTestName && selectedTest ? (
           <BannerTestEditor
-            test={tests.find((test) => test.name === selectedTestName)}
+            test={selectedTest}
             hasChanged={!!modifiedTests[selectedTestName]}
             onChange={(updatedTest) =>
               onTestsChange(updateTest(tests, updatedTest), updatedTest.name)
@@ -93,8 +96,8 @@ const BannerTestsForm: React.FC<Props> = ({
             onValidationChange={onTestErrorStatusChange(selectedTestName)}
             visible
             editMode={editMode}
-            onDelete={onTestDelete}
-            onArchive={onTestArchive}
+            onDelete={() => onTestDelete(selectedTestName)}
+            onArchive={() => onTestArchive(selectedTestName)}
             isDeleted={
               modifiedTests[selectedTestName] &&
               modifiedTests[selectedTestName].isDeleted
