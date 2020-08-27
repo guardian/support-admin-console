@@ -130,6 +130,12 @@ const TestEditor = <T extends Test>(
     };
 
     save = (tests: T[]) => (): void => {
+      // TODO - implement dialog in StickyBottomBar?
+      if (Object.keys(this.state.modifiedTests).some(testName => !this.state.modifiedTests[testName].isValid)) {
+        alert("Test contains errors. Please fix any errors before saving.");
+        return;
+      }
+
       const testsToArchive: T[] = tests.filter(
         (test) =>
           this.state.modifiedTests[test.name] &&
