@@ -105,7 +105,7 @@ const StickyBottomBarActionButtons: React.FC<
             <Button onClick={save} color="primary" autoFocus>
               Save changes
             </Button>
-            <Button onClick={() => setIsOpen(false)} color="primary" autoFocus>
+            <Button onClick={close} color="primary" autoFocus>
               Cancel
             </Button>
           </DialogActions>
@@ -152,20 +152,21 @@ const StickyBottomBarActionButtons: React.FC<
   );
 
   const TakeControlButton = () => {
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, open, close] = useOpenable();
+
     return (
       <>
         <Button
           variant="outlined"
           className={classes.button}
           startIcon={<LockIcon />}
-          onClick={() => setIsOpen(true)}
+          onClick={open}
         >
           <Typography className={classes.buttonText}>Take control</Typography>
         </Button>
         <Dialog
           open={isOpen}
-          onClose={() => setIsOpen(false)}
+          onClose={close}
           aria-labelledby="take-control-dialog-title"
           aria-describedby="take-control-dialog-description"
         >
@@ -179,7 +180,7 @@ const StickyBottomBarActionButtons: React.FC<
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => setIsOpen(false)} color="primary">
+            <Button onClick={close} color="primary">
               Cancel
             </Button>
             <Button onClick={requestTakeControl} color="primary" autoFocus>
