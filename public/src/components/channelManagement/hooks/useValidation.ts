@@ -5,7 +5,11 @@ const allValid = (validationStatus: ValidationStatus) => {
   return Object.values(validationStatus).every((status) => status);
 };
 
-const useValidation = (onValidationChanged: (isValid: boolean) => void) => {
+type FieldValidationChange = (fieldName: string, isValid: boolean) => void;
+
+const useValidation = (
+  onValidationChanged: (isValid: boolean) => void
+): FieldValidationChange => {
   const [validationStatus, setValidationStatus] = useState<ValidationStatus>(
     {}
   );
