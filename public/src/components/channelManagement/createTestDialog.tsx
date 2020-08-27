@@ -127,6 +127,7 @@ const CreateTestDialog = ({
           variant="outlined"
           editEnabled
           autoFocus
+          required
           fullWidth
         />
         <EditableTextField

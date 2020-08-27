@@ -45,9 +45,12 @@ const styles = ({ spacing, typography }: Theme) =>
       marginBottom: "10px",
     },
     articlesViewsContainer: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "flex-start",
       marginTop: "10px",
       marginLeft: "20px",
-      "& > *": {
+      "& > * + *": {
         marginTop: spacing(4),
       },
     },

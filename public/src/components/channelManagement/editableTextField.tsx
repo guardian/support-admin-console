@@ -10,11 +10,6 @@ import TextField from "@material-ui/core/TextField";
 
 const styles = ({ typography, spacing }: Theme) =>
   createStyles({
-    container: {
-      marginLeft: 0,
-      display: "flex",
-      "justify-content": "space-between",
-    },
     label: {
       fontSize: typography.pxToRem(22),
       fontWeight: typography.fontWeightMedium,
@@ -52,7 +47,6 @@ interface EditableTextFieldProps extends WithStyles<typeof styles> {
 
 interface EditableTextFieldState {
   currentText: string;
-  error: string | null;
 }
 
 class EditableTextField extends React.Component<
@@ -61,7 +55,6 @@ class EditableTextField extends React.Component<
 > {
   state: EditableTextFieldState = {
     currentText: this.props.text,
-    error: null,
   };
 
   componentDidMount() {
@@ -75,9 +68,6 @@ class EditableTextField extends React.Component<
     if (prevProps.text !== this.props.text) {
       this.setState({
         currentText: this.props.text,
-        error: this.props.validation
-          ? this.props.validation.getError(this.props.text)
-          : null,
       });
     }
   }
@@ -91,9 +81,6 @@ class EditableTextField extends React.Component<
 
     this.setState({
       currentText: newValue,
-      error: this.props.validation
-        ? this.props.validation.getError(newValue)
-        : null,
     });
   };
 
@@ -108,31 +95,28 @@ class EditableTextField extends React.Component<
   };
 
   render(): React.ReactNode {
-    const { classes } = this.props;
+    const error =
+      this.props.errorMessage ||
+      (this.props.validation &&
+        this.props.validation.getError(this.state.currentText));
 
     return (
-      <>
-        <div className={classes.container}>
-          <TextField
-            label={this.props.label}
-            variant={this.props.variant || "outlined"}
-            required={this.props.required}
-            multiline={this.props.textarea}
-            rows={this.props.height}
-            fullWidth={this.props.fullWidth}
-            name={this.props.label}
-            disabled={!this.props.editEnabled}
-            value={this.state.currentText}
-            onChange={this.onChange}
-            helperText={
-              this.state.error ? this.state.error : this.props.helperText
-            }
-            autoFocus={this.props.autoFocus}
-            error={this.state.error ? true : false}
-            onBlur={this.onExitField}
-          />
-        </div>
-      </>
+      <TextField
+        label={this.props.label}
+        variant={this.props.variant || "outlined"}
+        required={this.props.required}
+        multiline={this.props.textarea}
+        rows={this.props.height}
+        fullWidth={this.props.fullWidth}
+        name={this.props.label}
+        disabled={!this.props.editEnabled}
+        value={this.state.currentText}
+        onChange={this.onChange}
+        helperText={error ? error : this.props.helperText}
+        autoFocus={this.props.autoFocus}
+        error={error ? true : false}
+        onBlur={this.onExitField}
+      />
     );
   }
 }

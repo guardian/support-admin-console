@@ -23,6 +23,10 @@ const styles = ({ spacing }: Theme) =>
       },
     },
     formContainer: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "flex-start",
+
       "& > * + *": {
         marginTop: spacing(1),
       },
