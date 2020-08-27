@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Dialog,
@@ -7,14 +7,13 @@ import {
   DialogTitle,
   createStyles,
   IconButton,
-  TextField,
   Theme,
   WithStyles,
   withStyles,
 } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 
-import useValidatableField from "../../hooks/useValidatableField";
+import EditableTextField from "./editableTextField";
 
 import {
   getInvalidCharactersError,
@@ -60,19 +59,16 @@ const CreateTestDialog = ({
   copiedTestNickname,
   createTest,
 }: CreateTestDialogProps & WithStyles<typeof styles>) => {
+  const [name, setName] = useState("");
+  const [nameIsValid, setNameIsValid] = useState(false);
+
   const getDuplicateNameError = createGetDuplicateError(existingNames);
   const getNameError = (value: string) =>
     getInvalidCharactersError(value) ||
     getEmptyError(value) ||
     getDuplicateNameError(value);
-
-  const [
-    name,
-    setName,
-    nameHasError,
-    nameHelperText,
-    checkName,
-  ] = useValidatableField(NAME_DEFAULT_HELPER_TEXT, getNameError);
+  const onNameValidationChange = (isValid: boolean) => setNameIsValid(isValid);
+  const onNameSubmit = (updatedName: string) => setName(updatedName);
 
   useEffect(() => {
     if (mode === "COPY" && copiedTestName) {
@@ -80,17 +76,16 @@ const CreateTestDialog = ({
     }
   }, []);
 
+  const [nickname, setNickname] = useState("");
+  const [nicknameIsValid, setNicknameIsValid] = useState(false);
+
   const getDuplicateNicknameError = createGetDuplicateError(existingNicknames);
   const getNicknameError = (value: string) =>
     getEmptyError(value) || getDuplicateNicknameError(value);
-
-  const [
-    nickname,
-    setNickname,
-    nicknameHasError,
-    nicknameHelperText,
-    checkNickname,
-  ] = useValidatableField(NICKNAME_DEFAULT_HELPER_TEXT, getNicknameError);
+  const onNicknameValidationChange = (isValid: boolean) =>
+    setNicknameIsValid(isValid);
+  const onNicknameSubmit = (updatedNickname: string) =>
+    setNickname(updatedNickname);
 
   useEffect(() => {
     if (mode === "COPY" && copiedTestNickname) {
@@ -98,25 +93,11 @@ const CreateTestDialog = ({
     }
   }, []);
 
-  const check = (): boolean => {
-    const nameIsValid = checkName();
-    const nicknameIsValid = checkNickname();
-
-    return nameIsValid && nicknameIsValid;
-  };
-
   const submit = () => {
-    if (check()) {
+    if (nameIsValid && nicknameIsValid) {
       createTest(name, nickname);
       close();
     }
-  };
-
-  const updateName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setName(event.target.value);
-  };
-  const updateNickname = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNickname(event.target.value);
   };
 
   return (
@@ -134,24 +115,30 @@ const CreateTestDialog = ({
         </IconButton>
       </div>
       <DialogContent dividers>
-        <TextField
-          value={name}
-          onChange={updateName}
-          error={nameHasError}
-          helperText={nameHelperText}
+        <EditableTextField
+          text={name}
+          onSubmit={onNameSubmit}
+          helperText={NAME_DEFAULT_HELPER_TEXT}
+          validation={{
+            getError: getNameError,
+            onChange: onNameValidationChange,
+          }}
           label="Full test name"
-          margin="normal"
           variant="outlined"
+          editEnabled
           autoFocus
           fullWidth
         />
-        <TextField
-          value={nickname}
-          onChange={updateNickname}
-          error={nicknameHasError}
-          helperText={nicknameHelperText}
+        <EditableTextField
+          text={nickname}
+          onSubmit={onNicknameSubmit}
+          helperText={NICKNAME_DEFAULT_HELPER_TEXT}
+          validation={{
+            getError: getNicknameError,
+            onChange: onNicknameValidationChange,
+          }}
+          editEnabled
           label="Nickname"
-          margin="normal"
           variant="outlined"
           fullWidth
         />
