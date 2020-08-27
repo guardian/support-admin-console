@@ -146,7 +146,7 @@ const StickyBottomBarActionButtons: React.FC<
           hasTestSelected ? (
             // Edit mode + test selected
             <>
-              <PreviewButton />
+              {/* <PreviewButton /> */}
               <SaveButton />
             </>
           ) : (
