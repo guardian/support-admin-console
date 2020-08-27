@@ -25,7 +25,7 @@ const useValidation = (
   }, [validationStatus]);
 
   const setValidationStatusForField = (field: string, isValid: boolean) => {
-    setValidationStatus({ ...validationStatus, [field]: isValid });
+    setValidationStatus((current) => ({ ...current, [field]: isValid }));
   };
 
   return setValidationStatusForField;
