@@ -29,7 +29,6 @@ const styles = ({ spacing, palette }: Theme) =>
       paddingTop: spacing(6),
       paddingRight: spacing(12),
       paddingLeft: spacing(3),
-      marginLeft: -spacing(3),
     },
     headerAndSwitchContainer: {
       paddingBottom: spacing(3),
