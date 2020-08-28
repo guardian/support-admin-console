@@ -5,6 +5,7 @@ import EditableTextField from './editableTextField';
 import { getNotNumberError } from './helpers/validation';
 import useValidation from './hooks/useValidation';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing }: Theme) =>
   createStyles({
     container: {
@@ -34,9 +35,9 @@ const TestEditorMinArticlesViewedInput: React.FC<TestEditorMinArticlesViewedInpu
   const setValidationStatusForField = useValidation(onValidationChange);
 
   const getError = getNotNumberError;
-  const onChange = (isValid: boolean) =>
+  const onChange = (isValid: boolean): void =>
     setValidationStatusForField('minArticlesViewedInput', isValid);
-  const onSubmit = (updatedMinArticles: string) => {
+  const onSubmit = (updatedMinArticles: string): void => {
     const number = Number(updatedMinArticles);
     if (!Number.isNaN(number)) {
       onUpdate(number);

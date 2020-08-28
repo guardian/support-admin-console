@@ -24,7 +24,7 @@ const styles = makeStyles({
   },
 });
 
-export default function IndexPage() {
+export default function IndexPage(): React.ReactElement {
   const classes = styles();
   return (
     <div className={classes.body}>

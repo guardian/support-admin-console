@@ -20,6 +20,7 @@ import LockIcon from '@material-ui/icons/Lock';
 
 import useOpenable from '../../hooks/useOpenable';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing }: Theme) =>
   createStyles({
     container: {

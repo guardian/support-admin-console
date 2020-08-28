@@ -11,6 +11,7 @@ import {
 } from '@material-ui/core';
 import EditableTextField from './editableTextField';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing }: Theme) =>
   createStyles({
     fields: {

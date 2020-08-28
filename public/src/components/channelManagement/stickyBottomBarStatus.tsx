@@ -1,15 +1,14 @@
 import React from 'react';
-import { createStyles, Theme, Typography, WithStyles, withStyles } from '@material-ui/core';
+import { createStyles, Typography, WithStyles, withStyles } from '@material-ui/core';
 
-const styles = ({}: Theme) =>
-  createStyles({
-    text: {
-      fontSize: '14px',
-      fontWeight: 900,
-      textTransform: 'uppercase',
-      letterSpacing: '1px',
-    },
-  });
+const styles = createStyles({
+  text: {
+    fontSize: '14px',
+    fontWeight: 900,
+    textTransform: 'uppercase',
+    letterSpacing: '1px',
+  },
+});
 
 interface StickyBottomBarStatusProps extends WithStyles<typeof styles> {
   isInEditMode: boolean;

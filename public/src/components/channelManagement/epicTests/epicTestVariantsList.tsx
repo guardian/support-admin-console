@@ -16,6 +16,7 @@ import NewNameCreator from '../newNameCreator';
 import { onFieldValidationChange, ValidationStatus } from '../helpers/validation';
 import { defaultCta } from '../helpers/shared';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ typography, spacing }: Theme) =>
   createStyles({
     h4: {

@@ -15,6 +15,7 @@ import EditableTextField from './editableTextField';
 import useValidation from './hooks/useValidation';
 import { getNotNumberError, getEmptyError } from './helpers/validation';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing }: Theme) =>
   createStyles({
     container: {
@@ -51,7 +52,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
 }: TestEditorArticleCountEditorProps) => {
   const setValidationStatusForField = useValidation(onValidationChange);
 
-  const onRadioGroupChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onRadioGroupChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     if (event.target.value === 'enabled') {
       onArticlesViewedSettingsChanged(DEFAULT_ARTICLES_VIEWED_SETTINGS);
     } else {
@@ -60,10 +61,10 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
   };
 
   const getMinPageViewsError = getNotNumberError;
-  const onMinPageViewsChange = (isValid: boolean) =>
+  const onMinPageViewsChange = (isValid: boolean): void =>
     setValidationStatusForField('minViews', isValid);
 
-  const onMinPageViewsChanged = (updatedMinPageViews: string) => {
+  const onMinPageViewsChanged = (updatedMinPageViews: string): void => {
     const number = Number(updatedMinPageViews);
     if (!Number.isNaN(number) && articlesViewedSettings) {
       onArticlesViewedSettingsChanged({
@@ -74,10 +75,10 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
   };
 
   const getMaxPageViewsError = getNotNumberError;
-  const onMaxPageViewsChange = (isValid: boolean) =>
+  const onMaxPageViewsChange = (isValid: boolean): void =>
     setValidationStatusForField('maxViews', isValid);
 
-  const onMaxPageViewsChanged = (updatedMaxPageViews: string) => {
+  const onMaxPageViewsChanged = (updatedMaxPageViews: string): void => {
     const number = Number(updatedMaxPageViews);
     if (!Number.isNaN(number) && articlesViewedSettings) {
       onArticlesViewedSettingsChanged({
@@ -87,11 +88,12 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
     }
   };
 
-  const getPeriodInWeeksError = (text: string) => getNotNumberError(text) || getEmptyError(text);
-  const onPeriodInWeeksChange = (isValid: boolean) =>
+  const getPeriodInWeeksError = (text: string): string | null =>
+    getNotNumberError(text) || getEmptyError(text);
+  const onPeriodInWeeksChange = (isValid: boolean): void =>
     setValidationStatusForField('periodInWeeks', isValid);
 
-  const onPeriodInWeeksChanged = (updatedPeriodInWeeks: string) => {
+  const onPeriodInWeeksChanged = (updatedPeriodInWeeks: string): void => {
     const number = Number(updatedPeriodInWeeks);
     if (!Number.isNaN(number) && articlesViewedSettings) {
       onArticlesViewedSettingsChanged({

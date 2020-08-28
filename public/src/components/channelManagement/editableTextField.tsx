@@ -2,6 +2,7 @@ import React from 'react';
 import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ typography }: Theme) =>
   createStyles({
     container: {

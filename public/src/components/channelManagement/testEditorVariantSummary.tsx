@@ -10,6 +10,7 @@ import {
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing, palette }: Theme) =>
   createStyles({
     container: {

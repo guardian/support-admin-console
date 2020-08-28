@@ -4,6 +4,7 @@ import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ palette }: Theme) =>
   createStyles({
     amountInput: {

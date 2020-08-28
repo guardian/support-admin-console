@@ -28,6 +28,7 @@ import EpicTypeComponent, { EpicType } from './epicTypeComponent';
 import TargetRegionsSelector from '../targetRegionsSelector';
 import { articleCountTemplate, countryNameTemplate } from '../helpers/copyTemplates';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing, typography }: Theme) =>
   createStyles({
     container: {
@@ -134,7 +135,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, TestEditorStat
     validationStatus: {},
   };
 
-  isEditable = () => {
+  isEditable = (): boolean => {
     return this.props.editMode && !this.props.isDeleted && !this.props.isArchived;
   };
 
@@ -148,7 +149,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, TestEditorStat
     return undefined;
   };
 
-  updateTest = (update: (test: EpicTest) => EpicTest) => {
+  updateTest = (update: (test: EpicTest) => EpicTest): void => {
     if (this.props.test) {
       const updatedTest = update(this.props.test);
 
@@ -202,13 +203,13 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, TestEditorStat
     this.updateTest(test => ({ ...test, locations: selectedRegions }));
   };
 
-  renderBottomButtons = (test: EpicTest) => (
+  renderBottomButtons = (test: EpicTest): React.ReactElement => (
     <div className={this.props.classes.buttons}>
       <div className={this.props.classes.button}>
         <ButtonWithConfirmationPopup
           buttonText="Archive test"
           confirmationText={areYouSure}
-          onConfirm={() => this.props.onArchive(test.name)}
+          onConfirm={(): void => this.props.onArchive(test.name)}
           icon={<ArchiveIcon />}
         />
       </div>
@@ -216,7 +217,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, TestEditorStat
         <ButtonWithConfirmationPopup
           buttonText="Delete test"
           confirmationText={areYouSure}
-          onConfirm={() => this.props.onDelete(test.name)}
+          onConfirm={(): void => this.props.onDelete(test.name)}
           icon={<DeleteSweepIcon />}
         />
       </div>
@@ -234,10 +235,10 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, TestEditorStat
     </div>
   );
 
-  renderEditor = (test: EpicTest): React.ReactNode => {
+  renderEditor = (test: EpicTest): React.ReactNode | undefined => {
     const { classes } = this.props;
 
-    const statusText = () => {
+    const statusText = (): React.ReactElement | undefined => {
       if (this.props.isDeleted) {
         return <span className={classes.isDeleted}>&nbsp;(to be deleted)</span>;
       } else if (this.props.isArchived) {
@@ -379,7 +380,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, TestEditorStat
           <MaxEpicViewsEditor
             test={test}
             editMode={this.isEditable()}
-            onChange={(alwaysAsk: boolean, maxEpicViews: MaxEpicViews) =>
+            onChange={(alwaysAsk: boolean, maxEpicViews: MaxEpicViews): void =>
               this.updateTest(test => ({
                 ...test,
                 alwaysAsk,
@@ -395,7 +396,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, TestEditorStat
           <ArticlesViewedEditor
             articlesViewedSettings={test.articlesViewedSettings}
             editMode={this.isEditable()}
-            onChange={(articlesViewedSettings?: ArticlesViewedSettings) =>
+            onChange={(articlesViewedSettings?: ArticlesViewedSettings): void =>
               this.updateTest(test => ({ ...test, articlesViewedSettings }))
             }
             onValidationChange={onFieldValidationChange(this)('articlesViewedEditor')}

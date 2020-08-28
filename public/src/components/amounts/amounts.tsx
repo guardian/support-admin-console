@@ -41,6 +41,7 @@ const emptyAmounts: Amounts = {
   ANNUAL: [],
 };
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ palette, spacing }: Theme) =>
   createStyles({
     form: {

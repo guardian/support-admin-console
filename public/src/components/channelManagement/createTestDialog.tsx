@@ -8,7 +8,6 @@ import {
   createStyles,
   IconButton,
   TextField,
-  Theme,
   WithStyles,
   withStyles,
 } from '@material-ui/core';
@@ -22,22 +21,20 @@ import {
   createGetDuplicateError,
 } from './helpers/validation';
 
-const styles = ({}: Theme) =>
-  createStyles({
-    dialogHeader: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      paddingRight: '8px',
-    },
-  });
+const styles = createStyles({
+  dialogHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingRight: '8px',
+  },
+});
 
 const NAME_DEFAULT_HELPER_TEXT = 'Date format: YYYY-MM-DD_TEST_NAME';
 const NICKNAME_DEFAULT_HELPER_TEXT = "Pick a name for your test that's easy to recognise";
 
 type Mode = 'NEW' | 'COPY';
-
-interface CreateTestDialogProps {
+interface CreateTestDialogProps extends WithStyles<typeof styles> {
   isOpen: boolean;
   close: () => void;
   existingNames: string[];
@@ -48,7 +45,7 @@ interface CreateTestDialogProps {
   createTest: (name: string, nickname: string) => void;
 }
 
-const CreateTestDialog = ({
+const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
   classes,
   isOpen,
   close,
@@ -58,9 +55,9 @@ const CreateTestDialog = ({
   copiedTestName,
   copiedTestNickname,
   createTest,
-}: CreateTestDialogProps & WithStyles<typeof styles>) => {
+}: CreateTestDialogProps) => {
   const getDuplicateNameError = createGetDuplicateError(existingNames);
-  const getNameError = (value: string) =>
+  const getNameError = (value: string): string | null =>
     getInvalidCharactersError(value) || getEmptyError(value) || getDuplicateNameError(value);
 
   const [name, setName, nameHasError, nameHelperText, checkName] = useValidatableField(
@@ -75,7 +72,7 @@ const CreateTestDialog = ({
   }, []);
 
   const getDuplicateNicknameError = createGetDuplicateError(existingNicknames);
-  const getNicknameError = (value: string) =>
+  const getNicknameError = (value: string): string | null =>
     getEmptyError(value) || getDuplicateNicknameError(value);
 
   const [
@@ -99,17 +96,17 @@ const CreateTestDialog = ({
     return nameIsValid && nicknameIsValid;
   };
 
-  const submit = () => {
+  const submit = (): void => {
     if (check()) {
       createTest(name, nickname);
       close();
     }
   };
 
-  const updateName = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const updateName = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setName(event.target.value);
   };
-  const updateNickname = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const updateNickname = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setNickname(event.target.value);
   };
 

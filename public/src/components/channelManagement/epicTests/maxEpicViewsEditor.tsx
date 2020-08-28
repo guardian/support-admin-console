@@ -20,6 +20,7 @@ export const MaxEpicViewsDefaults: MaxEpicViews = {
   minDaysBetweenViews: 0,
 };
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing, typography }: Theme) =>
   createStyles({
     button: {
@@ -65,7 +66,7 @@ class MaxEpicViewsEditor extends React.Component<Props, State> {
     validationStatus: {},
   };
 
-  buildField = (fieldName: MaxEpicViewsFieldName, label: string) => {
+  buildField = (fieldName: MaxEpicViewsFieldName, label: string): React.ReactElement => {
     const test = this.props.test;
 
     return (
@@ -75,7 +76,7 @@ class MaxEpicViewsEditor extends React.Component<Props, State> {
             ? test.maxViews[fieldName].toString()
             : MaxEpicViewsDefaults[fieldName].toString()
         }
-        onSubmit={(value: string) => {
+        onSubmit={(value: string): void => {
           if (isNumber(value)) {
             this.props.onChange(this.props.test.alwaysAsk, {
               ...(this.props.test.maxViews || MaxEpicViewsDefaults),
@@ -87,7 +88,7 @@ class MaxEpicViewsEditor extends React.Component<Props, State> {
         helperText="Must be a number"
         editEnabled={this.props.editMode}
         validation={{
-          getError: (value: string) => (isNumber(value) ? null : 'Must be a number'),
+          getError: (value: string): string | null => (isNumber(value) ? null : 'Must be a number'),
           onChange: onFieldValidationChange(this)(fieldName),
         }}
         isNumberField
@@ -95,7 +96,7 @@ class MaxEpicViewsEditor extends React.Component<Props, State> {
     );
   };
 
-  onRadioChange(askStrategy: AskStrategy) {
+  onRadioChange(askStrategy: AskStrategy): void {
     this.props.onChange(
       askStrategy === 'AlwaysAsk',
       this.props.test.maxViews || MaxEpicViewsDefaults,
@@ -115,7 +116,7 @@ class MaxEpicViewsEditor extends React.Component<Props, State> {
           <RadioGroup
             className={classes.radio}
             value={this.props.test.alwaysAsk ? 'AlwaysAsk' : 'MaxEpicViews'}
-            onChange={(event, value) => {
+            onChange={(event, value): void => {
               if (value === 'AlwaysAsk' || value === 'MaxEpicViews') {
                 this.onRadioChange(value);
               }

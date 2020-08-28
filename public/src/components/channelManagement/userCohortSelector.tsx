@@ -12,6 +12,7 @@ import {
 } from '@material-ui/core';
 import { UserCohort } from './helpers/shared';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing, typography }: Theme) =>
   createStyles({
     selectLabel: {

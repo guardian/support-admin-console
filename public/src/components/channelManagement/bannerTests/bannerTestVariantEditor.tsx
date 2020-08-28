@@ -8,6 +8,7 @@ import { getEmptyError } from '../helpers/validation';
 import useValidation from '../hooks/useValidation';
 import { Cta } from '../helpers/shared';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ palette, spacing }: Theme) =>
   createStyles({
     container: {
@@ -53,25 +54,27 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
   const setValidationStatusForField = useValidation(onValidationChange);
 
   const getHeadingError = getInvalidTemplateError;
-  const onHeadingChanged = (isValid: boolean) => setValidationStatusForField('heading', isValid);
-  const onHeadingSubmit = (updatedHeading: string) =>
+  const onHeadingChanged = (isValid: boolean): void =>
+    setValidationStatusForField('heading', isValid);
+  const onHeadingSubmit = (updatedHeading: string): void =>
     onVariantChange({ ...variant, heading: updatedHeading });
 
-  const getBodyError = (text: string) => getEmptyError(text) || getInvalidTemplateError(text);
-  const onBodyChanged = (isValid: boolean) => setValidationStatusForField('body', isValid);
-  const onBodySubmit = (updatedBody: string) => onVariantChange({ ...variant, body: updatedBody });
+  const getBodyError = (text: string): string | null =>
+    getEmptyError(text) || getInvalidTemplateError(text);
+  const onBodyChanged = (isValid: boolean): void => setValidationStatusForField('body', isValid);
+  const onBodySubmit = (updatedBody: string): void =>
+    onVariantChange({ ...variant, body: updatedBody });
 
   const getHighlightedTextError = getInvalidTemplateError;
-  const onHighLightedTextChange = (isValid: boolean) =>
+  const onHighLightedTextChange = (isValid: boolean): void =>
     setValidationStatusForField('highlightedText', isValid);
-  const onHighlightedTextSubmit = (updatedHighlightedText: string) =>
+  const onHighlightedTextSubmit = (updatedHighlightedText: string): void =>
     onVariantChange({ ...variant, highlightedText: updatedHighlightedText });
 
-  const updatePrimaryCta = (updatedCta?: Cta) => {
+  const updatePrimaryCta = (updatedCta?: Cta): void => {
     onVariantChange({ ...variant, cta: updatedCta });
   };
-
-  const updateSecondaryCta = (updatedCta?: Cta) => {
+  const updateSecondaryCta = (updatedCta?: Cta): void => {
     onVariantChange({ ...variant, secondaryCta: updatedCta });
   };
 

@@ -55,6 +55,7 @@ interface TestFormState<T extends Test> {
  * A stateful higher-order component for fetching/saving test data.
  * Takes care of locks
  */
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const TestEditor = <T extends Test>(
   InnerComponent: React.ComponentType<InnerComponentProps<T>>,
   settingsType: FrontendSettingsType,

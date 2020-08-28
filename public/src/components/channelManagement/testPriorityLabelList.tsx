@@ -1,18 +1,17 @@
 import React from 'react';
-import { createStyles, List, Theme, withStyles, WithStyles } from '@material-ui/core';
+import { createStyles, List, withStyles, WithStyles } from '@material-ui/core';
 
 import TestPriorityLabelListLabel from './testPriorityLabelListLabel';
 
-const styles = ({}: Theme) =>
-  createStyles({
-    list: {
-      marginTop: 0,
-      padding: 0,
-      '& > * + *': {
-        marginTop: '8px',
-      },
+const styles = createStyles({
+  list: {
+    marginTop: 0,
+    padding: 0,
+    '& > * + *': {
+      marginTop: '8px',
     },
-  });
+  },
+});
 
 interface TestPriorityLabelListProps extends WithStyles<typeof styles> {
   numTests: number;

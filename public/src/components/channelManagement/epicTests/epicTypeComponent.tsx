@@ -11,6 +11,7 @@ import {
   withStyles,
 } from '@material-ui/core';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing, typography }: Theme) =>
   createStyles({
     formControl: {
@@ -38,7 +39,7 @@ interface Props extends WithStyles<typeof styles> {
   onEpicTypeChange: (epicType: EpicType) => void;
 }
 
-const EpicTypeComponent = (props: Props) => {
+const EpicTypeComponent: React.FC<Props> = (props: Props) => {
   const classes = props.classes;
 
   return (
@@ -49,7 +50,7 @@ const EpicTypeComponent = (props: Props) => {
       <RadioGroup
         className={classes.radio}
         value={props.epicType}
-        onChange={(event, value) => props.onEpicTypeChange(value as EpicType)}
+        onChange={(event, value): void => props.onEpicTypeChange(value as EpicType)}
       >
         <FormControlLabel
           value={'Standard'}

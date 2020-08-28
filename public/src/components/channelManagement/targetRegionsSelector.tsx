@@ -12,6 +12,7 @@ import {
 } from '@material-ui/core';
 import { Region } from '../../utils/models';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing, typography }: Theme) =>
   createStyles({
     selectLabel: {
@@ -57,7 +58,7 @@ class TargetRegionsSelector extends React.Component<
     selectedRegions: this.props.regions,
   };
 
-  onAllRegionsChange = (event: React.ChangeEvent<{ value: string; checked: boolean }>) => {
+  onAllRegionsChange = (event: React.ChangeEvent<{ value: string; checked: boolean }>): void => {
     this.setState(
       {
         selectedRegions: event.target.checked ? this.allRegions : [],
@@ -66,11 +67,11 @@ class TargetRegionsSelector extends React.Component<
     );
   };
 
-  onSingleRegionChange = (event: React.ChangeEvent<{ value: string; checked: boolean }>) => {
+  onSingleRegionChange = (event: React.ChangeEvent<{ value: string; checked: boolean }>): void => {
     const checked = event.target.checked;
     const changedRegion = event.target.value;
 
-    const newSelectedRegions = () => {
+    const newSelectedRegions = (): Region[] => {
       if (checked) {
         return [...this.state.selectedRegions, changedRegion as Region];
       } else {

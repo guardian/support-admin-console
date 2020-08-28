@@ -1,32 +1,31 @@
 import React from 'react';
-import { createStyles, Theme, Typography, withStyles, WithStyles } from '@material-ui/core';
+import { createStyles, Typography, withStyles, WithStyles } from '@material-ui/core';
 import { ModifiedTests } from './helpers/shared';
 import { Test } from './helpers/shared';
 import TestList from './testList';
 import TestPriorityLabelList from './testPriorityLabelList';
 import NewTestButton from './newTestButton';
 
-const styles = ({}: Theme) =>
-  createStyles({
-    root: {
-      display: 'flex',
-      flexDirection: 'column',
-      paddingLeft: '32px',
-    },
-    header: {
-      marginTop: '32px',
-      fontSize: '14px',
-    },
-    listsContainer: {
-      position: 'relative',
-      display: 'flex',
-      marginTop: '8px',
-    },
-    priorityLabelListContainer: {
-      position: 'absolute',
-      left: '-32px',
-    },
-  });
+const styles = createStyles({
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    paddingLeft: '32px',
+  },
+  header: {
+    marginTop: '32px',
+    fontSize: '14px',
+  },
+  listsContainer: {
+    position: 'relative',
+    display: 'flex',
+    marginTop: '8px',
+  },
+  priorityLabelListContainer: {
+    position: 'absolute',
+    left: '-32px',
+  },
+});
 
 interface SidebarProps<T extends Test> {
   tests: T[];
@@ -77,6 +76,7 @@ function Sidebar<T extends Test>({
 export default function WrappedTestListContainer<T extends Test>(
   props: SidebarProps<T>,
 ): React.ReactElement<SidebarProps<T>> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const wrapper = withStyles(styles)(Sidebar) as any;
 
   return React.createElement(wrapper, props);

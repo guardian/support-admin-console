@@ -1,19 +1,18 @@
 import React from 'react';
-import { Typography, createStyles, withStyles, WithStyles, Theme } from '@material-ui/core';
+import { Typography, createStyles, withStyles, WithStyles } from '@material-ui/core';
 
-const styles = ({}: Theme) =>
-  createStyles({
-    text: {
-      maxWidth: '190px',
-      fontSize: '12px',
-      fontWeight: 500,
-      lineHeight: '24px',
-      textTransform: 'uppercase',
-    },
-    textInverted: {
-      color: '#FFFFFF',
-    },
-  });
+const styles = createStyles({
+  text: {
+    maxWidth: '190px',
+    fontSize: '12px',
+    fontWeight: 500,
+    lineHeight: '24px',
+    textTransform: 'uppercase',
+  },
+  textInverted: {
+    color: '#FFFFFF',
+  },
+});
 
 interface TestListTestNameProps extends WithStyles<typeof styles> {
   name: string;

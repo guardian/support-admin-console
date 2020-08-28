@@ -1,7 +1,7 @@
 import React from 'react';
 
 // G roundel
-export default function RRControlPanelLogo() {
+export default function RRControlPanelLogo(): React.ReactElement {
   return (
     <svg
       width="248"

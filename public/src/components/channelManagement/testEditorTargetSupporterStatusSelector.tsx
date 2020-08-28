@@ -12,6 +12,7 @@ import {
 } from '@material-ui/core';
 import { UserCohort } from './helpers/shared';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing }: Theme) =>
   createStyles({
     container: {
@@ -35,14 +36,14 @@ const TestEditorTargetSupporterStatusSelector: React.FC<TestEditorTargetSupporte
   onCohortChange,
   isDisabled,
 }: TestEditorTargetSupporterStatusSelectorProps) => {
-  const onEveryoneSelected = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onEveryoneSelected = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const checked = event.target.checked;
     if (checked) {
       onCohortChange(UserCohort['Everyone']);
     }
   };
 
-  const onNonSupportersSelected = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onNonSupportersSelected = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const checked = event.target.checked;
     if (checked) {
       onCohortChange(UserCohort['Everyone']);
@@ -51,7 +52,7 @@ const TestEditorTargetSupporterStatusSelector: React.FC<TestEditorTargetSupporte
     }
   };
 
-  const onAllSupportersSelected = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onAllSupportersSelected = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const checked = event.target.checked;
     if (checked) {
       onCohortChange(UserCohort['Everyone']);

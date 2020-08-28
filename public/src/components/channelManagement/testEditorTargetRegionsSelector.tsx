@@ -12,6 +12,7 @@ import {
 } from '@material-ui/core';
 import { Region } from '../../utils/models';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing }: Theme) =>
   createStyles({
     container: {
@@ -47,11 +48,11 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
   onRegionsUpdate,
   isDisabled,
 }: TestEditorTargetRegionsSelectorProps) => {
-  const onAllRegionsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onAllRegionsChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     onRegionsUpdate(event.target.checked ? ALL_REGIONS : []);
   };
 
-  const onSingleRegionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onSingleRegionChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const checked = event.target.checked;
     const changedRegion = event.target.value;
 

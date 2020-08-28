@@ -7,6 +7,7 @@ import TestListTestName from './testListTestName';
 import TestListTestArticleCountLabel from './testListTestArticleCountLabel';
 import useHover from '../../hooks/useHover';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ palette }: Theme) =>
   createStyles({
     test: {

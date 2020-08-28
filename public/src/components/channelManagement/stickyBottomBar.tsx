@@ -7,6 +7,7 @@ import StickyBottomBarStatus from './stickyBottomBarStatus';
 import StickyBottomBarDetail from './stickyBottomBarDetail';
 import StickyBottomBarActionButtons from './stickyBottomBarActionButtons';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ palette, spacing }: Theme) =>
   createStyles({
     appBar: {

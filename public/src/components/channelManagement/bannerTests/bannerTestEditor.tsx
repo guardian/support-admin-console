@@ -14,6 +14,7 @@ import TestEditorArticleCountEditor from '../testEditorArticleCountEditor';
 import TestEditorActionButtons from '../testEditorActionButtons';
 import useValidation from '../hooks/useValidation';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing, palette }: Theme) =>
   createStyles({
     container: {
@@ -90,19 +91,19 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
   testNicknames,
   createTest,
 }: BannerTestEditorProps) => {
-  const isEditable = () => {
+  const isEditable = (): boolean => {
     return editMode && !isDeleted && !isArchived;
   };
 
   const setValidationStatusForField = useValidation(onValidationChange);
 
-  const onVariantsListValidationChange = (isValid: boolean) =>
+  const onVariantsListValidationChange = (isValid: boolean): void =>
     setValidationStatusForField('variantsList', isValid);
 
-  const onMinArticlesViewedValidationChanged = (isValid: boolean) =>
+  const onMinArticlesViewedValidationChanged = (isValid: boolean): void =>
     setValidationStatusForField('minArticlesViewed', isValid);
 
-  const onArticlesViewedSettingsValidationChanged = (isValid: boolean) =>
+  const onArticlesViewedSettingsValidationChanged = (isValid: boolean): void =>
     setValidationStatusForField('articlesViewedSettings', isValid);
 
   const getArticlesViewedSettings = (test: BannerTest): ArticlesViewedSettings | undefined => {
@@ -115,7 +116,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
     return undefined;
   };
 
-  const updateTest = (updatedTest: BannerTest) => {
+  const updateTest = (updatedTest: BannerTest): void => {
     onChange({
       ...updatedTest,
       // To save dotcom from having to work this out
@@ -123,7 +124,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
     });
   };
 
-  const onLiveSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onLiveSwitchChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     updateTest({ ...test, isOn: event.target.checked });
   };
 
@@ -155,7 +156,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
     });
   };
 
-  const onCopy = (name: string, nickname: string) => {
+  const onCopy = (name: string, nickname: string): void => {
     createTest({ ...test, name: name, nickname: nickname });
   };
 

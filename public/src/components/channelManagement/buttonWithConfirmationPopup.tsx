@@ -10,6 +10,7 @@ import {
 import Button, { ButtonProps } from '@material-ui/core/Button';
 import { SvgIconProps } from '@material-ui/core/SvgIcon';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing, typography }: Theme) =>
   createStyles({
     button: {
@@ -28,7 +29,7 @@ const styles = ({ spacing, typography }: Theme) =>
 
 interface ButtonWithConfirmationPopupProps extends WithStyles<typeof styles> {
   buttonText: string;
-  confirmationText: string | ReactElement<any>;
+  confirmationText: string | ReactElement;
   onConfirm: () => void;
   color?: ButtonProps['color'];
   icon: ReactElement<SvgIconProps>;
@@ -49,19 +50,19 @@ class ButtonWithConfirmationPopup extends React.Component<
     anchorElement: undefined,
   };
 
-  onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  onClick = (event: React.MouseEvent<HTMLButtonElement>): void => {
     this.setState({
       popoverOpen: true,
       anchorElement: event.currentTarget,
     });
   };
 
-  handleConfirm = () => {
+  handleConfirm = (): void => {
     this.setState({ popoverOpen: false });
     this.props.onConfirm();
   };
 
-  handleCancel = () => {
+  handleCancel = (): void => {
     this.setState({ popoverOpen: false });
   };
 

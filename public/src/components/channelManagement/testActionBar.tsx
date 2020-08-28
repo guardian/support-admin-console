@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import ButtonWithConfirmationPopup from './buttonWithConfirmationPopup';
 import { LockStatus, ModifiedTests } from './helpers/shared';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing, typography }: Theme) =>
   createStyles({
     actionBar: {
@@ -85,7 +86,7 @@ class TestActionBar extends React.Component<ActionBarProps> {
       : undefined;
   };
 
-  renderLockedMessageAndButton = (): ReactElement<any> => {
+  renderLockedMessageAndButton = (): ReactElement => {
     const friendlyName: string | undefined =
       this.props.lockStatus.email && this.makeFriendlyName(this.props.lockStatus.email);
     const friendlyTimestamp: string | undefined =
@@ -114,7 +115,7 @@ class TestActionBar extends React.Component<ActionBarProps> {
     );
   };
 
-  renderEditButton = (): ReactElement<any> => {
+  renderEditButton = (): ReactElement => {
     const { classes } = this.props;
 
     return (
@@ -134,7 +135,7 @@ class TestActionBar extends React.Component<ActionBarProps> {
     );
   };
 
-  renderPublishButtons = (): ReactElement<any> => {
+  renderPublishButtons = (): ReactElement => {
     const { classes } = this.props;
     const unmodified = Object.keys(this.props.modifiedTests).length === 0;
 
@@ -180,7 +181,7 @@ class TestActionBar extends React.Component<ActionBarProps> {
     );
   };
 
-  buildConfirmationText = (modifiedTests: ModifiedTests): ReactElement<any> => {
+  buildConfirmationText = (modifiedTests: ModifiedTests): ReactElement => {
     const counts = {
       deleted: 0,
       created: 0,
@@ -199,13 +200,15 @@ class TestActionBar extends React.Component<ActionBarProps> {
       }
     });
 
-    const statusLine = (status: 'deleted' | 'created' | 'modified' | 'archived') =>
-      counts[status] > 0 && (
+    const statusLine = (
+      status: 'deleted' | 'created' | 'modified' | 'archived',
+    ): React.ReactElement | null =>
+      counts[status] > 0 ? (
         <span>
           <br />
           &bull; {`${counts[status]} test${counts[status] !== 1 ? 's' : ''} ${status}`}
         </span>
-      );
+      ) : null;
 
     return (
       <>
@@ -218,7 +221,7 @@ class TestActionBar extends React.Component<ActionBarProps> {
     );
   };
 
-  render(): ReactElement<any> {
+  render(): ReactElement {
     const { classes } = this.props;
     const classNames = [
       classes.actionBar,

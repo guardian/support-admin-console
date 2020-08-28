@@ -1,6 +1,7 @@
 import React from 'react';
 import { Typography, createStyles, withStyles, WithStyles, Theme } from '@material-ui/core';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ palette }: Theme) =>
   createStyles({
     container: {

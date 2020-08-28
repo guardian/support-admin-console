@@ -26,6 +26,7 @@ import {
   createGetDuplicateError,
 } from '../helpers/validation';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing, palette }: Theme) =>
   createStyles({
     button: {

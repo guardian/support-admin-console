@@ -16,6 +16,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IndexPage from './components/indexPage';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ palette, mixins, typography, transitions }: Theme) =>
   createStyles({
     root: {
@@ -50,7 +51,7 @@ const styles = ({ palette, mixins, typography, transitions }: Theme) =>
 type Props = WithStyles<typeof styles>;
 
 const AppRouter = withStyles(styles)(({ classes }: Props) => {
-  const createComponent = (component: JSX.Element, displayName: string) => (
+  const createComponent = (component: JSX.Element, displayName: string): React.ReactElement => (
     <div className={classes.appContainer}>
       <AppBar position="relative" className={classes.appBar}>
         <Toolbar>
@@ -68,17 +69,32 @@ const AppRouter = withStyles(styles)(({ classes }: Props) => {
     <Router>
       <div className={classes.root}>
         <CssBaseline />
-        <Route exact path="/" render={() => createComponent(<IndexPage />, 'Home Page')} />
-        <Route path="/switches" render={() => createComponent(<Switchboard />, 'Switches')} />
+        <Route
+          exact
+          path="/"
+          render={(): React.ReactElement => createComponent(<IndexPage />, 'Home Page')}
+        />
+        <Route
+          path="/switches"
+          render={(): React.ReactElement => createComponent(<Switchboard />, 'Switches')}
+        />
         <Route
           path="/contribution-types"
-          render={() => createComponent(<ContributionTypesForm />, 'Contribution Types')}
+          render={(): React.ReactElement =>
+            createComponent(<ContributionTypesForm />, 'Contribution Types')
+          }
         />
-        <Route path="/amounts" render={() => createComponent(<AmountsForm />, 'Amounts')} />
-        <Route path="/epic-tests" render={() => createComponent(<EpicTestsForm />, 'Epic Tests')} />
+        <Route
+          path="/amounts"
+          render={(): React.ReactElement => createComponent(<AmountsForm />, 'Amounts')}
+        />
+        <Route
+          path="/epic-tests"
+          render={(): React.ReactElement => createComponent(<EpicTestsForm />, 'Epic Tests')}
+        />
         <Route
           path="/banner-tests"
-          render={() => createComponent(<BannerTestsForm />, 'Banner Tests')}
+          render={(): React.ReactElement => createComponent(<BannerTestsForm />, 'Banner Tests')}
         />
       </div>
     </Router>

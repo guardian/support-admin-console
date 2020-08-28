@@ -3,6 +3,7 @@ import { createStyles, Theme, Typography, withStyles, WithStyles } from '@materi
 import StickyBottomBar from './stickyBottomBar';
 import { LockStatus } from './helpers/shared';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing, typography }: Theme) =>
   createStyles({
     viewTextContainer: {

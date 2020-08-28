@@ -5,6 +5,7 @@ import BannerTestVariantEditorsAccordion from './bannerTestVariantEditorsAccordi
 import BannerTestNewVariantButton from './bannerTestNewVariantButton';
 import { defaultCta } from '../helpers/shared';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing }: Theme) =>
   createStyles({
     container: {
@@ -30,7 +31,7 @@ const BannerTestVariantsEditor: React.FC<BannerTestVariantsEditorProps> = ({
   editMode,
   onValidationChange,
 }: BannerTestVariantsEditorProps) => {
-  const createVariant = (name: string) => {
+  const createVariant = (name: string): void => {
     const newVariant: BannerVariant = {
       name: name,
       heading: undefined,

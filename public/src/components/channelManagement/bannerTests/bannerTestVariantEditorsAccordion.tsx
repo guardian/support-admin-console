@@ -14,6 +14,7 @@ import TestEditorVariantSummary from '../testEditorVariantSummary';
 import VariantDeleteButton from '../variantDeleteButton';
 import useValidation from '../hooks/useValidation';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing, palette }: Theme) =>
   createStyles({
     expansionPanelsContainer: {

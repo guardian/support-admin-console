@@ -19,6 +19,7 @@ import FileCopyIcon from '@material-ui/icons/FileCopy';
 import CreateTestDialog from './createTestDialog';
 import useOpenable from '../../hooks/useOpenable';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing, palette }: Theme) =>
   createStyles({
     container: {

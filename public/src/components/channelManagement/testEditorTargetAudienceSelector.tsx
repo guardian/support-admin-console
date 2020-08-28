@@ -7,6 +7,7 @@ import { UserCohort } from './helpers/shared';
 import TestEditorTargetRegionsSelector from './testEditorTargetRegionsSelector';
 import TestEditorTargetSupporterStatusSelector from './testEditorTargetSupporterStatusSelector';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing }: Theme) =>
   createStyles({
     container: {

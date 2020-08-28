@@ -88,7 +88,7 @@ const useStyles = makeStyles({
 
 const anchor = 'left';
 
-export default function NavDrawer() {
+export default function NavDrawer(): React.ReactElement {
   const classes = useStyles();
   const [state, setState] = React.useState({
     left: false,
@@ -96,7 +96,7 @@ export default function NavDrawer() {
 
   const toggleDrawer = (anchor: string, open: boolean) => (
     event: React.KeyboardEvent | React.MouseEvent,
-  ) => {
+  ): void => {
     if (
       event.type === 'keydown' &&
       ((event as React.KeyboardEvent).key === 'Tab' ||
@@ -108,7 +108,7 @@ export default function NavDrawer() {
     setState({ ...state, [anchor]: open });
   };
 
-  const list = (anchor: string) => (
+  const list = (anchor: string): React.ReactElement => (
     <div
       className={classes.list}
       role="presentation"

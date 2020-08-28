@@ -50,6 +50,7 @@ const sortContributionTypeSettings = (
       contributionTypesIndices[a.contributionType] - contributionTypesIndices[b.contributionType],
   );
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ palette, spacing }: Theme) =>
   createStyles({
     form: {

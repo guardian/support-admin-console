@@ -10,6 +10,7 @@ import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 import { onFieldValidationChange, ValidationStatus } from '../helpers/validation';
 import { getInvalidTemplateError } from '../helpers/copyTemplates';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ palette, spacing, typography }: Theme) =>
   createStyles({
     container: {

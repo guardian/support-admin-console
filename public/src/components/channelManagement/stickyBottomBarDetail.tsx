@@ -1,16 +1,15 @@
 import React from 'react';
-import { createStyles, Theme, Typography, WithStyles, withStyles } from '@material-ui/core';
+import { createStyles, Typography, WithStyles, withStyles } from '@material-ui/core';
 import { LockStatus } from './helpers/shared';
 
-const styles = ({}: Theme) =>
-  createStyles({
-    text: {
-      fontSize: '14px',
-      fontWeight: 500,
-      textTransform: 'uppercase',
-      letterSpacing: '1px',
-    },
-  });
+const styles = createStyles({
+  text: {
+    fontSize: '14px',
+    fontWeight: 500,
+    textTransform: 'uppercase',
+    letterSpacing: '1px',
+  },
+});
 
 interface StickyBottomBarDetailProps extends WithStyles<typeof styles> {
   isInEditMode: boolean;

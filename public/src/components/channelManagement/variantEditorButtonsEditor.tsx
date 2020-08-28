@@ -3,6 +3,7 @@ import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core';
 import VariantEditorButtonEditor from './variantEditorButtonEditor';
 import { Cta } from './helpers/shared';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing }: Theme) =>
   createStyles({
     container: {

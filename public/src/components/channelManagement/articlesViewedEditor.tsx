@@ -22,6 +22,7 @@ export const defaultArticlesViewedSettings: ArticlesViewedSettings = {
   periodInWeeks: 52,
 };
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing, typography }: Theme) =>
   createStyles({
     button: {
@@ -73,13 +74,13 @@ class ArticlesViewedEditor extends React.Component<Props, State> {
     label: string,
     articlesViewedSettings: ArticlesViewedSettings,
     isRequired: boolean,
-  ) => {
+  ): React.ReactElement => {
     const setting: number | null = articlesViewedSettings[fieldName];
 
     return (
       <EditableTextField
         text={setting ? setting.toString() : ''}
-        onSubmit={(value: string) => {
+        onSubmit={(value: string): void => {
           if (value === null || isNumber(value)) {
             this.props.onChange({
               ...(articlesViewedSettings || defaultArticlesViewedSettings),
@@ -92,7 +93,7 @@ class ArticlesViewedEditor extends React.Component<Props, State> {
         helperText="Must be a number"
         editEnabled={this.props.editMode}
         validation={{
-          getError: (value: string) => {
+          getError: (value: string): string | null => {
             if (isRequired && !value) {
               return 'This field is required';
             } else if (!isNumber(value)) {
@@ -108,7 +109,7 @@ class ArticlesViewedEditor extends React.Component<Props, State> {
     );
   };
 
-  onArticlesViewedEditorSwitchChange = (enabled: boolean) => {
+  onArticlesViewedEditorSwitchChange = (enabled: boolean): void => {
     if (enabled) {
       this.props.onChange(defaultArticlesViewedSettings);
     } else {
@@ -128,7 +129,7 @@ class ArticlesViewedEditor extends React.Component<Props, State> {
           <RadioGroup
             className={classes.radio}
             value={this.props.articlesViewedSettings ? 'enable' : 'disable'}
-            onChange={(event, showArticleCount) =>
+            onChange={(event, showArticleCount): void =>
               this.onArticlesViewedEditorSwitchChange(showArticleCount === 'enable')
             }
           >

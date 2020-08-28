@@ -15,6 +15,7 @@ import { TickerCountType, TickerEndType, TickerSettings } from './helpers/shared
 import EditableTextField from './editableTextField';
 import { onFieldValidationChange, ValidationStatus } from './helpers/validation';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing, typography }: Theme) =>
   createStyles({
     formControl: {
@@ -70,10 +71,10 @@ class TickerEditor extends React.Component<Props, State> {
     currencySymbol: '$',
   };
 
-  renderFields(tickerSettings: TickerSettings) {
+  renderFields(tickerSettings: TickerSettings): React.ReactElement {
     const classes = this.props.classes;
 
-    const onCopyFieldChange = (fieldName: string) => (value: string) =>
+    const onCopyFieldChange = (fieldName: string) => (value: string): void =>
       this.props.onChange({
         ...tickerSettings,
         copy: {
@@ -90,7 +91,11 @@ class TickerEditor extends React.Component<Props, State> {
       }
     };
 
-    const renderTextField = (value: string, fieldName: string, label: string) => (
+    const renderTextField = (
+      value: string,
+      fieldName: string,
+      label: string,
+    ): React.ReactElement => (
       <EditableTextField
         text={value}
         label={label}
@@ -123,7 +128,7 @@ class TickerEditor extends React.Component<Props, State> {
           <EditableTextField
             text={tickerSettings.currencySymbol}
             label="Currency"
-            onSubmit={value =>
+            onSubmit={(value): void =>
               this.props.onChange({
                 ...tickerSettings,
                 currencySymbol: value,
@@ -146,7 +151,7 @@ class TickerEditor extends React.Component<Props, State> {
           <RadioGroup
             className={classes.radio}
             value={tickerSettings.countType}
-            onChange={(event, value: string) =>
+            onChange={(event, value: string): void =>
               this.props.onChange({
                 ...tickerSettings,
                 countType: value as TickerCountType,
@@ -172,7 +177,7 @@ class TickerEditor extends React.Component<Props, State> {
           <RadioGroup
             className={classes.radio}
             value={tickerSettings.endType}
-            onChange={(event, value: string) =>
+            onChange={(event, value: string): void =>
               this.props.onChange({
                 ...tickerSettings,
                 endType: value as TickerEndType,
@@ -194,7 +199,7 @@ class TickerEditor extends React.Component<Props, State> {
     );
   }
 
-  render() {
+  render(): React.ReactElement {
     return (
       <>
         <FormControl>
@@ -202,7 +207,7 @@ class TickerEditor extends React.Component<Props, State> {
             control={
               <Switch
                 checked={!!this.props.tickerSettings}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
                   this.props.onChange(event.target.checked ? this.defaultTickerSettings : undefined)
                 }
                 disabled={!this.props.editMode}
