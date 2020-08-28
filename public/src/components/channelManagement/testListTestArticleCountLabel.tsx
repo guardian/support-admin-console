@@ -1,27 +1,21 @@
-import React from "react";
-import {
-  Typography,
-  createStyles,
-  withStyles,
-  WithStyles,
-  Theme,
-} from "@material-ui/core";
+import React from 'react';
+import { Typography, createStyles, withStyles, WithStyles, Theme } from '@material-ui/core';
 
 const styles = ({}: Theme) =>
   createStyles({
     container: {
-      padding: "3px",
-      background: "#FFC107",
-      borderRadius: "2px",
+      padding: '3px',
+      background: '#FFC107',
+      borderRadius: '2px',
     },
     text: {
-      fontSize: "8px",
+      fontSize: '8px',
       fontWeight: 500,
-      textTransform: "uppercase",
+      textTransform: 'uppercase',
     },
   });
 
-interface TestListTestArticleCountLabel extends WithStyles<typeof styles> {}
+type TestListTestArticleCountLabel = WithStyles<typeof styles>;
 
 const TestListTestArticleCountLabel: React.FC<TestListTestArticleCountLabel> = ({
   classes,

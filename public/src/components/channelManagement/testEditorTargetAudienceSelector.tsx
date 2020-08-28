@@ -1,25 +1,24 @@
-import React from "react";
+import React from 'react';
 
-import { Theme, WithStyles, createStyles, withStyles } from "@material-ui/core";
-import { Region } from "../../utils/models";
-import { UserCohort } from "./helpers/shared";
+import { Theme, WithStyles, createStyles, withStyles } from '@material-ui/core';
+import { Region } from '../../utils/models';
+import { UserCohort } from './helpers/shared';
 
-import TestEditorTargetRegionsSelector from "./testEditorTargetRegionsSelector";
-import TestEditorTargetSupporterStatusSelector from "./testEditorTargetSupporterStatusSelector";
+import TestEditorTargetRegionsSelector from './testEditorTargetRegionsSelector';
+import TestEditorTargetSupporterStatusSelector from './testEditorTargetSupporterStatusSelector';
 
 const styles = ({ spacing }: Theme) =>
   createStyles({
     container: {
-      display: "flex",
+      display: 'flex',
 
-      "& > * + *": {
+      '& > * + *': {
         marginLeft: spacing(30),
       },
     },
   });
 
-interface TestEditorTargetAudienceSelectorProps
-  extends WithStyles<typeof styles> {
+interface TestEditorTargetAudienceSelectorProps extends WithStyles<typeof styles> {
   selectedRegions: Region[];
   onRegionsUpdate: (selectedRegions: Region[]) => void;
   selectedCohort: UserCohort;

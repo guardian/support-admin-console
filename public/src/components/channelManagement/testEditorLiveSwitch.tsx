@@ -1,33 +1,26 @@
-import React from "react";
-import {
-  createStyles,
-  withStyles,
-  WithStyles,
-  Switch,
-  Theme,
-  Typography,
-} from "@material-ui/core";
+import React from 'react';
+import { createStyles, withStyles, WithStyles, Switch, Theme, Typography } from '@material-ui/core';
 
 const styles = ({ spacing }: Theme) =>
   createStyles({
     container: {
-      display: "flex",
-      alignItems: "center",
+      display: 'flex',
+      alignItems: 'center',
 
-      "& > * + *": {
+      '& > * + *': {
         marginLeft: spacing(5),
       },
     },
     switchContainer: {
-      display: "flex",
-      alignItems: "center",
+      display: 'flex',
+      alignItems: 'center',
 
-      "& > * + *": {
+      '& > * + *': {
         marginLeft: spacing(1),
       },
     },
     onOffLabel: {
-      fontSize: "14px",
+      fontSize: '14px',
       fontWeight: 500,
     },
   });

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 /**
  * Helper for tracking validation of multiple child components.
@@ -34,7 +34,7 @@ export type ValidationStatus = {
 };
 
 const INVALID_CHARACTERS_ERROR_HELPER_TEXT =
-  "Only letters, numbers, underscores and hyphens are allowed";
+  'Only letters, numbers, underscores and hyphens are allowed';
 const INVALID_CHARACTERS_REGEX = /[^\w-]/;
 
 export const getInvalidCharactersError = (text: string): string | null => {
@@ -44,26 +44,23 @@ export const getInvalidCharactersError = (text: string): string | null => {
   return null;
 };
 
-const EMPTY_ERROR_HELPER_TEXT =
-  "Field cannot be empty - please enter some text";
+const EMPTY_ERROR_HELPER_TEXT = 'Field cannot be empty - please enter some text';
 
 export const getEmptyError = (text: string): string | null => {
-  if (text.trim() === "") {
+  if (text.trim() === '') {
     return EMPTY_ERROR_HELPER_TEXT;
   }
   return null;
 };
 
-const NOT_NUMBER_ERROR_HELPER_TEXT = "Must be a number";
+const NOT_NUMBER_ERROR_HELPER_TEXT = 'Must be a number';
 
 export const getNotNumberError = (text: string): string | null =>
   Number.isNaN(Number(text)) ? NOT_NUMBER_ERROR_HELPER_TEXT : null;
 
-const DUPLICATE_ERROR_HELPER_TEXT = "Name already exists - please try another";
+const DUPLICATE_ERROR_HELPER_TEXT = 'Name already exists - please try another';
 
-export const createGetDuplicateError = (
-  existing: string[]
-): ((text: string) => string | null) => {
+export const createGetDuplicateError = (existing: string[]): ((text: string) => string | null) => {
   const getDuplicateError = (text: string): string | null => {
     if (existing.includes(text)) {
       return DUPLICATE_ERROR_HELPER_TEXT;
@@ -82,27 +79,23 @@ export const onFieldValidationChange = <
   P extends ValidationComponentProps,
   S extends ValidationComponentState
 >(
-  component: React.Component<P, S>
+  component: React.Component<P, S>,
 ) => (fieldName: string) => (isValid: boolean): void => {
   component.setState(
-    (state) => {
-      const newValidationStatus: ValidationStatus = Object.assign(
-        {},
-        state.validationStatus
-      );
+    state => {
+      const newValidationStatus: ValidationStatus = Object.assign({}, state.validationStatus);
       newValidationStatus[fieldName] = isValid;
       return { validationStatus: newValidationStatus };
     },
     () => {
-      const hasInvalidField = Object.keys(
-        component.state.validationStatus
-      ).some((name) => component.state.validationStatus[name] === false);
+      const hasInvalidField = Object.keys(component.state.validationStatus).some(
+        name => component.state.validationStatus[name] === false,
+      );
 
       component.props.onValidationChange(!hasInvalidField);
-    }
+    },
   );
 };
 
 // const onFieldValidationChangeTemp = (setValidation, )
-export const isNumber = (value: string): boolean =>
-  !Number.isNaN(Number(value));
+export const isNumber = (value: string): boolean => !Number.isNaN(Number(value));

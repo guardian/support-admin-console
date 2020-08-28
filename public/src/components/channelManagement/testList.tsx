@@ -1,20 +1,9 @@
-import React from "react";
-import {
-  createStyles,
-  List,
-  Theme,
-  withStyles,
-  WithStyles,
-} from "@material-ui/core";
-import {
-  DragDropContext,
-  Droppable,
-  Draggable,
-  DropResult,
-} from "react-beautiful-dnd";
+import React from 'react';
+import { createStyles, List, Theme, withStyles, WithStyles } from '@material-ui/core';
+import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 
-import { Test } from "./helpers/shared";
-import TestListTest from "./testListTest";
+import { Test } from './helpers/shared';
+import TestListTest from './testListTest';
 
 const styles = ({}: Theme) =>
   createStyles({
@@ -22,8 +11,8 @@ const styles = ({}: Theme) =>
     list: {
       marginTop: 0,
       padding: 0,
-      "& > * + *": {
-        marginTop: "8px",
+      '& > * + *': {
+        marginTop: '8px',
       },
     },
   });
@@ -59,20 +48,12 @@ const TestList = <T extends Test>({
     <div className={classes.container}>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="droppable">
-          {(provided) => (
-            <List
-              className={classes.list}
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-            >
+          {provided => (
+            <List className={classes.list} ref={provided.innerRef} {...provided.droppableProps}>
               {tests.map((test, index) =>
                 isInEditMode ? (
-                  <Draggable
-                    key={test.name}
-                    draggableId={test.name}
-                    index={index}
-                  >
-                    {(provided) => (
+                  <Draggable key={test.name} draggableId={test.name} index={index}>
+                    {provided => (
                       <div
                         ref={provided.innerRef}
                         {...provided.draggableProps}
@@ -93,7 +74,7 @@ const TestList = <T extends Test>({
                     isSelected={test.name === selectedTestName}
                     onClick={() => onTestSelected(test.name)}
                   />
-                )
+                ),
               )}
             </List>
           )}
@@ -105,7 +86,7 @@ const TestList = <T extends Test>({
 
 // Hack to work around material UI breaking type checking when class has type parameters - https://stackoverflow.com/q/52567697
 export default function WrappedTestsList<T extends Test>(
-  props: TestListProps<T>
+  props: TestListProps<T>,
 ): React.ReactElement<TestListProps<T>> {
   const wrapper = withStyles(styles)(TestList) as any;
 

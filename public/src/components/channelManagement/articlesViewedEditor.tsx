@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   createStyles,
   FormControl,
@@ -9,13 +9,10 @@ import {
   WithStyles,
   RadioGroup,
   Radio,
-} from "@material-ui/core";
-import EditableTextField from "./editableTextField";
-import {
-  onFieldValidationChange,
-  ValidationStatus,
-} from "./helpers/validation";
-import { ArticlesViewedSettings } from "./helpers/shared";
+} from '@material-ui/core';
+import EditableTextField from './editableTextField';
+import { onFieldValidationChange, ValidationStatus } from './helpers/validation';
+import { ArticlesViewedSettings } from './helpers/shared';
 
 const isNumber = (value: string): boolean => !Number.isNaN(Number(value));
 
@@ -28,32 +25,32 @@ export const defaultArticlesViewedSettings: ArticlesViewedSettings = {
 const styles = ({ spacing, typography }: Theme) =>
   createStyles({
     button: {
-      marginTop: "20px",
+      marginTop: '20px',
     },
     formControl: {
       marginTop: spacing(2),
       marginBottom: spacing(1),
-      display: "block",
+      display: 'block',
     },
     selectLabel: {
       fontSize: typography.pxToRem(22),
       fontWeight: typography.fontWeightMedium,
-      color: "black",
+      color: 'black',
     },
     radio: {
-      paddingTop: "20px",
-      marginBottom: "10px",
+      paddingTop: '20px',
+      marginBottom: '10px',
     },
     articlesViewsContainer: {
-      marginTop: "10px",
-      marginLeft: "20px",
-      "& > *": {
+      marginTop: '10px',
+      marginLeft: '20px',
+      '& > *': {
         marginTop: spacing(4),
       },
     },
   });
 
-type ArticleViewsFieldName = "minViews" | "maxViews" | "periodInWeeks";
+type ArticleViewsFieldName = 'minViews' | 'maxViews' | 'periodInWeeks';
 
 interface Props extends WithStyles<typeof styles> {
   articlesViewedSettings?: ArticlesViewedSettings;
@@ -75,13 +72,13 @@ class ArticlesViewedEditor extends React.Component<Props, State> {
     fieldName: ArticleViewsFieldName,
     label: string,
     articlesViewedSettings: ArticlesViewedSettings,
-    isRequired: boolean
+    isRequired: boolean,
   ) => {
     const setting: number | null = articlesViewedSettings[fieldName];
 
     return (
       <EditableTextField
-        text={setting ? setting.toString() : ""}
+        text={setting ? setting.toString() : ''}
         onSubmit={(value: string) => {
           if (value === null || isNumber(value)) {
             this.props.onChange({
@@ -97,10 +94,12 @@ class ArticlesViewedEditor extends React.Component<Props, State> {
         validation={{
           getError: (value: string) => {
             if (isRequired && !value) {
-              return "This field is required";
+              return 'This field is required';
             } else if (!isNumber(value)) {
-              return "Must be a number";
-            } else return null;
+              return 'Must be a number';
+            } else {
+              return null;
+            }
           },
           onChange: onFieldValidationChange(this)(fieldName),
         }}
@@ -122,33 +121,27 @@ class ArticlesViewedEditor extends React.Component<Props, State> {
     return (
       <>
         <FormControl className={classes.formControl}>
-          <InputLabel
-            className={classes.selectLabel}
-            shrink
-            htmlFor="ask-strategy"
-          >
+          <InputLabel className={classes.selectLabel} shrink htmlFor="ask-strategy">
             Article Count:
           </InputLabel>
 
           <RadioGroup
             className={classes.radio}
-            value={this.props.articlesViewedSettings ? "enable" : "disable"}
+            value={this.props.articlesViewedSettings ? 'enable' : 'disable'}
             onChange={(event, showArticleCount) =>
-              this.onArticlesViewedEditorSwitchChange(
-                showArticleCount === "enable"
-              )
+              this.onArticlesViewedEditorSwitchChange(showArticleCount === 'enable')
             }
           >
             <FormControlLabel
-              value={"disable"}
-              key={"disable"}
+              value={'disable'}
+              key={'disable'}
               control={<Radio />}
               label={"Do not show user's article count"}
               disabled={!this.props.editMode}
             />
             <FormControlLabel
-              value={"enable"}
-              key={"enable"}
+              value={'enable'}
+              key={'enable'}
               control={<Radio />}
               label={"Show user's article count..."}
               disabled={!this.props.editMode}
@@ -159,22 +152,22 @@ class ArticlesViewedEditor extends React.Component<Props, State> {
         {this.props.articlesViewedSettings && (
           <div className={classes.articlesViewsContainer}>
             {this.buildField(
-              "minViews",
-              "Minimum number of articles viewed",
+              'minViews',
+              'Minimum number of articles viewed',
               this.props.articlesViewedSettings,
-              false
+              false,
             )}
             {this.buildField(
-              "maxViews",
-              "Maximum articles viewed",
+              'maxViews',
+              'Maximum articles viewed',
               this.props.articlesViewedSettings,
-              false
+              false,
             )}
             {this.buildField(
-              "periodInWeeks",
-              "Time period in weeks",
+              'periodInWeeks',
+              'Time period in weeks',
               this.props.articlesViewedSettings,
-              true
+              true,
             )}
           </div>
         )}

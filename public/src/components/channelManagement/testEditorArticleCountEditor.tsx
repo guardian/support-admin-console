@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 import {
   FormControl,
@@ -9,21 +9,21 @@ import {
   WithStyles,
   createStyles,
   withStyles,
-} from "@material-ui/core";
-import { ArticlesViewedSettings } from "./helpers/shared";
-import EditableTextField from "./editableTextField";
-import useValidation from "./hooks/useValidation";
-import { getNotNumberError, getEmptyError } from "./helpers/validation";
+} from '@material-ui/core';
+import { ArticlesViewedSettings } from './helpers/shared';
+import EditableTextField from './editableTextField';
+import useValidation from './hooks/useValidation';
+import { getNotNumberError, getEmptyError } from './helpers/validation';
 
 const styles = ({ spacing }: Theme) =>
   createStyles({
     container: {
-      "& > * + *": {
+      '& > * + *': {
         marginTop: spacing(2),
       },
     },
     formContainer: {
-      "& > * + *": {
+      '& > * + *': {
         marginTop: spacing(1),
       },
     },
@@ -37,9 +37,7 @@ const DEFAULT_ARTICLES_VIEWED_SETTINGS: ArticlesViewedSettings = {
 
 interface TestEditorArticleCountEditorProps extends WithStyles<typeof styles> {
   articlesViewedSettings?: ArticlesViewedSettings;
-  onArticlesViewedSettingsChanged: (
-    updatedArticlesViewedSettings?: ArticlesViewedSettings
-  ) => void;
+  onArticlesViewedSettingsChanged: (updatedArticlesViewedSettings?: ArticlesViewedSettings) => void;
   onValidationChange: (isValid: boolean) => void;
   isDisabled: boolean;
 }
@@ -54,7 +52,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
   const setValidationStatusForField = useValidation(onValidationChange);
 
   const onRadioGroupChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.value === "enabled") {
+    if (event.target.value === 'enabled') {
       onArticlesViewedSettingsChanged(DEFAULT_ARTICLES_VIEWED_SETTINGS);
     } else {
       onArticlesViewedSettingsChanged(undefined);
@@ -63,7 +61,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
 
   const getMinPageViewsError = getNotNumberError;
   const onMinPageViewsChange = (isValid: boolean) =>
-    setValidationStatusForField("minViews", isValid);
+    setValidationStatusForField('minViews', isValid);
 
   const onMinPageViewsChanged = (updatedMinPageViews: string) => {
     const number = Number(updatedMinPageViews);
@@ -77,7 +75,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
 
   const getMaxPageViewsError = getNotNumberError;
   const onMaxPageViewsChange = (isValid: boolean) =>
-    setValidationStatusForField("maxViews", isValid);
+    setValidationStatusForField('maxViews', isValid);
 
   const onMaxPageViewsChanged = (updatedMaxPageViews: string) => {
     const number = Number(updatedMaxPageViews);
@@ -89,10 +87,9 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
     }
   };
 
-  const getPeriodInWeeksError = (text: string) =>
-    getNotNumberError(text) || getEmptyError(text);
+  const getPeriodInWeeksError = (text: string) => getNotNumberError(text) || getEmptyError(text);
   const onPeriodInWeeksChange = (isValid: boolean) =>
-    setValidationStatusForField("periodInWeeks", isValid);
+    setValidationStatusForField('periodInWeeks', isValid);
 
   const onPeriodInWeeksChanged = (updatedPeriodInWeeks: string) => {
     const number = Number(updatedPeriodInWeeks);
@@ -108,7 +105,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
     <div className={classes.container}>
       <FormControl>
         <RadioGroup
-          value={articlesViewedSettings ? "enabled" : "disabled"}
+          value={articlesViewedSettings ? 'enabled' : 'disabled'}
           onChange={onRadioGroupChange}
         >
           <FormControlLabel
@@ -136,7 +133,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
               getError: getMinPageViewsError,
               onChange: onMinPageViewsChange,
             }}
-            text={articlesViewedSettings.minViews?.toString() || ""}
+            text={articlesViewedSettings.minViews?.toString() || ''}
             label="Minimum page views"
             variant="filled"
             isNumberField
@@ -148,7 +145,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
               getError: getMaxPageViewsError,
               onChange: onMaxPageViewsChange,
             }}
-            text={articlesViewedSettings.maxViews?.toString() || ""}
+            text={articlesViewedSettings.maxViews?.toString() || ''}
             label="Maximum page views"
             variant="filled"
             isNumberField

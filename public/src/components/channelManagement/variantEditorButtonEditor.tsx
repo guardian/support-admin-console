@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Checkbox,
   createStyles,
@@ -6,25 +6,25 @@ import {
   Theme,
   WithStyles,
   withStyles,
-} from "@material-ui/core";
-import EditableTextField from "./editableTextField";
-import { Cta } from "./helpers/shared";
+} from '@material-ui/core';
+import EditableTextField from './editableTextField';
+import { Cta } from './helpers/shared';
 
 const styles = ({ spacing }: Theme) =>
   createStyles({
     container: {
-      "& > * + *": {
+      '& > * + *': {
         marginTop: spacing(1),
       },
     },
     fieldsContainer: {
-      "& > * + *": {
+      '& > * + *': {
         marginTop: spacing(3),
       },
     },
   });
 
-interface VariantEditorButtonEditorProps {
+interface VariantEditorButtonEditorProps extends WithStyles<typeof styles> {
   label: string;
   cta?: Cta;
   updateCta: (updatedCta?: Cta) => void;
@@ -32,12 +32,17 @@ interface VariantEditorButtonEditorProps {
   isDisabled: boolean;
 }
 
-const VariantEditorButtonEditor: React.FC<
-  VariantEditorButtonEditorProps & WithStyles<typeof styles>
-> = ({ classes, label, cta, updateCta, defaultCta, isDisabled }) => {
+const VariantEditorButtonEditor: React.FC<VariantEditorButtonEditorProps> = ({
+  classes,
+  label,
+  cta,
+  updateCta,
+  defaultCta,
+  isDisabled,
+}: VariantEditorButtonEditorProps) => {
   const isChecked = cta !== undefined;
 
-  const onCheckboxChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onCheckboxChanged = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const isChecked = event.target.checked;
     if (isChecked) {
       updateCta(defaultCta);
@@ -46,11 +51,11 @@ const VariantEditorButtonEditor: React.FC<
     }
   };
 
-  const onTextChanged = (updatedText: string) => {
+  const onTextChanged = (updatedText: string): void => {
     updateCta({ ...cta, text: updatedText });
   };
 
-  const onBaseUrlChanged = (updatedBaseUrl: string) => {
+  const onBaseUrlChanged = (updatedBaseUrl: string): void => {
     updateCta({ ...cta, baseUrl: updatedBaseUrl });
   };
 
@@ -71,14 +76,14 @@ const VariantEditorButtonEditor: React.FC<
       {isChecked && (
         <div className={classes.fieldsContainer}>
           <EditableTextField
-            text={cta?.text || ""}
+            text={cta?.text || ''}
             onSubmit={onTextChanged}
             label="Button copy"
             editEnabled={!isDisabled}
             fullWidth
           />
           <EditableTextField
-            text={cta?.baseUrl || ""}
+            text={cta?.baseUrl || ''}
             onSubmit={onBaseUrlChanged}
             label="Button destination"
             editEnabled={!isDisabled}

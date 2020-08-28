@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import { Cta } from "./helpers/shared";
+import { Cta } from './helpers/shared';
 import {
   createStyles,
   FormControlLabel,
@@ -8,14 +8,14 @@ import {
   Theme,
   withStyles,
   WithStyles,
-} from "@material-ui/core";
-import EditableTextField from "./editableTextField";
+} from '@material-ui/core';
+import EditableTextField from './editableTextField';
 
-const styles = ({ palette, spacing, typography }: Theme) =>
+const styles = ({ spacing }: Theme) =>
   createStyles({
     fields: {
-      marginLeft: "20px",
-      "& > *": {
+      marginLeft: '20px',
+      '& > *': {
         marginTop: spacing(3),
       },
     },
@@ -32,13 +32,13 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 class CtaEditor extends React.Component<Props> {
-  renderFields = (cta: Cta) => {
+  renderFields = (cta: Cta): React.ReactElement => {
     return (
       <div className={this.props.classes.fields}>
         <EditableTextField
           required
-          text={cta.text || this.props.defaultText || ""}
-          onSubmit={(value) => this.props.update({ ...cta, text: value })}
+          text={cta.text || this.props.defaultText || ''}
+          onSubmit={(value): void => this.props.update({ ...cta, text: value })}
           label="Button text:"
           editEnabled={this.props.editMode}
           fullWidth
@@ -46,13 +46,13 @@ class CtaEditor extends React.Component<Props> {
 
         <EditableTextField
           required
-          text={cta.baseUrl || this.props.defaultBaseUrl || ""}
-          onSubmit={(value) => this.props.update({ ...cta, baseUrl: value })}
+          text={cta.baseUrl || this.props.defaultBaseUrl || ''}
+          onSubmit={(value): void => this.props.update({ ...cta, baseUrl: value })}
           label="Button destination:"
           editEnabled={this.props.editMode}
           helperText={
             this.props.manualCampaignCode
-              ? "Note - if this is not a support.theguardian.com url then tracking code must be added manually, e.g. theguardian.com/article?INTCMP=my-campaign-code"
+              ? 'Note - if this is not a support.theguardian.com url then tracking code must be added manually, e.g. theguardian.com/article?INTCMP=my-campaign-code'
               : undefined
           }
           fullWidth
@@ -65,8 +65,8 @@ class CtaEditor extends React.Component<Props> {
     const ctaEnabled = event.target.checked;
     if (ctaEnabled) {
       this.props.update({
-        text: this.props.defaultText || "",
-        baseUrl: this.props.defaultBaseUrl || "",
+        text: this.props.defaultText || '',
+        baseUrl: this.props.defaultBaseUrl || '',
       });
     } else {
       this.props.update(undefined);

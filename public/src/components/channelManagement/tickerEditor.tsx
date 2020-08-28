@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   createStyles,
   FormControl,
@@ -8,43 +8,36 @@ import {
   Theme,
   withStyles,
   WithStyles,
-} from "@material-ui/core";
-import Switch from "@material-ui/core/Switch";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import {
-  TickerCountType,
-  TickerEndType,
-  TickerSettings,
-} from "./helpers/shared";
-import EditableTextField from "./editableTextField";
-import {
-  onFieldValidationChange,
-  ValidationStatus,
-} from "./helpers/validation";
+} from '@material-ui/core';
+import Switch from '@material-ui/core/Switch';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import { TickerCountType, TickerEndType, TickerSettings } from './helpers/shared';
+import EditableTextField from './editableTextField';
+import { onFieldValidationChange, ValidationStatus } from './helpers/validation';
 
 const styles = ({ spacing, typography }: Theme) =>
   createStyles({
     formControl: {
       marginTop: spacing(2),
       marginBottom: spacing(1),
-      display: "block",
+      display: 'block',
     },
     selectLabel: {
       fontSize: typography.pxToRem(22),
-      color: "black",
+      color: 'black',
     },
     radio: {
-      paddingTop: "20px",
-      marginBottom: "10px",
+      paddingTop: '20px',
+      marginBottom: '10px',
     },
     fieldsContainer: {
-      marginLeft: "30px",
-      marginBottom: "20px",
-      borderRadius: "4px",
-      border: "1px solid #dcdcdc",
-      padding: "2px 2px 0px 10px",
+      marginLeft: '30px',
+      marginBottom: '20px',
+      borderRadius: '4px',
+      border: '1px solid #dcdcdc',
+      padding: '2px 2px 0px 10px',
 
-      "& > *": {
+      '& > *': {
         marginTop: spacing(3),
       },
     },
@@ -70,11 +63,11 @@ class TickerEditor extends React.Component<Props, State> {
     endType: TickerEndType.unlimited,
     countType: TickerCountType.money,
     copy: {
-      countLabel: "contributions",
+      countLabel: 'contributions',
       goalReachedPrimary: "We've hit our goal!",
-      goalReachedSecondary: "but you can still support us",
+      goalReachedSecondary: 'but you can still support us',
     },
-    currencySymbol: "$",
+    currencySymbol: '$',
   };
 
   renderFields(tickerSettings: TickerSettings) {
@@ -90,15 +83,14 @@ class TickerEditor extends React.Component<Props, State> {
       });
 
     const emptyFieldCheck = (value: string): string | null => {
-      if (value.trim() === "") return "Field must not be empty";
-      else return null;
+      if (value.trim() === '') {
+        return 'Field must not be empty';
+      } else {
+        return null;
+      }
     };
 
-    const renderTextField = (
-      value: string,
-      fieldName: string,
-      label: string
-    ) => (
+    const renderTextField = (value: string, fieldName: string, label: string) => (
       <EditableTextField
         text={value}
         label={label}
@@ -115,27 +107,23 @@ class TickerEditor extends React.Component<Props, State> {
 
     return (
       <div className={classes.fieldsContainer}>
-        {renderTextField(
-          tickerSettings.copy.countLabel,
-          "countLabel",
-          "Count label"
-        )}
+        {renderTextField(tickerSettings.copy.countLabel, 'countLabel', 'Count label')}
         {renderTextField(
           tickerSettings.copy.goalReachedPrimary,
-          "goalReachedPrimary",
-          "Goal reached primary text"
+          'goalReachedPrimary',
+          'Goal reached primary text',
         )}
         {renderTextField(
           tickerSettings.copy.goalReachedSecondary,
-          "goalReachedSecondary",
-          "Goal reached secondary text"
+          'goalReachedSecondary',
+          'Goal reached secondary text',
         )}
 
-        {tickerSettings.countType === "money" && (
+        {tickerSettings.countType === 'money' && (
           <EditableTextField
             text={tickerSettings.currencySymbol}
             label="Currency"
-            onSubmit={(value) =>
+            onSubmit={value =>
               this.props.onChange({
                 ...tickerSettings,
                 currencySymbol: value,
@@ -145,18 +133,14 @@ class TickerEditor extends React.Component<Props, State> {
             required={true}
             validation={{
               getError: emptyFieldCheck,
-              onChange: onFieldValidationChange(this)("currencySymbol"),
+              onChange: onFieldValidationChange(this)('currencySymbol'),
             }}
             fullWidth
           />
         )}
 
         <FormControl className={classes.formControl}>
-          <InputLabel
-            className={classes.selectLabel}
-            shrink
-            htmlFor="count-type"
-          >
+          <InputLabel className={classes.selectLabel} shrink htmlFor="count-type">
             Ticker count type - are we fund-raising or accumulating supporters?
           </InputLabel>
           <RadioGroup
@@ -169,7 +153,7 @@ class TickerEditor extends React.Component<Props, State> {
               })
             }
           >
-            {Object.values(TickerCountType).map((countType) => (
+            {Object.values(TickerCountType).map(countType => (
               <FormControlLabel
                 value={countType}
                 key={countType}
@@ -195,7 +179,7 @@ class TickerEditor extends React.Component<Props, State> {
               })
             }
           >
-            {Object.values(TickerEndType).map((endType) => (
+            {Object.values(TickerEndType).map(endType => (
               <FormControlLabel
                 value={endType}
                 key={endType}
@@ -219,21 +203,16 @@ class TickerEditor extends React.Component<Props, State> {
               <Switch
                 checked={!!this.props.tickerSettings}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                  this.props.onChange(
-                    event.target.checked
-                      ? this.defaultTickerSettings
-                      : undefined
-                  )
+                  this.props.onChange(event.target.checked ? this.defaultTickerSettings : undefined)
                 }
                 disabled={!this.props.editMode}
               />
             }
-            label={`Ticker is ${!!this.props.tickerSettings ? "on" : "off"}`}
+            label={`Ticker is ${!!this.props.tickerSettings ? 'on' : 'off'}`}
           />
         </FormControl>
 
-        {!!this.props.tickerSettings &&
-          this.renderFields(this.props.tickerSettings)}
+        {!!this.props.tickerSettings && this.renderFields(this.props.tickerSettings)}
       </>
     );
   }

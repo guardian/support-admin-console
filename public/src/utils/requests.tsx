@@ -1,11 +1,9 @@
-import { EpicTest } from '../components/channelManagement/epicTests/epicTestsForm';
-import { BannerTest } from '../components/channelManagement/bannerTests/bannerTestsForm';
-import {Test} from "../components/channelManagement/helpers/shared";
+import { Test } from '../components/channelManagement/helpers/shared';
 
 export enum SupportFrontendSettingsType {
   switches = 'switches',
   contributionTypes = 'contribution-types',
-  amounts = 'amounts'
+  amounts = 'amounts',
 }
 
 export enum FrontendSettingsType {
@@ -14,15 +12,14 @@ export enum FrontendSettingsType {
 }
 
 function fetchSettings(path: string): Promise<any> {
-  return fetch(path)
-    .then(resp => {
-      if (!resp.ok) {
-        resp.text().then(msg => alert(msg));
-        throw new Error(`Could not fetch ${path} settings from server`);
-      }
+  return fetch(path).then(resp => {
+    if (!resp.ok) {
+      resp.text().then(msg => alert(msg));
+      throw new Error(`Could not fetch ${path} settings from server`);
+    }
 
-      return resp.json();
-    });
+    return resp.json();
+  });
 }
 
 function saveSettings(path: string, data: any): Promise<Response> {
@@ -32,32 +29,37 @@ function saveSettings(path: string, data: any): Promise<Response> {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(data),
-  })
+  });
 }
 
 export function requestLock(settingsType: FrontendSettingsType): Promise<Response> {
   return fetch(`/frontend/${settingsType}/lock`, {
-    method: 'POST'
+    method: 'POST',
   });
 }
 
 export function requestUnlock(settingsType: FrontendSettingsType): Promise<Response> {
   return fetch(`/frontend/${settingsType}/unlock`, {
-    method: 'POST'
+    method: 'POST',
   });
 }
 
 export function requestTakeControl(settingsType: FrontendSettingsType): Promise<Response> {
   return fetch(`/frontend/${settingsType}/takecontrol`, {
-    method: 'POST'
+    method: 'POST',
   });
 }
 
-export function fetchSupportFrontendSettings(settingsType: SupportFrontendSettingsType): Promise<any> {
+export function fetchSupportFrontendSettings(
+  settingsType: SupportFrontendSettingsType,
+): Promise<any> {
   return fetchSettings(`/support-frontend/${settingsType}`);
 }
 
-export function saveSupportFrontendSettings(settingsType: SupportFrontendSettingsType, data: any): Promise<Response> {
+export function saveSupportFrontendSettings(
+  settingsType: SupportFrontendSettingsType,
+  data: any,
+): Promise<Response> {
   return saveSettings(`/support-frontend/${settingsType}/update`, data);
 }
 
@@ -65,7 +67,10 @@ export function fetchFrontendSettings(settingsType: FrontendSettingsType): Promi
   return fetchSettings(`/frontend/${settingsType}`);
 }
 
-export function saveFrontendSettings(settingsType: FrontendSettingsType, data: any): Promise<Response> {
+export function saveFrontendSettings(
+  settingsType: FrontendSettingsType,
+  data: any,
+): Promise<Response> {
   return saveSettings(`/frontend/${settingsType}/update`, data);
 }
 

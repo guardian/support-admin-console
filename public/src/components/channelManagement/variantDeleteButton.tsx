@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from 'react';
 import {
   Button,
   Dialog,
@@ -7,10 +7,10 @@ import {
   DialogContentText,
   DialogTitle,
   IconButton,
-} from "@material-ui/core";
-import DeleteIcon from "@material-ui/icons/Delete";
+} from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
 
-import useOpenable from "../../hooks/useOpenable";
+import useOpenable from '../../hooks/useOpenable';
 
 interface VariantEditorButtonsEditorProps {
   isDisabled: boolean;
@@ -20,7 +20,7 @@ interface VariantEditorButtonsEditorProps {
 const VariantEditorButtonsEditor: React.FC<VariantEditorButtonsEditorProps> = ({
   isDisabled,
   onConfirm,
-}) => {
+}: VariantEditorButtonsEditorProps) => {
   const [isOpen, open, close] = useOpenable();
   return (
     <>
@@ -33,9 +33,7 @@ const VariantEditorButtonsEditor: React.FC<VariantEditorButtonsEditorProps> = ({
         aria-labelledby="delete-variant-dialog-title"
         aria-describedby="delete-variant-dialog-description"
       >
-        <DialogTitle id="delete-variant-dialog-title">
-          Are you sure?
-        </DialogTitle>
+        <DialogTitle id="delete-variant-dialog-title">Are you sure?</DialogTitle>
         <DialogContent>
           <DialogContentText id="delete-variant-dialog-description">
             Deleting this variant will remove it from the test permanently.

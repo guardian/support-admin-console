@@ -1,94 +1,106 @@
 import React, { ReactElement } from 'react';
-import {createStyles, Theme, withStyles, WithStyles, Typography} from "@material-ui/core";
-import LockOpenIcon from '@material-ui/icons/LockOpen'
+import { createStyles, Theme, withStyles, WithStyles, Typography } from '@material-ui/core';
+import LockOpenIcon from '@material-ui/icons/LockOpen';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import Button from "@material-ui/core/Button";
+import Button from '@material-ui/core/Button';
 import ButtonWithConfirmationPopup from './buttonWithConfirmationPopup';
 import { LockStatus, ModifiedTests } from './helpers/shared';
 
-const styles = ({ spacing, typography }: Theme) => createStyles({
- actionBar: {
-    marginTop: spacing(2),
-    marginBottom: spacing(2),
-    borderRadius: "5px",
-    paddingTop: spacing(2),
-    display: "flex",
-    justifyContent: "space-between",
-    minHeight: spacing(9)
-  },
-  actionBarText: {
-    fontSize: typography.pxToRem(18),
-    marginLeft: spacing(2),
-    marginTop: spacing(1)
-  },
-  actionBarButtons: {
-    marginLeft: spacing(2),
-    marginRight: spacing(2),
-    '& button': {
-      marginLeft: spacing(2)
-    }
-  },
-  editModeColour: {
-    backgroundColor: "#ffe500"
-  },
-  readOnlyModeColour: {
-    backgroundColor: "#dcdcdc"
-  },
-  modeTag: {
-    marginLeft: spacing(2),
-    marginBottom: spacing(2),
-    padding: spacing(1),
-    borderRadius: "5px"
-  },
-  editModeTagColour: {
-    backgroundColor: "#ffbb50"
-  },
-  readOnlyModeTagColour: {
-    backgroundColor: "#f6f6f6"
-  },
-  modeTagText: {
-    fontSize: typography.pxToRem(18),
-    fontWeight: typography.fontWeightMedium
-  }
-});
+const styles = ({ spacing, typography }: Theme) =>
+  createStyles({
+    actionBar: {
+      marginTop: spacing(2),
+      marginBottom: spacing(2),
+      borderRadius: '5px',
+      paddingTop: spacing(2),
+      display: 'flex',
+      justifyContent: 'space-between',
+      minHeight: spacing(9),
+    },
+    actionBarText: {
+      fontSize: typography.pxToRem(18),
+      marginLeft: spacing(2),
+      marginTop: spacing(1),
+    },
+    actionBarButtons: {
+      marginLeft: spacing(2),
+      marginRight: spacing(2),
+      '& button': {
+        marginLeft: spacing(2),
+      },
+    },
+    editModeColour: {
+      backgroundColor: '#ffe500',
+    },
+    readOnlyModeColour: {
+      backgroundColor: '#dcdcdc',
+    },
+    modeTag: {
+      marginLeft: spacing(2),
+      marginBottom: spacing(2),
+      padding: spacing(1),
+      borderRadius: '5px',
+    },
+    editModeTagColour: {
+      backgroundColor: '#ffbb50',
+    },
+    readOnlyModeTagColour: {
+      backgroundColor: '#f6f6f6',
+    },
+    modeTagText: {
+      fontSize: typography.pxToRem(18),
+      fontWeight: typography.fontWeightMedium,
+    },
+  });
 
 interface ActionBarProps extends WithStyles<typeof styles> {
-  modifiedTests: ModifiedTests,
-  lockStatus: LockStatus,
-  editMode: boolean,
-  requestTakeControl: () => void,
-  requestLock: () => void,
-  cancel: () => void,
-  save: () => void
-};
+  modifiedTests: ModifiedTests;
+  lockStatus: LockStatus;
+  editMode: boolean;
+  requestTakeControl: () => void;
+  requestLock: () => void;
+  cancel: () => void;
+  save: () => void;
+}
 
 class TestActionBar extends React.Component<ActionBarProps> {
-
   makeFriendlyDate = (timestamp: string): string => {
     const datetime = new Date(timestamp);
-    const hours = `${datetime.getHours() < 10 ? "0" : ""}${datetime.getHours()}`;
-    const minutes = `${datetime.getMinutes() < 10 ? "0": ""}${datetime.getMinutes()}`;
+    const hours = `${datetime.getHours() < 10 ? '0' : ''}${datetime.getHours()}`;
+    const minutes = `${datetime.getMinutes() < 10 ? '0' : ''}${datetime.getMinutes()}`;
     const date = datetime.getDate();
     const month = datetime.getMonth() + 1;
     const year = datetime.getFullYear();
 
     return `${hours}:${minutes} on ${date}/${month}/${year}`;
-  }
+  };
 
   makeFriendlyName = (email: string): string | undefined => {
     const nameArr: RegExpMatchArray | null = email.match(/^([a-z]*)\.([a-z]*).*@.*/);
-    return nameArr ? `${nameArr[1][0].toUpperCase()}${nameArr[1].slice(1,)} ${nameArr[2][0].toUpperCase()}${nameArr[2].slice(1,)}` : undefined;
-  }
+    return nameArr
+      ? `${nameArr[1][0].toUpperCase()}${nameArr[1].slice(
+          1,
+        )} ${nameArr[2][0].toUpperCase()}${nameArr[2].slice(1)}`
+      : undefined;
+  };
 
   renderLockedMessageAndButton = (): ReactElement<any> => {
-    const friendlyName: string | undefined = this.props.lockStatus.email && this.makeFriendlyName(this.props.lockStatus.email);
-    const friendlyTimestamp: string | undefined = this.props.lockStatus.timestamp && this.makeFriendlyDate(this.props.lockStatus.timestamp);
-    const {classes} = this.props;
+    const friendlyName: string | undefined =
+      this.props.lockStatus.email && this.makeFriendlyName(this.props.lockStatus.email);
+    const friendlyTimestamp: string | undefined =
+      this.props.lockStatus.timestamp && this.makeFriendlyDate(this.props.lockStatus.timestamp);
+    const { classes } = this.props;
     return (
       <>
-        <div className={`${classes.modeTag} ${classes.readOnlyModeTagColour}`}><Typography className={classes.modeTagText}>Read-only (locked)</Typography></div>
-        <Typography className={classes.actionBarText}>File locked for editing by {friendlyName} (<a href={"mailto:" + this.props.lockStatus.email}>{this.props.lockStatus.email}</a>) at {friendlyTimestamp}.</Typography>
+        <div className={`${classes.modeTag} ${classes.readOnlyModeTagColour}`}>
+          <Typography className={classes.modeTagText}>Read-only (locked)</Typography>
+        </div>
+        <Typography className={classes.actionBarText}>
+          File locked for editing by {friendlyName} (
+          <a href={'mailto:' + this.props.lockStatus.email}>{this.props.lockStatus.email}</a>) at{' '}
+          {friendlyTimestamp}.
+        </Typography>
         <div className={classes.actionBarButtons}>
           <ButtonWithConfirmationPopup
             buttonText="Take control"
@@ -99,22 +111,22 @@ class TestActionBar extends React.Component<ActionBarProps> {
           />
         </div>
       </>
-    )
+    );
   };
 
   renderEditButton = (): ReactElement<any> => {
-    const {classes} = this.props;
+    const { classes } = this.props;
 
     return (
       <>
-        <div className={`${classes.modeTag} ${classes.readOnlyModeTagColour}`}><Typography className={classes.modeTagText}>Read-only mode</Typography></div>
-        <Typography className={classes.actionBarText}>Click the button on the right to create and edit tests</Typography>
+        <div className={`${classes.modeTag} ${classes.readOnlyModeTagColour}`}>
+          <Typography className={classes.modeTagText}>Read-only mode</Typography>
+        </div>
+        <Typography className={classes.actionBarText}>
+          Click the button on the right to create and edit tests
+        </Typography>
         <div className={classes.actionBarButtons}>
-          <Button
-            onClick={this.props.requestLock}
-            variant="contained"
-            color="primary"
-          >
+          <Button onClick={this.props.requestLock} variant="contained" color="primary">
             Create & edit tests
           </Button>
         </div>
@@ -123,37 +135,49 @@ class TestActionBar extends React.Component<ActionBarProps> {
   };
 
   renderPublishButtons = (): ReactElement<any> => {
-    const {classes} = this.props;
+    const { classes } = this.props;
     const unmodified = Object.keys(this.props.modifiedTests).length === 0;
 
     return (
-    <>
-      <div className={`${classes.modeTag} ${classes.editModeTagColour}`}><Typography className={classes.modeTagText}>Edit mode</Typography></div>
-      <div><Typography className={classes.actionBarText}>{unmodified ?  "You haven't made any changes yet" : "WARNING: Any changes you make will be lost if you refresh the page"}</Typography></div>
-      <div className={classes.actionBarButtons}>
-        <ButtonWithConfirmationPopup
-        buttonText="Save all"
-        confirmationText={this.buildConfirmationText(this.props.modifiedTests)}
-        onConfirm={this.props.save}
-        icon={<CloudUploadIcon />}
-        disabled={
-          unmodified ||
-          Object.keys(this.props.modifiedTests).some(name =>
-            !this.props.modifiedTests[name].isValid && !this.props.modifiedTests[name].isDeleted
-          )
-        }
-        color={'primary'}
-        />
-        <ButtonWithConfirmationPopup
-        buttonText={unmodified ? "Cancel" : "Discard"}
-        confirmationText={`Are you sure? ${unmodified ? "" : "All new, modified and deleted tests will be lost!"}`}
-        onConfirm={this.props.cancel}
-        icon={<RefreshIcon />}
-        color={'primary'}
-        />
-      </div>
-    </>
-  );
+      <>
+        <div className={`${classes.modeTag} ${classes.editModeTagColour}`}>
+          <Typography className={classes.modeTagText}>Edit mode</Typography>
+        </div>
+        <div>
+          <Typography className={classes.actionBarText}>
+            {unmodified
+              ? "You haven't made any changes yet"
+              : 'WARNING: Any changes you make will be lost if you refresh the page'}
+          </Typography>
+        </div>
+        <div className={classes.actionBarButtons}>
+          <ButtonWithConfirmationPopup
+            buttonText="Save all"
+            confirmationText={this.buildConfirmationText(this.props.modifiedTests)}
+            onConfirm={this.props.save}
+            icon={<CloudUploadIcon />}
+            disabled={
+              unmodified ||
+              Object.keys(this.props.modifiedTests).some(
+                name =>
+                  !this.props.modifiedTests[name].isValid &&
+                  !this.props.modifiedTests[name].isDeleted,
+              )
+            }
+            color={'primary'}
+          />
+          <ButtonWithConfirmationPopup
+            buttonText={unmodified ? 'Cancel' : 'Discard'}
+            confirmationText={`Are you sure? ${
+              unmodified ? '' : 'All new, modified and deleted tests will be lost!'
+            }`}
+            onConfirm={this.props.cancel}
+            icon={<RefreshIcon />}
+            color={'primary'}
+          />
+        </div>
+      </>
+    );
   };
 
   buildConfirmationText = (modifiedTests: ModifiedTests): ReactElement<any> => {
@@ -161,23 +185,31 @@ class TestActionBar extends React.Component<ActionBarProps> {
       deleted: 0,
       created: 0,
       modified: 0,
-      archived: 0
+      archived: 0,
     };
     Object.keys(modifiedTests).forEach(key => {
-      if (modifiedTests[key].isDeleted) counts.deleted++;
-      else if (modifiedTests[key].isNew) counts.created++;
-      else if (modifiedTests[key].isArchived) counts.archived++;
-      else counts.modified++;
+      if (modifiedTests[key].isDeleted) {
+        counts.deleted++;
+      } else if (modifiedTests[key].isNew) {
+        counts.created++;
+      } else if (modifiedTests[key].isArchived) {
+        counts.archived++;
+      } else {
+        counts.modified++;
+      }
     });
 
-    const statusLine = (status: 'deleted' | 'created' | 'modified' | 'archived') => counts[status] > 0 &&
-      <span>
-        <br />&bull; {`${counts[status]} test${counts[status] !== 1 ? "s" : ""} ${status}`}
-      </span>;
+    const statusLine = (status: 'deleted' | 'created' | 'modified' | 'archived') =>
+      counts[status] > 0 && (
+        <span>
+          <br />
+          &bull; {`${counts[status]} test${counts[status] !== 1 ? 's' : ''} ${status}`}
+        </span>
+      );
 
     return (
       <>
-      Are you sure you want to save these changes?
+        Are you sure you want to save these changes?
         {statusLine('deleted')}
         {statusLine('created')}
         {statusLine('modified')}
@@ -187,20 +219,22 @@ class TestActionBar extends React.Component<ActionBarProps> {
   };
 
   render(): ReactElement<any> {
-    const {classes} = this.props;
+    const { classes } = this.props;
     const classNames = [
       classes.actionBar,
       this.props.editMode && classes.editModeColour,
-      !this.props.editMode && classes.readOnlyModeColour
+      !this.props.editMode && classes.readOnlyModeColour,
     ].join(' ');
 
     return (
       <div className={classNames}>
-        {!this.props.editMode ? (
-          this.props.lockStatus.locked ? this.renderLockedMessageAndButton() : this.renderEditButton()
-        ) : this.renderPublishButtons()}
+        {!this.props.editMode
+          ? this.props.lockStatus.locked
+            ? this.renderLockedMessageAndButton()
+            : this.renderEditButton()
+          : this.renderPublishButtons()}
       </div>
-    )
+    );
   }
 }
 

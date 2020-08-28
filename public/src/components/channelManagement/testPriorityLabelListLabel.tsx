@@ -1,33 +1,27 @@
-import React from "react";
-import {
-  Typography,
-  createStyles,
-  withStyles,
-  WithStyles,
-  Theme,
-} from "@material-ui/core";
+import React from 'react';
+import { Typography, createStyles, withStyles, WithStyles, Theme } from '@material-ui/core';
 
 const styles = ({ palette }: Theme) =>
   createStyles({
     container: {
-      display: "flex",
-      height: "50px",
-      padding: "4px 0",
+      display: 'flex',
+      height: '50px',
+      padding: '4px 0',
     },
     text: {
-      fontSize: "12px",
+      fontSize: '12px',
       color: palette.grey[700],
     },
     dashedLinesContainer: {
-      display: "flex",
-      marginLeft: "4px",
-      "& > * + *": {
-        marginLeft: "2px",
+      display: 'flex',
+      marginLeft: '4px',
+      '& > * + *': {
+        marginLeft: '2px',
       },
     },
     dashedLine: {
-      height: "100%",
-      borderLeft: "1px dashed #9E9E9E",
+      height: '100%',
+      borderLeft: '1px dashed #9E9E9E',
     },
   });
 

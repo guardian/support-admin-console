@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 import {
   Checkbox,
@@ -9,13 +9,13 @@ import {
   WithStyles,
   createStyles,
   withStyles,
-} from "@material-ui/core";
-import { UserCohort } from "./helpers/shared";
+} from '@material-ui/core';
+import { UserCohort } from './helpers/shared';
 
 const styles = ({ spacing }: Theme) =>
   createStyles({
     container: {
-      "& > * + *": {
+      '& > * + *': {
         marginTop: spacing(2),
       },
     },
@@ -24,8 +24,7 @@ const styles = ({ spacing }: Theme) =>
     },
   });
 
-interface TestEditorTargetSupporterStatusSelectorProps
-  extends WithStyles<typeof styles> {
+interface TestEditorTargetSupporterStatusSelectorProps extends WithStyles<typeof styles> {
   selectedCohort: UserCohort;
   onCohortChange: (updatedCohort: UserCohort) => void;
   isDisabled: boolean;
@@ -39,29 +38,25 @@ const TestEditorTargetSupporterStatusSelector: React.FC<TestEditorTargetSupporte
   const onEveryoneSelected = (event: React.ChangeEvent<HTMLInputElement>) => {
     const checked = event.target.checked;
     if (checked) {
-      onCohortChange(UserCohort["Everyone"]);
+      onCohortChange(UserCohort['Everyone']);
     }
   };
 
-  const onNonSupportersSelected = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const onNonSupportersSelected = (event: React.ChangeEvent<HTMLInputElement>) => {
     const checked = event.target.checked;
     if (checked) {
-      onCohortChange(UserCohort["Everyone"]);
-    } else if (selectedCohort === UserCohort["Everyone"]) {
-      onCohortChange(UserCohort["AllExistingSupporters"]);
+      onCohortChange(UserCohort['Everyone']);
+    } else if (selectedCohort === UserCohort['Everyone']) {
+      onCohortChange(UserCohort['AllExistingSupporters']);
     }
   };
 
-  const onAllSupportersSelected = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const onAllSupportersSelected = (event: React.ChangeEvent<HTMLInputElement>) => {
     const checked = event.target.checked;
     if (checked) {
-      onCohortChange(UserCohort["Everyone"]);
-    } else if (selectedCohort === UserCohort["Everyone"]) {
-      onCohortChange(UserCohort["AllNonSupporters"]);
+      onCohortChange(UserCohort['Everyone']);
+    } else if (selectedCohort === UserCohort['Everyone']) {
+      onCohortChange(UserCohort['AllNonSupporters']);
     }
   };
 
@@ -72,7 +67,7 @@ const TestEditorTargetSupporterStatusSelector: React.FC<TestEditorTargetSupporte
         <FormControlLabel
           control={
             <Checkbox
-              checked={selectedCohort === "Everyone"}
+              checked={selectedCohort === 'Everyone'}
               onChange={onEveryoneSelected}
               disabled={isDisabled}
             />
@@ -84,8 +79,8 @@ const TestEditorTargetSupporterStatusSelector: React.FC<TestEditorTargetSupporte
             control={
               <Checkbox
                 checked={
-                  selectedCohort === UserCohort["Everyone"] ||
-                  selectedCohort === UserCohort["AllNonSupporters"]
+                  selectedCohort === UserCohort['Everyone'] ||
+                  selectedCohort === UserCohort['AllNonSupporters']
                 }
                 onChange={onNonSupportersSelected}
                 disabled={isDisabled}
@@ -97,8 +92,8 @@ const TestEditorTargetSupporterStatusSelector: React.FC<TestEditorTargetSupporte
             control={
               <Checkbox
                 checked={
-                  selectedCohort === UserCohort["Everyone"] ||
-                  selectedCohort === UserCohort["AllExistingSupporters"]
+                  selectedCohort === UserCohort['Everyone'] ||
+                  selectedCohort === UserCohort['AllExistingSupporters']
                 }
                 onChange={onAllSupportersSelected}
                 disabled={isDisabled}

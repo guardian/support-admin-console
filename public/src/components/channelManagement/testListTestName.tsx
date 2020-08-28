@@ -1,23 +1,17 @@
-import React from "react";
-import {
-  Typography,
-  createStyles,
-  withStyles,
-  WithStyles,
-  Theme,
-} from "@material-ui/core";
+import React from 'react';
+import { Typography, createStyles, withStyles, WithStyles, Theme } from '@material-ui/core';
 
 const styles = ({}: Theme) =>
   createStyles({
     text: {
-      maxWidth: "190px",
-      fontSize: "12px",
+      maxWidth: '190px',
+      fontSize: '12px',
       fontWeight: 500,
-      lineHeight: "24px",
-      textTransform: "uppercase",
+      lineHeight: '24px',
+      textTransform: 'uppercase',
     },
     textInverted: {
-      color: "#FFFFFF",
+      color: '#FFFFFF',
     },
   });
 
@@ -41,10 +35,8 @@ const TestListTestName: React.FC<TestListTestNameProps> = ({
   }
 
   return (
-    <Typography className={textClasses.join(" ")} noWrap={true}>
-      {nickname
-        ? nickname
-        : name.replace(TEST_NAME_CHARACTERS_TO_STRIP_REGEX, "")}
+    <Typography className={textClasses.join(' ')} noWrap={true}>
+      {nickname ? nickname : name.replace(TEST_NAME_CHARACTERS_TO_STRIP_REGEX, '')}
     </Typography>
   );
 };

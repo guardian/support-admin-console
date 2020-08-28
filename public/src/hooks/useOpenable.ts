@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 const useOpenable = (): [boolean, () => void, () => void] => {
   const [isOpen, setIsOpen] = useState(false);

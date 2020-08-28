@@ -1,37 +1,31 @@
-import React from "react";
-import {
-  createStyles,
-  Theme,
-  Typography,
-  WithStyles,
-  withStyles,
-} from "@material-ui/core";
-import EditableTextField from "../editableTextField";
-import VariantEditorButtonsEditor from "../variantEditorButtonsEditor";
-import { BannerVariant } from "./bannerTestsForm";
-import { getInvalidTemplateError } from "../helpers/copyTemplates";
-import { getEmptyError } from "../helpers/validation";
-import useValidation from "../hooks/useValidation";
-import { Cta } from "../helpers/shared";
+import React from 'react';
+import { createStyles, Theme, Typography, WithStyles, withStyles } from '@material-ui/core';
+import EditableTextField from '../editableTextField';
+import VariantEditorButtonsEditor from '../variantEditorButtonsEditor';
+import { BannerVariant } from './bannerTestsForm';
+import { getInvalidTemplateError } from '../helpers/copyTemplates';
+import { getEmptyError } from '../helpers/validation';
+import useValidation from '../hooks/useValidation';
+import { Cta } from '../helpers/shared';
 
 const styles = ({ palette, spacing }: Theme) =>
   createStyles({
     container: {
-      width: "100%",
+      width: '100%',
       paddingTop: spacing(2),
       paddingLeft: spacing(4),
       paddingRight: spacing(10),
 
-      "& > * + *": {
+      '& > * + *': {
         marginTop: spacing(3),
       },
     },
     hook: {
-      maxWidth: "400px",
+      maxWidth: '400px',
     },
     buttonsSectionContainer: {
       marginTop: spacing(5),
-      "& > * + *": {
+      '& > * + *': {
         marginTop: spacing(3),
       },
     },
@@ -59,21 +53,17 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
   const setValidationStatusForField = useValidation(onValidationChange);
 
   const getHeadingError = getInvalidTemplateError;
-  const onHeadingChanged = (isValid: boolean) =>
-    setValidationStatusForField("heading", isValid);
+  const onHeadingChanged = (isValid: boolean) => setValidationStatusForField('heading', isValid);
   const onHeadingSubmit = (updatedHeading: string) =>
     onVariantChange({ ...variant, heading: updatedHeading });
 
-  const getBodyError = (text: string) =>
-    getEmptyError(text) || getInvalidTemplateError(text);
-  const onBodyChanged = (isValid: boolean) =>
-    setValidationStatusForField("body", isValid);
-  const onBodySubmit = (updatedBody: string) =>
-    onVariantChange({ ...variant, body: updatedBody });
+  const getBodyError = (text: string) => getEmptyError(text) || getInvalidTemplateError(text);
+  const onBodyChanged = (isValid: boolean) => setValidationStatusForField('body', isValid);
+  const onBodySubmit = (updatedBody: string) => onVariantChange({ ...variant, body: updatedBody });
 
   const getHighlightedTextError = getInvalidTemplateError;
   const onHighLightedTextChange = (isValid: boolean) =>
-    setValidationStatusForField("highlightedText", isValid);
+    setValidationStatusForField('highlightedText', isValid);
   const onHighlightedTextSubmit = (updatedHighlightedText: string) =>
     onVariantChange({ ...variant, highlightedText: updatedHighlightedText });
 
@@ -88,7 +78,7 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
   return (
     <div className={classes.container}>
       <EditableTextField
-        text={variant.heading || ""}
+        text={variant.heading || ''}
         onSubmit={onHeadingSubmit}
         label="Header"
         editEnabled={editMode}
@@ -116,7 +106,7 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
       />
 
       <EditableTextField
-        text={variant.highlightedText || ""}
+        text={variant.highlightedText || ''}
         onSubmit={onHighlightedTextSubmit}
         label="Highlighted text"
         editEnabled={editMode}

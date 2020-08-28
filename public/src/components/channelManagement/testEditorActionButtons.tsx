@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Button,
   createStyles,
@@ -11,31 +11,31 @@ import {
   WithStyles,
   Theme,
   Typography,
-} from "@material-ui/core";
-import { grey } from "@material-ui/core/colors";
-import DeleteIcon from "@material-ui/icons/Delete";
-import ArchiveIcon from "@material-ui/icons/Archive";
-import FileCopyIcon from "@material-ui/icons/FileCopy";
-import CreateTestDialog from "./createTestDialog";
-import useOpenable from "../../hooks/useOpenable";
+} from '@material-ui/core';
+import { grey } from '@material-ui/core/colors';
+import DeleteIcon from '@material-ui/icons/Delete';
+import ArchiveIcon from '@material-ui/icons/Archive';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
+import CreateTestDialog from './createTestDialog';
+import useOpenable from '../../hooks/useOpenable';
 
 const styles = ({ spacing, palette }: Theme) =>
   createStyles({
     container: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "space-between",
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
     },
     copyAndArchiveContainer: {
-      "& > * + *": {
+      '& > * + *': {
         marginLeft: spacing(2),
       },
     },
     buttonText: {
-      fontSize: "14px",
+      fontSize: '14px',
       fontWeight: 500,
-      textTransform: "uppercase",
-      letterSpacing: "1px",
+      textTransform: 'uppercase',
+      letterSpacing: '1px',
       color: palette.grey[800],
     },
   });
@@ -62,7 +62,7 @@ const TestEditorActionButtons: React.FC<TestEditorActionButtonsProps> = ({
   testNickname,
   onCopy,
 }: TestEditorActionButtonsProps) => {
-  const DeleteButton = () => {
+  const DeleteButton: React.FC = () => {
     const [isOpen, open, close] = useOpenable();
 
     return (
@@ -74,6 +74,7 @@ const TestEditorActionButtons: React.FC<TestEditorActionButtonsProps> = ({
           onClick={open}
           disabled={isDisabled}
         >
+          {/* eslint-disable-next-line react/prop-types */}
           <Typography className={classes.buttonText}>Delete test</Typography>
         </Button>
         <Dialog
@@ -85,8 +86,7 @@ const TestEditorActionButtons: React.FC<TestEditorActionButtonsProps> = ({
           <DialogTitle id="delete-test-dialog-title">Are you sure?</DialogTitle>
           <DialogContent>
             <DialogContentText id="delete-test-dialog-description">
-              Deleting this test will remove it from the banner tool
-              permanently.
+              Deleting this test will remove it from the banner tool permanently.
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -102,7 +102,7 @@ const TestEditorActionButtons: React.FC<TestEditorActionButtonsProps> = ({
     );
   };
 
-  const ArchiveButton = () => {
+  const ArchiveButton: React.FC = () => {
     const [isOpen, open, close] = useOpenable();
 
     return (
@@ -114,6 +114,7 @@ const TestEditorActionButtons: React.FC<TestEditorActionButtonsProps> = ({
           onClick={open}
           disabled={isDisabled}
         >
+          {/* eslint-disable-next-line react/prop-types */}
           <Typography className={classes.buttonText}>Archive test</Typography>
         </Button>
         <Dialog
@@ -122,13 +123,11 @@ const TestEditorActionButtons: React.FC<TestEditorActionButtonsProps> = ({
           aria-labelledby="archive-test-dialog-title"
           aria-describedby="archive-test-dialog-description"
         >
-          <DialogTitle id="archive-test-dialog-title">
-            Are you sure?
-          </DialogTitle>
+          <DialogTitle id="archive-test-dialog-title">Are you sure?</DialogTitle>
           <DialogContent>
             <DialogContentText id="archive-test-dialog-description">
-              Archiving this test will remove it from the banner tool - you can
-              only restore it with an engineer's help.
+              Archiving this test will remove it from the banner tool - you can only restore it with
+              an engineer&apos;s help.
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -144,7 +143,7 @@ const TestEditorActionButtons: React.FC<TestEditorActionButtonsProps> = ({
     );
   };
 
-  const CopyButton = () => {
+  const CopyButton: React.FC = () => {
     const [isOpen, open, close] = useOpenable();
     return (
       <>
@@ -155,6 +154,7 @@ const TestEditorActionButtons: React.FC<TestEditorActionButtonsProps> = ({
           size="medium"
           disabled={isDisabled}
         >
+          {/* eslint-disable-next-line react/prop-types */}
           <Typography className={classes.buttonText}>Copy test</Typography>
         </Button>
         <CreateTestDialog

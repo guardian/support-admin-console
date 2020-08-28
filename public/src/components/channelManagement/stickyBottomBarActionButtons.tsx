@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from 'react';
 import {
   Button,
   createStyles,
@@ -11,46 +11,45 @@ import {
   Typography,
   WithStyles,
   withStyles,
-} from "@material-ui/core";
+} from '@material-ui/core';
 
-import CloseIcon from "@material-ui/icons/Close";
-import VisibilityIcon from "@material-ui/icons/Visibility";
-import SaveIcon from "@material-ui/icons/Save";
-import EditIcon from "@material-ui/icons/Edit";
-import LockIcon from "@material-ui/icons/Lock";
+import CloseIcon from '@material-ui/icons/Close';
+import SaveIcon from '@material-ui/icons/Save';
+import EditIcon from '@material-ui/icons/Edit';
+import LockIcon from '@material-ui/icons/Lock';
 
-import useOpenable from "../../hooks/useOpenable";
+import useOpenable from '../../hooks/useOpenable';
 
 const styles = ({ spacing }: Theme) =>
   createStyles({
     container: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "space-between",
-      width: "100%",
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      width: '100%',
     },
     leftContainer: {},
     rightContainer: {
-      "& > * + *": {
+      '& > * + *': {
         marginLeft: spacing(1),
       },
     },
     button: {
-      color: "white",
-      borderColor: "white",
+      color: 'white',
+      borderColor: 'white',
     },
     buttonText: {
-      fontSize: "14px",
+      fontSize: '14px',
       fontWeight: 500,
-      textTransform: "uppercase",
-      letterSpacing: "1px",
+      textTransform: 'uppercase',
+      letterSpacing: '1px',
     },
   });
 
-const SAVE_BUTTON_TEST_SELECTED_TEXT = "Save test";
-const SAVE_BUTTON_TEST_NOT_SELECTED_TEXT = "Save changes";
+const SAVE_BUTTON_TEST_SELECTED_TEXT = 'Save test';
+const SAVE_BUTTON_TEST_NOT_SELECTED_TEXT = 'Save changes';
 
-interface StickyBottomBarActionButtonsProps {
+interface StickyBottomBarActionButtonsProps extends WithStyles<typeof styles> {
   isInEditMode: boolean;
   hasTestSelected: boolean;
   isLocked: boolean;
@@ -60,9 +59,7 @@ interface StickyBottomBarActionButtonsProps {
   cancel: () => void;
 }
 
-const StickyBottomBarActionButtons: React.FC<
-  StickyBottomBarActionButtonsProps & WithStyles<typeof styles>
-> = ({
+const StickyBottomBarActionButtons: React.FC<StickyBottomBarActionButtonsProps> = ({
   classes,
   isInEditMode,
   hasTestSelected,
@@ -71,18 +68,20 @@ const StickyBottomBarActionButtons: React.FC<
   requestLock,
   save,
   cancel,
-}) => {
-  const CancelButton = () => {
+}: StickyBottomBarActionButtonsProps) => {
+  const CancelButton: React.FC = () => {
     const [isOpen, open, close] = useOpenable();
 
     return (
       <>
         <Button
           variant="outlined"
+          // eslint-disable-next-line react/prop-types
           className={classes.button}
           startIcon={<CloseIcon />}
           onClick={open}
         >
+          {/*eslint-disable-next-line react/prop-types */}
           <Typography className={classes.buttonText}>Discard</Typography>
         </Button>
         <Dialog
@@ -94,8 +93,8 @@ const StickyBottomBarActionButtons: React.FC<
           <DialogTitle id="cancel-dialog-title">Discard changes?</DialogTitle>
           <DialogContent>
             <DialogContentText id="cancel-dialog-description">
-              You have unsaved changes - these will be lost if you move on.
-              Please consider saving your work now.
+              You have unsaved changes - these will be lost if you move on. Please consider saving
+              your work now.
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -114,17 +113,7 @@ const StickyBottomBarActionButtons: React.FC<
     );
   };
 
-  const PreviewButton = () => (
-    <Button
-      variant="outlined"
-      className={classes.button}
-      startIcon={<VisibilityIcon />}
-    >
-      <Typography className={classes.buttonText}>Preview</Typography>
-    </Button>
-  );
-
-  const SaveButton = () => (
+  const SaveButton: React.FC = () => (
     <Button
       variant="contained"
       color="primary"
@@ -132,36 +121,39 @@ const StickyBottomBarActionButtons: React.FC<
       startIcon={<SaveIcon />}
       onClick={save}
     >
+      {/*eslint-disable-next-line react/prop-types */}
       <Typography className={classes.buttonText}>
-        {hasTestSelected
-          ? SAVE_BUTTON_TEST_SELECTED_TEXT
-          : SAVE_BUTTON_TEST_NOT_SELECTED_TEXT}
+        {hasTestSelected ? SAVE_BUTTON_TEST_SELECTED_TEXT : SAVE_BUTTON_TEST_NOT_SELECTED_TEXT}
       </Typography>
     </Button>
   );
 
-  const EditButton = () => (
+  const EditButton: React.FC = () => (
     <Button
       variant="outlined"
+      // eslint-disable-next-line react/prop-types
       className={classes.button}
       startIcon={<EditIcon />}
       onClick={requestLock}
     >
+      {/*eslint-disable-next-line react/prop-types */}
       <Typography className={classes.buttonText}>Enter edit mode</Typography>
     </Button>
   );
 
-  const TakeControlButton = () => {
+  const TakeControlButton: React.FC = () => {
     const [isOpen, open, close] = useOpenable();
 
     return (
       <>
         <Button
           variant="outlined"
+          // eslint-disable-next-line react/prop-types
           className={classes.button}
           startIcon={<LockIcon />}
           onClick={open}
         >
+          {/*eslint-disable-next-line react/prop-types */}
           <Typography className={classes.buttonText}>Take control</Typography>
         </Button>
         <Dialog
@@ -170,13 +162,11 @@ const StickyBottomBarActionButtons: React.FC<
           aria-labelledby="take-control-dialog-title"
           aria-describedby="take-control-dialog-description"
         >
-          <DialogTitle id="take-control-dialog-title">
-            Take control?
-          </DialogTitle>
+          <DialogTitle id="take-control-dialog-title">Take control?</DialogTitle>
           <DialogContent>
             <DialogContentText id="take-control-dialog-description">
-              The current editor will lose any unsaved work if you take control.
-              If they were live recently, please check with them first.
+              The current editor will lose any unsaved work if you take control. If they were live
+              recently, please check with them first.
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -193,9 +183,7 @@ const StickyBottomBarActionButtons: React.FC<
   };
   return (
     <div className={classes.container}>
-      <div className={classes.leftContainer}>
-        {isInEditMode && <CancelButton />}
-      </div>
+      <div className={classes.leftContainer}>{isInEditMode && <CancelButton />}</div>
 
       <div className={classes.rightContainer}>
         {isInEditMode ? (
