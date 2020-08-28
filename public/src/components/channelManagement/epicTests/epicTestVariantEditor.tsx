@@ -118,19 +118,6 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
     this.updateVariant(variant => ({ ...variant, [fieldName]: updatedBool }));
   };
 
-  renderDeleteVariantButton = (): React.ReactElement => {
-    return (
-      this.props.editMode && (
-        <ButtonWithConfirmationPopup
-          buttonText="Delete variant"
-          confirmationText={`Are you sure? This cannot be undone!`}
-          onConfirm={(): void => this.props.onDelete()}
-          icon={<DeleteSweepIcon />}
-        />
-      )
-    );
-  };
-
   renderVariantEditor = (variant: EpicVariant): React.ReactNode => {
     const { classes } = this.props;
     return (
