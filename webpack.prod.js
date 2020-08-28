@@ -1,5 +1,7 @@
-import path from 'path';
-import TSConfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const path = require('path');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const TSConfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 module.exports = {
   entry: './public/src/main.tsx',
