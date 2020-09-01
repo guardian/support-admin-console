@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 const useValidatableField = (
   defaultHelperText: string,
-  getError: (value: string) => string | null
+  getError: (value: string) => string | null,
 ): [string, (value: string) => void, boolean, string, () => boolean] => {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState('');
   const [hasError, setHasError] = useState(false);
   const [helperText, setHelperText] = useState(defaultHelperText);
 

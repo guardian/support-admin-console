@@ -2,16 +2,16 @@ import React from 'react';
 import Drawer from '@material-ui/core/Drawer';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import {Link} from "react-router-dom";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import makeStyles from "@material-ui/core/styles/makeStyles";
-import RRControlPanelLogo from "./rrControlPanelLogo";
+import { Link } from 'react-router-dom';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import RRControlPanelLogo from './rrControlPanelLogo';
 
 const useStyles = makeStyles({
   list: {
     width: '20vw',
-    minWidth: '260px'
+    minWidth: '260px',
   },
 
   drawerHeading: {
@@ -23,12 +23,12 @@ const useStyles = makeStyles({
     paddingLeft: '10px',
     marginBottom: '12%',
     boxSizing: 'border-box',
-    borderBottom: '1px solid #616161'
+    borderBottom: '1px solid #616161',
   },
 
   link: {
     textDecoration: 'none',
-    color: '#616161'
+    color: '#616161',
   },
 
   disabledListItem: {
@@ -36,8 +36,8 @@ const useStyles = makeStyles({
     marginLeft: '15%',
     width: '85%',
     '&:after': {
-      content: ' (disabled)'
-    }
+      content: ' (disabled)',
+    },
   },
 
   listItem: {
@@ -45,10 +45,10 @@ const useStyles = makeStyles({
     marginLeft: '15%',
     width: '85%',
     '&:hover': {
-      backgroundColor: '#ededed'
+      backgroundColor: '#ededed',
     },
     '&:focus': {
-      backgroundColor: '#dcdcdc'
+      backgroundColor: '#dcdcdc',
     },
   },
 
@@ -57,8 +57,8 @@ const useStyles = makeStyles({
   },
 
   fullWidthRule: {
-    width: "100%",
-    borderTop: "1px solid #616161"
+    width: '100%',
+    borderTop: '1px solid #616161',
   },
 
   sectionHeader: {
@@ -71,7 +71,7 @@ const useStyles = makeStyles({
     fontStyle: 'normal',
     fontWeight: 'normal',
     fontSize: '18px',
-    lineHeight: '20px'
+    lineHeight: '20px',
   },
 
   topSectionHeader: {
@@ -82,22 +82,21 @@ const useStyles = makeStyles({
     fontStyle: 'normal',
     fontWeight: 'normal',
     fontSize: '18px',
-    lineHeight: '20px'
-  }
-
+    lineHeight: '20px',
+  },
 });
 
 const anchor = 'left';
 
-export default function NavDrawer() {
+export default function NavDrawer(): React.ReactElement {
   const classes = useStyles();
   const [state, setState] = React.useState({
-    left: false
+    left: false,
   });
 
   const toggleDrawer = (anchor: string, open: boolean) => (
     event: React.KeyboardEvent | React.MouseEvent,
-  ) => {
+  ): void => {
     if (
       event.type === 'keydown' &&
       ((event as React.KeyboardEvent).key === 'Tab' ||
@@ -109,7 +108,7 @@ export default function NavDrawer() {
     setState({ ...state, [anchor]: open });
   };
 
-  const list = (anchor: string) => (
+  const list = (anchor: string): React.ReactElement => (
     <div
       className={classes.list}
       role="presentation"
@@ -122,42 +121,46 @@ export default function NavDrawer() {
 
       <div>
         <h2 className={classes.topSectionHeader}>Channel Management</h2>
-        <Link key='Epic' to='/epic-tests' className={classes.link}>
-          <ListItem className={classes.listItem} button key='Epic'>
-            <ListItemText primary='Epic'/>
+        <Link key="Epic" to="/epic-tests" className={classes.link}>
+          <ListItem className={classes.listItem} button key="Epic">
+            <ListItemText primary="Epic" />
           </ListItem>
         </Link>
-        <Link key='Banner' to='/banner-tests' className={classes.link}>
-          <ListItem className={classes.listItem} button key='Banner'>
-            <ListItemText primary='Banner'/>
+        <Link key="Banner" to="/banner-tests" className={classes.link}>
+          <ListItem className={classes.listItem} button key="Banner">
+            <ListItemText primary="Banner" />
           </ListItem>
         </Link>
       </div>
 
       <div>
         <h2 className={classes.sectionHeader}>Admin Console</h2>
-        <Link key='Switches' to='/switches' className={classes.link}>
-          <ListItem className={classes.listItem} button key='Switches'>
-            <ListItemText primary='Switches' />
+        <Link key="Switches" to="/switches" className={classes.link}>
+          <ListItem className={classes.listItem} button key="Switches">
+            <ListItemText primary="Switches" />
           </ListItem>
         </Link>
-        <Link key='Amounts' to='/amounts' className={classes.link}>
-          <ListItem className={classes.listItem} button key='Amounts'>
-            <ListItemText primary='Amounts' />
+        <Link key="Amounts" to="/amounts" className={classes.link}>
+          <ListItem className={classes.listItem} button key="Amounts">
+            <ListItemText primary="Amounts" />
           </ListItem>
         </Link>
-        <Link key='Contribution Types' to='/contribution-types' className={classes.link} >
-          <ListItem className={classes.listItem} button key='Contribution Types'>
-            <ListItemText primary='Contribution Types' />
+        <Link key="Contribution Types" to="/contribution-types" className={classes.link}>
+          <ListItem className={classes.listItem} button key="Contribution Types">
+            <ListItemText primary="Contribution Types" />
           </ListItem>
         </Link>
       </div>
 
       <div>
         <h2 className={classes.sectionHeader}>Help Centre</h2>
-        <a href='https://docs.google.com/document/d/15XeUDHMSt7Urv0I3LyAAhC8kcC2JRWtkiD1xlEVitcE' key='Testing FAQ' className={classes.link}>
-          <ListItem className={classes.listItem} button key='Testing FAQ'>
-            <ListItemText primary='Testing FAQ'/>
+        <a
+          href="https://docs.google.com/document/d/15XeUDHMSt7Urv0I3LyAAhC8kcC2JRWtkiD1xlEVitcE"
+          key="Testing FAQ"
+          className={classes.link}
+        >
+          <ListItem className={classes.listItem} button key="Testing FAQ">
+            <ListItemText primary="Testing FAQ" />
           </ListItem>
         </a>
       </div>
@@ -166,20 +169,20 @@ export default function NavDrawer() {
 
   return (
     <div>
-        <React.Fragment key={anchor}>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={toggleDrawer(anchor, true)}
-            edge="start"
-            className={classes.menuButton}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Drawer anchor={anchor} open={state[anchor]} onClose={toggleDrawer(anchor, false)}>
-            {list(anchor)}
-          </Drawer>
-        </React.Fragment>
+      <React.Fragment key={anchor}>
+        <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          onClick={toggleDrawer(anchor, true)}
+          edge="start"
+          className={classes.menuButton}
+        >
+          <MenuIcon />
+        </IconButton>
+        <Drawer anchor={anchor} open={state[anchor]} onClose={toggleDrawer(anchor, false)}>
+          {list(anchor)}
+        </Drawer>
+      </React.Fragment>
     </div>
   );
 }

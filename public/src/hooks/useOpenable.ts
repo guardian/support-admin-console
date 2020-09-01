@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 const useOpenable = (): [boolean, () => void, () => void] => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const open = () => setIsOpen(true);
-  const close = () => setIsOpen(false);
+  const open = (): void => setIsOpen(true);
+  const close = (): void => setIsOpen(false);
 
   return [isOpen, open, close];
 };

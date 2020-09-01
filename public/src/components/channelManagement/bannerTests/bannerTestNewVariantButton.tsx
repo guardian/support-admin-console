@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from 'react';
 import {
   Button,
   createStyles,
@@ -12,34 +12,35 @@ import {
   Typography,
   WithStyles,
   withStyles,
-} from "@material-ui/core";
+} from '@material-ui/core';
 
-import AddIcon from "@material-ui/icons/Add";
-import CloseIcon from "@material-ui/icons/Close";
+import AddIcon from '@material-ui/icons/Add';
+import CloseIcon from '@material-ui/icons/Close';
 
-import useOpenable from "../../../hooks/useOpenable";
-import useValidatableField from "../../../hooks/useValidatableField";
+import useOpenable from '../../../hooks/useOpenable';
+import useValidatableField from '../../../hooks/useValidatableField';
 
 import {
   getInvalidCharactersError,
   getEmptyError,
   createGetDuplicateError,
-} from "../helpers/validation";
+} from '../helpers/validation';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing, palette }: Theme) =>
   createStyles({
     button: {
-      width: "100%",
-      display: "flex",
-      justifyContent: "start",
+      width: '100%',
+      display: 'flex',
+      justifyContent: 'start',
       border: `1px dashed ${palette.grey[700]}`,
-      borderRadius: "4px",
-      padding: "12px 16px",
+      borderRadius: '4px',
+      padding: '12px 16px',
     },
     container: {
-      display: "flex",
-      alignItems: "center",
-      "& > * + *": {
+      display: 'flex',
+      alignItems: 'center',
+      '& > * + *': {
         marginLeft: spacing(1),
       },
     },
@@ -47,13 +48,13 @@ const styles = ({ spacing, palette }: Theme) =>
       fontSize: 14,
       fontWeight: 500,
       letterSpacing: 1,
-      textTransform: "uppercase",
+      textTransform: 'uppercase',
     },
     dialogHeader: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "space-between",
-      paddingRight: "8px",
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingRight: '8px',
     },
   });
 
@@ -74,21 +75,19 @@ const BannerTestNewVariantButton: React.FC<BannerTestNewVariantButtonProps> = ({
   const [isOpen, open, close] = useOpenable();
 
   const getDuplicateError = createGetDuplicateError(existingNames);
-  const getNameError = (value: string) =>
-    getInvalidCharactersError(value) ||
-    getEmptyError(value) ||
-    getDuplicateError(value);
+  const getNameError = (value: string): string | null =>
+    getInvalidCharactersError(value) || getEmptyError(value) || getDuplicateError(value);
 
   const [name, setname, hasError, helperText, check] = useValidatableField(
     NAME_DEFAULT_HELPER_TEXT,
-    getNameError
+    getNameError,
   );
 
-  const updateName = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const updateName = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setname(event.target.value);
   };
 
-  const submit = () => {
+  const submit = (): void => {
     if (check()) {
       createVariant(name);
       close();
@@ -111,9 +110,7 @@ const BannerTestNewVariantButton: React.FC<BannerTestNewVariantButtonProps> = ({
         fullWidth
       >
         <div className={classes.dialogHeader}>
-          <DialogTitle id="new-variant-dialog-title">
-            Create a new variant
-          </DialogTitle>
+          <DialogTitle id="new-variant-dialog-title">Create a new variant</DialogTitle>
           <IconButton onClick={close} aria-label="close">
             <CloseIcon />
           </IconButton>

@@ -1,31 +1,26 @@
-import React from "react";
-import { Region } from "../../../utils/models";
-import { ArticlesViewedSettings, UserCohort } from "../helpers/shared";
-import { articleCountTemplate } from "../helpers/copyTemplates";
-import {
-  createStyles,
-  Theme,
-  Typography,
-  WithStyles,
-  withStyles,
-} from "@material-ui/core";
-import { BannerTest, BannerVariant } from "./bannerTestsForm";
-import { defaultArticlesViewedSettings } from "../articlesViewedEditor";
-import BannerTestVariantsEditor from "./bannerTestVariantsEditor";
-import TestEditorHeader from "../testEditorHeader";
-import TestEditorLiveSwitch from "../testEditorLiveSwitch";
-import TestEditorMinArticlesViewedInput from "../testEditorMinArticlesViewedInput";
-import TestEditorTargetAudienceSelector from "../testEditorTargetAudienceSelector";
-import TestEditorArticleCountEditor from "../testEditorArticleCountEditor";
-import TestEditorActionButtons from "../testEditorActionButtons";
-import useValidation from "../hooks/useValidation";
+import React from 'react';
+import { Region } from '../../../utils/models';
+import { ArticlesViewedSettings, UserCohort } from '../helpers/shared';
+import { articleCountTemplate } from '../helpers/copyTemplates';
+import { createStyles, Theme, Typography, WithStyles, withStyles } from '@material-ui/core';
+import { BannerTest, BannerVariant } from './bannerTestsForm';
+import { defaultArticlesViewedSettings } from '../articlesViewedEditor';
+import BannerTestVariantsEditor from './bannerTestVariantsEditor';
+import TestEditorHeader from '../testEditorHeader';
+import TestEditorLiveSwitch from '../testEditorLiveSwitch';
+import TestEditorMinArticlesViewedInput from '../testEditorMinArticlesViewedInput';
+import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
+import TestEditorArticleCountEditor from '../testEditorArticleCountEditor';
+import TestEditorActionButtons from '../testEditorActionButtons';
+import useValidation from '../hooks/useValidation';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing, palette }: Theme) =>
   createStyles({
     container: {
-      width: "100%",
-      height: "max-content",
-      background: "#FFFFFF",
+      width: '100%',
+      height: 'max-content',
+      background: '#FFFFFF',
       paddingTop: spacing(6),
       paddingRight: spacing(12),
       paddingLeft: spacing(3),
@@ -34,7 +29,7 @@ const styles = ({ spacing, palette }: Theme) =>
       paddingBottom: spacing(3),
       borderBottom: `1px solid ${palette.grey[500]}`,
 
-      "& > * + *": {
+      '& > * + *': {
         marginTop: spacing(2),
       },
     },
@@ -43,7 +38,7 @@ const styles = ({ spacing, palette }: Theme) =>
       paddingBottom: spacing(6),
       borderBottom: `1px solid ${palette.grey[500]}`,
 
-      "& > * + *": {
+      '& > * + *': {
         marginTop: spacing(4),
       },
     },
@@ -60,9 +55,8 @@ const styles = ({ spacing, palette }: Theme) =>
 
 const copyHasTemplate = (test: BannerTest, template: string): boolean =>
   test.variants.some(
-    (variant) =>
-      (variant.heading && variant.heading.includes(template)) ||
-      variant.body.includes(template)
+    variant =>
+      (variant.heading && variant.heading.includes(template)) || variant.body.includes(template),
   );
 
 interface BannerTestEditorProps extends WithStyles<typeof styles> {
@@ -97,24 +91,22 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
   testNicknames,
   createTest,
 }: BannerTestEditorProps) => {
-  const isEditable = () => {
+  const isEditable = (): boolean => {
     return editMode && !isDeleted && !isArchived;
   };
 
   const setValidationStatusForField = useValidation(onValidationChange);
 
-  const onVariantsListValidationChange = (isValid: boolean) =>
-    setValidationStatusForField("variantsList", isValid);
+  const onVariantsListValidationChange = (isValid: boolean): void =>
+    setValidationStatusForField('variantsList', isValid);
 
-  const onMinArticlesViewedValidationChanged = (isValid: boolean) =>
-    setValidationStatusForField("minArticlesViewed", isValid);
+  const onMinArticlesViewedValidationChanged = (isValid: boolean): void =>
+    setValidationStatusForField('minArticlesViewed', isValid);
 
-  const onArticlesViewedSettingsValidationChanged = (isValid: boolean) =>
-    setValidationStatusForField("articlesViewedSettings", isValid);
+  const onArticlesViewedSettingsValidationChanged = (isValid: boolean): void =>
+    setValidationStatusForField('articlesViewedSettings', isValid);
 
-  const getArticlesViewedSettings = (
-    test: BannerTest
-  ): ArticlesViewedSettings | undefined => {
+  const getArticlesViewedSettings = (test: BannerTest): ArticlesViewedSettings | undefined => {
     if (!!test.articlesViewedSettings) {
       return test.articlesViewedSettings;
     }
@@ -124,7 +116,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
     return undefined;
   };
 
-  const updateTest = (updatedTest: BannerTest) => {
+  const updateTest = (updatedTest: BannerTest): void => {
     onChange({
       ...updatedTest,
       // To save dotcom from having to work this out
@@ -132,7 +124,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
     });
   };
 
-  const onLiveSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onLiveSwitchChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     updateTest({ ...test, isOn: event.target.checked });
   };
 
@@ -156,7 +148,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
   };
 
   const onArticlesViewedSettingsChange = (
-    updatedArticlesViewedSettings?: ArticlesViewedSettings
+    updatedArticlesViewedSettings?: ArticlesViewedSettings,
   ): void => {
     updateTest({
       ...test,
@@ -164,7 +156,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
     });
   };
 
-  const onCopy = (name: string, nickname: string) => {
+  const onCopy = (name: string, nickname: string): void => {
     createTest({ ...test, name: name, nickname: nickname });
   };
 
@@ -182,7 +174,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
         </div>
 
         <div className={classes.sectionContainer}>
-          <Typography variant={"h3"} className={classes.sectionHeader}>
+          <Typography variant={'h3'} className={classes.sectionHeader}>
             Variants
           </Typography>
           <div>
@@ -197,7 +189,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
         </div>
 
         <div className={classes.sectionContainer}>
-          <Typography variant={"h3"} className={classes.sectionHeader}>
+          <Typography variant={'h3'} className={classes.sectionHeader}>
             Display rules
           </Typography>
 
@@ -210,7 +202,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
         </div>
 
         <div className={classes.sectionContainer}>
-          <Typography variant={"h3"} className={classes.sectionHeader}>
+          <Typography variant={'h3'} className={classes.sectionHeader}>
             Target audience
           </Typography>
 
@@ -224,7 +216,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
         </div>
 
         <div className={classes.sectionContainer}>
-          <Typography variant={"h3"} className={classes.sectionHeader}>
+          <Typography variant={'h3'} className={classes.sectionHeader}>
             Article count
           </Typography>
 

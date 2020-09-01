@@ -1,28 +1,23 @@
-import React from "react";
-import {
-  createStyles,
-  Theme,
-  withStyles,
-  WithStyles,
-  Typography,
-} from "@material-ui/core";
-import TextField from "@material-ui/core/TextField";
+import React from 'react';
+import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core';
+import TextField from '@material-ui/core/TextField';
 
-const styles = ({ typography, spacing }: Theme) =>
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+const styles = ({ typography }: Theme) =>
   createStyles({
     container: {
       marginLeft: 0,
-      display: "flex",
-      "justify-content": "space-between",
+      display: 'flex',
+      'justify-content': 'space-between',
     },
     label: {
       fontSize: typography.pxToRem(22),
       fontWeight: typography.fontWeightMedium,
-      color: "black",
+      color: 'black',
     },
     button: {
-      marginTop: "30px",
-      height: "36px",
+      marginTop: '30px',
+      height: '36px',
     },
   });
 
@@ -31,7 +26,7 @@ interface Validation {
   onChange: (valid: boolean) => void; //called every time the validation status of this field changes
 }
 
-type Variant = "outlined" | "filled";
+type Variant = 'outlined' | 'filled';
 
 interface EditableTextFieldProps extends WithStyles<typeof styles> {
   text: string;
@@ -54,22 +49,19 @@ interface EditableTextFieldState {
   currentText: string;
 }
 
-class EditableTextField extends React.Component<
-  EditableTextFieldProps,
-  EditableTextFieldState
-> {
+class EditableTextField extends React.Component<EditableTextFieldProps, EditableTextFieldState> {
   state: EditableTextFieldState = {
     currentText: this.props.text,
   };
 
-  componentDidMount() {
+  componentDidMount(): void {
     if (this.props.validation) {
       // Report initial validation status
       this.props.validation.onChange(this.isValid());
     }
   }
 
-  componentDidUpdate(prevProps: EditableTextFieldProps) {
+  componentDidUpdate(prevProps: EditableTextFieldProps): void {
     if (prevProps.text !== this.props.text) {
       this.setState({
         currentText: this.props.text,
@@ -78,10 +70,9 @@ class EditableTextField extends React.Component<
   }
 
   isValid = (): boolean =>
-    !this.props.validation ||
-    this.props.validation.getError(this.state.currentText) === null;
+    !this.props.validation || this.props.validation.getError(this.state.currentText) === null;
 
-  onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  onChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const newValue = event.target.value;
 
     this.setState({
@@ -89,9 +80,7 @@ class EditableTextField extends React.Component<
     });
   };
 
-  onExitField = (
-    event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
-  ): void => {
+  onExitField = (): void => {
     if (this.props.validation) {
       this.props.validation.onChange(this.isValid());
     }
@@ -104,15 +93,14 @@ class EditableTextField extends React.Component<
 
     const error: string | null | undefined =
       this.props.errorMessage ||
-      (this.props.validation &&
-        this.props.validation.getError(this.state.currentText));
+      (this.props.validation && this.props.validation.getError(this.state.currentText));
 
     return (
       <>
         <div className={classes.container}>
           <TextField
             label={this.props.label}
-            variant={this.props.variant || "outlined"}
+            variant={this.props.variant || 'outlined'}
             required={this.props.required}
             multiline={this.props.textarea}
             rows={this.props.height}

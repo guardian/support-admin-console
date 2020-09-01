@@ -1,16 +1,11 @@
-import TestsForm, { InnerComponentProps, updateTest } from "../testEditor";
-import React from "react";
-import { FrontendSettingsType } from "../../../utils/requests";
-import Sidebar from "../sidebar";
-import BannerTestEditor from "./bannerTestEditor";
-import TestsFormLayout from "../testsFormLayout";
-import {
-  ArticlesViewedSettings,
-  Cta,
-  Test,
-  UserCohort,
-} from "../helpers/shared";
-import { Region } from "../../../utils/models";
+import TestsForm, { InnerComponentProps, updateTest } from '../testEditor';
+import React from 'react';
+import { FrontendSettingsType } from '../../../utils/requests';
+import Sidebar from '../sidebar';
+import BannerTestEditor from './bannerTestEditor';
+import TestsFormLayout from '../testsFormLayout';
+import { ArticlesViewedSettings, Cta, Test, UserCohort } from '../helpers/shared';
+import { Region } from '../../../utils/models';
 
 export interface BannerVariant {
   name: string;
@@ -32,10 +27,7 @@ export interface BannerTest extends Test {
   articlesViewedSettings?: ArticlesViewedSettings;
 }
 
-const createDefaultBannerTest = (
-  newTestName: string,
-  newTestNickname: string
-) => ({
+const createDefaultBannerTest = (newTestName: string, newTestNickname: string): BannerTest => ({
   name: newTestName,
   nickname: newTestNickname,
   isOn: false,
@@ -63,13 +55,13 @@ const BannerTestsForm: React.FC<Props> = ({
   save,
   cancel,
   editMode,
-}) => {
-  const createTest = (name: string, nickname: string) => {
+}: Props) => {
+  const createTest = (name: string, nickname: string): void => {
     const newTests = [...tests, createDefaultBannerTest(name, nickname)];
     onTestsChange(newTests, name);
   };
 
-  const selectedTest = tests.find((t) => t.name === selectedTestName);
+  const selectedTest = tests.find(t => t.name === selectedTestName);
 
   return (
     <TestsFormLayout
@@ -90,35 +82,26 @@ const BannerTestsForm: React.FC<Props> = ({
           <BannerTestEditor
             test={selectedTest}
             hasChanged={!!modifiedTests[selectedTestName]}
-            onChange={(updatedTest) =>
+            onChange={(updatedTest): void =>
               onTestsChange(updateTest(tests, updatedTest), updatedTest.name)
             }
             onValidationChange={onTestErrorStatusChange(selectedTestName)}
             visible
             editMode={editMode}
-            onDelete={() => onTestDelete(selectedTestName)}
-            onArchive={() => onTestArchive(selectedTestName)}
-            isDeleted={
-              modifiedTests[selectedTestName] &&
-              modifiedTests[selectedTestName].isDeleted
-            }
+            onDelete={(): void => onTestDelete(selectedTestName)}
+            onArchive={(): void => onTestArchive(selectedTestName)}
+            isDeleted={modifiedTests[selectedTestName] && modifiedTests[selectedTestName].isDeleted}
             isArchived={
-              modifiedTests[selectedTestName] &&
-              modifiedTests[selectedTestName].isArchived
+              modifiedTests[selectedTestName] && modifiedTests[selectedTestName].isArchived
             }
-            isNew={
-              modifiedTests[selectedTestName] &&
-              modifiedTests[selectedTestName].isNew
-            }
-            createTest={(newTest: BannerTest) => {
+            isNew={modifiedTests[selectedTestName] && modifiedTests[selectedTestName].isNew}
+            createTest={(newTest: BannerTest): void => {
               const newTests = [...tests, newTest];
               onTestsChange(newTests, newTest.name);
             }}
-            testNames={tests.map((test) => test.name)}
+            testNames={tests.map(test => test.name)}
             testNicknames={
-              tests
-                .map((test) => test.nickname)
-                .filter((nickname) => !!nickname) as string[]
+              tests.map(test => test.nickname).filter(nickname => !!nickname) as string[]
             }
           />
         ) : null

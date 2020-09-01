@@ -1,47 +1,43 @@
-import React, { Component } from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import Switchboard from "./components/switchboard";
-import ContributionTypesForm from "./components/contributionTypes";
-import AmountsForm from "./components/amounts/amounts";
-import EpicTestsForm from "./components/channelManagement/epicTests/epicTestsForm";
-import BannerTestsForm from "./components/channelManagement/bannerTests/bannerTestsForm";
-import {
-  createStyles,
-  Theme,
-  WithStyles,
-  withStyles,
-} from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import AppBar from "@material-ui/core/AppBar";
-import { CSSProperties } from "@material-ui/core/styles/withStyles";
-import NavDrawer from "./components/drawer";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import IndexPage from "./components/indexPage";
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import Switchboard from './components/switchboard';
+import ContributionTypesForm from './components/contributionTypes';
+import AmountsForm from './components/amounts/amounts';
+import EpicTestsForm from './components/channelManagement/epicTests/epicTestsForm';
+import BannerTestsForm from './components/channelManagement/bannerTests/bannerTestsForm';
+import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import AppBar from '@material-ui/core/AppBar';
+import { CSSProperties } from '@material-ui/core/styles/withStyles';
+import NavDrawer from './components/drawer';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import IndexPage from './components/indexPage';
 
-const styles = ({ palette, spacing, mixins, typography, transitions }: Theme) =>
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+const styles = ({ palette, mixins, typography, transitions }: Theme) =>
   createStyles({
     root: {
-      display: "flex",
+      display: 'flex',
     },
     appContainer: {
-      display: "flex",
-      flexDirection: "column",
-      width: "100vw",
-      height: "100vh",
+      display: 'flex',
+      flexDirection: 'column',
+      width: '100vw',
+      height: '100vh',
     },
     appBar: {
-      transition: transitions.create(["margin", "width"], {
+      transition: transitions.create(['margin', 'width'], {
         easing: transitions.easing.sharp,
         duration: transitions.duration.leavingScreen,
       }),
     },
     appContent: {
-      display: "flex",
-      flexDirection: "column",
-      overflow: "hidden",
+      display: 'flex',
+      flexDirection: 'column',
+      overflow: 'hidden',
       flexGrow: 1,
       backgroundColor: palette.grey[100],
     },
@@ -52,20 +48,15 @@ const styles = ({ palette, spacing, mixins, typography, transitions }: Theme) =>
     },
   });
 
-interface Props extends WithStyles<typeof styles> {}
+type Props = WithStyles<typeof styles>;
 
 const AppRouter = withStyles(styles)(({ classes }: Props) => {
-  const createComponent = (component: JSX.Element, displayName: string) => (
+  const createComponent = (component: JSX.Element, displayName: string): React.ReactElement => (
     <div className={classes.appContainer}>
       <AppBar position="relative" className={classes.appBar}>
         <Toolbar>
           <NavDrawer />
-          <Typography
-            className={classes.heading}
-            variant="h1"
-            color="inherit"
-            noWrap
-          >
+          <Typography className={classes.heading} variant="h1" color="inherit" noWrap>
             {displayName}
           </Typography>
         </Toolbar>
@@ -81,33 +72,33 @@ const AppRouter = withStyles(styles)(({ classes }: Props) => {
         <Route
           exact
           path="/"
-          render={() => createComponent(<IndexPage />, "Home Page")}
+          render={(): React.ReactElement => createComponent(<IndexPage />, 'Home Page')}
         />
         <Route
           path="/switches"
-          render={() => createComponent(<Switchboard />, "Switches")}
+          render={(): React.ReactElement => createComponent(<Switchboard />, 'Switches')}
         />
         <Route
           path="/contribution-types"
-          render={() =>
-            createComponent(<ContributionTypesForm />, "Contribution Types")
+          render={(): React.ReactElement =>
+            createComponent(<ContributionTypesForm />, 'Contribution Types')
           }
         />
         <Route
           path="/amounts"
-          render={() => createComponent(<AmountsForm />, "Amounts")}
+          render={(): React.ReactElement => createComponent(<AmountsForm />, 'Amounts')}
         />
         <Route
           path="/epic-tests"
-          render={() => createComponent(<EpicTestsForm />, "Epic Tests")}
+          render={(): React.ReactElement => createComponent(<EpicTestsForm />, 'Epic Tests')}
         />
         <Route
           path="/banner-tests"
-          render={() => createComponent(<BannerTestsForm />, "Banner Tests")}
+          render={(): React.ReactElement => createComponent(<BannerTestsForm />, 'Banner Tests')}
         />
       </div>
     </Router>
   );
 });
 
-ReactDOM.render(<AppRouter />, document.getElementById("root"));
+ReactDOM.render(<AppRouter />, document.getElementById('root'));

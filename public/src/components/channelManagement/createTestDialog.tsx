@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 import {
   Button,
   Dialog,
@@ -8,37 +8,33 @@ import {
   createStyles,
   IconButton,
   TextField,
-  Theme,
   WithStyles,
   withStyles,
-} from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
+} from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
 
-import useValidatableField from "../../hooks/useValidatableField";
+import useValidatableField from '../../hooks/useValidatableField';
 
 import {
   getInvalidCharactersError,
   getEmptyError,
   createGetDuplicateError,
-} from "./helpers/validation";
+} from './helpers/validation';
 
-const styles = ({}: Theme) =>
-  createStyles({
-    dialogHeader: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "space-between",
-      paddingRight: "8px",
-    },
-  });
+const styles = createStyles({
+  dialogHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingRight: '8px',
+  },
+});
 
-const NAME_DEFAULT_HELPER_TEXT = "Date format: YYYY-MM-DD_TEST_NAME";
-const NICKNAME_DEFAULT_HELPER_TEXT =
-  "Pick a name for your test that's easy to recognise";
+const NAME_DEFAULT_HELPER_TEXT = 'Date format: YYYY-MM-DD_TEST_NAME';
+const NICKNAME_DEFAULT_HELPER_TEXT = "Pick a name for your test that's easy to recognise";
 
-type Mode = "NEW" | "COPY";
-
-interface CreateTestDialogProps {
+type Mode = 'NEW' | 'COPY';
+interface CreateTestDialogProps extends WithStyles<typeof styles> {
   isOpen: boolean;
   close: () => void;
   existingNames: string[];
@@ -49,7 +45,7 @@ interface CreateTestDialogProps {
   createTest: (name: string, nickname: string) => void;
 }
 
-const CreateTestDialog = ({
+const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
   classes,
   isOpen,
   close,
@@ -59,29 +55,24 @@ const CreateTestDialog = ({
   copiedTestName,
   copiedTestNickname,
   createTest,
-}: CreateTestDialogProps & WithStyles<typeof styles>) => {
+}: CreateTestDialogProps) => {
   const getDuplicateNameError = createGetDuplicateError(existingNames);
-  const getNameError = (value: string) =>
-    getInvalidCharactersError(value) ||
-    getEmptyError(value) ||
-    getDuplicateNameError(value);
+  const getNameError = (value: string): string | null =>
+    getInvalidCharactersError(value) || getEmptyError(value) || getDuplicateNameError(value);
 
-  const [
-    name,
-    setName,
-    nameHasError,
-    nameHelperText,
-    checkName,
-  ] = useValidatableField(NAME_DEFAULT_HELPER_TEXT, getNameError);
+  const [name, setName, nameHasError, nameHelperText, checkName] = useValidatableField(
+    NAME_DEFAULT_HELPER_TEXT,
+    getNameError,
+  );
 
   useEffect(() => {
-    if (mode === "COPY" && copiedTestName) {
+    if (mode === 'COPY' && copiedTestName) {
       setName(`Copy of ${copiedTestName}`);
     }
   }, []);
 
   const getDuplicateNicknameError = createGetDuplicateError(existingNicknames);
-  const getNicknameError = (value: string) =>
+  const getNicknameError = (value: string): string | null =>
     getEmptyError(value) || getDuplicateNicknameError(value);
 
   const [
@@ -93,7 +84,7 @@ const CreateTestDialog = ({
   ] = useValidatableField(NICKNAME_DEFAULT_HELPER_TEXT, getNicknameError);
 
   useEffect(() => {
-    if (mode === "COPY" && copiedTestNickname) {
+    if (mode === 'COPY' && copiedTestNickname) {
       setNickname(`Copy of ${copiedTestNickname}`);
     }
   }, []);
@@ -105,29 +96,25 @@ const CreateTestDialog = ({
     return nameIsValid && nicknameIsValid;
   };
 
-  const submit = () => {
+  const submit = (): void => {
     if (check()) {
       createTest(name, nickname);
       close();
     }
   };
 
-  const updateName = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const updateName = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setName(event.target.value);
   };
-  const updateNickname = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const updateNickname = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setNickname(event.target.value);
   };
 
   return (
-    <Dialog
-      open={isOpen}
-      onClose={close}
-      aria-labelledby="create-test-dialog-title"
-    >
+    <Dialog open={isOpen} onClose={close} aria-labelledby="create-test-dialog-title">
       <div className={classes.dialogHeader}>
         <DialogTitle id="create-test-dialog-title">
-          {mode === "NEW" ? "Create a new test" : "Name your new test"}
+          {mode === 'NEW' ? 'Create a new test' : 'Name your new test'}
         </DialogTitle>
         <IconButton onClick={close} aria-label="close">
           <CloseIcon />
@@ -158,7 +145,7 @@ const CreateTestDialog = ({
       </DialogContent>
       <DialogActions>
         <Button onClick={submit} color="primary">
-          {mode === "NEW" ? "Create test" : "Confirm"}
+          {mode === 'NEW' ? 'Create test' : 'Confirm'}
         </Button>
       </DialogActions>
     </Dialog>

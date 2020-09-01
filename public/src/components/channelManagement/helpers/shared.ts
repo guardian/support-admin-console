@@ -1,4 +1,4 @@
-import { ValidationStatus } from "./validation";
+import { ValidationStatus } from './validation';
 
 export interface Test {
   name: string;
@@ -26,15 +26,15 @@ export interface Cta {
 }
 
 export const defaultCta = {
-  text: "Support the Guardian",
-  baseUrl: "https://support.theguardian.com/contribute",
+  text: 'Support the Guardian',
+  baseUrl: 'https://support.theguardian.com/contribute',
 };
 
 export enum UserCohort {
-  Everyone = "Everyone",
-  AllExistingSupporters = "AllExistingSupporters",
-  AllNonSupporters = "AllNonSupporters",
-  PostAskPauseSingleContributors = "PostAskPauseSingleContributors",
+  Everyone = 'Everyone',
+  AllExistingSupporters = 'AllExistingSupporters',
+  AllNonSupporters = 'AllNonSupporters',
+  PostAskPauseSingleContributors = 'PostAskPauseSingleContributors',
 }
 
 // Stores tests which have been modified
@@ -53,12 +53,12 @@ export interface TestEditorState {
 }
 
 export enum TickerEndType {
-  unlimited = "unlimited",
-  hardstop = "hardstop",
+  unlimited = 'unlimited',
+  hardstop = 'hardstop',
 }
 export enum TickerCountType {
-  money = "money",
-  people = "people",
+  money = 'money',
+  people = 'people',
 }
 interface TickerCopy {
   countLabel: string;

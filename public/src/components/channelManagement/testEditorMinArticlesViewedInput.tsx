@@ -1,21 +1,16 @@
-import React from "react";
-import {
-  createStyles,
-  withStyles,
-  WithStyles,
-  Theme,
-  Typography,
-} from "@material-ui/core";
+import React from 'react';
+import { createStyles, withStyles, WithStyles, Theme, Typography } from '@material-ui/core';
 
-import EditableTextField from "./editableTextField";
-import { getNotNumberError } from "./helpers/validation";
-import useValidation from "./hooks/useValidation";
+import EditableTextField from './editableTextField';
+import { getNotNumberError } from './helpers/validation';
+import useValidation from './hooks/useValidation';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing }: Theme) =>
   createStyles({
     container: {
-      display: "flex",
-      alignItems: "center",
+      display: 'flex',
+      alignItems: 'center',
     },
     text: {
       marginLeft: spacing(1),
@@ -23,8 +18,7 @@ const styles = ({ spacing }: Theme) =>
     },
   });
 
-interface TestEditorMinArticlesViewedInputProps
-  extends WithStyles<typeof styles> {
+interface TestEditorMinArticlesViewedInputProps extends WithStyles<typeof styles> {
   minArticles: number;
   isDisabled: boolean;
   onValidationChange: (isValid: boolean) => void;
@@ -41,9 +35,9 @@ const TestEditorMinArticlesViewedInput: React.FC<TestEditorMinArticlesViewedInpu
   const setValidationStatusForField = useValidation(onValidationChange);
 
   const getError = getNotNumberError;
-  const onChange = (isValid: boolean) =>
-    setValidationStatusForField("minArticlesViewedInput", isValid);
-  const onSubmit = (updatedMinArticles: string) => {
+  const onChange = (isValid: boolean): void =>
+    setValidationStatusForField('minArticlesViewedInput', isValid);
+  const onSubmit = (updatedMinArticles: string): void => {
     const number = Number(updatedMinArticles);
     if (!Number.isNaN(number)) {
       onUpdate(number);

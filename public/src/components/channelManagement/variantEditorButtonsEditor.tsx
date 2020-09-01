@@ -1,28 +1,29 @@
-import React from "react";
-import { createStyles, Theme, WithStyles, withStyles } from "@material-ui/core";
-import VariantEditorButtonEditor from "./variantEditorButtonEditor";
-import { Cta } from "./helpers/shared";
+import React from 'react';
+import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core';
+import VariantEditorButtonEditor from './variantEditorButtonEditor';
+import { Cta } from './helpers/shared';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing }: Theme) =>
   createStyles({
     container: {
-      display: "grid",
-      gridTemplateColumns: "1fr 1fr",
+      display: 'grid',
+      gridTemplateColumns: '1fr 1fr',
       gridGap: spacing(2),
     },
   });
 
 const DEFAULT_PRIMARY_CTA = {
-  text: "Support the Guardian",
-  baseUrl: "https://support.theguardian.com/contribute",
+  text: 'Support the Guardian',
+  baseUrl: 'https://support.theguardian.com/contribute',
 };
 
 const DEFAULT_SECONDARY_CTA = {
-  text: "Support the Guardian",
-  baseUrl: "https://support.theguardian.com/contribute",
+  text: 'Support the Guardian',
+  baseUrl: 'https://support.theguardian.com/contribute',
 };
 
-interface VariantEditorButtonsEditorProps {
+interface VariantEditorButtonsEditorProps extends WithStyles<typeof styles> {
   primaryCta?: Cta;
   secondaryCta?: Cta;
   updatePrimaryCta: (updatedCta?: Cta) => void;
@@ -30,16 +31,14 @@ interface VariantEditorButtonsEditorProps {
   isDisabled: boolean;
 }
 
-const VariantEditorButtonsEditor: React.FC<
-  VariantEditorButtonsEditorProps & WithStyles<typeof styles>
-> = ({
+const VariantEditorButtonsEditor: React.FC<VariantEditorButtonsEditorProps> = ({
   classes,
   primaryCta,
   secondaryCta,
   updatePrimaryCta,
   updateSecondaryCta,
   isDisabled,
-}) => {
+}: VariantEditorButtonsEditorProps) => {
   return (
     <div className={classes.container}>
       <VariantEditorButtonEditor

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Theme,
   createStyles,
@@ -7,29 +7,29 @@ import {
   ExpansionPanel,
   ExpansionPanelDetails,
   ExpansionPanelActions,
-} from "@material-ui/core";
-import { BannerVariant } from "./bannerTestsForm";
-import BannerTestVariantEditor from "./bannerTestVariantEditor";
-import TestEditorVariantSummary from "../testEditorVariantSummary";
-import VariantDeleteButton from "../variantDeleteButton";
-import useValidation from "../hooks/useValidation";
+} from '@material-ui/core';
+import { BannerVariant } from './bannerTestsForm';
+import BannerTestVariantEditor from './bannerTestVariantEditor';
+import TestEditorVariantSummary from '../testEditorVariantSummary';
+import VariantDeleteButton from '../variantDeleteButton';
+import useValidation from '../hooks/useValidation';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing, palette }: Theme) =>
   createStyles({
     expansionPanelsContainer: {
-      "& > * + *": {
+      '& > * + *': {
         marginTop: spacing(1),
       },
     },
     expansionPanel: {
       border: `1px solid ${palette.grey[700]}`,
       borderRadius: 4,
-      boxShadow: "none",
+      boxShadow: 'none',
     },
   });
 
-interface BannerTestVariantEditorsAccordionProps
-  extends WithStyles<typeof styles> {
+interface BannerTestVariantEditorsAccordionProps extends WithStyles<typeof styles> {
   variants: BannerVariant[];
   onVariantsListChange: (variantList: BannerVariant[]) => void;
   testName: string;
@@ -45,32 +45,24 @@ const BannerTestVariantEditorsAccordion: React.FC<BannerTestVariantEditorsAccord
   editMode,
   onValidationChange,
 }: BannerTestVariantEditorsAccordionProps) => {
-  const [expandedVariantKey, setExpandedVariantKey] = useState<
-    string | undefined
-  >(undefined);
+  const [expandedVariantKey, setExpandedVariantKey] = useState<string | undefined>(undefined);
 
   const setValidationStatusForField = useValidation(onValidationChange);
 
   const onVariantChange = (updatedVariant: BannerVariant): void => {
-    const updatedVariantList: BannerVariant[] = variants.map((variant) =>
-      variant.name === updatedVariant.name ? updatedVariant : variant
+    const updatedVariantList: BannerVariant[] = variants.map(variant =>
+      variant.name === updatedVariant.name ? updatedVariant : variant,
     );
     onVariantsListChange(updatedVariantList);
   };
 
   const onVariantDelete = (variantName: string): void => {
-    const updatedVariantList = variants.filter(
-      (variant) => variant.name !== variantName
-    );
+    const updatedVariantList = variants.filter(variant => variant.name !== variantName);
     onVariantsListChange(updatedVariantList);
   };
 
-  const onExpansionPanelChange = (key: string) => (
-    event: React.ChangeEvent<{}>
-  ) => {
-    expandedVariantKey === key
-      ? setExpandedVariantKey(undefined)
-      : setExpandedVariantKey(key);
+  const onExpansionPanelChange = (key: string) => (): void => {
+    expandedVariantKey === key ? setExpandedVariantKey(undefined) : setExpandedVariantKey(key);
   };
 
   const createVariantKey = (variantName: string): string => {
@@ -95,11 +87,11 @@ const BannerTestVariantEditorsAccordion: React.FC<BannerTestVariantEditorsAccord
                 variant={variant}
                 onVariantChange={onVariantChange}
                 editMode={editMode}
-                onDelete={() => {
+                onDelete={(): void => {
                   onVariantDelete(variant.name);
                   setValidationStatusForField(variant.name, true);
                 }}
-                onValidationChange={(isValid: boolean) =>
+                onValidationChange={(isValid: boolean): void =>
                   setValidationStatusForField(variant.name, isValid)
                 }
               />
@@ -107,7 +99,7 @@ const BannerTestVariantEditorsAccordion: React.FC<BannerTestVariantEditorsAccord
             <ExpansionPanelActions>
               <VariantDeleteButton
                 isDisabled={!editMode}
-                onConfirm={() => onVariantDelete(variant.name)}
+                onConfirm={(): void => onVariantDelete(variant.name)}
               />
             </ExpansionPanelActions>
           </ExpansionPanel>

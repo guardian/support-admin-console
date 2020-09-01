@@ -1,14 +1,15 @@
-import React from "react";
-import { Theme, createStyles, WithStyles, withStyles } from "@material-ui/core";
-import { BannerVariant } from "./bannerTestsForm";
-import BannerTestVariantEditorsAccordion from "./bannerTestVariantEditorsAccordion";
-import BannerTestNewVariantButton from "./bannerTestNewVariantButton";
-import { defaultCta } from "../helpers/shared";
+import React from 'react';
+import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core';
+import { BannerVariant } from './bannerTestsForm';
+import BannerTestVariantEditorsAccordion from './bannerTestVariantEditorsAccordion';
+import BannerTestNewVariantButton from './bannerTestNewVariantButton';
+import { defaultCta } from '../helpers/shared';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing }: Theme) =>
   createStyles({
     container: {
-      "& > * + *": {
+      '& > * + *': {
         marginTop: spacing(1),
       },
     },
@@ -30,13 +31,13 @@ const BannerTestVariantsEditor: React.FC<BannerTestVariantsEditorProps> = ({
   editMode,
   onValidationChange,
 }: BannerTestVariantsEditorProps) => {
-  const createVariant = (name: string) => {
+  const createVariant = (name: string): void => {
     const newVariant: BannerVariant = {
       name: name,
       heading: undefined,
-      body: "",
+      body: '',
       highlightedText:
-        "Support the Guardian from as little as %%CURRENCY_SYMBOL%%1 – and it only takes a minute. Thank you.",
+        'Support the Guardian from as little as %%CURRENCY_SYMBOL%%1 – and it only takes a minute. Thank you.',
       cta: defaultCta,
     };
 
@@ -54,7 +55,7 @@ const BannerTestVariantsEditor: React.FC<BannerTestVariantsEditorProps> = ({
       />
 
       <BannerTestNewVariantButton
-        existingNames={variants.map((variant) => variant.name)}
+        existingNames={variants.map(variant => variant.name)}
         createVariant={createVariant}
         isDisabled={!editMode}
       />

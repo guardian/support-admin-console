@@ -1,25 +1,20 @@
-import React from "react";
-import {
-  createStyles,
-  withStyles,
-  WithStyles,
-  Theme,
-  Typography,
-} from "@material-ui/core";
+import React from 'react';
+import { createStyles, withStyles, WithStyles, Theme, Typography } from '@material-ui/core';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ palette }: Theme) =>
   createStyles({
     container: {
-      display: "flex",
-      alignItems: "flex-start",
-      justifyContent: "space-between",
+      display: 'flex',
+      alignItems: 'flex-start',
+      justifyContent: 'space-between',
     },
     mainHeader: {
-      fontSize: "32px",
-      fontWeight: "normal",
+      fontSize: '32px',
+      fontWeight: 'normal',
     },
     secondaryHeader: {
-      fontSize: "14px",
+      fontSize: '14px',
       color: palette.grey[700],
     },
   });
@@ -42,9 +37,7 @@ const TestEditorHeader: React.FC<TestEditorHeaderProps> = ({
       <Typography variant="h2" className={classes.mainHeader}>
         {mainHeader}
       </Typography>
-      <Typography className={classes.secondaryHeader}>
-        {secondaryHeader}
-      </Typography>
+      <Typography className={classes.secondaryHeader}>{secondaryHeader}</Typography>
     </header>
   );
 };

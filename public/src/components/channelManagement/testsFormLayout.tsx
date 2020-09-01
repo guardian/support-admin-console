@@ -1,50 +1,45 @@
-import * as React from "react";
-import {
-  createStyles,
-  Theme,
-  Typography,
-  withStyles,
-  WithStyles,
-} from "@material-ui/core";
-import StickyBottomBar from "./stickyBottomBar";
-import { LockStatus } from "./helpers/shared";
+import * as React from 'react';
+import { createStyles, Theme, Typography, withStyles, WithStyles } from '@material-ui/core';
+import StickyBottomBar from './stickyBottomBar';
+import { LockStatus } from './helpers/shared';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing, typography }: Theme) =>
   createStyles({
     viewTextContainer: {
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      alignItems: "center",
-      marginTop: "-50px",
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginTop: '-50px',
     },
     viewText: {
       fontSize: typography.pxToRem(16),
     },
     body: {
-      display: "flex",
-      overflow: "hidden",
+      display: 'flex',
+      overflow: 'hidden',
       flexGrow: 1,
-      width: "100%",
-      height: "100%",
+      width: '100%',
+      height: '100%',
     },
     leftCol: {
-      height: "100%",
-      overflowY: "auto",
-      background: "white",
+      height: '100%',
+      overflowY: 'auto',
+      background: 'white',
       paddingTop: spacing(6),
       paddingLeft: spacing(6),
       paddingRight: spacing(6),
     },
     rightCol: {
-      overflowY: "auto",
+      overflowY: 'auto',
       flexGrow: 1,
-      display: "flex",
-      justifyContent: "center",
+      display: 'flex',
+      justifyContent: 'center',
     },
   });
 
-interface Props {
+interface Props extends WithStyles<typeof styles> {
   sidebar: JSX.Element;
   testEditor: JSX.Element | null;
   selectedTestName?: string;
@@ -56,7 +51,7 @@ interface Props {
   cancel: () => void;
 }
 
-const TestsFormLayout: React.FC<Props & WithStyles<typeof styles>> = ({
+const TestsFormLayout: React.FC<Props> = ({
   classes,
   sidebar,
   testEditor,
@@ -67,7 +62,7 @@ const TestsFormLayout: React.FC<Props & WithStyles<typeof styles>> = ({
   requestTakeControl,
   requestLock,
   lockStatus,
-}) => {
+}: Props) => {
   return (
     <>
       <div className={classes.body}>
@@ -81,9 +76,7 @@ const TestsFormLayout: React.FC<Props & WithStyles<typeof styles>> = ({
               <Typography className={classes.viewText}>
                 Select an existing test from the menu,
               </Typography>
-              <Typography className={classes.viewText}>
-                or create a new one
-              </Typography>
+              <Typography className={classes.viewText}>or create a new one</Typography>
             </div>
           )}
         </div>

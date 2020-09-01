@@ -1,37 +1,32 @@
-import React from "react";
-import {
-  createStyles,
-  Theme,
-  Typography,
-  WithStyles,
-  withStyles,
-} from "@material-ui/core";
-import EditableTextField from "../editableTextField";
-import VariantEditorButtonsEditor from "../variantEditorButtonsEditor";
-import { BannerVariant } from "./bannerTestsForm";
-import { getInvalidTemplateError } from "../helpers/copyTemplates";
-import { getEmptyError } from "../helpers/validation";
-import useValidation from "../hooks/useValidation";
-import { Cta } from "../helpers/shared";
+import React from 'react';
+import { createStyles, Theme, Typography, WithStyles, withStyles } from '@material-ui/core';
+import EditableTextField from '../editableTextField';
+import VariantEditorButtonsEditor from '../variantEditorButtonsEditor';
+import { BannerVariant } from './bannerTestsForm';
+import { getInvalidTemplateError } from '../helpers/copyTemplates';
+import { getEmptyError } from '../helpers/validation';
+import useValidation from '../hooks/useValidation';
+import { Cta } from '../helpers/shared';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ palette, spacing }: Theme) =>
   createStyles({
     container: {
-      width: "100%",
+      width: '100%',
       paddingTop: spacing(2),
       paddingLeft: spacing(4),
       paddingRight: spacing(10),
 
-      "& > * + *": {
+      '& > * + *': {
         marginTop: spacing(3),
       },
     },
     hook: {
-      maxWidth: "400px",
+      maxWidth: '400px',
     },
     buttonsSectionContainer: {
       marginTop: spacing(5),
-      "& > * + *": {
+      '& > * + *': {
         marginTop: spacing(3),
       },
     },
@@ -59,36 +54,34 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
   const setValidationStatusForField = useValidation(onValidationChange);
 
   const getHeadingError = getInvalidTemplateError;
-  const onHeadingChanged = (isValid: boolean) =>
-    setValidationStatusForField("heading", isValid);
-  const onHeadingSubmit = (updatedHeading: string) =>
+  const onHeadingChanged = (isValid: boolean): void =>
+    setValidationStatusForField('heading', isValid);
+  const onHeadingSubmit = (updatedHeading: string): void =>
     onVariantChange({ ...variant, heading: updatedHeading });
 
-  const getBodyError = (text: string) =>
+  const getBodyError = (text: string): string | null =>
     getEmptyError(text) || getInvalidTemplateError(text);
-  const onBodyChanged = (isValid: boolean) =>
-    setValidationStatusForField("body", isValid);
-  const onBodySubmit = (updatedBody: string) =>
+  const onBodyChanged = (isValid: boolean): void => setValidationStatusForField('body', isValid);
+  const onBodySubmit = (updatedBody: string): void =>
     onVariantChange({ ...variant, body: updatedBody });
 
   const getHighlightedTextError = getInvalidTemplateError;
-  const onHighLightedTextChange = (isValid: boolean) =>
-    setValidationStatusForField("highlightedText", isValid);
-  const onHighlightedTextSubmit = (updatedHighlightedText: string) =>
+  const onHighLightedTextChange = (isValid: boolean): void =>
+    setValidationStatusForField('highlightedText', isValid);
+  const onHighlightedTextSubmit = (updatedHighlightedText: string): void =>
     onVariantChange({ ...variant, highlightedText: updatedHighlightedText });
 
-  const updatePrimaryCta = (updatedCta?: Cta) => {
+  const updatePrimaryCta = (updatedCta?: Cta): void => {
     onVariantChange({ ...variant, cta: updatedCta });
   };
-
-  const updateSecondaryCta = (updatedCta?: Cta) => {
+  const updateSecondaryCta = (updatedCta?: Cta): void => {
     onVariantChange({ ...variant, secondaryCta: updatedCta });
   };
 
   return (
     <div className={classes.container}>
       <EditableTextField
-        text={variant.heading || ""}
+        text={variant.heading || ''}
         onSubmit={onHeadingSubmit}
         label="Header"
         editEnabled={editMode}
@@ -116,7 +109,7 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
       />
 
       <EditableTextField
-        text={variant.highlightedText || ""}
+        text={variant.highlightedText || ''}
         onSubmit={onHighlightedTextSubmit}
         label="Highlighted text"
         editEnabled={editMode}
