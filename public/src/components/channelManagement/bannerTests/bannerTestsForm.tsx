@@ -57,8 +57,13 @@ const BannerTestsForm: React.FC<Props> = ({
   editMode,
 }: Props) => {
   const createTest = (name: string, nickname: string): void => {
-    const newTests = [...tests, createDefaultBannerTest(name, nickname)];
-    onTestsChange(newTests, name);
+    if (Object.keys(modifiedTests).length > 0) {
+      alert('Please either save or discard before creating a test.');
+    } else {
+      const newTests = [...tests, createDefaultBannerTest(name, nickname)];
+      onTestsChange(newTests, name);
+      onSelectedTestName(name);
+    }
   };
 
   const selectedTest = tests.find(t => t.name === selectedTestName);

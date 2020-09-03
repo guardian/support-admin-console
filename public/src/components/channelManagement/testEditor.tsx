@@ -265,7 +265,7 @@ const TestEditor = <T extends Test>(
     };
 
     onSelectedTestName = (testName: string): void => {
-      if (this.state.selectedTestName && this.state.editMode) {
+      if (Object.keys(this.state.modifiedTests).length > 0) {
         alert('Please either save or discard before selecting another test.');
       } else {
         this.setState({
