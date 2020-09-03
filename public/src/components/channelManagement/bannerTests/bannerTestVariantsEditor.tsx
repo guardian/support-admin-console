@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core';
 import { BannerVariant } from './bannerTestsForm';
 import BannerTestVariantEditorsAccordion from './bannerTestVariantEditorsAccordion';
@@ -31,6 +31,16 @@ const BannerTestVariantsEditor: React.FC<BannerTestVariantsEditorProps> = ({
   editMode,
   onValidationChange,
 }: BannerTestVariantsEditorProps) => {
+  const [selectedVariantKey, setSelectedVariantKey] = useState<string | null>(null);
+
+  // unselect a variant if the test changes
+  useEffect(() => {
+    setSelectedVariantKey(null);
+  }, [testName]);
+
+  const onVariantSelected = (variantKey: string): void =>
+    setSelectedVariantKey(variantKey === selectedVariantKey ? null : variantKey);
+
   const createVariant = (name: string): void => {
     const newVariant: BannerVariant = {
       name: name,
@@ -42,16 +52,21 @@ const BannerTestVariantsEditor: React.FC<BannerTestVariantsEditorProps> = ({
     };
 
     onVariantsListChange([...variants, newVariant]);
+    onVariantSelected(name);
   };
+
+  const variantKeys = variants.map(variant => `${testName}-${variant.name}`);
 
   return (
     <div className={classes.container}>
       <BannerTestVariantEditorsAccordion
         variants={variants}
+        variantKeys={variantKeys}
         onVariantsListChange={onVariantsListChange}
-        testName={testName}
         editMode={editMode}
         onValidationChange={onValidationChange}
+        selectedVariantKey={selectedVariantKey}
+        onVariantSelected={onVariantSelected}
       />
 
       <BannerTestNewVariantButton
