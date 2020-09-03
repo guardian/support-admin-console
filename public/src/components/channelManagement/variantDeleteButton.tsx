@@ -22,6 +22,12 @@ const VariantEditorButtonsEditor: React.FC<VariantEditorButtonsEditorProps> = ({
   onConfirm,
 }: VariantEditorButtonsEditorProps) => {
   const [isOpen, open, close] = useOpenable();
+
+  const submit = (): void => {
+    onConfirm();
+    close();
+  };
+
   return (
     <>
       <IconButton onClick={open} disabled={isDisabled}>
@@ -43,7 +49,7 @@ const VariantEditorButtonsEditor: React.FC<VariantEditorButtonsEditorProps> = ({
           <Button color="primary" onClick={close}>
             Cancel
           </Button>
-          <Button color="primary" onClick={onConfirm}>
+          <Button color="primary" onClick={submit}>
             Delete variant
           </Button>
         </DialogActions>
