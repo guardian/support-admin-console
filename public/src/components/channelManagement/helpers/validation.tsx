@@ -61,8 +61,9 @@ export const getNotNumberError = (text: string): string | null =>
 const DUPLICATE_ERROR_HELPER_TEXT = 'Name already exists - please try another';
 
 export const createGetDuplicateError = (existing: string[]): ((text: string) => string | null) => {
+  const existingLowerCased = existing.map(value => value.toLowerCase());
   const getDuplicateError = (text: string): string | null => {
-    if (existing.includes(text)) {
+    if (existingLowerCased.includes(text.toLowerCase())) {
       return DUPLICATE_ERROR_HELPER_TEXT;
     }
     return null;
