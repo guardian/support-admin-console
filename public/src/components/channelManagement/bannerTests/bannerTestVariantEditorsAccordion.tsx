@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Theme,
   createStyles,
@@ -31,22 +31,24 @@ const styles = ({ spacing, palette }: Theme) =>
 
 interface BannerTestVariantEditorsAccordionProps extends WithStyles<typeof styles> {
   variants: BannerVariant[];
+  variantKeys: string[];
   onVariantsListChange: (variantList: BannerVariant[]) => void;
-  testName: string;
   editMode: boolean;
   onValidationChange: (isValid: boolean) => void;
+  selectedVariantKey: string | null;
+  onVariantSelected: (variantKey: string) => void;
 }
 
 const BannerTestVariantEditorsAccordion: React.FC<BannerTestVariantEditorsAccordionProps> = ({
   classes,
   variants,
+  variantKeys,
   onVariantsListChange,
-  testName,
   editMode,
   onValidationChange,
+  selectedVariantKey,
+  onVariantSelected,
 }: BannerTestVariantEditorsAccordionProps) => {
-  const [expandedVariantKey, setExpandedVariantKey] = useState<string | undefined>(undefined);
-
   const setValidationStatusForField = useValidation(onValidationChange);
 
   const onVariantChange = (updatedVariant: BannerVariant): void => {
@@ -61,24 +63,15 @@ const BannerTestVariantEditorsAccordion: React.FC<BannerTestVariantEditorsAccord
     onVariantsListChange(updatedVariantList);
   };
 
-  const onExpansionPanelChange = (key: string) => (): void => {
-    expandedVariantKey === key ? setExpandedVariantKey(undefined) : setExpandedVariantKey(key);
-  };
-
-  const createVariantKey = (variantName: string): string => {
-    return `${testName}${variantName}`;
-  };
-
   return (
     <div className={classes.expansionPanelsContainer}>
       {variants.map((variant, index) => {
-        const key = createVariantKey(variant.name);
-
+        const variantKey = variantKeys[index];
         return (
           <ExpansionPanel
-            key={index}
-            expanded={expandedVariantKey === key}
-            onChange={onExpansionPanelChange(key)}
+            key={variant.name}
+            expanded={variantKey === selectedVariantKey}
+            onChange={(): void => onVariantSelected(variantKey)}
             className={classes.expansionPanel}
           >
             <TestEditorVariantSummary name={variant.name} />

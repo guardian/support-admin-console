@@ -118,8 +118,13 @@ const TestEditor = <T extends Test>(
       );
     };
 
-    save = (tests: T[]) => (): void => {
+    save = (): void => {
+      // TODO - remove the concept of modifiedTests and simplify
       // TODO - implement dialog in StickyBottomBar?
+      if (this.state.tests == null) {
+        return;
+      }
+
       if (
         Object.keys(this.state.modifiedTests).some(
           testName => !this.state.modifiedTests[testName].isValid,
@@ -129,7 +134,7 @@ const TestEditor = <T extends Test>(
         return;
       }
 
-      const testsToArchive: T[] = tests.filter(
+      const testsToArchive: T[] = this.state.tests.filter(
         test =>
           this.state.modifiedTests[test.name] && this.state.modifiedTests[test.name].isArchived,
       );
@@ -140,7 +145,10 @@ const TestEditor = <T extends Test>(
         if (notOk) {
           alert(`Failed to archive ${numTestsToArchive} test${numTestsToArchive !== 1 ? 's' : ''}`);
         } else {
-          const updatedTests: T[] = tests.filter(test => {
+          if (this.state.tests == null) {
+            return;
+          }
+          const updatedTests: T[] = this.state.tests.filter(test => {
             const modifiedTestData = this.state.modifiedTests[test.name];
             return !(
               modifiedTestData &&
@@ -225,7 +233,7 @@ const TestEditor = <T extends Test>(
         },
         () => {
           if (this.state.tests !== null) {
-            this.save(this.state.tests)();
+            this.save();
           }
         },
       );
@@ -250,14 +258,14 @@ const TestEditor = <T extends Test>(
         },
         () => {
           if (this.state.tests !== null) {
-            this.save(this.state.tests)();
+            this.save();
           }
         },
       );
     };
 
     onSelectedTestName = (testName: string): void => {
-      if (this.state.selectedTestName && this.state.editMode) {
+      if (Object.keys(this.state.modifiedTests).length > 0) {
         alert('Please either save or discard before selecting another test.');
       } else {
         this.setState({
@@ -295,7 +303,7 @@ const TestEditor = <T extends Test>(
                 requestTakeControl={this.requestTestsTakeControl}
                 requestLock={this.requestTestsLock}
                 lockStatus={this.state.lockStatus}
-                save={this.save(this.state.tests)}
+                save={this.save}
                 cancel={this.cancel}
                 editMode={this.state.editMode}
               />
