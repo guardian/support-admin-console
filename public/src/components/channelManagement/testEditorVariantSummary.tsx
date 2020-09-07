@@ -5,7 +5,7 @@ import {
   WithStyles,
   Theme,
   Typography,
-  ExpansionPanelSummary,
+  AccordionSummary,
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
@@ -53,7 +53,7 @@ const TestEditorVariantSummary: React.FC<TestEditorVariantSummaryProps> = ({
   isInEditMode,
 }: TestEditorVariantSummaryProps) => {
   return (
-    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
       <div className={classes.container}>
         <div className={classes.nameContainer}>
           <InsertDriveFileIcon className={classes.icon} />
@@ -68,7 +68,7 @@ const TestEditorVariantSummary: React.FC<TestEditorVariantSummaryProps> = ({
           isDisabled={isInEditMode}
         />
       </div>
-    </ExpansionPanelSummary>
+    </AccordionSummary>
   );
 };
 
