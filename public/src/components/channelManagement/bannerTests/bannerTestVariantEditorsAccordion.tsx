@@ -74,7 +74,11 @@ const BannerTestVariantEditorsAccordion: React.FC<BannerTestVariantEditorsAccord
             onChange={(): void => onVariantSelected(variantKey)}
             className={classes.expansionPanel}
           >
-            <TestEditorVariantSummary name={variant.name} />
+            <TestEditorVariantSummary
+              name={variant.name}
+              testName={testName}
+              isInEditMode={editMode}
+            />
             <ExpansionPanelDetails>
               <BannerTestVariantEditor
                 variant={variant}
