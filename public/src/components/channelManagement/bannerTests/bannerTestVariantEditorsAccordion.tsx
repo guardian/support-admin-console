@@ -33,6 +33,7 @@ interface BannerTestVariantEditorsAccordionProps extends WithStyles<typeof style
   variants: BannerVariant[];
   variantKeys: string[];
   onVariantsListChange: (variantList: BannerVariant[]) => void;
+  testName: string;
   editMode: boolean;
   onValidationChange: (isValid: boolean) => void;
   selectedVariantKey: string | null;
@@ -44,6 +45,7 @@ const BannerTestVariantEditorsAccordion: React.FC<BannerTestVariantEditorsAccord
   variants,
   variantKeys,
   onVariantsListChange,
+  testName,
   editMode,
   onValidationChange,
   selectedVariantKey,

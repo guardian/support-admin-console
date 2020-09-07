@@ -63,6 +63,7 @@ const BannerTestVariantsEditor: React.FC<BannerTestVariantsEditorProps> = ({
         variants={variants}
         variantKeys={variantKeys}
         onVariantsListChange={onVariantsListChange}
+        testName={testName}
         editMode={editMode}
         onValidationChange={onValidationChange}
         selectedVariantKey={selectedVariantKey}
