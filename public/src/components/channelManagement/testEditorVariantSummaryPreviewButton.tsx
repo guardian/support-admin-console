@@ -24,7 +24,8 @@ const PROD_BASE_ARTICLE_URL =
 const CODE_BASE_ARTICLE_URL =
   'https://m.code.dev-theguardian.com/world/2020/may/08/commemorating-ve-day-during-coronavirus-lockdown-somehow-the-quiet-made-it-louder';
 
-const getPreviewUrlForStage = (stage: Stage, testName: string, variantName: string): string => {
+const getPreviewUrl = (testName: string, variantName: string): string => {
+  const stage = getStage();
   if (stage === 'CODE') {
     return `${CODE_BASE_ARTICLE_URL}?dcr&force-banner=${testName}:${variantName}`;
   } else if (stage == 'PROD') {
@@ -33,11 +34,6 @@ const getPreviewUrlForStage = (stage: Stage, testName: string, variantName: stri
   // placeholder for dev
   return '/';
 };
-
-const getPreviewUrl = (testName: string, variantName: string): string => {
-  return getPreviewUrlForStage(getStage(), testName, variantName);
-};
-
 interface TestEditorVariantSummaryPreviewButtonProps {
   name: string;
   testName: string;
@@ -49,7 +45,6 @@ const TestEditorVariantSummaryPreviewButton: React.FC<TestEditorVariantSummaryPr
   testName,
   isDisabled,
 }: TestEditorVariantSummaryPreviewButtonProps) => {
-  console.log(getStage());
   return (
     <Button
       startIcon={<VisibilityIcon />}
