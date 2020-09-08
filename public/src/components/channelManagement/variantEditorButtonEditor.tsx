@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import {
   Checkbox,
   createStyles,
   FormControlLabel,
+  TextField,
   Theme,
   WithStyles,
   withStyles,
 } from '@material-ui/core';
-import EditableTextField from './editableTextField';
 import { Cta } from './helpers/shared';
+import { EMPTY_ERROR_HELPER_TEXT } from './helpers/validation';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing }: Theme) =>
@@ -25,10 +27,16 @@ const styles = ({ spacing }: Theme) =>
     },
   });
 
+interface FormData {
+  text: string;
+  baseUrl: string;
+}
+
 interface VariantEditorButtonEditorProps extends WithStyles<typeof styles> {
   label: string;
   cta?: Cta;
   updateCta: (updatedCta?: Cta) => void;
+  onValidationChange: (isValid: boolean) => void;
   defaultCta: Cta;
   isDisabled: boolean;
 }
@@ -38,6 +46,7 @@ const VariantEditorButtonEditor: React.FC<VariantEditorButtonEditorProps> = ({
   label,
   cta,
   updateCta,
+  onValidationChange,
   defaultCta,
   isDisabled,
 }: VariantEditorButtonEditorProps) => {
@@ -45,19 +54,23 @@ const VariantEditorButtonEditor: React.FC<VariantEditorButtonEditorProps> = ({
 
   const onCheckboxChanged = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const isChecked = event.target.checked;
-    if (isChecked) {
-      updateCta(defaultCta);
-    } else {
-      updateCta(undefined);
-    }
+    updateCta(isChecked ? defaultCta : undefined);
   };
 
-  const onTextChanged = (updatedText: string): void => {
-    updateCta({ ...cta, text: updatedText });
+  const defaultValues: FormData = {
+    text: cta?.text || '',
+    baseUrl: cta?.baseUrl || '',
   };
 
-  const onBaseUrlChanged = (updatedBaseUrl: string): void => {
-    updateCta({ ...cta, baseUrl: updatedBaseUrl });
+  const { register, handleSubmit, errors } = useForm<FormData>({ mode: 'onChange', defaultValues });
+
+  useEffect(() => {
+    const isValid = Object.keys(errors).length === 0;
+    onValidationChange(isValid);
+  }, [errors.text, errors.baseUrl]);
+
+  const onSubmit = ({ text, baseUrl }: FormData): void => {
+    updateCta({ text, baseUrl });
   };
 
   return (
@@ -76,18 +89,32 @@ const VariantEditorButtonEditor: React.FC<VariantEditorButtonEditorProps> = ({
 
       {isChecked && (
         <div className={classes.fieldsContainer}>
-          <EditableTextField
-            text={cta?.text || ''}
-            onSubmit={onTextChanged}
+          <TextField
+            inputRef={register({
+              required: EMPTY_ERROR_HELPER_TEXT,
+            })}
+            error={errors.text !== undefined}
+            helperText={errors.text?.message}
+            onBlur={handleSubmit(onSubmit)}
+            name="text"
             label="Button copy"
-            editEnabled={!isDisabled}
+            margin="normal"
+            variant="outlined"
+            disabled={isDisabled}
             fullWidth
           />
-          <EditableTextField
-            text={cta?.baseUrl || ''}
-            onSubmit={onBaseUrlChanged}
+          <TextField
+            inputRef={register({
+              required: EMPTY_ERROR_HELPER_TEXT,
+            })}
+            error={errors.baseUrl !== undefined}
+            helperText={errors.baseUrl?.message}
+            onBlur={handleSubmit(onSubmit)}
+            name="baseUrl"
             label="Button destination"
-            editEnabled={!isDisabled}
+            margin="normal"
+            variant="outlined"
+            disabled={isDisabled}
             fullWidth
           />
         </div>

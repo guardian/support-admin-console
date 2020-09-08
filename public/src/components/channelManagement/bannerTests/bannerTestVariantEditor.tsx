@@ -151,6 +151,7 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
           updatePrimaryCta={updatePrimaryCta}
           updateSecondaryCta={updateSecondaryCta}
           isDisabled={!editMode}
+          onValidationChange={onValidationChange}
         />
       </div>
     </div>
