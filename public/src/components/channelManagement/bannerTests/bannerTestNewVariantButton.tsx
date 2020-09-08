@@ -1,4 +1,5 @@
 import React from 'react';
+import { useForm } from 'react-hook-form';
 import {
   Button,
   createStyles,
@@ -18,12 +19,12 @@ import AddIcon from '@material-ui/icons/Add';
 import CloseIcon from '@material-ui/icons/Close';
 
 import useOpenable from '../../../hooks/useOpenable';
-import useValidatableField from '../../../hooks/useValidatableField';
 
 import {
-  getInvalidCharactersError,
-  getEmptyError,
-  createGetDuplicateError,
+  EMPTY_ERROR_HELPER_TEXT,
+  INVALID_CHARACTERS_ERROR_HELPER_TEXT,
+  VALID_CHARACTERS_REGEX,
+  createDuplicateValidator,
 } from '../helpers/validation';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -60,6 +61,10 @@ const styles = ({ spacing, palette }: Theme) =>
 
 const NAME_DEFAULT_HELPER_TEXT = "Format: 'control' or 'v1_name'";
 
+interface FormData {
+  name: string;
+}
+
 interface BannerTestNewVariantButtonProps extends WithStyles<typeof styles> {
   existingNames: string[];
   createVariant: (name: string) => void;
@@ -74,24 +79,11 @@ const BannerTestNewVariantButton: React.FC<BannerTestNewVariantButtonProps> = ({
 }: BannerTestNewVariantButtonProps) => {
   const [isOpen, open, close] = useOpenable();
 
-  const getDuplicateError = createGetDuplicateError(existingNames);
-  const getNameError = (value: string): string | null =>
-    getInvalidCharactersError(value) || getEmptyError(value) || getDuplicateError(value);
+  const { register, handleSubmit, errors } = useForm<FormData>();
 
-  const [name, setname, hasError, helperText, check] = useValidatableField(
-    NAME_DEFAULT_HELPER_TEXT,
-    getNameError,
-  );
-
-  const updateName = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setname(event.target.value);
-  };
-
-  const submit = (): void => {
-    if (check()) {
-      createVariant(name);
-      close();
-    }
+  const onSubmit = ({ name }: FormData): void => {
+    createVariant(name);
+    close();
   };
 
   return (
@@ -117,11 +109,18 @@ const BannerTestNewVariantButton: React.FC<BannerTestNewVariantButtonProps> = ({
         </div>
         <DialogContent dividers>
           <TextField
+            inputRef={register({
+              required: EMPTY_ERROR_HELPER_TEXT,
+              pattern: {
+                value: VALID_CHARACTERS_REGEX,
+                message: INVALID_CHARACTERS_ERROR_HELPER_TEXT,
+              },
+              validate: createDuplicateValidator(existingNames),
+            })}
+            error={errors.name !== undefined}
+            helperText={errors.name ? errors.name.message : NAME_DEFAULT_HELPER_TEXT}
+            name="name"
             label="Variant name"
-            value={name}
-            onChange={updateName}
-            helperText={helperText}
-            error={hasError}
             margin="normal"
             variant="outlined"
             autoFocus
@@ -129,7 +128,7 @@ const BannerTestNewVariantButton: React.FC<BannerTestNewVariantButtonProps> = ({
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={submit} color="primary">
+          <Button onClick={handleSubmit(onSubmit)} color="primary">
             Create variant
           </Button>
         </DialogActions>
