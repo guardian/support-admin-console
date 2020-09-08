@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import { useForm } from 'react-hook-form';
 import {
   Button,
   Dialog,
@@ -13,12 +14,11 @@ import {
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
-import useValidatableField from '../../hooks/useValidatableField';
-
 import {
-  getInvalidCharactersError,
-  getEmptyError,
-  createGetDuplicateError,
+  createDuplicateValidator,
+  EMPTY_ERROR_HELPER_TEXT,
+  INVALID_CHARACTERS_ERROR_HELPER_TEXT,
+  VALID_CHARACTERS_REGEX,
 } from './helpers/validation';
 
 const styles = createStyles({
@@ -29,6 +29,11 @@ const styles = createStyles({
     paddingRight: '8px',
   },
 });
+
+type FormData = {
+  name: string;
+  nickname: string;
+};
 
 const NAME_DEFAULT_HELPER_TEXT = 'Date format: YYYY-MM-DD_TEST_NAME';
 const NICKNAME_DEFAULT_HELPER_TEXT = "Pick a name for your test that's easy to recognise";
@@ -56,58 +61,18 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
   copiedTestNickname,
   createTest,
 }: CreateTestDialogProps) => {
-  const getDuplicateNameError = createGetDuplicateError(existingNames);
-  const getNameError = (value: string): string | null =>
-    getInvalidCharactersError(value) || getEmptyError(value) || getDuplicateNameError(value);
-
-  const [name, setName, nameHasError, nameHelperText, checkName] = useValidatableField(
-    NAME_DEFAULT_HELPER_TEXT,
-    getNameError,
-  );
-
-  useEffect(() => {
-    if (mode === 'COPY' && copiedTestName) {
-      setName(`Copy of ${copiedTestName}`);
-    }
-  }, []);
-
-  const getDuplicateNicknameError = createGetDuplicateError(existingNicknames);
-  const getNicknameError = (value: string): string | null =>
-    getEmptyError(value) || getDuplicateNicknameError(value);
-
-  const [
-    nickname,
-    setNickname,
-    nicknameHasError,
-    nicknameHelperText,
-    checkNickname,
-  ] = useValidatableField(NICKNAME_DEFAULT_HELPER_TEXT, getNicknameError);
-
-  useEffect(() => {
-    if (mode === 'COPY' && copiedTestNickname) {
-      setNickname(`Copy of ${copiedTestNickname}`);
-    }
-  }, []);
-
-  const check = (): boolean => {
-    const nameIsValid = checkName();
-    const nicknameIsValid = checkNickname();
-
-    return nameIsValid && nicknameIsValid;
+  const defaultValues = {
+    name: mode === 'COPY' ? `Copy of ${copiedTestName}` : '',
+    nickname: mode === 'COPY' ? `Copy of ${copiedTestNickname}` : '',
   };
 
-  const submit = (): void => {
-    if (check()) {
-      createTest(name, nickname);
-      close();
-    }
-  };
+  const { register, handleSubmit, errors } = useForm<FormData>({
+    defaultValues,
+  });
 
-  const updateName = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setName(event.target.value);
-  };
-  const updateNickname = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setNickname(event.target.value);
+  const onSubmit = ({ name, nickname }: FormData): void => {
+    createTest(name, nickname);
+    close();
   };
 
   return (
@@ -122,10 +87,17 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
       </div>
       <DialogContent dividers>
         <TextField
-          value={name}
-          onChange={updateName}
-          error={nameHasError}
-          helperText={nameHelperText}
+          inputRef={register({
+            required: EMPTY_ERROR_HELPER_TEXT,
+            pattern: {
+              value: VALID_CHARACTERS_REGEX,
+              message: INVALID_CHARACTERS_ERROR_HELPER_TEXT,
+            },
+            validate: createDuplicateValidator(existingNames),
+          })}
+          error={errors.name !== undefined}
+          helperText={errors.name ? errors.name.message : NAME_DEFAULT_HELPER_TEXT}
+          name="name"
           label="Full test name"
           margin="normal"
           variant="outlined"
@@ -133,10 +105,13 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
           fullWidth
         />
         <TextField
-          value={nickname}
-          onChange={updateNickname}
-          error={nicknameHasError}
-          helperText={nicknameHelperText}
+          inputRef={register({
+            required: EMPTY_ERROR_HELPER_TEXT,
+            validate: createDuplicateValidator(existingNicknames),
+          })}
+          error={errors.nickname !== undefined}
+          helperText={errors.nickname ? errors.nickname.message : NICKNAME_DEFAULT_HELPER_TEXT}
+          name="nickname"
           label="Nickname"
           margin="normal"
           variant="outlined"
@@ -144,7 +119,7 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={submit} color="primary">
+        <Button onClick={handleSubmit(onSubmit)} color="primary">
           {mode === 'NEW' ? 'Create test' : 'Confirm'}
         </Button>
       </DialogActions>

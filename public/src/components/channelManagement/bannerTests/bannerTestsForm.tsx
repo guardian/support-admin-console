@@ -61,8 +61,8 @@ const BannerTestsForm: React.FC<Props> = ({
       alert('Please either save or discard before creating a test.');
     } else {
       const newTests = [...tests, createDefaultBannerTest(name, nickname)];
-      onTestsChange(newTests, name);
       onSelectedTestName(name);
+      onTestsChange(newTests, name);
     }
   };
 

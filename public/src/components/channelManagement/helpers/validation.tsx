@@ -33,9 +33,10 @@ export type ValidationStatus = {
   [fieldName: string]: boolean;
 };
 
-const INVALID_CHARACTERS_ERROR_HELPER_TEXT =
+export const INVALID_CHARACTERS_ERROR_HELPER_TEXT =
   'Only letters, numbers, underscores and hyphens are allowed';
 const INVALID_CHARACTERS_REGEX = /[^\w-]/;
+export const VALID_CHARACTERS_REGEX = /^[\w-]+$/;
 
 export const getInvalidCharactersError = (text: string): string | null => {
   if (INVALID_CHARACTERS_REGEX.test(text)) {
@@ -44,7 +45,7 @@ export const getInvalidCharactersError = (text: string): string | null => {
   return null;
 };
 
-const EMPTY_ERROR_HELPER_TEXT = 'Field cannot be empty - please enter some text';
+export const EMPTY_ERROR_HELPER_TEXT = 'Field cannot be empty - please enter some text';
 
 export const getEmptyError = (text: string): string | null => {
   if (text.trim() === '') {
@@ -58,7 +59,7 @@ const NOT_NUMBER_ERROR_HELPER_TEXT = 'Must be a number';
 export const getNotNumberError = (text: string): string | null =>
   Number.isNaN(Number(text)) ? NOT_NUMBER_ERROR_HELPER_TEXT : null;
 
-const DUPLICATE_ERROR_HELPER_TEXT = 'Name already exists - please try another';
+export const DUPLICATE_ERROR_HELPER_TEXT = 'Name already exists - please try another';
 
 export const createGetDuplicateError = (existing: string[]): ((text: string) => string | null) => {
   const existingLowerCased = existing.map(value => value.toLowerCase());
@@ -69,6 +70,19 @@ export const createGetDuplicateError = (existing: string[]): ((text: string) => 
     return null;
   };
   return getDuplicateError;
+};
+
+export const createDuplicateValidator = (
+  existing: string[],
+): ((text: string) => string | boolean) => {
+  const existingLowerCased = existing.map(value => value.toLowerCase());
+  const duplicateValidator = (text: string): string | boolean => {
+    if (existingLowerCased.includes(text.toLowerCase())) {
+      return DUPLICATE_ERROR_HELPER_TEXT;
+    }
+    return true;
+  };
+  return duplicateValidator;
 };
 
 export interface ValidationComponentState {
