@@ -59,6 +59,9 @@ const NOT_NUMBER_ERROR_HELPER_TEXT = 'Must be a number';
 export const getNotNumberError = (text: string): string | null =>
   Number.isNaN(Number(text)) ? NOT_NUMBER_ERROR_HELPER_TEXT : null;
 
+export const notNumberValidator = (text: string): string | boolean =>
+  Number.isNaN(Number(text)) ? NOT_NUMBER_ERROR_HELPER_TEXT : true;
+
 export const DUPLICATE_ERROR_HELPER_TEXT = 'Name already exists - please try another';
 
 export const createGetDuplicateError = (existing: string[]): ((text: string) => string | null) => {
