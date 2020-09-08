@@ -4,9 +4,9 @@ import {
   createStyles,
   WithStyles,
   withStyles,
-  ExpansionPanel,
-  ExpansionPanelDetails,
-  ExpansionPanelActions,
+  Accordion,
+  AccordionDetails,
+  AccordionActions,
 } from '@material-ui/core';
 import { BannerVariant } from './bannerTestsForm';
 import BannerTestVariantEditor from './bannerTestVariantEditor';
@@ -70,7 +70,7 @@ const BannerTestVariantEditorsAccordion: React.FC<BannerTestVariantEditorsAccord
       {variants.map((variant, index) => {
         const variantKey = variantKeys[index];
         return (
-          <ExpansionPanel
+          <Accordion
             key={variant.name}
             expanded={variantKey === selectedVariantKey}
             onChange={(): void => onVariantSelected(variantKey)}
@@ -81,7 +81,7 @@ const BannerTestVariantEditorsAccordion: React.FC<BannerTestVariantEditorsAccord
               testName={testName}
               isInEditMode={editMode}
             />
-            <ExpansionPanelDetails>
+            <AccordionDetails>
               <BannerTestVariantEditor
                 variant={variant}
                 onVariantChange={onVariantChange}
@@ -94,14 +94,14 @@ const BannerTestVariantEditorsAccordion: React.FC<BannerTestVariantEditorsAccord
                   setValidationStatusForField(variant.name, isValid)
                 }
               />
-            </ExpansionPanelDetails>
-            <ExpansionPanelActions>
+            </AccordionDetails>
+            <AccordionActions>
               <VariantDeleteButton
                 isDisabled={!editMode}
                 onConfirm={(): void => onVariantDelete(variant.name)}
               />
-            </ExpansionPanelActions>
-          </ExpansionPanel>
+            </AccordionActions>
+          </Accordion>
         );
       })}
     </div>
