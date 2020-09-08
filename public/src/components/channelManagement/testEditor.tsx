@@ -211,6 +211,18 @@ const TestEditor = <T extends Test>(
             },
           },
         });
+      } else {
+        this.setState({
+          modifiedTests: {
+            ...this.state.modifiedTests,
+            [testName]: {
+              isValid,
+              isDeleted: false,
+              isArchived: false,
+              isNew: false,
+            },
+          },
+        });
       }
     };
 

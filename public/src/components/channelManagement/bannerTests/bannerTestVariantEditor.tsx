@@ -1,11 +1,16 @@
-import React from 'react';
-import { createStyles, Theme, Typography, WithStyles, withStyles } from '@material-ui/core';
-import EditableTextField from '../editableTextField';
+import React, { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import {
+  createStyles,
+  TextField,
+  Theme,
+  Typography,
+  WithStyles,
+  withStyles,
+} from '@material-ui/core';
 import VariantEditorButtonsEditor from '../variantEditorButtonsEditor';
 import { BannerVariant } from './bannerTestsForm';
-import { getInvalidTemplateError } from '../helpers/copyTemplates';
-import { getEmptyError } from '../helpers/validation';
-import useValidation from '../hooks/useValidation';
+import { invalidTemplateValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 import { Cta } from '../helpers/shared';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -36,6 +41,16 @@ const styles = ({ palette, spacing }: Theme) =>
     },
   });
 
+const HEADER_DEFAULT_HELPER_TEXT = 'Assitive text';
+const BODY_DEFAULT_HELPER_TEXT = 'Main banner message, including paragraph breaks';
+const HIGHTLIGHTED_TEXT_HELPER_TEXT = 'Final sentence of body copy';
+
+interface FormData {
+  heading: string;
+  body: string;
+  highlightedText: string;
+}
+
 interface BannerTestVariantEditorProps extends WithStyles<typeof styles> {
   variant: BannerVariant;
   onVariantChange: (updatedVariant: BannerVariant) => void;
@@ -51,25 +66,22 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
   onValidationChange,
   onVariantChange,
 }: BannerTestVariantEditorProps) => {
-  const setValidationStatusForField = useValidation(onValidationChange);
+  const defaultValues: FormData = {
+    heading: variant.heading || '',
+    body: variant.body,
+    highlightedText: variant.highlightedText || '',
+  };
 
-  const getHeadingError = getInvalidTemplateError;
-  const onHeadingChanged = (isValid: boolean): void =>
-    setValidationStatusForField('heading', isValid);
-  const onHeadingSubmit = (updatedHeading: string): void =>
-    onVariantChange({ ...variant, heading: updatedHeading });
+  const { register, handleSubmit, errors } = useForm<FormData>({ mode: 'onChange', defaultValues });
 
-  const getBodyError = (text: string): string | null =>
-    getEmptyError(text) || getInvalidTemplateError(text);
-  const onBodyChanged = (isValid: boolean): void => setValidationStatusForField('body', isValid);
-  const onBodySubmit = (updatedBody: string): void =>
-    onVariantChange({ ...variant, body: updatedBody });
+  useEffect(() => {
+    const isValid = Object.keys(errors).length === 0;
+    onValidationChange(isValid);
+  }, [errors.body, errors.heading, errors.highlightedText]);
 
-  const getHighlightedTextError = getInvalidTemplateError;
-  const onHighLightedTextChange = (isValid: boolean): void =>
-    setValidationStatusForField('highlightedText', isValid);
-  const onHighlightedTextSubmit = (updatedHighlightedText: string): void =>
-    onVariantChange({ ...variant, highlightedText: updatedHighlightedText });
+  const onSubmit = ({ heading, body, highlightedText }: FormData): void => {
+    onVariantChange({ ...variant, heading, body, highlightedText });
+  };
 
   const updatePrimaryCta = (updatedCta?: Cta): void => {
     onVariantChange({ ...variant, cta: updatedCta });
@@ -80,44 +92,51 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
 
   return (
     <div className={classes.container}>
-      <EditableTextField
-        text={variant.heading || ''}
-        onSubmit={onHeadingSubmit}
+      <TextField
+        inputRef={register({ validate: invalidTemplateValidator })}
+        error={errors.heading !== undefined}
+        helperText={errors.heading ? errors.heading.message : HEADER_DEFAULT_HELPER_TEXT}
+        onBlur={handleSubmit(onSubmit)}
+        name="heading"
         label="Header"
-        editEnabled={editMode}
-        validation={{
-          getError: getHeadingError,
-          onChange: onHeadingChanged,
-        }}
-        helperText="Assistive text"
+        margin="normal"
+        variant="outlined"
+        disabled={!editMode}
         fullWidth
       />
 
-      <EditableTextField
-        textarea
-        height={10}
-        text={variant.body}
-        onSubmit={onBodySubmit}
+      <TextField
+        inputRef={register({
+          required: EMPTY_ERROR_HELPER_TEXT,
+          validate: invalidTemplateValidator,
+        })}
+        error={errors.body !== undefined}
+        helperText={errors.body ? errors.body.message : BODY_DEFAULT_HELPER_TEXT}
+        onBlur={handleSubmit(onSubmit)}
+        name="body"
         label="Body copy"
-        editEnabled={editMode}
-        validation={{
-          getError: getBodyError,
-          onChange: onBodyChanged,
-        }}
-        helperText="Main Banner message, including paragraph breaks"
+        margin="normal"
+        variant="outlined"
+        multiline
+        rows={10}
+        disabled={!editMode}
         fullWidth
       />
 
-      <EditableTextField
-        text={variant.highlightedText || ''}
-        onSubmit={onHighlightedTextSubmit}
-        label="Highlighted text"
-        editEnabled={editMode}
-        validation={{
-          getError: getHighlightedTextError,
-          onChange: onHighLightedTextChange,
-        }}
-        helperText="Final sentence of body copy"
+      <TextField
+        inputRef={register({
+          validate: invalidTemplateValidator,
+        })}
+        error={errors.highlightedText !== undefined}
+        helperText={
+          errors.highlightedText ? errors.highlightedText.message : HIGHTLIGHTED_TEXT_HELPER_TEXT
+        }
+        onBlur={handleSubmit(onSubmit)}
+        name="highlightedText"
+        label="Hightlighted text"
+        margin="normal"
+        variant="outlined"
+        disabled={!editMode}
         fullWidth
       />
 

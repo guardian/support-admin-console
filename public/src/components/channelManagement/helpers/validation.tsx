@@ -85,6 +85,24 @@ export const createDuplicateValidator = (
   return duplicateValidator;
 };
 
+export const CURRENCY_TEMPLATE = '%%CURRENCY_SYMBOL%%';
+export const COUNTRY_NAME_TEMPLATE = '%%COUNTRY_NAME%%';
+export const ARTICLE_COUNT_TEMPLATE = '%%ARTICLE_COUNT%%';
+
+const validTemplates = [CURRENCY_TEMPLATE, COUNTRY_NAME_TEMPLATE, ARTICLE_COUNT_TEMPLATE];
+
+export const invalidTemplateValidator = (text: string): string | boolean => {
+  const templates = text.match(/%%[A-Za-z_]*%%/g);
+
+  if (templates !== null) {
+    const invalidTemplate = templates.find(template => !validTemplates.includes(template));
+    if (invalidTemplate) {
+      return `Invalid template: ${invalidTemplate}`;
+    }
+  }
+  return true;
+};
+
 export interface ValidationComponentState {
   validationStatus: ValidationStatus;
 }
