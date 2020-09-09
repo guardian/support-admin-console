@@ -50,9 +50,10 @@ const BannerTestVariantsEditor: React.FC<BannerTestVariantsEditorProps> = ({
         'Support the Guardian from as little as %%CURRENCY_SYMBOL%%1 – and it only takes a minute. Thank you.',
       cta: defaultCta,
     };
+    console.log('here');
 
     onVariantsListChange([...variants, newVariant]);
-    onVariantSelected(name);
+    onVariantSelected(`${testName}-${name}`);
   };
 
   const variantKeys = variants.map(variant => `${testName}-${variant.name}`);

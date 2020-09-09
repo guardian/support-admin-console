@@ -1,19 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 
 import {
   FormControl,
   Radio,
   RadioGroup,
   FormControlLabel,
+  TextField,
   Theme,
   WithStyles,
   createStyles,
   withStyles,
 } from '@material-ui/core';
 import { ArticlesViewedSettings } from './helpers/shared';
-import EditableTextField from './editableTextField';
-import useValidation from './hooks/useValidation';
-import { getNotNumberError, getEmptyError } from './helpers/validation';
+import { notNumberValidator, EMPTY_ERROR_HELPER_TEXT } from './helpers/validation';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing }: Theme) =>
@@ -36,6 +36,12 @@ const DEFAULT_ARTICLES_VIEWED_SETTINGS: ArticlesViewedSettings = {
   periodInWeeks: 6,
 };
 
+interface FormData {
+  minViews: string;
+  maxViews: string;
+  periodInWeeks: string;
+}
+
 interface TestEditorArticleCountEditorProps extends WithStyles<typeof styles> {
   articlesViewedSettings?: ArticlesViewedSettings;
   onArticlesViewedSettingsChanged: (updatedArticlesViewedSettings?: ArticlesViewedSettings) => void;
@@ -50,56 +56,32 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
   onValidationChange,
   isDisabled,
 }: TestEditorArticleCountEditorProps) => {
-  const setValidationStatusForField = useValidation(onValidationChange);
+  const defaultValues: FormData = {
+    minViews: articlesViewedSettings?.minViews?.toString() || '',
+    maxViews: articlesViewedSettings?.maxViews?.toString() || '',
+    periodInWeeks: articlesViewedSettings?.periodInWeeks.toString() || '',
+  };
+
+  const { register, errors, handleSubmit } = useForm<FormData>({ mode: 'onChange', defaultValues });
+
+  const onSubmit = ({ minViews, maxViews, periodInWeeks }: FormData): void => {
+    onArticlesViewedSettingsChanged({
+      minViews: parseInt(minViews),
+      maxViews: parseInt(maxViews),
+      periodInWeeks: parseInt(periodInWeeks),
+    });
+  };
+
+  useEffect(() => {
+    const isValid = Object.keys(errors).length === 0;
+    onValidationChange(isValid);
+  }, [errors.minViews, errors.maxViews, errors.periodInWeeks]);
 
   const onRadioGroupChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     if (event.target.value === 'enabled') {
       onArticlesViewedSettingsChanged(DEFAULT_ARTICLES_VIEWED_SETTINGS);
     } else {
       onArticlesViewedSettingsChanged(undefined);
-    }
-  };
-
-  const getMinPageViewsError = getNotNumberError;
-  const onMinPageViewsChange = (isValid: boolean): void =>
-    setValidationStatusForField('minViews', isValid);
-
-  const onMinPageViewsChanged = (updatedMinPageViews: string): void => {
-    const number = Number(updatedMinPageViews);
-    if (!Number.isNaN(number) && articlesViewedSettings) {
-      onArticlesViewedSettingsChanged({
-        ...articlesViewedSettings,
-        minViews: number,
-      });
-    }
-  };
-
-  const getMaxPageViewsError = getNotNumberError;
-  const onMaxPageViewsChange = (isValid: boolean): void =>
-    setValidationStatusForField('maxViews', isValid);
-
-  const onMaxPageViewsChanged = (updatedMaxPageViews: string): void => {
-    const number = Number(updatedMaxPageViews);
-    if (!Number.isNaN(number) && articlesViewedSettings) {
-      onArticlesViewedSettingsChanged({
-        ...articlesViewedSettings,
-        maxViews: number,
-      });
-    }
-  };
-
-  const getPeriodInWeeksError = (text: string): string | null =>
-    getNotNumberError(text) || getEmptyError(text);
-  const onPeriodInWeeksChange = (isValid: boolean): void =>
-    setValidationStatusForField('periodInWeeks', isValid);
-
-  const onPeriodInWeeksChanged = (updatedPeriodInWeeks: string): void => {
-    const number = Number(updatedPeriodInWeeks);
-    if (!Number.isNaN(number) && articlesViewedSettings) {
-      onArticlesViewedSettingsChanged({
-        ...articlesViewedSettings,
-        periodInWeeks: number,
-      });
     }
   };
 
@@ -129,42 +111,45 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
 
       {articlesViewedSettings && (
         <div className={classes.formContainer}>
-          <EditableTextField
-            onSubmit={onMinPageViewsChanged}
-            validation={{
-              getError: getMinPageViewsError,
-              onChange: onMinPageViewsChange,
-            }}
-            text={articlesViewedSettings.minViews?.toString() || ''}
-            label="Minimum page views"
-            variant="filled"
-            isNumberField
-            editEnabled={!isDisabled}
-          />
-          <EditableTextField
-            onSubmit={onMaxPageViewsChanged}
-            validation={{
-              getError: getMaxPageViewsError,
-              onChange: onMaxPageViewsChange,
-            }}
-            text={articlesViewedSettings.maxViews?.toString() || ''}
-            label="Maximum page views"
-            variant="filled"
-            isNumberField
-            editEnabled={!isDisabled}
-          />
-          <EditableTextField
-            onSubmit={onPeriodInWeeksChanged}
-            validation={{
-              getError: getPeriodInWeeksError,
-              onChange: onPeriodInWeeksChange,
-            }}
-            text={articlesViewedSettings.periodInWeeks.toString()}
-            label="Time period in weeks"
-            variant="filled"
-            isNumberField
-            editEnabled={!isDisabled}
-          />
+          <div>
+            <TextField
+              inputRef={register({ validate: notNumberValidator })}
+              error={errors.minViews !== undefined}
+              helperText={errors.minViews?.message}
+              onBlur={handleSubmit(onSubmit)}
+              name="minViews"
+              label="Minimum page views"
+              variant="filled"
+              disabled={isDisabled}
+            />
+          </div>
+          <div>
+            <TextField
+              inputRef={register({ validate: notNumberValidator })}
+              error={errors.maxViews !== undefined}
+              helperText={errors.maxViews?.message}
+              onBlur={handleSubmit(onSubmit)}
+              name="maxViews"
+              label="Maximum page views"
+              variant="filled"
+              disabled={isDisabled}
+            />
+          </div>
+          <div>
+            <TextField
+              inputRef={register({
+                required: EMPTY_ERROR_HELPER_TEXT,
+                validate: notNumberValidator,
+              })}
+              error={errors.periodInWeeks !== undefined}
+              helperText={errors.periodInWeeks?.message}
+              onBlur={handleSubmit(onSubmit)}
+              name="periodInWeeks"
+              label="Time period in weeks"
+              variant="filled"
+              disabled={isDisabled}
+            />
+          </div>
         </div>
       )}
     </div>

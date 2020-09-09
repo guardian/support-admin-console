@@ -28,6 +28,7 @@ interface VariantEditorButtonsEditorProps extends WithStyles<typeof styles> {
   secondaryCta?: Cta;
   updatePrimaryCta: (updatedCta?: Cta) => void;
   updateSecondaryCta: (updatedCta?: Cta) => void;
+  onValidationChange: (isValid: boolean) => void;
   isDisabled: boolean;
 }
 
@@ -37,6 +38,7 @@ const VariantEditorButtonsEditor: React.FC<VariantEditorButtonsEditorProps> = ({
   secondaryCta,
   updatePrimaryCta,
   updateSecondaryCta,
+  onValidationChange,
   isDisabled,
 }: VariantEditorButtonsEditorProps) => {
   return (
@@ -47,6 +49,7 @@ const VariantEditorButtonsEditor: React.FC<VariantEditorButtonsEditorProps> = ({
         cta={primaryCta}
         updateCta={updatePrimaryCta}
         defaultCta={DEFAULT_PRIMARY_CTA}
+        onValidationChange={onValidationChange}
       />
       <VariantEditorButtonEditor
         label="Secondary button"
@@ -54,6 +57,7 @@ const VariantEditorButtonsEditor: React.FC<VariantEditorButtonsEditorProps> = ({
         cta={secondaryCta}
         updateCta={updateSecondaryCta}
         defaultCta={DEFAULT_SECONDARY_CTA}
+        onValidationChange={onValidationChange}
       />
     </div>
   );

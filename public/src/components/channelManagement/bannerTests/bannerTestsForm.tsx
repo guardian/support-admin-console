@@ -61,8 +61,8 @@ const BannerTestsForm: React.FC<Props> = ({
       alert('Please either save or discard before creating a test.');
     } else {
       const newTests = [...tests, createDefaultBannerTest(name, nickname)];
-      onTestsChange(newTests, name);
       onSelectedTestName(name);
+      onTestsChange(newTests, name);
     }
   };
 
@@ -95,6 +95,7 @@ const BannerTestsForm: React.FC<Props> = ({
             editMode={editMode}
             onDelete={(): void => onTestDelete(selectedTestName)}
             onArchive={(): void => onTestArchive(selectedTestName)}
+            onSelectedTestName={onSelectedTestName}
             isDeleted={modifiedTests[selectedTestName] && modifiedTests[selectedTestName].isDeleted}
             isArchived={
               modifiedTests[selectedTestName] && modifiedTests[selectedTestName].isArchived
