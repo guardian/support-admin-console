@@ -24,7 +24,7 @@ const CODE_BASE_ARTICLE_URL =
 const getPreviewUrl = (testName: string, variantName: string, testType: TestType): string => {
   const stage = getStage();
 
-  const queryString = `?drc&force-${testType.toLowerCase()}=${testName}:${variantName}`;
+  const queryString = `?dcr&force-${testType.toLowerCase()}=${testName}:${variantName}`;
   if (stage === 'CODE') {
     return `${CODE_BASE_ARTICLE_URL}${queryString}`;
   } else if (stage == 'PROD') {
