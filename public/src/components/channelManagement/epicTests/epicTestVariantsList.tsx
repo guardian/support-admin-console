@@ -15,6 +15,7 @@ import { EpicVariant } from './epicTestsForm';
 import NewNameCreator from '../newNameCreator';
 import { onFieldValidationChange, ValidationStatus } from '../helpers/validation';
 import { defaultCta } from '../helpers/shared';
+import TestEditorVariantSummaryPreviewButton from '../testEditorVariantSummaryPreviewButton';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ typography, spacing }: Theme) =>
@@ -33,6 +34,12 @@ const styles = ({ typography, spacing }: Theme) =>
     },
     newVariantButton: {
       marginTop: spacing(2),
+    },
+    summary: {
+      display: 'flex',
+      width: '100%',
+      justifyContent: 'space-between',
+      alignItems: 'center',
     },
   });
 
@@ -160,12 +167,21 @@ class EpicTestVariantsList extends React.Component<
                 aria-controls="variant-control"
                 id="variant-header"
               >
-                <Typography variant={'h4'} className={classes.h4}>
-                  {variant.name}{' '}
-                  {variant.heading && (
-                    <span className={classes.heading}>- &quot;{variant.heading}&quot;</span>
-                  )}
-                </Typography>
+                <div className={classes.summary}>
+                  <Typography variant={'h4'} className={classes.h4}>
+                    {variant.name}{' '}
+                    {variant.heading && (
+                      <span className={classes.heading}>- &quot;{variant.heading}&quot;</span>
+                    )}
+                  </Typography>
+
+                  <TestEditorVariantSummaryPreviewButton
+                    name={variant.name}
+                    testName={this.props.testName}
+                    testType="EPIC" // will have to change this to make it more reusable
+                    isDisabled={this.props.editMode}
+                  />
+                </div>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
                 <EpicTestVariantEditor

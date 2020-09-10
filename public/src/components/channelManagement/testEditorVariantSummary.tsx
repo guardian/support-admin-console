@@ -65,6 +65,7 @@ const TestEditorVariantSummary: React.FC<TestEditorVariantSummaryProps> = ({
         <TestEditorVariantSummaryPreviewButton
           name={name}
           testName={testName}
+          testType="BANNER" // will have to change this to make it more reusable
           isDisabled={isInEditMode}
         />
       </div>
