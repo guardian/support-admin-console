@@ -39,53 +39,26 @@ interface TargetRegionsSelectorProps extends WithStyles<typeof styles> {
   onRegionsUpdate: (selectedRegions: Region[]) => void;
   isEditable: boolean;
 }
-
-interface TargetRegionsSelectorState {
-  selectedRegions: Region[];
-}
-
-class TargetRegionsSelector extends React.Component<
-  TargetRegionsSelectorProps,
-  TargetRegionsSelectorState
-> {
+class TargetRegionsSelector extends React.Component<TargetRegionsSelectorProps> {
   allRegions: Region[] = Object.values(Region);
 
   indeterminateStatus = (): boolean =>
-    this.state.selectedRegions.length > 0 &&
-    this.state.selectedRegions.length < this.allRegions.length;
-
-  state: TargetRegionsSelectorState = {
-    selectedRegions: this.props.regions,
-  };
+    this.props.regions.length > 0 && this.props.regions.length < this.allRegions.length;
 
   onAllRegionsChange = (event: React.ChangeEvent<{ value: string; checked: boolean }>): void => {
-    this.setState(
-      {
-        selectedRegions: event.target.checked ? this.allRegions : [],
-      },
-      () => this.props.onRegionsUpdate(this.state.selectedRegions),
-    );
+    this.props.onRegionsUpdate(event.target.checked ? this.allRegions : []);
   };
 
   onSingleRegionChange = (event: React.ChangeEvent<{ value: string; checked: boolean }>): void => {
     const checked = event.target.checked;
     const changedRegion = event.target.value;
 
-    const newSelectedRegions = (): Region[] => {
-      if (checked) {
-        return [...this.state.selectedRegions, changedRegion as Region];
-      } else {
-        const regionIndex = this.state.selectedRegions.indexOf(changedRegion as Region);
-        return this.state.selectedRegions.filter((_, index) => index !== regionIndex);
-      }
-    };
-
-    this.setState(
-      {
-        selectedRegions: newSelectedRegions(),
-      },
-      () => this.props.onRegionsUpdate(this.state.selectedRegions),
-    );
+    if (checked) {
+      this.props.onRegionsUpdate([...this.props.regions, changedRegion as Region]);
+    } else {
+      const regionIndex = this.props.regions.indexOf(changedRegion as Region);
+      this.props.onRegionsUpdate(this.props.regions.filter((_, index) => index !== regionIndex));
+    }
   };
 
   render(): React.ReactNode {
@@ -98,7 +71,7 @@ class TargetRegionsSelector extends React.Component<
           <FormControlLabel
             control={
               <Checkbox
-                checked={this.state.selectedRegions.length === this.allRegions.length}
+                checked={this.props.regions.length === this.allRegions.length}
                 onChange={this.onAllRegionsChange}
                 value={'allRegions'}
                 indeterminate={this.indeterminateStatus()}
@@ -113,7 +86,7 @@ class TargetRegionsSelector extends React.Component<
               control={
                 <Checkbox
                   className={classes.indentedCheckbox}
-                  checked={this.state.selectedRegions.indexOf(region) > -1}
+                  checked={this.props.regions.indexOf(region) > -1}
                   onChange={this.onSingleRegionChange}
                   value={region}
                 />
