@@ -8,6 +8,7 @@ GET /contribution-types                             controllers.Application.inde
 GET /amounts                                        controllers.Application.index
 GET /epic-tests                                     controllers.Application.index
 GET /banner-tests                                   controllers.Application.index
+GET /banner-tests2                                  controllers.Application.index
 
 # ----- Authentication ----- #
 GET  /login                                         controllers.Login.login

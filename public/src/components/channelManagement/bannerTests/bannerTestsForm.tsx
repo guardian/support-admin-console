@@ -123,4 +123,5 @@ const BannerTestsForm: React.FC<Props> = ({
   );
 };
 
-export default TestsForm(BannerTestsForm, FrontendSettingsType.bannerTests);
+export const BannerTestsForm1 = TestsForm(BannerTestsForm, FrontendSettingsType.bannerTests);
+export const BannerTestsForm2 = TestsForm(BannerTestsForm, FrontendSettingsType.bannerTests2);

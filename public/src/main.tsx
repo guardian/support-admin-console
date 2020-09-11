@@ -6,7 +6,10 @@ import Switchboard from './components/switchboard';
 import ContributionTypesForm from './components/contributionTypes';
 import AmountsForm from './components/amounts/amounts';
 import EpicTestsForm from './components/channelManagement/epicTests/epicTestsForm';
-import BannerTestsForm from './components/channelManagement/bannerTests/bannerTestsForm';
+import {
+  BannerTestsForm1,
+  BannerTestsForm2
+} from './components/channelManagement/bannerTests/bannerTestsForm';
 import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
@@ -94,7 +97,11 @@ const AppRouter = withStyles(styles)(({ classes }: Props) => {
         />
         <Route
           path="/banner-tests"
-          render={(): React.ReactElement => createComponent(<BannerTestsForm />, 'Banner Tests')}
+          render={(): React.ReactElement => createComponent(<BannerTestsForm1 />, 'Banner Tests 1')}
+        />
+        <Route
+          path="/banner-tests2"
+          render={(): React.ReactElement => createComponent(<BannerTestsForm2 />, 'Banner Tests 2')}
         />
       </div>
     </Router>

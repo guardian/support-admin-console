@@ -126,9 +126,14 @@ export default function NavDrawer(): React.ReactElement {
             <ListItemText primary="Epic" />
           </ListItem>
         </Link>
-        <Link key="Banner" to="/banner-tests" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Banner">
-            <ListItemText primary="Banner" />
+        <Link key="Banner1" to="/banner-tests" className={classes.link}>
+          <ListItem className={classes.listItem} button key="Banner1">
+            <ListItemText primary="Banner 1" />
+          </ListItem>
+        </Link>
+        <Link key="Banner2" to="/banner-tests2" className={classes.link}>
+          <ListItem className={classes.listItem} button key="Banner2">
+            <ListItemText primary="Banner 2" />
           </ListItem>
         </Link>
       </div>
