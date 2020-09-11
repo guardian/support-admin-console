@@ -14,7 +14,7 @@ export enum BannerTemplate {
 }
 export interface BannerVariant {
   name: string;
-  template: BannerTemplate,
+  template: BannerTemplate;
   heading?: string;
   body: string;
   highlightedText?: string;

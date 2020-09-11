@@ -9,12 +9,12 @@ import {
   withStyles,
 } from '@material-ui/core';
 import VariantEditorButtonsEditor from '../variantEditorButtonsEditor';
-import {BannerTemplate, BannerVariant} from './bannerTestsForm';
+import { BannerTemplate, BannerVariant } from './bannerTestsForm';
 import { invalidTemplateValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 import { Cta } from '../helpers/shared';
-import RadioGroup from "@material-ui/core/RadioGroup";
-import Radio from "@material-ui/core/Radio";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
+import RadioGroup from '@material-ui/core/RadioGroup';
+import Radio from '@material-ui/core/Radio';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ palette, spacing }: Theme) =>
@@ -50,7 +50,7 @@ const styles = ({ palette, spacing }: Theme) =>
     },
     templates: {
       marginTop: '15px',
-    }
+    },
   });
 
 const HEADER_DEFAULT_HELPER_TEXT = 'Assitive text';
@@ -108,7 +108,6 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
 
   return (
     <div className={classes.container}>
-
       <div className={classes.sectionContainer}>
         <Typography className={classes.sectionHeader} variant="h4">
           Banner template
@@ -123,19 +122,18 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
               onVariantChange({
                 ...variant,
                 template: value,
-              })
+              });
             }
           }}
         >
-          { Object.values(BannerTemplate).map(bannerTemplate => (
-              <FormControlLabel
-                key={bannerTemplate}
-                value={bannerTemplate}
-                control={<Radio disabled={!editMode}/>}
-                label={bannerTemplate}
-              />
-            ))
-          }
+          {Object.values(BannerTemplate).map(bannerTemplate => (
+            <FormControlLabel
+              key={bannerTemplate}
+              value={bannerTemplate}
+              control={<Radio disabled={!editMode} />}
+              label={bannerTemplate}
+            />
+          ))}
         </RadioGroup>
       </div>
 
@@ -170,7 +168,7 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
         fullWidth
       />
 
-      { variant.template === BannerTemplate.ContributionsBanner &&
+      {variant.template === BannerTemplate.ContributionsBanner && (
         <TextField
           inputRef={register({
             validate: invalidTemplateValidator,
@@ -187,7 +185,7 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
           disabled={!editMode}
           fullWidth
         />
-      }
+      )}
 
       <div className={classes.buttonsSectionContainer}>
         <Typography className={classes.sectionHeader} variant="h4">
