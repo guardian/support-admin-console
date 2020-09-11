@@ -131,7 +131,7 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
               <FormControlLabel
                 key={bannerTemplate}
                 value={bannerTemplate}
-                control={<Radio />}
+                control={<Radio disabled={!editMode}/>}
                 label={bannerTemplate}
               />
             ))
@@ -170,22 +170,24 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
         fullWidth
       />
 
-      <TextField
-        inputRef={register({
-          validate: invalidTemplateValidator,
-        })}
-        error={errors.highlightedText !== undefined}
-        helperText={
-          errors.highlightedText ? errors.highlightedText.message : HIGHTLIGHTED_TEXT_HELPER_TEXT
-        }
-        onBlur={handleSubmit(onSubmit)}
-        name="highlightedText"
-        label="Hightlighted text"
-        margin="normal"
-        variant="outlined"
-        disabled={!editMode}
-        fullWidth
-      />
+      { variant.template === BannerTemplate.ContributionsBanner &&
+        <TextField
+          inputRef={register({
+            validate: invalidTemplateValidator,
+          })}
+          error={errors.highlightedText !== undefined}
+          helperText={
+            errors.highlightedText ? errors.highlightedText.message : HIGHTLIGHTED_TEXT_HELPER_TEXT
+          }
+          onBlur={handleSubmit(onSubmit)}
+          name="highlightedText"
+          label="Hightlighted text"
+          margin="normal"
+          variant="outlined"
+          disabled={!editMode}
+          fullWidth
+        />
+      }
 
       <div className={classes.buttonsSectionContainer}>
         <Typography className={classes.sectionHeader} variant="h4">
