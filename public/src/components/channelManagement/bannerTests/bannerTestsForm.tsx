@@ -7,8 +7,14 @@ import TestsFormLayout from '../testsFormLayout';
 import { ArticlesViewedSettings, Cta, Test, UserCohort } from '../helpers/shared';
 import { Region } from '../../../utils/models';
 
+export enum BannerTemplate {
+  ContributionsBanner = 'ContributionsBanner',
+  DigitalSubscriptionsBanner = 'DigitalSubscriptionsBanner',
+  GuardianWeeklyBanner = 'GuardianWeeklyBanner',
+}
 export interface BannerVariant {
   name: string;
+  template: BannerTemplate,
   heading?: string;
   body: string;
   highlightedText?: string;
