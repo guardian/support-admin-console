@@ -3,7 +3,6 @@ import { Region } from '../../../utils/models';
 import { ArticlesViewedSettings, UserCohort } from '../helpers/shared';
 import { articleCountTemplate } from '../helpers/copyTemplates';
 import { createStyles, Theme, Typography, WithStyles, withStyles } from '@material-ui/core';
-import { BannerTest, BannerVariant } from './bannerTestsForm';
 import { defaultArticlesViewedSettings } from '../articlesViewedEditor';
 import BannerTestVariantsEditor from './bannerTestVariantsEditor';
 import TestEditorHeader from '../testEditorHeader';
@@ -13,6 +12,7 @@ import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelecto
 import TestEditorArticleCountEditor from '../testEditorArticleCountEditor';
 import TestEditorActionButtons from '../testEditorActionButtons';
 import useValidation from '../hooks/useValidation';
+import { BannerTest, BannerVariant } from '../../../models/banner';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing, palette }: Theme) =>

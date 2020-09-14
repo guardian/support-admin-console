@@ -8,11 +8,11 @@ import {
   AccordionDetails,
   AccordionActions,
 } from '@material-ui/core';
-import { BannerVariant } from './bannerTestsForm';
 import BannerTestVariantEditor from './bannerTestVariantEditor';
 import TestEditorVariantSummary from '../testEditorVariantSummary';
 import VariantDeleteButton from '../variantDeleteButton';
 import useValidation from '../hooks/useValidation';
+import { BannerVariant } from '../../../models/banner';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing, palette }: Theme) =>

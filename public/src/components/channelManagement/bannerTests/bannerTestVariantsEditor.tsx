@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core';
-import { BannerVariant } from './bannerTestsForm';
+import React, { useEffect, useState } from 'react';
+import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core';
 import BannerTestVariantEditorsAccordion from './bannerTestVariantEditorsAccordion';
 import BannerTestNewVariantButton from './bannerTestNewVariantButton';
 import { defaultCta } from '../helpers/shared';
+import { BannerTemplate, BannerVariant } from '../../../models/banner';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing }: Theme) =>
@@ -44,13 +44,13 @@ const BannerTestVariantsEditor: React.FC<BannerTestVariantsEditorProps> = ({
   const createVariant = (name: string): void => {
     const newVariant: BannerVariant = {
       name: name,
+      template: BannerTemplate.ContributionsBanner,
       heading: undefined,
       body: '',
       highlightedText:
         'Support the Guardian from as little as %%CURRENCY_SYMBOL%%1 – and it only takes a minute. Thank you.',
       cta: defaultCta,
     };
-    console.log('here');
 
     onVariantsListChange([...variants, newVariant]);
     onVariantSelected(`${testName}-${name}`);

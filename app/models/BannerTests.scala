@@ -1,12 +1,25 @@
 package models
 
+import enumeratum.{CirceEnum, Enum, EnumEntry}
 import io.circe.generic.extras.Configuration
 import io.circe.generic.extras.auto._
 import io.circe.{Decoder, Encoder}
 
+import scala.collection.immutable.IndexedSeq
+
+
+sealed trait BannerTemplate extends EnumEntry
+object BannerTemplate extends Enum[BannerTemplate] with CirceEnum[BannerTemplate] {
+  override val values: IndexedSeq[BannerTemplate] = findValues
+
+  case object ContributionsBanner extends BannerTemplate
+  case object DigitalSubscriptionsBanner extends BannerTemplate
+  case object GuardianWeeklyBanner extends BannerTemplate
+}
 
 case class BannerVariant(
   name: String,
+  template: BannerTemplate,
   heading: Option[String],
   body: String,
   highlightedText: Option[String],

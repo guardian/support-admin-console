@@ -9,9 +9,10 @@ import {
   withStyles,
 } from '@material-ui/core';
 import VariantEditorButtonsEditor from '../variantEditorButtonsEditor';
-import { BannerVariant } from './bannerTestsForm';
 import { invalidTemplateValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 import { Cta } from '../helpers/shared';
+import BannerTemplateSelector from './bannerTemplateSelector';
+import { BannerTemplate, BannerVariant } from '../../../models/banner';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ palette, spacing }: Theme) =>
@@ -29,15 +30,18 @@ const styles = ({ palette, spacing }: Theme) =>
     hook: {
       maxWidth: '400px',
     },
-    buttonsSectionContainer: {
-      marginTop: spacing(5),
+    sectionHeader: {
+      fontSize: 16,
+      color: palette.grey[900],
+      fontWeight: 500,
+    },
+    sectionContainer: {
+      paddingTop: spacing(1),
+      paddingBottom: spacing(2),
+      borderBottom: `1px solid ${palette.grey[500]}`,
       '& > * + *': {
         marginTop: spacing(3),
       },
-    },
-    buttonsSectionHeader: {
-      fontSize: 16,
-      color: palette.grey[900],
     },
   });
 
@@ -92,6 +96,17 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
 
   return (
     <div className={classes.container}>
+      <div className={classes.sectionContainer}>
+        <Typography className={classes.sectionHeader} variant="h4">
+          Banner template
+        </Typography>
+        <BannerTemplateSelector
+          variant={variant}
+          onVariantChange={onVariantChange}
+          editMode={editMode}
+        />
+      </div>
+
       <TextField
         inputRef={register({ validate: invalidTemplateValidator })}
         error={errors.heading !== undefined}
@@ -123,25 +138,27 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
         fullWidth
       />
 
-      <TextField
-        inputRef={register({
-          validate: invalidTemplateValidator,
-        })}
-        error={errors.highlightedText !== undefined}
-        helperText={
-          errors.highlightedText ? errors.highlightedText.message : HIGHTLIGHTED_TEXT_HELPER_TEXT
-        }
-        onBlur={handleSubmit(onSubmit)}
-        name="highlightedText"
-        label="Hightlighted text"
-        margin="normal"
-        variant="outlined"
-        disabled={!editMode}
-        fullWidth
-      />
+      {variant.template === BannerTemplate.ContributionsBanner && (
+        <TextField
+          inputRef={register({
+            validate: invalidTemplateValidator,
+          })}
+          error={errors.highlightedText !== undefined}
+          helperText={
+            errors.highlightedText ? errors.highlightedText.message : HIGHTLIGHTED_TEXT_HELPER_TEXT
+          }
+          onBlur={handleSubmit(onSubmit)}
+          name="highlightedText"
+          label="Hightlighted text"
+          margin="normal"
+          variant="outlined"
+          disabled={!editMode}
+          fullWidth
+        />
+      )}
 
-      <div className={classes.buttonsSectionContainer}>
-        <Typography className={classes.buttonsSectionHeader} variant="h4">
+      <div className={classes.sectionContainer}>
+        <Typography className={classes.sectionHeader} variant="h4">
           Buttons
         </Typography>
 
