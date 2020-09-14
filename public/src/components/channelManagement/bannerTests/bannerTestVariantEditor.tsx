@@ -9,12 +9,10 @@ import {
   withStyles,
 } from '@material-ui/core';
 import VariantEditorButtonsEditor from '../variantEditorButtonsEditor';
-import { BannerTemplate, BannerVariant } from './bannerTestsForm';
 import { invalidTemplateValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 import { Cta } from '../helpers/shared';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import Radio from '@material-ui/core/Radio';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import BannerTemplateSelector from './bannerTemplateSelector';
+import { BannerTemplate, BannerVariant } from './bannerTestsForm';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ palette, spacing }: Theme) =>
@@ -47,9 +45,6 @@ const styles = ({ palette, spacing }: Theme) =>
       paddingTop: spacing(1),
       paddingBottom: spacing(2),
       borderBottom: `1px solid ${palette.grey[500]}`,
-    },
-    templates: {
-      marginTop: '15px',
     },
   });
 
@@ -102,39 +97,17 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
     onVariantChange({ ...variant, secondaryCta: updatedCta });
   };
 
-  function isBannerTemplate(s: string): s is BannerTemplate {
-    return Object.values(BannerTemplate).includes(s as BannerTemplate);
-  }
-
   return (
     <div className={classes.container}>
       <div className={classes.sectionContainer}>
         <Typography className={classes.sectionHeader} variant="h4">
           Banner template
         </Typography>
-        <RadioGroup
-          aria-label="Default"
-          name="default"
-          className={classes.templates}
-          value={variant.template}
-          onChange={(event, value): void => {
-            if (isBannerTemplate(value)) {
-              onVariantChange({
-                ...variant,
-                template: value,
-              });
-            }
-          }}
-        >
-          {Object.values(BannerTemplate).map(bannerTemplate => (
-            <FormControlLabel
-              key={bannerTemplate}
-              value={bannerTemplate}
-              control={<Radio disabled={!editMode} />}
-              label={bannerTemplate}
-            />
-          ))}
-        </RadioGroup>
+        <BannerTemplateSelector
+          variant={variant}
+          onVariantChange={onVariantChange}
+          editMode={editMode}
+        />
       </div>
 
       <TextField
