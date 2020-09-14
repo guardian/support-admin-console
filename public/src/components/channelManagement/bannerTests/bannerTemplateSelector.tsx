@@ -3,7 +3,7 @@ import { createStyles, withStyles, WithStyles } from '@material-ui/core';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Radio from '@material-ui/core/Radio';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import { BannerTemplate, BannerVariant } from './bannerTestsForm';
+import { BannerTemplate, BannerVariant } from '../../../models/banner';
 
 function isBannerTemplate(s: string): s is BannerTemplate {
   return Object.values(BannerTemplate).includes(s as BannerTemplate);

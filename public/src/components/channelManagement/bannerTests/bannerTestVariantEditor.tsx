@@ -12,7 +12,7 @@ import VariantEditorButtonsEditor from '../variantEditorButtonsEditor';
 import { invalidTemplateValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 import { Cta } from '../helpers/shared';
 import BannerTemplateSelector from './bannerTemplateSelector';
-import { BannerTemplate, BannerVariant } from './bannerTestsForm';
+import { BannerTemplate, BannerVariant } from '../../../models/banner';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ palette, spacing }: Theme) =>

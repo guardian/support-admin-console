@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core';
-import { BannerTemplate, BannerVariant } from './bannerTestsForm';
 import BannerTestVariantEditorsAccordion from './bannerTestVariantEditorsAccordion';
 import BannerTestNewVariantButton from './bannerTestNewVariantButton';
 import { defaultCta } from '../helpers/shared';
+import { BannerTemplate, BannerVariant } from '../../../models/banner';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing }: Theme) =>
