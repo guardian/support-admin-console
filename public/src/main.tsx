@@ -8,7 +8,7 @@ import AmountsForm from './components/amounts/amounts';
 import EpicTestsForm from './components/channelManagement/epicTests/epicTestsForm';
 import {
   BannerTestsForm1,
-  BannerTestsForm2
+  BannerTestsForm2,
 } from './components/channelManagement/bannerTests/bannerTestsForm';
 import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
