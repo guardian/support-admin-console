@@ -30,12 +30,6 @@ const styles = ({ palette, spacing }: Theme) =>
     hook: {
       maxWidth: '400px',
     },
-    buttonsSectionContainer: {
-      marginTop: spacing(5),
-      '& > * + *': {
-        marginTop: spacing(3),
-      },
-    },
     sectionHeader: {
       fontSize: 16,
       color: palette.grey[900],
@@ -45,6 +39,9 @@ const styles = ({ palette, spacing }: Theme) =>
       paddingTop: spacing(1),
       paddingBottom: spacing(2),
       borderBottom: `1px solid ${palette.grey[500]}`,
+      '& > * + *': {
+        marginTop: spacing(3),
+      },
     },
   });
 
@@ -160,7 +157,7 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
         />
       )}
 
-      <div className={classes.buttonsSectionContainer}>
+      <div className={classes.sectionContainer}>
         <Typography className={classes.sectionHeader} variant="h4">
           Buttons
         </Typography>
