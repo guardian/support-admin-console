@@ -47,6 +47,7 @@ interface Switches {
   recurringPaymentMethods: {
     [p in RecurringPaymentMethod]: SwitchState;
   };
+  enableDigitalSubGifting: SwitchState;
   useDotcomContactPage: SwitchState;
   enableRecaptchaBackend: SwitchState;
   enableRecaptchaFrontend: SwitchState;
@@ -146,6 +147,7 @@ class Switchboard extends React.Component<Props, Switches> {
         existingCard: SwitchState.Off,
         existingDirectDebit: SwitchState.Off,
       },
+      enableDigitalSubGifting: SwitchState.Off,
       useDotcomContactPage: SwitchState.Off,
       enableRecaptchaBackend: SwitchState.Off,
       enableRecaptchaFrontend: SwitchState.Off,
@@ -335,7 +337,21 @@ class Switchboard extends React.Component<Props, Switches> {
             />
           </FormControl>
           <FormControl component={'fieldset' as 'div'} className={classes.formControl}>
-            <FormLabel component={'legend' as 'label'}>Other Switches</FormLabel>
+            <FormLabel component={'legend' as 'label'}>Subscriptions Switches</FormLabel>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={switchStateToBoolean(this.state.enableDigitalSubGifting)}
+                  onChange={(event): void =>
+                    this.setState({
+                      enableDigitalSubGifting: booleanToSwitchState(event.target.checked),
+                    })
+                  }
+                  value={switchStateToBoolean(this.state.enableDigitalSubGifting)}
+                />
+              }
+              label="Enable Digital Subscriptions Gifting"
+            />
             <FormControlLabel
               control={
                 <Switch
