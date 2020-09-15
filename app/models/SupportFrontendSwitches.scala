@@ -42,6 +42,7 @@ case class SupportFrontendSwitches(
   oneOffPaymentMethods: PaymentMethodSwitches,
   recurringPaymentMethods: PaymentMethodSwitches,
   experiments: Map[String, ExperimentSwitch],
+  enableDigitalSubGifting: SwitchState,
   useDotcomContactPage: SwitchState,
   enableRecaptchaBackend: SwitchState,
   enableRecaptchaFrontend: SwitchState
