@@ -106,9 +106,15 @@ const EpicTestsForm: React.FC<Props> = ({
   editMode,
 }: Props) => {
   const createTest = (name: string, nickname: string): void => {
-    const newTests = [...tests, createDefaultEpicTest(name, nickname)];
-    onTestsChange(newTests, name);
+    if (Object.keys(modifiedTests).length > 0) {
+      alert('Please either save or discard before creating a test.');
+    } else {
+      const newTests = [...tests, createDefaultEpicTest(name, nickname)];
+      onSelectedTestName(name);
+      onTestsChange(newTests, name);
+    }
   };
+
   return (
     <TestsFormLayout
       sidebar={

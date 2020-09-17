@@ -71,8 +71,8 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
   });
 
   const onSubmit = ({ name, nickname }: FormData): void => {
-    createTest(name, nickname);
     close();
+    createTest(name, nickname);
   };
 
   return (
