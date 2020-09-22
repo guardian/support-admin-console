@@ -62,7 +62,14 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
     periodInWeeks: articlesViewedSettings?.periodInWeeks.toString() || '',
   };
 
-  const { register, errors, handleSubmit } = useForm<FormData>({ mode: 'onChange', defaultValues });
+  const { register, errors, handleSubmit, reset } = useForm<FormData>({
+    mode: 'onChange',
+    defaultValues,
+  });
+
+  useEffect(() => {
+    reset(defaultValues);
+  }, [defaultValues.minViews, defaultValues.maxViews, defaultValues.periodInWeeks]);
 
   const onSubmit = ({ minViews, maxViews, periodInWeeks }: FormData): void => {
     onArticlesViewedSettingsChanged({
@@ -119,6 +126,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
               onBlur={handleSubmit(onSubmit)}
               name="minViews"
               label="Minimum page views"
+              InputLabelProps={{ shrink: true }}
               variant="filled"
               disabled={isDisabled}
             />
@@ -131,6 +139,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
               onBlur={handleSubmit(onSubmit)}
               name="maxViews"
               label="Maximum page views"
+              InputLabelProps={{ shrink: true }}
               variant="filled"
               disabled={isDisabled}
             />
@@ -146,6 +155,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
               onBlur={handleSubmit(onSubmit)}
               name="periodInWeeks"
               label="Time period in weeks"
+              InputLabelProps={{ shrink: true }}
               variant="filled"
               disabled={isDisabled}
             />
