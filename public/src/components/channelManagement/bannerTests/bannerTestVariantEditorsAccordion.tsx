@@ -71,7 +71,7 @@ const BannerTestVariantEditorsAccordion: React.FC<BannerTestVariantEditorsAccord
         const variantKey = variantKeys[index];
         return (
           <Accordion
-            key={variant.name}
+            key={variantKey}
             expanded={variantKey === selectedVariantKey}
             onChange={(): void => onVariantSelected(variantKey)}
             className={classes.expansionPanel}
