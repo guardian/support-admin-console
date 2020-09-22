@@ -126,6 +126,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
               onBlur={handleSubmit(onSubmit)}
               name="minViews"
               label="Minimum page views"
+              InputLabelProps={{ shrink: true }}
               variant="filled"
               disabled={isDisabled}
             />
@@ -138,6 +139,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
               onBlur={handleSubmit(onSubmit)}
               name="maxViews"
               label="Maximum page views"
+              InputLabelProps={{ shrink: true }}
               variant="filled"
               disabled={isDisabled}
             />
@@ -153,6 +155,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
               onBlur={handleSubmit(onSubmit)}
               name="periodInWeeks"
               label="Time period in weeks"
+              InputLabelProps={{ shrink: true }}
               variant="filled"
               disabled={isDisabled}
             />
