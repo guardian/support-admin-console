@@ -64,25 +64,18 @@ Optionally sends a Fastly PURGE request after updates to S3.
 ### How to add a new switch
 This section will describe how to add a simple on/off switch to the switchboard for a PR example of this [see here](https://github.com/guardian/support-admin-console/pull/157/files)
 
-- Add your new switch to the `SupportFrontendSwitches` class in _SupportFrontendSwitches.scala_
-- Add it into the `Switches` interface in _switchboard.tsx_
+- Add your new switch to the `SupportFrontendSwitches` class in _SupportFrontendSwitches.scala_ make sure to provide a default value for the new switch
+as this will be used when loading values from S3 for the first time. Eg:
+```
+case class SupportFrontendSwitches(
+  ...
+  myNewSwitch: SwitchState = Off
+)
+```
+- Add the new switch into the `Switches` interface in _switchboard.tsx_
 - Set a default value for your new switch in the constructor of the `Switchboard` component in _switchboard.tsx_
 - Add a user interface component to control the state of your switch in _switchboard.tsx_
 - Update _S3JsonSpec.scala_ to add the new switch to both the `expectedJson` string and the `expectedDecoded` object
 
-This is all the code changes you will need to make however you will also need to update the json files which store this state in S3 __before__ merging these changes.
-To do this:
-
-- Ensure you have [AWS Cli](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html) installed
-- Ensure you have fresh Janus credentials for the membership account
-- Copy the existing DEV environment switches.json file to your local machine:
-```
-aws s3 cp s3://support-admin-console/DEV/switches.json . --profile membership
-```
-- Edit switches.json to add your new switch. It is a good idea to use an editor that can validate Json for this
-- Upload the edited file back to S3:
-```
-aws s3 cp ./switches.json s3://support-admin-console/DEV/switches.json --profile membership
-```
-- Repeat this process for the `CODE` and `PROD` environments
+Your new switch should now be ready to use
 
