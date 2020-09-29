@@ -1,5 +1,5 @@
-import React from "react";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import React from 'react';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import {
   fetchFrontendSettings,
   FrontendSettingsType,
@@ -8,17 +8,11 @@ import {
   requestTakeControl,
   requestUnlock,
   archiveTest,
-} from "../../utils/requests";
-import { LockStatus, ModifiedTests, Test } from "./helpers/shared";
-import TestActionBar from "./testActionBar";
+} from '../../utils/requests';
+import { LockStatus, ModifiedTests, Test } from './helpers/shared';
 
-export const updateTest = <T extends Test>(
-  currentTests: T[],
-  updatedTest: T
-): T[] =>
-  currentTests.map((test) =>
-    test.name === updatedTest.name ? updatedTest : test
-  );
+export const updateTest = <T extends Test>(currentTests: T[], updatedTest: T): T[] =>
+  currentTests.map(test => (test.name === updatedTest.name ? updatedTest : test));
 
 // The inner component's props must extend this type
 export interface InnerComponentProps<T extends Test> {
@@ -32,7 +26,9 @@ export interface InnerComponentProps<T extends Test> {
   onTestErrorStatusChange: (testName: string) => (isValid: boolean) => void;
   cancel: () => void;
   save: () => void;
+  requestTakeControl: () => void;
   requestLock: () => void;
+  lockStatus: LockStatus;
   editMode: boolean;
 }
 
@@ -55,17 +51,16 @@ interface TestFormState<T extends Test> {
   timeoutAlertId: number | null; // A timeout for warning about being open for edit for too long
 }
 
-interface Props {}
-
 /**
  * A stateful higher-order component for fetching/saving test data.
  * Takes care of locks
  */
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const TestEditor = <T extends Test>(
   InnerComponent: React.ComponentType<InnerComponentProps<T>>,
-  settingsType: FrontendSettingsType
+  settingsType: FrontendSettingsType,
 ) =>
-  class extends React.Component<Props, TestFormState<T>> {
+  class extends React.Component<{}, TestFormState<T>> {
     state: TestFormState<T> = {
       tests: null,
       version: null,
@@ -76,26 +71,24 @@ const TestEditor = <T extends Test>(
       timeoutAlertId: null,
     };
 
-    componentWillMount(): void {
+    UNSAFE_componentWillMount(): void {
       this.fetchStateFromServer();
     }
 
     fetchStateFromServer = (): void => {
-      fetchFrontendSettings(settingsType).then(
-        (serverData: DataFromServer<T>) => {
-          const editMode = serverData.status.email === serverData.userEmail;
+      fetchFrontendSettings(settingsType).then((serverData: DataFromServer<T>) => {
+        const editMode = serverData.status.email === serverData.userEmail;
 
-          this.updateWarningTimeout(editMode);
+        this.updateWarningTimeout(editMode);
 
-          this.setState({
-            ...serverData.value,
-            version: serverData.version,
-            lockStatus: serverData.status,
-            editMode: editMode,
-            modifiedTests: {},
-          });
-        }
-      );
+        this.setState({
+          ...serverData.value,
+          version: serverData.version,
+          lockStatus: serverData.status,
+          editMode: editMode,
+          modifiedTests: {},
+        });
+      });
     };
 
     // Maintains an alert if tool is left open for edit for 20 minutes
@@ -107,7 +100,7 @@ const TestEditor = <T extends Test>(
 
         const timeoutAlertId = window.setTimeout(() => {
           alert(
-            "You've had this editing session open for 20 minutes - if you leave it much longer then you may lose any unsaved work!\nIf you've finished then please either save or cancel."
+            "You've had this editing session open for 20 minutes - if you leave it much longer then you may lose any unsaved work!\nIf you've finished then please either save or cancel.",
           );
           this.setState({ timeoutAlertId: null });
         }, 60 * 20 * 1000);
@@ -120,33 +113,42 @@ const TestEditor = <T extends Test>(
     };
 
     cancel = (): void => {
-      requestUnlock(settingsType).then((response) =>
-        response.ok
-          ? this.fetchStateFromServer()
-          : alert("Error - can't request lock!")
+      requestUnlock(settingsType).then(response =>
+        response.ok ? this.fetchStateFromServer() : alert("Error - can't request lock!"),
       );
     };
 
-    save = (tests: T[]) => (): void => {
-      const testsToArchive: T[] = tests.filter(
-        (test) =>
-          this.state.modifiedTests[test.name] &&
-          this.state.modifiedTests[test.name].isArchived
+    save = (): void => {
+      // TODO - remove the concept of modifiedTests and simplify
+      // TODO - implement dialog in StickyBottomBar?
+      if (this.state.tests == null) {
+        return;
+      }
+
+      if (
+        Object.keys(this.state.modifiedTests).some(
+          testName => !this.state.modifiedTests[testName].isValid,
+        )
+      ) {
+        alert('Test contains errors. Please fix any errors before saving.');
+        return;
+      }
+
+      const testsToArchive: T[] = this.state.tests.filter(
+        test =>
+          this.state.modifiedTests[test.name] && this.state.modifiedTests[test.name].isArchived,
       );
 
-      Promise.all(
-        testsToArchive.map((test) => archiveTest(test, settingsType))
-      ).then((results) => {
-        const notOk = results.some((result) => !result.ok);
+      Promise.all(testsToArchive.map(test => archiveTest(test, settingsType))).then(results => {
+        const notOk = results.some(result => !result.ok);
         const numTestsToArchive = testsToArchive.length;
         if (notOk) {
-          alert(
-            `Failed to archive ${numTestsToArchive} test${
-              numTestsToArchive !== 1 ? "s" : ""
-            }`
-          );
+          alert(`Failed to archive ${numTestsToArchive} test${numTestsToArchive !== 1 ? 's' : ''}`);
         } else {
-          const updatedTests: T[] = tests.filter((test) => {
+          if (this.state.tests == null) {
+            return;
+          }
+          const updatedTests: T[] = this.state.tests.filter(test => {
             const modifiedTestData = this.state.modifiedTests[test.name];
             return !(
               modifiedTestData &&
@@ -162,14 +164,14 @@ const TestEditor = <T extends Test>(
           };
 
           saveFrontendSettings(settingsType, postData)
-            .then((resp) => {
+            .then(resp => {
               if (!resp.ok) {
-                resp.text().then((msg) => alert(msg));
+                resp.text().then(msg => alert(msg));
               }
               this.fetchStateFromServer();
             })
-            .catch((resp) => {
-              alert("Error while saving");
+            .catch(() => {
+              alert('Error while saving');
               this.fetchStateFromServer();
             });
         }
@@ -186,8 +188,7 @@ const TestEditor = <T extends Test>(
               isDeleted: false,
               isArchived: false,
               isNew: !(
-                this.state.tests &&
-                this.state.tests.some((test) => test.name === modifiedTestName)
+                this.state.tests && this.state.tests.some(test => test.name === modifiedTestName)
               ),
             },
           },
@@ -199,9 +200,7 @@ const TestEditor = <T extends Test>(
       });
     };
 
-    onTestErrorStatusChange = (testName: string) => (
-      isValid: boolean
-    ): void => {
+    onTestErrorStatusChange = (testName: string) => (isValid: boolean): void => {
       if (this.state.modifiedTests[testName]) {
         this.setState({
           modifiedTests: {
@@ -225,12 +224,19 @@ const TestEditor = <T extends Test>(
             isArchived: false,
           };
 
-      this.setState({
-        modifiedTests: {
-          ...this.state.modifiedTests,
-          [testName]: updatedState,
+      this.setState(
+        {
+          modifiedTests: {
+            ...this.state.modifiedTests,
+            [testName]: updatedState,
+          },
         },
-      });
+        () => {
+          if (this.state.tests !== null) {
+            this.save();
+          }
+        },
+      );
     };
 
     onTestArchive = (testName: string): void => {
@@ -243,33 +249,40 @@ const TestEditor = <T extends Test>(
             isArchived: true,
           };
 
-      this.setState({
-        modifiedTests: {
-          ...this.state.modifiedTests,
-          [testName]: updatedState,
+      this.setState(
+        {
+          modifiedTests: {
+            ...this.state.modifiedTests,
+            [testName]: updatedState,
+          },
         },
-      });
-    };
-
-    onSelectedTestName = (testName: string): void => {
-      this.setState({
-        selectedTestName: testName,
-      });
-    };
-
-    requestTestsLock = () => {
-      requestLock(settingsType).then((response) =>
-        response.ok
-          ? this.fetchStateFromServer()
-          : alert("Error - can't request lock!")
+        () => {
+          if (this.state.tests !== null) {
+            this.save();
+          }
+        },
       );
     };
 
-    requestTestsTakeControl = () => {
-      requestTakeControl(settingsType).then((response) =>
-        response.ok
-          ? this.fetchStateFromServer()
-          : alert("Error - can't take back control!")
+    onSelectedTestName = (testName: string): void => {
+      if (Object.keys(this.state.modifiedTests).length > 0) {
+        alert('Please either save or discard before selecting another test.');
+      } else {
+        this.setState({
+          selectedTestName: testName,
+        });
+      }
+    };
+
+    requestTestsLock = (): void => {
+      requestLock(settingsType).then(response =>
+        response.ok ? this.fetchStateFromServer() : alert("Error - can't request lock!"),
+      );
+    };
+
+    requestTestsTakeControl = (): void => {
+      requestTakeControl(settingsType).then(response =>
+        response.ok ? this.fetchStateFromServer() : alert("Error - can't take back control!"),
       );
     };
 
@@ -287,8 +300,10 @@ const TestEditor = <T extends Test>(
                 onTestArchive={this.onTestArchive}
                 onSelectedTestName={this.onSelectedTestName}
                 onTestErrorStatusChange={this.onTestErrorStatusChange}
+                requestTakeControl={this.requestTestsTakeControl}
                 requestLock={this.requestTestsLock}
-                save={this.save(this.state.tests)}
+                lockStatus={this.state.lockStatus}
+                save={this.save}
                 cancel={this.cancel}
                 editMode={this.state.editMode}
               />

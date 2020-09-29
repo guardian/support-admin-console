@@ -52,7 +52,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
 
   override lazy val router: Router = new Routes(
     httpErrorHandler,
-    new Application(authAction, controllerComponents),
+    new Application(authAction, controllerComponents, stage),
     new Login(authConfig, wsClient, requiredGoogleGroups, googleGroupChecker, controllerComponents),
     new SwitchesController(authAction, controllerComponents, stage, runtime),
     new ContributionTypesController(authAction, controllerComponents, stage, runtime),
@@ -61,6 +61,8 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     new EpicTestArchiveController(authAction, controllerComponents, wsClient, stage, runtime),
     new BannerTestsController(authAction, controllerComponents, wsClient, stage, runtime),
     new BannerTestArchiveController(authAction, controllerComponents, wsClient, stage, runtime),
+    new BannerTestsController2(authAction, controllerComponents, wsClient, stage, runtime),
+    new BannerTestArchiveController2(authAction, controllerComponents, wsClient, stage, runtime),
     assets
   )
 }

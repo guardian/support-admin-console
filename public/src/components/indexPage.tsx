@@ -1,5 +1,5 @@
 import React from 'react';
-import makeStyles from "@material-ui/core/styles/makeStyles";
+import makeStyles from '@material-ui/core/styles/makeStyles';
 
 const styles = makeStyles({
   body: {
@@ -21,19 +21,15 @@ const styles = makeStyles({
     fontSize: '16pt',
     lineHeight: '24px',
     textAlign: 'center',
-  }
+  },
 });
 
-export default function IndexPage() {
+export default function IndexPage(): React.ReactElement {
   const classes = styles();
   return (
     <div className={classes.body}>
-      <p className={classes.content}>
-        Welcome to the Reader Revenue Control Panel.
-      </p>
-      <p className={classes.content}>
-        To begin, select a tool from the menu.
-      </p>
+      <p className={classes.content}>Welcome to the Reader Revenue Control Panel.</p>
+      <p className={classes.content}>To begin, select a tool from the menu.</p>
     </div>
-  )
+  );
 }

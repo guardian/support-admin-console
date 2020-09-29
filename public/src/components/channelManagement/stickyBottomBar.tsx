@@ -1,30 +1,26 @@
-import React from "react";
-import {
-  Button,
-  createStyles,
-  Theme,
-  Typography,
-  WithStyles,
-  withStyles,
-} from "@material-ui/core";
-import AppBar from "@material-ui/core/AppBar";
-import StickyBottomBarStatus from "./stickyBottomBarStatus";
-import StickyBottomBarDetail from "./stickyBottomBarDetail";
-import StickyBottomBarActionButtons from "./stickyBottomBarActionButtons";
+import React from 'react';
+import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core';
+import AppBar from '@material-ui/core/AppBar';
+import { LockStatus } from './helpers/shared';
 
-const styles = ({ palette, spacing, mixins, typography, transitions }: Theme) =>
+import StickyBottomBarStatus from './stickyBottomBarStatus';
+import StickyBottomBarDetail from './stickyBottomBarDetail';
+import StickyBottomBarActionButtons from './stickyBottomBarActionButtons';
+
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+const styles = ({ palette, spacing }: Theme) =>
   createStyles({
     appBar: {
-      top: "auto",
+      top: 'auto',
       bottom: 0,
     },
     container: {
-      display: "flex",
-      alignItems: "baseline",
-      justifyContent: "center",
+      display: 'flex',
+      alignItems: 'baseline',
+      justifyContent: 'center',
       padding: `${spacing(2)}px 0`,
-      "& > * + *": {
-        marginLeft: "4px",
+      '& > * + *': {
+        marginLeft: '4px',
       },
     },
     containerEditMode: {
@@ -34,46 +30,49 @@ const styles = ({ palette, spacing, mixins, typography, transitions }: Theme) =>
       background: palette.grey[900],
     },
     actionButtonContainer: {
-      position: "absolute",
+      position: 'absolute',
       top: 0,
       bottom: 0,
-      left: "100px",
-      right: "100px",
-      display: "flex",
-      alignItems: "center",
+      left: '100px',
+      right: '100px',
+      display: 'flex',
+      alignItems: 'center',
     },
   });
 
-interface StickyBottomBarProps {
+interface StickyBottomBarProps extends WithStyles<typeof styles> {
   isInEditMode: boolean;
   selectedTestName?: string;
+  lockStatus: LockStatus;
+  requestTakeControl: () => void;
   requestLock: () => void;
   save: () => void;
   cancel: () => void;
 }
 
-const StickyBottomBar: React.FC<
-  StickyBottomBarProps & WithStyles<typeof styles>
-> = ({
+const StickyBottomBar: React.FC<StickyBottomBarProps> = ({
   classes,
   isInEditMode,
   selectedTestName,
+  lockStatus,
+  requestTakeControl,
   requestLock,
   save,
   cancel,
-}) => {
+}: StickyBottomBarProps) => {
   const containerClasses = [
     classes.container,
     isInEditMode ? classes.containerEditMode : classes.containerReadOnlyMode,
-  ].join(" ");
+  ].join(' ');
 
   return (
     <AppBar position="relative" className={classes.appBar}>
       <div className={containerClasses}>
-        <StickyBottomBarStatus isInEditMode={isInEditMode} />
+        <StickyBottomBarStatus isInEditMode={isInEditMode} isLocked={lockStatus.locked} />
         <StickyBottomBarDetail
           isInEditMode={isInEditMode}
           selectedTestName={selectedTestName}
+          lockStatus={lockStatus}
         />
       </div>
 
@@ -81,6 +80,8 @@ const StickyBottomBar: React.FC<
         <StickyBottomBarActionButtons
           isInEditMode={isInEditMode}
           hasTestSelected={selectedTestName !== undefined}
+          isLocked={lockStatus.locked}
+          requestTakeControl={requestTakeControl}
           requestLock={requestLock}
           save={save}
           cancel={cancel}

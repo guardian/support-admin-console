@@ -1,33 +1,34 @@
 import React from 'react';
 import update from 'immutability-helper';
 
-import {createStyles, Theme, withStyles, WithStyles} from "@material-ui/core";
-import {Amount} from './amounts';
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import Button from "@material-ui/core/Button";
+import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core';
+import { Amount } from './amounts';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import Button from '@material-ui/core/Button';
 
-
-const styles = ({ spacing }: Theme) => createStyles({
-  amount: {
-    marginLeft: spacing(1),
-    marginRight: spacing(1)
-  },
-  isDefault: {
-    color: 'red'
-  }
-});
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+const styles = ({ spacing }: Theme) =>
+  createStyles({
+    amount: {
+      marginLeft: spacing(1),
+      marginRight: spacing(1),
+    },
+    isDefault: {
+      color: 'red',
+    },
+  });
 
 interface Props extends WithStyles<typeof styles> {
-  amount: Amount,
-  deleteAmount: (amountToDelete: string) => void,
-  makeDefault: (defaultAmount: string) => void
+  amount: Amount;
+  deleteAmount: (amountToDelete: string) => void;
+  makeDefault: (defaultAmount: string) => void;
 }
 
 interface AmountState {
-  amount: Amount,
+  amount: Amount;
   //anchor determines where on the page the right-click menu should pop-up
-  anchor: HTMLElement | null
+  anchor: HTMLElement | null;
 }
 
 class AmountComponent extends React.Component<Props, AmountState> {
@@ -36,56 +37,60 @@ class AmountComponent extends React.Component<Props, AmountState> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      amount: {value: ''},
-      anchor: null
+      amount: { value: '' },
+      anchor: null,
     };
   }
 
   onButtonClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
     this.setState({
       anchor: event.currentTarget,
-      amount: this.state.amount
+      amount: this.state.amount,
     });
   };
 
-  onClose() {
-    this.setState((prevState) => update(prevState, {
-      anchor: {$set: null}
-    }));
+  onClose(): void {
+    this.setState(prevState =>
+      update(prevState, {
+        anchor: { $set: null },
+      }),
+    );
   }
 
-  render() {
-
+  render(): React.ReactElement {
     return (
       <div>
         <Button
-          className={this.props.classes.amount + (this.props.amount.isDefault ? ` ${this.props.classes.isDefault}` : '') }
+          className={
+            this.props.classes.amount +
+            (this.props.amount.isDefault ? ` ${this.props.classes.isDefault}` : '')
+          }
           onClick={this.onButtonClick}
-          variant='outlined'
+          variant="outlined"
         >
           {this.props.amount.value}
         </Button>
 
         <Menu
           open={Boolean(this.state.anchor)}
-          onClose={event => {
-            this.onClose()
+          onClose={(): void => {
+            this.onClose();
           }}
           anchorEl={this.state.anchor}
         >
-          { this.props.amount.isDefault ? null :
-              <MenuItem
-                onClick={() => {
-                  this.props.makeDefault(this.props.amount.value);
-                  this.onClose();
-                }}
-              >
-                Make default
-              </MenuItem>
-          }
+          {this.props.amount.isDefault ? null : (
+            <MenuItem
+              onClick={(): void => {
+                this.props.makeDefault(this.props.amount.value);
+                this.onClose();
+              }}
+            >
+              Make default
+            </MenuItem>
+          )}
 
           <MenuItem
-            onClick={() => {
+            onClick={(): void => {
               this.props.deleteAmount(this.props.amount.value);
               this.onClose();
             }}
@@ -94,7 +99,7 @@ class AmountComponent extends React.Component<Props, AmountState> {
           </MenuItem>
         </Menu>
       </div>
-    )
+    );
   }
 }
 

@@ -1,27 +1,22 @@
-import React from "react";
-import EpicTestEditor from "./epicTestEditor";
-import { Region } from "../../../utils/models";
+import React from 'react';
+import EpicTestEditor from './epicTestEditor';
+import { Region } from '../../../utils/models';
 
-import {
-  UserCohort,
-  Cta,
-  ArticlesViewedSettings,
-  Test,
-} from "../helpers/shared";
-import { InnerComponentProps, updateTest } from "../testEditor";
-import TestsForm from "../testEditor";
-import TestsFormLayout from "../testsFormLayout";
-import Sidebar from "../sidebar";
-import { FrontendSettingsType } from "../../../utils/requests";
-import { MaxEpicViewsDefaults } from "./maxEpicViewsEditor";
+import { UserCohort, Cta, ArticlesViewedSettings, Test } from '../helpers/shared';
+import { InnerComponentProps, updateTest } from '../testEditor';
+import TestsForm from '../testEditor';
+import TestsFormLayout from '../testsFormLayout';
+import Sidebar from '../sidebar';
+import { FrontendSettingsType } from '../../../utils/requests';
+import { MaxEpicViewsDefaults } from './maxEpicViewsEditor';
 
 export enum TickerEndType {
-  unlimited = "unlimited",
-  hardstop = "hardstop",
+  unlimited = 'unlimited',
+  hardstop = 'hardstop',
 }
 export enum TickerCountType {
-  money = "money",
-  people = "people",
+  money = 'money',
+  people = 'people',
 }
 interface TickerCopy {
   countLabel: string;
@@ -73,10 +68,7 @@ export interface EpicTest extends Test {
   articlesViewedSettings?: ArticlesViewedSettings;
 }
 
-const createDefaultEpicTest = (
-  newTestName: string,
-  newTestNickname: string
-): EpicTest => ({
+const createDefaultEpicTest = (newTestName: string, newTestNickname: string): EpicTest => ({
   name: newTestName,
   nickname: newTestNickname,
   isOn: false,
@@ -106,12 +98,14 @@ const EpicTestsForm: React.FC<Props> = ({
   onTestDelete,
   onTestArchive,
   onTestErrorStatusChange,
+  lockStatus,
+  requestTakeControl,
   requestLock,
   save,
   cancel,
   editMode,
-}) => {
-  const createTest = (name: string, nickname: string) => {
+}: Props) => {
+  const createTest = (name: string, nickname: string): void => {
     const newTests = [...tests, createDefaultEpicTest(name, nickname)];
     onTestsChange(newTests, name);
   };
@@ -131,9 +125,9 @@ const EpicTestsForm: React.FC<Props> = ({
       testEditor={
         selectedTestName ? (
           <EpicTestEditor
-            test={tests.find((test) => test.name === selectedTestName)}
+            test={tests.find(test => test.name === selectedTestName)}
             hasChanged={!!modifiedTests[selectedTestName]}
-            onChange={(updatedTest) =>
+            onChange={(updatedTest): void =>
               onTestsChange(updateTest(tests, updatedTest), updatedTest.name)
             }
             onValidationChange={onTestErrorStatusChange(selectedTestName)}
@@ -141,32 +135,25 @@ const EpicTestsForm: React.FC<Props> = ({
             editMode={editMode}
             onDelete={onTestDelete}
             onArchive={onTestArchive}
-            isDeleted={
-              modifiedTests[selectedTestName] &&
-              modifiedTests[selectedTestName].isDeleted
-            }
+            isDeleted={modifiedTests[selectedTestName] && modifiedTests[selectedTestName].isDeleted}
             isArchived={
-              modifiedTests[selectedTestName] &&
-              modifiedTests[selectedTestName].isArchived
+              modifiedTests[selectedTestName] && modifiedTests[selectedTestName].isArchived
             }
-            isNew={
-              modifiedTests[selectedTestName] &&
-              modifiedTests[selectedTestName].isNew
-            }
-            createTest={(newTest: EpicTest) => {
+            isNew={modifiedTests[selectedTestName] && modifiedTests[selectedTestName].isNew}
+            createTest={(newTest: EpicTest): void => {
               const newTests = [...tests, newTest];
               onTestsChange(newTests, newTest.name);
             }}
-            testNames={tests.map((test) => test.name)}
+            testNames={tests.map(test => test.name)}
             testNicknames={
-              tests
-                .map((test) => test.nickname)
-                .filter((nickname) => !!nickname) as string[]
+              tests.map(test => test.nickname).filter(nickname => !!nickname) as string[]
             }
           />
         ) : null
       }
       selectedTestName={selectedTestName}
+      lockStatus={lockStatus}
+      requestTakeControl={requestTakeControl}
       requestLock={requestLock}
       save={save}
       cancel={cancel}

@@ -8,6 +8,7 @@ GET /contribution-types                             controllers.Application.inde
 GET /amounts                                        controllers.Application.index
 GET /epic-tests                                     controllers.Application.index
 GET /banner-tests                                   controllers.Application.index
+GET /banner-tests2                                  controllers.Application.index
 
 # ----- Authentication ----- #
 GET  /login                                         controllers.Login.login
@@ -46,6 +47,16 @@ POST  /frontend/banner-tests/takecontrol              controllers.BannerTestsCon
 POST  /frontend/banner-tests/archive                  controllers.BannerTestArchiveController.set
 GET   /frontend/banner-tests/archive/:testName        controllers.BannerTestArchiveController.get(testName: String)
 GET   /frontend/banner-tests/archived-test-names      controllers.BannerTestArchiveController.list
+
+# ----- banner tests ----- #
+GET   /frontend/banner-tests2                          controllers.BannerTestsController2.get
+POST  /frontend/banner-tests2/update                   controllers.BannerTestsController2.set
+POST  /frontend/banner-tests2/lock                     controllers.BannerTestsController2.lock
+POST  /frontend/banner-tests2/unlock                   controllers.BannerTestsController2.unlock
+POST  /frontend/banner-tests2/takecontrol              controllers.BannerTestsController2.takecontrol
+POST  /frontend/banner-tests2/archive                  controllers.BannerTestArchiveController2.set
+GET   /frontend/banner-tests2/archive/:testName        controllers.BannerTestArchiveController2.get(testName: String)
+GET   /frontend/banner-tests2/archived-test-names      controllers.BannerTestArchiveController2.list
 
 # Map static resources from the /public folder to the /assets URL path
 GET  /assets/*file                                  controllers.Assets.at(path="/public", file)

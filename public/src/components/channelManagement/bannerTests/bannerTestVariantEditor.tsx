@@ -1,217 +1,178 @@
-import React from 'react';
-import {Theme, createStyles, WithStyles, withStyles} from "@material-ui/core";
-import EditableTextField from "../editableTextField";
-import ButtonWithConfirmationPopup from '../buttonWithConfirmationPopup';
-import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
-import {onFieldValidationChange, ValidationStatus} from '../helpers/validation';
-import {BannerVariant} from "./bannerTestsForm";
-import CtaEditor from "../ctaEditor";
-import {Cta, defaultCta} from "../helpers/shared";
-import {getInvalidTemplateError} from '../helpers/copyTemplates';
+import React, { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import {
+  createStyles,
+  TextField,
+  Theme,
+  Typography,
+  WithStyles,
+  withStyles,
+} from '@material-ui/core';
+import VariantEditorButtonsEditor from '../variantEditorButtonsEditor';
+import { invalidTemplateValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
+import { Cta } from '../helpers/shared';
+import BannerTemplateSelector from './bannerTemplateSelector';
+import { BannerTemplate, BannerVariant } from '../../../models/banner';
 
-const styles = ({ palette, spacing, typography }: Theme) => createStyles({
-  container: {
-    width: "100%",
-    borderTop: `2px solid ${palette.grey['300']}`,
-    marginLeft: "15px"
-  },
-  variant: {
-    display: "flex",
-    "& span": {
-      marginLeft: "4px",
-      marginRight: "4px"
-    }
-  },
-  variantName: {
-    width: "10%"
-  },
-  variantHeading: {
-    width: "20%"
-  },
-  variantListHeading: {
-    fontWeight: "bold"
-  },
-  formControl: {
-    marginTop: spacing(2),
-    marginBottom: spacing(1),
-    minWidth: "60%",
-    maxWidth: "100%",
-    display: "block",
-  },
-  deleteButton: {
-    marginTop: spacing(2),
-    float: "right"
-  },
-  label: {
-    fontSize: typography.pxToRem(16),
-    fontWeight: typography.fontWeightMedium,
-    color: "black"
-  },
-  ctaContainer: {
-    marginTop: "15px",
-    marginBottom: "15px"
-  },
-  hook: {
-    maxWidth: '400px'
-  }
-});
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+const styles = ({ palette, spacing }: Theme) =>
+  createStyles({
+    container: {
+      width: '100%',
+      paddingTop: spacing(2),
+      paddingLeft: spacing(4),
+      paddingRight: spacing(10),
 
-interface Props extends WithStyles<typeof styles> {
-  variant?: BannerVariant,
-  onVariantChange: (updatedVariant: BannerVariant) => void,
-  editMode: boolean,
-  onDelete: () => void,
-  onValidationChange: (isValid: boolean) => void
+      '& > * + *': {
+        marginTop: spacing(3),
+      },
+    },
+    hook: {
+      maxWidth: '400px',
+    },
+    sectionHeader: {
+      fontSize: 16,
+      color: palette.grey[900],
+      fontWeight: 500,
+    },
+    sectionContainer: {
+      paddingTop: spacing(1),
+      paddingBottom: spacing(2),
+      borderBottom: `1px solid ${palette.grey[500]}`,
+      '& > * + *': {
+        marginTop: spacing(3),
+      },
+    },
+  });
+
+const HEADER_DEFAULT_HELPER_TEXT = 'Assitive text';
+const BODY_DEFAULT_HELPER_TEXT = 'Main banner message, including paragraph breaks';
+const HIGHTLIGHTED_TEXT_HELPER_TEXT = 'Final sentence of body copy';
+
+interface FormData {
+  heading: string;
+  body: string;
+  highlightedText: string;
 }
 
-interface State {
-  validationStatus: ValidationStatus
+interface BannerTestVariantEditorProps extends WithStyles<typeof styles> {
+  variant: BannerVariant;
+  onVariantChange: (updatedVariant: BannerVariant) => void;
+  editMode: boolean;
+  onDelete: () => void;
+  onValidationChange: (isValid: boolean) => void;
 }
 
-enum VariantFieldNames {
-  name = "name",
-  heading = "heading",
-  body = "body",
-  highlightedText = "highlightedText",
-  footer = "footer",
-  backgroundImageUrl = "backgroundImageUrl"
-}
-
-class BannerTestVariantEditor extends React.Component<Props, State> {
-
-  state: State = {
-    validationStatus: {}
+const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
+  classes,
+  variant,
+  editMode,
+  onValidationChange,
+  onVariantChange,
+}: BannerTestVariantEditorProps) => {
+  const defaultValues: FormData = {
+    heading: variant.heading || '',
+    body: variant.body,
+    highlightedText: variant.highlightedText || '',
   };
 
-  updateVariant = (update: (variant: BannerVariant) => BannerVariant) => {
-    if (this.props.variant) {
-      this.props.onVariantChange(update(this.props.variant));
-    }
+  const { register, handleSubmit, errors } = useForm<FormData>({ mode: 'onChange', defaultValues });
+
+  useEffect(() => {
+    const isValid = Object.keys(errors).length === 0;
+    onValidationChange(isValid);
+  }, [errors.body, errors.heading, errors.highlightedText]);
+
+  const onSubmit = ({ heading, body, highlightedText }: FormData): void => {
+    onVariantChange({ ...variant, heading, body, highlightedText });
   };
 
-  onOptionalTextChange = (fieldName: string) => (updatedString: string): void => {
-    //For optional fields, an empty string means it's unset
-    this.updateVariant(variant => ({
-      ...variant,
-      [fieldName]: updatedString === "" ? undefined : updatedString
-    }));
+  const updatePrimaryCta = (updatedCta?: Cta): void => {
+    onVariantChange({ ...variant, cta: updatedCta });
+  };
+  const updateSecondaryCta = (updatedCta?: Cta): void => {
+    onVariantChange({ ...variant, secondaryCta: updatedCta });
   };
 
-  onBodyChange = (fieldName: string) => (updatedBody: string): void => {
-    this.updateVariant(variant => ({...variant, [fieldName]: updatedBody}));
-  };
-
-  onVariantSwitchChange = (fieldName: string) => (event: React.ChangeEvent<HTMLInputElement>):void =>  {
-    const updatedBool = event.target.checked;
-    this.updateVariant(variant => ({...variant, [fieldName]: updatedBool}))
-  };
-
-  renderDeleteVariantButton = (variantName: string) => {
-    return this.props.editMode && (
-      <ButtonWithConfirmationPopup
-        buttonText="Delete variant"
-        confirmationText={`Are you sure? This cannot be undone!`}
-        onConfirm={() => this.props.onDelete()}
-        icon={<DeleteSweepIcon />}
-      />
-    );
-  }
-
-  renderVariantEditor = (variant: BannerVariant): React.ReactNode => {
-    const {classes} = this.props;
-    return (
-        <>
-          <div className={classes.hook}>
-            <EditableTextField
-              text={variant.heading || ''}
-              onSubmit={this.onOptionalTextChange('heading')}
-              label="Header"
-              editEnabled={this.props.editMode}
-              helperText="e.g. Since you're here"
-              validation={
-                {
-                  getError: (value: string) => getInvalidTemplateError(value),
-                  onChange: onFieldValidationChange(this)("heading")
-                }
-              }
-            />
-          </div>
-
-          <EditableTextField
-            required
-            textarea
-            height={10}
-            text={variant.body}
-            onSubmit={this.onBodyChange("body")}
-            label="Body copy"
-            editEnabled={this.props.editMode}
-            helperText="Main Banner message, including paragraph breaks"
-            validation={
-              {
-                getError: (value: string) => {
-                  if (value.trim() === '') return "Field must not be empty";
-                  else return getInvalidTemplateError(value);
-                },
-                onChange: onFieldValidationChange(this)("body")
-              }
-            }
-          />
-
-          <EditableTextField
-            text={variant.highlightedText || ""}
-            onSubmit={this.onOptionalTextChange("highlightedText")}
-            label="Highlighted text"
-            helperText="Final sentence, highlighted in yellow"
-            editEnabled={this.props.editMode}
-            validation={
-              {
-                getError: (value: string) => getInvalidTemplateError(value),
-                onChange: onFieldValidationChange(this)("highlightedText")
-              }
-            }
-          />
-
-
-          <div className={classes.ctaContainer}>
-            <span className={classes.label}>Buttons</span>
-            <CtaEditor
-              cta={variant.cta}
-              update={(cta?: Cta) =>
-                this.updateVariant(variant => ({...variant, cta}))
-              }
-              editMode={this.props.editMode}
-              label="Has a button linking to the landing page"
-              defaultText={defaultCta.text}
-              defaultBaseUrl={defaultCta.baseUrl}
-              manualCampaignCode={false}
-            />
-
-            <CtaEditor
-              cta={variant.secondaryCta}
-              update={(cta?: Cta) =>
-                this.updateVariant(variant => ({...variant, secondaryCta: cta}))
-              }
-              editMode={this.props.editMode}
-              label={"Has a secondary button"}
-              manualCampaignCode={true}
-            />
-          </div>
-
-          <div className={classes.deleteButton}>{this.renderDeleteVariantButton(variant.name)}</div>
-
-        </>
-    )
-  };
-
-  render(): React.ReactNode {
-    const {classes} = this.props;
-
-    return (
-      <div className={classes.container}>
-        {this.props.variant ? this.renderVariantEditor(this.props.variant) : <div>No variant selected</div>}
+  return (
+    <div className={classes.container}>
+      <div className={classes.sectionContainer}>
+        <Typography className={classes.sectionHeader} variant="h4">
+          Banner template
+        </Typography>
+        <BannerTemplateSelector
+          variant={variant}
+          onVariantChange={onVariantChange}
+          editMode={editMode}
+        />
       </div>
-    )
-  }
-}
+
+      <TextField
+        inputRef={register({ validate: invalidTemplateValidator })}
+        error={errors.heading !== undefined}
+        helperText={errors.heading ? errors.heading.message : HEADER_DEFAULT_HELPER_TEXT}
+        onBlur={handleSubmit(onSubmit)}
+        name="heading"
+        label="Header"
+        margin="normal"
+        variant="outlined"
+        disabled={!editMode}
+        fullWidth
+      />
+
+      <TextField
+        inputRef={register({
+          required: EMPTY_ERROR_HELPER_TEXT,
+          validate: invalidTemplateValidator,
+        })}
+        error={errors.body !== undefined}
+        helperText={errors.body ? errors.body.message : BODY_DEFAULT_HELPER_TEXT}
+        onBlur={handleSubmit(onSubmit)}
+        name="body"
+        label="Body copy"
+        margin="normal"
+        variant="outlined"
+        multiline
+        rows={10}
+        disabled={!editMode}
+        fullWidth
+      />
+
+      {variant.template === BannerTemplate.ContributionsBanner && (
+        <TextField
+          inputRef={register({
+            validate: invalidTemplateValidator,
+          })}
+          error={errors.highlightedText !== undefined}
+          helperText={
+            errors.highlightedText ? errors.highlightedText.message : HIGHTLIGHTED_TEXT_HELPER_TEXT
+          }
+          onBlur={handleSubmit(onSubmit)}
+          name="highlightedText"
+          label="Hightlighted text"
+          margin="normal"
+          variant="outlined"
+          disabled={!editMode}
+          fullWidth
+        />
+      )}
+
+      <div className={classes.sectionContainer}>
+        <Typography className={classes.sectionHeader} variant="h4">
+          Buttons
+        </Typography>
+
+        <VariantEditorButtonsEditor
+          primaryCta={variant.cta}
+          secondaryCta={variant.secondaryCta}
+          updatePrimaryCta={updatePrimaryCta}
+          updateSecondaryCta={updateSecondaryCta}
+          isDisabled={!editMode}
+          onValidationChange={onValidationChange}
+        />
+      </div>
+    </div>
+  );
+};
 
 export default withStyles(styles)(BannerTestVariantEditor);

@@ -60,3 +60,22 @@ Updates are only permitted if the user has a lock.
 A separate S3 object is used for recording the lock status.
 
 Optionally sends a Fastly PURGE request after updates to S3.
+
+### How to add a new switch
+This section will describe how to add a simple on/off switch to the switchboard for a PR example of this [see here](https://github.com/guardian/support-admin-console/pull/157/files)
+
+- Add your new switch to the `SupportFrontendSwitches` class in _SupportFrontendSwitches.scala_ make sure to provide a default value for the new switch
+as this will be used when loading values from S3 for the first time. Eg:
+```
+case class SupportFrontendSwitches(
+  ...
+  myNewSwitch: SwitchState = Off
+)
+```
+- Add the new switch into the `Switches` interface in _switchboard.tsx_
+- Set a default value for your new switch in the constructor of the `Switchboard` component in _switchboard.tsx_
+- Add a user interface component to control the state of your switch in _switchboard.tsx_
+- Update _S3JsonSpec.scala_ to add the new switch to both the `expectedJson` string and the `expectedDecoded` object
+
+Your new switch should now be ready to use
+
