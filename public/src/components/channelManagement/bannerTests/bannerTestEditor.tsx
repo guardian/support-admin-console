@@ -160,7 +160,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
 
   const onCopy = (name: string, nickname: string): void => {
     onSelectedTestName(name);
-    createTest({ ...test, name: name, nickname: nickname });
+    createTest({ ...test, name: name, nickname: nickname, isOn: false });
   };
 
   if (test && visible) {

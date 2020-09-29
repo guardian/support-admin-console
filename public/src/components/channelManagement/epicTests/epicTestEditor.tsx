@@ -168,6 +168,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, TestEditorStat
         ...this.props.test,
         name: newTestName,
         nickname: newTestNickname,
+        isOn: false,
       };
       this.props.createTest(newTest);
     }
