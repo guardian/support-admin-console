@@ -1,9 +1,14 @@
-import React from 'react';
-import { createStyles, withStyles, WithStyles, Theme, Typography } from '@material-ui/core';
-
-import EditableTextField from './editableTextField';
-import { getNotNumberError } from './helpers/validation';
-import useValidation from './hooks/useValidation';
+import React, { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import {
+  createStyles,
+  withStyles,
+  WithStyles,
+  TextField,
+  Theme,
+  Typography,
+} from '@material-ui/core';
+import { notNumberValidator } from './helpers/validation';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing }: Theme) =>
@@ -17,6 +22,10 @@ const styles = ({ spacing }: Theme) =>
       fontSize: 14,
     },
   });
+
+interface FormData {
+  minArticles: string;
+}
 
 interface TestEditorMinArticlesViewedInputProps extends WithStyles<typeof styles> {
   minArticles: number;
@@ -32,32 +41,40 @@ const TestEditorMinArticlesViewedInput: React.FC<TestEditorMinArticlesViewedInpu
   onValidationChange,
   onUpdate,
 }: TestEditorMinArticlesViewedInputProps) => {
-  const setValidationStatusForField = useValidation(onValidationChange);
+  const defaultValues: FormData = {
+    minArticles: minArticles.toString(),
+  };
 
-  const getError = getNotNumberError;
-  const onChange = (isValid: boolean): void =>
-    setValidationStatusForField('minArticlesViewedInput', isValid);
-  const onSubmit = (updatedMinArticles: string): void => {
-    const number = Number(updatedMinArticles);
-    if (!Number.isNaN(number)) {
-      onUpdate(number);
-    }
+  const { register, errors, handleSubmit, reset } = useForm<FormData>({
+    mode: 'onChange',
+    defaultValues,
+  });
+
+  useEffect(() => {
+    reset(defaultValues);
+  }, [defaultValues.minArticles]);
+
+  useEffect(() => {
+    const isValid = Object.keys(errors).length === 0;
+    onValidationChange(isValid);
+  }, [errors.minArticles]);
+
+  const onSubmit = ({ minArticles }: FormData): void => {
+    onUpdate(parseInt(minArticles));
   };
 
   return (
     <div className={classes.container}>
-      <EditableTextField
-        text={minArticles.toString()}
-        onSubmit={onSubmit}
+      <TextField
+        inputRef={register({ validate: notNumberValidator })}
+        error={errors.minArticles !== undefined}
+        helperText={errors.minArticles?.message}
+        onBlur={handleSubmit(onSubmit)}
+        name="minArticles"
         label="Show the banner on"
-        helperText="Must be a number"
-        editEnabled={!isDisabled}
-        validation={{
-          getError: getError,
-          onChange: onChange,
-        }}
+        InputLabelProps={{ shrink: true }}
         variant="filled"
-        isNumberField
+        disabled={isDisabled}
       />
       <Typography className={classes.text}>page views</Typography>
     </div>

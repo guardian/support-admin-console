@@ -45,8 +45,6 @@ interface CreateTestDialogProps extends WithStyles<typeof styles> {
   existingNames: string[];
   existingNicknames: string[];
   mode: Mode;
-  copiedTestName?: string;
-  copiedTestNickname?: string;
   createTest: (name: string, nickname: string) => void;
 }
 
@@ -57,13 +55,11 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
   existingNames,
   existingNicknames,
   mode,
-  copiedTestName,
-  copiedTestNickname,
   createTest,
 }: CreateTestDialogProps) => {
   const defaultValues = {
-    name: mode === 'COPY' ? `Copy of ${copiedTestName}` : '',
-    nickname: mode === 'COPY' ? `Copy of ${copiedTestNickname}` : '',
+    name: '',
+    nickname: '',
   };
 
   const { register, handleSubmit, errors } = useForm<FormData>({
