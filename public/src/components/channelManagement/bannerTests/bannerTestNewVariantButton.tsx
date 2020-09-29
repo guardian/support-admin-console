@@ -57,6 +57,11 @@ const styles = ({ spacing, palette }: Theme) =>
       justifyContent: 'space-between',
       paddingRight: '8px',
     },
+    input: {
+      '& input': {
+        textTransform: 'uppercase !important',
+      },
+    },
   });
 
 const NAME_DEFAULT_HELPER_TEXT = "Format: 'control' or 'v1_name'";
@@ -82,8 +87,8 @@ const BannerTestNewVariantButton: React.FC<BannerTestNewVariantButtonProps> = ({
   const { register, handleSubmit, errors } = useForm<FormData>();
 
   const onSubmit = ({ name }: FormData): void => {
-    createVariant(name);
     close();
+    createVariant(name.toUpperCase());
   };
 
   return (
@@ -109,6 +114,7 @@ const BannerTestNewVariantButton: React.FC<BannerTestNewVariantButtonProps> = ({
         </div>
         <DialogContent dividers>
           <TextField
+            className={classes.input}
             inputRef={register({
               required: EMPTY_ERROR_HELPER_TEXT,
               pattern: {

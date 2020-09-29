@@ -28,6 +28,11 @@ const styles = createStyles({
     justifyContent: 'space-between',
     paddingRight: '8px',
   },
+  input: {
+    '& input': {
+      textTransform: 'uppercase !important',
+    },
+  },
 });
 
 type FormData = {
@@ -67,7 +72,7 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
   });
 
   const onSubmit = ({ name, nickname }: FormData): void => {
-    createTest(name, nickname);
+    createTest(name.toUpperCase(), nickname.toUpperCase());
     close();
   };
 
@@ -83,6 +88,7 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
       </div>
       <DialogContent dividers>
         <TextField
+          className={classes.input}
           inputRef={register({
             required: EMPTY_ERROR_HELPER_TEXT,
             pattern: {
@@ -101,6 +107,7 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
           fullWidth
         />
         <TextField
+          className={classes.input}
           inputRef={register({
             required: EMPTY_ERROR_HELPER_TEXT,
             validate: createDuplicateValidator(existingNicknames),
