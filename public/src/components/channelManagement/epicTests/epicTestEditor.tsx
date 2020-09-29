@@ -120,6 +120,7 @@ interface EpicTestEditorProps extends WithStyles<typeof styles> {
   editMode: boolean;
   onDelete: (testName: string) => void;
   onArchive: (testName: string) => void;
+  onSelectedTestName: (testName: string) => void;
   isDeleted: boolean;
   isArchived: boolean;
   isNew: boolean;
@@ -164,6 +165,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, TestEditorStat
 
   copyTest = (newTestName: string, newTestNickname: string): void => {
     if (this.props.test) {
+      this.props.onSelectedTestName(newTestName);
       const newTest: EpicTest = {
         ...this.props.test,
         name: newTestName,
