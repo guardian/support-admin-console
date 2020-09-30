@@ -6,6 +6,7 @@ import { LockStatus } from './helpers/shared';
 import StickyBottomBarStatus from './stickyBottomBarStatus';
 import StickyBottomBarDetail from './stickyBottomBarDetail';
 import StickyBottomBarActionButtons from './stickyBottomBarActionButtons';
+import StickyBottomBarHelpButton from './stickyBottomBarHelpButton';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ palette, spacing }: Theme) =>
@@ -37,6 +38,11 @@ const styles = ({ palette, spacing }: Theme) =>
       right: '100px',
       display: 'flex',
       alignItems: 'center',
+    },
+    helpButtonContainer: {
+      position: 'absolute',
+      top: '-62px',
+      right: '24px',
     },
   });
 
@@ -87,6 +93,12 @@ const StickyBottomBar: React.FC<StickyBottomBarProps> = ({
           cancel={cancel}
         />
       </div>
+
+      {isInEditMode && (
+        <div className={classes.helpButtonContainer}>
+          <StickyBottomBarHelpButton />
+        </div>
+      )}
     </AppBar>
   );
 };
