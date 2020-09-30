@@ -28,6 +28,11 @@ const styles = createStyles({
     justifyContent: 'space-between',
     paddingRight: '8px',
   },
+  input: {
+    '& input': {
+      textTransform: 'uppercase !important',
+    },
+  },
 });
 
 type FormData = {
@@ -45,8 +50,6 @@ interface CreateTestDialogProps extends WithStyles<typeof styles> {
   existingNames: string[];
   existingNicknames: string[];
   mode: Mode;
-  copiedTestName?: string;
-  copiedTestNickname?: string;
   createTest: (name: string, nickname: string) => void;
 }
 
@@ -57,13 +60,11 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
   existingNames,
   existingNicknames,
   mode,
-  copiedTestName,
-  copiedTestNickname,
   createTest,
 }: CreateTestDialogProps) => {
   const defaultValues = {
-    name: mode === 'COPY' ? `Copy of ${copiedTestName}` : '',
-    nickname: mode === 'COPY' ? `Copy of ${copiedTestNickname}` : '',
+    name: '',
+    nickname: '',
   };
 
   const { register, handleSubmit, errors } = useForm<FormData>({
@@ -71,7 +72,7 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
   });
 
   const onSubmit = ({ name, nickname }: FormData): void => {
-    createTest(name, nickname);
+    createTest(name.toUpperCase(), nickname.toUpperCase());
     close();
   };
 
@@ -87,6 +88,7 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
       </div>
       <DialogContent dividers>
         <TextField
+          className={classes.input}
           inputRef={register({
             required: EMPTY_ERROR_HELPER_TEXT,
             pattern: {
@@ -105,6 +107,7 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
           fullWidth
         />
         <TextField
+          className={classes.input}
           inputRef={register({
             required: EMPTY_ERROR_HELPER_TEXT,
             validate: createDuplicateValidator(existingNicknames),

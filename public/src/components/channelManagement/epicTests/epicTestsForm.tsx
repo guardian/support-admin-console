@@ -135,6 +135,7 @@ const EpicTestsForm: React.FC<Props> = ({
             editMode={editMode}
             onDelete={onTestDelete}
             onArchive={onTestArchive}
+            onSelectedTestName={onSelectedTestName}
             isDeleted={modifiedTests[selectedTestName] && modifiedTests[selectedTestName].isDeleted}
             isArchived={
               modifiedTests[selectedTestName] && modifiedTests[selectedTestName].isArchived

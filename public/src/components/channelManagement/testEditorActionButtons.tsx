@@ -47,8 +47,6 @@ interface TestEditorActionButtonsProps extends WithStyles<typeof styles> {
   onArchive: () => void;
   onDelete: () => void;
   isDisabled: boolean;
-  testName: string;
-  testNickname?: string;
   onCopy: (name: string, nickname: string) => void;
 }
 
@@ -59,8 +57,6 @@ const TestEditorActionButtons: React.FC<TestEditorActionButtonsProps> = ({
   onArchive,
   onDelete,
   isDisabled,
-  testName,
-  testNickname,
   onCopy,
 }: TestEditorActionButtonsProps) => {
   const DeleteButton: React.FC = () => {
@@ -164,8 +160,6 @@ const TestEditorActionButtons: React.FC<TestEditorActionButtonsProps> = ({
           existingNames={existingNames}
           existingNicknames={existingNicknames}
           mode="COPY"
-          copiedTestName={testName}
-          copiedTestNickname={testNickname}
           createTest={onCopy}
         />
       </>

@@ -120,7 +120,8 @@ const StickyBottomBarActionButtons: React.FC<StickyBottomBarActionButtonsProps> 
       color="primary"
       disableElevation
       startIcon={<SaveIcon />}
-      onClick={save}
+      // this is a bit of a hack to prevent needing to click save twice when a field is focused
+      onMouseUp={save}
     >
       {/*eslint-disable-next-line react/prop-types */}
       <Typography className={classes.buttonText}>
