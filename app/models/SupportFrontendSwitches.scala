@@ -45,7 +45,9 @@ case class SupportFrontendSwitches(
   enableDigitalSubGifting: SwitchState,
   useDotcomContactPage: SwitchState,
   enableRecaptchaBackend: SwitchState,
-  enableRecaptchaFrontend: SwitchState
+  enableRecaptchaFrontend: SwitchState,
+  enableContributionsCampaign: SwitchState = Off,
+  forceContributionsCampaign: SwitchState = Off,
 )
 
 object SupportFrontendSwitches {

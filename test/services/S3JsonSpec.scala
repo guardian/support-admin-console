@@ -43,7 +43,9 @@ class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
       |      "enableDigitalSubGifting": "Off",
       |      "useDotcomContactPage": "Off",
       |      "enableRecaptchaBackend" : "On",
-      |      "enableRecaptchaFrontend" : "On"
+      |      "enableRecaptchaFrontend" : "On",
+      |      "enableContributionsCampaign" : "On",
+      |      "forceContributionsCampaign" : "On"
       |}
     """.stripMargin
 
@@ -73,7 +75,9 @@ class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
       enableDigitalSubGifting = Off,
       useDotcomContactPage = Off,
       enableRecaptchaBackend = On,
-      enableRecaptchaFrontend = On
+      enableRecaptchaFrontend = On,
+      enableContributionsCampaign = On,
+      forceContributionsCampaign = On
     ),
     version = "v1"
   )
