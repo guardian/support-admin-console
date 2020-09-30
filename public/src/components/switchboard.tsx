@@ -51,6 +51,8 @@ interface Switches {
   useDotcomContactPage: SwitchState;
   enableRecaptchaBackend: SwitchState;
   enableRecaptchaFrontend: SwitchState;
+  enableContributionsCampaign: SwitchState;
+  forceContributionsCampaign: SwitchState;
   experiments: {
     [featureSwitch: string]: {
       name: string;
@@ -151,6 +153,8 @@ class Switchboard extends React.Component<Props, Switches> {
       useDotcomContactPage: SwitchState.Off,
       enableRecaptchaBackend: SwitchState.Off,
       enableRecaptchaFrontend: SwitchState.Off,
+      enableContributionsCampaign: SwitchState.Off,
+      forceContributionsCampaign: SwitchState.Off,
       experiments: {},
     };
     this.previousStateFromServer = null;
@@ -365,6 +369,37 @@ class Switchboard extends React.Component<Props, Switches> {
                 />
               }
               label="Use emergency contact page on dotcom"
+            />
+          </FormControl>
+          <FormControl component={'fieldset' as 'div'} className={classes.formControl}>
+            <FormLabel component={'legend' as 'label'}>Campaign Switches</FormLabel>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={switchStateToBoolean(this.state.enableContributionsCampaign)}
+                  onChange={(event): void =>
+                    this.setState({
+                      enableContributionsCampaign: booleanToSwitchState(event.target.checked),
+                    })
+                  }
+                  value={switchStateToBoolean(this.state.enableContributionsCampaign)}
+                />
+              }
+              label="Enable contributions campaign"
+            />
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={switchStateToBoolean(this.state.forceContributionsCampaign)}
+                  onChange={(event): void =>
+                    this.setState({
+                      forceContributionsCampaign: booleanToSwitchState(event.target.checked),
+                    })
+                  }
+                  value={switchStateToBoolean(this.state.forceContributionsCampaign)}
+                />
+              }
+              label="Force all users into the contributions campaign"
             />
           </FormControl>
         </div>
