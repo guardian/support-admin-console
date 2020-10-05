@@ -7,6 +7,7 @@ GET /switches                                       controllers.Application.inde
 GET /contribution-types                             controllers.Application.index
 GET /amounts                                        controllers.Application.index
 GET /epic-tests                                     controllers.Application.index
+GET /liveblog-epic-tests                            controllers.Application.index
 GET /banner-tests                                   controllers.Application.index
 GET /banner-tests2                                  controllers.Application.index
 
@@ -37,6 +38,16 @@ POST  /frontend/epic-tests/takecontrol              controllers.EpicTestsControl
 POST  /frontend/epic-tests/archive                  controllers.EpicTestArchiveController.set
 GET   /frontend/epic-tests/archive/:testName        controllers.EpicTestArchiveController.get(testName: String)
 GET   /frontend/epic-tests/archived-test-names      controllers.EpicTestArchiveController.list
+
+# ----- liveblog epic tests ----- #
+GET   /frontend/liveblog-epic-tests                          controllers.LiveblogEpicTestsController.get
+POST  /frontend/liveblog-epic-tests/update                   controllers.LiveblogEpicTestsController.set
+POST  /frontend/liveblog-epic-tests/lock                     controllers.LiveblogEpicTestsController.lock
+POST  /frontend/liveblog-epic-tests/unlock                   controllers.LiveblogEpicTestsController.unlock
+POST  /frontend/liveblog-epic-tests/takecontrol              controllers.LiveblogEpicTestsController.takecontrol
+POST  /frontend/liveblog-epic-tests/archive                  controllers.LiveblogEpicTestArchiveController.set
+GET   /frontend/liveblog-epic-tests/archive/:testName        controllers.LiveblogEpicTestArchiveController.get(testName: String)
+GET   /frontend/liveblog-epic-tests/archived-test-names      controllers.LiveblogEpicTestArchiveController.list
 
 # ----- banner tests ----- #
 GET   /frontend/banner-tests                          controllers.BannerTestsController.get

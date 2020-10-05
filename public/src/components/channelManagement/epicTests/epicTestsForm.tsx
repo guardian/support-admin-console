@@ -163,4 +163,8 @@ const EpicTestsForm: React.FC<Props> = ({
   );
 };
 
-export default TestsForm(EpicTestsForm, FrontendSettingsType.epicTests);
+export const ArticleEpicTestsForm = TestsForm(EpicTestsForm, FrontendSettingsType.epicTests);
+export const LiveblogEpicTestsForm = TestsForm(
+  EpicTestsForm,
+  FrontendSettingsType.liveblogEpicTests,
+);

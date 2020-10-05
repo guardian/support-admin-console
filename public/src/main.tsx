@@ -5,7 +5,10 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Switchboard from './components/switchboard';
 import ContributionTypesForm from './components/contributionTypes';
 import AmountsForm from './components/amounts/amounts';
-import EpicTestsForm from './components/channelManagement/epicTests/epicTestsForm';
+import {
+  ArticleEpicTestsForm,
+  LiveblogEpicTestsForm,
+} from './components/channelManagement/epicTests/epicTestsForm';
 import {
   BannerTestsForm1,
   BannerTestsForm2,
@@ -93,7 +96,13 @@ const AppRouter = withStyles(styles)(({ classes }: Props) => {
         />
         <Route
           path="/epic-tests"
-          render={(): React.ReactElement => createComponent(<EpicTestsForm />, 'Epic Tests')}
+          render={(): React.ReactElement => createComponent(<ArticleEpicTestsForm />, 'Epic Tests')}
+        />
+        <Route
+          path="/liveblog-epic-tests"
+          render={(): React.ReactElement =>
+            createComponent(<LiveblogEpicTestsForm />, 'Liveblog Epic Tests')
+          }
         />
         <Route
           path="/banner-tests"
