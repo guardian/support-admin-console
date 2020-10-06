@@ -162,18 +162,20 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
           fullWidth
         />
 
-        <EditableTextField
-          text={variant.highlightedText || ''}
-          onSubmit={this.onOptionalTextChange('highlightedText')}
-          label="Highlighted text"
-          helperText="Final sentence, highlighted in yellow"
-          editEnabled={this.props.editMode}
-          validation={{
-            getError: (value: string): string | null => getInvalidTemplateError(value),
-            onChange: onFieldValidationChange(this)('highlightedText'),
-          }}
-          fullWidth
-        />
+        {!this.props.isLiveblog && (
+          <EditableTextField
+            text={variant.highlightedText || ''}
+            onSubmit={this.onOptionalTextChange('highlightedText')}
+            label="Highlighted text"
+            helperText="Final sentence, highlighted in yellow"
+            editEnabled={this.props.editMode}
+            validation={{
+              getError: (value: string): string | null => getInvalidTemplateError(value),
+              onChange: onFieldValidationChange(this)('highlightedText'),
+            }}
+            fullWidth
+          />
+        )}
         <div className={classes.ctaContainer}>
           <span className={classes.label}>Buttons</span>
           <CtaEditor
