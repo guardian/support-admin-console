@@ -24,7 +24,6 @@ import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 import ArchiveIcon from '@material-ui/icons/Archive';
 import ArticlesViewedEditor, { defaultArticlesViewedSettings } from '../articlesViewedEditor';
 import NewNameCreator from '../newNameCreator';
-import EpicTypeComponent, { EpicType } from './epicTypeComponent';
 import TargetRegionsSelector from '../targetRegionsSelector';
 import { articleCountTemplate, countryNameTemplate } from '../helpers/copyTemplates';
 
@@ -114,6 +113,7 @@ const copyHasTemplate = (test: EpicTest, template: string): boolean =>
 interface EpicTestEditorProps extends WithStyles<typeof styles> {
   test?: EpicTest;
   hasChanged: boolean;
+  isLiveblog: boolean;
   onChange: (updatedTest: EpicTest) => void;
   onValidationChange: (isValid: boolean) => void;
   visible: boolean;
@@ -197,11 +197,6 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, TestEditorStat
     this.updateTest(test => ({ ...test, userCohort: selectedCohort }));
   };
 
-  onEpicTypeChange = (epicType: EpicType): void => {
-    const isLiveBlog = epicType === 'LiveBlog';
-    this.updateTest(test => ({ ...test, isLiveBlog: isLiveBlog }));
-  };
-
   onTargetRegionsChange = (selectedRegions: Region[]): void => {
     this.updateTest(test => ({ ...test, locations: selectedRegions }));
   };
@@ -274,12 +269,6 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, TestEditorStat
 
         <hr />
 
-        <EpicTypeComponent
-          epicType={test.isLiveBlog ? 'LiveBlog' : 'Standard'}
-          isEditable={this.isEditable()}
-          onEpicTypeChange={this.onEpicTypeChange}
-        />
-
         <Typography variant={'h4'} className={classes.boldHeading}>
           Variants
         </Typography>
@@ -289,6 +278,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, TestEditorStat
             onVariantsListChange={this.onVariantsChange}
             testName={test.name}
             editMode={this.isEditable()}
+            isLiveblog={this.props.isLiveblog}
             onValidationChange={onFieldValidationChange(this)('variantsList')}
           />
         </div>

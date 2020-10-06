@@ -48,6 +48,7 @@ interface EpicTestVariantsListProps extends WithStyles<typeof styles> {
   onVariantsListChange: (variantList: EpicVariant[]) => void;
   testName: string;
   editMode: boolean;
+  isLiveblog: boolean;
   onValidationChange: (isValid: boolean) => void;
 }
 
@@ -188,6 +189,7 @@ class EpicTestVariantsList extends React.Component<
                   variant={variant}
                   onVariantChange={this.onVariantChange}
                   editMode={this.props.editMode}
+                  isLiveblog={this.props.isLiveblog}
                   onDelete={(): void => {
                     this.onVariantDelete(variant.name);
                     onFieldValidationChange(this)(variant.name)(true);

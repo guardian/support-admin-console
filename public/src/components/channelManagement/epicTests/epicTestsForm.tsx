@@ -68,103 +68,122 @@ export interface EpicTest extends Test {
   articlesViewedSettings?: ArticlesViewedSettings;
 }
 
-const createDefaultEpicTest = (newTestName: string, newTestNickname: string): EpicTest => ({
-  name: newTestName,
-  nickname: newTestNickname,
-  isOn: false,
-  locations: [],
-  tagIds: [],
-  sections: [],
-  excludedTagIds: [],
-  excludedSections: [],
-  alwaysAsk: false,
-  maxViews: MaxEpicViewsDefaults,
-  userCohort: UserCohort.AllNonSupporters, // matches the default in dotcom
-  isLiveBlog: false,
-  hasCountryName: false,
-  variants: [],
-  highPriority: false, // has been removed from form, but might be used in future
-  useLocalViewLog: false,
-});
+export type EpicType = 'ARTICLE' | 'LIVEBLOG';
 
 type Props = InnerComponentProps<EpicTest>;
 
-const EpicTestsForm: React.FC<Props> = ({
-  tests,
-  modifiedTests,
-  selectedTestName,
-  onTestsChange,
-  onSelectedTestName,
-  onTestDelete,
-  onTestArchive,
-  onTestErrorStatusChange,
-  lockStatus,
-  requestTakeControl,
-  requestLock,
-  save,
-  cancel,
-  editMode,
-}: Props) => {
-  const createTest = (name: string, nickname: string): void => {
-    const newTests = [...tests, createDefaultEpicTest(name, nickname)];
-    onTestsChange(newTests, name);
-  };
-  return (
-    <TestsFormLayout
-      sidebar={
-        <Sidebar<EpicTest>
-          tests={tests}
-          modifiedTests={modifiedTests}
-          selectedTestName={selectedTestName}
-          onUpdate={onTestsChange}
-          onSelectedTestName={onSelectedTestName}
-          createTest={createTest}
-          isInEditMode={editMode}
-        />
+const getEpicTestForm = (epicType: EpicType): React.FC<Props> => {
+  const isLiveBlog = epicType === 'LIVEBLOG';
+
+  const createDefaultEpicTest = (newTestName: string, newTestNickname: string): EpicTest => ({
+    name: newTestName,
+    nickname: newTestNickname,
+    isOn: false,
+    locations: [],
+    tagIds: [],
+    sections: [],
+    excludedTagIds: [],
+    excludedSections: [],
+    alwaysAsk: false,
+    maxViews: MaxEpicViewsDefaults,
+    userCohort: UserCohort.AllNonSupporters, // matches the default in dotcom
+    isLiveBlog: isLiveBlog,
+    hasCountryName: false,
+    variants: [],
+    highPriority: false, // has been removed from form, but might be used in future
+    useLocalViewLog: false,
+  });
+
+  const EpicTestsForm: React.FC<Props> = ({
+    tests,
+    modifiedTests,
+    selectedTestName,
+    onTestsChange,
+    onSelectedTestName,
+    onTestDelete,
+    onTestArchive,
+    onTestErrorStatusChange,
+    lockStatus,
+    requestTakeControl,
+    requestLock,
+    save,
+    cancel,
+    editMode,
+  }: Props) => {
+    const createTest = (name: string, nickname: string): void => {
+      if (Object.keys(modifiedTests).length > 0) {
+        alert('Please either save or discard before creating a test.');
+      } else {
+        const newTests = [...tests, createDefaultEpicTest(name, nickname)];
+        onSelectedTestName(name);
+        onTestsChange(newTests, name);
       }
-      testEditor={
-        selectedTestName ? (
-          <EpicTestEditor
-            test={tests.find(test => test.name === selectedTestName)}
-            hasChanged={!!modifiedTests[selectedTestName]}
-            onChange={(updatedTest): void =>
-              onTestsChange(updateTest(tests, updatedTest), updatedTest.name)
-            }
-            onValidationChange={onTestErrorStatusChange(selectedTestName)}
-            visible
-            editMode={editMode}
-            onDelete={onTestDelete}
-            onArchive={onTestArchive}
+    };
+    return (
+      <TestsFormLayout
+        sidebar={
+          <Sidebar<EpicTest>
+            tests={tests}
+            modifiedTests={modifiedTests}
+            selectedTestName={selectedTestName}
+            onUpdate={onTestsChange}
             onSelectedTestName={onSelectedTestName}
-            isDeleted={modifiedTests[selectedTestName] && modifiedTests[selectedTestName].isDeleted}
-            isArchived={
-              modifiedTests[selectedTestName] && modifiedTests[selectedTestName].isArchived
-            }
-            isNew={modifiedTests[selectedTestName] && modifiedTests[selectedTestName].isNew}
-            createTest={(newTest: EpicTest): void => {
-              const newTests = [...tests, newTest];
-              onTestsChange(newTests, newTest.name);
-            }}
-            testNames={tests.map(test => test.name)}
-            testNicknames={
-              tests.map(test => test.nickname).filter(nickname => !!nickname) as string[]
-            }
+            createTest={createTest}
+            isInEditMode={editMode}
           />
-        ) : null
-      }
-      selectedTestName={selectedTestName}
-      lockStatus={lockStatus}
-      requestTakeControl={requestTakeControl}
-      requestLock={requestLock}
-      save={save}
-      cancel={cancel}
-      editMode={editMode}
-    />
-  );
+        }
+        testEditor={
+          selectedTestName ? (
+            <EpicTestEditor
+              test={tests.find(test => test.name === selectedTestName)}
+              hasChanged={!!modifiedTests[selectedTestName]}
+              isLiveblog={isLiveBlog}
+              onChange={(updatedTest): void =>
+                onTestsChange(updateTest(tests, updatedTest), updatedTest.name)
+              }
+              onValidationChange={onTestErrorStatusChange(selectedTestName)}
+              visible
+              editMode={editMode}
+              onDelete={onTestDelete}
+              onArchive={onTestArchive}
+              onSelectedTestName={onSelectedTestName}
+              isDeleted={
+                modifiedTests[selectedTestName] && modifiedTests[selectedTestName].isDeleted
+              }
+              isArchived={
+                modifiedTests[selectedTestName] && modifiedTests[selectedTestName].isArchived
+              }
+              isNew={modifiedTests[selectedTestName] && modifiedTests[selectedTestName].isNew}
+              createTest={(newTest: EpicTest): void => {
+                const newTests = [...tests, newTest];
+                onTestsChange(newTests, newTest.name);
+              }}
+              testNames={tests.map(test => test.name)}
+              testNicknames={
+                tests.map(test => test.nickname).filter(nickname => !!nickname) as string[]
+              }
+            />
+          ) : null
+        }
+        selectedTestName={selectedTestName}
+        lockStatus={lockStatus}
+        requestTakeControl={requestTakeControl}
+        requestLock={requestLock}
+        save={save}
+        cancel={cancel}
+        editMode={editMode}
+      />
+    );
+  };
+
+  return EpicTestsForm;
 };
 
-export const ArticleEpicTestsForm = TestsForm(EpicTestsForm, FrontendSettingsType.epicTests);
+export const ArticleEpicTestsForm = TestsForm(
+  getEpicTestForm('ARTICLE'),
+  FrontendSettingsType.epicTests,
+);
 export const LiveblogEpicTestsForm = TestsForm(
-  EpicTestsForm,
+  getEpicTestForm('LIVEBLOG'),
   FrontendSettingsType.liveblogEpicTests,
 );
