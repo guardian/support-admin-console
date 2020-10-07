@@ -33,6 +33,6 @@ class LiveblogEpicTestsController(
       cacheControl = Some("max-age=30"),
       surrogateControl = Some("max-age=86400")  // Cache for a day, and use cache purging after updates
     ),
-    fastlyPurger = FastlyPurger.fastlyPurger(stage, s"${EpicTestsController.name}.json", ws),
+    fastlyPurger = None,
     runtime = runtime
   ) with Circe
