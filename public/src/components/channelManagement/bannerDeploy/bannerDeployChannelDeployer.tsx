@@ -143,7 +143,7 @@ const BannerDeployChannelDeployer: React.FC<BannerDeployChannelDeployerProps> = 
       />
 
       <Button onClick={redeploy} color="primary" variant="contained" size="large">
-        {isChannel1 ? 'Redeploy channel 1' : 'Redeploy channel 2'}
+        Redeploy channel {isChannel1 ? ' 1 ' : ' 2 '} in selected regions
       </Button>
     </div>
   );
