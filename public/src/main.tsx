@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Switchboard from './components/switchboard';
+import BannerDeployDashboard from './components/channelManagement/bannerDeploy/bannerDeployDashboard';
 import ContributionTypesForm from './components/contributionTypes';
 import AmountsForm from './components/amounts/amounts';
 import EpicTestsForm from './components/channelManagement/epicTests/epicTestsForm';
@@ -102,6 +103,12 @@ const AppRouter = withStyles(styles)(({ classes }: Props) => {
         <Route
           path="/banner-tests2"
           render={(): React.ReactElement => createComponent(<BannerTestsForm2 />, 'Banner Tests 2')}
+        />
+        <Route
+          path="/banner-deploy"
+          render={(): React.ReactElement =>
+            createComponent(<BannerDeployDashboard />, 'Banner Deploy')
+          }
         />
       </div>
     </Router>

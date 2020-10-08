@@ -136,6 +136,11 @@ export default function NavDrawer(): React.ReactElement {
             <ListItemText primary="Banner 2" />
           </ListItem>
         </Link>
+        <Link key="Banner Deploy" to="/banner-deploy" className={classes.link}>
+          <ListItem className={classes.listItem} button key="Banner Deploy">
+            <ListItemText primary="Banner Deploy" />
+          </ListItem>
+        </Link>
       </div>
 
       <div>
