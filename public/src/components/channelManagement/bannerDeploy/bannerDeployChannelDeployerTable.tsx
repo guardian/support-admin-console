@@ -17,7 +17,7 @@ import {
   WithStyles,
 } from '@material-ui/core';
 import { BannerChannel } from './bannerDeployDashboard';
-import { BannerDeploys } from './bannerDeployChannelDeployer';
+import { BannerDeploys, BannersToRedeploy } from './bannerDeployChannelDeployer';
 import BannerDeployChannelDeployerTableRow from './bannerDeployChannelDeployerTableRow';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -33,13 +33,22 @@ const styles = ({ spacing }: Theme) =>
 type BannerDeployChannelDeployerTableProps = WithStyles<typeof styles> & {
   channel: BannerChannel;
   bannerDeploys: BannerDeploys | null;
+  bannersToRedeploy: BannersToRedeploy;
+  onRedeployAllClick: (shouldRedeploy: boolean) => void;
+  onRedeployClick: (region: string, shouldRedeploy: boolean) => void;
 };
 
 const BannerDeployChannelDeployerTable: React.FC<BannerDeployChannelDeployerTableProps> = ({
   channel,
   bannerDeploys,
+  bannersToRedeploy,
+  onRedeployAllClick,
+  onRedeployClick,
 }: BannerDeployChannelDeployerTableProps) => {
   const isChannel1 = channel === 'CHANNEL1';
+  const shouldRedeployAllBanners = Object.values(bannersToRedeploy).every(
+    shouldRedeploy => shouldRedeploy,
+  );
 
   return (
     <TableContainer component={Paper}>
@@ -52,7 +61,10 @@ const BannerDeployChannelDeployerTable: React.FC<BannerDeployChannelDeployerTabl
         <TableHead>
           <TableRow>
             <TableCell padding="checkbox">
-              <Checkbox />
+              <Checkbox
+                checked={shouldRedeployAllBanners}
+                onChange={(event): void => onRedeployAllClick(event.target.checked)}
+              />
             </TableCell>
             <TableCell>Region</TableCell>
             <TableCell>Last Deploy (UTC)</TableCell>
@@ -67,6 +79,10 @@ const BannerDeployChannelDeployerTable: React.FC<BannerDeployChannelDeployerTabl
                 region={region}
                 timestamp={bannerDeploys[region as keyof BannerDeploys].timestamp}
                 email={bannerDeploys[region as keyof BannerDeploys].email}
+                shouldRedeploy={bannersToRedeploy[region as keyof BannersToRedeploy]}
+                onRedeployClick={(shouldRedeploy: boolean): void =>
+                  onRedeployClick(region, shouldRedeploy)
+                }
               />
             ))}
         </TableBody>

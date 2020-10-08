@@ -30,7 +30,15 @@ export interface BannerDeploys {
   EuropeanUnion: BannerDeployRegion;
   RestOfWorld: BannerDeployRegion;
   UnitedStates: BannerDeployRegion;
-  UnitedKingom: BannerDeployRegion;
+  UnitedKingdom: BannerDeployRegion;
+}
+
+export interface BannersToRedeploy {
+  Australia: boolean;
+  EuropeanUnion: boolean;
+  RestOfWorld: boolean;
+  UnitedStates: boolean;
+  UnitedKingdom: boolean;
 }
 
 type BannerDeployChannelDeployerProps = WithStyles<typeof styles> & {
@@ -47,6 +55,30 @@ const BannerDeployChannelDeployer: React.FC<BannerDeployChannelDeployerProps> = 
     : FrontendSettingsType.bannerDeploy2;
 
   const [bannerDeploys, setBannerDeploys] = useState<BannerDeploys | null>(null);
+  const [bannersToRedeploy, setBannersToRedeploy] = useState<BannersToRedeploy>({
+    Australia: false,
+    EuropeanUnion: false,
+    RestOfWorld: false,
+    UnitedStates: false,
+    UnitedKingdom: false,
+  });
+
+  const onRedeployAllClick = (shouldRedeploy: boolean): void => {
+    setBannersToRedeploy({
+      Australia: shouldRedeploy,
+      EuropeanUnion: shouldRedeploy,
+      RestOfWorld: shouldRedeploy,
+      UnitedStates: shouldRedeploy,
+      UnitedKingdom: shouldRedeploy,
+    });
+  };
+
+  const onRedeployClick = (region: string, shouldRedeploy: boolean): void => {
+    setBannersToRedeploy({
+      ...bannersToRedeploy,
+      [region as keyof BannersToRedeploy]: shouldRedeploy,
+    });
+  };
 
   useEffect(() => {
     fetchFrontendSettings(settingsType)
@@ -56,7 +88,13 @@ const BannerDeployChannelDeployer: React.FC<BannerDeployChannelDeployerProps> = 
 
   return (
     <div className={classes.container}>
-      <BannerChannelDeployerTable channel={channel} bannerDeploys={bannerDeploys} />
+      <BannerChannelDeployerTable
+        channel={channel}
+        bannerDeploys={bannerDeploys}
+        bannersToRedeploy={bannersToRedeploy}
+        onRedeployAllClick={onRedeployAllClick}
+        onRedeployClick={onRedeployClick}
+      />
 
       <Button color="primary" variant="contained" size="large">
         {isChannel1 ? 'Redeploy channel 1' : 'Redeploy channel 2'}

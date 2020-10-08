@@ -6,6 +6,8 @@ type BannerDeployChannelDeployerTableRowProps = {
   region: string;
   timestamp: number;
   email: string;
+  shouldRedeploy: boolean;
+  onRedeployClick: (shouldRedeploy: boolean) => void;
 };
 
 interface PrettifiedRegions {
@@ -64,11 +66,16 @@ const BannerDeployChannelDeployerTableRow: React.FC<BannerDeployChannelDeployerT
   region,
   timestamp,
   email,
+  shouldRedeploy,
+  onRedeployClick,
 }: BannerDeployChannelDeployerTableRowProps) => {
   return (
     <TableRow key={region}>
       <TableCell padding="checkbox">
-        <Checkbox />
+        <Checkbox
+          checked={shouldRedeploy}
+          onChange={(event): void => onRedeployClick(event.target.checked)}
+        />
       </TableCell>
       <TableCell>{prettifiedRegion(region)}</TableCell>
       <TableCell>{prettifiedTimestamp(timestamp)}</TableCell>
