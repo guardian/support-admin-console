@@ -41,6 +41,12 @@ export interface BannersToRedeploy {
   UnitedKingdom: boolean;
 }
 
+interface DataFromServer {
+  value: BannerDeploys;
+  version: string;
+  email: string;
+}
+
 type BannerDeployChannelDeployerProps = WithStyles<typeof styles> & {
   channel: BannerChannel;
 };
@@ -54,7 +60,7 @@ const BannerDeployChannelDeployer: React.FC<BannerDeployChannelDeployerProps> = 
     ? FrontendSettingsType.bannerDeploy
     : FrontendSettingsType.bannerDeploy2;
 
-  const [bannerDeploys, setBannerDeploys] = useState<BannerDeploys | null>(null);
+  const [dataFromServer, setDataFromServer] = useState<DataFromServer | null>(null);
   const [bannersToRedeploy, setBannersToRedeploy] = useState<BannersToRedeploy>({
     Australia: false,
     EuropeanUnion: false,
@@ -80,96 +86,67 @@ const BannerDeployChannelDeployer: React.FC<BannerDeployChannelDeployerProps> = 
     });
   };
 
-  useEffect(() => {
+  const fetchDataFromServer = (): void => {
     fetchFrontendSettings(settingsType)
-      .then(data => setBannerDeploys(data.value))
+      .then(data => setDataFromServer(data))
       .catch(err => alert(err));
-  });
+  };
+
+  const resetBannersToDeploy = (): void => {
+    setBannersToRedeploy({
+      Australia: false,
+      EuropeanUnion: false,
+      RestOfWorld: false,
+      UnitedStates: false,
+      UnitedKingdom: false,
+    });
+  };
+
+  const redeploy = (): void => {
+    if (!dataFromServer) {
+      return;
+    }
+
+    const now = Date.now();
+
+    const newBannerDeploys = { ...dataFromServer.value };
+    Object.entries(bannersToRedeploy).forEach(([region, shouldRedeploy]) => {
+      if (shouldRedeploy) {
+        newBannerDeploys[region as keyof BannerDeploys] = {
+          timestamp: now,
+          email: dataFromServer.email,
+        };
+      }
+    });
+
+    saveFrontendSettings(settingsType, {
+      value: newBannerDeploys,
+      version: dataFromServer.version,
+    })
+      .then(() => {
+        fetchDataFromServer();
+        resetBannersToDeploy();
+      })
+      .catch(err => alert(err));
+  };
+
+  useEffect(fetchDataFromServer, []);
 
   return (
     <div className={classes.container}>
       <BannerChannelDeployerTable
         channel={channel}
-        bannerDeploys={bannerDeploys}
+        bannerDeploys={dataFromServer?.value}
         bannersToRedeploy={bannersToRedeploy}
         onRedeployAllClick={onRedeployAllClick}
         onRedeployClick={onRedeployClick}
       />
 
-      <Button color="primary" variant="contained" size="large">
+      <Button onClick={redeploy} color="primary" variant="contained" size="large">
         {isChannel1 ? 'Redeploy channel 1' : 'Redeploy channel 2'}
       </Button>
     </div>
   );
 };
-
-// class Switchboard extends React.Component<Props, Switches> {
-//   state: Switches;
-//   previousStateFromServer: DataFromServer | null;
-
-//   UNSAFE_componentWillMount(): void {
-//     this.fetchStateFromServer();
-//   }
-
-//   fetchStateFromServer(): void {
-//     fetchSupportFrontendSettings(SupportFrontendSettingsType.switches).then(serverData => {
-//       this.previousStateFromServer = serverData;
-//       this.setState({
-//         ...serverData.value,
-//       });
-//     });
-//   }
-
-//   updateOneOffPaymentMethodSwitch(paymentMethod: string, switchState: SwitchState): void {
-//     this.setState(prevState =>
-//       update(prevState, {
-//         oneOffPaymentMethods: {
-//           [paymentMethod]: { $set: switchState },
-//         },
-//       }),
-//     );
-//   }
-
-//   updateRecurringPaymentMethodSwitch(paymentMethod: string, switchState: SwitchState): void {
-//     this.setState(prevState =>
-//       update(prevState, {
-//         recurringPaymentMethods: {
-//           [paymentMethod]: { $set: switchState },
-//         },
-//       }),
-//     );
-//   }
-
-//   updateFeatureSwitch(switchName: string, switchState: SwitchState): void {
-//     this.setState(prevState =>
-//       update(prevState, {
-//         experiments: {
-//           [switchName]: {
-//             state: { $set: switchState },
-//           },
-//         },
-//       }),
-//     );
-//   }
-
-//   saveSwitches = (): void => {
-//     const newState = update(this.previousStateFromServer, {
-//       value: { $set: this.state },
-//     });
-
-//     saveSupportFrontendSettings(SupportFrontendSettingsType.switches, newState)
-//       .then(resp => {
-//         if (!resp.ok) {
-//           resp.text().then(msg => alert(msg));
-//         }
-//         this.fetchStateFromServer();
-//       })
-//       .catch(resp => {
-//         alert(`Error while saving: ${resp}`);
-//         this.fetchStateFromServer();
-//       });
-//   };
-//   }
-// }
 
 export default withStyles(styles)(BannerDeployChannelDeployer);

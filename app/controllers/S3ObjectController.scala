@@ -13,6 +13,8 @@ import zio.{DefaultRuntime, IO, ZIO}
 
 import scala.concurrent.{ExecutionContext, Future}
 
+
+case class VersionedS3DataWithEmail[T](value: T, version: String, email: String)
 /**
   * Controller for managing JSON data in a single object in S3
   */
@@ -42,11 +44,12 @@ abstract class S3ObjectController[T : Decoder : Encoder](
     * Returns current version of the object in s3 as json, with the version id.
     * The s3 data is validated against the model.
     */
-  def get = authAction.async {
+  def get = authAction.async { request =>
     run {
       S3Json
         .getFromJson[T](s3Client)
         .apply(dataObjectSettings)
+        .map(s3Data => VersionedS3DataWithEmail(s3Data.value, s3Data.version, request.user.email))
         .map { s3Data =>
           Ok(S3Json.noNulls(s3Data.asJson))
         }

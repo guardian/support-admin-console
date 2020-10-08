@@ -32,7 +32,7 @@ const styles = ({ spacing }: Theme) =>
 
 type BannerDeployChannelDeployerTableProps = WithStyles<typeof styles> & {
   channel: BannerChannel;
-  bannerDeploys: BannerDeploys | null;
+  bannerDeploys?: BannerDeploys;
   bannersToRedeploy: BannersToRedeploy;
   onRedeployAllClick: (shouldRedeploy: boolean) => void;
   onRedeployClick: (region: string, shouldRedeploy: boolean) => void;
