@@ -63,6 +63,8 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     new BannerTestArchiveController(authAction, controllerComponents, wsClient, stage, runtime),
     new BannerTestsController2(authAction, controllerComponents, wsClient, stage, runtime),
     new BannerTestArchiveController2(authAction, controllerComponents, wsClient, stage, runtime),
+    new BannerDeployController(authAction, controllerComponents, stage, runtime),
+    new BannerDeployController2(authAction, controllerComponents, stage, runtime),
     assets
   )
 }

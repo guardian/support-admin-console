@@ -10,6 +10,8 @@ export enum FrontendSettingsType {
   epicTests = 'epic-tests',
   bannerTests = 'banner-tests',
   bannerTests2 = 'banner-tests2',
+  bannerDeploy = 'banner-deploy',
+  bannerDeploy2 = 'banner-deploy2',
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
