@@ -22,7 +22,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     val domain = configuration.get[String]("googleAuth.domain")
 
     //TODO - play secret rotation
-    GoogleAuthConfig(clientId, clientSecret, redirectUrl, domain, antiForgeryChecker = AntiForgeryChecker.borrowSettingsFromPlay(httpConfiguration))
+    GoogleAuthConfig(clientId, clientSecret, redirectUrl, List(domain), antiForgeryChecker = AntiForgeryChecker.borrowSettingsFromPlay(httpConfiguration))
   }
 
   // https://github.com/guardian/play-googleauth#implement-googlegroups-based-access-control-using-the-directory-api
