@@ -114,6 +114,7 @@ const copyHasTemplate = (test: EpicTest, template: string): boolean =>
 interface EpicTestEditorProps extends WithStyles<typeof styles> {
   test?: EpicTest;
   hasChanged: boolean;
+  isLiveblog: boolean;
   onChange: (updatedTest: EpicTest) => void;
   onValidationChange: (isValid: boolean) => void;
   visible: boolean;
@@ -289,6 +290,7 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, TestEditorStat
             onVariantsListChange={this.onVariantsChange}
             testName={test.name}
             editMode={this.isEditable()}
+            isLiveblog={this.props.isLiveblog}
             onValidationChange={onFieldValidationChange(this)('variantsList')}
           />
         </div>
