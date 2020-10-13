@@ -197,11 +197,6 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, TestEditorStat
     this.updateTest(test => ({ ...test, userCohort: selectedCohort }));
   };
 
-  onEpicTypeChange = (epicType: EpicType): void => {
-    const isLiveBlog = epicType === 'LiveBlog';
-    this.updateTest(test => ({ ...test, isLiveBlog: isLiveBlog }));
-  };
-
   onTargetRegionsChange = (selectedRegions: Region[]): void => {
     this.updateTest(test => ({ ...test, locations: selectedRegions }));
   };
