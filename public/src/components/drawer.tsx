@@ -126,12 +126,11 @@ export default function NavDrawer(): React.ReactElement {
             <ListItemText primary="Epic" />
           </ListItem>
         </Link>
-        {/* TODO: add this back once we've migrated over the liveblog tests */}
-        {/* <Link key="Liveblog Epic" to="/liveblog-epic-tests" className={classes.link}>
+        <Link key="Liveblog Epic" to="/liveblog-epic-tests" className={classes.link}>
           <ListItem className={classes.listItem} button key="Liveblog Epic">
             <ListItemText primary="Liveblog Epic" />
           </ListItem>
-        </Link> */}
+        </Link>
         <Link key="Banner1" to="/banner-tests" className={classes.link}>
           <ListItem className={classes.listItem} button key="Banner1">
             <ListItemText primary="Banner 1" />

@@ -24,7 +24,6 @@ import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 import ArchiveIcon from '@material-ui/icons/Archive';
 import ArticlesViewedEditor, { defaultArticlesViewedSettings } from '../articlesViewedEditor';
 import NewNameCreator from '../newNameCreator';
-import EpicTypeComponent, { EpicType } from './epicTypeComponent';
 import TargetRegionsSelector from '../targetRegionsSelector';
 import { articleCountTemplate, countryNameTemplate } from '../helpers/copyTemplates';
 
@@ -274,12 +273,6 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, TestEditorStat
         </div>
 
         <hr />
-
-        <EpicTypeComponent
-          epicType={test.isLiveBlog ? 'LiveBlog' : 'Standard'}
-          isEditable={this.isEditable()}
-          onEpicTypeChange={this.onEpicTypeChange}
-        />
 
         <Typography variant={'h4'} className={classes.boldHeading}>
           Variants
