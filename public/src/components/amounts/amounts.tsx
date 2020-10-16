@@ -47,6 +47,8 @@ const styles = ({ palette, spacing }: Theme) =>
     form: {
       display: 'flex',
       flexDirection: 'row',
+      overflow: 'auto',
+      marginTop: '20px',
     },
     button: {
       marginRight: spacing(2),
