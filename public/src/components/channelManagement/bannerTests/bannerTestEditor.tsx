@@ -4,7 +4,8 @@ import { ArticlesViewedSettings, UserCohort } from '../helpers/shared';
 import { articleCountTemplate } from '../helpers/copyTemplates';
 import { createStyles, Theme, Typography, WithStyles, withStyles } from '@material-ui/core';
 import { defaultArticlesViewedSettings } from '../articlesViewedEditor';
-import BannerTestVariantsEditor from './bannerTestVariantsEditor';
+import BannerTestVariantEditor from './bannerTestVariantEditor';
+import TestVariantsEditor from '../testVariantsEditor';
 import TestEditorHeader from '../testEditorHeader';
 import TestEditorLiveSwitch from '../testEditorLiveSwitch';
 import TestEditorMinArticlesViewedInput from '../testEditorMinArticlesViewedInput';
@@ -12,7 +13,8 @@ import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelecto
 import TestEditorArticleCountEditor from '../testEditorArticleCountEditor';
 import TestEditorActionButtons from '../testEditorActionButtons';
 import useValidation from '../hooks/useValidation';
-import { BannerTest, BannerVariant } from '../../../models/banner';
+import { BannerTest, BannerVariant, BannerTemplate } from '../../../models/banner';
+import { defaultCta } from '../helpers/shared';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing, palette }: Theme) =>
@@ -99,9 +101,6 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
 
   const setValidationStatusForField = useValidation(onValidationChange);
 
-  const onVariantsListValidationChange = (isValid: boolean): void =>
-    setValidationStatusForField('variantsList', isValid);
-
   const onMinArticlesViewedValidationChanged = (isValid: boolean): void =>
     setValidationStatusForField('minArticlesViewed', isValid);
 
@@ -134,6 +133,18 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
     updateTest({ ...test, variants: updatedVariantList });
   };
 
+  const onVariantChange = (updatedVariant: BannerVariant): void => {
+    onVariantsChange(
+      test.variants.map(variant =>
+        variant.name === updatedVariant.name ? updatedVariant : variant,
+      ),
+    );
+  };
+
+  const onVariantDelete = (deletedVariantName: string): void => {
+    onVariantsChange(test.variants.filter(variant => variant.name !== deletedVariantName));
+  };
+
   const onMinArticlesViewedChange = (updatedMinArticles: number): void => {
     updateTest({
       ...test,
@@ -163,6 +174,32 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
     createTest({ ...test, name: name, nickname: nickname, isOn: false });
   };
 
+  const variantEditors = test.variants.map(variant => (
+    <BannerTestVariantEditor
+      key={`banner-${test.name}-${variant.name}`}
+      variant={variant}
+      onVariantChange={onVariantChange}
+      onDelete={(): void => onVariantDelete(variant.name)}
+      editMode={editMode}
+      onValidationChange={(isValid: boolean): void =>
+        setValidationStatusForField(variant.name, isValid)
+      }
+    />
+  ));
+
+  const createVariant = (name: string): void => {
+    const newVariant: BannerVariant = {
+      name: name,
+      template: BannerTemplate.ContributionsBanner,
+      heading: undefined,
+      body: '',
+      highlightedText:
+        'Support the Guardian from as little as %%CURRENCY_SYMBOL%%1 – and it only takes a minute. Thank you.',
+      cta: defaultCta,
+    };
+    onVariantsChange([...test.variants, newVariant]);
+  };
+
   if (test && visible) {
     return (
       <div className={classes.container}>
@@ -181,12 +218,13 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
             Variants
           </Typography>
           <div>
-            <BannerTestVariantsEditor
+            <TestVariantsEditor
               variants={test.variants}
-              onVariantsListChange={onVariantsChange}
+              createVariant={createVariant}
               testName={test.name}
               editMode={isEditable()}
-              onValidationChange={onVariantsListValidationChange}
+              variantEditors={variantEditors}
+              onVariantDelete={onVariantDelete}
             />
           </div>
         </div>
