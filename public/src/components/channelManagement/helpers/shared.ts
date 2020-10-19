@@ -1,10 +1,15 @@
 import { ValidationStatus } from './validation';
 
+export interface Variant {
+  name: string;
+}
+
 export interface Test {
   name: string;
   nickname?: string;
   isOn: boolean;
   articlesViewedSettings?: ArticlesViewedSettings;
+  variants: Variant[];
 }
 
 export interface LockStatus {

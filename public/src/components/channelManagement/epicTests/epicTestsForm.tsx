@@ -2,7 +2,7 @@ import React from 'react';
 import EpicTestEditor from './epicTestEditor';
 import { Region } from '../../../utils/models';
 
-import { UserCohort, Cta, ArticlesViewedSettings, Test } from '../helpers/shared';
+import { UserCohort, Cta, ArticlesViewedSettings, Test, Variant } from '../helpers/shared';
 import { InnerComponentProps, updateTest } from '../testEditor';
 import TestsForm from '../testEditor';
 import TestsFormLayout from '../testsFormLayout';
@@ -29,8 +29,7 @@ export interface TickerSettings {
   currencySymbol: string;
   copy: TickerCopy;
 }
-export interface EpicVariant {
-  name: string;
+export interface EpicVariant extends Variant {
   heading?: string;
   paragraphs: string[];
   highlightedText?: string;

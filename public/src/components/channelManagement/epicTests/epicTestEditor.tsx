@@ -1,7 +1,7 @@
 import React from 'react';
 import { Region } from '../../../utils/models';
 import { EpicTest, EpicVariant, MaxEpicViews } from './epicTestsForm';
-import { ArticlesViewedSettings, TestEditorState, UserCohort } from '../helpers/shared';
+import { ArticlesViewedSettings, TestEditorState, UserCohort, defaultCta } from '../helpers/shared';
 import {
   createStyles,
   FormControl,
@@ -15,8 +15,11 @@ import {
   WithStyles,
   withStyles,
 } from '@material-ui/core';
+import TestEditorHeader from '../testEditorHeader';
+import TestEditorLiveSwitch from '../testEditorLiveSwitch';
+import TestVariantsEditor from '../testVariantsEditor';
+import EpicTestVariantEditor from './epicTestVariantEditor';
 import EditableTextField from '../editableTextField';
-import EpicTestVariantsList from './epicTestVariantsList';
 import MaxEpicViewsEditor from './maxEpicViewsEditor';
 import { onFieldValidationChange } from '../helpers/validation';
 import ButtonWithConfirmationPopup from '../buttonWithConfirmationPopup';
@@ -28,13 +31,37 @@ import TargetRegionsSelector from '../targetRegionsSelector';
 import { articleCountTemplate, countryNameTemplate } from '../helpers/copyTemplates';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const styles = ({ spacing, typography }: Theme) =>
+const styles = ({ spacing, typography, palette }: Theme) =>
   createStyles({
     container: {
       width: '100%',
-      borderTop: `2px solid #999999`,
-      marginLeft: spacing(2),
-      marginTop: spacing(6),
+      height: 'max-content',
+      background: '#FFFFFF',
+      paddingTop: spacing(6),
+      paddingRight: spacing(12),
+      paddingLeft: spacing(3),
+    },
+    headerAndSwitchContainer: {
+      paddingBottom: spacing(3),
+      borderBottom: `1px solid ${palette.grey[500]}`,
+
+      '& > * + *': {
+        marginTop: spacing(2),
+      },
+    },
+    sectionContainer: {
+      paddingTop: spacing(1),
+      paddingBottom: spacing(6),
+      borderBottom: `1px solid ${palette.grey[500]}`,
+
+      '& > * + *': {
+        marginTop: spacing(4),
+      },
+    },
+    sectionHeader: {
+      fontSize: 16,
+      fontWeight: 500,
+      color: palette.grey[700],
     },
     fieldsContainer: {
       '& > *': {
@@ -182,6 +209,47 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, TestEditorStat
     }
   };
 
+  onVariantChange = (updatedVariant: EpicVariant): void => {
+    if (this.props.test) {
+      const updatedVariantList = this.props.test.variants.map(variant =>
+        variant.name === updatedVariant.name ? updatedVariant : variant,
+      );
+      this.onVariantsChange(updatedVariantList);
+    }
+  };
+
+  onVariantDelete = (deletedVariantName: string): void => {
+    if (this.props.test) {
+      const updatedVariantList = this.props.test.variants.filter(
+        variant => variant.name !== deletedVariantName,
+      );
+      this.onVariantsChange(updatedVariantList);
+    }
+  };
+
+  createVariant = (name: string): void => {
+    console.log(name);
+    const newVariant: EpicVariant = {
+      name: name,
+      heading: undefined,
+      paragraphs: [],
+      highlightedText:
+        'Support the Guardian from as little as %%CURRENCY_SYMBOL%%1 – and it only takes a minute. Thank you.',
+      footer: undefined,
+      showTicker: false,
+      backgroundImageUrl: undefined,
+      cta: defaultCta,
+    };
+
+    if (this.props.test) {
+      this.onVariantsChange([...this.props.test.variants, newVariant]);
+      console.log(this.props.test.variants);
+    }
+
+    // onVariantsListChange([...variants, newVariant]);
+    // onVariantSelected(`${testName}-${name}`);
+  };
+
   onListChange = (fieldName: string) => (updatedString: string): void => {
     const updatedList = updatedString === '' ? [] : updatedString.split(',');
     this.updateTest(test => ({ ...test, [fieldName]: updatedList }));
@@ -190,6 +258,10 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, TestEditorStat
   onSwitchChange = (fieldName: string) => (event: React.ChangeEvent<HTMLInputElement>): void => {
     const updatedBool = event.target.checked;
     this.updateTest(test => ({ ...test, [fieldName]: updatedBool }));
+  };
+
+  onLiveSwitchChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    this.updateTest(test => ({ ...test, isOn: event.target.checked }));
   };
 
   onUserCohortChange = (event: React.ChangeEvent<{}>, value: string): void => {
@@ -236,51 +308,44 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, TestEditorStat
   renderEditor = (test: EpicTest): React.ReactNode | undefined => {
     const { classes } = this.props;
 
-    const statusText = (): React.ReactElement | undefined => {
-      if (this.props.isDeleted) {
-        return <span className={classes.isDeleted}>&nbsp;(to be deleted)</span>;
-      } else if (this.props.isArchived) {
-        return <span className={classes.isArchived}>&nbsp;(to be archived)</span>;
-      } else if (this.props.isNew) {
-        return <span className={classes.hasChanged}>&nbsp;(new)</span>;
-      } else if (this.props.hasChanged) {
-        return <span className={classes.hasChanged}>&nbsp;(modified)</span>;
-      }
-    };
+    const variantEditors = test.variants.map(variant => (
+      <EpicTestVariantEditor
+        key={variant.name}
+        variant={variant}
+        isLiveblog={test.isLiveBlog}
+        editMode={this.props.editMode}
+        onVariantChange={this.onVariantChange}
+        onDelete={(): void => this.onVariantDelete(variant.name)}
+        onValidationChange={onFieldValidationChange(this)(`variant-${variant.name}`)}
+      />
+    ));
 
     return (
       <div className={classes.container}>
-        <Typography variant={'h3'} className={classes.h3}>
-          {this.props.test && this.props.test.name}
-          {statusText()}
-        </Typography>
-        <Typography variant={'h4'} className={classes.boldHeading}>
-          {this.props.test && this.props.test.nickname}
-        </Typography>
+        <div className={classes.headerAndSwitchContainer}>
+          <TestEditorHeader name={test.name} nickname={test.nickname} />
 
-        <div className={classes.switchWithIcon}>
-          <Typography className={classes.switchLabel}>Live on theguardian.com</Typography>
-          <Switch
-            checked={test.isOn}
-            onChange={this.onSwitchChange('isOn')}
-            disabled={!this.isEditable()}
+          <TestEditorLiveSwitch
+            isChecked={test.isOn}
+            isDisabled={!this.isEditable()}
+            onChange={this.onLiveSwitchChange}
           />
         </div>
 
-        <hr />
-
-        <Typography variant={'h4'} className={classes.boldHeading}>
-          Variants
-        </Typography>
-        <div>
-          <EpicTestVariantsList
-            variants={test.variants}
-            onVariantsListChange={this.onVariantsChange}
-            testName={test.name}
-            editMode={this.isEditable()}
-            isLiveblog={this.props.isLiveblog}
-            onValidationChange={onFieldValidationChange(this)('variantsList')}
-          />
+        <div className={classes.sectionContainer}>
+          <Typography variant={'h3'} className={classes.sectionHeader}>
+            Variants
+          </Typography>
+          <div>
+            <TestVariantsEditor<EpicVariant>
+              variants={test.variants}
+              testName={test.name}
+              editMode={this.isEditable()}
+              createVariant={this.createVariant}
+              variantEditors={variantEditors}
+              onVariantDelete={this.onVariantDelete}
+            />
+          </div>
         </div>
 
         <Typography variant={'h4'} className={classes.boldHeading}>
