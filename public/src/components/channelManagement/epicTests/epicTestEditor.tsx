@@ -15,6 +15,7 @@ import TestEditorHeader from '../testEditorHeader';
 import TestEditorLiveSwitch from '../testEditorLiveSwitch';
 import TestVariantsEditor from '../testVariantsEditor';
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
+import TestEditorArticleCountEditor from '../testEditorArticleCountEditor';
 import EpicTestVariantEditor from './epicTestVariantEditor';
 import EpicTestTargetContentEditor from './epicTestTargetContentEditor';
 import MaxEpicViewsEditor from './maxEpicViewsEditor';
@@ -22,7 +23,7 @@ import { onFieldValidationChange } from '../helpers/validation';
 import ButtonWithConfirmationPopup from '../buttonWithConfirmationPopup';
 import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 import ArchiveIcon from '@material-ui/icons/Archive';
-import ArticlesViewedEditor, { defaultArticlesViewedSettings } from '../articlesViewedEditor';
+import { defaultArticlesViewedSettings } from '../articlesViewedEditor';
 import NewNameCreator from '../newNameCreator';
 import { articleCountTemplate, countryNameTemplate } from '../helpers/copyTemplates';
 
@@ -286,6 +287,15 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, TestEditorStat
     this.updateTest(test => ({ ...test, userCohort: updatedCohort }));
   };
 
+  onArticlesViewedSettingsChange = (
+    updatedArticlesViewedSettings?: ArticlesViewedSettings,
+  ): void => {
+    this.updateTest(test => ({
+      ...test,
+      articlesViewedSettings: updatedArticlesViewedSettings,
+    }));
+  };
+
   renderBottomButtons = (test: EpicTest): React.ReactElement => (
     <div className={this.props.classes.buttons}>
       <div className={this.props.classes.button}>
@@ -420,19 +430,18 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, TestEditorStat
           />
         </div>
 
-        <Typography variant={'h4'} className={this.props.classes.boldHeading}>
-          Article count
-        </Typography>
-        <ArticlesViewedEditor
-          articlesViewedSettings={test.articlesViewedSettings}
-          editMode={this.isEditable()}
-          onChange={(articlesViewedSettings?: ArticlesViewedSettings): void =>
-            this.updateTest(test => ({ ...test, articlesViewedSettings }))
-          }
-          onValidationChange={onFieldValidationChange(this)('articlesViewedEditor')}
-        />
+        <div className={classes.sectionContainer}>
+          <Typography variant={'h3'} className={classes.sectionHeader}>
+            Article count
+          </Typography>
 
-        {this.isEditable() && this.props.test && this.renderBottomButtons(this.props.test)}
+          <TestEditorArticleCountEditor
+            articlesViewedSettings={test.articlesViewedSettings}
+            onArticlesViewedSettingsChanged={this.onArticlesViewedSettingsChange}
+            onValidationChange={isValid => console.log(isValid)}
+            isDisabled={!this.isEditable()}
+          />
+        </div>
       </div>
     );
   };
