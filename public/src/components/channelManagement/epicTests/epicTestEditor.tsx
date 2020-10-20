@@ -390,33 +390,35 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, TestEditorStat
           />
         </div>
 
-        <Typography variant={'h4'} className={this.props.classes.boldHeading}>
-          View frequency settings
-        </Typography>
+        <div className={classes.sectionContainer}>
+          <Typography variant={'h3'} className={classes.sectionHeader}>
+            View frequency settings
+          </Typography>
 
-        <FormControlLabel
-          control={
-            <Switch
-              checked={test.useLocalViewLog}
-              onChange={this.onSwitchChange('useLocalViewLog')}
-              disabled={!this.isEditable()}
-            />
-          }
-          label={`Use private view counter for this test (instead of the global one)`}
-        />
+          <FormControlLabel
+            control={
+              <Switch
+                checked={test.useLocalViewLog}
+                onChange={this.onSwitchChange('useLocalViewLog')}
+                disabled={!this.isEditable()}
+              />
+            }
+            label={`Use private view counter for this test (instead of the global one)`}
+          />
 
-        <MaxEpicViewsEditor
-          test={test}
-          editMode={this.isEditable()}
-          onChange={(alwaysAsk: boolean, maxEpicViews: MaxEpicViews): void =>
-            this.updateTest(test => ({
-              ...test,
-              alwaysAsk,
-              maxViews: maxEpicViews,
-            }))
-          }
-          onValidationChange={onFieldValidationChange(this)('maxViews')}
-        />
+          <MaxEpicViewsEditor
+            test={test}
+            editMode={this.isEditable()}
+            onChange={(alwaysAsk: boolean, maxEpicViews: MaxEpicViews): void =>
+              this.updateTest(test => ({
+                ...test,
+                alwaysAsk,
+                maxViews: maxEpicViews,
+              }))
+            }
+            onValidationChange={onFieldValidationChange(this)('maxViews')}
+          />
+        </div>
 
         <Typography variant={'h4'} className={this.props.classes.boldHeading}>
           Article count
