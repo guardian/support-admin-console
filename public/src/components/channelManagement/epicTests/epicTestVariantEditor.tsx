@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { EpicVariant } from './epicTestsForm';
-import { Cta } from '../helpers/shared';
+import { Cta, TickerSettings } from '../helpers/shared';
 import { Theme, Typography, makeStyles, TextField } from '@material-ui/core';
 import VariantEditorButtonsEditor from '../variantEditorButtonsEditor';
 import TickerEditor from '../tickerEditor';
+import { invalidTemplateValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {
@@ -38,6 +40,14 @@ const IMAGE_URL_DEFAULT_HELPER_TEXT =
   'Image ratio should be 2.5:1. This will appear above everything except a ticker';
 const FOOTER_DEFAULT_HELPER_TEXT = 'Bold text that appears below the button';
 
+interface FormData {
+  heading: string;
+  body: string;
+  highlightedText: string;
+  backgroundImageUrl: string;
+  footer: string;
+}
+
 interface EpicTestVariantEditorProps {
   variant: EpicVariant;
   onVariantChange: (updatedVariant: EpicVariant) => void;
@@ -56,10 +66,44 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
 }: EpicTestVariantEditorProps) => {
   const classes = useStyles();
 
-  const updateVariant = (update: (variant: EpicVariant) => EpicVariant): void => {
-    if (variant) {
-      onVariantChange(update(variant));
-    }
+  const defaultValues: FormData = {
+    heading: variant.heading || '',
+    body: variant.paragraphs.join('\n'),
+    highlightedText: variant.highlightedText || '',
+    backgroundImageUrl: variant.backgroundImageUrl || '',
+    footer: variant.footer || '',
+  };
+
+  const { register, handleSubmit, errors } = useForm<FormData>({ defaultValues });
+
+  useEffect(() => {
+    const isValid = Object.keys(errors).length === 0;
+    onValidationChange(isValid);
+  }, [
+    errors.heading,
+    errors.body,
+    errors.highlightedText,
+    errors.backgroundImageUrl,
+    errors.footer,
+  ]);
+
+  const onSubmit = ({
+    heading,
+    body,
+    highlightedText,
+    backgroundImageUrl,
+    footer,
+  }: FormData): void => {
+    const paragraphs = body.split('\n');
+
+    onVariantChange({
+      ...variant,
+      heading,
+      paragraphs,
+      highlightedText,
+      backgroundImageUrl,
+      footer,
+    });
   };
 
   const updatePrimaryCta = (updatedCta?: Cta): void => {
@@ -68,12 +112,18 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   const updateSecondaryCta = (updatedCta?: Cta): void => {
     onVariantChange({ ...variant, secondaryCta: updatedCta });
   };
+  const updateTickerSettings = (updatedTickerSettings?: TickerSettings): void => {
+    onVariantChange({ ...variant, tickerSettings: updatedTickerSettings });
+  };
 
   return (
     <div className={classes.container}>
       {!isLiveblog && (
         <TextField
-          helperText={HEADER_DEFAULT_HELPER_TEXT}
+          inputRef={register({ validate: invalidTemplateValidator })}
+          error={errors.heading !== undefined}
+          helperText={errors.heading ? errors.heading.message : HEADER_DEFAULT_HELPER_TEXT}
+          onBlur={handleSubmit(onSubmit)}
           name="heading"
           label="Header"
           margin="normal"
@@ -84,7 +134,13 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
       )}
 
       <TextField
-        helperText={BODY_DEFAULT_HELPER_TEXT}
+        inputRef={register({
+          required: EMPTY_ERROR_HELPER_TEXT,
+          validate: invalidTemplateValidator,
+        })}
+        error={errors.body !== undefined}
+        helperText={errors.body ? errors.body.message : BODY_DEFAULT_HELPER_TEXT}
+        onBlur={handleSubmit(onSubmit)}
         name="body"
         label="Body copy"
         margin="normal"
@@ -97,7 +153,16 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
 
       {!isLiveblog && (
         <TextField
-          helperText={HIGHTLIGHTED_TEXT_DEFAULT_HELPER_TEXT}
+          inputRef={register({
+            validate: invalidTemplateValidator,
+          })}
+          error={errors.highlightedText !== undefined}
+          helperText={
+            errors.highlightedText
+              ? errors.highlightedText.message
+              : HIGHTLIGHTED_TEXT_DEFAULT_HELPER_TEXT
+          }
+          onBlur={handleSubmit(onSubmit)}
           name="highlightedText"
           label="Hightlighted text"
           margin="normal"
@@ -127,17 +192,18 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
           <TickerEditor
             editMode={editMode}
             tickerSettings={variant.tickerSettings}
-            onChange={(tickerSettings): void =>
-              updateVariant(variant => ({ ...variant, tickerSettings }))
-            }
-            onValidationChange={isValid => console.log(isValid)}
+            onChange={updateTickerSettings}
+            onValidationChange={onValidationChange}
           />
         </div>
       )}
+
       {!isLiveblog && (
         <TextField
+          inputRef={register()}
           helperText={IMAGE_URL_DEFAULT_HELPER_TEXT}
-          name="imageUrl"
+          onBlur={handleSubmit(onSubmit)}
+          name="backgroundImageUrl"
           label="Image URL"
           margin="normal"
           variant="outlined"
@@ -147,7 +213,9 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
       )}
       {!isLiveblog && (
         <TextField
+          inputRef={register()}
           helperText={FOOTER_DEFAULT_HELPER_TEXT}
+          onBlur={handleSubmit(onSubmit)}
           name="footer"
           label="Footer"
           margin="normal"
