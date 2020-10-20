@@ -58,7 +58,7 @@ export interface EpicTest extends Test {
   excludedSections: string[];
   alwaysAsk: boolean;
   maxViews?: MaxEpicViews;
-  userCohort?: UserCohort;
+  userCohort: UserCohort;
   isLiveBlog: boolean;
   hasCountryName: boolean;
   variants: EpicVariant[];
@@ -118,6 +118,9 @@ const getEpicTestForm = (epicType: EpicType): React.FC<Props> => {
         onTestsChange(newTests, name);
       }
     };
+
+    const selectedTest = tests.find(t => t.name === selectedTestName);
+
     return (
       <TestsFormLayout
         sidebar={
@@ -132,9 +135,9 @@ const getEpicTestForm = (epicType: EpicType): React.FC<Props> => {
           />
         }
         testEditor={
-          selectedTestName ? (
+          selectedTestName && selectedTest ? (
             <EpicTestEditor
-              test={tests.find(test => test.name === selectedTestName)}
+              test={selectedTest}
               hasChanged={!!modifiedTests[selectedTestName]}
               isLiveblog={isLiveBlog}
               onChange={(updatedTest): void =>
@@ -143,8 +146,8 @@ const getEpicTestForm = (epicType: EpicType): React.FC<Props> => {
               onValidationChange={onTestErrorStatusChange(selectedTestName)}
               visible
               editMode={editMode}
-              onDelete={onTestDelete}
-              onArchive={onTestArchive}
+              onDelete={(): void => onTestDelete(selectedTestName)}
+              onArchive={(): void => onTestArchive(selectedTestName)}
               onSelectedTestName={onSelectedTestName}
               isDeleted={
                 modifiedTests[selectedTestName] && modifiedTests[selectedTestName].isDeleted

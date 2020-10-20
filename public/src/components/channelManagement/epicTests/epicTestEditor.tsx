@@ -16,19 +16,16 @@ import TestEditorLiveSwitch from '../testEditorLiveSwitch';
 import TestVariantsEditor from '../testVariantsEditor';
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 import TestEditorArticleCountEditor from '../testEditorArticleCountEditor';
+import TestEditorActionButtons from '../testEditorActionButtons';
 import EpicTestVariantEditor from './epicTestVariantEditor';
 import EpicTestTargetContentEditor from './epicTestTargetContentEditor';
 import MaxEpicViewsEditor from './maxEpicViewsEditor';
 import { onFieldValidationChange } from '../helpers/validation';
-import ButtonWithConfirmationPopup from '../buttonWithConfirmationPopup';
-import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
-import ArchiveIcon from '@material-ui/icons/Archive';
 import { defaultArticlesViewedSettings } from '../articlesViewedEditor';
-import NewNameCreator from '../newNameCreator';
 import { articleCountTemplate, countryNameTemplate } from '../helpers/copyTemplates';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const styles = ({ spacing, typography, palette }: Theme) =>
+const styles = ({ spacing, palette }: Theme) =>
   createStyles({
     container: {
       width: '100%',
@@ -60,70 +57,9 @@ const styles = ({ spacing, typography, palette }: Theme) =>
       fontWeight: 500,
       color: palette.grey[700],
     },
-    fieldsContainer: {
-      '& > *': {
-        marginTop: spacing(3),
-      },
-    },
-    formControl: {
-      marginTop: spacing(2),
-      marginBottom: spacing(1),
-      display: 'block',
-    },
-    h3: {
-      fontSize: typography.pxToRem(28),
-      fontWeight: typography.fontWeightMedium,
-      margin: '10px 0 15px',
-    },
-    hasChanged: {
-      color: 'orange',
-    },
-    boldHeading: {
-      fontSize: typography.pxToRem(17),
-      fontWeight: typography.fontWeightBold,
-      margin: '20px 0 10px',
-    },
-    select: {
-      minWidth: '460px',
-      paddingTop: '10px',
-      marginBottom: '20px',
-    },
-    selectLabel: {
-      fontSize: typography.pxToRem(22),
-      color: 'black',
-    },
-    radio: {
-      paddingTop: '20px',
-      marginBottom: '10px',
-    },
-    visibilityIcons: {
-      marginTop: spacing(1),
-    },
-    switchWithIcon: {
-      display: 'flex',
-    },
-    visibilityHelperText: {
-      marginTop: spacing(1),
-      marginLeft: spacing(1),
-    },
-    buttons: {
-      display: 'flex',
-      justifyContent: 'flex-end',
-    },
-    button: {
-      marginTop: spacing(2),
-      marginLeft: spacing(2),
-    },
-    isDeleted: {
-      color: '#ab0613',
-    },
-    isArchived: {
-      color: '#a1845c',
-    },
-    switchLabel: {
-      marginTop: spacing(0.6),
-      marginRight: spacing(6),
-      fontSize: typography.pxToRem(18),
+    buttonsContainer: {
+      paddingTop: spacing(4),
+      paddingBottom: spacing(12),
     },
   });
 
@@ -135,15 +71,15 @@ const copyHasTemplate = (test: EpicTest, template: string): boolean =>
   );
 
 interface EpicTestEditorProps extends WithStyles<typeof styles> {
-  test?: EpicTest;
+  test: EpicTest;
   hasChanged: boolean;
   isLiveblog: boolean;
   onChange: (updatedTest: EpicTest) => void;
   onValidationChange: (isValid: boolean) => void;
   visible: boolean;
   editMode: boolean;
-  onDelete: (testName: string) => void;
-  onArchive: (testName: string) => void;
+  onDelete: () => void;
+  onArchive: () => void;
   onSelectedTestName: (testName: string) => void;
   isDeleted: boolean;
   isArchived: boolean;
@@ -152,8 +88,6 @@ interface EpicTestEditorProps extends WithStyles<typeof styles> {
   testNicknames: string[];
   createTest: (newTest: EpicTest) => void;
 }
-
-const areYouSure = `Are you sure? This can't be undone without cancelling entire edit session!`;
 
 class EpicTestEditor extends React.Component<EpicTestEditorProps, TestEditorState> {
   state: TestEditorState = {
@@ -296,37 +230,10 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, TestEditorStat
     }));
   };
 
-  renderBottomButtons = (test: EpicTest): React.ReactElement => (
-    <div className={this.props.classes.buttons}>
-      <div className={this.props.classes.button}>
-        <ButtonWithConfirmationPopup
-          buttonText="Archive test"
-          confirmationText={areYouSure}
-          onConfirm={(): void => this.props.onArchive(test.name)}
-          icon={<ArchiveIcon />}
-        />
-      </div>
-      <div className={this.props.classes.button}>
-        <ButtonWithConfirmationPopup
-          buttonText="Delete test"
-          confirmationText={areYouSure}
-          onConfirm={(): void => this.props.onDelete(test.name)}
-          icon={<DeleteSweepIcon />}
-        />
-      </div>
-      <div className={this.props.classes.button}>
-        <NewNameCreator
-          type="test"
-          action="Copy"
-          existingNames={this.props.testNames}
-          existingNicknames={this.props.testNicknames}
-          onValidName={this.copyTest}
-          editEnabled={this.props.editMode}
-          initialValue={test.name}
-        />
-      </div>
-    </div>
-  );
+  onCopy = (name: string, nickname: string): void => {
+    this.props.onSelectedTestName(name);
+    this.props.createTest({ ...this.props.test, name: name, nickname: nickname, isOn: false });
+  };
 
   renderEditor = (test: EpicTest): React.ReactNode | undefined => {
     const { classes } = this.props;
@@ -440,6 +347,17 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, TestEditorStat
             onArticlesViewedSettingsChanged={this.onArticlesViewedSettingsChange}
             onValidationChange={isValid => console.log(isValid)}
             isDisabled={!this.isEditable()}
+          />
+        </div>
+
+        <div className={classes.buttonsContainer}>
+          <TestEditorActionButtons
+            existingNames={this.props.testNames}
+            existingNicknames={this.props.testNicknames}
+            isDisabled={!this.isEditable()}
+            onArchive={this.props.onArchive}
+            onDelete={this.props.onDelete}
+            onCopy={this.onCopy}
           />
         </div>
       </div>
