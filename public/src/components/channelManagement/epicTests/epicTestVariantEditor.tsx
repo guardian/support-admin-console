@@ -1,80 +1,73 @@
 import React from 'react';
 import { EpicVariant } from './epicTestsForm';
 import { Cta, defaultCta } from '../helpers/shared';
-import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core';
+import { Theme, makeStyles } from '@material-ui/core';
 import EditableTextField from '../editableTextField';
 import CtaEditor from '../ctaEditor';
 import TickerEditor from '../tickerEditor';
 import ButtonWithConfirmationPopup from '../buttonWithConfirmationPopup';
 import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
-import { onFieldValidationChange, ValidationStatus } from '../helpers/validation';
 import { getInvalidTemplateError } from '../helpers/copyTemplates';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const styles = ({ palette, spacing, typography }: Theme) =>
-  createStyles({
-    container: {
-      width: '100%',
-      borderTop: `2px solid ${palette.grey['300']}`,
-      marginLeft: '15px',
+const useStyles = makeStyles(({ palette, spacing, typography }: Theme) => ({
+  container: {
+    width: '100%',
+    borderTop: `2px solid ${palette.grey['300']}`,
+    marginLeft: '15px',
+  },
+  fieldsContainer: {
+    '& > *': {
+      marginTop: spacing(3),
     },
-    fieldsContainer: {
-      '& > *': {
-        marginTop: spacing(3),
-      },
+  },
+  variant: {
+    display: 'flex',
+    '& span': {
+      marginLeft: '4px',
+      marginRight: '4px',
     },
-    variant: {
-      display: 'flex',
-      '& span': {
-        marginLeft: '4px',
-        marginRight: '4px',
-      },
-    },
-    variantName: {
-      width: '10%',
-    },
-    variantHeading: {
-      width: '20%',
-    },
-    variantListHeading: {
-      fontWeight: 'bold',
-    },
-    formControl: {
-      marginTop: spacing(2),
-      marginBottom: spacing(1),
-      minWidth: '60%',
-      maxWidth: '100%',
-      display: 'block',
-    },
-    deleteButton: {
-      marginTop: spacing(2),
-      float: 'right',
-    },
-    label: {
-      fontSize: typography.pxToRem(16),
-      fontWeight: typography.fontWeightMedium,
-      color: 'black',
-    },
-    ctaContainer: {
-      marginTop: '15px',
-      marginBottom: '15px',
-    },
-    hook: {
-      maxWidth: '400px',
-    },
-  });
+  },
+  variantName: {
+    width: '10%',
+  },
+  variantHeading: {
+    width: '20%',
+  },
+  variantListHeading: {
+    fontWeight: 'bold',
+  },
+  formControl: {
+    marginTop: spacing(2),
+    marginBottom: spacing(1),
+    minWidth: '60%',
+    maxWidth: '100%',
+    display: 'block',
+  },
+  deleteButton: {
+    marginTop: spacing(2),
+    float: 'right',
+  },
+  label: {
+    fontSize: typography.pxToRem(16),
+    fontWeight: typography.fontWeightMedium,
+    color: 'black',
+  },
+  ctaContainer: {
+    marginTop: '15px',
+    marginBottom: '15px',
+  },
+  hook: {
+    maxWidth: '400px',
+  },
+}));
 
-interface Props extends WithStyles<typeof styles> {
-  variant?: EpicVariant;
+interface EpicTestVariantEditorProps {
+  variant: EpicVariant;
   onVariantChange: (updatedVariant: EpicVariant) => void;
   editMode: boolean;
   isLiveblog: boolean;
   onDelete: () => void;
   onValidationChange: (isValid: boolean) => void;
-}
-
-interface State {
-  validationStatus: ValidationStatus;
 }
 
 enum VariantFieldNames {
@@ -87,54 +80,50 @@ enum VariantFieldNames {
   backgroundImageUrl = 'backgroundImageUrl',
 }
 
-class EpicTestVariantEditor extends React.Component<Props, State> {
-  state: State = {
-    validationStatus: {},
-  };
+const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
+  variant,
+  onVariantChange,
+  editMode,
+  isLiveblog,
+  onDelete,
+}: EpicTestVariantEditorProps) => {
+  const classes = useStyles();
 
-  updateVariant = (update: (variant: EpicVariant) => EpicVariant): void => {
-    if (this.props.variant) {
-      this.props.onVariantChange(update(this.props.variant));
+  const updateVariant = (update: (variant: EpicVariant) => EpicVariant): void => {
+    if (variant) {
+      onVariantChange(update(variant));
     }
   };
 
-  onOptionalTextChange = (fieldName: string) => (updatedString: string): void => {
+  const onOptionalTextChange = (fieldName: string) => (updatedString: string): void => {
     //For optional fields, an empty string means it's unset
-    this.updateVariant(variant => ({
+    updateVariant(variant => ({
       ...variant,
       [fieldName]: updatedString === '' ? undefined : updatedString,
     }));
   };
 
-  onParagraphsChange = (fieldName: string) => (updatedParagraphs: string): void => {
-    this.updateVariant(variant => ({
+  const onParagraphsChange = (fieldName: string) => (updatedParagraphs: string): void => {
+    updateVariant(variant => ({
       ...variant,
       [fieldName]: updatedParagraphs.split('\n'),
     }));
   };
 
-  onVariantSwitchChange = (fieldName: string) => (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ): void => {
-    const updatedBool = event.target.checked;
-    this.updateVariant(variant => ({ ...variant, [fieldName]: updatedBool }));
-  };
-
-  renderVariantEditor = (variant: EpicVariant): React.ReactNode => {
-    const { classes } = this.props;
-    return (
+  return (
+    <div className={classes.container}>
       <div className={classes.fieldsContainer}>
-        {!this.props.isLiveblog && (
+        {!isLiveblog && (
           <div className={classes.hook}>
             <EditableTextField
               text={variant.heading || ''}
-              onSubmit={this.onOptionalTextChange('heading')}
+              onSubmit={onOptionalTextChange('heading')}
               label="Hook"
-              editEnabled={this.props.editMode}
+              editEnabled={editMode}
               helperText="e.g. Since you're here"
               validation={{
                 getError: (value: string): string | null => getInvalidTemplateError(value),
-                onChange: onFieldValidationChange(this)('heading'),
+                onChange: isValid => console.log(isValid),
               }}
               fullWidth
             />
@@ -145,9 +134,9 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
           textarea
           height={10}
           text={variant.paragraphs.join('\n')}
-          onSubmit={this.onParagraphsChange('paragraphs')}
+          onSubmit={onParagraphsChange('paragraphs')}
           label="Body copy"
-          editEnabled={this.props.editMode}
+          editEnabled={editMode}
           helperText="Main Epic message, including paragraph breaks"
           validation={{
             getError: (value: string): string | null => {
@@ -157,21 +146,21 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
                 return getInvalidTemplateError(value);
               }
             },
-            onChange: onFieldValidationChange(this)('paragraphs'),
+            onChange: isValid => console.log(isValid),
           }}
           fullWidth
         />
 
-        {!this.props.isLiveblog && (
+        {!isLiveblog && (
           <EditableTextField
             text={variant.highlightedText || ''}
-            onSubmit={this.onOptionalTextChange('highlightedText')}
+            onSubmit={onOptionalTextChange('highlightedText')}
             label="Highlighted text"
             helperText="Final sentence, highlighted in yellow"
-            editEnabled={this.props.editMode}
+            editEnabled={editMode}
             validation={{
               getError: (value: string): string | null => getInvalidTemplateError(value),
-              onChange: onFieldValidationChange(this)('highlightedText'),
+              onChange: isValid => console.log(isValid),
             }}
             fullWidth
           />
@@ -180,88 +169,74 @@ class EpicTestVariantEditor extends React.Component<Props, State> {
           <span className={classes.label}>Buttons</span>
           <CtaEditor
             cta={variant.cta}
-            update={(cta?: Cta): void => this.updateVariant(variant => ({ ...variant, cta }))}
-            editMode={this.props.editMode}
+            update={(cta?: Cta): void => updateVariant(variant => ({ ...variant, cta }))}
+            editMode={editMode}
             label="Has a button linking to the landing page"
             defaultText={defaultCta.text}
             defaultBaseUrl={defaultCta.baseUrl}
             manualCampaignCode={false}
           />
 
-          {!this.props.isLiveblog && (
+          {!isLiveblog && (
             <CtaEditor
               cta={variant.secondaryCta}
               update={(cta?: Cta): void =>
-                this.updateVariant(variant => ({
+                updateVariant(variant => ({
                   ...variant,
                   secondaryCta: cta,
                 }))
               }
-              editMode={this.props.editMode}
+              editMode={editMode}
               label={'Has a secondary button'}
               manualCampaignCode={true}
             />
           )}
         </div>
-        {!this.props.isLiveblog && (
+        {!isLiveblog && (
           <div>
             <TickerEditor
-              editMode={this.props.editMode}
+              editMode={editMode}
               tickerSettings={variant.tickerSettings}
               onChange={(tickerSettings): void =>
-                this.updateVariant(variant => ({ ...variant, tickerSettings }))
+                updateVariant(variant => ({ ...variant, tickerSettings }))
               }
-              onValidationChange={onFieldValidationChange(this)('tickerSettings')}
+              onValidationChange={isValid => console.log(isValid)}
             />
           </div>
         )}
-        {!this.props.isLiveblog && (
+        {!isLiveblog && (
           <EditableTextField
             text={variant.backgroundImageUrl || ''}
-            onSubmit={this.onOptionalTextChange(VariantFieldNames.backgroundImageUrl)}
+            onSubmit={onOptionalTextChange(VariantFieldNames.backgroundImageUrl)}
             label="Image URL"
             helperText="Image ratio should be 2.5:1. This will appear above everything except a ticker"
-            editEnabled={this.props.editMode}
+            editEnabled={editMode}
             fullWidth
           />
         )}
-        {!this.props.isLiveblog && (
+        {!isLiveblog && (
           <EditableTextField
             text={variant.footer || ''}
-            onSubmit={this.onOptionalTextChange('footer')}
+            onSubmit={onOptionalTextChange('footer')}
             label="Footer"
             helperText="Bold text that appears below the button"
-            editEnabled={this.props.editMode}
+            editEnabled={editMode}
             fullWidth
           />
         )}
         <div className={classes.deleteButton}>
-          {this.props.editMode && (
+          {editMode && (
             <ButtonWithConfirmationPopup
               buttonText="Delete variant"
               confirmationText={`Are you sure? This cannot be undone!`}
-              onConfirm={(): void => this.props.onDelete()}
+              onConfirm={(): void => onDelete()}
               icon={<DeleteSweepIcon />}
             />
           )}
         </div>
       </div>
-    );
-  };
+    </div>
+  );
+};
 
-  render(): React.ReactNode {
-    const { classes } = this.props;
-
-    return (
-      <div className={classes.container}>
-        {this.props.variant ? (
-          this.renderVariantEditor(this.props.variant)
-        ) : (
-          <div>No variant selected</div>
-        )}
-      </div>
-    );
-  }
-}
-
-export default withStyles(styles)(EpicTestVariantEditor);
+export default EpicTestVariantEditor;
