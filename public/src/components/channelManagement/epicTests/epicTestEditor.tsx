@@ -19,6 +19,7 @@ import TestEditorHeader from '../testEditorHeader';
 import TestEditorLiveSwitch from '../testEditorLiveSwitch';
 import TestVariantsEditor from '../testVariantsEditor';
 import EpicTestVariantEditor from './epicTestVariantEditor';
+import EpicTestTargetContentEditor from './epicTestTargetContentEditor';
 import EditableTextField from '../editableTextField';
 import MaxEpicViewsEditor from './maxEpicViewsEditor';
 import { onFieldValidationChange } from '../helpers/validation';
@@ -273,6 +274,15 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, TestEditorStat
     this.updateTest(test => ({ ...test, locations: selectedRegions }));
   };
 
+  updateTargetSections = (
+    tagIds: string[],
+    sections: string[],
+    excludedTagIds: string[],
+    excludedSections: string[],
+  ): void => {
+    this.updateTest(test => ({ ...test, tagIds, sections, excludedTagIds, excludedSections }));
+  };
+
   renderBottomButtons = (test: EpicTest): React.ReactElement => (
     <div className={this.props.classes.buttons}>
       <div className={this.props.classes.button}>
@@ -348,120 +358,93 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, TestEditorStat
           </div>
         </div>
 
+        <div className={classes.sectionContainer}>
+          <Typography variant={'h3'} className={classes.sectionHeader}>
+            Target content
+          </Typography>
+
+          <EpicTestTargetContentEditor
+            tagIds={test.tagIds}
+            sections={test.sections}
+            excludeTagIds={test.excludedTagIds}
+            excludeSections={test.excludedSections}
+            editMode={this.isEditable()}
+            updateTargetContent={this.updateTargetSections}
+          />
+        </div>
+
         <Typography variant={'h4'} className={classes.boldHeading}>
-          Target content
+          Target audience
         </Typography>
 
-        <div className={classes.fieldsContainer}>
-          <EditableTextField
-            text={test.tagIds.join(',')}
-            onSubmit={this.onListChange('tagIds')}
-            label="Target tags"
-            helperText="Format: environment/wildlife,business/economics"
-            editEnabled={this.isEditable()}
-            fullWidth
-          />
+        <TargetRegionsSelector
+          regions={test.locations}
+          onRegionsUpdate={this.onTargetRegionsChange}
+          isEditable={this.isEditable()}
+        />
 
-          <EditableTextField
-            text={test.sections.join(',')}
-            onSubmit={this.onListChange('sections')}
-            label="Target sections"
-            helperText="Format: environment,business"
-            editEnabled={this.isEditable()}
-            fullWidth
-          />
-
-          <EditableTextField
-            text={test.excludedTagIds.join(',')}
-            onSubmit={this.onListChange('excludedTagIds')}
-            label="Excluded tags"
-            helperText="Format: environment/wildlife,business/economics"
-            editEnabled={this.isEditable()}
-            fullWidth
-          />
-
-          <EditableTextField
-            text={test.excludedSections.join(',')}
-            onSubmit={this.onListChange('excludedSections')}
-            label="Excluded sections"
-            helperText="Format: environment,business"
-            editEnabled={this.isEditable()}
-            fullWidth
-          />
-
-          <Typography variant={'h4'} className={classes.boldHeading}>
-            Target audience
-          </Typography>
-
-          <TargetRegionsSelector
-            regions={test.locations}
-            onRegionsUpdate={this.onTargetRegionsChange}
-            isEditable={this.isEditable()}
-          />
-
-          <FormControl className={classes.formControl}>
-            <InputLabel className={classes.selectLabel} shrink htmlFor="user-cohort">
-              Supporter status
-            </InputLabel>
-            <RadioGroup
-              className={classes.radio}
-              value={test.userCohort}
-              onChange={this.onUserCohortChange}
-            >
-              {Object.values(UserCohort).map(cohort => (
-                <FormControlLabel
-                  value={cohort}
-                  key={cohort}
-                  control={<Radio />}
-                  label={cohort}
-                  disabled={!this.isEditable()}
-                />
-              ))}
-            </RadioGroup>
-          </FormControl>
-
-          <Typography variant={'h4'} className={this.props.classes.boldHeading}>
-            View frequency settings
-          </Typography>
-
-          <FormControlLabel
-            control={
-              <Switch
-                checked={test.useLocalViewLog}
-                onChange={this.onSwitchChange('useLocalViewLog')}
+        <FormControl className={classes.formControl}>
+          <InputLabel className={classes.selectLabel} shrink htmlFor="user-cohort">
+            Supporter status
+          </InputLabel>
+          <RadioGroup
+            className={classes.radio}
+            value={test.userCohort}
+            onChange={this.onUserCohortChange}
+          >
+            {Object.values(UserCohort).map(cohort => (
+              <FormControlLabel
+                value={cohort}
+                key={cohort}
+                control={<Radio />}
+                label={cohort}
                 disabled={!this.isEditable()}
               />
-            }
-            label={`Use private view counter for this test (instead of the global one)`}
-          />
+            ))}
+          </RadioGroup>
+        </FormControl>
 
-          <MaxEpicViewsEditor
-            test={test}
-            editMode={this.isEditable()}
-            onChange={(alwaysAsk: boolean, maxEpicViews: MaxEpicViews): void =>
-              this.updateTest(test => ({
-                ...test,
-                alwaysAsk,
-                maxViews: maxEpicViews,
-              }))
-            }
-            onValidationChange={onFieldValidationChange(this)('maxViews')}
-          />
+        <Typography variant={'h4'} className={this.props.classes.boldHeading}>
+          View frequency settings
+        </Typography>
 
-          <Typography variant={'h4'} className={this.props.classes.boldHeading}>
-            Article count
-          </Typography>
-          <ArticlesViewedEditor
-            articlesViewedSettings={test.articlesViewedSettings}
-            editMode={this.isEditable()}
-            onChange={(articlesViewedSettings?: ArticlesViewedSettings): void =>
-              this.updateTest(test => ({ ...test, articlesViewedSettings }))
-            }
-            onValidationChange={onFieldValidationChange(this)('articlesViewedEditor')}
-          />
+        <FormControlLabel
+          control={
+            <Switch
+              checked={test.useLocalViewLog}
+              onChange={this.onSwitchChange('useLocalViewLog')}
+              disabled={!this.isEditable()}
+            />
+          }
+          label={`Use private view counter for this test (instead of the global one)`}
+        />
 
-          {this.isEditable() && this.props.test && this.renderBottomButtons(this.props.test)}
-        </div>
+        <MaxEpicViewsEditor
+          test={test}
+          editMode={this.isEditable()}
+          onChange={(alwaysAsk: boolean, maxEpicViews: MaxEpicViews): void =>
+            this.updateTest(test => ({
+              ...test,
+              alwaysAsk,
+              maxViews: maxEpicViews,
+            }))
+          }
+          onValidationChange={onFieldValidationChange(this)('maxViews')}
+        />
+
+        <Typography variant={'h4'} className={this.props.classes.boldHeading}>
+          Article count
+        </Typography>
+        <ArticlesViewedEditor
+          articlesViewedSettings={test.articlesViewedSettings}
+          editMode={this.isEditable()}
+          onChange={(articlesViewedSettings?: ArticlesViewedSettings): void =>
+            this.updateTest(test => ({ ...test, articlesViewedSettings }))
+          }
+          onValidationChange={onFieldValidationChange(this)('articlesViewedEditor')}
+        />
+
+        {this.isEditable() && this.props.test && this.renderBottomButtons(this.props.test)}
       </div>
     );
   };
