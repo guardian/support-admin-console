@@ -4,11 +4,7 @@ import { EpicTest, EpicVariant, MaxEpicViews } from './epicTestsForm';
 import { ArticlesViewedSettings, TestEditorState, UserCohort, defaultCta } from '../helpers/shared';
 import {
   createStyles,
-  FormControl,
   FormControlLabel,
-  InputLabel,
-  Radio,
-  RadioGroup,
   Switch,
   Theme,
   Typography,
@@ -18,9 +14,9 @@ import {
 import TestEditorHeader from '../testEditorHeader';
 import TestEditorLiveSwitch from '../testEditorLiveSwitch';
 import TestVariantsEditor from '../testVariantsEditor';
+import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 import EpicTestVariantEditor from './epicTestVariantEditor';
 import EpicTestTargetContentEditor from './epicTestTargetContentEditor';
-import EditableTextField from '../editableTextField';
 import MaxEpicViewsEditor from './maxEpicViewsEditor';
 import { onFieldValidationChange } from '../helpers/validation';
 import ButtonWithConfirmationPopup from '../buttonWithConfirmationPopup';
@@ -28,7 +24,6 @@ import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 import ArchiveIcon from '@material-ui/icons/Archive';
 import ArticlesViewedEditor, { defaultArticlesViewedSettings } from '../articlesViewedEditor';
 import NewNameCreator from '../newNameCreator';
-import TargetRegionsSelector from '../targetRegionsSelector';
 import { articleCountTemplate, countryNameTemplate } from '../helpers/copyTemplates';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -283,6 +278,14 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, TestEditorStat
     this.updateTest(test => ({ ...test, tagIds, sections, excludedTagIds, excludedSections }));
   };
 
+  onRegionsChange = (updatedRegions: Region[]): void => {
+    this.updateTest(test => ({ ...test, locations: updatedRegions }));
+  };
+
+  onCohortChange = (updatedCohort: UserCohort): void => {
+    this.updateTest(test => ({ ...test, userCohort: updatedCohort }));
+  };
+
   renderBottomButtons = (test: EpicTest): React.ReactElement => (
     <div className={this.props.classes.buttons}>
       <div className={this.props.classes.button}>
@@ -373,36 +376,19 @@ class EpicTestEditor extends React.Component<EpicTestEditorProps, TestEditorStat
           />
         </div>
 
-        <Typography variant={'h4'} className={classes.boldHeading}>
-          Target audience
-        </Typography>
+        <div className={classes.sectionContainer}>
+          <Typography variant={'h3'} className={classes.sectionHeader}>
+            Target audience
+          </Typography>
 
-        <TargetRegionsSelector
-          regions={test.locations}
-          onRegionsUpdate={this.onTargetRegionsChange}
-          isEditable={this.isEditable()}
-        />
-
-        <FormControl className={classes.formControl}>
-          <InputLabel className={classes.selectLabel} shrink htmlFor="user-cohort">
-            Supporter status
-          </InputLabel>
-          <RadioGroup
-            className={classes.radio}
-            value={test.userCohort}
-            onChange={this.onUserCohortChange}
-          >
-            {Object.values(UserCohort).map(cohort => (
-              <FormControlLabel
-                value={cohort}
-                key={cohort}
-                control={<Radio />}
-                label={cohort}
-                disabled={!this.isEditable()}
-              />
-            ))}
-          </RadioGroup>
-        </FormControl>
+          <TestEditorTargetAudienceSelector
+            selectedRegions={test.locations}
+            onRegionsUpdate={this.onRegionsChange}
+            selectedCohort={test.userCohort}
+            onCohortChange={this.onCohortChange}
+            isDisabled={!this.isEditable()}
+          />
+        </div>
 
         <Typography variant={'h4'} className={this.props.classes.boldHeading}>
           View frequency settings
