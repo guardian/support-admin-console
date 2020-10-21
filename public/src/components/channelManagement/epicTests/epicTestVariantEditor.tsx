@@ -74,7 +74,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
     footer: variant.footer || '',
   };
 
-  const { register, handleSubmit, errors } = useForm<FormData>({ defaultValues });
+  const { register, handleSubmit, errors } = useForm<FormData>({ mode: 'onChange', defaultValues });
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;

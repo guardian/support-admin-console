@@ -12,6 +12,7 @@ import TestEditorActionButtons from '../testEditorActionButtons';
 import EpicTestVariantEditor from './epicTestVariantEditor';
 import EpicTestTargetContentEditor from './epicTestTargetContentEditor';
 import MaxEpicViewsEditor from './maxEpicViewsEditor';
+import useValidation from '../hooks/useValidation';
 import { defaultArticlesViewedSettings } from '../articlesViewedEditor';
 import { articleCountTemplate, countryNameTemplate } from '../helpers/copyTemplates';
 
@@ -91,8 +92,17 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
   testNames,
   testNicknames,
   createTest,
+  onValidationChange,
 }: EpicTestEditorProps) => {
   const classes = useStyles();
+
+  const setValidationStatusForField = useValidation(onValidationChange);
+
+  const onMaxViewsValidationChange = (isValid: boolean): void =>
+    setValidationStatusForField('maxViews', isValid);
+
+  const onArticlesViewedSettingsValidationChanged = (isValid: boolean): void =>
+    setValidationStatusForField('articlesViewedSettings', isValid);
 
   const isEditable = (): boolean => {
     return editMode && !isDeleted && !isArchived;
@@ -213,7 +223,9 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
       editMode={editMode}
       onVariantChange={onVariantChange}
       onDelete={(): void => onVariantDelete(variant.name)}
-      onValidationChange={isValid => console.log(isValid)}
+      onValidationChange={(isValid: boolean): void =>
+        setValidationStatusForField(variant.name, isValid)
+      }
     />
   ));
 
@@ -300,7 +312,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
               maxViews: maxEpicViews,
             }))
           }
-          onValidationChange={isValid => console.log(isValid)}
+          onValidationChange={onMaxViewsValidationChange}
         />
       </div>
 
@@ -312,7 +324,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
         <TestEditorArticleCountEditor
           articlesViewedSettings={test.articlesViewedSettings}
           onArticlesViewedSettingsChanged={onArticlesViewedSettingsChange}
-          onValidationChange={isValid => console.log(isValid)}
+          onValidationChange={onArticlesViewedSettingsValidationChanged}
           isDisabled={!isEditable()}
         />
       </div>
