@@ -2,15 +2,7 @@ import React from 'react';
 import { Region } from '../../../utils/models';
 import { EpicTest, EpicVariant, MaxEpicViews } from './epicTestsForm';
 import { ArticlesViewedSettings, UserCohort, defaultCta } from '../helpers/shared';
-import {
-  createStyles,
-  FormControlLabel,
-  Switch,
-  Theme,
-  Typography,
-  WithStyles,
-  withStyles,
-} from '@material-ui/core';
+import { makeStyles, FormControlLabel, Switch, Theme, Typography } from '@material-ui/core';
 import TestEditorHeader from '../testEditorHeader';
 import TestEditorLiveSwitch from '../testEditorLiveSwitch';
 import TestVariantsEditor from '../testVariantsEditor';
@@ -23,44 +15,42 @@ import MaxEpicViewsEditor from './maxEpicViewsEditor';
 import { defaultArticlesViewedSettings } from '../articlesViewedEditor';
 import { articleCountTemplate, countryNameTemplate } from '../helpers/copyTemplates';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const styles = ({ spacing, palette }: Theme) =>
-  createStyles({
-    container: {
-      width: '100%',
-      height: 'max-content',
-      background: '#FFFFFF',
-      paddingTop: spacing(6),
-      paddingRight: spacing(12),
-      paddingLeft: spacing(3),
-    },
-    headerAndSwitchContainer: {
-      paddingBottom: spacing(3),
-      borderBottom: `1px solid ${palette.grey[500]}`,
+const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
+  container: {
+    width: '100%',
+    height: 'max-content',
+    background: '#FFFFFF',
+    paddingTop: spacing(6),
+    paddingRight: spacing(12),
+    paddingLeft: spacing(3),
+  },
+  headerAndSwitchContainer: {
+    paddingBottom: spacing(3),
+    borderBottom: `1px solid ${palette.grey[500]}`,
 
-      '& > * + *': {
-        marginTop: spacing(2),
-      },
+    '& > * + *': {
+      marginTop: spacing(2),
     },
-    sectionContainer: {
-      paddingTop: spacing(1),
-      paddingBottom: spacing(6),
-      borderBottom: `1px solid ${palette.grey[500]}`,
+  },
+  sectionContainer: {
+    paddingTop: spacing(1),
+    paddingBottom: spacing(6),
+    borderBottom: `1px solid ${palette.grey[500]}`,
 
-      '& > * + *': {
-        marginTop: spacing(4),
-      },
+    '& > * + *': {
+      marginTop: spacing(4),
     },
-    sectionHeader: {
-      fontSize: 16,
-      fontWeight: 500,
-      color: palette.grey[700],
-    },
-    buttonsContainer: {
-      paddingTop: spacing(4),
-      paddingBottom: spacing(12),
-    },
-  });
+  },
+  sectionHeader: {
+    fontSize: 16,
+    fontWeight: 500,
+    color: palette.grey[700],
+  },
+  buttonsContainer: {
+    paddingTop: spacing(4),
+    paddingBottom: spacing(12),
+  },
+}));
 
 const copyHasTemplate = (test: EpicTest, template: string): boolean =>
   test.variants.some(
@@ -69,7 +59,7 @@ const copyHasTemplate = (test: EpicTest, template: string): boolean =>
       variant.paragraphs.some(para => para.includes(template)),
   );
 
-interface EpicTestEditorProps extends WithStyles<typeof styles> {
+interface EpicTestEditorProps {
   test: EpicTest;
   hasChanged: boolean;
   isLiveblog: boolean;
@@ -89,7 +79,6 @@ interface EpicTestEditorProps extends WithStyles<typeof styles> {
 }
 
 const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
-  classes,
   test,
   isLiveblog,
   onChange,
@@ -103,6 +92,8 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
   testNicknames,
   createTest,
 }: EpicTestEditorProps) => {
+  const classes = useStyles();
+
   const isEditable = (): boolean => {
     return editMode && !isDeleted && !isArchived;
   };
@@ -340,4 +331,4 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
   );
 };
 
-export default withStyles(styles)(EpicTestEditor);
+export default EpicTestEditor;
