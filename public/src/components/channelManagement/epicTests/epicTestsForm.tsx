@@ -8,7 +8,7 @@ import TestsForm from '../testEditor';
 import TestsFormLayout from '../testsFormLayout';
 import Sidebar from '../sidebar';
 import { FrontendSettingsType } from '../../../utils/requests';
-import { MaxEpicViewsDefaults } from './maxEpicViewsEditor';
+import { DEFAULT_MAX_EPIC_VIEWS } from './epicTestMaxViewsEditor';
 
 export enum TickerEndType {
   unlimited = 'unlimited',
@@ -84,7 +84,7 @@ const getEpicTestForm = (epicType: EpicType): React.FC<Props> => {
     excludedTagIds: [],
     excludedSections: [],
     alwaysAsk: false,
-    maxViews: MaxEpicViewsDefaults,
+    maxViews: DEFAULT_MAX_EPIC_VIEWS,
     userCohort: UserCohort.AllNonSupporters, // matches the default in dotcom
     isLiveBlog: isLiveBlog,
     hasCountryName: false,

@@ -11,7 +11,7 @@ import TestEditorArticleCountEditor from '../testEditorArticleCountEditor';
 import TestEditorActionButtons from '../testEditorActionButtons';
 import EpicTestVariantEditor from './epicTestVariantEditor';
 import EpicTestTargetContentEditor from './epicTestTargetContentEditor';
-import MaxEpicViewsEditor from './maxEpicViewsEditor';
+import EpicTestMaxViewsEditor from './epicTestMaxViewsEditor';
 import useValidation from '../hooks/useValidation';
 import { defaultArticlesViewedSettings } from '../articlesViewedEditor';
 import { articleCountTemplate, countryNameTemplate } from '../helpers/copyTemplates';
@@ -210,6 +210,13 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
     }));
   };
 
+  const onMaxViewsChange = (updatedMaxViews?: MaxEpicViews): void => {
+    updateTest(test => ({
+      ...test,
+      maxViews: updatedMaxViews,
+    }));
+  };
+
   const onCopy = (name: string, nickname: string): void => {
     onSelectedTestName(name);
     createTest({ ...test, name: name, nickname: nickname, isOn: false });
@@ -302,16 +309,10 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
           label={`Use private view counter for this test (instead of the global one)`}
         />
 
-        <MaxEpicViewsEditor
-          test={test}
-          editMode={isEditable()}
-          onChange={(alwaysAsk: boolean, maxEpicViews: MaxEpicViews): void =>
-            updateTest(test => ({
-              ...test,
-              alwaysAsk,
-              maxViews: maxEpicViews,
-            }))
-          }
+        <EpicTestMaxViewsEditor
+          maxEpicViews={test.maxViews}
+          isDisabled={!isEditable()}
+          onMaxViewsChanged={onMaxViewsChange}
           onValidationChange={onMaxViewsValidationChange}
         />
       </div>
