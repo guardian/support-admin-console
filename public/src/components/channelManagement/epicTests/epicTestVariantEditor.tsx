@@ -4,7 +4,7 @@ import { EpicVariant } from './epicTestsForm';
 import { Cta, TickerSettings } from '../helpers/shared';
 import { Theme, Typography, makeStyles, TextField } from '@material-ui/core';
 import VariantEditorButtonsEditor from '../variantEditorButtonsEditor';
-import TickerEditor from '../tickerEditor';
+import EpicTestTickerEditor from './epicTestTickerEditor';
 import { invalidTemplateValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
@@ -26,7 +26,7 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   sectionContainer: {
     paddingTop: spacing(1),
     paddingBottom: spacing(2),
-    borderBottom: `1px solid ${palette.grey[500]}`,
+
     '& > * + *': {
       marginTop: spacing(3),
     },
@@ -172,6 +172,34 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
         />
       )}
 
+      {!isLiveblog && (
+        <TextField
+          inputRef={register()}
+          helperText={IMAGE_URL_DEFAULT_HELPER_TEXT}
+          onBlur={handleSubmit(onSubmit)}
+          name="backgroundImageUrl"
+          label="Image URL"
+          margin="normal"
+          variant="outlined"
+          disabled={!editMode}
+          fullWidth
+        />
+      )}
+
+      {!isLiveblog && (
+        <TextField
+          inputRef={register()}
+          helperText={FOOTER_DEFAULT_HELPER_TEXT}
+          onBlur={handleSubmit(onSubmit)}
+          name="footer"
+          label="Footer"
+          margin="normal"
+          variant="outlined"
+          disabled={!editMode}
+          fullWidth
+        />
+      )}
+
       <div className={classes.sectionContainer}>
         <Typography className={classes.sectionHeader} variant="h4">
           Buttons
@@ -188,41 +216,18 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
       </div>
 
       {!isLiveblog && (
-        <div>
-          <TickerEditor
-            editMode={editMode}
+        <div className={classes.sectionContainer}>
+          <Typography className={classes.sectionHeader} variant="h4">
+            Ticker
+          </Typography>
+
+          <EpicTestTickerEditor
             tickerSettings={variant.tickerSettings}
-            onChange={updateTickerSettings}
+            updateTickerSettings={updateTickerSettings}
+            isDisabled={!editMode}
             onValidationChange={onValidationChange}
           />
         </div>
-      )}
-
-      {!isLiveblog && (
-        <TextField
-          inputRef={register()}
-          helperText={IMAGE_URL_DEFAULT_HELPER_TEXT}
-          onBlur={handleSubmit(onSubmit)}
-          name="backgroundImageUrl"
-          label="Image URL"
-          margin="normal"
-          variant="outlined"
-          disabled={!editMode}
-          fullWidth
-        />
-      )}
-      {!isLiveblog && (
-        <TextField
-          inputRef={register()}
-          helperText={FOOTER_DEFAULT_HELPER_TEXT}
-          onBlur={handleSubmit(onSubmit)}
-          name="footer"
-          label="Footer"
-          margin="normal"
-          variant="outlined"
-          disabled={!editMode}
-          fullWidth
-        />
       )}
     </div>
   );
