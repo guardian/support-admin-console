@@ -20,6 +20,8 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
     },
   },
   formContainer: {
+    maxWidth: '250px',
+
     '& > * + *': {
       marginTop: spacing(1),
     },
@@ -122,6 +124,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
               label="Maximum view counts"
               InputLabelProps={{ shrink: true }}
               variant="filled"
+              fullWidth
               disabled={isDisabled}
             />
           </div>
@@ -135,6 +138,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
               label="Number of days"
               InputLabelProps={{ shrink: true }}
               variant="filled"
+              fullWidth
               disabled={isDisabled}
             />
           </div>
@@ -151,6 +155,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
               label="Minimum days between views"
               InputLabelProps={{ shrink: true }}
               variant="filled"
+              fullWidth
               disabled={isDisabled}
             />
           </div>

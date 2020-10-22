@@ -24,6 +24,8 @@ const styles = ({ spacing }: Theme) =>
       },
     },
     formContainer: {
+      maxWidth: '250px',
+
       '& > * + *': {
         marginTop: spacing(1),
       },
@@ -128,6 +130,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
               label="Minimum page views"
               InputLabelProps={{ shrink: true }}
               variant="filled"
+              fullWidth
               disabled={isDisabled}
             />
           </div>
@@ -141,6 +144,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
               label="Maximum page views"
               InputLabelProps={{ shrink: true }}
               variant="filled"
+              fullWidth
               disabled={isDisabled}
             />
           </div>
@@ -157,6 +161,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
               label="Time period in weeks"
               InputLabelProps={{ shrink: true }}
               variant="filled"
+              fullWidth
               disabled={isDisabled}
             />
           </div>
