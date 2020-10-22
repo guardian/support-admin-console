@@ -15,7 +15,7 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
     paddingRight: spacing(10),
 
     '& > * + *': {
-      marginTop: spacing(3),
+      marginTop: spacing(1),
     },
   },
   sectionHeader: {
@@ -119,85 +119,95 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   return (
     <div className={classes.container}>
       {!isLiveblog && (
-        <TextField
-          inputRef={register({ validate: invalidTemplateValidator })}
-          error={errors.heading !== undefined}
-          helperText={errors.heading ? errors.heading.message : HEADER_DEFAULT_HELPER_TEXT}
-          onBlur={handleSubmit(onSubmit)}
-          name="heading"
-          label="Header"
-          margin="normal"
-          variant="outlined"
-          disabled={!editMode}
-          fullWidth
-        />
+        <div>
+          <TextField
+            inputRef={register({ validate: invalidTemplateValidator })}
+            error={errors.heading !== undefined}
+            helperText={errors.heading ? errors.heading.message : HEADER_DEFAULT_HELPER_TEXT}
+            onBlur={handleSubmit(onSubmit)}
+            name="heading"
+            label="Header"
+            margin="normal"
+            variant="outlined"
+            disabled={!editMode}
+            fullWidth
+          />
+        </div>
       )}
 
-      <TextField
-        inputRef={register({
-          required: EMPTY_ERROR_HELPER_TEXT,
-          validate: invalidTemplateValidator,
-        })}
-        error={errors.body !== undefined}
-        helperText={errors.body ? errors.body.message : BODY_DEFAULT_HELPER_TEXT}
-        onBlur={handleSubmit(onSubmit)}
-        name="body"
-        label="Body copy"
-        margin="normal"
-        variant="outlined"
-        multiline
-        rows={10}
-        disabled={!editMode}
-        fullWidth
-      />
-
-      {!isLiveblog && (
+      <div>
         <TextField
           inputRef={register({
+            required: EMPTY_ERROR_HELPER_TEXT,
             validate: invalidTemplateValidator,
           })}
-          error={errors.highlightedText !== undefined}
-          helperText={
-            errors.highlightedText
-              ? errors.highlightedText.message
-              : HIGHTLIGHTED_TEXT_DEFAULT_HELPER_TEXT
-          }
+          error={errors.body !== undefined}
+          helperText={errors.body ? errors.body.message : BODY_DEFAULT_HELPER_TEXT}
           onBlur={handleSubmit(onSubmit)}
-          name="highlightedText"
-          label="Hightlighted text"
+          name="body"
+          label="Body copy"
           margin="normal"
           variant="outlined"
+          multiline
+          rows={10}
           disabled={!editMode}
           fullWidth
         />
+      </div>
+
+      {!isLiveblog && (
+        <div>
+          <TextField
+            inputRef={register({
+              validate: invalidTemplateValidator,
+            })}
+            error={errors.highlightedText !== undefined}
+            helperText={
+              errors.highlightedText
+                ? errors.highlightedText.message
+                : HIGHTLIGHTED_TEXT_DEFAULT_HELPER_TEXT
+            }
+            onBlur={handleSubmit(onSubmit)}
+            name="highlightedText"
+            label="Hightlighted text"
+            margin="normal"
+            variant="outlined"
+            disabled={!editMode}
+            fullWidth
+          />
+        </div>
       )}
 
       {!isLiveblog && (
-        <TextField
-          inputRef={register()}
-          helperText={IMAGE_URL_DEFAULT_HELPER_TEXT}
-          onBlur={handleSubmit(onSubmit)}
-          name="backgroundImageUrl"
-          label="Image URL"
-          margin="normal"
-          variant="outlined"
-          disabled={!editMode}
-          fullWidth
-        />
+        <div>
+          <TextField
+            inputRef={register()}
+            helperText={IMAGE_URL_DEFAULT_HELPER_TEXT}
+            onBlur={handleSubmit(onSubmit)}
+            name="backgroundImageUrl"
+            label="Image URL"
+            margin="normal"
+            variant="outlined"
+            disabled={!editMode}
+            fullWidth
+          />
+        </div>
       )}
 
       {!isLiveblog && (
-        <TextField
-          inputRef={register()}
-          helperText={FOOTER_DEFAULT_HELPER_TEXT}
-          onBlur={handleSubmit(onSubmit)}
-          name="footer"
-          label="Footer"
-          margin="normal"
-          variant="outlined"
-          disabled={!editMode}
-          fullWidth
-        />
+        <div>
+          <TextField
+            inputRef={register()}
+            helperText={FOOTER_DEFAULT_HELPER_TEXT}
+            onBlur={handleSubmit(onSubmit)}
+            name="footer"
+            label="Footer"
+            margin="normal"
+            variant="outlined"
+            disabled={!editMode}
+            fullWidth
+          />
+        </div>
       )}
 
       <div className={classes.sectionContainer}>
