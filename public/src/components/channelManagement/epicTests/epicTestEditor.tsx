@@ -7,13 +7,14 @@ import TestEditorHeader from '../testEditorHeader';
 import TestEditorLiveSwitch from '../testEditorLiveSwitch';
 import TestVariantsEditor from '../testVariantsEditor';
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
-import TestEditorArticleCountEditor from '../testEditorArticleCountEditor';
+import TestEditorArticleCountEditor, {
+  DEFAULT_ARTICLES_VIEWED_SETTINGS,
+} from '../testEditorArticleCountEditor';
 import TestEditorActionButtons from '../testEditorActionButtons';
 import EpicTestVariantEditor from './epicTestVariantEditor';
 import EpicTestTargetContentEditor from './epicTestTargetContentEditor';
 import EpicTestMaxViewsEditor from './epicTestMaxViewsEditor';
 import useValidation from '../hooks/useValidation';
-import { defaultArticlesViewedSettings } from '../articlesViewedEditor';
 import { articleCountTemplate, countryNameTemplate } from '../helpers/copyTemplates';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
@@ -113,7 +114,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
       return test.articlesViewedSettings;
     }
     if (copyHasTemplate(test, articleCountTemplate)) {
-      return defaultArticlesViewedSettings;
+      return DEFAULT_ARTICLES_VIEWED_SETTINGS;
     }
     return undefined;
   };

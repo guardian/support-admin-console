@@ -3,14 +3,15 @@ import { Region } from '../../../utils/models';
 import { ArticlesViewedSettings, UserCohort } from '../helpers/shared';
 import { articleCountTemplate } from '../helpers/copyTemplates';
 import { createStyles, Theme, Typography, WithStyles, withStyles } from '@material-ui/core';
-import { defaultArticlesViewedSettings } from '../articlesViewedEditor';
 import BannerTestVariantEditor from './bannerTestVariantEditor';
 import TestVariantsEditor from '../testVariantsEditor';
 import TestEditorHeader from '../testEditorHeader';
 import TestEditorLiveSwitch from '../testEditorLiveSwitch';
 import TestEditorMinArticlesViewedInput from '../testEditorMinArticlesViewedInput';
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
-import TestEditorArticleCountEditor from '../testEditorArticleCountEditor';
+import TestEditorArticleCountEditor, {
+  DEFAULT_ARTICLES_VIEWED_SETTINGS,
+} from '../testEditorArticleCountEditor';
 import TestEditorActionButtons from '../testEditorActionButtons';
 import useValidation from '../hooks/useValidation';
 import { BannerTest, BannerVariant, BannerTemplate } from '../../../models/banner';
@@ -112,7 +113,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
       return test.articlesViewedSettings;
     }
     if (copyHasTemplate(test, articleCountTemplate)) {
-      return defaultArticlesViewedSettings;
+      return DEFAULT_ARTICLES_VIEWED_SETTINGS;
     }
     return undefined;
   };

@@ -30,7 +30,7 @@ const styles = ({ spacing }: Theme) =>
     },
   });
 
-const DEFAULT_ARTICLES_VIEWED_SETTINGS: ArticlesViewedSettings = {
+export const DEFAULT_ARTICLES_VIEWED_SETTINGS: ArticlesViewedSettings = {
   minViews: 3,
   maxViews: 999,
   periodInWeeks: 6,
