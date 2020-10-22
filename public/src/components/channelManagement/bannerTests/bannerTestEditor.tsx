@@ -175,7 +175,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
     createTest({ ...test, name: name, nickname: nickname, isOn: false });
   };
 
-  const variantEditors = test.variants.map(variant => (
+  const renderVariantEditor = (variant: BannerVariant): React.ReactElement => (
     <BannerTestVariantEditor
       key={`banner-${test.name}-${variant.name}`}
       variant={variant}
@@ -186,7 +186,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
         setValidationStatusForField(variant.name, isValid)
       }
     />
-  ));
+  );
 
   const createVariant = (name: string): void => {
     const newVariant: BannerVariant = {
@@ -224,7 +224,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
               createVariant={createVariant}
               testName={test.name}
               editMode={isEditable()}
-              variantEditors={variantEditors}
+              renderVariantEditor={renderVariantEditor}
               onVariantDelete={onVariantDelete}
             />
           </div>

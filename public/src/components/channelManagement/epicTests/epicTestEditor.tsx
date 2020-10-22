@@ -223,7 +223,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
     createTest({ ...test, name: name, nickname: nickname, isOn: false });
   };
 
-  const variantEditors = test.variants.map(variant => (
+  const renderVariantEditor = (variant: EpicVariant): React.ReactElement => (
     <EpicTestVariantEditor
       key={variant.name}
       variant={variant}
@@ -235,7 +235,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
         setValidationStatusForField(variant.name, isValid)
       }
     />
-  ));
+  );
 
   return (
     <div className={classes.container}>
@@ -259,7 +259,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
             testName={test.name}
             editMode={isEditable()}
             createVariant={createVariant}
-            variantEditors={variantEditors}
+            renderVariantEditor={renderVariantEditor}
             onVariantDelete={onVariantDelete}
           />
         </div>

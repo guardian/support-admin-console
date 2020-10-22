@@ -17,7 +17,7 @@ interface TestVariantsEditorProps<V extends Variant> {
   testName: string;
   editMode: boolean;
   createVariant: (name: string) => void;
-  variantEditors: React.ReactElement[];
+  renderVariantEditor: (variant: V) => React.ReactElement;
   onVariantDelete: (variantName: string) => void;
 }
 
@@ -26,7 +26,7 @@ function TestVariantsEditor<V extends Variant>({
   testName,
   editMode,
   createVariant,
-  variantEditors,
+  renderVariantEditor,
   onVariantDelete,
 }: TestVariantsEditorProps<V>): React.ReactElement<TestVariantsEditorProps<V>> {
   const classes = useStyles();
@@ -51,7 +51,7 @@ function TestVariantsEditor<V extends Variant>({
         editMode={editMode}
         selectedVariantKey={selectedVariantKey}
         onVariantSelected={onVariantSelected}
-        variantEditors={variantEditors}
+        renderVariantEditor={renderVariantEditor}
         onVariantDelete={onVariantDelete}
       />
 

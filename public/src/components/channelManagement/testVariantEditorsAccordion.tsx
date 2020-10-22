@@ -30,7 +30,7 @@ interface TestVariantEditorsAccordionProps<V extends Variant> {
   editMode: boolean;
   selectedVariantKey: string | null;
   onVariantSelected: (variantKey: string) => void;
-  variantEditors: React.ReactElement[];
+  renderVariantEditor: (variant: V) => React.ReactElement;
   onVariantDelete: (variantName: string) => void;
 }
 
@@ -41,7 +41,7 @@ function TestVariantEditorsAccordion<V extends Variant>({
   editMode,
   selectedVariantKey,
   onVariantSelected,
-  variantEditors,
+  renderVariantEditor,
   onVariantDelete,
 }: TestVariantEditorsAccordionProps<V>): React.ReactElement<TestVariantEditorsAccordionProps<V>> {
   const classes = useStyles();
@@ -50,7 +50,6 @@ function TestVariantEditorsAccordion<V extends Variant>({
     <div className={classes.expansionPanelsContainer}>
       {variants.map((variant, index) => {
         const variantKey = variantKeys[index];
-        const variantEditor = variantEditors[index];
 
         return (
           <Accordion
@@ -64,7 +63,7 @@ function TestVariantEditorsAccordion<V extends Variant>({
               testName={testName}
               isInEditMode={editMode}
             />
-            <AccordionDetails>{variantEditor}</AccordionDetails>
+            <AccordionDetails>{renderVariantEditor(variant)}</AccordionDetails>
             <AccordionActions>
               <VariantDeleteButton
                 isDisabled={!editMode}
