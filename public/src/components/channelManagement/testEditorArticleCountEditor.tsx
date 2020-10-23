@@ -34,7 +34,7 @@ const styles = ({ spacing }: Theme) =>
 
 export const DEFAULT_ARTICLES_VIEWED_SETTINGS: ArticlesViewedSettings = {
   minViews: 3,
-  maxViews: 999,
+  maxViews: null,
   periodInWeeks: 6,
 };
 
@@ -75,8 +75,8 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
 
   const onSubmit = ({ minViews, maxViews, periodInWeeks }: FormData): void => {
     onArticlesViewedSettingsChanged({
-      minViews: parseInt(minViews),
-      maxViews: parseInt(maxViews),
+      minViews: parseInt(minViews) || null,
+      maxViews: parseInt(maxViews) || null,
       periodInWeeks: parseInt(periodInWeeks),
     });
   };
