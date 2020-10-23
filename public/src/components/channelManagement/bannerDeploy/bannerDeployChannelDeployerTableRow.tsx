@@ -31,13 +31,10 @@ const prettifiedRegion = (region: string): string =>
 const prettifiedTimestamp = (timestamp: number): string => {
   const date = new Date(timestamp);
   const day = date
-    .getUTCDay()
+    .getUTCDate()
     .toString()
     .padStart(2, '0');
-  const month = date
-    .getUTCMonth()
-    .toString()
-    .padStart(2, '0');
+  const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
   const year = date.getUTCFullYear();
 
   const hour = date
@@ -50,7 +47,7 @@ const prettifiedTimestamp = (timestamp: number): string => {
     .toString()
     .padStart(2, '0');
 
-  return `${hour}:${minute} - ${day}/${month}/${year}`;
+  return `${year}/${month}/${day} - ${hour}:${minute}`;
 };
 
 const prettifiedUser = (email: string): string => {
