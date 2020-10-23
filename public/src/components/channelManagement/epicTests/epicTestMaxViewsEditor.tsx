@@ -116,7 +116,10 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
         <div className={classes.formContainer}>
           <div>
             <TextField
-              inputRef={register({ validate: notNumberValidator })}
+              inputRef={register({
+                required: EMPTY_ERROR_HELPER_TEXT,
+                validate: notNumberValidator,
+              })}
               error={errors.maxViewsCount !== undefined}
               helperText={errors.maxViewsCount?.message}
               onBlur={handleSubmit(onSubmit)}
@@ -130,7 +133,10 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
           </div>
           <div>
             <TextField
-              inputRef={register({ validate: notNumberValidator })}
+              inputRef={register({
+                required: EMPTY_ERROR_HELPER_TEXT,
+                validate: notNumberValidator,
+              })}
               error={errors.maxViewsDays !== undefined}
               helperText={errors.maxViewsDays?.message}
               onBlur={handleSubmit(onSubmit)}
