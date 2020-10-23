@@ -76,7 +76,14 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
     highlightedText: variant.highlightedText || '',
   };
 
-  const { register, handleSubmit, errors } = useForm<FormData>({ mode: 'onChange', defaultValues });
+  const { register, handleSubmit, errors, trigger } = useForm<FormData>({
+    mode: 'onChange',
+    defaultValues,
+  });
+
+  useEffect(() => {
+    trigger();
+  }, []);
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
