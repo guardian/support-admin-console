@@ -2,6 +2,7 @@ import {
   ArticlesViewedSettings,
   Cta,
   Test,
+  Variant,
   UserCohort,
 } from '../components/channelManagement/helpers/shared';
 import { Region } from '../utils/models';
@@ -11,8 +12,7 @@ export enum BannerTemplate {
   DigitalSubscriptionsBanner = 'DigitalSubscriptionsBanner',
   GuardianWeeklyBanner = 'GuardianWeeklyBanner',
 }
-export interface BannerVariant {
-  name: string;
+export interface BannerVariant extends Variant {
   template: BannerTemplate;
   heading?: string;
   body: string;

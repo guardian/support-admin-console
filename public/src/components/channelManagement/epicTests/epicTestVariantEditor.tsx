@@ -1,71 +1,55 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { EpicVariant } from './epicTestsForm';
-import { Cta, defaultCta } from '../helpers/shared';
-import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core';
-import EditableTextField from '../editableTextField';
-import CtaEditor from '../ctaEditor';
-import TickerEditor from '../tickerEditor';
-import ButtonWithConfirmationPopup from '../buttonWithConfirmationPopup';
-import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
-import { onFieldValidationChange, ValidationStatus } from '../helpers/validation';
-import { getInvalidTemplateError } from '../helpers/copyTemplates';
+import { Cta, TickerSettings } from '../helpers/shared';
+import { Theme, Typography, makeStyles, TextField } from '@material-ui/core';
+import VariantEditorButtonsEditor from '../variantEditorButtonsEditor';
+import EpicTestTickerEditor from './epicTestTickerEditor';
+import { invalidTemplateValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const styles = ({ palette, spacing, typography }: Theme) =>
-  createStyles({
-    container: {
-      width: '100%',
-      borderTop: `2px solid ${palette.grey['300']}`,
-      marginLeft: '15px',
-    },
-    fieldsContainer: {
-      '& > *': {
-        marginTop: spacing(3),
-      },
-    },
-    variant: {
-      display: 'flex',
-      '& span': {
-        marginLeft: '4px',
-        marginRight: '4px',
-      },
-    },
-    variantName: {
-      width: '10%',
-    },
-    variantHeading: {
-      width: '20%',
-    },
-    variantListHeading: {
-      fontWeight: 'bold',
-    },
-    formControl: {
-      marginTop: spacing(2),
-      marginBottom: spacing(1),
-      minWidth: '60%',
-      maxWidth: '100%',
-      display: 'block',
-    },
-    deleteButton: {
-      marginTop: spacing(2),
-      float: 'right',
-    },
-    label: {
-      fontSize: typography.pxToRem(16),
-      fontWeight: typography.fontWeightMedium,
-      color: 'black',
-    },
-    ctaContainer: {
-      marginTop: '15px',
-      marginBottom: '15px',
-    },
-    hook: {
-      maxWidth: '400px',
-    },
-  });
+const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
+  container: {
+    width: '100%',
+    paddingTop: spacing(2),
+    paddingLeft: spacing(4),
+    paddingRight: spacing(10),
 
-interface Props extends WithStyles<typeof styles> {
-  variant?: EpicVariant;
+    '& > * + *': {
+      marginTop: spacing(1),
+    },
+  },
+  sectionHeader: {
+    fontSize: 16,
+    color: palette.grey[900],
+    fontWeight: 500,
+  },
+  sectionContainer: {
+    paddingTop: spacing(1),
+    paddingBottom: spacing(2),
+
+    '& > * + *': {
+      marginTop: spacing(3),
+    },
+  },
+}));
+
+const HEADER_DEFAULT_HELPER_TEXT = 'Assitive text';
+const BODY_DEFAULT_HELPER_TEXT = 'Maximum 500 characters';
+const HIGHTLIGHTED_TEXT_DEFAULT_HELPER_TEXT = 'Final sentence of body copy';
+const IMAGE_URL_DEFAULT_HELPER_TEXT =
+  'Image ratio should be 2.5:1. This will appear above everything except a ticker';
+const FOOTER_DEFAULT_HELPER_TEXT = 'Bold text that appears below the button';
+
+interface FormData {
+  heading: string;
+  body: string;
+  highlightedText: string;
+  backgroundImageUrl: string;
+  footer: string;
+}
+
+interface EpicTestVariantEditorProps {
+  variant: EpicVariant;
   onVariantChange: (updatedVariant: EpicVariant) => void;
   editMode: boolean;
   isLiveblog: boolean;
@@ -73,195 +57,197 @@ interface Props extends WithStyles<typeof styles> {
   onValidationChange: (isValid: boolean) => void;
 }
 
-interface State {
-  validationStatus: ValidationStatus;
-}
+const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
+  variant,
+  onVariantChange,
+  editMode,
+  isLiveblog,
+  onValidationChange,
+}: EpicTestVariantEditorProps) => {
+  const classes = useStyles();
 
-enum VariantFieldNames {
-  name = 'name',
-  heading = 'heading',
-  paragraphs = 'paragraphs',
-  highlightedText = 'highlightedText',
-  footer = 'footer',
-  showTicker = 'showTicker',
-  backgroundImageUrl = 'backgroundImageUrl',
-}
-
-class EpicTestVariantEditor extends React.Component<Props, State> {
-  state: State = {
-    validationStatus: {},
+  const defaultValues: FormData = {
+    heading: variant.heading || '',
+    body: variant.paragraphs.join('\n'),
+    highlightedText: variant.highlightedText || '',
+    backgroundImageUrl: variant.backgroundImageUrl || '',
+    footer: variant.footer || '',
   };
 
-  updateVariant = (update: (variant: EpicVariant) => EpicVariant): void => {
-    if (this.props.variant) {
-      this.props.onVariantChange(update(this.props.variant));
-    }
-  };
+  const { register, handleSubmit, errors, trigger } = useForm<FormData>({
+    mode: 'onChange',
+    defaultValues,
+  });
 
-  onOptionalTextChange = (fieldName: string) => (updatedString: string): void => {
-    //For optional fields, an empty string means it's unset
-    this.updateVariant(variant => ({
+  useEffect(() => {
+    trigger();
+  }, []);
+
+  useEffect(() => {
+    const isValid = Object.keys(errors).length === 0;
+    onValidationChange(isValid);
+  }, [
+    errors.heading,
+    errors.body,
+    errors.highlightedText,
+    errors.backgroundImageUrl,
+    errors.footer,
+  ]);
+
+  const onSubmit = ({
+    heading,
+    body,
+    highlightedText,
+    backgroundImageUrl,
+    footer,
+  }: FormData): void => {
+    const paragraphs = body.split('\n');
+
+    onVariantChange({
       ...variant,
-      [fieldName]: updatedString === '' ? undefined : updatedString,
-    }));
+      heading,
+      paragraphs,
+      highlightedText,
+      backgroundImageUrl,
+      footer,
+    });
   };
 
-  onParagraphsChange = (fieldName: string) => (updatedParagraphs: string): void => {
-    this.updateVariant(variant => ({
-      ...variant,
-      [fieldName]: updatedParagraphs.split('\n'),
-    }));
+  const updatePrimaryCta = (updatedCta?: Cta): void => {
+    onVariantChange({ ...variant, cta: updatedCta });
+  };
+  const updateSecondaryCta = (updatedCta?: Cta): void => {
+    onVariantChange({ ...variant, secondaryCta: updatedCta });
+  };
+  const updateTickerSettings = (updatedTickerSettings?: TickerSettings): void => {
+    onVariantChange({ ...variant, tickerSettings: updatedTickerSettings });
   };
 
-  onVariantSwitchChange = (fieldName: string) => (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ): void => {
-    const updatedBool = event.target.checked;
-    this.updateVariant(variant => ({ ...variant, [fieldName]: updatedBool }));
-  };
+  return (
+    <div className={classes.container}>
+      {!isLiveblog && (
+        <div>
+          <TextField
+            inputRef={register({ validate: invalidTemplateValidator })}
+            error={errors.heading !== undefined}
+            helperText={errors.heading ? errors.heading.message : HEADER_DEFAULT_HELPER_TEXT}
+            onBlur={handleSubmit(onSubmit)}
+            name="heading"
+            label="Header"
+            margin="normal"
+            variant="outlined"
+            disabled={!editMode}
+            fullWidth
+          />
+        </div>
+      )}
 
-  renderVariantEditor = (variant: EpicVariant): React.ReactNode => {
-    const { classes } = this.props;
-    return (
-      <div className={classes.fieldsContainer}>
-        {!this.props.isLiveblog && (
-          <div className={classes.hook}>
-            <EditableTextField
-              text={variant.heading || ''}
-              onSubmit={this.onOptionalTextChange('heading')}
-              label="Hook"
-              editEnabled={this.props.editMode}
-              helperText="e.g. Since you're here"
-              validation={{
-                getError: (value: string): string | null => getInvalidTemplateError(value),
-                onChange: onFieldValidationChange(this)('heading'),
-              }}
-              fullWidth
-            />
-          </div>
-        )}
-        <EditableTextField
-          required
-          textarea
-          height={10}
-          text={variant.paragraphs.join('\n')}
-          onSubmit={this.onParagraphsChange('paragraphs')}
+      <div>
+        <TextField
+          inputRef={register({
+            required: EMPTY_ERROR_HELPER_TEXT,
+            validate: invalidTemplateValidator,
+          })}
+          error={errors.body !== undefined}
+          helperText={errors.body ? errors.body.message : BODY_DEFAULT_HELPER_TEXT}
+          onBlur={handleSubmit(onSubmit)}
+          name="body"
           label="Body copy"
-          editEnabled={this.props.editMode}
-          helperText="Main Epic message, including paragraph breaks"
-          validation={{
-            getError: (value: string): string | null => {
-              if (value.trim() === '') {
-                return 'Field must not be empty';
-              } else {
-                return getInvalidTemplateError(value);
-              }
-            },
-            onChange: onFieldValidationChange(this)('paragraphs'),
-          }}
+          margin="normal"
+          variant="outlined"
+          multiline
+          rows={10}
+          disabled={!editMode}
           fullWidth
         />
+      </div>
 
-        {!this.props.isLiveblog && (
-          <EditableTextField
-            text={variant.highlightedText || ''}
-            onSubmit={this.onOptionalTextChange('highlightedText')}
-            label="Highlighted text"
-            helperText="Final sentence, highlighted in yellow"
-            editEnabled={this.props.editMode}
-            validation={{
-              getError: (value: string): string | null => getInvalidTemplateError(value),
-              onChange: onFieldValidationChange(this)('highlightedText'),
-            }}
+      {!isLiveblog && (
+        <div>
+          <TextField
+            inputRef={register({
+              validate: invalidTemplateValidator,
+            })}
+            error={errors.highlightedText !== undefined}
+            helperText={
+              errors.highlightedText
+                ? errors.highlightedText.message
+                : HIGHTLIGHTED_TEXT_DEFAULT_HELPER_TEXT
+            }
+            onBlur={handleSubmit(onSubmit)}
+            name="highlightedText"
+            label="Hightlighted text"
+            margin="normal"
+            variant="outlined"
+            disabled={!editMode}
             fullWidth
           />
-        )}
-        <div className={classes.ctaContainer}>
-          <span className={classes.label}>Buttons</span>
-          <CtaEditor
-            cta={variant.cta}
-            update={(cta?: Cta): void => this.updateVariant(variant => ({ ...variant, cta }))}
-            editMode={this.props.editMode}
-            label="Has a button linking to the landing page"
-            defaultText={defaultCta.text}
-            defaultBaseUrl={defaultCta.baseUrl}
-            manualCampaignCode={false}
-          />
-
-          {!this.props.isLiveblog && (
-            <CtaEditor
-              cta={variant.secondaryCta}
-              update={(cta?: Cta): void =>
-                this.updateVariant(variant => ({
-                  ...variant,
-                  secondaryCta: cta,
-                }))
-              }
-              editMode={this.props.editMode}
-              label={'Has a secondary button'}
-              manualCampaignCode={true}
-            />
-          )}
         </div>
-        {!this.props.isLiveblog && (
-          <div>
-            <TickerEditor
-              editMode={this.props.editMode}
-              tickerSettings={variant.tickerSettings}
-              onChange={(tickerSettings): void =>
-                this.updateVariant(variant => ({ ...variant, tickerSettings }))
-              }
-              onValidationChange={onFieldValidationChange(this)('tickerSettings')}
-            />
-          </div>
-        )}
-        {!this.props.isLiveblog && (
-          <EditableTextField
-            text={variant.backgroundImageUrl || ''}
-            onSubmit={this.onOptionalTextChange(VariantFieldNames.backgroundImageUrl)}
+      )}
+
+      {!isLiveblog && (
+        <div>
+          <TextField
+            inputRef={register()}
+            helperText={IMAGE_URL_DEFAULT_HELPER_TEXT}
+            onBlur={handleSubmit(onSubmit)}
+            name="backgroundImageUrl"
             label="Image URL"
-            helperText="Image ratio should be 2.5:1. This will appear above everything except a ticker"
-            editEnabled={this.props.editMode}
+            margin="normal"
+            variant="outlined"
+            disabled={!editMode}
             fullWidth
           />
-        )}
-        {!this.props.isLiveblog && (
-          <EditableTextField
-            text={variant.footer || ''}
-            onSubmit={this.onOptionalTextChange('footer')}
-            label="Footer"
-            helperText="Bold text that appears below the button"
-            editEnabled={this.props.editMode}
-            fullWidth
-          />
-        )}
-        <div className={classes.deleteButton}>
-          {this.props.editMode && (
-            <ButtonWithConfirmationPopup
-              buttonText="Delete variant"
-              confirmationText={`Are you sure? This cannot be undone!`}
-              onConfirm={(): void => this.props.onDelete()}
-              icon={<DeleteSweepIcon />}
-            />
-          )}
         </div>
+      )}
+
+      {!isLiveblog && (
+        <div>
+          <TextField
+            inputRef={register()}
+            helperText={FOOTER_DEFAULT_HELPER_TEXT}
+            onBlur={handleSubmit(onSubmit)}
+            name="footer"
+            label="Footer"
+            margin="normal"
+            variant="outlined"
+            disabled={!editMode}
+            fullWidth
+          />
+        </div>
+      )}
+
+      <div className={classes.sectionContainer}>
+        <Typography className={classes.sectionHeader} variant="h4">
+          Buttons
+        </Typography>
+
+        <VariantEditorButtonsEditor
+          primaryCta={variant.cta}
+          secondaryCta={variant.secondaryCta}
+          updatePrimaryCta={updatePrimaryCta}
+          updateSecondaryCta={updateSecondaryCta}
+          isDisabled={!editMode}
+          onValidationChange={onValidationChange}
+        />
       </div>
-    );
-  };
 
-  render(): React.ReactNode {
-    const { classes } = this.props;
+      {!isLiveblog && (
+        <div className={classes.sectionContainer}>
+          <Typography className={classes.sectionHeader} variant="h4">
+            Ticker
+          </Typography>
 
-    return (
-      <div className={classes.container}>
-        {this.props.variant ? (
-          this.renderVariantEditor(this.props.variant)
-        ) : (
-          <div>No variant selected</div>
-        )}
-      </div>
-    );
-  }
-}
+          <EpicTestTickerEditor
+            tickerSettings={variant.tickerSettings}
+            updateTickerSettings={updateTickerSettings}
+            isDisabled={!editMode}
+            onValidationChange={onValidationChange}
+          />
+        </div>
+      )}
+    </div>
+  );
+};
 
-export default withStyles(styles)(EpicTestVariantEditor);
+export default EpicTestVariantEditor;

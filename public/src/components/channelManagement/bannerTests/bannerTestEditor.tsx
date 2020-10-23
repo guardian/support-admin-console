@@ -3,16 +3,19 @@ import { Region } from '../../../utils/models';
 import { ArticlesViewedSettings, UserCohort } from '../helpers/shared';
 import { articleCountTemplate } from '../helpers/copyTemplates';
 import { createStyles, Theme, Typography, WithStyles, withStyles } from '@material-ui/core';
-import { defaultArticlesViewedSettings } from '../articlesViewedEditor';
-import BannerTestVariantsEditor from './bannerTestVariantsEditor';
+import BannerTestVariantEditor from './bannerTestVariantEditor';
+import TestVariantsEditor from '../testVariantsEditor';
 import TestEditorHeader from '../testEditorHeader';
 import TestEditorLiveSwitch from '../testEditorLiveSwitch';
 import TestEditorMinArticlesViewedInput from '../testEditorMinArticlesViewedInput';
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
-import TestEditorArticleCountEditor from '../testEditorArticleCountEditor';
+import TestEditorArticleCountEditor, {
+  DEFAULT_ARTICLES_VIEWED_SETTINGS,
+} from '../testEditorArticleCountEditor';
 import TestEditorActionButtons from '../testEditorActionButtons';
 import useValidation from '../hooks/useValidation';
-import { BannerTest, BannerVariant } from '../../../models/banner';
+import { BannerTest, BannerVariant, BannerTemplate } from '../../../models/banner';
+import { defaultCta } from '../helpers/shared';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing, palette }: Theme) =>
@@ -99,9 +102,6 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
 
   const setValidationStatusForField = useValidation(onValidationChange);
 
-  const onVariantsListValidationChange = (isValid: boolean): void =>
-    setValidationStatusForField('variantsList', isValid);
-
   const onMinArticlesViewedValidationChanged = (isValid: boolean): void =>
     setValidationStatusForField('minArticlesViewed', isValid);
 
@@ -113,7 +113,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
       return test.articlesViewedSettings;
     }
     if (copyHasTemplate(test, articleCountTemplate)) {
-      return defaultArticlesViewedSettings;
+      return DEFAULT_ARTICLES_VIEWED_SETTINGS;
     }
     return undefined;
   };
@@ -132,6 +132,18 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
 
   const onVariantsChange = (updatedVariantList: BannerVariant[]): void => {
     updateTest({ ...test, variants: updatedVariantList });
+  };
+
+  const onVariantChange = (updatedVariant: BannerVariant): void => {
+    onVariantsChange(
+      test.variants.map(variant =>
+        variant.name === updatedVariant.name ? updatedVariant : variant,
+      ),
+    );
+  };
+
+  const onVariantDelete = (deletedVariantName: string): void => {
+    onVariantsChange(test.variants.filter(variant => variant.name !== deletedVariantName));
   };
 
   const onMinArticlesViewedChange = (updatedMinArticles: number): void => {
@@ -163,6 +175,32 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
     createTest({ ...test, name: name, nickname: nickname, isOn: false });
   };
 
+  const renderVariantEditor = (variant: BannerVariant): React.ReactElement => (
+    <BannerTestVariantEditor
+      key={`banner-${test.name}-${variant.name}`}
+      variant={variant}
+      onVariantChange={onVariantChange}
+      onDelete={(): void => onVariantDelete(variant.name)}
+      editMode={editMode}
+      onValidationChange={(isValid: boolean): void =>
+        setValidationStatusForField(variant.name, isValid)
+      }
+    />
+  );
+
+  const createVariant = (name: string): void => {
+    const newVariant: BannerVariant = {
+      name: name,
+      template: BannerTemplate.ContributionsBanner,
+      heading: undefined,
+      body: '',
+      highlightedText:
+        'Support the Guardian from as little as %%CURRENCY_SYMBOL%%1 – and it only takes a minute. Thank you.',
+      cta: defaultCta,
+    };
+    onVariantsChange([...test.variants, newVariant]);
+  };
+
   if (test && visible) {
     return (
       <div className={classes.container}>
@@ -181,12 +219,13 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
             Variants
           </Typography>
           <div>
-            <BannerTestVariantsEditor
+            <TestVariantsEditor
               variants={test.variants}
-              onVariantsListChange={onVariantsChange}
+              createVariant={createVariant}
               testName={test.name}
               editMode={isEditable()}
-              onValidationChange={onVariantsListValidationChange}
+              renderVariantEditor={renderVariantEditor}
+              onVariantDelete={onVariantDelete}
             />
           </div>
         </div>

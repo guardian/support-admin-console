@@ -24,15 +24,17 @@ const styles = ({ spacing }: Theme) =>
       },
     },
     formContainer: {
+      maxWidth: '250px',
+
       '& > * + *': {
         marginTop: spacing(1),
       },
     },
   });
 
-const DEFAULT_ARTICLES_VIEWED_SETTINGS: ArticlesViewedSettings = {
+export const DEFAULT_ARTICLES_VIEWED_SETTINGS: ArticlesViewedSettings = {
   minViews: 3,
-  maxViews: 999,
+  maxViews: null,
   periodInWeeks: 6,
 };
 
@@ -73,8 +75,8 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
 
   const onSubmit = ({ minViews, maxViews, periodInWeeks }: FormData): void => {
     onArticlesViewedSettingsChanged({
-      minViews: parseInt(minViews),
-      maxViews: parseInt(maxViews),
+      minViews: parseInt(minViews) || null,
+      maxViews: parseInt(maxViews) || null,
       periodInWeeks: parseInt(periodInWeeks),
     });
   };
@@ -128,6 +130,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
               label="Minimum page views"
               InputLabelProps={{ shrink: true }}
               variant="filled"
+              fullWidth
               disabled={isDisabled}
             />
           </div>
@@ -141,6 +144,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
               label="Maximum page views"
               InputLabelProps={{ shrink: true }}
               variant="filled"
+              fullWidth
               disabled={isDisabled}
             />
           </div>
@@ -157,6 +161,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
               label="Time period in weeks"
               InputLabelProps={{ shrink: true }}
               variant="filled"
+              fullWidth
               disabled={isDisabled}
             />
           </div>

@@ -2,13 +2,13 @@ import React from 'react';
 import EpicTestEditor from './epicTestEditor';
 import { Region } from '../../../utils/models';
 
-import { UserCohort, Cta, ArticlesViewedSettings, Test } from '../helpers/shared';
+import { UserCohort, Cta, ArticlesViewedSettings, Test, Variant } from '../helpers/shared';
 import { InnerComponentProps, updateTest } from '../testEditor';
 import TestsForm from '../testEditor';
 import TestsFormLayout from '../testsFormLayout';
 import Sidebar from '../sidebar';
 import { FrontendSettingsType } from '../../../utils/requests';
-import { MaxEpicViewsDefaults } from './maxEpicViewsEditor';
+import { DEFAULT_MAX_EPIC_VIEWS } from './epicTestMaxViewsEditor';
 
 export enum TickerEndType {
   unlimited = 'unlimited',
@@ -29,8 +29,7 @@ export interface TickerSettings {
   currencySymbol: string;
   copy: TickerCopy;
 }
-export interface EpicVariant {
-  name: string;
+export interface EpicVariant extends Variant {
   heading?: string;
   paragraphs: string[];
   highlightedText?: string;
@@ -59,7 +58,7 @@ export interface EpicTest extends Test {
   excludedSections: string[];
   alwaysAsk: boolean;
   maxViews?: MaxEpicViews;
-  userCohort?: UserCohort;
+  userCohort: UserCohort;
   isLiveBlog: boolean;
   hasCountryName: boolean;
   variants: EpicVariant[];
@@ -85,7 +84,7 @@ const getEpicTestForm = (epicType: EpicType): React.FC<Props> => {
     excludedTagIds: [],
     excludedSections: [],
     alwaysAsk: false,
-    maxViews: MaxEpicViewsDefaults,
+    maxViews: DEFAULT_MAX_EPIC_VIEWS,
     userCohort: UserCohort.AllNonSupporters, // matches the default in dotcom
     isLiveBlog: isLiveBlog,
     hasCountryName: false,
@@ -119,6 +118,9 @@ const getEpicTestForm = (epicType: EpicType): React.FC<Props> => {
         onTestsChange(newTests, name);
       }
     };
+
+    const selectedTest = tests.find(t => t.name === selectedTestName);
+
     return (
       <TestsFormLayout
         sidebar={
@@ -133,9 +135,9 @@ const getEpicTestForm = (epicType: EpicType): React.FC<Props> => {
           />
         }
         testEditor={
-          selectedTestName ? (
+          selectedTestName && selectedTest ? (
             <EpicTestEditor
-              test={tests.find(test => test.name === selectedTestName)}
+              test={selectedTest}
               hasChanged={!!modifiedTests[selectedTestName]}
               isLiveblog={isLiveBlog}
               onChange={(updatedTest): void =>
@@ -144,8 +146,8 @@ const getEpicTestForm = (epicType: EpicType): React.FC<Props> => {
               onValidationChange={onTestErrorStatusChange(selectedTestName)}
               visible
               editMode={editMode}
-              onDelete={onTestDelete}
-              onArchive={onTestArchive}
+              onDelete={(): void => onTestDelete(selectedTestName)}
+              onArchive={(): void => onTestArchive(selectedTestName)}
               onSelectedTestName={onSelectedTestName}
               isDeleted={
                 modifiedTests[selectedTestName] && modifiedTests[selectedTestName].isDeleted
