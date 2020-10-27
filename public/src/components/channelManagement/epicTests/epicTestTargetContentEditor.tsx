@@ -78,6 +78,7 @@ const EpicTestTargetContentEditor: React.FC<EpicTestTargetContentEditorProps> = 
         helperText="Format: environment/wildlife,business/economics"
         onBlur={handleSubmit(onSubmit)}
         margin="normal"
+        InputLabelProps={{ shrink: true }}
         variant="outlined"
         disabled={!editMode}
         fullWidth
@@ -90,6 +91,7 @@ const EpicTestTargetContentEditor: React.FC<EpicTestTargetContentEditorProps> = 
         helperText="Format: environment,business"
         onBlur={handleSubmit(onSubmit)}
         margin="normal"
+        InputLabelProps={{ shrink: true }}
         variant="outlined"
         disabled={!editMode}
         fullWidth
@@ -102,6 +104,7 @@ const EpicTestTargetContentEditor: React.FC<EpicTestTargetContentEditorProps> = 
         helperText="Format: environment/wildlife,business/economics"
         onBlur={handleSubmit(onSubmit)}
         margin="normal"
+        InputLabelProps={{ shrink: true }}
         variant="outlined"
         disabled={!editMode}
         fullWidth
@@ -114,6 +117,7 @@ const EpicTestTargetContentEditor: React.FC<EpicTestTargetContentEditorProps> = 
         helperText="Format: environment,business"
         onBlur={handleSubmit(onSubmit)}
         margin="normal"
+        InputLabelProps={{ shrink: true }}
         variant="outlined"
         disabled={!editMode}
         fullWidth
