@@ -18,6 +18,8 @@ interface FormData {
   excludeSections: string;
 }
 
+const parseList = (list: string): string[] => list.split(',').filter(item => !!item);
+
 interface EpicTestTargetContentEditorProps {
   tagIds: string[];
   sections: string[];
@@ -62,10 +64,10 @@ const EpicTestTargetContentEditor: React.FC<EpicTestTargetContentEditorProps> = 
 
   const onSubmit = ({ tagIds, sections, excludeTagIds, excludeSections }: FormData): void => {
     updateTargetContent(
-      tagIds.split(','),
-      sections.split(','),
-      excludeTagIds.split(','),
-      excludeSections.split(','),
+      parseList(tagIds),
+      parseList(sections),
+      parseList(excludeTagIds),
+      parseList(excludeSections),
     );
   };
 
