@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Theme, makeStyles, TextField } from '@material-ui/core';
 
@@ -49,7 +49,16 @@ const EpicTestTargetContentEditor: React.FC<EpicTestTargetContentEditorProps> = 
     excludeSections: excludeSections.join(','),
   };
 
-  const { register, handleSubmit } = useForm<FormData>({ defaultValues });
+  const { register, handleSubmit, reset } = useForm<FormData>({ defaultValues });
+
+  useEffect(() => {
+    reset(defaultValues);
+  }, [
+    defaultValues.tagIds,
+    defaultValues.sections,
+    defaultValues.excludeTagIds,
+    defaultValues.excludeSections,
+  ]);
 
   const onSubmit = ({ tagIds, sections, excludeTagIds, excludeSections }: FormData): void => {
     updateTargetContent(
