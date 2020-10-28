@@ -1,14 +1,20 @@
 # Support Admin Console
-Webapp for maintaining settings for the Guardian's Supporter platform.
+Webapp for maintaining settings for the Guardian's Supporter platform and acquisition channels.
 
 Uses [play-googleauth](https://github.com/guardian/play-googleauth) for authorisation.
 
 ### Pages
 
+#### For support.theguardian.com:
 - /switches - switchboard for contributions landing page
 - /contribution-types - maintains contribution type settings on contributions landing page
 - /amounts - maintains amounts settings on contributions landing page
-- [/epic-tests](docs/epic-tests.md)
+
+####For theguardian.com channel tests ([see here for details](docs/channel-tests.md)):
+- /epic-tests
+- /liveblog-epic-tests
+- /banner-tests and /banner-tests2
+- /banner-deploy
 
 ### Running locally
 Fetch DEV config by getting `membership` janus credentials and running:
