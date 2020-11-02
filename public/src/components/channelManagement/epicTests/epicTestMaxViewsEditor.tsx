@@ -47,7 +47,7 @@ interface TestEditorArticleCountEditorProps {
   isDisabled: boolean;
 }
 
-const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> = ({
+const EpicTestMaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
   maxEpicViews,
   onMaxViewsChanged,
   onValidationChange,
@@ -99,14 +99,14 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
             value="disabled"
             key="disabled"
             control={<Radio />}
-            label="Do not show user's article count"
+            label="Always ask"
             disabled={isDisabled}
           />
           <FormControlLabel
             value="enabled"
             key="enabled"
             control={<Radio />}
-            label="Show user's article count"
+            label="Use max views settings..."
             disabled={isDisabled}
           />
         </RadioGroup>
@@ -171,4 +171,4 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
   );
 };
 
-export default TestEditorArticleCountEditor;
+export default EpicTestMaxViewsEditor;
