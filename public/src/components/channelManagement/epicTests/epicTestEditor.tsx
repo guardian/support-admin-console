@@ -214,6 +214,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
   const onMaxViewsChange = (updatedMaxViews?: MaxEpicViews): void => {
     updateTest(test => ({
       ...test,
+      alwaysAsk: !updatedMaxViews,
       maxViews: updatedMaxViews,
     }));
   };
@@ -311,7 +312,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
         />
 
         <EpicTestMaxViewsEditor
-          maxEpicViews={test.maxViews}
+          maxEpicViews={test.alwaysAsk ? undefined : test.maxViews}
           isDisabled={!isEditable()}
           onMaxViewsChanged={onMaxViewsChange}
           onValidationChange={onMaxViewsValidationChange}
