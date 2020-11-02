@@ -12,6 +12,8 @@ export interface Test {
   variants: Variant[];
 }
 
+export type EpicType = 'ARTICLE' | 'LIVEBLOG' | 'APPLE_NEWS';
+
 export interface LockStatus {
   locked: boolean;
   email?: string;

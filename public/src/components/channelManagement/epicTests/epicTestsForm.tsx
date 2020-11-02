@@ -2,7 +2,14 @@ import React from 'react';
 import EpicTestEditor from './epicTestEditor';
 import { Region } from '../../../utils/models';
 
-import { UserCohort, Cta, ArticlesViewedSettings, Test, Variant } from '../helpers/shared';
+import {
+  UserCohort,
+  Cta,
+  ArticlesViewedSettings,
+  Test,
+  Variant,
+  EpicType,
+} from '../helpers/shared';
 import { InnerComponentProps, updateTest } from '../testEditor';
 import TestsForm from '../testEditor';
 import TestsFormLayout from '../testsFormLayout';
@@ -66,8 +73,6 @@ export interface EpicTest extends Test {
   useLocalViewLog: boolean;
   articlesViewedSettings?: ArticlesViewedSettings;
 }
-
-export type EpicType = 'ARTICLE' | 'LIVEBLOG';
 
 type Props = InnerComponentProps<EpicTest>;
 
@@ -140,6 +145,7 @@ const getEpicTestForm = (epicType: EpicType): React.FC<Props> => {
               test={selectedTest}
               hasChanged={!!modifiedTests[selectedTestName]}
               isLiveblog={isLiveBlog}
+              epicType={epicType}
               onChange={(updatedTest): void =>
                 onTestsChange(updateTest(tests, updatedTest), updatedTest.name)
               }
@@ -188,4 +194,8 @@ export const ArticleEpicTestsForm = TestsForm(
 export const LiveblogEpicTestsForm = TestsForm(
   getEpicTestForm('LIVEBLOG'),
   FrontendSettingsType.liveblogEpicTests,
+);
+export const AppleNewsEpicTestsForm = TestsForm(
+  getEpicTestForm('APPLE_NEWS'),
+  FrontendSettingsType.appleNewsEpicTests,
 );

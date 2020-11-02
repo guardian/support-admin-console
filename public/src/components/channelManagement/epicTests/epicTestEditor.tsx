@@ -1,7 +1,7 @@
 import React from 'react';
 import { Region } from '../../../utils/models';
 import { EpicTest, EpicVariant, MaxEpicViews } from './epicTestsForm';
-import { ArticlesViewedSettings, UserCohort, defaultCta } from '../helpers/shared';
+import { ArticlesViewedSettings, UserCohort, defaultCta, EpicType } from '../helpers/shared';
 import { makeStyles, FormControlLabel, Switch, Theme, Typography } from '@material-ui/core';
 import TestEditorHeader from '../testEditorHeader';
 import TestEditorLiveSwitch from '../testEditorLiveSwitch';
@@ -65,6 +65,7 @@ interface EpicTestEditorProps {
   test: EpicTest;
   hasChanged: boolean;
   isLiveblog: boolean;
+  epicType: EpicType;
   onChange: (updatedTest: EpicTest) => void;
   onValidationChange: (isValid: boolean) => void;
   visible: boolean;
@@ -83,6 +84,7 @@ interface EpicTestEditorProps {
 const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
   test,
   isLiveblog,
+  epicType,
   onChange,
   editMode,
   onDelete,
@@ -281,19 +283,21 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
         />
       </div>
 
-      <div className={classes.sectionContainer}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
-          Target audience
-        </Typography>
+      {epicType !== 'APPLE_NEWS' && (
+        <div className={classes.sectionContainer}>
+          <Typography variant={'h3'} className={classes.sectionHeader}>
+            Target audience
+          </Typography>
 
-        <TestEditorTargetAudienceSelector
-          selectedRegions={test.locations}
-          onRegionsUpdate={onRegionsChange}
-          selectedCohort={test.userCohort}
-          onCohortChange={onCohortChange}
-          isDisabled={!isEditable()}
-        />
-      </div>
+          <TestEditorTargetAudienceSelector
+            selectedRegions={test.locations}
+            onRegionsUpdate={onRegionsChange}
+            selectedCohort={test.userCohort}
+            onCohortChange={onCohortChange}
+            isDisabled={!isEditable()}
+          />
+        </div>
+      )}
 
       <div className={classes.sectionContainer}>
         <Typography variant={'h3'} className={classes.sectionHeader}>
