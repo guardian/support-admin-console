@@ -25,7 +25,8 @@ import IndexPage from './components/indexPage';
 
 const initialiseDynamicImport = () => {
   try {
-    window.guardianImport = new Function(
+    // @ts-ignore
+    window.remoteImport = new Function(
       'url',
       `return import(url)`,
     ) as (url: string) => Promise<any>;
