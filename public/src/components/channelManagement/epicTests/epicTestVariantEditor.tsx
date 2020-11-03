@@ -7,6 +7,7 @@ import EpicTestVariantEditorCtasEditor from './epicTestVariantEditorCtasEditor';
 import VariantEditorSeparateArticleCountEditor from '../variantEditorSeparateArticleCountEditor';
 import EpicTestTickerEditor from './epicTestTickerEditor';
 import { invalidTemplateValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
+import EpicVariantLivePreview from "./epicVariantLivePreview";
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const getUseStyles = (shouldAddPadding: boolean) => {
@@ -274,6 +275,8 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
           />
         </div>
       )}
+
+      <EpicVariantLivePreview variant={variant} />
     </div>
   );
 };
