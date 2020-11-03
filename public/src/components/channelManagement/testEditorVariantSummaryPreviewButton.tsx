@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button } from '@material-ui/core';
 import VisibilityIcon from '@material-ui/icons/Visibility';
+import { TestType } from './helpers/shared';
 
-type TestType = 'EPIC' | 'BANNER';
 type Stage = 'DEV' | 'CODE' | 'PROD';
 
 declare global {

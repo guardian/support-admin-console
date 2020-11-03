@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles, Theme } from '@material-ui/core';
-import { Variant } from './helpers/shared';
+import { Variant, TestType } from './helpers/shared';
 import TestNewVariantButton from './testNewVariantButton';
 import TestVariantEditorsAccordion from './testVariantEditorsAccordion';
 
@@ -15,6 +15,7 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 interface TestVariantsEditorProps<V extends Variant> {
   variants: V[];
   testName: string;
+  testType: TestType;
   editMode: boolean;
   createVariant: (name: string) => void;
   renderVariantEditor: (variant: V) => React.ReactElement;
@@ -24,6 +25,7 @@ interface TestVariantsEditorProps<V extends Variant> {
 function TestVariantsEditor<V extends Variant>({
   variants,
   testName,
+  testType,
   editMode,
   createVariant,
   renderVariantEditor,
@@ -48,6 +50,7 @@ function TestVariantsEditor<V extends Variant>({
         variants={variants}
         variantKeys={variantKeys}
         testName={testName}
+        testType={testType}
         editMode={editMode}
         selectedVariantKey={selectedVariantKey}
         onVariantSelected={onVariantSelected}

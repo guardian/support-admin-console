@@ -258,6 +258,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
           <TestVariantsEditor<EpicVariant>
             variants={test.variants}
             testName={test.name}
+            testType="EPIC"
             editMode={isEditable()}
             createVariant={createVariant}
             renderVariantEditor={renderVariantEditor}
