@@ -230,7 +230,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
     <EpicTestVariantEditor
       key={variant.name}
       variant={variant}
-      isLiveblog={isLiveblog}
+      epicType={epicType}
       editMode={editMode}
       onVariantChange={onVariantChange}
       onDelete={(): void => onVariantDelete(variant.name)}
@@ -252,21 +252,46 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
         />
       </div>
 
-      <div className={classes.sectionContainer}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
-          Variants
-        </Typography>
-        <div>
-          <TestVariantsEditor<EpicVariant>
-            variants={test.variants}
-            testName={test.name}
-            editMode={isEditable()}
-            createVariant={createVariant}
-            renderVariantEditor={renderVariantEditor}
-            onVariantDelete={onVariantDelete}
-          />
+      {epicType !== 'APPLE_NEWS' && (
+        <div className={classes.sectionContainer}>
+          <Typography variant={'h3'} className={classes.sectionHeader}>
+            Variants
+          </Typography>
+
+          <div>
+            <TestVariantsEditor<EpicVariant>
+              variants={test.variants}
+              testName={test.name}
+              editMode={isEditable()}
+              createVariant={createVariant}
+              renderVariantEditor={renderVariantEditor}
+              onVariantDelete={onVariantDelete}
+            />
+          </div>
         </div>
-      </div>
+      )}
+
+      {epicType === 'APPLE_NEWS' && (
+        <div className={classes.sectionContainer}>
+          <Typography variant={'h3'} className={classes.sectionHeader}>
+            Copy
+          </Typography>
+
+          <div>
+            <EpicTestVariantEditor
+              key={test.variants[0].name}
+              variant={test.variants[0]}
+              epicType={epicType}
+              editMode={editMode}
+              onVariantChange={onVariantChange}
+              onDelete={(): void => onVariantDelete(test.variants[0].name)}
+              onValidationChange={(isValid: boolean): void =>
+                setValidationStatusForField(test.variants[0].name, isValid)
+              }
+            />
+          </div>
+        </div>
+      )}
 
       <div className={classes.sectionContainer}>
         <Typography variant={'h3'} className={classes.sectionHeader}>
@@ -299,42 +324,46 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
         </div>
       )}
 
-      <div className={classes.sectionContainer}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
-          View frequency settings
-        </Typography>
+      {epicType !== 'APPLE_NEWS' && (
+        <div className={classes.sectionContainer}>
+          <Typography variant={'h3'} className={classes.sectionHeader}>
+            View frequency settings
+          </Typography>
 
-        <FormControlLabel
-          control={
-            <Switch
-              checked={test.useLocalViewLog}
-              onChange={onSwitchChange('useLocalViewLog')}
-              disabled={!isEditable()}
-            />
-          }
-          label={`Use private view counter for this test (instead of the global one)`}
-        />
+          <FormControlLabel
+            control={
+              <Switch
+                checked={test.useLocalViewLog}
+                onChange={onSwitchChange('useLocalViewLog')}
+                disabled={!isEditable()}
+              />
+            }
+            label={`Use private view counter for this test (instead of the global one)`}
+          />
 
-        <EpicTestMaxViewsEditor
-          maxEpicViews={test.alwaysAsk ? undefined : test.maxViews}
-          isDisabled={!isEditable()}
-          onMaxViewsChanged={onMaxViewsChange}
-          onValidationChange={onMaxViewsValidationChange}
-        />
-      </div>
+          <EpicTestMaxViewsEditor
+            maxEpicViews={test.alwaysAsk ? undefined : test.maxViews}
+            isDisabled={!isEditable()}
+            onMaxViewsChanged={onMaxViewsChange}
+            onValidationChange={onMaxViewsValidationChange}
+          />
+        </div>
+      )}
 
-      <div className={classes.sectionContainer}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
-          Article count
-        </Typography>
+      {epicType !== 'APPLE_NEWS' && (
+        <div className={classes.sectionContainer}>
+          <Typography variant={'h3'} className={classes.sectionHeader}>
+            Article count
+          </Typography>
 
-        <TestEditorArticleCountEditor
-          articlesViewedSettings={test.articlesViewedSettings}
-          onArticlesViewedSettingsChanged={onArticlesViewedSettingsChange}
-          onValidationChange={onArticlesViewedSettingsValidationChanged}
-          isDisabled={!isEditable()}
-        />
-      </div>
+          <TestEditorArticleCountEditor
+            articlesViewedSettings={test.articlesViewedSettings}
+            onArticlesViewedSettingsChanged={onArticlesViewedSettingsChange}
+            onValidationChange={onArticlesViewedSettingsValidationChanged}
+            isDisabled={!isEditable()}
+          />
+        </div>
+      )}
 
       <div className={classes.buttonsContainer}>
         <TestEditorActionButtons
