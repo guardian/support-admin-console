@@ -158,7 +158,6 @@ const getEpicTestForm = (epicType: EpicType): React.FC<Props> => {
             <EpicTestEditor
               test={selectedTest}
               hasChanged={!!modifiedTests[selectedTestName]}
-              isLiveblog={isLiveBlog}
               epicType={epicType}
               onChange={(updatedTest): void =>
                 onTestsChange(updateTest(tests, updatedTest), updatedTest.name)

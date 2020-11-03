@@ -7,6 +7,7 @@ import VariantEditorButtonsEditor from '../variantEditorButtonsEditor';
 import EpicTestTickerEditor from './epicTestTickerEditor';
 import { invalidTemplateValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const getUseStyles = (isAppleNews: boolean) => {
   const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
     container: {

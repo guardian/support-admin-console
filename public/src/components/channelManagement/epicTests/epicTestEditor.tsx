@@ -64,7 +64,6 @@ const copyHasTemplate = (test: EpicTest, template: string): boolean =>
 interface EpicTestEditorProps {
   test: EpicTest;
   hasChanged: boolean;
-  isLiveblog: boolean;
   epicType: EpicType;
   onChange: (updatedTest: EpicTest) => void;
   onValidationChange: (isValid: boolean) => void;
@@ -83,7 +82,6 @@ interface EpicTestEditorProps {
 
 const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
   test,
-  isLiveblog,
   epicType,
   onChange,
   editMode,
