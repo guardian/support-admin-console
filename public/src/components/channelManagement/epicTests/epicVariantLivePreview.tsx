@@ -8,15 +8,57 @@ import IconButton from '@material-ui/core/IconButton';
 import Drawer from '@material-ui/core/Drawer';
 import ChevronLeft from '@material-ui/icons/ChevronLeft';
 
+
+interface EpicProps {
+  variant: EpicVariant;
+  tracking: {
+    ophanPageId: string;
+    platformId: string;
+    referrerUrl: string;
+    clientName: string;
+    abTestName: string;
+    abTestVariant: string;
+    campaignCode: string;
+    campaignId: string;
+    componentType: string;
+    products: string[];
+  };
+  countryCode?: string;
+  numArticles: number;
+}
+
+const anchor = 'right';
+
+const buildProps = (variant: EpicVariant): EpicProps => ({
+  variant: {
+    name: variant.name,
+    heading: variant.heading,
+    paragraphs: variant.paragraphs,
+    highlightedText: variant.highlightedText,
+    showTicker: false,
+    cta: variant.cta
+  },
+  tracking: {
+    ophanPageId: "ophanPageId",
+    platformId: "GUARDIAN_WEB",
+    clientName: "frontend",
+    referrerUrl: "https://www.theguardian.com/",
+    abTestName: "abTestName",
+    abTestVariant: variant.name,
+    campaignCode: "campaignCode",
+    campaignId: "",
+    componentType: "ACQUISITIONS_EPIC",
+    products: []
+  },
+  numArticles: 13,
+  countryCode: "GB"
+});
+
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {
     position: "fixed",
     top: "50vh",
     right: "10px",
-    // width: "620px"
-  },
-  menuButton: {
-
   },
   epic: {
     width: "620px"
@@ -35,17 +77,16 @@ interface EpicVariantLivePreviewProps {
   variant: EpicVariant;
 }
 
-const anchor = 'right';
-
 const EpicVariantLivePreview: React.FC<EpicVariantLivePreviewProps> = ({
   variant
 }: EpicVariantLivePreviewProps) => {
   const classes = useStyles();
 
-  const [Epic, setEpic] = useState<React.FC>();
+  const [Epic, setEpic] = useState<React.FC<EpicProps>>();
   const [drawerOpen, setDrawerOpen] = useState<boolean>();
 
   useEffect(() => {
+    // @ts-ignore
     window.guardian.automat = {
       react: React,
       preact: React,
@@ -54,55 +95,20 @@ const EpicVariantLivePreview: React.FC<EpicVariantLivePreviewProps> = ({
       emotion,
     };
 
-    window.guardianImport('https://contributions.guardianapis.com/epic.js').then(epicModule => {
-      console.log("module", module)
+    // @ts-ignore
+    window.remoteImport('https://contributions.guardianapis.com/epic.js').then(epicModule => {
       setEpic(() => epicModule.ContributionsEpic);
     })
   }, []);
 
-  const toggleDrawer = (anchor: string, open: boolean) => (
+  const toggleDrawer = (open: boolean) => (
     event: React.KeyboardEvent | React.MouseEvent,
   ): void => {
-    if (
-      event.type === 'keydown' &&
-      ((event as React.KeyboardEvent).key === 'Tab' ||
-        (event as React.KeyboardEvent).key === 'Shift')
-    ) {
-      return;
-    }
-
     setDrawerOpen(open);
   };
 
 
-  const props = {
-    onReminderOpen: () => {},
-    variant: {
-      "name": "CONTROL",
-      heading: variant.heading,
-      paragraphs: variant.paragraphs,
-      highlightedText: variant.highlightedText,
-      showTicker: false,
-      cta: variant.cta
-    },
-    tracking: {
-      "ophanPageId": "kh2cygvnxtiv6okonx9b",
-      "platformId": "GUARDIAN_WEB",
-      "clientName": "frontend",
-      "referrerUrl": "https://www.theguardian.com/us-news/2020/nov/03/trump-era-division-america",
-      "abTestName": "2020-11-02_US_ELECTION_RUNUP_ROUND2__UKAUS_WITH_ARTICLE_COUNT",
-      "abTestVariant": "CONTROL",
-      "campaignCode": "gdnwb_copts_memco_2020-11-02_US_ELECTION_RUNUP_ROUND2__UKAUS_WITH_ARTICLE_COUNT_CONTROL",
-      "campaignId": "epic_2020-11-02_US_ELECTION_RUNUP_ROUND2__UKAUS_WITH_ARTICLE_COUNT",
-      "componentType": "ACQUISITIONS_EPIC",
-      "products": [
-        "CONTRIBUTION",
-        "MEMBERSHIP_SUPPORTER"
-      ]
-    },
-    "numArticles": 13,
-    "countryCode": "GB"
-  };
+  const props = buildProps(variant);
 
   return (
     <div className={classes.container}>
@@ -112,13 +118,12 @@ const EpicVariantLivePreview: React.FC<EpicVariantLivePreviewProps> = ({
             <IconButton
               color="inherit"
               aria-label="open drawer"
-              onClick={toggleDrawer(anchor, true)}
+              onClick={toggleDrawer(true)}
               edge="start"
-              className={classes.menuButton}
             >
               <ChevronLeft className={classes.icon}/>
             </IconButton>
-            <Drawer anchor={anchor} open={drawerOpen} onClose={toggleDrawer(anchor, false)}>
+            <Drawer anchor={anchor} open={drawerOpen} onClose={toggleDrawer(false)}>
               <div className={classes.epic}>
                 <Epic {...props}/>
               </div>

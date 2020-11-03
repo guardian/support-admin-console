@@ -35,7 +35,8 @@ import { getTheme } from './utils/theme';
 
 const initialiseDynamicImport = () => {
   try {
-    window.guardianImport = new Function(
+    // @ts-ignore
+    window.remoteImport = new Function(
       'url',
       `return import(url)`,
     ) as (url: string) => Promise<any>;
