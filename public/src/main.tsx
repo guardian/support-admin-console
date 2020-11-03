@@ -23,6 +23,19 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IndexPage from './components/indexPage';
 
+const initialiseDynamicImport = () => {
+  try {
+    window.guardianImport = new Function(
+      'url',
+      `return import(url)`,
+    ) as (url: string) => Promise<any>;
+  } catch (e) {
+    console.log('failed to init import')
+  }
+};
+
+initialiseDynamicImport();
+
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ palette, mixins, typography, transitions }: Theme) =>
   createStyles({

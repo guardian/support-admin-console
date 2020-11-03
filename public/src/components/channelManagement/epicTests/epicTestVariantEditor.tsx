@@ -6,6 +6,7 @@ import { Theme, Typography, makeStyles, TextField } from '@material-ui/core';
 import VariantEditorButtonsEditor from '../variantEditorButtonsEditor';
 import EpicTestTickerEditor from './epicTestTickerEditor';
 import { invalidTemplateValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
+import EpicVariantLivePreview from "./epicVariantLivePreview";
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {
@@ -246,6 +247,8 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
           />
         </div>
       )}
+
+      <EpicVariantLivePreview variant={variant} />
     </div>
   );
 };
