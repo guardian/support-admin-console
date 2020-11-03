@@ -223,6 +223,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
               variants={test.variants}
               createVariant={createVariant}
               testName={test.name}
+              testType="BANNER"
               editMode={isEditable()}
               renderVariantEditor={renderVariantEditor}
               onVariantDelete={onVariantDelete}
