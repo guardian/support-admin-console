@@ -52,14 +52,14 @@ GET   /frontend/liveblog-epic-tests/archive/:testName        controllers.Liveblo
 GET   /frontend/liveblog-epic-tests/archived-test-names      controllers.LiveblogEpicTestArchiveController.list
 
 # ----- Apple News epic 'tests' ----- #
-GET   /frontend/apple-news-epic-tests                          controllers.EpicTestsController.get
-POST  /frontend/apple-news-epic-tests/update                   controllers.EpicTestsController.set
-POST  /frontend/apple-news-epic-tests/lock                     controllers.EpicTestsController.lock
-POST  /frontend/apple-news-epic-tests/unlock                   controllers.EpicTestsController.unlock
-POST  /frontend/apple-news-epic-tests/takecontrol              controllers.EpicTestsController.takecontrol
-POST  /frontend/apple-news-epic-tests/archive                  controllers.EpicTestArchiveController.set
-GET   /frontend/apple-news-epic-tests/archive/:testName        controllers.EpicTestArchiveController.get(testName: String)
-GET   /frontend/apple-news-epic-tests/archived-test-names      controllers.EpicTestArchiveController.list
+GET   /frontend/apple-news-epic-tests                          controllers.AppleNewsEpicTestsController.get
+POST  /frontend/apple-news-epic-tests/update                   controllers.AppleNewsEpicTestsController.set
+POST  /frontend/apple-news-epic-tests/lock                     controllers.AppleNewsEpicTestsController.lock
+POST  /frontend/apple-news-epic-tests/unlock                   controllers.AppleNewsEpicTestsController.unlock
+POST  /frontend/apple-news-epic-tests/takecontrol              controllers.AppleNewsEpicTestsController.takecontrol
+POST  /frontend/apple-news-epic-tests/archive                  controllers.AppleNewsEpicTestArchiveController.set
+GET   /frontend/apple-news-epic-tests/archive/:testName        controllers.AppleNewsEpicTestArchiveController.get(testName: String)
+GET   /frontend/apple-news-epic-tests/archived-test-names      controllers.AppleNewsEpicTestArchiveController.list
 
 # ----- banner tests ----- #
 GET   /frontend/banner-tests                          controllers.BannerTestsController.get
