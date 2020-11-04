@@ -13,6 +13,7 @@ import { invalidTemplateValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/va
 import { Cta } from '../helpers/shared';
 import BannerTemplateSelector from './bannerTemplateSelector';
 import { BannerTemplate, BannerVariant } from '../../../models/banner';
+import BannerVariantLivePreview from "../epicTests/bannerVariantLivePreview";
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ palette, spacing }: Theme) =>
@@ -178,6 +179,8 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
           onValidationChange={onValidationChange}
         />
       </div>
+
+      <BannerVariantLivePreview variant={variant} />
     </div>
   );
 };
