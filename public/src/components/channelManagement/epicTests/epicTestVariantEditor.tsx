@@ -6,14 +6,14 @@ import { Theme, Typography, makeStyles, TextField } from '@material-ui/core';
 import VariantEditorButtonsEditor from '../variantEditorButtonsEditor';
 import EpicTestTickerEditor from './epicTestTickerEditor';
 import { invalidTemplateValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
-import EpicVariantLivePreview from "./epicVariantLivePreview";
+import EpicVariantLivePreview from './epicVariantLivePreview';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {
-    width: '100%',
-    paddingTop: spacing(2),
-    paddingLeft: spacing(4),
-    paddingRight: spacing(10),
+    // width: '100%',
+    // paddingTop: spacing(2),
+    // paddingLeft: spacing(4),
+    // paddingRight: spacing(10),
 
     '& > * + *': {
       marginTop: spacing(1),
@@ -248,7 +248,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
         </div>
       )}
 
-      <EpicVariantLivePreview variant={variant} />
+      {/* <EpicVariantLivePreview variant={variant} /> */}
     </div>
   );
 };
