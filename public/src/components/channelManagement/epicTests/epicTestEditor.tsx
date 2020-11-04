@@ -10,7 +10,9 @@ import TestEditorArticleCountEditor, {
   DEFAULT_ARTICLES_VIEWED_SETTINGS,
 } from '../testEditorArticleCountEditor';
 import TestEditorActionButtons from '../testEditorActionButtons';
+import TestVariantEditor from '../testVariantEditor';
 import EpicTestVariantEditor from './epicTestVariantEditor';
+import EpicVariantPreview from './epicVariantPreview';
 import EpicTestTargetContentEditor from './epicTestTargetContentEditor';
 import EpicTestMaxViewsEditor from './epicTestMaxViewsEditor';
 import useValidation from '../hooks/useValidation';
@@ -220,16 +222,21 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
   };
 
   const renderVariantEditor = (variant: EpicVariant): React.ReactElement => (
-    <EpicTestVariantEditor
-      key={variant.name}
-      variant={variant}
-      epicEditorConfig={epicEditorConfig}
-      editMode={editMode}
-      onVariantChange={onVariantChange}
-      onDelete={(): void => onVariantDelete(variant.name)}
-      onValidationChange={(isValid: boolean): void =>
-        setValidationStatusForField(variant.name, isValid)
+    <TestVariantEditor
+      variantEditor={
+        <EpicTestVariantEditor
+          epicEditorConfig={epicEditorConfig}
+          key={variant.name}
+          variant={variant}
+          editMode={editMode}
+          onVariantChange={onVariantChange}
+          onDelete={(): void => onVariantDelete(variant.name)}
+          onValidationChange={(isValid: boolean): void =>
+            setValidationStatusForField(variant.name, isValid)
+          }
+        />
       }
+      variantPreview={<EpicVariantPreview variant={variant} />}
     />
   );
 
