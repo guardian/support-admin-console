@@ -11,6 +11,10 @@ import zio.DefaultRuntime
 
 import scala.concurrent.ExecutionContext
 
+object AppleNewsEpicTestsController {
+  val name = "apple-news-epic-tests"
+}
+
 class AppleNewsEpicTestsController(
   authAction: AuthAction[AnyContent],
   components: ControllerComponents,
@@ -20,10 +24,10 @@ class AppleNewsEpicTestsController(
   authAction,
   components,
   stage,
-  name = LiveblogEpicTestsController.name,
+  name = AppleNewsEpicTestsController.name,
   dataObjectSettings = S3ObjectSettings(
     bucket = "gu-contributions-public",
-    key = s"epic/$stage/apple-news-epic-tests.json",
+    key = s"epic/$stage/${AppleNewsEpicTestsController.name}.json",
     publicRead = true
   ),
   fastlyPurger = None,
