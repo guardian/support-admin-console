@@ -4,6 +4,8 @@ export interface Variant {
   name: string;
 }
 
+export type TestType = 'EPIC' | 'BANNER';
+
 export interface Test {
   name: string;
   nickname?: string;

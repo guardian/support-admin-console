@@ -6,7 +6,7 @@ import {
   AccordionDetails,
   AccordionActions,
 } from '@material-ui/core';
-import { Variant } from './helpers/shared';
+import { Variant, TestType } from './helpers/shared';
 import TestEditorVariantSummary from './testEditorVariantSummary';
 import VariantDeleteButton from './variantDeleteButton';
 
@@ -27,6 +27,7 @@ interface TestVariantEditorsAccordionProps<V extends Variant> {
   variants: V[];
   variantKeys: string[];
   testName: string;
+  testType: TestType;
   editMode: boolean;
   selectedVariantKey: string | null;
   onVariantSelected: (variantKey: string) => void;
@@ -38,6 +39,7 @@ function TestVariantEditorsAccordion<V extends Variant>({
   variants,
   variantKeys,
   testName,
+  testType,
   editMode,
   selectedVariantKey,
   onVariantSelected,
@@ -61,6 +63,7 @@ function TestVariantEditorsAccordion<V extends Variant>({
             <TestEditorVariantSummary
               name={variant.name}
               testName={testName}
+              testType={testType}
               isInEditMode={editMode}
             />
             <AccordionDetails>{renderVariantEditor(variant)}</AccordionDetails>

@@ -10,6 +10,7 @@ import {
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import TestEditorVariantSummaryPreviewButton from './testEditorVariantSummaryPreviewButton';
+import { TestType } from './helpers/shared';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing, palette }: Theme) =>
@@ -43,6 +44,7 @@ const styles = ({ spacing, palette }: Theme) =>
 interface TestEditorVariantSummaryProps extends WithStyles<typeof styles> {
   name: string;
   testName: string;
+  testType: TestType;
   isInEditMode: boolean;
 }
 
@@ -50,6 +52,7 @@ const TestEditorVariantSummary: React.FC<TestEditorVariantSummaryProps> = ({
   classes,
   name,
   testName,
+  testType,
   isInEditMode,
 }: TestEditorVariantSummaryProps) => {
   return (
@@ -65,7 +68,7 @@ const TestEditorVariantSummary: React.FC<TestEditorVariantSummaryProps> = ({
         <TestEditorVariantSummaryPreviewButton
           name={name}
           testName={testName}
-          testType="BANNER" // will have to change this to make it more reusable
+          testType={testType}
           isDisabled={isInEditMode}
         />
       </div>

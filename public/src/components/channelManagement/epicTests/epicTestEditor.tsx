@@ -255,11 +255,11 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
           <Typography variant={'h3'} className={classes.sectionHeader}>
             Variants
           </Typography>
-
           <div>
             <TestVariantsEditor<EpicVariant>
               variants={test.variants}
               testName={test.name}
+              testType="EPIC"
               editMode={isEditable()}
               createVariant={createVariant}
               renderVariantEditor={renderVariantEditor}
