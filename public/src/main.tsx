@@ -115,9 +115,7 @@ const AppRouter = withStyles(styles)(({ classes }: Props) => {
         />
         <Route
           path="/amp-epic-tests"
-          render={(): React.ReactElement =>
-            createComponent(<AMPEpicTestsForm />, 'AMP Epics')
-          }
+          render={(): React.ReactElement => createComponent(<AMPEpicTestsForm />, 'AMP Epics')}
         />
         <Route
           path="/banner-tests"
