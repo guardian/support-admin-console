@@ -1,21 +1,22 @@
-package controllers
+package controllers.banner
 
 import com.gu.googleauth.AuthAction
-import play.api.mvc.{AnyContent, ControllerComponents}
+import controllers.LockableS3ObjectController
 import models.BannerTests
+import play.api.libs.circe.Circe
 import play.api.libs.ws.WSClient
+import play.api.mvc.{AnyContent, ControllerComponents}
 import services.FastlyPurger
 import services.S3Client.S3ObjectSettings
-import play.api.libs.circe.Circe
 import zio.DefaultRuntime
 
 import scala.concurrent.ExecutionContext
 
-object BannerTestsController {
-  val name = "banner-tests"
+object BannerTestsController2 {
+  val name = "banner-tests2"
 }
 
-class BannerTestsController(
+class BannerTestsController2(
   authAction: AuthAction[AnyContent],
   components: ControllerComponents,
   ws: WSClient, stage: String,
@@ -24,14 +25,14 @@ class BannerTestsController(
     authAction,
     components,
     stage,
-    name = BannerTestsController.name,
+    name = BannerTestsController2.name,
     dataObjectSettings = S3ObjectSettings(
       bucket = "gu-contributions-public",
-      key = s"banner/$stage/${BannerTestsController.name}.json",
+      key = s"banner/$stage/${BannerTestsController2.name}.json",
       publicRead = true,  // This data will be requested by dotcom
       cacheControl = Some("max-age=30"),
       surrogateControl = Some("max-age=86400")  // Cache for a day, and use cache purging after updates
     ),
-    fastlyPurger = FastlyPurger.fastlyPurger(stage, s"${BannerTestsController.name}.json", ws),
+    fastlyPurger = FastlyPurger.fastlyPurger(stage, s"${BannerTestsController2.name}.json", ws),
     runtime = runtime
   ) with Circe

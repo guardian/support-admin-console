@@ -1,24 +1,25 @@
-package controllers
+package controllers.banner
 
 import com.gu.googleauth.AuthAction
-import models.EpicTest
-import models.EpicTests._
+import controllers.S3ObjectsController
+import models.BannerTest
+import models.BannerTests._
 import play.api.libs.ws.WSClient
 import play.api.mvc.{AnyContent, ControllerComponents}
 import zio.DefaultRuntime
 
 import scala.concurrent.ExecutionContext
 
-class EpicTestArchiveController(
+class BannerTestArchiveController(
   authAction: AuthAction[AnyContent],
   components: ControllerComponents,
   ws: WSClient, stage: String,
   runtime: DefaultRuntime
-)(implicit ec: ExecutionContext) extends S3ObjectsController[EpicTest](
+)(implicit ec: ExecutionContext) extends S3ObjectsController[BannerTest](
   authAction,
   components,
   stage,
-  path = "archived-epic-tests",
+  path = "archived-banner-tests",
   nameGenerator = _.name,
   runtime
 )

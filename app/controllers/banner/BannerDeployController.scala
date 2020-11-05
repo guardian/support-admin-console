@@ -1,9 +1,10 @@
-package controllers
+package controllers.banner
 
 import com.gu.googleauth.AuthAction
+import controllers.S3ObjectController
+import io.circe.generic.auto._
 import models.BannerDeploys
 import play.api.mvc.{AnyContent, ControllerComponents}
-import io.circe.generic.auto._
 import zio.DefaultRuntime
 
 import scala.concurrent.ExecutionContext
