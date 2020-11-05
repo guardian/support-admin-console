@@ -2,7 +2,15 @@ import React from 'react';
 import EpicTestEditor from './epicTestEditor';
 import { Region } from '../../../utils/models';
 
-import { UserCohort, Cta, ArticlesViewedSettings, Test, Variant } from '../helpers/shared';
+import {
+  UserCohort,
+  Cta,
+  ArticlesViewedSettings,
+  Test,
+  Variant,
+  EpicType,
+  defaultCta,
+} from '../helpers/shared';
 import { InnerComponentProps, updateTest } from '../testEditor';
 import TestsForm from '../testEditor';
 import TestsFormLayout from '../testsFormLayout';
@@ -67,12 +75,23 @@ export interface EpicTest extends Test {
   articlesViewedSettings?: ArticlesViewedSettings;
 }
 
-export type EpicType = 'ARTICLE' | 'LIVEBLOG';
-
 type Props = InnerComponentProps<EpicTest>;
 
 const getEpicTestForm = (epicType: EpicType): React.FC<Props> => {
   const isLiveBlog = epicType === 'LIVEBLOG';
+  const isAppleNews = epicType == 'APPLE_NEWS';
+
+  const createDefaultEpicVariant = (): EpicVariant => ({
+    name: 'CONTROL',
+    heading: undefined,
+    paragraphs: [],
+    highlightedText:
+      'Support the Guardian from as little as %%CURRENCY_SYMBOL%%1 – and it only takes a minute. Thank you.',
+    footer: undefined,
+    showTicker: false,
+    backgroundImageUrl: undefined,
+    cta: defaultCta,
+  });
 
   const createDefaultEpicTest = (newTestName: string, newTestNickname: string): EpicTest => ({
     name: newTestName,
@@ -88,7 +107,7 @@ const getEpicTestForm = (epicType: EpicType): React.FC<Props> => {
     userCohort: UserCohort.AllNonSupporters, // matches the default in dotcom
     isLiveBlog: isLiveBlog,
     hasCountryName: false,
-    variants: [],
+    variants: isAppleNews ? [createDefaultEpicVariant()] : [],
     highPriority: false, // has been removed from form, but might be used in future
     useLocalViewLog: false,
   });
@@ -139,7 +158,7 @@ const getEpicTestForm = (epicType: EpicType): React.FC<Props> => {
             <EpicTestEditor
               test={selectedTest}
               hasChanged={!!modifiedTests[selectedTestName]}
-              isLiveblog={isLiveBlog}
+              epicType={epicType}
               onChange={(updatedTest): void =>
                 onTestsChange(updateTest(tests, updatedTest), updatedTest.name)
               }
@@ -188,4 +207,8 @@ export const ArticleEpicTestsForm = TestsForm(
 export const LiveblogEpicTestsForm = TestsForm(
   getEpicTestForm('LIVEBLOG'),
   FrontendSettingsType.liveblogEpicTests,
+);
+export const AppleNewsEpicTestsForm = TestsForm(
+  getEpicTestForm('APPLE_NEWS'),
+  FrontendSettingsType.appleNewsEpicTests,
 );

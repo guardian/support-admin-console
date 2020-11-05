@@ -1,37 +1,41 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { EpicVariant } from './epicTestsForm';
-import { Cta, TickerSettings } from '../helpers/shared';
+import { Cta, EpicType, TickerSettings } from '../helpers/shared';
 import { Theme, Typography, makeStyles, TextField } from '@material-ui/core';
 import VariantEditorButtonsEditor from '../variantEditorButtonsEditor';
 import EpicTestTickerEditor from './epicTestTickerEditor';
 import { invalidTemplateValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 
-const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
-  container: {
-    width: '100%',
-    paddingTop: spacing(2),
-    paddingLeft: spacing(4),
-    paddingRight: spacing(10),
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+const getUseStyles = (isAppleNews: boolean) => {
+  const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
+    container: {
+      width: '100%',
+      paddingTop: isAppleNews ? 0 : spacing(2),
+      paddingLeft: isAppleNews ? 0 : spacing(4),
+      paddingRight: isAppleNews ? 0 : spacing(10),
 
-    '& > * + *': {
-      marginTop: spacing(1),
+      '& > * + *': {
+        marginTop: spacing(1),
+      },
     },
-  },
-  sectionHeader: {
-    fontSize: 16,
-    color: palette.grey[900],
-    fontWeight: 500,
-  },
-  sectionContainer: {
-    paddingTop: spacing(1),
-    paddingBottom: spacing(2),
+    sectionHeader: {
+      fontSize: 16,
+      color: palette.grey[900],
+      fontWeight: 500,
+    },
+    sectionContainer: {
+      paddingTop: spacing(1),
+      paddingBottom: spacing(2),
 
-    '& > * + *': {
-      marginTop: spacing(3),
+      '& > * + *': {
+        marginTop: spacing(3),
+      },
     },
-  },
-}));
+  }));
+  return useStyles;
+};
 
 const HEADER_DEFAULT_HELPER_TEXT = 'Assitive text';
 const BODY_DEFAULT_HELPER_TEXT = 'Maximum 500 characters';
@@ -50,9 +54,9 @@ interface FormData {
 
 interface EpicTestVariantEditorProps {
   variant: EpicVariant;
+  epicType: EpicType;
   onVariantChange: (updatedVariant: EpicVariant) => void;
   editMode: boolean;
-  isLiveblog: boolean;
   onDelete: () => void;
   onValidationChange: (isValid: boolean) => void;
 }
@@ -61,10 +65,13 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   variant,
   onVariantChange,
   editMode,
-  isLiveblog,
+  epicType,
   onValidationChange,
 }: EpicTestVariantEditorProps) => {
-  const classes = useStyles();
+  const isLiveblog = epicType === 'LIVEBLOG';
+  const isAppleNews = epicType === 'APPLE_NEWS';
+
+  const classes = getUseStyles(isAppleNews)();
 
   const defaultValues: FormData = {
     heading: variant.heading || '',
@@ -185,7 +192,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
         </div>
       )}
 
-      {!isLiveblog && (
+      {!isLiveblog && !isAppleNews && (
         <div>
           <TextField
             inputRef={register()}
@@ -201,7 +208,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
         </div>
       )}
 
-      {!isLiveblog && (
+      {!isLiveblog && !isAppleNews && (
         <div>
           <TextField
             inputRef={register()}
@@ -217,22 +224,24 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
         </div>
       )}
 
-      <div className={classes.sectionContainer}>
-        <Typography className={classes.sectionHeader} variant="h4">
-          Buttons
-        </Typography>
+      {!isAppleNews && (
+        <div className={classes.sectionContainer}>
+          <Typography className={classes.sectionHeader} variant="h4">
+            Buttons
+          </Typography>
 
-        <VariantEditorButtonsEditor
-          primaryCta={variant.cta}
-          secondaryCta={variant.secondaryCta}
-          updatePrimaryCta={updatePrimaryCta}
-          updateSecondaryCta={updateSecondaryCta}
-          isDisabled={!editMode}
-          onValidationChange={onValidationChange}
-        />
-      </div>
+          <VariantEditorButtonsEditor
+            primaryCta={variant.cta}
+            secondaryCta={variant.secondaryCta}
+            updatePrimaryCta={updatePrimaryCta}
+            updateSecondaryCta={updateSecondaryCta}
+            isDisabled={!editMode}
+            onValidationChange={onValidationChange}
+          />
+        </div>
+      )}
 
-      {!isLiveblog && (
+      {!isLiveblog && !isAppleNews && (
         <div className={classes.sectionContainer}>
           <Typography className={classes.sectionHeader} variant="h4">
             Ticker
