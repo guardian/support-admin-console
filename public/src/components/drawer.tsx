@@ -135,12 +135,12 @@ export default function NavDrawer(): React.ReactElement {
             <ListItemText primary="Liveblog Epic" />
           </ListItem>
         </Link>
-        <Link key="Apple News Epic" to="/apple-news-epic-tests" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Apple News Epic">
-            <ListItemText primary="Apple News Epic" />
-            <img className={classes.icon} src="assets/images/apple-news-icon.png" />
-          </ListItem>
-        </Link>
+        {/*<Link key="Apple News Epic" to="/apple-news-epic-tests" className={classes.link}>*/}
+          {/*<ListItem className={classes.listItem} button key="Apple News Epic">*/}
+            {/*<ListItemText primary="Apple News Epic" />*/}
+            {/*<img className={classes.icon} src="assets/images/apple-news-icon.png" />*/}
+          {/*</ListItem>*/}
+        {/*</Link>*/}
         <Link key="Banner1" to="/banner-tests" className={classes.link}>
           <ListItem className={classes.listItem} button key="Banner1">
             <ListItemText primary="Banner 1" />
