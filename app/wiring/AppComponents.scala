@@ -65,6 +65,8 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     new LiveblogEpicTestArchiveController(authAction, controllerComponents, wsClient, stage, runtime),
     new AppleNewsEpicTestsController(authAction, controllerComponents, wsClient, stage, runtime),
     new AppleNewsEpicTestArchiveController(authAction, controllerComponents, wsClient, stage, runtime),
+    new AMPEpicTestsController(authAction, controllerComponents, wsClient, stage, runtime),
+    new AMPEpicTestArchiveController(authAction, controllerComponents, wsClient, stage, runtime),
     new BannerTestsController(authAction, controllerComponents, wsClient, stage, runtime),
     new BannerTestArchiveController(authAction, controllerComponents, wsClient, stage, runtime),
     new BannerTestsController2(authAction, controllerComponents, wsClient, stage, runtime),
