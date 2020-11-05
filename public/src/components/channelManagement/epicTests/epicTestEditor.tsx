@@ -97,6 +97,8 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
 }: EpicTestEditorProps) => {
   const classes = useStyles();
 
+  const isOffPlatform = epicType === 'APPLE_NEWS' || epicType === 'AMP';
+
   const setValidationStatusForField = useValidation(onValidationChange);
 
   const onMaxViewsValidationChange = (isValid: boolean): void =>
@@ -250,7 +252,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
         />
       </div>
 
-      {epicType !== 'APPLE_NEWS' && (
+      {!isOffPlatform && (
         <div className={classes.sectionContainer}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
             Variants
@@ -269,7 +271,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
         </div>
       )}
 
-      {epicType === 'APPLE_NEWS' && (
+      {isOffPlatform && (
         <div className={classes.sectionContainer}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
             Copy
@@ -306,7 +308,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
         />
       </div>
 
-      {epicType !== 'APPLE_NEWS' && (
+      {!isOffPlatform && (
         <div className={classes.sectionContainer}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
             Target audience
@@ -322,7 +324,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
         </div>
       )}
 
-      {epicType !== 'APPLE_NEWS' && (
+      {!isOffPlatform && (
         <div className={classes.sectionContainer}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
             View frequency settings
@@ -348,7 +350,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
         </div>
       )}
 
-      {epicType !== 'APPLE_NEWS' && (
+      {!isOffPlatform && (
         <div className={classes.sectionContainer}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
             Article count

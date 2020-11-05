@@ -8,13 +8,13 @@ import EpicTestTickerEditor from './epicTestTickerEditor';
 import { invalidTemplateValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const getUseStyles = (isAppleNews: boolean) => {
+const getUseStyles = (isOffPlatform: boolean) => {
   const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
     container: {
       width: '100%',
-      paddingTop: isAppleNews ? 0 : spacing(2),
-      paddingLeft: isAppleNews ? 0 : spacing(4),
-      paddingRight: isAppleNews ? 0 : spacing(10),
+      paddingTop: isOffPlatform ? 0 : spacing(2),
+      paddingLeft: isOffPlatform ? 0 : spacing(4),
+      paddingRight: isOffPlatform ? 0 : spacing(10),
 
       '& > * + *': {
         marginTop: spacing(1),
@@ -69,9 +69,9 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   onValidationChange,
 }: EpicTestVariantEditorProps) => {
   const isLiveblog = epicType === 'LIVEBLOG';
-  const isAppleNews = epicType === 'APPLE_NEWS';
+  const isOffPlatform = epicType === 'APPLE_NEWS' || epicType === 'AMP';
 
-  const classes = getUseStyles(isAppleNews)();
+  const classes = getUseStyles(isOffPlatform)();
 
   const defaultValues: FormData = {
     heading: variant.heading || '',
@@ -192,7 +192,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
         </div>
       )}
 
-      {!isLiveblog && !isAppleNews && (
+      {!isLiveblog && !isOffPlatform && (
         <div>
           <TextField
             inputRef={register()}
@@ -208,7 +208,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
         </div>
       )}
 
-      {!isLiveblog && !isAppleNews && (
+      {!isLiveblog && !isOffPlatform && (
         <div>
           <TextField
             inputRef={register()}
@@ -224,7 +224,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
         </div>
       )}
 
-      {!isAppleNews && (
+      {!isOffPlatform && (
         <div className={classes.sectionContainer}>
           <Typography className={classes.sectionHeader} variant="h4">
             Buttons
@@ -241,7 +241,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
         </div>
       )}
 
-      {!isLiveblog && !isAppleNews && (
+      {!isLiveblog && !isOffPlatform && (
         <div className={classes.sectionContainer}>
           <Typography className={classes.sectionHeader} variant="h4">
             Ticker

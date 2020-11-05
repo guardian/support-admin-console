@@ -9,6 +9,7 @@ GET /amounts                                        controllers.Application.inde
 GET /epic-tests                                     controllers.Application.index
 GET /liveblog-epic-tests                            controllers.Application.index
 GET /apple-news-epic-tests                          controllers.Application.index
+GET /amp-epic-tests                                 controllers.Application.index
 GET /banner-tests                                   controllers.Application.index
 GET /banner-tests2                                  controllers.Application.index
 GET /banner-deploy                                  controllers.Application.index
