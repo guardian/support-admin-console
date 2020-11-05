@@ -293,22 +293,24 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
         </div>
       )}
 
-      <div className={classes.sectionContainer}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
-          Target content
-        </Typography>
+      {epicType !== 'AMP' && (
+        <div className={classes.sectionContainer}>
+          <Typography variant={'h3'} className={classes.sectionHeader}>
+            Target content
+          </Typography>
 
-        <EpicTestTargetContentEditor
-          tagIds={test.tagIds}
-          sections={test.sections}
-          excludeTagIds={test.excludedTagIds}
-          excludeSections={test.excludedSections}
-          editMode={isEditable()}
-          updateTargetContent={updateTargetSections}
-        />
-      </div>
+          <EpicTestTargetContentEditor
+            tagIds={test.tagIds}
+            sections={test.sections}
+            excludeTagIds={test.excludedTagIds}
+            excludeSections={test.excludedSections}
+            editMode={isEditable()}
+            updateTargetContent={updateTargetSections}
+          />
+        </div>
+      )}
 
-      {!isOffPlatform && (
+      {epicType !== 'APPLE_NEWS' && (
         <div className={classes.sectionContainer}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
             Target audience
@@ -320,6 +322,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
             selectedCohort={test.userCohort}
             onCohortChange={onCohortChange}
             isDisabled={!isEditable()}
+            showSupporterStatusSelector={epicType !== 'AMP'}
           />
         </div>
       )}

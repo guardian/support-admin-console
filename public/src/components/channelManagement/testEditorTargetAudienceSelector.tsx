@@ -25,6 +25,7 @@ interface TestEditorTargetAudienceSelectorProps extends WithStyles<typeof styles
   selectedCohort: UserCohort;
   onCohortChange: (updatedCohort: UserCohort) => void;
   isDisabled: boolean;
+  showSupporterStatusSelector: boolean;
 }
 const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelectorProps> = ({
   classes,
@@ -33,6 +34,7 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
   selectedCohort,
   onCohortChange,
   isDisabled,
+  showSupporterStatusSelector,
 }: TestEditorTargetAudienceSelectorProps) => {
   return (
     <div className={classes.container}>
@@ -42,11 +44,13 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
         isDisabled={isDisabled}
       />
 
-      <TestEditorTargetSupporterStatusSelector
-        selectedCohort={selectedCohort}
-        onCohortChange={onCohortChange}
-        isDisabled={isDisabled}
-      />
+      {showSupporterStatusSelector && (
+        <TestEditorTargetSupporterStatusSelector
+          selectedCohort={selectedCohort}
+          onCohortChange={onCohortChange}
+          isDisabled={isDisabled}
+        />
+      )}
     </div>
   );
 };
