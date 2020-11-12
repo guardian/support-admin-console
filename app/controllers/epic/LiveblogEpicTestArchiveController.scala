@@ -1,6 +1,7 @@
-package controllers
+package controllers.epic
 
 import com.gu.googleauth.AuthAction
+import controllers.S3ObjectsController
 import models.EpicTest
 import models.EpicTests._
 import play.api.libs.ws.WSClient
@@ -9,7 +10,7 @@ import zio.DefaultRuntime
 
 import scala.concurrent.ExecutionContext
 
-class AppleNewsEpicTestArchiveController(
+class LiveblogEpicTestArchiveController(
   authAction: AuthAction[AnyContent],
   components: ControllerComponents,
   ws: WSClient, stage: String,
@@ -18,7 +19,7 @@ class AppleNewsEpicTestArchiveController(
   authAction,
   components,
   stage,
-  path = "archived-apple-news-epic-tests",
+  path = "archived-liveblog-epic-tests",
   nameGenerator = _.name,
   runtime
 )

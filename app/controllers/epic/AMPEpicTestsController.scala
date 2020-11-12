@@ -1,17 +1,21 @@
-package controllers
+package controllers.epic
 
 import com.gu.googleauth.AuthAction
-import play.api.mvc._
+import controllers.LockableS3ObjectController
 import models.EpicTests
-import play.api.libs.ws.WSClient
-import services.S3Client.S3ObjectSettings
-
 import play.api.libs.circe.Circe
+import play.api.libs.ws.WSClient
+import play.api.mvc._
+import services.S3Client.S3ObjectSettings
 import zio.DefaultRuntime
 
 import scala.concurrent.ExecutionContext
 
-class AppleNewsEpicTestsController(
+object AMPEpicTestsController {
+  val name = "amp-epic-tests"
+}
+
+class AMPEpicTestsController(
   authAction: AuthAction[AnyContent],
   components: ControllerComponents,
   ws: WSClient, stage: String,
@@ -20,10 +24,10 @@ class AppleNewsEpicTestsController(
   authAction,
   components,
   stage,
-  name = LiveblogEpicTestsController.name,
+  name = AMPEpicTestsController.name,
   dataObjectSettings = S3ObjectSettings(
     bucket = "gu-contributions-public",
-    key = s"epic/$stage/apple-news-epic-tests.json",
+    key = s"epic/$stage/${AMPEpicTestsController.name}.json",
     publicRead = true
   ),
   fastlyPurger = None,

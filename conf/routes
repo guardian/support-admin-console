@@ -9,6 +9,7 @@ GET /amounts                                        controllers.Application.inde
 GET /epic-tests                                     controllers.Application.index
 GET /liveblog-epic-tests                            controllers.Application.index
 GET /apple-news-epic-tests                          controllers.Application.index
+GET /amp-epic-tests                                 controllers.Application.index
 GET /banner-tests                                   controllers.Application.index
 GET /banner-tests2                                  controllers.Application.index
 GET /banner-deploy                                  controllers.Application.index
@@ -32,62 +33,72 @@ GET   /support-frontend/amounts                     controllers.AmountsControlle
 POST  /support-frontend/amounts/update              controllers.AmountsController.set
 
 # ----- epic tests ----- #
-GET   /frontend/epic-tests                          controllers.EpicTestsController.get
-POST  /frontend/epic-tests/update                   controllers.EpicTestsController.set
-POST  /frontend/epic-tests/lock                     controllers.EpicTestsController.lock
-POST  /frontend/epic-tests/unlock                   controllers.EpicTestsController.unlock
-POST  /frontend/epic-tests/takecontrol              controllers.EpicTestsController.takecontrol
-POST  /frontend/epic-tests/archive                  controllers.EpicTestArchiveController.set
-GET   /frontend/epic-tests/archive/:testName        controllers.EpicTestArchiveController.get(testName: String)
-GET   /frontend/epic-tests/archived-test-names      controllers.EpicTestArchiveController.list
+GET   /frontend/epic-tests                          controllers.epic.EpicTestsController.get
+POST  /frontend/epic-tests/update                   controllers.epic.EpicTestsController.set
+POST  /frontend/epic-tests/lock                     controllers.epic.EpicTestsController.lock
+POST  /frontend/epic-tests/unlock                   controllers.epic.EpicTestsController.unlock
+POST  /frontend/epic-tests/takecontrol              controllers.epic.EpicTestsController.takecontrol
+POST  /frontend/epic-tests/archive                  controllers.epic.EpicTestArchiveController.set
+GET   /frontend/epic-tests/archive/:testName        controllers.epic.EpicTestArchiveController.get(testName: String)
+GET   /frontend/epic-tests/archived-test-names      controllers.epic.EpicTestArchiveController.list
 
 # ----- liveblog epic tests ----- #
-GET   /frontend/liveblog-epic-tests                          controllers.LiveblogEpicTestsController.get
-POST  /frontend/liveblog-epic-tests/update                   controllers.LiveblogEpicTestsController.set
-POST  /frontend/liveblog-epic-tests/lock                     controllers.LiveblogEpicTestsController.lock
-POST  /frontend/liveblog-epic-tests/unlock                   controllers.LiveblogEpicTestsController.unlock
-POST  /frontend/liveblog-epic-tests/takecontrol              controllers.LiveblogEpicTestsController.takecontrol
-POST  /frontend/liveblog-epic-tests/archive                  controllers.LiveblogEpicTestArchiveController.set
-GET   /frontend/liveblog-epic-tests/archive/:testName        controllers.LiveblogEpicTestArchiveController.get(testName: String)
-GET   /frontend/liveblog-epic-tests/archived-test-names      controllers.LiveblogEpicTestArchiveController.list
+GET   /frontend/liveblog-epic-tests                          controllers.epic.LiveblogEpicTestsController.get
+POST  /frontend/liveblog-epic-tests/update                   controllers.epic.LiveblogEpicTestsController.set
+POST  /frontend/liveblog-epic-tests/lock                     controllers.epic.LiveblogEpicTestsController.lock
+POST  /frontend/liveblog-epic-tests/unlock                   controllers.epic.LiveblogEpicTestsController.unlock
+POST  /frontend/liveblog-epic-tests/takecontrol              controllers.epic.LiveblogEpicTestsController.takecontrol
+POST  /frontend/liveblog-epic-tests/archive                  controllers.epic.LiveblogEpicTestArchiveController.set
+GET   /frontend/liveblog-epic-tests/archive/:testName        controllers.epic.LiveblogEpicTestArchiveController.get(testName: String)
+GET   /frontend/liveblog-epic-tests/archived-test-names      controllers.epic.LiveblogEpicTestArchiveController.list
 
 # ----- Apple News epic 'tests' ----- #
-GET   /frontend/apple-news-epic-tests                          controllers.AppleNewsEpicTestsController.get
-POST  /frontend/apple-news-epic-tests/update                   controllers.AppleNewsEpicTestsController.set
-POST  /frontend/apple-news-epic-tests/lock                     controllers.AppleNewsEpicTestsController.lock
-POST  /frontend/apple-news-epic-tests/unlock                   controllers.AppleNewsEpicTestsController.unlock
-POST  /frontend/apple-news-epic-tests/takecontrol              controllers.AppleNewsEpicTestsController.takecontrol
-POST  /frontend/apple-news-epic-tests/archive                  controllers.AppleNewsEpicTestArchiveController.set
-GET   /frontend/apple-news-epic-tests/archive/:testName        controllers.AppleNewsEpicTestArchiveController.get(testName: String)
-GET   /frontend/apple-news-epic-tests/archived-test-names      controllers.AppleNewsEpicTestArchiveController.list
+GET   /frontend/apple-news-epic-tests                          controllers.epic.AppleNewsEpicTestsController.get
+POST  /frontend/apple-news-epic-tests/update                   controllers.epic.AppleNewsEpicTestsController.set
+POST  /frontend/apple-news-epic-tests/lock                     controllers.epic.AppleNewsEpicTestsController.lock
+POST  /frontend/apple-news-epic-tests/unlock                   controllers.epic.AppleNewsEpicTestsController.unlock
+POST  /frontend/apple-news-epic-tests/takecontrol              controllers.epic.AppleNewsEpicTestsController.takecontrol
+POST  /frontend/apple-news-epic-tests/archive                  controllers.epic.AppleNewsEpicTestArchiveController.set
+GET   /frontend/apple-news-epic-tests/archive/:testName        controllers.epic.AppleNewsEpicTestArchiveController.get(testName: String)
+GET   /frontend/apple-news-epic-tests/archived-test-names      controllers.epic.AppleNewsEpicTestArchiveController.list
+
+# ----- AMO epic 'tests' ----- #
+GET   /frontend/amp-epic-tests                          controllers.epic.AMPEpicTestsController.get
+POST  /frontend/amp-epic-tests/update                   controllers.epic.AMPEpicTestsController.set
+POST  /frontend/amp-epic-tests/lock                     controllers.epic.AMPEpicTestsController.lock
+POST  /frontend/amp-epic-tests/unlock                   controllers.epic.AMPEpicTestsController.unlock
+POST  /frontend/amp-epic-tests/takecontrol              controllers.epic.AMPEpicTestsController.takecontrol
+POST  /frontend/amp-epic-tests/archive                  controllers.epic.AMPEpicTestArchiveController.set
+GET   /frontend/amp-epic-tests/archive/:testName        controllers.epic.AMPEpicTestArchiveController.get(testName: String)
+GET   /frontend/amp-epic-tests/archived-test-names      controllers.epic.AMPEpicTestArchiveController.list
 
 # ----- banner tests ----- #
-GET   /frontend/banner-tests                          controllers.BannerTestsController.get
-POST  /frontend/banner-tests/update                   controllers.BannerTestsController.set
-POST  /frontend/banner-tests/lock                     controllers.BannerTestsController.lock
-POST  /frontend/banner-tests/unlock                   controllers.BannerTestsController.unlock
-POST  /frontend/banner-tests/takecontrol              controllers.BannerTestsController.takecontrol
-POST  /frontend/banner-tests/archive                  controllers.BannerTestArchiveController.set
-GET   /frontend/banner-tests/archive/:testName        controllers.BannerTestArchiveController.get(testName: String)
-GET   /frontend/banner-tests/archived-test-names      controllers.BannerTestArchiveController.list
+GET   /frontend/banner-tests                          controllers.banner.BannerTestsController.get
+POST  /frontend/banner-tests/update                   controllers.banner.BannerTestsController.set
+POST  /frontend/banner-tests/lock                     controllers.banner.BannerTestsController.lock
+POST  /frontend/banner-tests/unlock                   controllers.banner.BannerTestsController.unlock
+POST  /frontend/banner-tests/takecontrol              controllers.banner.BannerTestsController.takecontrol
+POST  /frontend/banner-tests/archive                  controllers.banner.BannerTestArchiveController.set
+GET   /frontend/banner-tests/archive/:testName        controllers.banner.BannerTestArchiveController.get(testName: String)
+GET   /frontend/banner-tests/archived-test-names      controllers.banner.BannerTestArchiveController.list
 
 # ----- banner tests ----- #
-GET   /frontend/banner-tests2                          controllers.BannerTestsController2.get
-POST  /frontend/banner-tests2/update                   controllers.BannerTestsController2.set
-POST  /frontend/banner-tests2/lock                     controllers.BannerTestsController2.lock
-POST  /frontend/banner-tests2/unlock                   controllers.BannerTestsController2.unlock
-POST  /frontend/banner-tests2/takecontrol              controllers.BannerTestsController2.takecontrol
-POST  /frontend/banner-tests2/archive                  controllers.BannerTestArchiveController2.set
-GET   /frontend/banner-tests2/archive/:testName        controllers.BannerTestArchiveController2.get(testName: String)
-GET   /frontend/banner-tests2/archived-test-names      controllers.BannerTestArchiveController2.list
+GET   /frontend/banner-tests2                          controllers.banner.BannerTestsController2.get
+POST  /frontend/banner-tests2/update                   controllers.banner.BannerTestsController2.set
+POST  /frontend/banner-tests2/lock                     controllers.banner.BannerTestsController2.lock
+POST  /frontend/banner-tests2/unlock                   controllers.banner.BannerTestsController2.unlock
+POST  /frontend/banner-tests2/takecontrol              controllers.banner.BannerTestsController2.takecontrol
+POST  /frontend/banner-tests2/archive                  controllers.banner.BannerTestArchiveController2.set
+GET   /frontend/banner-tests2/archive/:testName        controllers.banner.BannerTestArchiveController2.get(testName: String)
+GET   /frontend/banner-tests2/archived-test-names      controllers.banner.BannerTestArchiveController2.list
 
 # ----- banner deploys ----- #
-GET   /frontend/banner-deploy                          controllers.BannerDeployController.get
-POST  /frontend/banner-deploy/update                   controllers.BannerDeployController.set
+GET   /frontend/banner-deploy                          controllers.banner.BannerDeployController.get
+POST  /frontend/banner-deploy/update                   controllers.banner.BannerDeployController.set
 
 # ----- banner deploys ----- #
-GET   /frontend/banner-deploy2                         controllers.BannerDeployController2.get
-POST  /frontend/banner-deploy2/update                  controllers.BannerDeployController2.set
+GET   /frontend/banner-deploy2                         controllers.banner.BannerDeployController2.get
+POST  /frontend/banner-deploy2/update                  controllers.banner.BannerDeployController2.set
 
 # Map static resources from the /public folder to the /assets URL path
 GET  /assets/*file                                  controllers.Assets.at(path="/public", file)

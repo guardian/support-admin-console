@@ -10,6 +10,7 @@ import {
   ArticleEpicTestsForm,
   LiveblogEpicTestsForm,
   AppleNewsEpicTestsForm,
+  AMPEpicTestsForm,
 } from './components/channelManagement/epicTests/epicTestsForm';
 import {
   BannerTestsForm1,
@@ -111,6 +112,10 @@ const AppRouter = withStyles(styles)(({ classes }: Props) => {
           render={(): React.ReactElement =>
             createComponent(<AppleNewsEpicTestsForm />, 'Apple News Epics')
           }
+        />
+        <Route
+          path="/amp-epic-tests"
+          render={(): React.ReactElement => createComponent(<AMPEpicTestsForm />, 'AMP Epics')}
         />
         <Route
           path="/banner-tests"

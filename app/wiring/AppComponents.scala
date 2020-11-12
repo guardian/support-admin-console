@@ -5,6 +5,8 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
 import com.gu.googleauth._
 import play.api.routing.Router
 import controllers._
+import controllers.banner._
+import controllers.epic._
 import play.api.ApplicationLoader.Context
 import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.mvc.AnyContent
@@ -46,7 +48,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
 
   private val requiredGoogleGroups: Set[String] = configuration.get[String]("googleAuth.requiredGroups").split(',').toSet
 
-  private val authAction = new AuthAction[AnyContent](authConfig, routes.Login.loginAction(), controllerComponents.parsers.default)(executionContext)
+  private val authAction = new AuthAction[AnyContent](authConfig, controllers.routes.Login.loginAction(), controllerComponents.parsers.default)(executionContext)
 
   private val runtime = new DefaultRuntime {}
 
@@ -63,6 +65,8 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     new LiveblogEpicTestArchiveController(authAction, controllerComponents, wsClient, stage, runtime),
     new AppleNewsEpicTestsController(authAction, controllerComponents, wsClient, stage, runtime),
     new AppleNewsEpicTestArchiveController(authAction, controllerComponents, wsClient, stage, runtime),
+    new AMPEpicTestsController(authAction, controllerComponents, wsClient, stage, runtime),
+    new AMPEpicTestArchiveController(authAction, controllerComponents, wsClient, stage, runtime),
     new BannerTestsController(authAction, controllerComponents, wsClient, stage, runtime),
     new BannerTestArchiveController(authAction, controllerComponents, wsClient, stage, runtime),
     new BannerTestsController2(authAction, controllerComponents, wsClient, stage, runtime),

@@ -255,6 +255,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
             selectedCohort={test.userCohort}
             onCohortChange={onCohortChange}
             isDisabled={!isEditable()}
+            showSupporterStatusSelector={true}
           />
         </div>
 

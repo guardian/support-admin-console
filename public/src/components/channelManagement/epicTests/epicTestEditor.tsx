@@ -97,6 +97,8 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
 }: EpicTestEditorProps) => {
   const classes = useStyles();
 
+  const isOffPlatform = epicType === 'APPLE_NEWS' || epicType === 'AMP';
+
   const setValidationStatusForField = useValidation(onValidationChange);
 
   const onMaxViewsValidationChange = (isValid: boolean): void =>
@@ -250,7 +252,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
         />
       </div>
 
-      {epicType !== 'APPLE_NEWS' && (
+      {!isOffPlatform && (
         <div className={classes.sectionContainer}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
             Variants
@@ -269,7 +271,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
         </div>
       )}
 
-      {epicType === 'APPLE_NEWS' && (
+      {isOffPlatform && (
         <div className={classes.sectionContainer}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
             Copy
@@ -291,20 +293,22 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
         </div>
       )}
 
-      <div className={classes.sectionContainer}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
-          Target content
-        </Typography>
+      {epicType !== 'AMP' && (
+        <div className={classes.sectionContainer}>
+          <Typography variant={'h3'} className={classes.sectionHeader}>
+            Target content
+          </Typography>
 
-        <EpicTestTargetContentEditor
-          tagIds={test.tagIds}
-          sections={test.sections}
-          excludeTagIds={test.excludedTagIds}
-          excludeSections={test.excludedSections}
-          editMode={isEditable()}
-          updateTargetContent={updateTargetSections}
-        />
-      </div>
+          <EpicTestTargetContentEditor
+            tagIds={test.tagIds}
+            sections={test.sections}
+            excludeTagIds={test.excludedTagIds}
+            excludeSections={test.excludedSections}
+            editMode={isEditable()}
+            updateTargetContent={updateTargetSections}
+          />
+        </div>
+      )}
 
       {epicType !== 'APPLE_NEWS' && (
         <div className={classes.sectionContainer}>
@@ -318,11 +322,12 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
             selectedCohort={test.userCohort}
             onCohortChange={onCohortChange}
             isDisabled={!isEditable()}
+            showSupporterStatusSelector={epicType !== 'AMP'}
           />
         </div>
       )}
 
-      {epicType !== 'APPLE_NEWS' && (
+      {!isOffPlatform && (
         <div className={classes.sectionContainer}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
             View frequency settings
@@ -348,7 +353,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
         </div>
       )}
 
-      {epicType !== 'APPLE_NEWS' && (
+      {!isOffPlatform && (
         <div className={classes.sectionContainer}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
             Article count

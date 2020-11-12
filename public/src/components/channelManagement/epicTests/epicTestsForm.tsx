@@ -79,7 +79,7 @@ type Props = InnerComponentProps<EpicTest>;
 
 const getEpicTestForm = (epicType: EpicType): React.FC<Props> => {
   const isLiveBlog = epicType === 'LIVEBLOG';
-  const isAppleNews = epicType == 'APPLE_NEWS';
+  const isOffPlatform = epicType === 'APPLE_NEWS' || epicType === 'AMP';
 
   const createDefaultEpicVariant = (): EpicVariant => ({
     name: 'CONTROL',
@@ -107,7 +107,7 @@ const getEpicTestForm = (epicType: EpicType): React.FC<Props> => {
     userCohort: UserCohort.AllNonSupporters, // matches the default in dotcom
     isLiveBlog: isLiveBlog,
     hasCountryName: false,
-    variants: isAppleNews ? [createDefaultEpicVariant()] : [],
+    variants: isOffPlatform ? [createDefaultEpicVariant()] : [],
     highPriority: false, // has been removed from form, but might be used in future
     useLocalViewLog: false,
   });
@@ -211,4 +211,8 @@ export const LiveblogEpicTestsForm = TestsForm(
 export const AppleNewsEpicTestsForm = TestsForm(
   getEpicTestForm('APPLE_NEWS'),
   FrontendSettingsType.appleNewsEpicTests,
+);
+export const AMPEpicTestsForm = TestsForm(
+  getEpicTestForm('AMP'),
+  FrontendSettingsType.ampEpicTests,
 );
