@@ -272,7 +272,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
       )}
 
       {isOffPlatform && (
-        <div className={classes.sectionContainer}>
+        <div className={classes.sectionContainer} key={test.name}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
             Copy
           </Typography>
