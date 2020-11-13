@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core';
 import VariantEditorButtonEditor from './variantEditorButtonEditor';
-import { Cta } from './helpers/shared';
+import {Cta, EpicType} from './helpers/shared';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing }: Theme) =>
@@ -30,6 +30,7 @@ interface VariantEditorButtonsEditorProps extends WithStyles<typeof styles> {
   updateSecondaryCta: (updatedCta?: Cta) => void;
   onValidationChange: (isValid: boolean) => void;
   isDisabled: boolean;
+  supportSecondaryCta: boolean;
 }
 
 const VariantEditorButtonsEditor: React.FC<VariantEditorButtonsEditorProps> = ({
@@ -40,6 +41,7 @@ const VariantEditorButtonsEditor: React.FC<VariantEditorButtonsEditorProps> = ({
   updateSecondaryCta,
   onValidationChange,
   isDisabled,
+  supportSecondaryCta,
 }: VariantEditorButtonsEditorProps) => {
   return (
     <div className={classes.container}>
@@ -51,14 +53,16 @@ const VariantEditorButtonsEditor: React.FC<VariantEditorButtonsEditorProps> = ({
         defaultCta={DEFAULT_PRIMARY_CTA}
         onValidationChange={onValidationChange}
       />
-      <VariantEditorButtonEditor
-        label="Secondary button"
-        isDisabled={isDisabled}
-        cta={secondaryCta}
-        updateCta={updateSecondaryCta}
-        defaultCta={DEFAULT_SECONDARY_CTA}
-        onValidationChange={onValidationChange}
-      />
+      { supportSecondaryCta &&
+        <VariantEditorButtonEditor
+          label="Secondary button"
+          isDisabled={isDisabled}
+          cta={secondaryCta}
+          updateCta={updateSecondaryCta}
+          defaultCta={DEFAULT_SECONDARY_CTA}
+          onValidationChange={onValidationChange}
+        />
+      }
     </div>
   );
 };

@@ -224,7 +224,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
         </div>
       )}
 
-      {!isOffPlatform && (
+      {epicType !== 'APPLE_NEWS' && (
         <div className={classes.sectionContainer}>
           <Typography className={classes.sectionHeader} variant="h4">
             Buttons
@@ -237,6 +237,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
             updateSecondaryCta={updateSecondaryCta}
             isDisabled={!editMode}
             onValidationChange={onValidationChange}
+            supportSecondaryCta={!isOffPlatform}
           />
         </div>
       )}
