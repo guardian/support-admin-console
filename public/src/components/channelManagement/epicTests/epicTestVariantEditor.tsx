@@ -242,7 +242,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
         </div>
       )}
 
-      {!isLiveblog && !isOffPlatform && (
+      {!isLiveblog && epicType !== 'APPLE_NEWS' && (
         <div className={classes.sectionContainer}>
           <Typography className={classes.sectionHeader} variant="h4">
             Ticker
