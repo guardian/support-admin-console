@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core';
 import VariantEditorButtonEditor from './variantEditorButtonEditor';
-import {Cta, EpicType} from './helpers/shared';
+import { Cta } from './helpers/shared';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing }: Theme) =>
@@ -53,7 +53,7 @@ const VariantEditorButtonsEditor: React.FC<VariantEditorButtonsEditorProps> = ({
         defaultCta={DEFAULT_PRIMARY_CTA}
         onValidationChange={onValidationChange}
       />
-      { supportSecondaryCta &&
+      {supportSecondaryCta && (
         <VariantEditorButtonEditor
           label="Secondary button"
           isDisabled={isDisabled}
@@ -62,7 +62,7 @@ const VariantEditorButtonsEditor: React.FC<VariantEditorButtonsEditorProps> = ({
           defaultCta={DEFAULT_SECONDARY_CTA}
           onValidationChange={onValidationChange}
         />
-      }
+      )}
     </div>
   );
 };
