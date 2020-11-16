@@ -20,12 +20,13 @@ export interface InnerComponentProps<T extends Test> {
   modifiedTests: ModifiedTests;
   selectedTestName?: string;
   onTestsChange: (updatedTests: T[], modifiedTestName?: string) => void;
-  onTestDelete: (testName: string) => void;
-  onTestArchive: (testName: string) => void;
+  onTestChange: (updatedTest: T) => void;
+  onTestSave: () => void;
+  onTestDelete: () => void;
+  onTestArchive: () => void;
   onSelectedTestName: (testName: string) => void;
-  onTestErrorStatusChange: (testName: string) => (isValid: boolean) => void;
+  onTestErrorStatusChange: (isValid: boolean) => void;
   cancel: () => void;
-  save: () => void;
   requestTakeControl: () => void;
   requestLock: () => void;
   lockStatus: LockStatus;
@@ -42,9 +43,11 @@ interface DataFromServer<T extends Test> {
 }
 
 interface TestFormState<T extends Test> {
-  tests: T[] | null;
+  tests?: T[];
   version: string | null;
   selectedTestName?: string;
+  selectedTestHasBeenModified: boolean;
+  selectedTestIsValid: boolean;
   editMode: boolean;
   lockStatus: LockStatus;
   modifiedTests: ModifiedTests;
@@ -62,9 +65,11 @@ const TestEditor = <T extends Test>(
 ) =>
   class extends React.Component<{}, TestFormState<T>> {
     state: TestFormState<T> = {
-      tests: null,
+      tests: undefined,
       version: null,
       selectedTestName: undefined,
+      selectedTestHasBeenModified: false,
+      selectedTestIsValid: true,
       editMode: false,
       lockStatus: { locked: false },
       modifiedTests: {},
@@ -83,6 +88,8 @@ const TestEditor = <T extends Test>(
 
         this.setState({
           ...serverData.value,
+          selectedTestIsValid: true,
+          selectedTestHasBeenModified: false,
           version: serverData.version,
           lockStatus: serverData.status,
           editMode: editMode,
@@ -113,72 +120,106 @@ const TestEditor = <T extends Test>(
     };
 
     cancel = (): void => {
-      requestUnlock(settingsType).then(response =>
-        response.ok ? this.fetchStateFromServer() : alert("Error - can't request lock!"),
-      );
-    };
-
-    save = (): void => {
-      // TODO - remove the concept of modifiedTests and simplify
-      // TODO - implement dialog in StickyBottomBar?
-      if (this.state.tests == null) {
-        return;
-      }
-
-      if (
-        Object.keys(this.state.modifiedTests).some(
-          testName => !this.state.modifiedTests[testName].isValid,
-        )
-      ) {
-        alert('Test contains errors. Please fix any errors before saving.');
-        return;
-      }
-
-      const testsToArchive: T[] = this.state.tests.filter(
-        test =>
-          this.state.modifiedTests[test.name] && this.state.modifiedTests[test.name].isArchived,
-      );
-
-      Promise.all(testsToArchive.map(test => archiveTest(test, settingsType))).then(results => {
-        const notOk = results.some(result => !result.ok);
-        const numTestsToArchive = testsToArchive.length;
-        if (notOk) {
-          alert(`Failed to archive ${numTestsToArchive} test${numTestsToArchive !== 1 ? 's' : ''}`);
+      requestUnlock(settingsType).then(response => {
+        if (response.ok) {
+          this.fetchStateFromServer();
         } else {
-          if (this.state.tests == null) {
-            return;
-          }
-          const updatedTests: T[] = this.state.tests.filter(test => {
-            const modifiedTestData = this.state.modifiedTests[test.name];
-            return !(
-              modifiedTestData &&
-              (modifiedTestData.isDeleted || modifiedTestData.isArchived)
-            );
-          });
-
-          const postData = {
-            version: this.state.version,
-            value: {
-              tests: updatedTests,
-            },
-          };
-
-          saveFrontendSettings(settingsType, postData)
-            .then(resp => {
-              if (!resp.ok) {
-                resp.text().then(msg => alert(msg));
-              }
-              this.fetchStateFromServer();
-            })
-            .catch(() => {
-              alert('Error while saving');
-              this.fetchStateFromServer();
-            });
+          alert("Error - can't request lock!");
         }
       });
     };
 
+    onTestSave = (): void => {
+      if (!this.state.tests) {
+        return;
+      }
+
+      if (!this.state.selectedTestIsValid) {
+        alert('Test contains errors. Please fix any errors before saving.');
+        return;
+      }
+
+      this.save();
+    };
+
+    onTestDelete = (): void => {
+      if (!this.state.tests) {
+        return;
+      }
+
+      const updatedTests = this.state.tests.filter(
+        test => test.name !== this.state.selectedTestName,
+      );
+
+      this.setState(
+        {
+          tests: updatedTests,
+          selectedTestName: undefined,
+          selectedTestIsValid: true,
+          selectedTestHasBeenModified: false,
+        },
+        () => {
+          this.save();
+        },
+      );
+    };
+
+    onTestArchive = (): void => {
+      if (!this.state.tests) {
+        return;
+      }
+
+      const selectedTest = this.state.tests.find(test => test.name === this.state.selectedTestName);
+
+      if (!selectedTest) {
+        return;
+      }
+
+      archiveTest(selectedTest, settingsType).then(result => {
+        if (!result.ok) {
+          alert('Failed to archive test');
+        } else {
+          const updatedTests = this.state.tests?.filter(
+            test => test.name !== this.state.selectedTestName,
+          );
+
+          this.setState(
+            {
+              tests: updatedTests,
+              selectedTestName: undefined,
+              selectedTestIsValid: true,
+              selectedTestHasBeenModified: false,
+            },
+            () => {
+              this.save();
+            },
+          );
+        }
+      });
+    };
+
+    save = (): void => {
+      const postData = {
+        version: this.state.version,
+        value: {
+          tests: this.state.tests,
+        },
+      };
+
+      saveFrontendSettings(settingsType, postData)
+        .then(resp => {
+          if (!resp.ok) {
+            resp.text().then(msg => alert(msg));
+          }
+        })
+        .catch(() => {
+          alert('Error while saving');
+        })
+        .then(this.fetchStateFromServer);
+    };
+
     onTestsChange = (updatedTests: T[], modifiedTestName?: string): void => {
+      debugger;
       if (modifiedTestName && !this.state.modifiedTests[modifiedTestName]) {
         this.setState({
           modifiedTests: {
@@ -200,72 +241,23 @@ const TestEditor = <T extends Test>(
       });
     };
 
-    onTestErrorStatusChange = (testName: string) => (isValid: boolean): void => {
-      if (this.state.modifiedTests[testName]) {
-        this.setState({
-          modifiedTests: {
-            ...this.state.modifiedTests,
-            [testName]: {
-              ...this.state.modifiedTests[testName],
-              isValid,
-            },
-          },
-        });
+    onTestChange = (updatedTest: T): void => {
+      if (!this.state.tests) {
+        return;
       }
+
+      const updatedTests = this.state.tests?.map(test =>
+        test.name === updatedTest.name ? updatedTest : test,
+      );
+      this.setState({ tests: updatedTests, selectedTestHasBeenModified: true });
     };
 
-    onTestDelete = (testName: string): void => {
-      const updatedState = this.state.modifiedTests[testName]
-        ? { ...this.state.modifiedTests[testName], isDeleted: true }
-        : {
-            isValid: true,
-            isDeleted: true,
-            isNew: false,
-            isArchived: false,
-          };
-
-      this.setState(
-        {
-          modifiedTests: {
-            ...this.state.modifiedTests,
-            [testName]: updatedState,
-          },
-        },
-        () => {
-          if (this.state.tests !== null) {
-            this.save();
-          }
-        },
-      );
-    };
-
-    onTestArchive = (testName: string): void => {
-      const updatedState = this.state.modifiedTests[testName]
-        ? { ...this.state.modifiedTests[testName], isArchived: true }
-        : {
-            isValid: true,
-            isDeleted: false,
-            isNew: false,
-            isArchived: true,
-          };
-
-      this.setState(
-        {
-          modifiedTests: {
-            ...this.state.modifiedTests,
-            [testName]: updatedState,
-          },
-        },
-        () => {
-          if (this.state.tests !== null) {
-            this.save();
-          }
-        },
-      );
+    onTestErrorStatusChange = (isValid: boolean): void => {
+      this.setState({ selectedTestIsValid: isValid });
     };
 
     onSelectedTestName = (testName: string): void => {
-      if (Object.keys(this.state.modifiedTests).length > 0) {
+      if (this.state.selectedTestHasBeenModified) {
         alert('Please either save or discard before selecting another test.');
       } else {
         this.setState({
@@ -289,13 +281,15 @@ const TestEditor = <T extends Test>(
     render(): React.ReactNode {
       return (
         <>
-          {this.state.tests !== null ? (
+          {!!this.state.tests ? (
             <>
               <InnerComponent
                 tests={this.state.tests}
                 modifiedTests={this.state.modifiedTests}
                 selectedTestName={this.state.selectedTestName}
-                onTestsChange={this.onTestsChange}
+                onTestsChange={this.onTestsChange} // TODO: delete this
+                onTestChange={this.onTestChange}
+                onTestSave={this.onTestSave}
                 onTestDelete={this.onTestDelete}
                 onTestArchive={this.onTestArchive}
                 onSelectedTestName={this.onSelectedTestName}
@@ -303,7 +297,6 @@ const TestEditor = <T extends Test>(
                 requestTakeControl={this.requestTestsTakeControl}
                 requestLock={this.requestTestsLock}
                 lockStatus={this.state.lockStatus}
-                save={this.save}
                 cancel={this.cancel}
                 editMode={this.state.editMode}
               />

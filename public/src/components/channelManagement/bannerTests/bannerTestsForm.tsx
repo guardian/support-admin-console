@@ -1,4 +1,4 @@
-import TestsForm, { InnerComponentProps, updateTest } from '../testEditor';
+import TestsForm, { InnerComponentProps } from '../testEditor';
 import React from 'react';
 import { FrontendSettingsType } from '../../../utils/requests';
 import Sidebar from '../sidebar';
@@ -25,15 +25,16 @@ const getBannerTestsForm = (isFirstChannel: boolean): React.FC<Props> => {
     tests,
     modifiedTests,
     selectedTestName,
+    onTestChange,
     onTestsChange,
     onSelectedTestName,
+    onTestSave,
     onTestDelete,
     onTestArchive,
     onTestErrorStatusChange,
     lockStatus,
     requestTakeControl,
     requestLock,
-    save,
     cancel,
     editMode,
   }: Props) => {
@@ -68,14 +69,12 @@ const getBannerTestsForm = (isFirstChannel: boolean): React.FC<Props> => {
             <BannerTestEditor
               test={selectedTest}
               hasChanged={!!modifiedTests[selectedTestName]}
-              onChange={(updatedTest): void =>
-                onTestsChange(updateTest(tests, updatedTest), updatedTest.name)
-              }
-              onValidationChange={onTestErrorStatusChange(selectedTestName)}
+              onChange={onTestChange}
+              onValidationChange={onTestErrorStatusChange}
               visible
               editMode={editMode}
-              onDelete={(): void => onTestDelete(selectedTestName)}
-              onArchive={(): void => onTestArchive(selectedTestName)}
+              onDelete={onTestDelete}
+              onArchive={onTestArchive}
               onSelectedTestName={onSelectedTestName}
               isDeleted={
                 modifiedTests[selectedTestName] && modifiedTests[selectedTestName].isDeleted
@@ -99,7 +98,7 @@ const getBannerTestsForm = (isFirstChannel: boolean): React.FC<Props> => {
         lockStatus={lockStatus}
         requestTakeControl={requestTakeControl}
         requestLock={requestLock}
-        save={save}
+        save={onTestSave}
         cancel={cancel}
         editMode={editMode}
       />

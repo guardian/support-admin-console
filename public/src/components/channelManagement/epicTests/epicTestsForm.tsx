@@ -118,13 +118,13 @@ const getEpicTestForm = (epicType: EpicType): React.FC<Props> => {
     selectedTestName,
     onTestsChange,
     onSelectedTestName,
+    onTestSave,
     onTestDelete,
     onTestArchive,
     onTestErrorStatusChange,
     lockStatus,
     requestTakeControl,
     requestLock,
-    save,
     cancel,
     editMode,
   }: Props) => {
@@ -162,11 +162,11 @@ const getEpicTestForm = (epicType: EpicType): React.FC<Props> => {
               onChange={(updatedTest): void =>
                 onTestsChange(updateTest(tests, updatedTest), updatedTest.name)
               }
-              onValidationChange={onTestErrorStatusChange(selectedTestName)}
+              onValidationChange={onTestErrorStatusChange}
               visible
               editMode={editMode}
-              onDelete={(): void => onTestDelete(selectedTestName)}
-              onArchive={(): void => onTestArchive(selectedTestName)}
+              onDelete={onTestDelete}
+              onArchive={onTestArchive}
               onSelectedTestName={onSelectedTestName}
               isDeleted={
                 modifiedTests[selectedTestName] && modifiedTests[selectedTestName].isDeleted
@@ -190,7 +190,7 @@ const getEpicTestForm = (epicType: EpicType): React.FC<Props> => {
         lockStatus={lockStatus}
         requestTakeControl={requestTakeControl}
         requestLock={requestLock}
-        save={save}
+        save={onTestSave}
         cancel={cancel}
         editMode={editMode}
       />
