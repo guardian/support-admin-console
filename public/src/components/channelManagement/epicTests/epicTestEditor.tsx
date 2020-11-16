@@ -72,9 +72,6 @@ interface EpicTestEditorProps {
   onDelete: () => void;
   onArchive: () => void;
   onSelectedTestName: (testName: string) => void;
-  isDeleted: boolean;
-  isArchived: boolean;
-  isNew: boolean;
   testNames: string[];
   testNicknames: string[];
   createTest: (newTest: EpicTest) => void;
@@ -88,8 +85,6 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
   onDelete,
   onArchive,
   onSelectedTestName,
-  isDeleted,
-  isArchived,
   testNames,
   testNicknames,
   createTest,
@@ -108,7 +103,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
     setValidationStatusForField('articlesViewedSettings', isValid);
 
   const isEditable = (): boolean => {
-    return editMode && !isDeleted && !isArchived;
+    return editMode;
   };
 
   const getArticlesViewedSettings = (test: EpicTest): ArticlesViewedSettings | undefined => {

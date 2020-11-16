@@ -72,9 +72,6 @@ interface BannerTestEditorProps extends WithStyles<typeof styles> {
   onDelete: () => void;
   onArchive: () => void;
   onSelectedTestName: (testName: string) => void;
-  isDeleted: boolean;
-  isArchived: boolean;
-  isNew: boolean;
   testNames: string[];
   testNicknames: string[];
   createTest: (newTest: BannerTest) => void;
@@ -87,8 +84,6 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
   onValidationChange,
   visible,
   editMode,
-  isDeleted,
-  isArchived,
   onArchive,
   onDelete,
   onSelectedTestName,
@@ -97,7 +92,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
   createTest,
 }: BannerTestEditorProps) => {
   const isEditable = (): boolean => {
-    return editMode && !isDeleted && !isArchived;
+    return editMode;
   };
 
   const setValidationStatusForField = useValidation(onValidationChange);

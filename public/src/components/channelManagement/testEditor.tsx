@@ -9,21 +9,19 @@ import {
   requestUnlock,
   archiveTest,
 } from '../../utils/requests';
-import { LockStatus, ModifiedTests, Test } from './helpers/shared';
-
-export const updateTest = <T extends Test>(currentTests: T[], updatedTest: T): T[] =>
-  currentTests.map(test => (test.name === updatedTest.name ? updatedTest : test));
+import { LockStatus, Test } from './helpers/shared';
 
 // The inner component's props must extend this type
 export interface InnerComponentProps<T extends Test> {
   tests: T[];
-  modifiedTests: ModifiedTests;
   selectedTestName?: string;
-  onTestsChange: (updatedTests: T[], modifiedTestName?: string) => void;
+  selectedTestHasBeenModified: boolean;
   onTestChange: (updatedTest: T) => void;
   onTestSave: () => void;
   onTestDelete: () => void;
   onTestArchive: () => void;
+  onTestCreate: (newTest: T) => void;
+  onTestPriorityChange: (newPriority: number, oldPriority: number) => void;
   onSelectedTestName: (testName: string) => void;
   onTestErrorStatusChange: (isValid: boolean) => void;
   cancel: () => void;
@@ -42,17 +40,32 @@ interface DataFromServer<T extends Test> {
   userEmail: string;
 }
 
-interface TestFormState<T extends Test> {
-  tests?: T[];
-  version: string | null;
-  selectedTestName?: string;
-  selectedTestHasBeenModified: boolean;
-  selectedTestIsValid: boolean;
-  editMode: boolean;
-  lockStatus: LockStatus;
-  modifiedTests: ModifiedTests;
-  timeoutAlertId: number | null; // A timeout for warning about being open for edit for too long
-}
+const useEditModeAlertTimer = (editMode: boolean): void => {
+  const [timeoutId, setTimeoutId] = useState<number | undefined>(undefined);
+
+  const clearTimeout = (): void => {
+    window.clearTimeout(timeoutId);
+    setTimeoutId(undefined);
+  };
+
+  useEffect(() => {
+    if (editMode) {
+      if (timeoutId) {
+        clearTimeout();
+      }
+      const newTimeoutId = window.setTimeout(() => {
+        alert(
+          "You've had this editing session open for 20 minutes - if you leave it much longer then you may lose any unsaved work!\nIf you've finished then please either save or cancel.",
+        );
+        clearTimeout();
+      }, 60 * 20 * 1000);
+
+      setTimeoutId(newTimeoutId);
+    } else if (timeoutId) {
+      clearTimeout();
+    }
+  }, [editMode]);
+};
 
 /**
  * A stateful higher-order component for fetching/saving test data.
@@ -71,17 +84,7 @@ const TestEditor = <T extends Test>(
     const [selectedTestHasBeenModified, setSelectedTestHasBeenModified] = useState<boolean>(true);
     const [lockStatus, setLockStatus] = useState<LockStatus>({ locked: false });
 
-    const state: TestFormState<T> = {
-      tests: undefined,
-      version: null,
-      selectedTestName: undefined,
-      selectedTestHasBeenModified: false,
-      selectedTestIsValid: true,
-      editMode: false,
-      lockStatus: { locked: false },
-      modifiedTests: {},
-      timeoutAlertId: null,
-    };
+    useEditModeAlertTimer(editMode);
 
     const fetchStateFromServer = (): void => {
       fetchFrontendSettings(settingsType).then((serverData: DataFromServer<T>) => {
@@ -128,25 +131,6 @@ const TestEditor = <T extends Test>(
           alert("Error - can't request lock!");
         }
       });
-    };
-
-    const onTestsChange = (updatedTests: T[], modifiedTestName?: string): void => {
-      if (modifiedTestName && !state.modifiedTests[modifiedTestName]) {
-        // setState({
-        //   modifiedTests: {
-        //     ...state.modifiedTests,
-        //     [modifiedTestName]: {
-        //       isValid: true, // not already modified, assume it's valid until told otherwise
-        //       isDeleted: false,
-        //       isArchived: false,
-        //       isNew: !(state.tests && state.tests.some(test => test.name === modifiedTestName)),
-        //     },
-        //   },
-        // });
-      }
-      // setState({
-      //   tests: updatedTests,
-      // });
     };
 
     const onTestSave = (): void => {
@@ -217,6 +201,28 @@ const TestEditor = <T extends Test>(
       setSelectedTestIsValid(isValid);
     };
 
+    const onTestCreate = (newTest: T): void => {
+      const updatedTests = tests ? [...tests, newTest] : [newTest];
+
+      setTests(updatedTests);
+      setSelectedTestName(newTest.name);
+      setSelectedTestHasBeenModified(false);
+      setSelectedTestIsValid(true);
+    };
+
+    const onTestPriorityChange = (newPriority: number, oldPriority: number): void => {
+      if (!tests) {
+        return;
+      }
+
+      const updatedTests = [...tests];
+      const movedTest = { ...tests[oldPriority] };
+      updatedTests.splice(oldPriority, 1);
+      updatedTests.splice(newPriority, 0, movedTest);
+
+      setTests(updatedTests);
+    };
+
     const onSelectedTestName = (testName: string): void => {
       if (selectedTestHasBeenModified) {
         alert('Please either save or discard before selecting another test.');
@@ -243,15 +249,16 @@ const TestEditor = <T extends Test>(
           <>
             <InnerComponent
               tests={tests}
-              modifiedTests={state.modifiedTests}
               selectedTestName={selectedTestName}
-              onTestsChange={onTestsChange} // TODO: delete this
+              selectedTestHasBeenModified={selectedTestHasBeenModified}
               onTestChange={onTestChange}
+              onTestErrorStatusChange={onTestErrorStatusChange}
+              onTestPriorityChange={onTestPriorityChange}
               onTestSave={onTestSave}
               onTestDelete={onTestDelete}
               onTestArchive={onTestArchive}
+              onTestCreate={onTestCreate}
               onSelectedTestName={onSelectedTestName}
-              onTestErrorStatusChange={onTestErrorStatusChange}
               requestTakeControl={requestTestsTakeControl}
               requestLock={requestTestsLock}
               lockStatus={lockStatus}

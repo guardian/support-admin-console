@@ -23,14 +23,15 @@ const getBannerTestsForm = (isFirstChannel: boolean): React.FC<Props> => {
 
   const BannerTestsForm: React.FC<Props> = ({
     tests,
-    modifiedTests,
     selectedTestName,
+    selectedTestHasBeenModified,
     onTestChange,
-    onTestsChange,
+    onTestPriorityChange,
     onSelectedTestName,
     onTestSave,
     onTestDelete,
     onTestArchive,
+    onTestCreate,
     onTestErrorStatusChange,
     lockStatus,
     requestTakeControl,
@@ -39,12 +40,10 @@ const getBannerTestsForm = (isFirstChannel: boolean): React.FC<Props> => {
     editMode,
   }: Props) => {
     const createTest = (name: string, nickname: string): void => {
-      if (Object.keys(modifiedTests).length > 0) {
+      if (selectedTestHasBeenModified) {
         alert('Please either save or discard before creating a test.');
       } else {
-        const newTests = [...tests, createDefaultBannerTest(name, nickname)];
-        onSelectedTestName(name);
-        onTestsChange(newTests, name);
+        onTestCreate(createDefaultBannerTest(name, nickname));
       }
     };
 
@@ -55,9 +54,8 @@ const getBannerTestsForm = (isFirstChannel: boolean): React.FC<Props> => {
         sidebar={
           <Sidebar<BannerTest>
             tests={tests}
-            modifiedTests={modifiedTests}
             selectedTestName={selectedTestName}
-            onUpdate={onTestsChange}
+            onTestPriorityChange={onTestPriorityChange}
             onSelectedTestName={onSelectedTestName}
             createTest={createTest}
             isInEditMode={editMode}
@@ -68,7 +66,7 @@ const getBannerTestsForm = (isFirstChannel: boolean): React.FC<Props> => {
           selectedTestName && selectedTest ? (
             <BannerTestEditor
               test={selectedTest}
-              hasChanged={!!modifiedTests[selectedTestName]}
+              hasChanged={selectedTestHasBeenModified}
               onChange={onTestChange}
               onValidationChange={onTestErrorStatusChange}
               visible
@@ -76,17 +74,7 @@ const getBannerTestsForm = (isFirstChannel: boolean): React.FC<Props> => {
               onDelete={onTestDelete}
               onArchive={onTestArchive}
               onSelectedTestName={onSelectedTestName}
-              isDeleted={
-                modifiedTests[selectedTestName] && modifiedTests[selectedTestName].isDeleted
-              }
-              isArchived={
-                modifiedTests[selectedTestName] && modifiedTests[selectedTestName].isArchived
-              }
-              isNew={modifiedTests[selectedTestName] && modifiedTests[selectedTestName].isNew}
-              createTest={(newTest: BannerTest): void => {
-                const newTests = [...tests, newTest];
-                onTestsChange(newTests, newTest.name);
-              }}
+              createTest={onTestCreate}
               testNames={tests.map(test => test.name)}
               testNicknames={
                 tests.map(test => test.nickname).filter(nickname => !!nickname) as string[]

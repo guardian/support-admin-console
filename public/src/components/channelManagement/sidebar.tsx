@@ -1,6 +1,5 @@
 import React from 'react';
 import { createStyles, Typography, withStyles, WithStyles } from '@material-ui/core';
-import { ModifiedTests } from './helpers/shared';
 import { Test } from './helpers/shared';
 import TestList from './testList';
 import TestPriorityLabelList from './testPriorityLabelList';
@@ -29,9 +28,8 @@ const styles = createStyles({
 
 interface SidebarProps<T extends Test> {
   tests: T[];
-  modifiedTests: ModifiedTests;
   selectedTestName?: string;
-  onUpdate: (tests: T[], modifiedTestName?: string) => void;
+  onTestPriorityChange: (newPriority: number, oldPriority: number) => void;
   onSelectedTestName: (testName: string) => void;
   createTest: (name: string, nickname: string) => void;
   isInEditMode: boolean;
@@ -42,7 +40,7 @@ function Sidebar<T extends Test>({
   tests,
   isInEditMode,
   selectedTestName,
-  onUpdate,
+  onTestPriorityChange,
   onSelectedTestName,
   createTest,
 }: SidebarProps<T> & WithStyles<typeof styles>): React.ReactElement<SidebarProps<T>> {
@@ -64,7 +62,7 @@ function Sidebar<T extends Test>({
           tests={tests}
           isInEditMode={isInEditMode}
           selectedTestName={selectedTestName}
-          onUpdate={onUpdate}
+          onTestPriorityChange={onTestPriorityChange}
           onTestSelected={onSelectedTestName}
         />
       </div>
