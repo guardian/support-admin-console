@@ -102,10 +102,6 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
   const onArticlesViewedSettingsValidationChanged = (isValid: boolean): void =>
     setValidationStatusForField('articlesViewedSettings', isValid);
 
-  const isEditable = (): boolean => {
-    return editMode;
-  };
-
   const getArticlesViewedSettings = (test: EpicTest): ArticlesViewedSettings | undefined => {
     if (!!test.articlesViewedSettings) {
       return test.articlesViewedSettings;
@@ -242,7 +238,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
 
         <TestEditorLiveSwitch
           isChecked={test.isOn}
-          isDisabled={!isEditable()}
+          isDisabled={!editMode}
           onChange={onLiveSwitchChange}
         />
       </div>
@@ -257,7 +253,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
               variants={test.variants}
               testName={test.name}
               testType="EPIC"
-              editMode={isEditable()}
+              editMode={editMode}
               createVariant={createVariant}
               renderVariantEditor={renderVariantEditor}
               onVariantDelete={onVariantDelete}
@@ -299,7 +295,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
             sections={test.sections}
             excludeTagIds={test.excludedTagIds}
             excludeSections={test.excludedSections}
-            editMode={isEditable()}
+            editMode={editMode}
             updateTargetContent={updateTargetSections}
           />
         </div>
@@ -316,7 +312,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
             onRegionsUpdate={onRegionsChange}
             selectedCohort={test.userCohort}
             onCohortChange={onCohortChange}
-            isDisabled={!isEditable()}
+            isDisabled={!editMode}
             showSupporterStatusSelector={epicType !== 'AMP'}
           />
         </div>
@@ -333,7 +329,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
               <Switch
                 checked={test.useLocalViewLog}
                 onChange={onSwitchChange('useLocalViewLog')}
-                disabled={!isEditable()}
+                disabled={!editMode}
               />
             }
             label={`Use private view counter for this test (instead of the global one)`}
@@ -341,7 +337,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
 
           <EpicTestMaxViewsEditor
             maxEpicViews={test.alwaysAsk ? undefined : test.maxViews}
-            isDisabled={!isEditable()}
+            isDisabled={!editMode}
             onMaxViewsChanged={onMaxViewsChange}
             onValidationChange={onMaxViewsValidationChange}
           />
@@ -358,7 +354,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
             articlesViewedSettings={test.articlesViewedSettings}
             onArticlesViewedSettingsChanged={onArticlesViewedSettingsChange}
             onValidationChange={onArticlesViewedSettingsValidationChanged}
-            isDisabled={!isEditable()}
+            isDisabled={!editMode}
           />
         </div>
       )}
@@ -367,7 +363,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
         <TestEditorActionButtons
           existingNames={testNames}
           existingNicknames={testNicknames}
-          isDisabled={!isEditable()}
+          isDisabled={!editMode}
           onArchive={onArchive}
           onDelete={onDelete}
           onCopy={onCopy}
