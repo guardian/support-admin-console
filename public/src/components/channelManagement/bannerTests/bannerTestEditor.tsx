@@ -71,10 +71,7 @@ interface BannerTestEditorProps extends WithStyles<typeof styles> {
   editMode: boolean;
   onDelete: () => void;
   onArchive: () => void;
-  onSelectedTestName: (testName: string) => void;
-  isDeleted: boolean;
-  isArchived: boolean;
-  isNew: boolean;
+  onTestSelected: (testName: string) => void;
   testNames: string[];
   testNicknames: string[];
   createTest: (newTest: BannerTest) => void;
@@ -87,19 +84,13 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
   onValidationChange,
   visible,
   editMode,
-  isDeleted,
-  isArchived,
   onArchive,
   onDelete,
-  onSelectedTestName,
+  onTestSelected,
   testNames,
   testNicknames,
   createTest,
 }: BannerTestEditorProps) => {
-  const isEditable = (): boolean => {
-    return editMode && !isDeleted && !isArchived;
-  };
-
   const setValidationStatusForField = useValidation(onValidationChange);
 
   const onMinArticlesViewedValidationChanged = (isValid: boolean): void =>
@@ -171,7 +162,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
   };
 
   const onCopy = (name: string, nickname: string): void => {
-    onSelectedTestName(name);
+    onTestSelected(name);
     createTest({ ...test, name: name, nickname: nickname, isOn: false });
   };
 
@@ -209,7 +200,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
 
           <TestEditorLiveSwitch
             isChecked={test.isOn}
-            isDisabled={!isEditable()}
+            isDisabled={!editMode}
             onChange={onLiveSwitchChange}
           />
         </div>
@@ -224,7 +215,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
               createVariant={createVariant}
               testName={test.name}
               testType="BANNER"
-              editMode={isEditable()}
+              editMode={editMode}
               renderVariantEditor={renderVariantEditor}
               onVariantDelete={onVariantDelete}
             />
@@ -238,7 +229,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
 
           <TestEditorMinArticlesViewedInput
             minArticles={test.minArticlesBeforeShowingBanner}
-            isDisabled={!isEditable()}
+            isDisabled={!editMode}
             onValidationChange={onMinArticlesViewedValidationChanged}
             onUpdate={onMinArticlesViewedChange}
           />
@@ -254,7 +245,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
             onRegionsUpdate={onRegionsChange}
             selectedCohort={test.userCohort}
             onCohortChange={onCohortChange}
-            isDisabled={!isEditable()}
+            isDisabled={!editMode}
             showSupporterStatusSelector={true}
           />
         </div>
@@ -268,14 +259,14 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
             articlesViewedSettings={test.articlesViewedSettings}
             onArticlesViewedSettingsChanged={onArticlesViewedSettingsChange}
             onValidationChange={onArticlesViewedSettingsValidationChanged}
-            isDisabled={!isEditable()}
+            isDisabled={!editMode}
           />
         </div>
         <div className={classes.buttonsContainer}>
           <TestEditorActionButtons
             existingNames={testNames}
             existingNicknames={testNicknames}
-            isDisabled={!isEditable()}
+            isDisabled={!editMode}
             onArchive={onArchive}
             onDelete={onDelete}
             onCopy={onCopy}

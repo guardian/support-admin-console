@@ -71,10 +71,7 @@ interface EpicTestEditorProps {
   editMode: boolean;
   onDelete: () => void;
   onArchive: () => void;
-  onSelectedTestName: (testName: string) => void;
-  isDeleted: boolean;
-  isArchived: boolean;
-  isNew: boolean;
+  onTestSelected: (testName: string) => void;
   testNames: string[];
   testNicknames: string[];
   createTest: (newTest: EpicTest) => void;
@@ -87,9 +84,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
   editMode,
   onDelete,
   onArchive,
-  onSelectedTestName,
-  isDeleted,
-  isArchived,
+  onTestSelected,
   testNames,
   testNicknames,
   createTest,
@@ -106,10 +101,6 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
 
   const onArticlesViewedSettingsValidationChanged = (isValid: boolean): void =>
     setValidationStatusForField('articlesViewedSettings', isValid);
-
-  const isEditable = (): boolean => {
-    return editMode && !isDeleted && !isArchived;
-  };
 
   const getArticlesViewedSettings = (test: EpicTest): ArticlesViewedSettings | undefined => {
     if (!!test.articlesViewedSettings) {
@@ -222,7 +213,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
   };
 
   const onCopy = (name: string, nickname: string): void => {
-    onSelectedTestName(name);
+    onTestSelected(name);
     createTest({ ...test, name: name, nickname: nickname, isOn: false });
   };
 
@@ -247,7 +238,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
 
         <TestEditorLiveSwitch
           isChecked={test.isOn}
-          isDisabled={!isEditable()}
+          isDisabled={!editMode}
           onChange={onLiveSwitchChange}
         />
       </div>
@@ -262,7 +253,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
               variants={test.variants}
               testName={test.name}
               testType="EPIC"
-              editMode={isEditable()}
+              editMode={editMode}
               createVariant={createVariant}
               renderVariantEditor={renderVariantEditor}
               onVariantDelete={onVariantDelete}
@@ -304,7 +295,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
             sections={test.sections}
             excludeTagIds={test.excludedTagIds}
             excludeSections={test.excludedSections}
-            editMode={isEditable()}
+            editMode={editMode}
             updateTargetContent={updateTargetSections}
           />
         </div>
@@ -321,7 +312,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
             onRegionsUpdate={onRegionsChange}
             selectedCohort={test.userCohort}
             onCohortChange={onCohortChange}
-            isDisabled={!isEditable()}
+            isDisabled={!editMode}
             showSupporterStatusSelector={epicType !== 'AMP'}
           />
         </div>
@@ -338,7 +329,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
               <Switch
                 checked={test.useLocalViewLog}
                 onChange={onSwitchChange('useLocalViewLog')}
-                disabled={!isEditable()}
+                disabled={!editMode}
               />
             }
             label={`Use private view counter for this test (instead of the global one)`}
@@ -346,7 +337,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
 
           <EpicTestMaxViewsEditor
             maxEpicViews={test.alwaysAsk ? undefined : test.maxViews}
-            isDisabled={!isEditable()}
+            isDisabled={!editMode}
             onMaxViewsChanged={onMaxViewsChange}
             onValidationChange={onMaxViewsValidationChange}
           />
@@ -363,7 +354,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
             articlesViewedSettings={test.articlesViewedSettings}
             onArticlesViewedSettingsChanged={onArticlesViewedSettingsChange}
             onValidationChange={onArticlesViewedSettingsValidationChanged}
-            isDisabled={!isEditable()}
+            isDisabled={!editMode}
           />
         </div>
       )}
@@ -372,7 +363,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
         <TestEditorActionButtons
           existingNames={testNames}
           existingNicknames={testNicknames}
-          isDisabled={!isEditable()}
+          isDisabled={!editMode}
           onArchive={onArchive}
           onDelete={onDelete}
           onCopy={onCopy}

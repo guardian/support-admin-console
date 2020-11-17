@@ -43,7 +43,7 @@ const styles = ({ spacing, typography }: Theme) =>
 interface Props extends WithStyles<typeof styles> {
   sidebar: JSX.Element;
   testEditor: JSX.Element | null;
-  selectedTestName?: string;
+  selectedTestName: string | null;
   editMode: boolean;
   lockStatus: LockStatus;
   requestTakeControl: () => void;

@@ -11,7 +11,7 @@ import {
   EpicType,
   defaultCta,
 } from '../helpers/shared';
-import { InnerComponentProps, updateTest } from '../testEditor';
+import { InnerComponentProps } from '../testEditor';
 import TestsForm from '../testEditor';
 import TestsFormLayout from '../testsFormLayout';
 import Sidebar from '../sidebar';
@@ -114,27 +114,27 @@ const getEpicTestForm = (epicType: EpicType): React.FC<Props> => {
 
   const EpicTestsForm: React.FC<Props> = ({
     tests,
-    modifiedTests,
     selectedTestName,
-    onTestsChange,
-    onSelectedTestName,
+    selectedTestHasBeenModified,
+    onTestSelected,
+    onTestSave,
     onTestDelete,
     onTestArchive,
     onTestErrorStatusChange,
+    onTestChange,
+    onTestCreate,
+    onTestPriorityChange,
     lockStatus,
     requestTakeControl,
     requestLock,
-    save,
     cancel,
     editMode,
   }: Props) => {
     const createTest = (name: string, nickname: string): void => {
-      if (Object.keys(modifiedTests).length > 0) {
+      if (selectedTestHasBeenModified) {
         alert('Please either save or discard before creating a test.');
       } else {
-        const newTests = [...tests, createDefaultEpicTest(name, nickname)];
-        onSelectedTestName(name);
-        onTestsChange(newTests, name);
+        onTestCreate(createDefaultEpicTest(name, nickname));
       }
     };
 
@@ -145,10 +145,9 @@ const getEpicTestForm = (epicType: EpicType): React.FC<Props> => {
         sidebar={
           <Sidebar<EpicTest>
             tests={tests}
-            modifiedTests={modifiedTests}
             selectedTestName={selectedTestName}
-            onUpdate={onTestsChange}
-            onSelectedTestName={onSelectedTestName}
+            onTestPriorityChange={onTestPriorityChange}
+            onTestSelected={onTestSelected}
             createTest={createTest}
             isInEditMode={editMode}
           />
@@ -157,28 +156,16 @@ const getEpicTestForm = (epicType: EpicType): React.FC<Props> => {
           selectedTestName && selectedTest ? (
             <EpicTestEditor
               test={selectedTest}
-              hasChanged={!!modifiedTests[selectedTestName]}
+              hasChanged={selectedTestHasBeenModified}
               epicType={epicType}
-              onChange={(updatedTest): void =>
-                onTestsChange(updateTest(tests, updatedTest), updatedTest.name)
-              }
-              onValidationChange={onTestErrorStatusChange(selectedTestName)}
+              onChange={onTestChange}
+              onValidationChange={onTestErrorStatusChange}
               visible
               editMode={editMode}
-              onDelete={(): void => onTestDelete(selectedTestName)}
-              onArchive={(): void => onTestArchive(selectedTestName)}
-              onSelectedTestName={onSelectedTestName}
-              isDeleted={
-                modifiedTests[selectedTestName] && modifiedTests[selectedTestName].isDeleted
-              }
-              isArchived={
-                modifiedTests[selectedTestName] && modifiedTests[selectedTestName].isArchived
-              }
-              isNew={modifiedTests[selectedTestName] && modifiedTests[selectedTestName].isNew}
-              createTest={(newTest: EpicTest): void => {
-                const newTests = [...tests, newTest];
-                onTestsChange(newTests, newTest.name);
-              }}
+              onDelete={onTestDelete}
+              onArchive={onTestArchive}
+              onTestSelected={onTestSelected}
+              createTest={onTestCreate}
               testNames={tests.map(test => test.name)}
               testNicknames={
                 tests.map(test => test.nickname).filter(nickname => !!nickname) as string[]
@@ -190,7 +177,7 @@ const getEpicTestForm = (epicType: EpicType): React.FC<Props> => {
         lockStatus={lockStatus}
         requestTakeControl={requestTakeControl}
         requestLock={requestLock}
-        save={save}
+        save={onTestSave}
         cancel={cancel}
         editMode={editMode}
       />

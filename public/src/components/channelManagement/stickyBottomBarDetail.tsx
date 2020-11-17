@@ -13,7 +13,7 @@ const styles = createStyles({
 
 interface StickyBottomBarDetailProps extends WithStyles<typeof styles> {
   isInEditMode: boolean;
-  selectedTestName?: string;
+  selectedTestName: string | null;
   lockStatus: LockStatus;
 }
 

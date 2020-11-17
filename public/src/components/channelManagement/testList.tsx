@@ -19,8 +19,8 @@ const styles = createStyles({
 interface TestListProps<T extends Test> {
   tests: T[];
   isInEditMode: boolean;
-  selectedTestName?: string;
-  onUpdate: (tests: T[], modifiedTestName?: string) => void;
+  selectedTestName: string | null;
+  onTestPriorityChange: (newPriority: number, oldPriority: number) => void;
   onTestSelected: (testName: string) => void;
 }
 
@@ -29,17 +29,12 @@ const TestList = <T extends Test>({
   tests,
   isInEditMode,
   selectedTestName,
-  onUpdate,
+  onTestPriorityChange,
   onTestSelected,
 }: TestListProps<T> & WithStyles<typeof styles>): React.ReactElement => {
   const onDragEnd = ({ destination, source }: DropResult): void => {
     if (destination) {
-      const newTests = [...tests];
-      const movedTest = { ...tests[source.index] };
-      newTests.splice(source.index, 1);
-      newTests.splice(destination.index, 0, movedTest);
-
-      onUpdate(newTests, movedTest.name);
+      onTestPriorityChange(destination.index, source.index);
     }
   };
 
