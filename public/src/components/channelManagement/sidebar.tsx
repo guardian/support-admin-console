@@ -28,7 +28,7 @@ const styles = createStyles({
 
 interface SidebarProps<T extends Test> {
   tests: T[];
-  selectedTestName?: string;
+  selectedTestName: string | null;
   onTestPriorityChange: (newPriority: number, oldPriority: number) => void;
   onTestSelected: (testName: string) => void;
   createTest: (name: string, nickname: string) => void;

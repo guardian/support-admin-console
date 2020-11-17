@@ -19,7 +19,7 @@ const styles = createStyles({
 interface TestListProps<T extends Test> {
   tests: T[];
   isInEditMode: boolean;
-  selectedTestName?: string;
+  selectedTestName: string | null;
   onTestPriorityChange: (newPriority: number, oldPriority: number) => void;
   onTestSelected: (testName: string) => void;
 }

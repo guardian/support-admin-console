@@ -14,7 +14,7 @@ import { LockStatus, Test } from './helpers/shared';
 // The inner component's props must extend this type
 export interface InnerComponentProps<T extends Test> {
   tests: T[];
-  selectedTestName?: string;
+  selectedTestName: string | null;
   selectedTestHasBeenModified: boolean;
   onTestChange: (updatedTest: T) => void;
   onTestSave: () => void;
@@ -79,7 +79,7 @@ const TestEditor = <T extends Test>(
     const [tests, setTests] = useState<T[] | null>(null);
     const [version, setVersion] = useState<string | null>(null);
     const [editMode, setEditMode] = useState<boolean>(false);
-    const [selectedTestName, setSelectedTestName] = useState<string>('');
+    const [selectedTestName, setSelectedTestName] = useState<string | null>(null);
     const [selectedTestIsValid, setSelectedTestIsValid] = useState<boolean>(true);
     const [selectedTestHasBeenModified, setSelectedTestHasBeenModified] = useState<boolean>(true);
     const [lockStatus, setLockStatus] = useState<LockStatus>({ locked: false });
@@ -154,7 +154,7 @@ const TestEditor = <T extends Test>(
       const updatedTests = tests.filter(test => test.name !== selectedTestName);
 
       save(updatedTests).then(() => {
-        setSelectedTestName('');
+        setSelectedTestName(null);
         setSelectedTestIsValid(true);
         setSelectedTestHasBeenModified(false);
       });
@@ -178,7 +178,7 @@ const TestEditor = <T extends Test>(
           const updatedTests = tests.filter(test => test.name !== selectedTestName);
 
           save(updatedTests).then(() => {
-            setSelectedTestName('');
+            setSelectedTestName(null);
             setSelectedTestIsValid(true);
             setSelectedTestHasBeenModified(false);
           });
