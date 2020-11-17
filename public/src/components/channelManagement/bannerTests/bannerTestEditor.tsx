@@ -71,7 +71,7 @@ interface BannerTestEditorProps extends WithStyles<typeof styles> {
   editMode: boolean;
   onDelete: () => void;
   onArchive: () => void;
-  onSelectedTestName: (testName: string) => void;
+  onTestSelected: (testName: string) => void;
   testNames: string[];
   testNicknames: string[];
   createTest: (newTest: BannerTest) => void;
@@ -86,7 +86,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
   editMode,
   onArchive,
   onDelete,
-  onSelectedTestName,
+  onTestSelected,
   testNames,
   testNicknames,
   createTest,
@@ -162,7 +162,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
   };
 
   const onCopy = (name: string, nickname: string): void => {
-    onSelectedTestName(name);
+    onTestSelected(name);
     createTest({ ...test, name: name, nickname: nickname, isOn: false });
   };
 

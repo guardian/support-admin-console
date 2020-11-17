@@ -30,7 +30,7 @@ interface SidebarProps<T extends Test> {
   tests: T[];
   selectedTestName?: string;
   onTestPriorityChange: (newPriority: number, oldPriority: number) => void;
-  onSelectedTestName: (testName: string) => void;
+  onTestSelected: (testName: string) => void;
   createTest: (name: string, nickname: string) => void;
   isInEditMode: boolean;
 }
@@ -41,7 +41,7 @@ function Sidebar<T extends Test>({
   isInEditMode,
   selectedTestName,
   onTestPriorityChange,
-  onSelectedTestName,
+  onTestSelected,
   createTest,
 }: SidebarProps<T> & WithStyles<typeof styles>): React.ReactElement<SidebarProps<T>> {
   return (
@@ -63,7 +63,7 @@ function Sidebar<T extends Test>({
           isInEditMode={isInEditMode}
           selectedTestName={selectedTestName}
           onTestPriorityChange={onTestPriorityChange}
-          onTestSelected={onSelectedTestName}
+          onTestSelected={onTestSelected}
         />
       </div>
     </div>

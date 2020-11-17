@@ -22,7 +22,7 @@ export interface InnerComponentProps<T extends Test> {
   onTestArchive: () => void;
   onTestCreate: (newTest: T) => void;
   onTestPriorityChange: (newPriority: number, oldPriority: number) => void;
-  onSelectedTestName: (testName: string) => void;
+  onTestSelected: (testName: string) => void;
   onTestErrorStatusChange: (isValid: boolean) => void;
   cancel: () => void;
   requestTakeControl: () => void;
@@ -258,7 +258,7 @@ const TestEditor = <T extends Test>(
               onTestDelete={onTestDelete}
               onTestArchive={onTestArchive}
               onTestCreate={onTestCreate}
-              onSelectedTestName={onSelectedTestName}
+              onTestSelected={onSelectedTestName}
               requestTakeControl={requestTestsTakeControl}
               requestLock={requestTestsLock}
               lockStatus={lockStatus}

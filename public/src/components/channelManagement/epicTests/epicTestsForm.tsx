@@ -116,7 +116,7 @@ const getEpicTestForm = (epicType: EpicType): React.FC<Props> => {
     tests,
     selectedTestName,
     selectedTestHasBeenModified,
-    onSelectedTestName,
+    onTestSelected,
     onTestSave,
     onTestDelete,
     onTestArchive,
@@ -147,7 +147,7 @@ const getEpicTestForm = (epicType: EpicType): React.FC<Props> => {
             tests={tests}
             selectedTestName={selectedTestName}
             onTestPriorityChange={onTestPriorityChange}
-            onSelectedTestName={onSelectedTestName}
+            onTestSelected={onTestSelected}
             createTest={createTest}
             isInEditMode={editMode}
           />
@@ -164,7 +164,7 @@ const getEpicTestForm = (epicType: EpicType): React.FC<Props> => {
               editMode={editMode}
               onDelete={onTestDelete}
               onArchive={onTestArchive}
-              onSelectedTestName={onSelectedTestName}
+              onTestSelected={onTestSelected}
               createTest={onTestCreate}
               testNames={tests.map(test => test.name)}
               testNicknames={

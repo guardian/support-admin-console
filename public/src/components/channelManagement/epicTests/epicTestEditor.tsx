@@ -71,7 +71,7 @@ interface EpicTestEditorProps {
   editMode: boolean;
   onDelete: () => void;
   onArchive: () => void;
-  onSelectedTestName: (testName: string) => void;
+  onTestSelected: (testName: string) => void;
   testNames: string[];
   testNicknames: string[];
   createTest: (newTest: EpicTest) => void;
@@ -84,7 +84,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
   editMode,
   onDelete,
   onArchive,
-  onSelectedTestName,
+  onTestSelected,
   testNames,
   testNicknames,
   createTest,
@@ -213,7 +213,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
   };
 
   const onCopy = (name: string, nickname: string): void => {
-    onSelectedTestName(name);
+    onTestSelected(name);
     createTest({ ...test, name: name, nickname: nickname, isOn: false });
   };
 
