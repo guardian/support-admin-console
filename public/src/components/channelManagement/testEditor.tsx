@@ -103,7 +103,7 @@ const TestEditor = <T extends Test>(
       fetchStateFromServer();
     }, []);
 
-    const save = async (updatedTests: T[]): Promise<void> => {
+    const save = (updatedTests: T[]): Promise<void> => {
       const postData = {
         version: version,
         value: {
@@ -111,7 +111,7 @@ const TestEditor = <T extends Test>(
         },
       };
 
-      saveFrontendSettings(settingsType, postData)
+      return saveFrontendSettings(settingsType, postData)
         .then(resp => {
           if (!resp.ok) {
             resp.text().then(msg => alert(msg));
