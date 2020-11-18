@@ -33,9 +33,9 @@ const styles = ({ spacing }: Theme) =>
   });
 
 export const DEFAULT_ARTICLES_VIEWED_SETTINGS: ArticlesViewedSettings = {
-  minViews: 3,
+  minViews: 5,
   maxViews: null,
-  periodInWeeks: 6,
+  periodInWeeks: 52,
 };
 
 interface FormData {
