@@ -55,6 +55,11 @@ export interface MaxEpicViews {
   minDaysBetweenViews: number;
 }
 
+export interface ControlProportionSettings {
+  proportion: number;
+  offset: number;
+}
+
 export interface EpicTest extends Test {
   name: string;
   nickname?: string;
@@ -73,6 +78,7 @@ export interface EpicTest extends Test {
   highPriority: boolean; // has been removed from form, but might be used in future
   useLocalViewLog: boolean;
   articlesViewedSettings?: ArticlesViewedSettings;
+  controlProportionSettings?: ControlProportionSettings;
 }
 
 type Props = InnerComponentProps<EpicTest>;

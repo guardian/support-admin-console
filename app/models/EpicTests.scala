@@ -6,6 +6,8 @@ import io.circe.generic.extras.auto._
 import io.circe.{Decoder, Encoder}
 import scala.collection.immutable.IndexedSeq
 
+case class ControlProportionSettings(proportion: Float, offset: Int)
+
 case class Cta(text: Option[String], baseUrl: Option[String])
 
 sealed trait TickerEndType extends EnumEntry
@@ -66,7 +68,8 @@ case class EpicTest(
   variants: List[EpicVariant],
   highPriority: Boolean = false, // has been removed from form, but might be used in future
   useLocalViewLog: Boolean = false,
-  articlesViewedSettings: Option[ArticlesViewedSettings] = None
+  articlesViewedSettings: Option[ArticlesViewedSettings] = None,
+  controlProportionSettings: Option[ControlProportionSettings] = None
 )
 
 case class EpicTests(tests: List[EpicTest])

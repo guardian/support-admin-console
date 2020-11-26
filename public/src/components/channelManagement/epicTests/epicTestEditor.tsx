@@ -1,6 +1,6 @@
 import React from 'react';
 import { Region } from '../../../utils/models';
-import { EpicTest, EpicVariant, MaxEpicViews } from './epicTestsForm';
+import { ControlProportionSettings, EpicTest, EpicVariant, MaxEpicViews } from './epicTestsForm';
 import { ArticlesViewedSettings, UserCohort, defaultCta, EpicType } from '../helpers/shared';
 import { makeStyles, FormControlLabel, Switch, Theme, Typography } from '@material-ui/core';
 import TestEditorHeader from '../testEditorHeader';
@@ -16,6 +16,7 @@ import EpicTestTargetContentEditor from './epicTestTargetContentEditor';
 import EpicTestMaxViewsEditor from './epicTestMaxViewsEditor';
 import useValidation from '../hooks/useValidation';
 import { articleCountTemplate, countryNameTemplate } from '../helpers/copyTemplates';
+import EpicTestVariantsSplitEditor from './epicTestVariantsSplitEditor';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
@@ -101,6 +102,9 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
 
   const onArticlesViewedSettingsValidationChanged = (isValid: boolean): void =>
     setValidationStatusForField('articlesViewedSettings', isValid);
+
+  const onVariantsSplitSettingsValidationChanged = (isValid: boolean): void =>
+    setValidationStatusForField('variantsSplitSettings', isValid);
 
   const getArticlesViewedSettings = (test: EpicTest): ArticlesViewedSettings | undefined => {
     if (!!test.articlesViewedSettings) {
@@ -212,6 +216,10 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
     }));
   };
 
+  const onControlProportionSettingsChange = (
+    controlProportionSettings?: ControlProportionSettings,
+  ): void => updateTest(test => ({ ...test, controlProportionSettings }));
+
   const onCopy = (name: string, nickname: string): void => {
     onTestSelected(name);
     createTest({ ...test, name: name, nickname: nickname, isOn: false });
@@ -257,6 +265,23 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
               createVariant={createVariant}
               renderVariantEditor={renderVariantEditor}
               onVariantDelete={onVariantDelete}
+            />
+          </div>
+        </div>
+      )}
+
+      {!isOffPlatform && (
+        <div className={classes.sectionContainer}>
+          <Typography variant={'h3'} className={classes.sectionHeader}>
+            Variants split
+          </Typography>
+          <div>
+            <EpicTestVariantsSplitEditor
+              variants={test.variants}
+              controlProportionSettings={test.controlProportionSettings}
+              onControlProportionSettingsChange={onControlProportionSettingsChange}
+              onValidationChange={onVariantsSplitSettingsValidationChanged}
+              isDisabled={!editMode}
             />
           </div>
         </div>
