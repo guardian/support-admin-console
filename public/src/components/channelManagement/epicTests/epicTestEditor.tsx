@@ -270,7 +270,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
         </div>
       )}
 
-      {!isOffPlatform && (
+      {!isOffPlatform && test.variants.length > 0 && (
         <div className={classes.sectionContainer}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
             Variants split
