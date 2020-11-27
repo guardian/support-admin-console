@@ -25,11 +25,13 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
       marginLeft: spacing(3),
     },
   },
-  variant: {},
+  variantField: {
+    backgroundColor: '#EEEEEE',
+  },
 }));
 
 interface FormState {
-  proportion?: number;
+  percentage?: number;
 }
 
 interface EpicTestVariantsSplitEditorProps {
@@ -51,7 +53,9 @@ const EpicTestVariantsSplitEditor: React.FC<EpicTestVariantsSplitEditorProps> = 
 }: EpicTestVariantsSplitEditorProps) => {
   const classes = useStyles();
 
-  const defaultValues = { proportion: controlProportionSettings?.proportion };
+  const defaultValues = {
+    percentage: controlProportionSettings ? controlProportionSettings.proportion * 100 : undefined,
+  };
 
   const { register, errors, handleSubmit, trigger, getValues, reset } = useForm<FormState>({
     mode: 'onChange',
@@ -66,12 +70,12 @@ const EpicTestVariantsSplitEditor: React.FC<EpicTestVariantsSplitEditorProps> = 
   // display initial value when switching to manual
   useEffect(() => {
     reset(defaultValues);
-  }, [defaultValues.proportion]);
+  }, [defaultValues.percentage]);
 
   useEffect(() => {
-    const isValid = Object.keys(errors).length === 0 || !getValues().proportion;
+    const isValid = Object.keys(errors).length === 0 || !getValues().percentage;
     onValidationChange(isValid);
-  }, [errors.proportion]);
+  }, [errors.percentage]);
 
   const onRadioGroupChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     if (event.target.value === 'manual') {
@@ -85,23 +89,23 @@ const EpicTestVariantsSplitEditor: React.FC<EpicTestVariantsSplitEditorProps> = 
   };
 
   const onSubmit = (controlProportionSettings: ControlProportionSettings) => ({
-    proportion,
+    percentage,
   }: FormState): void => {
-    if (proportion) {
+    if (percentage) {
       onControlProportionSettingsChange({
-        proportion,
+        proportion: percentage / 100,
         offset: controlProportionSettings.offset,
       });
     }
   };
 
   const validate = (text: string): string | boolean => {
-    const value = Number(text);
-    if (!Number.isNaN(value)) {
+    const percentage = Number(text);
+    if (!Number.isNaN(percentage)) {
       const controlExists = hasControl(variants);
       if (controlExists) {
-        const max = 1 / variants.length;
-        if (value <= max) {
+        const max = 100 / variants.length;
+        if (percentage <= max) {
           return true;
         } else {
           return `Control cannot be greater than ${+max.toFixed(2)}`;
@@ -115,18 +119,22 @@ const EpicTestVariantsSplitEditor: React.FC<EpicTestVariantsSplitEditorProps> = 
   };
 
   const renderVariants = (controlProportion: number): ReactElement[] => {
-    const proportion = (1 - controlProportion) / (variants.length - 1);
+    const percentage = +((1 - controlProportion) / (variants.length - 1)) * 100;
     return variants
       .filter(v => v.name.toLowerCase() !== 'control')
       .map(variant => (
-        <div className={classes.variant} key={`${variant.name}_proportion`}>
+        <div key={`${variant.name}_proportion`}>
           <TextField
-            value={+proportion.toFixed(2)}
+            value={percentage.toFixed(2)}
             label={variant.name}
+            helperText="This value cannot be edited"
             InputLabelProps={{ shrink: true }}
-            variant="filled"
+            variant="outlined"
             fullWidth
             disabled={true}
+            InputProps={{
+              className: classes.variantField,
+            }}
           />
         </div>
       ));
@@ -157,16 +165,16 @@ const EpicTestVariantsSplitEditor: React.FC<EpicTestVariantsSplitEditorProps> = 
 
         {controlProportionSettings && hasControl(variants) && (
           <div className={classes.variantsContainer}>
-            <div className={classes.variant}>
+            <div>
               <TextField
                 inputRef={register({
                   required: EMPTY_ERROR_HELPER_TEXT,
                   validate: validate,
                 })}
-                error={errors.proportion !== undefined}
-                helperText={errors.proportion?.message}
+                error={errors.percentage !== undefined}
+                helperText={errors.percentage?.message || 'Must be a number'}
                 onBlur={handleSubmit(onSubmit(controlProportionSettings))}
-                name="proportion"
+                name="percentage"
                 label="CONTROL"
                 InputLabelProps={{ shrink: true }}
                 variant="outlined"
