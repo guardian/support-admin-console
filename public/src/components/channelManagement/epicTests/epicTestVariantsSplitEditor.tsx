@@ -12,10 +12,15 @@ import { ControlProportionSettings, EpicVariant } from './epicTestsForm';
 import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 import { useForm } from 'react-hook-form';
 
+const MAX_MVT = 1000000;
+
 const hasControl = (variants: EpicVariant[]): boolean =>
   !!variants.find(v => v.name.toLowerCase() === 'control');
 
-const randomMvt = (): number => Math.round(Math.random() * 1000000);
+const randomMvt = (): number => Math.round(Math.random() * MAX_MVT);
+
+// adapted from https://stackoverflow.com/a/11832950
+const round = (n: number): number => Math.round((n + Number.EPSILON) * MAX_MVT) / MAX_MVT;
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   variantsContainer: {
@@ -80,7 +85,7 @@ const EpicTestVariantsSplitEditor: React.FC<EpicTestVariantsSplitEditorProps> = 
   const onRadioGroupChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     if (event.target.value === 'manual') {
       onControlProportionSettingsChange({
-        proportion: 1 / variants.length,
+        proportion: round(1 / variants.length),
         offset: randomMvt(),
       });
     } else {
@@ -93,7 +98,7 @@ const EpicTestVariantsSplitEditor: React.FC<EpicTestVariantsSplitEditorProps> = 
   }: FormState): void => {
     if (percentage) {
       onControlProportionSettingsChange({
-        proportion: percentage / 100,
+        proportion: round(percentage / 100),
         offset: controlProportionSettings.offset,
       });
     }
