@@ -70,7 +70,7 @@ const EpicTestVariantsSplitEditor: React.FC<EpicTestVariantsSplitEditorProps> = 
   // clears error if necessary
   useEffect(() => {
     trigger();
-  }, [variants]);
+  }, []);
 
   // display initial value when switching to manual
   useEffect(() => {
@@ -78,7 +78,7 @@ const EpicTestVariantsSplitEditor: React.FC<EpicTestVariantsSplitEditorProps> = 
   }, [defaultValues.percentage]);
 
   useEffect(() => {
-    const isValid = Object.keys(errors).length === 0 || !getValues().percentage;
+    const isValid = Object.keys(errors).length === 0 || !controlProportionSettings;
     onValidationChange(isValid);
   }, [errors.percentage]);
 
