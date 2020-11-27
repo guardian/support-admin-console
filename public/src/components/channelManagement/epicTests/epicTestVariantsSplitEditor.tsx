@@ -62,7 +62,7 @@ const EpicTestVariantsSplitEditor: React.FC<EpicTestVariantsSplitEditorProps> = 
     percentage: controlProportionSettings ? controlProportionSettings.proportion * 100 : undefined,
   };
 
-  const { register, errors, handleSubmit, trigger, getValues, reset } = useForm<FormState>({
+  const { register, errors, handleSubmit, trigger, reset } = useForm<FormState>({
     mode: 'onChange',
     defaultValues,
   });
