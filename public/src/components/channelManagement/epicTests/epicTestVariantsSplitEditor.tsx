@@ -140,6 +140,10 @@ const EpicTestVariantsSplitEditor: React.FC<EpicTestVariantsSplitEditorProps> = 
       ));
   };
 
+  if (variants.length === 0) {
+    return null;
+  }
+
   return (
     <div>
       <FormControl>
