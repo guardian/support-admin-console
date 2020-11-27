@@ -119,13 +119,13 @@ const EpicTestVariantsSplitEditor: React.FC<EpicTestVariantsSplitEditorProps> = 
   };
 
   const renderVariants = (controlProportion: number): ReactElement[] => {
-    const percentage = +((1 - controlProportion) / (variants.length - 1)) * 100;
+    const percentage = ((1 - controlProportion) / (variants.length - 1)) * 100;
     return variants
       .filter(v => v.name.toLowerCase() !== 'control')
       .map(variant => (
         <div key={`${variant.name}_proportion`}>
           <TextField
-            value={percentage.toFixed(2)}
+            value={+percentage.toFixed(2)}
             label={variant.name}
             helperText="This value cannot be edited"
             InputLabelProps={{ shrink: true }}
