@@ -41,9 +41,9 @@ const AmountsEditor: React.FC<AmountsEditorProps> = ({
     <div className={classes.container}>
       <div className={classes.header}>{label}</div>
       <div className={classes.rowsContainer}>
-        <AmountEditorRow label="One off" amounts={contributionAmounts.ONE_OFF} />
-        <AmountEditorRow label="Monthly" amounts={contributionAmounts.MONTHLY} />
-        <AmountEditorRow label="Annual" amounts={contributionAmounts.ANNUAL} />
+        <AmountEditorRow label="One off" amountsSelection={contributionAmounts.ONE_OFF} />
+        <AmountEditorRow label="Monthly" amountsSelection={contributionAmounts.MONTHLY} />
+        <AmountEditorRow label="Annual" amountsSelection={contributionAmounts.ANNUAL} />
       </div>
     </div>
   );

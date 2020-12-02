@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, makeStyles, Theme } from '@material-ui/core';
-import { Amount } from './configuredAmountsEditor';
+import { AmountSelection } from './configuredAmountsEditor';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
@@ -27,12 +27,12 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
 
 interface AmountsEditorRowProps {
   label: string;
-  amounts: Amount[];
+  amountsSelection: AmountSelection;
 }
 
 const AmountsEditorRow: React.FC<AmountsEditorRowProps> = ({
   label,
-  amounts,
+  amountsSelection,
 }: AmountsEditorRowProps) => {
   const classes = useStyles();
 
@@ -40,7 +40,7 @@ const AmountsEditorRow: React.FC<AmountsEditorRowProps> = ({
     <div className={classes.container}>
       <div className={classes.amountsLabel}>{label}</div>
       <div className={classes.amountsContainer}>
-        {amounts.map(amount => (
+        {amountsSelection.amounts.map(amount => (
           <Button key={amount.value} variant="outlined" disableElevation>
             {amount.value}
           </Button>

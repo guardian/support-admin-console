@@ -9,11 +9,15 @@ import { ContributionType, Region, getPrettifiedRegionName } from '../../utils/m
 
 export interface Amount {
   value: number;
-  isDefault?: boolean;
+}
+
+export interface AmountSelection {
+  amounts: Amount[];
+  defaultAmountIndex: number;
 }
 
 export type ContributionAmounts = {
-  [key in ContributionType]: Amount[];
+  [key in ContributionType]: AmountSelection;
 };
 
 export interface AmountsTestVariant {
@@ -65,24 +69,18 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 }));
 
 const getContributionAmounts = (): ContributionAmounts => ({
-  ONE_OFF: [
-    { value: 5, isDefault: false },
-    { value: 10, isDefault: false },
-    { value: 15, isDefault: false },
-    { value: 20, isDefault: false },
-  ],
-  MONTHLY: [
-    { value: 5, isDefault: false },
-    { value: 10, isDefault: false },
-    { value: 15, isDefault: false },
-    { value: 20, isDefault: false },
-  ],
-  ANNUAL: [
-    { value: 5, isDefault: false },
-    { value: 10, isDefault: false },
-    { value: 15, isDefault: false },
-    { value: 20, isDefault: false },
-  ],
+  ONE_OFF: {
+    amounts: [{ value: 5 }, { value: 10 }, { value: 15 }, { value: 20 }],
+    defaultAmountIndex: 0,
+  },
+  MONTHLY: {
+    amounts: [{ value: 5 }, { value: 10 }, { value: 15 }, { value: 20 }],
+    defaultAmountIndex: 0,
+  },
+  ANNUAL: {
+    amounts: [{ value: 5 }, { value: 10 }, { value: 15 }, { value: 20 }],
+    defaultAmountIndex: 0,
+  },
 });
 
 const getAmountsTestVariant = (name: string): AmountsTestVariant => ({
