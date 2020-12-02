@@ -48,7 +48,7 @@ const formattedTimestamp = (timestamp: string): string => {
   const paddedhours = String(hours).padStart(2, '0');
   const minutes = date.getMinutes();
   const paddedMinutes = String(minutes).padStart(2, '0');
-  const day = date.getDay();
+  const day = date.getDate();
   const paddedDay = String(day).padStart(2, '0');
   const monthName = MONTH_NAMES[date.getMonth()];
 
