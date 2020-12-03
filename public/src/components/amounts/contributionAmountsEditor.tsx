@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles, Theme } from '@material-ui/core';
-import { ContributionAmounts } from './configuredAmountsEditor';
+import { AmountSelection, ContributionAmounts } from './configuredAmountsEditor';
 import AmountEditorRow from './amountsEditorRow';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
@@ -29,11 +29,13 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
 interface AmountsEditorProps {
   label: string;
   contributionAmounts: ContributionAmounts;
+  updateContributionAmounts: (contributionAmounts: ContributionAmounts) => void;
 }
 
 const AmountsEditor: React.FC<AmountsEditorProps> = ({
   label,
   contributionAmounts,
+  updateContributionAmounts,
 }: AmountsEditorProps) => {
   const classes = useStyles();
 
@@ -41,9 +43,27 @@ const AmountsEditor: React.FC<AmountsEditorProps> = ({
     <div className={classes.container}>
       <div className={classes.header}>{label}</div>
       <div className={classes.rowsContainer}>
-        <AmountEditorRow label="One off" amountsSelection={contributionAmounts.ONE_OFF} />
-        <AmountEditorRow label="Monthly" amountsSelection={contributionAmounts.MONTHLY} />
-        <AmountEditorRow label="Annual" amountsSelection={contributionAmounts.ANNUAL} />
+        <AmountEditorRow
+          label="One off"
+          amountsSelection={contributionAmounts.ONE_OFF}
+          updateSelection={(amountSelection: AmountSelection): void =>
+            updateContributionAmounts({ ...contributionAmounts, ONE_OFF: amountSelection })
+          }
+        />
+        <AmountEditorRow
+          label="Monthly"
+          amountsSelection={contributionAmounts.MONTHLY}
+          updateSelection={(amountSelection: AmountSelection): void =>
+            updateContributionAmounts({ ...contributionAmounts, MONTHLY: amountSelection })
+          }
+        />
+        <AmountEditorRow
+          label="Annual"
+          amountsSelection={contributionAmounts.ANNUAL}
+          updateSelection={(amountSelection: AmountSelection): void =>
+            updateContributionAmounts({ ...contributionAmounts, ANNUAL: amountSelection })
+          }
+        />
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, makeStyles, Theme } from '@material-ui/core';
-import { AmountSelection } from './configuredAmountsEditor';
+import { AmountSelection, Amount } from './configuredAmountsEditor';
+import AmountInput from './amountInput';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
@@ -18,6 +19,15 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     fontWeight: 'bold',
     color: palette.grey[800],
   },
+  amountsAndInputContainer: {
+    flexGrow: 1,
+    display: 'flex',
+    justifyContent: 'space-between',
+
+    '& > * + *': {
+      marginLeft: spacing(4),
+    },
+  },
   amountsContainer: {
     '& > * + *': {
       marginLeft: spacing(2),
@@ -28,23 +38,31 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
 interface AmountsEditorRowProps {
   label: string;
   amountsSelection: AmountSelection;
+  updateSelection: (AmountSelection: AmountSelection) => void;
 }
 
 const AmountsEditorRow: React.FC<AmountsEditorRowProps> = ({
   label,
   amountsSelection,
+  updateSelection,
 }: AmountsEditorRowProps) => {
   const classes = useStyles();
+
+  const addAmount = (amount: Amount): void =>
+    updateSelection({ ...amountsSelection, amounts: [...amountsSelection.amounts, amount] });
 
   return (
     <div className={classes.container}>
       <div className={classes.amountsLabel}>{label}</div>
-      <div className={classes.amountsContainer}>
-        {amountsSelection.amounts.map(amount => (
-          <Button key={amount.value} variant="outlined" disableElevation>
-            {amount.value}
-          </Button>
-        ))}
+      <div className={classes.amountsAndInputContainer}>
+        <div className={classes.amountsContainer}>
+          {amountsSelection.amounts.map(amount => (
+            <Button key={amount.value} variant="outlined" disableElevation>
+              {amount.value}
+            </Button>
+          ))}
+        </div>
+        <AmountInput amounts={amountsSelection.amounts} addAmount={addAmount} />
       </div>
     </div>
   );

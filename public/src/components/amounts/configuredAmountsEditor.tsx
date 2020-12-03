@@ -112,10 +112,15 @@ const getConfiguredAmounts = (): ConfiguredAmounts => ({
 const ConfiguredAmountsEditor: React.FC = ({}) => {
   const classes = useStyles();
   const [selectedRegion, setSelectedRegion] = useState<Region>(Region.GBPCountries);
+  const [configuredAmounts, setConfiguredAmounts] = useState<ConfiguredAmounts>(
+    getConfiguredAmounts(),
+  );
 
-  const configuredAmounts = getConfiguredAmounts();
   const selectedRegionPrettifiedName = getPrettifiedRegionName(selectedRegion);
   const selectedRegionAmounts = configuredAmounts[selectedRegion];
+
+  const updateConfiguredRegionAmounts = (configuredRegionAmounts: ConfiguredRegionAmounts): void =>
+    setConfiguredAmounts({ ...configuredAmounts, [selectedRegion]: configuredRegionAmounts });
 
   return (
     <div className={classes.body}>
@@ -126,6 +131,7 @@ const ConfiguredAmountsEditor: React.FC = ({}) => {
         <ConfiguredRegionAmountsEditor
           label={selectedRegionPrettifiedName}
           configuredRegionAmounts={selectedRegionAmounts}
+          updateConfiguredRegionAmounts={updateConfiguredRegionAmounts}
         />
       </div>
     </div>
