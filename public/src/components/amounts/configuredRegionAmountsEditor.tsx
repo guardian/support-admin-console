@@ -2,8 +2,13 @@ import React from 'react';
 
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import AmountsEditor from './contributionAmountsEditor';
+import CreateVariantButton from './createVariantButton';
 
-import { ConfiguredRegionAmounts, ContributionAmounts } from './configuredAmountsEditor';
+import {
+  AmountsTestVariant,
+  ConfiguredRegionAmounts,
+  ContributionAmounts,
+} from './configuredAmountsEditor';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -33,7 +38,28 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
     textTransform: 'uppercase',
     fontWeight: 'bold',
   },
+  createVariantButtonContainer: {
+    marginTop: spacing(3),
+  },
 }));
+
+const variantWithDefaultAmounts = (name: string): AmountsTestVariant => ({
+  name: name,
+  amounts: {
+    ONE_OFF: {
+      amounts: [],
+      defaultAmountIndex: 0,
+    },
+    MONTHLY: {
+      amounts: [],
+      defaultAmountIndex: 0,
+    },
+    ANNUAL: {
+      amounts: [],
+      defaultAmountIndex: 0,
+    },
+  },
+});
 
 interface ConfiguredRegionAmountsEditorProps {
   label: string;
@@ -87,6 +113,21 @@ const ConfiguredRegionAmountsEditor: React.FC<ConfiguredRegionAmountsEditorProps
     });
   };
 
+  const createVariant = (name: string): void => {
+    if (!configuredRegionAmounts.test) {
+      return;
+    }
+    const updatedVariants: AmountsTestVariant[] = [
+      ...configuredRegionAmounts.test.variants,
+      variantWithDefaultAmounts(name),
+    ];
+
+    updateConfiguredRegionAmounts({
+      ...configuredRegionAmounts,
+      test: { ...configuredRegionAmounts.test, variants: updatedVariants },
+    });
+  };
+
   const classes = useStyles();
   return (
     <div className={classes.container}>
@@ -115,6 +156,9 @@ const ConfiguredRegionAmountsEditor: React.FC<ConfiguredRegionAmountsEditorProps
               ))
             : // no variants
               null}
+          <div className={classes.createVariantButtonContainer}>
+            <CreateVariantButton onCreate={createVariant} />
+          </div>
         </div>
       ) : // no test
       null}
