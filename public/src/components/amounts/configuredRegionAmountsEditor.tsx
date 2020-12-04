@@ -2,10 +2,10 @@ import React from 'react';
 
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import AmountsEditor from './contributionAmountsEditor';
-import CreateVariantButton from './createVariantButton';
+import AmountsTestEditor from './amountsTestEditor';
 
 import {
-  AmountsTestVariant,
+  AmountsTest,
   ConfiguredRegionAmounts,
   ContributionAmounts,
 } from './configuredAmountsEditor';
@@ -43,24 +43,6 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   },
 }));
 
-const variantWithDefaultAmounts = (name: string): AmountsTestVariant => ({
-  name: name,
-  amounts: {
-    ONE_OFF: {
-      amounts: [],
-      defaultAmountIndex: 0,
-    },
-    MONTHLY: {
-      amounts: [],
-      defaultAmountIndex: 0,
-    },
-    ANNUAL: {
-      amounts: [],
-      defaultAmountIndex: 0,
-    },
-  },
-});
-
 interface ConfiguredRegionAmountsEditorProps {
   label: string;
   configuredRegionAmounts: ConfiguredRegionAmounts;
@@ -75,58 +57,8 @@ const ConfiguredRegionAmountsEditor: React.FC<ConfiguredRegionAmountsEditorProps
   const updateControl = (contributionAmounts: ContributionAmounts): void =>
     updateConfiguredRegionAmounts({ ...configuredRegionAmounts, control: contributionAmounts });
 
-  const updateVariant = (variantIndex: number) => (
-    contributionAmounts: ContributionAmounts,
-  ): void => {
-    if (!configuredRegionAmounts.test) {
-      return;
-    }
-
-    const variants = configuredRegionAmounts.test.variants;
-    const updatedVariants = [
-      ...variants.slice(0, variantIndex),
-      { ...variants[variantIndex], amounts: contributionAmounts },
-      ...variants.slice(variantIndex + 1),
-    ];
-
-    updateConfiguredRegionAmounts({
-      ...configuredRegionAmounts,
-      test: { ...configuredRegionAmounts.test, variants: updatedVariants },
-    });
-  };
-
-  const deleteVariant = (variantIndex: number) => (): void => {
-    if (!configuredRegionAmounts.test) {
-      return;
-    }
-
-    const variants = configuredRegionAmounts.test.variants;
-
-    const updatedVariants = [
-      ...variants.slice(0, variantIndex),
-      ...variants.slice(variantIndex + 1),
-    ];
-
-    updateConfiguredRegionAmounts({
-      ...configuredRegionAmounts,
-      test: { ...configuredRegionAmounts.test, variants: updatedVariants },
-    });
-  };
-
-  const createVariant = (name: string): void => {
-    if (!configuredRegionAmounts.test) {
-      return;
-    }
-    const updatedVariants: AmountsTestVariant[] = [
-      ...configuredRegionAmounts.test.variants,
-      variantWithDefaultAmounts(name),
-    ];
-
-    updateConfiguredRegionAmounts({
-      ...configuredRegionAmounts,
-      test: { ...configuredRegionAmounts.test, variants: updatedVariants },
-    });
-  };
+  const updateTest = (updatedTest: AmountsTest): void =>
+    updateConfiguredRegionAmounts({ ...configuredRegionAmounts, test: updatedTest });
 
   const classes = useStyles();
   return (
@@ -140,28 +72,8 @@ const ConfiguredRegionAmountsEditor: React.FC<ConfiguredRegionAmountsEditorProps
         />
       </div>
       {configuredRegionAmounts.test ? (
-        <div className={classes.testContainer}>
-          <div className={classes.testHeader}>{configuredRegionAmounts.test.name}</div>
-
-          {configuredRegionAmounts.test.variants.length > 0
-            ? configuredRegionAmounts.test.variants.map((variant, index) => (
-                <div className={classes.amountsEditorContainer} key={variant.name}>
-                  <AmountsEditor
-                    label={variant.name}
-                    updateContributionAmounts={updateVariant(index)}
-                    deleteContributionAmounts={deleteVariant(index)}
-                    contributionAmounts={variant.amounts}
-                  />
-                </div>
-              ))
-            : // no variants
-              null}
-          <div className={classes.createVariantButtonContainer}>
-            <CreateVariantButton onCreate={createVariant} />
-          </div>
-        </div>
-      ) : // no test
-      null}
+        <AmountsTestEditor test={configuredRegionAmounts.test} updateTest={updateTest} />
+      ) : null}
     </div>
   );
 };
