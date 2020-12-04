@@ -53,6 +53,12 @@ const AmountInput: React.FC<AmountInputProps> = ({ amounts, addAmount }: AmountI
     reset({ value: '' });
   };
 
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>): void => {
+    if (event.key === 'Enter') {
+      handleSubmit(onSubmit)();
+    }
+  };
+
   const classes = useStyles();
   return (
     <div className={classes.container}>
@@ -62,6 +68,7 @@ const AmountInput: React.FC<AmountInputProps> = ({ amounts, addAmount }: AmountI
         error={!!errors.value}
         helperText={errors.value?.message}
         name="value"
+        onKeyPress={handleKeyPress}
         fullWidth={false}
         type="number"
       />
