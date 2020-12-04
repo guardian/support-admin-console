@@ -69,6 +69,24 @@ const ConfiguredRegionAmountsEditor: React.FC<ConfiguredRegionAmountsEditorProps
     });
   };
 
+  const deleteVariant = (variantIndex: number) => (): void => {
+    if (!configuredRegionAmounts.test) {
+      return;
+    }
+
+    const variants = configuredRegionAmounts.test.variants;
+
+    const updatedVariants = [
+      ...variants.slice(0, variantIndex),
+      ...variants.slice(variantIndex + 1),
+    ];
+
+    updateConfiguredRegionAmounts({
+      ...configuredRegionAmounts,
+      test: { ...configuredRegionAmounts.test, variants: updatedVariants },
+    });
+  };
+
   const classes = useStyles();
   return (
     <div className={classes.container}>
@@ -90,6 +108,7 @@ const ConfiguredRegionAmountsEditor: React.FC<ConfiguredRegionAmountsEditorProps
                   <AmountsEditor
                     label={variant.name}
                     updateContributionAmounts={updateVariant(index)}
+                    deleteContributionAmounts={deleteVariant(index)}
                     contributionAmounts={variant.amounts}
                   />
                 </div>

@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles, Theme } from '@material-ui/core';
 import { AmountSelection, ContributionAmounts } from './configuredAmountsEditor';
 import AmountEditorRow from './amountsEditorRow';
+import AmountEditorDeleteButton from './contributionAmountsEditorDeleteButton';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
@@ -15,6 +16,9 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     },
   },
   header: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     color: palette.grey[800],
     fontSize: 18,
     fontWeight: 'bold',
@@ -30,18 +34,25 @@ interface AmountsEditorProps {
   label: string;
   contributionAmounts: ContributionAmounts;
   updateContributionAmounts: (contributionAmounts: ContributionAmounts) => void;
+  deleteContributionAmounts?: () => void;
 }
 
 const AmountsEditor: React.FC<AmountsEditorProps> = ({
   label,
   contributionAmounts,
   updateContributionAmounts,
+  deleteContributionAmounts,
 }: AmountsEditorProps) => {
   const classes = useStyles();
 
   return (
     <div className={classes.container}>
-      <div className={classes.header}>{label}</div>
+      <div className={classes.header}>
+        {label}
+        {deleteContributionAmounts && (
+          <AmountEditorDeleteButton onDelete={deleteContributionAmounts} />
+        )}
+      </div>
       <div className={classes.rowsContainer}>
         <AmountEditorRow
           label="One off"
