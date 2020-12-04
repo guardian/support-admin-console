@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, makeStyles, Theme } from '@material-ui/core';
 import { AmountSelection, Amount } from './configuredAmountsEditor';
 import AmountInput from './amountInput';
+import AmountsEditorRowAmount from './amountsEditorRowAmount';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
@@ -29,6 +30,9 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     },
   },
   amountsContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+
     '& > * + *': {
       marginLeft: spacing(2),
     },
@@ -51,15 +55,23 @@ const AmountsEditorRow: React.FC<AmountsEditorRowProps> = ({
   const addAmount = (amount: Amount): void =>
     updateSelection({ ...amountsSelection, amounts: [...amountsSelection.amounts, amount] });
 
+  const deleteAmount = (amount: Amount) => (): void =>
+    updateSelection({
+      ...amountsSelection,
+      amounts: amountsSelection.amounts.filter(a => a.value !== amount.value),
+    });
+
   return (
     <div className={classes.container}>
       <div className={classes.amountsLabel}>{label}</div>
       <div className={classes.amountsAndInputContainer}>
         <div className={classes.amountsContainer}>
           {amountsSelection.amounts.map(amount => (
-            <Button key={amount.value} variant="outlined" disableElevation>
-              {amount.value}
-            </Button>
+            <AmountsEditorRowAmount
+              key={amount.value}
+              amount={amount}
+              deleteAmount={deleteAmount(amount)}
+            />
           ))}
         </div>
         <AmountInput amounts={amountsSelection.amounts} addAmount={addAmount} />
