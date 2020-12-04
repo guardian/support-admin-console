@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, makeStyles, Theme } from '@material-ui/core';
+import { makeStyles, Theme } from '@material-ui/core';
 import { AmountSelection, Amount } from './configuredAmountsEditor';
 import AmountInput from './amountInput';
 import AmountsEditorRowAmount from './amountsEditorRowAmount';
@@ -59,6 +59,12 @@ const AmountsEditorRow: React.FC<AmountsEditorRowProps> = ({
     updateSelection({ ...amountsSelection, amounts: updatedAmounts });
   };
 
+  const setAsDefault = (index: number) => (): void =>
+    updateSelection({
+      ...amountsSelection,
+      defaultAmountIndex: index,
+    });
+
   const deleteAmount = (amount: Amount) => (): void =>
     updateSelection({
       ...amountsSelection,
@@ -70,10 +76,12 @@ const AmountsEditorRow: React.FC<AmountsEditorRowProps> = ({
       <div className={classes.amountsLabel}>{label}</div>
       <div className={classes.amountsAndInputContainer}>
         <div className={classes.amountsContainer}>
-          {amountsSelection.amounts.map(amount => (
+          {amountsSelection.amounts.map((amount, index) => (
             <AmountsEditorRowAmount
               key={amount.value}
               amount={amount}
+              isDefault={index === amountsSelection.defaultAmountIndex}
+              setAsDefault={setAsDefault(index)}
               deleteAmount={deleteAmount(amount)}
             />
           ))}
