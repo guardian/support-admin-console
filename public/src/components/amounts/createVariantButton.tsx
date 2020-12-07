@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Button, makeStyles, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import CreateVariantDiaglog from './createVariantDialog';
+import useOpenable from '../../hooks/useOpenable';
 
 const useStyles = makeStyles(() => ({
   button: {
@@ -25,9 +26,7 @@ const CreateVariantButton: React.FC<CreateVariantButtonProps> = ({
   onCreate,
   existingNames,
 }: CreateVariantButtonProps) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const open = (): void => setIsOpen(true);
-  const close = (): void => setIsOpen(false);
+  const [isOpen, open, close] = useOpenable();
 
   const classes = useStyles();
   return (

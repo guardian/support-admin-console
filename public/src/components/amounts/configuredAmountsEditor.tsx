@@ -91,7 +91,7 @@ const getAmountsTestVariant = (name: string): AmountsTestVariant => ({
 const getAmountsTest = (name: string): AmountsTest => ({
   name: name,
   isLive: false,
-  variants: [getAmountsTestVariant('v1'), getAmountsTestVariant('v2')],
+  variants: [getAmountsTestVariant('V1'), getAmountsTestVariant('V2')],
 });
 
 const getConfiguredRegionAmounts = (regionName: string): ConfiguredRegionAmounts => ({
@@ -100,13 +100,13 @@ const getConfiguredRegionAmounts = (regionName: string): ConfiguredRegionAmounts
 });
 
 const getConfiguredAmounts = (): ConfiguredAmounts => ({
-  GBPCountries: getConfiguredRegionAmounts('First amounts test GBP'),
-  UnitedStates: getConfiguredRegionAmounts('First amounts test US'),
-  AUDCountries: getConfiguredRegionAmounts('First amounts test AUD'),
-  NZDCountries: getConfiguredRegionAmounts('First amounts test NZD'),
-  EURCountries: getConfiguredRegionAmounts('First amounts test EUR'),
-  Canada: getConfiguredRegionAmounts('First amounts test CN'),
-  International: getConfiguredRegionAmounts('First amounts test INT'),
+  GBPCountries: getConfiguredRegionAmounts('FIRST_AMOUNTS_TEST_GBP'),
+  UnitedStates: getConfiguredRegionAmounts('FIRST_AMOUNTS_TEST_US'),
+  AUDCountries: getConfiguredRegionAmounts('FIRST_AMOUNTS_TEST_AUD'),
+  NZDCountries: getConfiguredRegionAmounts('FIRST_AMOUNTS_TEST_NZD'),
+  EURCountries: getConfiguredRegionAmounts('FIRST_AMOUNTS_TEST_EUR'),
+  Canada: getConfiguredRegionAmounts('FIRST_AMOUNTS_TEST_CN'),
+  International: getConfiguredRegionAmounts('FIRST_AMOUNTS_TEST_INT'),
 });
 
 const ConfiguredAmountsEditor: React.FC = ({}) => {

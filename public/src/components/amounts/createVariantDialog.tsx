@@ -12,6 +12,13 @@ import {
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
+import {
+  duplicateValidator,
+  VALID_CHARACTERS_REGEX,
+  INVALID_CHARACTERS_ERROR_HELPER_TEXT,
+  EMPTY_ERROR_HELPER_TEXT,
+} from '../../utils/forms';
+
 const useStyles = makeStyles(() => ({
   dialogHeader: {
     display: 'flex',
@@ -28,13 +35,6 @@ const useStyles = makeStyles(() => ({
 
 type FormData = {
   name: string;
-};
-const duplicateValidator = (existingNames: string[]) => (name: string): string | boolean => {
-  const existingNamesLowerCased = existingNames.map(n => n.toLowerCase());
-  if (existingNamesLowerCased.includes(name.toLowerCase())) {
-    return 'Name already exists - please try another';
-  }
-  return true;
 };
 
 interface CreateVariantDialogProps {
@@ -77,6 +77,11 @@ const CreateVariantDialog: React.FC<CreateVariantDialogProps> = ({
         <TextField
           className={classes.input}
           inputRef={register({
+            required: EMPTY_ERROR_HELPER_TEXT,
+            pattern: {
+              value: VALID_CHARACTERS_REGEX,
+              message: INVALID_CHARACTERS_ERROR_HELPER_TEXT,
+            },
             validate: duplicateValidator(existingNames),
           })}
           error={!!errors.name}
