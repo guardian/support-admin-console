@@ -60,6 +60,9 @@ const ConfiguredRegionAmountsEditor: React.FC<ConfiguredRegionAmountsEditorProps
   const updateTest = (updatedTest: AmountsTest): void =>
     updateConfiguredRegionAmounts({ ...configuredRegionAmounts, test: updatedTest });
 
+  const deleteTest = (): void =>
+    updateConfiguredRegionAmounts({ ...configuredRegionAmounts, test: undefined });
+
   const classes = useStyles();
   return (
     <div className={classes.container}>
@@ -72,7 +75,11 @@ const ConfiguredRegionAmountsEditor: React.FC<ConfiguredRegionAmountsEditorProps
         />
       </div>
       {configuredRegionAmounts.test ? (
-        <AmountsTestEditor test={configuredRegionAmounts.test} updateTest={updateTest} />
+        <AmountsTestEditor
+          test={configuredRegionAmounts.test}
+          updateTest={updateTest}
+          deleteTest={deleteTest}
+        />
       ) : null}
     </div>
   );

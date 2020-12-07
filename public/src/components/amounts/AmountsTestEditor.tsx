@@ -5,15 +5,23 @@ import AmountsEditor from './contributionAmountsEditor';
 import CreateVariantButton from './createVariantButton';
 
 import { AmountsTest, AmountsTestVariant, ContributionAmounts } from './configuredAmountsEditor';
+import AmountsTestEditorDeleteButton from './amountsTestEditorDeleteButton';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
     marginTop: spacing(4),
   },
   header: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
     fontSize: 16,
     textTransform: 'uppercase',
     fontWeight: 'bold',
+
+    '& > * + *': {
+      marginLeft: spacing(2),
+    },
   },
   amountsEditorContainer: {
     marginTop: spacing(2),
@@ -44,11 +52,13 @@ const variantWithDefaultAmounts = (name: string): AmountsTestVariant => ({
 interface AmountsTestEditorProps {
   test: AmountsTest;
   updateTest: (updatedTest: AmountsTest) => void;
+  deleteTest: () => void;
 }
 
 const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
   test,
   updateTest,
+  deleteTest,
 }: AmountsTestEditorProps) => {
   const updateVariant = (variantIndex: number) => (
     contributionAmounts: ContributionAmounts,
@@ -89,7 +99,10 @@ const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
   const classes = useStyles();
   return (
     <div className={classes.container}>
-      <div className={classes.header}>{test.name}</div>
+      <div className={classes.header}>
+        <span>{test.name}</span>
+        <AmountsTestEditorDeleteButton onDelete={deleteTest} />
+      </div>
 
       {test.variants.length > 0
         ? test.variants.map((variant, index) => (
