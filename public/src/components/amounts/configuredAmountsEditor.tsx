@@ -122,6 +122,10 @@ const ConfiguredAmountsEditor: React.FC = ({}) => {
   const updateConfiguredRegionAmounts = (configuredRegionAmounts: ConfiguredRegionAmounts): void =>
     setConfiguredAmounts({ ...configuredAmounts, [selectedRegion]: configuredRegionAmounts });
 
+  const existingTestNames = Object.values(configuredAmounts)
+    .map(regionAmounts => regionAmounts.test?.name || '')
+    .filter(name => !!name);
+
   return (
     <div className={classes.body}>
       <div className={classes.leftCol}>
@@ -132,6 +136,7 @@ const ConfiguredAmountsEditor: React.FC = ({}) => {
           label={selectedRegionPrettifiedName}
           configuredRegionAmounts={selectedRegionAmounts}
           updateConfiguredRegionAmounts={updateConfiguredRegionAmounts}
+          existingTestNames={existingTestNames}
         />
       </div>
     </div>

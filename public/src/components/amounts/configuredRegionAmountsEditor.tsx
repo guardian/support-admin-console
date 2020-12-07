@@ -48,12 +48,14 @@ interface ConfiguredRegionAmountsEditorProps {
   label: string;
   configuredRegionAmounts: ConfiguredRegionAmounts;
   updateConfiguredRegionAmounts: (configuredRegionAmounts: ConfiguredRegionAmounts) => void;
+  existingTestNames: string[];
 }
 
 const ConfiguredRegionAmountsEditor: React.FC<ConfiguredRegionAmountsEditorProps> = ({
   label,
   configuredRegionAmounts,
   updateConfiguredRegionAmounts,
+  existingTestNames,
 }: ConfiguredRegionAmountsEditorProps) => {
   const updateControl = (contributionAmounts: ContributionAmounts): void =>
     updateConfiguredRegionAmounts({ ...configuredRegionAmounts, control: contributionAmounts });
@@ -89,7 +91,7 @@ const ConfiguredRegionAmountsEditor: React.FC<ConfiguredRegionAmountsEditorProps
         />
       ) : (
         <div>
-          <CreateTestButton onCreate={createTest} existingNames={[]} />
+          <CreateTestButton onCreate={createTest} existingNames={existingTestNames} />
         </div>
       )}
     </div>
