@@ -3,6 +3,7 @@ import React from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import AmountsEditor from './contributionAmountsEditor';
 import AmountsTestEditor from './amountsTestEditor';
+import CreateTestButton from './createTestButton';
 
 import {
   AmountsTest,
@@ -63,6 +64,12 @@ const ConfiguredRegionAmountsEditor: React.FC<ConfiguredRegionAmountsEditorProps
   const deleteTest = (): void =>
     updateConfiguredRegionAmounts({ ...configuredRegionAmounts, test: undefined });
 
+  const createTest = (name: string): void =>
+    updateConfiguredRegionAmounts({
+      ...configuredRegionAmounts,
+      test: { name, isLive: false, variants: [] },
+    });
+
   const classes = useStyles();
   return (
     <div className={classes.container}>
@@ -80,7 +87,11 @@ const ConfiguredRegionAmountsEditor: React.FC<ConfiguredRegionAmountsEditorProps
           updateTest={updateTest}
           deleteTest={deleteTest}
         />
-      ) : null}
+      ) : (
+        <div>
+          <CreateTestButton onCreate={createTest} existingNames={[]} />
+        </div>
+      )}
     </div>
   );
 };
