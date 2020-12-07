@@ -18,10 +18,12 @@ const useStyles = makeStyles(() => ({
 
 interface CreateVariantButtonProps {
   onCreate: (name: string) => void;
+  existingNames: string[];
 }
 
 const CreateVariantButton: React.FC<CreateVariantButtonProps> = ({
   onCreate,
+  existingNames,
 }: CreateVariantButtonProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const open = (): void => setIsOpen(true);
@@ -42,7 +44,7 @@ const CreateVariantButton: React.FC<CreateVariantButtonProps> = ({
       <CreateVariantDiaglog
         isOpen={isOpen}
         close={close}
-        existingNames={[]}
+        existingNames={existingNames}
         createTest={onCreate}
       />
     </>

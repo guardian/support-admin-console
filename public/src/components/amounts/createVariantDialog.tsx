@@ -29,6 +29,13 @@ const useStyles = makeStyles(() => ({
 type FormData = {
   name: string;
 };
+const duplicateValidator = (existingNames: string[]) => (name: string): string | boolean => {
+  const existingNamesLowerCased = existingNames.map(n => n.toLowerCase());
+  if (existingNamesLowerCased.includes(name.toLowerCase())) {
+    return 'Name already exists - please try another';
+  }
+  return true;
+};
 
 interface CreateVariantDialogProps {
   isOpen: boolean;
@@ -40,7 +47,7 @@ interface CreateVariantDialogProps {
 const CreateVariantDialog: React.FC<CreateVariantDialogProps> = ({
   isOpen,
   close,
-  // existingNames,
+  existingNames,
   createTest,
 }: CreateVariantDialogProps) => {
   const defaultValues = {
@@ -69,7 +76,9 @@ const CreateVariantDialog: React.FC<CreateVariantDialogProps> = ({
       <DialogContent dividers>
         <TextField
           className={classes.input}
-          inputRef={register({})}
+          inputRef={register({
+            validate: duplicateValidator(existingNames),
+          })}
           error={!!errors.name}
           helperText={errors.name && errors.name.message}
           name="name"

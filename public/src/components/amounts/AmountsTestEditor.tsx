@@ -118,7 +118,10 @@ const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
         : null}
 
       <div className={classes.createVariantButtonContainer}>
-        <CreateVariantButton onCreate={createVariant} />
+        <CreateVariantButton
+          onCreate={createVariant}
+          existingNames={test.variants.map(v => v.name)}
+        />
       </div>
     </div>
   );
