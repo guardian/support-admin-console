@@ -1,7 +1,7 @@
 import React from 'react';
-import { List, ListItem, makeStyles, Typography } from '@material-ui/core';
-import { red } from '@material-ui/core/colors';
+import { Button, List, ListItem, makeStyles, Typography } from '@material-ui/core';
 import { Region, getPrettifiedRegionName } from '../../utils/models';
+import SaveIcon from '@material-ui/icons/Save';
 
 const useStyles = makeStyles(({ palette, spacing }) => ({
   root: {
@@ -12,11 +12,6 @@ const useStyles = makeStyles(({ palette, spacing }) => ({
   header: {
     marginTop: '32px',
     fontSize: '14px',
-  },
-  listsContainer: {
-    position: 'relative',
-    display: 'flex',
-    marginTop: '8px',
   },
   list: {
     '& > * + *': {
@@ -34,38 +29,8 @@ const useStyles = makeStyles(({ palette, spacing }) => ({
     borderRadius: '4px',
     padding: '0 12px',
   },
-  live: {
-    border: `1px solid ${red[500]}`,
-
-    '&:hover': {
-      background: `${red[500]}`,
-    },
-  },
-  liveInverted: {
-    background: `${red[500]}`,
-  },
   draft: {
     border: `1px solid ${palette.grey[700]}`,
-
-    '&:hover': {
-      // background: `${palette.grey[700]}`,
-    },
-  },
-  draftInverted: {
-    background: `${palette.grey[700]}`,
-  },
-  priorityLabelContainer: {
-    position: 'absolute',
-    top: '0',
-    bottom: '0',
-    left: '-36px',
-  },
-  labelAndNameContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    '& > * + *': {
-      marginLeft: '4px',
-    },
   },
   text: {
     maxWidth: '190px',
@@ -73,6 +38,16 @@ const useStyles = makeStyles(({ palette, spacing }) => ({
     fontWeight: 500,
     lineHeight: '24px',
     textTransform: 'uppercase',
+  },
+  button: {
+    justifyContent: 'start',
+    height: '48px',
+  },
+  buttonText: {
+    fontSize: '12px',
+    fontWeight: 500,
+    textTransform: 'uppercase',
+    letterSpacing: '1px',
   },
 }));
 
@@ -82,10 +57,23 @@ interface SidebarItemProps {
 
 interface SidebarProps {
   onRegionSelected: (region: Region) => void;
+  save: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ onRegionSelected }: SidebarProps) => {
+const Sidebar: React.FC<SidebarProps> = ({ onRegionSelected, save }: SidebarProps) => {
   const classes = useStyles();
+
+  const SidebarSaveButton: React.FC = () => (
+    <Button
+      variant="contained"
+      color="primary"
+      className={classes.button}
+      startIcon={<SaveIcon />}
+      onClick={save}
+    >
+      <Typography className={classes.buttonText}>Save</Typography>
+    </Button>
+  );
 
   const SidebarItem: React.FC<SidebarItemProps> = ({ region }: SidebarItemProps) => {
     return (
@@ -101,6 +89,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onRegionSelected }: SidebarProps) => 
 
   return (
     <div className={classes.root}>
+      <SidebarSaveButton />
       <Typography className={classes.header}>Tests by region</Typography>
       <div>
         <List className={classes.list}>

@@ -6,6 +6,12 @@ import Sidebar from './sidebar';
 import ConfiguredRegionAmountsEditor from './configuredRegionAmountsEditor';
 
 import { ContributionType, Region, getPrettifiedRegionName } from '../../utils/models';
+import {
+  SupportFrontendSettingsType,
+  fetchSupportFrontendSettings,
+  saveSupportFrontendSettings,
+} from '../../utils/requests';
+import withS3Data, { InnerProps, DataFromServer } from '../../hocs/withS3Data';
 
 export interface Amount {
   value: number;
@@ -68,53 +74,13 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   },
 }));
 
-const getContributionAmounts = (): ContributionAmounts => ({
-  ONE_OFF: {
-    amounts: [{ value: 5 }, { value: 10 }, { value: 15 }, { value: 20 }],
-    defaultAmountIndex: 0,
-  },
-  MONTHLY: {
-    amounts: [{ value: 5 }, { value: 10 }, { value: 15 }, { value: 20 }],
-    defaultAmountIndex: 0,
-  },
-  ANNUAL: {
-    amounts: [{ value: 5 }, { value: 10 }, { value: 15 }, { value: 20 }],
-    defaultAmountIndex: 0,
-  },
-});
-
-const getAmountsTestVariant = (name: string): AmountsTestVariant => ({
-  name: name,
-  amounts: getContributionAmounts(),
-});
-
-const getAmountsTest = (name: string): AmountsTest => ({
-  name: name,
-  isLive: false,
-  variants: [getAmountsTestVariant('V1'), getAmountsTestVariant('V2')],
-});
-
-const getConfiguredRegionAmounts = (regionName: string): ConfiguredRegionAmounts => ({
-  control: getContributionAmounts(),
-  test: getAmountsTest(regionName),
-});
-
-const getConfiguredAmounts = (): ConfiguredAmounts => ({
-  GBPCountries: getConfiguredRegionAmounts('FIRST_AMOUNTS_TEST_GBP'),
-  UnitedStates: getConfiguredRegionAmounts('FIRST_AMOUNTS_TEST_US'),
-  AUDCountries: getConfiguredRegionAmounts('FIRST_AMOUNTS_TEST_AUD'),
-  NZDCountries: getConfiguredRegionAmounts('FIRST_AMOUNTS_TEST_NZD'),
-  EURCountries: getConfiguredRegionAmounts('FIRST_AMOUNTS_TEST_EUR'),
-  Canada: getConfiguredRegionAmounts('FIRST_AMOUNTS_TEST_CN'),
-  International: getConfiguredRegionAmounts('FIRST_AMOUNTS_TEST_INT'),
-});
-
-const ConfiguredAmountsEditor: React.FC = ({}) => {
+const ConfiguredAmountsEditor: React.FC<InnerProps<ConfiguredAmounts>> = ({
+  data: configuredAmounts,
+  setData: setConfiguredAmounts,
+  saveData: saveConfiguredAmounts,
+}: InnerProps<ConfiguredAmounts>) => {
   const classes = useStyles();
   const [selectedRegion, setSelectedRegion] = useState<Region>(Region.GBPCountries);
-  const [configuredAmounts, setConfiguredAmounts] = useState<ConfiguredAmounts>(
-    getConfiguredAmounts(),
-  );
 
   const selectedRegionPrettifiedName = getPrettifiedRegionName(selectedRegion);
   const selectedRegionAmounts = configuredAmounts[selectedRegion];
@@ -129,7 +95,7 @@ const ConfiguredAmountsEditor: React.FC = ({}) => {
   return (
     <div className={classes.body}>
       <div className={classes.leftCol}>
-        <Sidebar onRegionSelected={setSelectedRegion} />
+        <Sidebar onRegionSelected={setSelectedRegion} save={saveConfiguredAmounts} />
       </div>
       <div className={classes.rightCol}>
         <ConfiguredRegionAmountsEditor
@@ -143,4 +109,11 @@ const ConfiguredAmountsEditor: React.FC = ({}) => {
   );
 };
 
-export default ConfiguredAmountsEditor;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const fetchSettings = (): Promise<any> =>
+  fetchSupportFrontendSettings(SupportFrontendSettingsType.amounts);
+
+const saveSettings = (data: DataFromServer<ConfiguredAmounts>): Promise<Response> =>
+  saveSupportFrontendSettings(SupportFrontendSettingsType.amounts, data);
+
+export default withS3Data<ConfiguredAmounts>(ConfiguredAmountsEditor, fetchSettings, saveSettings);
