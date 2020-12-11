@@ -4,21 +4,17 @@ import { FrontendSettingsType } from '../../../utils/requests';
 import Sidebar from '../sidebar';
 import BannerTestEditor from './bannerTestEditor';
 import TestsFormLayout from '../testsFormLayout';
-import { UserCohort } from '../helpers/shared';
 import { BannerTest } from '../../../models/banner';
+import { getDefaultBanner } from './utils/defaultBanner';
 
 type Props = InnerComponentProps<BannerTest>;
 
 const getBannerTestsForm = (isFirstChannel: boolean): React.FC<Props> => {
   const createDefaultBannerTest = (newTestName: string, newTestNickname: string): BannerTest => ({
+    ...getDefaultBanner(),
     name: newTestName,
     nickname: newTestNickname,
-    isOn: false,
     minArticlesBeforeShowingBanner: isFirstChannel ? 2 : 4,
-    userCohort: UserCohort.AllNonSupporters,
-    locations: [],
-    variants: [],
-    articlesViewedSettings: undefined,
   });
 
   const BannerTestsForm: React.FC<Props> = ({
