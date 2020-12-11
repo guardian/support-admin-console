@@ -2,18 +2,7 @@ import React from 'react';
 import { Button } from '@material-ui/core';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import { TestType } from './helpers/shared';
-
-type Stage = 'DEV' | 'CODE' | 'PROD';
-
-declare global {
-  interface Window {
-    guardian: { stage: Stage };
-  }
-}
-
-const getStage = (): Stage => {
-  return window.guardian.stage;
-};
+import { getStage } from '../../utils/stage';
 
 const PROD_BASE_ARTICLE_URL =
   'https://theguardian.com/world/2020/may/08/commemorating-ve-day-during-coronavirus-lockdown-somehow-the-quiet-made-it-louder';
