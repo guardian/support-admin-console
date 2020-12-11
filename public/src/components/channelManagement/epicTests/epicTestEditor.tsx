@@ -1,7 +1,7 @@
 import React from 'react';
 import { Region } from '../../../utils/models';
 import { ControlProportionSettings, EpicTest, EpicVariant, MaxEpicViews } from './epicTestsForm';
-import { ArticlesViewedSettings, UserCohort, defaultCta, EpicType } from '../helpers/shared';
+import { ArticlesViewedSettings, UserCohort, EpicType } from '../helpers/shared';
 import { makeStyles, FormControlLabel, Switch, Theme, Typography } from '@material-ui/core';
 import TestEditorHeader from '../testEditorHeader';
 import TestEditorLiveSwitch from '../testEditorLiveSwitch';
@@ -17,6 +17,7 @@ import EpicTestMaxViewsEditor from './epicTestMaxViewsEditor';
 import useValidation from '../hooks/useValidation';
 import { articleCountTemplate, countryNameTemplate } from '../helpers/copyTemplates';
 import EpicTestVariantsSplitEditor from './epicTestVariantsSplitEditor';
+import { getDefaultVariant } from './utils/defaults';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
@@ -155,15 +156,8 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
 
   const createVariant = (name: string): void => {
     const newVariant: EpicVariant = {
+      ...getDefaultVariant(),
       name: name,
-      heading: undefined,
-      paragraphs: [],
-      highlightedText:
-        'Support the Guardian from as little as %%CURRENCY_SYMBOL%%1 – and it only takes a minute. Thank you.',
-      footer: undefined,
-      showTicker: false,
-      backgroundImageUrl: undefined,
-      cta: defaultCta,
     };
 
     if (test) {
