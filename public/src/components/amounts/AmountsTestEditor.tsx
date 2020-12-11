@@ -6,6 +6,7 @@ import CreateVariantButton from './createVariantButton';
 
 import { AmountsTest, AmountsTestVariant, ContributionAmounts } from './configuredAmountsEditor';
 import AmountsTestEditorDeleteButton from './amountsTestEditorDeleteButton';
+import LiveSwitch from '../shared/liveSwitch';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -60,6 +61,10 @@ const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
   updateTest,
   deleteTest,
 }: AmountsTestEditorProps) => {
+  const updateIsLive = (isLive: boolean): void => {
+    updateTest({ ...test, isLive: isLive });
+  };
+
   const updateVariant = (variantIndex: number) => (
     contributionAmounts: ContributionAmounts,
   ): void => {
@@ -102,6 +107,15 @@ const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
       <div className={classes.header}>
         <span>{test.name}</span>
         <AmountsTestEditorDeleteButton onDelete={deleteTest} />
+      </div>
+
+      <div>
+        <LiveSwitch
+          label="Live on support.theguardian.com"
+          isLive={test.isLive}
+          onChange={updateIsLive}
+          isDisabled={false}
+        />
       </div>
 
       {test.variants.length > 0
