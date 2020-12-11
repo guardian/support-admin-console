@@ -5,13 +5,13 @@ import Sidebar from '../sidebar';
 import BannerTestEditor from './bannerTestEditor';
 import TestsFormLayout from '../testsFormLayout';
 import { BannerTest } from '../../../models/banner';
-import { getDefaultBanner } from './utils/defaultBanner';
+import { getDefaultTest } from './utils/defaults';
 
 type Props = InnerComponentProps<BannerTest>;
 
 const getBannerTestsForm = (isFirstChannel: boolean): React.FC<Props> => {
   const createDefaultBannerTest = (newTestName: string, newTestNickname: string): BannerTest => ({
-    ...getDefaultBanner(),
+    ...getDefaultTest(),
     name: newTestName,
     nickname: newTestNickname,
     minArticlesBeforeShowingBanner: isFirstChannel ? 2 : 4,

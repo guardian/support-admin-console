@@ -15,7 +15,7 @@ import TestEditorArticleCountEditor, {
 import TestEditorActionButtons from '../testEditorActionButtons';
 import useValidation from '../hooks/useValidation';
 import { BannerTest, BannerVariant } from '../../../models/banner';
-import { getDefaultVariant } from './utils/defaultBanner';
+import { getDefaultVariant } from './utils/defaults';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing, palette }: Theme) =>

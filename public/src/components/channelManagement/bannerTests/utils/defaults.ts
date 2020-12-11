@@ -57,7 +57,7 @@ const PROD_DEFAULT_BANNER: BannerTest = {
   articlesViewedSettings: undefined,
 };
 
-export const getDefaultBanner = (): BannerTest => {
+export const getDefaultTest = (): BannerTest => {
   const stage = getStage();
   if (stage === 'DEV' || stage === 'CODE') {
     return DEV_AND_CODE_DEFAULT_BANNER_TEST;
