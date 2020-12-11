@@ -14,8 +14,8 @@ import TestEditorArticleCountEditor, {
 } from '../testEditorArticleCountEditor';
 import TestEditorActionButtons from '../testEditorActionButtons';
 import useValidation from '../hooks/useValidation';
-import { BannerTest, BannerVariant, BannerTemplate } from '../../../models/banner';
-import { defaultCta } from '../helpers/shared';
+import { BannerTest, BannerVariant } from '../../../models/banner';
+import { getDefaultVariant } from './utils/defaultBanner';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing, palette }: Theme) =>
@@ -181,13 +181,8 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
 
   const createVariant = (name: string): void => {
     const newVariant: BannerVariant = {
+      ...getDefaultVariant(),
       name: name,
-      template: BannerTemplate.ContributionsBanner,
-      heading: undefined,
-      body: '',
-      highlightedText:
-        'Support the Guardian from as little as %%CURRENCY_SYMBOL%%1 – and it only takes a minute. Thank you.',
-      cta: defaultCta,
     };
     onVariantsChange([...test.variants, newVariant]);
   };
