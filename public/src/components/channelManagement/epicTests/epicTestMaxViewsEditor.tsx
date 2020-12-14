@@ -12,6 +12,7 @@ import {
 } from '@material-ui/core';
 import { MaxEpicViews } from './epicTestsForm';
 import { notNumberValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
+import { DEFAULT_MAX_EPIC_VIEWS } from './utils/defaults';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -27,12 +28,6 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
     },
   },
 }));
-
-export const DEFAULT_MAX_EPIC_VIEWS: MaxEpicViews = {
-  maxViewsCount: 4,
-  maxViewsDays: 30,
-  minDaysBetweenViews: 0,
-};
 
 interface FormData {
   maxViewsCount: string;

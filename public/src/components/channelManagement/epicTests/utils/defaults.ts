@@ -1,0 +1,94 @@
+import { UserCohort } from '../../helpers/shared';
+import { EpicVariant, EpicTest, MaxEpicViews } from '../epicTestsForm';
+
+import { getStage } from '../../../../utils/stage';
+
+export const DEFAULT_MAX_EPIC_VIEWS: MaxEpicViews = {
+  maxViewsCount: 4,
+  maxViewsDays: 30,
+  minDaysBetweenViews: 0,
+};
+
+const DEV_AND_CODE_DEFAULT_VARIANT: EpicVariant = {
+  name: 'CONTROL',
+  heading: "Since you're here ...",
+  paragraphs: [
+    "… we have a small favour to ask. You've read %%ARTICLE_COUNT%% articles in the last year. And you’re not alone; millions are flocking to the Guardian for quality news every day. We believe everyone deserves access to factual information, and analysis that has authority and integrity. That’s why, unlike many others, we made a choice: to keep Guardian reporting open for all, regardless of where they live or what they can afford to pay.",
+    'As an open, independent news organisation we investigate, interrogate and expose the actions of those in power, without fear. With no shareholders or billionaire owner, our journalism is free from political and commercial bias – this makes us different. We can give a voice to the oppressed and neglected, and stand in solidarity with those who are calling for a fairer future. With your help we can make a difference.',
+    'We’re determined to provide journalism that helps each of us better understand the world, and take actions that challenge, unite, and inspire change – in times of crisis and beyond. Our work would not be possible without our readers, who now support our work from 180 countries around the world.',
+    'Every reader contribution, however big or small, is so valuable for our future.',
+  ],
+  highlightedText:
+    'Support the Guardian from as little as %%CURRENCY_SYMBOL%%1 – and it only takes a minute. Thank you.',
+  showTicker: false,
+  cta: {
+    text: 'Support the Guardian',
+    baseUrl: 'https://support.theguardian.com/contribute',
+  },
+};
+
+const PROD_DEFAULT_VARIANT: EpicVariant = {
+  name: 'CONTROL',
+  paragraphs: [],
+  highlightedText:
+    'Support the Guardian from as little as %%CURRENCY_SYMBOL%%1 – and it only takes a minute. Thank you.',
+  showTicker: false,
+  cta: {
+    text: 'Support the Guardian',
+    baseUrl: 'https://support.theguardian.com/contribute',
+  },
+};
+
+export const getDefaultVariant = (): EpicVariant => {
+  const stage = getStage();
+  if (stage === 'DEV' || stage === 'CODE') {
+    return DEV_AND_CODE_DEFAULT_VARIANT;
+  }
+  return PROD_DEFAULT_VARIANT;
+};
+
+const DEV_AND_CODE_DEFAULT_TEST: EpicTest = {
+  name: 'TEST',
+  nickname: 'TEST',
+  isOn: false,
+  locations: [],
+  tagIds: [],
+  sections: [],
+  excludedTagIds: [],
+  excludedSections: [],
+  alwaysAsk: false,
+  maxViews: DEFAULT_MAX_EPIC_VIEWS,
+  userCohort: UserCohort.AllNonSupporters, // matches the default in dotcom
+  isLiveBlog: false,
+  hasCountryName: false,
+  variants: [DEV_AND_CODE_DEFAULT_VARIANT],
+  highPriority: false, // has been removed from form, but might be used in future
+  useLocalViewLog: false,
+};
+
+const PROD_DEFAULT_TEST: EpicTest = {
+  name: 'TEST',
+  nickname: 'TEST',
+  isOn: false,
+  locations: [],
+  tagIds: [],
+  sections: [],
+  excludedTagIds: [],
+  excludedSections: [],
+  alwaysAsk: false,
+  maxViews: DEFAULT_MAX_EPIC_VIEWS,
+  userCohort: UserCohort.AllNonSupporters, // matches the default in dotcom
+  isLiveBlog: false,
+  hasCountryName: false,
+  variants: [],
+  highPriority: false, // has been removed from form, but might be used in future
+  useLocalViewLog: false,
+};
+
+export const getDefaultTest = (): EpicTest => {
+  const stage = getStage();
+  if (stage === 'DEV' || stage === 'CODE') {
+    return DEV_AND_CODE_DEFAULT_TEST;
+  }
+  return PROD_DEFAULT_TEST;
+};

@@ -9,14 +9,13 @@ import {
   Test,
   Variant,
   EpicType,
-  defaultCta,
 } from '../helpers/shared';
 import { InnerComponentProps } from '../testEditor';
 import TestsForm from '../testEditor';
 import TestsFormLayout from '../testsFormLayout';
 import Sidebar from '../sidebar';
 import { FrontendSettingsType } from '../../../utils/requests';
-import { DEFAULT_MAX_EPIC_VIEWS } from './epicTestMaxViewsEditor';
+import { getDefaultTest, getDefaultVariant } from './utils/defaults';
 
 export enum TickerEndType {
   unlimited = 'unlimited',
@@ -87,35 +86,12 @@ const getEpicTestForm = (epicType: EpicType): React.FC<Props> => {
   const isLiveBlog = epicType === 'LIVEBLOG';
   const isOffPlatform = epicType === 'APPLE_NEWS' || epicType === 'AMP';
 
-  const createDefaultEpicVariant = (): EpicVariant => ({
-    name: 'CONTROL',
-    heading: undefined,
-    paragraphs: [],
-    highlightedText:
-      'Support the Guardian from as little as %%CURRENCY_SYMBOL%%1 – and it only takes a minute. Thank you.',
-    footer: undefined,
-    showTicker: false,
-    backgroundImageUrl: undefined,
-    cta: defaultCta,
-  });
-
   const createDefaultEpicTest = (newTestName: string, newTestNickname: string): EpicTest => ({
+    ...getDefaultTest(),
     name: newTestName,
     nickname: newTestNickname,
-    isOn: false,
-    locations: [],
-    tagIds: [],
-    sections: [],
-    excludedTagIds: [],
-    excludedSections: [],
-    alwaysAsk: false,
-    maxViews: DEFAULT_MAX_EPIC_VIEWS,
-    userCohort: UserCohort.AllNonSupporters, // matches the default in dotcom
     isLiveBlog: isLiveBlog,
-    hasCountryName: false,
-    variants: isOffPlatform ? [createDefaultEpicVariant()] : [],
-    highPriority: false, // has been removed from form, but might be used in future
-    useLocalViewLog: false,
+    variants: isOffPlatform ? [{ ...getDefaultVariant() }] : [],
   });
 
   const EpicTestsForm: React.FC<Props> = ({
