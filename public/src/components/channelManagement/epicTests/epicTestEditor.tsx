@@ -94,9 +94,9 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
 }: EpicTestEditorProps) => {
   const classes = useStyles();
 
-  const isAMP = epicType === 'AMP'
+  const isAMP = epicType === 'AMP';
   const isAppleNews = epicType === 'APPLE_NEWS';
-  const isOffPlatform = isAMP || isAppleNews
+  const isOffPlatform = isAMP || isAppleNews;
 
   const setValidationStatusForField = useValidation(onValidationChange);
 
