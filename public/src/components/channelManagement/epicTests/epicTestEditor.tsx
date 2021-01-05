@@ -94,7 +94,9 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
 }: EpicTestEditorProps) => {
   const classes = useStyles();
 
-  const isOffPlatform = epicType === 'APPLE_NEWS' || epicType === 'AMP';
+  const isAMP = epicType === 'AMP'
+  const isAppleNews = epicType === 'APPLE_NEWS';
+  const isOffPlatform = isAMP || isAppleNews
 
   const setValidationStatusForField = useValidation(onValidationChange);
 
@@ -111,7 +113,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
     if (!!test.articlesViewedSettings) {
       return test.articlesViewedSettings;
     }
-    if (copyHasTemplate(test, articleCountTemplate)) {
+    if (!isOffPlatform && copyHasTemplate(test, articleCountTemplate)) {
       return DEFAULT_ARTICLES_VIEWED_SETTINGS;
     }
     return undefined;
@@ -245,7 +247,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
         />
       </div>
 
-      {!isOffPlatform && (
+      {!isAppleNews && (
         <div className={classes.sectionContainer}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
             Variants
@@ -281,7 +283,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
         </div>
       )}
 
-      {isOffPlatform && (
+      {isAppleNews && (
         <div className={classes.sectionContainer} key={test.name}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
             Copy
@@ -303,7 +305,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
         </div>
       )}
 
-      {epicType !== 'AMP' && (
+      {!isAMP && (
         <div className={classes.sectionContainer}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
             Target content
@@ -320,7 +322,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
         </div>
       )}
 
-      {epicType !== 'APPLE_NEWS' && (
+      {!isAppleNews && (
         <div className={classes.sectionContainer}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
             Target audience
