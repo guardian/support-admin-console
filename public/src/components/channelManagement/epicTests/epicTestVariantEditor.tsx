@@ -183,7 +183,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
             }
             onBlur={handleSubmit(onSubmit)}
             name="highlightedText"
-            label="Hightlighted text"
+            label="Highlighted text"
             margin="normal"
             variant="outlined"
             disabled={!editMode}
