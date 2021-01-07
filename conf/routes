@@ -62,7 +62,7 @@ POST  /frontend/apple-news-epic-tests/archive                  controllers.epic.
 GET   /frontend/apple-news-epic-tests/archive/:testName        controllers.epic.AppleNewsEpicTestArchiveController.get(testName: String)
 GET   /frontend/apple-news-epic-tests/archived-test-names      controllers.epic.AppleNewsEpicTestArchiveController.list
 
-# ----- AMO epic 'tests' ----- #
+# ----- AMP epic 'tests' ----- #
 GET   /frontend/amp-epic-tests                          controllers.epic.AMPEpicTestsController.get
 POST  /frontend/amp-epic-tests/update                   controllers.epic.AMPEpicTestsController.set
 POST  /frontend/amp-epic-tests/lock                     controllers.epic.AMPEpicTestsController.lock

@@ -156,7 +156,7 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
           }
           onBlur={handleSubmit(onSubmit)}
           name="highlightedText"
-          label="Hightlighted text"
+          label="Highlighted text"
           margin="normal"
           variant="outlined"
           disabled={!editMode}
