@@ -54,7 +54,9 @@ const AmountsEditorRow: React.FC<AmountsEditorRowProps> = ({
 
   const addAmount = (amount: number): void => {
     // this is already a sorted list, so we could be cleverer here, but this sure takes less code!
-    const updatedAmounts = [...amountsSelection.amounts, amount].sort();
+    const updatedAmounts = [...amountsSelection.amounts, amount].sort(
+      (a: number, b: number) => a - b,
+    );
 
     updateSelection({ ...amountsSelection, amounts: updatedAmounts });
   };
