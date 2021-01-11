@@ -1,6 +1,6 @@
 package models
 
-case class AmountsSelection(amounts: List[Int], defaultAmountIndex: Int)
+case class AmountsSelection(amounts: List[Int], defaultAmount: Int)
 
 case class ContributionAmounts(
     ONE_OFF: AmountsSelection,

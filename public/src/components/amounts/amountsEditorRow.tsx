@@ -61,10 +61,10 @@ const AmountsEditorRow: React.FC<AmountsEditorRowProps> = ({
     updateSelection({ ...amountsSelection, amounts: updatedAmounts });
   };
 
-  const setAsDefault = (index: number) => (): void =>
+  const setAsDefault = (amount: number) => (): void =>
     updateSelection({
       ...amountsSelection,
-      defaultAmountIndex: index,
+      defaultAmount: amount,
     });
 
   const deleteAmount = (index: number) => (): void =>
@@ -85,8 +85,8 @@ const AmountsEditorRow: React.FC<AmountsEditorRowProps> = ({
             <AmountsEditorRowAmount
               key={amount}
               amount={amount}
-              isDefault={index === amountsSelection.defaultAmountIndex}
-              setAsDefault={setAsDefault(index)}
+              isDefault={amount === amountsSelection.defaultAmount}
+              setAsDefault={setAsDefault(amount)}
               deleteAmount={deleteAmount(index)}
             />
           ))}

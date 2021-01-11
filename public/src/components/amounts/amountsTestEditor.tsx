@@ -37,15 +37,15 @@ const variantWithDefaultAmounts = (name: string): AmountsTestVariant => ({
   amounts: {
     ONE_OFF: {
       amounts: [],
-      defaultAmountIndex: 0,
+      defaultAmount: 0,
     },
     MONTHLY: {
       amounts: [],
-      defaultAmountIndex: 0,
+      defaultAmount: 0,
     },
     ANNUAL: {
       amounts: [],
-      defaultAmountIndex: 0,
+      defaultAmount: 0,
     },
   },
 });

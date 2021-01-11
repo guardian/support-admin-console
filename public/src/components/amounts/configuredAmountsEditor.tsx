@@ -15,7 +15,7 @@ import withS3Data, { InnerProps, DataFromServer } from '../../hocs/withS3Data';
 
 export interface AmountSelection {
   amounts: number[];
-  defaultAmountIndex: number;
+  defaultAmount: number;
 }
 
 export type ContributionAmounts = {
