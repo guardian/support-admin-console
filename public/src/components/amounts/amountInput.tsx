@@ -1,7 +1,6 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, makeStyles, TextField, Theme } from '@material-ui/core';
-import { Amount } from './configuredAmountsEditor';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {},
@@ -21,8 +20,8 @@ const isIntegerValidator = (value: string): string | undefined => {
   return undefined;
 };
 
-const getIsUniqueValidator = (amounts: Amount[]) => (value: string): string | undefined => {
-  const values = amounts.map(amount => amount.value.toString());
+const getIsUniqueValidator = (amounts: number[]) => (value: string): string | undefined => {
+  const values = amounts.map(amount => amount.toString());
 
   if (values.includes(value)) {
     return 'Must be unique';
@@ -36,8 +35,8 @@ interface FormData {
 }
 
 interface AmountInputProps {
-  amounts: Amount[];
-  addAmount: (amount: Amount) => void;
+  amounts: number[];
+  addAmount: (amount: number) => void;
 }
 
 const AmountInput: React.FC<AmountInputProps> = ({ amounts, addAmount }: AmountInputProps) => {
@@ -49,7 +48,7 @@ const AmountInput: React.FC<AmountInputProps> = ({ amounts, addAmount }: AmountI
     isIntegerValidator(value) || isUniqueValidator(value);
 
   const onSubmit = ({ value }: FormData): void => {
-    addAmount({ value: parseInt(value) });
+    addAmount(parseInt(value));
     reset({ value: '' });
   };
 

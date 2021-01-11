@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles, Theme } from '@material-ui/core';
-import { AmountSelection, Amount } from './configuredAmountsEditor';
+import { AmountSelection } from './configuredAmountsEditor';
 import AmountInput from './amountInput';
 import AmountsEditorRowAmount from './amountsEditorRowAmount';
 
@@ -52,9 +52,9 @@ const AmountsEditorRow: React.FC<AmountsEditorRowProps> = ({
 }: AmountsEditorRowProps) => {
   const classes = useStyles();
 
-  const addAmount = (amount: Amount): void => {
+  const addAmount = (amount: number): void => {
     // this is already a sorted list, so we could be cleverer here, but this sure takes less code!
-    const updatedAmounts = [...amountsSelection.amounts, amount].sort((a, b) => a.value - b.value);
+    const updatedAmounts = [...amountsSelection.amounts, amount].sort();
 
     updateSelection({ ...amountsSelection, amounts: updatedAmounts });
   };
@@ -65,10 +65,13 @@ const AmountsEditorRow: React.FC<AmountsEditorRowProps> = ({
       defaultAmountIndex: index,
     });
 
-  const deleteAmount = (amount: Amount) => (): void =>
+  const deleteAmount = (index: number) => (): void =>
     updateSelection({
       ...amountsSelection,
-      amounts: amountsSelection.amounts.filter(a => a.value !== amount.value),
+      amounts: [
+        ...amountsSelection.amounts.slice(0, index),
+        ...amountsSelection.amounts.slice(index + 1),
+      ],
     });
 
   return (
@@ -78,11 +81,11 @@ const AmountsEditorRow: React.FC<AmountsEditorRowProps> = ({
         <div className={classes.amountsContainer}>
           {amountsSelection.amounts.map((amount, index) => (
             <AmountsEditorRowAmount
-              key={amount.value}
+              key={amount}
               amount={amount}
               isDefault={index === amountsSelection.defaultAmountIndex}
               setAsDefault={setAsDefault(index)}
-              deleteAmount={deleteAmount(amount)}
+              deleteAmount={deleteAmount(index)}
             />
           ))}
         </div>

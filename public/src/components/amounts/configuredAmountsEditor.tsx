@@ -13,12 +13,8 @@ import {
 } from '../../utils/requests';
 import withS3Data, { InnerProps, DataFromServer } from '../../hocs/withS3Data';
 
-export interface Amount {
-  value: number;
-}
-
 export interface AmountSelection {
-  amounts: Amount[];
+  amounts: number[];
   defaultAmountIndex: number;
 }
 

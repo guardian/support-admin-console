@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button, makeStyles, Menu, MenuItem } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
-import { Amount } from './configuredAmountsEditor';
 
 const useStyles = makeStyles(() => ({
   container: {},
@@ -11,7 +10,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 interface AmountsEditorRowAmount {
-  amount: Amount;
+  amount: number;
   isDefault: boolean;
   setAsDefault: () => void;
   deleteAmount: () => void;
@@ -55,7 +54,7 @@ const AmountsEditorRowAmount: React.FC<AmountsEditorRowAmount> = ({
         disableElevation
         className={isDefault ? classes.default : ''}
       >
-        {amount.value}
+        {amount}
       </Button>
       <Menu
         id="simple-menu"
