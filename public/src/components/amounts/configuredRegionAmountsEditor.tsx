@@ -44,6 +44,12 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   },
 }));
 
+const generateRandomSeed = (): number => {
+  const MAX_SEED = 1_000_000;
+
+  return Math.floor(Math.random() * MAX_SEED);
+};
+
 interface ConfiguredRegionAmountsEditorProps {
   label: string;
   configuredRegionAmounts: ConfiguredRegionAmounts;
@@ -69,7 +75,7 @@ const ConfiguredRegionAmountsEditor: React.FC<ConfiguredRegionAmountsEditorProps
   const createTest = (name: string): void =>
     updateConfiguredRegionAmounts({
       ...configuredRegionAmounts,
-      test: { name, isLive: false, variants: [] },
+      test: { name, isLive: false, variants: [], seed: generateRandomSeed() },
     });
 
   const classes = useStyles();

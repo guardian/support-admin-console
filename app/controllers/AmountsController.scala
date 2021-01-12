@@ -2,8 +2,8 @@ package controllers
 
 import com.gu.googleauth.AuthAction
 import models.ConfiguredAmounts
+import models.ConfiguredAmounts._
 import play.api.mvc.{AnyContent, ControllerComponents}
-import io.circe.generic.auto._
 import zio.DefaultRuntime
 
 import scala.concurrent.ExecutionContext
