@@ -12,8 +12,7 @@ export const DUPLICATE_ERROR_HELPER_TEXT = 'Name already exists - please try ano
 export const duplicateValidator = (existingNames: string[]): Validator => (
   name: string,
 ): string | boolean => {
-  const existingNamesLowerCased = existingNames.map(n => n.toLowerCase());
-  if (existingNamesLowerCased.includes(name.toLowerCase())) {
+  if (existingNames.some(n => n.toLowerCase() === name.toLowerCase())) {
     return DUPLICATE_ERROR_HELPER_TEXT;
   }
   return true;
