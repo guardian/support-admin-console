@@ -1,71 +1,81 @@
 import React from 'react';
-import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core';
+import { useForm } from 'react-hook-form';
+import { Button, makeStyles, TextField, Theme } from '@material-ui/core';
 
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
+const useStyles = makeStyles(({ spacing }: Theme) => ({
+  container: {},
+  textField: {
+    width: '120px',
+  },
+  button: {
+    minWidth: '20px',
+    marginLeft: spacing(2),
+  },
+}));
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const styles = ({ palette }: Theme) =>
-  createStyles({
-    amountInput: {
-      display: 'inline',
-      marginLeft: 'auto',
-      paddingLeft: '8px',
-      borderLeft: `1px dotted ${palette.grey['300']}`,
-    },
-    amountTextField: {
-      width: '80px',
-    },
-    addButton: {
-      minWidth: '20px',
-      marginLeft: '5px',
-    },
-  });
+const isIntegerValidator = (value: string): string | undefined => {
+  if (isNaN(parseInt(value))) {
+    return 'Must be a number';
+  }
+  return undefined;
+};
 
-interface Props extends WithStyles<typeof styles> {
-  addAmount: (value: string) => void;
-}
+const getIsUniqueValidator = (amounts: number[]) => (value: string): string | undefined => {
+  const values = amounts.map(amount => amount.toString());
 
-interface EnteredAmount {
+  if (values.includes(value)) {
+    return 'Must be unique';
+  }
+
+  return undefined;
+};
+
+interface FormData {
   value: string;
 }
 
-class AmountInputComponent extends React.Component<Props, EnteredAmount> {
-  state: EnteredAmount;
+interface AmountInputProps {
+  amounts: number[];
+  addAmount: (amount: number) => void;
+}
 
-  constructor(props: Props) {
-    super(props);
-    this.state = { value: '' };
-  }
+const AmountInput: React.FC<AmountInputProps> = ({ amounts, addAmount }: AmountInputProps) => {
+  const { register, handleSubmit, errors, reset } = useForm<FormData>();
 
-  addAmount = (): void => {
-    if (!isNaN(parseInt(this.state.value))) {
-      this.props.addAmount(this.state.value);
+  const isUniqueValidator = getIsUniqueValidator(amounts);
+
+  const validator = (value: string): string | undefined =>
+    isIntegerValidator(value) || isUniqueValidator(value);
+
+  const onSubmit = ({ value }: FormData): void => {
+    addAmount(parseInt(value));
+    reset({ value: '' });
+  };
+
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>): void => {
+    if (event.key === 'Enter') {
+      handleSubmit(onSubmit)();
     }
   };
 
-  render(): React.ReactElement {
-    const { classes } = this.props;
+  const classes = useStyles();
+  return (
+    <div className={classes.container}>
+      <TextField
+        className={classes.textField}
+        inputRef={register({ validate: validator })}
+        error={!!errors.value}
+        helperText={errors.value?.message}
+        name="value"
+        onKeyPress={handleKeyPress}
+        fullWidth={false}
+        type="number"
+      />
+      <Button className={classes.button} onClick={handleSubmit(onSubmit)} variant="outlined">
+        +
+      </Button>
+    </div>
+  );
+};
 
-    return (
-      <div className={classes.amountInput}>
-        <TextField
-          className={classes.amountTextField}
-          fullWidth={false}
-          type="number"
-          onChange={(event): void => {
-            const newValue = event.target.value;
-            this.setState(() => {
-              return { value: newValue };
-            });
-          }}
-        />
-        <Button className={classes.addButton} onClick={this.addAmount} variant="outlined">
-          +
-        </Button>
-      </div>
-    );
-  }
-}
-
-export default withStyles(styles)(AmountInputComponent);
+export default AmountInput;

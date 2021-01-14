@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Switchboard from './components/switchboard';
 import BannerDeployDashboard from './components/channelManagement/bannerDeploy/bannerDeployDashboard';
 import ContributionTypesForm from './components/contributionTypes';
-import AmountsForm from './components/amounts/amounts';
+import ConfiguredAmountsEditor from './components/amounts/configuredAmountsEditor';
 import {
   ArticleEpicTestsForm,
   LiveblogEpicTestsForm,
@@ -103,7 +103,9 @@ const AppRouter = withStyles(styles)(({ classes }: Props) => {
           />
           <Route
             path="/amounts"
-            render={(): React.ReactElement => createComponent(<AmountsForm />, 'Amounts')}
+            render={(): React.ReactElement =>
+              createComponent(<ConfiguredAmountsEditor />, 'Amounts')
+            }
           />
           <Route
             path="/epic-tests"

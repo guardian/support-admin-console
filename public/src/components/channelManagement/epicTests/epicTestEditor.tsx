@@ -4,7 +4,6 @@ import { ControlProportionSettings, EpicTest, EpicVariant, MaxEpicViews } from '
 import { ArticlesViewedSettings, UserCohort, EpicType } from '../helpers/shared';
 import { makeStyles, FormControlLabel, Switch, Theme, Typography } from '@material-ui/core';
 import TestEditorHeader from '../testEditorHeader';
-import TestEditorLiveSwitch from '../testEditorLiveSwitch';
 import TestVariantsEditor from '../testVariantsEditor';
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 import TestEditorArticleCountEditor, {
@@ -18,6 +17,7 @@ import useValidation from '../hooks/useValidation';
 import { articleCountTemplate, countryNameTemplate } from '../helpers/copyTemplates';
 import EpicTestVariantsSplitEditor from './epicTestVariantsSplitEditor';
 import { getDefaultVariant } from './utils/defaults';
+import LiveSwitch from '../../shared/liveSwitch';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
@@ -174,8 +174,8 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
     updateTest(test => ({ ...test, [fieldName]: updatedBool }));
   };
 
-  const onLiveSwitchChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    updateTest(test => ({ ...test, isOn: event.target.checked }));
+  const onLiveSwitchChange = (isOn: boolean): void => {
+    updateTest(test => ({ ...test, isOn }));
   };
 
   const updateTargetSections = (
@@ -240,8 +240,9 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
       <div className={classes.headerAndSwitchContainer}>
         <TestEditorHeader name={test.name} nickname={test.nickname} />
 
-        <TestEditorLiveSwitch
-          isChecked={test.isOn}
+        <LiveSwitch
+          label="Live on Guardian.com"
+          isLive={test.isOn}
           isDisabled={!editMode}
           onChange={onLiveSwitchChange}
         />

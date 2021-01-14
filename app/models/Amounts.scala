@@ -1,15 +1,33 @@
 package models
 
-case class Amount(value: String, isDefault: Option[Boolean])
+import io.circe.{ Decoder, Encoder }
+import io.circe.generic.auto._
 
-case class Amounts(ONE_OFF: List[Amount], MONTHLY: List[Amount], ANNUAL: List[Amount])
+case class AmountsSelection(amounts: List[Int], defaultAmount: Int)
 
-case class AmountsRegions(
-  GBPCountries: Amounts,
-  UnitedStates: Amounts,
-  EURCountries: Amounts,
-  AUDCountries: Amounts,
-  International: Amounts,
-  NZDCountries: Amounts,
-  Canada: Amounts
+case class ContributionAmounts(
+    ONE_OFF: AmountsSelection,
+    MONTHLY: AmountsSelection,
+    ANNUAL: AmountsSelection
 )
+
+case class AmountsTestVariant(name: String, amounts: ContributionAmounts)
+
+case class AmountsTest(name: String, isLive: Boolean, variants: List[AmountsTestVariant], seed: Int)
+
+case class ConfiguredRegionAmounts(control: ContributionAmounts, test: Option[AmountsTest])
+
+case class ConfiguredAmounts(
+    GBPCountries: ConfiguredRegionAmounts,
+    UnitedStates: ConfiguredRegionAmounts,
+    EURCountries: ConfiguredRegionAmounts,
+    AUDCountries: ConfiguredRegionAmounts,
+    International: ConfiguredRegionAmounts,
+    NZDCountries: ConfiguredRegionAmounts,
+    Canada: ConfiguredRegionAmounts
+)
+
+object ConfiguredAmounts {
+  implicit val configuredAmountsDecoder = Decoder[ConfiguredAmounts]
+  implicit val configuredAmountsEncoder = Encoder[ConfiguredAmounts]
+}

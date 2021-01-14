@@ -6,13 +6,13 @@ import { createStyles, Theme, Typography, WithStyles, withStyles } from '@materi
 import BannerTestVariantEditor from './bannerTestVariantEditor';
 import TestVariantsEditor from '../testVariantsEditor';
 import TestEditorHeader from '../testEditorHeader';
-import TestEditorLiveSwitch from '../testEditorLiveSwitch';
 import TestEditorMinArticlesViewedInput from '../testEditorMinArticlesViewedInput';
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 import TestEditorArticleCountEditor, {
   DEFAULT_ARTICLES_VIEWED_SETTINGS,
 } from '../testEditorArticleCountEditor';
 import TestEditorActionButtons from '../testEditorActionButtons';
+import LiveSwitch from '../../shared/liveSwitch';
 import useValidation from '../hooks/useValidation';
 import { BannerTest, BannerVariant } from '../../../models/banner';
 import { getDefaultVariant } from './utils/defaults';
@@ -117,8 +117,8 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
     });
   };
 
-  const onLiveSwitchChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    updateTest({ ...test, isOn: event.target.checked });
+  const onLiveSwitchChange = (isOn: boolean): void => {
+    updateTest({ ...test, isOn });
   };
 
   const onVariantsChange = (updatedVariantList: BannerVariant[]): void => {
@@ -193,8 +193,9 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
         <div className={classes.headerAndSwitchContainer}>
           <TestEditorHeader name={test.name} nickname={test.nickname} />
 
-          <TestEditorLiveSwitch
-            isChecked={test.isOn}
+          <LiveSwitch
+            label="Live on Guardian.com"
+            isLive={test.isOn}
             isDisabled={!editMode}
             onChange={onLiveSwitchChange}
           />
