@@ -82,7 +82,7 @@ const CreateVariantDialog: React.FC<CreateVariantDialogProps> = ({
               value: VALID_CHARACTERS_REGEX,
               message: INVALID_CHARACTERS_ERROR_HELPER_TEXT,
             },
-            validate: duplicateValidator(existingNames),
+            validate: duplicateValidator(['CONTROL', ...existingNames]),
           })}
           error={!!errors.name}
           helperText={errors.name && errors.name.message}
