@@ -82,16 +82,27 @@ export interface EpicTest extends Test {
 
 type Props = InnerComponentProps<EpicTest>;
 
+const EPICS_THAT_ONLY_ALLOW_A_SINGLE_VARIANT: EpicType[] = ['ARTICLE_HOLDBACK', 'APPLE_NEWS'];
+const EPICS_THAT_DONT_ALLOW_VARIANT_SPLIT: EpicType[] = [
+  ...EPICS_THAT_ONLY_ALLOW_A_SINGLE_VARIANT,
+  'AMP',
+];
+
+export const isOnlyAllowedOneVariant = (epicType: EpicType): boolean =>
+  EPICS_THAT_ONLY_ALLOW_A_SINGLE_VARIANT.includes(epicType);
+
+export const isNotAllowedVariantSplit = (epicType: EpicType): boolean =>
+  EPICS_THAT_DONT_ALLOW_VARIANT_SPLIT.includes(epicType);
+
 const getEpicTestForm = (epicType: EpicType): React.FC<Props> => {
   const isLiveBlog = epicType === 'LIVEBLOG';
-  const isOffPlatform = epicType === 'APPLE_NEWS' || epicType === 'AMP';
 
   const createDefaultEpicTest = (newTestName: string, newTestNickname: string): EpicTest => ({
     ...getDefaultTest(),
     name: newTestName,
     nickname: newTestNickname,
     isLiveBlog: isLiveBlog,
-    variants: isOffPlatform ? [{ ...getDefaultVariant() }] : [],
+    variants: isOnlyAllowedOneVariant(epicType) ? [{ ...getDefaultVariant() }] : [],
   });
 
   const EpicTestsForm: React.FC<Props> = ({

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { EpicVariant } from './epicTestsForm';
+import { EpicVariant, isOnlyAllowedOneVariant } from './epicTestsForm';
 import { Cta, EpicType, TickerSettings } from '../helpers/shared';
 import { Theme, Typography, makeStyles, TextField } from '@material-ui/core';
 import VariantEditorButtonsEditor from '../variantEditorButtonsEditor';
@@ -8,13 +8,15 @@ import EpicTestTickerEditor from './epicTestTickerEditor';
 import { invalidTemplateValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const getUseStyles = (isOffPlatform: boolean) => {
+const getUseStyles = (epicType: EpicType) => {
+  const shouldSkipPadding = isOnlyAllowedOneVariant(epicType);
+
   const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
     container: {
       width: '100%',
-      paddingTop: isOffPlatform ? 0 : spacing(2),
-      paddingLeft: isOffPlatform ? 0 : spacing(4),
-      paddingRight: isOffPlatform ? 0 : spacing(10),
+      paddingTop: shouldSkipPadding ? 0 : spacing(2),
+      paddingLeft: shouldSkipPadding ? 0 : spacing(4),
+      paddingRight: shouldSkipPadding ? 0 : spacing(10),
 
       '& > * + *': {
         marginTop: spacing(1),
@@ -71,7 +73,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   const isLiveblog = epicType === 'LIVEBLOG';
   const isOffPlatform = epicType === 'APPLE_NEWS' || epicType === 'AMP';
 
-  const classes = getUseStyles(isOffPlatform)();
+  const classes = getUseStyles(epicType)();
 
   const defaultValues: FormData = {
     heading: variant.heading || '',

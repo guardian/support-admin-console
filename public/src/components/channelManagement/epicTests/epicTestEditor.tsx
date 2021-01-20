@@ -1,6 +1,13 @@
 import React from 'react';
 import { Region } from '../../../utils/models';
-import { ControlProportionSettings, EpicTest, EpicVariant, MaxEpicViews } from './epicTestsForm';
+import {
+  ControlProportionSettings,
+  EpicTest,
+  EpicVariant,
+  isNotAllowedVariantSplit,
+  isOnlyAllowedOneVariant,
+  MaxEpicViews,
+} from './epicTestsForm';
 import { ArticlesViewedSettings, UserCohort, EpicType } from '../helpers/shared';
 import { makeStyles, FormControlLabel, Switch, Theme, Typography } from '@material-ui/core';
 import TestEditorHeader from '../testEditorHeader';
@@ -248,7 +255,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
         />
       </div>
 
-      {!isAppleNews && (
+      {!isOnlyAllowedOneVariant(epicType) && (
         <div className={classes.sectionContainer}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
             Variants
@@ -267,7 +274,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
         </div>
       )}
 
-      {!isOffPlatform && test.variants.length > 0 && (
+      {!isNotAllowedVariantSplit(epicType) && test.variants.length > 0 && (
         <div className={classes.sectionContainer}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
             Variants split
@@ -284,7 +291,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
         </div>
       )}
 
-      {isAppleNews && (
+      {isOnlyAllowedOneVariant(epicType) && (
         <div className={classes.sectionContainer} key={test.name}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
             Copy
