@@ -1,14 +1,7 @@
 import React from 'react';
 import { Region } from '../../../utils/models';
-import {
-  ControlProportionSettings,
-  EpicTest,
-  EpicVariant,
-  isNotAllowedVariantSplit,
-  isOnlyAllowedOneVariant,
-  MaxEpicViews,
-} from './epicTestsForm';
-import { ArticlesViewedSettings, UserCohort, EpicType } from '../helpers/shared';
+import { ControlProportionSettings, EpicTest, EpicVariant, MaxEpicViews } from './epicTestsForm';
+import { ArticlesViewedSettings, UserCohort, EpicEditorConfig } from '../helpers/shared';
 import { makeStyles, FormControlLabel, Switch, Theme, Typography } from '@material-ui/core';
 import TestEditorHeader from '../testEditorHeader';
 import TestVariantsEditor from '../testVariantsEditor';
@@ -73,7 +66,7 @@ const copyHasTemplate = (test: EpicTest, template: string): boolean =>
 interface EpicTestEditorProps {
   test: EpicTest;
   hasChanged: boolean;
-  epicType: EpicType;
+  epicEditorConfig: EpicEditorConfig;
   onChange: (updatedTest: EpicTest) => void;
   onValidationChange: (isValid: boolean) => void;
   visible: boolean;
@@ -88,7 +81,7 @@ interface EpicTestEditorProps {
 
 const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
   test,
-  epicType,
+  epicEditorConfig,
   onChange,
   editMode,
   onDelete,
@@ -100,10 +93,6 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
   onValidationChange,
 }: EpicTestEditorProps) => {
   const classes = useStyles();
-
-  const isAMP = epicType === 'AMP';
-  const isAppleNews = epicType === 'APPLE_NEWS';
-  const isOffPlatform = isAMP || isAppleNews;
 
   const setValidationStatusForField = useValidation(onValidationChange);
 
@@ -120,7 +109,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
     if (!!test.articlesViewedSettings) {
       return test.articlesViewedSettings;
     }
-    if (!isOffPlatform && copyHasTemplate(test, articleCountTemplate)) {
+    if (epicEditorConfig.allowArticleCount && copyHasTemplate(test, articleCountTemplate)) {
       return DEFAULT_ARTICLES_VIEWED_SETTINGS;
     }
     return undefined;
@@ -232,7 +221,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
     <EpicTestVariantEditor
       key={variant.name}
       variant={variant}
-      epicType={epicType}
+      epicEditorConfig={epicEditorConfig}
       editMode={editMode}
       onVariantChange={onVariantChange}
       onDelete={(): void => onVariantDelete(variant.name)}
@@ -255,7 +244,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
         />
       </div>
 
-      {!isOnlyAllowedOneVariant(epicType) && (
+      {epicEditorConfig.allowMultipleVariants && (
         <div className={classes.sectionContainer}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
             Variants
@@ -274,7 +263,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
         </div>
       )}
 
-      {!isNotAllowedVariantSplit(epicType) && test.variants.length > 0 && (
+      {epicEditorConfig.allowCustomVariantSplit && test.variants.length > 1 && (
         <div className={classes.sectionContainer}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
             Variants split
@@ -291,7 +280,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
         </div>
       )}
 
-      {isOnlyAllowedOneVariant(epicType) && (
+      {!epicEditorConfig.allowMultipleVariants && (
         <div className={classes.sectionContainer} key={test.name}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
             Copy
@@ -301,7 +290,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
             <EpicTestVariantEditor
               key={test.variants[0].name}
               variant={test.variants[0]}
-              epicType={epicType}
+              epicEditorConfig={epicEditorConfig}
               editMode={editMode}
               onVariantChange={onVariantChange}
               onDelete={(): void => onVariantDelete(test.variants[0].name)}
@@ -313,7 +302,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
         </div>
       )}
 
-      {!isAMP && (
+      {epicEditorConfig.allowContentTargetting && (
         <div className={classes.sectionContainer}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
             Target content
@@ -330,7 +319,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
         </div>
       )}
 
-      {!isAppleNews && (
+      {epicEditorConfig.allowLocationTargetting && (
         <div className={classes.sectionContainer}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
             Target audience
@@ -342,12 +331,12 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
             selectedCohort={test.userCohort}
             onCohortChange={onCohortChange}
             isDisabled={!editMode}
-            showSupporterStatusSelector={epicType !== 'AMP'}
+            showSupporterStatusSelector={epicEditorConfig.allowSupporterStatusTargetting}
           />
         </div>
       )}
 
-      {!isOffPlatform && (
+      {epicEditorConfig.allowViewFrequencySettings && (
         <div className={classes.sectionContainer}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
             View frequency settings
@@ -373,7 +362,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
         </div>
       )}
 
-      {!isOffPlatform && (
+      {epicEditorConfig.allowArticleCount && (
         <div className={classes.sectionContainer}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
             Article count

@@ -16,6 +16,111 @@ export interface Test {
 
 export type EpicType = 'ARTICLE' | 'ARTICLE_HOLDBACK' | 'LIVEBLOG' | 'APPLE_NEWS' | 'AMP';
 
+export interface EpicEditorConfig {
+  // test level settings
+  allowMultipleVariants: boolean;
+  allowCustomVariantSplit: boolean;
+  allowContentTargetting: boolean;
+  allowLocationTargetting: boolean;
+  allowSupporterStatusTargetting: boolean;
+  allowViewFrequencySettings: boolean;
+  allowArticleCount: boolean;
+
+  // variant level settings
+  allowVariantHeader: boolean;
+  allowVariantHighlightedText: boolean;
+  allowVariantImageUrl: boolean;
+  allowVariantFooter: boolean;
+  allowVariantCustomPrimaryCta: boolean;
+  allowVariantCustomSecondaryCta: boolean;
+  allowVariantTicker: boolean;
+}
+
+export const ARTICLE_EPIC_CONFIG: EpicEditorConfig = {
+  allowMultipleVariants: true,
+  allowCustomVariantSplit: true,
+  allowContentTargetting: true,
+  allowLocationTargetting: true,
+  allowSupporterStatusTargetting: true,
+  allowViewFrequencySettings: true,
+  allowArticleCount: true,
+  allowVariantHeader: true,
+  allowVariantHighlightedText: true,
+  allowVariantImageUrl: true,
+  allowVariantFooter: true,
+  allowVariantCustomPrimaryCta: true,
+  allowVariantCustomSecondaryCta: true,
+  allowVariantTicker: true,
+};
+
+export const ARTICLE_EPIC_HOLDBACK_CONFIG: EpicEditorConfig = {
+  allowMultipleVariants: false,
+  allowCustomVariantSplit: false,
+  allowContentTargetting: true,
+  allowLocationTargetting: true,
+  allowSupporterStatusTargetting: true,
+  allowViewFrequencySettings: true,
+  allowArticleCount: true,
+  allowVariantHeader: true,
+  allowVariantHighlightedText: true,
+  allowVariantImageUrl: true,
+  allowVariantFooter: true,
+  allowVariantCustomPrimaryCta: true,
+  allowVariantCustomSecondaryCta: true,
+  allowVariantTicker: true,
+};
+
+export const LIVEBLOG_EPIC_CONFIG: EpicEditorConfig = {
+  allowMultipleVariants: true,
+  allowCustomVariantSplit: true,
+  allowContentTargetting: true,
+  allowLocationTargetting: true,
+  allowSupporterStatusTargetting: true,
+  allowViewFrequencySettings: true,
+  allowArticleCount: true,
+  allowVariantHeader: false,
+  allowVariantHighlightedText: false,
+  allowVariantImageUrl: false,
+  allowVariantFooter: false,
+  allowVariantCustomPrimaryCta: true,
+  allowVariantCustomSecondaryCta: true,
+  allowVariantTicker: false,
+};
+
+export const APPLE_NEWS_EPIC_CONFIG: EpicEditorConfig = {
+  allowMultipleVariants: false,
+  allowCustomVariantSplit: false,
+  allowContentTargetting: true,
+  allowLocationTargetting: false,
+  allowSupporterStatusTargetting: true,
+  allowViewFrequencySettings: false,
+  allowArticleCount: false,
+  allowVariantHeader: true,
+  allowVariantHighlightedText: true,
+  allowVariantImageUrl: false,
+  allowVariantFooter: false,
+  allowVariantCustomPrimaryCta: false,
+  allowVariantCustomSecondaryCta: false,
+  allowVariantTicker: false,
+};
+
+export const AMP_EPIC_CONFIG: EpicEditorConfig = {
+  allowMultipleVariants: true,
+  allowCustomVariantSplit: false,
+  allowContentTargetting: false,
+  allowLocationTargetting: true,
+  allowSupporterStatusTargetting: false,
+  allowViewFrequencySettings: false,
+  allowArticleCount: false,
+  allowVariantHeader: true,
+  allowVariantHighlightedText: true,
+  allowVariantImageUrl: false,
+  allowVariantFooter: false,
+  allowVariantCustomPrimaryCta: true,
+  allowVariantCustomSecondaryCta: false,
+  allowVariantTicker: true,
+};
+
 export interface LockStatus {
   locked: boolean;
   email?: string;
