@@ -29,10 +29,10 @@ class EpicHoldbackTestsController(
     dataObjectSettings = S3ObjectSettings(
       bucket = "gu-contributions-public",
       key = s"epic/$stage/${EpicHoldbackTestsController.name}.json",
-      publicRead = true,  // This data will be requested by dotcom
-      cacheControl = Some("max-age=30"),
-      surrogateControl = Some("max-age=86400")  // Cache for a day, and use cache purging after updates
+      publicRead = false,
+      cacheControl = None,
+      surrogateControl = None
     ),
-    fastlyPurger = FastlyPurger.fastlyPurger(stage, s"${EpicHoldbackTestsController.name}.json", ws),
+    fastlyPurger = None,
     runtime = runtime
   ) with Circe
