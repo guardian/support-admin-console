@@ -8,6 +8,7 @@ export enum SupportFrontendSettingsType {
 
 export enum FrontendSettingsType {
   epicTests = 'epic-tests',
+  epicHoldbackTests = 'epic-holdback-tests',
   liveblogEpicTests = 'liveblog-epic-tests',
   appleNewsEpicTests = 'apple-news-epic-tests',
   ampEpicTests = 'amp-epic-tests',

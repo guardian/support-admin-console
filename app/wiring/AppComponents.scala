@@ -61,6 +61,8 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     new AmountsController(authAction, controllerComponents, stage, runtime),
     new EpicTestsController(authAction, controllerComponents, wsClient, stage, runtime),
     new EpicTestArchiveController(authAction, controllerComponents, wsClient, stage, runtime),
+    new EpicHoldbackTestsController(authAction, controllerComponents, wsClient, stage, runtime),
+    new EpicHoldbackTestArchiveController(authAction, controllerComponents, wsClient, stage, runtime),
     new LiveblogEpicTestsController(authAction, controllerComponents, wsClient, stage, runtime),
     new LiveblogEpicTestArchiveController(authAction, controllerComponents, wsClient, stage, runtime),
     new AppleNewsEpicTestsController(authAction, controllerComponents, wsClient, stage, runtime),

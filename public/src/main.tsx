@@ -8,6 +8,7 @@ import ContributionTypesForm from './components/contributionTypes';
 import ConfiguredAmountsEditor from './components/amounts/configuredAmountsEditor';
 import {
   ArticleEpicTestsForm,
+  ArticleEpicHoldbackTestsForm,
   LiveblogEpicTestsForm,
   AppleNewsEpicTestsForm,
   AMPEpicTestsForm,
@@ -111,6 +112,12 @@ const AppRouter = withStyles(styles)(({ classes }: Props) => {
             path="/epic-tests"
             render={(): React.ReactElement =>
               createComponent(<ArticleEpicTestsForm />, 'Epic Tests')
+            }
+          />
+          <Route
+            path="/epic-holdback-tests"
+            render={(): React.ReactElement =>
+              createComponent(<ArticleEpicHoldbackTestsForm />, 'Epic Holdback Tests')
             }
           />
           <Route

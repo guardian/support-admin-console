@@ -7,6 +7,7 @@ GET /switches                                       controllers.Application.inde
 GET /contribution-types                             controllers.Application.index
 GET /amounts                                        controllers.Application.index
 GET /epic-tests                                     controllers.Application.index
+GET /epic-holdback-tests                            controllers.Application.index
 GET /liveblog-epic-tests                            controllers.Application.index
 GET /apple-news-epic-tests                          controllers.Application.index
 GET /amp-epic-tests                                 controllers.Application.index
@@ -41,6 +42,16 @@ POST  /frontend/epic-tests/takecontrol              controllers.epic.EpicTestsCo
 POST  /frontend/epic-tests/archive                  controllers.epic.EpicTestArchiveController.set
 GET   /frontend/epic-tests/archive/:testName        controllers.epic.EpicTestArchiveController.get(testName: String)
 GET   /frontend/epic-tests/archived-test-names      controllers.epic.EpicTestArchiveController.list
+
+# ----- epic holdback tests ----- #
+GET   /frontend/epic-holdback-tests                          controllers.epic.EpicHoldbackTestsController.get
+POST  /frontend/epic-holdback-tests/update                   controllers.epic.EpicHoldbackTestsController.set
+POST  /frontend/epic-holdback-tests/lock                     controllers.epic.EpicHoldbackTestsController.lock
+POST  /frontend/epic-holdback-tests/unlock                   controllers.epic.EpicHoldbackTestsController.unlock
+POST  /frontend/epic-holdback-tests/takecontrol              controllers.epic.EpicHoldbackTestsController.takecontrol
+POST  /frontend/epic-holdback-tests/archive                  controllers.epic.EpicHoldbackTestArchiveController.set
+GET   /frontend/epic-holdback-tests/archive/:testName        controllers.epic.EpicHoldbackTestArchiveController.get(testName: String)
+GET   /frontend/epic-holdback-tests/archived-test-names      controllers.epic.EpicHoldbackTestArchiveController.list
 
 # ----- liveblog epic tests ----- #
 GET   /frontend/liveblog-epic-tests                          controllers.epic.LiveblogEpicTestsController.get

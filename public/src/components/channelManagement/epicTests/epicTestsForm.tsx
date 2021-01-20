@@ -173,6 +173,12 @@ export const ArticleEpicTestsForm = TestsForm(
   getEpicTestForm('ARTICLE'),
   FrontendSettingsType.epicTests,
 );
+
+export const ArticleEpicHoldbackTestsForm = TestsForm(
+  getEpicTestForm('ARTICLE_HOLDBACK'),
+  FrontendSettingsType.epicHoldbackTests,
+);
+
 export const LiveblogEpicTestsForm = TestsForm(
   getEpicTestForm('LIVEBLOG'),
   FrontendSettingsType.liveblogEpicTests,
