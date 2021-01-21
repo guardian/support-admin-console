@@ -8,7 +8,12 @@ import {
   ArticlesViewedSettings,
   Test,
   Variant,
-  EpicType,
+  EpicEditorConfig,
+  ARTICLE_EPIC_CONFIG,
+  ARTICLE_EPIC_HOLDBACK_CONFIG,
+  LIVEBLOG_EPIC_CONFIG,
+  APPLE_NEWS_EPIC_CONFIG,
+  AMP_EPIC_CONFIG,
 } from '../helpers/shared';
 import { InnerComponentProps } from '../testEditor';
 import TestsForm from '../testEditor';
@@ -71,7 +76,6 @@ export interface EpicTest extends Test {
   alwaysAsk: boolean;
   maxViews?: MaxEpicViews;
   userCohort: UserCohort;
-  isLiveBlog: boolean;
   hasCountryName: boolean;
   variants: EpicVariant[];
   highPriority: boolean; // has been removed from form, but might be used in future
@@ -82,16 +86,12 @@ export interface EpicTest extends Test {
 
 type Props = InnerComponentProps<EpicTest>;
 
-const getEpicTestForm = (epicType: EpicType): React.FC<Props> => {
-  const isLiveBlog = epicType === 'LIVEBLOG';
-  const isOffPlatform = epicType === 'APPLE_NEWS' || epicType === 'AMP';
-
+const getEpicTestForm = (epicEditorConfig: EpicEditorConfig): React.FC<Props> => {
   const createDefaultEpicTest = (newTestName: string, newTestNickname: string): EpicTest => ({
     ...getDefaultTest(),
     name: newTestName,
     nickname: newTestNickname,
-    isLiveBlog: isLiveBlog,
-    variants: isOffPlatform ? [{ ...getDefaultVariant() }] : [],
+    variants: epicEditorConfig.allowMultipleVariants ? [] : [{ ...getDefaultVariant() }],
   });
 
   const EpicTestsForm: React.FC<Props> = ({
@@ -139,7 +139,7 @@ const getEpicTestForm = (epicType: EpicType): React.FC<Props> => {
             <EpicTestEditor
               test={selectedTest}
               hasChanged={selectedTestHasBeenModified}
-              epicType={epicType}
+              epicEditorConfig={epicEditorConfig}
               onChange={onTestChange}
               onValidationChange={onTestErrorStatusChange}
               visible
@@ -170,18 +170,24 @@ const getEpicTestForm = (epicType: EpicType): React.FC<Props> => {
 };
 
 export const ArticleEpicTestsForm = TestsForm(
-  getEpicTestForm('ARTICLE'),
+  getEpicTestForm(ARTICLE_EPIC_CONFIG),
   FrontendSettingsType.epicTests,
 );
+
+export const ArticleEpicHoldbackTestsForm = TestsForm(
+  getEpicTestForm(ARTICLE_EPIC_HOLDBACK_CONFIG),
+  FrontendSettingsType.epicHoldbackTests,
+);
+
 export const LiveblogEpicTestsForm = TestsForm(
-  getEpicTestForm('LIVEBLOG'),
+  getEpicTestForm(LIVEBLOG_EPIC_CONFIG),
   FrontendSettingsType.liveblogEpicTests,
 );
 export const AppleNewsEpicTestsForm = TestsForm(
-  getEpicTestForm('APPLE_NEWS'),
+  getEpicTestForm(APPLE_NEWS_EPIC_CONFIG),
   FrontendSettingsType.appleNewsEpicTests,
 );
 export const AMPEpicTestsForm = TestsForm(
-  getEpicTestForm('AMP'),
+  getEpicTestForm(AMP_EPIC_CONFIG),
   FrontendSettingsType.ampEpicTests,
 );

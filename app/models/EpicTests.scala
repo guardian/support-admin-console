@@ -63,7 +63,6 @@ case class EpicTest(
   alwaysAsk: Boolean = false,
   maxViews: Option[MaxViews],
   userCohort: Option[UserCohort] = None,
-  isLiveBlog: Boolean = false,
   hasCountryName: Boolean = false,
   variants: List[EpicVariant],
   highPriority: Boolean = false, // has been removed from form, but might be used in future

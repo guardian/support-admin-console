@@ -1,20 +1,20 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { EpicVariant } from './epicTestsForm';
-import { Cta, EpicType, TickerSettings } from '../helpers/shared';
+import { Cta, EpicEditorConfig, TickerSettings } from '../helpers/shared';
 import { Theme, Typography, makeStyles, TextField } from '@material-ui/core';
 import VariantEditorButtonsEditor from '../variantEditorButtonsEditor';
 import EpicTestTickerEditor from './epicTestTickerEditor';
 import { invalidTemplateValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const getUseStyles = (isOffPlatform: boolean) => {
+const getUseStyles = (shouldAddPadding: boolean) => {
   const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
     container: {
       width: '100%',
-      paddingTop: isOffPlatform ? 0 : spacing(2),
-      paddingLeft: isOffPlatform ? 0 : spacing(4),
-      paddingRight: isOffPlatform ? 0 : spacing(10),
+      paddingTop: shouldAddPadding ? spacing(2) : 0,
+      paddingLeft: shouldAddPadding ? spacing(4) : 0,
+      paddingRight: shouldAddPadding ? spacing(10) : 0,
 
       '& > * + *': {
         marginTop: spacing(1),
@@ -54,7 +54,7 @@ interface FormData {
 
 interface EpicTestVariantEditorProps {
   variant: EpicVariant;
-  epicType: EpicType;
+  epicEditorConfig: EpicEditorConfig;
   onVariantChange: (updatedVariant: EpicVariant) => void;
   editMode: boolean;
   onDelete: () => void;
@@ -65,13 +65,10 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   variant,
   onVariantChange,
   editMode,
-  epicType,
+  epicEditorConfig,
   onValidationChange,
 }: EpicTestVariantEditorProps) => {
-  const isLiveblog = epicType === 'LIVEBLOG';
-  const isOffPlatform = epicType === 'APPLE_NEWS' || epicType === 'AMP';
-
-  const classes = getUseStyles(isOffPlatform)();
+  const classes = getUseStyles(epicEditorConfig.allowMultipleVariants)();
 
   const defaultValues: FormData = {
     heading: variant.heading || '',
@@ -132,7 +129,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
 
   return (
     <div className={classes.container}>
-      {!isLiveblog && (
+      {epicEditorConfig.allowVariantHeader && (
         <div>
           <TextField
             inputRef={register({ validate: invalidTemplateValidator })}
@@ -169,7 +166,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
         />
       </div>
 
-      {!isLiveblog && (
+      {epicEditorConfig.allowVariantHighlightedText && (
         <div>
           <TextField
             inputRef={register({
@@ -192,7 +189,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
         </div>
       )}
 
-      {!isLiveblog && !isOffPlatform && (
+      {epicEditorConfig.allowVariantImageUrl && (
         <div>
           <TextField
             inputRef={register()}
@@ -208,7 +205,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
         </div>
       )}
 
-      {!isLiveblog && !isOffPlatform && (
+      {epicEditorConfig.allowVariantFooter && (
         <div>
           <TextField
             inputRef={register()}
@@ -224,7 +221,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
         </div>
       )}
 
-      {epicType !== 'APPLE_NEWS' && (
+      {epicEditorConfig.allowVariantCustomPrimaryCta && (
         <div className={classes.sectionContainer}>
           <Typography className={classes.sectionHeader} variant="h4">
             Buttons
@@ -237,12 +234,12 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
             updateSecondaryCta={updateSecondaryCta}
             isDisabled={!editMode}
             onValidationChange={onValidationChange}
-            supportSecondaryCta={!isOffPlatform}
+            supportSecondaryCta={epicEditorConfig.allowVariantCustomSecondaryCta}
           />
         </div>
       )}
 
-      {!isLiveblog && epicType !== 'APPLE_NEWS' && (
+      {epicEditorConfig.allowVariantTicker && (
         <div className={classes.sectionContainer}>
           <Typography className={classes.sectionHeader} variant="h4">
             Ticker

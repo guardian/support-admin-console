@@ -59,7 +59,6 @@ const DEV_AND_CODE_DEFAULT_TEST: EpicTest = {
   alwaysAsk: false,
   maxViews: DEFAULT_MAX_EPIC_VIEWS,
   userCohort: UserCohort.AllNonSupporters, // matches the default in dotcom
-  isLiveBlog: false,
   hasCountryName: false,
   variants: [DEV_AND_CODE_DEFAULT_VARIANT],
   highPriority: false, // has been removed from form, but might be used in future
@@ -78,7 +77,6 @@ const PROD_DEFAULT_TEST: EpicTest = {
   alwaysAsk: false,
   maxViews: DEFAULT_MAX_EPIC_VIEWS,
   userCohort: UserCohort.AllNonSupporters, // matches the default in dotcom
-  isLiveBlog: false,
   hasCountryName: false,
   variants: [],
   highPriority: false, // has been removed from form, but might be used in future
