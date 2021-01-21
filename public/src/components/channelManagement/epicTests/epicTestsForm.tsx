@@ -8,7 +8,6 @@ import {
   ArticlesViewedSettings,
   Test,
   Variant,
-  EpicType,
   EpicEditorConfig,
   ARTICLE_EPIC_CONFIG,
   ARTICLE_EPIC_HOLDBACK_CONFIG,
@@ -86,18 +85,6 @@ export interface EpicTest extends Test {
 }
 
 type Props = InnerComponentProps<EpicTest>;
-
-const EPICS_THAT_ONLY_ALLOW_A_SINGLE_VARIANT: EpicType[] = ['ARTICLE_HOLDBACK', 'APPLE_NEWS'];
-const EPICS_THAT_DONT_ALLOW_VARIANT_SPLIT: EpicType[] = [
-  ...EPICS_THAT_ONLY_ALLOW_A_SINGLE_VARIANT,
-  'AMP',
-];
-
-export const isOnlyAllowedOneVariant = (epicType: EpicType): boolean =>
-  EPICS_THAT_ONLY_ALLOW_A_SINGLE_VARIANT.includes(epicType);
-
-export const isNotAllowedVariantSplit = (epicType: EpicType): boolean =>
-  EPICS_THAT_DONT_ALLOW_VARIANT_SPLIT.includes(epicType);
 
 const getEpicTestForm = (epicEditorConfig: EpicEditorConfig): React.FC<Props> => {
   const createDefaultEpicTest = (newTestName: string, newTestNickname: string): EpicTest => ({

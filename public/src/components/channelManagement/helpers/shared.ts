@@ -14,15 +14,13 @@ export interface Test {
   variants: Variant[];
 }
 
-export type EpicType = 'ARTICLE' | 'ARTICLE_HOLDBACK' | 'LIVEBLOG' | 'APPLE_NEWS' | 'AMP';
-
 export interface EpicEditorConfig {
   // test level settings
   allowMultipleVariants: boolean;
   allowCustomVariantSplit: boolean;
-  allowContentTargetting: boolean;
-  allowLocationTargetting: boolean;
-  allowSupporterStatusTargetting: boolean;
+  allowContentTargeting: boolean;
+  allowLocationTargeting: boolean;
+  allowSupporterStatusTargeting: boolean;
   allowViewFrequencySettings: boolean;
   allowArticleCount: boolean;
 
@@ -39,9 +37,9 @@ export interface EpicEditorConfig {
 export const ARTICLE_EPIC_CONFIG: EpicEditorConfig = {
   allowMultipleVariants: true,
   allowCustomVariantSplit: true,
-  allowContentTargetting: true,
-  allowLocationTargetting: true,
-  allowSupporterStatusTargetting: true,
+  allowContentTargeting: true,
+  allowLocationTargeting: true,
+  allowSupporterStatusTargeting: true,
   allowViewFrequencySettings: true,
   allowArticleCount: true,
   allowVariantHeader: true,
@@ -56,9 +54,9 @@ export const ARTICLE_EPIC_CONFIG: EpicEditorConfig = {
 export const ARTICLE_EPIC_HOLDBACK_CONFIG: EpicEditorConfig = {
   allowMultipleVariants: false,
   allowCustomVariantSplit: false,
-  allowContentTargetting: true,
-  allowLocationTargetting: true,
-  allowSupporterStatusTargetting: true,
+  allowContentTargeting: true,
+  allowLocationTargeting: true,
+  allowSupporterStatusTargeting: true,
   allowViewFrequencySettings: true,
   allowArticleCount: true,
   allowVariantHeader: true,
@@ -73,9 +71,9 @@ export const ARTICLE_EPIC_HOLDBACK_CONFIG: EpicEditorConfig = {
 export const LIVEBLOG_EPIC_CONFIG: EpicEditorConfig = {
   allowMultipleVariants: true,
   allowCustomVariantSplit: true,
-  allowContentTargetting: true,
-  allowLocationTargetting: true,
-  allowSupporterStatusTargetting: true,
+  allowContentTargeting: true,
+  allowLocationTargeting: true,
+  allowSupporterStatusTargeting: true,
   allowViewFrequencySettings: true,
   allowArticleCount: true,
   allowVariantHeader: false,
@@ -90,9 +88,9 @@ export const LIVEBLOG_EPIC_CONFIG: EpicEditorConfig = {
 export const APPLE_NEWS_EPIC_CONFIG: EpicEditorConfig = {
   allowMultipleVariants: false,
   allowCustomVariantSplit: false,
-  allowContentTargetting: true,
-  allowLocationTargetting: false,
-  allowSupporterStatusTargetting: true,
+  allowContentTargeting: true,
+  allowLocationTargeting: false,
+  allowSupporterStatusTargeting: true,
   allowViewFrequencySettings: false,
   allowArticleCount: false,
   allowVariantHeader: true,
@@ -107,9 +105,9 @@ export const APPLE_NEWS_EPIC_CONFIG: EpicEditorConfig = {
 export const AMP_EPIC_CONFIG: EpicEditorConfig = {
   allowMultipleVariants: true,
   allowCustomVariantSplit: false,
-  allowContentTargetting: false,
-  allowLocationTargetting: true,
-  allowSupporterStatusTargetting: false,
+  allowContentTargeting: false,
+  allowLocationTargeting: true,
+  allowSupporterStatusTargeting: false,
   allowViewFrequencySettings: false,
   allowArticleCount: false,
   allowVariantHeader: true,

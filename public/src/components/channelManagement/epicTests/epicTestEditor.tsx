@@ -302,7 +302,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
         </div>
       )}
 
-      {epicEditorConfig.allowContentTargetting && (
+      {epicEditorConfig.allowContentTargeting && (
         <div className={classes.sectionContainer}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
             Target content
@@ -319,7 +319,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
         </div>
       )}
 
-      {epicEditorConfig.allowLocationTargetting && (
+      {epicEditorConfig.allowLocationTargeting && (
         <div className={classes.sectionContainer}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
             Target audience
@@ -331,7 +331,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
             selectedCohort={test.userCohort}
             onCohortChange={onCohortChange}
             isDisabled={!editMode}
-            showSupporterStatusSelector={epicEditorConfig.allowSupporterStatusTargetting}
+            showSupporterStatusSelector={epicEditorConfig.allowSupporterStatusTargeting}
           />
         </div>
       )}
