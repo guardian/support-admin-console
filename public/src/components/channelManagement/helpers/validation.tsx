@@ -77,10 +77,11 @@ export const createGetDuplicateError = (existing: string[]): ((text: string) => 
 
 export const createDuplicateValidator = (
   existing: string[],
+  testNamePrefix?: string,
 ): ((text: string) => string | boolean) => {
   const existingLowerCased = existing.map(value => value.toLowerCase());
   const duplicateValidator = (text: string): string | boolean => {
-    if (existingLowerCased.includes(text.toLowerCase())) {
+    if (existingLowerCased.includes(`${testNamePrefix || ''}${text}`.toLowerCase())) {
       return DUPLICATE_ERROR_HELPER_TEXT;
     }
     return true;

@@ -22,6 +22,7 @@ const styles = createStyles({
 interface NewTestButtonProps extends WithStyles<typeof styles> {
   existingNames: string[];
   existingNicknames: string[];
+  testNamePrefix?: string;
   createTest: (name: string, nickname: string) => void;
 }
 
@@ -29,6 +30,7 @@ const NewTestButton: React.FC<NewTestButtonProps> = ({
   classes,
   existingNames,
   existingNicknames,
+  testNamePrefix,
   createTest,
 }: NewTestButtonProps) => {
   const [isOpen, open, close] = useOpenable();
@@ -42,6 +44,7 @@ const NewTestButton: React.FC<NewTestButtonProps> = ({
         close={close}
         existingNames={existingNames}
         existingNicknames={existingNicknames}
+        testNamePrefix={testNamePrefix}
         createTest={createTest}
         mode="NEW"
       />

@@ -11,6 +11,7 @@ import {
   TextField,
   WithStyles,
   withStyles,
+  InputAdornment,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
@@ -50,6 +51,7 @@ interface CreateTestDialogProps extends WithStyles<typeof styles> {
   existingNames: string[];
   existingNicknames: string[];
   mode: Mode;
+  testNamePrefix?: string;
   createTest: (name: string, nickname: string) => void;
 }
 
@@ -60,6 +62,7 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
   existingNames,
   existingNicknames,
   mode,
+  testNamePrefix,
   createTest,
 }: CreateTestDialogProps) => {
   const defaultValues = {
@@ -72,7 +75,7 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
   });
 
   const onSubmit = ({ name, nickname }: FormData): void => {
-    createTest(name.toUpperCase(), nickname.toUpperCase());
+    createTest(`${testNamePrefix || ''}${name}`.toUpperCase(), nickname.toUpperCase());
     close();
   };
 
@@ -95,7 +98,7 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
               value: VALID_CHARACTERS_REGEX,
               message: INVALID_CHARACTERS_ERROR_HELPER_TEXT,
             },
-            validate: createDuplicateValidator(existingNames),
+            validate: createDuplicateValidator(existingNames, testNamePrefix),
           })}
           error={errors.name !== undefined}
           helperText={errors.name ? errors.name.message : NAME_DEFAULT_HELPER_TEXT}
@@ -103,6 +106,11 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
           label="Full test name"
           margin="normal"
           variant="outlined"
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">{testNamePrefix || ''}</InputAdornment>
+            ),
+          }}
           autoFocus
           fullWidth
         />

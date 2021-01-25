@@ -23,6 +23,7 @@ export interface EpicEditorConfig {
   allowSupporterStatusTargeting: boolean;
   allowViewFrequencySettings: boolean;
   allowArticleCount: boolean;
+  testNamePrefix?: string;
 
   // variant level settings
   allowVariantHeader: boolean;
@@ -59,6 +60,7 @@ export const ARTICLE_EPIC_HOLDBACK_CONFIG: EpicEditorConfig = {
   allowSupporterStatusTargeting: true,
   allowViewFrequencySettings: true,
   allowArticleCount: true,
+  testNamePrefix: 'HOLDBACK__',
   allowVariantHeader: true,
   allowVariantHighlightedText: true,
   allowVariantImageUrl: true,
