@@ -44,6 +44,7 @@ const styles = ({ spacing, palette }: Theme) =>
 interface TestEditorActionButtonsProps extends WithStyles<typeof styles> {
   existingNames: string[];
   existingNicknames: string[];
+  testNamePrefix?: string;
   onArchive: () => void;
   onDelete: () => void;
   isDisabled: boolean;
@@ -54,6 +55,7 @@ const TestEditorActionButtons: React.FC<TestEditorActionButtonsProps> = ({
   classes,
   existingNames,
   existingNicknames,
+  testNamePrefix,
   onArchive,
   onDelete,
   isDisabled,
@@ -159,6 +161,7 @@ const TestEditorActionButtons: React.FC<TestEditorActionButtonsProps> = ({
           close={close}
           existingNames={existingNames}
           existingNicknames={existingNicknames}
+          testNamePrefix={testNamePrefix}
           mode="COPY"
           createTest={onCopy}
         />

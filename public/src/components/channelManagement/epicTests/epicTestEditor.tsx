@@ -76,6 +76,7 @@ interface EpicTestEditorProps {
   onTestSelected: (testName: string) => void;
   testNames: string[];
   testNicknames: string[];
+  testNamePrefix?: string;
   createTest: (newTest: EpicTest) => void;
 }
 
@@ -89,6 +90,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
   onTestSelected,
   testNames,
   testNicknames,
+  testNamePrefix,
   createTest,
   onValidationChange,
 }: EpicTestEditorProps) => {
@@ -381,6 +383,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
         <TestEditorActionButtons
           existingNames={testNames}
           existingNicknames={testNicknames}
+          testNamePrefix={testNamePrefix}
           isDisabled={!editMode}
           onArchive={onArchive}
           onDelete={onDelete}

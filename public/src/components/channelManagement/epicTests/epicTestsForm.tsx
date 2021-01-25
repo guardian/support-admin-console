@@ -130,6 +130,7 @@ const getEpicTestForm = (epicEditorConfig: EpicEditorConfig): React.FC<Props> =>
             selectedTestName={selectedTestName}
             onTestPriorityChange={onTestPriorityChange}
             onTestSelected={onTestSelected}
+            testNamePrefix={epicEditorConfig.testNamePrefix}
             createTest={createTest}
             isInEditMode={editMode}
           />
@@ -152,6 +153,7 @@ const getEpicTestForm = (epicEditorConfig: EpicEditorConfig): React.FC<Props> =>
               testNicknames={
                 tests.map(test => test.nickname).filter(nickname => !!nickname) as string[]
               }
+              testNamePrefix={epicEditorConfig.testNamePrefix}
             />
           ) : null
         }

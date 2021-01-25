@@ -31,6 +31,7 @@ interface SidebarProps<T extends Test> {
   selectedTestName: string | null;
   onTestPriorityChange: (newPriority: number, oldPriority: number) => void;
   onTestSelected: (testName: string) => void;
+  testNamePrefix?: string;
   createTest: (name: string, nickname: string) => void;
   isInEditMode: boolean;
 }
@@ -42,6 +43,7 @@ function Sidebar<T extends Test>({
   selectedTestName,
   onTestPriorityChange,
   onTestSelected,
+  testNamePrefix,
   createTest,
 }: SidebarProps<T> & WithStyles<typeof styles>): React.ReactElement<SidebarProps<T>> {
   return (
@@ -50,6 +52,7 @@ function Sidebar<T extends Test>({
         <NewTestButton
           existingNames={tests.map(t => t.name)}
           existingNicknames={tests.map(t => t.nickname || '')}
+          testNamePrefix={testNamePrefix}
           createTest={createTest}
         />
       )}
