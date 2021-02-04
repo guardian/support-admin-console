@@ -78,7 +78,7 @@ export const LIVEBLOG_EPIC_CONFIG: EpicEditorConfig = {
   allowSupporterStatusTargeting: true,
   allowViewFrequencySettings: true,
   allowArticleCount: true,
-  allowVariantHeader: false,
+  allowVariantHeader: true,
   allowVariantHighlightedText: false,
   allowVariantImageUrl: false,
   allowVariantFooter: false,
