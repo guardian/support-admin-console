@@ -33,6 +33,7 @@ export interface EpicEditorConfig {
   allowVariantCustomPrimaryCta: boolean;
   allowVariantCustomSecondaryCta: boolean;
   allowVariantTicker: boolean;
+  requireVariantHeader: boolean;
 }
 
 export const ARTICLE_EPIC_CONFIG: EpicEditorConfig = {
@@ -50,6 +51,7 @@ export const ARTICLE_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantCustomPrimaryCta: true,
   allowVariantCustomSecondaryCta: true,
   allowVariantTicker: true,
+  requireVariantHeader: true,
 };
 
 export const ARTICLE_EPIC_HOLDBACK_CONFIG: EpicEditorConfig = {
@@ -68,6 +70,7 @@ export const ARTICLE_EPIC_HOLDBACK_CONFIG: EpicEditorConfig = {
   allowVariantCustomPrimaryCta: true,
   allowVariantCustomSecondaryCta: true,
   allowVariantTicker: true,
+  requireVariantHeader: true,
 };
 
 export const LIVEBLOG_EPIC_CONFIG: EpicEditorConfig = {
@@ -85,6 +88,7 @@ export const LIVEBLOG_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantCustomPrimaryCta: true,
   allowVariantCustomSecondaryCta: true,
   allowVariantTicker: false,
+  requireVariantHeader: false,
 };
 
 export const APPLE_NEWS_EPIC_CONFIG: EpicEditorConfig = {
@@ -102,6 +106,7 @@ export const APPLE_NEWS_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantCustomPrimaryCta: false,
   allowVariantCustomSecondaryCta: false,
   allowVariantTicker: false,
+  requireVariantHeader: true,
 };
 
 export const AMP_EPIC_CONFIG: EpicEditorConfig = {
@@ -119,6 +124,7 @@ export const AMP_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantCustomPrimaryCta: true,
   allowVariantCustomSecondaryCta: false,
   allowVariantTicker: true,
+  requireVariantHeader: true,
 };
 
 export interface LockStatus {
