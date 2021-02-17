@@ -45,11 +45,11 @@ const IMAGE_URL_DEFAULT_HELPER_TEXT =
 const FOOTER_DEFAULT_HELPER_TEXT = 'Bold text that appears below the button';
 
 interface FormData {
-  heading: string;
+  heading?: string;
   body: string;
-  highlightedText: string;
-  backgroundImageUrl: string;
-  footer: string;
+  highlightedText?: string;
+  backgroundImageUrl?: string;
+  footer?: string;
 }
 
 interface EpicTestVariantEditorProps {
@@ -71,11 +71,11 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   const classes = getUseStyles(epicEditorConfig.allowMultipleVariants)();
 
   const defaultValues: FormData = {
-    heading: variant.heading || '',
+    heading: variant.heading,
     body: variant.paragraphs.join('\n'),
-    highlightedText: variant.highlightedText || '',
-    backgroundImageUrl: variant.backgroundImageUrl || '',
-    footer: variant.footer || '',
+    highlightedText: variant.highlightedText,
+    backgroundImageUrl: variant.backgroundImageUrl,
+    footer: variant.footer,
   };
 
   const { register, handleSubmit, errors, trigger } = useForm<FormData>({
@@ -109,11 +109,11 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
 
     onVariantChange({
       ...variant,
-      heading,
+      heading: heading || undefined,
       paragraphs,
-      highlightedText,
-      backgroundImageUrl,
-      footer,
+      highlightedText: highlightedText || undefined,
+      backgroundImageUrl: backgroundImageUrl || undefined,
+      footer: footer || undefined,
     });
   };
 
@@ -132,7 +132,10 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
       {epicEditorConfig.allowVariantHeader && (
         <div>
           <TextField
-            inputRef={register({ validate: invalidTemplateValidator })}
+            inputRef={register({
+              required: epicEditorConfig.requireVariantHeader ? EMPTY_ERROR_HELPER_TEXT : undefined,
+              validate: invalidTemplateValidator,
+            })}
             error={errors.heading !== undefined}
             helperText={errors.heading ? errors.heading.message : HEADER_DEFAULT_HELPER_TEXT}
             onBlur={handleSubmit(onSubmit)}
