@@ -11,6 +11,7 @@ export const DEFAULT_MAX_EPIC_VIEWS: MaxEpicViews = {
 
 const DEV_AND_CODE_DEFAULT_VARIANT: EpicVariant = {
   name: 'CONTROL',
+  heading: "Since you're here ...",
   paragraphs: [
     "… we have a small favour to ask. You've read %%ARTICLE_COUNT%% articles in the last year. And you’re not alone; millions are flocking to the Guardian for quality news every day. We believe everyone deserves access to factual information, and analysis that has authority and integrity. That’s why, unlike many others, we made a choice: to keep Guardian reporting open for all, regardless of where they live or what they can afford to pay.",
     'As an open, independent news organisation we investigate, interrogate and expose the actions of those in power, without fear. With no shareholders or billionaire owner, our journalism is free from political and commercial bias – this makes us different. We can give a voice to the oppressed and neglected, and stand in solidarity with those who are calling for a fairer future. With your help we can make a difference.',
