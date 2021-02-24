@@ -33,7 +33,7 @@ case class BannerVariant(
 
   // Deprecated - use bannerContent / mobileBannerContent
   heading: Option[String],
-  body: String,
+  body: Option[String],
   highlightedText: Option[String],
   cta: Option[Cta],
   secondaryCta: Option[Cta]
