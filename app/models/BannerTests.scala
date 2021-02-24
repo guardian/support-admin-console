@@ -17,9 +17,21 @@ object BannerTemplate extends Enum[BannerTemplate] with CirceEnum[BannerTemplate
   case object GuardianWeeklyBanner extends BannerTemplate
 }
 
+case class BannerContent(
+  heading: Option[String],
+  messageText: String,
+  highlightedText: Option[String],
+  cta: Option[Cta],
+  secondaryCta: Option[Cta]
+)
+
 case class BannerVariant(
   name: String,
   template: BannerTemplate,
+  bannerContent: Option[BannerContent],
+  mobileBannerContent: Option[BannerContent],
+
+  // Deprecated - use bannerContent / mobileBannerContent
   heading: Option[String],
   body: String,
   highlightedText: Option[String],

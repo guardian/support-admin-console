@@ -14,7 +14,7 @@ import TestEditorArticleCountEditor, {
 import TestEditorActionButtons from '../testEditorActionButtons';
 import LiveSwitch from '../../shared/liveSwitch';
 import useValidation from '../hooks/useValidation';
-import { BannerTest, BannerVariant } from '../../../models/banner';
+import { BannerContent, BannerTest, BannerVariant } from '../../../models/banner';
 import { getDefaultVariant } from './utils/defaults';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -56,10 +56,13 @@ const styles = ({ spacing, palette }: Theme) =>
     },
   });
 
-const copyHasTemplate = (test: BannerTest, template: string): boolean =>
+const copyHasTemplate = (content: BannerContent, template: string): boolean =>
+  (content.heading && content.heading.includes(template)) || content.messageText.includes(template);
+const testCopyHasTemplate = (test: BannerTest, template: string): boolean =>
   test.variants.some(
     variant =>
-      (variant.heading && variant.heading.includes(template)) || variant.body.includes(template),
+      (variant.bannerContent && copyHasTemplate(variant.bannerContent, template)) ||
+      (variant.mobileBannerContent && copyHasTemplate(variant.mobileBannerContent, template)),
   );
 
 interface BannerTestEditorProps extends WithStyles<typeof styles> {
@@ -103,7 +106,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
     if (!!test.articlesViewedSettings) {
       return test.articlesViewedSettings;
     }
-    if (copyHasTemplate(test, articleCountTemplate)) {
+    if (testCopyHasTemplate(test, articleCountTemplate)) {
       return DEFAULT_ARTICLES_VIEWED_SETTINGS;
     }
     return undefined;
