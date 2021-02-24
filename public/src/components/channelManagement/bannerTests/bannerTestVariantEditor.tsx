@@ -67,7 +67,7 @@ const getLabelSuffix = (deviceType: DeviceType): string => {
     case 'MOBILE':
       return ' (mobile only)';
     case 'NOT_MOBILE':
-      return ' (from tablet)';
+      return ' (tablet + desktop)';
     default:
       return ' (all devices)';
   }
@@ -287,7 +287,7 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
             value="enabled"
             key="enabled"
             control={<Radio />}
-            label="Show different copy on mobile..."
+            label="Show different copy on mobile"
             disabled={!editMode}
           />
         </RadioGroup>
