@@ -12,10 +12,22 @@ export enum BannerTemplate {
   DigitalSubscriptionsBanner = 'DigitalSubscriptionsBanner',
   GuardianWeeklyBanner = 'GuardianWeeklyBanner',
 }
+
+export interface BannerContent {
+  heading?: string;
+  messageText: string;
+  highlightedText?: string;
+  cta?: Cta;
+  secondaryCta?: Cta;
+}
 export interface BannerVariant extends Variant {
   template: BannerTemplate;
+  bannerContent?: BannerContent;
+  mobileBannerContent?: BannerContent;
+
+  // Deprecated - use bannerContent / mobileBannerContent
   heading?: string;
-  body: string;
+  body?: string;
   highlightedText?: string;
   cta?: Cta;
   secondaryCta?: Cta;
