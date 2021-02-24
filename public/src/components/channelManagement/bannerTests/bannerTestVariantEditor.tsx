@@ -62,7 +62,7 @@ const HIGHTLIGHTED_TEXT_HELPER_TEXT = 'Final sentence of body copy';
 
 type DeviceType = 'ALL' | 'MOBILE' | 'NOT_MOBILE';
 
-const getFieldNameSuffix = (deviceType: DeviceType): string => {
+const getLabelSuffix = (deviceType: DeviceType): string => {
   switch (deviceType) {
     case 'MOBILE':
       return ' (mobile only)';
@@ -122,7 +122,7 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
     onChange({ ...content, secondaryCta: updatedCta });
   };
 
-  const labelSuffix = getFieldNameSuffix(deviceType);
+  const labelSuffix = getLabelSuffix(deviceType);
 
   return (
     <>
