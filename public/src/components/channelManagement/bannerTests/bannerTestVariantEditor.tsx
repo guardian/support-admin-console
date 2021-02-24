@@ -1,15 +1,13 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import {
-  createStyles,
   FormControlLabel,
   Radio,
   RadioGroup,
   TextField,
   Theme,
   Typography,
-  WithStyles,
-  withStyles,
+  makeStyles,
 } from '@material-ui/core';
 import VariantEditorButtonsEditor from '../variantEditorButtonsEditor';
 import { invalidTemplateValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
@@ -20,41 +18,40 @@ import { getDefaultVariant } from './utils/defaults';
 import useValidation from '../hooks/useValidation';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const styles = ({ palette, spacing }: Theme) =>
-  createStyles({
-    container: {
-      width: '100%',
-      paddingTop: spacing(2),
-      paddingLeft: spacing(4),
-      paddingRight: spacing(10),
+const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
+  container: {
+    width: '100%',
+    paddingTop: spacing(2),
+    paddingLeft: spacing(4),
+    paddingRight: spacing(10),
 
-      '& > * + *': {
-        marginTop: spacing(3),
-      },
+    '& > * + *': {
+      marginTop: spacing(3),
     },
-    hook: {
-      maxWidth: '400px',
+  },
+  hook: {
+    maxWidth: '400px',
+  },
+  sectionHeader: {
+    fontSize: 16,
+    color: palette.grey[900],
+    fontWeight: 500,
+  },
+  sectionContainer: {
+    paddingTop: spacing(2),
+    paddingBottom: spacing(2),
+    borderBottom: `1px solid ${palette.grey[500]}`,
+    '& > * + *': {
+      marginTop: spacing(3),
     },
-    sectionHeader: {
-      fontSize: 16,
-      color: palette.grey[900],
-      fontWeight: 500,
-    },
-    sectionContainer: {
-      paddingTop: spacing(2),
-      paddingBottom: spacing(2),
-      borderBottom: `1px solid ${palette.grey[500]}`,
-      '& > * + *': {
-        marginTop: spacing(3),
-      },
-    },
-    contentContainer: {
-      marginLeft: spacing(2),
-    },
-    buttonsContainer: {
-      marginTop: spacing(2),
-    },
-  });
+  },
+  contentContainer: {
+    marginLeft: spacing(2),
+  },
+  buttonsContainer: {
+    marginTop: spacing(2),
+  },
+}));
 
 const HEADER_DEFAULT_HELPER_TEXT = 'Assitive text';
 const BODY_DEFAULT_HELPER_TEXT = 'Main banner message, including paragraph breaks';
@@ -73,7 +70,7 @@ const getLabelSuffix = (deviceType: DeviceType): string => {
   }
 };
 
-interface BannerTestVariantContentEditorProps extends WithStyles<typeof styles> {
+interface BannerTestVariantContentEditorProps {
   content: BannerContent;
   template: BannerTemplate;
   onChange: (updatedContent: BannerContent) => void;
@@ -83,7 +80,6 @@ interface BannerTestVariantContentEditorProps extends WithStyles<typeof styles> 
 }
 
 const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorProps> = ({
-  classes,
   content,
   template,
   onChange,
@@ -91,6 +87,8 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
   editMode,
   deviceType,
 }: BannerTestVariantContentEditorProps) => {
+  const classes = useStyles();
+
   const defaultValues: BannerContent = {
     heading: content.heading || '',
     messageText: content.messageText,
@@ -202,9 +200,7 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
   );
 };
 
-const BannerTestVariantContentEditorWithStyles = withStyles(styles)(BannerTestVariantContentEditor);
-
-interface BannerTestVariantEditorProps extends WithStyles<typeof styles> {
+interface BannerTestVariantEditorProps {
   variant: BannerVariant;
   onVariantChange: (updatedVariant: BannerVariant) => void;
   editMode: boolean;
@@ -213,12 +209,12 @@ interface BannerTestVariantEditorProps extends WithStyles<typeof styles> {
 }
 
 const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
-  classes,
   variant,
   editMode,
   onValidationChange,
   onVariantChange,
 }: BannerTestVariantEditorProps) => {
+  const classes = useStyles();
   const setValidationStatusForField = useValidation(onValidationChange);
 
   const content: BannerContent = variant.bannerContent || {
@@ -259,7 +255,7 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
       </div>
 
       <div className={classes.sectionContainer}>
-        <BannerTestVariantContentEditorWithStyles
+        <BannerTestVariantContentEditor
           content={content}
           template={variant.template}
           onChange={(updatedContent: BannerContent): void =>
@@ -292,7 +288,7 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
           />
         </RadioGroup>
         {variant.mobileBannerContent && (
-          <BannerTestVariantContentEditorWithStyles
+          <BannerTestVariantContentEditor
             content={variant.mobileBannerContent}
             template={variant.template}
             onChange={(updatedContent: BannerContent): void =>
@@ -310,4 +306,4 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
   );
 };
 
-export default withStyles(styles)(BannerTestVariantEditor);
+export default BannerTestVariantEditor;
