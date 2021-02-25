@@ -71,7 +71,7 @@ Resources:
       ImageId: !Ref AMI
       SecurityGroups:
       - !Ref InstanceSecurityGroup
-      InstanceType: t3.micro
+      InstanceType: t4g.micro
       IamInstanceProfile: !Ref InstanceProfile
       AssociatePublicIpAddress: false
       UserData:
