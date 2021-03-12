@@ -87,7 +87,7 @@ const CreateVariantDialog: React.FC<CreateVariantDialogProps> = ({
           error={!!errors.name}
           helperText={errors.name && errors.name.message}
           name="name"
-          label="Full test name"
+          label="Variant name"
           margin="normal"
           variant="outlined"
           autoFocus
