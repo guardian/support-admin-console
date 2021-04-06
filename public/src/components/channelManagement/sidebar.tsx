@@ -4,6 +4,7 @@ import { Test } from './helpers/shared';
 import TestList from './testList';
 import TestPriorityLabelList from './testPriorityLabelList';
 import NewTestButton from './newTestButton';
+import { EpicTestKind } from './epicTests/epicTestsForm';
 
 const styles = createStyles({
   root: {
@@ -32,7 +33,7 @@ interface SidebarProps<T extends Test> {
   onTestPriorityChange: (newPriority: number, oldPriority: number) => void;
   onTestSelected: (testName: string) => void;
   testNamePrefix?: string;
-  createTest: (name: string, nickname: string) => void;
+  createTest: (name: string, nickname: string, kind: EpicTestKind) => void;
   isInEditMode: boolean;
 }
 

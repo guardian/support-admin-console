@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Button,
@@ -12,6 +12,11 @@ import {
   WithStyles,
   withStyles,
   InputAdornment,
+  FormControl,
+  FormLabel,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
@@ -21,6 +26,7 @@ import {
   INVALID_CHARACTERS_ERROR_HELPER_TEXT,
   VALID_CHARACTERS_REGEX,
 } from './helpers/validation';
+import { EpicTestKind } from './epicTests/epicTestsForm';
 
 const styles = createStyles({
   dialogHeader: {
@@ -52,7 +58,7 @@ interface CreateTestDialogProps extends WithStyles<typeof styles> {
   existingNicknames: string[];
   mode: Mode;
   testNamePrefix?: string;
-  createTest: (name: string, nickname: string) => void;
+  createTest: (name: string, nickname: string, kind: EpicTestKind) => void;
 }
 
 const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
@@ -73,10 +79,15 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
   const { register, handleSubmit, errors } = useForm<FormData>({
     defaultValues,
   });
+  const [kind, setKind] = useState<EpicTestKind>('COPY');
 
   const onSubmit = ({ name, nickname }: FormData): void => {
-    createTest(`${testNamePrefix || ''}${name}`.toUpperCase(), nickname.toUpperCase());
+    createTest(`${testNamePrefix || ''}${name}`.toUpperCase(), nickname.toUpperCase(), kind);
     close();
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setKind(event.target.value as EpicTestKind);
   };
 
   return (
@@ -90,6 +101,14 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
         </IconButton>
       </div>
       <DialogContent dividers>
+        <FormControl component="fieldset">
+          <FormLabel component="legend">Type</FormLabel>
+          <RadioGroup aria-label="type" name="type" value={kind} onChange={handleChange}>
+            <FormControlLabel value="COPY" control={<Radio />} label="Copy" />
+            <FormControlLabel value="DESIGN" control={<Radio />} label="Design" />
+          </RadioGroup>
+        </FormControl>
+
         <TextField
           className={classes.input}
           inputRef={register({
@@ -114,6 +133,7 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
           autoFocus
           fullWidth
         />
+
         <TextField
           className={classes.input}
           inputRef={register({

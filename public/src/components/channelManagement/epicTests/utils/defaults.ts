@@ -1,5 +1,5 @@
 import { UserCohort } from '../../helpers/shared';
-import { EpicVariant, EpicTest, MaxEpicViews, EpicCopyTest } from '../epicTestsForm';
+import { EpicVariant, EpicTest, MaxEpicViews, EpicCopyTest, EpicTestKind } from '../epicTestsForm';
 
 import { getStage } from '../../../../utils/stage';
 
@@ -85,7 +85,28 @@ const PROD_DEFAULT_TEST: EpicTest = {
   useLocalViewLog: false,
 };
 
-export const getDefaultTest = (): EpicTest => {
+const DEFAULT_DESIGN_TEST: EpicTest = {
+  kind: 'DESIGN',
+  name: 'TEST',
+  nickname: 'TEST',
+  isOn: false,
+  locations: [],
+  tagIds: [],
+  sections: [],
+  excludedTagIds: [],
+  excludedSections: [],
+  alwaysAsk: false,
+  maxViews: DEFAULT_MAX_EPIC_VIEWS,
+  userCohort: UserCohort.AllNonSupporters, // matches the default in dotcom
+  variants: [],
+  useLocalViewLog: false,
+};
+
+export const getDefaultTest = (kind: EpicTestKind): EpicTest => {
+  if (kind === 'DESIGN') {
+    return DEFAULT_DESIGN_TEST;
+  }
+
   const stage = getStage();
   if (stage === 'DEV' || stage === 'CODE') {
     return DEV_AND_CODE_DEFAULT_TEST;

@@ -4,6 +4,7 @@ import AddIcon from '@material-ui/icons/Add';
 
 import CreateTestDialog from './createTestDialog';
 import useOpenable from '../../hooks/useOpenable';
+import { EpicTestKind } from './epicTests/epicTestsForm';
 
 const styles = createStyles({
   button: {
@@ -23,7 +24,7 @@ interface NewTestButtonProps extends WithStyles<typeof styles> {
   existingNames: string[];
   existingNicknames: string[];
   testNamePrefix?: string;
-  createTest: (name: string, nickname: string) => void;
+  createTest: (name: string, nickname: string, kind: EpicTestKind) => void;
 }
 
 const NewTestButton: React.FC<NewTestButtonProps> = ({

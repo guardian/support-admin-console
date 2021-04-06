@@ -21,7 +21,7 @@ import TestsForm from '../testEditor';
 import TestsFormLayout from '../testsFormLayout';
 import Sidebar from '../sidebar';
 import { FrontendSettingsType } from '../../../utils/requests';
-import { getDefaultTest, getDefaultVariant } from './utils/defaults';
+import { getDefaultTest } from './utils/defaults';
 
 export enum TickerEndType {
   unlimited = 'unlimited',
@@ -65,6 +65,8 @@ export interface ControlProportionSettings {
   offset: number;
 }
 
+export type EpicTestKind = 'COPY' | 'DESIGN';
+
 export interface EpicCopyTest extends Test {
   kind: 'COPY';
   name: string;
@@ -104,11 +106,15 @@ export type EpicTest = EpicCopyTest | EpicDesignTest;
 type Props = InnerComponentProps<EpicTest>;
 
 const getEpicTestForm = (epicEditorConfig: EpicEditorConfig): React.FC<Props> => {
-  const createDefaultEpicTest = (newTestName: string, newTestNickname: string): EpicTest => ({
-    ...getDefaultTest(),
+  const createDefaultEpicTest = (
+    newTestName: string,
+    newTestNickname: string,
+    kind: EpicTestKind,
+  ): EpicTest => ({
+    ...getDefaultTest(kind),
     name: newTestName,
     nickname: newTestNickname,
-    variants: epicEditorConfig.allowMultipleVariants ? [] : [{ ...getDefaultVariant() }],
+    // variants: epicEditorConfig.allowMultipleVariants ? [] : [{ ...getDefaultVariant() }],
   });
 
   const EpicTestsForm: React.FC<Props> = ({
@@ -129,11 +135,11 @@ const getEpicTestForm = (epicEditorConfig: EpicEditorConfig): React.FC<Props> =>
     cancel,
     editMode,
   }: Props) => {
-    const createTest = (name: string, nickname: string): void => {
+    const createTest = (name: string, nickname: string, kind: EpicTestKind): void => {
       if (selectedTestHasBeenModified) {
         alert('Please either save or discard before creating a test.');
       } else {
-        onTestCreate(createDefaultEpicTest(name, nickname));
+        onTestCreate(createDefaultEpicTest(name, nickname, kind));
       }
     };
 
@@ -184,8 +190,6 @@ const getEpicTestForm = (epicEditorConfig: EpicEditorConfig): React.FC<Props> =>
                 editMode={editMode}
                 onDelete={onTestDelete}
                 onArchive={onTestArchive}
-                onTestSelected={onTestSelected}
-                createTest={onTestCreate}
                 testNames={tests.map(test => test.name)}
                 testNicknames={
                   tests.map(test => test.nickname).filter(nickname => !!nickname) as string[]

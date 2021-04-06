@@ -1,6 +1,6 @@
 import React from 'react';
 import { Region } from '../../../utils/models';
-import { EpicCopyTest, EpicDesignTest, MaxEpicViews } from './epicTestsForm';
+import { EpicDesignTest, MaxEpicViews } from './epicTestsForm';
 import { UserCohort, EpicEditorConfig } from '../helpers/shared';
 import { makeStyles, FormControlLabel, Switch, Theme, Typography } from '@material-ui/core';
 import TestEditorHeader from '../testEditorHeader';
@@ -58,11 +58,9 @@ interface EpicDesignTestEditorProps {
   editMode: boolean;
   onDelete: () => void;
   onArchive: () => void;
-  onTestSelected: (testName: string) => void;
   testNames: string[];
   testNicknames: string[];
   testNamePrefix?: string;
-  createTest: (newTest: EpicCopyTest) => void;
 }
 
 const EpicDesignTestEditor: React.FC<EpicDesignTestEditorProps> = ({
@@ -72,7 +70,6 @@ const EpicDesignTestEditor: React.FC<EpicDesignTestEditorProps> = ({
   editMode,
   onDelete,
   onArchive,
-  onTestSelected,
   testNames,
   testNicknames,
   testNamePrefix,
@@ -133,7 +130,7 @@ const EpicDesignTestEditor: React.FC<EpicDesignTestEditorProps> = ({
 
   const onCopy = (name: string, nickname: string): void => {
     console.log({ name, nickname });
-    onTestSelected(name);
+    // onTestSelected(name);
     // createTest({ ...test, name: name, nickname: nickname, isOn: false });
   };
 
