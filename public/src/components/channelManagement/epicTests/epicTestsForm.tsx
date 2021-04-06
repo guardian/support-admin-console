@@ -1,5 +1,6 @@
 import React from 'react';
 import EpicTestEditor from './epicTestEditor';
+import EpicDesignTestEditor from './epicDesignTestEditor';
 import { Region } from '../../../utils/models';
 
 import {
@@ -87,6 +88,15 @@ export interface EpicCopyTest extends Test {
 
 export interface EpicDesignTest extends Test {
   kind: 'DESIGN';
+  locations: Region[];
+  tagIds: string[];
+  sections: string[];
+  excludedTagIds: string[];
+  excludedSections: string[];
+  alwaysAsk: boolean;
+  maxViews?: MaxEpicViews;
+  userCohort: UserCohort;
+  useLocalViewLog: boolean;
 }
 
 export type EpicTest = EpicCopyTest | EpicDesignTest;
@@ -143,25 +153,46 @@ const getEpicTestForm = (epicEditorConfig: EpicEditorConfig): React.FC<Props> =>
           />
         }
         testEditor={
-          selectedTestName && selectedTest && selectedTest.kind === 'COPY' ? (
-            <EpicTestEditor
-              test={selectedTest}
-              hasChanged={selectedTestHasBeenModified}
-              epicEditorConfig={epicEditorConfig}
-              onChange={onTestChange}
-              onValidationChange={onTestErrorStatusChange}
-              visible
-              editMode={editMode}
-              onDelete={onTestDelete}
-              onArchive={onTestArchive}
-              onTestSelected={onTestSelected}
-              createTest={onTestCreate}
-              testNames={tests.map(test => test.name)}
-              testNicknames={
-                tests.map(test => test.nickname).filter(nickname => !!nickname) as string[]
-              }
-              testNamePrefix={epicEditorConfig.testNamePrefix}
-            />
+          selectedTestName && selectedTest ? (
+            selectedTest.kind === 'COPY' ? (
+              <EpicTestEditor
+                test={selectedTest}
+                hasChanged={selectedTestHasBeenModified}
+                epicEditorConfig={epicEditorConfig}
+                onChange={onTestChange}
+                onValidationChange={onTestErrorStatusChange}
+                visible
+                editMode={editMode}
+                onDelete={onTestDelete}
+                onArchive={onTestArchive}
+                onTestSelected={onTestSelected}
+                createTest={onTestCreate}
+                testNames={tests.map(test => test.name)}
+                testNicknames={
+                  tests.map(test => test.nickname).filter(nickname => !!nickname) as string[]
+                }
+                testNamePrefix={epicEditorConfig.testNamePrefix}
+              />
+            ) : (
+              <EpicDesignTestEditor
+                test={selectedTest}
+                hasChanged={selectedTestHasBeenModified}
+                epicEditorConfig={epicEditorConfig}
+                onChange={onTestChange}
+                onValidationChange={onTestErrorStatusChange}
+                visible
+                editMode={editMode}
+                onDelete={onTestDelete}
+                onArchive={onTestArchive}
+                onTestSelected={onTestSelected}
+                createTest={onTestCreate}
+                testNames={tests.map(test => test.name)}
+                testNicknames={
+                  tests.map(test => test.nickname).filter(nickname => !!nickname) as string[]
+                }
+                testNamePrefix={epicEditorConfig.testNamePrefix}
+              />
+            )
           ) : null
         }
         selectedTestName={selectedTestName}
