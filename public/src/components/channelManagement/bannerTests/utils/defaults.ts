@@ -40,6 +40,7 @@ export const getDefaultVariant = (): BannerVariant => {
 };
 
 const DEV_AND_CODE_DEFAULT_BANNER_TEST: BannerTest = {
+  kind: 'COPY',
   name: 'TEST',
   nickname: 'TEST',
   isOn: false,
@@ -51,6 +52,7 @@ const DEV_AND_CODE_DEFAULT_BANNER_TEST: BannerTest = {
 };
 
 const PROD_DEFAULT_BANNER: BannerTest = {
+  kind: 'COPY',
   name: '',
   nickname: '',
   isOn: false,

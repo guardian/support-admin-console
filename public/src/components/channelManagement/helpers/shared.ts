@@ -7,6 +7,7 @@ export interface Variant {
 export type TestType = 'EPIC' | 'BANNER';
 
 export interface Test {
+  kind: 'COPY' | 'DESIGN';
   name: string;
   nickname?: string;
   isOn: boolean;

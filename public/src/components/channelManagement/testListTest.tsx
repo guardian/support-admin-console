@@ -5,6 +5,7 @@ import { Test } from './helpers/shared';
 import TestListTestLiveLabel from './testListTestLiveLabel';
 import TestListTestName from './testListTestName';
 import TestListTestArticleCountLabel from './testListTestArticleCountLabel';
+import TestListTestDesignTestLabel from './testListTestDesignTestLabel';
 import useHover from '../../hooks/useHover';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -92,6 +93,7 @@ const TestListTest: React.FC<TestListTestProps> = ({
       </div>
 
       {hasArticleCount && <TestListTestArticleCountLabel />}
+      {test.kind === 'DESIGN' && <TestListTestDesignTestLabel />}
     </ListItem>
   );
 };

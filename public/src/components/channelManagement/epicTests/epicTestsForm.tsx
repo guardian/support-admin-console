@@ -64,8 +64,6 @@ export interface ControlProportionSettings {
   offset: number;
 }
 
-export type EpicTestKind = 'COPY' | 'DESIGN';
-
 export interface EpicCopyTest extends Test {
   kind: 'COPY';
   name: string;
