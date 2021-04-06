@@ -52,6 +52,7 @@ case class EpicVariant(
   secondaryCta: Option[Cta]
 )
 case class EpicTest(
+  kind: String,
   name: String,
   nickname: Option[String],
   isOn: Boolean,

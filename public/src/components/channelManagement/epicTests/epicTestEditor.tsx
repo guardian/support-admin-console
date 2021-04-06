@@ -1,6 +1,11 @@
 import React from 'react';
 import { Region } from '../../../utils/models';
-import { ControlProportionSettings, EpicTest, EpicVariant, MaxEpicViews } from './epicTestsForm';
+import {
+  ControlProportionSettings,
+  EpicCopyTest,
+  EpicVariant,
+  MaxEpicViews,
+} from './epicTestsForm';
 import { ArticlesViewedSettings, UserCohort, EpicEditorConfig } from '../helpers/shared';
 import { makeStyles, FormControlLabel, Switch, Theme, Typography } from '@material-ui/core';
 import TestEditorHeader from '../testEditorHeader';
@@ -56,7 +61,7 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   },
 }));
 
-const copyHasTemplate = (test: EpicTest, template: string): boolean =>
+const copyHasTemplate = (test: EpicCopyTest, template: string): boolean =>
   test.variants.some(
     variant =>
       (variant.heading && variant.heading.includes(template)) ||
@@ -64,10 +69,10 @@ const copyHasTemplate = (test: EpicTest, template: string): boolean =>
   );
 
 interface EpicTestEditorProps {
-  test: EpicTest;
+  test: EpicCopyTest;
   hasChanged: boolean;
   epicEditorConfig: EpicEditorConfig;
-  onChange: (updatedTest: EpicTest) => void;
+  onChange: (updatedTest: EpicCopyTest) => void;
   onValidationChange: (isValid: boolean) => void;
   visible: boolean;
   editMode: boolean;
@@ -77,7 +82,7 @@ interface EpicTestEditorProps {
   testNames: string[];
   testNicknames: string[];
   testNamePrefix?: string;
-  createTest: (newTest: EpicTest) => void;
+  createTest: (newTest: EpicCopyTest) => void;
 }
 
 const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
@@ -107,7 +112,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
   const onVariantsSplitSettingsValidationChanged = (isValid: boolean): void =>
     setValidationStatusForField('variantsSplitSettings', isValid);
 
-  const getArticlesViewedSettings = (test: EpicTest): ArticlesViewedSettings | undefined => {
+  const getArticlesViewedSettings = (test: EpicCopyTest): ArticlesViewedSettings | undefined => {
     if (!!test.articlesViewedSettings) {
       return test.articlesViewedSettings;
     }
@@ -117,7 +122,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
     return undefined;
   };
 
-  const updateTest = (update: (test: EpicTest) => EpicTest): void => {
+  const updateTest = (update: (test: EpicCopyTest) => EpicCopyTest): void => {
     if (test) {
       const updatedTest = update(test);
 

@@ -64,7 +64,10 @@ export interface ControlProportionSettings {
   offset: number;
 }
 
-export interface EpicTest extends Test {
+export type EpicTestKind = 'COPY' | 'DESIGN';
+
+export interface EpicCopyTest extends Test {
+  kind: 'COPY';
   name: string;
   nickname?: string;
   isOn: boolean;
@@ -83,6 +86,12 @@ export interface EpicTest extends Test {
   articlesViewedSettings?: ArticlesViewedSettings;
   controlProportionSettings?: ControlProportionSettings;
 }
+
+export interface EpicDesignTest extends Test {
+  kind: 'DESIGN';
+}
+
+export type EpicTest = EpicCopyTest | EpicDesignTest;
 
 type Props = InnerComponentProps<EpicTest>;
 
@@ -136,7 +145,7 @@ const getEpicTestForm = (epicEditorConfig: EpicEditorConfig): React.FC<Props> =>
           />
         }
         testEditor={
-          selectedTestName && selectedTest ? (
+          selectedTestName && selectedTest && selectedTest.kind === 'COPY' ? (
             <EpicTestEditor
               test={selectedTest}
               hasChanged={selectedTestHasBeenModified}

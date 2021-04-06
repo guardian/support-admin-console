@@ -1,5 +1,5 @@
 import { UserCohort } from '../../helpers/shared';
-import { EpicVariant, EpicTest, MaxEpicViews } from '../epicTestsForm';
+import { EpicVariant, EpicTest, MaxEpicViews, EpicCopyTest } from '../epicTestsForm';
 
 import { getStage } from '../../../../utils/stage';
 
@@ -47,7 +47,8 @@ export const getDefaultVariant = (): EpicVariant => {
   return PROD_DEFAULT_VARIANT;
 };
 
-const DEV_AND_CODE_DEFAULT_TEST: EpicTest = {
+const DEV_AND_CODE_DEFAULT_TEST: EpicCopyTest = {
+  kind: 'COPY',
   name: 'TEST',
   nickname: 'TEST',
   isOn: false,
@@ -66,6 +67,7 @@ const DEV_AND_CODE_DEFAULT_TEST: EpicTest = {
 };
 
 const PROD_DEFAULT_TEST: EpicTest = {
+  kind: 'COPY',
   name: 'TEST',
   nickname: 'TEST',
   isOn: false,
