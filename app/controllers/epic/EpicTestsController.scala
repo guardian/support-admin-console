@@ -28,7 +28,7 @@ class EpicTestsController(
     name = EpicTestsController.name,
     dataObjectSettings = S3ObjectSettings(
       bucket = "gu-contributions-public",
-      key = s"epic/$stage/${EpicTestsController.name}.json",
+      key = s"epic/$stage/${EpicTestsController.name}-tom-10p-time.json",
       publicRead = true,  // This data will be requested by dotcom
       cacheControl = Some("max-age=30"),
       surrogateControl = Some("max-age=86400")  // Cache for a day, and use cache purging after updates
