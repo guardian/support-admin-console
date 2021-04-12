@@ -9,4 +9,4 @@ package-lock.json
 .DS_Store
 .bloop/
 .metals/
-project/.bloop/
+project
