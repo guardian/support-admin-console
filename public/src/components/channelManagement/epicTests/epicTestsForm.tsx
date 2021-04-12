@@ -41,6 +41,11 @@ export interface TickerSettings {
   currencySymbol: string;
   copy: TickerCopy;
 }
+
+export interface SeparateArticleCount {
+  type: 'above';
+}
+
 export interface EpicVariant extends Variant {
   heading?: string;
   paragraphs: string[];
@@ -51,6 +56,7 @@ export interface EpicVariant extends Variant {
   backgroundImageUrl?: string;
   cta?: Cta;
   secondaryCta?: Cta;
+  separateArticleCount?: SeparateArticleCount;
 }
 
 export interface MaxEpicViews {

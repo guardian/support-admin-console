@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { EpicVariant } from './epicTestsForm';
+import { EpicVariant, SeparateArticleCount } from './epicTestsForm';
 import { Cta, EpicEditorConfig, TickerSettings } from '../helpers/shared';
 import { Theme, Typography, makeStyles, TextField } from '@material-ui/core';
 import VariantEditorButtonsEditor from '../variantEditorButtonsEditor';
+import VariantEditorSeparateArticleCountEditor from '../variantEditorSeparateArticleCountEditor';
 import EpicTestTickerEditor from './epicTestTickerEditor';
 import { invalidTemplateValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 
@@ -123,6 +124,9 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   const updateSecondaryCta = (updatedCta?: Cta): void => {
     onVariantChange({ ...variant, secondaryCta: updatedCta });
   };
+  const updateSeparateArticleCount = (updatedSeparateArticleCount?: SeparateArticleCount): void => {
+    onVariantChange({ ...variant, separateArticleCount: updatedSeparateArticleCount });
+  };
   const updateTickerSettings = (updatedTickerSettings?: TickerSettings): void => {
     onVariantChange({ ...variant, tickerSettings: updatedTickerSettings });
   };
@@ -238,6 +242,20 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
             isDisabled={!editMode}
             onValidationChange={onValidationChange}
             supportSecondaryCta={epicEditorConfig.allowVariantCustomSecondaryCta}
+          />
+        </div>
+      )}
+
+      {epicEditorConfig.allowVariantSeparateArticleCount && (
+        <div className={classes.sectionContainer}>
+          <Typography className={classes.sectionHeader} variant="h4">
+            Separate article count
+          </Typography>
+
+          <VariantEditorSeparateArticleCountEditor
+            separateArticleCount={variant.separateArticleCount}
+            updateSeparateArticleCount={updateSeparateArticleCount}
+            isDisabled={!editMode}
           />
         </div>
       )}

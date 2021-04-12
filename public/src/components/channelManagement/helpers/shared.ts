@@ -32,6 +32,7 @@ export interface EpicEditorConfig {
   allowVariantFooter: boolean;
   allowVariantCustomPrimaryCta: boolean;
   allowVariantCustomSecondaryCta: boolean;
+  allowVariantSeparateArticleCount: boolean;
   allowVariantTicker: boolean;
   requireVariantHeader: boolean;
 }
@@ -50,6 +51,7 @@ export const ARTICLE_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantFooter: true,
   allowVariantCustomPrimaryCta: true,
   allowVariantCustomSecondaryCta: true,
+  allowVariantSeparateArticleCount: true,
   allowVariantTicker: true,
   requireVariantHeader: true,
 };
@@ -69,6 +71,7 @@ export const ARTICLE_EPIC_HOLDBACK_CONFIG: EpicEditorConfig = {
   allowVariantFooter: true,
   allowVariantCustomPrimaryCta: true,
   allowVariantCustomSecondaryCta: true,
+  allowVariantSeparateArticleCount: true,
   allowVariantTicker: true,
   requireVariantHeader: true,
 };
@@ -87,6 +90,7 @@ export const LIVEBLOG_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantFooter: false,
   allowVariantCustomPrimaryCta: true,
   allowVariantCustomSecondaryCta: true,
+  allowVariantSeparateArticleCount: false,
   allowVariantTicker: false,
   requireVariantHeader: false,
 };
@@ -105,6 +109,7 @@ export const APPLE_NEWS_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantFooter: false,
   allowVariantCustomPrimaryCta: false,
   allowVariantCustomSecondaryCta: false,
+  allowVariantSeparateArticleCount: false,
   allowVariantTicker: false,
   requireVariantHeader: true,
 };
@@ -123,6 +128,7 @@ export const AMP_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantFooter: false,
   allowVariantCustomPrimaryCta: true,
   allowVariantCustomSecondaryCta: false,
+  allowVariantSeparateArticleCount: false,
   allowVariantTicker: true,
   requireVariantHeader: true,
 };
