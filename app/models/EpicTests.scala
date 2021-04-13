@@ -39,6 +39,18 @@ case class TickerSettings(
   copy: TickerCopy
 )
 
+sealed trait SeparateArticleCountType extends EnumEntry
+object SeparateArticleCountType extends Enum[SeparateArticleCountType] with CirceEnum[SeparateArticleCountType] {
+  override val values: IndexedSeq[SeparateArticleCountType] = findValues
+
+  case object above extends SeparateArticleCountType
+}
+
+
+case class SeparateArticleCount(
+  `type`: SeparateArticleCountType,
+)
+
 case class EpicVariant(
   name: String,
   heading: Option[String],
@@ -49,7 +61,8 @@ case class EpicVariant(
   tickerSettings: Option[TickerSettings] = None,
   backgroundImageUrl: Option[String] = None,
   cta: Option[Cta],
-  secondaryCta: Option[Cta]
+  secondaryCta: Option[Cta],
+  separateArticleCount: Option[SeparateArticleCount],
 )
 case class EpicTest(
   name: String,
