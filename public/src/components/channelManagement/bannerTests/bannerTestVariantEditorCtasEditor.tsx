@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core';
-import VariantEditorButtonEditor from './variantEditorButtonEditor';
-import { Cta } from './helpers/shared';
+import VariantEditorCtaEditor from '../variantEditorCtaEditor';
+import { Cta } from '../helpers/shared';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing }: Theme) =>
@@ -23,7 +23,7 @@ const DEFAULT_SECONDARY_CTA = {
   baseUrl: 'https://support.theguardian.com/contribute',
 };
 
-interface VariantEditorButtonsEditorProps extends WithStyles<typeof styles> {
+interface BannerTestVariantEditorCtasEditorProps extends WithStyles<typeof styles> {
   primaryCta?: Cta;
   secondaryCta?: Cta;
   updatePrimaryCta: (updatedCta?: Cta) => void;
@@ -33,7 +33,7 @@ interface VariantEditorButtonsEditorProps extends WithStyles<typeof styles> {
   supportSecondaryCta: boolean;
 }
 
-const VariantEditorButtonsEditor: React.FC<VariantEditorButtonsEditorProps> = ({
+const BannerTestVariantEditorCtasEditor: React.FC<BannerTestVariantEditorCtasEditorProps> = ({
   classes,
   primaryCta,
   secondaryCta,
@@ -42,10 +42,10 @@ const VariantEditorButtonsEditor: React.FC<VariantEditorButtonsEditorProps> = ({
   onValidationChange,
   isDisabled,
   supportSecondaryCta,
-}: VariantEditorButtonsEditorProps) => {
+}: BannerTestVariantEditorCtasEditorProps) => {
   return (
     <div className={classes.container}>
-      <VariantEditorButtonEditor
+      <VariantEditorCtaEditor
         label="Primary button"
         isDisabled={isDisabled}
         cta={primaryCta}
@@ -53,8 +53,9 @@ const VariantEditorButtonsEditor: React.FC<VariantEditorButtonsEditorProps> = ({
         defaultCta={DEFAULT_PRIMARY_CTA}
         onValidationChange={onValidationChange}
       />
+
       {supportSecondaryCta && (
-        <VariantEditorButtonEditor
+        <VariantEditorCtaEditor
           label="Secondary button"
           isDisabled={isDisabled}
           cta={secondaryCta}
@@ -67,4 +68,4 @@ const VariantEditorButtonsEditor: React.FC<VariantEditorButtonsEditorProps> = ({
   );
 };
 
-export default withStyles(styles)(VariantEditorButtonsEditor);
+export default withStyles(styles)(BannerTestVariantEditorCtasEditor);

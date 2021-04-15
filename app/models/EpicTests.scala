@@ -10,6 +10,24 @@ case class ControlProportionSettings(proportion: Float, offset: Int)
 
 case class Cta(text: Option[String], baseUrl: Option[String])
 
+sealed trait SecondaryCta
+
+case class CustomSecondaryCta(
+  `type`: String = "CustomSecondaryCta",
+  cta: Cta,
+) extends SecondaryCta
+
+case class ContributionsReminderSecondaryCta(
+  `type`: String = "ContributionsReminderSecondaryCta",
+) extends SecondaryCta
+
+object SecondaryCta {
+  implicit val customConfig: Configuration = Configuration.default.withDiscriminator("type")
+
+  implicit val secondaryCtaDecoder = Decoder[SecondaryCta]
+  implicit val secondaryCtaEncoder = Encoder[SecondaryCta]
+}
+
 sealed trait TickerEndType extends EnumEntry
 object TickerEndType extends Enum[TickerEndType] with CirceEnum[TickerEndType] {
   override val values: IndexedSeq[TickerEndType] = findValues
@@ -46,7 +64,6 @@ object SeparateArticleCountType extends Enum[SeparateArticleCountType] with Circ
   case object above extends SeparateArticleCountType
 }
 
-
 case class SeparateArticleCount(
   `type`: SeparateArticleCountType,
 )
@@ -61,7 +78,7 @@ case class EpicVariant(
   tickerSettings: Option[TickerSettings] = None,
   backgroundImageUrl: Option[String] = None,
   cta: Option[Cta],
-  secondaryCta: Option[Cta],
+  secondaryCta: Option[SecondaryCta],
   separateArticleCount: Option[SeparateArticleCount],
 )
 case class EpicTest(
