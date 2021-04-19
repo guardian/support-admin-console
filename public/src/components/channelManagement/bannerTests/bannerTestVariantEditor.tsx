@@ -9,7 +9,7 @@ import {
   Typography,
   makeStyles,
 } from '@material-ui/core';
-import VariantEditorButtonsEditor from '../variantEditorButtonsEditor';
+import BannerTestVariantEditorCtasEditor from './bannerTestVariantEditorCtasEditor';
 import { invalidTemplateValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 import { Cta } from '../helpers/shared';
 import BannerTemplateSelector from './bannerTemplateSelector';
@@ -185,7 +185,7 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
             {`Buttons${labelSuffix}`}
           </Typography>
 
-          <VariantEditorButtonsEditor
+          <BannerTestVariantEditorCtasEditor
             primaryCta={content.cta}
             secondaryCta={content.secondaryCta}
             updatePrimaryCta={updatePrimaryCta}

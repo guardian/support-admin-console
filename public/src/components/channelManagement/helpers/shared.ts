@@ -89,7 +89,7 @@ export const LIVEBLOG_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantImageUrl: false,
   allowVariantFooter: false,
   allowVariantCustomPrimaryCta: true,
-  allowVariantCustomSecondaryCta: true,
+  allowVariantCustomSecondaryCta: false,
   allowVariantSeparateArticleCount: false,
   allowVariantTicker: false,
   requireVariantHeader: false,
@@ -150,6 +150,22 @@ export interface Cta {
   text?: string;
   baseUrl?: string;
 }
+
+export enum SecondaryCtaType {
+  Custom = 'CustomSecondaryCta',
+  ContributionsReminder = 'ContributionsReminderSecondaryCta',
+}
+
+interface CustomSecondaryCta {
+  type: SecondaryCtaType.Custom;
+  cta: Cta;
+}
+
+interface ContributionsReminderSecondaryCta {
+  type: SecondaryCtaType.ContributionsReminder;
+}
+
+export type SecondaryCta = CustomSecondaryCta | ContributionsReminderSecondaryCta;
 
 export const defaultCta = {
   text: 'Support the Guardian',

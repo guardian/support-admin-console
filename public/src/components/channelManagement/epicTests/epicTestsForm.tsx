@@ -14,6 +14,7 @@ import {
   LIVEBLOG_EPIC_CONFIG,
   APPLE_NEWS_EPIC_CONFIG,
   AMP_EPIC_CONFIG,
+  SecondaryCta,
 } from '../helpers/shared';
 import { InnerComponentProps } from '../testEditor';
 import TestsForm from '../testEditor';
@@ -55,7 +56,7 @@ export interface EpicVariant extends Variant {
   tickerSettings?: TickerSettings;
   backgroundImageUrl?: string;
   cta?: Cta;
-  secondaryCta?: Cta;
+  secondaryCta?: SecondaryCta;
   separateArticleCount?: SeparateArticleCount;
 }
 

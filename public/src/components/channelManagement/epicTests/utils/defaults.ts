@@ -1,4 +1,4 @@
-import { UserCohort } from '../../helpers/shared';
+import { SecondaryCtaType, UserCohort } from '../../helpers/shared';
 import { EpicVariant, EpicTest, MaxEpicViews } from '../epicTestsForm';
 
 import { getStage } from '../../../../utils/stage';
@@ -25,6 +25,7 @@ const DEV_AND_CODE_DEFAULT_VARIANT: EpicVariant = {
     text: 'Support the Guardian',
     baseUrl: 'https://support.theguardian.com/contribute',
   },
+  secondaryCta: { type: SecondaryCtaType.ContributionsReminder },
 };
 
 const PROD_DEFAULT_VARIANT: EpicVariant = {
@@ -37,6 +38,7 @@ const PROD_DEFAULT_VARIANT: EpicVariant = {
     text: 'Support the Guardian',
     baseUrl: 'https://support.theguardian.com/contribute',
   },
+  secondaryCta: { type: SecondaryCtaType.ContributionsReminder },
 };
 
 export const getDefaultVariant = (): EpicVariant => {

@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { EpicVariant, SeparateArticleCount } from './epicTestsForm';
-import { Cta, EpicEditorConfig, TickerSettings } from '../helpers/shared';
+import { Cta, SecondaryCta, EpicEditorConfig, TickerSettings } from '../helpers/shared';
 import { Theme, Typography, makeStyles, TextField } from '@material-ui/core';
-import VariantEditorButtonsEditor from '../variantEditorButtonsEditor';
+import EpicTestVariantEditorCtasEditor from './epicTestVariantEditorCtasEditor';
 import VariantEditorSeparateArticleCountEditor from '../variantEditorSeparateArticleCountEditor';
 import EpicTestTickerEditor from './epicTestTickerEditor';
 import { invalidTemplateValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
@@ -121,7 +121,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   const updatePrimaryCta = (updatedCta?: Cta): void => {
     onVariantChange({ ...variant, cta: updatedCta });
   };
-  const updateSecondaryCta = (updatedCta?: Cta): void => {
+  const updateSecondaryCta = (updatedCta?: SecondaryCta): void => {
     onVariantChange({ ...variant, secondaryCta: updatedCta });
   };
   const updateSeparateArticleCount = (updatedSeparateArticleCount?: SeparateArticleCount): void => {
@@ -234,7 +234,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
             Buttons
           </Typography>
 
-          <VariantEditorButtonsEditor
+          <EpicTestVariantEditorCtasEditor
             primaryCta={variant.cta}
             secondaryCta={variant.secondaryCta}
             updatePrimaryCta={updatePrimaryCta}
