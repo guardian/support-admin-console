@@ -19,6 +19,11 @@ const DEFAULT_PRIMARY_CTA: Cta = {
   baseUrl: 'https://support.theguardian.com/contribute',
 };
 
+const DEFAULT_SECONDARY_CTA: Cta = {
+  text: '',
+  baseUrl: '',
+};
+
 interface EpicTestVariantEditorButtonsEditorProps extends WithStyles<typeof styles> {
   primaryCta?: Cta;
   secondaryCta?: SecondaryCta;
@@ -56,6 +61,7 @@ const EpicTestVariantEditorButtonsEditor: React.FC<EpicTestVariantEditorButtonsE
           isDisabled={isDisabled}
           cta={secondaryCta}
           updateCta={updateSecondaryCta}
+          defaultCta={DEFAULT_SECONDARY_CTA}
           onValidationChange={onValidationChange}
         />
       )}

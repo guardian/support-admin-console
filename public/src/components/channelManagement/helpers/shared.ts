@@ -147,8 +147,8 @@ export interface TestStatus {
 }
 
 export interface Cta {
-  text?: string;
-  baseUrl?: string;
+  text: string;
+  baseUrl: string;
 }
 
 export enum SecondaryCtaType {

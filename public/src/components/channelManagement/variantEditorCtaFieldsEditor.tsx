@@ -38,8 +38,8 @@ const VariantEditorCtaFieldsEditor: React.FC<VariantEditorCtaFieldsEditorProps> 
   isDisabled,
 }: VariantEditorCtaFieldsEditorProps) => {
   const defaultValues: FormData = {
-    text: cta.text || '',
-    baseUrl: cta.baseUrl || '',
+    text: cta.text,
+    baseUrl: cta.baseUrl,
   };
 
   const { register, handleSubmit, errors } = useForm<FormData>({ mode: 'onChange', defaultValues });
