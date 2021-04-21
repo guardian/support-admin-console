@@ -34,6 +34,7 @@ interface VariantEditorSecondaryCtaEditorProps extends WithStyles<typeof styles>
   updateCta: (updatedCta?: SecondaryCta) => void;
   onValidationChange: (isValid: boolean) => void;
   isDisabled: boolean;
+  defaultCta: Cta;
 }
 
 const VariantEditorSecondaryCtaEditor: React.FC<VariantEditorSecondaryCtaEditorProps> = ({
@@ -43,12 +44,13 @@ const VariantEditorSecondaryCtaEditor: React.FC<VariantEditorSecondaryCtaEditorP
   updateCta,
   onValidationChange,
   isDisabled,
+  defaultCta,
 }: VariantEditorSecondaryCtaEditorProps) => {
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>): void => {
     const value = event.target.value as SecondaryCtaType | 'None';
 
     if (value === SecondaryCtaType.Custom) {
-      updateCta({ type: SecondaryCtaType.Custom, cta: {} });
+      updateCta({ type: SecondaryCtaType.Custom, cta: defaultCta });
     } else if (value === SecondaryCtaType.ContributionsReminder) {
       updateCta({ type: SecondaryCtaType.ContributionsReminder });
     } else {

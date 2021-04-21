@@ -8,7 +8,7 @@ import scala.collection.immutable.IndexedSeq
 
 case class ControlProportionSettings(proportion: Float, offset: Int)
 
-case class Cta(text: Option[String], baseUrl: Option[String])
+case class Cta(text: String, baseUrl: String)
 
 sealed trait SecondaryCta
 
