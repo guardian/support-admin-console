@@ -66,7 +66,6 @@ const EpicVariantLivePreview: React.FC<EpicVariantLivePreviewProps> = ({
   const [Epic, setEpic] = useState<React.FC<EpicProps>>();
 
   useEffect(() => {
-    // @ts-ignore
     window.guardian.automat = {
       react: React,
       preact: React,
@@ -75,10 +74,11 @@ const EpicVariantLivePreview: React.FC<EpicVariantLivePreviewProps> = ({
       emotion,
     };
 
-    // @ts-ignore
-    window.remoteImport('https://contributions.guardianapis.com/epic.js').then(epicModule => {
-      setEpic(() => epicModule.ContributionsEpic);
-    });
+    window
+      .remoteImport('https://contributions.guardianapis.com/modules/v1/epics/ContributionsEpic.js')
+      .then(epicModule => {
+        setEpic(() => epicModule.ContributionsEpic);
+      });
   }, []);
 
   const props = buildProps(variant);
