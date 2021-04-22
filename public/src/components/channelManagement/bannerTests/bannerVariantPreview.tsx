@@ -8,7 +8,7 @@ import Drawer from '@material-ui/core/Drawer';
 import { BannerTemplate, BannerVariant } from '../../../models/banner';
 import { Cta } from '../helpers/shared';
 import Typography from '@material-ui/core/Typography';
-import { withPreviewStyles } from "../previewContainer";
+import { withPreviewStyles } from '../previewContainer';
 
 export interface BannerContent {
   heading?: string;
