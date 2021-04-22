@@ -16,7 +16,6 @@ import BannerTemplateSelector from './bannerTemplateSelector';
 import { BannerContent, BannerTemplate, BannerVariant } from '../../../models/banner';
 import { getDefaultVariant } from './utils/defaults';
 import useValidation from '../hooks/useValidation';
-import BannerVariantLivePreview from '../epicTests/bannerVariantLivePreview';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
@@ -303,8 +302,6 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
           />
         )}
       </div>
-
-      <BannerVariantLivePreview variant={variant} />
     </div>
   );
 };

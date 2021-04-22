@@ -22,7 +22,7 @@ export interface BannerContent {
 }
 export interface BannerVariant extends Variant {
   template: BannerTemplate;
-  bannerContent?: BannerContent;
+  bannerContent: BannerContent;
   mobileBannerContent?: BannerContent;
 
   // Deprecated - use bannerContent / mobileBannerContent

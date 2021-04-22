@@ -1,13 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { Theme, makeStyles } from '@material-ui/core';
+import { Theme, makeStyles, Button } from '@material-ui/core';
 import * as emotion from 'emotion';
 import * as emotionCore from '@emotion/core';
 import * as emotionTheming from 'emotion-theming';
-import IconButton from '@material-ui/core/IconButton';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 import Drawer from '@material-ui/core/Drawer';
-import ChevronLeft from '@material-ui/icons/ChevronLeft';
 import { BannerTemplate, BannerVariant } from '../../../models/banner';
 import { Cta } from '../helpers/shared';
+import Typography from '@material-ui/core/Typography';
+
+export interface BannerContent {
+  heading?: string;
+  messageText: string;
+  highlightedText?: string;
+  cta?: Cta;
+  secondaryCta?: Cta;
+}
 
 interface BannerProps {
   tracking: {
@@ -26,15 +34,11 @@ interface BannerProps {
   bannerChannel: string;
   countryCode?: string;
   numArticles: number;
-  content: {
-    messageText: string;
-    heading?: string;
-    highlightedText?: string;
-    cta?: Cta;
-  };
+  content: BannerContent;
+  mobileContent?: BannerContent;
 }
 
-const anchor = 'right';
+const anchor = 'bottom';
 
 const buildProps = (variant: BannerVariant): BannerProps => ({
   tracking: {
@@ -51,37 +55,28 @@ const buildProps = (variant: BannerVariant): BannerProps => ({
   },
   bannerChannel: 'contributions',
   isSupporter: false,
-  content: {
-    messageText: variant.body || '',
-    heading: variant.heading,
-    highlightedText: variant.highlightedText,
-    cta: variant.cta,
-  },
+  content: variant.bannerContent,
+  mobileContent: variant.mobileBannerContent,
   countryCode: 'GB',
   numArticles: 13,
 });
 
 const bannerModules = {
   [BannerTemplate.GuardianWeeklyBanner]: {
-    path: 'guardian-weekly-banner.js',
+    path: 'guardianWeekly/GuardianWeeklyBanner.js',
     name: 'GuardianWeeklyBanner',
   },
   [BannerTemplate.DigitalSubscriptionsBanner]: {
-    path: 'digital-subscriptions-banner.js',
+    path: 'digitalSubscriptions/DigitalSubscriptionsBanner.js',
     name: 'DigitalSubscriptionsBanner',
   },
   [BannerTemplate.ContributionsBanner]: {
-    path: 'contributions-banner.js',
+    path: 'contributions/ContributionsBanner.js',
     name: 'ContributionsBanner',
   },
 };
 
 const useStyles = makeStyles(({ palette }: Theme) => ({
-  container: {
-    position: 'fixed',
-    top: '50vh',
-    right: '10px',
-  },
   drawer: {
     height: 'auto',
     bottom: 0,
@@ -96,13 +91,18 @@ const useStyles = makeStyles(({ palette }: Theme) => ({
     color: 'white',
     cursor: 'pointer',
   },
+  hint: {
+    textAlign: 'center',
+    fontStyle: 'italic',
+    fontSize: '20px',
+  },
 }));
 
 interface BannerVariantLivePreviewProps {
   variant: BannerVariant;
 }
 
-const BannerVariantLivePreview: React.FC<BannerVariantLivePreviewProps> = ({
+const BannerVariantPreview: React.FC<BannerVariantLivePreviewProps> = ({
   variant,
 }: BannerVariantLivePreviewProps) => {
   const classes = useStyles();
@@ -121,31 +121,29 @@ const BannerVariantLivePreview: React.FC<BannerVariantLivePreviewProps> = ({
 
     window
       .remoteImport(
-        `https://contributions.guardianapis.com/${bannerModules[variant.template].path}`,
+        `https://contributions.guardianapis.com/modules/v1/banners/${
+          bannerModules[variant.template].path
+        }`,
       )
       .then(bannerModule => {
         setBanner(() => bannerModule[bannerModules[variant.template].name]);
       });
   }, [variant.template]);
 
-  const toggleDrawer = (open: boolean) => (): void => {
+  const toggleDrawer = (open: boolean) => (event: React.MouseEvent): void => {
+    event.stopPropagation();
     setDrawerOpen(open);
   };
 
   const props = buildProps(variant);
 
   return (
-    <div className={classes.container}>
+    <div>
       {Banner && (
         <React.Fragment key={anchor}>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={toggleDrawer(true)}
-            edge="start"
-          >
-            <ChevronLeft className={classes.icon} />
-          </IconButton>
+          <Button startIcon={<VisibilityIcon />} size="small" onClick={toggleDrawer(true)}>
+            Live preview
+          </Button>
           <Drawer
             anchor={anchor}
             open={drawerOpen}
@@ -153,6 +151,9 @@ const BannerVariantLivePreview: React.FC<BannerVariantLivePreviewProps> = ({
             classes={{ paper: classes.drawer }}
           >
             <div>
+              <div className={classes.hint} onClick={toggleDrawer(false)}>
+                <Typography>Click anywhere outside the banner to close</Typography>
+              </div>
               <Banner {...props} />
             </div>
           </Drawer>
@@ -162,4 +163,4 @@ const BannerVariantLivePreview: React.FC<BannerVariantLivePreviewProps> = ({
   );
 };
 
-export default BannerVariantLivePreview;
+export default BannerVariantPreview;

@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
-import TestEditorVariantSummaryPreviewButton from './testEditorVariantSummaryPreviewButton';
+import TestEditorVariantSummaryWebPreviewButton from './testEditorVariantSummaryWebPreviewButton';
 import { TestType } from './helpers/shared';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -39,6 +39,13 @@ const styles = ({ spacing, palette }: Theme) =>
       letterSpacing: 1,
       textTransform: 'uppercase',
     },
+    buttonsContainer: {
+      display: 'flex',
+      flexDirection: 'row',
+      '& > *': {
+        marginLeft: '20px',
+      },
+    },
   });
 
 interface TestEditorVariantSummaryProps extends WithStyles<typeof styles> {
@@ -46,6 +53,7 @@ interface TestEditorVariantSummaryProps extends WithStyles<typeof styles> {
   testName: string;
   testType: TestType;
   isInEditMode: boolean;
+  topButton?: React.ReactElement;
 }
 
 const TestEditorVariantSummary: React.FC<TestEditorVariantSummaryProps> = ({
@@ -54,6 +62,7 @@ const TestEditorVariantSummary: React.FC<TestEditorVariantSummaryProps> = ({
   testName,
   testType,
   isInEditMode,
+  topButton,
 }: TestEditorVariantSummaryProps) => {
   return (
     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -65,12 +74,15 @@ const TestEditorVariantSummary: React.FC<TestEditorVariantSummaryProps> = ({
             {name}
           </Typography>
         </div>
-        <TestEditorVariantSummaryPreviewButton
-          name={name}
-          testName={testName}
-          testType={testType}
-          isDisabled={isInEditMode}
-        />
+        <div className={classes.buttonsContainer}>
+          {topButton}
+          <TestEditorVariantSummaryWebPreviewButton
+            name={name}
+            testName={testName}
+            testType={testType}
+            isDisabled={isInEditMode}
+          />
+        </div>
       </div>
     </AccordionSummary>
   );

@@ -30,7 +30,7 @@ interface TestEditorVariantSummaryPreviewButtonProps {
   isDisabled: boolean;
 }
 
-const TestEditorVariantSummaryPreviewButton: React.FC<TestEditorVariantSummaryPreviewButtonProps> = ({
+const TestEditorVariantSummaryWebPreviewButton: React.FC<TestEditorVariantSummaryPreviewButtonProps> = ({
   name,
   testName,
   testType,
@@ -47,8 +47,8 @@ const TestEditorVariantSummaryPreviewButton: React.FC<TestEditorVariantSummaryPr
       rel="noopener noreferrer"
       disabled={isDisabled}
     >
-      Preview
+      Web preview
     </Button>
   );
 };
-export default TestEditorVariantSummaryPreviewButton;
+export default TestEditorVariantSummaryWebPreviewButton;
