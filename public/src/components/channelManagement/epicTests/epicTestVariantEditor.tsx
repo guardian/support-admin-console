@@ -275,8 +275,6 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
           />
         </div>
       )}
-
-      {/* <EpicVariantLivePreview variant={variant} /> */}
     </div>
   );
 };
