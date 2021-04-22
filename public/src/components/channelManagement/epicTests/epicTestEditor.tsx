@@ -11,7 +11,7 @@ import TestEditorArticleCountEditor, {
   DEFAULT_ARTICLES_VIEWED_SETTINGS,
 } from '../testEditorArticleCountEditor';
 import TestEditorActionButtons from '../testEditorActionButtons';
-import TestVariantEditor from '../testVariantEditor';
+import TestVariantEditorWithPreviewTab from '../testVariantEditorWithPreviewTab';
 import EpicTestVariantEditor from './epicTestVariantEditor';
 import EpicVariantPreview from './epicVariantPreview';
 import EpicTestTargetContentEditor from './epicTestTargetContentEditor';
@@ -223,7 +223,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
   };
 
   const renderVariantEditor = (variant: EpicVariant): React.ReactElement => (
-    <TestVariantEditor
+    <TestVariantEditorWithPreviewTab
       variantEditor={
         <EpicTestVariantEditor
           epicEditorConfig={epicEditorConfig}

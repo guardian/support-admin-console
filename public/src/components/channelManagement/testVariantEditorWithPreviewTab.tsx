@@ -23,7 +23,7 @@ interface TestVariantEditorProps {
   variantPreview: React.ReactElement;
 }
 
-function TestVariantEditor({
+function TestVariantEditorWithPreviewTab({
   variantEditor,
   variantPreview,
 }: TestVariantEditorProps): React.ReactElement<TestVariantEditorProps> {
@@ -56,4 +56,4 @@ function TestVariantEditor({
   );
 }
 
-export default TestVariantEditor;
+export default TestVariantEditorWithPreviewTab;
