@@ -8,6 +8,7 @@ import Drawer from '@material-ui/core/Drawer';
 import { BannerTemplate, BannerVariant } from '../../../models/banner';
 import { Cta } from '../helpers/shared';
 import Typography from '@material-ui/core/Typography';
+import { withPreviewStyles } from "../previewContainer";
 
 export interface BannerContent {
   heading?: string;
@@ -126,7 +127,7 @@ const BannerVariantPreview: React.FC<BannerVariantPreviewProps> = ({
         }`,
       )
       .then(bannerModule => {
-        setBanner(() => bannerModule[bannerModules[variant.template].name]);
+        setBanner(() => withPreviewStyles(bannerModule[bannerModules[variant.template].name]));
       });
   }, [variant.template]);
 
