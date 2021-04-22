@@ -4,6 +4,7 @@ import * as emotion from 'emotion';
 import * as emotionCore from '@emotion/core';
 import * as emotionTheming from 'emotion-theming';
 import { EpicVariant } from './epicTestsForm';
+import { withPreviewStyles } from '../previewContainer';
 
 interface EpicProps {
   variant: EpicVariant;
@@ -77,7 +78,7 @@ const EpicVariantLivePreview: React.FC<EpicVariantLivePreviewProps> = ({
     window
       .remoteImport('https://contributions.guardianapis.com/modules/v1/epics/ContributionsEpic.js')
       .then(epicModule => {
-        setEpic(() => epicModule.ContributionsEpic);
+        setEpic(() => withPreviewStyles(epicModule.ContributionsEpic));
       });
   }, []);
 
