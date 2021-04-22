@@ -55,13 +55,13 @@ const useStyles = makeStyles(({}: Theme) => ({
   },
 }));
 
-interface EpicVariantLivePreviewProps {
+interface EpicVariantPreviewProps {
   variant: EpicVariant;
 }
 
-const EpicVariantLivePreview: React.FC<EpicVariantLivePreviewProps> = ({
+const EpicVariantPreview: React.FC<EpicVariantPreviewProps> = ({
   variant,
-}: EpicVariantLivePreviewProps) => {
+}: EpicVariantPreviewProps) => {
   const classes = useStyles();
 
   const [Epic, setEpic] = useState<React.FC<EpicProps>>();
@@ -87,4 +87,4 @@ const EpicVariantLivePreview: React.FC<EpicVariantLivePreviewProps> = ({
   return <div className={classes.container}>{Epic && <Epic {...props} />}</div>;
 };
 
-export default EpicVariantLivePreview;
+export default EpicVariantPreview;

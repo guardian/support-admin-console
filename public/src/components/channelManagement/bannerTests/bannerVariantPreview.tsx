@@ -98,13 +98,13 @@ const useStyles = makeStyles(({ palette }: Theme) => ({
   },
 }));
 
-interface BannerVariantLivePreviewProps {
+interface BannerVariantPreviewProps {
   variant: BannerVariant;
 }
 
-const BannerVariantPreview: React.FC<BannerVariantLivePreviewProps> = ({
+const BannerVariantPreview: React.FC<BannerVariantPreviewProps> = ({
   variant,
-}: BannerVariantLivePreviewProps) => {
+}: BannerVariantPreviewProps) => {
   const classes = useStyles();
 
   const [Banner, setBanner] = useState<React.FC<BannerProps>>();
