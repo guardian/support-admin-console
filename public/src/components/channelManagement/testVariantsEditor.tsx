@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles, Theme } from '@material-ui/core';
-import { Variant, TestType } from './helpers/shared';
+import { Variant } from './helpers/shared';
 import TestNewVariantButton from './testNewVariantButton';
 import TestVariantEditorsAccordion from './testVariantEditorsAccordion';
 
@@ -15,20 +15,20 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 interface TestVariantsEditorProps<V extends Variant> {
   variants: V[];
   testName: string;
-  testType: TestType;
   editMode: boolean;
   createVariant: (name: string) => void;
   renderVariantEditor: (variant: V) => React.ReactElement;
+  renderVariantSummary: (variant: V) => React.ReactElement;
   onVariantDelete: (variantName: string) => void;
 }
 
 function TestVariantsEditor<V extends Variant>({
   variants,
   testName,
-  testType,
   editMode,
   createVariant,
   renderVariantEditor,
+  renderVariantSummary,
   onVariantDelete,
 }: TestVariantsEditorProps<V>): React.ReactElement<TestVariantsEditorProps<V>> {
   const classes = useStyles();
@@ -49,12 +49,11 @@ function TestVariantsEditor<V extends Variant>({
       <TestVariantEditorsAccordion<V>
         variants={variants}
         variantKeys={variantKeys}
-        testName={testName}
-        testType={testType}
         editMode={editMode}
         selectedVariantKey={selectedVariantKey}
         onVariantSelected={onVariantSelected}
         renderVariantEditor={renderVariantEditor}
+        renderVariantSummary={renderVariantSummary}
         onVariantDelete={onVariantDelete}
       />
 

@@ -33,6 +33,39 @@ import Typography from '@material-ui/core/Typography';
 import IndexPage from './components/indexPage';
 import { getTheme } from './utils/theme';
 
+type Stage = 'DEV' | 'CODE' | 'PROD';
+declare global {
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  interface Window {
+    remoteImport: (url: string) => Promise<any>;
+    guardian: {
+      stage: Stage;
+      automat: {
+        react: any;
+        preact: any;
+        emotionCore: any;
+        emotionTheming: any;
+        emotion: any;
+      };
+    };
+  }
+  /* eslint-enable @typescript-eslint/no-explicit-any */
+}
+
+const initialiseDynamicImport = (): void => {
+  try {
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    window.remoteImport = new Function('url', `return import(url)`) as (
+      url: string,
+    ) => Promise<any>;
+    /* eslint-enable @typescript-eslint/no-explicit-any */
+  } catch (e) {
+    console.log('failed to init import');
+  }
+};
+
+initialiseDynamicImport();
+
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ palette, mixins, typography, transitions }: Theme) =>
   createStyles({

@@ -16,6 +16,8 @@ import LiveSwitch from '../../shared/liveSwitch';
 import useValidation from '../hooks/useValidation';
 import { BannerContent, BannerTest, BannerVariant } from '../../../models/banner';
 import { getDefaultVariant } from './utils/defaults';
+import TestEditorVariantSummary from '../testEditorVariantSummary';
+import BannerVariantPreview from './bannerVariantPreview';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing, palette }: Theme) =>
@@ -182,6 +184,16 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
     />
   );
 
+  const renderVariantSummary = (variant: BannerVariant): React.ReactElement => (
+    <TestEditorVariantSummary
+      name={variant.name}
+      testName={name}
+      testType="BANNER"
+      isInEditMode={editMode}
+      topButton={<BannerVariantPreview variant={variant} />}
+    />
+  );
+
   const createVariant = (name: string): void => {
     const newVariant: BannerVariant = {
       ...getDefaultVariant(),
@@ -213,9 +225,9 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
               variants={test.variants}
               createVariant={createVariant}
               testName={test.name}
-              testType="BANNER"
               editMode={editMode}
               renderVariantEditor={renderVariantEditor}
+              renderVariantSummary={renderVariantSummary}
               onVariantDelete={onVariantDelete}
             />
           </div>

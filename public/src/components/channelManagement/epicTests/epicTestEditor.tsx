@@ -5,12 +5,15 @@ import { ArticlesViewedSettings, UserCohort, EpicEditorConfig } from '../helpers
 import { makeStyles, FormControlLabel, Switch, Theme, Typography } from '@material-ui/core';
 import TestEditorHeader from '../testEditorHeader';
 import TestVariantsEditor from '../testVariantsEditor';
+import TestEditorVariantSummary from '../testEditorVariantSummary';
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 import TestEditorArticleCountEditor, {
   DEFAULT_ARTICLES_VIEWED_SETTINGS,
 } from '../testEditorArticleCountEditor';
 import TestEditorActionButtons from '../testEditorActionButtons';
+import TestVariantEditorWithPreviewTab from '../testVariantEditorWithPreviewTab';
 import EpicTestVariantEditor from './epicTestVariantEditor';
+import EpicVariantPreview from './epicVariantPreview';
 import EpicTestTargetContentEditor from './epicTestTargetContentEditor';
 import EpicTestMaxViewsEditor from './epicTestMaxViewsEditor';
 import useValidation from '../hooks/useValidation';
@@ -220,16 +223,30 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
   };
 
   const renderVariantEditor = (variant: EpicVariant): React.ReactElement => (
-    <EpicTestVariantEditor
-      key={variant.name}
-      variant={variant}
-      epicEditorConfig={epicEditorConfig}
-      editMode={editMode}
-      onVariantChange={onVariantChange}
-      onDelete={(): void => onVariantDelete(variant.name)}
-      onValidationChange={(isValid: boolean): void =>
-        setValidationStatusForField(variant.name, isValid)
+    <TestVariantEditorWithPreviewTab
+      variantEditor={
+        <EpicTestVariantEditor
+          epicEditorConfig={epicEditorConfig}
+          key={variant.name}
+          variant={variant}
+          editMode={editMode}
+          onVariantChange={onVariantChange}
+          onDelete={(): void => onVariantDelete(variant.name)}
+          onValidationChange={(isValid: boolean): void =>
+            setValidationStatusForField(variant.name, isValid)
+          }
+        />
       }
+      variantPreview={<EpicVariantPreview variant={variant} />}
+    />
+  );
+
+  const renderVariantSummary = (variant: EpicVariant): React.ReactElement => (
+    <TestEditorVariantSummary
+      name={variant.name}
+      testName={name}
+      testType="EPIC"
+      isInEditMode={editMode}
     />
   );
 
@@ -255,10 +272,10 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
             <TestVariantsEditor<EpicVariant>
               variants={test.variants}
               testName={test.name}
-              testType="EPIC"
               editMode={editMode}
               createVariant={createVariant}
               renderVariantEditor={renderVariantEditor}
+              renderVariantSummary={renderVariantSummary}
               onVariantDelete={onVariantDelete}
             />
           </div>

@@ -6,8 +6,7 @@ import {
   AccordionDetails,
   AccordionActions,
 } from '@material-ui/core';
-import { Variant, TestType } from './helpers/shared';
-import TestEditorVariantSummary from './testEditorVariantSummary';
+import { Variant } from './helpers/shared';
 import VariantDeleteButton from './variantDeleteButton';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
@@ -26,24 +25,22 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
 interface TestVariantEditorsAccordionProps<V extends Variant> {
   variants: V[];
   variantKeys: string[];
-  testName: string;
-  testType: TestType;
   editMode: boolean;
   selectedVariantKey: string | null;
   onVariantSelected: (variantKey: string) => void;
   renderVariantEditor: (variant: V) => React.ReactElement;
+  renderVariantSummary: (variant: V) => React.ReactElement;
   onVariantDelete: (variantName: string) => void;
 }
 
 function TestVariantEditorsAccordion<V extends Variant>({
   variants,
   variantKeys,
-  testName,
-  testType,
   editMode,
   selectedVariantKey,
   onVariantSelected,
   renderVariantEditor,
+  renderVariantSummary,
   onVariantDelete,
 }: TestVariantEditorsAccordionProps<V>): React.ReactElement<TestVariantEditorsAccordionProps<V>> {
   const classes = useStyles();
@@ -60,12 +57,7 @@ function TestVariantEditorsAccordion<V extends Variant>({
             onChange={(): void => onVariantSelected(variantKey)}
             className={classes.expansionPanel}
           >
-            <TestEditorVariantSummary
-              name={variant.name}
-              testName={testName}
-              testType={testType}
-              isInEditMode={editMode}
-            />
+            {renderVariantSummary(variant)}
             <AccordionDetails>{renderVariantEditor(variant)}</AccordionDetails>
             <AccordionActions>
               <VariantDeleteButton
