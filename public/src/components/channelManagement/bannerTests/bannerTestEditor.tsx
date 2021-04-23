@@ -187,7 +187,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
   const renderVariantSummary = (variant: BannerVariant): React.ReactElement => (
     <TestEditorVariantSummary
       name={variant.name}
-      testName={name}
+      testName={test.name}
       testType="BANNER"
       isInEditMode={editMode}
       topButton={<BannerVariantPreview variant={variant} />}
