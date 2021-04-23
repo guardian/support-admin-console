@@ -244,7 +244,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
   const renderVariantSummary = (variant: EpicVariant): React.ReactElement => (
     <TestEditorVariantSummary
       name={variant.name}
-      testName={name}
+      testName={test.name}
       testType="EPIC"
       isInEditMode={editMode}
     />
