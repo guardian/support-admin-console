@@ -27,6 +27,7 @@ const templatesWithLabels = [
   { template: BannerTemplate.ContributionsBanner, label: 'Contributions' },
   { template: BannerTemplate.DigitalSubscriptionsBanner, label: 'Digital subscriptions' },
   { template: BannerTemplate.GuardianWeeklyBanner, label: 'Guardian Weekly' },
+  { template: BannerTemplate.G200Banner, label: 'G200' },
 ];
 
 const BannerTemplateSelector: React.FC<BannerTemplateSelectorProps> = ({
