@@ -4,7 +4,15 @@ import enumeratum.{CirceEnum, Enum, EnumEntry}
 import io.circe.generic.extras.Configuration
 import io.circe.generic.extras.auto._
 import io.circe.{Decoder, Encoder}
+import models.Adventure.AdventureState
+
 import scala.collection.immutable.IndexedSeq
+
+object Adventure {
+  case class AdventureOption(targetName: String, text: String)
+  case class AdventureState(name: String, paragraphs: List[String], options: List[AdventureOption])
+  type Adventure = Map[String,AdventureState]
+}
 
 case class ControlProportionSettings(proportion: Float, offset: Int)
 
@@ -80,6 +88,7 @@ case class EpicVariant(
   cta: Option[Cta],
   secondaryCta: Option[SecondaryCta],
   separateArticleCount: Option[SeparateArticleCount],
+  adventure: Option[Adventure.Adventure]
 )
 case class EpicTest(
   name: String,

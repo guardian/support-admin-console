@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { EpicVariant, SeparateArticleCount } from './epicTestsForm';
+import {Adventure, EpicVariant, SeparateArticleCount} from './epicTestsForm';
 import { Cta, SecondaryCta, EpicEditorConfig, TickerSettings } from '../helpers/shared';
 import { Theme, Typography, makeStyles, TextField } from '@material-ui/core';
 import EpicTestVariantEditorCtasEditor from './epicTestVariantEditorCtasEditor';
 import VariantEditorSeparateArticleCountEditor from '../variantEditorSeparateArticleCountEditor';
 import EpicTestTickerEditor from './epicTestTickerEditor';
 import { invalidTemplateValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
+import EpicAdventureTestEditor from "./epicAdventureEditor";
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const getUseStyles = (shouldAddPadding: boolean) => {
@@ -130,9 +131,18 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   const updateTickerSettings = (updatedTickerSettings?: TickerSettings): void => {
     onVariantChange({ ...variant, tickerSettings: updatedTickerSettings });
   };
+  const updateAdventure = (adventure?: Adventure): void => {
+    onVariantChange({ ...variant, adventure });
+  };
 
   return (
     <div className={classes.container}>
+      <EpicAdventureTestEditor
+        adventure={variant.adventure}
+        onUpdate={updateAdventure}
+      />
+
+
       {epicEditorConfig.allowVariantHeader && (
         <div>
           <TextField

@@ -23,6 +23,17 @@ import Sidebar from '../sidebar';
 import { FrontendSettingsType } from '../../../utils/requests';
 import { getDefaultTest, getDefaultVariant } from './utils/defaults';
 
+interface AdventureOption {
+  targetName: string;
+  text: string;
+}
+export interface AdventureState {
+  name: string;
+  paragraphs: string[];
+  options: AdventureOption[];
+}
+export type Adventure = { [name: string]: AdventureState };
+
 export enum TickerEndType {
   unlimited = 'unlimited',
   hardstop = 'hardstop',
@@ -58,6 +69,7 @@ export interface EpicVariant extends Variant {
   cta?: Cta;
   secondaryCta?: SecondaryCta;
   separateArticleCount?: SeparateArticleCount;
+  adventure?: Adventure;
 }
 
 export interface MaxEpicViews {
