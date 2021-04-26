@@ -1,0 +1,169 @@
+{
+  "tests" : [
+    {
+      "name" : "ALL_FALLBACK",
+      "nickname" : "FALLBACK",
+      "isOn" : true,
+      "locations" : [
+        "AUDCountries",
+        "Canada",
+        "EURCountries",
+        "NZDCountries",
+        "GBPCountries",
+        "UnitedStates",
+        "International"
+      ],
+      "tagIds" : [
+      ],
+      "sections" : [
+      ],
+      "excludedTagIds" : [
+      ],
+      "excludedSections" : [
+      ],
+      "alwaysAsk" : true,
+      "userCohort" : "AllNonSupporters",
+      "hasCountryName" : false,
+      "variants" : [
+        {
+          "name" : "CONTROL",
+          "adventure": {
+            "start": {
+              "name": "start",
+              "paragraphs": ["Would you be surprised to hear that you're one of our top readers globally?"],
+              "options": [
+                  {
+                      "targetName": "article-count",
+                      "text": "Yes!"
+                  },
+                  {
+                      "targetName": "article-count",
+                      "text": "No"
+                  }
+              ]
+            },
+            "article-count": {
+              "name": "article-count",
+              "paragraphs": [
+                  "Well - you've read %%ARTICLE_COUNT%% articles in the last year! And you’re not alone; through these turbulent and challenging times, millions rely on the Guardian for independent journalism that stands for truth and integrity.",
+                  "Would you like to know how readers are supporting the Guardian?"
+              ],
+              "options": [
+                {
+                    "targetName": "supporters",
+                    "text": "Yes"
+                },
+                {
+                    "targetName": "no",
+                    "text": "No"
+                }
+              ]
+            },
+            "supporters": {
+              "name": "supporters",
+              "paragraphs": ["Our readers chose to support us financially more than 1.5 million times in 2020, joining existing supporters in 180 countries - including %%COUNTRY_NAME%%."],
+              "options": [
+                {
+                  "targetName": "why",
+                  "text": "Why should I support the Guardian?"
+                }
+              ]
+            },
+            "why": {
+              "name": "why",
+              "paragraphs": ["With your help, we will continue to provide high-impact reporting that can counter misinformation and offer an authoritative, trustworthy source of news for everyone. With no shareholders or billionaire owner, we set our own agenda and provide truth-seeking journalism that’s free from commercial and political influence. When it’s never mattered more, we can investigate and challenge without fear or favour."],
+              "options": [
+                {
+                  "targetName": "yes",
+                  "text": "Count me in!"
+                },
+                {
+                  "targetName": "no",
+                  "text": "I'll pass"
+                }
+              ]
+            },
+            "no": {
+              "name": "no",
+              "paragraphs": [
+                "That's ok. Unlike many others, we have maintained our choice: to keep Guardian journalism open for all readers, regardless of where they live or what they can afford to pay. We do this because we believe in information equality, where everyone deserves to read accurate news and thoughtful analysis. Greater numbers of people are staying well-informed on world events, and being inspired to take meaningful action."
+              ],
+              "options": []
+            },
+            "yes": {
+              "name": "no",
+              "paragraphs": [
+                "Great! If there were ever a time to join us, it is now. You can power Guardian journalism and help sustain our future."
+              ],
+              "options": []
+            }
+          },
+          "heading" : "Since you're here ...",
+          "paragraphs" : [
+            "… we have a small favour to ask. We believe everyone deserves access to factual information, and analysis that has authority and integrity. That’s why, unlike many others, we made a choice: to keep Guardian reporting open for all, regardless of where they live or what they can afford to pay.",
+            "As an open, independent news organisation we investigate, interrogate and expose the actions of those in power, without fear. With no shareholders or billionaire owner, our journalism is free from political and commercial bias – this makes us different. We can give a voice to the oppressed and neglected, and stand in solidarity with those who are calling for a fairer future. With your help we can make a difference.",
+            "We’re determined to provide journalism that helps each of us better understand the world, and take actions that challenge, unite, and inspire change – in times of crisis and beyond. Our work would not be possible without our readers, who now support our work from 180 countries around the world.",
+            "Every reader contribution, however big or small, is so valuable for our future."
+          ],
+          "highlightedText" : "Support the Guardian from as little as %%CURRENCY_SYMBOL%%1 – and it only takes a minute. Thank you.",
+          "showTicker" : false,
+          "cta" : {
+            "text" : "Support the Guardian",
+            "baseUrl" : "https://support.theguardian.com/contribute"
+          },
+          "separateArticleCount" : {
+            "type" : "above"
+          }
+        }
+      ],
+      "highPriority" : false,
+      "useLocalViewLog" : false
+    },
+    {
+      "name" : "THANKYOU",
+      "nickname" : "THANKYOU",
+      "isOn" : false,
+      "locations" : [
+        "AUDCountries",
+        "Canada",
+        "EURCountries",
+        "NZDCountries",
+        "GBPCountries",
+        "UnitedStates",
+        "International"
+      ],
+      "tagIds" : [
+      ],
+      "sections" : [
+      ],
+      "excludedTagIds" : [
+      ],
+      "excludedSections" : [
+      ],
+      "alwaysAsk" : true,
+      "userCohort" : "AllExistingSupporters",
+      "hasCountryName" : false,
+      "variants" : [
+        {
+          "name" : "CONTROL",
+          "heading" : "We’d just like to say …",
+          "paragraphs" : [
+            "… thank you so much for supporting Guardian journalism. Your funding protects our editorial independence, so we can continue to provide truth-seeking reporting that’s free from commercial and political influence. When it’s never mattered more, our independence allows us to investigate, challenge and report on world events without fear or favour. This makes us different.",
+            "",
+            "Millions turn to the Guardian for quality news and analysis every day, relying on us for journalism that stands for truth and integrity. Last year, 2 billion unique browsers visited our website, and on average more than 600 pages were loaded every second. ",
+            "",
+            "We now have supporters like you in 180 countries around the world. It’s thanks to this support that we can keep our reporting open for everyone, regardless of where they live or what they can afford to pay. Greater numbers of people are staying well-informed, and being inspired to take meaningful action."
+          ],
+          "highlightedText" : "Support the Guardian from as little as %%CURRENCY_SYMBOL%%1 – and it only takes a minute. Thank you.",
+          "showTicker" : false,
+          "cta" : {
+            "text" : "Read more",
+            "baseUrl" : "https://theguardian.com"
+          }
+        }
+      ],
+      "highPriority" : false,
+      "useLocalViewLog" : false
+    }
+  ]
+}
