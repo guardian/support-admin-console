@@ -242,7 +242,7 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
   };
 
   return (
-    <div>
+    <div className={classes.container}>
       <div className={classes.sectionContainer}>
         <Typography className={classes.sectionHeader} variant="h4">
           Banner template
