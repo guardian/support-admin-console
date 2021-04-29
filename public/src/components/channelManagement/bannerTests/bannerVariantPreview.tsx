@@ -9,6 +9,7 @@ import { BannerTemplate, BannerVariant } from '../../../models/banner';
 import { Cta } from '../helpers/shared';
 import Typography from '@material-ui/core/Typography';
 import { withPreviewStyles } from '../previewContainer';
+import { getStage } from '../../../utils/stage';
 
 export interface BannerContent {
   heading?: string;
@@ -75,6 +76,10 @@ const bannerModules = {
     path: 'contributions/ContributionsBanner.js',
     name: 'ContributionsBanner',
   },
+  [BannerTemplate.G200Banner]: {
+    path: 'g200/G200Banner.js',
+    name: 'G200Banner',
+  },
 };
 
 const useStyles = makeStyles(({ palette }: Theme) => ({
@@ -120,15 +125,16 @@ const BannerVariantPreview: React.FC<BannerVariantPreviewProps> = ({
       emotion,
     };
 
-    window
-      .remoteImport(
-        `https://contributions.guardianapis.com/modules/v1/banners/${
-          bannerModules[variant.template].path
-        }`,
-      )
-      .then(bannerModule => {
-        setBanner(() => withPreviewStyles(bannerModule[bannerModules[variant.template].name]));
-      });
+    const stage = getStage();
+
+    const baseUrl =
+      stage === 'PROD'
+        ? 'https://contributions.guardianapis.com/modules/v1/banners'
+        : 'https://contributions.code.dev-guardianapis.com/modules/v1/banners';
+
+    window.remoteImport(`${baseUrl}/${bannerModules[variant.template].path}`).then(bannerModule => {
+      setBanner(() => withPreviewStyles(bannerModule[bannerModules[variant.template].name]));
+    });
   }, [variant.template]);
 
   const toggleDrawer = (open: boolean) => (event: React.MouseEvent): void => {
