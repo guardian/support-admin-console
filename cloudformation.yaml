@@ -152,6 +152,13 @@ Resources:
           - Effect: Allow
             Action: ec2:DescribeTags
             Resource: "*"
+      - PolicyName: s3Deploy
+        PolicyDocument:
+          Statement:
+            Effect: Allow
+            Action: s3:GetObject
+            Resource:
+              - arn:aws:s3::*:membership-dist/*
 
   InstanceProfile:
     Type: AWS::IAM::InstanceProfile
