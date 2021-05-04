@@ -114,7 +114,7 @@ POST  /frontend/banner-deploy2/update                  controllers.banner.Banner
 
 # ----- channel switches ----- #
 GET   /frontend/channel-switches                       controllers.ChannelSwitchesController.get
-POST  /frontend/channel-switches                       controllers.ChannelSwitchesController.get
+POST  /frontend/channel-switches/update                controllers.ChannelSwitchesController.set
 
 # Map static resources from the /public folder to the /assets URL path
 GET  /assets/*file                                  controllers.Assets.at(path="/public", file)

@@ -1,11 +1,15 @@
-import React, {useEffect, useState} from 'react';
-import {makeStyles, Theme} from "@material-ui/core";
-import {fetchFrontendSettings, FrontendSettingsType, saveFrontendSettings} from "../../utils/requests";
-import Switch from "@material-ui/core/Switch";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Button from "@material-ui/core/Button";
+import React, { useEffect, useState } from 'react';
+import { makeStyles } from '@material-ui/core';
+import {
+  fetchFrontendSettings,
+  FrontendSettingsType,
+  saveFrontendSettings,
+} from '../../utils/requests';
+import Switch from '@material-ui/core/Switch';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Button from '@material-ui/core/Button';
 
-const useStyles = makeStyles(({ palette }: Theme) => ({
+const useStyles = makeStyles(() => ({
   container: {
     margin: '30px',
     display: 'flex',
@@ -13,19 +17,19 @@ const useStyles = makeStyles(({ palette }: Theme) => ({
     '& > * + *': {
       marginTop: '5px',
     },
-  }
+  },
 }));
 
 type SwitchName = 'enableBanners' | 'enableEpics';
 
 type ChannelSwitches = {
   [key in SwitchName]: boolean;
-}
+};
 
 const defaultSwitches: ChannelSwitches = {
   enableBanners: false,
   enableEpics: false,
-}
+};
 
 interface ChannelSwitchProps {
   name: SwitchName;
@@ -39,51 +43,64 @@ const ChannelSwitch: React.FC<ChannelSwitchProps> = ({
   label,
   enabled,
   setSwitch,
-}) => (
+}: ChannelSwitchProps) => (
   <FormControlLabel
     key={name}
     label={label}
     control={
       <Switch
         checked={enabled}
-        onChange={event => {
+        onChange={(event): void => {
           setSwitch(name, event.target.checked);
         }}
         value={name}
       />
     }
   />
-)
+);
 
-interface Props {
-}
-
-const ChannelSwitches: React.FC<Props> = (props: Props) => {
+const ChannelSwitches: React.FC<void> = () => {
   const classes = useStyles();
-  const [switches, setSwitches] = useState<ChannelSwitches>(defaultSwitches)
+  const [switches, setSwitches] = useState<ChannelSwitches>(defaultSwitches);
+  const [version, setVersion] = useState<string | null>(null);
+
+  const fetchSwitches = (): void => {
+    fetchFrontendSettings(FrontendSettingsType.channelSwitches)
+      .then(result => {
+        setVersion(result.version);
+        setSwitches(result.value);
+      })
+      .catch(err => alert(err));
+  };
 
   useEffect(() => {
-    fetchFrontendSettings(FrontendSettingsType.channelSwitches)
-      .then(result => setSwitches(result.value))
-      .catch(err => alert(err));
+    fetchSwitches();
   }, []);
 
   const onSwitchChange = (name: SwitchName, enabled: boolean): void => {
     setSwitches({
       ...switches,
       [name]: enabled,
-    })
-  }
+    });
+  };
 
   const onSubmit = (): void => {
-    saveFrontendSettings(FrontendSettingsType.channelSwitches, switches)
-  }
+    const payload = {
+      value: switches,
+      version,
+    };
+    saveFrontendSettings(FrontendSettingsType.channelSwitches, payload)
+      .then(() => {
+        fetchSwitches();
+      })
+      .catch(err => alert(err));
+  };
 
   return (
     <div className={classes.container}>
       <ChannelSwitch
         name="enableEpics"
-        label="Enable Epics"
+        label="Enable Epics (this does not include Apple News)"
         enabled={switches.enableEpics}
         setSwitch={onSwitchChange}
       />
@@ -94,16 +111,19 @@ const ChannelSwitches: React.FC<Props> = (props: Props) => {
         setSwitch={onSwitchChange}
       />
 
-      <Button
-        onClick={onSubmit}
-        color="primary"
-        variant="contained"
-        size="large"
-      >
-        Submit
-      </Button>
+      {version && (
+        <Button
+          onClick={onSubmit}
+          color="primary"
+          variant="contained"
+          size="large"
+          fullWidth={false}
+        >
+          Submit
+        </Button>
+      )}
     </div>
-  )
-}
+  );
+};
 
 export default ChannelSwitches;
