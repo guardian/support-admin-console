@@ -12,6 +12,7 @@ import Button from '@material-ui/core/Button';
 const useStyles = makeStyles(() => ({
   container: {
     margin: '30px',
+    maxWidth: '500px',
     display: 'flex',
     flexDirection: 'column',
     '& > * + *': {
