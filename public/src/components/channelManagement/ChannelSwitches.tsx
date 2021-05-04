@@ -60,7 +60,7 @@ const ChannelSwitch: React.FC<ChannelSwitchProps> = ({
   />
 );
 
-const ChannelSwitches: React.FC<void> = () => {
+const ChannelSwitches: React.FC = () => {
   const classes = useStyles();
   const [switches, setSwitches] = useState<ChannelSwitches>(defaultSwitches);
   const [version, setVersion] = useState<string | null>(null);
