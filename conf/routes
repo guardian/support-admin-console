@@ -14,6 +14,7 @@ GET /amp-epic-tests                                 controllers.Application.inde
 GET /banner-tests                                   controllers.Application.index
 GET /banner-tests2                                  controllers.Application.index
 GET /banner-deploy                                  controllers.Application.index
+GET /channel-switches                               controllers.Application.index
 
 # ----- Authentication ----- #
 GET  /login                                         controllers.Login.login
@@ -110,6 +111,10 @@ POST  /frontend/banner-deploy/update                   controllers.banner.Banner
 # ----- banner deploys ----- #
 GET   /frontend/banner-deploy2                         controllers.banner.BannerDeployController2.get
 POST  /frontend/banner-deploy2/update                  controllers.banner.BannerDeployController2.set
+
+# ----- channel switches ----- #
+GET   /frontend/channel-switches                       controllers.ChannelSwitchesController.get
+POST  /frontend/channel-switches                       controllers.ChannelSwitchesController.get
 
 # Map static resources from the /public folder to the /assets URL path
 GET  /assets/*file                                  controllers.Assets.at(path="/public", file)

@@ -32,6 +32,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IndexPage from './components/indexPage';
 import { getTheme } from './utils/theme';
+import ChannelSwitches from './components/channelManagement/ChannelSwitches';
 
 type Stage = 'DEV' | 'CODE' | 'PROD';
 declare global {
@@ -185,6 +186,12 @@ const AppRouter = withStyles(styles)(({ classes }: Props) => {
             path="/banner-deploy"
             render={(): React.ReactElement =>
               createComponent(<BannerDeployDashboard />, 'Banner Deploy')
+            }
+          />
+          <Route
+            path="/channel-switches"
+            render={(): React.ReactElement =>
+              createComponent(<ChannelSwitches />, 'Channel Switches')
             }
           />
         </div>
