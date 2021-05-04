@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core';
 import {
   fetchFrontendSettings,
@@ -8,6 +8,7 @@ import {
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Button from '@material-ui/core/Button';
+import withS3Data, { DataFromServer, InnerProps } from '../../hocs/withS3Data';
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -25,11 +26,6 @@ type SwitchName = 'enableBanners' | 'enableEpics';
 
 type ChannelSwitches = {
   [key in SwitchName]: boolean;
-};
-
-const defaultSwitches: ChannelSwitches = {
-  enableBanners: false,
-  enableEpics: false,
 };
 
 interface ChannelSwitchProps {
@@ -60,41 +56,18 @@ const ChannelSwitch: React.FC<ChannelSwitchProps> = ({
   />
 );
 
-const ChannelSwitches: React.FC = () => {
+const ChannelSwitches: React.FC<InnerProps<ChannelSwitches>> = ({
+  data: switches,
+  setData: setSwitches,
+  saveData: saveSwitches,
+}: InnerProps<ChannelSwitches>) => {
   const classes = useStyles();
-  const [switches, setSwitches] = useState<ChannelSwitches>(defaultSwitches);
-  const [version, setVersion] = useState<string | null>(null);
-
-  const fetchSwitches = (): void => {
-    fetchFrontendSettings(FrontendSettingsType.channelSwitches)
-      .then(result => {
-        setVersion(result.version);
-        setSwitches(result.value);
-      })
-      .catch(err => alert(err));
-  };
-
-  useEffect(() => {
-    fetchSwitches();
-  }, []);
 
   const onSwitchChange = (name: SwitchName, enabled: boolean): void => {
     setSwitches({
       ...switches,
       [name]: enabled,
     });
-  };
-
-  const onSubmit = (): void => {
-    const payload = {
-      value: switches,
-      version,
-    };
-    saveFrontendSettings(FrontendSettingsType.channelSwitches, payload)
-      .then(() => {
-        fetchSwitches();
-      })
-      .catch(err => alert(err));
   };
 
   return (
@@ -112,19 +85,22 @@ const ChannelSwitches: React.FC = () => {
         setSwitch={onSwitchChange}
       />
 
-      {version && (
-        <Button
-          onClick={onSubmit}
-          color="primary"
-          variant="contained"
-          size="large"
-          fullWidth={false}
-        >
-          Submit
-        </Button>
-      )}
+      <Button
+        onClick={saveSwitches}
+        color="primary"
+        variant="contained"
+        size="large"
+        fullWidth={false}
+      >
+        Submit
+      </Button>
     </div>
   );
 };
 
-export default ChannelSwitches;
+const fetchSettings = (): Promise<DataFromServer<ChannelSwitches>> =>
+  fetchFrontendSettings(FrontendSettingsType.channelSwitches);
+const saveSettings = (data: DataFromServer<ChannelSwitches>): Promise<Response> =>
+  saveFrontendSettings(FrontendSettingsType.channelSwitches, data);
+
+export default withS3Data<ChannelSwitches>(ChannelSwitches, fetchSettings, saveSettings);
