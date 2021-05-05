@@ -75,6 +75,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     new BannerTestArchiveController2(authAction, controllerComponents, wsClient, stage, runtime),
     new BannerDeployController(authAction, controllerComponents, stage, runtime),
     new BannerDeployController2(authAction, controllerComponents, stage, runtime),
+    new ChannelSwitchesController(authAction, controllerComponents, stage, runtime),
     assets
   )
 }

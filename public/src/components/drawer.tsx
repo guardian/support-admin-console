@@ -167,6 +167,11 @@ export default function NavDrawer(): React.ReactElement {
             <ListItemText primary="Banner Deploy" />
           </ListItem>
         </Link>
+        <Link key="Channel Switches" to="/channel-switches" className={classes.link}>
+          <ListItem className={classes.listItem} button key="Channel Switches">
+            <ListItemText primary="Channel Switches" />
+          </ListItem>
+        </Link>
       </div>
 
       <div>
