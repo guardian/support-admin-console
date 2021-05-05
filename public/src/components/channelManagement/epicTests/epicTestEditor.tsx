@@ -18,7 +18,7 @@ import EpicTestTargetContentEditor from './epicTestTargetContentEditor';
 import EpicTestMaxViewsEditor from './epicTestMaxViewsEditor';
 import useValidation from '../hooks/useValidation';
 import { articleCountTemplate, countryNameTemplate } from '../helpers/copyTemplates';
-import EpicTestVariantsSplitEditor from './epicTestVariantsSplitEditor';
+import TestVariantsSplitEditor from '../testVariantsSplitEditor';
 import { getDefaultVariant } from './utils/defaults';
 import LiveSwitch from '../../shared/liveSwitch';
 import { ControlProportionSettings } from '../helpers/controlProportionSettings';
@@ -289,7 +289,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
             Variants split
           </Typography>
           <div>
-            <EpicTestVariantsSplitEditor
+            <TestVariantsSplitEditor
               variants={test.variants}
               controlProportionSettings={test.controlProportionSettings}
               onControlProportionSettingsChange={onControlProportionSettingsChange}
