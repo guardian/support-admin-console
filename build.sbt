@@ -5,16 +5,13 @@ version := "1.0-SNAPSHOT"
 
 scalaVersion := "2.12.8"
 
-//Bintray for simple-configuration dependency
-resolvers += "Guardian Platform Bintray" at "https://dl.bintray.com/guardian/platforms"
-
 val circeVersion = "0.10.0"
 val jacksonVersion = "2.10.0"
 
 libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2",
   "com.gu.play-googleauth" %% "play-v26" % "1.0.7",
-  "com.gu" %% "simple-configuration-ssm" % "1.4.1",
+  "com.gu" %% "simple-configuration-ssm" % "1.5.6",
   "com.amazonaws" % "aws-java-sdk-s3" % "1.11.641",
   // Override jackson because the version used by AWS is always out of date and has security issues
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
