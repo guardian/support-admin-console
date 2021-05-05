@@ -8,9 +8,10 @@ import {
   TextField,
   Theme,
 } from '@material-ui/core';
-import { ControlProportionSettings, EpicVariant } from './epicTestsForm';
+import { EpicVariant } from './epicTestsForm';
 import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 import { useForm } from 'react-hook-form';
+import { ControlProportionSettings } from '../helpers/controlProportionSettings';
 
 const MAX_MVT = 1000000;
 

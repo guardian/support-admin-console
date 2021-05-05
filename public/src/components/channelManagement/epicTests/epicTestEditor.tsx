@@ -1,6 +1,6 @@
 import React from 'react';
 import { Region } from '../../../utils/models';
-import { ControlProportionSettings, EpicTest, EpicVariant, MaxEpicViews } from './epicTestsForm';
+import { EpicTest, EpicVariant, MaxEpicViews } from './epicTestsForm';
 import { ArticlesViewedSettings, UserCohort, EpicEditorConfig } from '../helpers/shared';
 import { makeStyles, FormControlLabel, Switch, Theme, Typography } from '@material-ui/core';
 import TestEditorHeader from '../testEditorHeader';
@@ -21,6 +21,7 @@ import { articleCountTemplate, countryNameTemplate } from '../helpers/copyTempla
 import EpicTestVariantsSplitEditor from './epicTestVariantsSplitEditor';
 import { getDefaultVariant } from './utils/defaults';
 import LiveSwitch from '../../shared/liveSwitch';
+import { ControlProportionSettings } from '../helpers/controlProportionSettings';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
