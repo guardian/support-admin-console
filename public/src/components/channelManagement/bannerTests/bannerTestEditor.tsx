@@ -18,6 +18,9 @@ import { BannerContent, BannerTest, BannerVariant } from '../../../models/banner
 import { getDefaultVariant } from './utils/defaults';
 import TestEditorVariantSummary from '../testEditorVariantSummary';
 import BannerVariantPreview from './bannerVariantPreview';
+import {ControlProportionSettings} from "../helpers/controlProportionSettings";
+import TestVariantsSplitEditor from "../testVariantsSplitEditor";
+import {EpicTest} from "../epicTests/epicTestsForm";
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing, palette }: Theme) =>
@@ -104,6 +107,13 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
   const onArticlesViewedSettingsValidationChanged = (isValid: boolean): void =>
     setValidationStatusForField('articlesViewedSettings', isValid);
 
+  const onVariantsSplitSettingsValidationChanged = (isValid: boolean): void =>
+    setValidationStatusForField('variantsSplitSettings', isValid);
+
+  const onControlProportionSettingsChange = (
+    controlProportionSettings?: ControlProportionSettings,
+  ): void => updateTest(test => ({ ...test, controlProportionSettings }));
+
   const getArticlesViewedSettings = (test: BannerTest): ArticlesViewedSettings | undefined => {
     if (!!test.articlesViewedSettings) {
       return test.articlesViewedSettings;
@@ -114,20 +124,26 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
     return undefined;
   };
 
-  const updateTest = (updatedTest: BannerTest): void => {
-    onChange({
-      ...updatedTest,
-      // To save dotcom from having to work this out
-      articlesViewedSettings: getArticlesViewedSettings(updatedTest),
-    });
+  const updateTest = (update: (test: BannerTest) => BannerTest): void => {
+    if (test) {
+      const updatedTest = update(test);
+
+      onChange({
+        ...updatedTest,
+        // To save dotcom from having to work this out
+        articlesViewedSettings: getArticlesViewedSettings(updatedTest),
+      });
+    }
   };
 
   const onLiveSwitchChange = (isOn: boolean): void => {
-    updateTest({ ...test, isOn });
+    updateTest(test => ({ ...test, isOn }));
   };
 
   const onVariantsChange = (updatedVariantList: BannerVariant[]): void => {
-    updateTest({ ...test, variants: updatedVariantList });
+    if (test) {
+      updateTest(test => ({ ...test, variants: updatedVariantList }));
+    }
   };
 
   const onVariantChange = (updatedVariant: BannerVariant): void => {
@@ -143,27 +159,27 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
   };
 
   const onMinArticlesViewedChange = (updatedMinArticles: number): void => {
-    updateTest({
+    updateTest( test => ({
       ...test,
       minArticlesBeforeShowingBanner: updatedMinArticles,
-    });
+    }));
   };
 
   const onRegionsChange = (updatedRegions: Region[]): void => {
-    updateTest({ ...test, locations: updatedRegions });
+    updateTest(test => ({ ...test, locations: updatedRegions }));
   };
 
   const onCohortChange = (updatedCohort: UserCohort): void => {
-    updateTest({ ...test, userCohort: updatedCohort });
+    updateTest(test => ({ ...test, userCohort: updatedCohort }));
   };
 
   const onArticlesViewedSettingsChange = (
     updatedArticlesViewedSettings?: ArticlesViewedSettings,
   ): void => {
-    updateTest({
+    updateTest(test => ({
       ...test,
       articlesViewedSettings: updatedArticlesViewedSettings,
-    });
+    }));
   };
 
   const onCopy = (name: string, nickname: string): void => {
@@ -232,6 +248,23 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
             />
           </div>
         </div>
+
+        {test.variants.length > 1 && (
+          <div className={classes.sectionContainer}>
+            <Typography variant={'h3'} className={classes.sectionHeader}>
+              Variants split
+            </Typography>
+            <div>
+              <TestVariantsSplitEditor
+                variants={test.variants}
+                controlProportionSettings={test.controlProportionSettings}
+                onControlProportionSettingsChange={onControlProportionSettingsChange}
+                onValidationChange={onVariantsSplitSettingsValidationChanged}
+                isDisabled={!editMode}
+              />
+            </div>
+          </div>
+        )}
 
         <div className={classes.sectionContainer}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
