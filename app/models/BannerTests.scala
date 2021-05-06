@@ -4,6 +4,7 @@ import enumeratum.{CirceEnum, Enum, EnumEntry}
 import io.circe.generic.extras.Configuration
 import io.circe.generic.extras.auto._
 import io.circe.{Decoder, Encoder}
+import utils.ControlProportionSettings
 
 import scala.collection.immutable.IndexedSeq
 
@@ -48,7 +49,8 @@ case class BannerTest(
   userCohort: UserCohort,
   locations: List[Region] = Nil,
   variants: List[BannerVariant],
-  articlesViewedSettings: Option[ArticlesViewedSettings] = None
+  articlesViewedSettings: Option[ArticlesViewedSettings] = None,
+  controlProportionSettings: Option[ControlProportionSettings] = None
 )
 
 case class BannerTests(tests: List[BannerTest])
