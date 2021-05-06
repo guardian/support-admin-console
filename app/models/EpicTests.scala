@@ -5,7 +5,6 @@ import io.circe.generic.extras.Configuration
 import io.circe.generic.extras.auto._
 import io.circe.{Decoder, Encoder}
 
-import utils.ControlProportionSettings
 import scala.collection.immutable.IndexedSeq
 
 case class Cta(text: String, baseUrl: String)
