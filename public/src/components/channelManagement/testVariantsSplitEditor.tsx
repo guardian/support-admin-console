@@ -8,7 +8,6 @@ import {
   TextField,
   Theme,
 } from '@material-ui/core';
-import { EpicVariant } from './epicTests/epicTestsForm';
 import { Variant } from './helpers/shared';
 import { EMPTY_ERROR_HELPER_TEXT } from './helpers/validation';
 import { useForm } from 'react-hook-form';
@@ -52,12 +51,12 @@ interface TestVariantsSplitEditorProps {
 }
 
 const TestVariantsSplitEditor: React.FC<TestVariantsSplitEditorProps> = ({
-                                                                                   variants,
-                                                                                   controlProportionSettings,
-                                                                                   onControlProportionSettingsChange,
-                                                                                   onValidationChange,
-                                                                                   isDisabled,
-                                                                                 }: TestVariantsSplitEditorProps) => {
+  variants,
+  controlProportionSettings,
+  onControlProportionSettingsChange,
+  onValidationChange,
+  isDisabled,
+}: TestVariantsSplitEditorProps) => {
   const classes = useStyles();
 
   const defaultValues = {
@@ -96,8 +95,8 @@ const TestVariantsSplitEditor: React.FC<TestVariantsSplitEditorProps> = ({
   };
 
   const onSubmit = (controlProportionSettings: ControlProportionSettings) => ({
-                                                                                percentage,
-                                                                              }: FormState): void => {
+    percentage,
+  }: FormState): void => {
     if (percentage) {
       onControlProportionSettingsChange({
         proportion: round(percentage / 100),

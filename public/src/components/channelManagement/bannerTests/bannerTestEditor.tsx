@@ -18,9 +18,8 @@ import { BannerContent, BannerTest, BannerVariant } from '../../../models/banner
 import { getDefaultVariant } from './utils/defaults';
 import TestEditorVariantSummary from '../testEditorVariantSummary';
 import BannerVariantPreview from './bannerVariantPreview';
-import {ControlProportionSettings} from "../helpers/controlProportionSettings";
-import TestVariantsSplitEditor from "../testVariantsSplitEditor";
-import {EpicTest} from "../epicTests/epicTestsForm";
+import { ControlProportionSettings } from '../helpers/controlProportionSettings';
+import TestVariantsSplitEditor from '../testVariantsSplitEditor';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing, palette }: Theme) =>
@@ -101,19 +100,6 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
 }: BannerTestEditorProps) => {
   const setValidationStatusForField = useValidation(onValidationChange);
 
-  const onMinArticlesViewedValidationChanged = (isValid: boolean): void =>
-    setValidationStatusForField('minArticlesViewed', isValid);
-
-  const onArticlesViewedSettingsValidationChanged = (isValid: boolean): void =>
-    setValidationStatusForField('articlesViewedSettings', isValid);
-
-  const onVariantsSplitSettingsValidationChanged = (isValid: boolean): void =>
-    setValidationStatusForField('variantsSplitSettings', isValid);
-
-  const onControlProportionSettingsChange = (
-    controlProportionSettings?: ControlProportionSettings,
-  ): void => updateTest(test => ({ ...test, controlProportionSettings }));
-
   const getArticlesViewedSettings = (test: BannerTest): ArticlesViewedSettings | undefined => {
     if (!!test.articlesViewedSettings) {
       return test.articlesViewedSettings;
@@ -135,6 +121,19 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
       });
     }
   };
+
+  const onMinArticlesViewedValidationChanged = (isValid: boolean): void =>
+    setValidationStatusForField('minArticlesViewed', isValid);
+
+  const onArticlesViewedSettingsValidationChanged = (isValid: boolean): void =>
+    setValidationStatusForField('articlesViewedSettings', isValid);
+
+  const onVariantsSplitSettingsValidationChanged = (isValid: boolean): void =>
+    setValidationStatusForField('variantsSplitSettings', isValid);
+
+  const onControlProportionSettingsChange = (
+    controlProportionSettings?: ControlProportionSettings,
+  ): void => updateTest(test => ({ ...test, controlProportionSettings }));
 
   const onLiveSwitchChange = (isOn: boolean): void => {
     updateTest(test => ({ ...test, isOn }));
@@ -159,7 +158,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
   };
 
   const onMinArticlesViewedChange = (updatedMinArticles: number): void => {
-    updateTest( test => ({
+    updateTest(test => ({
       ...test,
       minArticlesBeforeShowingBanner: updatedMinArticles,
     }));
