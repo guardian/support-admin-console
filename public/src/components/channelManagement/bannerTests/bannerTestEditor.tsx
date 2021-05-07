@@ -2,7 +2,7 @@ import React from 'react';
 import { Region } from '../../../utils/models';
 import { ArticlesViewedSettings, UserCohort } from '../helpers/shared';
 import { articleCountTemplate } from '../helpers/copyTemplates';
-import { createStyles, Theme, Typography, WithStyles, withStyles } from '@material-ui/core';
+import { Typography, WithStyles, withStyles } from '@material-ui/core';
 import BannerTestVariantEditor from './bannerTestVariantEditor';
 import TestVariantsEditor from '../testVariantsEditor';
 import TestEditorHeader from '../testEditorHeader';
@@ -20,45 +20,7 @@ import TestEditorVariantSummary from '../testEditorVariantSummary';
 import BannerVariantPreview from './bannerVariantPreview';
 import { ControlProportionSettings } from '../helpers/controlProportionSettings';
 import TestVariantsSplitEditor from '../testVariantsSplitEditor';
-
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const styles = ({ spacing, palette }: Theme) =>
-  createStyles({
-    container: {
-      width: '100%',
-      height: 'max-content',
-      background: '#FFFFFF',
-      paddingTop: spacing(6),
-      paddingRight: spacing(12),
-      paddingLeft: spacing(3),
-    },
-    headerAndSwitchContainer: {
-      paddingBottom: spacing(3),
-      borderBottom: `1px solid ${palette.grey[500]}`,
-
-      '& > * + *': {
-        marginTop: spacing(2),
-      },
-    },
-    sectionContainer: {
-      paddingTop: spacing(1),
-      paddingBottom: spacing(6),
-      borderBottom: `1px solid ${palette.grey[500]}`,
-
-      '& > * + *': {
-        marginTop: spacing(4),
-      },
-    },
-    sectionHeader: {
-      fontSize: 16,
-      fontWeight: 500,
-      color: palette.grey[700],
-    },
-    buttonsContainer: {
-      paddingTop: spacing(4),
-      paddingBottom: spacing(12),
-    },
-  });
+import { testEditorStyles as styles } from '../helpers/testEditorStyles';
 
 const copyHasTemplate = (content: BannerContent, template: string): boolean =>
   (content.heading && content.heading.includes(template)) || content.messageText.includes(template);

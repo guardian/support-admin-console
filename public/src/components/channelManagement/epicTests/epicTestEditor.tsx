@@ -2,7 +2,7 @@ import React from 'react';
 import { Region } from '../../../utils/models';
 import { EpicTest, EpicVariant, MaxEpicViews } from './epicTestsForm';
 import { ArticlesViewedSettings, UserCohort, EpicEditorConfig } from '../helpers/shared';
-import { makeStyles, FormControlLabel, Switch, Theme, Typography } from '@material-ui/core';
+import {FormControlLabel, Switch, Typography, WithStyles, withStyles} from '@material-ui/core';
 import TestEditorHeader from '../testEditorHeader';
 import TestVariantsEditor from '../testVariantsEditor';
 import TestEditorVariantSummary from '../testEditorVariantSummary';
@@ -22,43 +22,7 @@ import TestVariantsSplitEditor from '../testVariantsSplitEditor';
 import { getDefaultVariant } from './utils/defaults';
 import LiveSwitch from '../../shared/liveSwitch';
 import { ControlProportionSettings } from '../helpers/controlProportionSettings';
-
-const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
-  container: {
-    width: '100%',
-    height: 'max-content',
-    background: '#FFFFFF',
-    paddingTop: spacing(6),
-    paddingRight: spacing(12),
-    paddingLeft: spacing(3),
-  },
-  headerAndSwitchContainer: {
-    paddingBottom: spacing(3),
-    borderBottom: `1px solid ${palette.grey[500]}`,
-
-    '& > * + *': {
-      marginTop: spacing(2),
-    },
-  },
-  sectionContainer: {
-    paddingTop: spacing(1),
-    paddingBottom: spacing(6),
-    borderBottom: `1px solid ${palette.grey[500]}`,
-
-    '& > * + *': {
-      marginTop: spacing(4),
-    },
-  },
-  sectionHeader: {
-    fontSize: 16,
-    fontWeight: 500,
-    color: palette.grey[700],
-  },
-  buttonsContainer: {
-    paddingTop: spacing(4),
-    paddingBottom: spacing(12),
-  },
-}));
+import { testEditorStyles as styles } from '../helpers/testEditorStyles';
 
 const copyHasTemplate = (test: EpicTest, template: string): boolean =>
   test.variants.some(
@@ -67,7 +31,7 @@ const copyHasTemplate = (test: EpicTest, template: string): boolean =>
       variant.paragraphs.some(para => para.includes(template)),
   );
 
-interface EpicTestEditorProps {
+interface EpicTestEditorProps extends WithStyles<typeof styles> {
   test: EpicTest;
   hasChanged: boolean;
   epicEditorConfig: EpicEditorConfig;
@@ -85,6 +49,7 @@ interface EpicTestEditorProps {
 }
 
 const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
+  classes,
   test,
   epicEditorConfig,
   onChange,
@@ -98,8 +63,6 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
   createTest,
   onValidationChange,
 }: EpicTestEditorProps) => {
-  const classes = useStyles();
-
   const setValidationStatusForField = useValidation(onValidationChange);
 
   const onMaxViewsValidationChange = (isValid: boolean): void =>
@@ -412,4 +375,4 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
   );
 };
 
-export default EpicTestEditor;
+export default withStyles(styles)(EpicTestEditor);
