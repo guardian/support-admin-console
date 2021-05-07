@@ -73,15 +73,13 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
   };
 
   const updateTest = (update: (test: BannerTest) => BannerTest): void => {
-    if (test) {
-      const updatedTest = update(test);
+    const updatedTest = update(test);
 
-      onChange({
-        ...updatedTest,
-        // To save dotcom from having to work this out
-        articlesViewedSettings: getArticlesViewedSettings(updatedTest),
-      });
-    }
+    onChange({
+      ...updatedTest,
+      // To save dotcom from having to work this out
+      articlesViewedSettings: getArticlesViewedSettings(updatedTest),
+    });
   };
 
   const onMinArticlesViewedValidationChanged = (isValid: boolean): void =>
@@ -102,9 +100,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
   };
 
   const onVariantsChange = (updatedVariantList: BannerVariant[]): void => {
-    if (test) {
-      updateTest(test => ({ ...test, variants: updatedVariantList }));
-    }
+    updateTest(test => ({ ...test, variants: updatedVariantList }));
   };
 
   const onVariantChange = (updatedVariant: BannerVariant): void => {

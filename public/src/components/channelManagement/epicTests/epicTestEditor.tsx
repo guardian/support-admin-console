@@ -2,7 +2,7 @@ import React from 'react';
 import { Region } from '../../../utils/models';
 import { EpicTest, EpicVariant, MaxEpicViews } from './epicTestsForm';
 import { ArticlesViewedSettings, UserCohort, EpicEditorConfig } from '../helpers/shared';
-import {FormControlLabel, Switch, Typography, WithStyles, withStyles} from '@material-ui/core';
+import { FormControlLabel, Switch, Typography, WithStyles, withStyles } from '@material-ui/core';
 import TestEditorHeader from '../testEditorHeader';
 import TestVariantsEditor from '../testVariantsEditor';
 import TestEditorVariantSummary from '../testEditorVariantSummary';
@@ -85,40 +85,30 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
   };
 
   const updateTest = (update: (test: EpicTest) => EpicTest): void => {
-    if (test) {
-      const updatedTest = update(test);
+    const updatedTest = update(test);
 
-      onChange({
-        ...updatedTest,
-        // To save dotcom from having to work this out
-        hasCountryName: copyHasTemplate(updatedTest, countryNameTemplate),
-        articlesViewedSettings: getArticlesViewedSettings(updatedTest),
-      });
-    }
+    onChange({
+      ...updatedTest,
+      // To save dotcom from having to work this out
+      hasCountryName: copyHasTemplate(updatedTest, countryNameTemplate),
+      articlesViewedSettings: getArticlesViewedSettings(updatedTest),
+    });
   };
 
   const onVariantsChange = (updatedVariantList: EpicVariant[]): void => {
-    if (test) {
-      updateTest(test => ({ ...test, variants: updatedVariantList }));
-    }
+    updateTest(test => ({ ...test, variants: updatedVariantList }));
   };
 
   const onVariantChange = (updatedVariant: EpicVariant): void => {
-    if (test) {
-      const updatedVariantList = test.variants.map(variant =>
-        variant.name === updatedVariant.name ? updatedVariant : variant,
-      );
-      onVariantsChange(updatedVariantList);
-    }
+    const updatedVariantList = test.variants.map(variant =>
+      variant.name === updatedVariant.name ? updatedVariant : variant,
+    );
+    onVariantsChange(updatedVariantList);
   };
 
   const onVariantDelete = (deletedVariantName: string): void => {
-    if (test) {
-      const updatedVariantList = test.variants.filter(
-        variant => variant.name !== deletedVariantName,
-      );
-      onVariantsChange(updatedVariantList);
-    }
+    const updatedVariantList = test.variants.filter(variant => variant.name !== deletedVariantName);
+    onVariantsChange(updatedVariantList);
   };
 
   const createVariant = (name: string): void => {
@@ -127,9 +117,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
       name: name,
     };
 
-    if (test) {
-      onVariantsChange([...test.variants, newVariant]);
-    }
+    onVariantsChange([...test.variants, newVariant]);
   };
 
   const onSwitchChange = (fieldName: string) => (
