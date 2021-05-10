@@ -85,9 +85,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
     return undefined;
   };
 
-  const updateTest = (update: (test: EpicTest) => EpicTest): void => {
-    const updatedTest = update(test);
-
+  const updateTest = (updatedTest: EpicTest): void => {
     onChange({
       ...updatedTest,
       // To save dotcom from having to work this out
@@ -97,7 +95,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
   };
 
   const onVariantsChange = (updatedVariantList: EpicVariant[]): void => {
-    updateTest(test => ({ ...test, variants: updatedVariantList }));
+    updateTest({ ...test, variants: updatedVariantList });
   };
 
   const onVariantChange = (updatedVariant: EpicVariant): void => {
@@ -125,11 +123,11 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
     event: React.ChangeEvent<HTMLInputElement>,
   ): void => {
     const updatedBool = event.target.checked;
-    updateTest(test => ({ ...test, [fieldName]: updatedBool }));
+    updateTest({ ...test, [fieldName]: updatedBool });
   };
 
   const onLiveSwitchChange = (isOn: boolean): void => {
-    updateTest(test => ({ ...test, isOn }));
+    updateTest({ ...test, isOn });
   };
 
   const updateTargetSections = (
@@ -138,37 +136,37 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
     excludedTagIds: string[],
     excludedSections: string[],
   ): void => {
-    updateTest(test => ({ ...test, tagIds, sections, excludedTagIds, excludedSections }));
+    updateTest({ ...test, tagIds, sections, excludedTagIds, excludedSections });
   };
 
   const onRegionsChange = (updatedRegions: Region[]): void => {
-    updateTest(test => ({ ...test, locations: updatedRegions }));
+    updateTest({ ...test, locations: updatedRegions });
   };
 
   const onCohortChange = (updatedCohort: UserCohort): void => {
-    updateTest(test => ({ ...test, userCohort: updatedCohort }));
+    updateTest({ ...test, userCohort: updatedCohort });
   };
 
   const onArticlesViewedSettingsChange = (
     updatedArticlesViewedSettings?: ArticlesViewedSettings,
   ): void => {
-    updateTest(test => ({
+    updateTest({
       ...test,
       articlesViewedSettings: updatedArticlesViewedSettings,
-    }));
+    });
   };
 
   const onMaxViewsChange = (updatedMaxViews?: MaxEpicViews): void => {
-    updateTest(test => ({
+    updateTest({
       ...test,
       alwaysAsk: !updatedMaxViews,
       maxViews: updatedMaxViews,
-    }));
+    });
   };
 
   const onControlProportionSettingsChange = (
     controlProportionSettings?: ControlProportionSettings,
-  ): void => updateTest(test => ({ ...test, controlProportionSettings }));
+  ): void => updateTest({ ...test, controlProportionSettings });
 
   const onCopy = (name: string, nickname: string): void => {
     onTestSelected(name);

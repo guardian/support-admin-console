@@ -73,9 +73,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
     return undefined;
   };
 
-  const updateTest = (update: (test: BannerTest) => BannerTest): void => {
-    const updatedTest = update(test);
-
+  const updateTest = (updatedTest: BannerTest): void => {
     onChange({
       ...updatedTest,
       // To save dotcom from having to work this out
@@ -94,14 +92,14 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
 
   const onControlProportionSettingsChange = (
     controlProportionSettings?: ControlProportionSettings,
-  ): void => updateTest(test => ({ ...test, controlProportionSettings }));
+  ): void => updateTest({ ...test, controlProportionSettings });
 
   const onLiveSwitchChange = (isOn: boolean): void => {
-    updateTest(test => ({ ...test, isOn }));
+    updateTest({ ...test, isOn });
   };
 
   const onVariantsChange = (updatedVariantList: BannerVariant[]): void => {
-    updateTest(test => ({ ...test, variants: updatedVariantList }));
+    updateTest({ ...test, variants: updatedVariantList });
   };
 
   const onVariantChange = (updatedVariant: BannerVariant): void => {
@@ -117,27 +115,27 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
   };
 
   const onMinArticlesViewedChange = (updatedMinArticles: number): void => {
-    updateTest(test => ({
+    updateTest({
       ...test,
       minArticlesBeforeShowingBanner: updatedMinArticles,
-    }));
+    });
   };
 
   const onRegionsChange = (updatedRegions: Region[]): void => {
-    updateTest(test => ({ ...test, locations: updatedRegions }));
+    updateTest({ ...test, locations: updatedRegions });
   };
 
   const onCohortChange = (updatedCohort: UserCohort): void => {
-    updateTest(test => ({ ...test, userCohort: updatedCohort }));
+    updateTest({ ...test, userCohort: updatedCohort });
   };
 
   const onArticlesViewedSettingsChange = (
     updatedArticlesViewedSettings?: ArticlesViewedSettings,
   ): void => {
-    updateTest(test => ({
+    updateTest({
       ...test,
       articlesViewedSettings: updatedArticlesViewedSettings,
-    }));
+    });
   };
 
   const onCopy = (name: string, nickname: string): void => {
