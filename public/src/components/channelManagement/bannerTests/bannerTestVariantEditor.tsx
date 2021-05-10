@@ -162,27 +162,27 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
           fullWidth
         />
 
-        {template === BannerTemplate.ContributionsBanner ||
-          (template === BannerTemplate.G200Banner && (
-            <TextField
-              inputRef={register({
-                validate: invalidTemplateValidator,
-              })}
-              error={errors.highlightedText !== undefined}
-              helperText={
-                errors.highlightedText
-                  ? errors.highlightedText.message
-                  : HIGHTLIGHTED_TEXT_HELPER_TEXT
-              }
-              onBlur={handleSubmit(onSubmit)}
-              name="highlightedText"
-              label="Highlighted text"
-              margin="normal"
-              variant="outlined"
-              disabled={!editMode}
-              fullWidth
-            />
-          ))}
+        {(template === BannerTemplate.ContributionsBanner ||
+          template === BannerTemplate.G200Banner) && (
+          <TextField
+            inputRef={register({
+              validate: invalidTemplateValidator,
+            })}
+            error={errors.highlightedText !== undefined}
+            helperText={
+              errors.highlightedText
+                ? errors.highlightedText.message
+                : HIGHTLIGHTED_TEXT_HELPER_TEXT
+            }
+            onBlur={handleSubmit(onSubmit)}
+            name="highlightedText"
+            label="Highlighted text"
+            margin="normal"
+            variant="outlined"
+            disabled={!editMode}
+            fullWidth
+          />
+        )}
 
         <div className={classes.buttonsContainer}>
           <Typography className={classes.sectionHeader} variant="h4">
