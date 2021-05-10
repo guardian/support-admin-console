@@ -2,7 +2,7 @@ import React from 'react';
 import { Region } from '../../../utils/models';
 import { ArticlesViewedSettings, UserCohort } from '../helpers/shared';
 import { articleCountTemplate } from '../helpers/copyTemplates';
-import { Typography, WithStyles, withStyles } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import BannerTestVariantEditor from './bannerTestVariantEditor';
 import TestVariantsEditor from '../testVariantsEditor';
 import TestEditorHeader from '../testEditorHeader';
