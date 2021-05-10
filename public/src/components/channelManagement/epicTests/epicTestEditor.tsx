@@ -2,7 +2,7 @@ import React from 'react';
 import { Region } from '../../../utils/models';
 import { EpicTest, EpicVariant, MaxEpicViews } from './epicTestsForm';
 import { ArticlesViewedSettings, UserCohort, EpicEditorConfig } from '../helpers/shared';
-import { FormControlLabel, Switch, Typography, WithStyles, withStyles } from '@material-ui/core';
+import { FormControlLabel, Switch, Typography } from '@material-ui/core';
 import TestEditorHeader from '../testEditorHeader';
 import TestVariantsEditor from '../testVariantsEditor';
 import TestEditorVariantSummary from '../testEditorVariantSummary';
@@ -22,7 +22,7 @@ import TestVariantsSplitEditor from '../testVariantsSplitEditor';
 import { getDefaultVariant } from './utils/defaults';
 import LiveSwitch from '../../shared/liveSwitch';
 import { ControlProportionSettings } from '../helpers/controlProportionSettings';
-import { testEditorStyles as styles } from '../helpers/testEditorStyles';
+import { useStyles } from '../helpers/testEditorStyles';
 
 const copyHasTemplate = (test: EpicTest, template: string): boolean =>
   test.variants.some(
@@ -31,7 +31,7 @@ const copyHasTemplate = (test: EpicTest, template: string): boolean =>
       variant.paragraphs.some(para => para.includes(template)),
   );
 
-interface EpicTestEditorProps extends WithStyles<typeof styles> {
+interface EpicTestEditorProps {
   test: EpicTest;
   hasChanged: boolean;
   epicEditorConfig: EpicEditorConfig;
@@ -49,7 +49,6 @@ interface EpicTestEditorProps extends WithStyles<typeof styles> {
 }
 
 const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
-  classes,
   test,
   epicEditorConfig,
   onChange,
@@ -63,6 +62,8 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
   createTest,
   onValidationChange,
 }: EpicTestEditorProps) => {
+  const classes = useStyles();
+
   const setValidationStatusForField = useValidation(onValidationChange);
 
   const onMaxViewsValidationChange = (isValid: boolean): void =>
@@ -363,4 +364,4 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
   );
 };
 
-export default withStyles(styles)(EpicTestEditor);
+export default EpicTestEditor;

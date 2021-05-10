@@ -20,7 +20,7 @@ import TestEditorVariantSummary from '../testEditorVariantSummary';
 import BannerVariantPreview from './bannerVariantPreview';
 import { ControlProportionSettings } from '../helpers/controlProportionSettings';
 import TestVariantsSplitEditor from '../testVariantsSplitEditor';
-import { testEditorStyles as styles } from '../helpers/testEditorStyles';
+import { useStyles } from '../helpers/testEditorStyles';
 
 const copyHasTemplate = (content: BannerContent, template: string): boolean =>
   (content.heading && content.heading.includes(template)) || content.messageText.includes(template);
@@ -31,7 +31,7 @@ const testCopyHasTemplate = (test: BannerTest, template: string): boolean =>
       (variant.mobileBannerContent && copyHasTemplate(variant.mobileBannerContent, template)),
   );
 
-interface BannerTestEditorProps extends WithStyles<typeof styles> {
+interface BannerTestEditorProps {
   test: BannerTest;
   hasChanged: boolean;
   onChange: (updatedTest: BannerTest) => void;
@@ -47,7 +47,6 @@ interface BannerTestEditorProps extends WithStyles<typeof styles> {
 }
 
 const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
-  classes,
   test,
   onChange,
   onValidationChange,
@@ -60,6 +59,8 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
   testNicknames,
   createTest,
 }: BannerTestEditorProps) => {
+  const classes = useStyles();
+
   const setValidationStatusForField = useValidation(onValidationChange);
 
   const getArticlesViewedSettings = (test: BannerTest): ArticlesViewedSettings | undefined => {
@@ -279,4 +280,4 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
   return null;
 };
 
-export default withStyles(styles)(BannerTestEditor);
+export default BannerTestEditor;
