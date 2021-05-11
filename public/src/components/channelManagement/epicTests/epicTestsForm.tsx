@@ -22,6 +22,7 @@ import TestsFormLayout from '../testsFormLayout';
 import Sidebar from '../sidebar';
 import { FrontendSettingsType } from '../../../utils/requests';
 import { getDefaultTest, getDefaultVariant } from './utils/defaults';
+import { ControlProportionSettings } from '../helpers/controlProportionSettings';
 
 export enum TickerEndType {
   unlimited = 'unlimited',
@@ -64,11 +65,6 @@ export interface MaxEpicViews {
   maxViewsCount: number;
   maxViewsDays: number;
   minDaysBetweenViews: number;
-}
-
-export interface ControlProportionSettings {
-  proportion: number;
-  offset: number;
 }
 
 export interface EpicTest extends Test {

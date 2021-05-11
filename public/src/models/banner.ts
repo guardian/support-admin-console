@@ -6,6 +6,7 @@ import {
   UserCohort,
 } from '../components/channelManagement/helpers/shared';
 import { Region } from '../utils/models';
+import { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';
 
 export enum BannerTemplate {
   ContributionsBanner = 'ContributionsBanner',
@@ -43,4 +44,5 @@ export interface BannerTest extends Test {
   locations: Region[];
   variants: BannerVariant[];
   articlesViewedSettings?: ArticlesViewedSettings;
+  controlProportionSettings?: ControlProportionSettings;
 }

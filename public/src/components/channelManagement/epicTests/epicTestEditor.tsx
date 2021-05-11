@@ -1,8 +1,8 @@
 import React from 'react';
 import { Region } from '../../../utils/models';
-import { ControlProportionSettings, EpicTest, EpicVariant, MaxEpicViews } from './epicTestsForm';
+import { EpicTest, EpicVariant, MaxEpicViews } from './epicTestsForm';
 import { ArticlesViewedSettings, UserCohort, EpicEditorConfig } from '../helpers/shared';
-import { makeStyles, FormControlLabel, Switch, Theme, Typography } from '@material-ui/core';
+import { FormControlLabel, Switch, Typography } from '@material-ui/core';
 import TestEditorHeader from '../testEditorHeader';
 import TestVariantsEditor from '../testVariantsEditor';
 import TestEditorVariantSummary from '../testEditorVariantSummary';
@@ -18,46 +18,11 @@ import EpicTestTargetContentEditor from './epicTestTargetContentEditor';
 import EpicTestMaxViewsEditor from './epicTestMaxViewsEditor';
 import useValidation from '../hooks/useValidation';
 import { articleCountTemplate, countryNameTemplate } from '../helpers/copyTemplates';
-import EpicTestVariantsSplitEditor from './epicTestVariantsSplitEditor';
+import TestVariantsSplitEditor from '../testVariantsSplitEditor';
 import { getDefaultVariant } from './utils/defaults';
 import LiveSwitch from '../../shared/liveSwitch';
-
-const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
-  container: {
-    width: '100%',
-    height: 'max-content',
-    background: '#FFFFFF',
-    paddingTop: spacing(6),
-    paddingRight: spacing(12),
-    paddingLeft: spacing(3),
-  },
-  headerAndSwitchContainer: {
-    paddingBottom: spacing(3),
-    borderBottom: `1px solid ${palette.grey[500]}`,
-
-    '& > * + *': {
-      marginTop: spacing(2),
-    },
-  },
-  sectionContainer: {
-    paddingTop: spacing(1),
-    paddingBottom: spacing(6),
-    borderBottom: `1px solid ${palette.grey[500]}`,
-
-    '& > * + *': {
-      marginTop: spacing(4),
-    },
-  },
-  sectionHeader: {
-    fontSize: 16,
-    fontWeight: 500,
-    color: palette.grey[700],
-  },
-  buttonsContainer: {
-    paddingTop: spacing(4),
-    paddingBottom: spacing(12),
-  },
-}));
+import { ControlProportionSettings } from '../helpers/controlProportionSettings';
+import { useStyles } from '../helpers/testEditorStyles';
 
 const copyHasTemplate = (test: EpicTest, template: string): boolean =>
   test.variants.some(
@@ -120,41 +85,29 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
     return undefined;
   };
 
-  const updateTest = (update: (test: EpicTest) => EpicTest): void => {
-    if (test) {
-      const updatedTest = update(test);
-
-      onChange({
-        ...updatedTest,
-        // To save dotcom from having to work this out
-        hasCountryName: copyHasTemplate(updatedTest, countryNameTemplate),
-        articlesViewedSettings: getArticlesViewedSettings(updatedTest),
-      });
-    }
+  const updateTest = (updatedTest: EpicTest): void => {
+    onChange({
+      ...updatedTest,
+      // To save dotcom from having to work this out
+      hasCountryName: copyHasTemplate(updatedTest, countryNameTemplate),
+      articlesViewedSettings: getArticlesViewedSettings(updatedTest),
+    });
   };
 
   const onVariantsChange = (updatedVariantList: EpicVariant[]): void => {
-    if (test) {
-      updateTest(test => ({ ...test, variants: updatedVariantList }));
-    }
+    updateTest({ ...test, variants: updatedVariantList });
   };
 
   const onVariantChange = (updatedVariant: EpicVariant): void => {
-    if (test) {
-      const updatedVariantList = test.variants.map(variant =>
-        variant.name === updatedVariant.name ? updatedVariant : variant,
-      );
-      onVariantsChange(updatedVariantList);
-    }
+    const updatedVariantList = test.variants.map(variant =>
+      variant.name === updatedVariant.name ? updatedVariant : variant,
+    );
+    onVariantsChange(updatedVariantList);
   };
 
   const onVariantDelete = (deletedVariantName: string): void => {
-    if (test) {
-      const updatedVariantList = test.variants.filter(
-        variant => variant.name !== deletedVariantName,
-      );
-      onVariantsChange(updatedVariantList);
-    }
+    const updatedVariantList = test.variants.filter(variant => variant.name !== deletedVariantName);
+    onVariantsChange(updatedVariantList);
   };
 
   const createVariant = (name: string): void => {
@@ -163,20 +116,18 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
       name: name,
     };
 
-    if (test) {
-      onVariantsChange([...test.variants, newVariant]);
-    }
+    onVariantsChange([...test.variants, newVariant]);
   };
 
   const onSwitchChange = (fieldName: string) => (
     event: React.ChangeEvent<HTMLInputElement>,
   ): void => {
     const updatedBool = event.target.checked;
-    updateTest(test => ({ ...test, [fieldName]: updatedBool }));
+    updateTest({ ...test, [fieldName]: updatedBool });
   };
 
   const onLiveSwitchChange = (isOn: boolean): void => {
-    updateTest(test => ({ ...test, isOn }));
+    updateTest({ ...test, isOn });
   };
 
   const updateTargetSections = (
@@ -185,37 +136,37 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
     excludedTagIds: string[],
     excludedSections: string[],
   ): void => {
-    updateTest(test => ({ ...test, tagIds, sections, excludedTagIds, excludedSections }));
+    updateTest({ ...test, tagIds, sections, excludedTagIds, excludedSections });
   };
 
   const onRegionsChange = (updatedRegions: Region[]): void => {
-    updateTest(test => ({ ...test, locations: updatedRegions }));
+    updateTest({ ...test, locations: updatedRegions });
   };
 
   const onCohortChange = (updatedCohort: UserCohort): void => {
-    updateTest(test => ({ ...test, userCohort: updatedCohort }));
+    updateTest({ ...test, userCohort: updatedCohort });
   };
 
   const onArticlesViewedSettingsChange = (
     updatedArticlesViewedSettings?: ArticlesViewedSettings,
   ): void => {
-    updateTest(test => ({
+    updateTest({
       ...test,
       articlesViewedSettings: updatedArticlesViewedSettings,
-    }));
+    });
   };
 
   const onMaxViewsChange = (updatedMaxViews?: MaxEpicViews): void => {
-    updateTest(test => ({
+    updateTest({
       ...test,
       alwaysAsk: !updatedMaxViews,
       maxViews: updatedMaxViews,
-    }));
+    });
   };
 
   const onControlProportionSettingsChange = (
     controlProportionSettings?: ControlProportionSettings,
-  ): void => updateTest(test => ({ ...test, controlProportionSettings }));
+  ): void => updateTest({ ...test, controlProportionSettings });
 
   const onCopy = (name: string, nickname: string): void => {
     onTestSelected(name);
@@ -288,7 +239,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
             Variants split
           </Typography>
           <div>
-            <EpicTestVariantsSplitEditor
+            <TestVariantsSplitEditor
               variants={test.variants}
               controlProportionSettings={test.controlProportionSettings}
               onControlProportionSettingsChange={onControlProportionSettingsChange}

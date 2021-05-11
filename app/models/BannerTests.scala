@@ -48,7 +48,8 @@ case class BannerTest(
   userCohort: UserCohort,
   locations: List[Region] = Nil,
   variants: List[BannerVariant],
-  articlesViewedSettings: Option[ArticlesViewedSettings] = None
+  articlesViewedSettings: Option[ArticlesViewedSettings] = None,
+  controlProportionSettings: Option[ControlProportionSettings] = None
 )
 
 case class BannerTests(tests: List[BannerTest])

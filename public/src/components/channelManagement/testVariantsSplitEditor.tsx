@@ -8,13 +8,14 @@ import {
   TextField,
   Theme,
 } from '@material-ui/core';
-import { ControlProportionSettings, EpicVariant } from './epicTestsForm';
-import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
+import { Variant } from './helpers/shared';
+import { EMPTY_ERROR_HELPER_TEXT } from './helpers/validation';
 import { useForm } from 'react-hook-form';
+import { ControlProportionSettings } from './helpers/controlProportionSettings';
 
-const MAX_MVT = 1000000;
+const MAX_MVT = 1_000_000;
 
-const hasControl = (variants: EpicVariant[]): boolean =>
+const hasControl = (variants: Variant[]): boolean =>
   !!variants.find(v => v.name.toLowerCase() === 'control');
 
 const randomMvt = (): number => Math.round(Math.random() * MAX_MVT);
@@ -39,8 +40,8 @@ interface FormState {
   percentage?: number;
 }
 
-interface EpicTestVariantsSplitEditorProps {
-  variants: EpicVariant[];
+interface TestVariantsSplitEditorProps {
+  variants: Variant[];
   controlProportionSettings?: ControlProportionSettings;
   onControlProportionSettingsChange: (
     controlProportionSettings?: ControlProportionSettings,
@@ -49,13 +50,13 @@ interface EpicTestVariantsSplitEditorProps {
   isDisabled: boolean;
 }
 
-const EpicTestVariantsSplitEditor: React.FC<EpicTestVariantsSplitEditorProps> = ({
+const TestVariantsSplitEditor: React.FC<TestVariantsSplitEditorProps> = ({
   variants,
   controlProportionSettings,
   onControlProportionSettingsChange,
   onValidationChange,
   isDisabled,
-}: EpicTestVariantsSplitEditorProps) => {
+}: TestVariantsSplitEditorProps) => {
   const classes = useStyles();
 
   const defaultValues = {
@@ -196,4 +197,4 @@ const EpicTestVariantsSplitEditor: React.FC<EpicTestVariantsSplitEditorProps> = 
   );
 };
 
-export default EpicTestVariantsSplitEditor;
+export default TestVariantsSplitEditor;

@@ -2,7 +2,7 @@ import React from 'react';
 import { Region } from '../../../utils/models';
 import { ArticlesViewedSettings, UserCohort } from '../helpers/shared';
 import { articleCountTemplate } from '../helpers/copyTemplates';
-import { createStyles, Theme, Typography, WithStyles, withStyles } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import BannerTestVariantEditor from './bannerTestVariantEditor';
 import TestVariantsEditor from '../testVariantsEditor';
 import TestEditorHeader from '../testEditorHeader';
@@ -18,45 +18,9 @@ import { BannerContent, BannerTest, BannerVariant } from '../../../models/banner
 import { getDefaultVariant } from './utils/defaults';
 import TestEditorVariantSummary from '../testEditorVariantSummary';
 import BannerVariantPreview from './bannerVariantPreview';
-
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const styles = ({ spacing, palette }: Theme) =>
-  createStyles({
-    container: {
-      width: '100%',
-      height: 'max-content',
-      background: '#FFFFFF',
-      paddingTop: spacing(6),
-      paddingRight: spacing(12),
-      paddingLeft: spacing(3),
-    },
-    headerAndSwitchContainer: {
-      paddingBottom: spacing(3),
-      borderBottom: `1px solid ${palette.grey[500]}`,
-
-      '& > * + *': {
-        marginTop: spacing(2),
-      },
-    },
-    sectionContainer: {
-      paddingTop: spacing(1),
-      paddingBottom: spacing(6),
-      borderBottom: `1px solid ${palette.grey[500]}`,
-
-      '& > * + *': {
-        marginTop: spacing(4),
-      },
-    },
-    sectionHeader: {
-      fontSize: 16,
-      fontWeight: 500,
-      color: palette.grey[700],
-    },
-    buttonsContainer: {
-      paddingTop: spacing(4),
-      paddingBottom: spacing(12),
-    },
-  });
+import { ControlProportionSettings } from '../helpers/controlProportionSettings';
+import TestVariantsSplitEditor from '../testVariantsSplitEditor';
+import { useStyles } from '../helpers/testEditorStyles';
 
 const copyHasTemplate = (content: BannerContent, template: string): boolean =>
   (content.heading && content.heading.includes(template)) || content.messageText.includes(template);
@@ -67,7 +31,7 @@ const testCopyHasTemplate = (test: BannerTest, template: string): boolean =>
       (variant.mobileBannerContent && copyHasTemplate(variant.mobileBannerContent, template)),
   );
 
-interface BannerTestEditorProps extends WithStyles<typeof styles> {
+interface BannerTestEditorProps {
   test: BannerTest;
   hasChanged: boolean;
   onChange: (updatedTest: BannerTest) => void;
@@ -83,7 +47,6 @@ interface BannerTestEditorProps extends WithStyles<typeof styles> {
 }
 
 const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
-  classes,
   test,
   onChange,
   onValidationChange,
@@ -96,13 +59,9 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
   testNicknames,
   createTest,
 }: BannerTestEditorProps) => {
+  const classes = useStyles();
+
   const setValidationStatusForField = useValidation(onValidationChange);
-
-  const onMinArticlesViewedValidationChanged = (isValid: boolean): void =>
-    setValidationStatusForField('minArticlesViewed', isValid);
-
-  const onArticlesViewedSettingsValidationChanged = (isValid: boolean): void =>
-    setValidationStatusForField('articlesViewedSettings', isValid);
 
   const getArticlesViewedSettings = (test: BannerTest): ArticlesViewedSettings | undefined => {
     if (!!test.articlesViewedSettings) {
@@ -121,6 +80,19 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
       articlesViewedSettings: getArticlesViewedSettings(updatedTest),
     });
   };
+
+  const onMinArticlesViewedValidationChanged = (isValid: boolean): void =>
+    setValidationStatusForField('minArticlesViewed', isValid);
+
+  const onArticlesViewedSettingsValidationChanged = (isValid: boolean): void =>
+    setValidationStatusForField('articlesViewedSettings', isValid);
+
+  const onVariantsSplitSettingsValidationChanged = (isValid: boolean): void =>
+    setValidationStatusForField('variantsSplitSettings', isValid);
+
+  const onControlProportionSettingsChange = (
+    controlProportionSettings?: ControlProportionSettings,
+  ): void => updateTest({ ...test, controlProportionSettings });
 
   const onLiveSwitchChange = (isOn: boolean): void => {
     updateTest({ ...test, isOn });
@@ -233,6 +205,23 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
           </div>
         </div>
 
+        {test.variants.length > 1 && (
+          <div className={classes.sectionContainer}>
+            <Typography variant={'h3'} className={classes.sectionHeader}>
+              Variants split
+            </Typography>
+            <div>
+              <TestVariantsSplitEditor
+                variants={test.variants}
+                controlProportionSettings={test.controlProportionSettings}
+                onControlProportionSettingsChange={onControlProportionSettingsChange}
+                onValidationChange={onVariantsSplitSettingsValidationChanged}
+                isDisabled={!editMode}
+              />
+            </div>
+          </div>
+        )}
+
         <div className={classes.sectionContainer}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
             Display rules
@@ -289,4 +278,4 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
   return null;
 };
 
-export default withStyles(styles)(BannerTestEditor);
+export default BannerTestEditor;
