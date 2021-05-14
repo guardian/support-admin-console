@@ -7,26 +7,6 @@ import io.circe.{Decoder, Encoder}
 
 import scala.collection.immutable.IndexedSeq
 
-case class Cta(text: String, baseUrl: String)
-
-sealed trait SecondaryCta
-
-case class CustomSecondaryCta(
-  `type`: String = "CustomSecondaryCta",
-  cta: Cta,
-) extends SecondaryCta
-
-case class ContributionsReminderSecondaryCta(
-  `type`: String = "ContributionsReminderSecondaryCta",
-) extends SecondaryCta
-
-object SecondaryCta {
-  implicit val customConfig: Configuration = Configuration.default.withDiscriminator("type")
-
-  implicit val secondaryCtaDecoder = Decoder[SecondaryCta]
-  implicit val secondaryCtaEncoder = Encoder[SecondaryCta]
-}
-
 sealed trait TickerEndType extends EnumEntry
 object TickerEndType extends Enum[TickerEndType] with CirceEnum[TickerEndType] {
   override val values: IndexedSeq[TickerEndType] = findValues

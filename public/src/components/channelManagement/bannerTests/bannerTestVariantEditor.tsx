@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core';
 import BannerTestVariantEditorCtasEditor from './bannerTestVariantEditorCtasEditor';
 import { invalidTemplateValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
-import { Cta } from '../helpers/shared';
+import { Cta, SecondaryCta } from '../helpers/shared';
 import BannerTemplateSelector from './bannerTemplateSelector';
 import { BannerContent, BannerTemplate, BannerVariant } from '../../../models/banner';
 import { getDefaultVariant } from './utils/defaults';
@@ -116,7 +116,7 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
   const updatePrimaryCta = (updatedCta?: Cta): void => {
     onChange({ ...content, cta: updatedCta });
   };
-  const updateSecondaryCta = (updatedCta?: Cta): void => {
+  const updateSecondaryCta = (updatedCta?: SecondaryCta): void => {
     onChange({ ...content, secondaryCta: updatedCta });
   };
 

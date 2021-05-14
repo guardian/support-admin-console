@@ -23,7 +23,7 @@ case class BannerContent(
   messageText: String,
   highlightedText: Option[String],
   cta: Option[Cta],
-  secondaryCta: Option[Cta]
+  secondaryCta: Option[SecondaryCta]
 )
 
 case class BannerVariant(

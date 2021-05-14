@@ -4,6 +4,7 @@ import {
   Test,
   Variant,
   UserCohort,
+  SecondaryCta,
 } from '../components/channelManagement/helpers/shared';
 import { Region } from '../utils/models';
 import { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';
@@ -20,7 +21,7 @@ export interface BannerContent {
   messageText: string;
   highlightedText?: string;
   cta?: Cta;
-  secondaryCta?: Cta;
+  secondaryCta?: SecondaryCta;
 }
 export interface BannerVariant extends Variant {
   template: BannerTemplate;
