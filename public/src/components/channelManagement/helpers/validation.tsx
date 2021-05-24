@@ -96,7 +96,7 @@ export const ARTICLE_COUNT_TEMPLATE = '%%ARTICLE_COUNT%%';
 const validTemplates = [CURRENCY_TEMPLATE, COUNTRY_NAME_TEMPLATE, ARTICLE_COUNT_TEMPLATE];
 
 export const invalidTemplateValidator = (text: string): string | boolean => {
-  const templates: string[] | null = text.match(/%%[A-Za-z_]*%%/g);
+  const templates: string[] | null = text.match(/%\S*%/g);
 
   if (templates !== null) {
     const invalidTemplate = templates.find(template => !validTemplates.includes(template));

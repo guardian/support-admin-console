@@ -17,7 +17,7 @@ import EpicVariantPreview from './epicVariantPreview';
 import EpicTestTargetContentEditor from './epicTestTargetContentEditor';
 import EpicTestMaxViewsEditor from './epicTestMaxViewsEditor';
 import useValidation from '../hooks/useValidation';
-import { articleCountTemplate, countryNameTemplate } from '../helpers/copyTemplates';
+import { ARTICLE_COUNT_TEMPLATE, COUNTRY_NAME_TEMPLATE } from '../helpers/validation';
 import TestVariantsSplitEditor from '../testVariantsSplitEditor';
 import { getDefaultVariant } from './utils/defaults';
 import LiveSwitch from '../../shared/liveSwitch';
@@ -79,7 +79,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
     if (!!test.articlesViewedSettings) {
       return test.articlesViewedSettings;
     }
-    if (epicEditorConfig.allowArticleCount && copyHasTemplate(test, articleCountTemplate)) {
+    if (epicEditorConfig.allowArticleCount && copyHasTemplate(test, ARTICLE_COUNT_TEMPLATE)) {
       return DEFAULT_ARTICLES_VIEWED_SETTINGS;
     }
     return undefined;
@@ -89,7 +89,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
     onChange({
       ...updatedTest,
       // To save dotcom from having to work this out
-      hasCountryName: copyHasTemplate(updatedTest, countryNameTemplate),
+      hasCountryName: copyHasTemplate(updatedTest, COUNTRY_NAME_TEMPLATE),
       articlesViewedSettings: getArticlesViewedSettings(updatedTest),
     });
   };

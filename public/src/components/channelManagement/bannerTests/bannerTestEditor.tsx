@@ -1,7 +1,7 @@
 import React from 'react';
 import { Region } from '../../../utils/models';
 import { ArticlesViewedSettings, UserCohort } from '../helpers/shared';
-import { articleCountTemplate } from '../helpers/copyTemplates';
+import { ARTICLE_COUNT_TEMPLATE } from '../helpers/validation';
 import { Typography } from '@material-ui/core';
 import BannerTestVariantEditor from './bannerTestVariantEditor';
 import TestVariantsEditor from '../testVariantsEditor';
@@ -67,7 +67,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
     if (!!test.articlesViewedSettings) {
       return test.articlesViewedSettings;
     }
-    if (testCopyHasTemplate(test, articleCountTemplate)) {
+    if (testCopyHasTemplate(test, ARTICLE_COUNT_TEMPLATE)) {
       return DEFAULT_ARTICLES_VIEWED_SETTINGS;
     }
     return undefined;
