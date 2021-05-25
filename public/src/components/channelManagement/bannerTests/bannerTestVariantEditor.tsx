@@ -10,6 +10,7 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import BannerTestVariantEditorCtasEditor from './bannerTestVariantEditorCtasEditor';
+import VariantEditorCopyLengthWarning from '../variantEditorCopyLengthWarning';
 import { invalidTemplateValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 import { Cta } from '../helpers/shared';
 import BannerTemplateSelector from './bannerTemplateSelector';
@@ -56,6 +57,9 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
 const HEADER_DEFAULT_HELPER_TEXT = 'Assitive text';
 const BODY_DEFAULT_HELPER_TEXT = 'Main banner message, including paragraph breaks';
 const HIGHTLIGHTED_TEXT_HELPER_TEXT = 'Final sentence of body copy';
+
+const HEADER_COPY_RECOMMENDED_LENGTH = 50;
+const BODY_COPY_RECOMMENDED_LENGTH = 525;
 
 type DeviceType = 'ALL' | 'MOBILE' | 'NOT_MOBILE';
 
@@ -122,6 +126,9 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
 
   const labelSuffix = getLabelSuffix(deviceType);
 
+  const headerCopyLength = content.heading?.length ?? 0;
+  const bodyCopyLength = content.messageText.length + (content.highlightedText?.length ?? 0);
+
   return (
     <>
       <Typography className={classes.sectionHeader} variant="h4">
@@ -130,59 +137,71 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
 
       <div className={classes.contentContainer}>
         {template !== BannerTemplate.G200Banner && (
-          <TextField
-            inputRef={register({ validate: invalidTemplateValidator })}
-            error={errors.heading !== undefined}
-            helperText={errors.heading ? errors.heading.message : HEADER_DEFAULT_HELPER_TEXT}
-            onBlur={handleSubmit(onSubmit)}
-            name="heading"
-            label="Header"
-            margin="normal"
-            variant="outlined"
-            disabled={!editMode}
-            fullWidth
-          />
+          <div>
+            <TextField
+              inputRef={register({ validate: invalidTemplateValidator })}
+              error={errors.heading !== undefined}
+              helperText={errors.heading ? errors.heading.message : HEADER_DEFAULT_HELPER_TEXT}
+              onBlur={handleSubmit(onSubmit)}
+              name="heading"
+              label="Header"
+              margin="normal"
+              variant="outlined"
+              disabled={!editMode}
+              fullWidth
+            />
+
+            {headerCopyLength > HEADER_COPY_RECOMMENDED_LENGTH && (
+              <VariantEditorCopyLengthWarning charLimit={HEADER_COPY_RECOMMENDED_LENGTH} />
+            )}
+          </div>
         )}
 
-        <TextField
-          inputRef={register({
-            required: EMPTY_ERROR_HELPER_TEXT,
-            validate: invalidTemplateValidator,
-          })}
-          error={errors.messageText !== undefined}
-          helperText={errors.messageText ? errors.messageText.message : BODY_DEFAULT_HELPER_TEXT}
-          onBlur={handleSubmit(onSubmit)}
-          name="messageText"
-          label="Body copy"
-          margin="normal"
-          variant="outlined"
-          multiline
-          rows={10}
-          disabled={!editMode}
-          fullWidth
-        />
-
-        {(template === BannerTemplate.ContributionsBanner ||
-          template === BannerTemplate.G200Banner) && (
+        <div>
           <TextField
             inputRef={register({
+              required: EMPTY_ERROR_HELPER_TEXT,
               validate: invalidTemplateValidator,
             })}
-            error={errors.highlightedText !== undefined}
-            helperText={
-              errors.highlightedText
-                ? errors.highlightedText.message
-                : HIGHTLIGHTED_TEXT_HELPER_TEXT
-            }
+            error={errors.messageText !== undefined}
+            helperText={errors.messageText ? errors.messageText.message : BODY_DEFAULT_HELPER_TEXT}
             onBlur={handleSubmit(onSubmit)}
-            name="highlightedText"
-            label="Highlighted text"
+            name="messageText"
+            label="Body copy"
             margin="normal"
             variant="outlined"
+            multiline
+            rows={10}
             disabled={!editMode}
             fullWidth
           />
-        )}
+
+          {(template === BannerTemplate.ContributionsBanner ||
+            template === BannerTemplate.G200Banner) && (
+            <TextField
+              inputRef={register({
+                validate: invalidTemplateValidator,
+              })}
+              error={errors.highlightedText !== undefined}
+              helperText={
+                errors.highlightedText
+                  ? errors.highlightedText.message
+                  : HIGHTLIGHTED_TEXT_HELPER_TEXT
+              }
+              onBlur={handleSubmit(onSubmit)}
+              name="highlightedText"
+              label="Highlighted text"
+              margin="normal"
+              variant="outlined"
+              disabled={!editMode}
+              fullWidth
+            />
+          )}
+
+          {bodyCopyLength > BODY_COPY_RECOMMENDED_LENGTH && (
+            <VariantEditorCopyLengthWarning charLimit={BODY_COPY_RECOMMENDED_LENGTH} />
+          )}
+        </div>
 
         <div className={classes.buttonsContainer}>
           <Typography className={classes.sectionHeader} variant="h4">
