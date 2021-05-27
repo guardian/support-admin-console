@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Theme, makeStyles, Button } from '@material-ui/core';
-import * as emotion from 'emotion';
-import * as emotionCore from '@emotion/core';
-import * as emotionTheming from 'emotion-theming';
+import * as emotionReact from '@emotion/react';
+import * as emotionReactJsxRuntime from '@emotion/react/jsx-runtime';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import Drawer from '@material-ui/core/Drawer';
 import { BannerTemplate, BannerVariant } from '../../../models/banner';
@@ -120,17 +119,16 @@ const BannerVariantPreview: React.FC<BannerVariantPreviewProps> = ({
     window.guardian.automat = {
       react: React,
       preact: React,
-      emotionCore,
-      emotionTheming,
-      emotion,
+      emotionReact,
+      emotionReactJsxRuntime,
     };
 
     const stage = getStage();
 
     const baseUrl =
       stage === 'PROD'
-        ? 'https://contributions.guardianapis.com/modules/v1/banners'
-        : 'https://contributions.code.dev-guardianapis.com/modules/v1/banners';
+        ? 'https://contributions.guardianapis.com/modules/v2/banners'
+        : 'https://contributions.code.dev-guardianapis.com/modules/v2/banners';
 
     window.remoteImport(`${baseUrl}/${bannerModules[variant.template].path}`).then(bannerModule => {
       setBanner(() => withPreviewStyles(bannerModule[bannerModules[variant.template].name]));
