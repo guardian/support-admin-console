@@ -44,9 +44,8 @@ declare global {
       automat: {
         react: any;
         preact: any;
-        emotionCore: any;
-        emotionTheming: any;
-        emotion: any;
+        emotionReact: any;
+        emotionReactJsxRuntime: any;
       };
     };
   }

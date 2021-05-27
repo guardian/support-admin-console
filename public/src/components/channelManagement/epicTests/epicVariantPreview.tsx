@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Theme, makeStyles } from '@material-ui/core';
-import * as emotion from 'emotion';
-import * as emotionCore from '@emotion/core';
-import * as emotionTheming from 'emotion-theming';
+import * as emotionReact from '@emotion/react';
+import * as emotionReactJsxRuntime from '@emotion/react/jsx-runtime';
 import { EpicVariant } from './epicTestsForm';
 import { withPreviewStyles } from '../previewContainer';
 import { getStage } from '../../../utils/stage';
@@ -71,17 +70,16 @@ const EpicVariantPreview: React.FC<EpicVariantPreviewProps> = ({
     window.guardian.automat = {
       react: React,
       preact: React,
-      emotionCore,
-      emotionTheming,
-      emotion,
+      emotionReact,
+      emotionReactJsxRuntime,
     };
 
     const stage = getStage();
 
     const url =
       stage === 'PROD'
-        ? 'https://contributions.guardianapis.com/modules/v1/epics/ContributionsEpic.js'
-        : 'https://contributions.code.dev-guardianapis.com/modules/v1/epics/ContributionsEpic.js';
+        ? 'https://contributions.guardianapis.com/modules/v2/epics/ContributionsEpic.js'
+        : 'https://contributions.code.dev-guardianapis.com/modules/v2/epics/ContributionsEpic.js';
 
     window.remoteImport(url).then(epicModule => {
       setEpic(() => withPreviewStyles(epicModule.ContributionsEpic));

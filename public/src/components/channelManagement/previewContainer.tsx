@@ -101,7 +101,6 @@ export const cssResets = `
 
 export const previewStyles = `
     .preview {
-        max-width: 1300px;
         margin: 0 auto;
     }
 `;
@@ -115,7 +114,7 @@ export function withPreviewStyles<Props>(Component: React.FC<Props>): React.FC<P
           {cssResets}
           {previewStyles}
         </style>
-        <div css="preview">
+        <div className="preview">
           <Component {...props} />
         </div>
       </div>
