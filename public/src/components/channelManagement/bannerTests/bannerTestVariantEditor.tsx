@@ -59,7 +59,8 @@ const BODY_DEFAULT_HELPER_TEXT = 'Main banner message, including paragraph break
 const HIGHTLIGHTED_TEXT_HELPER_TEXT = 'Final sentence of body copy';
 
 const HEADER_COPY_RECOMMENDED_LENGTH = 50;
-const BODY_COPY_RECOMMENDED_LENGTH = 525;
+const BODY_COPY_WITHOUT_SECONDARY_CTA_RECOMMENDED_LENGTH = 525;
+const BODY_COPY_WITH_SECONDARY_CTA_RECOMMENDED_LENGTH = 390;
 
 type DeviceType = 'ALL' | 'MOBILE' | 'NOT_MOBILE';
 
@@ -127,6 +128,11 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
   const labelSuffix = getLabelSuffix(deviceType);
 
   const headerCopyLength = content.heading?.length ?? 0;
+
+  const bodyCopyRecommendedLength = content.secondaryCta
+    ? BODY_COPY_WITH_SECONDARY_CTA_RECOMMENDED_LENGTH
+    : BODY_COPY_WITHOUT_SECONDARY_CTA_RECOMMENDED_LENGTH;
+
   const bodyCopyLength = content.messageText.length + (content.highlightedText?.length ?? 0);
 
   return (
@@ -198,8 +204,8 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
             />
           )}
 
-          {bodyCopyLength > BODY_COPY_RECOMMENDED_LENGTH && (
-            <VariantEditorCopyLengthWarning charLimit={BODY_COPY_RECOMMENDED_LENGTH} />
+          {bodyCopyLength > bodyCopyRecommendedLength && (
+            <VariantEditorCopyLengthWarning charLimit={bodyCopyRecommendedLength} />
           )}
         </div>
 
