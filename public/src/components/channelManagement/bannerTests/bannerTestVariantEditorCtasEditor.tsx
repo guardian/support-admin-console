@@ -1,7 +1,8 @@
 import React from 'react';
 import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core';
 import VariantEditorCtaEditor from '../variantEditorCtaEditor';
-import { Cta } from '../helpers/shared';
+import VariantEditorSecondaryCtaEditor from '../variantEditorSecondaryCtaEditor';
+import { Cta, SecondaryCta } from '../helpers/shared';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing }: Theme) =>
@@ -25,9 +26,9 @@ const DEFAULT_SECONDARY_CTA = {
 
 interface BannerTestVariantEditorCtasEditorProps extends WithStyles<typeof styles> {
   primaryCta?: Cta;
-  secondaryCta?: Cta;
+  secondaryCta?: SecondaryCta;
   updatePrimaryCta: (updatedCta?: Cta) => void;
-  updateSecondaryCta: (updatedCta?: Cta) => void;
+  updateSecondaryCta: (updatedCta?: SecondaryCta) => void;
   onValidationChange: (isValid: boolean) => void;
   isDisabled: boolean;
   supportSecondaryCta: boolean;
@@ -55,7 +56,7 @@ const BannerTestVariantEditorCtasEditor: React.FC<BannerTestVariantEditorCtasEdi
       />
 
       {supportSecondaryCta && (
-        <VariantEditorCtaEditor
+        <VariantEditorSecondaryCtaEditor
           label="Secondary button"
           isDisabled={isDisabled}
           cta={secondaryCta}

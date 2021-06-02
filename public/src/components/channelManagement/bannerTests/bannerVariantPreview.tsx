@@ -5,7 +5,7 @@ import * as emotionReactJsxRuntime from '@emotion/react/jsx-runtime';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import Drawer from '@material-ui/core/Drawer';
 import { BannerTemplate, BannerVariant } from '../../../models/banner';
-import { Cta } from '../helpers/shared';
+import { Cta, SecondaryCta } from '../helpers/shared';
 import Typography from '@material-ui/core/Typography';
 import { withPreviewStyles } from '../previewContainer';
 import { getStage } from '../../../utils/stage';
@@ -15,7 +15,7 @@ export interface BannerContent {
   messageText: string;
   highlightedText?: string;
   cta?: Cta;
-  secondaryCta?: Cta;
+  secondaryCta?: SecondaryCta;
 }
 
 interface BannerProps {
