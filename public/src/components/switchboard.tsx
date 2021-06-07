@@ -38,6 +38,7 @@ enum RecurringPaymentMethod {
   existingDirectDebit = 'existingDirectDebit',
   stripeApplePay = 'stripeApplePay',
   stripePaymentRequestButton = 'stripePaymentRequestButton',
+  sepa = 'sepa',
 }
 
 interface Switches {
@@ -148,6 +149,7 @@ class Switchboard extends React.Component<Props, Switches> {
         directDebit: SwitchState.Off,
         existingCard: SwitchState.Off,
         existingDirectDebit: SwitchState.Off,
+        sepa: SwitchState.Off,
       },
       enableDigitalSubGifting: SwitchState.Off,
       useDotcomContactPage: SwitchState.Off,

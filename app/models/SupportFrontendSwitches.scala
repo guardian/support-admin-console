@@ -35,7 +35,8 @@ case class PaymentMethodSwitches(
   amazonPay: Option[SwitchState],
   directDebit: Option[SwitchState],
   existingCard: Option[SwitchState],
-  existingDirectDebit: Option[SwitchState]
+  existingDirectDebit: Option[SwitchState],
+  sepa: Option[SwitchState]
 )
 
 case class SupportFrontendSwitches(
