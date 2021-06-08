@@ -100,6 +100,8 @@ function paymentMethodToHumanReadable(paymentMethod: string): string {
       return 'Stripe - Apple Pay';
     case RecurringPaymentMethod.stripePaymentRequestButton:
       return 'Stripe - Payment Request Button';
+    case RecurringPaymentMethod.sepa:
+      return 'Sepa';
     default:
       return 'Unknown';
   }
