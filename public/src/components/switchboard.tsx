@@ -38,6 +38,7 @@ enum RecurringPaymentMethod {
   existingDirectDebit = 'existingDirectDebit',
   stripeApplePay = 'stripeApplePay',
   stripePaymentRequestButton = 'stripePaymentRequestButton',
+  sepa = 'sepa',
 }
 
 interface Switches {
@@ -99,6 +100,8 @@ function paymentMethodToHumanReadable(paymentMethod: string): string {
       return 'Stripe - Apple Pay';
     case RecurringPaymentMethod.stripePaymentRequestButton:
       return 'Stripe - Payment Request Button';
+    case RecurringPaymentMethod.sepa:
+      return 'Sepa';
     default:
       return 'Unknown';
   }
@@ -148,6 +151,7 @@ class Switchboard extends React.Component<Props, Switches> {
         directDebit: SwitchState.Off,
         existingCard: SwitchState.Off,
         existingDirectDebit: SwitchState.Off,
+        sepa: SwitchState.Off,
       },
       enableDigitalSubGifting: SwitchState.Off,
       useDotcomContactPage: SwitchState.Off,
