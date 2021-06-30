@@ -20,6 +20,7 @@ const DEV_AND_CODE_DEFAULT_VARIANT: EpicVariant = {
   ],
   highlightedText:
     'Support the Guardian from as little as %%CURRENCY_SYMBOL%%1 – and it only takes a minute. Thank you.',
+  separateArticleCount: { type: 'above' },
   showTicker: false,
   cta: {
     text: 'Support the Guardian',
@@ -33,6 +34,7 @@ const PROD_DEFAULT_VARIANT: EpicVariant = {
   paragraphs: [],
   highlightedText:
     'Support the Guardian from as little as %%CURRENCY_SYMBOL%%1 – and it only takes a minute. Thank you.',
+  separateArticleCount: { type: 'above' },
   showTicker: false,
   cta: {
     text: 'Support the Guardian',
