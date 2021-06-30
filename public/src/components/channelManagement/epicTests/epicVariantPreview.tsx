@@ -22,6 +22,7 @@ interface EpicProps {
   };
   countryCode?: string;
   numArticles: number;
+  hasConsentForArticleCount?: boolean;
 }
 
 const buildProps = (variant: EpicVariant): EpicProps => ({
@@ -32,6 +33,7 @@ const buildProps = (variant: EpicVariant): EpicProps => ({
     highlightedText: variant.highlightedText,
     showTicker: false,
     cta: variant.cta,
+    separateArticleCount: variant.separateArticleCount,
   },
   tracking: {
     ophanPageId: 'ophanPageId',
@@ -47,6 +49,7 @@ const buildProps = (variant: EpicVariant): EpicProps => ({
   },
   numArticles: 13,
   countryCode: 'GB',
+  hasConsentForArticleCount: true,
 });
 
 const useStyles = makeStyles(({}: Theme) => ({
