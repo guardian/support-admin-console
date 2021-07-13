@@ -93,10 +93,6 @@ const bannerModules = {
     path: 'contributions/ContributionsBanner.js',
     name: 'ContributionsBanner',
   },
-  // [BannerTemplate.G200Banner]: {
-  //   path: 'g200/G200Banner.js',
-  //   name: 'G200Banner',
-  // },
   [BannerTemplate.AusMomentBanner]: {
     path: 'ausMoment/AusBanner.js',
     name: 'AusBanner',
