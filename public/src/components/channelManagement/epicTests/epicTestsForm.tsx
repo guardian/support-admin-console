@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import EpicTestEditor from './epicTestEditor';
 import { Region } from '../../../utils/models';
 
@@ -89,6 +89,12 @@ export interface EpicTest extends Test {
 
 type Props = InnerComponentProps<EpicTest>;
 
+interface EpicTestViews {
+  [testName: string]: number;
+}
+
+const EPIC_TEST_VIEWS_END_POINT = 'http://localhost:8080/views';
+
 const getEpicTestForm = (epicEditorConfig: EpicEditorConfig): React.FC<Props> => {
   const createDefaultEpicTest = (newTestName: string, newTestNickname: string): EpicTest => ({
     ...getDefaultTest(),
@@ -125,6 +131,33 @@ const getEpicTestForm = (epicEditorConfig: EpicEditorConfig): React.FC<Props> =>
 
     const selectedTest = tests.find(t => t.name === selectedTestName);
 
+    const [epicTestViews, setEpicTestViews] = useState<EpicTestViews | null>(null);
+
+    useEffect(() => {
+      const fetchEpicTestViews = async (): Promise<void> => {
+        const response = await fetch(EPIC_TEST_VIEWS_END_POINT);
+        const json = await response.json();
+
+        setEpicTestViews(json.views);
+      };
+
+      fetchEpicTestViews();
+      const interval = setInterval(async () => {
+        fetchEpicTestViews();
+      }, 5_000);
+
+      return (): void => clearInterval(interval);
+    }, []);
+
+    const getTestViews = (testName: string): number | undefined => {
+      if (epicTestViews && testName in epicTestViews) {
+        return epicTestViews[testName];
+      }
+      return undefined;
+    };
+
+    const selectedTestViews = selectedTest && getTestViews(selectedTest.name);
+
     return (
       <TestsFormLayout
         sidebar={
@@ -157,6 +190,7 @@ const getEpicTestForm = (epicEditorConfig: EpicEditorConfig): React.FC<Props> =>
                 tests.map(test => test.nickname).filter(nickname => !!nickname) as string[]
               }
               testNamePrefix={epicEditorConfig.testNamePrefix}
+              testViews={selectedTestViews}
             />
           ) : null
         }

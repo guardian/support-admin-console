@@ -22,12 +22,14 @@ const styles = ({ palette }: Theme) =>
 interface TestEditorHeaderProps extends WithStyles<typeof styles> {
   name: string;
   nickname?: string;
+  views?: number;
 }
 
 const TestEditorHeader: React.FC<TestEditorHeaderProps> = ({
   classes,
   name,
   nickname,
+  views,
 }: TestEditorHeaderProps) => {
   const mainHeader = nickname ? nickname : name;
   const secondaryHeader = nickname ? name : null;
@@ -37,6 +39,13 @@ const TestEditorHeader: React.FC<TestEditorHeaderProps> = ({
       <Typography variant="h2" className={classes.mainHeader}>
         {mainHeader}
       </Typography>
+
+      {views && (
+        <div>
+          <Typography>{views} views/min</Typography>
+        </div>
+      )}
+
       <Typography className={classes.secondaryHeader}>{secondaryHeader}</Typography>
     </header>
   );

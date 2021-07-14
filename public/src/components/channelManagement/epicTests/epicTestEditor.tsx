@@ -45,6 +45,7 @@ interface EpicTestEditorProps {
   testNames: string[];
   testNicknames: string[];
   testNamePrefix?: string;
+  testViews?: number;
   createTest: (newTest: EpicTest) => void;
 }
 
@@ -59,6 +60,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
   testNames,
   testNicknames,
   testNamePrefix,
+  testViews,
   createTest,
   onValidationChange,
 }: EpicTestEditorProps) => {
@@ -204,7 +206,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
   return (
     <div className={classes.container}>
       <div className={classes.headerAndSwitchContainer}>
-        <TestEditorHeader name={test.name} nickname={test.nickname} />
+        <TestEditorHeader name={test.name} nickname={test.nickname} views={testViews} />
 
         <LiveSwitch
           label="Live on Guardian.com"
