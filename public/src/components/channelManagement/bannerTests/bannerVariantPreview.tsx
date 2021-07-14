@@ -95,7 +95,7 @@ const bannerModules = {
   },
   [BannerTemplate.AusMomentBanner]: {
     path: 'ausMoment/AusBanner.js',
-    name: 'AusBanner',
+    name: 'AusMomentBanner',
   },
 };
 
