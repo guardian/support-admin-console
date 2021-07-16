@@ -5,10 +5,11 @@ import * as emotionReactJsxRuntime from '@emotion/react/jsx-runtime';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import Drawer from '@material-ui/core/Drawer';
 import { BannerTemplate, BannerVariant } from '../../../models/banner';
-import { Cta, SecondaryCta } from '../helpers/shared';
+import { Cta, SecondaryCta, TickerCountType, TickerEndType } from '../helpers/shared';
 import Typography from '@material-ui/core/Typography';
 import { withPreviewStyles } from '../previewContainer';
 import { getStage } from '../../../utils/stage';
+import { TickerSettings } from '../epicTests/epicTestsForm';
 
 export interface BannerContent {
   heading?: string;
@@ -37,9 +38,25 @@ interface BannerProps {
   numArticles: number;
   content: BannerContent;
   mobileContent?: BannerContent;
+  tickerSettings?: TickerSettings;
 }
 
 const anchor = 'bottom';
+
+const tickerSettings = {
+  countType: TickerCountType.people,
+  endType: TickerEndType.unlimited,
+  currencySymbol: '$',
+  copy: {
+    countLabel: 'supporters in Australia',
+    goalReachedPrimary: "We've hit our goal!",
+    goalReachedSecondary: 'but you can still support us',
+  },
+  tickerData: {
+    total: 120_000,
+    goal: 150_000,
+  },
+};
 
 const buildProps = (variant: BannerVariant): BannerProps => ({
   tracking: {
@@ -60,6 +77,7 @@ const buildProps = (variant: BannerVariant): BannerProps => ({
   mobileContent: variant.mobileBannerContent,
   countryCode: 'GB',
   numArticles: 13,
+  tickerSettings,
 });
 
 const bannerModules = {
@@ -75,9 +93,9 @@ const bannerModules = {
     path: 'contributions/ContributionsBanner.js',
     name: 'ContributionsBanner',
   },
-  [BannerTemplate.G200Banner]: {
-    path: 'g200/G200Banner.js',
-    name: 'G200Banner',
+  [BannerTemplate.AusMomentBanner]: {
+    path: 'ausMoment/AusBanner.js',
+    name: 'AusMomentBanner',
   },
 };
 

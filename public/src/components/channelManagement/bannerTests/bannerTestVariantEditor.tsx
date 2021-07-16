@@ -142,27 +142,25 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
       </Typography>
 
       <div className={classes.contentContainer}>
-        {template !== BannerTemplate.G200Banner && (
-          <div>
-            <TextField
-              inputRef={register({ validate: invalidTemplateValidator })}
-              error={errors.heading !== undefined}
-              helperText={errors.heading ? errors.heading.message : HEADER_DEFAULT_HELPER_TEXT}
-              onBlur={handleSubmit(onSubmit)}
-              name="heading"
-              label="Header"
-              margin="normal"
-              variant="outlined"
-              disabled={!editMode}
-              fullWidth
-            />
+        <div>
+          <TextField
+            inputRef={register({ validate: invalidTemplateValidator })}
+            error={errors.heading !== undefined}
+            helperText={errors.heading ? errors.heading.message : HEADER_DEFAULT_HELPER_TEXT}
+            onBlur={handleSubmit(onSubmit)}
+            name="heading"
+            label="Header"
+            margin="normal"
+            variant="outlined"
+            disabled={!editMode}
+            fullWidth
+          />
 
-            {headerCopyLength > HEADER_COPY_RECOMMENDED_LENGTH && (
-              <VariantEditorCopyLengthWarning charLimit={HEADER_COPY_RECOMMENDED_LENGTH} />
-            )}
-          </div>
-        )}
-
+          {headerCopyLength > HEADER_COPY_RECOMMENDED_LENGTH && (
+            <VariantEditorCopyLengthWarning charLimit={HEADER_COPY_RECOMMENDED_LENGTH} />
+          )}
+        </div>
+        )
         <div>
           <TextField
             inputRef={register({
@@ -182,8 +180,7 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
             fullWidth
           />
 
-          {(template === BannerTemplate.ContributionsBanner ||
-            template === BannerTemplate.G200Banner) && (
+          {template === BannerTemplate.ContributionsBanner && (
             <TextField
               inputRef={register({
                 validate: invalidTemplateValidator,
@@ -208,7 +205,6 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
             <VariantEditorCopyLengthWarning charLimit={bodyCopyRecommendedLength} />
           )}
         </div>
-
         <div className={classes.buttonsContainer}>
           <Typography className={classes.sectionHeader} variant="h4">
             {`Buttons${labelSuffix}`}
