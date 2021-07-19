@@ -26,7 +26,6 @@ interface EpicProps {
     products: string[];
   };
   countryCode?: string;
-  // numArticles: number;
   articleCounts: ArticleCounts;
   hasConsentForArticleCount?: boolean;
 }
