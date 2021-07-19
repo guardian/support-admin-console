@@ -6,6 +6,11 @@ import { EpicVariant } from './epicTestsForm';
 import { withPreviewStyles } from '../previewContainer';
 import { getStage } from '../../../utils/stage';
 
+export interface ArticleCounts {
+  for52Weeks: number; // The user's total article view count, which currently goes back as far as 52 weeks
+  forTargetedWeeks: number; // The user's article view count for the configured periodInWeeks
+}
+
 interface EpicProps {
   variant: EpicVariant;
   tracking: {
@@ -21,7 +26,8 @@ interface EpicProps {
     products: string[];
   };
   countryCode?: string;
-  numArticles: number;
+  // numArticles: number;
+  articleCounts: ArticleCounts;
   hasConsentForArticleCount?: boolean;
 }
 
@@ -47,7 +53,10 @@ const buildProps = (variant: EpicVariant): EpicProps => ({
     componentType: 'ACQUISITIONS_EPIC',
     products: [],
   },
-  numArticles: 13,
+  articleCounts: {
+    for52Weeks: 13,
+    forTargetedWeeks: 13,
+  },
   countryCode: 'GB',
   hasConsentForArticleCount: true,
 });
