@@ -6,6 +6,7 @@ import io.circe.generic.auto._
 case class ChannelSwitches(
   enableEpics: Boolean,
   enableBanners: Boolean,
+  enableSuperMode: Boolean
 )
 
 object ChannelSwitches {
