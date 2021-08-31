@@ -13,7 +13,6 @@ export enum BannerTemplate {
   ContributionsBanner = 'ContributionsBanner',
   DigitalSubscriptionsBanner = 'DigitalSubscriptionsBanner',
   GuardianWeeklyBanner = 'GuardianWeeklyBanner',
-  AusMomentBanner = 'AusMomentBanner',
 }
 
 export interface BannerContent {
