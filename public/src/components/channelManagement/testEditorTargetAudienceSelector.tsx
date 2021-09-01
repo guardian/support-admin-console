@@ -24,6 +24,7 @@ interface TestEditorTargetAudienceSelectorProps extends WithStyles<typeof styles
   onRegionsUpdate: (selectedRegions: Region[]) => void;
   selectedCohort: UserCohort;
   onCohortChange: (updatedCohort: UserCohort) => void;
+  supportedRegions?: Region[];
   isDisabled: boolean;
   showSupporterStatusSelector: boolean;
 }
@@ -33,6 +34,7 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
   onRegionsUpdate,
   selectedCohort,
   onCohortChange,
+  supportedRegions,
   isDisabled,
   showSupporterStatusSelector,
 }: TestEditorTargetAudienceSelectorProps) => {
@@ -41,6 +43,7 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
       <TestEditorTargetRegionsSelector
         selectedRegions={selectedRegions}
         onRegionsUpdate={onRegionsUpdate}
+        supportedRegions={supportedRegions}
         isDisabled={isDisabled}
       />
 
