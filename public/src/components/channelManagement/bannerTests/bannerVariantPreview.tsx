@@ -93,10 +93,6 @@ const bannerModules = {
     path: 'contributions/ContributionsBanner.js',
     name: 'ContributionsBanner',
   },
-  [BannerTemplate.AusMomentBanner]: {
-    path: 'ausMoment/AusBanner.js',
-    name: 'AusMomentBanner',
-  },
 };
 
 const useStyles = makeStyles(({ palette }: Theme) => ({
