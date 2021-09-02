@@ -300,6 +300,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
             onRegionsUpdate={onRegionsChange}
             selectedCohort={test.userCohort}
             onCohortChange={onCohortChange}
+            supportedRegions={epicEditorConfig.supportedRegions}
             isDisabled={!editMode}
             showSupporterStatusSelector={epicEditorConfig.allowSupporterStatusTargeting}
           />

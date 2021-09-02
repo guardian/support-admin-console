@@ -40,16 +40,20 @@ const ALL_REGIONS = Object.values(Region);
 interface TestEditorTargetRegionsSelectorProps extends WithStyles<typeof styles> {
   selectedRegions: Region[];
   onRegionsUpdate: (selectedRegions: Region[]) => void;
+  supportedRegions?: Region[];
   isDisabled: boolean;
 }
 const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorProps> = ({
   classes,
   selectedRegions,
   onRegionsUpdate,
+  supportedRegions,
   isDisabled,
 }: TestEditorTargetRegionsSelectorProps) => {
+  const allRegions = supportedRegions || ALL_REGIONS;
+
   const onAllRegionsChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    onRegionsUpdate(event.target.checked ? ALL_REGIONS : []);
+    onRegionsUpdate(event.target.checked ? allRegions : []);
   };
 
   const onSingleRegionChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -71,7 +75,7 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
         <FormControlLabel
           control={
             <Checkbox
-              checked={selectedRegions.length === ALL_REGIONS.length}
+              checked={selectedRegions.length === allRegions.length}
               value={'allRegions'}
               onChange={onAllRegionsChange}
               disabled={isDisabled}
@@ -80,7 +84,7 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
           label={'All regions'}
         />
         <FormGroup className={classes.indentedContainer}>
-          {ALL_REGIONS.map(region => (
+          {allRegions.map(region => (
             <FormControlLabel
               key={region}
               control={

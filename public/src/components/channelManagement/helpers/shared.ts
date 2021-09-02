@@ -1,3 +1,4 @@
+import { Region } from '../../../utils/models';
 import { ValidationStatus } from './validation';
 
 export interface Variant {
@@ -20,6 +21,7 @@ export interface EpicEditorConfig {
   allowCustomVariantSplit: boolean;
   allowContentTargeting: boolean;
   allowLocationTargeting: boolean;
+  supportedRegions?: Region[];
   allowSupporterStatusTargeting: boolean;
   allowViewFrequencySettings: boolean;
   allowArticleCount: boolean;
@@ -99,8 +101,9 @@ export const APPLE_NEWS_EPIC_CONFIG: EpicEditorConfig = {
   allowMultipleVariants: false,
   allowCustomVariantSplit: false,
   allowContentTargeting: true,
-  allowLocationTargeting: false,
-  allowSupporterStatusTargeting: true,
+  allowLocationTargeting: true,
+  supportedRegions: [Region.UnitedStates, Region.AUDCountries],
+  allowSupporterStatusTargeting: false,
   allowViewFrequencySettings: false,
   allowArticleCount: false,
   allowVariantHeader: true,
