@@ -160,7 +160,7 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
             <VariantEditorCopyLengthWarning charLimit={HEADER_COPY_RECOMMENDED_LENGTH} />
           )}
         </div>
-        )
+
         <div>
           <TextField
             inputRef={register({
