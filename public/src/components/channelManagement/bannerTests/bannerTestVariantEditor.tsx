@@ -180,7 +180,8 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
             fullWidth
           />
 
-          {template === BannerTemplate.ContributionsBanner && (
+          {(template === BannerTemplate.ContributionsBanner ||
+            template === BannerTemplate.InvestigationsMomentBanner) && (
             <TextField
               inputRef={register({
                 validate: invalidTemplateValidator,
