@@ -160,7 +160,7 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
             <VariantEditorCopyLengthWarning charLimit={HEADER_COPY_RECOMMENDED_LENGTH} />
           )}
         </div>
-        )
+
         <div>
           <TextField
             inputRef={register({
@@ -180,7 +180,8 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
             fullWidth
           />
 
-          {template === BannerTemplate.ContributionsBanner && (
+          {(template === BannerTemplate.ContributionsBanner ||
+            template === BannerTemplate.InvestigationsMomentBanner) && (
             <TextField
               inputRef={register({
                 validate: invalidTemplateValidator,

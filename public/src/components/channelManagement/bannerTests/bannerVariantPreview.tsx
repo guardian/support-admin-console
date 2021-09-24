@@ -93,6 +93,10 @@ const bannerModules = {
     path: 'contributions/ContributionsBanner.js',
     name: 'ContributionsBanner',
   },
+  [BannerTemplate.InvestigationsMomentBanner]: {
+    path: 'investigationsMoment/InvestigationsMomentBanner.js',
+    name: 'InvestigationsMomentBanner',
+  },
 };
 
 const useStyles = makeStyles(({ palette }: Theme) => ({
