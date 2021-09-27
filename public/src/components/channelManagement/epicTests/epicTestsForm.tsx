@@ -59,6 +59,7 @@ export interface EpicVariant extends Variant {
   cta?: Cta;
   secondaryCta?: SecondaryCta;
   separateArticleCount?: SeparateArticleCount;
+  useChoiceCards?: boolean;
 }
 
 export interface MaxEpicViews {
