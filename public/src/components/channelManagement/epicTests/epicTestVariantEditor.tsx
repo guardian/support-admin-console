@@ -7,7 +7,7 @@ import EpicTestVariantEditorCtasEditor from './epicTestVariantEditorCtasEditor';
 import VariantEditorSeparateArticleCountEditor from '../variantEditorSeparateArticleCountEditor';
 import EpicTestTickerEditor from './epicTestTickerEditor';
 import { invalidTemplateValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
-import EpicTestChoiceCardsEditor from "./epicTestChoiceCardsEditor";
+import EpicTestChoiceCardsEditor from './epicTestChoiceCardsEditor';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const getUseStyles = (shouldAddPadding: boolean) => {
