@@ -70,7 +70,7 @@ case class EpicTest(
   sections: List[String] = Nil,
   excludedTagIds: List[String] = Nil,
   excludedSections: List[String] = Nil,
-  alwaysAsk: Boolean = false,loads
+  alwaysAsk: Boolean = false,
   maxViews: Option[MaxViews],
   userCohort: Option[UserCohort] = None,
   hasCountryName: Boolean = false,
