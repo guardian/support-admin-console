@@ -131,8 +131,8 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   const updateTickerSettings = (updatedTickerSettings?: TickerSettings): void => {
     onVariantChange({ ...variant, tickerSettings: updatedTickerSettings });
   };
-  const updateUseChoiceCards = (updatedUseChoiceCards?: boolean): void => {
-    onVariantChange({ ...variant, useChoiceCards: updatedUseChoiceCards });
+  const updateshowChoiceCards = (updatedshowChoiceCards?: boolean): void => {
+    onVariantChange({ ...variant, showChoiceCards: updatedshowChoiceCards });
   };
 
   return (
@@ -286,8 +286,8 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
           </Typography>
 
           <EpicTestChoiceCardsEditor
-            useChoiceCards={variant.useChoiceCards}
-            updateUseChoiceCards={updateUseChoiceCards}
+            showChoiceCards={variant.showChoiceCards}
+            updateshowChoiceCards={updateshowChoiceCards}
             isDisabled={!editMode}
           />
         </div>

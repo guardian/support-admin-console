@@ -59,7 +59,7 @@ case class EpicVariant(
   cta: Option[Cta],
   secondaryCta: Option[SecondaryCta],
   separateArticleCount: Option[SeparateArticleCount],
-  useChoiceCards: Option[Boolean],
+  showChoiceCards: Option[Boolean],
 )
 case class EpicTest(
   name: String,

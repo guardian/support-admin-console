@@ -3,18 +3,18 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 
 interface EpicTestChoiceCardsEditorProps {
-  useChoiceCards?: boolean;
-  updateUseChoiceCards: (useChoiceCards?: boolean) => void;
+  showChoiceCards?: boolean;
+  updateshowChoiceCards: (showChoiceCards?: boolean) => void;
   isDisabled: boolean;
 }
 
 const EpicTestChoiceCardsEditor: React.FC<EpicTestChoiceCardsEditorProps> = ({
-  useChoiceCards,
-  updateUseChoiceCards,
+  showChoiceCards,
+  updateshowChoiceCards,
   isDisabled,
 }: EpicTestChoiceCardsEditorProps) => {
   const onChange = (): void => {
-    updateUseChoiceCards(!Boolean(useChoiceCards));
+    updateshowChoiceCards(!Boolean(showChoiceCards));
   };
 
   return (
@@ -22,7 +22,7 @@ const EpicTestChoiceCardsEditor: React.FC<EpicTestChoiceCardsEditorProps> = ({
       <FormControlLabel
         control={
           <Checkbox
-            checked={Boolean(useChoiceCards)}
+            checked={Boolean(showChoiceCards)}
             onChange={onChange}
             color="primary"
             disabled={isDisabled}

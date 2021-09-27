@@ -27,7 +27,7 @@ const DEV_AND_CODE_DEFAULT_VARIANT: EpicVariant = {
     baseUrl: 'https://support.theguardian.com/contribute',
   },
   secondaryCta: { type: SecondaryCtaType.ContributionsReminder },
-  useChoiceCards: false,
+  showChoiceCards: false,
 };
 
 const PROD_DEFAULT_VARIANT: EpicVariant = {
@@ -42,7 +42,7 @@ const PROD_DEFAULT_VARIANT: EpicVariant = {
     baseUrl: 'https://support.theguardian.com/contribute',
   },
   secondaryCta: { type: SecondaryCtaType.ContributionsReminder },
-  useChoiceCards: false,
+  showChoiceCards: false,
 };
 
 export const getDefaultVariant = (): EpicVariant => {
