@@ -59,6 +59,7 @@ case class EpicVariant(
   cta: Option[Cta],
   secondaryCta: Option[SecondaryCta],
   separateArticleCount: Option[SeparateArticleCount],
+  useChoiceCards: Option[Boolean],
 )
 case class EpicTest(
   name: String,
@@ -69,7 +70,7 @@ case class EpicTest(
   sections: List[String] = Nil,
   excludedTagIds: List[String] = Nil,
   excludedSections: List[String] = Nil,
-  alwaysAsk: Boolean = false,
+  alwaysAsk: Boolean = false,loads
   maxViews: Option[MaxViews],
   userCohort: Option[UserCohort] = None,
   hasCountryName: Boolean = false,
