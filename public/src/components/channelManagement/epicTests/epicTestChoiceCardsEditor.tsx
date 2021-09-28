@@ -4,17 +4,17 @@ import Checkbox from '@material-ui/core/Checkbox';
 
 interface EpicTestChoiceCardsEditorProps {
   showChoiceCards?: boolean;
-  updateshowChoiceCards: (showChoiceCards?: boolean) => void;
+  updateShowChoiceCards: (showChoiceCards?: boolean) => void;
   isDisabled: boolean;
 }
 
 const EpicTestChoiceCardsEditor: React.FC<EpicTestChoiceCardsEditorProps> = ({
   showChoiceCards,
-  updateshowChoiceCards,
+  updateShowChoiceCards,
   isDisabled,
 }: EpicTestChoiceCardsEditorProps) => {
   const onChange = (): void => {
-    updateshowChoiceCards(!Boolean(showChoiceCards));
+    updateShowChoiceCards(!Boolean(showChoiceCards));
   };
 
   return (
