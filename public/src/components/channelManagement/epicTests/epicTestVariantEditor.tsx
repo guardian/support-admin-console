@@ -7,6 +7,7 @@ import EpicTestVariantEditorCtasEditor from './epicTestVariantEditorCtasEditor';
 import VariantEditorSeparateArticleCountEditor from '../variantEditorSeparateArticleCountEditor';
 import EpicTestTickerEditor from './epicTestTickerEditor';
 import { invalidTemplateValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
+import EpicTestChoiceCardsEditor from './epicTestChoiceCardsEditor';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const getUseStyles = (shouldAddPadding: boolean) => {
@@ -129,6 +130,9 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   };
   const updateTickerSettings = (updatedTickerSettings?: TickerSettings): void => {
     onVariantChange({ ...variant, tickerSettings: updatedTickerSettings });
+  };
+  const updateShowChoiceCards = (updatedshowChoiceCards?: boolean): void => {
+    onVariantChange({ ...variant, showChoiceCards: updatedshowChoiceCards });
   };
 
   return (
@@ -271,6 +275,20 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
             updateTickerSettings={updateTickerSettings}
             isDisabled={!editMode}
             onValidationChange={onValidationChange}
+          />
+        </div>
+      )}
+
+      {epicEditorConfig.allowVariantChoiceCards && (
+        <div className={classes.sectionContainer}>
+          <Typography className={classes.sectionHeader} variant="h4">
+            Choice Cards
+          </Typography>
+
+          <EpicTestChoiceCardsEditor
+            showChoiceCards={variant.showChoiceCards}
+            updateShowChoiceCards={updateShowChoiceCards}
+            isDisabled={!editMode}
           />
         </div>
       )}
