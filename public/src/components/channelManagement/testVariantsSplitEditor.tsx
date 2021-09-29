@@ -11,12 +11,9 @@ import {
 import { Variant } from './helpers/shared';
 import { EMPTY_ERROR_HELPER_TEXT } from './helpers/validation';
 import { useForm } from 'react-hook-form';
-import { ControlProportionSettings } from './helpers/controlProportionSettings';
+import { ControlProportionSettings, hasControl } from './helpers/controlProportionSettings';
 
 const MAX_MVT = 1_000_000;
-
-const hasControl = (variants: Variant[]): boolean =>
-  !!variants.find(v => v.name.toLowerCase() === 'control');
 
 const randomMvt = (): number => Math.round(Math.random() * MAX_MVT);
 
@@ -169,7 +166,7 @@ const TestVariantsSplitEditor: React.FC<TestVariantsSplitEditorProps> = ({
           />
         </RadioGroup>
 
-        {controlProportionSettings && hasControl(variants) && (
+        {controlProportionSettings && (
           <div className={classes.variantsContainer}>
             <div>
               <TextField
