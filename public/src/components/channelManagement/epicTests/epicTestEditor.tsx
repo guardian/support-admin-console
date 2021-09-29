@@ -21,7 +21,10 @@ import { ARTICLE_COUNT_TEMPLATE, COUNTRY_NAME_TEMPLATE } from '../helpers/valida
 import TestVariantsSplitEditor from '../testVariantsSplitEditor';
 import { getDefaultVariant } from './utils/defaults';
 import LiveSwitch from '../../shared/liveSwitch';
-import { ControlProportionSettings } from '../helpers/controlProportionSettings';
+import {
+  canHaveCustomVariantSplit,
+  ControlProportionSettings,
+} from '../helpers/controlProportionSettings';
 import { useStyles } from '../helpers/testEditorStyles';
 
 const copyHasTemplate = (test: EpicTest, template: string): boolean =>
@@ -107,7 +110,11 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
 
   const onVariantDelete = (deletedVariantName: string): void => {
     const updatedVariantList = test.variants.filter(variant => variant.name !== deletedVariantName);
-    onVariantsChange(updatedVariantList);
+    const controlProportionSettings = canHaveCustomVariantSplit(updatedVariantList)
+      ? test.controlProportionSettings
+      : undefined;
+
+    updateTest({ ...test, variants: updatedVariantList, controlProportionSettings });
   };
 
   const createVariant = (name: string): void => {
@@ -233,7 +240,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
         </div>
       )}
 
-      {epicEditorConfig.allowCustomVariantSplit && test.variants.length > 1 && (
+      {epicEditorConfig.allowCustomVariantSplit && canHaveCustomVariantSplit(test.variants) && (
         <div className={classes.sectionContainer}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
             Variants split
