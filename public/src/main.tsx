@@ -87,6 +87,7 @@ const styles = ({ palette, mixins, typography, transitions }: Theme) =>
     appContent: {
       display: 'flex',
       flexDirection: 'column',
+      overflow: 'hidden',
       flexGrow: 1,
       backgroundColor: palette.grey[100],
     },
