@@ -130,6 +130,7 @@ const styles = ({ palette, spacing }: Theme) =>
       marginLeft: spacing(4),
       marginRight: spacing(4),
       marginBottom: spacing(4),
+      overflowY: 'auto',
     },
   });
 
