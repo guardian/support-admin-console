@@ -138,7 +138,7 @@ export const AMP_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantCustomSecondaryCta: false,
   allowVariantSeparateArticleCount: false,
   allowVariantTicker: true,
-  allowVariantChoiceCards: false,
+  allowVariantChoiceCards: true,
   requireVariantHeader: true,
 };
 
