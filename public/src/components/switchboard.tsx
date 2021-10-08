@@ -125,6 +125,13 @@ const styles = ({ palette, spacing }: Theme) =>
     buttons: {
       marginTop: spacing(2),
     },
+    form: {
+      marginTop: spacing(4),
+      marginLeft: spacing(4),
+      marginRight: spacing(4),
+      marginBottom: spacing(4),
+      overflowY: 'auto',
+    },
   });
 
 type Props = WithStyles<typeof styles>;
@@ -231,7 +238,7 @@ class Switchboard extends React.Component<Props, Switches> {
     const { classes } = this.props;
 
     return (
-      <form>
+      <form className={classes.form}>
         <div>
           {/* as "div", as "label" typecasts are to get around this issue: https://github.com/mui-org/material-ui/issues/13744 */}
           <FormControl component={'fieldset' as 'div'} className={classes.formControl}>
