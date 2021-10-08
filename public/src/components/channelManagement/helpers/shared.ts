@@ -7,6 +7,8 @@ export interface Variant {
 
 export type TestType = 'EPIC' | 'BANNER';
 
+export type EpicModuleName = 'ContributionsEpic' | 'ContributionsLiveblogEpic';
+
 export interface Test {
   name: string;
   nickname?: string;
@@ -38,6 +40,7 @@ export interface EpicEditorConfig {
   allowVariantTicker: boolean;
   allowVariantChoiceCards: boolean;
   requireVariantHeader: boolean;
+  moduleName: EpicModuleName;
 }
 
 export const ARTICLE_EPIC_CONFIG: EpicEditorConfig = {
@@ -58,6 +61,7 @@ export const ARTICLE_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantTicker: true,
   allowVariantChoiceCards: true,
   requireVariantHeader: true,
+  moduleName: 'ContributionsEpic',
 };
 
 export const ARTICLE_EPIC_HOLDBACK_CONFIG: EpicEditorConfig = {
@@ -79,6 +83,7 @@ export const ARTICLE_EPIC_HOLDBACK_CONFIG: EpicEditorConfig = {
   allowVariantTicker: true,
   allowVariantChoiceCards: true,
   requireVariantHeader: true,
+  moduleName: 'ContributionsEpic',
 };
 
 export const LIVEBLOG_EPIC_CONFIG: EpicEditorConfig = {
@@ -99,6 +104,7 @@ export const LIVEBLOG_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantTicker: false,
   allowVariantChoiceCards: false,
   requireVariantHeader: false,
+  moduleName: 'ContributionsLiveblogEpic',
 };
 
 export const APPLE_NEWS_EPIC_CONFIG: EpicEditorConfig = {
@@ -120,6 +126,7 @@ export const APPLE_NEWS_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantTicker: false,
   allowVariantChoiceCards: false,
   requireVariantHeader: true,
+  moduleName: 'ContributionsEpic',
 };
 
 export const AMP_EPIC_CONFIG: EpicEditorConfig = {
@@ -140,6 +147,7 @@ export const AMP_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantTicker: true,
   allowVariantChoiceCards: false,
   requireVariantHeader: true,
+  moduleName: 'ContributionsEpic',
 };
 
 export interface LockStatus {

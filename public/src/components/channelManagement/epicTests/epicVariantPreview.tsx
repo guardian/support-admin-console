@@ -6,6 +6,8 @@ import { EpicVariant } from './epicTestsForm';
 import { withPreviewStyles } from '../previewContainer';
 import { getStage } from '../../../utils/stage';
 
+import { EpicModuleName } from '../helpers/shared';
+
 export interface ArticleCounts {
   for52Weeks: number; // The user's total article view count, which currently goes back as far as 52 weeks
   forTargetedWeeks: number; // The user's article view count for the configured periodInWeeks
@@ -68,10 +70,12 @@ const useStyles = makeStyles(({}: Theme) => ({
 
 interface EpicVariantPreviewProps {
   variant: EpicVariant;
+  moduleName: EpicModuleName;
 }
 
 const EpicVariantPreview: React.FC<EpicVariantPreviewProps> = ({
   variant,
+  moduleName,
 }: EpicVariantPreviewProps) => {
   const classes = useStyles();
 
@@ -89,11 +93,11 @@ const EpicVariantPreview: React.FC<EpicVariantPreviewProps> = ({
 
     const url =
       stage === 'PROD'
-        ? 'https://contributions.guardianapis.com/modules/v2/epics/ContributionsEpic.js'
-        : 'https://contributions.code.dev-guardianapis.com/modules/v2/epics/ContributionsEpic.js';
+        ? `https://contributions.guardianapis.com/modules/v2/epics/${moduleName}.js`
+        : `https://contributions.code.dev-guardianapis.com/modules/v2/epics/${moduleName}.js`;
 
     window.remoteImport(url).then(epicModule => {
-      setEpic(() => withPreviewStyles(epicModule.ContributionsEpic));
+      setEpic(() => withPreviewStyles(epicModule[moduleName]));
     });
   }, []);
 

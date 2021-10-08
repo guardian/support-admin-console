@@ -195,7 +195,9 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
           }
         />
       }
-      variantPreview={<EpicVariantPreview variant={variant} />}
+      variantPreview={
+        <EpicVariantPreview variant={variant} moduleName={epicEditorConfig.moduleName} />
+      }
     />
   );
 
