@@ -93,6 +93,10 @@ const bannerModules = {
     path: 'contributions/ContributionsBanner.js',
     name: 'ContributionsBanner',
   },
+  [BannerTemplate.ContributionsBannerWithSignIn]: {
+    path: 'contributions/ContributionsBannerWithSignIn.js',
+    name: 'ContributionsBannerWithSignIn',
+  },
   [BannerTemplate.InvestigationsMomentBanner]: {
     path: 'investigationsMoment/InvestigationsMomentBanner.js',
     name: 'InvestigationsMomentBanner',
@@ -128,6 +132,7 @@ interface BannerVariantPreviewProps {
 const BannerVariantPreview: React.FC<BannerVariantPreviewProps> = ({
   variant,
 }: BannerVariantPreviewProps) => {
+  console.log(variant);
   const classes = useStyles();
 
   const [Banner, setBanner] = useState<React.FC<BannerProps>>();
