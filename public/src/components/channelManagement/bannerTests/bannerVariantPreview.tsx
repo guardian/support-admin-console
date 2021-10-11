@@ -132,7 +132,6 @@ interface BannerVariantPreviewProps {
 const BannerVariantPreview: React.FC<BannerVariantPreviewProps> = ({
   variant,
 }: BannerVariantPreviewProps) => {
-  console.log(variant);
   const classes = useStyles();
 
   const [Banner, setBanner] = useState<React.FC<BannerProps>>();
