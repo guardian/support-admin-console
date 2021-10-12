@@ -94,8 +94,12 @@ export const COUNTRY_NAME_TEMPLATE = '%%COUNTRY_NAME%%';
 export const ARTICLE_COUNT_TEMPLATE = '%%ARTICLE_COUNT%%';
 
 const validTemplates = [CURRENCY_TEMPLATE, COUNTRY_NAME_TEMPLATE, ARTICLE_COUNT_TEMPLATE];
+const ampValidTemplates = [CURRENCY_TEMPLATE, COUNTRY_NAME_TEMPLATE];
 
-export const invalidTemplateValidator = (text: string): string | boolean => {
+const genericInvalidTemplateValidator = (
+  text: string,
+  validTemplates: string[],
+): string | boolean => {
   const templates: string[] | null = text.match(/%\S*%/g);
 
   if (templates !== null) {
@@ -106,6 +110,12 @@ export const invalidTemplateValidator = (text: string): string | boolean => {
   }
   return true;
 };
+
+export const invalidTemplateValidator = (text: string): string | boolean =>
+  genericInvalidTemplateValidator(text, validTemplates);
+
+export const ampInvalidTemplateValidator = (text: string): string | boolean =>
+  genericInvalidTemplateValidator(text, ampValidTemplates);
 
 export interface ValidationComponentState {
   validationStatus: ValidationStatus;

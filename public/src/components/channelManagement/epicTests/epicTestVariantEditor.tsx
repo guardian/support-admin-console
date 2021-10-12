@@ -6,7 +6,11 @@ import { Theme, Typography, makeStyles, TextField } from '@material-ui/core';
 import EpicTestVariantEditorCtasEditor from './epicTestVariantEditorCtasEditor';
 import VariantEditorSeparateArticleCountEditor from '../variantEditorSeparateArticleCountEditor';
 import EpicTestTickerEditor from './epicTestTickerEditor';
-import { invalidTemplateValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
+import {
+  invalidTemplateValidator,
+  ampInvalidTemplateValidator,
+  EMPTY_ERROR_HELPER_TEXT,
+} from '../helpers/validation';
 import EpicTestChoiceCardsEditor from './epicTestChoiceCardsEditor';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -71,6 +75,11 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   onValidationChange,
 }: EpicTestVariantEditorProps) => {
   const classes = getUseStyles(epicEditorConfig.allowMultipleVariants)();
+
+  const templateValidator =
+    epicEditorConfig.platform && epicEditorConfig.platform === 'AMP'
+      ? ampInvalidTemplateValidator
+      : invalidTemplateValidator;
 
   const defaultValues: FormData = {
     heading: variant.heading,
@@ -142,7 +151,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
           <TextField
             inputRef={register({
               required: epicEditorConfig.requireVariantHeader ? EMPTY_ERROR_HELPER_TEXT : undefined,
-              validate: invalidTemplateValidator,
+              validate: templateValidator,
             })}
             error={errors.heading !== undefined}
             helperText={errors.heading ? errors.heading.message : HEADER_DEFAULT_HELPER_TEXT}
@@ -161,7 +170,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
         <TextField
           inputRef={register({
             required: EMPTY_ERROR_HELPER_TEXT,
-            validate: invalidTemplateValidator,
+            validate: templateValidator,
           })}
           error={errors.body !== undefined}
           helperText={errors.body ? errors.body.message : BODY_DEFAULT_HELPER_TEXT}
@@ -181,7 +190,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
         <div>
           <TextField
             inputRef={register({
-              validate: invalidTemplateValidator,
+              validate: templateValidator,
             })}
             error={errors.highlightedText !== undefined}
             helperText={
