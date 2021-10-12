@@ -10,7 +10,7 @@ import {
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import TestEditorVariantSummaryWebPreviewButton from './testEditorVariantSummaryWebPreviewButton';
-import { TestType } from './helpers/shared';
+import {TestPlatform, TestType} from './helpers/shared';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing, palette }: Theme) =>
@@ -54,6 +54,7 @@ interface TestEditorVariantSummaryProps extends WithStyles<typeof styles> {
   testType: TestType;
   isInEditMode: boolean;
   topButton?: React.ReactElement;
+  platform?: TestPlatform;
 }
 
 const TestEditorVariantSummary: React.FC<TestEditorVariantSummaryProps> = ({
@@ -63,6 +64,7 @@ const TestEditorVariantSummary: React.FC<TestEditorVariantSummaryProps> = ({
   testType,
   isInEditMode,
   topButton,
+  platform,
 }: TestEditorVariantSummaryProps) => {
   return (
     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -80,6 +82,7 @@ const TestEditorVariantSummary: React.FC<TestEditorVariantSummaryProps> = ({
             name={name}
             testName={testName}
             testType={testType}
+            platform={platform}
             isDisabled={isInEditMode}
           />
         </div>

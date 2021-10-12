@@ -207,6 +207,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
       testName={test.name}
       testType="EPIC"
       isInEditMode={editMode}
+      platform={epicEditorConfig.platform}
     />
   );
 

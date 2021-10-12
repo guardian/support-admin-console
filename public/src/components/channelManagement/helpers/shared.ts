@@ -5,6 +5,8 @@ export interface Variant {
   name: string;
 }
 
+export type TestPlatform = 'AMP' | 'DOTCOM';
+
 export type TestType = 'EPIC' | 'BANNER';
 
 export type EpicModuleName = 'ContributionsEpic' | 'ContributionsLiveblogEpic';
@@ -28,6 +30,7 @@ export interface EpicEditorConfig {
   allowViewFrequencySettings: boolean;
   allowArticleCount: boolean;
   testNamePrefix?: string;
+  platform?: TestPlatform;
 
   // variant level settings
   allowVariantHeader: boolean;
