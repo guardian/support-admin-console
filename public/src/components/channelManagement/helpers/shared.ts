@@ -5,7 +5,7 @@ export interface Variant {
   name: string;
 }
 
-export type TestPlatform = 'AMP' | 'DOTCOM';
+export type TestPlatform = 'AMP' | 'APPLE_NEWS' | 'ARTICLE' | 'LIVEBLOG';
 
 export type TestType = 'EPIC' | 'BANNER';
 
@@ -30,7 +30,7 @@ export interface EpicEditorConfig {
   allowViewFrequencySettings: boolean;
   allowArticleCount: boolean;
   testNamePrefix?: string;
-  platform?: TestPlatform;
+  platform: TestPlatform;
 
   // variant level settings
   allowVariantHeader: boolean;
@@ -65,6 +65,7 @@ export const ARTICLE_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantChoiceCards: true,
   requireVariantHeader: true,
   moduleName: 'ContributionsEpic',
+  platform: 'ARTICLE',
 };
 
 export const ARTICLE_EPIC_HOLDBACK_CONFIG: EpicEditorConfig = {
@@ -87,6 +88,7 @@ export const ARTICLE_EPIC_HOLDBACK_CONFIG: EpicEditorConfig = {
   allowVariantChoiceCards: true,
   requireVariantHeader: true,
   moduleName: 'ContributionsEpic',
+  platform: 'ARTICLE',
 };
 
 export const LIVEBLOG_EPIC_CONFIG: EpicEditorConfig = {
@@ -108,6 +110,7 @@ export const LIVEBLOG_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantChoiceCards: false,
   requireVariantHeader: false,
   moduleName: 'ContributionsLiveblogEpic',
+  platform: 'LIVEBLOG',
 };
 
 export const APPLE_NEWS_EPIC_CONFIG: EpicEditorConfig = {
@@ -130,6 +133,7 @@ export const APPLE_NEWS_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantChoiceCards: false,
   requireVariantHeader: true,
   moduleName: 'ContributionsEpic',
+  platform: 'APPLE_NEWS',
 };
 
 export const AMP_EPIC_CONFIG: EpicEditorConfig = {
@@ -151,6 +155,7 @@ export const AMP_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantChoiceCards: true,
   requireVariantHeader: true,
   moduleName: 'ContributionsEpic',
+  platform: 'AMP',
 };
 
 export interface LockStatus {

@@ -93,8 +93,9 @@ export const CURRENCY_TEMPLATE = '%%CURRENCY_SYMBOL%%';
 export const COUNTRY_NAME_TEMPLATE = '%%COUNTRY_NAME%%';
 export const ARTICLE_COUNT_TEMPLATE = '%%ARTICLE_COUNT%%';
 
-const validTemplates = [CURRENCY_TEMPLATE, COUNTRY_NAME_TEMPLATE, ARTICLE_COUNT_TEMPLATE];
+const defaultValidTemplates = [CURRENCY_TEMPLATE, COUNTRY_NAME_TEMPLATE, ARTICLE_COUNT_TEMPLATE];
 const ampValidTemplates = [CURRENCY_TEMPLATE, COUNTRY_NAME_TEMPLATE];
+const appleNewsValidTemplates = [CURRENCY_TEMPLATE];
 
 const genericInvalidTemplateValidator = (
   text: string,
@@ -112,10 +113,13 @@ const genericInvalidTemplateValidator = (
 };
 
 export const invalidTemplateValidator = (text: string): string | boolean =>
-  genericInvalidTemplateValidator(text, validTemplates);
+  genericInvalidTemplateValidator(text, defaultValidTemplates);
 
 export const ampInvalidTemplateValidator = (text: string): string | boolean =>
   genericInvalidTemplateValidator(text, ampValidTemplates);
+
+export const appleNewsInvalidTemplateValidator = (text: string): string | boolean =>
+  genericInvalidTemplateValidator(text, appleNewsValidTemplates);
 
 export interface ValidationComponentState {
   validationStatus: ValidationStatus;

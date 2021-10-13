@@ -194,6 +194,6 @@ export const AppleNewsEpicTestsForm = TestsForm(
   FrontendSettingsType.appleNewsEpicTests,
 );
 export const AMPEpicTestsForm = TestsForm(
-  getEpicTestForm({ ...AMP_EPIC_CONFIG, platform: 'AMP' }),
+  getEpicTestForm(AMP_EPIC_CONFIG),
   FrontendSettingsType.ampEpicTests,
 );

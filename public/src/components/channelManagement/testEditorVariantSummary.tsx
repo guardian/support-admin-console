@@ -54,7 +54,7 @@ interface TestEditorVariantSummaryProps extends WithStyles<typeof styles> {
   testType: TestType;
   isInEditMode: boolean;
   topButton?: React.ReactElement;
-  platform?: TestPlatform;
+  platform: TestPlatform;
 }
 
 const TestEditorVariantSummary: React.FC<TestEditorVariantSummaryProps> = ({

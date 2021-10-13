@@ -8,20 +8,26 @@ const BASE_ARTICLE_URL = {
   PROD: {
     AMP:
       'https://amp.theguardian.com/world/2020/may/08/commemorating-ve-day-during-coronavirus-lockdown-somehow-the-quiet-made-it-louder',
-    DOTCOM:
+    ARTICLE:
       'https://theguardian.com/world/2020/may/08/commemorating-ve-day-during-coronavirus-lockdown-somehow-the-quiet-made-it-louder',
+    LIVEBLOG: '',
+    APPLE_NEWS: '',
   },
   CODE: {
     AMP:
       'https://amp.code.dev-theguardian.com/world/2020/may/08/commemorating-ve-day-during-coronavirus-lockdown-somehow-the-quiet-made-it-louder',
-    DOTCOM:
+    ARTICLE:
       'https://m.code.dev-theguardian.com/world/2020/may/08/commemorating-ve-day-during-coronavirus-lockdown-somehow-the-quiet-made-it-louder',
+    LIVEBLOG: '',
+    APPLE_NEWS: '',
   },
   DEV: {
     AMP:
       'https://amp.code.dev-theguardian.com/world/2020/may/08/commemorating-ve-day-during-coronavirus-lockdown-somehow-the-quiet-made-it-louder',
-    DOTCOM:
+    ARTICLE:
       'https://m.code.dev-theguardian.com/world/2020/may/08/commemorating-ve-day-during-coronavirus-lockdown-somehow-the-quiet-made-it-louder',
+    LIVEBLOG: '',
+    APPLE_NEWS: '',
   },
 };
 
@@ -29,19 +35,19 @@ const getPreviewUrl = (
   testName: string,
   variantName: string,
   testType: TestType,
-  platform?: TestPlatform,
+  platform: TestPlatform,
 ): string => {
   const stage = getStage();
   const queryString = `?dcr&force-${testType.toLowerCase()}=${testName}:${variantName}`;
 
-  return stage ? `${BASE_ARTICLE_URL[stage][platform || 'DOTCOM']}${queryString}` : '/';
+  return stage ? `${BASE_ARTICLE_URL[stage][platform]}${queryString}` : '/';
 };
 
 interface TestEditorVariantSummaryPreviewButtonProps {
   name: string;
   testName: string;
   testType: TestType;
-  platform?: TestPlatform;
+  platform: TestPlatform;
   isDisabled: boolean;
 }
 
@@ -61,7 +67,7 @@ const TestEditorVariantSummaryWebPreviewButton: React.FC<TestEditorVariantSummar
       href={getPreviewUrl(testName, name, testType, platform)}
       target="_blank"
       rel="noopener noreferrer"
-      disabled={isDisabled}
+      disabled={['APPLE_NEWS', 'LIVEBLOG'].includes(platform) ? true : isDisabled}
     >
       Web preview
     </Button>
