@@ -6,26 +6,23 @@ import { getStage } from '../../utils/stage';
 
 const BASE_ARTICLE_URL = {
   PROD: {
-    AMP:
-      'https://amp.theguardian.com/world/2020/may/08/commemorating-ve-day-during-coronavirus-lockdown-somehow-the-quiet-made-it-louder',
     ARTICLE:
       'https://theguardian.com/world/2020/may/08/commemorating-ve-day-during-coronavirus-lockdown-somehow-the-quiet-made-it-louder',
+    AMP: '',
     LIVEBLOG: '',
     APPLE_NEWS: '',
   },
   CODE: {
-    AMP:
-      'https://amp.code.dev-theguardian.com/world/2020/may/08/commemorating-ve-day-during-coronavirus-lockdown-somehow-the-quiet-made-it-louder',
     ARTICLE:
       'https://m.code.dev-theguardian.com/world/2020/may/08/commemorating-ve-day-during-coronavirus-lockdown-somehow-the-quiet-made-it-louder',
+    AMP: '',
     LIVEBLOG: '',
     APPLE_NEWS: '',
   },
   DEV: {
-    AMP:
-      'https://amp.code.dev-theguardian.com/world/2020/may/08/commemorating-ve-day-during-coronavirus-lockdown-somehow-the-quiet-made-it-louder',
     ARTICLE:
       'https://m.code.dev-theguardian.com/world/2020/may/08/commemorating-ve-day-during-coronavirus-lockdown-somehow-the-quiet-made-it-louder',
+    AMP: '',
     LIVEBLOG: '',
     APPLE_NEWS: '',
   },
@@ -58,6 +55,8 @@ const TestEditorVariantSummaryWebPreviewButton: React.FC<TestEditorVariantSummar
   platform,
   isDisabled,
 }: TestEditorVariantSummaryPreviewButtonProps) => {
+  const isCompatiblePlatform = !['AMP', 'APPLE_NEWS', 'LIVEBLOG'].includes(platform);
+
   return (
     <Button
       startIcon={<VisibilityIcon />}
@@ -67,9 +66,11 @@ const TestEditorVariantSummaryWebPreviewButton: React.FC<TestEditorVariantSummar
       href={getPreviewUrl(testName, name, testType, platform)}
       target="_blank"
       rel="noopener noreferrer"
-      disabled={['APPLE_NEWS', 'LIVEBLOG'].includes(platform) ? true : isDisabled}
+      disabled={isCompatiblePlatform ? isDisabled : true}
     >
-      Web preview
+      {isCompatiblePlatform
+        ? 'WEB PREVIEW'
+        : `WEB PREVIEW UNAVAILABLE FOR ${platform.replace('_', ' ')}`}
     </Button>
   );
 };
