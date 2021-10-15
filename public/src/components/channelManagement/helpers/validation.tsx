@@ -1,4 +1,5 @@
 import React from 'react';
+import { TestPlatform } from './shared';
 
 /**
  * Helper for tracking validation of multiple child components.
@@ -97,6 +98,8 @@ const defaultValidTemplates = [CURRENCY_TEMPLATE, COUNTRY_NAME_TEMPLATE, ARTICLE
 const ampValidTemplates = [CURRENCY_TEMPLATE, COUNTRY_NAME_TEMPLATE];
 const appleNewsValidTemplates = [CURRENCY_TEMPLATE];
 
+type TemplateValidatorForPlatform = (text: string) => string | boolean;
+
 const genericInvalidTemplateValidator = (
   text: string,
   validTemplates: string[],
@@ -112,14 +115,25 @@ const genericInvalidTemplateValidator = (
   return true;
 };
 
-export const invalidTemplateValidator = (text: string): string | boolean =>
+const defaultInvalidTemplateValidator = (text: string): string | boolean =>
   genericInvalidTemplateValidator(text, defaultValidTemplates);
 
-export const ampInvalidTemplateValidator = (text: string): string | boolean =>
+const ampInvalidTemplateValidator = (text: string): string | boolean =>
   genericInvalidTemplateValidator(text, ampValidTemplates);
 
-export const appleNewsInvalidTemplateValidator = (text: string): string | boolean =>
+const appleNewsInvalidTemplateValidator = (text: string): string | boolean =>
   genericInvalidTemplateValidator(text, appleNewsValidTemplates);
+
+export const templateValidatorForPlatform = (
+  platform: TestPlatform,
+): TemplateValidatorForPlatform => {
+  return {
+    AMP: ampInvalidTemplateValidator,
+    APPLE_NEWS: appleNewsInvalidTemplateValidator,
+    ARTICLE: defaultInvalidTemplateValidator,
+    LIVEBLOG: defaultInvalidTemplateValidator,
+  }[platform];
+};
 
 export interface ValidationComponentState {
   validationStatus: ValidationStatus;

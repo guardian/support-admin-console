@@ -6,11 +6,7 @@ import { Theme, Typography, makeStyles, TextField } from '@material-ui/core';
 import EpicTestVariantEditorCtasEditor from './epicTestVariantEditorCtasEditor';
 import VariantEditorSeparateArticleCountEditor from '../variantEditorSeparateArticleCountEditor';
 import EpicTestTickerEditor from './epicTestTickerEditor';
-import {
-  invalidTemplateValidator,
-  ampInvalidTemplateValidator,
-  EMPTY_ERROR_HELPER_TEXT,
-} from '../helpers/validation';
+import { EMPTY_ERROR_HELPER_TEXT, templateValidatorForPlatform } from '../helpers/validation';
 import EpicTestChoiceCardsEditor from './epicTestChoiceCardsEditor';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -76,10 +72,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
 }: EpicTestVariantEditorProps) => {
   const classes = getUseStyles(epicEditorConfig.allowMultipleVariants)();
 
-  const templateValidator =
-    epicEditorConfig.platform && epicEditorConfig.platform === 'AMP'
-      ? ampInvalidTemplateValidator
-      : invalidTemplateValidator;
+  const templateValidator = templateValidatorForPlatform(epicEditorConfig.platform);
 
   const defaultValues: FormData = {
     heading: variant.heading,
