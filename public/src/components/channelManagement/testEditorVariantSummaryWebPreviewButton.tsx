@@ -45,9 +45,6 @@ interface TestEditorVariantSummaryPreviewButtonProps {
   isDisabled: boolean;
 }
 
-const isCompatiblePlatform = (platform: TestPlatform): boolean =>
-  !['AMP', 'APPLE_NEWS'].includes(platform);
-
 const TestEditorVariantSummaryWebPreviewButton: React.FC<TestEditorVariantSummaryPreviewButtonProps> = ({
   name,
   testName,
@@ -55,6 +52,8 @@ const TestEditorVariantSummaryWebPreviewButton: React.FC<TestEditorVariantSummar
   platform,
   isDisabled,
 }: TestEditorVariantSummaryPreviewButtonProps) => {
+  const isCompatiblePlatform = !['AMP', 'APPLE_NEWS'].includes(platform);
+
   return (
     <Button
       startIcon={<VisibilityIcon />}
@@ -64,7 +63,7 @@ const TestEditorVariantSummaryWebPreviewButton: React.FC<TestEditorVariantSummar
       href={getPreviewUrl(testName, name, testType, platform)}
       target="_blank"
       rel="noopener noreferrer"
-      disabled={isCompatiblePlatform(platform) ? isDisabled : true}
+      disabled={isCompatiblePlatform ? isDisabled : true}
     >
       {isCompatiblePlatform
         ? 'WEB PREVIEW'
