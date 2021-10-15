@@ -67,12 +67,13 @@ export const DUPLICATE_ERROR_HELPER_TEXT = 'Name already exists - please try ano
 
 export const createGetDuplicateError = (existing: string[]): ((text: string) => string | null) => {
   const existingLowerCased = existing.map(value => value.toLowerCase());
-  return (text: string): string | null => {
+  const getDuplicateError = (text: string): string | null => {
     if (existingLowerCased.includes(text.toLowerCase())) {
       return DUPLICATE_ERROR_HELPER_TEXT;
     }
     return null;
   };
+  return getDuplicateError;
 };
 
 export const createDuplicateValidator = (
@@ -80,12 +81,13 @@ export const createDuplicateValidator = (
   testNamePrefix?: string,
 ): ((text: string) => string | boolean) => {
   const existingLowerCased = existing.map(value => value.toLowerCase());
-  return (text: string): string | boolean => {
+  const duplicateValidator = (text: string): string | boolean => {
     if (existingLowerCased.includes(`${testNamePrefix || ''}${text}`.toLowerCase())) {
       return DUPLICATE_ERROR_HELPER_TEXT;
     }
     return true;
   };
+  return duplicateValidator;
 };
 
 export const CURRENCY_TEMPLATE = '%%CURRENCY_SYMBOL%%';
