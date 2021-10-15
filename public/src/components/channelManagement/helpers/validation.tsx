@@ -1,5 +1,5 @@
 import React from 'react';
-import {TestPlatform} from './shared';
+import { TestPlatform } from './shared';
 
 /**
  * Helper for tracking validation of multiple child components.
