@@ -17,6 +17,7 @@ export interface Test {
   isOn: boolean;
   articlesViewedSettings?: ArticlesViewedSettings;
   variants: Variant[];
+  locations: Region[];
 }
 
 export interface EpicEditorConfig {
