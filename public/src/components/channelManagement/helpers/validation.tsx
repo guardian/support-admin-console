@@ -1,4 +1,5 @@
 import React from 'react';
+import { TestPlatform } from './shared';
 
 /**
  * Helper for tracking validation of multiple child components.
@@ -66,13 +67,12 @@ export const DUPLICATE_ERROR_HELPER_TEXT = 'Name already exists - please try ano
 
 export const createGetDuplicateError = (existing: string[]): ((text: string) => string | null) => {
   const existingLowerCased = existing.map(value => value.toLowerCase());
-  const getDuplicateError = (text: string): string | null => {
+  return (text: string): string | null => {
     if (existingLowerCased.includes(text.toLowerCase())) {
       return DUPLICATE_ERROR_HELPER_TEXT;
     }
     return null;
   };
-  return getDuplicateError;
 };
 
 export const createDuplicateValidator = (
@@ -80,26 +80,33 @@ export const createDuplicateValidator = (
   testNamePrefix?: string,
 ): ((text: string) => string | boolean) => {
   const existingLowerCased = existing.map(value => value.toLowerCase());
-  const duplicateValidator = (text: string): string | boolean => {
+  return (text: string): string | boolean => {
     if (existingLowerCased.includes(`${testNamePrefix || ''}${text}`.toLowerCase())) {
       return DUPLICATE_ERROR_HELPER_TEXT;
     }
     return true;
   };
-  return duplicateValidator;
 };
 
 export const CURRENCY_TEMPLATE = '%%CURRENCY_SYMBOL%%';
 export const COUNTRY_NAME_TEMPLATE = '%%COUNTRY_NAME%%';
 export const ARTICLE_COUNT_TEMPLATE = '%%ARTICLE_COUNT%%';
 
-const validTemplates = [CURRENCY_TEMPLATE, COUNTRY_NAME_TEMPLATE, ARTICLE_COUNT_TEMPLATE];
+const VALID_TEMPLATES = {
+  AMP: [CURRENCY_TEMPLATE, COUNTRY_NAME_TEMPLATE],
+  APPLE_NEWS: [CURRENCY_TEMPLATE],
+  DOTCOM: [CURRENCY_TEMPLATE, COUNTRY_NAME_TEMPLATE, ARTICLE_COUNT_TEMPLATE],
+};
 
-export const invalidTemplateValidator = (text: string): string | boolean => {
+export const templateValidatorForPlatform = (platform: TestPlatform) => (
+  text: string,
+): string | boolean => {
   const templates: string[] | null = text.match(/%\S*%/g);
 
   if (templates !== null) {
-    const invalidTemplate = templates.find(template => !validTemplates.includes(template));
+    const invalidTemplate = templates.find(
+      template => !VALID_TEMPLATES[platform].includes(template),
+    );
     if (invalidTemplate) {
       return `Invalid template: ${invalidTemplate}`;
     }
@@ -126,7 +133,7 @@ export const onFieldValidationChange = <
     },
     () => {
       const hasInvalidField = Object.keys(component.state.validationStatus).some(
-        name => component.state.validationStatus[name] === false,
+        name => !component.state.validationStatus[name],
       );
 
       component.props.onValidationChange(!hasInvalidField);

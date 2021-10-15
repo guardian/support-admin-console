@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core';
 import BannerTestVariantEditorCtasEditor from './bannerTestVariantEditorCtasEditor';
 import VariantEditorCopyLengthWarning from '../variantEditorCopyLengthWarning';
-import { invalidTemplateValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
+import { templateValidatorForPlatform, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 import { Cta, SecondaryCta } from '../helpers/shared';
 import BannerTemplateSelector from './bannerTemplateSelector';
 import { BannerContent, BannerTemplate, BannerVariant } from '../../../models/banner';
@@ -94,6 +94,8 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
 }: BannerTestVariantContentEditorProps) => {
   const classes = useStyles();
 
+  const templateValidator = templateValidatorForPlatform('DOTCOM');
+
   const defaultValues: BannerContent = {
     heading: content.heading || '',
     messageText: content.messageText,
@@ -144,7 +146,7 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
       <div className={classes.contentContainer}>
         <div>
           <TextField
-            inputRef={register({ validate: invalidTemplateValidator })}
+            inputRef={register({ validate: templateValidator })}
             error={errors.heading !== undefined}
             helperText={errors.heading ? errors.heading.message : HEADER_DEFAULT_HELPER_TEXT}
             onBlur={handleSubmit(onSubmit)}
@@ -165,7 +167,7 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
           <TextField
             inputRef={register({
               required: EMPTY_ERROR_HELPER_TEXT,
-              validate: invalidTemplateValidator,
+              validate: templateValidator,
             })}
             error={errors.messageText !== undefined}
             helperText={errors.messageText ? errors.messageText.message : BODY_DEFAULT_HELPER_TEXT}
@@ -184,7 +186,7 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
             template === BannerTemplate.InvestigationsMomentBanner) && (
             <TextField
               inputRef={register({
-                validate: invalidTemplateValidator,
+                validate: templateValidator,
               })}
               error={errors.highlightedText !== undefined}
               helperText={
