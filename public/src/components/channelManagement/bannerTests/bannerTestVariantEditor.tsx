@@ -94,7 +94,7 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
 }: BannerTestVariantContentEditorProps) => {
   const classes = useStyles();
 
-  const templateValidator = templateValidatorForPlatform('ARTICLE');
+  const templateValidator = templateValidatorForPlatform('DOTCOM');
 
   const defaultValues: BannerContent = {
     heading: content.heading || '',

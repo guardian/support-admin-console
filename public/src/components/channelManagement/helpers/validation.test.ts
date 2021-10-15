@@ -1,37 +1,8 @@
 import { templateValidatorForPlatform } from './validation';
 
 describe('templateValidatorForPlatform', () => {
-  describe('When platform is a dotcom article', () => {
-    const templateValidator = templateValidatorForPlatform('ARTICLE');
-
-    it('should return true if no templates are present', () => {
-      expect(templateValidator('Blah blah')).toBeTruthy();
-    });
-
-    it('should return true if a valid template is present', () => {
-      expect(templateValidator('%%CURRENCY_SYMBOL%%')).toBeTruthy();
-      expect(templateValidator('%%COUNTRY_NAME%%')).toBeTruthy();
-      expect(templateValidator('%%ARTICLE_COUNT%%')).toBeTruthy();
-    });
-
-    it('should return an error message if template text is not valid', () => {
-      expect(templateValidator('I am from %%COUNTRY_NAM%%')).toEqual(
-        'Invalid template: %%COUNTRY_NAM%%',
-      );
-    });
-
-    it('should return an error message if template tags are not valid', () => {
-      expect(templateValidator('I am from %COUNTRY_NAME%%')).toEqual(
-        'Invalid template: %COUNTRY_NAME%%',
-      );
-      expect(templateValidator('I am from %%COUNTRY_NAME%')).toEqual(
-        'Invalid template: %%COUNTRY_NAME%',
-      );
-    });
-  });
-
-  describe('When platform is a dotcom liveblog', () => {
-    const templateValidator = templateValidatorForPlatform('LIVEBLOG');
+  describe('When platform is dotcom', () => {
+    const templateValidator = templateValidatorForPlatform('DOTCOM');
 
     it('should return true if no templates are present', () => {
       expect(templateValidator('Blah blah')).toBeTruthy();

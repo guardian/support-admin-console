@@ -5,7 +5,7 @@ export interface Variant {
   name: string;
 }
 
-export type TestPlatform = 'AMP' | 'APPLE_NEWS' | 'ARTICLE' | 'LIVEBLOG';
+export type TestPlatform = 'AMP' | 'APPLE_NEWS' | 'DOTCOM';
 
 export type TestType = 'EPIC' | 'BANNER';
 
@@ -65,7 +65,7 @@ export const ARTICLE_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantChoiceCards: true,
   requireVariantHeader: true,
   moduleName: 'ContributionsEpic',
-  platform: 'ARTICLE',
+  platform: 'DOTCOM',
 };
 
 export const ARTICLE_EPIC_HOLDBACK_CONFIG: EpicEditorConfig = {
@@ -88,7 +88,7 @@ export const ARTICLE_EPIC_HOLDBACK_CONFIG: EpicEditorConfig = {
   allowVariantChoiceCards: true,
   requireVariantHeader: true,
   moduleName: 'ContributionsEpic',
-  platform: 'ARTICLE',
+  platform: 'DOTCOM',
 };
 
 export const LIVEBLOG_EPIC_CONFIG: EpicEditorConfig = {
@@ -110,7 +110,7 @@ export const LIVEBLOG_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantChoiceCards: false,
   requireVariantHeader: false,
   moduleName: 'ContributionsLiveblogEpic',
-  platform: 'LIVEBLOG',
+  platform: 'DOTCOM',
 };
 
 export const APPLE_NEWS_EPIC_CONFIG: EpicEditorConfig = {
