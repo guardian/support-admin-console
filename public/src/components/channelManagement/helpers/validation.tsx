@@ -94,45 +94,27 @@ export const CURRENCY_TEMPLATE = '%%CURRENCY_SYMBOL%%';
 export const COUNTRY_NAME_TEMPLATE = '%%COUNTRY_NAME%%';
 export const ARTICLE_COUNT_TEMPLATE = '%%ARTICLE_COUNT%%';
 
-const defaultValidTemplates = [CURRENCY_TEMPLATE, COUNTRY_NAME_TEMPLATE, ARTICLE_COUNT_TEMPLATE];
-const ampValidTemplates = [CURRENCY_TEMPLATE, COUNTRY_NAME_TEMPLATE];
-const appleNewsValidTemplates = [CURRENCY_TEMPLATE];
+const VALID_TEMPLATES = {
+  AMP: [CURRENCY_TEMPLATE, COUNTRY_NAME_TEMPLATE],
+  APPLE_NEWS: [CURRENCY_TEMPLATE],
+  ARTICLE: [CURRENCY_TEMPLATE, COUNTRY_NAME_TEMPLATE, ARTICLE_COUNT_TEMPLATE],
+  LIVEBLOG: [CURRENCY_TEMPLATE, COUNTRY_NAME_TEMPLATE, ARTICLE_COUNT_TEMPLATE],
+};
 
-type TemplateValidatorForPlatform = (text: string) => string | boolean;
-
-const genericInvalidTemplateValidator = (
+export const templateValidatorForPlatform = (platform: TestPlatform) => (
   text: string,
-  validTemplates: string[],
 ): string | boolean => {
   const templates: string[] | null = text.match(/%\S*%/g);
 
   if (templates !== null) {
-    const invalidTemplate = templates.find(template => !validTemplates.includes(template));
+    const invalidTemplate = templates.find(
+      template => !VALID_TEMPLATES[platform].includes(template),
+    );
     if (invalidTemplate) {
       return `Invalid template: ${invalidTemplate}`;
     }
   }
   return true;
-};
-
-const defaultInvalidTemplateValidator = (text: string): string | boolean =>
-  genericInvalidTemplateValidator(text, defaultValidTemplates);
-
-const ampInvalidTemplateValidator = (text: string): string | boolean =>
-  genericInvalidTemplateValidator(text, ampValidTemplates);
-
-const appleNewsInvalidTemplateValidator = (text: string): string | boolean =>
-  genericInvalidTemplateValidator(text, appleNewsValidTemplates);
-
-export const templateValidatorForPlatform = (
-  platform: TestPlatform,
-): TemplateValidatorForPlatform => {
-  return {
-    AMP: ampInvalidTemplateValidator,
-    APPLE_NEWS: appleNewsInvalidTemplateValidator,
-    ARTICLE: defaultInvalidTemplateValidator,
-    LIVEBLOG: defaultInvalidTemplateValidator,
-  }[platform];
 };
 
 export interface ValidationComponentState {
