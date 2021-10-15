@@ -13,6 +13,7 @@ object BannerTemplate extends Enum[BannerTemplate] with CirceEnum[BannerTemplate
   override val values: IndexedSeq[BannerTemplate] = findValues
 
   case object ContributionsBanner extends BannerTemplate
+  case object ContributionsBannerWithSignIn extends BannerTemplate
   case object DigitalSubscriptionsBanner extends BannerTemplate
   case object GuardianWeeklyBanner extends BannerTemplate
   case object InvestigationsMomentBanner extends BannerTemplate
