@@ -106,7 +106,7 @@ export const LIVEBLOG_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantSeparateArticleCount: false,
   allowVariantTicker: false,
   allowVariantChoiceCards: false,
-  allowVariantSignInLink: true,
+  allowVariantSignInLink: false,
   requireVariantHeader: false,
   moduleName: 'ContributionsLiveblogEpic',
 };
@@ -129,7 +129,7 @@ export const APPLE_NEWS_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantSeparateArticleCount: false,
   allowVariantTicker: false,
   allowVariantChoiceCards: false,
-  allowVariantSignInLink: true,
+  allowVariantSignInLink: false,
   requireVariantHeader: true,
   moduleName: 'ContributionsEpic',
 };
@@ -151,7 +151,7 @@ export const AMP_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantSeparateArticleCount: false,
   allowVariantTicker: true,
   allowVariantChoiceCards: true,
-  allowVariantSignInLink: true,
+  allowVariantSignInLink: false,
   requireVariantHeader: true,
   moduleName: 'ContributionsEpic',
 };
