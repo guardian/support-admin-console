@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { createStyles, Typography, withStyles, WithStyles } from '@material-ui/core';
 import { Test } from './helpers/shared';
 import TestList from './testList';
@@ -37,6 +37,8 @@ interface SidebarProps<T extends Test> {
   testNamePrefix?: string;
   createTest: (name: string, nickname: string) => void;
   isInEditMode: boolean;
+  regionFilter: RegionsAndAll;
+  setRegionFilter: (regionValue: RegionsAndAll) => void;
 }
 
 function Sidebar<T extends Test>({
@@ -48,11 +50,11 @@ function Sidebar<T extends Test>({
   onTestSelected,
   testNamePrefix,
   createTest,
+  regionFilter,
+  setRegionFilter,
 }: SidebarProps<T> & WithStyles<typeof styles>): React.ReactElement<SidebarProps<T>> {
-  const [regionFilter, setRegionFilter] = useState<RegionsAndAll>('ALL');
-
   const filterTests = function(testsToFilter: Test[]): Test[] {
-    if ('ALL' === regionFilter) {
+    if (isInEditMode || 'ALL' === regionFilter) {
       return testsToFilter;
     }
     return testsToFilter.filter(t => t.locations.indexOf(regionFilter) >= 0);

@@ -34,6 +34,8 @@ const getBannerTestsForm = (isFirstChannel: boolean): React.FC<Props> => {
     requestLock,
     cancel,
     editMode,
+    regionFilter,
+    setRegionFilter,
   }: Props) => {
     const createTest = (name: string, nickname: string): void => {
       if (selectedTestHasBeenModified) {
@@ -55,6 +57,8 @@ const getBannerTestsForm = (isFirstChannel: boolean): React.FC<Props> => {
             onTestSelected={onTestSelected}
             createTest={createTest}
             isInEditMode={editMode}
+            regionFilter={regionFilter}
+            setRegionFilter={setRegionFilter}
           />
         }
         testEditor={
