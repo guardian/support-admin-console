@@ -8,6 +8,7 @@ import VariantEditorSeparateArticleCountEditor from '../variantEditorSeparateArt
 import EpicTestTickerEditor from './epicTestTickerEditor';
 import { EMPTY_ERROR_HELPER_TEXT, templateValidatorForPlatform } from '../helpers/validation';
 import EpicTestChoiceCardsEditor from './epicTestChoiceCardsEditor';
+import EpicTestSignInLinkEditor from './epicTestSignInLinkEditor';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const getUseStyles = (shouldAddPadding: boolean) => {
@@ -135,6 +136,9 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   };
   const updateShowChoiceCards = (updatedshowChoiceCards?: boolean): void => {
     onVariantChange({ ...variant, showChoiceCards: updatedshowChoiceCards });
+  };
+  const updateShowSignInLink = (updatedShowSignInLink?: boolean): void => {
+    onVariantChange({ ...variant, showSignInLink: updatedShowSignInLink });
   };
 
   return (
@@ -290,6 +294,20 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
           <EpicTestChoiceCardsEditor
             showChoiceCards={variant.showChoiceCards}
             updateShowChoiceCards={updateShowChoiceCards}
+            isDisabled={!editMode}
+          />
+        </div>
+      )}
+
+      {epicEditorConfig.allowVariantSignInLink && (
+        <div className={classes.sectionContainer}>
+          <Typography className={classes.sectionHeader} variant="h4">
+            Sign in link
+          </Typography>
+
+          <EpicTestSignInLinkEditor
+            showSignInLink={variant.showSignInLink}
+            updateShowSignInLink={updateShowSignInLink}
             isDisabled={!editMode}
           />
         </div>

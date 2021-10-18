@@ -60,6 +60,7 @@ export interface EpicVariant extends Variant {
   secondaryCta?: SecondaryCta;
   separateArticleCount?: SeparateArticleCount;
   showChoiceCards?: boolean;
+  showSignInLink?: boolean;
 }
 
 export interface MaxEpicViews {
