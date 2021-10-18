@@ -14,6 +14,8 @@ export enum Region {
   International = 'International',
 }
 
+export type RegionsAndAll = Region | 'ALL';
+
 export function isRegion(s: string): s is Region {
   return Object.values(Region).includes(s as Region);
 }

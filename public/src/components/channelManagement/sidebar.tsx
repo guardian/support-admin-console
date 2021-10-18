@@ -5,6 +5,9 @@ import TestList from './testList';
 import TestPriorityLabelList from './testPriorityLabelList';
 import NewTestButton from './newTestButton';
 
+import TestListSidebarFilterSelector from './testListSidebarFilterSelector';
+import { RegionsAndAll } from '../../utils/models';
+
 const styles = createStyles({
   root: {
     display: 'flex',
@@ -34,6 +37,8 @@ interface SidebarProps<T extends Test> {
   testNamePrefix?: string;
   createTest: (name: string, nickname: string) => void;
   isInEditMode: boolean;
+  regionFilter: RegionsAndAll;
+  setRegionFilter: (regionValue: RegionsAndAll) => void;
 }
 
 function Sidebar<T extends Test>({
@@ -45,24 +50,40 @@ function Sidebar<T extends Test>({
   onTestSelected,
   testNamePrefix,
   createTest,
+  regionFilter,
+  setRegionFilter,
 }: SidebarProps<T> & WithStyles<typeof styles>): React.ReactElement<SidebarProps<T>> {
+  const filterTests = function(testsToFilter: Test[]): Test[] {
+    if (isInEditMode || 'ALL' === regionFilter) {
+      return testsToFilter;
+    }
+    return testsToFilter.filter(t => t.locations.indexOf(regionFilter) >= 0);
+  };
+
   return (
     <div className={classes.root}>
-      {isInEditMode && (
-        <NewTestButton
-          existingNames={tests.map(t => t.name)}
-          existingNicknames={tests.map(t => t.nickname || '')}
-          testNamePrefix={testNamePrefix}
-          createTest={createTest}
-        />
+      {isInEditMode ? (
+        <>
+          <NewTestButton
+            existingNames={tests.map(t => t.name)}
+            existingNicknames={tests.map(t => t.nickname || '')}
+            testNamePrefix={testNamePrefix}
+            createTest={createTest}
+          />
+          <Typography className={classes.header}>EDITING: tests in priority order</Typography>
+        </>
+      ) : (
+        <TestListSidebarFilterSelector
+          regionFilter={regionFilter}
+          handleRegionFilterChange={setRegionFilter}
+        ></TestListSidebarFilterSelector>
       )}
-      <Typography className={classes.header}>Tests in priority order</Typography>
       <div className={classes.listsContainer}>
         <div className={classes.priorityLabelListContainer}>
           <TestPriorityLabelList numTests={tests.length} />
         </div>
         <TestList
-          tests={tests}
+          tests={filterTests(tests)}
           isInEditMode={isInEditMode}
           selectedTestName={selectedTestName}
           onTestPriorityChange={onTestPriorityChange}

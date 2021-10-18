@@ -116,6 +116,8 @@ const getEpicTestForm = (epicEditorConfig: EpicEditorConfig): React.FC<Props> =>
     requestLock,
     cancel,
     editMode,
+    regionFilter,
+    setRegionFilter,
   }: Props) => {
     const createTest = (name: string, nickname: string): void => {
       if (selectedTestHasBeenModified) {
@@ -138,6 +140,8 @@ const getEpicTestForm = (epicEditorConfig: EpicEditorConfig): React.FC<Props> =>
             testNamePrefix={epicEditorConfig.testNamePrefix}
             createTest={createTest}
             isInEditMode={editMode}
+            regionFilter={regionFilter}
+            setRegionFilter={setRegionFilter}
           />
         }
         testEditor={

@@ -10,6 +10,7 @@ import {
   archiveTest,
 } from '../../utils/requests';
 import { LockStatus, Test } from './helpers/shared';
+import { RegionsAndAll } from '../../utils/models';
 
 // The inner component's props must extend this type
 export interface InnerComponentProps<T extends Test> {
@@ -29,6 +30,8 @@ export interface InnerComponentProps<T extends Test> {
   requestLock: () => void;
   lockStatus: LockStatus;
   editMode: boolean;
+  regionFilter: RegionsAndAll;
+  setRegionFilter: (regionValue: RegionsAndAll) => void;
 }
 
 interface DataFromServer<T extends Test> {
@@ -83,6 +86,8 @@ const TestEditor = <T extends Test>(
     const [selectedTestIsValid, setSelectedTestIsValid] = useState<boolean>(true);
     const [selectedTestHasBeenModified, setSelectedTestHasBeenModified] = useState<boolean>(true);
     const [lockStatus, setLockStatus] = useState<LockStatus>({ locked: false });
+
+    const [regionFilter, setRegionFilter] = useState<RegionsAndAll>('ALL');
 
     useEditModeAlertTimer(editMode);
 
@@ -264,6 +269,8 @@ const TestEditor = <T extends Test>(
               lockStatus={lockStatus}
               cancel={cancel}
               editMode={editMode}
+              regionFilter={regionFilter}
+              setRegionFilter={setRegionFilter}
             />
           </>
         ) : (
