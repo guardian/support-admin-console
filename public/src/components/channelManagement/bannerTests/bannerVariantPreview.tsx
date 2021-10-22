@@ -101,6 +101,10 @@ const bannerModules = {
     path: 'investigationsMoment/InvestigationsMomentBanner.js',
     name: 'InvestigationsMomentBanner',
   },
+  [BannerTemplate.EnvironmentMomentBanner]: {
+    path: 'environmentMoment/EnvironmentMomentBanner.js',
+    name: 'EnvironmentMomentBanner',
+  },
 };
 
 const useStyles = makeStyles(({ palette }: Theme) => ({

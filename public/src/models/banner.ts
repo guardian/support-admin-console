@@ -15,6 +15,7 @@ export enum BannerTemplate {
   DigitalSubscriptionsBanner = 'DigitalSubscriptionsBanner',
   GuardianWeeklyBanner = 'GuardianWeeklyBanner',
   InvestigationsMomentBanner = 'InvestigationsMomentBanner',
+  EnvironmentMomentBanner = 'EnvironmentMomentBanner',
 }
 
 export interface BannerContent {
