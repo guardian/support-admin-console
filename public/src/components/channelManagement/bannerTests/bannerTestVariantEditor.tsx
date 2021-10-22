@@ -144,24 +144,26 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
       </Typography>
 
       <div className={classes.contentContainer}>
-        <div>
-          <TextField
-            inputRef={register({ validate: templateValidator })}
-            error={errors.heading !== undefined}
-            helperText={errors.heading ? errors.heading.message : HEADER_DEFAULT_HELPER_TEXT}
-            onBlur={handleSubmit(onSubmit)}
-            name="heading"
-            label="Header"
-            margin="normal"
-            variant="outlined"
-            disabled={!editMode}
-            fullWidth
-          />
+        {template !== BannerTemplate.EnvironmentMomentBanner && (
+          <div>
+            <TextField
+              inputRef={register({ validate: templateValidator })}
+              error={errors.heading !== undefined}
+              helperText={errors.heading ? errors.heading.message : HEADER_DEFAULT_HELPER_TEXT}
+              onBlur={handleSubmit(onSubmit)}
+              name="heading"
+              label="Header"
+              margin="normal"
+              variant="outlined"
+              disabled={!editMode}
+              fullWidth
+            />
 
-          {headerCopyLength > HEADER_COPY_RECOMMENDED_LENGTH && (
-            <VariantEditorCopyLengthWarning charLimit={HEADER_COPY_RECOMMENDED_LENGTH} />
-          )}
-        </div>
+            {headerCopyLength > HEADER_COPY_RECOMMENDED_LENGTH && (
+              <VariantEditorCopyLengthWarning charLimit={HEADER_COPY_RECOMMENDED_LENGTH} />
+            )}
+          </div>
+        )}
 
         <div>
           <TextField
