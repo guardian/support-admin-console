@@ -9,7 +9,7 @@ const moduleVersion = 3;
 /**
  * Hook for importing a remote module, for live previews.
  */
-export const useModule = <T>(path: string, name: string): React.FC<T> => {
+export const useModule = <T>(path: string, name: string): React.FC<T> | undefined => {
   const [Module, setModule] = useState<React.FC<T>>();
 
   useEffect(() => {
