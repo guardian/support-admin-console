@@ -4,7 +4,7 @@ import * as emotionReactJsxRuntime from '@emotion/react/jsx-runtime';
 import { getStage } from '../utils/stage';
 import { withPreviewStyles } from '../components/channelManagement/previewContainer';
 
-const moduleVersion = 2;
+const moduleVersion = 3;
 
 /**
  * Hook for importing a remote module, for live previews.
