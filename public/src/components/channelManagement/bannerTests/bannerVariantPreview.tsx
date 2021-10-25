@@ -1,15 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Theme, makeStyles, Button } from '@material-ui/core';
-import * as emotionReact from '@emotion/react';
-import * as emotionReactJsxRuntime from '@emotion/react/jsx-runtime';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import Drawer from '@material-ui/core/Drawer';
 import { BannerTemplate, BannerVariant } from '../../../models/banner';
 import { Cta, SecondaryCta, TickerCountType, TickerEndType } from '../helpers/shared';
 import Typography from '@material-ui/core/Typography';
-import { withPreviewStyles } from '../previewContainer';
-import { getStage } from '../../../utils/stage';
 import { TickerSettings } from '../epicTests/epicTestsForm';
+import { useModule } from '../../../hooks/useModule';
 
 export interface BannerContent {
   heading?: string;
@@ -138,28 +135,12 @@ const BannerVariantPreview: React.FC<BannerVariantPreviewProps> = ({
 }: BannerVariantPreviewProps) => {
   const classes = useStyles();
 
-  const [Banner, setBanner] = useState<React.FC<BannerProps>>();
   const [drawerOpen, setDrawerOpen] = useState<boolean>();
 
-  useEffect(() => {
-    window.guardian.automat = {
-      react: React,
-      preact: React,
-      emotionReact,
-      emotionReactJsxRuntime,
-    };
-
-    const stage = getStage();
-
-    const baseUrl =
-      stage === 'PROD'
-        ? 'https://contributions.guardianapis.com/modules/v2/banners'
-        : 'https://contributions.code.dev-guardianapis.com/modules/v2/banners';
-
-    window.remoteImport(`${baseUrl}/${bannerModules[variant.template].path}`).then(bannerModule => {
-      setBanner(() => withPreviewStyles(bannerModule[bannerModules[variant.template].name]));
-    });
-  }, [variant.template]);
+  const Banner = useModule<BannerProps>(
+    `banners/${bannerModules[variant.template].path}`,
+    bannerModules[variant.template].name,
+  );
 
   const toggleDrawer = (open: boolean) => (event: React.MouseEvent): void => {
     event.stopPropagation();

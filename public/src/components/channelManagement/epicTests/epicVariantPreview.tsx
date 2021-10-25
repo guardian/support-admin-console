@@ -1,12 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Theme, makeStyles } from '@material-ui/core';
-import * as emotionReact from '@emotion/react';
-import * as emotionReactJsxRuntime from '@emotion/react/jsx-runtime';
 import { EpicVariant } from './epicTestsForm';
-import { withPreviewStyles } from '../previewContainer';
-import { getStage } from '../../../utils/stage';
 
 import { EpicModuleName } from '../helpers/shared';
+import { useModule } from '../../../hooks/useModule';
 
 export interface ArticleCounts {
   for52Weeks: number; // The user's total article view count, which currently goes back as far as 52 weeks
@@ -80,27 +77,7 @@ const EpicVariantPreview: React.FC<EpicVariantPreviewProps> = ({
 }: EpicVariantPreviewProps) => {
   const classes = useStyles();
 
-  const [Epic, setEpic] = useState<React.FC<EpicProps>>();
-
-  useEffect(() => {
-    window.guardian.automat = {
-      react: React,
-      preact: React,
-      emotionReact,
-      emotionReactJsxRuntime,
-    };
-
-    const stage = getStage();
-
-    const url =
-      stage === 'PROD'
-        ? `https://contributions.guardianapis.com/modules/v2/epics/${moduleName}.js`
-        : `https://contributions.code.dev-guardianapis.com/modules/v2/epics/${moduleName}.js`;
-
-    window.remoteImport(url).then(epicModule => {
-      setEpic(() => withPreviewStyles(epicModule[moduleName]));
-    });
-  }, []);
+  const Epic = useModule<EpicProps>(`epics/${moduleName}.js`, moduleName);
 
   const props = buildProps(variant);
 
