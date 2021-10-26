@@ -4,6 +4,7 @@ import { Test } from './helpers/shared';
 import TestList from './testList';
 import TestPriorityLabelList from './testPriorityLabelList';
 import NewTestButton from './newTestButton';
+import BatchProcessTestButton from './batchProcessTestButton';
 
 import TestListSidebarFilterSelector from './testListSidebarFilterSelector';
 import { RegionsAndAll } from '../../utils/models';
@@ -39,6 +40,8 @@ interface SidebarProps<T extends Test> {
   isInEditMode: boolean;
   regionFilter: RegionsAndAll;
   setRegionFilter: (regionValue: RegionsAndAll) => void;
+  onBatchTestDelete: (batchTestNames: string) => void;
+  onBatchTestArchive: (batchTestNames: string) => void;
 }
 
 function Sidebar<T extends Test>({
@@ -52,6 +55,8 @@ function Sidebar<T extends Test>({
   createTest,
   regionFilter,
   setRegionFilter,
+  onBatchTestDelete,
+  onBatchTestArchive,
 }: SidebarProps<T> & WithStyles<typeof styles>): React.ReactElement<SidebarProps<T>> {
   const filterTests = function(testsToFilter: Test[]): Test[] {
     if (isInEditMode || 'ALL' === regionFilter) {
@@ -69,6 +74,13 @@ function Sidebar<T extends Test>({
             existingNicknames={tests.map(t => t.nickname || '')}
             testNamePrefix={testNamePrefix}
             createTest={createTest}
+          />
+          <BatchProcessTestButton
+            // filter out live tests and any test currently being edited
+            tests={tests}
+            draftTests={tests.filter(t => (!t.isOn && t.name !== selectedTestName ? true : false))}
+            onBatchTestDelete={onBatchTestDelete}
+            onBatchTestArchive={onBatchTestArchive}
           />
           <Typography className={classes.header}>EDITING: tests in priority order</Typography>
         </>
