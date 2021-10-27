@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
 import {
   Button,
   Dialog,
@@ -30,17 +29,13 @@ const styles = createStyles({
   },
 });
 
-type FormData = {
-  selectedTests: Test[];
-};
-
 interface BatchProcessTestDialogProps extends WithStyles<typeof styles> {
   isOpen: boolean;
   close: () => void;
   draftTests: Test[];
   tests: Test[];
-  onBatchTestDelete: (batchTestNames: string) => void;
-  onBatchTestArchive: (batchTestNames: string) => void;
+  onBatchTestDelete: (batchTestNames: string[]) => void;
+  onBatchTestArchive: (batchTestNames: string[]) => void;
 }
 
 const BatchProcessTestDialog: React.FC<BatchProcessTestDialogProps> = ({
@@ -51,88 +46,60 @@ const BatchProcessTestDialog: React.FC<BatchProcessTestDialogProps> = ({
   onBatchTestDelete,
   onBatchTestArchive,
 }: BatchProcessTestDialogProps) => {
-  const defaultValues = {
-    selectedTests: [],
-  };
-
-  const { handleSubmit } = useForm<FormData>({
-    defaultValues,
-  });
-
-  const currentSelectedTests: Test[] = [];
-
-  const [checked, setChecked] = useState([-1]);
   const [selectedBatchProcess, setSelectedBatchProcess] = useState('');
-  const [selectedTests, setSelectedTests] = useState(currentSelectedTests);
-
-  const getSelectedTests = (): Test[] => {
-    currentSelectedTests.length = 0;
-
-    checked.forEach(i => {
-      if (i >= 0) {
-        currentSelectedTests.push(draftTests[i]);
-      }
-    });
-    return currentSelectedTests;
-  };
-
-  const getSelectedTestNames = (): string => {
-    if (!selectedTests) {
-      return '';
-    }
-
-    const namesArray: string[] = [];
-    selectedTests.forEach(t => namesArray.push(t.name));
-    return namesArray.join(', ');
-  };
-
+  const [selectedTests, setSelectedTests] = useState<string[]>([]);
   const [isConfirmOpen, confirmOpen, confirmClose] = useOpenable();
 
   const onArchiveSubmit = (): void => {
-    setSelectedTests(getSelectedTests());
     setSelectedBatchProcess('ARCHIVE');
     confirmOpen();
   };
 
   const completeArchiveSubmit = (): void => {
     confirmClose();
-    const selectedNames = getSelectedTestNames();
-    onBatchTestArchive(selectedNames);
+    onBatchTestArchive([...selectedTests]);
     setSelectedBatchProcess('');
-    setChecked([-1]);
+    setSelectedTests([]);
     close();
   };
 
   const onDeleteSubmit = (): void => {
-    setSelectedTests(getSelectedTests());
     setSelectedBatchProcess('DELETE');
     confirmOpen();
   };
 
   const completeDeleteSubmit = (): void => {
-    const selectedNames = getSelectedTestNames();
     confirmClose();
-    onBatchTestDelete(selectedNames);
+    onBatchTestDelete([...selectedTests]);
     setSelectedBatchProcess('');
-    setChecked([-1]);
+    setSelectedTests([]);
     close();
   };
 
   const onCancel = (): void => {
-    setChecked([-1]);
+    setSelectedTests([]);
     close();
   };
 
-  const handleToggle = (value: number) => (): void => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
+  const handleToggle = (value: string) => (): void => {
+    const valueIndex = selectedTests.indexOf(value),
+      currentSelected = [...selectedTests];
 
-    if (currentIndex < 0) {
-      newChecked.push(value);
+    if (valueIndex < 0) {
+      currentSelected.push(value);
     } else {
-      newChecked.splice(currentIndex, 1);
+      currentSelected.splice(valueIndex, 1);
     }
-    setChecked(newChecked);
+    setSelectedTests(currentSelected);
+  };
+
+  const getTestNickname = (val: string): string => {
+    const myTestArray = draftTests.filter(t => val === t.name);
+
+    if (myTestArray.length) {
+      return myTestArray[0].nickname || val;
+    }
+    return val;
   };
 
   const isDelete = (): boolean => {
@@ -159,15 +126,15 @@ const BatchProcessTestDialog: React.FC<BatchProcessTestDialogProps> = ({
       <DialogContent dividers>
         <List>
           {draftTests.map((t, index) => {
-            const labelId = `checkbox-label-${t.name}`,
-              value = index;
+            const labelId = `checkbox-label-${t.name}`;
 
             return (
-              <ListItem key={value} onClick={handleToggle(value)}>
+              <ListItem key={index} onClick={handleToggle(t.name)}>
                 <ListItemIcon>
                   <Checkbox
                     edge="start"
-                    checked={checked.indexOf(value) !== -1}
+                    checked={selectedTests.indexOf(t.name) >= 0}
+                    // value={t.name}
                     tabIndex={-1}
                     disableRipple
                     inputProps={{ 'aria-labelledby': labelId }}
@@ -201,33 +168,33 @@ const BatchProcessTestDialog: React.FC<BatchProcessTestDialogProps> = ({
           </Typography>
           <ul>
             {selectedTests.map((t, i) => (
-              <li key={i}>{t.nickname || t.name}</li>
+              <li key={i}>{getTestNickname(t)}</li>
             ))}
           </ul>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleSubmit(confirmClose)} color="primary">
+          <Button onClick={confirmClose} color="primary">
             Cancel
           </Button>
           {isDelete() ? (
-            <Button onClick={handleSubmit(completeDeleteSubmit)} color="secondary">
+            <Button onClick={completeDeleteSubmit} color="secondary">
               Delete
             </Button>
           ) : (
-            <Button onClick={handleSubmit(completeArchiveSubmit)} color="secondary">
+            <Button onClick={completeArchiveSubmit} color="secondary">
               Archive
             </Button>
           )}
         </DialogActions>
       </Dialog>
       <DialogActions>
-        <Button onClick={handleSubmit(onCancel)} color="primary">
+        <Button onClick={onCancel} color="primary">
           Cancel
         </Button>
-        <Button onClick={handleSubmit(onArchiveSubmit)} color="secondary">
+        <Button onClick={onArchiveSubmit} color="secondary">
           Archive
         </Button>
-        <Button onClick={handleSubmit(onDeleteSubmit)} color="secondary">
+        <Button onClick={onDeleteSubmit} color="secondary">
           Delete
         </Button>
       </DialogActions>

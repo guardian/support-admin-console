@@ -40,8 +40,8 @@ interface SidebarProps<T extends Test> {
   isInEditMode: boolean;
   regionFilter: RegionsAndAll;
   setRegionFilter: (regionValue: RegionsAndAll) => void;
-  onBatchTestDelete: (batchTestNames: string) => void;
-  onBatchTestArchive: (batchTestNames: string) => void;
+  onBatchTestDelete: (batchTestNames: string[]) => void;
+  onBatchTestArchive: (batchTestNames: string[]) => void;
 }
 
 function Sidebar<T extends Test>({

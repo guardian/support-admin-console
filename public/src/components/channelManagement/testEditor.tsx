@@ -21,8 +21,8 @@ export interface InnerComponentProps<T extends Test> {
   onTestSave: () => void;
   onTestDelete: () => void;
   onTestArchive: () => void;
-  onBatchTestDelete: (batchTestNames: string) => void;
-  onBatchTestArchive: (batchTestNames: string) => void;
+  onBatchTestDelete: (batchTestNames: string[]) => void;
+  onBatchTestArchive: (batchTestNames: string[]) => void;
   onTestCreate: (newTest: T) => void;
   onTestPriorityChange: (newPriority: number, oldPriority: number) => void;
   onTestSelected: (testName: string) => void;
@@ -193,7 +193,7 @@ const TestEditor = <T extends Test>(
       });
     };
 
-    const onBatchTestDelete = (batchTestNames: string): void => {
+    const onBatchTestDelete = (batchTestNames: string[]): void => {
       if (!tests || !batchTestNames) {
         return;
       }
@@ -203,7 +203,7 @@ const TestEditor = <T extends Test>(
       save(updatedTests).catch(e => console.log('onBatchTestDelete: error encountered', e));
     };
 
-    const onBatchTestArchive = (batchTestNames: string): void => {
+    const onBatchTestArchive = (batchTestNames: string[]): void => {
       if (!tests || !batchTestNames) {
         return;
       }
