@@ -39,6 +39,7 @@ const buildProps = (variant: EpicVariant): EpicProps => ({
     cta: variant.cta,
     separateArticleCount: variant.separateArticleCount,
     showSignInLink: variant.showSignInLink,
+    backgroundImageUrl: variant.backgroundImageUrl,
   },
   tracking: {
     ophanPageId: 'ophanPageId',
