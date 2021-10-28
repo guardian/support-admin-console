@@ -24,8 +24,8 @@ export const useModule = <T>(path: string, name: string): React.FC<T> | undefine
 
     const baseUrl =
       stage === 'PROD'
-        ? `https://contributions.guardianapis.com/modules/${moduleVersion}`
-        : `https://contributions.code.dev-guardianapis.com/modules/${moduleVersion}`;
+        ? `https://contributions.guardianapis.com/modules/v${moduleVersion}`
+        : `https://contributions.code.dev-guardianapis.com/modules/v${moduleVersion}`;
 
     window.remoteImport(`${baseUrl}/${path}`).then(bannerModule => {
       setModule(() => withPreviewStyles(bannerModule[name]));
