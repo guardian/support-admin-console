@@ -33,7 +33,6 @@ interface BatchProcessTestDialogProps extends WithStyles<typeof styles> {
   isOpen: boolean;
   close: () => void;
   draftTests: Test[];
-  tests: Test[];
   onBatchTestDelete: (batchTestNames: string[]) => void;
   onBatchTestArchive: (batchTestNames: string[]) => void;
 }
@@ -93,21 +92,16 @@ const BatchProcessTestDialog: React.FC<BatchProcessTestDialogProps> = ({
     setSelectedTests(currentSelected);
   };
 
-  const getTestNickname = (val: string): string => {
-    const myTestArray = draftTests.filter(t => val === t.name);
+  const getTestNickname = (name: string): string => {
+    const test = draftTests.find(t => name === t.name);
 
-    if (myTestArray.length) {
-      return myTestArray[0].nickname || val;
+    if (test) {
+      return test.nickname || name;
     }
-    return val;
+    return name;
   };
 
-  const isDelete = (): boolean => {
-    if (selectedBatchProcess === 'DELETE') {
-      return true;
-    }
-    return false;
-  };
+  const isDelete = selectedBatchProcess === 'DELETE';
 
   return (
     <Dialog
@@ -129,15 +123,15 @@ const BatchProcessTestDialog: React.FC<BatchProcessTestDialogProps> = ({
             const labelId = `checkbox-label-${t.name}`;
 
             return (
-              <ListItem key={index} onClick={handleToggle(t.name)}>
+              <ListItem key={index}>
                 <ListItemIcon>
                   <Checkbox
                     edge="start"
                     checked={selectedTests.indexOf(t.name) >= 0}
-                    // value={t.name}
                     tabIndex={-1}
                     disableRipple
                     inputProps={{ 'aria-labelledby': labelId }}
+                    onClick={handleToggle(t.name)}
                   />
                 </ListItemIcon>
                 <ListItemText id={labelId} primary={t.nickname || t.name} />
@@ -155,7 +149,7 @@ const BatchProcessTestDialog: React.FC<BatchProcessTestDialogProps> = ({
       >
         <div className={classes.dialogHeader}>
           <DialogTitle id="batch-process-dialog-title">
-            Batch {isDelete() ? 'delete' : 'archive'} tests
+            Batch {isDelete ? 'delete' : 'archive'} tests
           </DialogTitle>
           <IconButton onClick={confirmClose} aria-label="close">
             <CloseIcon />
@@ -164,7 +158,7 @@ const BatchProcessTestDialog: React.FC<BatchProcessTestDialogProps> = ({
         <DialogContent dividers>
           <Typography>
             Please confirm. The following tests will be{' '}
-            <strong>{isDelete() ? 'deleted' : 'archived'}</strong>:
+            <strong>{isDelete ? 'deleted' : 'archived'}</strong>:
           </Typography>
           <ul>
             {selectedTests.map((t, i) => (
@@ -176,7 +170,7 @@ const BatchProcessTestDialog: React.FC<BatchProcessTestDialogProps> = ({
           <Button onClick={confirmClose} color="primary">
             Cancel
           </Button>
-          {isDelete() ? (
+          {isDelete ? (
             <Button onClick={completeDeleteSubmit} color="secondary">
               Delete
             </Button>

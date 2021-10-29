@@ -77,7 +77,6 @@ function Sidebar<T extends Test>({
           />
           <BatchProcessTestButton
             // filter out live tests and any test currently being edited
-            tests={tests}
             draftTests={tests.filter(t => (!t.isOn && t.name !== selectedTestName ? true : false))}
             onBatchTestDelete={onBatchTestDelete}
             onBatchTestArchive={onBatchTestArchive}

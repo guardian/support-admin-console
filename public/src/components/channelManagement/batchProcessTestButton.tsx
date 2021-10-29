@@ -23,7 +23,6 @@ const styles = createStyles({
 
 interface BatchProcessTestButtonProps extends WithStyles<typeof styles> {
   draftTests: Test[];
-  tests: Test[];
   onBatchTestDelete: (batchTestNames: string[]) => void;
   onBatchTestArchive: (batchTestNames: string[]) => void;
 }
@@ -31,7 +30,6 @@ interface BatchProcessTestButtonProps extends WithStyles<typeof styles> {
 const BatchProcessTestButton: React.FC<BatchProcessTestButtonProps> = ({
   classes,
   draftTests,
-  tests,
   onBatchTestDelete,
   onBatchTestArchive,
 }: BatchProcessTestButtonProps) => {
@@ -50,7 +48,6 @@ const BatchProcessTestButton: React.FC<BatchProcessTestButtonProps> = ({
         isOpen={isOpen}
         close={close}
         draftTests={draftTests}
-        tests={tests}
         onBatchTestDelete={onBatchTestDelete}
         onBatchTestArchive={onBatchTestArchive}
       />
