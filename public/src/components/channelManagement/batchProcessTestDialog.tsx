@@ -128,10 +128,10 @@ const BatchProcessTestDialog: React.FC<BatchProcessTestDialogProps> = ({
                   <Checkbox
                     edge="start"
                     checked={selectedTests.indexOf(t.name) >= 0}
-                    tabIndex={-1}
-                    disableRipple
+                    // tabIndex={-1}
+                    // disableRipple
                     inputProps={{ 'aria-labelledby': labelId }}
-                    onClick={handleToggle(t.name)}
+                    onChange={handleToggle(t.name)}
                   />
                 </ListItemIcon>
                 <ListItemText id={labelId} primary={t.nickname || t.name} />
