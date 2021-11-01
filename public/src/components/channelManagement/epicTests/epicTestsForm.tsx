@@ -107,6 +107,8 @@ const getEpicTestForm = (epicEditorConfig: EpicEditorConfig): React.FC<Props> =>
     onTestSave,
     onTestDelete,
     onTestArchive,
+    onBatchTestDelete,
+    onBatchTestArchive,
     onTestErrorStatusChange,
     onTestChange,
     onTestCreate,
@@ -142,6 +144,8 @@ const getEpicTestForm = (epicEditorConfig: EpicEditorConfig): React.FC<Props> =>
             isInEditMode={editMode}
             regionFilter={regionFilter}
             setRegionFilter={setRegionFilter}
+            onBatchTestDelete={onBatchTestDelete}
+            onBatchTestArchive={onBatchTestArchive}
           />
         }
         testEditor={

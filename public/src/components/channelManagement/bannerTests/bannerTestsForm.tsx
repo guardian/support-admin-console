@@ -27,6 +27,8 @@ const getBannerTestsForm = (isFirstChannel: boolean): React.FC<Props> => {
     onTestSave,
     onTestDelete,
     onTestArchive,
+    onBatchTestDelete,
+    onBatchTestArchive,
     onTestCreate,
     onTestErrorStatusChange,
     lockStatus,
@@ -59,6 +61,8 @@ const getBannerTestsForm = (isFirstChannel: boolean): React.FC<Props> => {
             isInEditMode={editMode}
             regionFilter={regionFilter}
             setRegionFilter={setRegionFilter}
+            onBatchTestDelete={onBatchTestDelete}
+            onBatchTestArchive={onBatchTestArchive}
           />
         }
         testEditor={
