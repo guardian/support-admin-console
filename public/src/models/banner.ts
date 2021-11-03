@@ -38,6 +38,19 @@ export interface BannerVariant extends Variant {
   secondaryCta?: Cta;
 }
 
+export const products = ['guardianWeekly', 'contributions', 'digitalSubscription'] as const;
+export type Product = typeof products[number];
+
+interface Threshold {
+  min: number;
+  max: number;
+}
+
+export type PropensityThresholds = {
+  [key in Product]?: Threshold;
+}
+
+const tmp: PropensityThresholds = {};
 export interface BannerTest extends Test {
   name: string;
   nickname?: string;
@@ -48,4 +61,5 @@ export interface BannerTest extends Test {
   variants: BannerVariant[];
   articlesViewedSettings?: ArticlesViewedSettings;
   controlProportionSettings?: ControlProportionSettings;
+  propensityThresholds?: PropensityThresholds
 }

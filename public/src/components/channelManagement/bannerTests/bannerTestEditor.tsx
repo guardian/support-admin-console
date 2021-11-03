@@ -14,7 +14,7 @@ import TestEditorArticleCountEditor, {
 import TestEditorActionButtons from '../testEditorActionButtons';
 import LiveSwitch from '../../shared/liveSwitch';
 import useValidation from '../hooks/useValidation';
-import { BannerContent, BannerTest, BannerVariant } from '../../../models/banner';
+import { BannerContent, BannerTest, BannerVariant, PropensityThresholds } from '../../../models/banner';
 import { getDefaultVariant } from './utils/defaults';
 import TestEditorVariantSummary from '../testEditorVariantSummary';
 import BannerVariantPreview from './bannerVariantPreview';
@@ -102,6 +102,10 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
   const onVariantsChange = (updatedVariantList: BannerVariant[]): void => {
     updateTest({ ...test, variants: updatedVariantList });
   };
+
+  const onThresholdsChange = (updatedThresholds: PropensityThresholds) => {
+    updateTest({ ...test, propensityThresholds: updatedThresholds })
+  } 
 
   const onVariantChange = (updatedVariant: BannerVariant): void => {
     onVariantsChange(
@@ -257,7 +261,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
             Propensity model thresholds
           </Typography>
 
-          <TestEditorPropensityThresholds />
+          <TestEditorPropensityThresholds isDisabled={!editMode} propensityThresholds={test.propensityThresholds} updateThresholds={onThresholdsChange} />
         </div>
 
         <div className={classes.sectionContainer}>

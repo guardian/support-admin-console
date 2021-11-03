@@ -42,6 +42,17 @@ case class BannerVariant(
   secondaryCta: Option[Cta]
 )
 
+case class Threshold(
+  min: Float,
+  max: Float
+)
+
+case class PropensityThresholds(
+  guardianWeekly: Option[Threshold] = None,
+  digitalSubscription: Option[Threshold] = None,
+  contributions: Option[Threshold] = None
+)
+
 case class BannerTest(
   name: String,
   nickname: Option[String],
@@ -51,7 +62,8 @@ case class BannerTest(
   locations: List[Region] = Nil,
   variants: List[BannerVariant],
   articlesViewedSettings: Option[ArticlesViewedSettings] = None,
-  controlProportionSettings: Option[ControlProportionSettings] = None
+  controlProportionSettings: Option[ControlProportionSettings] = None,
+  propensityThresholds: Option[PropensityThresholds] = None
 )
 
 case class BannerTests(tests: List[BannerTest])
