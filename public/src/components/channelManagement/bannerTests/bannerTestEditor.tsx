@@ -21,6 +21,7 @@ import BannerVariantPreview from './bannerVariantPreview';
 import { ControlProportionSettings } from '../helpers/controlProportionSettings';
 import TestVariantsSplitEditor from '../testVariantsSplitEditor';
 import { useStyles } from '../helpers/testEditorStyles';
+import TestEditorPropensityThresholds from "../testEditorPropensityThresholds";
 
 const copyHasTemplate = (content: BannerContent, template: string): boolean =>
   (content.heading && content.heading.includes(template)) || content.messageText.includes(template);
@@ -249,6 +250,14 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
             isDisabled={!editMode}
             showSupporterStatusSelector={true}
           />
+        </div>
+
+        <div className={classes.sectionContainer}>
+          <Typography variant={'h3'} className={classes.sectionHeader}>
+            Propensity model thresholds
+          </Typography>
+
+          <TestEditorPropensityThresholds />
         </div>
 
         <div className={classes.sectionContainer}>
