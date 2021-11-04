@@ -1,4 +1,4 @@
-import { SecondaryCtaType, UserCohort } from '../../helpers/shared';
+import { Cta, SecondaryCtaType, UserCohort } from '../../helpers/shared';
 import { EpicVariant, EpicTest, MaxEpicViews } from '../epicTestsForm';
 
 import { getStage } from '../../../../utils/stage';
@@ -7,6 +7,16 @@ export const DEFAULT_MAX_EPIC_VIEWS: MaxEpicViews = {
   maxViewsCount: 4,
   maxViewsDays: 30,
   minDaysBetweenViews: 0,
+};
+
+export const DEFAULT_PRIMARY_CTA: Cta = {
+  text: 'Continue',
+  baseUrl: 'https://support.theguardian.com/contribute',
+};
+
+export const DEFAULT_SECONDARY_CTA: Cta = {
+  text: '',
+  baseUrl: '',
 };
 
 const DEV_AND_CODE_DEFAULT_VARIANT: EpicVariant = {
@@ -22,10 +32,7 @@ const DEV_AND_CODE_DEFAULT_VARIANT: EpicVariant = {
     'Support the Guardian from as little as %%CURRENCY_SYMBOL%%1 – and it only takes a minute. Thank you.',
   separateArticleCount: { type: 'above' },
   showTicker: false,
-  cta: {
-    text: 'Support the Guardian',
-    baseUrl: 'https://support.theguardian.com/contribute',
-  },
+  cta: DEFAULT_PRIMARY_CTA,
   secondaryCta: { type: SecondaryCtaType.ContributionsReminder },
   showChoiceCards: false,
 };
@@ -37,10 +44,7 @@ const PROD_DEFAULT_VARIANT: EpicVariant = {
     'Support the Guardian from as little as %%CURRENCY_SYMBOL%%1 – and it only takes a minute. Thank you.',
   separateArticleCount: { type: 'above' },
   showTicker: false,
-  cta: {
-    text: 'Support the Guardian',
-    baseUrl: 'https://support.theguardian.com/contribute',
-  },
+  cta: DEFAULT_PRIMARY_CTA,
   secondaryCta: { type: SecondaryCtaType.ContributionsReminder },
   showChoiceCards: false,
 };
