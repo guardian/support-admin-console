@@ -1,7 +1,17 @@
-import { UserCohort } from '../../helpers/shared';
+import { Cta, UserCohort } from '../../helpers/shared';
 import { BannerTest, BannerVariant, BannerTemplate } from '../../../../models/banner';
 
 import { getStage } from '../../../../utils/stage';
+
+export const DEFAULT_PRIMARY_CTA: Cta = {
+  text: 'Support the Guardian',
+  baseUrl: 'https://support.theguardian.com/contribute',
+};
+
+export const DEFAULT_SECONDARY_CTA: Cta = {
+  text: 'Support the Guardian',
+  baseUrl: 'https://support.theguardian.com/contribute',
+};
 
 const DEV_AND_CODE_DEFAULT_VARIANT: BannerVariant = {
   name: 'CONTROL',
@@ -11,10 +21,7 @@ const DEV_AND_CODE_DEFAULT_VARIANT: BannerVariant = {
     messageText:
       'We believe every one of us deserves to read quality, independent, fact-checked news and measured explanation – that’s why we keep Guardian journalism open to all. Our editorial independence has never been so vital. No one sets our agenda, or edits our editor, so we can keep providing independent reporting each and every day. No matter how unpredictable the future feels, we will remain with you. Every contribution, however big or small, makes our work possible – in times of crisis and beyond.',
     highlightedText: 'Support the Guardian from as little as %%CURRENCY_SYMBOL%%1. Thank you.',
-    cta: {
-      text: 'Support the Guardian',
-      baseUrl: 'https://support.theguardian.com/contribute',
-    },
+    cta: DEFAULT_PRIMARY_CTA,
   },
 };
 
@@ -24,10 +31,7 @@ const PROD_DEFAULT_VARIANT: BannerVariant = {
   bannerContent: {
     messageText: '',
     highlightedText: 'Support the Guardian from as little as %%CURRENCY_SYMBOL%%1. Thank you.',
-    cta: {
-      text: 'Support the Guardian',
-      baseUrl: 'https://support.theguardian.com/contribute',
-    },
+    cta: DEFAULT_PRIMARY_CTA,
   },
 };
 
