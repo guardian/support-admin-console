@@ -199,11 +199,6 @@ interface ContributionsReminderSecondaryCta {
 
 export type SecondaryCta = CustomSecondaryCta | ContributionsReminderSecondaryCta;
 
-export const defaultCta = {
-  text: 'Support the Guardian',
-  baseUrl: 'https://support.theguardian.com/contribute',
-};
-
 export enum UserCohort {
   Everyone = 'Everyone',
   AllExistingSupporters = 'AllExistingSupporters',

@@ -3,6 +3,7 @@ import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core';
 import VariantEditorCtaEditor from '../variantEditorCtaEditor';
 import VariantEditorSecondaryCtaEditor from '../variantEditorSecondaryCtaEditor';
 import { Cta, SecondaryCta } from '../helpers/shared';
+import { DEFAULT_PRIMARY_CTA, DEFAULT_SECONDARY_CTA } from './utils/defaults';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing }: Theme) =>
@@ -13,16 +14,6 @@ const styles = ({ spacing }: Theme) =>
       gridGap: spacing(2),
     },
   });
-
-const DEFAULT_PRIMARY_CTA: Cta = {
-  text: 'Support the Guardian',
-  baseUrl: 'https://support.theguardian.com/contribute',
-};
-
-const DEFAULT_SECONDARY_CTA: Cta = {
-  text: '',
-  baseUrl: '',
-};
 
 interface EpicTestVariantEditorButtonsEditorProps extends WithStyles<typeof styles> {
   primaryCta?: Cta;
