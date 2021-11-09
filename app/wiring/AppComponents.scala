@@ -12,7 +12,7 @@ import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.mvc.AnyContent
 import play.api.{BuiltInComponentsFromContext, NoHttpFiltersComponents}
 import router.Routes
-import services.S3
+import services.{CapiService, S3}
 import zio.DefaultRuntime
 
 class AppComponents(context: Context, stage: String) extends BuiltInComponentsFromContext(context) with AhcWSComponents with NoHttpFiltersComponents with AssetsComponents {
@@ -52,6 +52,8 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
 
   private val runtime = new DefaultRuntime {}
 
+  val capiService = new CapiService(configuration.get[String]("capi.apiKey"), wsClient)
+
   override lazy val router: Router = new Routes(
     httpErrorHandler,
     new Application(authAction, controllerComponents, stage),
@@ -76,6 +78,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     new BannerDeployController(authAction, controllerComponents, stage, runtime),
     new BannerDeployController2(authAction, controllerComponents, stage, runtime),
     new ChannelSwitchesController(authAction, controllerComponents, stage, runtime),
+    new CapiController(authAction, capiService),
     assets
   )
 }
