@@ -1,6 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Theme, makeStyles, TextField } from '@material-ui/core';
+
+import { Autocomplete } from '@material-ui/lab';
+import { tagIdData, getTagIdOptions } from './tagIds';
+import { getSectionOptions } from './sections';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -11,14 +15,15 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   },
 }));
 
-interface FormData {
-  tagIds: string;
-  sections: string;
-  excludeTagIds: string;
-  excludeSections: string;
-}
+type TagIdDataOrEmpty = tagIdData[] | [];
+type StringDataOrEmpty = string[] | [];
 
-const parseList = (list: string): string[] => list.split(',').filter(item => !!item);
+interface FormData {
+  tagIds: string[];
+  sections: string[];
+  excludeTagIds: string[];
+  excludeSections: string[];
+}
 
 interface EpicTestTargetContentEditorProps {
   tagIds: string[];
@@ -42,87 +47,177 @@ const EpicTestTargetContentEditor: React.FC<EpicTestTargetContentEditorProps> = 
   editMode,
   updateTargetContent,
 }: EpicTestTargetContentEditorProps) => {
+
   const classes = useStyles();
 
-  const defaultValues: FormData = {
-    tagIds: tagIds.join(','),
-    sections: sections.join(','),
-    excludeTagIds: excludeTagIds.join(','),
-    excludeSections: excludeSections.join(','),
-  };
+  const onSubmit = (): void => {
 
-  const { register, handleSubmit, reset } = useForm<FormData>({ defaultValues });
-
-  useEffect(() => {
-    reset(defaultValues);
-  }, [
-    defaultValues.tagIds,
-    defaultValues.sections,
-    defaultValues.excludeTagIds,
-    defaultValues.excludeSections,
-  ]);
-
-  const onSubmit = ({ tagIds, sections, excludeTagIds, excludeSections }: FormData): void => {
     updateTargetContent(
-      parseList(tagIds),
-      parseList(sections),
-      parseList(excludeTagIds),
-      parseList(excludeSections),
+      prepareTagIdsForSubmit(tagIdsField),
+      prepareSectionsForSubmit(sectionsField),
+      prepareTagIdsForSubmit(excludeTagIdsField),
+      prepareSectionsForSubmit(excludeSectionsField),
     );
   };
 
+  const prepareTagIdsForSubmit = (input: TagIdDataOrEmpty): StringDataOrEmpty => {
+    const output: string[] = [];
+    input.forEach(i => output.push(i.tagid));
+    return output;
+  };
+
+  const prepareSectionsForSubmit = (input: StringDataOrEmpty): StringDataOrEmpty => {
+    return input;
+  };
+
+  // tagId stuff
+  const [tagIdValues, setTagIdValues] = useState<TagIdDataOrEmpty>([]);
+
+  const getInitialTagIds = (vals: string[]): TagIdDataOrEmpty => {
+
+    const res = [];
+
+    for (let t of tagIdValues) {
+
+      if (vals.indexOf(t.tagid) >= 0) {
+        res.push(t);
+      }
+    };
+    return res;
+  };
+
+  const [tagIdsField, setTagIdsField] = useState<TagIdDataOrEmpty>([]);
+
+  const [excludeTagIdsField, setExcludeTagIdsField] = useState<TagIdDataOrEmpty>([]);
+  
+  if (!tagIdValues.length) {
+    getTagIdOptions()
+    .then(res => setTagIdValues(res))
+    .catch(e => console.log('tagIdValues fail:', e));
+  }
+
+  useEffect(() => {
+        setTagIdsField(getInitialTagIds(tagIds));
+        setExcludeTagIdsField(getInitialTagIds(excludeTagIds));
+  }, [tagIdValues]);
+
+  useEffect(() => setTagIdsField(getInitialTagIds(tagIds)), [tagIds])
+
+  useEffect(() => setExcludeTagIdsField(getInitialTagIds(excludeTagIds)), [excludeTagIds])
+
+  // section stuff
+  const [sectionValues, setSectionValues] = useState<StringDataOrEmpty>([]);
+
+  const getInitialSections = (vals: string[]): StringDataOrEmpty => {
+
+    const res = [];
+
+    for (let s of sectionValues) {
+
+      if (vals.indexOf(s) >= 0) {
+        res.push(s);
+      }
+    };
+    return res;
+  };
+
+  const [sectionsField, setSectionsField] = useState<StringDataOrEmpty>([]);
+  
+  const [excludeSectionsField, setExcludeSectionsField] = useState<StringDataOrEmpty>([]);
+
+  if (!sectionValues.length) {
+    getSectionOptions()
+    .then(res => setSectionValues(res))
+    .catch(e => console.log('INIT-VALUES tagIdValues fail:', e));
+  }
+
+  useEffect(() => {
+    setSectionsField(getInitialSections(sections));
+    setExcludeSectionsField(getInitialSections(excludeSections));
+  }, [sectionValues])
+
+  useEffect(() => setSectionsField(getInitialSections(sections)), [sections])
+
+  useEffect(() => setExcludeSectionsField(getInitialSections(excludeSections)), [excludeSections])
+
+
   return (
     <div className={classes.container}>
-      <TextField
-        inputRef={register()}
-        name="tagIds"
-        label="Target tags"
-        helperText="Format: environment/wildlife,business/economics"
-        onBlur={handleSubmit(onSubmit)}
-        margin="normal"
-        InputLabelProps={{ shrink: true }}
-        variant="outlined"
+
+      <Autocomplete
+        multiple
+        options={tagIdValues}
         disabled={!editMode}
-        fullWidth
+        groupBy={(opt) => opt.firstword}
+        getOptionLabel={(opt) => opt.tagid}
+        filterSelectedOptions
+        onChange={(event, value) => setTagIdsField(value)}
+        value={tagIdsField}
+        onBlur={onSubmit}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            name="tagIds"
+            variant="outlined"
+            label="Target tags"
+          />
+        )}
       />
 
-      <TextField
-        inputRef={register()}
-        name="sections"
-        label="Target sections"
-        helperText="Format: environment,business"
-        onBlur={handleSubmit(onSubmit)}
-        margin="normal"
-        InputLabelProps={{ shrink: true }}
-        variant="outlined"
+      <Autocomplete
+        multiple
+        options={sectionValues}
         disabled={!editMode}
-        fullWidth
+        filterSelectedOptions
+        onChange={(event, value) => setSectionsField(value)}
+        value={sectionsField}
+        onBlur={onSubmit}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            name="sections"
+            variant="outlined"
+            label="Target sections"
+          />
+        )}
       />
 
-      <TextField
-        inputRef={register()}
-        name="excludeTagIds"
-        label="Excluded tags"
-        helperText="Format: environment/wildlife,business/economics"
-        onBlur={handleSubmit(onSubmit)}
-        margin="normal"
-        InputLabelProps={{ shrink: true }}
-        variant="outlined"
+      <Autocomplete
+        multiple
+        options={tagIdValues}
         disabled={!editMode}
-        fullWidth
+        groupBy={(opt) => opt.firstword}
+        getOptionLabel={(opt) => opt.tagid}
+        filterSelectedOptions
+        onChange={(event, value) => setExcludeTagIdsField(value)}
+        value={excludeTagIdsField}
+        onBlur={onSubmit}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            name="excludeTagIds"
+            variant="outlined"
+            label="Excluded tags"
+          />
+        )}
       />
 
-      <TextField
-        inputRef={register()}
-        name="excludeSections"
-        label="Excluded sections"
-        helperText="Format: environment,business"
-        onBlur={handleSubmit(onSubmit)}
-        margin="normal"
-        InputLabelProps={{ shrink: true }}
-        variant="outlined"
+      <Autocomplete
+        multiple
+        options={sectionValues}
         disabled={!editMode}
-        fullWidth
+        filterSelectedOptions
+        onChange={(event, value) => setExcludeSectionsField(value)}
+        value={excludeSectionsField}
+        onBlur={onSubmit}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            name="excludeSections"
+            variant="outlined"
+            label="Excluded sections"
+          />
+        )}
       />
     </div>
   );
