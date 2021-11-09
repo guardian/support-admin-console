@@ -143,6 +143,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
     excludedTagIds: string[],
     excludedSections: string[],
   ): void => {
+    console.log('updateTargetSections', typeof tagIds, typeof sections, typeof excludedTagIds, typeof excludedSections, tagIds, sections, excludedTagIds, excludedSections)
     updateTest({ ...test, tagIds, sections, excludedTagIds, excludedSections });
   };
 
