@@ -3,8 +3,7 @@ import { useForm } from 'react-hook-form';
 import { Theme, makeStyles, TextField } from '@material-ui/core';
 
 import { Autocomplete } from '@material-ui/lab';
-import { tagIdData, getTagIdOptions } from './tagIds';
-import { getSectionOptions } from './sections';
+import { SectionDataOrEmpty, TagIdDataOrEmpty, tagIdOptions, sectionOptions, callCAPI } from './fetchDataFromCapi';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -15,7 +14,6 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   },
 }));
 
-type TagIdDataOrEmpty = tagIdData[] | [];
 type StringDataOrEmpty = string[] | [];
 
 interface FormData {
@@ -48,6 +46,8 @@ const EpicTestTargetContentEditor: React.FC<EpicTestTargetContentEditorProps> = 
   updateTargetContent,
 }: EpicTestTargetContentEditorProps) => {
 
+  callCAPI();
+
   const classes = useStyles();
 
   const onSubmit = (): void => {
@@ -62,24 +62,24 @@ const EpicTestTargetContentEditor: React.FC<EpicTestTargetContentEditorProps> = 
 
   const prepareTagIdsForSubmit = (input: TagIdDataOrEmpty): StringDataOrEmpty => {
     const output: string[] = [];
-    input.forEach(i => output.push(i.tagid));
+    input.forEach(i => output.push(i.id));
     return output;
   };
 
-  const prepareSectionsForSubmit = (input: StringDataOrEmpty): StringDataOrEmpty => {
-    return input;
+  const prepareSectionsForSubmit = (input: SectionDataOrEmpty): StringDataOrEmpty => {
+    const output: string[] = [];
+    input.forEach(i => output.push(i.id));
+    return output;
   };
 
   // tagId stuff
-  const [tagIdValues, setTagIdValues] = useState<TagIdDataOrEmpty>([]);
-
   const getInitialTagIds = (vals: string[]): TagIdDataOrEmpty => {
 
     const res = [];
 
-    for (let t of tagIdValues) {
+    for (let t of tagIdOptions) {
 
-      if (vals.indexOf(t.tagid) >= 0) {
+      if (vals.indexOf(t.id) >= 0) {
         res.push(t);
       }
     };
@@ -90,66 +90,51 @@ const EpicTestTargetContentEditor: React.FC<EpicTestTargetContentEditorProps> = 
 
   const [excludeTagIdsField, setExcludeTagIdsField] = useState<TagIdDataOrEmpty>([]);
   
-  if (!tagIdValues.length) {
-    getTagIdOptions()
-    .then(res => setTagIdValues(res))
-    .catch(e => console.log('tagIdValues fail:', e));
-  }
-
   useEffect(() => {
-        setTagIdsField(getInitialTagIds(tagIds));
-        setExcludeTagIdsField(getInitialTagIds(excludeTagIds));
-  }, [tagIdValues]);
+    setTagIdsField(getInitialTagIds(tagIds));
+    setExcludeTagIdsField(getInitialTagIds(excludeTagIds));
+  }, [tagIdOptions]);
 
   useEffect(() => setTagIdsField(getInitialTagIds(tagIds)), [tagIds])
 
   useEffect(() => setExcludeTagIdsField(getInitialTagIds(excludeTagIds)), [excludeTagIds])
 
   // section stuff
-  const [sectionValues, setSectionValues] = useState<StringDataOrEmpty>([]);
-
-  const getInitialSections = (vals: string[]): StringDataOrEmpty => {
+  const getInitialSections = (vals: string[]): SectionDataOrEmpty => {
 
     const res = [];
 
-    for (let s of sectionValues) {
+    for (let s of sectionOptions) {
 
-      if (vals.indexOf(s) >= 0) {
+      if (vals.indexOf(s.id) >= 0) {
         res.push(s);
       }
     };
     return res;
   };
 
-  const [sectionsField, setSectionsField] = useState<StringDataOrEmpty>([]);
+  const [sectionsField, setSectionsField] = useState<SectionDataOrEmpty>([]);
   
-  const [excludeSectionsField, setExcludeSectionsField] = useState<StringDataOrEmpty>([]);
-
-  if (!sectionValues.length) {
-    getSectionOptions()
-    .then(res => setSectionValues(res))
-    .catch(e => console.log('INIT-VALUES tagIdValues fail:', e));
-  }
+  const [excludeSectionsField, setExcludeSectionsField] = useState<SectionDataOrEmpty>([]);
 
   useEffect(() => {
     setSectionsField(getInitialSections(sections));
     setExcludeSectionsField(getInitialSections(excludeSections));
-  }, [sectionValues])
+  }, [sectionOptions])
 
   useEffect(() => setSectionsField(getInitialSections(sections)), [sections])
 
   useEffect(() => setExcludeSectionsField(getInitialSections(excludeSections)), [excludeSections])
 
-
-  return (
+   return (
     <div className={classes.container}>
 
       <Autocomplete
         multiple
-        options={tagIdValues}
+        options={tagIdOptions}
         disabled={!editMode}
-        groupBy={(opt) => opt.firstword}
-        getOptionLabel={(opt) => opt.tagid}
+        groupBy={(opt) => opt.section}
+        getOptionLabel={(opt) => opt.display}
         filterSelectedOptions
         onChange={(event, value) => setTagIdsField(value)}
         value={tagIdsField}
@@ -166,8 +151,9 @@ const EpicTestTargetContentEditor: React.FC<EpicTestTargetContentEditorProps> = 
 
       <Autocomplete
         multiple
-        options={sectionValues}
+        options={sectionOptions}
         disabled={!editMode}
+        getOptionLabel={(opt) => opt.display}
         filterSelectedOptions
         onChange={(event, value) => setSectionsField(value)}
         value={sectionsField}
@@ -184,10 +170,10 @@ const EpicTestTargetContentEditor: React.FC<EpicTestTargetContentEditorProps> = 
 
       <Autocomplete
         multiple
-        options={tagIdValues}
+        options={tagIdOptions}
         disabled={!editMode}
-        groupBy={(opt) => opt.firstword}
-        getOptionLabel={(opt) => opt.tagid}
+        groupBy={(opt) => opt.section}
+        getOptionLabel={(opt) => opt.display}
         filterSelectedOptions
         onChange={(event, value) => setExcludeTagIdsField(value)}
         value={excludeTagIdsField}
@@ -204,8 +190,9 @@ const EpicTestTargetContentEditor: React.FC<EpicTestTargetContentEditorProps> = 
 
       <Autocomplete
         multiple
-        options={sectionValues}
+        options={sectionOptions}
         disabled={!editMode}
+        getOptionLabel={(opt) => opt.display}
         filterSelectedOptions
         onChange={(event, value) => setExcludeSectionsField(value)}
         value={excludeSectionsField}
