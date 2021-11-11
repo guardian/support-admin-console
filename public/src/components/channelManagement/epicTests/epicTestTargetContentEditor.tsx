@@ -95,9 +95,9 @@ const EpicTestTargetContentEditor: React.FC<EpicTestTargetContentEditorProps> = 
     setExcludeTagIdsField(getInitialTagIds(excludeTagIds));
   }, [tagIdOptions]);
 
-  useEffect(() => setTagIdsField(getInitialTagIds(tagIds)), [tagIds])
+  useEffect(() => setTagIdsField(getInitialTagIds(tagIds)), [tagIds]);
 
-  useEffect(() => setExcludeTagIdsField(getInitialTagIds(excludeTagIds)), [excludeTagIds])
+  useEffect(() => setExcludeTagIdsField(getInitialTagIds(excludeTagIds)), [excludeTagIds]);
 
   // section stuff
   const getInitialSections = (vals: string[]): SectionDataOrEmpty => {
@@ -122,11 +122,43 @@ const EpicTestTargetContentEditor: React.FC<EpicTestTargetContentEditorProps> = 
     setExcludeSectionsField(getInitialSections(excludeSections));
   }, [sectionOptions])
 
-  useEffect(() => setSectionsField(getInitialSections(sections)), [sections])
+  useEffect(() => setSectionsField(getInitialSections(sections)), [sections]);
 
-  useEffect(() => setExcludeSectionsField(getInitialSections(excludeSections)), [excludeSections])
+  useEffect(() => setExcludeSectionsField(getInitialSections(excludeSections)), [excludeSections]);
 
-   return (
+  const [inputValueForTagId, setInputValueForTagId] = React.useState('');
+  const [openForTagId, setOpenForTagId] = React.useState(false);
+  const handleOpenForTagId = () => {
+    if (inputValueForTagId.length > 2) {
+      setOpenForTagId(true);
+    }
+  };
+  const handleInputChangeForTagId = (event:any, newInputValue:string) => {
+    setInputValueForTagId(newInputValue);
+    if (newInputValue.length > 2) {
+      setOpenForTagId(true);
+    } else {
+      setOpenForTagId(false);
+    }
+  };
+
+  const [inputValueForExcludeTagId, setInputValueForExcludeTagId] = React.useState('');
+  const [openForExcludeTagId, setOpenForExcludeTagId] = React.useState(false);
+  const handleOpenForExcludeTagId = () => {
+    if (inputValueForExcludeTagId.length > 2) {
+      setOpenForExcludeTagId(true);
+    }
+  };
+  const handleInputChangeForExcludeTagId = (event:any, newInputValue:string) => {
+    setInputValueForExcludeTagId(newInputValue);
+    if (newInputValue.length > 2) {
+      setOpenForExcludeTagId(true);
+    } else {
+      setOpenForExcludeTagId(false);
+    }
+  };
+
+  return (
     <div className={classes.container}>
 
       <Autocomplete
@@ -139,6 +171,11 @@ const EpicTestTargetContentEditor: React.FC<EpicTestTargetContentEditorProps> = 
         onChange={(event, value) => setTagIdsField(value)}
         value={tagIdsField}
         onBlur={onSubmit}
+        open={openForTagId}
+        onOpen={handleOpenForTagId}
+        onClose={() => setOpenForTagId(false)}
+        inputValue={inputValueForTagId}
+        onInputChange={handleInputChangeForTagId}
         renderInput={(params) => (
           <TextField
             {...params}
@@ -178,6 +215,11 @@ const EpicTestTargetContentEditor: React.FC<EpicTestTargetContentEditorProps> = 
         onChange={(event, value) => setExcludeTagIdsField(value)}
         value={excludeTagIdsField}
         onBlur={onSubmit}
+        open={openForExcludeTagId}
+        onOpen={handleOpenForExcludeTagId}
+        onClose={() => setOpenForExcludeTagId(false)}
+        inputValue={inputValueForExcludeTagId}
+        onInputChange={handleInputChangeForExcludeTagId}
         renderInput={(params) => (
           <TextField
             {...params}

@@ -202,7 +202,7 @@ const callCAPI = (): void => {
         setTimeout(() => {
           processTagIdResults(tabIdResults);
           console.log(`CAPI fetch completed - sections: ${sectionOptions.length}; tagIds: ${tagIdOptions.length}`);
-        }, 1000);
+        }, 2000);
       })
       .catch((error) => console.log(error));
     })
