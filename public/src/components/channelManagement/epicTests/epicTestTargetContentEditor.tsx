@@ -2,6 +2,7 @@ import React, { useEffect, useState, ChangeEvent } from 'react';
 import { Theme, makeStyles, TextField } from '@material-ui/core';
 
 import { Autocomplete } from '@material-ui/lab';
+import {MetadataEditor} from "./MetadataEditor";
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -253,6 +254,7 @@ const EpicTestTargetContentEditor: React.FC<EpicTestTargetContentEditorProps> = 
   };
 
   const callCAPI = (): void => {
+    return;
     if (!capiFlag) {
       console.log('Starting CAPI fetch');
 
@@ -298,7 +300,7 @@ const EpicTestTargetContentEditor: React.FC<EpicTestTargetContentEditorProps> = 
             promises.push(generateFetchPromise(noSectionsUrl, promises));
           }
 
-          Promise.allSettled(promises)
+          Promise.all(promises)
             .then(() => {
               // Delay by a second
               // - to capture returns from multi-paged results which take time to settle
@@ -355,6 +357,36 @@ const EpicTestTargetContentEditor: React.FC<EpicTestTargetContentEditorProps> = 
 
   return (
     <div className={classes.container}>
+      <MetadataEditor
+        type="tags"
+        ids={tagIds}
+        onUpdate={(newTagIds) => {
+          console.log({newTagIds});
+          // TODO - do this properly
+          updateTargetContent(
+            newTagIds,
+            [],
+            [],
+            [],
+          )
+        }}
+      />
+
+      <MetadataEditor
+        type="sections"
+        ids={sections}
+        onUpdate={(newSectionIds) => {
+          console.log({newSectionIds});
+          // TODO - do this properly
+          updateTargetContent(
+            [],
+            newSectionIds,
+            [],
+            [],
+          )
+        }}
+      />
+
       <Autocomplete
         multiple
         options={tagIdsOptions}
