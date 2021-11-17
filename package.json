@@ -33,6 +33,9 @@
     "react-router-dom": "^5.0.1",
     "@emotion/react": "^11.4.0"
   },
+  "resolutions": {
+    "csstype": "^2.5.2"
+  },
   "scripts": {
     "build": "webpack --config webpack.prod.js",
     "build-dev": "webpack --config webpack.dev.js",
