@@ -33,7 +33,6 @@ import Typography from '@material-ui/core/Typography';
 import IndexPage from './components/indexPage';
 import { getTheme } from './utils/theme';
 import ChannelSwitches from './components/channelManagement/ChannelSwitches';
-import { FontWeightProperty } from 'csstype';
 
 type Stage = 'DEV' | 'CODE' | 'PROD';
 declare global {
@@ -95,7 +94,7 @@ const styles = ({ palette, mixins, typography, transitions }: Theme) =>
     toolbar: mixins.toolbar as CSSProperties, // createStyles expects material-ui's CSSProperties type, not react's
     heading: {
       fontSize: typography.pxToRem(24),
-      fontWeight: typography.fontWeightMedium as FontWeightProperty,
+      fontWeight: typography.fontWeightMedium,
     },
   });
 
