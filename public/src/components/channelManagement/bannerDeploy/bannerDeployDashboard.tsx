@@ -1,34 +1,30 @@
 import React from 'react';
 
-import { Theme, withStyles, createStyles, WithStyles } from '@material-ui/core';
+import { Theme, makeStyles } from '@material-ui/core';
 
 import BannerDeployeChannelDeployer from './bannerDeployChannelDeployer';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const styles = ({ spacing }: Theme) =>
-  createStyles({
-    scrollableContainer: {
-      overflow: 'auto',
-    },
-    container: {
-      padding: `${spacing(6)}px ${spacing(9)}px`,
+const useStyles = makeStyles(({ spacing }: Theme) => ({
+  scrollableContainer: {
+    overflow: 'auto',
+  },
+  container: {
+    padding: `${spacing(6)}px ${spacing(9)}px`,
 
-      '& > * + *': {
-        marginTop: spacing(4),
-      },
+    '& > * + *': {
+      marginTop: spacing(4),
     },
-    tableContainer: {
-      width: '45%',
-    },
-  });
+  },
+  tableContainer: {
+    width: '45%',
+  },
+}));
 
 export type BannerChannel = 'CHANNEL1' | 'CHANNEL2';
 
-type BannerDeployDashboardProps = WithStyles<typeof styles>;
-
-const BannerDeployDashboard: React.FC<BannerDeployDashboardProps> = ({
-  classes,
-}: BannerDeployDashboardProps) => {
+const BannerDeployDashboard: React.FC = () => {
+  const classes = useStyles();
   return (
     <div className={classes.scrollableContainer}>
       <div className={classes.container}>
@@ -43,4 +39,4 @@ const BannerDeployDashboard: React.FC<BannerDeployDashboardProps> = ({
   );
 };
 
-export default withStyles(styles)(BannerDeployDashboard);
+export default BannerDeployDashboard;

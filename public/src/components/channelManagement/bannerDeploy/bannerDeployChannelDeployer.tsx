@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Button, Theme, withStyles, createStyles, WithStyles } from '@material-ui/core';
+import { Button, Theme, makeStyles } from '@material-ui/core';
 import { BannerChannel } from './bannerDeployDashboard';
 import BannerChannelDeployerTable from './bannerDeployChannelDeployerTable';
 
@@ -11,14 +11,13 @@ import {
 } from '../../../utils/requests';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const styles = ({ spacing }: Theme) =>
-  createStyles({
-    container: {
-      '& > * + *': {
-        marginTop: spacing(2),
-      },
+const useStyles = makeStyles(({ spacing }: Theme) => ({
+  container: {
+    '& > * + *': {
+      marginTop: spacing(2),
     },
-  });
+  },
+}));
 
 export interface BannerDeployRegion {
   timestamp: number;
@@ -47,14 +46,15 @@ interface DataFromServer {
   email: string;
 }
 
-type BannerDeployChannelDeployerProps = WithStyles<typeof styles> & {
+interface BannerDeployChannelDeployerProps {
   channel: BannerChannel;
-};
+}
 
 const BannerDeployChannelDeployer: React.FC<BannerDeployChannelDeployerProps> = ({
-  classes,
   channel,
 }: BannerDeployChannelDeployerProps) => {
+  const classes = useStyles();
+
   const isChannel1 = channel === 'CHANNEL1';
   const settingsType = isChannel1
     ? FrontendSettingsType.bannerDeploy
@@ -149,4 +149,4 @@ const BannerDeployChannelDeployer: React.FC<BannerDeployChannelDeployerProps> = 
   );
 };
 
-export default withStyles(styles)(BannerDeployChannelDeployer);
+export default BannerDeployChannelDeployer;
