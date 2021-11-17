@@ -94,7 +94,7 @@ const styles = ({ palette, mixins, typography, transitions }: Theme) =>
     toolbar: mixins.toolbar as CSSProperties, // createStyles expects material-ui's CSSProperties type, not react's
     heading: {
       fontSize: typography.pxToRem(24),
-      fontWeight: typography.fontWeightMedium,
+      fontWeight: typography.fontWeightMedium as any,
     },
   });
 
