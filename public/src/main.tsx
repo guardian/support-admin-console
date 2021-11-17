@@ -33,7 +33,7 @@ import Typography from '@material-ui/core/Typography';
 import IndexPage from './components/indexPage';
 import { getTheme } from './utils/theme';
 import ChannelSwitches from './components/channelManagement/ChannelSwitches';
-import { FontWeightProperty } from "csstype";
+import { FontWeightProperty } from 'csstype';
 
 type Stage = 'DEV' | 'CODE' | 'PROD';
 declare global {
