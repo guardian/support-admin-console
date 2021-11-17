@@ -23,20 +23,18 @@ import BannerDeployChannelDeployerTableRow from './bannerDeployChannelDeployerTa
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing }: Theme) =>
   createStyles({
-    container: {
-      '& > * + *': {
-        marginTop: spacing(2),
-      },
+    schedule: {
+      paddingLeft: spacing(3),
     },
   });
 
-type BannerDeployChannelDeployerTableProps = WithStyles<typeof styles> & {
+interface BannerDeployChannelDeployerTableProps extends WithStyles<typeof styles> {
   channel: BannerChannel;
   bannerDeploys?: BannerDeploys;
   bannersToRedeploy: BannersToRedeploy;
   onRedeployAllClick: (shouldRedeploy: boolean) => void;
   onRedeployClick: (region: string, shouldRedeploy: boolean) => void;
-};
+}
 
 const BannerDeployChannelDeployerTable: React.FC<BannerDeployChannelDeployerTableProps> = ({
   channel,
@@ -44,10 +42,27 @@ const BannerDeployChannelDeployerTable: React.FC<BannerDeployChannelDeployerTabl
   bannersToRedeploy,
   onRedeployAllClick,
   onRedeployClick,
+  classes,
 }: BannerDeployChannelDeployerTableProps) => {
   const isChannel1 = channel === 'CHANNEL1';
   const shouldRedeployAllBanners = Object.values(bannersToRedeploy).every(
     shouldRedeploy => shouldRedeploy,
+  );
+
+  const Schedule = (): JSX.Element => (
+    <div className={classes.schedule}>
+      This banner is automatically deployed at:
+      {isChannel1 ? (
+        <ul>
+          <li>9am every Sunday</li>
+        </ul>
+      ) : (
+        <ul>
+          <li>8am every Monday</li>
+          <li>8am every Friday</li>
+        </ul>
+      )}
+    </div>
   );
 
   return (
@@ -57,6 +72,7 @@ const BannerDeployChannelDeployerTable: React.FC<BannerDeployChannelDeployerTabl
           {isChannel1 ? 'Banner 1' : 'Banner 2'}
         </Typography>
       </Toolbar>
+      <Schedule />
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>
@@ -67,7 +83,7 @@ const BannerDeployChannelDeployerTable: React.FC<BannerDeployChannelDeployerTabl
               />
             </TableCell>
             <TableCell>Region</TableCell>
-            <TableCell>Last Deploy (UTC)</TableCell>
+            <TableCell>Last Manual Deploy (UTC)</TableCell>
             <TableCell>User</TableCell>
           </TableRow>
         </TableHead>
