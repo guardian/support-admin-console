@@ -103,7 +103,7 @@ const bannerModules = {
     name: 'EnvironmentMomentBanner',
   },
   [BannerTemplate.UsEoyMomentBanner]: {
-    path: 'environmentMoment/UsEoyMomentBanner.js',
+    path: 'usEoyMoment/UsEoyMomentBanner.js',
     name: 'UsEoyMomentBanner',
   },
 };
