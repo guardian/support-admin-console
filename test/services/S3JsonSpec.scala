@@ -46,7 +46,8 @@ class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
       |      "enableRecaptchaBackend" : "On",
       |      "enableRecaptchaFrontend" : "On",
       |      "enableContributionsCampaign" : "On",
-      |      "forceContributionsCampaign" : "On"
+      |      "forceContributionsCampaign" : "On",
+      |      "enableQuantumMetric" : "On"
       |}
     """.stripMargin
 
@@ -80,7 +81,8 @@ class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
       enableRecaptchaBackend = On,
       enableRecaptchaFrontend = On,
       enableContributionsCampaign = On,
-      forceContributionsCampaign = On
+      forceContributionsCampaign = On,
+      enableQuantumMetric = On
     ),
     version = "v1"
   )
