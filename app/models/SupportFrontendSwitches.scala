@@ -49,6 +49,7 @@ case class SupportFrontendSwitches(
   enableRecaptchaFrontend: SwitchState,
   enableContributionsCampaign: SwitchState = Off,
   forceContributionsCampaign: SwitchState = Off,
+  enableQuantumMetric: SwitchState = Off
 )
 
 object SupportFrontendSwitches {
