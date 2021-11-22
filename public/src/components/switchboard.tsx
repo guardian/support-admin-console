@@ -54,6 +54,7 @@ interface Switches {
   enableRecaptchaFrontend: SwitchState;
   enableContributionsCampaign: SwitchState;
   forceContributionsCampaign: SwitchState;
+  enableQuantumMetric: SwitchState;
   experiments: {
     [featureSwitch: string]: {
       name: string;
@@ -166,6 +167,7 @@ class Switchboard extends React.Component<Props, Switches> {
       enableRecaptchaFrontend: SwitchState.Off,
       enableContributionsCampaign: SwitchState.Off,
       forceContributionsCampaign: SwitchState.Off,
+      enableQuantumMetric: SwitchState.Off,
       experiments: {},
     };
     this.previousStateFromServer = null;
@@ -411,6 +413,24 @@ class Switchboard extends React.Component<Props, Switches> {
                 />
               }
               label="Force all users into the contributions campaign"
+            />
+          </FormControl>
+
+          <FormControl component={'fieldset' as 'div'} className={classes.formControl}>
+            <FormLabel component={'legend' as 'label'}>Other switches</FormLabel>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={switchStateToBoolean(this.state.enableQuantumMetric)}
+                  onChange={(event): void =>
+                    this.setState({
+                      enableQuantumMetric: booleanToSwitchState(event.target.checked),
+                    })
+                  }
+                  value={switchStateToBoolean(this.state.enableQuantumMetric)}
+                />
+              }
+              label="Enable Quantum Metric"
             />
           </FormControl>
         </div>
