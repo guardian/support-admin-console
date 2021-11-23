@@ -1,9 +1,8 @@
-import React, { useEffect, useState, ChangeEvent } from 'react';
-import { Theme, makeStyles, TextField } from '@material-ui/core';
+import React from 'react';
+import { Theme, makeStyles } from '@material-ui/core';
 
-import { Autocomplete } from '@material-ui/lab';
-import { TagsEditor } from "./tagsEditor";
-import { SectionsEditor } from "./sectionsEditor";
+import { TagsEditor } from './tagsEditor';
+import { SectionsEditor } from './sectionsEditor';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -38,19 +37,13 @@ const EpicTestTargetContentEditor: React.FC<EpicTestTargetContentEditorProps> = 
 }: EpicTestTargetContentEditorProps) => {
   const classes = useStyles();
 
-   return (
+  return (
     <div className={classes.container}>
       <TagsEditor
         label="Target tags"
         ids={tagIds}
-        onUpdate={(newTagIds) => {
-          updateTargetContent(
-            newTagIds,
-            sections,
-            excludeTagIds,
-            excludeSections,
-          )
-
+        onUpdate={(newTagIds): void => {
+          updateTargetContent(newTagIds, sections, excludeTagIds, excludeSections);
         }}
         disabled={!editMode}
       />
@@ -58,13 +51,8 @@ const EpicTestTargetContentEditor: React.FC<EpicTestTargetContentEditorProps> = 
       <SectionsEditor
         label="Target sections"
         ids={sections}
-        onUpdate={(newSectionIds) => {
-          updateTargetContent(
-            tagIds,
-            newSectionIds,
-            excludeTagIds,
-            excludeSections,
-          )
+        onUpdate={(newSectionIds): void => {
+          updateTargetContent(tagIds, newSectionIds, excludeTagIds, excludeSections);
         }}
         disabled={!editMode}
       />
@@ -72,13 +60,8 @@ const EpicTestTargetContentEditor: React.FC<EpicTestTargetContentEditorProps> = 
       <TagsEditor
         label="Excluded tags"
         ids={excludeTagIds}
-        onUpdate={(newExcludedTagIds) => {
-          updateTargetContent(
-            tagIds,
-            sections,
-            newExcludedTagIds,
-            excludeSections,
-          )
+        onUpdate={(newExcludedTagIds): void => {
+          updateTargetContent(tagIds, sections, newExcludedTagIds, excludeSections);
         }}
         disabled={!editMode}
       />
@@ -86,13 +69,8 @@ const EpicTestTargetContentEditor: React.FC<EpicTestTargetContentEditorProps> = 
       <SectionsEditor
         label="Excluded sections"
         ids={excludeSections}
-        onUpdate={(newExcludedSectionIds) => {
-          updateTargetContent(
-            tagIds,
-            sections,
-            excludeTagIds,
-            newExcludedSectionIds,
-          )
+        onUpdate={(newExcludedSectionIds): void => {
+          updateTargetContent(tagIds, sections, excludeTagIds, newExcludedSectionIds);
         }}
         disabled={!editMode}
       />

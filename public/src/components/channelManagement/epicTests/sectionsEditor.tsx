@@ -1,6 +1,6 @@
 import { Autocomplete } from '@material-ui/lab';
 import React, { useEffect } from 'react';
-import { TextField } from "@material-ui/core";
+import { TextField } from '@material-ui/core';
 
 interface Section {
   id: string;
@@ -28,26 +28,25 @@ export const SectionsEditor: React.FC<SectionEditorProps> = ({
   const [options, setOptions] = React.useState<Section[]>([]);
 
   useEffect(() => {
-
     fetch(`/capi/sections`)
-    .then(response => response.json())
-    .then(data => {
+      .then(response => response.json())
+      .then(data => {
+        const processedOptions = data.response.results.map(
+          (section: { id: string; webTitle: string }) => ({
+            id: section.id,
+            name: section.webTitle,
+          }),
+        );
 
-      const processedOptions = data.response.results.map((section: { id: string, webTitle: string }) => ({
-        id: section.id,
-        name: section.webTitle
-      }));
+        processedOptions.sort((a: Section, b: Section) => {
+          if (a.name != null && b.name != null && a.name > b.name) {
+            return 1;
+          }
+          return -1;
+        });
 
-      processedOptions.sort((a:Section, b:Section) => {
-        if (a.name != null && b.name != null && a.name > b.name) {
-          return 1;
-        }
-        return -1;
+        setOptions(processedOptions);
       });
-
-      setOptions(processedOptions);
-    })
-
   }, []);
 
   return (
@@ -55,30 +54,30 @@ export const SectionsEditor: React.FC<SectionEditorProps> = ({
       id={'capi-sections'}
       disabled={disabled}
       multiple
-      getOptionLabel={option => option.name || option.id}
+      getOptionLabel={(option): string => option.name || option.id}
       options={options}
       autoComplete
       includeInputInList
       filterSelectedOptions
-      value={ids.map<Section>(id => ({id}))}
+      value={ids.map<Section>(id => ({ id }))}
       inputValue={inputValue}
-      onInputChange={(event, newInputValue, reason) => {
+      onInputChange={(event, newInputValue, reason): void => {
         if (reason === 'input') {
           setInputValue(newInputValue);
         }
       }}
-      renderInput={(params) => (
+      renderInput={(params): JSX.Element => (
         <TextField {...params} variant="outlined" label={label} />
       )}
-      renderOption={(option) => {
-        return <div>{option.name ? option.name : option.id}</div>
+      renderOption={(option): JSX.Element => {
+        return <div>{option.name ? option.name : option.id}</div>;
       }}
-      onChange={(event, values: Section[], reason) => {
+      onChange={(event, values: Section[], reason): void => {
         if (reason === 'select-option' || reason === 'remove-option') {
           onUpdate(values.map(value => value.id));
           setInputValue('');
         }
       }}
     />
-  )
-}
+  );
+};
