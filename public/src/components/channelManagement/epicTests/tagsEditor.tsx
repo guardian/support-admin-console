@@ -29,17 +29,42 @@ export const TagsEditor: React.FC<TagEditorProps> = ({
   const [inputValue, setInputValue] = React.useState<string>('');
   const [options, setOptions] = React.useState<Tag[]>([]);
 
-  const fetchTags = (value: string) => fetch(`/capi/tags?web-title=${value}&page-size=200`)
+  const fetchTags = (value: string) => fetch(`/capi/tags?web-title=${value}&page-size=1000`)
     .then(response => response.json())
     .then(data => {
+
       const newOptions = data.response.results.map((tag: { id: string, webTitle: string, sectionId: string }) => ({
         id: tag.id,
         name: tag.webTitle,
-        section: tag.sectionId?.toUpperCase(),
+        section: (tag.sectionId != null) ? tag.sectionId.toUpperCase() : '[no section]',
       }));
-      const inputValueOption = {id: value};  // Make the raw input an option, in case user is pasting in tags
 
-      setOptions([inputValueOption].concat(newOptions));
+      newOptions.sort((a:Tag, b:Tag) => {
+
+        if (a.section != null && b.section != null) {
+
+          if (a.section > b.section) {
+            return 1;
+          } 
+
+          else if (a.section < b.section) {
+            return -1;
+          }
+        } 
+
+        if (a.name != null && b.name != null && a.name > b.name) {
+          return 1;
+        }
+
+        return -1;
+      });
+
+      // Make the raw input an option, in case user is pasting in tags
+      const inputValueOption = {id: value};  
+
+      const combinedOptions = [inputValueOption].concat(newOptions);
+
+      setOptions(combinedOptions);
     });
 
   // Throttle requests as the user types

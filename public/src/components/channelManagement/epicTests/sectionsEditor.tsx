@@ -28,14 +28,26 @@ export const SectionsEditor: React.FC<SectionEditorProps> = ({
   const [options, setOptions] = React.useState<Section[]>([]);
 
   useEffect(() => {
+
     fetch(`/capi/sections`)
-      .then(response => response.json())
-      .then(data => {
-        setOptions(data.response.results.map((section: { id: string, webTitle: string }) => ({
-          id: section.id,
-          name: section.webTitle
-        })));
-      })
+    .then(response => response.json())
+    .then(data => {
+
+      const processedOptions = data.response.results.map((section: { id: string, webTitle: string }) => ({
+        id: section.id,
+        name: section.webTitle
+      }));
+
+      processedOptions.sort((a:Section, b:Section) => {
+        if (a.name != null && b.name != null && a.name > b.name) {
+          return 1;
+        }
+        return -1;
+      });
+
+      setOptions(processedOptions);
+    })
+
   }, []);
 
   return (
@@ -59,7 +71,7 @@ export const SectionsEditor: React.FC<SectionEditorProps> = ({
         <TextField {...params} variant="outlined" label={label} />
       )}
       renderOption={(option) => {
-        return <div>{option.name ? `${option.name} (${option.id})` : option.id}</div>
+        return <div>{option.name ? option.name : option.id}</div>
       }}
       onChange={(event, values: Section[], reason) => {
         if (reason === 'select-option' || reason === 'remove-option') {
