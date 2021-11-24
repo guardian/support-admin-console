@@ -4,7 +4,7 @@ import update from 'immutability-helper';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
+import SwitchUI from '@material-ui/core/Switch';
 import Button from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
 import RefreshIcon from '@material-ui/icons/Refresh';
@@ -21,6 +21,10 @@ enum SwitchState {
   On = 'On',
   Off = 'Off',
 }
+
+/**
+ * Old model -
+ */
 
 enum OneOffPaymentMethod {
   stripe = 'stripe',
@@ -62,6 +66,23 @@ interface Switches {
       state: SwitchState;
     };
   };
+}
+
+/**
+ * New model -
+ */
+
+interface Switch {
+  description: string;
+  state: SwitchState;
+}
+
+interface SwitchGroup {
+  [switchName: string]: Switch;
+}
+
+interface SupportFrontendSwitches {
+  [groupName: string]: SwitchGroup;
 }
 
 interface DataFromServer {
@@ -138,6 +159,10 @@ const styles = ({ palette, spacing }: Theme) =>
 type Props = WithStyles<typeof styles>;
 
 class Switchboard extends React.Component<Props, Switches> {
+  /**
+   * TODO - refactor this component to use withS3Data.
+   * See configuredAmountsEditor.tsx for an example.
+   */
   state: Switches;
   previousStateFromServer: DataFromServer | null;
 
@@ -259,7 +284,7 @@ class Switchboard extends React.Component<Props, Switches> {
                 <FormControlLabel
                   key={index}
                   control={
-                    <Switch
+                    <SwitchUI
                       checked={switchStateToBoolean(switchState)}
                       onChange={(ev): void =>
                         this.updateOneOffPaymentMethodSwitch(
@@ -284,7 +309,7 @@ class Switchboard extends React.Component<Props, Switches> {
                 <FormControlLabel
                   key={index}
                   control={
-                    <Switch
+                    <SwitchUI
                       checked={switchStateToBoolean(switchState)}
                       onChange={(event): void =>
                         this.updateRecurringPaymentMethodSwitch(
@@ -307,7 +332,7 @@ class Switchboard extends React.Component<Props, Switches> {
                 <FormControlLabel
                   key={index}
                   control={
-                    <Switch
+                    <SwitchUI
                       checked={switchStateToBoolean(switchData.state)}
                       onChange={(event): void =>
                         this.updateFeatureSwitch(
@@ -326,7 +351,7 @@ class Switchboard extends React.Component<Props, Switches> {
             <FormLabel component={'legend' as 'label'}>Recaptcha Switches</FormLabel>
             <FormControlLabel
               control={
-                <Switch
+                <SwitchUI
                   checked={switchStateToBoolean(this.state.enableRecaptchaBackend)}
                   onChange={(event): void =>
                     this.setState({
@@ -340,7 +365,7 @@ class Switchboard extends React.Component<Props, Switches> {
             />
             <FormControlLabel
               control={
-                <Switch
+                <SwitchUI
                   checked={switchStateToBoolean(this.state.enableRecaptchaFrontend)}
                   onChange={(event): void =>
                     this.setState({
@@ -357,7 +382,7 @@ class Switchboard extends React.Component<Props, Switches> {
             <FormLabel component={'legend' as 'label'}>Subscriptions Switches</FormLabel>
             <FormControlLabel
               control={
-                <Switch
+                <SwitchUI
                   checked={switchStateToBoolean(this.state.enableDigitalSubGifting)}
                   onChange={(event): void =>
                     this.setState({
@@ -371,7 +396,7 @@ class Switchboard extends React.Component<Props, Switches> {
             />
             <FormControlLabel
               control={
-                <Switch
+                <SwitchUI
                   checked={switchStateToBoolean(this.state.useDotcomContactPage)}
                   onChange={(event): void =>
                     this.setState({
@@ -388,7 +413,7 @@ class Switchboard extends React.Component<Props, Switches> {
             <FormLabel component={'legend' as 'label'}>Campaign Switches</FormLabel>
             <FormControlLabel
               control={
-                <Switch
+                <SwitchUI
                   checked={switchStateToBoolean(this.state.enableContributionsCampaign)}
                   onChange={(event): void =>
                     this.setState({
@@ -402,7 +427,7 @@ class Switchboard extends React.Component<Props, Switches> {
             />
             <FormControlLabel
               control={
-                <Switch
+                <SwitchUI
                   checked={switchStateToBoolean(this.state.forceContributionsCampaign)}
                   onChange={(event): void =>
                     this.setState({
@@ -420,7 +445,7 @@ class Switchboard extends React.Component<Props, Switches> {
             <FormLabel component={'legend' as 'label'}>Other switches</FormLabel>
             <FormControlLabel
               control={
-                <Switch
+                <SwitchUI
                   checked={switchStateToBoolean(this.state.enableQuantumMetric)}
                   onChange={(event): void =>
                     this.setState({
