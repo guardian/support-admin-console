@@ -1,10 +1,8 @@
 package controllers
 
 import com.gu.googleauth.AuthAction
-import models.SupportFrontendSwitches
 import play.api.mvc.{AnyContent, ControllerComponents}
-import models.SupportFrontendSwitches.SupportFrontendSwitchesDecoder
-import models.SupportFrontendSwitches.SupportFrontendSwitchesEncoder
+import models.SupportFrontendSwitches.{SupportFrontendSwitches, SupportFrontendSwitchesDecoder, SupportFrontendSwitchesEncoder}
 import zio.DefaultRuntime
 
 import scala.concurrent.ExecutionContext
