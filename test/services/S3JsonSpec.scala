@@ -4,7 +4,7 @@ import org.scalatest.{EitherValues, FlatSpec, Matchers}
 import services.S3Client.{RawVersionedS3Data, S3Action, S3ObjectSettings}
 import gnieh.diffson.circe._
 import models.SupportFrontendSwitches.{SupportFrontendSwitches, Switch}
-import models.SwitchState.On
+import models._
 import zio.{DefaultRuntime, IO}
 
 import scala.concurrent.Await
