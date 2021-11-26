@@ -1,6 +1,8 @@
-import React, { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { Theme, makeStyles, TextField } from '@material-ui/core';
+import React from 'react';
+import { Theme, makeStyles } from '@material-ui/core';
+
+import { TagsEditor } from './tagsEditor';
+import { SectionsEditor } from './sectionsEditor';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -10,15 +12,6 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
     },
   },
 }));
-
-interface FormData {
-  tagIds: string;
-  sections: string;
-  excludeTagIds: string;
-  excludeSections: string;
-}
-
-const parseList = (list: string): string[] => list.split(',').filter(item => !!item);
 
 interface EpicTestTargetContentEditorProps {
   tagIds: string[];
@@ -44,85 +37,42 @@ const EpicTestTargetContentEditor: React.FC<EpicTestTargetContentEditorProps> = 
 }: EpicTestTargetContentEditorProps) => {
   const classes = useStyles();
 
-  const defaultValues: FormData = {
-    tagIds: tagIds.join(','),
-    sections: sections.join(','),
-    excludeTagIds: excludeTagIds.join(','),
-    excludeSections: excludeSections.join(','),
-  };
-
-  const { register, handleSubmit, reset } = useForm<FormData>({ defaultValues });
-
-  useEffect(() => {
-    reset(defaultValues);
-  }, [
-    defaultValues.tagIds,
-    defaultValues.sections,
-    defaultValues.excludeTagIds,
-    defaultValues.excludeSections,
-  ]);
-
-  const onSubmit = ({ tagIds, sections, excludeTagIds, excludeSections }: FormData): void => {
-    updateTargetContent(
-      parseList(tagIds),
-      parseList(sections),
-      parseList(excludeTagIds),
-      parseList(excludeSections),
-    );
-  };
-
   return (
     <div className={classes.container}>
-      <TextField
-        inputRef={register()}
-        name="tagIds"
+      <TagsEditor
         label="Target tags"
-        helperText="Format: environment/wildlife,business/economics"
-        onBlur={handleSubmit(onSubmit)}
-        margin="normal"
-        InputLabelProps={{ shrink: true }}
-        variant="outlined"
+        ids={tagIds}
+        onUpdate={(newTagIds): void => {
+          updateTargetContent(newTagIds, sections, excludeTagIds, excludeSections);
+        }}
         disabled={!editMode}
-        fullWidth
       />
 
-      <TextField
-        inputRef={register()}
-        name="sections"
+      <SectionsEditor
         label="Target sections"
-        helperText="Format: environment,business"
-        onBlur={handleSubmit(onSubmit)}
-        margin="normal"
-        InputLabelProps={{ shrink: true }}
-        variant="outlined"
+        ids={sections}
+        onUpdate={(newSectionIds): void => {
+          updateTargetContent(tagIds, newSectionIds, excludeTagIds, excludeSections);
+        }}
         disabled={!editMode}
-        fullWidth
       />
 
-      <TextField
-        inputRef={register()}
-        name="excludeTagIds"
+      <TagsEditor
         label="Excluded tags"
-        helperText="Format: environment/wildlife,business/economics"
-        onBlur={handleSubmit(onSubmit)}
-        margin="normal"
-        InputLabelProps={{ shrink: true }}
-        variant="outlined"
+        ids={excludeTagIds}
+        onUpdate={(newExcludedTagIds): void => {
+          updateTargetContent(tagIds, sections, newExcludedTagIds, excludeSections);
+        }}
         disabled={!editMode}
-        fullWidth
       />
 
-      <TextField
-        inputRef={register()}
-        name="excludeSections"
+      <SectionsEditor
         label="Excluded sections"
-        helperText="Format: environment,business"
-        onBlur={handleSubmit(onSubmit)}
-        margin="normal"
-        InputLabelProps={{ shrink: true }}
-        variant="outlined"
+        ids={excludeSections}
+        onUpdate={(newExcludedSectionIds): void => {
+          updateTargetContent(tagIds, sections, excludeTagIds, newExcludedSectionIds);
+        }}
         disabled={!editMode}
-        fullWidth
       />
     </div>
   );
