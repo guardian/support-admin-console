@@ -7,10 +7,9 @@ import io.circe.{Decoder, Encoder}
 
 import scala.collection.immutable.IndexedSeq
 
+
 sealed trait BannerTemplate extends EnumEntry
-object BannerTemplate
-    extends Enum[BannerTemplate]
-    with CirceEnum[BannerTemplate] {
+object BannerTemplate extends Enum[BannerTemplate] with CirceEnum[BannerTemplate] {
   override val values: IndexedSeq[BannerTemplate] = findValues
 
   case object ContributionsBanner extends BannerTemplate
