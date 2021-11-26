@@ -106,6 +106,10 @@ const bannerModules = {
     path: 'usEoyMoment/UsEoyMomentBanner.js',
     name: 'UsEoyMomentBanner',
   },
+  [BannerTemplate.UsEoyMomentGivingTuesdayBanner]: {
+    path: 'usEoyMoment/UsEoyMomentGivingTuesdayBanner.js',
+    name: 'UsEoyMomentGivingTuesdayBanner',
+  },
 };
 
 const useStyles = makeStyles(({ palette }: Theme) => ({
