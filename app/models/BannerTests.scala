@@ -23,37 +23,37 @@ object BannerTemplate extends Enum[BannerTemplate] with CirceEnum[BannerTemplate
 }
 
 case class BannerContent(
-    heading: Option[String],
-    messageText: String,
-    highlightedText: Option[String],
-    cta: Option[Cta],
-    secondaryCta: Option[SecondaryCta]
+  heading: Option[String],
+  messageText: String,
+  highlightedText: Option[String],
+  cta: Option[Cta],
+  secondaryCta: Option[SecondaryCta]
 )
 
 case class BannerVariant(
-    name: String,
-    template: BannerTemplate,
-    bannerContent: Option[BannerContent],
-    mobileBannerContent: Option[BannerContent],
+  name: String,
+  template: BannerTemplate,
+  bannerContent: Option[BannerContent],
+  mobileBannerContent: Option[BannerContent],
 
-    // Deprecated - use bannerContent / mobileBannerContent
-    heading: Option[String],
-    body: Option[String],
-    highlightedText: Option[String],
-    cta: Option[Cta],
-    secondaryCta: Option[Cta]
+  // Deprecated - use bannerContent / mobileBannerContent
+  heading: Option[String],
+  body: Option[String],
+  highlightedText: Option[String],
+  cta: Option[Cta],
+  secondaryCta: Option[Cta]
 )
 
 case class BannerTest(
-    name: String,
-    nickname: Option[String],
-    isOn: Boolean,
-    minArticlesBeforeShowingBanner: Int,
-    userCohort: UserCohort,
-    locations: List[Region] = Nil,
-    variants: List[BannerVariant],
-    articlesViewedSettings: Option[ArticlesViewedSettings] = None,
-    controlProportionSettings: Option[ControlProportionSettings] = None
+  name: String,
+  nickname: Option[String],
+  isOn: Boolean,
+  minArticlesBeforeShowingBanner: Int,
+  userCohort: UserCohort,
+  locations: List[Region] = Nil,
+  variants: List[BannerVariant],
+  articlesViewedSettings: Option[ArticlesViewedSettings] = None,
+  controlProportionSettings: Option[ControlProportionSettings] = None
 )
 
 case class BannerTests(tests: List[BannerTest])
