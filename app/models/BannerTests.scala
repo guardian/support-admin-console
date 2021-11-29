@@ -19,6 +19,7 @@ object BannerTemplate extends Enum[BannerTemplate] with CirceEnum[BannerTemplate
   case object InvestigationsMomentBanner extends BannerTemplate
   case object EnvironmentMomentBanner extends BannerTemplate
   case object UsEoyMomentBanner extends BannerTemplate
+  case object UsEoyMomentGivingTuesdayBanner extends BannerTemplate
 }
 
 case class BannerContent(
