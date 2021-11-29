@@ -18,43 +18,55 @@ class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
     """
       |{
       |  "oneOffPaymentMethods" : {
-      |    "stripe" : {
-      |      "state": "On",
-      |      "description": "Stripe"
-      |    },
-      |    "payPal" : {
-      |      "state": "On",
-      |      "description": "PayPal"
+      |    "description": "One-off payment methods",
+      |    "switches": {
+      |      "stripe" : {
+      |        "state": "On",
+      |        "description": "Stripe"
+      |      },
+      |      "payPal" : {
+      |        "state": "On",
+      |        "description": "Stripe"
+      |      }
       |    }
       |  },
       |  "recurringPaymentMethods" : {
-      |    "stripe" : {
-      |      "state": "On",
-      |      "description": "Stripe"
-      |    },
-      |    "payPal" : {
-      |      "state": "On",
-      |      "description": "PayPal"
+      |    "description": "Recurring payment methods",
+      |    "switches": {
+      |      "stripe" : {
+      |        "state": "On",
+      |        "description": "Stripe"
+      |      },
+      |      "payPal" : {
+      |        "state": "On",
+      |        "description": "Stripe"
+      |      }
       |    }
       |  },
       |  "featureSwitches" : {
-      |    "enableQuantumMetric": {
-      |      "state": "On",
-      |      "description": "Enable Quantum Metric"
-      |    },
-      |    "checkoutPostcodeLookup": {
-      |      "state": "On",
-      |      "description": "Enable external service postcode lookup in checkout form"
+      |    "description": "Feature switches",
+      |    "switches": {
+      |      "quantumMetric": {
+      |        "state": "On",
+      |        "description": "Enable quantum metric"
+      |      },
+      |      "checkoutPostcodeLookup": {
+      |        "state": "On",
+      |        "description": "Enable external service postcode lookup in checkout form"
+      |      }
       |    }
       |  },
       |  "campaignSwitches": {
-      |    "enableCampaign": {
-      |      "state": "On",
-      |      "description": "Enable contributions campaign"
-      |    },
-      |    "forceAll": {
-      |      "state": "On",
-      |      "description": "Force all users into the campaign"
+      |    "description": "Campaign switches",
+      |    "switches": {
+      |      "enableCampaign": {
+      |        "state": "On",
+      |        "description": "Enable contributions campaign"
+      |      },
+      |      "forceAll": {
+      |        "state": "On",
+      |        "description": "Force all users into the campaign"
+      |      }
       |    }
       |  }
       |}
@@ -62,21 +74,33 @@ class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
 
   val expectedDecoded: VersionedS3Data[SupportFrontendSwitches] = VersionedS3Data(
     Map(
-      "oneOffPaymentMethods" -> Map(
-        "stripe" -> Switch("Stripe", On),
-        "payPal" -> Switch("PayPal", On),
+      "oneOffPaymentMethods" -> SwitchGroup(
+        "description" -> "One-off payment methods",
+        "switches" -> Map(
+          "stripe" -> Switch("Stripe", On),
+          "payPal" -> Switch("PayPal", On)
+        )
       ),
-      "recurringPaymentMethods" -> Map(
-        "stripe" -> Switch("Stripe", On),
-        "payPal" -> Switch("PayPal", On),
+      "recurringPaymentMethods" -> SwitchGroup(
+        "description" -> "Recurring payment methods",
+        "switches" -> Map(
+          "stripe" -> Switch("Stripe", On),
+          "payPal" -> Switch("PayPal", On)
+        )
       ),
-      "featureSwitches" -> Map(
-        "enableQuantumMetric" -> Switch("Enable Quantum Metric", On),
-        "checkoutPostcodeLookup" -> Switch("Enable external service postcode lookup in checkout form", On)
+      "featureSwitches" -> SwitchGroup(
+        "description" -> "Feature switches",
+        "switches" -> Map(
+          "enableQuantumMetric" -> Switch("Enable Quantum Metric", On),
+          "checkoutPostcodeLookup" -> Switch("Enable external service postcode lookup in checkout form", On)
+        )
       ),
-      "campaignSwitches" -> Map(
-        "enableCampaign"-> Switch("Enable contributions campaign", On),
-        "forceAll"-> Switch("Force all users into the campaign", On),
+      "featureSwitches" -> SwitchGroup(
+        "description" -> "Feature switches",
+        "switches" -> Map(
+          "enableCampaign"-> Switch("Enable contributions campaign", On),
+          "forceAll"-> Switch("Force all users into the campaign", On)
+        )
       )
     ),
     version = "v1"

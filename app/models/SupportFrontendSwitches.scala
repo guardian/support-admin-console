@@ -13,10 +13,10 @@ object SupportFrontendSwitches {
 
   case class Switch(description: String, state: SwitchState)
   type SwitchName = String
-  type SwitchGroup = Map[SwitchName,Switch]
+  case class SwitchGroup(description: String, switches: Map[SwitchName, Switch])
   type GroupName = String
   type SupportFrontendSwitches = Map[GroupName,SwitchGroup]
-
+  
   implicit val customConfig: Configuration = Configuration.default.withDefaults
   implicit val stateDecoder: Decoder[SwitchState] = deriveEnumerationDecoder[SwitchState]
   implicit val stateEncoder: Encoder[SwitchState] = deriveEnumerationEncoder[SwitchState]
