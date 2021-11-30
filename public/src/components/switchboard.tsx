@@ -102,14 +102,14 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     );
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const updateSwitchSetting = (groupId: string, switchData: [string, Switch], event: any): void => {
+  const updateSwitchSetting = (
+    switchId: string, 
+    switchData: Switch,
+    groupId: string, 
+    isChecked: boolean): void => {
     const updatedState = cloneDeep(data);
 
-    // const [mySwitchId, mySwitch] = switchData;
-    const mySwitchId = switchData[0];
-
-    updatedState[groupId].switches[mySwitchId].state = event.target.checked
+    updatedState[groupId].switches[switchId].state = (isChecked)
       ? SwitchState.On
       : SwitchState.Off;
 
@@ -118,17 +118,19 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
   };
 
   const createSwitchesFromGroupData = (
-    mySwitch: [string, Switch],
+    switchId: string, 
+    switchData: Switch,
     groupId: string,
   ): JSX.Element => {
-    const [switchId, switchData] = mySwitch;
+
+    const isChecked = switchData.state === 'On';
 
     return (
       <FormControlLabel
         label={switchData.description}
         checked={switchData.state === 'On' ? true : false}
         control={<SwitchUI />}
-        onChange={(event): void => updateSwitchSetting(groupId, mySwitch, event)}
+        onChange={(event): void => updateSwitchSetting(switchId, switchData, groupId, !isChecked)}
         value={switchId}
         key={switchId}
       />
@@ -141,8 +143,8 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     return (
       <FormControl className={classes.formControl} key={groupId}>
         <FormLabel>{groupData.description}</FormLabel>
-        {Object.entries(groupData.switches).map(mySwitch =>
-          createSwitchesFromGroupData(mySwitch, groupId),
+        {Object.entries(groupData.switches).map(([switchId, switchData]) =>
+          createSwitchesFromGroupData(switchId, switchData, groupId),
         )}
       </FormControl>
     );
