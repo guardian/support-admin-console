@@ -80,7 +80,7 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   },
   textParagraph: {
     marginBottom: spacing(2),
-  }
+  },
 }));
 
 const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
@@ -103,26 +103,24 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
   };
 
   const updateSwitchSetting = (
-    switchId: string, 
+    switchId: string,
     switchData: Switch,
-    groupId: string, 
-    isChecked: boolean): void => {
+    groupId: string,
+    isChecked: boolean,
+  ): void => {
     const updatedState = cloneDeep(data);
 
-    updatedState[groupId].switches[switchId].state = (isChecked)
-      ? SwitchState.On
-      : SwitchState.Off;
+    updatedState[groupId].switches[switchId].state = isChecked ? SwitchState.On : SwitchState.Off;
 
     setData(updatedState);
     setNeedToSaveDataWarning(true);
   };
 
   const createSwitchesFromGroupData = (
-    switchId: string, 
+    switchId: string,
     switchData: Switch,
     groupId: string,
   ): JSX.Element => {
-
     const isChecked = switchData.state === 'On';
 
     return (
@@ -130,7 +128,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
         label={switchData.description}
         checked={switchData.state === 'On' ? true : false}
         control={<SwitchUI />}
-        onChange={(event): void => updateSwitchSetting(switchId, switchData, groupId, !isChecked)}
+        onChange={(): void => updateSwitchSetting(switchId, switchData, groupId, !isChecked)}
         value={switchId}
         key={switchId}
       />
@@ -161,7 +159,9 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
 
   return (
     <form className={classes.form}>
-      <Typography className={classes.existingSwitchesHeader} variant="h6">Manage existing switches</Typography>
+      <Typography className={classes.existingSwitchesHeader} variant="h6">
+        Manage existing switches
+      </Typography>
 
       {createSwitchFields()}
 
@@ -180,12 +180,16 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
 
       <Divider variant="fullWidth" className={classes.divider} />
 
-      <Typography className={classes.newSwitchesHeader} variant="h6">Create new switches</Typography>
-      <Typography className={classes.textParagraph} variant="body1">
-        Currently, to create a new switch, update the JSON file in AWS S3 to include details of the switch, then refresh this page so that the switch status can be viewed and updated.
+      <Typography className={classes.newSwitchesHeader} variant="h6">
+        Create new switches
       </Typography>
       <Typography className={classes.textParagraph} variant="body1">
-        If there is a demand for it, we can add functionality to create new switches (and new switch groups) to this page in due course.
+        Currently, to create a new switch, update the JSON file in AWS S3 to include details of the
+        switch, then refresh this page so that the switch status can be viewed and updated.
+      </Typography>
+      <Typography className={classes.textParagraph} variant="body1">
+        If there is a demand for it, we can add functionality to create new switches (and new switch
+        groups) to this page in due course.
       </Typography>
     </form>
   );
