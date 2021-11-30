@@ -12,7 +12,6 @@ import {
 } from '@material-ui/core';
 import SwitchUI from '@material-ui/core/Switch';
 import SaveIcon from '@material-ui/icons/Save';
-// import RefreshIcon from '@material-ui/icons/Refresh';
 import Alert from '@material-ui/lab/Alert';
 
 import cloneDeep from 'lodash/cloneDeep';
@@ -73,6 +72,15 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
     marginTop: spacing(4),
     marginBottom: spacing(4),
   },
+  existingSwitchesHeader: {
+    marginBottom: spacing(2),
+  },
+  newSwitchesHeader: {
+    marginBottom: spacing(2),
+  },
+  textParagraph: {
+    marginBottom: spacing(2),
+  }
 }));
 
 const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
@@ -144,58 +152,40 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     return <>{Object.entries(data).map(group => createGroupsFromData(group))}</>;
   };
 
-  // This isn't working because original state doesn't get conserved in this component
-  // - Need to consider whether we need a 'reset' button?
-  // - For now, solve by suppressing the reset button
-  // const originalState = cloneDeep(data);
-
-  // const actionResetData = (): void => {
-
-  //   setData(originalState);
-  //   setNeedToSaveDataWarning(false);
-  // };
-
   const actionSaveData = (): void => {
     saveData();
     setNeedToSaveDataWarning(false);
   };
 
   return (
-    <>
-      <form className={classes.form}>
-        <Typography variant="h6">Manage existing switches</Typography>
+    <form className={classes.form}>
+      <Typography className={classes.existingSwitchesHeader} variant="h6">Manage existing switches</Typography>
 
-        {createSwitchFields()}
+      {createSwitchFields()}
 
-        {displayNeedToSaveDataWarning()}
+      {displayNeedToSaveDataWarning()}
 
-        <div className={classes.buttons}>
-          <Button
-            variant="contained"
-            onClick={(): void => actionSaveData()}
-            className={classes.button}
-          >
-            <SaveIcon />
-            Save
-          </Button>
-          {/*<Button
-            variant="contained"
-            onClick={(event: any) => actionResetData()}
-            className={classes.button}
-          >
-            <RefreshIcon />
-            Refresh
-          </Button>*/}
-        </div>
+      <div className={classes.buttons}>
+        <Button
+          variant="contained"
+          onClick={(): void => actionSaveData()}
+          className={classes.button}
+        >
+          <SaveIcon />
+          Save
+        </Button>
+      </div>
 
-        <Divider variant="fullWidth" className={classes.divider} />
+      <Divider variant="fullWidth" className={classes.divider} />
 
-        <Typography variant="h6">Create new switches</Typography>
-        <Typography variant="body1">
-          Form for creating new switches. Also: new switch groups?
-        </Typography>
-      </form>
-    </>
+      <Typography className={classes.newSwitchesHeader} variant="h6">Create new switches</Typography>
+      <Typography className={classes.textParagraph} variant="body1">
+        Currently, to create a new switch, update the JSON file in AWS S3 to include details of the switch, then refresh this page so that the switch status can be viewed and updated.
+      </Typography>
+      <Typography className={classes.textParagraph} variant="body1">
+        If there is a demand for it, we can add functionality to create new switches (and new switch groups) to this page in due course.
+      </Typography>
+    </form>
   );
 };
 
