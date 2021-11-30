@@ -3,7 +3,7 @@ package services
 import org.scalatest.{EitherValues, FlatSpec, Matchers}
 import services.S3Client.{RawVersionedS3Data, S3Action, S3ObjectSettings}
 import gnieh.diffson.circe._
-import models.SupportFrontendSwitches.{SupportFrontendSwitches, Switch}
+import models.SupportFrontendSwitches.{SupportFrontendSwitches, Switch, SwitchGroup}
 import models._
 import zio.{DefaultRuntime, IO}
 
@@ -26,7 +26,7 @@ class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
       |      },
       |      "payPal" : {
       |        "state": "On",
-      |        "description": "Stripe"
+      |        "description": "PayPal"
       |      }
       |    }
       |  },
@@ -39,16 +39,16 @@ class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
       |      },
       |      "payPal" : {
       |        "state": "On",
-      |        "description": "Stripe"
+      |        "description": "PayPal"
       |      }
       |    }
       |  },
       |  "featureSwitches" : {
       |    "description": "Feature switches",
       |    "switches": {
-      |      "quantumMetric": {
+      |      "enableQuantumMetric": {
       |        "state": "On",
-      |        "description": "Enable quantum metric"
+      |        "description": "Enable Quantum Metric"
       |      },
       |      "checkoutPostcodeLookup": {
       |        "state": "On",
@@ -75,29 +75,29 @@ class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
   val expectedDecoded: VersionedS3Data[SupportFrontendSwitches] = VersionedS3Data(
     Map(
       "oneOffPaymentMethods" -> SwitchGroup(
-        "description" -> "One-off payment methods",
-        "switches" -> Map(
+        description = "One-off payment methods",
+        switches = Map(
           "stripe" -> Switch("Stripe", On),
           "payPal" -> Switch("PayPal", On)
         )
       ),
       "recurringPaymentMethods" -> SwitchGroup(
-        "description" -> "Recurring payment methods",
-        "switches" -> Map(
+        description = "Recurring payment methods",
+        switches = Map(
           "stripe" -> Switch("Stripe", On),
           "payPal" -> Switch("PayPal", On)
         )
       ),
       "featureSwitches" -> SwitchGroup(
-        "description" -> "Feature switches",
-        "switches" -> Map(
+        description = "Feature switches",
+        switches = Map(
           "enableQuantumMetric" -> Switch("Enable Quantum Metric", On),
           "checkoutPostcodeLookup" -> Switch("Enable external service postcode lookup in checkout form", On)
         )
       ),
-      "featureSwitches" -> SwitchGroup(
-        "description" -> "Feature switches",
-        "switches" -> Map(
+      "campaignSwitches" -> SwitchGroup(
+        description = "Campaign switches",
+        switches = Map(
           "enableCampaign"-> Switch("Enable contributions campaign", On),
           "forceAll"-> Switch("Force all users into the campaign", On)
         )
