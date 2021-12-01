@@ -83,6 +83,10 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   },
 }));
 
+function sortByDescription<T extends Switch | SwitchGroup>(a: [string, T], b: [string, T]): number {
+  return a[1].description > b[1].description ? 1 : -1;
+}
+
 const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
   data,
   setData,
@@ -126,7 +130,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     return (
       <FormControlLabel
         label={switchData.description}
-        checked={switchData.state === 'On' ? true : false}
+        checked={switchData.state === 'On'}
         control={<SwitchUI />}
         onChange={(): void => updateSwitchSetting(switchId, switchData, groupId, !isChecked)}
         value={switchId}
@@ -141,16 +145,22 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     return (
       <FormControl className={classes.formControl} key={groupId}>
         <FormLabel>{groupData.description}</FormLabel>
-        {Object.entries(groupData.switches).map(([switchId, switchData]) =>
-          createSwitchesFromGroupData(switchId, switchData, groupId),
-        )}
+        {Object.entries(groupData.switches)
+          .sort(sortByDescription)
+          .map(([switchId, switchData]) =>
+            createSwitchesFromGroupData(switchId, switchData, groupId),
+          )}
       </FormControl>
     );
   };
 
-  const createSwitchFields = (): JSX.Element => {
-    return <>{Object.entries(data).map(group => createGroupsFromData(group))}</>;
-  };
+  const createSwitchFields = (): JSX.Element => (
+    <>
+      {Object.entries(data)
+        .sort(sortByDescription)
+        .map(group => createGroupsFromData(group))}
+    </>
+  );
 
   const actionSaveData = (): void => {
     saveData();
