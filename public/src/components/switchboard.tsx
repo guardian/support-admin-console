@@ -173,6 +173,8 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
         Manage existing switches
       </Typography>
 
+      {displayNeedToSaveDataWarning()}
+
       {createSwitchFields()}
 
       {displayNeedToSaveDataWarning()}
