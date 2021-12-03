@@ -7,9 +7,12 @@ export interface Variant {
 
 export type TestPlatform = 'AMP' | 'APPLE_NEWS' | 'DOTCOM';
 
-export type TestType = 'EPIC' | 'BANNER';
+// export type TestType = 'EPIC' | 'BANNER';
+export type TestType = 'EPIC' | 'HEADER' | 'BANNER';
 
 export type EpicModuleName = 'ContributionsEpic' | 'ContributionsLiveblogEpic';
+
+export type HeaderModuleName = 'HeaderHeader';
 
 export interface Test {
   name: string;
@@ -47,6 +50,57 @@ export interface EpicEditorConfig {
   requireVariantHeader: boolean;
   moduleName: EpicModuleName;
 }
+
+export interface HeaderEditorConfig {
+  // test level settings
+  allowMultipleVariants: boolean;
+  allowCustomVariantSplit: boolean;
+  allowContentTargeting: boolean;
+  allowLocationTargeting: boolean;
+  supportedRegions?: Region[];
+  allowSupporterStatusTargeting: boolean;
+  allowViewFrequencySettings: boolean;
+  allowArticleCount: boolean;
+  testNamePrefix?: string;
+  platform: TestPlatform;
+
+  // variant level settings
+  allowVariantHeader: boolean;
+  allowVariantHighlightedText: boolean;
+  allowVariantImageUrl: boolean;
+  allowVariantFooter: boolean;
+  allowVariantCustomPrimaryCta: boolean;
+  allowVariantCustomSecondaryCta: boolean;
+  allowVariantSeparateArticleCount: boolean;
+  allowVariantTicker: boolean;
+  allowVariantChoiceCards: boolean;
+  allowVariantSignInLink: boolean;
+  requireVariantHeader: boolean;
+  moduleName: HeaderModuleName;
+}
+
+export const HEADER_CONFIG: HeaderEditorConfig = {
+  allowMultipleVariants: true,
+  allowCustomVariantSplit: true,
+  allowContentTargeting: true,
+  allowLocationTargeting: true,
+  allowSupporterStatusTargeting: true,
+  allowViewFrequencySettings: true,
+  allowArticleCount: true,
+  allowVariantHeader: true,
+  allowVariantHighlightedText: true,
+  allowVariantImageUrl: true,
+  allowVariantFooter: true,
+  allowVariantCustomPrimaryCta: true,
+  allowVariantCustomSecondaryCta: true,
+  allowVariantSeparateArticleCount: true,
+  allowVariantTicker: true,
+  allowVariantChoiceCards: true,
+  allowVariantSignInLink: true,
+  requireVariantHeader: true,
+  moduleName: 'HeaderHeader',
+  platform: 'DOTCOM',
+};
 
 export const ARTICLE_EPIC_CONFIG: EpicEditorConfig = {
   allowMultipleVariants: true,

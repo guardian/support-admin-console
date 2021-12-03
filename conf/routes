@@ -6,6 +6,7 @@ GET /                                               controllers.Application.inde
 GET /switches                                       controllers.Application.index
 GET /contribution-types                             controllers.Application.index
 GET /amounts                                        controllers.Application.index
+GET /header-tests                                   controllers.Application.index
 GET /epic-tests                                     controllers.Application.index
 GET /epic-holdback-tests                            controllers.Application.index
 GET /liveblog-epic-tests                            controllers.Application.index
@@ -43,6 +44,13 @@ POST  /frontend/epic-tests/takecontrol              controllers.epic.EpicTestsCo
 POST  /frontend/epic-tests/archive                  controllers.epic.EpicTestArchiveController.set
 GET   /frontend/epic-tests/archive/:testName        controllers.epic.EpicTestArchiveController.get(testName: String)
 GET   /frontend/epic-tests/archived-test-names      controllers.epic.EpicTestArchiveController.list
+
+# ----- header tests ----- #
+GET   /frontend/header-tests                          controllers.HeaderTestsController.get
+POST  /frontend/header-tests/update                   controllers.HeaderTestsController.set
+POST  /frontend/header-tests/lock                     controllers.HeaderTestsController.lock
+POST  /frontend/header-tests/unlock                   controllers.HeaderTestsController.unlock
+POST  /frontend/header-tests/takecontrol              controllers.HeaderTestsController.takecontrol
 
 # ----- epic holdback tests ----- #
 GET   /frontend/epic-holdback-tests                          controllers.epic.EpicHoldbackTestsController.get
