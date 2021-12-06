@@ -7,7 +7,8 @@ export enum SupportFrontendSettingsType {
 }
 
 export enum FrontendSettingsType {
-  headerTests = 'header-tests',
+  headTests = 'header-tests',
+  headTests2 = 'header-tests2',
   epicTests = 'epic-tests',
   epicHoldbackTests = 'epic-holdback-tests',
   liveblogEpicTests = 'liveblog-epic-tests',

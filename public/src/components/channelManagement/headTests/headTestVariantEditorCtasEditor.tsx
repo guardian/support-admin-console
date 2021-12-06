@@ -15,7 +15,7 @@ const styles = ({ spacing }: Theme) =>
     },
   });
 
-interface HeaderTestVariantEditorButtonsEditorProps extends WithStyles<typeof styles> {
+interface HeadTestVariantEditorCtasEditorProps extends WithStyles<typeof styles> {
   primaryCta?: Cta;
   secondaryCta?: SecondaryCta;
   updatePrimaryCta: (updatedCta?: Cta) => void;
@@ -25,7 +25,7 @@ interface HeaderTestVariantEditorButtonsEditorProps extends WithStyles<typeof st
   supportSecondaryCta: boolean;
 }
 
-const HeaderTestVariantEditorButtonsEditor: React.FC<HeaderTestVariantEditorButtonsEditorProps> = ({
+const HeadTestVariantEditorCtasEditor: React.FC<HeadTestVariantEditorCtasEditorProps> = ({
   classes,
   primaryCta,
   secondaryCta,
@@ -34,7 +34,7 @@ const HeaderTestVariantEditorButtonsEditor: React.FC<HeaderTestVariantEditorButt
   onValidationChange,
   isDisabled,
   supportSecondaryCta,
-}: HeaderTestVariantEditorButtonsEditorProps) => {
+}: HeadTestVariantEditorCtasEditorProps) => {
   return (
     <div className={classes.container}>
       <VariantEditorCtaEditor
@@ -60,4 +60,4 @@ const HeaderTestVariantEditorButtonsEditor: React.FC<HeaderTestVariantEditorButt
   );
 };
 
-export default withStyles(styles)(HeaderTestVariantEditorButtonsEditor);
+export default withStyles(styles)(HeadTestVariantEditorCtasEditor);

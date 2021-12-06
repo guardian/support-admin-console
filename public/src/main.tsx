@@ -18,8 +18,9 @@ import {
   BannerTestsForm2,
 } from './components/channelManagement/bannerTests/bannerTestsForm';
 import {
-  HeaderTestsForm,
-} from './components/channelManagement/headerTests/headerTestsForm';
+  HeadTestsForm1,
+  HeadTestsForm2,
+} from './components/channelManagement/headTests/headTestsForm';
 import {
   createStyles,
   Theme,
@@ -148,7 +149,13 @@ const AppRouter = withStyles(styles)(({ classes }: Props) => {
           <Route
             path="/header-tests"
             render={(): React.ReactElement =>
-              createComponent(<HeaderTestsForm />, 'Header Tests')
+              createComponent(<HeadTestsForm1 />, 'Header Tests')
+            }
+          />
+          <Route
+            path="/header-tests2"
+            render={(): React.ReactElement =>
+              createComponent(<HeadTestsForm2 />, 'Header Tests 2')
             }
           />
           <Route
