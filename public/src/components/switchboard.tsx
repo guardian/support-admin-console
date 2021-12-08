@@ -60,6 +60,7 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   },
   buttons: {
     marginTop: spacing(2),
+    marginBottom: spacing(2),
   },
   form: {
     marginTop: spacing(4),
@@ -167,6 +168,19 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     setNeedToSaveDataWarning(false);
   };
 
+  const SaveButton = (): JSX.Element => (
+    <div className={classes.buttons}>
+      <Button
+        variant="contained"
+        onClick={actionSaveData}
+        className={classes.button}
+      >
+        <SaveIcon />
+        Save
+      </Button>
+    </div>
+  )
+
   return (
     <form className={classes.form}>
       <Typography className={classes.existingSwitchesHeader} variant="h6">
@@ -174,21 +188,12 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
       </Typography>
 
       {displayNeedToSaveDataWarning()}
+      <SaveButton />
 
       {createSwitchFields()}
 
       {displayNeedToSaveDataWarning()}
-
-      <div className={classes.buttons}>
-        <Button
-          variant="contained"
-          onClick={(): void => actionSaveData()}
-          className={classes.button}
-        >
-          <SaveIcon />
-          Save
-        </Button>
-      </div>
+      <SaveButton />
 
       <Divider variant="fullWidth" className={classes.divider} />
 
