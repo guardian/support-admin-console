@@ -1,456 +1,219 @@
-import React from 'react';
-import update from 'immutability-helper';
+import React, { useState } from 'react';
 
-import FormLabel from '@material-ui/core/FormLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
-import Button from '@material-ui/core/Button';
-import SaveIcon from '@material-ui/icons/Save';
-import RefreshIcon from '@material-ui/icons/Refresh';
-
-import { Theme, withStyles, createStyles, WithStyles } from '@material-ui/core/styles';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 
 import {
+  Divider,
+  Typography,
+  Button,
+  FormLabel,
+  FormControl,
+  FormControlLabel,
+} from '@material-ui/core';
+import SwitchUI from '@material-ui/core/Switch';
+import SaveIcon from '@material-ui/icons/Save';
+import Alert from '@material-ui/lab/Alert';
+
+import cloneDeep from 'lodash/cloneDeep';
+
+import {
+  SupportFrontendSettingsType,
   fetchSupportFrontendSettings,
   saveSupportFrontendSettings,
-  SupportFrontendSettingsType,
 } from '../utils/requests';
+
+import withS3Data, { InnerProps, DataFromServer } from '../hocs/withS3Data';
 
 enum SwitchState {
   On = 'On',
   Off = 'Off',
 }
 
-enum OneOffPaymentMethod {
-  stripe = 'stripe',
-  payPal = 'payPal',
-  amazonPay = 'amazonPay',
-  stripeApplePay = 'stripeApplePay',
-  stripePaymentRequestButton = 'stripePaymentRequestButton',
+interface Switch {
+  description: string;
+  state: SwitchState;
 }
 
-enum RecurringPaymentMethod {
-  stripe = 'stripe',
-  payPal = 'payPal',
-  directDebit = 'directDebit',
-  existingCard = 'existingCard',
-  existingDirectDebit = 'existingDirectDebit',
-  stripeApplePay = 'stripeApplePay',
-  stripePaymentRequestButton = 'stripePaymentRequestButton',
-  sepa = 'sepa',
-}
-
-interface Switches {
-  oneOffPaymentMethods: {
-    [p in OneOffPaymentMethod]: SwitchState;
-  };
-  recurringPaymentMethods: {
-    [p in RecurringPaymentMethod]: SwitchState;
-  };
-  enableDigitalSubGifting: SwitchState;
-  useDotcomContactPage: SwitchState;
-  enableRecaptchaBackend: SwitchState;
-  enableRecaptchaFrontend: SwitchState;
-  enableContributionsCampaign: SwitchState;
-  forceContributionsCampaign: SwitchState;
-  enableQuantumMetric: SwitchState;
-  experiments: {
-    [featureSwitch: string]: {
-      name: string;
-      description: string;
-      state: SwitchState;
-    };
+interface SwitchGroup {
+  description: string;
+  switches: {
+    [switchName: string]: Switch;
   };
 }
 
-interface DataFromServer {
-  value: Switches;
-  version: string;
+interface SupportFrontendSwitches {
+  [groupName: string]: SwitchGroup;
 }
 
-function booleanToSwitchState(b: boolean): SwitchState {
-  return b ? SwitchState.On : SwitchState.Off;
+const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
+  formControl: {
+    marginRight: spacing(4),
+    marginBottom: spacing(4),
+    paddingTop: spacing(1),
+    paddingBottom: spacing(1),
+    paddingLeft: spacing(2),
+    paddingRight: spacing(2),
+    border: `1px solid ${palette.grey['300']}`,
+  },
+  button: {
+    marginRight: spacing(2),
+  },
+  buttons: {
+    marginTop: spacing(2),
+  },
+  form: {
+    marginTop: spacing(4),
+    marginLeft: spacing(4),
+    marginRight: spacing(4),
+    marginBottom: spacing(4),
+    overflowY: 'auto',
+  },
+  divider: {
+    marginTop: spacing(4),
+    marginBottom: spacing(4),
+  },
+  existingSwitchesHeader: {
+    marginBottom: spacing(2),
+  },
+  newSwitchesHeader: {
+    marginBottom: spacing(2),
+  },
+  textParagraph: {
+    marginBottom: spacing(2),
+  },
+}));
+
+function sortByDescription<T extends Switch | SwitchGroup>(a: [string, T], b: [string, T]): number {
+  return a[1].description > b[1].description ? 1 : -1;
 }
 
-function switchStateToBoolean(s: SwitchState): boolean {
-  return s === SwitchState.On;
-}
+const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
+  data,
+  setData,
+  saveData,
+}: InnerProps<SupportFrontendSwitches>) => {
+  const classes = useStyles();
 
-function paymentMethodToHumanReadable(paymentMethod: string): string {
-  switch (paymentMethod) {
-    case OneOffPaymentMethod.amazonPay:
-      return 'Amazon Pay';
-    case OneOffPaymentMethod.stripe:
-      return 'Stripe - Credit/Debit card';
-    case OneOffPaymentMethod.stripeApplePay:
-      return 'Stripe - Apple Pay';
-    case OneOffPaymentMethod.stripePaymentRequestButton:
-      return 'Stripe - Payment Request Button';
-    case RecurringPaymentMethod.directDebit:
-      return 'GoCardless - Direct Debit';
-    case RecurringPaymentMethod.payPal:
-      return 'PayPal';
-    case RecurringPaymentMethod.stripe:
-      return 'Stripe - Credit/Debit card';
-    case RecurringPaymentMethod.existingCard:
-      return 'Stripe - Existing Card';
-    case RecurringPaymentMethod.existingDirectDebit:
-      return 'GoCardless - Existing Direct Debit';
-    case RecurringPaymentMethod.stripeApplePay:
-      return 'Stripe - Apple Pay';
-    case RecurringPaymentMethod.stripePaymentRequestButton:
-      return 'Stripe - Payment Request Button';
-    case RecurringPaymentMethod.sepa:
-      return 'Sepa';
-    default:
-      return 'Unknown';
-  }
-}
+  const [needToSaveDataWarning, setNeedToSaveDataWarning] = useState(false);
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const styles = ({ palette, spacing }: Theme) =>
-  createStyles({
-    formControl: {
-      marginRight: spacing(4),
-      marginBottom: spacing(4),
-      paddingTop: spacing(1),
-      paddingBottom: spacing(1),
-      paddingLeft: spacing(2),
-      paddingRight: spacing(2),
-      border: `1px solid ${palette.grey['300']}`,
-    },
-    button: {
-      marginRight: spacing(2),
-    },
-    buttons: {
-      marginTop: spacing(2),
-    },
-    form: {
-      marginTop: spacing(4),
-      marginLeft: spacing(4),
-      marginRight: spacing(4),
-      marginBottom: spacing(4),
-      overflowY: 'auto',
-    },
-  });
-
-type Props = WithStyles<typeof styles>;
-
-class Switchboard extends React.Component<Props, Switches> {
-  state: Switches;
-  previousStateFromServer: DataFromServer | null;
-
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      oneOffPaymentMethods: {
-        stripe: SwitchState.Off,
-        stripeApplePay: SwitchState.Off,
-        stripePaymentRequestButton: SwitchState.Off,
-        payPal: SwitchState.Off,
-        amazonPay: SwitchState.Off,
-      },
-      recurringPaymentMethods: {
-        stripe: SwitchState.Off,
-        stripeApplePay: SwitchState.Off,
-        stripePaymentRequestButton: SwitchState.Off,
-        payPal: SwitchState.Off,
-        directDebit: SwitchState.Off,
-        existingCard: SwitchState.Off,
-        existingDirectDebit: SwitchState.Off,
-        sepa: SwitchState.Off,
-      },
-      enableDigitalSubGifting: SwitchState.Off,
-      useDotcomContactPage: SwitchState.Off,
-      enableRecaptchaBackend: SwitchState.Off,
-      enableRecaptchaFrontend: SwitchState.Off,
-      enableContributionsCampaign: SwitchState.Off,
-      forceContributionsCampaign: SwitchState.Off,
-      enableQuantumMetric: SwitchState.Off,
-      experiments: {},
-    };
-    this.previousStateFromServer = null;
-  }
-
-  UNSAFE_componentWillMount(): void {
-    this.fetchStateFromServer();
-  }
-
-  fetchStateFromServer(): void {
-    fetchSupportFrontendSettings(SupportFrontendSettingsType.switches).then(serverData => {
-      this.previousStateFromServer = serverData;
-      this.setState({
-        ...serverData.value,
-      });
-    });
-  }
-
-  updateOneOffPaymentMethodSwitch(paymentMethod: string, switchState: SwitchState): void {
-    this.setState(prevState =>
-      update(prevState, {
-        oneOffPaymentMethods: {
-          [paymentMethod]: { $set: switchState },
-        },
-      }),
+  const displayNeedToSaveDataWarning = (): JSX.Element | false => {
+    return (
+      needToSaveDataWarning && (
+        <Alert severity="warning">
+          Switch settings have been changed. Changes need to be saved before they take effect!
+        </Alert>
+      )
     );
-  }
-
-  updateRecurringPaymentMethodSwitch(paymentMethod: string, switchState: SwitchState): void {
-    this.setState(prevState =>
-      update(prevState, {
-        recurringPaymentMethods: {
-          [paymentMethod]: { $set: switchState },
-        },
-      }),
-    );
-  }
-
-  updateFeatureSwitch(switchName: string, switchState: SwitchState): void {
-    this.setState(prevState =>
-      update(prevState, {
-        experiments: {
-          [switchName]: {
-            state: { $set: switchState },
-          },
-        },
-      }),
-    );
-  }
-
-  saveSwitches = (): void => {
-    const newState = update(this.previousStateFromServer, {
-      value: { $set: this.state },
-    });
-
-    saveSupportFrontendSettings(SupportFrontendSettingsType.switches, newState)
-      .then(resp => {
-        if (!resp.ok) {
-          resp.text().then(msg => alert(msg));
-        }
-        this.fetchStateFromServer();
-      })
-      .catch(resp => {
-        alert(`Error while saving: ${resp}`);
-        this.fetchStateFromServer();
-      });
   };
 
-  render(): React.ReactNode {
-    const { classes } = this.props;
+  const updateSwitchSetting = (
+    switchId: string,
+    switchData: Switch,
+    groupId: string,
+    isChecked: boolean,
+  ): void => {
+    const updatedState = cloneDeep(data);
+
+    updatedState[groupId].switches[switchId].state = isChecked ? SwitchState.On : SwitchState.Off;
+
+    setData(updatedState);
+    setNeedToSaveDataWarning(true);
+  };
+
+  const createSwitchesFromGroupData = (
+    switchId: string,
+    switchData: Switch,
+    groupId: string,
+  ): JSX.Element => {
+    const isChecked = switchData.state === 'On';
 
     return (
-      <form className={classes.form}>
-        <div>
-          {/* as "div", as "label" typecasts are to get around this issue: https://github.com/mui-org/material-ui/issues/13744 */}
-          <FormControl component={'fieldset' as 'div'} className={classes.formControl}>
-            <FormLabel component={'legend' as 'label'}>One-off contributions</FormLabel>
-            {/*
-              It seems no matter how I set up the types, Object.entries and Object.keys
-              give a string type to the object keys. This is a bit of a shame since it would be nice
-              to have an enum type for paymentMethod and then set that type on arguments to
-              paymentMethodToHumanReadable and updateOneOffPaymentMethodSwitch.
-            */}
-            {Object.entries(this.state.oneOffPaymentMethods)
-              .sort(([pm1], [pm2]) =>
-                paymentMethodToHumanReadable(pm1).localeCompare(paymentMethodToHumanReadable(pm2)),
-              )
-              .map(([paymentMethod, switchState], index) => (
-                <FormControlLabel
-                  key={index}
-                  control={
-                    <Switch
-                      checked={switchStateToBoolean(switchState)}
-                      onChange={(ev): void =>
-                        this.updateOneOffPaymentMethodSwitch(
-                          paymentMethod,
-                          booleanToSwitchState(ev.target.checked),
-                        )
-                      }
-                      value={paymentMethod}
-                    />
-                  }
-                  label={paymentMethodToHumanReadable(paymentMethod)}
-                />
-              ))}
-          </FormControl>
-          <FormControl component={'fieldset' as 'div'} className={classes.formControl}>
-            <FormLabel component={'legend' as 'label'}>Recurring contributions</FormLabel>
-            {Object.entries(this.state.recurringPaymentMethods)
-              .sort(([pm1], [pm2]) =>
-                paymentMethodToHumanReadable(pm1).localeCompare(paymentMethodToHumanReadable(pm2)),
-              )
-              .map(([paymentMethod, switchState], index) => (
-                <FormControlLabel
-                  key={index}
-                  control={
-                    <Switch
-                      checked={switchStateToBoolean(switchState)}
-                      onChange={(event): void =>
-                        this.updateRecurringPaymentMethodSwitch(
-                          paymentMethod,
-                          booleanToSwitchState(event.target.checked),
-                        )
-                      }
-                      value={paymentMethod}
-                    />
-                  }
-                  label={paymentMethodToHumanReadable(paymentMethod)}
-                />
-              ))}
-          </FormControl>
-          <FormControl component={'fieldset' as 'div'} className={classes.formControl}>
-            <FormLabel component={'legend' as 'label'}>Feature Switches</FormLabel>
-            {Object.entries(this.state.experiments)
-              .sort(([switchName1], [switchName2]) => switchName1.localeCompare(switchName2))
-              .map(([switchName, switchData], index) => (
-                <FormControlLabel
-                  key={index}
-                  control={
-                    <Switch
-                      checked={switchStateToBoolean(switchData.state)}
-                      onChange={(event): void =>
-                        this.updateFeatureSwitch(
-                          switchName,
-                          booleanToSwitchState(event.target.checked),
-                        )
-                      }
-                      value={switchName}
-                    />
-                  }
-                  label={`${switchData.name}: ${switchData.description}`}
-                />
-              ))}
-          </FormControl>
-          <FormControl component={'fieldset' as 'div'} className={classes.formControl}>
-            <FormLabel component={'legend' as 'label'}>Recaptcha Switches</FormLabel>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={switchStateToBoolean(this.state.enableRecaptchaBackend)}
-                  onChange={(event): void =>
-                    this.setState({
-                      enableRecaptchaBackend: booleanToSwitchState(event.target.checked),
-                    })
-                  }
-                  value={switchStateToBoolean(this.state.enableRecaptchaBackend)}
-                />
-              }
-              label="Enable recaptcha on backend [Always Disable First then wait 2 mins]"
-            />
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={switchStateToBoolean(this.state.enableRecaptchaFrontend)}
-                  onChange={(event): void =>
-                    this.setState({
-                      enableRecaptchaFrontend: booleanToSwitchState(event.target.checked),
-                    })
-                  }
-                  value={switchStateToBoolean(this.state.enableRecaptchaFrontend)}
-                />
-              }
-              label="Enable recaptcha on frontend [Always Enable First then wait 2 mins]"
-            />
-          </FormControl>
-          <FormControl component={'fieldset' as 'div'} className={classes.formControl}>
-            <FormLabel component={'legend' as 'label'}>Subscriptions Switches</FormLabel>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={switchStateToBoolean(this.state.enableDigitalSubGifting)}
-                  onChange={(event): void =>
-                    this.setState({
-                      enableDigitalSubGifting: booleanToSwitchState(event.target.checked),
-                    })
-                  }
-                  value={switchStateToBoolean(this.state.enableDigitalSubGifting)}
-                />
-              }
-              label="Enable Digital Subscriptions Gifting"
-            />
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={switchStateToBoolean(this.state.useDotcomContactPage)}
-                  onChange={(event): void =>
-                    this.setState({
-                      useDotcomContactPage: booleanToSwitchState(event.target.checked),
-                    })
-                  }
-                  value={switchStateToBoolean(this.state.useDotcomContactPage)}
-                />
-              }
-              label="Use emergency contact page on dotcom"
-            />
-          </FormControl>
-          <FormControl component={'fieldset' as 'div'} className={classes.formControl}>
-            <FormLabel component={'legend' as 'label'}>Campaign Switches</FormLabel>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={switchStateToBoolean(this.state.enableContributionsCampaign)}
-                  onChange={(event): void =>
-                    this.setState({
-                      enableContributionsCampaign: booleanToSwitchState(event.target.checked),
-                    })
-                  }
-                  value={switchStateToBoolean(this.state.enableContributionsCampaign)}
-                />
-              }
-              label="Enable contributions campaign"
-            />
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={switchStateToBoolean(this.state.forceContributionsCampaign)}
-                  onChange={(event): void =>
-                    this.setState({
-                      forceContributionsCampaign: booleanToSwitchState(event.target.checked),
-                    })
-                  }
-                  value={switchStateToBoolean(this.state.forceContributionsCampaign)}
-                />
-              }
-              label="Force all users into the contributions campaign"
-            />
-          </FormControl>
-
-          <FormControl component={'fieldset' as 'div'} className={classes.formControl}>
-            <FormLabel component={'legend' as 'label'}>Other switches</FormLabel>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={switchStateToBoolean(this.state.enableQuantumMetric)}
-                  onChange={(event): void =>
-                    this.setState({
-                      enableQuantumMetric: booleanToSwitchState(event.target.checked),
-                    })
-                  }
-                  value={switchStateToBoolean(this.state.enableQuantumMetric)}
-                />
-              }
-              label="Enable Quantum Metric"
-            />
-          </FormControl>
-        </div>
-        <div className={classes.buttons}>
-          <Button variant="contained" onClick={this.saveSwitches} className={classes.button}>
-            <SaveIcon />
-            Save
-          </Button>
-          <Button
-            variant="contained"
-            onClick={(): void => this.fetchStateFromServer()}
-            className={classes.button}
-          >
-            <RefreshIcon />
-            Refresh
-          </Button>
-        </div>
-      </form>
+      <FormControlLabel
+        label={switchData.description}
+        checked={switchData.state === 'On'}
+        control={<SwitchUI />}
+        onChange={(): void => updateSwitchSetting(switchId, switchData, groupId, !isChecked)}
+        value={switchId}
+        key={switchId}
+      />
     );
-  }
-}
+  };
 
-export default withStyles(styles)(Switchboard);
+  const createGroupsFromData = (group: [string, SwitchGroup]): JSX.Element => {
+    const [groupId, groupData] = group;
+
+    return (
+      <FormControl className={classes.formControl} key={groupId}>
+        <FormLabel>{groupData.description}</FormLabel>
+        {Object.entries(groupData.switches)
+          .sort(sortByDescription)
+          .map(([switchId, switchData]) =>
+            createSwitchesFromGroupData(switchId, switchData, groupId),
+          )}
+      </FormControl>
+    );
+  };
+
+  const createSwitchFields = (): JSX.Element => (
+    <>
+      {Object.entries(data)
+        .sort(sortByDescription)
+        .map(group => createGroupsFromData(group))}
+    </>
+  );
+
+  const actionSaveData = (): void => {
+    saveData();
+    setNeedToSaveDataWarning(false);
+  };
+
+  return (
+    <form className={classes.form}>
+      <Typography className={classes.existingSwitchesHeader} variant="h6">
+        Manage existing switches
+      </Typography>
+
+      {displayNeedToSaveDataWarning()}
+
+      {createSwitchFields()}
+
+      {displayNeedToSaveDataWarning()}
+
+      <div className={classes.buttons}>
+        <Button
+          variant="contained"
+          onClick={(): void => actionSaveData()}
+          className={classes.button}
+        >
+          <SaveIcon />
+          Save
+        </Button>
+      </div>
+
+      <Divider variant="fullWidth" className={classes.divider} />
+
+      <Typography className={classes.newSwitchesHeader} variant="h6">
+        Create new switches
+      </Typography>
+      <Typography className={classes.textParagraph} variant="body1">
+        Currently, to create a new switch, update the JSON file in AWS S3 to include details of the
+        switch, then refresh this page so that the switch status can be viewed and updated.
+      </Typography>
+      <Typography className={classes.textParagraph} variant="body1">
+        If there is a demand for it, we can add functionality to create new switches (and new switch
+        groups) to this page in due course.
+      </Typography>
+    </form>
+  );
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const fetchSettings = (): Promise<any> => {
+  return fetchSupportFrontendSettings(SupportFrontendSettingsType.switches);
+};
+
+const saveSettings = (data: DataFromServer<SupportFrontendSwitches>): Promise<Response> => {
+  return saveSupportFrontendSettings(SupportFrontendSettingsType.switches, data);
+};
+
+export default withS3Data<SupportFrontendSwitches>(Switchboard, fetchSettings, saveSettings);
