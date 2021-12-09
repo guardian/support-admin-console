@@ -170,16 +170,12 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
 
   const SaveButton = (): JSX.Element => (
     <div className={classes.buttons}>
-      <Button
-        variant="contained"
-        onClick={actionSaveData}
-        className={classes.button}
-      >
+      <Button variant="contained" onClick={actionSaveData} className={classes.button}>
         <SaveIcon />
         Save
       </Button>
     </div>
-  )
+  );
 
   return (
     <form className={classes.form}>
@@ -202,8 +198,11 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
       </Typography>
       <Typography className={classes.textParagraph} variant="body1">
         Currently, to create a new switch, update the JSON file in AWS S3 to include details of the
-        switch, then refresh this page so that the switch status can be viewed and updated.
-        Also, you need to add the new switch to <a href="https://github.com/guardian/support-frontend/blob/main/support-frontend/app/admin/settings/Switches.scala">support-frontend.</a>
+        switch, then refresh this page so that the switch status can be viewed and updated. Also,
+        you need to add the new switch to{' '}
+        <a href="https://github.com/guardian/support-frontend/blob/main/support-frontend/app/admin/settings/Switches.scala">
+          support-frontend.
+        </a>
       </Typography>
       <Typography className={classes.textParagraph} variant="body1">
         If there is a demand for it, we can add functionality to create new switches (and new switch
