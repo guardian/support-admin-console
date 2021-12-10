@@ -51,6 +51,10 @@ POST  /frontend/header-tests/update                   controllers.HeaderTestsCon
 POST  /frontend/header-tests/lock                     controllers.HeaderTestsController.lock
 POST  /frontend/header-tests/unlock                   controllers.HeaderTestsController.unlock
 POST  /frontend/header-tests/takecontrol              controllers.HeaderTestsController.takecontrol
+POST  /frontend/header-tests/archive                  controllers.HeaderTestArchiveController.set
+GET   /frontend/header-tests/archive/:testName        controllers.HeaderTestArchiveController.get(testName: String)
+GET   /frontend/header-tests/archived-test-names      controllers.HeaderTestArchiveController.list
+
 
 # ----- epic holdback tests ----- #
 GET   /frontend/epic-holdback-tests                          controllers.epic.EpicHoldbackTestsController.get

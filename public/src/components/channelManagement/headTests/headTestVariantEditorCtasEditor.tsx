@@ -1,8 +1,11 @@
 import React from 'react';
 import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core';
 import VariantEditorCtaEditor from '../variantEditorCtaEditor';
-import VariantEditorSecondaryCtaEditor from '../variantEditorSecondaryCtaEditor';
-import { Cta, SecondaryCta } from '../helpers/shared';
+import HeadTestVariantEditorSecondaryCtaEditor from './headTestVariantEditorSecondaryCtaEditor';
+
+// import { Cta, SecondaryCta } from '../helpers/shared';
+import { Cta } from '../helpers/shared';
+
 import { DEFAULT_PRIMARY_CTA, DEFAULT_SECONDARY_CTA } from './utils/defaults';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -17,9 +20,9 @@ const styles = ({ spacing }: Theme) =>
 
 interface HeadTestVariantEditorCtasEditorProps extends WithStyles<typeof styles> {
   primaryCta?: Cta;
-  secondaryCta?: SecondaryCta;
+  secondaryCta?: Cta;
   updatePrimaryCta: (updatedCta?: Cta) => void;
-  updateSecondaryCta: (updatedCta?: SecondaryCta) => void;
+  updateSecondaryCta: (updatedCta?: Cta) => void;
   onValidationChange: (isValid: boolean) => void;
   isDisabled: boolean;
   supportSecondaryCta: boolean;
@@ -47,7 +50,7 @@ const HeadTestVariantEditorCtasEditor: React.FC<HeadTestVariantEditorCtasEditorP
       />
 
       {supportSecondaryCta && (
-        <VariantEditorSecondaryCtaEditor
+        <HeadTestVariantEditorSecondaryCtaEditor
           label="Secondary button"
           isDisabled={isDisabled}
           cta={secondaryCta}

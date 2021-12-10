@@ -1,50 +1,25 @@
 import React from 'react';
 import { Region } from '../../../utils/models';
 
-
-// import { ArticlesViewedSettings, UserCohort } from '../helpers/shared';
 import { UserCohort } from '../helpers/shared';
-
-
-// import { ARTICLE_COUNT_TEMPLATE } from '../helpers/validation';
-
 
 import { Typography } from '@material-ui/core';
 import HeadTestVariantEditor from './headTestVariantEditor';
 import TestVariantsEditor from '../testVariantsEditor';
 import TestEditorHeader from '../testEditorHeader';
 
-
-// import TestEditorMinArticlesViewedInput from '../testEditorMinArticlesViewedInput';
-
-
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
-
-
-// import TestEditorArticleCountEditor, {
-//   DEFAULT_ARTICLES_VIEWED_SETTINGS,
-// } from '../testEditorArticleCountEditor';
-
 
 import TestEditorActionButtons from '../testEditorActionButtons';
 import LiveSwitch from '../../shared/liveSwitch';
 import useValidation from '../hooks/useValidation';
-import { HeadContent, HeadTest, HeadVariant } from '../../../models/head';
+import { HeadTest, HeadVariant } from '../../../models/head';
 import { getDefaultVariant } from './utils/defaults';
 import TestEditorVariantSummary from '../testEditorVariantSummary';
-import HeadVariantPreview from './headVariantPreview';
+
 import { ControlProportionSettings } from '../helpers/controlProportionSettings';
 import TestVariantsSplitEditor from '../testVariantsSplitEditor';
 import { useStyles } from '../helpers/testEditorStyles';
-
-const copyHasTemplate = (content: HeadContent, template: string): boolean =>
-  (content.heading && content.heading.includes(template)) || content.messageText.includes(template);
-const testCopyHasTemplate = (test: HeadTest, template: string): boolean =>
-  test.variants.some(
-    variant =>
-      (variant.headContent && copyHasTemplate(variant.headContent, template)) ||
-      (variant.mobileHeadContent && copyHasTemplate(variant.mobileHeadContent, template)),
-  );
 
 interface HeadTestEditorProps {
   test: HeadTest;
@@ -78,29 +53,9 @@ const HeadTestEditor: React.FC<HeadTestEditorProps> = ({
 
   const setValidationStatusForField = useValidation(onValidationChange);
 
-  // const getArticlesViewedSettings = (test: HeadTest): ArticlesViewedSettings | undefined => {
-  //   if (!!test.articlesViewedSettings) {
-  //     return test.articlesViewedSettings;
-  //   }
-  //   if (testCopyHasTemplate(test, ARTICLE_COUNT_TEMPLATE)) {
-  //     return DEFAULT_ARTICLES_VIEWED_SETTINGS;
-  //   }
-  //   return undefined;
-  // };
-
   const updateTest = (updatedTest: HeadTest): void => {
-    onChange({
-      ...updatedTest,
-      // To save dotcom from having to work this out
-      // articlesViewedSettings: getArticlesViewedSettings(updatedTest),
-    });
+    onChange({ ...updatedTest });
   };
-
-  // const onMinArticlesViewedValidationChanged = (isValid: boolean): void =>
-  //   setValidationStatusForField('minArticlesViewed', isValid);
-
-  // const onArticlesViewedSettingsValidationChanged = (isValid: boolean): void =>
-  //   setValidationStatusForField('articlesViewedSettings', isValid);
 
   const onVariantsSplitSettingsValidationChanged = (isValid: boolean): void =>
     setValidationStatusForField('variantsSplitSettings', isValid);
@@ -129,13 +84,6 @@ const HeadTestEditor: React.FC<HeadTestEditorProps> = ({
     onVariantsChange(test.variants.filter(variant => variant.name !== deletedVariantName));
   };
 
-  // const onMinArticlesViewedChange = (updatedMinArticles: number): void => {
-  //   updateTest({
-  //     ...test,
-  //     minArticlesBeforeShowingHead: updatedMinArticles,
-  //   });
-  // };
-
   const onRegionsChange = (updatedRegions: Region[]): void => {
     updateTest({ ...test, locations: updatedRegions });
   };
@@ -143,15 +91,6 @@ const HeadTestEditor: React.FC<HeadTestEditorProps> = ({
   const onCohortChange = (updatedCohort: UserCohort): void => {
     updateTest({ ...test, userCohort: updatedCohort });
   };
-
-  // const onArticlesViewedSettingsChange = (
-  //   updatedArticlesViewedSettings?: ArticlesViewedSettings,
-  // ): void => {
-  //   updateTest({
-  //     ...test,
-  //     articlesViewedSettings: updatedArticlesViewedSettings,
-  //   });
-  // };
 
   const onCopy = (name: string, nickname: string): void => {
     onTestSelected(name);
@@ -177,8 +116,8 @@ const HeadTestEditor: React.FC<HeadTestEditorProps> = ({
       testName={test.name}
       testType="BANNER"
       isInEditMode={editMode}
-      topButton={<HeadVariantPreview variant={variant} />}
-      platform="DOTCOM" // hardcoded as heads are currently not supported in AMP or Apple News
+      // hardcoded as heads are currently not supported in AMP or Apple News
+      platform="DOTCOM"
     />
   );
 
@@ -238,21 +177,6 @@ const HeadTestEditor: React.FC<HeadTestEditorProps> = ({
           </div>
         )}
 
-{/*
-        <div className={classes.sectionContainer}>
-          <Typography variant={'h3'} className={classes.sectionHeader}>
-            Display rules
-          </Typography>
-
-          <TestEditorMinArticlesViewedInput
-            minArticles={test.minArticlesBeforeShowingHead}
-            isDisabled={!editMode}
-            onValidationChange={onMinArticlesViewedValidationChanged}
-            onUpdate={onMinArticlesViewedChange}
-          />
-        </div>
-*/}
-
         <div className={classes.sectionContainer}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
             Target audience
@@ -267,21 +191,6 @@ const HeadTestEditor: React.FC<HeadTestEditorProps> = ({
             showSupporterStatusSelector={true}
           />
         </div>
-
-{/*
-        <div className={classes.sectionContainer}>
-          <Typography variant={'h3'} className={classes.sectionHeader}>
-            Article count
-          </Typography>
-
-          <TestEditorArticleCountEditor
-            articlesViewedSettings={test.articlesViewedSettings}
-            onArticlesViewedSettingsChanged={onArticlesViewedSettingsChange}
-            onValidationChange={onArticlesViewedSettingsValidationChanged}
-            isDisabled={!editMode}
-          />
-        </div>
-*/}
 
         <div className={classes.buttonsContainer}>
           <TestEditorActionButtons

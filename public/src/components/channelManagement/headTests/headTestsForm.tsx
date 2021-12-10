@@ -9,12 +9,11 @@ import { getDefaultTest } from './utils/defaults';
 
 type Props = InnerComponentProps<HeadTest>;
 
-const getHeadTestsForm = (isFirstChannel: boolean): React.FC<Props> => {
+const getHeadTestsForm = (): React.FC<Props> => {
   const createDefaultHeadTest = (newTestName: string, newTestNickname: string): HeadTest => ({
     ...getDefaultTest(),
     name: newTestName,
     nickname: newTestNickname,
-    minArticlesBeforeShowingHead: isFirstChannel ? 2 : 4,
   });
 
   const HeadTestsForm: React.FC<Props> = ({
@@ -99,11 +98,4 @@ const getHeadTestsForm = (isFirstChannel: boolean): React.FC<Props> => {
   return HeadTestsForm;
 };
 
-export const HeadTestsForm1 = TestsForm(
-  getHeadTestsForm(true),
-  FrontendSettingsType.headTests,
-);
-export const HeadTestsForm2 = TestsForm(
-  getHeadTestsForm(false),
-  FrontendSettingsType.headTests2,
-);
+export const HeadTestsForm = TestsForm(getHeadTestsForm(), FrontendSettingsType.headTests);

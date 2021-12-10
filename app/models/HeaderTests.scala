@@ -27,6 +27,7 @@ case class HeaderTest(
   locations: List[Region] = Nil,
   userCohort: Option[UserCohort] = None,
   variants: List[HeaderVariant],
+  controlProportionSettings: Option[ControlProportionSettings] = None
 )
 
 case class HeaderTests(tests: List[HeaderTest])
@@ -38,38 +39,3 @@ object HeaderTests {
   implicit val headerTestsDecoder = Decoder[HeaderTests]
   implicit val headerTestsEncoder = Encoder[HeaderTests]
 }
-
-    // {
-    //   "name" : "USEOY_CONTRIBUTE_2021",
-    //   "nickname" : "US EOY 2021 Contribute",
-    //   "isOn" : true,
-    //   "locations" : [
-    //     "UnitedStates",
-    //   ],
-    //   "userCohort" : "AllNonSupporters",
-    //   "variants" : [
-    //     {
-    //       "name" : "CONTROL",
-    //       "content" : {
-    //         "heading": "Support the Guardian",
-    //         "subheading": "Make a year-end gift",
-    //         "primaryCta": {
-    //           "url": "https://support.theguardian.com/contribute",
-    //           "text": "Contribute"
-    //         },
-    //         "secondaryCta": {
-    //           "url": "https://support.theguardian.com/subscribe",
-    //           "text": "Subscribe"
-    //         }
-    //       },
-    //       "mobileContent" : {
-    //         "heading": "",
-    //         "subheading": "",
-    //         "primaryCta": {
-    //           "url": "https://support.theguardian.com/contribute",
-    //           "text": "Make a year-end gift"
-    //         }
-    //       }
-    //     }
-    //   ]
-    // },

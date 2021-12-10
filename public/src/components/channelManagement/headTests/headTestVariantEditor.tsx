@@ -11,10 +11,9 @@ import {
 } from '@material-ui/core';
 import HeadTestVariantEditorCtasEditor from './headTestVariantEditorCtasEditor';
 import VariantEditorCopyLengthWarning from '../variantEditorCopyLengthWarning';
-import { templateValidatorForPlatform, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
-import { Cta, SecondaryCta } from '../helpers/shared';
-import HeadTemplateSelector from './headTemplateSelector';
-import { HeadContent, HeadTemplate, HeadVariant } from '../../../models/head';
+import { templateValidatorForPlatform } from '../helpers/validation';
+import { Cta } from '../helpers/shared';
+import { HeadContent, HeadVariant } from '../../../models/head';
 import { getDefaultVariant } from './utils/defaults';
 import useValidation from '../hooks/useValidation';
 
@@ -54,13 +53,11 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   },
 }));
 
-const HEADER_DEFAULT_HELPER_TEXT = 'Assitive text';
-const BODY_DEFAULT_HELPER_TEXT = 'Main head message, including paragraph breaks';
-const HIGHTLIGHTED_TEXT_HELPER_TEXT = 'Final sentence of body copy';
+const HEADING_DEFAULT_HELPER_TEXT = 'Heading assitive text';
+const SUBHEADING_DEFAULT_HELPER_TEXT = 'Subheading assitive text';
 
-const HEADER_COPY_RECOMMENDED_LENGTH = 50;
-const BODY_COPY_WITHOUT_SECONDARY_CTA_RECOMMENDED_LENGTH = 525;
-const BODY_COPY_WITH_SECONDARY_CTA_RECOMMENDED_LENGTH = 390;
+const HEADING_COPY_RECOMMENDED_LENGTH = 50;
+const SUBHEADING_COPY_RECOMMENDED_LENGTH = 50;
 
 type DeviceType = 'ALL' | 'MOBILE' | 'NOT_MOBILE';
 
@@ -77,7 +74,6 @@ const getLabelSuffix = (deviceType: DeviceType): string => {
 
 interface HeadTestVariantContentEditorProps {
   content: HeadContent;
-  template: HeadTemplate;
   onChange: (updatedContent: HeadContent) => void;
   onValidationChange: (isValid: boolean) => void;
   editMode: boolean;
@@ -86,7 +82,6 @@ interface HeadTestVariantContentEditorProps {
 
 const HeadTestVariantContentEditor: React.FC<HeadTestVariantContentEditorProps> = ({
   content,
-  template,
   onChange,
   onValidationChange,
   editMode,
@@ -98,8 +93,7 @@ const HeadTestVariantContentEditor: React.FC<HeadTestVariantContentEditorProps> 
 
   const defaultValues: HeadContent = {
     heading: content.heading || '',
-    messageText: content.messageText,
-    highlightedText: content.highlightedText || '',
+    subheading: content.subheading || '',
   };
 
   const { register, handleSubmit, errors, trigger } = useForm<HeadContent>({
@@ -114,28 +108,23 @@ const HeadTestVariantContentEditor: React.FC<HeadTestVariantContentEditorProps> 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
-  }, [errors.messageText, errors.heading, errors.highlightedText]);
+  }, [errors.heading, errors.subheading]);
 
-  const onSubmit = ({ heading, messageText, highlightedText }: HeadContent): void => {
-    onChange({ ...content, heading, messageText, highlightedText });
+  const onSubmit = ({ heading, subheading }: HeadContent): void => {
+    onChange({ ...content, heading, subheading });
   };
 
   const updatePrimaryCta = (updatedCta?: Cta): void => {
-    onChange({ ...content, cta: updatedCta });
+    onChange({ ...content, primaryCta: updatedCta });
   };
-  const updateSecondaryCta = (updatedCta?: SecondaryCta): void => {
+  const updateSecondaryCta = (updatedCta?: Cta): void => {
     onChange({ ...content, secondaryCta: updatedCta });
   };
 
   const labelSuffix = getLabelSuffix(deviceType);
 
-  const headerCopyLength = content.heading?.length ?? 0;
-
-  const bodyCopyRecommendedLength = content.secondaryCta
-    ? BODY_COPY_WITH_SECONDARY_CTA_RECOMMENDED_LENGTH
-    : BODY_COPY_WITHOUT_SECONDARY_CTA_RECOMMENDED_LENGTH;
-
-  const bodyCopyLength = content.messageText.length + (content.highlightedText?.length ?? 0);
+  const headingCopyLength = content.heading?.length ?? 0;
+  const subheadingCopyLength = content.subheading?.length ?? 0;
 
   return (
     <>
@@ -144,87 +133,61 @@ const HeadTestVariantContentEditor: React.FC<HeadTestVariantContentEditorProps> 
       </Typography>
 
       <div className={classes.contentContainer}>
-        {template !== HeadTemplate.EnvironmentMomentHead && (
-          <div>
-            <TextField
-              inputRef={register({ validate: templateValidator })}
-              error={errors.heading !== undefined}
-              helperText={errors.heading ? errors.heading.message : HEADER_DEFAULT_HELPER_TEXT}
-              onBlur={handleSubmit(onSubmit)}
-              name="heading"
-              label="Header"
-              margin="normal"
-              variant="outlined"
-              disabled={!editMode}
-              fullWidth
-            />
-
-            {headerCopyLength > HEADER_COPY_RECOMMENDED_LENGTH && (
-              <VariantEditorCopyLengthWarning charLimit={HEADER_COPY_RECOMMENDED_LENGTH} />
-            )}
-          </div>
-        )}
-
         <div>
           <TextField
-            inputRef={register({
-              required: EMPTY_ERROR_HELPER_TEXT,
-              validate: templateValidator,
-            })}
-            error={errors.messageText !== undefined}
-            helperText={errors.messageText ? errors.messageText.message : BODY_DEFAULT_HELPER_TEXT}
+            inputRef={register({ validate: templateValidator })}
+            error={errors.heading !== undefined}
+            helperText={errors.heading ? errors.heading.message : HEADING_DEFAULT_HELPER_TEXT}
             onBlur={handleSubmit(onSubmit)}
-            name="messageText"
-            label="Body copy"
+            name="heading"
+            label="Heading"
             margin="normal"
             variant="outlined"
-            multiline
-            rows={10}
             disabled={!editMode}
             fullWidth
           />
 
-          {(template === HeadTemplate.ContributionsHead ||
-            template === HeadTemplate.InvestigationsMomentHead) && (
-            <TextField
-              inputRef={register({
-                validate: templateValidator,
-              })}
-              error={errors.highlightedText !== undefined}
-              helperText={
-                errors.highlightedText
-                  ? errors.highlightedText.message
-                  : HIGHTLIGHTED_TEXT_HELPER_TEXT
-              }
-              onBlur={handleSubmit(onSubmit)}
-              name="highlightedText"
-              label="Highlighted text"
-              margin="normal"
-              variant="outlined"
-              disabled={!editMode}
-              fullWidth
-            />
-          )}
-
-          {bodyCopyLength > bodyCopyRecommendedLength && (
-            <VariantEditorCopyLengthWarning charLimit={bodyCopyRecommendedLength} />
+          {headingCopyLength > HEADING_COPY_RECOMMENDED_LENGTH && (
+            <VariantEditorCopyLengthWarning charLimit={HEADING_COPY_RECOMMENDED_LENGTH} />
           )}
         </div>
-        <div className={classes.buttonsContainer}>
-          <Typography className={classes.sectionHeader} variant="h4">
-            {`Buttons${labelSuffix}`}
-          </Typography>
+      </div>
 
-          <HeadTestVariantEditorCtasEditor
-            primaryCta={content.cta}
-            secondaryCta={content.secondaryCta}
-            updatePrimaryCta={updatePrimaryCta}
-            updateSecondaryCta={updateSecondaryCta}
-            isDisabled={!editMode}
-            onValidationChange={onValidationChange}
-            supportSecondaryCta={true}
+      <div className={classes.contentContainer}>
+        <div>
+          <TextField
+            inputRef={register({ validate: templateValidator })}
+            error={errors.heading !== undefined}
+            helperText={errors.heading ? errors.heading.message : SUBHEADING_DEFAULT_HELPER_TEXT}
+            onBlur={handleSubmit(onSubmit)}
+            name="subheading"
+            label="Sub-heading"
+            margin="normal"
+            variant="outlined"
+            disabled={!editMode}
+            fullWidth
           />
+
+          {subheadingCopyLength > SUBHEADING_COPY_RECOMMENDED_LENGTH && (
+            <VariantEditorCopyLengthWarning charLimit={SUBHEADING_COPY_RECOMMENDED_LENGTH} />
+          )}
         </div>
+      </div>
+
+      <div className={classes.buttonsContainer}>
+        <Typography className={classes.sectionHeader} variant="h4">
+          {`Buttons${labelSuffix}`}
+        </Typography>
+
+        <HeadTestVariantEditorCtasEditor
+          primaryCta={content.primaryCta}
+          secondaryCta={content.secondaryCta}
+          updatePrimaryCta={updatePrimaryCta}
+          updateSecondaryCta={updateSecondaryCta}
+          isDisabled={!editMode}
+          onValidationChange={onValidationChange}
+          supportSecondaryCta={true}
+        />
       </div>
     </>
   );
@@ -247,26 +210,23 @@ const HeadTestVariantEditor: React.FC<HeadTestVariantEditorProps> = ({
   const classes = useStyles();
   const setValidationStatusForField = useValidation(onValidationChange);
 
-  const content: HeadContent = variant.headContent || {
-    heading: variant.heading,
-    messageText: variant.body || '',
-    highlightedText: variant.highlightedText,
-    cta: variant.cta,
-    secondaryCta: variant.secondaryCta,
+  const content: HeadContent = variant.content || {
+    heading: 'Lorem Ipsum',
+    subheading: 'Exam desut lineas buteram loas',
   };
 
   const onMobileContentRadioChange = (): void => {
-    if (variant.mobileHeadContent === undefined) {
+    if (variant.mobileContent === undefined) {
       onVariantChange({
         ...variant,
-        mobileHeadContent: getDefaultVariant().headContent,
+        mobileContent: getDefaultVariant().content,
       });
     } else {
       // remove mobile content and clear any validation errors
       setValidationStatusForField('mobileContent', true);
       onVariantChange({
         ...variant,
-        mobileHeadContent: undefined,
+        mobileContent: undefined,
       });
     }
   };
@@ -274,32 +234,20 @@ const HeadTestVariantEditor: React.FC<HeadTestVariantEditorProps> = ({
   return (
     <div className={classes.container}>
       <div className={classes.sectionContainer}>
-        <Typography className={classes.sectionHeader} variant="h4">
-          Head template
-        </Typography>
-        <HeadTemplateSelector
-          variant={variant}
-          onVariantChange={onVariantChange}
-          editMode={editMode}
-        />
-      </div>
-
-      <div className={classes.sectionContainer}>
         <HeadTestVariantContentEditor
           content={content}
-          template={variant.template}
           onChange={(updatedContent: HeadContent): void =>
-            onVariantChange({ ...variant, headContent: updatedContent })
+            onVariantChange({ ...variant, content: updatedContent })
           }
           onValidationChange={(isValid): void =>
             setValidationStatusForField('mainContent', isValid)
           }
           editMode={editMode}
-          deviceType={variant.mobileHeadContent === undefined ? 'ALL' : 'NOT_MOBILE'}
+          deviceType={variant.mobileContent === undefined ? 'ALL' : 'NOT_MOBILE'}
         />
 
         <RadioGroup
-          value={variant.mobileHeadContent !== undefined ? 'enabled' : 'disabled'}
+          value={variant.mobileContent !== undefined ? 'enabled' : 'disabled'}
           onChange={onMobileContentRadioChange}
         >
           <FormControlLabel
@@ -317,12 +265,11 @@ const HeadTestVariantEditor: React.FC<HeadTestVariantEditorProps> = ({
             disabled={!editMode}
           />
         </RadioGroup>
-        {variant.mobileHeadContent && (
+        {variant.mobileContent && (
           <HeadTestVariantContentEditor
-            content={variant.mobileHeadContent}
-            template={variant.template}
+            content={variant.mobileContent}
             onChange={(updatedContent: HeadContent): void =>
-              onVariantChange({ ...variant, mobileHeadContent: updatedContent })
+              onVariantChange({ ...variant, mobileContent: updatedContent })
             }
             onValidationChange={(isValid): void =>
               setValidationStatusForField('mobileContent', isValid)
