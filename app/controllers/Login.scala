@@ -41,7 +41,7 @@ class Login(
     Redirect("/").withNewSession
   }
 
-  override val failureRedirectTarget: Call = routes.Login.login()
+  override val failureRedirectTarget: Call = routes.Login.login
 
-  override val defaultRedirectTarget: Call = routes.Application.index()
+  override val defaultRedirectTarget: Call = routes.Application.index
 }

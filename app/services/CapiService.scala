@@ -10,7 +10,7 @@ class CapiService(apiKey: String, wsClient: WSClient)(implicit val ec: Execution
   private def request(path: String, querystring: String): Future[String] =
     wsClient
       .url(s"$url/$path?api-key=$apiKey&$querystring")
-      .get
+      .get()
       .map(response => response.body)
 
   def getTags(querystring: String): Future[String] = request("tags", querystring)

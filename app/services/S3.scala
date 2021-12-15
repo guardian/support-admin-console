@@ -1,19 +1,17 @@
 package services
 
-import java.io.ByteArrayInputStream
-import java.nio.charset.StandardCharsets
-
-import com.amazonaws.services.s3.model.{CannedAccessControlList, ObjectMetadata, PutObjectRequest}
-import com.amazonaws.services.s3.{AmazonS3, AmazonS3ClientBuilder}
 import com.typesafe.scalalogging.StrictLogging
 import io.circe.{Decoder, Encoder, Json, Printer}
 import io.circe.parser.decode
 import io.circe.syntax._
 import services.S3Client._
+import software.amazon.awssdk.core.sync.RequestBody
+import software.amazon.awssdk.services.s3.model.{GetObjectRequest, HeadObjectRequest, ListObjectsRequest, ObjectCannedACL, PutObjectRequest}
 import zio._
 import zio.blocking.{Blocking, effectBlocking}
+import software.amazon.awssdk.services.s3.{S3Client => AwsS3Client}
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 
 case class VersionedS3Data[T](value: T, version: String)
@@ -54,75 +52,78 @@ object S3Client {
 
 object S3 extends S3Client with StrictLogging {
 
-  val s3Client: AmazonS3 = AmazonS3ClientBuilder
-    .standard()
-    .withRegion(Aws.region)
-    .withCredentials(Aws.credentialsProvider)
-    .build()
+  val s3Client: AwsS3Client = AwsS3Client
+    .builder
+    .region(Aws.region)
+    .credentialsProvider(Aws.credentialsProvider.build)
+    .build
 
   def get: S3Action[RawVersionedS3Data] = { objectSettings =>
-    val s3ObjectAndStream = for {
-      s3Object <- ZManaged.fromAutoCloseable(effectBlocking(s3Client.getObject(objectSettings.bucket, objectSettings.key)))
-      stream <- ZManaged.fromAutoCloseable(effectBlocking(s3Object.getObjectContent))
-    } yield (s3Object, stream)
+    val request = GetObjectRequest
+      .builder
+      .bucket(objectSettings.bucket)
+      .key(objectSettings.key)
+      .build
 
-    s3ObjectAndStream.use { case (s3Object, stream) =>
-      Task {
-        VersionedS3Data(
-          value = scala.io.Source.fromInputStream(stream).mkString,
-          version = s3Object.getObjectMetadata.getVersionId
-        )
+    ZManaged
+      .fromAutoCloseable(effectBlocking(s3Client.getObject(request)))
+      .use { s3Object =>
+        Task {
+          VersionedS3Data(
+            value = scala.io.Source.fromInputStream(s3Object).mkString,
+            version = s3Object.response().versionId()
+          )
+        }
       }
-    }.mapError { e =>
-      logger.error(s"Error reading $objectSettings from S3: ${e.getMessage}", e)
-      S3GetObjectError(e)
-    }
+      .mapError { e =>
+        logger.error(s"Error reading $objectSettings from S3: ${e.getMessage}", e)
+        S3GetObjectError(e)
+      }
   }
 
   def update(data: RawVersionedS3Data): S3Action[Unit] = { objectSettings =>
-    effectBlocking(s3Client.getObjectMetadata(objectSettings.bucket, objectSettings.key).getVersionId)
+    val request = HeadObjectRequest
+      .builder
+      .bucket(objectSettings.bucket)
+      .key(objectSettings.key)
+      .build
+
+    effectBlocking(s3Client.headObject(request))
       .mapError(e => {
         logger.error(s"Error getting object metadata for $objectSettings: ${e.getMessage}", e)
         S3GetObjectError(e)
       })
-      .flatMap(currentVersion => {
-        if (currentVersion == data.version) {
+      .flatMap(response => {
+        if (response.versionId() == data.version) {
           createOrUpdate(data.value)(objectSettings)
         } else {
-          logger.warn(s"Cannot update S3 object $objectSettings because provided version (${data.version}) does not match latest version ($currentVersion)")
+          logger.warn(s"Cannot update S3 object $objectSettings because provided version (${data.version}) does not match latest version (${response.versionId()})")
           IO.fail(S3VersionMatchError)
         }
       })
   }
 
   def createOrUpdate(data: String): S3Action[Unit] = { objectSettings =>
-    val bytes = data.getBytes(StandardCharsets.UTF_8)
+      UIO.effectTotal {
+        val request = PutObjectRequest.builder
+          .bucket(objectSettings.bucket)
+          .key(objectSettings.key)
 
-    Task(new ByteArrayInputStream(bytes))
-      .bracket(stream => UIO(stream.close()))
-      .apply { stream =>
+        val requestModifiers: List[Option[PutObjectRequest.Builder => PutObjectRequest.Builder]] = List(
+          objectSettings.cacheControl.map(cc => _.cacheControl(cc)),
+          objectSettings.surrogateControl.map(sc => _.metadata(Map("surrogate-control" -> sc).asJava)),
+          if (objectSettings.publicRead) Some(_.acl(ObjectCannedACL.PUBLIC_READ)) else None
+        )
 
-        UIO.effectTotal {
-          val metadata = new ObjectMetadata()
-          metadata.setContentLength(bytes.length)
-          // https://docs.fastly.com/en/guides/how-caching-and-cdns-work#surrogate-headers
-          objectSettings.cacheControl.foreach(metadata.setCacheControl)
-          objectSettings.surrogateControl.foreach(cc => metadata.addUserMetadata("surrogate-control", cc))
+        requestModifiers
+          .flatten
+          .foldLeft(request)((req, modifier) => modifier(req))
+          .build()
 
-          new PutObjectRequest(
-            objectSettings.bucket,
-            objectSettings.key,
-            stream,
-            metadata
-          )
-        }.flatMap { request =>
-          effectBlocking {
-            s3Client.putObject(
-              if (objectSettings.publicRead) request.withCannedAcl(CannedAccessControlList.PublicRead)
-              else request
-            )
-          }.unit
-        }
+      }.flatMap { request =>
+        effectBlocking {
+          s3Client.putObject(request, RequestBody.fromString(data))
+        }.unit
       }
       .mapError { e =>
         logger.error(s"Error writing $objectSettings to S3: ${e.getMessage}", e)
@@ -132,8 +133,14 @@ object S3 extends S3Client with StrictLogging {
 
   def listKeys: S3Action[List[String]] = { objectSettings =>
     effectBlocking {
-      val result = s3Client.listObjects(objectSettings.bucket, objectSettings.key)
-      result.getObjectSummaries.asScala.toList.map(_.getKey)
+      val request = ListObjectsRequest
+        .builder
+        .bucket(objectSettings.bucket)
+        .prefix(objectSettings.key)
+        .build
+
+      val result = s3Client.listObjects(request)
+      result.contents().asScala.toList.map(_.key)
     }.mapError { e =>
       logger.info(s"Error listing S3 objects for $objectSettings: ${e.getMessage}")
       S3ListObjectsError(e)
@@ -148,7 +155,7 @@ object S3Json extends StrictLogging {
   }
 
   private val printer = Printer.spaces2.copy(dropNullValues = true)
-  def noNulls(json: Json): String = printer.pretty(json)
+  def noNulls(json: Json): String = printer.print(json)
 
   def getFromJson[T : Decoder](s3: S3Client): S3ObjectSettings => ZIO[Blocking,Throwable,VersionedS3Data[T]] = { objectSettings =>
     s3.get(objectSettings).flatMap { raw =>

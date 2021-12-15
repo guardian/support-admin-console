@@ -9,7 +9,7 @@
         @error.map { message =>
             <p>The error was: @message</p>
         }
-        <form action="@routes.Login.loginAction()" method="get">
+        <form action="@routes.Login.loginAction" method="get">
         <input value="Log In" type="submit">
     </form>
     </body>
