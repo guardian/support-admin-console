@@ -3,10 +3,10 @@ logs/
 elm-stuff/
 public/build/
 node_modules/
-package-lock.json
 .idea
 .vscode
 .DS_Store
 .bloop/
 .metals/
+.bsp/
 project
