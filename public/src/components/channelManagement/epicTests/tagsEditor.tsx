@@ -20,7 +20,12 @@ interface TagEditorProps {
  * Multiselect component for tags from CAPI.
  * Searches for tags based on the user's input.
  */
-export const TagsEditor: React.FC<TagEditorProps> = ({ label, disabled, ids, onUpdate }) => {
+export const TagsEditor: React.FC<TagEditorProps> = ({
+  label,
+  disabled,
+  ids,
+  onUpdate,
+}: TagEditorProps) => {
   const [inputValue, setInputValue] = React.useState<string>('');
   const [options, setOptions] = React.useState<Tag[]>([]);
 
