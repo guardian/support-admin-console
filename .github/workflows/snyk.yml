@@ -2,7 +2,7 @@ name: Snyk
 
 on:
   push:
-    branches: [ main, jd-snyk-action ]
+    branches: [ main, tf-snyk ]
   workflow_dispatch:
 
 jobs:
