@@ -1,7 +1,6 @@
 package controllers
 
 import com.gu.googleauth.AuthAction
-import com.typesafe.scalalogging.StrictLogging
 import io.circe.{Decoder, Encoder}
 import io.circe.syntax._
 import play.api.libs.circe.Circe
@@ -35,7 +34,7 @@ abstract class S3ObjectsController[T : Decoder : Encoder](
   path: String,
   nameGenerator: T => String,
   runtime: DefaultRuntime
-)(implicit ec: ExecutionContext) extends AbstractController(components) with Circe with StrictLogging {
+)(implicit ec: ExecutionContext) extends AbstractController(components) with Circe {
 
   val s3Client = services.S3
 

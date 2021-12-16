@@ -1,16 +1,18 @@
 package services
 
-import org.scalatest.{EitherValues, FlatSpec, Matchers}
+import io.circe.Json
+import org.scalatest.EitherValues
+import org.scalatest.flatspec.AnyFlatSpec
 import services.S3Client.{RawVersionedS3Data, S3Action, S3ObjectSettings}
-import gnieh.diffson.circe._
 import models.SupportFrontendSwitches.{SupportFrontendSwitches, Switch, SwitchGroup}
 import models._
+import org.scalatest.matchers.should.Matchers
 import zio.{DefaultRuntime, IO}
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
 
-class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
+class S3JsonSpec extends AnyFlatSpec with Matchers with EitherValues {
 
   val runtime = new DefaultRuntime {}
 
@@ -144,14 +146,28 @@ class S3JsonSpec extends FlatSpec with Matchers with EitherValues {
   }
 
   it should "encode as json" in {
-    Await.result(
-      runtime.unsafeRunToFuture {
-        S3Json.updateAsJson[SupportFrontendSwitches](expectedDecoded)(dummyS3Client).apply(objectSettings)
-      },
+    import diffson.lcs._
+    import diffson.circe._
+    import diffson.jsonpatch._
+    import diffson.jsonpatch.lcsdiff._
+    import io.circe.parser._
+
+    val program = for {
+      _ <- S3Json.updateAsJson[SupportFrontendSwitches](expectedDecoded)(dummyS3Client).apply(objectSettings)
+      json <- dummyS3Client.get(objectSettings)
+    } yield json
+
+    val jsonFromClient: RawVersionedS3Data = Await.result(
+      runtime.unsafeRunToFuture(program),
       1.second
     )
-    val diff = JsonDiff.diff(expectedJson, dummyS3Client.mockStore.get.value, false)
 
-    diff should be(JsonPatch(Nil))
+    implicit val patience = new Patience[Json]
+    val jsonDiff = diffson.diff(
+      parse(expectedJson).toOption.get,
+      parse(jsonFromClient.value).toOption.get
+    )
+
+    jsonDiff should be(JsonPatch(Nil))
   }
 }

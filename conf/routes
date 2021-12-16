@@ -117,8 +117,8 @@ GET   /frontend/channel-switches                       controllers.ChannelSwitch
 POST  /frontend/channel-switches/update                controllers.ChannelSwitchesController.set
 
 # ----- capi ----- #
-GET   /capi/tags                                       controllers.CapiController.getTags
-GET   /capi/sections                                   controllers.CapiController.getSections
+GET   /capi/tags                                       controllers.CapiController.getTags()
+GET   /capi/sections                                   controllers.CapiController.getSections()
 
 # Map static resources from the /public folder to the /assets URL path
 GET  /assets/*file                                  controllers.Assets.at(path="/public", file)

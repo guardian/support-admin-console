@@ -3,7 +3,6 @@ package controllers
 import java.time.OffsetDateTime
 
 import com.gu.googleauth.AuthAction
-import com.typesafe.scalalogging.StrictLogging
 import controllers.LockableS3ObjectController.LockableS3ObjectResponse
 import io.circe.{Decoder, Encoder}
 import io.circe.syntax._
@@ -40,7 +39,7 @@ abstract class LockableS3ObjectController[T : Decoder : Encoder](
   dataObjectSettings: S3ObjectSettings,
   fastlyPurger: Option[FastlyPurger],
   runtime: DefaultRuntime
-)(implicit ec: ExecutionContext) extends AbstractController(components) with Circe with StrictLogging {
+)(implicit ec: ExecutionContext) extends AbstractController(components) with Circe {
 
   private val lockObjectSettings = S3ObjectSettings(
     bucket = "support-admin-console",

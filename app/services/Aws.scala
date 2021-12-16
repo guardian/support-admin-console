@@ -1,14 +1,14 @@
 package services
 
-import com.amazonaws.auth.{AWSCredentialsProviderChain, InstanceProfileCredentialsProvider}
-import com.amazonaws.auth.profile.ProfileCredentialsProvider
-import com.amazonaws.regions.Regions
+import software.amazon.awssdk.auth.credentials.{AwsCredentialsProviderChain, InstanceProfileCredentialsProvider, ProfileCredentialsProvider}
+import software.amazon.awssdk.regions.Region
+
 
 object Aws {
-  val credentialsProvider = new AWSCredentialsProviderChain(
-    new ProfileCredentialsProvider("membership"),
-    new InstanceProfileCredentialsProvider(false)
+  val credentialsProvider = AwsCredentialsProviderChain.builder().credentialsProviders(
+    ProfileCredentialsProvider.builder.profileName("membership").build,
+    InstanceProfileCredentialsProvider.builder.asyncCredentialUpdateEnabled(false).build
   )
 
-  val region = Regions.EU_WEST_1
+  val region = Region.EU_WEST_1
 }
