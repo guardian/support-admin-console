@@ -240,3 +240,5 @@ export interface TickerSettings {
   currencySymbol: string;
   copy: TickerCopy;
 }
+
+export type ContributionFrequency = 'ONE_OFF' | 'MONTHLY' | 'ANNUAL';

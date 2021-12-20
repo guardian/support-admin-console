@@ -60,6 +60,7 @@ case class EpicVariant(
   secondaryCta: Option[SecondaryCta],
   separateArticleCount: Option[SeparateArticleCount],
   showChoiceCards: Option[Boolean],
+  defaultChoiceCardFrequency: Option[ContributionType],
   showSignInLink: Option[Boolean]
 )
 case class EpicTest(

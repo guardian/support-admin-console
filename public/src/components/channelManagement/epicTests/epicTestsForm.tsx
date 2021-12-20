@@ -15,6 +15,7 @@ import {
   APPLE_NEWS_EPIC_CONFIG,
   AMP_EPIC_CONFIG,
   SecondaryCta,
+  ContributionFrequency,
 } from '../helpers/shared';
 import { InnerComponentProps } from '../testEditor';
 import TestsForm from '../testEditor';
@@ -60,6 +61,7 @@ export interface EpicVariant extends Variant {
   secondaryCta?: SecondaryCta;
   separateArticleCount?: SeparateArticleCount;
   showChoiceCards?: boolean;
+  defaultChoiceCardFrequency?: ContributionFrequency;
   showSignInLink?: boolean;
 }
 
