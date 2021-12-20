@@ -1,8 +1,14 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { EpicVariant, SeparateArticleCount } from './epicTestsForm';
-import { Cta, SecondaryCta, EpicEditorConfig, TickerSettings } from '../helpers/shared';
-import { Theme, Typography, makeStyles, TextField } from '@material-ui/core';
+import {
+  ContributionFrequency,
+  Cta,
+  EpicEditorConfig,
+  SecondaryCta,
+  TickerSettings,
+} from '../helpers/shared';
+import { makeStyles, TextField, Theme, Typography } from '@material-ui/core';
 import EpicTestVariantEditorCtasEditor from './epicTestVariantEditorCtasEditor';
 import VariantEditorSeparateArticleCountEditor from '../variantEditorSeparateArticleCountEditor';
 import EpicTestTickerEditor from './epicTestTickerEditor';
@@ -136,6 +142,11 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   };
   const updateShowChoiceCards = (updatedshowChoiceCards?: boolean): void => {
     onVariantChange({ ...variant, showChoiceCards: updatedshowChoiceCards });
+  };
+  const updateDefaultChoiceCardFrequency = (
+    updatedDefaultChoiceCardFrequency: ContributionFrequency,
+  ): void => {
+    onVariantChange({ ...variant, defaultChoiceCardFrequency: updatedDefaultChoiceCardFrequency });
   };
   const updateShowSignInLink = (updatedShowSignInLink?: boolean): void => {
     onVariantChange({ ...variant, showSignInLink: updatedShowSignInLink });
@@ -293,7 +304,9 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
 
           <EpicTestChoiceCardsEditor
             showChoiceCards={variant.showChoiceCards}
+            defaultFrequency={variant.defaultChoiceCardFrequency}
             updateShowChoiceCards={updateShowChoiceCards}
+            updateDefaultFrequency={updateDefaultChoiceCardFrequency}
             isDisabled={!editMode}
           />
         </div>
