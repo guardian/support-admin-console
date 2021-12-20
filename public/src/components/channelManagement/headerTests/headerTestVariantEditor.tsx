@@ -9,11 +9,11 @@ import {
   Typography,
   makeStyles,
 } from '@material-ui/core';
-import HeadTestVariantEditorCtasEditor from './headTestVariantEditorCtasEditor';
+import HeaderTestVariantEditorCtasEditor from './headerTestVariantEditorCtasEditor';
 import VariantEditorCopyLengthWarning from '../variantEditorCopyLengthWarning';
 import { templateValidatorForPlatform } from '../helpers/validation';
 import { Cta } from '../helpers/shared';
-import { HeadContent, HeadVariant } from '../../../models/head';
+import { HeaderContent, HeaderVariant } from '../../../models/header';
 import { getDefaultVariant } from './utils/defaults';
 import useValidation from '../hooks/useValidation';
 
@@ -72,31 +72,31 @@ const getLabelSuffix = (deviceType: DeviceType): string => {
   }
 };
 
-interface HeadTestVariantContentEditorProps {
-  content: HeadContent;
-  onChange: (updatedContent: HeadContent) => void;
+interface HeaderTestVariantContentEditorProps {
+  content: HeaderContent;
+  onChange: (updatedContent: HeaderContent) => void;
   onValidationChange: (isValid: boolean) => void;
   editMode: boolean;
   deviceType: DeviceType;
 }
 
-const HeadTestVariantContentEditor: React.FC<HeadTestVariantContentEditorProps> = ({
+const HeaderTestVariantContentEditor: React.FC<HeaderTestVariantContentEditorProps> = ({
   content,
   onChange,
   onValidationChange,
   editMode,
   deviceType,
-}: HeadTestVariantContentEditorProps) => {
+}: HeaderTestVariantContentEditorProps) => {
   const classes = useStyles();
 
   const templateValidator = templateValidatorForPlatform('DOTCOM');
 
-  const defaultValues: HeadContent = {
+  const defaultValues: HeaderContent = {
     heading: content.heading || '',
     subheading: content.subheading || '',
   };
 
-  const { register, handleSubmit, errors, trigger } = useForm<HeadContent>({
+  const { register, handleSubmit, errors, trigger } = useForm<HeaderContent>({
     mode: 'onChange',
     defaultValues,
   });
@@ -110,7 +110,7 @@ const HeadTestVariantContentEditor: React.FC<HeadTestVariantContentEditorProps> 
     onValidationChange(isValid);
   }, [errors.heading, errors.subheading]);
 
-  const onSubmit = ({ heading, subheading }: HeadContent): void => {
+  const onSubmit = ({ heading, subheading }: HeaderContent): void => {
     onChange({ ...content, heading, subheading });
   };
 
@@ -179,7 +179,7 @@ const HeadTestVariantContentEditor: React.FC<HeadTestVariantContentEditorProps> 
           {`Buttons${labelSuffix}`}
         </Typography>
 
-        <HeadTestVariantEditorCtasEditor
+        <HeaderTestVariantEditorCtasEditor
           primaryCta={content.primaryCta}
           secondaryCta={content.secondaryCta}
           updatePrimaryCta={updatePrimaryCta}
@@ -193,24 +193,24 @@ const HeadTestVariantContentEditor: React.FC<HeadTestVariantContentEditorProps> 
   );
 };
 
-interface HeadTestVariantEditorProps {
-  variant: HeadVariant;
-  onVariantChange: (updatedVariant: HeadVariant) => void;
+interface HeaderTestVariantEditorProps {
+  variant: HeaderVariant;
+  onVariantChange: (updatedVariant: HeaderVariant) => void;
   editMode: boolean;
   onDelete: () => void;
   onValidationChange: (isValid: boolean) => void;
 }
 
-const HeadTestVariantEditor: React.FC<HeadTestVariantEditorProps> = ({
+const HeaderTestVariantEditor: React.FC<HeaderTestVariantEditorProps> = ({
   variant,
   editMode,
   onValidationChange,
   onVariantChange,
-}: HeadTestVariantEditorProps) => {
+}: HeaderTestVariantEditorProps) => {
   const classes = useStyles();
   const setValidationStatusForField = useValidation(onValidationChange);
 
-  const content: HeadContent = variant.content || {
+  const content: HeaderContent = variant.content || {
     heading: 'Lorem Ipsum',
     subheading: 'Exam desut lineas buteram loas',
   };
@@ -234,9 +234,9 @@ const HeadTestVariantEditor: React.FC<HeadTestVariantEditorProps> = ({
   return (
     <div className={classes.container}>
       <div className={classes.sectionContainer}>
-        <HeadTestVariantContentEditor
+        <HeaderTestVariantContentEditor
           content={content}
-          onChange={(updatedContent: HeadContent): void =>
+          onChange={(updatedContent: HeaderContent): void =>
             onVariantChange({ ...variant, content: updatedContent })
           }
           onValidationChange={(isValid): void =>
@@ -266,9 +266,9 @@ const HeadTestVariantEditor: React.FC<HeadTestVariantEditorProps> = ({
           />
         </RadioGroup>
         {variant.mobileContent && (
-          <HeadTestVariantContentEditor
+          <HeaderTestVariantContentEditor
             content={variant.mobileContent}
-            onChange={(updatedContent: HeadContent): void =>
+            onChange={(updatedContent: HeaderContent): void =>
               onVariantChange({ ...variant, mobileContent: updatedContent })
             }
             onValidationChange={(isValid): void =>
@@ -283,4 +283,4 @@ const HeadTestVariantEditor: React.FC<HeadTestVariantEditorProps> = ({
   );
 };
 
-export default HeadTestVariantEditor;
+export default HeaderTestVariantEditor;

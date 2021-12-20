@@ -18,7 +18,7 @@ import {
   BannerTestsForm2,
 } from './components/channelManagement/bannerTests/bannerTestsForm';
 
-import { HeadTestsForm } from './components/channelManagement/headTests/headTestsForm';
+import { HeaderTestsForm } from './components/channelManagement/headerTests/headerTestsForm';
 
 import {
   createStyles,
@@ -147,7 +147,7 @@ const AppRouter = withStyles(styles)(({ classes }: Props) => {
           />
           <Route
             path="/header-tests"
-            render={(): React.ReactElement => createComponent(<HeadTestsForm />, 'Header Tests')}
+            render={(): React.ReactElement => createComponent(<HeaderTestsForm />, 'Header Tests')}
           />
           <Route
             path="/epic-tests"

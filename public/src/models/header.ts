@@ -2,25 +2,25 @@ import { Cta, Test, Variant, UserCohort } from '../components/channelManagement/
 import { Region } from '../utils/models';
 import { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';
 
-export interface HeadContent {
+export interface HeaderContent {
   heading?: string;
   subheading?: string;
   primaryCta?: Cta;
   secondaryCta?: Cta;
 }
 
-export interface HeadVariant extends Variant {
+export interface HeaderVariant extends Variant {
   name: string;
-  content: HeadContent;
-  mobileContent?: HeadContent;
+  content: HeaderContent;
+  mobileContent?: HeaderContent;
 }
 
-export interface HeadTest extends Test {
+export interface HeaderTest extends Test {
   name: string;
   nickname?: string;
   isOn: boolean;
   userCohort: UserCohort;
   locations: Region[];
-  variants: HeadVariant[];
+  variants: HeaderVariant[];
   controlProportionSettings?: ControlProportionSettings;
 }

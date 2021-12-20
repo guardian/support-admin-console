@@ -1,5 +1,5 @@
 import { Cta, UserCohort } from '../../helpers/shared';
-import { HeadTest, HeadVariant } from '../../../../models/head';
+import { HeaderTest, HeaderVariant } from '../../../../models/header';
 
 import { getStage } from '../../../../utils/stage';
 
@@ -13,7 +13,7 @@ export const DEFAULT_SECONDARY_CTA: Cta = {
   baseUrl: 'https://support.theguardian.com/contribute',
 };
 
-const DEV_AND_CODE_DEFAULT_VARIANT: HeadVariant = {
+const DEV_AND_CODE_DEFAULT_VARIANT: HeaderVariant = {
   name: 'CONTROL',
   content: {
     heading: 'Lorem Ipsum',
@@ -22,7 +22,7 @@ const DEV_AND_CODE_DEFAULT_VARIANT: HeadVariant = {
   },
 };
 
-const PROD_DEFAULT_VARIANT: HeadVariant = {
+const PROD_DEFAULT_VARIANT: HeaderVariant = {
   name: 'CONTROL',
   content: {
     heading: 'Lorem Ipsum Prod',
@@ -31,7 +31,7 @@ const PROD_DEFAULT_VARIANT: HeadVariant = {
   },
 };
 
-export const getDefaultVariant = (): HeadVariant => {
+export const getDefaultVariant = (): HeaderVariant => {
   const stage = getStage();
   if (stage === 'DEV' || stage === 'CODE') {
     return DEV_AND_CODE_DEFAULT_VARIANT;
@@ -39,7 +39,7 @@ export const getDefaultVariant = (): HeadVariant => {
   return PROD_DEFAULT_VARIANT;
 };
 
-const DEV_AND_CODE_DEFAULT_BANNER_TEST: HeadTest = {
+const DEV_AND_CODE_DEFAULT_BANNER_TEST: HeaderTest = {
   name: '',
   nickname: '',
   isOn: false,
@@ -48,7 +48,7 @@ const DEV_AND_CODE_DEFAULT_BANNER_TEST: HeadTest = {
   variants: [],
 };
 
-const PROD_DEFAULT_BANNER: HeadTest = {
+const PROD_DEFAULT_BANNER: HeaderTest = {
   name: '',
   nickname: '',
   isOn: false,
@@ -57,7 +57,7 @@ const PROD_DEFAULT_BANNER: HeadTest = {
   variants: [],
 };
 
-export const getDefaultTest = (): HeadTest => {
+export const getDefaultTest = (): HeaderTest => {
   const stage = getStage();
   if (stage === 'DEV' || stage === 'CODE') {
     return DEV_AND_CODE_DEFAULT_BANNER_TEST;

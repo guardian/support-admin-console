@@ -4,7 +4,7 @@ import { Region } from '../../../utils/models';
 import { UserCohort } from '../helpers/shared';
 
 import { Typography } from '@material-ui/core';
-import HeadTestVariantEditor from './headTestVariantEditor';
+import HeaderTestVariantEditor from './headerTestVariantEditor';
 import TestVariantsEditor from '../testVariantsEditor';
 import TestEditorHeader from '../testEditorHeader';
 
@@ -13,7 +13,7 @@ import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelecto
 import TestEditorActionButtons from '../testEditorActionButtons';
 import LiveSwitch from '../../shared/liveSwitch';
 import useValidation from '../hooks/useValidation';
-import { HeadTest, HeadVariant } from '../../../models/head';
+import { HeaderTest, HeaderVariant } from '../../../models/header';
 import { getDefaultVariant } from './utils/defaults';
 import TestEditorVariantSummary from '../testEditorVariantSummary';
 
@@ -21,10 +21,10 @@ import { ControlProportionSettings } from '../helpers/controlProportionSettings'
 import TestVariantsSplitEditor from '../testVariantsSplitEditor';
 import { useStyles } from '../helpers/testEditorStyles';
 
-interface HeadTestEditorProps {
-  test: HeadTest;
+interface HeaderTestEditorProps {
+  test: HeaderTest;
   hasChanged: boolean;
-  onChange: (updatedTest: HeadTest) => void;
+  onChange: (updatedTest: HeaderTest) => void;
   onValidationChange: (isValid: boolean) => void;
   visible: boolean;
   editMode: boolean;
@@ -33,10 +33,10 @@ interface HeadTestEditorProps {
   onTestSelected: (testName: string) => void;
   testNames: string[];
   testNicknames: string[];
-  createTest: (newTest: HeadTest) => void;
+  createTest: (newTest: HeaderTest) => void;
 }
 
-const HeadTestEditor: React.FC<HeadTestEditorProps> = ({
+const HeaderTestEditor: React.FC<HeaderTestEditorProps> = ({
   test,
   onChange,
   onValidationChange,
@@ -48,12 +48,12 @@ const HeadTestEditor: React.FC<HeadTestEditorProps> = ({
   testNames,
   testNicknames,
   createTest,
-}: HeadTestEditorProps) => {
+}: HeaderTestEditorProps) => {
   const classes = useStyles();
 
   const setValidationStatusForField = useValidation(onValidationChange);
 
-  const updateTest = (updatedTest: HeadTest): void => {
+  const updateTest = (updatedTest: HeaderTest): void => {
     onChange({ ...updatedTest });
   };
 
@@ -68,11 +68,11 @@ const HeadTestEditor: React.FC<HeadTestEditorProps> = ({
     updateTest({ ...test, isOn });
   };
 
-  const onVariantsChange = (updatedVariantList: HeadVariant[]): void => {
+  const onVariantsChange = (updatedVariantList: HeaderVariant[]): void => {
     updateTest({ ...test, variants: updatedVariantList });
   };
 
-  const onVariantChange = (updatedVariant: HeadVariant): void => {
+  const onVariantChange = (updatedVariant: HeaderVariant): void => {
     onVariantsChange(
       test.variants.map(variant =>
         variant.name === updatedVariant.name ? updatedVariant : variant,
@@ -97,8 +97,8 @@ const HeadTestEditor: React.FC<HeadTestEditorProps> = ({
     createTest({ ...test, name: name, nickname: nickname, isOn: false });
   };
 
-  const renderVariantEditor = (variant: HeadVariant): React.ReactElement => (
-    <HeadTestVariantEditor
+  const renderVariantEditor = (variant: HeaderVariant): React.ReactElement => (
+    <HeaderTestVariantEditor
       key={`head-${test.name}-${variant.name}`}
       variant={variant}
       onVariantChange={onVariantChange}
@@ -110,7 +110,7 @@ const HeadTestEditor: React.FC<HeadTestEditorProps> = ({
     />
   );
 
-  const renderVariantSummary = (variant: HeadVariant): React.ReactElement => (
+  const renderVariantSummary = (variant: HeaderVariant): React.ReactElement => (
     <TestEditorVariantSummary
       name={variant.name}
       testName={test.name}
@@ -122,7 +122,7 @@ const HeadTestEditor: React.FC<HeadTestEditorProps> = ({
   );
 
   const createVariant = (name: string): void => {
-    const newVariant: HeadVariant = {
+    const newVariant: HeaderVariant = {
       ...getDefaultVariant(),
       name: name,
     };
@@ -208,4 +208,4 @@ const HeadTestEditor: React.FC<HeadTestEditorProps> = ({
   return null;
 };
 
-export default HeadTestEditor;
+export default HeaderTestEditor;

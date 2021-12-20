@@ -2,21 +2,21 @@ import TestsForm, { InnerComponentProps } from '../testEditor';
 import React from 'react';
 import { FrontendSettingsType } from '../../../utils/requests';
 import Sidebar from '../sidebar';
-import HeadTestEditor from './headTestEditor';
+import HeaderTestEditor from './headerTestEditor';
 import TestsFormLayout from '../testsFormLayout';
-import { HeadTest } from '../../../models/head';
+import { HeaderTest } from '../../../models/header';
 import { getDefaultTest } from './utils/defaults';
 
-type Props = InnerComponentProps<HeadTest>;
+type Props = InnerComponentProps<HeaderTest>;
 
-const getHeadTestsForm = (): React.FC<Props> => {
-  const createDefaultHeadTest = (newTestName: string, newTestNickname: string): HeadTest => ({
+const getHeaderTestsForm = (): React.FC<Props> => {
+  const createDefaultHeaderTest = (newTestName: string, newTestNickname: string): HeaderTest => ({
     ...getDefaultTest(),
     name: newTestName,
     nickname: newTestNickname,
   });
 
-  const HeadTestsForm: React.FC<Props> = ({
+  const HeaderTestsForm: React.FC<Props> = ({
     tests,
     selectedTestName,
     selectedTestHasBeenModified,
@@ -42,7 +42,7 @@ const getHeadTestsForm = (): React.FC<Props> => {
       if (selectedTestHasBeenModified) {
         alert('Please either save or discard before creating a test.');
       } else {
-        onTestCreate(createDefaultHeadTest(name, nickname));
+        onTestCreate(createDefaultHeaderTest(name, nickname));
       }
     };
 
@@ -51,7 +51,7 @@ const getHeadTestsForm = (): React.FC<Props> => {
     return (
       <TestsFormLayout
         sidebar={
-          <Sidebar<HeadTest>
+          <Sidebar<HeaderTest>
             tests={tests}
             selectedTestName={selectedTestName}
             onTestPriorityChange={onTestPriorityChange}
@@ -67,7 +67,7 @@ const getHeadTestsForm = (): React.FC<Props> => {
         testEditor={
           // needed to convince typescript neither are undefined
           selectedTestName && selectedTest ? (
-            <HeadTestEditor
+            <HeaderTestEditor
               test={selectedTest}
               hasChanged={selectedTestHasBeenModified}
               onChange={onTestChange}
@@ -95,7 +95,7 @@ const getHeadTestsForm = (): React.FC<Props> => {
       />
     );
   };
-  return HeadTestsForm;
+  return HeaderTestsForm;
 };
 
-export const HeadTestsForm = TestsForm(getHeadTestsForm(), FrontendSettingsType.headTests);
+export const HeaderTestsForm = TestsForm(getHeaderTestsForm(), FrontendSettingsType.headerTests);

@@ -1,9 +1,8 @@
 import React from 'react';
 import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core';
 import VariantEditorCtaEditor from '../variantEditorCtaEditor';
-import HeadTestVariantEditorSecondaryCtaEditor from './headTestVariantEditorSecondaryCtaEditor';
+// import HeaderTestVariantEditorSecondaryCtaEditor from './headerTestVariantEditorSecondaryCtaEditor';
 
-// import { Cta, SecondaryCta } from '../helpers/shared';
 import { Cta } from '../helpers/shared';
 
 import { DEFAULT_PRIMARY_CTA, DEFAULT_SECONDARY_CTA } from './utils/defaults';
@@ -18,7 +17,7 @@ const styles = ({ spacing }: Theme) =>
     },
   });
 
-interface HeadTestVariantEditorCtasEditorProps extends WithStyles<typeof styles> {
+interface HeaderTestVariantEditorCtasEditorProps extends WithStyles<typeof styles> {
   primaryCta?: Cta;
   secondaryCta?: Cta;
   updatePrimaryCta: (updatedCta?: Cta) => void;
@@ -28,7 +27,7 @@ interface HeadTestVariantEditorCtasEditorProps extends WithStyles<typeof styles>
   supportSecondaryCta: boolean;
 }
 
-const HeadTestVariantEditorCtasEditor: React.FC<HeadTestVariantEditorCtasEditorProps> = ({
+const HeaderTestVariantEditorCtasEditor: React.FC<HeaderTestVariantEditorCtasEditorProps> = ({
   classes,
   primaryCta,
   secondaryCta,
@@ -37,7 +36,7 @@ const HeadTestVariantEditorCtasEditor: React.FC<HeadTestVariantEditorCtasEditorP
   onValidationChange,
   isDisabled,
   supportSecondaryCta,
-}: HeadTestVariantEditorCtasEditorProps) => {
+}: HeaderTestVariantEditorCtasEditorProps) => {
   return (
     <div className={classes.container}>
       <VariantEditorCtaEditor
@@ -50,7 +49,7 @@ const HeadTestVariantEditorCtasEditor: React.FC<HeadTestVariantEditorCtasEditorP
       />
 
       {supportSecondaryCta && (
-        <HeadTestVariantEditorSecondaryCtaEditor
+        <VariantEditorCtaEditor
           label="Secondary button"
           isDisabled={isDisabled}
           cta={secondaryCta}
@@ -63,4 +62,4 @@ const HeadTestVariantEditorCtasEditor: React.FC<HeadTestVariantEditorCtasEditorP
   );
 };
 
-export default withStyles(styles)(HeadTestVariantEditorCtasEditor);
+export default withStyles(styles)(HeaderTestVariantEditorCtasEditor);
