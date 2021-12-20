@@ -23,15 +23,6 @@ object TickerCountType extends Enum[TickerCountType] with CirceEnum[TickerCountT
   case object people extends TickerCountType
 }
 
-sealed trait ContributionFrequency extends EnumEntry
-object ContributionFrequency extends Enum[ContributionFrequency] with CirceEnum[ContributionFrequency] {
-  override val values: IndexedSeq[ContributionFrequency] = findValues
-
-  case object ONE_OFF extends ContributionFrequency
-  case object MONTHLY extends ContributionFrequency
-  case object ANNUAL extends ContributionFrequency
-}
-
 case class TickerCopy(
   countLabel: String,
   goalReachedPrimary: String,
@@ -69,7 +60,7 @@ case class EpicVariant(
   secondaryCta: Option[SecondaryCta],
   separateArticleCount: Option[SeparateArticleCount],
   showChoiceCards: Option[Boolean],
-  defaultChoiceCardFrequency: Option[ContributionFrequency],
+  defaultChoiceCardFrequency: Option[ContributionType],
   showSignInLink: Option[Boolean]
 )
 case class EpicTest(
