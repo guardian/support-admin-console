@@ -29,7 +29,7 @@ const DEV_AND_CODE_DEFAULT_VARIANT: EpicVariant = {
     'Every reader contribution, however big or small, is so valuable for our future.',
   ],
   highlightedText:
-    'Support the Guardian from as little as %%CURRENCY_SYMBOL%%1 – and it only takes a minute. Thank you.',
+    'Support the Guardian from as little as %%CURRENCY_SYMBOL%%1 – it only takes a minute. If you can, please consider supporting us with a regular amount each month. Thank you.',
   separateArticleCount: { type: 'above' },
   showTicker: false,
   cta: DEFAULT_PRIMARY_CTA,
@@ -41,7 +41,7 @@ const PROD_DEFAULT_VARIANT: EpicVariant = {
   name: 'CONTROL',
   paragraphs: [],
   highlightedText:
-    'Support the Guardian from as little as %%CURRENCY_SYMBOL%%1 – and it only takes a minute. Thank you.',
+    'Support the Guardian from as little as %%CURRENCY_SYMBOL%%1 – it only takes a minute. If you can, please consider supporting us with a regular amount each month. Thank you.',
   separateArticleCount: { type: 'above' },
   showTicker: false,
   cta: DEFAULT_PRIMARY_CTA,
