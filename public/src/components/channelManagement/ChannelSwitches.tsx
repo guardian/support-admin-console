@@ -22,7 +22,12 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-type SwitchName = 'enableBanners' | 'enableEpics' | 'enableSuperMode' | 'enableHardcodedEpicTests';
+type SwitchName =
+  | 'enableBanners'
+  | 'enableEpics'
+  | 'enableHeaders'
+  | 'enableSuperMode'
+  | 'enableHardcodedEpicTests';
 
 type ChannelSwitches = {
   [key in SwitchName]: boolean;
@@ -82,6 +87,12 @@ const ChannelSwitches: React.FC<InnerProps<ChannelSwitches>> = ({
         name="enableBanners"
         label="Enable Banners"
         enabled={switches.enableBanners}
+        setSwitch={onSwitchChange}
+      />
+      <ChannelSwitch
+        name="enableHeaders"
+        label="Enable Headers"
+        enabled={switches.enableHeaders}
         setSwitch={onSwitchChange}
       />
       <ChannelSwitch
