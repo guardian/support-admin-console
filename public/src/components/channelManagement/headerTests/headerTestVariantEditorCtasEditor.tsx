@@ -1,7 +1,6 @@
 import React from 'react';
 import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core';
 import VariantEditorCtaEditor from '../variantEditorCtaEditor';
-// import HeaderTestVariantEditorSecondaryCtaEditor from './headerTestVariantEditorSecondaryCtaEditor';
 
 import { Cta } from '../helpers/shared';
 

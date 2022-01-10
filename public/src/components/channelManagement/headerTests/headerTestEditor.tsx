@@ -114,7 +114,7 @@ const HeaderTestEditor: React.FC<HeaderTestEditorProps> = ({
     <TestEditorVariantSummary
       name={variant.name}
       testName={test.name}
-      testType="BANNER"
+      testType="HEADER"
       isInEditMode={editMode}
       // hardcoded as heads are currently not supported in AMP or Apple News
       platform="DOTCOM"

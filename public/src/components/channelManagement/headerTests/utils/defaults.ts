@@ -16,8 +16,8 @@ export const DEFAULT_SECONDARY_CTA: Cta = {
 const DEV_AND_CODE_DEFAULT_VARIANT: HeaderVariant = {
   name: 'CONTROL',
   content: {
-    heading: 'Lorem Ipsum',
-    subheading: 'Exam desut lineas buteram loas',
+    heading: 'Support the Guardian',
+    subheading: 'Available for everyone, funded by readers',
     primaryCta: DEFAULT_PRIMARY_CTA,
   },
 };
@@ -25,8 +25,8 @@ const DEV_AND_CODE_DEFAULT_VARIANT: HeaderVariant = {
 const PROD_DEFAULT_VARIANT: HeaderVariant = {
   name: 'CONTROL',
   content: {
-    heading: 'Lorem Ipsum Prod',
-    subheading: 'Exam desut lineas buteram loas Prod',
+    heading: 'Support the Guardian',
+    subheading: 'Available for everyone, funded by readers',
     primaryCta: DEFAULT_PRIMARY_CTA,
   },
 };

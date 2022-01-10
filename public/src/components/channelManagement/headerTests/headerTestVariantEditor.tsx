@@ -210,10 +210,7 @@ const HeaderTestVariantEditor: React.FC<HeaderTestVariantEditorProps> = ({
   const classes = useStyles();
   const setValidationStatusForField = useValidation(onValidationChange);
 
-  const content: HeaderContent = variant.content || {
-    heading: 'Lorem Ipsum',
-    subheading: 'Exam desut lineas buteram loas',
-  };
+  const content: HeaderContent = variant.content;
 
   const onMobileContentRadioChange = (): void => {
     if (variant.mobileContent === undefined) {

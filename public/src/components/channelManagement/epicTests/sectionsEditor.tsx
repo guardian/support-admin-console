@@ -23,7 +23,7 @@ export const SectionsEditor: React.FC<SectionEditorProps> = ({
   disabled,
   ids,
   onUpdate,
-}) => {
+}: SectionEditorProps) => {
   const [inputValue, setInputValue] = React.useState<string>('');
   const [options, setOptions] = React.useState<Section[]>([]);
 

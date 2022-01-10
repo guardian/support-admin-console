@@ -52,7 +52,25 @@ const TestEditorVariantSummaryWebPreviewButton: React.FC<TestEditorVariantSummar
   platform,
   isDisabled,
 }: TestEditorVariantSummaryPreviewButtonProps) => {
-  const isCompatiblePlatform = !['AMP', 'APPLE_NEWS'].includes(platform);
+  const isIncompatiblePlatform = ['AMP', 'APPLE_NEWS'].includes(platform);
+  const isExcludedTestType = ['HEADER'].includes(testType);
+
+  const checkForDisabledButton = (): boolean => {
+    if (isIncompatiblePlatform || isExcludedTestType) {
+      return true;
+    }
+    return isDisabled;
+  };
+
+  const getButtonCopy = (): string => {
+    if (isIncompatiblePlatform) {
+      return `WEB PREVIEW UNAVAILABLE FOR ${platform.replace('_', ' ')}`;
+    }
+    if (isExcludedTestType) {
+      return `WEB PREVIEW UNAVAILABLE FOR ${testType}`;
+    }
+    return 'WEB PREVIEW';
+  };
 
   return (
     <Button
@@ -63,11 +81,9 @@ const TestEditorVariantSummaryWebPreviewButton: React.FC<TestEditorVariantSummar
       href={getPreviewUrl(testName, name, testType, platform)}
       target="_blank"
       rel="noopener noreferrer"
-      disabled={isCompatiblePlatform ? isDisabled : true}
+      disabled={checkForDisabledButton()}
     >
-      {isCompatiblePlatform
-        ? 'WEB PREVIEW'
-        : `WEB PREVIEW UNAVAILABLE FOR ${platform.replace('_', ' ')}`}
+      {getButtonCopy()}
     </Button>
   );
 };
