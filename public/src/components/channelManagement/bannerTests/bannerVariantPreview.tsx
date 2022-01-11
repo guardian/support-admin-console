@@ -110,6 +110,10 @@ const bannerModules = {
     path: 'usEoyMoment/UsEoyMomentGivingTuesdayBanner.js',
     name: 'UsEoyMomentGivingTuesdayBanner',
   },
+  [BannerTemplate.GlobalNewYearBanner]: {
+    path: 'globalNewYear/GlobalNewYearBanner.js',
+    name: 'GlobalNewYearBanner',
+  },
 };
 
 const useStyles = makeStyles(({ palette }: Theme) => ({
