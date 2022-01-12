@@ -195,7 +195,7 @@ export default function NavDrawer(): React.ReactElement {
 
       <div>
         <h2 className={classes.sectionHeader}>Help Centre</h2>
-        <a
+{/*        <a
           href="https://docs.google.com/document/d/1sS0GsBU10UFTz499eba0OB4n6wsK_HfE6aGUiWrqlsM/edit?usp=drive_web&ouid=113021945753427758713"
           key="Testing FAQ"
           className={classes.link}
@@ -206,7 +206,7 @@ export default function NavDrawer(): React.ReactElement {
             <ListItemText primary="Testing FAQ" />
           </ListItem>
         </a>
-
+*/}
         <a
           href="https://forms.gle/Z8Fzn6iw2d9F631n9"
           key="Report an issue"
