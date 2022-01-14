@@ -1,20 +1,12 @@
+// Note: we developed this component expecting that headers would have the ability to display different copy and CTAs on small screens, thus requiring this form to include fields for that content. However it seems like current functionality of the GU frontend is to only show the main copy and CTAs, whatever the screen size may be. Code to include and action mobile-specific fields can be found in earlier commits in this PR: https://github.com/guardian/support-admin-console/pull/259
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import {
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-  TextField,
-  Theme,
-  Typography,
-  makeStyles,
-} from '@material-ui/core';
+import { TextField, Theme, Typography, makeStyles } from '@material-ui/core';
 import HeaderTestVariantEditorCtasEditor from './headerTestVariantEditorCtasEditor';
 import VariantEditorCopyLengthWarning from '../variantEditorCopyLengthWarning';
 import { templateValidatorForPlatform } from '../helpers/validation';
 import { Cta } from '../helpers/shared';
 import { HeaderContent, HeaderVariant } from '../../../models/header';
-import { getDefaultVariant } from './utils/defaults';
 import useValidation from '../hooks/useValidation';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -212,22 +204,6 @@ const HeaderTestVariantEditor: React.FC<HeaderTestVariantEditorProps> = ({
 
   const content: HeaderContent = variant.content;
 
-  const onMobileContentRadioChange = (): void => {
-    if (variant.mobileContent === undefined) {
-      onVariantChange({
-        ...variant,
-        mobileContent: getDefaultVariant().content,
-      });
-    } else {
-      // remove mobile content and clear any validation errors
-      setValidationStatusForField('mobileContent', true);
-      onVariantChange({
-        ...variant,
-        mobileContent: undefined,
-      });
-    }
-  };
-
   return (
     <div className={classes.container}>
       <div className={classes.sectionContainer}>
@@ -242,39 +218,6 @@ const HeaderTestVariantEditor: React.FC<HeaderTestVariantEditorProps> = ({
           editMode={editMode}
           deviceType={variant.mobileContent === undefined ? 'ALL' : 'NOT_MOBILE'}
         />
-
-        <RadioGroup
-          value={variant.mobileContent !== undefined ? 'enabled' : 'disabled'}
-          onChange={onMobileContentRadioChange}
-        >
-          <FormControlLabel
-            value="disabled"
-            key="disabled"
-            control={<Radio />}
-            label="Show the same copy across devices"
-            disabled={!editMode}
-          />
-          <FormControlLabel
-            value="enabled"
-            key="enabled"
-            control={<Radio />}
-            label="Show different copy on mobile"
-            disabled={!editMode}
-          />
-        </RadioGroup>
-        {variant.mobileContent && (
-          <HeaderTestVariantContentEditor
-            content={variant.mobileContent}
-            onChange={(updatedContent: HeaderContent): void =>
-              onVariantChange({ ...variant, mobileContent: updatedContent })
-            }
-            onValidationChange={(isValid): void =>
-              setValidationStatusForField('mobileContent', isValid)
-            }
-            editMode={editMode}
-            deviceType={'MOBILE'}
-          />
-        )}
       </div>
     </div>
   );
