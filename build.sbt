@@ -9,7 +9,7 @@ val circeVersion = "0.14.1"
 
 libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.4",
-  "com.gu.play-googleauth" %% "play-v28" % "2.1.1",
+  "com.gu.play-googleauth" %% "play-v28" % "2.2.2",
   "com.gu" %% "simple-configuration-ssm" % "1.5.7",
   "software.amazon.awssdk" % "s3" % "2.17.99",
   "io.circe" %% "circe-core" % circeVersion,
