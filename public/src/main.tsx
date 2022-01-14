@@ -17,6 +17,9 @@ import {
   BannerTestsForm1,
   BannerTestsForm2,
 } from './components/channelManagement/bannerTests/bannerTestsForm';
+
+import { HeaderTestsForm } from './components/channelManagement/headerTests/headerTestsForm';
+
 import {
   createStyles,
   Theme,
@@ -141,6 +144,10 @@ const AppRouter = withStyles(styles)(({ classes }: Props) => {
             render={(): React.ReactElement =>
               createComponent(<ConfiguredAmountsEditor />, 'Amounts')
             }
+          />
+          <Route
+            path="/header-tests"
+            render={(): React.ReactElement => createComponent(<HeaderTestsForm />, 'Header Tests')}
           />
           <Route
             path="/epic-tests"
