@@ -28,6 +28,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import { CSSProperties } from '@material-ui/core/styles/withStyles';
 import NavDrawer from './components/drawer';
+import Button from '@material-ui/core/Button';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IndexPage from './components/indexPage';
@@ -97,19 +98,45 @@ const styles = ({ palette, mixins, typography, transitions }: Theme) =>
       fontSize: typography.pxToRem(24),
       fontWeight: typography.fontWeightMedium as FontWeightProperty,
     },
+    toolbarContent: {
+      width: '100%',
+      justifyContent: 'space-between',
+    },
+    link: {
+      fontSize: typography.pxToRem(12),
+      fontWeight: typography.fontWeightMedium as FontWeightProperty,
+      textDecoration: 'none',
+    },
+    guideButton: {
+      borderColor: palette.grey[100],
+      color: palette.grey[100],
+    },
   });
 
 type Props = WithStyles<typeof styles>;
+
+const HELP_GUIDE_URL =
+  'https://docs.google.com/document/d/1ErgEoQJRpiVMHZZpUmAnq3MGY8tJCaHTun0INzLcLRc/edit';
 
 const AppRouter = withStyles(styles)(({ classes }: Props) => {
   const createComponent = (component: JSX.Element, displayName: string): React.ReactElement => (
     <div className={classes.appContainer}>
       <AppBar position="relative" className={classes.appBar}>
-        <Toolbar>
+        <Toolbar className={classes.toolbarContent}>
           <NavDrawer />
           <Typography className={classes.heading} variant="h1" color="inherit" noWrap>
             {displayName}
           </Typography>
+          <a
+            href={HELP_GUIDE_URL}
+            className={classes.link}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Button className={classes.guideButton} variant="outlined" disableElevation>
+              User Guide
+            </Button>
+          </a>
         </Toolbar>
       </AppBar>
       <main className={classes.appContent}>{component}</main>
