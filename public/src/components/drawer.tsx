@@ -201,18 +201,6 @@ export default function NavDrawer(): React.ReactElement {
       <div>
         <h2 className={classes.sectionHeader}>Help Centre</h2>
         <a
-          href="https://docs.google.com/document/d/1sS0GsBU10UFTz499eba0OB4n6wsK_HfE6aGUiWrqlsM/edit?usp=drive_web&ouid=113021945753427758713"
-          key="Testing FAQ"
-          className={classes.link}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <ListItem className={classes.listItem} button key="Testing FAQ">
-            <ListItemText primary="Testing FAQ" />
-          </ListItem>
-        </a>
-
-        <a
           href="https://forms.gle/Z8Fzn6iw2d9F631n9"
           key="Report an issue"
           className={classes.link}

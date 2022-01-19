@@ -55,24 +55,19 @@ const formattedTimestamp = (timestamp: string): string => {
   return `${monthName} ${paddedDay} - ${paddedhours}:${paddedMinutes}`;
 };
 
-const READ_ONLY_MODE_DEFAULT_TEXT = '— View live and draft tests using the left-hand menu';
-
 const StickyBottomBarDetail: React.FC<StickyBottomBarDetailProps> = ({
   classes,
   isInEditMode,
   selectedTestName,
   lockStatus,
 }: StickyBottomBarDetailProps) => {
-  let text = '';
-  if (isInEditMode) {
-    text = selectedTestName === undefined ? '' : `- ${selectedTestName}`;
-  } else if (lockStatus.locked && lockStatus.email && lockStatus.timestamp) {
+  let text = selectedTestName == null ? '' : `- ${selectedTestName}`;
+
+  if (!isInEditMode && lockStatus.locked && lockStatus.email && lockStatus.timestamp) {
     const name = formattedName(lockStatus.email);
     const timestamp = formattedTimestamp(lockStatus.timestamp);
 
     text = `- By ${name}, last live ${timestamp}`;
-  } else {
-    text = READ_ONLY_MODE_DEFAULT_TEXT;
   }
 
   return (
