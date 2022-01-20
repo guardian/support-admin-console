@@ -16,6 +16,8 @@ import { EMPTY_ERROR_HELPER_TEXT, templateValidatorForPlatform } from '../helper
 import EpicTestChoiceCardsEditor from './epicTestChoiceCardsEditor';
 import EpicTestSignInLinkEditor from './epicTestSignInLinkEditor';
 
+import RichTextEditor from '../richTextEditor';
+
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const getUseStyles = (shouldAddPadding: boolean) => {
   const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
@@ -156,6 +158,8 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
     <div className={classes.container}>
       {epicEditorConfig.allowVariantHeader && (
         <div>
+          <RichTextEditor></RichTextEditor>
+{/*
           <TextField
             inputRef={register({
               required: epicEditorConfig.requireVariantHeader ? EMPTY_ERROR_HELPER_TEXT : undefined,
@@ -171,6 +175,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
             disabled={!editMode}
             fullWidth
           />
+*/}
         </div>
       )}
 

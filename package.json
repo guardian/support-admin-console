@@ -26,6 +26,8 @@
     "@material-ui/core": "^4.11.4",
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.58",
+    "@remirror/pm": "^1.0.11",
+    "@remirror/react": "^1.0.21",
     "@types/lodash": "^4.14.176",
     "@types/react-beautiful-dnd": "^13.0.0",
     "immutability-helper": "^3.0.1",
@@ -34,7 +36,8 @@
     "react-beautiful-dnd": "^13.0.0",
     "react-dom": "^16.9.0",
     "react-hook-form": "^6.7.2",
-    "react-router-dom": "^5.0.1"
+    "react-router-dom": "^5.0.1",
+    "remirror": "^1.0.60"
   },
   "resolutions": {
     "csstype": "^2.6.18"
