@@ -158,8 +158,20 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
     <div className={classes.container}>
       {epicEditorConfig.allowVariantHeader && (
         <div>
-          <RichTextEditor></RichTextEditor>
-{/*
+          <RichTextEditor
+            inputRef={register({
+              required: epicEditorConfig.requireVariantHeader ? EMPTY_ERROR_HELPER_TEXT : undefined,
+              validate: templateValidator,
+            })}
+            error={errors.heading !== undefined}
+            helperText={errors.heading ? errors.heading.message : HEADER_DEFAULT_HELPER_TEXT}
+            onBlur={handleSubmit(onSubmit)}
+            name="heading"
+            label="Header"
+            copyContent={defaultValues.heading}
+            disabled={!editMode}
+          />
+          {/*
           <TextField
             inputRef={register({
               required: epicEditorConfig.requireVariantHeader ? EMPTY_ERROR_HELPER_TEXT : undefined,
@@ -175,11 +187,24 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
             disabled={!editMode}
             fullWidth
           />
-*/}
+          */}
         </div>
       )}
-
       <div>
+        <RichTextEditor
+          inputRef={register({
+            required: EMPTY_ERROR_HELPER_TEXT,
+            validate: templateValidator,
+          })}
+          error={errors.body !== undefined}
+          helperText={errors.body ? errors.body.message : BODY_DEFAULT_HELPER_TEXT}
+          onBlur={handleSubmit(onSubmit)}
+          name="body"
+          label="Body copy"
+          copyContent={defaultValues.body}
+          disabled={!editMode}
+        />
+        {/*
         <TextField
           inputRef={register({
             required: EMPTY_ERROR_HELPER_TEXT,
@@ -197,6 +222,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
           disabled={!editMode}
           fullWidth
         />
+      */}
       </div>
 
       {epicEditorConfig.allowVariantHighlightedText && (
