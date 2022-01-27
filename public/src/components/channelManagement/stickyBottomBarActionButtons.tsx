@@ -125,7 +125,9 @@ const StickyBottomBarActionButtons: React.FC<StickyBottomBarActionButtonsProps> 
     >
       {/*eslint-disable-next-line react/prop-types */}
       <Typography className={classes.buttonText}>
-        {selectedTestIsBeingEdited ? SAVE_BUTTON_TEST_SELECTED_TEXT : SAVE_BUTTON_TEST_NOT_SELECTED_TEXT}
+        {selectedTestIsBeingEdited
+          ? SAVE_BUTTON_TEST_SELECTED_TEXT
+          : SAVE_BUTTON_TEST_NOT_SELECTED_TEXT}
       </Typography>
     </Button>
   );

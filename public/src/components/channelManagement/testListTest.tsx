@@ -86,7 +86,7 @@ const TestListTest: React.FC<TestListTestProps> = ({
   return (
     <ListItem className={containerClasses.join(' ')} button={true} onClick={onClick} ref={ref}>
       <div className={classes.labelAndNameContainer}>
-        { isEdited && <EditIcon /> }
+        {isEdited && <EditIcon />}
         <TestListTestLiveLabel isLive={test.isOn} shouldInvertColor={shouldInvertColor} />
         <TestListTestName
           name={test.name}
