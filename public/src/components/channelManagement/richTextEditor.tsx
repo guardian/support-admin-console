@@ -24,6 +24,8 @@ import {
 
 import { createStyles, WithStyles, withStyles } from '@material-ui/core';
 
+// CSS
+// Note that ReMirror/ProseMirror CSS has been added to the /src/style.css file
 const styles = createStyles({
   fieldLabel: {
     display: 'inline-block',
@@ -38,20 +40,20 @@ const styles = createStyles({
   },
   errorText: {
     color: 'rgba(0 0 0 / 1)',
-    backgroundColor: 'rgba(0 255 255 / 1)',
+    backgroundColor: 'rgba(255 255 0 / 1)',
     margin: '0.5em 0 0 1.5em',
   },
 });
 
+// Typescript
 interface RichTextEditorProps extends WithStyles<typeof styles> {
   disabled: boolean;
-  copyContent: string | undefined;
-  label: string | undefined;
-  helperText: string | undefined;
-  name: string | undefined;
+  label?: string;
+  helperText?: string;
+  name?: string;
   error: boolean;
-  inputRef: (item?: any) => void;
-  onBlur: () => void;
+  updateCopy: (item?: any) => void;
+  copyData?: string | string[];
 }
 
 interface RichTextMenuProps extends WithStyles<typeof styles> {
@@ -59,7 +61,7 @@ interface RichTextMenuProps extends WithStyles<typeof styles> {
   label: string | undefined;
 }
 
-// LINK FUNCTIONALITY
+// ReMirror/ProseMirror LINK functionality
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function useLinkShortcut() {
   const [linkShortcut, setLinkShortcut] = useState<ShortcutHandlerProps | undefined>();
@@ -153,7 +155,7 @@ function useFloatingLinkState() {
   );
 }
 
-// FLOATING LINK MENU BUTTONS
+// ReMirror/ProseMirror FLOATING LINK MENU BUTTONS
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const FloatingLinkToolbar = () => {
   const {
@@ -229,7 +231,7 @@ const FloatingLinkToolbar = () => {
   );
 };
 
-// TOP MENU BUTTONS
+// ReMirror/ProseMirror TOP MENU BUTTONS
 const RichTextMenu: React.FC<RichTextMenuProps> = ({
   classes,
   disabled,
@@ -273,37 +275,34 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
   );
 };
 
-const parseCopyForParagraphs = (copy: string | undefined): string | undefined => {
-  if (copy) {
-    const search = /\n/gm;
-    return copy.replace(search, '</p><p>');
-  }
-  return copy;
+// Helper function - converts an array of strings into a set of (stringified) HTML <p> elements
+const parseCopyForParagraphs = (copy: string[]): string => {
+  let res = '';
+
+  copy.forEach(paragraph => {
+    res += `<p>${paragraph}</p>`;
+  });
+  return res;
 };
 
-// const unparseCopyForParagraphs = (copy: string | undefined): string | undefined => {
-//   if (copy) {
-//     const search = /<\/p>.*?<p>/gm;
-//     return copy.replace(search, '\n');
-//   }
-//   return copy;
-// };
-
+// Component function
 const RichTextEditor: React.FC<RichTextEditorProps> = ({
   classes,
-  inputRef,
   disabled,
-  copyContent,
-  name,
   label,
   helperText,
-  onBlur,
+  name,
   error,
+  updateCopy,
+  copyData,
 }: RichTextEditorProps) => {
-  console.log(copyContent, typeof inputRef, typeof onBlur);
-
-  const editorId =
-    name != null ? `RTE-for-${name.replace(/ /g, '')}` : `RTE-${Math.random().toFixed(6)}`;
+  // Make sure the supplied copy is in an Array, for processing
+  if (copyData == null) {
+    copyData = [];
+  }
+  if (!Array.isArray(copyData)) {
+    copyData = [copyData];
+  }
 
   const { manager, state } = useRemirror({
     extensions: () => [
@@ -311,25 +310,43 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
       new ItalicExtension(),
       new LinkExtension({ autoLink: true }),
     ],
-    content: `<p>${parseCopyForParagraphs(copyContent)}</p>`,
+    content: parseCopyForParagraphs(copyData),
     selection: 'start',
     stringHandler: 'html',
   });
 
+  // Handle to the ProseMirror <div> element containing all the RTE text
+  // - There's probably a better way of doing this, but I can't get my head around React refs at the moment and it's just as easy to grab a handle to the ProseMirror <div> element and suck child elements out of it
+  let ref: any = false;
   useEffect(() => {
-    const editorHandle = document.querySelector(`#${editorId} .remirror-editor`);
-
-    if (editorHandle) {
-      if (disabled) {
-        editorHandle.classList.add('editor-disabled');
-      } else {
-        editorHandle.classList.remove('editor-disabled');
-      }
-    }
+    ref = document.querySelector(`#RTE-${name} .ProseMirror`);
   });
 
+  // Helper function - extracts copy from an array of HTML child elements
+  const blurAction = () => {
+    if (name && ref && !disabled) {
+      const elements = [...ref.children];
+
+      const paragraphs = elements.filter(p => {
+        if (p == null) {
+          return false;
+        }
+        if (p.tagName === 'P') {
+          return true;
+        }
+        return false;
+      });
+
+      const paragraphsCopy = paragraphs.map(p => p.innerHTML);
+      updateCopy(paragraphsCopy);
+    }
+  };
+
+  // Control the look of the ReMirror RTE dependant on whether the user is in Edit or Read-Only Mode
+  const wrapperClasses = disabled ? 'remirror-theme editor-disabled' : 'remirror-theme';
+
   return (
-    <div className="remirror-theme" id={editorId}>
+    <div id={`RTE-${name}`} className={wrapperClasses} onBlur={blurAction}>
       <Remirror manager={manager} initialContent={state} editable={!disabled}>
         <RichTextMenu classes={classes} disabled={disabled} label={label} />
         <EditorComponent />

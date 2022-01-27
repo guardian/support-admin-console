@@ -47,6 +47,8 @@ export const getInvalidCharactersError = (text: string): string | null => {
 };
 
 export const EMPTY_ERROR_HELPER_TEXT = 'Field cannot be empty - please enter some text';
+export const MAXLENGTH_ERROR_HELPER_TEXT =
+  'This copy is longer than the recommended length. Please preview across breakpoints before publishing.';
 
 export const getEmptyError = (text: string): string | null => {
   if (text.trim() === '') {

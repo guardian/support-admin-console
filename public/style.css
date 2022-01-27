@@ -4284,7 +4284,7 @@ button:active .remirror-menu-pane-shortcut,
 }
 
 .editor-disabled p, .editor-disabled a {
-  opacity: 0.8;
+  opacity: 0.65;
 }
 
 .remirror-button {

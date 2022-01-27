@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import React from 'react';
 import { EpicVariant, SeparateArticleCount } from './epicTestsForm';
 import {
   ContributionFrequency,
@@ -12,12 +11,13 @@ import { makeStyles, TextField, Theme, Typography } from '@material-ui/core';
 import EpicTestVariantEditorCtasEditor from './epicTestVariantEditorCtasEditor';
 import VariantEditorSeparateArticleCountEditor from '../variantEditorSeparateArticleCountEditor';
 import EpicTestTickerEditor from './epicTestTickerEditor';
-import { EMPTY_ERROR_HELPER_TEXT, templateValidatorForPlatform } from '../helpers/validation';
+import { EMPTY_ERROR_HELPER_TEXT, MAXLENGTH_ERROR_HELPER_TEXT } from '../helpers/validation';
 import EpicTestChoiceCardsEditor from './epicTestChoiceCardsEditor';
 import EpicTestSignInLinkEditor from './epicTestSignInLinkEditor';
 
 import RichTextEditor from '../richTextEditor';
 
+// CSS
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const getUseStyles = (shouldAddPadding: boolean) => {
   const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
@@ -48,21 +48,17 @@ const getUseStyles = (shouldAddPadding: boolean) => {
   return useStyles;
 };
 
+// Hard-coded (magic) values
+const PARAGRAPHS_MAX_LENGTH = 2000;
+
 const HEADER_DEFAULT_HELPER_TEXT = 'Assitive text';
-const BODY_DEFAULT_HELPER_TEXT = 'Maximum 500 characters';
+const BODY_DEFAULT_HELPER_TEXT = `Maximum ${PARAGRAPHS_MAX_LENGTH} characters`;
 const HIGHTLIGHTED_TEXT_DEFAULT_HELPER_TEXT = 'Final sentence of body copy';
 const IMAGE_URL_DEFAULT_HELPER_TEXT =
   'Image ratio should be 2.5:1. This will appear above everything except a ticker';
 const FOOTER_DEFAULT_HELPER_TEXT = 'Bold text that appears below the button';
 
-interface FormData {
-  heading?: string;
-  body: string;
-  highlightedText?: string;
-  backgroundImageUrl?: string;
-  footer?: string;
-}
-
+// Typescript
 interface EpicTestVariantEditorProps {
   variant: EpicVariant;
   epicEditorConfig: EpicEditorConfig;
@@ -72,6 +68,7 @@ interface EpicTestVariantEditorProps {
   onValidationChange: (isValid: boolean) => void;
 }
 
+// Component function
 const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   variant,
   onVariantChange,
@@ -81,55 +78,25 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
 }: EpicTestVariantEditorProps) => {
   const classes = getUseStyles(epicEditorConfig.allowMultipleVariants)();
 
-  const templateValidator = templateValidatorForPlatform(epicEditorConfig.platform);
-
-  const defaultValues: FormData = {
-    heading: variant.heading,
-    body: variant.paragraphs.join('\n'),
-    highlightedText: variant.highlightedText,
-    backgroundImageUrl: variant.backgroundImageUrl,
-    footer: variant.footer,
+  // Field updates
+  const updateHeading = (updatedHeading: string[]): void => {
+    onVariantChange({ ...variant, heading: updatedHeading[0] });
   };
-
-  const { register, handleSubmit, errors, trigger } = useForm<FormData>({
-    mode: 'onChange',
-    defaultValues,
-  });
-
-  useEffect(() => {
-    trigger();
-  }, []);
-
-  useEffect(() => {
-    const isValid = Object.keys(errors).length === 0;
-    onValidationChange(isValid);
-  }, [
-    errors.heading,
-    errors.body,
-    errors.highlightedText,
-    errors.backgroundImageUrl,
-    errors.footer,
-  ]);
-
-  const onSubmit = ({
-    heading,
-    body,
-    highlightedText,
-    backgroundImageUrl,
-    footer,
-  }: FormData): void => {
-    const paragraphs = body.split('\n');
-
-    onVariantChange({
-      ...variant,
-      heading: heading || undefined,
-      paragraphs,
-      highlightedText: highlightedText || undefined,
-      backgroundImageUrl: backgroundImageUrl || undefined,
-      footer: footer || undefined,
-    });
+  const updateParagraphs = (updatedParagraphs: string[]): void => {
+    onVariantChange({ ...variant, paragraphs: updatedParagraphs });
   };
-
+  const updateHighlightedText = (updatedHighlightedText: string[]): void => {
+    onVariantChange({ ...variant, highlightedText: updatedHighlightedText[0] });
+  };
+  // This isn't working!
+  const updateBackgroundImageUrl = (
+    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement, Element>,
+  ): void => {
+    onVariantChange({ ...variant, backgroundImageUrl: e.target.value });
+  };
+  const updateFooter = (updatedFooter: string[]): void => {
+    onVariantChange({ ...variant, footer: updatedFooter[0] });
+  };
   const updatePrimaryCta = (updatedCta?: Cta): void => {
     onVariantChange({ ...variant, cta: updatedCta });
   };
@@ -154,96 +121,62 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
     onVariantChange({ ...variant, showSignInLink: updatedShowSignInLink });
   };
 
+  // Field validations
+  const paragraphsLength = variant.paragraphs.join(' ').length;
+  const getParagraphsHelperText = () => {
+    if (!paragraphsLength) {
+      return EMPTY_ERROR_HELPER_TEXT;
+    }
+    if (paragraphsLength > PARAGRAPHS_MAX_LENGTH) {
+      return MAXLENGTH_ERROR_HELPER_TEXT;
+    }
+    return BODY_DEFAULT_HELPER_TEXT;
+  };
+  const checkForParagraphsError = () => {
+    if (!paragraphsLength || paragraphsLength > PARAGRAPHS_MAX_LENGTH) {
+      return true;
+    }
+    return false;
+  };
+
+  // Form
   return (
     <div className={classes.container}>
       {epicEditorConfig.allowVariantHeader && (
         <div>
           <RichTextEditor
-            inputRef={register({
-              required: epicEditorConfig.requireVariantHeader ? EMPTY_ERROR_HELPER_TEXT : undefined,
-              validate: templateValidator,
-            })}
-            error={errors.heading !== undefined}
-            helperText={errors.heading ? errors.heading.message : HEADER_DEFAULT_HELPER_TEXT}
-            onBlur={handleSubmit(onSubmit)}
+            error={false}
+            helperText={HEADER_DEFAULT_HELPER_TEXT}
+            updateCopy={updateHeading}
+            copyData={variant.heading}
             name="heading"
             label="Header"
-            copyContent={defaultValues.heading}
             disabled={!editMode}
           />
-          {/*
-          <TextField
-            inputRef={register({
-              required: epicEditorConfig.requireVariantHeader ? EMPTY_ERROR_HELPER_TEXT : undefined,
-              validate: templateValidator,
-            })}
-            error={errors.heading !== undefined}
-            helperText={errors.heading ? errors.heading.message : HEADER_DEFAULT_HELPER_TEXT}
-            onBlur={handleSubmit(onSubmit)}
-            name="heading"
-            label="Header"
-            margin="normal"
-            variant="outlined"
-            disabled={!editMode}
-            fullWidth
-          />
-          */}
         </div>
       )}
       <div>
         <RichTextEditor
-          inputRef={register({
-            required: EMPTY_ERROR_HELPER_TEXT,
-            validate: templateValidator,
-          })}
-          error={errors.body !== undefined}
-          helperText={errors.body ? errors.body.message : BODY_DEFAULT_HELPER_TEXT}
-          onBlur={handleSubmit(onSubmit)}
-          name="body"
+          error={checkForParagraphsError()}
+          helperText={getParagraphsHelperText()}
+          copyData={variant.paragraphs}
+          updateCopy={updateParagraphs}
+          name="paragraphs"
           label="Body copy"
-          copyContent={defaultValues.body}
           disabled={!editMode}
         />
-        {/*
-        <TextField
-          inputRef={register({
-            required: EMPTY_ERROR_HELPER_TEXT,
-            validate: templateValidator,
-          })}
-          error={errors.body !== undefined}
-          helperText={errors.body ? errors.body.message : BODY_DEFAULT_HELPER_TEXT}
-          onBlur={handleSubmit(onSubmit)}
-          name="body"
-          label="Body copy"
-          margin="normal"
-          variant="outlined"
-          multiline
-          rows={10}
-          disabled={!editMode}
-          fullWidth
-        />
-      */}
       </div>
 
       {epicEditorConfig.allowVariantHighlightedText && (
         <div>
-          <TextField
-            inputRef={register({
-              validate: templateValidator,
-            })}
-            error={errors.highlightedText !== undefined}
-            helperText={
-              errors.highlightedText
-                ? errors.highlightedText.message
-                : HIGHTLIGHTED_TEXT_DEFAULT_HELPER_TEXT
-            }
-            onBlur={handleSubmit(onSubmit)}
+          <RichTextEditor
+            error={false}
+            helperText={HIGHTLIGHTED_TEXT_DEFAULT_HELPER_TEXT}
+            updateCopy={updateHighlightedText}
+            copyData={variant.highlightedText}
             name="highlightedText"
             label="Highlighted text"
-            margin="normal"
-            variant="outlined"
             disabled={!editMode}
-            fullWidth
           />
         </div>
       )}
@@ -251,9 +184,9 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
       {epicEditorConfig.allowVariantImageUrl && (
         <div>
           <TextField
-            inputRef={register()}
+            value={variant.backgroundImageUrl}
             helperText={IMAGE_URL_DEFAULT_HELPER_TEXT}
-            onBlur={handleSubmit(onSubmit)}
+            onBlur={updateBackgroundImageUrl}
             name="backgroundImageUrl"
             label="Image URL"
             margin="normal"
@@ -266,16 +199,14 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
 
       {epicEditorConfig.allowVariantFooter && (
         <div>
-          <TextField
-            inputRef={register()}
+          <RichTextEditor
+            error={false}
             helperText={FOOTER_DEFAULT_HELPER_TEXT}
-            onBlur={handleSubmit(onSubmit)}
+            updateCopy={updateFooter}
+            copyData={variant.footer}
             name="footer"
             label="Footer"
-            margin="normal"
-            variant="outlined"
             disabled={!editMode}
-            fullWidth
           />
         </div>
       )}
