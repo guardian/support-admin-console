@@ -33,7 +33,6 @@ const testCopyHasTemplate = (test: BannerTest, template: string): boolean =>
 
 interface BannerTestEditorProps {
   test: BannerTest;
-  hasChanged: boolean;
   onChange: (updatedTest: BannerTest) => void;
   onValidationChange: (isValid: boolean) => void;
   visible: boolean;

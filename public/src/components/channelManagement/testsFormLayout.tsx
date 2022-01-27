@@ -44,6 +44,7 @@ interface Props extends WithStyles<typeof styles> {
   sidebar: JSX.Element;
   testEditor: JSX.Element | null;
   selectedTestName: string | null;
+  editedTestName: string | null;
   editMode: boolean;
   lockStatus: LockStatus;
   requestTakeControl: () => void;
@@ -57,6 +58,7 @@ const TestsFormLayout: React.FC<Props> = ({
   sidebar,
   testEditor,
   selectedTestName,
+  editedTestName,
   save,
   cancel,
   editMode,
@@ -86,6 +88,7 @@ const TestsFormLayout: React.FC<Props> = ({
       <StickyBottomBar
         isInEditMode={editMode}
         selectedTestName={selectedTestName}
+        editedTestName={editedTestName}
         lockStatus={lockStatus}
         requestTakeControl={requestTakeControl}
         requestLock={requestLock}

@@ -19,7 +19,7 @@ const getHeaderTestsForm = (): React.FC<Props> => {
   const HeaderTestsForm: React.FC<Props> = ({
     tests,
     selectedTestName,
-    selectedTestHasBeenModified,
+    editedTestName,
     onTestChange,
     onTestPriorityChange,
     onTestSelected,
@@ -39,14 +39,11 @@ const getHeaderTestsForm = (): React.FC<Props> => {
     setRegionFilter,
   }: Props) => {
     const createTest = (name: string, nickname: string): void => {
-      if (selectedTestHasBeenModified) {
-        alert('Please either save or discard before creating a test.');
-      } else {
-        onTestCreate(createDefaultHeaderTest(name, nickname));
-      }
+      onTestCreate(createDefaultHeaderTest(name, nickname));
     };
 
     const selectedTest = tests.find(t => t.name === selectedTestName);
+    const selectedTestIsBeingEdited = selectedTestName === editedTestName;
 
     return (
       <TestsFormLayout
@@ -54,6 +51,7 @@ const getHeaderTestsForm = (): React.FC<Props> => {
           <Sidebar<HeaderTest>
             tests={tests}
             selectedTestName={selectedTestName}
+            editedTestName={editedTestName}
             onTestPriorityChange={onTestPriorityChange}
             onTestSelected={onTestSelected}
             createTest={createTest}
@@ -69,11 +67,10 @@ const getHeaderTestsForm = (): React.FC<Props> => {
           selectedTestName && selectedTest ? (
             <HeaderTestEditor
               test={selectedTest}
-              hasChanged={selectedTestHasBeenModified}
               onChange={onTestChange}
               onValidationChange={onTestErrorStatusChange}
               visible
-              editMode={editMode}
+              editMode={editMode && selectedTestIsBeingEdited}
               onDelete={onTestDelete}
               onArchive={onTestArchive}
               onTestSelected={onTestSelected}
@@ -86,6 +83,7 @@ const getHeaderTestsForm = (): React.FC<Props> => {
           ) : null
         }
         selectedTestName={selectedTestName}
+        editedTestName={editedTestName}
         lockStatus={lockStatus}
         requestTakeControl={requestTakeControl}
         requestLock={requestLock}

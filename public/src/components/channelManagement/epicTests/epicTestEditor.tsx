@@ -36,7 +36,6 @@ const copyHasTemplate = (test: EpicTest, template: string): boolean =>
 
 interface EpicTestEditorProps {
   test: EpicTest;
-  hasChanged: boolean;
   epicEditorConfig: EpicEditorConfig;
   onChange: (updatedTest: EpicTest) => void;
   onValidationChange: (isValid: boolean) => void;

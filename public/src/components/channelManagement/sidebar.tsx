@@ -33,6 +33,7 @@ const styles = createStyles({
 interface SidebarProps<T extends Test> {
   tests: T[];
   selectedTestName: string | null;
+  editedTestName: string | null;
   onTestPriorityChange: (newPriority: number, oldPriority: number) => void;
   onTestSelected: (testName: string) => void;
   testNamePrefix?: string;
@@ -49,6 +50,7 @@ function Sidebar<T extends Test>({
   tests,
   isInEditMode,
   selectedTestName,
+  editedTestName,
   onTestPriorityChange,
   onTestSelected,
   testNamePrefix,
@@ -97,6 +99,7 @@ function Sidebar<T extends Test>({
           tests={filterTests(tests)}
           isInEditMode={isInEditMode}
           selectedTestName={selectedTestName}
+          editedTestName={editedTestName}
           onTestPriorityChange={onTestPriorityChange}
           onTestSelected={onTestSelected}
         />
