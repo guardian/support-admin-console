@@ -55,6 +55,9 @@ const styles = ({ palette }: Theme) =>
         marginLeft: '4px',
       },
     },
+    whitePencil: {
+      color: 'white',
+    },
   });
 
 interface TestListTestProps extends WithStyles<typeof styles> {
@@ -86,7 +89,7 @@ const TestListTest: React.FC<TestListTestProps> = ({
   return (
     <ListItem className={containerClasses.join(' ')} button={true} onClick={onClick} ref={ref}>
       <div className={classes.labelAndNameContainer}>
-        {isEdited && <EditIcon />}
+        {isEdited && (isSelected ? <EditIcon className={classes.whitePencil} /> : <EditIcon />)}
         <TestListTestLiveLabel isLive={test.isOn} shouldInvertColor={shouldInvertColor} />
         <TestListTestName
           name={test.name}
