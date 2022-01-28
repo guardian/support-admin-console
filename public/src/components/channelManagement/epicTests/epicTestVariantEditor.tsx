@@ -15,7 +15,7 @@ import { EMPTY_ERROR_HELPER_TEXT, MAXLENGTH_ERROR_HELPER_TEXT } from '../helpers
 import EpicTestChoiceCardsEditor from './epicTestChoiceCardsEditor';
 import EpicTestSignInLinkEditor from './epicTestSignInLinkEditor';
 
-import RichTextEditor from '../richTextEditor';
+import RichTextEditor, { getRteCopyLength } from '../richTextEditor';
 
 import { useForm } from 'react-hook-form';
 import { templateValidatorForPlatform } from '../helpers/validation';
@@ -99,18 +99,15 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   });
 
   useEffect(() => {
-    console.log('trigger triggered', defaultValues);
     trigger();
   }, []);
 
   useEffect(() => {
-    console.log('errors', errors, defaultValues);
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
   }, [errors.backgroundImageUrl]);
 
   const onSubmit = ({ backgroundImageUrl }: EpicTestMuiTextFields): void => {
-    console.log('backgroundImageUrl', backgroundImageUrl, defaultValues);
     onVariantChange({ ...variant, backgroundImageUrl });
   };
 
@@ -154,8 +151,9 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   };
 
   // RTE field validations
-  const paragraphsLength = variant.paragraphs.join(' ').length;
   const getParagraphsHelperText = () => {
+    let paragraphsLength = getRteCopyLength(variant.paragraphs);
+
     if (!paragraphsLength) {
       return EMPTY_ERROR_HELPER_TEXT;
     }
@@ -165,6 +163,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
     return BODY_DEFAULT_HELPER_TEXT;
   };
   const checkForParagraphsError = () => {
+    let paragraphsLength = getRteCopyLength(variant.paragraphs);
     if (!paragraphsLength || paragraphsLength > PARAGRAPHS_MAX_LENGTH) {
       return true;
     }
@@ -229,17 +228,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
           />
         </div>
       )}
-{/*            inputRef={register({ validate: templateValidator })}
-            error={errors.heading !== undefined}
-            helperText={errors.heading ? errors.heading.message : HEADING_DEFAULT_HELPER_TEXT}
-            onBlur={handleSubmit(onSubmit)}
-            name="heading"
-            label="Heading"
-            margin="normal"
-            variant="outlined"
-            disabled={!editMode}
-            fullWidth
-*/}
+
       {epicEditorConfig.allowVariantFooter && (
         <div>
           <RichTextEditor

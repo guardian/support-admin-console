@@ -285,6 +285,12 @@ const parseCopyForParagraphs = (copy: string[]): string => {
   return res;
 };
 
+export const getRteCopyLength = (copy: string[]): number => {
+    let paragraphsCheck = copy.join(' ');
+    paragraphsCheck = paragraphsCheck.replace(/<.*?>/g, '');
+    return paragraphsCheck.length;
+};
+
 // Component function
 const RichTextEditor: React.FC<RichTextEditorProps> = ({
   classes,
