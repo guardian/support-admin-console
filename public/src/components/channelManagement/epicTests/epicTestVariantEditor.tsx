@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { EpicVariant, SeparateArticleCount } from './epicTestsForm';
 import {
   ContributionFrequency,
@@ -16,6 +16,10 @@ import EpicTestChoiceCardsEditor from './epicTestChoiceCardsEditor';
 import EpicTestSignInLinkEditor from './epicTestSignInLinkEditor';
 
 import RichTextEditor from '../richTextEditor';
+
+import { useForm } from 'react-hook-form';
+import { templateValidatorForPlatform } from '../helpers/validation';
+
 
 // CSS
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -68,6 +72,10 @@ interface EpicTestVariantEditorProps {
   onValidationChange: (isValid: boolean) => void;
 }
 
+interface EpicTestMuiTextFields {
+  backgroundImageUrl: string;
+}
+
 // Component function
 const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   variant,
@@ -78,7 +86,35 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
 }: EpicTestVariantEditorProps) => {
   const classes = getUseStyles(epicEditorConfig.allowMultipleVariants)();
 
-  // Field updates
+  // Handling MUI TextField updates
+  const templateValidator = templateValidatorForPlatform('DOTCOM');
+
+  const defaultValues: EpicTestMuiTextFields = {
+    backgroundImageUrl: variant.backgroundImageUrl || '',
+  };
+
+  const { register, handleSubmit, errors, trigger } = useForm<EpicTestMuiTextFields>({
+    mode: 'onChange',
+    defaultValues,
+  });
+
+  useEffect(() => {
+    console.log('trigger triggered', defaultValues);
+    trigger();
+  }, []);
+
+  useEffect(() => {
+    console.log('errors', errors, defaultValues);
+    const isValid = Object.keys(errors).length === 0;
+    onValidationChange(isValid);
+  }, [errors.backgroundImageUrl]);
+
+  const onSubmit = ({ backgroundImageUrl }: EpicTestMuiTextFields): void => {
+    console.log('backgroundImageUrl', backgroundImageUrl, defaultValues);
+    onVariantChange({ ...variant, backgroundImageUrl });
+  };
+
+  // Handling RTE Field updates
   const updateHeading = (updatedHeading: string[]): void => {
     onVariantChange({ ...variant, heading: updatedHeading[0] });
   };
@@ -88,15 +124,11 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   const updateHighlightedText = (updatedHighlightedText: string[]): void => {
     onVariantChange({ ...variant, highlightedText: updatedHighlightedText[0] });
   };
-  // This isn't working!
-  const updateBackgroundImageUrl = (
-    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement, Element>,
-  ): void => {
-    onVariantChange({ ...variant, backgroundImageUrl: e.target.value });
-  };
   const updateFooter = (updatedFooter: string[]): void => {
     onVariantChange({ ...variant, footer: updatedFooter[0] });
   };
+
+  // Handling other form field updates
   const updatePrimaryCta = (updatedCta?: Cta): void => {
     onVariantChange({ ...variant, cta: updatedCta });
   };
@@ -121,7 +153,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
     onVariantChange({ ...variant, showSignInLink: updatedShowSignInLink });
   };
 
-  // Field validations
+  // RTE field validations
   const paragraphsLength = variant.paragraphs.join(' ').length;
   const getParagraphsHelperText = () => {
     if (!paragraphsLength) {
@@ -184,9 +216,10 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
       {epicEditorConfig.allowVariantImageUrl && (
         <div>
           <TextField
-            value={variant.backgroundImageUrl}
+            inputRef={register({ validate: templateValidator })}
+            error={errors.backgroundImageUrl !== undefined}
             helperText={IMAGE_URL_DEFAULT_HELPER_TEXT}
-            onBlur={updateBackgroundImageUrl}
+            onBlur={handleSubmit(onSubmit)}
             name="backgroundImageUrl"
             label="Image URL"
             margin="normal"
@@ -196,7 +229,17 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
           />
         </div>
       )}
-
+{/*            inputRef={register({ validate: templateValidator })}
+            error={errors.heading !== undefined}
+            helperText={errors.heading ? errors.heading.message : HEADING_DEFAULT_HELPER_TEXT}
+            onBlur={handleSubmit(onSubmit)}
+            name="heading"
+            label="Heading"
+            margin="normal"
+            variant="outlined"
+            disabled={!editMode}
+            fullWidth
+*/}
       {epicEditorConfig.allowVariantFooter && (
         <div>
           <RichTextEditor
