@@ -104,7 +104,7 @@ const getEpicTestForm = (epicEditorConfig: EpicEditorConfig): React.FC<Props> =>
   const EpicTestsForm: React.FC<Props> = ({
     tests,
     selectedTestName,
-    selectedTestHasBeenModified,
+    editedTestName,
     onTestSelected,
     onTestSave,
     onTestDelete,
@@ -124,14 +124,11 @@ const getEpicTestForm = (epicEditorConfig: EpicEditorConfig): React.FC<Props> =>
     setRegionFilter,
   }: Props) => {
     const createTest = (name: string, nickname: string): void => {
-      if (selectedTestHasBeenModified) {
-        alert('Please either save or discard before creating a test.');
-      } else {
-        onTestCreate(createDefaultEpicTest(name, nickname));
-      }
+      onTestCreate(createDefaultEpicTest(name, nickname));
     };
 
     const selectedTest = tests.find(t => t.name === selectedTestName);
+    const selectedTestIsBeingEdited = selectedTestName === editedTestName;
 
     return (
       <TestsFormLayout
@@ -139,6 +136,7 @@ const getEpicTestForm = (epicEditorConfig: EpicEditorConfig): React.FC<Props> =>
           <Sidebar<EpicTest>
             tests={tests}
             selectedTestName={selectedTestName}
+            editedTestName={editedTestName}
             onTestPriorityChange={onTestPriorityChange}
             onTestSelected={onTestSelected}
             testNamePrefix={epicEditorConfig.testNamePrefix}
@@ -154,12 +152,11 @@ const getEpicTestForm = (epicEditorConfig: EpicEditorConfig): React.FC<Props> =>
           selectedTestName && selectedTest ? (
             <EpicTestEditor
               test={selectedTest}
-              hasChanged={selectedTestHasBeenModified}
               epicEditorConfig={epicEditorConfig}
               onChange={onTestChange}
               onValidationChange={onTestErrorStatusChange}
               visible
-              editMode={editMode}
+              editMode={editMode && selectedTestIsBeingEdited}
               onDelete={onTestDelete}
               onArchive={onTestArchive}
               onTestSelected={onTestSelected}
@@ -173,6 +170,7 @@ const getEpicTestForm = (epicEditorConfig: EpicEditorConfig): React.FC<Props> =>
           ) : null
         }
         selectedTestName={selectedTestName}
+        editedTestName={editedTestName}
         lockStatus={lockStatus}
         requestTakeControl={requestTakeControl}
         requestLock={requestLock}

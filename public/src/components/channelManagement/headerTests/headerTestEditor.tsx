@@ -23,7 +23,6 @@ import { useStyles } from '../helpers/testEditorStyles';
 
 interface HeaderTestEditorProps {
   test: HeaderTest;
-  hasChanged: boolean;
   onChange: (updatedTest: HeaderTest) => void;
   onValidationChange: (isValid: boolean) => void;
   visible: boolean;

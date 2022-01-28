@@ -20,6 +20,7 @@ interface TestListProps<T extends Test> {
   tests: T[];
   isInEditMode: boolean;
   selectedTestName: string | null;
+  editedTestName: string | null;
   onTestPriorityChange: (newPriority: number, oldPriority: number) => void;
   onTestSelected: (testName: string) => void;
 }
@@ -29,6 +30,7 @@ const TestList = <T extends Test>({
   tests,
   isInEditMode,
   selectedTestName,
+  editedTestName,
   onTestPriorityChange,
   onTestSelected,
 }: TestListProps<T> & WithStyles<typeof styles>): React.ReactElement => {
@@ -56,6 +58,7 @@ const TestList = <T extends Test>({
                         <TestListTest
                           test={test}
                           isSelected={test.name === selectedTestName}
+                          isEdited={test.name === editedTestName}
                           onClick={(): void => onTestSelected(test.name)}
                         />
                       </div>
@@ -66,6 +69,7 @@ const TestList = <T extends Test>({
                     key={test.name}
                     test={test}
                     isSelected={test.name === selectedTestName}
+                    isEdited={test.name === editedTestName}
                     onClick={(): void => onTestSelected(test.name)}
                   />
                 ),

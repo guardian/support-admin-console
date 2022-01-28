@@ -13,7 +13,7 @@ const styles = createStyles({
 
 interface StickyBottomBarDetailProps extends WithStyles<typeof styles> {
   isInEditMode: boolean;
-  selectedTestName: string | null;
+  editedTestName: string | null;
   lockStatus: LockStatus;
 }
 
@@ -58,10 +58,10 @@ const formattedTimestamp = (timestamp: string): string => {
 const StickyBottomBarDetail: React.FC<StickyBottomBarDetailProps> = ({
   classes,
   isInEditMode,
-  selectedTestName,
+  editedTestName,
   lockStatus,
 }: StickyBottomBarDetailProps) => {
-  let text = selectedTestName == null ? '' : `- ${selectedTestName}`;
+  let text = editedTestName == null ? '' : `- ${editedTestName}`;
 
   if (!isInEditMode && lockStatus.locked && lockStatus.email && lockStatus.timestamp) {
     const name = formattedName(lockStatus.email);
