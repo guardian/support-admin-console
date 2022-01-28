@@ -11,7 +11,11 @@ import { makeStyles, TextField, Theme, Typography } from '@material-ui/core';
 import EpicTestVariantEditorCtasEditor from './epicTestVariantEditorCtasEditor';
 import VariantEditorSeparateArticleCountEditor from '../variantEditorSeparateArticleCountEditor';
 import EpicTestTickerEditor from './epicTestTickerEditor';
-import { EMPTY_ERROR_HELPER_TEXT, MAXLENGTH_ERROR_HELPER_TEXT, PLACEHOLDER_TEXT } from '../helpers/validation';
+import {
+  EMPTY_ERROR_HELPER_TEXT,
+  MAXLENGTH_ERROR_HELPER_TEXT,
+  PLACEHOLDER_TEXT,
+} from '../helpers/validation';
 import EpicTestChoiceCardsEditor from './epicTestChoiceCardsEditor';
 import EpicTestSignInLinkEditor from './epicTestSignInLinkEditor';
 
@@ -19,7 +23,6 @@ import RichTextEditor, { getRteCopyLength } from '../richTextEditor';
 
 import { useForm } from 'react-hook-form';
 import { templateValidatorForPlatform } from '../helpers/validation';
-
 
 // CSS
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -152,7 +155,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
 
   // RTE field validations
   const getParagraphsHelperText = () => {
-    let paragraphsLength = getRteCopyLength(variant.paragraphs);
+    const paragraphsLength = getRteCopyLength(variant.paragraphs);
 
     if (!paragraphsLength) {
       return EMPTY_ERROR_HELPER_TEXT;
@@ -163,7 +166,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
     return BODY_DEFAULT_HELPER_TEXT;
   };
   const checkForParagraphsError = () => {
-    let paragraphsLength = getRteCopyLength(variant.paragraphs);
+    const paragraphsLength = getRteCopyLength(variant.paragraphs);
     if (!paragraphsLength || paragraphsLength > PARAGRAPHS_MAX_LENGTH) {
       return true;
     }

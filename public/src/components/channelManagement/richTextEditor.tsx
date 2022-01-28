@@ -285,19 +285,10 @@ const parseCopyForParagraphs = (copy: string[]): string => {
   return res;
 };
 
-// const parseCopyForPlaceholderText = (copy: string): string => {
-//   copy = copy.replace(/%%ARTICLE_COUNT%%/gm, '<mark class="placeholder-value">%%ARTICLE_COUNT%%</mark>');
-//   copy = copy.replace(/%%CURRENCY_SYMBOL%%/gm, '<mark class="placeholder-value">%%CURRENCY_SYMBOL%%</mark>');
-//   copy = copy.replace(/%%COUNTRY_NAME%%/gm, '<mark class="placeholder-value">%%COUNTRY_NAME%%</mark>');
-//   console.log(copy);
-
-//   return copy;
-// };
-
 export const getRteCopyLength = (copy: string[]): number => {
-    let paragraphsCheck = copy.join(' ');
-    paragraphsCheck = paragraphsCheck.replace(/<.*?>/g, '');
-    return paragraphsCheck.length;
+  let paragraphsCheck = copy.join(' ');
+  paragraphsCheck = paragraphsCheck.replace(/<.*?>/g, '');
+  return paragraphsCheck.length;
 };
 
 // Component function
