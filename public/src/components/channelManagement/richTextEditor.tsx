@@ -285,6 +285,15 @@ const parseCopyForParagraphs = (copy: string[]): string => {
   return res;
 };
 
+// const parseCopyForPlaceholderText = (copy: string): string => {
+//   copy = copy.replace(/%%ARTICLE_COUNT%%/gm, '<mark class="placeholder-value">%%ARTICLE_COUNT%%</mark>');
+//   copy = copy.replace(/%%CURRENCY_SYMBOL%%/gm, '<mark class="placeholder-value">%%CURRENCY_SYMBOL%%</mark>');
+//   copy = copy.replace(/%%COUNTRY_NAME%%/gm, '<mark class="placeholder-value">%%COUNTRY_NAME%%</mark>');
+//   console.log(copy);
+
+//   return copy;
+// };
+
 export const getRteCopyLength = (copy: string[]): number => {
     let paragraphsCheck = copy.join(' ');
     paragraphsCheck = paragraphsCheck.replace(/<.*?>/g, '');
@@ -316,6 +325,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
       new ItalicExtension(),
       new LinkExtension({ autoLink: true }),
     ],
+    // content: parseCopyForPlaceholderText(parseCopyForParagraphs(copyData)),
     content: parseCopyForParagraphs(copyData),
     selection: 'start',
     stringHandler: 'html',
