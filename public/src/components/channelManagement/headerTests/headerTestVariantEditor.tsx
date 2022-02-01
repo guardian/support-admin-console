@@ -50,6 +50,7 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   },
   buttonsContainer: {
     marginTop: spacing(2),
+    marginLeft: spacing(2),
   },
 }));
 
@@ -128,57 +129,63 @@ const HeaderTestVariantContentEditor: React.FC<HeaderTestVariantContentEditorPro
 
   return (
     <>
+      {deviceType !== 'MOBILE' && (
+        <>
+          <Typography className={classes.sectionHeader} variant="h4">
+            {`Content${labelSuffix}`}
+          </Typography>
+
+          <div className={classes.contentContainer}>
+            <div>
+              <TextField
+                inputRef={register({ validate: templateValidator })}
+                error={errors.heading !== undefined}
+                helperText={errors.heading ? errors.heading.message : HEADING_DEFAULT_HELPER_TEXT}
+                onBlur={handleSubmit(onSubmit)}
+                name="heading"
+                label="Heading"
+                margin="normal"
+                variant="outlined"
+                disabled={!editMode}
+                fullWidth
+              />
+
+              {headingCopyLength > HEADING_COPY_RECOMMENDED_LENGTH && (
+                <VariantEditorCopyLengthWarning charLimit={HEADING_COPY_RECOMMENDED_LENGTH} />
+              )}
+            </div>
+          </div>
+
+          <div className={classes.contentContainer}>
+            <div>
+              <TextField
+                inputRef={register({ validate: templateValidator })}
+                error={errors.heading !== undefined}
+                helperText={
+                  errors.heading ? errors.heading.message : SUBHEADING_DEFAULT_HELPER_TEXT
+                }
+                onBlur={handleSubmit(onSubmit)}
+                name="subheading"
+                label="Sub-heading"
+                margin="normal"
+                variant="outlined"
+                disabled={!editMode}
+                fullWidth
+              />
+
+              {subheadingCopyLength > SUBHEADING_COPY_RECOMMENDED_LENGTH && (
+                <VariantEditorCopyLengthWarning charLimit={SUBHEADING_COPY_RECOMMENDED_LENGTH} />
+              )}
+            </div>
+          </div>
+        </>
+      )}
+
       <Typography className={classes.sectionHeader} variant="h4">
-        {`Content${labelSuffix}`}
+        {`Buttons${labelSuffix}`}
       </Typography>
 
-      <div className={classes.contentContainer}>
-        <div>
-          <TextField
-            inputRef={register({ validate: templateValidator })}
-            error={errors.heading !== undefined}
-            helperText={errors.heading ? errors.heading.message : HEADING_DEFAULT_HELPER_TEXT}
-            onBlur={handleSubmit(onSubmit)}
-            name="heading"
-            label="Heading"
-            margin="normal"
-            variant="outlined"
-            disabled={!editMode}
-            fullWidth
-          />
-
-          {headingCopyLength > HEADING_COPY_RECOMMENDED_LENGTH && (
-            <VariantEditorCopyLengthWarning charLimit={HEADING_COPY_RECOMMENDED_LENGTH} />
-          )}
-        </div>
-      </div>
-
-      <div className={classes.contentContainer}>
-        <div>
-          <TextField
-            inputRef={register({ validate: templateValidator })}
-            error={errors.heading !== undefined}
-            helperText={errors.heading ? errors.heading.message : SUBHEADING_DEFAULT_HELPER_TEXT}
-            onBlur={handleSubmit(onSubmit)}
-            name="subheading"
-            label="Sub-heading"
-            margin="normal"
-            variant="outlined"
-            disabled={!editMode}
-            fullWidth
-          />
-
-          {subheadingCopyLength > SUBHEADING_COPY_RECOMMENDED_LENGTH && (
-            <VariantEditorCopyLengthWarning charLimit={SUBHEADING_COPY_RECOMMENDED_LENGTH} />
-          )}
-        </div>
-      </div>
-
       <div className={classes.buttonsContainer}>
-        <Typography className={classes.sectionHeader} variant="h4">
-          {`Buttons${labelSuffix}`}
-        </Typography>
-
         <HeaderTestVariantEditorCtasEditor
           primaryCta={content.primaryCta}
           secondaryCta={content.secondaryCta}
@@ -186,7 +193,7 @@ const HeaderTestVariantContentEditor: React.FC<HeaderTestVariantContentEditorPro
           updateSecondaryCta={updateSecondaryCta}
           isDisabled={!editMode}
           onValidationChange={onValidationChange}
-          supportSecondaryCta={true}
+          supportSecondaryCta={deviceType !== 'MOBILE'}
         />
       </div>
     </>
