@@ -53,10 +53,9 @@ const TestEditorVariantSummaryWebPreviewButton: React.FC<TestEditorVariantSummar
   isDisabled,
 }: TestEditorVariantSummaryPreviewButtonProps) => {
   const isIncompatiblePlatform = ['AMP', 'APPLE_NEWS'].includes(platform);
-  const isExcludedTestType = ['HEADER'].includes(testType);
 
   const checkForDisabledButton = (): boolean => {
-    if (isIncompatiblePlatform || isExcludedTestType) {
+    if (isIncompatiblePlatform) {
       return true;
     }
     return isDisabled;
@@ -65,9 +64,6 @@ const TestEditorVariantSummaryWebPreviewButton: React.FC<TestEditorVariantSummar
   const getButtonCopy = (): string => {
     if (isIncompatiblePlatform) {
       return `WEB PREVIEW UNAVAILABLE FOR ${platform.replace('_', ' ')}`;
-    }
-    if (isExcludedTestType) {
-      return `WEB PREVIEW UNAVAILABLE FOR ${testType}`;
     }
     return 'WEB PREVIEW';
   };
