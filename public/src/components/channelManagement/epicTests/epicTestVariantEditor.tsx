@@ -14,7 +14,6 @@ import EpicTestTickerEditor from './epicTestTickerEditor';
 import {
   EMPTY_ERROR_HELPER_TEXT,
   MAXLENGTH_ERROR_HELPER_TEXT,
-  PLACEHOLDER_TEXT,
 } from '../helpers/validation';
 import EpicTestChoiceCardsEditor from './epicTestChoiceCardsEditor';
 import EpicTestSignInLinkEditor from './epicTestSignInLinkEditor';
@@ -59,11 +58,11 @@ const getUseStyles = (shouldAddPadding: boolean) => {
 const PARAGRAPHS_MAX_LENGTH = 2000;
 
 const HEADER_DEFAULT_HELPER_TEXT = `Assitive text`;
-const BODY_DEFAULT_HELPER_TEXT = `Maximum ${PARAGRAPHS_MAX_LENGTH} characters. ${PLACEHOLDER_TEXT}`;
-const HIGHTLIGHTED_TEXT_DEFAULT_HELPER_TEXT = `Final sentence of body copy. ${PLACEHOLDER_TEXT}`;
+const BODY_DEFAULT_HELPER_TEXT = `Maximum ${PARAGRAPHS_MAX_LENGTH} characters.`;
+const HIGHTLIGHTED_TEXT_DEFAULT_HELPER_TEXT = `Final sentence of body copy.`;
 const IMAGE_URL_DEFAULT_HELPER_TEXT =
   'Image ratio should be 2.5:1. This will appear above everything except a ticker';
-const FOOTER_DEFAULT_HELPER_TEXT = `Bold text below the button. ${PLACEHOLDER_TEXT}`;
+const FOOTER_DEFAULT_HELPER_TEXT = `Bold text below the button.`;
 
 // Typescript
 interface EpicTestVariantEditorProps {

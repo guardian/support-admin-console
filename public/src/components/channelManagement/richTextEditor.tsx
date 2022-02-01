@@ -2,9 +2,10 @@ import React, { useCallback, useEffect, useLayoutEffect, useMemo, useState } fro
 import {
   BoldExtension,
   ItalicExtension,
-  createMarkPositioner,
   LinkExtension,
   ShortcutHandlerProps,
+  TextHighlightExtension,
+  createMarkPositioner,
 } from 'remirror/extensions';
 import {
   ComponentItem,
@@ -16,6 +17,7 @@ import {
   useActive,
   useAttrs,
   useChainedCommands,
+  useCommands,
   useCurrentSelection,
   useExtension,
   useRemirror,
@@ -237,8 +239,12 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
   disabled,
   label,
 }: RichTextMenuProps) => {
+  const commands = useCommands();
   const chain = useChainedCommands();
   const active = useActive();
+
+  console.log('chain', chain);
+  // console.log('active', active);
 
   return (
     <div>
@@ -269,11 +275,69 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
           >
             Italic
           </button>
+          <button
+            className="remirror-button"
+            // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+            onClick={() => {
+              chain
+                .insertText('%%ARTICLE_COUNT%%')
+                .run();
+            }}
+          >
+            Articles
+          </button>
+          <button
+            className="remirror-button"
+            // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+            onClick={() => {
+              chain
+                .insertText('%%CURRENCY_SYMBOL%%')
+                .run();
+            }}
+          >
+            Currency
+          </button>
+          <button
+            className="remirror-button"
+            // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+            onClick={() => {
+              chain
+                .insertText('%%COUNTRY_NAME%%')
+                .run();
+            }}
+          >
+            Country
+          </button>
+
+
+{/*
+          <button
+            className="remirror-button"
+            onMouseDown={(event) => event.preventDefault()}
+            // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+            onClick={() => commands.setTextHighlight('rgba(255 0 0 / 0.4)')}
+
+          >
+            Highlight
+          </button>
+*/}
+
+
         </>
       )}
     </div>
   );
 };
+
+
+/*
+DOM copy - TYPERIGHTER ERRORS:
+
+<mark style=" background-color:rgba(255 0 0 / 0.4)" data-text-highlight-mark="rgba(255 0 0 / 0.4)" title="this is the error message">With no shareholders or billionaire owner</mark>
+*/
+
+
+
 
 // Helper function - converts an array of strings into a set of (stringified) HTML <p> elements
 const parseCopyForParagraphs = (copy: string[]): string => {
@@ -315,6 +379,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
       new BoldExtension(),
       new ItalicExtension(),
       new LinkExtension({ autoLink: true }),
+      new TextHighlightExtension(),
     ],
     // content: parseCopyForPlaceholderText(parseCopyForParagraphs(copyData)),
     content: parseCopyForParagraphs(copyData),
