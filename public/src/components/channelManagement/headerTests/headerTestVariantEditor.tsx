@@ -1,7 +1,15 @@
 // Note: we developed this component expecting that headers would have the ability to display different copy and CTAs on small screens, thus requiring this form to include fields for that content. However it seems like current functionality of the GU frontend is to only show the main copy and CTAs, whatever the screen size may be. Code to include and action mobile-specific fields can be found in earlier commits in this PR: https://github.com/guardian/support-admin-console/pull/259
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { TextField, Theme, Typography, makeStyles } from '@material-ui/core';
+import {
+  TextField,
+  Theme,
+  Typography,
+  makeStyles,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+} from '@material-ui/core';
 import HeaderTestVariantEditorCtasEditor from './headerTestVariantEditorCtasEditor';
 import VariantEditorCopyLengthWarning from '../variantEditorCopyLengthWarning';
 import { templateValidatorForPlatform } from '../helpers/validation';
@@ -42,6 +50,7 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   },
   buttonsContainer: {
     marginTop: spacing(2),
+    marginLeft: spacing(2),
   },
 }));
 
@@ -120,57 +129,63 @@ const HeaderTestVariantContentEditor: React.FC<HeaderTestVariantContentEditorPro
 
   return (
     <>
+      {deviceType !== 'MOBILE' && (
+        <>
+          <Typography className={classes.sectionHeader} variant="h4">
+            {`Content${labelSuffix}`}
+          </Typography>
+
+          <div className={classes.contentContainer}>
+            <div>
+              <TextField
+                inputRef={register({ validate: templateValidator })}
+                error={errors.heading !== undefined}
+                helperText={errors.heading ? errors.heading.message : HEADING_DEFAULT_HELPER_TEXT}
+                onBlur={handleSubmit(onSubmit)}
+                name="heading"
+                label="Heading"
+                margin="normal"
+                variant="outlined"
+                disabled={!editMode}
+                fullWidth
+              />
+
+              {headingCopyLength > HEADING_COPY_RECOMMENDED_LENGTH && (
+                <VariantEditorCopyLengthWarning charLimit={HEADING_COPY_RECOMMENDED_LENGTH} />
+              )}
+            </div>
+          </div>
+
+          <div className={classes.contentContainer}>
+            <div>
+              <TextField
+                inputRef={register({ validate: templateValidator })}
+                error={errors.heading !== undefined}
+                helperText={
+                  errors.heading ? errors.heading.message : SUBHEADING_DEFAULT_HELPER_TEXT
+                }
+                onBlur={handleSubmit(onSubmit)}
+                name="subheading"
+                label="Sub-heading"
+                margin="normal"
+                variant="outlined"
+                disabled={!editMode}
+                fullWidth
+              />
+
+              {subheadingCopyLength > SUBHEADING_COPY_RECOMMENDED_LENGTH && (
+                <VariantEditorCopyLengthWarning charLimit={SUBHEADING_COPY_RECOMMENDED_LENGTH} />
+              )}
+            </div>
+          </div>
+        </>
+      )}
+
       <Typography className={classes.sectionHeader} variant="h4">
-        {`Content${labelSuffix}`}
+        {`Buttons${labelSuffix}`}
       </Typography>
 
-      <div className={classes.contentContainer}>
-        <div>
-          <TextField
-            inputRef={register({ validate: templateValidator })}
-            error={errors.heading !== undefined}
-            helperText={errors.heading ? errors.heading.message : HEADING_DEFAULT_HELPER_TEXT}
-            onBlur={handleSubmit(onSubmit)}
-            name="heading"
-            label="Heading"
-            margin="normal"
-            variant="outlined"
-            disabled={!editMode}
-            fullWidth
-          />
-
-          {headingCopyLength > HEADING_COPY_RECOMMENDED_LENGTH && (
-            <VariantEditorCopyLengthWarning charLimit={HEADING_COPY_RECOMMENDED_LENGTH} />
-          )}
-        </div>
-      </div>
-
-      <div className={classes.contentContainer}>
-        <div>
-          <TextField
-            inputRef={register({ validate: templateValidator })}
-            error={errors.heading !== undefined}
-            helperText={errors.heading ? errors.heading.message : SUBHEADING_DEFAULT_HELPER_TEXT}
-            onBlur={handleSubmit(onSubmit)}
-            name="subheading"
-            label="Sub-heading"
-            margin="normal"
-            variant="outlined"
-            disabled={!editMode}
-            fullWidth
-          />
-
-          {subheadingCopyLength > SUBHEADING_COPY_RECOMMENDED_LENGTH && (
-            <VariantEditorCopyLengthWarning charLimit={SUBHEADING_COPY_RECOMMENDED_LENGTH} />
-          )}
-        </div>
-      </div>
-
       <div className={classes.buttonsContainer}>
-        <Typography className={classes.sectionHeader} variant="h4">
-          {`Buttons${labelSuffix}`}
-        </Typography>
-
         <HeaderTestVariantEditorCtasEditor
           primaryCta={content.primaryCta}
           secondaryCta={content.secondaryCta}
@@ -178,7 +193,7 @@ const HeaderTestVariantContentEditor: React.FC<HeaderTestVariantContentEditorPro
           updateSecondaryCta={updateSecondaryCta}
           isDisabled={!editMode}
           onValidationChange={onValidationChange}
-          supportSecondaryCta={true}
+          supportSecondaryCta={deviceType !== 'MOBILE'}
         />
       </div>
     </>
@@ -204,6 +219,25 @@ const HeaderTestVariantEditor: React.FC<HeaderTestVariantEditorProps> = ({
 
   const content: HeaderContent = variant.content;
 
+  const onMobileContentRadioChange = (): void => {
+    if (variant.mobileContent === undefined) {
+      onVariantChange({
+        ...variant,
+        mobileContent: {
+          heading: '',
+          subheading: '',
+        },
+      });
+    } else {
+      // remove mobile content and clear any validation errors
+      setValidationStatusForField('mobileContent', true);
+      onVariantChange({
+        ...variant,
+        mobileContent: undefined,
+      });
+    }
+  };
+
   return (
     <div className={classes.container}>
       <div className={classes.sectionContainer}>
@@ -219,6 +253,39 @@ const HeaderTestVariantEditor: React.FC<HeaderTestVariantEditorProps> = ({
           deviceType={variant.mobileContent === undefined ? 'ALL' : 'NOT_MOBILE'}
         />
       </div>
+
+      <RadioGroup
+        value={variant.mobileContent !== undefined ? 'enabled' : 'disabled'}
+        onChange={onMobileContentRadioChange}
+      >
+        <FormControlLabel
+          value="disabled"
+          key="disabled"
+          control={<Radio />}
+          label="Show the same copy across devices"
+          disabled={!editMode}
+        />
+        <FormControlLabel
+          value="enabled"
+          key="enabled"
+          control={<Radio />}
+          label="Show different copy on mobile"
+          disabled={!editMode}
+        />
+      </RadioGroup>
+      {variant.mobileContent && (
+        <HeaderTestVariantContentEditor
+          content={variant.mobileContent}
+          onChange={(updatedContent: HeaderContent): void =>
+            onVariantChange({ ...variant, mobileContent: updatedContent })
+          }
+          onValidationChange={(isValid): void =>
+            setValidationStatusForField('mobileContent', isValid)
+          }
+          editMode={editMode}
+          deviceType={'MOBILE'}
+        />
+      )}
     </div>
   );
 };
