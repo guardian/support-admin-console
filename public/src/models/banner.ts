@@ -39,6 +39,7 @@ export interface BannerVariant extends Variant {
   highlightedText?: string;
   cta?: Cta;
   secondaryCta?: Cta;
+  separateArticleCount?: boolean;
 }
 
 export interface BannerTest extends Test {
