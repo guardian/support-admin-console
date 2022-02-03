@@ -8,6 +8,7 @@ import {
   Theme,
   Typography,
   makeStyles,
+  Switch,
 } from '@material-ui/core';
 import BannerTestVariantEditorCtasEditor from './bannerTestVariantEditorCtasEditor';
 import VariantEditorCopyLengthWarning from '../variantEditorCopyLengthWarning';
@@ -51,6 +52,18 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   },
   buttonsContainer: {
     marginTop: spacing(2),
+  },
+  switchContainer: {
+    display: 'flex',
+    alignItems: 'center',
+
+    '& > * + *': {
+      marginLeft: spacing(1),
+    },
+  },
+  switchLabel: {
+    fontSize: '14px',
+    fontWeight: 500,
   },
 }));
 
@@ -331,6 +344,23 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
             deviceType={'MOBILE'}
           />
         )}
+      </div>
+      <div className={classes.sectionContainer}>
+        <Typography className={classes.sectionHeader} variant="h4">
+          Separate article count (displayed only for users with at least 5 article views)
+        </Typography>
+
+        <div className={classes.switchContainer}>
+          <Typography className={classes.switchLabel}>Disabled</Typography>
+          <Switch
+            checked={!!variant.separateArticleCount}
+            onChange={(e): void =>
+              onVariantChange({ ...variant, separateArticleCount: e.target.checked })
+            }
+            disabled={!editMode}
+          />
+          <Typography className={classes.switchLabel}>Enabled</Typography>
+        </div>
       </div>
     </div>
   );

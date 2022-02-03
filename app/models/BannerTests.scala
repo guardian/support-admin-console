@@ -42,7 +42,8 @@ case class BannerVariant(
   body: Option[String],
   highlightedText: Option[String],
   cta: Option[Cta],
-  secondaryCta: Option[Cta]
+  secondaryCta: Option[Cta],
+  separateArticleCount: Option[Boolean]
 )
 
 case class BannerTest(
