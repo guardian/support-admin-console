@@ -1,22 +1,20 @@
-import React, { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import React from 'react';
 import {
   FormControlLabel,
   Radio,
   RadioGroup,
-  TextField,
   Theme,
   Typography,
   makeStyles,
 } from '@material-ui/core';
 import BannerTestVariantEditorCtasEditor from './bannerTestVariantEditorCtasEditor';
-import VariantEditorCopyLengthWarning from '../variantEditorCopyLengthWarning';
-import { templateValidatorForPlatform, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
+import { EMPTY_ERROR_HELPER_TEXT, MAXLENGTH_ERROR_HELPER_TEXT } from '../helpers/validation';
 import { Cta, SecondaryCta } from '../helpers/shared';
 import BannerTemplateSelector from './bannerTemplateSelector';
 import { BannerContent, BannerTemplate, BannerVariant } from '../../../models/banner';
 import { getDefaultVariant } from './utils/defaults';
 import useValidation from '../hooks/useValidation';
+import RichTextEditor, { getRteCopyLength } from '../richTextEditor';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
@@ -55,7 +53,7 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
 }));
 
 const HEADER_DEFAULT_HELPER_TEXT = 'Assitive text';
-const BODY_DEFAULT_HELPER_TEXT = 'Main banner message, including paragraph breaks';
+const BODY_DEFAULT_HELPER_TEXT = 'Main banner message (1 paragraph max)';
 const HIGHTLIGHTED_TEXT_HELPER_TEXT = 'Final sentence of body copy';
 
 const HEADER_COPY_RECOMMENDED_LENGTH = 50;
@@ -94,32 +92,6 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
 }: BannerTestVariantContentEditorProps) => {
   const classes = useStyles();
 
-  const templateValidator = templateValidatorForPlatform('DOTCOM');
-
-  const defaultValues: BannerContent = {
-    heading: content.heading || '',
-    messageText: content.messageText,
-    highlightedText: content.highlightedText || '',
-  };
-
-  const { register, handleSubmit, errors, trigger } = useForm<BannerContent>({
-    mode: 'onChange',
-    defaultValues,
-  });
-
-  useEffect(() => {
-    trigger();
-  }, []);
-
-  useEffect(() => {
-    const isValid = Object.keys(errors).length === 0;
-    onValidationChange(isValid);
-  }, [errors.messageText, errors.heading, errors.highlightedText]);
-
-  const onSubmit = ({ heading, messageText, highlightedText }: BannerContent): void => {
-    onChange({ ...content, heading, messageText, highlightedText });
-  };
-
   const updatePrimaryCta = (updatedCta?: Cta): void => {
     onChange({ ...content, cta: updatedCta });
   };
@@ -129,13 +101,90 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
 
   const labelSuffix = getLabelSuffix(deviceType);
 
-  const headerCopyLength = content.heading?.length ?? 0;
+  // Handling RTE Field updates
+  const updateHeading = (updatedHeading: string[] | undefined): void => {
+    if (updatedHeading != null) {
+      onChange({ ...content, heading: updatedHeading[0] });
+    } else {
+      onChange({ ...content, heading: '' });
+    }
+  };
+  const updateMessageText = (updatedMessageText: string[] | undefined): void => {
+    if (updatedMessageText != null) {
+      onChange({ ...content, messageText: updatedMessageText[0] });
+    } else {
+      onChange({ ...content, messageText: '' });
+    }
+  };
+  const updateHighlightedText = (updatedHighlightedText: string[] | undefined): void => {
+    if (updatedHighlightedText != null) {
+      onChange({ ...content, highlightedText: updatedHighlightedText[0] });
+    } else {
+      onChange({ ...content, highlightedText: '' });
+    }
+  };
 
-  const bodyCopyRecommendedLength = content.secondaryCta
-    ? BODY_COPY_WITH_SECONDARY_CTA_RECOMMENDED_LENGTH
-    : BODY_COPY_WITHOUT_SECONDARY_CTA_RECOMMENDED_LENGTH;
+  // RTE field validations
+  const checkForHeadingError = () => {
+    const paragraphsLength = getRteCopyLength([content.heading || '']);
+    if (!paragraphsLength || paragraphsLength > HEADER_COPY_RECOMMENDED_LENGTH) {
+      return true;
+    }
+    return false;
+  };
 
-  const bodyCopyLength = content.messageText.length + (content.highlightedText?.length ?? 0);
+  const getMessageAndHighlightedTextLength = () => {
+    const bodyCopyRecommendedLength = content.secondaryCta
+      ? BODY_COPY_WITH_SECONDARY_CTA_RECOMMENDED_LENGTH
+      : BODY_COPY_WITHOUT_SECONDARY_CTA_RECOMMENDED_LENGTH;
+
+    return [
+      getRteCopyLength([content.messageText, content.highlightedText || '']),
+      bodyCopyRecommendedLength,
+    ];
+  };
+
+  const checkForMessageAndHighlightedTextError = () => {
+    const [copyLength, recommendedLength] = getMessageAndHighlightedTextLength();
+
+    if (!copyLength || copyLength > recommendedLength) {
+      return true;
+    }
+    return false;
+  };
+
+  const getHeadingHelperText = () => {
+    const paragraphsLength = getRteCopyLength([content.heading || '']);
+
+    if (paragraphsLength > HEADER_COPY_RECOMMENDED_LENGTH) {
+      return MAXLENGTH_ERROR_HELPER_TEXT;
+    }
+    return HEADER_DEFAULT_HELPER_TEXT;
+  };
+
+  const getMessageTextHelperText = () => {
+    const [copyLength, recommendedLength] = getMessageAndHighlightedTextLength();
+
+    if (!copyLength) {
+      return EMPTY_ERROR_HELPER_TEXT;
+    }
+    if (copyLength > recommendedLength) {
+      return MAXLENGTH_ERROR_HELPER_TEXT;
+    }
+    return BODY_DEFAULT_HELPER_TEXT;
+  };
+
+  const getHighlightedTextHelperText = () => {
+    const [copyLength, recommendedLength] = getMessageAndHighlightedTextLength();
+
+    if (!copyLength) {
+      return EMPTY_ERROR_HELPER_TEXT;
+    }
+    if (copyLength > recommendedLength) {
+      return MAXLENGTH_ERROR_HELPER_TEXT;
+    }
+    return HIGHTLIGHTED_TEXT_HELPER_TEXT;
+  };
 
   return (
     <>
@@ -145,69 +194,38 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
 
       <div className={classes.contentContainer}>
         {template !== BannerTemplate.EnvironmentMomentBanner && (
-          <div>
-            <TextField
-              inputRef={register({ validate: templateValidator })}
-              error={errors.heading !== undefined}
-              helperText={errors.heading ? errors.heading.message : HEADER_DEFAULT_HELPER_TEXT}
-              onBlur={handleSubmit(onSubmit)}
-              name="heading"
-              label="Header"
-              margin="normal"
-              variant="outlined"
-              disabled={!editMode}
-              fullWidth
-            />
-
-            {headerCopyLength > HEADER_COPY_RECOMMENDED_LENGTH && (
-              <VariantEditorCopyLengthWarning charLimit={HEADER_COPY_RECOMMENDED_LENGTH} />
-            )}
-          </div>
+          <RichTextEditor
+            error={checkForHeadingError()}
+            helperText={getHeadingHelperText()}
+            copyData={content.heading}
+            updateCopy={updateHeading}
+            name="heading"
+            label="Header"
+            disabled={!editMode}
+          />
         )}
-
         <div>
-          <TextField
-            inputRef={register({
-              required: EMPTY_ERROR_HELPER_TEXT,
-              validate: templateValidator,
-            })}
-            error={errors.messageText !== undefined}
-            helperText={errors.messageText ? errors.messageText.message : BODY_DEFAULT_HELPER_TEXT}
-            onBlur={handleSubmit(onSubmit)}
+          <RichTextEditor
+            error={checkForMessageAndHighlightedTextError()}
+            helperText={getMessageTextHelperText()}
+            copyData={content.messageText}
+            updateCopy={updateMessageText}
             name="messageText"
             label="Body copy"
-            margin="normal"
-            variant="outlined"
-            multiline
-            rows={10}
             disabled={!editMode}
-            fullWidth
           />
 
           {(template === BannerTemplate.ContributionsBanner ||
             template === BannerTemplate.InvestigationsMomentBanner) && (
-            <TextField
-              inputRef={register({
-                validate: templateValidator,
-              })}
-              error={errors.highlightedText !== undefined}
-              helperText={
-                errors.highlightedText
-                  ? errors.highlightedText.message
-                  : HIGHTLIGHTED_TEXT_HELPER_TEXT
-              }
-              onBlur={handleSubmit(onSubmit)}
+            <RichTextEditor
+              error={checkForMessageAndHighlightedTextError()}
+              helperText={getHighlightedTextHelperText()}
+              copyData={content.highlightedText}
+              updateCopy={updateHighlightedText}
               name="highlightedText"
               label="Highlighted text"
-              margin="normal"
-              variant="outlined"
               disabled={!editMode}
-              fullWidth
             />
-          )}
-
-          {bodyCopyLength > bodyCopyRecommendedLength && (
-            <VariantEditorCopyLengthWarning charLimit={bodyCopyRecommendedLength} />
           )}
         </div>
         <div className={classes.buttonsContainer}>

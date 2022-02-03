@@ -1,5 +1,13 @@
 import React, { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { makeStyles, TextField, Theme, Typography } from '@material-ui/core';
+
+import EpicTestChoiceCardsEditor from './epicTestChoiceCardsEditor';
 import { EpicVariant, SeparateArticleCount } from './epicTestsForm';
+import EpicTestSignInLinkEditor from './epicTestSignInLinkEditor';
+import EpicTestTickerEditor from './epicTestTickerEditor';
+import EpicTestVariantEditorCtasEditor from './epicTestVariantEditorCtasEditor';
+
 import {
   ContributionFrequency,
   Cta,
@@ -7,21 +15,13 @@ import {
   SecondaryCta,
   TickerSettings,
 } from '../helpers/shared';
-import { makeStyles, TextField, Theme, Typography } from '@material-ui/core';
-import EpicTestVariantEditorCtasEditor from './epicTestVariantEditorCtasEditor';
-import VariantEditorSeparateArticleCountEditor from '../variantEditorSeparateArticleCountEditor';
-import EpicTestTickerEditor from './epicTestTickerEditor';
 import {
   EMPTY_ERROR_HELPER_TEXT,
   MAXLENGTH_ERROR_HELPER_TEXT,
+  templateValidatorForPlatform,
 } from '../helpers/validation';
-import EpicTestChoiceCardsEditor from './epicTestChoiceCardsEditor';
-import EpicTestSignInLinkEditor from './epicTestSignInLinkEditor';
-
 import RichTextEditor, { getRteCopyLength } from '../richTextEditor';
-
-import { useForm } from 'react-hook-form';
-import { templateValidatorForPlatform } from '../helpers/validation';
+import VariantEditorSeparateArticleCountEditor from '../variantEditorSeparateArticleCountEditor';
 
 // CSS
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -114,17 +114,33 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   };
 
   // Handling RTE Field updates
-  const updateHeading = (updatedHeading: string[]): void => {
-    onVariantChange({ ...variant, heading: updatedHeading[0] });
+  const updateHeading = (updatedHeading: string[] | undefined): void => {
+    if (updatedHeading != null) {
+      onVariantChange({ ...variant, heading: updatedHeading[0] });
+    } else {
+      onVariantChange({ ...variant, heading: '' });
+    }
   };
-  const updateParagraphs = (updatedParagraphs: string[]): void => {
-    onVariantChange({ ...variant, paragraphs: updatedParagraphs });
+  const updateParagraphs = (updatedParagraphs: string[] | undefined): void => {
+    if (updatedParagraphs != null) {
+      onVariantChange({ ...variant, paragraphs: updatedParagraphs });
+    } else {
+      onVariantChange({ ...variant, paragraphs: [] });
+    }
   };
-  const updateHighlightedText = (updatedHighlightedText: string[]): void => {
-    onVariantChange({ ...variant, highlightedText: updatedHighlightedText[0] });
+  const updateHighlightedText = (updatedHighlightedText: string[] | undefined): void => {
+    if (updatedHighlightedText != null) {
+      onVariantChange({ ...variant, highlightedText: updatedHighlightedText[0] });
+    } else {
+      onVariantChange({ ...variant, highlightedText: '' });
+    }
   };
-  const updateFooter = (updatedFooter: string[]): void => {
-    onVariantChange({ ...variant, footer: updatedFooter[0] });
+  const updateFooter = (updatedFooter: string[] | undefined): void => {
+    if (updatedFooter != null) {
+      onVariantChange({ ...variant, footer: updatedFooter[0] });
+    } else {
+      onVariantChange({ ...variant, footer: '' });
+    }
   };
 
   // Handling other form field updates

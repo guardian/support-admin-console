@@ -17,7 +17,6 @@ import {
   useActive,
   useAttrs,
   useChainedCommands,
-  useCommands,
   useCurrentSelection,
   useExtension,
   useRemirror,
@@ -54,7 +53,7 @@ interface RichTextEditorProps extends WithStyles<typeof styles> {
   helperText?: string;
   name?: string;
   error: boolean;
-  updateCopy: (item?: any) => void;
+  updateCopy: (item?: string[]) => void;
   copyData?: string | string[];
 }
 
@@ -239,12 +238,8 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
   disabled,
   label,
 }: RichTextMenuProps) => {
-  const commands = useCommands();
   const chain = useChainedCommands();
   const active = useActive();
-
-  console.log('chain', chain);
-  // console.log('active', active);
 
   return (
     <div>
@@ -275,13 +270,12 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
           >
             Italic
           </button>
+          <span className="remirror-button-spacer">&nbsp;</span>
           <button
             className="remirror-button"
             // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
             onClick={() => {
-              chain
-                .insertText('%%ARTICLE_COUNT%%')
-                .run();
+              chain.insertText('%%ARTICLE_COUNT%%').run();
             }}
           >
             Articles
@@ -290,9 +284,7 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
             className="remirror-button"
             // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
             onClick={() => {
-              chain
-                .insertText('%%CURRENCY_SYMBOL%%')
-                .run();
+              chain.insertText('%%CURRENCY_SYMBOL%%').run();
             }}
           >
             Currency
@@ -301,43 +293,16 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
             className="remirror-button"
             // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
             onClick={() => {
-              chain
-                .insertText('%%COUNTRY_NAME%%')
-                .run();
+              chain.insertText('%%COUNTRY_NAME%%').run();
             }}
           >
             Country
           </button>
-
-
-{/*
-          <button
-            className="remirror-button"
-            onMouseDown={(event) => event.preventDefault()}
-            // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-            onClick={() => commands.setTextHighlight('rgba(255 0 0 / 0.4)')}
-
-          >
-            Highlight
-          </button>
-*/}
-
-
         </>
       )}
     </div>
   );
 };
-
-
-/*
-DOM copy - TYPERIGHTER ERRORS:
-
-<mark style=" background-color:rgba(255 0 0 / 0.4)" data-text-highlight-mark="rgba(255 0 0 / 0.4)" title="this is the error message">With no shareholders or billionaire owner</mark>
-*/
-
-
-
 
 // Helper function - converts an array of strings into a set of (stringified) HTML <p> elements
 const parseCopyForParagraphs = (copy: string[]): string => {
@@ -374,6 +339,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
     copyData = [copyData];
   }
 
+  // Instantiate the Remirror RTE component
   const { manager, state } = useRemirror({
     extensions: () => [
       new BoldExtension(),
@@ -381,23 +347,21 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
       new LinkExtension({ autoLink: true }),
       new TextHighlightExtension(),
     ],
-    // content: parseCopyForPlaceholderText(parseCopyForParagraphs(copyData)),
     content: parseCopyForParagraphs(copyData),
     selection: 'start',
     stringHandler: 'html',
   });
 
   // Handle to the ProseMirror <div> element containing all the RTE text
-  // - There's probably a better way of doing this, but I can't get my head around React refs at the moment and it's just as easy to grab a handle to the ProseMirror <div> element and suck child elements out of it
-  let ref: any = false;
+  let ref: HTMLDivElement | null = document.createElement('div');
   useEffect(() => {
     ref = document.querySelector(`#RTE-${name} .ProseMirror`);
   });
 
   // Helper function - extracts copy from an array of HTML child elements
   const blurAction = () => {
-    if (name && ref && !disabled) {
-      const elements = [...ref.children];
+    if (name && ref != null && !disabled) {
+      const elements = Array.from(ref.children);
 
       const paragraphs = elements.filter(p => {
         if (p == null) {
@@ -408,7 +372,6 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
         }
         return false;
       });
-
       const paragraphsCopy = paragraphs.map(p => p.innerHTML);
       updateCopy(paragraphsCopy);
     }

@@ -4,6 +4,7 @@
 
 
 /* To support Remirror - we can cut out all non-required CSS as we experiment */
+
 /*.
 remirror-editor-wrapper {
   padding-top: var(--rmr-space-3);
@@ -700,6 +701,7 @@ button:active .remirror-menu-pane-shortcut,
   white-space: pre-wrap !important;
 }
 
+/*
 .remirror-a11y-dark code[class*='language-'],
 .remirror-a11y-dark pre[class*='language-'] {
   color: #f8f8f2;
@@ -3581,6 +3583,7 @@ button:active .remirror-menu-pane-shortcut,
   font-style: italic;
   content: attr(data-placeholder);
 }
+*/
 
 .remirror-editor.ProseMirror {
   position: relative;
@@ -3654,7 +3657,7 @@ button:active .remirror-menu-pane-shortcut,
 .remirror-controllers-toggle {
   visibility: hidden;
 }
-
+/*
 .remirror-table-show-controllers .remirror-controllers-toggle {
   visibility: visible;
 }
@@ -3907,6 +3910,7 @@ button:active .remirror-menu-pane-shortcut,
   border-color: var(--rmr-color-table-predelete-border);
   background-color: var(--rmr-color-table-predelete-cell);
 }
+*/
 
 .remirror-editor.ProseMirror .whitespace {
   pointer-events: none;
@@ -3934,6 +3938,7 @@ button:active .remirror-menu-pane-shortcut,
   content: '¶';
 }
 
+/*
 .remirror-editor.ProseMirror .ProseMirror-yjs-cursor {
   position: absolute;
   border-left: black;
@@ -3973,7 +3978,7 @@ button:active .remirror-menu-pane-shortcut,
 .remirror-editor #y-functions > * {
   display: inline-block;
 }
-
+*/
 .remirror-theme {
   box-sizing: border-box;
 }
@@ -4271,6 +4276,9 @@ button:active .remirror-menu-pane-shortcut,
   margin: 0;
 }
 
+
+/* Additional CSS added to style RCE in RRCP forms */
+
 .remirror-theme .ProseMirror p {
     margin-bottom: 0.5em;
 }
@@ -4331,4 +4339,8 @@ button:active .remirror-menu-pane-shortcut,
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
     border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   font-size: 100%;
+}
+
+.remirror-button-spacer {
+  padding-left: 1em;
 }
