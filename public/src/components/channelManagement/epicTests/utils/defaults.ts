@@ -34,7 +34,7 @@ const DEV_AND_CODE_DEFAULT_VARIANT: EpicVariant = {
   showTicker: false,
   cta: DEFAULT_PRIMARY_CTA,
   secondaryCta: { type: SecondaryCtaType.ContributionsReminder },
-  showChoiceCards: false,
+  showChoiceCards: true,
 };
 
 const PROD_DEFAULT_VARIANT: EpicVariant = {
@@ -46,7 +46,7 @@ const PROD_DEFAULT_VARIANT: EpicVariant = {
   showTicker: false,
   cta: DEFAULT_PRIMARY_CTA,
   secondaryCta: { type: SecondaryCtaType.ContributionsReminder },
-  showChoiceCards: false,
+  showChoiceCards: true,
 };
 
 export const getDefaultVariant = (): EpicVariant => {
