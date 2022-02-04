@@ -53,7 +53,7 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
 }));
 
 const HEADER_DEFAULT_HELPER_TEXT = 'Assitive text';
-const BODY_DEFAULT_HELPER_TEXT = 'Main banner message (1 paragraph max)';
+const BODY_DEFAULT_HELPER_TEXT = 'Main banner message paragraph';
 const HIGHTLIGHTED_TEXT_HELPER_TEXT = 'Final sentence of body copy';
 
 const HEADER_COPY_RECOMMENDED_LENGTH = 50;
@@ -127,7 +127,7 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
   // RTE field validations
   const checkForHeadingError = () => {
     const paragraphsLength = getRteCopyLength([content.heading || '']);
-    if (!paragraphsLength || paragraphsLength > HEADER_COPY_RECOMMENDED_LENGTH) {
+    if (paragraphsLength > HEADER_COPY_RECOMMENDED_LENGTH) {
       return true;
     }
     return false;
@@ -159,7 +159,7 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
     if (paragraphsLength > HEADER_COPY_RECOMMENDED_LENGTH) {
       return MAXLENGTH_ERROR_HELPER_TEXT;
     }
-    return HEADER_DEFAULT_HELPER_TEXT;
+    return `${HEADER_DEFAULT_HELPER_TEXT} (${HEADER_COPY_RECOMMENDED_LENGTH} chars)`;
   };
 
   const getMessageTextHelperText = () => {
@@ -171,7 +171,7 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
     if (copyLength > recommendedLength) {
       return MAXLENGTH_ERROR_HELPER_TEXT;
     }
-    return BODY_DEFAULT_HELPER_TEXT;
+    return `${BODY_DEFAULT_HELPER_TEXT} (${recommendedLength} chars)`;
   };
 
   const getHighlightedTextHelperText = () => {

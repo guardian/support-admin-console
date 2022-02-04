@@ -315,8 +315,13 @@ const parseCopyForParagraphs = (copy: string[]): string => {
 };
 
 export const getRteCopyLength = (copy: string[]): number => {
-  let paragraphsCheck = copy.join(' ');
+  let paragraphsCheck = copy.join('');
+
   paragraphsCheck = paragraphsCheck.replace(/<.*?>/g, '');
+  paragraphsCheck = paragraphsCheck.replace(/%%CURRENCY_SYMBOL%%/g, ' ');
+  paragraphsCheck = paragraphsCheck.replace(/%%ARTICLE_COUNT%%/g, '     ');
+  paragraphsCheck = paragraphsCheck.replace(/%%COUNTRY_NAME%%/g, '          ');
+
   return paragraphsCheck.length;
 };
 
@@ -372,7 +377,14 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
         }
         return false;
       });
+
       const paragraphsCopy = paragraphs.map(p => p.innerHTML);
+
+      // Get rid of unwanted markup created by ProseMirror
+      paragraphsCopy.forEach((p, index) => {
+        paragraphsCopy[index] = p.replace('<br class="ProseMirror-trailingBreak">', '');
+      });
+
       updateCopy(paragraphsCopy);
     }
   };
