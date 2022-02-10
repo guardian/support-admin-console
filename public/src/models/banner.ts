@@ -30,13 +30,6 @@ export interface BannerVariant extends Variant {
   template: BannerTemplate;
   bannerContent: BannerContent;
   mobileBannerContent?: BannerContent;
-
-  // Deprecated - use bannerContent / mobileBannerContent
-  heading?: string;
-  body?: string;
-  highlightedText?: string;
-  cta?: Cta;
-  secondaryCta?: Cta;
   separateArticleCount?: boolean;
 }
 

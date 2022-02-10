@@ -34,13 +34,6 @@ case class BannerVariant(
   template: BannerTemplate,
   bannerContent: Option[BannerContent],
   mobileBannerContent: Option[BannerContent],
-
-  // Deprecated - use bannerContent / mobileBannerContent
-  heading: Option[String],
-  body: Option[String],
-  highlightedText: Option[String],
-  cta: Option[Cta],
-  secondaryCta: Option[Cta],
   separateArticleCount: Option[Boolean]
 )
 
