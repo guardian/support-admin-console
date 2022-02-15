@@ -63,7 +63,6 @@ interface RichTextMenuProps extends WithStyles<typeof styles> {
 }
 
 // ReMirror/ProseMirror LINK functionality
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function useLinkShortcut() {
   const [linkShortcut, setLinkShortcut] = useState<ShortcutHandlerProps | undefined>();
   const [isEditing, setIsEditing] = useState(false);
@@ -82,7 +81,6 @@ function useLinkShortcut() {
   return { linkShortcut, isEditing, setIsEditing };
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function useFloatingLinkState() {
   const chain = useChainedCommands();
   const { isEditing, linkShortcut, setIsEditing } = useLinkShortcut();
@@ -157,7 +155,6 @@ function useFloatingLinkState() {
 }
 
 // ReMirror/ProseMirror FLOATING LINK MENU BUTTONS
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const FloatingLinkToolbar = () => {
   const {
     isEditing,
@@ -179,14 +176,10 @@ const FloatingLinkToolbar = () => {
         label: 'Link',
         items: activeLink
           ? [
-              // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
               { type: ComponentItem.ToolbarButton, onClick: () => clickEdit(), icon: 'pencilLine' },
               { type: ComponentItem.ToolbarButton, onClick: onRemove, icon: 'linkUnlink' },
             ]
-          : [
-              // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-              { type: ComponentItem.ToolbarButton, onClick: () => clickEdit(), icon: 'link' },
-            ],
+          : [{ type: ComponentItem.ToolbarButton, onClick: () => clickEdit(), icon: 'link' }],
       },
     ],
     [clickEdit, onRemove, activeLink],
@@ -213,10 +206,8 @@ const FloatingLinkToolbar = () => {
           style={{ zIndex: 20 }}
           autoFocus
           placeholder="Enter link..."
-          // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
           onChange={event => setHref(event.target.value)}
           value={href}
-          // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
           onKeyDown={event => {
             const { key } = event;
             if (key === 'Enter') {
@@ -248,7 +239,6 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
         <>
           <button
             className={active.bold() ? 'remirror-button-active' : 'remirror-button'}
-            // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
             onClick={() => {
               chain
                 .toggleBold()
@@ -260,7 +250,6 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
           </button>
           <button
             className={active.italic() ? 'remirror-button-active' : 'remirror-button'}
-            // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
             onClick={() => {
               chain
                 .toggleItalic()
@@ -273,7 +262,6 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
           <span className="remirror-button-spacer">&nbsp;</span>
           <button
             className="remirror-button"
-            // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
             onClick={() => {
               chain.insertText('%%ARTICLE_COUNT%%').run();
             }}
@@ -282,7 +270,6 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
           </button>
           <button
             className="remirror-button"
-            // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
             onClick={() => {
               chain.insertText('%%CURRENCY_SYMBOL%%').run();
             }}
@@ -291,7 +278,6 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
           </button>
           <button
             className="remirror-button"
-            // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
             onClick={() => {
               chain.insertText('%%COUNTRY_NAME%%').run();
             }}
