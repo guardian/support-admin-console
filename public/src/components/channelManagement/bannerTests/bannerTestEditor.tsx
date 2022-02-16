@@ -23,7 +23,10 @@ import TestVariantsSplitEditor from '../testVariantsSplitEditor';
 import { useStyles } from '../helpers/testEditorStyles';
 
 const copyHasTemplate = (content: BannerContent, template: string): boolean =>
-  (content.heading && content.heading.includes(template)) || content.messageText.includes(template);
+  (content.heading && content.heading.includes(template)) ||
+  (content.paragraphs != null && content.paragraphs[0].includes(template)) ||
+  (content.messageText != null && content.messageText.includes(template));
+
 const testCopyHasTemplate = (test: BannerTest, template: string): boolean =>
   test.variants.some(
     variant =>

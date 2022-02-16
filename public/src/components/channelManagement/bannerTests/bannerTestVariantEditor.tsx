@@ -111,7 +111,7 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
 
   const defaultValues: BannerContent = {
     heading: content.heading || '',
-    messageText: content.messageText,
+    paragraphs: content.paragraphs || [content.messageText] || [],
     highlightedText: content.highlightedText || '',
   };
 
@@ -127,10 +127,13 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
-  }, [errors.messageText, errors.heading, errors.highlightedText]);
+  }, [errors.paragraphs, errors.heading, errors.highlightedText]);
 
-  const onSubmit = ({ heading, messageText, highlightedText }: BannerContent): void => {
-    onChange({ ...content, heading, messageText, highlightedText });
+  const onSubmit = ({ heading, paragraphs, highlightedText }: BannerContent): void => {
+    if (paragraphs != null && !Array.isArray(paragraphs)) {
+      paragraphs = [paragraphs];
+    }
+    onChange({ ...content, heading, paragraphs, highlightedText });
   };
 
   const updatePrimaryCta = (updatedCta?: Cta): void => {
@@ -148,7 +151,19 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
     ? BODY_COPY_WITH_SECONDARY_CTA_RECOMMENDED_LENGTH
     : BODY_COPY_WITHOUT_SECONDARY_CTA_RECOMMENDED_LENGTH;
 
-  const bodyCopyLength = content.messageText.length + (content.highlightedText?.length ?? 0);
+  const getBodyCopyLength = (paras: string[] | undefined, text: string | undefined): number => {
+    if (paras != null) {
+      return paras.reduce((prev, curr) => prev + curr.length, 0);
+    }
+    if (text != null) {
+      return text.length;
+    }
+    return 0;
+  };
+
+  const bodyCopyLength =
+    getBodyCopyLength(content.paragraphs, content.messageText) +
+    (content.highlightedText?.length ?? 0);
 
   return (
     <>
@@ -184,10 +199,14 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
               required: EMPTY_ERROR_HELPER_TEXT,
               validate: templateValidator,
             })}
-            error={errors.messageText !== undefined}
-            helperText={errors.messageText ? errors.messageText.message : BODY_DEFAULT_HELPER_TEXT}
+            error={errors.paragraphs !== undefined}
+            helperText={
+              errors.paragraphs && errors.paragraphs[0]
+                ? errors.paragraphs[0].message
+                : BODY_DEFAULT_HELPER_TEXT
+            }
             onBlur={handleSubmit(onSubmit)}
-            name="messageText"
+            name="paragraphs"
             label="Body copy"
             margin="normal"
             variant="outlined"
@@ -262,7 +281,7 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
 
   const content: BannerContent = variant.bannerContent || {
     heading: variant.heading,
-    messageText: variant.body || '',
+    paragraphs: variant.body || '',
     highlightedText: variant.highlightedText,
     cta: variant.cta,
     secondaryCta: variant.secondaryCta,

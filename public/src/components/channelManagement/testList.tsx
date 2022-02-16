@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React from 'react';
 import { createStyles, List, withStyles, WithStyles } from '@material-ui/core';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 

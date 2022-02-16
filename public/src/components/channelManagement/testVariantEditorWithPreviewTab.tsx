@@ -31,7 +31,7 @@ function TestVariantEditorWithPreviewTab({
 
   const [value, setValue] = useState(0);
 
-  const handleChange = (event: React.ChangeEvent<{}>, newValue: number): void => {
+  const handleChange = (event: React.ChangeEvent<unknown>, newValue: number): void => {
     setValue(newValue);
   };
 
