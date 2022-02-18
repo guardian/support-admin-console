@@ -8,7 +8,11 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import BannerTestVariantEditorCtasEditor from './bannerTestVariantEditorCtasEditor';
-import { EMPTY_ERROR_HELPER_TEXT, MAXLENGTH_ERROR_HELPER_TEXT } from '../helpers/validation';
+import {
+  EMPTY_ERROR_HELPER_TEXT,
+  MAXLENGTH_ERROR_HELPER_TEXT,
+  // templateValidatorForPlatform,
+} from '../helpers/validation';
 import { Cta, SecondaryCta } from '../helpers/shared';
 import BannerTemplateSelector from './bannerTemplateSelector';
 import { BannerContent, BannerTemplate, BannerVariant } from '../../../models/banner';
@@ -92,6 +96,9 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
 }: BannerTestVariantContentEditorProps) => {
   const classes = useStyles();
 
+  // Handling MUI TextField updates
+  // const templateValidator = templateValidatorForPlatform('DOTCOM');
+
   const updatePrimaryCta = (updatedCta?: Cta): void => {
     onChange({ ...content, cta: updatedCta });
   };
@@ -104,21 +111,21 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
   // Handling RTE Field updates
   const updateHeading = (updatedHeading: string[] | undefined): void => {
     if (updatedHeading != null) {
-      onChange({ ...content, heading: updatedHeading[0] });
+      onChange({ ...content, heading: updatedHeading.join(' ') });
     } else {
       onChange({ ...content, heading: '' });
     }
   };
-  const updateMessageText = (updatedMessageText: string[] | undefined): void => {
-    if (updatedMessageText != null) {
-      onChange({ ...content, messageText: updatedMessageText[0] });
+  const updateParagraphs = (updatedParagraphs: string[] | undefined): void => {
+    if (updatedParagraphs != null) {
+      onChange({ ...content, paragraphs: updatedParagraphs });
     } else {
-      onChange({ ...content, messageText: '' });
+      onChange({ ...content, paragraphs: [] });
     }
   };
   const updateHighlightedText = (updatedHighlightedText: string[] | undefined): void => {
     if (updatedHighlightedText != null) {
-      onChange({ ...content, highlightedText: updatedHighlightedText[0] });
+      onChange({ ...content, highlightedText: updatedHighlightedText.join(' ') });
     } else {
       onChange({ ...content, highlightedText: '' });
     }
@@ -133,19 +140,25 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
     return false;
   };
 
-  const getMessageAndHighlightedTextLength = () => {
+  const getBodyCopyLength = () => {
     const bodyCopyRecommendedLength = content.secondaryCta
       ? BODY_COPY_WITH_SECONDARY_CTA_RECOMMENDED_LENGTH
       : BODY_COPY_WITHOUT_SECONDARY_CTA_RECOMMENDED_LENGTH;
 
+    if (content.paragraphs != null) {
+      return [
+        getRteCopyLength([...content.paragraphs, content.highlightedText || '']),
+        bodyCopyRecommendedLength,
+      ];
+    }
     return [
-      getRteCopyLength([content.messageText, content.highlightedText || '']),
+      getRteCopyLength([content.messageText || '', content.highlightedText || '']),
       bodyCopyRecommendedLength,
     ];
   };
 
   const checkForMessageAndHighlightedTextError = () => {
-    const [copyLength, recommendedLength] = getMessageAndHighlightedTextLength();
+    const [copyLength, recommendedLength] = getBodyCopyLength();
 
     if (!copyLength || copyLength > recommendedLength) {
       return true;
@@ -162,8 +175,8 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
     return `${HEADER_DEFAULT_HELPER_TEXT} (${HEADER_COPY_RECOMMENDED_LENGTH} chars)`;
   };
 
-  const getMessageTextHelperText = () => {
-    const [copyLength, recommendedLength] = getMessageAndHighlightedTextLength();
+  const getParagraphsHelperText = () => {
+    const [copyLength, recommendedLength] = getBodyCopyLength();
 
     if (!copyLength) {
       return EMPTY_ERROR_HELPER_TEXT;
@@ -175,7 +188,7 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
   };
 
   const getHighlightedTextHelperText = () => {
-    const [copyLength, recommendedLength] = getMessageAndHighlightedTextLength();
+    const [copyLength, recommendedLength] = getBodyCopyLength();
 
     if (!copyLength) {
       return EMPTY_ERROR_HELPER_TEXT;
@@ -185,6 +198,8 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
     }
     return HIGHTLIGHTED_TEXT_HELPER_TEXT;
   };
+
+  console.log(content);
 
   return (
     <>
@@ -204,13 +219,14 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
             disabled={!editMode}
           />
         )}
+
         <div>
           <RichTextEditor
             error={checkForMessageAndHighlightedTextError()}
-            helperText={getMessageTextHelperText()}
-            copyData={content.messageText}
-            updateCopy={updateMessageText}
-            name="messageText"
+            helperText={getParagraphsHelperText()}
+            copyData={content.paragraphs || content.messageText}
+            updateCopy={updateParagraphs}
+            name="paragraphs"
             label="Body copy"
             disabled={!editMode}
           />
@@ -267,7 +283,7 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
 
   const content: BannerContent = variant.bannerContent || {
     heading: variant.heading,
-    messageText: variant.body || '',
+    paragraphs: variant.body || '',
     highlightedText: variant.highlightedText,
     cta: variant.cta,
     secondaryCta: variant.secondaryCta,

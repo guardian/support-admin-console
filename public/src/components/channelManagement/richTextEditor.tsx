@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import {
   BoldExtension,
+  EventsExtension,
   ItalicExtension,
   LinkExtension,
   ShortcutHandlerProps,
@@ -19,6 +20,7 @@ import {
   useChainedCommands,
   useCurrentSelection,
   useExtension,
+  useHelpers,
   useRemirror,
   useUpdateReason,
 } from '@remirror/react';
@@ -330,6 +332,42 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
     copyData = [copyData];
   }
 
+  const hooks = [
+    () => {
+      const { getHTML } = useHelpers();
+
+      const handleSaveShortcut = useCallback(
+        ({ state }) => {
+          const frag = document.createElement('div');
+          frag.innerHTML = getHTML(state);
+
+          const elements = Array.from(frag.children);
+
+          const paragraphs = elements.filter(p => {
+            if (p == null) {
+              return false;
+            }
+            if (p.tagName === 'P') {
+              return true;
+            }
+            return false;
+          });
+
+          const paragraphsCopy = paragraphs.map(p => p.innerHTML);
+
+          // Get rid of unwanted markup created by ProseMirror
+          paragraphsCopy.forEach((p, index) => {
+            paragraphsCopy[index] = p.replace('<br class="ProseMirror-trailingBreak">', '');
+          });
+          updateCopy(paragraphsCopy);
+          return true;
+        },
+        [getHTML],
+      );
+      manager.getExtension(EventsExtension).addHandler('blur', handleSaveShortcut);
+    },
+  ];
+
   // Instantiate the Remirror RTE component
   const { manager, state } = useRemirror({
     extensions: () => [
@@ -343,44 +381,44 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
     stringHandler: 'html',
   });
 
-  // Handle to the ProseMirror <div> element containing all the RTE text
-  let ref: HTMLDivElement | null = document.createElement('div');
-  useEffect(() => {
-    ref = document.querySelector(`#RTE-${name} .ProseMirror`);
-  });
+  // // Handle to the ProseMirror <div> element containing all the RTE text
+  // let ref: HTMLDivElement | null = document.createElement('div');
+  // useEffect(() => {
+  //   ref = document.querySelector(`#RTE-${name} .ProseMirror`);
+  // });
 
-  // Helper function - extracts copy from an array of HTML child elements
-  const blurAction = () => {
-    if (name && ref != null && !disabled) {
-      const elements = Array.from(ref.children);
+  // // Helper function - extracts copy from an array of HTML child elements
+  // const blurAction = () => {
+  //   if (name && ref != null && !disabled) {
+  //     const elements = Array.from(ref.children);
 
-      const paragraphs = elements.filter(p => {
-        if (p == null) {
-          return false;
-        }
-        if (p.tagName === 'P') {
-          return true;
-        }
-        return false;
-      });
+  //     const paragraphs = elements.filter(p => {
+  //       if (p == null) {
+  //         return false;
+  //       }
+  //       if (p.tagName === 'P') {
+  //         return true;
+  //       }
+  //       return false;
+  //     });
 
-      const paragraphsCopy = paragraphs.map(p => p.innerHTML);
+  //     const paragraphsCopy = paragraphs.map(p => p.innerHTML);
 
-      // Get rid of unwanted markup created by ProseMirror
-      paragraphsCopy.forEach((p, index) => {
-        paragraphsCopy[index] = p.replace('<br class="ProseMirror-trailingBreak">', '');
-      });
+  //     // Get rid of unwanted markup created by ProseMirror
+  //     paragraphsCopy.forEach((p, index) => {
+  //       paragraphsCopy[index] = p.replace('<br class="ProseMirror-trailingBreak">', '');
+  //     });
 
-      updateCopy(paragraphsCopy);
-    }
-  };
+  //     updateCopy(paragraphsCopy);
+  //   }
+  // };
 
   // Control the look of the ReMirror RTE dependant on whether the user is in Edit or Read-Only Mode
   const wrapperClasses = disabled ? 'remirror-theme editor-disabled' : 'remirror-theme';
 
   return (
-    <div id={`RTE-${name}`} className={wrapperClasses} onBlur={blurAction}>
-      <Remirror manager={manager} initialContent={state} editable={!disabled}>
+    <div id={`RTE-${name}`} className={wrapperClasses}>
+      <Remirror manager={manager} initialContent={state} editable={!disabled} hooks={hooks}>
         <RichTextMenu classes={classes} disabled={disabled} label={label} />
         <EditorComponent />
         {!disabled && <FloatingLinkToolbar />}

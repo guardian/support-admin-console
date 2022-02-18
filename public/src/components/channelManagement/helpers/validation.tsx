@@ -101,9 +101,10 @@ const VALID_TEMPLATES = {
 };
 
 export const templateValidatorForPlatform = (platform: TestPlatform) => (
-  text: string,
+  text: string | string[],
 ): string | boolean => {
-  const templates: string[] | null = text.match(/%\S*%/g);
+  const textToCheck = Array.isArray(text) ? text.join('') : text;
+  const templates: string[] | null = textToCheck.match(/%\S*%/g);
 
   if (templates !== null) {
     const invalidTemplate = templates.find(

@@ -22,14 +22,28 @@ import { ControlProportionSettings } from '../helpers/controlProportionSettings'
 import TestVariantsSplitEditor from '../testVariantsSplitEditor';
 import { useStyles } from '../helpers/testEditorStyles';
 
-const copyHasTemplate = (content: BannerContent, template: string): boolean =>
-  (content.heading && content.heading.includes(template)) || content.messageText.includes(template);
-const testCopyHasTemplate = (test: BannerTest, template: string): boolean =>
-  test.variants.some(
-    variant =>
-      (variant.bannerContent && copyHasTemplate(variant.bannerContent, template)) ||
-      (variant.mobileBannerContent && copyHasTemplate(variant.mobileBannerContent, template)),
-  );
+const getVariantCombinedCopy = (content: BannerContent): string => {
+  let res = (content.heading || '') + (content.highlightedText || '');
+
+  if (content.paragraphs) {
+    res += content.paragraphs.join('');
+  } else if (content.messageText) {
+    res += content.messageText;
+  }
+  return res;
+};
+
+const checkIfTestCopyIncludesTemplate = (test: BannerTest, template: string): boolean => {
+  return test.variants.some(variant => {
+    if (variant.bannerContent) {
+      return getVariantCombinedCopy(variant.bannerContent).includes(template);
+    }
+    if (variant.mobileBannerContent) {
+      return getVariantCombinedCopy(variant.mobileBannerContent).includes(template);
+    }
+    return false;
+  });
+};
 
 interface BannerTestEditorProps {
   test: BannerTest;
@@ -67,7 +81,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
     if (!!test.articlesViewedSettings) {
       return test.articlesViewedSettings;
     }
-    if (testCopyHasTemplate(test, ARTICLE_COUNT_TEMPLATE)) {
+    if (checkIfTestCopyIncludesTemplate(test, ARTICLE_COUNT_TEMPLATE)) {
       return DEFAULT_ARTICLES_VIEWED_SETTINGS;
     }
     return undefined;

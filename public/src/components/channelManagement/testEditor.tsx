@@ -149,7 +149,6 @@ const TestEditor = <T extends Test>(
         alert('Test contains errors. Please fix any errors before saving.');
         return;
       }
-
       save(tests);
     };
 
