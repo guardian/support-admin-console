@@ -24,7 +24,7 @@ import { useStyles } from '../helpers/testEditorStyles';
 
 const copyHasTemplate = (content: BannerContent, template: string): boolean =>
   (content.heading && content.heading.includes(template)) ||
-  (content.paragraphs != null && content.paragraphs[0].includes(template)) ||
+  (content.paragraphs && content.paragraphs.some(para => para.includes(template))) ||
   (content.messageText != null && content.messageText.includes(template));
 
 const testCopyHasTemplate = (test: BannerTest, template: string): boolean =>

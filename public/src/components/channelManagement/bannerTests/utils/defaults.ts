@@ -33,7 +33,7 @@ const PROD_DEFAULT_VARIANT: BannerVariant = {
   template: BannerTemplate.ContributionsBanner,
   bannerContent: {
     messageText: '',
-    paragraphs: [''],
+    paragraphs: [],
     highlightedText: 'Support the Guardian from as little as %%CURRENCY_SYMBOL%%1. Thank you.',
     cta: DEFAULT_PRIMARY_CTA,
   },
