@@ -297,14 +297,6 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
   const classes = useStyles();
   const setValidationStatusForField = useValidation(onValidationChange);
 
-  const content: BannerContent = variant.bannerContent || {
-    heading: variant.heading,
-    paragraphs: variant.body || [],
-    highlightedText: variant.highlightedText,
-    cta: variant.cta,
-    secondaryCta: variant.secondaryCta,
-  };
-
   const onMobileContentRadioChange = (): void => {
     if (variant.mobileBannerContent === undefined) {
       onVariantChange({
@@ -336,7 +328,7 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
 
       <div className={classes.sectionContainer}>
         <BannerTestVariantContentEditor
-          content={content}
+          content={variant.bannerContent}
           template={variant.template}
           onChange={(updatedContent: BannerContent): void =>
             onVariantChange({ ...variant, bannerContent: updatedContent })
