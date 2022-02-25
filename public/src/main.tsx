@@ -37,8 +37,8 @@ import Typography from '@material-ui/core/Typography';
 import IndexPage from './components/indexPage';
 import { getTheme } from './utils/theme';
 import ChannelSwitches from './components/channelManagement/ChannelSwitches';
+import CampaignsEditor from './components/channelManagement/campaigns/CampaignsEditor';
 import { FontWeightProperty } from 'csstype';
-import Campaigns from './components/channelManagement/campaigns/Campaigns';
 
 type Stage = 'DEV' | 'CODE' | 'PROD';
 declare global {
@@ -231,7 +231,7 @@ const AppRouter = withStyles(styles)(({ classes }: Props) => {
           />
           <Route
             path="/campaigns"
-            render={(): React.ReactElement => createComponent(<Campaigns />, 'Campaigns')}
+            render={(): React.ReactElement => createComponent(<CampaignsEditor />, 'Campaigns')}
           />
         </div>
       </Router>

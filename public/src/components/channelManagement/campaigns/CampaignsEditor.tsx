@@ -38,7 +38,7 @@ interface Campaign {
 }
 type Campaigns = Campaign[];
 
-const Campaigns: React.FC<InnerProps<Campaigns>> = ({
+const CampaignsEditor: React.FC<InnerProps<Campaigns>> = ({
   data: campaigns,
   setData: setCampaigns,
   saveData: saveCampaigns,
@@ -85,4 +85,4 @@ const fetchSettings = (): Promise<DataFromServer<Campaigns>> =>
 const saveSettings = (data: DataFromServer<Campaigns>): Promise<Response> =>
   saveFrontendSettings(FrontendSettingsType.campaigns, data);
 
-export default withS3Data<Campaigns>(Campaigns, fetchSettings, saveSettings);
+export default withS3Data<Campaigns>(CampaignsEditor, fetchSettings, saveSettings);
