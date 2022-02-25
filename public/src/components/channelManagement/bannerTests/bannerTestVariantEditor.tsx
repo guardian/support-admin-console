@@ -149,7 +149,13 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
   }, [errors.body, errors.heading, errors.highlightedText]);
 
   const onSubmit = ({ heading, body, highlightedText }: FormData): void => {
-    onChange({ ...content, heading, paragraphs: body.split('\n'), highlightedText });
+    onChange({
+      ...content,
+      heading,
+      paragraphs: body.split('\n'),
+      highlightedText,
+      messageText: undefined,
+    });
   };
 
   const updatePrimaryCta = (updatedCta?: Cta): void => {
