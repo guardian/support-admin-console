@@ -38,6 +38,7 @@ import IndexPage from './components/indexPage';
 import { getTheme } from './utils/theme';
 import ChannelSwitches from './components/channelManagement/ChannelSwitches';
 import { FontWeightProperty } from 'csstype';
+import Campaigns from './components/channelManagement/campaigns/Campaigns';
 
 type Stage = 'DEV' | 'CODE' | 'PROD';
 declare global {
@@ -227,6 +228,10 @@ const AppRouter = withStyles(styles)(({ classes }: Props) => {
             render={(): React.ReactElement =>
               createComponent(<ChannelSwitches />, 'Channel Switches')
             }
+          />
+          <Route
+            path="/campaigns"
+            render={(): React.ReactElement => createComponent(<Campaigns />, 'Campaigns')}
           />
         </div>
       </Router>

@@ -177,6 +177,11 @@ export default function NavDrawer(): React.ReactElement {
             <ListItemText primary="Channel Switches" />
           </ListItem>
         </Link>
+        <Link key="Campaigns" to="/campaigns" className={classes.link}>
+          <ListItem className={classes.listItem} button key="Campaigns">
+            <ListItemText primary="Campaigns" />
+          </ListItem>
+        </Link>
       </div>
 
       <div>
