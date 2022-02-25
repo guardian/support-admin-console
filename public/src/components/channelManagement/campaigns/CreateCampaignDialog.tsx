@@ -86,7 +86,7 @@ const CreateCampaignDialog: React.FC<CreateCampaignDialogProps> = ({
           error={errors.name !== undefined}
           helperText={errors.name ? errors.name.message : ''}
           name="name"
-          label="Full campaign name"
+          label="Campaign name"
           margin="normal"
           variant="outlined"
           autoFocus
