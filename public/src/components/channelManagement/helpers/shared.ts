@@ -28,6 +28,7 @@ export interface EpicEditorConfig {
   allowLocationTargeting: boolean;
   supportedRegions?: Region[];
   allowSupporterStatusTargeting: boolean;
+  allowDeviceTypeTargeting: boolean;
   allowViewFrequencySettings: boolean;
   allowArticleCount: boolean;
   testNamePrefix?: string;
@@ -54,6 +55,7 @@ export const ARTICLE_EPIC_CONFIG: EpicEditorConfig = {
   allowContentTargeting: true,
   allowLocationTargeting: true,
   allowSupporterStatusTargeting: true,
+  allowDeviceTypeTargeting: true,
   allowViewFrequencySettings: true,
   allowArticleCount: true,
   allowVariantHeader: true,
@@ -77,6 +79,7 @@ export const ARTICLE_EPIC_HOLDBACK_CONFIG: EpicEditorConfig = {
   allowContentTargeting: true,
   allowLocationTargeting: true,
   allowSupporterStatusTargeting: true,
+  allowDeviceTypeTargeting: true,
   allowViewFrequencySettings: true,
   allowArticleCount: true,
   testNamePrefix: 'HOLDBACK__',
@@ -101,6 +104,7 @@ export const LIVEBLOG_EPIC_CONFIG: EpicEditorConfig = {
   allowContentTargeting: true,
   allowLocationTargeting: true,
   allowSupporterStatusTargeting: true,
+  allowDeviceTypeTargeting: true,
   allowViewFrequencySettings: true,
   allowArticleCount: true,
   allowVariantHeader: true,
@@ -125,6 +129,7 @@ export const APPLE_NEWS_EPIC_CONFIG: EpicEditorConfig = {
   allowLocationTargeting: true,
   supportedRegions: [Region.UnitedStates, Region.AUDCountries],
   allowSupporterStatusTargeting: false,
+  allowDeviceTypeTargeting: false,
   allowViewFrequencySettings: false,
   allowArticleCount: false,
   allowVariantHeader: true,
@@ -148,6 +153,7 @@ export const AMP_EPIC_CONFIG: EpicEditorConfig = {
   allowContentTargeting: false,
   allowLocationTargeting: true,
   allowSupporterStatusTargeting: false,
+  allowDeviceTypeTargeting: false,
   allowViewFrequencySettings: false,
   allowArticleCount: false,
   allowVariantHeader: true,
@@ -242,3 +248,5 @@ export interface TickerSettings {
 }
 
 export type ContributionFrequency = 'ONE_OFF' | 'MONTHLY' | 'ANNUAL';
+
+export type DeviceType = 'Mobile' | 'Desktop' | 'All';

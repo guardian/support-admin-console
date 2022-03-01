@@ -5,7 +5,6 @@ import {
   FormControlLabel,
   FormGroup,
   Theme,
-  Typography,
   WithStyles,
   createStyles,
   withStyles,
@@ -15,11 +14,6 @@ import { UserCohort } from './helpers/shared';
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing }: Theme) =>
   createStyles({
-    container: {
-      '& > * + *': {
-        marginTop: spacing(2),
-      },
-    },
     indentedContainer: {
       marginLeft: spacing(3),
     },
@@ -62,49 +56,46 @@ const TestEditorTargetSupporterStatusSelector: React.FC<TestEditorTargetSupporte
   };
 
   return (
-    <div className={classes.container}>
-      <Typography>Supporter status</Typography>
-      <FormGroup>
+    <FormGroup>
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={selectedCohort === 'Everyone'}
+            onChange={onEveryoneSelected}
+            disabled={isDisabled}
+          />
+        }
+        label="Everyone"
+      />
+      <FormGroup className={classes.indentedContainer}>
         <FormControlLabel
           control={
             <Checkbox
-              checked={selectedCohort === 'Everyone'}
-              onChange={onEveryoneSelected}
+              checked={
+                selectedCohort === UserCohort['Everyone'] ||
+                selectedCohort === UserCohort['AllNonSupporters']
+              }
+              onChange={onNonSupportersSelected}
               disabled={isDisabled}
             />
           }
-          label="Everyone"
+          label="Non-supporters"
         />
-        <FormGroup className={classes.indentedContainer}>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={
-                  selectedCohort === UserCohort['Everyone'] ||
-                  selectedCohort === UserCohort['AllNonSupporters']
-                }
-                onChange={onNonSupportersSelected}
-                disabled={isDisabled}
-              />
-            }
-            label="Non-supporters"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={
-                  selectedCohort === UserCohort['Everyone'] ||
-                  selectedCohort === UserCohort['AllExistingSupporters']
-                }
-                onChange={onAllSupportersSelected}
-                disabled={isDisabled}
-              />
-            }
-            label="Existing supporters"
-          />
-        </FormGroup>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={
+                selectedCohort === UserCohort['Everyone'] ||
+                selectedCohort === UserCohort['AllExistingSupporters']
+              }
+              onChange={onAllSupportersSelected}
+              disabled={isDisabled}
+            />
+          }
+          label="Existing supporters"
+        />
       </FormGroup>
-    </div>
+    </FormGroup>
   );
 };
 

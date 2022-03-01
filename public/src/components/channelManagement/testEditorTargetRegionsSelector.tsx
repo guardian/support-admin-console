@@ -5,7 +5,6 @@ import {
   FormControlLabel,
   FormGroup,
   Theme,
-  Typography,
   WithStyles,
   createStyles,
   withStyles,
@@ -15,11 +14,6 @@ import { Region } from '../../utils/models';
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ spacing }: Theme) =>
   createStyles({
-    container: {
-      '& > * + *': {
-        marginTop: spacing(2),
-      },
-    },
     indentedContainer: {
       marginLeft: spacing(3),
     },
@@ -69,38 +63,35 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
   };
 
   return (
-    <div className={classes.container}>
-      <Typography>Region</Typography>
-      <FormGroup>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={selectedRegions.length === allRegions.length}
-              value={'allRegions'}
-              onChange={onAllRegionsChange}
-              disabled={isDisabled}
-            />
-          }
-          label={'All regions'}
-        />
-        <FormGroup className={classes.indentedContainer}>
-          {allRegions.map(region => (
-            <FormControlLabel
-              key={region}
-              control={
-                <Checkbox
-                  checked={selectedRegions.includes(region)}
-                  onChange={onSingleRegionChange}
-                  value={region}
-                  disabled={isDisabled}
-                />
-              }
-              label={regionLabels[region]}
-            />
-          ))}
-        </FormGroup>
+    <FormGroup>
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={selectedRegions.length === allRegions.length}
+            value={'allRegions'}
+            onChange={onAllRegionsChange}
+            disabled={isDisabled}
+          />
+        }
+        label={'All regions'}
+      />
+      <FormGroup className={classes.indentedContainer}>
+        {allRegions.map(region => (
+          <FormControlLabel
+            key={region}
+            control={
+              <Checkbox
+                checked={selectedRegions.includes(region)}
+                onChange={onSingleRegionChange}
+                value={region}
+                disabled={isDisabled}
+              />
+            }
+            label={regionLabels[region]}
+          />
+        ))}
       </FormGroup>
-    </div>
+    </FormGroup>
   );
 };
 

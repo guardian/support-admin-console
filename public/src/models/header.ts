@@ -1,4 +1,10 @@
-import { Cta, Test, Variant, UserCohort } from '../components/channelManagement/helpers/shared';
+import {
+  Cta,
+  Test,
+  Variant,
+  UserCohort,
+  DeviceType,
+} from '../components/channelManagement/helpers/shared';
 import { Region } from '../utils/models';
 import { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';
 
@@ -23,4 +29,5 @@ export interface HeaderTest extends Test {
   locations: Region[];
   variants: HeaderVariant[];
   controlProportionSettings?: ControlProportionSettings;
+  deviceType?: DeviceType;
 }
