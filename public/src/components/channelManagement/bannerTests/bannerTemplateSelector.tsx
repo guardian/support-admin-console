@@ -40,10 +40,7 @@ const BannerTemplateSelector: React.FC<BannerTemplateSelectorProps> = ({
   return (
     <Select value={variant.template} onChange={onChange} disabled={!editMode}>
       {templatesWithLabels.map(withLabel => (
-        <MenuItem
-          value={withLabel.template}
-          key={withLabel.template}
-        >
+        <MenuItem value={withLabel.template} key={withLabel.template}>
           {withLabel.label}
         </MenuItem>
       ))}
