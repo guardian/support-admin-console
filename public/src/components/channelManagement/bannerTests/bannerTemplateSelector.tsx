@@ -1,13 +1,13 @@
 import React from 'react';
 import { MenuItem, Select } from '@material-ui/core';
-import { BannerTemplate, BannerVariant } from '../../../models/banner';
+import { BannerTemplate } from '../../../models/banner';
 
 function isBannerTemplate(s: string): s is BannerTemplate {
   return Object.values(BannerTemplate).includes(s as BannerTemplate);
 }
 
 interface BannerTemplateSelectorProps {
-  variant: BannerVariant;
+  template: BannerTemplate;
   onTemplateChange: (updatedTemplate: BannerTemplate) => void;
   editMode: boolean;
 }
@@ -26,7 +26,7 @@ const templatesWithLabels = [
 ];
 
 const BannerTemplateSelector: React.FC<BannerTemplateSelectorProps> = ({
-  variant,
+  template,
   onTemplateChange,
   editMode,
 }: BannerTemplateSelectorProps) => {
@@ -38,7 +38,7 @@ const BannerTemplateSelector: React.FC<BannerTemplateSelectorProps> = ({
   };
 
   return (
-    <Select value={variant.template} onChange={onChange} disabled={!editMode}>
+    <Select value={template} onChange={onChange} disabled={!editMode}>
       {templatesWithLabels.map(withLabel => (
         <MenuItem value={withLabel.template} key={withLabel.template}>
           {withLabel.label}

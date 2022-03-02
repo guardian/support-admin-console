@@ -283,7 +283,7 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
           Banner template
         </Typography>
         <BannerTemplateSelector
-          variant={variant}
+          template={variant.template}
           onTemplateChange={(template): void =>
             onVariantChange({
               ...variant,
