@@ -79,7 +79,7 @@ export const ARTICLE_EPIC_HOLDBACK_CONFIG: EpicEditorConfig = {
   allowSupporterStatusTargeting: true,
   allowViewFrequencySettings: true,
   allowArticleCount: true,
-  testNamePrefix: 'HOLDBACK__',
+  testNamePrefix: 'HOLDBACK',
   allowVariantHeader: true,
   allowVariantHighlightedText: true,
   allowVariantImageUrl: true,
