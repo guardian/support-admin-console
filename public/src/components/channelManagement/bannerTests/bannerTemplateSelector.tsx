@@ -1,25 +1,14 @@
 import React from 'react';
-import { createStyles, withStyles, WithStyles } from '@material-ui/core';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import Radio from '@material-ui/core/Radio';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import { BannerTemplate, BannerVariant } from '../../../models/banner';
+import { MenuItem, Select } from '@material-ui/core';
+import { BannerTemplate } from '../../../models/banner';
 
 function isBannerTemplate(s: string): s is BannerTemplate {
   return Object.values(BannerTemplate).includes(s as BannerTemplate);
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const styles = () =>
-  createStyles({
-    templates: {
-      marginTop: '15px',
-    },
-  });
-
-interface BannerTemplateSelectorProps extends WithStyles<typeof styles> {
-  variant: BannerVariant;
-  onVariantChange: (updatedVariant: BannerVariant) => void;
+interface BannerTemplateSelectorProps {
+  template: BannerTemplate;
+  onTemplateChange: (updatedTemplate: BannerTemplate) => void;
   editMode: boolean;
 }
 
@@ -37,34 +26,26 @@ const templatesWithLabels = [
 ];
 
 const BannerTemplateSelector: React.FC<BannerTemplateSelectorProps> = ({
-  classes,
-  variant,
-  onVariantChange,
+  template,
+  onTemplateChange,
   editMode,
-}: BannerTemplateSelectorProps) => (
-  <RadioGroup
-    aria-label="Default"
-    name="default"
-    className={classes.templates}
-    value={variant.template}
-    onChange={(event, value): void => {
-      if (isBannerTemplate(value)) {
-        onVariantChange({
-          ...variant,
-          template: value,
-        });
-      }
-    }}
-  >
-    {templatesWithLabels.map(withLabel => (
-      <FormControlLabel
-        key={withLabel.template}
-        value={withLabel.template}
-        control={<Radio disabled={!editMode} />}
-        label={withLabel.label}
-      />
-    ))}
-  </RadioGroup>
-);
+}: BannerTemplateSelectorProps) => {
+  const onChange = (event: React.ChangeEvent<{ value: unknown }>): void => {
+    const value = event.target.value as string;
+    if (isBannerTemplate(value)) {
+      onTemplateChange(value);
+    }
+  };
 
-export default withStyles(styles)(BannerTemplateSelector);
+  return (
+    <Select value={template} onChange={onChange} disabled={!editMode}>
+      {templatesWithLabels.map(withLabel => (
+        <MenuItem value={withLabel.template} key={withLabel.template}>
+          {withLabel.label}
+        </MenuItem>
+      ))}
+    </Select>
+  );
+};
+
+export default BannerTemplateSelector;
