@@ -23,6 +23,7 @@ const DEV_AND_CODE_DEFAULT_VARIANT: BannerVariant = {
     highlightedText: 'Support the Guardian from as little as %%CURRENCY_SYMBOL%%1. Thank you.',
     cta: DEFAULT_PRIMARY_CTA,
   },
+  separateArticleCount: true,
 };
 
 const PROD_DEFAULT_VARIANT: BannerVariant = {
@@ -33,6 +34,7 @@ const PROD_DEFAULT_VARIANT: BannerVariant = {
     highlightedText: 'Support the Guardian from as little as %%CURRENCY_SYMBOL%%1. Thank you.',
     cta: DEFAULT_PRIMARY_CTA,
   },
+  separateArticleCount: true,
 };
 
 export const getDefaultVariant = (): BannerVariant => {
