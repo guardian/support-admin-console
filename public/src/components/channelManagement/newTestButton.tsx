@@ -45,7 +45,6 @@ const NewTestButton: React.FC<NewTestButtonProps> = ({
         existingNames={existingNames}
         existingNicknames={existingNicknames}
         testNamePrefix={testNamePrefix}
-        campaigns={[{ name: 'C1' }, { name: 'C2' }]}
         createTest={createTest}
         mode="NEW"
       />

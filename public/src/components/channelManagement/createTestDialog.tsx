@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Button,
@@ -26,6 +26,8 @@ import {
   VALID_CHARACTERS_REGEX,
 } from './helpers/validation';
 import { Campaign } from './campaigns/CampaignsEditor';
+import { fetchFrontendSettings, FrontendSettingsType } from '../../utils/requests';
+import { DataFromServer } from '../../hocs/withS3Data';
 
 const styles = createStyles({
   dialogHeader: {
@@ -60,8 +62,7 @@ interface CreateTestDialogProps extends WithStyles<typeof styles> {
   existingNames: string[];
   existingNicknames: string[];
   mode: Mode;
-  testNamePrefix?: string;
-  campaigns: Campaign[];
+  testNamePrefix?: string; // set if all tests must have the same prefix
   createTest: (name: string, nickname: string) => void;
 }
 
@@ -73,7 +74,6 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
   existingNicknames,
   mode,
   testNamePrefix,
-  campaigns,
   createTest,
 }: CreateTestDialogProps) => {
   const defaultValues = {
@@ -85,13 +85,20 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
     defaultValues,
   });
 
-  const [campaign, setCampaign] = useState<string | undefined>(undefined);
+  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+  const [campaignName, setCampaignName] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    fetchFrontendSettings(FrontendSettingsType.campaigns).then((data: DataFromServer<Campaign[]>) =>
+      setCampaigns(data.value),
+    );
+  }, []);
 
   const buildPrefix = (): string => {
     if (testNamePrefix) {
       return `${testNamePrefix}__`;
-    } else if (campaign) {
-      return `${campaign}__`;
+    } else if (campaignName) {
+      return `${campaignName}__`;
     }
     return '';
   };
@@ -116,7 +123,7 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
           <FormControl className={classes.campaignSelector}>
             <InputLabel id="campaign-selector">Campaign</InputLabel>
             <Select
-              value={campaign}
+              value={campaignName}
               displayEmpty
               renderValue={(campaign): string => {
                 if (campaign === undefined) {
@@ -125,10 +132,10 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
                 return campaign as string;
               }}
               onChange={(event: React.ChangeEvent<{ value: unknown }>): void => {
-                setCampaign(event.target.value as string | undefined);
+                setCampaignName(event.target.value as string | undefined);
               }}
             >
-              <MenuItem value={undefined} key={'campaign-none'}>
+              <MenuItem value={undefined} key={'campaignName-none'}>
                 No campaign
               </MenuItem>
               {campaigns.map(campaign => (

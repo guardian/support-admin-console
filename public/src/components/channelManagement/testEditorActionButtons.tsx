@@ -162,7 +162,6 @@ const TestEditorActionButtons: React.FC<TestEditorActionButtonsProps> = ({
           existingNames={existingNames}
           existingNicknames={existingNicknames}
           testNamePrefix={testNamePrefix}
-          campaigns={[{ name: 'C1' }, { name: 'C2' }]}
           mode="COPY"
           createTest={onCopy}
         />
