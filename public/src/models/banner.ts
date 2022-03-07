@@ -5,6 +5,7 @@ import {
   Variant,
   UserCohort,
   SecondaryCta,
+  DeviceType,
 } from '../components/channelManagement/helpers/shared';
 import { Region } from '../utils/models';
 import { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';
@@ -43,4 +44,5 @@ export interface BannerTest extends Test {
   variants: BannerVariant[];
   articlesViewedSettings?: ArticlesViewedSettings;
   controlProportionSettings?: ControlProportionSettings;
+  deviceType?: DeviceType;
 }

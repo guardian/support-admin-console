@@ -16,6 +16,7 @@ import {
   AMP_EPIC_CONFIG,
   SecondaryCta,
   ContributionFrequency,
+  DeviceType,
 } from '../helpers/shared';
 import { InnerComponentProps } from '../testEditor';
 import TestsForm from '../testEditor';
@@ -89,6 +90,7 @@ export interface EpicTest extends Test {
   useLocalViewLog: boolean;
   articlesViewedSettings?: ArticlesViewedSettings;
   controlProportionSettings?: ControlProportionSettings;
+  deviceType?: DeviceType;
 }
 
 type Props = InnerComponentProps<EpicTest>;

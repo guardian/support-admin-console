@@ -1,6 +1,6 @@
 import React from 'react';
 import { Region } from '../../../utils/models';
-import { ArticlesViewedSettings, UserCohort } from '../helpers/shared';
+import { ArticlesViewedSettings, DeviceType, UserCohort } from '../helpers/shared';
 import { ARTICLE_COUNT_TEMPLATE } from '../helpers/validation';
 import { Typography } from '@material-ui/core';
 import BannerTestVariantEditor from './bannerTestVariantEditor';
@@ -128,6 +128,10 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
     updateTest({ ...test, userCohort: updatedCohort });
   };
 
+  const onDeviceTypeChange = (updatedDeviceType: DeviceType): void => {
+    updateTest({ ...test, deviceType: updatedDeviceType });
+  };
+
   const onArticlesViewedSettingsChange = (
     updatedArticlesViewedSettings?: ArticlesViewedSettings,
   ): void => {
@@ -245,8 +249,11 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
             onRegionsUpdate={onRegionsChange}
             selectedCohort={test.userCohort}
             onCohortChange={onCohortChange}
+            selectedDeviceType={test.deviceType ?? 'All'}
+            onDeviceTypeChange={onDeviceTypeChange}
             isDisabled={!editMode}
             showSupporterStatusSelector={true}
+            showDeviceTypeSelector={true}
           />
         </div>
 
