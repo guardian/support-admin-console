@@ -33,7 +33,7 @@ const useStyles = makeStyles(({ palette }: Theme) => ({
   },
 }));
 
-interface Campaign {
+export interface Campaign {
   name: string;
 }
 type Campaigns = Campaign[];
