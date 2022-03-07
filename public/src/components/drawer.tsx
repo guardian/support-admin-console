@@ -125,6 +125,11 @@ export default function NavDrawer(): React.ReactElement {
 
       <div>
         <h2 className={classes.topSectionHeader}>Channel Management</h2>
+        <Link key="Campaigns" to="/campaigns" className={classes.link}>
+          <ListItem className={classes.listItem} button key="Campaigns">
+            <ListItemText primary="Campaigns" />
+          </ListItem>
+        </Link>
         <Link key="Header" to="/header-tests" className={classes.link}>
           <ListItem className={classes.listItem} button key="Header">
             <ListItemText primary="Header" />
@@ -175,11 +180,6 @@ export default function NavDrawer(): React.ReactElement {
         <Link key="Channel Switches" to="/channel-switches" className={classes.link}>
           <ListItem className={classes.listItem} button key="Channel Switches">
             <ListItemText primary="Channel Switches" />
-          </ListItem>
-        </Link>
-        <Link key="Campaigns" to="/campaigns" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Campaigns">
-            <ListItemText primary="Campaigns" />
           </ListItem>
         </Link>
       </div>
