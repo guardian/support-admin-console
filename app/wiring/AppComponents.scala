@@ -82,6 +82,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     new BannerDeployController(authAction, controllerComponents, stage, runtime),
     new BannerDeployController2(authAction, controllerComponents, stage, runtime),
     new ChannelSwitchesController(authAction, controllerComponents, stage, runtime),
+    new CampaignsController(authAction, controllerComponents, stage, runtime),
     new CapiController(authAction, capiService),
     assets
   )

@@ -18,6 +18,7 @@ export enum FrontendSettingsType {
   bannerDeploy = 'banner-deploy',
   bannerDeploy2 = 'banner-deploy2',
   channelSwitches = 'channel-switches',
+  campaigns = 'campaigns',
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
