@@ -22,7 +22,8 @@ export enum BannerTemplate {
 
 export interface BannerContent {
   heading?: string;
-  messageText: string;
+  messageText?: string;
+  paragraphs: string[];
   highlightedText?: string;
   cta?: Cta;
   secondaryCta?: SecondaryCta;

@@ -23,7 +23,8 @@ object BannerTemplate extends Enum[BannerTemplate] with CirceEnum[BannerTemplate
 
 case class BannerContent(
   heading: Option[String],
-  messageText: String,
+  paragraphs: Option[List[String]],
+  messageText: Option[String],
   highlightedText: Option[String],
   cta: Option[Cta],
   secondaryCta: Option[SecondaryCta]
