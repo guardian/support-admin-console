@@ -48,6 +48,7 @@ const styles = ({ palette, spacing }: Theme) =>
 interface StickyBottomBarProps extends WithStyles<typeof styles> {
   isInEditMode: boolean;
   selectedTestName: string | null;
+  editedTestName: string | null;
   lockStatus: LockStatus;
   requestTakeControl: () => void;
   requestLock: () => void;
@@ -59,6 +60,7 @@ const StickyBottomBar: React.FC<StickyBottomBarProps> = ({
   classes,
   isInEditMode,
   selectedTestName,
+  editedTestName,
   lockStatus,
   requestTakeControl,
   requestLock,
@@ -76,7 +78,7 @@ const StickyBottomBar: React.FC<StickyBottomBarProps> = ({
         <StickyBottomBarStatus isInEditMode={isInEditMode} isLocked={lockStatus.locked} />
         <StickyBottomBarDetail
           isInEditMode={isInEditMode}
-          selectedTestName={selectedTestName}
+          editedTestName={editedTestName}
           lockStatus={lockStatus}
         />
       </div>
@@ -84,7 +86,7 @@ const StickyBottomBar: React.FC<StickyBottomBarProps> = ({
       <div className={classes.actionButtonContainer}>
         <StickyBottomBarActionButtons
           isInEditMode={isInEditMode}
-          hasTestSelected={selectedTestName !== undefined}
+          selectedTestIsBeingEdited={!!editedTestName && selectedTestName === editedTestName}
           isLocked={lockStatus.locked}
           requestTakeControl={requestTakeControl}
           requestLock={requestLock}

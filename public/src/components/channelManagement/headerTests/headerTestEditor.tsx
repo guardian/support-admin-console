@@ -1,7 +1,7 @@
 import React from 'react';
 import { Region } from '../../../utils/models';
 
-import { UserCohort } from '../helpers/shared';
+import { DeviceType, UserCohort } from '../helpers/shared';
 
 import { Typography } from '@material-ui/core';
 import HeaderTestVariantEditor from './headerTestVariantEditor';
@@ -23,7 +23,6 @@ import { useStyles } from '../helpers/testEditorStyles';
 
 interface HeaderTestEditorProps {
   test: HeaderTest;
-  hasChanged: boolean;
   onChange: (updatedTest: HeaderTest) => void;
   onValidationChange: (isValid: boolean) => void;
   visible: boolean;
@@ -90,6 +89,10 @@ const HeaderTestEditor: React.FC<HeaderTestEditorProps> = ({
 
   const onCohortChange = (updatedCohort: UserCohort): void => {
     updateTest({ ...test, userCohort: updatedCohort });
+  };
+
+  const onDeviceTypeChange = (updatedDeviceType: DeviceType): void => {
+    updateTest({ ...test, deviceType: updatedDeviceType });
   };
 
   const onCopy = (name: string, nickname: string): void => {
@@ -187,8 +190,11 @@ const HeaderTestEditor: React.FC<HeaderTestEditorProps> = ({
             onRegionsUpdate={onRegionsChange}
             selectedCohort={test.userCohort}
             onCohortChange={onCohortChange}
+            selectedDeviceType={test.deviceType ?? 'All'}
+            onDeviceTypeChange={onDeviceTypeChange}
             isDisabled={!editMode}
             showSupporterStatusSelector={true}
+            showDeviceTypeSelector={true}
           />
         </div>
 

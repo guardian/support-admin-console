@@ -20,7 +20,7 @@ const getBannerTestsForm = (isFirstChannel: boolean): React.FC<Props> => {
   const BannerTestsForm: React.FC<Props> = ({
     tests,
     selectedTestName,
-    selectedTestHasBeenModified,
+    editedTestName,
     onTestChange,
     onTestPriorityChange,
     onTestSelected,
@@ -40,14 +40,11 @@ const getBannerTestsForm = (isFirstChannel: boolean): React.FC<Props> => {
     setRegionFilter,
   }: Props) => {
     const createTest = (name: string, nickname: string): void => {
-      if (selectedTestHasBeenModified) {
-        alert('Please either save or discard before creating a test.');
-      } else {
-        onTestCreate(createDefaultBannerTest(name, nickname));
-      }
+      onTestCreate(createDefaultBannerTest(name, nickname));
     };
 
     const selectedTest = tests.find(t => t.name === selectedTestName);
+    const selectedTestIsBeingEdited = selectedTestName === editedTestName;
 
     return (
       <TestsFormLayout
@@ -55,6 +52,7 @@ const getBannerTestsForm = (isFirstChannel: boolean): React.FC<Props> => {
           <Sidebar<BannerTest>
             tests={tests}
             selectedTestName={selectedTestName}
+            editedTestName={editedTestName}
             onTestPriorityChange={onTestPriorityChange}
             onTestSelected={onTestSelected}
             createTest={createTest}
@@ -70,11 +68,10 @@ const getBannerTestsForm = (isFirstChannel: boolean): React.FC<Props> => {
           selectedTestName && selectedTest ? (
             <BannerTestEditor
               test={selectedTest}
-              hasChanged={selectedTestHasBeenModified}
               onChange={onTestChange}
               onValidationChange={onTestErrorStatusChange}
               visible
-              editMode={editMode}
+              editMode={editMode && selectedTestIsBeingEdited}
               onDelete={onTestDelete}
               onArchive={onTestArchive}
               onTestSelected={onTestSelected}
@@ -87,6 +84,7 @@ const getBannerTestsForm = (isFirstChannel: boolean): React.FC<Props> => {
           ) : null
         }
         selectedTestName={selectedTestName}
+        editedTestName={editedTestName}
         lockStatus={lockStatus}
         requestTakeControl={requestTakeControl}
         requestLock={requestLock}

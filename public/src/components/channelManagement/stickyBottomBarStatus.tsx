@@ -17,7 +17,7 @@ interface StickyBottomBarStatusProps extends WithStyles<typeof styles> {
 
 const LOCKED_TEXT = 'Locked for editing';
 const READ_ONLY_MODE_TEXT = 'Read only mode';
-const EDIT_MODE_TEXT = 'Edit mode';
+const EDIT_MODE_TEXT = 'Editing';
 
 const StickyBottomBarStatus: React.FC<StickyBottomBarStatusProps> = ({
   classes,

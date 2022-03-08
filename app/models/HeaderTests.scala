@@ -27,7 +27,8 @@ case class HeaderTest(
   locations: List[Region] = Nil,
   userCohort: Option[UserCohort] = None,
   variants: List[HeaderVariant],
-  controlProportionSettings: Option[ControlProportionSettings] = None
+  controlProportionSettings: Option[ControlProportionSettings] = None,
+  deviceType: Option[DeviceType] = None
 )
 
 case class HeaderTests(tests: List[HeaderTest])

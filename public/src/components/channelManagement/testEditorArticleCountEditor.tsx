@@ -105,14 +105,14 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
             value="disabled"
             key="disabled"
             control={<Radio />}
-            label="Do not show user's article count"
+            label="Do not target by user's article count"
             disabled={isDisabled}
           />
           <FormControlLabel
             value="enabled"
             key="enabled"
             control={<Radio />}
-            label="Show user's article count"
+            label="Target by user's article count"
             disabled={isDisabled}
           />
         </RadioGroup>

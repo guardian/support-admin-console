@@ -125,6 +125,11 @@ export default function NavDrawer(): React.ReactElement {
 
       <div>
         <h2 className={classes.topSectionHeader}>Channel Management</h2>
+        <Link key="Campaigns" to="/campaigns" className={classes.link}>
+          <ListItem className={classes.listItem} button key="Campaigns">
+            <ListItemText primary="Campaigns" />
+          </ListItem>
+        </Link>
         <Link key="Header" to="/header-tests" className={classes.link}>
           <ListItem className={classes.listItem} button key="Header">
             <ListItemText primary="Header" />

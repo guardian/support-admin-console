@@ -6,6 +6,7 @@ import {
   Theme,
   Typography,
   makeStyles,
+  Switch,
 } from '@material-ui/core';
 import BannerTestVariantEditorCtasEditor from './bannerTestVariantEditorCtasEditor';
 import {
@@ -54,6 +55,18 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   buttonsContainer: {
     marginTop: spacing(2),
   },
+  switchContainer: {
+    display: 'flex',
+    alignItems: 'center',
+
+    '& > * + *': {
+      marginLeft: spacing(1),
+    },
+  },
+  switchLabel: {
+    fontSize: '14px',
+    fontWeight: 500,
+  },
 }));
 
 const HEADER_DEFAULT_HELPER_TEXT = 'Assitive text';
@@ -84,6 +97,12 @@ interface BannerTestVariantContentEditorProps {
   onValidationChange: (isValid: boolean) => void;
   editMode: boolean;
   deviceType: DeviceType;
+}
+
+interface FormData {
+  heading?: string;
+  body: string;
+  highlightedText?: string;
 }
 
 const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorProps> = ({
@@ -199,8 +218,6 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
     return HIGHTLIGHTED_TEXT_HELPER_TEXT;
   };
 
-  console.log(content);
-
   return (
     <>
       <Typography className={classes.sectionHeader} variant="h4">
@@ -281,14 +298,6 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
   const classes = useStyles();
   const setValidationStatusForField = useValidation(onValidationChange);
 
-  const content: BannerContent = variant.bannerContent || {
-    heading: variant.heading,
-    paragraphs: variant.body || '',
-    highlightedText: variant.highlightedText,
-    cta: variant.cta,
-    secondaryCta: variant.secondaryCta,
-  };
-
   const onMobileContentRadioChange = (): void => {
     if (variant.mobileBannerContent === undefined) {
       onVariantChange({
@@ -312,15 +321,20 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
           Banner template
         </Typography>
         <BannerTemplateSelector
-          variant={variant}
-          onVariantChange={onVariantChange}
+          template={variant.template}
+          onTemplateChange={(template): void =>
+            onVariantChange({
+              ...variant,
+              template,
+            })
+          }
           editMode={editMode}
         />
       </div>
 
       <div className={classes.sectionContainer}>
         <BannerTestVariantContentEditor
-          content={content}
+          content={variant.bannerContent}
           template={variant.template}
           onChange={(updatedContent: BannerContent): void =>
             onVariantChange({ ...variant, bannerContent: updatedContent })
@@ -365,6 +379,23 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
             deviceType={'MOBILE'}
           />
         )}
+      </div>
+      <div className={classes.sectionContainer}>
+        <Typography className={classes.sectionHeader} variant="h4">
+          Separate article count (displayed only for users with at least 5 article views)
+        </Typography>
+
+        <div className={classes.switchContainer}>
+          <Typography className={classes.switchLabel}>Disabled</Typography>
+          <Switch
+            checked={!!variant.separateArticleCount}
+            onChange={(e): void =>
+              onVariantChange({ ...variant, separateArticleCount: e.target.checked })
+            }
+            disabled={!editMode}
+          />
+          <Typography className={classes.switchLabel}>Enabled</Typography>
+        </div>
       </div>
     </div>
   );

@@ -18,8 +18,6 @@ object BannerTemplate extends Enum[BannerTemplate] with CirceEnum[BannerTemplate
   case object GuardianWeeklyBanner extends BannerTemplate
   case object InvestigationsMomentBanner extends BannerTemplate
   case object EnvironmentMomentBanner extends BannerTemplate
-  case object UsEoyMomentBanner extends BannerTemplate
-  case object UsEoyMomentGivingTuesdayBanner extends BannerTemplate
   case object GlobalNewYearBanner extends BannerTemplate
 }
 
@@ -37,13 +35,7 @@ case class BannerVariant(
   template: BannerTemplate,
   bannerContent: Option[BannerContent],
   mobileBannerContent: Option[BannerContent],
-
-  // Deprecated - use bannerContent / mobileBannerContent
-  heading: Option[String],
-  body: Option[String],
-  highlightedText: Option[String],
-  cta: Option[Cta],
-  secondaryCta: Option[Cta]
+  separateArticleCount: Option[Boolean]
 )
 
 case class BannerTest(
@@ -55,7 +47,8 @@ case class BannerTest(
   locations: List[Region] = Nil,
   variants: List[BannerVariant],
   articlesViewedSettings: Option[ArticlesViewedSettings] = None,
-  controlProportionSettings: Option[ControlProportionSettings] = None
+  controlProportionSettings: Option[ControlProportionSettings] = None,
+  deviceType: Option[DeviceType] = None
 )
 
 case class BannerTests(tests: List[BannerTest])

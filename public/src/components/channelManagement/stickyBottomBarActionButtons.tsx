@@ -52,7 +52,7 @@ const SAVE_BUTTON_TEST_NOT_SELECTED_TEXT = 'Save changes';
 
 interface StickyBottomBarActionButtonsProps extends WithStyles<typeof styles> {
   isInEditMode: boolean;
-  hasTestSelected: boolean;
+  selectedTestIsBeingEdited: boolean;
   isLocked: boolean;
   requestTakeControl: () => void;
   requestLock: () => void;
@@ -63,7 +63,7 @@ interface StickyBottomBarActionButtonsProps extends WithStyles<typeof styles> {
 const StickyBottomBarActionButtons: React.FC<StickyBottomBarActionButtonsProps> = ({
   classes,
   isInEditMode,
-  hasTestSelected,
+  selectedTestIsBeingEdited,
   isLocked,
   requestTakeControl,
   requestLock,
@@ -125,7 +125,9 @@ const StickyBottomBarActionButtons: React.FC<StickyBottomBarActionButtonsProps> 
     >
       {/*eslint-disable-next-line react/prop-types */}
       <Typography className={classes.buttonText}>
-        {hasTestSelected ? SAVE_BUTTON_TEST_SELECTED_TEXT : SAVE_BUTTON_TEST_NOT_SELECTED_TEXT}
+        {selectedTestIsBeingEdited
+          ? SAVE_BUTTON_TEST_SELECTED_TEXT
+          : SAVE_BUTTON_TEST_NOT_SELECTED_TEXT}
       </Typography>
     </Button>
   );
@@ -189,16 +191,8 @@ const StickyBottomBarActionButtons: React.FC<StickyBottomBarActionButtonsProps> 
 
       <div className={classes.rightContainer}>
         {isInEditMode ? (
-          hasTestSelected ? (
-            // Edit mode + test selected
-            <>
-              {/* <PreviewButton /> */}
-              <SaveButton />
-            </>
-          ) : (
-            // Edit mode + no test selected
-            <SaveButton />
-          )
+          // Edit mode
+          <SaveButton />
         ) : isLocked ? (
           // Read only mode + locked
           <TakeControlButton />

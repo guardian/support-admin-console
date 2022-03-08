@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Button,
@@ -12,6 +12,10 @@ import {
   WithStyles,
   withStyles,
   InputAdornment,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
@@ -21,6 +25,9 @@ import {
   INVALID_CHARACTERS_ERROR_HELPER_TEXT,
   VALID_CHARACTERS_REGEX,
 } from './helpers/validation';
+import { Campaign } from './campaigns/CampaignsEditor';
+import { fetchFrontendSettings, FrontendSettingsType } from '../../utils/requests';
+import { DataFromServer } from '../../hocs/withS3Data';
 
 const styles = createStyles({
   dialogHeader: {
@@ -33,6 +40,10 @@ const styles = createStyles({
     '& input': {
       textTransform: 'uppercase !important',
     },
+  },
+  campaignSelector: {
+    marginBottom: '20px',
+    minWidth: '200px',
   },
 });
 
@@ -51,7 +62,7 @@ interface CreateTestDialogProps extends WithStyles<typeof styles> {
   existingNames: string[];
   existingNicknames: string[];
   mode: Mode;
-  testNamePrefix?: string;
+  testNamePrefix?: string; // set if all tests must have the same prefix
   createTest: (name: string, nickname: string) => void;
 }
 
@@ -74,8 +85,26 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
     defaultValues,
   });
 
+  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+  const [campaignName, setCampaignName] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    fetchFrontendSettings(FrontendSettingsType.campaigns).then((data: DataFromServer<Campaign[]>) =>
+      setCampaigns(data.value),
+    );
+  }, []);
+
+  const buildPrefix = (): string => {
+    if (testNamePrefix) {
+      return `${testNamePrefix}__`;
+    } else if (campaignName) {
+      return `${campaignName}__`;
+    }
+    return '';
+  };
+
   const onSubmit = ({ name, nickname }: FormData): void => {
-    createTest(`${testNamePrefix || ''}${name}`.toUpperCase(), nickname.toUpperCase());
+    createTest(`${buildPrefix()}${name}`.toUpperCase(), nickname.toUpperCase());
     close();
   };
 
@@ -90,6 +119,33 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
         </IconButton>
       </div>
       <DialogContent dividers>
+        {testNamePrefix === undefined && (
+          <FormControl className={classes.campaignSelector}>
+            <InputLabel id="campaign-selector">Campaign</InputLabel>
+            <Select
+              value={campaignName}
+              displayEmpty
+              renderValue={(campaign): string => {
+                if (campaign === undefined) {
+                  return ''; // triggers the displayEmpty behaviour
+                }
+                return campaign as string;
+              }}
+              onChange={(event: React.ChangeEvent<{ value: unknown }>): void => {
+                setCampaignName(event.target.value as string | undefined);
+              }}
+            >
+              <MenuItem value={undefined} key={'campaignName-none'}>
+                No campaign
+              </MenuItem>
+              {campaigns.map(campaign => (
+                <MenuItem value={campaign.name} key={`campaign-${campaign.name}`}>
+                  {campaign.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        )}
         <TextField
           className={classes.input}
           inputRef={register({
@@ -98,7 +154,7 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
               value: VALID_CHARACTERS_REGEX,
               message: INVALID_CHARACTERS_ERROR_HELPER_TEXT,
             },
-            validate: createDuplicateValidator(existingNames, testNamePrefix),
+            validate: createDuplicateValidator(existingNames, buildPrefix()),
           })}
           error={errors.name !== undefined}
           helperText={errors.name ? errors.name.message : NAME_DEFAULT_HELPER_TEXT}
@@ -107,9 +163,7 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
           margin="normal"
           variant="outlined"
           InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">{testNamePrefix || ''}</InputAdornment>
-            ),
+            startAdornment: <InputAdornment position="start">{buildPrefix()}</InputAdornment>,
           }}
           autoFocus
           fullWidth

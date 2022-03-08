@@ -1,6 +1,6 @@
 import React from 'react';
 import { Region } from '../../../utils/models';
-import { ArticlesViewedSettings, UserCohort } from '../helpers/shared';
+import { ArticlesViewedSettings, DeviceType, UserCohort } from '../helpers/shared';
 import { ARTICLE_COUNT_TEMPLATE } from '../helpers/validation';
 import { Typography } from '@material-ui/core';
 import BannerTestVariantEditor from './bannerTestVariantEditor';
@@ -47,7 +47,6 @@ const checkIfTestCopyIncludesTemplate = (test: BannerTest, template: string): bo
 
 interface BannerTestEditorProps {
   test: BannerTest;
-  hasChanged: boolean;
   onChange: (updatedTest: BannerTest) => void;
   onValidationChange: (isValid: boolean) => void;
   visible: boolean;
@@ -141,6 +140,10 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
 
   const onCohortChange = (updatedCohort: UserCohort): void => {
     updateTest({ ...test, userCohort: updatedCohort });
+  };
+
+  const onDeviceTypeChange = (updatedDeviceType: DeviceType): void => {
+    updateTest({ ...test, deviceType: updatedDeviceType });
   };
 
   const onArticlesViewedSettingsChange = (
@@ -260,8 +263,11 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
             onRegionsUpdate={onRegionsChange}
             selectedCohort={test.userCohort}
             onCohortChange={onCohortChange}
+            selectedDeviceType={test.deviceType ?? 'All'}
+            onDeviceTypeChange={onDeviceTypeChange}
             isDisabled={!editMode}
             showSupporterStatusSelector={true}
+            showDeviceTypeSelector={true}
           />
         </div>
 

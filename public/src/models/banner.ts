@@ -5,6 +5,7 @@ import {
   Variant,
   UserCohort,
   SecondaryCta,
+  DeviceType,
 } from '../components/channelManagement/helpers/shared';
 import { Region } from '../utils/models';
 import { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';
@@ -16,8 +17,6 @@ export enum BannerTemplate {
   GuardianWeeklyBanner = 'GuardianWeeklyBanner',
   InvestigationsMomentBanner = 'InvestigationsMomentBanner',
   EnvironmentMomentBanner = 'EnvironmentMomentBanner',
-  UsEoyMomentBanner = 'UsEoyMomentBanner',
-  UsEoyMomentGivingTuesdayBanner = 'UsEoyMomentGivingTuesdayBanner',
   GlobalNewYearBanner = 'GlobalNewYearBanner',
 }
 
@@ -33,13 +32,7 @@ export interface BannerVariant extends Variant {
   template: BannerTemplate;
   bannerContent: BannerContent;
   mobileBannerContent?: BannerContent;
-
-  // Deprecated - use bannerContent / mobileBannerContent
-  heading?: string;
-  body?: string;
-  highlightedText?: string;
-  cta?: Cta;
-  secondaryCta?: Cta;
+  separateArticleCount?: boolean;
 }
 
 export interface BannerTest extends Test {
@@ -52,4 +45,5 @@ export interface BannerTest extends Test {
   variants: BannerVariant[];
   articlesViewedSettings?: ArticlesViewedSettings;
   controlProportionSettings?: ControlProportionSettings;
+  deviceType?: DeviceType;
 }

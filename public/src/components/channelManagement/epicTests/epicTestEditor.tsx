@@ -1,7 +1,12 @@
 import React from 'react';
 import { Region } from '../../../utils/models';
 import { EpicTest, EpicVariant, MaxEpicViews } from './epicTestsForm';
-import { ArticlesViewedSettings, UserCohort, EpicEditorConfig } from '../helpers/shared';
+import {
+  ArticlesViewedSettings,
+  UserCohort,
+  EpicEditorConfig,
+  DeviceType,
+} from '../helpers/shared';
 import { FormControlLabel, Switch, Typography } from '@material-ui/core';
 import TestEditorHeader from '../testEditorHeader';
 import TestVariantsEditor from '../testVariantsEditor';
@@ -36,7 +41,6 @@ const copyHasTemplate = (test: EpicTest, template: string): boolean =>
 
 interface EpicTestEditorProps {
   test: EpicTest;
-  hasChanged: boolean;
   epicEditorConfig: EpicEditorConfig;
   onChange: (updatedTest: EpicTest) => void;
   onValidationChange: (isValid: boolean) => void;
@@ -152,6 +156,10 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
 
   const onCohortChange = (updatedCohort: UserCohort): void => {
     updateTest({ ...test, userCohort: updatedCohort });
+  };
+
+  const onDeviceTypeChange = (updatedDeviceType: DeviceType): void => {
+    updateTest({ ...test, deviceType: updatedDeviceType });
   };
 
   const onArticlesViewedSettingsChange = (
@@ -311,8 +319,11 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
             selectedCohort={test.userCohort}
             onCohortChange={onCohortChange}
             supportedRegions={epicEditorConfig.supportedRegions}
+            selectedDeviceType={test.deviceType ?? 'All'}
+            onDeviceTypeChange={onDeviceTypeChange}
             isDisabled={!editMode}
             showSupporterStatusSelector={epicEditorConfig.allowSupporterStatusTargeting}
+            showDeviceTypeSelector={epicEditorConfig.allowDeviceTypeTargeting}
           />
         </div>
       )}

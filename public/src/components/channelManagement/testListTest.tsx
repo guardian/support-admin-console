@@ -6,6 +6,7 @@ import TestListTestLiveLabel from './testListTestLiveLabel';
 import TestListTestName from './testListTestName';
 import TestListTestArticleCountLabel from './testListTestArticleCountLabel';
 import useHover from '../../hooks/useHover';
+import EditIcon from '@material-ui/icons/Edit';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const styles = ({ palette }: Theme) =>
@@ -54,11 +55,15 @@ const styles = ({ palette }: Theme) =>
         marginLeft: '4px',
       },
     },
+    whitePencil: {
+      color: 'white',
+    },
   });
 
 interface TestListTestProps extends WithStyles<typeof styles> {
   test: Test;
   isSelected: boolean;
+  isEdited: boolean;
   onClick: () => void;
 }
 
@@ -66,6 +71,7 @@ const TestListTest: React.FC<TestListTestProps> = ({
   classes,
   test,
   isSelected,
+  isEdited,
   onClick,
 }: TestListTestProps) => {
   const hasArticleCount = test.articlesViewedSettings !== undefined;
@@ -83,6 +89,7 @@ const TestListTest: React.FC<TestListTestProps> = ({
   return (
     <ListItem className={containerClasses.join(' ')} button={true} onClick={onClick} ref={ref}>
       <div className={classes.labelAndNameContainer}>
+        {isEdited && (isSelected ? <EditIcon className={classes.whitePencil} /> : <EditIcon />)}
         <TestListTestLiveLabel isLive={test.isOn} shouldInvertColor={shouldInvertColor} />
         <TestListTestName
           name={test.name}

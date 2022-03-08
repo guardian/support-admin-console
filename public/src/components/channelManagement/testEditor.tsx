@@ -16,7 +16,7 @@ import { RegionsAndAll } from '../../utils/models';
 export interface InnerComponentProps<T extends Test> {
   tests: T[];
   selectedTestName: string | null;
-  selectedTestHasBeenModified: boolean;
+  editedTestName: string | null;
   onTestChange: (updatedTest: T) => void;
   onTestSave: () => void;
   onTestDelete: () => void;
@@ -85,8 +85,8 @@ const TestEditor = <T extends Test>(
     const [version, setVersion] = useState<string | null>(null);
     const [editMode, setEditMode] = useState<boolean>(false);
     const [selectedTestName, setSelectedTestName] = useState<string | null>(null);
-    const [selectedTestIsValid, setSelectedTestIsValid] = useState<boolean>(true);
-    const [selectedTestHasBeenModified, setSelectedTestHasBeenModified] = useState<boolean>(true);
+    const [editedTestName, setEditedTestName] = useState<string | null>(null);
+    const [editedTestIsValid, setEditedTestIsValid] = useState<boolean>(true);
     const [lockStatus, setLockStatus] = useState<LockStatus>({ locked: false });
 
     const [regionFilter, setRegionFilter] = useState<RegionsAndAll>('ALL');
@@ -101,8 +101,13 @@ const TestEditor = <T extends Test>(
         setVersion(serverData.version);
         setEditMode(editMode);
         setLockStatus(serverData.status);
-        setSelectedTestIsValid(true);
-        setSelectedTestHasBeenModified(false);
+        setEditedTestIsValid(true);
+
+        if (editMode && selectedTestName) {
+          setEditedTestName(selectedTestName);
+        } else {
+          setEditedTestName(null);
+        }
       });
     };
 
@@ -145,7 +150,7 @@ const TestEditor = <T extends Test>(
         return;
       }
 
-      if (!selectedTestIsValid) {
+      if (!editedTestIsValid) {
         alert('Test contains errors. Please fix any errors before saving.');
         return;
       }
@@ -161,8 +166,8 @@ const TestEditor = <T extends Test>(
 
       save(updatedTests).then(() => {
         setSelectedTestName(null);
-        setSelectedTestIsValid(true);
-        setSelectedTestHasBeenModified(false);
+        setEditedTestIsValid(true);
+        setEditedTestName(null);
       });
     };
 
@@ -185,8 +190,8 @@ const TestEditor = <T extends Test>(
 
           save(updatedTests).then(() => {
             setSelectedTestName(null);
-            setSelectedTestIsValid(true);
-            setSelectedTestHasBeenModified(false);
+            setEditedTestIsValid(true);
+            setEditedTestName(null);
           });
         }
       });
@@ -231,11 +236,13 @@ const TestEditor = <T extends Test>(
       const updatedTests = tests.map(test => (test.name === updatedTest.name ? updatedTest : test));
 
       setTests(updatedTests);
-      setSelectedTestHasBeenModified(true);
+      if (editMode) {
+        setEditedTestName(updatedTest.name);
+      }
     };
 
     const onTestErrorStatusChange = (isValid: boolean): void => {
-      setSelectedTestIsValid(isValid);
+      setEditedTestIsValid(isValid);
     };
 
     const onTestCreate = (newTest: T): void => {
@@ -243,8 +250,8 @@ const TestEditor = <T extends Test>(
 
       setTests(updatedTests);
       setSelectedTestName(newTest.name);
-      setSelectedTestHasBeenModified(false);
-      setSelectedTestIsValid(true);
+      setEditedTestName(newTest.name);
+      setEditedTestIsValid(true);
     };
 
     const onTestPriorityChange = (newPriority: number, oldPriority: number): void => {
@@ -261,11 +268,11 @@ const TestEditor = <T extends Test>(
     };
 
     const onSelectedTestName = (testName: string): void => {
-      if (selectedTestHasBeenModified) {
-        alert('Please either save or discard before selecting another test.');
-      } else {
-        setSelectedTestName(testName);
+      if (editMode && !selectedTestName) {
+        // No test was previously selected, start editing this one
+        setEditedTestName(testName);
       }
+      setSelectedTestName(testName);
     };
 
     const requestTestsLock = (): void => {
@@ -287,7 +294,7 @@ const TestEditor = <T extends Test>(
             <InnerComponent
               tests={tests}
               selectedTestName={selectedTestName}
-              selectedTestHasBeenModified={selectedTestHasBeenModified}
+              editedTestName={editedTestName}
               onTestChange={onTestChange}
               onTestErrorStatusChange={onTestErrorStatusChange}
               onTestPriorityChange={onTestPriorityChange}
