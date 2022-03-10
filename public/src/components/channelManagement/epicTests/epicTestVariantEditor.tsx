@@ -20,7 +20,7 @@ import {
   MAXLENGTH_ERROR_HELPER_TEXT,
   templateValidatorForPlatform,
 } from '../helpers/validation';
-import RichTextEditor, { getRteCopyLength } from '../richTextEditor';
+import {RichTextEditor, getRteCopyLength, RichTextEditorSingleLine} from '../richTextEditor';
 import VariantEditorSeparateArticleCountEditor from '../variantEditorSeparateArticleCountEditor';
 
 // CSS
@@ -75,11 +75,11 @@ interface EpicTestVariantEditorProps {
 }
 
 interface EpicTestMuiTextFields {
-  heading: (string | undefined)[];
+  heading: string | undefined;
   paragraphs: string[];
-  highlightedText: (string | undefined)[];
+  highlightedText: string | undefined;
   backgroundImageUrl: string | undefined;
-  footer: (string | undefined)[];
+  footer: string | undefined;
 }
 
 // Component function
@@ -96,11 +96,11 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   const templateValidator = templateValidatorForPlatform('DOTCOM');
 
   const defaultValues: EpicTestMuiTextFields = {
-    heading: [variant.heading] || [],
+    heading: variant.heading || '',
     paragraphs: variant.paragraphs || [],
-    highlightedText: [variant.highlightedText] || [],
+    highlightedText: variant.highlightedText || '',
     backgroundImageUrl: variant.backgroundImageUrl || '',
-    footer: [variant.footer] || [],
+    footer: variant.footer || '',
   };
 
   const { register, handleSubmit, control, errors, trigger } = useForm<EpicTestMuiTextFields>({
@@ -132,11 +132,11 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   }: EpicTestMuiTextFields): void => {
     onVariantChange({
       ...variant,
-      heading: heading != null ? heading.join(' ') : undefined,
+      heading,
       paragraphs,
-      highlightedText: highlightedText != null ? highlightedText.join(' ') : undefined,
-      backgroundImageUrl: backgroundImageUrl || undefined,
-      footer: footer != null ? footer.join(' ') : undefined,
+      highlightedText,
+      backgroundImageUrl,
+      footer,
     });
   };
 
@@ -191,7 +191,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
           }}
           render={data => {
             return (
-              <RichTextEditor
+              <RichTextEditorSingleLine
                 error={errors.heading !== undefined}
                 helperText={errors.heading ? errors.heading.message : HEADER_DEFAULT_HELPER_TEXT}
                 copyData={data.value}
@@ -242,7 +242,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
           }}
           render={data => {
             return (
-              <RichTextEditor
+              <RichTextEditorSingleLine
                 error={errors.highlightedText !== undefined}
                 helperText={
                   errors.highlightedText
@@ -289,7 +289,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
           }}
           render={data => {
             return (
-              <RichTextEditor
+              <RichTextEditorSingleLine
                 error={errors.footer !== undefined}
                 helperText={errors.footer ? errors.footer.message : FOOTER_DEFAULT_HELPER_TEXT}
                 copyData={data.value}
