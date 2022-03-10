@@ -25,11 +25,10 @@ import {
   useUpdateReason,
 } from '@remirror/react';
 
-import { createStyles, WithStyles, withStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 
 // CSS
-// Note that ReMirror/ProseMirror CSS has been added to the /src/style.css file
-const styles = createStyles({
+const useStyles = makeStyles(() => ({
   fieldLabel: {
     display: 'inline-block',
     fontSize: '85%',
@@ -46,20 +45,20 @@ const styles = createStyles({
     backgroundColor: 'rgba(255 255 0 / 1)',
     margin: '0.5em 0 0 1.5em',
   },
-});
+}));
 
 // Typescript
-interface RichTextEditorProps extends WithStyles<typeof styles> {
+interface RichTextEditorProps<T> {
   disabled: boolean;
   label?: string;
   helperText?: string;
   name?: string;
   error: boolean;
-  updateCopy: (item?: string[]) => void;
-  copyData?: string | string[];
+  updateCopy: (item?: T) => void;
+  copyData?: T;
 }
 
-interface RichTextMenuProps extends WithStyles<typeof styles> {
+interface RichTextMenuProps {
   disabled: boolean;
   label: string | undefined;
 }
@@ -226,11 +225,8 @@ const FloatingLinkToolbar = () => {
 };
 
 // ReMirror/ProseMirror TOP MENU BUTTONS
-const RichTextMenu: React.FC<RichTextMenuProps> = ({
-  classes,
-  disabled,
-  label,
-}: RichTextMenuProps) => {
+const RichTextMenu: React.FC<RichTextMenuProps> = ({ disabled, label }: RichTextMenuProps) => {
+  const classes = useStyles();
   const chain = useChainedCommands();
   const active = useActive();
 
@@ -302,7 +298,7 @@ const parseCopyForParagraphs = (copy: string[]): string => {
   return res;
 };
 
-export const getRteCopyLength = (copy: string[]): number => {
+const getRteCopyLength = (copy: string[]): number => {
   let paragraphsCheck = copy.join('');
 
   paragraphsCheck = paragraphsCheck.replace(/<.*?>/g, '');
@@ -314,8 +310,7 @@ export const getRteCopyLength = (copy: string[]): number => {
 };
 
 // Component function
-const RichTextEditor: React.FC<RichTextEditorProps> = ({
-  classes,
+const RichTextEditor: React.FC<RichTextEditorProps<string[]>> = ({
   disabled,
   label,
   helperText,
@@ -323,13 +318,12 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
   error,
   updateCopy,
   copyData,
-}: RichTextEditorProps) => {
+}: RichTextEditorProps<string[]>) => {
+  const classes = useStyles();
+
   // Make sure the supplied copy is in an Array, for processing
   if (copyData == null) {
     copyData = [];
-  }
-  if (!Array.isArray(copyData)) {
-    copyData = [copyData];
   }
 
   const hooks = [
@@ -355,10 +349,6 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
 
           const paragraphsCopy = paragraphs.map(p => p.innerHTML);
 
-          // Get rid of unwanted markup created by ProseMirror
-          paragraphsCopy.forEach((p, index) => {
-            paragraphsCopy[index] = p.replace('<br class="ProseMirror-trailingBreak">', '');
-          });
           updateCopy(paragraphsCopy);
           return true;
         },
@@ -381,45 +371,13 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
     stringHandler: 'html',
   });
 
-  // // Handle to the ProseMirror <div> element containing all the RTE text
-  // let ref: HTMLDivElement | null = document.createElement('div');
-  // useEffect(() => {
-  //   ref = document.querySelector(`#RTE-${name} .ProseMirror`);
-  // });
-
-  // // Helper function - extracts copy from an array of HTML child elements
-  // const blurAction = () => {
-  //   if (name && ref != null && !disabled) {
-  //     const elements = Array.from(ref.children);
-
-  //     const paragraphs = elements.filter(p => {
-  //       if (p == null) {
-  //         return false;
-  //       }
-  //       if (p.tagName === 'P') {
-  //         return true;
-  //       }
-  //       return false;
-  //     });
-
-  //     const paragraphsCopy = paragraphs.map(p => p.innerHTML);
-
-  //     // Get rid of unwanted markup created by ProseMirror
-  //     paragraphsCopy.forEach((p, index) => {
-  //       paragraphsCopy[index] = p.replace('<br class="ProseMirror-trailingBreak">', '');
-  //     });
-
-  //     updateCopy(paragraphsCopy);
-  //   }
-  // };
-
   // Control the look of the ReMirror RTE dependant on whether the user is in Edit or Read-Only Mode
   const wrapperClasses = disabled ? 'remirror-theme editor-disabled' : 'remirror-theme';
 
   return (
     <div id={`RTE-${name}`} className={wrapperClasses}>
       <Remirror manager={manager} initialContent={state} editable={!disabled} hooks={hooks}>
-        <RichTextMenu classes={classes} disabled={disabled} label={label} />
+        <RichTextMenu disabled={disabled} label={label} />
         <EditorComponent />
         {!disabled && <FloatingLinkToolbar />}
         <p className={error ? classes.errorText : classes.helperText}>{helperText}</p>
@@ -428,4 +386,34 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
   );
 };
 
-export default withStyles(styles)(RichTextEditor);
+const RichTextEditorSingleLine: React.FC<RichTextEditorProps<string>> = ({
+  disabled,
+  label,
+  helperText,
+  name,
+  error,
+  updateCopy,
+  copyData,
+}: RichTextEditorProps<string>) => {
+  const onUpdate = (paras: string[] | undefined): void => {
+    if (!!paras) {
+      updateCopy(paras.join(' '));
+    } else {
+      updateCopy(undefined);
+    }
+  };
+
+  return (
+    <RichTextEditor
+      disabled={disabled}
+      label={label}
+      helperText={helperText}
+      name={name}
+      error={error}
+      updateCopy={onUpdate}
+      copyData={!!copyData ? [copyData] : undefined}
+    />
+  );
+};
+
+export { RichTextEditor, RichTextEditorSingleLine, getRteCopyLength };
