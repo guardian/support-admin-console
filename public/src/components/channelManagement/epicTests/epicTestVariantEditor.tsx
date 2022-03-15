@@ -221,8 +221,8 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
               error={errors.paragraphs !== undefined}
               helperText={
                 errors.paragraphs
-                  // @ts-ignore -- react-hook-form doesn't believe it has a message field
-                  ? errors.paragraphs.message
+                  ? // @ts-ignore -- react-hook-form doesn't believe it has a message field
+                    errors.paragraphs.message
                   : getParagraphsHelperText()
               }
               copyData={data.value}
