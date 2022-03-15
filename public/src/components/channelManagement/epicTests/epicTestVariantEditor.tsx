@@ -23,7 +23,6 @@ import {
 import { RichTextEditor, RichTextEditorSingleLine, getRteCopyLength } from '../richTextEditor';
 import VariantEditorSeparateArticleCountEditor from '../variantEditorSeparateArticleCountEditor';
 
-// CSS
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const getUseStyles = (shouldAddPadding: boolean) => {
   const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
@@ -54,7 +53,6 @@ const getUseStyles = (shouldAddPadding: boolean) => {
   return useStyles;
 };
 
-// Hard-coded (magic) values
 const PARAGRAPHS_MAX_LENGTH = 2000;
 
 const HEADER_DEFAULT_HELPER_TEXT = `Assitive text`;
@@ -64,7 +62,14 @@ const IMAGE_URL_DEFAULT_HELPER_TEXT =
   'Image ratio should be 2.5:1. This will appear above everything except a ticker';
 const FOOTER_DEFAULT_HELPER_TEXT = `Bold text below the button.`;
 
-// Typescript
+interface FormData {
+  heading?: string;
+  paragraphs: string[];
+  highlightedText?: string;
+  backgroundImageUrl?: string;
+  footer?: string;
+}
+
 interface EpicTestVariantEditorProps {
   variant: EpicVariant;
   epicEditorConfig: EpicEditorConfig;
@@ -74,15 +79,6 @@ interface EpicTestVariantEditorProps {
   onValidationChange: (isValid: boolean) => void;
 }
 
-interface EpicTestMuiTextFields {
-  heading: string | undefined;
-  paragraphs: string[];
-  highlightedText: string | undefined;
-  backgroundImageUrl: string | undefined;
-  footer: string | undefined;
-}
-
-// Component function
 const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   variant,
   onVariantChange,
@@ -92,18 +88,17 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
 }: EpicTestVariantEditorProps) => {
   const classes = getUseStyles(epicEditorConfig.allowMultipleVariants)();
 
-  // Handling MUI TextField updates
-  const templateValidator = templateValidatorForPlatform('DOTCOM');
+  const templateValidator = templateValidatorForPlatform(epicEditorConfig.platform);
 
-  const defaultValues: EpicTestMuiTextFields = {
-    heading: variant.heading || '',
-    paragraphs: variant.paragraphs || [],
-    highlightedText: variant.highlightedText || '',
-    backgroundImageUrl: variant.backgroundImageUrl || '',
-    footer: variant.footer || '',
+  const defaultValues: FormData = {
+    heading: variant.heading,
+    paragraphs: variant.paragraphs,
+    highlightedText: variant.highlightedText,
+    backgroundImageUrl: variant.backgroundImageUrl,
+    footer: variant.footer,
   };
 
-  const { register, handleSubmit, control, errors, trigger } = useForm<EpicTestMuiTextFields>({
+  const { register, handleSubmit, control, errors, trigger } = useForm<FormData>({
     mode: 'onChange',
     defaultValues,
   });
@@ -129,7 +124,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
     highlightedText,
     backgroundImageUrl,
     footer,
-  }: EpicTestMuiTextFields): void => {
+  }: FormData): void => {
     onVariantChange({
       ...variant,
       heading,
@@ -165,7 +160,6 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
     onVariantChange({ ...variant, showSignInLink: updatedShowSignInLink });
   };
 
-  // RTE field validations
   const getParagraphsHelperText = () => {
     const paragraphsLength = getRteCopyLength(variant.paragraphs);
 
@@ -178,7 +172,6 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
     return BODY_DEFAULT_HELPER_TEXT;
   };
 
-  // Form
   return (
     <div className={classes.container}>
       {epicEditorConfig.allowVariantHeader && (

@@ -11,7 +11,7 @@ import { useModule } from '../../../hooks/useModule';
 export interface BannerContent {
   heading?: string;
   messageText?: string;
-  paragraphs?: string[];
+  paragraphs: string[];
   highlightedText?: string;
   cta?: Cta;
   secondaryCta?: SecondaryCta;
