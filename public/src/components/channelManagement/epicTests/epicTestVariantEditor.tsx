@@ -193,7 +193,6 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
             return (
               <RichTextEditorSingleLine
                 error={errors.heading !== undefined}
-                // @ts-ignore -- react-hook-form doesn't believe it has a message field
                 helperText={errors.heading ? errors.heading.message : HEADER_DEFAULT_HELPER_TEXT}
                 copyData={data.value}
                 updateCopy={pars => {
@@ -252,7 +251,6 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                 error={errors.highlightedText !== undefined}
                 helperText={
                   errors.highlightedText
-                    // @ts-ignore -- react-hook-form doesn't believe it has a message field
                     ? errors.highlightedText.message
                     : HIGHTLIGHTED_TEXT_DEFAULT_HELPER_TEXT
                 }
@@ -298,7 +296,6 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
             return (
               <RichTextEditorSingleLine
                 error={errors.footer !== undefined}
-                // @ts-ignore -- react-hook-form doesn't believe it has a message field
                 helperText={errors.footer ? errors.footer.message : FOOTER_DEFAULT_HELPER_TEXT}
                 copyData={data.value}
                 updateCopy={pars => {

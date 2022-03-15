@@ -214,7 +214,6 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
               return (
                 <RichTextEditorSingleLine
                   error={errors.heading !== undefined}
-                  // @ts-ignore -- react-hook-form doesn't believe it has a message field
                   helperText={errors.heading ? errors.heading.message : HEADER_DEFAULT_HELPER_TEXT}
                   copyData={data.value}
                   updateCopy={pars => {
