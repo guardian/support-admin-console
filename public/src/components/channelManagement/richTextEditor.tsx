@@ -24,6 +24,7 @@ import {
   useRemirror,
   useUpdateReason,
 } from '@remirror/react';
+import 'remirror/styles/all.css';
 
 import { makeStyles } from '@material-ui/core';
 
