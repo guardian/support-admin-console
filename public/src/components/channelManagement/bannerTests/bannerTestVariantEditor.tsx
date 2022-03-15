@@ -74,7 +74,6 @@ const HEADER_DEFAULT_HELPER_TEXT = 'Assitive text';
 const BODY_DEFAULT_HELPER_TEXT = 'Main banner message paragraph';
 const HIGHTLIGHTED_TEXT_HELPER_TEXT = 'Final sentence of body copy';
 
-// const HEADER_COPY_RECOMMENDED_LENGTH = 50;
 const BODY_COPY_WITHOUT_SECONDARY_CTA_RECOMMENDED_LENGTH = 525;
 const BODY_COPY_WITH_SECONDARY_CTA_RECOMMENDED_LENGTH = 390;
 
@@ -100,9 +99,9 @@ interface BannerTestVariantContentEditorProps {
   deviceType: DeviceType;
 }
 
-interface BannerTestMuiTextFields {
+interface FormData {
   heading?: string;
-  paragraphs?: string[];
+  paragraphs: string[];
   highlightedText?: string;
 }
 
@@ -131,16 +130,15 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
 }: BannerTestVariantContentEditorProps) => {
   const classes = useStyles();
 
-  // Handling MUI TextField updates
   const templateValidator = templateValidatorForPlatform('DOTCOM');
 
-  const defaultValues: BannerTestMuiTextFields = {
+  const defaultValues: FormData = {
     heading: content.heading || '',
     paragraphs: getParagraphsOrMessageText(content.paragraphs, content.messageText),
     highlightedText: content.highlightedText || '',
   };
 
-  const { handleSubmit, control, errors, trigger } = useForm<BannerTestMuiTextFields>({
+  const { handleSubmit, control, errors, trigger } = useForm<FormData>({
     mode: 'onChange',
     defaultValues,
   });
@@ -154,7 +152,7 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
     onValidationChange(isValid);
   }, [errors.heading, errors.paragraphs, errors.highlightedText]);
 
-  const onSubmit = ({ heading, paragraphs, highlightedText }: BannerTestMuiTextFields): void => {
+  const onSubmit = ({ heading, paragraphs, highlightedText }: FormData): void => {
     onChange({ ...content, heading, paragraphs, highlightedText });
   };
 
