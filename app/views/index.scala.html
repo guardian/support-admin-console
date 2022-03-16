@@ -3,18 +3,18 @@
 <html>
   <head>
     <title>Reader Revenue Control Panel</title>
-    <link rel="stylesheet" type="text/css" href="@routes.Assets.at("style.css")"/>
+    <link rel="stylesheet" type="text/css" href="@routes.Assets.versioned("style.css")"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no">
-    <link rel="icon" type="image/png" href="@routes.Assets.at("images/favicon-32x32.png")" sizes="32x32">
-    <link rel="icon" type="image/png" href="@routes.Assets.at("images/favicon-152x152.png")" sizes="152x152">
+    <link rel="icon" type="image/png" href="@routes.Assets.versioned("images/favicon-32x32.png")" sizes="32x32">
+    <link rel="icon" type="image/png" href="@routes.Assets.versioned("images/favicon-152x152.png")" sizes="152x152">
   </head>
   <body>
     <div id="root"></div>
     <script>
       window.guardian = { stage: "@stage"};
     </script>
-    <script src="@routes.Assets.at("build/app.bundle.js")"></script>
+    <script src="@routes.Assets.versioned("build/app.bundle.js")"></script>
   </body>
 </html>
