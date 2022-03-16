@@ -20,7 +20,11 @@ import BannerTemplateSelector from './bannerTemplateSelector';
 import { BannerContent, BannerTemplate, BannerVariant } from '../../../models/banner';
 import { getDefaultVariant } from './utils/defaults';
 import useValidation from '../hooks/useValidation';
-import { RichTextEditor, RichTextEditorSingleLine, getRteCopyLength } from '../richTextEditor';
+import {
+  RichTextEditor,
+  RichTextEditorSingleLine,
+  getRteCopyLength,
+} from '../richTextEditor/richTextEditor';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({

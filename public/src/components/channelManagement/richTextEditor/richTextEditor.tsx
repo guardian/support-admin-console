@@ -25,28 +25,7 @@ import {
   useUpdateReason,
 } from '@remirror/react';
 import 'remirror/styles/all.css';
-
-import { makeStyles } from '@material-ui/core';
-
-// CSS
-const useStyles = makeStyles(() => ({
-  fieldLabel: {
-    display: 'inline-block',
-    fontSize: '85%',
-    color: 'rgba(0 0 0 / 0.6)',
-    margin: '0 1.5em',
-  },
-  helperText: {
-    fontSize: '85%',
-    color: 'rgba(0 0 0 / 0.6)',
-    margin: '0.5em 0 0 1.5em',
-  },
-  errorText: {
-    color: 'rgba(0 0 0 / 1)',
-    backgroundColor: 'rgba(255 255 0 / 1)',
-    margin: '0.5em 0 0 1.5em',
-  },
-}));
+import { useRTEStyles } from './richTextEditorStyles';
 
 // Typescript
 interface RichTextEditorProps<T> {
@@ -227,7 +206,7 @@ const FloatingLinkToolbar = () => {
 
 // ReMirror/ProseMirror TOP MENU BUTTONS
 const RichTextMenu: React.FC<RichTextMenuProps> = ({ disabled, label }: RichTextMenuProps) => {
-  const classes = useStyles();
+  const classes = useRTEStyles();
   const chain = useChainedCommands();
   const active = useActive();
 
@@ -237,7 +216,7 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({ disabled, label }: RichText
       {!disabled && (
         <>
           <button
-            className={active.bold() ? 'remirror-button-active' : 'remirror-button'}
+            className={active.bold() ? 'remirror-button remirror-button-active' : 'remirror-button'}
             onClick={() => {
               chain
                 .toggleBold()
@@ -248,7 +227,9 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({ disabled, label }: RichText
             Bold
           </button>
           <button
-            className={active.italic() ? 'remirror-button-active' : 'remirror-button'}
+            className={
+              active.italic() ? 'remirror-button remirror-button-active' : 'remirror-button'
+            }
             onClick={() => {
               chain
                 .toggleItalic()
@@ -258,7 +239,7 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({ disabled, label }: RichText
           >
             Italic
           </button>
-          <span className="remirror-button-spacer">&nbsp;</span>
+          <span className={classes.remirrorButtonSpacer}>&nbsp;</span>
           <button
             className="remirror-button"
             onClick={() => {
@@ -320,7 +301,7 @@ const RichTextEditor: React.FC<RichTextEditorProps<string[]>> = ({
   updateCopy,
   copyData,
 }: RichTextEditorProps<string[]>) => {
-  const classes = useStyles();
+  const classes = useRTEStyles();
 
   // Make sure the supplied copy is in an Array, for processing
   if (copyData == null) {
@@ -376,13 +357,15 @@ const RichTextEditor: React.FC<RichTextEditorProps<string[]>> = ({
   const wrapperClasses = disabled ? 'remirror-theme editor-disabled' : 'remirror-theme';
 
   return (
-    <div id={`RTE-${name}`} className={wrapperClasses}>
-      <Remirror manager={manager} initialContent={state} editable={!disabled} hooks={hooks}>
-        <RichTextMenu disabled={disabled} label={label} />
-        <EditorComponent />
-        {!disabled && <FloatingLinkToolbar />}
-        <p className={error ? classes.errorText : classes.helperText}>{helperText}</p>
-      </Remirror>
+    <div className={classes.remirrorCustom}>
+      <div id={`RTE-${name}`} className={wrapperClasses}>
+        <Remirror manager={manager} initialContent={state} editable={!disabled} hooks={hooks}>
+          <RichTextMenu disabled={disabled} label={label} />
+          <EditorComponent />
+          {!disabled && <FloatingLinkToolbar />}
+          <p className={error ? classes.errorText : classes.helperText}>{helperText}</p>
+        </Remirror>
+      </div>
     </div>
   );
 };
