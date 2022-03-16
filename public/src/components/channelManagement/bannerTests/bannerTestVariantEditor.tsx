@@ -207,7 +207,7 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
               error={errors.heading !== undefined}
               helperText={errors.heading ? errors.heading.message : HEADER_DEFAULT_HELPER_TEXT}
               onBlur={handleSubmit(onSubmit)}
-              name="heading"
+              name="heading!"
               label="Header"
               margin="normal"
               variant="outlined"
