@@ -20,7 +20,11 @@ import {
   MAXLENGTH_ERROR_HELPER_TEXT,
   templateValidatorForPlatform,
 } from '../helpers/validation';
-import { RichTextEditor, RichTextEditorSingleLine, getRteCopyLength } from '../richTextEditor';
+import {
+  RichTextEditor,
+  RichTextEditorSingleLine,
+  getRteCopyLength,
+} from '../richTextEditor/richTextEditor';
 import VariantEditorSeparateArticleCountEditor from '../variantEditorSeparateArticleCountEditor';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
