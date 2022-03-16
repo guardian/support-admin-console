@@ -9,6 +9,7 @@ class Application(authAction: AuthAction[AnyContent], components: ControllerComp
   }
 
   def index = authAction {
-    Ok(views.html.index(stage)).withHeaders(CACHE_CONTROL -> "no-cache")
+    val jsLocation = routes.Assets.versioned("build/app.bundle.js").toString
+    Ok(views.html.index(stage, jsLocation)).withHeaders(CACHE_CONTROL -> "no-cache")
   }
 }
