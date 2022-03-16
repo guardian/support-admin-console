@@ -33,5 +33,8 @@ export const useRTEStyles = makeStyles(() => ({
     '& > .editor-disabled p, & > .editor-disabled a': {
       opacity: 0.65,
     },
+    '& > .remirror-theme .remirror-editor-wrapper': {
+      paddingTop: 0,
+    }
   },
 }));
