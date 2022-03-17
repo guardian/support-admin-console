@@ -57,6 +57,13 @@ export const getEmptyError = (text: string): string | null => {
   return null;
 };
 
+export const getEmptyParagraphsError = (pars: string[]): string | null => {
+  if (pars.filter(p => p).join('').length <= 0) {
+    return EMPTY_ERROR_HELPER_TEXT;
+  }
+  return null;
+};
+
 const NOT_NUMBER_ERROR_HELPER_TEXT = 'Must be a number';
 
 export const getNotNumberError = (text: string): string | null =>
@@ -101,16 +108,18 @@ const VALID_TEMPLATES = {
 };
 
 export const templateValidatorForPlatform = (platform: TestPlatform) => (
-  text: string,
+  text?: string,
 ): string | boolean => {
-  const templates: string[] | null = text.match(/%\S*%/g);
+  if (text) {
+    const templates: string[] | null = text.match(/%\S*%/g);
 
-  if (templates !== null) {
-    const invalidTemplate = templates.find(
-      template => !VALID_TEMPLATES[platform].includes(template),
-    );
-    if (invalidTemplate) {
-      return `Invalid template: ${invalidTemplate}`;
+    if (templates !== null) {
+      const invalidTemplate = templates.find(
+        template => !VALID_TEMPLATES[platform].includes(template),
+      );
+      if (invalidTemplate) {
+        return `Invalid template: ${invalidTemplate}`;
+      }
     }
   }
   return true;

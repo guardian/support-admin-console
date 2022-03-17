@@ -12,6 +12,7 @@ import {
 import BannerTestVariantEditorCtasEditor from './bannerTestVariantEditorCtasEditor';
 import {
   EMPTY_ERROR_HELPER_TEXT,
+  getEmptyParagraphsError,
   MAXLENGTH_ERROR_HELPER_TEXT,
   templateValidatorForPlatform,
 } from '../helpers/validation';
@@ -216,7 +217,11 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
               return (
                 <RichTextEditorSingleLine
                   error={errors.heading !== undefined}
-                  helperText={errors.heading ? errors.heading.message : HEADER_DEFAULT_HELPER_TEXT}
+                  helperText={
+                    errors.heading
+                      ? errors.heading.message || errors.heading.type
+                      : HEADER_DEFAULT_HELPER_TEXT
+                  }
                   copyData={data.value}
                   updateCopy={pars => {
                     data.onChange(pars);
@@ -238,6 +243,7 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
             rules={{
               required: true,
               validate: (pars: string[]) =>
+                getEmptyParagraphsError(pars) ??
                 pars.map(templateValidator).find(result => result !== true),
             }}
             render={data => {
@@ -247,7 +253,7 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
                   helperText={
                     errors.paragraphs
                       ? // @ts-ignore -- react-hook-form doesn't believe it has a message field
-                        errors.paragraphs.message
+                        errors.paragraphs.message || errors.paragraphs.type
                       : getParagraphsHelperText()
                   }
                   copyData={data.value}
@@ -277,7 +283,7 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
                     error={errors.highlightedText !== undefined}
                     helperText={
                       errors.highlightedText
-                        ? errors.highlightedText.message
+                        ? errors.highlightedText.message || errors.highlightedText.type
                         : HIGHTLIGHTED_TEXT_HELPER_TEXT
                     }
                     copyData={data.value}

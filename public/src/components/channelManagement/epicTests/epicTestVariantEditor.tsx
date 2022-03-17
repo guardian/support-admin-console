@@ -17,6 +17,7 @@ import {
 } from '../helpers/shared';
 import {
   EMPTY_ERROR_HELPER_TEXT,
+  getEmptyParagraphsError,
   MAXLENGTH_ERROR_HELPER_TEXT,
   templateValidatorForPlatform,
 } from '../helpers/validation';
@@ -190,10 +191,14 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
             return (
               <RichTextEditorSingleLine
                 error={errors.heading !== undefined}
-                helperText={errors.heading ? errors.heading.message : HEADER_DEFAULT_HELPER_TEXT}
+                helperText={
+                  errors.heading
+                    ? errors.heading.message || errors.heading.type
+                    : HEADER_DEFAULT_HELPER_TEXT
+                }
                 copyData={data.value}
-                updateCopy={pars => {
-                  data.onChange(pars);
+                updateCopy={value => {
+                  data.onChange(value);
                   handleSubmit(onSubmit)();
                 }}
                 name="heading"
@@ -210,7 +215,9 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
         control={control}
         rules={{
           required: true,
-          validate: (pars: string[]) => pars.map(templateValidator).find(result => result !== true),
+          validate: (pars: string[]) =>
+            getEmptyParagraphsError(pars) ??
+            pars.map(templateValidator).find(result => result !== true),
         }}
         render={data => {
           return (
@@ -219,7 +226,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
               helperText={
                 errors.paragraphs
                   ? // @ts-ignore -- react-hook-form doesn't believe it has a message field
-                    errors.paragraphs.message
+                    errors.paragraphs.message || errors.paragraphs.type
                   : getParagraphsHelperText()
               }
               copyData={data.value}
@@ -240,6 +247,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
           name="highlightedText"
           control={control}
           rules={{
+            required: false,
             validate: templateValidator,
           }}
           render={data => {
@@ -248,7 +256,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                 error={errors.highlightedText !== undefined}
                 helperText={
                   errors.highlightedText
-                    ? errors.highlightedText.message
+                    ? errors.highlightedText.message || errors.highlightedText.type
                     : HIGHTLIGHTED_TEXT_DEFAULT_HELPER_TEXT
                 }
                 copyData={data.value}
@@ -293,7 +301,11 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
             return (
               <RichTextEditorSingleLine
                 error={errors.footer !== undefined}
-                helperText={errors.footer ? errors.footer.message : FOOTER_DEFAULT_HELPER_TEXT}
+                helperText={
+                  errors.footer
+                    ? errors.footer.message || errors.footer.type
+                    : FOOTER_DEFAULT_HELPER_TEXT
+                }
                 copyData={data.value}
                 updateCopy={pars => {
                   data.onChange(pars);

@@ -281,7 +281,7 @@ const parseCopyForParagraphs = (copy: string[]): string => {
 };
 
 const getRteCopyLength = (copy: string[]): number => {
-  let paragraphsCheck = copy.join('');
+  let paragraphsCheck = copy.filter(p => p).join('');
 
   paragraphsCheck = paragraphsCheck.replace(/<.*?>/g, '');
   paragraphsCheck = paragraphsCheck.replace(/%%CURRENCY_SYMBOL%%/g, ' ');
