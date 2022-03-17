@@ -24,7 +24,7 @@ import {
   useRemirror,
   useUpdateReason,
 } from '@remirror/react';
-import 'remirror/styles/all.css';
+import './styles.scss';
 import { useRTEStyles } from './richTextEditorStyles';
 
 // Typescript
