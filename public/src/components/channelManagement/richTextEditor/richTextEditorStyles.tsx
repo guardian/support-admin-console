@@ -37,7 +37,7 @@ export const useRTEStyles = makeStyles(() => ({
       paddingTop: 0,
     },
     '& > .remirror-theme .ProseMirror': {
-      minHeight: 0,
+      minHeight: '80px',
     },
   },
 }));
