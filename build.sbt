@@ -29,9 +29,9 @@ sources in(Compile, doc) := Seq.empty
 
 publishArtifact in(Compile, packageDoc) := false
 
-enablePlugins(PlayScala, RiffRaffArtifact, JDebPackaging, SystemdPlugin, SbtWeb)
+enablePlugins(PlayScala, RiffRaffArtifact, SbtWeb, JDebPackaging, SystemdPlugin)
 
-//pipelineStages := Seq(digest)
+pipelineStages := Seq(digest)
 
 riffRaffPackageType := (packageBin in Debian).value
 riffRaffManifestProjectName := "support:admin-console"
