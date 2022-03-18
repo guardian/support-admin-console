@@ -1,23 +1,31 @@
 import React, { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import {
   FormControlLabel,
   Radio,
   RadioGroup,
-  TextField,
   Theme,
   Typography,
   makeStyles,
   Switch,
 } from '@material-ui/core';
 import BannerTestVariantEditorCtasEditor from './bannerTestVariantEditorCtasEditor';
-import VariantEditorCopyLengthWarning from '../variantEditorCopyLengthWarning';
-import { templateValidatorForPlatform, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
+import {
+  EMPTY_ERROR_HELPER_TEXT,
+  getEmptyParagraphsError,
+  MAXLENGTH_ERROR_HELPER_TEXT,
+  templateValidatorForPlatform,
+} from '../helpers/validation';
 import { Cta, SecondaryCta } from '../helpers/shared';
 import BannerTemplateSelector from './bannerTemplateSelector';
 import { BannerContent, BannerTemplate, BannerVariant } from '../../../models/banner';
 import { getDefaultVariant } from './utils/defaults';
 import useValidation from '../hooks/useValidation';
+import {
+  RichTextEditor,
+  RichTextEditorSingleLine,
+  getRteCopyLength,
+} from '../richTextEditor/richTextEditor';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
@@ -68,10 +76,9 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
 }));
 
 const HEADER_DEFAULT_HELPER_TEXT = 'Assitive text';
-const BODY_DEFAULT_HELPER_TEXT = 'Main banner message, including paragraph breaks';
+const BODY_DEFAULT_HELPER_TEXT = 'Main banner message paragraph';
 const HIGHTLIGHTED_TEXT_HELPER_TEXT = 'Final sentence of body copy';
 
-const HEADER_COPY_RECOMMENDED_LENGTH = 50;
 const BODY_COPY_WITHOUT_SECONDARY_CTA_RECOMMENDED_LENGTH = 525;
 const BODY_COPY_WITH_SECONDARY_CTA_RECOMMENDED_LENGTH = 390;
 
@@ -99,9 +106,24 @@ interface BannerTestVariantContentEditorProps {
 
 interface FormData {
   heading?: string;
-  body: string;
+  paragraphs: string[];
   highlightedText?: string;
 }
+
+// Temporary, while we migrate from messageText to paragraphs
+const getParagraphsOrMessageText = (
+  paras: string[] | undefined,
+  text: string | undefined,
+): string[] => {
+  const bodyCopy = [];
+
+  if (paras != null) {
+    bodyCopy.push(...paras);
+  } else if (text != null) {
+    bodyCopy.push(text);
+  }
+  return bodyCopy;
+};
 
 const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorProps> = ({
   content,
@@ -115,26 +137,13 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
 
   const templateValidator = templateValidatorForPlatform('DOTCOM');
 
-  const getParagraphsString = (
-    paragraphs: string[] | null | undefined,
-    messageText: string | null | undefined,
-  ): string => {
-    if (Array.isArray(paragraphs)) {
-      return paragraphs.join('\n');
-    }
-    if (paragraphs != null) {
-      return paragraphs;
-    }
-    return messageText || '';
-  };
-
   const defaultValues: FormData = {
     heading: content.heading || '',
-    body: getParagraphsString(content.paragraphs, content.messageText),
+    paragraphs: getParagraphsOrMessageText(content.paragraphs, content.messageText),
     highlightedText: content.highlightedText || '',
   };
 
-  const { register, handleSubmit, errors, trigger } = useForm<FormData>({
+  const { handleSubmit, control, errors, trigger } = useForm<FormData>({
     mode: 'onChange',
     defaultValues,
   });
@@ -146,13 +155,13 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
-  }, [errors.body, errors.heading, errors.highlightedText]);
+  }, [errors.heading, errors.paragraphs, errors.highlightedText]);
 
-  const onSubmit = ({ heading, body, highlightedText }: FormData): void => {
+  const onSubmit = ({ heading, paragraphs, highlightedText }: FormData): void => {
     onChange({
       ...content,
       heading,
-      paragraphs: body.split('\n'),
+      paragraphs,
       highlightedText,
       messageText: undefined,
     });
@@ -167,31 +176,34 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
 
   const labelSuffix = getLabelSuffix(deviceType);
 
-  const headerCopyLength = content.heading?.length ?? 0;
+  const getBodyCopyLength = () => {
+    const bodyCopyRecommendedLength = content.secondaryCta
+      ? BODY_COPY_WITH_SECONDARY_CTA_RECOMMENDED_LENGTH
+      : BODY_COPY_WITHOUT_SECONDARY_CTA_RECOMMENDED_LENGTH;
 
-  const bodyCopyRecommendedLength = content.secondaryCta
-    ? BODY_COPY_WITH_SECONDARY_CTA_RECOMMENDED_LENGTH
-    : BODY_COPY_WITHOUT_SECONDARY_CTA_RECOMMENDED_LENGTH;
-
-  const getBodyCopyLength = (
-    paras: string[] | string | undefined,
-    text: string | undefined,
-  ): number => {
-    if (Array.isArray(paras)) {
-      return paras.reduce((prev, curr) => prev + curr.length, 0);
+    if (content.paragraphs != null) {
+      return [
+        getRteCopyLength([...content.paragraphs, content.highlightedText || '']),
+        bodyCopyRecommendedLength,
+      ];
     }
-    if (paras != null) {
-      return paras.length;
-    }
-    if (text != null) {
-      return text.length;
-    }
-    return 0;
+    return [
+      getRteCopyLength([content.messageText || '', content.highlightedText || '']),
+      bodyCopyRecommendedLength,
+    ];
   };
 
-  const bodyCopyLength =
-    getBodyCopyLength(content.paragraphs, content.messageText) +
-    (content.highlightedText?.length ?? 0);
+  const getParagraphsHelperText = () => {
+    const [copyLength, recommendedLength] = getBodyCopyLength();
+
+    if (!copyLength) {
+      return EMPTY_ERROR_HELPER_TEXT;
+    }
+    if (copyLength > recommendedLength) {
+      return MAXLENGTH_ERROR_HELPER_TEXT;
+    }
+    return `${BODY_DEFAULT_HELPER_TEXT} (${recommendedLength} chars)`;
+  };
 
   return (
     <>
@@ -201,71 +213,100 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
 
       <div className={classes.contentContainer}>
         {template !== BannerTemplate.EnvironmentMomentBanner && (
-          <div>
-            <TextField
-              inputRef={register({ validate: templateValidator })}
-              error={errors.heading !== undefined}
-              helperText={errors.heading ? errors.heading.message : HEADER_DEFAULT_HELPER_TEXT}
-              onBlur={handleSubmit(onSubmit)}
-              name="heading"
-              label="Header"
-              margin="normal"
-              variant="outlined"
-              disabled={!editMode}
-              fullWidth
-            />
-
-            {headerCopyLength > HEADER_COPY_RECOMMENDED_LENGTH && (
-              <VariantEditorCopyLengthWarning charLimit={HEADER_COPY_RECOMMENDED_LENGTH} />
-            )}
-          </div>
+          <Controller
+            name="heading"
+            control={control}
+            rules={{
+              validate: templateValidator,
+            }}
+            render={data => {
+              return (
+                <RichTextEditorSingleLine
+                  error={errors.heading !== undefined}
+                  helperText={
+                    errors.heading
+                      ? errors.heading.message || errors.heading.type
+                      : HEADER_DEFAULT_HELPER_TEXT
+                  }
+                  copyData={data.value}
+                  updateCopy={pars => {
+                    data.onChange(pars);
+                    handleSubmit(onSubmit)();
+                  }}
+                  name="heading"
+                  label="Header"
+                  disabled={!editMode}
+                />
+              );
+            }}
+          />
         )}
 
         <div>
-          <TextField
-            inputRef={register({
-              required: EMPTY_ERROR_HELPER_TEXT,
-              validate: templateValidator,
-            })}
-            error={errors.body !== undefined}
-            helperText={errors.body ? errors.body.message : BODY_DEFAULT_HELPER_TEXT}
-            onBlur={handleSubmit(onSubmit)}
-            name="body"
-            label="Body copy"
-            margin="normal"
-            variant="outlined"
-            multiline
-            rows={10}
-            disabled={!editMode}
-            fullWidth
+          <Controller
+            name="paragraphs"
+            control={control}
+            rules={{
+              required: true,
+              validate: (pars: string[]) =>
+                getEmptyParagraphsError(pars) ??
+                pars.map(templateValidator).find(result => result !== true),
+            }}
+            render={data => {
+              return (
+                <RichTextEditor
+                  error={errors.paragraphs !== undefined}
+                  helperText={
+                    errors.paragraphs
+                      ? // @ts-ignore -- react-hook-form doesn't believe it has a message field
+                        errors.paragraphs.message || errors.paragraphs.type
+                      : getParagraphsHelperText()
+                  }
+                  copyData={data.value}
+                  updateCopy={pars => {
+                    data.onChange(pars);
+                    handleSubmit(onSubmit)();
+                  }}
+                  name="paragraphs"
+                  label="Body copy"
+                  disabled={!editMode}
+                />
+              );
+            }}
           />
 
           {(template === BannerTemplate.ContributionsBanner ||
             template === BannerTemplate.InvestigationsMomentBanner) && (
-            <TextField
-              inputRef={register({
-                validate: templateValidator,
-              })}
-              error={errors.highlightedText !== undefined}
-              helperText={
-                errors.highlightedText
-                  ? errors.highlightedText.message
-                  : HIGHTLIGHTED_TEXT_HELPER_TEXT
-              }
-              onBlur={handleSubmit(onSubmit)}
+            <Controller
               name="highlightedText"
-              label="Highlighted text"
-              margin="normal"
-              variant="outlined"
-              disabled={!editMode}
-              fullWidth
+              control={control}
+              rules={{
+                validate: templateValidator,
+              }}
+              render={data => {
+                return (
+                  <RichTextEditorSingleLine
+                    error={errors.highlightedText !== undefined}
+                    helperText={
+                      errors.highlightedText
+                        ? errors.highlightedText.message || errors.highlightedText.type
+                        : HIGHTLIGHTED_TEXT_HELPER_TEXT
+                    }
+                    copyData={data.value}
+                    updateCopy={pars => {
+                      data.onChange(pars);
+                      handleSubmit(onSubmit)();
+                    }}
+                    name="highlightedText"
+                    label="Highlighted text"
+                    disabled={!editMode}
+                  />
+                );
+              }}
             />
           )}
-
-          {bodyCopyLength > bodyCopyRecommendedLength && (
-            <VariantEditorCopyLengthWarning charLimit={bodyCopyRecommendedLength} />
-          )}
         </div>
+
         <div className={classes.buttonsContainer}>
           <Typography className={classes.sectionHeader} variant="h4">
             {`Buttons${labelSuffix}`}
