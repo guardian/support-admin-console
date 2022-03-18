@@ -47,9 +47,18 @@ export const getInvalidCharactersError = (text: string): string | null => {
 };
 
 export const EMPTY_ERROR_HELPER_TEXT = 'Field cannot be empty - please enter some text';
+export const MAXLENGTH_ERROR_HELPER_TEXT =
+  'This copy is longer than the recommended length. Please preview across breakpoints before publishing.';
 
 export const getEmptyError = (text: string): string | null => {
   if (text.trim() === '') {
+    return EMPTY_ERROR_HELPER_TEXT;
+  }
+  return null;
+};
+
+export const getEmptyParagraphsError = (pars: string[]): string | null => {
+  if (pars.filter(p => p).join('').length <= 0) {
     return EMPTY_ERROR_HELPER_TEXT;
   }
   return null;
@@ -99,16 +108,18 @@ const VALID_TEMPLATES = {
 };
 
 export const templateValidatorForPlatform = (platform: TestPlatform) => (
-  text: string,
+  text?: string,
 ): string | boolean => {
-  const templates: string[] | null = text.match(/%\S*%/g);
+  if (text) {
+    const templates: string[] | null = text.match(/%\S*%/g);
 
-  if (templates !== null) {
-    const invalidTemplate = templates.find(
-      template => !VALID_TEMPLATES[platform].includes(template),
-    );
-    if (invalidTemplate) {
-      return `Invalid template: ${invalidTemplate}`;
+    if (templates !== null) {
+      const invalidTemplate = templates.find(
+        template => !VALID_TEMPLATES[platform].includes(template),
+      );
+      if (invalidTemplate) {
+        return `Invalid template: ${invalidTemplate}`;
+      }
     }
   }
   return true;
