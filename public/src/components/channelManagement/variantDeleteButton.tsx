@@ -6,9 +6,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  IconButton,
 } from '@material-ui/core';
-import DeleteIcon from '@material-ui/icons/Delete';
 
 import useOpenable from '../../hooks/useOpenable';
 
@@ -30,9 +28,9 @@ const VariantEditorButtonsEditor: React.FC<VariantEditorButtonsEditorProps> = ({
 
   return (
     <>
-      <IconButton onClick={open} disabled={isDisabled}>
-        <DeleteIcon />
-      </IconButton>
+      <Button variant="outlined" onClick={open} disabled={isDisabled}>
+        Delete variant
+      </Button>
       <Dialog
         open={isOpen}
         onClose={close}
@@ -50,7 +48,7 @@ const VariantEditorButtonsEditor: React.FC<VariantEditorButtonsEditorProps> = ({
             Cancel
           </Button>
           <Button color="primary" onClick={submit}>
-            Delete variant
+            Delete
           </Button>
         </DialogActions>
       </Dialog>
