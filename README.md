@@ -10,7 +10,7 @@ Uses [play-googleauth](https://github.com/guardian/play-googleauth) for authoris
 - /contribution-types - maintains contribution type settings on contributions landing page
 - /amounts - maintains amounts settings on contributions landing page
 
-####For theguardian.com channel tests ([see here for details](docs/channel-tests.md)):
+#### For theguardian.com channel tests ([see here for details](docs/channel-tests.md)):
 - /epic-tests
 - /liveblog-epic-tests
 - /banner-tests and /banner-tests2
