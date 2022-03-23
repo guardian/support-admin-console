@@ -8,6 +8,7 @@ import {
 } from '@material-ui/core';
 import { Variant } from './helpers/shared';
 import VariantDeleteButton from './variantDeleteButton';
+import VariantCloneButton from './variantCloneButton';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   expansionPanelsContainer: {
@@ -31,6 +32,7 @@ interface TestVariantEditorsAccordionProps<V extends Variant> {
   renderVariantEditor: (variant: V) => React.ReactElement;
   renderVariantSummary: (variant: V) => React.ReactElement;
   onVariantDelete: (variantName: string) => void;
+  onVariantClone: (variantName: string) => void;
 }
 
 function TestVariantEditorsAccordion<V extends Variant>({
@@ -42,6 +44,7 @@ function TestVariantEditorsAccordion<V extends Variant>({
   renderVariantEditor,
   renderVariantSummary,
   onVariantDelete,
+  onVariantClone,
 }: TestVariantEditorsAccordionProps<V>): React.ReactElement<TestVariantEditorsAccordionProps<V>> {
   const classes = useStyles();
 
@@ -60,6 +63,11 @@ function TestVariantEditorsAccordion<V extends Variant>({
             {renderVariantSummary(variant)}
             <AccordionDetails>{renderVariantEditor(variant)}</AccordionDetails>
             <AccordionActions>
+              <VariantCloneButton
+                isDisabled={!editMode}
+                existingNames={[]}
+                cloneVariant={(): void => onVariantClone(variant.name)}
+              />
               <VariantDeleteButton
                 isDisabled={!editMode}
                 onConfirm={(): void => onVariantDelete(variant.name)}

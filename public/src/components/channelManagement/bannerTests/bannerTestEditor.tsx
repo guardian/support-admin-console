@@ -116,6 +116,10 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
     onVariantsChange(test.variants.filter(variant => variant.name !== deletedVariantName));
   };
 
+  const onVariantClone = (clonedVariantName: string): void => {
+    console.log(`bannerTestEditor onVariantClone ${clonedVariantName}`);
+  };
+
   const onMinArticlesViewedChange = (updatedMinArticles: number): void => {
     updateTest({
       ...test,
@@ -208,6 +212,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
               renderVariantEditor={renderVariantEditor}
               renderVariantSummary={renderVariantSummary}
               onVariantDelete={onVariantDelete}
+              onVariantClone={onVariantClone}
             />
           </div>
         </div>

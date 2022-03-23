@@ -83,6 +83,10 @@ const HeaderTestEditor: React.FC<HeaderTestEditorProps> = ({
     onVariantsChange(test.variants.filter(variant => variant.name !== deletedVariantName));
   };
 
+  const onVariantClone = (clonedVariantName: string): void => {
+    console.log(`headerTestEditor onVariantClone ${clonedVariantName}`);
+  };
+
   const onRegionsChange = (updatedRegions: Region[]): void => {
     updateTest({ ...test, locations: updatedRegions });
   };
@@ -159,6 +163,7 @@ const HeaderTestEditor: React.FC<HeaderTestEditorProps> = ({
               renderVariantEditor={renderVariantEditor}
               renderVariantSummary={renderVariantSummary}
               onVariantDelete={onVariantDelete}
+              onVariantClone={onVariantClone}
             />
           </div>
         </div>
