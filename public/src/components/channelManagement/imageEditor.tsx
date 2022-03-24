@@ -13,16 +13,20 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 
 interface ImageEditorProps {
   image: Image;
-  updateImage: (image?: Image) => void;
+  updateImage: (image: Image) => void;
   isDisabled: boolean;
   onValidationChange: (isValid: boolean) => void;
   guidance: string;
 }
 
-type ImageEditorContainerProps = Omit<ImageEditorProps, 'image'> & {
+interface ImageEditorContainerProps {
   image?: Image;
+  updateImage: (image?: Image) => void;
+  isDisabled: boolean;
+  onValidationChange: (isValid: boolean) => void;
+  guidance: string;
   label: string;
-};
+}
 
 const DEFAULT_IMAGE: Image = {
   mainUrl: '',
@@ -52,10 +56,6 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
     onValidationChange(isValid);
   }, [errors]);
 
-  const onUpdate = (updatedImage: Image): void => {
-    updateImage(updatedImage);
-  };
-
   return (
     <div>
       <TextField
@@ -64,7 +64,7 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
         })}
         error={errors.mainUrl !== undefined}
         helperText={errors.mainUrl?.message ?? guidance}
-        onBlur={handleSubmit(onUpdate)}
+        onBlur={handleSubmit(updateImage)}
         name="mainUrl"
         label="Image URL"
         margin="normal"
@@ -78,7 +78,7 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
         })}
         error={errors.altText !== undefined}
         helperText={errors.altText?.message}
-        onBlur={handleSubmit(onUpdate)}
+        onBlur={handleSubmit(updateImage)}
         name="altText"
         label="Image alt-text"
         margin="normal"
