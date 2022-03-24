@@ -16,7 +16,7 @@ interface ImageEditorProps {
   updateImage: (image: Image) => void;
   isDisabled: boolean;
   onValidationChange: (isValid: boolean) => void;
-  guidance: string;
+  guidance: string; // helper text to suggest e.g. image ratio
 }
 
 interface ImageEditorContainerProps {
