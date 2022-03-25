@@ -3,23 +3,23 @@ import EpicTestEditor from './epicTestEditor';
 import { Region } from '../../../utils/models';
 
 import {
-  UserCohort,
-  Cta,
-  ArticlesViewedSettings,
-  Test,
-  Variant,
-  EpicEditorConfig,
+  AMP_EPIC_CONFIG,
+  APPLE_NEWS_EPIC_CONFIG,
   ARTICLE_EPIC_CONFIG,
   ARTICLE_EPIC_HOLDBACK_CONFIG,
-  LIVEBLOG_EPIC_CONFIG,
-  APPLE_NEWS_EPIC_CONFIG,
-  AMP_EPIC_CONFIG,
-  SecondaryCta,
+  ArticlesViewedSettings,
   ContributionFrequency,
+  Cta,
   DeviceType,
+  EpicEditorConfig,
+  Image,
+  LIVEBLOG_EPIC_CONFIG,
+  SecondaryCta,
+  Test,
+  UserCohort,
+  Variant,
 } from '../helpers/shared';
-import { InnerComponentProps } from '../testEditor';
-import TestsForm from '../testEditor';
+import TestsForm, { InnerComponentProps } from '../testEditor';
 import TestsFormLayout from '../testsFormLayout';
 import Sidebar from '../sidebar';
 import { FrontendSettingsType } from '../../../utils/requests';
@@ -57,7 +57,7 @@ export interface EpicVariant extends Variant {
   footer?: string;
   showTicker: boolean;
   tickerSettings?: TickerSettings;
-  backgroundImageUrl?: string;
+  image?: Image;
   cta?: Cta;
   secondaryCta?: SecondaryCta;
   separateArticleCount?: SeparateArticleCount;

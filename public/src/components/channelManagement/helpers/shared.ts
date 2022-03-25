@@ -250,3 +250,8 @@ export interface TickerSettings {
 export type ContributionFrequency = 'ONE_OFF' | 'MONTHLY' | 'ANNUAL';
 
 export type DeviceType = 'Mobile' | 'Desktop' | 'All';
+
+export interface Image {
+  mainUrl: string;
+  altText: string;
+}

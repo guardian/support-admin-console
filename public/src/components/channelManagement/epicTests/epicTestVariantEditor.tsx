@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { makeStyles, TextField, Theme, Typography } from '@material-ui/core';
+import { makeStyles, Theme, Typography } from '@material-ui/core';
 
 import EpicTestChoiceCardsEditor from './epicTestChoiceCardsEditor';
 import { EpicVariant, SeparateArticleCount } from './epicTestsForm';
@@ -12,6 +12,7 @@ import {
   ContributionFrequency,
   Cta,
   EpicEditorConfig,
+  Image,
   SecondaryCta,
   TickerSettings,
 } from '../helpers/shared';
@@ -27,6 +28,7 @@ import {
   getRteCopyLength,
 } from '../richTextEditor/richTextEditor';
 import VariantEditorSeparateArticleCountEditor from '../variantEditorSeparateArticleCountEditor';
+import { ImageEditorToggle } from '../imageEditor';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const getUseStyles = (shouldAddPadding: boolean) => {
@@ -63,15 +65,13 @@ const PARAGRAPHS_MAX_LENGTH = 2000;
 const HEADER_DEFAULT_HELPER_TEXT = `Assitive text`;
 const BODY_DEFAULT_HELPER_TEXT = `Maximum ${PARAGRAPHS_MAX_LENGTH} characters.`;
 const HIGHTLIGHTED_TEXT_DEFAULT_HELPER_TEXT = `Final sentence of body copy.`;
-const IMAGE_URL_DEFAULT_HELPER_TEXT =
-  'Image ratio should be 2.5:1. This will appear above everything except a ticker';
 const FOOTER_DEFAULT_HELPER_TEXT = `Bold text below the button.`;
 
 interface FormData {
   heading?: string;
   paragraphs: string[];
   highlightedText?: string;
-  backgroundImageUrl?: string;
+  image?: Image;
   footer?: string;
 }
 
@@ -99,11 +99,11 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
     heading: variant.heading,
     paragraphs: variant.paragraphs,
     highlightedText: variant.highlightedText,
-    backgroundImageUrl: variant.backgroundImageUrl,
+    image: variant.image,
     footer: variant.footer,
   };
 
-  const { register, handleSubmit, control, errors, trigger } = useForm<FormData>({
+  const { handleSubmit, control, errors, trigger } = useForm<FormData>({
     mode: 'onChange',
     defaultValues,
   });
@@ -115,27 +115,15 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
-  }, [
-    errors.heading,
-    errors.paragraphs,
-    errors.highlightedText,
-    errors.backgroundImageUrl,
-    errors.footer,
-  ]);
+  }, [errors.heading, errors.paragraphs, errors.highlightedText, errors.image, errors.footer]);
 
-  const onSubmit = ({
-    heading,
-    paragraphs,
-    highlightedText,
-    backgroundImageUrl,
-    footer,
-  }: FormData): void => {
+  const onSubmit = ({ heading, paragraphs, highlightedText, image, footer }: FormData): void => {
     onVariantChange({
       ...variant,
       heading,
       paragraphs,
       highlightedText,
-      backgroundImageUrl: backgroundImageUrl || undefined,
+      image,
       footer,
     });
   };
@@ -163,6 +151,9 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   };
   const updateShowSignInLink = (updatedShowSignInLink?: boolean): void => {
     onVariantChange({ ...variant, showSignInLink: updatedShowSignInLink });
+  };
+  const updateImage = (image?: Image): void => {
+    onVariantChange({ ...variant, image });
   };
 
   const getParagraphsHelperText = () => {
@@ -273,23 +264,6 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
         />
       )}
 
-      {epicEditorConfig.allowVariantImageUrl && (
-        <div>
-          <TextField
-            inputRef={register({ validate: templateValidator })}
-            error={errors.backgroundImageUrl !== undefined}
-            helperText={IMAGE_URL_DEFAULT_HELPER_TEXT}
-            onBlur={handleSubmit(onSubmit)}
-            name="backgroundImageUrl"
-            label="Image URL"
-            margin="normal"
-            variant="outlined"
-            disabled={!editMode}
-            fullWidth
-          />
-        </div>
-      )}
-
       {epicEditorConfig.allowVariantFooter && (
         <Controller
           name="footer"
@@ -317,6 +291,17 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
               />
             );
           }}
+        />
+      )}
+
+      {epicEditorConfig.allowVariantImageUrl && (
+        <ImageEditorToggle
+          image={variant.image}
+          updateImage={updateImage}
+          isDisabled={!editMode}
+          onValidationChange={onValidationChange}
+          label={'Image - appears below the article count badge and ticker'}
+          guidance={'Ratio should be 2.5:1'}
         />
       )}
 

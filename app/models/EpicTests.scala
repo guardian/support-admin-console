@@ -55,7 +55,7 @@ case class EpicVariant(
   footer: Option[String] = None,
   showTicker: Boolean = false,  // Deprecated - use tickerSettings instead
   tickerSettings: Option[TickerSettings] = None,
-  backgroundImageUrl: Option[String] = None,
+  image: Option[Image] = None,
   cta: Option[Cta],
   secondaryCta: Option[SecondaryCta],
   separateArticleCount: Option[SeparateArticleCount],
