@@ -121,16 +121,19 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
     updateTest({ ...test, variants: updatedVariantList, controlProportionSettings });
   };
 
-  const onVariantClone = (clonedVariantName: string): void => {
-    console.log(`epicTestEditor onVariantClone ${clonedVariantName}`);
-  };
-
   const createVariant = (name: string): void => {
     const newVariant: EpicVariant = {
       ...getDefaultVariant(),
       name: name,
     };
+    onVariantsChange([...test.variants, newVariant]);
+  };
 
+  const onVariantClone = (originalVariant: EpicVariant, clonedVariantName: string): void => {
+    const newVariant: EpicVariant = {
+      ...originalVariant,
+      name: clonedVariantName,
+    };
     onVariantsChange([...test.variants, newVariant]);
   };
 

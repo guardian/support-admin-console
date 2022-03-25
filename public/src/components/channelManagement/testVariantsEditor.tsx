@@ -20,7 +20,7 @@ interface TestVariantsEditorProps<V extends Variant> {
   renderVariantEditor: (variant: V) => React.ReactElement;
   renderVariantSummary: (variant: V) => React.ReactElement;
   onVariantDelete: (variantName: string) => void;
-  onVariantClone: (variantName: string) => void;
+  onVariantClone: (originalVariant: V, variantName: string) => void;
 }
 
 function TestVariantsEditor<V extends Variant>({
@@ -46,11 +46,14 @@ function TestVariantsEditor<V extends Variant>({
 
   const variantKeys = variants.map(variant => `${testName}-${variant.name}`);
 
+  const variantNames = variants.map(variant => variant.name);
+
   return (
     <div className={classes.container}>
       <TestVariantEditorsAccordion<V>
         variants={variants}
         variantKeys={variantKeys}
+        existingNames={variantNames}
         editMode={editMode}
         selectedVariantKey={selectedVariantKey}
         onVariantSelected={onVariantSelected}
@@ -61,7 +64,7 @@ function TestVariantsEditor<V extends Variant>({
       />
 
       <TestNewVariantButton
-        existingNames={variants.map(variant => variant.name)}
+        existingNames={variantNames}
         createVariant={createVariant}
         isDisabled={!editMode}
       />

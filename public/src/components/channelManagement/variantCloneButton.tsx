@@ -10,13 +10,13 @@ import {
   IconButton,
   TextField,
   Theme,
-  // Typography,
   WithStyles,
   withStyles,
 } from '@material-ui/core';
 
-// import FileCopyIcon from '@material-ui/icons/FileCopy';
 import CloseIcon from '@material-ui/icons/Close';
+
+import { Variant } from './helpers/shared';
 
 import useOpenable from '../../hooks/useOpenable';
 
@@ -62,25 +62,27 @@ interface FormData {
   name: string;
 }
 
-interface VariantEditorButtonsEditorProps extends WithStyles<typeof styles> {
+interface VariantEditorButtonsEditorProps<V extends Variant> extends WithStyles<typeof styles> {
   existingNames: string[];
-  cloneVariant: (name: string) => void;
+  cloneVariant: (originalVariant: V, clonedVariantName: string) => void;
+  currentVariant: V;
   isDisabled: boolean;
 }
 
-const VariantEditorButtonsEditor: React.FC<VariantEditorButtonsEditorProps> = ({
+function VariantEditorButtonsEditor<V extends Variant>({
   classes,
   existingNames,
   cloneVariant,
+  currentVariant,
   isDisabled,
-}: VariantEditorButtonsEditorProps) => {
+}: VariantEditorButtonsEditorProps<V>): React.ReactElement<VariantEditorButtonsEditorProps<V>> {
   const [isOpen, open, close] = useOpenable();
 
   const { register, handleSubmit, errors } = useForm<FormData>();
 
   const onSubmit = ({ name }: FormData): void => {
     close();
-    cloneVariant(name.toUpperCase());
+    cloneVariant(currentVariant, name.toUpperCase());
   };
 
   return (
@@ -130,6 +132,6 @@ const VariantEditorButtonsEditor: React.FC<VariantEditorButtonsEditorProps> = ({
       </Dialog>
     </>
   );
-};
+}
 
 export default withStyles(styles)(VariantEditorButtonsEditor);

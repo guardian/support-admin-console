@@ -26,18 +26,20 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
 interface TestVariantEditorsAccordionProps<V extends Variant> {
   variants: V[];
   variantKeys: string[];
+  existingNames: string[];
   editMode: boolean;
   selectedVariantKey: string | null;
   onVariantSelected: (variantKey: string) => void;
   renderVariantEditor: (variant: V) => React.ReactElement;
   renderVariantSummary: (variant: V) => React.ReactElement;
   onVariantDelete: (variantName: string) => void;
-  onVariantClone: (variantName: string) => void;
+  onVariantClone: (originalVariant: V, variantName: string) => void;
 }
 
 function TestVariantEditorsAccordion<V extends Variant>({
   variants,
   variantKeys,
+  existingNames,
   editMode,
   selectedVariantKey,
   onVariantSelected,
@@ -65,8 +67,9 @@ function TestVariantEditorsAccordion<V extends Variant>({
             <AccordionActions>
               <VariantCloneButton
                 isDisabled={!editMode}
-                existingNames={[]}
-                cloneVariant={(): void => onVariantClone(variant.name)}
+                existingNames={existingNames}
+                cloneVariant={onVariantClone}
+                currentVariant={variant}
               />
               <VariantDeleteButton
                 isDisabled={!editMode}
