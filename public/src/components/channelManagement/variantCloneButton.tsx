@@ -2,16 +2,14 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Button,
-  createStyles,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   IconButton,
+  makeStyles,
   TextField,
   Theme,
-  WithStyles,
-  withStyles,
 } from '@material-ui/core';
 
 import CloseIcon from '@material-ui/icons/Close';
@@ -27,34 +25,32 @@ import {
   createDuplicateValidator,
 } from './helpers/validation';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const styles = ({ spacing }: Theme) =>
-  createStyles({
-    container: {
-      display: 'flex',
-      alignItems: 'center',
-      '& > * + *': {
-        marginLeft: spacing(1),
-      },
+const useStyles = makeStyles(({ spacing }: Theme) => ({
+  container: {
+    display: 'flex',
+    alignItems: 'center',
+    '& > * + *': {
+      marginLeft: spacing(1),
     },
-    text: {
-      fontSize: 14,
-      fontWeight: 500,
-      letterSpacing: 1,
-      textTransform: 'uppercase',
+  },
+  text: {
+    fontSize: 14,
+    fontWeight: 500,
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+  },
+  dialogHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingRight: '8px',
+  },
+  input: {
+    '& input': {
+      textTransform: 'uppercase !important',
     },
-    dialogHeader: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      paddingRight: '8px',
-    },
-    input: {
-      '& input': {
-        textTransform: 'uppercase !important',
-      },
-    },
-  });
+  },
+}));
 
 const NAME_DEFAULT_HELPER_TEXT = "Format: 'control' or 'v1_name'";
 
@@ -62,7 +58,7 @@ interface FormData {
   name: string;
 }
 
-interface VariantEditorButtonsEditorProps<V extends Variant> extends WithStyles<typeof styles> {
+interface VariantEditorButtonsEditorProps<V extends Variant> {
   existingNames: string[];
   cloneVariant: (originalVariant: V, clonedVariantName: string) => void;
   currentVariant: V;
@@ -70,12 +66,12 @@ interface VariantEditorButtonsEditorProps<V extends Variant> extends WithStyles<
 }
 
 function VariantEditorButtonsEditor<V extends Variant>({
-  classes,
   existingNames,
   cloneVariant,
   currentVariant,
   isDisabled,
 }: VariantEditorButtonsEditorProps<V>): React.ReactElement<VariantEditorButtonsEditorProps<V>> {
+  const classes = useStyles();
   const [isOpen, open, close] = useOpenable();
 
   const { register, handleSubmit, errors } = useForm<FormData>();
@@ -134,4 +130,4 @@ function VariantEditorButtonsEditor<V extends Variant>({
   );
 }
 
-export default withStyles(styles)(VariantEditorButtonsEditor);
+export default VariantEditorButtonsEditor;
