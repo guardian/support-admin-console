@@ -19,7 +19,7 @@ interface ImageEditorProps {
   guidance: string; // helper text to suggest e.g. image ratio
 }
 
-interface ImageEditorContainerProps {
+interface ImageEditorToggleProps {
   image?: Image;
   updateImage: (image?: Image) => void;
   isDisabled: boolean;
@@ -94,14 +94,14 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
  * Component for toggling the use of an image.
  * Renders the ImageEditor component if the checkbox is checked.
  */
-const ImageEditorToggle: React.FC<ImageEditorContainerProps> = ({
+const ImageEditorToggle: React.FC<ImageEditorToggleProps> = ({
   image,
   updateImage,
   isDisabled,
   onValidationChange,
   label,
   guidance,
-}: ImageEditorContainerProps) => {
+}: ImageEditorToggleProps) => {
   const classes = useStyles();
 
   const onCheckboxChanged = (event: React.ChangeEvent<HTMLInputElement>): void => {
