@@ -9,7 +9,6 @@ import {
   IconButton,
   makeStyles,
   TextField,
-  Theme,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import {
@@ -19,7 +18,7 @@ import {
   VALID_CHARACTERS_REGEX,
 } from './helpers/validation';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
+const useStyles = makeStyles(() => ({
   dialogHeader: {
     display: 'flex',
     alignItems: 'center',
