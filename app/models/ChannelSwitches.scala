@@ -10,6 +10,7 @@ case class ChannelSwitches(
   enableHeaders: Boolean = true,
   enableSuperMode: Boolean,
   enableHardcodedEpicTests: Boolean,
+  enableHardcodedBannerTests: Boolean,
 )
 
 object ChannelSwitches {
