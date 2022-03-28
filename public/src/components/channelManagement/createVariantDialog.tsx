@@ -20,13 +20,6 @@ import {
 } from './helpers/validation';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
-  container: {
-    display: 'flex',
-    alignItems: 'center',
-    '& > * + *': {
-      marginLeft: spacing(1),
-    },
-  },
   dialogHeader: {
     display: 'flex',
     alignItems: 'center',
