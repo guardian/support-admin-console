@@ -132,6 +132,14 @@ const HeaderTestEditor: React.FC<HeaderTestEditorProps> = ({
     onVariantsChange([...test.variants, newVariant]);
   };
 
+  const onVariantClone = (originalVariant: HeaderVariant, clonedVariantName: string): void => {
+    const newVariant: HeaderVariant = {
+      ...originalVariant,
+      name: clonedVariantName,
+    };
+    onVariantsChange([...test.variants, newVariant]);
+  };
+
   if (test && visible) {
     return (
       <div className={classes.container}>
@@ -159,6 +167,7 @@ const HeaderTestEditor: React.FC<HeaderTestEditorProps> = ({
               renderVariantEditor={renderVariantEditor}
               renderVariantSummary={renderVariantSummary}
               onVariantDelete={onVariantDelete}
+              onVariantClone={onVariantClone}
             />
           </div>
         </div>

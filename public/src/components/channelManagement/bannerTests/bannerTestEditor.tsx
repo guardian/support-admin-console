@@ -181,6 +181,14 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
     onVariantsChange([...test.variants, newVariant]);
   };
 
+  const onVariantClone = (originalVariant: BannerVariant, clonedVariantName: string): void => {
+    const newVariant: BannerVariant = {
+      ...originalVariant,
+      name: clonedVariantName,
+    };
+    onVariantsChange([...test.variants, newVariant]);
+  };
+
   if (test && visible) {
     return (
       <div className={classes.container}>
@@ -208,6 +216,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
               renderVariantEditor={renderVariantEditor}
               renderVariantSummary={renderVariantSummary}
               onVariantDelete={onVariantDelete}
+              onVariantClone={onVariantClone}
             />
           </div>
         </div>

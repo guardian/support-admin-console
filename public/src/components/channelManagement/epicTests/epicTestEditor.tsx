@@ -126,7 +126,14 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
       ...getDefaultVariant(),
       name: name,
     };
+    onVariantsChange([...test.variants, newVariant]);
+  };
 
+  const onVariantClone = (originalVariant: EpicVariant, clonedVariantName: string): void => {
+    const newVariant: EpicVariant = {
+      ...originalVariant,
+      name: clonedVariantName,
+    };
     onVariantsChange([...test.variants, newVariant]);
   };
 
@@ -246,6 +253,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
               renderVariantEditor={renderVariantEditor}
               renderVariantSummary={renderVariantSummary}
               onVariantDelete={onVariantDelete}
+              onVariantClone={onVariantClone}
             />
           </div>
         </div>
