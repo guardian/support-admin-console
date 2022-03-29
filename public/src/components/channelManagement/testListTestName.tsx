@@ -1,7 +1,7 @@
 import React from 'react';
-import { Typography, createStyles, withStyles, WithStyles } from '@material-ui/core';
+import { Typography, makeStyles } from '@material-ui/core';
 
-const styles = createStyles({
+const useStyles = makeStyles(() => ({
   text: {
     maxWidth: '190px',
     fontSize: '12px',
@@ -12,9 +12,9 @@ const styles = createStyles({
   textInverted: {
     color: '#FFFFFF',
   },
-});
+}));
 
-interface TestListTestNameProps extends WithStyles<typeof styles> {
+interface TestListTestNameProps {
   name: string;
   nickname?: string;
   shouldInverColor: boolean;
@@ -23,11 +23,12 @@ interface TestListTestNameProps extends WithStyles<typeof styles> {
 const TEST_NAME_CHARACTERS_TO_STRIP_REGEX = /^\d{4}-\d{2}-\d{2}_(contribs*_|moment_)*/;
 
 const TestListTestName: React.FC<TestListTestNameProps> = ({
-  classes,
   name,
   nickname,
   shouldInverColor,
 }: TestListTestNameProps) => {
+  const classes = useStyles();
+
   const textClasses = [classes.text];
   if (shouldInverColor) {
     textClasses.push(classes.textInverted);
@@ -40,4 +41,4 @@ const TestListTestName: React.FC<TestListTestNameProps> = ({
   );
 };
 
-export default withStyles(styles)(TestListTestName);
+export default TestListTestName;

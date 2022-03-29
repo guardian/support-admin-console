@@ -1,16 +1,14 @@
 import React from 'react';
 import {
   Button,
-  createStyles,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
+  makeStyles,
   Theme,
   Typography,
-  WithStyles,
-  withStyles,
 } from '@material-ui/core';
 
 import CloseIcon from '@material-ui/icons/Close';
@@ -20,37 +18,35 @@ import LockIcon from '@material-ui/icons/Lock';
 
 import useOpenable from '../../hooks/useOpenable';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const styles = ({ spacing }: Theme) =>
-  createStyles({
-    container: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      width: '100%',
+const useStyles = makeStyles(({ spacing }: Theme) => ({
+  container: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  leftContainer: {},
+  rightContainer: {
+    '& > * + *': {
+      marginLeft: spacing(1),
     },
-    leftContainer: {},
-    rightContainer: {
-      '& > * + *': {
-        marginLeft: spacing(1),
-      },
-    },
-    button: {
-      color: 'white',
-      borderColor: 'white',
-    },
-    buttonText: {
-      fontSize: '14px',
-      fontWeight: 500,
-      textTransform: 'uppercase',
-      letterSpacing: '1px',
-    },
-  });
+  },
+  button: {
+    color: 'white',
+    borderColor: 'white',
+  },
+  buttonText: {
+    fontSize: '14px',
+    fontWeight: 500,
+    textTransform: 'uppercase',
+    letterSpacing: '1px',
+  },
+}));
 
 const SAVE_BUTTON_TEST_SELECTED_TEXT = 'Save test';
 const SAVE_BUTTON_TEST_NOT_SELECTED_TEXT = 'Save changes';
 
-interface StickyBottomBarActionButtonsProps extends WithStyles<typeof styles> {
+interface StickyBottomBarActionButtonsProps {
   isInEditMode: boolean;
   selectedTestIsBeingEdited: boolean;
   isLocked: boolean;
@@ -61,7 +57,6 @@ interface StickyBottomBarActionButtonsProps extends WithStyles<typeof styles> {
 }
 
 const StickyBottomBarActionButtons: React.FC<StickyBottomBarActionButtonsProps> = ({
-  classes,
   isInEditMode,
   selectedTestIsBeingEdited,
   isLocked,
@@ -70,6 +65,8 @@ const StickyBottomBarActionButtons: React.FC<StickyBottomBarActionButtonsProps> 
   save,
   cancel,
 }: StickyBottomBarActionButtonsProps) => {
+  const classes = useStyles();
+
   const CancelButton: React.FC = () => {
     const [isOpen, open, close] = useOpenable();
 
@@ -205,4 +202,4 @@ const StickyBottomBarActionButtons: React.FC<StickyBottomBarActionButtonsProps> 
   );
 };
 
-export default withStyles(styles)(StickyBottomBarActionButtons);
+export default StickyBottomBarActionButtons;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ListItem, createStyles, withStyles, WithStyles, Theme } from '@material-ui/core';
+import { ListItem, Theme, makeStyles } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
 import { Test } from './helpers/shared';
 import TestListTestLiveLabel from './testListTestLiveLabel';
@@ -8,59 +8,57 @@ import TestListTestArticleCountLabel from './testListTestArticleCountLabel';
 import useHover from '../../hooks/useHover';
 import EditIcon from '@material-ui/icons/Edit';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const styles = ({ palette }: Theme) =>
-  createStyles({
-    test: {
-      position: 'relative',
-      height: '50px',
-      width: '290px',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      background: 'white',
-      borderRadius: '4px',
-      padding: '0 12px',
-    },
-    live: {
-      border: `1px solid ${red[500]}`,
+const useStyles = makeStyles(({ palette }: Theme) => ({
+  test: {
+    position: 'relative',
+    height: '50px',
+    width: '290px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    background: 'white',
+    borderRadius: '4px',
+    padding: '0 12px',
+  },
+  live: {
+    border: `1px solid ${red[500]}`,
 
-      '&:hover': {
-        background: `${red[500]}`,
-      },
-    },
-    liveInverted: {
+    '&:hover': {
       background: `${red[500]}`,
     },
-    draft: {
-      border: `1px solid ${palette.grey[700]}`,
+  },
+  liveInverted: {
+    background: `${red[500]}`,
+  },
+  draft: {
+    border: `1px solid ${palette.grey[700]}`,
 
-      '&:hover': {
-        background: `${palette.grey[700]}`,
-      },
-    },
-    draftInverted: {
+    '&:hover': {
       background: `${palette.grey[700]}`,
     },
-    priorityLabelContainer: {
-      position: 'absolute',
-      top: '0',
-      bottom: '0',
-      left: '-36px',
+  },
+  draftInverted: {
+    background: `${palette.grey[700]}`,
+  },
+  priorityLabelContainer: {
+    position: 'absolute',
+    top: '0',
+    bottom: '0',
+    left: '-36px',
+  },
+  labelAndNameContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    '& > * + *': {
+      marginLeft: '4px',
     },
-    labelAndNameContainer: {
-      display: 'flex',
-      alignItems: 'center',
-      '& > * + *': {
-        marginLeft: '4px',
-      },
-    },
-    whitePencil: {
-      color: 'white',
-    },
-  });
+  },
+  whitePencil: {
+    color: 'white',
+  },
+}));
 
-interface TestListTestProps extends WithStyles<typeof styles> {
+interface TestListTestProps {
   test: Test;
   isSelected: boolean;
   isEdited: boolean;
@@ -68,12 +66,13 @@ interface TestListTestProps extends WithStyles<typeof styles> {
 }
 
 const TestListTest: React.FC<TestListTestProps> = ({
-  classes,
   test,
   isSelected,
   isEdited,
   onClick,
 }: TestListTestProps) => {
+  const classes = useStyles();
+
   const hasArticleCount = test.articlesViewedSettings !== undefined;
 
   const [ref, isHovered] = useHover<HTMLDivElement>();
@@ -103,4 +102,4 @@ const TestListTest: React.FC<TestListTestProps> = ({
   );
 };
 
-export default withStyles(styles)(TestListTest);
+export default TestListTest;

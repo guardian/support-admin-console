@@ -1,7 +1,7 @@
 import React from 'react';
-import { Typography, createStyles, withStyles, WithStyles } from '@material-ui/core';
+import { Typography, makeStyles } from '@material-ui/core';
 
-const styles = createStyles({
+const useStyles = makeStyles(() => ({
   container: {
     padding: '3px',
     background: '#FFC107',
@@ -12,13 +12,10 @@ const styles = createStyles({
     fontWeight: 500,
     textTransform: 'uppercase',
   },
-});
+}));
 
-type TestListTestArticleCountLabel = WithStyles<typeof styles>;
-
-const TestListTestArticleCountLabel: React.FC<TestListTestArticleCountLabel> = ({
-  classes,
-}: TestListTestArticleCountLabel) => {
+const TestListTestArticleCountLabel = (): JSX.Element => {
+  const classes = useStyles();
   return (
     <div className={classes.container}>
       <Typography className={classes.text} noWrap={true}>
@@ -28,4 +25,4 @@ const TestListTestArticleCountLabel: React.FC<TestListTestArticleCountLabel> = (
   );
 };
 
-export default withStyles(styles)(TestListTestArticleCountLabel);
+export default TestListTestArticleCountLabel;

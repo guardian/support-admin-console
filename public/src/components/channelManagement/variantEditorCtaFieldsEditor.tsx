@@ -1,30 +1,15 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { createStyles, TextField, Theme, WithStyles, withStyles } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 import { Cta } from './helpers/shared';
 import { EMPTY_ERROR_HELPER_TEXT } from './helpers/validation';
-
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const styles = ({ spacing }: Theme) =>
-  createStyles({
-    container: {
-      '& > * + *': {
-        marginTop: spacing(1),
-      },
-    },
-    fieldsContainer: {
-      '& > * + *': {
-        marginTop: spacing(3),
-      },
-    },
-  });
 
 interface FormData {
   text: string;
   baseUrl: string;
 }
 
-interface VariantEditorCtaFieldsEditorProps extends WithStyles<typeof styles> {
+interface VariantEditorCtaFieldsEditorProps {
   cta: Cta;
   updateCta: (updatedCta: Cta) => void;
   onValidationChange: (isValid: boolean) => void;
@@ -88,4 +73,4 @@ const VariantEditorCtaFieldsEditor: React.FC<VariantEditorCtaFieldsEditorProps> 
   );
 };
 
-export default withStyles(styles)(VariantEditorCtaFieldsEditor);
+export default VariantEditorCtaFieldsEditor;

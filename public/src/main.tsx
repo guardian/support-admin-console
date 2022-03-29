@@ -20,13 +20,7 @@ import {
 
 import { HeaderTestsForm } from './components/channelManagement/headerTests/headerTestsForm';
 
-import {
-  createStyles,
-  Theme,
-  ThemeProvider,
-  WithStyles,
-  withStyles,
-} from '@material-ui/core/styles';
+import { Theme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import { CSSProperties } from '@material-ui/core/styles/withStyles';
@@ -39,6 +33,7 @@ import { getTheme } from './utils/theme';
 import ChannelSwitches from './components/channelManagement/ChannelSwitches';
 import CampaignsEditor from './components/channelManagement/campaigns/CampaignsEditor';
 import { FontWeightProperty } from 'csstype';
+import { makeStyles } from '@material-ui/core';
 
 type Stage = 'DEV' | 'CODE' | 'PROD';
 declare global {
@@ -72,57 +67,55 @@ const initialiseDynamicImport = (): void => {
 
 initialiseDynamicImport();
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const styles = ({ palette, mixins, typography, transitions }: Theme) =>
-  createStyles({
-    root: {
-      display: 'flex',
-    },
-    appContainer: {
-      display: 'flex',
-      flexDirection: 'column',
-      width: '100vw',
-      height: '100vh',
-    },
-    appBar: {
-      transition: transitions.create(['margin', 'width'], {
-        easing: transitions.easing.sharp,
-        duration: transitions.duration.leavingScreen,
-      }),
-    },
-    appContent: {
-      display: 'flex',
-      flexDirection: 'column',
-      overflow: 'hidden',
-      flexGrow: 1,
-      backgroundColor: palette.grey[100],
-    },
-    toolbar: mixins.toolbar as CSSProperties, // createStyles expects material-ui's CSSProperties type, not react's
-    heading: {
-      fontSize: typography.pxToRem(24),
-      fontWeight: typography.fontWeightMedium as FontWeightProperty,
-    },
-    toolbarContent: {
-      width: '100%',
-      justifyContent: 'space-between',
-    },
-    link: {
-      fontSize: typography.pxToRem(12),
-      fontWeight: typography.fontWeightMedium as FontWeightProperty,
-      textDecoration: 'none',
-    },
-    guideButton: {
-      borderColor: palette.grey[100],
-      color: palette.grey[100],
-    },
-  });
-
-type Props = WithStyles<typeof styles>;
+const useStyles = makeStyles(({ palette, mixins, typography, transitions }: Theme) => ({
+  root: {
+    display: 'flex',
+  },
+  appContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100vw',
+    height: '100vh',
+  },
+  appBar: {
+    transition: transitions.create(['margin', 'width'], {
+      easing: transitions.easing.sharp,
+      duration: transitions.duration.leavingScreen,
+    }),
+  },
+  appContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'hidden',
+    flexGrow: 1,
+    backgroundColor: palette.grey[100],
+  },
+  toolbar: mixins.toolbar as CSSProperties, // createStyles expects material-ui's CSSProperties type, not react's
+  heading: {
+    fontSize: typography.pxToRem(24),
+    fontWeight: typography.fontWeightMedium as FontWeightProperty,
+  },
+  toolbarContent: {
+    width: '100%',
+    justifyContent: 'space-between',
+  },
+  link: {
+    fontSize: typography.pxToRem(12),
+    fontWeight: typography.fontWeightMedium as FontWeightProperty,
+    textDecoration: 'none',
+  },
+  guideButton: {
+    borderColor: palette.grey[100],
+    color: palette.grey[100],
+  },
+}));
 
 const HELP_GUIDE_URL =
   'https://docs.google.com/document/d/1ErgEoQJRpiVMHZZpUmAnq3MGY8tJCaHTun0INzLcLRc/edit';
 
-const AppRouter = withStyles(styles)(({ classes }: Props) => {
+const AppRouter = () => {
+  const classes = useStyles();
+
   const createComponent = (component: JSX.Element, displayName: string): React.ReactElement => (
     <div className={classes.appContainer}>
       <AppBar position="relative" className={classes.appBar}>
@@ -237,6 +230,6 @@ const AppRouter = withStyles(styles)(({ classes }: Props) => {
       </Router>
     </ThemeProvider>
   );
-});
+};
 
 ReactDOM.render(<AppRouter />, document.getElementById('root'));

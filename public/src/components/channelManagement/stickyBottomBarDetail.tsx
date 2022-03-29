@@ -1,17 +1,17 @@
 import React from 'react';
-import { createStyles, Typography, WithStyles, withStyles } from '@material-ui/core';
+import { makeStyles, Typography } from '@material-ui/core';
 import { LockStatus } from './helpers/shared';
 
-const styles = createStyles({
+const useStyles = makeStyles(() => ({
   text: {
     fontSize: '14px',
     fontWeight: 500,
     textTransform: 'uppercase',
     letterSpacing: '1px',
   },
-});
+}));
 
-interface StickyBottomBarDetailProps extends WithStyles<typeof styles> {
+interface StickyBottomBarDetailProps {
   isInEditMode: boolean;
   editedTestName: string | null;
   lockStatus: LockStatus;
@@ -56,11 +56,11 @@ const formattedTimestamp = (timestamp: string): string => {
 };
 
 const StickyBottomBarDetail: React.FC<StickyBottomBarDetailProps> = ({
-  classes,
   isInEditMode,
   editedTestName,
   lockStatus,
 }: StickyBottomBarDetailProps) => {
+  const classes = useStyles();
   let text = editedTestName == null ? '' : `- ${editedTestName}`;
 
   if (!isInEditMode && lockStatus.locked && lockStatus.email && lockStatus.timestamp) {
@@ -77,4 +77,4 @@ const StickyBottomBarDetail: React.FC<StickyBottomBarDetailProps> = ({
   );
 };
 
-export default withStyles(styles)(StickyBottomBarDetail);
+export default StickyBottomBarDetail;

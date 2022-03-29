@@ -1,39 +1,38 @@
 import React from 'react';
-import { Typography, createStyles, withStyles, WithStyles, Theme } from '@material-ui/core';
+import { Typography, Theme, makeStyles } from '@material-ui/core';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const styles = ({ palette }: Theme) =>
-  createStyles({
-    container: {
-      display: 'flex',
-      height: '50px',
-      padding: '4px 0',
+const useStyles = makeStyles(({ palette }: Theme) => ({
+  container: {
+    display: 'flex',
+    height: '50px',
+    padding: '4px 0',
+  },
+  text: {
+    fontSize: '12px',
+    color: palette.grey[700],
+  },
+  dashedLinesContainer: {
+    display: 'flex',
+    marginLeft: '4px',
+    '& > * + *': {
+      marginLeft: '2px',
     },
-    text: {
-      fontSize: '12px',
-      color: palette.grey[700],
-    },
-    dashedLinesContainer: {
-      display: 'flex',
-      marginLeft: '4px',
-      '& > * + *': {
-        marginLeft: '2px',
-      },
-    },
-    dashedLine: {
-      height: '100%',
-      borderLeft: '1px dashed #9E9E9E',
-    },
-  });
+  },
+  dashedLine: {
+    height: '100%',
+    borderLeft: '1px dashed #9E9E9E',
+  },
+}));
 
-interface TestPriorityLabelListLabelProps extends WithStyles<typeof styles> {
+interface TestPriorityLabelListLabelProps {
   priority: number;
 }
 
 const TestPriorityLabelListLabel: React.FC<TestPriorityLabelListLabelProps> = ({
-  classes,
   priority,
 }: TestPriorityLabelListLabelProps) => {
+  const classes = useStyles();
+
   return (
     <div className={classes.container}>
       <Typography className={classes.text} noWrap={true}>
@@ -47,4 +46,4 @@ const TestPriorityLabelListLabel: React.FC<TestPriorityLabelListLabelProps> = ({
   );
 };
 
-export default withStyles(styles)(TestPriorityLabelListLabel);
+export default TestPriorityLabelListLabel;

@@ -6,16 +6,14 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  createStyles,
   IconButton,
   TextField,
-  WithStyles,
-  withStyles,
   InputAdornment,
   Select,
   MenuItem,
   InputLabel,
   FormControl,
+  makeStyles,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
@@ -29,7 +27,7 @@ import { Campaign } from './campaigns/CampaignsEditor';
 import { fetchFrontendSettings, FrontendSettingsType } from '../../utils/requests';
 import { DataFromServer } from '../../hocs/withS3Data';
 
-const styles = createStyles({
+const useStyles = makeStyles(() => ({
   dialogHeader: {
     display: 'flex',
     alignItems: 'center',
@@ -45,7 +43,7 @@ const styles = createStyles({
     marginBottom: '20px',
     minWidth: '200px',
   },
-});
+}));
 
 type FormData = {
   name: string;
@@ -56,7 +54,7 @@ const NAME_DEFAULT_HELPER_TEXT = 'Date format: YYYY-MM-DD_TEST_NAME';
 const NICKNAME_DEFAULT_HELPER_TEXT = "Pick a name for your test that's easy to recognise";
 
 type Mode = 'NEW' | 'COPY';
-interface CreateTestDialogProps extends WithStyles<typeof styles> {
+interface CreateTestDialogProps {
   isOpen: boolean;
   close: () => void;
   existingNames: string[];
@@ -67,7 +65,6 @@ interface CreateTestDialogProps extends WithStyles<typeof styles> {
 }
 
 const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
-  classes,
   isOpen,
   close,
   existingNames,
@@ -76,6 +73,8 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
   testNamePrefix,
   createTest,
 }: CreateTestDialogProps) => {
+  const classes = useStyles();
+
   const defaultValues = {
     name: '',
     nickname: '',
@@ -192,4 +191,4 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
   );
 };
 
-export default withStyles(styles)(CreateTestDialog);
+export default CreateTestDialog;

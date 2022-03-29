@@ -2,17 +2,15 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Button,
-  createStyles,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   IconButton,
+  makeStyles,
   TextField,
   Theme,
   Typography,
-  WithStyles,
-  withStyles,
 } from '@material-ui/core';
 
 import AddIcon from '@material-ui/icons/Add';
@@ -27,42 +25,40 @@ import {
   createDuplicateValidator,
 } from '../helpers/validation';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const styles = ({ spacing, palette }: Theme) =>
-  createStyles({
-    button: {
-      width: '100%',
-      display: 'flex',
-      justifyContent: 'start',
-      border: `1px dashed ${palette.grey[700]}`,
-      borderRadius: '4px',
-      padding: '12px 16px',
+const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
+  button: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'start',
+    border: `1px dashed ${palette.grey[700]}`,
+    borderRadius: '4px',
+    padding: '12px 16px',
+  },
+  container: {
+    display: 'flex',
+    alignItems: 'center',
+    '& > * + *': {
+      marginLeft: spacing(1),
     },
-    container: {
-      display: 'flex',
-      alignItems: 'center',
-      '& > * + *': {
-        marginLeft: spacing(1),
-      },
+  },
+  text: {
+    fontSize: 14,
+    fontWeight: 500,
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+  },
+  dialogHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingRight: '8px',
+  },
+  input: {
+    '& input': {
+      textTransform: 'uppercase !important',
     },
-    text: {
-      fontSize: 14,
-      fontWeight: 500,
-      letterSpacing: 1,
-      textTransform: 'uppercase',
-    },
-    dialogHeader: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      paddingRight: '8px',
-    },
-    input: {
-      '& input': {
-        textTransform: 'uppercase !important',
-      },
-    },
-  });
+  },
+}));
 
 const NAME_DEFAULT_HELPER_TEXT = "Format: 'control' or 'v1_name'";
 
@@ -70,18 +66,18 @@ interface FormData {
   name: string;
 }
 
-interface BannerTestNewVariantButtonProps extends WithStyles<typeof styles> {
+interface BannerTestNewVariantButtonProps {
   existingNames: string[];
   createVariant: (name: string) => void;
   isDisabled: boolean;
 }
 
 const BannerTestNewVariantButton: React.FC<BannerTestNewVariantButtonProps> = ({
-  classes,
   existingNames,
   createVariant,
   isDisabled,
 }: BannerTestNewVariantButtonProps) => {
+  const classes = useStyles();
   const [isOpen, open, close] = useOpenable();
 
   const { register, handleSubmit, errors } = useForm<FormData>();
@@ -143,4 +139,4 @@ const BannerTestNewVariantButton: React.FC<BannerTestNewVariantButtonProps> = ({
   );
 };
 
-export default withStyles(styles)(BannerTestNewVariantButton);
+export default BannerTestNewVariantButton;

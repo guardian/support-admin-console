@@ -71,7 +71,7 @@ export function fetchSupportFrontendSettings(
 
 export function saveSupportFrontendSettings(
   settingsType: SupportFrontendSettingsType,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
   data: any,
 ): Promise<Response> {
   return saveSettings(`/support-frontend/${settingsType}/update`, data);
@@ -84,7 +84,7 @@ export function fetchFrontendSettings(settingsType: FrontendSettingsType): Promi
 
 export function saveFrontendSettings(
   settingsType: FrontendSettingsType,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
   data: any,
 ): Promise<Response> {
   return saveSettings(`/frontend/${settingsType}/update`, data);

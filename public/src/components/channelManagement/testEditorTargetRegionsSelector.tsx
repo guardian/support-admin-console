@@ -1,23 +1,13 @@
 import React from 'react';
 
-import {
-  Checkbox,
-  FormControlLabel,
-  FormGroup,
-  Theme,
-  WithStyles,
-  createStyles,
-  withStyles,
-} from '@material-ui/core';
+import { Checkbox, FormControlLabel, FormGroup, Theme, makeStyles } from '@material-ui/core';
 import { Region } from '../../utils/models';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const styles = ({ spacing }: Theme) =>
-  createStyles({
-    indentedContainer: {
-      marginLeft: spacing(3),
-    },
-  });
+const useStyles = makeStyles(({ spacing }: Theme) => ({
+  indentedContainer: {
+    marginLeft: spacing(3),
+  },
+}));
 
 const regionLabels = {
   AUDCountries: 'Australia',
@@ -31,19 +21,19 @@ const regionLabels = {
 
 const ALL_REGIONS = Object.values(Region);
 
-interface TestEditorTargetRegionsSelectorProps extends WithStyles<typeof styles> {
+interface TestEditorTargetRegionsSelectorProps {
   selectedRegions: Region[];
   onRegionsUpdate: (selectedRegions: Region[]) => void;
   supportedRegions?: Region[];
   isDisabled: boolean;
 }
 const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorProps> = ({
-  classes,
   selectedRegions,
   onRegionsUpdate,
   supportedRegions,
   isDisabled,
 }: TestEditorTargetRegionsSelectorProps) => {
+  const classes = useStyles();
   const allRegions = supportedRegions || ALL_REGIONS;
 
   const onAllRegionsChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -95,4 +85,4 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
   );
 };
 
-export default withStyles(styles)(TestEditorTargetRegionsSelector);
+export default TestEditorTargetRegionsSelector;

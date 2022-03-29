@@ -1,34 +1,25 @@
 import React from 'react';
-import {
-  Checkbox,
-  createStyles,
-  FormControlLabel,
-  Theme,
-  WithStyles,
-  withStyles,
-} from '@material-ui/core';
+import { Checkbox, FormControlLabel, makeStyles, Theme } from '@material-ui/core';
 import { Cta } from './helpers/shared';
 import VariantEditorCtaFieldsEditor from './variantEditorCtaFieldsEditor';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const styles = ({ spacing }: Theme) =>
-  createStyles({
-    container: {
-      '& > * + *': {
-        marginTop: spacing(1),
-      },
+const useStyles = makeStyles(({ spacing }: Theme) => ({
+  container: {
+    '& > * + *': {
+      marginTop: spacing(1),
     },
-    checkboxContainer: {
-      height: '50px',
+  },
+  checkboxContainer: {
+    height: '50px',
+  },
+  fieldsContainer: {
+    '& > * + *': {
+      marginTop: spacing(3),
     },
-    fieldsContainer: {
-      '& > * + *': {
-        marginTop: spacing(3),
-      },
-    },
-  });
+  },
+}));
 
-interface VariantEditorCtaEditorProps extends WithStyles<typeof styles> {
+interface VariantEditorCtaEditorProps {
   label: string;
   cta?: Cta;
   updateCta: (updatedCta?: Cta) => void;
@@ -38,7 +29,6 @@ interface VariantEditorCtaEditorProps extends WithStyles<typeof styles> {
 }
 
 const VariantEditorCtaEditor: React.FC<VariantEditorCtaEditorProps> = ({
-  classes,
   label,
   cta,
   updateCta,
@@ -46,6 +36,7 @@ const VariantEditorCtaEditor: React.FC<VariantEditorCtaEditorProps> = ({
   defaultCta,
   isDisabled,
 }: VariantEditorCtaEditorProps) => {
+  const classes = useStyles();
   const isChecked = cta !== undefined;
 
   const onCheckboxChanged = (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -83,4 +74,4 @@ const VariantEditorCtaEditor: React.FC<VariantEditorCtaEditorProps> = ({
   );
 };
 
-export default withStyles(styles)(VariantEditorCtaEditor);
+export default VariantEditorCtaEditor;

@@ -1,35 +1,26 @@
 import React from 'react';
 
-import {
-  Checkbox,
-  FormControlLabel,
-  FormGroup,
-  Theme,
-  WithStyles,
-  createStyles,
-  withStyles,
-} from '@material-ui/core';
+import { Checkbox, FormControlLabel, FormGroup, Theme, makeStyles } from '@material-ui/core';
 import { UserCohort } from './helpers/shared';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const styles = ({ spacing }: Theme) =>
-  createStyles({
-    indentedContainer: {
-      marginLeft: spacing(3),
-    },
-  });
+const useStyles = makeStyles(({ spacing }: Theme) => ({
+  indentedContainer: {
+    marginLeft: spacing(3),
+  },
+}));
 
-interface TestEditorTargetSupporterStatusSelectorProps extends WithStyles<typeof styles> {
+interface TestEditorTargetSupporterStatusSelectorProps {
   selectedCohort: UserCohort;
   onCohortChange: (updatedCohort: UserCohort) => void;
   isDisabled: boolean;
 }
 const TestEditorTargetSupporterStatusSelector: React.FC<TestEditorTargetSupporterStatusSelectorProps> = ({
-  classes,
   selectedCohort,
   onCohortChange,
   isDisabled,
 }: TestEditorTargetSupporterStatusSelectorProps) => {
+  const classes = useStyles();
+
   const onEveryoneSelected = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const checked = event.target.checked;
     if (checked) {
@@ -99,4 +90,4 @@ const TestEditorTargetSupporterStatusSelector: React.FC<TestEditorTargetSupporte
   );
 };
 
-export default withStyles(styles)(TestEditorTargetSupporterStatusSelector);
+export default TestEditorTargetSupporterStatusSelector;

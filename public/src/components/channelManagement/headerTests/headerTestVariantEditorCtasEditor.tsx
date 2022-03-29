@@ -1,22 +1,20 @@
 import React from 'react';
-import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core';
+import { makeStyles, Theme } from '@material-ui/core';
 import VariantEditorCtaEditor from '../variantEditorCtaEditor';
 
 import { Cta } from '../helpers/shared';
 
 import { DEFAULT_PRIMARY_CTA, DEFAULT_SECONDARY_CTA } from './utils/defaults';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const styles = ({ spacing }: Theme) =>
-  createStyles({
-    container: {
-      display: 'grid',
-      gridTemplateColumns: '1fr 1fr',
-      gridGap: spacing(2),
-    },
-  });
+const useStyles = makeStyles(({ spacing }: Theme) => ({
+  container: {
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr',
+    gridGap: spacing(2),
+  },
+}));
 
-interface HeaderTestVariantEditorCtasEditorProps extends WithStyles<typeof styles> {
+interface HeaderTestVariantEditorCtasEditorProps {
   primaryCta?: Cta;
   secondaryCta?: Cta;
   updatePrimaryCta: (updatedCta?: Cta) => void;
@@ -27,7 +25,6 @@ interface HeaderTestVariantEditorCtasEditorProps extends WithStyles<typeof style
 }
 
 const HeaderTestVariantEditorCtasEditor: React.FC<HeaderTestVariantEditorCtasEditorProps> = ({
-  classes,
   primaryCta,
   secondaryCta,
   updatePrimaryCta,
@@ -36,6 +33,8 @@ const HeaderTestVariantEditorCtasEditor: React.FC<HeaderTestVariantEditorCtasEdi
   isDisabled,
   supportSecondaryCta,
 }: HeaderTestVariantEditorCtasEditorProps) => {
+  const classes = useStyles();
+
   return (
     <div className={classes.container}>
       <VariantEditorCtaEditor
@@ -61,4 +60,4 @@ const HeaderTestVariantEditorCtasEditor: React.FC<HeaderTestVariantEditorCtasEdi
   );
 };
 
-export default withStyles(styles)(HeaderTestVariantEditorCtasEditor);
+export default HeaderTestVariantEditorCtasEditor;

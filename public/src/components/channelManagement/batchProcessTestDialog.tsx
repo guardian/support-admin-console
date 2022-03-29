@@ -5,7 +5,6 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  createStyles,
   IconButton,
   List,
   ListItem,
@@ -13,23 +12,22 @@ import {
   ListItemText,
   Checkbox,
   Typography,
-  WithStyles,
-  withStyles,
+  makeStyles,
 } from '@material-ui/core';
 import { Test } from './helpers/shared';
 import CloseIcon from '@material-ui/icons/Close';
 import useOpenable from '../../hooks/useOpenable';
 
-const styles = createStyles({
+const useStyles = makeStyles(() => ({
   dialogHeader: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingRight: '8px',
   },
-});
+}));
 
-interface BatchProcessTestDialogProps extends WithStyles<typeof styles> {
+interface BatchProcessTestDialogProps {
   isOpen: boolean;
   close: () => void;
   draftTests: Test[];
@@ -38,13 +36,14 @@ interface BatchProcessTestDialogProps extends WithStyles<typeof styles> {
 }
 
 const BatchProcessTestDialog: React.FC<BatchProcessTestDialogProps> = ({
-  classes,
   isOpen,
   close,
   draftTests,
   onBatchTestDelete,
   onBatchTestArchive,
 }: BatchProcessTestDialogProps) => {
+  const classes = useStyles();
+
   const [selectedBatchProcess, setSelectedBatchProcess] = useState('');
   const [selectedTests, setSelectedTests] = useState<string[]>([]);
   const [isConfirmOpen, confirmOpen, confirmClose] = useOpenable();
@@ -194,4 +193,4 @@ const BatchProcessTestDialog: React.FC<BatchProcessTestDialogProps> = ({
   );
 };
 
-export default withStyles(styles)(BatchProcessTestDialog);
+export default BatchProcessTestDialog;
