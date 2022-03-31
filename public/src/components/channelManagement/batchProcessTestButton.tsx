@@ -1,12 +1,12 @@
 import React from 'react';
-import { Button, createStyles, Typography, WithStyles, withStyles } from '@material-ui/core';
+import { Button, makeStyles, Typography } from '@material-ui/core';
 import { Test } from './helpers/shared';
 import ArchiveIcon from '@material-ui/icons/Archive';
 
 import BatchProcessTestDialog from './batchProcessTestDialog';
 import useOpenable from '../../hooks/useOpenable';
 
-const styles = createStyles({
+const useStyles = makeStyles(() => ({
   button: {
     borderStyle: 'dashed',
     justifyContent: 'start',
@@ -19,20 +19,20 @@ const styles = createStyles({
     textTransform: 'uppercase',
     letterSpacing: '1px',
   },
-});
+}));
 
-interface BatchProcessTestButtonProps extends WithStyles<typeof styles> {
+interface BatchProcessTestButtonProps {
   draftTests: Test[];
   onBatchTestDelete: (batchTestNames: string[]) => void;
   onBatchTestArchive: (batchTestNames: string[]) => void;
 }
 
 const BatchProcessTestButton: React.FC<BatchProcessTestButtonProps> = ({
-  classes,
   draftTests,
   onBatchTestDelete,
   onBatchTestArchive,
 }: BatchProcessTestButtonProps) => {
+  const classes = useStyles();
   const [isOpen, open, close] = useOpenable();
   return (
     <>
@@ -55,4 +55,4 @@ const BatchProcessTestButton: React.FC<BatchProcessTestButtonProps> = ({
   );
 };
 
-export default withStyles(styles)(BatchProcessTestButton);
+export default BatchProcessTestButton;

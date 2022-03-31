@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Theme, WithStyles, createStyles, withStyles, Typography } from '@material-ui/core';
+import { Theme, Typography, makeStyles } from '@material-ui/core';
 import { Region } from '../../utils/models';
 import { DeviceType, UserCohort } from './helpers/shared';
 
@@ -8,29 +8,27 @@ import TestEditorTargetRegionsSelector from './testEditorTargetRegionsSelector';
 import TestEditorTargetSupporterStatusSelector from './testEditorTargetSupporterStatusSelector';
 import TestEditorTargetDeviceType from './testEditorTargetDeviceType';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const styles = ({ spacing, palette }: Theme) =>
-  createStyles({
-    container: {
-      display: 'flex',
+const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
+  container: {
+    display: 'flex',
 
-      '& > * + *': {
-        marginLeft: spacing(12),
-      },
+    '& > * + *': {
+      marginLeft: spacing(12),
     },
-    sectionContainer: {
-      '& > * + *': {
-        marginTop: spacing(2),
-      },
+  },
+  sectionContainer: {
+    '& > * + *': {
+      marginTop: spacing(2),
     },
-    heading: {
-      fontSize: 16,
-      color: palette.grey[900],
-      fontWeight: 500,
-    },
-  });
+  },
+  heading: {
+    fontSize: 16,
+    color: palette.grey[900],
+    fontWeight: 500,
+  },
+}));
 
-interface TestEditorTargetAudienceSelectorProps extends WithStyles<typeof styles> {
+interface TestEditorTargetAudienceSelectorProps {
   selectedRegions: Region[];
   onRegionsUpdate: (selectedRegions: Region[]) => void;
   selectedCohort: UserCohort;
@@ -43,7 +41,6 @@ interface TestEditorTargetAudienceSelectorProps extends WithStyles<typeof styles
   showDeviceTypeSelector: boolean;
 }
 const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelectorProps> = ({
-  classes,
   selectedRegions,
   onRegionsUpdate,
   selectedCohort,
@@ -55,6 +52,8 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
   showSupporterStatusSelector,
   showDeviceTypeSelector,
 }: TestEditorTargetAudienceSelectorProps) => {
+  const classes = useStyles();
+
   return (
     <div className={classes.container}>
       <div className={classes.sectionContainer}>
@@ -92,4 +91,4 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
   );
 };
 
-export default withStyles(styles)(TestEditorTargetAudienceSelector);
+export default TestEditorTargetAudienceSelector;

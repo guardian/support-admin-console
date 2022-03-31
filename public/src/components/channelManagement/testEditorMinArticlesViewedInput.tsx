@@ -1,33 +1,24 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import {
-  createStyles,
-  withStyles,
-  WithStyles,
-  TextField,
-  Theme,
-  Typography,
-} from '@material-ui/core';
+import { TextField, Theme, Typography, makeStyles } from '@material-ui/core';
 import { notNumberValidator } from './helpers/validation';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const styles = ({ spacing }: Theme) =>
-  createStyles({
-    container: {
-      display: 'flex',
-      alignItems: 'center',
-    },
-    text: {
-      marginLeft: spacing(1),
-      fontSize: 14,
-    },
-  });
+const useStyles = makeStyles(({ spacing }: Theme) => ({
+  container: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  text: {
+    marginLeft: spacing(1),
+    fontSize: 14,
+  },
+}));
 
 interface FormData {
   minArticles: string;
 }
 
-interface TestEditorMinArticlesViewedInputProps extends WithStyles<typeof styles> {
+interface TestEditorMinArticlesViewedInputProps {
   minArticles: number;
   isDisabled: boolean;
   onValidationChange: (isValid: boolean) => void;
@@ -35,12 +26,13 @@ interface TestEditorMinArticlesViewedInputProps extends WithStyles<typeof styles
 }
 
 const TestEditorMinArticlesViewedInput: React.FC<TestEditorMinArticlesViewedInputProps> = ({
-  classes,
   minArticles,
   isDisabled,
   onValidationChange,
   onUpdate,
 }: TestEditorMinArticlesViewedInputProps) => {
+  const classes = useStyles();
+
   const defaultValues: FormData = {
     minArticles: minArticles.toString(),
   };
@@ -81,4 +73,4 @@ const TestEditorMinArticlesViewedInput: React.FC<TestEditorMinArticlesViewedInpu
   );
 };
 
-export default withStyles(styles)(TestEditorMinArticlesViewedInput);
+export default TestEditorMinArticlesViewedInput;

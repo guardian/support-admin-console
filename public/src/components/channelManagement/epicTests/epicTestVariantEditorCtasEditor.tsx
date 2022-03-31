@@ -1,21 +1,19 @@
 import React from 'react';
-import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core';
+import { makeStyles, Theme } from '@material-ui/core';
 import VariantEditorCtaEditor from '../variantEditorCtaEditor';
 import VariantEditorSecondaryCtaEditor from '../variantEditorSecondaryCtaEditor';
 import { Cta, SecondaryCta } from '../helpers/shared';
 import { DEFAULT_PRIMARY_CTA, DEFAULT_SECONDARY_CTA } from './utils/defaults';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const styles = ({ spacing }: Theme) =>
-  createStyles({
-    container: {
-      display: 'grid',
-      gridTemplateColumns: '1fr 1fr',
-      gridGap: spacing(2),
-    },
-  });
+const useStyles = makeStyles(({ spacing }: Theme) => ({
+  container: {
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr',
+    gridGap: spacing(2),
+  },
+}));
 
-interface EpicTestVariantEditorButtonsEditorProps extends WithStyles<typeof styles> {
+interface EpicTestVariantEditorButtonsEditorProps {
   primaryCta?: Cta;
   secondaryCta?: SecondaryCta;
   updatePrimaryCta: (updatedCta?: Cta) => void;
@@ -26,7 +24,6 @@ interface EpicTestVariantEditorButtonsEditorProps extends WithStyles<typeof styl
 }
 
 const EpicTestVariantEditorButtonsEditor: React.FC<EpicTestVariantEditorButtonsEditorProps> = ({
-  classes,
   primaryCta,
   secondaryCta,
   updatePrimaryCta,
@@ -35,6 +32,8 @@ const EpicTestVariantEditorButtonsEditor: React.FC<EpicTestVariantEditorButtonsE
   isDisabled,
   supportSecondaryCta,
 }: EpicTestVariantEditorButtonsEditorProps) => {
+  const classes = useStyles();
+
   return (
     <div className={classes.container}>
       <VariantEditorCtaEditor
@@ -60,4 +59,4 @@ const EpicTestVariantEditorButtonsEditor: React.FC<EpicTestVariantEditorButtonsE
   );
 };
 
-export default withStyles(styles)(EpicTestVariantEditorButtonsEditor);
+export default EpicTestVariantEditorButtonsEditor;

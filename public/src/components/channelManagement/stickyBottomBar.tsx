@@ -1,5 +1,5 @@
 import React from 'react';
-import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core';
+import { makeStyles, Theme } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import { LockStatus } from './helpers/shared';
 
@@ -7,45 +7,43 @@ import StickyBottomBarStatus from './stickyBottomBarStatus';
 import StickyBottomBarDetail from './stickyBottomBarDetail';
 import StickyBottomBarActionButtons from './stickyBottomBarActionButtons';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const styles = ({ palette, spacing }: Theme) =>
-  createStyles({
-    appBar: {
-      top: 'auto',
-      bottom: 0,
+const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
+  appBar: {
+    top: 'auto',
+    bottom: 0,
+  },
+  container: {
+    display: 'flex',
+    alignItems: 'baseline',
+    justifyContent: 'center',
+    padding: `${spacing(2)}px 0`,
+    '& > * + *': {
+      marginLeft: '4px',
     },
-    container: {
-      display: 'flex',
-      alignItems: 'baseline',
-      justifyContent: 'center',
-      padding: `${spacing(2)}px 0`,
-      '& > * + *': {
-        marginLeft: '4px',
-      },
-    },
-    containerEditMode: {
-      background: palette.grey[800],
-    },
-    containerReadOnlyMode: {
-      background: palette.grey[900],
-    },
-    actionButtonContainer: {
-      position: 'absolute',
-      top: 0,
-      bottom: 0,
-      left: '100px',
-      right: '100px',
-      display: 'flex',
-      alignItems: 'center',
-    },
-    helpButtonContainer: {
-      position: 'absolute',
-      top: '-62px',
-      right: '24px',
-    },
-  });
+  },
+  containerEditMode: {
+    background: palette.grey[800],
+  },
+  containerReadOnlyMode: {
+    background: palette.grey[900],
+  },
+  actionButtonContainer: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: '100px',
+    right: '100px',
+    display: 'flex',
+    alignItems: 'center',
+  },
+  helpButtonContainer: {
+    position: 'absolute',
+    top: '-62px',
+    right: '24px',
+  },
+}));
 
-interface StickyBottomBarProps extends WithStyles<typeof styles> {
+interface StickyBottomBarProps {
   isInEditMode: boolean;
   selectedTestName: string | null;
   editedTestName: string | null;
@@ -57,7 +55,6 @@ interface StickyBottomBarProps extends WithStyles<typeof styles> {
 }
 
 const StickyBottomBar: React.FC<StickyBottomBarProps> = ({
-  classes,
   isInEditMode,
   selectedTestName,
   editedTestName,
@@ -67,6 +64,7 @@ const StickyBottomBar: React.FC<StickyBottomBarProps> = ({
   save,
   cancel,
 }: StickyBottomBarProps) => {
+  const classes = useStyles();
   const containerClasses = [
     classes.container,
     isInEditMode ? classes.containerEditMode : classes.containerReadOnlyMode,
@@ -98,4 +96,4 @@ const StickyBottomBar: React.FC<StickyBottomBarProps> = ({
   );
 };
 
-export default withStyles(styles)(StickyBottomBar);
+export default StickyBottomBar;

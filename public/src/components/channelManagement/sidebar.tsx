@@ -1,5 +1,5 @@
 import React from 'react';
-import { createStyles, Typography, withStyles, WithStyles } from '@material-ui/core';
+import { makeStyles, Typography } from '@material-ui/core';
 import { Test } from './helpers/shared';
 import TestList from './testList';
 import TestPriorityLabelList from './testPriorityLabelList';
@@ -9,7 +9,7 @@ import BatchProcessTestButton from './batchProcessTestButton';
 import TestListSidebarFilterSelector from './testListSidebarFilterSelector';
 import { RegionsAndAll } from '../../utils/models';
 
-const styles = createStyles({
+const useStyles = makeStyles(() => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
@@ -28,7 +28,7 @@ const styles = createStyles({
     position: 'absolute',
     left: '-32px',
   },
-});
+}));
 
 interface SidebarProps<T extends Test> {
   tests: T[];
@@ -46,7 +46,6 @@ interface SidebarProps<T extends Test> {
 }
 
 function Sidebar<T extends Test>({
-  classes,
   tests,
   isInEditMode,
   selectedTestName,
@@ -59,7 +58,9 @@ function Sidebar<T extends Test>({
   setRegionFilter,
   onBatchTestDelete,
   onBatchTestArchive,
-}: SidebarProps<T> & WithStyles<typeof styles>): React.ReactElement<SidebarProps<T>> {
+}: SidebarProps<T>): React.ReactElement<SidebarProps<T>> {
+  const classes = useStyles();
+
   const filterTests = function(testsToFilter: Test[]): Test[] {
     if (isInEditMode || 'ALL' === regionFilter) {
       return testsToFilter;
@@ -108,12 +109,4 @@ function Sidebar<T extends Test>({
   );
 }
 
-// Hack to work around material UI breaking type checking when class has type parameters - https://stackoverflow.com/q/52567697
-export default function WrappedTestListContainer<T extends Test>(
-  props: SidebarProps<T>,
-): React.ReactElement<SidebarProps<T>> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const wrapper = withStyles(styles)(Sidebar) as any;
-
-  return React.createElement(wrapper, props);
-}
+export default Sidebar;

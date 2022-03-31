@@ -1,34 +1,32 @@
 import React from 'react';
-import { createStyles, withStyles, WithStyles, Theme, Typography } from '@material-ui/core';
+import { Theme, Typography, makeStyles } from '@material-ui/core';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const styles = ({ palette }: Theme) =>
-  createStyles({
-    container: {
-      display: 'flex',
-      alignItems: 'flex-start',
-      justifyContent: 'space-between',
-    },
-    mainHeader: {
-      fontSize: '32px',
-      fontWeight: 'normal',
-    },
-    secondaryHeader: {
-      fontSize: '14px',
-      color: palette.grey[700],
-    },
-  });
+const useStyles = makeStyles(({ palette }: Theme) => ({
+  container: {
+    display: 'flex',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+  },
+  mainHeader: {
+    fontSize: '32px',
+    fontWeight: 'normal',
+  },
+  secondaryHeader: {
+    fontSize: '14px',
+    color: palette.grey[700],
+  },
+}));
 
-interface TestEditorHeaderProps extends WithStyles<typeof styles> {
+interface TestEditorHeaderProps {
   name: string;
   nickname?: string;
 }
 
 const TestEditorHeader: React.FC<TestEditorHeaderProps> = ({
-  classes,
   name,
   nickname,
 }: TestEditorHeaderProps) => {
+  const classes = useStyles();
   const mainHeader = nickname ? nickname : name;
   const secondaryHeader = nickname ? name : null;
 
@@ -42,4 +40,4 @@ const TestEditorHeader: React.FC<TestEditorHeaderProps> = ({
   );
 };
 
-export default withStyles(styles)(TestEditorHeader);
+export default TestEditorHeader;

@@ -1,34 +1,23 @@
 import React from 'react';
-import {
-  createStyles,
-  Theme,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  WithStyles,
-  withStyles,
-} from '@material-ui/core';
+import { Theme, FormControl, InputLabel, Select, MenuItem, makeStyles } from '@material-ui/core';
 import { Cta, SecondaryCta, SecondaryCtaType } from './helpers/shared';
 import VariantEditorCtaFieldsEditor from './variantEditorCtaFieldsEditor';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const styles = ({ spacing }: Theme) =>
-  createStyles({
-    container: {
-      '& > * + *': {
-        marginTop: spacing(1),
-      },
+const useStyles = makeStyles(({ spacing }: Theme) => ({
+  container: {
+    '& > * + *': {
+      marginTop: spacing(1),
     },
-    selectContainer: {
-      height: '50px',
-    },
-    formControl: {
-      minWidth: 240,
-    },
-  });
+  },
+  selectContainer: {
+    height: '50px',
+  },
+  formControl: {
+    minWidth: 240,
+  },
+}));
 
-interface VariantEditorSecondaryCtaEditorProps extends WithStyles<typeof styles> {
+interface VariantEditorSecondaryCtaEditorProps {
   label: string;
   cta?: SecondaryCta;
   updateCta: (updatedCta?: SecondaryCta) => void;
@@ -38,7 +27,6 @@ interface VariantEditorSecondaryCtaEditorProps extends WithStyles<typeof styles>
 }
 
 const VariantEditorSecondaryCtaEditor: React.FC<VariantEditorSecondaryCtaEditorProps> = ({
-  classes,
   label,
   cta,
   updateCta,
@@ -46,6 +34,8 @@ const VariantEditorSecondaryCtaEditor: React.FC<VariantEditorSecondaryCtaEditorP
   isDisabled,
   defaultCta,
 }: VariantEditorSecondaryCtaEditorProps) => {
+  const classes = useStyles();
+
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>): void => {
     const value = event.target.value as SecondaryCtaType | 'None';
 
@@ -89,4 +79,4 @@ const VariantEditorSecondaryCtaEditor: React.FC<VariantEditorSecondaryCtaEditorP
   );
 };
 
-export default withStyles(styles)(VariantEditorSecondaryCtaEditor);
+export default VariantEditorSecondaryCtaEditor;

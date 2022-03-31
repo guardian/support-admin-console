@@ -1,16 +1,16 @@
 import React from 'react';
-import { createStyles, Typography, WithStyles, withStyles } from '@material-ui/core';
+import { makeStyles, Typography } from '@material-ui/core';
 
-const styles = createStyles({
+const useStyles = makeStyles(() => ({
   text: {
     fontSize: '14px',
     fontWeight: 900,
     textTransform: 'uppercase',
     letterSpacing: '1px',
   },
-});
+}));
 
-interface StickyBottomBarStatusProps extends WithStyles<typeof styles> {
+interface StickyBottomBarStatusProps {
   isInEditMode: boolean;
   isLocked: boolean;
 }
@@ -20,10 +20,11 @@ const READ_ONLY_MODE_TEXT = 'Read only mode';
 const EDIT_MODE_TEXT = 'Editing';
 
 const StickyBottomBarStatus: React.FC<StickyBottomBarStatusProps> = ({
-  classes,
   isInEditMode,
   isLocked,
 }: StickyBottomBarStatusProps) => {
+  const classes = useStyles();
+
   let text = '';
   if (isInEditMode) {
     text = EDIT_MODE_TEXT;
@@ -40,4 +41,4 @@ const StickyBottomBarStatus: React.FC<StickyBottomBarStatusProps> = ({
   );
 };
 
-export default withStyles(styles)(StickyBottomBarStatus);
+export default StickyBottomBarStatus;

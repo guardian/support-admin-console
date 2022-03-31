@@ -1,16 +1,14 @@
 import React from 'react';
 import {
   Button,
-  createStyles,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  withStyles,
-  WithStyles,
   Theme,
   Typography,
+  makeStyles,
 } from '@material-ui/core';
 import { grey } from '@material-ui/core/colors';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -19,29 +17,27 @@ import FileCopyIcon from '@material-ui/icons/FileCopy';
 import CreateTestDialog from './createTestDialog';
 import useOpenable from '../../hooks/useOpenable';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const styles = ({ spacing, palette }: Theme) =>
-  createStyles({
-    container: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
+const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
+  container: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  copyAndArchiveContainer: {
+    '& > * + *': {
+      marginLeft: spacing(2),
     },
-    copyAndArchiveContainer: {
-      '& > * + *': {
-        marginLeft: spacing(2),
-      },
-    },
-    buttonText: {
-      fontSize: '14px',
-      fontWeight: 500,
-      textTransform: 'uppercase',
-      letterSpacing: '1px',
-      color: palette.grey[800],
-    },
-  });
+  },
+  buttonText: {
+    fontSize: '14px',
+    fontWeight: 500,
+    textTransform: 'uppercase',
+    letterSpacing: '1px',
+    color: palette.grey[800],
+  },
+}));
 
-interface TestEditorActionButtonsProps extends WithStyles<typeof styles> {
+interface TestEditorActionButtonsProps {
   existingNames: string[];
   existingNicknames: string[];
   testNamePrefix?: string;
@@ -52,7 +48,6 @@ interface TestEditorActionButtonsProps extends WithStyles<typeof styles> {
 }
 
 const TestEditorActionButtons: React.FC<TestEditorActionButtonsProps> = ({
-  classes,
   existingNames,
   existingNicknames,
   testNamePrefix,
@@ -61,6 +56,8 @@ const TestEditorActionButtons: React.FC<TestEditorActionButtonsProps> = ({
   isDisabled,
   onCopy,
 }: TestEditorActionButtonsProps) => {
+  const classes = useStyles();
+
   const DeleteButton: React.FC = () => {
     const [isOpen, open, close] = useOpenable();
 
@@ -179,4 +176,4 @@ const TestEditorActionButtons: React.FC<TestEditorActionButtonsProps> = ({
   );
 };
 
-export default withStyles(styles)(TestEditorActionButtons);
+export default TestEditorActionButtons;

@@ -8,29 +8,25 @@ import {
   FormControlLabel,
   TextField,
   Theme,
-  WithStyles,
-  createStyles,
-  withStyles,
+  makeStyles,
 } from '@material-ui/core';
 import { ArticlesViewedSettings } from './helpers/shared';
 import { notNumberValidator, EMPTY_ERROR_HELPER_TEXT } from './helpers/validation';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const styles = ({ spacing }: Theme) =>
-  createStyles({
-    container: {
-      '& > * + *': {
-        marginTop: spacing(2),
-      },
+const useStyles = makeStyles(({ spacing }: Theme) => ({
+  container: {
+    '& > * + *': {
+      marginTop: spacing(2),
     },
-    formContainer: {
-      maxWidth: '250px',
+  },
+  formContainer: {
+    maxWidth: '250px',
 
-      '& > * + *': {
-        marginTop: spacing(1),
-      },
+    '& > * + *': {
+      marginTop: spacing(1),
     },
-  });
+  },
+}));
 
 export const DEFAULT_ARTICLES_VIEWED_SETTINGS: ArticlesViewedSettings = {
   minViews: 5,
@@ -44,7 +40,7 @@ interface FormData {
   periodInWeeks: string;
 }
 
-interface TestEditorArticleCountEditorProps extends WithStyles<typeof styles> {
+interface TestEditorArticleCountEditorProps {
   articlesViewedSettings?: ArticlesViewedSettings;
   onArticlesViewedSettingsChanged: (updatedArticlesViewedSettings?: ArticlesViewedSettings) => void;
   onValidationChange: (isValid: boolean) => void;
@@ -52,12 +48,13 @@ interface TestEditorArticleCountEditorProps extends WithStyles<typeof styles> {
 }
 
 const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> = ({
-  classes,
   articlesViewedSettings,
   onArticlesViewedSettingsChanged,
   onValidationChange,
   isDisabled,
 }: TestEditorArticleCountEditorProps) => {
+  const classes = useStyles();
+
   const defaultValues: FormData = {
     minViews: articlesViewedSettings?.minViews?.toString() || '',
     maxViews: articlesViewedSettings?.maxViews?.toString() || '',
@@ -171,4 +168,4 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
   );
 };
 
-export default withStyles(styles)(TestEditorArticleCountEditor);
+export default TestEditorArticleCountEditor;

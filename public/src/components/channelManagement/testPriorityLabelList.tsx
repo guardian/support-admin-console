@@ -1,9 +1,9 @@
 import React from 'react';
-import { createStyles, List, withStyles, WithStyles } from '@material-ui/core';
+import { List, makeStyles } from '@material-ui/core';
 
 import TestPriorityLabelListLabel from './testPriorityLabelListLabel';
 
-const styles = createStyles({
+const useStyles = makeStyles(() => ({
   list: {
     marginTop: 0,
     padding: 0,
@@ -11,18 +11,18 @@ const styles = createStyles({
       marginTop: '8px',
     },
   },
-});
+}));
 
-interface TestPriorityLabelListProps extends WithStyles<typeof styles> {
+interface TestPriorityLabelListProps {
   numTests: number;
 }
 
 const MAX_PRIORITY_TO_DISPLAY_LABEL_FOR = 5;
 
 const TestPriorityLabelList: React.FC<TestPriorityLabelListProps> = ({
-  classes,
   numTests,
 }: TestPriorityLabelListProps) => {
+  const classes = useStyles();
   const maxPriorityLabel = Math.min(numTests, MAX_PRIORITY_TO_DISPLAY_LABEL_FOR);
 
   return (
@@ -34,4 +34,4 @@ const TestPriorityLabelList: React.FC<TestPriorityLabelListProps> = ({
   );
 };
 
-export default withStyles(styles)(TestPriorityLabelList);
+export default TestPriorityLabelList;

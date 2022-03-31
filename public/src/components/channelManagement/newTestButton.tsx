@@ -1,11 +1,11 @@
 import React from 'react';
-import { Button, createStyles, Typography, WithStyles, withStyles } from '@material-ui/core';
+import { Button, makeStyles, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 
 import CreateTestDialog from './createTestDialog';
 import useOpenable from '../../hooks/useOpenable';
 
-const styles = createStyles({
+const useStyles = makeStyles(() => ({
   button: {
     borderStyle: 'dashed',
     justifyContent: 'start',
@@ -17,9 +17,9 @@ const styles = createStyles({
     textTransform: 'uppercase',
     letterSpacing: '1px',
   },
-});
+}));
 
-interface NewTestButtonProps extends WithStyles<typeof styles> {
+interface NewTestButtonProps {
   existingNames: string[];
   existingNicknames: string[];
   testNamePrefix?: string;
@@ -27,12 +27,12 @@ interface NewTestButtonProps extends WithStyles<typeof styles> {
 }
 
 const NewTestButton: React.FC<NewTestButtonProps> = ({
-  classes,
   existingNames,
   existingNicknames,
   testNamePrefix,
   createTest,
 }: NewTestButtonProps) => {
+  const classes = useStyles();
   const [isOpen, open, close] = useOpenable();
   return (
     <>
@@ -52,4 +52,4 @@ const NewTestButton: React.FC<NewTestButtonProps> = ({
   );
 };
 
-export default withStyles(styles)(NewTestButton);
+export default NewTestButton;
