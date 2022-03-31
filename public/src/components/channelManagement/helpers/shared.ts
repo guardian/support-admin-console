@@ -209,7 +209,8 @@ export enum UserCohort {
   Everyone = 'Everyone',
   AllExistingSupporters = 'AllExistingSupporters',
   AllNonSupporters = 'AllNonSupporters',
-  PostAskPauseSingleContributors = 'PostAskPauseSingleContributors',
+  // Not currently supported
+  // PostAskPauseSingleContributors = 'PostAskPauseSingleContributors',
 }
 
 // Stores tests which have been modified
