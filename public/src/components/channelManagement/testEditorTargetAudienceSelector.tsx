@@ -5,8 +5,7 @@ import { Region } from '../../utils/models';
 import { DeviceType, UserCohort } from './helpers/shared';
 
 import TestEditorTargetRegionsSelector from './testEditorTargetRegionsSelector';
-import TestEditorTargetSupporterStatusSelector from './testEditorTargetSupporterStatusSelector';
-import TestEditorTargetDeviceType from './testEditorTargetDeviceType';
+import TypedRadioGroup from './TypedRadioGroup';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
@@ -69,10 +68,15 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
       {showSupporterStatusSelector && (
         <div className={classes.sectionContainer}>
           <Typography className={classes.heading}>Supporter Status</Typography>
-          <TestEditorTargetSupporterStatusSelector
-            selectedCohort={selectedCohort}
-            onCohortChange={onCohortChange}
+          <TypedRadioGroup
+            selectedValue={selectedCohort}
+            onChange={onCohortChange}
             isDisabled={isDisabled}
+            labels={{
+              Everyone: 'Everyone',
+              AllNonSupporters: 'Non-supporters',
+              AllExistingSupporters: 'Existing supporters',
+            }}
           />
         </div>
       )}
@@ -80,10 +84,15 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
       {showDeviceTypeSelector && (
         <div className={classes.sectionContainer}>
           <Typography className={classes.heading}>Device Type</Typography>
-          <TestEditorTargetDeviceType
-            selectedDeviceType={selectedDeviceType}
+          <TypedRadioGroup
+            selectedValue={selectedDeviceType}
             onChange={onDeviceTypeChange}
             isDisabled={isDisabled}
+            labels={{
+              All: 'All',
+              Desktop: 'Desktop',
+              Mobile: 'Mobile',
+            }}
           />
         </div>
       )}
