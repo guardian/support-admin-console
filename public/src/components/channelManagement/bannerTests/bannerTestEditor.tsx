@@ -284,7 +284,9 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
         <div className={classes.buttonsContainer}>
           <TestEditorActionButtons
             existingNames={testNames}
+            sourceName={test.name}
             existingNicknames={testNicknames}
+            sourceNickname={test.nickname}
             isDisabled={!editMode}
             onArchive={onArchive}
             onDelete={onDelete}

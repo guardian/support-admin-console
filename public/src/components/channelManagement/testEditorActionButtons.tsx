@@ -39,7 +39,9 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
 
 interface TestEditorActionButtonsProps {
   existingNames: string[];
+  sourceName?: string | void;
   existingNicknames: string[];
+  sourceNickname?: string | void;
   testNamePrefix?: string;
   onArchive: () => void;
   onDelete: () => void;
@@ -49,7 +51,9 @@ interface TestEditorActionButtonsProps {
 
 const TestEditorActionButtons: React.FC<TestEditorActionButtonsProps> = ({
   existingNames,
+  sourceName,
   existingNicknames,
+  sourceNickname,
   testNamePrefix,
   onArchive,
   onDelete,
@@ -157,7 +161,9 @@ const TestEditorActionButtons: React.FC<TestEditorActionButtonsProps> = ({
           isOpen={isOpen}
           close={close}
           existingNames={existingNames}
+          sourceName={sourceName}
           existingNicknames={existingNicknames}
+          sourceNickname={sourceNickname}
           testNamePrefix={testNamePrefix}
           mode="COPY"
           createTest={onCopy}
