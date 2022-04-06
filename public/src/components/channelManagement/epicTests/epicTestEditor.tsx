@@ -380,7 +380,9 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
       <div className={classes.buttonsContainer}>
         <TestEditorActionButtons
           existingNames={testNames}
+          sourceName={test.name}
           existingNicknames={testNicknames}
+          sourceNickname={test.nickname}
           testNamePrefix={testNamePrefix}
           isDisabled={!editMode}
           onArchive={onArchive}

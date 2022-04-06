@@ -58,7 +58,9 @@ interface CreateTestDialogProps {
   isOpen: boolean;
   close: () => void;
   existingNames: string[];
+  sourceName?: string | void;
   existingNicknames: string[];
+  sourceNickname?: string | void;
   mode: Mode;
   testNamePrefix?: string; // set if all tests must have the same prefix
   createTest: (name: string, nickname: string) => void;
@@ -68,7 +70,9 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
   isOpen,
   close,
   existingNames,
+  sourceName,
   existingNicknames,
+  sourceNickname,
   mode,
   testNamePrefix,
   createTest,
@@ -76,8 +80,8 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
   const classes = useStyles();
 
   const defaultValues = {
-    name: '',
-    nickname: '',
+    name: sourceName || '',
+    nickname: sourceNickname || '',
   };
 
   const { register, handleSubmit, errors } = useForm<FormData>({

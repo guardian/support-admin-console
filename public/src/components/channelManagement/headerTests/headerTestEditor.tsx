@@ -210,7 +210,9 @@ const HeaderTestEditor: React.FC<HeaderTestEditorProps> = ({
         <div className={classes.buttonsContainer}>
           <TestEditorActionButtons
             existingNames={testNames}
+            sourceName={test.name}
             existingNicknames={testNicknames}
+            sourceNickname={test.nickname}
             isDisabled={!editMode}
             onArchive={onArchive}
             onDelete={onDelete}
