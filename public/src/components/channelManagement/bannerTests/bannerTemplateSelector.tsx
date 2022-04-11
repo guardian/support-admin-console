@@ -23,6 +23,7 @@ const templatesWithLabels = [
   { template: BannerTemplate.InvestigationsMomentBanner, label: 'Investigations moment' },
   { template: BannerTemplate.EnvironmentMomentBanner, label: 'Environment moment' },
   { template: BannerTemplate.GlobalNewYearBanner, label: 'Global New Year moment' },
+  { template: BannerTemplate.ElectionAuMomentBanner, label: 'Australian Election moment' },
 ];
 
 const BannerTemplateSelector: React.FC<BannerTemplateSelectorProps> = ({
