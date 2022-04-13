@@ -36,6 +36,7 @@ interface RichTextEditorProps<T> {
   error: boolean;
   updateCopy: (item?: T) => void;
   copyData?: T;
+  allowHtml: boolean;
 }
 
 interface RichTextMenuProps {
@@ -291,6 +292,25 @@ const getRteCopyLength = (copy: string[]): number => {
   return paragraphsCheck.length;
 };
 
+const paragraphsToArray = (html: string): string[] => {
+  const frag = document.createElement('div');
+  frag.innerHTML = html;
+
+  const elements = Array.from(frag.children);
+
+  const paragraphs = elements.filter(p => {
+    if (p == null) {
+      return false;
+    }
+    if (p.tagName === 'P') {
+      return true;
+    }
+    return false;
+  });
+
+  return paragraphs.map(p => p.innerHTML);
+};
+
 // Component function
 const RichTextEditor: React.FC<RichTextEditorProps<string[]>> = ({
   disabled,
@@ -300,6 +320,7 @@ const RichTextEditor: React.FC<RichTextEditorProps<string[]>> = ({
   error,
   updateCopy,
   copyData,
+  allowHtml,
 }: RichTextEditorProps<string[]>) => {
   const classes = useRTEStyles();
 
@@ -310,28 +331,16 @@ const RichTextEditor: React.FC<RichTextEditorProps<string[]>> = ({
 
   const hooks = [
     () => {
-      const { getHTML } = useHelpers();
+      const { getHTML, getText } = useHelpers();
 
       const handleSaveShortcut = useCallback(
         ({ state }) => {
-          const frag = document.createElement('div');
-          frag.innerHTML = getHTML(state);
-
-          const elements = Array.from(frag.children);
-
-          const paragraphs = elements.filter(p => {
-            if (p == null) {
-              return false;
-            }
-            if (p.tagName === 'P') {
-              return true;
-            }
-            return false;
-          });
-
-          const paragraphsCopy = paragraphs.map(p => p.innerHTML);
-
-          updateCopy(paragraphsCopy);
+          if (!allowHtml) {
+            // getText gives us the plain text representation with line breaks
+            updateCopy(getText(state).split('\n'));
+          } else {
+            updateCopy(paragraphsToArray(getHTML(state)));
+          }
           return true;
         },
         [getHTML],
@@ -378,6 +387,7 @@ const RichTextEditorSingleLine: React.FC<RichTextEditorProps<string>> = ({
   error,
   updateCopy,
   copyData,
+  allowHtml,
 }: RichTextEditorProps<string>) => {
   const onUpdate = (paras: string[] | undefined): void => {
     if (!!paras) {
@@ -396,6 +406,7 @@ const RichTextEditorSingleLine: React.FC<RichTextEditorProps<string>> = ({
       error={error}
       updateCopy={onUpdate}
       copyData={!!copyData ? [copyData] : undefined}
+      allowHtml={allowHtml}
     />
   );
 };
