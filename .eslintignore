@@ -1,1 +1,14 @@
 /cdk
+target/
+logs/
+elm-stuff/
+public/build/
+node_modules/
+.idea
+.vscode
+.DS_Store
+.bloop/
+.metals/
+.bsp/
+project
+
