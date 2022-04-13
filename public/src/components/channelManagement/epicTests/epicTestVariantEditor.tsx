@@ -94,6 +94,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   const classes = getUseStyles(epicEditorConfig.allowMultipleVariants)();
 
   const templateValidator = templateValidatorForPlatform(epicEditorConfig.platform);
+  const allowHtml = epicEditorConfig.platform === 'DOTCOM';
 
   const defaultValues: FormData = {
     heading: variant.heading,
@@ -195,6 +196,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                 name="heading"
                 label="Header"
                 disabled={!editMode}
+                allowHtml={allowHtml}
               />
             );
           }}
@@ -228,6 +230,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
               name="paragraphs"
               label="Body copy"
               disabled={!editMode}
+              allowHtml={allowHtml}
             />
           );
         }}
@@ -258,6 +261,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                 name="highlightedText"
                 label="Highlighted text"
                 disabled={!editMode}
+                allowHtml={allowHtml}
               />
             );
           }}
@@ -288,6 +292,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                 name="footer"
                 label="Footer"
                 disabled={!editMode}
+                allowHtml={allowHtml}
               />
             );
           }}

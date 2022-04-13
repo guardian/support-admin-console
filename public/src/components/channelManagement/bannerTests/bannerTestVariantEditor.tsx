@@ -236,6 +236,7 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
                   name="heading"
                   label="Header"
                   disabled={!editMode}
+                  allowHtml={true}
                 />
               );
             }}
@@ -270,6 +271,7 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
                   name="paragraphs"
                   label="Body copy"
                   disabled={!editMode}
+                  allowHtml={true}
                 />
               );
             }}
@@ -300,6 +302,7 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
                     name="highlightedText"
                     label="Highlighted text"
                     disabled={!editMode}
+                    allowHtml={true}
                   />
                 );
               }}
