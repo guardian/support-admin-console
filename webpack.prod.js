@@ -14,7 +14,7 @@ module.exports = {
       {
         test: /^(?!.*\.spec\.tsx?$).*\.tsx?$/,
         use: 'ts-loader',
-        exclude: /node_modules/,
+        exclude: [/node_modules/, /cdk/],
       },
       {
         test: /\.(scss|css)$/,

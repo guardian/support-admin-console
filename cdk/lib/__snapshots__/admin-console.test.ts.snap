@@ -1,0 +1,616 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`The AdminConsole stack matches the snapshot 1`] = `
+Object {
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "support-admin-console",
+  "Parameters": Object {
+    "AMI": Object {
+      "Default": "ami-0eb88168",
+      "Description": "AMI ID (may be replaced by RiffRaff for latest baked AMI)",
+      "Type": "String",
+    },
+    "App": Object {
+      "Default": "admin-console",
+      "Description": "Applied directly as a tag",
+      "Type": "String",
+    },
+    "BastionSecurityGroup": Object {
+      "Description": "Bastion's security group for SSH",
+      "Type": "String",
+    },
+    "CertificateARN": Object {
+      "Description": "SSL certificate ARN",
+      "Type": "String",
+    },
+    "KingsPlaceIP": Object {
+      "Default": "77.91.248.0/21",
+      "Description": "Kings Place IP range",
+      "Type": "String",
+    },
+    "PrivateVpcSubnets": Object {
+      "Description": "Private subnets to use for EC2 instances",
+      "Type": "List<AWS::EC2::Subnet::Id>",
+    },
+    "PublicVpcSubnets": Object {
+      "Description": "Public subnets to use for the ELB",
+      "Type": "List<AWS::EC2::Subnet::Id>",
+    },
+    "Stack": Object {
+      "Description": "Applied directly as a tag",
+      "Type": "String",
+    },
+    "Stage": Object {
+      "Description": "Applied directly as a tag",
+      "Type": "String",
+    },
+    "VpcId": Object {
+      "Default": "vpc-e6e00183",
+      "Description": "VpcId of your existing Virtual Private Cloud (VPC)",
+      "Type": "String",
+    },
+  },
+  "Resources": Object {
+    "AppRole": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "sts:AssumeRole",
+              ],
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": Array [
+                  "ec2.amazonaws.com",
+                ],
+              },
+            },
+          ],
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Sub": "arn:aws:iam::\${AWS::AccountId}:policy/guardian-ec2-role-for-ssm",
+          },
+        ],
+        "Path": "/",
+        "Policies": Array [
+          Object {
+            "PolicyDocument": Object {
+              "Statement": Array [
+                Object {
+                  "Action": Array [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents",
+                  ],
+                  "Effect": "Allow",
+                  "Resource": Object {
+                    "Fn::GetAtt": "LogGroup.Arn",
+                  },
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "CloudwatchLogs",
+          },
+          Object {
+            "PolicyDocument": Object {
+              "Statement": Array [
+                Object {
+                  "Action": "ssm:GetParametersByPath",
+                  "Effect": "Allow",
+                  "Resource": Object {
+                    "Fn::Sub": "arn:aws:ssm:\${AWS::Region}:\${AWS::AccountId}:parameter/\${App}/\${Stage}",
+                  },
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "ConfigLoad",
+          },
+          Object {
+            "PolicyDocument": Object {
+              "Statement": Array [
+                Object {
+                  "Action": "s3:*",
+                  "Effect": "Allow",
+                  "Resource": Object {
+                    "Fn::Sub": "arn:aws:s3:::support-admin-console/\${Stage}/*",
+                  },
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "SettingsBucket",
+          },
+          Object {
+            "PolicyDocument": Object {
+              "Statement": Array [
+                Object {
+                  "Action": "s3:*",
+                  "Effect": "Allow",
+                  "Resource": Array [
+                    Object {
+                      "Fn::Sub": "arn:aws:s3:::gu-contributions-public/epic/\${Stage}/*",
+                    },
+                    Object {
+                      "Fn::Sub": "arn:aws:s3:::gu-contributions-public/header/\${Stage}/*",
+                    },
+                    Object {
+                      "Fn::Sub": "arn:aws:s3:::gu-contributions-public/banner/\${Stage}/*",
+                    },
+                  ],
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "PublicSettingsBucket",
+          },
+          Object {
+            "PolicyDocument": Object {
+              "Statement": Array [
+                Object {
+                  "Action": "s3:GetObject",
+                  "Effect": "Allow",
+                  "Resource": "arn:aws:s3:::support-admin-console/google-auth-service-account-certificate.json",
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "GoogleServiceAccountCertificate",
+          },
+          Object {
+            "PolicyDocument": Object {
+              "Statement": Array [
+                Object {
+                  "Action": Array [
+                    "autoscaling:DescribeAutoScalingInstances",
+                    "autoscaling:DescribeAutoScalingGroups",
+                  ],
+                  "Effect": "Allow",
+                  "Resource": "*",
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "DescribeAutoScaling",
+          },
+          Object {
+            "PolicyDocument": Object {
+              "Statement": Array [
+                Object {
+                  "Action": "ec2:DescribeTags",
+                  "Effect": "Allow",
+                  "Resource": "*",
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "DescribeTags",
+          },
+          Object {
+            "PolicyDocument": Object {
+              "Statement": Object {
+                "Action": "s3:GetObject",
+                "Effect": "Allow",
+                "Resource": Array [
+                  "arn:aws:s3::*:membership-dist/*",
+                ],
+              },
+            },
+            "PolicyName": "s3Deploy",
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "40.0.1",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/support-admin-console",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "AutoScalingGroup": Object {
+      "Properties": Object {
+        "HealthCheckGracePeriod": 300,
+        "HealthCheckType": "ELB",
+        "LaunchConfigurationName": Object {
+          "Ref": "LaunchConfig",
+        },
+        "MaxSize": "2",
+        "MinSize": "1",
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "PropagateAtLaunch": true,
+            "Value": Object {
+              "Ref": "App",
+            },
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "PropagateAtLaunch": true,
+            "Value": "40.0.1",
+          },
+          Object {
+            "Key": "gu:repo",
+            "PropagateAtLaunch": true,
+            "Value": "guardian/support-admin-console",
+          },
+          Object {
+            "Key": "Name",
+            "PropagateAtLaunch": true,
+            "Value": Object {
+              "Fn::Join": Array [
+                "-",
+                Array [
+                  Object {
+                    "Ref": "Stack",
+                  },
+                  Object {
+                    "Ref": "Stage",
+                  },
+                  Object {
+                    "Ref": "App",
+                  },
+                ],
+              ],
+            },
+          },
+          Object {
+            "Key": "Stack",
+            "PropagateAtLaunch": true,
+            "Value": "support",
+          },
+          Object {
+            "Key": "Stage",
+            "PropagateAtLaunch": true,
+            "Value": "TEST",
+          },
+        ],
+        "TargetGroupARNs": Array [
+          Object {
+            "Ref": "TargetGroup",
+          },
+        ],
+        "VPCZoneIdentifier": Object {
+          "Ref": "PrivateVpcSubnets",
+        },
+      },
+      "Type": "AWS::AutoScaling::AutoScalingGroup",
+    },
+    "ElasticLoadBalancer": Object {
+      "Properties": Object {
+        "Name": Object {
+          "Fn::Sub": "\${Stack}-\${Stage}-\${App}",
+        },
+        "SecurityGroups": Array [
+          Object {
+            "Ref": "LoadBalancerSecurityGroup",
+          },
+        ],
+        "Subnets": Object {
+          "Ref": "PublicVpcSubnets",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": Object {
+              "Ref": "App",
+            },
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "40.0.1",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/support-admin-console",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+    },
+    "InstanceProfile": Object {
+      "Properties": Object {
+        "Path": "/",
+        "Roles": Array [
+          Object {
+            "Ref": "AppRole",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::InstanceProfile",
+    },
+    "InstanceSecurityGroup": Object {
+      "Properties": Object {
+        "GroupDescription": "Open up SSH access and enable HTTP access on the configured port",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "FromPort": 22,
+            "IpProtocol": "tcp",
+            "SourceSecurityGroupId": Object {
+              "Ref": "BastionSecurityGroup",
+            },
+            "ToPort": 22,
+          },
+          Object {
+            "CidrIp": Object {
+              "Ref": "KingsPlaceIP",
+            },
+            "FromPort": 9000,
+            "IpProtocol": "tcp",
+            "ToPort": 9000,
+          },
+          Object {
+            "FromPort": 9000,
+            "IpProtocol": "tcp",
+            "SourceSecurityGroupId": Object {
+              "Ref": "LoadBalancerSecurityGroup",
+            },
+            "ToPort": 9000,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "40.0.1",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/support-admin-console",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "VpcId",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "LaunchConfig": Object {
+      "Properties": Object {
+        "AssociatePublicIpAddress": false,
+        "IamInstanceProfile": Object {
+          "Ref": "InstanceProfile",
+        },
+        "ImageId": Object {
+          "Ref": "AMI",
+        },
+        "InstanceType": "t4g.micro",
+        "SecurityGroups": Array [
+          Object {
+            "Ref": "InstanceSecurityGroup",
+          },
+          Object {
+            "Ref": "WazuhSecurityGroup",
+          },
+        ],
+        "UserData": Object {
+          "Fn::Base64": Object {
+            "Fn::Sub": "#!/bin/bash -ev
+aws --region \${AWS::Region} s3 cp s3://membership-dist/\${Stack}/\${Stage}/\${App}/support-admin-console_1.0-SNAPSHOT_all.deb /tmp
+dpkg -i /tmp/support-admin-console_1.0-SNAPSHOT_all.deb
+/opt/cloudwatch-logs/configure-logs application \${Stack} \${Stage} \${App} /var/log/support-admin-console/application.log
+",
+          },
+        },
+      },
+      "Type": "AWS::AutoScaling::LaunchConfiguration",
+    },
+    "LoadBalancerListener": Object {
+      "Properties": Object {
+        "Certificates": Array [
+          Object {
+            "CertificateArn": Object {
+              "Ref": "CertificateARN",
+            },
+          },
+        ],
+        "DefaultActions": Array [
+          Object {
+            "TargetGroupArn": Object {
+              "Ref": "TargetGroup",
+            },
+            "Type": "forward",
+          },
+        ],
+        "LoadBalancerArn": Object {
+          "Ref": "ElasticLoadBalancer",
+        },
+        "Port": 443,
+        "Protocol": "HTTPS",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+    },
+    "LoadBalancerSecurityGroup": Object {
+      "Properties": Object {
+        "GroupDescription": "Permit incoming HTTPS access on port 443, egress to port 9000",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": 9000,
+            "IpProtocol": "tcp",
+            "ToPort": 9000,
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "40.0.1",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/support-admin-console",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "VpcId",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "LogGroup": Object {
+      "Properties": Object {
+        "LogGroupName": Object {
+          "Fn::Sub": "\${Stack}-\${App}-\${Stage}",
+        },
+        "RetentionInDays": 14,
+        "Tags": Array [
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "40.0.1",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/support-admin-console",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::Logs::LogGroup",
+    },
+    "TargetGroup": Object {
+      "DependsOn": Array [
+        "ElasticLoadBalancer",
+      ],
+      "Properties": Object {
+        "HealthCheckIntervalSeconds": 10,
+        "HealthCheckPath": "/healthcheck",
+        "HealthCheckPort": "9000",
+        "HealthCheckProtocol": "HTTP",
+        "HealthCheckTimeoutSeconds": 5,
+        "HealthyThresholdCount": 2,
+        "Name": Object {
+          "Fn::Sub": "\${Stack}-\${Stage}-\${App}",
+        },
+        "Port": 9000,
+        "Protocol": "HTTP",
+        "Tags": Array [
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "40.0.1",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/support-admin-console",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+        "TargetGroupAttributes": Array [
+          Object {
+            "Key": "deregistration_delay.timeout_seconds",
+            "Value": "20",
+          },
+        ],
+        "UnhealthyThresholdCount": 2,
+        "VpcId": Object {
+          "Ref": "VpcId",
+        },
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+    },
+    "WazuhSecurityGroup": Object {
+      "Properties": Object {
+        "GroupDescription": "Allow outbound traffic from wazuh agent to manager",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": 1514,
+            "IpProtocol": "tcp",
+            "ToPort": 1515,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "40.0.1",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/support-admin-console",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "VpcId",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+  },
+}
+`;
