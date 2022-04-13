@@ -53,13 +53,5 @@
     "lint": "eslint .  --ext .js,.jsx,.ts,.tsx",
     "fix": "npm run lint -- --fix",
     "test": "echo 'Running JS tests' && jest"
-  },
-  "jest": {
-    "modulePaths": [
-      "public"
-    ],
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    }
   }
 }

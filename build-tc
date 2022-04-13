@@ -15,6 +15,5 @@ npm run test
 npm run build
 
 cd cdk
-yarn
 ./script/ci
 
