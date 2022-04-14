@@ -5,7 +5,9 @@ deployments:
     type: cloud-formation
     app: admin-console
     parameters:
-      templatePath: cfn.yaml
+      templateStagePaths:
+        CODE: AdminConsole-CODE.template.json
+        PROD: AdminConsole-PROD.template.json
       amiTags:
         Recipe: bionic-membership-ARM
         AmigoStage: PROD
