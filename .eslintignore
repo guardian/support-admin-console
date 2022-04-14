@@ -1,7 +1,6 @@
-/cdk
+cdk/
 target/
 logs/
-elm-stuff/
 public/build/
 node_modules/
 .idea
@@ -11,4 +10,3 @@ node_modules/
 .metals/
 .bsp/
 project
-
