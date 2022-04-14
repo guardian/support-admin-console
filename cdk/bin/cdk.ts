@@ -1,5 +1,5 @@
 import 'source-map-support/register';
-import { App } from '@aws-cdk/core';
+import { App } from 'aws-cdk-lib';
 import { AdminConsole } from '../lib/admin-console';
 
 const app = new App();

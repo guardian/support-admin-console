@@ -205,7 +205,7 @@ Object {
         "Tags": Array [
           Object {
             "Key": "gu:cdk:version",
-            "Value": "40.0.1",
+            "Value": "TEST",
           },
           Object {
             "Key": "gu:repo",
@@ -243,7 +243,7 @@ Object {
           Object {
             "Key": "gu:cdk:version",
             "PropagateAtLaunch": true,
-            "Value": "40.0.1",
+            "Value": "TEST",
           },
           Object {
             "Key": "gu:repo",
@@ -314,7 +314,7 @@ Object {
           },
           Object {
             "Key": "gu:cdk:version",
-            "Value": "40.0.1",
+            "Value": "TEST",
           },
           Object {
             "Key": "gu:repo",
@@ -383,7 +383,7 @@ Object {
         "Tags": Array [
           Object {
             "Key": "gu:cdk:version",
-            "Value": "40.0.1",
+            "Value": "TEST",
           },
           Object {
             "Key": "gu:repo",
@@ -481,7 +481,7 @@ dpkg -i /tmp/support-admin-console_1.0-SNAPSHOT_all.deb
         "Tags": Array [
           Object {
             "Key": "gu:cdk:version",
-            "Value": "40.0.1",
+            "Value": "TEST",
           },
           Object {
             "Key": "gu:repo",
@@ -511,7 +511,7 @@ dpkg -i /tmp/support-admin-console_1.0-SNAPSHOT_all.deb
         "Tags": Array [
           Object {
             "Key": "gu:cdk:version",
-            "Value": "40.0.1",
+            "Value": "TEST",
           },
           Object {
             "Key": "gu:repo",
@@ -548,7 +548,7 @@ dpkg -i /tmp/support-admin-console_1.0-SNAPSHOT_all.deb
         "Tags": Array [
           Object {
             "Key": "gu:cdk:version",
-            "Value": "40.0.1",
+            "Value": "TEST",
           },
           Object {
             "Key": "gu:repo",
@@ -590,7 +590,7 @@ dpkg -i /tmp/support-admin-console_1.0-SNAPSHOT_all.deb
         "Tags": Array [
           Object {
             "Key": "gu:cdk:version",
-            "Value": "40.0.1",
+            "Value": "TEST",
           },
           Object {
             "Key": "gu:repo",
