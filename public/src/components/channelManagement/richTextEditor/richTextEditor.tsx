@@ -26,6 +26,8 @@ import {
 } from '@remirror/react';
 import './styles.scss';
 import { useRTEStyles } from './richTextEditorStyles';
+import { CreateExtensionPlugin, PlainExtension } from 'remirror';
+import { Plugin } from 'prosemirror-state';
 
 // Typescript
 interface RichTextEditorProps<T> {
@@ -42,6 +44,31 @@ interface RichTextEditorProps<T> {
 interface RichTextMenuProps {
   disabled: boolean;
   label: string | undefined;
+}
+
+/**
+ * A Remirror Extension to add a prosemirror plugin which removes html from pasted text.
+ * This is important because our users often paste from Google Docs, which may inadvertently include markup.
+ *
+ * transformPastedHTML - https://prosemirror.net/docs/ref/version/0.17.0.html#view.EditorProps.transformPastedHTML
+ * createPlugin - https://remirror.io/docs/api/core.pluginsextension.createplugin
+ */
+class RemovePastedHtmlExtension extends PlainExtension {
+  get name() {
+    return 'RemovePastedHtmlExtension' as const;
+  }
+  createPlugin(): CreateExtensionPlugin {
+    return new Plugin({
+      key: this.pluginKey,
+
+      props: {
+        transformPastedHTML: html => {
+          const doc = new DOMParser().parseFromString(html, 'text/html');
+          return doc.body.textContent || '';
+        },
+      },
+    });
+  }
 }
 
 // ReMirror/ProseMirror LINK functionality
@@ -356,6 +383,7 @@ const RichTextEditor: React.FC<RichTextEditorProps<string[]>> = ({
       new ItalicExtension(),
       new LinkExtension({ autoLink: true }),
       new TextHighlightExtension(),
+      new RemovePastedHtmlExtension(),
     ],
     content: parseCopyForParagraphs(copyData),
     selection: 'start',
