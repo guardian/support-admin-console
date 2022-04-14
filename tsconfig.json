@@ -18,6 +18,7 @@
     "target",
     "config",
     "scripts",
-    "**/*.spec.tsx"
+    "**/*.spec.tsx",
+    "cdk"
   ]
 }

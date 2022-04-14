@@ -1,0 +1,12 @@
+cdk/
+target/
+logs/
+public/build/
+node_modules/
+.idea
+.vscode
+.DS_Store
+.bloop/
+.metals/
+.bsp/
+project
