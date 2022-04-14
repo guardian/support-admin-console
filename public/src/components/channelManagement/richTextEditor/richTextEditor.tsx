@@ -51,6 +51,7 @@ interface RichTextMenuProps {
  * This is important because our users often paste from Google Docs, which may inadvertently include markup.
  *
  * transformPastedHTML - https://prosemirror.net/docs/ref/version/0.17.0.html#view.EditorProps.transformPastedHTML
+ * createPlugin - https://remirror.io/docs/api/core.pluginsextension.createplugin
  */
 class RemovePastedHtmlExtension extends PlainExtension {
   get name() {
