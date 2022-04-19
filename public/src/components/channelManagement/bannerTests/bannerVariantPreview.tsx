@@ -107,6 +107,10 @@ const bannerModules = {
     path: 'globalNewYear/GlobalNewYearBanner.js',
     name: 'GlobalNewYearBanner',
   },
+  [BannerTemplate.ElectionAuMomentBanner]: {
+    path: 'electionAuMoment/ElectionAuMomentBanner.js',
+    name: 'ElectionAuMomentBanner',
+  },
 };
 
 const useStyles = makeStyles(({ palette }: Theme) => ({

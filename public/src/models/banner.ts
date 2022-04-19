@@ -18,6 +18,7 @@ export enum BannerTemplate {
   InvestigationsMomentBanner = 'InvestigationsMomentBanner',
   EnvironmentMomentBanner = 'EnvironmentMomentBanner',
   GlobalNewYearBanner = 'GlobalNewYearBanner',
+  ElectionAuMomentBanner = 'ElectionAuMomentBanner',
 }
 
 export interface BannerContent {
