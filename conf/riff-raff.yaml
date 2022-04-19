@@ -13,6 +13,13 @@ deployments:
         Recipe: bionic-membership-ARM
         AmigoStage: PROD
       amiEncrypted: true
+  dynamo-cfn:
+    type: cloud-formation
+    app: admin-console-dynamo
+    parameters:
+      templateStagePaths:
+        CODE: AdminConsoleDynamo-CODE.template.json
+        PROD: AdminConsoleDynamo-PROD.template.json
   admin-console:
     type: autoscaling
     dependencies: [cfn]
