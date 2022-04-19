@@ -41,7 +41,7 @@ riffRaffUploadManifestBucket := Option("riffraff-builds")
 riffRaffArtifactResources ++= Seq(
   file("cdk/cdk.out/AdminConsole-PROD.template.json") -> "cfn/AdminConsole-PROD.template.json",
   file("cdk/cdk.out/AdminConsole-CODE.template.json") -> "cfn/AdminConsole-CODE.template.json",
-  file("cdk/cdk.out/AdminConsoleDynamo-PROD.template.json") -> "cfn/AdminConsoleDynamo-PROD.template.json",
-  file("cdk/cdk.out/AdminConsoleDynamo-CODE.template.json") -> "cfn/AdminConsoleDynamo-CODE.template.json",
+  file("cdk/cdk.out/AdminConsoleDynamo-PROD.template.json") -> "dynamo-cfn/AdminConsoleDynamo-PROD.template.json",
+  file("cdk/cdk.out/AdminConsoleDynamo-CODE.template.json") -> "dynamo-cfn/AdminConsoleDynamo-CODE.template.json",
 )
 javaOptions in run ++= Seq("-Xms2G", "-Xmx2G", "-Xss4M")
