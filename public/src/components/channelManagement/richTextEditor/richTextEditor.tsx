@@ -26,8 +26,9 @@ import {
 } from '@remirror/react';
 import './styles.scss';
 import { useRTEStyles } from './richTextEditorStyles';
-import { CreateExtensionPlugin, PlainExtension } from 'remirror';
+import { CreateExtensionPlugin, PlainExtension, InputRule } from 'remirror';
 import { Plugin } from 'prosemirror-state';
+import { MarkPasteRule } from '@remirror/pm/paste-rules';
 
 // Typescript
 interface RichTextEditorProps<T> {
@@ -44,6 +45,30 @@ interface RichTextEditorProps<T> {
 interface RichTextMenuProps {
   disabled: boolean;
   label: string | undefined;
+}
+
+/**
+ * Remirror extensions to override the built-in bold and italic extensions
+ * These are needed because by default the built-in extensions allow markup-like input:
+ * - For bold, __words__ and **words**
+ * - For italic, _words_
+ *
+ * These extensions override that functionality
+ * See Remirror discussion on GitHub: https://github.com/remirror/remirror/discussions/1526
+ */
+class MyBoldExtension extends BoldExtension {
+  createInputRules(): InputRule[] {
+    return [];
+  }
+}
+
+class MyItalicExtension extends ItalicExtension {
+  createInputRules(): InputRule[] {
+    return [];
+  }
+  createPasteRules(): MarkPasteRule[] {
+    return [];
+  }
 }
 
 /**
@@ -379,8 +404,8 @@ const RichTextEditor: React.FC<RichTextEditorProps<string[]>> = ({
   // Instantiate the Remirror RTE component
   const { manager, state } = useRemirror({
     extensions: () => [
-      new BoldExtension(),
-      new ItalicExtension(),
+      new MyBoldExtension(),
+      new MyItalicExtension(),
       new LinkExtension({ autoLink: true }),
       new TextHighlightExtension(),
       new RemovePastedHtmlExtension(),
