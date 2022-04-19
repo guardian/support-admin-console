@@ -38,7 +38,7 @@ riffRaffManifestProjectName := "support:admin-console"
 riffRaffPackageName := "admin-console"
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
-riffRaffArtifactResources := Seq(
+riffRaffArtifactResources ++= Seq(
   file("cdk/cdk.out/AdminConsole-PROD.template.json") -> "cfn/AdminConsole-PROD.template.json",
   file("cdk/cdk.out/AdminConsole-CODE.template.json") -> "cfn/AdminConsole-CODE.template.json",
   file("cdk/cdk.out/AdminConsoleDynamo-PROD.template.json") -> "cfn/AdminConsoleDynamo-PROD.template.json",
