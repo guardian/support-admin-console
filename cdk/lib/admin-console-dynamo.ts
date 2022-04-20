@@ -14,8 +14,8 @@ export class AdminConsoleDynamo extends GuStack {
       const table = new Table(this, id, {
         tableName: `${channel}-tests-${this.stage}`,
         removalPolicy: RemovalPolicy.RETAIN,
-        readCapacity: 5,
-        writeCapacity: 5,
+        readCapacity: 4,
+        writeCapacity: 4,
         partitionKey: {
           name: 'name',
           type: AttributeType.STRING,
@@ -26,5 +26,7 @@ export class AdminConsoleDynamo extends GuStack {
     };
 
     buildTable('header');
+    buildTable('epic');
+    buildTable('banner');
   }
 }
