@@ -253,7 +253,6 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
                   }
                   onBlur={handleSubmit(onSubmit)}
                   onChange={update => {
-                    console.log('onChange', update.target.value.split('\n'));
                     data.onChange(update.target.value.split('\n'));
                   }}
                   name="paragraphs"
