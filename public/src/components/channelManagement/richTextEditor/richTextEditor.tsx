@@ -387,6 +387,7 @@ const RichTextEditor: React.FC<RichTextEditorProps<string[]>> = ({
 
       const handleSaveShortcut = useCallback(
         ({ state }) => {
+          console.log('rte', getHTML(state))
           if (!allowHtml) {
             // getText gives us the plain text representation with line breaks
             updateCopy(getText(state).split('\n'));

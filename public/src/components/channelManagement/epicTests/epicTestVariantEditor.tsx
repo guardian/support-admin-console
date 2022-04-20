@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { makeStyles, Theme, Typography } from '@material-ui/core';
+import {makeStyles, TextField, Theme, Typography} from '@material-ui/core';
 
 import EpicTestChoiceCardsEditor from './epicTestChoiceCardsEditor';
 import { EpicVariant, SeparateArticleCount } from './epicTestsForm';
@@ -104,7 +104,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
     footer: variant.footer,
   };
 
-  const { handleSubmit, control, errors, trigger } = useForm<FormData>({
+  const { handleSubmit, control, errors, trigger, register } = useForm<FormData>({
     mode: 'onChange',
     defaultValues,
   });
@@ -119,6 +119,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   }, [errors.heading, errors.paragraphs, errors.highlightedText, errors.image, errors.footer]);
 
   const onSubmit = ({ heading, paragraphs, highlightedText, image, footer }: FormData): void => {
+    console.log('onSubmit', heading)
     onVariantChange({
       ...variant,
       heading,
@@ -172,6 +173,54 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   return (
     <div className={classes.container}>
       {epicEditorConfig.allowVariantHeader && (
+        // <TextField
+        //   inputRef={register({
+        //     required: epicEditorConfig.requireVariantHeader ? EMPTY_ERROR_HELPER_TEXT : undefined,
+        //     validate: templateValidator,
+        //   })}
+        //   error={errors.heading !== undefined}
+        //   helperText={errors.heading ? errors.heading.message || errors.heading.type : HEADER_DEFAULT_HELPER_TEXT }
+        //   onBlur={handleSubmit(onSubmit)}
+        //   name="heading"
+        //   label="heading"
+        //   margin="normal"
+        //   variant="outlined"
+        //   disabled={!editMode}
+        //   fullWidth
+        // />
+
+        // <Controller
+        //   name="heading"
+        //   control={control}
+        //   rules={{
+        //     required: epicEditorConfig.requireVariantHeader ? EMPTY_ERROR_HELPER_TEXT : undefined,
+        //     validate: templateValidator,
+        //   }}
+        //   render={data => {
+        //     return (
+        //       <TextField
+        //         value={data.value}
+        //         error={errors.heading !== undefined}
+        //         helperText={errors.heading ? errors.heading.message || errors.heading.type : HEADER_DEFAULT_HELPER_TEXT }
+        //         onBlur={value => {
+        //           console.log('onBlur',value)
+        //           handleSubmit(onSubmit)();
+        //         }}
+        //         onChange={update => {
+        //           console.log('onChange', update.target.value)
+        //           data.onChange(update.target.value)
+        //         }}
+        //         name="heading"
+        //         label="heading"
+        //         margin="normal"
+        //         variant="outlined"
+        //         disabled={!editMode}
+        //         fullWidth
+        //       />
+        //     );
+        //   }}
+        // />
+
         <Controller
           name="heading"
           control={control}
@@ -190,6 +239,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                 }
                 copyData={data.value}
                 updateCopy={value => {
+                  console.log('updateCopy', value)
                   data.onChange(value);
                   handleSubmit(onSubmit)();
                 }}

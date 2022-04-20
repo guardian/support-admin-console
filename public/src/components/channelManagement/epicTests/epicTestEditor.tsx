@@ -102,11 +102,16 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
   };
 
   const onVariantsChange = (updatedVariantList: EpicVariant[]): void => {
+    console.log('onVariantsChange', updatedVariantList)
     updateTest({ ...test, variants: updatedVariantList });
   };
 
-  const onVariantChange = (updatedVariant: EpicVariant): void => {
-    const updatedVariantList = test.variants.map(variant =>
+  // When this is called by a specific EpicTestVariantEditor, test.variants may be stale?
+  const onVariantChange = (variants: EpicVariant[]) => (updatedVariant: EpicVariant): void => {
+    // console.log('test.variants',test.variants)
+    console.log('test.variants',variants)
+    const updatedVariantList = variants.map(variant =>
+    // const updatedVariantList = test.variants.map(variant =>
       variant.name === updatedVariant.name ? updatedVariant : variant,
     );
     onVariantsChange(updatedVariantList);
@@ -195,26 +200,32 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
     createTest({ ...test, name: name, nickname: nickname, isOn: false });
   };
 
-  const renderVariantEditor = (variant: EpicVariant): React.ReactElement => (
-    <TestVariantEditorWithPreviewTab
-      variantEditor={
-        <EpicTestVariantEditor
-          epicEditorConfig={epicEditorConfig}
-          key={variant.name}
-          variant={variant}
-          editMode={editMode}
-          onVariantChange={onVariantChange}
-          onDelete={(): void => onVariantDelete(variant.name)}
-          onValidationChange={(isValid: boolean): void =>
-            setValidationStatusForField(variant.name, isValid)
-          }
-        />
-      }
-      variantPreview={
-        <EpicVariantPreview variant={variant} moduleName={epicEditorConfig.moduleName} />
-      }
-    />
-  );
+  const renderVariantEditor = (test: EpicTest) => (variant: EpicVariant): React.ReactElement => {
+    console.log('renderVariantEditor', variant.name, test.variants)
+    const localOnVariantChange = onVariantChange(test.variants);
+    return (
+      <TestVariantEditorWithPreviewTab
+        key={`${variant.name}-with-preview`}
+        variantEditor={
+          <EpicTestVariantEditor
+            epicEditorConfig={epicEditorConfig}
+            key={variant.name}
+            variant={variant}
+            editMode={editMode}
+            // onVariantChange={onVariantChange(test.variants)}
+            onVariantChange={localOnVariantChange}
+            onDelete={(): void => onVariantDelete(variant.name)}
+            onValidationChange={(isValid: boolean): void =>
+              setValidationStatusForField(variant.name, isValid)
+            }
+          />
+        }
+        variantPreview={
+          <EpicVariantPreview variant={variant} moduleName={epicEditorConfig.moduleName} />
+        }
+      />
+    );
+  }
 
   const renderVariantSummary = (variant: EpicVariant): React.ReactElement => (
     <TestEditorVariantSummary
@@ -250,7 +261,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
               testName={test.name}
               editMode={editMode}
               createVariant={createVariant}
-              renderVariantEditor={renderVariantEditor}
+              renderVariantEditor={renderVariantEditor(test)}
               renderVariantSummary={renderVariantSummary}
               onVariantDelete={onVariantDelete}
               onVariantClone={onVariantClone}
@@ -288,7 +299,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
               variant={test.variants[0]}
               epicEditorConfig={epicEditorConfig}
               editMode={editMode}
-              onVariantChange={onVariantChange}
+              onVariantChange={onVariantChange(test.variants)}
               onDelete={(): void => onVariantDelete(test.variants[0].name)}
               onValidationChange={(isValid: boolean): void =>
                 setValidationStatusForField(test.variants[0].name, isValid)
