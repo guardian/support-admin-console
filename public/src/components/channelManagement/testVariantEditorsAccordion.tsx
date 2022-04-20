@@ -63,7 +63,9 @@ function TestVariantEditorsAccordion<V extends Variant>({
             className={classes.expansionPanel}
           >
             {renderVariantSummary(variant)}
-            <AccordionDetails>{variantKey === selectedVariantKey && renderVariantEditor(variant)}</AccordionDetails>
+            <AccordionDetails>
+              {variantKey === selectedVariantKey && renderVariantEditor(variant)}
+            </AccordionDetails>
             <AccordionActions>
               <VariantCloneButton
                 isDisabled={!editMode}

@@ -44,8 +44,6 @@ function TestVariantsEditor<V extends Variant>({
   const onVariantSelected = (variantKey: string): void =>
     setSelectedVariantKey(variantKey === selectedVariantKey ? null : variantKey);
 
-  console.log('TestVariantsEditor', variants)
-
   const variantKeys = variants.map(variant => `${testName}-${variant.name}`);
 
   const variantNames = variants.map(variant => variant.name);

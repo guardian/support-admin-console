@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React from 'react';
 import { Region } from '../../../utils/models';
 import { EpicTest, EpicVariant, MaxEpicViews } from './epicTestsForm';
 import {
@@ -102,18 +102,11 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
   };
 
   const onVariantsChange = (updatedVariantList: EpicVariant[]): void => {
-    console.log('onVariantsChange', updatedVariantList)
     updateTest({ ...test, variants: updatedVariantList });
   };
 
-  const { variants } = test;
-
-  // When this is called by a specific EpicTestVariantEditor, test.variants may be stale?
   const onVariantChange = (updatedVariant: EpicVariant): void => {
-    // console.log('test.variants',test.variants)
-    console.log('test.variants',test.variants)
     const updatedVariantList = test.variants.map(variant =>
-    // const updatedVariantList = test.variants.map(variant =>
       variant.name === updatedVariant.name ? updatedVariant : variant,
     );
     onVariantsChange(updatedVariantList);
@@ -202,30 +195,26 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
     createTest({ ...test, name: name, nickname: nickname, isOn: false });
   };
 
-  const renderVariantEditor = (variant: EpicVariant): React.ReactElement => {
-    console.log('renderVariantEditor', variant.name, test.variants)
-    return (
-      <TestVariantEditorWithPreviewTab
-        key={`${variant.name}-with-preview`}
-        variantEditor={
-          <EpicTestVariantEditor
-            epicEditorConfig={epicEditorConfig}
-            key={variant.name}
-            variant={variant}
-            editMode={editMode}
-            onVariantChange={onVariantChange}
-            onDelete={(): void => onVariantDelete(variant.name)}
-            onValidationChange={(isValid: boolean): void =>
-              setValidationStatusForField(variant.name, isValid)
-            }
-          />
-        }
-        variantPreview={
-          <EpicVariantPreview variant={variant} moduleName={epicEditorConfig.moduleName} />
-        }
-      />
-    );
-  }
+  const renderVariantEditor = (variant: EpicVariant): React.ReactElement => (
+    <TestVariantEditorWithPreviewTab
+      variantEditor={
+        <EpicTestVariantEditor
+          epicEditorConfig={epicEditorConfig}
+          key={variant.name}
+          variant={variant}
+          editMode={editMode}
+          onVariantChange={onVariantChange}
+          onDelete={(): void => onVariantDelete(variant.name)}
+          onValidationChange={(isValid: boolean): void =>
+            setValidationStatusForField(variant.name, isValid)
+          }
+        />
+      }
+      variantPreview={
+        <EpicVariantPreview variant={variant} moduleName={epicEditorConfig.moduleName} />
+      }
+    />
+  );
 
   const renderVariantSummary = (variant: EpicVariant): React.ReactElement => (
     <TestEditorVariantSummary
@@ -257,7 +246,6 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
           </Typography>
           <div>
             <TestVariantsEditor<EpicVariant>
-              key={`${test.name}-variants-editor`}
               variants={test.variants}
               testName={test.name}
               editMode={editMode}
