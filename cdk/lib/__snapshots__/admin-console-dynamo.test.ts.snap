@@ -3,6 +3,90 @@
 exports[`The AdminConsole stack matches the snapshot 1`] = `
 Object {
   "Resources": Object {
+    "BannerTestsDynamoTable": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "AttributeDefinitions": Array [
+          Object {
+            "AttributeName": "name",
+            "AttributeType": "S",
+          },
+        ],
+        "KeySchema": Array [
+          Object {
+            "AttributeName": "name",
+            "KeyType": "HASH",
+          },
+        ],
+        "ProvisionedThroughput": Object {
+          "ReadCapacityUnits": 4,
+          "WriteCapacityUnits": 4,
+        },
+        "TableName": "banner-tests-TEST",
+        "Tags": Array [
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/support-admin-console",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::DynamoDB::Table",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "EpicTestsDynamoTable": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "AttributeDefinitions": Array [
+          Object {
+            "AttributeName": "name",
+            "AttributeType": "S",
+          },
+        ],
+        "KeySchema": Array [
+          Object {
+            "AttributeName": "name",
+            "KeyType": "HASH",
+          },
+        ],
+        "ProvisionedThroughput": Object {
+          "ReadCapacityUnits": 4,
+          "WriteCapacityUnits": 4,
+        },
+        "TableName": "epic-tests-TEST",
+        "Tags": Array [
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/support-admin-console",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::DynamoDB::Table",
+      "UpdateReplacePolicy": "Retain",
+    },
     "HeaderTestsDynamoTable": Object {
       "DeletionPolicy": "Retain",
       "Properties": Object {
@@ -19,8 +103,8 @@ Object {
           },
         ],
         "ProvisionedThroughput": Object {
-          "ReadCapacityUnits": 5,
-          "WriteCapacityUnits": 5,
+          "ReadCapacityUnits": 4,
+          "WriteCapacityUnits": 4,
         },
         "TableName": "header-tests-TEST",
         "Tags": Array [
