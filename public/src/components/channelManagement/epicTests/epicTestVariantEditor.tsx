@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { makeStyles, TextField, Theme, Typography } from '@material-ui/core';
 
 import EpicTestChoiceCardsEditor from './epicTestChoiceCardsEditor';
@@ -99,7 +99,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
     footer: variant.footer,
   };
 
-  const { handleSubmit, errors, trigger, register } = useForm<FormData>({
+  const { handleSubmit, errors, trigger, register, control } = useForm<FormData>({
     mode: 'onChange',
     defaultValues,
   });
@@ -188,29 +188,42 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
         />
       )}
 
-      <TextField
-        inputRef={register({
+      <Controller
+        name="paragraphs"
+        control={control}
+        rules={{
           required: true,
           validate: (pars: string[]) =>
             getEmptyParagraphsError(pars) ??
-              pars.map(templateValidator).find(result => result !== true),
-        })}
-        error={errors.paragraphs !== undefined}
-        helperText={
-          errors.paragraphs
-            ? // @ts-ignore -- react-hook-form doesn't believe it has a message field
-              errors.paragraphs.message || errors.paragraphs.type
-            : getParagraphsHelperText()
-        }
-        onBlur={handleSubmit(onSubmit)}
-        name="paragraphs"
-        label="Body copy"
-        margin="normal"
-        variant="outlined"
-        multiline
-        rows={10}
-        disabled={!editMode}
-        fullWidth
+            pars.map(templateValidator).find(result => result !== true),
+        }}
+        render={data => {
+          return (
+            <TextField
+              value={data.value.join('\n')}
+              error={errors.paragraphs !== undefined}
+              helperText={
+                errors.paragraphs
+                  ? // @ts-ignore -- react-hook-form doesn't believe it has a message field
+                    errors.paragraphs.message || errors.paragraphs.type
+                  : getParagraphsHelperText()
+              }
+              onBlur={handleSubmit(onSubmit)}
+              onChange={update => {
+                console.log('onChange', update.target.value.split('\n'));
+                data.onChange(update.target.value.split('\n'));
+              }}
+              name="paragraphs"
+              label="Body copy"
+              margin="normal"
+              variant="outlined"
+              multiline
+              rows={10}
+              disabled={!editMode}
+              fullWidth
+            />
+          );
+        }}
       />
 
       {epicEditorConfig.allowVariantHighlightedText && (
