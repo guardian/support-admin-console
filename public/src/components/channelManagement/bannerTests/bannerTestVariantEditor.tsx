@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import {
   FormControlLabel,
   Radio,
@@ -8,6 +8,7 @@ import {
   Typography,
   makeStyles,
   Switch,
+  TextField,
 } from '@material-ui/core';
 import BannerTestVariantEditorCtasEditor from './bannerTestVariantEditorCtasEditor';
 import {
@@ -21,11 +22,7 @@ import BannerTemplateSelector from './bannerTemplateSelector';
 import { BannerContent, BannerTemplate, BannerVariant } from '../../../models/banner';
 import { getDefaultVariant } from './utils/defaults';
 import useValidation from '../hooks/useValidation';
-import {
-  RichTextEditor,
-  RichTextEditorSingleLine,
-  getRteCopyLength,
-} from '../richTextEditor/richTextEditor';
+import { getRteCopyLength } from '../richTextEditor/richTextEditor';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
@@ -143,7 +140,7 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
     highlightedText: content.highlightedText || '',
   };
 
-  const { handleSubmit, control, errors, trigger } = useForm<FormData>({
+  const { handleSubmit, errors, trigger, register } = useForm<FormData>({
     mode: 'onChange',
     defaultValues,
   });
@@ -213,100 +210,73 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
 
       <div className={classes.contentContainer}>
         {template !== BannerTemplate.EnvironmentMomentBanner && (
-          <Controller
-            name="heading"
-            control={control}
-            rules={{
+          <TextField
+            inputRef={register({
               validate: templateValidator,
-            }}
-            render={data => {
-              return (
-                <RichTextEditorSingleLine
-                  error={errors.heading !== undefined}
-                  helperText={
-                    errors.heading
-                      ? errors.heading.message || errors.heading.type
-                      : HEADER_DEFAULT_HELPER_TEXT
-                  }
-                  copyData={data.value}
-                  updateCopy={pars => {
-                    data.onChange(pars);
-                    handleSubmit(onSubmit)();
-                  }}
-                  name="heading"
-                  label="Header"
-                  disabled={!editMode}
-                  allowHtml={true}
-                />
-              );
-            }}
+            })}
+            error={errors.heading !== undefined}
+            helperText={
+              errors.heading
+                ? errors.heading.message || errors.heading.type
+                : HEADER_DEFAULT_HELPER_TEXT
+            }
+            onBlur={handleSubmit(onSubmit)}
+            name="heading"
+            label="Header"
+            margin="normal"
+            variant="outlined"
+            disabled={!editMode}
+            fullWidth
           />
         )}
 
         <div>
-          <Controller
-            name="paragraphs"
-            control={control}
-            rules={{
+          <TextField
+            inputRef={register({
               required: true,
               validate: (pars: string[]) =>
                 getEmptyParagraphsError(pars) ??
                 pars.map(templateValidator).find(result => result !== true),
-            }}
-            render={data => {
-              return (
-                <RichTextEditor
-                  error={errors.paragraphs !== undefined}
-                  helperText={
-                    errors.paragraphs
-                      ? // @ts-ignore -- react-hook-form doesn't believe it has a message field
-                        errors.paragraphs.message || errors.paragraphs.type
-                      : getParagraphsHelperText()
-                  }
-                  copyData={data.value}
-                  updateCopy={pars => {
-                    data.onChange(pars);
-                    handleSubmit(onSubmit)();
-                  }}
-                  name="paragraphs"
-                  label="Body copy"
-                  disabled={!editMode}
-                  allowHtml={true}
-                />
-              );
-            }}
+            })}
+            error={errors.paragraphs !== undefined}
+            helperText={
+              errors.paragraphs
+                ? // @ts-ignore -- react-hook-form doesn't believe it has a message field
+                  errors.paragraphs.message || errors.paragraphs.type
+                : getParagraphsHelperText()
+            }
+            onBlur={handleSubmit(onSubmit)}
+            name="paragraphs"
+            label="Body copy"
+            margin="normal"
+            variant="outlined"
+            multiline
+            rows={10}
+            disabled={!editMode}
+            fullWidth
           />
 
           {(template === BannerTemplate.ContributionsBanner ||
             template === BannerTemplate.InvestigationsMomentBanner ||
             template === BannerTemplate.ElectionAuMomentBanner) && (
-            <Controller
-              name="highlightedText"
-              control={control}
-              rules={{
+            <TextField
+              inputRef={register({
+                required: false,
                 validate: templateValidator,
-              }}
-              render={data => {
-                return (
-                  <RichTextEditorSingleLine
-                    error={errors.highlightedText !== undefined}
-                    helperText={
-                      errors.highlightedText
-                        ? errors.highlightedText.message || errors.highlightedText.type
-                        : HIGHTLIGHTED_TEXT_HELPER_TEXT
-                    }
-                    copyData={data.value}
-                    updateCopy={pars => {
-                      data.onChange(pars);
-                      handleSubmit(onSubmit)();
-                    }}
-                    name="highlightedText"
-                    label="Highlighted text"
-                    disabled={!editMode}
-                    allowHtml={true}
-                  />
-                );
-              }}
+              })}
+              error={errors.highlightedText !== undefined}
+              helperText={
+                errors.highlightedText
+                  ? errors.highlightedText.message || errors.highlightedText.type
+                  : HIGHTLIGHTED_TEXT_HELPER_TEXT
+              }
+              onBlur={handleSubmit(onSubmit)}
+              name="highlightedText"
+              label="Highlighted text"
+              margin="normal"
+              variant="outlined"
+              disabled={!editMode}
+              fullWidth
             />
           )}
         </div>
