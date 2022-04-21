@@ -4,14 +4,14 @@ describe('templateValidatorForPlatform', () => {
   describe('When platform is dotcom', () => {
     const templateValidator = templateValidatorForPlatform('DOTCOM');
 
-    it('should return true if no templates are present', () => {
-      expect(templateValidator('Blah blah')).toBeTruthy();
+    it('should return undefined if no templates are present', () => {
+      expect(templateValidator('Blah blah')).toBeUndefined();
     });
 
-    it('should return true if a valid template is present', () => {
-      expect(templateValidator('%%CURRENCY_SYMBOL%%')).toBeTruthy();
-      expect(templateValidator('%%COUNTRY_NAME%%')).toBeTruthy();
-      expect(templateValidator('%%ARTICLE_COUNT%%')).toBeTruthy();
+    it('should return undefined if a valid template is present', () => {
+      expect(templateValidator('%%CURRENCY_SYMBOL%%')).toBeUndefined();
+      expect(templateValidator('%%COUNTRY_NAME%%')).toBeUndefined();
+      expect(templateValidator('%%ARTICLE_COUNT%%')).toBeUndefined();
     });
 
     it('should return an error message if template text is not valid', () => {
@@ -33,13 +33,13 @@ describe('templateValidatorForPlatform', () => {
   describe('When platform is an AMP article', () => {
     const templateValidator = templateValidatorForPlatform('AMP');
 
-    it('should return true if no templates are present', () => {
-      expect(templateValidator('Blah blah')).toBeTruthy();
+    it('should return undefined if no templates are present', () => {
+      expect(templateValidator('Blah blah')).toBeUndefined();
     });
 
-    it('should return true if a valid template is present', () => {
-      expect(templateValidator('%%CURRENCY_SYMBOL%%')).toBeTruthy();
-      expect(templateValidator('%%COUNTRY_NAME%%')).toBeTruthy();
+    it('should return undefined if a valid template is present', () => {
+      expect(templateValidator('%%CURRENCY_SYMBOL%%')).toBeUndefined();
+      expect(templateValidator('%%COUNTRY_NAME%%')).toBeUndefined();
     });
 
     it('should return an error message if template is unsupported by platform', () => {
@@ -67,12 +67,12 @@ describe('templateValidatorForPlatform', () => {
   describe('When platform is an Apple News article', () => {
     const templateValidator = templateValidatorForPlatform('APPLE_NEWS');
 
-    it('should return true if no templates are present', () => {
-      expect(templateValidator('Blah blah')).toBeTruthy();
+    it('should return undefined if no templates are present', () => {
+      expect(templateValidator('Blah blah')).toBeUndefined();
     });
 
-    it('should return true if a valid template is present', () => {
-      expect(templateValidator('%%CURRENCY_SYMBOL%%')).toBeTruthy();
+    it('should return undefined if a valid template is present', () => {
+      expect(templateValidator('%%CURRENCY_SYMBOL%%')).toBeUndefined();
     });
 
     it('should return an error message if template is unsupported by platform', () => {

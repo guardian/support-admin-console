@@ -251,7 +251,7 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
               required: true,
               validate: (pars: string[]) =>
                 getEmptyParagraphsError(pars) ??
-                pars.map(templateValidator).find(result => result !== true),
+                pars.map(templateValidator).find((result: string | undefined) => !!result),
             }}
             render={data => {
               return (
