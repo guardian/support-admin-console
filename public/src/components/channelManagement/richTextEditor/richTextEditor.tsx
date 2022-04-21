@@ -45,6 +45,7 @@ interface RichTextEditorProps<T> {
 interface RichTextMenuProps {
   disabled: boolean;
   label: string | undefined;
+  allowHtml: boolean;
 }
 
 /**
@@ -258,7 +259,11 @@ const FloatingLinkToolbar = () => {
 };
 
 // ReMirror/ProseMirror TOP MENU BUTTONS
-const RichTextMenu: React.FC<RichTextMenuProps> = ({ disabled, label }: RichTextMenuProps) => {
+const RichTextMenu: React.FC<RichTextMenuProps> = ({
+  disabled,
+  label,
+  allowHtml,
+}: RichTextMenuProps) => {
   const classes = useRTEStyles();
   const chain = useChainedCommands();
   const active = useActive();
@@ -268,31 +273,37 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({ disabled, label }: RichText
       <span className={classes.fieldLabel}>{label != null ? label : 'Editable field'}</span>
       {!disabled && (
         <>
-          <button
-            className={active.bold() ? 'remirror-button remirror-button-active' : 'remirror-button'}
-            onClick={() => {
-              chain
-                .toggleBold()
-                .focus()
-                .run();
-            }}
-          >
-            Bold
-          </button>
-          <button
-            className={
-              active.italic() ? 'remirror-button remirror-button-active' : 'remirror-button'
-            }
-            onClick={() => {
-              chain
-                .toggleItalic()
-                .focus()
-                .run();
-            }}
-          >
-            Italic
-          </button>
-          <span className={classes.remirrorButtonSpacer}>&nbsp;</span>
+          {allowHtml && (
+            <>
+              <button
+                className={
+                  active.bold() ? 'remirror-button remirror-button-active' : 'remirror-button'
+                }
+                onClick={() => {
+                  chain
+                    .toggleBold()
+                    .focus()
+                    .run();
+                }}
+              >
+                Bold
+              </button>
+              <button
+                className={
+                  active.italic() ? 'remirror-button remirror-button-active' : 'remirror-button'
+                }
+                onClick={() => {
+                  chain
+                    .toggleItalic()
+                    .focus()
+                    .run();
+                }}
+              >
+                Italic
+              </button>
+              <span className={classes.remirrorButtonSpacer}>&nbsp;</span>
+            </>
+          )}
           <button
             className="remirror-button"
             onClick={() => {
@@ -422,7 +433,7 @@ const RichTextEditor: React.FC<RichTextEditorProps<string[]>> = ({
     <div className={classes.remirrorCustom}>
       <div id={`RTE-${name}`} className={wrapperClasses}>
         <Remirror manager={manager} initialContent={state} editable={!disabled} hooks={hooks}>
-          <RichTextMenu disabled={disabled} label={label} />
+          <RichTextMenu disabled={disabled} label={label} allowHtml={allowHtml} />
           <EditorComponent />
           {!disabled && <FloatingLinkToolbar />}
           <p className={error ? classes.errorText : classes.helperText}>{helperText}</p>
