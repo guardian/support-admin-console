@@ -8,6 +8,22 @@ import Typography from '@material-ui/core/Typography';
 import { TickerSettings } from '../epicTests/epicTestsForm';
 import { useModule } from '../../../hooks/useModule';
 
+interface ProductPriceData {
+  Monthly: {
+    price: string;
+  };
+  Annual: {
+    price: string;
+  };
+}
+interface CountryGroupPriceData {
+  GuardianWeekly: ProductPriceData;
+  Digisub: ProductPriceData;
+}
+export type Prices = {
+  [index: string]: CountryGroupPriceData;
+};
+
 export interface BannerContent {
   heading?: string;
   messageText?: string;
@@ -33,6 +49,7 @@ interface BannerProps {
   isSupporter: boolean;
   bannerChannel: string;
   countryCode?: string;
+  prices?: Prices;
   numArticles: number;
   content: BannerContent;
   mobileContent?: BannerContent;
@@ -74,6 +91,26 @@ const buildProps = (variant: BannerVariant): BannerProps => ({
   content: variant.bannerContent,
   mobileContent: variant.mobileBannerContent,
   countryCode: 'GB',
+  prices: {
+    GBPCountries: {
+      GuardianWeekly: {
+        Monthly: {
+          price: '0.00',
+        },
+        Annual: {
+          price: '0.00',
+        },
+      },
+      Digisub: {
+        Monthly: {
+          price: '0.00',
+        },
+        Annual: {
+          price: '0.00',
+        },
+      },
+    },
+  },
   numArticles: 13,
   tickerSettings,
 });
