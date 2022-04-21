@@ -19,6 +19,7 @@ import {
 import {
   EMPTY_ERROR_HELPER_TEXT,
   getEmptyParagraphsError,
+  noHtmlValidator,
   MAXLENGTH_ERROR_HELPER_TEXT,
   templateValidatorForPlatform,
 } from '../helpers/validation';
@@ -95,6 +96,8 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
 
   const templateValidator = templateValidatorForPlatform(epicEditorConfig.platform);
   const allowHtml = epicEditorConfig.platform === 'DOTCOM';
+  const htmlValidator = allowHtml ? () => undefined : noHtmlValidator;
+  const lineValidator = (text: string) => templateValidator(text) ?? htmlValidator(text);
 
   const defaultValues: FormData = {
     heading: variant.heading,
@@ -177,7 +180,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
           control={control}
           rules={{
             required: epicEditorConfig.requireVariantHeader ? EMPTY_ERROR_HELPER_TEXT : undefined,
-            validate: templateValidator,
+            validate: lineValidator,
           }}
           render={data => {
             return (
@@ -210,7 +213,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
           required: true,
           validate: (pars: string[]) =>
             getEmptyParagraphsError(pars) ??
-            pars.map(templateValidator).find(result => result !== true),
+            pars.map(lineValidator).find((result: string | undefined) => !!result),
         }}
         render={data => {
           return (
@@ -242,7 +245,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
           control={control}
           rules={{
             required: false,
-            validate: templateValidator,
+            validate: lineValidator,
           }}
           render={data => {
             return (
@@ -273,7 +276,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
           name="footer"
           control={control}
           rules={{
-            validate: templateValidator,
+            validate: lineValidator,
           }}
           render={data => {
             return (

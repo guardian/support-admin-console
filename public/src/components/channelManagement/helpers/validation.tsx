@@ -1,34 +1,4 @@
-import React from 'react';
 import { TestPlatform } from './shared';
-
-/**
- * Helper for tracking validation of multiple child components.
- * Calls onValidationChange with 'true' only when all child components are valid.
- *
- * E.g.
- *
- * type Props = ValidationComponentProps & {}
- * type State = ValidationComponentState & {}
- *
- * class MyComponent extends React.Component<Props,State> {
- *   state: State = {
- *     validationStatus: {}
- *   };
- *
- *   <Input
- *     label="email"
- *     onChange={value => {
- *       const isValid = value !== '';
- *       onFieldValidationChange(this)('email')(isValid)
- *      }}
- *   />
- * }
- *
- */
-
-export interface ValidationComponentProps {
-  onValidationChange: (isValid: boolean) => void;
-}
 
 export type ValidationStatus = {
   [fieldName: string]: boolean;
@@ -36,64 +6,36 @@ export type ValidationStatus = {
 
 export const INVALID_CHARACTERS_ERROR_HELPER_TEXT =
   'Only letters, numbers, underscores and hyphens are allowed';
-const INVALID_CHARACTERS_REGEX = /[^\w-]/;
 export const VALID_CHARACTERS_REGEX = /^[\w-]+$/;
-
-export const getInvalidCharactersError = (text: string): string | null => {
-  if (INVALID_CHARACTERS_REGEX.test(text)) {
-    return INVALID_CHARACTERS_ERROR_HELPER_TEXT;
-  }
-  return null;
-};
 
 export const EMPTY_ERROR_HELPER_TEXT = 'Field cannot be empty - please enter some text';
 export const MAXLENGTH_ERROR_HELPER_TEXT =
   'This copy is longer than the recommended length. Please preview across breakpoints before publishing.';
 
-export const getEmptyError = (text: string): string | null => {
-  if (text.trim() === '') {
-    return EMPTY_ERROR_HELPER_TEXT;
-  }
-  return null;
-};
-
-export const getEmptyParagraphsError = (pars: string[]): string | null => {
+export const getEmptyParagraphsError = (pars: string[]): string | undefined => {
   if (pars.filter(p => p).join('').length <= 0) {
     return EMPTY_ERROR_HELPER_TEXT;
   }
-  return null;
+  return undefined;
 };
 
 const NOT_NUMBER_ERROR_HELPER_TEXT = 'Must be a number';
 
-export const getNotNumberError = (text: string): string | null =>
-  Number.isNaN(Number(text)) ? NOT_NUMBER_ERROR_HELPER_TEXT : null;
-
-export const notNumberValidator = (text: string): string | boolean =>
-  Number.isNaN(Number(text)) ? NOT_NUMBER_ERROR_HELPER_TEXT : true;
+export const notNumberValidator = (text: string): string | undefined =>
+  Number.isNaN(Number(text)) ? NOT_NUMBER_ERROR_HELPER_TEXT : undefined;
 
 export const DUPLICATE_ERROR_HELPER_TEXT = 'Name already exists - please try another';
-
-export const createGetDuplicateError = (existing: string[]): ((text: string) => string | null) => {
-  const existingLowerCased = existing.map(value => value.toLowerCase());
-  return (text: string): string | null => {
-    if (existingLowerCased.includes(text.toLowerCase())) {
-      return DUPLICATE_ERROR_HELPER_TEXT;
-    }
-    return null;
-  };
-};
 
 export const createDuplicateValidator = (
   existing: string[],
   testNamePrefix?: string,
-): ((text: string) => string | boolean) => {
+): ((text: string) => string | undefined) => {
   const existingLowerCased = existing.map(value => value.toLowerCase());
-  return (text: string): string | boolean => {
+  return (text: string): string | undefined => {
     if (existingLowerCased.includes(`${testNamePrefix || ''}${text}`.toLowerCase())) {
       return DUPLICATE_ERROR_HELPER_TEXT;
     }
-    return true;
+    return undefined;
   };
 };
 
@@ -109,7 +51,7 @@ const VALID_TEMPLATES = {
 
 export const templateValidatorForPlatform = (platform: TestPlatform) => (
   text?: string,
-): string | boolean => {
+): string | undefined => {
   if (text) {
     const templates: string[] | null = text.match(/%\S*%/g);
 
@@ -122,35 +64,8 @@ export const templateValidatorForPlatform = (platform: TestPlatform) => (
       }
     }
   }
-  return true;
+  return undefined;
 };
 
-export interface ValidationComponentState {
-  validationStatus: ValidationStatus;
-}
-
-// Call this when a single field in the component updates
-export const onFieldValidationChange = <
-  P extends ValidationComponentProps,
-  S extends ValidationComponentState
->(
-  component: React.Component<P, S>,
-) => (fieldName: string) => (isValid: boolean): void => {
-  component.setState(
-    state => {
-      const newValidationStatus: ValidationStatus = Object.assign({}, state.validationStatus);
-      newValidationStatus[fieldName] = isValid;
-      return { validationStatus: newValidationStatus };
-    },
-    () => {
-      const hasInvalidField = Object.keys(component.state.validationStatus).some(
-        name => !component.state.validationStatus[name],
-      );
-
-      component.props.onValidationChange(!hasInvalidField);
-    },
-  );
-};
-
-// const onFieldValidationChangeTemp = (setValidation, )
-export const isNumber = (value: string): boolean => !Number.isNaN(Number(value));
+export const noHtmlValidator = (s: string): string | undefined =>
+  /<\/?[a-z][\s\S]*>/i.test(s) ? 'HTML is not allowed' : undefined;
