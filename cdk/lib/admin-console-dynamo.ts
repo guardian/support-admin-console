@@ -2,7 +2,7 @@ import type { GuStackProps } from '@guardian/cdk/lib/constructs/core';
 import { GuStack } from '@guardian/cdk/lib/constructs/core';
 import type { App, CfnElement } from 'aws-cdk-lib';
 import { RemovalPolicy } from 'aws-cdk-lib';
-import { AttributeType, Table } from 'aws-cdk-lib/aws-dynamodb';
+import { AttributeType, ProjectionType, Table } from 'aws-cdk-lib/aws-dynamodb';
 
 export class AdminConsoleDynamo extends GuStack {
   constructor(scope: App, id: string, props: GuStackProps) {
@@ -21,6 +21,20 @@ export class AdminConsoleDynamo extends GuStack {
           type: AttributeType.STRING,
         },
       });
+
+      // Add an index for querying by status (LIVE/DRAFT/ARCHIVED)
+      table.addGlobalSecondaryIndex({
+        indexName: 'status-index',
+        partitionKey: {
+          name: 'status',
+          type: AttributeType.STRING,
+        },
+        readCapacity: 4,
+        writeCapacity: 4,
+        projectionType: ProjectionType.ALL,
+      });
+
+      // Give it a better name
       const defaultChild = table.node.defaultChild as unknown as CfnElement;
       defaultChild.overrideLogicalId(id);
     };
