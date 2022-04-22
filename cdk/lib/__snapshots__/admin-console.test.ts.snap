@@ -4,11 +4,26 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
 Object {
   "AWSTemplateFormatVersion": "2010-09-09",
   "Description": "support-admin-console",
+  "Outputs": Object {
+    "LoadBalancerAdminconsoleDnsName": Object {
+      "Description": "DNS entry for LoadBalancerAdminconsole",
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "LoadBalancerAdminconsole69251694",
+          "DNSName",
+        ],
+      },
+    },
+  },
   "Parameters": Object {
     "AMI": Object {
       "Default": "ami-0eb88168",
       "Description": "AMI ID (may be replaced by RiffRaff for latest baked AMI)",
       "Type": "String",
+    },
+    "AMIAdminconsole": Object {
+      "Description": "Amazon Machine Image ID for the app admin-console. Use this in conjunction with AMIgo to keep AMIs up to date.",
+      "Type": "AWS::EC2::Image::Id",
     },
     "App": Object {
       "Default": "admin-console",
@@ -23,9 +38,24 @@ Object {
       "Description": "SSL certificate ARN",
       "Type": "String",
     },
+    "DistributionBucketName": Object {
+      "Default": "/account/services/artifact.bucket",
+      "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
     "KingsPlaceIP": Object {
       "Default": "77.91.248.0/21",
       "Description": "Kings Place IP range",
+      "Type": "String",
+    },
+    "LoggingStreamName": Object {
+      "Default": "/account/services/logging.stream.name",
+      "Description": "SSM parameter containing the Name (not ARN) on the kinesis stream",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+    "OldVpcId": Object {
+      "Default": "vpc-e6e00183",
+      "Description": "VpcId of your existing Virtual Private Cloud (VPC)",
       "Type": "String",
     },
     "PrivateVpcSubnets": Object {
@@ -45,9 +75,19 @@ Object {
       "Type": "String",
     },
     "VpcId": Object {
-      "Default": "vpc-e6e00183",
-      "Description": "VpcId of your existing Virtual Private Cloud (VPC)",
-      "Type": "String",
+      "Default": "/account/vpc/primary/id",
+      "Description": "Virtual Private Cloud to run EC2 instances within. Should NOT be the account default VPC.",
+      "Type": "AWS::SSM::Parameter::Value<AWS::EC2::VPC::Id>",
+    },
+    "adminconsolePrivateSubnets": Object {
+      "Default": "/account/vpc/primary/subnets/private",
+      "Description": "A list of private subnets",
+      "Type": "AWS::SSM::Parameter::Value<List<AWS::EC2::Subnet::Id>>",
+    },
+    "adminconsolePublicSubnets": Object {
+      "Default": "/account/vpc/primary/subnets/public",
+      "Description": "A list of public subnets",
+      "Type": "AWS::SSM::Parameter::Value<List<AWS::EC2::Subnet::Id>>",
     },
   },
   "Resources": Object {
@@ -292,6 +332,206 @@ Object {
       },
       "Type": "AWS::AutoScaling::AutoScalingGroup",
     },
+    "AutoScalingGroupAdminconsoleASG0A6020EA": Object {
+      "Properties": Object {
+        "HealthCheckGracePeriod": 120,
+        "HealthCheckType": "ELB",
+        "LaunchConfigurationName": Object {
+          "Ref": "AutoScalingGroupAdminconsoleLaunchConfig2D175268",
+        },
+        "MaxSize": "2",
+        "MinSize": "1",
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "PropagateAtLaunch": true,
+            "Value": "admin-console",
+          },
+          Object {
+            "Key": "gu:cdk:pattern-name",
+            "PropagateAtLaunch": true,
+            "Value": "GuEc2App",
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "PropagateAtLaunch": true,
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "PropagateAtLaunch": true,
+            "Value": "guardian/support-admin-console",
+          },
+          Object {
+            "Key": "gu:riffraff:new-asg",
+            "PropagateAtLaunch": true,
+            "Value": "true",
+          },
+          Object {
+            "Key": "Name",
+            "PropagateAtLaunch": true,
+            "Value": "AdminConsole/AutoScalingGroupAdminconsole",
+          },
+          Object {
+            "Key": "Stack",
+            "PropagateAtLaunch": true,
+            "Value": "support",
+          },
+          Object {
+            "Key": "Stage",
+            "PropagateAtLaunch": true,
+            "Value": "TEST",
+          },
+        ],
+        "TargetGroupARNs": Array [
+          Object {
+            "Ref": "TargetGroupAdminconsole160A1621",
+          },
+        ],
+        "VPCZoneIdentifier": Object {
+          "Ref": "adminconsolePrivateSubnets",
+        },
+      },
+      "Type": "AWS::AutoScaling::AutoScalingGroup",
+    },
+    "AutoScalingGroupAdminconsoleInstanceProfileC5F9DB1A": Object {
+      "Properties": Object {
+        "Roles": Array [
+          Object {
+            "Ref": "InstanceRoleAdminconsole347DA627",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::InstanceProfile",
+    },
+    "AutoScalingGroupAdminconsoleLaunchConfig2D175268": Object {
+      "DependsOn": Array [
+        "InstanceRoleAdminconsole347DA627",
+      ],
+      "Properties": Object {
+        "IamInstanceProfile": Object {
+          "Ref": "AutoScalingGroupAdminconsoleInstanceProfileC5F9DB1A",
+        },
+        "ImageId": Object {
+          "Ref": "AMIAdminconsole",
+        },
+        "InstanceType": "t4g.micro",
+        "SecurityGroups": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "GuHttpsEgressSecurityGroupAdminconsole2F77C5D2",
+              "GroupId",
+            ],
+          },
+          Object {
+            "Fn::GetAtt": Array [
+              "WazuhSecurityGroup",
+              "GroupId",
+            ],
+          },
+        ],
+        "UserData": Object {
+          "Fn::Base64": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "#!/bin/bash -ev
+    aws --region ",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+                " s3 cp s3://membership-dist/support/TEST/admin-console/support-admin-console_1.0-SNAPSHOT_all.deb /tmp
+    dpkg -i /tmp/support-admin-console_1.0-SNAPSHOT_all.deb
+    /opt/cloudwatch-logs/configure-logs application support TEST admin-console /var/log/support-admin-console/application.log",
+              ],
+            ],
+          },
+        },
+      },
+      "Type": "AWS::AutoScaling::LaunchConfiguration",
+    },
+    "CertificateAdminconsole74B584AB": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "DomainName": "support.code.dev-gutools.co.uk",
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "admin-console",
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/support-admin-console",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+        "ValidationMethod": "DNS",
+      },
+      "Type": "AWS::CertificateManager::Certificate",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "CloudwatchA324BFA2": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": "arn:aws:logs:*:*:*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "CloudwatchA324BFA2",
+        "Roles": Array [
+          Object {
+            "Ref": "InstanceRoleAdminconsole347DA627",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "DescribeEC2PolicyFF5F9295": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "autoscaling:DescribeAutoScalingInstances",
+                "autoscaling:DescribeAutoScalingGroups",
+                "ec2:DescribeTags",
+                "ec2:DescribeInstances",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "describe-ec2-policy",
+        "Roles": Array [
+          Object {
+            "Ref": "InstanceRoleAdminconsole347DA627",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
     "ElasticLoadBalancer": Object {
       "Properties": Object {
         "Name": Object {
@@ -332,6 +572,141 @@ Object {
       },
       "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
     },
+    "GetDistributablePolicyAdminconsole6DA8CA46": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "s3:GetObject",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:aws:s3:::",
+                    Object {
+                      "Ref": "DistributionBucketName",
+                    },
+                    "/support/TEST/admin-console/*",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "GetDistributablePolicyAdminconsole6DA8CA46",
+        "Roles": Array [
+          Object {
+            "Ref": "InstanceRoleAdminconsole347DA627",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "GuHttpsEgressSecurityGroupAdminconsole2F77C5D2": Object {
+      "Properties": Object {
+        "GroupDescription": "Allow all outbound HTTPS traffic",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound HTTPS traffic",
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "admin-console",
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/support-admin-console",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "VpcId",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "GuHttpsEgressSecurityGroupAdminconsolefromAdminConsoleLoadBalancerAdminconsoleSecurityGroup606D9E9F900031980AFE": Object {
+      "Properties": Object {
+        "Description": "Load balancer to target",
+        "FromPort": 9000,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "GuHttpsEgressSecurityGroupAdminconsole2F77C5D2",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "LoadBalancerAdminconsoleSecurityGroupE93D84AC",
+            "GroupId",
+          ],
+        },
+        "ToPort": 9000,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "GuLogShippingPolicy981BFE5A": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "kinesis:Describe*",
+                "kinesis:Put*",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:aws:kinesis:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":stream/",
+                    Object {
+                      "Ref": "LoggingStreamName",
+                    },
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "GuLogShippingPolicy981BFE5A",
+        "Roles": Array [
+          Object {
+            "Ref": "InstanceRoleAdminconsole347DA627",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
     "InstanceProfile": Object {
       "Properties": Object {
         "Path": "/",
@@ -342,6 +717,56 @@ Object {
         ],
       },
       "Type": "AWS::IAM::InstanceProfile",
+    },
+    "InstanceRoleAdminconsole347DA627": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "ec2.",
+                      Object {
+                        "Ref": "AWS::URLSuffix",
+                      },
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Path": "/",
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "admin-console",
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/support-admin-console",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
     },
     "InstanceSecurityGroup": Object {
       "Properties": Object {
@@ -399,7 +824,7 @@ Object {
           },
         ],
         "VpcId": Object {
-          "Ref": "VpcId",
+          "Ref": "OldVpcId",
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
@@ -419,7 +844,7 @@ Object {
             "Ref": "InstanceSecurityGroup",
           },
           Object {
-            "Ref": "WazuhSecurityGroup",
+            "Ref": "OldWazuhSecurityGroup",
           },
         ],
         "UserData": Object {
@@ -433,6 +858,138 @@ dpkg -i /tmp/support-admin-console_1.0-SNAPSHOT_all.deb
         },
       },
       "Type": "AWS::AutoScaling::LaunchConfiguration",
+    },
+    "ListenerAdminconsole3E633904": Object {
+      "Properties": Object {
+        "Certificates": Array [
+          Object {
+            "CertificateArn": Object {
+              "Ref": "CertificateAdminconsole74B584AB",
+            },
+          },
+        ],
+        "DefaultActions": Array [
+          Object {
+            "TargetGroupArn": Object {
+              "Ref": "TargetGroupAdminconsole160A1621",
+            },
+            "Type": "forward",
+          },
+        ],
+        "LoadBalancerArn": Object {
+          "Ref": "LoadBalancerAdminconsole69251694",
+        },
+        "Port": 443,
+        "Protocol": "HTTPS",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+    },
+    "LoadBalancerAdminconsole69251694": Object {
+      "Properties": Object {
+        "LoadBalancerAttributes": Array [
+          Object {
+            "Key": "deletion_protection.enabled",
+            "Value": "true",
+          },
+        ],
+        "Scheme": "internet-facing",
+        "SecurityGroups": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "LoadBalancerAdminconsoleSecurityGroupE93D84AC",
+              "GroupId",
+            ],
+          },
+        ],
+        "Subnets": Object {
+          "Ref": "adminconsolePublicSubnets",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "admin-console",
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/support-admin-console",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+        "Type": "application",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+    },
+    "LoadBalancerAdminconsoleSecurityGroupE93D84AC": Object {
+      "Properties": Object {
+        "GroupDescription": "Automatically created Security Group for ELB AdminConsoleLoadBalancerAdminconsole64F16A33",
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow from anyone on port 443",
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "admin-console",
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/support-admin-console",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "VpcId",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "LoadBalancerAdminconsoleSecurityGrouptoAdminConsoleGuHttpsEgressSecurityGroupAdminconsole04293C9B9000EB39CE6F": Object {
+      "Properties": Object {
+        "Description": "Load balancer to target",
+        "DestinationSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "GuHttpsEgressSecurityGroupAdminconsole2F77C5D2",
+            "GroupId",
+          ],
+        },
+        "FromPort": 9000,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "LoadBalancerAdminconsoleSecurityGroupE93D84AC",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "ToPort": 9000,
+      },
+      "Type": "AWS::EC2::SecurityGroupEgress",
     },
     "LoadBalancerListener": Object {
       "Properties": Object {
@@ -497,7 +1054,7 @@ dpkg -i /tmp/support-admin-console_1.0-SNAPSHOT_all.deb
           },
         ],
         "VpcId": Object {
-          "Ref": "VpcId",
+          "Ref": "OldVpcId",
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
@@ -528,6 +1085,242 @@ dpkg -i /tmp/support-admin-console_1.0-SNAPSHOT_all.deb
         ],
       },
       "Type": "AWS::Logs::LogGroup",
+    },
+    "OldWazuhSecurityGroup": Object {
+      "Properties": Object {
+        "GroupDescription": "Allow outbound traffic from wazuh agent to manager",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": 1514,
+            "IpProtocol": "tcp",
+            "ToPort": 1515,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/support-admin-console",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "OldVpcId",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "ParameterStoreReadAdminconsole9C23871C": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "ssm:GetParametersByPath",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:aws:ssm:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":parameter/TEST/support/admin-console",
+                  ],
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:aws:ssm:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":parameter/TEST/support/admin-console/*",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "parameter-store-read-policy",
+        "Roles": Array [
+          Object {
+            "Ref": "InstanceRoleAdminconsole347DA627",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "PublicSettingsBucketPut4D9A09A1": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "s3:PutObject",
+              "Effect": "Allow",
+              "Resource": Array [
+                "arn:aws:s3:::gu-contributions-public/epic/TEST/*",
+                "arn:aws:s3:::gu-contributions-public/banner/TEST/*",
+                "arn:aws:s3:::gu-contributions-public/header/TEST/*",
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "PublicSettingsBucketPut4D9A09A1",
+        "Roles": Array [
+          Object {
+            "Ref": "InstanceRoleAdminconsole347DA627",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "SSMGetF4C837D5": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "ssm:GetParametersByPath",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:aws:ssm:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":parameter/admin-console/TEST",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "SSMGetF4C837D5",
+        "Roles": Array [
+          Object {
+            "Ref": "InstanceRoleAdminconsole347DA627",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "SSMRunCommandPolicy244E1613": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "ec2messages:AcknowledgeMessage",
+                "ec2messages:DeleteMessage",
+                "ec2messages:FailMessage",
+                "ec2messages:GetEndpoint",
+                "ec2messages:GetMessages",
+                "ec2messages:SendReply",
+                "ssm:UpdateInstanceInformation",
+                "ssm:ListInstanceAssociations",
+                "ssm:DescribeInstanceProperties",
+                "ssm:DescribeDocumentParameters",
+                "ssmmessages:CreateControlChannel",
+                "ssmmessages:CreateDataChannel",
+                "ssmmessages:OpenControlChannel",
+                "ssmmessages:OpenDataChannel",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ssm-run-command-policy",
+        "Roles": Array [
+          Object {
+            "Ref": "InstanceRoleAdminconsole347DA627",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "SettingsBucketGet3389C916": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "s3:GetObject",
+              "Effect": "Allow",
+              "Resource": Array [
+                "arn:aws:s3:::support-admin-console/TEST/*",
+                "arn:aws:s3:::support-admin-console/google-auth-service-account-certificate.json",
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "SettingsBucketGet3389C916",
+        "Roles": Array [
+          Object {
+            "Ref": "InstanceRoleAdminconsole347DA627",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "SettingsBucketPut45E58A86": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "s3:PutObject",
+              "Effect": "Allow",
+              "Resource": "arn:aws:s3:::support-admin-console/TEST/*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "SettingsBucketPut45E58A86",
+        "Roles": Array [
+          Object {
+            "Ref": "InstanceRoleAdminconsole347DA627",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
     },
     "TargetGroup": Object {
       "DependsOn": Array [
@@ -571,6 +1364,55 @@ dpkg -i /tmp/support-admin-console_1.0-SNAPSHOT_all.deb
         ],
         "UnhealthyThresholdCount": 2,
         "VpcId": Object {
+          "Ref": "OldVpcId",
+        },
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+    },
+    "TargetGroupAdminconsole160A1621": Object {
+      "Properties": Object {
+        "HealthCheckIntervalSeconds": 10,
+        "HealthCheckPath": "/healthcheck",
+        "HealthCheckProtocol": "HTTP",
+        "HealthCheckTimeoutSeconds": 5,
+        "HealthyThresholdCount": 5,
+        "Port": 9000,
+        "Protocol": "HTTP",
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "admin-console",
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/support-admin-console",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": "TEST",
+          },
+        ],
+        "TargetGroupAttributes": Array [
+          Object {
+            "Key": "deregistration_delay.timeout_seconds",
+            "Value": "30",
+          },
+          Object {
+            "Key": "stickiness.enabled",
+            "Value": "false",
+          },
+        ],
+        "TargetType": "instance",
+        "UnhealthyThresholdCount": 2,
+        "VpcId": Object {
           "Ref": "VpcId",
         },
       },
@@ -582,7 +1424,15 @@ dpkg -i /tmp/support-admin-console_1.0-SNAPSHOT_all.deb
         "SecurityGroupEgress": Array [
           Object {
             "CidrIp": "0.0.0.0/0",
+            "Description": "Wazuh event logging",
             "FromPort": 1514,
+            "IpProtocol": "tcp",
+            "ToPort": 1514,
+          },
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Wazuh agent registration",
+            "FromPort": 1515,
             "IpProtocol": "tcp",
             "ToPort": 1515,
           },
