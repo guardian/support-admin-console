@@ -3,17 +3,17 @@ import { GuEc2App } from '@guardian/cdk';
 import { AccessScope } from '@guardian/cdk/lib/constants';
 import type { GuStackProps } from '@guardian/cdk/lib/constructs/core';
 import { GuStack } from '@guardian/cdk/lib/constructs/core';
+import { GuCname } from '@guardian/cdk/lib/constructs/dns';
 import {
   GuAllowPolicy,
   GuGetS3ObjectsPolicy,
   GuPutS3ObjectsPolicy,
 } from '@guardian/cdk/lib/constructs/iam';
 import type { App } from 'aws-cdk-lib';
-import {Duration, Tags} from 'aws-cdk-lib';
+import { Duration, Tags } from 'aws-cdk-lib';
 import { InstanceClass, InstanceSize, InstanceType } from 'aws-cdk-lib/aws-ec2';
+import type { CfnLoadBalancer } from 'aws-cdk-lib/aws-elasticloadbalancing';
 import { CfnInclude } from 'aws-cdk-lib/cloudformation-include';
-import {GuCname} from '@guardian/cdk/lib/constructs/dns';
-import {CfnLoadBalancer} from 'aws-cdk-lib/aws-elasticloadbalancing';
 
 interface AdminConsoleProps extends GuStackProps {
   domainName: string;
