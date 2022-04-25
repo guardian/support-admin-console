@@ -23,6 +23,7 @@ GET  /login                                         controllers.Login.login
 GET  /loginAction                                   controllers.Login.loginAction
 GET  /oauth2callback                                controllers.Login.oauth2Callback
 GET  /logout                                        controllers.Login.logout
+GET  /reauth                                        controllers.Application.index
 
 # ----- support-frontend switches ----- #
 GET   /support-frontend/switches                    controllers.SwitchesController.get

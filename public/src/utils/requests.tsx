@@ -1,4 +1,6 @@
 import { Test } from '../components/channelManagement/helpers/shared';
+// @ts-ignore -- panda-session has no type definitions
+import { reEstablishSession } from 'panda-session';
 
 export enum SupportFrontendSettingsType {
   switches = 'switches',
@@ -33,15 +35,50 @@ function fetchSettings(path: string): Promise<any> {
   });
 }
 
+function postWithReauth(url: string, config: RequestInit): Promise<Response> {
+  return new Promise((resolve, reject) => {
+    fetch(url, config)
+      .then(response => {
+        console.log('status', response.status)
+        if (response.status === 419) {
+          // session has expired, reauth
+          console.log('doing reauth...')
+          return reEstablishSession('/reauth', 5000).then(
+            () => {
+              console.log('re-established')
+              fetch(url, config)
+                .then(response => {
+                  console.log('made the fetch after re-establish')
+                  return response;
+                })
+                .then(resolve)
+                .catch(reject);
+            }
+          );
+        } else {
+          return resolve(response);
+        }
+      })
+      .catch(reject);
+  });
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function saveSettings(path: string, data: any): Promise<Response> {
-  return fetch(path, {
+  return postWithReauth(path, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(data),
   });
+  // return fetch(path, {
+  //   method: 'POST',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //   },
+  //   body: JSON.stringify(data),
+  // });
 }
 
 export function requestLock(settingsType: FrontendSettingsType): Promise<Response> {

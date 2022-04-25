@@ -11,4 +11,9 @@ class Application(authAction: AuthAction[AnyContent], components: ControllerComp
   def index = authAction {
     Ok(views.html.index(stage)).withHeaders(CACHE_CONTROL -> "no-cache")
   }
+
+  // Enable re-authentication after session expires
+  def reauth = authAction {
+    Ok("auth ok")
+  }
 }
