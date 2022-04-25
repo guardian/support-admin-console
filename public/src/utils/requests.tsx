@@ -39,22 +39,20 @@ function postWithReauth(url: string, config: RequestInit): Promise<Response> {
   return new Promise((resolve, reject) => {
     fetch(url, config)
       .then(response => {
-        console.log('status', response.status)
+        console.log('status', response.status);
         if (response.status === 419) {
           // session has expired, reauth
-          console.log('doing reauth...')
-          return reEstablishSession('/reauth', 5000).then(
-            () => {
-              console.log('re-established')
-              fetch(url, config)
-                .then(response => {
-                  console.log('made the fetch after re-establish')
-                  return response;
-                })
-                .then(resolve)
-                .catch(reject);
-            }
-          );
+          console.log('doing reauth...');
+          return reEstablishSession('/reauth', 5000).then(() => {
+            console.log('re-established');
+            fetch(url, config)
+              .then(response => {
+                console.log('made the fetch after re-establish');
+                return response;
+              })
+              .then(resolve)
+              .catch(reject);
+          });
         } else {
           return resolve(response);
         }
