@@ -9,9 +9,11 @@ import {
   GuPutS3ObjectsPolicy,
 } from '@guardian/cdk/lib/constructs/iam';
 import type { App } from 'aws-cdk-lib';
-import { Tags } from 'aws-cdk-lib';
+import {Duration, Tags} from 'aws-cdk-lib';
 import { InstanceClass, InstanceSize, InstanceType } from 'aws-cdk-lib/aws-ec2';
 import { CfnInclude } from 'aws-cdk-lib/cloudformation-include';
+import {GuCname} from '@guardian/cdk/lib/constructs/dns';
+import {CfnLoadBalancer} from 'aws-cdk-lib/aws-elasticloadbalancing';
 
 interface AdminConsoleProps extends GuStackProps {
   domainName: string;
@@ -72,14 +74,23 @@ export class AdminConsole extends GuStack {
       withoutImdsv2: true,
     });
 
-    // Remove this tag after the migration
+    // TODO Remove this tag after the migration
     const ec2AppAsg = ec2App.autoScalingGroup;
     Tags.of(ec2AppAsg).add('gu:riffraff:new-asg', 'true');
 
-    // Legacy cloudformation stack - to be removed after migration to cdk is complete
+    // TODO Legacy cloudformation stack - to be removed after migration to cdk is complete
     const yamlTemplateFilePath = join(__dirname, '../..', 'cloudformation.yaml');
-    new CfnInclude(this, 'YamlTemplate', {
+    const template = new CfnInclude(this, 'YamlTemplate', {
       templateFile: yamlTemplateFilePath,
+    });
+
+    // TODO Migrate to new LB
+    const oldElb = template.getResource('ElasticLoadBalancer') as CfnLoadBalancer;
+    new GuCname(this, 'cname', {
+      app,
+      domainName,
+      ttl: Duration.minutes(1),
+      resourceRecord: oldElb.attrDnsName,
     });
   }
 }
