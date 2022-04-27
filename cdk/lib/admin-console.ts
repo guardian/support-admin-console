@@ -87,7 +87,7 @@ export class AdminConsole extends GuStack {
       templateFile: yamlTemplateFilePath,
     });
 
-    // TODO lower ttl after migration
+    // TODO increase ttl again after migration
     new GuCname(this, 'cname', {
       app,
       domainName,
