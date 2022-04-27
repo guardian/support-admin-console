@@ -57,7 +57,7 @@ export class AdminConsole extends GuStack {
 
     const ec2App = new GuEc2App(this, {
       applicationPort: 9000,
-      app: 'admin-console',
+      app,
       access: { scope: AccessScope.PUBLIC },
       certificateProps: {
         domainName,
