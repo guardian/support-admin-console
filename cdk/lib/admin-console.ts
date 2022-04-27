@@ -89,7 +89,7 @@ export class AdminConsole extends GuStack {
     new GuCname(this, 'cname', {
       app,
       domainName,
-      ttl: Duration.minutes(1),
+      ttl: Duration.minutes(60),
       resourceRecord: oldElb.attrDnsName,
     });
   }
