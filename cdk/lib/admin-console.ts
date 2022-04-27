@@ -1,4 +1,3 @@
-import { join } from 'path';
 import { GuEc2App } from '@guardian/cdk';
 import { AccessScope } from '@guardian/cdk/lib/constants';
 import type { GuStackProps } from '@guardian/cdk/lib/constructs/core';
@@ -10,9 +9,8 @@ import {
   GuPutS3ObjectsPolicy,
 } from '@guardian/cdk/lib/constructs/iam';
 import type { App } from 'aws-cdk-lib';
-import { Duration, Tags } from 'aws-cdk-lib';
+import { Duration } from 'aws-cdk-lib';
 import { InstanceClass, InstanceSize, InstanceType } from 'aws-cdk-lib/aws-ec2';
-import { CfnInclude } from 'aws-cdk-lib/cloudformation-include';
 
 export interface AdminConsoleProps extends GuStackProps {
   domainName: string;
@@ -75,16 +73,6 @@ export class AdminConsole extends GuStack {
       scaling: { minimumInstances: 1, maximumInstances: 2 },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MICRO),
       withoutImdsv2: true,
-    });
-
-    // TODO Remove this tag after the migration
-    const ec2AppAsg = ec2App.autoScalingGroup;
-    Tags.of(ec2AppAsg).add('gu:riffraff:new-asg', 'true');
-
-    // TODO Legacy cloudformation stack - to be removed after migration to cdk is complete
-    const yamlTemplateFilePath = join(__dirname, '../..', 'cloudformation.yaml');
-    new CfnInclude(this, 'YamlTemplate', {
-      templateFile: yamlTemplateFilePath,
     });
 
     // TODO increase ttl again after migration
