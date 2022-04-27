@@ -1468,7 +1468,7 @@ dpkg -i /tmp/support-admin-console_1.0-SNAPSHOT_all.deb
         "ResourceRecords": Array [
           Object {
             "Fn::GetAtt": Array [
-              "ElasticLoadBalancer",
+              "LoadBalancerAdminconsole69251694",
               "DNSName",
             ],
           },

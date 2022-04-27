@@ -12,7 +12,6 @@ import {
 import type { App } from 'aws-cdk-lib';
 import { Duration, Tags } from 'aws-cdk-lib';
 import { InstanceClass, InstanceSize, InstanceType } from 'aws-cdk-lib/aws-ec2';
-import type { CfnLoadBalancer } from 'aws-cdk-lib/aws-elasticloadbalancing';
 import { CfnInclude } from 'aws-cdk-lib/cloudformation-include';
 
 export interface AdminConsoleProps extends GuStackProps {
@@ -80,17 +79,16 @@ export class AdminConsole extends GuStack {
 
     // TODO Legacy cloudformation stack - to be removed after migration to cdk is complete
     const yamlTemplateFilePath = join(__dirname, '../..', 'cloudformation.yaml');
-    const template = new CfnInclude(this, 'YamlTemplate', {
+    new CfnInclude(this, 'YamlTemplate', {
       templateFile: yamlTemplateFilePath,
     });
 
-    // TODO Migrate to new LB
-    const oldElb = template.getResource('ElasticLoadBalancer') as CfnLoadBalancer;
+    // TODO lower ttl after migration
     new GuCname(this, 'cname', {
       app,
       domainName,
       ttl: Duration.minutes(1),
-      resourceRecord: oldElb.attrDnsName,
+      resourceRecord: ec2App.loadBalancer.loadBalancerDnsName,
     });
   }
 }
