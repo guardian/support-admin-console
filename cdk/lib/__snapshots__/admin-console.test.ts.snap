@@ -1185,7 +1185,10 @@ dpkg -i /tmp/support-admin-console_1.0-SNAPSHOT_all.deb
         "PolicyDocument": Object {
           "Statement": Array [
             Object {
-              "Action": "s3:PutObject",
+              "Action": Array [
+                "s3:PutObject",
+                "s3:PutObjectAcl",
+              ],
               "Effect": "Allow",
               "Resource": Array [
                 "arn:aws:s3:::gu-contributions-public/epic/PROD/*",

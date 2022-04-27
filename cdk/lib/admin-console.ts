@@ -48,9 +48,13 @@ export class AdminConsole extends GuStack {
         bucketName: 'support-admin-console',
         paths: [`${this.stage}/*`],
       }),
-      new GuPutS3ObjectsPolicy(this, 'PublicSettingsBucketPut', {
-        bucketName: 'gu-contributions-public',
-        paths: [`epic/${this.stage}/*`, `banner/${this.stage}/*`, `header/${this.stage}/*`],
+      new GuAllowPolicy(this, 'PublicSettingsBucketPut', {
+        actions: ['s3:PutObject', 's3:PutObjectAcl'],
+        resources: [
+          `arn:aws:s3:::gu-contributions-public/epic/${this.stage}/*`,
+          `arn:aws:s3:::gu-contributions-public/banner/${this.stage}/*`,
+          `arn:aws:s3:::gu-contributions-public/header/${this.stage}/*`,
+        ],
       }),
     ];
 
