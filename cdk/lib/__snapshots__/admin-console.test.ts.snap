@@ -257,7 +257,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": "TEST",
+            "Value": "PROD",
           },
         ],
       },
@@ -318,7 +318,7 @@ Object {
           Object {
             "Key": "Stage",
             "PropagateAtLaunch": true,
-            "Value": "TEST",
+            "Value": "PROD",
           },
         ],
         "TargetGroupARNs": Array [
@@ -380,7 +380,7 @@ Object {
           Object {
             "Key": "Stage",
             "PropagateAtLaunch": true,
-            "Value": "TEST",
+            "Value": "PROD",
           },
         ],
         "TargetGroupARNs": Array [
@@ -440,9 +440,9 @@ Object {
                 Object {
                   "Ref": "AWS::Region",
                 },
-                " s3 cp s3://membership-dist/support/TEST/admin-console/support-admin-console_1.0-SNAPSHOT_all.deb /tmp
+                " s3 cp s3://membership-dist/support/PROD/admin-console/support-admin-console_1.0-SNAPSHOT_all.deb /tmp
     dpkg -i /tmp/support-admin-console_1.0-SNAPSHOT_all.deb
-    /opt/cloudwatch-logs/configure-logs application support TEST admin-console /var/log/support-admin-console/application.log",
+    /opt/cloudwatch-logs/configure-logs application support PROD admin-console /var/log/support-admin-console/application.log",
               ],
             ],
           },
@@ -453,7 +453,7 @@ Object {
     "CertificateAdminconsole74B584AB": Object {
       "DeletionPolicy": "Retain",
       "Properties": Object {
-        "DomainName": "support.code.dev-gutools.co.uk",
+        "DomainName": "support.gutools.co.uk",
         "Tags": Array [
           Object {
             "Key": "App",
@@ -473,7 +473,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": "TEST",
+            "Value": "PROD",
           },
         ],
         "ValidationMethod": "DNS",
@@ -566,7 +566,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": "TEST",
+            "Value": "PROD",
           },
         ],
       },
@@ -587,7 +587,7 @@ Object {
                     Object {
                       "Ref": "DistributionBucketName",
                     },
-                    "/support/TEST/admin-console/*",
+                    "/support/PROD/admin-console/*",
                   ],
                 ],
               },
@@ -635,7 +635,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": "TEST",
+            "Value": "PROD",
           },
         ],
         "VpcId": Object {
@@ -762,7 +762,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": "TEST",
+            "Value": "PROD",
           },
         ],
       },
@@ -820,7 +820,7 @@ Object {
           },
           Object {
             "Key": "Stage",
-            "Value": "TEST",
+            "Value": "PROD",
           },
         ],
         "VpcId": Object {
@@ -923,7 +923,7 @@ dpkg -i /tmp/support-admin-console_1.0-SNAPSHOT_all.deb
           },
           Object {
             "Key": "Stage",
-            "Value": "TEST",
+            "Value": "PROD",
           },
         ],
         "Type": "application",
@@ -961,7 +961,7 @@ dpkg -i /tmp/support-admin-console_1.0-SNAPSHOT_all.deb
           },
           Object {
             "Key": "Stage",
-            "Value": "TEST",
+            "Value": "PROD",
           },
         ],
         "VpcId": Object {
@@ -1050,7 +1050,7 @@ dpkg -i /tmp/support-admin-console_1.0-SNAPSHOT_all.deb
           },
           Object {
             "Key": "Stage",
-            "Value": "TEST",
+            "Value": "PROD",
           },
         ],
         "VpcId": Object {
@@ -1080,7 +1080,7 @@ dpkg -i /tmp/support-admin-console_1.0-SNAPSHOT_all.deb
           },
           Object {
             "Key": "Stage",
-            "Value": "TEST",
+            "Value": "PROD",
           },
         ],
       },
@@ -1112,7 +1112,7 @@ dpkg -i /tmp/support-admin-console_1.0-SNAPSHOT_all.deb
           },
           Object {
             "Key": "Stage",
-            "Value": "TEST",
+            "Value": "PROD",
           },
         ],
         "VpcId": Object {
@@ -1140,7 +1140,7 @@ dpkg -i /tmp/support-admin-console_1.0-SNAPSHOT_all.deb
                     Object {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/TEST/support/admin-console",
+                    ":parameter/PROD/support/admin-console",
                   ],
                 ],
               },
@@ -1163,7 +1163,7 @@ dpkg -i /tmp/support-admin-console_1.0-SNAPSHOT_all.deb
                     Object {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/TEST/support/admin-console/*",
+                    ":parameter/PROD/support/admin-console/*",
                   ],
                 ],
               },
@@ -1188,9 +1188,9 @@ dpkg -i /tmp/support-admin-console_1.0-SNAPSHOT_all.deb
               "Action": "s3:PutObject",
               "Effect": "Allow",
               "Resource": Array [
-                "arn:aws:s3:::gu-contributions-public/epic/TEST/*",
-                "arn:aws:s3:::gu-contributions-public/banner/TEST/*",
-                "arn:aws:s3:::gu-contributions-public/header/TEST/*",
+                "arn:aws:s3:::gu-contributions-public/epic/PROD/*",
+                "arn:aws:s3:::gu-contributions-public/banner/PROD/*",
+                "arn:aws:s3:::gu-contributions-public/header/PROD/*",
               ],
             },
           ],
@@ -1224,7 +1224,7 @@ dpkg -i /tmp/support-admin-console_1.0-SNAPSHOT_all.deb
                     Object {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/admin-console/TEST",
+                    ":parameter/admin-console/PROD",
                   ],
                 ],
               },
@@ -1285,7 +1285,7 @@ dpkg -i /tmp/support-admin-console_1.0-SNAPSHOT_all.deb
               "Action": "s3:GetObject",
               "Effect": "Allow",
               "Resource": Array [
-                "arn:aws:s3:::support-admin-console/TEST/*",
+                "arn:aws:s3:::support-admin-console/PROD/*",
                 "arn:aws:s3:::support-admin-console/google-auth-service-account-certificate.json",
               ],
             },
@@ -1308,7 +1308,7 @@ dpkg -i /tmp/support-admin-console_1.0-SNAPSHOT_all.deb
             Object {
               "Action": "s3:PutObject",
               "Effect": "Allow",
-              "Resource": "arn:aws:s3:::support-admin-console/TEST/*",
+              "Resource": "arn:aws:s3:::support-admin-console/PROD/*",
             },
           ],
           "Version": "2012-10-17",
@@ -1353,7 +1353,7 @@ dpkg -i /tmp/support-admin-console_1.0-SNAPSHOT_all.deb
           },
           Object {
             "Key": "Stage",
-            "Value": "TEST",
+            "Value": "PROD",
           },
         ],
         "TargetGroupAttributes": Array [
@@ -1397,7 +1397,7 @@ dpkg -i /tmp/support-admin-console_1.0-SNAPSHOT_all.deb
           },
           Object {
             "Key": "Stage",
-            "Value": "TEST",
+            "Value": "PROD",
           },
         ],
         "TargetGroupAttributes": Array [
@@ -1452,7 +1452,7 @@ dpkg -i /tmp/support-admin-console_1.0-SNAPSHOT_all.deb
           },
           Object {
             "Key": "Stage",
-            "Value": "TEST",
+            "Value": "PROD",
           },
         ],
         "VpcId": Object {
@@ -1463,7 +1463,7 @@ dpkg -i /tmp/support-admin-console_1.0-SNAPSHOT_all.deb
     },
     "cname": Object {
       "Properties": Object {
-        "Name": "support.code.dev-gutools.co.uk",
+        "Name": "support.gutools.co.uk",
         "RecordType": "CNAME",
         "ResourceRecords": Array [
           Object {
@@ -1473,7 +1473,7 @@ dpkg -i /tmp/support-admin-console_1.0-SNAPSHOT_all.deb
             ],
           },
         ],
-        "Stage": "TEST",
+        "Stage": "PROD",
         "TTL": 3600,
       },
       "Type": "Guardian::DNS::RecordSet",
