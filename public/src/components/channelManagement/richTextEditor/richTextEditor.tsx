@@ -90,7 +90,9 @@ class RemovePastedHtmlExtension extends PlainExtension {
       props: {
         transformPastedHTML: html => {
           const doc = new DOMParser().parseFromString(html, 'text/html');
-          return doc.body.textContent || '';
+          return Array.from(doc.getElementsByTagName('p'))
+            .map(p => `<p>${p.textContent}</p>`)
+            .join(' ');
         },
       },
     });
