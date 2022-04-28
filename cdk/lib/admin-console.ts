@@ -75,11 +75,10 @@ export class AdminConsole extends GuStack {
       withoutImdsv2: true,
     });
 
-    // TODO increase ttl again after migration
     new GuCname(this, 'cname', {
       app,
       domainName,
-      ttl: Duration.minutes(1),
+      ttl: Duration.minutes(60),
       resourceRecord: ec2App.loadBalancer.loadBalancerDnsName,
     });
   }
