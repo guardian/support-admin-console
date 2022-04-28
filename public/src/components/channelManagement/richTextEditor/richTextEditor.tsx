@@ -90,7 +90,18 @@ class RemovePastedHtmlExtension extends PlainExtension {
       props: {
         transformPastedHTML: html => {
           const doc = new DOMParser().parseFromString(html, 'text/html');
-          return doc.body.textContent || '';
+          const paras = Array.from(doc.getElementsByTagName('p'));
+          /**
+           * It's important to remove all pasted html.
+           * If the html contains any paras then assume all content is in <p> tags.
+           */
+          if (paras.length > 0) {
+            return Array.from(doc.getElementsByTagName('p'))
+              .map(p => `<p>${p.textContent}</p>`)
+              .join(' ');
+          } else {
+            return doc.body.textContent || '';
+          }
         },
       },
     });
