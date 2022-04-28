@@ -866,7 +866,7 @@ Object {
           },
         ],
         "Stage": "PROD",
-        "TTL": 60,
+        "TTL": 3600,
       },
       "Type": "Guardian::DNS::RecordSet",
     },
