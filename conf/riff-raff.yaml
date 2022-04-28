@@ -8,6 +8,7 @@ deployments:
       templateStagePaths:
         CODE: AdminConsole-CODE.template.json
         PROD: AdminConsole-PROD.template.json
+      amiParameter: AMIAdminconsole
       amiTags:
         Recipe: bionic-membership-ARM
         AmigoStage: PROD
@@ -17,4 +18,3 @@ deployments:
     dependencies: [cfn]
     parameters:
       bucket: membership-dist
-      asgMigrationInProgress: true
