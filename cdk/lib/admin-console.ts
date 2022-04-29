@@ -8,8 +8,9 @@ import {
   GuGetS3ObjectsPolicy,
   GuPutS3ObjectsPolicy,
 } from '@guardian/cdk/lib/constructs/iam';
-import type { App } from 'aws-cdk-lib';
-import { Duration } from 'aws-cdk-lib';
+import type { App, CfnElement } from 'aws-cdk-lib';
+import { Duration, RemovalPolicy } from 'aws-cdk-lib';
+import { AttributeType, ProjectionType, Table } from 'aws-cdk-lib/aws-dynamodb';
 import { InstanceClass, InstanceSize, InstanceType } from 'aws-cdk-lib/aws-ec2';
 
 export interface AdminConsoleProps extends GuStackProps {
@@ -17,6 +18,43 @@ export interface AdminConsoleProps extends GuStackProps {
 }
 
 export class AdminConsole extends GuStack {
+  buildDynamoTables() {
+    const buildTable = (channel: string) => {
+      const id = `${channel[0].toUpperCase() + channel.slice(1)}TestsDynamoTable`;
+
+      const table = new Table(this, id, {
+        tableName: `${channel}-tests-${this.stage}`,
+        removalPolicy: RemovalPolicy.RETAIN,
+        readCapacity: 4,
+        writeCapacity: 4,
+        partitionKey: {
+          name: 'name',
+          type: AttributeType.STRING,
+        },
+      });
+
+      // Add an index for querying by status (LIVE/DRAFT/ARCHIVED)
+      table.addGlobalSecondaryIndex({
+        indexName: 'status-index',
+        partitionKey: {
+          name: 'status',
+          type: AttributeType.STRING,
+        },
+        readCapacity: 4,
+        writeCapacity: 4,
+        projectionType: ProjectionType.ALL,
+      });
+
+      // Give it a better name
+      const defaultChild = table.node.defaultChild as unknown as CfnElement;
+      defaultChild.overrideLogicalId(id);
+    };
+
+    buildTable('header');
+    buildTable('epic');
+    buildTable('banner');
+  }
+
   constructor(scope: App, id: string, props: AdminConsoleProps) {
     super(scope, id, props);
 
@@ -81,5 +119,7 @@ export class AdminConsole extends GuStack {
       ttl: Duration.minutes(60),
       resourceRecord: ec2App.loadBalancer.loadBalancerDnsName,
     });
+
+    this.buildDynamoTables();
   }
 }

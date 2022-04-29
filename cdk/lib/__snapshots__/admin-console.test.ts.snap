@@ -158,6 +158,70 @@ Object {
       },
       "Type": "AWS::AutoScaling::LaunchConfiguration",
     },
+    "BannerTestsDynamoTable": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "AttributeDefinitions": Array [
+          Object {
+            "AttributeName": "name",
+            "AttributeType": "S",
+          },
+          Object {
+            "AttributeName": "status",
+            "AttributeType": "S",
+          },
+        ],
+        "GlobalSecondaryIndexes": Array [
+          Object {
+            "IndexName": "status-index",
+            "KeySchema": Array [
+              Object {
+                "AttributeName": "status",
+                "KeyType": "HASH",
+              },
+            ],
+            "Projection": Object {
+              "ProjectionType": "ALL",
+            },
+            "ProvisionedThroughput": Object {
+              "ReadCapacityUnits": 4,
+              "WriteCapacityUnits": 4,
+            },
+          },
+        ],
+        "KeySchema": Array [
+          Object {
+            "AttributeName": "name",
+            "KeyType": "HASH",
+          },
+        ],
+        "ProvisionedThroughput": Object {
+          "ReadCapacityUnits": 4,
+          "WriteCapacityUnits": 4,
+        },
+        "TableName": "banner-tests-PROD",
+        "Tags": Array [
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/support-admin-console",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+      },
+      "Type": "AWS::DynamoDB::Table",
+      "UpdateReplacePolicy": "Retain",
+    },
     "CertificateAdminconsole74B584AB": Object {
       "DeletionPolicy": "Retain",
       "Properties": Object {
@@ -239,6 +303,70 @@ Object {
         ],
       },
       "Type": "AWS::IAM::Policy",
+    },
+    "EpicTestsDynamoTable": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "AttributeDefinitions": Array [
+          Object {
+            "AttributeName": "name",
+            "AttributeType": "S",
+          },
+          Object {
+            "AttributeName": "status",
+            "AttributeType": "S",
+          },
+        ],
+        "GlobalSecondaryIndexes": Array [
+          Object {
+            "IndexName": "status-index",
+            "KeySchema": Array [
+              Object {
+                "AttributeName": "status",
+                "KeyType": "HASH",
+              },
+            ],
+            "Projection": Object {
+              "ProjectionType": "ALL",
+            },
+            "ProvisionedThroughput": Object {
+              "ReadCapacityUnits": 4,
+              "WriteCapacityUnits": 4,
+            },
+          },
+        ],
+        "KeySchema": Array [
+          Object {
+            "AttributeName": "name",
+            "KeyType": "HASH",
+          },
+        ],
+        "ProvisionedThroughput": Object {
+          "ReadCapacityUnits": 4,
+          "WriteCapacityUnits": 4,
+        },
+        "TableName": "epic-tests-PROD",
+        "Tags": Array [
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/support-admin-console",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+      },
+      "Type": "AWS::DynamoDB::Table",
+      "UpdateReplacePolicy": "Retain",
     },
     "GetDistributablePolicyAdminconsole6DA8CA46": Object {
       "Properties": Object {
@@ -374,6 +502,70 @@ Object {
         ],
       },
       "Type": "AWS::IAM::Policy",
+    },
+    "HeaderTestsDynamoTable": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "AttributeDefinitions": Array [
+          Object {
+            "AttributeName": "name",
+            "AttributeType": "S",
+          },
+          Object {
+            "AttributeName": "status",
+            "AttributeType": "S",
+          },
+        ],
+        "GlobalSecondaryIndexes": Array [
+          Object {
+            "IndexName": "status-index",
+            "KeySchema": Array [
+              Object {
+                "AttributeName": "status",
+                "KeyType": "HASH",
+              },
+            ],
+            "Projection": Object {
+              "ProjectionType": "ALL",
+            },
+            "ProvisionedThroughput": Object {
+              "ReadCapacityUnits": 4,
+              "WriteCapacityUnits": 4,
+            },
+          },
+        ],
+        "KeySchema": Array [
+          Object {
+            "AttributeName": "name",
+            "KeyType": "HASH",
+          },
+        ],
+        "ProvisionedThroughput": Object {
+          "ReadCapacityUnits": 4,
+          "WriteCapacityUnits": 4,
+        },
+        "TableName": "header-tests-PROD",
+        "Tags": Array [
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/support-admin-console",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+      },
+      "Type": "AWS::DynamoDB::Table",
+      "UpdateReplacePolicy": "Retain",
     },
     "InstanceRoleAdminconsole347DA627": Object {
       "Properties": Object {
