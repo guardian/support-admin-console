@@ -18,41 +18,36 @@ export interface AdminConsoleProps extends GuStackProps {
 }
 
 export class AdminConsole extends GuStack {
-  buildDynamoTables() {
-    const buildTable = (channel: string) => {
-      const id = `${channel[0].toUpperCase() + channel.slice(1)}TestsDynamoTable`;
+  // Build a dynamodb table to store tests for the given channel
+  buildTestsTable(channel: string) {
+    const id = `${channel[0].toUpperCase() + channel.slice(1)}TestsDynamoTable`;
 
-      const table = new Table(this, id, {
-        tableName: `${channel}-tests-${this.stage}`,
-        removalPolicy: RemovalPolicy.RETAIN,
-        readCapacity: 4,
-        writeCapacity: 4,
-        partitionKey: {
-          name: 'name',
-          type: AttributeType.STRING,
-        },
-      });
+    const table = new Table(this, id, {
+      tableName: `${channel}-tests-${this.stage}`,
+      removalPolicy: RemovalPolicy.RETAIN,
+      readCapacity: 4,
+      writeCapacity: 4,
+      partitionKey: {
+        name: 'name',
+        type: AttributeType.STRING,
+      },
+    });
 
-      // Add an index for querying by status (LIVE/DRAFT/ARCHIVED)
-      table.addGlobalSecondaryIndex({
-        indexName: 'status-index',
-        partitionKey: {
-          name: 'status',
-          type: AttributeType.STRING,
-        },
-        readCapacity: 4,
-        writeCapacity: 4,
-        projectionType: ProjectionType.ALL,
-      });
+    // Add an index for querying by status (LIVE/DRAFT/ARCHIVED)
+    table.addGlobalSecondaryIndex({
+      indexName: 'status-index',
+      partitionKey: {
+        name: 'status',
+        type: AttributeType.STRING,
+      },
+      readCapacity: 4,
+      writeCapacity: 4,
+      projectionType: ProjectionType.ALL,
+    });
 
-      // Give it a better name
-      const defaultChild = table.node.defaultChild as unknown as CfnElement;
-      defaultChild.overrideLogicalId(id);
-    };
-
-    buildTable('header');
-    buildTable('epic');
-    buildTable('banner');
+    // Give it a better name
+    const defaultChild = table.node.defaultChild as unknown as CfnElement;
+    defaultChild.overrideLogicalId(id);
   }
 
   constructor(scope: App, id: string, props: AdminConsoleProps) {
@@ -120,6 +115,8 @@ export class AdminConsole extends GuStack {
       resourceRecord: ec2App.loadBalancer.loadBalancerDnsName,
     });
 
-    this.buildDynamoTables();
+    this.buildTestsTable('header');
+    this.buildTestsTable('epic');
+    this.buildTestsTable('banner');
   }
 }
