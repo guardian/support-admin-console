@@ -5,6 +5,8 @@ import { GuStack } from '@guardian/cdk/lib/constructs/core';
 import { GuCname } from '@guardian/cdk/lib/constructs/dns';
 import {
   GuAllowPolicy,
+  GuDynamoDBReadPolicy,
+  GuDynamoDBWritePolicy,
   GuGetS3ObjectsPolicy,
   GuPutS3ObjectsPolicy,
 } from '@guardian/cdk/lib/constructs/iam';
@@ -19,7 +21,7 @@ export interface AdminConsoleProps extends GuStackProps {
 
 export class AdminConsole extends GuStack {
   // Build a dynamodb table to store tests for the given channel
-  buildTestsTable(channel: string) {
+  buildTestsTable(channel: string): Table {
     const id = `${channel[0].toUpperCase() + channel.slice(1)}TestsDynamoTable`;
 
     const table = new Table(this, id, {
@@ -48,6 +50,25 @@ export class AdminConsole extends GuStack {
     // Give it a better name
     const defaultChild = table.node.defaultChild as unknown as CfnElement;
     defaultChild.overrideLogicalId(id);
+
+    return table;
+  }
+
+  buildDynamoPolicies(tables: Table[]): GuAllowPolicy[] {
+    const dynamoReadPolicies = tables.map(
+      (table) =>
+        new GuDynamoDBReadPolicy(this, `DynamoRead-${table.node.id}`, {
+          tableName: table.tableName,
+        }),
+    );
+    const dynamoWritePolicies = tables.map(
+      (table) =>
+        new GuDynamoDBWritePolicy(this, `DynamoWrite-${table.node.id}`, {
+          tableName: table.tableName,
+        }),
+    );
+
+    return [...dynamoReadPolicies, ...dynamoWritePolicies];
   }
 
   constructor(scope: App, id: string, props: AdminConsoleProps) {
@@ -56,6 +77,13 @@ export class AdminConsole extends GuStack {
     const { domainName } = props;
 
     const app = 'admin-console';
+
+    const dynamoTables = [
+      this.buildTestsTable('header'),
+      this.buildTestsTable('epic'),
+      this.buildTestsTable('banner'),
+    ];
+    const dynamoPolicies = this.buildDynamoPolicies(dynamoTables);
 
     const userData = `#!/bin/bash -ev
     aws --region ${this.region} s3 cp s3://membership-dist/${this.stack}/${this.stage}/${app}/support-admin-console_1.0-SNAPSHOT_all.deb /tmp
@@ -87,6 +115,7 @@ export class AdminConsole extends GuStack {
           `arn:aws:s3:::gu-contributions-public/header/${this.stage}/*`,
         ],
       }),
+      ...dynamoPolicies,
     ];
 
     const ec2App = new GuEc2App(this, {
@@ -114,9 +143,5 @@ export class AdminConsole extends GuStack {
       ttl: Duration.minutes(60),
       resourceRecord: ec2App.loadBalancer.loadBalancerDnsName,
     });
-
-    this.buildTestsTable('header');
-    this.buildTestsTable('epic');
-    this.buildTestsTable('banner');
   }
 }
