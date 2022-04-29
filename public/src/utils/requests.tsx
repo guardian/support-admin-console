@@ -37,27 +37,64 @@ function fetchSettings(path: string): Promise<any> {
 
 function postWithReauth(url: string, config: RequestInit): Promise<Response> {
   return new Promise((resolve, reject) => {
-    fetch(url, config)
+    fetch("/isValid")
       .then(response => {
-        console.log('status', response.status);
         if (response.status === 419) {
-          // session has expired, reauth
-          console.log('doing reauth...');
-          return reEstablishSession('/reauth', 5000).then(() => {
-            console.log('re-established');
-            fetch(url, config)
-              .then(response => {
-                console.log('made the fetch after re-establish');
-                return response;
-              })
-              .then(resolve)
-              .catch(reject);
-          });
+          console.log("419, need to re-establish")
+          reEstablishSession('/reauth', 5000)
+            .then(() => {
+              console.log('re-established');
+              fetch(url, config)
+                .then(resolve)
+                .catch(reject)
+            })
+            .catch(err => {
+              console.log('failed to re-establish')
+              reject(err)
+            })
         } else {
-          return resolve(response);
+          console.log("no need to re-establish")
+          fetch(url, config)
+            .then(resolve)
+            .catch(reject)
         }
       })
-      .catch(reject);
+    // fetch(url, config, redirect: 'manual'})
+    //   .then(response => {
+    //     console.log('response', response);
+    //
+    //     if (response.status === 0) {
+    //       fetch('reauth').then(() => {
+    //         console.log('re-established');
+    //         fetch(url, config)
+    //           .then(response => {
+    //             console.log('made the fetch after re-establish');
+    //             return response;
+    //           })
+    //           .then(resolve)
+    //           .catch(reject);
+    //       })
+    //     } else {
+    //       resolve(response);
+    //     }
+        // if (response.status === 419) {
+        //   // session has expired, reauth
+        //   console.log('doing reauth...');
+        //   return reEstablishSession('/reauth', 5000).then(() => {
+        //     console.log('re-established');
+        //     fetch(url, config)
+        //       .then(response => {
+        //         console.log('made the fetch after re-establish');
+        //         return response;
+        //       })
+        //       .then(resolve)
+        //       .catch(reject);
+        //   });
+        // } else {
+        //   return resolve(response);
+        // }
+      // })
+      // .catch(reject);
   });
 }
 

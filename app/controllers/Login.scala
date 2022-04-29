@@ -1,6 +1,6 @@
 package controllers
 
-import com.gu.googleauth.{GoogleAuthConfig, GoogleGroupChecker, LoginSupport}
+import com.gu.googleauth.{GoogleAuthConfig, GoogleGroupChecker, LoginSupport, UserIdentity}
 import play.api.libs.ws.WSClient
 import play.api.mvc._
 
@@ -39,6 +39,13 @@ class Login(
 
   def logout: Action[AnyContent] = Action { implicit request =>
     Redirect("/").withNewSession
+  }
+
+  def isValid: Action[AnyContent] = Action { implicit request =>
+    UserIdentity.fromRequest(request).filter(_.isValid) match {
+      case Some(_) => Ok("auth is valid")
+      case None => new Status(419)
+    }
   }
 
   override val failureRedirectTarget: Call = routes.Login.login
