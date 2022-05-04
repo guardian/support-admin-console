@@ -341,22 +341,13 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
               <span className={classes.remirrorButtonSpacer}>&nbsp;</span>
             </>
           )}
-          <button
-            className="remirror-button"
-            onClick={() => insertArticleCount()}
-          >
+          <button className="remirror-button" onClick={() => insertArticleCount()}>
             Articles
           </button>
-          <button
-            className="remirror-button"
-            onClick={() => insertCurrencySymbol()}
-          >
+          <button className="remirror-button" onClick={() => insertCurrencySymbol()}>
             Currency
           </button>
-          <button
-            className="remirror-button"
-            onClick={() => insertCountryName()}
-          >
+          <button className="remirror-button" onClick={() => insertCountryName()}>
             Country
           </button>
           <span className={classes.remirrorButtonSpacer}>&nbsp;</span>
@@ -368,7 +359,11 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
               {priceButtonsVisible ? 'Prices ↑' : 'Prices ↓'}
             </button>
             <menu
-              className={priceButtonsVisible ? classes.dropdownMenuContent : classes.dropdownMenuContentHidden}
+              className={
+                priceButtonsVisible
+                  ? classes.dropdownMenuContent
+                  : classes.dropdownMenuContentHidden
+              }
             >
               <div className={classes.fieldLabelPrices}>Price templates:</div>
               <button
