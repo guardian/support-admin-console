@@ -7,6 +7,13 @@ export const useRTEStyles = makeStyles(() => ({
     color: 'rgba(0 0 0 / 0.6)',
     margin: '0 1.5em',
   },
+  fieldLabelPrices: {
+    display: 'inline-block',
+    fontSize: '85%',
+    color: 'rgba(0 0 0 / 0.6)',
+    margin: '0 1.5em',
+    paddingLeft: '10em',
+  },
   helperText: {
     fontSize: '85%',
     color: 'rgba(0 0 0 / 0.6)',
@@ -19,6 +26,28 @@ export const useRTEStyles = makeStyles(() => ({
   },
   remirrorButtonSpacer: {
     paddingLeft: '1em',
+  },
+
+  dropdownMenu: {
+    display: 'inline',
+  },
+
+  dropdownMenuToggle: {
+  },
+
+  dropdownMenuContent: {
+    margin: '0.5em 0 0',
+    padding: '0',
+  },
+
+  dropdownMenuContentHidden: {
+    margin: '0',
+    padding: '0',
+    height: '0',
+    overflowY: 'hidden',
+  },
+
+  dropdownMenuItem: {
   },
 
   // extra css to style remirror components in RRCP:

@@ -222,10 +222,10 @@ const FloatingLinkToolbar = () => {
         label: 'Link',
         items: activeLink
           ? [
-              { type: ComponentItem.ToolbarButton, onClick: () => clickEdit(), icon: 'pencilLine' },
-              { type: ComponentItem.ToolbarButton, onClick: onRemove, icon: 'linkUnlink' },
+              { type: ComponentItem.ToolbarButton, onClick: () => clickEdit(), label: 'Edit link' },
+              { type: ComponentItem.ToolbarButton, onClick: onRemove, label: 'Remove link' },
             ]
-          : [{ type: ComponentItem.ToolbarButton, onClick: () => clickEdit(), icon: 'link' }],
+          : [{ type: ComponentItem.ToolbarButton, onClick: () => clickEdit(), label: 'Add link' }],
       },
     ],
     [clickEdit, onRemove, activeLink],
@@ -279,6 +279,42 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
   const chain = useChainedCommands();
   const active = useActive();
 
+  const [priceButtonsVisible, setPriceButtonsVisible] = useState<boolean>(false);
+
+  const clickBold = () => {
+    chain
+      .toggleBold()
+      .focus()
+      .run();
+  };
+  const clickItalic = () => {
+    chain
+      .toggleItalic()
+      .focus()
+      .run();
+  };
+  const insertArticleCount = () => {
+    chain.insertText('%%ARTICLE_COUNT%%').run();
+  };
+  const insertCurrencySymbol = () => {
+    chain.insertText('%%CURRENCY_SYMBOL%%').run();
+  };
+  const insertCountryName = () => {
+    chain.insertText('%%COUNTRY_NAME%%').run();
+  };
+  const insertPriceDigisubMonthly = () => {
+    chain.insertText('%%PRICE_DIGISUB_MONTHLY%%').run();
+  };
+  const insertPriceDigisubAnnual = () => {
+    chain.insertText('%%PRICE_DIGISUB_ANNUAL%%').run();
+  };
+  const insertPriceGwMonthly = () => {
+    chain.insertText('%%PRICE_GUARDIANWEEKLY_MONTHLY%%').run();
+  };
+  const insertPriceGwAnnual = () => {
+    chain.insertText('%%PRICE_GUARDIANWEEKLY_ANNUAL%%').run();
+  };
+
   return (
     <div>
       <span className={classes.fieldLabel}>{label != null ? label : 'Editable field'}</span>
@@ -290,12 +326,7 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
                 className={
                   active.bold() ? 'remirror-button remirror-button-active' : 'remirror-button'
                 }
-                onClick={() => {
-                  chain
-                    .toggleBold()
-                    .focus()
-                    .run();
-                }}
+                onClick={() => clickBold()}
               >
                 Bold
               </button>
@@ -303,12 +334,7 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
                 className={
                   active.italic() ? 'remirror-button remirror-button-active' : 'remirror-button'
                 }
-                onClick={() => {
-                  chain
-                    .toggleItalic()
-                    .focus()
-                    .run();
-                }}
+                onClick={() => clickItalic()}
               >
                 Italic
               </button>
@@ -317,28 +343,60 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
           )}
           <button
             className="remirror-button"
-            onClick={() => {
-              chain.insertText('%%ARTICLE_COUNT%%').run();
-            }}
+            onClick={() => insertArticleCount()}
           >
             Articles
           </button>
           <button
             className="remirror-button"
-            onClick={() => {
-              chain.insertText('%%CURRENCY_SYMBOL%%').run();
-            }}
+            onClick={() => insertCurrencySymbol()}
           >
             Currency
           </button>
           <button
             className="remirror-button"
-            onClick={() => {
-              chain.insertText('%%COUNTRY_NAME%%').run();
-            }}
+            onClick={() => insertCountryName()}
           >
             Country
           </button>
+          <span className={classes.remirrorButtonSpacer}>&nbsp;</span>
+          <div className={classes.dropdownMenu}>
+            <button
+              className={`remirror-button ${classes.dropdownMenuToggle}`}
+              onClick={() => setPriceButtonsVisible(!priceButtonsVisible)}
+            >
+              {priceButtonsVisible ? 'Prices ↑' : 'Prices ↓'}
+            </button>
+            <menu
+              className={priceButtonsVisible ? classes.dropdownMenuContent : classes.dropdownMenuContentHidden}
+            >
+              <div className={classes.fieldLabelPrices}>Price templates:</div>
+              <button
+                className={`remirror-button ${classes.dropdownMenuItem}`}
+                onClick={() => insertPriceDigisubMonthly()}
+              >
+                Digisub monthly
+              </button>
+              <button
+                className={`remirror-button ${classes.dropdownMenuItem}`}
+                onClick={() => insertPriceDigisubAnnual()}
+              >
+                Digisub annual
+              </button>
+              <button
+                className={`remirror-button ${classes.dropdownMenuItem}`}
+                onClick={() => insertPriceGwMonthly()}
+              >
+                GW monthly
+              </button>
+              <button
+                className={`remirror-button ${classes.dropdownMenuItem}`}
+                onClick={() => insertPriceGwAnnual()}
+              >
+                GW annual
+              </button>
+            </menu>
+          </div>
         </>
       )}
     </div>
