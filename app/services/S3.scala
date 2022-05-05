@@ -10,6 +10,7 @@ import software.amazon.awssdk.services.s3.model.{GetObjectRequest, HeadObjectReq
 import zio._
 import zio.blocking.{Blocking, effectBlocking}
 import software.amazon.awssdk.services.s3.{S3Client => AwsS3Client}
+import utils.Circe.noNulls
 
 import scala.jdk.CollectionConverters._
 
@@ -153,9 +154,6 @@ object S3Json extends StrictLogging {
   case class S3JsonError(objectSettings: S3ObjectSettings, error: io.circe.Error) extends Throwable {
     override def getMessage = s"Error decoding json from S3 ($objectSettings): ${error.getMessage}"
   }
-
-  private val printer = Printer.spaces2.copy(dropNullValues = true)
-  def noNulls(json: Json): String = printer.print(json)
 
   def getFromJson[T : Decoder](s3: S3Client): S3ObjectSettings => ZIO[Blocking,Throwable,VersionedS3Data[T]] = { objectSettings =>
     s3.get(objectSettings).flatMap { raw =>

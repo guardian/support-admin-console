@@ -1,11 +1,8 @@
 package models
 
-import enumeratum.{CirceEnum, Enum, EnumEntry}
 import io.circe.generic.extras.Configuration
 import io.circe.generic.extras.auto._
 import io.circe.{Decoder, Encoder}
-
-import scala.collection.immutable.IndexedSeq
 
 case class HeaderContent(
   heading: String,
@@ -22,14 +19,17 @@ case class HeaderVariant(
 
 case class HeaderTest(
   name: String,
+  status: Option[Status],
+  lockStatus: Option[LockStatus],
+  priority: Option[Int],
   nickname: Option[String],
-  isOn: Boolean,
+  isOn: Boolean,  // TODO - deprecate in favour of status
   locations: List[Region] = Nil,
   userCohort: Option[UserCohort] = None,
   variants: List[HeaderVariant],
   controlProportionSettings: Option[ControlProportionSettings] = None,
   deviceType: Option[DeviceType] = None
-)
+) extends ChannelTest
 
 case class HeaderTests(tests: List[HeaderTest])
 

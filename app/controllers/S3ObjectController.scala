@@ -8,6 +8,7 @@ import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, AnyContent, ControllerComponents, Result}
 import services.S3Client.S3ObjectSettings
 import services.{S3Json, VersionedS3Data}
+import utils.Circe.noNulls
 import zio.blocking.Blocking
 import zio.{DefaultRuntime, IO, ZIO}
 
@@ -51,7 +52,7 @@ abstract class S3ObjectController[T : Decoder : Encoder](
         .apply(dataObjectSettings)
         .map(s3Data => VersionedS3DataWithEmail(s3Data.value, s3Data.version, request.user.email))
         .map { s3Data =>
-          Ok(S3Json.noNulls(s3Data.asJson))
+          Ok(noNulls(s3Data.asJson))
         }
     }
   }

@@ -1,27 +1,20 @@
 package controllers
 
-import java.time.OffsetDateTime
-
 import com.gu.googleauth.AuthAction
 import controllers.LockableS3ObjectController.LockableS3ObjectResponse
 import io.circe.{Decoder, Encoder}
 import io.circe.syntax._
 import io.circe.generic.auto._
+import models.LockStatus
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.S3Client.{S3ClientError, S3ObjectSettings}
 import services.{FastlyPurger, S3Json, VersionedS3Data}
+import utils.Circe.noNulls
 import zio.blocking.Blocking
 import zio.{DefaultRuntime, IO, ZIO}
 
 import scala.concurrent.{ExecutionContext, Future}
-
-case class LockStatus(locked: Boolean, email: Option[String], timestamp: Option[OffsetDateTime])
-
-object LockStatus {
-  val unlocked = LockStatus(locked = false, None, None)
-  def locked(email: String) = LockStatus(locked = true, Some(email), Some(OffsetDateTime.now))
-}
 
 object LockableS3ObjectController {
   // The model returned by this controller for GET requests
@@ -77,7 +70,7 @@ abstract class LockableS3ObjectController[T : Decoder : Encoder](
         .getFromJson[T](s3Client)
         .apply(dataObjectSettings)
         .map { case VersionedS3Data(value, version) =>
-          Ok(S3Json.noNulls(LockableS3ObjectResponse(value, version, lockStatus, request.user.email).asJson))
+          Ok(noNulls(LockableS3ObjectResponse(value, version, lockStatus, request.user.email).asJson))
         }
     }
   }
