@@ -25,7 +25,7 @@ export class AdminConsole extends GuStack {
     const id = `ChannelTestsDynamoTable`;
 
     const table = new Table(this, id, {
-      tableName: `channel-tests-${this.stage}`,
+      tableName: `support-admin-console-channel-tests-${this.stage}`,
       removalPolicy: RemovalPolicy.RETAIN,
       readCapacity: 4,
       writeCapacity: 4,
