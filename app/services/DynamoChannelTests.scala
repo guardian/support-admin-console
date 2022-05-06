@@ -65,6 +65,7 @@ class DynamoChannelTests(stage: String) extends StrictLogging {
 
       val result = client.batchWriteItem(batchWriteRequest)
       logger.info(s"Batch write result: $result")
+      // TODO - handle any unprocessedItems
       result
 
     }.mapError(error =>
