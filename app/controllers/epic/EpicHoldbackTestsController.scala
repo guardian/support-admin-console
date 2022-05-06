@@ -37,5 +37,5 @@ class EpicHoldbackTestsController(
     ),
     fastlyPurger = None,
     runtime = runtime,
-  tests => dynamo.createOrUpdateTests(tests.tests.map(test => test.copy(channel = Some(Channel.EpicHoldback))))
+    tests => dynamo.createOrUpdateTests(tests.tests.map(test => test.copy(channel = Some(Channel.EpicHoldback))))
   ) with Circe
