@@ -65,6 +65,10 @@ case class EpicVariant(
 )
 case class EpicTest(
   name: String,
+  channel: Option[Channel],
+  status: Option[Status],
+  lockStatus: Option[LockStatus],
+  priority: Option[Int],
   nickname: Option[String],
   isOn: Boolean,
   locations: List[Region] = Nil,
@@ -82,9 +86,9 @@ case class EpicTest(
   articlesViewedSettings: Option[ArticlesViewedSettings] = None,
   controlProportionSettings: Option[ControlProportionSettings] = None,
   deviceType: Option[DeviceType] = None
-)
+) extends ChannelTest
 
-case class EpicTests(tests: List[EpicTest])
+case class EpicTests(tests: List[EpicTest]) extends ChannelTests[EpicTest]
 
 object EpicTests {
   implicit val customConfig: Configuration = Configuration.default.withDefaults

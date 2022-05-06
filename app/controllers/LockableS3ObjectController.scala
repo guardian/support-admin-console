@@ -5,11 +5,13 @@ import controllers.LockableS3ObjectController.LockableS3ObjectResponse
 import io.circe.{Decoder, Encoder}
 import io.circe.syntax._
 import io.circe.generic.auto._
-import models.LockStatus
+import models.{ChannelTests, LockStatus}
 import play.api.libs.circe.Circe
 import play.api.mvc._
+import services.DynamoChannelTests.DynamoPutError
 import services.S3Client.{S3ClientError, S3ObjectSettings}
 import services.{FastlyPurger, S3Json, VersionedS3Data}
+import software.amazon.awssdk.services.dynamodb.model.BatchWriteItemResponse
 import utils.Circe.noNulls
 import zio.blocking.Blocking
 import zio.{DefaultRuntime, IO, ZIO}
@@ -24,14 +26,19 @@ object LockableS3ObjectController {
 /**
   * Controller for managing JSON data in a single object in S3, with lock protection to prevent concurrent editing:
   */
-abstract class LockableS3ObjectController[T : Decoder : Encoder](
+abstract class LockableS3ObjectController[CT <: ChannelTests[_] : Decoder : Encoder](
   authAction: AuthAction[AnyContent],
   components: ControllerComponents,
   stage: String,
   name: String,
   dataObjectSettings: S3ObjectSettings,
   fastlyPurger: Option[FastlyPurger],
-  runtime: DefaultRuntime
+  runtime: DefaultRuntime,
+  /**
+    * During the migration we write to dynamo at the same time as S3.
+    * But we still read from S3, which is the source of truth for now.
+    */
+  dynamoWrite: CT => ZIO[Blocking, DynamoPutError, BatchWriteItemResponse],
 )(implicit ec: ExecutionContext) extends AbstractController(components) with Circe {
 
   private val lockObjectSettings = S3ObjectSettings(
@@ -67,7 +74,7 @@ abstract class LockableS3ObjectController[T : Decoder : Encoder](
   def get = authAction.async { request =>
     runWithLockStatus { case VersionedS3Data(lockStatus, _) =>
       S3Json
-        .getFromJson[T](s3Client)
+        .getFromJson[CT](s3Client)
         .apply(dataObjectSettings)
         .map { case VersionedS3Data(value, version) =>
           Ok(noNulls(LockableS3ObjectResponse(value, version, lockStatus, request.user.email).asJson))
@@ -79,11 +86,12 @@ abstract class LockableS3ObjectController[T : Decoder : Encoder](
     * Updates the file in s3 if the user currently has a lock on the file, and releases the lock if successful.
     * The POSTed json is validated against the model.
     */
-  def set = authAction.async(circe.json[VersionedS3Data[T]]) { request =>
+  def set = authAction.async(circe.json[VersionedS3Data[CT]]) { request =>
     runWithLockStatus { case VersionedS3Data(lockStatus, lockFileVersion) =>
       if (lockStatus.email.contains(request.user.email)) {
         val result = for {
           _ <- S3Json.updateAsJson(request.body)(s3Client).apply(dataObjectSettings)
+          _ <- dynamoWrite(request.body.value)
           _ <- setLockStatus(VersionedS3Data(LockStatus.unlocked, lockFileVersion))
         } yield ()
 

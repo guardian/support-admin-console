@@ -41,6 +41,10 @@ case class BannerVariant(
 
 case class BannerTest(
   name: String,
+  channel: Option[Channel],
+  status: Option[Status],
+  lockStatus: Option[LockStatus],
+  priority: Option[Int],
   nickname: Option[String],
   isOn: Boolean,
   minArticlesBeforeShowingBanner: Int,
@@ -50,9 +54,9 @@ case class BannerTest(
   articlesViewedSettings: Option[ArticlesViewedSettings] = None,
   controlProportionSettings: Option[ControlProportionSettings] = None,
   deviceType: Option[DeviceType] = None
-)
+) extends ChannelTest
 
-case class BannerTests(tests: List[BannerTest])
+case class BannerTests(tests: List[BannerTest]) extends ChannelTests[BannerTest]
 
 object BannerTests {
   implicit val customConfig: Configuration = Configuration.default.withDefaults

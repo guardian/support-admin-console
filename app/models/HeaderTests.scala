@@ -19,6 +19,7 @@ case class HeaderVariant(
 
 case class HeaderTest(
   name: String,
+  channel: Option[Channel],
   status: Option[Status],
   lockStatus: Option[LockStatus],
   priority: Option[Int],
@@ -31,7 +32,7 @@ case class HeaderTest(
   deviceType: Option[DeviceType] = None
 ) extends ChannelTest
 
-case class HeaderTests(tests: List[HeaderTest])
+case class HeaderTests(tests: List[HeaderTest]) extends ChannelTests[HeaderTest]
 
 object HeaderTests {
   implicit val customConfig: Configuration = Configuration.default.withDefaults
