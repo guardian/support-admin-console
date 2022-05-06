@@ -6,12 +6,14 @@ version := "1.0-SNAPSHOT"
 scalaVersion := "2.13.7"
 
 val circeVersion = "0.14.1"
+val awsVersion = "2.17.184"
 
 libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.4",
   "com.gu.play-googleauth" %% "play-v28" % "2.2.2",
   "com.gu" %% "simple-configuration-ssm" % "1.5.7",
-  "software.amazon.awssdk" % "s3" % "2.17.99",
+  "software.amazon.awssdk" % "s3" % awsVersion,
+  "software.amazon.awssdk" % "dynamodb" % awsVersion,
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
