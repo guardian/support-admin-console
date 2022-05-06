@@ -86,7 +86,11 @@ case class EpicTest(
   articlesViewedSettings: Option[ArticlesViewedSettings] = None,
   controlProportionSettings: Option[ControlProportionSettings] = None,
   deviceType: Option[DeviceType] = None
-) extends ChannelTest
+) extends ChannelTest[EpicTest] {
+
+  override def withChannel(channel: Channel): EpicTest = this.copy(channel = Some(channel))
+  override def withPriority(priority: Int): EpicTest = this.copy(priority = Some(priority))
+}
 
 case class EpicTests(tests: List[EpicTest]) extends ChannelTests[EpicTest]
 

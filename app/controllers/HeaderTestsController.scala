@@ -36,5 +36,5 @@ class HeaderTestsController(
     ),
     fastlyPurger = FastlyPurger.fastlyPurger(stage, s"${HeaderTestsController.name}.json", ws),
     runtime = runtime,
-    tests => dynamo.createOrUpdateTests(tests.tests.map(test => test.copy(channel = Some(Channel.Header))))
+    tests => dynamo.createOrUpdateTests(tests.tests, Channel.Header)
   )

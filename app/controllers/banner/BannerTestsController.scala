@@ -37,5 +37,5 @@ class BannerTestsController(
     ),
     fastlyPurger = FastlyPurger.fastlyPurger(stage, s"${BannerTestsController.name}.json", ws),
     runtime = runtime,
-    tests => dynamo.createOrUpdateTests(tests.tests.map(test => test.copy(channel = Some(Channel.Banner1))))
+    tests => dynamo.createOrUpdateTests(tests.tests, Channel.Banner1)
   ) with Circe

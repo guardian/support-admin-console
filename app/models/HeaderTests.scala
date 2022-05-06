@@ -30,7 +30,11 @@ case class HeaderTest(
   variants: List[HeaderVariant],
   controlProportionSettings: Option[ControlProportionSettings] = None,
   deviceType: Option[DeviceType] = None
-) extends ChannelTest
+) extends ChannelTest[HeaderTest] {
+
+  override def withChannel(channel: Channel): HeaderTest = this.copy(channel = Some(channel))
+  override def withPriority(priority: Int): HeaderTest = this.copy(priority = Some(priority))
+}
 
 case class HeaderTests(tests: List[HeaderTest]) extends ChannelTests[HeaderTest]
 

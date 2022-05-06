@@ -32,14 +32,17 @@ object Channel {
   implicit val statusDecoder = deriveEnumerationDecoder[Channel]
 }
 
-trait ChannelTest {
+trait ChannelTest[T] {
   val name: String
   val channel: Option[Channel] // optional only for the migration
   val status: Option[Status]
   val lockStatus: Option[LockStatus]
   val priority: Option[Int]
+
+  def withChannel(channel: Channel): T
+  def withPriority(priority: Int): T
 }
 
-trait ChannelTests[T <: ChannelTest] {
+trait ChannelTests[T <: ChannelTest[T]] {
   val tests: List[T]
 }

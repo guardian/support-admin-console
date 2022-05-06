@@ -72,7 +72,7 @@ class DynamoChannelTests(stage: String) extends StrictLogging {
       DynamoPutError(error)
     )
 
-  def getAllTests[T <: ChannelTest : Decoder](channel: Channel): ZIO[Blocking, DynamoGetError, List[T]] =
+  def getAllTests[T <: ChannelTest[T] : Decoder](channel: Channel): ZIO[Blocking, DynamoGetError, List[T]] =
     getAll(channel).map(results =>
       results.asScala
         .map(item => dynamoMapToJson(item).as[T])
@@ -86,8 +86,12 @@ class DynamoChannelTests(stage: String) extends StrictLogging {
         .sortBy(_.priority)
     )
 
-  def createOrUpdateTests[T : Encoder](tests: List[T]): ZIO[Blocking, DynamoPutError, BatchWriteItemResponse] =
+  def createOrUpdateTests[T <: ChannelTest[T] : Encoder](tests: List[T], channel: Channel): ZIO[Blocking, DynamoPutError, BatchWriteItemResponse] =
     putAll(
-      tests.map(test => jsonToDynamo(test.asJson).m())
+      tests.zipWithIndex.map { case (test, priority) =>
+        // Add the priority and channel fields, which we don't have in S3
+        val prioritised = test.withPriority(priority).withChannel(channel)
+        jsonToDynamo(prioritised.asJson).m()
+      }
     )
 }

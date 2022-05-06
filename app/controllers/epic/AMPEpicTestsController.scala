@@ -35,5 +35,5 @@ class AMPEpicTestsController(
   ),
   fastlyPurger = None,
   runtime = runtime,
-  tests => dynamo.createOrUpdateTests(tests.tests.map(test => test.copy(channel = Some(Channel.EpicAMP))))
+  tests => dynamo.createOrUpdateTests(tests.tests, Channel.EpicAMP)
 ) with Circe

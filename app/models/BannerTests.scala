@@ -54,7 +54,11 @@ case class BannerTest(
   articlesViewedSettings: Option[ArticlesViewedSettings] = None,
   controlProportionSettings: Option[ControlProportionSettings] = None,
   deviceType: Option[DeviceType] = None
-) extends ChannelTest
+) extends ChannelTest[BannerTest] {
+
+  override def withChannel(channel: Channel): BannerTest = this.copy(channel = Some(channel))
+  override def withPriority(priority: Int): BannerTest = this.copy(priority = Some(priority))
+}
 
 case class BannerTests(tests: List[BannerTest]) extends ChannelTests[BannerTest]
 

@@ -37,5 +37,5 @@ class LiveblogEpicTestsController(
     ),
     fastlyPurger = FastlyPurger.fastlyPurger(stage, s"${LiveblogEpicTestsController.name}.json", ws),
     runtime = runtime,
-    tests => dynamo.createOrUpdateTests(tests.tests.map(test => test.copy(channel = Some(Channel.EpicLiveblog))))
+    tests => dynamo.createOrUpdateTests(tests.tests, Channel.EpicLiveblog)
   ) with Circe

@@ -37,5 +37,5 @@ class EpicTestsController(
     ),
     fastlyPurger = FastlyPurger.fastlyPurger(stage, s"${EpicTestsController.name}.json", ws),
     runtime = runtime,
-    tests => dynamo.createOrUpdateTests(tests.tests.map(test => test.copy(channel = Some(Channel.Epic))))
+    tests => dynamo.createOrUpdateTests(tests.tests, Channel.Epic)
   ) with Circe
