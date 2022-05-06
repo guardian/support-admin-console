@@ -15,8 +15,12 @@ import scala.jdk.CollectionConverters._
 
 object DynamoChannelTests {
   sealed trait DynamoError extends Throwable
-  case class DynamoPutError(error: Throwable) extends DynamoError
-  case class DynamoGetError(error: Throwable) extends DynamoError
+  case class DynamoPutError(error: Throwable) extends DynamoError {
+    override def getMessage = s"Error writing to Dynamo: ${error.getMessage}"
+  }
+  case class DynamoGetError(error: Throwable) extends DynamoError {
+    override def getMessage = s"Error reading from Dynamo: ${error.getMessage}"
+  }
 }
 
 class DynamoChannelTests(stage: String) extends StrictLogging {
