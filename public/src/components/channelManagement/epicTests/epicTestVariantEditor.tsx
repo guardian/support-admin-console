@@ -19,9 +19,13 @@ import {
 import {
   EMPTY_ERROR_HELPER_TEXT,
   getEmptyParagraphsError,
-  noHtmlValidator,
   MAXLENGTH_ERROR_HELPER_TEXT,
+  noHtmlValidator,
   templateValidatorForPlatform,
+  VALID_TEMPLATES,
+  CURRENCY_TEMPLATE,
+  COUNTRY_NAME_TEMPLATE,
+  ARTICLE_COUNT_TEMPLATE,
 } from '../helpers/validation';
 import {
   RichTextEditor,
@@ -92,11 +96,25 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   epicEditorConfig,
   onValidationChange,
 }: EpicTestVariantEditorProps) => {
-  const classes = getUseStyles(epicEditorConfig.allowMultipleVariants)();
+  const {
+    allowMultipleVariants,
+    allowVariantHeader,
+    allowVariantHighlightedText,
+    allowVariantFooter,
+    allowVariantImageUrl,
+    allowVariantCustomPrimaryCta,
+    allowVariantCustomSecondaryCta,
+    allowVariantSeparateArticleCount,
+    allowVariantTicker,
+    allowVariantChoiceCards,
+    allowVariantSignInLink,
+    platform,
+    requireVariantHeader,
+  } = epicEditorConfig;
 
-  const templateValidator = templateValidatorForPlatform(epicEditorConfig.platform);
-  const allowHtml = epicEditorConfig.platform === 'DOTCOM';
-  const htmlValidator = allowHtml ? () => undefined : noHtmlValidator;
+  const classes = getUseStyles(allowMultipleVariants)();
+
+  const templateValidator = templateValidatorForPlatform(platform);
   const lineValidator = (text: string) => templateValidator(text) ?? htmlValidator(text);
 
   const defaultValues: FormData = {
@@ -111,6 +129,13 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
     mode: 'onChange',
     defaultValues,
   });
+
+  const noHtml = platform !== 'DOTCOM';
+  const htmlValidator = noHtml ? noHtmlValidator : () => undefined;
+
+  const noCurrencyTemplate = !VALID_TEMPLATES[platform].includes(CURRENCY_TEMPLATE);
+  const noCountryNameTemplate = !VALID_TEMPLATES[platform].includes(COUNTRY_NAME_TEMPLATE);
+  const noArticleCountTemplate = !VALID_TEMPLATES[platform].includes(ARTICLE_COUNT_TEMPLATE);
 
   useEffect(() => {
     trigger();
@@ -174,12 +199,12 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
 
   return (
     <div className={classes.container}>
-      {epicEditorConfig.allowVariantHeader && (
+      {allowVariantHeader && (
         <Controller
           name="heading"
           control={control}
           rules={{
-            required: epicEditorConfig.requireVariantHeader ? EMPTY_ERROR_HELPER_TEXT : undefined,
+            required: requireVariantHeader ? EMPTY_ERROR_HELPER_TEXT : undefined,
             validate: lineValidator,
           }}
           render={data => {
@@ -199,13 +224,19 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                 name="heading"
                 label="Header"
                 disabled={!editMode}
-                allowHtml={allowHtml}
+                rteMenuConstraints={{
+                  noHtml,
+                  noBold: true,
+                  noCurrencyTemplate,
+                  noCountryNameTemplate,
+                  noArticleCountTemplate,
+                  noPriceTemplates: true,
+                }}
               />
             );
           }}
         />
       )}
-
       <Controller
         name="paragraphs"
         control={control}
@@ -233,13 +264,19 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
               name="paragraphs"
               label="Body copy"
               disabled={!editMode}
-              allowHtml={allowHtml}
+              rteMenuConstraints={{
+                noHtml,
+                noCurrencyTemplate,
+                noCountryNameTemplate,
+                noArticleCountTemplate,
+                noPriceTemplates: true,
+              }}
             />
           );
         }}
       />
 
-      {epicEditorConfig.allowVariantHighlightedText && (
+      {allowVariantHighlightedText && (
         <Controller
           name="highlightedText"
           control={control}
@@ -264,14 +301,21 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                 name="highlightedText"
                 label="Highlighted text"
                 disabled={!editMode}
-                allowHtml={allowHtml}
+                rteMenuConstraints={{
+                  noHtml,
+                  noBold: true,
+                  noCurrencyTemplate,
+                  noCountryNameTemplate,
+                  noArticleCountTemplate,
+                  noPriceTemplates: true,
+                }}
               />
             );
           }}
         />
       )}
 
-      {epicEditorConfig.allowVariantFooter && (
+      {allowVariantFooter && (
         <Controller
           name="footer"
           control={control}
@@ -295,14 +339,20 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                 name="footer"
                 label="Footer"
                 disabled={!editMode}
-                allowHtml={allowHtml}
+                rteMenuConstraints={{
+                  noHtml,
+                  noCurrencyTemplate,
+                  noCountryNameTemplate,
+                  noArticleCountTemplate,
+                  noPriceTemplates: true,
+                }}
               />
             );
           }}
         />
       )}
 
-      {epicEditorConfig.allowVariantImageUrl && (
+      {allowVariantImageUrl && (
         <ImageEditorToggle
           image={variant.image}
           updateImage={updateImage}
@@ -313,7 +363,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
         />
       )}
 
-      {epicEditorConfig.allowVariantCustomPrimaryCta && (
+      {allowVariantCustomPrimaryCta && (
         <div className={classes.sectionContainer}>
           <Typography className={classes.sectionHeader} variant="h4">
             Buttons
@@ -326,12 +376,12 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
             updateSecondaryCta={updateSecondaryCta}
             isDisabled={!editMode}
             onValidationChange={onValidationChange}
-            supportSecondaryCta={epicEditorConfig.allowVariantCustomSecondaryCta}
+            supportSecondaryCta={allowVariantCustomSecondaryCta}
           />
         </div>
       )}
 
-      {epicEditorConfig.allowVariantSeparateArticleCount && (
+      {allowVariantSeparateArticleCount && (
         <div className={classes.sectionContainer}>
           <Typography className={classes.sectionHeader} variant="h4">
             Separate article count
@@ -345,7 +395,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
         </div>
       )}
 
-      {epicEditorConfig.allowVariantTicker && (
+      {allowVariantTicker && (
         <div className={classes.sectionContainer}>
           <Typography className={classes.sectionHeader} variant="h4">
             Ticker
@@ -360,7 +410,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
         </div>
       )}
 
-      {epicEditorConfig.allowVariantChoiceCards && (
+      {allowVariantChoiceCards && (
         <div className={classes.sectionContainer}>
           <Typography className={classes.sectionHeader} variant="h4">
             Choice Cards
@@ -376,7 +426,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
         </div>
       )}
 
-      {epicEditorConfig.allowVariantSignInLink && (
+      {allowVariantSignInLink && (
         <div className={classes.sectionContainer}>
           <Typography className={classes.sectionHeader} variant="h4">
             Sign in link
