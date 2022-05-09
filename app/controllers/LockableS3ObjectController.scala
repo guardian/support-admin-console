@@ -14,7 +14,7 @@ import services.{FastlyPurger, S3Json, VersionedS3Data}
 import software.amazon.awssdk.services.dynamodb.model.BatchWriteItemResponse
 import utils.Circe.noNulls
 import zio.blocking.Blocking
-import zio.{DefaultRuntime, IO, ZIO}
+import zio.{IO, ZEnv, ZIO}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -33,12 +33,12 @@ abstract class LockableS3ObjectController[CT <: ChannelTests[_] : Decoder : Enco
   name: String,
   dataObjectSettings: S3ObjectSettings,
   fastlyPurger: Option[FastlyPurger],
-  runtime: DefaultRuntime,
+  runtime: zio.Runtime[ZEnv],
   /**
     * During the migration we write to dynamo at the same time as S3.
     * But we still read from S3, which is the source of truth for now.
     */
-  dynamoWrite: CT => ZIO[Blocking, DynamoPutError, BatchWriteItemResponse],
+  dynamoWrite: CT => ZIO[ZEnv, DynamoPutError, Unit],
 )(implicit ec: ExecutionContext) extends AbstractController(components) with Circe {
 
   private val lockObjectSettings = S3ObjectSettings(
@@ -50,7 +50,7 @@ abstract class LockableS3ObjectController[CT <: ChannelTests[_] : Decoder : Enco
 
   val s3Client = services.S3
 
-  private def runWithLockStatus(f: VersionedS3Data[LockStatus] => ZIO[Blocking, Throwable, Result]): Future[Result] =
+  private def runWithLockStatus(f: VersionedS3Data[LockStatus] => ZIO[ZEnv, Throwable, Result]): Future[Result] =
     runtime.unsafeRunToFuture {
       S3Json
         .getFromJson[LockStatus](s3Client)
@@ -62,7 +62,7 @@ abstract class LockableS3ObjectController[CT <: ChannelTests[_] : Decoder : Enco
         })
     }
 
-  private def setLockStatus(lockStatus: VersionedS3Data[LockStatus]): ZIO[Blocking, S3ClientError, Unit] =
+  private def setLockStatus(lockStatus: VersionedS3Data[LockStatus]): ZIO[ZEnv, S3ClientError, Unit] =
     S3Json
       .updateAsJson(lockStatus)(s3Client)
       .apply(lockObjectSettings)
