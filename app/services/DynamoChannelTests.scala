@@ -74,16 +74,16 @@ class DynamoChannelTests(stage: String) extends StrictLogging {
     * Dynamodb limits us to batches of 25 items, and may return unprocessed items in the response.
     * This function groups items into batches of 25, and also checks the `unprocessedItems` in case we need to send
     * any again.
-    * It uses a zio stream to do this, pausing between batches to avoid any throttling. It stops processing the stream
-    * when the list of batches is empty.
+    * It uses an infinite zio stream to do this, pausing between batches to avoid any throttling. It stops processing
+    * the stream when the list of batches is empty.
     */
   private val BATCH_SIZE = 25
   def putAllBatched(writeRequests: List[WriteRequest]): ZIO[ZEnv, DynamoPutError, Unit] = {
     val batches = writeRequests.grouped(BATCH_SIZE).toList
     ZStream(())
       .forever
-      .fixed(2.seconds)     // wait 2 seconds between batches
-      .haltAfter(1.minute)  // assume something went wrong after 1 minute
+      .fixed(2.seconds) // wait 2 seconds between batches
+      .timeoutError(DynamoPutError(new Throwable("Timed out writing batches to dynamodb")))(1.minute)
       .foldWhileM(batches)(_.nonEmpty) {
         case (nextBatch :: remainingBatches, _) =>
           logger.info(s"next batch: $nextBatch")
