@@ -30,6 +30,16 @@ import { CreateExtensionPlugin, PlainExtension, InputRule } from 'remirror';
 import { Plugin } from 'prosemirror-state';
 import { MarkPasteRule } from '@remirror/pm/paste-rules';
 
+import {
+  ARTICLE_COUNT_TEMPLATE,
+  COUNTRY_NAME_TEMPLATE,
+  CURRENCY_TEMPLATE,
+  PRICE_DIGISUB_ANNUAL,
+  PRICE_DIGISUB_MONTHLY,
+  PRICE_GUARDIANWEEKLY_ANNUAL,
+  PRICE_GUARDIANWEEKLY_MONTHLY,
+} from '../helpers/validation';
+
 // Typescript
 interface RichTextEditorProps<T> {
   disabled: boolean;
@@ -39,13 +49,24 @@ interface RichTextEditorProps<T> {
   error: boolean;
   updateCopy: (item?: T) => void;
   copyData?: T;
-  allowHtml: boolean;
+  rteMenuConstraints?: RteMenuConstraints;
 }
 
 interface RichTextMenuProps {
   disabled: boolean;
   label: string | undefined;
-  allowHtml: boolean;
+  rteMenuConstraints: RteMenuConstraints;
+}
+
+interface RteMenuConstraints {
+  noHtml?: boolean;
+  noBold?: boolean;
+  noItalic?: boolean;
+  noCopyTemplates?: boolean;
+  noCurrencyTemplate?: boolean;
+  noCountryNameTemplate?: boolean;
+  noArticleCountTemplate?: boolean;
+  noPriceTemplates?: boolean;
 }
 
 /**
@@ -222,10 +243,10 @@ const FloatingLinkToolbar = () => {
         label: 'Link',
         items: activeLink
           ? [
-              { type: ComponentItem.ToolbarButton, onClick: () => clickEdit(), icon: 'pencilLine' },
-              { type: ComponentItem.ToolbarButton, onClick: onRemove, icon: 'linkUnlink' },
+              { type: ComponentItem.ToolbarButton, onClick: () => clickEdit(), label: 'Edit link' },
+              { type: ComponentItem.ToolbarButton, onClick: onRemove, label: 'Remove link' },
             ]
-          : [{ type: ComponentItem.ToolbarButton, onClick: () => clickEdit(), icon: 'link' }],
+          : [{ type: ComponentItem.ToolbarButton, onClick: () => clickEdit(), label: 'Add link' }],
       },
     ],
     [clickEdit, onRemove, activeLink],
@@ -273,72 +294,153 @@ const FloatingLinkToolbar = () => {
 const RichTextMenu: React.FC<RichTextMenuProps> = ({
   disabled,
   label,
-  allowHtml,
+  rteMenuConstraints,
 }: RichTextMenuProps) => {
   const classes = useRTEStyles();
   const chain = useChainedCommands();
   const active = useActive();
+
+  const [priceButtonsVisible, setPriceButtonsVisible] = useState<boolean>(false);
+
+  const {
+    noHtml,
+    noBold,
+    noItalic,
+    noCopyTemplates,
+    noPriceTemplates,
+    noCurrencyTemplate,
+    noCountryNameTemplate,
+    noArticleCountTemplate,
+  } = rteMenuConstraints;
+
+  const clickBold = () => {
+    chain
+      .toggleBold()
+      .focus()
+      .run();
+  };
+  const clickItalic = () => {
+    chain
+      .toggleItalic()
+      .focus()
+      .run();
+  };
+
+  const insertArticleCount = () => {
+    chain.insertText(ARTICLE_COUNT_TEMPLATE).run();
+  };
+  const insertCurrencySymbol = () => {
+    chain.insertText(CURRENCY_TEMPLATE).run();
+  };
+  const insertCountryName = () => {
+    chain.insertText(COUNTRY_NAME_TEMPLATE).run();
+  };
+  const insertPriceDigisubMonthly = () => {
+    chain.insertText(PRICE_DIGISUB_MONTHLY).run();
+  };
+  const insertPriceDigisubAnnual = () => {
+    chain.insertText(PRICE_DIGISUB_ANNUAL).run();
+  };
+  const insertPriceGwMonthly = () => {
+    chain.insertText(PRICE_GUARDIANWEEKLY_MONTHLY).run();
+  };
+  const insertPriceGwAnnual = () => {
+    chain.insertText(PRICE_GUARDIANWEEKLY_ANNUAL).run();
+  };
 
   return (
     <div>
       <span className={classes.fieldLabel}>{label != null ? label : 'Editable field'}</span>
       {!disabled && (
         <>
-          {allowHtml && (
+          {!noHtml && (
             <>
-              <button
-                className={
-                  active.bold() ? 'remirror-button remirror-button-active' : 'remirror-button'
-                }
-                onClick={() => {
-                  chain
-                    .toggleBold()
-                    .focus()
-                    .run();
-                }}
-              >
-                Bold
-              </button>
-              <button
-                className={
-                  active.italic() ? 'remirror-button remirror-button-active' : 'remirror-button'
-                }
-                onClick={() => {
-                  chain
-                    .toggleItalic()
-                    .focus()
-                    .run();
-                }}
-              >
-                Italic
-              </button>
-              <span className={classes.remirrorButtonSpacer}>&nbsp;</span>
+              {!noBold && (
+                <button
+                  className={`remirror-button ${active.bold() && 'remirror-button-active'}`}
+                  onClick={() => clickBold()}
+                >
+                  Bold
+                </button>
+              )}
+              {!noItalic && (
+                <button
+                  className={`remirror-button ${active.italic() && 'remirror-button-active'}`}
+                  onClick={() => clickItalic()}
+                >
+                  Italic
+                </button>
+              )}
             </>
           )}
-          <button
-            className="remirror-button"
-            onClick={() => {
-              chain.insertText('%%ARTICLE_COUNT%%').run();
-            }}
-          >
-            Articles
-          </button>
-          <button
-            className="remirror-button"
-            onClick={() => {
-              chain.insertText('%%CURRENCY_SYMBOL%%').run();
-            }}
-          >
-            Currency
-          </button>
-          <button
-            className="remirror-button"
-            onClick={() => {
-              chain.insertText('%%COUNTRY_NAME%%').run();
-            }}
-          >
-            Country
-          </button>
+          {!noCopyTemplates && (
+            <>
+              {(!noBold || !noItalic) && (
+                <span className={classes.remirrorButtonSpacer}>&nbsp;</span>
+              )}
+              {!noArticleCountTemplate && (
+                <button className="remirror-button" onClick={() => insertArticleCount()}>
+                  Articles
+                </button>
+              )}
+              {!noCurrencyTemplate && (
+                <button className="remirror-button" onClick={() => insertCurrencySymbol()}>
+                  Currency
+                </button>
+              )}
+              {!noCountryNameTemplate && (
+                <button className="remirror-button" onClick={() => insertCountryName()}>
+                  Country
+                </button>
+              )}
+              {!noPriceTemplates && (
+                <>
+                  <span className={classes.remirrorButtonSpacer}>&nbsp;</span>
+                  <div className={classes.dropdownMenu}>
+                    <button
+                      className={`remirror-button ${classes.dropdownMenuToggle}`}
+                      onClick={() => setPriceButtonsVisible(!priceButtonsVisible)}
+                    >
+                      {priceButtonsVisible ? 'Prices ↑' : 'Prices ↓'}
+                    </button>
+                    <menu
+                      className={
+                        priceButtonsVisible
+                          ? classes.dropdownMenuContent
+                          : classes.dropdownMenuContentHidden
+                      }
+                    >
+                      <div className={classes.fieldLabelPrices}>Price templates:</div>
+                      <button
+                        className={`remirror-button ${classes.dropdownMenuItem}`}
+                        onClick={() => insertPriceDigisubMonthly()}
+                      >
+                        Digisub monthly
+                      </button>
+                      <button
+                        className={`remirror-button ${classes.dropdownMenuItem}`}
+                        onClick={() => insertPriceDigisubAnnual()}
+                      >
+                        Digisub annual
+                      </button>
+                      <button
+                        className={`remirror-button ${classes.dropdownMenuItem}`}
+                        onClick={() => insertPriceGwMonthly()}
+                      >
+                        GW monthly
+                      </button>
+                      <button
+                        className={`remirror-button ${classes.dropdownMenuItem}`}
+                        onClick={() => insertPriceGwAnnual()}
+                      >
+                        GW annual
+                      </button>
+                    </menu>
+                  </div>
+                </>
+              )}
+            </>
+          )}
         </>
       )}
     </div>
@@ -394,9 +496,13 @@ const RichTextEditor: React.FC<RichTextEditorProps<string[]>> = ({
   error,
   updateCopy,
   copyData,
-  allowHtml,
+  rteMenuConstraints,
 }: RichTextEditorProps<string[]>) => {
   const classes = useRTEStyles();
+
+  const menuConstraints = rteMenuConstraints || {};
+
+  const { noHtml } = menuConstraints;
 
   // Make sure the supplied copy is in an Array, for processing
   if (copyData == null) {
@@ -409,7 +515,7 @@ const RichTextEditor: React.FC<RichTextEditorProps<string[]>> = ({
 
       const handleSaveShortcut = useCallback(
         ({ state }) => {
-          if (!allowHtml) {
+          if (noHtml) {
             // getText gives us the plain text representation with line breaks
             updateCopy(getText(state).split('\n'));
           } else {
@@ -444,9 +550,9 @@ const RichTextEditor: React.FC<RichTextEditorProps<string[]>> = ({
     <div className={classes.remirrorCustom}>
       <div id={`RTE-${name}`} className={wrapperClasses}>
         <Remirror manager={manager} initialContent={state} editable={!disabled} hooks={hooks}>
-          <RichTextMenu disabled={disabled} label={label} allowHtml={allowHtml} />
+          <RichTextMenu disabled={disabled} label={label} rteMenuConstraints={menuConstraints} />
           <EditorComponent />
-          {!disabled && <FloatingLinkToolbar />}
+          {!disabled && !noHtml && <FloatingLinkToolbar />}
           <p className={error ? classes.errorText : classes.helperText}>{helperText}</p>
         </Remirror>
       </div>
@@ -462,7 +568,7 @@ const RichTextEditorSingleLine: React.FC<RichTextEditorProps<string>> = ({
   error,
   updateCopy,
   copyData,
-  allowHtml,
+  rteMenuConstraints,
 }: RichTextEditorProps<string>) => {
   const onUpdate = (paras: string[] | undefined): void => {
     if (!!paras) {
@@ -481,9 +587,9 @@ const RichTextEditorSingleLine: React.FC<RichTextEditorProps<string>> = ({
       error={error}
       updateCopy={onUpdate}
       copyData={!!copyData ? [copyData] : undefined}
-      allowHtml={allowHtml}
+      rteMenuConstraints={rteMenuConstraints}
     />
   );
 };
 
-export { RichTextEditor, RichTextEditorSingleLine, getRteCopyLength };
+export { RichTextEditor, RichTextEditorSingleLine, getRteCopyLength, RteMenuConstraints };
