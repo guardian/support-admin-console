@@ -7,7 +7,7 @@ import play.api.libs.circe.Circe
 import play.api.libs.ws.WSClient
 import play.api.mvc._
 import services.S3Client.S3ObjectSettings
-import zio.DefaultRuntime
+import zio.ZEnv
 
 import scala.concurrent.ExecutionContext
 
@@ -19,7 +19,7 @@ class AMPEpicTestsController(
   authAction: AuthAction[AnyContent],
   components: ControllerComponents,
   ws: WSClient, stage: String,
-  runtime: DefaultRuntime
+  runtime: zio.Runtime[ZEnv]
 )(implicit ec: ExecutionContext) extends LockableS3ObjectController[EpicTests](
   authAction,
   components,

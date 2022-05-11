@@ -12,7 +12,7 @@ import play.api.mvc._
 import services.S3Client.{S3ClientError, S3ObjectSettings}
 import services.{FastlyPurger, S3Json, VersionedS3Data}
 import zio.blocking.Blocking
-import zio.{DefaultRuntime, IO, ZIO}
+import zio.{IO, ZEnv, ZIO}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -38,7 +38,7 @@ abstract class LockableS3ObjectController[T : Decoder : Encoder](
   name: String,
   dataObjectSettings: S3ObjectSettings,
   fastlyPurger: Option[FastlyPurger],
-  runtime: DefaultRuntime
+  runtime: zio.Runtime[ZEnv]
 )(implicit ec: ExecutionContext) extends AbstractController(components) with Circe {
 
   private val lockObjectSettings = S3ObjectSettings(
