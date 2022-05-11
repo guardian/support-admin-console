@@ -8,7 +8,7 @@ import play.api.mvc._
 import services.S3Client.S3ObjectSettings
 import services.{S3Json, VersionedS3Data}
 import zio.blocking.Blocking
-import zio.{DefaultRuntime, IO, ZIO}
+import zio.{IO, ZEnv, ZIO}
 import S3ObjectsController.extractFilename
 import utils.Circe.noNulls
 
@@ -34,12 +34,12 @@ abstract class S3ObjectsController[T : Decoder : Encoder](
   stage: String,
   path: String,
   nameGenerator: T => String,
-  runtime: DefaultRuntime
+  runtime: zio.Runtime[ZEnv]
 )(implicit ec: ExecutionContext) extends AbstractController(components) with Circe {
 
   val s3Client = services.S3
 
-  private def run(f: => ZIO[Blocking, Throwable, Result]): Future[Result] =
+  private def run(f: => ZIO[ZEnv, Throwable, Result]): Future[Result] =
     runtime.unsafeRunToFuture {
       f.catchAll { error =>
         IO.succeed(InternalServerError(error.getMessage))

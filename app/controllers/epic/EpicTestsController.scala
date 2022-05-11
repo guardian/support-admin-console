@@ -9,7 +9,7 @@ import play.api.libs.ws.WSClient
 import play.api.mvc._
 import services.{DynamoChannelTests, FastlyPurger}
 import services.S3Client.S3ObjectSettings
-import zio.DefaultRuntime
+import zio.ZEnv
 
 import scala.concurrent.ExecutionContext
 
@@ -21,7 +21,7 @@ class EpicTestsController(
   authAction: AuthAction[AnyContent],
   components: ControllerComponents,
   ws: WSClient, stage: String,
-  runtime: DefaultRuntime,
+  runtime: zio.Runtime[ZEnv],
   dynamo: DynamoChannelTests
 )(implicit ec: ExecutionContext) extends LockableS3ObjectController[EpicTests](
     authAction,
