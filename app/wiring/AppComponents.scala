@@ -13,7 +13,6 @@ import play.api.{BuiltInComponentsFromContext, NoHttpFiltersComponents}
 import router.Routes
 import services.{CapiService, S3}
 import software.amazon.awssdk.services.s3.model.GetObjectRequest
-import zio.DefaultRuntime
 
 class AppComponents(context: Context, stage: String) extends BuiltInComponentsFromContext(context) with AhcWSComponents with NoHttpFiltersComponents with AssetsComponents {
 
@@ -52,7 +51,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
 
   private val authAction = new AuthAction[AnyContent](authConfig, controllers.routes.Login.loginAction, controllerComponents.parsers.default)(executionContext)
 
-  private val runtime = new DefaultRuntime {}
+  private val runtime = zio.Runtime.default
 
   val capiService = new CapiService(configuration.get[String]("capi.apiKey"), wsClient)
 

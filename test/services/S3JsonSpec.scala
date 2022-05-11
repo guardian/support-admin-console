@@ -7,14 +7,14 @@ import services.S3Client.{RawVersionedS3Data, S3Action, S3ObjectSettings}
 import models.SupportFrontendSwitches.{SupportFrontendSwitches, Switch, SwitchGroup}
 import models._
 import org.scalatest.matchers.should.Matchers
-import zio.{DefaultRuntime, IO}
+import zio.IO
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
 
 class S3JsonSpec extends AnyFlatSpec with Matchers with EitherValues {
 
-  val runtime = new DefaultRuntime {}
+  val runtime = zio.Runtime.default
 
   val expectedJson: String =
     """

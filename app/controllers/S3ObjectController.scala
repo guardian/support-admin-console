@@ -9,7 +9,7 @@ import play.api.mvc.{AbstractController, AnyContent, ControllerComponents, Resul
 import services.S3Client.S3ObjectSettings
 import services.{S3Json, VersionedS3Data}
 import zio.blocking.Blocking
-import zio.{DefaultRuntime, IO, ZIO}
+import zio.{IO, ZEnv, ZIO}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -23,7 +23,7 @@ abstract class S3ObjectController[T : Decoder : Encoder](
   components: ControllerComponents,
   stage: String,
   filename: String,
-  val runtime: DefaultRuntime)(implicit ec: ExecutionContext) extends AbstractController(components) with Circe {
+  val runtime: zio.Runtime[ZEnv])(implicit ec: ExecutionContext) extends AbstractController(components) with Circe {
 
   private val dataObjectSettings = S3ObjectSettings(
     bucket = "support-admin-console",

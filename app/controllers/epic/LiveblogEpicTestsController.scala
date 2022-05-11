@@ -8,7 +8,7 @@ import play.api.libs.ws.WSClient
 import play.api.mvc._
 import services.FastlyPurger
 import services.S3Client.S3ObjectSettings
-import zio.DefaultRuntime
+import zio.ZEnv
 
 import scala.concurrent.ExecutionContext
 
@@ -20,7 +20,7 @@ class LiveblogEpicTestsController(
   authAction: AuthAction[AnyContent],
   components: ControllerComponents,
   ws: WSClient, stage: String,
-  runtime: DefaultRuntime
+  runtime: zio.Runtime[ZEnv]
 )(implicit ec: ExecutionContext) extends LockableS3ObjectController[EpicTests](
     authAction,
     components,

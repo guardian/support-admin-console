@@ -8,7 +8,7 @@ import play.api.libs.ws.WSClient
 import play.api.mvc.{AnyContent, ControllerComponents}
 import services.FastlyPurger
 import services.S3Client.S3ObjectSettings
-import zio.DefaultRuntime
+import zio.ZEnv
 
 import scala.concurrent.ExecutionContext
 
@@ -19,9 +19,9 @@ object HeaderTestsController {
 class HeaderTestsController(
   authAction: AuthAction[AnyContent],
   components: ControllerComponents,
-  ws: WSClient, 
+  ws: WSClient,
   stage: String,
-  runtime: DefaultRuntime
+  runtime: zio.Runtime[ZEnv]
 )(implicit ec: ExecutionContext) extends LockableS3ObjectController[HeaderTests](
     authAction,
     components,
