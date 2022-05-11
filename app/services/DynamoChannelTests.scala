@@ -95,7 +95,7 @@ class DynamoChannelTests(stage: String) extends StrictLogging {
           logger.info(s"finished batches")
           ZIO.succeed(Nil)
       }
-      .map(_ => ()) // on success, the result value isn't meaningful
+      .unit // on success, the result value isn't meaningful
   }
 
   def getAllTests[T <: ChannelTest[T] : Decoder](channel: Channel): ZIO[ZEnv, DynamoGetError, List[T]] =
