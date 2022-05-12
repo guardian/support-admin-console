@@ -86,14 +86,11 @@ class DynamoChannelTests(stage: String) extends StrictLogging {
       .timeoutError(DynamoPutError(new Throwable("Timed out writing batches to dynamodb")))(1.minute)
       .foldWhileM(batches)(_.nonEmpty) {
         case (nextBatch :: remainingBatches, _) =>
-          logger.info(s"next batch: $nextBatch")
           putAll(nextBatch).map {
             case Nil => remainingBatches
             case unprocessed => unprocessed :: remainingBatches
           }
-        case (Nil, _) =>
-          logger.info(s"finished batches")
-          ZIO.succeed(Nil)
+        case (Nil, _) => ZIO.succeed(Nil)
       }
       .unit // on success, the result value isn't meaningful
   }
