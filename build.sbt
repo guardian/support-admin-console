@@ -7,6 +7,7 @@ scalaVersion := "2.13.7"
 
 val circeVersion = "0.14.1"
 val awsVersion = "2.17.184"
+val zioVersion = "1.0.14"
 
 libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.4",
@@ -22,8 +23,8 @@ libraryDependencies ++= Seq(
   "com.beachape" %% "enumeratum" % "1.7.0",
   "com.beachape" %% "enumeratum-circe" % "1.7.0",
   ws,
-  "dev.zio" %% "zio" % "1.0.14",
-  "dev.zio" %% "zio-streams" % "1.0.14",
+  "dev.zio" %% "zio" % zioVersion,
+  "dev.zio" %% "zio-streams" % zioVersion,
   "org.scalatest" %% "scalatest" % "3.2.10" % "test",
   "org.gnieh" %% "diffson-circe" % "4.1.1" % "test",
 )
