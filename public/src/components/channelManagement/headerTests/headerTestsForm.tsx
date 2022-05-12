@@ -37,6 +37,7 @@ const getHeaderTestsForm = (): React.FC<Props> => {
     editMode,
     regionFilter,
     setRegionFilter,
+    saving,
   }: Props) => {
     const createTest = (name: string, nickname: string): void => {
       onTestCreate(createDefaultHeaderTest(name, nickname));
@@ -90,6 +91,7 @@ const getHeaderTestsForm = (): React.FC<Props> => {
         save={onTestSave}
         cancel={cancel}
         editMode={editMode}
+        saving={saving}
       />
     );
   };
