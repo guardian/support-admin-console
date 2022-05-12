@@ -34,6 +34,7 @@ export interface InnerComponentProps<T extends Test> {
   editMode: boolean;
   regionFilter: RegionsAndAll;
   setRegionFilter: (regionValue: RegionsAndAll) => void;
+  saving: boolean;
 }
 
 interface DataFromServer<T extends Test> {
@@ -88,6 +89,7 @@ const TestEditor = <T extends Test>(
     const [editedTestName, setEditedTestName] = useState<string | null>(null);
     const [editedTestIsValid, setEditedTestIsValid] = useState<boolean>(true);
     const [lockStatus, setLockStatus] = useState<LockStatus>({ locked: false });
+    const [saving, setSaving] = useState<boolean>(false);
 
     const [regionFilter, setRegionFilter] = useState<RegionsAndAll>('ALL');
 
@@ -123,8 +125,11 @@ const TestEditor = <T extends Test>(
         },
       };
 
+      setSaving(true);
+
       return saveFrontendSettings(settingsType, postData)
         .then(resp => {
+          setSaving(false);
           if (!resp.ok) {
             resp.text().then(msg => alert(msg));
           }
@@ -313,6 +318,7 @@ const TestEditor = <T extends Test>(
               editMode={editMode}
               regionFilter={regionFilter}
               setRegionFilter={setRegionFilter}
+              saving={saving}
             />
           </>
         ) : (

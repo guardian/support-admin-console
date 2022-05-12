@@ -52,6 +52,7 @@ interface StickyBottomBarProps {
   requestLock: () => void;
   save: () => void;
   cancel: () => void;
+  saving: boolean;
 }
 
 const StickyBottomBar: React.FC<StickyBottomBarProps> = ({
@@ -63,6 +64,7 @@ const StickyBottomBar: React.FC<StickyBottomBarProps> = ({
   requestLock,
   save,
   cancel,
+  saving,
 }: StickyBottomBarProps) => {
   const classes = useStyles();
   const containerClasses = [
@@ -90,6 +92,7 @@ const StickyBottomBar: React.FC<StickyBottomBarProps> = ({
           requestLock={requestLock}
           save={save}
           cancel={cancel}
+          saving={saving}
         />
       </div>
     </AppBar>

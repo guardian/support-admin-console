@@ -54,6 +54,7 @@ interface StickyBottomBarActionButtonsProps {
   requestLock: () => void;
   save: () => void;
   cancel: () => void;
+  saving: boolean;
 }
 
 const StickyBottomBarActionButtons: React.FC<StickyBottomBarActionButtonsProps> = ({
@@ -64,6 +65,7 @@ const StickyBottomBarActionButtons: React.FC<StickyBottomBarActionButtonsProps> 
   requestLock,
   save,
   cancel,
+  saving,
 }: StickyBottomBarActionButtonsProps) => {
   const classes = useStyles();
 
@@ -129,6 +131,12 @@ const StickyBottomBarActionButtons: React.FC<StickyBottomBarActionButtonsProps> 
     </Button>
   );
 
+  const SavingButton: React.FC = () => (
+    <Button variant="contained" color="primary" disableElevation startIcon={<SaveIcon />}>
+      <Typography className={classes.buttonText}>Saving...</Typography>
+    </Button>
+  );
+
   const EditButton: React.FC = () => (
     <Button
       variant="outlined"
@@ -187,7 +195,9 @@ const StickyBottomBarActionButtons: React.FC<StickyBottomBarActionButtonsProps> 
       <div className={classes.leftContainer}>{isInEditMode && <CancelButton />}</div>
 
       <div className={classes.rightContainer}>
-        {isInEditMode ? (
+        {saving ? (
+          <SavingButton />
+        ) : isInEditMode ? (
           // Edit mode
           <SaveButton />
         ) : isLocked ? (

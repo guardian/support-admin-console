@@ -38,6 +38,7 @@ const getBannerTestsForm = (isFirstChannel: boolean): React.FC<Props> => {
     editMode,
     regionFilter,
     setRegionFilter,
+    saving,
   }: Props) => {
     const createTest = (name: string, nickname: string): void => {
       onTestCreate(createDefaultBannerTest(name, nickname));
@@ -91,6 +92,7 @@ const getBannerTestsForm = (isFirstChannel: boolean): React.FC<Props> => {
         save={onTestSave}
         cancel={cancel}
         editMode={editMode}
+        saving={saving}
       />
     );
   };
