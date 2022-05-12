@@ -124,6 +124,7 @@ const getEpicTestForm = (epicEditorConfig: EpicEditorConfig): React.FC<Props> =>
     editMode,
     regionFilter,
     setRegionFilter,
+    saving,
   }: Props) => {
     const createTest = (name: string, nickname: string): void => {
       onTestCreate(createDefaultEpicTest(name, nickname));
@@ -179,6 +180,7 @@ const getEpicTestForm = (epicEditorConfig: EpicEditorConfig): React.FC<Props> =>
         save={onTestSave}
         cancel={cancel}
         editMode={editMode}
+        saving={saving}
       />
     );
   };

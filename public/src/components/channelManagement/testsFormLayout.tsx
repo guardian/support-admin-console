@@ -49,6 +49,7 @@ interface Props {
   requestLock: () => void;
   save: () => void;
   cancel: () => void;
+  saving: boolean;
 }
 
 const TestsFormLayout: React.FC<Props> = ({
@@ -62,6 +63,7 @@ const TestsFormLayout: React.FC<Props> = ({
   requestTakeControl,
   requestLock,
   lockStatus,
+  saving,
 }: Props) => {
   const classes = useStyles();
 
@@ -93,6 +95,7 @@ const TestsFormLayout: React.FC<Props> = ({
         requestLock={requestLock}
         save={save}
         cancel={cancel}
+        saving={saving}
       />
     </>
   );
