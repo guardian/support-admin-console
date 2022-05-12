@@ -148,6 +148,18 @@ const bannerModules = {
     path: 'electionAuMoment/ElectionAuMomentBanner.js',
     name: 'ElectionAuMomentBanner',
   },
+  [BannerTemplate.PostElectionAuMomentAlbaneseBanner]: {
+    path: 'postElectionAuMoment/PostElectionAuMomentAlbaneseBanner.js',
+    name: 'PostElectionAuMomentAlbaneseBanner',
+  },
+  [BannerTemplate.PostElectionAuMomentHungBanner]: {
+    path: 'postElectionAuMoment/PostElectionAuMomentHungBanner.js',
+    name: 'PostElectionAuMomentHungBanner',
+  },
+  [BannerTemplate.PostElectionAuMomentMorrisonBanner]: {
+    path: 'postElectionAuMoment/PostElectionAuMomentMorrisonBanner.js',
+    name: 'PostElectionAuMomentMorrisonBanner',
+  },
 };
 
 const useStyles = makeStyles(({ palette }: Theme) => ({

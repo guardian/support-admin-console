@@ -24,6 +24,18 @@ const templatesWithLabels = [
   { template: BannerTemplate.EnvironmentMomentBanner, label: 'Environment moment' },
   { template: BannerTemplate.GlobalNewYearBanner, label: 'Global New Year moment' },
   { template: BannerTemplate.ElectionAuMomentBanner, label: 'Australian Election moment' },
+  {
+    template: BannerTemplate.PostElectionAuMomentAlbaneseBanner,
+    label: 'Post Australian Election moment - Albanese win',
+  },
+  {
+    template: BannerTemplate.PostElectionAuMomentHungBanner,
+    label: 'Post Australian Election moment - hung Parliament',
+  },
+  {
+    template: BannerTemplate.PostElectionAuMomentMorrisonBanner,
+    label: 'Post Australian Election moment - Morrison win',
+  },
 ];
 
 const BannerTemplateSelector: React.FC<BannerTemplateSelectorProps> = ({
