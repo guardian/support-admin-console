@@ -514,6 +514,112 @@ Object {
       },
       "Type": "AWS::IAM::Policy",
     },
+    "High5xxPercentageAlarmAdminconsole274ADE37": Object {
+      "Properties": Object {
+        "ActionsEnabled": true,
+        "AlarmActions": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:aws:sns:",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                Object {
+                  "Ref": "AWS::AccountId",
+                },
+                ":marketing-dev",
+              ],
+            ],
+          },
+        ],
+        "AlarmDescription": "admin-console exceeded 0% error rate",
+        "AlarmName": "5XX error returned by admin-console PROD",
+        "ComparisonOperator": "GreaterThanThreshold",
+        "EvaluationPeriods": 1,
+        "Metrics": Array [
+          Object {
+            "Expression": "100*(m1+m2)/m3",
+            "Id": "expr_1",
+            "Label": "% of 5XX responses served for admin-console (load balancer and instances combined)",
+          },
+          Object {
+            "Id": "m1",
+            "MetricStat": Object {
+              "Metric": Object {
+                "Dimensions": Array [
+                  Object {
+                    "Name": "LoadBalancer",
+                    "Value": Object {
+                      "Fn::GetAtt": Array [
+                        "LoadBalancerAdminconsole69251694",
+                        "LoadBalancerFullName",
+                      ],
+                    },
+                  },
+                ],
+                "MetricName": "HTTPCode_ELB_5XX_Count",
+                "Namespace": "AWS/ApplicationELB",
+              },
+              "Period": 60,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+          Object {
+            "Id": "m2",
+            "MetricStat": Object {
+              "Metric": Object {
+                "Dimensions": Array [
+                  Object {
+                    "Name": "LoadBalancer",
+                    "Value": Object {
+                      "Fn::GetAtt": Array [
+                        "LoadBalancerAdminconsole69251694",
+                        "LoadBalancerFullName",
+                      ],
+                    },
+                  },
+                ],
+                "MetricName": "HTTPCode_Target_5XX_Count",
+                "Namespace": "AWS/ApplicationELB",
+              },
+              "Period": 60,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+          Object {
+            "Id": "m3",
+            "MetricStat": Object {
+              "Metric": Object {
+                "Dimensions": Array [
+                  Object {
+                    "Name": "LoadBalancer",
+                    "Value": Object {
+                      "Fn::GetAtt": Array [
+                        "LoadBalancerAdminconsole69251694",
+                        "LoadBalancerFullName",
+                      ],
+                    },
+                  },
+                ],
+                "MetricName": "RequestCount",
+                "Namespace": "AWS/ApplicationELB",
+              },
+              "Period": 60,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+        ],
+        "Threshold": 0,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
     "InstanceRoleAdminconsole347DA627": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
@@ -948,6 +1054,107 @@ Object {
         },
       },
       "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+    },
+    "UnhealthyInstancesAlarmAdminconsoleF0C5DFCF": Object {
+      "Properties": Object {
+        "ActionsEnabled": true,
+        "AlarmActions": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:aws:sns:",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                Object {
+                  "Ref": "AWS::AccountId",
+                },
+                ":marketing-dev",
+              ],
+            ],
+          },
+        ],
+        "AlarmDescription": "admin-console's instances have failed healthchecks several times over the last 1 hour.
+      This typically results in the AutoScaling Group cycling instances and can lead to problems with deployment,
+      scaling or handling traffic spikes.
+
+      Check admin-console's application logs or ssh onto an unhealthy instance in order to debug these problems.",
+        "AlarmName": "Unhealthy instances for admin-console in PROD",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "DatapointsToAlarm": 30,
+        "Dimensions": Array [
+          Object {
+            "Name": "LoadBalancer",
+            "Value": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  Object {
+                    "Fn::Select": Array [
+                      1,
+                      Object {
+                        "Fn::Split": Array [
+                          "/",
+                          Object {
+                            "Ref": "ListenerAdminconsole3E633904",
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                  "/",
+                  Object {
+                    "Fn::Select": Array [
+                      2,
+                      Object {
+                        "Fn::Split": Array [
+                          "/",
+                          Object {
+                            "Ref": "ListenerAdminconsole3E633904",
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                  "/",
+                  Object {
+                    "Fn::Select": Array [
+                      3,
+                      Object {
+                        "Fn::Split": Array [
+                          "/",
+                          Object {
+                            "Ref": "ListenerAdminconsole3E633904",
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              ],
+            },
+          },
+          Object {
+            "Name": "TargetGroup",
+            "Value": Object {
+              "Fn::GetAtt": Array [
+                "TargetGroupAdminconsole160A1621",
+                "TargetGroupFullName",
+              ],
+            },
+          },
+        ],
+        "EvaluationPeriods": 60,
+        "MetricName": "UnHealthyHostCount",
+        "Namespace": "AWS/ApplicationELB",
+        "Period": 60,
+        "Statistic": "Maximum",
+        "Threshold": 1,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
     },
     "WazuhSecurityGroup": Object {
       "Properties": Object {
