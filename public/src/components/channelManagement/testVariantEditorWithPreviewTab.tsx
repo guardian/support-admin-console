@@ -20,7 +20,7 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 
 interface TestVariantEditorProps {
   variantEditor: React.ReactElement;
-  variantPreview: React.ReactElement;
+  variantPreview?: React.ReactElement;
 }
 
 function TestVariantEditorWithPreviewTab({
@@ -45,12 +45,12 @@ function TestVariantEditorWithPreviewTab({
         aria-label="disabled tabs example"
       >
         <Tab label="Form" />
-        <Tab label="Preview" />
+        {variantPreview && <Tab label="Preview" />}
       </Tabs>
 
       <div>
         {value === 0 && variantEditor}
-        {value === 1 && variantPreview}
+        {value === 1 && variantPreview && variantPreview}
       </div>
     </div>
   );

@@ -8,19 +8,22 @@ const BASE_ARTICLE_URL = {
   PROD: {
     DOTCOM:
       'https://theguardian.com/world/2020/may/08/commemorating-ve-day-during-coronavirus-lockdown-somehow-the-quiet-made-it-louder',
-    AMP: '',
+    AMP:
+      'https://amp.theguardian.com/politics/2020/may/15/may-and-johnson-hung-civil-servants-out-to-dry-report-finds',
     APPLE_NEWS: '',
   },
   CODE: {
     DOTCOM:
       'https://m.code.dev-theguardian.com/world/2020/may/08/commemorating-ve-day-during-coronavirus-lockdown-somehow-the-quiet-made-it-louder',
-    AMP: '',
+    AMP:
+      'https://amp.code.dev-theguardian.com/politics/2020/may/15/may-and-johnson-hung-civil-servants-out-to-dry-report-findshttps://amp.theguardian.com/politics/2020/may/15/may-and-johnson-hung-civil-servants-out-to-dry-report-finds',
     APPLE_NEWS: '',
   },
   DEV: {
     DOTCOM:
       'https://m.code.dev-theguardian.com/world/2020/may/08/commemorating-ve-day-during-coronavirus-lockdown-somehow-the-quiet-made-it-louder',
-    AMP: '',
+    AMP:
+      'https://amp.code.dev-theguardian.com/politics/2020/may/15/may-and-johnson-hung-civil-servants-out-to-dry-report-finds',
     APPLE_NEWS: '',
   },
 };
@@ -52,7 +55,7 @@ const TestEditorVariantSummaryWebPreviewButton: React.FC<TestEditorVariantSummar
   platform,
   isDisabled,
 }: TestEditorVariantSummaryPreviewButtonProps) => {
-  const isIncompatiblePlatform = ['AMP', 'APPLE_NEWS'].includes(platform);
+  const isIncompatiblePlatform = ['APPLE_NEWS'].includes(platform);
 
   const checkForDisabledButton = (): boolean => {
     if (isIncompatiblePlatform) {
