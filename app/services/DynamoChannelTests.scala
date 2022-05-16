@@ -141,7 +141,7 @@ class DynamoChannelTests(stage: String) extends StrictLogging {
             )
             .build()
         )
-        .build
+        .build()
     }
 
     logger.info(s"About to batch delete: $deleteRequests")
