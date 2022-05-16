@@ -31,7 +31,7 @@ class EpicHoldbackTestsController(
     dataObjectSettings = S3ObjectSettings(
       bucket = "gu-contributions-public",
       key = s"epic/$stage/${EpicHoldbackTestsController.name}.json",
-      publicRead = false,
+      publicRead = true,
       cacheControl = None,
       surrogateControl = None
     ),
