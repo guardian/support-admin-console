@@ -114,8 +114,18 @@ const buildProps = (variant: EpicVariant): EpicProps => ({
     paragraphs: variant.paragraphs,
     highlightedText: variant.highlightedText,
     cta: variant.cta,
+
+    // Secondary CTA needs to have additional data added to it - like done for ticker
+    secondaryCta: variant.secondaryCta,
+
     separateArticleCount: variant.separateArticleCount,
-    showSignInLink: variant.showSignInLink,
+
+    // There's some weird stuff going on around the sign-in link
+    // - we have an 'enable sign-in link' checkbox in RRCP
+    // - but no indication that the checkbox setting gets set in variant data
+    // - for now, always show the link for the purposes of LIVE preview
+    showSignInLink: true,
+
     image: variant.image,
     showChoiceCards: variant.showChoiceCards,
     choiceCardAmounts: {
