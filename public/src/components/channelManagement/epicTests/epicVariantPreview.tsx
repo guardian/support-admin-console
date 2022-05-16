@@ -5,11 +5,15 @@ import { EpicVariant } from './epicTestsForm';
 import { EpicModuleName } from '../helpers/shared';
 import { useModule } from '../../../hooks/useModule';
 
+// Article count TS defs
 export interface ArticleCounts {
-  for52Weeks: number; // The user's total article view count, which currently goes back as far as 52 weeks
-  forTargetedWeeks: number; // The user's article view count for the configured periodInWeeks
+  // The user's total article view count, which currently goes back as far as 52 weeks
+  for52Weeks: number;
+  // The user's article view count for the configured periodInWeeks
+  forTargetedWeeks: number;
 }
 
+// Choice card TS defs and object generation
 interface ChoiceCardAmounts {
   amounts: number[];
   defaultAmount: number;
@@ -31,12 +35,6 @@ interface RegionalChoiceCard {
     isLive: boolean;
     variants: ChoiceCardVariant[];
     seed: number;
-  };
-}
-
-interface EpicVariantWithChoiceCard extends EpicVariant {
-  choiceCardAmounts: {
-    [index: string]: RegionalChoiceCard;
   };
 }
 
@@ -72,8 +70,46 @@ const generateRegionalChoiceCard = (name: string): RegionalChoiceCard => {
   };
 };
 
+// Ticker TS defs
+enum TickerEndType {
+  unlimited = 'unlimited',
+  hardstop = 'hardstop', // currently unsupported
+}
+
+enum TickerCountType {
+  money = 'money',
+  people = 'people',
+}
+
+interface TickerCopy {
+  countLabel: string;
+  goalReachedPrimary: string;
+  goalReachedSecondary: string;
+}
+
+interface TickerData {
+  total: number;
+  goal: number;
+}
+
+interface TickerSettings {
+  endType: TickerEndType;
+  countType: TickerCountType;
+  currencySymbol: string;
+  copy: TickerCopy;
+  tickerData?: TickerData;
+}
+
+// Extend EpicVariant to include choice cards and tickers
+interface EpicVariantWithAdditionalData extends EpicVariant {
+  choiceCardAmounts: {
+    [index: string]: RegionalChoiceCard;
+  };
+  tickerSettings: TickerSettings;
+}
+
 interface EpicProps {
-  variant: EpicVariantWithChoiceCard;
+  variant: EpicVariantWithAdditionalData;
   tracking: {
     ophanPageId: string;
     platformId: string;
@@ -97,7 +133,7 @@ const buildProps = (variant: EpicVariant): EpicProps => ({
     heading: variant.heading,
     paragraphs: variant.paragraphs,
     highlightedText: variant.highlightedText,
-    showTicker: false,
+    showTicker: variant.showTicker,
     cta: variant.cta,
     separateArticleCount: variant.separateArticleCount,
     showSignInLink: variant.showSignInLink,
@@ -111,6 +147,20 @@ const buildProps = (variant: EpicVariant): EpicProps => ({
       International: generateRegionalChoiceCard('2021-03-11_AMOUNTS_R2__INT'),
       NZDCountries: generateRegionalChoiceCard('2021-03-11_AMOUNTS_R2__NZ'),
       Canada: generateRegionalChoiceCard('2021-03-11_AMOUNTS_R2__CA'),
+    },
+    tickerSettings: {
+      countType: TickerCountType.money,
+      endType: TickerEndType.unlimited,
+      currencySymbol: '£',
+      copy: {
+        countLabel: 'contributed',
+        goalReachedPrimary: "We've met our goal - thank you",
+        goalReachedSecondary: 'Contributions are still being accepted',
+      },
+      tickerData: {
+        total: 10000,
+        goal: 100000,
+      },
     },
   },
   tracking: {
