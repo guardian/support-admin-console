@@ -2,7 +2,7 @@ import React from 'react';
 import { Theme, makeStyles } from '@material-ui/core';
 import { EpicVariant } from './epicTestsForm';
 
-import { EpicModuleName } from '../helpers/shared';
+import { EpicModuleName, TickerSettings } from '../helpers/shared';
 import { useModule } from '../../../hooks/useModule';
 
 // Article count TS defs
@@ -70,33 +70,13 @@ const generateRegionalChoiceCard = (name: string): RegionalChoiceCard => {
   };
 };
 
-// Ticker TS defs
-enum TickerEndType {
-  unlimited = 'unlimited',
-  hardstop = 'hardstop', // currently unsupported
-}
-
-enum TickerCountType {
-  money = 'money',
-  people = 'people',
-}
-
-interface TickerCopy {
-  countLabel: string;
-  goalReachedPrimary: string;
-  goalReachedSecondary: string;
-}
-
+// Ticker additional TS defs
 interface TickerData {
   total: number;
   goal: number;
 }
 
-interface TickerSettings {
-  endType: TickerEndType;
-  countType: TickerCountType;
-  currencySymbol: string;
-  copy: TickerCopy;
+interface TickerSettingsWithData extends TickerSettings {
   tickerData?: TickerData;
 }
 
@@ -105,7 +85,7 @@ interface EpicVariantWithAdditionalData extends EpicVariant {
   choiceCardAmounts: {
     [index: string]: RegionalChoiceCard;
   };
-  tickerSettings: TickerSettings;
+  tickerSettings?: TickerSettingsWithData;
 }
 
 interface EpicProps {
@@ -133,7 +113,6 @@ const buildProps = (variant: EpicVariant): EpicProps => ({
     heading: variant.heading,
     paragraphs: variant.paragraphs,
     highlightedText: variant.highlightedText,
-    showTicker: variant.showTicker,
     cta: variant.cta,
     separateArticleCount: variant.separateArticleCount,
     showSignInLink: variant.showSignInLink,
@@ -148,20 +127,19 @@ const buildProps = (variant: EpicVariant): EpicProps => ({
       NZDCountries: generateRegionalChoiceCard('2021-03-11_AMOUNTS_R2__NZ'),
       Canada: generateRegionalChoiceCard('2021-03-11_AMOUNTS_R2__CA'),
     },
-    tickerSettings: {
-      countType: TickerCountType.money,
-      endType: TickerEndType.unlimited,
-      currencySymbol: '£',
-      copy: {
-        countLabel: 'contributed',
-        goalReachedPrimary: "We've met our goal - thank you",
-        goalReachedSecondary: 'Contributions are still being accepted',
-      },
-      tickerData: {
-        total: 10000,
-        goal: 100000,
-      },
-    },
+    showTicker: variant.showTicker,
+    tickerSettings: variant.tickerSettings
+      ? {
+          countType: variant.tickerSettings.countType,
+          endType: variant.tickerSettings.endType,
+          currencySymbol: variant.tickerSettings.currencySymbol,
+          copy: variant.tickerSettings.copy,
+          tickerData: {
+            total: 50000,
+            goal: 100000,
+          },
+        }
+      : undefined,
   },
   tracking: {
     ophanPageId: 'ophanPageId',
