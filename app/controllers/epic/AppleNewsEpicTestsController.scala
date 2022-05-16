@@ -35,5 +35,5 @@ class AppleNewsEpicTestsController(
   ),
   fastlyPurger = None,
   runtime = runtime,
-  tests => dynamo.createOrUpdateTests(tests.tests, Channel.EpicAppleNews)
+  tests => dynamo.replaceChannelTests(tests.tests, Channel.EpicAppleNews)
 ) with Circe

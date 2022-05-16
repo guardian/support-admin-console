@@ -6,7 +6,7 @@ import io.circe.syntax._
 import models.{Channel, ChannelTest}
 import DynamoChannelTests._
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
-import software.amazon.awssdk.services.dynamodb.model.{AttributeValue, BatchWriteItemRequest, PutRequest, QueryRequest, WriteRequest}
+import software.amazon.awssdk.services.dynamodb.model.{AttributeValue, BatchWriteItemRequest, DeleteRequest, PutRequest, QueryRequest, WriteRequest}
 import utils.Circe.{dynamoMapToJson, jsonToDynamo}
 import zio.{ZEnv, ZIO}
 import zio.blocking.effectBlocking
@@ -124,5 +124,41 @@ class DynamoChannelTests(stage: String) extends StrictLogging {
     logger.info(s"About to batch put: $writeRequests")
 
     putAllBatched(writeRequests)
+  }
+
+  def deleteTests(testNames: List[String], channel: Channel): ZIO[ZEnv, DynamoPutError, Unit] = {
+    val deleteRequests = testNames.map { testName =>
+      WriteRequest
+        .builder
+        .deleteRequest(
+          DeleteRequest
+            .builder
+            .key(
+              Map(
+                "channel" -> AttributeValue.builder.s(channel.toString).build,
+                "name" -> AttributeValue.builder.s(testName).build
+              ).asJava
+            )
+            .build()
+        )
+        .build
+    }
+
+    logger.info(s"About to batch delete: $deleteRequests")
+    putAllBatched(deleteRequests)
+  }
+
+  def replaceChannelTests[T <: ChannelTest[T] : Encoder : Decoder](tests: List[T], channel: Channel): ZIO[ZEnv, DynamoError, Unit] = {
+    getAllTests(channel)
+      .flatMap(existingTests => {
+        // delete any existing tests that are not in the updated tests list
+        val deletedTests = existingTests.map(_.name).toSet -- tests.map(_.name).toSet
+        if (deletedTests.nonEmpty) {
+          deleteTests(deletedTests.toList, channel)
+        } else {
+          ZIO.unit
+        }
+      })
+      .flatMap(_ => createOrUpdateTests(tests, channel))
   }
 }

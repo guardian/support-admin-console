@@ -8,12 +8,10 @@ import io.circe.generic.auto._
 import models.{ChannelTests, LockStatus}
 import play.api.libs.circe.Circe
 import play.api.mvc._
-import services.DynamoChannelTests.DynamoPutError
+import services.DynamoChannelTests.DynamoError
 import services.S3Client.{S3ClientError, S3ObjectSettings}
 import services.{FastlyPurger, S3Json, VersionedS3Data}
-import software.amazon.awssdk.services.dynamodb.model.BatchWriteItemResponse
 import utils.Circe.noNulls
-import zio.blocking.Blocking
 import zio.{IO, ZEnv, ZIO}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -38,7 +36,7 @@ abstract class LockableS3ObjectController[CT <: ChannelTests[_] : Decoder : Enco
     * During the migration we write to dynamo at the same time as S3.
     * But we still read from S3, which is the source of truth for now.
     */
-  dynamoWrite: CT => ZIO[ZEnv, DynamoPutError, Unit],
+  dynamoWrite: CT => ZIO[ZEnv, DynamoError, Unit],
 )(implicit ec: ExecutionContext) extends AbstractController(components) with Circe {
 
   private val lockObjectSettings = S3ObjectSettings(
