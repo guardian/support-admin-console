@@ -6,12 +6,15 @@ version := "1.0-SNAPSHOT"
 scalaVersion := "2.13.7"
 
 val circeVersion = "0.14.1"
+val awsVersion = "2.17.184"
+val zioVersion = "1.0.14"
 
 libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.4",
   "com.gu.play-googleauth" %% "play-v28" % "2.2.2",
   "com.gu" %% "simple-configuration-ssm" % "1.5.7",
-  "software.amazon.awssdk" % "s3" % "2.17.99",
+  "software.amazon.awssdk" % "s3" % awsVersion,
+  "software.amazon.awssdk" % "dynamodb" % awsVersion,
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
@@ -20,7 +23,8 @@ libraryDependencies ++= Seq(
   "com.beachape" %% "enumeratum" % "1.7.0",
   "com.beachape" %% "enumeratum-circe" % "1.7.0",
   ws,
-  "dev.zio" %% "zio" % "1.0.14",
+  "dev.zio" %% "zio" % zioVersion,
+  "dev.zio" %% "zio-streams" % zioVersion,
   "org.scalatest" %% "scalatest" % "3.2.10" % "test",
   "org.gnieh" %% "diffson-circe" % "4.1.1" % "test",
 )

@@ -2,10 +2,12 @@ package controllers.epic
 
 import com.gu.googleauth.AuthAction
 import controllers.LockableS3ObjectController
-import models.EpicTests
+import models.{Channel, EpicTests}
+import models.EpicTests._
 import play.api.libs.circe.Circe
 import play.api.libs.ws.WSClient
 import play.api.mvc._
+import services.DynamoChannelTests
 import services.S3Client.S3ObjectSettings
 import zio.ZEnv
 
@@ -19,7 +21,8 @@ class AMPEpicTestsController(
   authAction: AuthAction[AnyContent],
   components: ControllerComponents,
   ws: WSClient, stage: String,
-  runtime: zio.Runtime[ZEnv]
+  runtime: zio.Runtime[ZEnv],
+  dynamo: DynamoChannelTests
 )(implicit ec: ExecutionContext) extends LockableS3ObjectController[EpicTests](
   authAction,
   components,
@@ -31,5 +34,6 @@ class AMPEpicTestsController(
     publicRead = true
   ),
   fastlyPurger = None,
-  runtime = runtime
+  runtime = runtime,
+  tests => dynamo.replaceChannelTests(tests.tests, Channel.EpicAMP)
 ) with Circe

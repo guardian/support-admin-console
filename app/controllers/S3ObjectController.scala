@@ -8,6 +8,7 @@ import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, AnyContent, ControllerComponents, Result}
 import services.S3Client.S3ObjectSettings
 import services.{S3Json, VersionedS3Data}
+import utils.Circe.noNulls
 import zio.blocking.Blocking
 import zio.{IO, ZEnv, ZIO}
 
@@ -33,7 +34,7 @@ abstract class S3ObjectController[T : Decoder : Encoder](
   )
   private val s3Client = services.S3
 
-  private def run(f: => ZIO[Blocking, Throwable, Result]): Future[Result] =
+  private def run(f: => ZIO[ZEnv, Throwable, Result]): Future[Result] =
     runtime.unsafeRunToFuture {
       f.catchAll { error =>
         IO.succeed(InternalServerError(error.getMessage))
@@ -51,7 +52,7 @@ abstract class S3ObjectController[T : Decoder : Encoder](
         .apply(dataObjectSettings)
         .map(s3Data => VersionedS3DataWithEmail(s3Data.value, s3Data.version, request.user.email))
         .map { s3Data =>
-          Ok(S3Json.noNulls(s3Data.asJson))
+          Ok(noNulls(s3Data.asJson))
         }
     }
   }

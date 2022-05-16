@@ -8,8 +8,9 @@ import services.S3Client._
 import software.amazon.awssdk.core.sync.RequestBody
 import software.amazon.awssdk.services.s3.model.{GetObjectRequest, HeadObjectRequest, ListObjectsRequest, ObjectCannedACL, PutObjectRequest}
 import zio._
-import zio.blocking.{Blocking, effectBlocking}
+import zio.blocking.effectBlocking
 import software.amazon.awssdk.services.s3.{S3Client => AwsS3Client}
+import utils.Circe.noNulls
 
 import scala.jdk.CollectionConverters._
 
@@ -25,7 +26,7 @@ trait S3Client {
 
 object S3Client {
   type RawVersionedS3Data = VersionedS3Data[String]
-  type S3Action[T] = S3ObjectSettings => ZIO[Blocking, S3ClientError,T]
+  type S3Action[T] = S3ObjectSettings => ZIO[ZEnv, S3ClientError,T]
 
   case class S3ObjectSettings(
     bucket: String,
@@ -154,10 +155,7 @@ object S3Json extends StrictLogging {
     override def getMessage = s"Error decoding json from S3 ($objectSettings): ${error.getMessage}"
   }
 
-  private val printer = Printer.spaces2.copy(dropNullValues = true)
-  def noNulls(json: Json): String = printer.print(json)
-
-  def getFromJson[T : Decoder](s3: S3Client): S3ObjectSettings => ZIO[Blocking,Throwable,VersionedS3Data[T]] = { objectSettings =>
+  def getFromJson[T : Decoder](s3: S3Client): S3ObjectSettings => ZIO[ZEnv,Throwable,VersionedS3Data[T]] = { objectSettings =>
     s3.get(objectSettings).flatMap { raw =>
 
       IO.fromEither(decode[T](raw.value))

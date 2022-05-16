@@ -2,11 +2,12 @@ package controllers.epic
 
 import com.gu.googleauth.AuthAction
 import controllers.LockableS3ObjectController
-import models.EpicTests
+import models.{Channel, EpicTest, EpicTests}
+import models.EpicTests._
 import play.api.libs.circe.Circe
 import play.api.libs.ws.WSClient
 import play.api.mvc._
-import services.FastlyPurger
+import services.{DynamoChannelTests, FastlyPurger}
 import services.S3Client.S3ObjectSettings
 import zio.ZEnv
 
@@ -20,7 +21,8 @@ class LiveblogEpicTestsController(
   authAction: AuthAction[AnyContent],
   components: ControllerComponents,
   ws: WSClient, stage: String,
-  runtime: zio.Runtime[ZEnv]
+  runtime: zio.Runtime[ZEnv],
+  dynamo: DynamoChannelTests
 )(implicit ec: ExecutionContext) extends LockableS3ObjectController[EpicTests](
     authAction,
     components,
@@ -34,5 +36,6 @@ class LiveblogEpicTestsController(
       surrogateControl = Some("max-age=86400")  // Cache for a day, and use cache purging after updates
     ),
     fastlyPurger = FastlyPurger.fastlyPurger(stage, s"${LiveblogEpicTestsController.name}.json", ws),
-    runtime = runtime
+    runtime = runtime,
+    tests => dynamo.replaceChannelTests(tests.tests, Channel.EpicLiveblog)
   ) with Circe

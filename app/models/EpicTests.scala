@@ -65,6 +65,10 @@ case class EpicVariant(
 )
 case class EpicTest(
   name: String,
+  channel: Option[Channel],
+  status: Option[Status],
+  lockStatus: Option[LockStatus],
+  priority: Option[Int],
   nickname: Option[String],
   isOn: Boolean,
   locations: List[Region] = Nil,
@@ -82,9 +86,13 @@ case class EpicTest(
   articlesViewedSettings: Option[ArticlesViewedSettings] = None,
   controlProportionSettings: Option[ControlProportionSettings] = None,
   deviceType: Option[DeviceType] = None
-)
+) extends ChannelTest[EpicTest] {
 
-case class EpicTests(tests: List[EpicTest])
+  override def withChannel(channel: Channel): EpicTest = this.copy(channel = Some(channel))
+  override def withPriority(priority: Int): EpicTest = this.copy(priority = Some(priority))
+}
+
+case class EpicTests(tests: List[EpicTest]) extends ChannelTests[EpicTest]
 
 object EpicTests {
   implicit val customConfig: Configuration = Configuration.default.withDefaults

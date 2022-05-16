@@ -10,6 +10,7 @@ import services.{S3Json, VersionedS3Data}
 import zio.blocking.Blocking
 import zio.{IO, ZEnv, ZIO}
 import S3ObjectsController.extractFilename
+import utils.Circe.noNulls
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -38,7 +39,7 @@ abstract class S3ObjectsController[T : Decoder : Encoder](
 
   val s3Client = services.S3
 
-  private def run(f: => ZIO[Blocking, Throwable, Result]): Future[Result] =
+  private def run(f: => ZIO[ZEnv, Throwable, Result]): Future[Result] =
     runtime.unsafeRunToFuture {
       f.catchAll { error =>
         IO.succeed(InternalServerError(error.getMessage))
@@ -83,7 +84,7 @@ abstract class S3ObjectsController[T : Decoder : Encoder](
         .listKeys(objectSettings)
         .map { keys =>
           val names: List[String] = keys.flatMap(extractFilename)
-          Ok(S3Json.noNulls(names.asJson))
+          Ok(noNulls(names.asJson))
         }
         .mapError { error =>
           logger.error(s"Failed to fetch list of object names: $error")

@@ -44,6 +44,10 @@ case class BannerVariant(
 
 case class BannerTest(
   name: String,
+  channel: Option[Channel],
+  status: Option[Status],
+  lockStatus: Option[LockStatus],
+  priority: Option[Int],
   nickname: Option[String],
   isOn: Boolean,
   minArticlesBeforeShowingBanner: Int,
@@ -53,9 +57,13 @@ case class BannerTest(
   articlesViewedSettings: Option[ArticlesViewedSettings] = None,
   controlProportionSettings: Option[ControlProportionSettings] = None,
   deviceType: Option[DeviceType] = None
-)
+) extends ChannelTest[BannerTest] {
 
-case class BannerTests(tests: List[BannerTest])
+  override def withChannel(channel: Channel): BannerTest = this.copy(channel = Some(channel))
+  override def withPriority(priority: Int): BannerTest = this.copy(priority = Some(priority))
+}
+
+case class BannerTests(tests: List[BannerTest]) extends ChannelTests[BannerTest]
 
 object BannerTests {
   implicit val customConfig: Configuration = Configuration.default.withDefaults

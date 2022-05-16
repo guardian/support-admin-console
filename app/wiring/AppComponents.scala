@@ -11,7 +11,7 @@ import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.mvc.AnyContent
 import play.api.{BuiltInComponentsFromContext, NoHttpFiltersComponents}
 import router.Routes
-import services.{CapiService, S3}
+import services.{CapiService, DynamoChannelTests, S3}
 import software.amazon.awssdk.services.s3.model.GetObjectRequest
 
 class AppComponents(context: Context, stage: String) extends BuiltInComponentsFromContext(context) with AhcWSComponents with NoHttpFiltersComponents with AssetsComponents {
@@ -55,6 +55,8 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
 
   val capiService = new CapiService(configuration.get[String]("capi.apiKey"), wsClient)
 
+  val dynamoTestsService = new DynamoChannelTests(stage)
+
   override lazy val router: Router = new Routes(
     httpErrorHandler,
     new Application(authAction, controllerComponents, stage),
@@ -62,21 +64,21 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     new SwitchesController(authAction, controllerComponents, stage, runtime),
     new ContributionTypesController(authAction, controllerComponents, stage, runtime),
     new AmountsController(authAction, controllerComponents, stage, runtime),
-    new EpicTestsController(authAction, controllerComponents, wsClient, stage, runtime),
+    new EpicTestsController(authAction, controllerComponents, wsClient, stage, runtime, dynamoTestsService),
     new EpicTestArchiveController(authAction, controllerComponents, wsClient, stage, runtime),
-    new HeaderTestsController(authAction, controllerComponents, wsClient, stage, runtime),
+    new HeaderTestsController(authAction, controllerComponents, wsClient, stage, runtime, dynamoTestsService),
     new HeaderTestArchiveController(authAction, controllerComponents, wsClient, stage, runtime),
-    new EpicHoldbackTestsController(authAction, controllerComponents, wsClient, stage, runtime),
+    new EpicHoldbackTestsController(authAction, controllerComponents, wsClient, stage, runtime, dynamoTestsService),
     new EpicHoldbackTestArchiveController(authAction, controllerComponents, wsClient, stage, runtime),
-    new LiveblogEpicTestsController(authAction, controllerComponents, wsClient, stage, runtime),
+    new LiveblogEpicTestsController(authAction, controllerComponents, wsClient, stage, runtime, dynamoTestsService),
     new LiveblogEpicTestArchiveController(authAction, controllerComponents, wsClient, stage, runtime),
-    new AppleNewsEpicTestsController(authAction, controllerComponents, wsClient, stage, runtime),
+    new AppleNewsEpicTestsController(authAction, controllerComponents, wsClient, stage, runtime, dynamoTestsService),
     new AppleNewsEpicTestArchiveController(authAction, controllerComponents, wsClient, stage, runtime),
-    new AMPEpicTestsController(authAction, controllerComponents, wsClient, stage, runtime),
+    new AMPEpicTestsController(authAction, controllerComponents, wsClient, stage, runtime, dynamoTestsService),
     new AMPEpicTestArchiveController(authAction, controllerComponents, wsClient, stage, runtime),
-    new BannerTestsController(authAction, controllerComponents, wsClient, stage, runtime),
+    new BannerTestsController(authAction, controllerComponents, wsClient, stage, runtime, dynamoTestsService),
     new BannerTestArchiveController(authAction, controllerComponents, wsClient, stage, runtime),
-    new BannerTestsController2(authAction, controllerComponents, wsClient, stage, runtime),
+    new BannerTestsController2(authAction, controllerComponents, wsClient, stage, runtime, dynamoTestsService),
     new BannerTestArchiveController2(authAction, controllerComponents, wsClient, stage, runtime),
     new BannerDeployController(authAction, controllerComponents, stage, runtime),
     new BannerDeployController2(authAction, controllerComponents, stage, runtime),
