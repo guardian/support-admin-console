@@ -6,15 +6,14 @@ Uses [play-googleauth](https://github.com/guardian/play-googleauth) for authoris
 ### Pages
 
 #### For support.theguardian.com:
-- /switches - switchboard for contributions landing page
+- /switches - [switchboard for contributions landing page](/docs/support-frontend-switches.md)
 - /contribution-types - maintains contribution type settings on contributions landing page
 - /amounts - maintains amounts settings on contributions landing page
 
 #### For theguardian.com channel tests ([see here for details](docs/channel-tests.md)):
-- /epic-tests
-- /liveblog-epic-tests
-- /banner-tests and /banner-tests2
-- /banner-deploy
+- tools for channel test configuration (epic, banner, header)
+- /banner-deploy - for manually redeploying the banners
+- /campaigns - for managing groups of channel tests in a "campaign"
 
 ### Running locally
 Fetch DEV config by getting `membership` janus credentials and running:
@@ -37,10 +36,21 @@ npm run watch
 ```
 
 ### SSH
-You must ssh via the bastion, e.g. using [ssm-scala](https://github.com/guardian/ssm-scala):
+You can ssh using [ssm-scala](https://github.com/guardian/ssm-scala):
 
-`ssm ssh --profile membership --bastion-tags contributions-store-bastion,support,PROD --tags admin-console,support,CODE -a -x --newest`
+`ssm ssh --profile membership --ssm-tunnel --tags admin-console,support,CODE -a -x --newest`
 
+
+### CDK
+The cloudformation stacks are managed by [cdk](https://github.com/guardian/cdk).
+
+The stack is defined in [admin-console.ts](cdk/lib/admin-console.ts).
+
+When you make a change to the stack you must update the snapshot by going to the cdk directory and running:
+
+`yarn test -u`
+
+Riffraff will make the cloudformation changes during the deploy.
 
 ### Backend
 There are three types of abstract controller for managing objects in S3:
@@ -66,22 +76,3 @@ Updates are only permitted if the user has a lock.
 A separate S3 object is used for recording the lock status.
 
 Optionally sends a Fastly PURGE request after updates to S3.
-
-### How to add a new switch
-This section will describe how to add a simple on/off switch to the switchboard for a PR example of this [see here](https://github.com/guardian/support-admin-console/pull/157/files)
-
-- Add your new switch to the `SupportFrontendSwitches` class in _SupportFrontendSwitches.scala_ make sure to provide a default value for the new switch
-as this will be used when loading values from S3 for the first time. Eg:
-```
-case class SupportFrontendSwitches(
-  ...
-  myNewSwitch: SwitchState = Off
-)
-```
-- Add the new switch into the `Switches` interface in _switchboard.tsx_
-- Set a default value for your new switch in the constructor of the `Switchboard` component in _switchboard.tsx_
-- Add a user interface component to control the state of your switch in _switchboard.tsx_
-- Update _S3JsonSpec.scala_ to add the new switch to both the `expectedJson` string and the `expectedDecoded` object
-
-Your new switch should now be ready to use
-

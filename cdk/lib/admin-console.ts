@@ -108,7 +108,13 @@ export class AdminConsole extends GuStack {
         domainName,
       },
       monitoringConfiguration: {
-        noMonitoring: true,
+        http5xxAlarm: {
+          tolerated5xxPercentage: 0,
+          numberOfMinutesAboveThresholdBeforeAlarm: 1,
+          alarmName: `5XX error returned by ${app} ${this.stage}`,
+        },
+        unhealthyInstancesAlarm: true,
+        snsTopicName: 'marketing-dev',
       },
       userData,
       roleConfiguration: {
