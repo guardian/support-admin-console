@@ -148,6 +148,7 @@ class DynamoChannelTests(stage: String) extends StrictLogging {
     putAllBatched(deleteRequests)
   }
 
+  // For use during the dynamodb migration - handles creates/updates/deletes by replacing all tests in the channel
   def replaceChannelTests[T <: ChannelTest[T] : Encoder : Decoder](tests: List[T], channel: Channel): ZIO[ZEnv, DynamoError, Unit] = {
     getAllTests(channel)
       .flatMap(existingTests => {
