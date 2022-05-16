@@ -10,8 +10,70 @@ export interface ArticleCounts {
   forTargetedWeeks: number; // The user's article view count for the configured periodInWeeks
 }
 
+interface ChoiceCardAmounts {
+  amounts: number[];
+  defaultAmount: number;
+}
+
+interface ChoiceCardVariant {
+  name: string;
+  amounts: {
+    [index: string]: ChoiceCardAmounts;
+  };
+}
+
+interface RegionalChoiceCard {
+  control: {
+    [index: string]: ChoiceCardAmounts;
+  };
+  test: {
+    name: string;
+    isLive: boolean;
+    variants: ChoiceCardVariant[];
+    seed: number;
+  };
+}
+
+interface EpicVariantWithChoiceCard extends EpicVariant {
+  choiceCardAmounts: {
+    [index: string]: RegionalChoiceCard;
+  };
+}
+
+const generateChoiceCardObject = (): ChoiceCardAmounts => {
+  return {
+    amounts: [30, 60, 120, 240],
+    defaultAmount: 60,
+  };
+};
+
+const generateChoiceCardAmounts = () => {
+  return {
+    ONE_OFF: generateChoiceCardObject(),
+    MONTHLY: generateChoiceCardObject(),
+    ANNUAL: generateChoiceCardObject(),
+  };
+};
+
+const generateRegionalChoiceCard = (name: string): RegionalChoiceCard => {
+  return {
+    control: generateChoiceCardAmounts(),
+    test: {
+      name,
+      isLive: false,
+      variants: [
+        {
+          name: 'V2_LOWER',
+          amounts: generateChoiceCardAmounts(),
+        },
+      ],
+      seed: 917618,
+    },
+  };
+};
+
 interface EpicProps {
-  variant: EpicVariant;
+  variant: EpicVariantWithChoiceCard;
   tracking: {
     ophanPageId: string;
     platformId: string;
@@ -40,6 +102,16 @@ const buildProps = (variant: EpicVariant): EpicProps => ({
     separateArticleCount: variant.separateArticleCount,
     showSignInLink: variant.showSignInLink,
     image: variant.image,
+    showChoiceCards: variant.showChoiceCards,
+    choiceCardAmounts: {
+      GBPCountries: generateRegionalChoiceCard('2021-09-02_AMOUNTS_R5__UK'),
+      UnitedStates: generateRegionalChoiceCard('2021-03-11_AMOUNTS_R2__US'),
+      EURCountries: generateRegionalChoiceCard('2021-03-11_AMOUNTS_R2__EU'),
+      AUDCountries: generateRegionalChoiceCard('2021-03-11_AMOUNTS_R2__AU'),
+      International: generateRegionalChoiceCard('2021-03-11_AMOUNTS_R2__INT'),
+      NZDCountries: generateRegionalChoiceCard('2021-03-11_AMOUNTS_R2__NZ'),
+      Canada: generateRegionalChoiceCard('2021-03-11_AMOUNTS_R2__CA'),
+    },
   },
   tracking: {
     ophanPageId: 'ophanPageId',
