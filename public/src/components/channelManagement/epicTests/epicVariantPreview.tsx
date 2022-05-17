@@ -80,12 +80,20 @@ interface TickerSettingsWithData extends TickerSettings {
   tickerData?: TickerData;
 }
 
+// Secondary CTA TS defs
+interface ShowReminderFields {
+  reminderCta: string;
+  reminderPeriod: string;
+  reminderLabel: string;
+}
+
 // Extend EpicVariant to include choice cards and tickers
 interface EpicVariantWithAdditionalData extends EpicVariant {
   choiceCardAmounts: {
     [index: string]: RegionalChoiceCard;
   };
   tickerSettings?: TickerSettingsWithData;
+  showReminderFields?: ShowReminderFields;
 }
 
 interface EpicProps {
@@ -115,8 +123,12 @@ const buildProps = (variant: EpicVariant): EpicProps => ({
     highlightedText: variant.highlightedText,
     cta: variant.cta,
 
-    // Secondary CTA needs to have additional data added to it - like done for ticker
     secondaryCta: variant.secondaryCta,
+    showReminderFields: {
+      reminderCta: 'Remind me in October',
+      reminderPeriod: '2021-10-01',
+      reminderLabel: 'October',
+    },
 
     separateArticleCount: variant.separateArticleCount,
 
@@ -127,6 +139,7 @@ const buildProps = (variant: EpicVariant): EpicProps => ({
     showSignInLink: true,
 
     image: variant.image,
+
     showChoiceCards: variant.showChoiceCards,
     choiceCardAmounts: {
       GBPCountries: generateRegionalChoiceCard('2021-09-02_AMOUNTS_R5__UK'),
@@ -137,6 +150,7 @@ const buildProps = (variant: EpicVariant): EpicProps => ({
       NZDCountries: generateRegionalChoiceCard('2021-03-11_AMOUNTS_R2__NZ'),
       Canada: generateRegionalChoiceCard('2021-03-11_AMOUNTS_R2__CA'),
     },
+
     showTicker: variant.showTicker,
     tickerSettings: variant.tickerSettings
       ? {
