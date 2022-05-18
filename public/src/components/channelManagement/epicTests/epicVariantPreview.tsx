@@ -14,31 +14,38 @@ export interface ArticleCounts {
 }
 
 // Choice card TS defs and object generation
-interface ChoiceCardAmounts {
+// - Matches the TS set out in SDC file `/packages/shared/src/types/abTests/epic.ts`
+interface AmountSelection {
   amounts: number[];
   defaultAmount: number;
 }
 
-interface ChoiceCardVariant {
+type ContributionAmounts = {
+  [index: string]: AmountSelection;
+};
+
+interface AmountsTestVariant {
   name: string;
-  amounts: {
-    [index: string]: ChoiceCardAmounts;
-  };
+  amounts: ContributionAmounts;
 }
 
-interface RegionalChoiceCard {
-  control: {
-    [index: string]: ChoiceCardAmounts;
-  };
-  test: {
-    name: string;
-    isLive: boolean;
-    variants: ChoiceCardVariant[];
-    seed: number;
-  };
+interface AmountsTest {
+  name: string;
+  isLive: boolean;
+  variants: AmountsTestVariant[];
+  seed: number;
 }
 
-const generateChoiceCardObject = (): ChoiceCardAmounts => {
+type ConfiguredRegionAmounts = {
+  control: ContributionAmounts;
+  test?: AmountsTest;
+};
+
+type ChoiceCardAmounts = {
+  [index: string]: ConfiguredRegionAmounts;
+};
+
+const generateChoiceCardObject = (): AmountSelection => {
   return {
     amounts: [30, 60, 120, 240],
     defaultAmount: 60,
@@ -53,7 +60,7 @@ const generateChoiceCardAmounts = () => {
   };
 };
 
-const generateRegionalChoiceCard = (name: string): RegionalChoiceCard => {
+const generateRegionalChoiceCard = (name: string): ConfiguredRegionAmounts => {
   return {
     control: generateChoiceCardAmounts(),
     test: {
@@ -89,9 +96,7 @@ interface ShowReminderFields {
 
 // Extend EpicVariant to include choice cards and tickers
 interface EpicVariantWithAdditionalData extends EpicVariant {
-  choiceCardAmounts: {
-    [index: string]: RegionalChoiceCard;
-  };
+  choiceCardAmounts: ChoiceCardAmounts;
   tickerSettings?: TickerSettingsWithData;
   showReminderFields?: ShowReminderFields;
 }
@@ -132,11 +137,7 @@ const buildProps = (variant: EpicVariant): EpicProps => ({
 
     separateArticleCount: variant.separateArticleCount,
 
-    // There's some weird stuff going on around the sign-in link
-    // - we have an 'enable sign-in link' checkbox in RRCP
-    // - but no indication that the checkbox setting gets set in variant data
-    // - for now, always show the link for the purposes of LIVE preview
-    showSignInLink: true,
+    showSignInLink: variant.showSignInLink,
 
     image: variant.image,
 
