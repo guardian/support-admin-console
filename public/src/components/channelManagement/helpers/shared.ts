@@ -45,6 +45,7 @@ export interface EpicEditorConfig {
   allowVariantTicker: boolean;
   allowVariantChoiceCards: boolean;
   allowVariantSignInLink: boolean;
+  allowVariantPreview: boolean;
   requireVariantHeader: boolean;
   moduleName: EpicModuleName;
 }
@@ -68,6 +69,7 @@ export const ARTICLE_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantTicker: true,
   allowVariantChoiceCards: true,
   allowVariantSignInLink: true,
+  allowVariantPreview: true,
   requireVariantHeader: false,
   moduleName: 'ContributionsEpic',
   platform: 'DOTCOM',
@@ -93,6 +95,7 @@ export const ARTICLE_EPIC_HOLDBACK_CONFIG: EpicEditorConfig = {
   allowVariantTicker: true,
   allowVariantChoiceCards: true,
   allowVariantSignInLink: true,
+  allowVariantPreview: true,
   requireVariantHeader: false,
   moduleName: 'ContributionsEpic',
   platform: 'DOTCOM',
@@ -117,6 +120,7 @@ export const LIVEBLOG_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantTicker: false,
   allowVariantChoiceCards: false,
   allowVariantSignInLink: false,
+  allowVariantPreview: true,
   requireVariantHeader: false,
   moduleName: 'ContributionsLiveblogEpic',
   platform: 'DOTCOM',
@@ -142,6 +146,7 @@ export const APPLE_NEWS_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantTicker: false,
   allowVariantChoiceCards: false,
   allowVariantSignInLink: false,
+  allowVariantPreview: false,
   requireVariantHeader: false,
   moduleName: 'ContributionsEpic',
   platform: 'APPLE_NEWS',
@@ -166,6 +171,7 @@ export const AMP_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantTicker: true,
   allowVariantChoiceCards: true,
   allowVariantSignInLink: false,
+  allowVariantPreview: false,
   requireVariantHeader: false,
   moduleName: 'ContributionsEpic',
   platform: 'AMP',
