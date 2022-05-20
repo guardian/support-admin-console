@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Theme, makeStyles, Button } from '@material-ui/core';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import Drawer from '@material-ui/core/Drawer';
-import { BannerTemplate, BannerVariant } from '../../../models/banner';
-import { Cta, SecondaryCta, TickerCountType, TickerEndType } from '../helpers/shared';
+import { BannerTemplate, BannerVariant, BannerContent } from '../../../models/banner';
+import { TickerCountType, TickerEndType } from '../helpers/shared';
 import Typography from '@material-ui/core/Typography';
 import { TickerSettings } from '../epicTests/epicTestsForm';
 import { useModule } from '../../../hooks/useModule';
@@ -23,15 +23,6 @@ interface CountryGroupPriceData {
 export type Prices = {
   [index: string]: CountryGroupPriceData;
 };
-
-export interface BannerContent {
-  heading?: string;
-  messageText?: string;
-  paragraphs: string[];
-  highlightedText?: string;
-  cta?: Cta;
-  secondaryCta?: SecondaryCta;
-}
 
 interface BannerProps {
   tracking: {
@@ -54,6 +45,7 @@ interface BannerProps {
   content: BannerContent;
   mobileContent?: BannerContent;
   tickerSettings?: TickerSettings;
+  separateArticleCount?: boolean;
 }
 
 const anchor = 'bottom';
@@ -113,6 +105,7 @@ const buildProps = (variant: BannerVariant): BannerProps => ({
   },
   numArticles: 13,
   tickerSettings,
+  separateArticleCount: variant.separateArticleCount,
 });
 
 const bannerModules = {
