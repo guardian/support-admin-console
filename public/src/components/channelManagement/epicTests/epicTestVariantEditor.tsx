@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { makeStyles, Theme, Typography } from '@material-ui/core';
 
@@ -125,10 +125,34 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
     footer: variant.footer,
   };
 
+  /**
+   * Only some fields are validated by the useForm here.
+   * Ideally we'd combine the validated fields with the rest of the variant fields in a callback (inside the RTE Controllers below).
+   * But the callback closes over the old state of `variant`, causing it to overwrite changes to non-validated fields.
+   * So instead we write updates to the validated fields to the `validatedFields` state, and merge with the rest of
+   * `variant` in a useEffect.
+   */
+  const [validatedFields, setValidatedFields] = useState<FormData>(defaultValues);
   const { handleSubmit, control, errors, trigger } = useForm<FormData>({
     mode: 'onChange',
     defaultValues,
   });
+
+  useEffect(() => {
+    trigger();
+  }, []);
+
+  useEffect(() => {
+    onVariantChange({
+      ...variant,
+      ...validatedFields,
+    });
+  }, [validatedFields]);
+
+  useEffect(() => {
+    const isValid = Object.keys(errors).length === 0;
+    onValidationChange(isValid);
+  }, [errors.heading, errors.paragraphs, errors.highlightedText, errors.image, errors.footer]);
 
   const noHtml = platform !== 'DOTCOM';
   const htmlValidator = noHtml ? noHtmlValidator : () => undefined;
@@ -136,26 +160,6 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   const noCurrencyTemplate = !VALID_TEMPLATES[platform].includes(CURRENCY_TEMPLATE);
   const noCountryNameTemplate = !VALID_TEMPLATES[platform].includes(COUNTRY_NAME_TEMPLATE);
   const noArticleCountTemplate = !VALID_TEMPLATES[platform].includes(ARTICLE_COUNT_TEMPLATE);
-
-  useEffect(() => {
-    trigger();
-  }, []);
-
-  useEffect(() => {
-    const isValid = Object.keys(errors).length === 0;
-    onValidationChange(isValid);
-  }, [errors.heading, errors.paragraphs, errors.highlightedText, errors.image, errors.footer]);
-
-  const onSubmit = ({ heading, paragraphs, highlightedText, image, footer }: FormData): void => {
-    onVariantChange({
-      ...variant,
-      heading,
-      paragraphs,
-      highlightedText,
-      image,
-      footer,
-    });
-  };
 
   // Handling other form field updates
   const updatePrimaryCta = (updatedCta?: Cta): void => {
@@ -219,7 +223,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                 copyData={data.value}
                 updateCopy={value => {
                   data.onChange(value);
-                  handleSubmit(onSubmit)();
+                  handleSubmit(setValidatedFields)();
                 }}
                 name="heading"
                 label="Header"
@@ -259,7 +263,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
               copyData={data.value}
               updateCopy={pars => {
                 data.onChange(pars);
-                handleSubmit(onSubmit)();
+                handleSubmit(setValidatedFields)();
               }}
               name="paragraphs"
               label="Body copy"
@@ -296,7 +300,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                 copyData={data.value}
                 updateCopy={pars => {
                   data.onChange(pars);
-                  handleSubmit(onSubmit)();
+                  handleSubmit(setValidatedFields)();
                 }}
                 name="highlightedText"
                 label="Highlighted text"
@@ -334,7 +338,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                 copyData={data.value}
                 updateCopy={pars => {
                   data.onChange(pars);
-                  handleSubmit(onSubmit)();
+                  handleSubmit(setValidatedFields)();
                 }}
                 name="footer"
                 label="Footer"

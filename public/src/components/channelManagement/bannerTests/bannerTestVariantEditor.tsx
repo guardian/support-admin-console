@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import {
   FormControlLabel,
@@ -143,6 +143,14 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
     highlightedText: content.highlightedText || '',
   };
 
+  /**
+   * Only some fields are validated by the useForm here.
+   * Ideally we'd combine the validated fields with the rest of the variant fields in a callback (inside the RTE Controllers below).
+   * But the callback closes over the old state of `content`, causing it to overwrite changes to non-validated fields.
+   * So instead we write updates to the validated fields to the `validatedFields` state, and merge with the rest of
+   * `content` in a useEffect.
+   */
+  const [validatedFields, setValidatedFields] = useState<FormData>(defaultValues);
   const { handleSubmit, control, errors, trigger } = useForm<FormData>({
     mode: 'onChange',
     defaultValues,
@@ -153,19 +161,17 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
   }, []);
 
   useEffect(() => {
+    onChange({
+      ...content,
+      ...validatedFields,
+      messageText: undefined,
+    });
+  }, [validatedFields]);
+
+  useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
   }, [errors.heading, errors.paragraphs, errors.highlightedText]);
-
-  const onSubmit = ({ heading, paragraphs, highlightedText }: FormData): void => {
-    onChange({
-      ...content,
-      heading,
-      paragraphs,
-      highlightedText,
-      messageText: undefined,
-    });
-  };
 
   const updatePrimaryCta = (updatedCta?: Cta): void => {
     onChange({ ...content, cta: updatedCta });
@@ -231,7 +237,7 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
                   copyData={data.value}
                   updateCopy={pars => {
                     data.onChange(pars);
-                    handleSubmit(onSubmit)();
+                    handleSubmit(setValidatedFields)();
                   }}
                   name="heading"
                   label="Header"
@@ -268,7 +274,7 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
                   copyData={data.value}
                   updateCopy={pars => {
                     data.onChange(pars);
-                    handleSubmit(onSubmit)();
+                    handleSubmit(setValidatedFields)();
                   }}
                   name="paragraphs"
                   label="Body copy"
@@ -302,7 +308,7 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
                     copyData={data.value}
                     updateCopy={pars => {
                       data.onChange(pars);
-                      handleSubmit(onSubmit)();
+                      handleSubmit(setValidatedFields)();
                     }}
                     name="highlightedText"
                     label="Highlighted text"
