@@ -213,8 +213,8 @@ Object {
           },
         ],
         "ProvisionedThroughput": Object {
-          "ReadCapacityUnits": 4,
-          "WriteCapacityUnits": 4,
+          "ReadCapacityUnits": 8,
+          "WriteCapacityUnits": 8,
         },
         "TableName": "support-admin-console-channel-tests-PROD",
         "Tags": Array [

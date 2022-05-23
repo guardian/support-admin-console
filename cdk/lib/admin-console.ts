@@ -27,8 +27,8 @@ export class AdminConsole extends GuStack {
     const table = new Table(this, id, {
       tableName: `support-admin-console-channel-tests-${this.stage}`,
       removalPolicy: RemovalPolicy.RETAIN,
-      readCapacity: 4,
-      writeCapacity: 4,
+      readCapacity: 8,
+      writeCapacity: 8,
       partitionKey: {
         name: 'channel',
         type: AttributeType.STRING,
