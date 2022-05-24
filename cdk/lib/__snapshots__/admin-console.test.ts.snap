@@ -202,6 +202,7 @@ Object {
             "AttributeType": "S",
           },
         ],
+        "BillingMode": "PAY_PER_REQUEST",
         "KeySchema": Array [
           Object {
             "AttributeName": "channel",
@@ -212,10 +213,6 @@ Object {
             "KeyType": "RANGE",
           },
         ],
-        "ProvisionedThroughput": Object {
-          "ReadCapacityUnits": 8,
-          "WriteCapacityUnits": 8,
-        },
         "TableName": "support-admin-console-channel-tests-PROD",
         "Tags": Array [
           Object {
