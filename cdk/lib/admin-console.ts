@@ -12,8 +12,7 @@ import {
 } from '@guardian/cdk/lib/constructs/iam';
 import type { App, CfnElement } from 'aws-cdk-lib';
 import { Duration, RemovalPolicy } from 'aws-cdk-lib';
-import { AttributeType, Table } from 'aws-cdk-lib/aws-dynamodb';
-import { BillingMode } from 'aws-cdk-lib/aws-dynamodb';
+import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';
 import { InstanceClass, InstanceSize, InstanceType } from 'aws-cdk-lib/aws-ec2';
 
 export interface AdminConsoleProps extends GuStackProps {
