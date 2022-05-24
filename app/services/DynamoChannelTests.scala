@@ -6,7 +6,7 @@ import io.circe.syntax._
 import models.{Channel, ChannelTest}
 import DynamoChannelTests._
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
-import software.amazon.awssdk.services.dynamodb.model.{AttributeValue, BatchWriteItemRequest, DeleteRequest, PutRequest, QueryRequest, WriteRequest}
+import software.amazon.awssdk.services.dynamodb.model.{AttributeValue, BatchWriteItemRequest, DeleteRequest, PutRequest, QueryRequest, ReturnConsumedCapacity, WriteRequest}
 import utils.Circe.{dynamoMapToJson, jsonToDynamo}
 import zio.{ZEnv, ZIO}
 import zio.blocking.effectBlocking
@@ -56,6 +56,7 @@ class DynamoChannelTests(stage: String) extends StrictLogging {
         BatchWriteItemRequest
           .builder
           .requestItems(Map(tableName -> writeRequests.asJava).asJava)
+          .returnConsumedCapacity(ReturnConsumedCapacity.TOTAL)
           .build()
 
       val result = client.batchWriteItem(batchWriteRequest)
