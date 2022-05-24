@@ -13,6 +13,7 @@ import {
 import type { App, CfnElement } from 'aws-cdk-lib';
 import { Duration, RemovalPolicy } from 'aws-cdk-lib';
 import { AttributeType, Table } from 'aws-cdk-lib/aws-dynamodb';
+import { BillingMode } from 'aws-cdk-lib/aws-dynamodb';
 import { InstanceClass, InstanceSize, InstanceType } from 'aws-cdk-lib/aws-ec2';
 
 export interface AdminConsoleProps extends GuStackProps {
@@ -27,8 +28,8 @@ export class AdminConsole extends GuStack {
     const table = new Table(this, id, {
       tableName: `support-admin-console-channel-tests-${this.stage}`,
       removalPolicy: RemovalPolicy.RETAIN,
-      readCapacity: 8,
-      writeCapacity: 8,
+      // Use on-demand billing during migration from S3, because we have infrequent spikes when users click save. We can switch to provisioned after
+      billingMode: BillingMode.PAY_PER_REQUEST,
       partitionKey: {
         name: 'channel',
         type: AttributeType.STRING,
