@@ -28,6 +28,7 @@ export class AdminConsole extends GuStack {
     const table = new Table(this, id, {
       tableName: `support-admin-console-channel-tests-${this.stage}`,
       removalPolicy: RemovalPolicy.RETAIN,
+      pointInTimeRecovery: this.stage === 'PROD',
       // Use on-demand billing during migration from S3, because we have infrequent spikes when users click save. We can switch to provisioned after
       billingMode: BillingMode.PAY_PER_REQUEST,
       partitionKey: {
