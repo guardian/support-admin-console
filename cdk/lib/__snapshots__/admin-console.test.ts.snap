@@ -213,6 +213,9 @@ Object {
             "KeyType": "RANGE",
           },
         ],
+        "PointInTimeRecoverySpecification": Object {
+          "PointInTimeRecoveryEnabled": true,
+        },
         "TableName": "support-admin-console-channel-tests-PROD",
         "Tags": Array [
           Object {
