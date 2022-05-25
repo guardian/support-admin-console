@@ -38,13 +38,7 @@ export const EpicTestPreviewButton: React.FC<EpicTestPreviewProps> = ({
         Preview all variants
       </Button>
 
-      <Dialog
-        open={isOpen}
-        onClose={close}
-        fullWidth
-        maxWidth="xl"
-        className={classes.dialog}
-      >
+      <Dialog open={isOpen} onClose={close} fullWidth maxWidth="xl" className={classes.dialog}>
         <div className={classes.variantPreviewsContainer}>
           {test.variants.map(variant => (
             <div
