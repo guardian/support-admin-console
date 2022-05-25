@@ -46,7 +46,3 @@ trait ChannelTest[T] {
 }
 
 case class ChannelTests[T : Decoder : Encoder](tests: List[T])
-
-object ChannelTests {
-  implicit def encoder[T : Decoder : Encoder] = Encoder[ChannelTests[T]]
-}

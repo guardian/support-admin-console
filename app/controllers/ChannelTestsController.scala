@@ -66,7 +66,8 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
     */
   def get = authAction.async { request =>
     runWithLockStatus { case VersionedS3Data(lockStatus, _) =>
-      dynamo.getAllTests[T](channel)
+      dynamo
+        .getAllTests[T](channel)
         .map { channelTests =>
           val response = LockableS3ObjectResponse(
             ChannelTests(channelTests),
