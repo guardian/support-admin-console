@@ -92,12 +92,8 @@ case class EpicTest(
   override def withPriority(priority: Int): EpicTest = this.copy(priority = Some(priority))
 }
 
-case class EpicTests(tests: List[EpicTest]) extends ChannelTests[EpicTest]
-
-object EpicTests {
+object EpicTest {
   implicit val customConfig: Configuration = Configuration.default.withDefaults
   implicit val epicTestDecoder = Decoder[EpicTest]
   implicit val epicTestEncoder = Encoder[EpicTest]
-  implicit val epicTestsDecoder = Decoder[EpicTests]
-  implicit val epicTestsEncoder = Encoder[EpicTests]
 }

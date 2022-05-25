@@ -2,7 +2,7 @@ package controllers
 
 import com.gu.googleauth.AuthAction
 import models.HeaderTest
-import models.HeaderTests._
+import models.HeaderTest._
 import play.api.libs.ws.WSClient
 import play.api.mvc.{AnyContent, ControllerComponents}
 import zio.ZEnv

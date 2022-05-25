@@ -1,47 +1,42 @@
 package controllers
 
 import com.gu.googleauth.AuthAction
-import controllers.LockableS3ObjectController.LockableS3ObjectResponse
+import controllers.ChannelTestsController.LockableS3ObjectResponse
 import io.circe.{Decoder, Encoder}
 import io.circe.syntax._
 import io.circe.generic.auto._
-import models.{ChannelTests, LockStatus}
+import models.{Channel, ChannelTest, ChannelTests, LockStatus}
 import play.api.libs.circe.Circe
 import play.api.mvc._
-import services.DynamoChannelTests.DynamoError
 import services.S3Client.{S3ClientError, S3ObjectSettings}
-import services.{FastlyPurger, S3Json, VersionedS3Data}
+import services.{DynamoChannelTests, S3Json, VersionedS3Data}
 import utils.Circe.noNulls
 import zio.{IO, ZEnv, ZIO}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-object LockableS3ObjectController {
+object ChannelTestsController {
   // The model returned by this controller for GET requests
   case class LockableS3ObjectResponse[T](value: T, version: String, status: LockStatus, userEmail: String)
 }
 
 /**
-  * Controller for managing JSON data in a single object in S3, with lock protection to prevent concurrent editing:
+  * Controller for managing channel tests config in Dynamodb.
+  * Uses an S3 file for lock protection to prevent concurrent editing.
   */
-abstract class LockableS3ObjectController[CT <: ChannelTests[_] : Decoder : Encoder](
+abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
   authAction: AuthAction[AnyContent],
   components: ControllerComponents,
   stage: String,
-  name: String,
-  dataObjectSettings: S3ObjectSettings,
-  fastlyPurger: Option[FastlyPurger],
+  lockFileName: String,
+  channel: Channel,
   runtime: zio.Runtime[ZEnv],
-  /**
-    * During the migration we write to dynamo at the same time as S3.
-    * But we still read from S3, which is the source of truth for now.
-    */
-  dynamoWrite: CT => ZIO[ZEnv, DynamoError, Unit],
+  dynamo: DynamoChannelTests
 )(implicit ec: ExecutionContext) extends AbstractController(components) with Circe {
 
   private val lockObjectSettings = S3ObjectSettings(
     bucket = "support-admin-console",
-    key = s"$stage/locks/$name.lock",
+    key = s"$stage/locks/$lockFileName.lock",
     publicRead = false,
     cacheControl = None
   )
@@ -71,11 +66,15 @@ abstract class LockableS3ObjectController[CT <: ChannelTests[_] : Decoder : Enco
     */
   def get = authAction.async { request =>
     runWithLockStatus { case VersionedS3Data(lockStatus, _) =>
-      S3Json
-        .getFromJson[CT](s3Client)
-        .apply(dataObjectSettings)
-        .map { case VersionedS3Data(value, version) =>
-          Ok(noNulls(LockableS3ObjectResponse(value, version, lockStatus, request.user.email).asJson))
+      dynamo.getAllTests[T](channel)
+        .map { channelTests =>
+          val response = LockableS3ObjectResponse(
+            ChannelTests(channelTests),
+            "versioning-deprecated",
+            lockStatus,
+            request.user.email
+          )
+          Ok(noNulls(response.asJson))
         }
     }
   }
@@ -84,30 +83,24 @@ abstract class LockableS3ObjectController[CT <: ChannelTests[_] : Decoder : Enco
     * Updates the file in s3 if the user currently has a lock on the file, and releases the lock if successful.
     * The POSTed json is validated against the model.
     */
-  def set = authAction.async(circe.json[VersionedS3Data[CT]]) { request =>
+  def set = authAction.async(circe.json[VersionedS3Data[ChannelTests[T]]]) { request =>
     runWithLockStatus { case VersionedS3Data(lockStatus, lockFileVersion) =>
       if (lockStatus.email.contains(request.user.email)) {
+
+        val tests = request.body.value.tests
         val result = for {
-          _ <- S3Json.updateAsJson(request.body)(s3Client).apply(dataObjectSettings)
-          _ <- dynamoWrite(request.body.value)
+          _ <- dynamo.replaceChannelTests(tests, channel)
           _ <- setLockStatus(VersionedS3Data(LockStatus.unlocked, lockFileVersion))
         } yield ()
 
         result
-          .flatMap { _ =>
-            // Even if purging fails, we have successfully published the change
-            logger.info(s"Successfully published ${dataObjectSettings.key} (user ${request.user.email}")
-
-            fastlyPurger
-              .map(_.purge.map(_ => Ok("updated")))
-              .getOrElse(IO.succeed(Ok("updated")))
-          }
+          .map(_ => Ok("updated"))
           .mapError { error =>
-            logger.error(s"Failed to publish ${dataObjectSettings.key} (user ${request.user.email}: $error")
+            logger.error(s"Failed to publish $channel tests (user ${request.user.email}: $error")
             error
           }
       } else {
-        IO.succeed(Conflict(s"You do not currently have ${dataObjectSettings.key} open for edit"))
+        IO.succeed(Conflict(s"You do not currently have $channel open for edit"))
       }
     }
   }
@@ -121,12 +114,12 @@ abstract class LockableS3ObjectController[CT <: ChannelTests[_] : Decoder : Enco
         val newLockStatus = LockStatus.locked(request.user.email)
 
         setLockStatus(VersionedS3Data(newLockStatus, lockFileVersion)).map { _ =>
-          logger.info(s"User ${request.user.email} took control of ${dataObjectSettings.key}")
+          logger.info(s"User ${request.user.email} took control of $channel")
           Ok("locked")
         }
       } else {
-        logger.info(s"User ${request.user.email} failed to take control of ${dataObjectSettings.key} because it was already locked")
-        IO.succeed(Conflict(s"File ${dataObjectSettings.key} is already locked"))
+        logger.info(s"User ${request.user.email} failed to take control of $channel because it was already locked")
+        IO.succeed(Conflict(s"File $channel is already locked"))
       }
     }
   }
@@ -138,12 +131,12 @@ abstract class LockableS3ObjectController[CT <: ChannelTests[_] : Decoder : Enco
     runWithLockStatus { case VersionedS3Data(lockStatus, lockFileVersion) =>
       if (lockStatus.email.contains(request.user.email)) {
         setLockStatus(VersionedS3Data(LockStatus.unlocked, lockFileVersion)) map { _ =>
-          logger.info(s"User ${request.user.email} unlocked ${dataObjectSettings.key}")
+          logger.info(s"User ${request.user.email} unlocked $channel")
           Ok("unlocked")
         }
       } else {
-        logger.info(s"User ${request.user.email} tried to unlock ${dataObjectSettings.key}, but they did not have a lock")
-        IO.succeed(BadRequest(s"File ${dataObjectSettings.key} is not currently locked by this user"))
+        logger.info(s"User ${request.user.email} tried to unlock $channel, but they did not have a lock")
+        IO.succeed(BadRequest(s"File $channel is not currently locked by this user"))
       }
     }
   }
@@ -151,7 +144,7 @@ abstract class LockableS3ObjectController[CT <: ChannelTests[_] : Decoder : Enco
   def takecontrol = authAction.async { request =>
      runWithLockStatus { case VersionedS3Data(lockStatus, lockFileVersion) =>
       setLockStatus(VersionedS3Data(LockStatus.locked(request.user.email), lockFileVersion)) map { _ =>
-        logger.info(s"User ${request.user.email} force-unlocked ${dataObjectSettings.key}, taking it from ${lockStatus.email}")
+        logger.info(s"User ${request.user.email} force-unlocked $channel, taking it from ${lockStatus.email}")
         Ok("unlocked")
       }
     }

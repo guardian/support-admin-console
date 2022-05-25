@@ -3,7 +3,7 @@ package controllers.banner
 import com.gu.googleauth.AuthAction
 import controllers.S3ObjectsController
 import models.BannerTest
-import models.BannerTests._
+import models.BannerTest._
 import play.api.libs.ws.WSClient
 import play.api.mvc.{AnyContent, ControllerComponents}
 import zio.ZEnv

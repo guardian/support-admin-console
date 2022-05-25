@@ -1,14 +1,12 @@
 package controllers.epic
 
 import com.gu.googleauth.AuthAction
-import controllers.LockableS3ObjectController
-import models.{Channel, EpicTests}
-import models.EpicTests._
+import controllers.ChannelTestsController
+import models.{Channel, EpicTest}
+import models.EpicTest._
 import play.api.libs.circe.Circe
-import play.api.libs.ws.WSClient
 import play.api.mvc._
 import services.DynamoChannelTests
-import services.S3Client.S3ObjectSettings
 import zio.ZEnv
 
 import scala.concurrent.ExecutionContext
@@ -20,20 +18,15 @@ object AMPEpicTestsController {
 class AMPEpicTestsController(
   authAction: AuthAction[AnyContent],
   components: ControllerComponents,
-  ws: WSClient, stage: String,
+  stage: String,
   runtime: zio.Runtime[ZEnv],
   dynamo: DynamoChannelTests
-)(implicit ec: ExecutionContext) extends LockableS3ObjectController[EpicTests](
+)(implicit ec: ExecutionContext) extends ChannelTestsController[EpicTest](
   authAction,
   components,
   stage,
-  name = AMPEpicTestsController.name,
-  dataObjectSettings = S3ObjectSettings(
-    bucket = "gu-contributions-public",
-    key = s"epic/$stage/${AMPEpicTestsController.name}.json",
-    publicRead = true
-  ),
-  fastlyPurger = None,
+  lockFileName = AMPEpicTestsController.name,
+  channel = Channel.EpicAMP,
   runtime = runtime,
-  tests => dynamo.replaceChannelTests(tests.tests, Channel.EpicAMP)
+  dynamo
 ) with Circe

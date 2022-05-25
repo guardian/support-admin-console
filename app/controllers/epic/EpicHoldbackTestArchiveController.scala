@@ -3,7 +3,7 @@ package controllers.epic
 import com.gu.googleauth.AuthAction
 import controllers.S3ObjectsController
 import models.EpicTest
-import models.EpicTests._
+import models.EpicTest._
 import play.api.libs.ws.WSClient
 import play.api.mvc.{AnyContent, ControllerComponents}
 import zio.ZEnv

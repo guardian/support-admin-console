@@ -1,12 +1,10 @@
 package controllers
 
 import com.gu.googleauth.AuthAction
-import models.{Channel, HeaderTests}
-import models.HeaderTests._
-import play.api.libs.ws.WSClient
+import models.{Channel, HeaderTest}
+import models.HeaderTest._
 import play.api.mvc.{AnyContent, ControllerComponents}
-import services.{DynamoChannelTests, FastlyPurger}
-import services.S3Client.S3ObjectSettings
+import services.DynamoChannelTests
 import zio.ZEnv
 
 import scala.concurrent.ExecutionContext
@@ -18,23 +16,15 @@ object HeaderTestsController {
 class HeaderTestsController(
   authAction: AuthAction[AnyContent],
   components: ControllerComponents,
-  ws: WSClient,
   stage: String,
   runtime: zio.Runtime[ZEnv],
   dynamo: DynamoChannelTests
-)(implicit ec: ExecutionContext) extends LockableS3ObjectController[HeaderTests](
-    authAction,
-    components,
-    stage,
-    name = HeaderTestsController.name,
-    dataObjectSettings = S3ObjectSettings(
-      bucket = "gu-contributions-public",
-      key = s"header/$stage/${HeaderTestsController.name}.json",
-      publicRead = true,  // This data will be requested by dotcom
-      cacheControl = Some("max-age=30"),
-      surrogateControl = Some("max-age=86400")  // Cache for a day, and use cache purging after updates
-    ),
-    fastlyPurger = FastlyPurger.fastlyPurger(stage, s"${HeaderTestsController.name}.json", ws),
-    runtime = runtime,
-    tests => dynamo.replaceChannelTests(tests.tests, Channel.Header)
-  )
+)(implicit ec: ExecutionContext) extends ChannelTestsController[HeaderTest](
+  authAction,
+  components,
+  stage,
+  lockFileName = HeaderTestsController.name,
+  channel = Channel.Header,
+  runtime = runtime,
+  dynamo
+)
