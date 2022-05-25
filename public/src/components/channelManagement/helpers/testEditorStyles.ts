@@ -17,6 +17,10 @@ export const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
       marginTop: spacing(2),
     },
   },
+  switchContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
   sectionContainer: {
     paddingTop: spacing(1),
     paddingBottom: spacing(6),
