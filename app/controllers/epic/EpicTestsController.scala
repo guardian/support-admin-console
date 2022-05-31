@@ -1,14 +1,12 @@
 package controllers.epic
 
 import com.gu.googleauth.AuthAction
-import controllers.LockableS3ObjectController
-import models.{Channel, EpicTest, EpicTests}
-import models.EpicTests._
+import controllers.ChannelTestsController
+import models.{Channel, EpicTest}
+import models.EpicTest._
 import play.api.libs.circe.Circe
-import play.api.libs.ws.WSClient
 import play.api.mvc._
-import services.{DynamoChannelTests, FastlyPurger}
-import services.S3Client.S3ObjectSettings
+import services.DynamoChannelTests
 import zio.ZEnv
 
 import scala.concurrent.ExecutionContext
@@ -20,22 +18,15 @@ object EpicTestsController {
 class EpicTestsController(
   authAction: AuthAction[AnyContent],
   components: ControllerComponents,
-  ws: WSClient, stage: String,
+  stage: String,
   runtime: zio.Runtime[ZEnv],
   dynamo: DynamoChannelTests
-)(implicit ec: ExecutionContext) extends LockableS3ObjectController[EpicTests](
-    authAction,
-    components,
-    stage,
-    name = EpicTestsController.name,
-    dataObjectSettings = S3ObjectSettings(
-      bucket = "gu-contributions-public",
-      key = s"epic/$stage/${EpicTestsController.name}.json",
-      publicRead = true,  // This data will be requested by dotcom
-      cacheControl = Some("max-age=30"),
-      surrogateControl = Some("max-age=86400")  // Cache for a day, and use cache purging after updates
-    ),
-    fastlyPurger = FastlyPurger.fastlyPurger(stage, s"${EpicTestsController.name}.json", ws),
-    runtime = runtime,
-    tests => dynamo.replaceChannelTests(tests.tests, Channel.Epic)
-  ) with Circe
+)(implicit ec: ExecutionContext) extends ChannelTestsController[EpicTest](
+  authAction,
+  components,
+  stage,
+  lockFileName = EpicTestsController.name,
+  channel = Channel.Epic,
+  runtime = runtime,
+  dynamo
+) with Circe

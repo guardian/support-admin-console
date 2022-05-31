@@ -36,12 +36,8 @@ case class HeaderTest(
   override def withPriority(priority: Int): HeaderTest = this.copy(priority = Some(priority))
 }
 
-case class HeaderTests(tests: List[HeaderTest]) extends ChannelTests[HeaderTest]
-
-object HeaderTests {
+object HeaderTest {
   implicit val customConfig: Configuration = Configuration.default.withDefaults
   implicit val headerTestDecoder = Decoder[HeaderTest]
   implicit val headerTestEncoder = Encoder[HeaderTest]
-  implicit val headerTestsDecoder = Decoder[HeaderTests]
-  implicit val headerTestsEncoder = Encoder[HeaderTests]
 }
