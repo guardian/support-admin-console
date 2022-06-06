@@ -7,7 +7,7 @@ import io.circe.generic.auto._
 import models.{Channel, ChannelTest, LockStatus, Status}
 import DynamoChannelTests._
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
-import software.amazon.awssdk.services.dynamodb.model.{AttributeValue, BatchWriteItemRequest, ConditionalCheckFailedException, DeleteRequest, PutItemRequest, PutRequest, QueryRequest, ReturnConsumedCapacity, TransactWriteItem, TransactWriteItemsRequest, Update, UpdateItemRequest, WriteRequest}
+import software.amazon.awssdk.services.dynamodb.model._
 import utils.Circe.{dynamoMapToJson, jsonToDynamo}
 import zio.{ZEnv, ZIO}
 import zio.blocking.effectBlocking
@@ -45,34 +45,6 @@ class DynamoChannelTests(stage: String) extends StrictLogging {
       "channel" -> AttributeValue.builder.s(channel.toString).build,
       "name" -> AttributeValue.builder.s(testName).build
     ).asJava
-
-  /**
-    * Attempts to retrieve a test from dynamodb. Fails if the test does not exist.
-    */
-  private def getTest(testName: String, channel: Channel): ZIO[ZEnv, DynamoGetError, java.util.Map[String, AttributeValue]] =
-    effectBlocking {
-      val query = QueryRequest
-        .builder
-        .tableName(tableName)
-        .keyConditionExpression("channel = :channel AND name = :name")
-        .expressionAttributeValues(
-          Map(
-            ":channel" -> AttributeValue.builder.s(channel.toString).build,
-            ":name" -> AttributeValue.builder.s(testName).build
-          ).asJava
-        )
-        .build()
-
-      client
-        .query(query)
-        .items.asScala.headOption
-
-    }.flatMap {
-      case Some(item) => ZIO.succeed(item)
-      case None => ZIO.fail(DynamoGetError(new Exception(s"Test does not exist: $channel/$testName")))
-    }.mapError(error =>
-      DynamoGetError(error)
-    )
 
   private def getAll(channel: Channel): ZIO[ZEnv, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
     effectBlocking {
@@ -279,22 +251,29 @@ class DynamoChannelTests(stage: String) extends StrictLogging {
         put(request)
       })
 
-  def lockTest(testName: String, channel: Channel, email: String): ZIO[ZEnv, DynamoError, Unit] = {
+  def lockTest(testName: String, channel: Channel, email: String, force: Boolean): ZIO[ZEnv, DynamoError, Unit] = {
     val lockStatus = LockStatus(
       locked = true,
       email = Some(email),
       timestamp = Some(OffsetDateTime.now())
     )
-    val request = UpdateItemRequest
-      .builder
-      .tableName(tableName)
-      .key(buildKey(channel, testName))
-      .updateExpression("set lockStatus = :lockStatus")
-      .expressionAttributeValues(Map(
-        ":lockStatus" -> jsonToDynamo(lockStatus.asJson)
-      ).asJava)
-      .conditionExpression("attribute_not_exists(lockStatus.email)")
-      .build()
+    val request = {
+      val builder = UpdateItemRequest
+        .builder
+        .tableName(tableName)
+        .key(buildKey(channel, testName))
+        .updateExpression("set lockStatus = :lockStatus")
+        .expressionAttributeValues(Map(
+          ":lockStatus" -> jsonToDynamo(lockStatus.asJson)
+        ).asJava)
+
+      if (!force) {
+        // Check it isn't already locked
+        builder.conditionExpression("attribute_not_exists(lockStatus.email)")
+      }
+
+      builder.build()
+    }
 
     update(request)
   }
@@ -310,18 +289,6 @@ class DynamoChannelTests(stage: String) extends StrictLogging {
       .expressionAttributeValues(Map(
         ":email" -> AttributeValue.builder.s(email).build
       ).asJava)
-      .build()
-
-    update(request)
-  }
-
-  // Removes the lockStatus attribute regardless of whether the user currently has it locked
-  def forceUnlockTest(testName: String, channel: Channel): ZIO[ZEnv, DynamoError, Unit] = {
-    val request = UpdateItemRequest
-      .builder
-      .tableName(tableName)
-      .key(buildKey(channel, testName))
-      .updateExpression("remove lockStatus")
       .build()
 
     update(request)
