@@ -48,6 +48,8 @@ GET   /frontend/epic-tests/archived-test-names      controllers.epic.EpicTestArc
 
 # ----- header tests ----- #
 GET   /frontend/header-tests                          controllers.HeaderTestsController.get
+
+# legacy header endpoints
 POST  /frontend/header-tests/update                   controllers.HeaderTestsController.set
 POST  /frontend/header-tests/lock                     controllers.HeaderTestsController.lock
 POST  /frontend/header-tests/unlock                   controllers.HeaderTestsController.unlock
@@ -55,12 +57,20 @@ POST  /frontend/header-tests/takecontrol              controllers.HeaderTestsCon
 POST  /frontend/header-tests/archive                  controllers.HeaderTestArchiveController.set
 GET   /frontend/header-tests/archive/:testName        controllers.HeaderTestArchiveController.get(testName: String)
 GET   /frontend/header-tests/archived-test-names      controllers.HeaderTestArchiveController.list
-POST  /frontend/header-tests/test/update              controllers.HeaderTestsController.updateTest
-POST  /frontend/header-tests/test/create              controllers.HeaderTestsController.createTest
-POST  /frontend/header-tests/test/lock/:testName      controllers.HeaderTestsController.lockTest(testName: String)
-POST  /frontend/header-tests/test/unlock/:testName    controllers.HeaderTestsController.unlockTest(testName: String)
-POST  /frontend/header-tests/test/takecontrol/:testName    controllers.HeaderTestsController.forceLockTest(testName: String)
-POST  /frontend/header-tests/test/archive             controllers.HeaderTestsController.archiveTests
+
+# header list endpoints
+POST  /frontend/header-tests/list/lock                  controllers.HeaderTestsController.lockList
+POST  /frontend/header-tests/list/unlock                controllers.HeaderTestsController.unlockList
+POST  /frontend/header-tests/list/takecontrol           controllers.HeaderTestsController.takeControlOfList
+POST  /frontend/header-tests/list/reorder               controllers.HeaderTestsController.reorderList
+
+# header test endpoints
+POST  /frontend/header-tests/test/update                controllers.HeaderTestsController.updateTest
+POST  /frontend/header-tests/test/create                controllers.HeaderTestsController.createTest
+POST  /frontend/header-tests/test/lock/:testName        controllers.HeaderTestsController.lockTest(testName: String)
+POST  /frontend/header-tests/test/unlock/:testName      controllers.HeaderTestsController.unlockTest(testName: String)
+POST  /frontend/header-tests/test/takecontrol/:testName controllers.HeaderTestsController.forceLockTest(testName: String)
+POST  /frontend/header-tests/test/archive               controllers.HeaderTestsController.archiveTests
 
 
 # ----- epic holdback tests ----- #

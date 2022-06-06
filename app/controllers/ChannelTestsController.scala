@@ -188,7 +188,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
     }
   }
 
-  def takecontrolOfList = authAction.async { request =>
+  def takeControlOfList = authAction.async { request =>
     runWithLockStatus { case VersionedS3Data(lockStatus, lockFileVersion) =>
       logger.info(s"User ${request.user.email} is force-unlocking $channel test list, taking it from ${lockStatus.email}")
 
