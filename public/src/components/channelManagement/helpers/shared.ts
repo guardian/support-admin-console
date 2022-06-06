@@ -18,7 +18,7 @@ export const setStatus = (isOn: boolean): Status => (isOn ? 'Live' : 'Draft');
 export interface Test {
   name: string;
   nickname?: string;
-  isOn: boolean;
+  isOn: boolean; // Deprecated and soon to be removed, use status instead
   status: Status;
   articlesViewedSettings?: ArticlesViewedSettings;
   variants: Variant[];
