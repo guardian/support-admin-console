@@ -6,7 +6,7 @@ import io.circe.syntax._
 import models.{Channel, ChannelTest}
 import DynamoChannelTests._
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
-import software.amazon.awssdk.services.dynamodb.model.{AttributeValue, BatchWriteItemRequest, DeleteRequest, PutRequest, QueryRequest, ReturnConsumedCapacity, WriteRequest}
+import software.amazon.awssdk.services.dynamodb.model.{AttributeValue, BatchWriteItemRequest, ConditionalCheckFailedException, DeleteRequest, PutRequest, QueryRequest, ReturnConsumedCapacity, UpdateItemRequest, WriteRequest}
 import utils.Circe.{dynamoMapToJson, jsonToDynamo}
 import zio.{ZEnv, ZIO}
 import zio.blocking.effectBlocking
@@ -34,6 +34,15 @@ class DynamoChannelTests(stage: String) extends StrictLogging {
     .region(Aws.region)
     .credentialsProvider(Aws.credentialsProvider.build)
     .build
+
+  def update(updateRequest: UpdateItemRequest): ZIO[ZEnv, DynamoError, Unit] =
+    effectBlocking {
+      val result = client.updateItem(updateRequest)
+      logger.info(s"UpdateItemResponse: $result")
+      ()
+    }.mapError(error =>
+      DynamoPutError(error)
+    )
 
   private def getAll(channel: Channel): ZIO[ZEnv, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
     effectBlocking {
