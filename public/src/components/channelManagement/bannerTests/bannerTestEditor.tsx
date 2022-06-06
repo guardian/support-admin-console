@@ -1,6 +1,6 @@
 import React from 'react';
 import { Region } from '../../../utils/models';
-import { ArticlesViewedSettings, DeviceType, UserCohort } from '../helpers/shared';
+import { ArticlesViewedSettings, DeviceType, setStatus, UserCohort } from '../helpers/shared';
 import { ARTICLE_COUNT_TEMPLATE } from '../helpers/validation';
 import { Typography } from '@material-ui/core';
 import BannerTestVariantEditor from './bannerTestVariantEditor';
@@ -97,7 +97,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
   ): void => updateTest({ ...test, controlProportionSettings });
 
   const onLiveSwitchChange = (isOn: boolean): void => {
-    updateTest({ ...test, isOn });
+    updateTest({ ...test, isOn, status: setStatus(isOn) });
   };
 
   const onVariantsChange = (updatedVariantList: BannerVariant[]): void => {
@@ -146,7 +146,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
 
   const onCopy = (name: string, nickname: string): void => {
     onTestSelected(name);
-    createTest({ ...test, name: name, nickname: nickname, isOn: false });
+    createTest({ ...test, name: name, nickname: nickname, isOn: false, status: 'Draft' });
   };
 
   const renderVariantEditor = (variant: BannerVariant): React.ReactElement => (

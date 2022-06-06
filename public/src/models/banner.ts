@@ -6,6 +6,7 @@ import {
   UserCohort,
   SecondaryCta,
   DeviceType,
+  Status,
 } from '../components/channelManagement/helpers/shared';
 import { Region } from '../utils/models';
 import { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';
@@ -43,6 +44,7 @@ export interface BannerTest extends Test {
   name: string;
   nickname?: string;
   isOn: boolean;
+  status: Status;
   minArticlesBeforeShowingBanner: number;
   userCohort: UserCohort;
   locations: Region[];

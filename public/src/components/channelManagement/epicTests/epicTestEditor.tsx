@@ -6,6 +6,7 @@ import {
   UserCohort,
   EpicEditorConfig,
   DeviceType,
+  setStatus,
 } from '../helpers/shared';
 import { FormControlLabel, Switch, Typography } from '@material-ui/core';
 import TestEditorHeader from '../testEditorHeader';
@@ -146,7 +147,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
   };
 
   const onLiveSwitchChange = (isOn: boolean): void => {
-    updateTest({ ...test, isOn });
+    updateTest({ ...test, isOn, status: setStatus(isOn) });
   };
 
   const updateTargetSections = (
@@ -193,7 +194,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
 
   const onCopy = (name: string, nickname: string): void => {
     onTestSelected(name);
-    createTest({ ...test, name: name, nickname: nickname, isOn: false });
+    createTest({ ...test, name: name, nickname: nickname, isOn: false, status: 'Draft' });
   };
 
   const renderVariantEditor = (variant: EpicVariant): React.ReactElement => (
