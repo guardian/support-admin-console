@@ -36,8 +36,11 @@ POST  /support-frontend/contribution-types/update   controllers.ContributionType
 GET   /support-frontend/amounts                     controllers.AmountsController.get
 POST  /support-frontend/amounts/update              controllers.AmountsController.set
 
-# ----- epic tests ----- #
+
+# ----- Epic tests ----- #
 GET   /frontend/epic-tests                          controllers.epic.EpicTestsController.get
+
+# legacy epic endpoints
 POST  /frontend/epic-tests/update                   controllers.epic.EpicTestsController.set
 POST  /frontend/epic-tests/lock                     controllers.epic.EpicTestsController.lock
 POST  /frontend/epic-tests/unlock                   controllers.epic.EpicTestsController.unlock
@@ -46,7 +49,22 @@ POST  /frontend/epic-tests/archive                  controllers.epic.EpicTestArc
 GET   /frontend/epic-tests/archive/:testName        controllers.epic.EpicTestArchiveController.get(testName: String)
 GET   /frontend/epic-tests/archived-test-names      controllers.epic.EpicTestArchiveController.list
 
-# ----- header tests ----- #
+# epic list endpoints
+POST  /frontend/epic-tests/list/lock                  controllers.epic.EpicTestsController.lockList
+POST  /frontend/epic-tests/list/unlock                controllers.epic.EpicTestsController.unlockList
+POST  /frontend/epic-tests/list/takecontrol           controllers.epic.EpicTestsController.takeControlOfList
+POST  /frontend/epic-tests/list/reorder               controllers.epic.EpicTestsController.reorderList
+
+# epic test endpoints
+POST  /frontend/epic-tests/test/update                controllers.epic.EpicTestsController.updateTest
+POST  /frontend/epic-tests/test/create                controllers.epic.EpicTestsController.createTest
+POST  /frontend/epic-tests/test/lock/:testName        controllers.epic.EpicTestsController.lockTest(testName: String)
+POST  /frontend/epic-tests/test/unlock/:testName      controllers.epic.EpicTestsController.unlockTest(testName: String)
+POST  /frontend/epic-tests/test/takecontrol/:testName controllers.epic.EpicTestsController.forceLockTest(testName: String)
+POST  /frontend/epic-tests/test/archive               controllers.epic.EpicTestsController.archiveTests
+
+
+# ----- Header tests ----- #
 GET   /frontend/header-tests                          controllers.HeaderTestsController.get
 
 # legacy header endpoints
@@ -73,8 +91,10 @@ POST  /frontend/header-tests/test/takecontrol/:testName controllers.HeaderTestsC
 POST  /frontend/header-tests/test/archive               controllers.HeaderTestsController.archiveTests
 
 
-# ----- epic holdback tests ----- #
+# ----- Epic holdback tests ----- #
 GET   /frontend/epic-holdback-tests                          controllers.epic.EpicHoldbackTestsController.get
+
+# legacy epic holdback endpoints
 POST  /frontend/epic-holdback-tests/update                   controllers.epic.EpicHoldbackTestsController.set
 POST  /frontend/epic-holdback-tests/lock                     controllers.epic.EpicHoldbackTestsController.lock
 POST  /frontend/epic-holdback-tests/unlock                   controllers.epic.EpicHoldbackTestsController.unlock
@@ -83,8 +103,25 @@ POST  /frontend/epic-holdback-tests/archive                  controllers.epic.Ep
 GET   /frontend/epic-holdback-tests/archive/:testName        controllers.epic.EpicHoldbackTestArchiveController.get(testName: String)
 GET   /frontend/epic-holdback-tests/archived-test-names      controllers.epic.EpicHoldbackTestArchiveController.list
 
-# ----- liveblog epic tests ----- #
+# epic holdback list endpoints
+POST  /frontend/epic-holdback-tests/list/lock                  controllers.epic.EpicHoldbackTestsController.lockList
+POST  /frontend/epic-holdback-tests/list/unlock                controllers.epic.EpicHoldbackTestsController.unlockList
+POST  /frontend/epic-holdback-tests/list/takecontrol           controllers.epic.EpicHoldbackTestsController.takeControlOfList
+POST  /frontend/epic-holdback-tests/list/reorder               controllers.epic.EpicHoldbackTestsController.reorderList
+
+# epic holdback test endpoints
+POST  /frontend/epic-holdback-tests/test/update                controllers.epic.EpicHoldbackTestsController.updateTest
+POST  /frontend/epic-holdback-tests/test/create                controllers.epic.EpicHoldbackTestsController.createTest
+POST  /frontend/epic-holdback-tests/test/lock/:testName        controllers.epic.EpicHoldbackTestsController.lockTest(testName: String)
+POST  /frontend/epic-holdback-tests/test/unlock/:testName      controllers.epic.EpicHoldbackTestsController.unlockTest(testName: String)
+POST  /frontend/epic-holdback-tests/test/takecontrol/:testName controllers.epic.EpicHoldbackTestsController.forceLockTest(testName: String)
+POST  /frontend/epic-holdback-tests/test/archive               controllers.epic.EpicHoldbackTestsController.archiveTests
+
+
+# ----- Liveblog epic tests ----- #
 GET   /frontend/liveblog-epic-tests                          controllers.epic.LiveblogEpicTestsController.get
+
+# legacy liveblog epic endpoints
 POST  /frontend/liveblog-epic-tests/update                   controllers.epic.LiveblogEpicTestsController.set
 POST  /frontend/liveblog-epic-tests/lock                     controllers.epic.LiveblogEpicTestsController.lock
 POST  /frontend/liveblog-epic-tests/unlock                   controllers.epic.LiveblogEpicTestsController.unlock
@@ -93,8 +130,25 @@ POST  /frontend/liveblog-epic-tests/archive                  controllers.epic.Li
 GET   /frontend/liveblog-epic-tests/archive/:testName        controllers.epic.LiveblogEpicTestArchiveController.get(testName: String)
 GET   /frontend/liveblog-epic-tests/archived-test-names      controllers.epic.LiveblogEpicTestArchiveController.list
 
+# liveblog epic list endpoints
+POST  /frontend/liveblog-epic-tests/list/lock                  controllers.epic.LiveblogEpicTestsController.lockList
+POST  /frontend/liveblog-epic-tests/list/unlock                controllers.epic.LiveblogEpicTestsController.unlockList
+POST  /frontend/liveblog-epic-tests/list/takecontrol           controllers.epic.LiveblogEpicTestsController.takeControlOfList
+POST  /frontend/liveblog-epic-tests/list/reorder               controllers.epic.LiveblogEpicTestsController.reorderList
+
+# liveblog epic test endpoints
+POST  /frontend/liveblog-epic-tests/test/update                controllers.epic.LiveblogEpicTestsController.updateTest
+POST  /frontend/liveblog-epic-tests/test/create                controllers.epic.LiveblogEpicTestsController.createTest
+POST  /frontend/liveblog-epic-tests/test/lock/:testName        controllers.epic.LiveblogEpicTestsController.lockTest(testName: String)
+POST  /frontend/liveblog-epic-tests/test/unlock/:testName      controllers.epic.LiveblogEpicTestsController.unlockTest(testName: String)
+POST  /frontend/liveblog-epic-tests/test/takecontrol/:testName controllers.epic.LiveblogEpicTestsController.forceLockTest(testName: String)
+POST  /frontend/liveblog-epic-tests/test/archive               controllers.epic.LiveblogEpicTestsController.archiveTests
+
+
 # ----- Apple News epic 'tests' ----- #
 GET   /frontend/apple-news-epic-tests                          controllers.epic.AppleNewsEpicTestsController.get
+
+# legacy Apple News epic endpoints
 POST  /frontend/apple-news-epic-tests/update                   controllers.epic.AppleNewsEpicTestsController.set
 POST  /frontend/apple-news-epic-tests/lock                     controllers.epic.AppleNewsEpicTestsController.lock
 POST  /frontend/apple-news-epic-tests/unlock                   controllers.epic.AppleNewsEpicTestsController.unlock
@@ -103,8 +157,25 @@ POST  /frontend/apple-news-epic-tests/archive                  controllers.epic.
 GET   /frontend/apple-news-epic-tests/archive/:testName        controllers.epic.AppleNewsEpicTestArchiveController.get(testName: String)
 GET   /frontend/apple-news-epic-tests/archived-test-names      controllers.epic.AppleNewsEpicTestArchiveController.list
 
+# Apple News epic list endpoints
+POST  /frontend/apple-news-epic-tests/list/lock                  controllers.epic.AppleNewsEpicTestsController.lockList
+POST  /frontend/apple-news-epic-tests/list/unlock                controllers.epic.AppleNewsEpicTestsController.unlockList
+POST  /frontend/apple-news-epic-tests/list/takecontrol           controllers.epic.AppleNewsEpicTestsController.takeControlOfList
+POST  /frontend/apple-news-epic-tests/list/reorder               controllers.epic.AppleNewsEpicTestsController.reorderList
+
+# Apple News epic test endpoints
+POST  /frontend/apple-news-epic-tests/test/update                controllers.epic.AppleNewsEpicTestsController.updateTest
+POST  /frontend/apple-news-epic-tests/test/create                controllers.epic.AppleNewsEpicTestsController.createTest
+POST  /frontend/apple-news-epic-tests/test/lock/:testName        controllers.epic.AppleNewsEpicTestsController.lockTest(testName: String)
+POST  /frontend/apple-news-epic-tests/test/unlock/:testName      controllers.epic.AppleNewsEpicTestsController.unlockTest(testName: String)
+POST  /frontend/apple-news-epic-tests/test/takecontrol/:testName controllers.epic.AppleNewsEpicTestsController.forceLockTest(testName: String)
+POST  /frontend/apple-news-epic-tests/test/archive               controllers.epic.AppleNewsEpicTestsController.archiveTests
+
+
 # ----- AMP epic 'tests' ----- #
 GET   /frontend/amp-epic-tests                          controllers.epic.AMPEpicTestsController.get
+
+# legacy AMP epic endpoints
 POST  /frontend/amp-epic-tests/update                   controllers.epic.AMPEpicTestsController.set
 POST  /frontend/amp-epic-tests/lock                     controllers.epic.AMPEpicTestsController.lock
 POST  /frontend/amp-epic-tests/unlock                   controllers.epic.AMPEpicTestsController.unlock
@@ -113,8 +184,25 @@ POST  /frontend/amp-epic-tests/archive                  controllers.epic.AMPEpic
 GET   /frontend/amp-epic-tests/archive/:testName        controllers.epic.AMPEpicTestArchiveController.get(testName: String)
 GET   /frontend/amp-epic-tests/archived-test-names      controllers.epic.AMPEpicTestArchiveController.list
 
-# ----- banner tests ----- #
+# AMP epic list endpoints
+POST  /frontend/amp-epic-tests/list/lock                  controllers.epic.AMPEpicTestsController.lockList
+POST  /frontend/amp-epic-tests/list/unlock                controllers.epic.AMPEpicTestsController.unlockList
+POST  /frontend/amp-epic-tests/list/takecontrol           controllers.epic.AMPEpicTestsController.takeControlOfList
+POST  /frontend/amp-epic-tests/list/reorder               controllers.epic.AMPEpicTestsController.reorderList
+
+# AMP epic test endpoints
+POST  /frontend/amp-epic-tests/test/update                controllers.epic.AMPEpicTestsController.updateTest
+POST  /frontend/amp-epic-tests/test/create                controllers.epic.AMPEpicTestsController.createTest
+POST  /frontend/amp-epic-tests/test/lock/:testName        controllers.epic.AMPEpicTestsController.lockTest(testName: String)
+POST  /frontend/amp-epic-tests/test/unlock/:testName      controllers.epic.AMPEpicTestsController.unlockTest(testName: String)
+POST  /frontend/amp-epic-tests/test/takecontrol/:testName controllers.epic.AMPEpicTestsController.forceLockTest(testName: String)
+POST  /frontend/amp-epic-tests/test/archive               controllers.epic.AMPEpicTestsController.archiveTests
+
+
+# ----- Banner channel 1 tests ----- #
 GET   /frontend/banner-tests                          controllers.banner.BannerTestsController.get
+
+# legacy banner endpoints
 POST  /frontend/banner-tests/update                   controllers.banner.BannerTestsController.set
 POST  /frontend/banner-tests/lock                     controllers.banner.BannerTestsController.lock
 POST  /frontend/banner-tests/unlock                   controllers.banner.BannerTestsController.unlock
@@ -123,8 +211,25 @@ POST  /frontend/banner-tests/archive                  controllers.banner.BannerT
 GET   /frontend/banner-tests/archive/:testName        controllers.banner.BannerTestArchiveController.get(testName: String)
 GET   /frontend/banner-tests/archived-test-names      controllers.banner.BannerTestArchiveController.list
 
-# ----- banner tests ----- #
+# banner list endpoints
+POST  /frontend/banner-tests/list/lock                  controllers.banner.BannerTestsController.lockList
+POST  /frontend/banner-tests/list/unlock                controllers.banner.BannerTestsController.unlockList
+POST  /frontend/banner-tests/list/takecontrol           controllers.banner.BannerTestsController.takeControlOfList
+POST  /frontend/banner-tests/list/reorder               controllers.banner.BannerTestsController.reorderList
+
+# banner test endpoints
+POST  /frontend/banner-tests/test/update                controllers.banner.BannerTestsController.updateTest
+POST  /frontend/banner-tests/test/create                controllers.banner.BannerTestsController.createTest
+POST  /frontend/banner-tests/test/lock/:testName        controllers.banner.BannerTestsController.lockTest(testName: String)
+POST  /frontend/banner-tests/test/unlock/:testName      controllers.banner.BannerTestsController.unlockTest(testName: String)
+POST  /frontend/banner-tests/test/takecontrol/:testName controllers.banner.BannerTestsController.forceLockTest(testName: String)
+POST  /frontend/banner-tests/test/archive               controllers.banner.BannerTestsController.archiveTests
+
+
+# ----- Banner channel 2 tests ----- #
 GET   /frontend/banner-tests2                          controllers.banner.BannerTestsController2.get
+
+# legacy banner endpoints
 POST  /frontend/banner-tests2/update                   controllers.banner.BannerTestsController2.set
 POST  /frontend/banner-tests2/lock                     controllers.banner.BannerTestsController2.lock
 POST  /frontend/banner-tests2/unlock                   controllers.banner.BannerTestsController2.unlock
@@ -132,6 +237,21 @@ POST  /frontend/banner-tests2/takecontrol              controllers.banner.Banner
 POST  /frontend/banner-tests2/archive                  controllers.banner.BannerTestArchiveController2.set
 GET   /frontend/banner-tests2/archive/:testName        controllers.banner.BannerTestArchiveController2.get(testName: String)
 GET   /frontend/banner-tests2/archived-test-names      controllers.banner.BannerTestArchiveController2.list
+
+# banner list endpoints
+POST  /frontend/banner-tests2/list/lock                  controllers.banner.BannerTestsController2.lockList
+POST  /frontend/banner-tests2/list/unlock                controllers.banner.BannerTestsController2.unlockList
+POST  /frontend/banner-tests2/list/takecontrol           controllers.banner.BannerTestsController2.takeControlOfList
+POST  /frontend/banner-tests2/list/reorder               controllers.banner.BannerTestsController2.reorderList
+
+# banner test endpoints
+POST  /frontend/banner-tests2/test/update                controllers.banner.BannerTestsController2.updateTest
+POST  /frontend/banner-tests2/test/create                controllers.banner.BannerTestsController2.createTest
+POST  /frontend/banner-tests2/test/lock/:testName        controllers.banner.BannerTestsController2.lockTest(testName: String)
+POST  /frontend/banner-tests2/test/unlock/:testName      controllers.banner.BannerTestsController2.unlockTest(testName: String)
+POST  /frontend/banner-tests2/test/takecontrol/:testName controllers.banner.BannerTestsController2.forceLockTest(testName: String)
+POST  /frontend/banner-tests2/test/archive               controllers.banner.BannerTestsController2.archiveTests
+
 
 # ----- banner deploys ----- #
 GET   /frontend/banner-deploy                          controllers.banner.BannerDeployController.get
