@@ -230,15 +230,16 @@ class DynamoChannelTests(stage: String) extends StrictLogging {
     update(updateRequest)
   }
 
-  private def getHighestPriority[T <: ChannelTest[T] : Decoder](channel: Channel): ZIO[ZEnv, DynamoError, Int] =
+  // Returns the value of the bottom priority test - which is the highest value, because 0 is top priority
+  private def getBottomPriority[T <: ChannelTest[T] : Decoder](channel: Channel): ZIO[ZEnv, DynamoError, Int] =
     getAllTests[T](channel)
       .map(allTests => allTests.flatMap(_.priority).max)
 
-  // Creates a new test, setting the priority to lowest
+  // Creates a new test, with bottom priority
   def createTest[T <: ChannelTest[T] : Encoder : Decoder](test: T, channel: Channel): ZIO[ZEnv, DynamoError, Unit] =
-    getHighestPriority[T](channel)
-      .flatMap(highestPriority => {
-        val priority = highestPriority + 1
+    getBottomPriority[T](channel)
+      .flatMap(bottomPriority => {
+        val priority = bottomPriority + 1
         val item = jsonToDynamo(test.withPriority(priority).asJson).m()
         val request = PutItemRequest
           .builder

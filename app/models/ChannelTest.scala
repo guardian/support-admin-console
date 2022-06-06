@@ -39,7 +39,7 @@ trait ChannelTest[T] {
   val channel: Option[Channel] // optional only for the migration
   val status: Option[Status]
   val lockStatus: Option[LockStatus]
-  val priority: Option[Int]
+  val priority: Option[Int] // 0 is top priority
 
   def withChannel(channel: Channel): T
   def withPriority(priority: Int): T
