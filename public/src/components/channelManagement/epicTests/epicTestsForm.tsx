@@ -15,6 +15,7 @@ import {
   Image,
   LIVEBLOG_EPIC_CONFIG,
   SecondaryCta,
+  Status,
   Test,
   UserCohort,
   Variant,
@@ -76,6 +77,7 @@ export interface EpicTest extends Test {
   name: string;
   nickname?: string;
   isOn: boolean;
+  status: Status;
   locations: Region[];
   tagIds: string[];
   sections: string[];

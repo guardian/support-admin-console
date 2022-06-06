@@ -4,6 +4,7 @@ import {
   Variant,
   UserCohort,
   DeviceType,
+  Status,
 } from '../components/channelManagement/helpers/shared';
 import { Region } from '../utils/models';
 import { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';
@@ -25,6 +26,7 @@ export interface HeaderTest extends Test {
   name: string;
   nickname?: string;
   isOn: boolean;
+  status: Status;
   userCohort: UserCohort;
   locations: Region[];
   variants: HeaderVariant[];

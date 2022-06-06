@@ -11,10 +11,15 @@ export type TestType = 'EPIC' | 'BANNER' | 'HEADER';
 
 export type EpicModuleName = 'ContributionsEpic' | 'ContributionsLiveblogEpic';
 
+export type Status = 'Live' | 'Draft' | 'Archived';
+
+export const setStatus = (isOn: boolean): Status => (isOn ? 'Live' : 'Draft');
+
 export interface Test {
   name: string;
   nickname?: string;
   isOn: boolean;
+  status: Status;
   articlesViewedSettings?: ArticlesViewedSettings;
   variants: Variant[];
   locations: Region[];
