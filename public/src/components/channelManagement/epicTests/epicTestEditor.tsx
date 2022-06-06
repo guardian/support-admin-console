@@ -31,6 +31,7 @@ import {
   ControlProportionSettings,
 } from '../helpers/controlProportionSettings';
 import { useStyles } from '../helpers/testEditorStyles';
+import { EpicTestPreviewButton } from './epicTestPreview';
 
 const copyHasTemplate = (test: EpicTest, template: string): boolean =>
   test.variants.some(
@@ -235,12 +236,17 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
       <div className={classes.headerAndSwitchContainer}>
         <TestEditorHeader name={test.name} nickname={test.nickname} />
 
-        <LiveSwitch
-          label="Live on Guardian.com"
-          isLive={test.isOn}
-          isDisabled={!editMode}
-          onChange={onLiveSwitchChange}
-        />
+        <div className={classes.switchContainer}>
+          <LiveSwitch
+            label="Live on Guardian.com"
+            isLive={test.isOn}
+            isDisabled={!editMode}
+            onChange={onLiveSwitchChange}
+          />
+          <div>
+            <EpicTestPreviewButton test={test} />
+          </div>
+        </div>
       </div>
 
       {epicEditorConfig.allowMultipleVariants && (
