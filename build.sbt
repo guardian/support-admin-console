@@ -11,7 +11,7 @@ val zioVersion = "1.0.14"
 
 libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.4",
-  "com.gu.play-googleauth" %% "play-v28" % "2.2.2",
+  "com.gu.play-googleauth" %% "play-v28" % "2.2.6",
   "com.gu" %% "simple-configuration-ssm" % "1.5.7",
   "software.amazon.awssdk" % "s3" % awsVersion,
   "software.amazon.awssdk" % "dynamodb" % awsVersion,
@@ -28,6 +28,12 @@ libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "3.2.10" % "test",
   "org.gnieh" %% "diffson-circe" % "4.1.1" % "test",
 )
+
+dynamoDBLocalPort := 8083
+startDynamoDBLocal := {startDynamoDBLocal.dependsOn(Test / compile).value}
+Test / testQuick := {(Test / testQuick).dependsOn(startDynamoDBLocal).evaluated}
+Test / test := {(Test / test).dependsOn(startDynamoDBLocal).value}
+Test / testOptions += {dynamoDBLocalTestCleanup.value}
 
 sources in(Compile, doc) := Seq.empty
 

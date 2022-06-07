@@ -30,15 +30,9 @@ object DynamoChannelTests {
   }
 }
 
-class DynamoChannelTests(stage: String) extends StrictLogging {
+class DynamoChannelTests(stage: String, client: DynamoDbClient) extends StrictLogging {
 
   private val tableName = s"support-admin-console-channel-tests-$stage"
-
-  private val client = DynamoDbClient
-    .builder
-    .region(Aws.region)
-    .credentialsProvider(Aws.credentialsProvider.build)
-    .build
 
   private def buildKey(channel: Channel, testName: String): java.util.Map[String, AttributeValue] =
     Map(
