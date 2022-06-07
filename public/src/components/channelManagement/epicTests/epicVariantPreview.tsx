@@ -188,7 +188,7 @@ const buildProps = (variant: EpicVariant): EpicProps => ({
 
 const useStyles = makeStyles(({}: Theme) => ({
   container: {
-    maxWidth: '620px',
+    width: '620px',
   },
 }));
 

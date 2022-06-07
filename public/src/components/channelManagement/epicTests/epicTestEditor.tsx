@@ -6,6 +6,7 @@ import {
   UserCohort,
   EpicEditorConfig,
   DeviceType,
+  setStatus,
 } from '../helpers/shared';
 import { FormControlLabel, Switch, Typography } from '@material-ui/core';
 import TestEditorHeader from '../testEditorHeader';
@@ -31,6 +32,7 @@ import {
   ControlProportionSettings,
 } from '../helpers/controlProportionSettings';
 import { useStyles } from '../helpers/testEditorStyles';
+import { EpicTestPreviewButton } from './epicTestPreview';
 
 const copyHasTemplate = (test: EpicTest, template: string): boolean =>
   test.variants.some(
@@ -145,7 +147,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
   };
 
   const onLiveSwitchChange = (isOn: boolean): void => {
-    updateTest({ ...test, isOn });
+    updateTest({ ...test, isOn, status: setStatus(isOn) });
   };
 
   const updateTargetSections = (
@@ -192,7 +194,7 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
 
   const onCopy = (name: string, nickname: string): void => {
     onTestSelected(name);
-    createTest({ ...test, name: name, nickname: nickname, isOn: false });
+    createTest({ ...test, name: name, nickname: nickname, isOn: false, status: 'Draft' });
   };
 
   const renderVariantEditor = (variant: EpicVariant): React.ReactElement => (
@@ -235,12 +237,17 @@ const EpicTestEditor: React.FC<EpicTestEditorProps> = ({
       <div className={classes.headerAndSwitchContainer}>
         <TestEditorHeader name={test.name} nickname={test.nickname} />
 
-        <LiveSwitch
-          label="Live on Guardian.com"
-          isLive={test.isOn}
-          isDisabled={!editMode}
-          onChange={onLiveSwitchChange}
-        />
+        <div className={classes.switchContainer}>
+          <LiveSwitch
+            label="Live on Guardian.com"
+            isLive={test.isOn}
+            isDisabled={!editMode}
+            onChange={onLiveSwitchChange}
+          />
+          <div>
+            <EpicTestPreviewButton test={test} />
+          </div>
+        </div>
       </div>
 
       {epicEditorConfig.allowMultipleVariants && (

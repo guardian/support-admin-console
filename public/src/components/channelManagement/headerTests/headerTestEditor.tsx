@@ -1,7 +1,7 @@
 import React from 'react';
 import { Region } from '../../../utils/models';
 
-import { DeviceType, UserCohort } from '../helpers/shared';
+import { DeviceType, setStatus, UserCohort } from '../helpers/shared';
 
 import { Typography } from '@material-ui/core';
 import HeaderTestVariantEditor from './headerTestVariantEditor';
@@ -64,7 +64,7 @@ const HeaderTestEditor: React.FC<HeaderTestEditorProps> = ({
   ): void => updateTest({ ...test, controlProportionSettings });
 
   const onLiveSwitchChange = (isOn: boolean): void => {
-    updateTest({ ...test, isOn });
+    updateTest({ ...test, isOn, status: setStatus(isOn) });
   };
 
   const onVariantsChange = (updatedVariantList: HeaderVariant[]): void => {
@@ -97,7 +97,7 @@ const HeaderTestEditor: React.FC<HeaderTestEditorProps> = ({
 
   const onCopy = (name: string, nickname: string): void => {
     onTestSelected(name);
-    createTest({ ...test, name: name, nickname: nickname, isOn: false });
+    createTest({ ...test, name: name, nickname: nickname, isOn: false, status: 'Draft' });
   };
 
   const renderVariantEditor = (variant: HeaderVariant): React.ReactElement => (
