@@ -29,6 +29,7 @@ libraryDependencies ++= Seq(
   "org.gnieh" %% "diffson-circe" % "4.1.1" % "test",
 )
 
+dynamoDBLocalPort := 8083
 startDynamoDBLocal := {startDynamoDBLocal.dependsOn(Test / compile).value}
 Test / testQuick := {(Test / testQuick).dependsOn(startDynamoDBLocal).evaluated}
 Test / test := {(Test / test).dependsOn(startDynamoDBLocal).value}
