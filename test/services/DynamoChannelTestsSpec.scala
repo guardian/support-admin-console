@@ -19,7 +19,7 @@ class DynamoChannelTestsSpec extends AnyFlatSpec with Matchers {
     .builder
     .region(Aws.region)
     .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create("id", "secret")))
-    .endpointOverride(new URI("http://localhost:8000"))
+    .endpointOverride(new URI("http://localhost:8083"))
     .build
 
   private val dynamo = new DynamoChannelTests(stage, client)
