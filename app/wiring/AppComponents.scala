@@ -11,7 +11,8 @@ import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.mvc.AnyContent
 import play.api.{BuiltInComponentsFromContext, NoHttpFiltersComponents}
 import router.Routes
-import services.{CapiService, DynamoChannelTests, S3}
+import services.{Aws, CapiService, DynamoChannelTests, S3}
+import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.s3.model.GetObjectRequest
 
 class AppComponents(context: Context, stage: String) extends BuiltInComponentsFromContext(context) with AhcWSComponents with NoHttpFiltersComponents with AssetsComponents {
@@ -55,7 +56,13 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
 
   val capiService = new CapiService(configuration.get[String]("capi.apiKey"), wsClient)
 
-  val dynamoTestsService = new DynamoChannelTests(stage)
+  val dynamoClient = DynamoDbClient
+    .builder
+    .region(Aws.region)
+    .credentialsProvider(Aws.credentialsProvider.build)
+    .build
+
+  val dynamoTestsService = new DynamoChannelTests(stage, dynamoClient)
 
   override lazy val router: Router = new Routes(
     httpErrorHandler,
