@@ -1,7 +1,7 @@
 package services
 
 import models.{Channel, EpicTest, Status}
-import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 import software.amazon.awssdk.auth.credentials.{AwsBasicCredentials, StaticCredentialsProvider}
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
@@ -10,7 +10,7 @@ import software.amazon.awssdk.services.dynamodb.model.{AttributeDefinition, Bill
 
 import java.net.URI
 
-class DynamoChannelTestsSpec extends AnyFlatSpec with Matchers {
+class DynamoChannelTestsSpec extends AsyncFlatSpec with Matchers {
   private val stage = "TEST"
   private val runtime = zio.Runtime.default
 
@@ -60,18 +60,18 @@ class DynamoChannelTestsSpec extends AnyFlatSpec with Matchers {
   )
 
   it should "create and then fetch epic tests" in {
-    val result = runtime.unsafeRunSync {
+    val result = runtime.unsafeRunToFuture {
       for {
         _ <- dynamo.replaceChannelTests(epicTests, Channel.Epic)
         tests <- dynamo.getAllTests(Channel.Epic)
       } yield tests
 
     }
-    result.toEither should be(Right(epicTests))
+    result.map(tests => tests should be(epicTests))
   }
 
   it should "create and then delete epic tests" in {
-    val result = runtime.unsafeRunSync {
+    val result = runtime.unsafeRunToFuture {
       for {
         _ <- dynamo.replaceChannelTests(epicTests, Channel.Epic)
         _ <- dynamo.deleteTests(epicTests.map(_.name), Channel.Epic)
@@ -79,6 +79,6 @@ class DynamoChannelTestsSpec extends AnyFlatSpec with Matchers {
       } yield tests
 
     }
-    result.toEither should be(Right(Nil))
+    result.map(tests => tests should be(Nil))
   }
 }
