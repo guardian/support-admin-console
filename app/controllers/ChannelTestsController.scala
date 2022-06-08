@@ -205,10 +205,9 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
         val result = for {
           _ <- dynamo.setPriorities(testNames, channel)
           _ <- setLockStatus(VersionedS3Data(LockStatus.unlocked, lockFileVersion))
-        } yield ()
+        } yield Ok("updated")
 
         result
-          .map(_ => Ok("updated"))
           .mapError { error =>
             logger.error(s"Failed to update $channel test list (user ${request.user.email}: $error")
             error
