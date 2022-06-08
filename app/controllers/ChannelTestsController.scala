@@ -12,7 +12,7 @@ import services.DynamoChannelTests.DynamoNoLockError
 import services.S3Client.{S3ClientError, S3ObjectSettings}
 import services.{DynamoChannelTests, S3Json, VersionedS3Data}
 import utils.Circe.noNulls
-import zio.{IO, ZEnv, ZIO}
+import zio.{IO, UIO, ZEnv, ZIO}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -101,10 +101,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
 
         result
           .map(_ => Ok("updated"))
-          .mapError { error =>
-            logger.error(s"Failed to publish $channel tests (user ${request.user.email}: $error")
-            error
-          }
+          .tapError(error => UIO(logger.error(s"Failed to publish $channel tests (user ${request.user.email}: $error")))
       } else {
         IO.succeed(Conflict(s"You do not currently have $channel open for edit"))
       }
@@ -207,11 +204,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
           _ <- setLockStatus(VersionedS3Data(LockStatus.unlocked, lockFileVersion))
         } yield Ok("updated")
 
-        result
-          .mapError { error =>
-            logger.error(s"Failed to update $channel test list (user ${request.user.email}: $error")
-            error
-          }
+        result.tapError(error => UIO(logger.error(s"Failed to update $channel test list (user ${request.user.email}: $error")))
       } else {
         IO.succeed(Conflict(s"You do not currently have $channel test list open for edit"))
       }
