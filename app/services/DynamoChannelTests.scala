@@ -194,7 +194,8 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends StrictLo
     */
   private def buildUpdateTestExpression(item: Map[String, AttributeValue]): String = {
     val subExprs = item.foldLeft[List[String]](Nil) { case (acc, (key, value)) =>
-      s"$key = :$key" +: acc
+      val name = if (key == "status") "#status" else key // status is a reserved word, so we alias with #
+      s"$name = :$key" +: acc
     }
     s"set ${subExprs.mkString(", ")} remove lockStatus" // Unlock the test at the same time
   }
@@ -218,6 +219,9 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends StrictLo
       .key(buildKey(channel, test.name))
       .updateExpression(updateExpression)
       .expressionAttributeValues(attributeValuesWithEmail.asJava)
+      .expressionAttributeNames(Map(
+        "#status" -> "status"
+      ).asJava)
       .conditionExpression("lockStatus.email = :email")
       .build()
 
@@ -227,7 +231,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends StrictLo
   // Returns the value of the bottom priority test - which is the highest value, because 0 is top priority
   private def getBottomPriority[T <: ChannelTest[T] : Decoder](channel: Channel): ZIO[ZEnv, DynamoError, Int] =
     getAllTests[T](channel)
-      .map(allTests => allTests.flatMap(_.priority).max)
+      .map(allTests => allTests.flatMap(_.priority).maxOption.getOrElse(0))
 
   // Creates a new test, with bottom priority
   def createTest[T <: ChannelTest[T] : Encoder : Decoder](test: T, channel: Channel): ZIO[ZEnv, DynamoError, Unit] =
@@ -289,7 +293,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends StrictLo
     update(request)
   }
 
-  private def deleteTests(testNames: List[String], channel: Channel): ZIO[ZEnv, DynamoPutError, Unit] = {
+  def deleteTests(testNames: List[String], channel: Channel): ZIO[ZEnv, DynamoPutError, Unit] = {
     val deleteRequests = testNames.map { testName =>
       WriteRequest
         .builder
@@ -331,7 +335,10 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends StrictLo
             .builder
             .tableName(tableName)
             .key(buildKey(channel, testName))
-            .expressionAttributeValues(Map(":priority" -> AttributeValue.builder.n(priority.toString).build).asJava)
+            .expressionAttributeValues(Map(
+              ":priority" -> AttributeValue.builder.n(priority.toString).build,
+              ":name" -> AttributeValue.builder.s(testName).build
+            ).asJava)
             .expressionAttributeNames(Map("#name" -> "name").asJava)
             .updateExpression("SET priority = :priority")
             .conditionExpression("#name = :name") // only update if it already exists in the table
