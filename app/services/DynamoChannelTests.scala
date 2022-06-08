@@ -57,9 +57,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends StrictLo
           .filterExpression("#status <> :archived")
           .build()
       ).items
-    }.mapError(error =>
-      DynamoGetError(error)
-    )
+    }.mapError(DynamoGetError)
 
   // Sends a batch of write requests, and returns any unprocessed items
   private def putAll(writeRequests: List[WriteRequest]): ZIO[ZEnv, DynamoPutError, List[WriteRequest]] =
@@ -79,18 +77,14 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends StrictLo
         .map(items => items.asScala.toList)
         .getOrElse(Nil)
 
-    }.mapError(error =>
-      DynamoPutError(error)
-    )
+    }.mapError(DynamoPutError)
 
   private def put(putRequest: PutItemRequest): ZIO[ZEnv, DynamoPutError, Unit] =
     effectBlocking {
       val result = client.putItem(putRequest)
       logger.info(s"PutItemResponse: $result")
       ()
-    }.mapError(error =>
-      DynamoPutError(error)
-    )
+    }.mapError(DynamoPutError)
 
   private def update(updateRequest: UpdateItemRequest): ZIO[ZEnv, DynamoError, Unit] =
     effectBlocking {
@@ -112,9 +106,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends StrictLo
       val result = client.transactWriteItems(request)
       logger.info(s"TransactWriteItemsResponse: $result")
       ()
-    }.mapError(error =>
-      DynamoPutError(error)
-    )
+    }.mapError(DynamoPutError)
 
   /**
     * Dynamodb limits us to batches of 25 items, and may return unprocessed items in the response.
