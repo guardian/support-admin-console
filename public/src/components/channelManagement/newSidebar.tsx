@@ -62,6 +62,7 @@ interface SidebarProps<T extends Test> {
   requestTestListTakeControl: () => void;
   testListLockStatus: LockStatus;
   userHasTestListLocked: boolean;
+  savingTestList: boolean;
 }
 
 function Sidebar<T extends Test>({
@@ -77,6 +78,7 @@ function Sidebar<T extends Test>({
   requestTestListTakeControl,
   testListLockStatus,
   userHasTestListLocked,
+  savingTestList,
 }: SidebarProps<T>): React.ReactElement<SidebarProps<T>> {
   const classes = useStyles();
   const [regionFilter, setRegionFilter] = useState<RegionsAndAll>('ALL');
@@ -111,9 +113,11 @@ function Sidebar<T extends Test>({
             size="medium"
             startIcon={<SaveIcon />}
             className={classes.reorderListButton}
-            onClick={onTestListOrderSave}
+            onClick={savingTestList ? () => {} : onTestListOrderSave }
           >
-            <Typography className={classes.buttonText}>Save order</Typography>
+            <Typography className={classes.buttonText}>
+              {savingTestList ? 'Saving order...' : 'Save order'}
+            </Typography>
           </Button>
           <Typography className={classes.header}>EDITING: tests in priority order</Typography>
         </>
@@ -135,15 +139,15 @@ function Sidebar<T extends Test>({
         }
 
         { !testListLockStatus.locked &&
-        <Button
-          variant="outlined"
-          size="medium"
-          startIcon={<EditIcon/>}
-          className={classes.reorderListButton}
-          onClick={requestTestListLock}
-        >
-          <Typography className={classes.buttonText}>Reorder test list</Typography>
-        </Button>
+          <Button
+            variant="outlined"
+            size="medium"
+            startIcon={<EditIcon/>}
+            className={classes.reorderListButton}
+            onClick={requestTestListLock}
+          >
+            <Typography className={classes.buttonText}>Reorder test list</Typography>
+          </Button>
         }
 
         {

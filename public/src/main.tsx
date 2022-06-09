@@ -12,7 +12,7 @@ import {
   LiveblogEpicTestsForm,
   AppleNewsEpicTestsForm,
   AMPEpicTestsForm,
-} from './components/channelManagement/epicTests/epicTestsForm';
+} from './components/channelManagement/epicTests/epicTestsFormNew';
 import {
   BannerTestsForm1,
   BannerTestsForm2,

@@ -74,6 +74,7 @@ export const TestsForm = <T extends Test>(
     const [selectedTestName, setSelectedTestName] = useState<string | null>(null);
     const [testListLockStatus, setTestListLockStatus] = useState<LockStatus>({ locked: false });
     const [email, setEmail] = useState<string>('');
+    const [savingTestList, setSavingTestList] = useState<boolean>(false);
 
     const fetchTests = (): void => {
       fetchFrontendSettings(settingsType).then((serverData: DataFromServer<T>) => {
@@ -204,18 +205,18 @@ export const TestsForm = <T extends Test>(
     };
 
     const onTestListOrderSave = (): void => {
-      if (tests) {
-        saveTestListOrder(settingsType, tests.map(test => test.name))
-          .then(resp => {
-            if (!resp.ok) {
-              resp.text().then(msg => alert(msg));
-            }
-          })
-          .catch(() => {
-            alert('Error while saving');
-          })
-          .then(_ => fetchTests());
-      }
+      setSavingTestList(true);
+      saveTestListOrder(settingsType, tests.map(test => test.name))
+        .then(resp => {
+          if (!resp.ok) {
+            resp.text().then(msg => alert(msg));
+          }
+        })
+        .catch(() => {
+          alert('Error while saving');
+        })
+        .then(_ => fetchTests())
+        .then(_ => setSavingTestList(false));
     }
 
     const requestTestListLock = (): void => {
@@ -247,6 +248,7 @@ export const TestsForm = <T extends Test>(
             requestTestListTakeControl={requestTestListTakeControl}
             testListLockStatus={testListLockStatus}
             userHasTestListLocked={testListLockStatus.email === email}
+            savingTestList={savingTestList}
           />
         </div>
 

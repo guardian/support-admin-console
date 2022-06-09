@@ -21,6 +21,7 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
     paddingTop: spacing(1),
     backgroundColor: palette.grey[200],
     borderBottom: `1px solid ${palette.grey[500]}`,
+    marginBottom: spacing(1),
   },
   namesContainer: {
     display: 'flex',
@@ -33,12 +34,6 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   secondaryHeader: {
     fontSize: '14px',
     color: palette.grey[700],
-  },
-  button: {
-
-  },
-  buttonText: {
-
   },
   lockContainer: {
     alignSelf: 'flex-end',
@@ -106,10 +101,9 @@ const TestEditorHeader: React.FC<TestEditorHeaderProps> = ({
               variant="outlined"
               size="medium"
               startIcon={<EditIcon/>}
-              className={classes.button}
               onClick={() => onTestLock(name, false)}
             >
-              <Typography className={classes.buttonText}>Edit test</Typography>
+              <Typography>Edit test</Typography>
             </Button>
           </>
         }
@@ -123,10 +117,9 @@ const TestEditorHeader: React.FC<TestEditorHeaderProps> = ({
               variant="outlined"
               size="medium"
               startIcon={<LockIcon />}
-              className={classes.button}
               onClick={() => onTestLock(name, true)}
             >
-              <Typography className={classes.buttonText}>Take control</Typography>
+              <Typography>Take control</Typography>
             </Button>
           </>
         }
@@ -137,19 +130,17 @@ const TestEditorHeader: React.FC<TestEditorHeaderProps> = ({
               variant="outlined"
               size="medium"
               startIcon={<CloseIcon />}
-              className={classes.button}
               onClick={() => onTestUnlock(name)}
             >
-              <Typography className={classes.buttonText}>Discard</Typography>
+              <Typography>Discard</Typography>
             </Button>
             <Button
               variant="outlined"
               size="medium"
               startIcon={<SaveIcon />}
-              className={classes.button}
               onClick={() => onTestSave(name)}
             >
-              <Typography className={classes.buttonText}>Save test</Typography>
+              <Typography>Save test</Typography>
             </Button>
           </>
         }
