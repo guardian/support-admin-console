@@ -56,6 +56,7 @@ POST  /frontend/epic-tests/list/takecontrol           controllers.epic.EpicTests
 POST  /frontend/epic-tests/list/reorder               controllers.epic.EpicTestsController.reorderList
 
 # epic test endpoints
+GET   /frontend/epic-tests/test/:testName             controllers.epic.EpicTestsController.getTest(testName: String)
 POST  /frontend/epic-tests/test/update                controllers.epic.EpicTestsController.updateTest
 POST  /frontend/epic-tests/test/create                controllers.epic.EpicTestsController.createTest
 POST  /frontend/epic-tests/test/lock/:testName        controllers.epic.EpicTestsController.lockTest(testName: String)
@@ -111,6 +112,7 @@ POST  /frontend/epic-holdback-tests/list/takecontrol           controllers.epic.
 POST  /frontend/epic-holdback-tests/list/reorder               controllers.epic.EpicHoldbackTestsController.reorderList
 
 # epic holdback test endpoints
+GET   /frontend/epic-holdback-tests/test/:testName             controllers.epic.EpicHoldbackTestsController.getTest(testName: String)
 POST  /frontend/epic-holdback-tests/test/update                controllers.epic.EpicHoldbackTestsController.updateTest
 POST  /frontend/epic-holdback-tests/test/create                controllers.epic.EpicHoldbackTestsController.createTest
 POST  /frontend/epic-holdback-tests/test/lock/:testName        controllers.epic.EpicHoldbackTestsController.lockTest(testName: String)
@@ -138,6 +140,7 @@ POST  /frontend/liveblog-epic-tests/list/takecontrol           controllers.epic.
 POST  /frontend/liveblog-epic-tests/list/reorder               controllers.epic.LiveblogEpicTestsController.reorderList
 
 # liveblog epic test endpoints
+GET   /frontend/liveblog-epic-tests/test/:testName             controllers.epic.LiveblogEpicTestsController.getTest(testName: String)
 POST  /frontend/liveblog-epic-tests/test/update                controllers.epic.LiveblogEpicTestsController.updateTest
 POST  /frontend/liveblog-epic-tests/test/create                controllers.epic.LiveblogEpicTestsController.createTest
 POST  /frontend/liveblog-epic-tests/test/lock/:testName        controllers.epic.LiveblogEpicTestsController.lockTest(testName: String)
@@ -165,6 +168,7 @@ POST  /frontend/apple-news-epic-tests/list/takecontrol           controllers.epi
 POST  /frontend/apple-news-epic-tests/list/reorder               controllers.epic.AppleNewsEpicTestsController.reorderList
 
 # Apple News epic test endpoints
+GET   /frontend/apple-news-epic-tests/test/:testName             controllers.epic.AppleNewsEpicTestsController.getTest(testName: String)
 POST  /frontend/apple-news-epic-tests/test/update                controllers.epic.AppleNewsEpicTestsController.updateTest
 POST  /frontend/apple-news-epic-tests/test/create                controllers.epic.AppleNewsEpicTestsController.createTest
 POST  /frontend/apple-news-epic-tests/test/lock/:testName        controllers.epic.AppleNewsEpicTestsController.lockTest(testName: String)
@@ -192,6 +196,7 @@ POST  /frontend/amp-epic-tests/list/takecontrol           controllers.epic.AMPEp
 POST  /frontend/amp-epic-tests/list/reorder               controllers.epic.AMPEpicTestsController.reorderList
 
 # AMP epic test endpoints
+GET   /frontend/amp-epic-tests/test/:testName             controllers.epic.AMPEpicTestsController.getTest(testName: String)
 POST  /frontend/amp-epic-tests/test/update                controllers.epic.AMPEpicTestsController.updateTest
 POST  /frontend/amp-epic-tests/test/create                controllers.epic.AMPEpicTestsController.createTest
 POST  /frontend/amp-epic-tests/test/lock/:testName        controllers.epic.AMPEpicTestsController.lockTest(testName: String)
@@ -219,6 +224,7 @@ POST  /frontend/banner-tests/list/takecontrol           controllers.banner.Banne
 POST  /frontend/banner-tests/list/reorder               controllers.banner.BannerTestsController.reorderList
 
 # banner test endpoints
+GET   /frontend/banner-tests/test/:testName             controllers.banner.BannerTestsController.getTest(testName: String)
 POST  /frontend/banner-tests/test/update                controllers.banner.BannerTestsController.updateTest
 POST  /frontend/banner-tests/test/create                controllers.banner.BannerTestsController.createTest
 POST  /frontend/banner-tests/test/lock/:testName        controllers.banner.BannerTestsController.lockTest(testName: String)
@@ -246,6 +252,7 @@ POST  /frontend/banner-tests2/list/takecontrol           controllers.banner.Bann
 POST  /frontend/banner-tests2/list/reorder               controllers.banner.BannerTestsController2.reorderList
 
 # banner test endpoints
+GET   /frontend/banner-tests2/test/:testName             controllers.banner.BannerTestsController2.getTest(testName: String)
 POST  /frontend/banner-tests2/test/update                controllers.banner.BannerTestsController2.updateTest
 POST  /frontend/banner-tests2/test/create                controllers.banner.BannerTestsController2.createTest
 POST  /frontend/banner-tests2/test/lock/:testName        controllers.banner.BannerTestsController2.lockTest(testName: String)

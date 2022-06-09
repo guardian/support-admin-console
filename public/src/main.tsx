@@ -16,7 +16,7 @@ import {
 import {
   BannerTestsForm1,
   BannerTestsForm2,
-} from './components/channelManagement/bannerTests/bannerTestsForm';
+} from './components/channelManagement/bannerTests/bannerTestsFormNew';
 
 import { HeaderTestsForm } from './components/channelManagement/headerTests/headerTestsFormNew';
 
