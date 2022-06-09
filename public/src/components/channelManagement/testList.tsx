@@ -60,7 +60,7 @@ const TestList = <T extends Test>({
                           test={test}
                           isSelected={test.name === selectedTestName}
                           isEdited={test.name === editedTestName}
-                          onClick={(): void => onTestSelected(test.name)}
+                          onClick={(): void => {}}  // Cannot select a test while reordering
                         />
                       </div>
                     )}
@@ -70,7 +70,8 @@ const TestList = <T extends Test>({
                     key={test.name}
                     test={test}
                     isSelected={test.name === selectedTestName}
-                    isEdited={test.name === editedTestName}
+                    isEdited={!!test.lockStatus?.locked}
+                    // isEdited={test.name === editedTestName}
                     onClick={(): void => onTestSelected(test.name)}
                   />
                 ),

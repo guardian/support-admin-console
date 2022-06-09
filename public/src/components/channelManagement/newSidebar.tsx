@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Button, makeStyles, Typography} from '@material-ui/core';
 import {LockStatus, Test} from './helpers/shared';
 import TestList from './testList';
@@ -10,6 +10,7 @@ import TestListSidebarFilterSelector from './testListSidebarFilterSelector';
 import { RegionsAndAll } from '../../utils/models';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
+import SaveIcon from '@material-ui/icons/Save';
 
 const useStyles = makeStyles(({palette}) => ({
   root: {
@@ -40,28 +41,27 @@ const useStyles = makeStyles(({palette}) => ({
     height: '48px',
     justifyContent: 'start',
   },
-  reorderListButtonText: {
+  buttonText: {
     fontSize: '12px',
     fontWeight: 500,
     textTransform: 'uppercase',
     letterSpacing: '1px',
-    color: palette.grey[800],
   },
 }));
 
 interface SidebarProps<T extends Test> {
   tests: T[];
   selectedTestName: string | null;
-  editedTestName: string | null;
+  // editedTestName: string | null;
   onTestPriorityChange: (newPriority: number, oldPriority: number) => void;
   onTestSelected: (testName: string) => void;
   testNamePrefix?: string;
   createTest: (name: string, nickname: string) => void;
-  isInEditMode: boolean;
-  regionFilter: RegionsAndAll;
-  setRegionFilter: (regionValue: RegionsAndAll) => void;
-  onBatchTestDelete: (batchTestNames: string[]) => void;
-  onBatchTestArchive: (batchTestNames: string[]) => void;
+  // isInEditMode: boolean;
+  // regionFilter: RegionsAndAll;
+  // setRegionFilter: (regionValue: RegionsAndAll) => void;
+  // onBatchTestDelete: (batchTestNames: string[]) => void;
+  // onBatchTestArchive: (batchTestNames: string[]) => void;
   onTestListOrderSave: () => void;
   requestTestListLock: () => void;
   requestTestListTakeControl: () => void;
@@ -71,17 +71,17 @@ interface SidebarProps<T extends Test> {
 
 function Sidebar<T extends Test>({
   tests,
-  isInEditMode,
+  // isInEditMode,
   selectedTestName,
-  editedTestName,
+  // editedTestName,
   onTestPriorityChange,
   onTestSelected,
   testNamePrefix,
   createTest,
-  regionFilter,
-  setRegionFilter,
-  onBatchTestDelete,
-  onBatchTestArchive,
+  // regionFilter,
+  // setRegionFilter,
+  // onBatchTestDelete,
+  // onBatchTestArchive,
   onTestListOrderSave,
   requestTestListLock,
   requestTestListTakeControl,
@@ -89,9 +89,10 @@ function Sidebar<T extends Test>({
   userHasTestListLocked,
 }: SidebarProps<T>): React.ReactElement<SidebarProps<T>> {
   const classes = useStyles();
+  const [regionFilter, setRegionFilter] = useState<RegionsAndAll>('ALL');
 
   const filterTests = function(testsToFilter: Test[]): Test[] {
-    if (isInEditMode || 'ALL' === regionFilter) {
+    if (userHasTestListLocked || 'ALL' === regionFilter) {
       return testsToFilter;
     }
     return testsToFilter.filter(t => t.locations.indexOf(regionFilter) >= 0);
@@ -107,57 +108,57 @@ function Sidebar<T extends Test>({
           createTest={createTest}
         />
 
-        <BatchProcessTestButton
-          // filter out live tests and any test currently being edited
-          draftTests={tests.filter(t => (!t.isOn && t.name !== selectedTestName ? true : false))}
-          onBatchTestDelete={onBatchTestDelete}
-          onBatchTestArchive={onBatchTestArchive}
-        />
+        {/*<BatchProcessTestButton*/}
+        {/*  // filter out live tests and any test currently being edited*/}
+        {/*  draftTests={tests.filter(t => (!t.isOn && t.name !== selectedTestName ? true : false))}*/}
+        {/*  onBatchTestDelete={onBatchTestDelete}*/}
+        {/*  onBatchTestArchive={onBatchTestArchive}*/}
+        {/*/>*/}
 
         { testListLockStatus.locked && userHasTestListLocked &&
-          <>
-            <Button
-              variant="outlined"
-              size="medium"
-              startIcon={<EditIcon/>}
-              className={classes.reorderListButton}
-              onClick={onTestListOrderSave}
-            >
-              <Typography className={classes.reorderListButtonText}>Save order</Typography>
-            </Button>
-            <Typography className={classes.header}>EDITING: tests in priority order</Typography>
-          </>
+        <>
+          <Button
+            variant="outlined"
+            size="medium"
+            startIcon={<SaveIcon />}
+            className={classes.reorderListButton}
+            onClick={onTestListOrderSave}
+          >
+            <Typography className={classes.buttonText}>Save order</Typography>
+          </Button>
+          <Typography className={classes.header}>EDITING: tests in priority order</Typography>
+        </>
         }
 
         { testListLockStatus.locked && !userHasTestListLocked &&
-          <>
-            <Button
-              variant="outlined"
-              size="medium"
-              startIcon={<EditIcon/>}
-              className={classes.reorderListButton}
-              onClick={requestTestListTakeControl}
-            >
-              <Typography className={classes.reorderListButtonText}>Take control</Typography>
-            </Button>
-            <Typography className={classes.header}>{testListLockStatus.email} has the test list locked</Typography>
-          </>
-        }
-
-        { !testListLockStatus.locked &&
+        <>
           <Button
             variant="outlined"
             size="medium"
             startIcon={<EditIcon/>}
             className={classes.reorderListButton}
-            onClick={requestTestListLock}
+            onClick={requestTestListTakeControl}
           >
-            <Typography className={classes.reorderListButtonText}>Reorder test list</Typography>
+            <Typography className={classes.buttonText}>Take control</Typography>
           </Button>
+          <Typography className={classes.header}>{testListLockStatus.email} has the test list locked</Typography>
+        </>
+        }
+
+        { !testListLockStatus.locked &&
+        <Button
+          variant="outlined"
+          size="medium"
+          startIcon={<EditIcon/>}
+          className={classes.reorderListButton}
+          onClick={requestTestListLock}
+        >
+          <Typography className={classes.buttonText}>Reorder test list</Typography>
+        </Button>
         }
 
         {
-          !isInEditMode &&
+          !userHasTestListLocked &&
           <TestListSidebarFilterSelector
             regionFilter={regionFilter}
             handleRegionFilterChange={setRegionFilter}
@@ -171,9 +172,9 @@ function Sidebar<T extends Test>({
         </div>
         <TestList
           tests={filterTests(tests)}
-          isInEditMode={isInEditMode}
+          isInEditMode={userHasTestListLocked}
           selectedTestName={selectedTestName}
-          editedTestName={editedTestName}
+          editedTestName={null} //TODO
           onTestPriorityChange={onTestPriorityChange}
           onTestSelected={onTestSelected}
         />

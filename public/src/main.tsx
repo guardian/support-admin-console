@@ -18,7 +18,7 @@ import {
   BannerTestsForm2,
 } from './components/channelManagement/bannerTests/bannerTestsForm';
 
-import { HeaderTestsForm } from './components/channelManagement/headerTests/headerTestsForm';
+import { HeaderTestsForm } from './components/channelManagement/headerTests/headerTestsFormNew';
 
 import { Theme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';

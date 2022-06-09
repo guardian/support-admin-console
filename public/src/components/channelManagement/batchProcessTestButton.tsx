@@ -11,7 +11,6 @@ const useStyles = makeStyles(() => ({
     borderStyle: 'dashed',
     justifyContent: 'start',
     height: '48px',
-    marginTop: '8px',
   },
   text: {
     fontSize: '12px',

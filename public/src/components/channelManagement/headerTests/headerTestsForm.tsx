@@ -30,9 +30,11 @@ const getHeaderTestsForm = (): React.FC<Props> => {
     onBatchTestArchive,
     onTestCreate,
     onTestErrorStatusChange,
-    lockStatus,
-    requestTakeControl,
-    requestLock,
+    testListLockStatus,
+    userHasTestListLocked,
+    onTestListOrderSave,
+    requestTestListTakeControl,
+    requestTestListLock,
     cancel,
     editMode,
     regionFilter,
@@ -61,6 +63,11 @@ const getHeaderTestsForm = (): React.FC<Props> => {
             setRegionFilter={setRegionFilter}
             onBatchTestDelete={onBatchTestDelete}
             onBatchTestArchive={onBatchTestArchive}
+            onTestListOrderSave={onTestListOrderSave}
+            requestTestListLock={requestTestListLock}
+            requestTestListTakeControl={requestTestListTakeControl}
+            testListLockStatus={testListLockStatus}
+            userHasTestListLocked={userHasTestListLocked}
           />
         }
         testEditor={
@@ -85,9 +92,9 @@ const getHeaderTestsForm = (): React.FC<Props> => {
         }
         selectedTestName={selectedTestName}
         editedTestName={editedTestName}
-        lockStatus={lockStatus}
-        requestTakeControl={requestTakeControl}
-        requestLock={requestLock}
+        lockStatus={testListLockStatus}
+        requestTakeControl={() => {}} // TODO
+        requestLock={() => {}}  // TODO
         save={onTestSave}
         cancel={cancel}
         editMode={editMode}

@@ -7,7 +7,7 @@ import {
   requestLock,
   requestTakeControl,
   requestUnlock,
-  archiveTest,
+  archiveTest, saveTestListOrder,
 } from '../../utils/requests';
 import { LockStatus, Test } from './helpers/shared';
 import { RegionsAndAll } from '../../utils/models';
@@ -28,9 +28,11 @@ export interface InnerComponentProps<T extends Test> {
   onTestSelected: (testName: string) => void;
   onTestErrorStatusChange: (isValid: boolean) => void;
   cancel: () => void;
-  requestTakeControl: () => void;
-  requestLock: () => void;
-  lockStatus: LockStatus;
+  requestTestListTakeControl: () => void;
+  requestTestListLock: () => void;
+  onTestListOrderSave: () => void;
+  testListLockStatus: LockStatus;
+  userHasTestListLocked: boolean;
   editMode: boolean;
   regionFilter: RegionsAndAll;
   setRegionFilter: (regionValue: RegionsAndAll) => void;
@@ -88,27 +90,30 @@ const TestEditor = <T extends Test>(
     const [selectedTestName, setSelectedTestName] = useState<string | null>(null);
     const [editedTestName, setEditedTestName] = useState<string | null>(null);
     const [editedTestIsValid, setEditedTestIsValid] = useState<boolean>(true);
-    const [lockStatus, setLockStatus] = useState<LockStatus>({ locked: false });
+    const [testListLockStatus, setTestListLockStatus] = useState<LockStatus>({ locked: false });
+    const [userHasTestListLocked, setUserHasTestListLocked] = useState<boolean>(false);
     const [saving, setSaving] = useState<boolean>(false);
 
     const [regionFilter, setRegionFilter] = useState<RegionsAndAll>('ALL');
 
-    useEditModeAlertTimer(editMode);
+    // useEditModeAlertTimer(editMode);
 
     const fetchStateFromServer = (): void => {
       fetchFrontendSettings(settingsType).then((serverData: DataFromServer<T>) => {
         const editMode = serverData.status.email === serverData.userEmail;
+        const a = serverData.value
 
         setTests(serverData.value.tests);
-        setVersion(serverData.version);
-        setEditMode(editMode);
-        setLockStatus(serverData.status);
+        // setVersion(serverData.version);
+        // setEditMode(editMode);
+        setTestListLockStatus(serverData.status);
+        setUserHasTestListLocked(serverData.status.email === serverData.userEmail);
         setEditedTestIsValid(true);
 
         if (editMode && selectedTestName) {
-          setEditedTestName(selectedTestName);
+          // setEditedTestName(selectedTestName);
         } else {
-          setEditedTestName(null);
+          // setEditedTestName(null);
         }
       });
     };
@@ -119,7 +124,7 @@ const TestEditor = <T extends Test>(
 
     const save = (updatedTests: T[]): Promise<void> => {
       const postData = {
-        version: version,
+        // version: version,
         value: {
           tests: updatedTests,
         },
@@ -173,7 +178,7 @@ const TestEditor = <T extends Test>(
       save(updatedTests).then(() => {
         setSelectedTestName(null);
         setEditedTestIsValid(true);
-        setEditedTestName(null);
+        // setEditedTestName(null);
       });
     };
 
@@ -197,7 +202,7 @@ const TestEditor = <T extends Test>(
           save(updatedTests).then(() => {
             setSelectedTestName(null);
             setEditedTestIsValid(true);
-            setEditedTestName(null);
+            // setEditedTestName(null);
           });
         }
       });
@@ -242,9 +247,9 @@ const TestEditor = <T extends Test>(
       const updatedTests = tests.map(test => (test.name === updatedTest.name ? updatedTest : test));
 
       setTests(updatedTests);
-      if (editMode) {
-        setEditedTestName(updatedTest.name);
-      }
+      // if (editMode) {
+        // setEditedTestName(updatedTest.name);
+      // }
     };
 
     const onTestErrorStatusChange = (isValid: boolean): void => {
@@ -256,7 +261,7 @@ const TestEditor = <T extends Test>(
 
       setTests(updatedTests);
       setSelectedTestName(newTest.name);
-      setEditedTestName(newTest.name);
+      // setEditedTestName(newTest.name);
       setEditedTestIsValid(true);
     };
 
@@ -274,20 +279,36 @@ const TestEditor = <T extends Test>(
     };
 
     const onSelectedTestName = (testName: string): void => {
-      if (editMode && !selectedTestName) {
+      // if (editMode && !selectedTestName) {
         // No test was previously selected, start editing this one
-        setEditedTestName(testName);
-      }
+        // setEditedTestName(testName);
+      // }
       setSelectedTestName(testName);
     };
 
-    const requestTestsLock = (): void => {
+    const onTestListOrderSave = (): void => {
+      if (tests) {
+        saveTestListOrder(settingsType, tests.map(test => test.name))
+          .then(resp => {
+            setSaving(false);
+            if (!resp.ok) {
+              resp.text().then(msg => alert(msg));
+            }
+          })
+          .catch(() => {
+            alert('Error while saving');
+          })
+          .then(fetchStateFromServer);
+      }
+    }
+
+    const requestTestListLock = (): void => {
       requestLock(settingsType).then(response =>
         response.ok ? fetchStateFromServer() : alert("Error - can't request lock!"),
       );
     };
 
-    const requestTestsTakeControl = (): void => {
+    const requestTestListTakeControl = (): void => {
       requestTakeControl(settingsType).then(response =>
         response.ok ? fetchStateFromServer() : alert("Error - can't take back control!"),
       );
@@ -311,9 +332,11 @@ const TestEditor = <T extends Test>(
               onBatchTestArchive={onBatchTestArchive}
               onTestCreate={onTestCreate}
               onTestSelected={onSelectedTestName}
-              requestTakeControl={requestTestsTakeControl}
-              requestLock={requestTestsLock}
-              lockStatus={lockStatus}
+              onTestListOrderSave={onTestListOrderSave}
+              requestTestListTakeControl={requestTestListTakeControl}
+              requestTestListLock={requestTestListLock}
+              testListLockStatus={testListLockStatus}
+              userHasTestListLocked={userHasTestListLocked}
               cancel={cancel}
               editMode={editMode}
               regionFilter={regionFilter}

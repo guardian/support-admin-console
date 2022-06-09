@@ -215,6 +215,14 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
     * Handlers for test editing
     */
 
+  def getTest(testName: String) = authAction.async { request =>
+    run {
+      dynamo
+        .getTest(testName, channel)
+        .map(test => Ok(noNulls(test.asJson)))
+    }
+  }
+
   def updateTest = authAction.async(circe.json[T]) { request =>
     run {
       val test = request.body

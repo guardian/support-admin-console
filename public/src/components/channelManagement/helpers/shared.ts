@@ -20,9 +20,11 @@ export interface Test {
   nickname?: string;
   isOn: boolean; // Deprecated and soon to be removed, use status instead
   status: Status;
+  lockStatus?: LockStatus;
   articlesViewedSettings?: ArticlesViewedSettings;
   variants: Variant[];
   locations: Region[];
+  isNew?: boolean;  // true if test has not yet been POSTed to backend
 }
 
 export interface EpicEditorConfig {

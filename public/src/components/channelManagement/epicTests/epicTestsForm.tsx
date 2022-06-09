@@ -119,9 +119,11 @@ const getEpicTestForm = (epicEditorConfig: EpicEditorConfig): React.FC<Props> =>
     onTestChange,
     onTestCreate,
     onTestPriorityChange,
-    lockStatus,
-    requestTakeControl,
-    requestLock,
+    testListLockStatus,
+    userHasTestListLocked,
+    onTestListOrderSave,
+    requestTestListTakeControl,
+    requestTestListLock,
     cancel,
     editMode,
     regionFilter,
@@ -151,6 +153,11 @@ const getEpicTestForm = (epicEditorConfig: EpicEditorConfig): React.FC<Props> =>
             setRegionFilter={setRegionFilter}
             onBatchTestDelete={onBatchTestDelete}
             onBatchTestArchive={onBatchTestArchive}
+            onTestListOrderSave={onTestListOrderSave}
+            requestTestListLock={requestTestListLock}
+            requestTestListTakeControl={requestTestListTakeControl}
+            testListLockStatus={testListLockStatus}
+            userHasTestListLocked={userHasTestListLocked}
           />
         }
         testEditor={
@@ -176,9 +183,9 @@ const getEpicTestForm = (epicEditorConfig: EpicEditorConfig): React.FC<Props> =>
         }
         selectedTestName={selectedTestName}
         editedTestName={editedTestName}
-        lockStatus={lockStatus}
-        requestTakeControl={requestTakeControl}
-        requestLock={requestLock}
+        lockStatus={testListLockStatus}
+        requestTakeControl={() => {}} // TODO
+        requestLock={() => {}}  // TODO
         save={onTestSave}
         cancel={cancel}
         editMode={editMode}

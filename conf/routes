@@ -83,6 +83,7 @@ POST  /frontend/header-tests/list/takecontrol           controllers.HeaderTestsC
 POST  /frontend/header-tests/list/reorder               controllers.HeaderTestsController.reorderList
 
 # header test endpoints
+GET   /frontend/header-tests/test/:testName             controllers.HeaderTestsController.getTest(testName: String)
 POST  /frontend/header-tests/test/update                controllers.HeaderTestsController.updateTest
 POST  /frontend/header-tests/test/create                controllers.HeaderTestsController.createTest
 POST  /frontend/header-tests/test/lock/:testName        controllers.HeaderTestsController.lockTest(testName: String)

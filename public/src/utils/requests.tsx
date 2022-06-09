@@ -44,6 +44,36 @@ function saveSettings(path: string, data: any): Promise<Response> {
   });
 }
 
+export function saveTestListOrder(settingsType: FrontendSettingsType, testNames: string[]): Promise<Response> {
+  return saveSettings(`/frontend/${settingsType}/list/reorder`, testNames);
+}
+
+export function fetchTest(settingsType: FrontendSettingsType, testName: string): Promise<any> {
+  return fetchSettings(`/frontend/${settingsType}/test/${testName}`)
+}
+
+export function lockTest(settingsType: FrontendSettingsType, testName: string, force: boolean): Promise<Response> {
+  const path = force ?
+    `/frontend/${settingsType}/test/takecontrol/${testName}` :
+    `/frontend/${settingsType}/test/lock/${testName}`;
+  return fetch(path, {
+    method: 'POST',
+  })
+}
+export function unlockTest(settingsType: FrontendSettingsType, testName: string): Promise<Response> {
+  return fetch(`/frontend/${settingsType}/test/unlock/${testName}`, {
+    method: 'POST',
+  })
+}
+export function updateTest(settingsType: FrontendSettingsType, test: any): Promise<Response> {
+  return saveSettings(`/frontend/${settingsType}/test/update`, test);
+}
+export function createTest(settingsType: FrontendSettingsType, test: any): Promise<Response> {
+  return saveSettings(`/frontend/${settingsType}/test/create`, test);
+}
+export function archiveTests(settingsType: FrontendSettingsType, testNames: string[]): Promise<Response> {
+  return saveSettings(`/frontend/${settingsType}/test/archive`, testNames);
+}
 export function requestLock(settingsType: FrontendSettingsType): Promise<Response> {
   return fetch(`/frontend/${settingsType}/lock`, {
     method: 'POST',

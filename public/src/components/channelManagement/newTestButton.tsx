@@ -7,7 +7,6 @@ import useOpenable from '../../hooks/useOpenable';
 
 const useStyles = makeStyles(() => ({
   button: {
-    borderStyle: 'dashed',
     justifyContent: 'start',
     height: '48px',
   },
