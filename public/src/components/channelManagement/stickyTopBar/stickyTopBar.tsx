@@ -1,14 +1,14 @@
 import React from 'react';
-import {Theme, Typography, makeStyles, Button} from '@material-ui/core';
+import { Theme, Typography, makeStyles, Button } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
-import StickyBottomBarDetail from '../stickyBottomBarDetail';
-import {LockStatus} from '../helpers/shared';
+import { LockStatus } from '../helpers/shared';
 import CloseIcon from '@material-ui/icons/Close';
 import SaveIcon from '@material-ui/icons/Save';
 import LockIcon from '@material-ui/icons/Lock';
-import {TestLockDetails} from './testLockDetails';
-import {TestArchiveButton} from './testArchiveButton';
-import {TestCopyButton} from './testCopyButton';
+import { TestLockDetails } from './testLockDetails';
+import { TestArchiveButton } from './testArchiveButton';
+import { TestCopyButton } from './testCopyButton';
+import { grey } from '@material-ui/core/colors';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {
@@ -21,7 +21,6 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
     paddingTop: spacing(1),
     backgroundColor: palette.grey[200],
     borderBottom: `1px solid ${palette.grey[500]}`,
-    marginBottom: spacing(1),
   },
   namesContainer: {
     display: 'flex',
@@ -42,10 +41,19 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
       marginLeft: spacing(2),
     },
   },
+  buttonText: {
+    fontSize: '14px',
+    fontWeight: 500,
+    textTransform: 'uppercase',
+    letterSpacing: '1px',
+    color: palette.grey[800],
+  },
+  icon: {
+    color: grey[700],
+  },
 }));
 
-
-interface TestEditorHeaderProps {
+interface StickyTopBarProps {
   name: string;
   nickname?: string;
   lockStatus: LockStatus;
@@ -60,7 +68,7 @@ interface TestEditorHeaderProps {
   onTestCopy: (oldName: string, newName: string, newNickname: string) => void;
 }
 
-const TestEditorHeader: React.FC<TestEditorHeaderProps> = ({
+const StickyTopBar: React.FC<StickyTopBarProps> = ({
   name,
   nickname,
   lockStatus,
@@ -73,7 +81,7 @@ const TestEditorHeader: React.FC<TestEditorHeaderProps> = ({
   onTestSave,
   onTestArchive,
   onTestCopy,
-}: TestEditorHeaderProps) => {
+}: StickyTopBarProps) => {
   const classes = useStyles();
   const mainHeader = nickname ? nickname : name;
   const secondaryHeader = nickname ? name : null;
@@ -87,7 +95,7 @@ const TestEditorHeader: React.FC<TestEditorHeaderProps> = ({
         <Typography className={classes.secondaryHeader}>{secondaryHeader}</Typography>
       </div>
       <div className={classes.lockContainer}>
-        {!userHasTestLocked && !lockStatus.locked &&
+        {!userHasTestLocked && !lockStatus.locked && (
           <>
             <TestCopyButton
               existingNames={existingNames}
@@ -100,53 +108,50 @@ const TestEditorHeader: React.FC<TestEditorHeaderProps> = ({
             <Button
               variant="outlined"
               size="medium"
-              startIcon={<EditIcon/>}
+              startIcon={<EditIcon className={classes.icon} />}
               onClick={() => onTestLock(name, false)}
             >
-              <Typography>Edit test</Typography>
+              <Typography className={classes.buttonText}>Edit test</Typography>
             </Button>
           </>
-        }
-        {!userHasTestLocked && lockStatus.locked &&
+        )}
+        {!userHasTestLocked && lockStatus.locked && (
           <>
-            <TestLockDetails
-              email={lockStatus.email}
-              timestamp={lockStatus.timestamp}
-            />
+            <TestLockDetails email={lockStatus.email} timestamp={lockStatus.timestamp} />
             <Button
               variant="outlined"
               size="medium"
-              startIcon={<LockIcon />}
+              startIcon={<LockIcon className={classes.icon} />}
               onClick={() => onTestLock(name, true)}
             >
-              <Typography>Take control</Typography>
+              <Typography className={classes.buttonText}>Take control</Typography>
             </Button>
           </>
-        }
-        {userHasTestLocked &&
+        )}
+        {userHasTestLocked && (
           <>
-            <TestArchiveButton onTestArchive={onTestArchive}/>
+            <TestArchiveButton onTestArchive={onTestArchive} />
             <Button
               variant="outlined"
               size="medium"
-              startIcon={<CloseIcon />}
+              startIcon={<CloseIcon className={classes.icon} />}
               onClick={() => onTestUnlock(name)}
             >
-              <Typography>Discard</Typography>
+              <Typography className={classes.buttonText}>Discard</Typography>
             </Button>
             <Button
               variant="outlined"
               size="medium"
-              startIcon={<SaveIcon />}
+              startIcon={<SaveIcon className={classes.icon} />}
               onClick={() => onTestSave(name)}
             >
-              <Typography>Save test</Typography>
+              <Typography className={classes.buttonText}>Save test</Typography>
             </Button>
           </>
-        }
+        )}
       </div>
     </header>
   );
 };
 
-export default TestEditorHeader;
+export default StickyTopBar;

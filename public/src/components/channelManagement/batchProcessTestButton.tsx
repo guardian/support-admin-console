@@ -38,7 +38,7 @@ const BatchProcessTestButton: React.FC<BatchProcessTestButtonProps> = ({
         startIcon={<ArchiveIcon />}
         onClick={open}
       >
-        <Typography className={classes.text}>Batch archive/delete tests</Typography>
+        <Typography className={classes.text}>Batch archive tests</Typography>
       </Button>
       <BatchProcessTestDialog
         isOpen={isOpen}

@@ -1,7 +1,7 @@
 import { Cta, SecondaryCtaType, UserCohort } from '../../helpers/shared';
 
 import { getStage } from '../../../../utils/stage';
-import {EpicTest, EpicVariant, MaxEpicViews} from '../../../../models/epic';
+import { EpicTest, EpicVariant, MaxEpicViews } from '../../../../models/epic';
 
 export const DEFAULT_MAX_EPIC_VIEWS: MaxEpicViews = {
   maxViewsCount: 4,

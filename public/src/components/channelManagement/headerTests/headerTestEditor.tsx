@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { Region } from '../../../utils/models';
 
 import { DeviceType, setStatus, UserCohort } from '../helpers/shared';
@@ -6,7 +6,7 @@ import { DeviceType, setStatus, UserCohort } from '../helpers/shared';
 import { Typography } from '@material-ui/core';
 import HeaderTestVariantEditor from './headerTestVariantEditor';
 import TestVariantsEditor from '../testVariantsEditor';
-import TestEditorHeader from '../testEditorHeader/testEditorHeaderNew';
+import StickyTopBar from '../stickyTopBar/stickyTopBar';
 
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 
@@ -19,7 +19,7 @@ import TestEditorVariantSummary from '../testEditorVariantSummary';
 import { ControlProportionSettings } from '../helpers/controlProportionSettings';
 import TestVariantsSplitEditor from '../testVariantsSplitEditor';
 import { useStyles } from '../helpers/testEditorStyles';
-import {TestEditorProps} from '../testsForm';
+import { TestEditorProps } from '../testsForm';
 
 const HeaderTestEditor: React.FC<TestEditorProps<HeaderTest>> = ({
   test,
@@ -44,7 +44,7 @@ const HeaderTestEditor: React.FC<TestEditorProps<HeaderTest>> = ({
     } else {
       alert('Test contains errors. Please fix any errors before saving.');
     }
-  }
+  };
 
   const onVariantsSplitSettingsValidationChanged = (isValid: boolean): void =>
     setValidationStatusForField('variantsSplitSettings', isValid);
@@ -127,10 +127,10 @@ const HeaderTestEditor: React.FC<TestEditorProps<HeaderTest>> = ({
 
   return (
     <div className={classes.container}>
-      <TestEditorHeader
+      <StickyTopBar
         name={test.name}
         nickname={test.nickname}
-        lockStatus={test.lockStatus || { locked: false } }
+        lockStatus={test.lockStatus || { locked: false }}
         userHasTestLocked={userHasTestLocked}
         existingNames={existingNames}
         existingNicknames={existingNicknames}

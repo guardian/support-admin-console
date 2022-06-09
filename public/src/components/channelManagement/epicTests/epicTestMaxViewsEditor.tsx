@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core';
 import { notNumberValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 import { DEFAULT_MAX_EPIC_VIEWS } from './utils/defaults';
-import {MaxEpicViews} from '../../../models/epic';
+import { MaxEpicViews } from '../../../models/epic';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {

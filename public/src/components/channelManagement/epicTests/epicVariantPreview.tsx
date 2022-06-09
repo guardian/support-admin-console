@@ -3,7 +3,7 @@ import { Theme, makeStyles } from '@material-ui/core';
 
 import { EpicModuleName, TickerSettings } from '../helpers/shared';
 import { useModule } from '../../../hooks/useModule';
-import {EpicVariant} from '../../../models/epic';
+import { EpicVariant } from '../../../models/epic';
 
 // Article count TS defs
 export interface ArticleCounts {

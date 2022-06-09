@@ -1,7 +1,7 @@
 import React from 'react';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import {SeparateArticleCount} from '../../models/epic';
+import { SeparateArticleCount } from '../../models/epic';
 
 interface VariantEditorSeparateArticleCountEditorProps {
   separateArticleCount?: SeparateArticleCount;

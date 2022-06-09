@@ -33,7 +33,7 @@ import {
 } from '../richTextEditor/richTextEditor';
 import VariantEditorSeparateArticleCountEditor from '../variantEditorSeparateArticleCountEditor';
 import { ImageEditorToggle } from '../imageEditor';
-import {EpicVariant, SeparateArticleCount} from '../../../models/epic';
+import { EpicVariant, SeparateArticleCount } from '../../../models/epic';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const getUseStyles = (shouldAddPadding: boolean) => {

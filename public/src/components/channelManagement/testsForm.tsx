@@ -1,13 +1,19 @@
-import React, {useEffect, useState} from 'react';
-import {makeStyles, Theme, Typography} from '@material-ui/core';
-import Sidebar from './newSidebar';
-import {LockStatus, Test} from './helpers/shared';
+import React, { useEffect, useState } from 'react';
+import { makeStyles, Theme, Typography } from '@material-ui/core';
+import Sidebar from './sidebar';
+import { LockStatus, Test } from './helpers/shared';
 import {
-  fetchFrontendSettings, fetchTest,
-  FrontendSettingsType, lockTest,
+  fetchFrontendSettings,
+  fetchTest,
+  FrontendSettingsType,
+  lockTest,
   requestLock,
-  requestTakeControl, updateTest,
-  saveTestListOrder, unlockTest, archiveTests, createTest
+  requestTakeControl,
+  updateTest,
+  saveTestListOrder,
+  unlockTest,
+  archiveTests,
+  createTest,
 } from '../../utils/requests';
 
 const useStyles = makeStyles(({ spacing, typography }: Theme) => ({
@@ -82,7 +88,7 @@ export const TestsForm = <T extends Test>(
         setTests(serverData.value.tests);
         setTestListLockStatus(serverData.status);
       });
-    }
+    };
 
     useEffect(() => {
       fetchTests();
@@ -99,23 +105,22 @@ export const TestsForm = <T extends Test>(
     };
 
     const refreshTest = (testName: string): Promise<void> =>
-      fetchTest(settingsType, testName)
-        .then((test: T) => onTestChange(test))
+      fetchTest<T>(settingsType, testName).then((test: T) => onTestChange(test));
 
     const onTestLock = (testName: string, force: boolean): void => {
       lockTest(settingsType, testName, force)
         .then(() => refreshTest(testName))
         .catch(error => {
-          alert(`Error while locking test: ${error}`)
-        })
-    }
+          alert(`Error while locking test: ${error}`);
+        });
+    };
     const onTestUnlock = (testName: string): void => {
       unlockTest(settingsType, testName)
         .then(() => refreshTest(testName))
         .catch(error => {
-          alert(`Error while unlocking test: ${error}`)
-        })
-    }
+          alert(`Error while unlocking test: ${error}`);
+        });
+    };
 
     const onTestSave = (testName: string): void => {
       const test = tests.find(test => test.name === testName);
@@ -128,33 +133,33 @@ export const TestsForm = <T extends Test>(
           createTest(settingsType, unlocked)
             .then(() => refreshTest(testName))
             .catch(error => {
-              alert(`Error while creating new test: ${error}`)
-            })
+              alert(`Error while creating new test: ${error}`);
+            });
         } else {
           updateTest(settingsType, test)
             .then(() => refreshTest(testName))
             .catch(error => {
-              alert(`Error while saving test: ${error}`)
-            })
+              alert(`Error while saving test: ${error}`);
+            });
         }
       }
-    }
+    };
 
     const onTestsArchive = (testNames: string[]): void => {
       archiveTests(settingsType, testNames)
         .then(() => fetchTests())
         .catch(error => {
-          alert(`Error while archiving test: ${error}`)
-        })
-    }
+          alert(`Error while archiving test: ${error}`);
+        });
+    };
 
     const onTestArchive = (testName: string): void => {
       archiveTests(settingsType, [testName])
         .then(() => setTests(tests.filter(test => test.name !== testName)))
         .catch(error => {
-          alert(`Error while archiving test: ${error}`)
-        })
-    }
+          alert(`Error while archiving test: ${error}`);
+        });
+    };
 
     const onTestCreate = (name: string, nickname: string): void => {
       const newTest: T = {
@@ -163,7 +168,7 @@ export const TestsForm = <T extends Test>(
         lockStatus: {
           locked: true,
           email: email,
-          timestamp: (new Date).toISOString(),
+          timestamp: new Date().toISOString(),
         },
       };
       setTests([...tests, newTest]);
@@ -182,7 +187,7 @@ export const TestsForm = <T extends Test>(
           lockStatus: {
             locked: true,
             email: email,
-            timestamp: (new Date).toISOString(),
+            timestamp: new Date().toISOString(),
           },
           isNew: true,
         };
@@ -206,7 +211,10 @@ export const TestsForm = <T extends Test>(
 
     const onTestListOrderSave = (): void => {
       setSavingTestList(true);
-      saveTestListOrder(settingsType, tests.map(test => test.name))
+      saveTestListOrder(
+        settingsType,
+        tests.map(test => test.name),
+      )
         .then(resp => {
           if (!resp.ok) {
             resp.text().then(msg => alert(msg));
@@ -215,9 +223,9 @@ export const TestsForm = <T extends Test>(
         .catch(() => {
           alert('Error while saving');
         })
-        .then(_ => fetchTests())
-        .then(_ => setSavingTestList(false));
-    }
+        .then(() => fetchTests())
+        .then(() => setSavingTestList(false));
+    };
 
     const requestTestListLock = (): void => {
       requestLock(settingsType).then(response =>
@@ -231,7 +239,7 @@ export const TestsForm = <T extends Test>(
       );
     };
 
-    const selectedTest = tests.find(test => test.name === selectedTestName)
+    const selectedTest = tests.find(test => test.name === selectedTestName);
 
     return (
       <div className={classes.body}>
@@ -277,5 +285,5 @@ export const TestsForm = <T extends Test>(
         </div>
       </div>
     );
-  }
-}
+  };
+};

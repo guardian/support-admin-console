@@ -1,11 +1,11 @@
 import React from 'react';
 import useOpenable from '../../../hooks/useOpenable';
-import {Button, makeStyles, Theme, Typography} from '@material-ui/core';
+import { Button, makeStyles, Theme, Typography } from '@material-ui/core';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
-import {grey} from '@material-ui/core/colors';
+import { grey } from '@material-ui/core/colors';
 import CreateTestDialog from '../createTestDialog';
 
-const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
+const useStyles = makeStyles(({ palette }: Theme) => ({
   buttonText: {
     fontSize: '14px',
     fontWeight: 500,
@@ -31,7 +31,7 @@ export const TestCopyButton: React.FC<TestCopyButtonProps> = ({
   sourceNickname,
   testNamePrefix,
   onTestCopy,
-}) => {
+}: TestCopyButtonProps) => {
   const classes = useStyles();
   const [isOpen, open, close] = useOpenable();
 

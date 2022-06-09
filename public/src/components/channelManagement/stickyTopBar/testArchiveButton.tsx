@@ -6,13 +6,15 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle, makeStyles, Theme,
-  Typography
+  DialogTitle,
+  makeStyles,
+  Theme,
+  Typography,
 } from '@material-ui/core';
 import ArchiveIcon from '@material-ui/icons/Archive';
-import {grey} from '@material-ui/core/colors';
+import { grey } from '@material-ui/core/colors';
 
-const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
+const useStyles = makeStyles(({ palette }: Theme) => ({
   buttonText: {
     fontSize: '14px',
     fontWeight: 500,
@@ -28,7 +30,7 @@ interface TestArchiveButtonProps {
 
 export const TestArchiveButton: React.FC<TestArchiveButtonProps> = ({
   onTestArchive,
-}) => {
+}: TestArchiveButtonProps) => {
   const classes = useStyles();
   const [isOpen, open, close] = useOpenable();
 

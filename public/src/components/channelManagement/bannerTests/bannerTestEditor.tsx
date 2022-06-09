@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { Region } from '../../../utils/models';
 import { ArticlesViewedSettings, DeviceType, setStatus, UserCohort } from '../helpers/shared';
 import { ARTICLE_COUNT_TEMPLATE } from '../helpers/validation';
@@ -19,8 +19,8 @@ import BannerVariantPreview from './bannerVariantPreview';
 import { ControlProportionSettings } from '../helpers/controlProportionSettings';
 import TestVariantsSplitEditor from '../testVariantsSplitEditor';
 import { useStyles } from '../helpers/testEditorStyles';
-import {TestEditorProps} from '../testsForm';
-import TestEditorHeader from '../testEditorHeader/testEditorHeaderNew';
+import { TestEditorProps } from '../testsForm';
+import StickyTopBar from '../stickyTopBar/stickyTopBar';
 
 const copyHasTemplate = (content: BannerContent, template: string): boolean =>
   (content.heading && content.heading.includes(template)) ||
@@ -57,7 +57,7 @@ const BannerTestEditor: React.FC<TestEditorProps<BannerTest>> = ({
     } else {
       alert('Test contains errors. Please fix any errors before saving.');
     }
-  }
+  };
 
   const getArticlesViewedSettings = (test: BannerTest): ArticlesViewedSettings | undefined => {
     if (!!test.articlesViewedSettings) {
@@ -181,10 +181,10 @@ const BannerTestEditor: React.FC<TestEditorProps<BannerTest>> = ({
   if (test) {
     return (
       <div className={classes.container}>
-        <TestEditorHeader
+        <StickyTopBar
           name={test.name}
           nickname={test.nickname}
-          lockStatus={test.lockStatus || { locked: false } }
+          lockStatus={test.lockStatus || { locked: false }}
           userHasTestLocked={userHasTestLocked}
           existingNames={existingNames}
           existingNicknames={existingNicknames}

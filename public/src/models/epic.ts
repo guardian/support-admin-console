@@ -1,14 +1,17 @@
 import {
   ArticlesViewedSettings,
   ContributionFrequency,
-  Cta, DeviceType,
+  Cta,
+  DeviceType,
   Image,
-  SecondaryCta, Status,
-  Test, UserCohort,
-  Variant
+  SecondaryCta,
+  Status,
+  Test,
+  UserCohort,
+  Variant,
 } from '../components/channelManagement/helpers/shared';
-import {Region} from '../utils/models';
-import {ControlProportionSettings} from '../components/channelManagement/helpers/controlProportionSettings';
+import { Region } from '../utils/models';
+import { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';
 
 export enum TickerEndType {
   unlimited = 'unlimited',

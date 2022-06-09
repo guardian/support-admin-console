@@ -12,13 +12,13 @@ import {
   LiveblogEpicTestsForm,
   AppleNewsEpicTestsForm,
   AMPEpicTestsForm,
-} from './components/channelManagement/epicTests/epicTestsFormNew';
+} from './components/channelManagement/epicTests/epicTestsForm';
 import {
   BannerTestsForm1,
   BannerTestsForm2,
-} from './components/channelManagement/bannerTests/bannerTestsFormNew';
+} from './components/channelManagement/bannerTests/bannerTestsForm';
 
-import { HeaderTestsForm } from './components/channelManagement/headerTests/headerTestsFormNew';
+import { HeaderTestsForm } from './components/channelManagement/headerTests/headerTestsForm';
 
 import { Theme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';

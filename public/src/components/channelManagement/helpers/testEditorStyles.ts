@@ -6,16 +6,14 @@ export const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     flexDirection: 'column',
     height: '100%',
     width: '100%',
-    // height: 'max-content',
     background: palette.background.paper, // #FFFFFF
-    // paddingTop: spacing(6),
-    // paddingRight: spacing(12),
-    // paddingLeft: spacing(3),
     borderLeft: `1px solid ${palette.grey[500]}`,
   },
   scrollableContainer: {
     overflowY: 'auto',
     paddingLeft: spacing(3),
+    paddingRight: spacing(1),
+    paddingTop: spacing(2),
   },
   headerAndSwitchContainer: {
     paddingBottom: spacing(3),
@@ -28,6 +26,8 @@ export const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   switchContainer: {
     display: 'flex',
     justifyContent: 'space-between',
+    paddingBottom: spacing(2),
+    borderBottom: `1px solid ${palette.grey[500]}`,
   },
   sectionContainer: {
     paddingTop: spacing(1),

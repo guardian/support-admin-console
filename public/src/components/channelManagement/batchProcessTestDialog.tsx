@@ -125,17 +125,14 @@ const BatchProcessTestDialog: React.FC<BatchProcessTestDialogProps> = ({
         aria-labelledby="batch-process-dialog-confirm-title"
       >
         <div className={classes.dialogHeader}>
-          <DialogTitle id="batch-process-dialog-title">
-            Batch archive tests
-          </DialogTitle>
+          <DialogTitle id="batch-process-dialog-title">Batch archive tests</DialogTitle>
           <IconButton onClick={confirmClose} aria-label="close">
             <CloseIcon />
           </IconButton>
         </div>
         <DialogContent dividers>
           <Typography>
-            Please confirm. The following tests will be{' '}
-            <strong>archived</strong>:
+            Please confirm. The following tests will be <strong>archived</strong>:
           </Typography>
           <ul>
             {selectedTests.map((t, i) => (
