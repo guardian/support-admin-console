@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button, Dialog, makeStyles, Theme, Typography } from '@material-ui/core';
-import { EpicTest } from './epicTestsForm';
 import useOpenable from '../../../hooks/useOpenable';
 import EpicVariantPreview from './epicVariantPreview';
+import {EpicTest} from '../../../models/epic';
 
 const useStyles = makeStyles(({}: Theme) => ({
   dialog: {

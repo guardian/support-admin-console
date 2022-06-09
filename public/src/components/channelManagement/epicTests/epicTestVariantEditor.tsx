@@ -3,7 +3,6 @@ import { useForm, Controller } from 'react-hook-form';
 import { makeStyles, Theme, Typography } from '@material-ui/core';
 
 import EpicTestChoiceCardsEditor from './epicTestChoiceCardsEditor';
-import { EpicVariant, SeparateArticleCount } from './epicTestsForm';
 import EpicTestSignInLinkEditor from './epicTestSignInLinkEditor';
 import EpicTestTickerEditor from './epicTestTickerEditor';
 import EpicTestVariantEditorCtasEditor from './epicTestVariantEditorCtasEditor';
@@ -34,6 +33,7 @@ import {
 } from '../richTextEditor/richTextEditor';
 import VariantEditorSeparateArticleCountEditor from '../variantEditorSeparateArticleCountEditor';
 import { ImageEditorToggle } from '../imageEditor';
+import {EpicVariant, SeparateArticleCount} from '../../../models/epic';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const getUseStyles = (shouldAddPadding: boolean) => {

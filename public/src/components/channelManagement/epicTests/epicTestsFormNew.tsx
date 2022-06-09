@@ -2,7 +2,6 @@ import {FrontendSettingsType} from '../../../utils/requests';
 import React from 'react';
 import {TestsForm} from '../testsForm';
 import {getDefaultTest, getDefaultVariant} from './utils/defaults';
-import {EpicTest} from './epicTestsForm';
 import {
   AMP_EPIC_CONFIG,
   APPLE_NEWS_EPIC_CONFIG,
@@ -12,6 +11,7 @@ import {
   LIVEBLOG_EPIC_CONFIG
 } from '../helpers/shared';
 import { getEpicTestEditor } from './epicTestEditorNew';
+import {EpicTest} from '../../../models/epic';
 
 const createDefaultEpicTest = (epicEditorConfig: EpicEditorConfig) => (newTestName: string, newTestNickname: string): EpicTest => ({
   ...getDefaultTest(),

@@ -3,9 +3,8 @@ import { Theme, makeStyles, Button } from '@material-ui/core';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import Drawer from '@material-ui/core/Drawer';
 import { BannerTemplate, BannerVariant, BannerContent } from '../../../models/banner';
-import { TickerCountType, TickerEndType } from '../helpers/shared';
+import {TickerCountType, TickerEndType, TickerSettings} from '../helpers/shared';
 import Typography from '@material-ui/core/Typography';
-import { TickerSettings } from '../epicTests/epicTestsForm';
 import { useModule } from '../../../hooks/useModule';
 
 interface ProductPriceData {

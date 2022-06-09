@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { Region } from '../../../utils/models';
-import { EpicTest, EpicVariant, MaxEpicViews } from './epicTestsForm';
+import {EpicTest, EpicVariant, MaxEpicViews} from '../../../models/epic';
 import {
   ArticlesViewedSettings,
   UserCohort,
