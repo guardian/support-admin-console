@@ -38,7 +38,6 @@ const useStyles = makeStyles(({ spacing, typography }: Theme) => ({
     paddingRight: spacing(6),
   },
   rightCol: {
-    // overflowY: 'auto',
     flexGrow: 1,
     display: 'flex',
     justifyContent: 'center',
@@ -63,30 +62,6 @@ export interface TestEditorProps<T extends Test> {
   existingNames: string[];
   existingNicknames: string[];
 }
-
-/**
- * NOTES
- *
- * - if we do not re-fetch the data when a user click lock, they may be editing stale data.
- * - re-fetching all data would clear any unsaved data
- *
- * Solution:
- * - TestsForm has top-level tests state
- * - HeaderTestEditor receives a Test
- *   - POSTs to /test/update
- *   - updates go to top-level state (so that user can move between tests without losing changes)
- *   - clicking "edit test" fetches state of that test again, in case it's stale, and updates it in the top-level state
- * - Sidebar receives list of tests
- *   - POSTs to /reorder
- *   - updates go to top-level state
- *   - clicking "edit test" and "save test" trigger re-fetch of tests list?
- *
- *
- *
- * - TestsForm (HOC)
- *   - Sidebar
- *   - HeaderTestEditor
- */
 
 export const TestsForm = <T extends Test>(
   TestEditor: React.ComponentType<TestEditorProps<T>>,
@@ -164,6 +139,14 @@ export const TestsForm = <T extends Test>(
       }
     }
 
+    const onTestsArchive = (testNames: string[]): void => {
+      archiveTests(settingsType, testNames)
+        .then(() => fetchTests())
+        .catch(error => {
+          alert(`Error while archiving test: ${error}`)
+        })
+    }
+
     const onTestArchive = (testName: string): void => {
       archiveTests(settingsType, [testName])
         .then(() => setTests(tests.filter(test => test.name !== testName)))
@@ -224,7 +207,6 @@ export const TestsForm = <T extends Test>(
       if (tests) {
         saveTestListOrder(settingsType, tests.map(test => test.name))
           .then(resp => {
-            // setSaving(false);
             if (!resp.ok) {
               resp.text().then(msg => alert(msg));
             }
@@ -259,8 +241,7 @@ export const TestsForm = <T extends Test>(
             onTestPriorityChange={onTestPriorityChange}
             onTestSelected={setSelectedTestName}
             createTest={onTestCreate}
-            // onBatchTestDelete={onBatchTestDelete}
-            // onBatchTestArchive={onBatchTestArchive}
+            onBatchTestArchive={onTestsArchive}
             onTestListOrderSave={onTestListOrderSave}
             requestTestListLock={requestTestListLock}
             requestTestListTakeControl={requestTestListTakeControl}

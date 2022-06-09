@@ -10,7 +10,6 @@ import TestEditorHeader from '../testEditorHeader/testEditorHeaderNew';
 
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 
-import TestEditorActionButtons from '../testEditorActionButtons';
 import LiveSwitch from '../../shared/liveSwitch';
 import useValidation from '../hooks/useValidation';
 import { HeaderTest, HeaderVariant } from '../../../models/header';
@@ -31,22 +30,21 @@ const HeaderTestEditor: React.FC<TestEditorProps<HeaderTest>> = ({
   onTestSave,
   onTestArchive,
   onTestCopy,
-
-  // onChange,
-  // onValidationChange,
-  // visible,
-  // editMode,
-  // onArchive,
-  // onDelete,
-  // onTestSelected,
   existingNames,
   existingNicknames,
-  // createTest,
 }: TestEditorProps<HeaderTest>) => {
   const classes = useStyles();
   const [isValid, setIsValid] = useState<boolean>(true);
 
   const setValidationStatusForField = useValidation(setIsValid);
+
+  const onSave = (): void => {
+    if (isValid) {
+      onTestSave(test.name);
+    } else {
+      alert('Test contains errors. Please fix any errors before saving.');
+    }
+  }
 
   const onVariantsSplitSettingsValidationChanged = (isValid: boolean): void =>
     setValidationStatusForField('variantsSplitSettings', isValid);
@@ -85,12 +83,6 @@ const HeaderTestEditor: React.FC<TestEditorProps<HeaderTest>> = ({
 
   const onDeviceTypeChange = (updatedDeviceType: DeviceType): void => {
     onTestChange({ ...test, deviceType: updatedDeviceType });
-  };
-
-  const onCopy = (name: string, nickname: string): void => {
-    //TODO
-    // onTestSelected(name);
-    // createTest({ ...test, name: name, nickname: nickname, isOn: false, status: 'Draft' });
   };
 
   const renderVariantEditor = (variant: HeaderVariant): React.ReactElement => (
@@ -142,9 +134,10 @@ const HeaderTestEditor: React.FC<TestEditorProps<HeaderTest>> = ({
         userHasTestLocked={userHasTestLocked}
         existingNames={existingNames}
         existingNicknames={existingNicknames}
+        testNamePrefix={undefined}
         onTestLock={onTestLock}
         onTestUnlock={onTestUnlock}
-        onTestSave={onTestSave}
+        onTestSave={onSave}
         onTestArchive={() => onTestArchive(test.name)}
         onTestCopy={onTestCopy}
       />
@@ -209,19 +202,6 @@ const HeaderTestEditor: React.FC<TestEditorProps<HeaderTest>> = ({
             isDisabled={!userHasTestLocked}
             showSupporterStatusSelector={true}
             showDeviceTypeSelector={true}
-          />
-        </div>
-
-        <div className={classes.buttonsContainer}>
-          <TestEditorActionButtons
-            existingNames={existingNames}
-            sourceName={test.name}
-            existingNicknames={existingNicknames}
-            sourceNickname={test.nickname}
-            isDisabled={!userHasTestLocked}
-            onArchive={() => onTestArchive(test.name)}
-            onDelete={() => {}} //TODO
-            onCopy={onCopy}
           />
         </div>
       </div>

@@ -57,6 +57,7 @@ interface TestEditorHeaderProps {
   userHasTestLocked: boolean;
   existingNames: string[];
   existingNicknames: string[];
+  testNamePrefix?: string;
   onTestLock: (testName: string, force: boolean) => void;
   onTestUnlock: (testName: string) => void;
   onTestSave: (testName: string) => void;
@@ -71,6 +72,7 @@ const TestEditorHeader: React.FC<TestEditorHeaderProps> = ({
   userHasTestLocked,
   existingNames,
   existingNicknames,
+  testNamePrefix,
   onTestLock,
   onTestUnlock,
   onTestSave,
@@ -97,7 +99,7 @@ const TestEditorHeader: React.FC<TestEditorHeaderProps> = ({
               existingNicknames={existingNicknames}
               sourceName={name}
               sourceNickname={nickname}
-              testNamePrefix={undefined}  // TODO
+              testNamePrefix={testNamePrefix}
               onTestCopy={onTestCopy}
             />
             <Button

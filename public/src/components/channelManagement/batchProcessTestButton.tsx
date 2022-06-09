@@ -22,13 +22,11 @@ const useStyles = makeStyles(() => ({
 
 interface BatchProcessTestButtonProps {
   draftTests: Test[];
-  onBatchTestDelete: (batchTestNames: string[]) => void;
   onBatchTestArchive: (batchTestNames: string[]) => void;
 }
 
 const BatchProcessTestButton: React.FC<BatchProcessTestButtonProps> = ({
   draftTests,
-  onBatchTestDelete,
   onBatchTestArchive,
 }: BatchProcessTestButtonProps) => {
   const classes = useStyles();
@@ -47,7 +45,6 @@ const BatchProcessTestButton: React.FC<BatchProcessTestButtonProps> = ({
         isOpen={isOpen}
         close={close}
         draftTests={draftTests}
-        onBatchTestDelete={onBatchTestDelete}
         onBatchTestArchive={onBatchTestArchive}
       />
     </>

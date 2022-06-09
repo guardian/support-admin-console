@@ -52,16 +52,11 @@ const useStyles = makeStyles(({palette}) => ({
 interface SidebarProps<T extends Test> {
   tests: T[];
   selectedTestName: string | null;
-  // editedTestName: string | null;
   onTestPriorityChange: (newPriority: number, oldPriority: number) => void;
   onTestSelected: (testName: string) => void;
   testNamePrefix?: string;
   createTest: (name: string, nickname: string) => void;
-  // isInEditMode: boolean;
-  // regionFilter: RegionsAndAll;
-  // setRegionFilter: (regionValue: RegionsAndAll) => void;
-  // onBatchTestDelete: (batchTestNames: string[]) => void;
-  // onBatchTestArchive: (batchTestNames: string[]) => void;
+  onBatchTestArchive: (batchTestNames: string[]) => void;
   onTestListOrderSave: () => void;
   requestTestListLock: () => void;
   requestTestListTakeControl: () => void;
@@ -71,17 +66,12 @@ interface SidebarProps<T extends Test> {
 
 function Sidebar<T extends Test>({
   tests,
-  // isInEditMode,
   selectedTestName,
-  // editedTestName,
   onTestPriorityChange,
   onTestSelected,
   testNamePrefix,
   createTest,
-  // regionFilter,
-  // setRegionFilter,
-  // onBatchTestDelete,
-  // onBatchTestArchive,
+  onBatchTestArchive,
   onTestListOrderSave,
   requestTestListLock,
   requestTestListTakeControl,
@@ -108,12 +98,11 @@ function Sidebar<T extends Test>({
           createTest={createTest}
         />
 
-        {/*<BatchProcessTestButton*/}
-        {/*  // filter out live tests and any test currently being edited*/}
-        {/*  draftTests={tests.filter(t => (!t.isOn && t.name !== selectedTestName ? true : false))}*/}
-        {/*  onBatchTestDelete={onBatchTestDelete}*/}
-        {/*  onBatchTestArchive={onBatchTestArchive}*/}
-        {/*/>*/}
+        <BatchProcessTestButton
+          // filter out live tests and any test currently being edited
+          draftTests={tests.filter(t => (!t.isOn && t.name !== selectedTestName ? true : false))}
+          onBatchTestArchive={onBatchTestArchive}
+        />
 
         { testListLockStatus.locked && userHasTestListLocked &&
         <>
@@ -174,7 +163,6 @@ function Sidebar<T extends Test>({
           tests={filterTests(tests)}
           isInEditMode={userHasTestListLocked}
           selectedTestName={selectedTestName}
-          editedTestName={null} //TODO
           onTestPriorityChange={onTestPriorityChange}
           onTestSelected={onTestSelected}
         />

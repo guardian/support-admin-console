@@ -110,7 +110,7 @@ function Sidebar<T extends Test>({
         <BatchProcessTestButton
           // filter out live tests and any test currently being edited
           draftTests={tests.filter(t => (!t.isOn && t.name !== selectedTestName ? true : false))}
-          onBatchTestDelete={onBatchTestDelete}
+          // onBatchTestDelete={onBatchTestDelete}
           onBatchTestArchive={onBatchTestArchive}
         />
 
@@ -173,7 +173,6 @@ function Sidebar<T extends Test>({
           tests={filterTests(tests)}
           isInEditMode={isInEditMode}
           selectedTestName={selectedTestName}
-          editedTestName={editedTestName}
           onTestPriorityChange={onTestPriorityChange}
           onTestSelected={onTestSelected}
         />
