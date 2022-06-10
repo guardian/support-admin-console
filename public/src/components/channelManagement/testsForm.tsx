@@ -102,10 +102,6 @@ export const TestsForm = <T extends Test>(
     }, []);
 
     const onTestChange = (updatedTest: T): void => {
-      if (!tests) {
-        return;
-      }
-
       const updatedTests = tests.map(test => (test.name === updatedTest.name ? updatedTest : test));
 
       setTests(updatedTests);
