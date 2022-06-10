@@ -9,7 +9,6 @@ import DynamoChannelTests._
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.dynamodb.model._
 import utils.Circe.{dynamoMapToJson, jsonToDynamo}
-import zio.ZIO.debug
 import zio.{ZEnv, ZIO}
 import zio.blocking.effectBlocking
 import zio.duration.durationInt
