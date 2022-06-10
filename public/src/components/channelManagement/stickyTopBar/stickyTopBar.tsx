@@ -40,6 +40,7 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
     '& > * + *': {
       marginLeft: spacing(2),
     },
+    marginLeft: spacing(1),
   },
   buttonText: {
     fontSize: '14px',
