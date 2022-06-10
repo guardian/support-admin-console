@@ -38,6 +38,7 @@ const BannerTestEditor: React.FC<TestEditorProps<BannerTest>> = ({
   test,
   onTestChange,
   userHasTestLocked,
+  userHasTestListLocked,
   onTestLock,
   onTestUnlock,
   onTestSave,
@@ -184,8 +185,10 @@ const BannerTestEditor: React.FC<TestEditorProps<BannerTest>> = ({
         <StickyTopBar
           name={test.name}
           nickname={test.nickname}
+          isNew={!!test.isNew}
           lockStatus={test.lockStatus || { locked: false }}
           userHasTestLocked={userHasTestLocked}
+          userHasTestListLocked={userHasTestListLocked}
           existingNames={existingNames}
           existingNicknames={existingNicknames}
           testNamePrefix={undefined}

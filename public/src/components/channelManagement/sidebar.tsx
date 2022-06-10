@@ -57,8 +57,7 @@ interface SidebarProps<T extends Test> {
   createTest: (name: string, nickname: string) => void;
   onBatchTestArchive: (batchTestNames: string[]) => void;
   onTestListOrderSave: () => void;
-  requestTestListLock: () => void;
-  requestTestListTakeControl: () => void;
+  onTestListLock: (force: boolean) => void;
   testListLockStatus: LockStatus;
   userHasTestListLocked: boolean;
   savingTestList: boolean;
@@ -73,8 +72,7 @@ function Sidebar<T extends Test>({
   createTest,
   onBatchTestArchive,
   onTestListOrderSave,
-  requestTestListLock,
-  requestTestListTakeControl,
+  onTestListLock,
   testListLockStatus,
   userHasTestListLocked,
   savingTestList,
@@ -97,6 +95,7 @@ function Sidebar<T extends Test>({
           existingNicknames={tests.map(t => t.nickname || '')}
           testNamePrefix={testNamePrefix}
           createTest={createTest}
+          disabled={userHasTestListLocked}
         />
 
         <BatchProcessTestButton
@@ -105,7 +104,7 @@ function Sidebar<T extends Test>({
           onBatchTestArchive={onBatchTestArchive}
         />
 
-        {testListLockStatus.locked && userHasTestListLocked && (
+        {userHasTestListLocked && (
           <>
             <Button
               variant="outlined"
@@ -113,6 +112,7 @@ function Sidebar<T extends Test>({
               startIcon={<SaveIcon />}
               className={classes.reorderListButton}
               onClick={savingTestList ? undefined : onTestListOrderSave}
+              disabled={savingTestList}
             >
               <Typography className={classes.buttonText}>
                 {savingTestList ? 'Saving order...' : 'Save order'}
@@ -129,7 +129,7 @@ function Sidebar<T extends Test>({
               size="medium"
               startIcon={<EditIcon />}
               className={classes.reorderListButton}
-              onClick={requestTestListTakeControl}
+              onClick={() => onTestListLock(true)}
             >
               <Typography className={classes.buttonText}>Take control</Typography>
             </Button>
@@ -145,7 +145,7 @@ function Sidebar<T extends Test>({
             size="medium"
             startIcon={<EditIcon />}
             className={classes.reorderListButton}
-            onClick={requestTestListLock}
+            onClick={() => onTestListLock(false)}
           >
             <Typography className={classes.buttonText}>Reorder test list</Typography>
           </Button>

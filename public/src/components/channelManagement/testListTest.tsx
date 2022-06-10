@@ -62,7 +62,7 @@ interface TestListTestProps {
   test: Test;
   isSelected: boolean;
   isEdited: boolean;
-  onClick?: () => void;
+  onClick: () => void;
 }
 
 const TestListTest: React.FC<TestListTestProps> = ({

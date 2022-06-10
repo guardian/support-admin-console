@@ -23,6 +23,7 @@ interface NewTestButtonProps {
   existingNicknames: string[];
   testNamePrefix?: string;
   createTest: (name: string, nickname: string) => void;
+  disabled: boolean;
 }
 
 const NewTestButton: React.FC<NewTestButtonProps> = ({
@@ -30,12 +31,19 @@ const NewTestButton: React.FC<NewTestButtonProps> = ({
   existingNicknames,
   testNamePrefix,
   createTest,
+  disabled,
 }: NewTestButtonProps) => {
   const classes = useStyles();
   const [isOpen, open, close] = useOpenable();
   return (
     <>
-      <Button variant="outlined" className={classes.button} startIcon={<AddIcon />} onClick={open}>
+      <Button
+        variant="outlined"
+        className={classes.button}
+        startIcon={<AddIcon />}
+        onClick={open}
+        disabled={disabled}
+      >
         <Typography className={classes.text}>Create a new test</Typography>
       </Button>
       <CreateTestDialog

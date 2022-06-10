@@ -1,11 +1,11 @@
 package controllers
 
 import com.gu.googleauth.AuthAction
-import controllers.ChannelTestsController.LockableS3ObjectResponse
+import controllers.ChannelTestsController.ChannelTestsResponse
 import io.circe.{Decoder, Encoder}
 import io.circe.syntax._
 import io.circe.generic.auto._
-import models.{Channel, ChannelTest, ChannelTests, LockStatus}
+import models.{Channel, ChannelTest, LockStatus}
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.DynamoChannelTests.DynamoNoLockError
@@ -18,7 +18,11 @@ import scala.concurrent.{ExecutionContext, Future}
 
 object ChannelTestsController {
   // The model returned by this controller for GET requests
-  case class LockableS3ObjectResponse[T](value: T, version: String, status: LockStatus, userEmail: String)
+  case class ChannelTestsResponse[T](
+    tests: List[T],
+    status: LockStatus,
+    userEmail: String
+  )
 }
 
 /**
@@ -65,91 +69,18 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
       .updateAsJson(lockStatus)(s3Client)
       .apply(lockObjectSettings)
 
-  /**
-    * Returns current version of the object in s3 as json, with the lock status.
-    * The s3 data is validated against the model.
-    */
   def get = authAction.async { request =>
     runWithLockStatus { case VersionedS3Data(lockStatus, _) =>
       dynamo
         .getAllTests[T](channel)
         .map { channelTests =>
-          val response = LockableS3ObjectResponse(
-            ChannelTests(channelTests),
-            "versioning-deprecated",
+          val response = ChannelTestsResponse(
+            channelTests,
             lockStatus,
             request.user.email
           )
           Ok(noNulls(response.asJson))
         }
-    }
-  }
-
-  /**
-    * Updates the file in s3 if the user currently has a lock on the file, and releases the lock if successful.
-    * The POSTed json is validated against the model.
-    */
-  def set = authAction.async(circe.json[VersionedS3Data[ChannelTests[T]]]) { request =>
-    runWithLockStatus { case VersionedS3Data(lockStatus, lockFileVersion) =>
-      if (lockStatus.email.contains(request.user.email)) {
-
-        val tests = request.body.value.tests
-        val result = for {
-          _ <- dynamo.replaceChannelTests(tests, channel)
-          _ <- setLockStatus(VersionedS3Data(LockStatus.unlocked, lockFileVersion))
-        } yield ()
-
-        result
-          .map(_ => Ok("updated"))
-          .tapError(error => UIO(logger.error(s"Failed to publish $channel tests (user ${request.user.email}: $error")))
-      } else {
-        IO.succeed(Conflict(s"You do not currently have $channel open for edit"))
-      }
-    }
-  }
-
-  /**
-    * Updates the lock file if there is not already a lock
-    */
-  def lock = authAction.async { request =>
-    runWithLockStatus { case VersionedS3Data(lockStatus, lockFileVersion) =>
-      if (!lockStatus.locked) {
-        val newLockStatus = LockStatus.locked(request.user.email)
-
-        setLockStatus(VersionedS3Data(newLockStatus, lockFileVersion)).map { _ =>
-          logger.info(s"User ${request.user.email} took control of $channel")
-          Ok("locked")
-        }
-      } else {
-        logger.info(s"User ${request.user.email} failed to take control of $channel because it was already locked")
-        IO.succeed(Conflict(s"File $channel is already locked"))
-      }
-    }
-  }
-
-  /**
-    * Updates the lock file to an unlocked status if this user currently has a lock
-    */
-  def unlock = authAction.async { request =>
-    runWithLockStatus { case VersionedS3Data(lockStatus, lockFileVersion) =>
-      if (lockStatus.email.contains(request.user.email)) {
-        setLockStatus(VersionedS3Data(LockStatus.unlocked, lockFileVersion)) map { _ =>
-          logger.info(s"User ${request.user.email} unlocked $channel")
-          Ok("unlocked")
-        }
-      } else {
-        logger.info(s"User ${request.user.email} tried to unlock $channel, but they did not have a lock")
-        IO.succeed(BadRequest(s"File $channel is not currently locked by this user"))
-      }
-    }
-  }
-
-  def takecontrol = authAction.async { request =>
-     runWithLockStatus { case VersionedS3Data(lockStatus, lockFileVersion) =>
-      setLockStatus(VersionedS3Data(LockStatus.locked(request.user.email), lockFileVersion)) map { _ =>
-        logger.info(s"User ${request.user.email} force-unlocked $channel, taking it from ${lockStatus.email}")
-        Ok("unlocked")
-      }
     }
   }
 

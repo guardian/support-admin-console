@@ -22,6 +22,7 @@ interface TestCopyButtonProps {
   sourceNickname?: string;
   testNamePrefix?: string;
   onTestCopy: (oldName: string, newName: string, newNickname: string) => void;
+  disabled: boolean;
 }
 
 export const TestCopyButton: React.FC<TestCopyButtonProps> = ({
@@ -31,6 +32,7 @@ export const TestCopyButton: React.FC<TestCopyButtonProps> = ({
   sourceNickname,
   testNamePrefix,
   onTestCopy,
+  disabled,
 }: TestCopyButtonProps) => {
   const classes = useStyles();
   const [isOpen, open, close] = useOpenable();
@@ -42,8 +44,8 @@ export const TestCopyButton: React.FC<TestCopyButtonProps> = ({
         variant="outlined"
         startIcon={<FileCopyIcon style={{ color: grey[700] }} />}
         size="medium"
+        disabled={disabled}
       >
-        {/* eslint-disable-next-line react/prop-types */}
         <Typography className={classes.buttonText}>Copy test</Typography>
       </Button>
       <CreateTestDialog

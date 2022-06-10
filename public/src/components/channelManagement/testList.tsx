@@ -58,6 +58,7 @@ const TestList = <T extends Test>({
                           test={test}
                           isSelected={test.name === selectedTestName}
                           isEdited={!!test.lockStatus?.locked}
+                          onClick={(): void => onTestSelected(test.name)}
                         />
                       </div>
                     )}

@@ -1,9 +1,7 @@
 package models
 
-import io.circe.{Decoder, Encoder}
 import io.circe.generic.extras.Configuration
 import io.circe.generic.extras.semiauto.{deriveEnumerationDecoder, deriveEnumerationEncoder}
-import io.circe.generic.auto._
 
 sealed trait Status
 
@@ -44,5 +42,3 @@ trait ChannelTest[T] {
   def withChannel(channel: Channel): T
   def withPriority(priority: Int): T
 }
-
-case class ChannelTests[T : Decoder : Encoder](tests: List[T])

@@ -56,8 +56,10 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
 interface StickyTopBarProps {
   name: string;
   nickname?: string;
+  isNew: boolean;
   lockStatus: LockStatus;
   userHasTestLocked: boolean;
+  userHasTestListLocked: boolean;
   existingNames: string[];
   existingNicknames: string[];
   testNamePrefix?: string;
@@ -71,8 +73,10 @@ interface StickyTopBarProps {
 const StickyTopBar: React.FC<StickyTopBarProps> = ({
   name,
   nickname,
+  isNew,
   lockStatus,
   userHasTestLocked,
+  userHasTestListLocked,
   existingNames,
   existingNicknames,
   testNamePrefix,
@@ -104,6 +108,7 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
               sourceNickname={nickname}
               testNamePrefix={testNamePrefix}
               onTestCopy={onTestCopy}
+              disabled={userHasTestListLocked}
             />
             <Button
               variant="outlined"
@@ -130,7 +135,7 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
         )}
         {userHasTestLocked && (
           <>
-            <TestArchiveButton onTestArchive={onTestArchive} />
+            {!isNew && <TestArchiveButton onTestArchive={onTestArchive} />}
             <Button
               variant="outlined"
               size="medium"

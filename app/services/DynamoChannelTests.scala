@@ -201,7 +201,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends StrictLo
         .sortBy(_.priority)
     )
 
-  private def createOrUpdateTests[T <: ChannelTest[T] : Encoder](tests: List[T], channel: Channel): ZIO[ZEnv, DynamoPutError, Unit] = {
+  def createOrUpdateTests[T <: ChannelTest[T] : Encoder](tests: List[T], channel: Channel): ZIO[ZEnv, DynamoPutError, Unit] = {
     val writeRequests = tests.zipWithIndex.map { case (test, priority) =>
       // Add the priority and channel fields, which we don't have in S3
       val prioritised = test.withPriority(priority).withChannel(channel)

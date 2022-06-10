@@ -25,6 +25,7 @@ const HeaderTestEditor: React.FC<TestEditorProps<HeaderTest>> = ({
   test,
   onTestChange,
   userHasTestLocked,
+  userHasTestListLocked,
   onTestLock,
   onTestUnlock,
   onTestSave,
@@ -130,8 +131,10 @@ const HeaderTestEditor: React.FC<TestEditorProps<HeaderTest>> = ({
       <StickyTopBar
         name={test.name}
         nickname={test.nickname}
+        isNew={!!test.isNew}
         lockStatus={test.lockStatus || { locked: false }}
         userHasTestLocked={userHasTestLocked}
+        userHasTestListLocked={userHasTestListLocked}
         existingNames={existingNames}
         existingNicknames={existingNicknames}
         testNamePrefix={undefined}

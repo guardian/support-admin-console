@@ -1,5 +1,3 @@
-import { Test } from '../components/channelManagement/helpers/shared';
-
 export enum SupportFrontendSettingsType {
   switches = 'switches',
   contributionTypes = 'contribution-types',
@@ -41,6 +39,12 @@ function saveSettings(path: string, data: any): Promise<Response> {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(data),
+  }).then(resp => {
+    if (!resp.ok) {
+      return resp.text().then(msg => Promise.reject(new Error(msg)));
+    }
+
+    return resp;
   });
 }
 
@@ -87,20 +91,14 @@ export function archiveTests(
 ): Promise<Response> {
   return saveSettings(`/frontend/${settingsType}/test/archive`, testNames);
 }
-export function requestLock(settingsType: FrontendSettingsType): Promise<Response> {
-  return fetch(`/frontend/${settingsType}/lock`, {
+export function requestTestListLock(settingsType: FrontendSettingsType): Promise<Response> {
+  return fetch(`/frontend/${settingsType}/list/lock`, {
     method: 'POST',
   });
 }
 
-export function requestUnlock(settingsType: FrontendSettingsType): Promise<Response> {
-  return fetch(`/frontend/${settingsType}/unlock`, {
-    method: 'POST',
-  });
-}
-
-export function requestTakeControl(settingsType: FrontendSettingsType): Promise<Response> {
-  return fetch(`/frontend/${settingsType}/takecontrol`, {
+export function requestTestListTakeControl(settingsType: FrontendSettingsType): Promise<Response> {
+  return fetch(`/frontend/${settingsType}/list/takecontrol`, {
     method: 'POST',
   });
 }
@@ -131,8 +129,4 @@ export function saveFrontendSettings(
   data: any,
 ): Promise<Response> {
   return saveSettings(`/frontend/${settingsType}/update`, data);
-}
-
-export function archiveTest(test: Test, settingsType: FrontendSettingsType): Promise<Response> {
-  return saveSettings(`/frontend/${settingsType}/archive`, test);
 }

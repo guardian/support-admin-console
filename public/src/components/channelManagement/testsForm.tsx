@@ -7,8 +7,8 @@ import {
   fetchTest,
   FrontendSettingsType,
   lockTest,
-  requestLock,
-  requestTakeControl,
+  requestTestListLock,
+  requestTestListTakeControl,
   updateTest,
   saveTestListOrder,
   unlockTest,
@@ -50,8 +50,8 @@ const useStyles = makeStyles(({ spacing, typography }: Theme) => ({
   },
 }));
 
-interface DataFromServer<T> {
-  value: { tests: T[] };
+interface ChannelTestsResponse<T> {
+  tests: T[];
   userEmail: string;
   status: LockStatus;
 }
@@ -59,6 +59,7 @@ interface DataFromServer<T> {
 export interface TestEditorProps<T extends Test> {
   test: T;
   userHasTestLocked: boolean;
+  userHasTestListLocked: boolean;
   onTestChange: (test: T) => void;
   onTestLock: (testName: string, force: boolean) => void;
   onTestUnlock: (testName: string) => void;
@@ -83,9 +84,9 @@ export const TestsForm = <T extends Test>(
     const [savingTestList, setSavingTestList] = useState<boolean>(false);
 
     const fetchTests = (): void => {
-      fetchFrontendSettings(settingsType).then((serverData: DataFromServer<T>) => {
+      fetchFrontendSettings(settingsType).then((serverData: ChannelTestsResponse<T>) => {
         setEmail(serverData.userEmail);
-        setTests(serverData.value.tests);
+        setTests(serverData.tests);
         setTestListLockStatus(serverData.status);
       });
     };
@@ -115,11 +116,17 @@ export const TestsForm = <T extends Test>(
         });
     };
     const onTestUnlock = (testName: string): void => {
-      unlockTest(settingsType, testName)
-        .then(() => refreshTest(testName))
-        .catch(error => {
-          alert(`Error while unlocking test: ${error}`);
-        });
+      const test = tests.find(test => test.name === testName);
+      if (test && test.isNew) {
+        // if it's a new test then just drop from the in-memory list
+        setTests(tests.filter(test => test.name !== testName));
+      } else {
+        unlockTest(settingsType, testName)
+          .then(() => refreshTest(testName))
+          .catch(error => {
+            alert(`Error while unlocking test: ${error}`);
+          });
+      }
     };
 
     const onTestSave = (testName: string): void => {
@@ -215,31 +222,31 @@ export const TestsForm = <T extends Test>(
         settingsType,
         tests.map(test => test.name),
       )
-        .then(resp => {
-          if (!resp.ok) {
-            resp.text().then(msg => alert(msg));
-          }
-        })
-        .catch(() => {
-          alert('Error while saving');
-        })
         .then(() => fetchTests())
-        .then(() => setSavingTestList(false));
+        .then(() => setSavingTestList(false))
+        .catch(error => {
+          alert(`Error while saving: ${error}`);
+        });
     };
 
-    const requestTestListLock = (): void => {
-      requestLock(settingsType).then(response =>
-        response.ok ? fetchTests() : alert("Error - can't request lock!"),
-      );
-    };
-
-    const requestTestListTakeControl = (): void => {
-      requestTakeControl(settingsType).then(response =>
-        response.ok ? fetchTests() : alert("Error - can't take back control!"),
-      );
+    const onTestListLock = (force: boolean): void => {
+      // For simplicity, do not allow reordering if there are any unsaved *new* tests
+      const newTest = tests.find(test => test.isNew);
+      if (newTest) {
+        alert(`Please save new test '${newTest.name}' before reordering`);
+      } else {
+        const lockAction = force ? requestTestListLock : requestTestListTakeControl;
+        lockAction(settingsType)
+          .then(() => fetchTests())
+          .catch(error => {
+            alert(`Error - can't request lock! - ${error}`);
+          });
+      }
     };
 
     const selectedTest = tests.find(test => test.name === selectedTestName);
+
+    const userHasTestListLocked = testListLockStatus.email === email;
 
     return (
       <div className={classes.body}>
@@ -252,8 +259,7 @@ export const TestsForm = <T extends Test>(
             createTest={onTestCreate}
             onBatchTestArchive={onTestsArchive}
             onTestListOrderSave={onTestListOrderSave}
-            requestTestListLock={requestTestListLock}
-            requestTestListTakeControl={requestTestListTakeControl}
+            onTestListLock={onTestListLock}
             testListLockStatus={testListLockStatus}
             userHasTestListLocked={testListLockStatus.email === email}
             savingTestList={savingTestList}
@@ -265,6 +271,7 @@ export const TestsForm = <T extends Test>(
             <TestEditor
               test={selectedTest}
               userHasTestLocked={selectedTest.lockStatus?.email === email}
+              userHasTestListLocked={userHasTestListLocked}
               existingNames={tests.map(test => test.name)}
               existingNicknames={tests.map(test => test.nickname || '')}
               onTestChange={onTestChange}
