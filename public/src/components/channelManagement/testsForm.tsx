@@ -70,6 +70,11 @@ export interface TestEditorProps<T extends Test> {
   existingNicknames: string[];
 }
 
+/**
+ * Higher-order component for the channel tests forms.
+ * Renders the Sidebar and the given `TestEditor` (which is custom for each channel).
+ * Holds the top-level state and takes care of all interactions with the backend.
+ */
 export const TestsForm = <T extends Test>(
   TestEditor: React.ComponentType<TestEditorProps<T>>,
   settingsType: FrontendSettingsType,
