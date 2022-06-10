@@ -118,6 +118,7 @@ export const TestsForm = <T extends Test>(
         .then(() => refreshTest(testName))
         .catch(error => {
           alert(`Error while locking test: ${error}`);
+          refreshTest(testName);
         });
     };
     const onTestUnlock = (testName: string): void => {
