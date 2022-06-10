@@ -340,21 +340,6 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends StrictLo
     putAllBatched(deleteRequests)
   }
 
-  // For use during the dynamodb migration - handles creates/updates/deletes by replacing all tests in the channel
-  def replaceChannelTests[T <: ChannelTest[T] : Encoder : Decoder](tests: List[T], channel: Channel): ZIO[ZEnv, DynamoError, Unit] = {
-    getAllTests(channel)
-      .flatMap(existingTests => {
-        // delete any existing tests that are not in the updated tests list
-        val deletedTests = existingTests.map(_.name).toSet -- tests.map(_.name).toSet
-        if (deletedTests.nonEmpty) {
-          deleteTests(deletedTests.toList, channel)
-        } else {
-          ZIO.unit
-        }
-      })
-      .flatMap(_ => createOrUpdateTests(tests, channel))
-  }
-
   // Set `priority` attribute based on the ordering of the List
   def setPriorities(testNames: List[String], channel: Channel): ZIO[ZEnv, DynamoError, Unit] = {
     val items = testNames.zipWithIndex.map { case (testName, priority) =>
