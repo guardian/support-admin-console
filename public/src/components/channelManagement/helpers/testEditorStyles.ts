@@ -7,13 +7,6 @@ export const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     height: '100%',
     width: '100%',
     background: palette.background.paper, // #FFFFFF
-    borderLeft: `1px solid ${palette.grey[500]}`,
-  },
-  scrollableContainer: {
-    overflowY: 'auto',
-    paddingLeft: spacing(3),
-    paddingRight: spacing(1),
-    paddingTop: spacing(2),
   },
   switchContainer: {
     display: 'flex',

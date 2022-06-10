@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Region } from '../../../utils/models';
 
 import { DeviceType, setStatus, UserCohort } from '../helpers/shared';
@@ -6,12 +6,10 @@ import { DeviceType, setStatus, UserCohort } from '../helpers/shared';
 import { Typography } from '@material-ui/core';
 import HeaderTestVariantEditor from './headerTestVariantEditor';
 import TestVariantsEditor from '../testVariantsEditor';
-import StickyTopBar from '../stickyTopBar/stickyTopBar';
 
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 
 import LiveSwitch from '../../shared/liveSwitch';
-import useValidation from '../hooks/useValidation';
 import { HeaderTest, HeaderVariant } from '../../../models/header';
 import { getDefaultVariant } from './utils/defaults';
 import TestEditorVariantSummary from '../testEditorVariantSummary';
@@ -19,33 +17,15 @@ import TestEditorVariantSummary from '../testEditorVariantSummary';
 import { ControlProportionSettings } from '../helpers/controlProportionSettings';
 import TestVariantsSplitEditor from '../testVariantsSplitEditor';
 import { useStyles } from '../helpers/testEditorStyles';
-import { TestEditorProps } from '../testsForm';
+import { ValidatedTestEditorProps } from '../validatedTestEditor';
 
-const HeaderTestEditor: React.FC<TestEditorProps<HeaderTest>> = ({
+const HeaderTestEditor: React.FC<ValidatedTestEditorProps<HeaderTest>> = ({
   test,
-  onTestChange,
   userHasTestLocked,
-  userHasTestListLocked,
-  onTestLock,
-  onTestUnlock,
-  onTestSave,
-  onTestArchive,
-  onTestCopy,
-  existingNames,
-  existingNicknames,
-}: TestEditorProps<HeaderTest>) => {
+  onTestChange,
+  setValidationStatusForField,
+}: ValidatedTestEditorProps<HeaderTest>) => {
   const classes = useStyles();
-  const [isValid, setIsValid] = useState<boolean>(true);
-
-  const setValidationStatusForField = useValidation(setIsValid);
-
-  const onSave = (): void => {
-    if (isValid) {
-      onTestSave(test.name);
-    } else {
-      alert('Test contains errors. Please fix any errors before saving.');
-    }
-  };
 
   const onVariantsSplitSettingsValidationChanged = (isValid: boolean): void =>
     setValidationStatusForField('variantsSplitSettings', isValid);
@@ -128,85 +108,66 @@ const HeaderTestEditor: React.FC<TestEditorProps<HeaderTest>> = ({
 
   return (
     <div className={classes.container}>
-      <StickyTopBar
-        name={test.name}
-        nickname={test.nickname}
-        isNew={!!test.isNew}
-        lockStatus={test.lockStatus || { locked: false }}
-        userHasTestLocked={userHasTestLocked}
-        userHasTestListLocked={userHasTestListLocked}
-        existingNames={existingNames}
-        existingNicknames={existingNicknames}
-        testNamePrefix={undefined}
-        onTestLock={onTestLock}
-        onTestUnlock={onTestUnlock}
-        onTestSave={onSave}
-        onTestArchive={() => onTestArchive(test.name)}
-        onTestCopy={onTestCopy}
-      />
+      <div className={classes.switchContainer}>
+        <LiveSwitch
+          label="Live on Guardian.com"
+          isLive={test.isOn}
+          isDisabled={!userHasTestLocked}
+          onChange={onLiveSwitchChange}
+        />
+      </div>
 
-      <div className={classes.scrollableContainer}>
-        <div className={classes.switchContainer}>
-          <LiveSwitch
-            label="Live on Guardian.com"
-            isLive={test.isOn}
-            isDisabled={!userHasTestLocked}
-            onChange={onLiveSwitchChange}
+      <div className={classes.sectionContainer}>
+        <Typography variant={'h3'} className={classes.sectionHeader}>
+          Variants
+        </Typography>
+        <div>
+          <TestVariantsEditor
+            variants={test.variants}
+            createVariant={createVariant}
+            testName={test.name}
+            editMode={userHasTestLocked}
+            renderVariantEditor={renderVariantEditor}
+            renderVariantSummary={renderVariantSummary}
+            onVariantDelete={onVariantDelete}
+            onVariantClone={onVariantClone}
           />
         </div>
+      </div>
 
+      {test.variants.length > 1 && (
         <div className={classes.sectionContainer}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
-            Variants
+            Variants split
           </Typography>
           <div>
-            <TestVariantsEditor
+            <TestVariantsSplitEditor
               variants={test.variants}
-              createVariant={createVariant}
-              testName={test.name}
-              editMode={userHasTestLocked}
-              renderVariantEditor={renderVariantEditor}
-              renderVariantSummary={renderVariantSummary}
-              onVariantDelete={onVariantDelete}
-              onVariantClone={onVariantClone}
+              controlProportionSettings={test.controlProportionSettings}
+              onControlProportionSettingsChange={onControlProportionSettingsChange}
+              onValidationChange={onVariantsSplitSettingsValidationChanged}
+              isDisabled={!userHasTestLocked}
             />
           </div>
         </div>
+      )}
 
-        {test.variants.length > 1 && (
-          <div className={classes.sectionContainer}>
-            <Typography variant={'h3'} className={classes.sectionHeader}>
-              Variants split
-            </Typography>
-            <div>
-              <TestVariantsSplitEditor
-                variants={test.variants}
-                controlProportionSettings={test.controlProportionSettings}
-                onControlProportionSettingsChange={onControlProportionSettingsChange}
-                onValidationChange={onVariantsSplitSettingsValidationChanged}
-                isDisabled={!userHasTestLocked}
-              />
-            </div>
-          </div>
-        )}
+      <div className={classes.sectionContainer}>
+        <Typography variant={'h3'} className={classes.sectionHeader}>
+          Target audience
+        </Typography>
 
-        <div className={classes.sectionContainer}>
-          <Typography variant={'h3'} className={classes.sectionHeader}>
-            Target audience
-          </Typography>
-
-          <TestEditorTargetAudienceSelector
-            selectedRegions={test.locations}
-            onRegionsUpdate={onRegionsChange}
-            selectedCohort={test.userCohort}
-            onCohortChange={onCohortChange}
-            selectedDeviceType={test.deviceType ?? 'All'}
-            onDeviceTypeChange={onDeviceTypeChange}
-            isDisabled={!userHasTestLocked}
-            showSupporterStatusSelector={true}
-            showDeviceTypeSelector={true}
-          />
-        </div>
+        <TestEditorTargetAudienceSelector
+          selectedRegions={test.locations}
+          onRegionsUpdate={onRegionsChange}
+          selectedCohort={test.userCohort}
+          onCohortChange={onCohortChange}
+          selectedDeviceType={test.deviceType ?? 'All'}
+          onDeviceTypeChange={onDeviceTypeChange}
+          isDisabled={!userHasTestLocked}
+          showSupporterStatusSelector={true}
+          showDeviceTypeSelector={true}
+        />
       </div>
     </div>
   );

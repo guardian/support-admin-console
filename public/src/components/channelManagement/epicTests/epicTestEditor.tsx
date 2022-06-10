@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Region } from '../../../utils/models';
 import { EpicTest, EpicVariant, MaxEpicViews } from '../../../models/epic';
 import {
@@ -20,7 +20,6 @@ import EpicTestVariantEditor from './epicTestVariantEditor';
 import EpicVariantPreview from './epicVariantPreview';
 import EpicTestTargetContentEditor from './epicTestTargetContentEditor';
 import EpicTestMaxViewsEditor from './epicTestMaxViewsEditor';
-import useValidation from '../hooks/useValidation';
 import { ARTICLE_COUNT_TEMPLATE, COUNTRY_NAME_TEMPLATE } from '../helpers/validation';
 import TestVariantsSplitEditor from '../testVariantsSplitEditor';
 import { getDefaultVariant } from './utils/defaults';
@@ -31,8 +30,8 @@ import {
 } from '../helpers/controlProportionSettings';
 import { useStyles } from '../helpers/testEditorStyles';
 import { EpicTestPreviewButton } from './epicTestPreview';
+import { ValidatedTestEditor, ValidatedTestEditorProps } from '../validatedTestEditor';
 import { TestEditorProps } from '../testsForm';
-import StickyTopBar from '../stickyTopBar/stickyTopBar';
 
 const copyHasTemplate = (test: EpicTest, template: string): boolean =>
   test.variants.some(
@@ -46,29 +45,11 @@ export const getEpicTestEditor = (
 ): React.FC<TestEditorProps<EpicTest>> => {
   const EpicTestEditor = ({
     test,
-    onTestChange,
     userHasTestLocked,
-    userHasTestListLocked,
-    onTestLock,
-    onTestUnlock,
-    onTestSave,
-    onTestArchive,
-    onTestCopy,
-    existingNames,
-    existingNicknames,
-  }: TestEditorProps<EpicTest>) => {
+    onTestChange,
+    setValidationStatusForField,
+  }: ValidatedTestEditorProps<EpicTest>) => {
     const classes = useStyles();
-    const [isValid, setIsValid] = useState<boolean>(true);
-
-    const setValidationStatusForField = useValidation(setIsValid);
-
-    const onSave = (): void => {
-      if (isValid) {
-        onTestSave(test.name);
-      } else {
-        alert('Test contains errors. Please fix any errors before saving.');
-      }
-    };
 
     const onMaxViewsValidationChange = (isValid: boolean): void =>
       setValidationStatusForField('maxViews', isValid);
@@ -226,176 +207,157 @@ export const getEpicTestEditor = (
 
     return (
       <div className={classes.container}>
-        <StickyTopBar
-          name={test.name}
-          nickname={test.nickname}
-          isNew={!!test.isNew}
-          lockStatus={test.lockStatus || { locked: false }}
-          userHasTestLocked={userHasTestLocked}
-          userHasTestListLocked={userHasTestListLocked}
-          existingNames={existingNames}
-          existingNicknames={existingNicknames}
-          testNamePrefix={undefined}
-          onTestLock={onTestLock}
-          onTestUnlock={onTestUnlock}
-          onTestSave={onSave}
-          onTestArchive={() => onTestArchive(test.name)}
-          onTestCopy={onTestCopy}
-        />
+        <div className={classes.switchContainer}>
+          <LiveSwitch
+            label="Live on Guardian.com"
+            isLive={test.isOn}
+            isDisabled={!userHasTestLocked}
+            onChange={onLiveSwitchChange}
+          />
+          <div>
+            <EpicTestPreviewButton test={test} />
+          </div>
+        </div>
 
-        <div className={classes.scrollableContainer}>
-          <div className={classes.switchContainer}>
-            <LiveSwitch
-              label="Live on Guardian.com"
-              isLive={test.isOn}
-              isDisabled={!userHasTestLocked}
-              onChange={onLiveSwitchChange}
-            />
+        {epicEditorConfig.allowMultipleVariants && (
+          <div className={classes.sectionContainer}>
+            <Typography variant={'h3'} className={classes.sectionHeader}>
+              Variants
+            </Typography>
             <div>
-              <EpicTestPreviewButton test={test} />
+              <TestVariantsEditor<EpicVariant>
+                variants={test.variants}
+                testName={test.name}
+                editMode={userHasTestLocked}
+                createVariant={createVariant}
+                renderVariantEditor={renderVariantEditor}
+                renderVariantSummary={renderVariantSummary}
+                onVariantDelete={onVariantDelete}
+                onVariantClone={onVariantClone}
+              />
             </div>
           </div>
+        )}
 
-          {epicEditorConfig.allowMultipleVariants && (
-            <div className={classes.sectionContainer}>
-              <Typography variant={'h3'} className={classes.sectionHeader}>
-                Variants
-              </Typography>
-              <div>
-                <TestVariantsEditor<EpicVariant>
-                  variants={test.variants}
-                  testName={test.name}
-                  editMode={userHasTestLocked}
-                  createVariant={createVariant}
-                  renderVariantEditor={renderVariantEditor}
-                  renderVariantSummary={renderVariantSummary}
-                  onVariantDelete={onVariantDelete}
-                  onVariantClone={onVariantClone}
-                />
-              </div>
+        {epicEditorConfig.allowCustomVariantSplit && canHaveCustomVariantSplit(test.variants) && (
+          <div className={classes.sectionContainer}>
+            <Typography variant={'h3'} className={classes.sectionHeader}>
+              Variants split
+            </Typography>
+            <div>
+              <TestVariantsSplitEditor
+                variants={test.variants}
+                controlProportionSettings={test.controlProportionSettings}
+                onControlProportionSettingsChange={onControlProportionSettingsChange}
+                onValidationChange={onVariantsSplitSettingsValidationChanged}
+                isDisabled={!userHasTestLocked}
+              />
             </div>
-          )}
+          </div>
+        )}
 
-          {epicEditorConfig.allowCustomVariantSplit && canHaveCustomVariantSplit(test.variants) && (
-            <div className={classes.sectionContainer}>
-              <Typography variant={'h3'} className={classes.sectionHeader}>
-                Variants split
-              </Typography>
-              <div>
-                <TestVariantsSplitEditor
-                  variants={test.variants}
-                  controlProportionSettings={test.controlProportionSettings}
-                  onControlProportionSettingsChange={onControlProportionSettingsChange}
-                  onValidationChange={onVariantsSplitSettingsValidationChanged}
-                  isDisabled={!userHasTestLocked}
-                />
-              </div>
-            </div>
-          )}
+        {!epicEditorConfig.allowMultipleVariants && (
+          <div className={classes.sectionContainer} key={test.name}>
+            <Typography variant={'h3'} className={classes.sectionHeader}>
+              Copy
+            </Typography>
 
-          {!epicEditorConfig.allowMultipleVariants && (
-            <div className={classes.sectionContainer} key={test.name}>
-              <Typography variant={'h3'} className={classes.sectionHeader}>
-                Copy
-              </Typography>
-
-              <div>
-                <EpicTestVariantEditor
-                  key={test.variants[0].name}
-                  variant={test.variants[0]}
-                  epicEditorConfig={epicEditorConfig}
-                  editMode={userHasTestLocked}
-                  onVariantChange={onVariantChange}
-                  onDelete={(): void => onVariantDelete(test.variants[0].name)}
-                  onValidationChange={(isValid: boolean): void =>
-                    setValidationStatusForField(test.variants[0].name, isValid)
-                  }
-                />
-              </div>
-            </div>
-          )}
-
-          {epicEditorConfig.allowContentTargeting && (
-            <div className={classes.sectionContainer}>
-              <Typography variant={'h3'} className={classes.sectionHeader}>
-                Target content
-              </Typography>
-
-              <EpicTestTargetContentEditor
-                tagIds={test.tagIds}
-                sections={test.sections}
-                excludeTagIds={test.excludedTagIds}
-                excludeSections={test.excludedSections}
+            <div>
+              <EpicTestVariantEditor
+                key={test.variants[0].name}
+                variant={test.variants[0]}
+                epicEditorConfig={epicEditorConfig}
                 editMode={userHasTestLocked}
-                updateTargetContent={updateTargetSections}
-              />
-            </div>
-          )}
-
-          {epicEditorConfig.allowLocationTargeting && (
-            <div className={classes.sectionContainer}>
-              <Typography variant={'h3'} className={classes.sectionHeader}>
-                Target audience
-              </Typography>
-
-              <TestEditorTargetAudienceSelector
-                selectedRegions={test.locations}
-                onRegionsUpdate={onRegionsChange}
-                selectedCohort={test.userCohort}
-                onCohortChange={onCohortChange}
-                supportedRegions={epicEditorConfig.supportedRegions}
-                selectedDeviceType={test.deviceType ?? 'All'}
-                onDeviceTypeChange={onDeviceTypeChange}
-                isDisabled={!userHasTestLocked}
-                showSupporterStatusSelector={epicEditorConfig.allowSupporterStatusTargeting}
-                showDeviceTypeSelector={epicEditorConfig.allowDeviceTypeTargeting}
-              />
-            </div>
-          )}
-
-          {epicEditorConfig.allowViewFrequencySettings && (
-            <div className={classes.sectionContainer}>
-              <Typography variant={'h3'} className={classes.sectionHeader}>
-                View frequency settings
-              </Typography>
-
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={test.useLocalViewLog}
-                    onChange={onSwitchChange('useLocalViewLog')}
-                    disabled={!userHasTestLocked}
-                  />
+                onVariantChange={onVariantChange}
+                onDelete={(): void => onVariantDelete(test.variants[0].name)}
+                onValidationChange={(isValid: boolean): void =>
+                  setValidationStatusForField(test.variants[0].name, isValid)
                 }
-                label={`Use private view counter for this test (instead of the global one)`}
-              />
-
-              <EpicTestMaxViewsEditor
-                maxEpicViews={test.alwaysAsk ? undefined : test.maxViews}
-                isDisabled={!userHasTestLocked}
-                onMaxViewsChanged={onMaxViewsChange}
-                onValidationChange={onMaxViewsValidationChange}
               />
             </div>
-          )}
+          </div>
+        )}
 
-          {epicEditorConfig.allowArticleCount && (
-            <div className={classes.sectionContainer}>
-              <Typography variant={'h3'} className={classes.sectionHeader}>
-                Article count
-              </Typography>
+        {epicEditorConfig.allowContentTargeting && (
+          <div className={classes.sectionContainer}>
+            <Typography variant={'h3'} className={classes.sectionHeader}>
+              Target content
+            </Typography>
 
-              <TestEditorArticleCountEditor
-                articlesViewedSettings={test.articlesViewedSettings}
-                onArticlesViewedSettingsChanged={onArticlesViewedSettingsChange}
-                onValidationChange={onArticlesViewedSettingsValidationChanged}
-                isDisabled={!userHasTestLocked}
-              />
-            </div>
-          )}
-        </div>
+            <EpicTestTargetContentEditor
+              tagIds={test.tagIds}
+              sections={test.sections}
+              excludeTagIds={test.excludedTagIds}
+              excludeSections={test.excludedSections}
+              editMode={userHasTestLocked}
+              updateTargetContent={updateTargetSections}
+            />
+          </div>
+        )}
+
+        {epicEditorConfig.allowLocationTargeting && (
+          <div className={classes.sectionContainer}>
+            <Typography variant={'h3'} className={classes.sectionHeader}>
+              Target audience
+            </Typography>
+
+            <TestEditorTargetAudienceSelector
+              selectedRegions={test.locations}
+              onRegionsUpdate={onRegionsChange}
+              selectedCohort={test.userCohort}
+              onCohortChange={onCohortChange}
+              supportedRegions={epicEditorConfig.supportedRegions}
+              selectedDeviceType={test.deviceType ?? 'All'}
+              onDeviceTypeChange={onDeviceTypeChange}
+              isDisabled={!userHasTestLocked}
+              showSupporterStatusSelector={epicEditorConfig.allowSupporterStatusTargeting}
+              showDeviceTypeSelector={epicEditorConfig.allowDeviceTypeTargeting}
+            />
+          </div>
+        )}
+
+        {epicEditorConfig.allowViewFrequencySettings && (
+          <div className={classes.sectionContainer}>
+            <Typography variant={'h3'} className={classes.sectionHeader}>
+              View frequency settings
+            </Typography>
+
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={test.useLocalViewLog}
+                  onChange={onSwitchChange('useLocalViewLog')}
+                  disabled={!userHasTestLocked}
+                />
+              }
+              label={`Use private view counter for this test (instead of the global one)`}
+            />
+
+            <EpicTestMaxViewsEditor
+              maxEpicViews={test.alwaysAsk ? undefined : test.maxViews}
+              isDisabled={!userHasTestLocked}
+              onMaxViewsChanged={onMaxViewsChange}
+              onValidationChange={onMaxViewsValidationChange}
+            />
+          </div>
+        )}
+
+        {epicEditorConfig.allowArticleCount && (
+          <div className={classes.sectionContainer}>
+            <Typography variant={'h3'} className={classes.sectionHeader}>
+              Article count
+            </Typography>
+
+            <TestEditorArticleCountEditor
+              articlesViewedSettings={test.articlesViewedSettings}
+              onArticlesViewedSettingsChanged={onArticlesViewedSettingsChange}
+              onValidationChange={onArticlesViewedSettingsValidationChanged}
+              isDisabled={!userHasTestLocked}
+            />
+          </div>
+        )}
       </div>
     );
   };
-  return EpicTestEditor;
+  return ValidatedTestEditor(EpicTestEditor, epicEditorConfig.testNamePrefix);
 };
