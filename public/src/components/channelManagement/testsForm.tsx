@@ -207,10 +207,6 @@ export const TestsForm = <T extends Test>(
     };
 
     const onTestPriorityChange = (newPriority: number, oldPriority: number): void => {
-      if (!tests) {
-        return;
-      }
-
       const updatedTests = [...tests];
       const movedTest = { ...tests[oldPriority] };
       updatedTests.splice(oldPriority, 1);
