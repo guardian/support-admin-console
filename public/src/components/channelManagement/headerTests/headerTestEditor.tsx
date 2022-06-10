@@ -143,7 +143,7 @@ const HeaderTestEditor: React.FC<TestEditorProps<HeaderTest>> = ({
       />
 
       <div className={classes.scrollableContainer}>
-        <div className={classes.headerAndSwitchContainer}>
+        <div className={classes.switchContainer}>
           <LiveSwitch
             label="Live on Guardian.com"
             isLive={test.isOn}

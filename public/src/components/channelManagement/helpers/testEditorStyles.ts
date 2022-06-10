@@ -15,14 +15,6 @@ export const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     paddingRight: spacing(1),
     paddingTop: spacing(2),
   },
-  headerAndSwitchContainer: {
-    paddingBottom: spacing(3),
-    borderBottom: `1px solid ${palette.grey[500]}`,
-
-    '& > * + *': {
-      marginTop: spacing(2),
-    },
-  },
   switchContainer: {
     display: 'flex',
     justifyContent: 'space-between',

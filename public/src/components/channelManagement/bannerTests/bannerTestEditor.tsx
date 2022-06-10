@@ -196,7 +196,7 @@ const BannerTestEditor: React.FC<TestEditorProps<BannerTest>> = ({
           onTestCopy={onTestCopy}
         />
         <div className={classes.scrollableContainer}>
-          <div className={classes.headerAndSwitchContainer}>
+          <div className={classes.switchContainer}>
             <LiveSwitch
               label="Live on Guardian.com"
               isLive={test.isOn}
