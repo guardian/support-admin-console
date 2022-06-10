@@ -79,6 +79,7 @@ export const TestsForm = <T extends Test>(
   TestEditor: React.ComponentType<TestEditorProps<T>>,
   settingsType: FrontendSettingsType,
   createDefaultTest: (name: string, nickname: string) => T,
+  testNamePrefix?: string,
 ): React.FC => {
   return () => {
     const classes = useStyles();
@@ -260,6 +261,7 @@ export const TestsForm = <T extends Test>(
           <Sidebar<T>
             tests={tests}
             selectedTestName={selectedTestName}
+            testNamePrefix={testNamePrefix}
             onTestPriorityChange={onTestPriorityChange}
             onTestSelected={setSelectedTestName}
             createTest={onTestCreate}

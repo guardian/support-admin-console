@@ -30,6 +30,7 @@ const buildEpicTestsForm = (
     getEpicTestEditor(epicEditorConfig),
     settingsType,
     createDefaultEpicTest(epicEditorConfig),
+    epicEditorConfig.testNamePrefix,
   );
 
 export const ArticleEpicTestsForm = buildEpicTestsForm(
