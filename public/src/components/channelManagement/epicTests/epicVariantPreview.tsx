@@ -1,9 +1,9 @@
 import React from 'react';
 import { Theme, makeStyles } from '@material-ui/core';
-import { EpicVariant } from './epicTestsForm';
 
 import { EpicModuleName, TickerSettings } from '../helpers/shared';
 import { useModule } from '../../../hooks/useModule';
+import { EpicVariant } from '../../../models/epic';
 
 // Article count TS defs
 export interface ArticleCounts {

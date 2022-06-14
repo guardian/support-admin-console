@@ -8,10 +8,8 @@ import useOpenable from '../../hooks/useOpenable';
 
 const useStyles = makeStyles(() => ({
   button: {
-    borderStyle: 'dashed',
     justifyContent: 'start',
     height: '48px',
-    marginTop: '8px',
   },
   text: {
     fontSize: '12px',
@@ -23,13 +21,11 @@ const useStyles = makeStyles(() => ({
 
 interface BatchProcessTestButtonProps {
   draftTests: Test[];
-  onBatchTestDelete: (batchTestNames: string[]) => void;
   onBatchTestArchive: (batchTestNames: string[]) => void;
 }
 
 const BatchProcessTestButton: React.FC<BatchProcessTestButtonProps> = ({
   draftTests,
-  onBatchTestDelete,
   onBatchTestArchive,
 }: BatchProcessTestButtonProps) => {
   const classes = useStyles();
@@ -42,13 +38,12 @@ const BatchProcessTestButton: React.FC<BatchProcessTestButtonProps> = ({
         startIcon={<ArchiveIcon />}
         onClick={open}
       >
-        <Typography className={classes.text}>Batch archive/delete tests</Typography>
+        <Typography className={classes.text}>Batch archive tests</Typography>
       </Button>
       <BatchProcessTestDialog
         isOpen={isOpen}
         close={close}
         draftTests={draftTests}
-        onBatchTestDelete={onBatchTestDelete}
         onBatchTestArchive={onBatchTestArchive}
       />
     </>

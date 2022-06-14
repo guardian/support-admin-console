@@ -10,9 +10,9 @@ import {
   TextField,
   Theme,
 } from '@material-ui/core';
-import { MaxEpicViews } from './epicTestsForm';
 import { notNumberValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 import { DEFAULT_MAX_EPIC_VIEWS } from './utils/defaults';
+import { MaxEpicViews } from '../../../models/epic';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {

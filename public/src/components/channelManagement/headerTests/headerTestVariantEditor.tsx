@@ -160,9 +160,9 @@ const HeaderTestVariantContentEditor: React.FC<HeaderTestVariantContentEditorPro
             <div>
               <TextField
                 inputRef={register({ validate: templateValidator })}
-                error={errors.heading !== undefined}
+                error={errors.subheading !== undefined}
                 helperText={
-                  errors.heading ? errors.heading.message : SUBHEADING_DEFAULT_HELPER_TEXT
+                  errors.subheading ? errors.subheading.message : SUBHEADING_DEFAULT_HELPER_TEXT
                 }
                 onBlur={handleSubmit(onSubmit)}
                 name="subheading"

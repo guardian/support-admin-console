@@ -2,24 +2,17 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
     width: '100%',
-    height: 'max-content',
     background: palette.background.paper, // #FFFFFF
-    paddingTop: spacing(6),
-    paddingRight: spacing(12),
-    paddingLeft: spacing(3),
-  },
-  headerAndSwitchContainer: {
-    paddingBottom: spacing(3),
-    borderBottom: `1px solid ${palette.grey[500]}`,
-
-    '& > * + *': {
-      marginTop: spacing(2),
-    },
   },
   switchContainer: {
     display: 'flex',
     justifyContent: 'space-between',
+    paddingBottom: spacing(2),
+    borderBottom: `1px solid ${palette.grey[500]}`,
   },
   sectionContainer: {
     paddingTop: spacing(1),

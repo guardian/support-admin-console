@@ -1,6 +1,6 @@
-import React from 'react';
-import { makeStyles, Typography } from '@material-ui/core';
-import { Test } from './helpers/shared';
+import React, { useState } from 'react';
+import { Button, makeStyles, Typography } from '@material-ui/core';
+import { LockStatus, Test } from './helpers/shared';
 import TestList from './testList';
 import TestPriorityLabelList from './testPriorityLabelList';
 import NewTestButton from './newTestButton';
@@ -8,6 +8,8 @@ import BatchProcessTestButton from './batchProcessTestButton';
 
 import TestListSidebarFilterSelector from './testListSidebarFilterSelector';
 import { RegionsAndAll } from '../../utils/models';
+import EditIcon from '@material-ui/icons/Edit';
+import SaveIcon from '@material-ui/icons/Save';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -16,7 +18,7 @@ const useStyles = makeStyles(() => ({
     paddingLeft: '32px',
   },
   header: {
-    marginTop: '32px',
+    marginTop: '5px',
     fontSize: '14px',
   },
   listsContainer: {
@@ -28,41 +30,58 @@ const useStyles = makeStyles(() => ({
     position: 'absolute',
     left: '-32px',
   },
+  buttonsContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '8px',
+    marginBottom: '10px',
+  },
+  reorderListButton: {
+    height: '48px',
+    justifyContent: 'start',
+  },
+  buttonText: {
+    fontSize: '12px',
+    fontWeight: 500,
+    textTransform: 'uppercase',
+    letterSpacing: '1px',
+  },
 }));
 
 interface SidebarProps<T extends Test> {
   tests: T[];
   selectedTestName: string | null;
-  editedTestName: string | null;
   onTestPriorityChange: (newPriority: number, oldPriority: number) => void;
   onTestSelected: (testName: string) => void;
   testNamePrefix?: string;
   createTest: (name: string, nickname: string) => void;
-  isInEditMode: boolean;
-  regionFilter: RegionsAndAll;
-  setRegionFilter: (regionValue: RegionsAndAll) => void;
-  onBatchTestDelete: (batchTestNames: string[]) => void;
   onBatchTestArchive: (batchTestNames: string[]) => void;
+  onTestListOrderSave: () => void;
+  onTestListLock: (force: boolean) => void;
+  testListLockStatus: LockStatus;
+  userHasTestListLocked: boolean;
+  savingTestList: boolean;
 }
 
 function Sidebar<T extends Test>({
   tests,
-  isInEditMode,
   selectedTestName,
-  editedTestName,
   onTestPriorityChange,
   onTestSelected,
   testNamePrefix,
   createTest,
-  regionFilter,
-  setRegionFilter,
-  onBatchTestDelete,
   onBatchTestArchive,
+  onTestListOrderSave,
+  onTestListLock,
+  testListLockStatus,
+  userHasTestListLocked,
+  savingTestList,
 }: SidebarProps<T>): React.ReactElement<SidebarProps<T>> {
   const classes = useStyles();
+  const [regionFilter, setRegionFilter] = useState<RegionsAndAll>('ALL');
 
   const filterTests = function(testsToFilter: Test[]): Test[] {
-    if (isInEditMode || 'ALL' === regionFilter) {
+    if (userHasTestListLocked || 'ALL' === regionFilter) {
       return testsToFilter;
     }
     return testsToFilter.filter(t => t.locations.indexOf(regionFilter) >= 0);
@@ -70,37 +89,84 @@ function Sidebar<T extends Test>({
 
   return (
     <div className={classes.root}>
-      {isInEditMode ? (
-        <>
-          <NewTestButton
-            existingNames={tests.map(t => t.name)}
-            existingNicknames={tests.map(t => t.nickname || '')}
-            testNamePrefix={testNamePrefix}
-            createTest={createTest}
+      <div className={classes.buttonsContainer}>
+        <NewTestButton
+          existingNames={tests.map(t => t.name)}
+          existingNicknames={tests.map(t => t.nickname || '')}
+          testNamePrefix={testNamePrefix}
+          createTest={createTest}
+          disabled={userHasTestListLocked}
+        />
+
+        <BatchProcessTestButton
+          // filter out live tests and any test currently being edited
+          draftTests={tests.filter(t => (!t.isOn && t.name !== selectedTestName ? true : false))}
+          onBatchTestArchive={onBatchTestArchive}
+        />
+
+        {userHasTestListLocked && (
+          <>
+            <Button
+              variant="outlined"
+              size="medium"
+              startIcon={<SaveIcon />}
+              className={classes.reorderListButton}
+              onClick={savingTestList ? undefined : onTestListOrderSave}
+              disabled={savingTestList}
+            >
+              <Typography className={classes.buttonText}>
+                {savingTestList ? 'Saving order...' : 'Save order'}
+              </Typography>
+            </Button>
+            <Typography className={classes.header}>EDITING: tests in priority order</Typography>
+          </>
+        )}
+
+        {testListLockStatus.locked && !userHasTestListLocked && (
+          <>
+            <Button
+              variant="outlined"
+              size="medium"
+              startIcon={<EditIcon />}
+              className={classes.reorderListButton}
+              onClick={() => onTestListLock(true)}
+            >
+              <Typography className={classes.buttonText}>Take control</Typography>
+            </Button>
+            <Typography className={classes.header}>
+              {testListLockStatus.email} has the test list locked
+            </Typography>
+          </>
+        )}
+
+        {!testListLockStatus.locked && (
+          <Button
+            variant="outlined"
+            size="medium"
+            startIcon={<EditIcon />}
+            className={classes.reorderListButton}
+            onClick={() => onTestListLock(false)}
+          >
+            <Typography className={classes.buttonText}>Reorder test list</Typography>
+          </Button>
+        )}
+
+        {!userHasTestListLocked && (
+          <TestListSidebarFilterSelector
+            regionFilter={regionFilter}
+            handleRegionFilterChange={setRegionFilter}
           />
-          <BatchProcessTestButton
-            // filter out live tests and any test currently being edited
-            draftTests={tests.filter(t => (!t.isOn && t.name !== selectedTestName ? true : false))}
-            onBatchTestDelete={onBatchTestDelete}
-            onBatchTestArchive={onBatchTestArchive}
-          />
-          <Typography className={classes.header}>EDITING: tests in priority order</Typography>
-        </>
-      ) : (
-        <TestListSidebarFilterSelector
-          regionFilter={regionFilter}
-          handleRegionFilterChange={setRegionFilter}
-        ></TestListSidebarFilterSelector>
-      )}
+        )}
+      </div>
+
       <div className={classes.listsContainer}>
         <div className={classes.priorityLabelListContainer}>
           <TestPriorityLabelList numTests={tests.length} />
         </div>
         <TestList
           tests={filterTests(tests)}
-          isInEditMode={isInEditMode}
+          isInEditMode={userHasTestListLocked}
           selectedTestName={selectedTestName}
-          editedTestName={editedTestName}
           onTestPriorityChange={onTestPriorityChange}
           onTestSelected={onTestSelected}
         />

@@ -86,7 +86,7 @@ class DynamoChannelTestsSpec extends AsyncFlatSpec with Matchers with BeforeAndA
   it should "create and then fetch epic tests" in {
     expectToSucceedWith {
       for {
-        _ <- dynamo.replaceChannelTests(epicTests, Channel.Epic)
+        _ <- dynamo.createOrUpdateTests(epicTests, Channel.Epic)
         tests <- dynamo.getAllTests(Channel.Epic)
       } yield tests
     }(tests => tests should be(epicTests))
@@ -95,7 +95,7 @@ class DynamoChannelTestsSpec extends AsyncFlatSpec with Matchers with BeforeAndA
   it should "create and then delete epic tests" in {
     expectToSucceedWith {
       for {
-        _ <- dynamo.replaceChannelTests(epicTests, Channel.Epic)
+        _ <- dynamo.createOrUpdateTests(epicTests, Channel.Epic)
         _ <- dynamo.deleteTests(epicTests.map(_.name), Channel.Epic)
         tests <- dynamo.getAllTests(Channel.Epic)
       } yield tests
@@ -105,7 +105,7 @@ class DynamoChannelTestsSpec extends AsyncFlatSpec with Matchers with BeforeAndA
   it should "create a new test with bottom priority" in {
     expectToSucceedWith {
       for {
-        _ <- dynamo.replaceChannelTests(epicTests, Channel.Epic)
+        _ <- dynamo.createOrUpdateTests(epicTests, Channel.Epic)
         _ <- dynamo.createTest(buildEpic("test3"), Channel.Epic) // should create with priority of 2
         tests <- dynamo.getAllTests(Channel.Epic)
       } yield tests(2)
@@ -164,7 +164,7 @@ class DynamoChannelTestsSpec extends AsyncFlatSpec with Matchers with BeforeAndA
   it should "update test priorities" in {
     expectToSucceedWith {
       for {
-        _ <- dynamo.replaceChannelTests(epicTests, Channel.Epic)
+        _ <- dynamo.createOrUpdateTests(epicTests, Channel.Epic)
         _ <- dynamo.setPriorities(List("test2", "test1"), Channel.Epic) //swap the priorities
         tests <- dynamo.getAllTests(Channel.Epic)
       } yield tests
@@ -174,7 +174,7 @@ class DynamoChannelTestsSpec extends AsyncFlatSpec with Matchers with BeforeAndA
   it should "archive a test" in {
     expectToSucceedWith {
       for {
-        _ <- dynamo.replaceChannelTests(epicTests, Channel.Epic)
+        _ <- dynamo.createOrUpdateTests(epicTests, Channel.Epic)
         _ <- dynamo.updateStatuses(List("test2"), Channel.Epic, Status.Archived)
         tests <- dynamo.getAllTests(Channel.Epic) // excludes archived tests
       } yield tests

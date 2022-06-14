@@ -40,6 +40,35 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends StrictLo
       "name" -> AttributeValue.builder.s(testName).build
     ).asJava
 
+  /**
+    * Attempts to retrieve a test from dynamodb. Fails if the test does not exist.
+    */
+  private def get(testName: String, channel: Channel): ZIO[ZEnv, DynamoGetError, java.util.Map[String, AttributeValue]] =
+    effectBlocking {
+      val query = QueryRequest
+        .builder
+        .tableName(tableName)
+        .keyConditionExpression("channel = :channel AND #name = :name")
+        .expressionAttributeValues(
+          Map(
+            ":channel" -> AttributeValue.builder.s(channel.toString).build,
+            ":name" -> AttributeValue.builder.s(testName).build
+          ).asJava
+        )
+        .expressionAttributeNames(Map("#name" -> "name").asJava)  // name is a reserved word in dynamodb
+        .build()
+
+      client
+        .query(query)
+        .items.asScala.headOption
+
+    }.flatMap {
+      case Some(item) => ZIO.succeed(item)
+      case None => ZIO.fail(DynamoGetError(new Exception(s"Test does not exist: $channel/$testName")))
+    }.mapError(error =>
+      DynamoGetError(error)
+    )
+
   private def getAll(channel: Channel): ZIO[ZEnv, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
     effectBlocking {
       client.query(
@@ -149,6 +178,14 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends StrictLo
       .unit
   }
 
+  def getTest[T <: ChannelTest[T] : Decoder](testName: String, channel: Channel): ZIO[ZEnv, DynamoGetError, T] =
+    get(testName, channel)
+      .map(item => dynamoMapToJson(item).as[T])
+      .flatMap {
+        case Right(test) => ZIO.succeed(test)
+        case Left(error) => ZIO.fail(DynamoGetError(error))
+      }
+
   def getAllTests[T <: ChannelTest[T] : Decoder](channel: Channel): ZIO[ZEnv, DynamoGetError, List[T]] =
     getAll(channel).map(results =>
       results.asScala
@@ -163,7 +200,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends StrictLo
         .sortBy(_.priority)
     )
 
-  private def createOrUpdateTests[T <: ChannelTest[T] : Encoder](tests: List[T], channel: Channel): ZIO[ZEnv, DynamoPutError, Unit] = {
+  def createOrUpdateTests[T <: ChannelTest[T] : Encoder](tests: List[T], channel: Channel): ZIO[ZEnv, DynamoPutError, Unit] = {
     val writeRequests = tests.zipWithIndex.map { case (test, priority) =>
       // Add the priority and channel fields, which we don't have in S3
       val prioritised = test.withPriority(priority).withChannel(channel)
@@ -230,7 +267,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends StrictLo
     getBottomPriority[T](channel)
       .flatMap(bottomPriority => {
         val priority = bottomPriority + 1
-        val item = jsonToDynamo(test.withPriority(priority).asJson).m()
+        val item = jsonToDynamo(test.withChannel(channel).withPriority(priority).asJson).m()
         val request = PutItemRequest
           .builder
           .tableName(tableName)
@@ -300,21 +337,6 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends StrictLo
 
     logger.info(s"About to batch delete: $deleteRequests")
     putAllBatched(deleteRequests)
-  }
-
-  // For use during the dynamodb migration - handles creates/updates/deletes by replacing all tests in the channel
-  def replaceChannelTests[T <: ChannelTest[T] : Encoder : Decoder](tests: List[T], channel: Channel): ZIO[ZEnv, DynamoError, Unit] = {
-    getAllTests(channel)
-      .flatMap(existingTests => {
-        // delete any existing tests that are not in the updated tests list
-        val deletedTests = existingTests.map(_.name).toSet -- tests.map(_.name).toSet
-        if (deletedTests.nonEmpty) {
-          deleteTests(deletedTests.toList, channel)
-        } else {
-          ZIO.unit
-        }
-      })
-      .flatMap(_ => createOrUpdateTests(tests, channel))
   }
 
   // Set `priority` attribute based on the ordering of the List

@@ -1,5 +1,3 @@
-import { Test } from '../components/channelManagement/helpers/shared';
-
 export enum SupportFrontendSettingsType {
   switches = 'switches',
   contributionTypes = 'contribution-types',
@@ -22,20 +20,24 @@ export enum FrontendSettingsType {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function fetchSettings(path: string): Promise<any> {
-  return fetch(path).then(resp => {
+function makeFetch(path: string, options?: RequestInit): Promise<any> {
+  return fetch(path, options).then(resp => {
     if (!resp.ok) {
-      resp.text().then(msg => alert(msg));
-      throw new Error(`Could not fetch ${path} settings from server`);
+      return resp.text().then(msg => Promise.reject(new Error(msg)));
     }
 
-    return resp.json();
+    return resp;
   });
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
+function fetchSettings(path: string): Promise<any> {
+  return makeFetch(path).then(resp => resp.json());
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function saveSettings(path: string, data: any): Promise<Response> {
-  return fetch(path, {
+  return makeFetch(path, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -44,20 +46,57 @@ function saveSettings(path: string, data: any): Promise<Response> {
   });
 }
 
-export function requestLock(settingsType: FrontendSettingsType): Promise<Response> {
-  return fetch(`/frontend/${settingsType}/lock`, {
+export function saveTestListOrder(
+  settingsType: FrontendSettingsType,
+  testNames: string[],
+): Promise<Response> {
+  return saveSettings(`/frontend/${settingsType}/list/reorder`, testNames);
+}
+
+export function fetchTest<T>(settingsType: FrontendSettingsType, testName: string): Promise<T> {
+  return fetchSettings(`/frontend/${settingsType}/test/${testName}`);
+}
+
+export function lockTest(
+  settingsType: FrontendSettingsType,
+  testName: string,
+  force: boolean,
+): Promise<Response> {
+  const path = force
+    ? `/frontend/${settingsType}/test/takecontrol/${testName}`
+    : `/frontend/${settingsType}/test/lock/${testName}`;
+  return makeFetch(path, {
+    method: 'POST',
+  });
+}
+export function unlockTest(
+  settingsType: FrontendSettingsType,
+  testName: string,
+): Promise<Response> {
+  return makeFetch(`/frontend/${settingsType}/test/unlock/${testName}`, {
+    method: 'POST',
+  });
+}
+export function updateTest<T>(settingsType: FrontendSettingsType, test: T): Promise<Response> {
+  return saveSettings(`/frontend/${settingsType}/test/update`, test);
+}
+export function createTest<T>(settingsType: FrontendSettingsType, test: T): Promise<Response> {
+  return saveSettings(`/frontend/${settingsType}/test/create`, test);
+}
+export function archiveTests(
+  settingsType: FrontendSettingsType,
+  testNames: string[],
+): Promise<Response> {
+  return saveSettings(`/frontend/${settingsType}/test/archive`, testNames);
+}
+export function requestTestListLock(settingsType: FrontendSettingsType): Promise<Response> {
+  return makeFetch(`/frontend/${settingsType}/list/lock`, {
     method: 'POST',
   });
 }
 
-export function requestUnlock(settingsType: FrontendSettingsType): Promise<Response> {
-  return fetch(`/frontend/${settingsType}/unlock`, {
-    method: 'POST',
-  });
-}
-
-export function requestTakeControl(settingsType: FrontendSettingsType): Promise<Response> {
-  return fetch(`/frontend/${settingsType}/takecontrol`, {
+export function requestTestListTakeControl(settingsType: FrontendSettingsType): Promise<Response> {
+  return makeFetch(`/frontend/${settingsType}/list/takecontrol`, {
     method: 'POST',
   });
 }
@@ -88,8 +127,4 @@ export function saveFrontendSettings(
   data: any,
 ): Promise<Response> {
   return saveSettings(`/frontend/${settingsType}/update`, data);
-}
-
-export function archiveTest(test: Test, settingsType: FrontendSettingsType): Promise<Response> {
-  return saveSettings(`/frontend/${settingsType}/archive`, test);
 }

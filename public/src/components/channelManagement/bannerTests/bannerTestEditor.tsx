@@ -5,15 +5,12 @@ import { ARTICLE_COUNT_TEMPLATE } from '../helpers/validation';
 import { Typography } from '@material-ui/core';
 import BannerTestVariantEditor from './bannerTestVariantEditor';
 import TestVariantsEditor from '../testVariantsEditor';
-import TestEditorHeader from '../testEditorHeader';
 import TestEditorMinArticlesViewedInput from '../testEditorMinArticlesViewedInput';
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 import TestEditorArticleCountEditor, {
   DEFAULT_ARTICLES_VIEWED_SETTINGS,
 } from '../testEditorArticleCountEditor';
-import TestEditorActionButtons from '../testEditorActionButtons';
 import LiveSwitch from '../../shared/liveSwitch';
-import useValidation from '../hooks/useValidation';
 import { BannerContent, BannerTest, BannerVariant } from '../../../models/banner';
 import { getDefaultVariant } from './utils/defaults';
 import TestEditorVariantSummary from '../testEditorVariantSummary';
@@ -21,6 +18,7 @@ import BannerVariantPreview from './bannerVariantPreview';
 import { ControlProportionSettings } from '../helpers/controlProportionSettings';
 import TestVariantsSplitEditor from '../testVariantsSplitEditor';
 import { useStyles } from '../helpers/testEditorStyles';
+import { ValidatedTestEditorProps } from '../validatedTestEditor';
 
 const copyHasTemplate = (content: BannerContent, template: string): boolean =>
   (content.heading && content.heading.includes(template)) ||
@@ -34,36 +32,13 @@ const testCopyHasTemplate = (test: BannerTest, template: string): boolean =>
       (variant.mobileBannerContent && copyHasTemplate(variant.mobileBannerContent, template)),
   );
 
-interface BannerTestEditorProps {
-  test: BannerTest;
-  onChange: (updatedTest: BannerTest) => void;
-  onValidationChange: (isValid: boolean) => void;
-  visible: boolean;
-  editMode: boolean;
-  onDelete: () => void;
-  onArchive: () => void;
-  onTestSelected: (testName: string) => void;
-  testNames: string[];
-  testNicknames: string[];
-  createTest: (newTest: BannerTest) => void;
-}
-
-const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
+const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
   test,
-  onChange,
-  onValidationChange,
-  visible,
-  editMode,
-  onArchive,
-  onDelete,
-  onTestSelected,
-  testNames,
-  testNicknames,
-  createTest,
-}: BannerTestEditorProps) => {
+  userHasTestLocked,
+  onTestChange,
+  setValidationStatusForField,
+}: ValidatedTestEditorProps<BannerTest>) => {
   const classes = useStyles();
-
-  const setValidationStatusForField = useValidation(onValidationChange);
 
   const getArticlesViewedSettings = (test: BannerTest): ArticlesViewedSettings | undefined => {
     if (!!test.articlesViewedSettings) {
@@ -76,7 +51,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
   };
 
   const updateTest = (updatedTest: BannerTest): void => {
-    onChange({
+    onTestChange({
       ...updatedTest,
       // To save dotcom from having to work this out
       articlesViewedSettings: getArticlesViewedSettings(updatedTest),
@@ -144,18 +119,13 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
     });
   };
 
-  const onCopy = (name: string, nickname: string): void => {
-    onTestSelected(name);
-    createTest({ ...test, name: name, nickname: nickname, isOn: false, status: 'Draft' });
-  };
-
   const renderVariantEditor = (variant: BannerVariant): React.ReactElement => (
     <BannerTestVariantEditor
       key={`banner-${test.name}-${variant.name}`}
       variant={variant}
       onVariantChange={onVariantChange}
       onDelete={(): void => onVariantDelete(variant.name)}
-      editMode={editMode}
+      editMode={userHasTestLocked}
       onValidationChange={(isValid: boolean): void =>
         setValidationStatusForField(variant.name, isValid)
       }
@@ -167,7 +137,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
       name={variant.name}
       testName={test.name}
       testType="BANNER"
-      isInEditMode={editMode}
+      isInEditMode={userHasTestLocked}
       topButton={<BannerVariantPreview variant={variant} />}
       platform="DOTCOM" // hardcoded as banners are currently not supported in AMP or Apple News
     />
@@ -189,16 +159,14 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
     onVariantsChange([...test.variants, newVariant]);
   };
 
-  if (test && visible) {
+  if (test) {
     return (
       <div className={classes.container}>
-        <div className={classes.headerAndSwitchContainer}>
-          <TestEditorHeader name={test.name} nickname={test.nickname} />
-
+        <div className={classes.switchContainer}>
           <LiveSwitch
             label="Live on Guardian.com"
             isLive={test.isOn}
-            isDisabled={!editMode}
+            isDisabled={!userHasTestLocked}
             onChange={onLiveSwitchChange}
           />
         </div>
@@ -212,7 +180,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
               variants={test.variants}
               createVariant={createVariant}
               testName={test.name}
-              editMode={editMode}
+              editMode={userHasTestLocked}
               renderVariantEditor={renderVariantEditor}
               renderVariantSummary={renderVariantSummary}
               onVariantDelete={onVariantDelete}
@@ -232,7 +200,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
                 controlProportionSettings={test.controlProportionSettings}
                 onControlProportionSettingsChange={onControlProportionSettingsChange}
                 onValidationChange={onVariantsSplitSettingsValidationChanged}
-                isDisabled={!editMode}
+                isDisabled={!userHasTestLocked}
               />
             </div>
           </div>
@@ -245,7 +213,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
 
           <TestEditorMinArticlesViewedInput
             minArticles={test.minArticlesBeforeShowingBanner}
-            isDisabled={!editMode}
+            isDisabled={!userHasTestLocked}
             onValidationChange={onMinArticlesViewedValidationChanged}
             onUpdate={onMinArticlesViewedChange}
           />
@@ -263,7 +231,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
             onCohortChange={onCohortChange}
             selectedDeviceType={test.deviceType ?? 'All'}
             onDeviceTypeChange={onDeviceTypeChange}
-            isDisabled={!editMode}
+            isDisabled={!userHasTestLocked}
             showSupporterStatusSelector={true}
             showDeviceTypeSelector={true}
           />
@@ -278,19 +246,7 @@ const BannerTestEditor: React.FC<BannerTestEditorProps> = ({
             articlesViewedSettings={test.articlesViewedSettings}
             onArticlesViewedSettingsChanged={onArticlesViewedSettingsChange}
             onValidationChange={onArticlesViewedSettingsValidationChanged}
-            isDisabled={!editMode}
-          />
-        </div>
-        <div className={classes.buttonsContainer}>
-          <TestEditorActionButtons
-            existingNames={testNames}
-            sourceName={test.name}
-            existingNicknames={testNicknames}
-            sourceNickname={test.nickname}
-            isDisabled={!editMode}
-            onArchive={onArchive}
-            onDelete={onDelete}
-            onCopy={onCopy}
+            isDisabled={!userHasTestLocked}
           />
         </div>
       </div>
