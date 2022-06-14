@@ -175,6 +175,7 @@ export const TestsForm = <T extends Test>(
       const newTest: T = {
         ...createDefaultTest(name, nickname),
         isNew: true,
+        // Set lockStatus client-side, so that the StickyTopBar knows what to render
         lockStatus: {
           locked: true,
           email: email,
@@ -194,6 +195,7 @@ export const TestsForm = <T extends Test>(
           nickname: newNickname,
           isOn: false,
           status: 'Draft',
+          // Set lockStatus client-side, so that the StickyTopBar knows what to render
           lockStatus: {
             locked: true,
             email: email,
