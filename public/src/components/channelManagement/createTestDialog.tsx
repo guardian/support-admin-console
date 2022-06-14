@@ -14,6 +14,7 @@ import {
   InputLabel,
   FormControl,
   makeStyles,
+  Checkbox,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
@@ -26,6 +27,7 @@ import {
 import { Campaign } from './campaigns/CampaignsEditor';
 import { fetchFrontendSettings, FrontendSettingsType } from '../../utils/requests';
 import { DataFromServer } from '../../hocs/withS3Data';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 const useStyles = makeStyles(() => ({
   dialogHeader: {
@@ -41,7 +43,12 @@ const useStyles = makeStyles(() => ({
   },
   campaignSelector: {
     marginBottom: '20px',
+    marginRight: '12px',
     minWidth: '200px',
+  },
+  campaignSelectorContainer: {
+    display: 'flex',
+    flexDirection: 'row',
   },
 }));
 
@@ -90,6 +97,7 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
 
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [campaignName, setCampaignName] = useState<string | undefined>(undefined);
+  const [campaignNamePrefix, setCampaignNamePrefix] = useState<boolean>(false);
 
   useEffect(() => {
     fetchFrontendSettings(FrontendSettingsType.campaigns).then((data: DataFromServer<Campaign[]>) =>
@@ -100,7 +108,7 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
   const buildPrefix = (): string => {
     if (testNamePrefix) {
       return `${testNamePrefix}__`;
-    } else if (campaignName) {
+    } else if (campaignName && campaignNamePrefix) {
       return `${campaignName}__`;
     }
     return '';
@@ -123,31 +131,44 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
       </div>
       <DialogContent dividers>
         {testNamePrefix === undefined && (
-          <FormControl className={classes.campaignSelector}>
-            <InputLabel id="campaign-selector">Campaign</InputLabel>
-            <Select
-              value={campaignName}
-              displayEmpty
-              renderValue={(campaign): string => {
-                if (campaign === undefined) {
-                  return ''; // triggers the displayEmpty behaviour
-                }
-                return campaign as string;
-              }}
-              onChange={(event: React.ChangeEvent<{ value: unknown }>): void => {
-                setCampaignName(event.target.value as string | undefined);
-              }}
-            >
-              <MenuItem value={undefined} key={'campaignName-none'}>
-                No campaign
-              </MenuItem>
-              {campaigns.map(campaign => (
-                <MenuItem value={campaign.name} key={`campaign-${campaign.name}`}>
-                  {campaign.name}
+          <div className={classes.campaignSelectorContainer}>
+            <FormControl className={classes.campaignSelector}>
+              <InputLabel id="campaign-selector">Campaign</InputLabel>
+              <Select
+                value={campaignName}
+                displayEmpty
+                renderValue={(campaign): string => {
+                  if (campaign === undefined) {
+                    return ''; // triggers the displayEmpty behaviour
+                  }
+                  return campaign as string;
+                }}
+                onChange={(event: React.ChangeEvent<{ value: unknown }>): void => {
+                  setCampaignName(event.target.value as string | undefined);
+                }}
+              >
+                <MenuItem value={undefined} key={'campaignName-none'}>
+                  No campaign
                 </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+                {campaigns.map(campaign => (
+                  <MenuItem value={campaign.name} key={`campaign-${campaign.name}`}>
+                    {campaign.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={campaignNamePrefix}
+                  onChange={() => setCampaignNamePrefix(!campaignNamePrefix)}
+                  color="primary"
+                  disabled={!campaignName}
+                />
+              }
+              label="Prefix test name"
+            />
+          </div>
         )}
         <TextField
           className={classes.input}
