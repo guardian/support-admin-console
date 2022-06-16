@@ -52,4 +52,5 @@ export interface BannerTest extends Test {
   articlesViewedSettings?: ArticlesViewedSettings;
   controlProportionSettings?: ControlProportionSettings;
   deviceType?: DeviceType;
+  campaignName?: string;
 }

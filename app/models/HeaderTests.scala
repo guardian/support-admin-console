@@ -29,7 +29,8 @@ case class HeaderTest(
   userCohort: Option[UserCohort] = None,
   variants: List[HeaderVariant],
   controlProportionSettings: Option[ControlProportionSettings] = None,
-  deviceType: Option[DeviceType] = None
+  deviceType: Option[DeviceType] = None,
+  campaignName: Option[String] = None
 ) extends ChannelTest[HeaderTest] {
 
   override def withChannel(channel: Channel): HeaderTest = this.copy(channel = Some(channel))

@@ -79,4 +79,5 @@ export interface EpicTest extends Test {
   articlesViewedSettings?: ArticlesViewedSettings;
   controlProportionSettings?: ControlProportionSettings;
   deviceType?: DeviceType;
+  campaignName?: string;
 }

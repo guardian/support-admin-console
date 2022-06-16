@@ -85,7 +85,8 @@ case class EpicTest(
   useLocalViewLog: Boolean = false,
   articlesViewedSettings: Option[ArticlesViewedSettings] = None,
   controlProportionSettings: Option[ControlProportionSettings] = None,
-  deviceType: Option[DeviceType] = None
+  deviceType: Option[DeviceType] = None,
+  campaignName: Option[String] = None
 ) extends ChannelTest[EpicTest] {
 
   override def withChannel(channel: Channel): EpicTest = this.copy(channel = Some(channel))

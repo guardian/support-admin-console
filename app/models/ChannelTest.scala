@@ -38,6 +38,7 @@ trait ChannelTest[T] {
   val status: Option[Status]
   val lockStatus: Option[LockStatus]
   val priority: Option[Int] // 0 is top priority
+  val campaignName: Option[String]
 
   def withChannel(channel: Channel): T
   def withPriority(priority: Int): T
