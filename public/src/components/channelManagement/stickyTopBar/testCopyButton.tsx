@@ -21,7 +21,12 @@ interface TestCopyButtonProps {
   sourceName: string;
   sourceNickname?: string;
   testNamePrefix?: string;
-  onTestCopy: (oldName: string, newName: string, newNickname: string) => void;
+  onTestCopy: (
+    oldName: string,
+    newName: string,
+    newNickname: string,
+    campaignName?: string,
+  ) => void;
   disabled: boolean;
 }
 
@@ -57,7 +62,9 @@ export const TestCopyButton: React.FC<TestCopyButtonProps> = ({
         sourceNickname={sourceNickname}
         testNamePrefix={testNamePrefix}
         mode="COPY"
-        createTest={(newName, newNickname) => onTestCopy(sourceName, newName, newNickname)}
+        createTest={(newName, newNickname, campaignName) =>
+          onTestCopy(sourceName, newName, newNickname, campaignName)
+        }
       />
     </>
   );
