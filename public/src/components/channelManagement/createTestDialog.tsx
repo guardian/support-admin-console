@@ -114,7 +114,7 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
     return '';
   };
 
-  const addPrefix = (name: string): string => `${name}${buildPrefix()}`;
+  const addPrefix = (name: string): string => `${buildPrefix()}${name}`;
 
   const doubleUnderscoresValidator = (s: string): string | undefined => {
     const count = (s.match(/__/g) || []).length;

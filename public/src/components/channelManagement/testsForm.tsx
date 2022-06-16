@@ -171,7 +171,7 @@ export const TestsForm = <T extends Test>(
         });
     };
 
-    const onTestCreate = (name: string, nickname: string): void => {
+    const onTestCreate = (name: string, nickname: string, campaignName?: string): void => {
       const newTest: T = {
         ...createDefaultTest(name, nickname),
         isNew: true,
@@ -181,12 +181,18 @@ export const TestsForm = <T extends Test>(
           email: email,
           timestamp: new Date().toISOString(),
         },
+        campaignName,
       };
       setTests([...tests, newTest]);
       setSelectedTestName(name);
     };
 
-    const onTestCopy = (oldName: string, newName: string, newNickname: string): void => {
+    const onTestCopy = (
+      oldName: string,
+      newName: string,
+      newNickname: string,
+      campaignName?: string,
+    ): void => {
       const oldTest = tests.find(test => test.name === oldName);
       if (oldTest) {
         const newTest: T = {
@@ -202,6 +208,7 @@ export const TestsForm = <T extends Test>(
             timestamp: new Date().toISOString(),
           },
           isNew: true,
+          campaignName,
         };
         setTests([...tests, newTest]);
         setSelectedTestName(newName);
