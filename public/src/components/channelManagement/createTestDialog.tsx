@@ -70,7 +70,7 @@ interface CreateTestDialogProps {
   sourceNickname?: string | void;
   mode: Mode;
   testNamePrefix?: string; // set if all tests must have the same prefix
-  createTest: (name: string, nickname: string) => void;
+  createTest: (name: string, nickname: string, campaignName?: string) => void;
 }
 
 const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
@@ -114,8 +114,19 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
     return '';
   };
 
+  const addPrefix = (name: string): string => `${name}${buildPrefix()}`;
+
+  const doubleUnderscoresValidator = (s: string): string | undefined => {
+    const count = (s.match(/__/g) || []).length;
+    if (count < 2) {
+      return undefined;
+    } else {
+      return `Name can only include one double-underscore, but has ${count}`;
+    }
+  };
+
   const onSubmit = ({ name, nickname }: FormData): void => {
-    createTest(`${buildPrefix()}${name}`.toUpperCase(), nickname.toUpperCase());
+    createTest(addPrefix(name).toUpperCase(), nickname.toUpperCase(), campaignName);
     close();
   };
 
@@ -178,7 +189,13 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
               value: VALID_CHARACTERS_REGEX,
               message: INVALID_CHARACTERS_ERROR_HELPER_TEXT,
             },
-            validate: createDuplicateValidator(existingNames, buildPrefix()),
+            validate: name => {
+              const withPrefix = addPrefix(name);
+              return (
+                doubleUnderscoresValidator(withPrefix) ??
+                createDuplicateValidator(existingNames)(withPrefix)
+              );
+            },
           })}
           error={errors.name !== undefined}
           helperText={errors.name ? errors.name.message : NAME_DEFAULT_HELPER_TEXT}

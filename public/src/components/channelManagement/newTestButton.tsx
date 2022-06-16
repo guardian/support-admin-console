@@ -22,7 +22,7 @@ interface NewTestButtonProps {
   existingNames: string[];
   existingNicknames: string[];
   testNamePrefix?: string;
-  createTest: (name: string, nickname: string) => void;
+  createTest: (name: string, nickname: string, campaignName?: string) => void;
   disabled: boolean;
 }
 
