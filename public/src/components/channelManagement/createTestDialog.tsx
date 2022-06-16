@@ -116,6 +116,7 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
 
   const addPrefix = (name: string): string => `${buildPrefix()}${name}`;
 
+  // There should only be one instance of a double-underscore, as this is used by the AB tests dashboard to group together tests with a common prefix
   const doubleUnderscoresValidator = (s: string): string | undefined => {
     const count = (s.match(/__/g) || []).length;
     if (count < 2) {
