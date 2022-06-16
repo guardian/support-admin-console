@@ -12,7 +12,7 @@ import {
 } from '@guardian/cdk/lib/constructs/iam';
 import type { App, CfnElement } from 'aws-cdk-lib';
 import { Duration, RemovalPolicy } from 'aws-cdk-lib';
-import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';
+import { AttributeType, BillingMode, ProjectionType, Table } from 'aws-cdk-lib/aws-dynamodb';
 import { InstanceClass, InstanceSize, InstanceType } from 'aws-cdk-lib/aws-ec2';
 
 export interface AdminConsoleProps extends GuStackProps {
@@ -32,6 +32,19 @@ export class AdminConsole extends GuStack {
       billingMode: BillingMode.PAY_PER_REQUEST,
       partitionKey: {
         name: 'channel',
+        type: AttributeType.STRING,
+      },
+      sortKey: {
+        name: 'name',
+        type: AttributeType.STRING,
+      },
+    });
+
+    table.addGlobalSecondaryIndex({
+      indexName: 'campaign-test-index',
+      projectionType: ProjectionType.ALL,
+      partitionKey: {
+        name: 'campaignName',
         type: AttributeType.STRING,
       },
       sortKey: {

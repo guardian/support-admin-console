@@ -201,8 +201,30 @@ Object {
             "AttributeName": "name",
             "AttributeType": "S",
           },
+          Object {
+            "AttributeName": "campaignName",
+            "AttributeType": "S",
+          },
         ],
         "BillingMode": "PAY_PER_REQUEST",
+        "GlobalSecondaryIndexes": Array [
+          Object {
+            "IndexName": "campaign-test-index",
+            "KeySchema": Array [
+              Object {
+                "AttributeName": "campaignName",
+                "KeyType": "HASH",
+              },
+              Object {
+                "AttributeName": "name",
+                "KeyType": "RANGE",
+              },
+            ],
+            "Projection": Object {
+              "ProjectionType": "ALL",
+            },
+          },
+        ],
         "KeySchema": Array [
           Object {
             "AttributeName": "channel",
