@@ -34,9 +34,10 @@ abstract class S3ObjectController[T : Decoder : Encoder](
   )
   private val s3Client = services.S3
 
-  private def run(f: => ZIO[ZEnv, Throwable, Result]): Future[Result] =
+  protected def run(f: => ZIO[ZEnv, Throwable, Result]): Future[Result] =
     runtime.unsafeRunToFuture {
       f.catchAll { error =>
+        logger.error(s"Returning InternalServerError to client: ${error.getMessage}", error)
         IO.succeed(InternalServerError(error.getMessage))
       }
     }

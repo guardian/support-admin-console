@@ -36,7 +36,6 @@ POST  /support-frontend/contribution-types/update   controllers.ContributionType
 GET   /support-frontend/amounts                     controllers.AmountsController.get
 POST  /support-frontend/amounts/update              controllers.AmountsController.set
 
-
 # ----- Epic tests ----- #
 GET   /frontend/epic-tests                          controllers.epic.EpicTestsController.get
 # epic list endpoints
@@ -188,6 +187,7 @@ POST  /frontend/channel-switches/update                controllers.ChannelSwitch
 # ----- campaigns ----- #
 GET   /frontend/campaigns                              controllers.CampaignsController.get
 POST  /frontend/campaigns/update                       controllers.CampaignsController.set
+GET   /frontend/campaign/:campaignName/tests           controllers.CampaignsController.getTests(campaignName: String)
 
 # ----- capi ----- #
 GET   /capi/tags                                       controllers.CapiController.getTags()
