@@ -41,7 +41,7 @@ export class AdminConsole extends GuStack {
     });
 
     table.addGlobalSecondaryIndex({
-      indexName: 'campaign-test-index',
+      indexName: 'campaignName-name-index',
       projectionType: ProjectionType.ALL,
       partitionKey: {
         name: 'campaignName',

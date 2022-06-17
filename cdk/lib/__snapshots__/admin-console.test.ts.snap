@@ -209,7 +209,7 @@ Object {
         "BillingMode": "PAY_PER_REQUEST",
         "GlobalSecondaryIndexes": Array [
           Object {
-            "IndexName": "campaign-test-index",
+            "IndexName": "campaignName-name-index",
             "KeySchema": Array [
               Object {
                 "AttributeName": "campaignName",
