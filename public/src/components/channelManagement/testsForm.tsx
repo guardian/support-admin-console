@@ -69,6 +69,7 @@ export interface TestEditorProps<T extends Test> {
   onTestCopy: (oldName: string, newName: string, newNickname: string) => void;
   existingNames: string[];
   existingNicknames: string[];
+  settingsType: FrontendSettingsType;
 }
 
 /**
@@ -291,6 +292,7 @@ export const TestsForm = <T extends Test>(
               onTestSave={onTestSave}
               onTestArchive={onTestArchive}
               onTestCopy={onTestCopy}
+              settingsType={settingsType}
             />
           ) : (
             <div className={classes.viewTextContainer}>

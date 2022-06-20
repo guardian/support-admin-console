@@ -49,6 +49,7 @@ export const ValidatedTestEditor = <T extends Test>(
     onTestCopy,
     existingNames,
     existingNicknames,
+    settingsType,
   }: TestEditorProps<T>) => {
     const classes = useStyles();
     const [isValid, setIsValid] = useState<boolean>(true);
@@ -80,6 +81,7 @@ export const ValidatedTestEditor = <T extends Test>(
           onTestSave={onSave}
           onTestArchive={() => onTestArchive(test.name)}
           onTestCopy={onTestCopy}
+          settingsType={settingsType}
         />
 
         <div className={classes.scrollableContainer}>

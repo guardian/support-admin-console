@@ -9,6 +9,8 @@ import { TestLockDetails } from './testLockDetails';
 import { TestArchiveButton } from './testArchiveButton';
 import { TestCopyButton } from './testCopyButton';
 import { grey } from '@material-ui/core/colors';
+import { Link } from '@material-ui/icons';
+import { FrontendSettingsType } from '../../../utils/requests';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {
@@ -29,6 +31,9 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   mainHeader: {
     fontSize: '32px',
     fontWeight: 'normal',
+  },
+  secondaryHeaderContainer: {
+    display: 'flex',
   },
   secondaryHeader: {
     fontSize: '14px',
@@ -52,6 +57,14 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   icon: {
     color: grey[700],
   },
+  link: {
+    marginLeft: spacing(2),
+    padding: '0 8px',
+    fontSize: '14px',
+    fontWeight: 'normal',
+    color: palette.grey[700],
+    lineHeight: 1.5,
+  },
 }));
 
 interface StickyTopBarProps {
@@ -69,6 +82,7 @@ interface StickyTopBarProps {
   onTestSave: (testName: string) => void;
   onTestArchive: () => void;
   onTestCopy: (oldName: string, newName: string, newNickname: string) => void;
+  settingsType: FrontendSettingsType;
 }
 
 const StickyTopBar: React.FC<StickyTopBarProps> = ({
@@ -86,6 +100,7 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
   onTestSave,
   onTestArchive,
   onTestCopy,
+  settingsType,
 }: StickyTopBarProps) => {
   const classes = useStyles();
   const mainHeader = nickname ? nickname : name;
@@ -97,7 +112,19 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
         <Typography variant="h2" className={classes.mainHeader}>
           {mainHeader}
         </Typography>
-        <Typography className={classes.secondaryHeader}>{secondaryHeader}</Typography>
+        <div className={classes.secondaryHeaderContainer}>
+          <Typography className={classes.secondaryHeader}>{secondaryHeader}</Typography>
+          <Button
+            className={classes.link}
+            variant="outlined"
+            startIcon={<Link />}
+            onClick={() => {
+              navigator.clipboard.writeText(`${location.origin}/${settingsType}/${name}`);
+            }}
+          >
+            Copy link
+          </Button>
+        </div>
       </div>
       <div className={classes.lockContainer}>
         {!userHasTestLocked && !lockStatus.locked && (
