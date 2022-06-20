@@ -1,17 +1,14 @@
 package models
 
-import enumeratum.{CirceEnum, Enum, EnumEntry}
 import io.circe.generic.extras.Configuration
 import io.circe.generic.extras.auto._
+import io.circe.generic.extras.semiauto._
 import io.circe.{Decoder, Encoder}
 
-import scala.collection.immutable.IndexedSeq
 
 
-sealed trait BannerTemplate extends EnumEntry
-object BannerTemplate extends Enum[BannerTemplate] with CirceEnum[BannerTemplate] {
-  override val values: IndexedSeq[BannerTemplate] = findValues
-
+sealed trait BannerTemplate
+object BannerTemplate {
   case object ContributionsBanner extends BannerTemplate
   case object ContributionsBannerWithSignIn extends BannerTemplate
   case object DigitalSubscriptionsBanner extends BannerTemplate
@@ -23,6 +20,10 @@ object BannerTemplate extends Enum[BannerTemplate] with CirceEnum[BannerTemplate
   case object PostElectionAuMomentAlbaneseBanner extends BannerTemplate
   case object PostElectionAuMomentHungBanner extends BannerTemplate
   case object PostElectionAuMomentMorrisonBanner extends BannerTemplate
+
+  implicit val customConfig: Configuration = Configuration.default.withDefaults
+  implicit val bannerTemplateEncoder = deriveEnumerationEncoder[BannerTemplate]
+  implicit val bannerTemplateDecoder = deriveEnumerationDecoder[BannerTemplate]
 }
 
 case class BannerContent(
@@ -66,6 +67,6 @@ case class BannerTest(
 
 object BannerTest {
   implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val bannerTestDecoder = Decoder[BannerTest]
-  implicit val bannerTestEncoder = Encoder[BannerTest]
+  implicit val bannerTestDecoder: Decoder[BannerTest] = deriveConfiguredDecoder[BannerTest]
+  implicit val bannerTestEncoder: Encoder[BannerTest] = deriveConfiguredEncoder[BannerTest]
 }

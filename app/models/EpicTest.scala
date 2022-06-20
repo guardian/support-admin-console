@@ -3,6 +3,7 @@ package models
 import enumeratum.{CirceEnum, Enum, EnumEntry}
 import io.circe.generic.extras.Configuration
 import io.circe.generic.extras.auto._
+import io.circe.generic.extras.semiauto._
 import io.circe.{Decoder, Encoder}
 
 import scala.collection.immutable.IndexedSeq
@@ -95,6 +96,6 @@ case class EpicTest(
 
 object EpicTest {
   implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val epicTestDecoder = Decoder[EpicTest]
-  implicit val epicTestEncoder = Encoder[EpicTest]
+  implicit val epicTestDecoder: Decoder[EpicTest] = deriveConfiguredDecoder[EpicTest]
+  implicit val epicTestEncoder: Encoder[EpicTest] = deriveConfiguredEncoder[EpicTest]
 }
