@@ -6,14 +6,31 @@ GET /                                               controllers.Application.inde
 GET /switches                                       controllers.Application.index
 GET /contribution-types                             controllers.Application.index
 GET /amounts                                        controllers.Application.index
+
 GET /header-tests                                   controllers.Application.index
+GET /header-tests/:testName                         controllers.Application.indexWithName(testName: String)
+
 GET /epic-tests                                     controllers.Application.index
+GET /epic-tests/:testName                           controllers.Application.indexWithName(testName: String)
+
 GET /epic-holdback-tests                            controllers.Application.index
+GET /epic-holdback-tests/:testName                  controllers.Application.indexWithName(testName: String)
+
 GET /liveblog-epic-tests                            controllers.Application.index
+GET /liveblog-epic-tests/:testName                  controllers.Application.indexWithName(testName: String)
+
 GET /apple-news-epic-tests                          controllers.Application.index
+GET /apple-news-epic-tests/:testName                controllers.Application.indexWithName(testName: String)
+
 GET /amp-epic-tests                                 controllers.Application.index
+GET /amp-epic-tests/:testName                       controllers.Application.indexWithName(testName: String)
+
 GET /banner-tests                                   controllers.Application.index
+GET /banner-tests/:testName                         controllers.Application.indexWithName(testName: String)
+
 GET /banner-tests2                                  controllers.Application.index
+GET /banner-tests2/:testName                        controllers.Application.indexWithName(testName: String)
+
 GET /banner-deploy                                  controllers.Application.index
 GET /channel-switches                               controllers.Application.index
 GET /campaigns                                      controllers.Application.index

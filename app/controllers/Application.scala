@@ -11,4 +11,7 @@ class Application(authAction: AuthAction[AnyContent], components: ControllerComp
   def index = authAction {
     Ok(views.html.index(stage)).withHeaders(CACHE_CONTROL -> "no-cache")
   }
+
+  // Handler for endpoints with a test name in the path. The client takes care of using the testName
+  def indexWithName(testName: String) = index
 }
