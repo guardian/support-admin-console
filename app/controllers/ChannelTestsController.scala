@@ -205,7 +205,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
   def forceLockTest(testName: String) = authAction.async { request =>
     run {
       logger.info(s"${request.user.email} is force locking $channel/'$testName'")
-      dynamo.lockTest(testName, channel, request.user.email, force = false)
+      dynamo.lockTest(testName, channel, request.user.email, force = true)
         .map(_ => Ok("locked"))
     }
   }
