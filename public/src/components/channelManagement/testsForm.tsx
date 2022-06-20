@@ -15,6 +15,7 @@ import {
   archiveTests,
   createTest,
 } from '../../utils/requests';
+import { useParams } from 'react-router-dom';
 
 const useStyles = makeStyles(({ spacing, typography }: Theme) => ({
   viewTextContainer: {
@@ -68,6 +69,7 @@ export interface TestEditorProps<T extends Test> {
   onTestCopy: (oldName: string, newName: string, newNickname: string) => void;
   existingNames: string[];
   existingNicknames: string[];
+  settingsType: FrontendSettingsType;
 }
 
 /**
@@ -83,8 +85,9 @@ export const TestsForm = <T extends Test>(
 ): React.FC => {
   return () => {
     const classes = useStyles();
+    const { testName } = useParams<{ testName?: string }>();
     const [tests, setTests] = useState<T[]>([]);
-    const [selectedTestName, setSelectedTestName] = useState<string | null>(null);
+    const [selectedTestName, setSelectedTestName] = useState<string | null>(testName || null);
     const [testListLockStatus, setTestListLockStatus] = useState<LockStatus>({ locked: false });
     const [email, setEmail] = useState<string>('');
     const [savingTestList, setSavingTestList] = useState<boolean>(false);
@@ -289,6 +292,7 @@ export const TestsForm = <T extends Test>(
               onTestSave={onTestSave}
               onTestArchive={onTestArchive}
               onTestCopy={onTestCopy}
+              settingsType={settingsType}
             />
           ) : (
             <div className={classes.viewTextContainer}>
