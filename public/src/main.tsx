@@ -229,7 +229,7 @@ const AppRouter = () => {
           />
           <Route
             path="/qr-code"
-            render={(): React.ReactElement => createComponent(<QrCodePage />, 'Campaigns')}
+            render={(): React.ReactElement => createComponent(<QrCodePage />, 'QR Code Generator')}
           />
         </div>
       </Router>
