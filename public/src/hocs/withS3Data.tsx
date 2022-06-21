@@ -34,6 +34,7 @@ function withS3Data<T>(
     }, []);
 
     const setData = (data: T): void => {
+      console.log('withS3Data setData', dataFromServer, data);
       if (!dataFromServer) {
         return;
       }
@@ -41,6 +42,7 @@ function withS3Data<T>(
     };
 
     const saveData = (): void => {
+      console.log('withS3Data saveData', dataFromServer);
       if (!dataFromServer) {
         return;
       }

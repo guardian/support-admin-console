@@ -66,13 +66,14 @@ const CreateCampaignDialog: React.FC<CreateCampaignDialogProps> = ({
   });
 
   const onSubmit = (vals: FormData): void => {
-    console.log('onSubmit', vals);
+    console.log('onSubmit START', vals);
     createCampaign({
       name: vals.name.toUpperCase(),
       nickname: vals.nickname.toUpperCase(),
       description: vals.description,
     });
     close();
+    console.log('onSubmit END');
   };
 
   return (

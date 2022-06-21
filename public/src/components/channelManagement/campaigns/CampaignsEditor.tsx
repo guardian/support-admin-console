@@ -31,6 +31,7 @@ function CampaignsEditor({
   existingNames,
   existingNicknames,
 }: CampaignsEditorProps): React.ReactElement {
+  console.log('LOADING CampaignsEditor', campaign);
   const classes = useStyles();
 
   if (campaign) {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles, Theme } from '@material-ui/core';
 import CampaignsSidebar from './CampaignsSidebar';
 import CampaignsEditor from './CampaignsEditor';
@@ -57,29 +57,41 @@ const CampaignsForm: React.FC<InnerProps<Campaigns>> = ({
   setData: setCampaigns,
   saveData: saveCampaigns,
 }: InnerProps<Campaigns>) => {
+  console.log('LOADING CampaignsForm', campaigns);
   const classes = useStyles();
 
   const createCampaign = (campaign: Campaign): void => {
+    console.log('createCampaign START', campaigns, campaign);
     setCampaigns([...campaigns, campaign]);
-    console.log('createCampaign', campaigns);
+    console.log('createCampaign END - invoking saveCampaigns');
+  };
+
+  const saveAllCampaigns = (): void => {
+    console.log('saveAllCampaigns START', campaigns);
+    saveCampaigns();
+    console.log('saveAllCampaigns END');
   };
 
   const saveCampaign = (campaign: Campaign): void => {
+    console.log('saveCampaign START', campaigns);
     const removed = campaigns.filter(c => c.name !== campaign.name);
     setCampaigns([...removed, campaign]);
-    console.log('saveCampaign', campaigns);
+    console.log('saveCampaign END');
   };
 
   const deleteCampaign = (campaign: Campaign): void => {
+    console.log('deleteCampaign START', campaign);
     setCampaigns(campaigns.filter(c => c.name !== campaign.name));
-    console.log('deleteCampaign', campaigns);
+    console.log('deleteCampaign END');
   };
 
   const [selectedCampaign, setSelectedCampaign] = useState<Campaign | undefined>();
 
   const onCampaignSelected = (name: string) => {
+    console.log('onCampaignSelected START', name);
     const requiredCampaign = campaigns.filter(c => c.name === name);
     setSelectedCampaign(requiredCampaign[0]);
+    console.log('onCampaignSelected END');
   };
 
   return (
@@ -90,6 +102,7 @@ const CampaignsForm: React.FC<InnerProps<Campaigns>> = ({
           createCampaign={createCampaign}
           selectedCampaignName=""
           onCampaignSelected={onCampaignSelected}
+          saveAllCampaigns={saveAllCampaigns}
           // tests={tests}
           // selectedTestName={selectedTestName}
           // testNamePrefix={testNamePrefix}
@@ -139,11 +152,14 @@ const CampaignsForm: React.FC<InnerProps<Campaigns>> = ({
   );
 };
 
-const fetchSettings = (): Promise<DataFromServer<Campaigns>> =>
-  fetchFrontendSettings(FrontendSettingsType.campaigns);
-const saveSettings = (data: DataFromServer<Campaigns>): Promise<Response> =>
-  saveFrontendSettings(FrontendSettingsType.campaigns, data);
+const fetchSettings = (): Promise<DataFromServer<Campaigns>> => {
+  console.log('fetchSettings START', FrontendSettingsType.campaigns);
+  return fetchFrontendSettings(FrontendSettingsType.campaigns);
+}
+
+const saveSettings = (data: DataFromServer<Campaigns>): Promise<Response> => {
+  console.log('saveSettings START', FrontendSettingsType, 'with DATA', data);
+  return saveFrontendSettings(FrontendSettingsType.campaigns, data);
+}
 
 export default withS3Data<Campaigns>(CampaignsForm, fetchSettings, saveSettings);
-
-// export default CampaignsForm;
