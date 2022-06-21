@@ -2,15 +2,12 @@ import React from 'react';
 import { Button, makeStyles, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 
+import { Campaigns, Campaign } from './CampaignsForm';
 import CreateCampaignDialog from './CreateCampaignDialog';
 import useOpenable from '../../../hooks/useOpenable';
 
 const useStyles = makeStyles(() => ({
-  container: {
-    marginBottom: '12px',
-  },
   button: {
-    borderStyle: 'dashed',
     justifyContent: 'start',
     height: '48px',
   },
@@ -24,18 +21,20 @@ const useStyles = makeStyles(() => ({
 
 interface NewCampaignButtonProps {
   existingNames: string[];
-  createCampaign: (name: string) => void;
+  existingNicknames: string[];
+  createCampaign: (campaign: Campaign) => void;
 }
 
 const NewCampaignButton: React.FC<NewCampaignButtonProps> = ({
   existingNames,
+  existingNicknames,
   createCampaign,
 }: NewCampaignButtonProps) => {
   const [isOpen, open, close] = useOpenable();
   const classes = useStyles();
 
   return (
-    <div className={classes.container}>
+    <>
       <Button className={classes.button} variant="outlined" startIcon={<AddIcon />} onClick={open}>
         <Typography className={classes.text}>Create a new campaign</Typography>
       </Button>
@@ -43,9 +42,10 @@ const NewCampaignButton: React.FC<NewCampaignButtonProps> = ({
         isOpen={isOpen}
         close={close}
         existingNames={existingNames}
+        existingNicknames={existingNicknames}
         createCampaign={createCampaign}
       />
-    </div>
+    </>
   );
 };
 

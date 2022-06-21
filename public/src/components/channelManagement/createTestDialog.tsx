@@ -23,7 +23,7 @@ import {
   INVALID_CHARACTERS_ERROR_HELPER_TEXT,
   VALID_CHARACTERS_REGEX,
 } from './helpers/validation';
-import { Campaign } from './campaigns/CampaignsEditor';
+import { Campaign } from './campaigns/CampaignsForm';
 import { fetchFrontendSettings, FrontendSettingsType } from '../../utils/requests';
 import { DataFromServer } from '../../hocs/withS3Data';
 

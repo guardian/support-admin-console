@@ -1,88 +1,83 @@
 import React from 'react';
-import { makeStyles, Theme } from '@material-ui/core';
-import {
-  fetchFrontendSettings,
-  FrontendSettingsType,
-  saveFrontendSettings,
-} from '../../../utils/requests';
-import Button from '@material-ui/core/Button';
-import withS3Data, { DataFromServer, InnerProps } from '../../../hocs/withS3Data';
-import NewCampaignButton from './NewCampaignButton';
-import DeleteCampaignButton from './DeleteCampaignButton';
+import { makeStyles, Theme, Typography } from '@material-ui/core';
+import StickyTopBar from './StickyCampaignBar';
+import { Campaign } from './CampaignsForm';
 
-const useStyles = makeStyles(({ palette }: Theme) => ({
-  container: {
-    margin: '30px',
-    maxWidth: '500px',
+const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
+  testEditorContainer: {
     display: 'flex',
     flexDirection: 'column',
-    '& > * + *': {
-      marginTop: '5px',
-    },
+    height: '100%',
+    width: '100%',
+    background: palette.background.paper, // #FFFFFF
+    borderLeft: `1px solid ${palette.grey[500]}`,
   },
-  campaign: {
-    display: 'flex',
-    alignItems: 'center',
-    '& > * + *': {
-      marginLeft: 'auto',
-    },
-    borderRadius: '4px',
-    border: `1px solid ${palette.grey[700]}`,
-    padding: '0 12px',
-    fontWeight: 500,
+  scrollableContainer: {
+    overflowY: 'auto',
+    paddingLeft: spacing(3),
+    paddingRight: spacing(1),
+    paddingTop: spacing(2),
   },
 }));
 
-export interface Campaign {
-  name: string;
+interface CampaignsEditorProps {
+  campaign?: Campaign;
+  existingNames: string[];
+  existingNicknames: string[];
 }
-type Campaigns = Campaign[];
 
-const CampaignsEditor: React.FC<InnerProps<Campaigns>> = ({
-  data: campaigns,
-  setData: setCampaigns,
-  saveData: saveCampaigns,
-}: InnerProps<Campaigns>) => {
+function CampaignsEditor({
+  campaign,
+  existingNames,
+  existingNicknames,
+}: CampaignsEditorProps): React.ReactElement {
   const classes = useStyles();
 
-  const createCampaign = (name: string): void => {
-    setCampaigns([...campaigns, { name }]);
-  };
+  if (campaign) {
+    const { name, nickname, description } = campaign;
 
-  const deleteCampaign = (name: string): void => {
-    setCampaigns(campaigns.filter(c => c.name !== name));
-  };
+    return (
+      <div className={classes.testEditorContainer}>
+        <StickyTopBar
+          name={campaign.name}
+          nickname={campaign.nickname}
+          isNew={false}
+          lockStatus={{ locked: false }}
+          userHasCampaignLocked={false}
+          userHasCampaignListLocked={false}
+          existingNames={existingNames}
+          existingNicknames={existingNicknames}
+          campaignNamePrefix={''}
+          onCampaignLock={() => {}}
+          onCampaignUnlock={() => {}}
+          onCampaignSave={() => {}}
+          onCampaignArchive={() => {}}
+          onCampaignCopy={() => {}}
+          // isNew={!!test.isNew}
+          // lockStatus={test.lockStatus || { locked: false }}
+          // userHasTestLocked={userHasTestLocked}
+          // userHasTestListLocked={userHasTestListLocked}
+          // existingNames={existingNames}
+          // existingNicknames={existingNicknames}
+          // testNamePrefix={testNamePrefix}
+          // onTestLock={onTestLock}
+          // onTestUnlock={onTestUnlock}
+          // onTestSave={onSave}
+          // onTestArchive={() => onTestArchive(test.name)}
+          // onTestCopy={onTestCopy}
+        />
 
-  return (
-    <div className={classes.container}>
-      <NewCampaignButton
-        existingNames={campaigns.map(c => c.name)}
-        createCampaign={createCampaign}
-      />
+        <div className={classes.scrollableContainer}>
+          <Typography>Name: {name}</Typography>
 
-      {campaigns.map(campaign => (
-        <div className={classes.campaign} key={`campaign-${campaign.name}`}>
-          <div>{campaign.name}</div>
-          <DeleteCampaignButton onDelete={(): void => deleteCampaign(campaign.name)} />
+          {nickname && <Typography>Nickname: {nickname}</Typography>}
+
+          {description && <Typography>Description: {description}</Typography>}
         </div>
-      ))}
+      </div>
+    );
+  }
+  return <Typography>Select a campaign to view its details.</Typography>;
+}
 
-      <Button
-        onClick={saveCampaigns}
-        color="primary"
-        variant="contained"
-        size="large"
-        fullWidth={false}
-      >
-        Submit
-      </Button>
-    </div>
-  );
-};
-
-const fetchSettings = (): Promise<DataFromServer<Campaigns>> =>
-  fetchFrontendSettings(FrontendSettingsType.campaigns);
-const saveSettings = (data: DataFromServer<Campaigns>): Promise<Response> =>
-  saveFrontendSettings(FrontendSettingsType.campaigns, data);
-
-export default withS3Data<Campaigns>(CampaignsEditor, fetchSettings, saveSettings);
+export default CampaignsEditor;
