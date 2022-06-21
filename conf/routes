@@ -17,6 +17,7 @@ GET /banner-tests2                                  controllers.Application.inde
 GET /banner-deploy                                  controllers.Application.index
 GET /channel-switches                               controllers.Application.index
 GET /campaigns                                      controllers.Application.index
+GET /qr-code                                        controllers.Application.index
 
 # ----- Authentication ----- #
 GET  /login                                         controllers.Login.login

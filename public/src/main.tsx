@@ -34,6 +34,7 @@ import ChannelSwitches from './components/channelManagement/ChannelSwitches';
 import CampaignsEditor from './components/channelManagement/campaigns/CampaignsEditor';
 import { FontWeightProperty } from 'csstype';
 import { makeStyles } from '@material-ui/core';
+import QrCodePage from './components/utilities/QrCodePage';
 
 type Stage = 'DEV' | 'CODE' | 'PROD';
 declare global {
@@ -225,6 +226,10 @@ const AppRouter = () => {
           <Route
             path="/campaigns"
             render={(): React.ReactElement => createComponent(<CampaignsEditor />, 'Campaigns')}
+          />
+          <Route
+            path="/qr-code"
+            render={(): React.ReactElement => createComponent(<QrCodePage />, 'Campaigns')}
           />
         </div>
       </Router>
