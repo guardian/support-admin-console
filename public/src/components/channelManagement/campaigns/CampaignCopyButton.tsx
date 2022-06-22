@@ -3,7 +3,7 @@ import useOpenable from '../../../hooks/useOpenable';
 import { Button, makeStyles, Theme, Typography } from '@material-ui/core';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import { grey } from '@material-ui/core/colors';
-import CreateCampaignDialog from './createCampaignDialog';
+import CreateCampaignDialog from './CreateCampaignDialog';
 
 const useStyles = makeStyles(({ palette }: Theme) => ({
   buttonText: {
