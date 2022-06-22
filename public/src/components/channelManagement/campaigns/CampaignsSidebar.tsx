@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { makeStyles, Typography, Button } from '@material-ui/core';
 import { Campaigns, Campaign } from './CampaignsForm';
 import NewCampaignButton from './NewCampaignButton';
 import CampaignsList from './CampaignsList';
+import { red } from '@material-ui/core/colors';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -11,21 +12,26 @@ const useStyles = makeStyles(() => ({
     paddingLeft: '32px',
   },
   listsContainer: {
-    // position: 'relative',
-    // display: 'flex',
-    // marginTop: '8px',
+    position: 'relative',
+    display: 'flex',
+    marginTop: '8px',
   },
   buttonsContainer: {
-    // display: 'flex',
-    // flexDirection: 'column',
-    // gap: '8px',
-    // marginBottom: '10px',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '8px',
+    marginBottom: '10px',
   },
-  button: {
+  saveAllButton: {
     justifyContent: 'start',
     height: '48px',
   },
-  text: {
+  saveAllButtonAlert: {
+    justifyContent: 'start',
+    height: '48px',
+    border: `3px solid ${red[500]}`,
+  },
+  saveAllButtonText: {
     fontSize: '12px',
     fontWeight: 500,
     textTransform: 'uppercase',
@@ -35,7 +41,8 @@ const useStyles = makeStyles(() => ({
 
 interface CampaignsSidebarProps {
   campaigns: Campaigns;
-  selectedCampaignName: string | null;
+  selectedCampaign?: Campaign;
+  newCampaignCreated: boolean;
   createCampaign: (campaign: Campaign) => void;
   onCampaignSelected: (campaignName: string) => void;
   saveAllCampaigns: () => void;
@@ -44,7 +51,8 @@ interface CampaignsSidebarProps {
 function CampaignsSidebar({
   campaigns,
   createCampaign,
-  selectedCampaignName,
+  selectedCampaign,
+  newCampaignCreated,
   onCampaignSelected,
   saveAllCampaigns,
 }: CampaignsSidebarProps): React.ReactElement {
@@ -59,23 +67,20 @@ function CampaignsSidebar({
           existingNicknames={campaigns.map(c => c.nickname)}
           createCampaign={createCampaign}
         />
+        <Button
+          className={newCampaignCreated ? classes.saveAllButtonAlert : classes.saveAllButton}
+          variant="outlined"
+          onClick={saveAllCampaigns}
+        >
+          <Typography className={classes.saveAllButtonText}>Save all campaigns</Typography>
+        </Button>
       </div>
       <div className={classes.listsContainer}>
         <CampaignsList
           campaigns={campaigns}
-          selectedCampaignName={selectedCampaignName}
+          selectedCampaign={selectedCampaign}
           onCampaignSelected={onCampaignSelected}
         />
-      </div>
-      <Typography >The requirement to<br />have this button is<br />needlessly bad UX -<br />a newly created campaign<br />should automatically be<br />saved into S3!</Typography>
-      <div className={classes.buttonsContainer}>
-        <Button
-          className={classes.button}
-          variant="outlined"
-          onClick={saveAllCampaigns}
-        >
-          <Typography className={classes.text}>Save all campaigns</Typography>
-        </Button>
       </div>
     </div>
   );

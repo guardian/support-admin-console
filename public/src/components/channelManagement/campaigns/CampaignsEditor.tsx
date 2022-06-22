@@ -31,7 +31,6 @@ function CampaignsEditor({
   existingNames,
   existingNicknames,
 }: CampaignsEditorProps): React.ReactElement {
-  console.log('LOADING CampaignsEditor', campaign);
   const classes = useStyles();
 
   if (campaign) {
@@ -40,32 +39,10 @@ function CampaignsEditor({
     return (
       <div className={classes.testEditorContainer}>
         <StickyTopBar
-          name={campaign.name}
-          nickname={campaign.nickname}
-          isNew={false}
-          lockStatus={{ locked: false }}
-          userHasCampaignLocked={false}
-          userHasCampaignListLocked={false}
+          name={name}
+          nickname={nickname}
           existingNames={existingNames}
           existingNicknames={existingNicknames}
-          campaignNamePrefix={''}
-          onCampaignLock={() => {}}
-          onCampaignUnlock={() => {}}
-          onCampaignSave={() => {}}
-          onCampaignArchive={() => {}}
-          onCampaignCopy={() => {}}
-          // isNew={!!test.isNew}
-          // lockStatus={test.lockStatus || { locked: false }}
-          // userHasTestLocked={userHasTestLocked}
-          // userHasTestListLocked={userHasTestListLocked}
-          // existingNames={existingNames}
-          // existingNicknames={existingNicknames}
-          // testNamePrefix={testNamePrefix}
-          // onTestLock={onTestLock}
-          // onTestUnlock={onTestUnlock}
-          // onTestSave={onSave}
-          // onTestArchive={() => onTestArchive(test.name)}
-          // onTestCopy={onTestCopy}
         />
 
         <div className={classes.scrollableContainer}>

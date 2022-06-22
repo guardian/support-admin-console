@@ -18,20 +18,14 @@ const useStyles = makeStyles(({ palette }: Theme) => ({
 interface CampaignCopyButtonProps {
   existingNames: string[];
   existingNicknames: string[];
-  // sourceName: string;
-  // sourceNickname?: string;
-  // campaignNamePrefix?: string;
-  // onTestCopy: (oldName: string, newName: string, newNickname: string) => void;
   disabled: boolean;
 }
+
+// const voidAction = () => {};
 
 export const CampaignCopyButton: React.FC<CampaignCopyButtonProps> = ({
   existingNames,
   existingNicknames,
-  // sourceName,
-  // sourceNickname,
-  // campaignNamePrefix,
-  // onTestCopy,
   disabled,
 }: CampaignCopyButtonProps) => {
   const classes = useStyles();
@@ -52,12 +46,8 @@ export const CampaignCopyButton: React.FC<CampaignCopyButtonProps> = ({
         isOpen={isOpen}
         close={close}
         existingNames={existingNames}
-        // sourceName={sourceName}
         existingNicknames={existingNicknames}
-        // sourceNickname={sourceNickname}
-        // campaignNamePrefix={campaignNamePrefix}
-        // mode="COPY"
-        createCampaign={() => {}}
+        // createCampaign={voidAction}
       />
     </>
   );

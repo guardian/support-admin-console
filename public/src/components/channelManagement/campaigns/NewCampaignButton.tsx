@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, makeStyles, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 
-import { Campaigns, Campaign } from './CampaignsForm';
+import { Campaign } from './CampaignsForm';
 import CreateCampaignDialog from './CreateCampaignDialog';
 import useOpenable from '../../../hooks/useOpenable';
 

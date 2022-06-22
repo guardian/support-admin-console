@@ -43,7 +43,7 @@ interface CreateCampaignDialogProps {
   close: () => void;
   existingNames: string[];
   existingNicknames: string[];
-  createCampaign: (data: FormData) => void;
+  createCampaign?: (data: FormData) => void;
 }
 
 const CreateCampaignDialog: React.FC<CreateCampaignDialogProps> = ({

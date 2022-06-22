@@ -1,10 +1,8 @@
 import React from 'react';
 import { List, ListItem, Theme, makeStyles, Button, Typography } from '@material-ui/core';
-import { red } from '@material-ui/core/colors';
-import { Campaigns } from './CampaignsForm';
-import useHover from '../../../hooks/useHover';
+import { Campaigns, Campaign } from './CampaignsForm';
 
-const useStyles = makeStyles(({ palette }: Theme) => ({
+const useStyles = makeStyles(({}: Theme) => ({
   container: {
     marginTop: '16px',
   },
@@ -19,11 +17,16 @@ const useStyles = makeStyles(({ palette }: Theme) => ({
     width: '100%',
   },
   button: {
-    justifyContent: 'start',
-    margin: 0,
-    padding: '8px',
+    position: 'relative',
+    height: '50px',
+    width: '290px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    background: 'white',
+    borderRadius: '4px',
+    padding: '0 12px',
     marginBottom: '4px',
-    width: '100%',
   },
   text: {
     fontSize: '12px',
@@ -31,49 +34,36 @@ const useStyles = makeStyles(({ palette }: Theme) => ({
     textTransform: 'uppercase',
     letterSpacing: '1px',
   },
-  // live: {
-  //   border: `1px solid ${red[500]}`,
-
-  //   '&:hover': {
-  //     background: `${red[500]}`,
-  //   },
-  // },
-  // liveInverted: {
-  //   background: `${red[500]}`,
-  // },
-  // draft: {
-  //   border: `1px solid ${palette.grey[700]}`,
-
-  //   '&:hover': {
-  //     background: `${palette.grey[700]}`,
-  //   },
-  // },
-  // draftInverted: {
-  //   background: `${palette.grey[700]}`,
-  // },
 }));
 
 interface CampaignsListProps {
   campaigns: Campaigns;
-  selectedCampaignName: string | null;
+  selectedCampaign?: Campaign;
   onCampaignSelected: (testName: string) => void;
 }
 
 const CampaignsList = ({
   campaigns,
-  selectedCampaignName,
+  selectedCampaign,
   onCampaignSelected,
 }: CampaignsListProps): React.ReactElement => {
   const classes = useStyles();
 
+  const checkIfCampaignIsSelected = (): 'outlined' => {
+    if (selectedCampaign) {
+      return 'outlined';
+    }
+    return 'outlined';
+  };
+
   return (
     <div className={classes.container}>
       <List className={classes.list}>
-        {campaigns.map((campaign, index) => (
+        {campaigns.map(campaign => (
           <ListItem className={classes.listItem} key={campaign.name}>
             <Button
               className={classes.button}
-              variant="outlined"
+              variant={checkIfCampaignIsSelected()}
               onClick={(): void => onCampaignSelected(campaign.name)}
             >
               <Typography className={classes.text}>{campaign.nickname}</Typography>

@@ -1,13 +1,5 @@
 import React from 'react';
-import { Theme, Typography, makeStyles, Button } from '@material-ui/core';
-import EditIcon from '@material-ui/icons/Edit';
-import { LockStatus } from '../helpers/shared';
-import CloseIcon from '@material-ui/icons/Close';
-import SaveIcon from '@material-ui/icons/Save';
-import LockIcon from '@material-ui/icons/Lock';
-import { TestLockDetails } from './CampaignLockDetails';
-import { CampaignArchiveButton } from './CampaignArchiveButton';
-import { CampaignCopyButton } from './CampaignCopyButton';
+import { Theme, Typography, makeStyles } from '@material-ui/core';
 import { grey } from '@material-ui/core/colors';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
@@ -57,39 +49,22 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
 interface StickyTopBarProps {
   name: string;
   nickname?: string;
-  isNew: boolean;
-  lockStatus: LockStatus;
-  userHasCampaignLocked: boolean;
-  userHasCampaignListLocked: boolean;
   existingNames: string[];
   existingNicknames: string[];
-  campaignNamePrefix?: string;
-  onCampaignLock: (campaignName: string, force: boolean) => void;
-  onCampaignUnlock: (campaignName: string) => void;
-  onCampaignSave: (campaignName: string) => void;
-  onCampaignArchive: () => void;
-  onCampaignCopy: (oldName: string, newName: string, newNickname: string) => void;
 }
 
 const StickyTopBar: React.FC<StickyTopBarProps> = ({
   name,
   nickname,
-  isNew,
-  lockStatus,
-  userHasCampaignLocked,
-  userHasCampaignListLocked,
   existingNames,
   existingNicknames,
-  campaignNamePrefix,
-  onCampaignLock,
-  onCampaignUnlock,
-  onCampaignSave,
-  onCampaignArchive,
-  onCampaignCopy,
 }: StickyTopBarProps) => {
   const classes = useStyles();
   const mainHeader = nickname ? nickname : name;
   const secondaryHeader = nickname ? name : null;
+
+  // Purely to stop linting errors during development
+  console.log(existingNames, existingNicknames);
 
   return (
     <header className={classes.container}>
@@ -99,17 +74,13 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
         </Typography>
         <Typography className={classes.secondaryHeader}>{secondaryHeader}</Typography>
       </div>
+      {/*      
       <div className={classes.lockContainer}>
         {!userHasCampaignLocked && !lockStatus.locked && (
           <>
             <CampaignCopyButton
               existingNames={existingNames}
               existingNicknames={existingNicknames}
-              // sourceName={name}
-              // sourceNickname={nickname}
-              // campaignNamePrefix={campaignNamePrefix}
-              // onTestCopy={onCampaignCopy}
-              // disabled={userHasCampaignListLocked}
               disabled={true}
             />
             <Button
@@ -117,7 +88,6 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
               size="medium"
               startIcon={<EditIcon className={classes.icon} />}
               onClick={() => onCampaignLock(name, false)}
-              disabled={true}
             >
               <Typography className={classes.buttonText}>Edit campaign</Typography>
             </Button>
@@ -160,6 +130,7 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
           </>
         )}
       </div>
+*/}
     </header>
   );
 };
