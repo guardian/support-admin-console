@@ -3,6 +3,7 @@ import useOpenable from '../../../hooks/useOpenable';
 import { Button, makeStyles, Theme, Typography } from '@material-ui/core';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import { grey } from '@material-ui/core/colors';
+import { Campaign } from './CampaignsForm';
 import CreateCampaignDialog from './CreateCampaignDialog';
 
 const useStyles = makeStyles(({ palette }: Theme) => ({
@@ -19,14 +20,14 @@ interface CampaignCopyButtonProps {
   existingNames: string[];
   existingNicknames: string[];
   disabled: boolean;
+  createCampaign: (campaign: Campaign) => void;
 }
-
-// const voidAction = () => {};
 
 export const CampaignCopyButton: React.FC<CampaignCopyButtonProps> = ({
   existingNames,
   existingNicknames,
   disabled,
+  createCampaign,
 }: CampaignCopyButtonProps) => {
   const classes = useStyles();
   const [isOpen, open, close] = useOpenable();
@@ -47,7 +48,7 @@ export const CampaignCopyButton: React.FC<CampaignCopyButtonProps> = ({
         close={close}
         existingNames={existingNames}
         existingNicknames={existingNicknames}
-        // createCampaign={voidAction}
+        createCampaign={createCampaign}
       />
     </>
   );
