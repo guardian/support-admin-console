@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { makeStyles, Theme } from '@material-ui/core';
+import { makeStyles, Theme, Typography } from '@material-ui/core';
 import CampaignsSidebar from './CampaignsSidebar';
 import CampaignsEditor from './CampaignsEditor';
 import { useParams } from 'react-router-dom';
@@ -78,20 +78,22 @@ const CampaignsForm: React.FC<InnerProps<Campaigns>> = ({
 
   const getSelectedCampaign = (): Campaign | undefined => {
     if (selectedCampaign == null && testName != null) {
-      const requiredCampaign = campaigns.filter(c => c.name === testName);
-      if (requiredCampaign[0] != null) {
-        return requiredCampaign[0];
+      const requiredCampaign = campaigns.find(c => c.name === testName);
+      if (requiredCampaign != null) {
+        return requiredCampaign;
       }
     }
     return selectedCampaign;
   };
 
   const onCampaignSelected = (name: string) => {
-    const requiredCampaign = campaigns.filter(c => c.name === name);
-    if (requiredCampaign[0] != null) {
-      setSelectedCampaign(requiredCampaign[0]);
+    const requiredCampaign = campaigns.find(c => c.name === name);
+    if (requiredCampaign != null) {
+      setSelectedCampaign(requiredCampaign);
     }
   };
+
+  const currentCampaign = getSelectedCampaign();
 
   return (
     <div className={classes.body}>
@@ -100,18 +102,29 @@ const CampaignsForm: React.FC<InnerProps<Campaigns>> = ({
           campaigns={campaigns}
           createCampaign={createCampaign}
           newCampaignCreated={newCampaignCreated}
-          selectedCampaign={getSelectedCampaign()}
+          selectedCampaign={currentCampaign}
           onCampaignSelected={onCampaignSelected}
           saveAllCampaigns={saveAllCampaigns}
         />
       </div>
-
+      {/*
       <div className={classes.rightCol}>
         <CampaignsEditor
           campaign={getSelectedCampaign()}
-          existingNames={campaigns.map(c => c.name)}
-          existingNicknames={campaigns.map(c => c.nickname)}
         />
+      </div>
+*/}
+      <div className={classes.rightCol}>
+        {currentCampaign ? (
+          <CampaignsEditor campaign={currentCampaign} />
+        ) : (
+          <div className={classes.viewTextContainer}>
+            <Typography className={classes.viewText}>
+              Select an existing campaign from the menu,
+            </Typography>
+            <Typography className={classes.viewText}>or create a new one</Typography>
+          </div>
+        )}
       </div>
     </div>
   );

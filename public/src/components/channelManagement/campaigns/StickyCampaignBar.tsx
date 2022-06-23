@@ -61,22 +61,12 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
 interface StickyTopBarProps {
   name: string;
   nickname?: string;
-  existingNames: string[];
-  existingNicknames: string[];
 }
 
-const StickyTopBar: React.FC<StickyTopBarProps> = ({
-  name,
-  nickname,
-  existingNames,
-  existingNicknames,
-}: StickyTopBarProps) => {
+const StickyTopBar: React.FC<StickyTopBarProps> = ({ name, nickname }: StickyTopBarProps) => {
   const classes = useStyles();
   const mainHeader = nickname ? nickname : name;
   const secondaryHeader = nickname ? name : null;
-
-  // Purely while developing, to get rid of a silly linting error
-  console.log(existingNames, existingNicknames);
 
   return (
     <header className={classes.container}>
@@ -98,63 +88,6 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
           </Button>
         </div>
       </div>
-      {/*      
-      <div className={classes.lockContainer}>
-        {!userHasCampaignLocked && !lockStatus.locked && (
-          <>
-            <CampaignCopyButton
-              existingNames={existingNames}
-              existingNicknames={existingNicknames}
-              disabled={true}
-            />
-            <Button
-              variant="outlined"
-              size="medium"
-              startIcon={<EditIcon className={classes.icon} />}
-              onClick={() => onCampaignLock(name, false)}
-            >
-              <Typography className={classes.buttonText}>Edit campaign</Typography>
-            </Button>
-          </>
-        )}
-        {!userHasCampaignLocked && lockStatus.locked && (
-          <>
-            <TestLockDetails email={lockStatus.email} timestamp={lockStatus.timestamp} />
-            <Button
-              variant="outlined"
-              size="medium"
-              startIcon={<LockIcon className={classes.icon} />}
-              onClick={() => onCampaignLock(name, true)}
-            >
-              <Typography className={classes.buttonText}>Take control</Typography>
-            </Button>
-          </>
-        )}
-        {userHasCampaignLocked && (
-          <>
-            {!isNew && <CampaignArchiveButton onCampaignArchive={onCampaignArchive} />}
-            <Button
-              variant="outlined"
-              size="medium"
-              startIcon={<CloseIcon className={classes.icon} />}
-              onClick={() => onCampaignUnlock(name)}
-              disabled={true}
-            >
-              <Typography className={classes.buttonText}>Discard</Typography>
-            </Button>
-            <Button
-              variant="outlined"
-              size="medium"
-              startIcon={<SaveIcon className={classes.icon} />}
-              onClick={() => onCampaignSave(name)}
-              disabled={true}
-            >
-              <Typography className={classes.buttonText}>Save test</Typography>
-            </Button>
-          </>
-        )}
-      </div>
-*/}
     </header>
   );
 };

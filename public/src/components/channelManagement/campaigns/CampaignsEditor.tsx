@@ -21,41 +21,27 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
 }));
 
 interface CampaignsEditorProps {
-  campaign?: Campaign;
-  existingNames: string[];
-  existingNicknames: string[];
+  campaign: Campaign;
 }
 
-function CampaignsEditor({
-  campaign,
-  existingNames,
-  existingNicknames,
-}: CampaignsEditorProps): React.ReactElement {
+function CampaignsEditor({ campaign }: CampaignsEditorProps): React.ReactElement {
   const classes = useStyles();
 
-  if (campaign) {
-    const { name, nickname, description } = campaign;
+  const { name, nickname, description } = campaign;
 
-    return (
-      <div className={classes.testEditorContainer}>
-        <StickyTopBar
-          name={name}
-          nickname={nickname}
-          existingNames={existingNames}
-          existingNicknames={existingNicknames}
-        />
+  return (
+    <div className={classes.testEditorContainer}>
+      <StickyTopBar name={name} nickname={nickname} />
 
-        <div className={classes.scrollableContainer}>
-          <Typography>Name: {name}</Typography>
+      <div className={classes.scrollableContainer}>
+        <Typography>Name: {name}</Typography>
 
-          {nickname && <Typography>Nickname: {nickname}</Typography>}
+        {nickname && <Typography>Nickname: {nickname}</Typography>}
 
-          {description && <Typography>Description: {description}</Typography>}
-        </div>
+        {description && <Typography>Description: {description}</Typography>}
       </div>
-    );
-  }
-  return <Typography>Select a campaign to view its details.</Typography>;
+    </div>
+  );
 }
 
 export default CampaignsEditor;
