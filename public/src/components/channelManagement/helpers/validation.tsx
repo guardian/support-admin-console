@@ -28,11 +28,10 @@ export const DUPLICATE_ERROR_HELPER_TEXT = 'Name already exists - please try ano
 
 export const createDuplicateValidator = (
   existing: string[],
-  testNamePrefix?: string,
 ): ((text: string) => string | undefined) => {
   const existingLowerCased = existing.map(value => value.toLowerCase());
   return (text: string): string | undefined => {
-    if (existingLowerCased.includes(`${testNamePrefix || ''}${text}`.toLowerCase())) {
+    if (existingLowerCased.includes(text.toLowerCase())) {
       return DUPLICATE_ERROR_HELPER_TEXT;
     }
     return undefined;

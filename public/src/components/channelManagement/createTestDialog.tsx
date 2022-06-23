@@ -14,6 +14,7 @@ import {
   InputLabel,
   FormControl,
   makeStyles,
+  Checkbox,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
@@ -26,6 +27,7 @@ import {
 import { Campaign } from './campaigns/CampaignsForm';
 import { fetchFrontendSettings, FrontendSettingsType } from '../../utils/requests';
 import { DataFromServer } from '../../hocs/withS3Data';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 const useStyles = makeStyles(() => ({
   dialogHeader: {
@@ -41,7 +43,12 @@ const useStyles = makeStyles(() => ({
   },
   campaignSelector: {
     marginBottom: '20px',
+    marginRight: '12px',
     minWidth: '200px',
+  },
+  campaignSelectorContainer: {
+    display: 'flex',
+    flexDirection: 'row',
   },
 }));
 
@@ -63,7 +70,7 @@ interface CreateTestDialogProps {
   sourceNickname?: string | void;
   mode: Mode;
   testNamePrefix?: string; // set if all tests must have the same prefix
-  createTest: (name: string, nickname: string) => void;
+  createTest: (name: string, nickname: string, campaignName?: string) => void;
 }
 
 const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
@@ -90,6 +97,7 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
 
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [campaignName, setCampaignName] = useState<string | undefined>(undefined);
+  const [campaignNamePrefix, setCampaignNamePrefix] = useState<boolean>(false);
 
   useEffect(() => {
     fetchFrontendSettings(FrontendSettingsType.campaigns).then((data: DataFromServer<Campaign[]>) =>
@@ -100,14 +108,26 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
   const buildPrefix = (): string => {
     if (testNamePrefix) {
       return `${testNamePrefix}__`;
-    } else if (campaignName) {
+    } else if (campaignName && campaignNamePrefix) {
       return `${campaignName}__`;
     }
     return '';
   };
 
+  const addPrefix = (name: string): string => `${buildPrefix()}${name}`;
+
+  // There should only be one instance of a double-underscore, as this is used by the AB tests dashboard to group together tests with a common prefix
+  const doubleUnderscoresValidator = (s: string): string | undefined => {
+    const count = (s.match(/__/g) || []).length;
+    if (count < 2) {
+      return undefined;
+    } else {
+      return `Name can only include one double-underscore, but has ${count}`;
+    }
+  };
+
   const onSubmit = ({ name, nickname }: FormData): void => {
-    createTest(`${buildPrefix()}${name}`.toUpperCase(), nickname.toUpperCase());
+    createTest(addPrefix(name).toUpperCase(), nickname.toUpperCase(), campaignName);
     close();
   };
 
@@ -123,31 +143,44 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
       </div>
       <DialogContent dividers>
         {testNamePrefix === undefined && (
-          <FormControl className={classes.campaignSelector}>
-            <InputLabel id="campaign-selector">Campaign</InputLabel>
-            <Select
-              value={campaignName}
-              displayEmpty
-              renderValue={(campaign): string => {
-                if (campaign === undefined) {
-                  return ''; // triggers the displayEmpty behaviour
-                }
-                return campaign as string;
-              }}
-              onChange={(event: React.ChangeEvent<{ value: unknown }>): void => {
-                setCampaignName(event.target.value as string | undefined);
-              }}
-            >
-              <MenuItem value={undefined} key={'campaignName-none'}>
-                No campaign
-              </MenuItem>
-              {campaigns.map(campaign => (
-                <MenuItem value={campaign.name} key={`campaign-${campaign.name}`}>
-                  {campaign.name}
+          <div className={classes.campaignSelectorContainer}>
+            <FormControl className={classes.campaignSelector}>
+              <InputLabel id="campaign-selector">Campaign</InputLabel>
+              <Select
+                value={campaignName}
+                displayEmpty
+                renderValue={(campaign): string => {
+                  if (campaign === undefined) {
+                    return ''; // triggers the displayEmpty behaviour
+                  }
+                  return campaign as string;
+                }}
+                onChange={(event: React.ChangeEvent<{ value: unknown }>): void => {
+                  setCampaignName(event.target.value as string | undefined);
+                }}
+              >
+                <MenuItem value={undefined} key={'campaignName-none'}>
+                  No campaign
                 </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+                {campaigns.map(campaign => (
+                  <MenuItem value={campaign.name} key={`campaign-${campaign.name}`}>
+                    {campaign.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={campaignNamePrefix}
+                  onChange={() => setCampaignNamePrefix(!campaignNamePrefix)}
+                  color="primary"
+                  disabled={!campaignName}
+                />
+              }
+              label="Prefix test name"
+            />
+          </div>
         )}
         <TextField
           className={classes.input}
@@ -157,7 +190,13 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
               value: VALID_CHARACTERS_REGEX,
               message: INVALID_CHARACTERS_ERROR_HELPER_TEXT,
             },
-            validate: createDuplicateValidator(existingNames, buildPrefix()),
+            validate: name => {
+              const withPrefix = addPrefix(name);
+              return (
+                doubleUnderscoresValidator(withPrefix) ??
+                createDuplicateValidator(existingNames)(withPrefix)
+              );
+            },
           })}
           error={errors.name !== undefined}
           helperText={errors.name ? errors.name.message : NAME_DEFAULT_HELPER_TEXT}

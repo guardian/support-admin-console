@@ -32,4 +32,5 @@ export interface HeaderTest extends Test {
   variants: HeaderVariant[];
   controlProportionSettings?: ControlProportionSettings;
   deviceType?: DeviceType;
+  campaignName?: string;
 }

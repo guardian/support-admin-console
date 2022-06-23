@@ -25,6 +25,7 @@ export interface Test {
   variants: Variant[];
   locations: Region[];
   isNew?: boolean; // true if test has not yet been POSTed to backend
+  campaignName?: string;
 }
 
 export interface EpicEditorConfig {
