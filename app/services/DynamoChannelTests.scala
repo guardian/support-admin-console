@@ -269,7 +269,8 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends StrictLo
 
   def updateTest[T <: ChannelTest[T] : Encoder](test: T, channel: Channel, email: String): ZIO[ZEnv, DynamoError, Unit] = {
     val item = jsonToDynamo(test.asJson).m().asScala.toMap -
-      "priority" -    // Do not update priority
+      "status" -      // Do not update status - this is a separate action
+      "priority" -    // Do not update priority - this is a separate action
       "lockStatus" -  // Unlock by removing lockStatus
       "name" -        // key field
       "channel"       // key field

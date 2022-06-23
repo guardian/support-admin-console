@@ -85,6 +85,7 @@ POST  /frontend/header-tests/test/lock/:testName        controllers.HeaderTestsC
 POST  /frontend/header-tests/test/unlock/:testName      controllers.HeaderTestsController.unlockTest(testName: String)
 POST  /frontend/header-tests/test/takecontrol/:testName controllers.HeaderTestsController.forceLockTest(testName: String)
 POST  /frontend/header-tests/test/archive               controllers.HeaderTestsController.archiveTests
+POST  /frontend/header-tests/test/status/:rawStatus     controllers.HeaderTestsController.setStatus(rawStatus: String)
 
 
 # ----- Epic holdback tests ----- #

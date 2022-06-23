@@ -217,4 +217,24 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
         .map(_ => Ok("archived"))
     }
   }
+
+  private def parseStatus(rawStatus: String): Option[models.Status] = rawStatus.toLowerCase match {
+    case "live" => Some(models.Status.Live)
+    case "draft" => Some(models.Status.Draft)
+    case "archived" => Some(models.Status.Archived)
+    case _ => None
+  }
+
+  def setStatus(rawStatus: String) = authAction.async(circe.json[List[String]]) { request =>
+    run {
+      logger.info(s"${request.user.email} is changing status to $rawStatus on: ${request.body}")
+      parseStatus(rawStatus) match {
+        case Some(status) =>
+          dynamo.updateStatuses(request.body, channel, status)
+            .map(_ => Ok(status.toString))
+        case None => ZIO.succeed(BadRequest(s"Invalid status: $rawStatus"))
+      }
+
+    }
+  }
 }
