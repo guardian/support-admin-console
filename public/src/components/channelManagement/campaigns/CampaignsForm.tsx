@@ -107,13 +107,6 @@ const CampaignsForm: React.FC<InnerProps<Campaigns>> = ({
           saveAllCampaigns={saveAllCampaigns}
         />
       </div>
-      {/*
-      <div className={classes.rightCol}>
-        <CampaignsEditor
-          campaign={getSelectedCampaign()}
-        />
-      </div>
-*/}
       <div className={classes.rightCol}>
         {currentCampaign ? (
           <CampaignsEditor campaign={currentCampaign} />

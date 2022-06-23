@@ -6,7 +6,7 @@ import io.circe.{Decoder, Encoder}
 
 case class Campaign(
   name: String,
-  nickname: Option[String],
+  nickname: String,
   description: Option[String]
 )
 
