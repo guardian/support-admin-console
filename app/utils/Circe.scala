@@ -18,7 +18,7 @@ object Circe {
 
   // Converts Circe Json to Dynamodb Attributes
   def jsonToDynamo(json: Json): AttributeValue =
-    json.deepDropNullValues.fold(
+    json.fold(
       jsonNull = AttributeValue.builder().nul(true).build,
       jsonBoolean = bool => AttributeValue.builder.bool(bool).build,
       jsonNumber = n => AttributeValue.builder.n(n.toString).build,

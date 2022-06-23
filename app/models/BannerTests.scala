@@ -58,7 +58,7 @@ case class BannerTest(
   articlesViewedSettings: Option[ArticlesViewedSettings] = None,
   controlProportionSettings: Option[ControlProportionSettings] = None,
   deviceType: Option[DeviceType] = None,
-  campaignName: Option[String] = None
+  campaignName: Option[String] = Some("NOT_IN_CAMPAIGN")
 ) extends ChannelTest[BannerTest] {
 
   override def withChannel(channel: Channel): BannerTest = this.copy(channel = Some(channel))
