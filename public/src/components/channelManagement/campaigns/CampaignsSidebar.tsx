@@ -56,7 +56,6 @@ function CampaignsSidebar({
   onCampaignSelected,
   saveAllCampaigns,
 }: CampaignsSidebarProps): React.ReactElement {
-  console.log('LOADING CampaignsSidebar', campaigns);
   const classes = useStyles();
 
   return (

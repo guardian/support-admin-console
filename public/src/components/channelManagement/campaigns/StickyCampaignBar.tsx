@@ -1,6 +1,7 @@
 import React from 'react';
-import { Theme, Typography, makeStyles } from '@material-ui/core';
+import { Theme, Typography, makeStyles, Button } from '@material-ui/core';
 import { grey } from '@material-ui/core/colors';
+import { Link } from '@material-ui/icons';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {
@@ -21,6 +22,9 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   mainHeader: {
     fontSize: '32px',
     fontWeight: 'normal',
+  },
+  secondaryHeaderContainer: {
+    display: 'flex',
   },
   secondaryHeader: {
     fontSize: '14px',
@@ -44,6 +48,14 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   icon: {
     color: grey[700],
   },
+  link: {
+    marginLeft: spacing(2),
+    padding: '0 8px',
+    fontSize: '14px',
+    fontWeight: 'normal',
+    color: palette.grey[700],
+    lineHeight: 1.5,
+  },
 }));
 
 interface StickyTopBarProps {
@@ -63,7 +75,7 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
   const mainHeader = nickname ? nickname : name;
   const secondaryHeader = nickname ? name : null;
 
-  // Purely to stop linting errors during development
+  // Purely while developing, to get rid of a silly linting error
   console.log(existingNames, existingNicknames);
 
   return (
@@ -72,7 +84,19 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
         <Typography variant="h2" className={classes.mainHeader}>
           {mainHeader}
         </Typography>
-        <Typography className={classes.secondaryHeader}>{secondaryHeader}</Typography>
+        <div className={classes.secondaryHeaderContainer}>
+          <Typography className={classes.secondaryHeader}>{secondaryHeader}</Typography>
+          <Button
+            className={classes.link}
+            variant="outlined"
+            startIcon={<Link />}
+            onClick={() => {
+              navigator.clipboard.writeText(`${location.origin}/campaigns/${name}`);
+            }}
+          >
+            Copy link
+          </Button>
+        </div>
       </div>
       {/*      
       <div className={classes.lockContainer}>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { makeStyles, Theme } from '@material-ui/core';
 import CampaignsSidebar from './CampaignsSidebar';
 import CampaignsEditor from './CampaignsEditor';
+import { useParams } from 'react-router-dom';
 
 import {
   fetchFrontendSettings,
@@ -58,6 +59,7 @@ const CampaignsForm: React.FC<InnerProps<Campaigns>> = ({
   saveData: saveCampaigns,
 }: InnerProps<Campaigns>) => {
   const classes = useStyles();
+  const { testName } = useParams<{ testName?: string }>();
 
   const createCampaign = (campaign: Campaign): void => {
     setCampaigns([...campaigns, campaign]);
@@ -70,22 +72,25 @@ const CampaignsForm: React.FC<InnerProps<Campaigns>> = ({
     setNewCampaignCreated(false);
   };
 
-  // const saveCampaign = (campaign: Campaign): void => {
-  //   const removed = campaigns.filter(c => c.name !== campaign.name);
-  //   setCampaigns([...removed, campaign]);
-  // };
-
-  // const deleteCampaign = (campaign: Campaign): void => {
-  //   setCampaigns(campaigns.filter(c => c.name !== campaign.name));
-  // };
+  const [newCampaignCreated, setNewCampaignCreated] = useState(false);
 
   const [selectedCampaign, setSelectedCampaign] = useState<Campaign | undefined>();
 
-  const [newCampaignCreated, setNewCampaignCreated] = useState(false);
+  const getSelectedCampaign = (): Campaign | undefined => {
+    if (selectedCampaign == null && testName != null) {
+      const requiredCampaign = campaigns.filter(c => c.name === testName);
+      if (requiredCampaign[0] != null) {
+        return requiredCampaign[0];
+      }
+    }
+    return selectedCampaign;
+  };
 
   const onCampaignSelected = (name: string) => {
     const requiredCampaign = campaigns.filter(c => c.name === name);
-    setSelectedCampaign(requiredCampaign[0]);
+    if (requiredCampaign[0] != null) {
+      setSelectedCampaign(requiredCampaign[0]);
+    }
   };
 
   return (
@@ -95,7 +100,7 @@ const CampaignsForm: React.FC<InnerProps<Campaigns>> = ({
           campaigns={campaigns}
           createCampaign={createCampaign}
           newCampaignCreated={newCampaignCreated}
-          selectedCampaign={selectedCampaign}
+          selectedCampaign={getSelectedCampaign()}
           onCampaignSelected={onCampaignSelected}
           saveAllCampaigns={saveAllCampaigns}
         />
@@ -103,7 +108,7 @@ const CampaignsForm: React.FC<InnerProps<Campaigns>> = ({
 
       <div className={classes.rightCol}>
         <CampaignsEditor
-          campaign={selectedCampaign}
+          campaign={getSelectedCampaign()}
           existingNames={campaigns.map(c => c.name)}
           existingNicknames={campaigns.map(c => c.nickname)}
         />
@@ -113,12 +118,10 @@ const CampaignsForm: React.FC<InnerProps<Campaigns>> = ({
 };
 
 const fetchSettings = (): Promise<DataFromServer<Campaigns>> => {
-  console.log('fetchSettings START', FrontendSettingsType.campaigns);
   return fetchFrontendSettings(FrontendSettingsType.campaigns);
 };
 
 const saveSettings = (data: DataFromServer<Campaigns>): Promise<Response> => {
-  console.log('saveSettings START', FrontendSettingsType, 'with DATA', data);
   return saveFrontendSettings(FrontendSettingsType.campaigns, data);
 };
 
