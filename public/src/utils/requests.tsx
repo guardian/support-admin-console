@@ -108,6 +108,13 @@ export function fetchSupportFrontendSettings(
   return fetchSettings(`/support-frontend/${settingsType}`);
 }
 
+export function fetchCampaignTests(
+  campaign: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): Promise<any> {
+  return fetchSettings(`/frontend/campaign/${campaign}/tests`);
+}
+
 export function saveSupportFrontendSettings(
   settingsType: SupportFrontendSettingsType,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
