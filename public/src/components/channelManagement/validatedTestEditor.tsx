@@ -69,6 +69,7 @@ export const ValidatedTestEditor = <T extends Test>(
         <StickyTopBar
           name={test.name}
           nickname={test.nickname}
+          campaignName={test.campaignName}
           isNew={!!test.isNew}
           lockStatus={test.lockStatus || { locked: false }}
           userHasTestLocked={userHasTestLocked}
