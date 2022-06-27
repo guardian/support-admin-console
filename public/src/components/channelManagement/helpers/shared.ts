@@ -13,8 +13,6 @@ export type EpicModuleName = 'ContributionsEpic' | 'ContributionsLiveblogEpic';
 
 export type Status = 'Live' | 'Draft' | 'Archived';
 
-export const setStatus = (isOn: boolean): Status => (isOn ? 'Live' : 'Draft');
-
 export interface Test {
   name: string;
   nickname?: string;

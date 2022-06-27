@@ -67,7 +67,7 @@ POST  /frontend/epic-tests/test/create                controllers.epic.EpicTests
 POST  /frontend/epic-tests/test/lock/:testName        controllers.epic.EpicTestsController.lockTest(testName: String)
 POST  /frontend/epic-tests/test/unlock/:testName      controllers.epic.EpicTestsController.unlockTest(testName: String)
 POST  /frontend/epic-tests/test/takecontrol/:testName controllers.epic.EpicTestsController.forceLockTest(testName: String)
-POST  /frontend/epic-tests/test/archive               controllers.epic.EpicTestsController.archiveTests
+POST  /frontend/epic-tests/test/status/:rawStatus     controllers.epic.EpicTestsController.setStatus(rawStatus: String)
 
 
 # ----- Header tests ----- #
@@ -84,7 +84,6 @@ POST  /frontend/header-tests/test/create                controllers.HeaderTestsC
 POST  /frontend/header-tests/test/lock/:testName        controllers.HeaderTestsController.lockTest(testName: String)
 POST  /frontend/header-tests/test/unlock/:testName      controllers.HeaderTestsController.unlockTest(testName: String)
 POST  /frontend/header-tests/test/takecontrol/:testName controllers.HeaderTestsController.forceLockTest(testName: String)
-POST  /frontend/header-tests/test/archive               controllers.HeaderTestsController.archiveTests
 POST  /frontend/header-tests/test/status/:rawStatus     controllers.HeaderTestsController.setStatus(rawStatus: String)
 
 
@@ -102,7 +101,7 @@ POST  /frontend/epic-holdback-tests/test/create                controllers.epic.
 POST  /frontend/epic-holdback-tests/test/lock/:testName        controllers.epic.EpicHoldbackTestsController.lockTest(testName: String)
 POST  /frontend/epic-holdback-tests/test/unlock/:testName      controllers.epic.EpicHoldbackTestsController.unlockTest(testName: String)
 POST  /frontend/epic-holdback-tests/test/takecontrol/:testName controllers.epic.EpicHoldbackTestsController.forceLockTest(testName: String)
-POST  /frontend/epic-holdback-tests/test/archive               controllers.epic.EpicHoldbackTestsController.archiveTests
+POST  /frontend/epic-holdback-tests/test/status/:rawStatus     controllers.epic.EpicHoldbackTestsController.setStatus(rawStatus: String)
 
 
 # ----- Liveblog epic tests ----- #
@@ -119,7 +118,7 @@ POST  /frontend/liveblog-epic-tests/test/create                controllers.epic.
 POST  /frontend/liveblog-epic-tests/test/lock/:testName        controllers.epic.LiveblogEpicTestsController.lockTest(testName: String)
 POST  /frontend/liveblog-epic-tests/test/unlock/:testName      controllers.epic.LiveblogEpicTestsController.unlockTest(testName: String)
 POST  /frontend/liveblog-epic-tests/test/takecontrol/:testName controllers.epic.LiveblogEpicTestsController.forceLockTest(testName: String)
-POST  /frontend/liveblog-epic-tests/test/archive               controllers.epic.LiveblogEpicTestsController.archiveTests
+POST  /frontend/liveblog-epic-tests/test/status/:rawStatus     controllers.epic.LiveblogEpicTestsController.setStatus(rawStatus: String)
 
 
 # ----- Apple News epic 'tests' ----- #
@@ -136,7 +135,7 @@ POST  /frontend/apple-news-epic-tests/test/create                controllers.epi
 POST  /frontend/apple-news-epic-tests/test/lock/:testName        controllers.epic.AppleNewsEpicTestsController.lockTest(testName: String)
 POST  /frontend/apple-news-epic-tests/test/unlock/:testName      controllers.epic.AppleNewsEpicTestsController.unlockTest(testName: String)
 POST  /frontend/apple-news-epic-tests/test/takecontrol/:testName controllers.epic.AppleNewsEpicTestsController.forceLockTest(testName: String)
-POST  /frontend/apple-news-epic-tests/test/archive               controllers.epic.AppleNewsEpicTestsController.archiveTests
+POST  /frontend/apple-news-epic-tests/test/status/:rawStatus     controllers.epic.AppleNewsEpicTestsController.setStatus(rawStatus: String)
 
 
 # ----- AMP epic 'tests' ----- #
@@ -153,7 +152,7 @@ POST  /frontend/amp-epic-tests/test/create                controllers.epic.AMPEp
 POST  /frontend/amp-epic-tests/test/lock/:testName        controllers.epic.AMPEpicTestsController.lockTest(testName: String)
 POST  /frontend/amp-epic-tests/test/unlock/:testName      controllers.epic.AMPEpicTestsController.unlockTest(testName: String)
 POST  /frontend/amp-epic-tests/test/takecontrol/:testName controllers.epic.AMPEpicTestsController.forceLockTest(testName: String)
-POST  /frontend/amp-epic-tests/test/archive               controllers.epic.AMPEpicTestsController.archiveTests
+POST  /frontend/amp-epic-tests/test/status/:rawStatus     controllers.epic.AMPEpicTestsController.setStatus(rawStatus: String)
 
 
 # ----- Banner channel 1 tests ----- #
@@ -170,7 +169,7 @@ POST  /frontend/banner-tests/test/create                controllers.banner.Banne
 POST  /frontend/banner-tests/test/lock/:testName        controllers.banner.BannerTestsController.lockTest(testName: String)
 POST  /frontend/banner-tests/test/unlock/:testName      controllers.banner.BannerTestsController.unlockTest(testName: String)
 POST  /frontend/banner-tests/test/takecontrol/:testName controllers.banner.BannerTestsController.forceLockTest(testName: String)
-POST  /frontend/banner-tests/test/archive               controllers.banner.BannerTestsController.archiveTests
+POST  /frontend/banner-tests/test/status/:rawStatus     controllers.banner.BannerTestsController.setStatus(rawStatus: String)
 
 
 # ----- Banner channel 2 tests ----- #
@@ -187,7 +186,7 @@ POST  /frontend/banner-tests2/test/create                controllers.banner.Bann
 POST  /frontend/banner-tests2/test/lock/:testName        controllers.banner.BannerTestsController2.lockTest(testName: String)
 POST  /frontend/banner-tests2/test/unlock/:testName      controllers.banner.BannerTestsController2.unlockTest(testName: String)
 POST  /frontend/banner-tests2/test/takecontrol/:testName controllers.banner.BannerTestsController2.forceLockTest(testName: String)
-POST  /frontend/banner-tests2/test/archive               controllers.banner.BannerTestsController2.archiveTests
+POST  /frontend/banner-tests2/test/status/:rawStatus     controllers.banner.BannerTestsController2.setStatus(rawStatus: String)
 
 
 # ----- banner deploys ----- #

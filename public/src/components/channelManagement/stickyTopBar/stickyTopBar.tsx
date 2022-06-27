@@ -1,7 +1,7 @@
 import React from 'react';
 import { Theme, Typography, makeStyles, Button } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
-import { LockStatus } from '../helpers/shared';
+import { LockStatus, Status } from '../helpers/shared';
 import CloseIcon from '@material-ui/icons/Close';
 import SaveIcon from '@material-ui/icons/Save';
 import LockIcon from '@material-ui/icons/Lock';
@@ -11,6 +11,7 @@ import { TestCopyButton } from './testCopyButton';
 import { grey } from '@material-ui/core/colors';
 import { Link } from '@material-ui/icons';
 import { FrontendSettingsType } from '../../../utils/requests';
+import LiveSwitch from '../../shared/liveSwitch';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {
@@ -19,7 +20,7 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
     justifyContent: 'space-between',
     paddingLeft: spacing(3),
     paddingRight: spacing(3),
-    paddingBottom: spacing(2),
+    paddingBottom: spacing(1),
     paddingTop: spacing(1),
     backgroundColor: palette.grey[200],
     borderBottom: `1px solid ${palette.grey[500]}`,
@@ -34,10 +35,15 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   },
   secondaryHeaderContainer: {
     display: 'flex',
+    borderBottom: `1px solid ${palette.grey[500]}`,
+    paddingBottom: spacing(1),
   },
   secondaryHeader: {
     fontSize: '14px',
     color: palette.grey[700],
+  },
+  switchContainer: {
+    display: 'flex',
   },
   lockContainer: {
     alignSelf: 'flex-end',
@@ -71,6 +77,7 @@ interface StickyTopBarProps {
   name: string;
   nickname?: string;
   isNew: boolean;
+  status: Status;
   lockStatus: LockStatus;
   userHasTestLocked: boolean;
   userHasTestListLocked: boolean;
@@ -82,6 +89,7 @@ interface StickyTopBarProps {
   onTestSave: (testName: string) => void;
   onTestArchive: () => void;
   onTestCopy: (oldName: string, newName: string, newNickname: string) => void;
+  onStatusChange: (status: Status) => void;
   settingsType: FrontendSettingsType;
 }
 
@@ -89,6 +97,7 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
   name,
   nickname,
   isNew,
+  status,
   lockStatus,
   userHasTestLocked,
   userHasTestListLocked,
@@ -100,6 +109,7 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
   onTestSave,
   onTestArchive,
   onTestCopy,
+  onStatusChange,
   settingsType,
 }: StickyTopBarProps) => {
   const classes = useStyles();
@@ -124,6 +134,13 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
           >
             Copy link
           </Button>
+        </div>
+        <div className={classes.switchContainer}>
+          <LiveSwitch
+            label="Live on theguardian.com"
+            isLive={status === 'Live'}
+            onChange={(isLive: boolean) => onStatusChange(isLive ? 'Live' : 'Draft')}
+          />
         </div>
       </div>
       <div className={classes.lockContainer}>

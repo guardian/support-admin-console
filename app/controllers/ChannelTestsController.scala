@@ -210,14 +210,6 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
     }
   }
 
-  def archiveTests = authAction.async(circe.json[List[String]]) { request =>
-    run {
-      logger.info(s"${request.user.email} is archiving ${request.body}")
-      dynamo.updateStatuses(request.body, channel, models.Status.Archived)
-        .map(_ => Ok("archived"))
-    }
-  }
-
   private def parseStatus(rawStatus: String): Option[models.Status] = rawStatus.toLowerCase match {
     case "live" => Some(models.Status.Live)
     case "draft" => Some(models.Status.Draft)
