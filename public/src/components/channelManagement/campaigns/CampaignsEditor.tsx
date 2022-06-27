@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Theme, Typography, makeStyles, Button } from '@material-ui/core';
 import StickyTopBar from './StickyCampaignBar';
 import { Campaign } from './CampaignsForm';
+import { CombinedTest } from './CampaignsForm';
 import ChannelCard from './ChannelCard';
 import { fetchCampaignTests } from '../../../utils/requests';
 
@@ -46,7 +47,16 @@ interface CampaignsEditorProps {
   campaign: Campaign;
 }
 
-const testChannelOrder = ['Header', 'Epic', 'EpicHoldback', 'EpicLiveblog', 'EpicAppleNews', 'EpicAMP', 'Banner1', 'Banner2'];
+const testChannelOrder = [
+  'Header',
+  'Epic',
+  'EpicHoldback',
+  'EpicLiveblog',
+  'EpicAppleNews',
+  'EpicAMP',
+  'Banner1',
+  'Banner2',
+];
 
 export interface TestChannelItem {
   name: string;
@@ -58,57 +68,54 @@ export interface TestChannelData {
 }
 
 const testChannelData: TestChannelData = {
-  'Header': {
+  Header: {
     name: 'Header',
     link: '/header-tests',
-  }, 
-  'Epic': {
+  },
+  Epic: {
     name: 'Epic',
     link: '/epic-tests',
-  }, 
-  'EpicHoldback': {
+  },
+  EpicHoldback: {
     name: 'Epic Holdback',
     link: '/epic-holdback-tests',
-  }, 
-  'EpicLiveblog': {
+  },
+  EpicLiveblog: {
     name: 'Liveblog Epic',
     link: '/liveblog-epic-tests',
-  }, 
-  'EpicAppleNews': {
+  },
+  EpicAppleNews: {
     name: 'Apple News Epic',
     link: '/apple-news-epic-tests',
-  }, 
-  'EpicAMP': {
+  },
+  EpicAMP: {
     name: 'AMP Epic',
     link: '/amp-epic-tests',
-  }, 
-  'Banner1': {
+  },
+  Banner1: {
     name: 'Banner 1',
     link: '/banner-tests',
-  }, 
-  'Banner2': {
+  },
+  Banner2: {
     name: 'Banner 2',
     link: '/banner-tests2',
-  }, 
+  },
 };
 
-function CampaignsEditor({ 
-  campaign 
-}: CampaignsEditorProps): React.ReactElement {
+function CampaignsEditor({ campaign }: CampaignsEditorProps): React.ReactElement {
   const classes = useStyles();
 
-  const [testData, setTestData] = useState<any[]>([]);
+  const [testData, setTestData] = useState<CombinedTest[]>([]);
 
   const { name, nickname, description } = campaign;
 
   useEffect(() => {
     fetchCampaignTests(name).then(tests => {
-
       // sort by channel
-      const sortedTests = tests.sort((a: any, b: any) => {
-        return testChannelOrder.indexOf(a.channel) - testChannelOrder.indexOf(b.channel)
-      });
-      setTestData(sortedTests);
+      // const sortedTests = tests.sort((a: CombinedTest, b: CombinedTest) => {
+      //   return testChannelOrder.indexOf(a.channel) - testChannelOrder.indexOf(b.channel);
+      // });
+      setTestData(tests);
     });
   }, [campaign]);
 
@@ -121,10 +128,13 @@ function CampaignsEditor({
           <Button
             className={classes.launchLink}
             variant="outlined"
-            onClick={() => {}}
+            onClick={(): void => {
+              console.log('TODO: tests status modal');
+            }}
             disabled={true}
           >
-            Button to open the tests status manager modal - needs to move into sticky bar (top right corner)
+            Button to open the tests status manager modal - needs to move into sticky bar (top right
+            corner)
           </Button>
           <div className={classes.notesContainer}>
             <div className={classes.notesHeader}>Notes (will be an editable RTE field):</div>

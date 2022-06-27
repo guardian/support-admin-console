@@ -1,9 +1,17 @@
 import React from 'react';
-import { makeStyles, Theme, Typography, Card, CardContent, CardActions, Button } from '@material-ui/core';
+import {
+  makeStyles,
+  Theme,
+  Typography,
+  Card,
+  CardContent,
+  CardActions,
+  Button,
+} from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { CombinedTest, CombinedVariant } from './CampaignsForm';
 
-const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
+const useStyles = makeStyles(({ spacing }: Theme) => ({
   cardContent: {
     fontSize: '16px',
   },
@@ -36,38 +44,28 @@ interface TestCardProps {
   linkPath: string;
 }
 
-function TestCard({ 
-  test,
-  keyId,
-  linkPath
-}: TestCardProps): React.ReactElement {
+function TestCard({ test, keyId, linkPath }: TestCardProps): React.ReactElement {
   const classes = useStyles();
 
   const getVariantNames = (variants: CombinedVariant[]) => {
     if (variants.length > 0) {
       return (
-        <div className={classes.variantsData}>
-          Variants: {variants.map(v => v.name).join(', ')}
-        </div>
-      )
+        <div className={classes.variantsData}>Variants: {variants.map(v => v.name).join(', ')}</div>
+      );
     }
     return (
       <div className={classes.variantsDataWarning}>
         No variants have been created for this test!
       </div>
-    )
-  }
+    );
+  };
 
   return (
     <Card>
       <CardContent className={classes.cardContent}>
         <CardActions>
           <div>
-            <Link 
-              className={classes.linkButton}
-              key={keyId} 
-              to={`${linkPath}/${test.name}`}
-            >
+            <Link className={classes.linkButton} key={keyId} to={`${linkPath}/${test.name}`}>
               <Button variant="outlined">{test.name}</Button>
             </Link>
           </div>
@@ -75,9 +73,7 @@ function TestCard({
         <div className={classes.dataContainer}>
           <div>
             {getVariantNames(test.variants)}
-            <div className={classes.statusData}>
-              Status: {test.status}
-            </div>
+            <div className={classes.statusData}>Status: {test.status}</div>
           </div>
           <div>
             <div>
@@ -90,7 +86,7 @@ function TestCard({
         </div>
       </CardContent>
     </Card>
-  )
+  );
 
   // return (
   //   <div>
