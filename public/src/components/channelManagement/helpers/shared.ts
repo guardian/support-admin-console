@@ -16,7 +16,6 @@ export type Status = 'Live' | 'Draft' | 'Archived';
 export interface Test {
   name: string;
   nickname?: string;
-  isOn: boolean; // Deprecated and soon to be removed, use status instead
   status: Status;
   lockStatus?: LockStatus;
   articlesViewedSettings?: ArticlesViewedSettings;

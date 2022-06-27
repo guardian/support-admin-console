@@ -141,18 +141,9 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
             Copy link
           </Button>
         </div>
-        {/*<div className={classes.switchContainer}>*/}
-        {/*  <LiveSwitch*/}
-        {/*    label="Live on theguardian.com"*/}
-        {/*    isLive={status === 'Live'}*/}
-        {/*    onChange={(isLive: boolean) => onStatusChange(isLive ? 'Live' : 'Draft')}*/}
-        {/*    disabled={userHasTestLocked && lockStatus.locked} // cannot change test status while still editing it*/}
-        {/*  />*/}
-        {/*</div>*/}
       </div>
 
       <div className={classes.buttonsContainer}>
-        {/*{!lockStatus.locked &&*/}
         <div className={classes.switchContainer}>
           <TestLiveSwitch
             isLive={status === 'Live'}
@@ -160,7 +151,6 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
             disabled={userHasTestLocked && lockStatus.locked} // cannot change test status while still editing it
           />
         </div>
-        {/*}*/}
         <div className={classes.lockContainer}>
           {!userHasTestLocked && !lockStatus.locked && (
             <>

@@ -25,7 +25,6 @@ export interface HeaderVariant extends Variant {
 export interface HeaderTest extends Test {
   name: string;
   nickname?: string;
-  isOn: boolean;
   status: Status;
   userCohort: UserCohort;
   locations: Region[];

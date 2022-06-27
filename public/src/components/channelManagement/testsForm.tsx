@@ -211,7 +211,6 @@ export const TestsForm = <T extends Test>(
           ...oldTest,
           name: newName,
           nickname: newNickname,
-          isOn: false,
           status: 'Draft',
           // Set lockStatus client-side, so that the StickyTopBar knows what to render
           lockStatus: {
