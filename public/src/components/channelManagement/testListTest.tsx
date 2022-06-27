@@ -80,16 +80,19 @@ const TestListTest: React.FC<TestListTestProps> = ({
   const shouldInvertColor = isHovered || isSelected;
 
   const containerClasses = [classes.test];
-  containerClasses.push(test.isOn ? classes.live : classes.draft);
+  containerClasses.push(test.status === 'Live' ? classes.live : classes.draft);
   if (shouldInvertColor) {
-    containerClasses.push(test.isOn ? classes.liveInverted : classes.draftInverted);
+    containerClasses.push(test.status === 'Live' ? classes.liveInverted : classes.draftInverted);
   }
 
   return (
     <ListItem className={containerClasses.join(' ')} button={true} onClick={onClick} ref={ref}>
       <div className={classes.labelAndNameContainer}>
         {isEdited && (isSelected ? <EditIcon className={classes.whitePencil} /> : <EditIcon />)}
-        <TestListTestLiveLabel isLive={test.isOn} shouldInvertColor={shouldInvertColor} />
+        <TestListTestLiveLabel
+          isLive={test.status === 'Live'}
+          shouldInvertColor={shouldInvertColor}
+        />
         <TestListTestName
           name={test.name}
           nickname={test.nickname}

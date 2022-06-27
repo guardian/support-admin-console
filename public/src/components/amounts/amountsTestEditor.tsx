@@ -114,6 +114,7 @@ const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
           label="Live on support.theguardian.com"
           isLive={test.isLive}
           onChange={updateIsLive}
+          isDisabled={false}
         />
       </div>
 

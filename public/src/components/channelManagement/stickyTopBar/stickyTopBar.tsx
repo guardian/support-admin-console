@@ -11,7 +11,7 @@ import { TestCopyButton } from './testCopyButton';
 import { grey } from '@material-ui/core/colors';
 import { Link } from '@material-ui/icons';
 import { FrontendSettingsType } from '../../../utils/requests';
-import LiveSwitch from '../../shared/liveSwitch';
+import TestLiveSwitch from '../testLiveSwitch';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {
@@ -20,7 +20,6 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
     justifyContent: 'space-between',
     paddingLeft: spacing(3),
     paddingRight: spacing(3),
-    paddingBottom: spacing(1),
     paddingTop: spacing(1),
     backgroundColor: palette.grey[200],
     borderBottom: `1px solid ${palette.grey[500]}`,
@@ -28,6 +27,7 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   namesContainer: {
     display: 'flex',
     flexDirection: 'column',
+    paddingBottom: spacing(2),
   },
   mainHeader: {
     fontSize: '32px',
@@ -35,14 +35,20 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   },
   secondaryHeaderContainer: {
     display: 'flex',
-    borderBottom: `1px solid ${palette.grey[500]}`,
-    paddingBottom: spacing(1),
+    marginTop: '4px',
   },
   secondaryHeader: {
     fontSize: '14px',
     color: palette.grey[700],
   },
+  buttonsContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignSelf: 'flex-end',
+    paddingBottom: spacing(1),
+  },
   switchContainer: {
+    alignSelf: 'flex-end',
     display: 'flex',
   },
   lockContainer: {
@@ -135,70 +141,83 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
             Copy link
           </Button>
         </div>
+        {/*<div className={classes.switchContainer}>*/}
+        {/*  <LiveSwitch*/}
+        {/*    label="Live on theguardian.com"*/}
+        {/*    isLive={status === 'Live'}*/}
+        {/*    onChange={(isLive: boolean) => onStatusChange(isLive ? 'Live' : 'Draft')}*/}
+        {/*    disabled={userHasTestLocked && lockStatus.locked} // cannot change test status while still editing it*/}
+        {/*  />*/}
+        {/*</div>*/}
+      </div>
+
+      <div className={classes.buttonsContainer}>
+        {/*{!lockStatus.locked &&*/}
         <div className={classes.switchContainer}>
-          <LiveSwitch
-            label="Live on theguardian.com"
+          <TestLiveSwitch
             isLive={status === 'Live'}
             onChange={(isLive: boolean) => onStatusChange(isLive ? 'Live' : 'Draft')}
+            disabled={userHasTestLocked && lockStatus.locked} // cannot change test status while still editing it
           />
         </div>
-      </div>
-      <div className={classes.lockContainer}>
-        {!userHasTestLocked && !lockStatus.locked && (
-          <>
-            <TestCopyButton
-              existingNames={existingNames}
-              existingNicknames={existingNicknames}
-              sourceName={name}
-              sourceNickname={nickname}
-              testNamePrefix={testNamePrefix}
-              onTestCopy={onTestCopy}
-              disabled={userHasTestListLocked}
-            />
-            <Button
-              variant="outlined"
-              size="medium"
-              startIcon={<EditIcon className={classes.icon} />}
-              onClick={() => onTestLock(name, false)}
-            >
-              <Typography className={classes.buttonText}>Edit test</Typography>
-            </Button>
-          </>
-        )}
-        {!userHasTestLocked && lockStatus.locked && (
-          <>
-            <TestLockDetails email={lockStatus.email} timestamp={lockStatus.timestamp} />
-            <Button
-              variant="outlined"
-              size="medium"
-              startIcon={<LockIcon className={classes.icon} />}
-              onClick={() => onTestLock(name, true)}
-            >
-              <Typography className={classes.buttonText}>Take control</Typography>
-            </Button>
-          </>
-        )}
-        {userHasTestLocked && (
-          <>
-            {!isNew && <TestArchiveButton onTestArchive={onTestArchive} />}
-            <Button
-              variant="outlined"
-              size="medium"
-              startIcon={<CloseIcon className={classes.icon} />}
-              onClick={() => onTestUnlock(name)}
-            >
-              <Typography className={classes.buttonText}>Discard</Typography>
-            </Button>
-            <Button
-              variant="outlined"
-              size="medium"
-              startIcon={<SaveIcon className={classes.icon} />}
-              onClick={() => onTestSave(name)}
-            >
-              <Typography className={classes.buttonText}>Save test</Typography>
-            </Button>
-          </>
-        )}
+        {/*}*/}
+        <div className={classes.lockContainer}>
+          {!userHasTestLocked && !lockStatus.locked && (
+            <>
+              <TestCopyButton
+                existingNames={existingNames}
+                existingNicknames={existingNicknames}
+                sourceName={name}
+                sourceNickname={nickname}
+                testNamePrefix={testNamePrefix}
+                onTestCopy={onTestCopy}
+                disabled={userHasTestListLocked}
+              />
+              <Button
+                variant="outlined"
+                size="medium"
+                startIcon={<EditIcon className={classes.icon} />}
+                onClick={() => onTestLock(name, false)}
+              >
+                <Typography className={classes.buttonText}>Edit test</Typography>
+              </Button>
+            </>
+          )}
+          {!userHasTestLocked && lockStatus.locked && (
+            <>
+              <TestLockDetails email={lockStatus.email} timestamp={lockStatus.timestamp} />
+              <Button
+                variant="outlined"
+                size="medium"
+                startIcon={<LockIcon className={classes.icon} />}
+                onClick={() => onTestLock(name, true)}
+              >
+                <Typography className={classes.buttonText}>Take control</Typography>
+              </Button>
+            </>
+          )}
+          {userHasTestLocked && (
+            <>
+              {!isNew && <TestArchiveButton onTestArchive={onTestArchive} />}
+              <Button
+                variant="outlined"
+                size="medium"
+                startIcon={<CloseIcon className={classes.icon} />}
+                onClick={() => onTestUnlock(name)}
+              >
+                <Typography className={classes.buttonText}>Discard</Typography>
+              </Button>
+              <Button
+                variant="outlined"
+                size="medium"
+                startIcon={<SaveIcon className={classes.icon} />}
+                onClick={() => onTestSave(name)}
+              >
+                <Typography className={classes.buttonText}>Save test</Typography>
+              </Button>
+            </>
+          )}
+        </div>
       </div>
     </header>
   );
