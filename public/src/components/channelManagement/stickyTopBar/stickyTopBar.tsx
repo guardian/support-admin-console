@@ -70,6 +70,7 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
 interface StickyTopBarProps {
   name: string;
   nickname?: string;
+  campaignName?: string;
   isNew: boolean;
   lockStatus: LockStatus;
   userHasTestLocked: boolean;
@@ -88,6 +89,7 @@ interface StickyTopBarProps {
 const StickyTopBar: React.FC<StickyTopBarProps> = ({
   name,
   nickname,
+  campaignName,
   isNew,
   lockStatus,
   userHasTestLocked,
@@ -104,13 +106,15 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
 }: StickyTopBarProps) => {
   const classes = useStyles();
   const mainHeader = nickname ? nickname : name;
+  const campaignHeader =
+    campaignName && campaignName !== 'NOT_IN_CAMPAIGN' ? `[${campaignName}]` : '';
   const secondaryHeader = nickname ? name : null;
 
   return (
     <header className={classes.container}>
       <div className={classes.namesContainer}>
         <Typography variant="h2" className={classes.mainHeader}>
-          {mainHeader}
+          {campaignHeader} {mainHeader}
         </Typography>
         <div className={classes.secondaryHeaderContainer}>
           <Typography className={classes.secondaryHeader}>{secondaryHeader}</Typography>
