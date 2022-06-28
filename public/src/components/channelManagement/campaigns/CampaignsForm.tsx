@@ -54,11 +54,11 @@ export type CombinedVariant = BannerVariant | EpicVariant | HeaderVariant;
 interface TestEnhancements {
   priority: number;
   channel: string;
-};
+}
 
-interface EnhancedBannerTest extends BannerTest, TestEnhancements {};
-interface EnhancedEpicTest extends EpicTest, TestEnhancements {};
-interface EnhancedHeaderTest extends HeaderTest, TestEnhancements {};
+interface EnhancedBannerTest extends BannerTest, TestEnhancements {}
+interface EnhancedEpicTest extends EpicTest, TestEnhancements {}
+interface EnhancedHeaderTest extends HeaderTest, TestEnhancements {}
 
 export type CombinedTest = EnhancedBannerTest | EnhancedEpicTest | EnhancedHeaderTest;
 

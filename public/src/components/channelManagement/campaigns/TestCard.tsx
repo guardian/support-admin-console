@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  makeStyles,
-  Theme,
-  Card,
-  CardContent,
-  CardActions,
-  Button,
-} from '@material-ui/core';
+import { makeStyles, Theme, Card, CardContent, CardActions, Button } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { CombinedTest, CombinedVariant } from './CampaignsForm';
 
@@ -105,18 +98,17 @@ function TestCard({ test, keyId, linkPath }: TestCardProps): React.ReactElement 
         <div className={classes.variantsData}>Variants: {variants.map(v => v.name).join(', ')}</div>
       );
     }
-    return (
-      <div className={classes.dataWarning}>
-        No variants have been created for this test!
-      </div>
-    );
+    return <div className={classes.dataWarning}>No variants have been created for this test!</div>;
   };
 
   const getPriorityAndStatus = (test: CombinedTest) => {
     return (
       <div className={classes.priorityAndStatusLine}>
         Priority: <span className={classes.prioritySpan}>{test.priority}</span>
-        Status: <span className={test.status === 'Live' ? classes.statusLiveSpan : classes.statusDraftSpan}>{test.status}</span>
+        Status:{' '}
+        <span className={test.status === 'Live' ? classes.statusLiveSpan : classes.statusDraftSpan}>
+          {test.status}
+        </span>
       </div>
     );
   };
@@ -136,9 +128,9 @@ function TestCard({ test, keyId, linkPath }: TestCardProps): React.ReactElement 
 
     return (
       <div className={classes.cohortLine}>
-        Cohort: 
-          <span className={checkCohort('AllExistingSupporters')}>Existing Supporters</span>
-          <span className={checkCohort('AllNonSupporters')}>Non-Supporters</span>
+        Cohort:
+        <span className={checkCohort('AllExistingSupporters')}>Existing Supporters</span>
+        <span className={checkCohort('AllNonSupporters')}>Non-Supporters</span>
       </div>
     );
   };
@@ -156,25 +148,25 @@ function TestCard({ test, keyId, linkPath }: TestCardProps): React.ReactElement 
     if (!locations.length) {
       return (
         <div className={classes.locationsLine}>
-          Locations: <span className={classes.dataWarning}>No locations have been selected for this Test</span>
+          Locations:{' '}
+          <span className={classes.dataWarning}>No locations have been selected for this Test</span>
         </div>
-      )
+      );
     }
 
     return (
       <div className={classes.locationsLine}>
-        Locations: 
-          <span className={checkLocation('AUDCountries')}>AU</span>
-          <span className={checkLocation('Canada')}>CA</span>
-          <span className={checkLocation('EURCountries')}>EU</span>
-          <span className={checkLocation('NZDCountries')}>NZ</span>
-          <span className={checkLocation('GBPCountries')}>UK</span>
-          <span className={checkLocation('UnitedStates')}>US</span>
-          <span className={checkLocation('International')}>ROW</span>
+        Locations:
+        <span className={checkLocation('AUDCountries')}>AU</span>
+        <span className={checkLocation('Canada')}>CA</span>
+        <span className={checkLocation('EURCountries')}>EU</span>
+        <span className={checkLocation('NZDCountries')}>NZ</span>
+        <span className={checkLocation('GBPCountries')}>UK</span>
+        <span className={checkLocation('UnitedStates')}>US</span>
+        <span className={checkLocation('International')}>ROW</span>
       </div>
     );
   };
-
 
   return (
     <Card className={classes.cardContainer}>
