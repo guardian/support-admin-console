@@ -2,7 +2,6 @@ import React from 'react';
 import {
   makeStyles,
   Theme,
-  Typography,
   Card,
   CardContent,
   CardActions,
@@ -12,6 +11,9 @@ import { Link } from 'react-router-dom';
 import { CombinedTest, CombinedVariant } from './CampaignsForm';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
+  cardContainer: {
+    marginBottom: '4px',
+  },
   cardContent: {
     fontSize: '16px',
   },
@@ -28,13 +30,63 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   variantsData: {
     fontSize: '14px',
   },
-  variantsDataWarning: {
+  dataWarning: {
     fontSize: '14px',
     color: '#f00',
     fontStyle: 'italic',
   },
-  statusData: {
+  priorityAndStatusLine: {
     marginTop: spacing(2),
+  },
+  prioritySpan: {
+    padding: '4px 8px',
+    border: '1px solid black',
+    marginRight: '8px',
+  },
+  statusDraftSpan: {
+    padding: '4px 8px',
+    border: '1px solid black',
+    backgroundColor: '#ddd',
+    color: '#000',
+  },
+  statusLiveSpan: {
+    padding: '4px 8px',
+    border: '1px solid black',
+    backgroundColor: '#f00',
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  cohortLine: {
+    marginBottom: spacing(2),
+  },
+  cohortSelectedSpan: {
+    fontSize: '13px',
+    marginLeft: '4px',
+    padding: '4px 8px',
+    border: '1px solid black',
+    backgroundColor: '#00a',
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  locationsLine: {
+    marginBottom: spacing(2),
+  },
+  locationSelectedSpan: {
+    fontSize: '13px',
+    marginLeft: '4px',
+    padding: '4px 8px',
+    border: '1px solid black',
+    backgroundColor: '#0a0',
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  notSelectedSpan: {
+    fontSize: '13px',
+    marginLeft: '4px',
+    padding: '4px 8px',
+    border: '1px solid black',
+    backgroundColor: '#eee',
+    color: '#555',
   },
 }));
 
@@ -54,14 +106,78 @@ function TestCard({ test, keyId, linkPath }: TestCardProps): React.ReactElement 
       );
     }
     return (
-      <div className={classes.variantsDataWarning}>
+      <div className={classes.dataWarning}>
         No variants have been created for this test!
       </div>
     );
   };
 
+  const getPriorityAndStatus = (test: CombinedTest) => {
+    return (
+      <div className={classes.priorityAndStatusLine}>
+        Priority: <span className={classes.prioritySpan}>{test.priority}</span>
+        Status: <span className={test.status === 'Live' ? classes.statusLiveSpan : classes.statusDraftSpan}>{test.status}</span>
+      </div>
+    );
+  };
+
+  const getCohort = (test: CombinedTest) => {
+    const userCohort = test.userCohort;
+
+    const checkCohort = (wanted: string) => {
+      if (userCohort === 'Everyone') {
+        return classes.cohortSelectedSpan;
+      }
+      if (userCohort === wanted) {
+        return classes.cohortSelectedSpan;
+      }
+      return classes.notSelectedSpan;
+    };
+
+    return (
+      <div className={classes.cohortLine}>
+        Cohort: 
+          <span className={checkCohort('AllExistingSupporters')}>Existing Supporters</span>
+          <span className={checkCohort('AllNonSupporters')}>Non-Supporters</span>
+      </div>
+    );
+  };
+
+  const getLocations = (test: CombinedTest) => {
+    const locations: string[] = test.locations || [];
+
+    const checkLocation = (wanted: string) => {
+      if (locations.indexOf(wanted) < 0) {
+        return classes.notSelectedSpan;
+      }
+      return classes.locationSelectedSpan;
+    };
+
+    if (!locations.length) {
+      return (
+        <div className={classes.locationsLine}>
+          Locations: <span className={classes.dataWarning}>No locations have been selected for this Test</span>
+        </div>
+      )
+    }
+
+    return (
+      <div className={classes.locationsLine}>
+        Locations: 
+          <span className={checkLocation('AUDCountries')}>AU</span>
+          <span className={checkLocation('Canada')}>CA</span>
+          <span className={checkLocation('EURCountries')}>EU</span>
+          <span className={checkLocation('NZDCountries')}>NZ</span>
+          <span className={checkLocation('GBPCountries')}>UK</span>
+          <span className={checkLocation('UnitedStates')}>US</span>
+          <span className={checkLocation('International')}>ROW</span>
+      </div>
+    );
+  };
+
+
   return (
-    <Card>
+    <Card className={classes.cardContainer}>
       <CardContent className={classes.cardContent}>
         <CardActions>
           <div>
@@ -73,32 +189,16 @@ function TestCard({ test, keyId, linkPath }: TestCardProps): React.ReactElement 
         <div className={classes.dataContainer}>
           <div>
             {getVariantNames(test.variants)}
-            <div className={classes.statusData}>Status: {test.status}</div>
+            {getPriorityAndStatus(test)}
           </div>
           <div>
-            <div>
-              <Typography>Cohort: {test.userCohort}</Typography>
-            </div>
-            <div>
-              <Typography>Locations: {test.locations.join(', ')}</Typography>
-            </div>
+            {getCohort(test)}
+            {getLocations(test)}
           </div>
         </div>
       </CardContent>
     </Card>
   );
-
-  // return (
-  //   <div>
-  //     <ul>
-  //       <li><Link key={`${test.channel}|${test.name}`} to={`${linkPath}/${test.name}`}><b>Test:</b> {test.name}</Link></li>
-  //       <li><b>Cohort:</b> {test.userCohort}</li>
-  //       <li><b>Locations:</b> {test.locations.join(', ')}</li>
-  //       <li><b>Variants:</b> {getVariantNames(test.variants)}</li>
-  //       <li><b>Status:</b> {test.status}</li>
-  //     </ul>
-  //   </div>
-  // )
 }
 
 export default TestCard;

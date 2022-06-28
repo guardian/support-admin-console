@@ -111,13 +111,15 @@ function CampaignsEditor({ campaign }: CampaignsEditorProps): React.ReactElement
 
   useEffect(() => {
     fetchCampaignTests(name).then(tests => {
-      // sort by channel
-      // const sortedTests = tests.sort((a: CombinedTest, b: CombinedTest) => {
-      //   return testChannelOrder.indexOf(a.channel) - testChannelOrder.indexOf(b.channel);
-      // });
-      setTestData(tests);
+      // sort by priority
+      const sortedTests = tests.sort((a: CombinedTest, b: CombinedTest) => {
+        return a.priority - b.priority;
+      });
+      setTestData(sortedTests);
     });
   }, [campaign]);
+
+  console.log(testData);
 
   return (
     <div className={classes.testEditorContainer}>

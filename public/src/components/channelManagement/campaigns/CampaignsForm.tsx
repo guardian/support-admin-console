@@ -49,8 +49,18 @@ const useStyles = makeStyles(({ spacing, typography }: Theme) => ({
   },
 }));
 
-export type CombinedTest = BannerTest | EpicTest | HeaderTest;
 export type CombinedVariant = BannerVariant | EpicVariant | HeaderVariant;
+
+interface TestEnhancements {
+  priority: number;
+  channel: string;
+};
+
+interface EnhancedBannerTest extends BannerTest, TestEnhancements {};
+interface EnhancedEpicTest extends EpicTest, TestEnhancements {};
+interface EnhancedHeaderTest extends HeaderTest, TestEnhancements {};
+
+export type CombinedTest = EnhancedBannerTest | EnhancedEpicTest | EnhancedHeaderTest;
 
 export interface Campaign {
   name: string;
