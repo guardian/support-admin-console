@@ -8,12 +8,6 @@ export const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     width: '100%',
     background: palette.background.paper, // #FFFFFF
   },
-  switchContainer: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    paddingBottom: spacing(2),
-    borderBottom: `1px solid ${palette.grey[500]}`,
-  },
   sectionContainer: {
     paddingTop: spacing(1),
     paddingBottom: spacing(6),
@@ -27,6 +21,11 @@ export const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     fontSize: 16,
     fontWeight: 500,
     color: palette.grey[700],
+  },
+  variantsHeaderContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
   },
   buttonsContainer: {
     paddingTop: spacing(4),

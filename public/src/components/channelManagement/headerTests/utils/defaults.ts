@@ -42,7 +42,6 @@ export const getDefaultVariant = (): HeaderVariant => {
 const DEV_AND_CODE_DEFAULT_BANNER_TEST: HeaderTest = {
   name: '',
   nickname: '',
-  isOn: false,
   status: 'Draft',
   userCohort: UserCohort.AllNonSupporters,
   locations: [],
@@ -52,7 +51,6 @@ const DEV_AND_CODE_DEFAULT_BANNER_TEST: HeaderTest = {
 const PROD_DEFAULT_BANNER: HeaderTest = {
   name: '',
   nickname: '',
-  isOn: false,
   status: 'Draft',
   userCohort: UserCohort.AllNonSupporters,
   locations: [],

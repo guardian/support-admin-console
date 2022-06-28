@@ -50,6 +50,7 @@ export const ValidatedTestEditor = <T extends Test>(
     existingNames,
     existingNicknames,
     settingsType,
+    onStatusChange,
   }: TestEditorProps<T>) => {
     const classes = useStyles();
     const [isValid, setIsValid] = useState<boolean>(true);
@@ -71,6 +72,7 @@ export const ValidatedTestEditor = <T extends Test>(
           nickname={test.nickname}
           campaignName={test.campaignName}
           isNew={!!test.isNew}
+          status={test.status}
           lockStatus={test.lockStatus || { locked: false }}
           userHasTestLocked={userHasTestLocked}
           userHasTestListLocked={userHasTestListLocked}
@@ -82,6 +84,7 @@ export const ValidatedTestEditor = <T extends Test>(
           onTestSave={onSave}
           onTestArchive={() => onTestArchive(test.name)}
           onTestCopy={onTestCopy}
+          onStatusChange={onStatusChange}
           settingsType={settingsType}
         />
 

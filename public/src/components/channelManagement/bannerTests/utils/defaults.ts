@@ -49,7 +49,6 @@ export const getDefaultVariant = (): BannerVariant => {
 const DEV_AND_CODE_DEFAULT_BANNER_TEST: BannerTest = {
   name: 'TEST',
   nickname: 'TEST',
-  isOn: false,
   status: 'Draft',
   minArticlesBeforeShowingBanner: 0,
   userCohort: UserCohort.AllNonSupporters,
@@ -61,7 +60,6 @@ const DEV_AND_CODE_DEFAULT_BANNER_TEST: BannerTest = {
 const PROD_DEFAULT_BANNER: BannerTest = {
   name: '',
   nickname: '',
-  isOn: false,
   status: 'Draft',
   minArticlesBeforeShowingBanner: 0,
   userCohort: UserCohort.AllNonSupporters,
