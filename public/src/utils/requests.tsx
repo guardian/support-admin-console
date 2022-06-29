@@ -1,4 +1,4 @@
-import { Test } from '../components/channelManagement/helpers/shared';
+import { Test, Status } from '../components/channelManagement/helpers/shared';
 
 export enum SupportFrontendSettingsType {
   switches = 'switches',
@@ -85,11 +85,12 @@ export function updateTest<T>(settingsType: FrontendSettingsType, test: T): Prom
 export function createTest<T>(settingsType: FrontendSettingsType, test: T): Promise<Response> {
   return saveSettings(`/frontend/${settingsType}/test/create`, test);
 }
-export function archiveTests(
+export function updateStatuses(
   settingsType: FrontendSettingsType,
   testNames: string[],
+  status: Status,
 ): Promise<Response> {
-  return saveSettings(`/frontend/${settingsType}/test/archive`, testNames);
+  return saveSettings(`/frontend/${settingsType}/test/status/${status}`, testNames);
 }
 export function requestTestListLock(settingsType: FrontendSettingsType): Promise<Response> {
   return makeFetch(`/frontend/${settingsType}/list/lock`, {

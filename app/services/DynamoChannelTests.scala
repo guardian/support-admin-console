@@ -261,15 +261,15 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends StrictLo
     */
   private def buildUpdateTestExpression(item: Map[String, AttributeValue]): String = {
     val subExprs = item.foldLeft[List[String]](Nil) { case (acc, (key, value)) =>
-      val name = if (key == "status") "#status" else key // status is a reserved word, so we alias with #
-      s"$name = :$key" +: acc
+      s"$key = :$key" +: acc
     }
     s"set ${subExprs.mkString(", ")} remove lockStatus" // Unlock the test at the same time
   }
 
   def updateTest[T <: ChannelTest[T] : Encoder](test: T, channel: Channel, email: String): ZIO[ZEnv, DynamoError, Unit] = {
     val item = jsonToDynamo(test.asJson).m().asScala.toMap -
-      "priority" -    // Do not update priority
+      "status" -      // Do not update status - this is a separate action
+      "priority" -    // Do not update priority - this is a separate action
       "lockStatus" -  // Unlock by removing lockStatus
       "name" -        // key field
       "channel"       // key field
@@ -286,9 +286,6 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends StrictLo
       .key(buildKey(channel, test.name))
       .updateExpression(updateExpression)
       .expressionAttributeValues(attributeValuesWithEmail.asJava)
-      .expressionAttributeNames(Map(
-        "#status" -> "status"
-      ).asJava)
       .conditionExpression("lockStatus.email = :email")
       .build()
 

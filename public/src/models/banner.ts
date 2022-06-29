@@ -43,7 +43,6 @@ export interface BannerVariant extends Variant {
 export interface BannerTest extends Test {
   name: string;
   nickname?: string;
-  isOn: boolean;
   status: Status;
   minArticlesBeforeShowingBanner: number;
   userCohort: UserCohort;

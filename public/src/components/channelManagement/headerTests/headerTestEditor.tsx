@@ -1,7 +1,7 @@
 import React from 'react';
 import { Region } from '../../../utils/models';
 
-import { DeviceType, setStatus, UserCohort } from '../helpers/shared';
+import { DeviceType, UserCohort } from '../helpers/shared';
 
 import { Typography } from '@material-ui/core';
 import HeaderTestVariantEditor from './headerTestVariantEditor';
@@ -9,7 +9,6 @@ import TestVariantsEditor from '../testVariantsEditor';
 
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 
-import LiveSwitch from '../../shared/liveSwitch';
 import { HeaderTest, HeaderVariant } from '../../../models/header';
 import { getDefaultVariant } from './utils/defaults';
 import TestEditorVariantSummary from '../testEditorVariantSummary';
@@ -33,10 +32,6 @@ const HeaderTestEditor: React.FC<ValidatedTestEditorProps<HeaderTest>> = ({
   const onControlProportionSettingsChange = (
     controlProportionSettings?: ControlProportionSettings,
   ): void => onTestChange({ ...test, controlProportionSettings });
-
-  const onLiveSwitchChange = (isOn: boolean): void => {
-    onTestChange({ ...test, isOn, status: setStatus(isOn) });
-  };
 
   const onVariantsChange = (updatedVariantList: HeaderVariant[]): void => {
     onTestChange({ ...test, variants: updatedVariantList });
@@ -108,15 +103,6 @@ const HeaderTestEditor: React.FC<ValidatedTestEditorProps<HeaderTest>> = ({
 
   return (
     <div className={classes.container}>
-      <div className={classes.switchContainer}>
-        <LiveSwitch
-          label="Live on Guardian.com"
-          isLive={test.isOn}
-          isDisabled={!userHasTestLocked}
-          onChange={onLiveSwitchChange}
-        />
-      </div>
-
       <div className={classes.sectionContainer}>
         <Typography variant={'h3'} className={classes.sectionHeader}>
           Variants
