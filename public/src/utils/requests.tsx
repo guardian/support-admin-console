@@ -1,4 +1,4 @@
-import { Status } from '../components/channelManagement/helpers/shared';
+import { Test, Status } from '../components/channelManagement/helpers/shared';
 
 export enum SupportFrontendSettingsType {
   switches = 'switches',
@@ -109,6 +109,10 @@ export function fetchSupportFrontendSettings(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<any> {
   return fetchSettings(`/support-frontend/${settingsType}`);
+}
+
+export function fetchCampaignTests(campaign: string): Promise<Test[]> {
+  return fetchSettings(`/frontend/campaign/${campaign}/tests`);
 }
 
 export function saveSupportFrontendSettings(
