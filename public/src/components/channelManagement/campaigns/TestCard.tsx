@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles, Theme, Card, CardContent, CardActions, Button } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import { CombinedTest, CombinedVariant } from './CampaignsForm';
+import { Test, Variant } from '../helpers/shared';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   cardContainer: {
@@ -84,7 +84,7 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 }));
 
 interface TestCardProps {
-  test: CombinedTest;
+  test: Test;
   keyId: string;
   linkPath: string;
 }
@@ -92,16 +92,16 @@ interface TestCardProps {
 function TestCard({ test, keyId, linkPath }: TestCardProps): React.ReactElement {
   const classes = useStyles();
 
-  const getVariantNames = (variants: CombinedVariant[]) => {
+  const getVariantNames = (variants: Variant[]) => {
     if (variants.length > 0) {
       return (
         <div className={classes.variantsData}>Variants: {variants.map(v => v.name).join(', ')}</div>
       );
     }
-    return <div className={classes.dataWarning}>No variants have been created for this test!</div>;
+    return <div className={classes.dataWarning}>No Variants have been created for this Test.</div>;
   };
 
-  const getPriorityAndStatus = (test: CombinedTest) => {
+  const getPriorityAndStatus = (test: Test) => {
     return (
       <div className={classes.priorityAndStatusLine}>
         Priority: <span className={classes.prioritySpan}>{test.priority}</span>
@@ -113,7 +113,7 @@ function TestCard({ test, keyId, linkPath }: TestCardProps): React.ReactElement 
     );
   };
 
-  const getCohort = (test: CombinedTest) => {
+  const getCohort = (test: Test) => {
     const userCohort = test.userCohort;
 
     const checkCohort = (wanted: string) => {
@@ -135,7 +135,7 @@ function TestCard({ test, keyId, linkPath }: TestCardProps): React.ReactElement 
     );
   };
 
-  const getLocations = (test: CombinedTest) => {
+  const getLocations = (test: Test) => {
     const locations: string[] = test.locations || [];
 
     const checkLocation = (wanted: string) => {
@@ -149,7 +149,9 @@ function TestCard({ test, keyId, linkPath }: TestCardProps): React.ReactElement 
       return (
         <div className={classes.locationsLine}>
           Locations:{' '}
-          <span className={classes.dataWarning}>No locations have been selected for this Test</span>
+          <span className={classes.dataWarning}>
+            No locations have been selected for this Test.
+          </span>
         </div>
       );
     }

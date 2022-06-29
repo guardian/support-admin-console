@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
 import { makeStyles, Theme, Typography } from '@material-ui/core';
-import { BannerTest, BannerVariant } from '../../../models/banner';
-import { EpicTest, EpicVariant } from '../../../models/epic';
-import { HeaderTest, HeaderVariant } from '../../../models/header';
 import CampaignsSidebar from './CampaignsSidebar';
 import CampaignsEditor from './CampaignsEditor';
 import { useParams } from 'react-router-dom';
@@ -48,19 +45,6 @@ const useStyles = makeStyles(({ spacing, typography }: Theme) => ({
     justifyContent: 'center',
   },
 }));
-
-export type CombinedVariant = BannerVariant | EpicVariant | HeaderVariant;
-
-interface TestEnhancements {
-  priority: number;
-  channel: string;
-}
-
-interface EnhancedBannerTest extends BannerTest, TestEnhancements {}
-interface EnhancedEpicTest extends EpicTest, TestEnhancements {}
-interface EnhancedHeaderTest extends HeaderTest, TestEnhancements {}
-
-export type CombinedTest = EnhancedBannerTest | EnhancedEpicTest | EnhancedHeaderTest;
 
 export interface Campaign {
   name: string;

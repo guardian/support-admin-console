@@ -26,6 +26,9 @@ export interface Test {
   locations: Region[];
   isNew?: boolean; // true if test has not yet been POSTed to backend
   campaignName?: string;
+  priority?: number;
+  userCohort?: string;
+  channel?: string;
 }
 
 export interface EpicEditorConfig {

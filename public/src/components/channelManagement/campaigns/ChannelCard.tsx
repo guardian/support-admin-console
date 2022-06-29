@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles, Theme } from '@material-ui/core';
 import TestCard from './TestCard';
 import { TestChannelItem } from './CampaignsEditor';
-import { CombinedTest } from './CampaignsForm';
+import { Test } from '../helpers/shared';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   channelContainer: {
@@ -21,13 +21,13 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 
 interface ChannelCardProps {
   channelData: TestChannelItem;
-  tests: CombinedTest[];
+  tests: Test[];
 }
 
 function ChannelCard({ channelData, tests }: ChannelCardProps): React.ReactElement {
   const classes = useStyles();
 
-  const getKey = (test: CombinedTest) => {
+  const getKey = (test: Test) => {
     return `${channelData.name}|${test.name}`;
   };
 
@@ -44,7 +44,7 @@ function ChannelCard({ channelData, tests }: ChannelCardProps): React.ReactEleme
           />
         ))
       ) : (
-        <div className={classes.noTestsWarning}>No tests have been set up for this channel</div>
+        <div className={classes.noTestsWarning}>No Tests have been set up for this Channel.</div>
       )}
       {}
     </div>

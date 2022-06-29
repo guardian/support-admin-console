@@ -1,3 +1,5 @@
+import { Test } from '../components/channelManagement/helpers/shared';
+
 export enum SupportFrontendSettingsType {
   switches = 'switches',
   contributionTypes = 'contribution-types',
@@ -108,10 +110,7 @@ export function fetchSupportFrontendSettings(
   return fetchSettings(`/support-frontend/${settingsType}`);
 }
 
-export function fetchCampaignTests(
-  campaign: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-): Promise<any> {
+export function fetchCampaignTests(campaign: string): Promise<Test[]> {
   return fetchSettings(`/frontend/campaign/${campaign}/tests`);
 }
 

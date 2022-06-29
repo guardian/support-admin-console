@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Theme, Typography, makeStyles, Button } from '@material-ui/core';
 import StickyTopBar from './StickyCampaignBar';
 import { Campaign } from './CampaignsForm';
-import { CombinedTest } from './CampaignsForm';
+import { Test } from '../helpers/shared';
 import ChannelCard from './ChannelCard';
 import { fetchCampaignTests } from '../../../utils/requests';
 
@@ -105,21 +105,22 @@ const testChannelData: TestChannelData = {
 function CampaignsEditor({ campaign }: CampaignsEditorProps): React.ReactElement {
   const classes = useStyles();
 
-  const [testData, setTestData] = useState<CombinedTest[]>([]);
+  const [testData, setTestData] = useState<Test[]>([]);
 
   const { name, nickname, description } = campaign;
 
   useEffect(() => {
     fetchCampaignTests(name).then(tests => {
       // sort by priority
-      const sortedTests = tests.sort((a: CombinedTest, b: CombinedTest) => {
-        return a.priority - b.priority;
+      const sortedTests = tests.sort((a: Test, b: Test) => {
+        if (a.priority != null && b.priority != null) {
+          return a.priority - b.priority;
+        }
+        return 0;
       });
       setTestData(sortedTests);
     });
   }, [campaign]);
-
-  console.log(testData);
 
   return (
     <div className={classes.testEditorContainer}>
