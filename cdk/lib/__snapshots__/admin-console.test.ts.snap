@@ -357,6 +357,52 @@ Object {
       },
       "Type": "AWS::IAM::Policy",
     },
+    "DynamoReadChannelTestsDynamoTableindexcampaignNamenameindex265299CD": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "dynamodb:BatchGetItem",
+                "dynamodb:GetItem",
+                "dynamodb:Scan",
+                "dynamodb:Query",
+                "dynamodb:GetRecords",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:aws:dynamodb:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":table/",
+                    Object {
+                      "Ref": "ChannelTestsDynamoTable",
+                    },
+                    "/index/campaignName-name-index",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "DynamoReadChannelTestsDynamoTableindexcampaignNamenameindex265299CD",
+        "Roles": Array [
+          Object {
+            "Ref": "InstanceRoleAdminconsole347DA627",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
     "DynamoWriteChannelTestsDynamoTable593B6212": Object {
       "Properties": Object {
         "PolicyDocument": Object {

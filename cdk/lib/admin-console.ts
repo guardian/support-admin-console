@@ -65,6 +65,9 @@ export class AdminConsole extends GuStack {
       new GuDynamoDBReadPolicy(this, `DynamoRead-${table.node.id}`, {
         tableName: table.tableName,
       }),
+      new GuDynamoDBReadPolicy(this, `DynamoRead-${table.node.id}/index/campaignName-name-index`, {
+        tableName: `${table.tableName}/index/campaignName-name-index`,
+      }),
       new GuDynamoDBWritePolicy(this, `DynamoWrite-${table.node.id}`, {
         tableName: table.tableName,
       }),
