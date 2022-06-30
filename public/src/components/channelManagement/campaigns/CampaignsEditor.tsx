@@ -128,17 +128,6 @@ function CampaignsEditor({ campaign }: CampaignsEditorProps): React.ReactElement
 
       <div className={classes.scrollableContainer}>
         <div className={classes.formContainer}>
-          <Button
-            className={classes.launchLink}
-            variant="outlined"
-            onClick={(): void => {
-              console.log('TODO: tests status modal');
-            }}
-            disabled={true}
-          >
-            Button to open the tests status manager modal - needs to move into sticky bar (top right
-            corner)
-          </Button>
           <div className={classes.notesContainer}>
             <div className={classes.notesHeader}>Notes (will be an editable RTE field):</div>
             {description && <Typography>{description}</Typography>}
