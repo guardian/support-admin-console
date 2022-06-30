@@ -50,7 +50,6 @@ case class BannerTest(
   lockStatus: Option[LockStatus],
   priority: Option[Int],
   nickname: Option[String],
-  isOn: Boolean,
   minArticlesBeforeShowingBanner: Int,
   userCohort: UserCohort,
   locations: List[Region] = Nil,

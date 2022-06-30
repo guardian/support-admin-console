@@ -71,7 +71,6 @@ case class EpicTest(
   lockStatus: Option[LockStatus],
   priority: Option[Int],
   nickname: Option[String],
-  isOn: Boolean,
   locations: List[Region] = Nil,
   tagIds: List[String] = Nil,
   sections: List[String] = Nil,
