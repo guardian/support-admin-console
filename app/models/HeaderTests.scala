@@ -25,7 +25,6 @@ case class HeaderTest(
   lockStatus: Option[LockStatus],
   priority: Option[Int],
   nickname: Option[String],
-  isOn: Boolean,  // TODO - deprecate in favour of status
   locations: List[Region] = Nil,
   userCohort: Option[UserCohort] = None,
   variants: List[HeaderVariant],
