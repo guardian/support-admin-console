@@ -33,7 +33,6 @@ class DynamoChannelTestsSpec extends AsyncFlatSpec with Matchers with BeforeAndA
     EpicTest(
       name = name,
       nickname = Some(name),
-      isOn = true,
       status = Some(Status.Live),
       channel = Some(Channel.Epic),
       lockStatus = None,
