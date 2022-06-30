@@ -2,6 +2,8 @@ import React from 'react';
 import { Theme, Typography, makeStyles, Button } from '@material-ui/core';
 import { grey } from '@material-ui/core/colors';
 import { Link } from '@material-ui/icons';
+import StatusUpdateButton from './StatusUpdateButton';
+import { Test } from '../helpers/shared';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {
@@ -17,6 +19,14 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   },
   namesContainer: {
     display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'spaced',
+    height: '100%',
+  },
+  buttonsContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    height: '100%',
     flexDirection: 'column',
   },
   mainHeader: {
@@ -61,9 +71,14 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
 interface StickyTopBarProps {
   name: string;
   nickname?: string;
+  tests: Test[];
 }
 
-const StickyTopBar: React.FC<StickyTopBarProps> = ({ name, nickname }: StickyTopBarProps) => {
+const StickyTopBar: React.FC<StickyTopBarProps> = ({ 
+  name,
+  nickname,
+  tests,
+}: StickyTopBarProps) => {
   const classes = useStyles();
   const mainHeader = nickname ? nickname : name;
   const secondaryHeader = nickname ? name : null;
@@ -87,6 +102,11 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({ name, nickname }: StickyTop
             Copy link
           </Button>
         </div>
+      </div>
+      <div className={classes.buttonsContainer}>
+        <StatusUpdateButton
+          tests={tests}
+        />
       </div>
     </header>
   );

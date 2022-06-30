@@ -122,10 +122,15 @@ function CampaignsEditor({ campaign }: CampaignsEditorProps): React.ReactElement
     });
   }, [campaign]);
 
+  // const updateTestStatus = (oldStatuses:)
+
   return (
     <div className={classes.testEditorContainer}>
-      <StickyTopBar name={name} nickname={nickname} />
-
+      <StickyTopBar 
+        name={name}
+        nickname={nickname}
+        tests={testData}
+      />
       <div className={classes.scrollableContainer}>
         <div className={classes.formContainer}>
           <div className={classes.notesContainer}>

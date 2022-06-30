@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Button,
   Dialog,
@@ -7,16 +7,10 @@ import {
   DialogTitle,
   IconButton,
   makeStyles,
-  TextField,
+  // TextField,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import {
-  createDuplicateValidator,
-  EMPTY_ERROR_HELPER_TEXT,
-  INVALID_CHARACTERS_ERROR_HELPER_TEXT,
-  VALID_CHARACTERS_REGEX,
-} from '../helpers/validation';
-import { useForm } from 'react-hook-form';
+import { Test } from '../helpers/shared';
 
 const useStyles = makeStyles(() => ({
   dialogHeader: {
@@ -32,104 +26,56 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-interface FormData {
-  name: string;
-  nickname: string;
-  description: string;
-}
-
 interface StatusUpdateDialogProps {
   isOpen: boolean;
   close: () => void;
-  existingNames: string[];
-  existingNicknames: string[];
-  createCampaign: (data: FormData) => void;
+  tests: Test[];
+}
+
+interface TestStatus {
+  [index: string]: string;
 }
 
 const StatusUpdateDialog: React.FC<StatusUpdateDialogProps> = ({
   isOpen,
   close,
-  existingNames,
-  existingNicknames,
-  createCampaign,
+  tests,
 }: StatusUpdateDialogProps) => {
   const classes = useStyles();
 
-  const defaultValues: FormData = {
-    name: '',
-    nickname: '',
-    description: '',
+  const oldTestStatuses: TestStatus = {};
+
+  const [testData, setTestData] = useState<TestStatus>(oldTestStatuses);
+
+  const getStatusKey = (test: Test) => {
+    return `${test.channel}|${test.name}`;
   };
 
-  const { register, handleSubmit, errors } = useForm<FormData>({
-    defaultValues,
-  });
-
-  const onSubmit = (vals: FormData): void => {
-    createCampaign({
-      name: vals.name.toUpperCase(),
-      nickname: vals.nickname.toUpperCase(),
-      description: vals.description,
+  useEffect(() => {
+    tests.map(test => {
+      const key = getStatusKey(test);
+      oldTestStatuses[key] = test.status;
     });
+    setTestData(oldTestStatuses);
+  }, [tests]);
+
+  const onSubmit = (): void => {
+    console.log(testData, tests);
     close();
   };
 
   return (
     <Dialog open={isOpen} onClose={close} aria-labelledby="create-test-dialog-title">
       <div className={classes.dialogHeader}>
-        <DialogTitle id="create-campaign-dialog-title">Create a new campaign</DialogTitle>
+        <DialogTitle id="create-campaign-dialog-title">Update Test status values</DialogTitle>
         <IconButton onClick={close} aria-label="close">
           <CloseIcon />
         </IconButton>
       </div>
-      <DialogContent dividers>
-        <TextField
-          className={classes.input}
-          inputRef={register({
-            required: EMPTY_ERROR_HELPER_TEXT,
-            pattern: {
-              value: VALID_CHARACTERS_REGEX,
-              message: INVALID_CHARACTERS_ERROR_HELPER_TEXT,
-            },
-            validate: createDuplicateValidator(existingNames),
-          })}
-          error={errors.name !== undefined}
-          helperText={errors.name ? errors.name.message : ''}
-          name="name"
-          label="Campaign name"
-          margin="normal"
-          variant="outlined"
-          autoFocus
-          fullWidth
-        />
-        <TextField
-          className={classes.input}
-          inputRef={register({
-            required: EMPTY_ERROR_HELPER_TEXT,
-            validate: createDuplicateValidator(existingNicknames),
-          })}
-          error={errors.nickname !== undefined}
-          helperText={errors.nickname ? errors.nickname.message : ''}
-          name="nickname"
-          label="Nickname"
-          margin="normal"
-          variant="outlined"
-          fullWidth
-        />
-        <TextField
-          inputRef={register()}
-          error={errors.description !== undefined}
-          helperText={errors.description ? errors.description.message : ''}
-          name="description"
-          label="Description"
-          margin="normal"
-          variant="outlined"
-          fullWidth
-        />
-      </DialogContent>
+      <DialogContent dividers>Clicking on the update button will change Test statuses on the site with immediate effect - are you sure?</DialogContent>
       <DialogActions>
-        <Button onClick={handleSubmit(onSubmit)} color="primary">
-          Create Campaign
+        <Button onClick={onSubmit} color="primary">
+          Update now
         </Button>
       </DialogActions>
     </Dialog>
