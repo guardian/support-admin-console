@@ -72,12 +72,14 @@ interface StickyTopBarProps {
   name: string;
   nickname?: string;
   tests: Test[];
+  updatePage: () => void;
 }
 
-const StickyTopBar: React.FC<StickyTopBarProps> = ({ 
+const StickyTopBar: React.FC<StickyTopBarProps> = ({
   name,
   nickname,
   tests,
+  updatePage,
 }: StickyTopBarProps) => {
   const classes = useStyles();
   const mainHeader = nickname ? nickname : name;
@@ -104,9 +106,7 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
         </div>
       </div>
       <div className={classes.buttonsContainer}>
-        <StatusUpdateButton
-          tests={tests}
-        />
+        <StatusUpdateButton tests={tests} updatePage={updatePage} />
       </div>
     </header>
   );
