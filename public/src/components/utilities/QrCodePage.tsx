@@ -5,7 +5,6 @@ import {
   FormControl,
   makeStyles,
   Paper,
-  Slider,
   TextField,
   Theme,
   Typography,
@@ -46,22 +45,10 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   },
 }));
 
-const sizeOptions = [
-  { value: 100, label: '100px' },
-  { value: 150, label: '150px' },
-  { value: 200, label: '200px' },
-  { value: 250, label: '250px' },
-  { value: 300, label: '300px' },
-  { value: 350, label: '350px' },
-  { value: 400, label: '400px' },
-  { value: 450, label: '450px' },
-  { value: 500, label: '500px' },
-];
-
 export default function QrCodePage(): JSX.Element {
   const [url, setUrl] = useState('');
   const [fileName, setFileName] = useState('');
-  const [codeSize, setCodeSize] = useState(250);
+  const [codeSize, setCodeSize] = useState(256);
   const classes = useStyles();
 
   function onSvgDownload() {
@@ -98,24 +85,23 @@ export default function QrCodePage(): JSX.Element {
               required
             />
           </FormControl>
+          <FormControl>
+            <TextField
+              label="Size (in px)"
+              name="size"
+              fullWidth={true}
+              defaultValue={256}
+              onChange={e => setCodeSize(parseInt(e.target.value))}
+              type="text"
+              inputMode="numeric"
+              required
+            />
+          </FormControl>
         </Box>
         <Paper className={classes.codeContainer}>
           {url && <QRCode id="QRCode" value={url} size={codeSize} />}
         </Paper>
         <Box className={classes.form}>
-          <FormControl>
-            <Typography>Code size</Typography>
-            <Slider
-              aria-label="Size"
-              defaultValue={250}
-              onChange={(_, value) => setCodeSize(value as number)}
-              valueLabelDisplay="off"
-              step={50}
-              marks={sizeOptions}
-              min={100}
-              max={500}
-            />
-          </FormControl>
           <FormControl>
             <TextField
               label="File name (optional)"
