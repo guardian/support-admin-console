@@ -6,6 +6,7 @@ import { DeviceType, UserCohort } from '../helpers/shared';
 import { Typography } from '@material-ui/core';
 import HeaderTestVariantEditor from './headerTestVariantEditor';
 import TestVariantsEditor from '../testVariantsEditor';
+import CampaignSelector from '../CampaignSelector';
 
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 
@@ -28,6 +29,13 @@ const HeaderTestEditor: React.FC<ValidatedTestEditorProps<HeaderTest>> = ({
 
   const onVariantsSplitSettingsValidationChanged = (isValid: boolean): void =>
     setValidationStatusForField('variantsSplitSettings', isValid);
+
+  const onCampaignChange = (campaign?: string): void => {
+    onTestChange({
+      ...test,
+      campaignName: campaign,
+    });
+  };
 
   const onControlProportionSettingsChange = (
     controlProportionSettings?: ControlProportionSettings,
@@ -103,6 +111,19 @@ const HeaderTestEditor: React.FC<ValidatedTestEditorProps<HeaderTest>> = ({
 
   return (
     <div className={classes.container}>
+      <div className={classes.sectionContainer}>
+        <Typography variant={'h3'} className={classes.sectionHeader}>
+          Campaign
+        </Typography>
+        <div>
+          <CampaignSelector
+            test={test}
+            onCampaignChange={onCampaignChange}
+            disabled={!userHasTestLocked}
+          />
+        </div>
+      </div>
+
       <div className={classes.sectionContainer}>
         <Typography variant={'h3'} className={classes.sectionHeader}>
           Variants
