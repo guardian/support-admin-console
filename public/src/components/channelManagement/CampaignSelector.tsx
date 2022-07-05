@@ -19,16 +19,17 @@ const useStyles = makeStyles(() => ({
     },
   },
   campaignSelector: {
-    marginBottom: '20px',
+    marginBottom: '8px',
     marginRight: '12px',
     minWidth: '200px',
-  },
-  campaignSelectorContainer: {
     display: 'flex',
     flexDirection: 'row',
+    alignItems: 'baseline',
+    justifyContent: 'flex-start',
   },
   warning: {
     color: '#555',
+    marginLeft: '24px',
   },
 }));
 
@@ -57,7 +58,7 @@ const CampaignSelector: React.FC<CampaignSelectorProps> = ({
 
   return (
     <>
-      <FormControl className={classes.campaignSelector}>
+      <FormControl className={classes.campaignSelector} size="small">
         <Select
           value={test.campaignName}
           displayEmpty
@@ -81,11 +82,10 @@ const CampaignSelector: React.FC<CampaignSelectorProps> = ({
             </MenuItem>
           ))}
         </Select>
+        <div className={classes.warning}>
+          If you want to use this Test in a new or different campaign, please consider copying the test rather than changing its campaign value.
+        </div>
       </FormControl>
-      <div className={classes.warning}>
-        If you want to use this Test in a new or different campaign, please consider copying it,
-        rather than changing the Test campaign value.
-      </div>
     </>
   );
 };

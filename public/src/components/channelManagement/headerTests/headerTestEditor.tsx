@@ -113,19 +113,6 @@ const HeaderTestEditor: React.FC<ValidatedTestEditorProps<HeaderTest>> = ({
     <div className={classes.container}>
       <div className={classes.sectionContainer}>
         <Typography variant={'h3'} className={classes.sectionHeader}>
-          Campaign
-        </Typography>
-        <div>
-          <CampaignSelector
-            test={test}
-            onCampaignChange={onCampaignChange}
-            disabled={!userHasTestLocked}
-          />
-        </div>
-      </div>
-
-      <div className={classes.sectionContainer}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
           Variants
         </Typography>
         <div>
@@ -158,6 +145,19 @@ const HeaderTestEditor: React.FC<ValidatedTestEditorProps<HeaderTest>> = ({
           </div>
         </div>
       )}
+
+      <div className={classes.sectionContainer}>
+        <Typography variant={'h3'} className={classes.sectionHeader}>
+          Campaign
+        </Typography>
+        <div>
+          <CampaignSelector
+            test={test}
+            onCampaignChange={onCampaignChange}
+            disabled={!userHasTestLocked}
+          />
+        </div>
+      </div>
 
       <div className={classes.sectionContainer}>
         <Typography variant={'h3'} className={classes.sectionHeader}>

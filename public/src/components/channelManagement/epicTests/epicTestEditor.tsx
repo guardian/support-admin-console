@@ -209,19 +209,6 @@ export const getEpicTestEditor = (
 
     return (
       <div className={classes.container}>
-        <div className={classes.sectionContainer}>
-          <Typography variant={'h3'} className={classes.sectionHeader}>
-            Campaign
-          </Typography>
-          <div>
-            <CampaignSelector
-              test={test}
-              onCampaignChange={onCampaignChange}
-              disabled={!userHasTestLocked}
-            />
-          </div>
-        </div>
-
         {epicEditorConfig.allowMultipleVariants && (
           <div className={classes.sectionContainer}>
             <div className={classes.variantsHeaderContainer}>
@@ -283,6 +270,19 @@ export const getEpicTestEditor = (
             </div>
           </div>
         )}
+
+        <div className={classes.sectionContainer}>
+          <Typography variant={'h3'} className={classes.sectionHeader}>
+            Campaign
+          </Typography>
+          <div>
+            <CampaignSelector
+              test={test}
+              onCampaignChange={onCampaignChange}
+              disabled={!userHasTestLocked}
+            />
+          </div>
+        </div>
 
         {epicEditorConfig.allowContentTargeting && (
           <div className={classes.sectionContainer}>
