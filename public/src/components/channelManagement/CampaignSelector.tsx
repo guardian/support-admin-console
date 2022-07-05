@@ -83,7 +83,8 @@ const CampaignSelector: React.FC<CampaignSelectorProps> = ({
           ))}
         </Select>
         <div className={classes.warning}>
-          If you want to use this Test in a new or different campaign, please consider copying the test rather than changing its campaign value.
+          If you want to use this Test in a new or different campaign, please consider copying the
+          test rather than changing its campaign value.
         </div>
       </FormControl>
     </>
