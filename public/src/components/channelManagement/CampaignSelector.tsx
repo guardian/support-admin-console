@@ -39,6 +39,8 @@ interface CampaignSelectorProps {
   disabled: boolean;
 }
 
+const unassignedCampaignLabel = 'NOT_IN_CAMPAIGN';
+
 const CampaignSelector: React.FC<CampaignSelectorProps> = ({
   onCampaignChange,
   test,
@@ -63,9 +65,6 @@ const CampaignSelector: React.FC<CampaignSelectorProps> = ({
           value={test.campaignName}
           displayEmpty
           renderValue={(campaign): string => {
-            if (campaign === undefined) {
-              return ''; // triggers the displayEmpty behaviour
-            }
             return campaign as string;
           }}
           onChange={(event: React.ChangeEvent<{ value: unknown }>): void => {
@@ -73,8 +72,8 @@ const CampaignSelector: React.FC<CampaignSelectorProps> = ({
           }}
           disabled={disabled}
         >
-          <MenuItem value={undefined} key={'campaignName-none'}>
-            No campaign
+          <MenuItem value={unassignedCampaignLabel} key={'campaignName-none'}>
+            {unassignedCampaignLabel}
           </MenuItem>
           {campaigns.map(campaign => (
             <MenuItem value={campaign.name} key={`campaign-${campaign.name}`}>
