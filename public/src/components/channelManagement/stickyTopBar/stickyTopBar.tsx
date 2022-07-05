@@ -103,7 +103,6 @@ interface StickyTopBarProps {
 const StickyTopBar: React.FC<StickyTopBarProps> = ({
   name,
   nickname,
-  campaignName,
   isNew,
   status,
   lockStatus,
@@ -122,8 +121,6 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
 }: StickyTopBarProps) => {
   const classes = useStyles();
   const mainHeader = nickname ? nickname : name;
-  const campaignHeader =
-    campaignName && campaignName !== 'NOT_IN_CAMPAIGN' ? `[${campaignName}]` : '';
   const secondaryHeader = nickname ? name : null;
 
   return (
