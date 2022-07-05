@@ -130,7 +130,7 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
     <header className={classes.container}>
       <div className={classes.namesContainer}>
         <Typography variant="h2" className={classes.mainHeader}>
-          {campaignHeader} {mainHeader}
+          {mainHeader}
         </Typography>
         <div className={classes.secondaryHeaderContainer}>
           <Typography className={classes.secondaryHeader}>{secondaryHeader}</Typography>
