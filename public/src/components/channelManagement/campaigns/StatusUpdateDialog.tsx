@@ -50,7 +50,7 @@ interface StatusUpdateDialogProps {
 }
 
 interface TestStatus {
-  [index: string]: string;
+  [index: string]: Status;
 }
 
 type UpdateStatusesArguments = [FrontendSettingsType, string[], Status];
@@ -63,20 +63,19 @@ const StatusUpdateDialog: React.FC<StatusUpdateDialogProps> = ({
 }: StatusUpdateDialogProps) => {
   const classes = useStyles();
 
-  const oldTestStatuses: TestStatus = {};
-
-  const [testData, setTestData] = useState<TestStatus>(oldTestStatuses);
-
   const getStatusKey = (test: Test) => {
     return `${test.channel}|${test.name}`;
   };
 
+  const [testData, setTestData] = useState<TestStatus>({});
+
   useEffect(() => {
+    const res: TestStatus = {};
     tests.map(test => {
       const key = getStatusKey(test);
-      oldTestStatuses[key] = test.status;
+      res[key] = test.status;
     });
-    setTestData(oldTestStatuses);
+    setTestData(res);
   }, [tests]);
 
   const updateSwitch = (e: React.ChangeEvent) => {
@@ -94,7 +93,7 @@ const StatusUpdateDialog: React.FC<StatusUpdateDialogProps> = ({
     const changes: UpdateStatusesArguments[] = [];
     tests.forEach(test => {
       const key = getStatusKey(test);
-      if (oldTestStatuses[key] !== testData[key]) {
+      if (test.status !== testData[key]) {
         const { channel, name } = test;
         if (channel != null) {
           const link = testChannelData[channel].link as FrontendSettingsType;
