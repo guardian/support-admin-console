@@ -153,7 +153,7 @@ const bannerModules = {
     name: 'PostElectionAuMomentMorrisonBanner',
   },
   [BannerTemplate.AusBrandMomentBanner]: {
-    path: 'ausBrandMoment/ausBrandMomentBanner.js',
+    path: 'ausBrandMoment/AusBrandMomentBanner.js',
     name: 'AusBrandMomentBanner',
   },
 };
