@@ -8,6 +8,7 @@ import {
   DeviceType,
 } from '../helpers/shared';
 import { FormControlLabel, Switch, Typography } from '@material-ui/core';
+import CampaignSelector from '../CampaignSelector';
 import TestVariantsEditor from '../testVariantsEditor';
 import TestEditorVariantSummary from '../testEditorVariantSummary';
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
@@ -74,6 +75,13 @@ export const getEpicTestEditor = (
         // To save dotcom from having to work this out
         hasCountryName: copyHasTemplate(updatedTest, COUNTRY_NAME_TEMPLATE),
         articlesViewedSettings: getArticlesViewedSettings(updatedTest),
+      });
+    };
+
+    const onCampaignChange = (campaign?: string): void => {
+      updateTest({
+        ...test,
+        campaignName: campaign,
       });
     };
 
@@ -262,6 +270,19 @@ export const getEpicTestEditor = (
             </div>
           </div>
         )}
+
+        <div className={classes.sectionContainer}>
+          <Typography variant={'h3'} className={classes.sectionHeader}>
+            Campaign
+          </Typography>
+          <div>
+            <CampaignSelector
+              test={test}
+              onCampaignChange={onCampaignChange}
+              disabled={!userHasTestLocked}
+            />
+          </div>
+        </div>
 
         {epicEditorConfig.allowContentTargeting && (
           <div className={classes.sectionContainer}>

@@ -4,6 +4,7 @@ import { ArticlesViewedSettings, DeviceType, UserCohort } from '../helpers/share
 import { ARTICLE_COUNT_TEMPLATE } from '../helpers/validation';
 import { Typography } from '@material-ui/core';
 import BannerTestVariantEditor from './bannerTestVariantEditor';
+import CampaignSelector from '../CampaignSelector';
 import TestVariantsEditor from '../testVariantsEditor';
 import TestEditorMinArticlesViewedInput from '../testEditorMinArticlesViewedInput';
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
@@ -54,6 +55,13 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
       ...updatedTest,
       // To save dotcom from having to work this out
       articlesViewedSettings: getArticlesViewedSettings(updatedTest),
+    });
+  };
+
+  const onCampaignChange = (campaign?: string): void => {
+    updateTest({
+      ...test,
+      campaignName: campaign,
     });
   };
 
@@ -191,6 +199,19 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
             </div>
           </div>
         )}
+
+        <div className={classes.sectionContainer}>
+          <Typography variant={'h3'} className={classes.sectionHeader}>
+            Campaign
+          </Typography>
+          <div>
+            <CampaignSelector
+              test={test}
+              onCampaignChange={onCampaignChange}
+              disabled={!userHasTestLocked}
+            />
+          </div>
+        </div>
 
         <div className={classes.sectionContainer}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
