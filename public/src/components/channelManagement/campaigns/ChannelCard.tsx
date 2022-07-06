@@ -35,14 +35,17 @@ function ChannelCard({ channelData, tests }: ChannelCardProps): React.ReactEleme
     <div className={classes.channelContainer}>
       <div className={classes.channelTitle}>{channelData.name} channel</div>
       {tests.length > 0 ? (
-        tests.map(test => (
-          <TestCard
-            test={test}
-            keyId={`${getKey(test)}_LINK`}
-            linkPath={channelData.link}
-            key={`${getKey(test)}_CARD`}
-          />
-        ))
+        tests.map(test => {
+          const key = getKey(test);
+          return (
+            <TestCard
+              test={test}
+              keyId={`${key}_LINK`}
+              linkPath={`/${channelData.link}`}
+              key={`${key}_CARD`}
+            />
+          );
+        })
       ) : (
         <div className={classes.noTestsWarning}>No Tests have been set up for this Channel.</div>
       )}

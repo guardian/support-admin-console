@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Theme, Typography, makeStyles, Button } from '@material-ui/core';
+import { Theme, Typography, makeStyles } from '@material-ui/core';
 import StickyTopBar from './StickyCampaignBar';
 import { Campaign } from './CampaignsForm';
 import { Test } from '../helpers/shared';
@@ -67,38 +67,38 @@ export interface TestChannelData {
   [index: string]: TestChannelItem;
 }
 
-const testChannelData: TestChannelData = {
+export const testChannelData: TestChannelData = {
   Header: {
     name: 'Header',
-    link: '/header-tests',
+    link: 'header-tests',
   },
   Epic: {
     name: 'Epic',
-    link: '/epic-tests',
+    link: 'epic-tests',
   },
   EpicHoldback: {
     name: 'Epic Holdback',
-    link: '/epic-holdback-tests',
+    link: 'epic-holdback-tests',
   },
   EpicLiveblog: {
     name: 'Liveblog Epic',
-    link: '/liveblog-epic-tests',
+    link: 'liveblog-epic-tests',
   },
   EpicAppleNews: {
     name: 'Apple News Epic',
-    link: '/apple-news-epic-tests',
+    link: 'apple-news-epic-tests',
   },
   EpicAMP: {
     name: 'AMP Epic',
-    link: '/amp-epic-tests',
+    link: 'amp-epic-tests',
   },
   Banner1: {
     name: 'Banner 1',
-    link: '/banner-tests',
+    link: 'banner-tests',
   },
   Banner2: {
     name: 'Banner 2',
-    link: '/banner-tests2',
+    link: 'banner-tests2',
   },
 };
 
@@ -109,9 +109,9 @@ function CampaignsEditor({ campaign }: CampaignsEditorProps): React.ReactElement
 
   const { name, nickname, description } = campaign;
 
-  useEffect(() => {
+  const doDataFetch = (name: string) => {
     fetchCampaignTests(name).then(tests => {
-      // sort by priority
+      // sort by test priority; each channel sets its own priority list
       const sortedTests = tests.sort((a: Test, b: Test) => {
         if (a.priority != null && b.priority != null) {
           return a.priority - b.priority;
@@ -120,25 +120,17 @@ function CampaignsEditor({ campaign }: CampaignsEditorProps): React.ReactElement
       });
       setTestData(sortedTests);
     });
-  }, [campaign]);
+  };
+
+  useEffect(() => doDataFetch(name), [campaign]);
+
+  const updatePage = () => doDataFetch(name);
 
   return (
     <div className={classes.testEditorContainer}>
-      <StickyTopBar name={name} nickname={nickname} />
-
+      <StickyTopBar name={name} nickname={nickname} tests={testData} updatePage={updatePage} />
       <div className={classes.scrollableContainer}>
         <div className={classes.formContainer}>
-          <Button
-            className={classes.launchLink}
-            variant="outlined"
-            onClick={(): void => {
-              console.log('TODO: tests status modal');
-            }}
-            disabled={true}
-          >
-            Button to open the tests status manager modal - needs to move into sticky bar (top right
-            corner)
-          </Button>
           <div className={classes.notesContainer}>
             <div className={classes.notesHeader}>Notes (will be an editable RTE field):</div>
             {description && <Typography>{description}</Typography>}
