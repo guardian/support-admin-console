@@ -37,7 +37,7 @@ const templatesWithLabels = [
     label: 'Post Australian Election moment - Morrison win',
   },
   {
-    template: BannerTemplate.AusBrandMomentBanner,
+    template: BannerTemplate.AuBrandMomentBanner,
     label: 'Australian brand moment 2022',
   },
 ];
