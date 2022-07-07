@@ -254,7 +254,7 @@ export const TestsForm = <T extends Test>(
       if (newTest) {
         alert(`Please save new test '${newTest.name}' before reordering`);
       } else {
-        const lockAction = force ? requestTestListLock : requestTestListTakeControl;
+        const lockAction = force ? requestTestListTakeControl : requestTestListLock;
         lockAction(settingsType)
           .then(() => fetchTests())
           .catch(error => {
