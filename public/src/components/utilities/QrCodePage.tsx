@@ -28,7 +28,6 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
     flexDirection: 'column',
     width: '650px',
     padding: spacing(2),
-    // minHeight: '100%',
     gridArea: ' 1 / 2 / 3 / 5',
     alignSelf: 'start',
   },
