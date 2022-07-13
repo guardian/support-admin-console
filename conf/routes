@@ -37,6 +37,8 @@ GET /channel-switches                               controllers.Application.inde
 GET /campaigns                                      controllers.Application.index
 GET /campaigns/:testName                            controllers.Application.indexWithName(testName: String)
 
+GET /qr-code                                        controllers.Application.index
+
 # ----- Authentication ----- #
 GET  /login                                         controllers.Login.login
 GET  /loginAction                                   controllers.Login.loginAction

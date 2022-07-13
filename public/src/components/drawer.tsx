@@ -201,6 +201,11 @@ export default function NavDrawer(): React.ReactElement {
             <ListItemText primary="Contribution Types" />
           </ListItem>
         </Link>
+        <Link key="QR Code Generator" to="/qr-code" className={classes.link}>
+          <ListItem className={classes.listItem} button key="QR Code Generator">
+            <ListItemText primary="QR Code Generator" />
+          </ListItem>
+        </Link>
       </div>
 
       <div>
