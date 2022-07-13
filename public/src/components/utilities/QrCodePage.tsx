@@ -27,8 +27,10 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
     display: 'flex',
     flexDirection: 'column',
     width: '650px',
-    minHeight: '100%',
+    padding: spacing(2),
+    // minHeight: '100%',
     gridArea: ' 1 / 2 / 3 / 5',
+    alignSelf: 'start',
   },
   heading: {
     fontSize: '1.5rem',
@@ -42,7 +44,7 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
     },
   },
   codeContainer: {
-    minWidth: '100%',
+    minWidth: '90%',
     marginTop: spacing(4),
     marginBottom: spacing(4),
     padding: spacing(4),
@@ -68,7 +70,7 @@ function UserAdvice() {
     <Card className={classes.card}>
       <CardContent>
         <Typography className={classes.paragraph}>
-          When using the QR code to track a reader by linking it to a url you must ensure that the
+          When using the QR code to track a reader by linking it to a URL you must ensure that the
           reader&apos;s CMP choice is respected either by reference to the reader choice logged with
           Sourcepoint, or by reference to the correct pageview table.
         </Typography>
@@ -104,7 +106,7 @@ export default function QrCodePage(): JSX.Element {
   return (
     <div className={classes.container}>
       <UserAdvice />
-      <div className={classes.subContainer}>
+      <Paper className={classes.subContainer}>
         <Typography variant="h2" className={classes.heading}>
           Generate a QR code
         </Typography>
@@ -132,9 +134,9 @@ export default function QrCodePage(): JSX.Element {
             />
           </FormControl>
         </Box>
-        <Paper className={classes.codeContainer}>
+        <Card className={classes.codeContainer} variant="outlined">
           {url && <QRCode id="QRCode" value={url} size={codeSize} />}
-        </Paper>
+        </Card>
         <Box className={classes.form}>
           <FormControl>
             <TextField
@@ -151,7 +153,7 @@ export default function QrCodePage(): JSX.Element {
             </Button>
           </FormControl>
         </Box>
-      </div>
+      </Paper>
     </div>
   );
 }
