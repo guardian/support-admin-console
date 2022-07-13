@@ -1,5 +1,6 @@
 import React from 'react';
-import { makeStyles, Theme } from '@material-ui/core';
+import { makeStyles, Theme, Button } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 import TestCard from './TestCard';
 import { TestChannelItem } from './CampaignsEditor';
 import { Test } from '../helpers/shared';
@@ -12,10 +13,18 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   noTestsWarning: {
     marginLeft: spacing(4),
   },
+  channelHeading: {
+    display: 'flex',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+  },
   channelTitle: {
     marginBottom: spacing(2),
     fontSize: '18px',
     fontWeight: 500,
+  },
+  linkButton: {
+    textDecoration: 'none',
   },
 }));
 
@@ -33,7 +42,12 @@ function ChannelCard({ channelData, tests }: ChannelCardProps): React.ReactEleme
 
   return (
     <div className={classes.channelContainer}>
-      <div className={classes.channelTitle}>{channelData.name} channel</div>
+      <div className={classes.channelHeading}>
+        <div className={classes.channelTitle}>{channelData.name} channel</div>
+        <Link className={classes.linkButton} key={channelData.name} to={`/${channelData.link}`}>
+          <Button variant="outlined">Go to {channelData.name} page</Button>
+        </Link>
+      </div>
       {tests.length > 0 ? (
         tests.map(test => {
           const key = getKey(test);
