@@ -33,6 +33,7 @@ object DynamoChannelTests {
 class DynamoChannelTests(stage: String, client: DynamoDbClient) extends StrictLogging {
 
   private val tableName = s"support-admin-console-channel-tests-$stage"
+  private val campaignNameIndex = "campaignName-name-index"
 
   private def buildKey(channel: Channel, testName: String): java.util.Map[String, AttributeValue] =
     Map(
@@ -78,6 +79,26 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends StrictLo
           .keyConditionExpression("channel = :channel")
           .expressionAttributeValues(Map(
             ":channel" -> AttributeValue.builder.s(channel.toString).build,
+            ":archived" -> AttributeValue.builder.s("Archived").build
+          ).asJava)
+          .expressionAttributeNames(Map(
+            "#status" -> "status"
+          ).asJava)
+          .filterExpression("#status <> :archived")
+          .build()
+      ).items
+    }.mapError(DynamoGetError)
+
+  private def getAllInCampaign(campaignName: String): ZIO[ZEnv, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
+    effectBlocking {
+      client.query(
+        QueryRequest
+          .builder
+          .tableName(tableName)
+          .keyConditionExpression("campaignName = :campaignName")
+          .indexName(campaignNameIndex)
+          .expressionAttributeValues(Map(
+            ":campaignName" -> AttributeValue.builder.s(campaignName).build,
             ":archived" -> AttributeValue.builder.s("Archived").build
           ).asJava)
           .expressionAttributeNames(Map(
@@ -200,6 +221,23 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends StrictLo
         .sortBy(_.priority)
     )
 
+  // Returns all tests in a campaign, sorted by channel
+  import models.ChannelTest.channelTestDecoder
+  def getAllTestsInCampaign(campaignName: String): ZIO[ZEnv, DynamoGetError, List[ChannelTest[_]]] =
+    getAllInCampaign(campaignName)
+      .map(results =>
+        results.asScala
+          .map(item => dynamoMapToJson(item).as[ChannelTest[_]])
+          .flatMap {
+            case Right(test) => Some(test)
+            case Left(error) =>
+              logger.error(s"Failed to decode item from Dynamo: ${error.getMessage}")
+              None
+          }
+          .toList
+          .sortBy(_.channel.toString)
+      )
+
   def createOrUpdateTests[T <: ChannelTest[T] : Encoder](tests: List[T], channel: Channel): ZIO[ZEnv, DynamoPutError, Unit] = {
     val writeRequests = tests.zipWithIndex.map { case (test, priority) =>
       // Add the priority and channel fields, which we don't have in S3
@@ -223,15 +261,15 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends StrictLo
     */
   private def buildUpdateTestExpression(item: Map[String, AttributeValue]): String = {
     val subExprs = item.foldLeft[List[String]](Nil) { case (acc, (key, value)) =>
-      val name = if (key == "status") "#status" else key // status is a reserved word, so we alias with #
-      s"$name = :$key" +: acc
+      s"$key = :$key" +: acc
     }
     s"set ${subExprs.mkString(", ")} remove lockStatus" // Unlock the test at the same time
   }
 
   def updateTest[T <: ChannelTest[T] : Encoder](test: T, channel: Channel, email: String): ZIO[ZEnv, DynamoError, Unit] = {
     val item = jsonToDynamo(test.asJson).m().asScala.toMap -
-      "priority" -    // Do not update priority
+      "status" -      // Do not update status - this is a separate action
+      "priority" -    // Do not update priority - this is a separate action
       "lockStatus" -  // Unlock by removing lockStatus
       "name" -        // key field
       "channel"       // key field
@@ -248,9 +286,6 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends StrictLo
       .key(buildKey(channel, test.name))
       .updateExpression(updateExpression)
       .expressionAttributeValues(attributeValuesWithEmail.asJava)
-      .expressionAttributeNames(Map(
-        "#status" -> "status"
-      ).asJava)
       .conditionExpression("lockStatus.email = :email")
       .build()
 

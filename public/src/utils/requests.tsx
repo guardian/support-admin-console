@@ -1,3 +1,5 @@
+import { Test, Status } from '../components/channelManagement/helpers/shared';
+
 export enum SupportFrontendSettingsType {
   switches = 'switches',
   contributionTypes = 'contribution-types',
@@ -83,11 +85,12 @@ export function updateTest<T>(settingsType: FrontendSettingsType, test: T): Prom
 export function createTest<T>(settingsType: FrontendSettingsType, test: T): Promise<Response> {
   return saveSettings(`/frontend/${settingsType}/test/create`, test);
 }
-export function archiveTests(
+export function updateStatuses(
   settingsType: FrontendSettingsType,
   testNames: string[],
+  status: Status,
 ): Promise<Response> {
-  return saveSettings(`/frontend/${settingsType}/test/archive`, testNames);
+  return saveSettings(`/frontend/${settingsType}/test/status/${status}`, testNames);
 }
 export function requestTestListLock(settingsType: FrontendSettingsType): Promise<Response> {
   return makeFetch(`/frontend/${settingsType}/list/lock`, {
@@ -106,6 +109,10 @@ export function fetchSupportFrontendSettings(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<any> {
   return fetchSettings(`/support-frontend/${settingsType}`);
+}
+
+export function fetchCampaignTests(campaign: string): Promise<Test[]> {
+  return fetchSettings(`/frontend/campaign/${campaign}/tests`);
 }
 
 export function saveSupportFrontendSettings(

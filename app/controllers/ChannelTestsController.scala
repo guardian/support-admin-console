@@ -205,16 +205,28 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
   def forceLockTest(testName: String) = authAction.async { request =>
     run {
       logger.info(s"${request.user.email} is force locking $channel/'$testName'")
-      dynamo.lockTest(testName, channel, request.user.email, force = false)
+      dynamo.lockTest(testName, channel, request.user.email, force = true)
         .map(_ => Ok("locked"))
     }
   }
 
-  def archiveTests = authAction.async(circe.json[List[String]]) { request =>
+  private def parseStatus(rawStatus: String): Option[models.Status] = rawStatus.toLowerCase match {
+    case "live" => Some(models.Status.Live)
+    case "draft" => Some(models.Status.Draft)
+    case "archived" => Some(models.Status.Archived)
+    case _ => None
+  }
+
+  def setStatus(rawStatus: String) = authAction.async(circe.json[List[String]]) { request =>
     run {
-      logger.info(s"${request.user.email} is archiving ${request.body}")
-      dynamo.updateStatuses(request.body, channel, models.Status.Archived)
-        .map(_ => Ok("archived"))
+      logger.info(s"${request.user.email} is changing status to $rawStatus on: ${request.body}")
+      parseStatus(rawStatus) match {
+        case Some(status) =>
+          dynamo.updateStatuses(request.body, channel, status)
+            .map(_ => Ok(status.toString))
+        case None => ZIO.succeed(BadRequest(s"Invalid status: $rawStatus"))
+      }
+
     }
   }
 }

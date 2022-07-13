@@ -13,12 +13,9 @@ export type EpicModuleName = 'ContributionsEpic' | 'ContributionsLiveblogEpic';
 
 export type Status = 'Live' | 'Draft' | 'Archived';
 
-export const setStatus = (isOn: boolean): Status => (isOn ? 'Live' : 'Draft');
-
 export interface Test {
   name: string;
   nickname?: string;
-  isOn: boolean; // Deprecated and soon to be removed, use status instead
   status: Status;
   lockStatus?: LockStatus;
   articlesViewedSettings?: ArticlesViewedSettings;
@@ -26,6 +23,9 @@ export interface Test {
   locations: Region[];
   isNew?: boolean; // true if test has not yet been POSTed to backend
   campaignName?: string;
+  priority?: number;
+  userCohort?: string;
+  channel?: string;
 }
 
 export interface EpicEditorConfig {

@@ -31,7 +31,7 @@ import Typography from '@material-ui/core/Typography';
 import IndexPage from './components/indexPage';
 import { getTheme } from './utils/theme';
 import ChannelSwitches from './components/channelManagement/ChannelSwitches';
-import CampaignsEditor from './components/channelManagement/campaigns/CampaignsEditor';
+import CampaignsForm from './components/channelManagement/campaigns/CampaignsForm';
 import { FontWeightProperty } from 'csstype';
 import { makeStyles } from '@material-ui/core';
 import QrCodePage from './components/utilities/QrCodePage';
@@ -168,45 +168,45 @@ const AppRouter = () => {
             }
           />
           <Route
-            path="/header-tests"
+            path="/header-tests/:testName?"
             render={(): React.ReactElement => createComponent(<HeaderTestsForm />, 'Header Tests')}
           />
           <Route
-            path="/epic-tests"
+            path="/epic-tests/:testName?"
             render={(): React.ReactElement =>
               createComponent(<ArticleEpicTestsForm />, 'Epic Tests')
             }
           />
           <Route
-            path="/epic-holdback-tests"
+            path="/epic-holdback-tests/:testName?"
             render={(): React.ReactElement =>
               createComponent(<ArticleEpicHoldbackTestsForm />, 'Epic Holdback Tests')
             }
           />
           <Route
-            path="/liveblog-epic-tests"
+            path="/liveblog-epic-tests/:testName?"
             render={(): React.ReactElement =>
               createComponent(<LiveblogEpicTestsForm />, 'Liveblog Epic Tests')
             }
           />
           <Route
-            path="/apple-news-epic-tests"
+            path="/apple-news-epic-tests/:testName?"
             render={(): React.ReactElement =>
               createComponent(<AppleNewsEpicTestsForm />, 'Apple News Epics')
             }
           />
           <Route
-            path="/amp-epic-tests"
+            path="/amp-epic-tests/:testName?"
             render={(): React.ReactElement => createComponent(<AMPEpicTestsForm />, 'AMP Epics')}
           />
           <Route
-            path="/banner-tests"
+            path="/banner-tests/:testName?"
             render={(): React.ReactElement =>
               createComponent(<BannerTestsForm1 />, 'Banner Tests 1')
             }
           />
           <Route
-            path="/banner-tests2"
+            path="/banner-tests2/:testName?"
             render={(): React.ReactElement =>
               createComponent(<BannerTestsForm2 />, 'Banner Tests 2')
             }
@@ -224,8 +224,8 @@ const AppRouter = () => {
             }
           />
           <Route
-            path="/campaigns"
-            render={(): React.ReactElement => createComponent(<CampaignsEditor />, 'Campaigns')}
+            path="/campaigns/:testName?"
+            render={(): React.ReactElement => createComponent(<CampaignsForm />, 'Campaigns')}
           />
           <Route
             path="/qr-code"

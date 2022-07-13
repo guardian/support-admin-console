@@ -32,40 +32,50 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+interface FormData {
+  name: string;
+  nickname: string;
+  description: string;
+}
+
 interface CreateCampaignDialogProps {
   isOpen: boolean;
   close: () => void;
   existingNames: string[];
-  createCampaign: (name: string) => void;
-}
-
-interface FormData {
-  name: string;
+  existingNicknames: string[];
+  createCampaign: (data: FormData) => void;
 }
 
 const CreateCampaignDialog: React.FC<CreateCampaignDialogProps> = ({
   isOpen,
   close,
   existingNames,
+  existingNicknames,
   createCampaign,
 }: CreateCampaignDialogProps) => {
   const classes = useStyles();
 
-  const defaultValues = {
+  const defaultValues: FormData = {
     name: '',
+    nickname: '',
+    description: '',
   };
 
   const { register, handleSubmit, errors } = useForm<FormData>({
     defaultValues,
   });
 
-  const onSubmit = ({ name }: FormData): void => {
-    createCampaign(name.toUpperCase());
+  const onSubmit = (vals: FormData): void => {
+    createCampaign({
+      name: vals.name.toUpperCase(),
+      nickname: vals.nickname.toUpperCase(),
+      description: vals.description,
+    });
     close();
   };
 
   return (
-    <Dialog open={isOpen} onClose={close} aria-labelledby="create-campaign-dialog-title">
+    <Dialog open={isOpen} onClose={close} aria-labelledby="create-test-dialog-title">
       <div className={classes.dialogHeader}>
         <DialogTitle id="create-campaign-dialog-title">Create a new campaign</DialogTitle>
         <IconButton onClick={close} aria-label="close">
@@ -92,10 +102,34 @@ const CreateCampaignDialog: React.FC<CreateCampaignDialogProps> = ({
           autoFocus
           fullWidth
         />
+        <TextField
+          className={classes.input}
+          inputRef={register({
+            required: EMPTY_ERROR_HELPER_TEXT,
+            validate: createDuplicateValidator(existingNicknames),
+          })}
+          error={errors.nickname !== undefined}
+          helperText={errors.nickname ? errors.nickname.message : ''}
+          name="nickname"
+          label="Nickname"
+          margin="normal"
+          variant="outlined"
+          fullWidth
+        />
+        <TextField
+          inputRef={register()}
+          error={errors.description !== undefined}
+          helperText={errors.description ? errors.description.message : ''}
+          name="description"
+          label="Description"
+          margin="normal"
+          variant="outlined"
+          fullWidth
+        />
       </DialogContent>
       <DialogActions>
         <Button onClick={handleSubmit(onSubmit)} color="primary">
-          Create
+          Create Campaign
         </Button>
       </DialogActions>
     </Dialog>

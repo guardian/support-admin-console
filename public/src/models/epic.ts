@@ -62,7 +62,6 @@ export interface MaxEpicViews {
 export interface EpicTest extends Test {
   name: string;
   nickname?: string;
-  isOn: boolean;
   status: Status;
   locations: Region[];
   tagIds: string[];

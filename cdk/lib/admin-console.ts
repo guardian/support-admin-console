@@ -12,7 +12,7 @@ import {
 } from '@guardian/cdk/lib/constructs/iam';
 import type { App, CfnElement } from 'aws-cdk-lib';
 import { Duration, RemovalPolicy } from 'aws-cdk-lib';
-import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';
+import { AttributeType, BillingMode, ProjectionType, Table } from 'aws-cdk-lib/aws-dynamodb';
 import { InstanceClass, InstanceSize, InstanceType } from 'aws-cdk-lib/aws-ec2';
 
 export interface AdminConsoleProps extends GuStackProps {
@@ -40,6 +40,19 @@ export class AdminConsole extends GuStack {
       },
     });
 
+    table.addGlobalSecondaryIndex({
+      indexName: 'campaignName-name-index',
+      projectionType: ProjectionType.ALL,
+      partitionKey: {
+        name: 'campaignName',
+        type: AttributeType.STRING,
+      },
+      sortKey: {
+        name: 'name',
+        type: AttributeType.STRING,
+      },
+    });
+
     // Give it a better name
     const defaultChild = table.node.defaultChild as unknown as CfnElement;
     defaultChild.overrideLogicalId(id);
@@ -51,6 +64,9 @@ export class AdminConsole extends GuStack {
     return [
       new GuDynamoDBReadPolicy(this, `DynamoRead-${table.node.id}`, {
         tableName: table.tableName,
+      }),
+      new GuDynamoDBReadPolicy(this, `DynamoRead-${table.node.id}/index/campaignName-name-index`, {
+        tableName: `${table.tableName}/index/campaignName-name-index`,
       }),
       new GuDynamoDBWritePolicy(this, `DynamoWrite-${table.node.id}`, {
         tableName: table.tableName,

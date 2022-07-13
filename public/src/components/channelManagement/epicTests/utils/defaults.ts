@@ -59,7 +59,6 @@ export const getDefaultVariant = (): EpicVariant => {
 const DEV_AND_CODE_DEFAULT_TEST: EpicTest = {
   name: 'TEST',
   nickname: 'TEST',
-  isOn: false,
   status: 'Draft',
   locations: [],
   tagIds: [],
@@ -78,7 +77,6 @@ const DEV_AND_CODE_DEFAULT_TEST: EpicTest = {
 const PROD_DEFAULT_TEST: EpicTest = {
   name: 'TEST',
   nickname: 'TEST',
-  isOn: false,
   status: 'Draft',
   locations: [],
   tagIds: [],

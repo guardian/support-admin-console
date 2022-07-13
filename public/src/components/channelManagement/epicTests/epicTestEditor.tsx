@@ -6,9 +6,9 @@ import {
   UserCohort,
   EpicEditorConfig,
   DeviceType,
-  setStatus,
 } from '../helpers/shared';
 import { FormControlLabel, Switch, Typography } from '@material-ui/core';
+import CampaignSelector from '../CampaignSelector';
 import TestVariantsEditor from '../testVariantsEditor';
 import TestEditorVariantSummary from '../testEditorVariantSummary';
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
@@ -23,7 +23,6 @@ import EpicTestMaxViewsEditor from './epicTestMaxViewsEditor';
 import { ARTICLE_COUNT_TEMPLATE, COUNTRY_NAME_TEMPLATE } from '../helpers/validation';
 import TestVariantsSplitEditor from '../testVariantsSplitEditor';
 import { getDefaultVariant } from './utils/defaults';
-import LiveSwitch from '../../shared/liveSwitch';
 import {
   canHaveCustomVariantSplit,
   ControlProportionSettings,
@@ -79,6 +78,13 @@ export const getEpicTestEditor = (
       });
     };
 
+    const onCampaignChange = (campaign?: string): void => {
+      updateTest({
+        ...test,
+        campaignName: campaign,
+      });
+    };
+
     const onVariantsChange = (updatedVariantList: EpicVariant[]): void => {
       updateTest({ ...test, variants: updatedVariantList });
     };
@@ -122,10 +128,6 @@ export const getEpicTestEditor = (
     ): void => {
       const updatedBool = event.target.checked;
       updateTest({ ...test, [fieldName]: updatedBool });
-    };
-
-    const onLiveSwitchChange = (isOn: boolean): void => {
-      updateTest({ ...test, isOn, status: setStatus(isOn) });
     };
 
     const updateTargetSections = (
@@ -207,23 +209,14 @@ export const getEpicTestEditor = (
 
     return (
       <div className={classes.container}>
-        <div className={classes.switchContainer}>
-          <LiveSwitch
-            label="Live on Guardian.com"
-            isLive={test.isOn}
-            isDisabled={!userHasTestLocked}
-            onChange={onLiveSwitchChange}
-          />
-          <div>
-            <EpicTestPreviewButton test={test} />
-          </div>
-        </div>
-
         {epicEditorConfig.allowMultipleVariants && (
           <div className={classes.sectionContainer}>
-            <Typography variant={'h3'} className={classes.sectionHeader}>
-              Variants
-            </Typography>
+            <div className={classes.variantsHeaderContainer}>
+              <Typography variant={'h3'} className={classes.sectionHeader}>
+                Variants
+              </Typography>
+              <EpicTestPreviewButton test={test} />
+            </div>
             <div>
               <TestVariantsEditor<EpicVariant>
                 variants={test.variants}
@@ -277,6 +270,19 @@ export const getEpicTestEditor = (
             </div>
           </div>
         )}
+
+        <div className={classes.sectionContainer}>
+          <Typography variant={'h3'} className={classes.sectionHeader}>
+            Campaign
+          </Typography>
+          <div>
+            <CampaignSelector
+              test={test}
+              onCampaignChange={onCampaignChange}
+              disabled={!userHasTestLocked}
+            />
+          </div>
+        </div>
 
         {epicEditorConfig.allowContentTargeting && (
           <div className={classes.sectionContainer}>

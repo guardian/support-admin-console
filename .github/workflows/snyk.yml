@@ -1,31 +1,18 @@
+# This action runs snyk monitor on every push to main
 name: Snyk
 
 on:
   push:
-    branches: [ main, tf-snyk ]
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
-  snyk:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout branch
-        uses: actions/checkout@v2
-
-      - name: SBT - Run Snyk to check for vulnerabilities
-        uses: snyk/actions/scala@0.3.0
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --org=the-guardian-cuu --project-name=${{ github.repository }} --file=./build.sbt
-          command: monitor
-
-      - name: npm - Run Snyk to check for vulnerabilities
-        uses: snyk/actions/node@0.3.0
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --org=the-guardian-cuu --project-name=${{ github.repository }} --file=./package-lock.json
-          command: monitor
-
+  security:
+    uses: guardian/.github/.github/workflows/sbt-node-snyk.yml@main
+    with:
+      DEBUG: true
+      ORG: the-guardian-cuu
+      SKIP_NODE: false
+    secrets:
+       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}

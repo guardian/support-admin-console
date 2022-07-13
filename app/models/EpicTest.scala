@@ -3,6 +3,7 @@ package models
 import enumeratum.{CirceEnum, Enum, EnumEntry}
 import io.circe.generic.extras.Configuration
 import io.circe.generic.extras.auto._
+import io.circe.generic.extras.semiauto._
 import io.circe.{Decoder, Encoder}
 
 import scala.collection.immutable.IndexedSeq
@@ -70,7 +71,6 @@ case class EpicTest(
   lockStatus: Option[LockStatus],
   priority: Option[Int],
   nickname: Option[String],
-  isOn: Boolean,
   locations: List[Region] = Nil,
   tagIds: List[String] = Nil,
   sections: List[String] = Nil,
@@ -86,7 +86,7 @@ case class EpicTest(
   articlesViewedSettings: Option[ArticlesViewedSettings] = None,
   controlProportionSettings: Option[ControlProportionSettings] = None,
   deviceType: Option[DeviceType] = None,
-  campaignName: Option[String] = None
+  campaignName: Option[String] = Some("NOT_IN_CAMPAIGN")
 ) extends ChannelTest[EpicTest] {
 
   override def withChannel(channel: Channel): EpicTest = this.copy(channel = Some(channel))
@@ -95,6 +95,6 @@ case class EpicTest(
 
 object EpicTest {
   implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val epicTestDecoder = Decoder[EpicTest]
-  implicit val epicTestEncoder = Encoder[EpicTest]
+  implicit val epicTestDecoder: Decoder[EpicTest] = deriveConfiguredDecoder[EpicTest]
+  implicit val epicTestEncoder: Encoder[EpicTest] = deriveConfiguredEncoder[EpicTest]
 }

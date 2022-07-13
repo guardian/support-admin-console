@@ -100,7 +100,7 @@ function Sidebar<T extends Test>({
 
         <BatchProcessTestButton
           // filter out live tests and any test currently being edited
-          draftTests={tests.filter(t => (!t.isOn && t.name !== selectedTestName ? true : false))}
+          draftTests={tests.filter(t => !(t.status === 'Live' && t.name !== selectedTestName))}
           onBatchTestArchive={onBatchTestArchive}
         />
 

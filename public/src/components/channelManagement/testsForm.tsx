@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles, Theme, Typography } from '@material-ui/core';
 import Sidebar from './sidebar';
-import { LockStatus, Test } from './helpers/shared';
+import { LockStatus, Status, Test } from './helpers/shared';
 import {
   fetchFrontendSettings,
   fetchTest,
@@ -12,9 +12,10 @@ import {
   updateTest,
   saveTestListOrder,
   unlockTest,
-  archiveTests,
   createTest,
+  updateStatuses,
 } from '../../utils/requests';
+import { useParams } from 'react-router-dom';
 
 const useStyles = makeStyles(({ spacing, typography }: Theme) => ({
   viewTextContainer: {
@@ -66,8 +67,10 @@ export interface TestEditorProps<T extends Test> {
   onTestSave: (testName: string) => void;
   onTestArchive: (testName: string) => void;
   onTestCopy: (oldName: string, newName: string, newNickname: string) => void;
+  onStatusChange: (status: Status) => void;
   existingNames: string[];
   existingNicknames: string[];
+  settingsType: FrontendSettingsType;
 }
 
 /**
@@ -83,8 +86,9 @@ export const TestsForm = <T extends Test>(
 ): React.FC => {
   return () => {
     const classes = useStyles();
+    const { testName } = useParams<{ testName?: string }>();
     const [tests, setTests] = useState<T[]>([]);
-    const [selectedTestName, setSelectedTestName] = useState<string | null>(null);
+    const [selectedTestName, setSelectedTestName] = useState<string | null>(testName || null);
     const [testListLockStatus, setTestListLockStatus] = useState<LockStatus>({ locked: false });
     const [email, setEmail] = useState<string>('');
     const [savingTestList, setSavingTestList] = useState<boolean>(false);
@@ -156,7 +160,7 @@ export const TestsForm = <T extends Test>(
     };
 
     const onTestsArchive = (testNames: string[]): void => {
-      archiveTests(settingsType, testNames)
+      updateStatuses(settingsType, testNames, 'Archived')
         .then(() => fetchTests())
         .catch(error => {
           alert(`Error while archiving test: ${error}`);
@@ -164,10 +168,18 @@ export const TestsForm = <T extends Test>(
     };
 
     const onTestArchive = (testName: string): void => {
-      archiveTests(settingsType, [testName])
+      updateStatuses(settingsType, [testName], 'Archived')
         .then(() => setTests(tests.filter(test => test.name !== testName)))
         .catch(error => {
           alert(`Error while archiving test: ${error}`);
+        });
+    };
+
+    const onStatusChange = (status: Status, testName: string): void => {
+      updateStatuses(settingsType, [testName], status)
+        .then(() => refreshTest(testName))
+        .catch(error => {
+          alert(`Error while setting test status to ${status}: ${error}`);
         });
     };
 
@@ -199,7 +211,6 @@ export const TestsForm = <T extends Test>(
           ...oldTest,
           name: newName,
           nickname: newNickname,
-          isOn: false,
           status: 'Draft',
           // Set lockStatus client-side, so that the StickyTopBar knows what to render
           lockStatus: {
@@ -243,7 +254,7 @@ export const TestsForm = <T extends Test>(
       if (newTest) {
         alert(`Please save new test '${newTest.name}' before reordering`);
       } else {
-        const lockAction = force ? requestTestListLock : requestTestListTakeControl;
+        const lockAction = force ? requestTestListTakeControl : requestTestListLock;
         lockAction(settingsType)
           .then(() => fetchTests())
           .catch(error => {
@@ -289,6 +300,8 @@ export const TestsForm = <T extends Test>(
               onTestSave={onTestSave}
               onTestArchive={onTestArchive}
               onTestCopy={onTestCopy}
+              onStatusChange={status => onStatusChange(status, selectedTest.name)}
+              settingsType={settingsType}
             />
           ) : (
             <div className={classes.viewTextContainer}>

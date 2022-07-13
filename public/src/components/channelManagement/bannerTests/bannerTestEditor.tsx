@@ -1,16 +1,16 @@
 import React from 'react';
 import { Region } from '../../../utils/models';
-import { ArticlesViewedSettings, DeviceType, setStatus, UserCohort } from '../helpers/shared';
+import { ArticlesViewedSettings, DeviceType, UserCohort } from '../helpers/shared';
 import { ARTICLE_COUNT_TEMPLATE } from '../helpers/validation';
 import { Typography } from '@material-ui/core';
 import BannerTestVariantEditor from './bannerTestVariantEditor';
+import CampaignSelector from '../CampaignSelector';
 import TestVariantsEditor from '../testVariantsEditor';
 import TestEditorMinArticlesViewedInput from '../testEditorMinArticlesViewedInput';
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 import TestEditorArticleCountEditor, {
   DEFAULT_ARTICLES_VIEWED_SETTINGS,
 } from '../testEditorArticleCountEditor';
-import LiveSwitch from '../../shared/liveSwitch';
 import { BannerContent, BannerTest, BannerVariant } from '../../../models/banner';
 import { getDefaultVariant } from './utils/defaults';
 import TestEditorVariantSummary from '../testEditorVariantSummary';
@@ -58,6 +58,13 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
     });
   };
 
+  const onCampaignChange = (campaign?: string): void => {
+    updateTest({
+      ...test,
+      campaignName: campaign,
+    });
+  };
+
   const onMinArticlesViewedValidationChanged = (isValid: boolean): void =>
     setValidationStatusForField('minArticlesViewed', isValid);
 
@@ -70,10 +77,6 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
   const onControlProportionSettingsChange = (
     controlProportionSettings?: ControlProportionSettings,
   ): void => updateTest({ ...test, controlProportionSettings });
-
-  const onLiveSwitchChange = (isOn: boolean): void => {
-    updateTest({ ...test, isOn, status: setStatus(isOn) });
-  };
 
   const onVariantsChange = (updatedVariantList: BannerVariant[]): void => {
     updateTest({ ...test, variants: updatedVariantList });
@@ -162,15 +165,6 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
   if (test) {
     return (
       <div className={classes.container}>
-        <div className={classes.switchContainer}>
-          <LiveSwitch
-            label="Live on Guardian.com"
-            isLive={test.isOn}
-            isDisabled={!userHasTestLocked}
-            onChange={onLiveSwitchChange}
-          />
-        </div>
-
         <div className={classes.sectionContainer}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
             Variants
@@ -205,6 +199,19 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
             </div>
           </div>
         )}
+
+        <div className={classes.sectionContainer}>
+          <Typography variant={'h3'} className={classes.sectionHeader}>
+            Campaign
+          </Typography>
+          <div>
+            <CampaignSelector
+              test={test}
+              onCampaignChange={onCampaignChange}
+              disabled={!userHasTestLocked}
+            />
+          </div>
+        </div>
 
         <div className={classes.sectionContainer}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
