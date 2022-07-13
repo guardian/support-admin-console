@@ -32,7 +32,7 @@ const StatusUpdateButton: React.FC<StatusUpdateButtonProps> = ({
 
   return (
     <>
-      <Button className={classes.button} variant="outlined" onClick={open}>
+      <Button className={classes.button} variant="contained" onClick={open}>
         <Typography className={classes.text}>Update Test statuses on theguardian.com</Typography>
       </Button>
       <StatusUpdateDialog isOpen={isOpen} close={close} tests={tests} updatePage={updatePage} />
