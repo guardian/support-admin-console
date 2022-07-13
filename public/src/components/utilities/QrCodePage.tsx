@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import {
   Box,
   Button,
+  Card,
+  CardContent,
   FormControl,
   makeStyles,
   Paper,
@@ -16,6 +18,9 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
     height: '100%',
     overflowY: 'auto',
     padding: spacing(2),
+    display: 'grid',
+    gridTemplateColumns: 'repeat(5, 1fr)',
+    gridTemplateRows: 'repeat(2, 1fr)',
   },
   subContainer: {
     margin: '0 auto',
@@ -23,6 +28,7 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
     flexDirection: 'column',
     width: '650px',
     minHeight: '100%',
+    gridArea: ' 1 / 2 / 3 / 5',
   },
   heading: {
     fontSize: '1.5rem',
@@ -44,6 +50,33 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
     justifyContent: 'center',
   },
 }));
+
+const userAdviceStyles = makeStyles({
+  card: {
+    alignSelf: 'start',
+    justifySelf: 'center',
+    maxWidth: '360px',
+  },
+  paragraph: {
+    marginBottom: '1rem',
+  },
+});
+
+function UserAdvice() {
+  const classes = userAdviceStyles();
+  return (
+    <Card className={classes.card}>
+      <CardContent>
+        <Typography className={classes.paragraph}>
+          When using the QR code to track a reader by linking it to a url you must ensure that the
+          reader&apos;s CMP choice is respected either by reference to the reader choice logged with
+          Sourcepoint, or by reference to the correct pageview table.
+        </Typography>
+        <Typography>For further guidance contact the T&C team or the Data Privacy team.</Typography>
+      </CardContent>
+    </Card>
+  );
+}
 
 export default function QrCodePage(): JSX.Element {
   const [url, setUrl] = useState('');
@@ -70,6 +103,7 @@ export default function QrCodePage(): JSX.Element {
 
   return (
     <div className={classes.container}>
+      <UserAdvice />
       <div className={classes.subContainer}>
         <Typography variant="h2" className={classes.heading}>
           Generate a QR code
