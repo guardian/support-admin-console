@@ -106,6 +106,7 @@ function CampaignsEditor({ campaign }: CampaignsEditorProps): React.ReactElement
   const classes = useStyles();
 
   const [testData, setTestData] = useState<Test[]>([]);
+  const [showArchivedTests, setShowArchivedTests] = useState(false);
 
   const { name, nickname, description } = campaign;
 
@@ -126,9 +127,26 @@ function CampaignsEditor({ campaign }: CampaignsEditorProps): React.ReactElement
 
   const updatePage = () => doDataFetch(name);
 
+  const filterTests = (channel: string) => {
+    if (showArchivedTests) {
+      return testData.filter(test => test.channel === channel);
+    }
+    else {
+      const filteredTests = testData.filter(test => test.channel === channel);
+      return filteredTests.filter(test => test.status !== 'Archived');
+    }
+  }
+
   return (
     <div className={classes.testEditorContainer}>
-      <StickyTopBar name={name} nickname={nickname} tests={testData} updatePage={updatePage} />
+      <StickyTopBar 
+        name={name}
+        nickname={nickname}
+        tests={testData}
+        showArchivedTests={showArchivedTests}
+        setShowArchivedTests={setShowArchivedTests}
+        updatePage={updatePage}
+      />
       <div className={classes.scrollableContainer}>
         <div className={classes.formContainer}>
           <div className={classes.notesContainer}>
@@ -139,7 +157,7 @@ function CampaignsEditor({ campaign }: CampaignsEditorProps): React.ReactElement
         {testChannelOrder.map(channel => (
           <ChannelCard
             channelData={testChannelData[channel]}
-            tests={testData.filter(test => test.channel === channel)}
+            tests={filterTests(channel)}
             key={channel}
           />
         ))}

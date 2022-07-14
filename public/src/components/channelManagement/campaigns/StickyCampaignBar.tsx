@@ -66,12 +66,18 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
     color: palette.grey[700],
     lineHeight: 1.5,
   },
+  archiveToggleButton: {
+    fontSize: '12px',
+    marginTop: '8px',
+  },
 }));
 
 interface StickyTopBarProps {
   name: string;
   nickname?: string;
   tests: Test[];
+  showArchivedTests: boolean;
+  setShowArchivedTests: (item: boolean) => void;
   updatePage: () => void;
 }
 
@@ -80,6 +86,8 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
   nickname,
   tests,
   updatePage,
+  showArchivedTests,
+  setShowArchivedTests,
 }: StickyTopBarProps) => {
   const classes = useStyles();
   const mainHeader = nickname ? nickname : name;
@@ -107,6 +115,13 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
       </div>
       <div className={classes.buttonsContainer}>
         <StatusUpdateButton tests={tests} updatePage={updatePage} />
+        <Button
+          className={classes.archiveToggleButton}
+          variant="outlined"
+          onClick={() => setShowArchivedTests(!showArchivedTests)}
+        >
+          {showArchivedTests ? 'Hide archived tests' : 'Show archived tests'}
+        </Button>
       </div>
     </header>
   );

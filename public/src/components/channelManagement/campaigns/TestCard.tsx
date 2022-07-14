@@ -96,6 +96,9 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   isArchived: {
     border: '1px dashed #c7cbd9',
   },
+  linkButtonBackground: {
+    backgroundColor: '#fafbff',
+  }
 }));
 
 interface TestCardProps {
@@ -211,7 +214,7 @@ function TestCard({ test, keyId, linkPath }: TestCardProps): React.ReactElement 
         <CardActions>
           <div>
             <Link className={classes.linkButton} key={keyId} to={`${linkPath}/${test.name}`}>
-              <Button variant="contained">{test.name}</Button>
+              <Button className={classes.linkButtonBackground} variant="contained">{test.name}</Button>
             </Link>
           </div>
         </CardActions>
