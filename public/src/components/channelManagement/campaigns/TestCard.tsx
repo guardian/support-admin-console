@@ -98,7 +98,10 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   },
   linkButtonBackground: {
     backgroundColor: '#fafbff',
-  }
+  },
+  trackingName: {
+    fontSize: '14px',
+  },
 }));
 
 interface TestCardProps {
@@ -208,15 +211,22 @@ function TestCard({ test, keyId, linkPath }: TestCardProps): React.ReactElement 
     return `${classes.cardContainer} ${classes.isArchived}`;
   };
 
+  const getTestNameBlock = () => {
+    return (
+      <div>
+        <Link className={classes.linkButton} key={keyId} to={`${linkPath}/${test.name}`}>
+          <Button className={classes.linkButtonBackground} variant="contained">{test.nickname != null ? test.nickname : test.name}</Button>
+        </Link>
+        <p className={classes.trackingName}>Tracking name: {test.name}</p>
+      </div>
+    );
+  };
+
   return (
     <Card className={getContainerStyle(test)}>
       <CardContent className={classes.cardContent}>
         <CardActions>
-          <div>
-            <Link className={classes.linkButton} key={keyId} to={`${linkPath}/${test.name}`}>
-              <Button className={classes.linkButtonBackground} variant="contained">{test.name}</Button>
-            </Link>
-          </div>
+          {getTestNameBlock()}
         </CardActions>
         <div className={classes.dataContainer}>
           <div>

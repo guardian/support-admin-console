@@ -1,6 +1,7 @@
 import React from 'react';
 import { List, ListItem, Theme, makeStyles, Button, Typography } from '@material-ui/core';
 import { Campaigns, Campaign } from './CampaignsForm';
+import { unassignedCampaignLabel } from '../CampaignSelector';
 
 const useStyles = makeStyles(({}: Theme) => ({
   container: {
@@ -56,20 +57,41 @@ const CampaignsList = ({
     return 'outlined';
   };
 
+  // When we get creation timestamps, we are thinking of allowing users to sort the list either alphabetically or by most recently created. For now, only the alphabetically sorted version is possible
+  const sortedCampaigns = [...campaigns];
+
+  sortedCampaigns.sort((a, b) => {
+    const A = a.nickname || a.name;
+    const B = b.nickname || b.name;
+
+    if (A < B) return -1;
+    if (B < A) return 1;
+    return 0;
+  });
+
   return (
     <div className={classes.container}>
       <List className={classes.list}>
-        {campaigns.map(campaign => (
+        {sortedCampaigns.map(campaign => (
           <ListItem className={classes.listItem} key={campaign.name}>
             <Button
               className={classes.button}
               variant={checkIfCampaignIsSelected()}
               onClick={(): void => onCampaignSelected(campaign.name)}
             >
-              <Typography className={classes.text}>{campaign.nickname}</Typography>
+              <Typography className={classes.text}>{campaign.nickname != null ? campaign.nickname : campaign.name}</Typography>
             </Button>
           </ListItem>
         ))}
+        <ListItem className={classes.listItem} key={unassignedCampaignLabel}>
+          <Button
+            className={classes.button}
+            variant={checkIfCampaignIsSelected()}
+            onClick={(): void => onCampaignSelected(unassignedCampaignLabel)}
+          >
+            <Typography className={classes.text}>{unassignedCampaignLabel}</Typography>
+          </Button>
+        </ListItem>
       </List>
     </div>
   );
