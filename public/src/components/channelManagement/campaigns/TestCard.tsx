@@ -81,6 +81,15 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
     backgroundColor: '#eee',
     color: '#555',
   },
+  isLive: {
+    border: '2px solid #e39f9f',
+  },
+  isDraft: {
+    border: '1px solid #8b90a3',
+  },
+  isArchived: {
+    border: '1px dashed #c7cbd9',
+  },
 }));
 
 interface TestCardProps {
@@ -170,8 +179,18 @@ function TestCard({ test, keyId, linkPath }: TestCardProps): React.ReactElement 
     );
   };
 
+  const getContainerStyle = (test: Test) => {
+    if(test.status === 'Live') {
+      return `${classes.cardContainer} ${classes.isLive}`;
+    }
+    if(test.status === 'Draft') {
+      return `${classes.cardContainer} ${classes.isDraft}`;
+    }
+    return `${classes.cardContainer} ${classes.isArchived}`;
+  };
+
   return (
-    <Card className={classes.cardContainer}>
+    <Card className={getContainerStyle(test)}>
       <CardContent className={classes.cardContent}>
         <CardActions>
           <div>
