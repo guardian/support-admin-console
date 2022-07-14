@@ -36,6 +36,12 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
     border: '1px solid black',
     marginRight: '8px',
   },
+  statusArchivedSpan: {
+    padding: '4px 8px',
+    border: '1px solid lightgray',
+    backgroundColor: '#fff',
+    color: '#000',
+  },
   statusDraftSpan: {
     padding: '4px 8px',
     border: '1px solid black',
@@ -111,11 +117,21 @@ function TestCard({ test, keyId, linkPath }: TestCardProps): React.ReactElement 
   };
 
   const getPriorityAndStatus = (test: Test) => {
+    const getStatusBoxStyle = () => {
+      if(test.status === 'Live') {
+        return classes.statusLiveSpan;
+      }
+      if(test.status === 'Draft') {
+        return classes.statusDraftSpan;
+      }
+      return classes.statusArchivedSpan;
+    }
+
     return (
       <div className={classes.priorityAndStatusLine}>
         Priority: <span className={classes.prioritySpan}>{test.priority}</span>
         Status:{' '}
-        <span className={test.status === 'Live' ? classes.statusLiveSpan : classes.statusDraftSpan}>
+        <span className={getStatusBoxStyle()}>
           {test.status}
         </span>
       </div>
@@ -195,7 +211,7 @@ function TestCard({ test, keyId, linkPath }: TestCardProps): React.ReactElement 
         <CardActions>
           <div>
             <Link className={classes.linkButton} key={keyId} to={`${linkPath}/${test.name}`}>
-              <Button variant="outlined">{test.name}</Button>
+              <Button variant="contained">{test.name}</Button>
             </Link>
           </div>
         </CardActions>

@@ -45,7 +45,7 @@ function ChannelCard({ channelData, tests }: ChannelCardProps): React.ReactEleme
       <div className={classes.channelHeading}>
         <div className={classes.channelTitle}>{channelData.name} channel</div>
         <Link className={classes.linkButton} key={channelData.name} to={`/${channelData.link}`}>
-          <Button variant="outlined">Go to {channelData.name} page</Button>
+          <Button variant="contained">Go to {channelData.name} page</Button>
         </Link>
       </div>
       {tests.length > 0 ? (
