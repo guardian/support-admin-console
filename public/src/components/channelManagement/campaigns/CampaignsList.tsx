@@ -1,7 +1,6 @@
 import React from 'react';
 import { List, ListItem, Theme, makeStyles, Button, Typography } from '@material-ui/core';
-import { Campaigns, Campaign } from './CampaignsForm';
-import { unassignedCampaignLabel } from '../CampaignSelector';
+import { Campaigns, Campaign, unassignedCampaign } from './CampaignsForm';
 
 const useStyles = makeStyles(({}: Theme) => ({
   container: {
@@ -83,13 +82,13 @@ const CampaignsList = ({
             </Button>
           </ListItem>
         ))}
-        <ListItem className={classes.listItem} key={unassignedCampaignLabel}>
+        <ListItem className={classes.listItem} key={unassignedCampaign.name}>
           <Button
             className={classes.button}
             variant={checkIfCampaignIsSelected()}
-            onClick={(): void => onCampaignSelected(unassignedCampaignLabel)}
+            onClick={(): void => onCampaignSelected(unassignedCampaign.name)}
           >
-            <Typography className={classes.text}>{unassignedCampaignLabel}</Typography>
+            <Typography className={classes.text}>{unassignedCampaign.nickname}</Typography>
           </Button>
         </ListItem>
       </List>

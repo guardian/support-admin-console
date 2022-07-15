@@ -47,7 +47,7 @@ interface CampaignsEditorProps {
   campaign: Campaign;
 }
 
-const testChannelOrder = [
+export const testChannelOrder = [
   'Header',
   'Epic',
   'EpicHoldback',

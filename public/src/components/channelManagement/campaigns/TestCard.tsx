@@ -88,10 +88,10 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
     color: '#555',
   },
   isLive: {
-    border: '2px solid #e39f9f',
+    border: '1px solid #c7cbd9',
   },
   isDraft: {
-    border: '1px solid #8b90a3',
+    border: '1px solid #c7cbd9',
   },
   isArchived: {
     border: '1px dashed #c7cbd9',

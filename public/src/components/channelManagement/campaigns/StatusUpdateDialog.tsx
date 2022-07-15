@@ -15,7 +15,7 @@ import {
 import CloseIcon from '@material-ui/icons/Close';
 import { Test, Status } from '../helpers/shared';
 import { updateStatuses, FrontendSettingsType } from '../../../utils/requests';
-import { testChannelData } from './CampaignsEditor';
+import { testChannelData, testChannelOrder } from './CampaignsEditor';
 
 const useStyles = makeStyles(() => ({
   dialogHeader: {
@@ -115,6 +115,22 @@ const StatusUpdateDialog: React.FC<StatusUpdateDialogProps> = ({
     close();
   };
 
+  const orderTests = () => {
+    const nonArchivedTests = tests.filter(t => t.status !== 'Archived');
+
+    nonArchivedTests.sort((a, b) => {
+      const tcoLength = testChannelOrder.length;
+      const channelA = (a.channel != null) ? testChannelOrder.indexOf(a.channel) : tcoLength;
+      const channelB = (b.channel != null) ? testChannelOrder.indexOf(b.channel) : tcoLength;
+
+      if (channelA === channelB) {
+        return a.name < b.name ? -1 : 1;
+      }
+      return channelA - channelB;
+    });
+    return nonArchivedTests;
+  };
+
   return (
     <Dialog open={isOpen} onClose={close} aria-labelledby="create-test-dialog-title">
       <div className={classes.dialogHeader}>
@@ -127,7 +143,7 @@ const StatusUpdateDialog: React.FC<StatusUpdateDialogProps> = ({
         <>
           <DialogContent dividers>
             <List>
-              {tests.map(t => {
+              {orderTests().map(t => {
                 const labelId = `checkbox-label-${t.name}`;
                 const key = getStatusKey(t);
                 const [channelLabel, testLabel] = key.split('|');
