@@ -58,8 +58,6 @@ function CampaignsSidebar({
 }: CampaignsSidebarProps): React.ReactElement {
   const classes = useStyles();
 
-  console.log(campaigns);
-
   return (
     <div className={classes.root}>
       <div className={classes.buttonsContainer}>
