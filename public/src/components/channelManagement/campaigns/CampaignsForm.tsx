@@ -57,7 +57,7 @@ export type Campaigns = Campaign[];
 export const unassignedCampaign = {
   name: unassignedCampaignLabel,
   nickname: 'TESTS NOT IN A CAMPAIGN',
-  description: 'Tests not assigned to a campaign'
+  description: 'Tests not assigned to a campaign',
 };
 
 const CampaignsForm: React.FC<InnerProps<Campaigns>> = ({
@@ -96,8 +96,7 @@ const CampaignsForm: React.FC<InnerProps<Campaigns>> = ({
   const onCampaignSelected = (name: string) => {
     if (unassignedCampaignLabel === name) {
       setSelectedCampaign(unassignedCampaign);
-    }
-    else {
+    } else {
       const requiredCampaign = campaigns.find(c => c.name === name);
       if (requiredCampaign != null) {
         setSelectedCampaign(requiredCampaign);

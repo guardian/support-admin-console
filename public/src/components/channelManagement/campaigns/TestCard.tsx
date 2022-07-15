@@ -124,22 +124,19 @@ function TestCard({ test, keyId, linkPath }: TestCardProps): React.ReactElement 
 
   const getPriorityAndStatus = (test: Test) => {
     const getStatusBoxStyle = () => {
-      if(test.status === 'Live') {
+      if (test.status === 'Live') {
         return classes.statusLiveSpan;
       }
-      if(test.status === 'Draft') {
+      if (test.status === 'Draft') {
         return classes.statusDraftSpan;
       }
       return classes.statusArchivedSpan;
-    }
+    };
 
     return (
       <div className={classes.priorityAndStatusLine}>
         Priority: <span className={classes.prioritySpan}>{test.priority}</span>
-        Status:{' '}
-        <span className={getStatusBoxStyle()}>
-          {test.status}
-        </span>
+        Status: <span className={getStatusBoxStyle()}>{test.status}</span>
       </div>
     );
   };
@@ -202,10 +199,10 @@ function TestCard({ test, keyId, linkPath }: TestCardProps): React.ReactElement 
   };
 
   const getContainerStyle = (test: Test) => {
-    if(test.status === 'Live') {
+    if (test.status === 'Live') {
       return `${classes.cardContainer} ${classes.isLive}`;
     }
-    if(test.status === 'Draft') {
+    if (test.status === 'Draft') {
       return `${classes.cardContainer} ${classes.isDraft}`;
     }
     return `${classes.cardContainer} ${classes.isArchived}`;
@@ -215,7 +212,9 @@ function TestCard({ test, keyId, linkPath }: TestCardProps): React.ReactElement 
     return (
       <div>
         <Link className={classes.linkButton} key={keyId} to={`${linkPath}/${test.name}`}>
-          <Button className={classes.linkButtonBackground} variant="contained">{test.nickname != null ? test.nickname : test.name}</Button>
+          <Button className={classes.linkButtonBackground} variant="contained">
+            {test.nickname != null ? test.nickname : test.name}
+          </Button>
         </Link>
         <p className={classes.trackingName}>Tracking name: {test.name}</p>
       </div>
@@ -225,9 +224,7 @@ function TestCard({ test, keyId, linkPath }: TestCardProps): React.ReactElement 
   return (
     <Card className={getContainerStyle(test)}>
       <CardContent className={classes.cardContent}>
-        <CardActions>
-          {getTestNameBlock()}
-        </CardActions>
+        <CardActions>{getTestNameBlock()}</CardActions>
         <div className={classes.dataContainer}>
           <div>
             {getVariantNames(test.variants)}

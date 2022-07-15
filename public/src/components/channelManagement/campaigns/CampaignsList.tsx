@@ -63,8 +63,12 @@ const CampaignsList = ({
     const A = a.nickname || a.name;
     const B = b.nickname || b.name;
 
-    if (A < B) return -1;
-    if (B < A) return 1;
+    if (A < B) {
+      return -1;
+    }
+    if (B < A) {
+      return 1;
+    }
     return 0;
   });
 
@@ -78,7 +82,9 @@ const CampaignsList = ({
               variant={checkIfCampaignIsSelected()}
               onClick={(): void => onCampaignSelected(campaign.name)}
             >
-              <Typography className={classes.text}>{campaign.nickname != null ? campaign.nickname : campaign.name}</Typography>
+              <Typography className={classes.text}>
+                {campaign.nickname != null ? campaign.nickname : campaign.name}
+              </Typography>
             </Button>
           </ListItem>
         ))}

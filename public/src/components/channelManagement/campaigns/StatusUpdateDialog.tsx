@@ -120,8 +120,8 @@ const StatusUpdateDialog: React.FC<StatusUpdateDialogProps> = ({
 
     nonArchivedTests.sort((a, b) => {
       const tcoLength = testChannelOrder.length;
-      const channelA = (a.channel != null) ? testChannelOrder.indexOf(a.channel) : tcoLength;
-      const channelB = (b.channel != null) ? testChannelOrder.indexOf(b.channel) : tcoLength;
+      const channelA = a.channel != null ? testChannelOrder.indexOf(a.channel) : tcoLength;
+      const channelB = b.channel != null ? testChannelOrder.indexOf(b.channel) : tcoLength;
 
       if (channelA === channelB) {
         return a.name < b.name ? -1 : 1;

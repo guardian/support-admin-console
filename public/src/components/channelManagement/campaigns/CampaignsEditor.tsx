@@ -130,16 +130,15 @@ function CampaignsEditor({ campaign }: CampaignsEditorProps): React.ReactElement
   const filterTests = (channel: string) => {
     if (showArchivedTests) {
       return testData.filter(test => test.channel === channel);
-    }
-    else {
+    } else {
       const filteredTests = testData.filter(test => test.channel === channel);
       return filteredTests.filter(test => test.status !== 'Archived');
     }
-  }
+  };
 
   return (
     <div className={classes.testEditorContainer}>
-      <StickyTopBar 
+      <StickyTopBar
         name={name}
         nickname={nickname}
         tests={testData}
