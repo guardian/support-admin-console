@@ -8,6 +8,7 @@ scalaVersion := "2.13.7"
 val circeVersion = "0.14.1"
 val awsVersion = "2.17.188"
 val zioVersion = "1.0.14"
+val jacksonVersion = "2.13.3"
 
 libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.4",
@@ -25,6 +26,9 @@ libraryDependencies ++= Seq(
   ws,
   "dev.zio" %% "zio" % zioVersion,
   "dev.zio" %% "zio-streams" % zioVersion,
+  // Use the latest version of jackson
+  "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
+  "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion,
   "org.scalatest" %% "scalatest" % "3.2.10" % "test",
   "org.gnieh" %% "diffson-circe" % "4.1.1" % "test",
 )
