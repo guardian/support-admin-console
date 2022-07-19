@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles, Theme, Card, CardContent, CardActions, Button } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { Test, Variant } from '../helpers/shared';
+import ArchivedTestButton from './ArchivedTestButton';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   cardContainer: {
@@ -211,11 +212,15 @@ function TestCard({ test, keyId, linkPath }: TestCardProps): React.ReactElement 
   const getTestNameBlock = () => {
     return (
       <div>
-        <Link className={classes.linkButton} key={keyId} to={`${linkPath}/${test.name}`}>
-          <Button className={classes.linkButtonBackground} variant="contained">
-            {!test.nickname ? test.nickname : test.name}
-          </Button>
-        </Link>
+          {test.status === 'Archived' ? (
+            <ArchivedTestButton test={test} />
+          ) : (
+            <Link className={classes.linkButton} key={keyId} to={`${linkPath}/${test.name}`}>
+              <Button className={classes.linkButtonBackground} variant="contained">
+              {!test.nickname ? test.name : test.nickname}
+              </Button>
+            </Link>
+          )}
         <p className={classes.trackingName}>Tracking name: {test.name}</p>
       </div>
     );

@@ -2,42 +2,47 @@ import React from 'react';
 import { Button, makeStyles, Typography } from '@material-ui/core';
 
 import { Test } from '../helpers/shared';
-import StatusUpdateDialog from './StatusUpdateDialog';
+import ArchivedTestDialog from './ArchivedTestDialog';
 import useOpenable from '../../../hooks/useOpenable';
 
 const useStyles = makeStyles(() => ({
   button: {
-    justifyContent: 'start',
-    height: '36px',
+    // justifyContent: 'start',
+    // height: '36px',
+    backgroundColor: '#fafbff',
   },
-  text: {
-    fontSize: '12px',
-    fontWeight: 500,
-    textTransform: 'uppercase',
-    letterSpacing: '1px',
-  },
+  // text: {
+  //   fontSize: '12px',
+  //   fontWeight: 500,
+  //   textTransform: 'uppercase',
+  //   letterSpacing: '1px',
+  // },
+  // linkButtonBackground: {
+  //   backgroundColor: '#fafbff',
+  // },
+  // linkButton: {
+  //   textDecoration: 'none',
+  // },
 }));
 
-interface StatusUpdateButtonProps {
-  tests: Test[];
-  updatePage: () => void;
+interface ArchivedTestButtonProps {
+  test: Test;
 }
 
-const StatusUpdateButton: React.FC<StatusUpdateButtonProps> = ({
-  tests,
-  updatePage,
-}: StatusUpdateButtonProps) => {
+const ArchivedTestButton: React.FC<ArchivedTestButtonProps> = ({
+  test,
+}: ArchivedTestButtonProps) => {
   const [isOpen, open, close] = useOpenable();
   const classes = useStyles();
 
   return (
     <>
       <Button className={classes.button} variant="contained" onClick={open}>
-        <Typography className={classes.text}>Update Test statuses on theguardian.com</Typography>
+        {!test.nickname ? test.name : test.nickname}
       </Button>
-      <StatusUpdateDialog isOpen={isOpen} close={close} tests={tests} updatePage={updatePage} />
+      <ArchivedTestDialog isOpen={isOpen} close={close} test={test} />
     </>
   );
 };
 
-export default StatusUpdateButton;
+export default ArchivedTestButton;

@@ -66,7 +66,7 @@ function ChannelCard({ channelData, tests }: ChannelCardProps): React.ReactEleme
           );
         })
       ) : (
-        <div className={classes.noTestsWarning}>No Tests have been set up for this Channel.</div>
+        <div className={classes.noTestsWarning}>No active Tests have been set up for this Channel.</div>
       )}
       {}
     </div>
