@@ -83,7 +83,7 @@ const CampaignsList = ({
               onClick={(): void => onCampaignSelected(campaign.name)}
             >
               <Typography className={classes.text}>
-                {!campaign.nickname ? campaign.nickname : campaign.name}
+                {campaign.nickname ? campaign.nickname : campaign.name}
               </Typography>
             </Button>
           </ListItem>
