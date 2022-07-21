@@ -36,6 +36,10 @@ const templatesWithLabels = [
     template: BannerTemplate.PostElectionAuMomentMorrisonBanner,
     label: 'Post Australian Election moment - Morrison win',
   },
+  {
+    template: BannerTemplate.AuBrandMomentBanner,
+    label: 'Australian brand moment 2022',
+  },
 ];
 
 const BannerTemplateSelector: React.FC<BannerTemplateSelectorProps> = ({
