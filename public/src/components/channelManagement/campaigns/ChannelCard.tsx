@@ -34,9 +34,10 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 interface ChannelCardProps {
   channelData: TestChannelItem;
   tests: Test[];
+  campaign: string;
 }
 
-function ChannelCard({ channelData, tests }: ChannelCardProps): React.ReactElement {
+function ChannelCard({ channelData, tests, campaign }: ChannelCardProps): React.ReactElement {
   const classes = useStyles();
 
   const getKey = (test: Test) => {
@@ -62,6 +63,7 @@ function ChannelCard({ channelData, tests }: ChannelCardProps): React.ReactEleme
               keyId={`${key}_LINK`}
               linkPath={`/${channelData.link}`}
               key={`${key}_CARD`}
+              campaign={campaign}
             />
           );
         })
