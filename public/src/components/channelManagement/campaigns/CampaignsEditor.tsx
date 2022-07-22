@@ -158,7 +158,6 @@ function CampaignsEditor({ campaign }: CampaignsEditorProps): React.ReactElement
             channelData={testChannelData[channel]}
             tests={filterTests(channel)}
             key={channel}
-            campaign={campaign.name}
           />
         ))}
       </div>

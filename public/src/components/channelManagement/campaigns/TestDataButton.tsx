@@ -13,10 +13,9 @@ const useStyles = makeStyles(() => ({
 
 interface TestDataButtonProps {
   test: Test;
-  campaign: string;
 }
 
-const TestDataButton: React.FC<TestDataButtonProps> = ({ test, campaign }: TestDataButtonProps) => {
+const TestDataButton: React.FC<TestDataButtonProps> = ({ test }: TestDataButtonProps) => {
   const [isOpen, open, close] = useOpenable();
   const classes = useStyles();
 
@@ -25,7 +24,7 @@ const TestDataButton: React.FC<TestDataButtonProps> = ({ test, campaign }: TestD
       <Button className={classes.button} variant="contained" onClick={open}>
         View data
       </Button>
-      <TestDataDialog isOpen={isOpen} close={close} test={test} campaign={campaign} />
+      <TestDataDialog isOpen={isOpen} close={close} test={test} />
     </>
   );
 };

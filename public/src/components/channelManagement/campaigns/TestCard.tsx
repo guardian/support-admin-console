@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles, Theme, Card, CardContent, CardActions, Button, Typography } from '@material-ui/core';
+import { makeStyles, Theme, Card, CardContent, CardActions, Button } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { Test, Variant } from '../helpers/shared';
 import TestDataButton from './TestDataButton';
@@ -133,10 +133,9 @@ interface TestCardProps {
   test: Test;
   keyId: string;
   linkPath: string;
-  campaign: string;
 }
 
-function TestCard({ test, keyId, linkPath, campaign }: TestCardProps): React.ReactElement {
+function TestCard({ test, keyId, linkPath }: TestCardProps): React.ReactElement {
   const classes = useStyles();
 
   const getVariantNames = (variants: Variant[]) => {
@@ -238,7 +237,13 @@ function TestCard({ test, keyId, linkPath, campaign }: TestCardProps): React.Rea
     return (
       <div className={classes.testNameBlockContainer}>
         <div className={classes.testNameBlockNames}>
-          <div className={test.status === 'Archived' ? classes.archivedTestNickname : classes.testNickname}>{test.nickname ? test.nickname : test.name}</div>
+          <div
+            className={
+              test.status === 'Archived' ? classes.archivedTestNickname : classes.testNickname
+            }
+          >
+            {test.nickname ? test.nickname : test.name}
+          </div>
           <div className={classes.testName}>Tracking name: {test.name}</div>
         </div>
         <div className={classes.testNameBlockActions}>
@@ -249,10 +254,10 @@ function TestCard({ test, keyId, linkPath, campaign }: TestCardProps): React.Rea
               </Button>
             </Link>
           )}
-          <TestDataButton test={test} campaign={campaign} />
+          <TestDataButton test={test} />
         </div>
       </div>
-    )
+    );
   };
 
   return (

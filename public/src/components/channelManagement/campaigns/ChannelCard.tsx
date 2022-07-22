@@ -34,10 +34,9 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 interface ChannelCardProps {
   channelData: TestChannelItem;
   tests: Test[];
-  campaign: string;
 }
 
-function ChannelCard({ channelData, tests, campaign }: ChannelCardProps): React.ReactElement {
+function ChannelCard({ channelData, tests }: ChannelCardProps): React.ReactElement {
   const classes = useStyles();
 
   const getKey = (test: Test) => {
@@ -63,12 +62,13 @@ function ChannelCard({ channelData, tests, campaign }: ChannelCardProps): React.
               keyId={`${key}_LINK`}
               linkPath={`/${channelData.link}`}
               key={`${key}_CARD`}
-              campaign={campaign}
             />
           );
         })
       ) : (
-        <div className={classes.noTestsWarning}>No active Tests have been set up for this Channel.</div>
+        <div className={classes.noTestsWarning}>
+          No active Tests have been set up for this Channel.
+        </div>
       )}
       {}
     </div>
