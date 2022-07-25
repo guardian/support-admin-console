@@ -36,6 +36,12 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
     border: '1px solid black',
     marginRight: '8px',
   },
+  statusArchivedSpan: {
+    padding: '4px 8px',
+    border: '1px solid lightgray',
+    backgroundColor: '#fff',
+    color: '#000',
+  },
   statusDraftSpan: {
     padding: '4px 8px',
     border: '1px solid black',
@@ -81,6 +87,21 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
     backgroundColor: '#eee',
     color: '#555',
   },
+  isLive: {
+    border: '1px solid #c7cbd9',
+  },
+  isDraft: {
+    border: '1px solid #c7cbd9',
+  },
+  isArchived: {
+    border: '1px dashed #c7cbd9',
+  },
+  linkButtonBackground: {
+    backgroundColor: '#fafbff',
+  },
+  trackingName: {
+    fontSize: '14px',
+  },
 }));
 
 interface TestCardProps {
@@ -102,13 +123,20 @@ function TestCard({ test, keyId, linkPath }: TestCardProps): React.ReactElement 
   };
 
   const getPriorityAndStatus = (test: Test) => {
+    const getStatusBoxStyle = () => {
+      if (test.status === 'Live') {
+        return classes.statusLiveSpan;
+      }
+      if (test.status === 'Draft') {
+        return classes.statusDraftSpan;
+      }
+      return classes.statusArchivedSpan;
+    };
+
     return (
       <div className={classes.priorityAndStatusLine}>
         Priority: <span className={classes.prioritySpan}>{test.priority}</span>
-        Status:{' '}
-        <span className={test.status === 'Live' ? classes.statusLiveSpan : classes.statusDraftSpan}>
-          {test.status}
-        </span>
+        Status: <span className={getStatusBoxStyle()}>{test.status}</span>
       </div>
     );
   };
@@ -170,16 +198,33 @@ function TestCard({ test, keyId, linkPath }: TestCardProps): React.ReactElement 
     );
   };
 
+  const getContainerStyle = (test: Test) => {
+    if (test.status === 'Live') {
+      return `${classes.cardContainer} ${classes.isLive}`;
+    }
+    if (test.status === 'Draft') {
+      return `${classes.cardContainer} ${classes.isDraft}`;
+    }
+    return `${classes.cardContainer} ${classes.isArchived}`;
+  };
+
+  const getTestNameBlock = () => {
+    return (
+      <div>
+        <Link className={classes.linkButton} key={keyId} to={`${linkPath}/${test.name}`}>
+          <Button className={classes.linkButtonBackground} variant="contained">
+            {test.nickname ? test.nickname : test.name}
+          </Button>
+        </Link>
+        <p className={classes.trackingName}>Tracking name: {test.name}</p>
+      </div>
+    );
+  };
+
   return (
-    <Card className={classes.cardContainer}>
+    <Card className={getContainerStyle(test)}>
       <CardContent className={classes.cardContent}>
-        <CardActions>
-          <div>
-            <Link className={classes.linkButton} key={keyId} to={`${linkPath}/${test.name}`}>
-              <Button variant="outlined">{test.name}</Button>
-            </Link>
-          </div>
-        </CardActions>
+        <CardActions>{getTestNameBlock()}</CardActions>
         <div className={classes.dataContainer}>
           <div>
             {getVariantNames(test.variants)}

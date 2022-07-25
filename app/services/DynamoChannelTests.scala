@@ -98,13 +98,8 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends StrictLo
           .keyConditionExpression("campaignName = :campaignName")
           .indexName(campaignNameIndex)
           .expressionAttributeValues(Map(
-            ":campaignName" -> AttributeValue.builder.s(campaignName).build,
-            ":archived" -> AttributeValue.builder.s("Archived").build
+            ":campaignName" -> AttributeValue.builder.s(campaignName).build
           ).asJava)
-          .expressionAttributeNames(Map(
-            "#status" -> "status"
-          ).asJava)
-          .filterExpression("#status <> :archived")
           .build()
       ).items
     }.mapError(DynamoGetError)

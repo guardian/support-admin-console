@@ -39,7 +39,7 @@ interface CampaignSelectorProps {
   disabled: boolean;
 }
 
-const unassignedCampaignLabel = 'NOT_IN_CAMPAIGN';
+export const unassignedCampaignLabel = 'NOT_IN_CAMPAIGN';
 
 const CampaignSelector: React.FC<CampaignSelectorProps> = ({
   onCampaignChange,
