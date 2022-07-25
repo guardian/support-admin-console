@@ -300,12 +300,14 @@ interface TestDataDialogProps {
   isOpen: boolean;
   close: () => void;
   test: Test;
+  datetimeStamp: string;
 }
 
 const TestDataDialog: React.FC<TestDataDialogProps> = ({
   isOpen,
   close,
   test,
+  datetimeStamp,
 }: TestDataDialogProps) => {
   const classes = useStyles();
 
@@ -323,31 +325,13 @@ const TestDataDialog: React.FC<TestDataDialogProps> = ({
       const val = data[key];
 
       if (rule != null && !rule.exclude.includes(channel)) {
-        switch (rule.type) {
-          case 'object-or-other':
-            if (typeof val === 'object') {
-              res += `${rule.label}:`;
-              if (rule.optional && val == null) {
-                res += ` (Not set)\n`;
-              } else if (val == null) {
-                res += ` (Data missing)\n`;
-              } else {
-                res += `\n`;
-                for (const [k, v] of Object.entries(val)) {
-                  res += `\t${k}: ${v}\n`;
-                }
-              }
-            } else {
-              res += `${rule.label}: `;
-              if (rule.optional) {
-                res += `${val != null ? val : '(Not set)'}`;
-              } else {
-                res += `${val != null ? val : '(Data missing)'}`;
-              }
-              res += `\n`;
-            }
-            break;
+        let formatter = rule.type;
 
+        if ('object-or-other' === formatter) {
+          formatter = (typeof val === 'object') ? 'object' : 'other';
+        }
+
+        switch (formatter) {
           case 'string-block':
             res += `${rule.label}:`;
             if (rule.optional) {
@@ -505,7 +489,7 @@ ${parseData(channel, variantFields.copy, v.mobileBannerContent)}
     const channel = data.channel;
 
     return `
-TEST CORE DETAILS
+TEST CORE DETAILS (${datetimeStamp})
 =====================================================================
 ${parseData(channel, testFields.core, data)}
 

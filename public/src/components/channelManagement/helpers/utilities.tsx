@@ -20,3 +20,32 @@ export const renderVisibilityHelpText = (isOn: boolean): React.ReactNode => {
     </Typography>
   );
 };
+
+const MONTH_NAMES = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
+
+export const formattedTimestamp = (timestamp: string): string => {
+  const date = new Date(timestamp);
+
+  const hours = date.getHours();
+  const paddedhours = String(hours).padStart(2, '0');
+  const minutes = date.getMinutes();
+  const paddedMinutes = String(minutes).padStart(2, '0');
+  const day = date.getDate();
+  const paddedDay = String(day).padStart(2, '0');
+  const monthName = MONTH_NAMES[date.getMonth()];
+
+  return `${monthName} ${paddedDay} at ${paddedhours}:${paddedMinutes}`;
+};
