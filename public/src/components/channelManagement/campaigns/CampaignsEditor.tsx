@@ -113,7 +113,6 @@ function CampaignsEditor({ campaign }: CampaignsEditorProps): React.ReactElement
   const doDataFetch = (name: string) => {
     fetchCampaignTests(name).then(tests => {
       // sort by test priority; each channel sets its own priority list
-      console.log('CampaignsEditor doDataFetch', tests)
       const sortedTests = tests.sort((a: Test, b: Test) => {
         if (a.priority != null && b.priority != null) {
           return a.priority - b.priority;
