@@ -328,7 +328,7 @@ const TestDataDialog: React.FC<TestDataDialogProps> = ({
         let formatter = rule.type;
 
         if ('object-or-other' === formatter) {
-          formatter = (typeof val === 'object') ? 'object' : 'other';
+          formatter = typeof val === 'object' ? 'object' : 'other';
         }
 
         switch (formatter) {
