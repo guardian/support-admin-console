@@ -152,6 +152,10 @@ const bannerModules = {
     path: 'postElectionAuMoment/PostElectionAuMomentMorrisonBanner.js',
     name: 'PostElectionAuMomentMorrisonBanner',
   },
+  [BannerTemplate.AuBrandMomentBanner]: {
+    path: 'auBrandMoment/AuBrandMomentBanner.js',
+    name: 'AuBrandMomentBanner',
+  },
 };
 
 const useStyles = makeStyles(({ palette }: Theme) => ({
