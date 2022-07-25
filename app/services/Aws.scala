@@ -9,7 +9,6 @@ object Aws {
     ProfileCredentialsProvider.builder.profileName("membership").build,
     InstanceProfileCredentialsProvider
       .builder
-      .asyncThreadName("credentials-thread")
       .asyncCredentialUpdateEnabled(true)
       .build
   ).build
