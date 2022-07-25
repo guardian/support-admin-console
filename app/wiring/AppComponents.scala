@@ -59,7 +59,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
   val dynamoClient = DynamoDbClient
     .builder
     .region(Aws.region)
-    .credentialsProvider(Aws.credentialsProvider)
+    .credentialsProvider(Aws.credentialsProvider.build)
     .build
 
   val dynamoTestsService = new DynamoChannelTests(stage, dynamoClient)

@@ -29,7 +29,7 @@ class AppLoader extends ApplicationLoader with StrictLogging {
     val application: Try[Application] = for {
       identity <-
         if (context.environment.mode == Mode.Dev) Success(DevIdentity("admin-console"))
-        else AppIdentity.whoAmI(defaultAppName = "admin-console", Aws.credentialsProvider)
+        else AppIdentity.whoAmI(defaultAppName = "admin-console", Aws.credentialsProvider.build)
       newContext <- addConfigToContext(identity)
       stage = identity match {
         case AwsIdentity(_, _, s, _) => s

@@ -11,7 +11,7 @@ object Aws {
       .builder
       .asyncCredentialUpdateEnabled(true)
       .build
-  ).build
+  )
 
   val region = Region.EU_WEST_1
 }
