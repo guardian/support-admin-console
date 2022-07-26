@@ -1,5 +1,6 @@
 import React from 'react';
 import { makeStyles, Typography } from '@material-ui/core';
+import { formattedTimestamp } from '../helpers/utilities';
 
 const useStyles = makeStyles(() => ({
   lockDetailsText: {
@@ -14,35 +15,6 @@ const formattedName = (email: string): string => {
         1,
       )} ${nameArr[2][0].toUpperCase()}${nameArr[2].slice(1)}`
     : email;
-};
-
-const MONTH_NAMES = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
-
-const formattedTimestamp = (timestamp: string): string => {
-  const date = new Date(timestamp);
-
-  const hours = date.getHours();
-  const paddedhours = String(hours).padStart(2, '0');
-  const minutes = date.getMinutes();
-  const paddedMinutes = String(minutes).padStart(2, '0');
-  const day = date.getDate();
-  const paddedDay = String(day).padStart(2, '0');
-  const monthName = MONTH_NAMES[date.getMonth()];
-
-  return `${monthName} ${paddedDay} at ${paddedhours}:${paddedMinutes}`;
 };
 
 interface TestLockDetailsProps {

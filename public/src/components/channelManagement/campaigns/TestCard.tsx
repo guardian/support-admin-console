@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles, Theme, Card, CardContent, CardActions, Button } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { Test, Variant } from '../helpers/shared';
+import TestDataButton from './TestDataButton';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   cardContainer: {
@@ -101,6 +102,30 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   },
   trackingName: {
     fontSize: '14px',
+  },
+  testNameBlockContainer: {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+  },
+  testNameBlockNames: {
+    width: '50%',
+  },
+  testName: {
+    fontSize: '14px',
+    fontStyle: 'italic',
+  },
+  testNickname: {
+    fontSize: '16px',
+    fontWeight: 'bold',
+  },
+  archivedTestNickname: {
+    fontSize: '16px',
+  },
+  testNameBlockActions: {
+    width: '40%',
+    textAlign: 'right',
   },
 }));
 
@@ -210,13 +235,27 @@ function TestCard({ test, keyId, linkPath }: TestCardProps): React.ReactElement 
 
   const getTestNameBlock = () => {
     return (
-      <div>
-        <Link className={classes.linkButton} key={keyId} to={`${linkPath}/${test.name}`}>
-          <Button className={classes.linkButtonBackground} variant="contained">
+      <div className={classes.testNameBlockContainer}>
+        <div className={classes.testNameBlockNames}>
+          <div
+            className={
+              test.status === 'Archived' ? classes.archivedTestNickname : classes.testNickname
+            }
+          >
             {test.nickname ? test.nickname : test.name}
-          </Button>
-        </Link>
-        <p className={classes.trackingName}>Tracking name: {test.name}</p>
+          </div>
+          <div className={classes.testName}>Tracking name: {test.name}</div>
+        </div>
+        <div className={classes.testNameBlockActions}>
+          {test.status !== 'Archived' && (
+            <Link className={classes.linkButton} key={keyId} to={`${linkPath}/${test.name}`}>
+              <Button className={classes.linkButtonBackground} variant="contained">
+                Test page
+              </Button>
+            </Link>
+          )}
+          <TestDataButton test={test} />
+        </div>
       </div>
     );
   };
