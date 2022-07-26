@@ -97,7 +97,7 @@ const testFields = {
     deviceType: {
       label: 'Device type',
       type: 'string',
-      exclude: ['Banner1', 'Banner2'],
+      exclude: [],
       optional: true,
     },
     articlesViewedSettings: {
