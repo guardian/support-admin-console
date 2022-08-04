@@ -21,6 +21,10 @@ export enum FrontendSettingsType {
   campaigns = 'campaigns',
 }
 
+export enum AppsSettingsType {
+  appsMeteringSwitches = 'apps-metering-switches',
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function makeFetch(path: string, options?: RequestInit): Promise<any> {
   return fetch(path, options).then(resp => {
@@ -134,4 +138,12 @@ export function saveFrontendSettings(
   data: any,
 ): Promise<Response> {
   return saveSettings(`/frontend/${settingsType}/update`, data);
+}
+
+export function fetchAppsSettings<T>(settingsType: AppsSettingsType): Promise<T> {
+  return fetchSettings(`/apps/${settingsType}`);
+}
+
+export function saveAppsSettings<T>(settingsType: AppsSettingsType, data: T): Promise<Response> {
+  return saveSettings(`/apps/${settingsType}/update`, data);
 }
