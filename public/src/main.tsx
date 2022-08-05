@@ -35,6 +35,7 @@ import CampaignsForm from './components/channelManagement/campaigns/CampaignsFor
 import { FontWeightProperty } from 'csstype';
 import { makeStyles } from '@material-ui/core';
 import QrCodePage from './components/utilities/QrCodePage';
+import AppsMeteringSwitches from './components/appsMeteringSwitches';
 
 type Stage = 'DEV' | 'CODE' | 'PROD';
 declare global {
@@ -230,6 +231,12 @@ const AppRouter = () => {
           <Route
             path="/qr-code"
             render={(): React.ReactElement => createComponent(<QrCodePage />, 'QR Code Generator')}
+          />
+          <Route
+            path="/apps-metering-switches"
+            render={(): React.ReactElement =>
+              createComponent(<AppsMeteringSwitches />, 'Apps Metering Switches')
+            }
           />
         </div>
       </Router>

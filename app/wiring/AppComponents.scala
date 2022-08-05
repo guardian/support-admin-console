@@ -84,6 +84,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     new ChannelSwitchesController(authAction, controllerComponents, stage, runtime),
     new CampaignsController(authAction, controllerComponents, stage, runtime, dynamoTestsService),
     new CapiController(authAction, capiService),
+    new AppsMeteringSwitchesController(authAction, controllerComponents, stage, runtime),
     assets
   )
 }
