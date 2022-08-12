@@ -18,7 +18,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-type SwitchName = 'enabled' | 'excludeBreakingNews';
+type SwitchName = 'enabled' | 'excludeBreakingNews' | 'requireApiKey';
 
 type AppsMeteringSwitches = {
   [key in SwitchName]: boolean;
@@ -78,6 +78,12 @@ const AppsMeteringSwitches: React.FC<InnerProps<AppsMeteringSwitches>> = ({
         name="excludeBreakingNews"
         label="Exclude breaking news articles from metering"
         enabled={switches.excludeBreakingNews}
+        setSwitch={onSwitchChange}
+      />
+      <AppsMeteringSwitch
+        name="requireApiKey"
+        label="Require clients to provide an API key"
+        enabled={switches.requireApiKey}
         setSwitch={onSwitchChange}
       />
 
