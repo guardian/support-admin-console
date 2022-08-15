@@ -5,7 +5,8 @@ import io.circe.{Decoder, Encoder}
 
 case class AppsMeteringSwitches(
   enabled: Boolean,
-  excludeBreakingNews: Boolean
+  excludeBreakingNews: Boolean,
+  requireApiKey: Boolean
 )
 
 object AppsMeteringSwitches {
