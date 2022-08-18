@@ -13,7 +13,6 @@ import BannerTestVariantEditorCtasEditor from './bannerTestVariantEditorCtasEdit
 import {
   EMPTY_ERROR_HELPER_TEXT,
   getEmptyParagraphsError,
-  MAXLENGTH_ERROR_HELPER_TEXT,
   templateValidatorForPlatform,
 } from '../helpers/validation';
 import { Cta, SecondaryCta } from '../helpers/shared';
@@ -79,7 +78,7 @@ const HEADER_DEFAULT_HELPER_TEXT = 'Assitive text';
 const BODY_DEFAULT_HELPER_TEXT = 'Main banner message paragraph';
 const HIGHTLIGHTED_TEXT_HELPER_TEXT = 'Final sentence of body copy';
 
-const BODY_COPY_WITHOUT_SECONDARY_CTA_RECOMMENDED_LENGTH = 525;
+const BODY_COPY_WITHOUT_SECONDARY_CTA_RECOMMENDED_LENGTH = 500;
 const BODY_COPY_WITH_SECONDARY_CTA_RECOMMENDED_LENGTH = 390;
 
 type DeviceType = 'ALL' | 'MOBILE' | 'NOT_MOBILE';
@@ -199,14 +198,14 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
     ];
   };
 
-  const getParagraphsHelperText = () => {
-    const [copyLength, recommendedLength] = getBodyCopyLength();
+  const [copyLength, recommendedLength] = getBodyCopyLength();
 
+  const getParagraphsHelperText = () => {
     if (!copyLength) {
       return EMPTY_ERROR_HELPER_TEXT;
     }
     if (copyLength > recommendedLength) {
-      return MAXLENGTH_ERROR_HELPER_TEXT;
+      return `This copy is longer than the recommended length (${recommendedLength} chars). Please preview across breakpoints before publishing.`;
     }
     return `${BODY_DEFAULT_HELPER_TEXT} (${recommendedLength} chars)`;
   };
@@ -264,7 +263,7 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
             render={data => {
               return (
                 <RichTextEditor
-                  error={errors.paragraphs !== undefined}
+                  error={errors.paragraphs !== undefined || copyLength > recommendedLength}
                   helperText={
                     errors.paragraphs
                       ? // @ts-ignore -- react-hook-form doesn't believe it has a message field
