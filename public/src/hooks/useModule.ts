@@ -30,7 +30,7 @@ export const useModule = <T>(path: string, name: string): React.FC<T> | undefine
     window.remoteImport(`${baseUrl}/${path}`).then(bannerModule => {
       setModule(() => withPreviewStyles(bannerModule[name]));
     });
-  }, []);
+  }, [name]);
 
   return Module;
 };
