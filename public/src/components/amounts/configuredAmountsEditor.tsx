@@ -75,6 +75,7 @@ const ConfiguredAmountsEditor: React.FC<InnerProps<ConfiguredAmounts>> = ({
   data: configuredAmounts,
   setData: setConfiguredAmounts,
   saveData: saveConfiguredAmounts,
+  saving,
 }: InnerProps<ConfiguredAmounts>) => {
   const classes = useStyles();
   const [selectedRegion, setSelectedRegion] = useState<Region>(Region.GBPCountries);
@@ -92,7 +93,11 @@ const ConfiguredAmountsEditor: React.FC<InnerProps<ConfiguredAmounts>> = ({
   return (
     <div className={classes.body}>
       <div className={classes.leftCol}>
-        <Sidebar onRegionSelected={setSelectedRegion} save={saveConfiguredAmounts} />
+        <Sidebar
+          onRegionSelected={setSelectedRegion}
+          save={saveConfiguredAmounts}
+          saving={saving}
+        />
       </div>
       <div className={classes.rightCol}>
         <ConfiguredRegionAmountsEditor

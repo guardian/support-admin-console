@@ -58,9 +58,10 @@ interface SidebarItemProps {
 interface SidebarProps {
   onRegionSelected: (region: Region) => void;
   save: () => void;
+  saving: boolean;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ onRegionSelected, save }: SidebarProps) => {
+const Sidebar: React.FC<SidebarProps> = ({ onRegionSelected, save, saving }: SidebarProps) => {
   const classes = useStyles();
 
   const SidebarSaveButton: React.FC = () => (
@@ -70,8 +71,9 @@ const Sidebar: React.FC<SidebarProps> = ({ onRegionSelected, save }: SidebarProp
       className={classes.button}
       startIcon={<SaveIcon />}
       onClick={save}
+      disabled={saving}
     >
-      <Typography className={classes.buttonText}>Save</Typography>
+      <Typography className={classes.buttonText}>{saving ? 'Saving' : 'Save'}</Typography>
     </Button>
   );
 

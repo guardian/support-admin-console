@@ -64,6 +64,7 @@ const CampaignsForm: React.FC<InnerProps<Campaigns>> = ({
   data: campaigns,
   setData: setCampaigns,
   saveData: saveCampaigns,
+  saving,
 }: InnerProps<Campaigns>) => {
   const classes = useStyles();
   const { testName } = useParams<{ testName?: string }>();
@@ -116,6 +117,7 @@ const CampaignsForm: React.FC<InnerProps<Campaigns>> = ({
           selectedCampaign={currentCampaign}
           onCampaignSelected={onCampaignSelected}
           saveAllCampaigns={saveAllCampaigns}
+          saving={saving}
         />
       </div>
       <div className={classes.rightCol}>

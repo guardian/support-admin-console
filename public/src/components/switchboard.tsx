@@ -92,6 +92,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
   data,
   setData,
   saveData,
+  saving,
 }: InnerProps<SupportFrontendSwitches>) => {
   const classes = useStyles();
 
@@ -170,7 +171,12 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
 
   const SaveButton = (): JSX.Element => (
     <div className={classes.buttons}>
-      <Button variant="contained" onClick={actionSaveData} className={classes.button}>
+      <Button
+        variant="contained"
+        onClick={actionSaveData}
+        className={classes.button}
+        disabled={saving}
+      >
         <SaveIcon />
         Save
       </Button>
