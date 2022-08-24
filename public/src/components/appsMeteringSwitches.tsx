@@ -56,6 +56,7 @@ const AppsMeteringSwitches: React.FC<InnerProps<AppsMeteringSwitches>> = ({
   data: switches,
   setData: setSwitches,
   saveData: saveSwitches,
+  saving,
 }: InnerProps<AppsMeteringSwitches>) => {
   const classes = useStyles();
 
@@ -93,6 +94,7 @@ const AppsMeteringSwitches: React.FC<InnerProps<AppsMeteringSwitches>> = ({
         variant="contained"
         size="large"
         fullWidth={false}
+        disabled={saving}
       >
         Submit
       </Button>

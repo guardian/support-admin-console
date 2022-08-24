@@ -46,6 +46,7 @@ interface CampaignsSidebarProps {
   createCampaign: (campaign: Campaign) => void;
   onCampaignSelected: (campaignName: string) => void;
   saveAllCampaigns: () => void;
+  saving: boolean;
 }
 
 function CampaignsSidebar({
@@ -55,6 +56,7 @@ function CampaignsSidebar({
   newCampaignCreated,
   onCampaignSelected,
   saveAllCampaigns,
+  saving,
 }: CampaignsSidebarProps): React.ReactElement {
   const classes = useStyles();
 
@@ -70,6 +72,7 @@ function CampaignsSidebar({
           className={newCampaignCreated ? classes.saveAllButtonAlert : classes.saveAllButton}
           variant="outlined"
           onClick={saveAllCampaigns}
+          disabled={saving}
         >
           <Typography className={classes.saveAllButtonText}>Save all campaigns</Typography>
         </Button>

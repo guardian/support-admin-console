@@ -66,6 +66,7 @@ const ChannelSwitches: React.FC<InnerProps<ChannelSwitches>> = ({
   data: switches,
   setData: setSwitches,
   saveData: saveSwitches,
+  saving,
 }: InnerProps<ChannelSwitches>) => {
   const classes = useStyles();
 
@@ -121,6 +122,7 @@ const ChannelSwitches: React.FC<InnerProps<ChannelSwitches>> = ({
         variant="contained"
         size="large"
         fullWidth={false}
+        disabled={saving}
       >
         Submit
       </Button>
