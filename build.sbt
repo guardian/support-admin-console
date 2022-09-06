@@ -8,7 +8,7 @@ scalaVersion := "2.13.7"
 val circeVersion = "0.14.1"
 val awsVersion = "2.17.238"
 val zioVersion = "1.0.14"
-val jacksonVersion = "2.13.3"
+val jacksonVersion = "2.13.4"
 
 libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.4",
