@@ -123,7 +123,7 @@ export const LIVEBLOG_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantImageUrl: false,
   allowVariantFooter: false,
   allowVariantCustomPrimaryCta: true,
-  allowVariantCustomSecondaryCta: false,
+  allowVariantCustomSecondaryCta: true,
   allowVariantSeparateArticleCount: false,
   allowVariantTicker: false,
   allowVariantChoiceCards: false,
