@@ -90,6 +90,7 @@ const HeaderTestEditor: React.FC<ValidatedTestEditorProps<HeaderTest>> = ({
       isInEditMode={userHasTestLocked}
       // hardcoded as heads are currently not supported in AMP or Apple News
       platform="DOTCOM"
+      articleType="Standard"
     />
   );
 

@@ -204,6 +204,9 @@ export const getEpicTestEditor = (
         testType="EPIC"
         isInEditMode={userHasTestLocked}
         platform={epicEditorConfig.platform}
+        articleType={
+          epicEditorConfig.moduleName === 'ContributionsLiveblogEpic' ? 'Liveblog' : 'Standard'
+        }
       />
     );
 
