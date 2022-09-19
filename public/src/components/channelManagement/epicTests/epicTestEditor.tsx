@@ -218,7 +218,7 @@ export const getEpicTestEditor = (
               <Typography variant={'h3'} className={classes.sectionHeader}>
                 Variants
               </Typography>
-              <EpicTestPreviewButton test={test} />
+              <EpicTestPreviewButton test={test} moduleName={epicEditorConfig.moduleName} />
             </div>
             <div>
               <TestVariantsEditor<EpicVariant>
