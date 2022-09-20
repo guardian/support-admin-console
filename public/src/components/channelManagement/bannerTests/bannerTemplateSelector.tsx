@@ -40,6 +40,10 @@ const templatesWithLabels = [
     template: BannerTemplate.AuBrandMomentBanner,
     label: 'Australian brand moment 2022',
   },
+  {
+    template: BannerTemplate.ClimateCrisisMomentBanner,
+    label: 'Climate crisis moment 2022',
+  },
 ];
 
 const BannerTemplateSelector: React.FC<BannerTemplateSelectorProps> = ({
