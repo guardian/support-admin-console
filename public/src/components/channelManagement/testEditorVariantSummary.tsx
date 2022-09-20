@@ -2,7 +2,9 @@ import React from 'react';
 import { Theme, Typography, AccordionSummary, makeStyles } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
-import TestEditorVariantSummaryWebPreviewButton from './testEditorVariantSummaryWebPreviewButton';
+import TestEditorVariantSummaryWebPreviewButton, {
+  ArticleType,
+} from './testEditorVariantSummaryWebPreviewButton';
 import { TestPlatform, TestType } from './helpers/shared';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
@@ -46,6 +48,7 @@ interface TestEditorVariantSummaryProps {
   isInEditMode: boolean;
   topButton?: React.ReactElement;
   platform: TestPlatform;
+  articleType: ArticleType;
 }
 
 const TestEditorVariantSummary: React.FC<TestEditorVariantSummaryProps> = ({
@@ -55,6 +58,7 @@ const TestEditorVariantSummary: React.FC<TestEditorVariantSummaryProps> = ({
   isInEditMode,
   topButton,
   platform,
+  articleType,
 }: TestEditorVariantSummaryProps) => {
   const classes = useStyles();
 
@@ -76,6 +80,7 @@ const TestEditorVariantSummary: React.FC<TestEditorVariantSummaryProps> = ({
             testType={testType}
             platform={platform}
             isDisabled={isInEditMode}
+            articleType={articleType}
           />
         </div>
       </div>

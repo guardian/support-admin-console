@@ -204,6 +204,9 @@ export const getEpicTestEditor = (
         testType="EPIC"
         isInEditMode={userHasTestLocked}
         platform={epicEditorConfig.platform}
+        articleType={
+          epicEditorConfig.moduleName === 'ContributionsLiveblogEpic' ? 'Liveblog' : 'Standard'
+        }
       />
     );
 
@@ -215,7 +218,7 @@ export const getEpicTestEditor = (
               <Typography variant={'h3'} className={classes.sectionHeader}>
                 Variants
               </Typography>
-              <EpicTestPreviewButton test={test} />
+              <EpicTestPreviewButton test={test} moduleName={epicEditorConfig.moduleName} />
             </div>
             <div>
               <TestVariantsEditor<EpicVariant>

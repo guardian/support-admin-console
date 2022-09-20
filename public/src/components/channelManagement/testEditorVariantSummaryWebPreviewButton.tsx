@@ -2,30 +2,22 @@ import React from 'react';
 import { Button } from '@material-ui/core';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import { TestPlatform, TestType } from './helpers/shared';
-import { getStage } from '../../utils/stage';
+import { getStage, Stage } from '../../utils/stage';
 
-const BASE_ARTICLE_URL = {
-  PROD: {
-    DOTCOM:
-      'https://theguardian.com/world/2020/may/08/commemorating-ve-day-during-coronavirus-lockdown-somehow-the-quiet-made-it-louder',
-    AMP:
-      'https://amp.theguardian.com/politics/2020/may/15/may-and-johnson-hung-civil-servants-out-to-dry-report-finds',
-    APPLE_NEWS: '',
-  },
-  CODE: {
-    DOTCOM:
-      'https://m.code.dev-theguardian.com/world/2020/may/08/commemorating-ve-day-during-coronavirus-lockdown-somehow-the-quiet-made-it-louder',
-    AMP:
-      'https://amp.code.dev-theguardian.com/politics/2020/may/15/may-and-johnson-hung-civil-servants-out-to-dry-report-finds',
-    APPLE_NEWS: '',
-  },
-  DEV: {
-    DOTCOM:
-      'https://m.code.dev-theguardian.com/world/2020/may/08/commemorating-ve-day-during-coronavirus-lockdown-somehow-the-quiet-made-it-louder',
-    AMP:
-      'https://amp.code.dev-theguardian.com/politics/2020/may/15/may-and-johnson-hung-civil-servants-out-to-dry-report-finds',
-    APPLE_NEWS: '',
-  },
+export type ArticleType = 'Standard' | 'Liveblog';
+
+const ArticlePaths: Record<ArticleType, string> = {
+  Standard:
+    'world/2020/may/08/commemorating-ve-day-during-coronavirus-lockdown-somehow-the-quiet-made-it-louder',
+  Liveblog: 'uk-news/live/2022/sep/19/queen-elizabeth-ii-state-funeral-westminster-abbey-updates',
+};
+
+const getHostName = (stage: Stage, platform: TestPlatform): string => {
+  if (stage === 'PROD') {
+    return platform === 'AMP' ? 'amp.theguardian.com' : 'theguardian.com';
+  } else {
+    return platform === 'AMP' ? 'amp.code.dev-theguardian.com' : 'm.code.dev-theguardian.com';
+  }
 };
 
 const getPreviewUrl = (
@@ -33,11 +25,12 @@ const getPreviewUrl = (
   variantName: string,
   testType: TestType,
   platform: TestPlatform,
+  articleType: ArticleType,
 ): string => {
   const stage = getStage();
   const queryString = `?dcr&force-${testType.toLowerCase()}=${testName}:${variantName}`;
 
-  return stage ? `${BASE_ARTICLE_URL[stage][platform]}${queryString}` : '/';
+  return `https://${getHostName(stage, platform)}/${ArticlePaths[articleType]}${queryString}`;
 };
 
 interface TestEditorVariantSummaryPreviewButtonProps {
@@ -46,6 +39,7 @@ interface TestEditorVariantSummaryPreviewButtonProps {
   testType: TestType;
   platform: TestPlatform;
   isDisabled: boolean;
+  articleType: ArticleType;
 }
 
 const TestEditorVariantSummaryWebPreviewButton: React.FC<TestEditorVariantSummaryPreviewButtonProps> = ({
@@ -54,6 +48,7 @@ const TestEditorVariantSummaryWebPreviewButton: React.FC<TestEditorVariantSummar
   testType,
   platform,
   isDisabled,
+  articleType,
 }: TestEditorVariantSummaryPreviewButtonProps) => {
   const isIncompatiblePlatform = ['APPLE_NEWS'].includes(platform);
 
@@ -77,7 +72,7 @@ const TestEditorVariantSummaryWebPreviewButton: React.FC<TestEditorVariantSummar
       size="small"
       onClick={(event): void => event.stopPropagation()}
       onFocus={(event): void => event.stopPropagation()}
-      href={getPreviewUrl(testName, name, testType, platform)}
+      href={getPreviewUrl(testName, name, testType, platform, articleType)}
       target="_blank"
       rel="noopener noreferrer"
       disabled={checkForDisabledButton()}
