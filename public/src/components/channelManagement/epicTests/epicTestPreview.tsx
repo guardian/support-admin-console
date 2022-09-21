@@ -3,6 +3,7 @@ import { Button, Dialog, makeStyles, Theme, Typography } from '@material-ui/core
 import useOpenable from '../../../hooks/useOpenable';
 import EpicVariantPreview from './epicVariantPreview';
 import { EpicTest } from '../../../models/epic';
+import { EpicModuleName } from '../helpers/shared';
 
 const useStyles = makeStyles(({}: Theme) => ({
   dialog: {
@@ -24,10 +25,12 @@ const useStyles = makeStyles(({}: Theme) => ({
 
 interface EpicTestPreviewProps {
   test: EpicTest;
+  moduleName: EpicModuleName;
 }
 
 export const EpicTestPreviewButton: React.FC<EpicTestPreviewProps> = ({
   test,
+  moduleName,
 }: EpicTestPreviewProps) => {
   const classes = useStyles();
   const [isOpen, open, close] = useOpenable();
@@ -48,7 +51,7 @@ export const EpicTestPreviewButton: React.FC<EpicTestPreviewProps> = ({
               <Typography variant={'h3'} className={classes.variantName}>
                 {variant.name}
               </Typography>
-              <EpicVariantPreview variant={variant} moduleName="ContributionsEpic" />
+              <EpicVariantPreview variant={variant} moduleName={moduleName} />
             </div>
           ))}
         </div>
