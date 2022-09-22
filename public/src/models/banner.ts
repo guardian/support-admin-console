@@ -24,6 +24,7 @@ export enum BannerTemplate {
   PostElectionAuMomentHungBanner = 'PostElectionAuMomentHungBanner',
   PostElectionAuMomentMorrisonBanner = 'PostElectionAuMomentMorrisonBanner',
   AuBrandMomentBanner = 'AuBrandMomentBanner',
+  ClimateCrisisMomentBanner = 'ClimateCrisisMomentBanner',
 }
 
 export interface BannerContent {

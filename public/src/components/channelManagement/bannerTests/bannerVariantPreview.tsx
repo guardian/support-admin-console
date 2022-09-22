@@ -156,6 +156,10 @@ const bannerModules = {
     path: 'auBrandMoment/AuBrandMomentBanner.js',
     name: 'AuBrandMomentBanner',
   },
+  [BannerTemplate.ClimateCrisisMomentBanner]: {
+    path: 'climateCrisisMoment/ClimateCrisisMomentBanner.js',
+    name: 'ClimateCrisisMomentBanner',
+  },
 };
 
 const useStyles = makeStyles(({ palette }: Theme) => ({
