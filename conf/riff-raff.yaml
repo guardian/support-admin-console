@@ -10,7 +10,7 @@ deployments:
         PROD: AdminConsole-PROD.template.json
       amiParameter: AMIAdminconsole
       amiTags:
-        Recipe: bionic-membership-ARM
+        Recipe: bionic-membership-java11
         AmigoStage: PROD
       amiEncrypted: true
   admin-console:
