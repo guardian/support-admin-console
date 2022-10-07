@@ -10,6 +10,7 @@ import services.{S3Json, VersionedS3Data}
 import zio.blocking.Blocking
 import zio.{IO, ZEnv, ZIO}
 import S3ObjectsController.extractFilename
+import com.typesafe.scalalogging.LazyLogging
 import utils.Circe.noNulls
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -35,7 +36,7 @@ abstract class S3ObjectsController[T : Decoder : Encoder](
   path: String,
   nameGenerator: T => String,
   runtime: zio.Runtime[ZEnv]
-)(implicit ec: ExecutionContext) extends AbstractController(components) with Circe {
+)(implicit ec: ExecutionContext) extends AbstractController(components) with Circe with LazyLogging {
 
   val s3Client = services.S3
 
