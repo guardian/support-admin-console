@@ -9,7 +9,7 @@ export type ArticleType = 'Standard' | 'Liveblog';
 const ArticlePaths: Record<ArticleType, string> = {
   Standard:
     'world/2020/may/08/commemorating-ve-day-during-coronavirus-lockdown-somehow-the-quiet-made-it-louder',
-  Liveblog: 'uk-news/live/2022/sep/19/queen-elizabeth-ii-state-funeral-westminster-abbey-updates',
+  Liveblog: 'world/live/2022/oct/07/nobel-peace-prize-2022-live-winners',
 };
 
 const getHostName = (stage: Stage, platform: TestPlatform): string => {
@@ -17,6 +17,14 @@ const getHostName = (stage: Stage, platform: TestPlatform): string => {
     return platform === 'AMP' ? 'amp.theguardian.com' : 'theguardian.com';
   } else {
     return platform === 'AMP' ? 'amp.code.dev-theguardian.com' : 'm.code.dev-theguardian.com';
+  }
+};
+
+const getChannelName = (testType: TestType, articleType: ArticleType): string => {
+  if (testType === 'EPIC' && articleType === 'Liveblog') {
+    return 'liveblog-epic';
+  } else {
+    return testType.toLowerCase();
   }
 };
 
@@ -28,7 +36,10 @@ const getPreviewUrl = (
   articleType: ArticleType,
 ): string => {
   const stage = getStage();
-  const queryString = `?dcr&force-${testType.toLowerCase()}=${testName}:${variantName}`;
+  const queryString = `?dcr&force-${getChannelName(
+    testType,
+    articleType,
+  )}=${testName}:${variantName}`;
 
   return `https://${getHostName(stage, platform)}/${ArticlePaths[articleType]}${queryString}`;
 };
