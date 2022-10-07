@@ -36,10 +36,8 @@ const getPreviewUrl = (
   articleType: ArticleType,
 ): string => {
   const stage = getStage();
-  const queryString = `?dcr&force-${getChannelName(
-    testType,
-    articleType,
-  )}=${testName}:${variantName}`;
+  const channelName = getChannelName(testType, articleType);
+  const queryString = `?dcr&force-${channelName}=${testName}:${variantName}`;
 
   return `https://${getHostName(stage, platform)}/${ArticlePaths[articleType]}${queryString}`;
 };
