@@ -13,6 +13,7 @@ import services.S3Client.{S3ClientError, S3ObjectSettings}
 import services.{DynamoChannelTests, S3Json, VersionedS3Data}
 import utils.Circe.noNulls
 import zio.{IO, UIO, ZEnv, ZIO}
+import com.typesafe.scalalogging.LazyLogging
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -37,7 +38,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
   channel: Channel,
   runtime: zio.Runtime[ZEnv],
   dynamo: DynamoChannelTests
-)(implicit ec: ExecutionContext) extends AbstractController(components) with Circe {
+)(implicit ec: ExecutionContext) extends AbstractController(components) with Circe with LazyLogging {
 
   private val lockObjectSettings = S3ObjectSettings(
     bucket = "support-admin-console",

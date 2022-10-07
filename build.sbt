@@ -11,7 +11,7 @@ val zioVersion = "1.0.14"
 val jacksonVersion = "2.13.4"
 
 libraryDependencies ++= Seq(
-  "com.typesafe.scala-logging" %% "scala-logging" % "3.9.4",
+  "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
   "com.gu.play-googleauth" %% "play-v28" % "2.2.6",
   "com.gu" %% "simple-configuration-ssm" % "1.5.7",
   "software.amazon.awssdk" % "s3" % awsVersion,

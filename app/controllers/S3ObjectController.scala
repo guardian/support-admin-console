@@ -11,6 +11,7 @@ import services.{S3Json, VersionedS3Data}
 import utils.Circe.noNulls
 import zio.blocking.Blocking
 import zio.{IO, ZEnv, ZIO}
+import com.typesafe.scalalogging.LazyLogging
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -24,7 +25,7 @@ abstract class S3ObjectController[T : Decoder : Encoder](
   components: ControllerComponents,
   stage: String,
   filename: String,
-  val runtime: zio.Runtime[ZEnv])(implicit ec: ExecutionContext) extends AbstractController(components) with Circe {
+  val runtime: zio.Runtime[ZEnv])(implicit ec: ExecutionContext) extends AbstractController(components) with Circe with LazyLogging {
 
   private val dataObjectSettings = S3ObjectSettings(
     bucket = "support-admin-console",
