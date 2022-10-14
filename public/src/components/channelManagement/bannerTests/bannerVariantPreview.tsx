@@ -136,22 +136,6 @@ const bannerModules = {
     path: 'globalNewYear/GlobalNewYearBanner.js',
     name: 'GlobalNewYearBanner',
   },
-  [BannerTemplate.ElectionAuMomentBanner]: {
-    path: 'electionAuMoment/ElectionAuMomentBanner.js',
-    name: 'ElectionAuMomentBanner',
-  },
-  [BannerTemplate.PostElectionAuMomentAlbaneseBanner]: {
-    path: 'postElectionAuMoment/PostElectionAuMomentAlbaneseBanner.js',
-    name: 'PostElectionAuMomentAlbaneseBanner',
-  },
-  [BannerTemplate.PostElectionAuMomentHungBanner]: {
-    path: 'postElectionAuMoment/PostElectionAuMomentHungBanner.js',
-    name: 'PostElectionAuMomentHungBanner',
-  },
-  [BannerTemplate.PostElectionAuMomentMorrisonBanner]: {
-    path: 'postElectionAuMoment/PostElectionAuMomentMorrisonBanner.js',
-    name: 'PostElectionAuMomentMorrisonBanner',
-  },
   [BannerTemplate.AuBrandMomentBanner]: {
     path: 'auBrandMoment/AuBrandMomentBanner.js',
     name: 'AuBrandMomentBanner',
