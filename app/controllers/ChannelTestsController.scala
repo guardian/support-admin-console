@@ -8,7 +8,7 @@ import io.circe.generic.auto._
 import models.{Channel, ChannelTest, LockStatus}
 import play.api.libs.circe.Circe
 import play.api.mvc._
-import services.DynamoChannelTests.DynamoNoLockError
+import services.DynamoChannelTests.{DynamoDuplicateNameError, DynamoNoLockError}
 import services.S3Client.{S3ClientError, S3ObjectSettings}
 import services.{DynamoChannelTests, S3Json, VersionedS3Data}
 import utils.Circe.noNulls
@@ -176,6 +176,10 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
       dynamo
         .createTest(test, channel)
         .map(_ => Ok("created"))
+        .catchSome { case DynamoDuplicateNameError(error) =>
+          logger.warn(s"Failed to create $channel/'${test.name}' because name already exists: ${error.getMessage}")
+          IO.succeed(BadRequest(s"Cannot create $channel test '${test.name}' because it already exists. Please use a different name"))
+        }
     }
   }
 
