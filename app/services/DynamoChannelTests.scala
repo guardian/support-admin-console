@@ -28,6 +28,9 @@ object DynamoChannelTests {
   case class DynamoGetError(error: Throwable) extends DynamoError {
     override def getMessage = s"Error reading from Dynamo: ${error.getMessage}"
   }
+  case class DynamoDuplicateNameError(error: Throwable) extends DynamoError {
+    override def getMessage = s"Error writing to Dynamo: ${error.getMessage}"
+  }
 }
 
 class DynamoChannelTests(stage: String, client: DynamoDbClient) extends StrictLogging {
@@ -124,12 +127,15 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends StrictLo
 
     }.mapError(DynamoPutError)
 
-  private def put(putRequest: PutItemRequest): ZIO[ZEnv, DynamoPutError, Unit] =
+  private def put(putRequest: PutItemRequest): ZIO[ZEnv, DynamoError, Unit] =
     effectBlocking {
       val result = client.putItem(putRequest)
       logger.info(s"PutItemResponse: $result")
       ()
-    }.mapError(DynamoPutError)
+    }.mapError {
+      case err: ConditionalCheckFailedException => DynamoDuplicateNameError(err)
+      case other => DynamoPutError(other)
+    }
 
   private def update(updateRequest: UpdateItemRequest): ZIO[ZEnv, DynamoError, Unit] =
     effectBlocking {
