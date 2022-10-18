@@ -11,6 +11,7 @@ case class ChannelSwitches(
   enableSuperMode: Boolean,
   enableHardcodedEpicTests: Boolean,
   enableHardcodedBannerTests: Boolean,
+  enableScheduledBannerDeploys: Boolean = true,
 )
 
 object ChannelSwitches {
