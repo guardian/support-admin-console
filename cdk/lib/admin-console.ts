@@ -60,13 +60,45 @@ export class AdminConsole extends GuStack {
     return table;
   }
 
-  buildDynamoPolicies(table: Table): GuAllowPolicy[] {
+  buildCampaignsTable(): Table {
+    const id = `CampaignsDynamoTable`;
+
+    const table = new Table(this, id, {
+      tableName: `support-admin-console-campaigns-${this.stage}`,
+      removalPolicy: RemovalPolicy.RETAIN,
+      pointInTimeRecovery: this.stage === 'PROD',
+      billingMode: BillingMode.PAY_PER_REQUEST,
+      partitionKey: {
+        name: 'name',
+        type: AttributeType.STRING,
+      },
+    });
+
+    // Give it a better name
+    const defaultChild = table.node.defaultChild as unknown as CfnElement;
+    defaultChild.overrideLogicalId(id);
+
+    return table;
+  }
+
+  buildChannelTestsDynamoPolicies(table: Table): GuAllowPolicy[] {
     return [
       new GuDynamoDBReadPolicy(this, `DynamoRead-${table.node.id}`, {
         tableName: table.tableName,
       }),
       new GuDynamoDBReadPolicy(this, `DynamoRead-${table.node.id}/index/campaignName-name-index`, {
         tableName: `${table.tableName}/index/campaignName-name-index`,
+      }),
+      new GuDynamoDBWritePolicy(this, `DynamoWrite-${table.node.id}`, {
+        tableName: table.tableName,
+      }),
+    ];
+  }
+
+  buildCampaignsDynamoPolicies(table: Table): GuAllowPolicy[] {
+    return [
+      new GuDynamoDBReadPolicy(this, `DynamoRead-${table.node.id}`, {
+        tableName: table.tableName,
       }),
       new GuDynamoDBWritePolicy(this, `DynamoWrite-${table.node.id}`, {
         tableName: table.tableName,
@@ -82,7 +114,10 @@ export class AdminConsole extends GuStack {
     const app = 'admin-console';
 
     const channelTestsDynamoTable = this.buildTestsTable();
-    const dynamoPolicies = this.buildDynamoPolicies(channelTestsDynamoTable);
+    const campaignsDynamoTable = this.buildCampaignsTable();
+    const channelTestsDynamoPolicies =
+      this.buildChannelTestsDynamoPolicies(channelTestsDynamoTable);
+    const campaignsDynamoPolicies = this.buildCampaignsDynamoPolicies(campaignsDynamoTable);
 
     const userData = `#!/bin/bash -ev
     aws --region ${this.region} s3 cp s3://membership-dist/${this.stack}/${this.stage}/${app}/support-admin-console_1.0-SNAPSHOT_all.deb /tmp
@@ -114,7 +149,8 @@ export class AdminConsole extends GuStack {
           `arn:aws:s3:::gu-contributions-public/header/${this.stage}/*`,
         ],
       }),
-      ...dynamoPolicies,
+      ...channelTestsDynamoPolicies,
+      ...campaignsDynamoPolicies,
     ];
 
     const ec2App = new GuEc2App(this, {
