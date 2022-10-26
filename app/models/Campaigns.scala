@@ -17,3 +17,9 @@ object Campaigns {
   implicit val decoder = Decoder[Campaigns]
   implicit val encoder = Encoder[Campaigns]
 }
+
+object Campaign {
+  implicit val customConfig: Configuration = Configuration.default.withDefaults
+  implicit val decoder = Decoder[Campaign]
+  implicit val encoder = Encoder[Campaign]
+}
