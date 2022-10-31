@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { makeStyles, Theme, Typography } from '@material-ui/core';
 import CampaignsSidebar from './CampaignsSidebar';
 import CampaignsEditor from './CampaignsEditor';
@@ -60,14 +60,19 @@ export const unassignedCampaign = {
   description: 'Tests not assigned to a campaign',
 };
 
-const CampaignsForm: React.FC<InnerProps<Campaigns>> = ({
-  data: campaigns,
-  setData: setCampaigns,
-  saveData: saveCampaigns,
-  saving,
-}: InnerProps<Campaigns>) => {
+const CampaignsForm: React.FC = () => {
+  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+  const [saving, setSaving] = useState<boolean>(false);
   const classes = useStyles();
   const { testName } = useParams<{ testName?: string }>();
+
+  const fetchSettings = (): Promise<Campaign[]> => {
+    return fetchFrontendSettings(FrontendSettingsType.campaigns);
+  };
+
+  useEffect(() => {
+    fetchSettings().then(setCampaigns);
+  }, []);
 
   const createCampaign = (campaign: Campaign): void => {
     setCampaigns([...campaigns, campaign]);
@@ -76,7 +81,7 @@ const CampaignsForm: React.FC<InnerProps<Campaigns>> = ({
   };
 
   const saveAllCampaigns = (): void => {
-    saveCampaigns();
+    // saveCampaigns();
     setNewCampaignCreated(false);
   };
 
@@ -136,12 +141,10 @@ const CampaignsForm: React.FC<InnerProps<Campaigns>> = ({
   );
 };
 
-const fetchSettings = (): Promise<DataFromServer<Campaigns>> => {
-  return fetchFrontendSettings(FrontendSettingsType.campaigns);
-};
 
 const saveSettings = (data: DataFromServer<Campaigns>): Promise<Response> => {
   return saveFrontendSettings(FrontendSettingsType.campaigns, data);
 };
 
-export default withS3Data<Campaigns>(CampaignsForm, fetchSettings, saveSettings);
+// export default withS3Data<Campaigns>(CampaignsForm, fetchSettings, saveSettings);
+export default CampaignsForm;
