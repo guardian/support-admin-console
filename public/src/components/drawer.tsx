@@ -88,6 +88,9 @@ const useStyles = makeStyles({
   icon: {
     maxWidth: '32px',
   },
+  bat: {
+    width: '60px',
+  },
 });
 
 const anchor = 'left';
@@ -121,6 +124,7 @@ export default function NavDrawer(): React.ReactElement {
     >
       <div className={classes.drawerHeading}>
         <RRControlPanelLogo />
+        <img src="/assets/images/bat.png" className={classes.bat} />
       </div>
 
       <div>
