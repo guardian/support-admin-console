@@ -115,6 +115,11 @@ export default function NavDrawer(): React.ReactElement {
     setState({ ...state, [anchor]: open });
   };
 
+  const isHalloween = () => {
+    const now = new Date();
+    return now.getMonth() == 9 && now.getDate() == 31;
+  };
+
   const list = (anchor: string): React.ReactElement => (
     <div
       className={classes.list}
@@ -124,7 +129,7 @@ export default function NavDrawer(): React.ReactElement {
     >
       <div className={classes.drawerHeading}>
         <RRControlPanelLogo />
-        <img src="/assets/images/bat.png" className={classes.bat} />
+        {isHalloween() && <img src="/assets/images/bat.png" className={classes.bat} />}
       </div>
 
       <div>
