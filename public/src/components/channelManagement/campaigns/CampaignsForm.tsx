@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles, Theme, Typography } from '@material-ui/core';
 import CampaignsSidebar from './CampaignsSidebar';
 import CampaignsEditor from './CampaignsEditor';
@@ -8,10 +8,8 @@ import { useParams } from 'react-router-dom';
 import {
   fetchFrontendSettings,
   FrontendSettingsType,
-  saveFrontendSettings,
+  sendCreateCampaignRequest,
 } from '../../../utils/requests';
-
-import withS3Data, { DataFromServer, InnerProps } from '../../../hocs/withS3Data';
 
 const useStyles = makeStyles(({ spacing, typography }: Theme) => ({
   viewTextContainer: {
@@ -62,7 +60,8 @@ export const unassignedCampaign = {
 
 const CampaignsForm: React.FC = () => {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
-  const [saving, setSaving] = useState<boolean>(false);
+  const [selectedCampaign, setSelectedCampaign] = useState<Campaign | undefined>();
+
   const classes = useStyles();
   const { testName } = useParams<{ testName?: string }>();
 
@@ -76,18 +75,9 @@ const CampaignsForm: React.FC = () => {
 
   const createCampaign = (campaign: Campaign): void => {
     setCampaigns([...campaigns, campaign]);
-    setNewCampaignCreated(true);
     setSelectedCampaign(campaign);
+    sendCreateCampaignRequest(campaign).catch(error => alert(`Error creating campaign: ${error}`));
   };
-
-  const saveAllCampaigns = (): void => {
-    // saveCampaigns();
-    setNewCampaignCreated(false);
-  };
-
-  const [newCampaignCreated, setNewCampaignCreated] = useState(false);
-
-  const [selectedCampaign, setSelectedCampaign] = useState<Campaign | undefined>();
 
   const getSelectedCampaign = (): Campaign | undefined => {
     if (selectedCampaign == null && testName != null) {
@@ -118,11 +108,8 @@ const CampaignsForm: React.FC = () => {
         <CampaignsSidebar
           campaigns={campaigns}
           createCampaign={createCampaign}
-          newCampaignCreated={newCampaignCreated}
           selectedCampaign={currentCampaign}
           onCampaignSelected={onCampaignSelected}
-          saveAllCampaigns={saveAllCampaigns}
-          saving={saving}
         />
       </div>
       <div className={classes.rightCol}>
@@ -141,10 +128,4 @@ const CampaignsForm: React.FC = () => {
   );
 };
 
-
-const saveSettings = (data: DataFromServer<Campaigns>): Promise<Response> => {
-  return saveFrontendSettings(FrontendSettingsType.campaigns, data);
-};
-
-// export default withS3Data<Campaigns>(CampaignsForm, fetchSettings, saveSettings);
 export default CampaignsForm;
