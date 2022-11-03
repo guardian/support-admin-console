@@ -5,10 +5,9 @@ import controllers.ChannelTestsController.ChannelTestsResponse
 import io.circe.{Decoder, Encoder}
 import io.circe.syntax._
 import io.circe.generic.auto._
-import models.{Channel, ChannelTest, LockStatus}
+import models.{Channel, ChannelTest, DynamoDuplicateNameError, DynamoNoLockError, LockStatus}
 import play.api.libs.circe.Circe
 import play.api.mvc._
-import services.DynamoChannelTests.{DynamoDuplicateNameError, DynamoNoLockError}
 import services.S3Client.{S3ClientError, S3ObjectSettings}
 import services.{DynamoChannelTests, S3Json, VersionedS3Data}
 import utils.Circe.noNulls
