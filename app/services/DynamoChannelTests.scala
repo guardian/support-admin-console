@@ -1,17 +1,17 @@
 package services
 
 import com.typesafe.scalalogging.StrictLogging
-import io.circe.{Decoder, Encoder}
-import io.circe.syntax._
 import io.circe.generic.auto._
-import models.{Channel, ChannelTest, DynamoDuplicateNameError, DynamoError, DynamoGetError, DynamoNoLockError, DynamoPutError, LockStatus, Status}
+import io.circe.syntax._
+import io.circe.{Decoder, Encoder}
+import models._
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.dynamodb.model._
 import utils.Circe.{dynamoMapToJson, jsonToDynamo}
-import zio.{ZEnv, ZIO}
 import zio.blocking.effectBlocking
 import zio.duration.durationInt
 import zio.stream.ZStream
+import zio.{ZEnv, ZIO}
 
 import java.time.OffsetDateTime
 import scala.jdk.CollectionConverters._
