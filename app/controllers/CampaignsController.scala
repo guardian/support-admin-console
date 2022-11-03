@@ -3,9 +3,10 @@ package controllers
 import com.gu.googleauth.AuthAction
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.syntax._
-import models.{Campaign, DynamoDuplicateNameError}
+import models.Campaign
 import models.Campaigns._
 import models.ChannelTest.channelTestEncoder
+import models.DynamoErrors._
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.{DynamoCampaigns, DynamoChannelTests}

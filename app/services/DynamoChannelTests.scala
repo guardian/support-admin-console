@@ -4,6 +4,7 @@ import com.typesafe.scalalogging.StrictLogging
 import io.circe.generic.auto._
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
+import models.DynamoErrors._
 import models._
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.dynamodb.model._
@@ -15,6 +16,7 @@ import zio.{ZEnv, ZIO}
 
 import java.time.OffsetDateTime
 import scala.jdk.CollectionConverters._
+
 
 class DynamoChannelTests(stage: String, client: DynamoDbClient) extends StrictLogging {
 

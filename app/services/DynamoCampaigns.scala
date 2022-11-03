@@ -1,7 +1,8 @@
 package services
 
 import com.typesafe.scalalogging.StrictLogging
-import models.{Campaign, DynamoDuplicateNameError, DynamoError, DynamoGetError, DynamoPutError}
+import models.{Campaign}
+import models.DynamoErrors._
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.dynamodb.model.{AttributeValue, ConditionalCheckFailedException, PutItemRequest, ScanRequest}
 import utils.Circe.{dynamoMapToJson, jsonToDynamo}
