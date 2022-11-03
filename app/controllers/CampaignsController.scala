@@ -1,17 +1,19 @@
 package controllers
 
 import com.gu.googleauth.AuthAction
+import com.typesafe.scalalogging.LazyLogging
 import models.Campaigns._
-import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents, Result}
 import services.{DynamoCampaigns, DynamoChannelTests}
 import utils.Circe.noNulls
-import zio.{IO, ZEnv}
+import zio.{IO, ZEnv, ZIO}
 import io.circe.syntax._
 import models.Campaign
 import models.ChannelTest.channelTestEncoder
+import play.api.libs.circe.Circe
 import services.DynamoChannelTests.DynamoDuplicateNameError
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 class CampaignsController(
   authAction: AuthAction[AnyContent],
@@ -21,9 +23,17 @@ class CampaignsController(
   dynamoChannelTests: DynamoChannelTests,
   dynamoCampaigns: DynamoCampaigns
 )(implicit ec: ExecutionContext)
-  extends S3ObjectController[Campaigns](authAction, components, stage, filename = "campaigns.json", runtime) {
+  extends AbstractController(components) with Circe with LazyLogging{
 
-  override def get(): Action[AnyContent] = authAction.async { request =>
+  private def run(f: => ZIO[ZEnv, Throwable, Result]): Future[Result] =
+    runtime.unsafeRunToFuture {
+      f.catchAll(error => {
+        logger.error(s"Returning InternalServerError to client: ${error.getMessage}", error)
+        IO.succeed(InternalServerError(error.getMessage))
+      })
+    }
+
+  def get(): Action[AnyContent] = authAction.async { request =>
     run {
       dynamoCampaigns.getAllCampaigns()
         .map(campaigns => Ok(noNulls(campaigns.asJson)))
