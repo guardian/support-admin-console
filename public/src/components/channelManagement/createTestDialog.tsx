@@ -26,7 +26,6 @@ import {
 } from './helpers/validation';
 import { Campaign } from './campaigns/CampaignsForm';
 import { fetchFrontendSettings, FrontendSettingsType } from '../../utils/requests';
-import { DataFromServer } from '../../hocs/withS3Data';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 const useStyles = makeStyles(() => ({
@@ -100,9 +99,7 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
   const [campaignNamePrefix, setCampaignNamePrefix] = useState<boolean>(false);
 
   useEffect(() => {
-    fetchFrontendSettings(FrontendSettingsType.campaigns).then((data: DataFromServer<Campaign[]>) =>
-      setCampaigns(data.value),
-    );
+    fetchFrontendSettings(FrontendSettingsType.campaigns).then(setCampaigns);
   }, []);
 
   const buildPrefix = (): string => {
