@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { fetchFrontendSettings, FrontendSettingsType } from '../../utils/requests';
-import { DataFromServer } from '../../hocs/withS3Data';
 import { Campaign } from './campaigns/CampaignsForm';
 import { Test } from './helpers/shared';
 
