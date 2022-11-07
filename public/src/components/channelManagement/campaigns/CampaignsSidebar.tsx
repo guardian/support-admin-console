@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles, Typography, Button } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 import { Campaigns, Campaign } from './CampaignsForm';
 import NewCampaignButton from './NewCampaignButton';
 import CampaignsList from './CampaignsList';
@@ -42,21 +42,15 @@ const useStyles = makeStyles(() => ({
 interface CampaignsSidebarProps {
   campaigns: Campaigns;
   selectedCampaign?: Campaign;
-  newCampaignCreated: boolean;
   createCampaign: (campaign: Campaign) => void;
   onCampaignSelected: (campaignName: string) => void;
-  saveAllCampaigns: () => void;
-  saving: boolean;
 }
 
 function CampaignsSidebar({
   campaigns,
   createCampaign,
   selectedCampaign,
-  newCampaignCreated,
   onCampaignSelected,
-  saveAllCampaigns,
-  saving,
 }: CampaignsSidebarProps): React.ReactElement {
   const classes = useStyles();
 
@@ -68,14 +62,6 @@ function CampaignsSidebar({
           existingNicknames={campaigns.map(c => c.nickname || '')}
           createCampaign={createCampaign}
         />
-        <Button
-          className={newCampaignCreated ? classes.saveAllButtonAlert : classes.saveAllButton}
-          variant="outlined"
-          onClick={saveAllCampaigns}
-          disabled={saving}
-        >
-          <Typography className={classes.saveAllButtonText}>Save all campaigns</Typography>
-        </Button>
       </div>
       <div className={classes.listsContainer}>
         <CampaignsList

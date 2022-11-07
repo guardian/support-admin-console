@@ -7,7 +7,7 @@ import software.amazon.awssdk.auth.credentials.{AwsBasicCredentials, StaticCrede
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import models.EpicTest._
 import org.scalatest.{Assertion, Assertions, BeforeAndAfterEach}
-import services.DynamoChannelTests.{DynamoError, DynamoNoLockError}
+import models.DynamoErrors.{DynamoError, DynamoNoLockError}
 import software.amazon.awssdk.services.dynamodb.model.{AttributeDefinition, BillingMode, CreateTableRequest, DeleteTableRequest, KeySchemaElement, KeyType}
 import zio.{ZEnv, ZIO}
 

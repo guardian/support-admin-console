@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { fetchFrontendSettings, FrontendSettingsType } from '../../utils/requests';
-import { DataFromServer } from '../../hocs/withS3Data';
 import { Campaign } from './campaigns/CampaignsForm';
 import { Test } from './helpers/shared';
 
@@ -51,9 +50,7 @@ const CampaignSelector: React.FC<CampaignSelectorProps> = ({
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
 
   useEffect(() => {
-    fetchFrontendSettings(FrontendSettingsType.campaigns).then((data: DataFromServer<Campaign[]>) =>
-      setCampaigns(data.value),
-    );
+    fetchFrontendSettings(FrontendSettingsType.campaigns).then(setCampaigns);
   }, []);
 
   const setCampaignName = (campaign?: string) => onCampaignChange(campaign);

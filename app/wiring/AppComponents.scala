@@ -11,7 +11,7 @@ import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.mvc.AnyContent
 import play.api.{BuiltInComponentsFromContext, NoHttpFiltersComponents}
 import router.Routes
-import services.{Aws, CapiService, DynamoChannelTests, S3}
+import services.{Aws, CapiService, DynamoCampaigns, DynamoChannelTests, S3}
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.s3.model.GetObjectRequest
 
@@ -64,6 +64,8 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
 
   val dynamoTestsService = new DynamoChannelTests(stage, dynamoClient)
 
+  val dynamoCampaignsService = new DynamoCampaigns(stage, dynamoClient)
+
   override lazy val router: Router = new Routes(
     httpErrorHandler,
     new Application(authAction, controllerComponents, stage),
@@ -82,7 +84,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     new BannerDeployController(authAction, controllerComponents, stage, runtime),
     new BannerDeployController2(authAction, controllerComponents, stage, runtime),
     new ChannelSwitchesController(authAction, controllerComponents, stage, runtime),
-    new CampaignsController(authAction, controllerComponents, stage, runtime, dynamoTestsService),
+    new CampaignsController(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoCampaignsService),
     new CapiController(authAction, capiService),
     new AppsMeteringSwitchesController(authAction, controllerComponents, stage, runtime),
     assets

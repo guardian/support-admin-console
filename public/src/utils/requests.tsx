@@ -1,4 +1,5 @@
 import { Test, Status } from '../components/channelManagement/helpers/shared';
+import { Campaign } from '../components/channelManagement/campaigns/CampaignsForm';
 
 export enum SupportFrontendSettingsType {
   switches = 'switches',
@@ -89,6 +90,11 @@ export function updateTest<T>(settingsType: FrontendSettingsType, test: T): Prom
 export function createTest<T>(settingsType: FrontendSettingsType, test: T): Promise<Response> {
   return saveSettings(`/frontend/${settingsType}/test/create`, test);
 }
+
+export function sendCreateCampaignRequest(campaign: Campaign): Promise<Response> {
+  return saveSettings(`/frontend/campaigns/create`, campaign);
+}
+
 export function updateStatuses(
   settingsType: FrontendSettingsType,
   testNames: string[],
