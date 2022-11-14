@@ -50,14 +50,14 @@ interface BannerProps {
 const anchor = 'bottom';
 
 const tickerSettings = {
-  countType: TickerCountType.people,
   endType: TickerEndType.unlimited,
-  currencySymbol: '$',
+  countType: TickerCountType.money,
   copy: {
-    countLabel: 'supporters in Australia',
+    countLabel: 'contributions',
     goalReachedPrimary: "We've hit our goal!",
     goalReachedSecondary: 'but you can still support us',
   },
+  currencySymbol: '$',
   tickerData: {
     total: 120_000,
     goal: 150_000,
