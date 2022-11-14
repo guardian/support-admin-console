@@ -248,7 +248,6 @@ export enum TickerEndType {
 }
 export enum TickerCountType {
   money = 'money',
-  people = 'people',
 }
 interface TickerCopy {
   countLabel: string;
