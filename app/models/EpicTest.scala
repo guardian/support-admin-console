@@ -21,7 +21,6 @@ object TickerCountType extends Enum[TickerCountType] with CirceEnum[TickerCountT
   override val values: IndexedSeq[TickerCountType] = findValues
 
   case object money extends TickerCountType
-  case object people extends TickerCountType
 }
 
 case class TickerCopy(

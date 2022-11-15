@@ -96,11 +96,6 @@ const EpicTestTickerEditor: React.FC<EpicTestTickerEditorProps> = ({
     updateTickerSettings(isChecked ? DEFAULT_TICKER_SETTINGS : undefined);
   };
 
-  const onCountTypeChanged = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const selectedType = event.target.value as TickerCountType;
-    tickerSettings && updateTickerSettings({ ...tickerSettings, countType: selectedType });
-  };
-
   const onEndTypeChanged = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const selectedType = event.target.value as TickerEndType;
     tickerSettings && updateTickerSettings({ ...tickerSettings, endType: selectedType });
@@ -189,31 +184,6 @@ const EpicTestTickerEditor: React.FC<EpicTestTickerEditorProps> = ({
               fullWidth
             />
           )}
-
-          <div>
-            <FormControl component="fieldset">
-              <FormLabel component="legend">Ticker count type</FormLabel>
-              <RadioGroup
-                value={tickerSettings.countType}
-                onChange={onCountTypeChanged}
-                aria-label="ticker-count-type"
-                name="ticker-count-type"
-              >
-                <FormControlLabel
-                  value={TickerCountType.money}
-                  control={<Radio />}
-                  label="Money"
-                  disabled={isDisabled}
-                />
-                <FormControlLabel
-                  value={TickerCountType.people}
-                  control={<Radio />}
-                  label="Supporters"
-                  disabled={isDisabled}
-                />
-              </RadioGroup>
-            </FormControl>
-          </div>
 
           <div>
             <FormControl component="fieldset">

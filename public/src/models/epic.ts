@@ -7,20 +7,14 @@ import {
   SecondaryCta,
   Status,
   Test,
+  TickerCountType,
+  TickerEndType,
   UserCohort,
   Variant,
 } from '../components/channelManagement/helpers/shared';
 import { Region } from '../utils/models';
 import { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';
 
-export enum TickerEndType {
-  unlimited = 'unlimited',
-  hardstop = 'hardstop',
-}
-export enum TickerCountType {
-  money = 'money',
-  people = 'people',
-}
 interface TickerCopy {
   countLabel: string;
   goalReachedPrimary: string;
