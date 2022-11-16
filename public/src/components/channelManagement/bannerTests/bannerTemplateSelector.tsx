@@ -31,6 +31,10 @@ const templatesWithLabels = [
     template: BannerTemplate.ClimateCrisisMomentBanner,
     label: 'Climate crisis moment 2022',
   },
+  {
+    template: BannerTemplate.UsEoyMomentBanner,
+    label: 'US EOY moment banner 2022',
+  },
 ];
 
 const BannerTemplateSelector: React.FC<BannerTemplateSelectorProps> = ({

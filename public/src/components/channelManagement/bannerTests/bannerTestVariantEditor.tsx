@@ -285,7 +285,8 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
 
           {(template === BannerTemplate.ContributionsBanner ||
             template === BannerTemplate.InvestigationsMomentBanner ||
-            template === BannerTemplate.ClimateCrisisMomentBanner) && (
+            template === BannerTemplate.ClimateCrisisMomentBanner ||
+            template === BannerTemplate.UsEoyMomentBanner) && (
             <Controller
               name="highlightedText"
               control={control}
