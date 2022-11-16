@@ -11,8 +11,8 @@ import {
   Theme,
 } from '@material-ui/core';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import { TickerCountType, TickerEndType, TickerSettings } from '../helpers/shared';
-import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
+import { TickerCountType, TickerEndType, TickerSettings } from './helpers/shared';
+import { EMPTY_ERROR_HELPER_TEXT } from './helpers/validation';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -45,19 +45,19 @@ const DEFAULT_TICKER_SETTINGS: TickerSettings = {
   currencySymbol: '$',
 };
 
-interface EpicTestTickerEditorProps {
+interface TickerEditorProps {
   isDisabled: boolean;
   tickerSettings?: TickerSettings;
   updateTickerSettings: (updatedTickerSettings?: TickerSettings) => void;
   onValidationChange: (isValid: boolean) => void;
 }
 
-const EpicTestTickerEditor: React.FC<EpicTestTickerEditorProps> = ({
+const TickerEditor: React.FC<TickerEditorProps> = ({
   isDisabled,
   tickerSettings,
   updateTickerSettings,
   onValidationChange,
-}: EpicTestTickerEditorProps) => {
+}: TickerEditorProps) => {
   const classes = useStyles();
 
   const defaultValues: FormData = {
@@ -215,4 +215,4 @@ const EpicTestTickerEditor: React.FC<EpicTestTickerEditorProps> = ({
   );
 };
 
-export default EpicTestTickerEditor;
+export default TickerEditor;
