@@ -4,7 +4,7 @@ import { makeStyles, Theme, Typography } from '@material-ui/core';
 
 import EpicTestChoiceCardsEditor from './epicTestChoiceCardsEditor';
 import EpicTestSignInLinkEditor from './epicTestSignInLinkEditor';
-import EpicTestTickerEditor from './epicTestTickerEditor';
+import TickerEditor from '../tickerEditor';
 import EpicTestVariantEditorCtasEditor from './epicTestVariantEditorCtasEditor';
 
 import {
@@ -405,7 +405,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
             Ticker
           </Typography>
 
-          <EpicTestTickerEditor
+          <TickerEditor
             tickerSettings={variant.tickerSettings}
             updateTickerSettings={updateTickerSettings}
             isDisabled={!editMode}
