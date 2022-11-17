@@ -7,25 +7,12 @@ import {
   SecondaryCta,
   Status,
   Test,
-  TickerCountType,
-  TickerEndType,
+  TickerSettings,
   UserCohort,
   Variant,
 } from '../components/channelManagement/helpers/shared';
 import { Region } from '../utils/models';
 import { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';
-
-interface TickerCopy {
-  countLabel: string;
-  goalReachedPrimary: string;
-  goalReachedSecondary: string;
-}
-export interface TickerSettings {
-  endType: TickerEndType;
-  countType: TickerCountType;
-  currencySymbol: string;
-  copy: TickerCopy;
-}
 
 export interface SeparateArticleCount {
   type: 'above';

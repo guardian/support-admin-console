@@ -2,17 +2,17 @@ import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Checkbox,
-  makeStyles,
-  TextField,
   FormControl,
   FormLabel,
+  makeStyles,
   Radio,
   RadioGroup,
+  TextField,
   Theme,
 } from '@material-ui/core';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import { TickerCountType, TickerEndType, TickerSettings } from '../helpers/shared';
-import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
+import { TickerCountType, TickerEndType, TickerName, TickerSettings } from './helpers/shared';
+import { EMPTY_ERROR_HELPER_TEXT } from './helpers/validation';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -43,21 +43,22 @@ const DEFAULT_TICKER_SETTINGS: TickerSettings = {
     goalReachedSecondary: 'but you can still support us',
   },
   currencySymbol: '$',
+  name: TickerName.US_2022,
 };
 
-interface EpicTestTickerEditorProps {
+interface TickerEditorProps {
   isDisabled: boolean;
   tickerSettings?: TickerSettings;
   updateTickerSettings: (updatedTickerSettings?: TickerSettings) => void;
   onValidationChange: (isValid: boolean) => void;
 }
 
-const EpicTestTickerEditor: React.FC<EpicTestTickerEditorProps> = ({
+const TickerEditor: React.FC<TickerEditorProps> = ({
   isDisabled,
   tickerSettings,
   updateTickerSettings,
   onValidationChange,
-}: EpicTestTickerEditorProps) => {
+}: TickerEditorProps) => {
   const classes = useStyles();
 
   const defaultValues: FormData = {
@@ -101,6 +102,11 @@ const EpicTestTickerEditor: React.FC<EpicTestTickerEditorProps> = ({
     tickerSettings && updateTickerSettings({ ...tickerSettings, endType: selectedType });
   };
 
+  const onNameChanged = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const selectedName = event.target.value as TickerName;
+    tickerSettings && updateTickerSettings({ ...tickerSettings, name: selectedName });
+  };
+
   const onSubmit = ({
     countLabel,
     goalReachedPrimary,
@@ -131,6 +137,31 @@ const EpicTestTickerEditor: React.FC<EpicTestTickerEditorProps> = ({
 
       {!!tickerSettings && (
         <div className={classes.fieldsContainer}>
+          <div>
+            <FormControl component="fieldset">
+              <FormLabel component="legend">Ticker campaign name</FormLabel>
+              <RadioGroup
+                value={tickerSettings.name}
+                onChange={onNameChanged}
+                aria-label="ticker-name"
+                name="ticker-name"
+              >
+                <FormControlLabel
+                  value={TickerName.US_2022}
+                  control={<Radio />}
+                  label="US_2022"
+                  disabled={isDisabled}
+                />
+                <FormControlLabel
+                  value={TickerName.AU_2022}
+                  control={<Radio />}
+                  label="AU_2022"
+                  disabled={isDisabled}
+                />
+              </RadioGroup>
+            </FormControl>
+          </div>
+
           <TextField
             inputRef={register({ required: EMPTY_ERROR_HELPER_TEXT })}
             error={!!errors.countLabel}
@@ -215,4 +246,4 @@ const EpicTestTickerEditor: React.FC<EpicTestTickerEditorProps> = ({
   );
 };
 
-export default EpicTestTickerEditor;
+export default TickerEditor;

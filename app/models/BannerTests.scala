@@ -43,7 +43,8 @@ case class BannerVariant(
   template: BannerTemplate,
   bannerContent: Option[BannerContent],
   mobileBannerContent: Option[BannerContent],
-  separateArticleCount: Option[Boolean]
+  separateArticleCount: Option[Boolean],
+  tickerSettings: Option[TickerSettings] = None,
 )
 
 case class BannerTest(

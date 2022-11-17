@@ -7,6 +7,7 @@ import {
   SecondaryCta,
   DeviceType,
   Status,
+  TickerSettings,
 } from '../components/channelManagement/helpers/shared';
 import { Region } from '../utils/models';
 import { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';
@@ -37,6 +38,7 @@ export interface BannerVariant extends Variant {
   bannerContent: BannerContent;
   mobileBannerContent?: BannerContent;
   separateArticleCount?: boolean;
+  tickerSettings?: TickerSettings;
 }
 
 export interface BannerTest extends Test {

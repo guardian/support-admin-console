@@ -249,6 +249,11 @@ export enum TickerEndType {
 export enum TickerCountType {
   money = 'money',
 }
+export enum TickerName {
+  US_2022 = 'US_2022',
+  AU_2022 = 'AU_2022',
+}
+
 interface TickerCopy {
   countLabel: string;
   goalReachedPrimary: string;
@@ -259,6 +264,7 @@ export interface TickerSettings {
   countType: TickerCountType;
   currencySymbol: string;
   copy: TickerCopy;
+  name: TickerName;
 }
 
 export type ContributionFrequency = 'ONE_OFF' | 'MONTHLY' | 'ANNUAL';
