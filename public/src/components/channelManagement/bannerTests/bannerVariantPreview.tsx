@@ -3,7 +3,7 @@ import { Theme, makeStyles, Button } from '@material-ui/core';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import Drawer from '@material-ui/core/Drawer';
 import { BannerTemplate, BannerVariant, BannerContent } from '../../../models/banner';
-import { TickerCountType, TickerEndType, TickerSettings } from '../helpers/shared';
+import { TickerCountType, TickerEndType, TickerName, TickerSettings } from '../helpers/shared';
 import Typography from '@material-ui/core/Typography';
 import { useModule } from '../../../hooks/useModule';
 
@@ -58,6 +58,7 @@ const tickerSettings = {
     goalReachedSecondary: 'but you can still support us',
   },
   currencySymbol: '$',
+  name: TickerName.US_2022,
   tickerData: {
     total: 120_000,
     goal: 150_000,

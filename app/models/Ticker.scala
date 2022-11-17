@@ -21,6 +21,16 @@ object TickerCountType {
   implicit val decoder = deriveEnumerationDecoder[TickerCountType]
 }
 
+sealed trait TickerName
+object TickerName {
+  case object US_2022 extends TickerName
+  case object AU_2022 extends TickerName
+
+  implicit val customConfig: Configuration = Configuration.default.withDefaults
+  implicit val encoder = deriveEnumerationEncoder[TickerName]
+  implicit val decoder = deriveEnumerationDecoder[TickerName]
+}
+
 case class TickerCopy(
   countLabel: String,
   goalReachedPrimary: String,
@@ -31,5 +41,6 @@ case class TickerSettings(
   endType: TickerEndType,
   countType: TickerCountType,
   currencySymbol: String,
-  copy: TickerCopy
+  copy: TickerCopy,
+  name: TickerName
 )
