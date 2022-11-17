@@ -1,7 +1,7 @@
 import React from 'react';
 import { Theme, makeStyles } from '@material-ui/core';
 
-import { EpicModuleName, TickerSettings } from '../helpers/shared';
+import { EpicModuleName, TickerName, TickerSettings } from '../helpers/shared';
 import { useModule } from '../../../hooks/useModule';
 import { EpicVariant } from '../../../models/epic';
 
@@ -159,6 +159,7 @@ const buildProps = (variant: EpicVariant): EpicProps => ({
           endType: variant.tickerSettings.endType,
           currencySymbol: variant.tickerSettings.currencySymbol,
           copy: variant.tickerSettings.copy,
+          name: TickerName.US_2022,
           tickerData: {
             total: 50000,
             goal: 100000,
