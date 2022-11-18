@@ -8,34 +8,6 @@ import io.circe.{Decoder, Encoder}
 
 import scala.collection.immutable.IndexedSeq
 
-sealed trait TickerEndType extends EnumEntry
-object TickerEndType extends Enum[TickerEndType] with CirceEnum[TickerEndType] {
-  override val values: IndexedSeq[TickerEndType] = findValues
-
-  case object unlimited extends TickerEndType
-  case object hardstop extends TickerEndType
-}
-
-sealed trait TickerCountType extends EnumEntry
-object TickerCountType extends Enum[TickerCountType] with CirceEnum[TickerCountType] {
-  override val values: IndexedSeq[TickerCountType] = findValues
-
-  case object money extends TickerCountType
-}
-
-case class TickerCopy(
-  countLabel: String,
-  goalReachedPrimary: String,
-  goalReachedSecondary: String
-)
-
-case class TickerSettings(
-  endType: TickerEndType,
-  countType: TickerCountType,
-  currencySymbol: String,
-  copy: TickerCopy
-)
-
 sealed trait SeparateArticleCountType extends EnumEntry
 object SeparateArticleCountType extends Enum[SeparateArticleCountType] with CirceEnum[SeparateArticleCountType] {
   override val values: IndexedSeq[SeparateArticleCountType] = findValues

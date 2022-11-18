@@ -25,6 +25,7 @@ import {
   RichTextEditorSingleLine,
   getRteCopyLength,
 } from '../richTextEditor/richTextEditor';
+import TickerEditor from '../tickerEditor';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
@@ -357,6 +358,8 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
   const classes = useStyles();
   const setValidationStatusForField = useValidation(onValidationChange);
 
+  const allowVariantTicker = false; // TODO - set based on template
+
   const onMobileContentRadioChange = (): void => {
     if (variant.mobileBannerContent === undefined) {
       onVariantChange({
@@ -456,6 +459,25 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
           <Typography className={classes.switchLabel}>Enabled</Typography>
         </div>
       </div>
+      {allowVariantTicker && (
+        <div className={classes.sectionContainer}>
+          <Typography className={classes.sectionHeader} variant="h4">
+            Ticker
+          </Typography>
+
+          <TickerEditor
+            tickerSettings={variant.tickerSettings}
+            updateTickerSettings={tickerSettings =>
+              onVariantChange({
+                ...variant,
+                tickerSettings,
+              })
+            }
+            isDisabled={!editMode}
+            onValidationChange={onValidationChange}
+          />
+        </div>
+      )}
     </div>
   );
 };
