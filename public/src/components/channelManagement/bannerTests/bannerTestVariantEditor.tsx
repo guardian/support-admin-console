@@ -358,7 +358,7 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
   const classes = useStyles();
   const setValidationStatusForField = useValidation(onValidationChange);
 
-  const allowVariantTicker = false; // TODO - set based on template
+  const allowVariantTicker = variant.name === 'US_2022'; // TODO - set based on template
 
   const onMobileContentRadioChange = (): void => {
     if (variant.mobileBannerContent === undefined) {
