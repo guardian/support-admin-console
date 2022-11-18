@@ -286,7 +286,8 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
 
           {(template === BannerTemplate.ContributionsBanner ||
             template === BannerTemplate.InvestigationsMomentBanner ||
-            template === BannerTemplate.ClimateCrisisMomentBanner) && (
+            template === BannerTemplate.ClimateCrisisMomentBanner ||
+            template === BannerTemplate.UsEoyMomentBanner) && (
             <Controller
               name="highlightedText"
               control={control}
@@ -357,7 +358,7 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
   const classes = useStyles();
   const setValidationStatusForField = useValidation(onValidationChange);
 
-  const allowVariantTicker = false; // TODO - set based on template
+  const allowVariantTicker = variant.template === BannerTemplate.UsEoyMomentBanner;
 
   const onMobileContentRadioChange = (): void => {
     if (variant.mobileBannerContent === undefined) {

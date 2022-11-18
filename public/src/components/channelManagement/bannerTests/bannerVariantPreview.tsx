@@ -145,6 +145,10 @@ const bannerModules = {
     path: 'climateCrisisMoment/ClimateCrisisMomentBanner.js',
     name: 'ClimateCrisisMomentBanner',
   },
+  [BannerTemplate.UsEoyMomentBanner]: {
+    path: 'usEoyMoment/UsEoyMomentBanner.js',
+    name: 'UsEoyMomentBanner',
+  },
 };
 
 const useStyles = makeStyles(({ palette }: Theme) => ({
