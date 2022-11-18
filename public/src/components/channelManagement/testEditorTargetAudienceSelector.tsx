@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Theme, Typography, makeStyles } from '@material-ui/core';
 import { Region } from '../../utils/models';
-import { DeviceType, UserCohort } from './helpers/shared';
+import { DeviceType, SignedInStatus, UserCohort } from './helpers/shared';
 
 import TestEditorTargetRegionsSelector from './testEditorTargetRegionsSelector';
 import TypedRadioGroup from './TypedRadioGroup';
@@ -38,6 +38,8 @@ interface TestEditorTargetAudienceSelectorProps {
   isDisabled: boolean;
   showSupporterStatusSelector: boolean;
   showDeviceTypeSelector: boolean;
+  selectedSignedInStatus?: SignedInStatus;
+  onSignedInStatusChange: (signedInStatus: SignedInStatus) => void;
 }
 const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelectorProps> = ({
   selectedRegions,
@@ -50,6 +52,8 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
   isDisabled,
   showSupporterStatusSelector,
   showDeviceTypeSelector,
+  selectedSignedInStatus,
+  onSignedInStatusChange,
 }: TestEditorTargetAudienceSelectorProps) => {
   const classes = useStyles();
 
@@ -96,6 +100,20 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
           />
         </div>
       )}
+
+      <div className={classes.sectionContainer}>
+        <Typography className={classes.heading}>Signed In Status</Typography>
+        <TypedRadioGroup
+          selectedValue={selectedSignedInStatus ?? 'All'}
+          onChange={onSignedInStatusChange}
+          isDisabled={isDisabled}
+          labels={{
+            All: 'All',
+            SignedIn: 'Signed in',
+            SignedOut: 'Signed out',
+          }}
+        />
+      </div>
     </div>
   );
 };

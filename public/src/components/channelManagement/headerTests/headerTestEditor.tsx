@@ -1,7 +1,7 @@
 import React from 'react';
 import { Region } from '../../../utils/models';
 
-import { DeviceType, UserCohort } from '../helpers/shared';
+import { DeviceType, SignedInStatus, UserCohort } from '../helpers/shared';
 
 import { Typography } from '@material-ui/core';
 import HeaderTestVariantEditor from './headerTestVariantEditor';
@@ -67,6 +67,10 @@ const HeaderTestEditor: React.FC<ValidatedTestEditorProps<HeaderTest>> = ({
 
   const onDeviceTypeChange = (updatedDeviceType: DeviceType): void => {
     onTestChange({ ...test, deviceType: updatedDeviceType });
+  };
+
+  const onSignedInStatusChange = (signedInStatus: SignedInStatus): void => {
+    onTestChange({ ...test, signedInStatus });
   };
 
   const renderVariantEditor = (variant: HeaderVariant): React.ReactElement => (
@@ -175,6 +179,8 @@ const HeaderTestEditor: React.FC<ValidatedTestEditorProps<HeaderTest>> = ({
           isDisabled={!userHasTestLocked}
           showSupporterStatusSelector={true}
           showDeviceTypeSelector={true}
+          selectedSignedInStatus={test.signedInStatus}
+          onSignedInStatusChange={onSignedInStatusChange}
         />
       </div>
     </div>

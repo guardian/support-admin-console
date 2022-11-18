@@ -1,6 +1,6 @@
 import React from 'react';
 import { Region } from '../../../utils/models';
-import { ArticlesViewedSettings, DeviceType, UserCohort } from '../helpers/shared';
+import { ArticlesViewedSettings, DeviceType, SignedInStatus, UserCohort } from '../helpers/shared';
 import { ARTICLE_COUNT_TEMPLATE } from '../helpers/validation';
 import { Typography } from '@material-ui/core';
 import BannerTestVariantEditor from './bannerTestVariantEditor';
@@ -111,6 +111,10 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
 
   const onDeviceTypeChange = (updatedDeviceType: DeviceType): void => {
     updateTest({ ...test, deviceType: updatedDeviceType });
+  };
+
+  const onSignedInStatusChange = (signedInStatus: SignedInStatus): void => {
+    onTestChange({ ...test, signedInStatus });
   };
 
   const onArticlesViewedSettingsChange = (
@@ -242,6 +246,8 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
             isDisabled={!userHasTestLocked}
             showSupporterStatusSelector={true}
             showDeviceTypeSelector={true}
+            selectedSignedInStatus={test.signedInStatus}
+            onSignedInStatusChange={onSignedInStatusChange}
           />
         </div>
 
