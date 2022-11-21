@@ -26,6 +26,7 @@ export interface Test {
   priority?: number;
   userCohort?: string;
   channel?: string;
+  signedInStatus?: SignedInStatus;
 }
 
 export interface EpicEditorConfig {
@@ -275,3 +276,5 @@ export interface Image {
   mainUrl: string;
   altText: string;
 }
+
+export type SignedInStatus = 'SignedIn' | 'SignedOut' | 'All';

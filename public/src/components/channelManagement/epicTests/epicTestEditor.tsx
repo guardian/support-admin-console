@@ -6,6 +6,7 @@ import {
   UserCohort,
   EpicEditorConfig,
   DeviceType,
+  SignedInStatus,
 } from '../helpers/shared';
 import { FormControlLabel, Switch, Typography } from '@material-ui/core';
 import CampaignSelector from '../CampaignSelector';
@@ -149,6 +150,10 @@ export const getEpicTestEditor = (
 
     const onDeviceTypeChange = (updatedDeviceType: DeviceType): void => {
       updateTest({ ...test, deviceType: updatedDeviceType });
+    };
+
+    const onSignedInStatusChange = (signedInStatus: SignedInStatus): void => {
+      onTestChange({ ...test, signedInStatus });
     };
 
     const onArticlesViewedSettingsChange = (
@@ -321,6 +326,8 @@ export const getEpicTestEditor = (
               isDisabled={!userHasTestLocked}
               showSupporterStatusSelector={epicEditorConfig.allowSupporterStatusTargeting}
               showDeviceTypeSelector={epicEditorConfig.allowDeviceTypeTargeting}
+              selectedSignedInStatus={test.signedInStatus}
+              onSignedInStatusChange={onSignedInStatusChange}
             />
           </div>
         )}

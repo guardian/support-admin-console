@@ -30,7 +30,8 @@ case class HeaderTest(
   variants: List[HeaderVariant],
   controlProportionSettings: Option[ControlProportionSettings] = None,
   deviceType: Option[DeviceType] = None,
-  campaignName: Option[String] = Some("NOT_IN_CAMPAIGN")
+  campaignName: Option[String] = Some("NOT_IN_CAMPAIGN"),
+  signedInStatus: Option[SignedInStatus] = Some(SignedInStatus.All),
 ) extends ChannelTest[HeaderTest] {
 
   override def withChannel(channel: Channel): HeaderTest = this.copy(channel = Some(channel))

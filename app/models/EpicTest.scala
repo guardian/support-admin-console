@@ -57,7 +57,8 @@ case class EpicTest(
   articlesViewedSettings: Option[ArticlesViewedSettings] = None,
   controlProportionSettings: Option[ControlProportionSettings] = None,
   deviceType: Option[DeviceType] = None,
-  campaignName: Option[String] = Some("NOT_IN_CAMPAIGN")
+  campaignName: Option[String] = Some("NOT_IN_CAMPAIGN"),
+  signedInStatus: Option[SignedInStatus] = Some(SignedInStatus.All),
 ) extends ChannelTest[EpicTest] {
 
   override def withChannel(channel: Channel): EpicTest = this.copy(channel = Some(channel))
