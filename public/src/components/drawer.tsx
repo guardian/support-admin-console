@@ -220,6 +220,11 @@ export default function NavDrawer(): React.ReactElement {
             <ListItemText primary="Apps Metering Switches" />
           </ListItem>
         </Link>
+        <Link key="Default Promos" to="/default-promos" className={classes.link}>
+          <ListItem className={classes.listItem} button key="Default Promos">
+            <ListItemText primary="Default Promos" />
+          </ListItem>
+        </Link>
       </div>
 
       <div>
