@@ -23,6 +23,7 @@ object BannerTemplate {
   case object AuBrandMomentBanner extends BannerTemplate
   case object ClimateCrisisMomentBanner extends BannerTemplate
   case object UsEoyMomentBanner extends BannerTemplate
+  case object UsEoyGivingTuesMomentBanner extends BannerTemplate
 
   implicit val customConfig: Configuration = Configuration.default.withDefaults
   implicit val bannerTemplateEncoder = deriveEnumerationEncoder[BannerTemplate]
