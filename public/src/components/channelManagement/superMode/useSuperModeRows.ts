@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import {addDays, format} from "date-fns";
+import { addDays, format } from 'date-fns';
 
 function toDateString(date: Date): string {
   return format(date, 'yyyy-MM-dd');

@@ -91,6 +91,9 @@ const useStyles = makeStyles({
   bat: {
     width: '60px',
   },
+  super: {
+    fontSize: '20px',
+  },
 });
 
 const anchor = 'left';
@@ -189,6 +192,12 @@ export default function NavDrawer(): React.ReactElement {
         <Link key="Channel Switches" to="/channel-switches" className={classes.link}>
           <ListItem className={classes.listItem} button key="Channel Switches">
             <ListItemText primary="Channel Switches" />
+          </ListItem>
+        </Link>
+        <Link key="Super Mode" to="/super-mode" className={classes.link}>
+          <ListItem className={classes.listItem} button key="Super Mode">
+            <ListItemText primary="Epic Super Mode Dashboard" />
+            <span className={classes.super}>🦸</span>
           </ListItem>
         </Link>
       </div>
