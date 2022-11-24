@@ -38,7 +38,7 @@ class DynamoSuperMode(client: DynamoDbClient) extends StrictLogging {
       ).items()
     }.mapError(DynamoGetError)
 
-  def getRowsForDate(date: String, endTimestamp: String): ZIO[ZEnv, DynamoGetError, List[SuperModeRow]] =
+  private def getRowsForDate(date: String, endTimestamp: String): ZIO[ZEnv, DynamoGetError, List[SuperModeRow]] =
     get(date, endTimestamp).map(results =>
       results.asScala
         .map(item => dynamoMapToJson(item).as[SuperModeRow])
