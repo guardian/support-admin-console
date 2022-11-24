@@ -31,17 +31,28 @@ class SuperModeController(
 
   def getSuperModeRows(): Action[AnyContent] = authAction.async { request =>
     run {
-      (request.queryString("endTimestamp").headOption, request.queryString("todayDate").headOption, request.queryString("tomorrowDate").headOption) match {
-        case (Some(endTimestamp), Some(todayDate), Some(tomorrowDate)) => dynamoSuperMode.getRows(endTimestamp, todayDate, tomorrowDate)
-          .map(rows => Ok(noNulls(rows.asJson)))
-        case _ => IO.succeed(BadRequest("missing endTimestamp"))
+      (
+        // TODO - ideally handling of today/tomorrow would be done server side
+        request.getQueryString("endTimestamp"),
+        request.getQueryString("todayDate"),
+        request.getQueryString("tomorrowDate")
+      ) match {
+        case (Some(endTimestamp), Some(todayDate), Some(tomorrowDate)) =>
+          dynamoSuperMode
+            .getRows(endTimestamp, todayDate, tomorrowDate)
+            .map(rows => Ok(noNulls(rows.asJson)))
+        case _ => IO.succeed(BadRequest("missing parameter"))
       }
     }
   }
 
   def getArticleData(): Action[AnyContent] = authAction.async { request =>
     run {
-      (request.queryString("from").headOption, request.queryString("to").headOption, request.queryString("url").headOption) match {
+      (
+        request.getQueryString("from"),
+        request.getQueryString("to"),
+        request.getQueryString("url")
+      ) match {
         case (Some(from), Some(to), Some(url)) =>
           athena
             .get(from, to, url)
