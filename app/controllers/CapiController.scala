@@ -20,4 +20,10 @@ class CapiController(authAction: AuthAction[AnyContent], capiService: CapiServic
       .getSections(request.rawQueryString)
       .map(response => Ok(response))
   }
+
+  def getContent(path: String) = authAction.async { request =>
+    capiService
+      .getContent(path)
+      .map(response => Ok(response))
+  }
 }
