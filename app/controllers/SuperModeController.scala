@@ -31,18 +31,9 @@ class SuperModeController(
 
   def getSuperModeRows(): Action[AnyContent] = authAction.async { request =>
     run {
-      (
-        // TODO - ideally handling of today/tomorrow would be done server side
-        request.getQueryString("endTimestamp"),
-        request.getQueryString("todayDate"),
-        request.getQueryString("tomorrowDate")
-      ) match {
-        case (Some(endTimestamp), Some(todayDate), Some(tomorrowDate)) =>
-          dynamoSuperMode
-            .getRows(endTimestamp, todayDate, tomorrowDate)
-            .map(rows => Ok(noNulls(rows.asJson)))
-        case _ => IO.succeed(BadRequest("missing parameter"))
-      }
+      dynamoSuperMode
+        .getCurrentSuperModeRows()
+        .map(rows => Ok(noNulls(rows.asJson)))
     }
   }
 

@@ -10,10 +10,17 @@ import utils.Circe.dynamoMapToJson
 import zio.{ZEnv, ZIO}
 import zio.blocking.effectBlocking
 
+import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.temporal.ChronoUnit
+import java.util.Date
 import scala.jdk.CollectionConverters._
 
 class DynamoSuperMode(client: DynamoDbClient) extends StrictLogging {
   private val tableName = s"super-mode-PROD"
+
+  private val dateFormat = new SimpleDateFormat("yyyy-MM-dd")
+  private val timestampFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
 
   private def get(endDate: String, endTimestamp: String): ZIO[ZEnv, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
     effectBlocking {
@@ -31,7 +38,7 @@ class DynamoSuperMode(client: DynamoDbClient) extends StrictLogging {
       ).items()
     }.mapError(DynamoGetError)
 
-  def getRowsForDate(endTimestamp: String, date: String): ZIO[ZEnv, DynamoGetError, List[SuperModeRow]] =
+  def getRowsForDate(date: String, endTimestamp: String): ZIO[ZEnv, DynamoGetError, List[SuperModeRow]] =
     get(date, endTimestamp).map(results =>
       results.asScala
         .map(item => dynamoMapToJson(item).as[SuperModeRow])
@@ -45,9 +52,19 @@ class DynamoSuperMode(client: DynamoDbClient) extends StrictLogging {
         .sortBy(_.endTimestamp)
     )
 
-  def getRows(endTimestamp: String, todayDate: String, tomorrowDate: String): ZIO[ZEnv, DynamoGetError, List[SuperModeRow]] =
+  def getCurrentSuperModeRows(): ZIO[ZEnv, DynamoGetError, List[SuperModeRow]] = {
+    /**
+     * Articles that are currently in super mode will have an endTimestamp later than now.
+     * Because the index partition key is endDate, we have to make 2 queries for today and tomorrow
+     */
+    val today = Instant.now()
+    val tomorrow = today.plus(1, ChronoUnit.DAYS)
+
+    val endTimestamp = timestampFormat.format(Date.from(today))
+
     ZIO.collectAll(List(
-      getRowsForDate(endTimestamp, todayDate),
-      getRowsForDate(endTimestamp, tomorrowDate)
+      getRowsForDate(dateFormat.format(Date.from(today)), endTimestamp),
+      getRowsForDate(dateFormat.format(Date.from(tomorrow)), endTimestamp)
     )).map(_.flatten)
+  }
 }
