@@ -77,8 +77,8 @@ Object {
               "Action": "s3:*",
               "Effect": "Allow",
               "Resource": Array [
-                "arn:aws:s3:::gu-support-analytics/support-admin-console/*",
-                "arn:aws:s3:::gu-support-analytics/support-admin-console",
+                "arn:aws:s3:::gu-support-analytics/*",
+                "arn:aws:s3:::gu-support-analytics",
               ],
             },
           ],
