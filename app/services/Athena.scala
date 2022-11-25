@@ -1,5 +1,6 @@
 package services
 
+import com.typesafe.scalalogging.StrictLogging
 import io.circe.{Decoder, Encoder}
 import scalikejdbc._
 import scalikejdbc.athena._
@@ -24,10 +25,11 @@ object ArticleEpicData extends SQLSyntaxSupport[ArticleEpicData] {
 }
 
 
-class Athena() {
+class Athena() extends StrictLogging {
   def get(from: String, to: String, url: String): ZIO[ZEnv, Throwable, List[ArticleEpicData]] = {
     val fromDate = from.take(10)
     val toDate = to.take(10)
+    logger.info(s"Querying athena")
 
     effectBlocking {
       DB.athena { implicit s =>
@@ -69,5 +71,7 @@ class Athena() {
           .sortBy(_.timestamp)
       }
     }
+      .tapError(error => ZIO.succeed(logger.error(s"Athena error: ${error.getMessage}")))
+      .tap(result => ZIO.succeed(logger.info(s"Athena result: ${result.length}")))
   }
 }
