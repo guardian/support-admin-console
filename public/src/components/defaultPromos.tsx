@@ -1,9 +1,4 @@
-import {
-  Button,
-  FormControlLabel,
-  TextField,
-  makeStyles,
-} from '@material-ui/core';
+import { Button, TextField, makeStyles } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import withS3Data, { InnerProps } from '../hocs/withS3Data';
 import {
@@ -37,9 +32,11 @@ const DefaultPromos: React.FC<InnerProps<DefaultPromos>> = ({
   saving,
 }: InnerProps<DefaultPromos>) => {
   const [gwPromosString, setGwPromosString] = useState<string>();
+  const [paperPromosString, setpaperPromosString] = useState<string>();
 
   useEffect(() => {
     setGwPromosString(data.guardianWeekly.join(', '));
+    setpaperPromosString(data.paper.join(', '));
   }, []);
 
   const classes = useStyles();
@@ -54,7 +51,11 @@ const DefaultPromos: React.FC<InnerProps<DefaultPromos>> = ({
           const inputValue = e.target.value;
           setGwPromosString(inputValue);
 
-          const parsedInputValue = inputValue.split(',').map(promo => promo.trim());
+          const parsedInputValue = inputValue
+            .split(',')
+            .filter(promo => promo !== '')
+            .map(promo => promo.trim());
+
           setData({
             ...data,
             guardianWeekly: parsedInputValue,
@@ -63,14 +64,27 @@ const DefaultPromos: React.FC<InnerProps<DefaultPromos>> = ({
         type="text"
         label="Guardian Weekly"
       />
-      {/* <TextField
-        value={data.paper.join(', ')}
+      <TextField
+        value={paperPromosString}
         name="paperDefaultPromos"
         fullWidth={true}
-        onChange={e => console.log(e.target)}
+        onChange={e => {
+          const inputValue = e.target.value;
+          setpaperPromosString(inputValue);
+
+          const parsedInputValue = inputValue
+            .split(',')
+            .filter(promo => promo !== '')
+            .map(promo => promo.trim());
+
+          setData({
+            ...data,
+            paper: parsedInputValue,
+          });
+        }}
         type="text"
         label="Paper"
-      /> */}
+      />
       <Button
         onClick={saveData}
         color="primary"
