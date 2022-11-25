@@ -45,7 +45,7 @@ Object {
     },
   },
   "Resources": Object {
-    "AcquisitionsBucketPutB1251186": Object {
+    "AcquisitionsBucket8EA032AA": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -60,7 +60,7 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "AcquisitionsBucketPutB1251186",
+        "PolicyName": "AcquisitionsBucket8EA032AA",
         "Roles": Array [
           Object {
             "Ref": "InstanceRoleAdminconsole347DA627",
@@ -69,7 +69,7 @@ Object {
       },
       "Type": "AWS::IAM::Policy",
     },
-    "AthenaOutputBucketPut752CF73E": Object {
+    "AthenaOutputBucket826361ED": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
@@ -84,7 +84,7 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "AthenaOutputBucketPut752CF73E",
+        "PolicyName": "AthenaOutputBucket826361ED",
         "Roles": Array [
           Object {
             "Ref": "InstanceRoleAdminconsole347DA627",

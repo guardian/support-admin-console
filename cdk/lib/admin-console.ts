@@ -159,11 +159,11 @@ export class AdminConsole extends GuStack {
       new GuDynamoDBReadPolicy(this, `DynamoRead-super-mode/index/end`, {
         tableName: `super-mode-PROD/index/end`,
       }),
-      new GuAllowPolicy(this, 'AthenaOutputBucketPut', {
+      new GuAllowPolicy(this, 'AthenaOutputBucket', {
         actions: ['s3:*'],
         resources: [`arn:aws:s3:::gu-support-analytics/*`, `arn:aws:s3:::gu-support-analytics`],
       }),
-      new GuAllowPolicy(this, 'AcquisitionsBucketPut', {
+      new GuAllowPolicy(this, 'AcquisitionsBucket', {
         actions: ['s3:*'],
         resources: [`arn:aws:s3:::acquisition-events/*`, `arn:aws:s3:::acquisition-events`],
       }),
@@ -176,15 +176,18 @@ export class AdminConsole extends GuStack {
       certificateProps: {
         domainName,
       },
-      monitoringConfiguration: {
-        http5xxAlarm: {
-          tolerated5xxPercentage: 0,
-          numberOfMinutesAboveThresholdBeforeAlarm: 1,
-          alarmName: `5XX error returned by ${app} ${this.stage}`,
-        },
-        unhealthyInstancesAlarm: true,
-        snsTopicName: 'marketing-dev',
-      },
+      monitoringConfiguration:
+        this.stage === 'PROD'
+          ? {
+              http5xxAlarm: {
+                tolerated5xxPercentage: 0,
+                numberOfMinutesAboveThresholdBeforeAlarm: 1,
+                alarmName: `5XX error returned by ${app} ${this.stage}`,
+              },
+              unhealthyInstancesAlarm: true,
+              snsTopicName: 'marketing-dev',
+            }
+          : { noMonitoring: true },
       userData,
       roleConfiguration: {
         additionalPolicies: policies,
