@@ -45,6 +45,54 @@ Object {
     },
   },
   "Resources": Object {
+    "AcquisitionsBucketPutB1251186": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "s3:*",
+              "Effect": "Allow",
+              "Resource": Array [
+                "arn:aws:s3:::acquisition-events/*",
+                "arn:aws:s3:::acquisition-events",
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "AcquisitionsBucketPutB1251186",
+        "Roles": Array [
+          Object {
+            "Ref": "InstanceRoleAdminconsole347DA627",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "AthenaOutputBucketPut752CF73E": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "s3:*",
+              "Effect": "Allow",
+              "Resource": Array [
+                "arn:aws:s3:::gu-support-analytics/support-admin-console/*",
+                "arn:aws:s3:::gu-support-analytics/support-admin-console",
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "AthenaOutputBucketPut752CF73E",
+        "Roles": Array [
+          Object {
+            "Ref": "InstanceRoleAdminconsole347DA627",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
     "AutoScalingGroupAdminconsoleASG0A6020EA": Object {
       "Properties": Object {
         "HealthCheckGracePeriod": 120,
@@ -482,6 +530,90 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "DynamoReadChannelTestsDynamoTableindexcampaignNamenameindex265299CD",
+        "Roles": Array [
+          Object {
+            "Ref": "InstanceRoleAdminconsole347DA627",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "DynamoReadsupermodeA2B60FEA": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "dynamodb:BatchGetItem",
+                "dynamodb:GetItem",
+                "dynamodb:Scan",
+                "dynamodb:Query",
+                "dynamodb:GetRecords",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:aws:dynamodb:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":table/super-mode-PROD",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "DynamoReadsupermodeA2B60FEA",
+        "Roles": Array [
+          Object {
+            "Ref": "InstanceRoleAdminconsole347DA627",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "DynamoReadsupermodeindexendFE67AC4E": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "dynamodb:BatchGetItem",
+                "dynamodb:GetItem",
+                "dynamodb:Scan",
+                "dynamodb:Query",
+                "dynamodb:GetRecords",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:aws:dynamodb:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":table/super-mode-PROD/index/end",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "DynamoReadsupermodeindexendFE67AC4E",
         "Roles": Array [
           Object {
             "Ref": "InstanceRoleAdminconsole347DA627",

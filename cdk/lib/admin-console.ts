@@ -151,6 +151,23 @@ export class AdminConsole extends GuStack {
       }),
       ...channelTestsDynamoPolicies,
       ...campaignsDynamoPolicies,
+      new GuDynamoDBReadPolicy(this, `DynamoRead-super-mode`, {
+        tableName: 'super-mode-PROD', // always PROD for super mode
+      }),
+      new GuDynamoDBReadPolicy(this, `DynamoRead-super-mode/index/end`, {
+        tableName: `super-mode-PROD/index/end`,
+      }),
+      new GuAllowPolicy(this, 'AthenaOutputBucketPut', {
+        actions: ['s3:*'],
+        resources: [
+          `arn:aws:s3:::gu-support-analytics/support-admin-console/*`,
+          `arn:aws:s3:::gu-support-analytics/support-admin-console`,
+        ],
+      }),
+      new GuAllowPolicy(this, 'AcquisitionsBucketPut', {
+        actions: ['s3:*'],
+        resources: [`arn:aws:s3:::acquisition-events/*`, `arn:aws:s3:::acquisition-events`],
+      }),
     ];
 
     const ec2App = new GuEc2App(this, {
