@@ -1,5 +1,5 @@
 import { Button, TextField, makeStyles } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import withS3Data, { InnerProps } from '../hocs/withS3Data';
 import {
   fetchSupportFrontendSettings,
@@ -31,13 +31,8 @@ const DefaultPromos: React.FC<InnerProps<DefaultPromos>> = ({
   saveData,
   saving,
 }: InnerProps<DefaultPromos>) => {
-  const [gwPromosString, setGwPromosString] = useState<string>();
-  const [paperPromosString, setpaperPromosString] = useState<string>();
-
-  useEffect(() => {
-    setGwPromosString(data.guardianWeekly.join(', '));
-    setpaperPromosString(data.paper.join(', '));
-  }, []);
+  const [gwPromosString, setGwPromosString] = useState<string>(data.guardianWeekly.join(', '));
+  const [paperPromosString, setpaperPromosString] = useState<string>(data.paper.join(', '));
 
   const classes = useStyles();
 
