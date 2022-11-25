@@ -1,19 +1,17 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, Typography } from '@material-ui/core';
 import { SuperModeRow, useSuperModeRows } from './useSuperModeRows';
 import { ArticleDataChartDialog } from './articleDataChart';
 import { SuperModeTable } from './superModeTable';
 
 const useStyles = makeStyles(() => ({
   container: {
-    display: 'flex',
     margin: '10px',
   },
-  dialogHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingRight: '8px',
+  info: {
+    fontSize: '14px',
+    marginBottom: '10px',
+    fontWeight: 500,
   },
 }));
 
@@ -25,6 +23,11 @@ export const SuperModeDashboard: React.FC = () => {
 
   return (
     <div className={classes.container}>
+      <div>
+        <Typography variant={'h3'} className={classes.info}>
+          Double click a row to see article data
+        </Typography>
+      </div>
       <SuperModeTable rows={rows} setSelectedRow={setSelectedRow} />
       <ArticleDataChartDialog row={selectedRow} onClose={() => setSelectedRow(null)} />
     </div>
