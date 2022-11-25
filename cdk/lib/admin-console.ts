@@ -161,10 +161,7 @@ export class AdminConsole extends GuStack {
       }),
       new GuAllowPolicy(this, 'AthenaOutputBucketPut', {
         actions: ['s3:*'],
-        resources: [
-          `arn:aws:s3:::gu-support-analytics/*`,
-          `arn:aws:s3:::gu-support-analytics`,
-        ],
+        resources: [`arn:aws:s3:::gu-support-analytics/*`, `arn:aws:s3:::gu-support-analytics`],
       }),
       new GuAllowPolicy(this, 'AcquisitionsBucketPut', {
         actions: ['s3:*'],
