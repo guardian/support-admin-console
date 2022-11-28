@@ -38,12 +38,14 @@ const useStyles = makeStyles(({}: Theme) => ({
 
 interface CampaignsListProps {
   campaigns: Campaigns;
+  campaignSearch: string;
   selectedCampaign?: Campaign;
   onCampaignSelected: (testName: string) => void;
 }
 
 const CampaignsList = ({
   campaigns,
+  campaignSearch,
   selectedCampaign,
   onCampaignSelected,
 }: CampaignsListProps): React.ReactElement => {
@@ -56,8 +58,19 @@ const CampaignsList = ({
     return 'outlined';
   };
 
-  // When we get creation timestamps, we are thinking of allowing users to sort the list either alphabetically or by most recently created. For now, only the alphabetically sorted version is possible
-  const sortedCampaigns = [...campaigns];
+
+  const sortedCampaigns = campaigns.filter(c => {
+    if (!campaignSearch) {
+      return true;
+    }
+    else if (c.nickname && c.nickname.indexOf(campaignSearch) >= 0) {
+      return true;
+    }
+    else if (c.name.indexOf(campaignSearch) >= 0) {
+      return true;
+    }
+    return false;
+  });
 
   sortedCampaigns.sort((a, b) => {
     const A = a.nickname || a.name;
