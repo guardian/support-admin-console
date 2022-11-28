@@ -1,6 +1,7 @@
 import { Button, TextField, makeStyles } from '@material-ui/core';
 import React, { useState } from 'react';
 import withS3Data, { InnerProps } from '../hocs/withS3Data';
+import { parsePromoInput } from '../utils/parsePromoInput';
 import {
   fetchSupportFrontendSettings,
   saveSupportFrontendSettings,
@@ -46,11 +47,7 @@ const DefaultPromos: React.FC<InnerProps<DefaultPromos>> = ({
           const inputValue = e.target.value;
           setGwPromosString(inputValue);
 
-          const parsedInputValue = inputValue
-            .split(',')
-            .map(promo => promo.trim())
-            .filter(promo => promo !== '');
-
+          const parsedInputValue = parsePromoInput(inputValue);
           setData({
             ...data,
             guardianWeekly: parsedInputValue,
@@ -67,11 +64,7 @@ const DefaultPromos: React.FC<InnerProps<DefaultPromos>> = ({
           const inputValue = e.target.value;
           setpaperPromosString(inputValue);
 
-          const parsedInputValue = inputValue
-            .split(',')
-            .map(promo => promo.trim())
-            .filter(promo => promo !== '');
-
+          const parsedInputValue = parsePromoInput(inputValue);
           setData({
             ...data,
             paper: parsedInputValue,
