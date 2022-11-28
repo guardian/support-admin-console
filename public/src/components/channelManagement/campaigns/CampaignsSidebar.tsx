@@ -3,7 +3,6 @@ import { makeStyles, TextField } from '@material-ui/core';
 import { Campaigns, Campaign } from './CampaignsForm';
 import NewCampaignButton from './NewCampaignButton';
 import CampaignsList from './CampaignsList';
-import { red } from '@material-ui/core/colors';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -48,7 +47,7 @@ function CampaignsSidebar({
     if (e && e.target) {
       setCampaignSearch(e.target.value.toUpperCase());
     }
-  }
+  };
 
   return (
     <div className={classes.root}>

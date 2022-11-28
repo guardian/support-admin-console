@@ -58,15 +58,12 @@ const CampaignsList = ({
     return 'outlined';
   };
 
-
   const sortedCampaigns = campaigns.filter(c => {
     if (!campaignSearch) {
       return true;
-    }
-    else if (c.nickname && c.nickname.indexOf(campaignSearch) >= 0) {
+    } else if (c.nickname && c.nickname.indexOf(campaignSearch) >= 0) {
       return true;
-    }
-    else if (c.name.indexOf(campaignSearch) >= 0) {
+    } else if (c.name.indexOf(campaignSearch) >= 0) {
       return true;
     }
     return false;
