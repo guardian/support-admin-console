@@ -41,6 +41,8 @@ GET /qr-code                                        controllers.Application.inde
 
 GET /apps-metering-switches                        controllers.Application.index
 
+GET /default-promos                                 controllers.Application.index
+
 # ----- Authentication ----- #
 GET  /login                                         controllers.Login.login
 GET  /loginAction                                   controllers.Login.loginAction
@@ -219,6 +221,10 @@ GET   /capi/sections                                   controllers.CapiControlle
 # ----- apps metering switches ----- #
 GET   /apps/apps-metering-switches                     controllers.AppsMeteringSwitchesController.get
 POST  /apps/apps-metering-switches/update              controllers.AppsMeteringSwitchesController.set
+
+# ----- default promos ---------- #
+GET   /support-frontend/default-promos                     controllers.DefaultPromosController.get
+POST  /support-frontend/default-promos/update              controllers.DefaultPromosController.set
 
 # Map static resources from the /public folder to the /assets URL path
 GET  /assets/*file                                  controllers.Assets.at(path="/public", file)

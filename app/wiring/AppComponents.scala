@@ -87,6 +87,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     new CampaignsController(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoCampaignsService),
     new CapiController(authAction, capiService),
     new AppsMeteringSwitchesController(authAction, controllerComponents, stage, runtime),
+    new DefaultPromosController(authAction,controllerComponents, stage, runtime),
     assets
   )
 }

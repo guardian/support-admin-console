@@ -36,6 +36,7 @@ import { FontWeightProperty } from 'csstype';
 import { makeStyles } from '@material-ui/core';
 import QrCodePage from './components/utilities/QrCodePage';
 import AppsMeteringSwitches from './components/appsMeteringSwitches';
+import DefaultPromos from './components/defaultPromos';
 
 type Stage = 'DEV' | 'CODE' | 'PROD';
 declare global {
@@ -237,6 +238,10 @@ const AppRouter = () => {
             render={(): React.ReactElement =>
               createComponent(<AppsMeteringSwitches />, 'Apps Metering Switches')
             }
+          />
+          <Route
+            path="/default-promos"
+            render={(): React.ReactElement => createComponent(<DefaultPromos />, 'Default Promos')}
           />
         </div>
       </Router>

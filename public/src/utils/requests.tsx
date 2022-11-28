@@ -5,6 +5,7 @@ export enum SupportFrontendSettingsType {
   switches = 'switches',
   contributionTypes = 'contribution-types',
   amounts = 'amounts',
+  defaultPromos = 'default-promos',
 }
 
 export enum FrontendSettingsType {
