@@ -48,8 +48,8 @@ const DefaultPromos: React.FC<InnerProps<DefaultPromos>> = ({
 
           const parsedInputValue = inputValue
             .split(',')
-            .filter(promo => promo !== '')
-            .map(promo => promo.trim());
+            .map(promo => promo.trim())
+            .filter(promo => promo !== '');
 
           setData({
             ...data,
@@ -69,8 +69,8 @@ const DefaultPromos: React.FC<InnerProps<DefaultPromos>> = ({
 
           const parsedInputValue = inputValue
             .split(',')
-            .filter(promo => promo !== '')
-            .map(promo => promo.trim());
+            .map(promo => promo.trim())
+            .filter(promo => promo !== '');
 
           setData({
             ...data,
