@@ -84,7 +84,7 @@ const CampaignsList = ({
       }
       return 0;
     });
-    return [...campaignArray];
+    return campaignArray;
   };
 
   const sortedCampaigns = sortCampaigns(filterCampaigns(campaigns));
