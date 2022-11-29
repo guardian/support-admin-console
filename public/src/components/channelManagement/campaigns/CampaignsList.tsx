@@ -58,29 +58,36 @@ const CampaignsList = ({
     return 'outlined';
   };
 
-  const sortedCampaigns = campaigns.filter(c => {
-    if (!campaignSearch) {
-      return true;
-    } else if (c.nickname && c.nickname.indexOf(campaignSearch) >= 0) {
-      return true;
-    } else if (c.name.indexOf(campaignSearch) >= 0) {
-      return true;
-    }
-    return false;
-  });
+  const filterCampaigns = (campaignArray: Campaigns) => {
+    return campaignArray.filter(c => {
+      if (!campaignSearch) {
+        return true;
+      } else if (c.nickname && c.nickname.indexOf(campaignSearch) >= 0) {
+        return true;
+      } else if (c.name.indexOf(campaignSearch) >= 0) {
+        return true;
+      }
+      return false;
+    });
+  };
 
-  sortedCampaigns.sort((a, b) => {
-    const A = a.nickname || a.name;
-    const B = b.nickname || b.name;
+  const sortCampaigns = (campaignArray: Campaigns) => {
+    campaignArray.sort((a, b) => {
+      const A = a.nickname || a.name;
+      const B = b.nickname || b.name;
 
-    if (A < B) {
-      return -1;
-    }
-    if (B < A) {
-      return 1;
-    }
-    return 0;
-  });
+      if (A < B) {
+        return -1;
+      }
+      if (B < A) {
+        return 1;
+      }
+      return 0;
+    });
+    return [...campaignArray];
+  };
+
+  const sortedCampaigns = sortCampaigns(filterCampaigns(campaigns));
 
   return (
     <div className={classes.container}>
