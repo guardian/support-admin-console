@@ -38,12 +38,14 @@ const useStyles = makeStyles(({}: Theme) => ({
 
 interface CampaignsListProps {
   campaigns: Campaigns;
+  campaignSearch: string;
   selectedCampaign?: Campaign;
   onCampaignSelected: (testName: string) => void;
 }
 
 const CampaignsList = ({
   campaigns,
+  campaignSearch,
   selectedCampaign,
   onCampaignSelected,
 }: CampaignsListProps): React.ReactElement => {
@@ -56,21 +58,36 @@ const CampaignsList = ({
     return 'outlined';
   };
 
-  // When we get creation timestamps, we are thinking of allowing users to sort the list either alphabetically or by most recently created. For now, only the alphabetically sorted version is possible
-  const sortedCampaigns = [...campaigns];
+  const filterCampaigns = (campaignArray: Campaigns) => {
+    return campaignArray.filter(c => {
+      if (!campaignSearch) {
+        return true;
+      } else if (c.nickname && c.nickname.indexOf(campaignSearch) >= 0) {
+        return true;
+      } else if (c.name.indexOf(campaignSearch) >= 0) {
+        return true;
+      }
+      return false;
+    });
+  };
 
-  sortedCampaigns.sort((a, b) => {
-    const A = a.nickname || a.name;
-    const B = b.nickname || b.name;
+  const sortCampaigns = (campaignArray: Campaigns) => {
+    campaignArray.sort((a, b) => {
+      const A = a.nickname || a.name;
+      const B = b.nickname || b.name;
 
-    if (A < B) {
-      return -1;
-    }
-    if (B < A) {
-      return 1;
-    }
-    return 0;
-  });
+      if (A < B) {
+        return -1;
+      }
+      if (B < A) {
+        return 1;
+      }
+      return 0;
+    });
+    return campaignArray;
+  };
+
+  const sortedCampaigns = sortCampaigns(filterCampaigns(campaigns));
 
   return (
     <div className={classes.container}>
