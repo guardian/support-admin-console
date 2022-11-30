@@ -39,17 +39,17 @@ class SuperModeController(
 
   def getArticleData(): Action[AnyContent] = authAction.async { request =>
     run {
-      (
-        request.getQueryString("from"),
-        request.getQueryString("to"),
-        request.getQueryString("url")
-      ) match {
-        case (Some(from), Some(to), Some(url)) =>
-          athena
-            .get(from, to, url)
-            .map(data => Ok(noNulls(data.asJson)))
-        case _ => IO.succeed(BadRequest("missing parameter"))
+      val result = for {
+        from <- request.getQueryString("from")
+        to <- request.getQueryString("to")
+        url <- request.getQueryString("url")
+      } yield {
+        athena
+          .get(from, to, url)
+          .map(data => Ok(noNulls(data.asJson)))
       }
+
+      result.getOrElse(IO.succeed(BadRequest("missing parameter")))
     }
   }
 }
