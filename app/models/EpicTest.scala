@@ -32,6 +32,7 @@ case class EpicVariant(
   secondaryCta: Option[SecondaryCta],
   separateArticleCount: Option[SeparateArticleCount],
   showChoiceCards: Option[Boolean],
+  bylineWithImage: Option[BylineWithImage],
   defaultChoiceCardFrequency: Option[ContributionType],
   showSignInLink: Option[Boolean]
 )

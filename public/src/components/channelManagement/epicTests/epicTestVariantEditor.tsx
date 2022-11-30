@@ -12,6 +12,7 @@ import {
   Cta,
   EpicEditorConfig,
   Image,
+  BylineWithImage,
   SecondaryCta,
   TickerSettings,
 } from '../helpers/shared';
@@ -77,6 +78,7 @@ interface FormData {
   paragraphs: string[];
   highlightedText?: string;
   image?: Image;
+  bylineWithImage?: BylineWithImage,
   footer?: string;
 }
 

@@ -54,6 +54,7 @@ export interface EpicEditorConfig {
   allowVariantTicker: boolean;
   allowVariantChoiceCards: boolean;
   allowVariantSignInLink: boolean;
+  allowBylineWithImage: boolean;
   allowVariantPreview: boolean;
   requireVariantHeader: boolean;
   moduleName: EpicModuleName;
@@ -78,6 +79,7 @@ export const ARTICLE_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantTicker: true,
   allowVariantChoiceCards: true,
   allowVariantSignInLink: true,
+  allowBylineWithImage: true,
   allowVariantPreview: true,
   requireVariantHeader: false,
   moduleName: 'ContributionsEpic',
@@ -104,6 +106,7 @@ export const ARTICLE_EPIC_HOLDBACK_CONFIG: EpicEditorConfig = {
   allowVariantTicker: true,
   allowVariantChoiceCards: true,
   allowVariantSignInLink: true,
+  allowBylineWithImage: false,
   allowVariantPreview: true,
   requireVariantHeader: false,
   moduleName: 'ContributionsEpic',
@@ -129,6 +132,7 @@ export const LIVEBLOG_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantTicker: false,
   allowVariantChoiceCards: false,
   allowVariantSignInLink: false,
+  allowBylineWithImage: false,
   allowVariantPreview: true,
   requireVariantHeader: false,
   moduleName: 'ContributionsLiveblogEpic',
@@ -155,6 +159,7 @@ export const APPLE_NEWS_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantTicker: false,
   allowVariantChoiceCards: false,
   allowVariantSignInLink: false,
+  allowBylineWithImage: false,
   allowVariantPreview: false,
   requireVariantHeader: false,
   moduleName: 'ContributionsEpic',
@@ -180,6 +185,7 @@ export const AMP_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantTicker: true,
   allowVariantChoiceCards: true,
   allowVariantSignInLink: false,
+  allowBylineWithImage: false,
   allowVariantPreview: false,
   requireVariantHeader: false,
   moduleName: 'ContributionsEpic',
@@ -275,6 +281,12 @@ export type DeviceType = 'Mobile' | 'Desktop' | 'All';
 export interface Image {
   mainUrl: string;
   altText: string;
+}
+
+export interface BylineWithImage {
+    name: string;
+    description?: string;
+    headshot?: Image;
 }
 
 export type SignedInStatus = 'SignedIn' | 'SignedOut' | 'All';
