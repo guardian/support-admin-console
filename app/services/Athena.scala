@@ -181,6 +181,8 @@ class Athena() extends StrictLogging {
     startQuery(from, to, url)
       .flatMap(pollQueryResult)
       .flatMap(getQueryResult)
+      .tapError(error => ZIO.succeed(logger.error(s"Athena error: ${error.getMessage}")))
+      .tap(result => ZIO.succeed(logger.info(s"Athena result: ${result.length}")))
 
 
   def get2(from: String, to: String, url: String): ZIO[ZEnv, Throwable, List[ArticleEpicData]] = {
