@@ -27,10 +27,6 @@ libraryDependencies ++= Seq(
   ws,
   "dev.zio" %% "zio" % zioVersion,
   "dev.zio" %% "zio-streams" % zioVersion,
-  "org.scalikejdbc" %% "scalikejdbc" % "3.4.0",
-  "com.zaneli" %% "scalikejdbc-athena" % "0.2.4",
-//  "com.amazonaws" % "simba-athena-jdbc-driver" % "2.0.9" from "https://s3.amazonaws.com/athena-downloads/drivers/JDBC/SimbaAthenaJDBC_2.0.9/AthenaJDBC42_2.0.9.jar",
-  "com.amazonaws" % "simba-athena-jdbc-driver" % "2.0.33" from "https://s3.amazonaws.com/athena-downloads/drivers/JDBC/SimbaAthenaJDBC-2.0.33.1002/AthenaJDBC41-2.0.33.jar",
   // Use the latest version of jackson
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion,
