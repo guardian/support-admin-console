@@ -37,6 +37,7 @@ import { makeStyles } from '@material-ui/core';
 import QrCodePage from './components/utilities/QrCodePage';
 import AppsMeteringSwitches from './components/appsMeteringSwitches';
 import { SuperModeDashboard } from './components/channelManagement/superMode/superModeDashboard';
+import DefaultPromos from './components/defaultPromos';
 
 type Stage = 'DEV' | 'CODE' | 'PROD';
 declare global {
@@ -244,6 +245,10 @@ const AppRouter = () => {
             render={(): React.ReactElement =>
               createComponent(<SuperModeDashboard />, 'Epic Super Mode dashboard 🦸')
             }
+          />
+          <Route
+            path="/default-promos"
+            render={(): React.ReactElement => createComponent(<DefaultPromos />, 'Default Promos')}
           />
         </div>
       </Router>

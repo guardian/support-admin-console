@@ -41,7 +41,9 @@ GET /qr-code                                        controllers.Application.inde
 
 GET /apps-metering-switches                        controllers.Application.index
 
-GET /super-mode                                controllers.Application.index
+GET /default-promos                                 controllers.Application.index
+
+GET /super-mode                                     controllers.Application.index
 
 # ----- Authentication ----- #
 GET  /login                                         controllers.Login.login
@@ -223,9 +225,13 @@ GET   /capi/content/*path                              controllers.CapiControlle
 GET   /apps/apps-metering-switches                     controllers.AppsMeteringSwitchesController.get
 POST  /apps/apps-metering-switches/update              controllers.AppsMeteringSwitchesController.set
 
+# ----- default promos ---------- #
+GET   /support-frontend/default-promos                     controllers.DefaultPromosController.get
+POST  /support-frontend/default-promos/update              controllers.DefaultPromosController.set
+
 # ----- super mode ----- #
 GET   /frontend/super-mode                             controllers.SuperModeController.getSuperModeRows()
-GET   /frontend/epic-article-data                           controllers.SuperModeController.getArticleData()
+GET   /frontend/epic-article-data                      controllers.SuperModeController.getArticleData()
 
 # Map static resources from the /public folder to the /assets URL path
 GET  /assets/*file                                  controllers.Assets.at(path="/public", file)

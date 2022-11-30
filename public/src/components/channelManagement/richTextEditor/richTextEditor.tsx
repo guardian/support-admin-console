@@ -326,27 +326,11 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
       .run();
   };
 
-  const insertArticleCount = () => {
-    chain.insertText(ARTICLE_COUNT_TEMPLATE).run();
-  };
-  const insertCurrencySymbol = () => {
-    chain.insertText(CURRENCY_TEMPLATE).run();
-  };
-  const insertCountryName = () => {
-    chain.insertText(COUNTRY_NAME_TEMPLATE).run();
-  };
-  const insertPriceDigisubMonthly = () => {
-    chain.insertText(PRICE_DIGISUB_MONTHLY).run();
-  };
-  const insertPriceDigisubAnnual = () => {
-    chain.insertText(PRICE_DIGISUB_ANNUAL).run();
-  };
-  const insertPriceGwMonthly = () => {
-    chain.insertText(PRICE_GUARDIANWEEKLY_MONTHLY).run();
-  };
-  const insertPriceGwAnnual = () => {
-    chain.insertText(PRICE_GUARDIANWEEKLY_ANNUAL).run();
-  };
+  const insertTemplate = (template: string): void =>
+    chain
+      .insertText(template)
+      .focus()
+      .run();
 
   return (
     <div>
@@ -379,17 +363,26 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
                 <span className={classes.remirrorButtonSpacer}>&nbsp;</span>
               )}
               {!noArticleCountTemplate && (
-                <button className="remirror-button" onClick={() => insertArticleCount()}>
+                <button
+                  className="remirror-button"
+                  onClick={() => insertTemplate(ARTICLE_COUNT_TEMPLATE)}
+                >
                   Articles
                 </button>
               )}
               {!noCurrencyTemplate && (
-                <button className="remirror-button" onClick={() => insertCurrencySymbol()}>
+                <button
+                  className="remirror-button"
+                  onClick={() => insertTemplate(CURRENCY_TEMPLATE)}
+                >
                   Currency
                 </button>
               )}
               {!noCountryNameTemplate && (
-                <button className="remirror-button" onClick={() => insertCountryName()}>
+                <button
+                  className="remirror-button"
+                  onClick={() => insertTemplate(COUNTRY_NAME_TEMPLATE)}
+                >
                   Country
                 </button>
               )}
@@ -413,25 +406,25 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
                       <div className={classes.fieldLabelPrices}>Price templates:</div>
                       <button
                         className={`remirror-button ${classes.dropdownMenuItem}`}
-                        onClick={() => insertPriceDigisubMonthly()}
+                        onClick={() => insertTemplate(PRICE_DIGISUB_MONTHLY)}
                       >
                         Digisub monthly
                       </button>
                       <button
                         className={`remirror-button ${classes.dropdownMenuItem}`}
-                        onClick={() => insertPriceDigisubAnnual()}
+                        onClick={() => insertTemplate(PRICE_DIGISUB_ANNUAL)}
                       >
                         Digisub annual
                       </button>
                       <button
                         className={`remirror-button ${classes.dropdownMenuItem}`}
-                        onClick={() => insertPriceGwMonthly()}
+                        onClick={() => insertTemplate(PRICE_GUARDIANWEEKLY_MONTHLY)}
                       >
                         GW monthly
                       </button>
                       <button
                         className={`remirror-button ${classes.dropdownMenuItem}`}
-                        onClick={() => insertPriceGwAnnual()}
+                        onClick={() => insertTemplate(PRICE_GUARDIANWEEKLY_ANNUAL)}
                       >
                         GW annual
                       </button>

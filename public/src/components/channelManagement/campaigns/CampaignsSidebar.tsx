@@ -1,9 +1,8 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core';
+import React, { useState } from 'react';
+import { makeStyles, TextField } from '@material-ui/core';
 import { Campaigns, Campaign } from './CampaignsForm';
 import NewCampaignButton from './NewCampaignButton';
 import CampaignsList from './CampaignsList';
-import { red } from '@material-ui/core/colors';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -16,26 +15,14 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     marginTop: '8px',
   },
+  searchField: {
+    marginTop: '8px',
+  },
   buttonsContainer: {
     display: 'flex',
     flexDirection: 'column',
     gap: '8px',
     marginBottom: '10px',
-  },
-  saveAllButton: {
-    justifyContent: 'start',
-    height: '48px',
-  },
-  saveAllButtonAlert: {
-    justifyContent: 'start',
-    height: '48px',
-    border: `3px solid ${red[500]}`,
-  },
-  saveAllButtonText: {
-    fontSize: '12px',
-    fontWeight: 500,
-    textTransform: 'uppercase',
-    letterSpacing: '1px',
   },
 }));
 
@@ -54,6 +41,14 @@ function CampaignsSidebar({
 }: CampaignsSidebarProps): React.ReactElement {
   const classes = useStyles();
 
+  const [campaignSearch, setCampaignSearch] = useState('');
+
+  const searchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e && e.target) {
+      setCampaignSearch(e.target.value.toUpperCase());
+    }
+  };
+
   return (
     <div className={classes.root}>
       <div className={classes.buttonsContainer}>
@@ -62,10 +57,19 @@ function CampaignsSidebar({
           existingNicknames={campaigns.map(c => c.nickname || '')}
           createCampaign={createCampaign}
         />
+        <TextField
+          className={classes.searchField}
+          label="Filter campaigns"
+          type="search"
+          variant="outlined"
+          onInput={searchInput}
+          onChange={searchInput}
+        />
       </div>
       <div className={classes.listsContainer}>
         <CampaignsList
           campaigns={campaigns}
+          campaignSearch={campaignSearch}
           selectedCampaign={selectedCampaign}
           onCampaignSelected={onCampaignSelected}
         />
