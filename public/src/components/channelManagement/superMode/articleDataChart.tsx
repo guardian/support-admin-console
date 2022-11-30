@@ -1,14 +1,5 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import {
-  XYPlot,
-  XAxis,
-  YAxis,
-  HorizontalGridLines,
-  VerticalGridLines,
-  VerticalBarSeries,
-} from 'react-vis';
-import 'react-vis/dist/style.css';
 import { addHours, subHours, formatISO9075 } from 'date-fns';
 import {
   Dialog,
@@ -21,6 +12,7 @@ import {
 import { SuperModeRow } from './useSuperModeRows';
 import CloseIcon from '@material-ui/icons/Close';
 import { ArticleDetails } from './articleDetails';
+import { BarChart, Bar, CartesianGrid, XAxis, YAxis } from 'recharts';
 
 interface ArticleEpicData {
   views: number;
@@ -32,6 +24,7 @@ interface ArticleEpicData {
 const useStyles = makeStyles(() => ({
   chartLabel: {
     fontSize: 14,
+    fontWeight: 500,
   },
   dialogHeader: {
     display: 'flex',
@@ -53,26 +46,27 @@ interface BarChartProps {
   yValue: (data: ArticleEpicData) => number;
   label: string;
 }
-const BarChart = ({ data, yValue, label }: BarChartProps) => {
+const CustomBarChart = ({ data, yValue, label }: BarChartProps) => {
   const classes = useStyles();
   return (
     <>
       <Typography variant={'h3'} className={classes.chartLabel}>
         {label}/hour
       </Typography>
-      <XYPlot xType="ordinal" width={600} height={300}>
-        <VerticalGridLines />
-        <HorizontalGridLines />
-        <XAxis title="Time" />
-        <YAxis title={label} />
-        <VerticalBarSeries
-          barWidth={1}
-          data={data.map(item => ({
-            x: item.hour.toString().padStart(2, '0'),
-            y: yValue(item),
-          }))}
-        />
-      </XYPlot>
+
+      <BarChart
+        width={600}
+        height={300}
+        data={data.map(item => ({
+          x: item.hour.toString().padStart(2, '0'),
+          y: yValue(item),
+        }))}
+      >
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="x" />
+        <YAxis />
+        <Bar dataKey="y" fill="#8884d8" />
+      </BarChart>
     </>
   );
 };
@@ -106,11 +100,11 @@ const ArticleDataCharts: React.FC<ArticleDataChartsProps> = ({
           This data is for all regions
         </Typography>
 
-        <BarChart data={data} yValue={item => item.views} label="Epic views" />
+        <CustomBarChart data={data} yValue={item => item.views} label="Epic views" />
 
-        <BarChart data={data} yValue={item => item.conversions} label="Conversions" />
+        <CustomBarChart data={data} yValue={item => item.conversions} label="Conversions" />
 
-        <BarChart data={data} yValue={item => item.avGBP} label="£AV" />
+        <CustomBarChart data={data} yValue={item => item.avGBP} label="£AV" />
       </div>
     );
   }
