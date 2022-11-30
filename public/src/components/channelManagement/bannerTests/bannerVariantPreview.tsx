@@ -154,7 +154,7 @@ const bannerModules = {
     name: 'UsEoyGivingTuesMomentBanner',
   },
   [BannerTemplate.AusEoyMomentBanner]: {
-    path: 'ausEoyMomentBanner/AusEoyMomentBanner.js',
+    path: 'ausEoyMoment/AusEoyMomentBanner.js',
     name: 'AusEoyMomentBanner',
   },
 };
