@@ -362,8 +362,8 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
 
   const allowVariantTicker =
     variant.template === BannerTemplate.UsEoyMomentBanner ||
-    variant.template === BannerTemplate.UsEoyGivingTuesMomentBanner;
-  variant.template === BannerTemplate.AusEoyMomentBanner;
+    variant.template === BannerTemplate.UsEoyGivingTuesMomentBanner ||
+    variant.template === BannerTemplate.AusEoyMomentBanner;
 
   const onMobileContentRadioChange = (): void => {
     if (variant.mobileBannerContent === undefined) {
