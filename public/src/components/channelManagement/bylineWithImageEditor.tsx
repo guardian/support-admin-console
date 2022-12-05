@@ -33,7 +33,7 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
   const generateDefaultValues = () => {
     const obj: BylineWithImage = {
       name: bylineWithImage.name || '',
-    }
+    };
     if (bylineWithImage.description != null) {
       obj.description = bylineWithImage.description;
     }
@@ -44,7 +44,7 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
       };
     }
     return obj;
-  }
+  };
   const defaultValues: BylineWithImage = generateDefaultValues();
 
   const { register, handleSubmit, errors, trigger } = useForm<BylineWithImage>({
@@ -138,10 +138,10 @@ const BylineWithImageEditorToggle: React.FC<BylineWithImageEditorToggleProps> = 
     const isChecked = event.target.checked;
     console.log('onCheckboxChanged #1', isChecked);
     if (isChecked) {
-    console.log('onCheckboxChanged #2', DEFAULT_BYLINE);
+      console.log('onCheckboxChanged #2', DEFAULT_BYLINE);
       updateBylineWithImage(DEFAULT_BYLINE);
     } else {
-    console.log('onCheckboxChanged #3');
+      console.log('onCheckboxChanged #3');
       updateBylineWithImage(undefined);
       onValidationChange(true);
     }
@@ -149,7 +149,6 @@ const BylineWithImageEditorToggle: React.FC<BylineWithImageEditorToggleProps> = 
 
   return (
     <div className={classes.container}>
-
       <FormControlLabel
         control={
           <Checkbox
@@ -171,7 +170,6 @@ const BylineWithImageEditorToggle: React.FC<BylineWithImageEditorToggleProps> = 
           guidance={guidance}
         />
       )}
-      
     </div>
   );
 };

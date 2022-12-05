@@ -284,9 +284,9 @@ export interface Image {
 }
 
 export interface BylineWithImage {
-    name: string;
-    description?: string;
-    headshot?: Image;
+  name: string;
+  description?: string;
+  headshot?: Image;
 }
 
 export type SignedInStatus = 'SignedIn' | 'SignedOut' | 'All';
