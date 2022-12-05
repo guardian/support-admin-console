@@ -16,7 +16,6 @@ interface BylineWithImageEditorProps {
   updateBylineWithImage: (bylineWithImage: BylineWithImage) => void;
   isDisabled: boolean;
   onValidationChange: (isValid: boolean) => void;
-  guidance: string; // helper text to suggest e.g. image ratio
 }
 
 const DEFAULT_BYLINE: BylineWithImage = {
@@ -28,7 +27,6 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
   updateBylineWithImage,
   isDisabled,
   onValidationChange,
-  guidance,
 }: BylineWithImageEditorProps) => {
   const generateDefaultValues = () => {
     const obj: BylineWithImage = {
@@ -68,7 +66,7 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
           required: EMPTY_ERROR_HELPER_TEXT,
         })}
         error={errors.name !== undefined}
-        helperText={errors.name?.message ?? guidance}
+        helperText={errors.name?.message}
         onBlur={handleSubmit(updateBylineWithImage)}
         name="name"
         label="Name"
@@ -78,7 +76,11 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
         fullWidth
       />
       <TextField
-        inputRef={register()}
+        inputRef={register({
+          required: EMPTY_ERROR_HELPER_TEXT,
+        })}
+        error={errors.description !== undefined}
+        helperText={errors.description?.message}
         onBlur={handleSubmit(updateBylineWithImage)}
         name="description"
         label="Title or description"
@@ -88,7 +90,14 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
         fullWidth
       />
       <TextField
-        inputRef={register()}
+        inputRef={register({
+          required: EMPTY_ERROR_HELPER_TEXT,
+        })}
+        error={errors.headshot?.mainUrl !== undefined}
+        helperText={
+          errors.headshot?.mainUrl?.message ??
+          'Image dimensions should be roughly square, with a transparent background'
+        }
         onBlur={handleSubmit(updateBylineWithImage)}
         name="headshot.mainUrl"
         label="Image URL"
@@ -98,7 +107,11 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
         fullWidth
       />
       <TextField
-        inputRef={register()}
+        inputRef={register({
+          required: EMPTY_ERROR_HELPER_TEXT,
+        })}
+        error={errors.headshot?.altText !== undefined}
+        helperText={errors.headshot?.altText?.message}
         onBlur={handleSubmit(updateBylineWithImage)}
         name="headshot.altText"
         label="Image alt-text"
@@ -116,7 +129,6 @@ interface BylineWithImageEditorToggleProps {
   updateBylineWithImage: (bylineWithImage?: BylineWithImage) => void;
   isDisabled: boolean;
   onValidationChange: (isValid: boolean) => void;
-  guidance: string;
   label: string;
 }
 
@@ -130,7 +142,6 @@ const BylineWithImageEditorToggle: React.FC<BylineWithImageEditorToggleProps> = 
   isDisabled,
   onValidationChange,
   label,
-  guidance,
 }: BylineWithImageEditorToggleProps) => {
   const classes = useStyles();
 
@@ -167,7 +178,6 @@ const BylineWithImageEditorToggle: React.FC<BylineWithImageEditorToggleProps> = 
           updateBylineWithImage={updateBylineWithImage}
           isDisabled={isDisabled}
           onValidationChange={onValidationChange}
-          guidance={guidance}
         />
       )}
     </div>

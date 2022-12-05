@@ -381,8 +381,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
           updateBylineWithImage={updateBylineWithImage}
           isDisabled={!editMode}
           onValidationChange={onValidationChange}
-          label={'Byline with image'}
-          guidance={'Where does guidance appear?'}
+          label={'Byline block - appears below the copy, above CTA buttons'}
         />
       )}
 
