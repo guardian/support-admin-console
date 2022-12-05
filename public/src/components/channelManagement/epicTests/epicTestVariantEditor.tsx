@@ -34,6 +34,7 @@ import {
 } from '../richTextEditor/richTextEditor';
 import VariantEditorSeparateArticleCountEditor from '../variantEditorSeparateArticleCountEditor';
 import { ImageEditorToggle } from '../imageEditor';
+import { BylineWithImageEditorToggle } from '../bylineWithImageEditor';
 import { EpicVariant, SeparateArticleCount } from '../../../models/epic';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -78,7 +79,7 @@ interface FormData {
   paragraphs: string[];
   highlightedText?: string;
   image?: Image;
-  bylineWithImage?: BylineWithImage,
+  bylineWithImage?: BylineWithImage;
   footer?: string;
 }
 
@@ -110,6 +111,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
     allowVariantTicker,
     allowVariantChoiceCards,
     allowVariantSignInLink,
+    allowBylineWithImage,
     platform,
     requireVariantHeader,
   } = epicEditorConfig;
@@ -124,6 +126,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
     paragraphs: variant.paragraphs,
     highlightedText: variant.highlightedText,
     image: variant.image,
+    bylineWithImage: variant.bylineWithImage,
     footer: variant.footer,
   };
 
@@ -189,6 +192,9 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   };
   const updateImage = (image?: Image): void => {
     onVariantChange({ ...variant, image });
+  };
+  const updateBylineWithImage = (bylineWithImage?: BylineWithImage): void => {
+    onVariantChange({ ...variant, bylineWithImage });
   };
 
   const getParagraphsHelperText = () => {
@@ -366,6 +372,17 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
           onValidationChange={onValidationChange}
           label={'Image - appears below the article count badge and ticker'}
           guidance={'Ratio should be 2.5:1'}
+        />
+      )}
+
+      {allowBylineWithImage && (
+        <BylineWithImageEditorToggle
+          bylineWithImage={variant.bylineWithImage}
+          updateBylineWithImage={updateBylineWithImage}
+          isDisabled={!editMode}
+          onValidationChange={onValidationChange}
+          label={'Byline with image'}
+          guidance={'Where does guidance appear?'}
         />
       )}
 
