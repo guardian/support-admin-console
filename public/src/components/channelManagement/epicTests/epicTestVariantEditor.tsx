@@ -194,6 +194,11 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
     onVariantChange({ ...variant, image });
   };
   const updateBylineWithImage = (bylineWithImage?: BylineWithImage): void => {
+    if (bylineWithImage != null && bylineWithImage.headshot != null) {
+      if (!bylineWithImage.headshot.mainUrl && !bylineWithImage.headshot.altText) {
+        delete bylineWithImage.headshot;
+      }
+    }
     onVariantChange({ ...variant, bylineWithImage });
   };
 

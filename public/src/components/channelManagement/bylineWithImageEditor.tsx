@@ -76,11 +76,7 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
         fullWidth
       />
       <TextField
-        inputRef={register({
-          required: EMPTY_ERROR_HELPER_TEXT,
-        })}
-        error={errors.description !== undefined}
-        helperText={errors.description?.message}
+        inputRef={register()}
         onBlur={handleSubmit(updateBylineWithImage)}
         name="description"
         label="Title or description"
@@ -90,14 +86,8 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
         fullWidth
       />
       <TextField
-        inputRef={register({
-          required: EMPTY_ERROR_HELPER_TEXT,
-        })}
-        error={errors.headshot?.mainUrl !== undefined}
-        helperText={
-          errors.headshot?.mainUrl?.message ??
-          'Image dimensions should be roughly square, with a transparent background'
-        }
+        inputRef={register()}
+        helperText="Image dimensions should be roughly square, with a transparent background"
         onBlur={handleSubmit(updateBylineWithImage)}
         name="headshot.mainUrl"
         label="Image URL"
@@ -107,11 +97,7 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
         fullWidth
       />
       <TextField
-        inputRef={register({
-          required: EMPTY_ERROR_HELPER_TEXT,
-        })}
-        error={errors.headshot?.altText !== undefined}
-        helperText={errors.headshot?.altText?.message}
+        inputRef={register()}
         onBlur={handleSubmit(updateBylineWithImage)}
         name="headshot.altText"
         label="Image alt-text"
