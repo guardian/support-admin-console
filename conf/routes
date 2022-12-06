@@ -43,6 +43,8 @@ GET /apps-metering-switches                        controllers.Application.index
 
 GET /default-promos                                 controllers.Application.index
 
+GET /super-mode                                     controllers.Application.index
+
 # ----- Authentication ----- #
 GET  /login                                         controllers.Login.login
 GET  /loginAction                                   controllers.Login.loginAction
@@ -217,6 +219,7 @@ GET   /frontend/campaign/:campaignName/tests           controllers.CampaignsCont
 # ----- capi ----- #
 GET   /capi/tags                                       controllers.CapiController.getTags()
 GET   /capi/sections                                   controllers.CapiController.getSections()
+GET   /capi/content/*path                              controllers.CapiController.getContent(path: String)
 
 # ----- apps metering switches ----- #
 GET   /apps/apps-metering-switches                     controllers.AppsMeteringSwitchesController.get
@@ -225,6 +228,10 @@ POST  /apps/apps-metering-switches/update              controllers.AppsMeteringS
 # ----- default promos ---------- #
 GET   /support-frontend/default-promos                     controllers.DefaultPromosController.get
 POST  /support-frontend/default-promos/update              controllers.DefaultPromosController.set
+
+# ----- super mode ----- #
+GET   /frontend/super-mode                             controllers.SuperModeController.getSuperModeRows()
+GET   /frontend/epic-article-data                      controllers.SuperModeController.getArticleData()
 
 # Map static resources from the /public folder to the /assets URL path
 GET  /assets/*file                                  controllers.Assets.at(path="/public", file)

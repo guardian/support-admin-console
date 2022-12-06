@@ -36,6 +36,7 @@ import { FontWeightProperty } from 'csstype';
 import { makeStyles } from '@material-ui/core';
 import QrCodePage from './components/utilities/QrCodePage';
 import AppsMeteringSwitches from './components/appsMeteringSwitches';
+import { SuperModeDashboard } from './components/channelManagement/superMode/superModeDashboard';
 import DefaultPromos from './components/defaultPromos';
 
 type Stage = 'DEV' | 'CODE' | 'PROD';
@@ -237,6 +238,12 @@ const AppRouter = () => {
             path="/apps-metering-switches"
             render={(): React.ReactElement =>
               createComponent(<AppsMeteringSwitches />, 'Apps Metering Switches')
+            }
+          />
+          <Route
+            path="/super-mode"
+            render={(): React.ReactElement =>
+              createComponent(<SuperModeDashboard />, 'Epic Super Mode dashboard 🦸')
             }
           />
           <Route

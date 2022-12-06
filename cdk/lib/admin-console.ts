@@ -14,6 +14,8 @@ import type { App, CfnElement } from 'aws-cdk-lib';
 import { Duration, RemovalPolicy } from 'aws-cdk-lib';
 import { AttributeType, BillingMode, ProjectionType, Table } from 'aws-cdk-lib/aws-dynamodb';
 import { InstanceClass, InstanceSize, InstanceType } from 'aws-cdk-lib/aws-ec2';
+import type { Policy } from 'aws-cdk-lib/aws-iam';
+import { ManagedPolicy } from 'aws-cdk-lib/aws-iam';
 
 export interface AdminConsoleProps extends GuStackProps {
   domainName: string;
@@ -124,7 +126,7 @@ export class AdminConsole extends GuStack {
     dpkg -i /tmp/support-admin-console_1.0-SNAPSHOT_all.deb
     /opt/cloudwatch-logs/configure-logs application ${this.stack} ${this.stage} ${app} /var/log/support-admin-console/application.log`;
 
-    const policies = [
+    const policies: Policy[] = [
       new GuAllowPolicy(this, 'Cloudwatch', {
         actions: ['logs:CreateLogGroup', 'logs:CreateLogStream', 'logs:PutLogEvents'],
         resources: ['arn:aws:logs:*:*:*'],
@@ -151,6 +153,20 @@ export class AdminConsole extends GuStack {
       }),
       ...channelTestsDynamoPolicies,
       ...campaignsDynamoPolicies,
+      new GuDynamoDBReadPolicy(this, `DynamoRead-super-mode`, {
+        tableName: 'super-mode-PROD', // always PROD for super mode
+      }),
+      new GuDynamoDBReadPolicy(this, `DynamoRead-super-mode/index/end`, {
+        tableName: `super-mode-PROD/index/end`,
+      }),
+      new GuAllowPolicy(this, 'AthenaOutputBucket', {
+        actions: ['s3:*'],
+        resources: [`arn:aws:s3:::gu-support-analytics/*`, `arn:aws:s3:::gu-support-analytics`],
+      }),
+      new GuAllowPolicy(this, 'AcquisitionsBucket', {
+        actions: ['s3:*'],
+        resources: [`arn:aws:s3:::acquisition-events/*`, `arn:aws:s3:::acquisition-events`],
+      }),
     ];
 
     const ec2App = new GuEc2App(this, {
@@ -160,15 +176,18 @@ export class AdminConsole extends GuStack {
       certificateProps: {
         domainName,
       },
-      monitoringConfiguration: {
-        http5xxAlarm: {
-          tolerated5xxPercentage: 0,
-          numberOfMinutesAboveThresholdBeforeAlarm: 1,
-          alarmName: `5XX error returned by ${app} ${this.stage}`,
-        },
-        unhealthyInstancesAlarm: true,
-        snsTopicName: 'marketing-dev',
-      },
+      monitoringConfiguration:
+        this.stage === 'PROD'
+          ? {
+              http5xxAlarm: {
+                tolerated5xxPercentage: 0,
+                numberOfMinutesAboveThresholdBeforeAlarm: 1,
+                alarmName: `5XX error returned by ${app} ${this.stage}`,
+              },
+              unhealthyInstancesAlarm: true,
+              snsTopicName: 'marketing-dev',
+            }
+          : { noMonitoring: true },
       userData,
       roleConfiguration: {
         additionalPolicies: policies,
@@ -177,6 +196,10 @@ export class AdminConsole extends GuStack {
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MICRO),
       withoutImdsv2: true,
     });
+
+    ec2App.autoScalingGroup.role.addManagedPolicy(
+      ManagedPolicy.fromAwsManagedPolicyName('AmazonAthenaFullAccess'),
+    );
 
     new GuCname(this, 'cname', {
       app,
