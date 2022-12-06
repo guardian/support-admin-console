@@ -119,8 +119,8 @@ interface BylineWithImageEditorToggleProps {
 }
 
 /**
- * Component for toggling the use of an image.
- * Renders the ImageEditor component if the checkbox is checked.
+ * Component for toggling the use of an byline component.
+ * Renders the BylineWithImageEditor component if the checkbox is checked.
  */
 const BylineWithImageEditorToggle: React.FC<BylineWithImageEditorToggleProps> = ({
   bylineWithImage,
