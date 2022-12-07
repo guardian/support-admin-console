@@ -45,6 +45,20 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
   };
   const defaultValues: BylineWithImage = generateDefaultValues();
 
+  const modifyReturnCheck = () => {
+    if (bylineWithImage != null && bylineWithImage.headshot != null) {
+      if (!bylineWithImage.headshot.mainUrl && !bylineWithImage.headshot.altText) {
+        delete bylineWithImage.headshot;
+      }
+    }
+    if (defaultValues != null && defaultValues.headshot != null) {
+      if (!defaultValues.headshot.mainUrl && !defaultValues.headshot.altText) {
+        delete defaultValues.headshot;
+      }
+    }
+    return handleSubmit(updateBylineWithImage);
+  };
+
   const { register, handleSubmit, errors, trigger } = useForm<BylineWithImage>({
     mode: 'onChange',
     defaultValues,
@@ -67,7 +81,7 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
         })}
         error={errors.name !== undefined}
         helperText={errors.name?.message}
-        onBlur={handleSubmit(updateBylineWithImage)}
+        onBlur={modifyReturnCheck()}
         name="name"
         label="Name"
         margin="normal"
@@ -77,7 +91,7 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
       />
       <TextField
         inputRef={register()}
-        onBlur={handleSubmit(updateBylineWithImage)}
+        onBlur={modifyReturnCheck()}
         name="description"
         label="Title or description"
         margin="normal"
@@ -85,10 +99,14 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
         disabled={isDisabled}
         fullWidth
       />
+      <p>
+        Note: if including a headshot image alongside the byline, both of the following fields
+        should be completed
+      </p>
       <TextField
         inputRef={register()}
         helperText="Image dimensions should be roughly square, with a transparent background"
-        onBlur={handleSubmit(updateBylineWithImage)}
+        onBlur={modifyReturnCheck()}
         name="headshot.mainUrl"
         label="Image URL"
         margin="normal"
@@ -98,7 +116,7 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
       />
       <TextField
         inputRef={register()}
-        onBlur={handleSubmit(updateBylineWithImage)}
+        onBlur={modifyReturnCheck()}
         name="headshot.altText"
         label="Image alt-text"
         margin="normal"
@@ -133,12 +151,9 @@ const BylineWithImageEditorToggle: React.FC<BylineWithImageEditorToggleProps> = 
 
   const onCheckboxChanged = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const isChecked = event.target.checked;
-    console.log('onCheckboxChanged #1', isChecked);
     if (isChecked) {
-      console.log('onCheckboxChanged #2', DEFAULT_BYLINE);
       updateBylineWithImage(DEFAULT_BYLINE);
     } else {
-      console.log('onCheckboxChanged #3');
       updateBylineWithImage(undefined);
       onValidationChange(true);
     }

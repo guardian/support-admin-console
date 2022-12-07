@@ -193,12 +193,8 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   const updateImage = (image?: Image): void => {
     onVariantChange({ ...variant, image });
   };
+  // See if we can move this closer to the action
   const updateBylineWithImage = (bylineWithImage?: BylineWithImage): void => {
-    if (bylineWithImage != null && bylineWithImage.headshot != null) {
-      if (!bylineWithImage.headshot.mainUrl && !bylineWithImage.headshot.altText) {
-        delete bylineWithImage.headshot;
-      }
-    }
     onVariantChange({ ...variant, bylineWithImage });
   };
 
@@ -369,15 +365,10 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
         />
       )}
 
-      {allowVariantImageUrl && (
-        <ImageEditorToggle
-          image={variant.image}
-          updateImage={updateImage}
-          isDisabled={!editMode}
-          onValidationChange={onValidationChange}
-          label={'Image - appears below the article count badge and ticker'}
-          guidance={'Ratio should be 2.5:1'}
-        />
+      {(allowVariantImageUrl || allowBylineWithImage) && (
+        <Typography className={classes.sectionHeader} variant="h4">
+          Byline copy and/or images
+        </Typography>
       )}
 
       {allowBylineWithImage && (
@@ -387,6 +378,17 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
           isDisabled={!editMode}
           onValidationChange={onValidationChange}
           label={'Byline block - appears below the copy, above CTA buttons'}
+        />
+      )}
+
+      {allowVariantImageUrl && (
+        <ImageEditorToggle
+          image={variant.image}
+          updateImage={updateImage}
+          isDisabled={!editMode}
+          onValidationChange={onValidationChange}
+          label={'Image - appears below the article count badge and ticker'}
+          guidance={'Ratio should be 2.5:1'}
         />
       )}
 
