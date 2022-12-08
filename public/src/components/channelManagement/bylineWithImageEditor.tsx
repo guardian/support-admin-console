@@ -28,38 +28,11 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
   isDisabled,
   onValidationChange,
 }: BylineWithImageEditorProps) => {
-  const generateDefaultValues = () => {
-    const obj: BylineWithImage = {
-      name: bylineWithImage.name || '',
-    };
-    if (bylineWithImage.description != null) {
-      obj.description = bylineWithImage.description;
-    }
-    if (bylineWithImage.headshot != null) {
-      obj.headshot = {
-        mainUrl: bylineWithImage.headshot.mainUrl,
-        altText: bylineWithImage.headshot.altText,
-      };
-    }
-    return obj;
-  };
-  const defaultValues: BylineWithImage = generateDefaultValues();
-
-  const modifyReturnCheck = () => {
-    if (bylineWithImage != null && bylineWithImage.headshot != null) {
-      if (!bylineWithImage.headshot.mainUrl && !bylineWithImage.headshot.altText) {
-        delete bylineWithImage.headshot;
-      }
-    }
-    if (defaultValues != null && defaultValues.headshot != null) {
-      if (!defaultValues.headshot.mainUrl && !defaultValues.headshot.altText) {
-        delete defaultValues.headshot;
-      }
-    }
-    return handleSubmit(updateBylineWithImage);
+  const defaultValues: BylineWithImage = bylineWithImage ?? {
+    name: '',
   };
 
-  const { register, handleSubmit, errors, trigger } = useForm<BylineWithImage>({
+  const { register, handleSubmit, errors, trigger, getValues } = useForm<BylineWithImage>({
     mode: 'onChange',
     defaultValues,
   });
@@ -73,6 +46,17 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
     onValidationChange(isValid);
   }, [errors]);
 
+  const update = (byline: BylineWithImage): void => {
+    if (!byline.headshot?.mainUrl && !byline.headshot?.altText) {
+      updateBylineWithImage({
+        ...byline,
+        headshot: undefined,
+      });
+    } else {
+      updateBylineWithImage(byline);
+    }
+  };
+
   return (
     <div>
       <TextField
@@ -81,7 +65,7 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
         })}
         error={errors.name !== undefined}
         helperText={errors.name?.message}
-        onBlur={modifyReturnCheck()}
+        onBlur={handleSubmit(update)}
         name="name"
         label="Name"
         margin="normal"
@@ -91,7 +75,7 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
       />
       <TextField
         inputRef={register()}
-        onBlur={modifyReturnCheck()}
+        onBlur={handleSubmit(update)}
         name="description"
         label="Title or description"
         margin="normal"
@@ -104,9 +88,21 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
         should be completed
       </p>
       <TextField
-        inputRef={register()}
-        helperText="Image dimensions should be roughly square, with a transparent background"
-        onBlur={modifyReturnCheck()}
+        inputRef={register({
+          validate: mainUrl => {
+            // required if altText is set
+            if (!mainUrl && getValues().headshot?.altText) {
+              return 'Required if alt-text is set';
+            }
+            return true;
+          },
+        })}
+        error={errors?.headshot?.mainUrl !== undefined}
+        helperText={
+          errors?.headshot?.mainUrl?.message ??
+          'Image dimensions should be roughly square, with a transparent background'
+        }
+        onBlur={handleSubmit(update)}
         name="headshot.mainUrl"
         label="Image URL"
         margin="normal"
@@ -115,8 +111,18 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
         fullWidth
       />
       <TextField
-        inputRef={register()}
-        onBlur={modifyReturnCheck()}
+        inputRef={register({
+          validate: altText => {
+            // required if mainUrl is set
+            if (!altText && getValues().headshot?.mainUrl) {
+              return 'Required if image url is set';
+            }
+            return true;
+          },
+        })}
+        error={errors?.headshot?.altText !== undefined}
+        helperText={errors?.headshot?.altText?.message ?? ''}
+        onBlur={handleSubmit(update)}
         name="headshot.altText"
         label="Image alt-text"
         margin="normal"
