@@ -94,7 +94,7 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
  * Component for toggling the use of an image.
  * Renders the ImageEditor component if the checkbox is checked.
  */
-const ImageEditorToggle: React.FC<ImageEditorToggleProps> = ({
+export const ImageEditorToggle: React.FC<ImageEditorToggleProps> = ({
   image,
   updateImage,
   isDisabled,
@@ -139,5 +139,3 @@ const ImageEditorToggle: React.FC<ImageEditorToggleProps> = ({
     </div>
   );
 };
-
-export { ImageEditorToggle };

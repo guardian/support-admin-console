@@ -9,6 +9,7 @@ import {
   Test,
   TickerSettings,
   UserCohort,
+  BylineWithImage,
   Variant,
 } from '../components/channelManagement/helpers/shared';
 import { Region } from '../utils/models';
@@ -31,6 +32,7 @@ export interface EpicVariant extends Variant {
   separateArticleCount?: SeparateArticleCount;
   showChoiceCards?: boolean;
   defaultChoiceCardFrequency?: ContributionFrequency;
+  bylineWithImage?: BylineWithImage;
   showSignInLink?: boolean;
 }
 

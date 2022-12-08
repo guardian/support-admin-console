@@ -12,6 +12,7 @@ import {
   Cta,
   EpicEditorConfig,
   Image,
+  BylineWithImage,
   SecondaryCta,
   TickerSettings,
 } from '../helpers/shared';
@@ -33,6 +34,7 @@ import {
 } from '../richTextEditor/richTextEditor';
 import VariantEditorSeparateArticleCountEditor from '../variantEditorSeparateArticleCountEditor';
 import { ImageEditorToggle } from '../imageEditor';
+import { BylineWithImageEditorToggle } from '../bylineWithImageEditor';
 import { EpicVariant, SeparateArticleCount } from '../../../models/epic';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -77,6 +79,7 @@ interface FormData {
   paragraphs: string[];
   highlightedText?: string;
   image?: Image;
+  bylineWithImage?: BylineWithImage;
   footer?: string;
 }
 
@@ -108,6 +111,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
     allowVariantTicker,
     allowVariantChoiceCards,
     allowVariantSignInLink,
+    allowBylineWithImage,
     platform,
     requireVariantHeader,
   } = epicEditorConfig;
@@ -122,6 +126,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
     paragraphs: variant.paragraphs,
     highlightedText: variant.highlightedText,
     image: variant.image,
+    bylineWithImage: variant.bylineWithImage,
     footer: variant.footer,
   };
 
@@ -187,6 +192,10 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   };
   const updateImage = (image?: Image): void => {
     onVariantChange({ ...variant, image });
+  };
+  // See if we can move this closer to the action
+  const updateBylineWithImage = (bylineWithImage?: BylineWithImage): void => {
+    onVariantChange({ ...variant, bylineWithImage });
   };
 
   const getParagraphsHelperText = () => {
@@ -353,6 +362,22 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
               />
             );
           }}
+        />
+      )}
+
+      {(allowVariantImageUrl || allowBylineWithImage) && (
+        <Typography className={classes.sectionHeader} variant="h4">
+          Byline copy and/or images
+        </Typography>
+      )}
+
+      {allowBylineWithImage && (
+        <BylineWithImageEditorToggle
+          bylineWithImage={variant.bylineWithImage}
+          updateBylineWithImage={updateBylineWithImage}
+          isDisabled={!editMode}
+          onValidationChange={onValidationChange}
+          label={'Byline block - appears below the copy, above CTA buttons'}
         />
       )}
 

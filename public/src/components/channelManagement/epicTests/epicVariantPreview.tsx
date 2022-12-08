@@ -140,6 +140,7 @@ const buildProps = (variant: EpicVariant): EpicProps => ({
     showSignInLink: variant.showSignInLink,
 
     image: variant.image,
+    bylineWithImage: variant.bylineWithImage,
 
     showChoiceCards: variant.showChoiceCards,
     choiceCardAmounts: {
