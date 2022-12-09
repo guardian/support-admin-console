@@ -159,7 +159,7 @@ const bannerModules = {
   },
   [BannerTemplate.UsEoyMomentBannerV3]: {
     path: 'usEoyMomentV3/UsEoyMomentBannerV3.js',
-    name: 'UsEoyMomentBanner',
+    name: 'UsEoyMomentBannerV3',
   },
 };
 
