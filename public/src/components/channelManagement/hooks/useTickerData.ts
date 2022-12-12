@@ -6,7 +6,7 @@ interface TickerData {
   goal: number;
 }
 
-interface TickerSettingsWithData extends TickerSettings {
+export interface TickerSettingsWithData extends TickerSettings {
   tickerData: TickerData;
 }
 
@@ -19,7 +19,12 @@ const useTickerData = (
     if (tickerSettings) {
       fetch(`https://support.theguardian.com/ticker/${tickerSettings.name}.json`)
         .then(resp => resp.json())
-        .then(setTickerData)
+        .then(json => {
+          setTickerData({
+            total: parseInt(json.total),
+            goal: parseInt(json.goal),
+          });
+        })
         .catch(err => alert(`Error fetching ticker data: ${err}`));
     }
   }, [tickerSettings]);
