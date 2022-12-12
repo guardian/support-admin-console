@@ -6,6 +6,7 @@ import { BannerTemplate, BannerVariant, BannerContent } from '../../../models/ba
 import { TickerCountType, TickerEndType, TickerName, TickerSettings } from '../helpers/shared';
 import Typography from '@material-ui/core/Typography';
 import { useModule } from '../../../hooks/useModule';
+import useTickerData from "../hooks/useTickerData";
 
 interface ProductPriceData {
   Monthly: {
@@ -195,6 +196,12 @@ const BannerVariantPreview: React.FC<BannerVariantPreviewProps> = ({
   const classes = useStyles();
 
   const [drawerOpen, setDrawerOpen] = useState<boolean>();
+  const tickerSettingsWithData = useTickerData(variant.tickerSettings);
+
+  if (variant.tickerSettings && !tickerSettingsWithData) {
+    // ticker data is required but not ready yet
+    return null;
+  }
 
   const Banner = useModule<BannerProps>(
     `banners/${bannerModules[variant.template].path}`,
