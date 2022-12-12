@@ -55,6 +55,7 @@ class Athena() extends StrictLogging {
   private val client = AthenaClient
     .builder()
     .credentialsProvider(Aws.credentialsProvider.build())
+    .region(Aws.region)
     .build()
 
   private val queryExecutionContext = QueryExecutionContext
