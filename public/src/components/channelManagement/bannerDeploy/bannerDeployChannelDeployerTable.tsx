@@ -52,11 +52,11 @@ const BannerDeployChannelDeployerTable: React.FC<BannerDeployChannelDeployerTabl
       {isChannel1 ? (
         <ul>
           <li>9am every Sunday</li>
+          <li>9am every Thursday</li>
         </ul>
       ) : (
         <ul>
-          <li>8am every Monday</li>
-          <li>8am every Friday</li>
+          <li>9am every Tuesday</li>
         </ul>
       )}
     </div>
