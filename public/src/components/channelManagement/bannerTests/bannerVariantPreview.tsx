@@ -3,9 +3,9 @@ import { Theme, makeStyles, Button } from '@material-ui/core';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import Drawer from '@material-ui/core/Drawer';
 import { BannerTemplate, BannerVariant, BannerContent } from '../../../models/banner';
-import { TickerCountType, TickerEndType, TickerName, TickerSettings } from '../helpers/shared';
 import Typography from '@material-ui/core/Typography';
 import { useModule } from '../../../hooks/useModule';
+import useTickerData, { TickerSettingsWithData } from '../hooks/useTickerData';
 
 interface ProductPriceData {
   Monthly: {
@@ -43,29 +43,16 @@ interface BannerProps {
   numArticles: number;
   content: BannerContent;
   mobileContent?: BannerContent;
-  tickerSettings?: TickerSettings;
+  tickerSettings?: TickerSettingsWithData;
   separateArticleCount?: boolean;
 }
 
 const anchor = 'bottom';
 
-const tickerSettings = {
-  endType: TickerEndType.unlimited,
-  countType: TickerCountType.money,
-  copy: {
-    countLabel: 'contributions',
-    goalReachedPrimary: "We've hit our goal!",
-    goalReachedSecondary: 'but you can still support us',
-  },
-  currencySymbol: '$',
-  name: TickerName.US_2022,
-  tickerData: {
-    total: 120_000,
-    goal: 150_000,
-  },
-};
-
-const buildProps = (variant: BannerVariant): BannerProps => ({
+const buildProps = (
+  variant: BannerVariant,
+  tickerSettingsWithData?: TickerSettingsWithData,
+): BannerProps => ({
   tracking: {
     ophanPageId: 'ophanPageId',
     platformId: 'GUARDIAN_WEB',
@@ -104,7 +91,7 @@ const buildProps = (variant: BannerVariant): BannerProps => ({
     },
   },
   numArticles: 13,
-  tickerSettings,
+  tickerSettings: tickerSettingsWithData,
   separateArticleCount: variant.separateArticleCount,
 });
 
@@ -195,6 +182,7 @@ const BannerVariantPreview: React.FC<BannerVariantPreviewProps> = ({
   const classes = useStyles();
 
   const [drawerOpen, setDrawerOpen] = useState<boolean>();
+  const tickerSettingsWithData = useTickerData(variant.tickerSettings);
 
   const Banner = useModule<BannerProps>(
     `banners/${bannerModules[variant.template].path}`,
@@ -206,7 +194,7 @@ const BannerVariantPreview: React.FC<BannerVariantPreviewProps> = ({
     setDrawerOpen(open);
   };
 
-  const props = buildProps(variant);
+  const props = buildProps(variant, tickerSettingsWithData);
 
   return (
     <div>

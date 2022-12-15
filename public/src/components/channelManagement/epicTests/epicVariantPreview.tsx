@@ -1,9 +1,10 @@
 import React from 'react';
 import { Theme, makeStyles } from '@material-ui/core';
 
-import { EpicModuleName, TickerName, TickerSettings } from '../helpers/shared';
+import { EpicModuleName } from '../helpers/shared';
 import { useModule } from '../../../hooks/useModule';
 import { EpicVariant } from '../../../models/epic';
+import useTickerData, { TickerSettingsWithData } from '../hooks/useTickerData';
 
 // Article count TS defs
 export interface ArticleCounts {
@@ -77,16 +78,6 @@ const generateRegionalChoiceCard = (name: string): ConfiguredRegionAmounts => {
   };
 };
 
-// Ticker additional TS defs
-interface TickerData {
-  total: number;
-  goal: number;
-}
-
-interface TickerSettingsWithData extends TickerSettings {
-  tickerData?: TickerData;
-}
-
 // Secondary CTA TS defs
 interface ShowReminderFields {
   reminderCta: string;
@@ -120,7 +111,10 @@ interface EpicProps {
   hasConsentForArticleCount?: boolean;
 }
 
-const buildProps = (variant: EpicVariant): EpicProps => ({
+const buildProps = (
+  variant: EpicVariant,
+  tickerSettingsWithData?: TickerSettingsWithData,
+): EpicProps => ({
   variant: {
     name: variant.name,
     heading: variant.heading,
@@ -154,19 +148,7 @@ const buildProps = (variant: EpicVariant): EpicProps => ({
     },
 
     showTicker: variant.showTicker,
-    tickerSettings: variant.tickerSettings
-      ? {
-          countType: variant.tickerSettings.countType,
-          endType: variant.tickerSettings.endType,
-          currencySymbol: variant.tickerSettings.currencySymbol,
-          copy: variant.tickerSettings.copy,
-          name: TickerName.US_2022,
-          tickerData: {
-            total: 50000,
-            goal: 100000,
-          },
-        }
-      : undefined,
+    tickerSettings: tickerSettingsWithData,
   },
   tracking: {
     ophanPageId: 'ophanPageId',
@@ -205,9 +187,11 @@ const EpicVariantPreview: React.FC<EpicVariantPreviewProps> = ({
 }: EpicVariantPreviewProps) => {
   const classes = useStyles();
 
+  const tickerSettingsWithData = useTickerData(variant.tickerSettings);
+
   const Epic = useModule<EpicProps>(`epics/${moduleName}.js`, moduleName);
 
-  const props = buildProps(variant);
+  const props = buildProps(variant, tickerSettingsWithData);
 
   return <div className={classes.container}>{Epic && <Epic {...props} />}</div>;
 };
