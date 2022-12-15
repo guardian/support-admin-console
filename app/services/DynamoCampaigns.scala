@@ -64,4 +64,13 @@ class DynamoCampaigns(stage: String, client: DynamoDbClient) extends StrictLoggi
     put(request)
   }
 
+  def updateCampaign(campaign: Campaign): ZIO[ZEnv, DynamoError, Unit] = {
+    val item = jsonToDynamo(campaign.asJson).m()
+    val request = PutItemRequest
+      .builder
+      .tableName(tableName)
+      .item(item)
+      .build()
+    put(request)
+  }
 }
