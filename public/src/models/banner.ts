@@ -26,6 +26,7 @@ export enum BannerTemplate {
   UsEoyGivingTuesMomentBanner = 'UsEoyGivingTuesMomentBanner',
   AusEoyMomentBanner = 'AusEoyMomentBanner',
   UsEoyMomentBannerV3 = 'UsEoyMomentBannerV3',
+  CharityAppealBanner = 'CharityAppealBanner',
 }
 
 export interface BannerContent {

@@ -112,6 +112,10 @@ const bannerModules = {
     path: 'contributions/ContributionsBannerWithSignIn.js',
     name: 'ContributionsBannerWithSignIn',
   },
+  [BannerTemplate.CharityAppealBanner]: {
+    path: 'charityAppeal/CharityAppealBanner.js',
+    name: 'CharityAppealBanner',
+  },
   [BannerTemplate.InvestigationsMomentBanner]: {
     path: 'investigationsMoment/InvestigationsMomentBanner.js',
     name: 'InvestigationsMomentBanner',
