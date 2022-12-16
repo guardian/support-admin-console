@@ -8,7 +8,8 @@ case class Campaign(
   name: String,
   nickname: String,
   description: Option[String],
-  notes: Option[List[String]]
+  notes: Option[List[String]],
+  isActive: Option[Boolean],
 )
 
 object Campaigns {

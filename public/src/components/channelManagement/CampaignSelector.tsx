@@ -55,6 +55,33 @@ const CampaignSelector: React.FC<CampaignSelectorProps> = ({
 
   const setCampaignName = (campaign?: string) => onCampaignChange(campaign);
 
+  const sortCampaigns = (campaignArray: Campaign[]) => {
+    campaignArray.sort((a, b) => {
+      const A = a.nickname || a.name;
+      const B = b.nickname || b.name;
+
+      if (A < B) {
+        return -1;
+      }
+      if (B < A) {
+        return 1;
+      }
+      return 0;
+    });
+    return campaignArray;
+  };
+
+  const sortedCampaigns = sortCampaigns(campaigns);
+  const filteredCampaigns = sortedCampaigns.filter(c => {
+    if (c.name === unassignedCampaignLabel) {
+      return false;
+    }
+    if (c.isActive || c.isActive == null) {
+      return true;
+    }
+    return false;
+  });
+
   return (
     <>
       <FormControl className={classes.campaignSelector} size="small">
@@ -72,9 +99,9 @@ const CampaignSelector: React.FC<CampaignSelectorProps> = ({
           <MenuItem value={unassignedCampaignLabel} key={'campaignName-none'}>
             {unassignedCampaignLabel}
           </MenuItem>
-          {campaigns.map(campaign => (
-            <MenuItem value={campaign.name} key={`campaign-${campaign.name}`}>
-              {campaign.name}
+          {filteredCampaigns.map(c => (
+            <MenuItem value={c.name} key={`campaign-${c.name}`}>
+              {c.name}
             </MenuItem>
           ))}
         </Select>

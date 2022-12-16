@@ -1,10 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Theme, Typography, makeStyles } from '@material-ui/core';
+import {
+  Theme,
+  // Typography,
+  makeStyles,
+  TextField,
+  FormControlLabel,
+  Switch,
+} from '@material-ui/core';
 import StickyTopBar from './StickyCampaignBar';
 import { Campaign } from './CampaignsForm';
 import { Test } from '../helpers/shared';
 import ChannelCard from './ChannelCard';
 import { fetchCampaignTests } from '../../../utils/requests';
+import { useForm } from 'react-hook-form';
+// import { useForm, Controller } from 'react-hook-form';
+// import { RichTextEditor } from '../richTextEditor/richTextEditor';
+import { unassignedCampaignLabel } from '../CampaignSelector';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   testEditorContainer: {
@@ -42,10 +53,6 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     marginBottom: spacing(2),
   },
 }));
-
-interface CampaignsEditorProps {
-  campaign: Campaign;
-}
 
 export const testChannelOrder = [
   'Header',
@@ -102,13 +109,24 @@ export const testChannelData: TestChannelData = {
   },
 };
 
-function CampaignsEditor({ campaign }: CampaignsEditorProps): React.ReactElement {
+interface FormData {
+  description: string;
+  notes: string[];
+  isActive: boolean;
+}
+
+interface CampaignsEditorProps {
+  campaign: Campaign;
+  updateCampaign: (data: Campaign) => void;
+}
+
+function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): React.ReactElement {
   const classes = useStyles();
 
   const [testData, setTestData] = useState<Test[]>([]);
+  // const [editMode, setEditMode] = useState(true);
+  const editMode = true;
   const [showArchivedTests, setShowArchivedTests] = useState(false);
-
-  const { name, nickname, description } = campaign;
 
   const doDataFetch = (name: string) => {
     fetchCampaignTests(name).then(tests => {
@@ -123,9 +141,26 @@ function CampaignsEditor({ campaign }: CampaignsEditorProps): React.ReactElement
     });
   };
 
+  const { name, nickname, description, notes, isActive } = campaign;
+
+  const defaultValues = {
+    description: description ?? '',
+    notes: notes ?? [],
+    isActive: isActive ?? true,
+  };
+
   useEffect(() => doDataFetch(name), [campaign]);
 
   const updatePage = () => doDataFetch(name);
+
+  const { register, handleSubmit, errors, trigger } = useForm<FormData>({
+    mode: 'onChange',
+    defaultValues,
+  });
+
+  useEffect(() => {
+    trigger();
+  }, []);
 
   const filterTests = (channel: string) => {
     if (showArchivedTests) {
@@ -135,6 +170,23 @@ function CampaignsEditor({ campaign }: CampaignsEditorProps): React.ReactElement
       return filteredTests.filter(test => test.status !== 'Archived');
     }
   };
+
+  const updateDescription = ({ description }: FormData): void => {
+    updateCampaign({ ...campaign, description });
+  };
+
+  // const updateNotes = ({ notes }: FormData): void => {
+  //   updateCampaign({ ...campaign, notes });
+  // };
+
+  const updateIsActive = ({ isActive }: FormData): void => {
+    console.log('isActive', isActive);
+    updateCampaign({ ...campaign, isActive });
+  };
+
+  console.log('campaign', campaign);
+  console.log('defaultValues', defaultValues);
+  console.log(name, nickname, description, isActive, notes);
 
   return (
     <div className={classes.testEditorContainer}>
@@ -147,12 +199,37 @@ function CampaignsEditor({ campaign }: CampaignsEditorProps): React.ReactElement
         updatePage={updatePage}
       />
       <div className={classes.scrollableContainer}>
-        <div className={classes.formContainer}>
-          <div className={classes.notesContainer}>
-            <div className={classes.notesHeader}>Notes (will be an editable RTE field):</div>
-            {description && <Typography>{description}</Typography>}
+        {name !== unassignedCampaignLabel && (
+          <div className={classes.formContainer}>
+            <div className={classes.notesContainer}>
+              <div className={classes.notesHeader}>Campaign metadata and notes:</div>
+              <TextField
+                inputRef={register()}
+                error={errors.description !== undefined}
+                helperText={errors.description ? errors.description.message : ''}
+                onBlur={handleSubmit(updateDescription)}
+                name="description"
+                label="Description"
+                margin="normal"
+                variant="outlined"
+                disabled={!editMode}
+                fullWidth
+              />
+              <FormControlLabel
+                control={
+                  <Switch
+                    inputRef={register()}
+                    name="isActive"
+                    checked={isActive ?? true}
+                    onChange={handleSubmit(updateIsActive)}
+                    disabled={!editMode}
+                  />
+                }
+                label={'Include this campaign in Channel Test campaign selectors'}
+              />
+            </div>
           </div>
-        </div>
+        )}
         {testChannelOrder.map(channel => (
           <ChannelCard
             channelData={testChannelData[channel]}

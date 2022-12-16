@@ -9,6 +9,7 @@ import {
   fetchFrontendSettings,
   FrontendSettingsType,
   sendCreateCampaignRequest,
+  sendUpdateCampaignRequest,
 } from '../../../utils/requests';
 
 const useStyles = makeStyles(({ spacing, typography }: Theme) => ({
@@ -49,6 +50,8 @@ export interface Campaign {
   name: string;
   nickname: string;
   description?: string;
+  notes?: string[];
+  isActive?: boolean;
 }
 export type Campaigns = Campaign[];
 
@@ -63,7 +66,6 @@ const CampaignsForm: React.FC = () => {
   const [selectedCampaign, setSelectedCampaign] = useState<Campaign | undefined>();
 
   const classes = useStyles();
-  const { testName } = useParams<{ testName?: string }>();
 
   const fetchSettings = (): Promise<Campaign[]> => {
     return fetchFrontendSettings(FrontendSettingsType.campaigns);
@@ -75,32 +77,48 @@ const CampaignsForm: React.FC = () => {
 
   const createCampaign = (campaign: Campaign): void => {
     setCampaigns([...campaigns, campaign]);
-    setSelectedCampaign(campaign);
+    setSelectedCampaign({ ...campaign });
     sendCreateCampaignRequest(campaign).catch(error => alert(`Error creating campaign: ${error}`));
   };
 
-  const getSelectedCampaign = (): Campaign | undefined => {
-    if (selectedCampaign == null && testName != null) {
+  const updateCampaign = (updatedCampaign: Campaign): void => {
+    setSelectedCampaign({ ...updatedCampaign });
+    sendUpdateCampaignRequest(updatedCampaign).catch(error =>
+      alert(`Error updating campaign ${updatedCampaign.name}: ${error}`),
+    );
+  };
+
+  const checkForSelectedOrRequestedCampaign = (): boolean => {
+    if (selectedCampaign != null) {
+      return true;
+    }
+
+    // Each campaign can have its own URL, whose value we need to interpret
+    // - https://support.gutools.co.uk/campaigns/2021_NY
+    const { testName } = useParams<{ testName?: string }>();
+
+    if (testName != null) {
       const requiredCampaign = campaigns.find(c => c.name === testName);
       if (requiredCampaign != null) {
-        return requiredCampaign;
+        setSelectedCampaign({ ...requiredCampaign });
+        return true;
       }
     }
-    return selectedCampaign;
+    return false;
   };
 
   const onCampaignSelected = (name: string) => {
     if (unassignedCampaignLabel === name) {
-      setSelectedCampaign(unassignedCampaign);
+      setSelectedCampaign({ ...unassignedCampaign });
     } else {
       const requiredCampaign = campaigns.find(c => c.name === name);
       if (requiredCampaign != null) {
-        setSelectedCampaign(requiredCampaign);
+        setSelectedCampaign({ ...requiredCampaign });
       }
     }
   };
 
-  const currentCampaign = getSelectedCampaign();
+  const hasCampaignBeenSelected = checkForSelectedOrRequestedCampaign();
 
   return (
     <div className={classes.body}>
@@ -108,13 +126,13 @@ const CampaignsForm: React.FC = () => {
         <CampaignsSidebar
           campaigns={campaigns}
           createCampaign={createCampaign}
-          selectedCampaign={currentCampaign}
+          selectedCampaign={selectedCampaign}
           onCampaignSelected={onCampaignSelected}
         />
       </div>
       <div className={classes.rightCol}>
-        {currentCampaign ? (
-          <CampaignsEditor campaign={currentCampaign} />
+        {hasCampaignBeenSelected && selectedCampaign ? (
+          <CampaignsEditor campaign={selectedCampaign} updateCampaign={updateCampaign} />
         ) : (
           <div className={classes.viewTextContainer}>
             <Typography className={classes.viewText}>
