@@ -28,7 +28,8 @@ const useStyles = makeStyles(() => ({
 
 interface CampaignsSidebarProps {
   campaigns: Campaigns;
-  selectedCampaign?: Campaign;
+  // selectedCampaign?: Campaign;
+  selectedCampaign?: string;
   createCampaign: (campaign: Campaign) => void;
   onCampaignSelected: (campaignName: string) => void;
 }

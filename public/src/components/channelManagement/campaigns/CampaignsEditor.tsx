@@ -12,8 +12,8 @@ import { Campaign } from './CampaignsForm';
 import { Test } from '../helpers/shared';
 import ChannelCard from './ChannelCard';
 import { fetchCampaignTests } from '../../../utils/requests';
-import { useForm } from 'react-hook-form';
-// import { useForm, Controller } from 'react-hook-form';
+// import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 // import { RichTextEditor } from '../richTextEditor/richTextEditor';
 import { unassignedCampaignLabel } from '../CampaignSelector';
 
@@ -116,17 +116,22 @@ interface FormData {
 }
 
 interface CampaignsEditorProps {
-  campaign: Campaign;
+  // campaign: Campaign;
+  campaignName: string;
+  getCampaignData: (name: string) => Campaign;
   updateCampaign: (data: Campaign) => void;
 }
 
-function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): React.ReactElement {
+function CampaignsEditor({ campaignName, getCampaignData, updateCampaign }: CampaignsEditorProps): React.ReactElement {
   const classes = useStyles();
 
   const [testData, setTestData] = useState<Test[]>([]);
   // const [editMode, setEditMode] = useState(true);
   const editMode = true;
   const [showArchivedTests, setShowArchivedTests] = useState(false);
+
+  const campaignData = getCampaignData(campaignName);
+  const { name, nickname, description, notes, isActive } = campaignData;
 
   const doDataFetch = (name: string) => {
     fetchCampaignTests(name).then(tests => {
@@ -141,7 +146,7 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
     });
   };
 
-  const { name, nickname, description, notes, isActive } = campaign;
+  // const { name, nickname, description, notes, isActive } = campaign;
 
   const defaultValues = {
     description: description ?? '',
@@ -149,11 +154,11 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
     isActive: isActive ?? true,
   };
 
-  useEffect(() => doDataFetch(name), [campaign]);
+  useEffect(() => doDataFetch(name), [campaignName]);
 
   const updatePage = () => doDataFetch(name);
 
-  const { register, handleSubmit, errors, trigger } = useForm<FormData>({
+  const { register, handleSubmit, errors, trigger, control } = useForm<FormData>({
     mode: 'onChange',
     defaultValues,
   });
@@ -172,7 +177,7 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
   };
 
   const updateDescription = ({ description }: FormData): void => {
-    updateCampaign({ ...campaign, description });
+    updateCampaign({ ...campaignData, description });
   };
 
   // const updateNotes = ({ notes }: FormData): void => {
@@ -180,11 +185,11 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
   // };
 
   const updateIsActive = ({ isActive }: FormData): void => {
-    console.log('isActive', isActive);
-    updateCampaign({ ...campaign, isActive });
+    console.log('isActive', isActive, );
+    updateCampaign({ ...campaignData, isActive });
   };
 
-  console.log('campaign', campaign);
+  console.log('campaign', campaignData);
   console.log('defaultValues', defaultValues);
   console.log(name, nickname, description, isActive, notes);
 
@@ -203,6 +208,28 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
           <div className={classes.formContainer}>
             <div className={classes.notesContainer}>
               <div className={classes.notesHeader}>Campaign metadata and notes:</div>
+
+{/*
+              <Controller
+                name="description"
+                control={control}
+                render={data => (
+                  <TextField
+                    inputRef={register()}
+                    error={errors.description !== undefined}
+                    helperText={errors.description ? errors.description.message : ''}
+                    onBlur={handleSubmit(updateDescription)}
+                    name="description"
+                    label="Description"
+                    margin="normal"
+                    variant="outlined"
+                    disabled={!editMode}
+                    fullWidth
+                  />
+                )}
+              />
+*/}              
+
               <TextField
                 inputRef={register()}
                 error={errors.description !== undefined}
@@ -215,6 +242,7 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
                 disabled={!editMode}
                 fullWidth
               />
+
               <FormControlLabel
                 control={
                   <Switch
