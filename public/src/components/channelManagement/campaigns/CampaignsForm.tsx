@@ -86,9 +86,7 @@ const CampaignsForm: React.FC = () => {
       .then(() => fetchSettings())
       .then(c => setCampaigns(c))
       .then(() => onCampaignSelected(updatedCampaign.name))
-      .catch(error =>
-        alert(`Error updating campaign ${updatedCampaign.name}: ${error}`),
-    );
+      .catch(error => alert(`Error updating campaign ${updatedCampaign.name}: ${error}`));
   };
 
   const checkForSelectedOrRequestedCampaign = (): boolean => {
@@ -108,10 +106,6 @@ const CampaignsForm: React.FC = () => {
       }
     }
     return false;
-  };
-
-  const getCampaignData = (name: string): Campaign => {
-    return campaigns.find(c => c.name === name) ?? {...unassignedCampaign};
   };
 
   const onCampaignSelected = (name: string) => {
@@ -139,7 +133,7 @@ const CampaignsForm: React.FC = () => {
       </div>
       <div className={classes.rightCol}>
         {hasCampaignBeenSelected && selectedCampaign ? (
-          <CampaignsEditor 
+          <CampaignsEditor
             key={selectedCampaign.name}
             campaign={selectedCampaign}
             updateCampaign={updateCampaign}

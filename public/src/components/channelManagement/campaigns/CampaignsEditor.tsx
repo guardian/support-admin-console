@@ -13,7 +13,7 @@ import { Test } from '../helpers/shared';
 import ChannelCard from './ChannelCard';
 import { fetchCampaignTests } from '../../../utils/requests';
 import { useForm, Controller } from 'react-hook-form';
-// import { RichTextEditor } from '../richTextEditor/richTextEditor';
+import { RichTextEditor } from '../richTextEditor/richTextEditor';
 import { unassignedCampaignLabel } from '../CampaignSelector';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
@@ -151,7 +151,7 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
 
   const updatePage = () => doDataFetch(name);
 
-  const { register, handleSubmit, errors, trigger } = useForm<FormData>({
+  const { register, handleSubmit, errors, trigger, control } = useForm<FormData>({
     mode: 'onChange',
     defaultValues,
   });
@@ -173,9 +173,9 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
     updateCampaign({ ...campaign, description });
   };
 
-  // const updateNotes = ({ notes }: FormData): void => {
-  //   updateCampaign({ ...campaign, notes });
-  // };
+  const updateNotes = ({ notes }: FormData): void => {
+    updateCampaign({ ...campaign, notes });
+  };
 
   const updateIsActive = ({ isActive }: FormData): void => {
     updateCampaign({ ...campaign, isActive });
@@ -221,6 +221,32 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
                   />
                 }
                 label={'Include this campaign in Channel Test campaign selectors'}
+              />
+
+              <Controller
+                name="notes"
+                control={control}
+                render={data => {
+                  return (
+                    <RichTextEditor
+                      error={errors.notes !== undefined}
+                      copyData={data.value}
+                      updateCopy={pars => {
+                        data.onChange(pars);
+                        handleSubmit(updateNotes)();
+                      }}
+                      name="notes"
+                      label="Notes and links"
+                      disabled={!editMode}
+                      rteMenuConstraints={{
+                        noCurrencyTemplate: true,
+                        noCountryNameTemplate: true,
+                        noArticleCountTemplate: true,
+                        noPriceTemplates: true,
+                      }}
+                    />
+                  );
+                }}
               />
             </div>
           </div>
