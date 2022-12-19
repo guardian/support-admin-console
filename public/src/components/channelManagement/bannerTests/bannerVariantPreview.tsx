@@ -125,7 +125,7 @@ const bannerModules = {
     name: 'EnvironmentMomentBanner',
   },
   [BannerTemplate.GlobalNewYearBanner]: {
-    path: 'globalNewYear/GlobalNewYearBanner.js',
+    path: 'globalNYMoment/GlobalNYMomentBanner.js',
     name: 'GlobalNewYearBanner',
   },
   [BannerTemplate.AuBrandMomentBanner]: {
