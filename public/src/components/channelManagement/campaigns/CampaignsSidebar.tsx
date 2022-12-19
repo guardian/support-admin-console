@@ -40,7 +40,6 @@ function CampaignsSidebar({
   onCampaignSelected,
 }: CampaignsSidebarProps): React.ReactElement {
   const classes = useStyles();
-
   const [campaignSearch, setCampaignSearch] = useState('');
 
   const searchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,7 +47,6 @@ function CampaignsSidebar({
       setCampaignSearch(e.target.value.toUpperCase());
     }
   };
-
   return (
     <div className={classes.root}>
       <div className={classes.buttonsContainer}>
