@@ -39,8 +39,7 @@ const useStyles = makeStyles(({}: Theme) => ({
 interface CampaignsListProps {
   campaigns: Campaigns;
   campaignSearch: string;
-  // selectedCampaign?: Campaign;
-  selectedCampaign?: string;
+  selectedCampaign?: Campaign;
   onCampaignSelected: (testName: string) => void;
 }
 

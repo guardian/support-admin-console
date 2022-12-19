@@ -12,7 +12,6 @@ import { Campaign } from './CampaignsForm';
 import { Test } from '../helpers/shared';
 import ChannelCard from './ChannelCard';
 import { fetchCampaignTests } from '../../../utils/requests';
-// import { useForm } from 'react-hook-form';
 import { useForm, Controller } from 'react-hook-form';
 // import { RichTextEditor } from '../richTextEditor/richTextEditor';
 import { unassignedCampaignLabel } from '../CampaignSelector';
@@ -116,22 +115,18 @@ interface FormData {
 }
 
 interface CampaignsEditorProps {
-  // campaign: Campaign;
-  campaignName: string;
-  getCampaignData: (name: string) => Campaign;
+  campaign: Campaign;
   updateCampaign: (data: Campaign) => void;
 }
 
-function CampaignsEditor({ campaignName, getCampaignData, updateCampaign }: CampaignsEditorProps): React.ReactElement {
+function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): React.ReactElement {
   const classes = useStyles();
 
   const [testData, setTestData] = useState<Test[]>([]);
-  // const [editMode, setEditMode] = useState(true);
   const editMode = true;
   const [showArchivedTests, setShowArchivedTests] = useState(false);
 
-  const campaignData = getCampaignData(campaignName);
-  const { name, nickname, description, notes, isActive } = campaignData;
+  const { name, nickname, description, notes, isActive } = campaign;
 
   const doDataFetch = (name: string) => {
     fetchCampaignTests(name).then(tests => {
@@ -146,19 +141,17 @@ function CampaignsEditor({ campaignName, getCampaignData, updateCampaign }: Camp
     });
   };
 
-  // const { name, nickname, description, notes, isActive } = campaign;
-
   const defaultValues = {
     description: description ?? '',
     notes: notes ?? [],
     isActive: isActive ?? true,
   };
 
-  useEffect(() => doDataFetch(name), [campaignName]);
+  useEffect(() => doDataFetch(name), [name]);
 
   const updatePage = () => doDataFetch(name);
 
-  const { register, handleSubmit, errors, trigger, control } = useForm<FormData>({
+  const { register, handleSubmit, errors, trigger } = useForm<FormData>({
     mode: 'onChange',
     defaultValues,
   });
@@ -177,7 +170,7 @@ function CampaignsEditor({ campaignName, getCampaignData, updateCampaign }: Camp
   };
 
   const updateDescription = ({ description }: FormData): void => {
-    updateCampaign({ ...campaignData, description });
+    updateCampaign({ ...campaign, description });
   };
 
   // const updateNotes = ({ notes }: FormData): void => {
@@ -185,13 +178,8 @@ function CampaignsEditor({ campaignName, getCampaignData, updateCampaign }: Camp
   // };
 
   const updateIsActive = ({ isActive }: FormData): void => {
-    console.log('isActive', isActive, );
-    updateCampaign({ ...campaignData, isActive });
+    updateCampaign({ ...campaign, isActive });
   };
-
-  console.log('campaign', campaignData);
-  console.log('defaultValues', defaultValues);
-  console.log(name, nickname, description, isActive, notes);
 
   return (
     <div className={classes.testEditorContainer}>
@@ -208,27 +196,6 @@ function CampaignsEditor({ campaignName, getCampaignData, updateCampaign }: Camp
           <div className={classes.formContainer}>
             <div className={classes.notesContainer}>
               <div className={classes.notesHeader}>Campaign metadata and notes:</div>
-
-{/*
-              <Controller
-                name="description"
-                control={control}
-                render={data => (
-                  <TextField
-                    inputRef={register()}
-                    error={errors.description !== undefined}
-                    helperText={errors.description ? errors.description.message : ''}
-                    onBlur={handleSubmit(updateDescription)}
-                    name="description"
-                    label="Description"
-                    margin="normal"
-                    variant="outlined"
-                    disabled={!editMode}
-                    fullWidth
-                  />
-                )}
-              />
-*/}              
 
               <TextField
                 inputRef={register()}

@@ -63,8 +63,7 @@ export const unassignedCampaign = {
 
 const CampaignsForm: React.FC = () => {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
-  // const [selectedCampaign, setSelectedCampaign] = useState<Campaign | undefined>();
-  const [selectedCampaign, setSelectedCampaign] = useState<string | undefined>();
+  const [selectedCampaign, setSelectedCampaign] = useState<Campaign | undefined>();
 
   const classes = useStyles();
 
@@ -78,16 +77,17 @@ const CampaignsForm: React.FC = () => {
 
   const createCampaign = (campaign: Campaign): void => {
     setCampaigns([...campaigns, campaign]);
-    // setSelectedCampaign({ ...campaign });
-    setSelectedCampaign(campaign.name);
+    setSelectedCampaign(campaign);
     sendCreateCampaignRequest(campaign).catch(error => alert(`Error creating campaign: ${error}`));
   };
 
   const updateCampaign = (updatedCampaign: Campaign): void => {
-    // setSelectedCampaign({ ...updatedCampaign });
-    setSelectedCampaign(updatedCampaign.name);
-    sendUpdateCampaignRequest(updatedCampaign).catch(error =>
-      alert(`Error updating campaign ${updatedCampaign.name}: ${error}`),
+    sendUpdateCampaignRequest(updatedCampaign)
+      .then(() => fetchSettings())
+      .then(c => setCampaigns(c))
+      .then(() => onCampaignSelected(updatedCampaign.name))
+      .catch(error =>
+        alert(`Error updating campaign ${updatedCampaign.name}: ${error}`),
     );
   };
 
@@ -103,8 +103,7 @@ const CampaignsForm: React.FC = () => {
     if (testName != null) {
       const requiredCampaign = campaigns.find(c => c.name === testName);
       if (requiredCampaign != null) {
-        // setSelectedCampaign({ ...requiredCampaign });
-        setSelectedCampaign(testName);
+        setSelectedCampaign(requiredCampaign);
         return true;
       }
     }
@@ -117,13 +116,11 @@ const CampaignsForm: React.FC = () => {
 
   const onCampaignSelected = (name: string) => {
     if (unassignedCampaignLabel === name) {
-      // setSelectedCampaign({ ...unassignedCampaign });
-      setSelectedCampaign(unassignedCampaign.name);
+      setSelectedCampaign(unassignedCampaign);
     } else {
       const requiredCampaign = campaigns.find(c => c.name === name);
       if (requiredCampaign != null) {
-        // setSelectedCampaign({ ...requiredCampaign });
-        setSelectedCampaign(requiredCampaign.name);
+        setSelectedCampaign(requiredCampaign);
       }
     }
   };
@@ -143,9 +140,9 @@ const CampaignsForm: React.FC = () => {
       <div className={classes.rightCol}>
         {hasCampaignBeenSelected && selectedCampaign ? (
           <CampaignsEditor 
-            campaignName={selectedCampaign}
+            key={selectedCampaign.name}
+            campaign={selectedCampaign}
             updateCampaign={updateCampaign}
-            getCampaignData={getCampaignData}
           />
         ) : (
           <div className={classes.viewTextContainer}>
