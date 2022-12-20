@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import {
   FormControlLabel,
+  makeStyles,
   Radio,
   RadioGroup,
+  Switch,
   Theme,
   Typography,
-  makeStyles,
-  Switch,
 } from '@material-ui/core';
 import BannerTestVariantEditorCtasEditor from './bannerTestVariantEditorCtasEditor';
 import {
@@ -21,9 +21,9 @@ import { BannerContent, BannerTemplate, BannerVariant } from '../../../models/ba
 import { getDefaultVariant } from './utils/defaults';
 import useValidation from '../hooks/useValidation';
 import {
+  getRteCopyLength,
   RichTextEditor,
   RichTextEditorSingleLine,
-  getRteCopyLength,
 } from '../richTextEditor/richTextEditor';
 import TickerEditor from '../tickerEditor';
 
@@ -285,6 +285,7 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
           />
 
           {(template === BannerTemplate.ContributionsBanner ||
+            template === BannerTemplate.GuardianWeeklyBanner ||
             template === BannerTemplate.CharityAppealBanner ||
             template === BannerTemplate.InvestigationsMomentBanner ||
             template === BannerTemplate.ClimateCrisisMomentBanner ||
