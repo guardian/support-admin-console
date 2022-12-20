@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles, Theme, Typography } from '@material-ui/core';
 import CampaignsSidebar from './CampaignsSidebar';
 import CampaignsEditor from './CampaignsEditor';
-import { unassignedCampaignLabel } from '../CampaignSelector';
 import { useParams } from 'react-router-dom';
 
 import {
@@ -56,7 +55,7 @@ export interface Campaign {
 export type Campaigns = Campaign[];
 
 export const unassignedCampaign = {
-  name: unassignedCampaignLabel,
+  name: 'NOT_IN_CAMPAIGN',
   nickname: 'TESTS NOT IN A CAMPAIGN',
   description: 'Tests not assigned to a campaign',
 };
@@ -109,7 +108,7 @@ const CampaignsForm: React.FC = () => {
   };
 
   const onCampaignSelected = (name: string) => {
-    if (unassignedCampaignLabel === name) {
+    if (unassignedCampaign.name === name) {
       setSelectedCampaign(unassignedCampaign);
     } else {
       const requiredCampaign = campaigns.find(c => c.name === name);

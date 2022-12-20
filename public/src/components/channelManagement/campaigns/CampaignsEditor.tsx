@@ -8,13 +8,12 @@ import {
   Switch,
 } from '@material-ui/core';
 import StickyTopBar from './StickyCampaignBar';
-import { Campaign } from './CampaignsForm';
+import { Campaign, unassignedCampaign } from './CampaignsForm';
 import { Test } from '../helpers/shared';
 import ChannelCard from './ChannelCard';
 import { fetchCampaignTests } from '../../../utils/requests';
 import { useForm, Controller } from 'react-hook-form';
 import { RichTextEditor } from '../richTextEditor/richTextEditor';
-import { unassignedCampaignLabel } from '../CampaignSelector';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   testEditorContainer: {
@@ -192,7 +191,7 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
         updatePage={updatePage}
       />
       <div className={classes.scrollableContainer}>
-        {name !== unassignedCampaignLabel && (
+        {name !== unassignedCampaign.name && (
           <div className={classes.formContainer}>
             <div className={classes.notesContainer}>
               <div className={classes.notesHeader}>Campaign metadata and notes:</div>

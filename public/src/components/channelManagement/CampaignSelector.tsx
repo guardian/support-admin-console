@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { fetchFrontendSettings, FrontendSettingsType } from '../../utils/requests';
-import { Campaign } from './campaigns/CampaignsForm';
+import { Campaign, unassignedCampaign } from './campaigns/CampaignsForm';
 import { Test } from './helpers/shared';
 
 import { Select, MenuItem, FormControl, makeStyles } from '@material-ui/core';
@@ -38,8 +38,6 @@ interface CampaignSelectorProps {
   disabled: boolean;
 }
 
-export const unassignedCampaignLabel = 'NOT_IN_CAMPAIGN';
-
 const CampaignSelector: React.FC<CampaignSelectorProps> = ({
   onCampaignChange,
   test,
@@ -71,16 +69,19 @@ const CampaignSelector: React.FC<CampaignSelectorProps> = ({
     return campaignArray;
   };
 
-  const sortedCampaigns = sortCampaigns(campaigns);
-  const filteredCampaigns = sortedCampaigns.filter(c => {
-    if (c.name === unassignedCampaignLabel) {
+  const filterCampaigns = (campaignArray: Campaign[]) => {
+    return campaignArray.filter(c => {
+      if (c.name === unassignedCampaign.name) {
+        return false;
+      }
+      if (c.isActive || c.isActive == null) {
+        return true;
+      }
       return false;
-    }
-    if (c.isActive || c.isActive == null) {
-      return true;
-    }
-    return false;
-  });
+    });
+  };
+
+  const availableCampaigns = sortCampaigns(filterCampaigns(campaigns));
 
   return (
     <>
@@ -96,12 +97,12 @@ const CampaignSelector: React.FC<CampaignSelectorProps> = ({
           }}
           disabled={disabled}
         >
-          <MenuItem value={unassignedCampaignLabel} key={'campaignName-none'}>
-            {unassignedCampaignLabel}
+          <MenuItem value={unassignedCampaign.name} key={'campaignName-none'}>
+            {unassignedCampaign.nickname}
           </MenuItem>
-          {filteredCampaigns.map(c => (
+          {availableCampaigns.map(c => (
             <MenuItem value={c.name} key={`campaign-${c.name}`}>
-              {c.name}
+              {c.nickname || c.name}
             </MenuItem>
           ))}
         </Select>
