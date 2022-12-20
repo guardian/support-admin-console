@@ -40,24 +40,24 @@ const useStyles = makeStyles(({ palette }: Theme) => ({
 
     '&:hover': {
       background: `${red[500]}`,
-      text: 'white',
+      color: 'white',
     },
   },
   liveInverted: {
     background: `${red[500]}`,
-    text: 'white',
+    color: 'white',
   },
   draft: {
     border: `1px solid ${palette.grey[700]}`,
 
     '&:hover': {
       background: `${palette.grey[700]}`,
-      text: 'white',
+      color: 'white',
     },
   },
   draftInverted: {
     background: `${palette.grey[700]}`,
-    text: 'white',
+    color: 'white',
   },
 }));
 
@@ -76,13 +76,13 @@ const CampaignsList = ({
 }: CampaignsListProps): React.ReactElement => {
   const classes = useStyles();
 
-  const getAppropriateStylingForCampaign = (c: Campaign | undefined) => {
-    if (c == null) {
+  const getAppropriateStylingForCampaign = (campaign: Campaign | undefined) => {
+    if (campaign == null) {
       return classes.button;
     }
     const containerClasses = [classes.button];
-    const isActive = c.isActive ?? true;
-    const isCurrent = selectedCampaign != null ? c.name === selectedCampaign.name : false;
+    const isActive = campaign.isActive ?? true;
+    const isCurrent = selectedCampaign != null ? campaign.name === selectedCampaign.name : false;
 
     if (isActive && isCurrent) {
       containerClasses.push(classes.liveInverted);
@@ -133,6 +133,7 @@ const CampaignsList = ({
         {sortedCampaigns.map(campaign => (
           <ListItem className={classes.listItem} key={campaign.name}>
             <Button
+              key={`${campaign.name}-button`}
               className={getAppropriateStylingForCampaign(campaign)}
               variant="outlined"
               onClick={(): void => onCampaignSelected(campaign.name)}
@@ -145,6 +146,7 @@ const CampaignsList = ({
         ))}
         <ListItem className={classes.listItem} key={unassignedCampaign.name}>
           <Button
+            key={`${unassignedCampaign.name}-button`}
             className={getAppropriateStylingForCampaign(unassignedCampaign)}
             variant="outlined"
             onClick={(): void => onCampaignSelected(unassignedCampaign.name)}

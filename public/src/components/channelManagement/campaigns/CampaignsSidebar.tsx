@@ -47,6 +47,7 @@ function CampaignsSidebar({
       setCampaignSearch(e.target.value.toUpperCase());
     }
   };
+
   return (
     <div className={classes.root}>
       <div className={classes.buttonsContainer}>
