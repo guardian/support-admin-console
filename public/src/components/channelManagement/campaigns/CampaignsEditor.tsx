@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Theme, makeStyles, TextField, FormControlLabel, Switch } from '@material-ui/core';
+import {
+  Theme,
+  makeStyles,
+  TextField,
+  FormControlLabel,
+  Switch,
+  Button,
+  Typography,
+} from '@material-ui/core';
 import StickyTopBar from './StickyCampaignBar';
 import { Campaign, unassignedCampaign } from './CampaignsForm';
 import { Test } from '../helpers/shared';
@@ -29,6 +37,10 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   },
   notesContainer: {
     marginBottom: spacing(4),
+  },
+  notesHeaderLine: {
+    display: 'flex',
+    justifyContent: 'space-between',
   },
   notesHeader: {
     marginBottom: spacing(2),
@@ -116,7 +128,7 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
 
   const [testData, setTestData] = useState<Test[]>([]);
   const [isActiveSwitch, setIsActiveSwitch] = useState(true);
-  const editMode = true;
+  const [editMode, setEditMode] = useState(false);
   const [showArchivedTests, setShowArchivedTests] = useState(false);
 
   const { name, nickname, description, notes, isActive } = campaign;
@@ -194,8 +206,14 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
         {name !== unassignedCampaign.name && (
           <div className={classes.formContainer}>
             <div className={classes.notesContainer}>
-              <div className={classes.notesHeader}>Campaign metadata and notes:</div>
-
+              <div className={classes.notesHeaderLine}>
+                <Typography className={classes.notesHeader}>
+                  Campaign metadata and notes:
+                </Typography>
+                <Button variant="contained" onClick={(): void => setEditMode(!editMode)}>
+                  <Typography>{editMode ? 'Save' : 'Edit'}</Typography>
+                </Button>
+              </div>
               <TextField
                 inputRef={register()}
                 error={errors.description !== undefined}
