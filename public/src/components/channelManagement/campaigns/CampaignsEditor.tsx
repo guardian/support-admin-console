@@ -115,6 +115,7 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
   const classes = useStyles();
 
   const [testData, setTestData] = useState<Test[]>([]);
+  const [isActiveSwitch, setIsActiveSwitch] = useState(true);
   const editMode = true;
   const [showArchivedTests, setShowArchivedTests] = useState(false);
 
@@ -139,7 +140,12 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
     isActive: isActive ?? true,
   };
 
-  useEffect(() => doDataFetch(name), [name]);
+  useEffect(() => {
+    doDataFetch(name);
+    if (isActive != null) {
+      setIsActiveSwitch(isActive);
+    }
+  }, [name]);
 
   const updatePage = () => doDataFetch(name);
 
@@ -171,6 +177,7 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
 
   const updateIsActive = ({ isActive }: FormData): void => {
     updateCampaign({ ...campaign, isActive });
+    setIsActiveSwitch(isActive);
   };
 
   return (
@@ -207,7 +214,7 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
                   <Switch
                     inputRef={register()}
                     name="isActive"
-                    checked={isActive ?? true}
+                    checked={isActiveSwitch}
                     onChange={handleSubmit(updateIsActive)}
                     disabled={!editMode}
                   />
