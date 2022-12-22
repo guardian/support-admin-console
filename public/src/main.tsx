@@ -227,7 +227,7 @@ const AppRouter = () => {
             }
           />
           <Route
-            path="/campaigns/:testName?"
+            path="/campaigns/:campaignName?"
             render={(): React.ReactElement => createComponent(<CampaignsForm />, 'Campaigns')}
           />
           <Route

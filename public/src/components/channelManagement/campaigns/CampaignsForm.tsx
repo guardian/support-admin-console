@@ -63,7 +63,7 @@ export const unassignedCampaign = {
 const CampaignsForm: React.FC = () => {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [selectedCampaign, setSelectedCampaign] = useState<Campaign | undefined>();
-  const { testName: campaignName } = useParams<{ testName?: string }>();
+  const { campaignName } = useParams<{ campaignName?: string }>();
   const classes = useStyles();
 
   const fetchSettings = (): Promise<Campaign[]> => {
