@@ -46,6 +46,11 @@ const useStyles = makeStyles(({ palette }: Theme) => ({
   liveInverted: {
     background: `${red[500]}`,
     color: 'white',
+
+    '&:hover': {
+      background: `${red[500]}`,
+      color: 'white',
+    },
   },
   draft: {
     border: `1px solid ${palette.grey[700]}`,
@@ -58,6 +63,11 @@ const useStyles = makeStyles(({ palette }: Theme) => ({
   draftInverted: {
     background: `${palette.grey[700]}`,
     color: 'white',
+
+    '&:hover': {
+      background: `${palette.grey[700]}`,
+      color: 'white',
+    },
   },
 }));
 
