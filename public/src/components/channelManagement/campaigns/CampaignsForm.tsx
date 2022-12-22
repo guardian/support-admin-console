@@ -63,7 +63,7 @@ export const unassignedCampaign = {
 const CampaignsForm: React.FC = () => {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [selectedCampaign, setSelectedCampaign] = useState<Campaign | undefined>();
-
+  const { testName: campaignName } = useParams<{ testName?: string }>();
   const classes = useStyles();
 
   const fetchSettings = (): Promise<Campaign[]> => {
@@ -73,6 +73,15 @@ const CampaignsForm: React.FC = () => {
   useEffect(() => {
     fetchSettings().then(setCampaigns);
   }, []);
+
+  useEffect(() => {
+    if (campaignName != null) {
+      const requiredCampaign = campaigns.find(c => c.name === campaignName);
+      if (requiredCampaign != null) {
+        setSelectedCampaign(requiredCampaign);
+      }
+    }
+  }, [campaignName, campaigns]);
 
   const createCampaign = (campaign: Campaign): void => {
     setCampaigns([...campaigns, campaign]);
@@ -88,25 +97,6 @@ const CampaignsForm: React.FC = () => {
       .catch(error => alert(`Error updating campaign ${updatedCampaign.name}: ${error}`));
   };
 
-  const checkForSelectedOrRequestedCampaign = (): boolean => {
-    if (selectedCampaign != null) {
-      return true;
-    }
-
-    // Each campaign can have its own URL, whose value we need to interpret
-    // - https://support.gutools.co.uk/campaigns/2021_NY
-    const { testName } = useParams<{ testName?: string }>();
-
-    if (testName != null) {
-      const requiredCampaign = campaigns.find(c => c.name === testName);
-      if (requiredCampaign != null) {
-        setSelectedCampaign(requiredCampaign);
-        return true;
-      }
-    }
-    return false;
-  };
-
   const onCampaignSelected = (name: string) => {
     if (unassignedCampaign.name === name) {
       setSelectedCampaign(unassignedCampaign);
@@ -117,8 +107,6 @@ const CampaignsForm: React.FC = () => {
       }
     }
   };
-
-  const hasCampaignBeenSelected = checkForSelectedOrRequestedCampaign();
 
   return (
     <div className={classes.body}>
@@ -131,7 +119,7 @@ const CampaignsForm: React.FC = () => {
         />
       </div>
       <div className={classes.rightCol}>
-        {hasCampaignBeenSelected && selectedCampaign ? (
+        {selectedCampaign ? (
           <CampaignsEditor
             key={selectedCampaign.name}
             campaign={selectedCampaign}
