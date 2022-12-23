@@ -1,3 +1,22 @@
+// CAMPAIGNS Branch /rjr-campaigns-add-editable-notes-field - issues
+//
+// - The commented-out code works
+//   - TomF thinks the code is fighting React and react-hook-forms 
+//     - so we're trying to see if we can get it to work without RHF
+//
+// - The current code has severe bugs:
+//
+//   - Description field seems to work as expected
+//
+//   - The isActive switch responds, but doesn't work
+//     - but its state isn't being reflected in the sidebar
+//     - value not being saved to the backend database
+//
+//   - Notes field doesn't display copy on load
+//     - issue looks like it's in ReMirror
+//       - see richTextEditor.tsx
+//     - editing the notes field does lead to copy being saved to the backend database
+
 import React, { useState, useEffect } from 'react';
 import {
   Theme,
@@ -13,7 +32,6 @@ import { Campaign, unassignedCampaign } from './CampaignsForm';
 import { Test } from '../helpers/shared';
 import ChannelCard from './ChannelCard';
 import { fetchCampaignTests } from '../../../utils/requests';
-import { useForm, Controller } from 'react-hook-form';
 import { RichTextEditor } from '../richTextEditor/richTextEditor';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
@@ -112,12 +130,6 @@ export const testChannelData: TestChannelData = {
   },
 };
 
-interface FormData {
-  description: string;
-  notes: string[];
-  isActive: boolean;
-}
-
 interface CampaignsEditorProps {
   campaign: Campaign;
   updateCampaign: (data: Campaign) => void;
@@ -128,6 +140,8 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
 
   const [testData, setTestData] = useState<Test[]>([]);
   const [isActiveSwitch, setIsActiveSwitch] = useState(true);
+  const [currentNotes, setCurrentNotes] = useState<string[]>([]);
+  const [currentDescription, setCurrentDescription] = useState('');
   const [editMode, setEditMode] = useState(false);
   const [showArchivedTests, setShowArchivedTests] = useState(false);
 
@@ -146,29 +160,14 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
     });
   };
 
-  const defaultValues = {
-    description: description ?? '',
-    notes: notes ?? [],
-    isActive: isActive ?? true,
-  };
-
   useEffect(() => {
     doDataFetch(name);
-    if (isActive != null) {
-      setIsActiveSwitch(isActive);
-    }
+    setIsActiveSwitch(isActive ?? true);
+    setCurrentNotes(notes ?? []);
+    setCurrentDescription(description ?? '');
   }, [name]);
 
   const updatePage = () => doDataFetch(name);
-
-  const { register, handleSubmit, errors, trigger, control } = useForm<FormData>({
-    mode: 'onChange',
-    defaultValues,
-  });
-
-  useEffect(() => {
-    trigger();
-  }, []);
 
   const filterTests = (channel: string) => {
     if (showArchivedTests) {
@@ -179,18 +178,22 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
     }
   };
 
-  const updateDescription = ({ description }: FormData): void => {
-    updateCampaign({ ...campaign, description });
+  const updateDescription = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setCurrentDescription(event.target.value);
+    updateCampaign({ ...campaign, description: currentDescription });
   };
 
-  const updateNotes = ({ notes }: FormData): void => {
-    updateCampaign({ ...campaign, notes });
+  const updateNotes = (updatedNotes: string[] | undefined): void => {
+    setCurrentNotes(updatedNotes ?? []);
+    updateCampaign({ ...campaign, notes: updatedNotes ?? undefined});
   };
 
-  const updateIsActive = ({ isActive }: FormData): void => {
-    updateCampaign({ ...campaign, isActive });
-    setIsActiveSwitch(isActive);
+  const updateIsActive = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setIsActiveSwitch(event.target.value === 'true');
+    updateCampaign({ ...campaign, isActive: isActiveSwitch });
   };
+
+  const updateEditMode = () => setEditMode(!editMode);
 
   return (
     <div className={classes.testEditorContainer}>
@@ -202,6 +205,7 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
         setShowArchivedTests={setShowArchivedTests}
         updatePage={updatePage}
       />
+
       <div className={classes.scrollableContainer}>
         {name !== unassignedCampaign.name && (
           <div className={classes.formContainer}>
@@ -210,64 +214,52 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
                 <Typography className={classes.notesHeader}>
                   Campaign metadata and notes:
                 </Typography>
-                <Button variant="contained" onClick={(): void => setEditMode(!editMode)}>
+                <Button variant="contained" onClick={updateEditMode}>
                   <Typography>{editMode ? 'Save' : 'Edit'}</Typography>
                 </Button>
               </div>
               <TextField
-                inputRef={register()}
-                error={errors.description !== undefined}
-                helperText={errors.description ? errors.description.message : ''}
-                onBlur={handleSubmit(updateDescription)}
                 name="description"
                 label="Description"
                 margin="normal"
                 variant="outlined"
                 disabled={!editMode}
+                onChange={updateDescription}
+                value={currentDescription}
                 fullWidth
               />
 
               <FormControlLabel
                 control={
                   <Switch
-                    inputRef={register()}
                     name="isActive"
                     checked={isActiveSwitch}
-                    onChange={handleSubmit(updateIsActive)}
+                    onChange={updateIsActive}
                     disabled={!editMode}
                   />
                 }
                 label={'Include this campaign in Channel Test campaign selectors'}
               />
 
-              <Controller
+              <RichTextEditor
+                error={false}
+                updateCopy={pars => updateNotes(pars)}
+                copyData={currentNotes}
                 name="notes"
-                control={control}
-                render={data => {
-                  return (
-                    <RichTextEditor
-                      error={errors.notes !== undefined}
-                      copyData={data.value}
-                      updateCopy={pars => {
-                        data.onChange(pars);
-                        handleSubmit(updateNotes)();
-                      }}
-                      name="notes"
-                      label="Notes and links"
-                      disabled={!editMode}
-                      rteMenuConstraints={{
-                        noCurrencyTemplate: true,
-                        noCountryNameTemplate: true,
-                        noArticleCountTemplate: true,
-                        noPriceTemplates: true,
-                      }}
-                    />
-                  );
+                label="Notes and links"
+                disabled={!editMode}
+                rteMenuConstraints={{
+                  noCurrencyTemplate: true,
+                  noCountryNameTemplate: true,
+                  noArticleCountTemplate: true,
+                  noPriceTemplates: true,
                 }}
-              />
-            </div>
-          </div>
-        )}
+               />
+             </div>
+           </div>
+         )}
+
+
         {testChannelOrder.map(channel => (
           <ChannelCard
             channelData={testChannelData[channel]}
@@ -281,3 +273,289 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
 }
 
 export default CampaignsEditor;
+
+
+
+// import React, { useState, useEffect } from 'react';
+// import {
+//   Theme,
+//   makeStyles,
+//   TextField,
+//   FormControlLabel,
+//   Switch,
+//   Button,
+//   Typography,
+// } from '@material-ui/core';
+// import StickyTopBar from './StickyCampaignBar';
+// import { Campaign, unassignedCampaign } from './CampaignsForm';
+// import { Test } from '../helpers/shared';
+// import ChannelCard from './ChannelCard';
+// import { fetchCampaignTests } from '../../../utils/requests';
+// import { useForm, Controller } from 'react-hook-form';
+// import { RichTextEditor } from '../richTextEditor/richTextEditor';
+
+// const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
+//   testEditorContainer: {
+//     display: 'flex',
+//     flexDirection: 'column',
+//     height: '100%',
+//     width: '100%',
+//     background: palette.background.paper, // #FFFFFF
+//     borderLeft: `1px solid ${palette.grey[500]}`,
+//   },
+//   scrollableContainer: {
+//     overflowY: 'auto',
+//     paddingLeft: spacing(3),
+//     paddingRight: spacing(1),
+//     paddingTop: spacing(2),
+//   },
+//   formContainer: {
+//     marginBottom: spacing(4),
+//     borderBottom: '1px solid black',
+//   },
+//   notesContainer: {
+//     marginBottom: spacing(4),
+//   },
+//   notesHeaderLine: {
+//     display: 'flex',
+//     justifyContent: 'space-between',
+//   },
+//   notesHeader: {
+//     marginBottom: spacing(2),
+//     fontSize: '18px',
+//     fontWeight: 500,
+//   },
+//   launchLink: {
+//     padding: '0 8px',
+//     fontSize: '14px',
+//     fontWeight: 'normal',
+//     color: palette.grey[700],
+//     lineHeight: 1.5,
+//     marginBottom: spacing(2),
+//   },
+// }));
+
+// export const testChannelOrder = [
+//   'Header',
+//   'Epic',
+//   'EpicHoldback',
+//   'EpicLiveblog',
+//   'EpicAppleNews',
+//   'EpicAMP',
+//   'Banner1',
+//   'Banner2',
+// ];
+
+// export interface TestChannelItem {
+//   name: string;
+//   link: string;
+// }
+
+// export interface TestChannelData {
+//   [index: string]: TestChannelItem;
+// }
+
+// export const testChannelData: TestChannelData = {
+//   Header: {
+//     name: 'Header',
+//     link: 'header-tests',
+//   },
+//   Epic: {
+//     name: 'Epic',
+//     link: 'epic-tests',
+//   },
+//   EpicHoldback: {
+//     name: 'Epic Holdback',
+//     link: 'epic-holdback-tests',
+//   },
+//   EpicLiveblog: {
+//     name: 'Liveblog Epic',
+//     link: 'liveblog-epic-tests',
+//   },
+//   EpicAppleNews: {
+//     name: 'Apple News Epic',
+//     link: 'apple-news-epic-tests',
+//   },
+//   EpicAMP: {
+//     name: 'AMP Epic',
+//     link: 'amp-epic-tests',
+//   },
+//   Banner1: {
+//     name: 'Banner 1',
+//     link: 'banner-tests',
+//   },
+//   Banner2: {
+//     name: 'Banner 2',
+//     link: 'banner-tests2',
+//   },
+// };
+
+// interface FormData {
+//   description: string;
+//   notes: string[];
+//   isActive: boolean;
+// }
+
+// interface CampaignsEditorProps {
+//   campaign: Campaign;
+//   updateCampaign: (data: Campaign) => void;
+// }
+
+// function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): React.ReactElement {
+//   const classes = useStyles();
+
+//   const [testData, setTestData] = useState<Test[]>([]);
+//   const [isActiveSwitch, setIsActiveSwitch] = useState(true);
+//   const [editMode, setEditMode] = useState(false);
+//   const [showArchivedTests, setShowArchivedTests] = useState(false);
+
+//   const { name, nickname, description, notes, isActive } = campaign;
+
+//   const doDataFetch = (name: string) => {
+//     fetchCampaignTests(name).then(tests => {
+//       // sort by test priority; each channel sets its own priority list
+//       const sortedTests = tests.sort((a: Test, b: Test) => {
+//         if (a.priority != null && b.priority != null) {
+//           return a.priority - b.priority;
+//         }
+//         return 0;
+//       });
+//       setTestData(sortedTests);
+//     });
+//   };
+
+//   const defaultValues = {
+//     description: description ?? '',
+//     notes: notes ?? [],
+//     isActive: isActive ?? true,
+//   };
+
+//   useEffect(() => {
+//     doDataFetch(name);
+//     if (isActive != null) {
+//       setIsActiveSwitch(isActive);
+//     }
+//   }, [name]);
+
+//   const updatePage = () => doDataFetch(name);
+
+//   const { register, handleSubmit, errors, trigger, control } = useForm<FormData>({
+//     mode: 'onChange',
+//     defaultValues,
+//   });
+
+//   useEffect(() => {
+//     trigger();
+//   }, []);
+
+//   const filterTests = (channel: string) => {
+//     if (showArchivedTests) {
+//       return testData.filter(test => test.channel === channel);
+//     } else {
+//       const filteredTests = testData.filter(test => test.channel === channel);
+//       return filteredTests.filter(test => test.status !== 'Archived');
+//     }
+//   };
+
+//   const updateDescription = ({ description }: FormData): void => {
+//     updateCampaign({ ...campaign, description });
+//   };
+
+//   const updateNotes = ({ notes }: FormData): void => {
+//     updateCampaign({ ...campaign, notes });
+//   };
+
+//   const updateIsActive = ({ isActive }: FormData): void => {
+//     updateCampaign({ ...campaign, isActive });
+//     setIsActiveSwitch(isActive);
+//   };
+
+//   return (
+//     <div className={classes.testEditorContainer}>
+//       <StickyTopBar
+//         name={name}
+//         nickname={nickname}
+//         tests={testData}
+//         showArchivedTests={showArchivedTests}
+//         setShowArchivedTests={setShowArchivedTests}
+//         updatePage={updatePage}
+//       />
+//       <div className={classes.scrollableContainer}>
+//         {name !== unassignedCampaign.name && (
+//           <div className={classes.formContainer}>
+//             <div className={classes.notesContainer}>
+//               <div className={classes.notesHeaderLine}>
+//                 <Typography className={classes.notesHeader}>
+//                   Campaign metadata and notes:
+//                 </Typography>
+//                 <Button variant="contained" onClick={(): void => setEditMode(!editMode)}>
+//                   <Typography>{editMode ? 'Save' : 'Edit'}</Typography>
+//                 </Button>
+//               </div>
+//               <TextField
+//                 inputRef={register()}
+//                 error={errors.description !== undefined}
+//                 helperText={errors.description ? errors.description.message : ''}
+//                 onBlur={handleSubmit(updateDescription)}
+//                 name="description"
+//                 label="Description"
+//                 margin="normal"
+//                 variant="outlined"
+//                 disabled={!editMode}
+//                 fullWidth
+//               />
+
+//               <FormControlLabel
+//                 control={
+//                   <Switch
+//                     inputRef={register()}
+//                     name="isActive"
+//                     checked={isActiveSwitch}
+//                     onChange={handleSubmit(updateIsActive)}
+//                     disabled={!editMode}
+//                   />
+//                 }
+//                 label={'Include this campaign in Channel Test campaign selectors'}
+//               />
+
+//               <Controller
+//                 name="notes"
+//                 control={control}
+//                 render={data => {
+//                   return (
+//                     <RichTextEditor
+//                       error={errors.notes !== undefined}
+//                       copyData={data.value}
+//                       updateCopy={pars => {
+//                         data.onChange(pars);
+//                         handleSubmit(updateNotes)();
+//                       }}
+//                       name="notes"
+//                       label="Notes and links"
+//                       disabled={!editMode}
+//                       rteMenuConstraints={{
+//                         noCurrencyTemplate: true,
+//                         noCountryNameTemplate: true,
+//                         noArticleCountTemplate: true,
+//                         noPriceTemplates: true,
+//                       }}
+//                     />
+//                   );
+//                 }}
+//               />
+//             </div>
+//           </div>
+//         )}
+//         {testChannelOrder.map(channel => (
+//           <ChannelCard
+//             channelData={testChannelData[channel]}
+//             tests={filterTests(channel)}
+//             key={channel}
+//           />
+//         ))}
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default CampaignsEditor;

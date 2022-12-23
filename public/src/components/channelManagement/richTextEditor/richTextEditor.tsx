@@ -522,6 +522,13 @@ const RichTextEditor: React.FC<RichTextEditorProps<string[]>> = ({
     },
   ];
 
+  // CAMPAIGNS editable note issue. Branch /rjr-campaigns-add-editable-notes-field
+  // + RTE receives the copyData, and parses it correctly, but copy is not being added in the state object. This seems to be a ReMirror issue
+  // + Note that we're on Remirror v1, while latest is v2. Attempting to update the package leads to interesting conflicts in the package-lock file
+  // To prove:
+  console.log(copyData);
+  console.log(parseCopyForParagraphs(copyData));
+
   // Instantiate the Remirror RTE component
   const { manager, state } = useRemirror({
     extensions: () => [
