@@ -193,7 +193,6 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   const updateImage = (image?: Image): void => {
     onVariantChange({ ...variant, image });
   };
-  // See if we can move this closer to the action
   const updateBylineWithImage = (bylineWithImage?: BylineWithImage): void => {
     onVariantChange({ ...variant, bylineWithImage });
   };
