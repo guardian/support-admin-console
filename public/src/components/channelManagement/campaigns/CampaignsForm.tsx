@@ -62,8 +62,8 @@ export const unassignedCampaign = {
 
 const CampaignsForm: React.FC = () => {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
-  const [selectedCampaign, setSelectedCampaign] = useState<Campaign | undefined>();
-  const { campaignName } = useParams<{ campaignName?: string }>();
+  const { campaignName } = useParams<{ campaignName?: string }>(); // querystring parameter
+  const [selectedCampaignName, setSelectedCampaignName] = useState<string | undefined>();
   const classes = useStyles();
 
   const fetchSettings = (): Promise<Campaign[]> => {
@@ -76,16 +76,13 @@ const CampaignsForm: React.FC = () => {
 
   useEffect(() => {
     if (campaignName != null) {
-      const requiredCampaign = campaigns.find(c => c.name === campaignName);
-      if (requiredCampaign != null) {
-        setSelectedCampaign(requiredCampaign);
-      }
+      setSelectedCampaignName(campaignName);
     }
   }, [campaignName, campaigns]);
 
   const createCampaign = (campaign: Campaign): void => {
     setCampaigns([...campaigns, campaign]);
-    setSelectedCampaign(campaign);
+    setSelectedCampaignName(campaign.name);
     sendCreateCampaignRequest(campaign).catch(error => alert(`Error creating campaign: ${error}`));
   };
 
@@ -93,20 +90,10 @@ const CampaignsForm: React.FC = () => {
     sendUpdateCampaignRequest(updatedCampaign)
       .then(() => fetchSettings())
       .then(c => setCampaigns(c))
-      .then(() => onCampaignSelected(updatedCampaign.name))
       .catch(error => alert(`Error updating campaign ${updatedCampaign.name}: ${error}`));
   };
 
-  const onCampaignSelected = (name: string) => {
-    if (unassignedCampaign.name === name) {
-      setSelectedCampaign(unassignedCampaign);
-    } else {
-      const requiredCampaign = campaigns.find(c => c.name === name);
-      if (requiredCampaign != null) {
-        setSelectedCampaign(requiredCampaign);
-      }
-    }
-  };
+  const selectedCampaign = campaigns.find(c => c.name === selectedCampaignName);
 
   return (
     <div className={classes.body}>
@@ -115,7 +102,7 @@ const CampaignsForm: React.FC = () => {
           campaigns={campaigns}
           createCampaign={createCampaign}
           selectedCampaign={selectedCampaign}
-          onCampaignSelected={onCampaignSelected}
+          onCampaignSelected={setSelectedCampaignName}
         />
       </div>
       <div className={classes.rightCol}>
