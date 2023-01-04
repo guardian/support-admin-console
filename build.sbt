@@ -10,6 +10,8 @@ val awsVersion = "2.18.39"
 val zioVersion = "1.0.14"
 val jacksonVersion = "2.14.1"
 
+asciiGraphWidth := 999999999 // to ensure Snyk can read the the deeeeep dependency tree
+
 libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
   "com.gu.play-googleauth" %% "play-v28" % "2.2.6",
