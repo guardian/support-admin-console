@@ -175,17 +175,6 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
     }
   };
 
-  // const onUpdate = (): void => {
-  //   setEditMode(!editMode);
-  //   handleSubmit(onSubmit)();
-  // };
-
-  // const onSubmit = ({ description, notes, isActive }: FormData): void => {
-  //   if (!editMode) {
-  //     updateCampaign({ ...campaign, description, notes, isActive });
-  //   }
-  // };
-
   const onSubmit = ({ description, notes, isActive }: FormData): void => {
     updateCampaign({ ...campaign, description, notes, isActive });
   };
@@ -208,11 +197,6 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
                 <Typography className={classes.notesHeader}>
                   Campaign metadata and notes:
                 </Typography>
-                {/*
-                <Button variant="contained" onClick={onUpdate}>
-                  <Typography>{editMode ? 'Save' : 'Edit'}</Typography>
-                </Button>
-                */}
                 <Button variant="contained" onClick={() => setEditMode(!editMode)}>
                   <Typography>{editMode ? 'Save' : 'Edit'}</Typography>
                 </Button>
