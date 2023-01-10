@@ -54,6 +54,16 @@ class CampaignsController(
     }
   }
 
+  def updateCampaign: Action[Campaign] = authAction.async(circe.json[Campaign]) { request =>
+    run {
+      val campaign = request.body
+      logger.info(s"${request.user.email} is updating campaign '${campaign.name}'")
+      dynamoCampaigns
+        .updateCampaign(campaign)
+        .map(_ => Ok("updated"))
+    }
+  }
+
   def getTests(campaignName: String): Action[AnyContent] = authAction.async { request =>
     run {
       dynamoChannelTests.getAllTestsInCampaign(campaignName)

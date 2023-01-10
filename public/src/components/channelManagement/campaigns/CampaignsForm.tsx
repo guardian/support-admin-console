@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles, Theme, Typography } from '@material-ui/core';
 import CampaignsSidebar from './CampaignsSidebar';
 import CampaignsEditor from './CampaignsEditor';
-import { unassignedCampaignLabel } from '../CampaignSelector';
 import { useParams } from 'react-router-dom';
 
 import {
   fetchFrontendSettings,
   FrontendSettingsType,
   sendCreateCampaignRequest,
+  sendUpdateCampaignRequest,
 } from '../../../utils/requests';
 
 const useStyles = makeStyles(({ spacing, typography }: Theme) => ({
@@ -49,21 +49,22 @@ export interface Campaign {
   name: string;
   nickname: string;
   description?: string;
+  notes?: string[];
+  isActive?: boolean;
 }
 export type Campaigns = Campaign[];
 
 export const unassignedCampaign = {
-  name: unassignedCampaignLabel,
+  name: 'NOT_IN_CAMPAIGN',
   nickname: 'TESTS NOT IN A CAMPAIGN',
   description: 'Tests not assigned to a campaign',
 };
 
 const CampaignsForm: React.FC = () => {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
-  const [selectedCampaign, setSelectedCampaign] = useState<Campaign | undefined>();
-
+  const { campaignName } = useParams<{ campaignName?: string }>(); // querystring parameter
+  const [selectedCampaignName, setSelectedCampaignName] = useState<string | undefined>();
   const classes = useStyles();
-  const { testName } = useParams<{ testName?: string }>();
 
   const fetchSettings = (): Promise<Campaign[]> => {
     return fetchFrontendSettings(FrontendSettingsType.campaigns);
@@ -73,34 +74,29 @@ const CampaignsForm: React.FC = () => {
     fetchSettings().then(setCampaigns);
   }, []);
 
+  useEffect(() => {
+    if (campaignName != null) {
+      setSelectedCampaignName(campaignName);
+    }
+  }, [campaignName, campaigns]);
+
   const createCampaign = (campaign: Campaign): void => {
     setCampaigns([...campaigns, campaign]);
-    setSelectedCampaign(campaign);
+    setSelectedCampaignName(campaign.name);
     sendCreateCampaignRequest(campaign).catch(error => alert(`Error creating campaign: ${error}`));
   };
 
-  const getSelectedCampaign = (): Campaign | undefined => {
-    if (selectedCampaign == null && testName != null) {
-      const requiredCampaign = campaigns.find(c => c.name === testName);
-      if (requiredCampaign != null) {
-        return requiredCampaign;
-      }
-    }
-    return selectedCampaign;
+  const updateCampaign = (updatedCampaign: Campaign): void => {
+    sendUpdateCampaignRequest(updatedCampaign)
+      .then(() => fetchSettings())
+      .then(c => setCampaigns(c))
+      .catch(error => alert(`Error updating campaign ${updatedCampaign.name}: ${error}`));
   };
 
-  const onCampaignSelected = (name: string) => {
-    if (unassignedCampaignLabel === name) {
-      setSelectedCampaign(unassignedCampaign);
-    } else {
-      const requiredCampaign = campaigns.find(c => c.name === name);
-      if (requiredCampaign != null) {
-        setSelectedCampaign(requiredCampaign);
-      }
-    }
-  };
-
-  const currentCampaign = getSelectedCampaign();
+  let selectedCampaign = campaigns.find(c => c.name === selectedCampaignName);
+  if (selectedCampaignName === unassignedCampaign.name) {
+    selectedCampaign = unassignedCampaign;
+  }
 
   return (
     <div className={classes.body}>
@@ -108,13 +104,17 @@ const CampaignsForm: React.FC = () => {
         <CampaignsSidebar
           campaigns={campaigns}
           createCampaign={createCampaign}
-          selectedCampaign={currentCampaign}
-          onCampaignSelected={onCampaignSelected}
+          selectedCampaign={selectedCampaign}
+          onCampaignSelected={setSelectedCampaignName}
         />
       </div>
       <div className={classes.rightCol}>
-        {currentCampaign ? (
-          <CampaignsEditor campaign={currentCampaign} />
+        {selectedCampaign ? (
+          <CampaignsEditor
+            key={selectedCampaign.name}
+            campaign={selectedCampaign}
+            updateCampaign={updateCampaign}
+          />
         ) : (
           <div className={classes.viewTextContainer}>
             <Typography className={classes.viewText}>

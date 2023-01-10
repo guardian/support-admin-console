@@ -40,7 +40,6 @@ function CampaignsSidebar({
   onCampaignSelected,
 }: CampaignsSidebarProps): React.ReactElement {
   const classes = useStyles();
-
   const [campaignSearch, setCampaignSearch] = useState('');
 
   const searchInput = (e: React.ChangeEvent<HTMLInputElement>) => {

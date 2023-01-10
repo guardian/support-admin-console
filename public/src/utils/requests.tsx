@@ -96,6 +96,10 @@ export function sendCreateCampaignRequest(campaign: Campaign): Promise<Response>
   return saveSettings(`/frontend/campaigns/create`, campaign);
 }
 
+export function sendUpdateCampaignRequest(campaign: Campaign): Promise<Response> {
+  return saveSettings(`/frontend/campaigns/update`, campaign);
+}
+
 export function updateStatuses(
   settingsType: FrontendSettingsType,
   testNames: string[],

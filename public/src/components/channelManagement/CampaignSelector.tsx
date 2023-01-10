@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { fetchFrontendSettings, FrontendSettingsType } from '../../utils/requests';
-import { Campaign } from './campaigns/CampaignsForm';
+import { Campaign, unassignedCampaign } from './campaigns/CampaignsForm';
 import { Test } from './helpers/shared';
 
 import { Select, MenuItem, FormControl, makeStyles } from '@material-ui/core';
@@ -38,8 +38,6 @@ interface CampaignSelectorProps {
   disabled: boolean;
 }
 
-export const unassignedCampaignLabel = 'NOT_IN_CAMPAIGN';
-
 const CampaignSelector: React.FC<CampaignSelectorProps> = ({
   onCampaignChange,
   test,
@@ -55,6 +53,36 @@ const CampaignSelector: React.FC<CampaignSelectorProps> = ({
 
   const setCampaignName = (campaign?: string) => onCampaignChange(campaign);
 
+  const sortCampaigns = (campaignArray: Campaign[]) => {
+    campaignArray.sort((a, b) => {
+      const A = a.nickname || a.name;
+      const B = b.nickname || b.name;
+
+      if (A < B) {
+        return -1;
+      }
+      if (B < A) {
+        return 1;
+      }
+      return 0;
+    });
+    return campaignArray;
+  };
+
+  const filterCampaigns = (campaignArray: Campaign[]) => {
+    return campaignArray.filter(c => {
+      if (c.name === unassignedCampaign.name) {
+        return false;
+      }
+      if (c.isActive || c.isActive == null) {
+        return true;
+      }
+      return false;
+    });
+  };
+
+  const availableCampaigns = sortCampaigns(filterCampaigns(campaigns));
+
   return (
     <>
       <FormControl className={classes.campaignSelector} size="small">
@@ -69,12 +97,12 @@ const CampaignSelector: React.FC<CampaignSelectorProps> = ({
           }}
           disabled={disabled}
         >
-          <MenuItem value={unassignedCampaignLabel} key={'campaignName-none'}>
-            {unassignedCampaignLabel}
+          <MenuItem value={unassignedCampaign.name} key={'campaignName-none'}>
+            {unassignedCampaign.nickname}
           </MenuItem>
-          {campaigns.map(campaign => (
-            <MenuItem value={campaign.name} key={`campaign-${campaign.name}`}>
-              {campaign.name}
+          {availableCampaigns.map(c => (
+            <MenuItem value={c.name} key={`campaign-${c.name}`}>
+              {c.nickname || c.name}
             </MenuItem>
           ))}
         </Select>
