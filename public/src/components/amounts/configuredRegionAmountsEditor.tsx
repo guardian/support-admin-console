@@ -63,8 +63,13 @@ const ConfiguredRegionAmountsEditor: React.FC<ConfiguredRegionAmountsEditorProps
   updateConfiguredRegionAmounts,
   existingTestNames,
 }: ConfiguredRegionAmountsEditorProps) => {
-  const updateControl = (contributionAmounts: ContributionAmounts): void =>
+  const updateControlAmounts = (contributionAmounts: ContributionAmounts): void =>
     updateConfiguredRegionAmounts({ ...configuredRegionAmounts, control: contributionAmounts });
+
+  // This does nothing at the moment
+  // Need to figure out a way to record status of hideChooseYourAmount in the control variant
+  // The amounts model is not very helpful for us here ...
+  const updateControlChooseYourAmountButton = (val: boolean): void => {};
 
   const updateTest = (updatedTest: AmountsTest): void =>
     updateConfiguredRegionAmounts({ ...configuredRegionAmounts, test: updatedTest });
@@ -85,7 +90,9 @@ const ConfiguredRegionAmountsEditor: React.FC<ConfiguredRegionAmountsEditorProps
       <div className={classes.amountsEditorContainer}>
         <AmountsEditor
           label="Control"
-          updateContributionAmounts={updateControl}
+          hideChooseYourAmount={false}
+          updateChooseYourAmountButton={updateControlChooseYourAmountButton}
+          updateContributionAmounts={updateControlAmounts}
           contributionAmounts={configuredRegionAmounts.control}
         />
       </div>

@@ -48,6 +48,7 @@ const variantWithDefaultAmounts = (name: string): AmountsTestVariant => ({
       defaultAmount: 0,
     },
   },
+  hideChooseYourAmount: false,
 });
 
 interface AmountsTestEditorProps {
@@ -65,7 +66,21 @@ const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
     updateTest({ ...test, isLive: isLive });
   };
 
-  const updateVariant = (variantIndex: number) => (
+  const updateVariantChooseAmountButton = (variantIndex: number) => (
+    hideChooseYourAmount: boolean,
+  ): void => {
+    const updatedVariants = [
+      ...test.variants.slice(0, variantIndex),
+      { ...test.variants[variantIndex], hideChooseYourAmount },
+      ...test.variants.slice(variantIndex + 1),
+    ];
+    updateTest({
+      ...test,
+      variants: updatedVariants,
+    });
+  };
+
+  const updateVariantContributionAmounts = (variantIndex: number) => (
     contributionAmounts: ContributionAmounts,
   ): void => {
     const updatedVariants = [
@@ -123,9 +138,11 @@ const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
             <div className={classes.amountsEditorContainer} key={variant.name}>
               <AmountsEditor
                 label={variant.name}
-                updateContributionAmounts={updateVariant(index)}
-                deleteContributionAmounts={deleteVariant(index)}
                 contributionAmounts={variant.amounts}
+                hideChooseYourAmount={variant.hideChooseYourAmount ?? false}
+                updateChooseYourAmountButton={updateVariantChooseAmountButton(index)}
+                updateContributionAmounts={updateVariantContributionAmounts(index)}
+                deleteContributionAmounts={deleteVariant(index)}
               />
             </div>
           ))

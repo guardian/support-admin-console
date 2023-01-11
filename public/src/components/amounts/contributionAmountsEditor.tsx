@@ -3,6 +3,7 @@ import { makeStyles, Theme } from '@material-ui/core';
 import { AmountSelection, ContributionAmounts } from './configuredAmountsEditor';
 import AmountEditorRow from './amountsEditorRow';
 import AmountEditorDeleteButton from './contributionAmountsEditorDeleteButton';
+import LiveSwitch from '../shared/liveSwitch';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
@@ -33,6 +34,8 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
 interface AmountsEditorProps {
   label: string;
   contributionAmounts: ContributionAmounts;
+  hideChooseYourAmount: boolean;
+  updateChooseYourAmountButton: (val: boolean) => void;
   updateContributionAmounts: (contributionAmounts: ContributionAmounts) => void;
   deleteContributionAmounts?: () => void;
 }
@@ -40,6 +43,8 @@ interface AmountsEditorProps {
 const AmountsEditor: React.FC<AmountsEditorProps> = ({
   label,
   contributionAmounts,
+  hideChooseYourAmount,
+  updateChooseYourAmountButton,
   updateContributionAmounts,
   deleteContributionAmounts,
 }: AmountsEditorProps) => {
@@ -53,6 +58,24 @@ const AmountsEditor: React.FC<AmountsEditorProps> = ({
           <AmountEditorDeleteButton onDelete={deleteContributionAmounts} />
         )}
       </div>
+      {/*
+      {label.toUpperCase() !== 'CONTROL' ? (
+        <LiveSwitch
+          label="'Choose your Amount' button"
+          isLive={!hideChooseYourAmount}
+          onChange={() => {}}
+          isDisabled={false}
+        />
+      ) : (
+        <div>The 'Choose your Amount' button always displays for the control variant.<br />This is because the Amounts model is complex, with the control amounts<br />separated from the variant test amounts.</div>
+      )}
+      */}
+      <LiveSwitch
+        label="'Choose your Amount' button"
+        isLive={!hideChooseYourAmount}
+        onChange={() => updateChooseYourAmountButton(!hideChooseYourAmount)}
+        isDisabled={false}
+      />
       <div className={classes.rowsContainer}>
         <AmountEditorRow
           label="One off"

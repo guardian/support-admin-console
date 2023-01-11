@@ -25,6 +25,7 @@ export type ContributionAmounts = {
 export interface AmountsTestVariant {
   name: string;
   amounts: ContributionAmounts;
+  hideChooseYourAmount: boolean;
 }
 
 export interface AmountsTest {
