@@ -58,18 +58,6 @@ const AmountsEditor: React.FC<AmountsEditorProps> = ({
           <AmountEditorDeleteButton onDelete={deleteContributionAmounts} />
         )}
       </div>
-      {/*
-      {label.toUpperCase() !== 'CONTROL' ? (
-        <LiveSwitch
-          label="'Choose your Amount' button"
-          isLive={!hideChooseYourAmount}
-          onChange={() => {}}
-          isDisabled={false}
-        />
-      ) : (
-        <div>The 'Choose your Amount' button always displays for the control variant.<br />This is because the Amounts model is complex, with the control amounts<br />separated from the variant test amounts.</div>
-      )}
-      */}
       <LiveSwitch
         label="'Choose your Amount' button"
         isLive={!hideChooseYourAmount}
