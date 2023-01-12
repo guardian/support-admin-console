@@ -53,6 +53,8 @@ const generateRandomSeed = (): number => {
 interface ConfiguredRegionAmountsEditorProps {
   label: string;
   configuredRegionAmounts: ConfiguredRegionAmounts;
+  hideChooseYourAmount: boolean;
+  updateChooseYourAmountButton: (hideChooseYourAmount: boolean) => void;
   updateConfiguredRegionAmounts: (configuredRegionAmounts: ConfiguredRegionAmounts) => void;
   existingTestNames: string[];
 }
@@ -60,16 +62,13 @@ interface ConfiguredRegionAmountsEditorProps {
 const ConfiguredRegionAmountsEditor: React.FC<ConfiguredRegionAmountsEditorProps> = ({
   label,
   configuredRegionAmounts,
+  hideChooseYourAmount,
+  updateChooseYourAmountButton,
   updateConfiguredRegionAmounts,
   existingTestNames,
 }: ConfiguredRegionAmountsEditorProps) => {
   const updateControlAmounts = (contributionAmounts: ContributionAmounts): void =>
     updateConfiguredRegionAmounts({ ...configuredRegionAmounts, control: contributionAmounts });
-
-  // This does nothing at the moment
-  // Need to figure out a way to record status of hideChooseYourAmount in the control variant
-  // The amounts model is not very helpful for us here ...
-  const updateControlChooseYourAmountButton = (val: boolean): void => {};
 
   const updateTest = (updatedTest: AmountsTest): void =>
     updateConfiguredRegionAmounts({ ...configuredRegionAmounts, test: updatedTest });
@@ -90,8 +89,8 @@ const ConfiguredRegionAmountsEditor: React.FC<ConfiguredRegionAmountsEditorProps
       <div className={classes.amountsEditorContainer}>
         <AmountsEditor
           label="Control"
-          hideChooseYourAmount={false}
-          updateChooseYourAmountButton={updateControlChooseYourAmountButton}
+          hideChooseYourAmount={hideChooseYourAmount}
+          updateChooseYourAmountButton={() => updateChooseYourAmountButton(!hideChooseYourAmount)}
           updateContributionAmounts={updateControlAmounts}
           contributionAmounts={configuredRegionAmounts.control}
         />

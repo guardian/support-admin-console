@@ -38,6 +38,7 @@ export interface AmountsTest {
 export type ConfiguredRegionAmounts = {
   control: ContributionAmounts;
   test?: AmountsTest;
+  hideChooseYourAmount?: boolean;
 };
 
 export type ConfiguredAmounts = {
@@ -87,6 +88,11 @@ const ConfiguredAmountsEditor: React.FC<InnerProps<ConfiguredAmounts>> = ({
   const updateConfiguredRegionAmounts = (configuredRegionAmounts: ConfiguredRegionAmounts): void =>
     setConfiguredAmounts({ ...configuredAmounts, [selectedRegion]: configuredRegionAmounts });
 
+  const updateControlChooseAmountButton = (hideChooseYourAmount: boolean): void => {
+    const updatedAmounts = { ...selectedRegionAmounts, hideChooseYourAmount };
+    setConfiguredAmounts({ ...configuredAmounts, [selectedRegion]: updatedAmounts });
+  };
+
   const existingTestNames = Object.values(configuredAmounts)
     .map(regionAmounts => regionAmounts.test?.name || '')
     .filter(name => !!name);
@@ -105,6 +111,8 @@ const ConfiguredAmountsEditor: React.FC<InnerProps<ConfiguredAmounts>> = ({
           label={selectedRegionPrettifiedName}
           configuredRegionAmounts={selectedRegionAmounts}
           updateConfiguredRegionAmounts={updateConfiguredRegionAmounts}
+          hideChooseYourAmount={selectedRegionAmounts.hideChooseYourAmount ?? false}
+          updateChooseYourAmountButton={updateControlChooseAmountButton}
           existingTestNames={existingTestNames}
         />
       </div>

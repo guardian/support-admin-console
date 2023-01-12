@@ -26,7 +26,8 @@ case class AmountsTest(
 
 case class ConfiguredRegionAmounts(
     control: ContributionAmounts,
-    test: Option[AmountsTest]
+    test: Option[AmountsTest],
+    hideChooseYourAmount: Option[Boolean]
 )
 
 case class ConfiguredAmounts(
