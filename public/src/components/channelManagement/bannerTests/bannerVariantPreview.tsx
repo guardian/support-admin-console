@@ -104,6 +104,10 @@ const bannerModules = {
     path: 'digitalSubscriptions/DigitalSubscriptionsBanner.js',
     name: 'DigitalSubscriptionsBanner',
   },
+  [BannerTemplate.PrintSubscriptionsBanner]: {
+    path: 'printSubscriptions/PrintSubscriptionsBanner.js',
+    name: 'PrintSubscriptionsBanner',
+  },
   [BannerTemplate.ContributionsBanner]: {
     path: 'contributions/ContributionsBanner.js',
     name: 'ContributionsBanner',

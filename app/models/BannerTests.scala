@@ -13,6 +13,7 @@ object BannerTemplate {
   case object ContributionsBannerWithSignIn extends BannerTemplate
   case object CharityAppealBanner extends BannerTemplate
   case object DigitalSubscriptionsBanner extends BannerTemplate
+  case object PrintSubscriptionsBanner extends BannerTemplate
   case object GuardianWeeklyBanner extends BannerTemplate
   case object InvestigationsMomentBanner extends BannerTemplate
   case object EnvironmentMomentBanner extends BannerTemplate
