@@ -30,21 +30,17 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   },
   amountsEditorContainer: {
     marginTop: spacing(2),
-    backgroundColor: '#aaa',
   },
   testContainer: {
     marginTop: spacing(4),
-    backgroundColor: '#999',
   },
   testHeader: {
     fontSize: 16,
     textTransform: 'uppercase',
     fontWeight: 'bold',
-    backgroundColor: '#888',
   },
   createVariantButtonContainer: {
     marginTop: spacing(3),
-    backgroundColor: '#777',
   },
 }));
 
