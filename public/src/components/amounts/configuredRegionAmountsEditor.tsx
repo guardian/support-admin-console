@@ -30,17 +30,21 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   },
   amountsEditorContainer: {
     marginTop: spacing(2),
+    backgroundColor: '#aaa',
   },
   testContainer: {
     marginTop: spacing(4),
+    backgroundColor: '#999',
   },
   testHeader: {
     fontSize: 16,
     textTransform: 'uppercase',
     fontWeight: 'bold',
+    backgroundColor: '#888',
   },
   createVariantButtonContainer: {
     marginTop: spacing(3),
+    backgroundColor: '#777',
   },
 }));
 
@@ -53,8 +57,6 @@ const generateRandomSeed = (): number => {
 interface ConfiguredRegionAmountsEditorProps {
   label: string;
   configuredRegionAmounts: ConfiguredRegionAmounts;
-  hideChooseYourAmount: boolean;
-  updateChooseYourAmountButton: (hideChooseYourAmount: boolean) => void;
   updateConfiguredRegionAmounts: (configuredRegionAmounts: ConfiguredRegionAmounts) => void;
   existingTestNames: string[];
 }
@@ -62,8 +64,6 @@ interface ConfiguredRegionAmountsEditorProps {
 const ConfiguredRegionAmountsEditor: React.FC<ConfiguredRegionAmountsEditorProps> = ({
   label,
   configuredRegionAmounts,
-  hideChooseYourAmount,
-  updateChooseYourAmountButton,
   updateConfiguredRegionAmounts,
   existingTestNames,
 }: ConfiguredRegionAmountsEditorProps) => {
@@ -89,8 +89,6 @@ const ConfiguredRegionAmountsEditor: React.FC<ConfiguredRegionAmountsEditorProps
       <div className={classes.amountsEditorContainer}>
         <AmountsEditor
           label="Control"
-          hideChooseYourAmount={hideChooseYourAmount}
-          updateChooseYourAmountButton={() => updateChooseYourAmountButton(!hideChooseYourAmount)}
           updateContributionAmounts={updateControlAmounts}
           contributionAmounts={configuredRegionAmounts.control}
         />

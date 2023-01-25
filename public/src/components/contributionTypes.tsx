@@ -20,6 +20,7 @@ import {
 interface ContributionTypeSetting {
   contributionType: ContributionType;
   isDefault?: boolean;
+  hideChooseYourAmount?: boolean;
 }
 
 type ContributionTypes = {
