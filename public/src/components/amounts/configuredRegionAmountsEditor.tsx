@@ -63,7 +63,7 @@ const ConfiguredRegionAmountsEditor: React.FC<ConfiguredRegionAmountsEditorProps
   updateConfiguredRegionAmounts,
   existingTestNames,
 }: ConfiguredRegionAmountsEditorProps) => {
-  const updateControlAmounts = (contributionAmounts: ContributionAmounts): void =>
+  const updateControl = (contributionAmounts: ContributionAmounts): void =>
     updateConfiguredRegionAmounts({ ...configuredRegionAmounts, control: contributionAmounts });
 
   const updateTest = (updatedTest: AmountsTest): void =>
@@ -85,7 +85,7 @@ const ConfiguredRegionAmountsEditor: React.FC<ConfiguredRegionAmountsEditorProps
       <div className={classes.amountsEditorContainer}>
         <AmountsEditor
           label="Control"
-          updateContributionAmounts={updateControlAmounts}
+          updateContributionAmounts={updateControl}
           contributionAmounts={configuredRegionAmounts.control}
         />
       </div>
