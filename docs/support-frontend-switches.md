@@ -9,4 +9,4 @@ The switchboard displays whatever switches are in the json file, and the support
 To add/remove a new switch:
 
 1. Manually add/remove it to the `switches_v2.json` json file
-2. Add it to the [model in support-frontend](https://github.com/guardian/support-frontend/blob/main/support-frontend/app/admin/settings/Switches.scala).
+2. Add it to (or remove it from) the [model in support-frontend](https://github.com/guardian/support-frontend/blob/main/support-frontend/app/admin/settings/Switches.scala).
