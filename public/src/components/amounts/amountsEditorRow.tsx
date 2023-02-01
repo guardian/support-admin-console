@@ -3,16 +3,25 @@ import { makeStyles, Theme } from '@material-ui/core';
 import { AmountSelection } from './configuredAmountsEditor';
 import AmountInput from './amountInput';
 import AmountsEditorRowAmount from './amountsEditorRowAmount';
+import LiveSwitch from '../shared/liveSwitch';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'column',
     alignItems: 'center',
-
-    '& > * + *': {
-      marginLeft: spacing(4),
-    },
+  },
+  amountsLabelContainer: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'flex-start',
+    marginBottom: spacing(1),
+  },
+  otherAmountSwitchContainer: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'flex-start',
+    marginTop: spacing(1),
   },
   amountsLabel: {
     width: 80,
@@ -24,6 +33,7 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     flexGrow: 1,
     display: 'flex',
     justifyContent: 'space-between',
+    width: '100%',
 
     '& > * + *': {
       marginLeft: spacing(4),
@@ -32,6 +42,7 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   amountsContainer: {
     display: 'flex',
     flexDirection: 'row',
+    margin: 0,
 
     '& > * + *': {
       marginLeft: spacing(2),
@@ -43,12 +54,16 @@ interface AmountsEditorRowProps {
   label: string;
   amountsSelection: AmountSelection;
   updateSelection: (AmountSelection: AmountSelection) => void;
+  hideChooseYourAmount: boolean;
+  updateChooseYourAmountButton: (value: boolean) => void;
 }
 
 const AmountsEditorRow: React.FC<AmountsEditorRowProps> = ({
   label,
   amountsSelection,
   updateSelection,
+  hideChooseYourAmount,
+  updateChooseYourAmountButton,
 }: AmountsEditorRowProps) => {
   const classes = useStyles();
 
@@ -78,7 +93,9 @@ const AmountsEditorRow: React.FC<AmountsEditorRowProps> = ({
 
   return (
     <div className={classes.container}>
-      <div className={classes.amountsLabel}>{label}</div>
+      <div className={classes.amountsLabelContainer}>
+        <div className={classes.amountsLabel}>{label}</div>
+      </div>
       <div className={classes.amountsAndInputContainer}>
         <div className={classes.amountsContainer}>
           {amountsSelection.amounts.map((amount, index) => (
@@ -92,6 +109,14 @@ const AmountsEditorRow: React.FC<AmountsEditorRowProps> = ({
           ))}
         </div>
         <AmountInput amounts={amountsSelection.amounts} addAmount={addAmount} />
+      </div>
+      <div className={classes.otherAmountSwitchContainer}>
+        <LiveSwitch
+          label="Include CHOOSE button"
+          isLive={!hideChooseYourAmount}
+          onChange={() => updateChooseYourAmountButton(!hideChooseYourAmount)}
+          isDisabled={false}
+        />
       </div>
     </div>
   );

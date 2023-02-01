@@ -38,14 +38,17 @@ const variantWithDefaultAmounts = (name: string): AmountsTestVariant => ({
     ONE_OFF: {
       amounts: [],
       defaultAmount: 0,
+      hideChooseYourAmount: false,
     },
     MONTHLY: {
       amounts: [],
       defaultAmount: 0,
+      hideChooseYourAmount: false,
     },
     ANNUAL: {
       amounts: [],
       defaultAmount: 0,
+      hideChooseYourAmount: false,
     },
   },
 });
@@ -65,7 +68,7 @@ const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
     updateTest({ ...test, isLive: isLive });
   };
 
-  const updateVariant = (variantIndex: number) => (
+  const updateVariantContributionAmounts = (variantIndex: number) => (
     contributionAmounts: ContributionAmounts,
   ): void => {
     const updatedVariants = [
@@ -123,9 +126,9 @@ const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
             <div className={classes.amountsEditorContainer} key={variant.name}>
               <AmountsEditor
                 label={variant.name}
-                updateContributionAmounts={updateVariant(index)}
-                deleteContributionAmounts={deleteVariant(index)}
                 contributionAmounts={variant.amounts}
+                updateContributionAmounts={updateVariantContributionAmounts(index)}
+                deleteContributionAmounts={deleteVariant(index)}
               />
             </div>
           ))

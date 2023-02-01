@@ -16,6 +16,7 @@ import withS3Data, { InnerProps, DataFromServer } from '../../hocs/withS3Data';
 export interface AmountSelection {
   amounts: number[];
   defaultAmount: number;
+  hideChooseYourAmount?: boolean;
 }
 
 export type ContributionAmounts = {

@@ -3,13 +3,14 @@ import { makeStyles, Theme } from '@material-ui/core';
 import { AmountSelection, ContributionAmounts } from './configuredAmountsEditor';
 import AmountEditorRow from './amountsEditorRow';
 import AmountEditorDeleteButton from './contributionAmountsEditorDeleteButton';
+import { ContributionType } from '../../utils/models';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
     padding: `${spacing(3)}px ${spacing(4)}px`,
     border: `1px solid ${palette.grey[700]}`,
     borderRadius: 4,
-    background: 'white',
+    backgroundColor: 'white',
 
     '& > * + *': {
       marginTop: spacing(2),
@@ -45,6 +46,27 @@ const AmountsEditor: React.FC<AmountsEditorProps> = ({
 }: AmountsEditorProps) => {
   const classes = useStyles();
 
+  const handleAmountSelection = (product: ContributionType, change: AmountSelection) => {
+    updateContributionAmounts({
+      ...contributionAmounts,
+      [product]: change,
+    });
+  };
+
+  const handleOtherButtonChange = (product: ContributionType, change: boolean) => {
+    updateContributionAmounts({
+      ...contributionAmounts,
+      [product]: {
+        ...contributionAmounts[product],
+        hideChooseYourAmount: change,
+      },
+    });
+  };
+
+  const getOtherButtonValue = (product: ContributionType) => {
+    return contributionAmounts[product].hideChooseYourAmount ?? false;
+  };
+
   return (
     <div className={classes.container}>
       <div className={classes.header}>
@@ -57,22 +79,28 @@ const AmountsEditor: React.FC<AmountsEditorProps> = ({
         <AmountEditorRow
           label="One off"
           amountsSelection={contributionAmounts.ONE_OFF}
-          updateSelection={(amountSelection: AmountSelection): void =>
-            updateContributionAmounts({ ...contributionAmounts, ONE_OFF: amountSelection })
+          updateSelection={amount => handleAmountSelection(ContributionType.ONE_OFF, amount)}
+          hideChooseYourAmount={getOtherButtonValue(ContributionType.ONE_OFF)}
+          updateChooseYourAmountButton={value =>
+            handleOtherButtonChange(ContributionType.ONE_OFF, value)
           }
         />
         <AmountEditorRow
           label="Monthly"
           amountsSelection={contributionAmounts.MONTHLY}
-          updateSelection={(amountSelection: AmountSelection): void =>
-            updateContributionAmounts({ ...contributionAmounts, MONTHLY: amountSelection })
+          updateSelection={amount => handleAmountSelection(ContributionType.MONTHLY, amount)}
+          hideChooseYourAmount={getOtherButtonValue(ContributionType.MONTHLY)}
+          updateChooseYourAmountButton={value =>
+            handleOtherButtonChange(ContributionType.MONTHLY, value)
           }
         />
         <AmountEditorRow
           label="Annual"
           amountsSelection={contributionAmounts.ANNUAL}
-          updateSelection={(amountSelection: AmountSelection): void =>
-            updateContributionAmounts({ ...contributionAmounts, ANNUAL: amountSelection })
+          updateSelection={amount => handleAmountSelection(ContributionType.ANNUAL, amount)}
+          hideChooseYourAmount={getOtherButtonValue(ContributionType.ANNUAL)}
+          updateChooseYourAmountButton={value =>
+            handleOtherButtonChange(ContributionType.ANNUAL, value)
           }
         />
       </div>
