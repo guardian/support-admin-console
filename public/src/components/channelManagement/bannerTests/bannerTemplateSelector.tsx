@@ -49,6 +49,10 @@ const templatesWithLabels = [
     template: BannerTemplate.UsEoyMomentBannerV3,
     label: 'US EOY moment banner v3 2022',
   },
+  {
+    template: BannerTemplate.UkraineMomentBanner,
+    label: 'Ukraine Moment Banner 2023',
+  },
 ];
 
 const BannerTemplateSelector: React.FC<BannerTemplateSelectorProps> = ({
