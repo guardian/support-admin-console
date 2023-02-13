@@ -15,7 +15,7 @@ const regionLabels = {
   EURCountries: 'Europe',
   NZDCountries: 'New Zealand',
   GBPCountries: 'the UK',
-  UnitedStates: 'the US',
+  UnitedStates: 'the US + Canada',
   International: 'Rest-of-world',
 };
 
@@ -63,7 +63,7 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
             disabled={isDisabled}
           />
         }
-        label={'All regions'}
+        label={'All supported regions'}
       />
       <FormGroup className={classes.indentedContainer}>
         {allRegions.map(region => (
