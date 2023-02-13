@@ -60,7 +60,7 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
       return 'the US + Canada';
     }
     return regionLabels[region];
-  }
+  };
 
   return (
     <FormGroup>
