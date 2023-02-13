@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Checkbox, FormControlLabel, FormGroup, Theme, makeStyles } from '@material-ui/core';
 import { Region } from '../../utils/models';
+import { TestPlatform } from './helpers/shared';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   indentedContainer: {
@@ -26,12 +27,14 @@ interface TestEditorTargetRegionsSelectorProps {
   onRegionsUpdate: (selectedRegions: Region[]) => void;
   supportedRegions?: Region[];
   isDisabled: boolean;
+  platform?: TestPlatform;
 }
 const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorProps> = ({
   selectedRegions,
   onRegionsUpdate,
   supportedRegions,
   isDisabled,
+  platform,
 }: TestEditorTargetRegionsSelectorProps) => {
   const classes = useStyles();
   const allRegions = supportedRegions || ALL_REGIONS;
@@ -52,6 +55,13 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
     }
   };
 
+  const checkLabelByChannel = (platform: TestPlatform | undefined, region: Region) => {
+    if (platform === 'APPLE_NEWS' && region === 'UnitedStates') {
+      return 'the US + Canada';
+    }
+    return regionLabels[region];
+  };
+
   return (
     <FormGroup>
       <FormControlLabel
@@ -63,7 +73,7 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
             disabled={isDisabled}
           />
         }
-        label={'All regions'}
+        label={'All supported regions'}
       />
       <FormGroup className={classes.indentedContainer}>
         {allRegions.map(region => (
@@ -77,7 +87,7 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
                 disabled={isDisabled}
               />
             }
-            label={regionLabels[region]}
+            label={checkLabelByChannel(platform, region)}
           />
         ))}
       </FormGroup>

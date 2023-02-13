@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Theme, Typography, makeStyles } from '@material-ui/core';
 import { Region } from '../../utils/models';
-import { DeviceType, SignedInStatus, UserCohort } from './helpers/shared';
+import { DeviceType, SignedInStatus, UserCohort, TestPlatform } from './helpers/shared';
 
 import TestEditorTargetRegionsSelector from './testEditorTargetRegionsSelector';
 import TypedRadioGroup from './TypedRadioGroup';
@@ -40,6 +40,7 @@ interface TestEditorTargetAudienceSelectorProps {
   showDeviceTypeSelector: boolean;
   selectedSignedInStatus?: SignedInStatus;
   onSignedInStatusChange: (signedInStatus: SignedInStatus) => void;
+  platform?: TestPlatform;
 }
 const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelectorProps> = ({
   selectedRegions,
@@ -54,6 +55,7 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
   showDeviceTypeSelector,
   selectedSignedInStatus,
   onSignedInStatusChange,
+  platform,
 }: TestEditorTargetAudienceSelectorProps) => {
   const classes = useStyles();
 
@@ -66,6 +68,7 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
           onRegionsUpdate={onRegionsUpdate}
           supportedRegions={supportedRegions}
           isDisabled={isDisabled}
+          platform={platform}
         />
       </div>
 

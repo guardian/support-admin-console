@@ -328,6 +328,7 @@ export const getEpicTestEditor = (
               showDeviceTypeSelector={epicEditorConfig.allowDeviceTypeTargeting}
               selectedSignedInStatus={test.signedInStatus}
               onSignedInStatusChange={onSignedInStatusChange}
+              platform={epicEditorConfig.platform}
             />
           </div>
         )}
