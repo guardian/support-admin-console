@@ -156,6 +156,10 @@ const bannerModules = {
     path: 'usEoyMomentV3/UsEoyMomentBannerV3.js',
     name: 'UsEoyMomentBannerV3',
   },
+  [BannerTemplate.UkraineMomentBanner]: {
+    path: 'ukraineMoment/UkraineMomentBanner.js',
+    name: 'UkraineMomentBanner',
+  },
 };
 
 const useStyles = makeStyles(({ palette }: Theme) => ({
