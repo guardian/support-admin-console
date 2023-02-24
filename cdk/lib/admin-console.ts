@@ -1,7 +1,7 @@
 import { GuEc2App } from '@guardian/cdk';
 import { AccessScope } from '@guardian/cdk/lib/constants';
 import type { GuStackProps } from '@guardian/cdk/lib/constructs/core';
-import { GuStack } from '@guardian/cdk/lib/constructs/core';
+import { GuStack, GuStringParameter } from '@guardian/cdk/lib/constructs/core';
 import { GuCname } from '@guardian/cdk/lib/constructs/dns';
 import {
   GuAllowPolicy,
@@ -15,7 +15,7 @@ import { Duration, RemovalPolicy } from 'aws-cdk-lib';
 import { AttributeType, BillingMode, ProjectionType, Table } from 'aws-cdk-lib/aws-dynamodb';
 import { InstanceClass, InstanceSize, InstanceType } from 'aws-cdk-lib/aws-ec2';
 import type { Policy } from 'aws-cdk-lib/aws-iam';
-import { ManagedPolicy } from 'aws-cdk-lib/aws-iam';
+import { AccountPrincipal, ManagedPolicy, Role } from 'aws-cdk-lib/aws-iam';
 
 export interface AdminConsoleProps extends GuStackProps {
   domainName: string;
@@ -206,6 +206,23 @@ export class AdminConsole extends GuStack {
       domainName,
       ttl: Duration.minutes(60),
       resourceRecord: ec2App.loadBalancer.loadBalancerDnsName,
+    });
+
+    // Cross-account role for CAPI access to Dynamodb
+    const capiAccountId = new GuStringParameter(this, 'CapiAccountId', {
+      description: 'ID of the CAPI aws account',
+    });
+
+    const dynamoPolicyForCapi = new GuDynamoDBReadPolicy(this, `DynamoRead-for-capi`, {
+      tableName: channelTestsDynamoTable.tableName,
+    });
+
+    new Role(this, 'capi-role', {
+      roleName: `support-admin-console-channel-tests-capi-role-${this.stage}`,
+      assumedBy: new AccountPrincipal(capiAccountId.valueAsString),
+      inlinePolicies: {
+        dynamoPolicyForCapi: dynamoPolicyForCapi.document,
+      },
     });
   }
 }
