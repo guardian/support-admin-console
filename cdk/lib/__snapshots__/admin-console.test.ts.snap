@@ -73,6 +73,25 @@ Object {
       },
       "Type": "AWS::IAM::Policy",
     },
+    "AlbSsmParam485C1D52": Object {
+      "Properties": Object {
+        "DataType": "text",
+        "Description": "The arn of the ALB for amiable-PROD. N.B. this parameter is created via cdk",
+        "Name": "/infosec/waf/services/PROD/support-admin-console-alb-arn",
+        "Tags": Object {
+          "Stack": "support",
+          "Stage": "PROD",
+          "gu:cdk:version": "TEST",
+          "gu:repo": "guardian/support-admin-console",
+        },
+        "Tier": "Standard",
+        "Type": "String",
+        "Value": Object {
+          "Ref": "LoadBalancerAdminconsole69251694",
+        },
+      },
+      "Type": "AWS::SSM::Parameter",
+    },
     "AthenaOutputBucket826361ED": Object {
       "Properties": Object {
         "PolicyDocument": Object {

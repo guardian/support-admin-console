@@ -16,6 +16,7 @@ import { AttributeType, BillingMode, ProjectionType, Table } from 'aws-cdk-lib/a
 import { InstanceClass, InstanceSize, InstanceType } from 'aws-cdk-lib/aws-ec2';
 import type { Policy } from 'aws-cdk-lib/aws-iam';
 import { AccountPrincipal, ManagedPolicy, Role } from 'aws-cdk-lib/aws-iam';
+import { ParameterDataType, ParameterTier, StringParameter } from 'aws-cdk-lib/aws-ssm';
 
 export interface AdminConsoleProps extends GuStackProps {
   domainName: string;
@@ -223,6 +224,16 @@ export class AdminConsole extends GuStack {
       inlinePolicies: {
         dynamoPolicyForCapi: dynamoPolicyForCapi.document,
       },
+    });
+
+    // This parameter is used by our WAF configuration
+    new StringParameter(this, 'AlbSsmParam', {
+      parameterName: `/infosec/waf/services/${this.stage}/support-admin-console-alb-arn`,
+      description: `The arn of the ALB for amiable-${this.stage}. N.B. this parameter is created via cdk`,
+      simpleName: false,
+      stringValue: ec2App.loadBalancer.loadBalancerArn,
+      tier: ParameterTier.STANDARD,
+      dataType: ParameterDataType.TEXT,
     });
   }
 }
