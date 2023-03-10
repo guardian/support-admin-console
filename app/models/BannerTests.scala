@@ -22,7 +22,6 @@ object BannerTemplate {
   case object PostElectionAuMomentAlbaneseBanner extends BannerTemplate
   case object PostElectionAuMomentHungBanner extends BannerTemplate
   case object PostElectionAuMomentMorrisonBanner extends BannerTemplate
-  case object ClimateCrisisMomentBanner extends BannerTemplate
   case object UkraineMomentBanner extends BannerTemplate
 
   implicit val customConfig: Configuration = Configuration.default.withDefaults

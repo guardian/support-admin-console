@@ -26,10 +26,6 @@ const templatesWithLabels = [
   { template: BannerTemplate.EnvironmentMomentBanner, label: 'Environment moment' },
   { template: BannerTemplate.GlobalNewYearBanner, label: 'Global New Year moment' },
   {
-    template: BannerTemplate.ClimateCrisisMomentBanner,
-    label: 'Climate crisis moment 2022',
-  },
-  {
     template: BannerTemplate.UkraineMomentBanner,
     label: 'Ukraine Moment Banner 2023',
   },

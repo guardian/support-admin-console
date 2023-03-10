@@ -21,7 +21,6 @@ export enum BannerTemplate {
   InvestigationsMomentBanner = 'InvestigationsMomentBanner',
   EnvironmentMomentBanner = 'EnvironmentMomentBanner',
   GlobalNewYearBanner = 'GlobalNewYearBanner',
-  ClimateCrisisMomentBanner = 'ClimateCrisisMomentBanner',
   CharityAppealBanner = 'CharityAppealBanner',
   UkraineMomentBanner = 'UkraineMomentBanner',
 }
