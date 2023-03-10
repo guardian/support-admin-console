@@ -26,28 +26,8 @@ const templatesWithLabels = [
   { template: BannerTemplate.EnvironmentMomentBanner, label: 'Environment moment' },
   { template: BannerTemplate.GlobalNewYearBanner, label: 'Global New Year moment' },
   {
-    template: BannerTemplate.AuBrandMomentBanner,
-    label: 'Australian brand moment 2022',
-  },
-  {
     template: BannerTemplate.ClimateCrisisMomentBanner,
     label: 'Climate crisis moment 2022',
-  },
-  {
-    template: BannerTemplate.UsEoyMomentBanner,
-    label: 'US EOY moment banner 2022',
-  },
-  {
-    template: BannerTemplate.UsEoyGivingTuesMomentBanner,
-    label: 'US EOY giving tuesday moment banner 2022',
-  },
-  {
-    template: BannerTemplate.AusEoyMomentBanner,
-    label: 'Aus EOY moment banner 2022',
-  },
-  {
-    template: BannerTemplate.UsEoyMomentBannerV3,
-    label: 'US EOY moment banner v3 2022',
   },
   {
     template: BannerTemplate.UkraineMomentBanner,
