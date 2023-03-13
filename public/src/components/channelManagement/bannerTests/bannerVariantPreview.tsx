@@ -136,6 +136,14 @@ const bannerModules = {
     path: 'ukraineMoment/UkraineMomentBanner.js',
     name: 'UkraineMomentBanner',
   },
+  [BannerTemplate.ChoiceCardsBannerBlue]: {
+    path: 'choiceCardsBanner/ChoiceCardsBannerBlue.js',
+    name: 'ChoiceCardsBannerBlue',
+  },
+  [BannerTemplate.ChoiceCardsBannerYellow]: {
+    path: 'choiceCardsBanner/ChoiceCardsBannerYellow.js',
+    name: 'ChoiceCardsBannerYellow',
+  },
 };
 
 const useStyles = makeStyles(({ palette }: Theme) => ({

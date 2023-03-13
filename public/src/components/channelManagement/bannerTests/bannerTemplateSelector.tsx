@@ -29,6 +29,14 @@ const templatesWithLabels = [
     template: BannerTemplate.UkraineMomentBanner,
     label: 'Ukraine Moment Banner 2023',
   },
+  {
+    template: BannerTemplate.ChoiceCardsBannerBlue,
+    label: 'Choice cards banner - blue',
+  },
+  {
+    template: BannerTemplate.ChoiceCardsBannerYellow,
+    label: 'Choice cards banner - yellow',
+  },
 ];
 
 const BannerTemplateSelector: React.FC<BannerTemplateSelectorProps> = ({

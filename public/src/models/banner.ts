@@ -15,6 +15,8 @@ import { ControlProportionSettings } from '../components/channelManagement/helpe
 export enum BannerTemplate {
   ContributionsBanner = 'ContributionsBanner',
   ContributionsBannerWithSignIn = 'ContributionsBannerWithSignIn',
+  ChoiceCardsBannerBlue = 'ChoiceCardsBannerBlue',
+  ChoiceCardsBannerYellow = 'ChoiceCardsBannerYellow',
   DigitalSubscriptionsBanner = 'DigitalSubscriptionsBanner',
   PrintSubscriptionsBanner = 'PrintSubscriptionsBanner',
   GuardianWeeklyBanner = 'GuardianWeeklyBanner',

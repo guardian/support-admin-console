@@ -9,16 +9,20 @@ import io.circe.{Decoder, Encoder}
 
 sealed trait BannerTemplate
 object BannerTemplate {
+  case object AusEoyMomentBanner extends BannerTemplate
+  case object AuBrandMomentBanner extends BannerTemplate
+  case object ChoiceCardsBannerBlue extends BannerTemplate
+  case object ChoiceCardsBannerYellow extends BannerTemplate
+  case object ClimateCrisisMomentBanner extends BannerTemplate
   case object ContributionsBanner extends BannerTemplate
   case object ContributionsBannerWithSignIn extends BannerTemplate
   case object CharityAppealBanner extends BannerTemplate
   case object DigitalSubscriptionsBanner extends BannerTemplate
-  case object PrintSubscriptionsBanner extends BannerTemplate
-  case object GuardianWeeklyBanner extends BannerTemplate
-  case object InvestigationsMomentBanner extends BannerTemplate
+  case object ElectionAuMomentBanner extends BannerTemplate
   case object EnvironmentMomentBanner extends BannerTemplate
   case object GlobalNewYearBanner extends BannerTemplate
-  case object ElectionAuMomentBanner extends BannerTemplate
+  case object GuardianWeeklyBanner extends BannerTemplate
+  case object InvestigationsMomentBanner extends BannerTemplate
   case object PostElectionAuMomentAlbaneseBanner extends BannerTemplate
   case object PostElectionAuMomentHungBanner extends BannerTemplate
   case object PostElectionAuMomentMorrisonBanner extends BannerTemplate
