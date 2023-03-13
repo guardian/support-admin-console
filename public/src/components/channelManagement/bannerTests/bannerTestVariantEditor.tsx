@@ -288,12 +288,7 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
             template === BannerTemplate.GuardianWeeklyBanner ||
             template === BannerTemplate.CharityAppealBanner ||
             template === BannerTemplate.InvestigationsMomentBanner ||
-            template === BannerTemplate.ClimateCrisisMomentBanner ||
             template === BannerTemplate.GlobalNewYearBanner ||
-            template === BannerTemplate.UsEoyMomentBanner ||
-            template === BannerTemplate.UsEoyGivingTuesMomentBanner ||
-            template === BannerTemplate.AusEoyMomentBanner ||
-            template === BannerTemplate.UsEoyMomentBannerV3 ||
             template === BannerTemplate.UkraineMomentBanner) && (
             <Controller
               name="highlightedText"
@@ -365,11 +360,7 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
   const classes = useStyles();
   const setValidationStatusForField = useValidation(onValidationChange);
 
-  const allowVariantTicker =
-    variant.template === BannerTemplate.UsEoyMomentBanner ||
-    variant.template === BannerTemplate.UsEoyGivingTuesMomentBanner ||
-    variant.template === BannerTemplate.AusEoyMomentBanner ||
-    variant.template === BannerTemplate.UsEoyMomentBannerV3;
+  const allowVariantTicker = false; // currently no banner templates support the ticker
 
   const onMobileContentRadioChange = (): void => {
     if (variant.mobileBannerContent === undefined) {
