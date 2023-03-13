@@ -132,30 +132,6 @@ const bannerModules = {
     path: 'globalNYMoment/GlobalNYMomentBanner.js',
     name: 'GlobalNewYearBanner',
   },
-  [BannerTemplate.AuBrandMomentBanner]: {
-    path: 'auBrandMoment/AuBrandMomentBanner.js',
-    name: 'AuBrandMomentBanner',
-  },
-  [BannerTemplate.ClimateCrisisMomentBanner]: {
-    path: 'climateCrisisMoment/ClimateCrisisMomentBanner.js',
-    name: 'ClimateCrisisMomentBanner',
-  },
-  [BannerTemplate.UsEoyMomentBanner]: {
-    path: 'usEoyMoment/UsEoyMomentBanner.js',
-    name: 'UsEoyMomentBanner',
-  },
-  [BannerTemplate.UsEoyGivingTuesMomentBanner]: {
-    path: 'usEoyGivingTuesMoment/UsEoyGivingTuesMomentBanner.js',
-    name: 'UsEoyGivingTuesMomentBanner',
-  },
-  [BannerTemplate.AusEoyMomentBanner]: {
-    path: 'ausEoyMoment/AusEoyMomentBanner.js',
-    name: 'AusEoyMomentBanner',
-  },
-  [BannerTemplate.UsEoyMomentBannerV3]: {
-    path: 'usEoyMomentV3/UsEoyMomentBannerV3.js',
-    name: 'UsEoyMomentBannerV3',
-  },
   [BannerTemplate.UkraineMomentBanner]: {
     path: 'ukraineMoment/UkraineMomentBanner.js',
     name: 'UkraineMomentBanner',
