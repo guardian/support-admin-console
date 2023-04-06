@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Checkbox, FormControlLabel, FormGroup, Theme, makeStyles } from '@material-ui/core';
-import { Region } from '../../utils/models';
+import { Region, Regions } from '../../utils/models';
 import { TestPlatform } from './helpers/shared';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
@@ -10,18 +10,6 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   },
 }));
 
-const regionLabels = {
-  AUDCountries: 'Australia',
-  Canada: 'Canada',
-  EURCountries: 'Europe',
-  NZDCountries: 'New Zealand',
-  GBPCountries: 'the UK',
-  UnitedStates: 'the US',
-  International: 'Rest-of-world',
-};
-
-const ALL_REGIONS = Object.values(Region);
-
 interface TestEditorTargetRegionsSelectorProps {
   selectedRegions: Region[];
   onRegionsUpdate: (selectedRegions: Region[]) => void;
@@ -29,6 +17,9 @@ interface TestEditorTargetRegionsSelectorProps {
   isDisabled: boolean;
   platform?: TestPlatform;
 }
+
+const definedRegions = Object.keys(Regions) as Region[];
+
 const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorProps> = ({
   selectedRegions,
   onRegionsUpdate,
@@ -37,7 +28,7 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
   platform,
 }: TestEditorTargetRegionsSelectorProps) => {
   const classes = useStyles();
-  const allRegions = supportedRegions || ALL_REGIONS;
+  const allRegions = supportedRegions as Region[] || definedRegions;
 
   const onAllRegionsChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     onRegionsUpdate(event.target.checked ? allRegions : []);
@@ -59,7 +50,7 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
     if (platform === 'APPLE_NEWS' && region === 'UnitedStates') {
       return 'the US + Canada';
     }
-    return regionLabels[region];
+    return Regions[region];
   };
 
   return (

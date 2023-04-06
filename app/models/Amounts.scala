@@ -1,48 +1,47 @@
 package models
 
-import io.circe.{ Decoder, Encoder }
-import io.circe.generic.auto._
+import io.circe.generic.extras.Configuration
+import io.circe.generic.extras.auto._
+import io.circe.generic.extras.semiauto._
+import io.circe.{Decoder, Encoder}
 
-case class AmountsSelection(
+case class AmountValuesObject(
     amounts: List[Int], 
     defaultAmount: Int,
     hideChooseYourAmount: Option[Boolean],
 )
 
-case class ContributionAmounts(
-    ONE_OFF: AmountsSelection,
-    MONTHLY: AmountsSelection,
-    ANNUAL: AmountsSelection,
+case class AmountsCardData(
+    ONE_OFF: AmountValuesObject,
+    MONTHLY: AmountValuesObject,
+    ANNUAL: AmountValuesObject,
 )
 
-case class AmountsTestVariant(
-    name: String,
-    amounts: ContributionAmounts,
+case class AmountsVariant(
+  variantName: String,
+  // defaultContributionType: ContributionsType,
+  amountsCardData: AmountsCardData,
 )
 
 case class AmountsTest(
-    name: String,
-    isLive: Boolean,
-    variants: List[AmountsTestVariant],
-    seed: Int,
+  testName: String,
+  isLive: Boolean,
+  target: String,
+  seed: Number,
+  variants: List[AmountsVariant],
 )
 
-case class ConfiguredRegionAmounts(
-    control: ContributionAmounts,
-    test: Option[AmountsTest],
-)
-
-case class ConfiguredAmounts(
-    GBPCountries: ConfiguredRegionAmounts,
-    UnitedStates: ConfiguredRegionAmounts,
-    EURCountries: ConfiguredRegionAmounts,
-    AUDCountries: ConfiguredRegionAmounts,
-    International: ConfiguredRegionAmounts,
-    NZDCountries: ConfiguredRegionAmounts,
-    Canada: ConfiguredRegionAmounts,
-)
-
-object ConfiguredAmounts {
-  implicit val configuredAmountsDecoder = Decoder[ConfiguredAmounts]
-  implicit val configuredAmountsEncoder = Encoder[ConfiguredAmounts]
+object AmountsTest {
+  implicit val customConfig: Configuration = Configuration.default.withDefaults
+  implicit val configuredAmountsDecoder: Decoder[AmountsTest] = deriveConfiguredDecoder[AmountsTest]
+  implicit val configuredAmountsEncoder: Encoder[AmountsTest] = deriveConfiguredEncoder[AmountsTest]
 }
+
+object AmountsTests {
+  type AmountsTests = List[AmountsTest]
+
+  implicit val customConfig: Configuration = Configuration.default.withDefaults
+  implicit val decoder = Decoder[AmountsTests]
+  implicit val encoder = Encoder[AmountsTests]
+}
+

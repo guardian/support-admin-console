@@ -144,7 +144,7 @@ export const APPLE_NEWS_EPIC_CONFIG: EpicEditorConfig = {
   allowCustomVariantSplit: false,
   allowContentTargeting: true,
   allowLocationTargeting: true,
-  supportedRegions: [Region.UnitedStates, Region.AUDCountries, Region.GBPCountries],
+  supportedRegions: ['UnitedStates', 'AUDCountries', 'GBPCountries'],
   allowSupporterStatusTargeting: false,
   allowDeviceTypeTargeting: false,
   allowViewFrequencySettings: false,

@@ -1,8 +1,8 @@
 import React from 'react';
 import { FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 
-import { Region, RegionsAndAll, getPrettifiedRegionName } from '../../utils/models';
-const definedRegions = Object.values(Region);
+import { Regions, RegionsAndAll } from '../../utils/models';
+const definedRegions = Object.keys(Regions);
 
 interface TestListSidebarFilterSelectorProps {
   regionFilter: string;
@@ -31,7 +31,7 @@ const TestListSidebarFilterSelector: React.FC<TestListSidebarFilterSelectorProps
 
         {definedRegions.map((region, index) => (
           <MenuItem key={index} value={region}>
-            {getPrettifiedRegionName(region)}
+            {Regions[region]}
           </MenuItem>
         ))}
       </Select>

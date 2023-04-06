@@ -60,8 +60,8 @@ GET   /support-frontend/contribution-types          controllers.ContributionType
 POST  /support-frontend/contribution-types/update   controllers.ContributionTypesController.set
 
 # ----- support-frontend amounts ----- #
-GET   /support-frontend/amounts                     controllers.AmountsControllerV2.get
-POST  /support-frontend/amounts/update              controllers.AmountsControllerV2.set
+GET   /support-frontend/amounts                     controllers.AmountsController.get
+POST  /support-frontend/amounts/update              controllers.AmountsController.set
 
 # ----- Epic tests ----- #
 GET   /frontend/epic-tests                          controllers.epic.EpicTestsController.get
