@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { makeStyles, Theme, Typography } from '@material-ui/core';
 
 import EpicTestChoiceCardsEditor from './epicTestChoiceCardsEditor';
@@ -8,29 +8,31 @@ import TickerEditor from '../tickerEditor';
 import EpicTestVariantEditorCtasEditor from './epicTestVariantEditorCtasEditor';
 
 import {
+  BylineWithImage,
   ContributionFrequency,
   Cta,
   EpicEditorConfig,
   Image,
-  BylineWithImage,
   SecondaryCta,
   TickerSettings,
 } from '../helpers/shared';
 import {
+  ARTICLE_COUNT_TEMPLATE,
+  COUNTRY_NAME_TEMPLATE,
+  CURRENCY_TEMPLATE,
+  DATE,
+  DAY_OF_THE_WEEK,
   EMPTY_ERROR_HELPER_TEXT,
   getEmptyParagraphsError,
   MAXLENGTH_ERROR_HELPER_TEXT,
   noHtmlValidator,
   templateValidatorForPlatform,
   VALID_TEMPLATES,
-  CURRENCY_TEMPLATE,
-  COUNTRY_NAME_TEMPLATE,
-  ARTICLE_COUNT_TEMPLATE,
 } from '../helpers/validation';
 import {
+  getRteCopyLength,
   RichTextEditor,
   RichTextEditorSingleLine,
-  getRteCopyLength,
 } from '../richTextEditor/richTextEditor';
 import VariantEditorSeparateArticleCountEditor from '../variantEditorSeparateArticleCountEditor';
 import { ImageEditorToggle } from '../imageEditor';
@@ -165,6 +167,8 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   const noCurrencyTemplate = !VALID_TEMPLATES[platform].includes(CURRENCY_TEMPLATE);
   const noCountryNameTemplate = !VALID_TEMPLATES[platform].includes(COUNTRY_NAME_TEMPLATE);
   const noArticleCountTemplate = !VALID_TEMPLATES[platform].includes(ARTICLE_COUNT_TEMPLATE);
+  const noDateTemplate = !VALID_TEMPLATES[platform].includes(DATE);
+  const noDayTemplate = !VALID_TEMPLATES[platform].includes(DAY_OF_THE_WEEK);
 
   // Handling other form field updates
   const updatePrimaryCta = (updatedCta?: Cta): void => {
@@ -243,6 +247,8 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                   noCountryNameTemplate,
                   noArticleCountTemplate,
                   noPriceTemplates: true,
+                  noDateTemplate,
+                  noDayTemplate,
                 }}
               />
             );
@@ -282,6 +288,8 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                 noCountryNameTemplate,
                 noArticleCountTemplate,
                 noPriceTemplates: true,
+                noDateTemplate,
+                noDayTemplate,
               }}
             />
           );
@@ -320,6 +328,8 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                   noCountryNameTemplate,
                   noArticleCountTemplate,
                   noPriceTemplates: true,
+                  noDateTemplate,
+                  noDayTemplate,
                 }}
               />
             );
@@ -357,6 +367,8 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                   noCountryNameTemplate,
                   noArticleCountTemplate,
                   noPriceTemplates: true,
+                  noDateTemplate,
+                  noDayTemplate,
                 }}
               />
             );
