@@ -257,6 +257,8 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
                         noCountryNameTemplate: true,
                         noArticleCountTemplate: true,
                         noPriceTemplates: true,
+                        noDateTemplate: true,
+                        noDayTemplate: true,
                       }}
                     />
                   );
