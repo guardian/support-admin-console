@@ -1,8 +1,9 @@
 import React from 'react';
 import { Button, makeStyles, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import CreateTestDiaglog from './createTestDialog';
+import CreateTestDialog from './CreateTestDialog';
 import useOpenable from '../../hooks/useOpenable';
+import { Territory } from '../../utils/models';
 
 const useStyles = makeStyles(() => ({
   button: {
@@ -18,13 +19,13 @@ const useStyles = makeStyles(() => ({
 }));
 
 interface CreateTestButtonProps {
-  onCreate: (name: string) => void;
-  existingNames: string[];
+  create: (name: string) => void;
+  candidateTargets: Territory[];
 }
 
 const CreateTestButton: React.FC<CreateTestButtonProps> = ({
-  onCreate,
-  existingNames,
+  create,
+  candidateTargets,
 }: CreateTestButtonProps) => {
   const [isOpen, open, close] = useOpenable();
 
@@ -40,11 +41,11 @@ const CreateTestButton: React.FC<CreateTestButtonProps> = ({
       >
         <Typography className={classes.text}>Create a new test</Typography>
       </Button>
-      <CreateTestDiaglog
+      <CreateTestDialog
         isOpen={isOpen}
         close={close}
-        existingNames={existingNames}
-        createTest={onCreate}
+        candidateTargets={candidateTargets}
+        create={create}
       />
     </>
   );

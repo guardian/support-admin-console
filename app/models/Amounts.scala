@@ -23,6 +23,12 @@ case class AmountsVariant(
   amountsCardData: AmountsCardData,
 )
 
+// object AmountsVariant {
+//   implicit val customConfig: Configuration = Configuration.default.withDefaults
+//   implicit val configuredAmountsDecoder: Decoder[AmountsVariant] = deriveConfiguredDecoder[AmountsVariant]
+//   implicit val configuredAmountsEncoder: Encoder[AmountsVariant] = deriveConfiguredEncoder[AmountsVariant]
+// }
+
 case class AmountsTest(
   testName: String,
   isLive: Boolean,

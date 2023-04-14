@@ -1,5 +1,5 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
+import React, { useEffect, useState } from 'react';
+import { Autocomplete } from '@material-ui/lab';
 import {
   Button,
   Dialog,
@@ -11,13 +11,7 @@ import {
   TextField,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-
-import {
-  duplicateValidator,
-  VALID_CHARACTERS_REGEX,
-  INVALID_CHARACTERS_ERROR_HELPER_TEXT,
-  EMPTY_ERROR_HELPER_TEXT,
-} from '../../utils/forms';
+import { Territory, Territories } from '../../utils/models';
 
 const useStyles = makeStyles(() => ({
   dialogHeader: {
@@ -33,33 +27,39 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-type FormData = {
-  name: string;
-};
-
 interface CreateTestDialogProps {
   isOpen: boolean;
   close: () => void;
-  existingNames: string[];
-  createTest: (name: string) => void;
+  create: (name: string) => void;
+  candidateTargets: Territory[];
+}
+
+interface CountryOptions {
+  code: Territory;
+  label: string;
 }
 
 const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
   isOpen,
   close,
-  existingNames,
-  createTest,
+  candidateTargets,
+  create,
 }: CreateTestDialogProps) => {
-  const defaultValues = {
-    name: '',
-  };
+  const [options, setOptions] = useState<CountryOptions[]>([]);
+  const [target, setTarget] = useState<CountryOptions | null>();
 
-  const { register, handleSubmit, errors } = useForm<FormData>({
-    defaultValues,
-  });
+  useEffect(() => {
+    const opts: CountryOptions[] = [];
+    candidateTargets.forEach(c => {
+      opts.push({
+        code: c,
+        label: Territories[c],
+      });
+    });
+    setOptions(opts);
+  }, []);
 
-  const onSubmit = ({ name }: FormData): void => {
-    createTest(name.toUpperCase());
+  const onSubmit = (e: any): void => {
     close();
   };
 
@@ -74,28 +74,22 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
         </IconButton>
       </div>
       <DialogContent dividers>
-        <TextField
-          className={classes.input}
-          inputRef={register({
-            required: EMPTY_ERROR_HELPER_TEXT,
-            pattern: {
-              value: VALID_CHARACTERS_REGEX,
-              message: INVALID_CHARACTERS_ERROR_HELPER_TEXT,
-            },
-            validate: duplicateValidator(existingNames),
-          })}
-          error={!!errors.name}
-          helperText={errors.name && errors.name.message}
-          name="name"
-          label="Full test name"
-          margin="normal"
-          variant="outlined"
-          autoFocus
-          fullWidth
+        <Autocomplete
+          value={target}
+          onChange={(event: React.ChangeEvent<{}>, newValue: CountryOptions | null) => {
+            setTarget(newValue);
+          }}
+          id={'candidate-territories'}
+          getOptionLabel={(option): string => option.label}
+          noOptionsText={'Search for target territory...'}
+          options={options}
+          renderInput={(params): JSX.Element => (
+            <TextField {...params} label={"Select target"} />
+          )}
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleSubmit(onSubmit)} color="primary">
+        <Button onClick={onSubmit} color="primary">
           Create test
         </Button>
       </DialogActions>

@@ -6,8 +6,8 @@ import TestPriorityLabelList from './testPriorityLabelList';
 import NewTestButton from './newTestButton';
 import BatchProcessTestButton from './batchProcessTestButton';
 
-import TestListSidebarFilterSelector from './testListSidebarFilterSelector';
-import { RegionsAndAll } from '../../utils/models';
+// import TestListSidebarFilterSelector from './testListSidebarFilterSelector';
+// import { RegionsAndAll } from '../../utils/models';
 import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 
@@ -78,13 +78,13 @@ function Sidebar<T extends Test>({
   savingTestList,
 }: SidebarProps<T>): React.ReactElement<SidebarProps<T>> {
   const classes = useStyles();
-  const [regionFilter, setRegionFilter] = useState<RegionsAndAll>('ALL');
+  // const [regionFilter, setRegionFilter] = useState<RegionsAndAll>('ALL');
 
   const filterTests = function(testsToFilter: Test[]): Test[] {
-    if (userHasTestListLocked || 'ALL' === regionFilter) {
+    // if (userHasTestListLocked || 'ALL' === regionFilter) {
       return testsToFilter;
-    }
-    return testsToFilter.filter(t => t.locations.indexOf(regionFilter) >= 0);
+    // }
+    // return testsToFilter.filter(t => t.locations.indexOf(regionFilter) >= 0);
   };
 
   return (
@@ -151,12 +151,17 @@ function Sidebar<T extends Test>({
           </Button>
         )}
 
+
+{/*
         {!userHasTestListLocked && (
           <TestListSidebarFilterSelector
             regionFilter={regionFilter}
             handleRegionFilterChange={setRegionFilter}
           />
         )}
+*/}
+
+
       </div>
 
       <div className={classes.listsContainer}>

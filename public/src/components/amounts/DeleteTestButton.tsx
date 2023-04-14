@@ -18,15 +18,15 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-interface CreateTestButtonProps {
+interface DeleteTestButtonProps {
   create: (name: string) => void;
   candidateTargets: Territory[];
 }
 
-const CreateTestButton: React.FC<CreateTestButtonProps> = ({
+const DeleteTestButton: React.FC<DeleteTestButtonProps> = ({
   create,
   candidateTargets,
-}: CreateTestButtonProps) => {
+}: DeleteTestButtonProps) => {
   const [isOpen, open, close] = useOpenable();
 
   const classes = useStyles();
@@ -39,16 +39,14 @@ const CreateTestButton: React.FC<CreateTestButtonProps> = ({
         startIcon={<AddIcon />}
         onClick={open}
       >
-        <Typography className={classes.text}>Create a new test</Typography>
+        <Typography className={classes.text}>Delete test</Typography>
       </Button>
-      <CreateTestDialog
+      <DeleteTestDialog
         isOpen={isOpen}
         close={close}
-        candidateTargets={candidateTargets}
-        create={create}
       />
     </>
   );
 };
 
-export default CreateTestButton;
+export default DeleteTestButton;

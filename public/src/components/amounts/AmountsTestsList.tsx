@@ -7,7 +7,6 @@ import {
   Regions,
   Countries,
 } from '../../utils/models';
-import SaveIcon from '@material-ui/icons/Save';
 import CreateTestButton from './CreateTestButton';
 
 const useStyles = makeStyles(({ palette, spacing }) => ({
@@ -26,10 +25,7 @@ interface AmountsTestsListProps {
   tests: AmountsTests;
   selectedTest: Territory | undefined;
   onTargetSelected: (target: Territory) => void;
-  save: () => void;
-  saving: boolean;
   create: () => void;
-  creating: boolean;
 }
 
 interface AmountsTestButtonProps {
@@ -43,10 +39,7 @@ const AmountsTestsList: React.FC<AmountsTestsListProps> = ({
   tests,
   selectedTest,
   onTargetSelected,
-  save,
-  saving,
   create,
-  creating,
 }: AmountsTestsListProps) => {
   const classes = useStyles();
 
@@ -68,19 +61,6 @@ const AmountsTestsList: React.FC<AmountsTestsListProps> = ({
     return potentialTests.sort();
   };
 
-  const SaveButton: React.FC = () => (
-    <Button
-      variant="contained"
-      color="primary"
-      className={classes.saveButton}
-      startIcon={<SaveIcon />}
-      onClick={save}
-      disabled={saving}
-    >
-      <Typography className={classes.saveButtonText}>{saving ? 'Saving' : 'Save'}</Typography>
-    </Button>
-  );
-
   const AmountsTestButton: React.FC<AmountsTestButtonProps> = ({ target }: AmountsTestButtonProps) => {
     return (
       <ListItem
@@ -95,7 +75,6 @@ const AmountsTestsList: React.FC<AmountsTestsListProps> = ({
 
   return (
     <div className={classes.root}>
-      <SaveButton />
       <Typography className={classes.header}>Region-wide tests</Typography>
       <div>
         <List className={classes.list}>
