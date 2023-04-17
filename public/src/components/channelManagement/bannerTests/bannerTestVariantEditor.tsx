@@ -284,7 +284,8 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
             }}
           />
 
-          {(template === BannerTemplate.ContributionsBanner ||
+          {(template === BannerTemplate.AusMomentBanner ||
+            template === BannerTemplate.ContributionsBanner ||
             template === BannerTemplate.ChoiceCardsBannerBlue ||
             template === BannerTemplate.ChoiceCardsBannerYellow ||
             template === BannerTemplate.GuardianWeeklyBanner ||
@@ -362,7 +363,7 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
   const classes = useStyles();
   const setValidationStatusForField = useValidation(onValidationChange);
 
-  const allowVariantTicker = false; // currently no banner templates support the ticker
+  const allowVariantTicker = variant.template === BannerTemplate.AusMomentBanner;
 
   const onMobileContentRadioChange = (): void => {
     if (variant.mobileBannerContent === undefined) {
