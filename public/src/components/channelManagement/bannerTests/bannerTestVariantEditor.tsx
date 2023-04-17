@@ -286,8 +286,10 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
 
           {(template === BannerTemplate.AusMomentBanner ||
             template === BannerTemplate.ContributionsBanner ||
-            template === BannerTemplate.ChoiceCardsBannerBlue ||
-            template === BannerTemplate.ChoiceCardsBannerYellow ||
+            template === BannerTemplate.ChoiceCardsButtonsBannerBlue ||
+            template === BannerTemplate.ChoiceCardsButtonsBannerYellow ||
+            template === BannerTemplate.ChoiceCardsTabsBannerBlue ||
+            template === BannerTemplate.ChoiceCardsTabsBannerYellow ||
             template === BannerTemplate.GuardianWeeklyBanner ||
             template === BannerTemplate.CharityAppealBanner ||
             template === BannerTemplate.InvestigationsMomentBanner ||

@@ -12,8 +12,10 @@ object BannerTemplate {
   case object AusEoyMomentBanner extends BannerTemplate
   case object AusMomentBanner extends BannerTemplate
   case object AuBrandMomentBanner extends BannerTemplate
-  case object ChoiceCardsBannerBlue extends BannerTemplate
-  case object ChoiceCardsBannerYellow extends BannerTemplate
+  case object ChoiceCardsButtonsBannerBlue extends BannerTemplate
+  case object ChoiceCardsButtonsBannerYellow extends BannerTemplate
+  case object ChoiceCardsTabsBannerBlue extends BannerTemplate
+  case object ChoiceCardsTabsBannerYellow extends BannerTemplate
   case object ClimateCrisisMomentBanner extends BannerTemplate
   case object ContributionsBanner extends BannerTemplate
   case object ContributionsBannerWithSignIn extends BannerTemplate
