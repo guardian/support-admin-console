@@ -13,6 +13,7 @@ import { Region } from '../utils/models';
 import { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';
 
 export enum BannerTemplate {
+  AusMomentBanner = 'AusMomentBanner',
   ContributionsBanner = 'ContributionsBanner',
   ContributionsBannerWithSignIn = 'ContributionsBannerWithSignIn',
   ChoiceCardsBannerBlue = 'ChoiceCardsBannerBlue',
