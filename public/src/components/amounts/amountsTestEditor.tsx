@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { Typography, Button,  } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
@@ -37,7 +37,23 @@ const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
   updateTest,
   deleteTest,
 }: AmountsTestEditorProps) => {
+console.log('editor - test', test);
   const classes = useStyles();
+
+  const testName = test?.testName;
+  const isLive = test?.isLive || false;
+  const target = test?.target;
+  const seed = test?.seed;
+  const variants = test?.variants;
+
+  const [testIsLive, setTestIsLive] = useState<boolean>(isLive);
+  const [testVariants, setTestVariants] = useState<AmountsVariant[]>([]);
+
+  useEffect(() => {
+    if (test != null && variants != null) {
+      setTestVariants([...variants]);
+    }
+  }, [test]);
 
   if (test == null) {
     return (
@@ -46,10 +62,6 @@ const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
      </div>
     );
   }
-
-  const { testName, isLive, target, seed, variants } = test;
-  const [testIsLive, setTestIsLive] = useState(isLive);
-  const [testVariants, setTestVariants] = useState<AmountsVariant[]>([...variants]);
 
   const createVariant = (name: string) => {
     const newVariant: AmountsVariant = {
@@ -103,23 +115,27 @@ const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
   };
 
   const saveCurrentTest = () => {
-    updateTest({
-       testName, 
-       isLive: testIsLive,
-       target, 
-       seed, 
-       variants: testVariants,
-     });
+    if (testName != null && target != null && seed != null) {
+      updateTest({
+         testName, 
+         isLive: testIsLive,
+         target, 
+         seed, 
+         variants: testVariants,
+       });
+    }
   };
 
   const deleteCurrentTest = () => {
-    deleteTest({
-       testName, 
-       isLive: testIsLive,
-       target, 
-       seed, 
-       variants: testVariants,
-     });
+    if (testName != null && target != null && seed != null) {
+      deleteTest({
+         testName, 
+         isLive: testIsLive,
+         target, 
+         seed, 
+         variants: testVariants,
+       });
+    }
   };
 
   const addVariantForm = (variant: AmountsVariant) => {

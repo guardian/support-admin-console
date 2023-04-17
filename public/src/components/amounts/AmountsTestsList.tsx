@@ -64,6 +64,7 @@ const AmountsTestsList: React.FC<AmountsTestsListProps> = ({
   const AmountsTestButton: React.FC<AmountsTestButtonProps> = ({ target }: AmountsTestButtonProps) => {
     return (
       <ListItem
+        key={target}
         className={target === selectedTest ? classes.testSelectedButton : classes.testButton}
         onClick={(): void => onTargetSelected(target)}
         button
