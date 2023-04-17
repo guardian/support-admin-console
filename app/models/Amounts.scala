@@ -19,7 +19,7 @@ case class AmountsCardData(
 
 case class AmountsVariant(
   variantName: String,
-  // defaultContributionType: ContributionsType,
+  defaultContributionType: Option[String],
   amountsCardData: AmountsCardData,
 )
 
@@ -33,14 +33,16 @@ case class AmountsTest(
 
 object AmountsTest {
   implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val configuredAmountsDecoder: Decoder[AmountsTest] = deriveConfiguredDecoder[AmountsTest]
-  implicit val configuredAmountsEncoder: Encoder[AmountsTest] = deriveConfiguredEncoder[AmountsTest]
+
+  implicit val decoder = Decoder[AmountsTest]
+  implicit val encoder = Encoder[AmountsTest]
 }
 
 object AmountsTests {
   type AmountsTests = List[AmountsTest]
 
   implicit val customConfig: Configuration = Configuration.default.withDefaults
+
   implicit val decoder = Decoder[AmountsTests]
   implicit val encoder = Encoder[AmountsTests]
 }
