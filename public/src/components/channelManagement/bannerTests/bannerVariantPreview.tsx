@@ -136,21 +136,13 @@ const bannerModules = {
     path: 'ukraineMoment/UkraineMomentBanner.js',
     name: 'UkraineMomentBanner',
   },
-  [BannerTemplate.ChoiceCardsButtonsBannerBlue]: {
-    path: 'choiceCardsButtonsBanner/ChoiceCardsButtonsBannerBlue.js',
-    name: 'ChoiceCardsButtonsBannerBlue',
+  [BannerTemplate.ChoiceCardsBannerBlue]: {
+    path: 'choiceCardsBanner/ChoiceCardsBannerBlue.js',
+    name: 'ChoiceCardsBannerBlue',
   },
-  [BannerTemplate.ChoiceCardsButtonsBannerYellow]: {
-    path: 'choiceCardsButtonsBanner/ChoiceCardsButtonsBannerYellow.js',
-    name: 'ChoiceCardsButtonsBannerYellow',
-  },
-  [BannerTemplate.ChoiceCardsTabsBannerBlue]: {
-    path: 'choiceCardsTabsBanner/ChoiceCardsTabsBannerBlue.js',
-    name: 'ChoiceCardsTabsBannerBlue',
-  },
-  [BannerTemplate.ChoiceCardsTabsBannerYellow]: {
-    path: 'choiceCardsTabsBanner/ChoiceCardsTabsBannerYellow.js',
-    name: 'ChoiceCardsTabsBannerYellow',
+  [BannerTemplate.ChoiceCardsBannerYellow]: {
+    path: 'choiceCardsBanner/ChoiceCardsBannerYellow.js',
+    name: 'ChoiceCardsBannerYellow',
   },
 };
 
