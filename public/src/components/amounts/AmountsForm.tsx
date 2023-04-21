@@ -5,8 +5,8 @@ import {
   AmountsTest,
 } from '../../utils/models';
 
-import AmountsTestsList from './AmountsTestsList';
-import AmountsTestEditor from './AmountsTestEditor';
+import { AmountsTestsList } from './AmountsTestsList';
+import { AmountsTestEditor } from './AmountsTestEditor';
 
 import {
   SupportFrontendSettingsType,
@@ -15,10 +15,42 @@ import {
 } from '../../utils/requests';
 import withS3Data, { InnerProps, DataFromServer } from '../../hocs/withS3Data';
 
+import { makeStyles, Theme } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(({ spacing }: Theme) => ({
+  body: {
+    display: 'flex',
+    overflow: 'hidden',
+    flexGrow: 1,
+    width: '100%',
+    height: '100%',
+  },
+  leftCol: {
+    height: '100%',
+    flexShrink: 0,
+    overflowY: 'auto',
+    background: 'white',
+    paddingTop: spacing(6),
+    paddingLeft: spacing(6),
+    paddingRight: spacing(6),
+  },
+  rightCol: {
+    overflowY: 'auto',
+    flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    paddingTop: spacing(6),
+    paddingLeft: spacing(6),
+  },
+}));
+
 const AmountsForm: React.FC<InnerProps<AmountsTests>> = ({
   data,
   setData,
 }: InnerProps<AmountsTests>) => {
+  const classes = useStyles();
+
   const [selectedTest, setSelectedTest] = useState<AmountsTest | undefined>();
 
   const onTargetSelected = (target: Territory) => {
@@ -47,18 +79,22 @@ const AmountsForm: React.FC<InnerProps<AmountsTests>> = ({
   };
 
   return (
-    <div>
-      <AmountsTestsList 
-        tests={data}
-        selectedTest={selectedTest?.testName || undefined}
-        onTargetSelected={onTargetSelected}
-        create={createTest}
-      />
-      <AmountsTestEditor 
-        test={selectedTest}
-        updateTest={saveTest}
-        deleteTest={deleteTest}
-      />
+    <div className={classes.body}>
+      <div className={classes.leftCol}>
+        <AmountsTestsList 
+          tests={data}
+          selectedTest={selectedTest?.target}
+          onTargetSelected={onTargetSelected}
+          create={createTest}
+        />
+      </div>
+      <div className={classes.rightCol}>
+        <AmountsTestEditor 
+          test={selectedTest}
+          updateTest={saveTest}
+          deleteTest={deleteTest}
+        />
+      </div>
     </div>
   );
 };

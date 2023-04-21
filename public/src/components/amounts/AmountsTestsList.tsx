@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button, List, ListItem, makeStyles, Typography } from '@material-ui/core';
+import { List, ListItem, makeStyles, Typography } from '@material-ui/core';
+import { red } from '@material-ui/core/colors';
 import { 
   Territories,
   Territory,
@@ -9,16 +10,69 @@ import {
 } from '../../utils/models';
 import CreateTestButton from './CreateTestButton';
 
-const useStyles = makeStyles(({ palette, spacing }) => ({
-  root: {},
-  saveButton: {},
-  saveButtonText: {},
-  testButton: {},
-  testButtonText: {},
-  testSelectedButton: {},
-  testSelectedButtonText: {},
-  header: {},
-  list: {},
+const useStyles = makeStyles(({ palette }) => ({
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    paddingLeft: '32px',
+  },
+  header: {
+    margin: '12px',
+    fontSize: '18px',
+  },
+  list: {
+    marginTop: 0,
+    padding: 0,
+    '& > * + *': {
+      marginTop: '8px',
+    },
+  },
+  testButton: {
+    position: 'relative',
+    height: '50px',
+    width: '290px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderRadius: '4px',
+    padding: '0 12px',
+    textTransform: 'uppercase',
+    fontSize: '12px',
+  },
+  testNotSelected: {
+    border: `1px solid ${palette.grey[700]}`,
+    backgroundColor: 'white',
+    color: palette.grey[700],
+    '&:hover': {
+      backgroundColor: palette.grey[300],
+    },
+  },
+  testIsSelected: {
+    border: `1px solid ${palette.grey[700]}`,
+    color: 'white',
+    backgroundColor: palette.grey[700],
+    '&:hover': {
+      color: palette.grey[700],
+      backgroundColor: palette.grey[300],
+    },
+  },
+  liveTestNotSelected: {
+    border: `1px solid ${red[500]}`,
+    backgroundColor: 'white',
+    color: palette.grey[700],
+    '&:hover': {
+      backgroundColor: palette.grey[300],
+    },
+  },
+  liveTestIsSelected: {
+    border: `1px solid ${red[500]}`,
+    color: 'white',
+    backgroundColor: red[500],
+    '&:hover': {
+      color: palette.grey[700],
+      backgroundColor: palette.grey[300],
+    },
+  },
 }));
 
 interface AmountsTestsListProps {
@@ -35,7 +89,7 @@ interface AmountsTestButtonProps {
 const regionLabels = Object.keys(Regions);
 const countryLabels = Object.keys(Countries);
 
-const AmountsTestsList: React.FC<AmountsTestsListProps> = ({ 
+export const AmountsTestsList: React.FC<AmountsTestsListProps> = ({ 
   tests,
   selectedTest,
   onTargetSelected,
@@ -61,15 +115,37 @@ const AmountsTestsList: React.FC<AmountsTestsListProps> = ({
     return potentialTests.sort();
   };
 
+  const getButtonStyling = (target: Territory) => {
+    const myTest = tests.filter(t => target === t.target)[0];
+    const res = [classes.testButton];
+    if (target === selectedTest) {
+      if (myTest.isLive) {
+        res.push(classes.liveTestIsSelected);
+      }
+      else {
+        res.push(classes.testIsSelected);
+      }
+    }
+    else {
+      if (myTest.isLive) {
+        res.push(classes.liveTestNotSelected);
+      }
+      else {
+        res.push(classes.testNotSelected);
+      }
+    }
+    return res.join(' ');
+  }
+
   const AmountsTestButton: React.FC<AmountsTestButtonProps> = ({ target }: AmountsTestButtonProps) => {
     return (
       <ListItem
         key={target}
-        className={target === selectedTest ? classes.testSelectedButton : classes.testButton}
+        className={getButtonStyling(target)}
         onClick={(): void => onTargetSelected(target)}
         button
       >
-        <div className={target === selectedTest ? classes.testSelectedButtonText : classes.testButtonText}>{Territories[target]}</div>
+        <div>{Territories[target]}</div>
       </ListItem>
     );
   };
@@ -83,12 +159,13 @@ const AmountsTestsList: React.FC<AmountsTestsListProps> = ({
         </List>
       </div>
 
+      <Typography className={classes.header}>Country-specific tests</Typography>
+
       <CreateTestButton 
         candidateTargets={getCountryTestCandidates()}
         create={create}
       />
 
-      <Typography className={classes.header}>Country-specific tests</Typography>
       <div>
         <List className={classes.list}>
           {getExistingCountryTests().map(t => <AmountsTestButton target={t} />)}
@@ -97,8 +174,6 @@ const AmountsTestsList: React.FC<AmountsTestsListProps> = ({
     </div>
   );
 };
-
-export default AmountsTestsList;
 
 
 

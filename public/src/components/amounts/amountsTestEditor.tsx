@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 
-import { Typography, Button,  } from '@material-ui/core';
+import { Typography, Button } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import LiveSwitch from '../shared/liveSwitch';
+
+import { AmountsVariantEditor } from './AmountsVariantEditor';
+import { CreateVariantButton } from './CreateVariantButton';
 
 import { 
   AmountsTest,
@@ -23,21 +26,17 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   saveButtonText: {},
 }));
 
-  // const SaveButton: React.FC = () => (
-  // );
-
 interface AmountsTestEditorProps {
   test: AmountsTest | undefined;
   updateTest: (updatedTest: AmountsTest) => void;
   deleteTest: (test: AmountsTest) => void | undefined;
 }
 
-const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
+export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
   test,
   updateTest,
   deleteTest,
 }: AmountsTestEditorProps) => {
-console.log('editor - test', test);
   const classes = useStyles();
 
   const testName = test?.testName;
@@ -102,6 +101,10 @@ console.log('editor - test', test);
     setTestVariants(newState);
   }
 
+  const getExistingVariantNames = () => {
+    return testVariants.map(v => v.variantName);
+  };
+
   const deleteVariant = (variant: AmountsVariant) => {
     const deleteName = variant.variantName;
     const newState = testVariants.filter(v => deleteName !== v.variantName);
@@ -139,6 +142,9 @@ console.log('editor - test', test);
   };
 
   const addVariantForm = (variant: AmountsVariant) => {
+    return (
+      <AmountsVariantEditor variant={variant} />
+    );
   };
 
   return (
@@ -166,14 +172,16 @@ console.log('editor - test', test);
           </Button>
         </div>
       </div>
-       <div className={classes.formBody}>
-         {testVariants.map(v => addVariantForm(v))}
+      <div className={classes.formBody}>
+        {testVariants.map(v => addVariantForm(v))}
+        <CreateVariantButton 
+          onCreate={createVariant}
+          existingNames={getExistingVariantNames()}
+        />
       </div>
    </div>
   );
 };
-
-export default AmountsTestEditor;
 
   // const updateIsLive = (isLive: boolean): void => {
   //   updateTest({ ...test, isLive: isLive });
