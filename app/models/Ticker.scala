@@ -23,8 +23,8 @@ object TickerCountType {
 
 sealed trait TickerName
 object TickerName {
-  case object US_2022 extends TickerName
-  case object AU_2022 extends TickerName
+  case object US extends TickerName
+  case object AU extends TickerName
 
   implicit val customConfig: Configuration = Configuration.default.withDefaults
   implicit val encoder = deriveEnumerationEncoder[TickerName]
