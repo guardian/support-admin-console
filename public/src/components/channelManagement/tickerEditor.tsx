@@ -43,7 +43,7 @@ const DEFAULT_TICKER_SETTINGS: TickerSettings = {
     goalReachedSecondary: 'but you can still support us',
   },
   currencySymbol: '$',
-  name: TickerName.US_2022,
+  name: TickerName.US,
 };
 
 interface TickerEditorProps {
@@ -147,15 +147,15 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
                 name="ticker-name"
               >
                 <FormControlLabel
-                  value={TickerName.US_2022}
+                  value={TickerName.US}
                   control={<Radio />}
-                  label="US_2022"
+                  label="US"
                   disabled={isDisabled}
                 />
                 <FormControlLabel
-                  value={TickerName.AU_2022}
+                  value={TickerName.AU}
                   control={<Radio />}
-                  label="AU_2022"
+                  label="AU"
                   disabled={isDisabled}
                 />
               </RadioGroup>

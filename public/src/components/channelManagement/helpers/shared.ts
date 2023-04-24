@@ -257,8 +257,8 @@ export enum TickerCountType {
   money = 'money',
 }
 export enum TickerName {
-  US_2022 = 'US_2022',
-  AU_2022 = 'AU_2022',
+  US = 'US',
+  AU = 'AU',
 }
 
 interface TickerCopy {
