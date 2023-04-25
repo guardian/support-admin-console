@@ -51,8 +51,7 @@
     "recharts": "2.0.8"
   },
   "resolutions": {
-    "csstype": "^2.6.18",
-    "react": "^17.0.2"
+    "csstype": "^2.6.18"
   },
   "overrides": {
     "react": "^17.0.2",
