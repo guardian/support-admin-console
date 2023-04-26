@@ -10,7 +10,7 @@ import io.circe.{Decoder, Encoder}
 sealed trait BannerTemplate
 object BannerTemplate {
   case object AusEoyMomentBanner extends BannerTemplate
-  case object AusMomentBanner extends BannerTemplate
+  case object AusAnniversaryBanner extends BannerTemplate
   case object AuBrandMomentBanner extends BannerTemplate
   case object ChoiceCardsButtonsBannerBlue extends BannerTemplate
   case object ChoiceCardsButtonsBannerYellow extends BannerTemplate

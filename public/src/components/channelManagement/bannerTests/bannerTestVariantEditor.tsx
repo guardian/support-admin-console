@@ -284,7 +284,7 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
             }}
           />
 
-          {(template === BannerTemplate.AusMomentBanner ||
+          {(template === BannerTemplate.AusAnniversaryBanner ||
             template === BannerTemplate.ContributionsBanner ||
             template === BannerTemplate.ChoiceCardsButtonsBannerBlue ||
             template === BannerTemplate.ChoiceCardsButtonsBannerYellow ||
@@ -365,7 +365,7 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
   const classes = useStyles();
   const setValidationStatusForField = useValidation(onValidationChange);
 
-  const allowVariantTicker = variant.template === BannerTemplate.AusMomentBanner;
+  const allowVariantTicker = variant.template === BannerTemplate.AusAnniversaryBanner;
 
   const onMobileContentRadioChange = (): void => {
     if (variant.mobileBannerContent === undefined) {

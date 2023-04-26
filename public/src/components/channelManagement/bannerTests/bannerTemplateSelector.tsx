@@ -13,7 +13,7 @@ interface BannerTemplateSelectorProps {
 }
 
 const templatesWithLabels = [
-  { template: BannerTemplate.AusMomentBanner, label: 'Aus 10 yr moment' },
+  { template: BannerTemplate.AusAnniversaryBanner, label: 'Aus 10 yr moment' },
   { template: BannerTemplate.ContributionsBanner, label: 'Contributions' },
   {
     template: BannerTemplate.ContributionsBannerWithSignIn,

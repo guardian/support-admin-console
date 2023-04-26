@@ -96,9 +96,9 @@ const buildProps = (
 });
 
 const bannerModules = {
-  [BannerTemplate.AusMomentBanner]: {
-    path: 'aus10yrAnniversaryMoment/Aus10yrAnniversaryMomentBanner.js',
-    name: 'Aus10yrMomentBanner',
+  [BannerTemplate.AusAnniversaryBanner]: {
+    path: 'ausAnniversaryBanner/AusAnniversaryBanner.js',
+    name: 'AusAnniversaryBanner',
   },
   [BannerTemplate.GuardianWeeklyBanner]: {
     path: 'guardianWeekly/GuardianWeeklyBanner.js',
