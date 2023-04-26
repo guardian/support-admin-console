@@ -4,7 +4,7 @@
     "@types/material-ui": "^0.21.7",
     "@types/react-dom": "^16.9.0",
     "@types/react-router-dom": "^5.0.1",
-    "@types/react": "^17.0.58",
+    "@types/react": "~17.0.58",
     "@typescript-eslint/eslint-plugin": "^4.1.1",
     "@typescript-eslint/parser": "^4.1.1",
     "css-loader": "^6.7.3",
