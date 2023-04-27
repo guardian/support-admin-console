@@ -25,6 +25,7 @@ export enum BannerTemplate {
   GlobalNewYearBanner = 'GlobalNewYearBanner',
   CharityAppealBanner = 'CharityAppealBanner',
   UkraineMomentBanner = 'UkraineMomentBanner',
+  WorldPressFreedomDayBanner = 'WorldPressFreedomDayBanner',
 }
 
 export interface BannerContent {

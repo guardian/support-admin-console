@@ -37,6 +37,8 @@ const templatesWithLabels = [
     template: BannerTemplate.ChoiceCardsBannerYellow,
     label: 'Choice cards banner - yellow',
   },
+  {
+    template: BannerTemplate.WorldPressFreedomDayBanner, label: 'World Press Freedom Day' },
 ];
 
 const BannerTemplateSelector: React.FC<BannerTemplateSelectorProps> = ({
