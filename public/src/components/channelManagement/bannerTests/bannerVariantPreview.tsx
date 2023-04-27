@@ -145,7 +145,7 @@ const bannerModules = {
     name: 'ChoiceCardsBannerYellow',
   },
   [BannerTemplate.WorldPressFreedomDayBanner]: {
-    path: 'worldPressFreedomDayBanner/WorldPressFreedomDayBanner.js',
+    path: 'worldPressFreedomDay/WorldPressFreedomDayBanner.js',
     name: 'WorldPressFreedomDayBanner',
   },
 };
