@@ -147,7 +147,7 @@ const bannerModules = {
   [BannerTemplate.WorldPressFreedomDayBanner]: {
     path: 'worldPressFreedomDayBanner/WorldPressFreedomDayBanner.js',
     name: 'WorldPressFreedomDayBanner',
-  }
+  },
 };
 
 const useStyles = makeStyles(({ palette }: Theme) => ({
