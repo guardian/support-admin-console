@@ -13,9 +13,6 @@ GET /header-tests/:testName                         controllers.Application.inde
 GET /epic-tests                                     controllers.Application.index
 GET /epic-tests/:testName                           controllers.Application.indexWithName(testName: String)
 
-GET /epic-holdback-tests                            controllers.Application.index
-GET /epic-holdback-tests/:testName                  controllers.Application.indexWithName(testName: String)
-
 GET /liveblog-epic-tests                            controllers.Application.index
 GET /liveblog-epic-tests/:testName                  controllers.Application.indexWithName(testName: String)
 
@@ -95,23 +92,6 @@ POST  /frontend/header-tests/test/lock/:testName        controllers.HeaderTestsC
 POST  /frontend/header-tests/test/unlock/:testName      controllers.HeaderTestsController.unlockTest(testName: String)
 POST  /frontend/header-tests/test/takecontrol/:testName controllers.HeaderTestsController.forceLockTest(testName: String)
 POST  /frontend/header-tests/test/status/:rawStatus     controllers.HeaderTestsController.setStatus(rawStatus: String)
-
-
-# ----- Epic holdback tests ----- #
-GET   /frontend/epic-holdback-tests                          controllers.epic.EpicHoldbackTestsController.get
-# epic holdback list endpoints
-POST  /frontend/epic-holdback-tests/list/lock                  controllers.epic.EpicHoldbackTestsController.lockList
-POST  /frontend/epic-holdback-tests/list/unlock                controllers.epic.EpicHoldbackTestsController.unlockList
-POST  /frontend/epic-holdback-tests/list/takecontrol           controllers.epic.EpicHoldbackTestsController.takeControlOfList
-POST  /frontend/epic-holdback-tests/list/reorder               controllers.epic.EpicHoldbackTestsController.reorderList
-# epic holdback test endpoints
-GET   /frontend/epic-holdback-tests/test/:testName             controllers.epic.EpicHoldbackTestsController.getTest(testName: String)
-POST  /frontend/epic-holdback-tests/test/update                controllers.epic.EpicHoldbackTestsController.updateTest
-POST  /frontend/epic-holdback-tests/test/create                controllers.epic.EpicHoldbackTestsController.createTest
-POST  /frontend/epic-holdback-tests/test/lock/:testName        controllers.epic.EpicHoldbackTestsController.lockTest(testName: String)
-POST  /frontend/epic-holdback-tests/test/unlock/:testName      controllers.epic.EpicHoldbackTestsController.unlockTest(testName: String)
-POST  /frontend/epic-holdback-tests/test/takecontrol/:testName controllers.epic.EpicHoldbackTestsController.forceLockTest(testName: String)
-POST  /frontend/epic-holdback-tests/test/status/:rawStatus     controllers.epic.EpicHoldbackTestsController.setStatus(rawStatus: String)
 
 
 # ----- Liveblog epic tests ----- #

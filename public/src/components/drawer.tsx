@@ -152,11 +152,6 @@ export default function NavDrawer(): React.ReactElement {
             <ListItemText primary="Epic" />
           </ListItem>
         </Link>
-        <Link key="Epic Holdback" to="/epic-holdback-tests" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Epic Holdback">
-            <ListItemText primary="Epic Holdback" />
-          </ListItem>
-        </Link>
         <Link key="Liveblog Epic" to="/liveblog-epic-tests" className={classes.link}>
           <ListItem className={classes.listItem} button key="Liveblog Epic">
             <ListItemText primary="Liveblog Epic" />

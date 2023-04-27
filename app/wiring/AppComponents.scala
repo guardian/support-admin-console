@@ -78,7 +78,6 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     new AmountsController(authAction, controllerComponents, stage, runtime),
     new EpicTestsController(authAction, controllerComponents, stage, runtime, dynamoTestsService),
     new HeaderTestsController(authAction, controllerComponents, stage, runtime, dynamoTestsService),
-    new EpicHoldbackTestsController(authAction, controllerComponents, stage, runtime, dynamoTestsService),
     new LiveblogEpicTestsController(authAction, controllerComponents, stage, runtime, dynamoTestsService),
     new AppleNewsEpicTestsController(authAction, controllerComponents, stage, runtime, dynamoTestsService),
     new AMPEpicTestsController(authAction, controllerComponents, stage, runtime, dynamoTestsService),

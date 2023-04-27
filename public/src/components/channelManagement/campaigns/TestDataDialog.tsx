@@ -127,7 +127,7 @@ const testFields = {
     minArticlesBeforeShowingBanner: {
       label: 'Min articles before showing banner',
       type: 'number',
-      exclude: ['Header', 'Epic', 'EpicHoldback', 'EpicLiveblog', 'EpicAppleNews', 'EpicAMP'],
+      exclude: ['Header', 'Epic', 'EpicLiveblog', 'EpicAppleNews', 'EpicAMP'],
       optional: false,
     },
     sections: {
@@ -177,7 +177,7 @@ const variantFields = {
     template: {
       label: 'Banner template',
       type: 'string',
-      exclude: ['Header', 'Epic', 'EpicHoldback', 'EpicLiveblog', 'EpicAppleNews', 'EpicAMP'],
+      exclude: ['Header', 'Epic', 'EpicLiveblog', 'EpicAppleNews', 'EpicAMP'],
       optional: false,
     },
     showSignInLink: {
@@ -228,15 +228,7 @@ const variantFields = {
     subheading: {
       label: 'Sub-heading',
       type: 'string-block',
-      exclude: [
-        'Epic',
-        'EpicHoldback',
-        'EpicLiveblog',
-        'EpicAppleNews',
-        'EpicAMP',
-        'Banner1',
-        'Banner2',
-      ],
+      exclude: ['Epic', 'EpicLiveblog', 'EpicAppleNews', 'EpicAMP', 'Banner1', 'Banner2'],
       optional: true,
     },
     paragraphs: {
@@ -266,15 +258,7 @@ const variantFields = {
     primaryCta: {
       label: 'Main CTA',
       type: 'object',
-      exclude: [
-        'Epic',
-        'EpicHoldback',
-        'EpicLiveblog',
-        'EpicAppleNews',
-        'EpicAMP',
-        'Banner1',
-        'Banner2',
-      ],
+      exclude: ['Epic', 'EpicLiveblog', 'EpicAppleNews', 'EpicAMP', 'Banner1', 'Banner2'],
       optional: true,
     },
     secondaryCta: {
@@ -408,7 +392,6 @@ const TestDataDialog: React.FC<TestDataDialogProps> = ({
       ![
         'Header',
         'Epic',
-        'EpicHoldback',
         'EpicLiveblog',
         'EpicAppleNews',
         'EpicAMP',
@@ -443,9 +426,7 @@ ${parseData(channel, variantFields.copy, v.mobileContent)}
 `;
         }
       });
-    } else if (
-      ['Epic', 'EpicHoldback', 'EpicLiveblog', 'EpicAppleNews', 'EpicAMP'].includes(channel)
-    ) {
+    } else if (['Epic', 'EpicLiveblog', 'EpicAppleNews', 'EpicAMP'].includes(channel)) {
       variants.forEach(v => {
         res += `Variant: ${v.name}
 ---------------------------------------------------------------------
