@@ -148,6 +148,10 @@ const bannerModules = {
     path: 'choiceCardsBanner/ChoiceCardsBannerYellow.js',
     name: 'ChoiceCardsBannerYellow',
   },
+  [BannerTemplate.WorldPressFreedomDayBanner]: {
+    path: 'worldPressFreedomDay/WorldPressFreedomDayBanner.js',
+    name: 'WorldPressFreedomDayBanner',
+  },
 };
 
 const useStyles = makeStyles(({ palette }: Theme) => ({
