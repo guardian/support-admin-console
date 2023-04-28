@@ -5,7 +5,6 @@ import {
   AMP_EPIC_CONFIG,
   APPLE_NEWS_EPIC_CONFIG,
   ARTICLE_EPIC_CONFIG,
-  ARTICLE_EPIC_HOLDBACK_CONFIG,
   EpicEditorConfig,
   LIVEBLOG_EPIC_CONFIG,
 } from '../helpers/shared';
@@ -37,12 +36,6 @@ export const ArticleEpicTestsForm = buildEpicTestsForm(
   ARTICLE_EPIC_CONFIG,
   FrontendSettingsType.epicTests,
 );
-
-export const ArticleEpicHoldbackTestsForm = buildEpicTestsForm(
-  ARTICLE_EPIC_HOLDBACK_CONFIG,
-  FrontendSettingsType.epicHoldbackTests,
-);
-
 export const LiveblogEpicTestsForm = buildEpicTestsForm(
   LIVEBLOG_EPIC_CONFIG,
   FrontendSettingsType.liveblogEpicTests,

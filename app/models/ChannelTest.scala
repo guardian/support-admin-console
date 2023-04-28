@@ -24,7 +24,6 @@ object Channel {
   case object EpicAMP extends Channel
   case object EpicAppleNews extends Channel
   case object EpicLiveblog extends Channel
-  case object EpicHoldback extends Channel
   case object Banner1 extends Channel
   case object Banner2 extends Channel
   case object Header extends Channel

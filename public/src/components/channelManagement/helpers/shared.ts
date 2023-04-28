@@ -86,33 +86,6 @@ export const ARTICLE_EPIC_CONFIG: EpicEditorConfig = {
   platform: 'DOTCOM',
 };
 
-export const ARTICLE_EPIC_HOLDBACK_CONFIG: EpicEditorConfig = {
-  allowMultipleVariants: false,
-  allowCustomVariantSplit: false,
-  allowContentTargeting: true,
-  allowLocationTargeting: true,
-  allowSupporterStatusTargeting: true,
-  allowDeviceTypeTargeting: true,
-  allowViewFrequencySettings: true,
-  allowArticleCount: true,
-  testNamePrefix: 'HOLDBACK',
-  allowVariantHeader: true,
-  allowVariantHighlightedText: true,
-  allowVariantImageUrl: true,
-  allowVariantFooter: true,
-  allowVariantCustomPrimaryCta: true,
-  allowVariantCustomSecondaryCta: true,
-  allowVariantSeparateArticleCount: true,
-  allowVariantTicker: true,
-  allowVariantChoiceCards: true,
-  allowVariantSignInLink: true,
-  allowBylineWithImage: false,
-  allowVariantPreview: true,
-  requireVariantHeader: false,
-  moduleName: 'ContributionsEpic',
-  platform: 'DOTCOM',
-};
-
 export const LIVEBLOG_EPIC_CONFIG: EpicEditorConfig = {
   allowMultipleVariants: true,
   allowCustomVariantSplit: true,
