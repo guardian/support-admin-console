@@ -92,8 +92,6 @@ export const AmountsVariantEditorRow: React.FC<AmountsVariantEditorRowProps> = (
     updateChooseAmount(label, val);
   };
 
-  console.log(label, defaultAmount, hideChooseYourAmount);
-
   return (
     <div className={classes.container}>
       <div className={classes.amountsLabelContainer}>
@@ -103,7 +101,7 @@ export const AmountsVariantEditorRow: React.FC<AmountsVariantEditorRowProps> = (
         <div className={classes.amountsContainer}>
           {amounts.map(amount => (
            <AmountsVariantEditorRowAmount
-             key={amount}
+             key={`${label}_${amount}`}
              amount={amount}
              isDefault={amount === defaultAmount}
              setAsDefault={() => setAmountAsDefault(amount)}

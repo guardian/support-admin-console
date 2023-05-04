@@ -3,7 +3,6 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 import {AmountsVariantEditorRow} from './AmountsVariantEditorRow';
 
 import { 
-  AmountsCardData,
   AmountsVariant,
   ContributionType,
   ContributionTypes,
@@ -26,10 +25,14 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
 
 interface AmountsVariantEditorProps {
 	variant: AmountsVariant;
+  updateVariant: (variant: AmountsVariant) => void;
+  deleteVariant: (variant: AmountsVariant) => void;
 };
 
 export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
   variant,
+  updateVariant,
+  deleteVariant,
 }: AmountsVariantEditorProps) => {
   const classes = useStyles();
 
@@ -39,56 +42,78 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
     variantName,
   } = variant;
 
-  const [currentAmountsCardData, setCurrentAmountsCardData] = useState<AmountsCardData>(amountsCardData);
-  const [currentDefaultContributionType, setCurrentDefaultContributionType] = useState<ContributionType>(defaultContributionType || 'MONTHLY');
-
   const updateAmounts = (label: ContributionType, val: number[]) => {
-    const contributionsToUpdate = currentAmountsCardData[label];
+    const contributionsToUpdate = amountsCardData[label];
     if (contributionsToUpdate != null) {
-      setCurrentAmountsCardData({
-        ...currentAmountsCardData,
-        [label]: {
-          ...contributionsToUpdate,
-          amounts: val,
+      const updatedAmounts: AmountsVariant = {
+        variantName,
+        defaultContributionType,
+        amountsCardData: {
+          ...amountsCardData,
+          [label]: {
+            ...contributionsToUpdate,
+            amounts: val,
+          },
         },
-      });
+      };
+      updateVariant(updatedAmounts);
     }
   };
 
   const updateChooseAmount = (label: ContributionType, val: boolean) => {
-    const contributionsToUpdate = currentAmountsCardData[label];
+    const contributionsToUpdate = amountsCardData[label];
     if (contributionsToUpdate != null) {
-      setCurrentAmountsCardData({
-        ...currentAmountsCardData,
-        [label]: {
-          ...contributionsToUpdate,
-          hideChooseYourAmount: val,
+      const updatedAmounts: AmountsVariant = {
+        variantName,
+        defaultContributionType,
+        amountsCardData: {
+          ...amountsCardData,
+          [label]: {
+            ...contributionsToUpdate,
+            hideChooseYourAmount: val,
+          },
         },
-      });
-    }
+      };
+      updateVariant(updatedAmounts);
+     }
   };
 
   const updateDefaultAmount = (label: ContributionType, val: number) => {
-    const contributionsToUpdate = currentAmountsCardData[label];
+    const contributionsToUpdate = amountsCardData[label];
     if (contributionsToUpdate != null) {
-      setCurrentAmountsCardData({
-        ...currentAmountsCardData,
-        [label]: {
-          ...contributionsToUpdate,
-          defaultAmount: val,
+      const updatedAmounts: AmountsVariant = {
+        variantName,
+        defaultContributionType,
+        amountsCardData: {
+          ...amountsCardData,
+          [label]: {
+            ...contributionsToUpdate,
+            defaultAmount: val,
+          },
         },
-      });
+      };
+      updateVariant(updatedAmounts);
     }
+  };
+
+  const updateDefaultContributionType = (val: ContributionType) => {
+    const updatedAmounts: AmountsVariant = {
+      variantName,
+      defaultContributionType: val,
+      amountsCardData,
+    };
+    updateVariant(updatedAmounts);
   };
 
   const buildAmountsCardRows = () => {
     return (
       <div>
         {Object.keys(ContributionTypes).map(k => {
-          const cardData: AmountValuesObject = currentAmountsCardData[k as ContributionType];
+          const cardData: AmountValuesObject = amountsCardData[k as ContributionType];
           if (cardData != null) {
             return (
               <AmountsVariantEditorRow 
+                key={`${variantName}_${k}_row`}
                 label={k as ContributionType}
                 amounts={cardData.amounts}
                 defaultAmount={cardData.defaultAmount}
@@ -107,8 +132,6 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
     );
   };
 
-  console.log(variant);
-
   return (
     <div className={classes.container}>
       <div>Variant {variantName} goes here</div>
@@ -117,16 +140,6 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
     </div>
   );
 };
-
-
-
-
-// import React from 'react';
-// import { makeStyles, Theme } from '@material-ui/core';
-// import { AmountSelection, ContributionAmounts } from './configuredAmountsEditor';
-// import AmountEditorRow from './amountsEditorRow';
-// import AmountEditorDeleteButton from './contributionAmountsEditorDeleteButton';
-// import { ContributionType } from '../../utils/models';
 
 // const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
 //   container: {
@@ -153,82 +166,3 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
 //     },
 //   },
 // }));
-
-// interface AmountsEditorProps {
-//   label: string;
-//   contributionAmounts: ContributionAmounts;
-//   updateContributionAmounts: (contributionAmounts: ContributionAmounts) => void;
-//   deleteContributionAmounts?: () => void;
-// }
-
-// const AmountsEditor: React.FC<AmountsEditorProps> = ({
-//   label,
-//   contributionAmounts,
-//   updateContributionAmounts,
-//   deleteContributionAmounts,
-// }: AmountsEditorProps) => {
-//   const classes = useStyles();
-
-//   const handleAmountSelection = (product: ContributionType, change: AmountSelection) => {
-//     updateContributionAmounts({
-//       ...contributionAmounts,
-//       [product]: change,
-//     });
-//   };
-
-//   const handleOtherButtonChange = (product: ContributionType, change: boolean) => {
-//     updateContributionAmounts({
-//       ...contributionAmounts,
-//       [product]: {
-//         ...contributionAmounts[product],
-//         hideChooseYourAmount: change,
-//       },
-//     });
-//   };
-
-//   const getOtherButtonValue = (product: ContributionType) => {
-//     return contributionAmounts[product].hideChooseYourAmount ?? false;
-//   };
-
-//   return (
-//     <div className={classes.container}>
-//       <div className={classes.header}>
-//         {label}
-//         {deleteContributionAmounts && (
-//           <AmountEditorDeleteButton onDelete={deleteContributionAmounts} />
-//         )}
-//       </div>
-//       <div className={classes.rowsContainer}>
-//         <AmountEditorRow
-//           label="One off"
-//           amountsSelection={contributionAmounts.ONE_OFF}
-//           updateSelection={amount => handleAmountSelection(ContributionType.ONE_OFF, amount)}
-//           hideChooseYourAmount={getOtherButtonValue(ContributionType.ONE_OFF)}
-//           updateChooseYourAmountButton={value =>
-//             handleOtherButtonChange(ContributionType.ONE_OFF, value)
-//           }
-//         />
-//         <AmountEditorRow
-//           label="Monthly"
-//           amountsSelection={contributionAmounts.MONTHLY}
-//           updateSelection={amount => handleAmountSelection(ContributionType.MONTHLY, amount)}
-//           hideChooseYourAmount={getOtherButtonValue(ContributionType.MONTHLY)}
-//           updateChooseYourAmountButton={value =>
-//             handleOtherButtonChange(ContributionType.MONTHLY, value)
-//           }
-//         />
-//         <AmountEditorRow
-//           label="Annual"
-//           amountsSelection={contributionAmounts.ANNUAL}
-//           updateSelection={amount => handleAmountSelection(ContributionType.ANNUAL, amount)}
-//           hideChooseYourAmount={getOtherButtonValue(ContributionType.ANNUAL)}
-//           updateChooseYourAmountButton={value =>
-//             handleOtherButtonChange(ContributionType.ANNUAL, value)
-//           }
-//         />
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default AmountsEditor;

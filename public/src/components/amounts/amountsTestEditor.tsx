@@ -30,12 +30,14 @@ interface AmountsTestEditorProps {
   test: AmountsTest | undefined;
   updateTest: (updatedTest: AmountsTest) => void;
   deleteTest: (test: AmountsTest) => void | undefined;
+  saveTest: () => void | undefined;
 }
 
 export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
   test,
   updateTest,
   deleteTest,
+  saveTest,
 }: AmountsTestEditorProps) => {
   const classes = useStyles();
 
@@ -45,6 +47,7 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
   const seed = test?.seed;
   const variants = test?.variants;
 
+  const [saveButtonIsDisabled, setSaveButtonIsDisabled] = useState<boolean>(true);
   const [testIsLive, setTestIsLive] = useState<boolean>(isLive);
   const [testVariants, setTestVariants] = useState<AmountsVariant[]>([]);
 
@@ -98,7 +101,9 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
         newState.push(v);
       }
     });
+    console.log('updateVariant to ', newState);
     setTestVariants(newState);
+    setSaveButtonIsDisabled(false);
   }
 
   const getExistingVariantNames = () => {
@@ -109,6 +114,7 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
     const deleteName = variant.variantName;
     const newState = testVariants.filter(v => deleteName !== v.variantName);
     setTestVariants(newState);
+    setSaveButtonIsDisabled(false);
   };
 
   const updateTestIsLive = () => {
@@ -119,13 +125,8 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
 
   const saveCurrentTest = () => {
     if (testName != null && target != null && seed != null) {
-      updateTest({
-         testName, 
-         isLive: testIsLive,
-         target, 
-         seed, 
-         variants: testVariants,
-       });
+      saveTest();
+      setSaveButtonIsDisabled(true);
     }
   };
 
@@ -143,7 +144,11 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
 
   const addVariantForm = (variant: AmountsVariant) => {
     return (
-      <AmountsVariantEditor variant={variant} />
+      <AmountsVariantEditor
+        variant={variant}
+        updateVariant={updateVariant}
+        deleteVariant={deleteVariant}
+      />
     );
   };
 
@@ -167,6 +172,8 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
             color="primary"
             className={classes.saveButton}
             startIcon={<SaveIcon />}
+            disabled={saveButtonIsDisabled}
+            onClick={saveCurrentTest}
           >
             <Typography className={classes.saveButtonText}>Save</Typography>
           </Button>

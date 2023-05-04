@@ -119,15 +119,15 @@ export function requestTestListTakeControl(settingsType: FrontendSettingsType): 
   });
 }
 
+export function fetchCampaignTests(campaign: string): Promise<Test[]> {
+  return fetchSettings(`/frontend/campaign/${campaign}/tests`);
+}
+
 export function fetchSupportFrontendSettings(
   settingsType: SupportFrontendSettingsType,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<any> {
   return fetchSettings(`/support-frontend/${settingsType}`);
-}
-
-export function fetchCampaignTests(campaign: string): Promise<Test[]> {
-  return fetchSettings(`/frontend/campaign/${campaign}/tests`);
 }
 
 export function saveSupportFrontendSettings(

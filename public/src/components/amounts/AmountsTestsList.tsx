@@ -140,12 +140,11 @@ export const AmountsTestsList: React.FC<AmountsTestsListProps> = ({
   const AmountsTestButton: React.FC<AmountsTestButtonProps> = ({ target }: AmountsTestButtonProps) => {
     return (
       <ListItem
-        key={target}
         className={getButtonStyling(target)}
         onClick={(): void => onTargetSelected(target)}
         button
       >
-        <div>{Territories[target]}</div>
+        {Territories[target]}
       </ListItem>
     );
   };
@@ -155,7 +154,7 @@ export const AmountsTestsList: React.FC<AmountsTestsListProps> = ({
       <Typography className={classes.header}>Region-wide tests</Typography>
       <div>
         <List className={classes.list}>
-          {getRegionTests().map(t => <AmountsTestButton target={t} />)}
+          {getRegionTests().map(t => <AmountsTestButton key={t} target={t} />)}
         </List>
       </div>
 
@@ -168,7 +167,7 @@ export const AmountsTestsList: React.FC<AmountsTestsListProps> = ({
 
       <div>
         <List className={classes.list}>
-          {getExistingCountryTests().map(t => <AmountsTestButton target={t} />)}
+          {getExistingCountryTests().map(t => <AmountsTestButton key={t} target={t} />)}
         </List>
       </div>
     </div>
