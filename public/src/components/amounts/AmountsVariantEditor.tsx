@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import {AmountsVariantEditorRow} from './AmountsVariantEditorRow';
+import { Divider } from '@material-ui/core';
+import { AmountsVariantEditorRow } from './AmountsVariantEditorRow';
+import { DeleteVariantButton } from './DeleteVariantButton';
 
 import { 
   AmountsVariant,
@@ -9,18 +11,28 @@ import {
   AmountValuesObject,
 } from '../../utils/models';
 
-
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
     padding: `${spacing(3)}px ${spacing(4)}px`,
     border: `1px solid ${palette.grey[700]}`,
     borderRadius: 4,
     backgroundColor: 'white',
+    marginTop: spacing(2),
 
     '& > * + *': {
       marginTop: spacing(2),
     },
   },
+  topBar: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+  variantName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  defaultContribution: {},
 }));
 
 interface AmountsVariantEditorProps {
@@ -105,6 +117,8 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
     updateVariant(updatedAmounts);
   };
 
+  const confirmDeletion = () => deleteVariant(variant);
+
   const buildAmountsCardRows = () => {
     return (
       <div>
@@ -112,16 +126,18 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
           const cardData: AmountValuesObject = amountsCardData[k as ContributionType];
           if (cardData != null) {
             return (
-              <AmountsVariantEditorRow 
-                key={`${variantName}_${k}_row`}
-                label={k as ContributionType}
-                amounts={cardData.amounts}
-                defaultAmount={cardData.defaultAmount}
-                hideChooseYourAmount={cardData.hideChooseYourAmount || false}
-                updateAmounts={updateAmounts}
-                updateChooseAmount={updateChooseAmount}
-                updateDefaultAmount={updateDefaultAmount}
-              />
+              <div key={`${variantName}_${k}_row`}>
+                <Divider />
+                <AmountsVariantEditorRow
+                  label={k as ContributionType}
+                  amounts={cardData.amounts}
+                  defaultAmount={cardData.defaultAmount}
+                  hideChooseYourAmount={cardData.hideChooseYourAmount || false}
+                  updateAmounts={updateAmounts}
+                  updateChooseAmount={updateChooseAmount}
+                  updateDefaultAmount={updateDefaultAmount}
+                />
+              </div>
             )
           }
           else {
@@ -132,10 +148,22 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
     );
   };
 
+  const checkIfVariantIsControl = () => {
+    return 'CONTROL' === variantName.toUpperCase();
+  }
+
   return (
-    <div className={classes.container}>
-      <div>Variant {variantName} goes here</div>
-      <div>Default contributions type selector will go here</div>
+    <div className={classes.container} >
+      <div className={classes.topBar}>
+        <div className={classes.variantName} >{variantName}</div>
+        {!checkIfVariantIsControl() && (
+            <DeleteVariantButton
+              variantName={variantName}
+              confirmDeletion={confirmDeletion}
+            />
+        )}
+      </div>
+      <div className={classes.defaultContribution} >Default contributions type selector will go here</div>
       {buildAmountsCardRows()}
     </div>
   );

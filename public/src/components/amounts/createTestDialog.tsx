@@ -39,7 +39,7 @@ interface CountryOptions {
   label: string;
 }
 
-const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
+export const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
   isOpen,
   close,
   candidateTargets,
@@ -96,5 +96,3 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
     </Dialog>
   );
 };
-
-export default CreateTestDialog;

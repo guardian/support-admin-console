@@ -8,7 +8,7 @@ import {
   Regions,
   Countries,
 } from '../../utils/models';
-import CreateTestButton from './CreateTestButton';
+import { CreateTestButton } from './CreateTestButton';
 
 const useStyles = makeStyles(({ palette }) => ({
   root: {

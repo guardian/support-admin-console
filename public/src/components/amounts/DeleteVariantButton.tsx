@@ -1,9 +1,14 @@
 import React from 'react';
 import { Button, makeStyles, Typography } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
-import CreateTestDiaglog from './createTestDialog';
+import { DeleteVariantDialog } from './DeleteVariantDialog';
 import useOpenable from '../../hooks/useOpenable';
-import { Territory } from '../../utils/models';
+import { 
+  AmountsTest,
+  AmountsVariant,
+  Territory,
+  Regions,
+} from '../../utils/models';
+
 
 const useStyles = makeStyles(() => ({
   button: {
@@ -18,15 +23,15 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-interface CreateTestButtonProps {
-  create: (name: string) => void;
-  candidateTargets: Territory[];
+interface DeleteVariantButtonProps {
+  variantName: string;
+  confirmDeletion: () => void;
 }
 
-const CreateTestButton: React.FC<CreateTestButtonProps> = ({
-  create,
-  candidateTargets,
-}: CreateTestButtonProps) => {
+export const DeleteVariantButton: React.FC<DeleteVariantButtonProps> = ({
+  variantName,
+  confirmDeletion,
+}: DeleteVariantButtonProps) => {
   const [isOpen, open, close] = useOpenable();
 
   const classes = useStyles();
@@ -36,19 +41,16 @@ const CreateTestButton: React.FC<CreateTestButtonProps> = ({
         variant="contained"
         color="primary"
         className={classes.button}
-        startIcon={<AddIcon />}
         onClick={open}
       >
-        <Typography className={classes.text}>Create a new test</Typography>
+        <Typography className={classes.text}>Delete variant</Typography>
       </Button>
-      <CreateTestDiaglog
+      <DeleteVariantDialog
+        variantName={variantName}
         isOpen={isOpen}
         close={close}
-        candidateTargets={candidateTargets}
-        create={create}
+        confirmDeletion={confirmDeletion}
       />
     </>
   );
 };
-
-export default CreateTestButton;

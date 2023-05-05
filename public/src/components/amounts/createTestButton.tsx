@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, makeStyles, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import CreateTestDialog from './CreateTestDialog';
+import { CreateTestDialog } from './CreateTestDialog';
 import useOpenable from '../../hooks/useOpenable';
 import { Territory } from '../../utils/models';
 
@@ -23,7 +23,7 @@ interface CreateTestButtonProps {
   candidateTargets: Territory[];
 }
 
-const CreateTestButton: React.FC<CreateTestButtonProps> = ({
+export const CreateTestButton: React.FC<CreateTestButtonProps> = ({
   create,
   candidateTargets,
 }: CreateTestButtonProps) => {
@@ -50,5 +50,3 @@ const CreateTestButton: React.FC<CreateTestButtonProps> = ({
     </>
   );
 };
-
-export default CreateTestButton;

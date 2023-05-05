@@ -20,6 +20,13 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   emptyContainer: {},
   formHead: {},
   formBody: {},
+  buttonBar: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'space-between',
+    marginTop: spacing(2),
+    marginBottom: spacing(2),
+  },
   addVariantButton: {},
   deleteTestButton: {},
   saveButton: {},
@@ -57,6 +64,16 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
     }
   }, [test]);
 
+  useEffect(() => {
+    if (test != null && testVariants.length) {
+      const t: AmountsTest = {
+        ...test,
+        variants: [...testVariants],
+      } 
+      updateTest(t);
+    }
+  }, [testVariants]);
+
   if (test == null) {
     return (
       <div className={classes.emptyContainer}>
@@ -89,6 +106,7 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
     };
     const newState: AmountsVariant[] = [...testVariants, newVariant];
     setTestVariants(newState);
+    setSaveButtonIsDisabled(false);
   };
 
   const updateVariant = (variant: AmountsVariant) => {
@@ -145,6 +163,7 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
   const addVariantForm = (variant: AmountsVariant) => {
     return (
       <AmountsVariantEditor
+        key={`variant_key_${variant.variantName}`}
         variant={variant}
         updateVariant={updateVariant}
         deleteVariant={deleteVariant}
@@ -156,35 +175,50 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
     <div className={classes.container}>
       <div className={classes.formHead}>
         <div>
-          <Typography>Test name: {testName}</Typography>
-          <Typography>Target: {target}</Typography>
-          <Typography>Seed: {seed}</Typography>
+          <Typography variant="h5">Test: {testName}</Typography>
+          <Typography variant="h6">Target: {target}</Typography>
           <LiveSwitch
             label="Control vs variants A/B test is live"
             isLive={testIsLive}
             onChange={updateTestIsLive}
             isDisabled={false}
           />
-        </div>
-        <div>
-          <Button
-            variant="contained"
-            color="primary"
-            className={classes.saveButton}
-            startIcon={<SaveIcon />}
-            disabled={saveButtonIsDisabled}
-            onClick={saveCurrentTest}
-          >
-            <Typography className={classes.saveButtonText}>Save</Typography>
-          </Button>
+          <div className={classes.buttonBar}>
+            <CreateVariantButton 
+              createVariant={createVariant}
+              existingNames={getExistingVariantNames()}
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.saveButton}
+              startIcon={<SaveIcon />}
+              disabled={saveButtonIsDisabled}
+              onClick={saveCurrentTest}
+            >
+              <Typography className={classes.saveButtonText}>Save test</Typography>
+            </Button>
+          </div>
         </div>
       </div>
       <div className={classes.formBody}>
         {testVariants.map(v => addVariantForm(v))}
+      </div>
+      <div className={classes.buttonBar}>
         <CreateVariantButton 
-          onCreate={createVariant}
+          createVariant={createVariant}
           existingNames={getExistingVariantNames()}
         />
+        <Button
+          variant="contained"
+          color="primary"
+          className={classes.saveButton}
+          startIcon={<SaveIcon />}
+          disabled={saveButtonIsDisabled}
+          onClick={saveCurrentTest}
+        >
+          <Typography className={classes.saveButtonText}>Save test</Typography>
+        </Button>
       </div>
    </div>
   );

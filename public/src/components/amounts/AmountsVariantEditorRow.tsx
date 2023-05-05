@@ -16,6 +16,7 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     width: '100%',
     display: 'flex',
     justifyContent: 'flex-start',
+    marginTop: spacing(1),
     marginBottom: spacing(1),
   },
   otherAmountSwitchContainer: {

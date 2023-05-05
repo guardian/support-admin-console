@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, makeStyles, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import CreateVariantDiaglog from './createVariantDialog';
+import { CreateVariantDialog } from './createVariantDialog';
 import useOpenable from '../../hooks/useOpenable';
 
 const useStyles = makeStyles(() => ({
@@ -18,12 +18,12 @@ const useStyles = makeStyles(() => ({
 }));
 
 interface CreateVariantButtonProps {
-  onCreate: (name: string) => void;
+  createVariant: (name: string) => void;
   existingNames: string[];
 }
 
 export const CreateVariantButton: React.FC<CreateVariantButtonProps> = ({
-  onCreate,
+  createVariant,
   existingNames,
 }: CreateVariantButtonProps) => {
   const [isOpen, open, close] = useOpenable();
@@ -40,11 +40,11 @@ export const CreateVariantButton: React.FC<CreateVariantButtonProps> = ({
       >
         <Typography className={classes.text}>Create a new variant</Typography>
       </Button>
-      <CreateVariantDiaglog
+      <CreateVariantDialog
         isOpen={isOpen}
         close={close}
         existingNames={existingNames}
-        createTest={onCreate}
+        createVariant={createVariant}
       />
     </>
   );

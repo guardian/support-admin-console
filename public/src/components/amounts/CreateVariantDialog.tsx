@@ -1,5 +1,4 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
+import React, { useState } from 'react';
 import {
   Button,
   Dialog,
@@ -30,29 +29,45 @@ interface CreateVariantDialogProps {
   isOpen: boolean;
   close: () => void;
   existingNames: string[];
-  createTest: (name: string) => void;
+  createVariant: (name: string) => void;
 }
 
-const CreateVariantDialog: React.FC<CreateVariantDialogProps> = ({
+const errorMessages = {
+  REQUIRED: 'Variant name required',
+  DUPLICATE: 'Variant with this name already exists',
+  OK: '',
+}
+
+export const CreateVariantDialog: React.FC<CreateVariantDialogProps> = ({
   isOpen,
   close,
   existingNames,
-  createTest,
+  createVariant,
 }: CreateVariantDialogProps) => {
-
-  // const { register, handleSubmit, errors } = useForm<FormData>({
-  //   defaultValues,
-  // });
-
-  // const onSubmit = ({ name }: FormData): void => {
-  //   createTest(name.toUpperCase());
-  //   close();
-  // };
-
   const classes = useStyles();
 
-  const onSubmit = (e: any): void => {
-    close();
+  const [name, setName] = useState('');
+  const [errorMessage, setErrorMessage] = useState(errorMessages.REQUIRED);
+
+  const onSubmit = (): void => {
+    if (name.length && !existingNames.includes(name)) {
+      createVariant(name.toUpperCase());
+      close();
+    }
+  };
+
+  const updateName = (val: string) => {
+    const updatedName = val.toUpperCase();
+    setName(updatedName);
+    if (!updatedName.length) {
+      setErrorMessage(errorMessages.REQUIRED);
+    }
+    else if (existingNames.includes(updatedName)) {
+      setErrorMessage(errorMessages.DUPLICATE);
+    }
+    else {
+      setErrorMessage(errorMessages.OK);
+    }
   };
 
   return (
@@ -68,8 +83,11 @@ const CreateVariantDialog: React.FC<CreateVariantDialogProps> = ({
           className={classes.input}
           name="name"
           label="Variant name"
+          error={!!errorMessage.length}
+          helperText={errorMessage}
           margin="normal"
           variant="outlined"
+          onChange={(e) => updateName(e.target.value)}
           autoFocus
           fullWidth
         />
@@ -82,5 +100,3 @@ const CreateVariantDialog: React.FC<CreateVariantDialogProps> = ({
     </Dialog>
   );
 };
-
-export default CreateVariantDialog;
