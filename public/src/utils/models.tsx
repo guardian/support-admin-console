@@ -302,6 +302,7 @@ export interface AmountsVariant {
 
 export interface AmountsTest {
   testName: string;
+  liveTestName?: string;
   isLive: boolean;
   target: Region | string;
   seed: number;

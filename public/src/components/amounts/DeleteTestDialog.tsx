@@ -12,29 +12,33 @@ import {
 const useStyles = makeStyles(() => ({}));
 
 interface DeleteTestDialogProps {
+  testName: string;
   isOpen: boolean;
   close: (response: boolean) => void;
+  confirmDeletion: () => void;
 }
 
 const DeleteTestDialog: React.FC<DeleteTestDialogProps> = ({
+  testName,
   isOpen,
   close,
+  confirmDeletion,
 }: DeleteTestDialogProps) => {
   const classes = useStyles();
 
   return (
     <Dialog open={isOpen} onClose={close} aria-labelledby="create-test-dialog-title" fullWidth>
-      <DialogTitle id="delete-variant-dialog-title">Delete test variant</DialogTitle>
+      <DialogTitle id="delete-variant-dialog-title">Delete test: {testName}</DialogTitle>
       <DialogContent dividers>
         <DialogContentText id="alert-dialog-description">
-          Be aware that once you delete this country test, its settings and data are lost forever!
+          Be aware that once you delete this country test, its settings and data will be lost forever!
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => close(true)} color="primary">
+        <Button onClick={() => confirmDeletion()} color="primary">
           Delete
         </Button>
-        <Button onClick={() => close(false)} color="primary">
+        <Button onClick={() => close(true)} color="primary">
           Cancel
         </Button>
       </DialogActions>

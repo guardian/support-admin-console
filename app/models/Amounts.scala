@@ -25,6 +25,7 @@ case class AmountsVariant(
 
 case class AmountsTest(
   testName: String,
+  liveTestName: Option[String],
   isLive: Boolean,
   target: String,
   seed: Int,

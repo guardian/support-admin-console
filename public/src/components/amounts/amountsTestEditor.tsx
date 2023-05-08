@@ -7,6 +7,7 @@ import LiveSwitch from '../shared/liveSwitch';
 
 import { AmountsVariantEditor } from './AmountsVariantEditor';
 import { CreateVariantButton } from './CreateVariantButton';
+import { DeleteTestButton } from './DeleteTestButton';
 
 import { 
   AmountsTest,
@@ -40,6 +41,8 @@ interface AmountsTestEditorProps {
   saveTest: () => void | undefined;
 }
 
+const regionLabels = Object.keys(Regions);
+
 export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
   test,
   updateTest,
@@ -49,18 +52,20 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
   const classes = useStyles();
 
   const testName = test?.testName;
+  const liveTestName = test?.liveTestName;
   const isLive = test?.isLive || false;
   const target = test?.target;
   const seed = test?.seed;
   const variants = test?.variants;
 
   const [saveButtonIsDisabled, setSaveButtonIsDisabled] = useState<boolean>(true);
-  const [testIsLive, setTestIsLive] = useState<boolean>(isLive);
   const [testVariants, setTestVariants] = useState<AmountsVariant[]>([]);
+  const [testIsLive, setTestIsLive] = useState<boolean>(isLive);
 
   useEffect(() => {
     if (test != null && variants != null) {
       setTestVariants([...variants]);
+      setTestIsLive(isLive);
     }
   }, [test]);
 
@@ -69,10 +74,11 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
       const t: AmountsTest = {
         ...test,
         variants: [...testVariants],
+        isLive: testIsLive,
       } 
       updateTest(t);
     }
-  }, [testVariants]);
+  }, [testVariants, testIsLive]);
 
   if (test == null) {
     return (
@@ -119,7 +125,6 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
         newState.push(v);
       }
     });
-    console.log('updateVariant to ', newState);
     setTestVariants(newState);
     setSaveButtonIsDisabled(false);
   }
@@ -136,9 +141,8 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
   };
 
   const updateTestIsLive = () => {
-    const newState = !testIsLive;
-    setTestIsLive(newState);
-    test.isLive = newState;
+    setTestIsLive(!testIsLive);
+    setSaveButtonIsDisabled(false);
   };
 
   const saveCurrentTest = () => {
@@ -152,6 +156,7 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
     if (testName != null && target != null && seed != null) {
       deleteTest({
          testName, 
+         liveTestName,
          isLive: testIsLive,
          target, 
          seed, 
@@ -171,40 +176,15 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
     );
   };
 
-  return (
-    <div className={classes.container}>
-      <div className={classes.formHead}>
-        <div>
-          <Typography variant="h5">Test: {testName}</Typography>
-          <Typography variant="h6">Target: {target}</Typography>
-          <LiveSwitch
-            label="Control vs variants A/B test is live"
-            isLive={testIsLive}
-            onChange={updateTestIsLive}
-            isDisabled={false}
-          />
-          <div className={classes.buttonBar}>
-            <CreateVariantButton 
-              createVariant={createVariant}
-              existingNames={getExistingVariantNames()}
-            />
-            <Button
-              variant="contained"
-              color="primary"
-              className={classes.saveButton}
-              startIcon={<SaveIcon />}
-              disabled={saveButtonIsDisabled}
-              onClick={saveCurrentTest}
-            >
-              <Typography className={classes.saveButtonText}>Save test</Typography>
-            </Button>
-          </div>
-        </div>
-      </div>
-      <div className={classes.formBody}>
-        {testVariants.map(v => addVariantForm(v))}
-      </div>
+  const addButtonBar = () => {
+    return (
       <div className={classes.buttonBar}>
+        {target != null && !regionLabels.includes(target as string) && (
+          <DeleteTestButton
+            testName={target as string}
+            confirmDeletion={deleteCurrentTest} 
+          />
+        )}
         <CreateVariantButton 
           createVariant={createVariant}
           existingNames={getExistingVariantNames()}
@@ -220,6 +200,31 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
           <Typography className={classes.saveButtonText}>Save test</Typography>
         </Button>
       </div>
+    )
+  };
+
+  return (
+    <div className={classes.container}>
+      <div className={classes.formHead}>
+        <div>
+          <p>Todo: style this header section</p>
+          <Typography variant="h5">Amounts tests for: {target}</Typography>
+          <Typography><b>Evergreen test name:</b> {testName}</Typography>
+          <Typography><b>Live A/B test name:</b> {liveTestName}</Typography>
+          <p>Todo: make the live test name editable</p>
+          <LiveSwitch
+            label="Control vs variants A/B test is live"
+            isLive={testIsLive}
+            onChange={updateTestIsLive}
+            isDisabled={false}
+          />
+          {addButtonBar()}
+        </div>
+      </div>
+      <div className={classes.formBody}>
+        {testVariants.map(v => addVariantForm(v))}
+      </div>
+      {addButtonBar()}
    </div>
   );
 };

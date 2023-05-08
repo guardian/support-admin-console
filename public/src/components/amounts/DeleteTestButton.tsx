@@ -3,7 +3,6 @@ import { Button, makeStyles, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteTestDialog from './DeleteTestDialog';
 import useOpenable from '../../hooks/useOpenable';
-import { Territory } from '../../utils/models';
 
 const useStyles = makeStyles(() => ({
   button: {
@@ -19,13 +18,13 @@ const useStyles = makeStyles(() => ({
 }));
 
 interface DeleteTestButtonProps {
-  create: (name: string) => void;
-  candidateTargets: Territory[];
+  testName: string;
+  confirmDeletion: () => void;
 }
 
-const DeleteTestButton: React.FC<DeleteTestButtonProps> = ({
-  create,
-  candidateTargets,
+export const DeleteTestButton: React.FC<DeleteTestButtonProps> = ({
+  testName,
+  confirmDeletion,
 }: DeleteTestButtonProps) => {
   const [isOpen, open, close] = useOpenable();
 
@@ -42,11 +41,11 @@ const DeleteTestButton: React.FC<DeleteTestButtonProps> = ({
         <Typography className={classes.text}>Delete test</Typography>
       </Button>
       <DeleteTestDialog
+        testName={testName}
         isOpen={isOpen}
         close={close}
+        confirmDeletion={confirmDeletion}
       />
     </>
   );
 };
-
-export default DeleteTestButton;

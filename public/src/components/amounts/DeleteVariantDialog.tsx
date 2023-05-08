@@ -32,7 +32,7 @@ export const DeleteVariantDialog: React.FC<DeleteVariantDialogProps> = ({
       <DialogTitle id="delete-variant-dialog-title">Delete test variant: {variantName}</DialogTitle>
       <DialogContent dividers>
         <DialogContentText id="alert-dialog-description">
-          Be aware that once you delete this variant, its settings and data are lost forever!
+          Be aware that once you delete this variant, its settings and data will be lost forever!
         </DialogContentText>
       </DialogContent>
       <DialogActions>
