@@ -7,6 +7,7 @@ import {
   AmountsTests,
   Regions,
   Countries,
+  CountryOptions,
 } from '../../utils/models';
 import { CreateTestButton } from './CreateTestButton';
 
@@ -79,7 +80,7 @@ interface AmountsTestsListProps {
   tests: AmountsTests;
   selectedTest: Territory | undefined;
   onTargetSelected: (target: Territory) => void;
-  create: () => void;
+  create: (selected: CountryOptions) => void;
 }
 
 interface AmountsTestButtonProps {

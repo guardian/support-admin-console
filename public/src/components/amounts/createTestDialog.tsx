@@ -11,7 +11,7 @@ import {
   TextField,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import { Territory, Territories } from '../../utils/models';
+import { Territory, Territories, CountryOptions } from '../../utils/models';
 
 const useStyles = makeStyles(() => ({
   dialogHeader: {
@@ -30,14 +30,14 @@ const useStyles = makeStyles(() => ({
 interface CreateTestDialogProps {
   isOpen: boolean;
   close: () => void;
-  create: (name: string) => void;
+  create: (selected: CountryOptions) => void;
   candidateTargets: Territory[];
 }
 
-interface CountryOptions {
-  code: Territory;
-  label: string;
-}
+// interface CountryOptions {
+//   code: Territory;
+//   label: string;
+// }
 
 export const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
   isOpen,
@@ -59,8 +59,11 @@ export const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
     setOptions(opts);
   }, []);
 
-  const onSubmit = (e: any): void => {
-    close();
+  const onSubmit = (): void => {
+    if (target) {
+      create(target);
+      close();
+    }
   };
 
   const classes = useStyles();

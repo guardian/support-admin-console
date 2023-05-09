@@ -37,12 +37,14 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
 
 interface AmountsVariantEditorProps {
 	variant: AmountsVariant;
+  testIsCountryTier: boolean;
   updateVariant: (variant: AmountsVariant) => void;
   deleteVariant: (variant: AmountsVariant) => void;
 };
 
 export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
   variant,
+  testIsCountryTier,
   updateVariant,
   deleteVariant,
 }: AmountsVariantEditorProps) => {
@@ -163,7 +165,9 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
             />
         )}
       </div>
-      <div className={classes.defaultContribution} >Default contributions type selector will go here</div>
+      {testIsCountryTier && (
+        <div className={classes.defaultContribution} >Default contributions type selector will go here</div>
+      )}
       {buildAmountsCardRows()}
     </div>
   );

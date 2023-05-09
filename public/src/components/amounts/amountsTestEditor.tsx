@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Typography, Button } from '@material-ui/core';
+import { Typography, Button, TextField } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import LiveSwitch from '../shared/liveSwitch';
@@ -32,10 +32,16 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   deleteTestButton: {},
   saveButton: {},
   saveButtonText: {},
+  input: {
+    '& input': {
+      textTransform: 'uppercase !important',
+    },
+  }
 }));
 
 interface AmountsTestEditorProps {
   test: AmountsTest | undefined;
+  testNames: string[];
   updateTest: (updatedTest: AmountsTest) => void;
   deleteTest: (test: AmountsTest) => void | undefined;
   saveTest: () => void | undefined;
@@ -43,8 +49,15 @@ interface AmountsTestEditorProps {
 
 const regionLabels = Object.keys(Regions);
 
+const errorMessages = {
+  REQUIRED: 'Live test name required',
+  DUPLICATE: 'Test with this name already exists',
+  OK: '',
+}
+
 export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
   test,
+  testNames,
   updateTest,
   deleteTest,
   saveTest,
@@ -62,10 +75,14 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
   const [testVariants, setTestVariants] = useState<AmountsVariant[]>([]);
   const [testIsLive, setTestIsLive] = useState<boolean>(isLive);
 
+  const [currentLiveTestName, setCurrentLiveTestName] = useState<string | undefined>(liveTestName);
+  const [currentLiveTestError, setCurrentLiveTestError] = useState(errorMessages.REQUIRED);
+
   useEffect(() => {
     if (test != null && variants != null) {
       setTestVariants([...variants]);
       setTestIsLive(isLive);
+      updateLiveTestName(liveTestName || '');
     }
   }, [test]);
 
@@ -75,10 +92,11 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
         ...test,
         variants: [...testVariants],
         isLive: testIsLive,
+        liveTestName: currentLiveTestName,
       } 
       updateTest(t);
     }
-  }, [testVariants, testIsLive]);
+  }, [testVariants, testIsLive, currentLiveTestName]);
 
   if (test == null) {
     return (
@@ -112,6 +130,21 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
     };
     const newState: AmountsVariant[] = [...testVariants, newVariant];
     setTestVariants(newState);
+    setSaveButtonIsDisabled(false);
+  };
+
+  const updateLiveTestName = (val: string) => {
+    const updatedName = val.toUpperCase();
+    setCurrentLiveTestName(updatedName);
+    if (!updatedName.length) {
+      setCurrentLiveTestError(errorMessages.REQUIRED);
+    }
+    else if (testNames.includes(updatedName)) {
+      setCurrentLiveTestError(errorMessages.DUPLICATE);
+    }
+    else {
+      setCurrentLiveTestError(errorMessages.OK);
+    }
     setSaveButtonIsDisabled(false);
   };
 
@@ -172,14 +205,19 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
         variant={variant}
         updateVariant={updateVariant}
         deleteVariant={deleteVariant}
+        testIsCountryTier={checkIfTestIsCountryTier()}
       />
     );
   };
 
+  const checkIfTestIsCountryTier = () => {
+    return (target != null && !regionLabels.includes(target as string)) ? true : false;
+  }
+
   const addButtonBar = () => {
     return (
       <div className={classes.buttonBar}>
-        {target != null && !regionLabels.includes(target as string) && (
+        {checkIfTestIsCountryTier() && (
           <DeleteTestButton
             testName={target as string}
             confirmDeletion={deleteCurrentTest} 
@@ -207,11 +245,32 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
     <div className={classes.container}>
       <div className={classes.formHead}>
         <div>
-          <p>Todo: style this header section</p>
           <Typography variant="h5">Amounts tests for: {target}</Typography>
-          <Typography><b>Evergreen test name:</b> {testName}</Typography>
-          <Typography><b>Live A/B test name:</b> {liveTestName}</Typography>
-          <p>Todo: make the live test name editable</p>
+
+          <TextField
+            className={classes.input}
+            name="testName"
+            label="Test default (evergreen) name"
+            value={testName}
+            margin="normal"
+            variant="outlined"
+            disabled={true}
+            fullWidth
+          />
+
+          <TextField
+            className={classes.input}
+            name="name"
+            label="Live A/B test name"
+            value={currentLiveTestName}
+            onChange={e => updateLiveTestName(e.target.value)}
+            error={!!currentLiveTestError.length}
+            helperText={currentLiveTestError}
+            margin="normal"
+            variant="outlined"
+            fullWidth
+          />
+
           <LiveSwitch
             label="Control vs variants A/B test is live"
             isLive={testIsLive}

@@ -3,12 +3,13 @@ import { Button, makeStyles, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { CreateTestDialog } from './CreateTestDialog';
 import useOpenable from '../../hooks/useOpenable';
-import { Territory } from '../../utils/models';
+import { Territory, CountryOptions } from '../../utils/models';
 
 const useStyles = makeStyles(() => ({
   button: {
     justifyContent: 'start',
     height: '48px',
+    marginBottom: '8px',
   },
   text: {
     fontSize: '12px',
@@ -19,7 +20,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 interface CreateTestButtonProps {
-  create: (name: string) => void;
+  create: (selected: CountryOptions) => void;
   candidateTargets: Territory[];
 }
 

@@ -284,6 +284,11 @@ export const getTargetName = (val: string): string => {
   return Countries[val] || '';
 };
 
+export interface CountryOptions {
+  code: Territory;
+  label: string;
+}
+
 export interface AmountValuesObject {
   amounts: number[];
   defaultAmount: number;
