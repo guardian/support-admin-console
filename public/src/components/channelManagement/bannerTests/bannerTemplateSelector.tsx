@@ -32,11 +32,11 @@ const templatesWithLabels = [
   },
   {
     template: BannerTemplate.ChoiceCardsBannerBlue,
-    label: 'Choice cards banner - blue',
+    label: 'Choice cards banner - TABS',
   },
   {
-    template: BannerTemplate.ChoiceCardsBannerYellow,
-    label: 'Choice cards banner - yellow',
+    template: BannerTemplate.ChoiceCardsButtonsBannerBlue,
+    label: 'Choice cards banner - BUTTONS',
   },
   {
     template: BannerTemplate.WorldPressFreedomDayBanner,
