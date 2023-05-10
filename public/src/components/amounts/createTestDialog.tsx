@@ -34,11 +34,6 @@ interface CreateTestDialogProps {
   candidateTargets: Territory[];
 }
 
-// interface CountryOptions {
-//   code: Territory;
-//   label: string;
-// }
-
 export const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
   isOpen,
   close,

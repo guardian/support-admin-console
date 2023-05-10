@@ -47,7 +47,6 @@ function withS3Data<T>(
       }
       setIsSaving(true);
 
-      console.log('withS3Data - saveData', dataFromServer);
       saveSettings(dataFromServer)
         .then(fetchData)
         .then(() => setIsSaving(false));
