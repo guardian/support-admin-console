@@ -59,7 +59,9 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
 
   const { amountsCardData, defaultContributionType, variantName } = variant;
 
-  const [currentContributionType, setCurrentContributionType] = useState(defaultContributionType || 'MONTHLY');
+  const [currentContributionType, setCurrentContributionType] = useState(
+    defaultContributionType || 'MONTHLY',
+  );
 
   useEffect(() => {
     setCurrentContributionType(defaultContributionType || 'MONTHLY');
