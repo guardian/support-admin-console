@@ -8,6 +8,7 @@ import {
   Regions,
   Countries,
   CountryOptions,
+  getTargetName,
 } from '../../utils/models';
 import { CreateTestButton } from './CreateTestButton';
 
@@ -108,7 +109,17 @@ export const AmountsTestsList: React.FC<AmountsTestsListProps> = ({
   const getExistingCountryTests = () => {
     const countryTests = tests.filter(t => !regionLabels.includes(t.target as string));
     const countryTestStrings = countryTests.map(t => t.target);
-    return countryTestStrings.sort();
+    return countryTestStrings.sort((a, b) => {
+      const A = getTargetName(a as string);
+      const B = getTargetName(b as string);
+      if (A < B) {
+        return -1;
+      }
+      if (A > B) {
+        return 1;
+      }
+      return 0;
+    });
   };
 
   const getCountryTestCandidates = () => {

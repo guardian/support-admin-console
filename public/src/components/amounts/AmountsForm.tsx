@@ -66,8 +66,6 @@ const AmountsForm: React.FC<InnerProps<AmountsTests>> = ({
   };
 
   const createLocalTest = (selected: CountryOptions) => {
-    console.log('createLocalTest', selected);
-
     if (selected && selected.label && selected.code) {
       const newTest = {
         testName: `SUPPORTER_AMOUNTS_EVERGREEN__${selected.code}`,
@@ -110,7 +108,6 @@ const AmountsForm: React.FC<InnerProps<AmountsTests>> = ({
   const updateLocalTest = (updated: AmountsTest) => {
     const updatedTests = configuredAmounts.filter(t => t.testName !== updated.testName);
     updatedTests.push(updated);
-    console.log('updateLocalTest - setConfiguredAmounts', updatedTests);
     setConfiguredAmounts(updatedTests);
   };
 
@@ -118,6 +115,7 @@ const AmountsForm: React.FC<InnerProps<AmountsTests>> = ({
     const updatedTests = configuredAmounts.filter(t => t.testName !== test.testName);
     console.log('deleteLocalTest - setConfiguredAmounts', updatedTests);
     setConfiguredAmounts(updatedTests);
+    setSelectedTest(undefined);
   };
 
   const saveLocalTestToS3 = () => {

@@ -35,7 +35,6 @@ function withS3Data<T>(
     }, []);
 
     const setData = (data: T): void => {
-      console.log('withS3Data - setData', data);
       if (!dataFromServer) {
         return;
       }
