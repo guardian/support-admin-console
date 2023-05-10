@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { makeStyles, Theme } from '@material-ui/core';
 import LiveSwitch from '../shared/liveSwitch';
 import { ContributionType } from '../../utils/models';
@@ -101,13 +101,13 @@ export const AmountsVariantEditorRow: React.FC<AmountsVariantEditorRowProps> = (
       <div className={classes.amountsAndInputContainer}>
         <div className={classes.amountsContainer}>
           {amounts.map(amount => (
-           <AmountsVariantEditorRowAmount
-             key={`${label}_${amount}`}
-             amount={amount}
-             isDefault={amount === defaultAmount}
-             setAsDefault={() => setAmountAsDefault(amount)}
-             deleteAmount={() => deleteAmount(amount)}
-           />
+            <AmountsVariantEditorRowAmount
+              key={`${label}_${amount}`}
+              amount={amount}
+              isDefault={amount === defaultAmount}
+              setAsDefault={() => setAmountAsDefault(amount)}
+              deleteAmount={() => deleteAmount(amount)}
+            />
           ))}
         </div>
         <AmountsVariantEditorRowInput amounts={amounts} addAmount={addAmount} />

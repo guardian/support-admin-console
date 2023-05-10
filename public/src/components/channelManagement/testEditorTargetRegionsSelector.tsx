@@ -28,7 +28,7 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
   platform,
 }: TestEditorTargetRegionsSelectorProps) => {
   const classes = useStyles();
-  const allRegions = supportedRegions as Region[] || definedRegions;
+  const allRegions = (supportedRegions as Region[]) || definedRegions;
 
   const onAllRegionsChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     onRegionsUpdate(event.target.checked ? allRegions : []);

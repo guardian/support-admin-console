@@ -9,15 +9,12 @@ import { AmountsVariantEditor } from './AmountsVariantEditor';
 import { CreateVariantButton } from './CreateVariantButton';
 import { DeleteTestButton } from './DeleteTestButton';
 
-import { 
-  AmountsTest,
-  AmountsVariant,
-  Territory,
-  Regions,
-} from '../../utils/models';
+import { AmountsTest, AmountsVariant, getTargetName, Region, Regions } from '../../utils/models';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
-  container: {},
+  container: {
+    minWidth: '500px',
+  },
   emptyContainer: {},
   formHead: {},
   formBody: {},
@@ -31,12 +28,17 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   addVariantButton: {},
   deleteTestButton: {},
   saveButton: {},
-  saveButtonText: {},
+  saveButtonText: {
+    fontSize: '12px',
+    fontWeight: 500,
+    textTransform: 'uppercase',
+    letterSpacing: '1px',
+  },
   input: {
     '& input': {
       textTransform: 'uppercase !important',
     },
-  }
+  },
 }));
 
 interface AmountsTestEditorProps {
@@ -53,7 +55,7 @@ const errorMessages = {
   REQUIRED: 'Live test name required',
   DUPLICATE: 'Test with this name already exists',
   OK: '',
-}
+};
 
 export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
   test,
@@ -93,7 +95,7 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
         variants: [...testVariants],
         isLive: testIsLive,
         liveTestName: currentLiveTestName,
-      } 
+      };
       updateTest(t);
     }
   }, [testVariants, testIsLive, currentLiveTestName]);
@@ -102,7 +104,7 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
     return (
       <div className={classes.emptyContainer}>
         <Typography>Please select an Amounts test for editing</Typography>
-     </div>
+      </div>
     );
   }
 
@@ -138,11 +140,9 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
     setCurrentLiveTestName(updatedName);
     if (!updatedName.length) {
       setCurrentLiveTestError(errorMessages.REQUIRED);
-    }
-    else if (testNames.includes(updatedName)) {
+    } else if (testNames.includes(updatedName)) {
       setCurrentLiveTestError(errorMessages.DUPLICATE);
-    }
-    else {
+    } else {
       setCurrentLiveTestError(errorMessages.OK);
     }
     setSaveButtonIsDisabled(false);
@@ -153,14 +153,13 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
     testVariants.forEach(v => {
       if (v.variantName === variant.variantName) {
         newState.push(variant);
-      }
-      else {
+      } else {
         newState.push(v);
       }
     });
     setTestVariants(newState);
     setSaveButtonIsDisabled(false);
-  }
+  };
 
   const getExistingVariantNames = () => {
     return testVariants.map(v => v.variantName);
@@ -188,13 +187,13 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
   const deleteCurrentTest = () => {
     if (testName != null && target != null && seed != null) {
       deleteTest({
-         testName, 
-         liveTestName,
-         isLive: testIsLive,
-         target, 
-         seed, 
-         variants: testVariants,
-       });
+        testName,
+        liveTestName,
+        isLive: testIsLive,
+        target,
+        seed,
+        variants: testVariants,
+      });
     }
   };
 
@@ -211,19 +210,16 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
   };
 
   const checkIfTestIsCountryTier = () => {
-    return (target != null && !regionLabels.includes(target as string)) ? true : false;
-  }
+    return target != null && !regionLabels.includes(target as string) ? true : false;
+  };
 
   const addButtonBar = () => {
     return (
       <div className={classes.buttonBar}>
         {checkIfTestIsCountryTier() && (
-          <DeleteTestButton
-            testName={target as string}
-            confirmDeletion={deleteCurrentTest} 
-          />
+          <DeleteTestButton testName={target as string} confirmDeletion={deleteCurrentTest} />
         )}
-        <CreateVariantButton 
+        <CreateVariantButton
           createVariant={createVariant}
           existingNames={getExistingVariantNames()}
         />
@@ -238,14 +234,21 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
           <Typography className={classes.saveButtonText}>Save test</Typography>
         </Button>
       </div>
-    )
+    );
+  };
+
+  const prettifyTargetName = (val: Region | string | undefined) => {
+    if (val != null) {
+      return getTargetName(target as string);
+    }
+    return val;
   };
 
   return (
     <div className={classes.container}>
       <div className={classes.formHead}>
         <div>
-          <Typography variant="h5">Amounts tests for: {target}</Typography>
+          <Typography variant="h5">Amounts tests for: {prettifyTargetName(target)}</Typography>
 
           <TextField
             className={classes.input}
@@ -280,247 +283,8 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
           {addButtonBar()}
         </div>
       </div>
-      <div className={classes.formBody}>
-        {testVariants.map(v => addVariantForm(v))}
-      </div>
+      <div className={classes.formBody}>{testVariants.map(v => addVariantForm(v))}</div>
       {addButtonBar()}
-   </div>
+    </div>
   );
 };
-
-  // const updateIsLive = (isLive: boolean): void => {
-  //   updateTest({ ...test, isLive: isLive });
-  // };
-
-  // const updateVariantContributionAmounts = (variantIndex: number) => (
-  //   contributionAmounts: ContributionAmounts,
-  // ): void => {
-  //   const updatedVariants = [
-  //     ...test.variants.slice(0, variantIndex),
-  //     { ...test.variants[variantIndex], amounts: contributionAmounts },
-  //     ...test.variants.slice(variantIndex + 1),
-  //   ];
-  //   updateTest({
-  //     ...test,
-  //     variants: updatedVariants,
-  //   });
-  // };
-
-  // const deleteVariant = (variantIndex: number) => (): void => {
-  //   const updatedVariants = [
-  //     ...test.variants.slice(0, variantIndex),
-  //     ...test.variants.slice(variantIndex + 1),
-  //   ];
-  //   updateTest({
-  //     ...test,
-  //     variants: updatedVariants,
-  //   });
-  // };
-
-  // const createVariant = (name: string): void => {
-  //   const updatedVariants: AmountsTestVariant[] = [
-  //     ...test.variants,
-  //     variantWithDefaultAmounts(name),
-  //   ];
-  //   updateTest({
-  //     ...test,
-  //     variants: updatedVariants,
-  //   });
-  // };
-
-  // const classes = useStyles();
-
-  // return (
-  //   <div className={classes.container}>
-  //     <div className={classes.header}>
-  //       <span>{test.name}</span>
-  //       <AmountsTestEditorDeleteButton onDelete={deleteTest} />
-  //     </div>
-
-  //     <div>
-  //       <LiveSwitch
-  //         label="Live on support.theguardian.com"
-  //         isLive={test.isLive}
-  //         onChange={updateIsLive}
-  //         isDisabled={false}
-  //       />
-  //     </div>
-
-  //     {test.variants.length > 0
-  //       ? test.variants.map((variant, index) => (
-  //           <div className={classes.amountsEditorContainer} key={variant.name}>
-  //             <AmountsEditor
-  //               label={variant.name}
-  //               contributionAmounts={variant.amounts}
-  //               updateContributionAmounts={updateVariantContributionAmounts(index)}
-  //               deleteContributionAmounts={deleteVariant(index)}
-  //             />
-  //           </div>
-  //         ))
-  //       : null}
-
-  //     <div className={classes.createVariantButtonContainer}>
-  //       <CreateVariantButton
-  //         onCreate={createVariant}
-  //         existingNames={test.variants.map(v => v.name)}
-  //       />
-  //     </div>
-  //   </div>
-  // );
-
-
-
-
-
-
-
-
-
-
-// import React from 'react';
-
-// import { makeStyles, Theme } from '@material-ui/core/styles';
-// import AmountsEditor from './contributionAmountsEditor';
-// import CreateVariantButton from './createVariantButton';
-
-// import { AmountsTest, AmountsTestVariant, ContributionAmounts } from './configuredAmountsEditor';
-// import AmountsTestEditorDeleteButton from './amountsTestEditorDeleteButton';
-// import LiveSwitch from '../shared/liveSwitch';
-
-// const useStyles = makeStyles(({ spacing }: Theme) => ({
-//   container: {
-//     marginTop: spacing(4),
-//   },
-//   header: {
-//     display: 'flex',
-//     flexDirection: 'row',
-//     alignItems: 'center',
-//     fontSize: 16,
-//     textTransform: 'uppercase',
-//     fontWeight: 'bold',
-
-//     '& > * + *': {
-//       marginLeft: spacing(2),
-//     },
-//   },
-//   amountsEditorContainer: {
-//     marginTop: spacing(2),
-//   },
-//   createVariantButtonContainer: {
-//     marginTop: spacing(3),
-//   },
-// }));
-
-// const variantWithDefaultAmounts = (name: string): AmountsTestVariant => ({
-//   name: name,
-//   amounts: {
-//     ONE_OFF: {
-//       amounts: [],
-//       defaultAmount: 0,
-//       hideChooseYourAmount: false,
-//     },
-//     MONTHLY: {
-//       amounts: [],
-//       defaultAmount: 0,
-//       hideChooseYourAmount: false,
-//     },
-//     ANNUAL: {
-//       amounts: [],
-//       defaultAmount: 0,
-//       hideChooseYourAmount: false,
-//     },
-//   },
-// });
-
-// interface AmountsTestEditorProps {
-//   test: AmountsTest;
-//   updateTest: (updatedTest: AmountsTest) => void;
-//   deleteTest: () => void;
-// }
-
-// const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
-//   test,
-//   updateTest,
-//   deleteTest,
-// }: AmountsTestEditorProps) => {
-//   const updateIsLive = (isLive: boolean): void => {
-//     updateTest({ ...test, isLive: isLive });
-//   };
-
-//   const updateVariantContributionAmounts = (variantIndex: number) => (
-//     contributionAmounts: ContributionAmounts,
-//   ): void => {
-//     const updatedVariants = [
-//       ...test.variants.slice(0, variantIndex),
-//       { ...test.variants[variantIndex], amounts: contributionAmounts },
-//       ...test.variants.slice(variantIndex + 1),
-//     ];
-//     updateTest({
-//       ...test,
-//       variants: updatedVariants,
-//     });
-//   };
-
-//   const deleteVariant = (variantIndex: number) => (): void => {
-//     const updatedVariants = [
-//       ...test.variants.slice(0, variantIndex),
-//       ...test.variants.slice(variantIndex + 1),
-//     ];
-//     updateTest({
-//       ...test,
-//       variants: updatedVariants,
-//     });
-//   };
-
-//   const createVariant = (name: string): void => {
-//     const updatedVariants: AmountsTestVariant[] = [
-//       ...test.variants,
-//       variantWithDefaultAmounts(name),
-//     ];
-//     updateTest({
-//       ...test,
-//       variants: updatedVariants,
-//     });
-//   };
-
-//   const classes = useStyles();
-//   return (
-//     <div className={classes.container}>
-//       <div className={classes.header}>
-//         <span>{test.name}</span>
-//         <AmountsTestEditorDeleteButton onDelete={deleteTest} />
-//       </div>
-
-//       <div>
-//         <LiveSwitch
-//           label="Live on support.theguardian.com"
-//           isLive={test.isLive}
-//           onChange={updateIsLive}
-//           isDisabled={false}
-//         />
-//       </div>
-
-//       {test.variants.length > 0
-//         ? test.variants.map((variant, index) => (
-//             <div className={classes.amountsEditorContainer} key={variant.name}>
-//               <AmountsEditor
-//                 label={variant.name}
-//                 contributionAmounts={variant.amounts}
-//                 updateContributionAmounts={updateVariantContributionAmounts(index)}
-//                 deleteContributionAmounts={deleteVariant(index)}
-//               />
-//             </div>
-//           ))
-//         : null}
-
-//       <div className={classes.createVariantButtonContainer}>
-//         <CreateVariantButton
-//           onCreate={createVariant}
-//           existingNames={test.variants.map(v => v.name)}
-//         />
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default AmountsTestEditor;

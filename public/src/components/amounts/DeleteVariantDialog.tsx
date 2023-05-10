@@ -7,10 +7,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  makeStyles,
 } from '@material-ui/core';
-
-const useStyles = makeStyles(() => ({}));
 
 interface DeleteVariantDialogProps {
   variantName: string;
@@ -25,8 +22,6 @@ export const DeleteVariantDialog: React.FC<DeleteVariantDialogProps> = ({
   close,
   confirmDeletion,
 }: DeleteVariantDialogProps) => {
-  const classes = useStyles();
-
   return (
     <Dialog open={isOpen} onClose={close} aria-labelledby="create-test-dialog-title" fullWidth>
       <DialogTitle id="delete-variant-dialog-title">Delete test variant: {variantName}</DialogTitle>

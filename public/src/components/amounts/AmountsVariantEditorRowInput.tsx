@@ -17,7 +17,10 @@ interface AmountsVariantEditorRowInputProps {
   addAmount: (amount: number) => void;
 }
 
-export const AmountsVariantEditorRowInput: React.FC<AmountsVariantEditorRowInputProps> = ({ amounts, addAmount }: AmountsVariantEditorRowInputProps) => {
+export const AmountsVariantEditorRowInput: React.FC<AmountsVariantEditorRowInputProps> = ({
+  amounts,
+  addAmount,
+}: AmountsVariantEditorRowInputProps) => {
   const [currentValue, setCurrentValue] = useState<number | undefined>();
   const [currentError, setCurrentError] = useState('');
 
@@ -39,11 +42,9 @@ export const AmountsVariantEditorRowInput: React.FC<AmountsVariantEditorRowInput
       const update = parseInt(event.target.value, 10);
       if (isNaN(update)) {
         setCurrentError('Invalid value');
-      }
-      else if (amounts.includes(update)) {
+      } else if (amounts.includes(update)) {
         setCurrentError('Duplicate value');
-      }
-      else {
+      } else {
         setCurrentValue(update);
         setCurrentError('');
       }

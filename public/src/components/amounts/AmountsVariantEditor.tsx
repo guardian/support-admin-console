@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import { Divider } from '@material-ui/core';
+import {
+  Divider,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Radio,
+  RadioGroup,
+} from '@material-ui/core';
 import { AmountsVariantEditorRow } from './AmountsVariantEditorRow';
 import { DeleteVariantButton } from './DeleteVariantButton';
 
-import { 
+import {
   AmountsVariant,
   ContributionType,
   ContributionTypes,
@@ -36,11 +43,11 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
 }));
 
 interface AmountsVariantEditorProps {
-	variant: AmountsVariant;
+  variant: AmountsVariant;
   testIsCountryTier: boolean;
   updateVariant: (variant: AmountsVariant) => void;
   deleteVariant: (variant: AmountsVariant) => void;
-};
+}
 
 export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
   variant,
@@ -50,11 +57,18 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
 }: AmountsVariantEditorProps) => {
   const classes = useStyles();
 
-  const {
-    amountsCardData,
-    defaultContributionType,
-    variantName,
-  } = variant;
+  const { amountsCardData, defaultContributionType, variantName } = variant;
+
+  const [currentContributionType, setCurrentContributionType] = useState(defaultContributionType);
+
+  useEffect(() => {
+    const updatedAmounts: AmountsVariant = {
+      variantName,
+      defaultContributionType: currentContributionType,
+      amountsCardData,
+    };
+    updateVariant(updatedAmounts);
+  }, [currentContributionType]);
 
   const updateAmounts = (label: ContributionType, val: number[]) => {
     const contributionsToUpdate = amountsCardData[label];
@@ -89,7 +103,7 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
         },
       };
       updateVariant(updatedAmounts);
-     }
+    }
   };
 
   const updateDefaultAmount = (label: ContributionType, val: number) => {
@@ -110,13 +124,8 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
     }
   };
 
-  const updateDefaultContributionType = (val: ContributionType) => {
-    const updatedAmounts: AmountsVariant = {
-      variantName,
-      defaultContributionType: val,
-      amountsCardData,
-    };
-    updateVariant(updatedAmounts);
+  const updateDefaultContributionType = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCurrentContributionType((event.target as HTMLInputElement).value as ContributionType);
   };
 
   const confirmDeletion = () => deleteVariant(variant);
@@ -140,61 +149,58 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
                   updateDefaultAmount={updateDefaultAmount}
                 />
               </div>
-            )
+            );
+          } else {
+            return <></>;
           }
-          else {
-            return (<></>);
-          } 
         })}
       </div>
     );
   };
 
+  const buildContributionTypeControl = () => {
+    return (
+      <FormControl>
+        <FormLabel id={`${variantName}_default_contribution_selector`}>
+          Default contributions type
+        </FormLabel>
+        <RadioGroup
+          aria-labelledby={`${variantName}_default_contribution_selector`}
+          name={`${variantName}_default_contribution_selector`}
+          value={currentContributionType}
+          onChange={e => updateDefaultContributionType(e)}
+          row
+        >
+          {Object.keys(ContributionTypes).map(k => {
+            return (
+              <FormControlLabel
+                key={`${variantName}_${k}`}
+                value={k}
+                control={<Radio />}
+                label={k}
+                disabled={!testIsCountryTier}
+              />
+            );
+          })}
+        </RadioGroup>
+      </FormControl>
+    );
+  };
+
   const checkIfVariantIsControl = () => {
     return 'CONTROL' === variantName.toUpperCase();
-  }
+  };
 
   return (
-    <div className={classes.container} >
+    <div className={classes.container}>
       <div className={classes.topBar}>
-        <div className={classes.variantName} >{variantName}</div>
+        <div className={classes.variantName}>{variantName}</div>
         {!checkIfVariantIsControl() && (
-            <DeleteVariantButton
-              variantName={variantName}
-              confirmDeletion={confirmDeletion}
-            />
+          <DeleteVariantButton variantName={variantName} confirmDeletion={confirmDeletion} />
         )}
       </div>
-      {testIsCountryTier && (
-        <div className={classes.defaultContribution} >Default contributions type selector will go here</div>
-      )}
+      {buildContributionTypeControl()}
       {buildAmountsCardRows()}
     </div>
   );
 };
-
-// const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
-//   container: {
-//     padding: `${spacing(3)}px ${spacing(4)}px`,
-//     border: `1px solid ${palette.grey[700]}`,
-//     borderRadius: 4,
-//     backgroundColor: 'white',
-
-//     '& > * + *': {
-//       marginTop: spacing(2),
-//     },
-//   },
-//   header: {
-//     display: 'flex',
-//     justifyContent: 'space-between',
-//     alignItems: 'center',
-//     color: palette.grey[800],
-//     fontSize: 18,
-//     fontWeight: 'bold',
-//   },
-//   rowsContainer: {
-//     '& > * + *': {
-//       marginTop: spacing(2),
-//     },
-//   },
-// }));

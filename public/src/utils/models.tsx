@@ -297,7 +297,7 @@ export interface AmountValuesObject {
 
 export type AmountsCardData = {
   [key in ContributionType]: AmountValuesObject;
-}
+};
 
 export interface AmountsVariant {
   variantName: string;

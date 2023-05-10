@@ -167,9 +167,7 @@ const AppRouter = () => {
           />
           <Route
             path="/amounts"
-            render={(): React.ReactElement =>
-              createComponent(<AmountsForm />, 'Amounts')
-            }
+            render={(): React.ReactElement => createComponent(<AmountsForm />, 'Amounts')}
           />
           <Route
             path="/header-tests/:testName?"

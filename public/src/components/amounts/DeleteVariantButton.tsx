@@ -2,13 +2,6 @@ import React from 'react';
 import { Button, makeStyles, Typography } from '@material-ui/core';
 import { DeleteVariantDialog } from './DeleteVariantDialog';
 import useOpenable from '../../hooks/useOpenable';
-import { 
-  AmountsTest,
-  AmountsVariant,
-  Territory,
-  Regions,
-} from '../../utils/models';
-
 
 const useStyles = makeStyles(() => ({
   button: {
@@ -37,12 +30,7 @@ export const DeleteVariantButton: React.FC<DeleteVariantButtonProps> = ({
   const classes = useStyles();
   return (
     <>
-      <Button
-        variant="contained"
-        color="primary"
-        className={classes.button}
-        onClick={open}
-      >
+      <Button variant="contained" color="primary" className={classes.button} onClick={open}>
         <Typography className={classes.text}>Delete variant</Typography>
       </Button>
       <DeleteVariantDialog

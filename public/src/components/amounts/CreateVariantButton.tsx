@@ -38,7 +38,7 @@ export const CreateVariantButton: React.FC<CreateVariantButtonProps> = ({
         startIcon={<AddIcon />}
         onClick={open}
       >
-        <Typography className={classes.text}>Create a new variant</Typography>
+        <Typography className={classes.text}>Add variant</Typography>
       </Button>
       <CreateVariantDialog
         isOpen={isOpen}

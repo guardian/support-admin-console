@@ -36,7 +36,7 @@ const errorMessages = {
   REQUIRED: 'Variant name required',
   DUPLICATE: 'Variant with this name already exists',
   OK: '',
-}
+};
 
 export const CreateVariantDialog: React.FC<CreateVariantDialogProps> = ({
   isOpen,
@@ -61,11 +61,9 @@ export const CreateVariantDialog: React.FC<CreateVariantDialogProps> = ({
     setName(updatedName);
     if (!updatedName.length) {
       setErrorMessage(errorMessages.REQUIRED);
-    }
-    else if (existingNames.includes(updatedName)) {
+    } else if (existingNames.includes(updatedName)) {
       setErrorMessage(errorMessages.DUPLICATE);
-    }
-    else {
+    } else {
       setErrorMessage(errorMessages.OK);
     }
   };
@@ -87,7 +85,7 @@ export const CreateVariantDialog: React.FC<CreateVariantDialogProps> = ({
           helperText={errorMessage}
           margin="normal"
           variant="outlined"
-          onChange={(e) => updateName(e.target.value)}
+          onChange={e => updateName(e.target.value)}
           autoFocus
           fullWidth
         />

@@ -79,16 +79,17 @@ export const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
       <DialogContent dividers>
         <Autocomplete
           value={target}
-          onChange={(event: React.ChangeEvent<{}>, newValue: CountryOptions | null) => {
+          onChange={(
+            event: React.ChangeEvent<Record<string, unknown>>,
+            newValue: CountryOptions | null,
+          ) => {
             setTarget(newValue);
           }}
           id={'candidate-territories'}
           getOptionLabel={(option): string => option.label}
           noOptionsText={'Search for target territory...'}
           options={options}
-          renderInput={(params): JSX.Element => (
-            <TextField {...params} label={"Select target"} />
-          )}
+          renderInput={(params): JSX.Element => <TextField {...params} label={'Select target'} />}
         />
       </DialogContent>
       <DialogActions>
