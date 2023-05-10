@@ -32,11 +32,6 @@ interface DataFromServer {
   version: string;
 }
 
-// const allContributionTypes = [
-//   { contributionType: ContributionType.ONE_OFF, label: 'One-off' },
-//   { contributionType: ContributionType.MONTHLY, label: 'Monthly' },
-//   { contributionType: ContributionType.ANNUAL, label: 'Annual' },
-// ];
 const allContributionTypes = [
   { contributionType: 'ONE_OFF', label: 'One-off' },
   { contributionType: 'MONTHLY', label: 'Monthly' },
