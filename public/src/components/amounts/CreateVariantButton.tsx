@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, makeStyles, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import { CreateVariantDialog } from './createVariantDialog';
+import { CreateVariantDialog } from './CreateVariantDialog';
 import useOpenable from '../../hooks/useOpenable';
 
 const useStyles = makeStyles(() => ({
