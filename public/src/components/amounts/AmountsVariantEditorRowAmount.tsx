@@ -3,7 +3,6 @@ import { Button, makeStyles, Menu, MenuItem } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
 
 const useStyles = makeStyles(() => ({
-  container: {},
   default: {
     color: red[500],
   },
@@ -45,7 +44,7 @@ export const AmountsVariantEditorRowAmount: React.FC<AmountsVariantEditorRowAmou
   const classes = useStyles();
 
   return (
-    <div className={classes.container}>
+    <div>
       <Button
         aria-controls="simple-menu"
         aria-haspopup="true"

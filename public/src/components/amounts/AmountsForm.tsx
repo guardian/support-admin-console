@@ -118,13 +118,11 @@ const AmountsForm: React.FC<InnerProps<AmountsTests>> = ({
 
   const deleteLocalTest = (test: AmountsTest) => {
     const updatedTests = configuredAmounts.filter(t => t.testName !== test.testName);
-    console.log('deleteLocalTest - setConfiguredAmounts', updatedTests);
     setConfiguredAmounts(updatedTests);
     setSelectedTest(undefined);
   };
 
   const saveLocalTestToS3 = () => {
-    console.log('saveLocalTestToS3 - saveConfiguredAmounts');
     saveConfiguredAmounts();
   };
 

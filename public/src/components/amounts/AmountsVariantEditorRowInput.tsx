@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Button, makeStyles, TextField, Theme } from '@material-ui/core';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
-  container: {},
   textField: {
     width: '120px',
   },
@@ -53,7 +52,7 @@ export const AmountsVariantEditorRowInput: React.FC<AmountsVariantEditorRowInput
 
   const classes = useStyles();
   return (
-    <div className={classes.container}>
+    <div>
       <TextField
         className={classes.textField}
         error={!!currentError}

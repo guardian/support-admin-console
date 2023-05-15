@@ -15,9 +15,13 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
     minWidth: '500px',
   },
-  emptyContainer: {},
-  formHead: {},
-  formBody: {},
+  emptyContainer: {
+    width: '100%',
+    height: '100vh',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   buttonBar: {
     width: '100%',
     display: 'flex',
@@ -25,9 +29,6 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
     marginTop: spacing(2),
     marginBottom: spacing(2),
   },
-  addVariantButton: {},
-  deleteTestButton: {},
-  saveButton: {},
   saveButtonText: {
     fontSize: '12px',
     fontWeight: 500,
@@ -226,7 +227,6 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
         <Button
           variant="contained"
           color="primary"
-          className={classes.saveButton}
           startIcon={<SaveIcon />}
           disabled={saveButtonIsDisabled}
           onClick={saveCurrentTest}
@@ -246,44 +246,42 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
 
   return (
     <div className={classes.container}>
-      <div className={classes.formHead}>
-        <div>
-          <Typography variant="h5">Amounts tests for: {prettifyTargetName(target)}</Typography>
+      <div>
+        <Typography variant="h5">Amounts tests for: {prettifyTargetName(target)}</Typography>
 
-          <TextField
-            className={classes.input}
-            name="testName"
-            label="Test default (evergreen) name"
-            value={testName}
-            margin="normal"
-            variant="outlined"
-            disabled={true}
-            fullWidth
-          />
+        <TextField
+          className={classes.input}
+          name="testName"
+          label="Test default (evergreen) name"
+          value={testName}
+          margin="normal"
+          variant="outlined"
+          disabled={true}
+          fullWidth
+        />
 
-          <TextField
-            className={classes.input}
-            name="name"
-            label="Live A/B test name"
-            value={currentLiveTestName}
-            onChange={e => updateLiveTestName(e.target.value)}
-            error={!!currentLiveTestError.length}
-            helperText={currentLiveTestError}
-            margin="normal"
-            variant="outlined"
-            fullWidth
-          />
+        <TextField
+          className={classes.input}
+          name="name"
+          label="Live A/B test name"
+          value={currentLiveTestName}
+          onChange={e => updateLiveTestName(e.target.value)}
+          error={!!currentLiveTestError.length}
+          helperText={currentLiveTestError}
+          margin="normal"
+          variant="outlined"
+          fullWidth
+        />
 
-          <LiveSwitch
-            label="Control vs variants A/B test is live"
-            isLive={testIsLive}
-            onChange={updateTestIsLive}
-            isDisabled={false}
-          />
-          {addButtonBar()}
-        </div>
+        <LiveSwitch
+          label="Control vs variants A/B test is live"
+          isLive={testIsLive}
+          onChange={updateTestIsLive}
+          isDisabled={false}
+        />
+        {addButtonBar()}
       </div>
-      <div className={classes.formBody}>{testVariants.map(v => addVariantForm(v))}</div>
+      <div>{testVariants.map(v => addVariantForm(v))}</div>
       {addButtonBar()}
     </div>
   );
