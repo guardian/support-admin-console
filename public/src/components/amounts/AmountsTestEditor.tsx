@@ -112,6 +112,7 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
     const newVariant: AmountsVariant = {
       variantName: name,
       defaultContributionType: 'MONTHLY',
+      displayContributionType: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
       amountsCardData: {
         ONE_OFF: {
           amounts: [1],

@@ -292,7 +292,7 @@ export interface CountryOptions {
 export interface AmountValuesObject {
   amounts: number[];
   defaultAmount: number;
-  hideChooseYourAmount?: boolean;
+  hideChooseYourAmount: boolean;
 }
 
 export type AmountsCardData = {
@@ -301,7 +301,8 @@ export type AmountsCardData = {
 
 export interface AmountsVariant {
   variantName: string;
-  defaultContributionType?: ContributionType;
+  defaultContributionType: ContributionType;
+  displayContributionType: ContributionType[];
   amountsCardData: AmountsCardData;
 }
 

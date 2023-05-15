@@ -78,6 +78,11 @@ const AmountsForm: React.FC<InnerProps<AmountsTests>> = ({
           {
             variantName: 'CONTROL',
             defaultContributionType: 'MONTHLY' as ContributionType,
+            displayContributionType: [
+              'ONE_OFF' as ContributionType,
+              'MONTHLY' as ContributionType,
+              'ANNUAL' as ContributionType,
+            ],
             amountsCardData: {
               ONE_OFF: {
                 amounts: [1],

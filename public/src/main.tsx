@@ -4,7 +4,6 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Switchboard from './components/switchboard';
 import BannerDeployDashboard from './components/channelManagement/bannerDeploy/bannerDeployDashboard';
-import ContributionTypesForm from './components/contributionTypes';
 import AmountsForm from './components/amounts/AmountsForm';
 import {
   ArticleEpicTestsForm,
@@ -157,12 +156,6 @@ const AppRouter = () => {
           <Route
             path="/switches"
             render={(): React.ReactElement => createComponent(<Switchboard />, 'Switches')}
-          />
-          <Route
-            path="/contribution-types"
-            render={(): React.ReactElement =>
-              createComponent(<ContributionTypesForm />, 'Contribution Types')
-            }
           />
           <Route
             path="/amounts"

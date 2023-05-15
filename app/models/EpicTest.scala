@@ -33,7 +33,7 @@ case class EpicVariant(
   separateArticleCount: Option[SeparateArticleCount],
   showChoiceCards: Option[Boolean],
   bylineWithImage: Option[BylineWithImage],
-  defaultChoiceCardFrequency: Option[ContributionType],
+  defaultChoiceCardFrequency: Option[String],
   showSignInLink: Option[Boolean]
 )
 case class EpicTest(

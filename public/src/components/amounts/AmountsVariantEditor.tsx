@@ -57,24 +57,33 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
 }: AmountsVariantEditorProps) => {
   const classes = useStyles();
 
-  const { amountsCardData, defaultContributionType, variantName } = variant;
+  const {
+    amountsCardData,
+    defaultContributionType,
+    displayContributionType,
+    variantName,
+  } = variant;
 
-  const [currentContributionType, setCurrentContributionType] = useState(
-    defaultContributionType || 'MONTHLY',
+  const [currentContributionType, setCurrentContributionType] = useState(defaultContributionType);
+
+  const [currentContributionDisplay, setCurrentContributionDisplay] = useState(
+    displayContributionType,
   );
 
   useEffect(() => {
-    setCurrentContributionType(defaultContributionType || 'MONTHLY');
+    setCurrentContributionType(defaultContributionType);
+    setCurrentContributionDisplay(displayContributionType);
   }, [variant]);
 
   useEffect(() => {
     const updatedAmounts: AmountsVariant = {
       variantName,
       defaultContributionType: currentContributionType,
+      displayContributionType: currentContributionDisplay,
       amountsCardData,
     };
     updateVariant(updatedAmounts);
-  }, [currentContributionType]);
+  }, [currentContributionType, displayContributionType]);
 
   const updateAmounts = (label: ContributionType, val: number[]) => {
     const contributionsToUpdate = amountsCardData[label];
@@ -82,6 +91,7 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
       const updatedAmounts: AmountsVariant = {
         variantName,
         defaultContributionType,
+        displayContributionType,
         amountsCardData: {
           ...amountsCardData,
           [label]: {
@@ -100,6 +110,7 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
       const updatedAmounts: AmountsVariant = {
         variantName,
         defaultContributionType,
+        displayContributionType,
         amountsCardData: {
           ...amountsCardData,
           [label]: {
@@ -118,6 +129,7 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
       const updatedAmounts: AmountsVariant = {
         variantName,
         defaultContributionType,
+        displayContributionType,
         amountsCardData: {
           ...amountsCardData,
           [label]: {

@@ -8,7 +8,7 @@ import io.circe.{Decoder, Encoder}
 case class AmountValuesObject(
     amounts: List[Int], 
     defaultAmount: Int,
-    hideChooseYourAmount: Option[Boolean],
+    hideChooseYourAmount: Boolean,
 )
 
 case class AmountsCardData(
@@ -19,7 +19,8 @@ case class AmountsCardData(
 
 case class AmountsVariant(
   variantName: String,
-  defaultContributionType: Option[String],
+  defaultContributionType: String,
+  displayContributionType: List[String],
   amountsCardData: AmountsCardData,
 )
 

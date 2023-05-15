@@ -74,7 +74,6 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     new Application(authAction, controllerComponents, stage),
     new Login(authConfig, wsClient, requiredGoogleGroups, googleGroupChecker, controllerComponents),
     new SwitchesController(authAction, controllerComponents, stage, runtime),
-    new ContributionTypesController(authAction, controllerComponents, stage, runtime),
     new AmountsController(authAction, controllerComponents, stage, runtime),
     new EpicTestsController(authAction, controllerComponents, stage, runtime, dynamoTestsService),
     new HeaderTestsController(authAction, controllerComponents, stage, runtime, dynamoTestsService),
