@@ -205,7 +205,6 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
         variant={variant}
         updateVariant={updateVariant}
         deleteVariant={deleteVariant}
-        testIsCountryTier={checkIfTestIsCountryTier()}
       />
     );
   };

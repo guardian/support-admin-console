@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import {
+  Checkbox,
   Divider,
   FormControl,
   FormControlLabel,
+  FormGroup,
   FormLabel,
   Radio,
   RadioGroup,
@@ -39,19 +41,19 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     fontSize: 18,
     fontWeight: 'bold',
   },
-  defaultContribution: {},
+  contributionControls: {
+    display: 'block',
+  },
 }));
 
 interface AmountsVariantEditorProps {
   variant: AmountsVariant;
-  testIsCountryTier: boolean;
   updateVariant: (variant: AmountsVariant) => void;
   deleteVariant: (variant: AmountsVariant) => void;
 }
 
 export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
   variant,
-  testIsCountryTier,
   updateVariant,
   deleteVariant,
 }: AmountsVariantEditorProps) => {
@@ -64,26 +66,28 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
     variantName,
   } = variant;
 
-  const [currentContributionType, setCurrentContributionType] = useState(defaultContributionType);
+  const [currentContributionDefault, setCurrentContributionDefault] = useState(
+    defaultContributionType,
+  );
 
   const [currentContributionDisplay, setCurrentContributionDisplay] = useState(
     displayContributionType,
   );
 
   useEffect(() => {
-    setCurrentContributionType(defaultContributionType);
+    setCurrentContributionDefault(defaultContributionType);
     setCurrentContributionDisplay(displayContributionType);
   }, [variant]);
 
   useEffect(() => {
     const updatedAmounts: AmountsVariant = {
       variantName,
-      defaultContributionType: currentContributionType,
+      defaultContributionType: currentContributionDefault,
       displayContributionType: currentContributionDisplay,
       amountsCardData,
     };
     updateVariant(updatedAmounts);
-  }, [currentContributionType, displayContributionType]);
+  }, [currentContributionDefault, currentContributionDisplay]);
 
   const updateAmounts = (label: ContributionType, val: number[]) => {
     const contributionsToUpdate = amountsCardData[label];
@@ -142,8 +146,27 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
     }
   };
 
-  const updateDefaultContributionType = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCurrentContributionType((event.target as HTMLInputElement).value as ContributionType);
+  const updateDefaultContribution = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const updatedDefault = (event.target as HTMLInputElement).value as ContributionType;
+    setCurrentContributionDefault(updatedDefault);
+  };
+
+  const updateDisplayContribution = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const updatedContribution = event.target.name as ContributionType;
+    const includeContribution = event.target.checked;
+    const updatedDisplayContribution: ContributionType[] = [];
+
+    if (includeContribution) {
+      if (!currentContributionDisplay.includes(updatedContribution)) {
+        updatedDisplayContribution.push(...currentContributionDisplay, updatedContribution);
+      }
+    } else {
+      const filteredContributions = currentContributionDisplay.filter(c => {
+        return c !== updatedContribution;
+      });
+      updatedDisplayContribution.push(...filteredContributions);
+    }
+    setCurrentContributionDisplay(updatedDisplayContribution);
   };
 
   const confirmDeletion = () => deleteVariant(variant);
@@ -161,7 +184,7 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
                   label={k as ContributionType}
                   amounts={cardData.amounts}
                   defaultAmount={cardData.defaultAmount}
-                  hideChooseYourAmount={cardData.hideChooseYourAmount || false}
+                  hideChooseYourAmount={cardData.hideChooseYourAmount}
                   updateAmounts={updateAmounts}
                   updateChooseAmount={updateChooseAmount}
                   updateDefaultAmount={updateDefaultAmount}
@@ -176,17 +199,17 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
     );
   };
 
-  const buildContributionTypeControl = () => {
+  const buildDefaultContributionControl = () => {
     return (
-      <FormControl>
+      <FormControl className={classes.contributionControls}>
         <FormLabel id={`${variantName}_default_contribution_selector`}>
           Default contributions type
         </FormLabel>
         <RadioGroup
           aria-labelledby={`${variantName}_default_contribution_selector`}
           name={`${variantName}_default_contribution_selector`}
-          value={currentContributionType}
-          onChange={e => updateDefaultContributionType(e)}
+          value={currentContributionDefault}
+          onChange={e => updateDefaultContribution(e)}
           row
         >
           {Object.keys(ContributionTypes).map(k => {
@@ -196,11 +219,43 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
                 value={k}
                 control={<Radio />}
                 label={k}
-                disabled={!testIsCountryTier}
+                disabled={!currentContributionDisplay.includes(k as ContributionType)}
               />
             );
           })}
         </RadioGroup>
+      </FormControl>
+    );
+  };
+
+  const buildDisplayContributionControl = () => {
+    return (
+      <FormControl
+        required
+        component="fieldset"
+        variant="standard"
+        className={classes.contributionControls}
+      >
+        <FormLabel id={`${variantName}_display_contribution_selector`}>
+          Display contributions type
+        </FormLabel>
+        <FormGroup row>
+          {Object.keys(ContributionTypes).map(k => {
+            return (
+              <FormControlLabel
+                key={`${variantName}_${k}`}
+                control={
+                  <Checkbox
+                    checked={currentContributionDisplay.includes(k as ContributionType)}
+                    onChange={e => updateDisplayContribution(e)}
+                    name={k}
+                  />
+                }
+                label={k}
+              />
+            );
+          })}
+        </FormGroup>
       </FormControl>
     );
   };
@@ -217,7 +272,8 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
           <DeleteVariantButton variantName={variantName} confirmDeletion={confirmDeletion} />
         )}
       </div>
-      {buildContributionTypeControl()}
+      {buildDisplayContributionControl()}
+      {buildDefaultContributionControl()}
       {buildAmountsCardRows()}
     </div>
   );
