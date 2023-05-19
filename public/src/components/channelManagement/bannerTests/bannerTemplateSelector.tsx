@@ -94,19 +94,24 @@ const BannerTemplateSelector: React.FC<BannerTemplateSelectorProps> = ({
 
   return (
     <>
-      <RadioGroup id="bannerTemplateType" name="bannerTemplateType">
+      <RadioGroup
+        aria-label="Banner Template Type"
+        name="bannerTemplateType"
+        value={selectedTemplateType}
+        onChange={e => setSelectedTemplateType(e.target.value as TemplateType)}
+      >
         {templateTypes.map(templateType => (
           <Radio
             key={templateType}
             id={templateType}
-            value={templateType}
             name={templateType}
+            value={templateType}
+            control={<Radio />}
             checked={templateType === selectedTemplateType}
             onChange={e => setSelectedTemplateType(e.target.value as TemplateType)}
           />
         ))}
       </RadioGroup>
-
       <Select value={template} onChange={onChange} disabled={!editMode}>
         {getselectedTemplateType(selectedTemplateType).map(withLabel => (
           <MenuItem value={withLabel.template} key={withLabel.template}>
