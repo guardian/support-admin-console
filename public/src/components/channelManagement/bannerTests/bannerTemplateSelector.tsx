@@ -1,5 +1,5 @@
-import React from 'react';
-import { MenuItem, Select } from '@material-ui/core';
+import React, { useState } from 'react';
+import { MenuItem, Radio, RadioGroup, Select } from '@material-ui/core';
 import { BannerTemplate } from '../../../models/banner';
 
 function isBannerTemplate(s: string): s is BannerTemplate {
@@ -12,24 +12,42 @@ interface BannerTemplateSelectorProps {
   editMode: boolean;
 }
 
-const templatesWithLabels = [
-  { template: BannerTemplate.AusAnniversaryBanner, label: 'Aus 10 yr moment' },
+type TemplateType = 'Contributions' | 'Subscriptions' | 'Moment Template' | 'Bespoke';
+
+const templateTypes: TemplateType[] = [
+  'Contributions',
+  'Subscriptions',
+  'Moment Template',
+  'Bespoke',
+];
+
+const contributionsTemplatesWithLabels = [
   { template: BannerTemplate.ContributionsBanner, label: 'Contributions' },
   {
     template: BannerTemplate.ContributionsBannerWithSignIn,
     label: 'Contributions - with sign in link',
   },
-  { template: BannerTemplate.CharityAppealBanner, label: 'Charity Appeal' },
+];
+
+const subscriptionsTemplatesWithLabels = [
   { template: BannerTemplate.DigitalSubscriptionsBanner, label: 'Digital subscriptions' },
   { template: BannerTemplate.PrintSubscriptionsBanner, label: 'Print subscriptions' },
   { template: BannerTemplate.GuardianWeeklyBanner, label: 'Guardian Weekly' },
-  { template: BannerTemplate.InvestigationsMomentBanner, label: 'Investigations moment' },
+];
+
+const momentTemplatesWithLabels = [
   { template: BannerTemplate.EnvironmentMomentBanner, label: 'Environment moment' },
   { template: BannerTemplate.GlobalNewYearBanner, label: 'Global New Year moment' },
   {
     template: BannerTemplate.UkraineMomentBanner,
     label: 'Ukraine Moment Banner 2023',
   },
+  { template: BannerTemplate.AusAnniversaryBanner, label: 'Aus 10 yr moment' },
+];
+
+const bespokeTemplatesWithLabels = [
+  { template: BannerTemplate.CharityAppealBanner, label: 'Charity Appeal' },
+  { template: BannerTemplate.InvestigationsMomentBanner, label: 'Investigations moment' },
   {
     template: BannerTemplate.ChoiceCardsBannerBlue,
     label: 'Choice cards banner - TABS',
@@ -44,11 +62,29 @@ const templatesWithLabels = [
   },
 ];
 
+const getselectedTemplateType = (selectedTemplateType: TemplateType) => {
+  switch (selectedTemplateType) {
+    case 'Contributions':
+      return contributionsTemplatesWithLabels;
+    case 'Subscriptions':
+      return subscriptionsTemplatesWithLabels;
+    case 'Moment Template':
+      return momentTemplatesWithLabels;
+    case 'Bespoke':
+      return bespokeTemplatesWithLabels;
+
+    default:
+      return contributionsTemplatesWithLabels;
+  }
+};
+
 const BannerTemplateSelector: React.FC<BannerTemplateSelectorProps> = ({
   template,
   onTemplateChange,
   editMode,
 }: BannerTemplateSelectorProps) => {
+  const [selectedTemplateType, setSelectedTemplateType] = useState<TemplateType>('Contributions');
+
   const onChange = (event: React.ChangeEvent<{ value: unknown }>): void => {
     const value = event.target.value as string;
     if (isBannerTemplate(value)) {
@@ -57,13 +93,28 @@ const BannerTemplateSelector: React.FC<BannerTemplateSelectorProps> = ({
   };
 
   return (
-    <Select value={template} onChange={onChange} disabled={!editMode}>
-      {templatesWithLabels.map(withLabel => (
-        <MenuItem value={withLabel.template} key={withLabel.template}>
-          {withLabel.label}
-        </MenuItem>
-      ))}
-    </Select>
+    <>
+      <RadioGroup id="bannerTemplateType" name="bannerTemplateType">
+        {templateTypes.map(templateType => (
+          <Radio
+            key={templateType}
+            id={templateType}
+            value={templateType}
+            name={templateType}
+            checked={templateType === selectedTemplateType}
+            onChange={e => setSelectedTemplateType(e.target.value as TemplateType)}
+          />
+        ))}
+      </RadioGroup>
+
+      <Select value={template} onChange={onChange} disabled={!editMode}>
+        {getselectedTemplateType(selectedTemplateType).map(withLabel => (
+          <MenuItem value={withLabel.template} key={withLabel.template}>
+            {withLabel.label}
+          </MenuItem>
+        ))}
+      </Select>
+    </>
   );
 };
 
