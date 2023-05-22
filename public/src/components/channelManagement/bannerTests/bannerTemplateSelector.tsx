@@ -1,5 +1,13 @@
 import React, { useState } from 'react';
-import { MenuItem, Radio, RadioGroup, Select } from '@material-ui/core';
+import {
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  MenuItem,
+  Radio,
+  RadioGroup,
+  Select,
+} from '@material-ui/core';
 import { BannerTemplate } from '../../../models/banner';
 
 function isBannerTemplate(s: string): s is BannerTemplate {
@@ -94,24 +102,28 @@ const BannerTemplateSelector: React.FC<BannerTemplateSelectorProps> = ({
 
   return (
     <>
-      <RadioGroup
-        aria-label="Banner Template Type"
-        name="bannerTemplateType"
-        value={selectedTemplateType}
-        onChange={e => setSelectedTemplateType(e.target.value as TemplateType)}
-      >
-        {templateTypes.map(templateType => (
-          <Radio
-            key={templateType}
-            id={templateType}
-            name={templateType}
-            value={templateType}
-            control={<Radio />}
-            checked={templateType === selectedTemplateType}
-            onChange={e => setSelectedTemplateType(e.target.value as TemplateType)}
-          />
-        ))}
-      </RadioGroup>
+      <FormControl>
+        <FormLabel id="Banner Template Type">Banner Template Type</FormLabel>
+        <RadioGroup
+          aria-label="Banner Template Type"
+          name="bannerTemplateType"
+          value={selectedTemplateType}
+          onChange={e => setSelectedTemplateType(e.target.value as TemplateType)}
+        >
+          {templateTypes.map(templateType => (
+            <FormControlLabel
+              key={templateType}
+              label={templateType}
+              value={templateType}
+              control={<Radio />}
+              id={templateType}
+              name={templateType}
+              checked={templateType === selectedTemplateType}
+            />
+          ))}
+        </RadioGroup>
+      </FormControl>
+
       <Select value={template} onChange={onChange} disabled={!editMode}>
         {getselectedTemplateType(selectedTemplateType).map(withLabel => (
           <MenuItem value={withLabel.template} key={withLabel.template}>
