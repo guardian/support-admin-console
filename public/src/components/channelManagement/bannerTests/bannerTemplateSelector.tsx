@@ -102,30 +102,27 @@ const BannerTemplateSelector: React.FC<BannerTemplateSelectorProps> = ({
 
   return (
     <>
-      <FormControl>
-        <FormLabel id="Banner Template Type">Banner Template Type</FormLabel>
+      <FormControl component="fieldset">
+        <FormLabel component="legend">Ticker campaign name</FormLabel>
         <RadioGroup
-          aria-label="Banner Template Type"
-          name="bannerTemplateType"
-          value={selectedTemplateType}
+          value={selectedTemplateType ?? ''}
           onChange={e => setSelectedTemplateType(e.target.value as TemplateType)}
+          // aria-label=""
+          // name=""
         >
-          {templateTypes.map(templateType => (
+          {templateTypes.map(template => (
             <FormControlLabel
-              key={templateType}
-              label={templateType}
-              value={templateType}
+              key={template}
+              value={template}
               control={<Radio />}
-              id={templateType}
-              name={templateType}
-              checked={templateType === selectedTemplateType}
+              label={template}
             />
           ))}
         </RadioGroup>
       </FormControl>
 
       <Select value={template} onChange={onChange} disabled={!editMode}>
-        {getselectedTemplateType(selectedTemplateType).map(withLabel => (
+        {getselectedTemplateType(selectedTemplateType ?? 'Contributions').map(withLabel => (
           <MenuItem value={withLabel.template} key={withLabel.template}>
             {withLabel.label}
           </MenuItem>
