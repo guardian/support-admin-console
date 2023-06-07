@@ -132,7 +132,7 @@ export const APPLE_NEWS_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantTicker: false,
   allowVariantChoiceCards: false,
   allowVariantSignInLink: false,
-  allowBylineWithImage: false,
+  allowBylineWithImage: true,
   allowVariantPreview: false,
   requireVariantHeader: false,
   moduleName: 'ContributionsEpic',
