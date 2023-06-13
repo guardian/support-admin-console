@@ -8,7 +8,7 @@ import {
   Button,
   FormLabel,
   FormControl,
-  FormControlLabel,
+  FormControlLabel, TextField, IconButton,
 } from '@material-ui/core';
 import SwitchUI from '@material-ui/core/Switch';
 import SaveIcon from '@material-ui/icons/Save';
@@ -23,6 +23,13 @@ import {
 } from '../utils/requests';
 
 import withS3Data, { InnerProps, DataFromServer } from '../hocs/withS3Data';
+import AddIcon from "@material-ui/icons/Add";
+import DeleteIcon from "@material-ui/icons/Delete";
+import {
+  createDuplicateValidator,
+  EMPTY_ERROR_HELPER_TEXT,
+} from "./channelManagement/helpers/validation";
+import CloseIcon from "@material-ui/icons/Close";
 
 enum SwitchState {
   On = 'On',
@@ -58,6 +65,10 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   button: {
     marginRight: spacing(2),
   },
+  addButton: {
+    padding: "0.2em",
+    margin: "0.1em 0.2em",
+  },
   buttons: {
     marginTop: spacing(2),
     marginBottom: spacing(2),
@@ -81,6 +92,17 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   },
   textParagraph: {
     marginBottom: spacing(2),
+  },
+  input: {
+    display: "inline-block",
+    width:"33%",
+    float: "left",
+    padding: "0.2em",
+    margin: "0.1em 0.2em",
+  },
+  inputSpacing: {
+    padding: '10px 12px',
+    float: "left",
   },
 }));
 
@@ -130,6 +152,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     const isChecked = switchData.state === 'On';
 
     return (
+      <div>
       <FormControlLabel
         label={switchData.description}
         checked={switchData.state === 'On'}
@@ -138,6 +161,10 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
         value={switchId}
         key={switchId}
       />
+    <IconButton onClick={close} aria-label="close">
+      <DeleteIcon />
+    </IconButton>
+  </div>
     );
   };
 
@@ -145,13 +172,41 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     const [groupId, groupData] = group;
 
     return (
+
       <FormControl className={classes.formControl} key={groupId}>
-        <FormLabel>{groupData.description}</FormLabel>
+        <FormLabel  >{groupData.description}</FormLabel>
         {Object.entries(groupData.switches)
           .sort(sortByDescription)
           .map(([switchId, switchData]) =>
             createSwitchesFromGroupData(switchId, switchData, groupId),
           )}
+        <div>
+        <TextField
+          className={classes.input}
+          // error={errors.nickname !== undefined}
+          // helperText={errors.nickname ? errors.nickname.message : DESCRIPTION_DEFAULT_HELPER_TEXT}
+          name="switchName"
+          label="Switch name"
+          margin="normal"
+          variant="outlined"
+          autoFocus
+          fullWidth
+        />
+          <span  className={classes.inputSpacing}/>
+        <TextField
+          className={classes.input}
+          // error={errors.name !== undefined}
+          // helperText={errors.name ? errors.name.message : NAME_DEFAULT_HELPER_TEXT}
+          name="description"
+          label="Description"
+          margin="normal"
+          variant="outlined"
+          autoFocus
+          fullWidth
+        />
+          <span className={classes.inputSpacing}/>
+         <AddButton/>
+        </div>
       </FormControl>
     );
   };
@@ -168,6 +223,31 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     saveData();
     setNeedToSaveDataWarning(false);
   };
+  const actionAddNewSwitch = (): void => {
+
+    const updatedState = cloneDeep(data);
+
+    // updatedState[groupId].switches[switchId].state = SwitchState.Off;
+
+    setData(updatedState);
+    setNeedToSaveDataWarning(true);
+
+  };
+
+
+  const AddButton = (): JSX.Element => (
+    <div className={classes.buttons}>
+      <Button
+        variant="contained"
+        onClick={actionAddNewSwitch}
+        className={classes.addButton}
+        disabled={saving}
+      >
+        <AddIcon/>
+      </Button>
+    </div>
+  );
+
 
   const SaveButton = (): JSX.Element => (
     <div className={classes.buttons}>
