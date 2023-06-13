@@ -42,6 +42,10 @@ const templatesWithLabels = [
     template: BannerTemplate.WorldPressFreedomDayBanner,
     label: 'World Press Freedom Day',
   },
+  {
+    template: BannerTemplate.Scotus2023MomentBanner,
+    label: 'US Supreme Court 2023 Moment',
+  },
 ];
 
 const BannerTemplateSelector: React.FC<BannerTemplateSelectorProps> = ({

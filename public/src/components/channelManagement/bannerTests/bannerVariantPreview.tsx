@@ -160,6 +160,10 @@ const bannerModules = {
     path: 'worldPressFreedomDay/WorldPressFreedomDayBanner.js',
     name: 'WorldPressFreedomDayBanner',
   },
+  [BannerTemplate.Scotus2023MomentBanner]: {
+    path: 'usSupremeCourt2023/Scotus2023MomentBanner.js',
+    name: 'Scotus2023MomentBanner',
+  },
 };
 
 const useStyles = makeStyles(({ palette }: Theme) => ({
