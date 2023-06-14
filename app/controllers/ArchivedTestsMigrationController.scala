@@ -7,6 +7,7 @@ import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponent
 import services.{DynamoArchivedChannelTests, DynamoChannelTests}
 import zio.{IO, ZEnv}
 import models.Channel
+import models.Channel._
 import software.amazon.awssdk.services.dynamodb.model.{PutRequest, WriteRequest}
 
 import scala.concurrent.{ExecutionContext, Future}
