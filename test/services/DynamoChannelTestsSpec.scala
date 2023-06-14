@@ -8,7 +8,7 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import models.EpicTest._
 import org.scalatest.{Assertion, Assertions, BeforeAndAfterEach}
 import models.DynamoErrors.{DynamoError, DynamoNoLockError}
-import software.amazon.awssdk.services.dynamodb.model.{AttributeDefinition, BillingMode, CreateTableRequest, DeleteTableRequest, KeySchemaElement, KeyType}
+import software.amazon.awssdk.services.dynamodb.model.{AttributeDefinition, BillingMode, CreateTableRequest, DeleteTableRequest, GlobalSecondaryIndex, KeySchemaElement, KeyType}
 import zio.{ZEnv, ZIO}
 
 import java.net.URI
@@ -71,6 +71,16 @@ class DynamoChannelTestsSpec extends AsyncFlatSpec with Matchers with BeforeAndA
         .keySchema(
           KeySchemaElement.builder.attributeName("channel").keyType(KeyType.HASH).build,
           KeySchemaElement.builder.attributeName("name").keyType(KeyType.RANGE).build
+        )
+        .globalSecondaryIndexes(
+          GlobalSecondaryIndex
+            .builder()
+            .indexName("channel-status-index")
+            .keySchema(
+              KeySchemaElement.builder.attributeName("channel").keyType(KeyType.HASH).build,
+              KeySchemaElement.builder.attributeName("status").keyType(KeyType.RANGE).build
+            )
+            .build()
         )
         .billingMode(BillingMode.PAY_PER_REQUEST)
         .build
