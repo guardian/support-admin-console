@@ -27,9 +27,10 @@ import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
 import {
   createDuplicateValidator,
-  EMPTY_ERROR_HELPER_TEXT,
+  EMPTY_ERROR_HELPER_TEXT, INVALID_CHARACTERS_ERROR_HELPER_TEXT, VALID_CHARACTERS_REGEX,
 } from "./channelManagement/helpers/validation";
 import CloseIcon from "@material-ui/icons/Close";
+import {useForm} from "react-hook-form";
 
 enum SwitchState {
   On = 'On',
@@ -120,6 +121,12 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
 
   const [needToSaveDataWarning, setNeedToSaveDataWarning] = useState(false);
 
+  type FormData = {
+    switchId: string;
+    description: string;
+  };
+
+
   const displayNeedToSaveDataWarning = (): JSX.Element | false => {
     return (
       needToSaveDataWarning && (
@@ -170,6 +177,16 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
 
   const createGroupsFromData = (group: [string, SwitchGroup]): JSX.Element => {
     const [groupId, groupData] = group;
+    const { register, handleSubmit, errors } = useForm<FormData>();
+
+    const onSubmit = ({ switchId,description }: FormData): void => {
+      const updatedState = cloneDeep(data);
+
+      updatedState[groupId].switches[switchId] = { description: description, state: SwitchState.Off };
+      setData(updatedState);
+      setNeedToSaveDataWarning(true);
+    };
+
 
     return (
 
@@ -183,9 +200,17 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
         <div>
         <TextField
           className={classes.input}
-          // error={errors.nickname !== undefined}
-          // helperText={errors.nickname ? errors.nickname.message : DESCRIPTION_DEFAULT_HELPER_TEXT}
-          name="switchName"
+          inputRef={register({
+            required: EMPTY_ERROR_HELPER_TEXT,
+            validate: switchId => {
+              return (
+                createDuplicateValidator(Object.entries(groupData.switches).map(([switchId, switchData])=>switchId))(switchId)
+              );
+            },
+          })}
+          error={errors.switchId !== undefined}
+          helperText={errors.switchId ? errors.switchId.message : ""}
+          name="switchId"
           label="Switch name"
           margin="normal"
           variant="outlined"
@@ -195,8 +220,14 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
           <span  className={classes.inputSpacing}/>
         <TextField
           className={classes.input}
-          // error={errors.name !== undefined}
-          // helperText={errors.name ? errors.name.message : NAME_DEFAULT_HELPER_TEXT}
+          inputRef={register({
+            required: EMPTY_ERROR_HELPER_TEXT,
+            validate: description => {
+              return undefined
+            },
+          })}
+          error={errors.description !== undefined}
+          helperText={errors.description ? errors.description.message : ""}
           name="description"
           label="Description"
           margin="normal"
@@ -205,7 +236,16 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
           fullWidth
         />
           <span className={classes.inputSpacing}/>
-         <AddButton/>
+          <div className={classes.buttons}>
+            <Button
+              variant="contained"
+              onClick={handleSubmit(onSubmit)}
+              className={classes.addButton}
+              disabled={saving}
+            >
+              <AddIcon/>
+            </Button>
+          </div>
         </div>
       </FormControl>
     );
@@ -219,35 +259,11 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     </>
   );
 
+
   const actionSaveData = (): void => {
     saveData();
     setNeedToSaveDataWarning(false);
   };
-  const actionAddNewSwitch = (): void => {
-
-    const updatedState = cloneDeep(data);
-
-    // updatedState[groupId].switches[switchId].state = SwitchState.Off;
-
-    setData(updatedState);
-    setNeedToSaveDataWarning(true);
-
-  };
-
-
-  const AddButton = (): JSX.Element => (
-    <div className={classes.buttons}>
-      <Button
-        variant="contained"
-        onClick={actionAddNewSwitch}
-        className={classes.addButton}
-        disabled={saving}
-      >
-        <AddIcon/>
-      </Button>
-    </div>
-  );
-
 
   const SaveButton = (): JSX.Element => (
     <div className={classes.buttons}>
