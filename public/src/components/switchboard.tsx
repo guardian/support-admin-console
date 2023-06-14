@@ -281,22 +281,16 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
                                    switchId: string,
                                    description: string,
   ): void => {
-    const userConfirmation=confirm("You are going to delete the switch.Make sure you have already removed the switch  from support-frontend code. Are you sure you want to proceed?")
+    const userConfirmation=confirm(`Deleting switch "${description}". If this switch hasn’t been removed from support-frontend yet, this will cause errors! Make sure you delete it there first. Are you sure you want to proceed?`)
     console.log("UserConfirm",userConfirmation)
     userConfirmation ? confirmRemoveData(groupId,switchId,description) :   ""
   };
 
   const confirmRemoveData = (groupId: string,switchId:string,description:string): void  => {
-    console.log("Here")
-    console.log("OldData",cloneDeep(data))
     const updatedState = cloneDeep(data);
-    console.log("updatedState[groupId].switches[switchId]",updatedState[groupId].switches[switchId])
     delete updatedState[groupId].switches[switchId]
     setData(updatedState);
-    console.log("After data",updatedState)
-    console.log("NewData",cloneDeep(data))
     setNeedToSaveDataWarning(true);
-
   };
 
   return (
