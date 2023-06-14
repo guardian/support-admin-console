@@ -214,5 +214,9 @@ POST  /support-frontend/default-promos/update              controllers.DefaultPr
 GET   /frontend/super-mode                             controllers.SuperModeController.getSuperModeRows()
 GET   /frontend/epic-article-data                      controllers.SuperModeController.getArticleData()
 
+
+# ----- archived test migration ----- #
+POST  /migrate-archived-tests/:channel                 controllers.ArchivedTestsMigration.migrate(channel: String)
+
 # Map static resources from the /public folder to the /assets URL path
 GET  /assets/*file                                  controllers.Assets.at(path="/public", file)

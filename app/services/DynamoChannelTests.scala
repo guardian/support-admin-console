@@ -77,6 +77,25 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends StrictLo
       ).items
     }.mapError(DynamoGetError)
 
+  def getAllArchived(channel: Channel): ZIO[ZEnv, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
+    effectBlocking {
+      client.query(
+        QueryRequest
+          .builder
+          .tableName(tableName)
+          .keyConditionExpression("channel = :channel")
+          .expressionAttributeValues(Map(
+            ":channel" -> AttributeValue.builder.s(channel.toString).build,
+            ":archived" -> AttributeValue.builder.s("Archived").build
+          ).asJava)
+          .expressionAttributeNames(Map(
+            "#status" -> "status"
+          ).asJava)
+          .filterExpression("#status = :archived")
+          .build()
+      ).items
+    }.mapError(DynamoGetError)
+
   private def getAllInCampaign(campaignName: String): ZIO[ZEnv, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
     effectBlocking {
       client.query(
