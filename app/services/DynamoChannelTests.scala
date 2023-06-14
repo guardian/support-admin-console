@@ -22,6 +22,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends StrictLo
 
   private val tableName = s"support-admin-console-channel-tests-$stage"
   private val campaignNameIndex = "campaignName-name-index"
+  private val statusIndex = "channel-status-index"
 
   private def buildKey(channel: Channel, testName: String): java.util.Map[String, AttributeValue] =
     Map(
@@ -64,7 +65,13 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends StrictLo
         QueryRequest
           .builder
           .tableName(tableName)
-          .keyConditionExpression("channel = :channel")
+          .indexName(statusIndex)
+          /**
+           * Why `#status > :archived`?
+           * We want to exclude archived tests, but Dynamodb doesn't allow the `<>` (not-equal) operator in the sort key condition!
+           * However, because the valid values of status are (Archived, Draft, Live), we get away with using a greater-than comparison.
+           */
+          .keyConditionExpression("channel = :channel AND #status > :archived")
           .expressionAttributeValues(Map(
             ":channel" -> AttributeValue.builder.s(channel.toString).build,
             ":archived" -> AttributeValue.builder.s("Archived").build
@@ -72,7 +79,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends StrictLo
           .expressionAttributeNames(Map(
             "#status" -> "status"
           ).asJava)
-          .filterExpression("#status <> :archived")
+          .returnConsumedCapacity("TOTAL")
           .build()
       ).items
     }.mapError(DynamoGetError)
