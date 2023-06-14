@@ -35,6 +35,13 @@ Refresh automatically:
 npm run watch
 ```
 
+### Running scala tests
+The scala backend tests use dynamodb-local. This doesn't support Apple Silicon (M1).
+
+If while running `sbt test` you get the error `cannot load library: java.lang.UnsatisfiedLinkError: no sqlite4java-osx-aarch64`, use this work around:
+1. download the correct `.dylib` from e.g. https://repo1.maven.org/maven2/io/github/ganadist/sqlite4java/libsqlite4java-osx-arm64/1.0.392/libsqlite4java-osx-arm64-1.0.392.dylib
+2. copy it into the `dynamodb-local/DynamoDBLocal_lib/` directory in this project
+
 ### SSH
 You can ssh using [ssm-scala](https://github.com/guardian/ssm-scala):
 
