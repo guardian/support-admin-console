@@ -8,7 +8,7 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import models.EpicTest._
 import org.scalatest.{Assertion, Assertions, BeforeAndAfterEach}
 import models.DynamoErrors.{DynamoError, DynamoNoLockError}
-import software.amazon.awssdk.services.dynamodb.model.{AttributeDefinition, BillingMode, CreateTableRequest, DeleteTableRequest, GlobalSecondaryIndex, KeySchemaElement, KeyType}
+import software.amazon.awssdk.services.dynamodb.model.{AttributeDefinition, BillingMode, CreateTableRequest, DeleteTableRequest, GlobalSecondaryIndex, KeySchemaElement, KeyType, Projection, ProjectionType}
 import zio.{ZEnv, ZIO}
 
 import java.net.URI
@@ -66,7 +66,8 @@ class DynamoChannelTestsSpec extends AsyncFlatSpec with Matchers with BeforeAndA
         .tableName(tableName)
         .attributeDefinitions(
           AttributeDefinition.builder.attributeName("channel").attributeType("S").build,
-          AttributeDefinition.builder.attributeName("name").attributeType("S").build
+          AttributeDefinition.builder.attributeName("name").attributeType("S").build,
+          AttributeDefinition.builder.attributeName("status").attributeType("S").build
         )
         .keySchema(
           KeySchemaElement.builder.attributeName("channel").keyType(KeyType.HASH).build,
@@ -80,6 +81,7 @@ class DynamoChannelTestsSpec extends AsyncFlatSpec with Matchers with BeforeAndA
               KeySchemaElement.builder.attributeName("channel").keyType(KeyType.HASH).build,
               KeySchemaElement.builder.attributeName("status").keyType(KeyType.RANGE).build
             )
+            .projection(Projection.builder().projectionType(ProjectionType.ALL).build())
             .build()
         )
         .billingMode(BillingMode.PAY_PER_REQUEST)
