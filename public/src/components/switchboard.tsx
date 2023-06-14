@@ -27,9 +27,8 @@ import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
 import {
   createDuplicateValidator,
-  EMPTY_ERROR_HELPER_TEXT, INVALID_CHARACTERS_ERROR_HELPER_TEXT, VALID_CHARACTERS_REGEX,
+  EMPTY_ERROR_HELPER_TEXT,
 } from "./channelManagement/helpers/validation";
-import CloseIcon from "@material-ui/icons/Close";
 import {useForm} from "react-hook-form";
 
 enum SwitchState {
@@ -120,7 +119,6 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
   const classes = useStyles();
 
   const [needToSaveDataWarning, setNeedToSaveDataWarning] = useState(false);
-
   type FormData = {
     switchId: string;
     description: string;
@@ -168,9 +166,10 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
         value={switchId}
         key={switchId}
       />
-    <IconButton onClick={close} aria-label="close">
-      <DeleteIcon />
-    </IconButton>
+        <IconButton onClick={(): void => actionRemoveSwitchData(groupId,switchId,switchData.description)} aria-label="removeSwitch">
+          <DeleteIcon />
+        </IconButton>
+
   </div>
     );
   };
@@ -186,7 +185,6 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
       setData(updatedState);
       setNeedToSaveDataWarning(true);
     };
-
 
     return (
 
@@ -278,6 +276,28 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
       </Button>
     </div>
   );
+
+  const actionRemoveSwitchData = ( groupId: string,
+                                   switchId: string,
+                                   description: string,
+  ): void => {
+    const userConfirmation=confirm("You are going to delete the switch.Make sure you have already removed the switch  from support-frontend code. Are you sure you want to proceed?")
+    console.log("UserConfirm",userConfirmation)
+    userConfirmation ? confirmRemoveData(groupId,switchId,description) :   ""
+  };
+
+  const confirmRemoveData = (groupId: string,switchId:string,description:string): void  => {
+    console.log("Here")
+    console.log("OldData",cloneDeep(data))
+    const updatedState = cloneDeep(data);
+    console.log("updatedState[groupId].switches[switchId]",updatedState[groupId].switches[switchId])
+    delete updatedState[groupId].switches[switchId]
+    setData(updatedState);
+    console.log("After data",updatedState)
+    console.log("NewData",cloneDeep(data))
+    setNeedToSaveDataWarning(true);
+
+  };
 
   return (
     <form className={classes.form}>
