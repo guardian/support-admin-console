@@ -6,7 +6,6 @@ import io.circe.Json
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 import services.{DynamoArchivedChannelTests, DynamoChannelTests}
 import zio.{IO, ZEnv}
-import io.circe.generic.auto._
 import models.Channel
 import models.Channel._
 import software.amazon.awssdk.services.dynamodb.model.{PutRequest, WriteRequest}
