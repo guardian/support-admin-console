@@ -61,6 +61,7 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
     paddingLeft: spacing(2),
     paddingRight: spacing(2),
     border: `1px solid ${palette.grey['300']}`,
+    width:"45%",
   },
   button: {
     marginRight: spacing(2),
@@ -96,13 +97,24 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   input: {
     display: "inline-block",
     width:"33%",
-    float: "left",
     padding: "0.2em",
     margin: "0.1em 0.2em",
+  },
+  inputGroup: {
+    marginTop: spacing(2),
+    display: "flex",
+    justifyContent: "space-evenly",
   },
   inputSpacing: {
     padding: '10px 12px',
     float: "left",
+  },
+  switchLayout: {
+    display: "flex",
+    justifyContent: "space-between",
+    "&:nth-child(even)": {
+      backgroundColor: "#e7e7e7",
+    }
   },
 }));
 
@@ -157,7 +169,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     const isChecked = switchData.state === 'On';
 
     return (
-      <div>
+      <div className={classes.switchLayout}>
       <FormControlLabel
         label={switchData.description}
         checked={switchData.state === 'On'}
@@ -195,7 +207,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
           .map(([switchId, switchData]) =>
             createSwitchesFromGroupData(switchId, switchData, groupId),
           )}
-        <div>
+        <div className={classes.inputGroup}>
         <TextField
           className={classes.input}
           inputRef={register({
