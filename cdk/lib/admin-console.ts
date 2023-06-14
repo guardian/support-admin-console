@@ -56,6 +56,19 @@ export class AdminConsole extends GuStack {
       },
     });
 
+    table.addGlobalSecondaryIndex({
+      indexName: 'channel-status-index',
+      projectionType: ProjectionType.ALL,
+      partitionKey: {
+        name: 'channel',
+        type: AttributeType.STRING,
+      },
+      sortKey: {
+        name: 'status',
+        type: AttributeType.STRING,
+      },
+    });
+
     // Give it a better name
     const defaultChild = table.node.defaultChild as unknown as CfnElement;
     defaultChild.overrideLogicalId(id);
