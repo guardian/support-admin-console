@@ -84,6 +84,31 @@ export class AdminConsole extends GuStack {
     return table;
   }
 
+  buildArchivedTestsTable(): Table {
+    const id = `ArchivedChannelTestsDynamoTable`;
+
+    const table = new Table(this, id, {
+      tableName: `support-admin-console-archived-channel-tests-${this.stage}`,
+      removalPolicy: RemovalPolicy.RETAIN,
+      pointInTimeRecovery: this.stage === 'PROD',
+      billingMode: BillingMode.PAY_PER_REQUEST,
+      partitionKey: {
+        name: 'channel',
+        type: AttributeType.STRING,
+      },
+      sortKey: {
+        name: 'name',
+        type: AttributeType.STRING,
+      },
+    });
+
+    // Give it a better name
+    const defaultChild = table.node.defaultChild as unknown as CfnElement;
+    defaultChild.overrideLogicalId(id);
+
+    return table;
+  }
+
   buildChannelTestsDynamoPolicies(table: Table): GuAllowPolicy[] {
     return [
       new GuDynamoDBReadPolicy(this, `DynamoRead-${table.node.id}`, {
@@ -98,7 +123,7 @@ export class AdminConsole extends GuStack {
     ];
   }
 
-  buildCampaignsDynamoPolicies(table: Table): GuAllowPolicy[] {
+  buildDynamoPolicies(table: Table): GuAllowPolicy[] {
     return [
       new GuDynamoDBReadPolicy(this, `DynamoRead-${table.node.id}`, {
         tableName: table.tableName,
@@ -117,10 +142,12 @@ export class AdminConsole extends GuStack {
     const app = 'admin-console';
 
     const channelTestsDynamoTable = this.buildTestsTable();
+    const archivedTestsDynamoTable = this.buildArchivedTestsTable();
     const campaignsDynamoTable = this.buildCampaignsTable();
     const channelTestsDynamoPolicies =
       this.buildChannelTestsDynamoPolicies(channelTestsDynamoTable);
-    const campaignsDynamoPolicies = this.buildCampaignsDynamoPolicies(campaignsDynamoTable);
+    const campaignsDynamoPolicies = this.buildDynamoPolicies(campaignsDynamoTable);
+    const archivedTestsDynamoPolicies = this.buildDynamoPolicies(archivedTestsDynamoTable);
 
     const userData = `#!/bin/bash -ev
     aws --region ${this.region} s3 cp s3://membership-dist/${this.stack}/${this.stage}/${app}/support-admin-console_1.0-SNAPSHOT_all.deb /tmp
@@ -154,6 +181,7 @@ export class AdminConsole extends GuStack {
       }),
       ...channelTestsDynamoPolicies,
       ...campaignsDynamoPolicies,
+      ...archivedTestsDynamoPolicies,
       new GuDynamoDBReadPolicy(this, `DynamoRead-super-mode`, {
         tableName: 'super-mode-PROD', // always PROD for super mode
       }),
