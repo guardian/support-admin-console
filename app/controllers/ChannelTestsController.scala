@@ -10,7 +10,7 @@ import models.DynamoErrors._
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.S3Client.{S3ClientError, S3ObjectSettings}
-import services.{DynamoChannelTests, S3Json, VersionedS3Data}
+import services.{DynamoArchivedChannelTests, DynamoChannelTests, S3Json, VersionedS3Data}
 import utils.Circe.noNulls
 import zio.{IO, UIO, ZEnv, ZIO}
 import com.typesafe.scalalogging.LazyLogging
@@ -37,7 +37,8 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
   lockFileName: String,
   channel: Channel,
   runtime: zio.Runtime[ZEnv],
-  dynamo: DynamoChannelTests
+  dynamoTests: DynamoChannelTests,
+  dynamoArchivedTests: DynamoArchivedChannelTests,
 )(implicit ec: ExecutionContext) extends AbstractController(components) with Circe with LazyLogging {
 
   private val lockObjectSettings = S3ObjectSettings(
@@ -72,7 +73,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
 
   def get = authAction.async { request =>
     runWithLockStatus { case VersionedS3Data(lockStatus, _) =>
-      dynamo
+      dynamoTests
         .getAllTests[T](channel)
         .map { channelTests =>
           val response = ChannelTestsResponse(
@@ -132,7 +133,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
 
         val testNames: List[String] = request.body
         val result = for {
-          _ <- dynamo.setPriorities(testNames, channel)
+          _ <- dynamoTests.setPriorities(testNames, channel)
           _ <- setLockStatus(VersionedS3Data(LockStatus.unlocked, lockFileVersion))
         } yield Ok("updated")
 
@@ -149,7 +150,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
 
   def getTest(testName: String) = authAction.async { request =>
     run {
-      dynamo
+      dynamoTests
         .getTest(testName, channel)
         .map(test => Ok(noNulls(test.asJson)))
     }
@@ -159,7 +160,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
     run {
       val test = request.body
       logger.info(s"${request.user.email} is updating $channel/'${test.name}'")
-      dynamo
+      dynamoTests
         .updateTest(test, channel, request.user.email)
         .map(_ => Ok("updated"))
         .catchSome { case DynamoNoLockError(error) =>
@@ -173,7 +174,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
     run {
       val test = request.body
       logger.info(s"${request.user.email} is creating $channel/'${test.name}'")
-      dynamo
+      dynamoTests
         .createTest(test, channel)
         .map(_ => Ok("created"))
         .catchSome { case DynamoDuplicateNameError(error) =>
@@ -186,7 +187,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
   def lockTest(testName: String) = authAction.async { request =>
     run {
       logger.info(s"${request.user.email} is locking $channel/'$testName'")
-      dynamo.lockTest(testName, channel, request.user.email, force = false)
+      dynamoTests.lockTest(testName, channel, request.user.email, force = false)
         .map(_ => Ok("locked"))
         .catchSome { case DynamoNoLockError(error) =>
           logger.warn(s"Failed to lock $channel/'$testName' because it is already locked: ${error.getMessage}")
@@ -198,7 +199,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
   def unlockTest(testName: String) = authAction.async { request =>
     run {
       logger.info(s"${request.user.email} is unlocking $channel/'$testName'")
-      dynamo.unlockTest(testName, channel, request.user.email)
+      dynamoTests.unlockTest(testName, channel, request.user.email)
         .map(_ => Ok("unlocked"))
         .catchSome { case DynamoNoLockError(error) =>
           logger.warn(s"Failed to unlock $channel/'$testName' because user ${request.user.email} does not have it locked: ${error.getMessage}")
@@ -210,7 +211,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
   def forceLockTest(testName: String) = authAction.async { request =>
     run {
       logger.info(s"${request.user.email} is force locking $channel/'$testName'")
-      dynamo.lockTest(testName, channel, request.user.email, force = true)
+      dynamoTests.lockTest(testName, channel, request.user.email, force = true)
         .map(_ => Ok("locked"))
     }
   }
@@ -224,11 +225,26 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
 
   def setStatus(rawStatus: String) = authAction.async(circe.json[List[String]]) { request =>
     run {
-      logger.info(s"${request.user.email} is changing status to $rawStatus on: ${request.body}")
+      val testNames = request.body
+      logger.info(s"${request.user.email} is changing status to $rawStatus on: $testNames")
       parseStatus(rawStatus) match {
+        case Some(models.Status.Archived) =>
+          // Special handling for archiving of tests, which are moved to another table
+          dynamoTests
+            .getRawTests(channel, testNames)
+            // write them to the archive table
+            .flatMap(dynamoArchivedTests.putAllRaw)
+            // now delete them from the main table
+            .flatMap(_ => dynamoTests.deleteTests(testNames, channel))
+            .map { _ =>
+              logger.info(s"Archived and deleted ${testNames.length} $channel tests")
+              Ok(rawStatus)
+            }
+
         case Some(status) =>
-          dynamo.updateStatuses(request.body, channel, status)
+          dynamoTests.updateStatuses(testNames, channel, status)
             .map(_ => Ok(status.toString))
+
         case None => ZIO.succeed(BadRequest(s"Invalid status: $rawStatus"))
       }
 
