@@ -77,6 +77,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends StrictLo
       ).items
     }.mapError(DynamoGetError)
 
+  // TODO - migrate to use the new archived tests table
   def getAllArchived(channel: Channel): ZIO[ZEnv, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
     effectBlocking {
       client.query(
