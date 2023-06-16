@@ -11,7 +11,7 @@ import software.amazon.awssdk.services.dynamodb.model._
 import utils.Circe.{dynamoMapToJson, jsonToDynamo}
 import zio.blocking.effectBlocking
 import zio.duration.durationInt
-import zio.stream.{ZSink, ZStream}
+import zio.stream.ZStream
 import zio.{ZEnv, ZIO}
 
 import java.time.OffsetDateTime
