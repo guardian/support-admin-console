@@ -4,7 +4,7 @@ import com.gu.googleauth.AuthAction
 import models.{Channel, HeaderTest}
 import models.HeaderTest._
 import play.api.mvc.{AnyContent, ControllerComponents}
-import services.DynamoChannelTests
+import services.{DynamoArchivedChannelTests, DynamoChannelTests}
 import zio.ZEnv
 
 import scala.concurrent.ExecutionContext
@@ -18,7 +18,8 @@ class HeaderTestsController(
   components: ControllerComponents,
   stage: String,
   runtime: zio.Runtime[ZEnv],
-  dynamo: DynamoChannelTests
+  dynamoTests: DynamoChannelTests,
+  dynamoArchivedTests: DynamoArchivedChannelTests,
 )(implicit ec: ExecutionContext) extends ChannelTestsController[HeaderTest](
   authAction,
   components,
@@ -26,5 +27,6 @@ class HeaderTestsController(
   lockFileName = HeaderTestsController.name,
   channel = Channel.Header,
   runtime = runtime,
-  dynamo
+  dynamoTests,
+  dynamoArchivedTests
 )

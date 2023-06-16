@@ -61,4 +61,15 @@ class DynamoArchivedChannelTests(stage: String, client: DynamoDbClient) extends 
       }
       .unit // on success, the result value isn't meaningful
   }
+
+  def putAllRaw(items: List[java.util.Map[String, AttributeValue]]): ZIO[ZEnv, DynamoPutError, Unit] = {
+    val writeRequests = items.map(item => WriteRequest.builder.putRequest(
+      PutRequest
+        .builder
+        .item(item)
+        .build()
+    ).build())
+
+    putAllBatched(writeRequests)
+  }
 }

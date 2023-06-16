@@ -11,7 +11,7 @@ import software.amazon.awssdk.services.dynamodb.model._
 import utils.Circe.{dynamoMapToJson, jsonToDynamo}
 import zio.blocking.effectBlocking
 import zio.duration.durationInt
-import zio.stream.ZStream
+import zio.stream.{ZSink, ZStream}
 import zio.{ZEnv, ZIO}
 
 import java.time.OffsetDateTime
@@ -225,6 +225,22 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends StrictLo
         .toList
         .sortBy(_.priority)
     )
+
+  // Does not decode the Dynamodb data
+  def getRawTests(channel: Channel, testNames: List[String]): ZIO[ZEnv, DynamoGetError, List[java.util.Map[String, AttributeValue]]] = {
+    // Build a batch item request
+    val items = testNames.map(testName => buildKey(channel, testName))
+    val keysAndAttributes = KeysAndAttributes.builder().keys(items.asJava).build()
+
+    val request = BatchGetItemRequest.builder()
+      .requestItems(Map(tableName -> keysAndAttributes).asJava)
+      .build()
+
+    effectBlocking {
+      client.batchGetItem(request)
+        .responses().asScala.get(tableName).map(_.asScala.toList).getOrElse(Nil)
+    }.mapError(DynamoGetError)
+  }
 
   // Returns all tests in a campaign, sorted by channel
   import models.ChannelTest.channelTestDecoder
