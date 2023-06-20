@@ -8,11 +8,12 @@ import {
   Button,
   FormLabel,
   FormControl,
-  FormControlLabel, TextField, IconButton,
+  FormControlLabel, TextField, IconButton, Checkbox, List, ListItem,
 } from '@material-ui/core';
 import SwitchUI from '@material-ui/core/Switch';
 import SaveIcon from '@material-ui/icons/Save';
 import Alert from '@material-ui/lab/Alert';
+import {Dialog, DialogTitle, DialogContent, DialogActions} from '@mui/material';
 
 import cloneDeep from 'lodash/cloneDeep';
 
@@ -30,6 +31,8 @@ import {
   EMPTY_ERROR_HELPER_TEXT,
 } from "./channelManagement/helpers/validation";
 import {useForm} from "react-hook-form";
+import CloseIcon from "@material-ui/icons/Close";
+import ListItemText from "@material-ui/core/ListItemText";
 
 enum SwitchState {
   On = 'On',
@@ -131,6 +134,9 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
   const classes = useStyles();
 
   const [needToSaveDataWarning, setNeedToSaveDataWarning] = useState(false);
+  const [newUnsavedData, setNewUnsavedData] = useState(false);
+  const [pendingChanges, setPendingChanges] = useState<string[]>([]);
+
   type FormData = {
     switchId: string;
     description: string;
@@ -142,10 +148,24 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
       needToSaveDataWarning && (
         <Alert severity="warning">
           Switch settings have been changed. Changes need to be saved before they take effect!
+          <List>
+            {pendingChanges.map((change, index) => (
+              <ListItem key={index}>
+                <ListItemText primary={change} />
+              </ListItem>
+            ))}
+          </List>
         </Alert>
       )
     );
   };
+
+  const setPendingChange =(changeName:string,description:string,groupId:string): void =>{
+    const unsavedChange=changeName +" "+ description +" in "+groupId
+   // Add the changeName to the list of pendingChanges
+    setPendingChanges((prevChanges) => [...prevChanges, unsavedChange]);
+
+  }
 
   const updateSwitchSetting = (
     switchId: string,
@@ -156,8 +176,10 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     const updatedState = cloneDeep(data);
 
     updatedState[groupId].switches[switchId].state = isChecked ? SwitchState.On : SwitchState.Off;
-
+    let currentSwitchState= updatedState[groupId].switches[switchId].state
     setData(updatedState);
+
+    setPendingChange("Turned "+ currentSwitchState +":",switchData.description,groupId)
     setNeedToSaveDataWarning(true);
   };
 
@@ -195,13 +217,15 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
 
       updatedState[groupId].switches[switchId] = { description: description, state: SwitchState.Off };
       setData(updatedState);
+      setNewUnsavedData(true);
+      setPendingChange("Added", description,groupId);
       setNeedToSaveDataWarning(true);
     };
 
     return (
 
       <FormControl className={classes.formControl} key={groupId}>
-        <FormLabel  >{groupData.description}</FormLabel>
+        <FormLabel  > <strong>{groupData.description} </strong></FormLabel><br/>
         {Object.entries(groupData.switches)
           .sort(sortByDescription)
           .map(([switchId, switchData]) =>
@@ -273,6 +297,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
   const actionSaveData = (): void => {
     saveData();
     setNeedToSaveDataWarning(false);
+    setNewUnsavedData(false);
   };
 
   const SaveButton = (): JSX.Element => (
@@ -302,6 +327,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     const updatedState = cloneDeep(data);
     delete updatedState[groupId].switches[switchId]
     setData(updatedState);
+    setPendingChange("Removed",description,groupId)
     setNeedToSaveDataWarning(true);
   };
 
