@@ -365,22 +365,6 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
       <SaveButton />
 
       <Divider variant="fullWidth" className={classes.divider} />
-
-      <Typography className={classes.newSwitchesHeader} variant="h6">
-        Create new switches
-      </Typography>
-      <Typography className={classes.textParagraph} variant="body1">
-        Currently, to create a new switch, update the JSON file in AWS S3 to include details of the
-        switch, then refresh this page so that the switch status can be viewed and updated. Also,
-        you need to add the new switch to{' '}
-        <a href="https://github.com/guardian/support-frontend/blob/main/support-frontend/app/admin/settings/Switches.scala">
-          support-frontend.
-        </a>
-      </Typography>
-      <Typography className={classes.textParagraph} variant="body1">
-        If there is a demand for it, we can add functionality to create new switches (and new switch
-        groups) to this page in due course.
-      </Typography>
     </form>
   );
 };
