@@ -126,7 +126,7 @@ export const APPLE_NEWS_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantHighlightedText: true,
   allowVariantImageUrl: false,
   allowVariantFooter: false,
-  allowVariantCustomPrimaryCta: false,
+  allowVariantCustomPrimaryCta: true,
   allowVariantCustomSecondaryCta: false,
   allowVariantSeparateArticleCount: false,
   allowVariantTicker: false,
