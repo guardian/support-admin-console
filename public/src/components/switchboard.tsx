@@ -179,7 +179,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     updatedState[groupId].switches[switchId].state = isChecked ? SwitchState.On : SwitchState.Off;
     const currentSwitchState = updatedState[groupId].switches[switchId].state;
     setData(updatedState);
-
+    setNewUnsavedData(true);
     setPendingChange(
       'Turned ' + currentSwitchState + ':',
       switchData.description,
@@ -310,6 +310,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     saveData();
     setNeedToSaveDataWarning(false);
     setNewUnsavedData(false);
+    setPendingChanges([]);
   };
 
   const SaveButton = (): JSX.Element => (
@@ -346,6 +347,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     const updatedState = cloneDeep(data);
     delete updatedState[groupId].switches[switchId];
     setData(updatedState);
+    setNewUnsavedData(true);
     setPendingChange('Removed', description, groupData.description);
     setNeedToSaveDataWarning(true);
   };
@@ -363,7 +365,6 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
 
       {displayNeedToSaveDataWarning()}
       <SaveButton />
-
       <Divider variant="fullWidth" className={classes.divider} />
     </form>
   );
