@@ -8,12 +8,15 @@ import {
   Button,
   FormLabel,
   FormControl,
-  FormControlLabel, TextField, IconButton, Checkbox, List, ListItem,
+  FormControlLabel,
+  TextField,
+  IconButton,
+  List,
+  ListItem,
 } from '@material-ui/core';
 import SwitchUI from '@material-ui/core/Switch';
 import SaveIcon from '@material-ui/icons/Save';
 import Alert from '@material-ui/lab/Alert';
-import {Dialog, DialogTitle, DialogContent, DialogActions} from '@mui/material';
 
 import cloneDeep from 'lodash/cloneDeep';
 
@@ -24,15 +27,14 @@ import {
 } from '../utils/requests';
 
 import withS3Data, { InnerProps, DataFromServer } from '../hocs/withS3Data';
-import AddIcon from "@material-ui/icons/Add";
-import DeleteIcon from "@material-ui/icons/Delete";
+import AddIcon from '@material-ui/icons/Add';
+import DeleteIcon from '@material-ui/icons/Delete';
 import {
   createDuplicateValidator,
   EMPTY_ERROR_HELPER_TEXT,
-} from "./channelManagement/helpers/validation";
-import {useForm} from "react-hook-form";
-import CloseIcon from "@material-ui/icons/Close";
-import ListItemText from "@material-ui/core/ListItemText";
+} from './channelManagement/helpers/validation';
+import { useForm } from 'react-hook-form';
+import ListItemText from '@material-ui/core/ListItemText';
 
 enum SwitchState {
   On = 'On',
@@ -64,14 +66,14 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
     paddingLeft: spacing(2),
     paddingRight: spacing(2),
     border: `1px solid ${palette.grey['300']}`,
-    width:"45%",
+    width: '45%',
   },
   button: {
     marginRight: spacing(2),
   },
   addButton: {
-    padding: "0.2em",
-    margin: "0.1em 0.2em",
+    padding: '0.2em',
+    margin: '0.1em 0.2em',
   },
   buttons: {
     marginTop: spacing(2),
@@ -98,26 +100,26 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
     marginBottom: spacing(2),
   },
   input: {
-    display: "inline-block",
-    width:"33%",
-    padding: "0.2em",
-    margin: "0.1em 0.2em",
+    display: 'inline-block',
+    width: '33%',
+    padding: '0.2em',
+    margin: '0.1em 0.2em',
   },
   inputGroup: {
     marginTop: spacing(2),
-    display: "flex",
-    justifyContent: "space-evenly",
+    display: 'flex',
+    justifyContent: 'space-evenly',
   },
   inputSpacing: {
     padding: '10px 12px',
-    float: "left",
+    float: 'left',
   },
   switchLayout: {
-    display: "flex",
-    justifyContent: "space-between",
-    "&:nth-child(even)": {
-      backgroundColor: "#e7e7e7",
-    }
+    display: 'flex',
+    justifyContent: 'space-between',
+    '&:nth-child(even)': {
+      backgroundColor: '#e7e7e7',
+    },
   },
 }));
 
@@ -142,10 +144,10 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     description: string;
   };
 
-
   const displayNeedToSaveDataWarning = (): JSX.Element | false => {
     return (
-      needToSaveDataWarning && (
+      needToSaveDataWarning &&
+      newUnsavedData && (
         <Alert severity="warning">
           Switch settings have been changed. Changes need to be saved before they take effect!
           <List>
@@ -160,51 +162,56 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     );
   };
 
-  const setPendingChange =(changeName:string,description:string,groupId:string): void =>{
-    const unsavedChange=changeName +" "+ description +" in "+groupId
-   // Add the changeName to the list of pendingChanges
-    setPendingChanges((prevChanges) => [...prevChanges, unsavedChange]);
-
-  }
+  const setPendingChange = (changeName: string, description: string, groupId: string): void => {
+    const unsavedChange = changeName + ' ' + description + ' in ' + groupId;
+    // Add the changeName to the list of pendingChanges
+    setPendingChanges(prevChanges => [...prevChanges, unsavedChange]);
+  };
 
   const updateSwitchSetting = (
     switchId: string,
     switchData: Switch,
-    groupId: string,
+    group: [string, SwitchGroup],
     isChecked: boolean,
   ): void => {
     const updatedState = cloneDeep(data);
-
+    const [groupId, groupData] = group;
     updatedState[groupId].switches[switchId].state = isChecked ? SwitchState.On : SwitchState.Off;
-    let currentSwitchState= updatedState[groupId].switches[switchId].state
+    const currentSwitchState = updatedState[groupId].switches[switchId].state;
     setData(updatedState);
 
-    setPendingChange("Turned "+ currentSwitchState +":",switchData.description,groupId)
+    setPendingChange(
+      'Turned ' + currentSwitchState + ':',
+      switchData.description,
+      groupData.description,
+    );
     setNeedToSaveDataWarning(true);
   };
 
   const createSwitchesFromGroupData = (
     switchId: string,
     switchData: Switch,
-    groupId: string,
+    group: [string, SwitchGroup],
   ): JSX.Element => {
     const isChecked = switchData.state === 'On';
 
     return (
       <div className={classes.switchLayout}>
-      <FormControlLabel
-        label={switchData.description}
-        checked={switchData.state === 'On'}
-        control={<SwitchUI />}
-        onChange={(): void => updateSwitchSetting(switchId, switchData, groupId, !isChecked)}
-        value={switchId}
-        key={switchId}
-      />
-        <IconButton onClick={(): void => actionRemoveSwitchData(groupId,switchId,switchData.description)} aria-label="removeSwitch">
+        <FormControlLabel
+          label={switchData.description}
+          checked={switchData.state === 'On'}
+          control={<SwitchUI />}
+          onChange={(): void => updateSwitchSetting(switchId, switchData, group, !isChecked)}
+          value={switchId}
+          key={switchId}
+        />
+        <IconButton
+          onClick={(): void => actionRemoveSwitchData(group, switchId, switchData.description)}
+          aria-label="removeSwitch"
+        >
           <DeleteIcon />
         </IconButton>
-
-  </div>
+      </div>
     );
   };
 
@@ -212,64 +219,70 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     const [groupId, groupData] = group;
     const { register, handleSubmit, errors } = useForm<FormData>();
 
-    const onSubmit = ({ switchId,description }: FormData): void => {
+    const onSubmit = ({ switchId, description }: FormData): void => {
       const updatedState = cloneDeep(data);
 
-      updatedState[groupId].switches[switchId] = { description: description, state: SwitchState.Off };
+      updatedState[groupId].switches[switchId] = {
+        description: description,
+        state: SwitchState.Off,
+      };
       setData(updatedState);
       setNewUnsavedData(true);
-      setPendingChange("Added", description,groupId);
+      setPendingChange('Added', description, groupData.description);
       setNeedToSaveDataWarning(true);
     };
 
     return (
-
       <FormControl className={classes.formControl} key={groupId}>
-        <FormLabel  > <strong>{groupData.description} </strong></FormLabel><br/>
+        <FormLabel>
+          {' '}
+          <strong>{groupData.description} </strong>
+        </FormLabel>
+        <br />
         {Object.entries(groupData.switches)
           .sort(sortByDescription)
           .map(([switchId, switchData]) =>
-            createSwitchesFromGroupData(switchId, switchData, groupId),
+            createSwitchesFromGroupData(switchId, switchData, group),
           )}
         <div className={classes.inputGroup}>
-        <TextField
-          className={classes.input}
-          inputRef={register({
-            required: EMPTY_ERROR_HELPER_TEXT,
-            validate: switchId => {
-              return (
-                createDuplicateValidator(Object.entries(groupData.switches).map(([switchId, switchData])=>switchId))(switchId)
-              );
-            },
-          })}
-          error={errors.switchId !== undefined}
-          helperText={errors.switchId ? errors.switchId.message : ""}
-          name="switchId"
-          label="Switch name"
-          margin="normal"
-          variant="outlined"
-          autoFocus
-          fullWidth
-        />
-          <span  className={classes.inputSpacing}/>
-        <TextField
-          className={classes.input}
-          inputRef={register({
-            required: EMPTY_ERROR_HELPER_TEXT,
-            validate: description => {
-              return undefined
-            },
-          })}
-          error={errors.description !== undefined}
-          helperText={errors.description ? errors.description.message : ""}
-          name="description"
-          label="Description"
-          margin="normal"
-          variant="outlined"
-          autoFocus
-          fullWidth
-        />
-          <span className={classes.inputSpacing}/>
+          <TextField
+            className={classes.input}
+            inputRef={register({
+              required: EMPTY_ERROR_HELPER_TEXT,
+              validate: switchId => {
+                return createDuplicateValidator(Object.keys(groupData.switches))(switchId);
+              },
+            })}
+            error={errors.switchId !== undefined}
+            helperText={errors.switchId ? errors.switchId.message : ''}
+            name="switchId"
+            label="Switch name"
+            margin="normal"
+            variant="outlined"
+            autoFocus
+            fullWidth
+          />
+          <span className={classes.inputSpacing} />
+          <TextField
+            className={classes.input}
+            inputRef={register({
+              required: EMPTY_ERROR_HELPER_TEXT,
+              validate: description => {
+                return createDuplicateValidator(
+                  Object.values(groupData.switches).map(switchData => switchData.description),
+                )(description);
+              },
+            })}
+            error={errors.description !== undefined}
+            helperText={errors.description ? errors.description.message : ''}
+            name="description"
+            label="Description"
+            margin="normal"
+            variant="outlined"
+            autoFocus
+            fullWidth
+          />
+          <span className={classes.inputSpacing} />
           <div className={classes.buttons}>
             <Button
               variant="contained"
@@ -277,7 +290,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
               className={classes.addButton}
               disabled={saving}
             >
-              <AddIcon/>
+              <AddIcon />
             </Button>
           </div>
         </div>
@@ -292,7 +305,6 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
         .map(group => createGroupsFromData(group))}
     </>
   );
-
 
   const actionSaveData = (): void => {
     saveData();
@@ -314,20 +326,27 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     </div>
   );
 
-  const actionRemoveSwitchData = ( groupId: string,
-                                   switchId: string,
-                                   description: string,
+  const actionRemoveSwitchData = (
+    group: [string, SwitchGroup],
+    switchId: string,
+    description: string,
   ): void => {
-    const userConfirmation=confirm(`Deleting switch "${description}". If this switch hasn’t been removed from support-frontend yet, this will cause errors! Make sure you delete it there first. Are you sure you want to proceed?`)
-    console.log("UserConfirm",userConfirmation)
-    userConfirmation ? confirmRemoveData(groupId,switchId,description) :   ""
+    const userConfirmation = confirm(
+      `Deleting switch "${description}". If this switch hasn’t been removed from support-frontend yet, this will cause errors! Make sure you delete it there first. Are you sure you want to proceed?`,
+    );
+    userConfirmation ? confirmRemoveData(group, switchId, description) : '';
   };
 
-  const confirmRemoveData = (groupId: string,switchId:string,description:string): void  => {
+  const confirmRemoveData = (
+    group: [string, SwitchGroup],
+    switchId: string,
+    description: string,
+  ): void => {
+    const [groupId, groupData] = group;
     const updatedState = cloneDeep(data);
-    delete updatedState[groupId].switches[switchId]
+    delete updatedState[groupId].switches[switchId];
     setData(updatedState);
-    setPendingChange("Removed",description,groupId)
+    setPendingChange('Removed', description, groupData.description);
     setNeedToSaveDataWarning(true);
   };
 
