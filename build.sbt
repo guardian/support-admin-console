@@ -38,6 +38,7 @@ libraryDependencies ++= Seq(
 
 dependencyOverrides ++= List(
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
+  // The version of netty-handler currently used by athena has a vulnerability - https://security.snyk.io/vuln/SNYK-JAVA-IONETTY-5725787
   "io.netty" % "netty-handler" % "4.1.94.Final"
 )
 
