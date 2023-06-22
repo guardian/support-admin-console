@@ -6,7 +6,7 @@ version := "1.0-SNAPSHOT"
 scalaVersion := "2.13.10"
 
 val circeVersion = "0.14.1"
-val awsVersion = "2.18.39"
+val awsVersion = "2.20.89"
 val zioVersion = "1.0.14"
 val jacksonVersion = "2.14.1"
 
@@ -36,7 +36,10 @@ libraryDependencies ++= Seq(
   "org.gnieh" %% "diffson-circe" % "4.1.1" % "test",
 )
 
-dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion
+dependencyOverrides ++= List(
+  "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
+  "io.netty" % "netty-handler" % "4.1.94.Final"
+)
 
 dynamoDBLocalPort := 8083
 startDynamoDBLocal := {startDynamoDBLocal.dependsOn(Test / compile).value}
