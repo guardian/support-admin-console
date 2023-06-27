@@ -138,7 +138,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
       pendingChanges.length > 0 && (
         <Alert severity="warning">
           Switch settings have been changed. Changes need to be saved before they take
-          effect!Refresh the page to undo the changes.
+          effect! Refresh the page to undo the changes.
           <List>
             {pendingChanges.map((change, index) => (
               <ListItem key={index}>
