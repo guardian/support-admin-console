@@ -100,10 +100,7 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
     marginBottom: spacing(2),
   },
   input: {
-    display: 'inline-block',
     width: '33%',
-    padding: '0.2em',
-    margin: '0.1em 0.2em',
   },
   inputGroup: {
     marginTop: spacing(2),
@@ -111,8 +108,8 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
     justifyContent: 'space-evenly',
   },
   inputSpacing: {
-    padding: '10px 12px',
-    float: 'left',
+    // padding: '10px 12px',
+    // float: 'left',
   },
   switchLayout: {
     display: 'flex',
@@ -135,21 +132,13 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
 }: InnerProps<SupportFrontendSwitches>) => {
   const classes = useStyles();
 
-  const [needToSaveDataWarning, setNeedToSaveDataWarning] = useState(false);
-  const [newUnsavedData, setNewUnsavedData] = useState(false);
   const [pendingChanges, setPendingChanges] = useState<string[]>([]);
-
-  type FormData = {
-    switchId: string;
-    description: string;
-  };
 
   const displayNeedToSaveDataWarning = (): JSX.Element | false => {
     return (
-      needToSaveDataWarning &&
-      newUnsavedData && (
+      (pendingChanges.length > 0)  && (
         <Alert severity="warning">
-          Switch settings have been changed. Changes need to be saved before they take effect!
+          Switch settings have been changed. Changes need to be saved before they take effect!Refresh the page to undo the changes.
           <List>
             {pendingChanges.map((change, index) => (
               <ListItem key={index}>
@@ -163,7 +152,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
   };
 
   const setPendingChange = (changeName: string, description: string, groupId: string): void => {
-    const unsavedChange = changeName + ' ' + description + ' in ' + groupId;
+    const unsavedChange = `${changeName} “${description}” in “${groupId}”`;
     // Add the changeName to the list of pendingChanges
     setPendingChanges(prevChanges => [...prevChanges, unsavedChange]);
   };
@@ -179,13 +168,11 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     updatedState[groupId].switches[switchId].state = isChecked ? SwitchState.On : SwitchState.Off;
     const currentSwitchState = updatedState[groupId].switches[switchId].state;
     setData(updatedState);
-    setNewUnsavedData(true);
     setPendingChange(
       'Turned ' + currentSwitchState + ':',
       switchData.description,
       groupData.description,
     );
-    setNeedToSaveDataWarning(true);
   };
 
   const createSwitchesFromGroupData = (
@@ -207,7 +194,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
         />
         <IconButton
           onClick={(): void => actionRemoveSwitchData(group, switchId, switchData.description)}
-          aria-label="removeSwitch"
+          aria-label="Remove Switch"
         >
           <DeleteIcon />
         </IconButton>
@@ -217,6 +204,10 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
 
   const createGroupsFromData = (group: [string, SwitchGroup]): JSX.Element => {
     const [groupId, groupData] = group;
+    type FormData = {
+      switchId: string;
+      description: string;
+    };
     const { register, handleSubmit, errors } = useForm<FormData>();
 
     const onSubmit = ({ switchId, description }: FormData): void => {
@@ -227,15 +218,12 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
         state: SwitchState.Off,
       };
       setData(updatedState);
-      setNewUnsavedData(true);
       setPendingChange('Added', description, groupData.description);
-      setNeedToSaveDataWarning(true);
     };
 
     return (
       <FormControl className={classes.formControl} key={groupId}>
         <FormLabel>
-          {' '}
           <strong>{groupData.description} </strong>
         </FormLabel>
         <br />
@@ -247,6 +235,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
         <div className={classes.inputGroup}>
           <TextField
             className={classes.input}
+            id={groupId + '-add-switch-switch-name'}
             inputRef={register({
               required: EMPTY_ERROR_HELPER_TEXT,
               validate: switchId => {
@@ -262,9 +251,10 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
             autoFocus
             fullWidth
           />
-          <span className={classes.inputSpacing} />
+          <span/>
           <TextField
             className={classes.input}
+            id={groupId + '-add-switch-switch-description'}
             inputRef={register({
               required: EMPTY_ERROR_HELPER_TEXT,
               validate: description => {
@@ -282,9 +272,10 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
             autoFocus
             fullWidth
           />
-          <span className={classes.inputSpacing} />
+          <span/>
           <div className={classes.buttons}>
             <Button
+              aria-label="Add switch"
               variant="contained"
               onClick={handleSubmit(onSubmit)}
               className={classes.addButton}
@@ -308,8 +299,6 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
 
   const actionSaveData = (): void => {
     saveData();
-    setNeedToSaveDataWarning(false);
-    setNewUnsavedData(false);
     setPendingChanges([]);
   };
 
@@ -347,9 +336,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     const updatedState = cloneDeep(data);
     delete updatedState[groupId].switches[switchId];
     setData(updatedState);
-    setNewUnsavedData(true);
     setPendingChange('Removed', description, groupData.description);
-    setNeedToSaveDataWarning(true);
   };
 
   return (
@@ -365,7 +352,6 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
 
       {displayNeedToSaveDataWarning()}
       <SaveButton />
-      <Divider variant="fullWidth" className={classes.divider} />
     </form>
   );
 };
