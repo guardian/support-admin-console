@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
 import {
-  Divider,
   Typography,
   Button,
   FormLabel,
@@ -136,9 +135,10 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
 
   const displayNeedToSaveDataWarning = (): JSX.Element | false => {
     return (
-      (pendingChanges.length > 0)  && (
+      pendingChanges.length > 0 && (
         <Alert severity="warning">
-          Switch settings have been changed. Changes need to be saved before they take effect!Refresh the page to undo the changes.
+          Switch settings have been changed. Changes need to be saved before they take
+          effect!Refresh the page to undo the changes.
           <List>
             {pendingChanges.map((change, index) => (
               <ListItem key={index}>
@@ -251,7 +251,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
             autoFocus
             fullWidth
           />
-          <span/>
+          <span />
           <TextField
             className={classes.input}
             id={groupId + '-add-switch-switch-description'}
@@ -272,7 +272,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
             autoFocus
             fullWidth
           />
-          <span/>
+          <span />
           <div className={classes.buttons}>
             <Button
               aria-label="Add switch"
