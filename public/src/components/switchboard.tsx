@@ -106,10 +106,6 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
     display: 'flex',
     justifyContent: 'space-evenly',
   },
-  inputSpacing: {
-    // padding: '10px 12px',
-    // float: 'left',
-  },
   switchLayout: {
     display: 'flex',
     justifyContent: 'space-between',
@@ -137,8 +133,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     return (
       pendingChanges.length > 0 && (
         <Alert severity="warning">
-          Switch settings have been changed. Changes need to be saved before they take
-          effect! Refresh the page to undo the changes.
+          Switch settings have been changed. Changes need to be saved before they take effect! Refresh the page to undo the changes.
           <List>
             {pendingChanges.map((change, index) => (
               <ListItem key={index}>
