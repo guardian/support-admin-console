@@ -47,21 +47,21 @@ const mockPricesData = {
 // Mock amounts card data
 type ContributionFrequency = 'ONE_OFF' | 'MONTHLY' | 'ANNUAL';
 interface AmountValuesObject {
-    amounts: number[];
-    defaultAmount: number;
-    hideChooseYourAmount?: boolean;
+  amounts: number[];
+  defaultAmount: number;
+  hideChooseYourAmount?: boolean;
 }
 type AmountsCardData = {
-    [key in ContributionFrequency]: AmountValuesObject;
+  [key in ContributionFrequency]: AmountValuesObject;
 };
 interface AmountsVariant {
-    variantName: string;
-    defaultContributionType: ContributionFrequency;
-    displayContributionType: ContributionFrequency[];
-    amountsCardData: AmountsCardData;
+  variantName: string;
+  defaultContributionType: ContributionFrequency;
+  displayContributionType: ContributionFrequency[];
+  amountsCardData: AmountsCardData;
 }
 export interface SelectedAmountsVariant extends AmountsVariant {
-    testName: string;
+  testName: string;
 }
 export const mockAmountsCardData: SelectedAmountsVariant = {
   testName: 'amounts_test',
