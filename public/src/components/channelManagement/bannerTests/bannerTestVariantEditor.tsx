@@ -284,14 +284,19 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
             }}
           />
 
-          {(template === BannerTemplate.ContributionsBanner ||
+          {(template === BannerTemplate.AusAnniversaryBanner ||
+            template === BannerTemplate.ContributionsBanner ||
             template === BannerTemplate.ChoiceCardsBannerBlue ||
             template === BannerTemplate.ChoiceCardsBannerYellow ||
+            template === BannerTemplate.ChoiceCardsButtonsBannerBlue ||
+            template === BannerTemplate.ChoiceCardsButtonsBannerYellow ||
             template === BannerTemplate.GuardianWeeklyBanner ||
             template === BannerTemplate.CharityAppealBanner ||
             template === BannerTemplate.InvestigationsMomentBanner ||
             template === BannerTemplate.GlobalNewYearBanner ||
-            template === BannerTemplate.UkraineMomentBanner) && (
+            template === BannerTemplate.UkraineMomentBanner ||
+            template === BannerTemplate.WorldPressFreedomDayBanner ||
+            template === BannerTemplate.Scotus2023MomentBanner) && (
             <Controller
               name="highlightedText"
               control={control}
@@ -362,7 +367,7 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
   const classes = useStyles();
   const setValidationStatusForField = useValidation(onValidationChange);
 
-  const allowVariantTicker = false; // currently no banner templates support the ticker
+  const allowVariantTicker = variant.template === BannerTemplate.AusAnniversaryBanner;
 
   const onMobileContentRadioChange = (): void => {
     if (variant.mobileBannerContent === undefined) {

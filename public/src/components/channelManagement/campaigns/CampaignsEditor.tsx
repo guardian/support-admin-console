@@ -60,7 +60,6 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
 export const testChannelOrder = [
   'Header',
   'Epic',
-  'EpicHoldback',
   'EpicLiveblog',
   'EpicAppleNews',
   'EpicAMP',
@@ -85,10 +84,6 @@ export const testChannelData: TestChannelData = {
   Epic: {
     name: 'Epic',
     link: 'epic-tests',
-  },
-  EpicHoldback: {
-    name: 'Epic Holdback',
-    link: 'epic-holdback-tests',
   },
   EpicLiveblog: {
     name: 'Liveblog Epic',
@@ -257,6 +252,8 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
                         noCountryNameTemplate: true,
                         noArticleCountTemplate: true,
                         noPriceTemplates: true,
+                        noDateTemplate: true,
+                        noDayTemplate: true,
                       }}
                     />
                   );

@@ -6,7 +6,7 @@ import models.{Channel, EpicTest}
 import models.EpicTest._
 import play.api.libs.circe.Circe
 import play.api.mvc._
-import services.DynamoChannelTests
+import services.{DynamoArchivedChannelTests, DynamoChannelTests}
 import zio.ZEnv
 
 import scala.concurrent.ExecutionContext
@@ -20,7 +20,8 @@ class LiveblogEpicTestsController(
   components: ControllerComponents,
   stage: String,
   runtime: zio.Runtime[ZEnv],
-  dynamo: DynamoChannelTests
+  dynamoTests: DynamoChannelTests,
+  dynamoArchivedTests: DynamoArchivedChannelTests,
 )(implicit ec: ExecutionContext) extends ChannelTestsController[EpicTest](
   authAction,
   components,
@@ -28,5 +29,6 @@ class LiveblogEpicTestsController(
   lockFileName = LiveblogEpicTestsController.name,
   channel = Channel.EpicLiveblog,
   runtime = runtime,
-  dynamo
+  dynamoTests,
+  dynamoArchivedTests
 ) with Circe

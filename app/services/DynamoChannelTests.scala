@@ -18,9 +18,9 @@ import java.time.OffsetDateTime
 import scala.jdk.CollectionConverters._
 
 
-class DynamoChannelTests(stage: String, client: DynamoDbClient) extends StrictLogging {
+class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoService(stage, client) with StrictLogging {
 
-  private val tableName = s"support-admin-console-channel-tests-$stage"
+  protected val tableName = s"support-admin-console-channel-tests-$stage"
   private val campaignNameIndex = "campaignName-name-index"
 
   private def buildKey(channel: Channel, testName: String): java.util.Map[String, AttributeValue] =
@@ -92,26 +92,6 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends StrictLo
       ).items
     }.mapError(DynamoGetError)
 
-  // Sends a batch of write requests, and returns any unprocessed items
-  private def putAll(writeRequests: List[WriteRequest]): ZIO[ZEnv, DynamoPutError, List[WriteRequest]] =
-    effectBlocking {
-      val batchWriteRequest =
-        BatchWriteItemRequest
-          .builder
-          .requestItems(Map(tableName -> writeRequests.asJava).asJava)
-          .returnConsumedCapacity(ReturnConsumedCapacity.TOTAL)
-          .build()
-
-      val result = client.batchWriteItem(batchWriteRequest)
-      logger.info(s"BatchWriteItemResponse: $result")
-
-      result.unprocessedItems().asScala
-        .get(tableName)
-        .map(items => items.asScala.toList)
-        .getOrElse(Nil)
-
-    }.mapError(DynamoPutError)
-
   private def put(putRequest: PutItemRequest): ZIO[ZEnv, DynamoError, Unit] =
     effectBlocking {
       val result = client.putItem(putRequest)
@@ -143,31 +123,6 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends StrictLo
       logger.info(s"TransactWriteItemsResponse: $result")
       ()
     }.mapError(DynamoPutError)
-
-  /**
-    * Dynamodb limits us to batches of 25 items, and may return unprocessed items in the response.
-    * This function groups items into batches of 25, and also checks the `unprocessedItems` in case we need to send
-    * any again.
-    * It uses an infinite zio stream to do this, pausing between batches to avoid any throttling. It stops processing
-    * the stream when the list of batches is empty.
-    */
-  private val BATCH_SIZE = 25
-  private def putAllBatched(writeRequests: List[WriteRequest]): ZIO[ZEnv, DynamoPutError, Unit] = {
-    val batches = writeRequests.grouped(BATCH_SIZE).toList
-    ZStream(())
-      .forever
-      .fixed(2.seconds) // wait 2 seconds between batches
-      .timeoutError(DynamoPutError(new Throwable("Timed out writing batches to dynamodb")))(1.minute)
-      .foldWhileM(batches)(_.nonEmpty) {
-        case (nextBatch :: remainingBatches, _) =>
-          putAll(nextBatch).map {
-            case Nil => remainingBatches
-            case unprocessed => unprocessed :: remainingBatches
-          }
-        case (Nil, _) => ZIO.succeed(Nil)
-      }
-      .unit // on success, the result value isn't meaningful
-  }
 
   /**
     * Dynamodb limits us to batches of 25 items.
@@ -206,6 +161,22 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends StrictLo
         .toList
         .sortBy(_.priority)
     )
+
+  // Does not decode the Dynamodb data
+  def getRawTests(channel: Channel, testNames: List[String]): ZIO[ZEnv, DynamoGetError, List[java.util.Map[String, AttributeValue]]] = {
+    // Build a batch item request
+    val items = testNames.map(testName => buildKey(channel, testName))
+    val keysAndAttributes = KeysAndAttributes.builder().keys(items.asJava).build()
+
+    val request = BatchGetItemRequest.builder()
+      .requestItems(Map(tableName -> keysAndAttributes).asJava)
+      .build()
+
+    effectBlocking {
+      client.batchGetItem(request)
+        .responses().asScala.get(tableName).map(_.asScala.toList).getOrElse(Nil)
+    }.mapError(DynamoGetError)
+  }
 
   // Returns all tests in a campaign, sorted by channel
   import models.ChannelTest.channelTestDecoder

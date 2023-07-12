@@ -34,6 +34,8 @@ import {
   ARTICLE_COUNT_TEMPLATE,
   COUNTRY_NAME_TEMPLATE,
   CURRENCY_TEMPLATE,
+  DATE,
+  DAY_OF_THE_WEEK,
   PRICE_DIGISUB_ANNUAL,
   PRICE_DIGISUB_MONTHLY,
   PRICE_GUARDIANWEEKLY_ANNUAL,
@@ -67,6 +69,8 @@ interface RteMenuConstraints {
   noCountryNameTemplate?: boolean;
   noArticleCountTemplate?: boolean;
   noPriceTemplates?: boolean;
+  noDateTemplate?: boolean;
+  noDayTemplate?: boolean;
 }
 
 /**
@@ -311,6 +315,8 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
     noCurrencyTemplate,
     noCountryNameTemplate,
     noArticleCountTemplate,
+    noDateTemplate,
+    noDayTemplate,
   } = rteMenuConstraints;
 
   const clickBold = () => {
@@ -384,6 +390,16 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
                   onClick={() => insertTemplate(COUNTRY_NAME_TEMPLATE)}
                 >
                   Country
+                </button>
+              )}
+              {!noDayTemplate && (
+                <button className="remirror-button" onClick={() => insertTemplate(DAY_OF_THE_WEEK)}>
+                  Day of week
+                </button>
+              )}
+              {!noDateTemplate && (
+                <button className="remirror-button" onClick={() => insertTemplate(DATE)}>
+                  Date
                 </button>
               )}
               {!noPriceTemplates && (

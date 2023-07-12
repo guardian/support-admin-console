@@ -7,7 +7,6 @@ import BannerDeployDashboard from './components/channelManagement/bannerDeploy/b
 import AmountsForm from './components/amounts/AmountsForm';
 import {
   ArticleEpicTestsForm,
-  ArticleEpicHoldbackTestsForm,
   LiveblogEpicTestsForm,
   AppleNewsEpicTestsForm,
   AMPEpicTestsForm,
@@ -169,12 +168,6 @@ const AppRouter = () => {
             path="/epic-tests/:testName?"
             render={(): React.ReactElement =>
               createComponent(<ArticleEpicTestsForm />, 'Epic Tests')
-            }
-          />
-          <Route
-            path="/epic-holdback-tests/:testName?"
-            render={(): React.ReactElement =>
-              createComponent(<ArticleEpicHoldbackTestsForm />, 'Epic Holdback Tests')
             }
           />
           <Route

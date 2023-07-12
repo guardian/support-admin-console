@@ -10,9 +10,12 @@ import io.circe.{Decoder, Encoder}
 sealed trait BannerTemplate
 object BannerTemplate {
   case object AusEoyMomentBanner extends BannerTemplate
+  case object AusAnniversaryBanner extends BannerTemplate
   case object AuBrandMomentBanner extends BannerTemplate
   case object ChoiceCardsBannerBlue extends BannerTemplate
   case object ChoiceCardsBannerYellow extends BannerTemplate
+  case object ChoiceCardsButtonsBannerBlue extends BannerTemplate
+  case object ChoiceCardsButtonsBannerYellow extends BannerTemplate
   case object ClimateCrisisMomentBanner extends BannerTemplate
   case object ContributionsBanner extends BannerTemplate
   case object ContributionsBannerWithSignIn extends BannerTemplate
@@ -27,6 +30,8 @@ object BannerTemplate {
   case object PostElectionAuMomentHungBanner extends BannerTemplate
   case object PostElectionAuMomentMorrisonBanner extends BannerTemplate
   case object UkraineMomentBanner extends BannerTemplate
+  case object WorldPressFreedomDayBanner extends BannerTemplate
+  case object Scotus2023MomentBanner extends BannerTemplate
 
   implicit val customConfig: Configuration = Configuration.default.withDefaults
   implicit val bannerTemplateEncoder = deriveEnumerationEncoder[BannerTemplate]
