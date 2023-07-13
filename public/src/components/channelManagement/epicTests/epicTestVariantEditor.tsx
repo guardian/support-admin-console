@@ -9,7 +9,6 @@ import EpicTestVariantEditorCtasEditor from './epicTestVariantEditorCtasEditor';
 
 import {
   BylineWithImage,
-  ContributionFrequency,
   Cta,
   EpicEditorConfig,
   Image,
@@ -185,11 +184,6 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   };
   const updateShowChoiceCards = (updatedshowChoiceCards?: boolean): void => {
     onVariantChange({ ...variant, showChoiceCards: updatedshowChoiceCards });
-  };
-  const updateDefaultChoiceCardFrequency = (
-    updatedDefaultChoiceCardFrequency: ContributionFrequency,
-  ): void => {
-    onVariantChange({ ...variant, defaultChoiceCardFrequency: updatedDefaultChoiceCardFrequency });
   };
   const updateShowSignInLink = (updatedShowSignInLink?: boolean): void => {
     onVariantChange({ ...variant, showSignInLink: updatedShowSignInLink });
@@ -458,9 +452,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
 
           <EpicTestChoiceCardsEditor
             showChoiceCards={variant.showChoiceCards}
-            defaultFrequency={variant.defaultChoiceCardFrequency}
             updateShowChoiceCards={updateShowChoiceCards}
-            updateDefaultFrequency={updateDefaultChoiceCardFrequency}
             isDisabled={!editMode}
           />
         </div>
