@@ -5,7 +5,7 @@ import { EpicModuleName } from '../helpers/shared';
 import { useModule } from '../../../hooks/useModule';
 import { EpicVariant } from '../../../models/epic';
 import useTickerData, { TickerSettingsWithData } from '../hooks/useTickerData';
-import { SelectedAmountsVariant, mockAmountsCardData } from '../bannerTests/bannerVariantPreview';
+import { SelectedAmountsVariant, mockAmountsCardData } from '../../../utils/models';
 
 // Article count TS defs
 export interface ArticleCounts {

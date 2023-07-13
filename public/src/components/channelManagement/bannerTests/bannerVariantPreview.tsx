@@ -6,6 +6,7 @@ import { BannerTemplate, BannerVariant, BannerContent } from '../../../models/ba
 import Typography from '@material-ui/core/Typography';
 import { useModule } from '../../../hooks/useModule';
 import useTickerData, { TickerSettingsWithData } from '../hooks/useTickerData';
+import { SelectedAmountsVariant, mockAmountsCardData } from '../../../utils/models';
 
 // Mock prices data
 interface ProductPriceData {
@@ -40,46 +41,6 @@ const mockPricesData = {
       Annual: {
         price: '0.00',
       },
-    },
-  },
-};
-
-// Mock amounts card data
-type ContributionFrequency = 'ONE_OFF' | 'MONTHLY' | 'ANNUAL';
-interface AmountValuesObject {
-  amounts: number[];
-  defaultAmount: number;
-  hideChooseYourAmount?: boolean;
-}
-type AmountsCardData = {
-  [key in ContributionFrequency]: AmountValuesObject;
-};
-interface AmountsVariant {
-  variantName: string;
-  defaultContributionType: ContributionFrequency;
-  displayContributionType: ContributionFrequency[];
-  amountsCardData: AmountsCardData;
-}
-export interface SelectedAmountsVariant extends AmountsVariant {
-  testName: string;
-}
-export const mockAmountsCardData: SelectedAmountsVariant = {
-  testName: 'amounts_test',
-  variantName: 'control',
-  defaultContributionType: 'MONTHLY',
-  displayContributionType: ['ANNUAL', 'MONTHLY', 'ONE_OFF'],
-  amountsCardData: {
-    ONE_OFF: {
-      amounts: [2, 5, 10, 20],
-      defaultAmount: 10,
-    },
-    MONTHLY: {
-      amounts: [5, 10, 15, 20],
-      defaultAmount: 10,
-    },
-    ANNUAL: {
-      amounts: [50, 100, 150, 200],
-      defaultAmount: 100,
     },
   },
 };

@@ -316,3 +316,30 @@ export interface AmountsTest {
 }
 
 export type AmountsTests = AmountsTest[];
+
+export interface SelectedAmountsVariant extends AmountsVariant {
+  testName: string;
+}
+export const mockAmountsCardData: SelectedAmountsVariant = {
+  testName: 'amounts_test',
+  variantName: 'control',
+  defaultContributionType: 'MONTHLY',
+  displayContributionType: ['ANNUAL', 'MONTHLY', 'ONE_OFF'],
+  amountsCardData: {
+    ONE_OFF: {
+      amounts: [2, 5, 10, 20],
+      defaultAmount: 10,
+      hideChooseYourAmount: false,
+    },
+    MONTHLY: {
+      amounts: [5, 10, 15, 20],
+      defaultAmount: 10,
+      hideChooseYourAmount: false,
+    },
+    ANNUAL: {
+      amounts: [50, 100, 150, 200],
+      defaultAmount: 100,
+      hideChooseYourAmount: false,
+    },
+  },
+};
