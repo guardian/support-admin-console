@@ -57,9 +57,9 @@ const AmountsForm: React.FC<InnerProps<AmountsTests>> = ({
   const [selectedTest, setSelectedTest] = useState<AmountsTest | undefined>();
 
   const onTargetSelected = (target: Territory) => {
-    const currentTest = configuredAmounts.filter(test => test.target === target);
-    if (currentTest.length) {
-      setSelectedTest(currentTest[0]);
+    const currentTest = configuredAmounts.find(test => test.target === target);
+    if (currentTest) {
+      setSelectedTest(currentTest);
     } else {
       setSelectedTest(undefined);
     }
