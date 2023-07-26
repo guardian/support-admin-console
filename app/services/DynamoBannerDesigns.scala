@@ -200,9 +200,8 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
   }
 
   // Removes the lockStatus attribute if the user currently has it locked
-  def unlockTest(designName: String,
-                 channel: Channel,
-                 email: String): ZIO[ZEnv, DynamoError, Unit] = {
+  def unlockBannerDesign(designName: String,
+                         email: String): ZIO[ZEnv, DynamoError, Unit] = {
     val request = UpdateItemRequest.builder
       .tableName(tableName)
       .key(buildKey(designName))

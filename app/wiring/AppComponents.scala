@@ -11,7 +11,7 @@ import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.mvc.AnyContent
 import play.api.{BuiltInComponentsFromContext, NoHttpFiltersComponents}
 import router.Routes
-import services.{Athena, Aws, CapiService, DynamoArchivedChannelTests, DynamoCampaigns, DynamoChannelTests, DynamoSuperMode, S3}
+import services.{Athena, Aws, CapiService, DynamoArchivedChannelTests, DynamoBannerDesigns, DynamoCampaigns, DynamoChannelTests, DynamoSuperMode, S3}
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.s3.model.GetObjectRequest
 
@@ -70,6 +70,8 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
   val dynamoSuperModeService = new DynamoSuperMode(dynamoClient)
   val athena = new Athena()
 
+  val dynamoBannerDesigns = new DynamoBannerDesigns(stage, dynamoClient)
+
   override lazy val router: Router = new Routes(
     httpErrorHandler,
     new Application(authAction, controllerComponents, stage),
@@ -88,6 +90,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     new BannerDeployController2(authAction, controllerComponents, stage, runtime),
     new ChannelSwitchesController(authAction, controllerComponents, stage, runtime),
     new CampaignsController(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoCampaignsService),
+    new BannerDesignsController(authAction, controllerComponents, stage, runtime, dynamoBannerDesigns),
     new CapiController(authAction, capiService),
     new AppsMeteringSwitchesController(authAction, controllerComponents, stage, runtime),
     new DefaultPromosController(authAction,controllerComponents, stage, runtime),
