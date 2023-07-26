@@ -68,12 +68,6 @@ class BannerDesignsController(
         .flatMap(f)
     }
 
-  private def setLockStatus(
-      lockStatus: VersionedS3Data[LockStatus]): ZIO[ZEnv, S3ClientError, Unit] =
-    S3Json
-      .updateAsJson(lockStatus)(s3Client)
-      .apply(lockObjectSettings)
-
   def getAll = authAction.async { request =>
     runWithLockStatus {
       case VersionedS3Data(lockStatus, _) =>
