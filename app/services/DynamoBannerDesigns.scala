@@ -123,7 +123,7 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
     * With an UpdateItem request we have to provide an expression to specify each attribute to be updated.
     * We do this by iterating over the attributes in `item` and building an expression
     */
-  private def buildUpdateTestExpression(
+  private def buildUpdateBannerDesignExpression(
       item: Map[String, AttributeValue]): String = {
     val subExprs = item.foldLeft[List[String]](Nil) {
       case (acc, (key, value)) =>
@@ -151,7 +151,7 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
       "lockStatus" - // Unlock by removing lockStatus
       "name" // key field
 
-    val updateExpression = buildUpdateTestExpression(item)
+    val updateExpression = buildUpdateBannerDesignExpression(item)
 
     val attributeValues = item.map { case (key, value) => s":$key" -> value }
     // Add email, for the conditional update

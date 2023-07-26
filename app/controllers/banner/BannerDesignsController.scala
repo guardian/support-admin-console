@@ -76,7 +76,7 @@ class BannerDesignsController(
     run {
       dynamoDesigns
         .getBannerDesign(designName)
-        .map(test => Ok(noNulls(test.asJson)))
+        .map(bannerDesign => Ok(noNulls(bannerDesign.asJson)))
     }
   }
 
