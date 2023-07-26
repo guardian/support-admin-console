@@ -32,9 +32,7 @@ class BannerDesignsController(
     with LazyLogging {
 
   case class BannerDesignsResponse(
-      tests: List[BannerDesign],
-      status: LockStatus,
-      userEmail: String
+      bannerDesigns: List[BannerDesign],
   )
 
   val lockFileName = "banner-designs"
@@ -58,29 +56,16 @@ class BannerDesignsController(
       })
     }
 
-  private def runWithLockStatus(
-      f: VersionedS3Data[LockStatus] => ZIO[ZEnv, Throwable, Result])
-    : Future[Result] =
-    run {
-      S3Json
-        .getFromJson[LockStatus](s3Client)
-        .apply(lockObjectSettings)
-        .flatMap(f)
-    }
-
   def getAll = authAction.async { request =>
-    runWithLockStatus {
-      case VersionedS3Data(lockStatus, _) =>
-        dynamoDesigns
-          .getAllBannerDesigns()
-          .map { bannerDesigns =>
-            val response = BannerDesignsResponse(
-              bannerDesigns,
-              lockStatus,
-              request.user.email
-            )
-            Ok(noNulls(response.asJson))
-          }
+    run {
+      dynamoDesigns
+        .getAllBannerDesigns()
+        .map { bannerDesigns =>
+          val response = BannerDesignsResponse(
+            bannerDesigns,
+          )
+          Ok(noNulls(response.asJson))
+        }
     }
   }
 
