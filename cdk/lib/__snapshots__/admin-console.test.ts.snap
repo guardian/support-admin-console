@@ -2,6 +2,51 @@
 
 exports[`The AdminConsole stack matches the snapshot 1`] = `
 Object {
+  "Metadata": Object {
+    "gu:cdk:constructs": Array [
+      "GuDynamoDBReadPolicy",
+      "GuDynamoDBReadPolicy",
+      "GuDynamoDBWritePolicy",
+      "GuDynamoDBReadPolicy",
+      "GuDynamoDBWritePolicy",
+      "GuDynamoDBReadPolicy",
+      "GuDynamoDBWritePolicy",
+      "GuAllowPolicy",
+      "GuAllowPolicy",
+      "GuGetS3ObjectsPolicy",
+      "GuPutS3ObjectsPolicy",
+      "GuAllowPolicy",
+      "GuDynamoDBReadPolicy",
+      "GuDynamoDBReadPolicy",
+      "GuAllowPolicy",
+      "GuAllowPolicy",
+      "GuVpcParameter",
+      "GuSubnetListParameter",
+      "GuSubnetListParameter",
+      "GuEc2App",
+      "GuCertificate",
+      "GuInstanceRole",
+      "GuDescribeEC2Policy",
+      "GuLoggingStreamNameParameter",
+      "GuLogShippingPolicy",
+      "GuDistributionBucketParameter",
+      "GuGetDistributablePolicy",
+      "GuParameterStoreReadPolicy",
+      "GuAmiParameter",
+      "GuHttpsEgressSecurityGroup",
+      "GuWazuhAccess",
+      "GuAutoScalingGroup",
+      "GuApplicationLoadBalancer",
+      "GuApplicationTargetGroup",
+      "GuHttpsApplicationListener",
+      "GuAlb5xxPercentageAlarm",
+      "GuUnhealthyInstancesAlarm",
+      "GuCname",
+      "GuStringParameter",
+      "GuDynamoDBReadPolicy",
+    ],
+    "gu:cdk:version": "TEST",
+  },
   "Outputs": Object {
     "LoadBalancerAdminconsoleDnsName": Object {
       "Description": "DNS entry for LoadBalancerAdminconsole",
@@ -170,8 +215,16 @@ Object {
       "Properties": Object {
         "HealthCheckGracePeriod": 120,
         "HealthCheckType": "ELB",
-        "LaunchConfigurationName": Object {
-          "Ref": "AutoScalingGroupAdminconsoleLaunchConfig2D175268",
+        "LaunchTemplate": Object {
+          "LaunchTemplateId": Object {
+            "Ref": "supportPRODadminconsoleBBAF00DB",
+          },
+          "Version": Object {
+            "Fn::GetAtt": Array [
+              "supportPRODadminconsoleBBAF00DB",
+              "LatestVersionNumber",
+            ],
+          },
         },
         "MaxSize": "2",
         "MinSize": "1",
@@ -180,11 +233,6 @@ Object {
             "Key": "App",
             "PropagateAtLaunch": true,
             "Value": "admin-console",
-          },
-          Object {
-            "Key": "gu:cdk:pattern-name",
-            "PropagateAtLaunch": true,
-            "Value": "GuEc2App",
           },
           Object {
             "Key": "gu:cdk:version",
@@ -197,9 +245,11 @@ Object {
             "Value": "guardian/support-admin-console",
           },
           Object {
-            "Key": "Name",
+            "Key": "LogKinesisStreamName",
             "PropagateAtLaunch": true,
-            "Value": "AdminConsole/AutoScalingGroupAdminconsole",
+            "Value": Object {
+              "Ref": "LoggingStreamName",
+            },
           },
           Object {
             "Key": "Stack",
@@ -222,62 +272,6 @@ Object {
         },
       },
       "Type": "AWS::AutoScaling::AutoScalingGroup",
-    },
-    "AutoScalingGroupAdminconsoleInstanceProfileC5F9DB1A": Object {
-      "Properties": Object {
-        "Roles": Array [
-          Object {
-            "Ref": "InstanceRoleAdminconsole347DA627",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::InstanceProfile",
-    },
-    "AutoScalingGroupAdminconsoleLaunchConfig2D175268": Object {
-      "DependsOn": Array [
-        "InstanceRoleAdminconsole347DA627",
-      ],
-      "Properties": Object {
-        "IamInstanceProfile": Object {
-          "Ref": "AutoScalingGroupAdminconsoleInstanceProfileC5F9DB1A",
-        },
-        "ImageId": Object {
-          "Ref": "AMIAdminconsole",
-        },
-        "InstanceType": "t4g.micro",
-        "SecurityGroups": Array [
-          Object {
-            "Fn::GetAtt": Array [
-              "GuHttpsEgressSecurityGroupAdminconsole2F77C5D2",
-              "GroupId",
-            ],
-          },
-          Object {
-            "Fn::GetAtt": Array [
-              "WazuhSecurityGroup",
-              "GroupId",
-            ],
-          },
-        ],
-        "UserData": Object {
-          "Fn::Base64": Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "#!/bin/bash -ev
-    aws --region ",
-                Object {
-                  "Ref": "AWS::Region",
-                },
-                " s3 cp s3://membership-dist/support/PROD/admin-console/support-admin-console_1.0-SNAPSHOT_all.deb /tmp
-    dpkg -i /tmp/support-admin-console_1.0-SNAPSHOT_all.deb
-    /opt/cloudwatch-logs/configure-logs application support PROD admin-console /var/log/support-admin-console/application.log",
-              ],
-            ],
-          },
-        },
-      },
-      "Type": "AWS::AutoScaling::LaunchConfiguration",
     },
     "CampaignsDynamoTable": Object {
       "DeletionPolicy": "Retain",
@@ -337,6 +331,10 @@ Object {
           Object {
             "Key": "gu:repo",
             "Value": "guardian/support-admin-console",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "AdminConsole/CertificateAdminconsole",
           },
           Object {
             "Key": "Stack",
@@ -1121,23 +1119,25 @@ Object {
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
               "Principal": Object {
-                "Service": Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      "ec2.",
-                      Object {
-                        "Ref": "AWS::URLSuffix",
-                      },
-                    ],
-                  ],
-                },
+                "Service": "ec2.amazonaws.com",
               },
             },
           ],
           "Version": "2012-10-17",
         },
         "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/AmazonSSMManagedInstanceCore",
+              ],
+            ],
+          },
           Object {
             "Fn::Join": Array [
               "",
@@ -1309,6 +1309,27 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroupEgress",
     },
+    "LoadBalancerAdminconsoleSecurityGrouptoAdminConsoleWazuhSecurityGroupDAE23D8490004DE069B1": Object {
+      "Properties": Object {
+        "Description": "Load balancer to target",
+        "DestinationSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "WazuhSecurityGroup",
+            "GroupId",
+          ],
+        },
+        "FromPort": 9000,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "LoadBalancerAdminconsoleSecurityGroupE93D84AC",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "ToPort": 9000,
+      },
+      "Type": "AWS::EC2::SecurityGroupEgress",
+    },
     "ParameterStoreReadAdminconsole9C23871C": Object {
       "Properties": Object {
         "PolicyDocument": Object {
@@ -1424,42 +1445,6 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "SSMGetF4C837D5",
-        "Roles": Array [
-          Object {
-            "Ref": "InstanceRoleAdminconsole347DA627",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "SSMRunCommandPolicy244E1613": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
-                "ec2messages:AcknowledgeMessage",
-                "ec2messages:DeleteMessage",
-                "ec2messages:FailMessage",
-                "ec2messages:GetEndpoint",
-                "ec2messages:GetMessages",
-                "ec2messages:SendReply",
-                "ssm:UpdateInstanceInformation",
-                "ssm:ListInstanceAssociations",
-                "ssm:DescribeInstanceProperties",
-                "ssm:DescribeDocumentParameters",
-                "ssmmessages:CreateControlChannel",
-                "ssmmessages:CreateDataChannel",
-                "ssmmessages:OpenControlChannel",
-                "ssmmessages:OpenDataChannel",
-              ],
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "ssm-run-command-policy",
         "Roles": Array [
           Object {
             "Ref": "InstanceRoleAdminconsole347DA627",
@@ -1706,6 +1691,27 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
+    "WazuhSecurityGroupfromAdminConsoleLoadBalancerAdminconsoleSecurityGroup606D9E9F90006E5FA438": Object {
+      "Properties": Object {
+        "Description": "Load balancer to target",
+        "FromPort": 9000,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "WazuhSecurityGroup",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "LoadBalancerAdminconsoleSecurityGroupE93D84AC",
+            "GroupId",
+          ],
+        },
+        "ToPort": 9000,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
     "capirole2BC59B5B": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
@@ -1812,6 +1818,145 @@ Object {
         "TTL": 3600,
       },
       "Type": "Guardian::DNS::RecordSet",
+    },
+    "supportPRODadminconsoleBBAF00DB": Object {
+      "Properties": Object {
+        "LaunchTemplateData": Object {
+          "IamInstanceProfile": Object {
+            "Arn": Object {
+              "Fn::GetAtt": Array [
+                "supportPRODadminconsoleProfile82C4E682",
+                "Arn",
+              ],
+            },
+          },
+          "ImageId": Object {
+            "Ref": "AMIAdminconsole",
+          },
+          "InstanceType": "t4g.micro",
+          "SecurityGroupIds": Array [
+            Object {
+              "Fn::GetAtt": Array [
+                "GuHttpsEgressSecurityGroupAdminconsole2F77C5D2",
+                "GroupId",
+              ],
+            },
+            Object {
+              "Fn::GetAtt": Array [
+                "WazuhSecurityGroup",
+                "GroupId",
+              ],
+            },
+          ],
+          "TagSpecifications": Array [
+            Object {
+              "ResourceType": "instance",
+              "Tags": Array [
+                Object {
+                  "Key": "gu:cdk:version",
+                  "Value": "TEST",
+                },
+                Object {
+                  "Key": "gu:repo",
+                  "Value": "guardian/support-admin-console",
+                },
+                Object {
+                  "Key": "Name",
+                  "Value": "AdminConsole/support-PROD-admin-console",
+                },
+                Object {
+                  "Key": "Stack",
+                  "Value": "support",
+                },
+                Object {
+                  "Key": "Stage",
+                  "Value": "PROD",
+                },
+              ],
+            },
+            Object {
+              "ResourceType": "volume",
+              "Tags": Array [
+                Object {
+                  "Key": "gu:cdk:version",
+                  "Value": "TEST",
+                },
+                Object {
+                  "Key": "gu:repo",
+                  "Value": "guardian/support-admin-console",
+                },
+                Object {
+                  "Key": "Name",
+                  "Value": "AdminConsole/support-PROD-admin-console",
+                },
+                Object {
+                  "Key": "Stack",
+                  "Value": "support",
+                },
+                Object {
+                  "Key": "Stage",
+                  "Value": "PROD",
+                },
+              ],
+            },
+          ],
+          "UserData": Object {
+            "Fn::Base64": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "#!/bin/bash -ev
+    aws --region ",
+                  Object {
+                    "Ref": "AWS::Region",
+                  },
+                  " s3 cp s3://membership-dist/support/PROD/admin-console/support-admin-console_1.0-SNAPSHOT_all.deb /tmp
+    dpkg -i /tmp/support-admin-console_1.0-SNAPSHOT_all.deb
+    /opt/cloudwatch-logs/configure-logs application support PROD admin-console /var/log/support-admin-console/application.log",
+                ],
+              ],
+            },
+          },
+        },
+        "TagSpecifications": Array [
+          Object {
+            "ResourceType": "launch-template",
+            "Tags": Array [
+              Object {
+                "Key": "gu:cdk:version",
+                "Value": "TEST",
+              },
+              Object {
+                "Key": "gu:repo",
+                "Value": "guardian/support-admin-console",
+              },
+              Object {
+                "Key": "Name",
+                "Value": "AdminConsole/support-PROD-admin-console",
+              },
+              Object {
+                "Key": "Stack",
+                "Value": "support",
+              },
+              Object {
+                "Key": "Stage",
+                "Value": "PROD",
+              },
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::EC2::LaunchTemplate",
+    },
+    "supportPRODadminconsoleProfile82C4E682": Object {
+      "Properties": Object {
+        "Roles": Array [
+          Object {
+            "Ref": "InstanceRoleAdminconsole347DA627",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::InstanceProfile",
     },
   },
 }
