@@ -42,6 +42,9 @@ GET /default-promos                                 controllers.Application.inde
 
 GET /super-mode                                     controllers.Application.index
 
+GET /banner-designs                                 controllers.Application.index
+GET /banner-designs/:name                           controllers.Application.indexWithName(name: String)
+
 # ----- Authentication ----- #
 GET  /login                                         controllers.Login.login
 GET  /loginAction                                   controllers.Login.loginAction

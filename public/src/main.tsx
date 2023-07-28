@@ -36,6 +36,7 @@ import { makeStyles } from '@material-ui/core';
 import QrCodePage from './components/utilities/QrCodePage';
 import AppsMeteringSwitches from './components/appsMeteringSwitches';
 import { SuperModeDashboard } from './components/channelManagement/superMode/superModeDashboard';
+import { BannerDesigns } from './components/channelManagement/bannerDesigns/';
 import DefaultPromos from './components/defaultPromos';
 
 type Stage = 'DEV' | 'CODE' | 'PROD';
@@ -242,6 +243,12 @@ const AppRouter = () => {
           <Route
             path="/default-promos"
             render={(): React.ReactElement => createComponent(<DefaultPromos />, 'Default Promos')}
+          />
+          <Route
+            path="/banner-designs/:name?"
+            render={(): React.ReactElement =>
+              createComponent(<BannerDesigns />, 'Banner Designs')
+            }
           />
         </div>
       </Router>
