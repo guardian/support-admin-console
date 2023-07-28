@@ -11,6 +11,8 @@ Object {
       "GuDynamoDBWritePolicy",
       "GuDynamoDBReadPolicy",
       "GuDynamoDBWritePolicy",
+      "GuDynamoDBReadPolicy",
+      "GuDynamoDBWritePolicy",
       "GuAllowPolicy",
       "GuAllowPolicy",
       "GuGetS3ObjectsPolicy",
@@ -273,6 +275,48 @@ Object {
       },
       "Type": "AWS::AutoScaling::AutoScalingGroup",
     },
+    "BannerDesignsDynamoTable": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "AttributeDefinitions": Array [
+          Object {
+            "AttributeName": "name",
+            "AttributeType": "S",
+          },
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "KeySchema": Array [
+          Object {
+            "AttributeName": "name",
+            "KeyType": "HASH",
+          },
+        ],
+        "PointInTimeRecoverySpecification": Object {
+          "PointInTimeRecoveryEnabled": true,
+        },
+        "TableName": "support-admin-console-banner-designs-PROD",
+        "Tags": Array [
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/support-admin-console",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+      },
+      "Type": "AWS::DynamoDB::Table",
+      "UpdateReplacePolicy": "Retain",
+    },
     "CampaignsDynamoTable": Object {
       "DeletionPolicy": "Retain",
       "Properties": Object {
@@ -510,6 +554,51 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "DynamoReadArchivedChannelTestsDynamoTable1835BCEF",
+        "Roles": Array [
+          Object {
+            "Ref": "InstanceRoleAdminconsole347DA627",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "DynamoReadBannerDesignsDynamoTable74192C24": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "dynamodb:BatchGetItem",
+                "dynamodb:GetItem",
+                "dynamodb:Scan",
+                "dynamodb:Query",
+                "dynamodb:GetRecords",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:aws:dynamodb:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":table/",
+                    Object {
+                      "Ref": "BannerDesignsDynamoTable",
+                    },
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "DynamoReadBannerDesignsDynamoTable74192C24",
         "Roles": Array [
           Object {
             "Ref": "InstanceRoleAdminconsole347DA627",
@@ -774,6 +863,50 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "DynamoWriteArchivedChannelTestsDynamoTableB9A0E0BA",
+        "Roles": Array [
+          Object {
+            "Ref": "InstanceRoleAdminconsole347DA627",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "DynamoWriteBannerDesignsDynamoTable36E4A766": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "dynamodb:BatchWriteItem",
+                "dynamodb:PutItem",
+                "dynamodb:DeleteItem",
+                "dynamodb:UpdateItem",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:aws:dynamodb:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":table/",
+                    Object {
+                      "Ref": "BannerDesignsDynamoTable",
+                    },
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "DynamoWriteBannerDesignsDynamoTable36E4A766",
         "Roles": Array [
           Object {
             "Ref": "InstanceRoleAdminconsole347DA627",
