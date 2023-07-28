@@ -109,6 +109,27 @@ export class AdminConsole extends GuStack {
     return table;
   }
 
+  buildBannerDesignsTable(): Table {
+    const id = `BannerDesignsDynamoTable`;
+
+    const table = new Table(this, id, {
+      tableName: `support-admin-console-banner-designs-${this.stage}`,
+      removalPolicy: RemovalPolicy.RETAIN,
+      pointInTimeRecovery: this.stage === 'PROD',
+      billingMode: BillingMode.PAY_PER_REQUEST,
+      partitionKey: {
+        name: 'name',
+        type: AttributeType.STRING,
+      },
+    });
+
+    // Give it a better name
+    const defaultChild = table.node.defaultChild as unknown as CfnElement;
+    defaultChild.overrideLogicalId(id);
+
+    return table;
+  }
+
   buildChannelTestsDynamoPolicies(table: Table): GuAllowPolicy[] {
     return [
       new GuDynamoDBReadPolicy(this, `DynamoRead-${table.node.id}`, {
@@ -144,10 +165,12 @@ export class AdminConsole extends GuStack {
     const channelTestsDynamoTable = this.buildTestsTable();
     const archivedTestsDynamoTable = this.buildArchivedTestsTable();
     const campaignsDynamoTable = this.buildCampaignsTable();
+    const bannerDesignsDynamoTable = this.buildBannerDesignsTable();
     const channelTestsDynamoPolicies =
       this.buildChannelTestsDynamoPolicies(channelTestsDynamoTable);
     const campaignsDynamoPolicies = this.buildDynamoPolicies(campaignsDynamoTable);
     const archivedTestsDynamoPolicies = this.buildDynamoPolicies(archivedTestsDynamoTable);
+    const bannerDesignsDynamoPolicies = this.buildDynamoPolicies(bannerDesignsDynamoTable);
 
     const userData = `#!/bin/bash -ev
     aws --region ${this.region} s3 cp s3://membership-dist/${this.stack}/${this.stage}/${app}/support-admin-console_1.0-SNAPSHOT_all.deb /tmp
@@ -182,6 +205,7 @@ export class AdminConsole extends GuStack {
       ...channelTestsDynamoPolicies,
       ...campaignsDynamoPolicies,
       ...archivedTestsDynamoPolicies,
+      ...bannerDesignsDynamoPolicies,
       new GuDynamoDBReadPolicy(this, `DynamoRead-super-mode`, {
         tableName: 'super-mode-PROD', // always PROD for super mode
       }),

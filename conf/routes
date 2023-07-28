@@ -146,7 +146,7 @@ POST  /frontend/amp-epic-tests/test/status/:rawStatus     controllers.epic.AMPEp
 
 
 # ----- Banner channel 1 tests ----- #
-GET   /frontend/banner-tests                          controllers.banner.BannerTestsController.get
+GET   /frontend/banner-tests                            controllers.banner.BannerTestsController.get
 # banner list endpoints
 POST  /frontend/banner-tests/list/lock                  controllers.banner.BannerTestsController.lockList
 POST  /frontend/banner-tests/list/unlock                controllers.banner.BannerTestsController.unlockList
@@ -196,6 +196,15 @@ GET   /frontend/campaigns                              controllers.CampaignsCont
 POST  /frontend/campaigns/create                       controllers.CampaignsController.createCampaign
 POST  /frontend/campaigns/update                       controllers.CampaignsController.updateCampaign
 GET   /frontend/campaign/:campaignName/tests           controllers.CampaignsController.getTests(campaignName: String)
+
+# ----- banner designs ----- #
+GET   /frontend/banner-designs                         controllers.banner.BannerDesignsController.getAll
+GET   /frontend/banner-designs/:designName             controllers.banner.BannerDesignsController.get(designName: String)
+POST  /frontend/banner-designs/update                  controllers.banner.BannerDesignsController.update
+POST  /frontend/banner-designs/create                  controllers.banner.BannerDesignsController.create
+POST  /frontend/banner-designs/lock/:testName          controllers.banner.BannerDesignsController.lock(testName: String)
+POST  /frontend/banner-designs/unlock/:testName        controllers.banner.BannerDesignsController.unlock(testName: String)
+POST  /frontend/banner-designs/takecontrol/:testName   controllers.banner.BannerDesignsController.forceLock(testName: String)
 
 # ----- capi ----- #
 GET   /capi/tags                                       controllers.CapiController.getTags()
