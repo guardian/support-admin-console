@@ -24,7 +24,7 @@ export const AmountsVariantEditorRowInput: React.FC<AmountsVariantEditorRowInput
   const [currentError, setCurrentError] = useState('');
 
   const onSubmit = () => {
-    if (!currentError && currentValue != null && currentValue) {
+    if (!currentError && currentValue) {
       addAmount(currentValue);
       setCurrentValue(undefined);
     }

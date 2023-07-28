@@ -211,7 +211,7 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
   };
 
   const checkIfTestIsCountryTier = () => {
-    return target != null && !regionLabels.includes(target as string) ? true : false;
+    return target != null && !regionLabels.includes(target as string);
   };
 
   const addButtonBar = () => {
