@@ -8,35 +8,35 @@ GET /contribution-types                             controllers.Application.inde
 GET /amounts                                        controllers.Application.index
 
 GET /header-tests                                   controllers.Application.index
-GET /header-tests/:testName                         controllers.Application.indexWithName(testName: String)
+GET /header-tests/:name                             controllers.Application.indexWithName(name: String)
 
 GET /epic-tests                                     controllers.Application.index
-GET /epic-tests/:testName                           controllers.Application.indexWithName(testName: String)
+GET /epic-tests/:name                               controllers.Application.indexWithName(name: String)
 
 GET /liveblog-epic-tests                            controllers.Application.index
-GET /liveblog-epic-tests/:testName                  controllers.Application.indexWithName(testName: String)
+GET /liveblog-epic-tests/:name                      controllers.Application.indexWithName(name: String)
 
 GET /apple-news-epic-tests                          controllers.Application.index
-GET /apple-news-epic-tests/:testName                controllers.Application.indexWithName(testName: String)
+GET /apple-news-epic-tests/:name                    controllers.Application.indexWithName(name: String)
 
 GET /amp-epic-tests                                 controllers.Application.index
-GET /amp-epic-tests/:testName                       controllers.Application.indexWithName(testName: String)
+GET /amp-epic-tests/:name                           controllers.Application.indexWithName(name: String)
 
 GET /banner-tests                                   controllers.Application.index
-GET /banner-tests/:testName                         controllers.Application.indexWithName(testName: String)
+GET /banner-tests/:name                             controllers.Application.indexWithName(name: String)
 
 GET /banner-tests2                                  controllers.Application.index
-GET /banner-tests2/:testName                        controllers.Application.indexWithName(testName: String)
+GET /banner-tests2/:name                            controllers.Application.indexWithName(name: String)
 
 GET /banner-deploy                                  controllers.Application.index
 GET /channel-switches                               controllers.Application.index
 
 GET /campaigns                                      controllers.Application.index
-GET /campaigns/:testName                            controllers.Application.indexWithName(testName: String)
+GET /campaigns/:name                                controllers.Application.indexWithName(name: String)
 
 GET /qr-code                                        controllers.Application.index
 
-GET /apps-metering-switches                        controllers.Application.index
+GET /apps-metering-switches                         controllers.Application.index
 
 GET /default-promos                                 controllers.Application.index
 
