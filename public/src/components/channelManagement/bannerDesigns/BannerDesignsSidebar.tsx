@@ -14,15 +14,6 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     marginTop: '8px',
   },
-  searchField: {
-    marginTop: '8px',
-  },
-  buttonsContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '8px',
-    marginBottom: '10px',
-  },
 }));
 
 interface Props {
