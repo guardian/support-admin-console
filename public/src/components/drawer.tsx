@@ -7,6 +7,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import RRControlPanelLogo from './rrControlPanelLogo';
+import { getStage } from '../utils/stage';
 
 const useStyles = makeStyles({
   list: {
@@ -123,6 +124,11 @@ export default function NavDrawer(): React.ReactElement {
     return now.getMonth() == 9 && now.getDate() == 31;
   };
 
+  const shouldShowBannerDesignNav = (): boolean => {
+    const stage = getStage();
+    return stage !== 'PROD' && stage !== 'CODE';
+  };
+
   const list = (anchor: string): React.ReactElement => (
     <div
       className={classes.list}
@@ -195,12 +201,14 @@ export default function NavDrawer(): React.ReactElement {
             <span className={classes.super}>🦸</span>
           </ListItem>
         </Link>
-        <Link key="Banner Designs" to="/banner-designs" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Banner Designs">
-            <ListItemText primary="Banner Designs" />
-            <span className={classes.super}>🎨</span>
-          </ListItem>
-        </Link>
+        {shouldShowBannerDesignNav() && (
+          <Link key="Banner Designs" to="/banner-designs" className={classes.link}>
+            <ListItem className={classes.listItem} button key="Banner Designs">
+              <ListItemText primary="Banner Designs" />
+              <span className={classes.super}>🎨</span>
+            </ListItem>
+          </Link>
+        )}
       </div>
 
       <div>
