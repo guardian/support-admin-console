@@ -3,6 +3,7 @@ import { Button, makeStyles, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import useOpenable from '../../../hooks/useOpenable';
 import { BannerDesign } from '../../../models/BannerDesign';
+import CreateBannerDesignDialog from './CreateBannerDesignDialog';
 
 const useStyles = makeStyles(() => ({
   button: {
@@ -30,12 +31,12 @@ const NewCampaignButton: React.FC<Props> = ({ existingNames, createDesign }: Pro
       <Button className={classes.button} variant="outlined" startIcon={<AddIcon />} onClick={open}>
         <Typography className={classes.text}>Create a new banner design</Typography>
       </Button>
-      {/*<CreateCampaignDialog*/}
-      {/*  isOpen={isOpen}*/}
-      {/*  close={close}*/}
-      {/*  existingNames={existingNames}*/}
-      {/*  createCampaign={createCampaign}*/}
-      {/*/>*/}
+      <CreateBannerDesignDialog
+        isOpen={isOpen}
+        close={close}
+        existingNames={existingNames}
+        createDesign={createDesign}
+      />
     </>
   );
 };
