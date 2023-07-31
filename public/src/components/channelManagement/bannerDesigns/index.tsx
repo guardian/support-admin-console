@@ -61,6 +61,10 @@ const BannerDesigns: React.FC = () => {
 
   const selectedBannerDesign = bannerDesigns.find(b => b.name === selectedBannerDesignName);
 
+  const createDesign = (design: BannerDesign): void => {
+    console.log('Creating banner design!', design);
+  };
+
   return (
     <div className={classes.body}>
       <div className={classes.leftCol}>
@@ -68,6 +72,7 @@ const BannerDesigns: React.FC = () => {
           designs={bannerDesigns}
           selectedDesign={selectedBannerDesign}
           onDesignSelected={name => setSelectedBannerDesignName(name)}
+          createDesign={createDesign}
         />
       </div>
       <div className={classes.rightCol}>
