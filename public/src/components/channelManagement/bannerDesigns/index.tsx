@@ -4,8 +4,8 @@ import BannerDesignsSidebar from './BannerDesignsSidebar';
 import BannerDesignEditor from './BannerDesignEditor';
 import { useParams } from 'react-router-dom';
 
-import {fetchBannerDesigns, fetchFrontendSettings, FrontendSettingsType} from '../../../utils/requests';
-import type { BannerDesign } from '../../../models/BannerDesign';
+import { fetchBannerDesigns } from '../../../utils/requests';
+import { BannerDesign } from '../../../models/BannerDesign';
 
 const useStyles = makeStyles(({ spacing, typography }: Theme) => ({
   viewTextContainer: {
@@ -66,9 +66,8 @@ const BannerDesigns: React.FC = () => {
       <div className={classes.leftCol}>
         <BannerDesignsSidebar
           designs={bannerDesigns}
-          createDesign={(bannerDesign: BannerDesign) => {}}
           selectedDesign={selectedBannerDesign}
-          onDesignSelected={() => {}}
+          onDesignSelected={name => setSelectedBannerDesignName(name)}
         />
       </div>
       <div className={classes.rightCol}>

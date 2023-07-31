@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { makeStyles, TextField } from '@material-ui/core';
+import React from 'react';
+import { makeStyles } from '@material-ui/core';
 import BannerDesignsList from './BannerDesignsList';
 import { BannerDesign } from '../../../models/BannerDesign';
 
@@ -28,13 +28,11 @@ const useStyles = makeStyles(() => ({
 interface Props {
   designs: BannerDesign[];
   selectedDesign?: BannerDesign;
-  createDesign: (design: BannerDesign) => void;
   onDesignSelected: (designName: string) => void;
 }
 
 const BannerDesignsSidebar = ({
   designs,
-  createDesign,
   selectedDesign,
   onDesignSelected,
 }: Props): React.ReactElement => {

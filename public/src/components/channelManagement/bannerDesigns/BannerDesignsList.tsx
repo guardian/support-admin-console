@@ -1,7 +1,5 @@
 import React from 'react';
 import { List, ListItem, Theme, makeStyles, Button, Typography } from '@material-ui/core';
-import { red } from '@material-ui/core/colors';
-import BannerDesignsSidebar from './BannerDesignsSidebar';
 import { BannerDesign } from '../../../models/BannerDesign';
 
 const useStyles = makeStyles(({ palette }: Theme) => ({
@@ -36,32 +34,7 @@ const useStyles = makeStyles(({ palette }: Theme) => ({
     textTransform: 'uppercase',
     letterSpacing: '1px',
   },
-  live: {
-    border: `1px solid ${red[500]}`,
-
-    '&:hover': {
-      background: `${red[500]}`,
-      color: 'white',
-    },
-  },
-  liveInverted: {
-    background: `${red[500]}`,
-    color: 'white',
-
-    '&:hover': {
-      background: `${red[500]}`,
-      color: 'white',
-    },
-  },
-  draft: {
-    border: `1px solid ${palette.grey[700]}`,
-
-    '&:hover': {
-      background: `${palette.grey[700]}`,
-      color: 'white',
-    },
-  },
-  draftInverted: {
+  selected: {
     background: `${palette.grey[700]}`,
     color: 'white',
 
@@ -88,18 +61,22 @@ const BannerDesignsList = ({
   return (
     <div className={classes.container}>
       <List className={classes.list}>
-        {designs.map(design => (
-          <ListItem className={classes.button} key={design.name}>
-            <Button
-              key={`${design.name}-button`}
-              className={classes.button}
-              variant="outlined"
-              onClick={(): void => onDesignSelected(design.name)}
-            >
-              <Typography className={classes.text}>{design.name}</Typography>
-            </Button>
-          </ListItem>
-        ))}
+        {designs.map(design => {
+          const isSelected = selectedDesign && selectedDesign.name === design.name;
+
+          return (
+            <ListItem className={classes.button} key={design.name}>
+              <Button
+                key={`${design.name}-button`}
+                className={[classes.button, isSelected && classes.selected].join(' ')}
+                variant="outlined"
+                onClick={(): void => onDesignSelected(design.name)}
+              >
+                <Typography className={classes.text}>{design.name}</Typography>
+              </Button>
+            </ListItem>
+          );
+        })}
       </List>
     </div>
   );

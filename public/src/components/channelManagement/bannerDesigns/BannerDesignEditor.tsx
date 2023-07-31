@@ -5,4 +5,8 @@ type Props = {
   bannerDesign: BannerDesign;
 };
 
-export default ({ bannerDesign }: Props) => <div>{bannerDesign.name}</div>;
+const BannerDesignEditor: React.FC<Props> = ({ bannerDesign }: Props) => (
+  <div>{bannerDesign.name}</div>
+);
+
+export default BannerDesignEditor;
