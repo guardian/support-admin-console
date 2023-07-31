@@ -4,4 +4,5 @@ import { BannerDesign } from '../../../models/BannerDesign';
 type Props = {
   bannerDesign: BannerDesign;
 };
+
 export default ({ bannerDesign }: Props) => <div>{bannerDesign.name}</div>;
