@@ -1,5 +1,6 @@
 import { Test, Status } from '../components/channelManagement/helpers/shared';
 import { Campaign } from '../components/channelManagement/campaigns/CampaignsForm';
+import { BannerDesign } from '../models/BannerDesign';
 
 export enum SupportFrontendSettingsType {
   switches = 'switches',
@@ -20,6 +21,7 @@ export enum FrontendSettingsType {
   bannerDeploy2 = 'banner-deploy2',
   channelSwitches = 'channel-switches',
   campaigns = 'campaigns',
+  bannerDesigns = 'banner-designs',
 }
 
 export enum AppsSettingsType {
@@ -140,6 +142,16 @@ export function saveSupportFrontendSettings(
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function fetchFrontendSettings(settingsType: FrontendSettingsType): Promise<any> {
   return fetchSettings(`/frontend/${settingsType}`);
+}
+
+interface BannerDesignsResponse {
+  bannerDesigns: BannerDesign[];
+}
+
+export function fetchBannerDesigns(): Promise<BannerDesign[]> {
+  return fetchFrontendSettings(FrontendSettingsType.bannerDesigns).then(
+    (response: BannerDesignsResponse) => response.bannerDesigns,
+  );
 }
 
 export function saveFrontendSettings(

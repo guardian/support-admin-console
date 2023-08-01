@@ -3,7 +3,10 @@ package controllers
 import com.gu.googleauth.AuthAction
 import play.api.mvc._
 
-class Application(authAction: AuthAction[AnyContent], components: ControllerComponents, stage: String) extends AbstractController(components) {
+class Application(authAction: AuthAction[AnyContent],
+                  components: ControllerComponents,
+                  stage: String)
+    extends AbstractController(components) {
   def healthcheck = Action {
     Ok("healthy")
   }
@@ -12,6 +15,6 @@ class Application(authAction: AuthAction[AnyContent], components: ControllerComp
     Ok(views.html.index(stage)).withHeaders(CACHE_CONTROL -> "no-cache")
   }
 
-  // Handler for endpoints with a test name in the path. The client takes care of using the testName
-  def indexWithName(testName: String) = index
+  // Handler for endpoints with a resource name in the path. The client takes care of using the name
+  def indexWithName(name: String) = index
 }
