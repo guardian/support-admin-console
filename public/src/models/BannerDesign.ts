@@ -4,5 +4,5 @@ export interface BannerDesign {
   name: string;
   imageUrl: string;
   isNew?: boolean;
-  lockState?: LockStatus;
+  lockStatus?: LockStatus;
 }

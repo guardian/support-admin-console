@@ -2,6 +2,7 @@ import React from 'react';
 import { BannerDesign } from '../../../models/BannerDesign';
 import StickyTopBar from './StickyTopBar';
 import { makeStyles, Theme } from '@material-ui/core';
+import { LockStatus } from '../helpers/shared';
 
 const useStyles = makeStyles(({ palette }: Theme) => ({
   container: {
@@ -19,14 +20,30 @@ type Props = {
   onLock: (designName: string, force: boolean) => void;
   onUnlock: (designName: string) => void;
   onSave: (designName: string) => void;
+  userHasLock: boolean;
+  lockStatus: LockStatus;
 };
 
-const BannerDesignEditor: React.FC<Props> = ({ name, onLock, onUnlock, onSave }: Props) => {
+const BannerDesignEditor: React.FC<Props> = ({
+  name,
+  onLock,
+  onUnlock,
+  onSave,
+  userHasLock,
+  lockStatus,
+}: Props) => {
   const classes = useStyles();
 
   return (
     <div className={classes.container}>
-      <StickyTopBar name={name} onLock={onLock} onUnlock={onUnlock} onSave={onSave} />
+      <StickyTopBar
+        name={name}
+        onLock={onLock}
+        onUnlock={onUnlock}
+        onSave={onSave}
+        userHasLock={userHasLock}
+        lockStatus={lockStatus}
+      />
     </div>
   );
 };

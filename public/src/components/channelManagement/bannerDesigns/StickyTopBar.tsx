@@ -7,6 +7,7 @@ import LockIcon from '@material-ui/icons/Lock';
 import CloseIcon from '@material-ui/icons/Close';
 import SaveIcon from '@material-ui/icons/Save';
 import { grey } from '@material-ui/core/colors';
+import { LockStatus } from '../helpers/shared';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {
@@ -61,13 +62,19 @@ interface Props {
   onLock: (name: string, force: boolean) => void;
   onUnlock: (name: string) => void;
   onSave: (name: string) => void;
+  lockStatus: LockStatus;
+  userHasLock: boolean;
 }
 
-const StickyTopBar: React.FC<Props> = ({ name, onLock, onUnlock, onSave }: Props) => {
+const StickyTopBar: React.FC<Props> = ({
+  name,
+  onLock,
+  onUnlock,
+  onSave,
+  userHasLock,
+  lockStatus,
+}: Props) => {
   const classes = useStyles();
-
-  const userHasDesignLocked = true;
-  const lockStatus = { locked: true, email: undefined, timestamp: undefined };
 
   return (
     <header className={classes.container}>
@@ -78,7 +85,7 @@ const StickyTopBar: React.FC<Props> = ({ name, onLock, onUnlock, onSave }: Props
       </div>
       <div className={classes.buttonsContainer}>
         <div className={classes.lockContainer}>
-          {!userHasDesignLocked && !lockStatus.locked && (
+          {!userHasLock && !lockStatus.locked && (
             <>
               <Button
                 variant="outlined"
@@ -90,7 +97,7 @@ const StickyTopBar: React.FC<Props> = ({ name, onLock, onUnlock, onSave }: Props
               </Button>
             </>
           )}
-          {!userHasDesignLocked && lockStatus.locked && (
+          {!userHasLock && lockStatus.locked && (
             <>
               <LockDetails email={lockStatus.email} timestamp={lockStatus.timestamp} />
               <Button
@@ -103,7 +110,7 @@ const StickyTopBar: React.FC<Props> = ({ name, onLock, onUnlock, onSave }: Props
               </Button>
             </>
           )}
-          {userHasDesignLocked && (
+          {userHasLock && (
             <>
               <Button
                 variant="outlined"

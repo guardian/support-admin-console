@@ -5,9 +5,11 @@ import BannerDesignEditor from './BannerDesignEditor';
 import { useParams } from 'react-router-dom';
 
 import {
+  BannerDesignsResponse,
   createBannerDesign,
   fetchBannerDesign,
-  fetchBannerDesigns,
+  fetchFrontendSettings,
+  FrontendSettingsType,
   lockBannerDesign,
   unlockBannerDesign,
   updateBannerDesign,
@@ -52,12 +54,17 @@ const BannerDesigns: React.FC = () => {
   const [bannerDesigns, setBannerDesigns] = useState<BannerDesign[]>([]);
   const { bannerDesignName } = useParams<{ bannerDesignName?: string }>(); // querystring parameter
   const [selectedBannerDesignName, setSelectedBannerDesignName] = useState<string | undefined>();
+  const [userEmail, setUserEmail] = useState<string>('');
+
   const classes = useStyles();
 
   useEffect(() => {
-    fetchBannerDesigns().then(bannerDesigns => {
-      setBannerDesigns(bannerDesigns);
-    });
+    fetchFrontendSettings(FrontendSettingsType.bannerDesigns).then(
+      (response: BannerDesignsResponse) => {
+        setBannerDesigns(response.bannerDesigns);
+        setUserEmail(response.userEmail);
+      },
+    );
   }, []);
 
   useEffect(() => {
@@ -74,7 +81,7 @@ const BannerDesigns: React.FC = () => {
       isNew: true,
       lockStatus: {
         locked: true,
-        email: 'tom.wey@guardian.co.uk',
+        email: userEmail,
         timestamp: new Date().toISOString(),
       },
     };
@@ -102,25 +109,24 @@ const BannerDesigns: React.FC = () => {
       });
   };
   const onUnlock = (designName: string): void => {
-    // const design = bannerDesigns.find(design => design.name === designName);
-    // if (test && test.isNew) {
-    //   // if it's a new design then just drop from the in-memory list
-    //   setTests(tests.filter(test => test.name !== testName));
-    // } else {
-    unlockBannerDesign(designName)
-      .then(() => refreshDesign(designName))
-      .catch(error => {
-        alert(`Error while unlocking test: ${error}`);
-      });
+    const design = bannerDesigns.find(design => design.name === designName);
+    if (design && design.isNew) {
+      // if it's a new design then just drop from the in-memory list
+      setBannerDesigns(bannerDesigns.filter(design => design.name !== designName));
+    } else {
+      unlockBannerDesign(designName)
+        .then(() => refreshDesign(designName))
+        .catch(error => {
+          alert(`Error while unlocking test: ${error}`);
+        });
+    }
   };
 
   const onSave = (designName: string): void => {
     const design = bannerDesigns.find(design => design.name === designName);
 
-    console.log('onSave');
     if (design) {
       if (design.isNew) {
-        console.log('Not new: ', design);
         const unlocked = {
           ...design,
           lockStatus: undefined,
@@ -158,6 +164,8 @@ const BannerDesigns: React.FC = () => {
             onLock={onLock}
             onUnlock={onUnlock}
             onSave={onSave}
+            userHasLock={selectedBannerDesign.lockStatus?.email === userEmail}
+            lockStatus={selectedBannerDesign.lockStatus || { locked: false }}
           />
         ) : (
           <div className={classes.viewTextContainer}>
