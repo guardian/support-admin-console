@@ -1,6 +1,12 @@
 import React from 'react';
-import { Theme, Typography, makeStyles } from '@material-ui/core';
+import { Theme, Typography, makeStyles, Button } from '@material-ui/core';
 import { BannerDesign } from '../../../models/BannerDesign';
+import EditIcon from '@material-ui/icons/Edit';
+import { LockDetails } from './LockDetails';
+import LockIcon from '@material-ui/icons/Lock';
+import CloseIcon from '@material-ui/icons/Close';
+import SaveIcon from '@material-ui/icons/Save';
+import { grey } from '@material-ui/core/colors';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {
@@ -24,21 +30,100 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
     fontSize: '32px',
     fontWeight: 'normal',
   },
+  buttonsContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignSelf: 'flex-end',
+    paddingBottom: spacing(1),
+  },
+  lockContainer: {
+    alignSelf: 'flex-end',
+    display: 'flex',
+    '& > * + *': {
+      marginLeft: spacing(2),
+    },
+    marginLeft: spacing(1),
+  },
+  buttonText: {
+    fontSize: '14px',
+    fontWeight: 500,
+    textTransform: 'uppercase',
+    letterSpacing: '1px',
+    color: palette.grey[800],
+  },
+  icon: {
+    color: grey[700],
+  },
 }));
 
 interface Props {
-  bannerDesign: BannerDesign;
+  name: string;
+  onLock: (name: string, force: boolean) => void;
+  onUnlock: (name: string) => void;
+  onSave: (name: string) => void;
 }
 
-const StickyTopBar: React.FC<Props> = ({ bannerDesign }: Props) => {
+const StickyTopBar: React.FC<Props> = ({ name, onLock, onUnlock, onSave }: Props) => {
   const classes = useStyles();
+
+  const userHasDesignLocked = true;
+  const lockStatus = { locked: true, email: undefined, timestamp: undefined };
 
   return (
     <header className={classes.container}>
       <div className={classes.namesContainer}>
         <Typography variant="h2" className={classes.mainHeader}>
-          {bannerDesign.name}
+          {name}
         </Typography>
+      </div>
+      <div className={classes.buttonsContainer}>
+        <div className={classes.lockContainer}>
+          {!userHasDesignLocked && !lockStatus.locked && (
+            <>
+              <Button
+                variant="outlined"
+                size="medium"
+                startIcon={<EditIcon className={classes.icon} />}
+                onClick={() => onLock(name, false)}
+              >
+                <Typography className={classes.buttonText}>Edit test</Typography>
+              </Button>
+            </>
+          )}
+          {!userHasDesignLocked && lockStatus.locked && (
+            <>
+              <LockDetails email={lockStatus.email} timestamp={lockStatus.timestamp} />
+              <Button
+                variant="outlined"
+                size="medium"
+                startIcon={<LockIcon className={classes.icon} />}
+                onClick={() => onLock(name, true)}
+              >
+                <Typography className={classes.buttonText}>Take control</Typography>
+              </Button>
+            </>
+          )}
+          {userHasDesignLocked && (
+            <>
+              <Button
+                variant="outlined"
+                size="medium"
+                startIcon={<CloseIcon className={classes.icon} />}
+                onClick={() => onUnlock(name)}
+              >
+                <Typography className={classes.buttonText}>Discard</Typography>
+              </Button>
+              <Button
+                variant="outlined"
+                size="medium"
+                startIcon={<SaveIcon className={classes.icon} />}
+                onClick={() => onSave(name)}
+              >
+                <Typography className={classes.buttonText}>Save</Typography>
+              </Button>
+            </>
+          )}
+        </div>
       </div>
     </header>
   );

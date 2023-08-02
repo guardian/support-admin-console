@@ -15,15 +15,18 @@ const useStyles = makeStyles(({ palette }: Theme) => ({
 }));
 
 type Props = {
-  bannerDesign: BannerDesign;
+  name: string;
+  onLock: (designName: string, force: boolean) => void;
+  onUnlock: (designName: string) => void;
+  onSave: (designName: string) => void;
 };
 
-const BannerDesignEditor: React.FC<Props> = ({ bannerDesign }: Props) => {
+const BannerDesignEditor: React.FC<Props> = ({ name, onLock, onUnlock, onSave }: Props) => {
   const classes = useStyles();
 
   return (
     <div className={classes.container}>
-      <StickyTopBar bannerDesign={bannerDesign} />
+      <StickyTopBar name={name} onLock={onLock} onUnlock={onUnlock} onSave={onSave} />
     </div>
   );
 };

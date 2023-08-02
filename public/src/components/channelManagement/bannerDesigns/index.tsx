@@ -4,7 +4,14 @@ import BannerDesignsSidebar from './BannerDesignsSidebar';
 import BannerDesignEditor from './BannerDesignEditor';
 import { useParams } from 'react-router-dom';
 
-import { fetchBannerDesigns } from '../../../utils/requests';
+import {
+  createBannerDesign,
+  fetchBannerDesign,
+  fetchBannerDesigns,
+  lockBannerDesign,
+  unlockBannerDesign,
+  updateBannerDesign,
+} from '../../../utils/requests';
 import { BannerDesign } from '../../../models/BannerDesign';
 
 const useStyles = makeStyles(({ spacing, typography }: Theme) => ({
@@ -62,8 +69,76 @@ const BannerDesigns: React.FC = () => {
   const selectedBannerDesign = bannerDesigns.find(b => b.name === selectedBannerDesignName);
 
   const createDesign = (newUnsavedDesign: BannerDesign): void => {
-    setSelectedBannerDesignName(newUnsavedDesign.name);
-    setBannerDesigns([...bannerDesigns, newUnsavedDesign]);
+    const design = {
+      ...newUnsavedDesign,
+      isNew: true,
+      lockStatus: {
+        locked: true,
+        email: 'tom.wey@guardian.co.uk',
+        timestamp: new Date().toISOString(),
+      },
+    };
+    setSelectedBannerDesignName(design.name);
+    setBannerDesigns([...bannerDesigns, design]);
+  };
+
+  const onDesignChange = (updatedDesign: BannerDesign): void => {
+    const updatedDesigns = bannerDesigns.map(design =>
+      design.name === updatedDesign.name ? updatedDesign : design,
+    );
+
+    setBannerDesigns(updatedDesigns);
+  };
+
+  const refreshDesign = (designName: string): Promise<void> =>
+    fetchBannerDesign(designName).then((design: BannerDesign) => onDesignChange(design));
+
+  const onLock = (designName: string, force: boolean): void => {
+    lockBannerDesign(designName, force)
+      .then(() => refreshDesign(designName))
+      .catch(error => {
+        alert(`Error while locking test: ${error}`);
+        refreshDesign(designName);
+      });
+  };
+  const onUnlock = (designName: string): void => {
+    // const design = bannerDesigns.find(design => design.name === designName);
+    // if (test && test.isNew) {
+    //   // if it's a new design then just drop from the in-memory list
+    //   setTests(tests.filter(test => test.name !== testName));
+    // } else {
+    unlockBannerDesign(designName)
+      .then(() => refreshDesign(designName))
+      .catch(error => {
+        alert(`Error while unlocking test: ${error}`);
+      });
+  };
+
+  const onSave = (designName: string): void => {
+    const design = bannerDesigns.find(design => design.name === designName);
+
+    console.log('onSave');
+    if (design) {
+      if (design.isNew) {
+        console.log('Not new: ', design);
+        const unlocked = {
+          ...design,
+          lockStatus: undefined,
+        };
+        createBannerDesign(unlocked)
+          .then(() => refreshDesign(designName))
+          .catch(error => {
+            alert(`Error while creating new test: ${error}`);
+          });
+      } else {
+        console.log('Not new: ', design);
+        updateBannerDesign(design)
+          .then(() => refreshDesign(designName))
+          .catch(error => {
+            alert(`Error while saving design: ${error}`);
+          });
+      }
+    }
   };
 
   return (
@@ -78,7 +153,12 @@ const BannerDesigns: React.FC = () => {
       </div>
       <div className={classes.rightCol}>
         {selectedBannerDesign ? (
-          <BannerDesignEditor bannerDesign={selectedBannerDesign} />
+          <BannerDesignEditor
+            name={selectedBannerDesign.name}
+            onLock={onLock}
+            onUnlock={onUnlock}
+            onSave={onSave}
+          />
         ) : (
           <div className={classes.viewTextContainer}>
             <Typography className={classes.viewText}>

@@ -50,6 +50,7 @@ const CreateBannerDesignDialog: React.FC<CreateBannerDesignDialogProps> = ({
 
   const defaultValues: BannerDesign = {
     name: '',
+    imageUrl: '',
   };
 
   const { register, handleSubmit, errors } = useForm<BannerDesign>({
@@ -59,6 +60,9 @@ const CreateBannerDesignDialog: React.FC<CreateBannerDesignDialogProps> = ({
   const onSubmit = (design: BannerDesign): void => {
     createDesign({
       name: design.name,
+      // Hardcode this until the form is working
+      imageUrl:
+        'https://i.guim.co.uk/img/media/35d403182e4b262d37385281b19b763ee6b32f6a/58_0_1743_1046/master/1743.png?width=930&quality=45&auto=format&s=9ecd82413fef9883c1e7a0df2bf6abb1',
     });
     close();
   };

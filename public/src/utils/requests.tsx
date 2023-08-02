@@ -154,6 +154,32 @@ export function fetchBannerDesigns(): Promise<BannerDesign[]> {
   );
 }
 
+export function fetchBannerDesign(designName: string): Promise<BannerDesign> {
+  return fetchSettings(`/frontend/${FrontendSettingsType.bannerDesigns}/${designName}`);
+}
+
+export function lockBannerDesign(designName: string, force: boolean): Promise<Response> {
+  const path = force
+    ? `/frontend/${FrontendSettingsType.bannerDesigns}/takecontrol/${designName}`
+    : `/frontend/${FrontendSettingsType.bannerDesigns}/lock/${designName}`;
+  return makeFetch(path, {
+    method: 'POST',
+  });
+}
+export function unlockBannerDesign(designName: string): Promise<Response> {
+  return makeFetch(`/frontend/${FrontendSettingsType.bannerDesigns}/unlock/${designName}`, {
+    method: 'POST',
+  });
+}
+
+export function updateBannerDesign(design: BannerDesign): Promise<Response> {
+  return saveSettings(`/frontend/${FrontendSettingsType.bannerDesigns}/update`, design);
+}
+
+export function createBannerDesign(design: BannerDesign): Promise<Response> {
+  return saveSettings(`/frontend/${FrontendSettingsType.bannerDesigns}/create`, design);
+}
+
 export function saveFrontendSettings(
   settingsType: FrontendSettingsType,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
