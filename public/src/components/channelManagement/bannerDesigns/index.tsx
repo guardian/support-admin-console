@@ -61,8 +61,9 @@ const BannerDesigns: React.FC = () => {
 
   const selectedBannerDesign = bannerDesigns.find(b => b.name === selectedBannerDesignName);
 
-  const createDesign = (design: BannerDesign): void => {
-    console.log('Creating banner design!', design);
+  const createDesign = (newUnsavedDesign: BannerDesign): void => {
+    setSelectedBannerDesignName(newUnsavedDesign.name);
+    setBannerDesigns([...bannerDesigns, newUnsavedDesign]);
   };
 
   return (
