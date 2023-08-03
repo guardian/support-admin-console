@@ -144,14 +144,9 @@ export function fetchFrontendSettings(settingsType: FrontendSettingsType): Promi
   return fetchSettings(`/frontend/${settingsType}`);
 }
 
-interface BannerDesignsResponse {
+export interface BannerDesignsResponse {
   bannerDesigns: BannerDesign[];
-}
-
-export function fetchBannerDesigns(): Promise<BannerDesign[]> {
-  return fetchFrontendSettings(FrontendSettingsType.bannerDesigns).then(
-    (response: BannerDesignsResponse) => response.bannerDesigns,
-  );
+  userEmail: string;
 }
 
 export function fetchBannerDesign(designName: string): Promise<BannerDesign> {

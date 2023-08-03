@@ -3,7 +3,7 @@ package models
 case class BannerDesign(
     name: String,
     imageUrl: String,
-    lockStatus: LockStatus,
+    lockStatus: Option[LockStatus],
 )
 
 object BannerDesign {}
