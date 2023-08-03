@@ -137,7 +137,6 @@ const BannerDesigns: React.FC = () => {
             alert(`Error while creating new test: ${error}`);
           });
       } else {
-        console.log('Not new: ', design);
         updateBannerDesign(design)
           .then(() => refreshDesign(designName))
           .catch(error => {
