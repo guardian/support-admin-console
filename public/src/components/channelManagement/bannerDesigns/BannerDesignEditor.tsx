@@ -1,5 +1,4 @@
 import React from 'react';
-import { BannerDesign } from '../../../models/BannerDesign';
 import StickyTopBar from './StickyTopBar';
 import { makeStyles, Theme } from '@material-ui/core';
 import { LockStatus } from '../helpers/shared';

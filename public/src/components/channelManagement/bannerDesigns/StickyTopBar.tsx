@@ -1,6 +1,5 @@
 import React from 'react';
 import { Theme, Typography, makeStyles, Button } from '@material-ui/core';
-import { BannerDesign } from '../../../models/BannerDesign';
 import EditIcon from '@material-ui/icons/Edit';
 import { LockDetails } from './LockDetails';
 import LockIcon from '@material-ui/icons/Lock';
