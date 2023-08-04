@@ -1,46 +1,17 @@
 import React from 'react';
-import { List, ListItem, Theme, makeStyles, Button, Typography } from '@material-ui/core';
+import { List, makeStyles } from '@material-ui/core';
 import { BannerDesign } from '../../../models/BannerDesign';
+import BannerDesignListItem from './BannerDesignListItem';
 
-const useStyles = makeStyles(({ palette }: Theme) => ({
+const useStyles = makeStyles(() => ({
   container: {
     marginTop: '16px',
   },
   list: {
     padding: 0,
-    width: '100%',
-  },
-  listItem: {
-    margin: 0,
-    padding: 0,
-    gutter: 0,
-    width: '100%',
-  },
-  button: {
-    position: 'relative',
-    height: '50px',
-    width: '290px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    background: 'white',
-    borderRadius: '4px',
-    padding: '0 12px',
-    marginBottom: '4px',
-  },
-  text: {
-    fontSize: '12px',
-    fontWeight: 500,
-    textTransform: 'uppercase',
-    letterSpacing: '1px',
-  },
-  selected: {
-    background: `${palette.grey[700]}`,
-    color: 'white',
-
-    '&:hover': {
-      background: `${palette.grey[700]}`,
-      color: 'white',
+    marginTop: 0,
+    '& > * + *': {
+      marginTop: '8px',
     },
   },
 }));
@@ -62,19 +33,16 @@ const BannerDesignsList = ({
     <div className={classes.container}>
       <List className={classes.list}>
         {designs.map(design => {
-          const isSelected = selectedDesign && selectedDesign.name === design.name;
+          const isSelected = Boolean(selectedDesign && selectedDesign.name === design.name);
 
           return (
-            <ListItem className={classes.listItem} key={design.name}>
-              <Button
-                key={`${design.name}-button`}
-                className={[classes.button, isSelected && classes.selected].join(' ')}
-                variant="outlined"
-                onClick={(): void => onDesignSelected(design.name)}
-              >
-                <Typography className={classes.text}>{design.name}</Typography>
-              </Button>
-            </ListItem>
+            <BannerDesignListItem
+              key={design.name}
+              design={design}
+              isSelected={isSelected}
+              isLockedForEditing={Boolean(design.lockStatus?.locked)}
+              onDesignSelected={(): void => onDesignSelected(design.name)}
+            />
           );
         })}
       </List>
