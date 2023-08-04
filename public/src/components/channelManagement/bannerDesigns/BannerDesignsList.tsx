@@ -65,7 +65,7 @@ const BannerDesignsList = ({
           const isSelected = selectedDesign && selectedDesign.name === design.name;
 
           return (
-            <ListItem className={classes.button} key={design.name}>
+            <ListItem className={classes.listItem} key={design.name}>
               <Button
                 key={`${design.name}-button`}
                 className={[classes.button, isSelected && classes.selected].join(' ')}

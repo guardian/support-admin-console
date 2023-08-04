@@ -144,14 +144,35 @@ export function fetchFrontendSettings(settingsType: FrontendSettingsType): Promi
   return fetchSettings(`/frontend/${settingsType}`);
 }
 
-interface BannerDesignsResponse {
+export interface BannerDesignsResponse {
   bannerDesigns: BannerDesign[];
+  userEmail: string;
 }
 
-export function fetchBannerDesigns(): Promise<BannerDesign[]> {
-  return fetchFrontendSettings(FrontendSettingsType.bannerDesigns).then(
-    (response: BannerDesignsResponse) => response.bannerDesigns,
-  );
+export function fetchBannerDesign(designName: string): Promise<BannerDesign> {
+  return fetchSettings(`/frontend/${FrontendSettingsType.bannerDesigns}/${designName}`);
+}
+
+export function lockBannerDesign(designName: string, force: boolean): Promise<Response> {
+  const path = force
+    ? `/frontend/${FrontendSettingsType.bannerDesigns}/takecontrol/${designName}`
+    : `/frontend/${FrontendSettingsType.bannerDesigns}/lock/${designName}`;
+  return makeFetch(path, {
+    method: 'POST',
+  });
+}
+export function unlockBannerDesign(designName: string): Promise<Response> {
+  return makeFetch(`/frontend/${FrontendSettingsType.bannerDesigns}/unlock/${designName}`, {
+    method: 'POST',
+  });
+}
+
+export function updateBannerDesign(design: BannerDesign): Promise<Response> {
+  return saveSettings(`/frontend/${FrontendSettingsType.bannerDesigns}/update`, design);
+}
+
+export function createBannerDesign(design: BannerDesign): Promise<Response> {
+  return saveSettings(`/frontend/${FrontendSettingsType.bannerDesigns}/create`, design);
 }
 
 export function saveFrontendSettings(

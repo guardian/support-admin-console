@@ -33,6 +33,7 @@ class BannerDesignsController(
 
   case class BannerDesignsResponse(
       bannerDesigns: List[BannerDesign],
+      userEmail: String,
   )
 
   val lockFileName = "banner-designs"
@@ -63,6 +64,7 @@ class BannerDesignsController(
         .map { bannerDesigns =>
           val response = BannerDesignsResponse(
             bannerDesigns,
+            request.user.email
           )
           Ok(noNulls(response.asJson))
         }
