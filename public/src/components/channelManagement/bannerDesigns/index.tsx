@@ -73,8 +73,6 @@ const BannerDesigns: React.FC = () => {
     }
   }, [bannerDesignName, bannerDesigns]);
 
-  const selectedBannerDesign = bannerDesigns.find(b => b.name === selectedBannerDesignName);
-
   const createDesign = (newUnsavedDesign: BannerDesign): void => {
     const design = {
       ...newUnsavedDesign,
@@ -108,6 +106,7 @@ const BannerDesigns: React.FC = () => {
         refreshDesign(designName);
       });
   };
+
   const onUnlock = (designName: string): void => {
     const design = bannerDesigns.find(design => design.name === designName);
     if (design && design.isNew) {
@@ -134,7 +133,7 @@ const BannerDesigns: React.FC = () => {
         createBannerDesign(unlocked)
           .then(() => refreshDesign(designName))
           .catch(error => {
-            alert(`Error while creating new test: ${error}`);
+            alert(`Error while creating new design: ${error}`);
           });
       } else {
         updateBannerDesign(design)
@@ -145,6 +144,8 @@ const BannerDesigns: React.FC = () => {
       }
     }
   };
+
+  const selectedBannerDesign = bannerDesigns.find(b => b.name === selectedBannerDesignName);
 
   return (
     <div className={classes.body}>

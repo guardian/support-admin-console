@@ -5,7 +5,6 @@ import { LockStatus } from '../helpers/shared';
 import useValidation from '../hooks/useValidation';
 import BannerDesignForm from './BannerDesignForm';
 import { BannerDesign } from '../../../models/BannerDesign';
-import BannerDesigns from './index';
 
 const useStyles = makeStyles(({ palette }: Theme) => ({
   container: {
@@ -13,7 +12,7 @@ const useStyles = makeStyles(({ palette }: Theme) => ({
     flexDirection: 'column',
     height: '100%',
     width: '100%',
-    background: palette.background.paper, // #FFFFFF
+    background: palette.background.paper,
     borderLeft: `1px solid ${palette.grey[500]}`,
   },
 }));
@@ -43,7 +42,7 @@ const BannerDesignEditor: React.FC<Props> = ({
 
   const [isValid, setIsValid] = useState<boolean>(true);
 
-  const setValidationStatusForField = useValidation(setIsValid);
+  const setValidationStatus = useValidation(setIsValid);
 
   const onSaveWithValidation = (designName: string): void => {
     if (isValid) {
@@ -65,7 +64,7 @@ const BannerDesignEditor: React.FC<Props> = ({
       />
       <BannerDesignForm
         design={design}
-        setValidationStatusForField={setValidationStatusForField}
+        setValidationStatus={setValidationStatus}
         isDisabled={!userHasLock}
         onChange={onChange}
       />
