@@ -37,8 +37,12 @@ interface CreateBannerDesignDialogProps {
   isOpen: boolean;
   close: () => void;
   existingNames: string[];
-  createDesign: (data: BannerDesign) => void;
+  createDesign: (name: string) => void;
 }
+
+type FormData = {
+  name: string;
+};
 
 const CreateBannerDesignDialog: React.FC<CreateBannerDesignDialogProps> = ({
   isOpen,
@@ -48,20 +52,16 @@ const CreateBannerDesignDialog: React.FC<CreateBannerDesignDialogProps> = ({
 }: CreateBannerDesignDialogProps) => {
   const classes = useStyles();
 
-  const defaultValues: BannerDesign = {
+  const defaultValues: FormData = {
     name: '',
-    imageUrl: '',
   };
 
-  const { register, handleSubmit, errors } = useForm<BannerDesign>({
+  const { register, handleSubmit, errors } = useForm<FormData>({
     defaultValues,
   });
 
-  const onSubmit = (design: BannerDesign): void => {
-    createDesign({
-      name: design.name.toUpperCase(),
-      imageUrl: design.imageUrl,
-    });
+  const onSubmit = ({ name }: FormData): void => {
+    createDesign(name.toUpperCase());
     close();
   };
 

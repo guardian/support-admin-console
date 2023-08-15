@@ -27,7 +27,7 @@ interface Props {
   designs: BannerDesign[];
   selectedDesign?: BannerDesign;
   onDesignSelected: (designName: string) => void;
-  createDesign: (design: BannerDesign) => void;
+  createDesign: (name: string) => void;
 }
 
 const BannerDesignsSidebar = ({

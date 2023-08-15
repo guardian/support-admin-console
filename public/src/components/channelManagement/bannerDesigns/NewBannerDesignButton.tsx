@@ -19,7 +19,7 @@ const useStyles = makeStyles(() => ({
 
 interface Props {
   existingNames: string[];
-  createDesign: (campaign: BannerDesign) => void;
+  createDesign: (name: string) => void;
 }
 
 const NewCampaignButton: React.FC<Props> = ({ existingNames, createDesign }: Props) => {

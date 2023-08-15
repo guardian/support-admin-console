@@ -15,6 +15,7 @@ import {
   updateBannerDesign,
 } from '../../../utils/requests';
 import { BannerDesign } from '../../../models/BannerDesign';
+import { createDefaultBannerDesign } from './utils/defaults';
 
 const useStyles = makeStyles(({ spacing, typography }: Theme) => ({
   viewTextContainer: {
@@ -79,9 +80,9 @@ const BannerDesigns: React.FC = () => {
     }
   }, [bannerDesignName, bannerDesigns]);
 
-  const createDesign = (newUnsavedDesign: BannerDesign): void => {
+  const createDesign = (name: string): void => {
     const design = {
-      ...newUnsavedDesign,
+      ...createDefaultBannerDesign(name),
       isNew: true,
       lockStatus: {
         locked: true,
