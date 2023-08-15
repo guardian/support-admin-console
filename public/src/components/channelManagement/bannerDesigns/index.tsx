@@ -160,11 +160,13 @@ const BannerDesigns: React.FC = () => {
         {selectedBannerDesign ? (
           <BannerDesignEditor
             name={selectedBannerDesign.name}
+            design={selectedBannerDesign}
             onLock={onLock}
             onUnlock={onUnlock}
             onSave={onSave}
             userHasLock={selectedBannerDesign.lockStatus?.email === userEmail}
             lockStatus={selectedBannerDesign.lockStatus || { locked: false }}
+            onChange={onDesignChange}
           />
         ) : (
           <div className={classes.viewTextContainer}>
