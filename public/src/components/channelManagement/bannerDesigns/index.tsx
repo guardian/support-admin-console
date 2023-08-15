@@ -48,6 +48,12 @@ const useStyles = makeStyles(({ spacing, typography }: Theme) => ({
     display: 'flex',
     justifyContent: 'center',
   },
+  scrollableContainer: {
+    overflowY: 'auto',
+    paddingLeft: spacing(3),
+    paddingRight: spacing(1),
+    paddingTop: spacing(2),
+  },
 }));
 
 const BannerDesigns: React.FC = () => {

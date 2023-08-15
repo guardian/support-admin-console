@@ -6,7 +6,7 @@ import useValidation from '../hooks/useValidation';
 import BannerDesignForm from './BannerDesignForm';
 import { BannerDesign } from '../../../models/BannerDesign';
 
-const useStyles = makeStyles(({ palette }: Theme) => ({
+const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
     display: 'flex',
     flexDirection: 'column',
@@ -14,6 +14,12 @@ const useStyles = makeStyles(({ palette }: Theme) => ({
     width: '100%',
     background: palette.background.paper,
     borderLeft: `1px solid ${palette.grey[500]}`,
+  },
+  scrollableContainer: {
+    overflowY: 'auto',
+    paddingLeft: spacing(3),
+    paddingRight: spacing(1),
+    paddingTop: spacing(2),
   },
 }));
 
@@ -62,12 +68,14 @@ const BannerDesignEditor: React.FC<Props> = ({
         userHasLock={userHasLock}
         lockStatus={lockStatus}
       />
-      <BannerDesignForm
-        design={design}
-        setValidationStatus={setValidationStatus}
-        isDisabled={!userHasLock}
-        onChange={onChange}
-      />
+      <div className={classes.scrollableContainer}>
+        <BannerDesignForm
+          design={design}
+          setValidationStatus={setValidationStatus}
+          isDisabled={!userHasLock}
+          onChange={onChange}
+        />
+      </div>
     </div>
   );
 };
