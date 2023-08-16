@@ -2,7 +2,6 @@ import React from 'react';
 import { Button, makeStyles, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import useOpenable from '../../../hooks/useOpenable';
-import { BannerDesign } from '../../../models/BannerDesign';
 import CreateBannerDesignDialog from './CreateBannerDesignDialog';
 
 const useStyles = makeStyles(() => ({

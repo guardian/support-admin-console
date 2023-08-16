@@ -17,7 +17,6 @@ import {
   VALID_CHARACTERS_REGEX,
 } from '../helpers/validation';
 import { useForm } from 'react-hook-form';
-import { BannerDesign } from '../../../models/BannerDesign';
 
 const useStyles = makeStyles(() => ({
   dialogHeader: {
