@@ -3,7 +3,10 @@ import { TextField, Typography } from '@material-ui/core';
 import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 import { useForm } from 'react-hook-form';
 import { BannerDesign } from '../../../models/BannerDesign';
-import { BannerDesignFormData as FormData, DEFAULT_BANNER_DESIGN } from './utils/defaults';
+import {
+  BannerDesignImageFormData as ImageFormData,
+  DEFAULT_BANNER_DESIGN,
+} from './utils/defaults';
 import { useStyles } from '../helpers/testEditorStyles';
 
 type Props = {
@@ -26,11 +29,14 @@ const BannerDesignForm: React.FC<Props> = ({
     setValidationStatus(validationScope, isValid);
   };
 
-  const defaultValues: FormData = {
-    imageUrl: design.imageUrl || DEFAULT_BANNER_DESIGN.imageUrl,
+  const defaultValues: ImageFormData = {
+    mobileUrl: design.image.mobileUrl || DEFAULT_BANNER_DESIGN.mobileUrl,
+    tabletDesktopUrl: design.image.tabletDesktopUrl || DEFAULT_BANNER_DESIGN.tabletDesktopUrl,
+    wideUrl: design.image.wideUrl || DEFAULT_BANNER_DESIGN.wideUrl,
+    altText: design.image.altText || DEFAULT_BANNER_DESIGN.altText,
   };
 
-  const { register, handleSubmit, errors, reset } = useForm<FormData>({
+  const { register, handleSubmit, errors, reset } = useForm<ImageFormData>({
     mode: 'onChange',
     defaultValues,
   });
@@ -39,14 +45,14 @@ const BannerDesignForm: React.FC<Props> = ({
     reset(defaultValues);
   }, [design]);
 
-  const onSubmit = ({ imageUrl }: FormData): void => {
-    onChange({ ...design, imageUrl });
+  const onSubmit = (formData: ImageFormData): void => {
+    onChange({ ...design, image: formData });
   };
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
-  }, [errors.imageUrl]);
+  }, [errors.mobileUrl, errors.tabletDesktopUrl, errors.wideUrl, errors.altText]);
 
   return (
     <div className={classes.container}>
@@ -59,11 +65,53 @@ const BannerDesignForm: React.FC<Props> = ({
             inputRef={register({
               required: EMPTY_ERROR_HELPER_TEXT,
             })}
-            error={errors.imageUrl !== undefined}
-            helperText={errors.imageUrl?.message}
+            error={errors.mobileUrl !== undefined}
+            helperText={errors.mobileUrl?.message}
             onBlur={handleSubmit(onSubmit)}
-            name="imageUrl"
-            label="Banner Image URL"
+            name="mobileUrl"
+            label="Banner Image URL (Mobile)"
+            margin="normal"
+            variant="outlined"
+            disabled={isDisabled}
+            fullWidth
+          />
+          <TextField
+            inputRef={register({
+              required: EMPTY_ERROR_HELPER_TEXT,
+            })}
+            error={errors.tabletDesktopUrl !== undefined}
+            helperText={errors.tabletDesktopUrl?.message}
+            onBlur={handleSubmit(onSubmit)}
+            name="tabletDesktopUrl"
+            label="Banner Image URL (Tablet & Desktop)"
+            margin="normal"
+            variant="outlined"
+            disabled={isDisabled}
+            fullWidth
+          />
+          <TextField
+            inputRef={register({
+              required: EMPTY_ERROR_HELPER_TEXT,
+            })}
+            error={errors.wideUrl !== undefined}
+            helperText={errors.wideUrl?.message}
+            onBlur={handleSubmit(onSubmit)}
+            name="wideUrl"
+            label="Banner Image URL (Wide)"
+            margin="normal"
+            variant="outlined"
+            disabled={isDisabled}
+            fullWidth
+          />
+          <TextField
+            inputRef={register({
+              required: EMPTY_ERROR_HELPER_TEXT,
+            })}
+            error={errors.altText !== undefined}
+            helperText={errors.altText?.message}
+            onBlur={handleSubmit(onSubmit)}
+            name="altText"
+            label="Banner Image Description (alt text)"
             margin="normal"
             variant="outlined"
             disabled={isDisabled}

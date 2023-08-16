@@ -1,8 +1,15 @@
 package models
 
+case class BannerDesignImage(
+    mobileUrl: String,
+    tabletDesktopUrl: String,
+    wideUrl: String,
+    altText: String
+)
+
 case class BannerDesign(
     name: String,
-    imageUrl: String,
+    image: BannerDesignImage,
     lockStatus: Option[LockStatus],
 )
 
