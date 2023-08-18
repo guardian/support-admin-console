@@ -11,6 +11,7 @@ import {
 } from '../components/channelManagement/helpers/shared';
 import { Region } from '../utils/models';
 import { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';
+import BannerTemplateSelector from '../components/channelManagement/bannerTests/bannerTemplateSelector';
 
 export enum BannerTemplate {
   AusAnniversaryBanner = 'AusAnniversaryBanner',
@@ -32,6 +33,12 @@ export enum BannerTemplate {
   Scotus2023MomentBanner = 'Scotus2023MomentBanner',
 }
 
+export interface BannerDesignName {
+  name: string;
+}
+
+export type BannerUI = BannerTemplate | BannerDesignName;
+
 export interface BannerContent {
   heading?: string;
   messageText?: string;
@@ -41,7 +48,7 @@ export interface BannerContent {
   secondaryCta?: SecondaryCta;
 }
 export interface BannerVariant extends Variant {
-  template: BannerTemplate;
+  template: BannerUI;
   bannerContent: BannerContent;
   mobileBannerContent?: BannerContent;
   separateArticleCount?: boolean;
@@ -60,4 +67,8 @@ export interface BannerTest extends Test {
   controlProportionSettings?: ControlProportionSettings;
   deviceType?: DeviceType;
   campaignName?: string;
+}
+
+export function isBannerTemplate(s: BannerUI | string): s is BannerTemplate {
+  return Object.values(BannerTemplate).includes(s as BannerTemplate);
 }

@@ -1,13 +1,9 @@
 import React from 'react';
 import { MenuItem, Select } from '@material-ui/core';
-import { BannerTemplate } from '../../../models/banner';
-
-function isBannerTemplate(s: string): s is BannerTemplate {
-  return Object.values(BannerTemplate).includes(s as BannerTemplate);
-}
+import { BannerTemplate, BannerUI, isBannerTemplate } from '../../../models/banner';
 
 interface BannerTemplateSelectorProps {
-  template: BannerTemplate;
+  template: BannerUI;
   onTemplateChange: (updatedTemplate: BannerTemplate) => void;
   editMode: boolean;
 }

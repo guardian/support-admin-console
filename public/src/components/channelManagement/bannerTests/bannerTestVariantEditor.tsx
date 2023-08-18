@@ -17,7 +17,7 @@ import {
 } from '../helpers/validation';
 import { Cta, SecondaryCta } from '../helpers/shared';
 import BannerTemplateSelector from './bannerTemplateSelector';
-import { BannerContent, BannerTemplate, BannerVariant } from '../../../models/banner';
+import { BannerContent, BannerTemplate, BannerUI, BannerVariant } from '../../../models/banner';
 import { getDefaultVariant } from './utils/defaults';
 import useValidation from '../hooks/useValidation';
 import {
@@ -97,7 +97,7 @@ const getLabelSuffix = (deviceType: DeviceType): string => {
 
 interface BannerTestVariantContentEditorProps {
   content: BannerContent;
-  template: BannerTemplate;
+  template: BannerUI;
   onChange: (updatedContent: BannerContent) => void;
   onValidationChange: (isValid: boolean) => void;
   editMode: boolean;
