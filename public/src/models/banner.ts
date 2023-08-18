@@ -11,7 +11,6 @@ import {
 } from '../components/channelManagement/helpers/shared';
 import { Region } from '../utils/models';
 import { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';
-import BannerTemplateSelector from '../components/channelManagement/bannerTests/bannerTemplateSelector';
 
 export enum BannerTemplate {
   AusAnniversaryBanner = 'AusAnniversaryBanner',
