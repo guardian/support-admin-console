@@ -41,10 +41,7 @@ const BannerDesignsList = ({
               design={design}
               isSelected={isSelected}
               isLockedForEditing={Boolean(design.lockStatus?.locked)}
-              onDesignSelected={(): void => {
-                console.log(design.name);
-                onDesignSelected(design.name);
-              }}
+              onDesignSelected={(): void => onDesignSelected(design.name)}
             />
           );
         })}
