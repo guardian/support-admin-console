@@ -17,7 +17,6 @@ import {
   VALID_CHARACTERS_REGEX,
 } from '../helpers/validation';
 import { useForm } from 'react-hook-form';
-import { BannerDesign } from '../../../models/BannerDesign';
 
 const useStyles = makeStyles(() => ({
   dialogHeader: {
@@ -37,8 +36,12 @@ interface CreateBannerDesignDialogProps {
   isOpen: boolean;
   close: () => void;
   existingNames: string[];
-  createDesign: (data: BannerDesign) => void;
+  createDesign: (name: string) => void;
 }
+
+type FormData = {
+  name: string;
+};
 
 const CreateBannerDesignDialog: React.FC<CreateBannerDesignDialogProps> = ({
   isOpen,
@@ -48,22 +51,16 @@ const CreateBannerDesignDialog: React.FC<CreateBannerDesignDialogProps> = ({
 }: CreateBannerDesignDialogProps) => {
   const classes = useStyles();
 
-  const defaultValues: BannerDesign = {
+  const defaultValues: FormData = {
     name: '',
-    imageUrl: '',
   };
 
-  const { register, handleSubmit, errors } = useForm<BannerDesign>({
+  const { register, handleSubmit, errors } = useForm<FormData>({
     defaultValues,
   });
 
-  const onSubmit = (design: BannerDesign): void => {
-    createDesign({
-      name: design.name.toUpperCase(),
-      // Hardcode this until the form is working
-      imageUrl:
-        'https://i.guim.co.uk/img/media/35d403182e4b262d37385281b19b763ee6b32f6a/58_0_1743_1046/master/1743.png?width=930&quality=45&auto=format&s=9ecd82413fef9883c1e7a0df2bf6abb1',
-    });
+  const onSubmit = ({ name }: FormData): void => {
+    createDesign(name.toUpperCase());
     close();
   };
 

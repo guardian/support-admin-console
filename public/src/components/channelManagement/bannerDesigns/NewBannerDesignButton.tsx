@@ -2,7 +2,6 @@ import React from 'react';
 import { Button, makeStyles, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import useOpenable from '../../../hooks/useOpenable';
-import { BannerDesign } from '../../../models/BannerDesign';
 import CreateBannerDesignDialog from './CreateBannerDesignDialog';
 
 const useStyles = makeStyles(() => ({
@@ -19,7 +18,7 @@ const useStyles = makeStyles(() => ({
 
 interface Props {
   existingNames: string[];
-  createDesign: (campaign: BannerDesign) => void;
+  createDesign: (name: string) => void;
 }
 
 const NewCampaignButton: React.FC<Props> = ({ existingNames, createDesign }: Props) => {

@@ -15,6 +15,7 @@ import {
   updateBannerDesign,
 } from '../../../utils/requests';
 import { BannerDesign } from '../../../models/BannerDesign';
+import { createDefaultBannerDesign } from './utils/defaults';
 
 const useStyles = makeStyles(({ spacing, typography }: Theme) => ({
   viewTextContainer: {
@@ -48,6 +49,12 @@ const useStyles = makeStyles(({ spacing, typography }: Theme) => ({
     display: 'flex',
     justifyContent: 'center',
   },
+  scrollableContainer: {
+    overflowY: 'auto',
+    paddingLeft: spacing(3),
+    paddingRight: spacing(1),
+    paddingTop: spacing(2),
+  },
 }));
 
 const BannerDesigns: React.FC = () => {
@@ -73,11 +80,9 @@ const BannerDesigns: React.FC = () => {
     }
   }, [bannerDesignName, bannerDesigns]);
 
-  const selectedBannerDesign = bannerDesigns.find(b => b.name === selectedBannerDesignName);
-
-  const createDesign = (newUnsavedDesign: BannerDesign): void => {
+  const createDesign = (name: string): void => {
     const design = {
-      ...newUnsavedDesign,
+      ...createDefaultBannerDesign(name),
       isNew: true,
       lockStatus: {
         locked: true,
@@ -108,6 +113,7 @@ const BannerDesigns: React.FC = () => {
         refreshDesign(designName);
       });
   };
+
   const onUnlock = (designName: string): void => {
     const design = bannerDesigns.find(design => design.name === designName);
     if (design && design.isNew) {
@@ -134,7 +140,7 @@ const BannerDesigns: React.FC = () => {
         createBannerDesign(unlocked)
           .then(() => refreshDesign(designName))
           .catch(error => {
-            alert(`Error while creating new test: ${error}`);
+            alert(`Error while creating new design: ${error}`);
           });
       } else {
         updateBannerDesign(design)
@@ -145,6 +151,8 @@ const BannerDesigns: React.FC = () => {
       }
     }
   };
+
+  const selectedBannerDesign = bannerDesigns.find(b => b.name === selectedBannerDesignName);
 
   return (
     <div className={classes.body}>
@@ -160,11 +168,13 @@ const BannerDesigns: React.FC = () => {
         {selectedBannerDesign ? (
           <BannerDesignEditor
             name={selectedBannerDesign.name}
+            design={selectedBannerDesign}
             onLock={onLock}
             onUnlock={onUnlock}
             onSave={onSave}
             userHasLock={selectedBannerDesign.lockStatus?.email === userEmail}
             lockStatus={selectedBannerDesign.lockStatus || { locked: false }}
+            onChange={onDesignChange}
           />
         ) : (
           <div className={classes.viewTextContainer}>
