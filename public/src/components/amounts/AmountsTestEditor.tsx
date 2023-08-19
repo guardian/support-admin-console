@@ -158,13 +158,11 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
       setCurrentLiveTestName('');
       setCurrentLiveTestError(nameErrorMessages.REQUIRED);
       setSaveButtonIsDisabled(true);
-    }
-    else {
+    } else {
       setCurrentLiveTestName(update.toUpperCase());
       if (checkTestNameIsUnique(update)) {
         setCurrentLiveTestError(nameErrorMessages.OK);
-      }
-      else {
+      } else {
         setCurrentLiveTestError(nameErrorMessages.DUPLICATE);
       }
       setSaveButtonIsDisabled(false);
@@ -176,18 +174,16 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
       setCurrentOrder(0);
       setCurrentOrderError(orderErrorMessages.NOTANUMBER);
       setSaveButtonIsDisabled(true);
-    }
-    else {
+    } else {
       setCurrentOrder(update);
       if (update < 0) {
         setCurrentOrderError(orderErrorMessages.NEGATIVE);
-      }
-      else {
+      } else {
         setCurrentOrderError(orderErrorMessages.OK);
       }
       setSaveButtonIsDisabled(false);
     }
-  }
+  };
 
   const updateVariant = (variant: AmountsVariant) => {
     const newState: AmountsVariant[] = [];
@@ -306,7 +302,7 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
         <TextField
           className={classes.input}
           name="liveTestName"
-          label={checkIfTestIsCountryTier() ? "Live test name" : "Live A/B test name"}
+          label={checkIfTestIsCountryTier() ? 'Live test name' : 'Live A/B test name'}
           value={currentLiveTestName}
           onChange={e => updateLiveTestName(e.target.value)}
           error={!!currentLiveTestError.length}
@@ -333,7 +329,7 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
         )}
 
         <LiveSwitch
-          label={checkIfTestIsCountryTier() ? "Test is live" : "A/B test is live"}
+          label={checkIfTestIsCountryTier() ? 'Test is live' : 'A/B test is live'}
           isLive={testIsLive}
           onChange={updateTestIsLive}
           isDisabled={false}

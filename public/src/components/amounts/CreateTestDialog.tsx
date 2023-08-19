@@ -55,13 +55,11 @@ export const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
     if (!update || !update.trim()) {
       setName('');
       setNameError(errorMessages.REQUIRED);
-    }
-    else {
+    } else {
       setName(update.toUpperCase());
       if (checkTestNameIsUnique(update)) {
         setNameError(errorMessages.OK);
-      }
-      else {
+      } else {
         setNameError(errorMessages.DUPLICATE);
       }
     }
@@ -71,13 +69,11 @@ export const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
     if (!update || !update.trim()) {
       setLabel('');
       setLabelError(errorMessages.REQUIRED);
-    }
-    else {
+    } else {
       setLabel(update.toUpperCase());
       if (checkTestLabelIsUnique(update)) {
         setLabelError(errorMessages.OK);
-      }
-      else {
+      } else {
         setLabelError(errorMessages.DUPLICATE);
       }
     }

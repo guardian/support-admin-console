@@ -1,10 +1,7 @@
 import React from 'react';
 import { List, ListItem, makeStyles, Typography } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
-import {
-  AmountsTests,
-  AmountsTest,
-} from '../../utils/models';
+import { AmountsTests, AmountsTest } from '../../utils/models';
 import { CreateTestButton } from './CreateTestButton';
 
 const useStyles = makeStyles(({ palette }) => ({
@@ -109,7 +106,7 @@ export const AmountsTestsList: React.FC<AmountsTestsListProps> = ({
     const countryTests = tests.filter(t => t.region === '');
     return countryTests.sort((a, b) => {
       if (a.order !== b.order) {
-        return a.order - b.order
+        return a.order - b.order;
       }
       const A = a.testLabel || a.testName;
       const B = b.testLabel || b.testName;

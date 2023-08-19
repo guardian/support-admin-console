@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
-import {
-  AmountsTests,
-  AmountsTest,
-  ContributionType,
-} from '../../utils/models';
+import { AmountsTests, AmountsTest, ContributionType } from '../../utils/models';
 
 import { AmountsTestsList } from './AmountsTestsList';
 import { AmountsTestEditor } from './AmountsTestEditor';
@@ -57,7 +53,7 @@ const AmountsForm: React.FC<InnerProps<AmountsTests>> = ({
   const onTestSelected = (name: string) => {
     const currentTest = configuredAmounts.find(test => test.testName === name);
     if (currentTest) {
-      setSelectedTest({...currentTest});
+      setSelectedTest({ ...currentTest });
     } else {
       setSelectedTest(undefined);
     }
@@ -70,8 +66,8 @@ const AmountsForm: React.FC<InnerProps<AmountsTests>> = ({
       if (t.liveTestName) {
         allTestNames.push(t.liveTestName);
       }
-    })
-    return !allTestNames.includes(name)
+    });
+    return !allTestNames.includes(name);
   };
 
   const checkTestLabelIsUnique = (name: string): boolean => {
@@ -79,12 +75,11 @@ const AmountsForm: React.FC<InnerProps<AmountsTests>> = ({
     configuredAmounts.forEach(t => {
       if (t.testLabel) {
         allTestLabels.push(t.testLabel);
-      }
-      else {
+      } else {
         allTestLabels.push(t.testName);
       }
-    })
-    return !allTestLabels.includes(name)
+    });
+    return !allTestLabels.includes(name);
   };
 
   const createLocalTest = (name: string, label: string) => {
@@ -132,7 +127,7 @@ const AmountsForm: React.FC<InnerProps<AmountsTests>> = ({
 
       const updatedTests = [...configuredAmounts, newTest];
       setConfiguredAmounts(updatedTests);
-      setSelectedTest({...newTest});
+      setSelectedTest({ ...newTest });
     }
   };
 
