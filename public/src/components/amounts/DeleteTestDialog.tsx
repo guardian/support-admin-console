@@ -26,8 +26,7 @@ const DeleteTestDialog: React.FC<DeleteTestDialogProps> = ({
       <DialogTitle id="delete-variant-dialog-title">Delete test: {testName}</DialogTitle>
       <DialogContent dividers>
         <DialogContentText id="alert-dialog-description">
-          Be aware that once you delete this country test, its settings and data will be lost
-          forever!
+          Be aware that once you delete this test, its settings and data will be lost forever!
         </DialogContentText>
       </DialogContent>
       <DialogActions>

@@ -9,5 +9,5 @@ import zio.ZEnv
 import scala.concurrent.ExecutionContext
 
 class AmountsController(authAction: AuthAction[AnyContent], components: ControllerComponents, stage: String, runtime: zio.Runtime[ZEnv])(implicit ec: ExecutionContext)
-  extends S3ObjectController[AmountsTests](authAction, components, stage, filename = "configured-amounts-v2.json", runtime) {
+  extends S3ObjectController[AmountsTests](authAction, components, stage, filename = "configured-amounts-v3.json", runtime) {
 }

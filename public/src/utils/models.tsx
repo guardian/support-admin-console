@@ -1,22 +1,22 @@
-interface CommonStringObject {
+export interface CommonStringObject {
   [index: string]: string;
 }
 
 // This type should match the `ContributionFrequency` type in the `support-dotcom-components` repo, file `packages/shared/src/types/epic.ts`
-export type ContributionType = 'ONE_OFF' | 'MONTHLY' | 'ANNUAL';
+// export type ContributionType = 'ONE_OFF' | 'MONTHLY' | 'ANNUAL';
 
-export const ContributionTypes: CommonStringObject = {
+export const contributionTypes: CommonStringObject = {
   ONE_OFF: 'ONE_OFF',
   MONTHLY: 'MONTHLY',
   ANNUAL: 'ANNUAL',
 };
 
-export const isContributionType = (val: string): boolean => {
-  return Object.keys(ContributionTypes).includes(val);
-};
+export const contributionIds = Object.keys(contributionTypes);
 
-// This type should match the `CountryGroupId` type in the `support-dotcom-components` repo, file `packages/shared/src/lib/geolocation.ts`
-export const Regions: CommonStringObject = {
+export type ContributionType = keyof typeof contributionTypes;
+
+// This object should match the `CountryGroupId` type in the `support-dotcom-components` repo, file `packages/shared/src/lib/geolocation.ts`
+export const regions: CommonStringObject = {
   AUDCountries: 'AUD Countries',
   Canada: 'CN Countries',
   EURCountries: 'EUR Countries',
@@ -26,12 +26,14 @@ export const Regions: CommonStringObject = {
   International: 'International',
 };
 
-export type Region = keyof typeof Regions;
+export const regionIds = Object.keys(regions);
+
+export type Region = keyof typeof regions;
 
 export type RegionsAndAll = Region | 'ALL';
 
 // This object should match the `countryNames` object in the `support-dotcom-components` repo, file `packages/shared/src/lib/geolocation.ts`
-export const Countries: CommonStringObject = {
+export const countries: CommonStringObject = {
   AD: 'Andorra',
   AE: 'the UAE',
   AF: 'Afghanistan',
@@ -264,30 +266,7 @@ export const Countries: CommonStringObject = {
   ZW: 'Zimbabwe',
 };
 
-export type Country = keyof typeof Countries;
-
-export type Territory = Country | Region;
-
-export const Territories = {
-  ...Regions,
-  ...Countries,
-};
-
-export const isRegion = (val: string): boolean => {
-  return Object.keys(Regions).includes(val);
-};
-
-export const getTargetName = (val: string): string => {
-  if (isRegion(val)) {
-    return Regions[val];
-  }
-  return Countries[val] || '';
-};
-
-export interface CountryOptions {
-  code: Territory;
-  label: string;
-}
+export type Country = keyof typeof countries;
 
 export interface AmountValuesObject {
   amounts: number[];
@@ -309,8 +288,11 @@ export interface AmountsVariant {
 export interface AmountsTest {
   testName: string;
   liveTestName?: string;
+  testLabel?: string;
   isLive: boolean;
-  target: Region | string;
+  region: Region | '';
+  country: Country[];
+  order: number;
   seed: number;
   variants: AmountsVariant[];
 }

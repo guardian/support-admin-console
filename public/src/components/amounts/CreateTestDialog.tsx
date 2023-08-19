@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { Autocomplete } from '@material-ui/lab';
+import React, { useState } from 'react';
 import {
   Button,
   Dialog,
@@ -11,7 +10,6 @@ import {
   TextField,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import { Territory, Territories, CountryOptions } from '../../utils/models';
 
 const useStyles = makeStyles(() => ({
   dialogHeader: {
@@ -27,36 +25,67 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+const errorMessages = {
+  REQUIRED: 'This field cannot be left empty',
+  DUPLICATE: 'A test with this name/label already exists',
+  OK: '',
+};
+
 interface CreateTestDialogProps {
   isOpen: boolean;
   close: () => void;
-  create: (selected: CountryOptions) => void;
-  candidateTargets: Territory[];
+  create: (name: string, label: string) => void;
+  checkTestNameIsUnique: (name: string) => boolean;
+  checkTestLabelIsUnique: (name: string) => boolean;
 }
 
 export const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
   isOpen,
   close,
-  candidateTargets,
+  checkTestNameIsUnique,
+  checkTestLabelIsUnique,
   create,
 }: CreateTestDialogProps) => {
-  const [options, setOptions] = useState<CountryOptions[]>([]);
-  const [target, setTarget] = useState<CountryOptions | null>();
+  const [name, setName] = useState<string | undefined>();
+  const [label, setLabel] = useState<string | undefined>();
+  const [nameError, setNameError] = useState<string>(errorMessages.REQUIRED);
+  const [labelError, setLabelError] = useState<string>(errorMessages.REQUIRED);
 
-  useEffect(() => {
-    const opts: CountryOptions[] = [];
-    candidateTargets.forEach(c => {
-      opts.push({
-        code: c,
-        label: Territories[c],
-      });
-    });
-    setOptions(opts);
-  }, []);
+  const updateTestName = (update: string) => {
+    if (!update || !update.trim()) {
+      setName('');
+      setNameError(errorMessages.REQUIRED);
+    }
+    else {
+      setName(update.toUpperCase());
+      if (checkTestNameIsUnique(update)) {
+        setNameError(errorMessages.OK);
+      }
+      else {
+        setNameError(errorMessages.DUPLICATE);
+      }
+    }
+  };
+
+  const updateTestLabel = (update: string) => {
+    if (!update || !update.trim()) {
+      setLabel('');
+      setLabelError(errorMessages.REQUIRED);
+    }
+    else {
+      setLabel(update.toUpperCase());
+      if (checkTestLabelIsUnique(update)) {
+        setLabelError(errorMessages.OK);
+      }
+      else {
+        setLabelError(errorMessages.DUPLICATE);
+      }
+    }
+  };
 
   const onSubmit = (): void => {
-    if (target) {
-      create(target);
+    if (name && label && !nameError.length && !labelError.length) {
+      create(name.trim(), label.trim());
       close();
     }
   };
@@ -72,19 +101,29 @@ export const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
         </IconButton>
       </div>
       <DialogContent dividers>
-        <Autocomplete
-          value={target}
-          onChange={(
-            event: React.ChangeEvent<Record<string, unknown>>,
-            newValue: CountryOptions | null,
-          ) => {
-            setTarget(newValue);
-          }}
-          id={'candidate-territories'}
-          getOptionLabel={(option): string => option.label}
-          noOptionsText={'Search for target territory...'}
-          options={options}
-          renderInput={(params): JSX.Element => <TextField {...params} label={'Select target'} />}
+        <TextField
+          className={classes.input}
+          name="name"
+          label="Test name"
+          value={name}
+          onChange={e => updateTestName(e.target.value)}
+          error={!!nameError.length}
+          helperText={nameError}
+          margin="normal"
+          variant="outlined"
+          fullWidth
+        />
+        <TextField
+          className={classes.input}
+          name="name"
+          label="Test label"
+          value={label}
+          onChange={e => updateTestLabel(e.target.value)}
+          error={!!labelError.length}
+          helperText={labelError}
+          margin="normal"
+          variant="outlined"
+          fullWidth
         />
       </DialogContent>
       <DialogActions>

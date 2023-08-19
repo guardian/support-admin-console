@@ -9,7 +9,7 @@ import { AmountsVariantEditor } from './AmountsVariantEditor';
 import { CreateVariantButton } from './CreateVariantButton';
 import { DeleteTestButton } from './DeleteTestButton';
 
-import { AmountsTest, AmountsVariant, getTargetName, Region, Regions } from '../../utils/models';
+import { AmountsTest, AmountsVariant } from '../../utils/models';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -40,52 +40,75 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
       textTransform: 'uppercase !important',
     },
   },
+  numberInput: {
+    width: '120px',
+  },
 }));
 
 interface AmountsTestEditorProps {
   test: AmountsTest | undefined;
-  testNames: string[];
+  checkTestNameIsUnique: (name: string) => boolean;
   updateTest: (updatedTest: AmountsTest) => void;
   deleteTest: (test: AmountsTest) => void | undefined;
   saveTest: () => void | undefined;
 }
 
-const regionLabels = Object.keys(Regions);
-
-const errorMessages = {
+const nameErrorMessages = {
   REQUIRED: 'Live test name required',
   DUPLICATE: 'Test with this name already exists',
   OK: '',
 };
 
+const orderErrorMessages = {
+  NOTANUMBER: 'Order value must be a number',
+  NEGATIVE: 'Order value should be >= 0',
+  OK: '',
+};
+
 export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
   test,
-  testNames,
+  checkTestNameIsUnique,
   updateTest,
   deleteTest,
   saveTest,
 }: AmountsTestEditorProps) => {
   const classes = useStyles();
 
-  const testName = test?.testName;
-  const liveTestName = test?.liveTestName;
-  const isLive = test?.isLive || false;
-  const target = test?.target;
-  const seed = test?.seed;
-  const variants = test?.variants;
+  if (test == null) {
+    return (
+      <div className={classes.emptyContainer}>
+        <Typography>Please select an Amounts test for editing</Typography>
+      </div>
+    );
+  }
+
+  const {
+    testName,
+    liveTestName,
+    testLabel,
+    isLive = false,
+    region,
+    country,
+    order,
+    seed,
+    variants,
+  } = test;
 
   const [saveButtonIsDisabled, setSaveButtonIsDisabled] = useState<boolean>(true);
   const [testVariants, setTestVariants] = useState<AmountsVariant[]>([]);
   const [testIsLive, setTestIsLive] = useState<boolean>(isLive);
 
   const [currentLiveTestName, setCurrentLiveTestName] = useState<string | undefined>(liveTestName);
-  const [currentLiveTestError, setCurrentLiveTestError] = useState(errorMessages.REQUIRED);
+  const [currentLiveTestError, setCurrentLiveTestError] = useState(nameErrorMessages.REQUIRED);
+  const [currentOrder, setCurrentOrder] = useState(order || 0);
+  const [currentOrderError, setCurrentOrderError] = useState(orderErrorMessages.OK);
 
   useEffect(() => {
     if (test != null && variants != null) {
       setTestVariants([...variants]);
       setTestIsLive(isLive);
       updateLiveTestName(liveTestName || '');
+      updateOrder(order || 0);
     }
   }, [test]);
 
@@ -96,18 +119,11 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
         variants: [...testVariants],
         isLive: testIsLive,
         liveTestName: currentLiveTestName,
+        order: currentOrder,
       };
       updateTest(t);
     }
-  }, [testVariants, testIsLive, currentLiveTestName]);
-
-  if (test == null) {
-    return (
-      <div className={classes.emptyContainer}>
-        <Typography>Please select an Amounts test for editing</Typography>
-      </div>
-    );
-  }
+  }, [testVariants, testIsLive, currentLiveTestName, currentOrder]);
 
   const createVariant = (name: string) => {
     const newVariant: AmountsVariant = {
@@ -137,18 +153,41 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
     setSaveButtonIsDisabled(false);
   };
 
-  const updateLiveTestName = (val: string) => {
-    const updatedName = val.toUpperCase();
-    setCurrentLiveTestName(updatedName);
-    if (!updatedName.length) {
-      setCurrentLiveTestError(errorMessages.REQUIRED);
-    } else if (testNames.includes(updatedName)) {
-      setCurrentLiveTestError(errorMessages.DUPLICATE);
-    } else {
-      setCurrentLiveTestError(errorMessages.OK);
+  const updateLiveTestName = (update: string) => {
+    if (!update || !update.trim()) {
+      setCurrentLiveTestName('');
+      setCurrentLiveTestError(nameErrorMessages.REQUIRED);
+      setSaveButtonIsDisabled(true);
     }
-    setSaveButtonIsDisabled(false);
+    else {
+      setCurrentLiveTestName(update.toUpperCase());
+      if (checkTestNameIsUnique(update)) {
+        setCurrentLiveTestError(nameErrorMessages.OK);
+      }
+      else {
+        setCurrentLiveTestError(nameErrorMessages.DUPLICATE);
+      }
+      setSaveButtonIsDisabled(false);
+    }
   };
+
+  const updateOrder = (update: number) => {
+    if (update == null || isNaN(update)) {
+      setCurrentOrder(0);
+      setCurrentOrderError(orderErrorMessages.NOTANUMBER);
+      setSaveButtonIsDisabled(true);
+    }
+    else {
+      setCurrentOrder(update);
+      if (update < 0) {
+        setCurrentOrderError(orderErrorMessages.NEGATIVE);
+      }
+      else {
+        setCurrentOrderError(orderErrorMessages.OK);
+      }
+      setSaveButtonIsDisabled(false);
+    }
+  }
 
   const updateVariant = (variant: AmountsVariant) => {
     const newState: AmountsVariant[] = [];
@@ -162,6 +201,14 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
     setTestVariants(newState);
     setSaveButtonIsDisabled(false);
   };
+
+  // const updateCountry = (countries: string[]) => {
+  //   const uniques = new Set(countries);
+  //   const newState: string[] = [];
+  //   uniques.forEach((val) => {
+
+  //   });
+  // }
 
   const getExistingVariantNames = () => {
     return testVariants.map(v => v.variantName);
@@ -180,19 +227,22 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
   };
 
   const saveCurrentTest = () => {
-    if (testName != null && target != null && seed != null) {
+    if (testName != null && seed != null) {
       saveTest();
       setSaveButtonIsDisabled(true);
     }
   };
 
   const deleteCurrentTest = () => {
-    if (testName != null && target != null && seed != null) {
+    if (testName != null && seed != null) {
       deleteTest({
         testName,
-        liveTestName,
+        liveTestName: currentLiveTestName,
+        testLabel,
         isLive: testIsLive,
-        target,
+        region,
+        country,
+        order: currentOrder,
         seed,
         variants: testVariants,
       });
@@ -211,14 +261,14 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
   };
 
   const checkIfTestIsCountryTier = () => {
-    return target != null && !regionLabels.includes(target as string);
+    return region === '';
   };
 
   const addButtonBar = () => {
     return (
       <div className={classes.buttonBar}>
         {checkIfTestIsCountryTier() && (
-          <DeleteTestButton testName={target as string} confirmDeletion={deleteCurrentTest} />
+          <DeleteTestButton testName={testName} confirmDeletion={deleteCurrentTest} />
         )}
         <CreateVariantButton
           createVariant={createVariant}
@@ -237,17 +287,10 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
     );
   };
 
-  const prettifyTargetName = (val: Region | string | undefined) => {
-    if (val != null) {
-      return getTargetName(target as string);
-    }
-    return val;
-  };
-
   return (
     <div className={classes.container}>
       <div>
-        <Typography variant="h5">Amounts tests for: {prettifyTargetName(target)}</Typography>
+        <Typography variant="h5">Amounts test: {testName}</Typography>
 
         <TextField
           className={classes.input}
@@ -262,8 +305,8 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
 
         <TextField
           className={classes.input}
-          name="name"
-          label="Live A/B test name"
+          name="liveTestName"
+          label={checkIfTestIsCountryTier() ? "Live test name" : "Live A/B test name"}
           value={currentLiveTestName}
           onChange={e => updateLiveTestName(e.target.value)}
           error={!!currentLiveTestError.length}
@@ -273,8 +316,24 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
           fullWidth
         />
 
+        {checkIfTestIsCountryTier() && (
+          <TextField
+            className={classes.numberInput}
+            name="order"
+            label="Test order"
+            value={currentOrder}
+            onChange={e => updateOrder(parseInt(e.target.value, 10))}
+            error={!!currentOrderError.length}
+            helperText={currentOrderError}
+            margin="normal"
+            variant="outlined"
+            fullWidth={false}
+            type="number"
+          />
+        )}
+
         <LiveSwitch
-          label="Control vs variants A/B test is live"
+          label={checkIfTestIsCountryTier() ? "Test is live" : "A/B test is live"}
           isLive={testIsLive}
           onChange={updateTestIsLive}
           isDisabled={false}

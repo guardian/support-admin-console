@@ -2,13 +2,8 @@ import React from 'react';
 import { List, ListItem, makeStyles, Typography } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
 import {
-  Territories,
-  Territory,
   AmountsTests,
-  Regions,
-  Countries,
-  CountryOptions,
-  getTargetName,
+  AmountsTest,
 } from '../../utils/models';
 import { CreateTestButton } from './CreateTestButton';
 
@@ -80,65 +75,58 @@ const useStyles = makeStyles(({ palette }) => ({
 
 interface AmountsTestsListProps {
   tests: AmountsTests;
-  selectedTest: Territory | undefined;
-  onTargetSelected: (target: Territory) => void;
-  create: (selected: CountryOptions) => void;
+  selectedTest: AmountsTest | undefined;
+  checkTestNameIsUnique: (name: string) => boolean;
+  checkTestLabelIsUnique: (name: string) => boolean;
+  onTestSelected: (name: string) => void;
+  create: (name: string, label: string) => void;
 }
 
 interface AmountsTestButtonProps {
-  target: Territory;
+  test: AmountsTest;
 }
-
-const regionLabels = Object.keys(Regions);
-const countryLabels = Object.keys(Countries);
 
 export const AmountsTestsList: React.FC<AmountsTestsListProps> = ({
   tests,
   selectedTest,
-  onTargetSelected,
+  onTestSelected,
+  checkTestNameIsUnique,
+  checkTestLabelIsUnique,
   create,
 }: AmountsTestsListProps) => {
   const classes = useStyles();
 
   const getRegionTests = () => {
-    const regionTests = tests.filter(t => regionLabels.includes(t.target as string));
-    const regionTestStrings = regionTests.map(t => t.target);
-    return regionTestStrings.sort();
-  };
-
-  const getExistingCountryTests = () => {
-    const countryTests = tests.filter(t => !regionLabels.includes(t.target as string));
-    const countryTestStrings = countryTests.map(t => t.target);
-    return countryTestStrings.sort((a, b) => {
-      const A = getTargetName(a as string);
-      const B = getTargetName(b as string);
-      if (A < B) {
-        return -1;
-      }
-      if (A > B) {
-        return 1;
-      }
-      return 0;
+    const regionTests = tests.filter(t => t.region !== '');
+    return regionTests.sort((a, b) => {
+      const A = a.testLabel || a.testName;
+      const B = b.testLabel || b.testName;
+      return A < B ? -1 : 1;
     });
   };
 
-  const getCountryTestCandidates = () => {
-    const existingCountryTests = getExistingCountryTests();
-    const potentialTests = countryLabels.filter(l => !existingCountryTests.includes(l));
-    return potentialTests.sort();
+  const getCountryTests = () => {
+    const countryTests = tests.filter(t => t.region === '');
+    return countryTests.sort((a, b) => {
+      if (a.order !== b.order) {
+        return a.order - b.order
+      }
+      const A = a.testLabel || a.testName;
+      const B = b.testLabel || b.testName;
+      return A < B ? -1 : 1;
+    });
   };
 
-  const getButtonStyling = (target: Territory) => {
-    const myTest = tests.filter(t => target === t.target)[0];
+  const getButtonStyling = (live: boolean, selected: boolean) => {
     const res = [classes.testButton];
-    if (target === selectedTest) {
-      if (myTest.isLive) {
+    if (selected) {
+      if (live) {
         res.push(classes.liveTestIsSelected);
       } else {
         res.push(classes.testIsSelected);
       }
     } else {
-      if (myTest.isLive) {
+      if (live) {
         res.push(classes.liveTestNotSelected);
       } else {
         res.push(classes.testNotSelected);
@@ -148,15 +136,15 @@ export const AmountsTestsList: React.FC<AmountsTestsListProps> = ({
   };
 
   const AmountsTestButton: React.FC<AmountsTestButtonProps> = ({
-    target,
+    test,
   }: AmountsTestButtonProps) => {
     return (
       <ListItem
-        className={getButtonStyling(target)}
-        onClick={(): void => onTargetSelected(target)}
+        className={getButtonStyling(test.isLive, test.testName === selectedTest?.testName)}
+        onClick={(): void => onTestSelected(test.testName)}
         button
       >
-        {Territories[target]}
+        {test.testLabel || test.testName}
       </ListItem>
     );
   };
@@ -167,19 +155,23 @@ export const AmountsTestsList: React.FC<AmountsTestsListProps> = ({
       <div>
         <List className={classes.list}>
           {getRegionTests().map(t => (
-            <AmountsTestButton key={t} target={t} />
+            <AmountsTestButton key={t.testName} test={t} />
           ))}
         </List>
       </div>
 
       <Typography className={classes.header}>Country-specific tests</Typography>
 
-      <CreateTestButton candidateTargets={getCountryTestCandidates()} create={create} />
+      <CreateTestButton
+        checkTestNameIsUnique={checkTestNameIsUnique}
+        checkTestLabelIsUnique={checkTestLabelIsUnique}
+        create={create}
+      />
 
       <div>
         <List className={classes.list}>
-          {getExistingCountryTests().map(t => (
-            <AmountsTestButton key={t} target={t} />
+          {getCountryTests().map(t => (
+            <AmountsTestButton key={t.testName} test={t} />
           ))}
         </List>
       </div>

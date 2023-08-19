@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import {
-  Territory,
   AmountsTests,
   AmountsTest,
-  CountryOptions,
   ContributionType,
 } from '../../utils/models';
 
@@ -56,22 +54,50 @@ const AmountsForm: React.FC<InnerProps<AmountsTests>> = ({
 
   const [selectedTest, setSelectedTest] = useState<AmountsTest | undefined>();
 
-  const onTargetSelected = (target: Territory) => {
-    const currentTest = configuredAmounts.find(test => test.target === target);
+  const onTestSelected = (name: string) => {
+    const currentTest = configuredAmounts.find(test => test.testName === name);
     if (currentTest) {
-      setSelectedTest(currentTest);
+      setSelectedTest({...currentTest});
     } else {
       setSelectedTest(undefined);
     }
   };
 
-  const createLocalTest = (selected: CountryOptions) => {
-    if (selected && selected.label && selected.code) {
-      const newTest = {
-        testName: `SUPPORTER_AMOUNTS_EVERGREEN__${selected.code}`,
-        liveTestName: `SUPPORTER_AMOUNTS_AB_TEST__${selected.code}`,
+  const checkTestNameIsUnique = (name: string): boolean => {
+    const allTestNames: string[] = [];
+    configuredAmounts.forEach(t => {
+      allTestNames.push(t.testName);
+      if (t.liveTestName) {
+        allTestNames.push(t.liveTestName);
+      }
+    })
+    return !allTestNames.includes(name)
+  };
+
+  const checkTestLabelIsUnique = (name: string): boolean => {
+    const allTestLabels: string[] = [];
+    configuredAmounts.forEach(t => {
+      if (t.testLabel) {
+        allTestLabels.push(t.testLabel);
+      }
+      else {
+        allTestLabels.push(t.testName);
+      }
+    })
+    return !allTestLabels.includes(name)
+  };
+
+  const createLocalTest = (name: string, label: string) => {
+    if (name && label) {
+      const newTest: AmountsTest = {
+        testName: name,
+        liveTestName: name,
+        testLabel: label,
         isLive: false,
-        target: selected.code,
+        // Only one test per region in data set, and these are evergreen (preset)
+        region: '',
+        country: [],
+        order: 0,
         // Need to calculate seed
         seed: Math.floor(Math.random() * 1000000),
         variants: [
@@ -106,7 +132,7 @@ const AmountsForm: React.FC<InnerProps<AmountsTests>> = ({
 
       const updatedTests = [...configuredAmounts, newTest];
       setConfiguredAmounts(updatedTests);
-      setSelectedTest(newTest);
+      setSelectedTest({...newTest});
     }
   };
 
@@ -126,35 +152,22 @@ const AmountsForm: React.FC<InnerProps<AmountsTests>> = ({
     saveConfiguredAmounts();
   };
 
-  const getAllTestNames = () => {
-    const namesArray: string[] = [];
-    configuredAmounts.forEach(t => {
-      if (t.testName === selectedTest?.testName) {
-        namesArray.push(t.testName);
-      } else {
-        namesArray.push(t.testName);
-        if (t.liveTestName) {
-          namesArray.push(t.liveTestName);
-        }
-      }
-    });
-    return namesArray;
-  };
-
   return (
     <div className={classes.body}>
       <div className={classes.leftCol}>
         <AmountsTestsList
           tests={configuredAmounts}
-          selectedTest={selectedTest?.target}
-          onTargetSelected={onTargetSelected}
+          selectedTest={selectedTest}
+          checkTestNameIsUnique={checkTestNameIsUnique}
+          checkTestLabelIsUnique={checkTestLabelIsUnique}
+          onTestSelected={onTestSelected}
           create={createLocalTest}
         />
       </div>
       <div className={classes.rightCol}>
         <AmountsTestEditor
           test={selectedTest}
-          testNames={getAllTestNames()}
+          checkTestNameIsUnique={checkTestNameIsUnique}
           saveTest={saveLocalTestToS3}
           updateTest={updateLocalTest}
           deleteTest={deleteLocalTest}

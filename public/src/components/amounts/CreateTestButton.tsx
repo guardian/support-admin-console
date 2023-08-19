@@ -3,7 +3,6 @@ import { Button, makeStyles, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { CreateTestDialog } from './CreateTestDialog';
 import useOpenable from '../../hooks/useOpenable';
-import { Territory, CountryOptions } from '../../utils/models';
 
 const useStyles = makeStyles(() => ({
   button: {
@@ -20,13 +19,15 @@ const useStyles = makeStyles(() => ({
 }));
 
 interface CreateTestButtonProps {
-  create: (selected: CountryOptions) => void;
-  candidateTargets: Territory[];
+  create: (name: string, label: string) => void;
+  checkTestNameIsUnique: (name: string) => boolean;
+  checkTestLabelIsUnique: (name: string) => boolean;
 }
 
 export const CreateTestButton: React.FC<CreateTestButtonProps> = ({
   create,
-  candidateTargets,
+  checkTestNameIsUnique,
+  checkTestLabelIsUnique,
 }: CreateTestButtonProps) => {
   const [isOpen, open, close] = useOpenable();
 
@@ -45,7 +46,8 @@ export const CreateTestButton: React.FC<CreateTestButtonProps> = ({
       <CreateTestDialog
         isOpen={isOpen}
         close={close}
-        candidateTargets={candidateTargets}
+        checkTestNameIsUnique={checkTestNameIsUnique}
+        checkTestLabelIsUnique={checkTestLabelIsUnique}
         create={create}
       />
     </>
