@@ -16,7 +16,7 @@ import { DeleteVariantButton } from './DeleteVariantButton';
 import {
   AmountsVariant,
   ContributionType,
-  ContributionTypes,
+  contributionIds,
   AmountValuesObject,
 } from '../../utils/models';
 
@@ -174,7 +174,7 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
   const buildAmountsCardRows = () => {
     return (
       <div>
-        {Object.keys(ContributionTypes).map(k => {
+        {contributionIds.map(k => {
           const cardData: AmountValuesObject = amountsCardData[k as ContributionType];
           if (cardData != null) {
             return (
@@ -212,7 +212,7 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
           onChange={e => updateDefaultContribution(e)}
           row
         >
-          {Object.keys(ContributionTypes).map(k => {
+          {contributionIds.map(k => {
             return (
               <FormControlLabel
                 key={`${variantName}_${k}`}
@@ -240,7 +240,7 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
           Display contributions type
         </FormLabel>
         <FormGroup row>
-          {Object.keys(ContributionTypes).map(k => {
+          {contributionIds.map(k => {
             return (
               <FormControlLabel
                 key={`${variantName}_${k}`}

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Checkbox, FormControlLabel, FormGroup, Theme, makeStyles } from '@material-ui/core';
-import { Region, Regions } from '../../utils/models';
+import { Region, regions, regionIds } from '../../utils/models';
 import { TestPlatform } from './helpers/shared';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
@@ -18,8 +18,6 @@ interface TestEditorTargetRegionsSelectorProps {
   platform?: TestPlatform;
 }
 
-const definedRegions = Object.keys(Regions) as Region[];
-
 const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorProps> = ({
   selectedRegions,
   onRegionsUpdate,
@@ -28,7 +26,7 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
   platform,
 }: TestEditorTargetRegionsSelectorProps) => {
   const classes = useStyles();
-  const allRegions = (supportedRegions as Region[]) || definedRegions;
+  const allRegions = (supportedRegions as Region[]) || regionIds;
 
   const onAllRegionsChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     onRegionsUpdate(event.target.checked ? allRegions : []);
@@ -50,7 +48,7 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
     if (platform === 'APPLE_NEWS' && region === 'UnitedStates') {
       return 'the US + Canada';
     }
-    return Regions[region];
+    return regions[region];
   };
 
   return (
