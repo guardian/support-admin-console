@@ -29,7 +29,7 @@ case class AmountsTest(
   liveTestName: Option[String],
   testLabel: Option[String],
   isLive: Boolean,
-  region: Region,
+  region: String,
   country: List[String],
   order: Int,
   seed: Int,

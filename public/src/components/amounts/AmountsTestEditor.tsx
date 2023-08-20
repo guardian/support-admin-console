@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import { Typography, Button, TextField } from '@material-ui/core';
+import { Autocomplete } from '@material-ui/lab';
 import SaveIcon from '@material-ui/icons/Save';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import LiveSwitch from '../shared/liveSwitch';
@@ -9,7 +10,7 @@ import { AmountsVariantEditor } from './AmountsVariantEditor';
 import { CreateVariantButton } from './CreateVariantButton';
 import { DeleteTestButton } from './DeleteTestButton';
 
-import { AmountsTest, AmountsVariant } from '../../utils/models';
+import { AmountsTest, AmountsVariant, countries } from '../../utils/models';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -41,15 +42,15 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
     },
   },
   numberInput: {
-    width: '120px',
+    width: '160px',
   },
 }));
 
 interface AmountsTestEditorProps {
   test: AmountsTest | undefined;
-  checkTestNameIsUnique: (name: string) => boolean;
+  checkLiveTestNameIsUnique: (name: string, test: string) => boolean;
   updateTest: (updatedTest: AmountsTest) => void;
-  deleteTest: (test: AmountsTest) => void | undefined;
+  deleteTest: (name: string) => void | undefined;
   saveTest: () => void | undefined;
 }
 
@@ -60,39 +61,33 @@ const nameErrorMessages = {
 };
 
 const orderErrorMessages = {
-  NOTANUMBER: 'Order value must be a number',
-  NEGATIVE: 'Order value should be >= 0',
+  NOTANUMBER: 'Must be a number',
+  NEGATIVE: 'Must be >= 0',
   OK: '',
 };
 
+const countryTags = [];
+Object.entries(countries).forEach(([id, label]) => countryTags.push({id, label}));
+
 export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
   test,
-  checkTestNameIsUnique,
+  checkLiveTestNameIsUnique,
   updateTest,
   deleteTest,
   saveTest,
 }: AmountsTestEditorProps) => {
   const classes = useStyles();
 
-  if (test == null) {
-    return (
-      <div className={classes.emptyContainer}>
-        <Typography>Please select an Amounts test for editing</Typography>
-      </div>
-    );
-  }
-
   const {
     testName,
     liveTestName,
-    testLabel,
     isLive = false,
     region,
     country,
-    order,
+    order = 0,
     seed,
     variants,
-  } = test;
+  } = test || {};
 
   const [saveButtonIsDisabled, setSaveButtonIsDisabled] = useState<boolean>(true);
   const [testVariants, setTestVariants] = useState<AmountsVariant[]>([]);
@@ -100,7 +95,7 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
 
   const [currentLiveTestName, setCurrentLiveTestName] = useState<string | undefined>(liveTestName);
   const [currentLiveTestError, setCurrentLiveTestError] = useState(nameErrorMessages.REQUIRED);
-  const [currentOrder, setCurrentOrder] = useState(order || 0);
+  const [currentOrder, setCurrentOrder] = useState(order);
   const [currentOrderError, setCurrentOrderError] = useState(orderErrorMessages.OK);
 
   useEffect(() => {
@@ -160,7 +155,7 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
       setSaveButtonIsDisabled(true);
     } else {
       setCurrentLiveTestName(update.toUpperCase());
-      if (checkTestNameIsUnique(update)) {
+      if (checkLiveTestNameIsUnique(update, testName || '')) {
         setCurrentLiveTestError(nameErrorMessages.OK);
       } else {
         setCurrentLiveTestError(nameErrorMessages.DUPLICATE);
@@ -231,17 +226,7 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
 
   const deleteCurrentTest = () => {
     if (testName != null && seed != null) {
-      deleteTest({
-        testName,
-        liveTestName: currentLiveTestName,
-        testLabel,
-        isLive: testIsLive,
-        region,
-        country,
-        order: currentOrder,
-        seed,
-        variants: testVariants,
-      });
+      deleteTest(testName || '');
     }
   };
 
@@ -264,7 +249,7 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
     return (
       <div className={classes.buttonBar}>
         {checkIfTestIsCountryTier() && (
-          <DeleteTestButton testName={testName} confirmDeletion={deleteCurrentTest} />
+          <DeleteTestButton testName={testName || ''} confirmDeletion={deleteCurrentTest} />
         )}
         <CreateVariantButton
           createVariant={createVariant}
@@ -283,21 +268,18 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
     );
   };
 
+  if (test == null) {
+    return (
+      <div className={classes.emptyContainer}>
+        <Typography>Please select an Amounts test for editing</Typography>
+      </div>
+    );
+  }
+
   return (
     <div className={classes.container}>
       <div>
         <Typography variant="h5">Amounts test: {testName}</Typography>
-
-        <TextField
-          className={classes.input}
-          name="testName"
-          label="Test default (evergreen) name"
-          value={testName}
-          margin="normal"
-          variant="outlined"
-          disabled={true}
-          fullWidth
-        />
 
         <TextField
           className={classes.input}

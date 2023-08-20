@@ -62,8 +62,21 @@ const AmountsForm: React.FC<InnerProps<AmountsTests>> = ({
   const checkTestNameIsUnique = (name: string): boolean => {
     const allTestNames: string[] = [];
     configuredAmounts.forEach(t => {
-      allTestNames.push(t.testName);
+        allTestNames.push(t.testName);
       if (t.liveTestName) {
+        allTestNames.push(t.liveTestName);
+      }
+    });
+    return !allTestNames.includes(name);
+  };
+
+  const checkLiveTestNameIsUnique = (name: string, test: string): boolean => {
+    const allTestNames: string[] = [];
+    configuredAmounts.forEach(t => {
+      if (t.region) {
+        allTestNames.push(t.testName);
+      }
+      if (t.liveTestName && t.testName !== test) {
         allTestNames.push(t.liveTestName);
       }
     });
@@ -137,8 +150,8 @@ const AmountsForm: React.FC<InnerProps<AmountsTests>> = ({
     setConfiguredAmounts(updatedTests);
   };
 
-  const deleteLocalTest = (test: AmountsTest) => {
-    const updatedTests = configuredAmounts.filter(t => t.testName !== test.testName);
+  const deleteLocalTest = (name: string) => {
+    const updatedTests = configuredAmounts.filter(t => t.testName !== name);
     setConfiguredAmounts(updatedTests);
     setSelectedTest(undefined);
   };
@@ -162,7 +175,7 @@ const AmountsForm: React.FC<InnerProps<AmountsTests>> = ({
       <div className={classes.rightCol}>
         <AmountsTestEditor
           test={selectedTest}
-          checkTestNameIsUnique={checkTestNameIsUnique}
+          checkLiveTestNameIsUnique={checkLiveTestNameIsUnique}
           saveTest={saveLocalTestToS3}
           updateTest={updateLocalTest}
           deleteTest={deleteLocalTest}
