@@ -174,6 +174,10 @@ const bannerModules = {
     path: 'usSupremeCourt2023/Scotus2023MomentBanner.js',
     name: 'Scotus2023MomentBanner',
   },
+  [BannerTemplate.EuropeMomentLocalLanguageBanner]: {
+    path: 'europeMomentLocalLanguage/EuropeMomentLocalLanguageBanner.js',
+    name: 'EuropeMomentLocalLanguageBanner',
+  },
 };
 
 const useStyles = makeStyles(({ palette }: Theme) => ({
