@@ -3,82 +3,47 @@ package models
 import io.circe.generic.extras.Configuration
 import io.circe.generic.extras.auto._
 import io.circe.generic.extras.semiauto._
-import io.circe.{Decoder, DecodingFailure, Encoder, HCursor, Json}
+import io.circe.{Decoder, Encoder, Json}
 
 sealed trait BannerUI
 object BannerUI {
-  case object AusEoyMomentBanner extends BannerUI
-  case object AusAnniversaryBanner extends BannerUI
-  case object AuBrandMomentBanner extends BannerUI
-  case object ChoiceCardsBannerBlue extends BannerUI
-  case object ChoiceCardsBannerYellow extends BannerUI
-  case object ChoiceCardsButtonsBannerBlue extends BannerUI
-  case object ChoiceCardsButtonsBannerYellow extends BannerUI
-  case object ClimateCrisisMomentBanner extends BannerUI
-  case object ContributionsBanner extends BannerUI
-  case object ContributionsBannerWithSignIn extends BannerUI
-  case object CharityAppealBanner extends BannerUI
-  case object DigitalSubscriptionsBanner extends BannerUI
-  case object ElectionAuMomentBanner extends BannerUI
-  case object EnvironmentMomentBanner extends BannerUI
-  case object GlobalNewYearBanner extends BannerUI
-  case object GuardianWeeklyBanner extends BannerUI
-  case object InvestigationsMomentBanner extends BannerUI
-  case object PostElectionAuMomentAlbaneseBanner extends BannerUI
-  case object PostElectionAuMomentHungBanner extends BannerUI
-  case object PostElectionAuMomentMorrisonBanner extends BannerUI
-  case object UkraineMomentBanner extends BannerUI
-  case object WorldPressFreedomDayBanner extends BannerUI
-  case object Scotus2023MomentBanner extends BannerUI
-  case class BannerDesignName(name: String) extends BannerUI
+  // For backwards compatibility BannerUI is either the name of a template, or has a nested designName field
+  case class BannerDesignName(designName: String) extends BannerUI
+  sealed trait BannerTemplate extends BannerUI
+
+  case object AusEoyMomentBanner extends BannerTemplate
+  case object AusAnniversaryBanner extends BannerTemplate
+  case object AuBrandMomentBanner extends BannerTemplate
+  case object ChoiceCardsBannerBlue extends BannerTemplate
+  case object ChoiceCardsBannerYellow extends BannerTemplate
+  case object ChoiceCardsButtonsBannerBlue extends BannerTemplate
+  case object ChoiceCardsButtonsBannerYellow extends BannerTemplate
+  case object ClimateCrisisMomentBanner extends BannerTemplate
+  case object ContributionsBanner extends BannerTemplate
+  case object ContributionsBannerWithSignIn extends BannerTemplate
+  case object CharityAppealBanner extends BannerTemplate
+  case object DigitalSubscriptionsBanner extends BannerTemplate
+  case object ElectionAuMomentBanner extends BannerTemplate
+  case object EnvironmentMomentBanner extends BannerTemplate
+  case object GlobalNewYearBanner extends BannerTemplate
+  case object GuardianWeeklyBanner extends BannerTemplate
+  case object InvestigationsMomentBanner extends BannerTemplate
+  case object PostElectionAuMomentAlbaneseBanner extends BannerTemplate
+  case object PostElectionAuMomentHungBanner extends BannerTemplate
+  case object PostElectionAuMomentMorrisonBanner extends BannerTemplate
+  case object UkraineMomentBanner extends BannerTemplate
+  case object WorldPressFreedomDayBanner extends BannerTemplate
+  case object Scotus2023MomentBanner extends BannerTemplate
 
   implicit val customConfig: Configuration = Configuration.default.withDefaults
+  import cats.syntax.functor._  // for the widen syntax
 
-  implicit val bannerDesignNameDecoder: Decoder[BannerDesignName] =
-    deriveDecoder[BannerDesignName]
-  implicit val bannerDesignNameEncoder: Encoder[BannerDesignName] =
-    deriveEncoder[BannerDesignName]
+  implicit val bannerUIDecoder: Decoder[BannerUI] = Decoder[BannerDesignName].widen or deriveEnumerationDecoder[BannerTemplate].widen
 
-  implicit val customDecoder: Decoder[BannerUI] = (c: HCursor) =>
-    c.as[String].flatMap {
-      case "AusEoyMomentBanner"      => Right(AusEoyMomentBanner)
-      case "AusAnniversaryBanner"    => Right(AusAnniversaryBanner)
-      case "AuBrandMomentBanner"     => Right(AuBrandMomentBanner)
-      case "ChoiceCardsBannerBlue"   => Right(ChoiceCardsBannerBlue)
-      case "ChoiceCardsBannerYellow" => Right(ChoiceCardsBannerYellow)
-      case "ChoiceCardsButtonsBannerBlue" =>
-        Right(ChoiceCardsButtonsBannerBlue)
-      case "ChoiceCardsButtonsBannerYellow" =>
-        Right(ChoiceCardsButtonsBannerYellow)
-      case "ClimateCrisisMomentBanner" => Right(ClimateCrisisMomentBanner)
-      case "ContributionsBanner"       => Right(ContributionsBanner)
-      case "ContributionsBannerWithSignIn" =>
-        Right(ContributionsBannerWithSignIn)
-      case "CharityAppealBanner"        => Right(CharityAppealBanner)
-      case "DigitalSubscriptionsBanner" => Right(DigitalSubscriptionsBanner)
-      case "ElectionAuMomentBanner"     => Right(ElectionAuMomentBanner)
-      case "EnvironmentMomentBanner"    => Right(EnvironmentMomentBanner)
-      case "GlobalNewYearBanner"        => Right(GlobalNewYearBanner)
-      case "GuardianWeeklyBanner"       => Right(GuardianWeeklyBanner)
-      case "InvestigationsMomentBanner" => Right(InvestigationsMomentBanner)
-      case "PostElectionAuMomentAlbaneseBanner" =>
-        Right(PostElectionAuMomentAlbaneseBanner)
-      case "PostElectionAuMomentHungBanner" =>
-        Right(PostElectionAuMomentHungBanner)
-      case "PostElectionAuMomentMorrisonBanner" =>
-        Right(PostElectionAuMomentMorrisonBanner)
-      case "UkraineMomentBanner"        => Right(UkraineMomentBanner)
-      case "WorldPressFreedomDayBanner" => Right(WorldPressFreedomDayBanner)
-      case "Scotus2023MomentBanner"     => Right(Scotus2023MomentBanner)
-      case stringValue =>
-        Left(
-          DecodingFailure(s"Unknown template value: $stringValue", c.history))
-    } orElse c.as[BannerDesignName]
-
-  implicit val customEncoder: Encoder[BannerUI] = Encoder.instance {
-    case designName: BannerDesignName =>
-      Json.obj("name" -> Json.fromString(designName.name))
-    case template => Json.fromString(s"$template")
+  implicit val bannerUIEncoder: Encoder[BannerUI] = Encoder.instance {
+    case BannerDesignName(designName) =>
+      Json.obj("designName" -> Json.fromString(designName))
+    case template: BannerTemplate => Json.fromString(s"$template")
   }
 }
 
