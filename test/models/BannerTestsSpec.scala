@@ -5,7 +5,12 @@ import org.scalatest.EitherValues
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import io.circe.parser._
-import models.BannerUI.{BannerDesignName, Scotus2023MomentBanner}
+import io.circe.syntax.EncoderOps
+import models.BannerUI.{
+  AusAnniversaryBanner,
+  BannerDesignName,
+  Scotus2023MomentBanner
+}
 
 import scala.language.postfixOps
 
@@ -56,5 +61,24 @@ class BannerTestsSpec extends AnyFlatSpec with Matchers with EitherValues {
     val result = decode[BannerUI](rawJson)
 
     result.left.value shouldBe a[DecodingFailure]
+  }
+
+  "encoding json" should "return an object for a BannerDesignName" in {
+    val bannerDesignName = BannerDesignName("TEST_DESIGN")
+
+    val json = bannerDesignName.asJson
+
+    val expectedJson = Json.obj(
+      "name" -> Json.fromString("TEST_DESIGN")
+    )
+    json should be(expectedJson)
+  }
+
+  it should "return a string for a named template" in {
+    val template: BannerUI = AusAnniversaryBanner
+
+    val json = template.asJson
+
+    json should be(Json.fromString("AusAnniversaryBanner"))
   }
 }

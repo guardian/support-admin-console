@@ -36,6 +36,8 @@ object BannerUI {
 
   implicit val bannerDesignNameDecoder: Decoder[BannerDesignName] =
     deriveDecoder[BannerDesignName]
+  implicit val bannerDesignNameEncoder: Encoder[BannerDesignName] =
+    deriveEncoder[BannerDesignName]
 
   implicit val customDecoder: Decoder[BannerUI] = (c: HCursor) =>
     c.as[String].flatMap {
@@ -72,6 +74,12 @@ object BannerUI {
         Left(
           DecodingFailure(s"Unknown template value: $stringValue", c.history))
     } orElse c.as[BannerDesignName]
+
+  implicit val customEncoder: Encoder[BannerUI] = Encoder.instance {
+    case designName: BannerDesignName =>
+      Json.obj("name" -> Json.fromString(designName.name))
+    case template => Json.fromString(s"$template")
+  }
 }
 
 case class BannerContent(
