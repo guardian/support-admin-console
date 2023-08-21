@@ -19,7 +19,7 @@ class BannerTestsSpec extends AnyFlatSpec with Matchers with EitherValues {
     val rawJson =
       """
         |{
-        |  "name": "TEST_DESIGN"
+        |  "designName": "TEST_DESIGN"
         |}
         |""".stripMargin
 
@@ -64,12 +64,12 @@ class BannerTestsSpec extends AnyFlatSpec with Matchers with EitherValues {
   }
 
   "encoding json" should "return an object for a BannerDesignName" in {
-    val bannerDesignName = BannerDesignName("TEST_DESIGN")
+    val bannerDesignName: BannerUI = BannerDesignName("TEST_DESIGN")
 
     val json = bannerDesignName.asJson
 
     val expectedJson = Json.obj(
-      "name" -> Json.fromString("TEST_DESIGN")
+      "designName" -> Json.fromString("TEST_DESIGN")
     )
     json should be(expectedJson)
   }
