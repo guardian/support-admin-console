@@ -190,6 +190,10 @@ const bannerModules = {
     path: 'usSupremeCourt2023/Scotus2023MomentBanner.js',
     name: 'Scotus2023MomentBanner',
   },
+  [BannerTemplate.GuardianLogoWithHands3DBanner]: {
+    path: 'guardianLogoWithHands3DBanner/GuardianLogoWithHands3DBanner.js',
+    name: 'Guardian Logo 3D Banner',
+  },
 };
 
 const useStyles = makeStyles(({ palette }: Theme) => ({

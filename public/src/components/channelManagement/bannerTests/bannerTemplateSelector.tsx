@@ -46,6 +46,10 @@ const templatesWithLabels = [
     template: BannerTemplate.Scotus2023MomentBanner,
     label: 'US Supreme Court 2023 Moment',
   },
+  {
+    template: BannerTemplate.GuardianLogoWithHands3DBanner,
+    label: 'Guardian Logo 3D Banner',
+  },
 ];
 
 const BannerTemplateSelector: React.FC<BannerTemplateSelectorProps> = ({
