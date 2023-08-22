@@ -45,6 +45,7 @@ const AmountsForm: React.FC<InnerProps<AmountsTests>> = ({
   data: configuredAmounts,
   setData: setConfiguredAmounts,
   saveData: saveConfiguredAmounts,
+  replaceData: replaceConfiguredAmounts,
 }: InnerProps<AmountsTests>) => {
   const classes = useStyles();
 
@@ -62,7 +63,7 @@ const AmountsForm: React.FC<InnerProps<AmountsTests>> = ({
   const checkTestNameIsUnique = (name: string): boolean => {
     const allTestNames: string[] = [];
     configuredAmounts.forEach(t => {
-        allTestNames.push(t.testName);
+      allTestNames.push(t.testName);
       if (t.liveTestName) {
         allTestNames.push(t.liveTestName);
       }
@@ -151,9 +152,11 @@ const AmountsForm: React.FC<InnerProps<AmountsTests>> = ({
   };
 
   const deleteLocalTest = (name: string) => {
-    const updatedTests = configuredAmounts.filter(t => t.testName !== name);
-    setConfiguredAmounts(updatedTests);
-    setSelectedTest(undefined);
+    if (replaceConfiguredAmounts) {
+      const updatedTests = configuredAmounts.filter(t => t.testName !== name);
+      replaceConfiguredAmounts(updatedTests);
+      setSelectedTest(undefined);
+    }
   };
 
   const saveLocalTestToS3 = () => {
@@ -192,4 +195,7 @@ const fetchSettings = (): Promise<any> =>
 const saveSettings = (data: DataFromServer<AmountsTests>): Promise<Response> =>
   saveSupportFrontendSettings(SupportFrontendSettingsType.amounts, data);
 
-export default withS3Data<AmountsTests>(AmountsForm, fetchSettings, saveSettings);
+const replaceSettings = (data: DataFromServer<AmountsTests>): Promise<Response> =>
+  saveSupportFrontendSettings(SupportFrontendSettingsType.amounts, data);
+
+export default withS3Data<AmountsTests>(AmountsForm, fetchSettings, saveSettings, replaceSettings);

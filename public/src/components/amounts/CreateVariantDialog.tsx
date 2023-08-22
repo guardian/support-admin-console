@@ -46,12 +46,14 @@ export const CreateVariantDialog: React.FC<CreateVariantDialogProps> = ({
 }: CreateVariantDialogProps) => {
   const classes = useStyles();
 
-  const [name, setName] = useState('');
+  const [name, setName] = useState<string | undefined>();
   const [errorMessage, setErrorMessage] = useState(errorMessages.REQUIRED);
 
   const onSubmit = (): void => {
-    if (name.length && !existingNames.includes(name)) {
+    if (name && name.length && !existingNames.includes(name)) {
       createVariant(name.toUpperCase());
+      setName(undefined);
+      setErrorMessage(errorMessages.REQUIRED);
       close();
     }
   };

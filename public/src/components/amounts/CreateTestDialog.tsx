@@ -82,6 +82,10 @@ export const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
   const onSubmit = (): void => {
     if (name && label && !nameError.length && !labelError.length) {
       create(name.trim(), label.trim());
+      setName(undefined);
+      setLabel(undefined);
+      setNameError(errorMessages.REQUIRED);
+      setLabelError(errorMessages.REQUIRED);
       close();
     }
   };

@@ -10,7 +10,7 @@ import { AmountsVariantEditor } from './AmountsVariantEditor';
 import { CreateVariantButton } from './CreateVariantButton';
 import { DeleteTestButton } from './DeleteTestButton';
 
-import { AmountsTest, AmountsVariant, countries } from '../../utils/models';
+import { AmountsTest, AmountsVariant, Country, countries } from '../../utils/models';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -66,8 +66,17 @@ const orderErrorMessages = {
   OK: '',
 };
 
-const countryTags = [];
-Object.entries(countries).forEach(([id, label]) => countryTags.push({id, label}));
+const countryErrorMessages = {
+  REQUIRED: 'Must include at least one country',
+  OK: '',
+};
+
+interface CountryTag {
+  id: Country;
+  label: string;
+}
+const countryTags: CountryTag[] = [];
+Object.entries(countries).forEach(([id, label]) => countryTags.push({ id, label }));
 
 export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
   test,
@@ -78,16 +87,8 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
 }: AmountsTestEditorProps) => {
   const classes = useStyles();
 
-  const {
-    testName,
-    liveTestName,
-    isLive = false,
-    region,
-    country,
-    order = 0,
-    seed,
-    variants,
-  } = test || {};
+  const { testName, liveTestName, isLive = false, region, country, order = 0, variants } =
+    test || {};
 
   const [saveButtonIsDisabled, setSaveButtonIsDisabled] = useState<boolean>(true);
   const [testVariants, setTestVariants] = useState<AmountsVariant[]>([]);
@@ -97,6 +98,20 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
   const [currentLiveTestError, setCurrentLiveTestError] = useState(nameErrorMessages.REQUIRED);
   const [currentOrder, setCurrentOrder] = useState(order);
   const [currentOrderError, setCurrentOrderError] = useState(orderErrorMessages.OK);
+  const [currentCountry, setCurrentCountry] = useState<CountryTag[]>([]);
+  const [currentCountryError, setCurrentCountryError] = useState(countryErrorMessages.OK);
+
+  const convertToCountryTag = (vals: Country[]): CountryTag[] => {
+    const output: CountryTag[] = [];
+    vals.forEach(id => output.push({ id, label: countries[id] }));
+    return output;
+  };
+
+  const convertFromCountryTag = (vals: CountryTag[]): Country[] => {
+    const output: Country[] = [];
+    vals.forEach(tag => output.push(tag.id));
+    return output;
+  };
 
   useEffect(() => {
     if (test != null && variants != null) {
@@ -104,21 +119,23 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
       setTestIsLive(isLive);
       updateLiveTestName(liveTestName || '');
       updateOrder(order || 0);
+      updateCountry(country != null ? convertToCountryTag(country) : []);
     }
   }, [test]);
 
   useEffect(() => {
-    if (test != null && testVariants.length) {
+    if (test != null) {
       const t: AmountsTest = {
         ...test,
         variants: [...testVariants],
         isLive: testIsLive,
         liveTestName: currentLiveTestName,
         order: currentOrder,
+        country: convertFromCountryTag(currentCountry),
       };
       updateTest(t);
     }
-  }, [testVariants, testIsLive, currentLiveTestName, currentOrder]);
+  }, [testVariants, testIsLive, currentLiveTestName, currentOrder, currentCountry]);
 
   const createVariant = (name: string) => {
     const newVariant: AmountsVariant = {
@@ -193,13 +210,16 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
     setSaveButtonIsDisabled(false);
   };
 
-  // const updateCountry = (countries: string[]) => {
-  //   const uniques = new Set(countries);
-  //   const newState: string[] = [];
-  //   uniques.forEach((val) => {
-
-  //   });
-  // }
+  const updateCountry = (update: CountryTag[]) => {
+    setCurrentCountry([...update]);
+    if (update.length) {
+      setCurrentCountryError(countryErrorMessages.OK);
+      setSaveButtonIsDisabled(false);
+    } else {
+      setCurrentCountryError(countryErrorMessages.REQUIRED);
+      setSaveButtonIsDisabled(true);
+    }
+  };
 
   const getExistingVariantNames = () => {
     return testVariants.map(v => v.variantName);
@@ -218,15 +238,15 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
   };
 
   const saveCurrentTest = () => {
-    if (testName != null && seed != null) {
-      saveTest();
-      setSaveButtonIsDisabled(true);
-    }
+    saveTest();
+    setSaveButtonIsDisabled(true);
   };
 
   const deleteCurrentTest = () => {
-    if (testName != null && seed != null) {
-      deleteTest(testName || '');
+    console.log('deleteCurrentTest #1', testName);
+    if (testName != null) {
+      console.log('deleteCurrentTest #2');
+      deleteTest(testName);
     }
   };
 
@@ -295,19 +315,39 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
         />
 
         {checkIfTestIsCountryTier() && (
-          <TextField
-            className={classes.numberInput}
-            name="order"
-            label="Test order"
-            value={currentOrder}
-            onChange={e => updateOrder(parseInt(e.target.value, 10))}
-            error={!!currentOrderError.length}
-            helperText={currentOrderError}
-            margin="normal"
-            variant="outlined"
-            fullWidth={false}
-            type="number"
-          />
+          <>
+            <TextField
+              className={classes.numberInput}
+              name="order"
+              label="Test order"
+              value={currentOrder}
+              onChange={e => updateOrder(parseInt(e.target.value, 10))}
+              error={!!currentOrderError.length}
+              helperText={currentOrderError}
+              margin="normal"
+              variant="outlined"
+              fullWidth={false}
+              type="number"
+            />
+
+            <Autocomplete
+              multiple
+              id="selected-countries"
+              options={countryTags}
+              getOptionLabel={opt => opt.label}
+              onChange={(event, value) => updateCountry(value)}
+              value={currentCountry}
+              renderInput={params => (
+                <TextField
+                  {...params}
+                  label="Included countries"
+                  variant="outlined"
+                  error={!!currentCountryError.length}
+                  helperText={currentCountryError}
+                />
+              )}
+            />
+          </>
         )}
 
         <LiveSwitch

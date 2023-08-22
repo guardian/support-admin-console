@@ -285,6 +285,32 @@ export interface AmountsVariant {
   amountsCardData: AmountsCardData;
 }
 
+/*
+An amounts test can be in one of two forms:
+
+Country test: 
+  Bespoke tests targeted at one or more geographical countries
+  `region` attribute will be an empty String
+  `country` attribute will be a String array containing 2-letter ISO country codes
+  When the `isLive` boolean is `false`: 
+    - the test is ignored; users will see their appropriate region test
+  When the `isLive` boolean is `true`: 
+    - users will be randomly segregated into an AB test and see the appropriate variant
+    - analytics will use the `liveTestName` label, if available, else the `testName` label
+  A country can appear in more than one country test:
+    - if 2+ live tests include the country, the test with the lowest `order` value will display
+
+Region test: 
+  Evergreen tests, one per geographical region
+  `region` attribute will be the region label, as defined by the Region type
+  `country` attribute will be a empty String array
+  When the `isLive` boolean is `false`: 
+    - the CONTROL variant will display
+    - analytics will use the `testName` label
+  When the `isLive` boolean is `true`: 
+    - users will be randomly segregated into an AB test and see the appropriate variant
+    - analytics will use the `liveTestName` label
+*/
 export interface AmountsTest {
   testName: string;
   liveTestName?: string;
