@@ -30,7 +30,6 @@ function withS3Data<T>(
     const fetchData = (): Promise<void> =>
       fetchSettings()
         .then(data => {
-          console.log('fetchData', data);
           setDataFromServer(data);
         })
         .catch(err => alert(err));

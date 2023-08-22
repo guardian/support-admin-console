@@ -243,9 +243,7 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
   };
 
   const deleteCurrentTest = () => {
-    console.log('deleteCurrentTest #1', testName);
     if (testName != null) {
-      console.log('deleteCurrentTest #2');
       deleteTest(testName);
     }
   };
