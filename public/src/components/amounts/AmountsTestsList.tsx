@@ -94,7 +94,7 @@ export const AmountsTestsList: React.FC<AmountsTestsListProps> = ({
   const classes = useStyles();
 
   const getRegionTests = () => {
-    const regionTests = tests.filter(t => t.region !== '');
+    const regionTests = tests.filter(t => t.targeting.targetingType === 'Region');
     return regionTests.sort((a, b) => {
       const A = a.testLabel || a.testName;
       const B = b.testLabel || b.testName;
@@ -103,7 +103,7 @@ export const AmountsTestsList: React.FC<AmountsTestsListProps> = ({
   };
 
   const getCountryTests = () => {
-    const countryTests = tests.filter(t => t.region === '');
+    const countryTests = tests.filter(t => t.targeting.targetingType === 'Country');
     return countryTests.sort((a, b) => {
       if (a.order !== b.order) {
         return a.order - b.order;
