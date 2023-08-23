@@ -33,7 +33,7 @@ export enum BannerTemplate {
 }
 
 export interface BannerDesignName {
-  name: string;
+  designName: string;
 }
 
 export type BannerUI = BannerTemplate | BannerDesignName;
@@ -66,6 +66,10 @@ export interface BannerTest extends Test {
   controlProportionSettings?: ControlProportionSettings;
   deviceType?: DeviceType;
   campaignName?: string;
+}
+
+export function uiIsDesign(ui: BannerUI): ui is BannerDesignName {
+  return (ui as BannerDesignName).designName !== undefined;
 }
 
 export function isBannerTemplate(s: BannerUI | string): s is BannerTemplate {
