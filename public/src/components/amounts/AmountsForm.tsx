@@ -74,7 +74,7 @@ const AmountsForm: React.FC<InnerProps<AmountsTests>> = ({
   const checkLiveTestNameIsUnique = (name: string, test: string): boolean => {
     const allTestNames: string[] = [];
     configuredAmounts.forEach(t => {
-      if (t.region) {
+      if (t.targeting.targetingType === 'Region') {
         allTestNames.push(t.testName);
       }
       if (t.liveTestName && t.testName !== test) {
@@ -104,8 +104,7 @@ const AmountsForm: React.FC<InnerProps<AmountsTests>> = ({
         testLabel: label,
         isLive: false,
         // Only one test per region in data set, and these are evergreen (preset)
-        region: '',
-        country: [],
+        targeting: { targetingType: 'Country', countries: [] },
         order: 0,
         // Need to calculate seed
         seed: Math.floor(Math.random() * 1000000),

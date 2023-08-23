@@ -87,8 +87,7 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
 }: AmountsTestEditorProps) => {
   const classes = useStyles();
 
-  const { testName, liveTestName, isLive = false, region, country, order = 0, variants } =
-    test || {};
+  const { testName, liveTestName, isLive = false, targeting, order = 0, variants } = test || {};
 
   const [saveButtonIsDisabled, setSaveButtonIsDisabled] = useState<boolean>(true);
   const [testVariants, setTestVariants] = useState<AmountsVariant[]>([]);
@@ -119,7 +118,11 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
       setTestIsLive(isLive);
       updateLiveTestName(liveTestName || '');
       updateOrder(order || 0);
-      updateCountry(country != null ? convertToCountryTag(country) : []);
+      updateCountry(
+        test.targeting.targetingType === 'Country'
+          ? convertToCountryTag(test.targeting.countries)
+          : [],
+      );
     }
   }, [test]);
 
@@ -131,7 +134,13 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
         isLive: testIsLive,
         liveTestName: currentLiveTestName,
         order: currentOrder,
-        country: convertFromCountryTag(currentCountry),
+        targeting:
+          test.targeting.targetingType === 'Country'
+            ? {
+                targetingType: 'Country',
+                countries: convertFromCountryTag(currentCountry),
+              }
+            : test.targeting,
       };
       updateTest(t);
     }
@@ -260,7 +269,7 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
   };
 
   const checkIfTestIsCountryTier = () => {
-    return region === '';
+    return targeting?.targetingType === 'Country';
   };
 
   const addButtonBar = () => {

@@ -1,9 +1,8 @@
 package models
 
 import io.circe.generic.extras.Configuration
-import io.circe.generic.extras.auto._
-import io.circe.generic.extras.semiauto._
-import io.circe.{Decoder, Encoder, Json}
+import io.circe.{Decoder, Encoder}
+import models.{Region => RegionEnum}
 
 case class AmountValuesObject(
     amounts: List[Int],
@@ -25,24 +24,16 @@ case class AmountsVariant(
 )
 
 sealed trait AmountsTestTargeting
-case class RegionTargeting(region: Region) extends AmountsTestTargeting
-case class CountryTargeting(countryCodes: List[String]) extends AmountsTestTargeting
 
 object AmountsTestTargeting {
-  import io.circe.generic.auto._
-  import cats.syntax.functor._  // for the widen syntax
+  case class Region(targetingType: String = "Region", region: RegionEnum) extends AmountsTestTargeting
+  case class Country(targetingType: String = "Country", countries: List[String]) extends AmountsTestTargeting
 
-  implicit val amountsTestTargetingDecoder: Decoder[AmountsTestTargeting] =
-    Decoder[RegionTargeting].widen or Decoder[CountryTargeting].widen
+  import io.circe.generic.extras.auto._
+  implicit val customConfig: Configuration = Configuration.default.withDiscriminator("targetingType")
 
-  implicit val amountsTestTargetingEncoder: Encoder[AmountsTestTargeting] = Encoder.instance {
-    case RegionTargeting(region) => Json.fromFields(List(
-      "region" -> Json.fromString(region.toString)
-    ))
-    case CountryTargeting(countryCodes) => Json.fromFields(List(
-      "countryCodes" -> Json.fromValues(countryCodes.map(Json.fromString))
-    ))
-  }
+  implicit val amountsTestTargetingDecoder = Decoder[AmountsTestTargeting]
+  implicit val amountsTestTargetingEncoder = Encoder[AmountsTestTargeting]
 }
 
 case class AmountsTest(
@@ -56,14 +47,8 @@ case class AmountsTest(
   variants: List[AmountsVariant],
 )
 
-object AmountsTest {
-  implicit val customConfig: Configuration = Configuration.default.withDefaults
-
-  implicit val decoder = Decoder[AmountsTest]
-  implicit val encoder = Encoder[AmountsTest]
-}
-
 object AmountsTests {
+  import io.circe.generic.extras.auto._
   type AmountsTests = List[AmountsTest]
 
   implicit val customConfig: Configuration = Configuration.default.withDefaults
@@ -71,4 +56,3 @@ object AmountsTests {
   implicit val decoder = Decoder[AmountsTests]
   implicit val encoder = Encoder[AmountsTests]
 }
-

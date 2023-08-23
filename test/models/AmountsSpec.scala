@@ -6,19 +6,20 @@ import org.scalatest.matchers.should.Matchers
 import io.circe.parser._
 import io.circe.syntax.EncoderOps
 import models.Region.GBPCountries
+import models.AmountsTestTargeting
 
 class AmountsSpec extends AnyFlatSpec with Matchers with EitherValues {
 
   it should "decode amounts" in {
-    decode[AmountsTestTargeting]("""{ "countryCodes": ["GB"] }""") should be(Right(CountryTargeting(List("GB"))))
-    decode[AmountsTestTargeting]("""{ "region": "GBPCountries" }""") should be(Right(RegionTargeting(GBPCountries)))
+    decode[AmountsTestTargeting]("""{ "targetingType": "Country", "countries": ["GB"] }""") should be(Right(AmountsTestTargeting.Country(countries = List("GB"))))
+    decode[AmountsTestTargeting]("""{ "targetingType": "Region", "region": "GBPCountries" }""") should be(Right(AmountsTestTargeting.Region(region = GBPCountries)))
   }
 
   it should "encode amounts" in {
-    val countryTargeting: AmountsTestTargeting = CountryTargeting(List("GB"))
-    countryTargeting.asJson.noSpaces should be("""{"countryCodes":["GB"]}""")
+    val countryTargeting: AmountsTestTargeting = AmountsTestTargeting.Country(countries = List("GB"))
+    countryTargeting.asJson.noSpaces should be("""{"targetingType":"Country","countries":["GB"]}""")
 
-    val regionTargeting: AmountsTestTargeting = RegionTargeting(GBPCountries)
-    regionTargeting.asJson.noSpaces should be("""{"region":"GBPCountries"}""")
+    val regionTargeting: AmountsTestTargeting = AmountsTestTargeting.Region(region = GBPCountries)
+    regionTargeting.asJson.noSpaces should be("""{"targetingType":"Region","region":"GBPCountries"}""")
   }
 }
