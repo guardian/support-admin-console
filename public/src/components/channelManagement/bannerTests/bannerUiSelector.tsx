@@ -1,10 +1,16 @@
 import React from 'react';
 import { MenuItem, Select } from '@material-ui/core';
-import { BannerTemplate, BannerUI, isBannerTemplate } from '../../../models/banner';
+import { BannerTemplate, BannerUi, isBannerTemplate, uiIsDesign } from '../../../models/banner';
+
+interface BannerUiSelectorProps {
+  ui: BannerUi;
+  onUiChange: (updatedUi: BannerUi) => void;
+  editMode: boolean;
+}
 
 interface BannerTemplateSelectorProps {
-  template: BannerUI;
-  onTemplateChange: (updatedTemplate: BannerTemplate) => void;
+  template: BannerTemplate;
+  onUiChange: (updatedUi: BannerUi) => void;
   editMode: boolean;
 }
 
@@ -46,13 +52,13 @@ const templatesWithLabels = [
 
 const BannerTemplateSelector: React.FC<BannerTemplateSelectorProps> = ({
   template,
-  onTemplateChange,
+  onUiChange,
   editMode,
 }: BannerTemplateSelectorProps) => {
   const onChange = (event: React.ChangeEvent<{ value: unknown }>): void => {
     const value = event.target.value as string;
     if (isBannerTemplate(value)) {
-      onTemplateChange(value);
+      onUiChange(value);
     }
   };
 
@@ -67,4 +73,16 @@ const BannerTemplateSelector: React.FC<BannerTemplateSelectorProps> = ({
   );
 };
 
-export default BannerTemplateSelector;
+const BannerUiSelector: React.FC<BannerUiSelectorProps> = ({
+  ui,
+  onUiChange,
+  editMode,
+}: BannerUiSelectorProps) => {
+  if (uiIsDesign(ui)) {
+    return <div>Implement design picker!</div>;
+  } else {
+    return <BannerTemplateSelector template={ui} onUiChange={onUiChange} editMode={editMode} />;
+  }
+};
+
+export default BannerUiSelector;

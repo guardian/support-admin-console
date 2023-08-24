@@ -16,8 +16,8 @@ import {
   templateValidatorForPlatform,
 } from '../helpers/validation';
 import { Cta, SecondaryCta } from '../helpers/shared';
-import BannerTemplateSelector from './bannerTemplateSelector';
-import { BannerContent, BannerTemplate, BannerUI, BannerVariant } from '../../../models/banner';
+import BannerUiSelector from './bannerUiSelector';
+import { BannerContent, BannerTemplate, BannerUi, BannerVariant } from '../../../models/banner';
 import { getDefaultVariant } from './utils/defaults';
 import useValidation from '../hooks/useValidation';
 import {
@@ -97,7 +97,7 @@ const getLabelSuffix = (deviceType: DeviceType): string => {
 
 interface BannerTestVariantContentEditorProps {
   content: BannerContent;
-  template: BannerUI;
+  template: BannerUi;
   onChange: (updatedContent: BannerContent) => void;
   onValidationChange: (isValid: boolean) => void;
   editMode: boolean;
@@ -391,12 +391,12 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
         <Typography className={classes.sectionHeader} variant="h4">
           Banner template
         </Typography>
-        <BannerTemplateSelector
-          template={variant.template}
-          onTemplateChange={(template): void =>
+        <BannerUiSelector
+          ui={variant.template}
+          onUiChange={(ui: BannerUi): void =>
             onVariantChange({
               ...variant,
-              template,
+              template: ui,
             })
           }
           editMode={editMode}

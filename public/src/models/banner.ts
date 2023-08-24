@@ -36,7 +36,7 @@ export interface BannerDesignName {
   designName: string;
 }
 
-export type BannerUI = BannerTemplate | BannerDesignName;
+export type BannerUi = BannerTemplate | BannerDesignName;
 
 export interface BannerContent {
   heading?: string;
@@ -47,7 +47,7 @@ export interface BannerContent {
   secondaryCta?: SecondaryCta;
 }
 export interface BannerVariant extends Variant {
-  template: BannerUI;
+  template: BannerUi;
   bannerContent: BannerContent;
   mobileBannerContent?: BannerContent;
   separateArticleCount?: boolean;
@@ -68,10 +68,10 @@ export interface BannerTest extends Test {
   campaignName?: string;
 }
 
-export function uiIsDesign(ui: BannerUI): ui is BannerDesignName {
+export function uiIsDesign(ui: BannerUi): ui is BannerDesignName {
   return (ui as BannerDesignName).designName !== undefined;
 }
 
-export function isBannerTemplate(s: BannerUI | string): s is BannerTemplate {
+export function isBannerTemplate(s: BannerUi | string): s is BannerTemplate {
   return Object.values(BannerTemplate).includes(s as BannerTemplate);
 }
