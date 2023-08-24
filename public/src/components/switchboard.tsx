@@ -121,8 +121,8 @@ function sortByDescription<T extends Switch | SwitchGroup>(a: [string, T], b: [s
 
 const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
   data,
-  setData,
-  saveData,
+  update,
+  sendToS3,
   saving,
 }: InnerProps<SupportFrontendSwitches>) => {
   const classes = useStyles();
@@ -163,7 +163,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     const [groupId, groupData] = group;
     updatedState[groupId].switches[switchId].state = isChecked ? SwitchState.On : SwitchState.Off;
     const currentSwitchState = updatedState[groupId].switches[switchId].state;
-    setData(updatedState);
+    update(updatedState);
     setPendingChange(
       'Turned ' + currentSwitchState + ':',
       switchData.description,
@@ -213,7 +213,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
         description: description,
         state: SwitchState.Off,
       };
-      setData(updatedState);
+      update(updatedState);
       setPendingChange('Added', description, groupData.description);
     };
 
@@ -294,7 +294,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
   );
 
   const actionSaveData = (): void => {
-    saveData();
+    sendToS3();
     setPendingChanges([]);
   };
 
@@ -331,7 +331,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     const [groupId, groupData] = group;
     const updatedState = cloneDeep(data);
     delete updatedState[groupId].switches[switchId];
-    setData(updatedState);
+    update(updatedState);
     setPendingChange('Removed', description, groupData.description);
   };
 

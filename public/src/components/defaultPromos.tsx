@@ -28,8 +28,8 @@ const useStyles = makeStyles(() => ({
 
 const DefaultPromos: React.FC<InnerProps<DefaultPromos>> = ({
   data,
-  setData,
-  saveData,
+  update,
+  sendToS3,
   saving,
 }: InnerProps<DefaultPromos>) => {
   const [gwPromosString, setGwPromosString] = useState<string>(data.guardianWeekly.join(', '));
@@ -48,7 +48,7 @@ const DefaultPromos: React.FC<InnerProps<DefaultPromos>> = ({
           setGwPromosString(inputValue);
 
           const parsedInputValue = parsePromoInput(inputValue);
-          setData({
+          update({
             ...data,
             guardianWeekly: parsedInputValue,
           });
@@ -65,7 +65,7 @@ const DefaultPromos: React.FC<InnerProps<DefaultPromos>> = ({
           setpaperPromosString(inputValue);
 
           const parsedInputValue = parsePromoInput(inputValue);
-          setData({
+          update({
             ...data,
             paper: parsedInputValue,
           });
@@ -74,7 +74,7 @@ const DefaultPromos: React.FC<InnerProps<DefaultPromos>> = ({
         label="Paper"
       />
       <Button
-        onClick={saveData}
+        onClick={sendToS3}
         color="primary"
         variant="contained"
         size="large"

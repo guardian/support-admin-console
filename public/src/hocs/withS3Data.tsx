@@ -8,9 +8,9 @@ export interface DataFromServer<T> {
 
 export interface InnerProps<T> {
   data: T;
-  setData: (data: T) => void;
-  saveData: () => void;
-  replaceData?: (data: T) => void;
+  update: (data: T) => void;
+  sendToS3: () => void;
+  updateAndSendToS3: (data: T) => void;
   saving: boolean;
 }
 
@@ -21,7 +21,6 @@ function withS3Data<T>(
   Inner: React.FC<InnerProps<T>>,
   fetchSettings: FetchSettings<T>,
   saveSettings: SaveSettings<T>,
-  replaceSettings?: SaveSettings<T>,
 ): React.FC {
   const Wrapped: React.FC = () => {
     const [dataFromServer, setDataFromServer] = useState<DataFromServer<T> | null>(null);
@@ -38,14 +37,14 @@ function withS3Data<T>(
       fetchData();
     }, []);
 
-    const setData = (data: T): void => {
+    const update = (data: T): void => {
       if (!dataFromServer) {
         return;
       }
       setDataFromServer({ ...dataFromServer, value: data });
     };
 
-    const saveData = (): void => {
+    const sendToS3 = (): void => {
       if (!dataFromServer) {
         return;
       }
@@ -56,13 +55,13 @@ function withS3Data<T>(
         .then(() => setIsSaving(false));
     };
 
-    const replaceData = (data: T): void => {
-      if (!dataFromServer || !replaceSettings) {
+    const updateAndSendToS3 = (data: T): void => {
+      if (!dataFromServer) {
         return;
       }
       setIsSaving(true);
 
-      replaceSettings({ ...dataFromServer, value: data })
+      saveSettings({ ...dataFromServer, value: data })
         .then(fetchData)
         .then(() => setIsSaving(false));
     };
@@ -70,9 +69,9 @@ function withS3Data<T>(
     return dataFromServer ? (
       <Inner
         data={dataFromServer.value}
-        setData={setData}
-        saveData={saveData}
-        replaceData={replaceData}
+        update={update}
+        sendToS3={sendToS3}
+        updateAndSendToS3={updateAndSendToS3}
         saving={saving}
       />
     ) : null; // TODO: add spinner?

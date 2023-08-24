@@ -43,9 +43,9 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 
 const AmountsForm: React.FC<InnerProps<AmountsTests>> = ({
   data: configuredAmounts,
-  setData: setConfiguredAmounts,
-  saveData: saveConfiguredAmounts,
-  replaceData: replaceConfiguredAmounts,
+  update,
+  sendToS3,
+  updateAndSendToS3,
 }: InnerProps<AmountsTests>) => {
   const classes = useStyles();
 
@@ -139,7 +139,7 @@ const AmountsForm: React.FC<InnerProps<AmountsTests>> = ({
       };
 
       const updatedTests = [...configuredAmounts, newTest];
-      setConfiguredAmounts(updatedTests);
+      update(updatedTests);
       setSelectedTest({ ...newTest });
     }
   };
@@ -147,19 +147,13 @@ const AmountsForm: React.FC<InnerProps<AmountsTests>> = ({
   const updateLocalTest = (updated: AmountsTest) => {
     const updatedTests = configuredAmounts.filter(t => t.testName !== updated.testName);
     updatedTests.push(updated);
-    setConfiguredAmounts(updatedTests);
+    update(updatedTests);
   };
 
   const deleteLocalTest = (name: string) => {
-    if (replaceConfiguredAmounts) {
-      const updatedTests = configuredAmounts.filter(t => t.testName !== name);
-      replaceConfiguredAmounts(updatedTests);
-      setSelectedTest(undefined);
-    }
-  };
-
-  const saveLocalTestToS3 = () => {
-    saveConfiguredAmounts();
+    const updatedTests = configuredAmounts.filter(t => t.testName !== name);
+    updateAndSendToS3(updatedTests);
+    setSelectedTest(undefined);
   };
 
   return (
@@ -178,7 +172,7 @@ const AmountsForm: React.FC<InnerProps<AmountsTests>> = ({
         <AmountsTestEditor
           test={selectedTest}
           checkLiveTestNameIsUnique={checkLiveTestNameIsUnique}
-          saveTest={saveLocalTestToS3}
+          saveTest={sendToS3}
           updateTest={updateLocalTest}
           deleteTest={deleteLocalTest}
         />
@@ -194,7 +188,4 @@ const fetchSettings = (): Promise<any> =>
 const saveSettings = (data: DataFromServer<AmountsTests>): Promise<Response> =>
   saveSupportFrontendSettings(SupportFrontendSettingsType.amounts, data);
 
-const replaceSettings = (data: DataFromServer<AmountsTests>): Promise<Response> =>
-  saveSupportFrontendSettings(SupportFrontendSettingsType.amounts, data);
-
-export default withS3Data<AmountsTests>(AmountsForm, fetchSettings, saveSettings, replaceSettings);
+export default withS3Data<AmountsTests>(AmountsForm, fetchSettings, saveSettings);
