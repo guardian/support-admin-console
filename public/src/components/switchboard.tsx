@@ -121,15 +121,15 @@ function sortByDescription<T extends Switch | SwitchGroup>(a: [string, T], b: [s
 
 const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
   data,
-  setData,
-  saveData,
+  update,
+  sendToS3,
   saving,
 }: InnerProps<SupportFrontendSwitches>) => {
   const classes = useStyles();
 
   const [pendingChanges, setPendingChanges] = useState<string[]>([]);
 
-  const displayNeedToSaveDataWarning = (): JSX.Element | false => {
+  const displayNeedTosendToS3Warning = (): JSX.Element | false => {
     return (
       pendingChanges.length > 0 && (
         <Alert severity="warning">
@@ -163,7 +163,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     const [groupId, groupData] = group;
     updatedState[groupId].switches[switchId].state = isChecked ? SwitchState.On : SwitchState.Off;
     const currentSwitchState = updatedState[groupId].switches[switchId].state;
-    setData(updatedState);
+    update(updatedState);
     setPendingChange(
       'Turned ' + currentSwitchState + ':',
       switchData.description,
@@ -213,7 +213,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
         description: description,
         state: SwitchState.Off,
       };
-      setData(updatedState);
+      update(updatedState);
       setPendingChange('Added', description, groupData.description);
     };
 
@@ -293,8 +293,8 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     </>
   );
 
-  const actionSaveData = (): void => {
-    saveData();
+  const actionsendToS3 = (): void => {
+    sendToS3();
     setPendingChanges([]);
   };
 
@@ -302,7 +302,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     <div className={classes.buttons}>
       <Button
         variant="contained"
-        onClick={actionSaveData}
+        onClick={actionsendToS3}
         className={classes.button}
         disabled={saving}
       >
@@ -331,7 +331,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     const [groupId, groupData] = group;
     const updatedState = cloneDeep(data);
     delete updatedState[groupId].switches[switchId];
-    setData(updatedState);
+    update(updatedState);
     setPendingChange('Removed', description, groupData.description);
   };
 
@@ -341,12 +341,12 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
         Manage existing switches
       </Typography>
 
-      {displayNeedToSaveDataWarning()}
+      {displayNeedTosendToS3Warning()}
       <SaveButton />
 
       {createSwitchFields()}
 
-      {displayNeedToSaveDataWarning()}
+      {displayNeedTosendToS3Warning()}
       <SaveButton />
     </form>
   );

@@ -65,14 +65,14 @@ const ChannelSwitch: React.FC<ChannelSwitchProps> = ({
 
 const ChannelSwitches: React.FC<InnerProps<ChannelSwitches>> = ({
   data: switches,
-  setData: setSwitches,
-  saveData: saveSwitches,
+  update,
+  sendToS3,
   saving,
 }: InnerProps<ChannelSwitches>) => {
   const classes = useStyles();
 
   const onSwitchChange = (name: SwitchName, enabled: boolean): void => {
-    setSwitches({
+    update({
       ...switches,
       [name]: enabled,
     });
@@ -124,7 +124,7 @@ const ChannelSwitches: React.FC<InnerProps<ChannelSwitches>> = ({
       />
 
       <Button
-        onClick={saveSwitches}
+        onClick={sendToS3}
         color="primary"
         variant="contained"
         size="large"
