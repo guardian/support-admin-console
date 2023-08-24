@@ -1,15 +1,23 @@
-import React from 'react';
-import { MenuItem, Select } from '@material-ui/core';
-import { BannerTemplate, BannerUi, isBannerTemplate, uiIsDesign } from '../../../models/banner';
+import React, { useEffect, useState } from 'react';
+import {
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  MenuItem,
+  Radio,
+  RadioGroup,
+  Select,
+} from '@material-ui/core';
+import {
+  BannerDesignName,
+  BannerTemplate,
+  BannerUi,
+  isBannerTemplate,
+  uiIsDesign,
+} from '../../../models/banner';
 
 interface BannerUiSelectorProps {
   ui: BannerUi;
-  onUiChange: (updatedUi: BannerUi) => void;
-  editMode: boolean;
-}
-
-interface BannerTemplateSelectorProps {
-  template: BannerTemplate;
   onUiChange: (updatedUi: BannerUi) => void;
   editMode: boolean;
 }
@@ -50,6 +58,12 @@ const templatesWithLabels = [
   },
 ];
 
+interface BannerTemplateSelectorProps {
+  template: BannerTemplate;
+  onUiChange: (updatedUi: BannerUi) => void;
+  editMode: boolean;
+}
+
 const BannerTemplateSelector: React.FC<BannerTemplateSelectorProps> = ({
   template,
   onUiChange,
@@ -73,16 +87,96 @@ const BannerTemplateSelector: React.FC<BannerTemplateSelectorProps> = ({
   );
 };
 
+interface BannerDesignSelectorProps {
+  design: BannerDesignName;
+  onUiChange: (updatedUi: BannerUi) => void;
+  editMode: boolean;
+}
+
+// TODO: Thread these through dynamically
+const bannerDesignNames: BannerDesignName[] = [
+  { designName: 'EXAMPLE' },
+  { designName: 'FOO' },
+  { designName: 'BAR' },
+  { designName: 'BAZ' },
+];
+
+const BannerDesignSelector: React.FC<BannerDesignSelectorProps> = ({
+  design,
+  onUiChange,
+  editMode,
+}: BannerDesignSelectorProps) => {
+  const onChange = (event: React.ChangeEvent<{ value: unknown }>): void => {
+    const designName = event.target.value as string;
+    // TODO: Verify that this is a valid design name
+    onUiChange({ designName });
+  };
+
+  return (
+    <Select value={design.designName} onChange={onChange} disabled={!editMode}>
+      {bannerDesignNames.map(design => (
+        <MenuItem value={design.designName} key={design.designName}>
+          {design.designName}
+        </MenuItem>
+      ))}
+    </Select>
+  );
+};
+
+type UiType = 'Design' | 'Template';
+
 const BannerUiSelector: React.FC<BannerUiSelectorProps> = ({
   ui,
   onUiChange,
   editMode,
 }: BannerUiSelectorProps) => {
-  if (uiIsDesign(ui)) {
-    return <div>Implement design picker!</div>;
-  } else {
-    return <BannerTemplateSelector template={ui} onUiChange={onUiChange} editMode={editMode} />;
-  }
+  const [uiType, setUiType] = useState<UiType>(uiIsDesign(ui) ? 'Design' : 'Template');
+
+  const onUiTypeChange = (event: React.ChangeEvent<{ value: unknown }>): void => {
+    const uiType = event.target.value as UiType;
+    setUiType(uiType);
+
+    onUiChange(
+      uiType === 'Design' ? { designName: 'EXAMPLE' } : BannerTemplate.ContributionsBanner,
+    );
+  };
+
+  useEffect(() => {
+    // This isn't part of the design, so when changes are discarded we want to reflect the unedited configuration
+    setUiType(uiIsDesign(ui) ? 'Design' : 'Template');
+  }, [editMode]);
+
+  return (
+    <>
+      <div>
+        <FormControl>
+          <FormLabel>UI Type</FormLabel>
+          <RadioGroup
+            name="controlled-radio-buttons-group"
+            value={uiType}
+            onChange={onUiTypeChange}
+          >
+            <FormControlLabel
+              value="Template"
+              control={<Radio disabled={!editMode} />}
+              label="Template"
+            />
+            <FormControlLabel
+              value="Design"
+              control={<Radio disabled={!editMode} />}
+              label="Design"
+            />
+          </RadioGroup>
+        </FormControl>
+      </div>
+
+      {uiIsDesign(ui) ? (
+        <BannerDesignSelector design={ui} onUiChange={onUiChange} editMode={editMode} />
+      ) : (
+        <BannerTemplateSelector template={ui} onUiChange={onUiChange} editMode={editMode} />
+      )}
+    </>
+  );
 };
 
 export default BannerUiSelector;
