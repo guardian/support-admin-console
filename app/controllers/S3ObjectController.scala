@@ -64,6 +64,7 @@ abstract class S3ObjectController[T : Decoder : Encoder](
     * The POSTed json is validated against the model.
     */
   def set = authAction.async(circe.json[VersionedS3Data[T]]) { request =>
+    logger.info(s"Updating S3 data: ${request.body}")
     run {
       S3Json
         .updateAsJson(request.body)(s3Client)

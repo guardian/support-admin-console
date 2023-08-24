@@ -95,6 +95,7 @@ object S3 extends S3Client with StrictLogging {
         S3GetObjectError(e)
       })
       .flatMap(response => {
+        logger.info(s"Got object metadata for $objectSettings")
         if (response.versionId() == data.version) {
           createOrUpdate(data.value)(objectSettings)
         } else {
