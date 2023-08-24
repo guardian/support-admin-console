@@ -290,8 +290,8 @@ An amounts test can be in one of two forms:
 
 Country test:
   Bespoke tests targeted at one or more geographical countries
-  `region` attribute will be an empty String
-  `country` attribute will be a String array containing 2-letter ISO country codes
+  `targeting` object will include a `countries` attribute
+    - a String array containing 2-letter ISO country codes
   When the `isLive` boolean is `false`:
     - the test is ignored; users will see their appropriate region test
   When the `isLive` boolean is `true`:
@@ -302,8 +302,8 @@ Country test:
 
 Region test:
   Evergreen tests, one per geographical region
-  `region` attribute will be the region label, as defined by the Region type
-  `country` attribute will be a empty String array
+  `targeting` object will include a `region` attribute
+    - the region label, as defined by the Region type
   When the `isLive` boolean is `false`:
     - the CONTROL variant will display
     - analytics will use the `testName` label
