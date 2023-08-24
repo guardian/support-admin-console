@@ -129,7 +129,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
 
   const [pendingChanges, setPendingChanges] = useState<string[]>([]);
 
-  const displayNeedTosendToS3Warning = (): JSX.Element | false => {
+  const displayNeedToSaveDataWarning = (): JSX.Element | false => {
     return (
       pendingChanges.length > 0 && (
         <Alert severity="warning">
@@ -293,7 +293,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     </>
   );
 
-  const actionsendToS3 = (): void => {
+  const actionSaveData = (): void => {
     sendToS3();
     setPendingChanges([]);
   };
@@ -302,7 +302,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     <div className={classes.buttons}>
       <Button
         variant="contained"
-        onClick={actionsendToS3}
+        onClick={actionSaveData}
         className={classes.button}
         disabled={saving}
       >
@@ -341,12 +341,12 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
         Manage existing switches
       </Typography>
 
-      {displayNeedTosendToS3Warning()}
+      {displayNeedToSaveDataWarning()}
       <SaveButton />
 
       {createSwitchFields()}
 
-      {displayNeedTosendToS3Warning()}
+      {displayNeedToSaveDataWarning()}
       <SaveButton />
     </form>
   );
