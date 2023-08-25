@@ -104,8 +104,10 @@ const BannerDesignSelector: React.FC<BannerDesignSelectorProps> = ({
 }: BannerDesignSelectorProps) => {
   const onChange = (event: React.ChangeEvent<{ value: unknown }>): void => {
     const designName = event.target.value as string;
-    // TODO: Verify that this is a valid design name
-    onUiChange({ designName });
+    const isValidBannerDesign = designs.map(d => d.name).includes(designName);
+    if (isValidBannerDesign) {
+      onUiChange({ designName });
+    }
   };
 
   return (
