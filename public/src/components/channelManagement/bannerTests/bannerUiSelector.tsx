@@ -142,7 +142,7 @@ const BannerUiSelector: React.FC<BannerUiSelectorProps> = ({
   };
 
   useEffect(() => {
-    // This isn't part of the design, so when changes are discarded we want to reflect the unedited configuration
+    // This state isn't part of the variant, so when changes are discarded we want to reflect the unedited variant
     setUiType(uiIsDesign(ui) ? 'Design' : 'Template');
   }, [editMode]);
 
