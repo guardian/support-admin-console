@@ -15,11 +15,13 @@ import {
   isBannerTemplate,
   uiIsDesign,
 } from '../../../models/banner';
+import { BannerDesign } from '../../../models/BannerDesign';
 
 interface BannerUiSelectorProps {
   ui: BannerUi;
   onUiChange: (updatedUi: BannerUi) => void;
   editMode: boolean;
+  designs: BannerDesign[];
 }
 
 const templatesWithLabels = [
@@ -91,20 +93,14 @@ interface BannerDesignSelectorProps {
   design: BannerDesignName;
   onUiChange: (updatedUi: BannerUi) => void;
   editMode: boolean;
+  designs: BannerDesign[];
 }
-
-// TODO: Thread these through dynamically
-const bannerDesignNames: BannerDesignName[] = [
-  { designName: 'EXAMPLE' },
-  { designName: 'FOO' },
-  { designName: 'BAR' },
-  { designName: 'BAZ' },
-];
 
 const BannerDesignSelector: React.FC<BannerDesignSelectorProps> = ({
   design,
   onUiChange,
   editMode,
+  designs,
 }: BannerDesignSelectorProps) => {
   const onChange = (event: React.ChangeEvent<{ value: unknown }>): void => {
     const designName = event.target.value as string;
@@ -114,9 +110,9 @@ const BannerDesignSelector: React.FC<BannerDesignSelectorProps> = ({
 
   return (
     <Select value={design.designName} onChange={onChange} disabled={!editMode}>
-      {bannerDesignNames.map(design => (
-        <MenuItem value={design.designName} key={design.designName}>
-          {design.designName}
+      {designs.map(design => (
+        <MenuItem value={design.name} key={design.name}>
+          {design.name}
         </MenuItem>
       ))}
     </Select>
@@ -129,6 +125,7 @@ const BannerUiSelector: React.FC<BannerUiSelectorProps> = ({
   ui,
   onUiChange,
   editMode,
+  designs,
 }: BannerUiSelectorProps) => {
   const [uiType, setUiType] = useState<UiType>(uiIsDesign(ui) ? 'Design' : 'Template');
 
@@ -171,7 +168,12 @@ const BannerUiSelector: React.FC<BannerUiSelectorProps> = ({
       </div>
 
       {uiIsDesign(ui) ? (
-        <BannerDesignSelector design={ui} onUiChange={onUiChange} editMode={editMode} />
+        <BannerDesignSelector
+          design={ui}
+          onUiChange={onUiChange}
+          editMode={editMode}
+          designs={designs}
+        />
       ) : (
         <BannerTemplateSelector template={ui} onUiChange={onUiChange} editMode={editMode} />
       )}

@@ -26,6 +26,7 @@ import {
   RichTextEditorSingleLine,
 } from '../richTextEditor/richTextEditor';
 import TickerEditor from '../tickerEditor';
+import { BannerDesign } from '../../../models/BannerDesign';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
@@ -356,6 +357,7 @@ interface BannerTestVariantEditorProps {
   editMode: boolean;
   onDelete: () => void;
   onValidationChange: (isValid: boolean) => void;
+  designs: BannerDesign[];
 }
 
 const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
@@ -363,6 +365,7 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
   editMode,
   onValidationChange,
   onVariantChange,
+  designs,
 }: BannerTestVariantEditorProps) => {
   const classes = useStyles();
   const setValidationStatusForField = useValidation(onValidationChange);
@@ -393,6 +396,7 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
         </Typography>
         <BannerUiSelector
           ui={variant.template}
+          designs={designs}
           onUiChange={(ui: BannerUi): void =>
             onVariantChange({
               ...variant,

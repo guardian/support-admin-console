@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Region } from '../../../utils/models';
 import { ArticlesViewedSettings, DeviceType, SignedInStatus, UserCohort } from '../helpers/shared';
 import { ARTICLE_COUNT_TEMPLATE } from '../helpers/validation';
@@ -19,6 +19,12 @@ import { ControlProportionSettings } from '../helpers/controlProportionSettings'
 import TestVariantsSplitEditor from '../testVariantsSplitEditor';
 import { useStyles } from '../helpers/testEditorStyles';
 import { ValidatedTestEditorProps } from '../validatedTestEditor';
+import { BannerDesign } from '../../../models/BannerDesign';
+import {
+  BannerDesignsResponse,
+  fetchFrontendSettings,
+  FrontendSettingsType,
+} from '../../../utils/requests';
 
 const copyHasTemplate = (content: BannerContent, template: string): boolean =>
   (content.heading && content.heading.includes(template)) ||
@@ -39,6 +45,20 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
   setValidationStatusForField,
 }: ValidatedTestEditorProps<BannerTest>) => {
   const classes = useStyles();
+
+  const [designs, setDesigns] = useState<BannerDesign[]>([]);
+
+  const fetchBannerDesigns = (): void => {
+    fetchFrontendSettings(FrontendSettingsType.bannerDesigns).then(
+      (response: BannerDesignsResponse) => {
+        setDesigns(response.bannerDesigns);
+      },
+    );
+  };
+
+  useEffect(() => {
+    fetchBannerDesigns();
+  }, []);
 
   const getArticlesViewedSettings = (test: BannerTest): ArticlesViewedSettings | undefined => {
     if (!!test.articlesViewedSettings) {
@@ -133,6 +153,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
       onVariantChange={onVariantChange}
       onDelete={(): void => onVariantDelete(variant.name)}
       editMode={userHasTestLocked}
+      designs={designs}
       onValidationChange={(isValid: boolean): void =>
         setValidationStatusForField(variant.name, isValid)
       }
