@@ -16,6 +16,7 @@ import {
   uiIsDesign,
 } from '../../../models/banner';
 import { BannerDesign } from '../../../models/BannerDesign';
+import { shouldShowBannerDesignsFeature } from '../../../utils/features';
 
 interface BannerUiSelectorProps {
   ui: BannerUi;
@@ -147,27 +148,29 @@ const BannerUiSelector: React.FC<BannerUiSelectorProps> = ({
 
   return (
     <>
-      <div>
-        <FormControl>
-          <FormLabel>UI Type</FormLabel>
-          <RadioGroup
-            name="controlled-radio-buttons-group"
-            value={uiType}
-            onChange={onUiTypeChange}
-          >
-            <FormControlLabel
-              value="Template"
-              control={<Radio disabled={!editMode} />}
-              label="Template"
-            />
-            <FormControlLabel
-              value="Design"
-              control={<Radio disabled={!editMode} />}
-              label="Design"
-            />
-          </RadioGroup>
-        </FormControl>
-      </div>
+      {shouldShowBannerDesignsFeature() && (
+        <div>
+          <FormControl>
+            <FormLabel>UI Type</FormLabel>
+            <RadioGroup
+              name="controlled-radio-buttons-group"
+              value={uiType}
+              onChange={onUiTypeChange}
+            >
+              <FormControlLabel
+                value="Template"
+                control={<Radio disabled={!editMode} />}
+                label="Template"
+              />
+              <FormControlLabel
+                value="Design"
+                control={<Radio disabled={!editMode} />}
+                label="Design"
+              />
+            </RadioGroup>
+          </FormControl>
+        </div>
+      )}
 
       {uiIsDesign(ui) ? (
         <BannerDesignSelector
