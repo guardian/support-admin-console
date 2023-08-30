@@ -174,6 +174,10 @@ const bannerModules = {
     path: 'usSupremeCourt2023/Scotus2023MomentBanner.js',
     name: 'Scotus2023MomentBanner',
   },
+  [BannerTemplate.SupporterMomentBanner]: {
+    path: 'supporterMoment/SupporterMomentBanner.js',
+    name: 'SupporterMomentBanner',
+  },
 };
 
 const useStyles = makeStyles(({ palette }: Theme) => ({
