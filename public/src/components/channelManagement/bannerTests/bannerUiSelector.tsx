@@ -136,9 +136,10 @@ const BannerUiSelector: React.FC<BannerUiSelectorProps> = ({
     const uiType = event.target.value as UiType;
     setUiType(uiType);
 
-    onUiChange(
-      uiType === 'Design' ? { designName: 'EXAMPLE' } : BannerTemplate.ContributionsBanner,
-    );
+    const defaultUI =
+      uiType === 'Design' ? { designName: designs[0]?.name } : BannerTemplate.ContributionsBanner;
+
+    onUiChange(defaultUI);
   };
 
   useEffect(() => {
