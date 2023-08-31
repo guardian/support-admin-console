@@ -54,14 +54,14 @@ const AppsMeteringSwitch: React.FC<AppsMeteringSwitchProps> = ({
 
 const AppsMeteringSwitches: React.FC<InnerProps<AppsMeteringSwitches>> = ({
   data: switches,
-  setData: setSwitches,
-  saveData: saveSwitches,
+  update,
+  sendToS3,
   saving,
 }: InnerProps<AppsMeteringSwitches>) => {
   const classes = useStyles();
 
   const onSwitchChange = (name: SwitchName, enabled: boolean): void => {
-    setSwitches({
+    update({
       ...switches,
       [name]: enabled,
     });
@@ -89,7 +89,7 @@ const AppsMeteringSwitches: React.FC<InnerProps<AppsMeteringSwitches>> = ({
       />
 
       <Button
-        onClick={saveSwitches}
+        onClick={sendToS3}
         color="primary"
         variant="contained"
         size="large"

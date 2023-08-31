@@ -8,8 +8,9 @@ export interface DataFromServer<T> {
 
 export interface InnerProps<T> {
   data: T;
-  setData: (data: T) => void;
-  saveData: () => void;
+  update: (data: T) => void;
+  sendToS3: () => void;
+  updateAndSendToS3: (data: T) => void;
   saving: boolean;
 }
 
@@ -27,21 +28,23 @@ function withS3Data<T>(
 
     const fetchData = (): Promise<void> =>
       fetchSettings()
-        .then(data => setDataFromServer(data))
+        .then(data => {
+          setDataFromServer(data);
+        })
         .catch(err => alert(err));
 
     useEffect(() => {
       fetchData();
     }, []);
 
-    const setData = (data: T): void => {
+    const update = (data: T): void => {
       if (!dataFromServer) {
         return;
       }
       setDataFromServer({ ...dataFromServer, value: data });
     };
 
-    const saveData = (): void => {
+    const sendToS3 = (): void => {
       if (!dataFromServer) {
         return;
       }
@@ -52,8 +55,25 @@ function withS3Data<T>(
         .then(() => setIsSaving(false));
     };
 
+    const updateAndSendToS3 = (data: T): void => {
+      if (!dataFromServer) {
+        return;
+      }
+      setIsSaving(true);
+
+      saveSettings({ ...dataFromServer, value: data })
+        .then(fetchData)
+        .then(() => setIsSaving(false));
+    };
+
     return dataFromServer ? (
-      <Inner data={dataFromServer.value} setData={setData} saveData={saveData} saving={saving} />
+      <Inner
+        data={dataFromServer.value}
+        update={update}
+        sendToS3={sendToS3}
+        updateAndSendToS3={updateAndSendToS3}
+        saving={saving}
+      />
     ) : null; // TODO: add spinner?
   };
 

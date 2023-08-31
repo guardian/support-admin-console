@@ -5,7 +5,7 @@ import { EpicModuleName } from '../helpers/shared';
 import { useModule } from '../../../hooks/useModule';
 import { EpicVariant } from '../../../models/epic';
 import useTickerData, { TickerSettingsWithData } from '../hooks/useTickerData';
-import { ContributionAmounts } from '../../amounts/configuredAmountsEditor';
+import { SelectedAmountsVariant, mockAmountsCardData } from '../../../utils/models';
 
 // Article count TS defs
 export interface ArticleCounts {
@@ -21,12 +21,6 @@ interface ShowReminderFields {
   reminderPeriod: string;
   reminderLabel: string;
 }
-
-export type SelectedAmountsVariant = {
-  testName: string;
-  variantName?: string;
-  amounts?: ContributionAmounts;
-};
 
 // Extend EpicVariant to include choice cards and tickers
 interface EpicVariantWithAdditionalData extends EpicVariant {
@@ -80,24 +74,7 @@ const buildProps = (
     bylineWithImage: variant.bylineWithImage,
 
     showChoiceCards: variant.showChoiceCards,
-    choiceCardAmounts: {
-      testName: 'amounts_test',
-      variantName: 'control',
-      amounts: {
-        ONE_OFF: {
-          amounts: [5, 10, 15, 20],
-          defaultAmount: 5,
-        },
-        MONTHLY: {
-          amounts: [3, 6, 10],
-          defaultAmount: 10,
-        },
-        ANNUAL: {
-          amounts: [100],
-          defaultAmount: 100,
-        },
-      },
-    },
+    choiceCardAmounts: mockAmountsCardData,
 
     showTicker: variant.showTicker,
     tickerSettings: tickerSettingsWithData,

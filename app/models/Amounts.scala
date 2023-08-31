@@ -1,48 +1,58 @@
 package models
 
-import io.circe.{ Decoder, Encoder }
-import io.circe.generic.auto._
+import io.circe.generic.extras.Configuration
+import io.circe.{Decoder, Encoder}
+import models.{Region => RegionEnum}
 
-case class AmountsSelection(
-    amounts: List[Int], 
+case class AmountValuesObject(
+    amounts: List[Int],
     defaultAmount: Int,
-    hideChooseYourAmount: Option[Boolean],
+    hideChooseYourAmount: Boolean,
 )
 
-case class ContributionAmounts(
-    ONE_OFF: AmountsSelection,
-    MONTHLY: AmountsSelection,
-    ANNUAL: AmountsSelection,
+case class AmountsCardData(
+    ONE_OFF: AmountValuesObject,
+    MONTHLY: AmountValuesObject,
+    ANNUAL: AmountValuesObject,
 )
 
-case class AmountsTestVariant(
-    name: String,
-    amounts: ContributionAmounts,
+case class AmountsVariant(
+  variantName: String,
+  defaultContributionType: String,
+  displayContributionType: List[String],
+  amountsCardData: AmountsCardData,
 )
+
+sealed trait AmountsTestTargeting
+
+object AmountsTestTargeting {
+  case class Region(targetingType: String = "Region", region: RegionEnum) extends AmountsTestTargeting
+  case class Country(targetingType: String = "Country", countries: List[String]) extends AmountsTestTargeting
+
+  import io.circe.generic.extras.auto._
+  implicit val customConfig: Configuration = Configuration.default.withDiscriminator("targetingType")
+
+  implicit val amountsTestTargetingDecoder = Decoder[AmountsTestTargeting]
+  implicit val amountsTestTargetingEncoder = Encoder[AmountsTestTargeting]
+}
 
 case class AmountsTest(
-    name: String,
-    isLive: Boolean,
-    variants: List[AmountsTestVariant],
-    seed: Int,
+  testName: String,
+  liveTestName: Option[String],
+  testLabel: Option[String],
+  isLive: Boolean,
+  targeting: AmountsTestTargeting,
+  order: Int,
+  seed: Int,
+  variants: List[AmountsVariant],
 )
 
-case class ConfiguredRegionAmounts(
-    control: ContributionAmounts,
-    test: Option[AmountsTest],
-)
+object AmountsTests {
+  import io.circe.generic.extras.auto._
+  type AmountsTests = List[AmountsTest]
 
-case class ConfiguredAmounts(
-    GBPCountries: ConfiguredRegionAmounts,
-    UnitedStates: ConfiguredRegionAmounts,
-    EURCountries: ConfiguredRegionAmounts,
-    AUDCountries: ConfiguredRegionAmounts,
-    International: ConfiguredRegionAmounts,
-    NZDCountries: ConfiguredRegionAmounts,
-    Canada: ConfiguredRegionAmounts,
-)
+  implicit val customConfig: Configuration = Configuration.default.withDefaults
 
-object ConfiguredAmounts {
-  implicit val configuredAmountsDecoder = Decoder[ConfiguredAmounts]
-  implicit val configuredAmountsEncoder = Encoder[ConfiguredAmounts]
+  implicit val decoder = Decoder[AmountsTests]
+  implicit val encoder = Encoder[AmountsTests]
 }

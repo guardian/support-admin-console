@@ -3,25 +3,24 @@ import { Button, makeStyles, Menu, MenuItem } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
 
 const useStyles = makeStyles(() => ({
-  container: {},
   default: {
     color: red[500],
   },
 }));
 
-interface AmountsEditorRowAmount {
+interface AmountsVariantEditorRowAmountPrefs {
   amount: number;
   isDefault: boolean;
   setAsDefault: () => void;
   deleteAmount: () => void;
 }
 
-const AmountsEditorRowAmount: React.FC<AmountsEditorRowAmount> = ({
+export const AmountsVariantEditorRowAmount: React.FC<AmountsVariantEditorRowAmountPrefs> = ({
   amount,
   isDefault,
   setAsDefault,
   deleteAmount,
-}: AmountsEditorRowAmount) => {
+}: AmountsVariantEditorRowAmountPrefs) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>): void => {
@@ -45,7 +44,7 @@ const AmountsEditorRowAmount: React.FC<AmountsEditorRowAmount> = ({
   const classes = useStyles();
 
   return (
-    <div className={classes.container}>
+    <div>
       <Button
         aria-controls="simple-menu"
         aria-haspopup="true"
@@ -69,5 +68,3 @@ const AmountsEditorRowAmount: React.FC<AmountsEditorRowAmount> = ({
     </div>
   );
 };
-
-export default AmountsEditorRowAmount;

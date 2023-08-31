@@ -1,5 +1,4 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
+import React, { useState } from 'react';
 import {
   Button,
   Dialog,
@@ -11,13 +10,6 @@ import {
   TextField,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-
-import {
-  duplicateValidator,
-  VALID_CHARACTERS_REGEX,
-  INVALID_CHARACTERS_ERROR_HELPER_TEXT,
-  EMPTY_ERROR_HELPER_TEXT,
-} from '../../utils/forms';
 
 const useStyles = makeStyles(() => ({
   dialogHeader: {
@@ -33,37 +25,50 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-type FormData = {
-  name: string;
-};
-
 interface CreateVariantDialogProps {
   isOpen: boolean;
   close: () => void;
   existingNames: string[];
-  createTest: (name: string) => void;
+  createVariant: (name: string) => void;
 }
 
-const CreateVariantDialog: React.FC<CreateVariantDialogProps> = ({
+const errorMessages = {
+  REQUIRED: 'Variant name required',
+  DUPLICATE: 'Variant with this name already exists',
+  OK: '',
+};
+
+export const CreateVariantDialog: React.FC<CreateVariantDialogProps> = ({
   isOpen,
   close,
   existingNames,
-  createTest,
+  createVariant,
 }: CreateVariantDialogProps) => {
-  const defaultValues = {
-    name: '',
-  };
-
-  const { register, handleSubmit, errors } = useForm<FormData>({
-    defaultValues,
-  });
-
-  const onSubmit = ({ name }: FormData): void => {
-    createTest(name.toUpperCase());
-    close();
-  };
-
   const classes = useStyles();
+
+  const [name, setName] = useState<string | undefined>();
+  const [errorMessage, setErrorMessage] = useState(errorMessages.REQUIRED);
+
+  const onSubmit = (): void => {
+    if (name && name.length && !existingNames.includes(name)) {
+      createVariant(name.toUpperCase());
+      setName(undefined);
+      setErrorMessage(errorMessages.REQUIRED);
+      close();
+    }
+  };
+
+  const updateName = (val: string) => {
+    const updatedName = val.toUpperCase();
+    setName(updatedName);
+    if (!updatedName.length) {
+      setErrorMessage(errorMessages.REQUIRED);
+    } else if (existingNames.includes(updatedName)) {
+      setErrorMessage(errorMessages.DUPLICATE);
+    } else {
+      setErrorMessage(errorMessages.OK);
+    }
+  };
 
   return (
     <Dialog open={isOpen} onClose={close} aria-labelledby="create-variant-dialog-title" fullWidth>
@@ -76,31 +81,22 @@ const CreateVariantDialog: React.FC<CreateVariantDialogProps> = ({
       <DialogContent dividers>
         <TextField
           className={classes.input}
-          inputRef={register({
-            required: EMPTY_ERROR_HELPER_TEXT,
-            pattern: {
-              value: VALID_CHARACTERS_REGEX,
-              message: INVALID_CHARACTERS_ERROR_HELPER_TEXT,
-            },
-            validate: duplicateValidator(['CONTROL', ...existingNames]),
-          })}
-          error={!!errors.name}
-          helperText={errors.name && errors.name.message}
           name="name"
           label="Variant name"
+          error={!!errorMessage.length}
+          helperText={errorMessage}
           margin="normal"
           variant="outlined"
+          onChange={e => updateName(e.target.value)}
           autoFocus
           fullWidth
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleSubmit(onSubmit)} color="primary">
+        <Button onClick={onSubmit} color="primary">
           Create variant
         </Button>
       </DialogActions>
     </Dialog>
   );
 };
-
-export default CreateVariantDialog;

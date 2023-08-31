@@ -153,7 +153,7 @@ function Sidebar<T extends Test>({
 
         {!userHasTestListLocked && (
           <TestListSidebarFilterSelector
-            regionFilter={regionFilter}
+            regionFilter={regionFilter as string}
             handleRegionFilterChange={setRegionFilter}
           />
         )}

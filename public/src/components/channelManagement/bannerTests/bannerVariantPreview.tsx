@@ -6,8 +6,9 @@ import { BannerTemplate, BannerVariant, BannerContent } from '../../../models/ba
 import Typography from '@material-ui/core/Typography';
 import { useModule } from '../../../hooks/useModule';
 import useTickerData, { TickerSettingsWithData } from '../hooks/useTickerData';
-import { ContributionAmounts } from '../../amounts/configuredAmountsEditor';
+import { SelectedAmountsVariant, mockAmountsCardData } from '../../../utils/models';
 
+// Mock prices data
 interface ProductPriceData {
   Monthly: {
     price: string;
@@ -20,14 +21,28 @@ interface CountryGroupPriceData {
   GuardianWeekly: ProductPriceData;
   Digisub: ProductPriceData;
 }
-export type Prices = {
+type Prices = {
   [index: string]: CountryGroupPriceData;
 };
-
-export type SelectedAmountsVariant = {
-  testName: string;
-  variantName?: string;
-  amounts?: ContributionAmounts;
+const mockPricesData = {
+  GBPCountries: {
+    GuardianWeekly: {
+      Monthly: {
+        price: '0.00',
+      },
+      Annual: {
+        price: '0.00',
+      },
+    },
+    Digisub: {
+      Monthly: {
+        price: '0.00',
+      },
+      Annual: {
+        price: '0.00',
+      },
+    },
+  },
 };
 
 interface BannerProps {
@@ -78,47 +93,11 @@ const buildProps = (
   content: variant.bannerContent,
   mobileContent: variant.mobileBannerContent,
   countryCode: 'GB',
-  prices: {
-    GBPCountries: {
-      GuardianWeekly: {
-        Monthly: {
-          price: '0.00',
-        },
-        Annual: {
-          price: '0.00',
-        },
-      },
-      Digisub: {
-        Monthly: {
-          price: '0.00',
-        },
-        Annual: {
-          price: '0.00',
-        },
-      },
-    },
-  },
   numArticles: 13,
   tickerSettings: tickerSettingsWithData,
   separateArticleCount: variant.separateArticleCount,
-  choiceCardAmounts: {
-    testName: 'amounts_test',
-    variantName: 'control',
-    amounts: {
-      ONE_OFF: {
-        amounts: [5, 10, 15, 20],
-        defaultAmount: 5,
-      },
-      MONTHLY: {
-        amounts: [3, 6, 10],
-        defaultAmount: 10,
-      },
-      ANNUAL: {
-        amounts: [100],
-        defaultAmount: 100,
-      },
-    },
-  },
+  prices: mockPricesData,
+  choiceCardAmounts: mockAmountsCardData,
 });
 
 const bannerModules = {

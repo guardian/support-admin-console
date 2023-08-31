@@ -4,7 +4,6 @@ GET /healthcheck                                    controllers.Application.heal
 # ----- Pages ----- #
 GET /                                               controllers.Application.index
 GET /switches                                       controllers.Application.index
-GET /contribution-types                             controllers.Application.index
 GET /amounts                                        controllers.Application.index
 
 GET /header-tests                                   controllers.Application.index
@@ -54,10 +53,6 @@ GET  /logout                                        controllers.Login.logout
 # ----- support-frontend switches ----- #
 GET   /support-frontend/switches                    controllers.SwitchesController.get
 POST  /support-frontend/switches/update             controllers.SwitchesController.set
-
-# ----- support-frontend contributionTypes ----- #
-GET   /support-frontend/contribution-types          controllers.ContributionTypesController.get
-POST  /support-frontend/contribution-types/update   controllers.ContributionTypesController.set
 
 # ----- support-frontend amounts ----- #
 GET   /support-frontend/amounts                     controllers.AmountsController.get

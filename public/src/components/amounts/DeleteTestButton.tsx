@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, makeStyles, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import CreateVariantDiaglog from './createVariantDialog';
+import DeleteTestDialog from './DeleteTestDialog';
 import useOpenable from '../../hooks/useOpenable';
 
 const useStyles = makeStyles(() => ({
@@ -17,15 +17,15 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-interface CreateVariantButtonProps {
-  onCreate: (name: string) => void;
-  existingNames: string[];
+interface DeleteTestButtonProps {
+  testName: string;
+  confirmDeletion: () => void;
 }
 
-const CreateVariantButton: React.FC<CreateVariantButtonProps> = ({
-  onCreate,
-  existingNames,
-}: CreateVariantButtonProps) => {
+export const DeleteTestButton: React.FC<DeleteTestButtonProps> = ({
+  testName,
+  confirmDeletion,
+}: DeleteTestButtonProps) => {
   const [isOpen, open, close] = useOpenable();
 
   const classes = useStyles();
@@ -38,16 +38,14 @@ const CreateVariantButton: React.FC<CreateVariantButtonProps> = ({
         startIcon={<AddIcon />}
         onClick={open}
       >
-        <Typography className={classes.text}>Create a new variant</Typography>
+        <Typography className={classes.text}>Delete test</Typography>
       </Button>
-      <CreateVariantDiaglog
+      <DeleteTestDialog
+        testName={testName}
         isOpen={isOpen}
         close={close}
-        existingNames={existingNames}
-        createTest={onCreate}
+        confirmDeletion={confirmDeletion}
       />
     </>
   );
 };
-
-export default CreateVariantButton;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, makeStyles, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import CreateTestDiaglog from './createTestDialog';
+import { CreateVariantDialog } from './CreateVariantDialog';
 import useOpenable from '../../hooks/useOpenable';
 
 const useStyles = makeStyles(() => ({
@@ -17,15 +17,15 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-interface CreateTestButtonProps {
-  onCreate: (name: string) => void;
+interface CreateVariantButtonProps {
+  createVariant: (name: string) => void;
   existingNames: string[];
 }
 
-const CreateTestButton: React.FC<CreateTestButtonProps> = ({
-  onCreate,
+export const CreateVariantButton: React.FC<CreateVariantButtonProps> = ({
+  createVariant,
   existingNames,
-}: CreateTestButtonProps) => {
+}: CreateVariantButtonProps) => {
   const [isOpen, open, close] = useOpenable();
 
   const classes = useStyles();
@@ -38,16 +38,14 @@ const CreateTestButton: React.FC<CreateTestButtonProps> = ({
         startIcon={<AddIcon />}
         onClick={open}
       >
-        <Typography className={classes.text}>Create a new test</Typography>
+        <Typography className={classes.text}>Add variant</Typography>
       </Button>
-      <CreateTestDiaglog
+      <CreateVariantDialog
         isOpen={isOpen}
         close={close}
         existingNames={existingNames}
-        createTest={onCreate}
+        createVariant={createVariant}
       />
     </>
   );
 };
-
-export default CreateTestButton;

@@ -189,7 +189,7 @@ function TestCard({ test, keyId, linkPath }: TestCardProps): React.ReactElement 
   };
 
   const getLocations = (test: Test) => {
-    const locations: string[] = test.locations || [];
+    const locations: (string | number)[] = test.locations || [];
 
     const checkLocation = (wanted: string) => {
       if (locations.indexOf(wanted) < 0) {

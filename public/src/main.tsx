@@ -4,8 +4,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Switchboard from './components/switchboard';
 import BannerDeployDashboard from './components/channelManagement/bannerDeploy/bannerDeployDashboard';
-import ContributionTypesForm from './components/contributionTypes';
-import ConfiguredAmountsEditor from './components/amounts/configuredAmountsEditor';
+import AmountsForm from './components/amounts/AmountsForm';
 import {
   ArticleEpicTestsForm,
   LiveblogEpicTestsForm,
@@ -159,16 +158,8 @@ const AppRouter = () => {
             render={(): React.ReactElement => createComponent(<Switchboard />, 'Switches')}
           />
           <Route
-            path="/contribution-types"
-            render={(): React.ReactElement =>
-              createComponent(<ContributionTypesForm />, 'Contribution Types')
-            }
-          />
-          <Route
             path="/amounts"
-            render={(): React.ReactElement =>
-              createComponent(<ConfiguredAmountsEditor />, 'Amounts')
-            }
+            render={(): React.ReactElement => createComponent(<AmountsForm />, 'Amounts')}
           />
           <Route
             path="/header-tests/:testName?"
