@@ -2,7 +2,12 @@ import React, { useState } from 'react';
 import { Theme, makeStyles, Button } from '@material-ui/core';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import Drawer from '@material-ui/core/Drawer';
-import { BannerTemplate, BannerVariant, BannerContent } from '../../../models/banner';
+import {
+  BannerTemplate,
+  BannerVariant,
+  BannerContent,
+  isBannerTemplate,
+} from '../../../models/banner';
 import Typography from '@material-ui/core/Typography';
 import { useModule } from '../../../hooks/useModule';
 import useTickerData, { TickerSettingsWithData } from '../hooks/useTickerData';
@@ -205,10 +210,18 @@ const BannerVariantPreview: React.FC<BannerVariantPreviewProps> = ({
   const [drawerOpen, setDrawerOpen] = useState<boolean>();
   const tickerSettingsWithData = useTickerData(variant.tickerSettings);
 
-  const Banner = useModule<BannerProps>(
-    `banners/${bannerModules[variant.template].path}`,
-    bannerModules[variant.template].name,
-  );
+  const moduleConfig = isBannerTemplate(variant.template)
+    ? {
+        path: `banners/${bannerModules[variant.template].path}`,
+        name: bannerModules[variant.template].name,
+      }
+    : {
+        // TODO: fixme!
+        path: `banners/hardcoded/banner/design/path`,
+        name: `designable banner name`,
+      };
+
+  const Banner = useModule<BannerProps>(moduleConfig.path, moduleConfig.name);
 
   const toggleDrawer = (open: boolean) => (event: React.MouseEvent): void => {
     event.stopPropagation();

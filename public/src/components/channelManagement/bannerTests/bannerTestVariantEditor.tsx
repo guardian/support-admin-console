@@ -16,8 +16,8 @@ import {
   templateValidatorForPlatform,
 } from '../helpers/validation';
 import { Cta, SecondaryCta } from '../helpers/shared';
-import BannerTemplateSelector from './bannerTemplateSelector';
-import { BannerContent, BannerTemplate, BannerVariant } from '../../../models/banner';
+import BannerUiSelector from './bannerUiSelector';
+import { BannerContent, BannerTemplate, BannerUi, BannerVariant } from '../../../models/banner';
 import { getDefaultVariant } from './utils/defaults';
 import useValidation from '../hooks/useValidation';
 import {
@@ -26,6 +26,7 @@ import {
   RichTextEditorSingleLine,
 } from '../richTextEditor/richTextEditor';
 import TickerEditor from '../tickerEditor';
+import { BannerDesign } from '../../../models/BannerDesign';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
@@ -97,7 +98,7 @@ const getLabelSuffix = (deviceType: DeviceType): string => {
 
 interface BannerTestVariantContentEditorProps {
   content: BannerContent;
-  template: BannerTemplate;
+  template: BannerUi;
   onChange: (updatedContent: BannerContent) => void;
   onValidationChange: (isValid: boolean) => void;
   editMode: boolean;
@@ -356,6 +357,7 @@ interface BannerTestVariantEditorProps {
   editMode: boolean;
   onDelete: () => void;
   onValidationChange: (isValid: boolean) => void;
+  designs: BannerDesign[];
 }
 
 const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
@@ -363,6 +365,7 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
   editMode,
   onValidationChange,
   onVariantChange,
+  designs,
 }: BannerTestVariantEditorProps) => {
   const classes = useStyles();
   const setValidationStatusForField = useValidation(onValidationChange);
@@ -391,12 +394,13 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
         <Typography className={classes.sectionHeader} variant="h4">
           Banner template
         </Typography>
-        <BannerTemplateSelector
-          template={variant.template}
-          onTemplateChange={(template): void =>
+        <BannerUiSelector
+          ui={variant.template}
+          designs={designs}
+          onUiChange={(ui: BannerUi): void =>
             onVariantChange({
               ...variant,
-              template,
+              template: ui,
             })
           }
           editMode={editMode}

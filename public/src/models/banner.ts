@@ -32,6 +32,12 @@ export enum BannerTemplate {
   Scotus2023MomentBanner = 'Scotus2023MomentBanner',
 }
 
+export interface BannerDesignName {
+  designName: string;
+}
+
+export type BannerUi = BannerTemplate | BannerDesignName;
+
 export interface BannerContent {
   heading?: string;
   messageText?: string;
@@ -41,7 +47,7 @@ export interface BannerContent {
   secondaryCta?: SecondaryCta;
 }
 export interface BannerVariant extends Variant {
-  template: BannerTemplate;
+  template: BannerUi;
   bannerContent: BannerContent;
   mobileBannerContent?: BannerContent;
   separateArticleCount?: boolean;
@@ -60,4 +66,12 @@ export interface BannerTest extends Test {
   controlProportionSettings?: ControlProportionSettings;
   deviceType?: DeviceType;
   campaignName?: string;
+}
+
+export function uiIsDesign(ui: BannerUi): ui is BannerDesignName {
+  return (ui as BannerDesignName).designName !== undefined;
+}
+
+export function isBannerTemplate(s: BannerUi | string): s is BannerTemplate {
+  return Object.values(BannerTemplate).includes(s as BannerTemplate);
 }
