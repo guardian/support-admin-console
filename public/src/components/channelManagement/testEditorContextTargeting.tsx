@@ -14,17 +14,17 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   },
 }));
 
-interface TestEditorTargetContextProps {
+interface TestEditorContextTargetingProps {
   contextTargeting: PageContextTargeting;
   editMode: boolean;
   updateContextTargeting: (contextTargeting: PageContextTargeting) => void;
 }
 
-const TestEditorTargetContext: React.FC<TestEditorTargetContextProps> = ({
+const TestEditorContextTargeting: React.FC<TestEditorContextTargetingProps> = ({
   contextTargeting,
   editMode,
   updateContextTargeting,
-}: TestEditorTargetContextProps) => {
+}: TestEditorContextTargetingProps) => {
   const classes = useStyles();
 
   const { tagIds, sectionIds, excludedTagIds, excludedSectionIds } = contextTargeting;
@@ -73,4 +73,4 @@ const TestEditorTargetContext: React.FC<TestEditorTargetContextProps> = ({
   );
 };
 
-export default TestEditorTargetContext;
+export default TestEditorContextTargeting;

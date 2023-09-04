@@ -25,7 +25,7 @@ import {
   fetchFrontendSettings,
   FrontendSettingsType,
 } from '../../../utils/requests';
-import TestEditorTargetContext from '../testEditorTargetContext';
+import TestEditorContextTargeting from '../testEditorContextTargeting';
 
 const copyHasTemplate = (content: BannerContent, template: string): boolean =>
   (content.heading && content.heading.includes(template)) ||
@@ -258,7 +258,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
             Target context
           </Typography>
 
-          <TestEditorTargetContext
+          <TestEditorContextTargeting
             contextTargeting={test.contextTargeting}
             editMode={userHasTestLocked}
             updateContextTargeting={contextTargeting => updateTest({ ...test, contextTargeting })}

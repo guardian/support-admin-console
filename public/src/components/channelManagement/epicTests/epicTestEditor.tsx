@@ -20,7 +20,7 @@ import TestEditorArticleCountEditor, {
 import TestVariantEditorWithPreviewTab from '../testVariantEditorWithPreviewTab';
 import EpicTestVariantEditor from './epicTestVariantEditor';
 import EpicVariantPreview from './epicVariantPreview';
-import TestEditorTargetContext from '../testEditorTargetContext';
+import TestEditorContextTargeting from '../testEditorContextTargeting';
 import EpicTestMaxViewsEditor from './epicTestMaxViewsEditor';
 import { ARTICLE_COUNT_TEMPLATE, COUNTRY_NAME_TEMPLATE } from '../helpers/validation';
 import TestVariantsSplitEditor from '../testVariantsSplitEditor';
@@ -300,7 +300,7 @@ export const getEpicTestEditor = (
               Target content
             </Typography>
 
-            <TestEditorTargetContext
+            <TestEditorContextTargeting
               contextTargeting={{
                 tagIds: test.tagIds,
                 sectionIds: test.sections,
