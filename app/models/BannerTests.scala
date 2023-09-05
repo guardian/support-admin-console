@@ -75,7 +75,7 @@ case class BannerTest(
     minArticlesBeforeShowingBanner: Int,
     userCohort: UserCohort,
     locations: List[Region] = Nil,
-    contextTargeting: Option[ContextTargeting] = Some(ContextTargeting(Nil,Nil,Nil,Nil)),
+    contextTargeting: Option[PageContextTargeting] = Some(PageContextTargeting(Nil,Nil,Nil,Nil)),
     variants: List[BannerVariant],
     articlesViewedSettings: Option[ArticlesViewedSettings] = None,
     controlProportionSettings: Option[ControlProportionSettings] = None,
