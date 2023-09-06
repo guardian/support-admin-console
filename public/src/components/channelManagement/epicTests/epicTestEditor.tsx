@@ -7,6 +7,7 @@ import {
   EpicEditorConfig,
   DeviceType,
   SignedInStatus,
+  PageContextTargeting,
 } from '../helpers/shared';
 import { FormControlLabel, Switch, Typography } from '@material-ui/core';
 import CampaignSelector from '../CampaignSelector';
@@ -19,7 +20,7 @@ import TestEditorArticleCountEditor, {
 import TestVariantEditorWithPreviewTab from '../testVariantEditorWithPreviewTab';
 import EpicTestVariantEditor from './epicTestVariantEditor';
 import EpicVariantPreview from './epicVariantPreview';
-import EpicTestTargetContentEditor from './epicTestTargetContentEditor';
+import TestEditorContextTargeting from '../testEditorContextTargeting';
 import EpicTestMaxViewsEditor from './epicTestMaxViewsEditor';
 import { ARTICLE_COUNT_TEMPLATE, COUNTRY_NAME_TEMPLATE } from '../helpers/validation';
 import TestVariantsSplitEditor from '../testVariantsSplitEditor';
@@ -131,13 +132,14 @@ export const getEpicTestEditor = (
       updateTest({ ...test, [fieldName]: updatedBool });
     };
 
-    const updateTargetSections = (
-      tagIds: string[],
-      sections: string[],
-      excludedTagIds: string[],
-      excludedSections: string[],
-    ): void => {
-      updateTest({ ...test, tagIds, sections, excludedTagIds, excludedSections });
+    const updateContextTargeting = (contextTargeting: PageContextTargeting): void => {
+      updateTest({
+        ...test,
+        tagIds: contextTargeting.tagIds,
+        sections: contextTargeting.sectionIds,
+        excludedTagIds: contextTargeting.excludedTagIds,
+        excludedSections: contextTargeting.excludedSectionIds,
+      });
     };
 
     const onRegionsChange = (updatedRegions: Region[]): void => {
@@ -298,13 +300,15 @@ export const getEpicTestEditor = (
               Target content
             </Typography>
 
-            <EpicTestTargetContentEditor
-              tagIds={test.tagIds}
-              sections={test.sections}
-              excludeTagIds={test.excludedTagIds}
-              excludeSections={test.excludedSections}
+            <TestEditorContextTargeting
+              contextTargeting={{
+                tagIds: test.tagIds,
+                sectionIds: test.sections,
+                excludedTagIds: test.excludedTagIds,
+                excludedSectionIds: test.excludedSections,
+              }}
               editMode={userHasTestLocked}
-              updateTargetContent={updateTargetSections}
+              updateContextTargeting={updateContextTargeting}
             />
           </div>
         )}

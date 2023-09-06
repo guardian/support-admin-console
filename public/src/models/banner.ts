@@ -8,6 +8,7 @@ import {
   DeviceType,
   Status,
   TickerSettings,
+  PageContextTargeting,
 } from '../components/channelManagement/helpers/shared';
 import { Region } from '../utils/models';
 import { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';
@@ -66,6 +67,7 @@ export interface BannerTest extends Test {
   controlProportionSettings?: ControlProportionSettings;
   deviceType?: DeviceType;
   campaignName?: string;
+  contextTargeting: PageContextTargeting;
 }
 
 export function uiIsDesign(ui: BannerUi): ui is BannerDesignName {
