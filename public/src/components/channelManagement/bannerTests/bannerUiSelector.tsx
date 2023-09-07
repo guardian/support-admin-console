@@ -63,6 +63,10 @@ const templatesWithLabels = [
     template: BannerTemplate.EuropeMomentLocalLanguageBanner,
     label: 'Europe Moment Local Language 2023',
   },
+  {
+    template: BannerTemplate.SupporterMomentBanner,
+    label: 'Supporter Moment 2023', // temp comment to fix github issue
+  },
 ];
 
 interface BannerTemplateSelectorProps {

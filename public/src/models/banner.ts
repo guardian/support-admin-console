@@ -32,6 +32,7 @@ export enum BannerTemplate {
   WorldPressFreedomDayBanner = 'WorldPressFreedomDayBanner',
   Scotus2023MomentBanner = 'Scotus2023MomentBanner',
   EuropeMomentLocalLanguageBanner = 'EuropeMomentLocalLanguageBanner',
+  SupporterMomentBanner = 'SupporterMomentBanner',
 }
 
 export interface BannerDesignName {

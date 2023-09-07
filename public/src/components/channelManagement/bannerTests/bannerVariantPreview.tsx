@@ -178,6 +178,10 @@ const bannerModules = {
     path: 'europeMomentLocalLanguage/EuropeMomentLocalLanguageBanner.js',
     name: 'EuropeMomentLocalLanguageBanner',
   },
+  [BannerTemplate.SupporterMomentBanner]: {
+    path: 'supporterMoment/SupporterMomentBanner.js',
+    name: 'SupporterMomentBanner',
+  },
 };
 
 const useStyles = makeStyles(({ palette }: Theme) => ({

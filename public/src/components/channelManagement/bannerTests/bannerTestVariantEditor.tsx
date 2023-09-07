@@ -298,7 +298,8 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
             template === BannerTemplate.UkraineMomentBanner ||
             template === BannerTemplate.WorldPressFreedomDayBanner ||
             template === BannerTemplate.Scotus2023MomentBanner ||
-            template === BannerTemplate.EuropeMomentLocalLanguageBanner) && (
+            template === BannerTemplate.EuropeMomentLocalLanguageBanner ||
+            template === BannerTemplate.SupporterMomentBanner) && (
             <Controller
               name="highlightedText"
               control={control}
