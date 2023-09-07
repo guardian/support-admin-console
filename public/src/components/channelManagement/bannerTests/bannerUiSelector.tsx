@@ -61,7 +61,7 @@ const templatesWithLabels = [
   },
   {
     template: BannerTemplate.SupporterMomentBanner,
-    label: 'Supporter Moment 2023',
+    label: 'Supporter Moment 2023', // temp comment to fix github issue
   },
 ];
 
