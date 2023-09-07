@@ -59,6 +59,10 @@ const templatesWithLabels = [
     template: BannerTemplate.Scotus2023MomentBanner,
     label: 'US Supreme Court 2023 Moment',
   },
+  {
+    template: BannerTemplate.EuropeMomentLocalLanguageBanner,
+    label: 'Europe Moment Local Language 2023',
+  },
 ];
 
 interface BannerTemplateSelectorProps {
