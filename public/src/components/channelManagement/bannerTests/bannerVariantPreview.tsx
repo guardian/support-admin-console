@@ -182,6 +182,10 @@ const bannerModules = {
     path: 'supporterMoment/SupporterMomentBanner.js',
     name: 'SupporterMomentBanner',
   },
+  DesignableBanner: {
+    path: 'designableBanner/DesignableBanner.js',
+    name: 'DesignableBanner',
+  },
 };
 
 const useStyles = makeStyles(({ palette }: Theme) => ({
@@ -224,9 +228,8 @@ const BannerVariantPreview: React.FC<BannerVariantPreviewProps> = ({
         name: bannerModules[variant.template].name,
       }
     : {
-        // TODO: fixme!
-        path: `banners/hardcoded/banner/design/path`,
-        name: `designable banner name`,
+        path: `banners/${bannerModules['DesignableBanner'].path}`,
+        name: bannerModules['DesignableBanner'].name,
       };
 
   const Banner = useModule<BannerProps>(moduleConfig.path, moduleConfig.name);
