@@ -15,7 +15,7 @@ import {
   isBannerTemplate,
   uiIsDesign,
 } from '../../../models/banner';
-import { BannerDesign } from '../../../models/BannerDesign';
+import { BannerDesign } from '../../../models/bannerDesign';
 import { shouldShowBannerDesignsFeature } from '../../../utils/features';
 
 interface BannerUiSelectorProps {

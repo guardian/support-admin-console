@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { TextField, Typography } from '@material-ui/core';
 import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 import { useForm } from 'react-hook-form';
-import { BannerDesign } from '../../../models/BannerDesign';
+import { BannerDesign } from '../../../models/bannerDesign';
 import {
   BannerDesignImageFormData as ImageFormData,
   DEFAULT_BANNER_DESIGN,

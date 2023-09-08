@@ -19,13 +19,14 @@ import { ControlProportionSettings } from '../helpers/controlProportionSettings'
 import TestVariantsSplitEditor from '../testVariantsSplitEditor';
 import { useStyles } from '../helpers/testEditorStyles';
 import { ValidatedTestEditorProps } from '../validatedTestEditor';
-import { BannerDesign } from '../../../models/BannerDesign';
+import { BannerDesign } from '../../../models/bannerDesign';
 import {
   BannerDesignsResponse,
   fetchFrontendSettings,
   FrontendSettingsType,
 } from '../../../utils/requests';
 import TestEditorContextTargeting from '../testEditorContextTargeting';
+import { getDesignForVariant } from '../../../utils/bannerDesigns';
 
 const copyHasTemplate = (content: BannerContent, template: string): boolean =>
   (content.heading && content.heading.includes(template)) ||
@@ -161,17 +162,21 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
     />
   );
 
-  const renderVariantSummary = (variant: BannerVariant): React.ReactElement => (
-    <TestEditorVariantSummary
-      name={variant.name}
-      testName={test.name}
-      testType="BANNER"
-      isInEditMode={userHasTestLocked}
-      topButton={<BannerVariantPreview variant={variant} />}
-      platform="DOTCOM" // hardcoded as banners are currently not supported in AMP or Apple News
-      articleType="Standard"
-    />
-  );
+  const renderVariantSummary = (variant: BannerVariant): React.ReactElement => {
+    const design = getDesignForVariant(variant, designs);
+
+    return (
+      <TestEditorVariantSummary
+        name={variant.name}
+        testName={test.name}
+        testType="BANNER"
+        isInEditMode={userHasTestLocked}
+        topButton={<BannerVariantPreview variant={variant} design={design} />}
+        platform="DOTCOM" // hardcoded as banners are currently not supported in AMP or Apple News
+        articleType="Standard"
+      />
+    );
+  };
 
   const createVariant = (name: string): void => {
     const newVariant: BannerVariant = {

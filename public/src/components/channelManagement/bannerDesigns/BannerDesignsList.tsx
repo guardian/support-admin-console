@@ -1,6 +1,6 @@
 import React from 'react';
 import { List, makeStyles } from '@material-ui/core';
-import { BannerDesign } from '../../../models/BannerDesign';
+import { BannerDesign } from '../../../models/bannerDesign';
 import BannerDesignListItem from './BannerDesignListItem';
 
 const useStyles = makeStyles(() => ({

@@ -14,7 +14,7 @@ import {
   unlockBannerDesign,
   updateBannerDesign,
 } from '../../../utils/requests';
-import { BannerDesign } from '../../../models/BannerDesign';
+import { BannerDesign } from '../../../models/bannerDesign';
 import { createDefaultBannerDesign } from './utils/defaults';
 
 const useStyles = makeStyles(({ spacing, typography }: Theme) => ({

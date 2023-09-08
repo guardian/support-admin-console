@@ -26,7 +26,7 @@ import {
   RichTextEditorSingleLine,
 } from '../richTextEditor/richTextEditor';
 import TickerEditor from '../tickerEditor';
-import { BannerDesign } from '../../../models/BannerDesign';
+import { BannerDesign } from '../../../models/bannerDesign';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
