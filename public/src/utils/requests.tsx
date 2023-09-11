@@ -1,6 +1,6 @@
 import { Test, Status } from '../components/channelManagement/helpers/shared';
 import { Campaign } from '../components/channelManagement/campaigns/CampaignsForm';
-import { BannerDesign } from '../models/BannerDesign';
+import { BannerDesign } from '../models/bannerDesign';
 
 export enum SupportFrontendSettingsType {
   switches = 'switches',

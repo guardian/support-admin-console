@@ -4,7 +4,7 @@ import { makeStyles, Theme } from '@material-ui/core';
 import { LockStatus } from '../helpers/shared';
 import useValidation from '../hooks/useValidation';
 import BannerDesignForm from './BannerDesignForm';
-import { BannerDesign } from '../../../models/BannerDesign';
+import { BannerDesign } from '../../../models/bannerDesign';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {

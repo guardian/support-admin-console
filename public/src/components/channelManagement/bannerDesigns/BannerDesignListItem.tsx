@@ -1,6 +1,6 @@
 import React from 'react';
 import { ListItem, Theme, makeStyles, Typography } from '@material-ui/core';
-import { BannerDesign } from '../../../models/BannerDesign';
+import { BannerDesign } from '../../../models/bannerDesign';
 import EditIcon from '@material-ui/icons/Edit';
 import useHover from '../../../hooks/useHover';
 

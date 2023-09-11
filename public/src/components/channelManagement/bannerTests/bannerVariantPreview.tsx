@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import { useModule } from '../../../hooks/useModule';
 import useTickerData, { TickerSettingsWithData } from '../hooks/useTickerData';
 import { SelectedAmountsVariant, mockAmountsCardData } from '../../../utils/models';
+import { BannerDesign, BannerDesignProps } from '../../../models/bannerDesign';
 
 // Mock prices data
 interface ProductPriceData {
@@ -73,6 +74,7 @@ interface BannerProps {
   tickerSettings?: TickerSettingsWithData;
   separateArticleCount?: boolean;
   choiceCardAmounts?: SelectedAmountsVariant;
+  design?: BannerDesignProps;
 }
 
 const anchor = 'bottom';
@@ -80,30 +82,38 @@ const anchor = 'bottom';
 const buildProps = (
   variant: BannerVariant,
   tickerSettingsWithData?: TickerSettingsWithData,
-): BannerProps => ({
-  tracking: {
-    ophanPageId: 'ophanPageId',
-    platformId: 'GUARDIAN_WEB',
-    clientName: 'frontend',
-    referrerUrl: 'https://www.theguardian.com/',
-    abTestName: 'abTestName',
-    abTestVariant: variant.name,
-    campaignCode: 'campaignCode',
-    campaignId: '',
-    componentType: 'ACQUISITIONS_ENGAGEMENT_BANNER',
-    products: [],
-  },
-  bannerChannel: 'contributions',
-  isSupporter: false,
-  content: variant.bannerContent,
-  mobileContent: variant.mobileBannerContent,
-  countryCode: 'GB',
-  numArticles: 13,
-  tickerSettings: tickerSettingsWithData,
-  separateArticleCount: variant.separateArticleCount,
-  prices: mockPricesData,
-  choiceCardAmounts: mockAmountsCardData,
-});
+  design?: BannerDesign,
+): BannerProps => {
+  const designProps = design && {
+    image: design.image,
+  };
+
+  return {
+    tracking: {
+      ophanPageId: 'ophanPageId',
+      platformId: 'GUARDIAN_WEB',
+      clientName: 'frontend',
+      referrerUrl: 'https://www.theguardian.com/',
+      abTestName: 'abTestName',
+      abTestVariant: variant.name,
+      campaignCode: 'campaignCode',
+      campaignId: '',
+      componentType: 'ACQUISITIONS_ENGAGEMENT_BANNER',
+      products: [],
+    },
+    bannerChannel: 'contributions',
+    isSupporter: false,
+    content: variant.bannerContent,
+    mobileContent: variant.mobileBannerContent,
+    countryCode: 'GB',
+    numArticles: 13,
+    tickerSettings: tickerSettingsWithData,
+    separateArticleCount: variant.separateArticleCount,
+    prices: mockPricesData,
+    choiceCardAmounts: mockAmountsCardData,
+    design: designProps,
+  };
+};
 
 const bannerModules = {
   [BannerTemplate.AusAnniversaryBanner]: {
@@ -182,6 +192,10 @@ const bannerModules = {
     path: 'supporterMoment/SupporterMomentBanner.js',
     name: 'SupporterMomentBanner',
   },
+  DesignableBanner: {
+    path: 'designableBanner/DesignableBanner.js',
+    name: 'DesignableBanner',
+  },
 };
 
 const useStyles = makeStyles(({ palette }: Theme) => ({
@@ -208,10 +222,12 @@ const useStyles = makeStyles(({ palette }: Theme) => ({
 
 interface BannerVariantPreviewProps {
   variant: BannerVariant;
+  design?: BannerDesign;
 }
 
 const BannerVariantPreview: React.FC<BannerVariantPreviewProps> = ({
   variant,
+  design,
 }: BannerVariantPreviewProps) => {
   const classes = useStyles();
 
@@ -224,9 +240,8 @@ const BannerVariantPreview: React.FC<BannerVariantPreviewProps> = ({
         name: bannerModules[variant.template].name,
       }
     : {
-        // TODO: fixme!
-        path: `banners/hardcoded/banner/design/path`,
-        name: `designable banner name`,
+        path: `banners/${bannerModules['DesignableBanner'].path}`,
+        name: bannerModules['DesignableBanner'].name,
       };
 
   const Banner = useModule<BannerProps>(moduleConfig.path, moduleConfig.name);
@@ -236,7 +251,7 @@ const BannerVariantPreview: React.FC<BannerVariantPreviewProps> = ({
     setDrawerOpen(open);
   };
 
-  const props = buildProps(variant, tickerSettingsWithData);
+  const props = buildProps(variant, tickerSettingsWithData, design);
 
   return (
     <div>

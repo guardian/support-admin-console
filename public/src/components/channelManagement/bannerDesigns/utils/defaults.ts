@@ -1,4 +1,4 @@
-import { BannerDesign } from '../../../../models/BannerDesign';
+import { BannerDesign } from '../../../../models/bannerDesign';
 
 export type BannerDesignImageFormData = {
   mobileUrl: string;
