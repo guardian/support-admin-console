@@ -16,6 +16,11 @@ type Props = {
   onChange: (design: BannerDesign) => void;
 };
 
+const imageUrlValidation = {
+  value: /^https:\/\/i\.guim\.co\.uk\//,
+  message: 'Images must be valid URLs hosted on https://i.guim.co.uk/',
+};
+
 const BannerDesignForm: React.FC<Props> = ({
   design,
   setValidationStatus,
@@ -64,6 +69,7 @@ const BannerDesignForm: React.FC<Props> = ({
           <TextField
             inputRef={register({
               required: EMPTY_ERROR_HELPER_TEXT,
+              pattern: imageUrlValidation,
             })}
             error={errors.mobileUrl !== undefined}
             helperText={errors.mobileUrl?.message}
@@ -78,6 +84,7 @@ const BannerDesignForm: React.FC<Props> = ({
           <TextField
             inputRef={register({
               required: EMPTY_ERROR_HELPER_TEXT,
+              pattern: imageUrlValidation,
             })}
             error={errors.tabletDesktopUrl !== undefined}
             helperText={errors.tabletDesktopUrl?.message}
@@ -92,6 +99,7 @@ const BannerDesignForm: React.FC<Props> = ({
           <TextField
             inputRef={register({
               required: EMPTY_ERROR_HELPER_TEXT,
+              pattern: imageUrlValidation,
             })}
             error={errors.wideUrl !== undefined}
             helperText={errors.wideUrl?.message}
