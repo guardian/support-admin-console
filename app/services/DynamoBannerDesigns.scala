@@ -149,7 +149,8 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
                          email: String): ZIO[ZEnv, DynamoError, Unit] = {
     val item = jsonToDynamo(bannerDesign.asJson).m().asScala.toMap -
       "lockStatus" - // Unlock by removing lockStatus
-      "name" // key field
+      "name" - // key field"
+      "status" // status updates happen separately
 
     val updateExpression = buildUpdateBannerDesignExpression(item)
 
