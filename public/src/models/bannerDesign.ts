@@ -11,8 +11,11 @@ export type BannerDesignProps = {
   image: BannerDesignImage;
 };
 
+type Status = 'Live' | 'Draft';
+
 export type BannerDesign = {
   name: string;
+  status: Status;
   isNew?: boolean;
   lockStatus?: LockStatus;
 } & BannerDesignProps;
