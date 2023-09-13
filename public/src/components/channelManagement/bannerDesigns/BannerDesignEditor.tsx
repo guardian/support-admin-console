@@ -67,6 +67,7 @@ const BannerDesignEditor: React.FC<Props> = ({
         onSave={onSaveWithValidation}
         userHasLock={userHasLock}
         lockStatus={lockStatus}
+        status={design.status}
       />
       <div className={classes.scrollableContainer}>
         <BannerDesignForm

@@ -11,7 +11,7 @@ export type BannerDesignProps = {
   image: BannerDesignImage;
 };
 
-type Status = 'Live' | 'Draft';
+export type Status = 'Live' | 'Draft';
 
 export type BannerDesign = {
   name: string;
