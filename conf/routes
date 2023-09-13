@@ -203,6 +203,7 @@ POST  /frontend/banner-designs/create                  controllers.banner.Banner
 POST  /frontend/banner-designs/lock/:testName          controllers.banner.BannerDesignsController.lock(testName: String)
 POST  /frontend/banner-designs/unlock/:testName        controllers.banner.BannerDesignsController.unlock(testName: String)
 POST  /frontend/banner-designs/takecontrol/:testName   controllers.banner.BannerDesignsController.forceLock(testName: String)
+POST  /frontend/banner-designs/status/:rawStatus       controllers.banner.BannerDesignsController.setStatus(rawStatus: String)
 
 # ----- capi ----- #
 GET   /capi/tags                                       controllers.CapiController.getTags()
