@@ -1,5 +1,23 @@
 package models
 
+import io.circe.generic.extras.Configuration
+import io.circe.generic.extras.semiauto.{
+  deriveEnumerationDecoder,
+  deriveEnumerationEncoder
+}
+
+sealed trait BannerDesignStatus
+
+object BannerDesignStatus {
+  case object Live extends BannerDesignStatus
+
+  case object Draft extends BannerDesignStatus
+
+  implicit val customConfig: Configuration = Configuration.default.withDefaults
+  implicit val statusEncoder = deriveEnumerationEncoder[BannerDesignStatus]
+  implicit val statusDecoder = deriveEnumerationDecoder[BannerDesignStatus]
+}
+
 case class BannerDesignImage(
     mobileUrl: String,
     tabletDesktopUrl: String,
@@ -9,6 +27,7 @@ case class BannerDesignImage(
 
 case class BannerDesign(
     name: String,
+    status: BannerDesignStatus,
     image: BannerDesignImage,
     lockStatus: Option[LockStatus],
 )

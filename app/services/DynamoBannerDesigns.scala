@@ -149,7 +149,8 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
                          email: String): ZIO[ZEnv, DynamoError, Unit] = {
     val item = jsonToDynamo(bannerDesign.asJson).m().asScala.toMap -
       "lockStatus" - // Unlock by removing lockStatus
-      "name" // key field
+      "name" - // key field"
+      "status" // status updates happen separately
 
     val updateExpression = buildUpdateBannerDesignExpression(item)
 
@@ -229,5 +230,32 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
 
     logger.info(s"About to batch delete: $deleteRequests")
     putAllBatched(deleteRequests)
+  }
+
+  def updateStatuses(
+      designNames: List[String],
+      status: BannerDesignStatus): ZIO[ZEnv, DynamoError, Unit] = {
+    val items = designNames.map { designName =>
+      TransactWriteItem.builder
+        .update(
+          Update.builder
+            .tableName(tableName)
+            .key(buildKey(designName))
+            .expressionAttributeValues(
+              Map(
+                ":status" -> AttributeValue.builder.s(status.toString).build,
+                ":name" -> AttributeValue.builder.s(designName).build
+              ).asJava)
+            .expressionAttributeNames(Map(
+              "#status" -> "status",
+              "#name" -> "name"
+            ).asJava)
+            .updateExpression("SET #status = :status")
+            .conditionExpression("#name = :name") // only update if it already exists in the table
+            .build()
+        )
+        .build()
+    }
+    putAllBatchedTransaction(items)
   }
 }

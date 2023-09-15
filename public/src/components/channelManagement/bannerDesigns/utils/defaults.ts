@@ -19,5 +19,6 @@ export const DEFAULT_BANNER_DESIGN: BannerDesignImageFormData = {
 
 export const createDefaultBannerDesign = (name: string): BannerDesign => ({
   name,
+  status: 'Draft',
   image: DEFAULT_BANNER_DESIGN,
 });

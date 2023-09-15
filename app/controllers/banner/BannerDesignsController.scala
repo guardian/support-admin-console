@@ -156,4 +156,32 @@ class BannerDesignsController(
         .map(_ => Ok("locked"))
     }
   }
+
+  private def parseStatus(
+      rawStatus: String): Option[models.BannerDesignStatus] =
+    rawStatus.toLowerCase match {
+      case "live"  => Some(models.BannerDesignStatus.Live)
+      case "draft" => Some(models.BannerDesignStatus.Draft)
+      case _       => None
+    }
+
+  def setStatus(rawStatus: String) =
+    authAction.async(circe.json[List[String]]) { request =>
+      run {
+        val designNames = request.body
+        logger.info(
+          s"${request.user.email} is changing status to $rawStatus on: $designNames")
+
+        parseStatus(rawStatus) match {
+          case Some(status) =>
+            dynamoDesigns
+              .updateStatuses(designNames, status)
+              .map(_ => Ok(status.toString))
+
+          case None =>
+            ZIO.succeed(BadRequest(s"Invalid status for design: $rawStatus"))
+        }
+
+      }
+    }
 }
