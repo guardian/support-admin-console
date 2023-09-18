@@ -18,7 +18,6 @@ object BannerUI {
   case object ClimateCrisisMomentBanner extends BannerTemplate
   case object ContributionsBanner extends BannerTemplate
   case object ContributionsBannerWithSignIn extends BannerTemplate
-  case object CharityAppealBanner extends BannerTemplate
   case object DigitalSubscriptionsBanner extends BannerTemplate
   case object ElectionAuMomentBanner extends BannerTemplate
   case object EnvironmentMomentBanner extends BannerTemplate
