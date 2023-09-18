@@ -32,7 +32,6 @@ const templatesWithLabels = [
     template: BannerTemplate.ContributionsBannerWithSignIn,
     label: 'Contributions - with sign in link',
   },
-  { template: BannerTemplate.DigitalSubscriptionsBanner, label: 'Digital subscriptions' },
   { template: BannerTemplate.PrintSubscriptionsBanner, label: 'Print subscriptions' },
   { template: BannerTemplate.GuardianWeeklyBanner, label: 'Guardian Weekly' },
   { template: BannerTemplate.InvestigationsMomentBanner, label: 'Investigations moment' },

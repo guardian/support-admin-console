@@ -124,10 +124,6 @@ const bannerModules = {
     path: 'guardianWeekly/GuardianWeeklyBanner.js',
     name: 'GuardianWeeklyBanner',
   },
-  [BannerTemplate.DigitalSubscriptionsBanner]: {
-    path: 'digitalSubscriptions/DigitalSubscriptionsBanner.js',
-    name: 'DigitalSubscriptionsBanner',
-  },
   [BannerTemplate.PrintSubscriptionsBanner]: {
     path: 'printSubscriptions/PrintSubscriptionsBanner.js',
     name: 'PrintSubscriptionsBanner',
