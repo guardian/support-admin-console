@@ -44,10 +44,6 @@ const templatesWithLabels = [
     label: 'Ukraine Moment Banner 2023',
   },
   {
-    template: BannerTemplate.ChoiceCardsBannerBlue,
-    label: 'Choice cards banner - TABS',
-  },
-  {
     template: BannerTemplate.ChoiceCardsButtonsBannerBlue,
     label: 'Choice cards banner - BUTTONS',
   },
