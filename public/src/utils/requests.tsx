@@ -1,6 +1,6 @@
 import { Test, Status } from '../components/channelManagement/helpers/shared';
 import { Campaign } from '../components/channelManagement/campaigns/CampaignsForm';
-import { BannerDesign } from '../models/bannerDesign';
+import { BannerDesign, Status as BannerDesignStatus } from '../models/bannerDesign';
 
 export enum SupportFrontendSettingsType {
   switches = 'switches',
@@ -161,6 +161,7 @@ export function lockBannerDesign(designName: string, force: boolean): Promise<Re
     method: 'POST',
   });
 }
+
 export function unlockBannerDesign(designName: string): Promise<Response> {
   return makeFetch(`/frontend/${FrontendSettingsType.bannerDesigns}/unlock/${designName}`, {
     method: 'POST',
@@ -173,6 +174,16 @@ export function updateBannerDesign(design: BannerDesign): Promise<Response> {
 
 export function createBannerDesign(design: BannerDesign): Promise<Response> {
   return saveSettings(`/frontend/${FrontendSettingsType.bannerDesigns}/create`, design);
+}
+
+export function updateBannerDesignStatus(
+  designNames: string[],
+  status: BannerDesignStatus,
+): Promise<Response> {
+  return saveSettings(
+    `/frontend/${FrontendSettingsType.bannerDesigns}/status/${status}`,
+    designNames,
+  );
 }
 
 export function saveFrontendSettings(
