@@ -7,7 +7,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import SaveIcon from '@material-ui/icons/Save';
 import { grey } from '@material-ui/core/colors';
 import { LockStatus } from '../helpers/shared';
-import TestLiveSwitch from '../testLiveSwitch';
+import TestLiveSwitch from './LiveSwitch';
 import { Status } from '../../../models/bannerDesign';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
