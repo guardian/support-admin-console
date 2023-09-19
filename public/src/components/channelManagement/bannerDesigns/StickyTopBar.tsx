@@ -7,7 +7,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import SaveIcon from '@material-ui/icons/Save';
 import { grey } from '@material-ui/core/colors';
 import { LockStatus } from '../helpers/shared';
-import TestLiveSwitch from './LiveSwitch';
+import LiveSwitch from './LiveSwitch';
 import { Status } from '../../../models/bannerDesign';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
@@ -94,7 +94,7 @@ const StickyTopBar: React.FC<Props> = ({
       </div>
       <div className={classes.buttonsContainer}>
         <div className={classes.switchContainer}>
-          <TestLiveSwitch
+          <LiveSwitch
             isLive={status === 'Live'}
             onChange={(isLive: boolean) => onStatusChange(isLive ? 'Live' : 'Draft')}
             disabled={userHasLock && lockStatus.locked}
