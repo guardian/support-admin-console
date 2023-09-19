@@ -34,7 +34,7 @@ const templatesWithLabels = [
   },
   { template: BannerTemplate.GuardianWeeklyBanner, label: 'Guardian Weekly' },
   { template: BannerTemplate.InvestigationsMomentBanner, label: 'Investigations moment' },
-  { template: BannerTemplate.EnvironmentMomentBanner, label: 'Environment moment' },
+  { template: BannerTemplate.EnvironmentBanner, label: 'Environment' },
   { template: BannerTemplate.GlobalNewYearBanner, label: 'Global New Year moment' },
   {
     template: BannerTemplate.UkraineMomentBanner,

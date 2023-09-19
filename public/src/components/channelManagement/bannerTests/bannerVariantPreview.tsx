@@ -136,9 +136,9 @@ const bannerModules = {
     path: 'investigationsMoment/InvestigationsMomentBanner.js',
     name: 'InvestigationsMomentBanner',
   },
-  [BannerTemplate.EnvironmentMomentBanner]: {
-    path: 'environmentMoment/EnvironmentMomentBanner.js',
-    name: 'EnvironmentMomentBanner',
+  [BannerTemplate.EnvironmentBanner]: {
+    path: 'environment/EnvironmentBanner.js',
+    name: 'EnvironmentBanner',
   },
   [BannerTemplate.GlobalNewYearBanner]: {
     path: 'globalNYMoment/GlobalNYMomentBanner.js',

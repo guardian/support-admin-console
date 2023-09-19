@@ -219,7 +219,7 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
       </Typography>
 
       <div className={classes.contentContainer}>
-        {template !== BannerTemplate.EnvironmentMomentBanner && (
+        {template !== BannerTemplate.EnvironmentBanner && (
           <Controller
             name="heading"
             control={control}
