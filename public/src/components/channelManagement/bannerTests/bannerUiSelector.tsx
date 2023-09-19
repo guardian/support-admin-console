@@ -26,7 +26,7 @@ interface BannerUiSelectorProps {
 }
 
 const templatesWithLabels = [
-  { template: BannerTemplate.AusAnniversaryBanner, label: 'Aus 10 yr moment' },
+  { template: BannerTemplate.AusAnniversaryMomentBanner, label: 'Aus-Anniversary Moment 2023' },
   { template: BannerTemplate.ContributionsBanner, label: 'Contributions' },
   {
     template: BannerTemplate.ContributionsBannerWithSignIn,

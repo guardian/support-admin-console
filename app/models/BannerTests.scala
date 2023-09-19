@@ -12,7 +12,7 @@ object BannerUI {
   sealed trait BannerTemplate extends BannerUI
 
   case object AusEoyMomentBanner extends BannerTemplate
-  case object AusAnniversaryBanner extends BannerTemplate
+  case object AusAnniversaryMomentBanner extends BannerTemplate
   case object AuBrandMomentBanner extends BannerTemplate
   case object ChoiceCardsButtonsBannerBlue extends BannerTemplate
   case object ClimateCrisisMomentBanner extends BannerTemplate
