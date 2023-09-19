@@ -26,19 +26,28 @@ interface BannerUiSelectorProps {
 }
 
 const templatesWithLabels = [
+  {
+    template: BannerTemplate.EuropeMomentLocalLanguageBanner,
+    label: 'Europe Moment Local Language 2023',
+  },
+  {
+    template: BannerTemplate.SupporterMomentBanner,
+    label: 'Supporter Moment 2023', // temp comment to fix github issue
+  },
+  {
+    template: BannerTemplate.Scotus2023MomentBanner,
+    label: 'US-Supreme-Court Moment 2023',
+  },
   { template: BannerTemplate.AusAnniversaryMomentBanner, label: 'Aus-Anniversary Moment 2023' },
+  {
+    template: BannerTemplate.UkraineMomentBanner,
+    label: 'Ukraine Moment 2023',
+  },
+  { template: BannerTemplate.GlobalNewYearMomentBanner, label: 'Global-New-Year Moment 2022' },
   { template: BannerTemplate.ContributionsBanner, label: 'Contributions' },
   {
     template: BannerTemplate.ContributionsBannerWithSignIn,
     label: 'Contributions - with sign in link',
-  },
-  { template: BannerTemplate.GuardianWeeklyBanner, label: 'Guardian Weekly' },
-  { template: BannerTemplate.InvestigationsMomentBanner, label: 'Investigations moment' },
-  { template: BannerTemplate.EnvironmentBanner, label: 'Environment' },
-  { template: BannerTemplate.GlobalNewYearMomentBanner, label: 'Global-New-Year Moment 2022' },
-  {
-    template: BannerTemplate.UkraineMomentBanner,
-    label: 'Ukraine Moment 2023',
   },
   {
     template: BannerTemplate.ChoiceCardsButtonsBannerBlue,
@@ -48,18 +57,9 @@ const templatesWithLabels = [
     template: BannerTemplate.WorldPressFreedomDayBanner,
     label: 'World Press Freedom Day',
   },
-  {
-    template: BannerTemplate.Scotus2023MomentBanner,
-    label: 'US-Supreme-Court Moment 2023',
-  },
-  {
-    template: BannerTemplate.EuropeMomentLocalLanguageBanner,
-    label: 'Europe Moment Local Language 2023',
-  },
-  {
-    template: BannerTemplate.SupporterMomentBanner,
-    label: 'Supporter Moment 2023', // temp comment to fix github issue
-  },
+  { template: BannerTemplate.GuardianWeeklyBanner, label: 'Guardian Weekly' },
+  { template: BannerTemplate.InvestigationsMomentBanner, label: 'Investigations moment' },
+  { template: BannerTemplate.EnvironmentBanner, label: 'Environment' },
 ];
 
 interface BannerTemplateSelectorProps {
