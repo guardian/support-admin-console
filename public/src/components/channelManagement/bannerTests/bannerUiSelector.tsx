@@ -38,7 +38,7 @@ const templatesWithLabels = [
   { template: BannerTemplate.GlobalNewYearMomentBanner, label: 'Global-New-Year Moment 2022' },
   {
     template: BannerTemplate.UkraineMomentBanner,
-    label: 'Ukraine Moment Banner 2023',
+    label: 'Ukraine Moment 2023',
   },
   {
     template: BannerTemplate.ChoiceCardsButtonsBannerBlue,
