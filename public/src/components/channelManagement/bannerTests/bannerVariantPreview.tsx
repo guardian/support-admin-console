@@ -140,9 +140,9 @@ const bannerModules = {
     path: 'environment/EnvironmentBanner.js',
     name: 'EnvironmentBanner',
   },
-  [BannerTemplate.GlobalNewYearBanner]: {
+  [BannerTemplate.GlobalNewYearMomentBanner]: {
     path: 'globalNYMoment/GlobalNYMomentBanner.js',
-    name: 'GlobalNewYearBanner',
+    name: 'GlobalNewYearMomentBanner',
   },
   [BannerTemplate.UkraineMomentBanner]: {
     path: 'ukraineMoment/UkraineMomentBanner.js',
