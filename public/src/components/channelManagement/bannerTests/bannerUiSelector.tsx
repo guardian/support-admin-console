@@ -50,7 +50,7 @@ const templatesWithLabels = [
   },
   {
     template: BannerTemplate.Scotus2023MomentBanner,
-    label: 'US Supreme Court 2023 Moment',
+    label: 'US-Supreme-Court Moment 2023',
   },
   {
     template: BannerTemplate.EuropeMomentLocalLanguageBanner,
