@@ -51,14 +51,14 @@ const templatesWithLabels = [
   },
   {
     template: BannerTemplate.ChoiceCardsButtonsBannerBlue,
-    label: 'Choice Cards Buttons',
+    label: 'Choice cards banner - BUTTONS',
   },
   {
     template: BannerTemplate.WorldPressFreedomDayBanner,
     label: 'World Press Freedom Day',
   },
   { template: BannerTemplate.GuardianWeeklyBanner, label: 'Guardian Weekly' },
-  { template: BannerTemplate.InvestigationsMomentBanner, label: 'Investigations' },
+  { template: BannerTemplate.InvestigationsMomentBanner, label: 'Investigations moment' },
   { template: BannerTemplate.EnvironmentBanner, label: 'Environment' },
 ];
 
