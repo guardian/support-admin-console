@@ -7,6 +7,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import SaveIcon from '@material-ui/icons/Save';
 import { grey } from '@material-ui/core/colors';
 import { LockStatus } from '../helpers/shared';
+import LiveSwitch from '../../shared/liveSwitch';
+import { Status } from '../../../models/bannerDesign';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {
@@ -36,6 +38,10 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
     alignSelf: 'flex-end',
     paddingBottom: spacing(1),
   },
+  switchContainer: {
+    alignSelf: 'flex-end',
+    display: 'flex',
+  },
   lockContainer: {
     alignSelf: 'flex-end',
     display: 'flex',
@@ -58,20 +64,24 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
 
 interface Props {
   name: string;
+  status: Status;
   onLock: (name: string, force: boolean) => void;
   onUnlock: (name: string) => void;
   onSave: (name: string) => void;
   lockStatus: LockStatus;
   userHasLock: boolean;
+  onStatusChange: (status: Status) => void;
 }
 
 const StickyTopBar: React.FC<Props> = ({
   name,
+  status,
   onLock,
   onUnlock,
   onSave,
   userHasLock,
   lockStatus,
+  onStatusChange,
 }: Props) => {
   const classes = useStyles();
 
@@ -83,6 +93,14 @@ const StickyTopBar: React.FC<Props> = ({
         </Typography>
       </div>
       <div className={classes.buttonsContainer}>
+        <div className={classes.switchContainer}>
+          <LiveSwitch
+            label="Status"
+            isLive={status === 'Live'}
+            onChange={(isLive: boolean) => onStatusChange(isLive ? 'Live' : 'Draft')}
+            isDisabled={userHasLock && lockStatus.locked}
+          />
+        </div>
         <div className={classes.lockContainer}>
           {!userHasLock && !lockStatus.locked && (
             <>

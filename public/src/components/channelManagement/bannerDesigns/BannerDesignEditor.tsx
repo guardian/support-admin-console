@@ -4,7 +4,7 @@ import { makeStyles, Theme } from '@material-ui/core';
 import { LockStatus } from '../helpers/shared';
 import useValidation from '../hooks/useValidation';
 import BannerDesignForm from './BannerDesignForm';
-import { BannerDesign } from '../../../models/bannerDesign';
+import { BannerDesign, Status } from '../../../models/bannerDesign';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
@@ -32,6 +32,7 @@ type Props = {
   userHasLock: boolean;
   lockStatus: LockStatus;
   onChange: (design: BannerDesign) => void;
+  onStatusChange: (status: Status) => void;
 };
 
 const BannerDesignEditor: React.FC<Props> = ({
@@ -43,6 +44,7 @@ const BannerDesignEditor: React.FC<Props> = ({
   userHasLock,
   lockStatus,
   onChange,
+  onStatusChange,
 }: Props) => {
   const classes = useStyles();
 
@@ -67,6 +69,8 @@ const BannerDesignEditor: React.FC<Props> = ({
         onSave={onSaveWithValidation}
         userHasLock={userHasLock}
         lockStatus={lockStatus}
+        status={design.status}
+        onStatusChange={onStatusChange}
       />
       <div className={classes.scrollableContainer}>
         <BannerDesignForm

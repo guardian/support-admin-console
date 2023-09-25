@@ -13,9 +13,11 @@ import {
   lockBannerDesign,
   unlockBannerDesign,
   updateBannerDesign,
+  updateBannerDesignStatus,
 } from '../../../utils/requests';
 import { BannerDesign } from '../../../models/bannerDesign';
 import { createDefaultBannerDesign } from './utils/defaults';
+import { Status } from '../../../models/bannerDesign';
 
 const useStyles = makeStyles(({ spacing, typography }: Theme) => ({
   viewTextContainer: {
@@ -152,6 +154,16 @@ const BannerDesigns: React.FC = () => {
     }
   };
 
+  const onStatusChange = (bannerDesignName: string | undefined, status: Status): void => {
+    if (bannerDesignName) {
+      updateBannerDesignStatus([bannerDesignName], status)
+        .then(() => refreshDesign(bannerDesignName))
+        .catch(error => {
+          alert(`Error while setting banner design status to ${status}: ${error}`);
+        });
+    }
+  };
+
   const selectedBannerDesign = bannerDesigns.find(b => b.name === selectedBannerDesignName);
 
   return (
@@ -175,6 +187,7 @@ const BannerDesigns: React.FC = () => {
             userHasLock={selectedBannerDesign.lockStatus?.email === userEmail}
             lockStatus={selectedBannerDesign.lockStatus || { locked: false }}
             onChange={onDesignChange}
+            onStatusChange={status => onStatusChange(selectedBannerDesignName, status)}
           />
         ) : (
           <div className={classes.viewTextContainer}>
