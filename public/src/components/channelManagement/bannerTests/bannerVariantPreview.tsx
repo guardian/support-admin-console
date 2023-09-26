@@ -169,7 +169,7 @@ const bannerModules = {
     name: 'SupporterMomentBanner',
   },
   [BannerTemplate.EnvironmentMoment2023Banner]: {
-    path: 'environmentMoment2023/environmentMoment2023.js',
+    path: 'environmentMoment2023/EnvironmentMoment2023Banner.js',
     name: 'EnvironmentMoment2023Banner',
   },
   DesignableBanner: {
