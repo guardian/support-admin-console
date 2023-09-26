@@ -53,7 +53,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
   const fetchBannerDesigns = (): void => {
     fetchFrontendSettings(FrontendSettingsType.bannerDesigns).then(
       (response: BannerDesignsResponse) => {
-        setDesigns(response.bannerDesigns);
+        setDesigns(response.bannerDesigns.filter(design => design.status === 'Live'));
       },
     );
   };
