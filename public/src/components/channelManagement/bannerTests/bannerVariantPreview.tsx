@@ -168,6 +168,10 @@ const bannerModules = {
     path: 'supporterMoment/SupporterMomentBanner.js',
     name: 'SupporterMomentBanner',
   },
+  [BannerTemplate.EnvironmentMoment2023Banner]: {
+    path: 'environmentMoment2023/EnvironmentMoment2023Banner.js',
+    name: 'EnvironmentMoment2023Banner',
+  },
   DesignableBanner: {
     path: 'designableBanner/DesignableBanner.js',
     name: 'DesignableBanner',

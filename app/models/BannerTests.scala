@@ -31,6 +31,7 @@ object BannerUI {
   case object Scotus2023MomentBanner extends BannerTemplate
   case object EuropeMomentLocalLanguageBanner extends BannerTemplate
   case object SupporterMomentBanner extends BannerTemplate
+  case object EnvironmentMoment2023Banner extends BannerTemplate
 
   implicit val customConfig: Configuration = Configuration.default.withDefaults
   import cats.syntax.functor._  // for the widen syntax
