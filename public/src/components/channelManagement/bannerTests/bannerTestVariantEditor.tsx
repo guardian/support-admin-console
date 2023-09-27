@@ -219,7 +219,7 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
       </Typography>
 
       <div className={classes.contentContainer}>
-        {template !== BannerTemplate.EnvironmentMomentBanner && (
+        {template !== BannerTemplate.EnvironmentBanner && (
           <Controller
             name="heading"
             control={control}
@@ -285,16 +285,12 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
             }}
           />
 
-          {(template === BannerTemplate.AusAnniversaryBanner ||
+          {(template === BannerTemplate.AusAnniversaryMomentBanner ||
             template === BannerTemplate.ContributionsBanner ||
-            template === BannerTemplate.ChoiceCardsBannerBlue ||
-            template === BannerTemplate.ChoiceCardsBannerYellow ||
             template === BannerTemplate.ChoiceCardsButtonsBannerBlue ||
-            template === BannerTemplate.ChoiceCardsButtonsBannerYellow ||
             template === BannerTemplate.GuardianWeeklyBanner ||
-            template === BannerTemplate.CharityAppealBanner ||
             template === BannerTemplate.InvestigationsMomentBanner ||
-            template === BannerTemplate.GlobalNewYearBanner ||
+            template === BannerTemplate.GlobalNewYearMomentBanner ||
             template === BannerTemplate.UkraineMomentBanner ||
             template === BannerTemplate.WorldPressFreedomDayBanner ||
             template === BannerTemplate.Scotus2023MomentBanner ||
@@ -372,7 +368,7 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
   const classes = useStyles();
   const setValidationStatusForField = useValidation(onValidationChange);
 
-  const allowVariantTicker = variant.template === BannerTemplate.AusAnniversaryBanner;
+  const allowVariantTicker = variant.template === BannerTemplate.AusAnniversaryMomentBanner;
 
   const onMobileContentRadioChange = (): void => {
     if (variant.mobileBannerContent === undefined) {

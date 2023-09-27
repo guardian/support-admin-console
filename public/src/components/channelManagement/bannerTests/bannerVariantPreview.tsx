@@ -116,21 +116,13 @@ const buildProps = (
 };
 
 const bannerModules = {
-  [BannerTemplate.AusAnniversaryBanner]: {
+  [BannerTemplate.AusAnniversaryMomentBanner]: {
     path: 'aus10yrAnniversaryMoment/Aus10yrAnniversaryMomentBanner.js',
-    name: 'AusAnniversaryBanner',
+    name: 'AusAnniversaryMomentBanner',
   },
   [BannerTemplate.GuardianWeeklyBanner]: {
     path: 'guardianWeekly/GuardianWeeklyBanner.js',
     name: 'GuardianWeeklyBanner',
-  },
-  [BannerTemplate.DigitalSubscriptionsBanner]: {
-    path: 'digitalSubscriptions/DigitalSubscriptionsBanner.js',
-    name: 'DigitalSubscriptionsBanner',
-  },
-  [BannerTemplate.PrintSubscriptionsBanner]: {
-    path: 'printSubscriptions/PrintSubscriptionsBanner.js',
-    name: 'PrintSubscriptionsBanner',
   },
   [BannerTemplate.ContributionsBanner]: {
     path: 'contributions/ContributionsBanner.js',
@@ -140,41 +132,25 @@ const bannerModules = {
     path: 'contributions/ContributionsBannerWithSignIn.js',
     name: 'ContributionsBannerWithSignIn',
   },
-  [BannerTemplate.CharityAppealBanner]: {
-    path: 'charityAppeal/CharityAppealBanner.js',
-    name: 'CharityAppealBanner',
-  },
   [BannerTemplate.InvestigationsMomentBanner]: {
     path: 'investigationsMoment/InvestigationsMomentBanner.js',
     name: 'InvestigationsMomentBanner',
   },
-  [BannerTemplate.EnvironmentMomentBanner]: {
-    path: 'environmentMoment/EnvironmentMomentBanner.js',
-    name: 'EnvironmentMomentBanner',
+  [BannerTemplate.EnvironmentBanner]: {
+    path: 'environment/EnvironmentBanner.js',
+    name: 'EnvironmentBanner',
   },
-  [BannerTemplate.GlobalNewYearBanner]: {
+  [BannerTemplate.GlobalNewYearMomentBanner]: {
     path: 'globalNYMoment/GlobalNYMomentBanner.js',
-    name: 'GlobalNewYearBanner',
+    name: 'GlobalNewYearMomentBanner',
   },
   [BannerTemplate.UkraineMomentBanner]: {
     path: 'ukraineMoment/UkraineMomentBanner.js',
     name: 'UkraineMomentBanner',
   },
-  [BannerTemplate.ChoiceCardsBannerBlue]: {
-    path: 'choiceCardsBanner/ChoiceCardsBannerBlue.js',
-    name: 'ChoiceCardsBannerBlue',
-  },
-  [BannerTemplate.ChoiceCardsBannerYellow]: {
-    path: 'choiceCardsBanner/ChoiceCardsBannerYellow.js',
-    name: 'ChoiceCardsBannerYellow',
-  },
   [BannerTemplate.ChoiceCardsButtonsBannerBlue]: {
     path: 'choiceCardsButtonsBanner/ChoiceCardsButtonsBannerBlue.js',
     name: 'ChoiceCardsButtonsBannerBlue',
-  },
-  [BannerTemplate.ChoiceCardsButtonsBannerYellow]: {
-    path: 'choiceCardsButtonsBanner/ChoiceCardsButtonsBannerYellow.js',
-    name: 'ChoiceCardsButtonsBannerYellow',
   },
   [BannerTemplate.WorldPressFreedomDayBanner]: {
     path: 'worldPressFreedomDay/WorldPressFreedomDayBanner.js',

@@ -14,20 +14,14 @@ import { Region } from '../utils/models';
 import { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';
 
 export enum BannerTemplate {
-  AusAnniversaryBanner = 'AusAnniversaryBanner',
+  AusAnniversaryMomentBanner = 'AusAnniversaryMomentBanner',
   ContributionsBanner = 'ContributionsBanner',
   ContributionsBannerWithSignIn = 'ContributionsBannerWithSignIn',
-  ChoiceCardsBannerBlue = 'ChoiceCardsBannerBlue',
-  ChoiceCardsBannerYellow = 'ChoiceCardsBannerYellow',
   ChoiceCardsButtonsBannerBlue = 'ChoiceCardsButtonsBannerBlue',
-  ChoiceCardsButtonsBannerYellow = 'ChoiceCardsButtonsBannerYellow',
-  DigitalSubscriptionsBanner = 'DigitalSubscriptionsBanner',
-  PrintSubscriptionsBanner = 'PrintSubscriptionsBanner',
   GuardianWeeklyBanner = 'GuardianWeeklyBanner',
   InvestigationsMomentBanner = 'InvestigationsMomentBanner',
-  EnvironmentMomentBanner = 'EnvironmentMomentBanner',
-  GlobalNewYearBanner = 'GlobalNewYearBanner',
-  CharityAppealBanner = 'CharityAppealBanner',
+  EnvironmentBanner = 'EnvironmentBanner',
+  GlobalNewYearMomentBanner = 'GlobalNewYearMomentBanner',
   UkraineMomentBanner = 'UkraineMomentBanner',
   WorldPressFreedomDayBanner = 'WorldPressFreedomDayBanner',
   Scotus2023MomentBanner = 'Scotus2023MomentBanner',

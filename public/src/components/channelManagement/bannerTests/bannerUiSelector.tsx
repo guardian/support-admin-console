@@ -26,26 +26,28 @@ interface BannerUiSelectorProps {
 }
 
 const templatesWithLabels = [
-  { template: BannerTemplate.AusAnniversaryBanner, label: 'Aus 10 yr moment' },
+  {
+    template: BannerTemplate.EuropeMomentLocalLanguageBanner,
+    label: 'Europe Moment Local Language 2023',
+  },
+  {
+    template: BannerTemplate.SupporterMomentBanner,
+    label: 'Supporter Moment 2023',
+  },
+  {
+    template: BannerTemplate.Scotus2023MomentBanner,
+    label: 'US-Supreme-Court Moment 2023',
+  },
+  { template: BannerTemplate.AusAnniversaryMomentBanner, label: 'Aus-Anniversary Moment 2023' },
+  {
+    template: BannerTemplate.UkraineMomentBanner,
+    label: 'Ukraine Moment 2023',
+  },
+  { template: BannerTemplate.GlobalNewYearMomentBanner, label: 'Global-New-Year Moment 2022' },
   { template: BannerTemplate.ContributionsBanner, label: 'Contributions' },
   {
     template: BannerTemplate.ContributionsBannerWithSignIn,
     label: 'Contributions - with sign in link',
-  },
-  { template: BannerTemplate.CharityAppealBanner, label: 'Charity Appeal' },
-  { template: BannerTemplate.DigitalSubscriptionsBanner, label: 'Digital subscriptions' },
-  { template: BannerTemplate.PrintSubscriptionsBanner, label: 'Print subscriptions' },
-  { template: BannerTemplate.GuardianWeeklyBanner, label: 'Guardian Weekly' },
-  { template: BannerTemplate.InvestigationsMomentBanner, label: 'Investigations moment' },
-  { template: BannerTemplate.EnvironmentMomentBanner, label: 'Environment moment' },
-  { template: BannerTemplate.GlobalNewYearBanner, label: 'Global New Year moment' },
-  {
-    template: BannerTemplate.UkraineMomentBanner,
-    label: 'Ukraine Moment Banner 2023',
-  },
-  {
-    template: BannerTemplate.ChoiceCardsBannerBlue,
-    label: 'Choice cards banner - TABS',
   },
   {
     template: BannerTemplate.ChoiceCardsButtonsBannerBlue,
@@ -55,18 +57,9 @@ const templatesWithLabels = [
     template: BannerTemplate.WorldPressFreedomDayBanner,
     label: 'World Press Freedom Day',
   },
-  {
-    template: BannerTemplate.Scotus2023MomentBanner,
-    label: 'US Supreme Court 2023 Moment',
-  },
-  {
-    template: BannerTemplate.EuropeMomentLocalLanguageBanner,
-    label: 'Europe Moment Local Language 2023',
-  },
-  {
-    template: BannerTemplate.SupporterMomentBanner,
-    label: 'Supporter Moment 2023', // temp comment to fix github issue
-  },
+  { template: BannerTemplate.GuardianWeeklyBanner, label: 'Guardian Weekly' },
+  { template: BannerTemplate.InvestigationsMomentBanner, label: 'Investigations moment' },
+  { template: BannerTemplate.EnvironmentBanner, label: 'Environment' },
 ];
 
 interface BannerTemplateSelectorProps {

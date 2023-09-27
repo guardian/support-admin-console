@@ -7,7 +7,7 @@ import org.scalatest.matchers.should.Matchers
 import io.circe.parser._
 import io.circe.syntax.EncoderOps
 import models.BannerUI.{
-  AusAnniversaryBanner,
+  AusAnniversaryMomentBanner,
   BannerDesignName,
   Scotus2023MomentBanner
 }
@@ -75,10 +75,10 @@ class BannerTestsSpec extends AnyFlatSpec with Matchers with EitherValues {
   }
 
   it should "return a string for a named template" in {
-    val template: BannerUI = AusAnniversaryBanner
+    val template: BannerUI = AusAnniversaryMomentBanner
 
     val json = template.asJson
 
-    json should be(Json.fromString("AusAnniversaryBanner"))
+    json should be(Json.fromString("AusAnniversaryMomentBanner"))
   }
 }
