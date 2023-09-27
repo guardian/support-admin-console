@@ -27,7 +27,7 @@ interface BannerUiSelectorProps {
 
 const templatesWithLabels = [
   {
-    template: BannerTemplate.EnvironmentMoment2023Banner,
+    template: BannerTemplate.EnvironmentMomentBanner,
     label: 'Environment Moment 2023',
   },
   {
