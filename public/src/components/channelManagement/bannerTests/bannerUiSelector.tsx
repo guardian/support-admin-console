@@ -27,6 +27,10 @@ interface BannerUiSelectorProps {
 
 const templatesWithLabels = [
   {
+    template: BannerTemplate.EnvironmentMoment2023Banner,
+    label: 'Environment Moment 2023',
+  },
+  {
     template: BannerTemplate.EuropeMomentLocalLanguageBanner,
     label: 'Europe Moment Local Language 2023',
   },
@@ -57,28 +61,9 @@ const templatesWithLabels = [
     template: BannerTemplate.WorldPressFreedomDayBanner,
     label: 'World Press Freedom Day',
   },
-<<<<<<< HEAD
   { template: BannerTemplate.GuardianWeeklyBanner, label: 'Guardian Weekly' },
   { template: BannerTemplate.InvestigationsMomentBanner, label: 'Investigations moment' },
   { template: BannerTemplate.EnvironmentBanner, label: 'Environment' },
-=======
-  {
-    template: BannerTemplate.Scotus2023MomentBanner,
-    label: 'US Supreme Court 2023 Moment',
-  },
-  {
-    template: BannerTemplate.EuropeMomentLocalLanguageBanner,
-    label: 'Europe Moment Local Language 2023',
-  },
-  {
-    template: BannerTemplate.SupporterMomentBanner,
-    label: 'Supporter Moment 2023', // temp comment to fix github issue
-  },
-  {
-    template: BannerTemplate.EnvironmentMoment2023Banner,
-    label: 'Environment Moment 2023',
-  },
->>>>>>> 7255f9d (Added Environment Moment 2023 banner added to RRCP and tests)
 ];
 
 interface BannerTemplateSelectorProps {
