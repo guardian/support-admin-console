@@ -1,22 +1,18 @@
 package controllers.banner
 
 import com.gu.googleauth.AuthAction
-import models.DynamoErrors.{DynamoDuplicateNameError, DynamoNoLockError}
-import models.{BannerDesign, LockStatus}
+import models.DynamoErrors.{DynamoDuplicateNameError, DynamoError, DynamoNoLockError}
+import models.{BannerDesign, BannerTest, Channel, LockStatus}
 import play.api.libs.circe.Circe
-import play.api.mvc.{
-  AbstractController,
-  AnyContent,
-  ControllerComponents,
-  Result
-}
-import services.{DynamoBannerDesigns, S3Json, VersionedS3Data}
+import play.api.mvc.{AbstractController, AnyContent, ControllerComponents, Result}
+import services.{DynamoBannerDesigns, DynamoChannelTests, S3Json, VersionedS3Data}
 import services.S3Client.{S3ClientError, S3ObjectSettings}
 import utils.Circe.noNulls
 import zio.{IO, ZEnv, ZIO}
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.syntax.EncoderOps
 import io.circe.generic.auto._
+import models.BannerUI.BannerDesignName
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -26,6 +22,7 @@ class BannerDesignsController(
     stage: String,
     runtime: zio.Runtime[ZEnv],
     dynamoDesigns: DynamoBannerDesigns,
+    dynamoTests: DynamoChannelTests
 )(implicit ec: ExecutionContext)
     extends AbstractController(components)
     with Circe
@@ -165,18 +162,43 @@ class BannerDesignsController(
       case _       => None
     }
 
-  def setStatus(rawStatus: String) =
-    authAction.async(circe.json[List[String]]) { request =>
+  private def getAllBannerTests(): ZIO[ZEnv, DynamoError, List[BannerTest]] = {
+    import models.BannerTest._
+    ZIO.collectAllPar(List(
+      dynamoTests.getAllTests(Channel.Banner1),
+      dynamoTests.getAllTests(Channel.Banner2)
+    )).map(_.flatten)
+  }
+
+  // Returns the names of any tests currently using the design
+  private def getTestsUsingDesign(designName: String): ZIO[ZEnv, DynamoError, List[String]] =
+    getAllBannerTests().map { bannerTests =>
+      bannerTests
+        .filter(banner => banner.variants.exists(variant => variant.template match {
+          case BannerDesignName(name) if designName == name => true
+          case _ => false
+        }))
+        .map(banner => banner.name)
+    }
+
+  def setStatus(designName: String, rawStatus: String) =
+    authAction.async { request =>
       run {
-        val designNames = request.body
         logger.info(
-          s"${request.user.email} is changing status to $rawStatus on: $designNames")
+          s"${request.user.email} is changing status to $rawStatus on: $designName")
 
         parseStatus(rawStatus) match {
           case Some(status) =>
-            dynamoDesigns
-              .updateStatuses(designNames, status)
-              .map(_ => Ok(status.toString))
+            // First make sure no test variants are currently using this design
+            getTestsUsingDesign(designName)
+              .flatMap {
+                case Nil =>
+                  dynamoDesigns
+                    .updateStatus(designName, status)
+                    .map(_ => Ok(status.toString))
+                case testNames =>
+                  ZIO.succeed(BadRequest(s"Cannot change status of design $designName because it's still in use by the following test(s): ${testNames.mkString(", ")}"))
+              }
 
           case None =>
             ZIO.succeed(BadRequest(s"Invalid status for design: $rawStatus"))

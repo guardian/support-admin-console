@@ -232,30 +232,25 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
     putAllBatched(deleteRequests)
   }
 
-  def updateStatuses(
-      designNames: List[String],
-      status: BannerDesignStatus): ZIO[ZEnv, DynamoError, Unit] = {
-    val items = designNames.map { designName =>
-      TransactWriteItem.builder
-        .update(
-          Update.builder
-            .tableName(tableName)
-            .key(buildKey(designName))
-            .expressionAttributeValues(
-              Map(
-                ":status" -> AttributeValue.builder.s(status.toString).build,
-                ":name" -> AttributeValue.builder.s(designName).build
-              ).asJava)
-            .expressionAttributeNames(Map(
-              "#status" -> "status",
-              "#name" -> "name"
-            ).asJava)
-            .updateExpression("SET #status = :status")
-            .conditionExpression("#name = :name") // only update if it already exists in the table
-            .build()
-        )
-        .build()
-    }
-    putAllBatchedTransaction(items)
+  def updateStatus(
+      designName: String,
+      status: BannerDesignStatus
+  ): ZIO[ZEnv, DynamoError, Unit] = {
+    val updateRequest = UpdateItemRequest.builder
+      .tableName(tableName)
+      .key(buildKey(designName))
+      .updateExpression("SET #status = :status")
+      .expressionAttributeValues(
+        Map(
+          ":status" -> jsonToDynamo(status.asJson)
+        ).asJava)
+      .expressionAttributeNames(Map(
+        // status is a reserved keyword in dynamodb
+        "#status" -> "status"
+      ).asJava)
+      .conditionExpression("#name = :name") // only update if it already exists in the table
+      .build()
+
+    update(updateRequest)
   }
 }

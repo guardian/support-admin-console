@@ -200,10 +200,10 @@ GET   /frontend/banner-designs                         controllers.banner.Banner
 GET   /frontend/banner-designs/:designName             controllers.banner.BannerDesignsController.get(designName: String)
 POST  /frontend/banner-designs/update                  controllers.banner.BannerDesignsController.update
 POST  /frontend/banner-designs/create                  controllers.banner.BannerDesignsController.create
-POST  /frontend/banner-designs/lock/:testName          controllers.banner.BannerDesignsController.lock(testName: String)
-POST  /frontend/banner-designs/unlock/:testName        controllers.banner.BannerDesignsController.unlock(testName: String)
-POST  /frontend/banner-designs/takecontrol/:testName   controllers.banner.BannerDesignsController.forceLock(testName: String)
-POST  /frontend/banner-designs/status/:rawStatus       controllers.banner.BannerDesignsController.setStatus(rawStatus: String)
+POST  /frontend/banner-designs/lock/:designName        controllers.banner.BannerDesignsController.lock(designName: String)
+POST  /frontend/banner-designs/unlock/:designName      controllers.banner.BannerDesignsController.unlock(designName: String)
+POST  /frontend/banner-designs/takecontrol/:designName controllers.banner.BannerDesignsController.forceLock(designName: String)
+POST  /frontend/banner-designs/status/:designName/:rawStatus controllers.banner.BannerDesignsController.setStatus(designName: String, rawStatus: String)
 
 # ----- capi ----- #
 GET   /capi/tags                                       controllers.CapiController.getTags()
