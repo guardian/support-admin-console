@@ -27,6 +27,7 @@ export enum BannerTemplate {
   Scotus2023MomentBanner = 'Scotus2023MomentBanner',
   EuropeMomentLocalLanguageBanner = 'EuropeMomentLocalLanguageBanner',
   SupporterMomentBanner = 'SupporterMomentBanner',
+  EnvironmentMomentBanner = 'EnvironmentMomentBanner',
 }
 
 export interface BannerDesignName {
