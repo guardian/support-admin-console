@@ -242,11 +242,12 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
       .updateExpression("SET #status = :status")
       .expressionAttributeValues(
         Map(
-          ":status" -> jsonToDynamo(status.asJson)
+          ":status" -> jsonToDynamo(status.asJson),
+          ":name" -> AttributeValue.builder.s(designName).build
         ).asJava)
       .expressionAttributeNames(Map(
-        // status is a reserved keyword in dynamodb
-        "#status" -> "status"
+        "#status" -> "status",
+        "#name" -> "name"
       ).asJava)
       .conditionExpression("#name = :name") // only update if it already exists in the table
       .build()
