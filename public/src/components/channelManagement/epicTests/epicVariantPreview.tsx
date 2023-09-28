@@ -103,7 +103,27 @@ const useStyles = makeStyles(({}: Theme) => ({
   container: {
     width: '620px',
   },
+  iframe: {
+    width: '620px',
+    height: '800px',
+  },
 }));
+
+const buildArgs = (path: string, data: object): string[] => {
+  const items: string[] = [];
+  Object.entries(data).map(([key, value]) => {
+    if (Array.isArray(value)) {
+      value.forEach((v, idx) => items.push(`${path}${key}[${idx}]:${value}`));
+    } else if (typeof value === 'object') {
+      const nestedData = buildArgs(`${path}${key}.`, value);
+      nestedData.forEach(item => items.push(item));
+    } else {
+      const escapedValue = value == null ? `!${value}` : value;
+      items.push(`${path}${key}:${escapedValue}`);
+    }
+  });
+  return items;
+};
 
 interface EpicVariantPreviewProps {
   variant: EpicVariant;
@@ -122,7 +142,16 @@ const EpicVariantPreview: React.FC<EpicVariantPreviewProps> = ({
 
   const props = buildProps(variant, tickerSettingsWithData);
 
-  return <div className={classes.container}>{Epic && <Epic {...props} />}</div>;
+  // return <div className={classes.container}>{Epic && <Epic {...props} />}</div>;
+  const args = buildArgs('', variant);
+  console.log(args);
+  return <div>
+    <iframe
+      className={classes.iframe}
+      // src={`http://localhost:4002/iframe.html?args=articleCounts.for52Weeks:200;articleCounts.forTargetedWeeks:200&id=components-marketing-contributionsepic--default&viewMode=story`}
+      src={`http://localhost:4002/iframe.html?args=${args.join(';')}&id=components-marketing-contributionsepic--default&viewMode=story`}
+    />
+  </div>
 };
 
 export default EpicVariantPreview;
