@@ -25,10 +25,26 @@ case class BannerDesignImage(
     altText: String
 )
 
+case class HexColour(
+    r: String,
+    g: String,
+    b: String,
+)
+
+case class BannerDesignBasicColours(
+    background: HexColour,
+    bodyText: HexColour,
+)
+
+case class BannerDesignColours(
+    basic: BannerDesignBasicColours,
+)
+
 case class BannerDesign(
     name: String,
     status: BannerDesignStatus,
     image: BannerDesignImage,
+    colours: BannerDesignColours,
     lockStatus: Option[LockStatus],
 )
 

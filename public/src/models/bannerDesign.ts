@@ -6,9 +6,41 @@ interface BannerDesignImage {
   wideUrl: string;
   altText: string;
 }
+type HexChar =
+  | '0'
+  | '1'
+  | '2'
+  | '3'
+  | '4'
+  | '5'
+  | '6'
+  | '7'
+  | '8'
+  | '9'
+  | 'A'
+  | 'B'
+  | 'C'
+  | 'D'
+  | 'E'
+  | 'F';
+
+type HexValue = `${HexChar}${HexChar}`;
+
+export interface HexColour {
+  r: HexValue;
+  g: HexValue;
+  b: HexValue;
+  kind: 'hex';
+}
 
 export type BannerDesignProps = {
   image: BannerDesignImage;
+  colours: {
+    basic: {
+      background: HexColour;
+      bodyText: HexColour;
+    };
+  };
 };
 
 export type Status = 'Live' | 'Draft';
