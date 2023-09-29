@@ -27,6 +27,10 @@ interface BannerUiSelectorProps {
 
 const templatesWithLabels = [
   {
+    template: BannerTemplate.ChoiceCardsMomentBanner,
+    label: 'Choice Cards Moment 2023',
+  },
+  {
     template: BannerTemplate.EnvironmentMomentBanner,
     label: 'Environment Moment 2023',
   },
@@ -55,14 +59,14 @@ const templatesWithLabels = [
   },
   {
     template: BannerTemplate.ChoiceCardsButtonsBannerBlue,
-    label: 'Choice cards banner - BUTTONS',
+    label: 'Choice Cards Buttons',
   },
   {
     template: BannerTemplate.WorldPressFreedomDayBanner,
     label: 'World Press Freedom Day',
   },
   { template: BannerTemplate.GuardianWeeklyBanner, label: 'Guardian Weekly' },
-  { template: BannerTemplate.InvestigationsMomentBanner, label: 'Investigations moment' },
+  { template: BannerTemplate.InvestigationsMomentBanner, label: 'Investigations' },
   { template: BannerTemplate.EnvironmentBanner, label: 'Environment' },
 ];
 

@@ -28,6 +28,7 @@ export enum BannerTemplate {
   EuropeMomentLocalLanguageBanner = 'EuropeMomentLocalLanguageBanner',
   SupporterMomentBanner = 'SupporterMomentBanner',
   EnvironmentMomentBanner = 'EnvironmentMomentBanner',
+  ChoiceCardsMomentBanner = 'ChoiceCardsMomentBanner',
 }
 
 export interface BannerDesignName {
