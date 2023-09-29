@@ -6,30 +6,10 @@ interface BannerDesignImage {
   wideUrl: string;
   altText: string;
 }
-type HexChar =
-  | '0'
-  | '1'
-  | '2'
-  | '3'
-  | '4'
-  | '5'
-  | '6'
-  | '7'
-  | '8'
-  | '9'
-  | 'A'
-  | 'B'
-  | 'C'
-  | 'D'
-  | 'E'
-  | 'F';
-
-type HexValue = `${HexChar}${HexChar}`;
-
 export interface HexColour {
-  r: HexValue;
-  g: HexValue;
-  b: HexValue;
+  r: string;
+  g: string;
+  b: string;
   kind: 'hex';
 }
 
@@ -51,3 +31,5 @@ export type BannerDesign = {
   isNew?: boolean;
   lockStatus?: LockStatus;
 } & BannerDesignProps;
+
+export const hexColourToString = (h: HexColour): string => `${h.r}${h.g}${h.b}`;

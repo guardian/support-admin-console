@@ -84,10 +84,6 @@ const buildProps = (
   tickerSettingsWithData?: TickerSettingsWithData,
   design?: BannerDesign,
 ): BannerProps => {
-  const designProps = design && {
-    image: design.image,
-  };
-
   return {
     tracking: {
       ophanPageId: 'ophanPageId',
@@ -111,7 +107,7 @@ const buildProps = (
     separateArticleCount: variant.separateArticleCount,
     prices: mockPricesData,
     choiceCardAmounts: mockAmountsCardData,
-    design: designProps,
+    design,
   };
 };
 
