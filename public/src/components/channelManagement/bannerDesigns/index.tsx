@@ -156,7 +156,7 @@ const BannerDesigns: React.FC = () => {
 
   const onStatusChange = (bannerDesignName: string | undefined, status: Status): void => {
     if (bannerDesignName) {
-      updateBannerDesignStatus([bannerDesignName], status)
+      updateBannerDesignStatus(bannerDesignName, status)
         .then(() => refreshDesign(bannerDesignName))
         .catch(error => {
           alert(`Error while setting banner design status to ${status}: ${error}`);

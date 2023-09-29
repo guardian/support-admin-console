@@ -177,12 +177,14 @@ export function createBannerDesign(design: BannerDesign): Promise<Response> {
 }
 
 export function updateBannerDesignStatus(
-  designNames: string[],
+  designName: string,
   status: BannerDesignStatus,
 ): Promise<Response> {
-  return saveSettings(
-    `/frontend/${FrontendSettingsType.bannerDesigns}/status/${status}`,
-    designNames,
+  return makeFetch(
+    `/frontend/${FrontendSettingsType.bannerDesigns}/status/${designName}/${status}`,
+    {
+      method: 'POST',
+    },
   );
 }
 

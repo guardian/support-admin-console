@@ -89,7 +89,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     new BannerDeployController2(authAction, controllerComponents, stage, runtime),
     new ChannelSwitchesController(authAction, controllerComponents, stage, runtime),
     new CampaignsController(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoCampaignsService),
-    new BannerDesignsController(authAction, controllerComponents, stage, runtime, dynamoBannerDesigns),
+    new BannerDesignsController(authAction, controllerComponents, stage, runtime, dynamoBannerDesigns, dynamoTestsService),
     new CapiController(authAction, capiService),
     new AppsMeteringSwitchesController(authAction, controllerComponents, stage, runtime),
     new DefaultPromosController(authAction,controllerComponents, stage, runtime),
