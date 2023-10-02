@@ -75,7 +75,6 @@ const BannerDesignForm: React.FC<Props> = ({
   }, [design]);
 
   const onSubmit = (formData: FormData): void => {
-    console.log('formData', formData);
     try {
       onChange({
         ...design,
@@ -101,6 +100,8 @@ const BannerDesignForm: React.FC<Props> = ({
     errors?.image?.tabletDesktopUrl,
     errors?.image?.wideUrl,
     errors?.image?.altText,
+    errors?.colours?.basic?.bodyText,
+    errors?.colours?.basic?.background,
   ]);
 
   return (
