@@ -9,6 +9,7 @@ import {
   DEFAULT_BANNER_DESIGN,
 } from './utils/defaults';
 import { useStyles } from '../helpers/testEditorStyles';
+import { convertStringToHexColour, hexColourStringRegex } from '../../../utils/bannerDesigns';
 
 type Props = {
   design: BannerDesign;
@@ -20,6 +21,11 @@ type Props = {
 const imageUrlValidation = {
   value: /^https:\/\/i\.guim\.co\.uk\//,
   message: 'Images must be valid URLs hosted on https://i.guim.co.uk/',
+};
+
+const colourValidation = {
+  value: hexColourStringRegex,
+  message: 'Colours must be valid 6 character hex code e.g. FF0000',
 };
 
 const BannerDesignForm: React.FC<Props> = ({
@@ -65,26 +71,21 @@ const BannerDesignForm: React.FC<Props> = ({
   }, [design]);
 
   const onSubmit = (formData: FormData): void => {
-    onChange({
-      ...design,
-      image: formData.image,
-      colours: {
-        basic: {
-          background: {
-            r: 'FF',
-            g: '00',
-            b: '00',
-            kind: 'hex',
-          },
-          bodyText: {
-            r: '00',
-            g: 'FF',
-            b: '00',
-            kind: 'hex',
+    try {
+      onChange({
+        ...design,
+        image: formData.image,
+        colours: {
+          basic: {
+            background: convertStringToHexColour(formData.colours.basic.background),
+            bodyText: convertStringToHexColour(formData.colours.basic.bodyText),
           },
         },
-      },
-    });
+      });
+    } catch (e) {
+      // We don't expect to get here as the form validation should have caught invalid hex colour strings
+      alert(`Something went wrong saving banner design: ${e}`);
+    }
   };
 
   useEffect(() => {
@@ -173,7 +174,7 @@ const BannerDesignForm: React.FC<Props> = ({
           <TextField
             inputRef={register({
               required: EMPTY_ERROR_HELPER_TEXT,
-              pattern: imageUrlValidation,
+              pattern: colourValidation,
             })}
             error={errors?.colours?.basic?.background !== undefined}
             helperText={errors?.colours?.basic?.background?.message}
@@ -188,7 +189,7 @@ const BannerDesignForm: React.FC<Props> = ({
           <TextField
             inputRef={register({
               required: EMPTY_ERROR_HELPER_TEXT,
-              pattern: imageUrlValidation,
+              pattern: colourValidation,
             })}
             error={errors?.colours?.basic?.bodyText !== undefined}
             helperText={errors?.colours?.basic?.bodyText?.message}
