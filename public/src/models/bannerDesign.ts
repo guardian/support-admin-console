@@ -6,9 +6,21 @@ interface BannerDesignImage {
   wideUrl: string;
   altText: string;
 }
+export interface HexColour {
+  r: string;
+  g: string;
+  b: string;
+  kind: 'hex';
+}
 
 export type BannerDesignProps = {
   image: BannerDesignImage;
+  colours: {
+    basic: {
+      background: HexColour;
+      bodyText: HexColour;
+    };
+  };
 };
 
 export type Status = 'Live' | 'Draft';
