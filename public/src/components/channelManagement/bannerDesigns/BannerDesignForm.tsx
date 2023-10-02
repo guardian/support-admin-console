@@ -14,6 +14,7 @@ import {
   hexColourStringRegex,
   stringToHexColour,
 } from '../../../utils/bannerDesigns';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 
 type Props = {
   design: BannerDesign;
@@ -32,6 +33,14 @@ const colourValidation = {
   message: 'Colours must be a valid 6 character hex code e.g. FF0000',
 };
 
+export const useLocalStyles = makeStyles(({}: Theme) => ({
+  colourSectionContainer: {
+    '& input': {
+      textTransform: 'uppercase',
+    },
+  },
+}));
+
 const BannerDesignForm: React.FC<Props> = ({
   design,
   setValidationStatus,
@@ -39,6 +48,7 @@ const BannerDesignForm: React.FC<Props> = ({
   onChange,
 }: Props) => {
   const classes = useStyles();
+  const localClasses = useLocalStyles();
 
   const onValidationChange = (isValid: boolean): void => {
     const validationScope = design.name;
@@ -172,7 +182,7 @@ const BannerDesignForm: React.FC<Props> = ({
           />
         </div>
       </div>
-      <div className={classes.sectionContainer}>
+      <div className={[classes.sectionContainer, localClasses.colourSectionContainer].join(' ')}>
         <Typography variant={'h3'} className={classes.sectionHeader}>
           Basic Colours
         </Typography>

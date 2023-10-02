@@ -12,7 +12,7 @@ export const getDesignForVariant = (
   }
 };
 
-export const hexColourStringRegex = /^([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})$/;
+export const hexColourStringRegex = /^([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})$/i;
 
 const isValidHexColourString = (colourString: string): boolean =>
   hexColourStringRegex.test(colourString);
@@ -21,9 +21,9 @@ export const stringToHexColour = (colourString: string): HexColour => {
   if (isValidHexColourString(colourString)) {
     const matches = hexColourStringRegex.exec(colourString);
     return {
-      r: matches?.[1] as string,
-      g: matches?.[2] as string,
-      b: matches?.[3] as string,
+      r: (matches?.[1] as string).toUpperCase(),
+      g: (matches?.[2] as string).toUpperCase(),
+      b: (matches?.[3] as string).toUpperCase(),
       kind: 'hex',
     };
   } else {
