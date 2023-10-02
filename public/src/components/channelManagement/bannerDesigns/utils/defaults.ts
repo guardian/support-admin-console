@@ -1,4 +1,5 @@
 import { BannerDesign } from '../../../../models/bannerDesign';
+import { stringToHexColour } from '../../../../utils/bannerDesigns';
 
 export type BannerDesignFormData = {
   image: {
@@ -25,7 +26,6 @@ export const DEFAULT_BANNER_DESIGN = {
       'https://i.guim.co.uk/img/media/35d403182e4b262d37385281b19b763ee6b32f6a/58_0_1743_1046/master/1743.png?width=930&quality=45&auto=format&s=9ecd82413fef9883c1e7a0df2bf6abb1',
     altText: 'Image description',
   },
-  // TODO: Don't duplicate this data in the default BannerDesign below
   colours: {
     basic: {
       background: '222527',
@@ -40,18 +40,8 @@ export const createDefaultBannerDesign = (name: string): BannerDesign => ({
   image: DEFAULT_BANNER_DESIGN.image,
   colours: {
     basic: {
-      background: {
-        r: '22',
-        g: '25',
-        b: '27',
-        kind: 'hex',
-      },
-      bodyText: {
-        r: 'FF',
-        g: 'FF',
-        b: 'FF',
-        kind: 'hex',
-      },
+      background: stringToHexColour(DEFAULT_BANNER_DESIGN.colours.basic.background),
+      bodyText: stringToHexColour(DEFAULT_BANNER_DESIGN.colours.basic.bodyText),
     },
   },
 });
