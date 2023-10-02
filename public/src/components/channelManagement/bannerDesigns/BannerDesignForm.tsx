@@ -25,7 +25,7 @@ const imageUrlValidation = {
 
 const colourValidation = {
   value: hexColourStringRegex,
-  message: 'Colours must be valid 6 character hex code e.g. FF0000',
+  message: 'Colours must be a valid 6 character hex code e.g. FF0000',
 };
 
 const BannerDesignForm: React.FC<Props> = ({
