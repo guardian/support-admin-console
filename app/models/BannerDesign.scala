@@ -29,6 +29,7 @@ case class HexColour(
     r: String,
     g: String,
     b: String,
+    kind: String,
 )
 
 case class BannerDesignBasicColours(
