@@ -31,5 +31,3 @@ export type BannerDesign = {
   isNew?: boolean;
   lockStatus?: LockStatus;
 } & BannerDesignProps;
-
-export const hexColourToString = (h: HexColour): string => `${h.r}${h.g}${h.b}`;

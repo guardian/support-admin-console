@@ -2,14 +2,18 @@ import React, { useEffect } from 'react';
 import { TextField, Typography } from '@material-ui/core';
 import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 import { useForm } from 'react-hook-form';
-import { BannerDesign, hexColourToString } from '../../../models/bannerDesign';
+import { BannerDesign } from '../../../models/bannerDesign';
 import {
   BannerDesignFormData,
   BannerDesignFormData as FormData,
   DEFAULT_BANNER_DESIGN,
 } from './utils/defaults';
 import { useStyles } from '../helpers/testEditorStyles';
-import { convertStringToHexColour, hexColourStringRegex } from '../../../utils/bannerDesigns';
+import {
+  hexColourToString,
+  hexColourStringRegex,
+  stringToHexColour,
+} from '../../../utils/bannerDesigns';
 
 type Props = {
   design: BannerDesign;
@@ -71,14 +75,15 @@ const BannerDesignForm: React.FC<Props> = ({
   }, [design]);
 
   const onSubmit = (formData: FormData): void => {
+    console.log('formData', formData);
     try {
       onChange({
         ...design,
         image: formData.image,
         colours: {
           basic: {
-            background: convertStringToHexColour(formData.colours.basic.background),
-            bodyText: convertStringToHexColour(formData.colours.basic.bodyText),
+            background: stringToHexColour(formData.colours.basic.background),
+            bodyText: stringToHexColour(formData.colours.basic.bodyText),
           },
         },
       });

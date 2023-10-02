@@ -17,7 +17,7 @@ export const hexColourStringRegex = /^([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})$/;
 const isValidHexColourString = (colourString: string): boolean =>
   hexColourStringRegex.test(colourString);
 
-export const convertStringToHexColour = (colourString: string): HexColour => {
+export const stringToHexColour = (colourString: string): HexColour => {
   if (isValidHexColourString(colourString)) {
     const matches = hexColourStringRegex.exec(colourString);
     return {
@@ -30,3 +30,5 @@ export const convertStringToHexColour = (colourString: string): HexColour => {
     throw new Error('Invalid hex colour string!');
   }
 };
+
+export const hexColourToString = (h: HexColour): string => `${h.r}${h.g}${h.b}`;

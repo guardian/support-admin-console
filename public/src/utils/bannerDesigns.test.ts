@@ -1,10 +1,10 @@
-import { convertStringToHexColour } from './bannerDesigns';
+import { stringToHexColour } from './bannerDesigns';
 
-describe('convertStringToHexColour', () => {
+describe('stringToHexColour', () => {
   it('returns a HexColour object for a valid hex colour string', () => {
     const hexColourString = 'FF00EF';
 
-    const result = convertStringToHexColour(hexColourString);
+    const result = stringToHexColour(hexColourString);
 
     expect(result).toEqual({
       r: 'FF',
@@ -17,6 +17,6 @@ describe('convertStringToHexColour', () => {
   it('throws an error for an invalid hex colour string', () => {
     const hexColourString = 'xxx';
 
-    expect(() => convertStringToHexColour(hexColourString)).toThrow('Invalid hex colour string!');
+    expect(() => stringToHexColour(hexColourString)).toThrow('Invalid hex colour string!');
   });
 });
