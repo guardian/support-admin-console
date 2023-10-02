@@ -110,7 +110,7 @@ const StickyTopBar: React.FC<Props> = ({
                 startIcon={<EditIcon className={classes.icon} />}
                 onClick={() => onLock(name, false)}
               >
-                <Typography className={classes.buttonText}>Edit test</Typography>
+                <Typography className={classes.buttonText}>Edit design</Typography>
               </Button>
             </>
           )}
