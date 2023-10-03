@@ -42,9 +42,7 @@ export const ColourInput: React.FC<Props> = ({
       name={name}
       value={value}
       onBlur={onBlur}
-      onChange={x => {
-        onChange(x.target.value);
-      }}
+      onChange={onChange}
       inputRef={ref}
       label={label}
       error={error !== undefined}
