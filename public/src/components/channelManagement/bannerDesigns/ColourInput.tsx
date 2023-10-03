@@ -3,6 +3,7 @@ import React from 'react';
 import { TextField } from '@material-ui/core';
 import { hexColourStringRegex } from '../../../utils/bannerDesigns';
 import { Control, useController } from 'react-hook-form';
+import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 
 const colourValidation = {
   value: hexColourStringRegex,
@@ -32,7 +33,7 @@ export const ColourInput: React.FC<Props> = ({
     name,
     control,
     rules: {
-      required: true,
+      required: EMPTY_ERROR_HELPER_TEXT,
       pattern: colourValidation,
     },
   });
