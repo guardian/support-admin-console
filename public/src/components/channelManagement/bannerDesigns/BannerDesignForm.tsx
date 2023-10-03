@@ -9,12 +9,9 @@ import {
   DEFAULT_BANNER_DESIGN,
 } from './utils/defaults';
 import { useStyles } from '../helpers/testEditorStyles';
-import {
-  hexColourToString,
-  hexColourStringRegex,
-  stringToHexColour,
-} from '../../../utils/bannerDesigns';
+import { hexColourToString, stringToHexColour } from '../../../utils/bannerDesigns';
 import { makeStyles, Theme } from '@material-ui/core/styles';
+import { ColourInput } from './ColourInput';
 
 type Props = {
   design: BannerDesign;
@@ -26,11 +23,6 @@ type Props = {
 const imageUrlValidation = {
   value: /^https:\/\/i\.guim\.co\.uk\//,
   message: 'Images must be valid URLs hosted on https://i.guim.co.uk/',
-};
-
-const colourValidation = {
-  value: hexColourStringRegex,
-  message: 'Colours must be a valid 6 character hex code e.g. FF0000',
 };
 
 export const useLocalStyles = makeStyles(({}: Theme) => ({
@@ -75,7 +67,7 @@ const BannerDesignForm: React.FC<Props> = ({
     },
   };
 
-  const { register, handleSubmit, errors, reset } = useForm<FormData>({
+  const { control, register, handleSubmit, errors, reset } = useForm<FormData>({
     mode: 'onChange',
     defaultValues,
   });
@@ -106,6 +98,7 @@ const BannerDesignForm: React.FC<Props> = ({
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
   }, [
+    // TODO - can we just use errors here?
     errors?.image?.mobileUrl,
     errors?.image?.tabletDesktopUrl,
     errors?.image?.wideUrl,
@@ -187,35 +180,21 @@ const BannerDesignForm: React.FC<Props> = ({
           Basic Colours
         </Typography>
         <div>
-          <TextField
-            inputRef={register({
-              required: EMPTY_ERROR_HELPER_TEXT,
-              pattern: colourValidation,
-            })}
-            error={errors?.colours?.basic?.background !== undefined}
-            helperText={errors?.colours?.basic?.background?.message}
-            onBlur={handleSubmit(onSubmit)}
+          <ColourInput
+            control={control}
+            error={errors?.colours?.basic?.background?.message}
             name="colours.basic.background"
             label="Background Colour"
-            margin="normal"
-            variant="outlined"
-            disabled={isDisabled}
-            fullWidth
-          />
-          <TextField
-            inputRef={register({
-              required: EMPTY_ERROR_HELPER_TEXT,
-              pattern: colourValidation,
-            })}
-            error={errors?.colours?.basic?.bodyText !== undefined}
-            helperText={errors?.colours?.basic?.bodyText?.message}
+            isDisabled={isDisabled}
             onBlur={handleSubmit(onSubmit)}
+          />
+          <ColourInput
+            control={control}
+            error={errors?.colours?.basic?.bodyText?.message}
             name="colours.basic.bodyText"
             label="Body Text Colour"
-            margin="normal"
-            variant="outlined"
-            disabled={isDisabled}
-            fullWidth
+            isDisabled={isDisabled}
+            onBlur={handleSubmit(onSubmit)}
           />
         </div>
       </div>
