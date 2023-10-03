@@ -98,7 +98,6 @@ const BannerDesignForm: React.FC<Props> = ({
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
   }, [
-    // TODO - can we just use errors here?
     errors?.image?.mobileUrl,
     errors?.image?.tabletDesktopUrl,
     errors?.image?.wideUrl,
