@@ -1,6 +1,6 @@
 import { LockStatus } from '../components/channelManagement/helpers/shared';
 
-interface BannerDesignImage {
+export interface BannerDesignImage {
   mobileUrl: string;
   tabletDesktopUrl: string;
   wideUrl: string;
@@ -13,13 +13,15 @@ export interface HexColour {
   kind: 'hex';
 }
 
+export interface BasicColours {
+  background: HexColour;
+  bodyText: HexColour;
+}
+
 export type BannerDesignProps = {
   image: BannerDesignImage;
   colours: {
-    basic: {
-      background: HexColour;
-      bodyText: HexColour;
-    };
+    basic: BasicColours;
   };
 };
 

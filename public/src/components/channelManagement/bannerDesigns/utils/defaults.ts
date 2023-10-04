@@ -1,21 +1,6 @@
 import { BannerDesign } from '../../../../models/bannerDesign';
 import { stringToHexColour } from '../../../../utils/bannerDesigns';
 
-export type BannerDesignFormData = {
-  image: {
-    mobileUrl: string;
-    tabletDesktopUrl: string;
-    wideUrl: string;
-    altText: string;
-  };
-  colours: {
-    basic: {
-      background: string;
-      bodyText: string;
-    };
-  };
-};
-
 export const DEFAULT_BANNER_DESIGN = {
   image: {
     mobileUrl:
