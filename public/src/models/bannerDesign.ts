@@ -16,6 +16,8 @@ export interface HexColour {
 export interface BasicColours {
   background: HexColour;
   bodyText: HexColour;
+  headerText: HexColour;
+  articleCountText: HexColour;
 }
 
 interface CtaStateDesign {
@@ -33,12 +35,7 @@ export type GuardianRoundel = 'default' | 'brand' | 'inverse';
 export type BannerDesignProps = {
   image: BannerDesignImage;
   colours: {
-    basic: {
-      background: HexColour;
-      bodyText: HexColour;
-      headerText: HexColour;
-      articleCountText: HexColour;
-    };
+    basic: BasicColours;
     highlightedText: {
       text: HexColour;
       highlight: HexColour;
