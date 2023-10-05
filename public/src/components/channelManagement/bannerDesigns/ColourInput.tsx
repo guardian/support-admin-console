@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { TextField } from '@material-ui/core';
-import { hexColourStringRegex } from '../../../utils/bannerDesigns';
-import { Control, useController } from 'react-hook-form';
+import {
+  hexColourStringRegex,
+  hexColourToString,
+  stringToHexColour,
+} from '../../../utils/bannerDesigns';
+import { useForm } from 'react-hook-form';
 import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
+import { HexColour } from '../../../models/bannerDesign';
 
 const colourValidation = {
   value: hexColourStringRegex,
@@ -11,43 +16,49 @@ const colourValidation = {
 };
 
 interface Props {
-  control: Control;
+  colour: HexColour;
   name: string;
   label: string;
-  error?: string;
   isDisabled: boolean;
-  onBlur: () => void;
+  onChange: (colour: HexColour) => void;
+  onValidationChange: (fieldName: string, isValid: boolean) => void;
 }
 
 export const ColourInput: React.FC<Props> = ({
-  control,
+  colour,
   name,
   label,
-  error,
   isDisabled,
-  onBlur,
+  onChange,
+  onValidationChange,
 }: Props) => {
-  const {
-    field: { ref, onChange, value },
-  } = useController({
-    name,
-    control,
-    rules: {
-      required: EMPTY_ERROR_HELPER_TEXT,
-      pattern: colourValidation,
-    },
+  const defaultValues = { colour: hexColourToString(colour) };
+  const { register, reset, handleSubmit, errors } = useForm<{ colour: string }>({
+    mode: 'onChange',
+    defaultValues,
   });
+
+  useEffect(() => {
+    const isValid = Object.keys(errors).length === 0;
+    onValidationChange(name, isValid);
+  }, [errors]);
+
+  useEffect(() => {
+    // necessary to reset fields if user discards changes
+    reset(defaultValues);
+  }, [colour]);
 
   return (
     <TextField
-      name={name}
-      value={value}
-      onBlur={onBlur}
-      onChange={onChange}
-      inputRef={ref}
+      inputRef={register({
+        required: EMPTY_ERROR_HELPER_TEXT,
+        pattern: colourValidation,
+      })}
+      name="colour"
+      onBlur={handleSubmit(({ colour }) => onChange(stringToHexColour(colour)))}
       label={label}
-      error={error !== undefined}
-      helperText={error}
+      error={errors?.colour !== undefined}
+      helperText={errors?.colour?.message}
       margin="normal"
       variant="outlined"
       fullWidth
