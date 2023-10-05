@@ -18,35 +18,67 @@ object BannerDesignStatus {
   implicit val statusDecoder = deriveEnumerationDecoder[BannerDesignStatus]
 }
 
+sealed trait GuardianRoundelDesign
+object GuardianRoundelDesign {
+  case object default extends GuardianRoundelDesign
+  case object brand extends GuardianRoundelDesign
+  case object inverse extends GuardianRoundelDesign
+
+  implicit val customConfig: Configuration = Configuration.default.withDefaults
+  implicit val encoder = deriveEnumerationEncoder[GuardianRoundelDesign]
+  implicit val decoder = deriveEnumerationDecoder[GuardianRoundelDesign]
+}
+
 case class BannerDesignImage(
-    mobileUrl: String,
-    tabletDesktopUrl: String,
-    wideUrl: String,
-    altText: String
+  mobileUrl: String,
+  tabletDesktopUrl: String,
+  wideUrl: String,
+  altText: String
 )
 
 case class HexColour(
-    r: String,
-    g: String,
-    b: String,
-    kind: String,
+  r: String,
+  g: String,
+  b: String,
+  kind: String,
 )
 
 case class BannerDesignBasicColours(
-    background: HexColour,
-    bodyText: HexColour,
+  background: HexColour,
+  bodyText: HexColour,
+  headerText: HexColour,
+  articleCountText: HexColour,
+)
+
+case class BannerDesignHighlightedTextColours(
+  text: HexColour,
+  highlight: HexColour
+)
+
+case class CtaStateDesign(
+  text: HexColour,
+  background: HexColour,
+  border: Option[HexColour]
+)
+
+case class CtaDesign(
+  default: CtaStateDesign,
+  hover: CtaStateDesign
 )
 
 case class BannerDesignColours(
-    basic: BannerDesignBasicColours,
+  basic: BannerDesignBasicColours,
+  highlightedText: BannerDesignHighlightedTextColours,
+  primaryCta: CtaDesign,
+  secondaryCta: CtaDesign,
+  closeButton: CtaDesign,
+  guardianRoundel: Option[GuardianRoundelDesign]
 )
 
 case class BannerDesign(
-    name: String,
-    status: BannerDesignStatus,
-    image: BannerDesignImage,
-    colours: BannerDesignColours,
-    lockStatus: Option[LockStatus],
+  name: String,
+  status: BannerDesignStatus,
+  image: BannerDesignImage,
+  colours: BannerDesignColours,
+  lockStatus: Option[LockStatus],
 )
-
-object BannerDesign {}
