@@ -3,7 +3,7 @@ import { Typography } from '@material-ui/core';
 import { BannerDesign, BannerDesignImage, BasicColours } from '../../../models/bannerDesign';
 import { useStyles } from '../helpers/testEditorStyles';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import { ImageUrlsEditor } from './ImageUrlsEditor';
+import { ImageEditor } from './ImageEditor';
 import { BasicColoursEditor } from './BasicColoursEditor';
 
 type Props = {
@@ -57,7 +57,7 @@ const BannerDesignForm: React.FC<Props> = ({
         <Typography variant={'h3'} className={classes.sectionHeader}>
           Images
         </Typography>
-        <ImageUrlsEditor
+        <ImageEditor
           image={design.image}
           isDisabled={isDisabled}
           onValidationChange={isValid => onValidationChange('imageUrls', isValid)}

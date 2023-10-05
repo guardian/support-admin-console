@@ -16,7 +16,7 @@ interface Props {
   onChange: (image: BannerDesignImage) => void;
 }
 
-export const ImageUrlsEditor: React.FC<Props> = ({
+export const ImageEditor: React.FC<Props> = ({
   image,
   isDisabled,
   onValidationChange,
