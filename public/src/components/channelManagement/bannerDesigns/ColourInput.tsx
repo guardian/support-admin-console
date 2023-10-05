@@ -53,7 +53,7 @@ export const ColourInput: React.FC<Props> = ({
   return (
     <TextField
       inputRef={register({
-        required: required ?? EMPTY_ERROR_HELPER_TEXT,
+        required: required ? EMPTY_ERROR_HELPER_TEXT : false,
         pattern: colourValidation,
       })}
       name="colour"

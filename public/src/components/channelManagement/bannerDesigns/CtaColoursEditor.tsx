@@ -18,7 +18,7 @@ export const useLocalStyles = makeStyles(({ palette }: Theme) => ({
     fontSize: 16,
     fontWeight: 500,
   },
-  sectionHeader: {
+  header: {
     fontSize: 16,
     fontWeight: 500,
     color: palette.grey[700],
@@ -46,7 +46,7 @@ export const CtaColoursEditor: React.FC<Props> = ({
 
   return (
     <>
-      <div className={classes.sectionHeader}>{label}</div>
+      <div className={classes.header}>{label}</div>
       <div className={classes.container}>
         <div className={classes.stateContainer}>
           <div className={classes.stateLabel}>Default</div>

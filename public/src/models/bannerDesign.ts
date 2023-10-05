@@ -45,7 +45,7 @@ export type BannerDesignProps = {
     primaryCta: CtaDesign;
     secondaryCta: CtaDesign;
     closeButton: CtaDesign;
-    guardianRoundel?: GuardianRoundel;
+    guardianRoundel: GuardianRoundel;
   };
 };
 

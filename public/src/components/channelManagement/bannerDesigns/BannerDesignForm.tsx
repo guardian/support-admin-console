@@ -5,6 +5,7 @@ import {
   BannerDesignImage,
   BasicColours,
   CtaDesign,
+  GuardianRoundel,
   HighlightedTextColours,
 } from '../../../models/bannerDesign';
 import { useStyles } from '../helpers/testEditorStyles';
@@ -13,6 +14,7 @@ import { ImageEditor } from './ImageEditor';
 import { BasicColoursEditor } from './BasicColoursEditor';
 import { HighlightedTextColoursEditor } from './HighlightedTextColoursEditor';
 import { CtaColoursEditor } from './CtaColoursEditor';
+import TypedRadioGroup from '../TypedRadioGroup';
 
 type Props = {
   design: BannerDesign;
@@ -81,6 +83,16 @@ const BannerDesignForm: React.FC<Props> = ({
     });
   };
 
+  const onRoundelChange = (roundel: GuardianRoundel): void => {
+    onChange({
+      ...design,
+      colours: {
+        ...design.colours,
+        guardianRoundel: roundel,
+      },
+    });
+  };
+
   return (
     <div className={classes.container}>
       <div className={classes.sectionContainer}>
@@ -144,6 +156,21 @@ const BannerDesignForm: React.FC<Props> = ({
           onValidationChange={onValidationChange}
           name={'colours.closeButton'}
           label="Close button"
+        />
+      </div>
+      <div className={[classes.sectionContainer, localClasses.colourSectionContainer].join(' ')}>
+        <Typography variant={'h3'} className={classes.sectionHeader}>
+          Roundel style
+        </Typography>
+        <TypedRadioGroup
+          selectedValue={design.colours.guardianRoundel}
+          onChange={onRoundelChange}
+          isDisabled={isDisabled}
+          labels={{
+            default: 'Default',
+            brand: 'Brand',
+            inverse: 'Inverse',
+          }}
         />
       </div>
     </div>

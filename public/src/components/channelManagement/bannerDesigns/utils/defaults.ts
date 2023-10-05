@@ -57,5 +57,6 @@ export const createDefaultBannerDesign = (name: string): BannerDesign => ({
         background: stringToHexColour('E5E5E5'),
       },
     },
+    guardianRoundel: 'inverse',
   },
 });
