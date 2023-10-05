@@ -1,10 +1,18 @@
 import React from 'react';
 import { Typography } from '@material-ui/core';
-import { BannerDesign, BannerDesignImage, BasicColours } from '../../../models/bannerDesign';
+import {
+  BannerDesign,
+  BannerDesignImage,
+  BasicColours,
+  CtaDesign,
+  HighlightedTextColours,
+} from '../../../models/bannerDesign';
 import { useStyles } from '../helpers/testEditorStyles';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { ImageEditor } from './ImageEditor';
 import { BasicColoursEditor } from './BasicColoursEditor';
+import { HighlightedTextColoursEditor } from './HighlightedTextColoursEditor';
+import { CtaColoursEditor } from './CtaColoursEditor';
 
 type Props = {
   design: BannerDesign;
@@ -51,6 +59,28 @@ const BannerDesignForm: React.FC<Props> = ({
     });
   };
 
+  const onHighlightedTextColoursChange = (highlightedTextColours: HighlightedTextColours): void => {
+    onChange({
+      ...design,
+      colours: {
+        ...design.colours,
+        highlightedText: highlightedTextColours,
+      },
+    });
+  };
+
+  const onCtaColoursChange = (name: 'primaryCta' | 'secondaryCta' | 'closeButton') => (
+    cta: CtaDesign,
+  ): void => {
+    onChange({
+      ...design,
+      colours: {
+        ...design.colours,
+        [name]: cta,
+      },
+    });
+  };
+
   return (
     <div className={classes.container}>
       <div className={classes.sectionContainer}>
@@ -73,6 +103,47 @@ const BannerDesignForm: React.FC<Props> = ({
           isDisabled={isDisabled}
           onChange={onBasicColoursChange}
           onValidationChange={onValidationChange}
+        />
+      </div>
+      <div className={[classes.sectionContainer, localClasses.colourSectionContainer].join(' ')}>
+        <Typography variant={'h3'} className={classes.sectionHeader}>
+          Highlighted Text Colours
+        </Typography>
+        <HighlightedTextColoursEditor
+          colours={design.colours.highlightedText}
+          isDisabled={isDisabled}
+          onChange={onHighlightedTextColoursChange}
+          onValidationChange={onValidationChange}
+        />
+      </div>
+      <div className={[classes.sectionContainer, localClasses.colourSectionContainer].join(' ')}>
+        <Typography variant={'h3'} className={classes.sectionHeader}>
+          CTA Colours
+        </Typography>
+
+        <CtaColoursEditor
+          cta={design.colours.primaryCta}
+          isDisabled={isDisabled}
+          onChange={onCtaColoursChange('primaryCta')}
+          onValidationChange={onValidationChange}
+          name={'colours.primaryCta'}
+          label="Primary CTA"
+        />
+        <CtaColoursEditor
+          cta={design.colours.secondaryCta}
+          isDisabled={isDisabled}
+          onChange={onCtaColoursChange('secondaryCta')}
+          onValidationChange={onValidationChange}
+          name={'colours.secondaryCta'}
+          label="Secondary CTA"
+        />
+        <CtaColoursEditor
+          cta={design.colours.closeButton}
+          isDisabled={isDisabled}
+          onChange={onCtaColoursChange('closeButton')}
+          onValidationChange={onValidationChange}
+          name={'colours.closeButton'}
+          label="Close button"
         />
       </div>
     </div>

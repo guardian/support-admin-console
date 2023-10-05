@@ -20,6 +20,11 @@ export interface BasicColours {
   articleCountText: HexColour;
 }
 
+export interface HighlightedTextColours {
+  text: HexColour;
+  highlight: HexColour;
+}
+
 interface CtaStateDesign {
   text: HexColour;
   background: HexColour;
@@ -36,10 +41,7 @@ export type BannerDesignProps = {
   image: BannerDesignImage;
   colours: {
     basic: BasicColours;
-    highlightedText: {
-      text: HexColour;
-      highlight: HexColour;
-    };
+    highlightedText: HighlightedTextColours;
     primaryCta: CtaDesign;
     secondaryCta: CtaDesign;
     closeButton: CtaDesign;

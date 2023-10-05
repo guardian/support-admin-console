@@ -16,12 +16,13 @@ const colourValidation = {
 };
 
 interface Props {
-  colour: HexColour;
+  colour?: HexColour;
   name: string;
   label: string;
   isDisabled: boolean;
   onChange: (colour: HexColour) => void;
   onValidationChange: (fieldName: string, isValid: boolean) => void;
+  required: boolean;
 }
 
 export const ColourInput: React.FC<Props> = ({
@@ -31,8 +32,9 @@ export const ColourInput: React.FC<Props> = ({
   isDisabled,
   onChange,
   onValidationChange,
+  required = true,
 }: Props) => {
-  const defaultValues = { colour: hexColourToString(colour) };
+  const defaultValues = { colour: colour ? hexColourToString(colour) : '' };
   const { register, reset, handleSubmit, errors } = useForm<{ colour: string }>({
     mode: 'onChange',
     defaultValues,
@@ -51,7 +53,7 @@ export const ColourInput: React.FC<Props> = ({
   return (
     <TextField
       inputRef={register({
-        required: EMPTY_ERROR_HELPER_TEXT,
+        required: required ?? EMPTY_ERROR_HELPER_TEXT,
         pattern: colourValidation,
       })}
       name="colour"
@@ -63,6 +65,7 @@ export const ColourInput: React.FC<Props> = ({
       variant="outlined"
       fullWidth
       disabled={isDisabled}
+      required={required}
     />
   );
 };
