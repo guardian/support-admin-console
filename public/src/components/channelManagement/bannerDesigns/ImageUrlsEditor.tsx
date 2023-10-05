@@ -22,7 +22,7 @@ export const ImageUrlsEditor: React.FC<Props> = ({
   onValidationChange,
   onChange,
 }: Props) => {
-  const { register, handleSubmit, errors } = useForm<BannerDesignImage>({
+  const { register, handleSubmit, errors, reset } = useForm<BannerDesignImage>({
     mode: 'onChange',
     defaultValues: image,
   });
@@ -31,6 +31,11 @@ export const ImageUrlsEditor: React.FC<Props> = ({
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
   }, [errors]);
+
+  useEffect(() => {
+    // necessary to reset fields if user discards changes
+    reset(image);
+  }, [image]);
 
   return (
     <div>
