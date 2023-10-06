@@ -188,6 +188,12 @@ export function updateBannerDesignStatus(
   );
 }
 
+export function getBannerDesignUsage(
+  designName: string,
+): Promise<{ name: string; channel: string }[]> {
+  return fetchSettings(`/frontend/${FrontendSettingsType.bannerDesigns}/usage/${designName}`);
+}
+
 export function saveFrontendSettings(
   settingsType: FrontendSettingsType,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
