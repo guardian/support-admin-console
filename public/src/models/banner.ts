@@ -17,7 +17,6 @@ export enum BannerTemplate {
   AusAnniversaryMomentBanner = 'AusAnniversaryMomentBanner',
   ContributionsBanner = 'ContributionsBanner',
   ContributionsBannerWithSignIn = 'ContributionsBannerWithSignIn',
-  ChoiceCardsButtonsBannerBlue = 'ChoiceCardsButtonsBannerBlue',
   GuardianWeeklyBanner = 'GuardianWeeklyBanner',
   InvestigationsMomentBanner = 'InvestigationsMomentBanner',
   EnvironmentBanner = 'EnvironmentBanner',

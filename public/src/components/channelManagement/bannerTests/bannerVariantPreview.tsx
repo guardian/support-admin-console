@@ -152,10 +152,6 @@ const bannerModules = {
     path: 'choiceCardsMoment/ChoiceCardsMomentBanner.js',
     name: 'ChoiceCardsMomentBanner',
   },
-  [BannerTemplate.ChoiceCardsButtonsBannerBlue]: {
-    path: 'choiceCardsButtonsBanner/ChoiceCardsButtonsBannerBlue.js',
-    name: 'ChoiceCardsButtonsBannerBlue',
-  },
   [BannerTemplate.WorldPressFreedomDayBanner]: {
     path: 'worldPressFreedomDay/WorldPressFreedomDayBanner.js',
     name: 'WorldPressFreedomDayBanner',
