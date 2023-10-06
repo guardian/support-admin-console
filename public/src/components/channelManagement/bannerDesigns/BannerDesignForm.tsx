@@ -7,6 +7,7 @@ import {
   CtaDesign,
   GuardianRoundel,
   HighlightedTextColours,
+  TickerDesign,
 } from '../../../models/bannerDesign';
 import { useStyles } from '../helpers/testEditorStyles';
 import { makeStyles, Theme } from '@material-ui/core/styles';
@@ -16,6 +17,7 @@ import { HighlightedTextColoursEditor } from './HighlightedTextColoursEditor';
 import { CtaColoursEditor } from './CtaColoursEditor';
 import TypedRadioGroup from '../TypedRadioGroup';
 import { BannerDesignUsage } from './BannerDesignUsage';
+import { TickerDesignEditor } from './TickerDesignEditor';
 
 type Props = {
   design: BannerDesign;
@@ -90,6 +92,16 @@ const BannerDesignForm: React.FC<Props> = ({
       colours: {
         ...design.colours,
         guardianRoundel: roundel,
+      },
+    });
+  };
+
+  const onTickerDesignChange = (ticker: TickerDesign): void => {
+    onChange({
+      ...design,
+      colours: {
+        ...design.colours,
+        ticker,
       },
     });
   };
@@ -178,6 +190,17 @@ const BannerDesignForm: React.FC<Props> = ({
             brand: 'Brand',
             inverse: 'Inverse',
           }}
+        />
+      </div>
+      <div className={[classes.sectionContainer, localClasses.colourSectionContainer].join(' ')}>
+        <Typography variant={'h3'} className={classes.sectionHeader}>
+          Ticker Colours
+        </Typography>
+        <TickerDesignEditor
+          ticker={design.colours.ticker}
+          isDisabled={isDisabled}
+          onChange={onTickerDesignChange}
+          onValidationChange={onValidationChange}
         />
       </div>
     </div>

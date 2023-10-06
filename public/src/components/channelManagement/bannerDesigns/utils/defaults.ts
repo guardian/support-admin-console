@@ -58,5 +58,11 @@ export const createDefaultBannerDesign = (name: string): BannerDesign => ({
       },
     },
     guardianRoundel: 'inverse',
+    ticker: {
+      text: stringToHexColour('052962'),
+      filledProgress: stringToHexColour('052962'),
+      progressBarBackground: stringToHexColour('ffffff'),
+      goalMarker: stringToHexColour('000000'),
+    },
   },
 });

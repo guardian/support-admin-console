@@ -66,13 +66,21 @@ case class CtaDesign(
   hover: CtaStateDesign
 )
 
+case class TickerDesign(
+  text: HexColour,
+  filledProgress: HexColour,
+  progressBarBackground: HexColour,
+  goalMarker: HexColour
+)
+
 case class BannerDesignColours(
   basic: BannerDesignBasicColours,
   highlightedText: BannerDesignHighlightedTextColours,
   primaryCta: CtaDesign,
   secondaryCta: CtaDesign,
   closeButton: CtaDesign,
-  guardianRoundel: Option[GuardianRoundelDesign]
+  guardianRoundel: Option[GuardianRoundelDesign],
+  ticker: TickerDesign
 )
 
 case class BannerDesign(

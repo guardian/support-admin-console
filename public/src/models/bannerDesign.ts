@@ -37,6 +37,13 @@ export interface CtaDesign {
 
 export type GuardianRoundel = 'default' | 'brand' | 'inverse';
 
+export interface TickerDesign {
+  text: HexColour;
+  filledProgress: HexColour;
+  progressBarBackground: HexColour;
+  goalMarker: HexColour;
+}
+
 export type BannerDesignProps = {
   image: BannerDesignImage;
   colours: {
@@ -46,6 +53,7 @@ export type BannerDesignProps = {
     secondaryCta: CtaDesign;
     closeButton: CtaDesign;
     guardianRoundel: GuardianRoundel;
+    ticker: TickerDesign;
   };
 };
 
