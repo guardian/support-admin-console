@@ -24,6 +24,7 @@ export const BasicColoursEditor: React.FC<Props> = ({
         isDisabled={isDisabled}
         onChange={colour => onChange({ ...basicColours, background: colour })}
         onValidationChange={onValidationChange}
+        required={true}
       />
       <ColourInput
         colour={basicColours.bodyText}
@@ -32,6 +33,25 @@ export const BasicColoursEditor: React.FC<Props> = ({
         isDisabled={isDisabled}
         onChange={colour => onChange({ ...basicColours, bodyText: colour })}
         onValidationChange={onValidationChange}
+        required={true}
+      />
+      <ColourInput
+        colour={basicColours.headerText}
+        name="colours.basic.headerText"
+        label="Header Text Colour"
+        isDisabled={isDisabled}
+        onChange={colour => onChange({ ...basicColours, headerText: colour })}
+        onValidationChange={onValidationChange}
+        required={true}
+      />
+      <ColourInput
+        colour={basicColours.articleCountText}
+        name="colours.basic.articleCountText"
+        label="Article Count Text Colour"
+        isDisabled={isDisabled}
+        onChange={colour => onChange({ ...basicColours, articleCountText: colour })}
+        onValidationChange={onValidationChange}
+        required={true}
       />
     </div>
   );

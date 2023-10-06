@@ -16,12 +16,36 @@ export interface HexColour {
 export interface BasicColours {
   background: HexColour;
   bodyText: HexColour;
+  headerText: HexColour;
+  articleCountText: HexColour;
 }
+
+export interface HighlightedTextColours {
+  text: HexColour;
+  highlight: HexColour;
+}
+
+interface CtaStateDesign {
+  text: HexColour;
+  background: HexColour;
+  border?: HexColour;
+}
+export interface CtaDesign {
+  default: CtaStateDesign;
+  hover: CtaStateDesign;
+}
+
+export type GuardianRoundel = 'default' | 'brand' | 'inverse';
 
 export type BannerDesignProps = {
   image: BannerDesignImage;
   colours: {
     basic: BasicColours;
+    highlightedText: HighlightedTextColours;
+    primaryCta: CtaDesign;
+    secondaryCta: CtaDesign;
+    closeButton: CtaDesign;
+    guardianRoundel: GuardianRoundel;
   };
 };
 

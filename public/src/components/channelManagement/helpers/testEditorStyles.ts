@@ -18,7 +18,7 @@ export const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     },
   },
   sectionHeader: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 500,
     color: palette.grey[700],
   },
