@@ -17,7 +17,13 @@ import {
 } from '../helpers/validation';
 import { Cta, SecondaryCta } from '../helpers/shared';
 import BannerUiSelector from './bannerUiSelector';
-import { BannerContent, BannerTemplate, BannerUi, BannerVariant } from '../../../models/banner';
+import {
+  BannerContent,
+  BannerTemplate,
+  BannerUi,
+  BannerVariant,
+  uiIsDesign,
+} from '../../../models/banner';
 import { getDefaultVariant } from './utils/defaults';
 import useValidation from '../hooks/useValidation';
 import {
@@ -370,7 +376,8 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
   const classes = useStyles();
   const setValidationStatusForField = useValidation(onValidationChange);
 
-  const allowVariantTicker = variant.template === BannerTemplate.AusAnniversaryMomentBanner;
+  const allowVariantTicker =
+    variant.template === BannerTemplate.AusAnniversaryMomentBanner || uiIsDesign(variant.template);
 
   const onMobileContentRadioChange = (): void => {
     if (variant.mobileBannerContent === undefined) {

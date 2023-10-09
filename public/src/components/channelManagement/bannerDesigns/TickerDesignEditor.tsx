@@ -1,0 +1,58 @@
+import { TickerDesign } from '../../../models/bannerDesign';
+import React from 'react';
+import { ColourInput } from './ColourInput';
+
+interface Props {
+  ticker: TickerDesign;
+  isDisabled: boolean;
+  onChange: (ticker: TickerDesign) => void;
+  onValidationChange: (fieldName: string, isValid: boolean) => void;
+}
+
+export const TickerDesignEditor: React.FC<Props> = ({
+  ticker,
+  isDisabled,
+  onValidationChange,
+  onChange,
+}: Props) => {
+  return (
+    <div>
+      <ColourInput
+        colour={ticker.text}
+        name="ticker.text"
+        label="Text Colour"
+        isDisabled={isDisabled}
+        onChange={colour => onChange({ ...ticker, text: colour })}
+        onValidationChange={onValidationChange}
+        required={true}
+      />
+      <ColourInput
+        colour={ticker.progressBarBackground}
+        name="ticker.progressBarBackground"
+        label="Progress Bar Background Colour"
+        isDisabled={isDisabled}
+        onChange={colour => onChange({ ...ticker, progressBarBackground: colour })}
+        onValidationChange={onValidationChange}
+        required={true}
+      />
+      <ColourInput
+        colour={ticker.filledProgress}
+        name="ticker.filledProgress"
+        label="Filled Progress Colour"
+        isDisabled={isDisabled}
+        onChange={colour => onChange({ ...ticker, filledProgress: colour })}
+        onValidationChange={onValidationChange}
+        required={true}
+      />
+      <ColourInput
+        colour={ticker.goalMarker}
+        name="ticker.goalMarker"
+        label="Goal Marker Colour"
+        isDisabled={isDisabled}
+        onChange={colour => onChange({ ...ticker, goalMarker: colour })}
+        onValidationChange={onValidationChange}
+        required={true}
+      />
+    </div>
+  );
+};
