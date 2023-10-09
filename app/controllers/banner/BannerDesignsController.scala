@@ -170,15 +170,14 @@ class BannerDesignsController(
     )).map(_.flatten)
   }
 
-  // Returns the names of any tests currently using the design
-  private def getTestsUsingDesign(designName: String): ZIO[ZEnv, DynamoError, List[String]] =
+  // Returns any tests currently using the design
+  private def getTestsUsingDesign(designName: String): ZIO[ZEnv, DynamoError, List[BannerTest]] =
     getAllBannerTests().map { bannerTests =>
       bannerTests
         .filter(banner => banner.variants.exists(variant => variant.template match {
           case BannerDesignName(name) if designName == name => true
           case _ => false
         }))
-        .map(banner => banner.name)
     }
 
   def setStatus(designName: String, rawStatus: String) =
@@ -196,7 +195,8 @@ class BannerDesignsController(
                   dynamoDesigns
                     .updateStatus(designName, status)
                     .map(_ => Ok(status.toString))
-                case testNames =>
+                case tests =>
+                  val testNames = tests.map(banner => banner.name)
                   ZIO.succeed(BadRequest(s"Cannot change status of design $designName because it's still in use by the following test(s): ${testNames.mkString(", ")}"))
               }
 
@@ -204,6 +204,14 @@ class BannerDesignsController(
             ZIO.succeed(BadRequest(s"Invalid status for design: $rawStatus"))
         }
 
+      }
+    }
+
+  def usage(designName: String) =
+    authAction.async { request =>
+      run {
+        getTestsUsingDesign(designName)
+          .map(testNames => Ok(testNames.asJson))
       }
     }
 }

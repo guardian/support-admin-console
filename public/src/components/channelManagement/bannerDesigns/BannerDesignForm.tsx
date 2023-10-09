@@ -15,6 +15,7 @@ import { BasicColoursEditor } from './BasicColoursEditor';
 import { HighlightedTextColoursEditor } from './HighlightedTextColoursEditor';
 import { CtaColoursEditor } from './CtaColoursEditor';
 import TypedRadioGroup from '../TypedRadioGroup';
+import { BannerDesignUsage } from './BannerDesignUsage';
 
 type Props = {
   design: BannerDesign;
@@ -95,6 +96,12 @@ const BannerDesignForm: React.FC<Props> = ({
 
   return (
     <div className={classes.container}>
+      <div className={classes.sectionContainer}>
+        <Typography variant={'h3'} className={classes.sectionHeader}>
+          Usage
+        </Typography>
+        <BannerDesignUsage designName={design.name} />
+      </div>
       <div className={classes.sectionContainer}>
         <Typography variant={'h3'} className={classes.sectionHeader}>
           Images

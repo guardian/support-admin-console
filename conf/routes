@@ -198,6 +198,7 @@ GET   /frontend/campaign/:campaignName/tests           controllers.CampaignsCont
 # ----- banner designs ----- #
 GET   /frontend/banner-designs                         controllers.banner.BannerDesignsController.getAll
 GET   /frontend/banner-designs/:designName             controllers.banner.BannerDesignsController.get(designName: String)
+GET   /frontend/banner-designs/usage/:designName       controllers.banner.BannerDesignsController.usage(designName: String)
 POST  /frontend/banner-designs/update                  controllers.banner.BannerDesignsController.update
 POST  /frontend/banner-designs/create                  controllers.banner.BannerDesignsController.create
 POST  /frontend/banner-designs/lock/:designName        controllers.banner.BannerDesignsController.lock(designName: String)
