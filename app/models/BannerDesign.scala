@@ -1,10 +1,8 @@
 package models
 
+import io.circe.{Decoder, Encoder}
 import io.circe.generic.extras.Configuration
-import io.circe.generic.extras.semiauto.{
-  deriveEnumerationDecoder,
-  deriveEnumerationEncoder
-}
+import io.circe.generic.extras.semiauto.{deriveEnumerationDecoder, deriveEnumerationEncoder}
 
 sealed trait BannerDesignStatus
 
@@ -29,12 +27,26 @@ object GuardianRoundelDesign {
   implicit val decoder = deriveEnumerationDecoder[GuardianRoundelDesign]
 }
 
-case class BannerDesignImage(
-  mobileUrl: String,
-  tabletDesktopUrl: String,
-  wideUrl: String,
-  altText: String
-)
+sealed trait BannerDesignVisual
+object BannerDesignVisual {
+  case class Image(
+    kind: String = "Image",
+    mobileUrl: String,
+    tabletDesktopUrl: String,
+    wideUrl: String,
+    altText: String
+  ) extends BannerDesignVisual
+
+  case class ChoiceCards(
+    kind: String = "ChoiceCards",
+    buttonColour: Option[HexColour]
+  ) extends BannerDesignVisual
+
+  import io.circe.generic.extras.auto._
+  implicit val customConfig: Configuration = Configuration.default.withDiscriminator("kind")
+  implicit val encoder = Encoder[BannerDesignVisual]
+  implicit val decoder = Decoder[BannerDesignVisual]
+}
 
 case class HexColour(
   r: String,
@@ -86,7 +98,7 @@ case class BannerDesignColours(
 case class BannerDesign(
   name: String,
   status: BannerDesignStatus,
-  image: BannerDesignImage,
+  visual: Option[BannerDesignVisual],
   colours: BannerDesignColours,
   lockStatus: Option[LockStatus],
 )
