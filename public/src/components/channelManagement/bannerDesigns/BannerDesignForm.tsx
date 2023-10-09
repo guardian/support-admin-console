@@ -116,7 +116,7 @@ const BannerDesignForm: React.FC<Props> = ({
       </div>
       <div className={classes.sectionContainer}>
         <Typography variant={'h3'} className={classes.sectionHeader}>
-          Images
+          Visual
         </Typography>
         <BannerVisualEditor
           visual={design.visual}
