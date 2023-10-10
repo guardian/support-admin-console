@@ -185,9 +185,7 @@ const BannerDesignForm: React.FC<Props> = ({
         </AccordionDetails>
       </Accordion>
 
-      <Accordion
-        className={[classes.accordion, classes.colourSectionContainer].join(' ')}
-      >
+      <Accordion className={[classes.accordion, classes.colourSectionContainer].join(' ')}>
         <AccordionSummary className={classes.sectionHeader} expandIcon={<ExpandMoreIcon />}>
           CTA Colours
         </AccordionSummary>
@@ -220,9 +218,7 @@ const BannerDesignForm: React.FC<Props> = ({
         </AccordionDetails>
       </Accordion>
 
-      <Accordion
-        className={[classes.accordion, classes.colourSectionContainer].join(' ')}
-      >
+      <Accordion className={[classes.accordion, classes.colourSectionContainer].join(' ')}>
         <AccordionSummary className={classes.sectionHeader} expandIcon={<ExpandMoreIcon />}>
           Roundel style
         </AccordionSummary>
@@ -240,9 +236,7 @@ const BannerDesignForm: React.FC<Props> = ({
           />
         </AccordionDetails>
       </Accordion>
-      <Accordion
-        className={[classes.accordion, classes.colourSectionContainer].join(' ')}
-      >
+      <Accordion className={[classes.accordion, classes.colourSectionContainer].join(' ')}>
         <AccordionSummary className={classes.sectionHeader} expandIcon={<ExpandMoreIcon />}>
           Ticker Colours
         </AccordionSummary>
