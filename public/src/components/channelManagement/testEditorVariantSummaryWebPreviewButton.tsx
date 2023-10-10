@@ -59,7 +59,7 @@ const TestEditorVariantSummaryWebPreviewButton: React.FC<TestEditorVariantSummar
   isDisabled,
   articleType,
 }: TestEditorVariantSummaryPreviewButtonProps) => {
-  const isIncompatiblePlatform = ['APPLE_NEWS'].includes(platform);
+  const isIncompatiblePlatform = ['APPLE_NEWS', 'AMP'].includes(platform);
 
   const checkForDisabledButton = (): boolean => {
     if (isIncompatiblePlatform) {
