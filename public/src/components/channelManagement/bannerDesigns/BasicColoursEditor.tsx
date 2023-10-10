@@ -1,6 +1,17 @@
 import React from 'react';
 import { BasicColours } from '../../../models/bannerDesign';
 import { ColourInput } from './ColourInput';
+import { makeStyles, Theme } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(({ spacing }: Theme) => ({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    '& > * + *': {
+      marginTop: spacing(1),
+    },
+  },
+}));
 
 interface Props {
   basicColours: BasicColours;
@@ -15,8 +26,10 @@ export const BasicColoursEditor: React.FC<Props> = ({
   onValidationChange,
   onChange,
 }: Props) => {
+  const classes = useStyles();
+
   return (
-    <div>
+    <div className={classes.container}>
       <ColourInput
         colour={basicColours.background}
         name="colours.basic.background"
