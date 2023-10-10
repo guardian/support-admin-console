@@ -26,7 +26,7 @@ type Props = {
   onChange: (design: BannerDesign) => void;
 };
 
-export const useLocalStyles = makeStyles(({ spacing, palette }: Theme) => ({
+export const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
     display: 'flex',
     flexDirection: 'column',
@@ -67,7 +67,7 @@ const BannerDesignForm: React.FC<Props> = ({
   isDisabled,
   onChange,
 }: Props) => {
-  const localClasses = useLocalStyles();
+  const classes = useStyles();
 
   const onValidationChange = (fieldName: string, isValid: boolean): void => {
     setValidationStatus(fieldName, isValid);
@@ -133,9 +133,9 @@ const BannerDesignForm: React.FC<Props> = ({
   };
 
   return (
-    <div className={localClasses.container}>
-      <Accordion className={localClasses.accordion}>
-        <AccordionSummary className={localClasses.sectionHeader} expandIcon={<ExpandMoreIcon />}>
+    <div className={classes.container}>
+      <Accordion className={classes.accordion}>
+        <AccordionSummary className={classes.sectionHeader} expandIcon={<ExpandMoreIcon />}>
           Usage
         </AccordionSummary>
         <AccordionDetails>
@@ -143,8 +143,8 @@ const BannerDesignForm: React.FC<Props> = ({
         </AccordionDetails>
       </Accordion>
 
-      <Accordion className={localClasses.accordion}>
-        <AccordionSummary className={localClasses.sectionHeader} expandIcon={<ExpandMoreIcon />}>
+      <Accordion className={classes.accordion}>
+        <AccordionSummary className={classes.sectionHeader} expandIcon={<ExpandMoreIcon />}>
           Visual
         </AccordionSummary>
         <AccordionDetails>
@@ -157,8 +157,8 @@ const BannerDesignForm: React.FC<Props> = ({
         </AccordionDetails>
       </Accordion>
 
-      <Accordion className={localClasses.accordion}>
-        <AccordionSummary className={localClasses.sectionHeader} expandIcon={<ExpandMoreIcon />}>
+      <Accordion className={classes.accordion}>
+        <AccordionSummary className={classes.sectionHeader} expandIcon={<ExpandMoreIcon />}>
           Basic Colours
         </AccordionSummary>
         <AccordionDetails>
@@ -171,8 +171,8 @@ const BannerDesignForm: React.FC<Props> = ({
         </AccordionDetails>
       </Accordion>
 
-      <Accordion className={localClasses.accordion}>
-        <AccordionSummary className={localClasses.sectionHeader} expandIcon={<ExpandMoreIcon />}>
+      <Accordion className={classes.accordion}>
+        <AccordionSummary className={classes.sectionHeader} expandIcon={<ExpandMoreIcon />}>
           Highlighted Text Colours
         </AccordionSummary>
         <AccordionDetails>
@@ -186,13 +186,13 @@ const BannerDesignForm: React.FC<Props> = ({
       </Accordion>
 
       <Accordion
-        className={[localClasses.accordion, localClasses.colourSectionContainer].join(' ')}
+        className={[classes.accordion, classes.colourSectionContainer].join(' ')}
       >
-        <AccordionSummary className={localClasses.sectionHeader} expandIcon={<ExpandMoreIcon />}>
+        <AccordionSummary className={classes.sectionHeader} expandIcon={<ExpandMoreIcon />}>
           CTA Colours
         </AccordionSummary>
 
-        <AccordionDetails className={localClasses.ctaEditors}>
+        <AccordionDetails className={classes.ctaEditors}>
           <CtaColoursEditor
             cta={design.colours.primaryCta}
             isDisabled={isDisabled}
@@ -221,9 +221,9 @@ const BannerDesignForm: React.FC<Props> = ({
       </Accordion>
 
       <Accordion
-        className={[localClasses.accordion, localClasses.colourSectionContainer].join(' ')}
+        className={[classes.accordion, classes.colourSectionContainer].join(' ')}
       >
-        <AccordionSummary className={localClasses.sectionHeader} expandIcon={<ExpandMoreIcon />}>
+        <AccordionSummary className={classes.sectionHeader} expandIcon={<ExpandMoreIcon />}>
           Roundel style
         </AccordionSummary>
 
@@ -241,9 +241,9 @@ const BannerDesignForm: React.FC<Props> = ({
         </AccordionDetails>
       </Accordion>
       <Accordion
-        className={[localClasses.accordion, localClasses.colourSectionContainer].join(' ')}
+        className={[classes.accordion, classes.colourSectionContainer].join(' ')}
       >
-        <AccordionSummary className={localClasses.sectionHeader} expandIcon={<ExpandMoreIcon />}>
+        <AccordionSummary className={classes.sectionHeader} expandIcon={<ExpandMoreIcon />}>
           Ticker Colours
         </AccordionSummary>
 
