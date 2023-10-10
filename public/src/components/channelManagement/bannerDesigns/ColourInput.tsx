@@ -90,7 +90,7 @@ export const ColourInput: React.FC<Props> = ({
         disabled={isDisabled}
         required={required}
       />
-      <div className={classes.colour} />
+      {colour && <div className={classes.colour} />}
     </div>
   );
 };
