@@ -1,11 +1,5 @@
 import { LockStatus } from '../components/channelManagement/helpers/shared';
 
-export interface BannerDesignImage {
-  mobileUrl: string;
-  tabletDesktopUrl: string;
-  wideUrl: string;
-  altText: string;
-}
 export interface HexColour {
   r: string;
   g: string;
@@ -44,8 +38,22 @@ export interface TickerDesign {
   goalMarker: HexColour;
 }
 
+export interface BannerDesignImage {
+  kind: 'Image';
+  mobileUrl: string;
+  tabletDesktopUrl: string;
+  wideUrl: string;
+  altText: string;
+}
+
+export interface ChoiceCardsDesign {
+  kind: 'ChoiceCards';
+  buttonColour?: HexColour;
+}
+export type BannerDesignVisual = BannerDesignImage | ChoiceCardsDesign;
+
 export type BannerDesignProps = {
-  image: BannerDesignImage;
+  visual?: BannerDesignVisual;
   colours: {
     basic: BasicColours;
     highlightedText: HighlightedTextColours;

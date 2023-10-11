@@ -2,7 +2,7 @@ import React from 'react';
 import { Typography } from '@material-ui/core';
 import {
   BannerDesign,
-  BannerDesignImage,
+  BannerDesignVisual,
   BasicColours,
   CtaDesign,
   GuardianRoundel,
@@ -11,13 +11,13 @@ import {
 } from '../../../models/bannerDesign';
 import { useStyles } from '../helpers/testEditorStyles';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import { ImageEditor } from './ImageEditor';
 import { BasicColoursEditor } from './BasicColoursEditor';
 import { HighlightedTextColoursEditor } from './HighlightedTextColoursEditor';
 import { CtaColoursEditor } from './CtaColoursEditor';
 import TypedRadioGroup from '../TypedRadioGroup';
 import { BannerDesignUsage } from './BannerDesignUsage';
 import { TickerDesignEditor } from './TickerDesignEditor';
+import { BannerVisualEditor } from './BannerVisualEditor';
 
 type Props = {
   design: BannerDesign;
@@ -47,10 +47,10 @@ const BannerDesignForm: React.FC<Props> = ({
     setValidationStatus(fieldName, isValid);
   };
 
-  const onImageChange = (image: BannerDesignImage): void => {
+  const onVisualChange = (visual?: BannerDesignVisual): void => {
     onChange({
       ...design,
-      image,
+      visual,
     });
   };
 
@@ -116,13 +116,13 @@ const BannerDesignForm: React.FC<Props> = ({
       </div>
       <div className={classes.sectionContainer}>
         <Typography variant={'h3'} className={classes.sectionHeader}>
-          Images
+          Visual
         </Typography>
-        <ImageEditor
-          image={design.image}
+        <BannerVisualEditor
+          visual={design.visual}
           isDisabled={isDisabled}
-          onValidationChange={isValid => onValidationChange('imageUrls', isValid)}
-          onChange={onImageChange}
+          onValidationChange={onValidationChange}
+          onChange={onVisualChange}
         />
       </div>
       <div className={[classes.sectionContainer, localClasses.colourSectionContainer].join(' ')}>
