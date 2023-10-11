@@ -3,7 +3,7 @@ import { CtaDesign } from '../../../models/bannerDesign';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { ColourInput } from './ColourInput';
 
-export const useLocalStyles = makeStyles(({ palette }: Theme) => ({
+const useLocalStyles = makeStyles(({ palette }: Theme) => ({
   container: {
     display: 'flex',
     flexDirection: 'row',
@@ -45,7 +45,7 @@ export const CtaColoursEditor: React.FC<Props> = ({
   const classes = useLocalStyles();
 
   return (
-    <>
+    <div>
       <div className={classes.header}>{label}</div>
       <div className={classes.container}>
         <div className={classes.stateContainer}>
@@ -114,6 +114,6 @@ export const CtaColoursEditor: React.FC<Props> = ({
           />
         </div>
       </div>
-    </>
+    </div>
   );
 };

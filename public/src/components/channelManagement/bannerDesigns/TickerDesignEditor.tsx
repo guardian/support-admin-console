@@ -1,6 +1,17 @@
 import { TickerDesign } from '../../../models/bannerDesign';
 import React from 'react';
 import { ColourInput } from './ColourInput';
+import { makeStyles, Theme } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(({ spacing }: Theme) => ({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    '& > * + *': {
+      marginTop: spacing(1),
+    },
+  },
+}));
 
 interface Props {
   ticker: TickerDesign;
@@ -15,8 +26,10 @@ export const TickerDesignEditor: React.FC<Props> = ({
   onValidationChange,
   onChange,
 }: Props) => {
+  const classes = useStyles();
+
   return (
-    <div>
+    <div className={classes.container}>
       <ColourInput
         colour={ticker.text}
         name="ticker.text"

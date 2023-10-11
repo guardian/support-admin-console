@@ -9,6 +9,26 @@ import {
 import { useForm } from 'react-hook-form';
 import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 import { HexColour } from '../../../models/bannerDesign';
+import { makeStyles, Theme } from '@material-ui/core/styles';
+
+const useStyles = makeStyles<Theme, { colour: string }>(({ palette }: Theme) => ({
+  container: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'end',
+  },
+  field: {
+    flexDirection: 'row',
+  },
+  colour: props => ({
+    border: `1px solid ${palette.grey[500]}`,
+    borderRadius: '4px',
+    width: '55px',
+    height: '55px',
+    marginBottom: '8px',
+    backgroundColor: props.colour,
+  }),
+}));
 
 const colourValidation = {
   value: hexColourStringRegex,
@@ -34,6 +54,7 @@ export const ColourInput: React.FC<Props> = ({
   onValidationChange,
   required = true,
 }: Props) => {
+  const classes = useStyles({ colour: `#${colour ? hexColourToString(colour) : 'ffffff'}` });
   const defaultValues = { colour: colour ? hexColourToString(colour) : '' };
   const { register, reset, handleSubmit, errors } = useForm<{ colour: string }>({
     mode: 'onChange',
@@ -51,21 +72,25 @@ export const ColourInput: React.FC<Props> = ({
   }, [colour]);
 
   return (
-    <TextField
-      inputRef={register({
-        required: required ? EMPTY_ERROR_HELPER_TEXT : false,
-        pattern: colourValidation,
-      })}
-      name="colour"
-      onBlur={handleSubmit(({ colour }) => onChange(stringToHexColour(colour)))}
-      label={label}
-      error={errors?.colour !== undefined}
-      helperText={errors?.colour?.message}
-      margin="normal"
-      variant="outlined"
-      fullWidth
-      disabled={isDisabled}
-      required={required}
-    />
+    <div className={classes.container}>
+      <TextField
+        className={classes.field}
+        inputRef={register({
+          required: required ? EMPTY_ERROR_HELPER_TEXT : false,
+          pattern: colourValidation,
+        })}
+        name="colour"
+        onBlur={handleSubmit(({ colour }) => onChange(stringToHexColour(colour)))}
+        label={label}
+        error={errors?.colour !== undefined}
+        helperText={errors?.colour?.message}
+        margin="normal"
+        variant="outlined"
+        fullWidth={false}
+        disabled={isDisabled}
+        required={required}
+      />
+      {colour && <div className={classes.colour} />}
+    </div>
   );
 };

@@ -1,6 +1,17 @@
 import React from 'react';
 import { HighlightedTextColours } from '../../../models/bannerDesign';
 import { ColourInput } from './ColourInput';
+import { makeStyles, Theme } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(({ spacing }: Theme) => ({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    '& > * + *': {
+      marginTop: spacing(1),
+    },
+  },
+}));
 
 interface Props {
   colours: HighlightedTextColours;
@@ -15,8 +26,10 @@ export const HighlightedTextColoursEditor: React.FC<Props> = ({
   onValidationChange,
   onChange,
 }: Props) => {
+  const classes = useStyles();
+
   return (
-    <div>
+    <div className={classes.container}>
       <ColourInput
         colour={colours.text}
         name="colours.highlightedText.text"
