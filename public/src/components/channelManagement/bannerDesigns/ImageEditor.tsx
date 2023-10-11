@@ -26,6 +26,8 @@ export const ImageEditor: React.FC<Props> = ({
     mode: 'onChange',
     defaultValues: image,
   });
+  // We have to register the kind field, or it will be lost onChange
+  register('kind', { required: true, setValueAs: () => 'Image' });
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
