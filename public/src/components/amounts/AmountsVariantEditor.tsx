@@ -249,7 +249,6 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
                     checked={currentContributionDisplay.includes(k as ContributionType)}
                     onChange={e => updateDisplayContribution(e)}
                     name={k}
-                    disabled={true}
                   />
                 }
                 label={k}
