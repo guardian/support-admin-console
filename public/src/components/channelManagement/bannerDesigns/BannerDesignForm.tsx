@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography } from '@material-ui/core';
+import { Accordion, AccordionDetails, AccordionSummary } from '@material-ui/core';
 import {
   BannerDesign,
   BannerDesignVisual,
@@ -9,7 +9,6 @@ import {
   HighlightedTextColours,
   TickerDesign,
 } from '../../../models/bannerDesign';
-import { useStyles } from '../helpers/testEditorStyles';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { BasicColoursEditor } from './BasicColoursEditor';
 import { HighlightedTextColoursEditor } from './HighlightedTextColoursEditor';
@@ -18,6 +17,7 @@ import TypedRadioGroup from '../TypedRadioGroup';
 import { BannerDesignUsage } from './BannerDesignUsage';
 import { TickerDesignEditor } from './TickerDesignEditor';
 import { BannerVisualEditor } from './BannerVisualEditor';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 type Props = {
   design: BannerDesign;
@@ -26,11 +26,38 @@ type Props = {
   onChange: (design: BannerDesign) => void;
 };
 
-export const useLocalStyles = makeStyles(({}: Theme) => ({
+export const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    width: '100%',
+    background: palette.background.paper, // #FFFFFF
+    '& > * + *': {
+      marginTop: spacing(1),
+    },
+  },
   colourSectionContainer: {
     '& input': {
       textTransform: 'uppercase',
     },
+  },
+  ctaEditors: {
+    '& > * + *': {
+      marginTop: spacing(4),
+    },
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  accordion: {
+    border: `1px solid ${palette.grey[700]}`,
+    borderRadius: 4,
+    boxShadow: 'none',
+  },
+  sectionHeader: {
+    fontSize: 18,
+    fontWeight: 500,
+    color: palette.grey[700],
   },
 }));
 
@@ -41,7 +68,6 @@ const BannerDesignForm: React.FC<Props> = ({
   onChange,
 }: Props) => {
   const classes = useStyles();
-  const localClasses = useLocalStyles();
 
   const onValidationChange = (fieldName: string, isValid: boolean): void => {
     setValidationStatus(fieldName, isValid);
@@ -108,101 +134,122 @@ const BannerDesignForm: React.FC<Props> = ({
 
   return (
     <div className={classes.container}>
-      <div className={classes.sectionContainer}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
+      <Accordion className={classes.accordion}>
+        <AccordionSummary className={classes.sectionHeader} expandIcon={<ExpandMoreIcon />}>
           Usage
-        </Typography>
-        <BannerDesignUsage designName={design.name} />
-      </div>
-      <div className={classes.sectionContainer}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
-          Visual
-        </Typography>
-        <BannerVisualEditor
-          visual={design.visual}
-          isDisabled={isDisabled}
-          onValidationChange={onValidationChange}
-          onChange={onVisualChange}
-        />
-      </div>
-      <div className={[classes.sectionContainer, localClasses.colourSectionContainer].join(' ')}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
-          Basic Colours
-        </Typography>
-        <BasicColoursEditor
-          basicColours={design.colours.basic}
-          isDisabled={isDisabled}
-          onChange={onBasicColoursChange}
-          onValidationChange={onValidationChange}
-        />
-      </div>
-      <div className={[classes.sectionContainer, localClasses.colourSectionContainer].join(' ')}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
-          Highlighted Text Colours
-        </Typography>
-        <HighlightedTextColoursEditor
-          colours={design.colours.highlightedText}
-          isDisabled={isDisabled}
-          onChange={onHighlightedTextColoursChange}
-          onValidationChange={onValidationChange}
-        />
-      </div>
-      <div className={[classes.sectionContainer, localClasses.colourSectionContainer].join(' ')}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
-          CTA Colours
-        </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <BannerDesignUsage designName={design.name} />
+        </AccordionDetails>
+      </Accordion>
 
-        <CtaColoursEditor
-          cta={design.colours.primaryCta}
-          isDisabled={isDisabled}
-          onChange={onCtaColoursChange('primaryCta')}
-          onValidationChange={onValidationChange}
-          name={'colours.primaryCta'}
-          label="Primary CTA"
-        />
-        <CtaColoursEditor
-          cta={design.colours.secondaryCta}
-          isDisabled={isDisabled}
-          onChange={onCtaColoursChange('secondaryCta')}
-          onValidationChange={onValidationChange}
-          name={'colours.secondaryCta'}
-          label="Secondary CTA"
-        />
-        <CtaColoursEditor
-          cta={design.colours.closeButton}
-          isDisabled={isDisabled}
-          onChange={onCtaColoursChange('closeButton')}
-          onValidationChange={onValidationChange}
-          name={'colours.closeButton'}
-          label="Close button"
-        />
-      </div>
-      <div className={[classes.sectionContainer, localClasses.colourSectionContainer].join(' ')}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
+      <Accordion className={classes.accordion}>
+        <AccordionSummary className={classes.sectionHeader} expandIcon={<ExpandMoreIcon />}>
+          Visual
+        </AccordionSummary>
+        <AccordionDetails>
+          <BannerVisualEditor
+            visual={design.visual}
+            isDisabled={isDisabled}
+            onValidationChange={onValidationChange}
+            onChange={onVisualChange}
+          />
+        </AccordionDetails>
+      </Accordion>
+
+      <Accordion className={classes.accordion}>
+        <AccordionSummary className={classes.sectionHeader} expandIcon={<ExpandMoreIcon />}>
+          Basic Colours
+        </AccordionSummary>
+        <AccordionDetails>
+          <BasicColoursEditor
+            basicColours={design.colours.basic}
+            isDisabled={isDisabled}
+            onChange={onBasicColoursChange}
+            onValidationChange={onValidationChange}
+          />
+        </AccordionDetails>
+      </Accordion>
+
+      <Accordion className={classes.accordion}>
+        <AccordionSummary className={classes.sectionHeader} expandIcon={<ExpandMoreIcon />}>
+          Highlighted Text Colours
+        </AccordionSummary>
+        <AccordionDetails>
+          <HighlightedTextColoursEditor
+            colours={design.colours.highlightedText}
+            isDisabled={isDisabled}
+            onChange={onHighlightedTextColoursChange}
+            onValidationChange={onValidationChange}
+          />
+        </AccordionDetails>
+      </Accordion>
+
+      <Accordion className={[classes.accordion, classes.colourSectionContainer].join(' ')}>
+        <AccordionSummary className={classes.sectionHeader} expandIcon={<ExpandMoreIcon />}>
+          CTA Colours
+        </AccordionSummary>
+
+        <AccordionDetails className={classes.ctaEditors}>
+          <CtaColoursEditor
+            cta={design.colours.primaryCta}
+            isDisabled={isDisabled}
+            onChange={onCtaColoursChange('primaryCta')}
+            onValidationChange={onValidationChange}
+            name={'colours.primaryCta'}
+            label="Primary CTA"
+          />
+          <CtaColoursEditor
+            cta={design.colours.secondaryCta}
+            isDisabled={isDisabled}
+            onChange={onCtaColoursChange('secondaryCta')}
+            onValidationChange={onValidationChange}
+            name={'colours.secondaryCta'}
+            label="Secondary CTA"
+          />
+          <CtaColoursEditor
+            cta={design.colours.closeButton}
+            isDisabled={isDisabled}
+            onChange={onCtaColoursChange('closeButton')}
+            onValidationChange={onValidationChange}
+            name={'colours.closeButton'}
+            label="Close button"
+          />
+        </AccordionDetails>
+      </Accordion>
+
+      <Accordion className={[classes.accordion, classes.colourSectionContainer].join(' ')}>
+        <AccordionSummary className={classes.sectionHeader} expandIcon={<ExpandMoreIcon />}>
           Roundel style
-        </Typography>
-        <TypedRadioGroup
-          selectedValue={design.colours.guardianRoundel}
-          onChange={onRoundelChange}
-          isDisabled={isDisabled}
-          labels={{
-            default: 'Default',
-            brand: 'Brand',
-            inverse: 'Inverse',
-          }}
-        />
-      </div>
-      <div className={[classes.sectionContainer, localClasses.colourSectionContainer].join(' ')}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
+        </AccordionSummary>
+
+        <AccordionDetails>
+          <TypedRadioGroup
+            selectedValue={design.colours.guardianRoundel}
+            onChange={onRoundelChange}
+            isDisabled={isDisabled}
+            labels={{
+              default: 'Default',
+              brand: 'Brand',
+              inverse: 'Inverse',
+            }}
+          />
+        </AccordionDetails>
+      </Accordion>
+      <Accordion className={[classes.accordion, classes.colourSectionContainer].join(' ')}>
+        <AccordionSummary className={classes.sectionHeader} expandIcon={<ExpandMoreIcon />}>
           Ticker Colours
-        </Typography>
-        <TickerDesignEditor
-          ticker={design.colours.ticker}
-          isDisabled={isDisabled}
-          onChange={onTickerDesignChange}
-          onValidationChange={onValidationChange}
-        />
-      </div>
+        </AccordionSummary>
+
+        <AccordionDetails>
+          <TickerDesignEditor
+            ticker={design.colours.ticker}
+            isDisabled={isDisabled}
+            onChange={onTickerDesignChange}
+            onValidationChange={onValidationChange}
+          />
+        </AccordionDetails>
+      </Accordion>
     </div>
   );
 };
