@@ -157,7 +157,11 @@ const StickyTopBar: React.FC<Props> = ({
               </Button>
             </>
           )}
-          <BannerVariantPreview variant={buildVariantForPreview(design)} design={design} />
+          <BannerVariantPreview
+            variant={buildVariantForPreview(design)}
+            design={design}
+            shouldShowTickerToggle={true}
+          />
         </div>
       </div>
     </header>

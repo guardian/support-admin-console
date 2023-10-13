@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
-import { Theme, makeStyles, Button } from '@material-ui/core';
+import { Button, makeStyles, Theme } from '@material-ui/core';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import Drawer from '@material-ui/core/Drawer';
 import {
+  BannerContent,
   BannerTemplate,
   BannerVariant,
-  BannerContent,
   isBannerTemplate,
 } from '../../../models/banner';
 import Typography from '@material-ui/core/Typography';
 import { useModule } from '../../../hooks/useModule';
 import useTickerData, { TickerSettingsWithData } from '../hooks/useTickerData';
-import { SelectedAmountsVariant, mockAmountsCardData } from '../../../utils/models';
+import { mockAmountsCardData, SelectedAmountsVariant } from '../../../utils/models';
 import { BannerDesign, BannerDesignProps } from '../../../models/bannerDesign';
+import { TickerCountType, TickerEndType, TickerName } from '../helpers/shared';
 
 // Mock prices data
 interface ProductPriceData {
@@ -198,17 +199,47 @@ const useStyles = makeStyles(({ palette }: Theme) => ({
     fontStyle: 'italic',
     fontSize: '20px',
   },
+  controlsContainer: {
+    position: 'fixed',
+    backgroundColor: palette.grey[100],
+    borderRadius: '5px',
+    top: '10px',
+    left: '10px',
+    padding: '20px',
+  },
 }));
 
 interface BannerVariantPreviewProps {
   variant: BannerVariant;
   design?: BannerDesign;
+  shouldShowTickerToggle?: boolean;
 }
+
+const DEFAULT_TICKER_SETTINGS: TickerSettingsWithData = {
+  tickerData: {
+    total: 50_000,
+    goal: 100_000,
+  },
+  countType: TickerCountType.money,
+  endType: TickerEndType.hardstop,
+  currencySymbol: '£',
+  copy: {
+    countLabel: 'contributions in May',
+    goalReachedPrimary: "We've met our goal - thank you!",
+    goalReachedSecondary: '',
+  },
+  name: TickerName.US_2022,
+};
 
 const BannerVariantPreview: React.FC<BannerVariantPreviewProps> = ({
   variant,
   design,
+  shouldShowTickerToggle = false,
 }: BannerVariantPreviewProps) => {
+  // The default state of showTicker is derived from whether the variant has tickerSettings
+  const [shouldShowTicker, setShouldShowTicker] = useState<boolean>(
+    Boolean(variant.tickerSettings),
+  );
   const classes = useStyles();
 
   const [drawerOpen, setDrawerOpen] = useState<boolean>();
@@ -231,7 +262,10 @@ const BannerVariantPreview: React.FC<BannerVariantPreviewProps> = ({
     setDrawerOpen(open);
   };
 
-  const props = buildProps(variant, tickerSettingsWithData, design);
+  const tickerSettings =
+    tickerSettingsWithData || (shouldShowTicker ? DEFAULT_TICKER_SETTINGS : undefined);
+
+  const props = buildProps(variant, tickerSettings, design);
 
   return (
     <div>
@@ -247,6 +281,17 @@ const BannerVariantPreview: React.FC<BannerVariantPreviewProps> = ({
             classes={{ paper: classes.drawer }}
           >
             <div>
+              {shouldShowTickerToggle && (
+                <div className={classes.controlsContainer}>
+                  <label htmlFor="ticker-checkbox">Show ticker?</label>
+                  <input
+                    type="checkbox"
+                    id="ticker-checkbox"
+                    checked={shouldShowTicker}
+                    onChange={() => setShouldShowTicker(!shouldShowTicker)}
+                  />
+                </div>
+              )}
               <div className={classes.hint} onClick={toggleDrawer(false)}>
                 <Typography>Click anywhere outside the banner to close</Typography>
               </div>
