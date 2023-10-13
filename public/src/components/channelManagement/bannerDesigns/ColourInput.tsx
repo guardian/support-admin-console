@@ -15,7 +15,7 @@ const useStyles = makeStyles<Theme, { colour: string }>(({ palette }: Theme) => 
   container: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'end',
+    marginTop: '16px',
   },
   colour: props => ({
     border: `1px solid ${palette.grey[500]}`,
@@ -27,6 +27,7 @@ const useStyles = makeStyles<Theme, { colour: string }>(({ palette }: Theme) => 
   }),
   field: {
     width: '240px',
+    marginTop: 0,
   },
 }));
 
