@@ -256,9 +256,7 @@ const BannerVariantPreview: React.FC<BannerVariantPreviewProps> = ({
   shouldShowTickerToggle = false,
 }: BannerVariantPreviewProps) => {
   // The default state of showTicker is derived from whether the variant has tickerSettings
-  const [shouldShowTicker, setShouldShowTicker] = useState<boolean>(
-    Boolean(variant.tickerSettings),
-  );
+  const [shouldShowTicker, setShouldShowTicker] = useState<boolean>(false);
   const classes = useStyles();
 
   const [drawerOpen, setDrawerOpen] = useState<boolean>();
