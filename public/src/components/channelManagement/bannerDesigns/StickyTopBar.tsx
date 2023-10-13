@@ -8,7 +8,17 @@ import SaveIcon from '@material-ui/icons/Save';
 import { grey } from '@material-ui/core/colors';
 import { LockStatus } from '../helpers/shared';
 import LiveSwitch from '../../shared/liveSwitch';
-import { Status } from '../../../models/bannerDesign';
+import BannerVariantPreview from '../bannerTests/bannerVariantPreview';
+import { getDefaultVariant } from '../bannerTests/utils/defaults';
+import { BannerVariant } from '../../../models/banner';
+import { BannerDesign, Status } from '../../../models/bannerDesign';
+
+const buildVariantForPreview = (design: BannerDesign): BannerVariant => {
+  return {
+    ...getDefaultVariant(),
+    template: { designName: design.name },
+  };
+};
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {
@@ -64,7 +74,7 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
 
 interface Props {
   name: string;
-  status: Status;
+  design: BannerDesign;
   onLock: (name: string, force: boolean) => void;
   onUnlock: (name: string) => void;
   onSave: (name: string) => void;
@@ -75,7 +85,7 @@ interface Props {
 
 const StickyTopBar: React.FC<Props> = ({
   name,
-  status,
+  design,
   onLock,
   onUnlock,
   onSave,
@@ -96,7 +106,7 @@ const StickyTopBar: React.FC<Props> = ({
         <div className={classes.switchContainer}>
           <LiveSwitch
             label="Status"
-            isLive={status === 'Live'}
+            isLive={design.status === 'Live'}
             onChange={(isLive: boolean) => onStatusChange(isLive ? 'Live' : 'Draft')}
             isDisabled={userHasLock && lockStatus.locked}
           />
@@ -147,6 +157,7 @@ const StickyTopBar: React.FC<Props> = ({
               </Button>
             </>
           )}
+          <BannerVariantPreview variant={buildVariantForPreview(design)} design={design} />
         </div>
       </div>
     </header>
