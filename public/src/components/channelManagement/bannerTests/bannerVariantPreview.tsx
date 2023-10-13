@@ -228,7 +228,7 @@ const DEFAULT_TICKER_SETTINGS: TickerSettingsWithData = {
     goalReachedPrimary: "We've met our goal - thank you!",
     goalReachedSecondary: '',
   },
-  name: TickerName.US_2022,
+  name: TickerName.US,
 };
 
 interface TickerToggleProps {
