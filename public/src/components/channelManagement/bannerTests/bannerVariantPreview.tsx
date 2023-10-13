@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, makeStyles, Theme } from '@material-ui/core';
+import { Button, Checkbox, FormControlLabel, makeStyles, Theme } from '@material-ui/core';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import Drawer from '@material-ui/core/Drawer';
 import {
@@ -179,7 +179,7 @@ const bannerModules = {
   },
 };
 
-const useStyles = makeStyles(({ palette }: Theme) => ({
+const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   drawer: {
     height: 'auto',
     bottom: 0,
@@ -202,10 +202,10 @@ const useStyles = makeStyles(({ palette }: Theme) => ({
   controlsContainer: {
     position: 'fixed',
     backgroundColor: palette.grey[100],
-    borderRadius: '5px',
-    top: '10px',
-    left: '10px',
-    padding: '20px',
+    borderRadius: '4px',
+    top: spacing(3),
+    left: spacing(3),
+    padding: spacing(3),
   },
 }));
 
@@ -229,6 +229,25 @@ const DEFAULT_TICKER_SETTINGS: TickerSettingsWithData = {
     goalReachedSecondary: '',
   },
   name: TickerName.US_2022,
+};
+
+interface TickerToggleProps {
+  shouldShowTicker: boolean;
+  setShouldShowTicker: (shouldShowTicker: boolean) => void;
+}
+const TickerToggle = ({ shouldShowTicker, setShouldShowTicker }: TickerToggleProps) => {
+  return (
+    <FormControlLabel
+      control={
+        <Checkbox
+          checked={shouldShowTicker}
+          onChange={() => setShouldShowTicker(!shouldShowTicker)}
+          color="primary"
+        />
+      }
+      label={'Show ticker?'}
+    />
+  );
 };
 
 const BannerVariantPreview: React.FC<BannerVariantPreviewProps> = ({
@@ -281,21 +300,18 @@ const BannerVariantPreview: React.FC<BannerVariantPreviewProps> = ({
             classes={{ paper: classes.drawer }}
           >
             <div>
-              {shouldShowTickerToggle && (
-                <div className={classes.controlsContainer}>
-                  <label htmlFor="ticker-checkbox">Show ticker?</label>
-                  <input
-                    type="checkbox"
-                    id="ticker-checkbox"
-                    checked={shouldShowTicker}
-                    onChange={() => setShouldShowTicker(!shouldShowTicker)}
-                  />
-                </div>
-              )}
               <div className={classes.hint} onClick={toggleDrawer(false)}>
                 <Typography>Click anywhere outside the banner to close</Typography>
               </div>
               <Banner {...props} />
+              {shouldShowTickerToggle && (
+                <div className={classes.controlsContainer}>
+                  <TickerToggle
+                    shouldShowTicker={shouldShowTicker}
+                    setShouldShowTicker={setShouldShowTicker}
+                  />
+                </div>
+              )}
             </div>
           </Drawer>
         </React.Fragment>
