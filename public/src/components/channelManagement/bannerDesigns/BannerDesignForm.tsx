@@ -145,7 +145,7 @@ const BannerDesignForm: React.FC<Props> = ({
 
       <Accordion className={classes.accordion}>
         <AccordionSummary className={classes.sectionHeader} expandIcon={<ExpandMoreIcon />}>
-          Visual
+          Image or Choice Cards
         </AccordionSummary>
         <AccordionDetails>
           <BannerVisualEditor
