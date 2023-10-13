@@ -25,6 +25,9 @@ const useStyles = makeStyles<Theme, { colour: string }>(({ palette }: Theme) => 
     marginBottom: '8px',
     backgroundColor: props.colour,
   }),
+  field: {
+    width: '240px',
+  },
 }));
 
 const colourValidation = {
