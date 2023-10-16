@@ -15,10 +15,7 @@ const useStyles = makeStyles<Theme, { colour: string }>(({ palette }: Theme) => 
   container: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'end',
-  },
-  field: {
-    flexDirection: 'row',
+    marginTop: '16px',
   },
   colour: props => ({
     border: `1px solid ${palette.grey[500]}`,
@@ -28,6 +25,10 @@ const useStyles = makeStyles<Theme, { colour: string }>(({ palette }: Theme) => 
     marginBottom: '8px',
     backgroundColor: props.colour,
   }),
+  field: {
+    width: '240px',
+    marginTop: 0,
+  },
 }));
 
 const colourValidation = {
