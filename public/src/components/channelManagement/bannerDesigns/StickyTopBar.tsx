@@ -1,46 +1,15 @@
-import React, { useState } from 'react';
-import {
-  Theme,
-  Typography,
-  makeStyles,
-  Button,
-  FormControlLabel,
-  Checkbox,
-} from '@material-ui/core';
+import React from 'react';
+import { Theme, Typography, makeStyles, Button } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import { LockDetails } from './LockDetails';
 import LockIcon from '@material-ui/icons/Lock';
 import CloseIcon from '@material-ui/icons/Close';
 import SaveIcon from '@material-ui/icons/Save';
 import { grey } from '@material-ui/core/colors';
-import { LockStatus, TickerCountType, TickerEndType, TickerName } from '../helpers/shared';
+import { LockStatus } from '../helpers/shared';
 import LiveSwitch from '../../shared/liveSwitch';
-import BannerVariantPreview from '../bannerTests/bannerVariantPreview';
-import { getDefaultVariant } from '../bannerTests/utils/defaults';
-import { BannerVariant } from '../../../models/banner';
 import { BannerDesign, Status } from '../../../models/bannerDesign';
-
-const buildVariantForPreview = (design: BannerDesign, shouldShowTicker: boolean): BannerVariant => {
-  const tickerSettings = shouldShowTicker
-    ? {
-        countType: TickerCountType.money,
-        endType: TickerEndType.hardstop,
-        currencySymbol: '£',
-        copy: {
-          countLabel: 'contributions in May',
-          goalReachedPrimary: "We've met our goal - thank you!",
-          goalReachedSecondary: '',
-        },
-        name: TickerName.US,
-      }
-    : undefined;
-
-  return {
-    ...getDefaultVariant(),
-    template: { designName: design.name },
-    tickerSettings,
-  };
-};
+import { BannerDesignPreview } from './BannerDesignPreview';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {
@@ -105,26 +74,6 @@ interface Props {
   onStatusChange: (status: Status) => void;
 }
 
-interface TickerToggleProps {
-  shouldShowTicker: boolean;
-  setShouldShowTicker: (shouldShowTicker: boolean) => void;
-}
-
-const TickerToggle = ({ shouldShowTicker, setShouldShowTicker }: TickerToggleProps) => {
-  return (
-    <FormControlLabel
-      control={
-        <Checkbox
-          checked={shouldShowTicker}
-          onChange={() => setShouldShowTicker(!shouldShowTicker)}
-          color="primary"
-        />
-      }
-      label={'Show ticker?'}
-    />
-  );
-};
-
 const StickyTopBar: React.FC<Props> = ({
   name,
   design,
@@ -136,8 +85,6 @@ const StickyTopBar: React.FC<Props> = ({
   onStatusChange,
 }: Props) => {
   const classes = useStyles();
-
-  const [shouldShowTicker, setShouldShowTicker] = useState<boolean>(false);
 
   return (
     <header className={classes.container}>
@@ -201,16 +148,7 @@ const StickyTopBar: React.FC<Props> = ({
               </Button>
             </>
           )}
-          <BannerVariantPreview
-            variant={buildVariantForPreview(design, shouldShowTicker)}
-            design={design}
-            controls={
-              <TickerToggle
-                shouldShowTicker={shouldShowTicker}
-                setShouldShowTicker={setShouldShowTicker}
-              />
-            }
-          />
+          <BannerDesignPreview design={design} />
         </div>
       </div>
     </header>
