@@ -18,6 +18,7 @@ import { BannerDesignUsage } from './BannerDesignUsage';
 import { TickerDesignEditor } from './TickerDesignEditor';
 import { BannerVisualEditor } from './BannerVisualEditor';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { InfoOutlined } from '@material-ui/icons';
 
 type Props = {
   design: BannerDesign;
@@ -58,6 +59,14 @@ export const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     fontSize: 18,
     fontWeight: 500,
     color: palette.grey[700],
+  },
+  info: {
+    display: 'flex',
+    marginBottom: spacing(1),
+    alignItems: 'center',
+    '& > * + *': {
+      marginLeft: spacing(1),
+    },
   },
 }));
 
@@ -134,6 +143,13 @@ const BannerDesignForm: React.FC<Props> = ({
 
   return (
     <div className={classes.container}>
+      <div className={classes.info}>
+        <InfoOutlined />
+        <span>
+          Create accessible designs that always meet WCAG Grading of AAA or AA. Check for colour
+          contrast at <a href="https://www.whocanuse.com/">whocanuse.com</a>
+        </span>
+      </div>
       <Accordion className={classes.accordion}>
         <AccordionSummary className={classes.sectionHeader} expandIcon={<ExpandMoreIcon />}>
           Usage
