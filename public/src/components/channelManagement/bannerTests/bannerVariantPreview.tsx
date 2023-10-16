@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Checkbox, FormControlLabel, makeStyles, Theme } from '@material-ui/core';
+import { Button, makeStyles, Theme } from '@material-ui/core';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import Drawer from '@material-ui/core/Drawer';
 import {
@@ -13,7 +13,6 @@ import { useModule } from '../../../hooks/useModule';
 import useTickerData, { TickerSettingsWithData } from '../hooks/useTickerData';
 import { mockAmountsCardData, SelectedAmountsVariant } from '../../../utils/models';
 import { BannerDesign, BannerDesignProps } from '../../../models/bannerDesign';
-import { TickerCountType, TickerEndType, TickerName } from '../helpers/shared';
 
 // Mock prices data
 interface ProductPriceData {
@@ -212,50 +211,14 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
 interface BannerVariantPreviewProps {
   variant: BannerVariant;
   design?: BannerDesign;
-  shouldShowTickerToggle?: boolean;
+  controls?: React.ReactElement;
 }
-
-const DEFAULT_TICKER_SETTINGS: TickerSettingsWithData = {
-  tickerData: {
-    total: 50_000,
-    goal: 100_000,
-  },
-  countType: TickerCountType.money,
-  endType: TickerEndType.hardstop,
-  currencySymbol: '£',
-  copy: {
-    countLabel: 'contributions in May',
-    goalReachedPrimary: "We've met our goal - thank you!",
-    goalReachedSecondary: '',
-  },
-  name: TickerName.US,
-};
-
-interface TickerToggleProps {
-  shouldShowTicker: boolean;
-  setShouldShowTicker: (shouldShowTicker: boolean) => void;
-}
-const TickerToggle = ({ shouldShowTicker, setShouldShowTicker }: TickerToggleProps) => {
-  return (
-    <FormControlLabel
-      control={
-        <Checkbox
-          checked={shouldShowTicker}
-          onChange={() => setShouldShowTicker(!shouldShowTicker)}
-          color="primary"
-        />
-      }
-      label={'Show ticker?'}
-    />
-  );
-};
 
 const BannerVariantPreview: React.FC<BannerVariantPreviewProps> = ({
   variant,
   design,
-  shouldShowTickerToggle = false,
+  controls,
 }: BannerVariantPreviewProps) => {
-  const [shouldShowTicker, setShouldShowTicker] = useState<boolean>(false);
   const classes = useStyles();
 
   const [drawerOpen, setDrawerOpen] = useState<boolean>();
@@ -278,10 +241,7 @@ const BannerVariantPreview: React.FC<BannerVariantPreviewProps> = ({
     setDrawerOpen(open);
   };
 
-  const tickerSettings =
-    tickerSettingsWithData || (shouldShowTicker ? DEFAULT_TICKER_SETTINGS : undefined);
-
-  const props = buildProps(variant, tickerSettings, design);
+  const props = buildProps(variant, tickerSettingsWithData, design);
 
   return (
     <div>
@@ -301,14 +261,7 @@ const BannerVariantPreview: React.FC<BannerVariantPreviewProps> = ({
                 <Typography>Click anywhere outside the banner to close</Typography>
               </div>
               <Banner {...props} />
-              {shouldShowTickerToggle && (
-                <div className={classes.controlsContainer}>
-                  <TickerToggle
-                    shouldShowTicker={shouldShowTicker}
-                    setShouldShowTicker={setShouldShowTicker}
-                  />
-                </div>
-              )}
+              {controls && <div className={classes.controlsContainer}>{controls}</div>}
             </div>
           </Drawer>
         </React.Fragment>
