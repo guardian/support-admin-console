@@ -245,9 +245,9 @@ const BannerDesignForm: React.FC<Props> = ({
             onChange={onRoundelChange}
             isDisabled={isDisabled}
             labels={{
-              default: 'Default',
-              brand: 'Brand',
-              inverse: 'Inverse',
+              default: 'Default - white text on black background',
+              inverse: 'Inverse - black text on white background',
+              brand: 'Brand - white text on blue background',
             }}
           />
         </AccordionDetails>
