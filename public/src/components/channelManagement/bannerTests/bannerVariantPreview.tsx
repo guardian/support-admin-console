@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
-import { Theme, makeStyles, Button } from '@material-ui/core';
+import { Button, makeStyles, Theme } from '@material-ui/core';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import Drawer from '@material-ui/core/Drawer';
 import {
+  BannerContent,
   BannerTemplate,
   BannerVariant,
-  BannerContent,
   isBannerTemplate,
 } from '../../../models/banner';
 import Typography from '@material-ui/core/Typography';
 import { useModule } from '../../../hooks/useModule';
 import useTickerData, { TickerSettingsWithData } from '../hooks/useTickerData';
-import { SelectedAmountsVariant, mockAmountsCardData } from '../../../utils/models';
+import { mockAmountsCardData, SelectedAmountsVariant } from '../../../utils/models';
 import { BannerDesign, BannerDesignProps } from '../../../models/bannerDesign';
 
 // Mock prices data
@@ -178,7 +178,7 @@ const bannerModules = {
   },
 };
 
-const useStyles = makeStyles(({ palette }: Theme) => ({
+const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   drawer: {
     height: 'auto',
     bottom: 0,
@@ -198,16 +198,26 @@ const useStyles = makeStyles(({ palette }: Theme) => ({
     fontStyle: 'italic',
     fontSize: '20px',
   },
+  controlsContainer: {
+    position: 'fixed',
+    backgroundColor: palette.grey[100],
+    borderRadius: '4px',
+    top: spacing(3),
+    left: spacing(3),
+    padding: spacing(3),
+  },
 }));
 
 interface BannerVariantPreviewProps {
   variant: BannerVariant;
   design?: BannerDesign;
+  controls?: React.ReactElement;
 }
 
 const BannerVariantPreview: React.FC<BannerVariantPreviewProps> = ({
   variant,
   design,
+  controls,
 }: BannerVariantPreviewProps) => {
   const classes = useStyles();
 
@@ -251,6 +261,7 @@ const BannerVariantPreview: React.FC<BannerVariantPreviewProps> = ({
                 <Typography>Click anywhere outside the banner to close</Typography>
               </div>
               <Banner {...props} />
+              {controls && <div className={classes.controlsContainer}>{controls}</div>}
             </div>
           </Drawer>
         </React.Fragment>

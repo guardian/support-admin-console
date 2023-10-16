@@ -8,17 +8,8 @@ import SaveIcon from '@material-ui/icons/Save';
 import { grey } from '@material-ui/core/colors';
 import { LockStatus } from '../helpers/shared';
 import LiveSwitch from '../../shared/liveSwitch';
-import BannerVariantPreview from '../bannerTests/bannerVariantPreview';
-import { getDefaultVariant } from '../bannerTests/utils/defaults';
-import { BannerVariant } from '../../../models/banner';
 import { BannerDesign, Status } from '../../../models/bannerDesign';
-
-const buildVariantForPreview = (design: BannerDesign): BannerVariant => {
-  return {
-    ...getDefaultVariant(),
-    template: { designName: design.name },
-  };
-};
+import { BannerDesignPreview } from './BannerDesignPreview';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {
@@ -157,7 +148,7 @@ const StickyTopBar: React.FC<Props> = ({
               </Button>
             </>
           )}
-          <BannerVariantPreview variant={buildVariantForPreview(design)} design={design} />
+          <BannerDesignPreview design={design} />
         </div>
       </div>
     </header>
