@@ -13,7 +13,7 @@ export const DEFAULT_SECONDARY_CTA: Cta = {
   baseUrl: 'https://support.theguardian.com/contribute',
 };
 
-export const DEV_AND_CODE_DEFAULT_VARIANT: BannerVariant = {
+const DEV_AND_CODE_DEFAULT_VARIANT: BannerVariant = {
   name: 'CONTROL',
   template: BannerTemplate.ContributionsBanner,
   bannerContent: {
