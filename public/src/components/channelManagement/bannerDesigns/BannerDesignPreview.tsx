@@ -4,7 +4,7 @@ import { BannerDesign } from '../../../models/bannerDesign';
 import { Checkbox, FormControlLabel } from '@material-ui/core';
 import { BannerVariant } from '../../../models/banner';
 import { TickerCountType, TickerEndType, TickerName } from '../helpers/shared';
-import { getDefaultVariant } from '../bannerTests/utils/defaults';
+import { DEV_AND_CODE_DEFAULT_VARIANT } from '../bannerTests/utils/defaults';
 
 interface Props {
   design: BannerDesign;
@@ -46,7 +46,7 @@ const buildVariantForPreview = (design: BannerDesign, shouldShowTicker: boolean)
     : undefined;
 
   return {
-    ...getDefaultVariant(),
+    ...DEV_AND_CODE_DEFAULT_VARIANT, // always use CODE config for design previews
     template: { designName: design.name },
     tickerSettings,
   };
