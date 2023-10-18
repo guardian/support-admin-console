@@ -7,7 +7,6 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import RRControlPanelLogo from './rrControlPanelLogo';
-import { shouldShowBannerDesignsFeature } from '../utils/features';
 
 const useStyles = makeStyles({
   list: {
@@ -196,14 +195,12 @@ export default function NavDrawer(): React.ReactElement {
             <span className={classes.super}>🦸</span>
           </ListItem>
         </Link>
-        {shouldShowBannerDesignsFeature() && (
-          <Link key="Banner Designs" to="/banner-designs" className={classes.link}>
-            <ListItem className={classes.listItem} button key="Banner Designs">
-              <ListItemText primary="Banner Designs" />
-              <span className={classes.super}>🎨</span>
-            </ListItem>
-          </Link>
-        )}
+        <Link key="Banner Designs" to="/banner-designs" className={classes.link}>
+          <ListItem className={classes.listItem} button key="Banner Designs">
+            <ListItemText primary="Banner Designs" />
+            <span className={classes.super}>🎨</span>
+          </ListItem>
+        </Link>
       </div>
 
       <div>
