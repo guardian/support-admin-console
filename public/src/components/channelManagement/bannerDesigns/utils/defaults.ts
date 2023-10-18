@@ -8,11 +8,12 @@ import { stringToHexColour } from '../../../../utils/bannerDesigns';
 export const defaultBannerImage: BannerDesignImage = {
   kind: 'Image',
   mobileUrl:
-    'https://i.guim.co.uk/img/media/35d403182e4b262d37385281b19b763ee6b32f6a/58_0_1743_1046/master/1743.png?width=930&quality=45&auto=format&s=9ecd82413fef9883c1e7a0df2bf6abb1',
+    'https://i.guim.co.uk/img/media/630a3735c02e195be89ab06fd1b8192959e282ab/0_0_1172_560/500.png?width=500&quality=75&s=937595b3f471d6591475955335c7c023',
   tabletDesktopUrl:
-    'https://i.guim.co.uk/img/media/35d403182e4b262d37385281b19b763ee6b32f6a/58_0_1743_1046/master/1743.png?width=930&quality=45&auto=format&s=9ecd82413fef9883c1e7a0df2bf6abb1',
+    'https://i.guim.co.uk/img/media/20cc6e0fa146574bb9c4ed410ac1a089fab02ce0/0_0_1428_1344/500.png?width=500&quality=75&s=fe64f647f74a3cb671f8035a473b895f',
   wideUrl:
-    'https://i.guim.co.uk/img/media/35d403182e4b262d37385281b19b763ee6b32f6a/58_0_1743_1046/master/1743.png?width=930&quality=45&auto=format&s=9ecd82413fef9883c1e7a0df2bf6abb1',
+    'https://i.guim.co.uk/img/media/6c933a058d1ce37a5ad17f79895906150812dfee/0_0_1768_1420/500.png?width=500&quality=75&s=9277532ddf184a308e14218e3576543b',
+
   altText: 'Image description',
 };
 
@@ -73,7 +74,7 @@ export const createDefaultBannerDesign = (name: string): BannerDesign => ({
     ticker: {
       text: stringToHexColour('052962'),
       filledProgress: stringToHexColour('052962'),
-      progressBarBackground: stringToHexColour('ffffff'),
+      progressBarBackground: stringToHexColour('FFFFFF'),
       goalMarker: stringToHexColour('000000'),
     },
   },
