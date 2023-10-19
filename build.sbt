@@ -6,7 +6,7 @@ version := "1.0-SNAPSHOT"
 scalaVersion := "2.13.10"
 
 val circeVersion = "0.14.1"
-val awsVersion = "2.20.89"
+val awsVersion = "2.20.162"
 val zioVersion = "1.0.14"
 val jacksonVersion = "2.14.1"
 
@@ -39,7 +39,8 @@ libraryDependencies ++= Seq(
 dependencyOverrides ++= List(
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
   // The version of netty-handler currently used by athena has a vulnerability - https://security.snyk.io/vuln/SNYK-JAVA-IONETTY-5725787
-  "io.netty" % "netty-handler" % "4.1.94.Final"
+  "io.netty" % "netty-handler" % "4.1.100.Final",
+  "io.netty" % "netty-codec-http2" % "4.1.100.Final"
 )
 
 dynamoDBLocalPort := 8083
