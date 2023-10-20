@@ -57,10 +57,6 @@ const templatesWithLabels = [
     label: 'Contributions - with sign in link',
   },
   {
-    template: BannerTemplate.ChoiceCardsButtonsBannerBlue,
-    label: 'Choice Cards Buttons',
-  },
-  {
     template: BannerTemplate.WorldPressFreedomDayBanner,
     label: 'World Press Freedom Day',
   },
