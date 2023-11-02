@@ -33,6 +33,7 @@ import { useStyles } from '../helpers/testEditorStyles';
 import { EpicTestPreviewButton } from './epicTestPreview';
 import { ValidatedTestEditor, ValidatedTestEditorProps } from '../validatedTestEditor';
 import { TestEditorProps } from '../testsForm';
+import lzstring from 'lz-string';
 
 const copyHasTemplate = (test: EpicTest, template: string): boolean =>
   test.variants.some(
@@ -179,30 +180,41 @@ export const getEpicTestEditor = (
       controlProportionSettings?: ControlProportionSettings,
     ): void => updateTest({ ...test, controlProportionSettings });
 
-    const renderVariantEditor = (variant: EpicVariant): React.ReactElement => (
-      <TestVariantEditorWithPreviewTab
-        variantEditor={
-          <EpicTestVariantEditor
-            epicEditorConfig={epicEditorConfig}
-            key={variant.name}
-            variant={variant}
-            editMode={userHasTestLocked}
-            onVariantChange={onVariantChange}
-            onDelete={(): void => onVariantDelete(variant.name)}
-            onValidationChange={(isValid: boolean): void =>
-              setValidationStatusForField(variant.name, isValid)
-            }
-          />
-        }
-        variantPreview={
-          epicEditorConfig.allowVariantPreview ? (
-            <EpicVariantPreview variant={variant} moduleName={epicEditorConfig.moduleName} />
-          ) : (
-            undefined
-          )
-        }
-      />
-    );
+    const renderVariantEditor = (variant: EpicVariant): React.ReactElement => {
+      const compressedProps = lzstring.compressToEncodedURIComponent(JSON.stringify({ variant }));
+      return (
+        <TestVariantEditorWithPreviewTab
+          variantEditor={
+            <EpicTestVariantEditor
+              epicEditorConfig={epicEditorConfig}
+              key={variant.name}
+              variant={variant}
+              editMode={userHasTestLocked}
+              onVariantChange={onVariantChange}
+              onDelete={(): void => onVariantDelete(variant.name)}
+              onValidationChange={(isValid: boolean): void =>
+                setValidationStatusForField(variant.name, isValid)
+              }
+            />
+          }
+          variantPreview={
+            <div>
+              <p>Preview</p>
+              <iframe
+                src={`http://localhost:4002/iframe.html?id=components-epic--default&viewMode=story&shortcuts=false&singleStory=true&args=json:${compressedProps}`}
+                width="800"
+                height="400"
+              ></iframe>
+            </div>
+            // epicEditorConfig.allowVariantPreview ? (
+            //   <EpicVariantPreview variant={variant} moduleName={epicEditorConfig.moduleName} />
+            // ) : (
+            //   undefined
+            // )
+          }
+        />
+      );
+    };
 
     const renderVariantSummary = (variant: EpicVariant): React.ReactElement => (
       <TestEditorVariantSummary
