@@ -2,10 +2,10 @@ import React from 'react';
 import { Theme, makeStyles } from '@material-ui/core';
 
 import { EpicModuleName } from '../helpers/shared';
-import { useModule } from '../../../hooks/useModule';
 import { EpicVariant } from '../../../models/epic';
 import useTickerData, { TickerSettingsWithData } from '../hooks/useTickerData';
 import { SelectedAmountsVariant, mockAmountsCardData } from '../../../utils/models';
+import lzstring from 'lz-string';
 
 // Article count TS defs
 export interface ArticleCounts {
@@ -103,6 +103,10 @@ const useStyles = makeStyles(({}: Theme) => ({
   container: {
     width: '620px',
   },
+  iframe: {
+    width: '620px',
+    height: '800px',
+  },
 }));
 
 interface EpicVariantPreviewProps {
@@ -118,11 +122,26 @@ const EpicVariantPreview: React.FC<EpicVariantPreviewProps> = ({
 
   const tickerSettingsWithData = useTickerData(variant.tickerSettings);
 
-  const Epic = useModule<EpicProps>(`epics/${moduleName}.js`, moduleName);
+  // const Epic = useModule<EpicProps>(`epics/${moduleName}.js`, moduleName);
 
   const props = buildProps(variant, tickerSettingsWithData);
+  const compressedProps = lzstring.compressToEncodedURIComponent(JSON.stringify(props));
 
-  return <div className={classes.container}>{Epic && <Epic {...props} />}</div>;
+  // TODO - support liveblog epic
+  const storyName = 'components-marketing-contributionsepic--default';
+
+  return (
+    <div>
+      <iframe
+        className={classes.iframe}
+        src={`http://localhost:4002/iframe.html?id=${storyName}&viewMode=story&shortcuts=false&singleStory=true&args=json:${compressedProps}`}
+        width="800"
+        height="400"
+      ></iframe>
+    </div>
+  );
+
+  // return <div className={classes.container}>{Epic && <Epic {...props} />}</div>;
 };
 
 export default EpicVariantPreview;
