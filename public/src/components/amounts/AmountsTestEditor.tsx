@@ -44,6 +44,9 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   numberInput: {
     width: '160px',
   },
+  note: {
+    fontStyle: 'italic',
+  }
 }));
 
 interface AmountsTestEditorProps {
@@ -356,6 +359,10 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
               )}
             />
           </>
+        )}
+
+        {!checkIfTestIsCountryTier() && (
+          <Typography className={classes.note}>Note: users arriving at the Supporter+ landing page from Apple News/Google AMP article CTAs will be presented with the "control" variant of their region's amount test.</Typography>
         )}
 
         <LiveSwitch
