@@ -302,7 +302,8 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
             template === BannerTemplate.EuropeMomentLocalLanguageBanner ||
             template === BannerTemplate.SupporterMomentBanner ||
             template === BannerTemplate.EnvironmentMomentBanner ||
-            template === BannerTemplate.ChoiceCardsMomentBanner) && (
+            template === BannerTemplate.ChoiceCardsMomentBanner ||
+            uiIsDesign(template)) && (
             <Controller
               name="highlightedText"
               control={control}
