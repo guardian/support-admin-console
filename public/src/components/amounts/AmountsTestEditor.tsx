@@ -44,6 +44,9 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   numberInput: {
     width: '160px',
   },
+  note: {
+    fontStyle: 'italic',
+  },
 }));
 
 interface AmountsTestEditorProps {
@@ -264,6 +267,7 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
         variant={variant}
         updateVariant={updateVariant}
         deleteVariant={deleteVariant}
+        isCountryTest={checkIfTestIsCountryTier()}
       />
     );
   };
@@ -355,6 +359,14 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
               )}
             />
           </>
+        )}
+
+        {!checkIfTestIsCountryTier() && (
+          <Typography className={classes.note}>
+            Note: users arriving at the checkout page from Apple News/Google AMP article CTAs will
+            only see their region&apos;s amounts test, with options for single, monthly and annual
+            contributions.
+          </Typography>
         )}
 
         <LiveSwitch

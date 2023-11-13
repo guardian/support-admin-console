@@ -50,12 +50,14 @@ interface AmountsVariantEditorProps {
   variant: AmountsVariant;
   updateVariant: (variant: AmountsVariant) => void;
   deleteVariant: (variant: AmountsVariant) => void;
+  isCountryTest: boolean;
 }
 
 export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
   variant,
   updateVariant,
   deleteVariant,
+  isCountryTest,
 }: AmountsVariantEditorProps) => {
   const classes = useStyles();
 
@@ -252,6 +254,7 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
                   />
                 }
                 label={k}
+                disabled={!isCountryTest}
               />
             );
           })}
