@@ -19,7 +19,7 @@ export const defaultBannerImage: BannerDesignImage = {
 
 export const defaultBannerChoiceCardsDesign: ChoiceCardsDesign = {
   kind: 'ChoiceCards',
-  buttonColour: undefined,
+  buttonColour: stringToHexColour('FFFFFF'),
 };
 
 export const createDefaultBannerDesign = (name: string): BannerDesign => ({
