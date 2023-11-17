@@ -8,7 +8,7 @@ import {
   SupportFrontendSettingsType,
 } from '../utils/requests';
 
-type ProductName = 'guardianWeekly' | 'paper';
+type ProductName = 'guardianWeekly' | 'paper' | 'digital';
 
 type DefaultPromos = {
   [key in ProductName]: string[];
@@ -34,6 +34,7 @@ const DefaultPromos: React.FC<InnerProps<DefaultPromos>> = ({
 }: InnerProps<DefaultPromos>) => {
   const [gwPromosString, setGwPromosString] = useState<string>(data.guardianWeekly.join(', '));
   const [paperPromosString, setpaperPromosString] = useState<string>(data.paper.join(', '));
+  const [digitalPromoString, setdigitalPromosString] = useState<string>(data.digital.join(', '));
 
   const classes = useStyles();
 
@@ -72,6 +73,23 @@ const DefaultPromos: React.FC<InnerProps<DefaultPromos>> = ({
         }}
         type="text"
         label="Paper"
+      />
+      <TextField
+        value={digitalPromoString}
+        name="digitalDefaultPromos"
+        fullWidth={true}
+        onChange={e => {
+          const inputValue = e.target.value;
+          setdigitalPromosString(inputValue);
+
+          const parsedInputValue = parsePromoInput(inputValue);
+          update({
+            ...data,
+            digital: parsedInputValue,
+          });
+        }}
+        type="text"
+        label="Digital"
       />
       <Button
         onClick={sendToS3}
