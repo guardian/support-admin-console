@@ -1,7 +1,7 @@
 import React from 'react';
 import { CtaDesign } from '../../../models/bannerDesign';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import { ColourInput } from './ColourInput';
+import { ColourInput, OptionalColourInput } from './ColourInput';
 
 const useLocalStyles = makeStyles(({ palette }: Theme) => ({
   container: {
@@ -58,7 +58,6 @@ export const CtaColoursEditor: React.FC<Props> = ({
             isDisabled={isDisabled}
             onChange={colour => onChange({ ...cta, default: { ...cta.default, text: colour } })}
             onValidationChange={onValidationChange}
-            required={true}
           />
           <ColourInput
             colour={cta.default.background}
@@ -69,16 +68,14 @@ export const CtaColoursEditor: React.FC<Props> = ({
               onChange({ ...cta, default: { ...cta.default, background: colour } })
             }
             onValidationChange={onValidationChange}
-            required={true}
           />
-          <ColourInput
+          <OptionalColourInput
             colour={cta.default.border}
             name={`${name}.border`}
             label="Border Colour"
             isDisabled={isDisabled}
             onChange={colour => onChange({ ...cta, default: { ...cta.default, border: colour } })}
             onValidationChange={onValidationChange}
-            required={false}
           />
         </div>
 
@@ -92,7 +89,6 @@ export const CtaColoursEditor: React.FC<Props> = ({
             isDisabled={isDisabled}
             onChange={colour => onChange({ ...cta, hover: { ...cta.hover, text: colour } })}
             onValidationChange={onValidationChange}
-            required={true}
           />
           <ColourInput
             colour={cta.hover.background}
@@ -101,16 +97,14 @@ export const CtaColoursEditor: React.FC<Props> = ({
             isDisabled={isDisabled}
             onChange={colour => onChange({ ...cta, hover: { ...cta.hover, background: colour } })}
             onValidationChange={onValidationChange}
-            required={true}
           />
-          <ColourInput
+          <OptionalColourInput
             colour={cta.hover.border}
             name={`${name}.border`}
             label="Border Colour"
             isDisabled={isDisabled}
             onChange={colour => onChange({ ...cta, hover: { ...cta.hover, border: colour } })}
             onValidationChange={onValidationChange}
-            required={false}
           />
         </div>
       </div>

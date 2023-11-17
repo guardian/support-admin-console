@@ -8,8 +8,9 @@ import {
 } from '../../../utils/bannerDesigns';
 import { useForm } from 'react-hook-form';
 import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
-import { HexColour } from '../../../models/bannerDesign';
 import { makeStyles, Theme } from '@material-ui/core/styles';
+import { HexColour } from '../../../models/bannerDesign';
+import { ClassNameMap } from '@mui/material';
 
 const useStyles = makeStyles<Theme, { colour: string }>(({ palette }: Theme) => ({
   container: {
@@ -36,27 +37,36 @@ const colourValidation = {
   message: 'Colours must be a valid 6 character hex code e.g. FF0000',
 };
 
-interface Props {
-  colour?: HexColour;
+interface Props<T> {
+  colour: T;
   name: string;
   label: string;
   isDisabled: boolean;
-  onChange: (colour: HexColour) => void;
+  onChange: (colour: T) => void;
   onValidationChange: (fieldName: string, isValid: boolean) => void;
-  required: boolean;
 }
 
-export const ColourInput: React.FC<Props> = ({
+interface GenericProps<T> extends Props<T> {
+  convertToString: (colour: T) => string;
+  convertFromString: (colourString: string) => T;
+  required: boolean;
+  styles: ClassNameMap<string>;
+}
+
+const GenericColourInput = <T extends unknown>({
   colour,
   name,
   label,
   isDisabled,
   onChange,
   onValidationChange,
-  required = true,
-}: Props) => {
-  const classes = useStyles({ colour: `#${colour ? hexColourToString(colour) : 'ffffff'}` });
-  const defaultValues = { colour: colour ? hexColourToString(colour) : '' };
+  convertFromString,
+  required,
+  convertToString,
+  styles: classes,
+}: GenericProps<T>) => {
+  const defaultValues = { colour: convertToString(colour) };
+
   const { register, reset, handleSubmit, errors } = useForm<{ colour: string }>({
     mode: 'onChange',
     defaultValues,
@@ -81,7 +91,10 @@ export const ColourInput: React.FC<Props> = ({
           pattern: colourValidation,
         })}
         name="colour"
-        onBlur={handleSubmit(({ colour }) => onChange(stringToHexColour(colour)))}
+        onBlur={handleSubmit(({ colour }) => {
+          const newColour = convertFromString(colour);
+          onChange(newColour);
+        })}
         label={label}
         error={errors?.colour !== undefined}
         helperText={errors?.colour?.message}
@@ -94,4 +107,46 @@ export const ColourInput: React.FC<Props> = ({
       {colour && <div className={classes.colour} />}
     </div>
   );
+};
+
+export const ColourInput: React.FC<Props<HexColour>> = (props: Props<HexColour>) => {
+  return (
+    <GenericColourInput
+      {...props}
+      required={true}
+      convertToString={hexColourToString}
+      convertFromString={stringToHexColour}
+      styles={useStyles({ colour: `#${hexColourToString(props.colour)}` })}
+    />
+  );
+};
+
+export const OptionalColourInput: React.FC<Props<HexColour | undefined>> = (
+  props: Props<HexColour | undefined>,
+) => {
+  return (
+    <GenericColourInput
+      {...props}
+      required={false}
+      convertToString={maybeHexColourToString}
+      convertFromString={stringToMaybeHexColour}
+      styles={useStyles({ colour: `#${maybeHexColourToString(props.colour)}` || 'FFFFFF' })}
+    />
+  );
+};
+
+const maybeHexColourToString = (h: HexColour | undefined): string => {
+  if (h) {
+    return hexColourToString(h);
+  } else {
+    return '';
+  }
+};
+
+const stringToMaybeHexColour = (h: string): HexColour | undefined => {
+  if (h) {
+    return stringToHexColour(h);
+  } else {
+    return undefined;
+  }
 };
