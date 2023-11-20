@@ -11,7 +11,7 @@ import {
   GuPutS3ObjectsPolicy,
 } from '@guardian/cdk/lib/constructs/iam';
 import type { App, CfnElement } from 'aws-cdk-lib';
-import { Duration, RemovalPolicy } from 'aws-cdk-lib';
+import { Duration, RemovalPolicy, Tags } from 'aws-cdk-lib';
 import { AttributeType, BillingMode, ProjectionType, Table } from 'aws-cdk-lib/aws-dynamodb';
 import { InstanceClass, InstanceSize, InstanceType } from 'aws-cdk-lib/aws-ec2';
 import type { Policy } from 'aws-cdk-lib/aws-iam';
@@ -60,6 +60,9 @@ export class AdminConsole extends GuStack {
     const defaultChild = table.node.defaultChild as unknown as CfnElement;
     defaultChild.overrideLogicalId(id);
 
+    // Enable automated backups via https://github.com/guardian/aws-backup
+    Tags.of(table).add('devx-backup-enabled', 'true');
+
     return table;
   }
 
@@ -80,6 +83,9 @@ export class AdminConsole extends GuStack {
     // Give it a better name
     const defaultChild = table.node.defaultChild as unknown as CfnElement;
     defaultChild.overrideLogicalId(id);
+
+    // Enable automated backups via https://github.com/guardian/aws-backup
+    Tags.of(table).add('devx-backup-enabled', 'true');
 
     return table;
   }
@@ -106,6 +112,9 @@ export class AdminConsole extends GuStack {
     const defaultChild = table.node.defaultChild as unknown as CfnElement;
     defaultChild.overrideLogicalId(id);
 
+    // Enable automated backups via https://github.com/guardian/aws-backup
+    Tags.of(table).add('devx-backup-enabled', 'true');
+
     return table;
   }
 
@@ -126,6 +135,9 @@ export class AdminConsole extends GuStack {
     // Give it a better name
     const defaultChild = table.node.defaultChild as unknown as CfnElement;
     defaultChild.overrideLogicalId(id);
+
+    // Enable automated backups via https://github.com/guardian/aws-backup
+    Tags.of(table).add('devx-backup-enabled', 'true');
 
     return table;
   }

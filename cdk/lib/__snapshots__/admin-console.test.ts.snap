@@ -169,6 +169,10 @@ Object {
         "TableName": "support-admin-console-archived-channel-tests-PROD",
         "Tags": Array [
           Object {
+            "Key": "devx-backup-enabled",
+            "Value": "true",
+          },
+          Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
@@ -297,6 +301,10 @@ Object {
         "TableName": "support-admin-console-banner-designs-PROD",
         "Tags": Array [
           Object {
+            "Key": "devx-backup-enabled",
+            "Value": "true",
+          },
+          Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
@@ -338,6 +346,10 @@ Object {
         },
         "TableName": "support-admin-console-campaigns-PROD",
         "Tags": Array [
+          Object {
+            "Key": "devx-backup-enabled",
+            "Value": "true",
+          },
           Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
@@ -445,6 +457,10 @@ Object {
         },
         "TableName": "support-admin-console-channel-tests-PROD",
         "Tags": Array [
+          Object {
+            "Key": "devx-backup-enabled",
+            "Value": "true",
+          },
           Object {
             "Key": "gu:cdk:version",
             "Value": "TEST",
