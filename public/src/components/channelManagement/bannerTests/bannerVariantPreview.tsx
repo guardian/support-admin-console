@@ -132,10 +132,6 @@ const bannerModules = {
     path: 'contributions/ContributionsBannerWithSignIn.js',
     name: 'ContributionsBannerWithSignIn',
   },
-  [BannerTemplate.InvestigationsMomentBanner]: {
-    path: 'investigationsMoment/InvestigationsMomentBanner.js',
-    name: 'InvestigationsMomentBanner',
-  },
   [BannerTemplate.EnvironmentBanner]: {
     path: 'environment/EnvironmentBanner.js',
     name: 'EnvironmentBanner',

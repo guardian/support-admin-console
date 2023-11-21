@@ -66,7 +66,6 @@ const templatesWithLabels = [
     label: 'World Press Freedom Day',
   },
   { template: BannerTemplate.GuardianWeeklyBanner, label: 'Guardian Weekly' },
-  { template: BannerTemplate.InvestigationsMomentBanner, label: 'Investigations' },
   { template: BannerTemplate.EnvironmentBanner, label: 'Environment' },
 ];
 
