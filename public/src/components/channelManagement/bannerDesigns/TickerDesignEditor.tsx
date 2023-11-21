@@ -37,7 +37,6 @@ export const TickerDesignEditor: React.FC<Props> = ({
         isDisabled={isDisabled}
         onChange={colour => onChange({ ...ticker, text: colour })}
         onValidationChange={onValidationChange}
-        required={true}
       />
       <ColourInput
         colour={ticker.progressBarBackground}
@@ -46,7 +45,6 @@ export const TickerDesignEditor: React.FC<Props> = ({
         isDisabled={isDisabled}
         onChange={colour => onChange({ ...ticker, progressBarBackground: colour })}
         onValidationChange={onValidationChange}
-        required={true}
       />
       <ColourInput
         colour={ticker.filledProgress}
@@ -55,7 +53,6 @@ export const TickerDesignEditor: React.FC<Props> = ({
         isDisabled={isDisabled}
         onChange={colour => onChange({ ...ticker, filledProgress: colour })}
         onValidationChange={onValidationChange}
-        required={true}
       />
       <ColourInput
         colour={ticker.goalMarker}
@@ -64,7 +61,6 @@ export const TickerDesignEditor: React.FC<Props> = ({
         isDisabled={isDisabled}
         onChange={colour => onChange({ ...ticker, goalMarker: colour })}
         onValidationChange={onValidationChange}
-        required={true}
       />
     </div>
   );

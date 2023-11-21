@@ -3,7 +3,7 @@ import { BannerDesignVisual } from '../../../models/bannerDesign';
 import { MenuItem, Select } from '@material-ui/core';
 import { defaultBannerChoiceCardsDesign, defaultBannerImage } from './utils/defaults';
 import { ImageEditor } from './ImageEditor';
-import { ColourInput } from './ColourInput';
+import { OptionalColourInput } from './ColourInput';
 
 interface Props {
   visual?: BannerDesignVisual;
@@ -52,14 +52,13 @@ export const BannerVisualEditor: React.FC<Props> = ({
           />
         )}
         {visual?.kind === 'ChoiceCards' && (
-          <ColourInput
+          <OptionalColourInput
             colour={visual.buttonColour}
             name="visual.buttonColour"
             label="Button Colour"
             isDisabled={isDisabled}
             onChange={buttonColour => onChange({ ...visual, buttonColour })}
             onValidationChange={onValidationChange}
-            required={false}
           />
         )}
       </div>

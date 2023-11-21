@@ -37,7 +37,6 @@ export const HighlightedTextColoursEditor: React.FC<Props> = ({
         isDisabled={isDisabled}
         onChange={colour => onChange({ ...colours, text: colour })}
         onValidationChange={onValidationChange}
-        required={true}
       />
       <ColourInput
         colour={colours.highlight}
@@ -46,7 +45,6 @@ export const HighlightedTextColoursEditor: React.FC<Props> = ({
         isDisabled={isDisabled}
         onChange={colour => onChange({ ...colours, highlight: colour })}
         onValidationChange={onValidationChange}
-        required={true}
       />
     </div>
   );
