@@ -100,6 +100,11 @@ const buildProps = (
   hasConsentForArticleCount: true,
 });
 
+const StorybookNames: Record<EpicModuleName, string> = {
+  ContributionsLiveblogEpic: 'components-marketing-contributionsliveblogepic--default',
+  ContributionsEpic: 'components-marketing-contributionsepic--default',
+};
+
 const useStyles = makeStyles(({}: Theme) => ({
   container: {
     width: '620px',
@@ -115,6 +120,9 @@ interface EpicVariantPreviewProps {
   moduleName: EpicModuleName;
 }
 
+/**
+ * Uses a remote import of the SDC component
+ */
 const EpicVariantPreviewSDCModule = ({ variant, moduleName }: EpicVariantPreviewProps) => {
   const classes = useStyles();
 
@@ -127,14 +135,18 @@ const EpicVariantPreviewSDCModule = ({ variant, moduleName }: EpicVariantPreview
   return <div className={classes.container}>{Epic && <Epic {...props} />}</div>;
 };
 
-const EpicVariantPreviewStorybook = ({ variant }: { variant: EpicVariant }) => {
+/**
+ * Uses the DCR storybook to render the component, iframed.
+ * Props are passed in the args parameter in the url.
+ */
+const EpicVariantPreviewStorybook = ({ variant, moduleName }: EpicVariantPreviewProps) => {
   const classes = useStyles();
 
   const tickerSettingsWithData = useTickerData(variant.tickerSettings);
   const props = buildProps(variant, tickerSettingsWithData);
   const compressedProps = lzstring.compressToEncodedURIComponent(JSON.stringify(props));
 
-  const storyName = 'components-marketing-contributionsliveblogepic--default';
+  const storyName = StorybookNames[moduleName];
   const dcrStorybookUrl = 'https://5dfcbf3012392c0020e7140b-borimwnbdl.chromatic.com';
 
   return (
@@ -152,7 +164,8 @@ const EpicVariantPreview: React.FC<EpicVariantPreviewProps> = ({
   moduleName,
 }: EpicVariantPreviewProps) => {
   if (moduleName === 'ContributionsLiveblogEpic') {
-    return <EpicVariantPreviewStorybook variant={variant} />;
+    // Currently only the liveblog epic is in DCR
+    return <EpicVariantPreviewStorybook variant={variant} moduleName={moduleName} />;
   } else {
     return <EpicVariantPreviewSDCModule variant={variant} moduleName={moduleName} />;
   }
