@@ -142,8 +142,6 @@ const EpicVariantPreviewStorybook = ({ variant }: { variant: EpicVariant }) => {
       <iframe
         className={classes.iframe}
         src={`${dcrStorybookUrl}/iframe.html?id=${storyName}&viewMode=story&shortcuts=false&singleStory=true&args=json:${compressedProps}`}
-        width="800"
-        height="400"
       ></iframe>
     </div>
   );
