@@ -21,7 +21,6 @@ object BannerUI {
   case object EnvironmentBanner extends BannerTemplate
   case object GlobalNewYearMomentBanner extends BannerTemplate
   case object GuardianWeeklyBanner extends BannerTemplate
-  case object InvestigationsMomentBanner extends BannerTemplate
   case object PostElectionAuMomentAlbaneseBanner extends BannerTemplate
   case object PostElectionAuMomentHungBanner extends BannerTemplate
   case object PostElectionAuMomentMorrisonBanner extends BannerTemplate

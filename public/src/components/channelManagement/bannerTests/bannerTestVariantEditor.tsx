@@ -294,7 +294,6 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
           {(template === BannerTemplate.AusAnniversaryMomentBanner ||
             template === BannerTemplate.ContributionsBanner ||
             template === BannerTemplate.GuardianWeeklyBanner ||
-            template === BannerTemplate.InvestigationsMomentBanner ||
             template === BannerTemplate.GlobalNewYearMomentBanner ||
             template === BannerTemplate.UkraineMomentBanner ||
             template === BannerTemplate.WorldPressFreedomDayBanner ||
