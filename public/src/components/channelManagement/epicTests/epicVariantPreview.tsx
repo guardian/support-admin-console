@@ -6,6 +6,7 @@ import { useModule } from '../../../hooks/useModule';
 import { EpicVariant } from '../../../models/epic';
 import useTickerData, { TickerSettingsWithData } from '../hooks/useTickerData';
 import { SelectedAmountsVariant, mockAmountsCardData } from '../../../utils/models';
+import lzstring from 'lz-string';
 
 // Article count TS defs
 export interface ArticleCounts {
@@ -99,9 +100,18 @@ const buildProps = (
   hasConsentForArticleCount: true,
 });
 
+const StorybookNames: Record<EpicModuleName, string> = {
+  ContributionsLiveblogEpic: 'components-marketing-contributionsliveblogepic--default',
+  ContributionsEpic: 'components-marketing-contributionsepic--default',
+};
+
 const useStyles = makeStyles(({}: Theme) => ({
   container: {
     width: '620px',
+  },
+  iframe: {
+    width: '620px',
+    height: '800px',
   },
 }));
 
@@ -110,10 +120,10 @@ interface EpicVariantPreviewProps {
   moduleName: EpicModuleName;
 }
 
-const EpicVariantPreview: React.FC<EpicVariantPreviewProps> = ({
-  variant,
-  moduleName,
-}: EpicVariantPreviewProps) => {
+/**
+ * Uses a remote import of the SDC component
+ */
+const EpicVariantPreviewSDCModule = ({ variant, moduleName }: EpicVariantPreviewProps) => {
   const classes = useStyles();
 
   const tickerSettingsWithData = useTickerData(variant.tickerSettings);
@@ -123,6 +133,42 @@ const EpicVariantPreview: React.FC<EpicVariantPreviewProps> = ({
   const props = buildProps(variant, tickerSettingsWithData);
 
   return <div className={classes.container}>{Epic && <Epic {...props} />}</div>;
+};
+
+/**
+ * Uses the DCR storybook to render the component, iframed.
+ * Props are passed in the args parameter in the url.
+ */
+const EpicVariantPreviewStorybook = ({ variant, moduleName }: EpicVariantPreviewProps) => {
+  const classes = useStyles();
+
+  const tickerSettingsWithData = useTickerData(variant.tickerSettings);
+  const props = buildProps(variant, tickerSettingsWithData);
+  const compressedProps = lzstring.compressToEncodedURIComponent(JSON.stringify(props));
+
+  const storyName = StorybookNames[moduleName];
+  const dcrStorybookUrl = 'https://5dfcbf3012392c0020e7140b-borimwnbdl.chromatic.com';
+
+  return (
+    <div>
+      <iframe
+        className={classes.iframe}
+        src={`${dcrStorybookUrl}/iframe.html?id=${storyName}&viewMode=story&shortcuts=false&singleStory=true&args=json:${compressedProps}`}
+      ></iframe>
+    </div>
+  );
+};
+
+const EpicVariantPreview: React.FC<EpicVariantPreviewProps> = ({
+  variant,
+  moduleName,
+}: EpicVariantPreviewProps) => {
+  if (moduleName === 'ContributionsLiveblogEpic') {
+    // Currently only the liveblog epic is in DCR
+    return <EpicVariantPreviewStorybook variant={variant} moduleName={moduleName} />;
+  } else {
+    return <EpicVariantPreviewSDCModule variant={variant} moduleName={moduleName} />;
+  }
 };
 
 export default EpicVariantPreview;
