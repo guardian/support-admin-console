@@ -147,7 +147,7 @@ const EpicVariantPreviewStorybook = ({ variant, moduleName }: EpicVariantPreview
   const compressedProps = lzstring.compressToEncodedURIComponent(JSON.stringify(props));
 
   const storyName = StorybookNames[moduleName];
-  const dcrStorybookUrl = 'https://5dfcbf3012392c0020e7140b-borimwnbdl.chromatic.com';
+  const dcrStorybookUrl = 'https://63e251470cfbe61776b0ef19-omtqcopvwm.chromatic.com';
 
   return (
     <div>
