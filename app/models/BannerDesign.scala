@@ -27,6 +27,13 @@ object GuardianRoundelDesign {
   implicit val decoder = deriveEnumerationDecoder[GuardianRoundelDesign]
 }
 
+case class HeaderImage(
+  mobileUrl: String,
+  tabletDesktopUrl: String,
+  wideUrl: String,
+  altText: String
+)
+
 sealed trait BannerDesignVisual
 object BannerDesignVisual {
   case class Image(
@@ -99,6 +106,7 @@ case class BannerDesign(
   name: String,
   status: BannerDesignStatus,
   visual: Option[BannerDesignVisual],
+  headerImage: Option[HeaderImage],
   colours: BannerDesignColours,
   lockStatus: Option[LockStatus],
 )

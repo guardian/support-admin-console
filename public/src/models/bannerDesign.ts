@@ -54,6 +54,7 @@ export type BannerDesignVisual = BannerDesignImage | ChoiceCardsDesign;
 
 export type BannerDesignProps = {
   visual?: BannerDesignVisual;
+  headerImage?: BannerDesignImage;
   colours: {
     basic: BasicColours;
     highlightedText: HighlightedTextColours;
