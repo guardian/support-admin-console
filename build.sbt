@@ -40,7 +40,9 @@ dependencyOverrides ++= List(
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
   // The version of netty-handler currently used by athena has a vulnerability - https://security.snyk.io/vuln/SNYK-JAVA-IONETTY-5725787
   "io.netty" % "netty-handler" % "4.1.100.Final",
-  "io.netty" % "netty-codec-http2" % "4.1.100.Final"
+  "io.netty" % "netty-codec-http2" % "4.1.100.Final",
+  // Fixes: https://security.snyk.io/vuln/SNYK-JAVA-CHQOSLOGBACK-6094942
+  "ch.qos.logback" % "logback-classic" % "1.2.13"
 )
 
 dynamoDBLocalPort := 8083
