@@ -18,14 +18,14 @@ const useStyles = makeStyles<Theme, { colour: string }>(({ palette }: Theme) => 
     flexDirection: 'row',
     marginTop: '16px',
   },
-  colour: props => ({
+  colour: {
     border: `1px solid ${palette.grey[500]}`,
     borderRadius: '4px',
     width: '55px',
     height: '55px',
     marginBottom: '8px',
-    backgroundColor: props.colour,
-  }),
+    backgroundColor: props => props.colour,
+  },
   field: {
     width: '240px',
     marginTop: 0,
@@ -104,7 +104,7 @@ const GenericColourInput = <T extends unknown>({
         disabled={isDisabled}
         required={required}
       />
-      {colour && <div className={classes.colour} />}
+      <div className={classes.colour} />
     </div>
   );
 };
@@ -124,13 +124,15 @@ export const ColourInput: React.FC<Props<HexColour>> = (props: Props<HexColour>)
 export const OptionalColourInput: React.FC<Props<HexColour | undefined>> = (
   props: Props<HexColour | undefined>,
 ) => {
+  const colourCss = props.colour ? `#${hexColourToString(props.colour)}` : 'rgb(0, 0, 0, 0)';
+
   return (
     <GenericColourInput
       {...props}
       required={false}
       convertToString={maybeHexColourToString}
       convertFromString={stringToMaybeHexColour}
-      styles={useStyles({ colour: `#${maybeHexColourToString(props.colour)}` || 'FFFFFF' })}
+      styles={useStyles({ colour: colourCss })}
     />
   );
 };
