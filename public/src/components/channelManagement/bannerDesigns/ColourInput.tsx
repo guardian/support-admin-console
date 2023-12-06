@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { TextField } from '@material-ui/core';
 import {
@@ -11,6 +11,7 @@ import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { HexColour } from '../../../models/bannerDesign';
 import { ClassNameMap } from '@mui/material';
+import { HexColorPicker } from 'react-colorful';
 
 const useStyles = makeStyles<Theme, { colour: string }>(({ palette }: Theme) => ({
   container: {
@@ -25,10 +26,18 @@ const useStyles = makeStyles<Theme, { colour: string }>(({ palette }: Theme) => 
     height: '55px',
     marginBottom: '8px',
     backgroundColor: props => props.colour,
+    cursor: 'pointer',
+    position: 'relative',
   },
   field: {
     width: '240px',
     marginTop: 0,
+  },
+  picker: {
+    position: 'absolute',
+    bottom: 0,
+    left: '55px',
+    margin: '0px 10px',
   },
 }));
 
@@ -65,6 +74,8 @@ const GenericColourInput = <T extends unknown>({
   convertToString,
   styles: classes,
 }: GenericProps<T>) => {
+  const [isPickerOpen, setIsPickerOpen] = useState<boolean>(false);
+
   const defaultValues = { colour: convertToString(colour) };
 
   const { register, reset, handleSubmit, errors } = useForm<{ colour: string }>({
@@ -82,6 +93,11 @@ const GenericColourInput = <T extends unknown>({
     reset(defaultValues);
   }, [colour]);
 
+  const handleColourChange = (colour: string) => {
+    const newColour = convertFromString(colour);
+    onChange(newColour);
+  };
+
   return (
     <div className={classes.container}>
       <TextField
@@ -91,10 +107,7 @@ const GenericColourInput = <T extends unknown>({
           pattern: colourValidation,
         })}
         name="colour"
-        onBlur={handleSubmit(({ colour }) => {
-          const newColour = convertFromString(colour);
-          onChange(newColour);
-        })}
+        onBlur={handleSubmit(({ colour }) => handleColourChange(colour))}
         label={label}
         error={errors?.colour !== undefined}
         helperText={errors?.colour?.message}
@@ -104,7 +117,19 @@ const GenericColourInput = <T extends unknown>({
         disabled={isDisabled}
         required={required}
       />
-      <div className={classes.colour} />
+      <div className={classes.colour} onClick={() => setIsPickerOpen(true)}>
+        {isPickerOpen && (
+          <div className={classes.picker}>
+            <HexColorPicker
+              color={colour ? `#${convertToString(colour)}` : 'rgb(0, 0, 0, 0)'}
+              onChange={(colour: string) => {
+                // Remove the leading '#' from the colour string
+                handleColourChange(colour.slice(1));
+              }}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 };
