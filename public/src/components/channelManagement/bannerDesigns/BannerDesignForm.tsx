@@ -2,7 +2,7 @@ import React from 'react';
 import { Accordion, AccordionDetails, AccordionSummary } from '@material-ui/core';
 import {
   BannerDesign,
-  BannerDesignImage,
+  BannerDesignHeaderImage,
   BannerDesignVisual,
   BasicColours,
   CtaDesign,
@@ -91,7 +91,7 @@ const BannerDesignForm: React.FC<Props> = ({
     });
   };
 
-  const onHeaderImageChange = (headerImage?: BannerDesignImage): void => {
+  const onHeaderImageChange = (headerImage?: BannerDesignHeaderImage): void => {
     onChange({
       ...design,
       headerImage,
@@ -170,7 +170,7 @@ const BannerDesignForm: React.FC<Props> = ({
 
       <Accordion className={classes.accordion}>
         <AccordionSummary className={classes.sectionHeader} expandIcon={<ExpandMoreIcon />}>
-          Image or Choice Cards
+          Main Image or Choice Cards
         </AccordionSummary>
         <AccordionDetails>
           <BannerVisualEditor

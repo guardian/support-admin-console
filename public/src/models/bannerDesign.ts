@@ -38,12 +38,15 @@ export interface TickerDesign {
   goalMarker: HexColour;
 }
 
-export interface BannerDesignImage {
-  kind: 'Image';
+export interface BannerDesignHeaderImage {
   mobileUrl: string;
   tabletDesktopUrl: string;
   wideUrl: string;
   altText: string;
+}
+
+export interface BannerDesignImage extends BannerDesignHeaderImage {
+  kind: 'Image';
 }
 
 export interface ChoiceCardsDesign {
@@ -54,7 +57,7 @@ export type BannerDesignVisual = BannerDesignImage | ChoiceCardsDesign;
 
 export type BannerDesignProps = {
   visual?: BannerDesignVisual;
-  headerImage?: BannerDesignImage;
+  headerImage?: BannerDesignHeaderImage;
   colours: {
     basic: BasicColours;
     highlightedText: HighlightedTextColours;
