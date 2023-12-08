@@ -69,7 +69,6 @@ case class BannerTest(
     lockStatus: Option[LockStatus],
     priority: Option[Int],
     nickname: Option[String],
-    minArticlesBeforeShowingBanner: Int,
     userCohort: UserCohort,
     locations: List[Region] = Nil,
     contextTargeting: PageContextTargeting = PageContextTargeting(Nil,Nil,Nil,Nil),

@@ -124,12 +124,6 @@ const testFields = {
       exclude: ['Header', 'Banner1', 'Banner2'],
       optional: true,
     },
-    minArticlesBeforeShowingBanner: {
-      label: 'Min articles before showing banner',
-      type: 'number',
-      exclude: ['Header', 'Epic', 'EpicLiveblog', 'EpicAppleNews', 'EpicAMP'],
-      optional: false,
-    },
     sections: {
       label: 'Target sections',
       type: 'string-array',

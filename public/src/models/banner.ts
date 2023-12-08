@@ -55,7 +55,6 @@ export interface BannerTest extends Test {
   name: string;
   nickname?: string;
   status: Status;
-  minArticlesBeforeShowingBanner: number;
   userCohort: UserCohort;
   locations: Region[];
   variants: BannerVariant[];
