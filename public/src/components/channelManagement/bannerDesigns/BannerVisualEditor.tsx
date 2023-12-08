@@ -33,7 +33,7 @@ export const BannerVisualEditor: React.FC<Props> = ({
     <div>
       <Select value={visual?.kind || 'None'} onChange={onVisualTypeChange} disabled={isDisabled}>
         <MenuItem value="Image" key="Image">
-          Image
+          Main Image
         </MenuItem>
         <MenuItem value="ChoiceCards" key="ChoiceCards">
           Amounts Choice Cards

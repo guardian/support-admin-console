@@ -2,6 +2,7 @@ import React from 'react';
 import { Accordion, AccordionDetails, AccordionSummary } from '@material-ui/core';
 import {
   BannerDesign,
+  BannerDesignHeaderImage,
   BannerDesignVisual,
   BasicColours,
   CtaDesign,
@@ -16,6 +17,7 @@ import { CtaColoursEditor } from './CtaColoursEditor';
 import TypedRadioGroup from '../TypedRadioGroup';
 import { BannerDesignUsage } from './BannerDesignUsage';
 import { TickerDesignEditor } from './TickerDesignEditor';
+import { HeaderImageEditor } from './HeaderImageEditor';
 import { BannerVisualEditor } from './BannerVisualEditor';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { InfoOutlined } from '@material-ui/icons';
@@ -86,6 +88,13 @@ const BannerDesignForm: React.FC<Props> = ({
     onChange({
       ...design,
       visual,
+    });
+  };
+
+  const onHeaderImageChange = (headerImage?: BannerDesignHeaderImage): void => {
+    onChange({
+      ...design,
+      headerImage,
     });
   };
 
@@ -161,7 +170,7 @@ const BannerDesignForm: React.FC<Props> = ({
 
       <Accordion className={classes.accordion}>
         <AccordionSummary className={classes.sectionHeader} expandIcon={<ExpandMoreIcon />}>
-          Image or Choice Cards
+          Main Image or Choice Cards
         </AccordionSummary>
         <AccordionDetails>
           <BannerVisualEditor
@@ -169,6 +178,20 @@ const BannerDesignForm: React.FC<Props> = ({
             isDisabled={isDisabled}
             onValidationChange={onValidationChange}
             onChange={onVisualChange}
+          />
+        </AccordionDetails>
+      </Accordion>
+
+      <Accordion className={classes.accordion}>
+        <AccordionSummary className={classes.sectionHeader} expandIcon={<ExpandMoreIcon />}>
+          Header image
+        </AccordionSummary>
+        <AccordionDetails>
+          <HeaderImageEditor
+            headerImage={design.headerImage}
+            isDisabled={isDisabled}
+            onValidationChange={onValidationChange}
+            onChange={onHeaderImageChange}
           />
         </AccordionDetails>
       </Accordion>
