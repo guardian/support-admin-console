@@ -5,24 +5,20 @@ import { BannerTest } from '../../../models/banner';
 import BannerTestEditor from './bannerTestEditor';
 import { ValidatedTestEditor } from '../validatedTestEditor';
 
-const createDefaultBannerTest = (minArticles: number) => (
-  newTestName: string,
-  newTestNickname: string,
-): BannerTest => ({
+const createDefaultBannerTest = (newTestName: string, newTestNickname: string): BannerTest => ({
   ...getDefaultTest(),
   name: newTestName,
   nickname: newTestNickname,
-  minArticlesBeforeShowingBanner: minArticles,
 });
 
 export const BannerTestsForm1 = TestsForm(
   ValidatedTestEditor(BannerTestEditor),
   FrontendSettingsType.bannerTests,
-  createDefaultBannerTest(2),
+  createDefaultBannerTest,
 );
 
 export const BannerTestsForm2 = TestsForm(
   ValidatedTestEditor(BannerTestEditor),
   FrontendSettingsType.bannerTests2,
-  createDefaultBannerTest(4),
+  createDefaultBannerTest,
 );

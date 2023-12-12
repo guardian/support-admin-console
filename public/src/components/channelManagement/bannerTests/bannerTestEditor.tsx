@@ -6,7 +6,6 @@ import { Typography } from '@material-ui/core';
 import BannerTestVariantEditor from './bannerTestVariantEditor';
 import CampaignSelector from '../CampaignSelector';
 import TestVariantsEditor from '../testVariantsEditor';
-import TestEditorMinArticlesViewedInput from '../testEditorMinArticlesViewedInput';
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 import TestEditorArticleCountEditor, {
   DEFAULT_ARTICLES_VIEWED_SETTINGS,
@@ -87,9 +86,6 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
     });
   };
 
-  const onMinArticlesViewedValidationChanged = (isValid: boolean): void =>
-    setValidationStatusForField('minArticlesViewed', isValid);
-
   const onArticlesViewedSettingsValidationChanged = (isValid: boolean): void =>
     setValidationStatusForField('articlesViewedSettings', isValid);
 
@@ -114,13 +110,6 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
 
   const onVariantDelete = (deletedVariantName: string): void => {
     onVariantsChange(test.variants.filter(variant => variant.name !== deletedVariantName));
-  };
-
-  const onMinArticlesViewedChange = (updatedMinArticles: number): void => {
-    updateTest({
-      ...test,
-      minArticlesBeforeShowingBanner: updatedMinArticles,
-    });
   };
 
   const onRegionsChange = (updatedRegions: Region[]): void => {
@@ -243,19 +232,6 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
               disabled={!userHasTestLocked}
             />
           </div>
-        </div>
-
-        <div className={classes.sectionContainer}>
-          <Typography variant={'h3'} className={classes.sectionHeader}>
-            Display rules
-          </Typography>
-
-          <TestEditorMinArticlesViewedInput
-            minArticles={test.minArticlesBeforeShowingBanner}
-            isDisabled={!userHasTestLocked}
-            onValidationChange={onMinArticlesViewedValidationChanged}
-            onUpdate={onMinArticlesViewedChange}
-          />
         </div>
 
         <div className={classes.sectionContainer}>
