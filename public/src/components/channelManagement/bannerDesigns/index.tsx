@@ -5,6 +5,7 @@ import BannerDesignEditor from './BannerDesignEditor';
 import { useParams } from 'react-router-dom';
 
 import {
+  archiveBannerDesign,
   BannerDesignsResponse,
   createBannerDesign,
   fetchBannerDesign,
@@ -67,13 +68,17 @@ const BannerDesigns: React.FC = () => {
 
   const classes = useStyles();
 
-  useEffect(() => {
+  const refreshDesigns = () => {
     fetchFrontendSettings(FrontendSettingsType.bannerDesigns).then(
       (response: BannerDesignsResponse) => {
         setBannerDesigns(response.bannerDesigns);
         setUserEmail(response.userEmail);
       },
     );
+  };
+
+  useEffect(() => {
+    refreshDesigns();
   }, []);
 
   useEffect(() => {
@@ -154,6 +159,14 @@ const BannerDesigns: React.FC = () => {
     }
   };
 
+  const onArchive = (designName: string): void => {
+    archiveBannerDesign(designName)
+      .then(() => refreshDesigns())
+      .catch(error => {
+        alert(`Error while archiving design: ${error}`);
+      });
+  };
+
   const onStatusChange = (bannerDesignName: string | undefined, status: Status): void => {
     if (bannerDesignName) {
       updateBannerDesignStatus(bannerDesignName, status)
@@ -184,6 +197,7 @@ const BannerDesigns: React.FC = () => {
             onLock={onLock}
             onUnlock={onUnlock}
             onSave={onSave}
+            onArchive={onArchive}
             userHasLock={selectedBannerDesign.lockStatus?.email === userEmail}
             lockStatus={selectedBannerDesign.lockStatus || { locked: false }}
             onChange={onDesignChange}
