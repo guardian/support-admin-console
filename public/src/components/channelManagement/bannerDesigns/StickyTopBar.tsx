@@ -1,5 +1,15 @@
 import React from 'react';
-import { Theme, Typography, makeStyles, Button } from '@material-ui/core';
+import {
+  Theme,
+  Typography,
+  makeStyles,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+} from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import { LockDetails } from './LockDetails';
 import LockIcon from '@material-ui/icons/Lock';
@@ -10,6 +20,8 @@ import { LockStatus } from '../helpers/shared';
 import LiveSwitch from '../../shared/liveSwitch';
 import { BannerDesign, Status } from '../../../models/bannerDesign';
 import { BannerDesignPreview } from './BannerDesignPreview';
+import useOpenable from '../../../hooks/useOpenable';
+import ArchiveIcon from '@material-ui/icons/Archive';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {
@@ -69,6 +81,7 @@ interface Props {
   onLock: (name: string, force: boolean) => void;
   onUnlock: (name: string) => void;
   onSave: (name: string) => void;
+  onArchive: (designName: string) => void;
   lockStatus: LockStatus;
   userHasLock: boolean;
   onStatusChange: (status: Status) => void;
@@ -80,11 +93,52 @@ const StickyTopBar: React.FC<Props> = ({
   onLock,
   onUnlock,
   onSave,
+  onArchive,
   userHasLock,
   lockStatus,
   onStatusChange,
 }: Props) => {
   const classes = useStyles();
+
+  const ArchiveButton: React.FC = () => {
+    const [isOpen, open, close] = useOpenable();
+
+    return (
+      <>
+        <Button
+          variant="outlined"
+          startIcon={<ArchiveIcon style={{ color: grey[700] }} />}
+          size="medium"
+          onClick={open}
+        >
+          {/* eslint-disable-next-line react/prop-types */}
+          <Typography className={classes.buttonText}>Archive banner design</Typography>
+        </Button>
+        <Dialog
+          open={isOpen}
+          onClose={close}
+          aria-labelledby="archive-dialog-title"
+          aria-describedby="archive-dialog-description"
+        >
+          <DialogTitle id="archive-dialog-title">Are you sure?</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="archive-dialog-description">
+              Archiving this design will remove it from the banner design tool - you can only
+              restore with an engineer&apos;s help.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button color="primary" onClick={close}>
+              Cancel
+            </Button>
+            <Button color="primary" onClick={() => onArchive(name)}>
+              Archive design
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </>
+    );
+  };
 
   return (
     <header className={classes.container}>
@@ -130,6 +184,7 @@ const StickyTopBar: React.FC<Props> = ({
           )}
           {userHasLock && (
             <>
+              {design.status === 'Draft' && <ArchiveButton />}
               <Button
                 variant="outlined"
                 size="medium"

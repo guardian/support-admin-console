@@ -29,6 +29,7 @@ type Props = {
   onLock: (designName: string, force: boolean) => void;
   onUnlock: (designName: string) => void;
   onSave: (designName: string) => void;
+  onArchive: (designName: string) => void;
   userHasLock: boolean;
   lockStatus: LockStatus;
   onChange: (design: BannerDesign) => void;
@@ -41,6 +42,7 @@ const BannerDesignEditor: React.FC<Props> = ({
   onLock,
   onUnlock,
   onSave,
+  onArchive,
   userHasLock,
   lockStatus,
   onChange,
@@ -67,6 +69,7 @@ const BannerDesignEditor: React.FC<Props> = ({
         onLock={onLock}
         onUnlock={onUnlock}
         onSave={onSaveWithValidation}
+        onArchive={onArchive}
         userHasLock={userHasLock}
         lockStatus={lockStatus}
         design={design}

@@ -205,6 +205,7 @@ POST  /frontend/banner-designs/lock/:designName        controllers.banner.Banner
 POST  /frontend/banner-designs/unlock/:designName      controllers.banner.BannerDesignsController.unlock(designName: String)
 POST  /frontend/banner-designs/takecontrol/:designName controllers.banner.BannerDesignsController.forceLock(designName: String)
 POST  /frontend/banner-designs/status/:designName/:rawStatus controllers.banner.BannerDesignsController.setStatus(designName: String, rawStatus: String)
+POST  /frontend/banner-designs/archive/:designName     controllers.banner.BannerDesignsController.archive(designName: String)
 
 # ----- capi ----- #
 GET   /capi/tags                                       controllers.CapiController.getTags()

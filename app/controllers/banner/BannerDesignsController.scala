@@ -2,11 +2,11 @@ package controllers.banner
 
 import com.gu.googleauth.AuthAction
 import models.DynamoErrors.{DynamoDuplicateNameError, DynamoError, DynamoNoLockError}
-import models.{BannerDesign, BannerTest, Channel, LockStatus}
+import models.{BannerDesign, BannerTest, Channel}
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, AnyContent, ControllerComponents, Result}
-import services.{DynamoBannerDesigns, DynamoChannelTests, S3Json, VersionedS3Data}
-import services.S3Client.{S3ClientError, S3ObjectSettings}
+import services.{DynamoBannerDesigns, DynamoChannelTests, DynamoArchivedBannerDesigns}
+import services.S3Client.S3ObjectSettings
 import utils.Circe.noNulls
 import zio.{IO, ZEnv, ZIO}
 import com.typesafe.scalalogging.LazyLogging
@@ -22,7 +22,8 @@ class BannerDesignsController(
     stage: String,
     runtime: zio.Runtime[ZEnv],
     dynamoDesigns: DynamoBannerDesigns,
-    dynamoTests: DynamoChannelTests
+    dynamoTests: DynamoChannelTests,
+    dynamoArchivedDesigns: DynamoArchivedBannerDesigns
 )(implicit ec: ExecutionContext)
     extends AbstractController(components)
     with Circe
@@ -204,6 +205,20 @@ class BannerDesignsController(
             ZIO.succeed(BadRequest(s"Invalid status for design: $rawStatus"))
         }
 
+      }
+    }
+
+  def archive(designName: String) =
+    authAction.async { request =>
+      run {
+        logger.info(s"${request.user.email} is archiving banner design: $designName")
+        dynamoDesigns
+          .getRawDesign(designName)
+          // write to the archive table
+          .flatMap(dynamoArchivedDesigns.putRaw)
+          // now delete from the main table
+          .flatMap(_ => dynamoDesigns.deleteBannerDesign(designName))
+          .map(_ => Ok("archived"))
       }
     }
 

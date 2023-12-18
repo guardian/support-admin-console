@@ -188,6 +188,12 @@ export function updateBannerDesignStatus(
   );
 }
 
+export function archiveBannerDesign(designName: string): Promise<Response> {
+  return makeFetch(`/frontend/${FrontendSettingsType.bannerDesigns}/archive/${designName}`, {
+    method: 'POST',
+  });
+}
+
 export function getBannerDesignUsage(
   designName: string,
 ): Promise<{ name: string; channel: string }[]> {
