@@ -112,19 +112,19 @@ const StickyTopBar: React.FC<Props> = ({
           onClick={open}
         >
           {/* eslint-disable-next-line react/prop-types */}
-          <Typography className={classes.buttonText}>Archive test</Typography>
+          <Typography className={classes.buttonText}>Archive banner design</Typography>
         </Button>
         <Dialog
           open={isOpen}
           onClose={close}
-          aria-labelledby="archive-test-dialog-title"
-          aria-describedby="archive-test-dialog-description"
+          aria-labelledby="archive-dialog-title"
+          aria-describedby="archive-dialog-description"
         >
-          <DialogTitle id="archive-test-dialog-title">Are you sure?</DialogTitle>
+          <DialogTitle id="archive-dialog-title">Are you sure?</DialogTitle>
           <DialogContent>
-            <DialogContentText id="archive-test-dialog-description">
-              Archiving this test will remove it from the banner tool - you can only restore it with
-              an engineer&apos;s help.
+            <DialogContentText id="archive-dialog-description">
+              Archiving this design will remove it from the banner design tool - you can only
+              restore with an engineer&apos;s help.
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -132,7 +132,7 @@ const StickyTopBar: React.FC<Props> = ({
               Cancel
             </Button>
             <Button color="primary" onClick={() => onArchive(name)}>
-              Archive test
+              Archive design
             </Button>
           </DialogActions>
         </Dialog>
