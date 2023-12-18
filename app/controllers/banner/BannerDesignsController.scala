@@ -214,10 +214,10 @@ class BannerDesignsController(
         logger.info(s"${request.user.email} is archiving banner design: $designName")
         dynamoDesigns
           .getRawDesign(designName)
-          .flatMap { design =>
-            dynamoArchivedDesigns.putRaw(design)
-              .flatMap(_ => dynamoDesigns.deleteBannerDesign(designName))
-          }
+          // write to the archive table
+          .flatMap(dynamoArchivedDesigns.putRaw)
+          // now delete from the main table
+          .flatMap(_ => dynamoDesigns.deleteBannerDesign(designName))
           .map(_ => Ok("archived"))
       }
     }
