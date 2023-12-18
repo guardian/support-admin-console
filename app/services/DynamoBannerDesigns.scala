@@ -95,6 +95,16 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
       case other                                => DynamoPutError(other)
     }
 
+  private def delete(deleteRequest: DeleteItemRequest): ZIO[ZEnv, DynamoError, Unit] =
+    effectBlocking {
+      val result = client.deleteItem(deleteRequest)
+      logger.info(s"DeleteItemResponse: $result")
+      ()
+    }.mapError {
+      case err: ConditionalCheckFailedException => DynamoNoLockError(err)
+      case other                                => DynamoPutError(other)
+    }
+
   def getBannerDesign(
       designName: String): ZIO[ZEnv, DynamoGetError, BannerDesign] =
     get(designName)
@@ -216,20 +226,13 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
     update(request)
   }
 
-  def deleteBannerDesigns(designNames: List[String],
-                          channel: Channel): ZIO[ZEnv, DynamoPutError, Unit] = {
-    val deleteRequests = designNames.map { designName =>
-      WriteRequest.builder
-        .deleteRequest(
-          DeleteRequest.builder
-            .key(buildKey(designName))
-            .build()
-        )
-        .build()
-    }
+  def deleteBannerDesign(designName: String): ZIO[ZEnv, DynamoError, Unit] = {
+    val request = DeleteItemRequest.builder
+      .tableName(tableName)
+      .key(buildKey(designName))
+      .build()
 
-    logger.info(s"About to batch delete: $deleteRequests")
-    putAllBatched(deleteRequests)
+    delete(request)
   }
 
   def updateStatus(
@@ -254,4 +257,10 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
 
     update(updateRequest)
   }
+
+  // Does not decode the Dynamodb data
+  def getRawDesign(designName: String): ZIO[ZEnv, DynamoGetError,java.util.Map[String, AttributeValue]] = {
+    get(designName)
+  }
+
 }
