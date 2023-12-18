@@ -7,6 +7,9 @@ import software.amazon.awssdk.services.dynamodb.model.{AttributeValue, Condition
 import zio.blocking.effectBlocking
 import zio.{ZEnv, ZIO}
 
+import java.text.SimpleDateFormat
+import java.util.Date
+
 class DynamoArchivedBannerDesigns(stage: String, client: DynamoDbClient) extends DynamoService(stage, client) with StrictLogging {
 
   protected val tableName = s"support-admin-console-archived-banner-designs-$stage"
@@ -21,11 +24,15 @@ class DynamoArchivedBannerDesigns(stage: String, client: DynamoDbClient) extends
       case other => DynamoPutError(other)
     }
 
-  def putRaw(item: java.util.Map[String, AttributeValue]): ZIO[ZEnv, DynamoError, Unit] =
+  def putRaw(item: java.util.Map[String, AttributeValue]): ZIO[ZEnv, DynamoError, Unit] = {
+    val date = new SimpleDateFormat("yyyy-MM-dd").format(new Date())
+    // sort key is date
+    item.put("date", AttributeValue.builder.s(date).build())
     put(
       PutItemRequest
         .builder
         .item(item)
         .build()
     )
+  }
 }
