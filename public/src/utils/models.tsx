@@ -131,7 +131,7 @@ export const countries: CommonStringObject = {
   GW: 'Guinea-Bissau',
   GY: 'Guyana',
   HK: 'Hong Kong',
-  NM: 'Heard Island and McDonald Islands',
+  HM: 'Heard Island and McDonald Islands',
   HN: 'Honduras',
   HR: 'Croatia',
   HT: 'Haiti',
