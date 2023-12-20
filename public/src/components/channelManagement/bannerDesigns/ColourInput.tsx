@@ -100,6 +100,12 @@ const GenericColourInput = <T extends unknown>({
     onChange(newColour);
   };
 
+  const handleColourChangeFromPicker = (colour: string) => {
+    // Remove the leading '#' from the colour string given by the picker
+    const colourWithNoLeadingHash = colour.slice(1);
+    handleColourChange(colourWithNoLeadingHash);
+  };
+
   return (
     <div className={classes.container}>
       <TextField
@@ -125,10 +131,7 @@ const GenericColourInput = <T extends unknown>({
             <div className={classes.picker}>
               <HexColorPicker
                 color={colour ? `#${convertToString(colour)}` : 'rgb(0, 0, 0, 0)'}
-                onChange={(colour: string) => {
-                  // Remove the leading '#' from the colour string
-                  handleColourChange(colour.slice(1));
-                }}
+                onChange={handleColourChangeFromPicker}
               />
             </div>
           </ClickAwayListener>
