@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
-
+import React, { useEffect, useState } from 'react';
 import { TextField } from '@material-ui/core';
+import debounce from 'lodash/debounce';
 import {
   hexColourStringRegex,
   hexColourToString,
@@ -10,27 +10,38 @@ import { useForm } from 'react-hook-form';
 import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { HexColour } from '../../../models/bannerDesign';
-import { ClassNameMap } from '@mui/material';
+import { ClassNameMap, ClickAwayListener } from '@mui/material';
+import { HexColorPicker } from 'react-colorful';
 
-const useStyles = makeStyles<Theme, { colour: string }>(({ palette }: Theme) => ({
-  container: {
-    display: 'flex',
-    flexDirection: 'row',
-    marginTop: '16px',
-  },
-  colour: props => ({
-    border: `1px solid ${palette.grey[500]}`,
-    borderRadius: '4px',
-    width: '55px',
-    height: '55px',
-    marginBottom: '8px',
-    backgroundColor: props.colour,
+const useStyles = makeStyles<Theme, { colour: string; isDisabled: boolean }>(
+  ({ palette }: Theme) => ({
+    container: {
+      display: 'flex',
+      flexDirection: 'row',
+      marginTop: '16px',
+    },
+    colour: {
+      border: `1px solid ${palette.grey[500]}`,
+      borderRadius: '4px',
+      width: '55px',
+      height: '55px',
+      marginBottom: '8px',
+      backgroundColor: props => props.colour,
+      cursor: props => (props.isDisabled ? 'not-allowed' : 'pointer'),
+      position: 'relative',
+    },
+    field: {
+      width: '240px',
+      marginTop: 0,
+    },
+    picker: {
+      position: 'absolute',
+      bottom: 0,
+      left: '55px',
+      margin: '0px 10px',
+    },
   }),
-  field: {
-    width: '240px',
-    marginTop: 0,
-  },
-}));
+);
 
 const colourValidation = {
   value: hexColourStringRegex,
@@ -65,6 +76,8 @@ const GenericColourInput = <T extends unknown>({
   convertToString,
   styles: classes,
 }: GenericProps<T>) => {
+  const [isPickerOpen, setIsPickerOpen] = useState<boolean>(false);
+
   const defaultValues = { colour: convertToString(colour) };
 
   const { register, reset, handleSubmit, errors } = useForm<{ colour: string }>({
@@ -82,6 +95,17 @@ const GenericColourInput = <T extends unknown>({
     reset(defaultValues);
   }, [colour]);
 
+  const handleColourChange = (colour: string) => {
+    const newColour = convertFromString(colour);
+    onChange(newColour);
+  };
+
+  const handleColourChangeFromPicker = debounce((colour: string) => {
+    // Remove the leading '#' from the colour string given by the picker
+    const colourWithNoLeadingHash = colour.slice(1);
+    handleColourChange(colourWithNoLeadingHash);
+  }, 100);
+
   return (
     <div className={classes.container}>
       <TextField
@@ -91,10 +115,7 @@ const GenericColourInput = <T extends unknown>({
           pattern: colourValidation,
         })}
         name="colour"
-        onBlur={handleSubmit(({ colour }) => {
-          const newColour = convertFromString(colour);
-          onChange(newColour);
-        })}
+        onBlur={handleSubmit(({ colour }) => handleColourChange(colour))}
         label={label}
         error={errors?.colour !== undefined}
         helperText={errors?.colour?.message}
@@ -104,7 +125,18 @@ const GenericColourInput = <T extends unknown>({
         disabled={isDisabled}
         required={required}
       />
-      {colour && <div className={classes.colour} />}
+      <div className={classes.colour} onClick={() => !isDisabled && setIsPickerOpen(true)}>
+        {isPickerOpen && (
+          <ClickAwayListener onClickAway={() => setIsPickerOpen(false)}>
+            <div className={classes.picker}>
+              <HexColorPicker
+                color={colour ? `#${convertToString(colour)}` : 'rgb(0, 0, 0, 0)'}
+                onChange={handleColourChangeFromPicker}
+              />
+            </div>
+          </ClickAwayListener>
+        )}
+      </div>
     </div>
   );
 };
@@ -116,7 +148,10 @@ export const ColourInput: React.FC<Props<HexColour>> = (props: Props<HexColour>)
       required={true}
       convertToString={hexColourToString}
       convertFromString={stringToHexColour}
-      styles={useStyles({ colour: `#${hexColourToString(props.colour)}` })}
+      styles={useStyles({
+        colour: `#${hexColourToString(props.colour)}`,
+        isDisabled: props.isDisabled,
+      })}
     />
   );
 };
@@ -124,13 +159,15 @@ export const ColourInput: React.FC<Props<HexColour>> = (props: Props<HexColour>)
 export const OptionalColourInput: React.FC<Props<HexColour | undefined>> = (
   props: Props<HexColour | undefined>,
 ) => {
+  const colourCss = props.colour ? `#${hexColourToString(props.colour)}` : 'rgb(0, 0, 0, 0)';
+
   return (
     <GenericColourInput
       {...props}
       required={false}
       convertToString={maybeHexColourToString}
       convertFromString={stringToMaybeHexColour}
-      styles={useStyles({ colour: `#${maybeHexColourToString(props.colour)}` || 'FFFFFF' })}
+      styles={useStyles({ colour: colourCss, isDisabled: props.isDisabled })}
     />
   );
 };
