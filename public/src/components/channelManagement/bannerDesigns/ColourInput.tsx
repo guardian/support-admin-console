@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-
 import { TextField } from '@material-ui/core';
+import debounce from 'lodash/debounce';
 import {
   hexColourStringRegex,
   hexColourToString,
@@ -100,11 +100,11 @@ const GenericColourInput = <T extends unknown>({
     onChange(newColour);
   };
 
-  const handleColourChangeFromPicker = (colour: string) => {
+  const handleColourChangeFromPicker = debounce((colour: string) => {
     // Remove the leading '#' from the colour string given by the picker
     const colourWithNoLeadingHash = colour.slice(1);
     handleColourChange(colourWithNoLeadingHash);
-  };
+  }, 100);
 
   return (
     <div className={classes.container}>
