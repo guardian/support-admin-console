@@ -52,14 +52,58 @@ export const BannerVisualEditor: React.FC<Props> = ({
           />
         )}
         {visual?.kind === 'ChoiceCards' && (
-          <OptionalColourInput
-            colour={visual.buttonColour}
-            name="visual.buttonColour"
-            label="Button Colour"
-            isDisabled={isDisabled}
-            onChange={buttonColour => onChange({ ...visual, buttonColour })}
-            onValidationChange={onValidationChange}
-          />
+          <>
+            <OptionalColourInput
+              colour={visual.buttonColour}
+              name="visual.buttonColour"
+              label="Button background colour"
+              isDisabled={isDisabled}
+              onChange={buttonColour => onChange({ ...visual, buttonColour })}
+              onValidationChange={onValidationChange}
+            />
+            <OptionalColourInput
+              colour={visual.buttonTextColour}
+              name="visual.buttonTextColour"
+              label="Button text colour"
+              isDisabled={isDisabled}
+              onChange={buttonTextColour => onChange({ ...visual, buttonTextColour })}
+              onValidationChange={onValidationChange}
+            />
+            <OptionalColourInput
+              colour={visual.buttonBorderColour}
+              name="visual.buttonBorderColour"
+              label="Button border colour"
+              isDisabled={isDisabled}
+              onChange={buttonBorderColour => onChange({ ...visual, buttonBorderColour })}
+              onValidationChange={onValidationChange}
+            />
+            <OptionalColourInput
+              colour={visual.buttonSelectColour}
+              name="visual.buttonSelectColour"
+              label="Selected button background colour"
+              isDisabled={isDisabled}
+              onChange={buttonSelectColour => onChange({ ...visual, buttonSelectColour })}
+              onValidationChange={onValidationChange}
+            />
+            <OptionalColourInput
+              colour={visual.buttonSelectTextColour}
+              name="visual.buttonSelectTextColour"
+              label="Selected button text colour"
+              isDisabled={isDisabled}
+              onChange={buttonSelectTextColour => onChange({ ...visual, buttonSelectTextColour })}
+              onValidationChange={onValidationChange}
+            />
+            <OptionalColourInput
+              colour={visual.buttonSelectBorderColour}
+              name="visual.buttonSelectBorderColour"
+              label="Selected button border colour"
+              isDisabled={isDisabled}
+              onChange={buttonSelectBorderColour =>
+                onChange({ ...visual, buttonSelectBorderColour })
+              }
+              onValidationChange={onValidationChange}
+            />
+          </>
         )}
       </div>
     </div>

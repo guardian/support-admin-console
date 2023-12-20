@@ -46,7 +46,12 @@ object BannerDesignVisual {
 
   case class ChoiceCards(
     kind: String = "ChoiceCards",
-    buttonColour: Option[HexColour]
+    buttonColour: Option[HexColour],
+    buttonTextColour: Option[HexColour],
+    buttonBorderColour: Option[HexColour],
+    buttonSelectColour: Option[HexColour],
+    buttonSelectTextColour: Option[HexColour],
+    buttonSelectBorderColour: Option[HexColour]
   ) extends BannerDesignVisual
 
   import io.circe.generic.extras.auto._
