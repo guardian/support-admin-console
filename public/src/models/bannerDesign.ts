@@ -52,6 +52,11 @@ export interface BannerDesignImage extends BannerDesignHeaderImage {
 export interface ChoiceCardsDesign {
   kind: 'ChoiceCards';
   buttonColour?: HexColour;
+  buttonTextColour?: HexColour;
+  buttonBorderColour?: HexColour;
+  buttonSelectColour?: HexColour;
+  buttonSelectTextColour?: HexColour;
+  buttonSelectBorderColour?: HexColour;
 }
 export type BannerDesignVisual = BannerDesignImage | ChoiceCardsDesign;
 
