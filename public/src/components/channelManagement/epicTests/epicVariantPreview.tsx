@@ -134,7 +134,8 @@ const EpicVariantPreview: React.FC<EpicVariantPreviewProps> = ({
   const compressedProps = lzstring.compressToEncodedURIComponent(JSON.stringify(props));
 
   const storyName = StorybookNames[moduleName];
-  const dcrStorybookUrl = 'https://63e251470cfbe61776b0ef19-omtqcopvwm.chromatic.com';
+  // this is the storybook url for the main branch of DCR
+  const dcrStorybookUrl = 'https://main--63e251470cfbe61776b0ef19.chromatic.com';
 
   return (
     <div>
