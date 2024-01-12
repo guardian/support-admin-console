@@ -2,7 +2,6 @@ import React from 'react';
 import { Theme, makeStyles } from '@material-ui/core';
 
 import { EpicModuleName } from '../helpers/shared';
-import { useModule } from '../../../hooks/useModule';
 import { EpicVariant } from '../../../models/epic';
 import useTickerData, { TickerSettingsWithData } from '../hooks/useTickerData';
 import { SelectedAmountsVariant, mockAmountsCardData } from '../../../utils/models';
@@ -121,25 +120,13 @@ interface EpicVariantPreviewProps {
 }
 
 /**
- * Uses a remote import of the SDC component
- */
-const EpicVariantPreviewSDCModule = ({ variant, moduleName }: EpicVariantPreviewProps) => {
-  const classes = useStyles();
-
-  const tickerSettingsWithData = useTickerData(variant.tickerSettings);
-
-  const Epic = useModule<EpicProps>(`epics/${moduleName}.js`, moduleName);
-
-  const props = buildProps(variant, tickerSettingsWithData);
-
-  return <div className={classes.container}>{Epic && <Epic {...props} />}</div>;
-};
-
-/**
  * Uses the DCR storybook to render the component, iframed.
  * Props are passed in the args parameter in the url.
  */
-const EpicVariantPreviewStorybook = ({ variant, moduleName }: EpicVariantPreviewProps) => {
+const EpicVariantPreview: React.FC<EpicVariantPreviewProps> = ({
+  variant,
+  moduleName,
+}: EpicVariantPreviewProps) => {
   const classes = useStyles();
 
   const tickerSettingsWithData = useTickerData(variant.tickerSettings);
@@ -147,7 +134,8 @@ const EpicVariantPreviewStorybook = ({ variant, moduleName }: EpicVariantPreview
   const compressedProps = lzstring.compressToEncodedURIComponent(JSON.stringify(props));
 
   const storyName = StorybookNames[moduleName];
-  const dcrStorybookUrl = 'https://63e251470cfbe61776b0ef19-omtqcopvwm.chromatic.com';
+  // this is the storybook url for the main branch of DCR
+  const dcrStorybookUrl = 'https://main--63e251470cfbe61776b0ef19.chromatic.com';
 
   return (
     <div>
@@ -157,18 +145,6 @@ const EpicVariantPreviewStorybook = ({ variant, moduleName }: EpicVariantPreview
       ></iframe>
     </div>
   );
-};
-
-const EpicVariantPreview: React.FC<EpicVariantPreviewProps> = ({
-  variant,
-  moduleName,
-}: EpicVariantPreviewProps) => {
-  if (moduleName === 'ContributionsLiveblogEpic') {
-    // Currently only the liveblog epic is in DCR
-    return <EpicVariantPreviewStorybook variant={variant} moduleName={moduleName} />;
-  } else {
-    return <EpicVariantPreviewSDCModule variant={variant} moduleName={moduleName} />;
-  }
 };
 
 export default EpicVariantPreview;
