@@ -7,9 +7,8 @@ import org.scalatest.matchers.should.Matchers
 import io.circe.parser._
 import io.circe.syntax.EncoderOps
 import models.BannerUI.{
-  AusAnniversaryMomentBanner,
-  BannerDesignName,
-  Scotus2023MomentBanner
+  ContributionsBanner,
+  BannerDesignName
 }
 
 import scala.language.postfixOps
@@ -31,12 +30,12 @@ class BannerTestsSpec extends AnyFlatSpec with Matchers with EitherValues {
   it should "return the correct case object when the json is a string with a matching case class" in {
     val rawJson =
       """
-        |"Scotus2023MomentBanner"
+        |"ContributionsBanner"
         |""".stripMargin
 
     val result = decode[BannerUI](rawJson)
 
-    result.value should be(Scotus2023MomentBanner)
+    result.value should be(ContributionsBanner)
   }
 
   it should "return an error when the json is a string with no matching case class" in {
@@ -75,7 +74,7 @@ class BannerTestsSpec extends AnyFlatSpec with Matchers with EitherValues {
   }
 
   it should "return a string for a named template" in {
-    val template: BannerUI = AusAnniversaryMomentBanner
+    val template: BannerUI = ContributionsBanner
 
     val json = template.asJson
 

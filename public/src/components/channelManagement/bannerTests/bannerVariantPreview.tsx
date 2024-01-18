@@ -112,14 +112,6 @@ const buildProps = (
 };
 
 const bannerModules = {
-  [BannerTemplate.AusAnniversaryMomentBanner]: {
-    path: 'aus10yrAnniversaryMoment/Aus10yrAnniversaryMomentBanner.js',
-    name: 'AusAnniversaryMomentBanner',
-  },
-  [BannerTemplate.GuardianWeeklyBanner]: {
-    path: 'guardianWeekly/GuardianWeeklyBanner.js',
-    name: 'GuardianWeeklyBanner',
-  },
   [BannerTemplate.ContributionsBanner]: {
     path: 'contributions/ContributionsBanner.js',
     name: 'ContributionsBanner',
@@ -132,37 +124,13 @@ const bannerModules = {
     path: 'environment/EnvironmentBanner.js',
     name: 'EnvironmentBanner',
   },
-  [BannerTemplate.GlobalNewYearMomentBanner]: {
-    path: 'globalNYMoment/GlobalNYMomentBanner.js',
-    name: 'GlobalNewYearMomentBanner',
-  },
-  [BannerTemplate.UkraineMomentBanner]: {
-    path: 'ukraineMoment/UkraineMomentBanner.js',
-    name: 'UkraineMomentBanner',
-  },
-  [BannerTemplate.ChoiceCardsMomentBanner]: {
-    path: 'choiceCardsMoment/ChoiceCardsMomentBanner.js',
-    name: 'ChoiceCardsMomentBanner',
-  },
   [BannerTemplate.WorldPressFreedomDayBanner]: {
     path: 'worldPressFreedomDay/WorldPressFreedomDayBanner.js',
     name: 'WorldPressFreedomDayBanner',
   },
-  [BannerTemplate.Scotus2023MomentBanner]: {
-    path: 'usSupremeCourt2023/Scotus2023MomentBanner.js',
-    name: 'Scotus2023MomentBanner',
-  },
   [BannerTemplate.EuropeMomentLocalLanguageBanner]: {
     path: 'europeMomentLocalLanguage/EuropeMomentLocalLanguageBanner.js',
     name: 'EuropeMomentLocalLanguageBanner',
-  },
-  [BannerTemplate.SupporterMomentBanner]: {
-    path: 'supporterMoment/SupporterMomentBanner.js',
-    name: 'SupporterMomentBanner',
-  },
-  [BannerTemplate.EnvironmentMomentBanner]: {
-    path: 'environmentMoment/EnvironmentMomentBanner.js',
-    name: 'EnvironmentMomentBanner',
   },
   DesignableBanner: {
     path: 'designableBanner/DesignableBanner.js',
