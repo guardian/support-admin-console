@@ -78,6 +78,6 @@ class BannerTestsSpec extends AnyFlatSpec with Matchers with EitherValues {
 
     val json = template.asJson
 
-    json should be(Json.fromString("AusAnniversaryMomentBanner"))
+    json should be(Json.fromString("ContributionsBanner"))
   }
 }
