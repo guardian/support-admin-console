@@ -37,6 +37,7 @@ export const createDefaultBannerDesign = (name: string): BannerDesign => ({
       bodyText: stringToHexColour('000000'),
       headerText: stringToHexColour('000000'),
       articleCountText: stringToHexColour('000000'),
+      logo: stringToHexColour('000000'),
     },
     highlightedText: {
       text: stringToHexColour('000000'),
