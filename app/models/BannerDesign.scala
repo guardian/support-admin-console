@@ -72,7 +72,7 @@ case class BannerDesignBasicColours(
   bodyText: HexColour,
   headerText: HexColour,
   articleCountText: HexColour,
-  logo: Option[HexColour]
+  logo: HexColour
 )
 
 case class BannerDesignHighlightedTextColours(

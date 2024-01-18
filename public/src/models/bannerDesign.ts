@@ -12,7 +12,7 @@ export interface BasicColours {
   bodyText: HexColour;
   headerText: HexColour;
   articleCountText: HexColour;
-  logo?: HexColour;
+  logo: HexColour;
 }
 
 export interface HighlightedTextColours {
