@@ -2,6 +2,7 @@ import React from 'react';
 import { BasicColours } from '../../../models/bannerDesign';
 import { ColourInput } from './ColourInput';
 import { makeStyles, Theme } from '@material-ui/core/styles';
+import { stringToHexColour } from '../../../utils/bannerDesigns';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -60,6 +61,14 @@ export const BasicColoursEditor: React.FC<Props> = ({
         label="Article Count Text Colour"
         isDisabled={isDisabled}
         onChange={colour => onChange({ ...basicColours, articleCountText: colour })}
+        onValidationChange={onValidationChange}
+      />
+      <ColourInput
+        colour={basicColours.logo ?? stringToHexColour('000000')}
+        name="colours.basic.logo"
+        label="Guardian Logo Colour"
+        isDisabled={isDisabled}
+        onChange={colour => onChange({ ...basicColours, logo: colour })}
         onValidationChange={onValidationChange}
       />
     </div>
