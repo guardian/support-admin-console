@@ -29,7 +29,7 @@ module.exports = {
         args: 'after-used',
       },
     ],
-    "@typescript-eslint/ban-ts-comment": "off",
+    '@typescript-eslint/ban-ts-comment': 'off',
   },
   settings: {
     react: {

@@ -84,7 +84,7 @@ export const TestsForm = <T extends Test>(
   createDefaultTest: (name: string, nickname: string) => T,
   testNamePrefix?: string,
 ): React.FC => {
-  return () => {
+  return function TestsFormInner() {
     const classes = useStyles();
     const { testName } = useParams<{ testName?: string }>();
     const [tests, setTests] = useState<T[]>([]);
