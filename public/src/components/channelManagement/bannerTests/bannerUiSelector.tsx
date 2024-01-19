@@ -26,31 +26,9 @@ interface BannerUiSelectorProps {
 
 const templatesWithLabels = [
   {
-    template: BannerTemplate.ChoiceCardsMomentBanner,
-    label: 'Choice Cards Moment 2023',
-  },
-  {
-    template: BannerTemplate.EnvironmentMomentBanner,
-    label: 'Environment Moment 2023',
-  },
-  {
     template: BannerTemplate.EuropeMomentLocalLanguageBanner,
     label: 'Europe Moment Local Language 2023',
   },
-  {
-    template: BannerTemplate.SupporterMomentBanner,
-    label: 'Supporter Moment 2023',
-  },
-  {
-    template: BannerTemplate.Scotus2023MomentBanner,
-    label: 'US-Supreme-Court Moment 2023',
-  },
-  { template: BannerTemplate.AusAnniversaryMomentBanner, label: 'Aus-Anniversary Moment 2023' },
-  {
-    template: BannerTemplate.UkraineMomentBanner,
-    label: 'Ukraine Moment 2023',
-  },
-  { template: BannerTemplate.GlobalNewYearMomentBanner, label: 'Global-New-Year Moment 2022' },
   { template: BannerTemplate.ContributionsBanner, label: 'Contributions' },
   {
     template: BannerTemplate.ContributionsBannerWithSignIn,
@@ -60,7 +38,6 @@ const templatesWithLabels = [
     template: BannerTemplate.WorldPressFreedomDayBanner,
     label: 'World Press Freedom Day',
   },
-  { template: BannerTemplate.GuardianWeeklyBanner, label: 'Guardian Weekly' },
   { template: BannerTemplate.EnvironmentBanner, label: 'Environment' },
 ];
 

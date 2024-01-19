@@ -291,17 +291,9 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
             }}
           />
 
-          {(template === BannerTemplate.AusAnniversaryMomentBanner ||
-            template === BannerTemplate.ContributionsBanner ||
-            template === BannerTemplate.GuardianWeeklyBanner ||
-            template === BannerTemplate.GlobalNewYearMomentBanner ||
-            template === BannerTemplate.UkraineMomentBanner ||
+          {(template === BannerTemplate.ContributionsBanner ||
             template === BannerTemplate.WorldPressFreedomDayBanner ||
-            template === BannerTemplate.Scotus2023MomentBanner ||
             template === BannerTemplate.EuropeMomentLocalLanguageBanner ||
-            template === BannerTemplate.SupporterMomentBanner ||
-            template === BannerTemplate.EnvironmentMomentBanner ||
-            template === BannerTemplate.ChoiceCardsMomentBanner ||
             uiIsDesign(template)) && (
             <Controller
               name="highlightedText"
@@ -375,8 +367,7 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
   const classes = useStyles();
   const setValidationStatusForField = useValidation(onValidationChange);
 
-  const allowVariantTicker =
-    variant.template === BannerTemplate.AusAnniversaryMomentBanner || uiIsDesign(variant.template);
+  const allowVariantTicker = uiIsDesign(variant.template);
 
   const onMobileContentRadioChange = (): void => {
     if (variant.mobileBannerContent === undefined) {
