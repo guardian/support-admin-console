@@ -16,17 +16,6 @@ object BannerDesignStatus {
   implicit val statusDecoder = deriveEnumerationDecoder[BannerDesignStatus]
 }
 
-sealed trait GuardianRoundelDesign
-object GuardianRoundelDesign {
-  case object default extends GuardianRoundelDesign
-  case object brand extends GuardianRoundelDesign
-  case object inverse extends GuardianRoundelDesign
-
-  implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val encoder = deriveEnumerationEncoder[GuardianRoundelDesign]
-  implicit val decoder = deriveEnumerationDecoder[GuardianRoundelDesign]
-}
-
 case class HeaderImage(
   mobileUrl: String,
   tabletDesktopUrl: String,
@@ -104,7 +93,6 @@ case class BannerDesignColours(
   primaryCta: CtaDesign,
   secondaryCta: CtaDesign,
   closeButton: CtaDesign,
-  guardianRoundel: Option[GuardianRoundelDesign],
   ticker: TickerDesign
 )
 
