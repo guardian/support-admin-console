@@ -6,7 +6,6 @@ import {
   BannerDesignVisual,
   BasicColours,
   CtaDesign,
-  GuardianRoundel,
   HighlightedTextColours,
   TickerDesign,
 } from '../../../models/bannerDesign';
@@ -14,7 +13,6 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 import { BasicColoursEditor } from './BasicColoursEditor';
 import { HighlightedTextColoursEditor } from './HighlightedTextColoursEditor';
 import { CtaColoursEditor } from './CtaColoursEditor';
-import TypedRadioGroup from '../TypedRadioGroup';
 import { BannerDesignUsage } from './BannerDesignUsage';
 import { TickerDesignEditor } from './TickerDesignEditor';
 import { HeaderImageEditor } from './HeaderImageEditor';
@@ -126,16 +124,6 @@ const BannerDesignForm: React.FC<Props> = ({
       colours: {
         ...design.colours,
         [name]: cta,
-      },
-    });
-  };
-
-  const onRoundelChange = (roundel: GuardianRoundel): void => {
-    onChange({
-      ...design,
-      colours: {
-        ...design.colours,
-        guardianRoundel: roundel,
       },
     });
   };
@@ -257,24 +245,6 @@ const BannerDesignForm: React.FC<Props> = ({
         </AccordionDetails>
       </Accordion>
 
-      <Accordion className={[classes.accordion, classes.colourSectionContainer].join(' ')}>
-        <AccordionSummary className={classes.sectionHeader} expandIcon={<ExpandMoreIcon />}>
-          Roundel style
-        </AccordionSummary>
-
-        <AccordionDetails>
-          <TypedRadioGroup
-            selectedValue={design.colours.guardianRoundel}
-            onChange={onRoundelChange}
-            isDisabled={isDisabled}
-            labels={{
-              default: 'Default - white text on black background',
-              inverse: 'Inverse - black text on white background',
-              brand: 'Brand - white text on blue background',
-            }}
-          />
-        </AccordionDetails>
-      </Accordion>
       <Accordion className={[classes.accordion, classes.colourSectionContainer].join(' ')}>
         <AccordionSummary className={classes.sectionHeader} expandIcon={<ExpandMoreIcon />}>
           Ticker Colours

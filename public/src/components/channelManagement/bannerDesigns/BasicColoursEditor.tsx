@@ -2,14 +2,21 @@ import React from 'react';
 import { BasicColours } from '../../../models/bannerDesign';
 import { ColourInput } from './ColourInput';
 import { makeStyles, Theme } from '@material-ui/core/styles';
+import { hexColourToString, stringToHexColour } from '../../../utils/bannerDesigns';
+import TypedRadioGroup from '../TypedRadioGroup';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
+const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
     display: 'flex',
     flexDirection: 'column',
     '& > * + *': {
       marginTop: spacing(1),
     },
+  },
+  header: {
+    fontSize: 16,
+    fontWeight: 500,
+    color: palette.grey[700],
   },
 }));
 
@@ -62,13 +69,12 @@ export const BasicColoursEditor: React.FC<Props> = ({
         onChange={colour => onChange({ ...basicColours, articleCountText: colour })}
         onValidationChange={onValidationChange}
       />
-      <ColourInput
-        colour={basicColours.logo}
-        name="colours.basic.logo"
-        label="Guardian Logo Colour"
+      <div className={classes.header}>Guardian Logo Colour</div>
+      <TypedRadioGroup
+        selectedValue={hexColourToString(basicColours.logo)}
+        onChange={colour => onChange({ ...basicColours, logo: stringToHexColour(colour) })}
         isDisabled={isDisabled}
-        onChange={colour => onChange({ ...basicColours, logo: colour })}
-        onValidationChange={onValidationChange}
+        labels={{ '000000': 'Black', FFFFFF: 'White' }}
       />
     </div>
   );

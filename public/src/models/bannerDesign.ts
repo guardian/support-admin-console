@@ -30,8 +30,6 @@ export interface CtaDesign {
   hover: CtaStateDesign;
 }
 
-export type GuardianRoundel = 'default' | 'brand' | 'inverse';
-
 export interface TickerDesign {
   text: HexColour;
   filledProgress: HexColour;
@@ -70,7 +68,6 @@ export type BannerDesignProps = {
     primaryCta: CtaDesign;
     secondaryCta: CtaDesign;
     closeButton: CtaDesign;
-    guardianRoundel: GuardianRoundel;
     ticker: TickerDesign;
   };
 };
