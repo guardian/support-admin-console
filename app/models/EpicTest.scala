@@ -17,6 +17,7 @@ object SeparateArticleCountType extends Enum[SeparateArticleCountType] with Circ
 
 case class SeparateArticleCount(
   `type`: SeparateArticleCountType,
+  copy: Option[String]
 )
 
 case class EpicVariant(
