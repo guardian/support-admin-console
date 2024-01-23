@@ -32,7 +32,9 @@ const VariantEditorSeparateArticleCountEditor: React.FC<VariantEditorSeparateArt
 
   const onSubmit = ({ copy }: FormData): void => {
     updateSeparateArticleCount(
-      separateArticleCount ? { ...separateArticleCount, copy } : undefined,
+      separateArticleCount
+        ? { ...separateArticleCount, copy: copy === '' ? undefined : copy }
+        : undefined,
     );
   };
 
