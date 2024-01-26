@@ -190,14 +190,13 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
     */
   private def buildUpdateTestExpression(item: Map[String, AttributeValue]): String = {
     case class Updates(changes: List[String], removes: List[String])
-    // Unlock the test at the same time
-    val removes = List("lockStatus")
+    val removes = List("lockStatus")  // Unlock the test at the same time
+
     val updates = item.foldLeft[Updates](Updates(Nil,removes)) { case (acc, (key, value)) =>
       if (value.nul()) {
-        // Remove the attribute
+        // Remove the attribute rather than setting it to null
         acc.copy(removes = s"$key" +: acc.removes)
       } else {
-        // Update the attribute
         acc.copy(changes = s"$key = :$key" +: acc.changes)
       }
     }
