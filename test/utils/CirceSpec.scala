@@ -7,13 +7,7 @@ import org.scalatest.matchers.should.Matchers
 import io.circe.parser._
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 
-
 class CirceSpec extends AnyFlatSpec with Matchers with EitherValues {
-  import diffson.lcs._
-  import diffson.circe._
-  import diffson.jsonpatch._
-  import diffson.jsonpatch.lcsdiff._
-
   val rawJson =
     """
       |{
@@ -28,6 +22,11 @@ class CirceSpec extends AnyFlatSpec with Matchers with EitherValues {
       |""".stripMargin
 
   it should "convert json to dynamo attributes, and back again" in {
+    import diffson.lcs._
+    import diffson.circe._
+    import diffson.jsonpatch._
+    import diffson.jsonpatch.lcsdiff._
+
     val initialJson: Json = parse(rawJson).toOption.get
 
     val dynamoAttributes: AttributeValue = Circe.jsonToDynamo(initialJson)
