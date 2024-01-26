@@ -1,6 +1,6 @@
 package services
 
-import models.{Channel, EpicTest, Status}
+import models.{ArticlesViewedSettings, Channel, EpicTest, MaxViews, Status}
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 import software.amazon.awssdk.auth.credentials.{AwsBasicCredentials, StaticCredentialsProvider}
@@ -178,5 +178,27 @@ class DynamoChannelTestsSpec extends AsyncFlatSpec with Matchers with BeforeAndA
         tests <- dynamo.getAllTests(Channel.Epic) // excludes archived tests
       } yield tests
     }(tests => tests.map(_.name) should be(List("test1")))
+  }
+
+  it should "update a test and remove unset fields" in {
+    val withFieldsSet = buildEpic("test1").copy(
+      maxViews = Some(MaxViews(1,2,3)),
+      articlesViewedSettings = Some(ArticlesViewedSettings(Some(1),Some(2),3))
+    )
+    val withFieldsUnset = buildEpic("test1").copy(
+      maxViews = None,  // top-level null
+      articlesViewedSettings = Some(ArticlesViewedSettings(None, None, 3))  // nested nulls
+    )
+    expectToSucceedWith {
+      for {
+        _ <- dynamo.createTest(withFieldsSet, Channel.Epic)
+        _ <- dynamo.lockTest("test1", Channel.Epic, "me1@me.com", force = false)
+        _ <- dynamo.updateTest(withFieldsUnset, Channel.Epic, "me1@me.com")
+        tests <- dynamo.getAllTests(Channel.Epic)
+      } yield tests.head
+    }(test => {
+      test.maxViews should be(None)
+      test.articlesViewedSettings should be(Some(ArticlesViewedSettings(None, None, 3)))
+    })
   }
 }

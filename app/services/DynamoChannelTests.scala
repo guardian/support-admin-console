@@ -189,10 +189,19 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
     * We do this by iterating over the attributes in `item` and building an expression
     */
   private def buildUpdateTestExpression(item: Map[String, AttributeValue]): String = {
-    val subExprs = item.foldLeft[List[String]](Nil) { case (acc, (key, value)) =>
-      s"$key = :$key" +: acc
+    case class Updates(changes: List[String], removes: List[String])
+    // Unlock the test at the same time
+    val removes = List("lockStatus")
+    val updates = item.foldLeft[Updates](Updates(Nil,removes)) { case (acc, (key, value)) =>
+      if (value.nul()) {
+        // Remove the attribute
+        acc.copy(removes = s"$key" +: acc.removes)
+      } else {
+        // Update the attribute
+        acc.copy(changes = s"$key = :$key" +: acc.changes)
+      }
     }
-    s"set ${subExprs.mkString(", ")} remove lockStatus" // Unlock the test at the same time
+    s"set ${updates.changes.mkString(", ")} remove ${updates.removes.mkString(", ")}"
   }
 
   def updateTest[T <: ChannelTest[T] : Encoder](test: T, channel: Channel, email: String): ZIO[ZEnv, DynamoError, Unit] = {
@@ -205,7 +214,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
 
     val updateExpression = buildUpdateTestExpression(item)
 
-    val attributeValues = item.map { case (key, value) => s":$key" -> value }
+    val attributeValues = item.collect { case (key, value) if !value.nul() => s":$key" -> value }
     // Add email, for the conditional update
     val attributeValuesWithEmail = attributeValues + (":email" -> AttributeValue.builder.s(email).build)
 

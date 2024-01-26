@@ -17,18 +17,21 @@ object Circe {
   def noNulls(json: Json): String = printer.print(json)
 
   // Converts Circe Json to Dynamodb Attributes
-  def jsonToDynamo(json: Json): AttributeValue =
-    json.deepDropNullValues.fold(
+  def jsonToDynamo(json: Json, dropNulls: Boolean = false): AttributeValue = {
+    // We only drop nulls on nested fields, not the top level, where we have to explicitly remove them from dynamodb
+    val jsonToFold = if (dropNulls) json.dropNullValues else json
+    jsonToFold.fold(
       jsonNull = AttributeValue.builder().nul(true).build,
       jsonBoolean = bool => AttributeValue.builder.bool(bool).build,
       jsonNumber = n => AttributeValue.builder.n(n.toString).build,
       jsonString = s => AttributeValue.builder.s(s).build,
-      jsonArray = arr => AttributeValue.builder.l(arr.map(jsonToDynamo).asJava).build,
+      jsonArray = arr => AttributeValue.builder.l(arr.map(j => jsonToDynamo(j, dropNulls = true)).asJava).build,
       jsonObject = obj => {
-        val map = obj.toMap.view.mapValues(jsonToDynamo).toMap
+        val map = obj.toMap.view.mapValues(j => jsonToDynamo(j, dropNulls = true)).toMap
         AttributeValue.builder.m(map.asJava).build
       }
     )
+  }
 
   // Converts Dynamodb Attributes to Circe Json
   def dynamoToJson(attribute: AttributeValue): Json = {
