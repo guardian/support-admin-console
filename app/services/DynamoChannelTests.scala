@@ -256,12 +256,16 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
         .key(buildKey(channel, testName))
         .updateExpression("set lockStatus = :lockStatus")
         .expressionAttributeValues(Map(
-          ":lockStatus" -> jsonToDynamo(lockStatus.asJson)
+          ":lockStatus" -> jsonToDynamo(lockStatus.asJson),
         ).asJava)
+        .expressionAttributeNames(Map("#name" -> "name").asJava)
 
+      val itemExistsExpression = "attribute_exists(#name)" // only update if it already exists in the table
       if (!force) {
         // Check it isn't already locked
-        builder.conditionExpression("attribute_not_exists(lockStatus.email)")
+        builder.conditionExpression(s"$itemExistsExpression and attribute_not_exists(lockStatus.email)")
+      } else {
+        builder.conditionExpression(itemExistsExpression)
       }
 
       builder.build()

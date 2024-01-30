@@ -191,7 +191,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
         .map(_ => Ok("locked"))
         .catchSome { case DynamoNoLockError(error) =>
           logger.warn(s"Failed to lock $channel/'$testName' because it is already locked: ${error.getMessage}")
-          IO.succeed(Conflict(s"$channel test '$testName' is already locked for edit by another user"))
+          IO.succeed(Conflict(s"$channel test '$testName' is already locked for edit by another user, or it doesn't exist"))
         }
     }
   }
