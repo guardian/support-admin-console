@@ -37,6 +37,7 @@ import VariantEditorSeparateArticleCountEditor from '../variantEditorSeparateArt
 import { ImageEditorToggle } from '../imageEditor';
 import { BylineWithImageEditorToggle } from '../bylineWithImageEditor';
 import { EpicVariant, SeparateArticleCount } from '../../../models/epic';
+import { AppleNewsChoiceCards } from './appleChoiceCardsEditor';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const getUseStyles = (shouldAddPadding: boolean) => {
@@ -475,30 +476,18 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
       )}
 
       {allowAppleNewsChoiceCards && (
-        <>
-          <div className={classes.sectionContainer}>
-            <Typography className={classes.sectionHeader} variant="h4">
-              Apple News Choice Cards
-            </Typography>
-
-            <EpicTestChoiceCardsEditor
-              showChoiceCards={variant.showChoiceCards}
-              updateShowChoiceCards={updateShowChoiceCards}
-              isDisabled={!editMode}
-            />
-          </div>
-          <div className={classes.sectionContainer}>
-            <EpicTestVariantEditorCtasEditor
-              primaryCta={variant.cta}
-              secondaryCta={variant.secondaryCta}
-              updatePrimaryCta={updatePrimaryCta}
-              updateSecondaryCta={updateSecondaryCta}
-              isDisabled={!editMode || !!variant.showChoiceCards}
-              onValidationChange={onValidationChange}
-              supportSecondaryCta={allowVariantCustomSecondaryCta}
-            />
-          </div>
-        </>
+        <div className={classes.sectionContainer}>
+          <Typography className={classes.sectionHeader} variant="h4">
+            Apple News Choice Cards
+          </Typography>
+          <AppleNewsChoiceCards
+            variant={variant}
+            editMode={editMode}
+            updateShowChoiceCards={updateShowChoiceCards}
+            updatePrimaryCta={updatePrimaryCta}
+            onValidationChange={onValidationChange}
+          />
+        </div>
       )}
     </div>
   );
