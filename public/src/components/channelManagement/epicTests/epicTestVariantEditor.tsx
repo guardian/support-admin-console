@@ -207,6 +207,8 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
     return BODY_DEFAULT_HELPER_TEXT;
   };
 
+  const allowAppleNewsChoiceCards = platform === 'APPLE_NEWS';
+
   return (
     <div className={classes.container}>
       {allowVariantHeader && (
@@ -470,6 +472,33 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
             isDisabled={!editMode}
           />
         </div>
+      )}
+
+      {allowAppleNewsChoiceCards && (
+        <>
+          <div className={classes.sectionContainer}>
+            <Typography className={classes.sectionHeader} variant="h4">
+              Apple News Choice Cards
+            </Typography>
+
+            <EpicTestChoiceCardsEditor
+              showChoiceCards={variant.showChoiceCards}
+              updateShowChoiceCards={updateShowChoiceCards}
+              isDisabled={!editMode}
+            />
+          </div>
+          <div className={classes.sectionContainer}>
+            <EpicTestVariantEditorCtasEditor
+              primaryCta={variant.cta}
+              secondaryCta={variant.secondaryCta}
+              updatePrimaryCta={updatePrimaryCta}
+              updateSecondaryCta={updateSecondaryCta}
+              isDisabled={!editMode || !!variant.showChoiceCards}
+              onValidationChange={onValidationChange}
+              supportSecondaryCta={allowVariantCustomSecondaryCta}
+            />
+          </div>
+        </>
       )}
     </div>
   );
