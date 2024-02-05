@@ -19,6 +19,7 @@
     "config",
     "scripts",
     "**/*.spec.tsx",
-    "cdk"
+    "cdk",
+    "**/*.bundle.js"
   ]
 }
