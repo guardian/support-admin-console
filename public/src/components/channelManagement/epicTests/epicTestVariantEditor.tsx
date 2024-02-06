@@ -37,6 +37,7 @@ import VariantEditorSeparateArticleCountEditor from '../variantEditorSeparateArt
 import { ImageEditorToggle } from '../imageEditor';
 import { BylineWithImageEditorToggle } from '../bylineWithImageEditor';
 import { EpicVariant, SeparateArticleCount } from '../../../models/epic';
+import { AppleNewsChoiceCards } from './appleChoiceCardsEditor';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const getUseStyles = (shouldAddPadding: boolean) => {
@@ -206,6 +207,8 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
     }
     return BODY_DEFAULT_HELPER_TEXT;
   };
+
+  const allowAppleNewsChoiceCards = platform === 'APPLE_NEWS';
 
   return (
     <div className={classes.container}>
@@ -468,6 +471,21 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
             showSignInLink={variant.showSignInLink}
             updateShowSignInLink={updateShowSignInLink}
             isDisabled={!editMode}
+          />
+        </div>
+      )}
+
+      {allowAppleNewsChoiceCards && (
+        <div className={classes.sectionContainer}>
+          <Typography className={classes.sectionHeader} variant="h4">
+            Apple News Choice Cards
+          </Typography>
+          <AppleNewsChoiceCards
+            variant={variant}
+            editMode={editMode}
+            updateShowChoiceCards={updateShowChoiceCards}
+            updatePrimaryCta={updatePrimaryCta}
+            onValidationChange={onValidationChange}
           />
         </div>
       )}
