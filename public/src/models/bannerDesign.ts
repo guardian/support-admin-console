@@ -42,6 +42,7 @@ export interface BannerDesignHeaderImage {
   tabletDesktopUrl: string;
   wideUrl: string;
   altText: string;
+  desktopUrl?: string;
 }
 
 export interface BannerDesignImage extends BannerDesignHeaderImage {

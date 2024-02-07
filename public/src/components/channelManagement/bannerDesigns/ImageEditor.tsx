@@ -76,6 +76,21 @@ export const ImageEditor: React.FC<Props> = ({
           required: EMPTY_ERROR_HELPER_TEXT,
           pattern: imageUrlValidation,
         })}
+        error={errors?.desktopUrl !== undefined}
+        helperText={errors?.desktopUrl?.message}
+        onBlur={handleSubmit(onChange)}
+        name="desktopUrl"
+        label="Banner Image URL (Desktop)"
+        margin="normal"
+        variant="outlined"
+        disabled={isDisabled}
+        fullWidth
+      />
+      <TextField
+        inputRef={register({
+          required: EMPTY_ERROR_HELPER_TEXT,
+          pattern: imageUrlValidation,
+        })}
         error={errors?.wideUrl !== undefined}
         helperText={errors?.wideUrl?.message}
         onBlur={handleSubmit(onChange)}
