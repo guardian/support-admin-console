@@ -98,7 +98,9 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
             labels={{
               All: 'All',
               Desktop: 'Desktop',
-              Mobile: 'Mobile',
+              Mobile: 'Mobile (All)',
+              iOS: 'Mobile (iOS)',
+              Android: 'Mobile (Android)',
             }}
           />
         </div>
