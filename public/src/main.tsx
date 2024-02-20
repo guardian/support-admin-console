@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Switchboard from './components/switchboard';
@@ -245,4 +245,10 @@ const AppRouter = () => {
   );
 };
 
-ReactDOM.render(<AppRouter />, document.getElementById('root'));
+const container = document.getElementById('root');
+if (container) {
+  const root = createRoot(container);
+  root.render(<AppRouter />);
+} else {
+  console.error('No root element found');
+}
