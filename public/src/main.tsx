@@ -40,7 +40,9 @@ import DefaultPromos from './components/defaultPromos';
 import { StyledEngineProvider } from '@mui/material';
 
 declare module '@mui/styles' {
-  type DefaultTheme = Theme;
+  // https://mui.com/material-ui/migration/v5-style-changes/#%E2%9C%85-add-module-augmentation-for-defaulttheme-typescript
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface DefaultTheme extends Theme {}
 }
 
 type Stage = 'DEV' | 'CODE' | 'PROD';
