@@ -37,6 +37,7 @@ import AppsMeteringSwitches from './components/appsMeteringSwitches';
 import { SuperModeDashboard } from './components/channelManagement/superMode/superModeDashboard';
 import BannerDesigns from './components/channelManagement/bannerDesigns/';
 import DefaultPromos from './components/defaultPromos';
+import { StyledEngineProvider } from '@mui/material';
 
 declare module '@mui/styles' {
   type DefaultTheme = Theme;
@@ -246,7 +247,9 @@ if (container) {
   const root = createRoot(container);
   root.render(
     <ThemeProvider theme={getTheme()}>
-      <AppRouter />
+      <StyledEngineProvider injectFirst>
+        <AppRouter />
+      </StyledEngineProvider>
     </ThemeProvider>,
   );
 } else {
