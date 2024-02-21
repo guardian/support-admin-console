@@ -13,10 +13,11 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
-  makeStyles,
   Checkbox,
-} from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
+  SelectChangeEvent,
+} from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import CloseIcon from '@mui/icons-material/Close';
 
 import {
   createDuplicateValidator,
@@ -26,7 +27,7 @@ import {
 } from './helpers/validation';
 import { Campaign } from './campaigns/CampaignsForm';
 import { fetchFrontendSettings, FrontendSettingsType } from '../../utils/requests';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 const useStyles = makeStyles(() => ({
   dialogHeader: {
@@ -152,8 +153,8 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
                   }
                   return campaign as string;
                 }}
-                onChange={(event: React.ChangeEvent<{ value: unknown }>): void => {
-                  setCampaignName(event.target.value as string | undefined);
+                onChange={(event: SelectChangeEvent<string | undefined>): void => {
+                  setCampaignName(event.target.value);
                 }}
               >
                 <MenuItem value={undefined} key={'campaignName-none'}>

@@ -11,7 +11,8 @@ import {
 } from '../../utils/requests';
 import withS3Data, { InnerProps, DataFromServer } from '../../hocs/withS3Data';
 
-import { makeStyles, Theme } from '@material-ui/core/styles';
+import { Theme } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   body: {

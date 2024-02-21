@@ -12,8 +12,8 @@ import {
   TableCell,
   Toolbar,
   Typography,
-  makeStyles,
-} from '@material-ui/core';
+} from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { BannerChannel } from './bannerDeployDashboard';
 import { BannerDeploys, BannersToRedeploy } from './bannerDeployChannelDeployer';
 import BannerDeployChannelDeployerTableRow from './bannerDeployChannelDeployerTableRow';

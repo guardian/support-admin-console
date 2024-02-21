@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { makeStyles, Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { SuperModeRow, useSuperModeRows } from './useSuperModeRows';
 import { ArticleDataChartDialog } from './articleDataChart';
 import { SuperModeTable } from './superModeTable';

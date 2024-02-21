@@ -8,11 +8,11 @@ import {
   List,
   ListItem,
   IconButton,
-  makeStyles,
   Switch,
   Typography,
-} from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
+} from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import CloseIcon from '@mui/icons-material/Close';
 import { Test, Status } from '../helpers/shared';
 import { updateStatuses, FrontendSettingsType } from '../../../utils/requests';
 import { testChannelData, testChannelOrder } from './CampaignsEditor';

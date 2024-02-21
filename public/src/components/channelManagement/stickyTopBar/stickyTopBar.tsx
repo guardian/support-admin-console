@@ -1,15 +1,16 @@
 import React from 'react';
-import { Theme, Typography, makeStyles, Button } from '@material-ui/core';
-import EditIcon from '@material-ui/icons/Edit';
+import { Theme, Typography, Button } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import EditIcon from '@mui/icons-material/Edit';
 import { LockStatus, Status } from '../helpers/shared';
-import CloseIcon from '@material-ui/icons/Close';
-import SaveIcon from '@material-ui/icons/Save';
-import LockIcon from '@material-ui/icons/Lock';
+import CloseIcon from '@mui/icons-material/Close';
+import SaveIcon from '@mui/icons-material/Save';
+import LockIcon from '@mui/icons-material/Lock';
 import { TestLockDetails } from './testLockDetails';
 import { TestArchiveButton } from './testArchiveButton';
 import { TestCopyButton } from './testCopyButton';
-import { grey } from '@material-ui/core/colors';
-import { Link } from '@material-ui/icons';
+import { grey } from '@mui/material/colors';
+import { Link } from '@mui/icons-material';
 import { FrontendSettingsType } from '../../../utils/requests';
 import TestLiveSwitch from '../testLiveSwitch';
 

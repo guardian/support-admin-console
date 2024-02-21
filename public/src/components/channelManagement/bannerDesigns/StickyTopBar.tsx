@@ -2,26 +2,26 @@ import React from 'react';
 import {
   Theme,
   Typography,
-  makeStyles,
   Button,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogContentText,
   DialogActions,
-} from '@material-ui/core';
-import EditIcon from '@material-ui/icons/Edit';
+} from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import EditIcon from '@mui/icons-material/Edit';
 import { LockDetails } from './LockDetails';
-import LockIcon from '@material-ui/icons/Lock';
-import CloseIcon from '@material-ui/icons/Close';
-import SaveIcon from '@material-ui/icons/Save';
-import { grey } from '@material-ui/core/colors';
+import LockIcon from '@mui/icons-material/Lock';
+import CloseIcon from '@mui/icons-material/Close';
+import SaveIcon from '@mui/icons-material/Save';
+import { grey } from '@mui/material/colors';
 import { LockStatus } from '../helpers/shared';
 import LiveSwitch from '../../shared/liveSwitch';
 import { BannerDesign, Status } from '../../../models/bannerDesign';
 import { BannerDesignPreview } from './BannerDesignPreview';
 import useOpenable from '../../../hooks/useOpenable';
-import ArchiveIcon from '@material-ui/icons/Archive';
+import ArchiveIcon from '@mui/icons-material/Archive';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {

@@ -3,7 +3,7 @@ import { Region } from '../../../utils/models';
 
 import { DeviceType, SignedInStatus, UserCohort } from '../helpers/shared';
 
-import { Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
 import HeaderTestVariantEditor from './headerTestVariantEditor';
 import TestVariantsEditor from '../testVariantsEditor';
 import CampaignSelector from '../CampaignSelector';

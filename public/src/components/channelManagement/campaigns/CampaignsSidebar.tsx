@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { makeStyles, TextField } from '@material-ui/core';
+import { TextField } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { Campaigns, Campaign } from './CampaignsForm';
 import NewCampaignButton from './NewCampaignButton';
 import CampaignsList from './CampaignsList';

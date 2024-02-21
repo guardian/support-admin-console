@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
+import { FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from '@mui/material';
 
 import { regions, regionIds, RegionsAndAll } from '../../utils/models';
 
@@ -20,8 +20,8 @@ const TestListSidebarFilterSelector: React.FC<TestListSidebarFilterSelectorProps
         id="filter-region-select"
         value={regionFilter}
         label="Filter by Region"
-        onChange={(event: React.ChangeEvent<{ value: unknown }>): void =>
-          handleRegionFilterChange(event.target.value as RegionsAndAll)
+        onChange={(event: SelectChangeEvent<RegionsAndAll>): void =>
+          handleRegionFilterChange(event.target.value)
         }
       >
         <MenuItem key="ALL" value="ALL">

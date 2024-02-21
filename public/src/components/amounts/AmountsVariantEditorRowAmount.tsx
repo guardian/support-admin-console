@@ -1,6 +1,7 @@
 import React from 'react';
-import { Button, makeStyles, Menu, MenuItem } from '@material-ui/core';
-import { red } from '@material-ui/core/colors';
+import { Button, Menu, MenuItem } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { red } from '@mui/material/colors';
 
 const useStyles = makeStyles(() => ({
   default: {

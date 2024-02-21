@@ -1,5 +1,6 @@
 import React from 'react';
-import { Theme, makeStyles } from '@material-ui/core';
+import { Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
 import { EpicModuleName } from '../helpers/shared';
 import { EpicVariant } from '../../../models/epic';

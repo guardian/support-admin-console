@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Theme,
-  makeStyles,
-  TextField,
-  FormControlLabel,
-  Switch,
-  Button,
-  Typography,
-} from '@material-ui/core';
+import { Theme, TextField, FormControlLabel, Switch, Button, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import StickyTopBar from './StickyCampaignBar';
 import { Campaign, unassignedCampaign } from './CampaignsForm';
 import { Test } from '../helpers/shared';

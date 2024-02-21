@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
-import { Button, Theme, makeStyles } from '@material-ui/core';
+import { Button, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { BannerChannel } from './bannerDeployDashboard';
 import BannerChannelDeployerTable from './bannerDeployChannelDeployerTable';
 

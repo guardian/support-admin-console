@@ -1,6 +1,7 @@
 import React from 'react';
-import { List, ListItem, makeStyles, Typography } from '@material-ui/core';
-import { red } from '@material-ui/core/colors';
+import { List, ListItem, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { red } from '@mui/material/colors';
 import { AmountsTests, AmountsTest } from '../../utils/models';
 import { CreateTestButton } from './CreateTestButton';
 

@@ -1,9 +1,10 @@
 import { Image } from './helpers/shared';
 import React, { useEffect } from 'react';
-import { Checkbox, makeStyles, TextField, Theme } from '@material-ui/core';
+import { Checkbox, TextField, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { useForm } from 'react-hook-form';
 import { EMPTY_ERROR_HELPER_TEXT } from './helpers/validation';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {

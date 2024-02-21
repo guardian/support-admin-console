@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
-import { Typography, Button, TextField } from '@material-ui/core';
-import { Autocomplete } from '@material-ui/lab';
-import SaveIcon from '@material-ui/icons/Save';
-import { makeStyles, Theme } from '@material-ui/core/styles';
+import { Typography, Button, TextField } from '@mui/material';
+import { Autocomplete } from '@mui/lab';
+import SaveIcon from '@mui/icons-material/Save';
+import { Theme } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
 import LiveSwitch from '../shared/liveSwitch';
 
 import { AmountsVariantEditor } from './AmountsVariantEditor';

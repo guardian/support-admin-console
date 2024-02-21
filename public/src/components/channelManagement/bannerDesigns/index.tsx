@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { makeStyles, Theme, Typography } from '@material-ui/core';
+import { Theme, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import BannerDesignsSidebar from './BannerDesignsSidebar';
 import BannerDesignEditor from './BannerDesignEditor';
 import { useParams } from 'react-router-dom';

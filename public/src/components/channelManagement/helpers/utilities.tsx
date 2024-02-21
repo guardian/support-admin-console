@@ -1,8 +1,8 @@
 import React from 'react';
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
-import { Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
 
 export const renderVisibilityIcons = (isOn: boolean): React.ReactNode => {
   return isOn ? <VisibilityIcon color={'action'} /> : <VisibilityOffIcon color={'disabled'} />;
