@@ -55,6 +55,7 @@ export const AmountsVariantEditorRowInput: React.FC<AmountsVariantEditorRowInput
   return (
     <div>
       <TextField
+        variant={'standard'}
         className={classes.textField}
         error={!!currentError}
         helperText={currentError}

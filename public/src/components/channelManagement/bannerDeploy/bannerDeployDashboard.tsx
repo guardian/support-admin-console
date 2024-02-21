@@ -11,7 +11,7 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
     overflow: 'auto',
   },
   container: {
-    padding: `${spacing(6)}px ${spacing(9)}px`,
+    padding: `${spacing(6)} ${spacing(9)}`,
 
     '& > * + *': {
       marginTop: spacing(4),

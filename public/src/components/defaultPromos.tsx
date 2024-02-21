@@ -22,7 +22,7 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     flexDirection: 'column',
     '& > * + *': {
-      marginTop: '5px',
+      marginTop: '16px',
     },
   },
 }));

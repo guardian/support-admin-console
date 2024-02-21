@@ -23,7 +23,7 @@ import {
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
-    padding: `${spacing(3)}px ${spacing(4)}px`,
+    padding: `${spacing(3)} ${spacing(4)}`,
     border: `1px solid ${palette.grey[700]}`,
     borderRadius: 4,
     backgroundColor: 'white',
