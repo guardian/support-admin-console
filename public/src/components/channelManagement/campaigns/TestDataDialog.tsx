@@ -237,12 +237,6 @@ const variantFields = {
       exclude: ['Header'],
       optional: true,
     },
-    footer: {
-      label: 'Footer',
-      type: 'string-block',
-      exclude: ['Header', 'Banner1', 'Banner2'],
-      optional: true,
-    },
     cta: {
       label: 'Main CTA',
       type: 'object',
