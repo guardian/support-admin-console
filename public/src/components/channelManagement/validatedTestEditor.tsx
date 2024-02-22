@@ -2,7 +2,8 @@ import { Test } from './helpers/shared';
 import React, { useState } from 'react';
 import { TestEditorProps } from './testsForm';
 import StickyTopBar from './stickyTopBar/stickyTopBar';
-import { makeStyles, Theme } from '@material-ui/core';
+import { Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import useValidation from './hooks/useValidation';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({

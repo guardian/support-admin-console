@@ -1,6 +1,6 @@
-import { Autocomplete } from '@material-ui/lab';
+import { Autocomplete } from '@mui/lab';
 import React, { useEffect } from 'react';
-import { TextField } from '@material-ui/core';
+import { TextField } from '@mui/material';
 
 interface Section {
   id: string;
@@ -69,11 +69,11 @@ export const SectionsEditor: React.FC<SectionEditorProps> = ({
       renderInput={(params): JSX.Element => (
         <TextField {...params} variant="outlined" label={label} />
       )}
-      renderOption={(option): JSX.Element => {
+      renderOption={(props, option): JSX.Element => {
         return <div>{option.name ? option.name : option.id}</div>;
       }}
       onChange={(event, values: Section[], reason): void => {
-        if (reason === 'select-option' || reason === 'remove-option') {
+        if (reason === 'selectOption' || reason === 'removeOption') {
           onUpdate(values.map(value => value.id));
           setInputValue('');
         }

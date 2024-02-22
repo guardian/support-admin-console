@@ -1,5 +1,6 @@
 import React from 'react';
-import { makeStyles, Theme, Card, CardContent, CardActions, Button } from '@material-ui/core';
+import { Theme, Card, CardContent, CardActions, Button } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { Link } from 'react-router-dom';
 import { Test, Variant } from '../helpers/shared';
 import TestDataButton from './TestDataButton';

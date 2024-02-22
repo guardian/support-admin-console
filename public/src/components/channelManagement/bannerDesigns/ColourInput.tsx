@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { TextField } from '@material-ui/core';
+import { TextField } from '@mui/material';
 import debounce from 'lodash/debounce';
 import {
   hexColourStringRegex,
@@ -8,7 +8,8 @@ import {
 } from '../../../utils/bannerDesigns';
 import { useForm } from 'react-hook-form';
 import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
-import { makeStyles, Theme } from '@material-ui/core/styles';
+import { Theme } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
 import { HexColour } from '../../../models/bannerDesign';
 import { ClassNameMap, ClickAwayListener } from '@mui/material';
 import { HexColorPicker } from 'react-colorful';

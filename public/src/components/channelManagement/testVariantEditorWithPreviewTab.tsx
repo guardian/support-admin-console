@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Tabs, Tab, Theme, makeStyles } from '@material-ui/core';
+import { Tabs, Tab, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
     width: '100%',

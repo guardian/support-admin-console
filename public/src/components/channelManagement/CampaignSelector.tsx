@@ -3,7 +3,8 @@ import { fetchFrontendSettings, FrontendSettingsType } from '../../utils/request
 import { Campaign, unassignedCampaign } from './campaigns/CampaignsForm';
 import { Test } from './helpers/shared';
 
-import { Select, MenuItem, FormControl, makeStyles } from '@material-ui/core';
+import { Select, MenuItem, FormControl, SelectChangeEvent } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles(() => ({
   dialogHeader: {
@@ -92,8 +93,8 @@ const CampaignSelector: React.FC<CampaignSelectorProps> = ({
           renderValue={(campaign): string => {
             return campaign as string;
           }}
-          onChange={(event: React.ChangeEvent<{ value: unknown }>): void => {
-            setCampaignName(event.target.value as string | undefined);
+          onChange={(event: SelectChangeEvent<string | undefined>): void => {
+            setCampaignName(event.target.value);
           }}
           disabled={disabled}
         >

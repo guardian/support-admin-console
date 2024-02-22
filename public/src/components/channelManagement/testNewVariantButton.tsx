@@ -1,7 +1,8 @@
 import React from 'react';
-import { Button, makeStyles, Theme, Typography } from '@material-ui/core';
+import { Button, Theme, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
-import AddIcon from '@material-ui/icons/Add';
+import AddIcon from '@mui/icons-material/Add';
 import useOpenable from '../../hooks/useOpenable';
 import CreateVariantDialog from './createVariantDialog';
 

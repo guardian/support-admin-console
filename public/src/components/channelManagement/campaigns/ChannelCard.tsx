@@ -1,5 +1,6 @@
 import React from 'react';
-import { makeStyles, Theme, Button } from '@material-ui/core';
+import { Theme, Button } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { Link } from 'react-router-dom';
 import TestCard from './TestCard';
 import { TestChannelItem } from './CampaignsEditor';

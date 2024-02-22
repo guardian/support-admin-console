@@ -1,7 +1,8 @@
 import React from 'react';
-import { Button, makeStyles, Typography } from '@material-ui/core';
+import { Button, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { Test } from './helpers/shared';
-import ArchiveIcon from '@material-ui/icons/Archive';
+import ArchiveIcon from '@mui/icons-material/Archive';
 
 import BatchProcessTestDialog from './batchProcessTestDialog';
 import useOpenable from '../../hooks/useOpenable';

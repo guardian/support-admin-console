@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 import { Variant } from './helpers/shared';
 import useOpenable from '../../hooks/useOpenable';
 import CreateVariantDialog from './createVariantDialog';

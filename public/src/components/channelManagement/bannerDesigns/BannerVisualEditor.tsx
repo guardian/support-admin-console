@@ -1,6 +1,6 @@
 import React from 'react';
 import { BannerDesignVisual } from '../../../models/bannerDesign';
-import { MenuItem, Select } from '@material-ui/core';
+import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { defaultBannerChoiceCardsDesign, defaultBannerImage } from './utils/defaults';
 import { ImageEditor } from './ImageEditor';
 import { OptionalColourInput } from './ColourInput';
@@ -12,14 +12,16 @@ interface Props {
   onChange: (visual: BannerDesignVisual | undefined) => void;
 }
 
+type VisualType = 'Image' | 'ChoiceCards' | 'None';
+
 export const BannerVisualEditor: React.FC<Props> = ({
   visual,
   isDisabled,
   onValidationChange,
   onChange,
 }: Props) => {
-  const onVisualTypeChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    const value = event.target.value as 'Image' | 'ChoiceCards' | 'None';
+  const onVisualTypeChange = (event: SelectChangeEvent<VisualType>) => {
+    const value = event.target.value;
     if (value === 'Image') {
       onChange(defaultBannerImage);
     } else if (value === 'ChoiceCards') {

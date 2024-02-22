@@ -1,5 +1,6 @@
 import React from 'react';
-import { List, makeStyles } from '@material-ui/core';
+import { List } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 
 import { Test } from './helpers/shared';

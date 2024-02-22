@@ -7,7 +7,8 @@ import {
   Radio,
   RadioGroup,
   Select,
-} from '@material-ui/core';
+  SelectChangeEvent,
+} from '@mui/material';
 import {
   BannerDesignName,
   BannerTemplate,
@@ -52,7 +53,7 @@ const BannerTemplateSelector: React.FC<BannerTemplateSelectorProps> = ({
   onUiChange,
   editMode,
 }: BannerTemplateSelectorProps) => {
-  const onChange = (event: React.ChangeEvent<{ value: unknown }>): void => {
+  const onChange = (event: SelectChangeEvent<BannerTemplate>): void => {
     const value = event.target.value as string;
     if (isBannerTemplate(value)) {
       onUiChange(value);
@@ -83,8 +84,8 @@ const BannerDesignSelector: React.FC<BannerDesignSelectorProps> = ({
   editMode,
   designs,
 }: BannerDesignSelectorProps) => {
-  const onChange = (event: React.ChangeEvent<{ value: unknown }>): void => {
-    const designName = event.target.value as string;
+  const onChange = (event: SelectChangeEvent): void => {
+    const designName = event.target.value;
     const isValidBannerDesign = designs.map(d => d.name).includes(designName);
     if (isValidBannerDesign) {
       onUiChange({ designName });

@@ -1,6 +1,7 @@
 import React from 'react';
-import { List, ListItem, Theme, makeStyles, Button, Typography } from '@material-ui/core';
-import { red } from '@material-ui/core/colors';
+import { List, ListItem, Theme, Button, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { red } from '@mui/material/colors';
 import { Campaigns, Campaign, unassignedCampaign } from './CampaignsForm';
 
 const useStyles = makeStyles(({ palette }: Theme) => ({

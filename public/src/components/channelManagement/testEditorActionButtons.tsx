@@ -8,12 +8,12 @@ import {
   DialogTitle,
   Theme,
   Typography,
-  makeStyles,
-} from '@material-ui/core';
-import { grey } from '@material-ui/core/colors';
-import DeleteIcon from '@material-ui/icons/Delete';
-import ArchiveIcon from '@material-ui/icons/Archive';
-import FileCopyIcon from '@material-ui/icons/FileCopy';
+} from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { grey } from '@mui/material/colors';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ArchiveIcon from '@mui/icons-material/Archive';
+import FileCopyIcon from '@mui/icons-material/FileCopy';
 import CreateTestDialog from './createTestDialog';
 import useOpenable from '../../hooks/useOpenable';
 

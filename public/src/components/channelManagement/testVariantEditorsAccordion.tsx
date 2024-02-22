@@ -1,11 +1,6 @@
 import React from 'react';
-import {
-  Theme,
-  makeStyles,
-  Accordion,
-  AccordionDetails,
-  AccordionActions,
-} from '@material-ui/core';
+import { Theme, Accordion, AccordionDetails, AccordionActions } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { Variant } from './helpers/shared';
 import VariantDeleteButton from './variantDeleteButton';
 import VariantCloneButton from './variantCloneButton';

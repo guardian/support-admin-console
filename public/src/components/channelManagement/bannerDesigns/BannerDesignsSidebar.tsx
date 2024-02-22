@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core';
+import { makeStyles } from '@mui/styles';
 import BannerDesignsList from './BannerDesignsList';
 import { BannerDesign } from '../../../models/bannerDesign';
 import NewBannerDesignButton from './NewBannerDesignButton';

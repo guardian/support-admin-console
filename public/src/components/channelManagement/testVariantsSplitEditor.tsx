@@ -1,13 +1,6 @@
 import React, { ReactElement, useEffect } from 'react';
-import {
-  FormControl,
-  makeStyles,
-  Radio,
-  RadioGroup,
-  FormControlLabel,
-  TextField,
-  Theme,
-} from '@material-ui/core';
+import { FormControl, Radio, RadioGroup, FormControlLabel, TextField, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { Variant } from './helpers/shared';
 import { EMPTY_ERROR_HELPER_TEXT } from './helpers/validation';
 import { useForm } from 'react-hook-form';

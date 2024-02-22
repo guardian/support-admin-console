@@ -1,9 +1,9 @@
-import { createMuiTheme, Theme } from '@material-ui/core/styles';
-import purple from '@material-ui/core/colors/purple';
-import green from '@material-ui/core/colors/green';
+import { createTheme, Theme } from '@mui/material/styles';
+import purple from '@mui/material/colors/purple';
+import green from '@mui/material/colors/green';
 import { getStage } from './stage';
 
-const DEV_AND_CODE_THEME = createMuiTheme({
+const DEV_AND_CODE_THEME = createTheme({
   palette: {
     primary: {
       main: purple[500],
@@ -14,7 +14,7 @@ const DEV_AND_CODE_THEME = createMuiTheme({
   },
 });
 
-const PROD_THEME = createMuiTheme({});
+const PROD_THEME = createTheme({});
 
 export const getTheme = (): Theme => {
   const stage = getStage();

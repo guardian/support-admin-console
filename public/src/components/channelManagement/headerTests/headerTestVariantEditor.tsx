@@ -1,15 +1,8 @@
 // Note: we developed this component expecting that headers would have the ability to display different copy and CTAs on small screens, thus requiring this form to include fields for that content. However it seems like current functionality of the GU frontend is to only show the main copy and CTAs, whatever the screen size may be. Code to include and action mobile-specific fields can be found in earlier commits in this PR: https://github.com/guardian/support-admin-console/pull/259
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import {
-  TextField,
-  Theme,
-  Typography,
-  makeStyles,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
-} from '@material-ui/core';
+import { TextField, Theme, Typography, RadioGroup, FormControlLabel, Radio } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import HeaderTestVariantEditorCtasEditor from './headerTestVariantEditorCtasEditor';
 import VariantEditorCopyLengthWarning from '../variantEditorCopyLengthWarning';
 import { templateValidatorForPlatform } from '../helpers/validation';

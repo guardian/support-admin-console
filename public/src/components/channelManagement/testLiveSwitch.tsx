@@ -6,13 +6,13 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
-  makeStyles,
   Switch,
   Theme,
   Typography,
-} from '@material-ui/core';
+} from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import useOpenable from '../../hooks/useOpenable';
-import CloseIcon from '@material-ui/icons/Close';
+import CloseIcon from '@mui/icons-material/Close';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {

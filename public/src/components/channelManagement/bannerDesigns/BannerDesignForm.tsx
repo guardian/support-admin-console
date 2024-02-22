@@ -1,5 +1,5 @@
 import React from 'react';
-import { Accordion, AccordionDetails, AccordionSummary } from '@material-ui/core';
+import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
 import {
   BannerDesign,
   BannerDesignHeaderImage,
@@ -9,7 +9,8 @@ import {
   HighlightedTextColours,
   TickerDesign,
 } from '../../../models/bannerDesign';
-import { makeStyles, Theme } from '@material-ui/core/styles';
+import { Theme } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
 import { BasicColoursEditor } from './BasicColoursEditor';
 import { HighlightedTextColoursEditor } from './HighlightedTextColoursEditor';
 import { CtaColoursEditor } from './CtaColoursEditor';
@@ -17,8 +18,8 @@ import { BannerDesignUsage } from './BannerDesignUsage';
 import { TickerDesignEditor } from './TickerDesignEditor';
 import { HeaderImageEditor } from './HeaderImageEditor';
 import { BannerVisualEditor } from './BannerVisualEditor';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { InfoOutlined } from '@material-ui/icons';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { InfoOutlined } from '@mui/icons-material';
 
 type Props = {
   design: BannerDesign;

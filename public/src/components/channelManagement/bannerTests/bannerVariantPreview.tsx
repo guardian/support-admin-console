@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { Button, makeStyles, Theme } from '@material-ui/core';
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import Drawer from '@material-ui/core/Drawer';
+import { Button, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import Drawer from '@mui/material/Drawer';
 import {
   BannerContent,
   BannerTemplate,
   BannerVariant,
   isBannerTemplate,
 } from '../../../models/banner';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 import { useModule } from '../../../hooks/useModule';
 import useTickerData, { TickerSettingsWithData } from '../hooks/useTickerData';
 import { mockAmountsCardData, SelectedAmountsVariant } from '../../../utils/models';

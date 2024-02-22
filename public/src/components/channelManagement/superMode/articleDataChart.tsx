@@ -1,16 +1,10 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { addHours, subHours, formatISO9075 } from 'date-fns';
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-  makeStyles,
-  Typography,
-} from '@material-ui/core';
+import { Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { SuperModeRow } from './useSuperModeRows';
-import CloseIcon from '@material-ui/icons/Close';
+import CloseIcon from '@mui/icons-material/Close';
 import { ArticleDetails } from './articleDetails';
 import { BarChart, Bar, CartesianGrid, XAxis, YAxis } from 'recharts';
 

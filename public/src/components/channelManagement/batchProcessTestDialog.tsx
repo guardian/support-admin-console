@@ -12,10 +12,10 @@ import {
   ListItemText,
   Checkbox,
   Typography,
-  makeStyles,
-} from '@material-ui/core';
+} from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { Test } from './helpers/shared';
-import CloseIcon from '@material-ui/icons/Close';
+import CloseIcon from '@mui/icons-material/Close';
 import useOpenable from '../../hooks/useOpenable';
 
 const useStyles = makeStyles(() => ({

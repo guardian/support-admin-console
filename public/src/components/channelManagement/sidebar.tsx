@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Button, makeStyles, Typography } from '@material-ui/core';
+import { Button, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { LockStatus, Test } from './helpers/shared';
 import TestList from './testList';
 import TestPriorityLabelList from './testPriorityLabelList';
@@ -8,8 +9,8 @@ import BatchProcessTestButton from './batchProcessTestButton';
 
 import TestListSidebarFilterSelector from './testListSidebarFilterSelector';
 import { RegionsAndAll } from '../../utils/models';
-import EditIcon from '@material-ui/icons/Edit';
-import SaveIcon from '@material-ui/icons/Save';
+import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
 
 const useStyles = makeStyles(() => ({
   root: {

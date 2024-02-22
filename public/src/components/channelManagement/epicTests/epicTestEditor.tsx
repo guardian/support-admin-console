@@ -9,7 +9,7 @@ import {
   SignedInStatus,
   PageContextTargeting,
 } from '../helpers/shared';
-import { FormControlLabel, Switch, Typography } from '@material-ui/core';
+import { FormControlLabel, Switch, Typography } from '@mui/material';
 import CampaignSelector from '../CampaignSelector';
 import TestVariantsEditor from '../testVariantsEditor';
 import TestEditorVariantSummary from '../testEditorVariantSummary';

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Region } from '../../../utils/models';
 import { ArticlesViewedSettings, DeviceType, SignedInStatus, UserCohort } from '../helpers/shared';
 import { ARTICLE_COUNT_TEMPLATE } from '../helpers/validation';
-import { Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
 import BannerTestVariantEditor from './bannerTestVariantEditor';
 import CampaignSelector from '../CampaignSelector';
 import TestVariantsEditor from '../testVariantsEditor';

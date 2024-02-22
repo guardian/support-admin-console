@@ -1,7 +1,8 @@
 import React from 'react';
 import { HighlightedTextColours } from '../../../models/bannerDesign';
 import { ColourInput } from './ColourInput';
-import { makeStyles, Theme } from '@material-ui/core/styles';
+import { Theme } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {

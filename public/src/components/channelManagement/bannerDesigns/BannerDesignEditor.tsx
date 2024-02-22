@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import StickyTopBar from './StickyTopBar';
-import { makeStyles, Theme } from '@material-ui/core';
+import { Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { LockStatus } from '../helpers/shared';
 import useValidation from '../hooks/useValidation';
 import BannerDesignForm from './BannerDesignForm';

@@ -5,12 +5,12 @@ import {
   Card,
   CardContent,
   FormControl,
-  makeStyles,
   Paper,
   TextField,
   Theme,
   Typography,
-} from '@material-ui/core';
+} from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import QRCode from 'react-qr-code';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
