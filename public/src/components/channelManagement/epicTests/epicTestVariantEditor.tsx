@@ -75,7 +75,6 @@ const PARAGRAPHS_MAX_LENGTH = 2000;
 const HEADER_DEFAULT_HELPER_TEXT = `Assitive text`;
 const BODY_DEFAULT_HELPER_TEXT = `Maximum ${PARAGRAPHS_MAX_LENGTH} characters.`;
 const HIGHTLIGHTED_TEXT_DEFAULT_HELPER_TEXT = `Final sentence of body copy.`;
-const FOOTER_DEFAULT_HELPER_TEXT = `Bold text below the button.`;
 
 interface FormData {
   heading?: string;
@@ -83,7 +82,6 @@ interface FormData {
   highlightedText?: string;
   image?: Image;
   bylineWithImage?: BylineWithImage;
-  footer?: string;
 }
 
 interface EpicTestVariantEditorProps {
@@ -106,7 +104,6 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
     allowMultipleVariants,
     allowVariantHeader,
     allowVariantHighlightedText,
-    allowVariantFooter,
     allowVariantImageUrl,
     allowVariantCustomPrimaryCta,
     allowVariantCustomSecondaryCta,
@@ -130,7 +127,6 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
     highlightedText: variant.highlightedText,
     image: variant.image,
     bylineWithImage: variant.bylineWithImage,
-    footer: variant.footer,
   };
 
   /**
@@ -160,7 +156,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
-  }, [errors.heading, errors.paragraphs, errors.highlightedText, errors.image, errors.footer]);
+  }, [errors.heading, errors.paragraphs, errors.highlightedText, errors.image]);
 
   const noHtml = platform !== 'DOTCOM';
   const htmlValidator = noHtml ? noHtmlValidator : () => undefined;
@@ -322,45 +318,6 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                 rteMenuConstraints={{
                   noHtml,
                   noBold: true,
-                  noCurrencyTemplate,
-                  noCountryNameTemplate,
-                  noArticleCountTemplate,
-                  noPriceTemplates: true,
-                  noDateTemplate,
-                  noDayTemplate,
-                }}
-              />
-            );
-          }}
-        />
-      )}
-
-      {allowVariantFooter && (
-        <Controller
-          name="footer"
-          control={control}
-          rules={{
-            validate: lineValidator,
-          }}
-          render={data => {
-            return (
-              <RichTextEditorSingleLine
-                error={errors.footer !== undefined}
-                helperText={
-                  errors.footer
-                    ? errors.footer.message || errors.footer.type
-                    : FOOTER_DEFAULT_HELPER_TEXT
-                }
-                copyData={data.value}
-                updateCopy={pars => {
-                  data.onChange(pars);
-                  handleSubmit(setValidatedFields)();
-                }}
-                name="footer"
-                label="Footer"
-                disabled={!editMode}
-                rteMenuConstraints={{
-                  noHtml,
                   noCurrencyTemplate,
                   noCountryNameTemplate,
                   noArticleCountTemplate,
