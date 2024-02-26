@@ -70,7 +70,7 @@ export const SectionsEditor: React.FC<SectionEditorProps> = ({
         <TextField {...params} variant="outlined" label={label} />
       )}
       renderOption={(props, option): JSX.Element => {
-        return <div>{option.name ? option.name : option.id}</div>;
+        return <li {...props}>{option.name ? option.name : option.id}</li>;
       }}
       onChange={(event, values: Section[], reason): void => {
         if (reason === 'selectOption' || reason === 'removeOption') {
