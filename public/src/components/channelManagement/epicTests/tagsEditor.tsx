@@ -101,7 +101,7 @@ export const TagsEditor: React.FC<TagEditorProps> = ({
         <TextField {...params} variant="outlined" label={label} />
       )}
       renderOption={(props, option): JSX.Element => {
-        return <div>{option.name ? `${option.name} (${option.id})` : option.id}</div>;
+        return <li {...props}>{option.name ? `${option.name} (${option.id})` : option.id}</li>;
       }}
       onChange={(event, values: Tag[], reason): void => {
         if (reason === 'selectOption' || reason === 'removeOption') {
