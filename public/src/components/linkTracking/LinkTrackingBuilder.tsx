@@ -50,6 +50,14 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   },
 }));
 
+const addHttps = (url: string): string => {
+  if (url.startsWith('https://')) {
+    return url;
+  } else {
+    return `https://${url}`;
+  }
+};
+
 interface FormData {
   url: string;
   campaign: string;
@@ -70,7 +78,8 @@ export const LinkTrackingBuilder: React.FC = () => {
   } = useForm<FormData>();
 
   const onSubmit: SubmitHandler<FormData> = ({ url, campaign, content, term, medium }) => {
-    const link = `${url}?utm_medium=${medium}&utm_campaign=${campaign}&utm_content=${content}&utm_term=${term}`;
+    const urlWithHttps = addHttps(url);
+    const link = `${urlWithHttps}?utm_medium=${medium}&utm_campaign=${campaign}&utm_content=${content}&utm_term=${term}`;
     setLink(link);
   };
 
@@ -85,7 +94,7 @@ export const LinkTrackingBuilder: React.FC = () => {
             validate: value => {
               // Check it's a valid url and has no querystring
               try {
-                const url = new URL(value);
+                const url = new URL(addHttps(value));
                 if (url.search !== '') {
                   return 'URL must not already have tracking';
                 }
