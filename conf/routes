@@ -35,6 +35,8 @@ GET /campaigns/:name                                controllers.Application.inde
 
 GET /qr-code                                        controllers.Application.index
 
+GET /lynx                                           controllers.Application.index
+
 GET /apps-metering-switches                         controllers.Application.index
 
 GET /default-promos                                 controllers.Application.index

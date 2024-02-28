@@ -38,6 +38,7 @@ import { SuperModeDashboard } from './components/channelManagement/superMode/sup
 import BannerDesigns from './components/channelManagement/bannerDesigns/';
 import DefaultPromos from './components/defaultPromos';
 import { StyledEngineProvider } from '@mui/material';
+import { LinkTrackingBuilder } from './components/linkTracking/LinkTrackingBuilder';
 
 declare module '@mui/styles' {
   // https://mui.com/material-ui/migration/v5-style-changes/#%E2%9C%85-add-module-augmentation-for-defaulttheme-typescript
@@ -218,6 +219,12 @@ const AppRouter = () => {
         <Route
           path="/qr-code"
           render={(): React.ReactElement => createComponent(<QrCodePage />, 'QR Code Generator')}
+        />
+        <Route
+          path="/lynx"
+          render={(): React.ReactElement =>
+            createComponent(<LinkTrackingBuilder />, 'Link Tracking Builder')
+          }
         />
         <Route
           path="/apps-metering-switches"
