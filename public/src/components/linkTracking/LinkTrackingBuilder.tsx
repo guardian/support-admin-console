@@ -83,8 +83,12 @@ export const LinkTrackingBuilder: React.FC = () => {
           inputRef={register({
             required: true,
             validate: value => {
+              // Check it's a valid url and has no querystring
               try {
-                new URL(value);
+                const url = new URL(value);
+                if (url.search !== '') {
+                  return 'URL must not already have tracking';
+                }
                 return true;
               } catch {
                 return 'Invalid URL';
