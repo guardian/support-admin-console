@@ -74,7 +74,7 @@ export const LinkTrackingBuilder: React.FC = () => {
     control,
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors },
   } = useForm<FormData>();
 
   const onSubmit: SubmitHandler<FormData> = ({ url, campaign, content, term, medium }) => {
@@ -82,6 +82,8 @@ export const LinkTrackingBuilder: React.FC = () => {
     const link = `${urlWithHttps}?utm_medium=${medium}&utm_campaign=${campaign}&utm_content=${content}&utm_term=${term}`;
     setLink(link);
   };
+
+  const linkReady = link.trim() !== '';
 
   return (
     <form
@@ -147,11 +149,11 @@ export const LinkTrackingBuilder: React.FC = () => {
         <MediumSelector control={control} />
       </div>
 
-      <Button type="submit" variant="contained" color="primary">
+      <Button type="submit" variant="contained" color="primary" disabled={linkReady}>
         Build link
       </Button>
 
-      {link.trim() !== '' && isValid && (
+      {linkReady && (
         <div className={classes.linkContainer}>
           <TextField className={classes.link} value={link} disabled />
           <Button
