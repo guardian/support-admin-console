@@ -74,7 +74,7 @@ export const LinkTrackingBuilder: React.FC = () => {
     control,
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<FormData>();
 
   const onSubmit: SubmitHandler<FormData> = ({ url, campaign, content, term, medium }) => {
@@ -84,7 +84,11 @@ export const LinkTrackingBuilder: React.FC = () => {
   };
 
   return (
-    <form className={classes.container} onSubmit={handleSubmit(onSubmit)}>
+    <form
+      className={classes.container}
+      onChange={() => setLink('')}
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <div className={classes.fieldsContainer}>
         <TextField
           name="url"
@@ -147,19 +151,21 @@ export const LinkTrackingBuilder: React.FC = () => {
         Build link
       </Button>
 
-      <div className={classes.linkContainer}>
-        <TextField className={classes.link} value={link} disabled />
-        <Button
-          className={classes.copyButton}
-          variant="outlined"
-          startIcon={<Link />}
-          onClick={() => {
-            navigator.clipboard.writeText(link);
-          }}
-        >
-          Copy
-        </Button>
-      </div>
+      {link.trim() !== '' && isValid && (
+        <div className={classes.linkContainer}>
+          <TextField className={classes.link} value={link} disabled />
+          <Button
+            className={classes.copyButton}
+            variant="outlined"
+            startIcon={<Link />}
+            onClick={() => {
+              navigator.clipboard.writeText(link);
+            }}
+          >
+            Copy
+          </Button>
+        </div>
+      )}
     </form>
   );
 };
