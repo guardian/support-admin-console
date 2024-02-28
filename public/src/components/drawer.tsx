@@ -220,6 +220,11 @@ export default function NavDrawer(): React.ReactElement {
             <ListItemText primary="QR Code Generator" />
           </ListItem>
         </Link>
+        <Link key="Link Tracking Builder" to="/lynx" className={classes.link}>
+          <ListItem className={classes.listItem} button key="Link Tracking Builder">
+            <ListItemText primary="Link Tracking Builder" />
+          </ListItem>
+        </Link>
         <Link key="Apps Metering Switches" to="/apps-metering-switches" className={classes.link}>
           <ListItem className={classes.listItem} button key="Apps Metering Switches">
             <ListItemText primary="Apps Metering Switches" />
