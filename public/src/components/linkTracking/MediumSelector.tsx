@@ -23,6 +23,7 @@ const OPTIONS: OptionGroup[] = [
       { value: 'ACQUISITIONS_ARTICLE_EMBED', label: 'ACQUISITIONS_ARTICLE_EMBED' },
       { value: 'ACQUISITIONS_EPIC', label: 'ACQUISITIONS_EPIC' },
       { value: 'ACQUISITIONS_HOUSE_ADS', label: 'ACQUISITIONS_HOUSE_ADS' },
+      { value: 'DISPLAY_AD', label: 'DISPLAY_AD' },
     ],
   },
   {
@@ -37,9 +38,7 @@ const OPTIONS: OptionGroup[] = [
   {
     group: 'DISPLAY',
     options: [
-      { value: 'odpy', label: 'Display (odpy)' },
       { value: 'dispad', label: 'Display ad (dispad)' },
-      { value: 'gdn', label: 'Display gdn (gdn)' },
       { value: 'pgmtc', label: 'Programmatic (pgmtc)' },
     ],
   },
