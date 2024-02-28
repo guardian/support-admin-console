@@ -99,7 +99,7 @@ export const LinkTrackingBuilder: React.FC = () => {
               // Check it's a valid url and has no querystring
               try {
                 const url = new URL(addHttps(value));
-                if (url.search !== '') {
+                if (value.endsWith('?') || url.search !== '') {
                   return 'URL must not already have tracking';
                 }
                 return true;
