@@ -139,7 +139,7 @@ export const LinkTrackingBuilder: React.FC = () => {
       </Button>
 
       <div className={classes.linkContainer}>
-        <TextField className={classes.link} label="Link with tracking" value={link} disabled />
+        <TextField className={classes.link} value={link} disabled />
         <Button
           className={classes.copyButton}
           variant="outlined"
