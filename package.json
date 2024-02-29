@@ -4,7 +4,7 @@
     "@types/material-ui": "^0.21.16",
     "@types/react": "~17.0.58",
     "@types/react-dom": "^18.2.19",
-    "@types/react-router-dom": "^5.1.9",
+    "@types/react-router-dom": "^5.3.3",
     "@typescript-eslint/eslint-plugin": "^4.1.1",
     "@typescript-eslint/parser": "^4.1.1",
     "css-loader": "^6.7.3",
@@ -48,7 +48,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^6.15.8",
     "react-qr-code": "^2.0.7",
-    "react-router-dom": "^5.2.0",
+    "react-router-dom": "^6.2.1",
     "recharts": "2.0.8",
     "remirror": "^1.0.60"
   },
