@@ -156,11 +156,7 @@ const AppRouter = () => {
       <div className={classes.root}>
         <CssBaseline />
         <Routes>
-          <Route
-            // exact
-            path="/"
-            element={createComponent(<IndexPage />, 'Home Page')}
-          />
+          <Route path="/" element={createComponent(<IndexPage />, 'Home Page')} />
           <Route path="/switches" element={createComponent(<Switchboard />, 'Switches')} />
           <Route path="/amounts" element={createComponent(<AmountsForm />, 'Amounts')} />
           <Route
