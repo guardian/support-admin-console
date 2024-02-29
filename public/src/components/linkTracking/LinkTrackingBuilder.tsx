@@ -1,9 +1,10 @@
 import React from 'react';
-import { Button, TextField, Theme, Typography } from '@mui/material';
+import { Button, TextField, Theme, Typography, Link } from '@mui/material';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { makeStyles } from '@mui/styles';
-import { Link } from '@mui/icons-material';
 import { MediumSelector } from './MediumSelector';
+import lzstring from 'lz-string';
+import { Link as LinkIcon, OpenInNew } from '@mui/icons-material';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {
@@ -47,6 +48,14 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
     fontSize: 16,
     color: palette.grey[900],
     fontWeight: 500,
+  },
+  qrContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    marginLeft: spacing(2),
+    '& > * + *': {
+      marginLeft: '4px',
+    },
   },
 }));
 
@@ -159,13 +168,22 @@ export const LinkTrackingBuilder: React.FC = () => {
           <Button
             className={classes.copyButton}
             variant="outlined"
-            startIcon={<Link />}
+            startIcon={<LinkIcon />}
             onClick={() => {
               navigator.clipboard.writeText(link);
             }}
           >
             Copy
           </Button>
+
+          <Link
+            className={classes.qrContainer}
+            target="_blank"
+            href={`/qr-code?url=${lzstring.compressToEncodedURIComponent(link)}`}
+          >
+            <OpenInNew />
+            <span>QR code</span>
+          </Link>
         </div>
       )}
     </form>
