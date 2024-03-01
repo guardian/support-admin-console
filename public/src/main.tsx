@@ -58,6 +58,7 @@ declare global {
         emotionReact: any;
         emotionReactJsxRuntime: any;
       };
+      sdcUrlOverride: string | undefined;
     };
   }
   /* eslint-enable @typescript-eslint/no-explicit-any */

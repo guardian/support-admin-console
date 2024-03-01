@@ -6,6 +6,19 @@ import { withPreviewStyles } from '../components/channelManagement/previewContai
 
 const moduleVersion = 3;
 
+const getSdcBaseUrl = (): string => {
+  // If override explicitly provided, use it
+  if (window.guardian.sdcUrlOverride) {
+    return `${window.guardian.sdcUrlOverride}/modules/v${moduleVersion}`;
+  }
+
+  // Otherwise, use the stage to determine the base URL
+  const stage = getStage();
+  return stage === 'PROD'
+    ? `https://contributions.guardianapis.com/modules/v${moduleVersion}`
+    : `https://contributions.code.dev-guardianapis.com/modules/v${moduleVersion}`;
+};
+
 /**
  * Hook for importing a remote module, for live previews.
  */
@@ -20,12 +33,7 @@ export const useModule = <T>(path: string, name: string): React.FC<T> | undefine
       emotionReactJsxRuntime,
     };
 
-    const stage = getStage();
-
-    const baseUrl =
-      stage === 'PROD'
-        ? `https://contributions.guardianapis.com/modules/v${moduleVersion}`
-        : `https://contributions.code.dev-guardianapis.com/modules/v${moduleVersion}`;
+    const baseUrl = getSdcBaseUrl();
 
     window.remoteImport(`${baseUrl}/${path}`).then(bannerModule => {
       setModule(() => withPreviewStyles(bannerModule[name]));
