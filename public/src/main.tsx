@@ -1,7 +1,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Switchboard from './components/switchboard';
 import BannerDeployDashboard from './components/channelManagement/bannerDeploy/bannerDeployDashboard';
 import AmountsForm from './components/amounts/AmountsForm';
@@ -38,6 +38,7 @@ import { SuperModeDashboard } from './components/channelManagement/superMode/sup
 import BannerDesigns from './components/channelManagement/bannerDesigns/';
 import DefaultPromos from './components/defaultPromos';
 import { StyledEngineProvider } from '@mui/material';
+import { LinkTrackingBuilder } from './components/linkTracking/LinkTrackingBuilder';
 
 declare module '@mui/styles' {
   // https://mui.com/material-ui/migration/v5-style-changes/#%E2%9C%85-add-module-augmentation-for-defaulttheme-typescript
@@ -155,91 +156,72 @@ const AppRouter = () => {
     <Router>
       <div className={classes.root}>
         <CssBaseline />
-        <Route
-          exact
-          path="/"
-          render={(): React.ReactElement => createComponent(<IndexPage />, 'Home Page')}
-        />
-        <Route
-          path="/switches"
-          render={(): React.ReactElement => createComponent(<Switchboard />, 'Switches')}
-        />
-        <Route
-          path="/amounts"
-          render={(): React.ReactElement => createComponent(<AmountsForm />, 'Amounts')}
-        />
-        <Route
-          path="/header-tests/:testName?"
-          render={(): React.ReactElement => createComponent(<HeaderTestsForm />, 'Header Tests')}
-        />
-        <Route
-          path="/epic-tests/:testName?"
-          render={(): React.ReactElement => createComponent(<ArticleEpicTestsForm />, 'Epic Tests')}
-        />
-        <Route
-          path="/liveblog-epic-tests/:testName?"
-          render={(): React.ReactElement =>
-            createComponent(<LiveblogEpicTestsForm />, 'Liveblog Epic Tests')
-          }
-        />
-        <Route
-          path="/apple-news-epic-tests/:testName?"
-          render={(): React.ReactElement =>
-            createComponent(<AppleNewsEpicTestsForm />, 'Apple News Epics')
-          }
-        />
-        <Route
-          path="/amp-epic-tests/:testName?"
-          render={(): React.ReactElement => createComponent(<AMPEpicTestsForm />, 'AMP Epics')}
-        />
-        <Route
-          path="/banner-tests/:testName?"
-          render={(): React.ReactElement => createComponent(<BannerTestsForm1 />, 'Banner Tests 1')}
-        />
-        <Route
-          path="/banner-tests2/:testName?"
-          render={(): React.ReactElement => createComponent(<BannerTestsForm2 />, 'Banner Tests 2')}
-        />
-        <Route
-          path="/banner-deploy"
-          render={(): React.ReactElement =>
-            createComponent(<BannerDeployDashboard />, 'Banner Deploy')
-          }
-        />
-        <Route
-          path="/channel-switches"
-          render={(): React.ReactElement =>
-            createComponent(<ChannelSwitches />, 'Channel Switches')
-          }
-        />
-        <Route
-          path="/campaigns/:campaignName?"
-          render={(): React.ReactElement => createComponent(<CampaignsForm />, 'Campaigns')}
-        />
-        <Route
-          path="/qr-code"
-          render={(): React.ReactElement => createComponent(<QrCodePage />, 'QR Code Generator')}
-        />
-        <Route
-          path="/apps-metering-switches"
-          render={(): React.ReactElement =>
-            createComponent(<AppsMeteringSwitches />, 'Apps Metering Switches')
-          }
-        />
-        <Route
-          path="/super-mode"
-          render={(): React.ReactElement =>
-            createComponent(<SuperModeDashboard />, 'Epic Super Mode dashboard 🦸')
-          }
-        />
-        <Route
-          path="/default-promos"
-          render={(): React.ReactElement => createComponent(<DefaultPromos />, 'Default Promos')}
-        />
-        <Route
-          path="/banner-designs/:name?"
-          render={(): React.ReactElement => createComponent(<BannerDesigns />, 'Banner Designs')}
-        />
+        <Routes>
+          <Route path="/" element={createComponent(<IndexPage />, 'Home Page')} />
+          <Route path="/switches" element={createComponent(<Switchboard />, 'Switches')} />
+          <Route path="/amounts" element={createComponent(<AmountsForm />, 'Amounts')} />
+          <Route
+            path="/header-tests/:testName?"
+            element={createComponent(<HeaderTestsForm />, 'Header Tests')}
+          />
+          <Route
+            path="/epic-tests/:testName?"
+            element={createComponent(<ArticleEpicTestsForm />, 'Epic Tests')}
+          />
+          <Route
+            path="/liveblog-epic-tests/:testName?"
+            element={createComponent(<LiveblogEpicTestsForm />, 'Liveblog Epic Tests')}
+          />
+          <Route
+            path="/apple-news-epic-tests/:testName?"
+            element={createComponent(<AppleNewsEpicTestsForm />, 'Apple News Epics')}
+          />
+          <Route
+            path="/amp-epic-tests/:testName?"
+            element={createComponent(<AMPEpicTestsForm />, 'AMP Epics')}
+          />
+          <Route
+            path="/banner-tests/:testName?"
+            element={createComponent(<BannerTestsForm1 />, 'Banner Tests 1')}
+          />
+          <Route
+            path="/banner-tests2/:testName?"
+            element={createComponent(<BannerTestsForm2 />, 'Banner Tests 2')}
+          />
+          <Route
+            path="/banner-deploy"
+            element={createComponent(<BannerDeployDashboard />, 'Banner Deploy')}
+          />
+          <Route
+            path="/channel-switches"
+            element={createComponent(<ChannelSwitches />, 'Channel Switches')}
+          />
+          <Route
+            path="/campaigns/:campaignName?"
+            element={createComponent(<CampaignsForm />, 'Campaigns')}
+          />
+          <Route path="/qr-code" element={createComponent(<QrCodePage />, 'QR Code Generator')} />
+          <Route
+            path="/lynx"
+            element={createComponent(<LinkTrackingBuilder />, 'Link Tracking Builder')}
+          />
+          <Route
+            path="/apps-metering-switches"
+            element={createComponent(<AppsMeteringSwitches />, 'Apps Metering Switches')}
+          />
+          <Route
+            path="/super-mode"
+            element={createComponent(<SuperModeDashboard />, 'Epic Super Mode dashboard 🦸')}
+          />
+          <Route
+            path="/default-promos"
+            element={createComponent(<DefaultPromos />, 'Default Promos')}
+          />
+          <Route
+            path="/banner-designs/:name?"
+            element={createComponent(<BannerDesigns />, 'Banner Designs')}
+          />
+        </Routes>
       </div>
     </Router>
   );
