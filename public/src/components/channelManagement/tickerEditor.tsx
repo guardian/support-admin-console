@@ -4,13 +4,13 @@ import {
   Checkbox,
   FormControl,
   FormLabel,
-  makeStyles,
   Radio,
   RadioGroup,
   TextField,
   Theme,
-} from '@material-ui/core';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+} from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import { TickerCountType, TickerEndType, TickerName, TickerSettings } from './helpers/shared';
 import { EMPTY_ERROR_HELPER_TEXT } from './helpers/validation';
 

@@ -1,5 +1,6 @@
 import React from 'react';
-import { Theme, makeStyles } from '@material-ui/core';
+import { Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
 import { TagsEditor } from './epicTests/tagsEditor';
 import { SectionsEditor } from './epicTests/sectionsEditor';

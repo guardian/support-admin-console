@@ -6,9 +6,9 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
-  makeStyles,
-} from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
+} from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import CloseIcon from '@mui/icons-material/Close';
 import { Test } from '../helpers/shared';
 
 const useStyles = makeStyles(() => ({
@@ -235,12 +235,6 @@ const variantFields = {
       label: 'Highlighted text',
       type: 'string-block',
       exclude: ['Header'],
-      optional: true,
-    },
-    footer: {
-      label: 'Footer',
-      type: 'string-block',
-      exclude: ['Header', 'Banner1', 'Banner2'],
       optional: true,
     },
     cta: {

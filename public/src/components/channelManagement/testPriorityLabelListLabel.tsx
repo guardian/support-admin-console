@@ -1,5 +1,6 @@
 import React from 'react';
-import { Typography, Theme, makeStyles } from '@material-ui/core';
+import { Typography, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles(({ palette }: Theme) => ({
   container: {

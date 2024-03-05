@@ -7,14 +7,14 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
-  makeStyles,
   TextField,
   Theme,
   Typography,
-} from '@material-ui/core';
+} from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
-import AddIcon from '@material-ui/icons/Add';
-import CloseIcon from '@material-ui/icons/Close';
+import AddIcon from '@mui/icons-material/Add';
+import CloseIcon from '@mui/icons-material/Close';
 
 import useOpenable from '../../../hooks/useOpenable';
 

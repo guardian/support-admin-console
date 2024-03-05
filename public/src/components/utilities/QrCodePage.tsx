@@ -5,13 +5,15 @@ import {
   Card,
   CardContent,
   FormControl,
-  makeStyles,
   Paper,
   TextField,
   Theme,
   Typography,
-} from '@material-ui/core';
+} from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import QRCode from 'react-qr-code';
+import { useSearchParams } from 'react-router-dom';
+import lzstring from 'lz-string';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -79,8 +81,16 @@ function UserAdvice() {
   );
 }
 
+const decodeUrlFromParam = (params: URLSearchParams): string | undefined => {
+  const url = params.get('url');
+  if (url) {
+    return lzstring.decompressFromEncodedURIComponent(url);
+  }
+};
+
 export default function QrCodePage(): JSX.Element {
-  const [url, setUrl] = useState('');
+  const [searchParams] = useSearchParams();
+  const [url, setUrl] = useState(decodeUrlFromParam(searchParams) ?? '');
   const [fileName, setFileName] = useState('');
   const [codeSize, setCodeSize] = useState(256);
   const classes = useStyles();
@@ -118,6 +128,7 @@ export default function QrCodePage(): JSX.Element {
               onChange={e => setUrl(e.target.value)}
               type="text"
               required
+              value={url}
             />
           </FormControl>
           <FormControl>

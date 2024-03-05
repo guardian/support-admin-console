@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { Theme, Typography, makeStyles } from '@material-ui/core';
+import { Theme, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { Region } from '../../utils/models';
 import { DeviceType, SignedInStatus, UserCohort, TestPlatform } from './helpers/shared';
 
@@ -98,7 +99,9 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
             labels={{
               All: 'All',
               Desktop: 'Desktop',
-              Mobile: 'Mobile',
+              Mobile: 'Mobile (All)',
+              iOS: 'Mobile (iOS)',
+              Android: 'Mobile (Android)',
             }}
           />
         </div>

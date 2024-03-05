@@ -1,15 +1,8 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
-import {
-  FormControl,
-  makeStyles,
-  Radio,
-  RadioGroup,
-  FormControlLabel,
-  TextField,
-  Theme,
-} from '@material-ui/core';
+import { FormControl, Radio, RadioGroup, FormControlLabel, TextField, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { notNumberValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 import { DEFAULT_MAX_EPIC_VIEWS } from './utils/defaults';
 import { MaxEpicViews } from '../../../models/epic';

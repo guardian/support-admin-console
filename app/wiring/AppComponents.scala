@@ -73,9 +73,11 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
   val dynamoBannerDesigns = new DynamoBannerDesigns(stage, dynamoClient)
   val dynamoArchivedBannerDesigns = new DynamoArchivedBannerDesigns(stage, dynamoClient)
 
+  val sdcUrlOverride: Option[String] = sys.env.get("SDC_URL")
+
   override lazy val router: Router = new Routes(
     httpErrorHandler,
-    new Application(authAction, controllerComponents, stage),
+    new Application(authAction, controllerComponents, stage, sdcUrlOverride),
     new Login(authConfig, wsClient, requiredGoogleGroups, googleGroupChecker, controllerComponents),
     new SwitchesController(authAction, controllerComponents, stage, runtime),
     new AmountsController(authAction, controllerComponents, stage, runtime),

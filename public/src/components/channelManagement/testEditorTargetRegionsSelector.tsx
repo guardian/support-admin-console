@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { Checkbox, FormControlLabel, FormGroup, Theme, makeStyles } from '@material-ui/core';
+import { Checkbox, FormControlLabel, FormGroup, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { Region, regions, regionIds } from '../../utils/models';
 import { TestPlatform } from './helpers/shared';
 

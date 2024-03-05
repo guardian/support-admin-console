@@ -24,7 +24,6 @@ export interface EpicVariant extends Variant {
   heading?: string;
   paragraphs: string[];
   highlightedText?: string;
-  footer?: string;
   showTicker: boolean;
   tickerSettings?: TickerSettings;
   image?: Image;

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import BannerVariantPreview from '../bannerTests/bannerVariantPreview';
 import { BannerDesign } from '../../../models/bannerDesign';
-import { Checkbox, FormControlLabel } from '@material-ui/core';
+import { Checkbox, FormControlLabel } from '@mui/material';
 import { BannerVariant } from '../../../models/banner';
 import { TickerCountType, TickerEndType, TickerName } from '../helpers/shared';
 

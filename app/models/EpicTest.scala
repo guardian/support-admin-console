@@ -25,7 +25,6 @@ case class EpicVariant(
   heading: Option[String],
   paragraphs: List[String],
   highlightedText: Option[String] = None,
-  footer: Option[String] = None,
   showTicker: Boolean = false,  // Deprecated - use tickerSettings instead
   tickerSettings: Option[TickerSettings] = None,
   image: Option[Image] = None,

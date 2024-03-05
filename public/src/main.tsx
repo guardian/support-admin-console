@@ -1,7 +1,7 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Switchboard from './components/switchboard';
 import BannerDeployDashboard from './components/channelManagement/bannerDeploy/bannerDeployDashboard';
 import AmountsForm from './components/amounts/AmountsForm';
@@ -18,25 +18,33 @@ import {
 
 import { HeaderTestsForm } from './components/channelManagement/headerTests/headerTestsForm';
 
-import { Theme, ThemeProvider } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import AppBar from '@material-ui/core/AppBar';
-import { CSSProperties } from '@material-ui/core/styles/withStyles';
+import { Theme, ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import AppBar from '@mui/material/AppBar';
+import { CSSProperties } from '@mui/styles';
 import NavDrawer from './components/drawer';
-import Button from '@material-ui/core/Button';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
+import Button from '@mui/material/Button';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
 import IndexPage from './components/indexPage';
 import { getTheme } from './utils/theme';
 import ChannelSwitches from './components/channelManagement/ChannelSwitches';
 import CampaignsForm from './components/channelManagement/campaigns/CampaignsForm';
 import { FontWeightProperty } from 'csstype';
-import { makeStyles } from '@material-ui/core';
+import { makeStyles } from '@mui/styles';
 import QrCodePage from './components/utilities/QrCodePage';
 import AppsMeteringSwitches from './components/appsMeteringSwitches';
 import { SuperModeDashboard } from './components/channelManagement/superMode/superModeDashboard';
 import BannerDesigns from './components/channelManagement/bannerDesigns/';
 import DefaultPromos from './components/defaultPromos';
+import { StyledEngineProvider } from '@mui/material';
+import { LinkTrackingBuilder } from './components/linkTracking/LinkTrackingBuilder';
+
+declare module '@mui/styles' {
+  // https://mui.com/material-ui/migration/v5-style-changes/#%E2%9C%85-add-module-augmentation-for-defaulttheme-typescript
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface DefaultTheme extends Theme {}
+}
 
 type Stage = 'DEV' | 'CODE' | 'PROD';
 declare global {
@@ -51,6 +59,7 @@ declare global {
         emotionReact: any;
         emotionReactJsxRuntime: any;
       };
+      sdcUrlOverride: string | undefined;
     };
   }
   /* eslint-enable @typescript-eslint/no-explicit-any */
@@ -144,105 +153,90 @@ const AppRouter = () => {
   );
 
   return (
-    <ThemeProvider theme={getTheme()}>
-      <Router>
-        <div className={classes.root}>
-          <CssBaseline />
-          <Route
-            exact
-            path="/"
-            render={(): React.ReactElement => createComponent(<IndexPage />, 'Home Page')}
-          />
-          <Route
-            path="/switches"
-            render={(): React.ReactElement => createComponent(<Switchboard />, 'Switches')}
-          />
-          <Route
-            path="/amounts"
-            render={(): React.ReactElement => createComponent(<AmountsForm />, 'Amounts')}
-          />
+    <Router>
+      <div className={classes.root}>
+        <CssBaseline />
+        <Routes>
+          <Route path="/" element={createComponent(<IndexPage />, 'Home Page')} />
+          <Route path="/switches" element={createComponent(<Switchboard />, 'Switches')} />
+          <Route path="/amounts" element={createComponent(<AmountsForm />, 'Amounts')} />
           <Route
             path="/header-tests/:testName?"
-            render={(): React.ReactElement => createComponent(<HeaderTestsForm />, 'Header Tests')}
+            element={createComponent(<HeaderTestsForm />, 'Header Tests')}
           />
           <Route
             path="/epic-tests/:testName?"
-            render={(): React.ReactElement =>
-              createComponent(<ArticleEpicTestsForm />, 'Epic Tests')
-            }
+            element={createComponent(<ArticleEpicTestsForm />, 'Epic Tests')}
           />
           <Route
             path="/liveblog-epic-tests/:testName?"
-            render={(): React.ReactElement =>
-              createComponent(<LiveblogEpicTestsForm />, 'Liveblog Epic Tests')
-            }
+            element={createComponent(<LiveblogEpicTestsForm />, 'Liveblog Epic Tests')}
           />
           <Route
             path="/apple-news-epic-tests/:testName?"
-            render={(): React.ReactElement =>
-              createComponent(<AppleNewsEpicTestsForm />, 'Apple News Epics')
-            }
+            element={createComponent(<AppleNewsEpicTestsForm />, 'Apple News Epics')}
           />
           <Route
             path="/amp-epic-tests/:testName?"
-            render={(): React.ReactElement => createComponent(<AMPEpicTestsForm />, 'AMP Epics')}
+            element={createComponent(<AMPEpicTestsForm />, 'AMP Epics')}
           />
           <Route
             path="/banner-tests/:testName?"
-            render={(): React.ReactElement =>
-              createComponent(<BannerTestsForm1 />, 'Banner Tests 1')
-            }
+            element={createComponent(<BannerTestsForm1 />, 'Banner Tests 1')}
           />
           <Route
             path="/banner-tests2/:testName?"
-            render={(): React.ReactElement =>
-              createComponent(<BannerTestsForm2 />, 'Banner Tests 2')
-            }
+            element={createComponent(<BannerTestsForm2 />, 'Banner Tests 2')}
           />
           <Route
             path="/banner-deploy"
-            render={(): React.ReactElement =>
-              createComponent(<BannerDeployDashboard />, 'Banner Deploy')
-            }
+            element={createComponent(<BannerDeployDashboard />, 'Banner Deploy')}
           />
           <Route
             path="/channel-switches"
-            render={(): React.ReactElement =>
-              createComponent(<ChannelSwitches />, 'Channel Switches')
-            }
+            element={createComponent(<ChannelSwitches />, 'Channel Switches')}
           />
           <Route
             path="/campaigns/:campaignName?"
-            render={(): React.ReactElement => createComponent(<CampaignsForm />, 'Campaigns')}
+            element={createComponent(<CampaignsForm />, 'Campaigns')}
           />
+          <Route path="/qr-code" element={createComponent(<QrCodePage />, 'QR Code Generator')} />
           <Route
-            path="/qr-code"
-            render={(): React.ReactElement => createComponent(<QrCodePage />, 'QR Code Generator')}
+            path="/lynx"
+            element={createComponent(<LinkTrackingBuilder />, 'Link Tracking Builder')}
           />
           <Route
             path="/apps-metering-switches"
-            render={(): React.ReactElement =>
-              createComponent(<AppsMeteringSwitches />, 'Apps Metering Switches')
-            }
+            element={createComponent(<AppsMeteringSwitches />, 'Apps Metering Switches')}
           />
           <Route
             path="/super-mode"
-            render={(): React.ReactElement =>
-              createComponent(<SuperModeDashboard />, 'Epic Super Mode dashboard 🦸')
-            }
+            element={createComponent(<SuperModeDashboard />, 'Epic Super Mode dashboard 🦸')}
           />
           <Route
             path="/default-promos"
-            render={(): React.ReactElement => createComponent(<DefaultPromos />, 'Default Promos')}
+            element={createComponent(<DefaultPromos />, 'Default Promos')}
           />
           <Route
             path="/banner-designs/:name?"
-            render={(): React.ReactElement => createComponent(<BannerDesigns />, 'Banner Designs')}
+            element={createComponent(<BannerDesigns />, 'Banner Designs')}
           />
-        </div>
-      </Router>
-    </ThemeProvider>
+        </Routes>
+      </div>
+    </Router>
   );
 };
 
-ReactDOM.render(<AppRouter />, document.getElementById('root'));
+const container = document.getElementById('root');
+if (container) {
+  const root = createRoot(container);
+  root.render(
+    <ThemeProvider theme={getTheme()}>
+      <StyledEngineProvider injectFirst>
+        <AppRouter />
+      </StyledEngineProvider>
+    </ThemeProvider>,
+  );
+} else {
+  console.error('No root element found');
+}

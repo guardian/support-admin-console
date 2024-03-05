@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { makeStyles, Theme } from '@material-ui/core/styles';
+import { Theme } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
 import {
   Checkbox,
   Divider,
@@ -9,7 +10,7 @@ import {
   FormLabel,
   Radio,
   RadioGroup,
-} from '@material-ui/core';
+} from '@mui/material';
 import { AmountsVariantEditorRow } from './AmountsVariantEditorRow';
 import { DeleteVariantButton } from './DeleteVariantButton';
 
@@ -22,7 +23,7 @@ import {
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
-    padding: `${spacing(3)}px ${spacing(4)}px`,
+    padding: `${spacing(3)} ${spacing(4)}`,
     border: `1px solid ${palette.grey[700]}`,
     borderRadius: 4,
     backgroundColor: 'white',

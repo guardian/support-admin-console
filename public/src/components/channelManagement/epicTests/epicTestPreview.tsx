@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button, Dialog, makeStyles, Theme, Typography } from '@material-ui/core';
+import { Button, Dialog, Theme, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import useOpenable from '../../../hooks/useOpenable';
 import EpicVariantPreview from './epicVariantPreview';
 import { EpicTest } from '../../../models/epic';

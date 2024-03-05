@@ -1,4 +1,5 @@
-import { Button, TextField, makeStyles } from '@material-ui/core';
+import { Button, TextField } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React, { useState } from 'react';
 import withS3Data, { InnerProps } from '../hocs/withS3Data';
 import { parsePromoInput } from '../utils/parsePromoInput';
@@ -21,7 +22,7 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     flexDirection: 'column',
     '& > * + *': {
-      marginTop: '5px',
+      marginTop: '16px',
     },
   },
 }));

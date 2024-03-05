@@ -5,14 +5,16 @@ import play.api.mvc._
 
 class Application(authAction: AuthAction[AnyContent],
                   components: ControllerComponents,
-                  stage: String)
+                  stage: String,
+                  sdcUrlOverride: Option[String])
     extends AbstractController(components) {
   def healthcheck = Action {
     Ok("healthy")
   }
 
   def index = authAction {
-    Ok(views.html.index(stage)).withHeaders(CACHE_CONTROL -> "no-cache")
+    Ok(views.html.index(stage, sdcUrlOverride))
+      .withHeaders(CACHE_CONTROL -> "no-cache")
   }
 
   // Handler for endpoints with a resource name in the path. The client takes care of using the name

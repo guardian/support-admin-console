@@ -1,7 +1,8 @@
 import React from 'react';
 import { BasicColours } from '../../../models/bannerDesign';
 import { ColourInput } from './ColourInput';
-import { makeStyles, Theme } from '@material-ui/core/styles';
+import { Theme } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
 import { hexColourToString, stringToHexColour } from '../../../utils/bannerDesigns';
 import TypedRadioGroup from '../TypedRadioGroup';
 

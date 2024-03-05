@@ -1,5 +1,6 @@
 import React from 'react';
-import { Checkbox, FormControlLabel, makeStyles, Theme } from '@material-ui/core';
+import { Checkbox, FormControlLabel, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { Cta } from './helpers/shared';
 import VariantEditorCtaFieldsEditor from './variantEditorCtaFieldsEditor';
 

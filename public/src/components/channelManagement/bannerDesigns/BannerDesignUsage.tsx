@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { getBannerDesignUsage } from '../../../utils/requests';
-import { List, ListItemText } from '@material-ui/core';
+import { List, ListItemText } from '@mui/material';
 import { ListItemButton } from '@mui/material';
-import { makeStyles, Theme } from '@material-ui/core/styles';
-import { OpenInNew } from '@material-ui/icons';
+import { Theme } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
+import { OpenInNew } from '@mui/icons-material';
 
 export const useLocalStyles = makeStyles(({ spacing }: Theme) => ({
   list: {

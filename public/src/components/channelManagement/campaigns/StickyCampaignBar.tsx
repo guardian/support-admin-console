@@ -1,7 +1,8 @@
 import React from 'react';
-import { Theme, Typography, makeStyles, Button } from '@material-ui/core';
-import { grey } from '@material-ui/core/colors';
-import { Link } from '@material-ui/icons';
+import { Theme, Typography, Button } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { grey } from '@mui/material/colors';
+import { Link } from '@mui/icons-material';
 import StatusUpdateButton from './StatusUpdateButton';
 import { Test } from '../helpers/shared';
 

@@ -47,7 +47,6 @@ export interface EpicEditorConfig {
   allowVariantHeader: boolean;
   allowVariantHighlightedText: boolean;
   allowVariantImageUrl: boolean;
-  allowVariantFooter: boolean;
   allowVariantCustomPrimaryCta: boolean;
   allowVariantCustomSecondaryCta: boolean;
   allowVariantSeparateArticleCount: boolean;
@@ -72,7 +71,6 @@ export const ARTICLE_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantHeader: true,
   allowVariantHighlightedText: true,
   allowVariantImageUrl: true,
-  allowVariantFooter: true,
   allowVariantCustomPrimaryCta: true,
   allowVariantCustomSecondaryCta: true,
   allowVariantSeparateArticleCount: true,
@@ -98,7 +96,6 @@ export const LIVEBLOG_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantHeader: true,
   allowVariantHighlightedText: false,
   allowVariantImageUrl: false,
-  allowVariantFooter: false,
   allowVariantCustomPrimaryCta: true,
   allowVariantCustomSecondaryCta: true,
   allowVariantSeparateArticleCount: false,
@@ -125,7 +122,6 @@ export const APPLE_NEWS_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantHeader: true,
   allowVariantHighlightedText: true,
   allowVariantImageUrl: false,
-  allowVariantFooter: false,
   allowVariantCustomPrimaryCta: false,
   allowVariantCustomSecondaryCta: false,
   allowVariantSeparateArticleCount: false,
@@ -151,7 +147,6 @@ export const AMP_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantHeader: true,
   allowVariantHighlightedText: true,
   allowVariantImageUrl: false,
-  allowVariantFooter: false,
   allowVariantCustomPrimaryCta: true,
   allowVariantCustomSecondaryCta: false,
   allowVariantSeparateArticleCount: false,
@@ -256,7 +251,7 @@ export interface TickerSettings {
 
 export type ContributionFrequency = 'ONE_OFF' | 'MONTHLY' | 'ANNUAL';
 
-export type DeviceType = 'Mobile' | 'Desktop' | 'All';
+export type DeviceType = 'Mobile' | 'Desktop' | 'All' | 'iOS' | 'Android';
 
 export interface Image {
   mainUrl: string;

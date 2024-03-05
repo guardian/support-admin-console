@@ -1,6 +1,6 @@
-import { Autocomplete } from '@material-ui/lab';
+import { Autocomplete } from '@mui/lab';
 import React, { useEffect, useCallback } from 'react';
-import { TextField } from '@material-ui/core';
+import { TextField } from '@mui/material';
 import throttle from 'lodash/throttle';
 
 interface Tag {
@@ -100,11 +100,11 @@ export const TagsEditor: React.FC<TagEditorProps> = ({
       renderInput={(params): JSX.Element => (
         <TextField {...params} variant="outlined" label={label} />
       )}
-      renderOption={(option): JSX.Element => {
-        return <div>{option.name ? `${option.name} (${option.id})` : option.id}</div>;
+      renderOption={(props, option): JSX.Element => {
+        return <li {...props}>{option.name ? `${option.name} (${option.id})` : option.id}</li>;
       }}
       onChange={(event, values: Tag[], reason): void => {
-        if (reason === 'select-option' || reason === 'remove-option') {
+        if (reason === 'selectOption' || reason === 'removeOption') {
           onUpdate(values.map(value => value.id));
           setInputValue('');
         }

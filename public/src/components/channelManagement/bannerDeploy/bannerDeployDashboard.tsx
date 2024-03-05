@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { Theme, makeStyles } from '@material-ui/core';
+import { Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
 import BannerDeployeChannelDeployer from './bannerDeployChannelDeployer';
 
@@ -10,7 +11,7 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
     overflow: 'auto',
   },
   container: {
-    padding: `${spacing(6)}px ${spacing(9)}px`,
+    padding: `${spacing(6)} ${spacing(9)}`,
 
     '& > * + *': {
       marginTop: spacing(4),

@@ -7,12 +7,12 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  makeStyles,
   Theme,
   Typography,
-} from '@material-ui/core';
-import ArchiveIcon from '@material-ui/icons/Archive';
-import { grey } from '@material-ui/core/colors';
+} from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import ArchiveIcon from '@mui/icons-material/Archive';
+import { grey } from '@mui/material/colors';
 
 const useStyles = makeStyles(({ palette }: Theme) => ({
   buttonText: {

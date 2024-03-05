@@ -1,9 +1,9 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core';
+import { makeStyles } from '@mui/styles';
 import { AppsSettingsType, fetchAppsSettings, saveAppsSettings } from '../utils/requests';
-import Switch from '@material-ui/core/Switch';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Button from '@material-ui/core/Button';
+import Switch from '@mui/material/Switch';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Button from '@mui/material/Button';
 import withS3Data, { InnerProps } from '../hocs/withS3Data';
 
 const useStyles = makeStyles(() => ({

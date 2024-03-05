@@ -1,11 +1,11 @@
 import React from 'react';
-import Drawer from '@material-ui/core/Drawer';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+import Drawer from '@mui/material/Drawer';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
 import { Link } from 'react-router-dom';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import makeStyles from '@material-ui/core/styles/makeStyles';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import { makeStyles } from '@mui/styles';
 import RRControlPanelLogo from './rrControlPanelLogo';
 
 const useStyles = makeStyles({
@@ -218,6 +218,11 @@ export default function NavDrawer(): React.ReactElement {
         <Link key="QR Code Generator" to="/qr-code" className={classes.link}>
           <ListItem className={classes.listItem} button key="QR Code Generator">
             <ListItemText primary="QR Code Generator" />
+          </ListItem>
+        </Link>
+        <Link key="Link Tracking Builder" to="/lynx" className={classes.link}>
+          <ListItem className={classes.listItem} button key="Link Tracking Builder">
+            <ListItemText primary="Link Tracking Builder" />
           </ListItem>
         </Link>
         <Link key="Apps Metering Switches" to="/apps-metering-switches" className={classes.link}>

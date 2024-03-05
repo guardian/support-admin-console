@@ -1,7 +1,8 @@
 import React from 'react';
-import { Theme, Typography, AccordionSummary, makeStyles } from '@material-ui/core';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
+import { Theme, Typography, AccordionSummary } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import TestEditorVariantSummaryWebPreviewButton, {
   ArticleType,
 } from './testEditorVariantSummaryWebPreviewButton';

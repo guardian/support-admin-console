@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
-import { makeStyles, Theme } from '@material-ui/core/styles';
+import { Theme } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
 
 import {
   Typography,
@@ -12,10 +13,10 @@ import {
   IconButton,
   List,
   ListItem,
-} from '@material-ui/core';
-import SwitchUI from '@material-ui/core/Switch';
-import SaveIcon from '@material-ui/icons/Save';
-import Alert from '@material-ui/lab/Alert';
+} from '@mui/material';
+import SwitchUI from '@mui/material/Switch';
+import SaveIcon from '@mui/icons-material/Save';
+import Alert from '@mui/lab/Alert';
 
 import cloneDeep from 'lodash/cloneDeep';
 
@@ -26,14 +27,14 @@ import {
 } from '../utils/requests';
 
 import withS3Data, { InnerProps, DataFromServer } from '../hocs/withS3Data';
-import AddIcon from '@material-ui/icons/Add';
-import DeleteIcon from '@material-ui/icons/Delete';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
 import {
   createDuplicateValidator,
   EMPTY_ERROR_HELPER_TEXT,
 } from './channelManagement/helpers/validation';
 import { useForm } from 'react-hook-form';
-import ListItemText from '@material-ui/core/ListItemText';
+import ListItemText from '@mui/material/ListItemText';
 
 enum SwitchState {
   On = 'On',

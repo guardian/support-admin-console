@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button } from '@material-ui/core';
-import VisibilityIcon from '@material-ui/icons/Visibility';
+import { Button } from '@mui/material';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import { TestPlatform, TestType } from './helpers/shared';
 import { getStage, Stage } from '../../utils/stage';
 

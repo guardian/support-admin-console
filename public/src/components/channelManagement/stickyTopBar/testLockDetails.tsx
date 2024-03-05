@@ -1,5 +1,6 @@
 import React from 'react';
-import { makeStyles, Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { formattedTimestamp } from '../helpers/utilities';
 
 const useStyles = makeStyles(() => ({
