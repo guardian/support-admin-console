@@ -18,14 +18,26 @@ object BannerDesignStatus {
 
 case class HeaderImage(
   mobileUrl: String,
-  tabletDesktopUrl: String,
-  wideUrl: String,
+  tabletDesktopUrl: String, // deprecated
+  wideUrl: String, // deprecated
 
-  tabletUrl: String, // new
-  desktopUrl: String, // new
+  tabletUrl: Option[String], // new
+  desktopUrl: Option[String], // new
 
   altText: String
 )
+object HeaderImage {
+  import io.circe.generic.extras.auto._
+  implicit val encoder = Encoder[HeaderImage]
+
+  // Modify the Decoder to use existing values for the new fields
+  val normalDecoder = Decoder[HeaderImage]
+  implicit val decoder = normalDecoder.map(header => {
+    val tabletUrl = header.tabletUrl.getOrElse(header.tabletDesktopUrl)
+    val desktopUrl = header.desktopUrl.getOrElse(header.wideUrl)
+    header.copy(tabletUrl = Some(tabletUrl), desktopUrl = Some(desktopUrl))
+  })
+}
 
 sealed trait BannerDesignVisual
 object BannerDesignVisual {
@@ -35,8 +47,8 @@ object BannerDesignVisual {
     tabletDesktopUrl: String, // deprecated
     wideUrl: String, // deprecated
 
-    tabletUrl: String = "https://i.guim.co.uk/img/media/cb654baf73bec78a73dbd656e865dedc3807ec74/0_0_300_300/300.jpg?width=300&height=300&quality=75&s=28324a5eb4f5f18eabd8c7b1a59ed150", // new
-    desktopUrl: String = "https://i.guim.co.uk/img/media/058e7bd9d7a37983eb01cf981f67bd6efe42f95d/0_0_500_300/500.jpg?width=500&height=300&quality=75&s=632c02ed370780425b323aeb1e98cd80", // new
+    tabletUrl: Option[String],  // new
+    desktopUrl: Option[String], // new
 
     altText: String
   ) extends BannerDesignVisual
@@ -53,6 +65,15 @@ object BannerDesignVisual {
 
   import io.circe.generic.extras.auto._
   implicit val customConfig: Configuration = Configuration.default.withDiscriminator("kind")
+
+  // Modify the Decoder to use existing values for the new fields
+  val normalImageDecoder = Decoder[Image]
+  implicit val imageDecoder = normalImageDecoder.map(header => {
+    val tabletUrl = header.tabletUrl.getOrElse(header.tabletDesktopUrl)
+    val desktopUrl = header.desktopUrl.getOrElse(header.wideUrl)
+    header.copy(tabletUrl = Some(tabletUrl), desktopUrl = Some(desktopUrl))
+  })
+
   implicit val encoder = Encoder[BannerDesignVisual]
   implicit val decoder = Decoder[BannerDesignVisual]
 }
