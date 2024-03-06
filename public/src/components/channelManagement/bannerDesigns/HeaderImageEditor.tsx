@@ -13,6 +13,8 @@ export const DEFAULT_HEADER_IMAGE_SETTINGS: BannerDesignHeaderImage = {
   mobileUrl: '',
   tabletDesktopUrl: '',
   wideUrl: '',
+  tabletUrl: '',
+  desktopUrl: '',
   altText: '',
 };
 
@@ -33,6 +35,8 @@ export const HeaderImageEditor: React.FC<Props> = ({
     mobileUrl: headerImage?.mobileUrl ?? '',
     tabletDesktopUrl: headerImage?.tabletDesktopUrl ?? '',
     wideUrl: headerImage?.wideUrl ?? '',
+    tabletUrl: headerImage?.tabletUrl ?? '',
+    desktopUrl: headerImage?.desktopUrl ?? '',
     altText: headerImage?.altText ?? '',
   };
 
@@ -59,9 +63,11 @@ export const HeaderImageEditor: React.FC<Props> = ({
     mobileUrl,
     tabletDesktopUrl,
     wideUrl,
+    tabletUrl,
+    desktopUrl,
     altText,
   }: BannerDesignHeaderImage): void => {
-    onChange({ mobileUrl, tabletDesktopUrl, wideUrl, altText });
+    onChange({ mobileUrl, tabletDesktopUrl, wideUrl, tabletUrl, desktopUrl, altText });
   };
 
   const onRadioGroupChange = (event: React.ChangeEvent<HTMLInputElement>): void => {

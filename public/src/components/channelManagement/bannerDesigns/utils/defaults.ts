@@ -13,6 +13,10 @@ export const defaultBannerImage: BannerDesignImage = {
     'https://i.guim.co.uk/img/media/20cc6e0fa146574bb9c4ed410ac1a089fab02ce0/0_0_1428_1344/500.png?width=500&quality=75&s=fe64f647f74a3cb671f8035a473b895f',
   wideUrl:
     'https://i.guim.co.uk/img/media/6c933a058d1ce37a5ad17f79895906150812dfee/0_0_1768_1420/500.png?width=500&quality=75&s=9277532ddf184a308e14218e3576543b',
+  tabletUrl:
+    'https://i.guim.co.uk/img/media/cb654baf73bec78a73dbd656e865dedc3807ec74/0_0_300_300/300.jpg?width=300&height=300&quality=75&s=28324a5eb4f5f18eabd8c7b1a59ed150',
+  desktopUrl:
+    'https://i.guim.co.uk/img/media/058e7bd9d7a37983eb01cf981f67bd6efe42f95d/0_0_500_300/500.jpg?width=500&height=300&quality=75&s=632c02ed370780425b323aeb1e98cd80',
 
   altText: 'Image description',
 };
