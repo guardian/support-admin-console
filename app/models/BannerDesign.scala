@@ -32,10 +32,10 @@ object HeaderImage {
 
   // Modify the Decoder to use existing values for the new fields
   val normalDecoder = Decoder[HeaderImage]
-  implicit val decoder = normalDecoder.map(header => {
-    val tabletUrl = header.tabletUrl.getOrElse(header.tabletDesktopUrl)
-    val desktopUrl = header.desktopUrl.getOrElse(header.wideUrl)
-    header.copy(tabletUrl = Some(tabletUrl), desktopUrl = Some(desktopUrl))
+  implicit val decoder = normalDecoder.map(image => {
+    val tabletUrl = image.tabletUrl.getOrElse(image.tabletDesktopUrl)
+    val desktopUrl = image.desktopUrl.getOrElse(image.wideUrl)
+    image.copy(tabletUrl = Some(tabletUrl), desktopUrl = Some(desktopUrl))
   })
 }
 
@@ -68,10 +68,10 @@ object BannerDesignVisual {
 
   // Modify the Decoder to use existing values for the new fields
   val normalImageDecoder = Decoder[Image]
-  implicit val imageDecoder = normalImageDecoder.map(header => {
-    val tabletUrl = header.tabletUrl.getOrElse(header.tabletDesktopUrl)
-    val desktopUrl = header.desktopUrl.getOrElse(header.wideUrl)
-    header.copy(tabletUrl = Some(tabletUrl), desktopUrl = Some(desktopUrl))
+  implicit val imageDecoder = normalImageDecoder.map(image => {
+    val tabletUrl = image.tabletUrl.getOrElse(image.tabletDesktopUrl)
+    val desktopUrl = image.desktopUrl.getOrElse(image.wideUrl)
+    image.copy(tabletUrl = Some(tabletUrl), desktopUrl = Some(desktopUrl))
   })
 
   implicit val encoder = Encoder[BannerDesignVisual]
