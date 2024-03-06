@@ -20,6 +20,10 @@ case class HeaderImage(
   mobileUrl: String,
   tabletDesktopUrl: String,
   wideUrl: String,
+
+  tabletUrl: String, // new
+  desktopUrl: String, // new
+
   altText: String
 )
 
@@ -28,8 +32,12 @@ object BannerDesignVisual {
   case class Image(
     kind: String = "Image",
     mobileUrl: String,
-    tabletDesktopUrl: String,
-    wideUrl: String,
+    tabletDesktopUrl: String, // deprecated
+    wideUrl: String, // deprecated
+
+    tabletUrl: String = "https://i.guim.co.uk/img/media/cb654baf73bec78a73dbd656e865dedc3807ec74/0_0_300_300/300.jpg?width=300&height=300&quality=75&s=28324a5eb4f5f18eabd8c7b1a59ed150", // new
+    desktopUrl: String = "https://i.guim.co.uk/img/media/058e7bd9d7a37983eb01cf981f67bd6efe42f95d/0_0_500_300/500.jpg?width=500&height=300&quality=75&s=632c02ed370780425b323aeb1e98cd80", // new
+
     altText: String
   ) extends BannerDesignVisual
 
