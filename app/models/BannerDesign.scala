@@ -27,7 +27,7 @@ case class HeaderImage(
   altText: String
 )
 object HeaderImage {
-  import io.circe.generic.extras.auto._
+  import io.circe.generic.auto._
   implicit val encoder = Encoder[HeaderImage]
 
   // Modify the Decoder to use existing values for the new fields
