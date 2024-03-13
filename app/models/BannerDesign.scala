@@ -18,18 +18,38 @@ object BannerDesignStatus {
 
 case class HeaderImage(
   mobileUrl: String,
-  tabletDesktopUrl: String,
-  wideUrl: String,
+  tabletDesktopUrl: String, // deprecated
+  wideUrl: String, // deprecated
+
+  tabletUrl: Option[String], // new
+  desktopUrl: Option[String], // new
+
   altText: String
 )
+object HeaderImage {
+  import io.circe.generic.auto._
+  implicit val encoder = Encoder[HeaderImage]
+
+  // Modify the Decoder to use existing values for the new fields
+  val normalDecoder = Decoder[HeaderImage]
+  implicit val decoder = normalDecoder.map(image => {
+    val tabletUrl = image.tabletUrl.getOrElse(image.tabletDesktopUrl)
+    val desktopUrl = image.desktopUrl.getOrElse(image.wideUrl)
+    image.copy(tabletUrl = Some(tabletUrl), desktopUrl = Some(desktopUrl))
+  })
+}
 
 sealed trait BannerDesignVisual
 object BannerDesignVisual {
   case class Image(
     kind: String = "Image",
     mobileUrl: String,
-    tabletDesktopUrl: String,
-    wideUrl: String,
+    tabletDesktopUrl: String, // deprecated
+    wideUrl: String, // deprecated
+
+    tabletUrl: Option[String],  // new
+    desktopUrl: Option[String], // new
+
     altText: String
   ) extends BannerDesignVisual
 
@@ -45,6 +65,15 @@ object BannerDesignVisual {
 
   import io.circe.generic.extras.auto._
   implicit val customConfig: Configuration = Configuration.default.withDiscriminator("kind")
+
+  // Modify the Decoder to use existing values for the new fields
+  val normalImageDecoder = Decoder[Image]
+  implicit val imageDecoder = normalImageDecoder.map(image => {
+    val tabletUrl = image.tabletUrl.getOrElse(image.tabletDesktopUrl)
+    val desktopUrl = image.desktopUrl.getOrElse(image.wideUrl)
+    image.copy(tabletUrl = Some(tabletUrl), desktopUrl = Some(desktopUrl))
+  })
+
   implicit val encoder = Encoder[BannerDesignVisual]
   implicit val decoder = Decoder[BannerDesignVisual]
 }

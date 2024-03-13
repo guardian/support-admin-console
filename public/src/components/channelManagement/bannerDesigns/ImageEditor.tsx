@@ -89,6 +89,37 @@ export const ImageEditor: React.FC<Props> = ({
       <TextField
         inputRef={register({
           required: EMPTY_ERROR_HELPER_TEXT,
+          pattern: imageUrlValidation,
+        })}
+        error={errors?.tabletUrl !== undefined}
+        helperText={errors?.tabletUrl?.message}
+        onBlur={handleSubmit(onChange)}
+        name="tabletUrl"
+        label="Banner Image URL (Tablet)"
+        margin="normal"
+        variant="outlined"
+        disabled={isDisabled}
+        fullWidth
+      />
+      <TextField
+        inputRef={register({
+          required: EMPTY_ERROR_HELPER_TEXT,
+          pattern: imageUrlValidation,
+        })}
+        error={errors?.desktopUrl !== undefined}
+        helperText={errors?.desktopUrl?.message}
+        onBlur={handleSubmit(onChange)}
+        name="desktopUrl"
+        label="Banner Image URL (Desktop)"
+        margin="normal"
+        variant="outlined"
+        disabled={isDisabled}
+        fullWidth
+      />
+
+      <TextField
+        inputRef={register({
+          required: EMPTY_ERROR_HELPER_TEXT,
         })}
         error={errors?.altText !== undefined}
         helperText={errors?.altText?.message}
