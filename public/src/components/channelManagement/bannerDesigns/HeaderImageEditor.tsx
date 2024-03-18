@@ -11,8 +11,6 @@ const imageUrlValidation = {
 
 export const DEFAULT_HEADER_IMAGE_SETTINGS: BannerDesignHeaderImage = {
   mobileUrl: '',
-  tabletDesktopUrl: '',
-  wideUrl: '',
   tabletUrl: '',
   desktopUrl: '',
   altText: '',
@@ -33,8 +31,6 @@ export const HeaderImageEditor: React.FC<Props> = ({
 }: Props) => {
   const defaultValues: BannerDesignHeaderImage = {
     mobileUrl: headerImage?.mobileUrl ?? '',
-    tabletDesktopUrl: headerImage?.tabletDesktopUrl ?? '',
-    wideUrl: headerImage?.wideUrl ?? '',
     tabletUrl: headerImage?.tabletUrl ?? '',
     desktopUrl: headerImage?.desktopUrl ?? '',
     altText: headerImage?.altText ?? '',
@@ -48,26 +44,24 @@ export const HeaderImageEditor: React.FC<Props> = ({
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange('BannerHeaderImage', isValid);
-  }, [errors.mobileUrl, errors.tabletDesktopUrl, errors.wideUrl, errors.altText]);
+  }, [errors.mobileUrl, errors.tabletUrl, errors.desktopUrl, errors.altText]);
 
   useEffect(() => {
     reset(defaultValues);
   }, [
     defaultValues.mobileUrl,
-    defaultValues.tabletDesktopUrl,
-    defaultValues.wideUrl,
+    defaultValues.tabletUrl,
+    defaultValues.desktopUrl,
     defaultValues.altText,
   ]);
 
   const onSubmit = ({
     mobileUrl,
-    tabletDesktopUrl,
-    wideUrl,
     tabletUrl,
     desktopUrl,
     altText,
   }: BannerDesignHeaderImage): void => {
-    onChange({ mobileUrl, tabletDesktopUrl, wideUrl, tabletUrl, desktopUrl, altText });
+    onChange({ mobileUrl, tabletUrl, desktopUrl, altText });
   };
 
   const onRadioGroupChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -121,11 +115,11 @@ export const HeaderImageEditor: React.FC<Props> = ({
               required: EMPTY_ERROR_HELPER_TEXT,
               pattern: imageUrlValidation,
             })}
-            error={errors?.tabletDesktopUrl !== undefined}
-            helperText={errors?.tabletDesktopUrl?.message}
+            error={errors?.tabletUrl !== undefined}
+            helperText={errors?.tabletUrl?.message}
             onBlur={handleSubmit(onSubmit)}
-            name="tabletDesktopUrl"
-            label="Header Image URL (Tablet & Desktop)"
+            name="tabletUrl"
+            label="Header Image URL (Tablet)"
             margin="normal"
             variant="outlined"
             disabled={isDisabled}
@@ -136,11 +130,11 @@ export const HeaderImageEditor: React.FC<Props> = ({
               required: EMPTY_ERROR_HELPER_TEXT,
               pattern: imageUrlValidation,
             })}
-            error={errors?.wideUrl !== undefined}
-            helperText={errors?.wideUrl?.message}
+            error={errors?.desktopUrl !== undefined}
+            helperText={errors?.desktopUrl?.message}
             onBlur={handleSubmit(onSubmit)}
-            name="wideUrl"
-            label="Header Image URL (Wide)"
+            name="desktopUrl"
+            label="Header Image URL (Dekstop and above)"
             margin="normal"
             variant="outlined"
             disabled={isDisabled}
