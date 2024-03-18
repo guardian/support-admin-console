@@ -12,7 +12,7 @@ jobs:
     uses: guardian/.github/.github/workflows/sbt-node-snyk.yml@main
     with:
       DEBUG: true
-      ORG: the-guardian-cuu
+      ORG: guardian-growth
       SKIP_NODE: false
       PROJECT_TAGS: Team=MarketingTools
     secrets:
