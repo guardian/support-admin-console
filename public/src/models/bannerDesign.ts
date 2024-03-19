@@ -39,12 +39,8 @@ export interface TickerDesign {
 
 export interface BannerDesignHeaderImage {
   mobileUrl: string;
-  tabletDesktopUrl: string; // deprecated
-  wideUrl: string; // deprecated
-
-  tabletUrl: string; // new
-  desktopUrl: string; // new
-
+  tabletUrl: string;
+  desktopUrl: string;
   altText: string;
 }
 

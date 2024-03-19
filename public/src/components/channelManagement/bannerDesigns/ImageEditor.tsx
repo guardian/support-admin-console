@@ -61,36 +61,6 @@ export const ImageEditor: React.FC<Props> = ({
           required: EMPTY_ERROR_HELPER_TEXT,
           pattern: imageUrlValidation,
         })}
-        error={errors?.tabletDesktopUrl !== undefined}
-        helperText={errors?.tabletDesktopUrl?.message}
-        onBlur={handleSubmit(onChange)}
-        name="tabletDesktopUrl"
-        label="Banner Image URL (Tablet & Desktop)"
-        margin="normal"
-        variant="outlined"
-        disabled={isDisabled}
-        fullWidth
-      />
-      <TextField
-        inputRef={register({
-          required: EMPTY_ERROR_HELPER_TEXT,
-          pattern: imageUrlValidation,
-        })}
-        error={errors?.wideUrl !== undefined}
-        helperText={errors?.wideUrl?.message}
-        onBlur={handleSubmit(onChange)}
-        name="wideUrl"
-        label="Banner Image URL (Wide)"
-        margin="normal"
-        variant="outlined"
-        disabled={isDisabled}
-        fullWidth
-      />
-      <TextField
-        inputRef={register({
-          required: EMPTY_ERROR_HELPER_TEXT,
-          pattern: imageUrlValidation,
-        })}
         error={errors?.tabletUrl !== undefined}
         helperText={errors?.tabletUrl?.message}
         onBlur={handleSubmit(onChange)}
@@ -110,13 +80,12 @@ export const ImageEditor: React.FC<Props> = ({
         helperText={errors?.desktopUrl?.message}
         onBlur={handleSubmit(onChange)}
         name="desktopUrl"
-        label="Banner Image URL (Desktop)"
+        label="Banner Image URL (Desktop and above)"
         margin="normal"
         variant="outlined"
         disabled={isDisabled}
         fullWidth
       />
-
       <TextField
         inputRef={register({
           required: EMPTY_ERROR_HELPER_TEXT,
