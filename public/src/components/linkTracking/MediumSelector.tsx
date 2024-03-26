@@ -30,9 +30,9 @@ const OPTIONS: OptionGroup[] = [
     group: 'AUDIO',
     options: [
       { value: 'acastrec', label: 'Acast recommends (acastrec)' },
-      { value: 'description', label: 'Description' },
       { value: 'dyn', label: 'Dynamic (dyn)' },
       { value: 'hstrd', label: 'Host reads (hstrd)' },
+      { value: 'description', label: 'Podcast description (description)' },
       { value: 'spot', label: 'Spotify (spot)' },
     ],
   },
