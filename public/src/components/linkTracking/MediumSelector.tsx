@@ -49,7 +49,7 @@ const OPTIONS: OptionGroup[] = [
       { value: 'email_editorial', label: 'Editorial (email_editorial)' },
       { value: 'email_marketing', label: 'Marketing (email_marketing)' },
       { value: 'email_service', label: 'Service (email_service)' },
-      { value: 'email_other', label: 'Other (email_other)'},
+      { value: 'email_other', label: 'Other (email_other)' },
     ],
   },
   {
