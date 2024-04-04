@@ -1,4 +1,4 @@
-addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.8.18")
+addSbtPlugin("org.playframework" % "sbt-plugin" % "3.0.2")
 
 addSbtPlugin("com.gu" % "sbt-riffraff-artifact" % "1.1.18")
 
