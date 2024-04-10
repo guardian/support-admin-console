@@ -6,7 +6,8 @@ import io.circe.{Decoder, Encoder}
 case class DefaultPromos(
   guardianWeekly: Seq[String],
   paper: Seq[String],
-  digital: Seq[String]
+  digital: Seq[String],
+  supporterPlus: Option[Seq[String]],
 )
 
 object DefaultPromos {
