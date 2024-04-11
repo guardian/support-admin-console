@@ -9,7 +9,7 @@ import {
   SupportFrontendSettingsType,
 } from '../utils/requests';
 
-type ProductName = 'guardianWeekly' | 'paper' | 'digital';
+type ProductName = 'guardianWeekly' | 'paper' | 'digital' | 'supporterPlus';
 
 type DefaultPromos = {
   [key in ProductName]: string[];
@@ -36,6 +36,9 @@ const DefaultPromos: React.FC<InnerProps<DefaultPromos>> = ({
   const [gwPromosString, setGwPromosString] = useState<string>(data.guardianWeekly.join(', '));
   const [paperPromosString, setpaperPromosString] = useState<string>(data.paper.join(', '));
   const [digitalPromoString, setdigitalPromosString] = useState<string>(data.digital.join(', '));
+  const [supporterPlusPromoString, setSupporterPlusPromosString] = useState<string>(
+    (data.supporterPlus ?? []).join(', '),
+  );
 
   const classes = useStyles();
 
@@ -91,6 +94,23 @@ const DefaultPromos: React.FC<InnerProps<DefaultPromos>> = ({
         }}
         type="text"
         label="Digital"
+      />
+      <TextField
+        value={supporterPlusPromoString}
+        name="supporterPlusDefaultPromos"
+        fullWidth={true}
+        onChange={e => {
+          const inputValue = e.target.value;
+          setSupporterPlusPromosString(inputValue);
+
+          const parsedInputValue = parsePromoInput(inputValue);
+          update({
+            ...data,
+            supporterPlus: parsedInputValue,
+          });
+        }}
+        type="text"
+        label="Supporter Plus"
       />
       <Button
         onClick={sendToS3}
