@@ -7,7 +7,7 @@ case class DefaultPromos(
   guardianWeekly: Seq[String],
   paper: Seq[String],
   digital: Seq[String],
-  supporterPlus: Option[Seq[String]],
+  supporterPlus: Seq[String],
 )
 
 object DefaultPromos {
