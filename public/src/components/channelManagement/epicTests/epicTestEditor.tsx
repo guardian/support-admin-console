@@ -7,7 +7,7 @@ import {
   EpicEditorConfig,
   DeviceType,
   SignedInStatus,
-  PageContextTargeting,
+  PageContextTargeting, ConsentStatus,
 } from '../helpers/shared';
 import { FormControlLabel, Switch, Typography } from '@mui/material';
 import CampaignSelector from '../CampaignSelector';
@@ -156,6 +156,10 @@ export const getEpicTestEditor = (
 
     const onSignedInStatusChange = (signedInStatus: SignedInStatus): void => {
       onTestChange({ ...test, signedInStatus });
+    };
+
+    const onConsentChange = (consentStatus: ConsentStatus): void => {
+      onTestChange({ ...test, consentStatus });
     };
 
     const onArticlesViewedSettingsChange = (
@@ -332,6 +336,8 @@ export const getEpicTestEditor = (
               showDeviceTypeSelector={epicEditorConfig.allowDeviceTypeTargeting}
               selectedSignedInStatus={test.signedInStatus}
               onSignedInStatusChange={onSignedInStatusChange}
+              selectedConsentStatus={test.consentStatus}
+              onConsentStatusChange={onConsentChange}
               platform={epicEditorConfig.platform}
             />
           </div>

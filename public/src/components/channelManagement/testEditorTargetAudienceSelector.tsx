@@ -3,7 +3,7 @@ import React from 'react';
 import { Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Region } from '../../utils/models';
-import { DeviceType, SignedInStatus, UserCohort, TestPlatform } from './helpers/shared';
+import {DeviceType, SignedInStatus, UserCohort, TestPlatform, ConsentStatus} from './helpers/shared';
 
 import TestEditorTargetRegionsSelector from './testEditorTargetRegionsSelector';
 import TypedRadioGroup from './TypedRadioGroup';
@@ -41,6 +41,8 @@ interface TestEditorTargetAudienceSelectorProps {
   showDeviceTypeSelector: boolean;
   selectedSignedInStatus?: SignedInStatus;
   onSignedInStatusChange: (signedInStatus: SignedInStatus) => void;
+  selectedConsentStatus?: ConsentStatus;
+  onConsentStatusChange: (consentStatus: ConsentStatus) => void;
   platform?: TestPlatform;
 }
 const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelectorProps> = ({
@@ -56,6 +58,8 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
   showDeviceTypeSelector,
   selectedSignedInStatus,
   onSignedInStatusChange,
+  selectedConsentStatus,
+  onConsentStatusChange,
   platform,
 }: TestEditorTargetAudienceSelectorProps) => {
   const classes = useStyles();
@@ -117,6 +121,20 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
             All: 'All',
             SignedIn: 'Signed in',
             SignedOut: 'Signed out',
+          }}
+        />
+      </div>
+
+      <div className={classes.sectionContainer}>
+        <Typography className={classes.heading}>Consent Status</Typography>
+        <TypedRadioGroup
+          selectedValue={selectedConsentStatus ?? 'All'}
+          onChange={onConsentStatusChange}
+          isDisabled={isDisabled}
+          labels={{
+            All: 'All',
+            HasConsented: 'Has consented',
+            HasNotConsented: 'Has not consented',
           }}
         />
       </div>
