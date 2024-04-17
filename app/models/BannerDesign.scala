@@ -76,9 +76,14 @@ case class CtaStateDesign(
   border: Option[HexColour]
 )
 
+case class ReminderCtaStateDesign(
+   text: HexColour
+)
+
 case class CtaDesign(
   default: CtaStateDesign,
-  hover: CtaStateDesign
+  hover: CtaStateDesign,
+  reminder: ReminderCtaStateDesign
 )
 
 case class TickerDesign(
