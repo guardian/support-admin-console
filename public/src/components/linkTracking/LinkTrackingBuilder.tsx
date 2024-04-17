@@ -72,7 +72,7 @@ interface FormData {
   campaign: string;
   content: string;
   term: string;
-  sourceAndMedium: string;
+  sourceAndMedium: string; // This is the source and medium separated by a double underscore
 }
 
 export const LinkTrackingBuilder: React.FC = () => {
