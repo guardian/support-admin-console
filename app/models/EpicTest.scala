@@ -60,7 +60,7 @@ case class EpicTest(
   deviceType: Option[DeviceType] = None,
   campaignName: Option[String] = Some("NOT_IN_CAMPAIGN"),
   signedInStatus: Option[SignedInStatus] = Some(SignedInStatus.All),
-  isBanditTest: Option[Boolean],
+  isBanditTest: Option[Boolean] = None,
 ) extends ChannelTest[EpicTest] {
 
   override def withChannel(channel: Channel): EpicTest = this.copy(channel = Some(channel))
