@@ -25,9 +25,14 @@ interface CtaStateDesign {
   background: HexColour;
   border?: HexColour;
 }
+
+interface ReminderCtaStateDesign {
+  text: HexColour;
+}
 export interface CtaDesign {
   default: CtaStateDesign;
   hover: CtaStateDesign;
+  reminder: ReminderCtaStateDesign;
 }
 
 export interface TickerDesign {

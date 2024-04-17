@@ -108,6 +108,20 @@ export const CtaColoursEditor: React.FC<Props> = ({
             onValidationChange={onValidationChange}
           />
         </div>
+        {label === 'Secondary CTA' && (
+            <div className={classes.stateContainer}>
+              <div className={classes.stateLabel}>Reminder</div>
+
+              <ColourInput
+                colour={cta.reminder.text}
+                name={`${name}.text`}
+                label="Text Colour"
+                isDisabled={isDisabled}
+                onChange={colour => onChange({...cta, reminder: {...cta.reminder, text: colour}})}
+                onValidationChange={onValidationChange}
+              />
+            </div>
+        )}
       </div>
     </div>
   );
