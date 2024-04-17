@@ -191,18 +191,30 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 
 interface Props {
   control: Control;
+  onUpdate: () => void;
 }
 
-export const MediumSelector: React.FC<Props> = ({ control }: Props) => {
+/**
+ * A selector for choosing a medium. The value is the source and medium separated by a double underscore.
+ * This is because the link tracking should contain both, but the source should not be chosen directly by the user.
+ */
+export const MediumSelector: React.FC<Props> = ({ control, onUpdate }: Props) => {
   const classes = useStyles();
 
   return (
     <FormControl>
       <Controller
-        name="medium"
+        name="sourceAndMedium"
         rules={{ required: true }}
-        as={
-          <Select error={!!control.formState.errors?.medium}>
+        render={({ onChange, value }) => (
+          <Select
+            value={value}
+            onChange={e => {
+              onUpdate();
+              onChange(e);
+            }}
+            error={!!control.formState.errors?.medium}
+          >
             {OPTIONS.map(group => {
               const groupItem = (
                 <MenuItem
@@ -217,7 +229,7 @@ export const MediumSelector: React.FC<Props> = ({ control }: Props) => {
               const items = group.options.map(medium => (
                 <MenuItem
                   className={classes.item}
-                  value={medium.value}
+                  value={`${group.group}__${medium.value}`}
                   key={`${group.group}-${medium.value}`}
                 >
                   {medium.label}
@@ -226,7 +238,7 @@ export const MediumSelector: React.FC<Props> = ({ control }: Props) => {
               return [groupItem].concat(items);
             })}
           </Select>
-        }
+        )}
         control={control}
         defaultValue={''}
       />
