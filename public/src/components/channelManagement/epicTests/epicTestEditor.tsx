@@ -33,6 +33,7 @@ import { useStyles } from '../helpers/testEditorStyles';
 import { EpicTestPreviewButton } from './epicTestPreview';
 import { ValidatedTestEditor, ValidatedTestEditorProps } from '../validatedTestEditor';
 import { TestEditorProps } from '../testsForm';
+import { EpicBanditEditor } from './epicBanditEditor';
 
 const copyHasTemplate = (test: EpicTest, template: string): boolean =>
   test.variants.some(
@@ -85,6 +86,10 @@ export const getEpicTestEditor = (
         ...test,
         campaignName: campaign,
       });
+    };
+
+    const onExperimentMethodologyChange = (isBanditTest?: boolean): void => {
+      updateTest({ ...test, isBanditTest });
     };
 
     const onVariantsChange = (updatedVariantList: EpicVariant[]): void => {
@@ -242,6 +247,17 @@ export const getEpicTestEditor = (
           </div>
         )}
 
+        <div className={classes.sectionContainer}>
+          <Typography variant={'h3'} className={classes.sectionHeader}>
+            Experiment Methodology
+          </Typography>
+          <EpicBanditEditor
+            test={test}
+            isDisabled={!userHasTestLocked}
+            onExperimentMethodologyChange={onExperimentMethodologyChange}
+          />
+        </div>
+
         {epicEditorConfig.allowCustomVariantSplit && canHaveCustomVariantSplit(test.variants) && (
           <div className={classes.sectionContainer}>
             <Typography variant={'h3'} className={classes.sectionHeader}>
@@ -253,7 +269,7 @@ export const getEpicTestEditor = (
                 controlProportionSettings={test.controlProportionSettings}
                 onControlProportionSettingsChange={onControlProportionSettingsChange}
                 onValidationChange={onVariantsSplitSettingsValidationChanged}
-                isDisabled={!userHasTestLocked}
+                isDisabled={!userHasTestLocked || !!test.isBanditTest}
               />
             </div>
           </div>
