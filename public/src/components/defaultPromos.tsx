@@ -37,7 +37,7 @@ const DefaultPromos: React.FC<InnerProps<DefaultPromos>> = ({
   const [paperPromosString, setpaperPromosString] = useState<string>(data.paper.join(', '));
   const [digitalPromoString, setdigitalPromosString] = useState<string>(data.digital.join(', '));
   const [supporterPlusPromoString, setSupporterPlusPromosString] = useState<string>(
-    (data.supporterPlus ?? []).join(', '),
+    data.supporterPlus.join(', '),
   );
 
   const classes = useStyles();
