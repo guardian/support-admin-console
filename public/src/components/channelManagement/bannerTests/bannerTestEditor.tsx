@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Region } from '../../../utils/models';
-import {ArticlesViewedSettings, ConsentStatus, DeviceType, SignedInStatus, UserCohort} from '../helpers/shared';
+import {
+  ArticlesViewedSettings,
+  ConsentStatus,
+  DeviceType,
+  SignedInStatus,
+  UserCohort,
+} from '../helpers/shared';
 import { ARTICLE_COUNT_TEMPLATE } from '../helpers/validation';
 import { Typography } from '@mui/material';
 import BannerTestVariantEditor from './bannerTestVariantEditor';
@@ -130,7 +136,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
 
   const onConsentStatusChange = (consentStatus: ConsentStatus): void => {
     onTestChange({ ...test, consentStatus });
-  }
+  };
 
   const onArticlesViewedSettingsChange = (
     updatedArticlesViewedSettings?: ArticlesViewedSettings,

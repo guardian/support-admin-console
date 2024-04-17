@@ -8,7 +8,8 @@ import {
   DeviceType,
   Status,
   TickerSettings,
-  PageContextTargeting, ConsentStatus,
+  PageContextTargeting,
+  ConsentStatus,
 } from '../components/channelManagement/helpers/shared';
 import { Region } from '../utils/models';
 import { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';

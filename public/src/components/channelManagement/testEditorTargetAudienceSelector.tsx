@@ -3,7 +3,13 @@ import React from 'react';
 import { Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Region } from '../../utils/models';
-import {DeviceType, SignedInStatus, UserCohort, TestPlatform, ConsentStatus} from './helpers/shared';
+import {
+  DeviceType,
+  SignedInStatus,
+  UserCohort,
+  TestPlatform,
+  ConsentStatus,
+} from './helpers/shared';
 
 import TestEditorTargetRegionsSelector from './testEditorTargetRegionsSelector';
 import TypedRadioGroup from './TypedRadioGroup';

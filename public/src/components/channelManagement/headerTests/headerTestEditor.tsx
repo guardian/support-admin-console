@@ -1,7 +1,7 @@
 import React from 'react';
 import { Region } from '../../../utils/models';
 
-import {ConsentStatus, DeviceType, SignedInStatus, UserCohort} from '../helpers/shared';
+import { ConsentStatus, DeviceType, SignedInStatus, UserCohort } from '../helpers/shared';
 
 import { Typography } from '@mui/material';
 import HeaderTestVariantEditor from './headerTestVariantEditor';

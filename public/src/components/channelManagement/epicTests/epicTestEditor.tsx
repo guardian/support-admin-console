@@ -7,7 +7,8 @@ import {
   EpicEditorConfig,
   DeviceType,
   SignedInStatus,
-  PageContextTargeting, ConsentStatus,
+  PageContextTargeting,
+  ConsentStatus,
 } from '../helpers/shared';
 import { FormControlLabel, Switch, Typography } from '@mui/material';
 import CampaignSelector from '../CampaignSelector';
