@@ -72,7 +72,7 @@ interface FormData {
   campaign: string;
   content: string;
   term: string;
-  medium: string;
+  sourceAndMedium: string; // This is the source and medium separated by a double underscore
 }
 
 export const LinkTrackingBuilder: React.FC = () => {
@@ -84,20 +84,29 @@ export const LinkTrackingBuilder: React.FC = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>();
+  } = useForm<FormData>({
+    defaultValues: {
+      url: 'https://support.theguardian.com',
+    },
+  });
 
-  const onSubmit: SubmitHandler<FormData> = ({ url, campaign, content, term, medium }) => {
+  const onSubmit: SubmitHandler<FormData> = ({ url, campaign, content, term, sourceAndMedium }) => {
     const urlWithHttps = addHttps(url);
-    const link = `${urlWithHttps}?utm_medium=${medium}&utm_campaign=${campaign}&utm_content=${content}&utm_term=${term}`;
+    const [source, medium] = sourceAndMedium.split('__');
+
+    const link = `${urlWithHttps}?utm_medium=${medium}&utm_campaign=${campaign}&utm_content=${content}&utm_term=${term}&utm_source=${source}`;
     setLink(link);
   };
+
+  // To be called whenever something changes, and the user needs to re-submit
+  const resetLink = () => setLink('');
 
   const linkReady = link.trim() !== '';
 
   return (
     <form
       className={classes.container}
-      onChange={() => setLink('')}
+      onChange={() => resetLink()}
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className={classes.fieldsContainer}>
@@ -155,7 +164,7 @@ export const LinkTrackingBuilder: React.FC = () => {
         <Typography className={classes.header} variant="h4">
           Placement
         </Typography>
-        <MediumSelector control={control} />
+        <MediumSelector onUpdate={resetLink} control={control} />
       </div>
 
       <Button type="submit" variant="contained" color="primary" disabled={linkReady}>
