@@ -66,7 +66,8 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
   selectedSignedInStatus,
   onSignedInStatusChange,
   selectedConsentStatus,
-  onConsentStatusChange, showConsentStatusSelector,
+  onConsentStatusChange,
+  showConsentStatusSelector,
   platform,
 }: TestEditorTargetAudienceSelectorProps) => {
   const classes = useStyles();
@@ -133,19 +134,20 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
       </div>
 
       {showConsentStatusSelector && (
-      <div className={classes.sectionContainer}>
-        <Typography className={classes.heading}>Consent Status</Typography>
-        <TypedRadioGroup
-          selectedValue={selectedConsentStatus ?? 'All'}
-          onChange={onConsentStatusChange}
-          isDisabled={isDisabled}
-          labels={{
-            All: 'All',
-            HasConsented: 'Has consented',
-            HasNotConsented: 'Has not consented',
-          }}
-        />
-      </div> )}
+        <div className={classes.sectionContainer}>
+          <Typography className={classes.heading}>Consent Status</Typography>
+          <TypedRadioGroup
+            selectedValue={selectedConsentStatus ?? 'All'}
+            onChange={onConsentStatusChange}
+            isDisabled={isDisabled}
+            labels={{
+              All: 'All',
+              HasConsented: 'Has consented',
+              HasNotConsented: 'Has not consented',
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 };
