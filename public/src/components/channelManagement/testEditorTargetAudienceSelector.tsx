@@ -49,6 +49,7 @@ interface TestEditorTargetAudienceSelectorProps {
   onSignedInStatusChange: (signedInStatus: SignedInStatus) => void;
   selectedConsentStatus?: ConsentStatus;
   onConsentStatusChange: (consentStatus: ConsentStatus) => void;
+  showConsentStatusSelector: boolean;
   platform?: TestPlatform;
 }
 const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelectorProps> = ({
@@ -65,7 +66,7 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
   selectedSignedInStatus,
   onSignedInStatusChange,
   selectedConsentStatus,
-  onConsentStatusChange,
+  onConsentStatusChange, showConsentStatusSelector,
   platform,
 }: TestEditorTargetAudienceSelectorProps) => {
   const classes = useStyles();
@@ -131,6 +132,7 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
         />
       </div>
 
+      {showConsentStatusSelector && (
       <div className={classes.sectionContainer}>
         <Typography className={classes.heading}>Consent Status</Typography>
         <TypedRadioGroup
@@ -143,7 +145,7 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
             HasNotConsented: 'Has not consented',
           }}
         />
-      </div>
+      </div> )}
     </div>
   );
 };

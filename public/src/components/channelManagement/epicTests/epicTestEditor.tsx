@@ -339,6 +339,7 @@ export const getEpicTestEditor = (
               onSignedInStatusChange={onSignedInStatusChange}
               selectedConsentStatus={test.consentStatus}
               onConsentStatusChange={onConsentChange}
+              showConsentStatusSelector={false}
               platform={epicEditorConfig.platform}
             />
           </div>

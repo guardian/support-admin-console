@@ -187,6 +187,7 @@ const HeaderTestEditor: React.FC<ValidatedTestEditorProps<HeaderTest>> = ({
           onSignedInStatusChange={onSignedInStatusChange}
           selectedConsentStatus={test.consentStatus}
           onConsentStatusChange={onConsentChange}
+          showConsentStatusSelector={false}
         />
       </div>
     </div>
