@@ -17,15 +17,11 @@ import TypedRadioGroup from './TypedRadioGroup';
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
     display: 'flex',
-
-    '& > * + *': {
-      marginLeft: spacing(12),
-    },
+    gap: spacing(12),
+    flexWrap: 'wrap',
   },
   sectionContainer: {
-    '& > * + *': {
-      marginTop: spacing(2),
-    },
+
   },
   heading: {
     fontSize: 16,
