@@ -34,7 +34,7 @@ case class EpicVariant(
   showChoiceCards: Option[Boolean],
   bylineWithImage: Option[BylineWithImage],
   defaultChoiceCardFrequency: Option[String],
-  showSignInLink: Option[Boolean]
+  showSignInLink: Option[Boolean],
 )
 case class EpicTest(
   name: String,
@@ -60,6 +60,7 @@ case class EpicTest(
   deviceType: Option[DeviceType] = None,
   campaignName: Option[String] = Some("NOT_IN_CAMPAIGN"),
   signedInStatus: Option[SignedInStatus] = Some(SignedInStatus.All),
+  isBanditTest: Option[Boolean] = None,
   consentStatus: Option[ConsentStatus] = Some(ConsentStatus.All),
 ) extends ChannelTest[EpicTest] {
 
