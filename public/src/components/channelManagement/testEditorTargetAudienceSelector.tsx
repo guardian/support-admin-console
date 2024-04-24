@@ -21,7 +21,6 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     flexWrap: 'wrap',
   },
   sectionContainer: {
-
   },
   heading: {
     fontSize: 16,
