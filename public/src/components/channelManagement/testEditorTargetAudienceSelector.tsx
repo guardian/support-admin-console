@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Region } from '../../utils/models';
@@ -17,15 +16,8 @@ import TypedRadioGroup from './TypedRadioGroup';
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
     display: 'flex',
-
-    '& > * + *': {
-      marginLeft: spacing(12),
-    },
-  },
-  sectionContainer: {
-    '& > * + *': {
-      marginTop: spacing(2),
-    },
+    gap: spacing(12),
+    flexWrap: 'wrap',
   },
   heading: {
     fontSize: 16,
@@ -74,19 +66,17 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
 
   return (
     <div className={classes.container}>
-      <div className={classes.sectionContainer}>
-        <Typography className={classes.heading}>Region</Typography>
-        <TestEditorTargetRegionsSelector
-          selectedRegions={selectedRegions}
-          onRegionsUpdate={onRegionsUpdate}
-          supportedRegions={supportedRegions}
-          isDisabled={isDisabled}
-          platform={platform}
-        />
-      </div>
+      <Typography className={classes.heading}>Region</Typography>
+      <TestEditorTargetRegionsSelector
+        selectedRegions={selectedRegions}
+        onRegionsUpdate={onRegionsUpdate}
+        supportedRegions={supportedRegions}
+        isDisabled={isDisabled}
+        platform={platform}
+      />
 
       {showSupporterStatusSelector && (
-        <div className={classes.sectionContainer}>
+        <>
           <Typography className={classes.heading}>Supporter Status</Typography>
           <TypedRadioGroup
             selectedValue={selectedCohort}
@@ -98,11 +88,11 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
               AllExistingSupporters: 'Existing supporters',
             }}
           />
-        </div>
+        </>
       )}
 
       {showDeviceTypeSelector && (
-        <div className={classes.sectionContainer}>
+        <>
           <Typography className={classes.heading}>Device Type</Typography>
           <TypedRadioGroup
             selectedValue={selectedDeviceType}
@@ -116,10 +106,10 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
               Android: 'Mobile (Android)',
             }}
           />
-        </div>
+        </>
       )}
 
-      <div className={classes.sectionContainer}>
+      <>
         <Typography className={classes.heading}>Signed In Status</Typography>
         <TypedRadioGroup
           selectedValue={selectedSignedInStatus ?? 'All'}
@@ -131,10 +121,10 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
             SignedOut: 'Signed out',
           }}
         />
-      </div>
+      </>
 
       {showConsentStatusSelector && (
-        <div className={classes.sectionContainer}>
+        <>
           <Typography className={classes.heading}>Consent Status</Typography>
           <TypedRadioGroup
             selectedValue={selectedConsentStatus ?? 'All'}
@@ -146,7 +136,7 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
               HasNotConsented: 'Has not consented',
             }}
           />
-        </div>
+        </>
       )}
     </div>
   );
