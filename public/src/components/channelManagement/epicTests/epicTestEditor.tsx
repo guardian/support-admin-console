@@ -8,6 +8,7 @@ import {
   DeviceType,
   SignedInStatus,
   PageContextTargeting,
+  ConsentStatus,
 } from '../helpers/shared';
 import { FormControlLabel, Switch, Typography } from '@mui/material';
 import CampaignSelector from '../CampaignSelector';
@@ -33,6 +34,9 @@ import { useStyles } from '../helpers/testEditorStyles';
 import { EpicTestPreviewButton } from './epicTestPreview';
 import { ValidatedTestEditor, ValidatedTestEditorProps } from '../validatedTestEditor';
 import { TestEditorProps } from '../testsForm';
+import { EpicBanditEditor } from './epicBanditEditor';
+
+const BANDIT_FEATURE_SWITCH = false;
 
 const copyHasTemplate = (test: EpicTest, template: string): boolean =>
   test.variants.some(
@@ -85,6 +89,10 @@ export const getEpicTestEditor = (
         ...test,
         campaignName: campaign,
       });
+    };
+
+    const onExperimentMethodologyChange = (isBanditTest?: boolean): void => {
+      updateTest({ ...test, isBanditTest });
     };
 
     const onVariantsChange = (updatedVariantList: EpicVariant[]): void => {
@@ -156,6 +164,10 @@ export const getEpicTestEditor = (
 
     const onSignedInStatusChange = (signedInStatus: SignedInStatus): void => {
       onTestChange({ ...test, signedInStatus });
+    };
+
+    const onConsentChange = (consentStatus: ConsentStatus): void => {
+      onTestChange({ ...test, consentStatus });
     };
 
     const onArticlesViewedSettingsChange = (
@@ -242,6 +254,19 @@ export const getEpicTestEditor = (
           </div>
         )}
 
+        {BANDIT_FEATURE_SWITCH && (
+          <div className={classes.sectionContainer}>
+            <Typography variant={'h3'} className={classes.sectionHeader}>
+              Experiment Methodology
+            </Typography>
+            <EpicBanditEditor
+              test={test}
+              isDisabled={!userHasTestLocked}
+              onExperimentMethodologyChange={onExperimentMethodologyChange}
+            />
+          </div>
+        )}
+
         {epicEditorConfig.allowCustomVariantSplit && canHaveCustomVariantSplit(test.variants) && (
           <div className={classes.sectionContainer}>
             <Typography variant={'h3'} className={classes.sectionHeader}>
@@ -253,7 +278,7 @@ export const getEpicTestEditor = (
                 controlProportionSettings={test.controlProportionSettings}
                 onControlProportionSettingsChange={onControlProportionSettingsChange}
                 onValidationChange={onVariantsSplitSettingsValidationChanged}
-                isDisabled={!userHasTestLocked}
+                isDisabled={!userHasTestLocked || !!test.isBanditTest}
               />
             </div>
           </div>
@@ -332,6 +357,9 @@ export const getEpicTestEditor = (
               showDeviceTypeSelector={epicEditorConfig.allowDeviceTypeTargeting}
               selectedSignedInStatus={test.signedInStatus}
               onSignedInStatusChange={onSignedInStatusChange}
+              selectedConsentStatus={test.consentStatus}
+              onConsentStatusChange={onConsentChange}
+              showConsentStatusSelector={false}
               platform={epicEditorConfig.platform}
             />
           </div>

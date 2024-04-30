@@ -27,6 +27,7 @@ export interface Test {
   userCohort?: string;
   channel?: string;
   signedInStatus?: SignedInStatus;
+  consentStatus?: ConsentStatus;
 }
 
 export interface EpicEditorConfig {
@@ -252,6 +253,8 @@ export interface TickerSettings {
 export type ContributionFrequency = 'ONE_OFF' | 'MONTHLY' | 'ANNUAL';
 
 export type DeviceType = 'Mobile' | 'Desktop' | 'All' | 'iOS' | 'Android';
+
+export type ConsentStatus = 'HasConsented' | 'HasNotConsented' | 'All';
 
 export interface Image {
   mainUrl: string;

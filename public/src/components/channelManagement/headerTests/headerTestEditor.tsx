@@ -1,7 +1,7 @@
 import React from 'react';
 import { Region } from '../../../utils/models';
 
-import { DeviceType, SignedInStatus, UserCohort } from '../helpers/shared';
+import { ConsentStatus, DeviceType, SignedInStatus, UserCohort } from '../helpers/shared';
 
 import { Typography } from '@mui/material';
 import HeaderTestVariantEditor from './headerTestVariantEditor';
@@ -71,6 +71,10 @@ const HeaderTestEditor: React.FC<ValidatedTestEditorProps<HeaderTest>> = ({
 
   const onSignedInStatusChange = (signedInStatus: SignedInStatus): void => {
     onTestChange({ ...test, signedInStatus });
+  };
+
+  const onConsentChange = (consentStatus: ConsentStatus): void => {
+    onTestChange({ ...test, consentStatus });
   };
 
   const renderVariantEditor = (variant: HeaderVariant): React.ReactElement => (
@@ -181,6 +185,9 @@ const HeaderTestEditor: React.FC<ValidatedTestEditorProps<HeaderTest>> = ({
           showDeviceTypeSelector={true}
           selectedSignedInStatus={test.signedInStatus}
           onSignedInStatusChange={onSignedInStatusChange}
+          selectedConsentStatus={test.consentStatus}
+          onConsentStatusChange={onConsentChange}
+          showConsentStatusSelector={false}
         />
       </div>
     </div>

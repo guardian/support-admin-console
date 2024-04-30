@@ -62,4 +62,5 @@ export interface EpicTest extends Test {
   controlProportionSettings?: ControlProportionSettings;
   deviceType?: DeviceType;
   campaignName?: string;
+  isBanditTest?: boolean;
 }
