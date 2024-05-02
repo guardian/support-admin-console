@@ -49,7 +49,7 @@
     "react-hook-form": "^6.15.8",
     "react-qr-code": "^2.0.7",
     "react-router-dom": "^6.2.1",
-    "recharts": "2.0.8",
+    "recharts": "2.12.6",
     "remirror": "^1.0.60"
   },
   "resolutions": {
