@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-
-import { FormControl, Radio, RadioGroup, FormControlLabel, TextField, Theme } from '@mui/material';
+import {FormControl, Radio, RadioGroup, FormControlLabel, TextField, Theme} from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { ArticlesViewedSettings } from './helpers/shared';
-import { notNumberValidator, EMPTY_ERROR_HELPER_TEXT } from './helpers/validation';
+import {notNumberValidator, EMPTY_ERROR_HELPER_TEXT} from './helpers/validation';
+import MultiselectAutocomplete from "./MutliSelectTagEditor";
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -25,12 +25,14 @@ export const DEFAULT_ARTICLES_VIEWED_SETTINGS: ArticlesViewedSettings = {
   minViews: 5,
   maxViews: null,
   periodInWeeks: 52,
+  tags: [],
 };
 
 interface FormData {
   minViews: string;
   maxViews: string;
   periodInWeeks: string;
+  tags: string[];
 }
 
 interface TestEditorArticleCountEditorProps {
@@ -52,29 +54,32 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
     minViews: articlesViewedSettings?.minViews?.toString() || '',
     maxViews: articlesViewedSettings?.maxViews?.toString() || '',
     periodInWeeks: articlesViewedSettings?.periodInWeeks.toString() || '',
+    tags: articlesViewedSettings?.tags|| [],
   };
 
-  const { register, errors, handleSubmit, reset } = useForm<FormData>({
+  const { register, errors, handleSubmit, reset } =useForm<FormData>({
     mode: 'onChange',
     defaultValues,
   });
+  const tags =articlesViewedSettings?.tags ||[];
 
   useEffect(() => {
     reset(defaultValues);
-  }, [defaultValues.minViews, defaultValues.maxViews, defaultValues.periodInWeeks]);
+  }, [defaultValues.minViews, defaultValues.maxViews, defaultValues.periodInWeeks, defaultValues.tags]);
 
-  const onSubmit = ({ minViews, maxViews, periodInWeeks }: FormData): void => {
+  const onSubmit = ({ minViews, maxViews, periodInWeeks,tags }: FormData): void => {
     onArticlesViewedSettingsChanged({
       minViews: parseInt(minViews) || null,
       maxViews: parseInt(maxViews) || null,
       periodInWeeks: parseInt(periodInWeeks),
+      tags: articlesViewedSettings?.tags || null,
     });
   };
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
-  }, [errors.minViews, errors.maxViews, errors.periodInWeeks]);
+  }, [errors.minViews, errors.maxViews, errors.periodInWeeks,errors.tags]);
 
   const onRadioGroupChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     if (event.target.value === 'enabled') {
@@ -85,79 +90,91 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
   };
 
   return (
-    <div className={classes.container}>
-      <FormControl>
-        <RadioGroup
-          value={articlesViewedSettings ? 'enabled' : 'disabled'}
-          onChange={onRadioGroupChange}
-        >
-          <FormControlLabel
-            value="disabled"
-            key="disabled"
-            control={<Radio />}
-            label="Do not target by user's article count"
-            disabled={isDisabled}
-          />
-          <FormControlLabel
-            value="enabled"
-            key="enabled"
-            control={<Radio />}
-            label="Target by user's article count"
-            disabled={isDisabled}
-          />
-        </RadioGroup>
-      </FormControl>
 
-      {articlesViewedSettings && (
-        <div className={classes.formContainer}>
-          <div>
-            <TextField
-              inputRef={register({ validate: notNumberValidator })}
-              error={errors.minViews !== undefined}
-              helperText={errors.minViews?.message}
-              onBlur={handleSubmit(onSubmit)}
-              name="minViews"
-              label="Minimum page views"
-              InputLabelProps={{ shrink: true }}
-              variant="filled"
-              fullWidth
+      <div className={classes.container}>
+        <FormControl>
+          <RadioGroup
+            value={articlesViewedSettings ? 'enabled' : 'disabled'}
+            onChange={onRadioGroupChange}
+          >
+            <FormControlLabel
+              value="disabled"
+              key="disabled"
+              control={<Radio />}
+              label="Do not target by user's article count"
               disabled={isDisabled}
             />
-          </div>
-          <div>
-            <TextField
-              inputRef={register({ validate: notNumberValidator })}
-              error={errors.maxViews !== undefined}
-              helperText={errors.maxViews?.message}
-              onBlur={handleSubmit(onSubmit)}
-              name="maxViews"
-              label="Maximum page views"
-              InputLabelProps={{ shrink: true }}
-              variant="filled"
-              fullWidth
+            <FormControlLabel
+              value="enabled"
+              key="enabled"
+              control={<Radio />}
+              label="Target by user's article count"
               disabled={isDisabled}
             />
+          </RadioGroup>
+        </FormControl>
+
+        {articlesViewedSettings && (
+          <div>
+            <div className={classes.formContainer}>
+            <div>
+              <TextField
+                inputRef={register({ validate: notNumberValidator })}
+                error={errors.minViews !== undefined}
+                helperText={errors.minViews?.message}
+                onBlur={handleSubmit(onSubmit)}
+                name="minViews"
+                label="Minimum page views"
+                InputLabelProps={{ shrink: true }}
+                variant="filled"
+                fullWidth
+                disabled={isDisabled}
+              />
+            </div>
+            <div>
+              <TextField
+                inputRef={register({ validate: notNumberValidator })}
+                error={errors.maxViews !== undefined}
+                helperText={errors.maxViews?.message}
+                onBlur={handleSubmit(onSubmit)}
+                name="maxViews"
+                label="Maximum page views"
+                InputLabelProps={{ shrink: true }}
+                variant="filled"
+                fullWidth
+                disabled={isDisabled}
+              />
+            </div>
+            <div>
+              <TextField
+                inputRef={register({
+                  required: EMPTY_ERROR_HELPER_TEXT,
+                  validate: notNumberValidator
+                })}
+                error={errors.periodInWeeks !== undefined}
+                helperText={errors.periodInWeeks?.message}
+                onBlur={handleSubmit(onSubmit)}
+                name="periodInWeeks"
+                label="Time period in weeks"
+                InputLabelProps={{ shrink: true }}
+                variant="filled"
+                fullWidth
+                disabled={isDisabled}
+              />
+            </div>
           </div>
           <div>
-            <TextField
-              inputRef={register({
-                required: EMPTY_ERROR_HELPER_TEXT,
-                validate: notNumberValidator,
-              })}
-              error={errors.periodInWeeks !== undefined}
-              helperText={errors.periodInWeeks?.message}
-              onBlur={handleSubmit(onSubmit)}
-              name="periodInWeeks"
-              label="Time period in weeks"
-              InputLabelProps={{ shrink: true }}
-              variant="filled"
-              fullWidth
-              disabled={isDisabled}
-            />
+          <MultiselectAutocomplete
+            disabled={isDisabled}
+            tags={tags}
+            onUpdate={(newTagIds): void => {
+             onArticlesViewedSettingsChanged({ ...articlesViewedSettings, tags: newTagIds });
+            }}
+          />
           </div>
-        </div>
-      )}
-    </div>
+          </div>
+        )}
+      </div>
   );
 };
 
