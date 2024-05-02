@@ -283,7 +283,7 @@ export class AdminConsole extends GuStack {
                 alarmName: `5XX error returned by ${app} ${this.stage}`,
               },
               unhealthyInstancesAlarm: true,
-              snsTopicName: 'marketing-dev',
+              snsTopicName: 'alarms-handler-topic-PROD',
             }
           : { noMonitoring: true },
       userData,

@@ -1315,7 +1315,7 @@ Object {
                 Object {
                   "Ref": "AWS::AccountId",
                 },
-                ":marketing-dev",
+                ":alarms-handler-topic-PROD",
               ],
             ],
           },
@@ -1857,7 +1857,7 @@ Object {
                 Object {
                   "Ref": "AWS::AccountId",
                 },
-                ":marketing-dev",
+                ":alarms-handler-topic-PROD",
               ],
             ],
           },
