@@ -3,7 +3,7 @@ import BannerVariantPreview from '../bannerTests/bannerVariantPreview';
 import { BannerDesign } from '../../../models/bannerDesign';
 import { Checkbox, FormControlLabel } from '@mui/material';
 import { BannerVariant } from '../../../models/banner';
-import { TickerCountType, TickerEndType, TickerName } from '../helpers/shared';
+import { TickerCountType, TickerName } from '../helpers/shared';
 
 interface Props {
   design: BannerDesign;
@@ -50,8 +50,7 @@ const buildVariantForPreview = (
   tickerSettings: shouldShowTicker
     ? {
         countType: TickerCountType.money,
-        endType: TickerEndType.hardstop,
-        currencySymbol: '£',
+        currencySymbol: '$',
         copy: {
           countLabel: 'contributions in May',
           goalReachedPrimary: "We've met our goal - thank you!",

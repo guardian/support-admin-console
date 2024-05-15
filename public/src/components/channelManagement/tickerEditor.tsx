@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import { TickerCountType, TickerEndType, TickerName, TickerSettings } from './helpers/shared';
+import { TickerCountType, TickerName, TickerSettings } from './helpers/shared';
 import { EMPTY_ERROR_HELPER_TEXT } from './helpers/validation';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
@@ -35,7 +35,6 @@ interface FormData {
 }
 
 const DEFAULT_TICKER_SETTINGS: TickerSettings = {
-  endType: TickerEndType.unlimited,
   countType: TickerCountType.money,
   copy: {
     countLabel: 'contributions',
@@ -97,9 +96,9 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
     updateTickerSettings(isChecked ? DEFAULT_TICKER_SETTINGS : undefined);
   };
 
-  const onEndTypeChanged = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const selectedType = event.target.value as TickerEndType;
-    tickerSettings && updateTickerSettings({ ...tickerSettings, endType: selectedType });
+  const onCountTypeChanged = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const selectedCountType = event.target.value as TickerCountType;
+    tickerSettings && updateTickerSettings({ ...tickerSettings, countType: selectedCountType });
   };
 
   const onNameChanged = (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -220,21 +219,21 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
             <FormControl component="fieldset">
               <FormLabel component="legend">Ticker end type</FormLabel>
               <RadioGroup
-                value={tickerSettings.endType}
-                onChange={onEndTypeChanged}
-                aria-label="ticker-end-type"
-                name="ticker-end-type"
+                value={tickerSettings.countType}
+                onChange={onCountTypeChanged}
+                aria-label="ticker-count-type"
+                name="ticker-count-type"
               >
                 <FormControlLabel
-                  value={TickerEndType.hardstop}
+                  value={TickerCountType.money}
                   control={<Radio />}
-                  label="Hard stop"
+                  label="money"
                   disabled={isDisabled}
                 />
                 <FormControlLabel
-                  value={TickerEndType.unlimited}
+                  value={TickerCountType.people}
                   control={<Radio />}
-                  label="Unlimited"
+                  label="people"
                   disabled={isDisabled}
                 />
               </RadioGroup>
