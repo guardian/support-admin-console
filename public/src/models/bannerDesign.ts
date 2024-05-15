@@ -34,7 +34,6 @@ export interface TickerDesign {
   text: HexColour;
   filledProgress: HexColour;
   progressBarBackground: HexColour;
-  goalMarker: HexColour;
 }
 
 export interface BannerDesignHeaderImage {

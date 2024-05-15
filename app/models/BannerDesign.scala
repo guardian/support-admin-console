@@ -85,7 +85,6 @@ case class TickerDesign(
   text: HexColour,
   filledProgress: HexColour,
   progressBarBackground: HexColour,
-  goalMarker: HexColour
 )
 
 case class BannerDesignColours(

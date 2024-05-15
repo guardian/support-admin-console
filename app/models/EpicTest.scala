@@ -25,7 +25,7 @@ case class EpicVariant(
   heading: Option[String],
   paragraphs: List[String],
   highlightedText: Option[String] = None,
-  showTicker: Boolean = false,  // Deprecated - use tickerSettings instead
+  showTicker: Boolean = false,  // Deprecated - use tickerSettings instead (can this now be removed?)
   tickerSettings: Option[TickerSettings] = None,
   image: Option[Image] = None,
   cta: Option[Cta],

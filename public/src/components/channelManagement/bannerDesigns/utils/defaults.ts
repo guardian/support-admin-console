@@ -80,7 +80,6 @@ export const createDefaultBannerDesign = (name: string): BannerDesign => ({
       text: stringToHexColour('052962'),
       filledProgress: stringToHexColour('052962'),
       progressBarBackground: stringToHexColour('FFFFFF'),
-      goalMarker: stringToHexColour('000000'),
     },
   },
 });

@@ -55,14 +55,6 @@ export const TickerDesignEditor: React.FC<Props> = ({
         onChange={colour => onChange({ ...ticker, filledProgress: colour })}
         onValidationChange={onValidationChange}
       />
-      <ColourInput
-        colour={ticker.goalMarker}
-        name="ticker.goalMarker"
-        label="Goal Marker Colour"
-        isDisabled={isDisabled}
-        onChange={colour => onChange({ ...ticker, goalMarker: colour })}
-        onValidationChange={onValidationChange}
-      />
     </div>
   );
 };
