@@ -1,4 +1,3 @@
-// MultiselectAutocomplete.tsx
 import React from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
@@ -6,7 +5,7 @@ import { makeStyles } from '@mui/styles';
 import { grey } from '@mui/material/colors';
 import { Theme } from '@mui/material/styles';
 
-const useStyles = makeStyles(({ spacing,zIndex }: Theme) => ({
+const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
     width: '100%',
     '& > * + *': {
@@ -15,10 +14,6 @@ const useStyles = makeStyles(({ spacing,zIndex }: Theme) => ({
     borderColor: `2px solid ${{ color: grey[700] }}`,
     borderRadius: '2px',
     padding: spacing(2),
-  },
-  autocompleteDropdown: {
-    position: 'fixed', // Position the dropdown fixed within the viewport
-    zIndex: zIndex.tooltip, // Ensure the dropdown appears above other elements
   },
 }));
 
@@ -76,18 +71,17 @@ const MultiselectAutocomplete: React.FC<MultiselectAutocompleteProps> = ({
         inputValue={inputValue}
         componentsProps={{
           popper: {
-            className: classes.autocompleteDropdown,
             modifiers: [
               {
                 name: 'flip',
-                enabled: false
+                enabled: false,
               },
               {
                 name: 'preventOverflow',
-                enabled: false
-              }
-            ]
-          }
+                enabled: false,
+              },
+            ],
+          },
         }}
         onInputChange={(event, newInputValue, reason): void => {
           if (reason === 'input') {
