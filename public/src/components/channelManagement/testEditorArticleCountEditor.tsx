@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import {FormControl, Radio, RadioGroup, FormControlLabel, TextField, Theme} from '@mui/material';
+
+import { FormControl, Radio, RadioGroup, FormControlLabel, TextField, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { ArticlesViewedSettings } from './helpers/shared';
-import {notNumberValidator, EMPTY_ERROR_HELPER_TEXT} from './helpers/validation';
+import { notNumberValidator, EMPTY_ERROR_HELPER_TEXT } from './helpers/validation';
 import MultiselectAutocomplete from "./MutliSelectTagEditor";
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
@@ -57,7 +58,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
     tags: articlesViewedSettings?.tags|| [],
   };
 
-  const { register, errors, handleSubmit, reset } =useForm<FormData>({
+  const { register, errors, handleSubmit, reset } = useForm<FormData>({
     mode: 'onChange',
     defaultValues,
   });
@@ -90,8 +91,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
   };
 
   return (
-
-      <div className={classes.container}>
+    <div className={classes.container}>
         <FormControl>
           <RadioGroup
             value={articlesViewedSettings ? 'enabled' : 'disabled'}
