@@ -5,7 +5,7 @@ import { FormControl, Radio, RadioGroup, FormControlLabel, TextField, Theme } fr
 import { makeStyles } from '@mui/styles';
 import { ArticlesViewedSettings } from './helpers/shared';
 import { notNumberValidator, EMPTY_ERROR_HELPER_TEXT } from './helpers/validation';
-import MultiselectAutocomplete from "./MutliSelectTagEditor";
+import MultiselectAutocomplete from './MutliSelectTagEditor';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -55,20 +55,25 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
     minViews: articlesViewedSettings?.minViews?.toString() || '',
     maxViews: articlesViewedSettings?.maxViews?.toString() || '',
     periodInWeeks: articlesViewedSettings?.periodInWeeks.toString() || '',
-    tags: articlesViewedSettings?.tags|| [],
+    tags: articlesViewedSettings?.tags || [],
   };
 
   const { register, errors, handleSubmit, reset } = useForm<FormData>({
     mode: 'onChange',
     defaultValues,
   });
-  const tags =articlesViewedSettings?.tags ||[];
+  const tags = articlesViewedSettings?.tags || [];
 
   useEffect(() => {
     reset(defaultValues);
-  }, [defaultValues.minViews, defaultValues.maxViews, defaultValues.periodInWeeks, defaultValues.tags]);
+  }, [
+    defaultValues.minViews,
+    defaultValues.maxViews,
+    defaultValues.periodInWeeks,
+    defaultValues.tags,
+  ]);
 
-  const onSubmit = ({ minViews, maxViews, periodInWeeks,tags }: FormData): void => {
+  const onSubmit = ({ minViews, maxViews, periodInWeeks }: FormData): void => {
     onArticlesViewedSettingsChanged({
       minViews: parseInt(minViews) || null,
       maxViews: parseInt(maxViews) || null,
@@ -80,7 +85,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
-  }, [errors.minViews, errors.maxViews, errors.periodInWeeks,errors.tags]);
+  }, [errors.minViews, errors.maxViews, errors.periodInWeeks, errors.tags]);
 
   const onRadioGroupChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     if (event.target.value === 'enabled') {
@@ -92,31 +97,31 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
 
   return (
     <div className={classes.container}>
-        <FormControl>
-          <RadioGroup
-            value={articlesViewedSettings ? 'enabled' : 'disabled'}
-            onChange={onRadioGroupChange}
-          >
-            <FormControlLabel
-              value="disabled"
-              key="disabled"
-              control={<Radio />}
-              label="Do not target by user's article count"
-              disabled={isDisabled}
-            />
-            <FormControlLabel
-              value="enabled"
-              key="enabled"
-              control={<Radio />}
-              label="Target by user's article count"
-              disabled={isDisabled}
-            />
-          </RadioGroup>
-        </FormControl>
+      <FormControl>
+        <RadioGroup
+          value={articlesViewedSettings ? 'enabled' : 'disabled'}
+          onChange={onRadioGroupChange}
+        >
+          <FormControlLabel
+            value="disabled"
+            key="disabled"
+            control={<Radio />}
+            label="Do not target by user's article count"
+            disabled={isDisabled}
+          />
+          <FormControlLabel
+            value="enabled"
+            key="enabled"
+            control={<Radio />}
+            label="Target by user's article count"
+            disabled={isDisabled}
+          />
+        </RadioGroup>
+      </FormControl>
 
-        {articlesViewedSettings && (
-          <div>
-            <div className={classes.formContainer}>
+      {articlesViewedSettings && (
+        <div>
+          <div className={classes.formContainer}>
             <div>
               <TextField
                 inputRef={register({ validate: notNumberValidator })}
@@ -149,7 +154,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
               <TextField
                 inputRef={register({
                   required: EMPTY_ERROR_HELPER_TEXT,
-                  validate: notNumberValidator
+                  validate: notNumberValidator,
                 })}
                 error={errors.periodInWeeks !== undefined}
                 helperText={errors.periodInWeeks?.message}
@@ -164,17 +169,17 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
             </div>
           </div>
           <div>
-          <MultiselectAutocomplete
-            disabled={isDisabled}
-            tags={tags}
-            onUpdate={(newTagIds): void => {
-             onArticlesViewedSettingsChanged({ ...articlesViewedSettings, tags: newTagIds });
-            }}
-          />
+            <MultiselectAutocomplete
+              disabled={isDisabled}
+              tags={tags}
+              onUpdate={(newTagIds): void => {
+                onArticlesViewedSettingsChanged({ ...articlesViewedSettings, tags: newTagIds });
+              }}
+            />
           </div>
-          </div>
-        )}
-      </div>
+        </div>
+      )}
+    </div>
   );
 };
 

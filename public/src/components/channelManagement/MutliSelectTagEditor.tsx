@@ -1,20 +1,26 @@
 // MultiselectAutocomplete.tsx
-import React, { useState } from 'react';
+import React from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import {makeStyles} from "@mui/styles";
-import {Theme} from "@mui/material";
+import { makeStyles } from '@mui/styles';
+import { grey } from '@mui/material/colors';
+import { Theme } from '@mui/material/styles';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
+const useStyles = makeStyles(({ spacing,zIndex }: Theme) => ({
   container: {
     width: '100%',
     '& > * + *': {
       marginTop: spacing(3),
     },
+    borderColor: `2px solid ${{ color: grey[700] }}`,
+    borderRadius: '2px',
+    padding: spacing(2),
+  },
+  autocompleteDropdown: {
+    position: 'fixed', // Position the dropdown fixed within the viewport
+    zIndex: zIndex.tooltip, // Ensure the dropdown appears above other elements
   },
 }));
-
-
 
 interface Option {
   label: string;
@@ -24,7 +30,7 @@ interface Option {
 const options: Option[] = [
   { label: 'environment/climate-change', value: 'environment/climate-change' },
   { label: 'environment/climate-crisis', value: 'environment/climate-crisis' },
-  { label: 'environment/environment' , value: 'environment/environment' },
+  { label: 'environment/environment', value: 'environment/environment' },
   { label: 'science/science', value: 'science/science' },
   { label: 'politics/politics', value: 'politics/politics' },
   { label: 'us-news/us-politics', value: 'us-news/us-politics' },
@@ -48,30 +54,47 @@ interface MultiselectAutocompleteProps {
   onUpdate: (tags: string[]) => void;
 }
 
-const MultiselectAutocomplete: React.FC<MultiselectAutocompleteProps>= ({disabled,tags, onUpdate}: MultiselectAutocompleteProps) => {
-
+const MultiselectAutocomplete: React.FC<MultiselectAutocompleteProps> = ({
+  disabled,
+  tags,
+  onUpdate,
+}: MultiselectAutocompleteProps) => {
   const classes = useStyles();
 
   const [inputValue, setInputValue] = React.useState<string>('');
 
-
   return (
     <div className={classes.container}>
-      <h4 id="multiple-select-label">Tag for content tagged article</h4>
+      <span style={{ fontSize: '1rem', fontWeight: 'normal' }}>Tag for content tagged article</span>
       <Autocomplete
-        id={"multi-seelect-tag"}
+        id={'multi-seelect-tag'}
         multiple
         disabled={disabled}
         options={options}
-        getOptionLabel={(option) => option.label}
+        getOptionLabel={option => option.label}
         value={tags?.map<Option>(tag => ({ label: tag, value: tag }))}
         inputValue={inputValue}
+        componentsProps={{
+          popper: {
+            className: classes.autocompleteDropdown,
+            modifiers: [
+              {
+                name: 'flip',
+                enabled: false
+              },
+              {
+                name: 'preventOverflow',
+                enabled: false
+              }
+            ]
+          }
+        }}
         onInputChange={(event, newInputValue, reason): void => {
           if (reason === 'input') {
             setInputValue(newInputValue);
           }
         }}
-        renderInput={(params) => (
+        renderInput={params => (
           <TextField
             {...params}
             variant="outlined"
