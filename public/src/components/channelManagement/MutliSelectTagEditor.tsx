@@ -23,25 +23,28 @@ interface Option {
 }
 
 const options: Option[] = [
-  { label: 'environment/climate-change', value: 'environment/climate-change' },
-  { label: 'environment/climate-crisis', value: 'environment/climate-crisis' },
-  { label: 'environment/environment', value: 'environment/environment' },
-  { label: 'science/science', value: 'science/science' },
-  { label: 'politics/politics', value: 'politics/politics' },
-  { label: 'us-news/us-politics', value: 'us-news/us-politics' },
-  { label: 'australia-news/australian-politics', value: 'australia-news/australian-politics' },
-  { label: 'world/world', value: 'world/world' },
-  { label: 'world/europe-news', value: 'world/europe-news' },
-  { label: 'world/russia', value: 'world/russia' },
-  { label: 'books/books', value: 'books/books' },
-  { label: 'culture/culture', value: 'culture/culture' },
-  { label: 'world/coronavirus-outbreak', value: 'world/coronavirus-outbreak' },
-  { label: 'world/race', value: 'world/race' },
-  { label: 'inequality/inequality', value: 'inequality/inequality' },
-  { label: 'technology/technology', value: 'technology/technology' },
-  { label: 'business/business', value: 'business/business' },
-  { label: 'tone/recipes', value: 'tone/recipes' },
-];
+  'environment/climate-change',
+  'environment/climate-crisis',
+  'environment/environment',
+  'science/science',
+  'politics/politics',
+  'us-news/us-politics',
+  'australia-news/australian-politics',
+  'world/world',
+  'world/europe-news',
+  'world/russia',
+  'books/books',
+  'culture/culture',
+  'world/coronavirus-outbreak',
+  'world/race',
+  'inequality/inequality',
+  'technology/technology',
+  'business/business',
+  'tone/recipes',
+].map(id => ({
+  label: id,
+  value: id,
+}));
 
 interface MultiselectAutocompleteProps {
   disabled: boolean;
@@ -60,7 +63,7 @@ const MultiselectAutocomplete: React.FC<MultiselectAutocompleteProps> = ({
 
   return (
     <div className={classes.container}>
-      <span style={{ fontSize: '1rem', fontWeight: 'normal' }}>Tag for content tagged article</span>
+      <span style={{ fontSize: '1rem', fontWeight: 'normal' }}>Filter article count by tag</span>
       <Autocomplete
         id={'multi-seelect-tag'}
         multiple
