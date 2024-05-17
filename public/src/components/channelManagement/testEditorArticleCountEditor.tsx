@@ -41,6 +41,7 @@ interface TestEditorArticleCountEditorProps {
   onArticlesViewedSettingsChanged: (updatedArticlesViewedSettings?: ArticlesViewedSettings) => void;
   onValidationChange: (isValid: boolean) => void;
   isDisabled: boolean;
+  isEpic: boolean;
 }
 
 const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> = ({
@@ -48,6 +49,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
   onArticlesViewedSettingsChanged,
   onValidationChange,
   isDisabled,
+  isEpic,
 }: TestEditorArticleCountEditorProps) => {
   const classes = useStyles();
 
@@ -168,7 +170,8 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
               />
             </div>
           </div>
-          <div>
+          { isEpic && (
+            <div>
             <MultiselectAutocomplete
               disabled={isDisabled}
               tagIds={tagIds}
@@ -177,6 +180,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
               }}
             />
           </div>
+          )}
         </div>
       )}
     </div>
