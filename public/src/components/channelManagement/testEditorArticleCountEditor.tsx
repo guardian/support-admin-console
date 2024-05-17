@@ -170,16 +170,16 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
               />
             </div>
           </div>
-          { isEpic && (
+          {isEpic && (
             <div>
-            <MultiselectAutocomplete
-              disabled={isDisabled}
-              tagIds={tagIds}
-              onUpdate={(newTagIds): void => {
-                onArticlesViewedSettingsChanged({ ...articlesViewedSettings, tagIds: newTagIds });
-              }}
-            />
-          </div>
+              <MultiselectAutocomplete
+                disabled={isDisabled}
+                tagIds={tagIds}
+                onUpdate={(newTagIds): void => {
+                  onArticlesViewedSettingsChanged({ ...articlesViewedSettings, tagIds: newTagIds });
+                }}
+              />
+            </div>
           )}
         </div>
       )}
