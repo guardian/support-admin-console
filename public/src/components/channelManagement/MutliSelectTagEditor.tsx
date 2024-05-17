@@ -48,13 +48,13 @@ const options: Option[] = [
 
 interface MultiselectAutocompleteProps {
   disabled: boolean;
-  tags: string[] | null;
-  onUpdate: (tags: string[]) => void;
+  tagIds: string[] | null;
+  onUpdate: (tagIds: string[]) => void;
 }
 
 const MultiselectAutocomplete: React.FC<MultiselectAutocompleteProps> = ({
   disabled,
-  tags,
+  tagIds,
   onUpdate,
 }: MultiselectAutocompleteProps) => {
   const classes = useStyles();
@@ -70,7 +70,7 @@ const MultiselectAutocomplete: React.FC<MultiselectAutocompleteProps> = ({
         disabled={disabled}
         options={options}
         getOptionLabel={option => option.label}
-        value={tags?.map<Option>(tag => ({ label: tag, value: tag }))}
+        value={tagIds?.map<Option>(tag => ({ label: tag, value: tag }))}
         inputValue={inputValue}
         componentsProps={{
           popper: {

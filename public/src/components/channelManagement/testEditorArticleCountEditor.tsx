@@ -26,14 +26,14 @@ export const DEFAULT_ARTICLES_VIEWED_SETTINGS: ArticlesViewedSettings = {
   minViews: 5,
   maxViews: null,
   periodInWeeks: 52,
-  tags: [],
+  tagIds: [],
 };
 
 interface FormData {
   minViews: string;
   maxViews: string;
   periodInWeeks: string;
-  tags: string[];
+  tagIds: string[];
 }
 
 interface TestEditorArticleCountEditorProps {
@@ -55,14 +55,14 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
     minViews: articlesViewedSettings?.minViews?.toString() || '',
     maxViews: articlesViewedSettings?.maxViews?.toString() || '',
     periodInWeeks: articlesViewedSettings?.periodInWeeks.toString() || '',
-    tags: articlesViewedSettings?.tags || [],
+    tagIds: articlesViewedSettings?.tagIds || [],
   };
 
   const { register, errors, handleSubmit, reset } = useForm<FormData>({
     mode: 'onChange',
     defaultValues,
   });
-  const tags = articlesViewedSettings?.tags || [];
+  const tagIds = articlesViewedSettings?.tagIds || [];
 
   useEffect(() => {
     reset(defaultValues);
@@ -70,7 +70,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
     defaultValues.minViews,
     defaultValues.maxViews,
     defaultValues.periodInWeeks,
-    defaultValues.tags,
+    defaultValues.tagIds,
   ]);
 
   const onSubmit = ({ minViews, maxViews, periodInWeeks }: FormData): void => {
@@ -78,14 +78,14 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
       minViews: parseInt(minViews) || null,
       maxViews: parseInt(maxViews) || null,
       periodInWeeks: parseInt(periodInWeeks),
-      tags: articlesViewedSettings?.tags || null,
+      tagIds: articlesViewedSettings?.tagIds || null,
     });
   };
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
-  }, [errors.minViews, errors.maxViews, errors.periodInWeeks, errors.tags]);
+  }, [errors.minViews, errors.maxViews, errors.periodInWeeks, errors.tagIds]);
 
   const onRadioGroupChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     if (event.target.value === 'enabled') {
@@ -171,9 +171,9 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
           <div>
             <MultiselectAutocomplete
               disabled={isDisabled}
-              tags={tags}
+              tagIds={tagIds}
               onUpdate={(newTagIds): void => {
-                onArticlesViewedSettingsChanged({ ...articlesViewedSettings, tags: newTagIds });
+                onArticlesViewedSettingsChanged({ ...articlesViewedSettings, tagIds: newTagIds });
               }}
             />
           </div>
