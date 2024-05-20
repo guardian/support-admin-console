@@ -219,6 +219,7 @@ export interface ArticlesViewedSettings {
   minViews: number | null;
   maxViews: number | null;
   periodInWeeks: number;
+  tagIds: string[] | null;
 }
 
 export interface TestEditorState {

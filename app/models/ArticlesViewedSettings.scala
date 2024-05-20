@@ -9,5 +9,6 @@ case class MaxViews(
 case class ArticlesViewedSettings(
  minViews: Option[Int],
  maxViews: Option[Int],
- periodInWeeks: Int
+ periodInWeeks: Int,
+ tagIds: List[String]=Nil
 )

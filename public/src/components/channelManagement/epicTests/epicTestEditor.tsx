@@ -402,6 +402,7 @@ export const getEpicTestEditor = (
               onArticlesViewedSettingsChanged={onArticlesViewedSettingsChange}
               onValidationChange={onArticlesViewedSettingsValidationChanged}
               isDisabled={!userHasTestLocked}
+              isEpic={true}
             />
           </div>
         )}
