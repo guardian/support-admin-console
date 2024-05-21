@@ -69,11 +69,7 @@ const buildVariantForPreview = (
     },
     secondaryCta: shouldShowReminder
       ? {
-          type: SecondaryCtaType.Custom,
-          cta: {
-            text: 'Support monthly',
-            baseUrl: 'https://support.theguardian.com/contribute/recurring',
-          },
+          type: SecondaryCtaType.ContributionsReminder,
         }
       : undefined,
   },
