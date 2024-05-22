@@ -3,18 +3,21 @@ import BannerVariantPreview from '../bannerTests/bannerVariantPreview';
 import { BannerDesign } from '../../../models/bannerDesign';
 import { Checkbox, FormControlLabel } from '@mui/material';
 import { BannerVariant } from '../../../models/banner';
-import { TickerCountType, TickerEndType, TickerName } from '../helpers/shared';
+import { SecondaryCtaType, TickerCountType, TickerEndType, TickerName } from '../helpers/shared';
 
 interface Props {
   design: BannerDesign;
 }
 
-interface TickerToggleProps {
-  shouldShowTicker: boolean;
-  setShouldShowTicker: (shouldShowTicker: boolean) => void;
+interface ToggleProps {
+  shouldShow: boolean;
+  setShouldShow: (shouldShow: boolean) => void;
 }
 
-const TickerToggle = ({ shouldShowTicker, setShouldShowTicker }: TickerToggleProps) => {
+const TickerToggle = ({
+  shouldShow: shouldShowTicker,
+  setShouldShow: setShouldShowTicker,
+}: ToggleProps) => {
   return (
     <FormControlLabel
       control={
@@ -29,9 +32,28 @@ const TickerToggle = ({ shouldShowTicker, setShouldShowTicker }: TickerTogglePro
   );
 };
 
+const ReminderToggle = ({
+  shouldShow: shouldShowReminder,
+  setShouldShow: setShouldShowReminder,
+}: ToggleProps) => {
+  return (
+    <FormControlLabel
+      control={
+        <Checkbox
+          checked={shouldShowReminder}
+          onChange={() => setShouldShowReminder(!shouldShowReminder)}
+          color="primary"
+        />
+      }
+      label={'Show reminder?'}
+    />
+  );
+};
+
 const buildVariantForPreview = (
   design: BannerDesign,
   shouldShowTicker: boolean,
+  shouldShowReminder: boolean,
 ): BannerVariant => ({
   name: 'CONTROL',
   template: { designName: design.name },
@@ -45,6 +67,11 @@ const buildVariantForPreview = (
       text: 'Support the Guardian',
       baseUrl: 'https://support.theguardian.com/contribute',
     },
+    secondaryCta: shouldShowReminder
+      ? {
+          type: SecondaryCtaType.ContributionsReminder,
+        }
+      : undefined,
   },
   separateArticleCount: true,
   tickerSettings: shouldShowTicker
@@ -64,16 +91,17 @@ const buildVariantForPreview = (
 
 const BannerDesignPreview: React.FC<Props> = ({ design }: Props) => {
   const [shouldShowTicker, setShouldShowTicker] = useState<boolean>(false);
+  const [shouldShowReminder, setShouldShowReminder] = useState<boolean>(false);
 
   return (
     <BannerVariantPreview
-      variant={buildVariantForPreview(design, shouldShowTicker)}
+      variant={buildVariantForPreview(design, shouldShowTicker, shouldShowReminder)}
       design={design}
       controls={
-        <TickerToggle
-          shouldShowTicker={shouldShowTicker}
-          setShouldShowTicker={setShouldShowTicker}
-        />
+        <>
+          <TickerToggle shouldShow={shouldShowTicker} setShouldShow={setShouldShowTicker} />
+          <ReminderToggle shouldShow={shouldShowReminder} setShouldShow={setShouldShowReminder} />
+        </>
       }
     />
   );
