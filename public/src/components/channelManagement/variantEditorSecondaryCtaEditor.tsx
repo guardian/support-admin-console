@@ -69,7 +69,9 @@ const VariantEditorSecondaryCtaEditor: React.FC<VariantEditorSecondaryCtaEditorP
             disabled={isDisabled}
           >
             <MenuItem value={'None'}>None</MenuItem>
-            { allowVariantCustomSecondaryCta && <MenuItem value={SecondaryCtaType.Custom}>Custom</MenuItem> }
+            {allowVariantCustomSecondaryCta && (
+              <MenuItem value={SecondaryCtaType.Custom}>Custom</MenuItem>
+            )}
             <MenuItem value={SecondaryCtaType.ContributionsReminder}>
               Contributions reminder
             </MenuItem>
