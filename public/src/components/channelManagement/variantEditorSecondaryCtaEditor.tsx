@@ -22,6 +22,7 @@ interface VariantEditorSecondaryCtaEditorProps {
   label: string;
   cta?: SecondaryCta;
   updateCta: (updatedCta?: SecondaryCta) => void;
+  allowVariantCustomSecondaryCta: boolean;
   onValidationChange: (isValid: boolean) => void;
   isDisabled: boolean;
   defaultCta: Cta;
@@ -31,6 +32,7 @@ const VariantEditorSecondaryCtaEditor: React.FC<VariantEditorSecondaryCtaEditorP
   label,
   cta,
   updateCta,
+  allowVariantCustomSecondaryCta,
   onValidationChange,
   isDisabled,
   defaultCta,
@@ -67,7 +69,7 @@ const VariantEditorSecondaryCtaEditor: React.FC<VariantEditorSecondaryCtaEditorP
             disabled={isDisabled}
           >
             <MenuItem value={'None'}>None</MenuItem>
-            <MenuItem value={SecondaryCtaType.Custom}>Custom</MenuItem>
+            { allowVariantCustomSecondaryCta && <MenuItem value={SecondaryCtaType.Custom}>Custom</MenuItem> }
             <MenuItem value={SecondaryCtaType.ContributionsReminder}>
               Contributions reminder
             </MenuItem>
