@@ -106,6 +106,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
     allowVariantHighlightedText,
     allowVariantImageUrl,
     allowVariantCustomPrimaryCta,
+    allowVariantSecondaryCta,
     allowVariantCustomSecondaryCta,
     allowVariantSeparateArticleCount,
     allowVariantTicker,
@@ -369,9 +370,10 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
             secondaryCta={variant.secondaryCta}
             updatePrimaryCta={updatePrimaryCta}
             updateSecondaryCta={updateSecondaryCta}
+            allowVariantCustomSecondaryCta={allowVariantCustomSecondaryCta}
             isDisabled={!editMode}
             onValidationChange={onValidationChange}
-            supportSecondaryCta={allowVariantCustomSecondaryCta}
+            supportSecondaryCta={allowVariantSecondaryCta}
           />
         </div>
       )}
