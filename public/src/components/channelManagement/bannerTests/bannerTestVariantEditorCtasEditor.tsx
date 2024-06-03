@@ -51,6 +51,7 @@ const BannerTestVariantEditorCtasEditor: React.FC<BannerTestVariantEditorCtasEdi
           label="Secondary button"
           isDisabled={isDisabled}
           cta={secondaryCta}
+          allowVariantCustomSecondaryCta={true}
           updateCta={updateSecondaryCta}
           defaultCta={DEFAULT_SECONDARY_CTA}
           onValidationChange={onValidationChange}
