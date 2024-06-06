@@ -221,7 +221,7 @@ export type ModifiedTests = {
 };
 
 export interface ArticlesViewedSettings {
-  minViews: number | null;
+  minViews: number;
   maxViews: number | null;
   periodInWeeks: number;
   tagIds: string[] | null;
