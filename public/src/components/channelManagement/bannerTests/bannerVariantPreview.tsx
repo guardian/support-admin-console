@@ -14,6 +14,7 @@ import { useModule } from '../../../hooks/useModule';
 import useTickerData, { TickerSettingsWithData } from '../hooks/useTickerData';
 import { mockAmountsCardData, SelectedAmountsVariant } from '../../../utils/models';
 import { BannerDesign, BannerDesignProps } from '../../../models/bannerDesign';
+import { ArticleCounts } from '../epicTests/epicVariantPreview';
 
 // Mock prices data
 interface ProductPriceData {
@@ -69,7 +70,7 @@ interface BannerProps {
   bannerChannel: string;
   countryCode?: string;
   prices?: Prices;
-  numArticles: number;
+  articleCounts: ArticleCounts;
   content: BannerContent;
   mobileContent?: BannerContent;
   tickerSettings?: TickerSettingsWithData;
@@ -103,7 +104,10 @@ const buildProps = (
     content: variant.bannerContent,
     mobileContent: variant.mobileBannerContent,
     countryCode: 'GB',
-    numArticles: 13,
+    articleCounts: {
+      for52Weeks: 13,
+      forTargetedWeeks: 13,
+    },
     tickerSettings: tickerSettingsWithData,
     separateArticleCount: variant.separateArticleCount,
     prices: mockPricesData,
