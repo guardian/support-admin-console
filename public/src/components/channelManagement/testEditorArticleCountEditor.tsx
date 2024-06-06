@@ -75,7 +75,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
 
   const onSubmit = ({ minViews, maxViews, periodInWeeks }: FormData): void => {
     onArticlesViewedSettingsChanged({
-      minViews: parseInt(minViews) || null,
+      minViews: parseInt(minViews),
       maxViews: parseInt(maxViews) || null,
       periodInWeeks: parseInt(periodInWeeks),
       tagIds: articlesViewedSettings?.tagIds || null,
@@ -124,7 +124,10 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
           <div className={classes.formContainer}>
             <div>
               <TextField
-                inputRef={register({ validate: notNumberValidator })}
+                inputRef={register({
+                  required: EMPTY_ERROR_HELPER_TEXT,
+                  validate: notNumberValidator,
+                })}
                 error={errors.minViews !== undefined}
                 helperText={errors.minViews?.message}
                 onBlur={handleSubmit(onSubmit)}
