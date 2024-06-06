@@ -35,6 +35,7 @@ import { EpicTestPreviewButton } from './epicTestPreview';
 import { ValidatedTestEditor, ValidatedTestEditorProps } from '../validatedTestEditor';
 import { TestEditorProps } from '../testsForm';
 import { EpicBanditEditor } from './epicBanditEditor';
+import { AnalyticsButton } from '../AnalyticsButton';
 
 const BANDIT_FEATURE_SWITCH = false;
 
@@ -237,7 +238,10 @@ export const getEpicTestEditor = (
               <Typography variant={'h3'} className={classes.sectionHeader}>
                 Variants
               </Typography>
-              <EpicTestPreviewButton test={test} moduleName={epicEditorConfig.moduleName} />
+              <div className={classes.variantsHeaderButtonsContainer}>
+                <EpicTestPreviewButton test={test} moduleName={epicEditorConfig.moduleName} />
+                <AnalyticsButton test={test} channel={'Epic'} />
+              </div>
             </div>
             <div>
               <TestVariantsEditor<EpicVariant>

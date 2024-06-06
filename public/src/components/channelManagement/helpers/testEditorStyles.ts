@@ -32,4 +32,10 @@ export const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     paddingTop: spacing(4),
     paddingBottom: spacing(12),
   },
+  variantsHeaderButtonsContainer: {
+    display: 'flex',
+    '& > * + *': {
+      marginLeft: spacing(2),
+    },
+  },
 }));

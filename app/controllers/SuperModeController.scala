@@ -45,7 +45,7 @@ class SuperModeController(
         url <- request.getQueryString("url")
       } yield {
         athena
-          .get(from, to, url)
+          .getArticleEpicData(from, to, url)
           .map(data => Ok(noNulls(data.asJson)))
       }
 
