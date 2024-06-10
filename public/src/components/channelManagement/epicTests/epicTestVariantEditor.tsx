@@ -39,6 +39,7 @@ import { ImageEditorToggle } from '../imageEditor';
 import { BylineWithImageEditorToggle } from '../bylineWithImageEditor';
 import { EpicVariant, SeparateArticleCount } from '../../../models/epic';
 import { AppleNewsChoiceCards } from './appleChoiceCardsEditor';
+import EpicTestNewsletter from "./epicNewsletterSignUp";
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const getUseStyles = (shouldAddPadding: boolean) => {
@@ -115,6 +116,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
     allowBylineWithImage,
     platform,
     requireVariantHeader,
+    allowNewsletterSignup,
   } = epicEditorConfig;
 
   const classes = getUseStyles(allowMultipleVariants)();
@@ -192,6 +194,9 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   };
   const updateBylineWithImage = (bylineWithImage?: BylineWithImage): void => {
     onVariantChange({ ...variant, bylineWithImage });
+  };
+  const updateShowNewsletterSignup = (updateShowNewsletterSignup?: boolean): void => {
+    onVariantChange({ ...variant, showNewsletterSignup: updateShowNewsletterSignup });
   };
 
   const getParagraphsHelperText = () => {
@@ -416,6 +421,21 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
           <EpicTestChoiceCardsEditor
             showChoiceCards={variant.showChoiceCards}
             updateShowChoiceCards={updateShowChoiceCards}
+            isDisabled={!editMode}
+          />
+        </div>
+      )}
+
+
+      {allowNewsletterSignup && (
+        <div className={classes.sectionContainer}>
+          <Typography className={classes.sectionHeader} variant="h4">
+            Newsletter Signup
+          </Typography>
+
+          <EpicTestNewsletter
+            showNewsletterSignup={variant.showNewsletterSignup}
+            updateShowNewsletterSignup={updateShowNewsletterSignup}
             isDisabled={!editMode}
           />
         </div>

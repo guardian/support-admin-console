@@ -34,6 +34,7 @@ export interface EpicVariant extends Variant {
   defaultChoiceCardFrequency?: ContributionFrequency;
   bylineWithImage?: BylineWithImage;
   showSignInLink?: boolean;
+  showNewsletterSignup?: boolean;
 }
 
 export interface MaxEpicViews {
