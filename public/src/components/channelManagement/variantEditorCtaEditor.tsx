@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { FormControl, FormControlLabel, Radio, RadioGroup, Theme } from '@mui/material';
+import React from 'react';
+import {Checkbox, FormControl, FormControlLabel, Radio, RadioGroup, Theme} from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Cta } from './helpers/shared';
 import VariantEditorCtaFieldsEditor from './variantEditorCtaFieldsEditor';
@@ -27,24 +27,21 @@ interface VariantEditorCtaEditorProps {
   onValidationChange: (isValid: boolean) => void;
   defaultCta: Cta;
   isDisabled: boolean;
-  onPrimaryButtonChange: (isSelected: boolean) => void;
 }
 
 const VariantEditorCtaEditor: React.FC<VariantEditorCtaEditorProps> = ({
-                                                                         cta,
-                                                                         updateCta,
-                                                                         onValidationChange,
-                                                                         defaultCta,
-                                                                         isDisabled,
-                                                                         onPrimaryButtonChange,
-                                                                       }: VariantEditorCtaEditorProps) => {
+  label,
+  cta,
+  updateCta,
+  onValidationChange,
+  defaultCta,
+  isDisabled,
+}: VariantEditorCtaEditorProps) => {
   const classes = useStyles();
-  const [isSelected, setIsSelected] = useState<boolean>(false);
+  const isSelected = cta !== undefined;
 
-  const onRadioChanged = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const isChecked = event.target.value === 'primaryButton';
-    setIsSelected(isChecked);
-    onPrimaryButtonChange(isChecked);
+  const onCheckboxChanged = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const isChecked = event.target.checked;
     updateCta(isChecked ? defaultCta : undefined);
   };
 
@@ -52,19 +49,18 @@ const VariantEditorCtaEditor: React.FC<VariantEditorCtaEditorProps> = ({
     <div className={classes.container}>
       <div className={classes.checkboxContainer}>
         <FormControl>
-          <RadioGroup onChange={onRadioChanged}>
+          <RadioGroup>
             <FormControlLabel
               value="primaryButton"
               key="primaryButton"
               control={<Radio />}
               label="Primary button"
-              disabled={isDisabled}
             />
           </RadioGroup>
         </FormControl>
       </div>
 
-      {isSelected && cta && (
+      {cta && (
         <div className={classes.fieldsContainer}>
           <VariantEditorCtaFieldsEditor
             cta={cta}
