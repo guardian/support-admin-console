@@ -1,5 +1,5 @@
-import React from 'react';
-import {Checkbox, FormControl, FormControlLabel, Radio, RadioGroup, Theme} from '@mui/material';
+import React, { useState } from 'react';
+import { FormControl, FormControlLabel, Radio, RadioGroup, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Cta } from './helpers/shared';
 import VariantEditorCtaFieldsEditor from './variantEditorCtaFieldsEditor';
@@ -30,18 +30,18 @@ interface VariantEditorCtaEditorProps {
 }
 
 const VariantEditorCtaEditor: React.FC<VariantEditorCtaEditorProps> = ({
-  label,
-  cta,
-  updateCta,
-  onValidationChange,
-  defaultCta,
-  isDisabled,
-}: VariantEditorCtaEditorProps) => {
+                                                                         cta,
+                                                                         updateCta,
+                                                                         onValidationChange,
+                                                                         defaultCta,
+                                                                         isDisabled,
+                                                                       }: VariantEditorCtaEditorProps) => {
   const classes = useStyles();
-  const isSelected = cta !== undefined;
+  const [isSelected, setIsSelected] = useState<boolean>(false);
 
-  const onCheckboxChanged = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const isChecked = event.target.checked;
+  const onRadioChanged = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const isChecked = event.target.value === 'primaryButton';
+    setIsSelected(isChecked);
     updateCta(isChecked ? defaultCta : undefined);
   };
 
@@ -49,18 +49,19 @@ const VariantEditorCtaEditor: React.FC<VariantEditorCtaEditorProps> = ({
     <div className={classes.container}>
       <div className={classes.checkboxContainer}>
         <FormControl>
-          <RadioGroup>
+          <RadioGroup onChange={onRadioChanged}>
             <FormControlLabel
               value="primaryButton"
               key="primaryButton"
               control={<Radio />}
               label="Primary button"
+              disabled={isDisabled}
             />
           </RadioGroup>
         </FormControl>
       </div>
 
-      {cta && (
+      {isSelected && cta && (
         <div className={classes.fieldsContainer}>
           <VariantEditorCtaFieldsEditor
             cta={cta}
