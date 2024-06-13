@@ -35,6 +35,7 @@ case class EpicVariant(
   bylineWithImage: Option[BylineWithImage],
   defaultChoiceCardFrequency: Option[String],
   showSignInLink: Option[Boolean],
+  newsletterSignup: Option[NewsletterSignup],
 )
 case class EpicTest(
   name: String,
