@@ -1,7 +1,6 @@
 import React from 'react';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import { Theme } from '@mui/material';
+import {FormControl, Radio, RadioGroup, TextField, Theme} from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
@@ -35,19 +34,37 @@ const EpicTestNewsletter: React.FC<EpicTestNewsletterProps> = ({
   };
 
   return (
-    <div className={classes.container}>
-      <FormControlLabel
-        control={
-          <Checkbox
-            checked={Boolean(showNewsletterSignup)}
-            onChange={onToggleShowNewsletterSignup}
-            color="primary"
-            disabled={isDisabled}
-          />
-        }
-        label="Enable newsletter signup"
-      />
-    </div>
+    <FormControl>
+      <RadioGroup>
+        <FormControlLabel
+          value="newsletterSignupEnabled"
+          key="newsletterSignupEnabled"
+          control={<Radio/>}
+          label="Enable newsletter sign up"
+        />
+      </RadioGroup>
+
+      <div>
+        <TextField
+          name="text"
+          label="Button copy"
+          margin="normal"
+          variant="outlined"
+          disabled={isDisabled}
+          fullWidth
+        />
+
+        <TextField
+          name="baseUrl"
+          label="Button destination"
+          margin="normal"
+          variant="outlined"
+          disabled={isDisabled}
+          fullWidth
+        />
+      </div>
+    </FormControl>
+
   );
 };
 
