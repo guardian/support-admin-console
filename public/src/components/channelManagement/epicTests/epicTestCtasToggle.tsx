@@ -1,27 +1,26 @@
-import {EpicVariant} from "../../../models/epic";
-import {FormControl, FormControlLabel, Radio, RadioGroup} from "@mui/material";
-import React from "react";
-import {NewsletterSignup} from "../helpers/shared";
+import { EpicVariant } from '../../../models/epic';
+import { FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
+import React from 'react';
 
 interface EpicTestCtasToggleProps {
-  variant: EpicVariant,
-  isDisabled: boolean
-  onVariantChange: (variant: EpicVariant) => void
+  variant: EpicVariant;
+  isDisabled: boolean;
+  onVariantChange: (variant: EpicVariant) => void;
 }
 
 export const EpicTestCtasToggle: React.FC<EpicTestCtasToggleProps> = ({
   variant,
-                                                               isDisabled,
-                                                               onVariantChange}) => {
-
+  isDisabled,
+  onVariantChange,
+}) => {
   const onRadioGroupChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const value = event.target.value;
     if (value === 'newsletterSignup') {
-      onVariantChange({...variant, newsletterSignup: {text: '', newsletterUrl: ''}})
+      onVariantChange({ ...variant, newsletterSignup: { text: '', newsletterUrl: '' } });
     } else {
-      onVariantChange({...variant, newsletterSignup: undefined})
+      onVariantChange({ ...variant, newsletterSignup: undefined });
     }
-  }
+  };
   return (
     <div>
       <FormControl>
@@ -45,7 +44,6 @@ export const EpicTestCtasToggle: React.FC<EpicTestCtasToggleProps> = ({
           />
         </RadioGroup>
       </FormControl>
-      {variant.newsletterSignup ? "Newsletter signup" : "Buttons"}
     </div>
-  )
-}
+  );
+};

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Theme, Typography } from '@mui/material';
+import { FormControl, FormControlLabel, Radio, RadioGroup, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-
 import EpicTestChoiceCardsEditor from './epicTestChoiceCardsEditor';
 import EpicTestSignInLinkEditor from './epicTestSignInLinkEditor';
 import TickerEditor from '../tickerEditor';
@@ -12,7 +11,7 @@ import {
   BylineWithImage,
   Cta,
   EpicEditorConfig,
-  Image, NewsletterSignup,
+  Image,
   SecondaryCta,
   TickerSettings,
 } from '../helpers/shared';
@@ -39,8 +38,7 @@ import { ImageEditorToggle } from '../imageEditor';
 import { BylineWithImageEditorToggle } from '../bylineWithImageEditor';
 import { EpicVariant, SeparateArticleCount } from '../../../models/epic';
 import { AppleNewsChoiceCards } from './appleChoiceCardsEditor';
-import EpicTestNewsletter from "./epicNewsletterSignUp";
-import {EpicTestCtasToggle} from "./epicTestCtasToggle";
+import EpicTestNewsletter from './epicNewsletterSignUp';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const getUseStyles = (shouldAddPadding: boolean) => {
@@ -107,7 +105,6 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
     allowVariantHeader,
     allowVariantHighlightedText,
     allowVariantImageUrl,
-    allowVariantCustomPrimaryCta,
     allowVariantSecondaryCta,
     allowVariantCustomSecondaryCta,
     allowVariantSeparateArticleCount,
@@ -171,6 +168,15 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   const noDateTemplate = !VALID_TEMPLATES[platform].includes(DATE);
   const noDayTemplate = !VALID_TEMPLATES[platform].includes(DAY_OF_THE_WEEK);
 
+  const onCtasToggleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const value = event.target.value;
+    if (value === 'newsletterSignup') {
+      onVariantChange({ ...variant, newsletterSignup: { text: '', newsletterUrl: '' } });
+    } else {
+      onVariantChange({ ...variant, newsletterSignup: undefined });
+    }
+  };
+
   // Handling other form field updates
   const updatePrimaryCta = (updatedCta?: Cta): void => {
     onVariantChange({ ...variant, cta: updatedCta });
@@ -195,9 +201,6 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   };
   const updateBylineWithImage = (bylineWithImage?: BylineWithImage): void => {
     onVariantChange({ ...variant, bylineWithImage });
-  };
-  const updateNewsletterSignup = (updatedNewsletterSignup?: NewsletterSignup): void => {
-    onVariantChange({ ...variant, newsletterSignup: updatedNewsletterSignup });
   };
 
   const getParagraphsHelperText = () => {
@@ -365,28 +368,78 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
         />
       )}
 
-      <EpicTestCtasToggle
-      variant={variant}
-      isDisabled={!editMode}
-      onVariantChange={onVariantChange}/>
-
-      {allowVariantCustomPrimaryCta && (
+      {allowNewsletterSignup && (
+        <FormControl>
+          <RadioGroup
+            value={variant.newsletterSignup ? 'newsletterSignup' : 'buttons'}
+            onChange={onCtasToggleChange}
+          >
+            <FormControlLabel
+              value="newsletterSignup"
+              key="newsletterSignup"
+              control={<Radio />}
+              label="Newsletter signup"
+              disabled={!editMode}
+            />
+            <FormControlLabel
+              value="buttons"
+              key="buttons"
+              control={<Radio />}
+              label="Buttons"
+              disabled={!editMode}
+            />
+          </RadioGroup>
+        </FormControl>
+      )}
+      {variant.newsletterSignup && (
         <div className={classes.sectionContainer}>
           <Typography className={classes.sectionHeader} variant="h4">
-            Buttons
+            Newsletter Signup
           </Typography>
 
-          <EpicTestVariantEditorCtasEditor
-            primaryCta={variant.cta}
-            secondaryCta={variant.secondaryCta}
-            updatePrimaryCta={updatePrimaryCta}
-            updateSecondaryCta={updateSecondaryCta}
-            allowVariantCustomSecondaryCta={allowVariantCustomSecondaryCta}
+          <EpicTestNewsletter
             isDisabled={!editMode}
-            onValidationChange={onValidationChange}
-            supportSecondaryCta={allowVariantSecondaryCta}
+            updateShowNewsletterSignup={newsletterSignup =>
+              onVariantChange({ ...variant, newsletterSignup })
+            }
           />
         </div>
+      )}
+      {!variant.newsletterSignup && (
+        <>
+          <div>
+            <div className={classes.sectionContainer}>
+              <Typography className={classes.sectionHeader} variant="h4">
+                Buttons
+              </Typography>
+
+              <EpicTestVariantEditorCtasEditor
+                primaryCta={variant.cta}
+                secondaryCta={variant.secondaryCta}
+                updatePrimaryCta={updatePrimaryCta}
+                updateSecondaryCta={updateSecondaryCta}
+                allowVariantCustomSecondaryCta={allowVariantCustomSecondaryCta}
+                isDisabled={!editMode}
+                onValidationChange={onValidationChange}
+                supportSecondaryCta={allowVariantSecondaryCta}
+              />
+            </div>
+          </div>
+
+          {allowVariantChoiceCards && (
+            <div className={classes.sectionContainer}>
+              <Typography className={classes.sectionHeader} variant="h4">
+                Choice Cards
+              </Typography>
+
+              <EpicTestChoiceCardsEditor
+                showChoiceCards={variant.showChoiceCards}
+                updateShowChoiceCards={updateShowChoiceCards}
+                isDisabled={!editMode}
+              />
+            </div>
+          )}
+        </>
       )}
 
       {allowVariantSeparateArticleCount && (
@@ -415,33 +468,6 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
             isDisabled={!editMode}
             onValidationChange={onValidationChange}
           />
-        </div>
-      )}
-
-      {allowVariantChoiceCards && (
-        <div className={classes.sectionContainer}>
-          <Typography className={classes.sectionHeader} variant="h4">
-            Choice Cards
-          </Typography>
-
-          <EpicTestChoiceCardsEditor
-            showChoiceCards={variant.showChoiceCards}
-            updateShowChoiceCards={updateShowChoiceCards}
-            isDisabled={!editMode}
-          />
-        </div>
-      )}
-
-
-      {allowNewsletterSignup && (
-        <div className={classes.sectionContainer}>
-          <Typography className={classes.sectionHeader} variant="h4">
-            Newsletter Signup
-          </Typography>
-
-          <EpicTestNewsletter
-           isDisabled={!editMode}
-           updateShowNewsletterSignup={updateNewsletterSignup}/>
         </div>
       )}
 

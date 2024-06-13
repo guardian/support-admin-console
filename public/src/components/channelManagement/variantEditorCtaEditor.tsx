@@ -1,5 +1,5 @@
 import React from 'react';
-import {Checkbox, FormControl, FormControlLabel, Radio, RadioGroup, Theme} from '@mui/material';
+import { Checkbox, FormControlLabel, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Cta } from './helpers/shared';
 import VariantEditorCtaFieldsEditor from './variantEditorCtaFieldsEditor';
@@ -38,8 +38,7 @@ const VariantEditorCtaEditor: React.FC<VariantEditorCtaEditorProps> = ({
   isDisabled,
 }: VariantEditorCtaEditorProps) => {
   const classes = useStyles();
-  const isSelected = cta !== undefined;
-
+  const isChecked = cta !== undefined;
   const onCheckboxChanged = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const isChecked = event.target.checked;
     updateCta(isChecked ? defaultCta : undefined);
@@ -48,16 +47,17 @@ const VariantEditorCtaEditor: React.FC<VariantEditorCtaEditorProps> = ({
   return (
     <div className={classes.container}>
       <div className={classes.checkboxContainer}>
-        <FormControl>
-          <RadioGroup>
-            <FormControlLabel
-              value="primaryButton"
-              key="primaryButton"
-              control={<Radio />}
-              label="Primary button"
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={isChecked}
+              onChange={onCheckboxChanged}
+              color="primary"
+              disabled={isDisabled}
             />
-          </RadioGroup>
-        </FormControl>
+          }
+          label={label}
+        />
       </div>
 
       {cta && (
