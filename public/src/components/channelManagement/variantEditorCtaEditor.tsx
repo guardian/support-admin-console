@@ -27,6 +27,7 @@ interface VariantEditorCtaEditorProps {
   onValidationChange: (isValid: boolean) => void;
   defaultCta: Cta;
   isDisabled: boolean;
+  onPrimaryButtonChange: (isSelected: boolean) => void;
 }
 
 const VariantEditorCtaEditor: React.FC<VariantEditorCtaEditorProps> = ({
@@ -35,6 +36,7 @@ const VariantEditorCtaEditor: React.FC<VariantEditorCtaEditorProps> = ({
                                                                          onValidationChange,
                                                                          defaultCta,
                                                                          isDisabled,
+                                                                         onPrimaryButtonChange,
                                                                        }: VariantEditorCtaEditorProps) => {
   const classes = useStyles();
   const [isSelected, setIsSelected] = useState<boolean>(false);
@@ -42,6 +44,7 @@ const VariantEditorCtaEditor: React.FC<VariantEditorCtaEditorProps> = ({
   const onRadioChanged = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const isChecked = event.target.value === 'primaryButton';
     setIsSelected(isChecked);
+    onPrimaryButtonChange(isChecked);
     updateCta(isChecked ? defaultCta : undefined);
   };
 

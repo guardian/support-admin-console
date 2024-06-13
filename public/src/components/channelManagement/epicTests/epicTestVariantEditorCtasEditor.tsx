@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import VariantEditorCtaEditor from '../variantEditorCtaEditor';
@@ -36,6 +36,11 @@ const EpicTestVariantEditorButtonsEditor: React.FC<EpicTestVariantEditorButtonsE
   supportSecondaryCta,
 }: EpicTestVariantEditorButtonsEditorProps) => {
   const classes = useStyles();
+  const [isPrimaryButtonSelected, setIsPrimaryButtonSelected] = useState<boolean>(false);
+
+  const handlePrimaryButtonChange = (isSelected: boolean): void => {
+    setIsPrimaryButtonSelected(isSelected);
+  };
 
   return (
     <div className={classes.container}>
@@ -46,9 +51,10 @@ const EpicTestVariantEditorButtonsEditor: React.FC<EpicTestVariantEditorButtonsE
         updateCta={updatePrimaryCta}
         defaultCta={DEFAULT_PRIMARY_CTA}
         onValidationChange={onValidationChange}
+        onPrimaryButtonChange={handlePrimaryButtonChange}  // New prop for state update
       />
 
-      {supportSecondaryCta && (
+      {supportSecondaryCta && isPrimaryButtonSelected && (
         <VariantEditorSecondaryCtaEditor
           label="Secondary button"
           isDisabled={isDisabled}

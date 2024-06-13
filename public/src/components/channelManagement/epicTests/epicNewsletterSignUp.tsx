@@ -60,7 +60,7 @@ const EpicTestNewsletter: React.FC<EpicTestNewsletterProps> = ({
 
           <TextField
             name="baseUrl"
-            label="Button destination"
+            label="Newsletter URL"
             margin="normal"
             variant="outlined"
             disabled={isDisabled}
