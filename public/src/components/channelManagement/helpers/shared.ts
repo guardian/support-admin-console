@@ -184,6 +184,11 @@ export interface TestStatus {
   isArchived: boolean;
 }
 
+export interface NewsletterSignup {
+  text: string;
+  newsletterUrl: string;
+}
+
 export interface Cta {
   text: string;
   baseUrl: string;
