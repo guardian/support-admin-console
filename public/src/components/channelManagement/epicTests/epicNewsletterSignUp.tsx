@@ -1,6 +1,5 @@
-import React from 'react';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import {FormControl, Radio, RadioGroup, TextField, Theme} from '@mui/material';
+import React, { useState } from 'react';
+import { FormControl, FormControlLabel, Radio, RadioGroup, TextField, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
@@ -25,46 +24,51 @@ interface EpicTestNewsletterProps {
 const EpicTestNewsletter: React.FC<EpicTestNewsletterProps> = ({
                                                                  showNewsletterSignup,
                                                                  updateShowNewsletterSignup,
-                                                                               isDisabled,
-                                                                             }: EpicTestNewsletterProps) => {
+                                                                 isDisabled,
+                                                               }: EpicTestNewsletterProps) => {
   const classes = useStyles();
+  const [isNewsletterSignupEnabled, setIsNewsletterSignupEnabled] = useState<boolean>(false);
 
-  const onToggleShowNewsletterSignup = (): void => {
-    updateShowNewsletterSignup(!Boolean(showNewsletterSignup));
+  const onRadioChanged = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const isChecked = event.target.value === 'newsletterSignupEnabled';
+    setIsNewsletterSignupEnabled(isChecked);
+    updateShowNewsletterSignup(isChecked);
   };
 
   return (
     <FormControl>
-      <RadioGroup>
+      <RadioGroup onChange={onRadioChanged}>
         <FormControlLabel
           value="newsletterSignupEnabled"
           key="newsletterSignupEnabled"
-          control={<Radio/>}
+          control={<Radio />}
           label="Enable newsletter sign up"
+          disabled={isDisabled}
         />
       </RadioGroup>
 
-      <div>
-        <TextField
-          name="text"
-          label="Button copy"
-          margin="normal"
-          variant="outlined"
-          disabled={isDisabled}
-          fullWidth
-        />
+      {isNewsletterSignupEnabled && (
+        <div className={classes.fieldsContainer}>
+          <TextField
+            name="text"
+            label="Button copy"
+            margin="normal"
+            variant="outlined"
+            disabled={isDisabled}
+            fullWidth
+          />
 
-        <TextField
-          name="baseUrl"
-          label="Button destination"
-          margin="normal"
-          variant="outlined"
-          disabled={isDisabled}
-          fullWidth
-        />
-      </div>
+          <TextField
+            name="baseUrl"
+            label="Button destination"
+            margin="normal"
+            variant="outlined"
+            disabled={isDisabled}
+            fullWidth
+          />
+        </div>
+      )}
     </FormControl>
-
   );
 };
 
