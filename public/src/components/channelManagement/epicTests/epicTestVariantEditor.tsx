@@ -40,6 +40,7 @@ import { BylineWithImageEditorToggle } from '../bylineWithImageEditor';
 import { EpicVariant, SeparateArticleCount } from '../../../models/epic';
 import { AppleNewsChoiceCards } from './appleChoiceCardsEditor';
 import EpicTestNewsletter from "./epicNewsletterSignUp";
+import {EpicTestCtasToggle} from "./epicTestCtasToggle";
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const getUseStyles = (shouldAddPadding: boolean) => {
@@ -363,6 +364,11 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
           guidance={'Ratio should be 2.5:1'}
         />
       )}
+
+      <EpicTestCtasToggle
+      variant={variant}
+      isDisabled={!editMode}
+      onVariantChange={onVariantChange}/>
 
       {allowVariantCustomPrimaryCta && (
         <div className={classes.sectionContainer}>
