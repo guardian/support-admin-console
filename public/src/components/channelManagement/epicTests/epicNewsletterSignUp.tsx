@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FormControl, FormControlLabel, Radio, RadioGroup, TextField, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import {NewsletterSignup} from "../helpers/shared";
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -16,13 +17,11 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 }));
 
 interface EpicTestNewsletterProps {
-  showNewsletterSignup?: boolean;
-  updateShowNewsletterSignup: (showNewsletterSignup?: boolean) => void;
+  updateShowNewsletterSignup: (showNewsletterSignup?: NewsletterSignup) => void;
   isDisabled: boolean;
 }
 
 const EpicTestNewsletter: React.FC<EpicTestNewsletterProps> = ({
-                                                                 showNewsletterSignup,
                                                                  updateShowNewsletterSignup,
                                                                  isDisabled,
                                                                }: EpicTestNewsletterProps) => {
@@ -32,7 +31,6 @@ const EpicTestNewsletter: React.FC<EpicTestNewsletterProps> = ({
   const onRadioChanged = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const isChecked = event.target.value === 'newsletterSignupEnabled';
     setIsNewsletterSignupEnabled(isChecked);
-    updateShowNewsletterSignup(isChecked);
   };
 
   return (

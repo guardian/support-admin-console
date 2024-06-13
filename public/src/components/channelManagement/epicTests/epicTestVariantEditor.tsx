@@ -12,7 +12,7 @@ import {
   BylineWithImage,
   Cta,
   EpicEditorConfig,
-  Image,
+  Image, NewsletterSignup,
   SecondaryCta,
   TickerSettings,
 } from '../helpers/shared';
@@ -195,8 +195,8 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   const updateBylineWithImage = (bylineWithImage?: BylineWithImage): void => {
     onVariantChange({ ...variant, bylineWithImage });
   };
-  const updateShowNewsletterSignup = (updateShowNewsletterSignup?: boolean): void => {
-    onVariantChange({ ...variant, showNewsletterSignup: updateShowNewsletterSignup });
+  const updateNewsletterSignup = (updatedNewsletterSignup?: NewsletterSignup): void => {
+    onVariantChange({ ...variant, newsletterSignup: updatedNewsletterSignup });
   };
 
   const getParagraphsHelperText = () => {
@@ -434,10 +434,8 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
           </Typography>
 
           <EpicTestNewsletter
-            showNewsletterSignup={variant.showNewsletterSignup}
-            updateShowNewsletterSignup={updateShowNewsletterSignup}
-            isDisabled={!editMode}
-          />
+           isDisabled={!editMode}
+           updateShowNewsletterSignup={updateNewsletterSignup}/>
         </div>
       )}
 
