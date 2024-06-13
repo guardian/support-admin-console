@@ -79,6 +79,8 @@ const buildProps = (
 
     showTicker: variant.showTicker,
     tickerSettings: tickerSettingsWithData,
+
+    newsletterSignup: variant.newsletterSignup,
   },
   tracking: {
     ophanPageId: 'ophanPageId',
