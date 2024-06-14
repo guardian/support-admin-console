@@ -9,7 +9,7 @@ import {
   SupportFrontendSettingsType,
 } from '../utils/requests';
 
-type ProductName = 'guardianWeekly' | 'paper' | 'digital' | 'supporterPlus';
+type ProductName = 'guardianWeekly' | 'paper' | 'digital' | 'supporterPlus' | 'tierThree';
 
 type DefaultPromos = {
   [key in ProductName]: string[];
@@ -39,6 +39,7 @@ const DefaultPromos: React.FC<InnerProps<DefaultPromos>> = ({
   const [supporterPlusPromoString, setSupporterPlusPromosString] = useState<string>(
     data.supporterPlus.join(', '),
   );
+  const [tierThreePromosString, setTierThreePromos] = useState<string>(data.tierThree.join(', '));
 
   const classes = useStyles();
 
@@ -111,6 +112,23 @@ const DefaultPromos: React.FC<InnerProps<DefaultPromos>> = ({
         }}
         type="text"
         label="Supporter Plus"
+      />
+      <TextField
+        value={tierThreePromosString}
+        name="tierThreeDefaultPromos"
+        fullWidth={true}
+        onChange={e => {
+          const inputValue = e.target.value;
+          setTierThreePromos(inputValue);
+
+          const parsedInputValue = parsePromoInput(inputValue);
+          update({
+            ...data,
+            tierThree: parsedInputValue,
+          });
+        }}
+        type="text"
+        label="Tier Three"
       />
       <Button
         onClick={sendToS3}
