@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { FormControlLabel, Radio, RadioGroup, Switch, Theme, Typography } from '@mui/material';
+import { FormControlLabel, Radio, RadioGroup, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import BannerTestVariantEditorCtasEditor from './bannerTestVariantEditorCtasEditor';
 import {
