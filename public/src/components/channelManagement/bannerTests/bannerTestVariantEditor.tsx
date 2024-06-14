@@ -26,6 +26,8 @@ import {
 } from '../richTextEditor/richTextEditor';
 import TickerEditor from '../tickerEditor';
 import { BannerDesign } from '../../../models/bannerDesign';
+import VariantEditorSeparateArticleCountEditor from "../variantEditorSeparateArticleCountEditor";
+import { SeparateArticleCount } from "../../../models/epic";
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
@@ -378,6 +380,9 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
     }
   };
 
+  const updateSeparateArticleCountSettings = (updatedSeparateArticleCountSettings?: SeparateArticleCount): void => {
+    onVariantChange({ ...variant, separateArticleCountSettings: updatedSeparateArticleCountSettings });
+  };
   return (
     <div className={classes.container}>
       <div className={classes.sectionContainer}>
@@ -445,23 +450,18 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
           />
         )}
       </div>
-      <div className={classes.sectionContainer}>
-        <Typography className={classes.sectionHeader} variant="h4">
-          Separate article count (displayed only for users with at least 5 article views)
-        </Typography>
+        <div className={classes.sectionContainer}>
+          <Typography className={classes.sectionHeader} variant="h4">
+            Separate article count
+          </Typography>
 
-        <div className={classes.switchContainer}>
-          <Typography className={classes.switchLabel}>Disabled</Typography>
-          <Switch
-            checked={!!variant.separateArticleCount}
-            onChange={(e): void =>
-              onVariantChange({ ...variant, separateArticleCount: e.target.checked })
-            }
-            disabled={!editMode}
+          <VariantEditorSeparateArticleCountEditor
+            separateArticleCount={variant.separateArticleCountSettings}
+            updateSeparateArticleCount={updateSeparateArticleCountSettings}
+            isDisabled={!editMode}
           />
-          <Typography className={classes.switchLabel}>Enabled</Typography>
         </div>
-      </div>
+
       {allowVariantTicker && (
         <div className={classes.sectionContainer}>
           <Typography className={classes.sectionHeader} variant="h4">

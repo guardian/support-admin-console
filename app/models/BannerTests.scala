@@ -44,6 +44,7 @@ case class BannerVariant(
     bannerContent: Option[BannerContent],
     mobileBannerContent: Option[BannerContent],
     separateArticleCount: Option[Boolean],
+    separateArticleCountSettings: Option[SeparateArticleCount],
     tickerSettings: Option[TickerSettings] = None,
 )
 

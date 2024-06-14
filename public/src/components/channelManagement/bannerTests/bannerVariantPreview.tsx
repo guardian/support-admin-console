@@ -15,6 +15,7 @@ import useTickerData, { TickerSettingsWithData } from '../hooks/useTickerData';
 import { mockAmountsCardData, SelectedAmountsVariant } from '../../../utils/models';
 import { BannerDesign, BannerDesignProps } from '../../../models/bannerDesign';
 import { ArticleCounts } from '../epicTests/epicVariantPreview';
+import { SeparateArticleCount } from "../../../models/epic";
 
 // Mock prices data
 interface ProductPriceData {
@@ -75,6 +76,7 @@ interface BannerProps {
   mobileContent?: BannerContent;
   tickerSettings?: TickerSettingsWithData;
   separateArticleCount?: boolean;
+  separateArticleCountSettings?: SeparateArticleCount;
   choiceCardAmounts?: SelectedAmountsVariant;
   design?: BannerDesignProps;
 }
@@ -110,6 +112,7 @@ const buildProps = (
     },
     tickerSettings: tickerSettingsWithData,
     separateArticleCount: variant.separateArticleCount,
+    separateArticleCountSettings: variant.separateArticleCountSettings,
     prices: mockPricesData,
     choiceCardAmounts: mockAmountsCardData,
     design,
