@@ -15,7 +15,7 @@ import useTickerData, { TickerSettingsWithData } from '../hooks/useTickerData';
 import { mockAmountsCardData, SelectedAmountsVariant } from '../../../utils/models';
 import { BannerDesign, BannerDesignProps } from '../../../models/bannerDesign';
 import { ArticleCounts } from '../epicTests/epicVariantPreview';
-import { SeparateArticleCount } from "../../../models/epic";
+import { SeparateArticleCount } from '../../../models/epic';
 
 // Mock prices data
 interface ProductPriceData {

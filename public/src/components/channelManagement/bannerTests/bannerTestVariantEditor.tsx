@@ -26,8 +26,8 @@ import {
 } from '../richTextEditor/richTextEditor';
 import TickerEditor from '../tickerEditor';
 import { BannerDesign } from '../../../models/bannerDesign';
-import VariantEditorSeparateArticleCountEditor from "../variantEditorSeparateArticleCountEditor";
-import { SeparateArticleCount } from "../../../models/epic";
+import VariantEditorSeparateArticleCountEditor from '../variantEditorSeparateArticleCountEditor';
+import { SeparateArticleCount } from '../../../models/epic';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
@@ -380,8 +380,13 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
     }
   };
 
-  const updateSeparateArticleCountSettings = (updatedSeparateArticleCountSettings?: SeparateArticleCount): void => {
-    onVariantChange({ ...variant, separateArticleCountSettings: updatedSeparateArticleCountSettings });
+  const updateSeparateArticleCountSettings = (
+    updatedSeparateArticleCountSettings?: SeparateArticleCount,
+  ): void => {
+    onVariantChange({
+      ...variant,
+      separateArticleCountSettings: updatedSeparateArticleCountSettings,
+    });
   };
   return (
     <div className={classes.container}>
@@ -450,17 +455,17 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
           />
         )}
       </div>
-        <div className={classes.sectionContainer}>
-          <Typography className={classes.sectionHeader} variant="h4">
-            Separate article count
-          </Typography>
+      <div className={classes.sectionContainer}>
+        <Typography className={classes.sectionHeader} variant="h4">
+          Separate article count
+        </Typography>
 
-          <VariantEditorSeparateArticleCountEditor
-            separateArticleCount={variant.separateArticleCountSettings}
-            updateSeparateArticleCount={updateSeparateArticleCountSettings}
-            isDisabled={!editMode}
-          />
-        </div>
+        <VariantEditorSeparateArticleCountEditor
+          separateArticleCount={variant.separateArticleCountSettings}
+          updateSeparateArticleCount={updateSeparateArticleCountSettings}
+          isDisabled={!editMode}
+        />
+      </div>
 
       {allowVariantTicker && (
         <div className={classes.sectionContainer}>
