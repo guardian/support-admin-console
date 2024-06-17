@@ -8,6 +8,7 @@ case class DefaultPromos(
   paper: Seq[String],
   digital: Seq[String],
   supporterPlus: Seq[String],
+  tierThree: Seq[String],
 )
 
 object DefaultPromos {
