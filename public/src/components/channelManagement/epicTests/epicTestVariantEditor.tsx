@@ -11,7 +11,7 @@ import {
   BylineWithImage,
   Cta,
   EpicEditorConfig,
-  Image,
+  Image, NewsletterSignup,
   SecondaryCta,
   TickerSettings,
 } from '../helpers/shared';
@@ -180,6 +180,9 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   // Handling other form field updates
   const updatePrimaryCta = (updatedCta?: Cta): void => {
     onVariantChange({ ...variant, cta: updatedCta });
+  };
+  const updateNewsletterSignup = (updateNewsletterSignup?: NewsletterSignup): void => {
+    onVariantChange({ ...variant, newsletterSignup: updateNewsletterSignup });
   };
   const updateSecondaryCta = (updatedCta?: SecondaryCta): void => {
     onVariantChange({ ...variant, secondaryCta: updatedCta });
@@ -398,10 +401,10 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
           </Typography>
 
           <EpicTestNewsletter
+            newsletterSignup={variant.newsletterSignup}
+            updateNewsletterSignup={updateNewsletterSignup}
+            onValidationChange={onValidationChange}
             isDisabled={!editMode}
-            updateShowNewsletterSignup={newsletterSignup =>
-              onVariantChange({ ...variant, newsletterSignup })
-            }
           />
         </div>
       )}

@@ -1,36 +1,51 @@
-import React from 'react';
-import { FormControl, TextField, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import React, {useEffect} from 'react';
+import { FormControl, TextField } from '@mui/material';
 import { NewsletterSignup } from '../helpers/shared';
+import {EMPTY_ERROR_HELPER_TEXT} from "../helpers/validation";
+import {useForm} from "react-hook-form";
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  container: {
-    '& > * + *': {
-      marginTop: spacing(1),
-    },
-  },
-  fieldsContainer: {
-    '& > * + *': {
-      marginTop: spacing(3),
-    },
-  },
-}));
+interface FormData {
+  url: string;
+}
 
 interface EpicTestNewsletterProps {
-  updateShowNewsletterSignup: (showNewsletterSignup?: NewsletterSignup) => void;
-  newsletterSignup?: NewsletterSignup;
+  newsletterSignup: NewsletterSignup;
+  updateNewsletterSignup: (updateNewsletterSignup?: NewsletterSignup) => void;
+  onValidationChange: (isValid: boolean) => void;
   isDisabled: boolean;
 }
 
 const EpicTestNewsletter: React.FC<EpicTestNewsletterProps> = ({
+                                                                 newsletterSignup,
+  updateNewsletterSignup,
+  onValidationChange,
   isDisabled,
 }: EpicTestNewsletterProps) => {
-  const classes = useStyles();
+  const defaultValues: FormData = {
+    url: newsletterSignup.url,
+  };
+  const { register, handleSubmit, errors } = useForm<FormData>({ mode: 'onChange', defaultValues });
+
+  useEffect(() => {
+    const isValid = Object.keys(errors).length === 0;
+    onValidationChange(isValid);
+  }, [errors.url]);
+
+  const onSubmit = ({ url}: FormData): void => {
+    updateNewsletterSignup({ url });
+  };
+
 
   return (
     <FormControl>
-      <div className={classes.fieldsContainer}>
+      <div>
         <TextField
+          inputRef={register({
+            required: EMPTY_ERROR_HELPER_TEXT,
+          })}
+          error={errors.url !== undefined}
+          helperText={errors.url?.message}
+          onBlur={handleSubmit(onSubmit)}
           name="baseUrl"
           label="Newsletter URL"
           margin="normal"
