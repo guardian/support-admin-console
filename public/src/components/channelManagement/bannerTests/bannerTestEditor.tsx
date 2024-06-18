@@ -289,7 +289,6 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
             onArticlesViewedSettingsChanged={onArticlesViewedSettingsChange}
             onValidationChange={onArticlesViewedSettingsValidationChanged}
             isDisabled={!userHasTestLocked}
-            isEpic={false}
           />
         </div>
       </div>

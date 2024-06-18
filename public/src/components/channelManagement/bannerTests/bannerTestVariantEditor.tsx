@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { FormControlLabel, Radio, RadioGroup, Switch, Theme, Typography } from '@mui/material';
+import { FormControlLabel, Radio, RadioGroup, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import BannerTestVariantEditorCtasEditor from './bannerTestVariantEditorCtasEditor';
 import {
@@ -26,6 +26,8 @@ import {
 } from '../richTextEditor/richTextEditor';
 import TickerEditor from '../tickerEditor';
 import { BannerDesign } from '../../../models/bannerDesign';
+import VariantEditorSeparateArticleCountEditor from '../variantEditorSeparateArticleCountEditor';
+import { SeparateArticleCount } from '../../../models/epic';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
@@ -378,6 +380,14 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
     }
   };
 
+  const updateSeparateArticleCountSettings = (
+    updatedSeparateArticleCountSettings?: SeparateArticleCount,
+  ): void => {
+    onVariantChange({
+      ...variant,
+      separateArticleCountSettings: updatedSeparateArticleCountSettings,
+    });
+  };
   return (
     <div className={classes.container}>
       <div className={classes.sectionContainer}>
@@ -447,21 +457,16 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
       </div>
       <div className={classes.sectionContainer}>
         <Typography className={classes.sectionHeader} variant="h4">
-          Separate article count (displayed only for users with at least 5 article views)
+          Separate article count
         </Typography>
 
-        <div className={classes.switchContainer}>
-          <Typography className={classes.switchLabel}>Disabled</Typography>
-          <Switch
-            checked={!!variant.separateArticleCount}
-            onChange={(e): void =>
-              onVariantChange({ ...variant, separateArticleCount: e.target.checked })
-            }
-            disabled={!editMode}
-          />
-          <Typography className={classes.switchLabel}>Enabled</Typography>
-        </div>
+        <VariantEditorSeparateArticleCountEditor
+          separateArticleCount={variant.separateArticleCountSettings}
+          updateSeparateArticleCount={updateSeparateArticleCountSettings}
+          isDisabled={!editMode}
+        />
       </div>
+
       {allowVariantTicker && (
         <div className={classes.sectionContainer}>
           <Typography className={classes.sectionHeader} variant="h4">
