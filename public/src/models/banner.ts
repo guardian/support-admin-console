@@ -12,6 +12,7 @@ import {
 } from '../components/channelManagement/helpers/shared';
 import { Region } from '../utils/models';
 import { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';
+import { SeparateArticleCount } from './epic';
 
 export enum BannerTemplate {
   ContributionsBanner = 'ContributionsBanner',
@@ -40,6 +41,7 @@ export interface BannerVariant extends Variant {
   bannerContent: BannerContent;
   mobileBannerContent?: BannerContent;
   separateArticleCount?: boolean;
+  separateArticleCountSettings?: SeparateArticleCount;
   tickerSettings?: TickerSettings;
 }
 
