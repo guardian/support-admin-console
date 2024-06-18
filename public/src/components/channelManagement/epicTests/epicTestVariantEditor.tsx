@@ -181,9 +181,6 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   const updatePrimaryCta = (updatedCta?: Cta): void => {
     onVariantChange({ ...variant, cta: updatedCta });
   };
-  const updateNewsletterSignup = (updateNewsletterSignup?: NewsletterSignup): void => {
-    onVariantChange({ ...variant, newsletterSignup: updateNewsletterSignup });
-  };
   const updateSecondaryCta = (updatedCta?: SecondaryCta): void => {
     onVariantChange({ ...variant, secondaryCta: updatedCta });
   };
@@ -204,6 +201,9 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   };
   const updateBylineWithImage = (bylineWithImage?: BylineWithImage): void => {
     onVariantChange({ ...variant, bylineWithImage });
+  };
+  const updateNewsletterSignup = (updateNewsletterSignup?: NewsletterSignup): void => {
+    onVariantChange({ ...variant, newsletterSignup: updateNewsletterSignup });
   };
 
   const getParagraphsHelperText = () => {

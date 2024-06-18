@@ -37,7 +37,6 @@ const EpicTestNewsletter: React.FC<EpicTestNewsletterProps> = ({
 
 
   return (
-    <FormControl>
       <div>
         <TextField
           inputRef={register({
@@ -46,7 +45,7 @@ const EpicTestNewsletter: React.FC<EpicTestNewsletterProps> = ({
           error={errors.url !== undefined}
           helperText={errors.url?.message}
           onBlur={handleSubmit(onSubmit)}
-          name="baseUrl"
+          name="url"
           label="Newsletter URL"
           margin="normal"
           variant="outlined"
@@ -54,7 +53,6 @@ const EpicTestNewsletter: React.FC<EpicTestNewsletterProps> = ({
           fullWidth
         />
       </div>
-    </FormControl>
   );
 };
 
