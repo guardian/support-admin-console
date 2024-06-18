@@ -31,15 +31,6 @@ const EpicTestNewsletter: React.FC<EpicTestNewsletterProps> = ({
     <FormControl>
       <div className={classes.fieldsContainer}>
         <TextField
-          name="text"
-          label="Button copy"
-          margin="normal"
-          variant="outlined"
-          disabled={isDisabled}
-          fullWidth
-        />
-
-        <TextField
           name="baseUrl"
           label="Newsletter URL"
           margin="normal"
