@@ -12,7 +12,7 @@ export const EpicTestCtasToggle: React.FC<EpicTestCtasToggleProps> = ({
   variant,
   isDisabled,
   onVariantChange,
-}) => {
+}: EpicTestCtasToggleProps) => {
   const onRadioGroupChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const value = event.target.value;
     if (value === 'newsletterSignup') {
