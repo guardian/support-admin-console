@@ -1,8 +1,8 @@
-import React, {useEffect} from 'react';
-import { FormControl, TextField } from '@mui/material';
+import React, { useEffect } from 'react';
+import { TextField } from '@mui/material';
 import { NewsletterSignup } from '../helpers/shared';
-import {EMPTY_ERROR_HELPER_TEXT} from "../helpers/validation";
-import {useForm} from "react-hook-form";
+import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
+import { useForm } from 'react-hook-form';
 
 interface FormData {
   url: string;
@@ -16,7 +16,7 @@ interface EpicTestNewsletterProps {
 }
 
 const EpicTestNewsletter: React.FC<EpicTestNewsletterProps> = ({
-                                                                 newsletterSignup,
+  newsletterSignup,
   updateNewsletterSignup,
   onValidationChange,
   isDisabled,
@@ -31,28 +31,27 @@ const EpicTestNewsletter: React.FC<EpicTestNewsletterProps> = ({
     onValidationChange(isValid);
   }, [errors.url]);
 
-  const onSubmit = ({ url}: FormData): void => {
+  const onSubmit = ({ url }: FormData): void => {
     updateNewsletterSignup({ url });
   };
 
-
   return (
-      <div>
-        <TextField
-          inputRef={register({
-            required: EMPTY_ERROR_HELPER_TEXT,
-          })}
-          error={errors.url !== undefined}
-          helperText={errors.url?.message}
-          onBlur={handleSubmit(onSubmit)}
-          name="url"
-          label="Newsletter URL"
-          margin="normal"
-          variant="outlined"
-          disabled={isDisabled}
-          fullWidth
-        />
-      </div>
+    <div>
+      <TextField
+        inputRef={register({
+          required: EMPTY_ERROR_HELPER_TEXT,
+        })}
+        error={errors.url !== undefined}
+        helperText={errors.url?.message}
+        onBlur={handleSubmit(onSubmit)}
+        name="url"
+        label="Newsletter URL"
+        margin="normal"
+        variant="outlined"
+        disabled={isDisabled}
+        fullWidth
+      />
+    </div>
   );
 };
 

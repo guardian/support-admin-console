@@ -11,7 +11,8 @@ import {
   BylineWithImage,
   Cta,
   EpicEditorConfig,
-  Image, NewsletterSignup,
+  Image,
+  NewsletterSignup,
   SecondaryCta,
   TickerSettings,
 } from '../helpers/shared';
