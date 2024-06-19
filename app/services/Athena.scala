@@ -129,17 +129,19 @@ class Athena() extends StrictLogging {
   private def startVariantViewsQuery(from: String, to: String, channel: String, testName: String): ZIO[ZEnv, AthenaError, QueryExecutionId] = {
     logger.info(s"Querying athena")
 
+    val query =
+      s"""
+         |SELECT date_hour, ab.variant, COUNT(*) AS views
+         |FROM acquisition.epic_views_prod, UNNEST(abtests) t(ab)
+         |WHERE date_hour >= timestamp '$from' AND date_hour < timestamp '$to'
+         |AND ab.name = '$testName'
+         |GROUP BY 1,2 ORDER BY 1,2
+    """
+
     val request = StartQueryExecutionRequest
       .builder()
       .queryString(
-        s"""
-           |SELECT date_hour, ab.variant, COUNT(*) AS views
-           |FROM acquisition.epic_views_prod, UNNEST(abtests) t(ab)
-           |WHERE date_hour >= timestamp '$from' AND date_hour < timestamp '$to'
-           |AND ab.name = '2024-05-24_STICKY_VARIANTS__UK'
-           |GROUP BY 1,2 ORDER BY 1,2
-        """
-          .stripMargin
+        query.stripMargin
       )
       .queryExecutionContext(queryExecutionContext)
       .resultConfiguration(resultConfiguration)

@@ -2,17 +2,20 @@ import { makeStyles } from '@mui/styles';
 import {Button, Dialog, Theme, Typography} from "@mui/material";
 import React, {useEffect} from 'react';
 import useOpenable from '../../hooks/useOpenable';
-import {addHours, formatISO9075, subHours} from "date-fns";
-import { LineChart, CartesianGrid, Line, XAxis, YAxis } from 'recharts';
+import { formatISO9075, subHours} from "date-fns";
+import {LineChart, CartesianGrid, Line, XAxis, YAxis, Legend} from 'recharts';
 import {Test} from "./helpers/shared";
 
 const useStyles = makeStyles(({}: Theme) => ({
   dialog: {
     padding: '10px',
   },
+  heading: {
+    margin: '12px',
+    fontSize: 16,
+  },
   variantName: {
-    marginBottom: '10px',
-    fontSize: 26,
+    fontSize: 18,
     fontWeight: 500,
   },
 }));
@@ -38,23 +41,23 @@ interface ChartProps {
   variantNames: string[];
 }
 
-type FlattenedGroupVariantViews = {
-  dateHour: string;
-} & { [variantName: string]: number };
+
+const Colours = ['red', 'blue', 'green', 'orange', 'yellow'];
 
 const Chart = ({ data, variantNames }: ChartProps) => {
   const flattenedData = data.map(({ dateHour, views }) => ({
     dateHour: dateHour,
     ...views,
   }));
-  console.log({ flattenedData })
+
   return (
-    <LineChart width={500} height={300} data={flattenedData}>
+    <LineChart width={800} height={500} data={flattenedData}>
       <XAxis dataKey="dateHour" />
       <YAxis />
       <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-      {variantNames.map(name => (
-        <Line key={name} type="monotone" dataKey={name} stroke="#8884d8" />
+      <Legend />
+      {variantNames.map((name, idx) => (
+        <Line key={name} type="monotone" dataKey={name} stroke={Colours[idx]} />
       ))}
     </LineChart>
   );
@@ -88,8 +91,6 @@ export const AnalyticsButton: React.FC<AnalyticsButtonProps> = ({
       .then(setData);
   }, [testName, channel]);
 
-  console.log(data);
-
   return (
     <>
       <Button variant="outlined" onClick={open}>
@@ -97,9 +98,13 @@ export const AnalyticsButton: React.FC<AnalyticsButtonProps> = ({
       </Button>
 
       <Dialog open={isOpen} onClose={close} fullWidth maxWidth="xl" className={classes.dialog}>
-        <h1>{testName}</h1>
+        <div className={classes.heading}>
+          <h3 className={classes.variantName}>{testName}</h3>
+          <h3>Impressions per hour:</h3>
+        </div>
 
         {data && <Chart data={data} variantNames={variants.map(v => v.name)} />}
+        {!data && <Typography>Loading...</Typography>}
       </Dialog>
     </>
   );
