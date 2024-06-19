@@ -133,8 +133,8 @@ class Athena() extends StrictLogging {
       s"""
          |SELECT date_hour, ab.variant, COUNT(*) AS views
          |FROM acquisition.epic_views_prod, UNNEST(abtests) t(ab)
-         |WHERE date_hour >= timestamp '$from' AND date_hour < timestamp '$to'
-         |AND ab.name = '$testName'
+         |WHERE date_hour >= TIMESTAMP '$from' AND date_hour < TIMESTAMP '$to'
+         |AND ab.name = ?
          |GROUP BY 1,2 ORDER BY 1,2
     """
 
@@ -143,6 +143,7 @@ class Athena() extends StrictLogging {
       .queryString(
         query.stripMargin
       )
+      .executionParameters(testName)
       .queryExecutionContext(queryExecutionContext)
       .resultConfiguration(resultConfiguration)
       .build()
