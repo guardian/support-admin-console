@@ -430,7 +430,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
             </div>
           </div>
 
-          {allowVariantChoiceCards && !variant.newsletterSignup && (
+          {allowVariantChoiceCards && (
             <div className={classes.sectionContainer}>
               <Typography className={classes.sectionHeader} variant="h4">
                 Choice Cards
