@@ -106,6 +106,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
     allowVariantHeader,
     allowVariantHighlightedText,
     allowVariantImageUrl,
+    allowVariantCustomPrimaryCta,
     allowVariantSecondaryCta,
     allowVariantCustomSecondaryCta,
     allowVariantSeparateArticleCount,
@@ -409,7 +410,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
           />
         </div>
       )}
-      {!variant.newsletterSignup && (
+      {!variant.newsletterSignup && allowVariantCustomPrimaryCta && (
         <>
           <div>
             <div className={classes.sectionContainer}>
