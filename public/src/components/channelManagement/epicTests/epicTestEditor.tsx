@@ -37,7 +37,7 @@ import { TestEditorProps } from '../testsForm';
 import { EpicBanditEditor } from './epicBanditEditor';
 import { AnalyticsButton } from '../AnalyticsButton';
 
-const BANDIT_FEATURE_SWITCH = false;
+const BANDIT_FEATURE_SWITCH = true;
 
 const copyHasTemplate = (test: EpicTest, template: string): boolean =>
   test.variants.some(
