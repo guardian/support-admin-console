@@ -97,6 +97,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     new AppsMeteringSwitchesController(authAction, controllerComponents, stage, runtime),
     new DefaultPromosController(authAction,controllerComponents, stage, runtime),
     new SuperModeController(authAction, controllerComponents, stage, runtime, dynamoSuperModeService, athena),
+    new AnalyticsController(authAction, controllerComponents, stage, runtime, athena),
     assets
   )
 }
