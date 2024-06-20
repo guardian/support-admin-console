@@ -263,7 +263,12 @@ export class AdminConsole extends GuStack {
       }),
       new GuAllowPolicy(this, 'AcquisitionsBucket', {
         actions: ['s3:*'],
-        resources: [`arn:aws:s3:::acquisition-events/*`, `arn:aws:s3:::acquisition-events`],
+        resources: [
+          `arn:aws:s3:::acquisition-events/*`,
+          `arn:aws:s3:::acquisition-events`,
+          `arn:aws:s3:::gu-support-analytics/*`,
+          `arn:aws:s3:::gu-support-analytics`,
+        ],
       }),
     ];
 
