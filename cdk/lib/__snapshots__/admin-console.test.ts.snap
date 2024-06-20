@@ -109,6 +109,8 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
               "Resource": [
                 "arn:aws:s3:::acquisition-events/*",
                 "arn:aws:s3:::acquisition-events",
+                "arn:aws:s3:::gu-support-analytics/*",
+                "arn:aws:s3:::gu-support-analytics",
               ],
             },
           ],
