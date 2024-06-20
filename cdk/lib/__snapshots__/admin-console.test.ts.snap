@@ -1,9 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`The AdminConsole stack matches the snapshot 1`] = `
-Object {
-  "Metadata": Object {
-    "gu:cdk:constructs": Array [
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
       "GuDynamoDBReadPolicy",
       "GuDynamoDBReadPolicy",
       "GuDynamoDBWritePolicy",
@@ -30,6 +30,7 @@ Object {
       "GuEc2App",
       "GuCertificate",
       "GuInstanceRole",
+      "GuSsmSshPolicy",
       "GuDescribeEC2Policy",
       "GuLoggingStreamNameParameter",
       "GuLogShippingPolicy",
@@ -51,61 +52,61 @@ Object {
     ],
     "gu:cdk:version": "TEST",
   },
-  "Outputs": Object {
-    "LoadBalancerAdminconsoleDnsName": Object {
+  "Outputs": {
+    "LoadBalancerAdminconsoleDnsName": {
       "Description": "DNS entry for LoadBalancerAdminconsole",
-      "Value": Object {
-        "Fn::GetAtt": Array [
+      "Value": {
+        "Fn::GetAtt": [
           "LoadBalancerAdminconsole69251694",
           "DNSName",
         ],
       },
     },
   },
-  "Parameters": Object {
-    "AMIAdminconsole": Object {
+  "Parameters": {
+    "AMIAdminconsole": {
       "Description": "Amazon Machine Image ID for the app admin-console. Use this in conjunction with AMIgo to keep AMIs up to date.",
       "Type": "AWS::EC2::Image::Id",
     },
-    "CapiAccountId": Object {
+    "CapiAccountId": {
       "Description": "ID of the CAPI aws account",
       "Type": "String",
     },
-    "DistributionBucketName": Object {
+    "DistributionBucketName": {
       "Default": "/account/services/artifact.bucket",
       "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
-    "LoggingStreamName": Object {
+    "LoggingStreamName": {
       "Default": "/account/services/logging.stream.name",
       "Description": "SSM parameter containing the Name (not ARN) on the kinesis stream",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
-    "VpcId": Object {
+    "VpcId": {
       "Default": "/account/vpc/primary/id",
       "Description": "Virtual Private Cloud to run EC2 instances within. Should NOT be the account default VPC.",
       "Type": "AWS::SSM::Parameter::Value<AWS::EC2::VPC::Id>",
     },
-    "adminconsolePrivateSubnets": Object {
+    "adminconsolePrivateSubnets": {
       "Default": "/account/vpc/primary/subnets/private",
       "Description": "A list of private subnets",
       "Type": "AWS::SSM::Parameter::Value<List<AWS::EC2::Subnet::Id>>",
     },
-    "adminconsolePublicSubnets": Object {
+    "adminconsolePublicSubnets": {
       "Default": "/account/vpc/primary/subnets/public",
       "Description": "A list of public subnets",
       "Type": "AWS::SSM::Parameter::Value<List<AWS::EC2::Subnet::Id>>",
     },
   },
-  "Resources": Object {
-    "AcquisitionsBucket8EA032AA": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
+  "Resources": {
+    "AcquisitionsBucket8EA032AA": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
               "Action": "s3:*",
               "Effect": "Allow",
-              "Resource": Array [
+              "Resource": [
                 "arn:aws:s3:::acquisition-events/*",
                 "arn:aws:s3:::acquisition-events",
                 "arn:aws:s3:::gu-support-analytics/*",
@@ -116,20 +117,20 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "AcquisitionsBucket8EA032AA",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleAdminconsole347DA627",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "AlbSsmParam485C1D52": Object {
-      "Properties": Object {
+    "AlbSsmParam485C1D52": {
+      "Properties": {
         "DataType": "text",
         "Description": "The arn of the ALB for amiable-PROD. N.B. this parameter is created via cdk",
         "Name": "/infosec/waf/services/PROD/support-admin-console-alb-arn",
-        "Tags": Object {
+        "Tags": {
           "Stack": "support",
           "Stage": "PROD",
           "gu:cdk:version": "TEST",
@@ -137,58 +138,58 @@ Object {
         },
         "Tier": "Standard",
         "Type": "String",
-        "Value": Object {
+        "Value": {
           "Ref": "LoadBalancerAdminconsole69251694",
         },
       },
       "Type": "AWS::SSM::Parameter",
     },
-    "ArchivedBannerDesignsDynamoTable": Object {
+    "ArchivedBannerDesignsDynamoTable": {
       "DeletionPolicy": "Retain",
-      "Properties": Object {
-        "AttributeDefinitions": Array [
-          Object {
+      "Properties": {
+        "AttributeDefinitions": [
+          {
             "AttributeName": "name",
             "AttributeType": "S",
           },
-          Object {
+          {
             "AttributeName": "date",
             "AttributeType": "S",
           },
         ],
         "BillingMode": "PAY_PER_REQUEST",
-        "KeySchema": Array [
-          Object {
+        "KeySchema": [
+          {
             "AttributeName": "name",
             "KeyType": "HASH",
           },
-          Object {
+          {
             "AttributeName": "date",
             "KeyType": "RANGE",
           },
         ],
-        "PointInTimeRecoverySpecification": Object {
+        "PointInTimeRecoverySpecification": {
           "PointInTimeRecoveryEnabled": true,
         },
         "TableName": "support-admin-console-archived-banner-designs-PROD",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "devx-backup-enabled",
             "Value": "true",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/support-admin-console",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "support",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "PROD",
           },
@@ -197,52 +198,52 @@ Object {
       "Type": "AWS::DynamoDB::Table",
       "UpdateReplacePolicy": "Retain",
     },
-    "ArchivedChannelTestsDynamoTable": Object {
+    "ArchivedChannelTestsDynamoTable": {
       "DeletionPolicy": "Retain",
-      "Properties": Object {
-        "AttributeDefinitions": Array [
-          Object {
+      "Properties": {
+        "AttributeDefinitions": [
+          {
             "AttributeName": "channel",
             "AttributeType": "S",
           },
-          Object {
+          {
             "AttributeName": "name",
             "AttributeType": "S",
           },
         ],
         "BillingMode": "PAY_PER_REQUEST",
-        "KeySchema": Array [
-          Object {
+        "KeySchema": [
+          {
             "AttributeName": "channel",
             "KeyType": "HASH",
           },
-          Object {
+          {
             "AttributeName": "name",
             "KeyType": "RANGE",
           },
         ],
-        "PointInTimeRecoverySpecification": Object {
+        "PointInTimeRecoverySpecification": {
           "PointInTimeRecoveryEnabled": true,
         },
         "TableName": "support-admin-console-archived-channel-tests-PROD",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "devx-backup-enabled",
             "Value": "true",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/support-admin-console",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "support",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "PROD",
           },
@@ -251,14 +252,14 @@ Object {
       "Type": "AWS::DynamoDB::Table",
       "UpdateReplacePolicy": "Retain",
     },
-    "AthenaOutputBucket826361ED": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "AthenaOutputBucket826361ED": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
               "Action": "s3:*",
               "Effect": "Allow",
-              "Resource": Array [
+              "Resource": [
                 "arn:aws:s3:::gu-support-analytics/*",
                 "arn:aws:s3:::gu-support-analytics",
               ],
@@ -267,24 +268,24 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "AthenaOutputBucket826361ED",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleAdminconsole347DA627",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "AutoScalingGroupAdminconsoleASG0A6020EA": Object {
-      "Properties": Object {
+    "AutoScalingGroupAdminconsoleASG0A6020EA": {
+      "Properties": {
         "HealthCheckGracePeriod": 120,
         "HealthCheckType": "ELB",
-        "LaunchTemplate": Object {
-          "LaunchTemplateId": Object {
+        "LaunchTemplate": {
+          "LaunchTemplateId": {
             "Ref": "supportPRODadminconsoleBBAF00DB",
           },
-          "Version": Object {
-            "Fn::GetAtt": Array [
+          "Version": {
+            "Fn::GetAtt": [
               "supportPRODadminconsoleBBAF00DB",
               "LatestVersionNumber",
             ],
@@ -292,89 +293,89 @@ Object {
         },
         "MaxSize": "2",
         "MinSize": "1",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "PropagateAtLaunch": true,
             "Value": "admin-console",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "PropagateAtLaunch": true,
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "PropagateAtLaunch": true,
             "Value": "guardian/support-admin-console",
           },
-          Object {
+          {
             "Key": "LogKinesisStreamName",
             "PropagateAtLaunch": true,
-            "Value": Object {
+            "Value": {
               "Ref": "LoggingStreamName",
             },
           },
-          Object {
+          {
             "Key": "Stack",
             "PropagateAtLaunch": true,
             "Value": "support",
           },
-          Object {
+          {
             "Key": "Stage",
             "PropagateAtLaunch": true,
             "Value": "PROD",
           },
         ],
-        "TargetGroupARNs": Array [
-          Object {
+        "TargetGroupARNs": [
+          {
             "Ref": "TargetGroupAdminconsole160A1621",
           },
         ],
-        "VPCZoneIdentifier": Object {
+        "VPCZoneIdentifier": {
           "Ref": "adminconsolePrivateSubnets",
         },
       },
       "Type": "AWS::AutoScaling::AutoScalingGroup",
     },
-    "BannerDesignsDynamoTable": Object {
+    "BannerDesignsDynamoTable": {
       "DeletionPolicy": "Retain",
-      "Properties": Object {
-        "AttributeDefinitions": Array [
-          Object {
+      "Properties": {
+        "AttributeDefinitions": [
+          {
             "AttributeName": "name",
             "AttributeType": "S",
           },
         ],
         "BillingMode": "PAY_PER_REQUEST",
-        "KeySchema": Array [
-          Object {
+        "KeySchema": [
+          {
             "AttributeName": "name",
             "KeyType": "HASH",
           },
         ],
-        "PointInTimeRecoverySpecification": Object {
+        "PointInTimeRecoverySpecification": {
           "PointInTimeRecoveryEnabled": true,
         },
         "TableName": "support-admin-console-banner-designs-PROD",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "devx-backup-enabled",
             "Value": "true",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/support-admin-console",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "support",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "PROD",
           },
@@ -383,44 +384,44 @@ Object {
       "Type": "AWS::DynamoDB::Table",
       "UpdateReplacePolicy": "Retain",
     },
-    "CampaignsDynamoTable": Object {
+    "CampaignsDynamoTable": {
       "DeletionPolicy": "Retain",
-      "Properties": Object {
-        "AttributeDefinitions": Array [
-          Object {
+      "Properties": {
+        "AttributeDefinitions": [
+          {
             "AttributeName": "name",
             "AttributeType": "S",
           },
         ],
         "BillingMode": "PAY_PER_REQUEST",
-        "KeySchema": Array [
-          Object {
+        "KeySchema": [
+          {
             "AttributeName": "name",
             "KeyType": "HASH",
           },
         ],
-        "PointInTimeRecoverySpecification": Object {
+        "PointInTimeRecoverySpecification": {
           "PointInTimeRecoveryEnabled": true,
         },
         "TableName": "support-admin-console-campaigns-PROD",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "devx-backup-enabled",
             "Value": "true",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/support-admin-console",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "support",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "PROD",
           },
@@ -429,32 +430,32 @@ Object {
       "Type": "AWS::DynamoDB::Table",
       "UpdateReplacePolicy": "Retain",
     },
-    "CertificateAdminconsole74B584AB": Object {
+    "CertificateAdminconsole74B584AB": {
       "DeletionPolicy": "Retain",
-      "Properties": Object {
+      "Properties": {
         "DomainName": "support.gutools.co.uk",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "admin-console",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/support-admin-console",
           },
-          Object {
+          {
             "Key": "Name",
             "Value": "AdminConsole/CertificateAdminconsole",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "support",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "PROD",
           },
@@ -464,74 +465,74 @@ Object {
       "Type": "AWS::CertificateManager::Certificate",
       "UpdateReplacePolicy": "Retain",
     },
-    "ChannelTestsDynamoTable": Object {
+    "ChannelTestsDynamoTable": {
       "DeletionPolicy": "Retain",
-      "Properties": Object {
-        "AttributeDefinitions": Array [
-          Object {
+      "Properties": {
+        "AttributeDefinitions": [
+          {
             "AttributeName": "channel",
             "AttributeType": "S",
           },
-          Object {
+          {
             "AttributeName": "name",
             "AttributeType": "S",
           },
-          Object {
+          {
             "AttributeName": "campaignName",
             "AttributeType": "S",
           },
         ],
         "BillingMode": "PAY_PER_REQUEST",
-        "GlobalSecondaryIndexes": Array [
-          Object {
+        "GlobalSecondaryIndexes": [
+          {
             "IndexName": "campaignName-name-index",
-            "KeySchema": Array [
-              Object {
+            "KeySchema": [
+              {
                 "AttributeName": "campaignName",
                 "KeyType": "HASH",
               },
-              Object {
+              {
                 "AttributeName": "name",
                 "KeyType": "RANGE",
               },
             ],
-            "Projection": Object {
+            "Projection": {
               "ProjectionType": "ALL",
             },
           },
         ],
-        "KeySchema": Array [
-          Object {
+        "KeySchema": [
+          {
             "AttributeName": "channel",
             "KeyType": "HASH",
           },
-          Object {
+          {
             "AttributeName": "name",
             "KeyType": "RANGE",
           },
         ],
-        "PointInTimeRecoverySpecification": Object {
+        "PointInTimeRecoverySpecification": {
           "PointInTimeRecoveryEnabled": true,
         },
         "TableName": "support-admin-console-channel-tests-PROD",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "devx-backup-enabled",
             "Value": "true",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/support-admin-console",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "support",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "PROD",
           },
@@ -540,12 +541,12 @@ Object {
       "Type": "AWS::DynamoDB::Table",
       "UpdateReplacePolicy": "Retain",
     },
-    "CloudwatchA324BFA2": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+    "CloudwatchA324BFA2": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "logs:CreateLogGroup",
                 "logs:CreateLogStream",
                 "logs:PutLogEvents",
@@ -557,20 +558,20 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "CloudwatchA324BFA2",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleAdminconsole347DA627",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "DescribeEC2PolicyFF5F9295": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+    "DescribeEC2PolicyFF5F9295": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "autoscaling:DescribeAutoScalingInstances",
                 "autoscaling:DescribeAutoScalingGroups",
                 "ec2:DescribeTags",
@@ -583,20 +584,20 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "describe-ec2-policy",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleAdminconsole347DA627",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "DynamoReadArchivedBannerDesignsDynamoTable44A0398A": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+    "DynamoReadArchivedBannerDesignsDynamoTable44A0398A": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "dynamodb:BatchGetItem",
                 "dynamodb:GetItem",
                 "dynamodb:Scan",
@@ -604,44 +605,66 @@ Object {
                 "dynamodb:GetRecords",
               ],
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
-                  "",
-                  Array [
-                    "arn:aws:dynamodb:",
-                    Object {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
-                    Object {
-                      "Ref": "AWS::AccountId",
-                    },
-                    ":table/",
-                    Object {
-                      "Ref": "ArchivedBannerDesignsDynamoTable",
-                    },
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "ArchivedBannerDesignsDynamoTable",
+                      },
+                    ],
                   ],
-                ],
-              },
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "ArchivedBannerDesignsDynamoTable",
+                      },
+                      "/index/*",
+                    ],
+                  ],
+                },
+              ],
             },
           ],
           "Version": "2012-10-17",
         },
         "PolicyName": "DynamoReadArchivedBannerDesignsDynamoTable44A0398A",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleAdminconsole347DA627",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "DynamoReadArchivedChannelTestsDynamoTable1835BCEF": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+    "DynamoReadArchivedChannelTestsDynamoTable1835BCEF": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "dynamodb:BatchGetItem",
                 "dynamodb:GetItem",
                 "dynamodb:Scan",
@@ -649,44 +672,66 @@ Object {
                 "dynamodb:GetRecords",
               ],
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
-                  "",
-                  Array [
-                    "arn:aws:dynamodb:",
-                    Object {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
-                    Object {
-                      "Ref": "AWS::AccountId",
-                    },
-                    ":table/",
-                    Object {
-                      "Ref": "ArchivedChannelTestsDynamoTable",
-                    },
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "ArchivedChannelTestsDynamoTable",
+                      },
+                    ],
                   ],
-                ],
-              },
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "ArchivedChannelTestsDynamoTable",
+                      },
+                      "/index/*",
+                    ],
+                  ],
+                },
+              ],
             },
           ],
           "Version": "2012-10-17",
         },
         "PolicyName": "DynamoReadArchivedChannelTestsDynamoTable1835BCEF",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleAdminconsole347DA627",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "DynamoReadBannerDesignsDynamoTable74192C24": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+    "DynamoReadBannerDesignsDynamoTable74192C24": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "dynamodb:BatchGetItem",
                 "dynamodb:GetItem",
                 "dynamodb:Scan",
@@ -694,44 +739,66 @@ Object {
                 "dynamodb:GetRecords",
               ],
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
-                  "",
-                  Array [
-                    "arn:aws:dynamodb:",
-                    Object {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
-                    Object {
-                      "Ref": "AWS::AccountId",
-                    },
-                    ":table/",
-                    Object {
-                      "Ref": "BannerDesignsDynamoTable",
-                    },
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "BannerDesignsDynamoTable",
+                      },
+                    ],
                   ],
-                ],
-              },
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "BannerDesignsDynamoTable",
+                      },
+                      "/index/*",
+                    ],
+                  ],
+                },
+              ],
             },
           ],
           "Version": "2012-10-17",
         },
         "PolicyName": "DynamoReadBannerDesignsDynamoTable74192C24",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleAdminconsole347DA627",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "DynamoReadCampaignsDynamoTable13FF797A": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+    "DynamoReadCampaignsDynamoTable13FF797A": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "dynamodb:BatchGetItem",
                 "dynamodb:GetItem",
                 "dynamodb:Scan",
@@ -739,44 +806,66 @@ Object {
                 "dynamodb:GetRecords",
               ],
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
-                  "",
-                  Array [
-                    "arn:aws:dynamodb:",
-                    Object {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
-                    Object {
-                      "Ref": "AWS::AccountId",
-                    },
-                    ":table/",
-                    Object {
-                      "Ref": "CampaignsDynamoTable",
-                    },
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "CampaignsDynamoTable",
+                      },
+                    ],
                   ],
-                ],
-              },
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "CampaignsDynamoTable",
+                      },
+                      "/index/*",
+                    ],
+                  ],
+                },
+              ],
             },
           ],
           "Version": "2012-10-17",
         },
         "PolicyName": "DynamoReadCampaignsDynamoTable13FF797A",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleAdminconsole347DA627",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "DynamoReadChannelTestsDynamoTable934E3DAF": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+    "DynamoReadChannelTestsDynamoTable934E3DAF": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "dynamodb:BatchGetItem",
                 "dynamodb:GetItem",
                 "dynamodb:Scan",
@@ -784,44 +873,66 @@ Object {
                 "dynamodb:GetRecords",
               ],
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
-                  "",
-                  Array [
-                    "arn:aws:dynamodb:",
-                    Object {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
-                    Object {
-                      "Ref": "AWS::AccountId",
-                    },
-                    ":table/",
-                    Object {
-                      "Ref": "ChannelTestsDynamoTable",
-                    },
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "ChannelTestsDynamoTable",
+                      },
+                    ],
                   ],
-                ],
-              },
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "ChannelTestsDynamoTable",
+                      },
+                      "/index/*",
+                    ],
+                  ],
+                },
+              ],
             },
           ],
           "Version": "2012-10-17",
         },
         "PolicyName": "DynamoReadChannelTestsDynamoTable934E3DAF",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleAdminconsole347DA627",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "DynamoReadChannelTestsDynamoTableindexcampaignNamenameindex265299CD": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+    "DynamoReadChannelTestsDynamoTableindexcampaignNamenameindex265299CD": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "dynamodb:BatchGetItem",
                 "dynamodb:GetItem",
                 "dynamodb:Scan",
@@ -829,45 +940,67 @@ Object {
                 "dynamodb:GetRecords",
               ],
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
-                  "",
-                  Array [
-                    "arn:aws:dynamodb:",
-                    Object {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
-                    Object {
-                      "Ref": "AWS::AccountId",
-                    },
-                    ":table/",
-                    Object {
-                      "Ref": "ChannelTestsDynamoTable",
-                    },
-                    "/index/campaignName-name-index",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "ChannelTestsDynamoTable",
+                      },
+                      "/index/campaignName-name-index",
+                    ],
                   ],
-                ],
-              },
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "ChannelTestsDynamoTable",
+                      },
+                      "/index/campaignName-name-index/index/*",
+                    ],
+                  ],
+                },
+              ],
             },
           ],
           "Version": "2012-10-17",
         },
         "PolicyName": "DynamoReadChannelTestsDynamoTableindexcampaignNamenameindex265299CD",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleAdminconsole347DA627",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "DynamoReadsupermodeA2B60FEA": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+    "DynamoReadsupermodeA2B60FEA": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "dynamodb:BatchGetItem",
                 "dynamodb:GetItem",
                 "dynamodb:Scan",
@@ -875,41 +1008,59 @@ Object {
                 "dynamodb:GetRecords",
               ],
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
-                  "",
-                  Array [
-                    "arn:aws:dynamodb:",
-                    Object {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
-                    Object {
-                      "Ref": "AWS::AccountId",
-                    },
-                    ":table/super-mode-PROD",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/super-mode-PROD",
+                    ],
                   ],
-                ],
-              },
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/super-mode-PROD/index/*",
+                    ],
+                  ],
+                },
+              ],
             },
           ],
           "Version": "2012-10-17",
         },
         "PolicyName": "DynamoReadsupermodeA2B60FEA",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleAdminconsole347DA627",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "DynamoReadsupermodeindexendFE67AC4E": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+    "DynamoReadsupermodeindexendFE67AC4E": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "dynamodb:BatchGetItem",
                 "dynamodb:GetItem",
                 "dynamodb:Scan",
@@ -917,268 +1068,396 @@ Object {
                 "dynamodb:GetRecords",
               ],
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
-                  "",
-                  Array [
-                    "arn:aws:dynamodb:",
-                    Object {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
-                    Object {
-                      "Ref": "AWS::AccountId",
-                    },
-                    ":table/super-mode-PROD/index/end",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/super-mode-PROD/index/end",
+                    ],
                   ],
-                ],
-              },
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/super-mode-PROD/index/end/index/*",
+                    ],
+                  ],
+                },
+              ],
             },
           ],
           "Version": "2012-10-17",
         },
         "PolicyName": "DynamoReadsupermodeindexendFE67AC4E",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleAdminconsole347DA627",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "DynamoWriteArchivedBannerDesignsDynamoTableB6640A8F": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+    "DynamoWriteArchivedBannerDesignsDynamoTableB6640A8F": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "dynamodb:BatchWriteItem",
                 "dynamodb:PutItem",
                 "dynamodb:DeleteItem",
                 "dynamodb:UpdateItem",
               ],
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
-                  "",
-                  Array [
-                    "arn:aws:dynamodb:",
-                    Object {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
-                    Object {
-                      "Ref": "AWS::AccountId",
-                    },
-                    ":table/",
-                    Object {
-                      "Ref": "ArchivedBannerDesignsDynamoTable",
-                    },
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "ArchivedBannerDesignsDynamoTable",
+                      },
+                    ],
                   ],
-                ],
-              },
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "ArchivedBannerDesignsDynamoTable",
+                      },
+                      "/index/*",
+                    ],
+                  ],
+                },
+              ],
             },
           ],
           "Version": "2012-10-17",
         },
         "PolicyName": "DynamoWriteArchivedBannerDesignsDynamoTableB6640A8F",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleAdminconsole347DA627",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "DynamoWriteArchivedChannelTestsDynamoTableB9A0E0BA": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+    "DynamoWriteArchivedChannelTestsDynamoTableB9A0E0BA": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "dynamodb:BatchWriteItem",
                 "dynamodb:PutItem",
                 "dynamodb:DeleteItem",
                 "dynamodb:UpdateItem",
               ],
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
-                  "",
-                  Array [
-                    "arn:aws:dynamodb:",
-                    Object {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
-                    Object {
-                      "Ref": "AWS::AccountId",
-                    },
-                    ":table/",
-                    Object {
-                      "Ref": "ArchivedChannelTestsDynamoTable",
-                    },
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "ArchivedChannelTestsDynamoTable",
+                      },
+                    ],
                   ],
-                ],
-              },
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "ArchivedChannelTestsDynamoTable",
+                      },
+                      "/index/*",
+                    ],
+                  ],
+                },
+              ],
             },
           ],
           "Version": "2012-10-17",
         },
         "PolicyName": "DynamoWriteArchivedChannelTestsDynamoTableB9A0E0BA",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleAdminconsole347DA627",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "DynamoWriteBannerDesignsDynamoTable36E4A766": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+    "DynamoWriteBannerDesignsDynamoTable36E4A766": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "dynamodb:BatchWriteItem",
                 "dynamodb:PutItem",
                 "dynamodb:DeleteItem",
                 "dynamodb:UpdateItem",
               ],
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
-                  "",
-                  Array [
-                    "arn:aws:dynamodb:",
-                    Object {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
-                    Object {
-                      "Ref": "AWS::AccountId",
-                    },
-                    ":table/",
-                    Object {
-                      "Ref": "BannerDesignsDynamoTable",
-                    },
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "BannerDesignsDynamoTable",
+                      },
+                    ],
                   ],
-                ],
-              },
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "BannerDesignsDynamoTable",
+                      },
+                      "/index/*",
+                    ],
+                  ],
+                },
+              ],
             },
           ],
           "Version": "2012-10-17",
         },
         "PolicyName": "DynamoWriteBannerDesignsDynamoTable36E4A766",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleAdminconsole347DA627",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "DynamoWriteCampaignsDynamoTableB29B2DDA": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+    "DynamoWriteCampaignsDynamoTableB29B2DDA": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "dynamodb:BatchWriteItem",
                 "dynamodb:PutItem",
                 "dynamodb:DeleteItem",
                 "dynamodb:UpdateItem",
               ],
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
-                  "",
-                  Array [
-                    "arn:aws:dynamodb:",
-                    Object {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
-                    Object {
-                      "Ref": "AWS::AccountId",
-                    },
-                    ":table/",
-                    Object {
-                      "Ref": "CampaignsDynamoTable",
-                    },
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "CampaignsDynamoTable",
+                      },
+                    ],
                   ],
-                ],
-              },
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "CampaignsDynamoTable",
+                      },
+                      "/index/*",
+                    ],
+                  ],
+                },
+              ],
             },
           ],
           "Version": "2012-10-17",
         },
         "PolicyName": "DynamoWriteCampaignsDynamoTableB29B2DDA",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleAdminconsole347DA627",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "DynamoWriteChannelTestsDynamoTable593B6212": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+    "DynamoWriteChannelTestsDynamoTable593B6212": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "dynamodb:BatchWriteItem",
                 "dynamodb:PutItem",
                 "dynamodb:DeleteItem",
                 "dynamodb:UpdateItem",
               ],
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
-                  "",
-                  Array [
-                    "arn:aws:dynamodb:",
-                    Object {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
-                    Object {
-                      "Ref": "AWS::AccountId",
-                    },
-                    ":table/",
-                    Object {
-                      "Ref": "ChannelTestsDynamoTable",
-                    },
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "ChannelTestsDynamoTable",
+                      },
+                    ],
                   ],
-                ],
-              },
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "ChannelTestsDynamoTable",
+                      },
+                      "/index/*",
+                    ],
+                  ],
+                },
+              ],
             },
           ],
           "Version": "2012-10-17",
         },
         "PolicyName": "DynamoWriteChannelTestsDynamoTable593B6212",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleAdminconsole347DA627",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "GetDistributablePolicyAdminconsole6DA8CA46": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "GetDistributablePolicyAdminconsole6DA8CA46": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
               "Action": "s3:GetObject",
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:aws:s3:::",
-                    Object {
+                    {
                       "Ref": "DistributionBucketName",
                     },
                     "/support/PROD/admin-console/*",
@@ -1190,19 +1469,19 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "GetDistributablePolicyAdminconsole6DA8CA46",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleAdminconsole347DA627",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "GuHttpsEgressSecurityGroupAdminconsole2F77C5D2": Object {
-      "Properties": Object {
+    "GuHttpsEgressSecurityGroupAdminconsole2F77C5D2": {
+      "Properties": {
         "GroupDescription": "Allow all outbound HTTPS traffic",
-        "SecurityGroupEgress": Array [
-          Object {
+        "SecurityGroupEgress": [
+          {
             "CidrIp": "0.0.0.0/0",
             "Description": "Allow all outbound HTTPS traffic",
             "FromPort": 443,
@@ -1210,47 +1489,47 @@ Object {
             "ToPort": 443,
           },
         ],
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "admin-console",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/support-admin-console",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "support",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "PROD",
           },
         ],
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "VpcId",
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "GuHttpsEgressSecurityGroupAdminconsolefromAdminConsoleLoadBalancerAdminconsoleSecurityGroup606D9E9F900031980AFE": Object {
-      "Properties": Object {
+    "GuHttpsEgressSecurityGroupAdminconsolefromAdminConsoleLoadBalancerAdminconsoleSecurityGroup606D9E9F900031980AFE": {
+      "Properties": {
         "Description": "Load balancer to target",
         "FromPort": 9000,
-        "GroupId": Object {
-          "Fn::GetAtt": Array [
+        "GroupId": {
+          "Fn::GetAtt": [
             "GuHttpsEgressSecurityGroupAdminconsole2F77C5D2",
             "GroupId",
           ],
         },
         "IpProtocol": "tcp",
-        "SourceSecurityGroupId": Object {
-          "Fn::GetAtt": Array [
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
             "LoadBalancerAdminconsoleSecurityGroupE93D84AC",
             "GroupId",
           ],
@@ -1259,30 +1538,30 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroupIngress",
     },
-    "GuLogShippingPolicy981BFE5A": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+    "GuLogShippingPolicy981BFE5A": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "kinesis:Describe*",
                 "kinesis:Put*",
               ],
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:aws:kinesis:",
-                    Object {
+                    {
                       "Ref": "AWS::Region",
                     },
                     ":",
-                    Object {
+                    {
                       "Ref": "AWS::AccountId",
                     },
                     ":stream/",
-                    Object {
+                    {
                       "Ref": "LoggingStreamName",
                     },
                   ],
@@ -1293,28 +1572,28 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "GuLogShippingPolicy981BFE5A",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleAdminconsole347DA627",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "High5xxPercentageAlarmAdminconsole274ADE37": Object {
-      "Properties": Object {
+    "High5xxPercentageAlarmAdminconsole274ADE37": {
+      "Properties": {
         "ActionsEnabled": true,
-        "AlarmActions": Array [
-          Object {
-            "Fn::Join": Array [
+        "AlarmActions": [
+          {
+            "Fn::Join": [
               "",
-              Array [
+              [
                 "arn:aws:sns:",
-                Object {
+                {
                   "Ref": "AWS::Region",
                 },
                 ":",
-                Object {
+                {
                   "Ref": "AWS::AccountId",
                 },
                 ":alarms-handler-topic-PROD",
@@ -1326,21 +1605,21 @@ Object {
         "AlarmName": "5XX error returned by admin-console PROD",
         "ComparisonOperator": "GreaterThanThreshold",
         "EvaluationPeriods": 1,
-        "Metrics": Array [
-          Object {
+        "Metrics": [
+          {
             "Expression": "100*(m1+m2)/m3",
             "Id": "expr_1",
             "Label": "% of 5XX responses served for admin-console (load balancer and instances combined)",
           },
-          Object {
+          {
             "Id": "m1",
-            "MetricStat": Object {
-              "Metric": Object {
-                "Dimensions": Array [
-                  Object {
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
                     "Name": "LoadBalancer",
-                    "Value": Object {
-                      "Fn::GetAtt": Array [
+                    "Value": {
+                      "Fn::GetAtt": [
                         "LoadBalancerAdminconsole69251694",
                         "LoadBalancerFullName",
                       ],
@@ -1355,15 +1634,15 @@ Object {
             },
             "ReturnData": false,
           },
-          Object {
+          {
             "Id": "m2",
-            "MetricStat": Object {
-              "Metric": Object {
-                "Dimensions": Array [
-                  Object {
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
                     "Name": "LoadBalancer",
-                    "Value": Object {
-                      "Fn::GetAtt": Array [
+                    "Value": {
+                      "Fn::GetAtt": [
                         "LoadBalancerAdminconsole69251694",
                         "LoadBalancerFullName",
                       ],
@@ -1378,15 +1657,15 @@ Object {
             },
             "ReturnData": false,
           },
-          Object {
+          {
             "Id": "m3",
-            "MetricStat": Object {
-              "Metric": Object {
-                "Dimensions": Array [
-                  Object {
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
                     "Name": "LoadBalancer",
-                    "Value": Object {
-                      "Fn::GetAtt": Array [
+                    "Value": {
+                      "Fn::GetAtt": [
                         "LoadBalancerAdminconsole69251694",
                         "LoadBalancerFullName",
                       ],
@@ -1407,39 +1686,27 @@ Object {
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "InstanceRoleAdminconsole347DA627": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "InstanceRoleAdminconsole347DA627": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
-              "Principal": Object {
+              "Principal": {
                 "Service": "ec2.amazonaws.com",
               },
             },
           ],
           "Version": "2012-10-17",
         },
-        "ManagedPolicyArns": Array [
-          Object {
-            "Fn::Join": Array [
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
               "",
-              Array [
+              [
                 "arn:",
-                Object {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/AmazonSSMManagedInstanceCore",
-              ],
-            ],
-          },
-          Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "arn:",
-                Object {
+                {
                   "Ref": "AWS::Partition",
                 },
                 ":iam::aws:policy/AmazonAthenaFullAccess",
@@ -1448,24 +1715,24 @@ Object {
           },
         ],
         "Path": "/",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "admin-console",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/support-admin-console",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "support",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "PROD",
           },
@@ -1473,24 +1740,24 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "ListenerAdminconsole3E633904": Object {
-      "Properties": Object {
-        "Certificates": Array [
-          Object {
-            "CertificateArn": Object {
+    "ListenerAdminconsole3E633904": {
+      "Properties": {
+        "Certificates": [
+          {
+            "CertificateArn": {
               "Ref": "CertificateAdminconsole74B584AB",
             },
           },
         ],
-        "DefaultActions": Array [
-          Object {
-            "TargetGroupArn": Object {
+        "DefaultActions": [
+          {
+            "TargetGroupArn": {
               "Ref": "TargetGroupAdminconsole160A1621",
             },
             "Type": "forward",
           },
         ],
-        "LoadBalancerArn": Object {
+        "LoadBalancerArn": {
           "Ref": "LoadBalancerAdminconsole69251694",
         },
         "Port": 443,
@@ -1498,44 +1765,52 @@ Object {
       },
       "Type": "AWS::ElasticLoadBalancingV2::Listener",
     },
-    "LoadBalancerAdminconsole69251694": Object {
-      "Properties": Object {
-        "LoadBalancerAttributes": Array [
-          Object {
+    "LoadBalancerAdminconsole69251694": {
+      "Properties": {
+        "LoadBalancerAttributes": [
+          {
             "Key": "deletion_protection.enabled",
+            "Value": "true",
+          },
+          {
+            "Key": "routing.http.x_amzn_tls_version_and_cipher_suite.enabled",
+            "Value": "true",
+          },
+          {
+            "Key": "routing.http.drop_invalid_header_fields.enabled",
             "Value": "true",
           },
         ],
         "Scheme": "internet-facing",
-        "SecurityGroups": Array [
-          Object {
-            "Fn::GetAtt": Array [
+        "SecurityGroups": [
+          {
+            "Fn::GetAtt": [
               "LoadBalancerAdminconsoleSecurityGroupE93D84AC",
               "GroupId",
             ],
           },
         ],
-        "Subnets": Object {
+        "Subnets": {
           "Ref": "adminconsolePublicSubnets",
         },
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "admin-console",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/support-admin-console",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "support",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "PROD",
           },
@@ -1544,11 +1819,11 @@ Object {
       },
       "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
     },
-    "LoadBalancerAdminconsoleSecurityGroupE93D84AC": Object {
-      "Properties": Object {
+    "LoadBalancerAdminconsoleSecurityGroupE93D84AC": {
+      "Properties": {
         "GroupDescription": "Automatically created Security Group for ELB AdminConsoleLoadBalancerAdminconsole64F16A33",
-        "SecurityGroupIngress": Array [
-          Object {
+        "SecurityGroupIngress": [
+          {
             "CidrIp": "0.0.0.0/0",
             "Description": "Allow from anyone on port 443",
             "FromPort": 443,
@@ -1556,46 +1831,46 @@ Object {
             "ToPort": 443,
           },
         ],
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "admin-console",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/support-admin-console",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "support",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "PROD",
           },
         ],
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "VpcId",
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "LoadBalancerAdminconsoleSecurityGrouptoAdminConsoleGuHttpsEgressSecurityGroupAdminconsole04293C9B9000EB39CE6F": Object {
-      "Properties": Object {
+    "LoadBalancerAdminconsoleSecurityGrouptoAdminConsoleGuHttpsEgressSecurityGroupAdminconsole04293C9B9000EB39CE6F": {
+      "Properties": {
         "Description": "Load balancer to target",
-        "DestinationSecurityGroupId": Object {
-          "Fn::GetAtt": Array [
+        "DestinationSecurityGroupId": {
+          "Fn::GetAtt": [
             "GuHttpsEgressSecurityGroupAdminconsole2F77C5D2",
             "GroupId",
           ],
         },
         "FromPort": 9000,
-        "GroupId": Object {
-          "Fn::GetAtt": Array [
+        "GroupId": {
+          "Fn::GetAtt": [
             "LoadBalancerAdminconsoleSecurityGroupE93D84AC",
             "GroupId",
           ],
@@ -1605,18 +1880,18 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroupEgress",
     },
-    "LoadBalancerAdminconsoleSecurityGrouptoAdminConsoleWazuhSecurityGroupDAE23D8490004DE069B1": Object {
-      "Properties": Object {
+    "LoadBalancerAdminconsoleSecurityGrouptoAdminConsoleWazuhSecurityGroupDAE23D8490004DE069B1": {
+      "Properties": {
         "Description": "Load balancer to target",
-        "DestinationSecurityGroupId": Object {
-          "Fn::GetAtt": Array [
+        "DestinationSecurityGroupId": {
+          "Fn::GetAtt": [
             "WazuhSecurityGroup",
             "GroupId",
           ],
         },
         "FromPort": 9000,
-        "GroupId": Object {
-          "Fn::GetAtt": Array [
+        "GroupId": {
+          "Fn::GetAtt": [
             "LoadBalancerAdminconsoleSecurityGroupE93D84AC",
             "GroupId",
           ],
@@ -1626,23 +1901,23 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroupEgress",
     },
-    "ParameterStoreReadAdminconsole9C23871C": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "ParameterStoreReadAdminconsole9C23871C": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
               "Action": "ssm:GetParametersByPath",
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:aws:ssm:",
-                    Object {
+                    {
                       "Ref": "AWS::Region",
                     },
                     ":",
-                    Object {
+                    {
                       "Ref": "AWS::AccountId",
                     },
                     ":parameter/PROD/support/admin-console",
@@ -1650,22 +1925,22 @@ Object {
                 ],
               },
             },
-            Object {
-              "Action": Array [
+            {
+              "Action": [
                 "ssm:GetParameters",
                 "ssm:GetParameter",
               ],
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:aws:ssm:",
-                    Object {
+                    {
                       "Ref": "AWS::Region",
                     },
                     ":",
-                    Object {
+                    {
                       "Ref": "AWS::AccountId",
                     },
                     ":parameter/PROD/support/admin-console/*",
@@ -1677,25 +1952,25 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "parameter-store-read-policy",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleAdminconsole347DA627",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "PublicSettingsBucketPut4D9A09A1": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+    "PublicSettingsBucketPut4D9A09A1": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "s3:PutObject",
                 "s3:PutObjectAcl",
               ],
               "Effect": "Allow",
-              "Resource": Array [
+              "Resource": [
                 "arn:aws:s3:::gu-contributions-public/epic/PROD/*",
                 "arn:aws:s3:::gu-contributions-public/banner/PROD/*",
                 "arn:aws:s3:::gu-contributions-public/header/PROD/*",
@@ -1705,31 +1980,31 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "PublicSettingsBucketPut4D9A09A1",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleAdminconsole347DA627",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "SSMGetF4C837D5": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "SSMGetF4C837D5": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
               "Action": "ssm:GetParametersByPath",
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:aws:ssm:",
-                    Object {
+                    {
                       "Ref": "AWS::Region",
                     },
                     ":",
-                    Object {
+                    {
                       "Ref": "AWS::AccountId",
                     },
                     ":parameter/admin-console/PROD",
@@ -1741,22 +2016,22 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "SSMGetF4C837D5",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleAdminconsole347DA627",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "SettingsBucketGet3389C916": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "SettingsBucketGet3389C916": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
               "Action": "s3:GetObject",
               "Effect": "Allow",
-              "Resource": Array [
+              "Resource": [
                 "arn:aws:s3:::support-admin-console/PROD/*",
                 "arn:aws:s3:::support-admin-console/google-auth-service-account-certificate.json",
               ],
@@ -1765,19 +2040,19 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "SettingsBucketGet3389C916",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleAdminconsole347DA627",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "SettingsBucketPut45E58A86": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "SettingsBucketPut45E58A86": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
               "Action": "s3:PutObject",
               "Effect": "Allow",
               "Resource": "arn:aws:s3:::support-admin-console/PROD/*",
@@ -1786,16 +2061,52 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "SettingsBucketPut45E58A86",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleAdminconsole347DA627",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "TargetGroupAdminconsole160A1621": Object {
-      "Properties": Object {
+    "SsmSshPolicy4CFC977E": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "ec2messages:AcknowledgeMessage",
+                "ec2messages:DeleteMessage",
+                "ec2messages:FailMessage",
+                "ec2messages:GetEndpoint",
+                "ec2messages:GetMessages",
+                "ec2messages:SendReply",
+                "ssm:UpdateInstanceInformation",
+                "ssm:ListInstanceAssociations",
+                "ssm:DescribeInstanceProperties",
+                "ssm:DescribeDocumentParameters",
+                "ssmmessages:CreateControlChannel",
+                "ssmmessages:CreateDataChannel",
+                "ssmmessages:OpenControlChannel",
+                "ssmmessages:OpenDataChannel",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ssm-ssh-policy",
+        "Roles": [
+          {
+            "Ref": "InstanceRoleAdminconsole347DA627",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "TargetGroupAdminconsole160A1621": {
+      "Properties": {
         "HealthCheckIntervalSeconds": 10,
         "HealthCheckPath": "/healthcheck",
         "HealthCheckProtocol": "HTTP",
@@ -1803,60 +2114,60 @@ Object {
         "HealthyThresholdCount": 5,
         "Port": 9000,
         "Protocol": "HTTP",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "admin-console",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/support-admin-console",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "support",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "PROD",
           },
         ],
-        "TargetGroupAttributes": Array [
-          Object {
+        "TargetGroupAttributes": [
+          {
             "Key": "deregistration_delay.timeout_seconds",
             "Value": "30",
           },
-          Object {
+          {
             "Key": "stickiness.enabled",
             "Value": "false",
           },
         ],
         "TargetType": "instance",
         "UnhealthyThresholdCount": 2,
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "VpcId",
         },
       },
       "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
     },
-    "UnhealthyInstancesAlarmAdminconsoleF0C5DFCF": Object {
-      "Properties": Object {
+    "UnhealthyInstancesAlarmAdminconsoleF0C5DFCF": {
+      "Properties": {
         "ActionsEnabled": true,
-        "AlarmActions": Array [
-          Object {
-            "Fn::Join": Array [
+        "AlarmActions": [
+          {
+            "Fn::Join": [
               "",
-              Array [
+              [
                 "arn:aws:sns:",
-                Object {
+                {
                   "Ref": "AWS::Region",
                 },
                 ":",
-                Object {
+                {
                   "Ref": "AWS::AccountId",
                 },
                 ":alarms-handler-topic-PROD",
@@ -1872,20 +2183,20 @@ Object {
         "AlarmName": "Unhealthy instances for admin-console in PROD",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "DatapointsToAlarm": 30,
-        "Dimensions": Array [
-          Object {
+        "Dimensions": [
+          {
             "Name": "LoadBalancer",
-            "Value": Object {
-              "Fn::Join": Array [
+            "Value": {
+              "Fn::Join": [
                 "",
-                Array [
-                  Object {
-                    "Fn::Select": Array [
+                [
+                  {
+                    "Fn::Select": [
                       1,
-                      Object {
-                        "Fn::Split": Array [
+                      {
+                        "Fn::Split": [
                           "/",
-                          Object {
+                          {
                             "Ref": "ListenerAdminconsole3E633904",
                           },
                         ],
@@ -1893,13 +2204,13 @@ Object {
                     ],
                   },
                   "/",
-                  Object {
-                    "Fn::Select": Array [
+                  {
+                    "Fn::Select": [
                       2,
-                      Object {
-                        "Fn::Split": Array [
+                      {
+                        "Fn::Split": [
                           "/",
-                          Object {
+                          {
                             "Ref": "ListenerAdminconsole3E633904",
                           },
                         ],
@@ -1907,13 +2218,13 @@ Object {
                     ],
                   },
                   "/",
-                  Object {
-                    "Fn::Select": Array [
+                  {
+                    "Fn::Select": [
                       3,
-                      Object {
-                        "Fn::Split": Array [
+                      {
+                        "Fn::Split": [
                           "/",
-                          Object {
+                          {
                             "Ref": "ListenerAdminconsole3E633904",
                           },
                         ],
@@ -1924,10 +2235,10 @@ Object {
               ],
             },
           },
-          Object {
+          {
             "Name": "TargetGroup",
-            "Value": Object {
-              "Fn::GetAtt": Array [
+            "Value": {
+              "Fn::GetAtt": [
                 "TargetGroupAdminconsole160A1621",
                 "TargetGroupFullName",
               ],
@@ -1944,18 +2255,18 @@ Object {
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "WazuhSecurityGroup": Object {
-      "Properties": Object {
+    "WazuhSecurityGroup": {
+      "Properties": {
         "GroupDescription": "Allow outbound traffic from wazuh agent to manager",
-        "SecurityGroupEgress": Array [
-          Object {
+        "SecurityGroupEgress": [
+          {
             "CidrIp": "0.0.0.0/0",
             "Description": "Wazuh event logging",
             "FromPort": 1514,
             "IpProtocol": "tcp",
             "ToPort": 1514,
           },
-          Object {
+          {
             "CidrIp": "0.0.0.0/0",
             "Description": "Wazuh agent registration",
             "FromPort": 1515,
@@ -1963,43 +2274,43 @@ Object {
             "ToPort": 1515,
           },
         ],
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/support-admin-console",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "support",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "PROD",
           },
         ],
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "VpcId",
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "WazuhSecurityGroupfromAdminConsoleLoadBalancerAdminconsoleSecurityGroup606D9E9F90006E5FA438": Object {
-      "Properties": Object {
+    "WazuhSecurityGroupfromAdminConsoleLoadBalancerAdminconsoleSecurityGroup606D9E9F90006E5FA438": {
+      "Properties": {
         "Description": "Load balancer to target",
         "FromPort": 9000,
-        "GroupId": Object {
-          "Fn::GetAtt": Array [
+        "GroupId": {
+          "Fn::GetAtt": [
             "WazuhSecurityGroup",
             "GroupId",
           ],
         },
         "IpProtocol": "tcp",
-        "SourceSecurityGroupId": Object {
-          "Fn::GetAtt": Array [
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
             "LoadBalancerAdminconsoleSecurityGroupE93D84AC",
             "GroupId",
           ],
@@ -2008,24 +2319,24 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroupIngress",
     },
-    "capirole2BC59B5B": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "capirole2BC59B5B": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
-              "Principal": Object {
-                "AWS": Object {
-                  "Fn::Join": Array [
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
                     "",
-                    Array [
+                    [
                       "arn:",
-                      Object {
+                      {
                         "Ref": "AWS::Partition",
                       },
                       ":iam::",
-                      Object {
+                      {
                         "Ref": "CapiAccountId",
                       },
                       ":root",
@@ -2037,12 +2348,12 @@ Object {
           ],
           "Version": "2012-10-17",
         },
-        "Policies": Array [
-          Object {
-            "PolicyDocument": Object {
-              "Statement": Array [
-                Object {
-                  "Action": Array [
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
                     "dynamodb:BatchGetItem",
                     "dynamodb:GetItem",
                     "dynamodb:Scan",
@@ -2050,25 +2361,47 @@ Object {
                     "dynamodb:GetRecords",
                   ],
                   "Effect": "Allow",
-                  "Resource": Object {
-                    "Fn::Join": Array [
-                      "",
-                      Array [
-                        "arn:aws:dynamodb:",
-                        Object {
-                          "Ref": "AWS::Region",
-                        },
-                        ":",
-                        Object {
-                          "Ref": "AWS::AccountId",
-                        },
-                        ":table/",
-                        Object {
-                          "Ref": "ChannelTestsDynamoTable",
-                        },
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:aws:dynamodb:",
+                          {
+                            "Ref": "AWS::Region",
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId",
+                          },
+                          ":table/",
+                          {
+                            "Ref": "ChannelTestsDynamoTable",
+                          },
+                        ],
                       ],
-                    ],
-                  },
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:aws:dynamodb:",
+                          {
+                            "Ref": "AWS::Region",
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId",
+                          },
+                          ":table/",
+                          {
+                            "Ref": "ChannelTestsDynamoTable",
+                          },
+                          "/index/*",
+                        ],
+                      ],
+                    },
+                  ],
                 },
               ],
               "Version": "2012-10-17",
@@ -2077,20 +2410,20 @@ Object {
           },
         ],
         "RoleName": "support-admin-console-channel-tests-capi-role-PROD",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/support-admin-console",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "support",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "PROD",
           },
@@ -2098,13 +2431,13 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "cname": Object {
-      "Properties": Object {
+    "cname": {
+      "Properties": {
         "Name": "support.gutools.co.uk",
         "RecordType": "CNAME",
-        "ResourceRecords": Array [
-          Object {
-            "Fn::GetAtt": Array [
+        "ResourceRecords": [
+          {
+            "Fn::GetAtt": [
               "LoadBalancerAdminconsole69251694",
               "DNSName",
             ],
@@ -2115,95 +2448,106 @@ Object {
       },
       "Type": "Guardian::DNS::RecordSet",
     },
-    "supportPRODadminconsoleBBAF00DB": Object {
-      "Properties": Object {
-        "LaunchTemplateData": Object {
-          "IamInstanceProfile": Object {
-            "Arn": Object {
-              "Fn::GetAtt": Array [
+    "supportPRODadminconsoleBBAF00DB": {
+      "DependsOn": [
+        "InstanceRoleAdminconsole347DA627",
+      ],
+      "Properties": {
+        "LaunchTemplateData": {
+          "IamInstanceProfile": {
+            "Arn": {
+              "Fn::GetAtt": [
                 "supportPRODadminconsoleProfile82C4E682",
                 "Arn",
               ],
             },
           },
-          "ImageId": Object {
+          "ImageId": {
             "Ref": "AMIAdminconsole",
           },
           "InstanceType": "t4g.micro",
-          "SecurityGroupIds": Array [
-            Object {
-              "Fn::GetAtt": Array [
+          "SecurityGroupIds": [
+            {
+              "Fn::GetAtt": [
                 "GuHttpsEgressSecurityGroupAdminconsole2F77C5D2",
                 "GroupId",
               ],
             },
-            Object {
-              "Fn::GetAtt": Array [
+            {
+              "Fn::GetAtt": [
                 "WazuhSecurityGroup",
                 "GroupId",
               ],
             },
           ],
-          "TagSpecifications": Array [
-            Object {
+          "TagSpecifications": [
+            {
               "ResourceType": "instance",
-              "Tags": Array [
-                Object {
+              "Tags": [
+                {
+                  "Key": "App",
+                  "Value": "admin-console",
+                },
+                {
                   "Key": "gu:cdk:version",
                   "Value": "TEST",
                 },
-                Object {
+                {
                   "Key": "gu:repo",
                   "Value": "guardian/support-admin-console",
                 },
-                Object {
+                {
                   "Key": "Name",
                   "Value": "AdminConsole/support-PROD-admin-console",
                 },
-                Object {
+                {
                   "Key": "Stack",
                   "Value": "support",
                 },
-                Object {
+                {
                   "Key": "Stage",
                   "Value": "PROD",
                 },
               ],
             },
-            Object {
+            {
               "ResourceType": "volume",
-              "Tags": Array [
-                Object {
+              "Tags": [
+                {
+                  "Key": "App",
+                  "Value": "admin-console",
+                },
+                {
                   "Key": "gu:cdk:version",
                   "Value": "TEST",
                 },
-                Object {
+                {
                   "Key": "gu:repo",
                   "Value": "guardian/support-admin-console",
                 },
-                Object {
+                {
                   "Key": "Name",
                   "Value": "AdminConsole/support-PROD-admin-console",
                 },
-                Object {
+                {
                   "Key": "Stack",
                   "Value": "support",
                 },
-                Object {
+                {
                   "Key": "Stage",
                   "Value": "PROD",
                 },
               ],
             },
           ],
-          "UserData": Object {
-            "Fn::Base64": Object {
-              "Fn::Join": Array [
+          "UserData": {
+            "Fn::Base64": {
+              "Fn::Join": [
                 "",
-                Array [
+                [
                   "#!/bin/bash -ev
     aws --region ",
-                  Object {
+                  {
                     "Ref": "AWS::Region",
                   },
                   " s3 cp s3://membership-dist/support/PROD/admin-console/support-admin-console_1.0-SNAPSHOT_all.deb /tmp
@@ -2214,27 +2558,31 @@ Object {
             },
           },
         },
-        "TagSpecifications": Array [
-          Object {
+        "TagSpecifications": [
+          {
             "ResourceType": "launch-template",
-            "Tags": Array [
-              Object {
+            "Tags": [
+              {
+                "Key": "App",
+                "Value": "admin-console",
+              },
+              {
                 "Key": "gu:cdk:version",
                 "Value": "TEST",
               },
-              Object {
+              {
                 "Key": "gu:repo",
                 "Value": "guardian/support-admin-console",
               },
-              Object {
+              {
                 "Key": "Name",
                 "Value": "AdminConsole/support-PROD-admin-console",
               },
-              Object {
+              {
                 "Key": "Stack",
                 "Value": "support",
               },
-              Object {
+              {
                 "Key": "Stage",
                 "Value": "PROD",
               },
@@ -2244,10 +2592,10 @@ Object {
       },
       "Type": "AWS::EC2::LaunchTemplate",
     },
-    "supportPRODadminconsoleProfile82C4E682": Object {
-      "Properties": Object {
-        "Roles": Array [
-          Object {
+    "supportPRODadminconsoleProfile82C4E682": {
+      "Properties": {
+        "Roles": [
+          {
             "Ref": "InstanceRoleAdminconsole347DA627",
           },
         ],
