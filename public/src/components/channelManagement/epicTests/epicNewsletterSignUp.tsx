@@ -63,7 +63,7 @@ const EpicTestNewsletter: React.FC<EpicTestNewsletterProps> = ({
           error={errors.successDescription !== undefined}
           helperText={errors.successDescription?.message}
           onBlur={handleSubmit(onSubmit)}
-          name="signUpSuccessMessage"
+          name="successDescription"
           label="Sign up success message"
           margin="normal"
           variant="outlined"
