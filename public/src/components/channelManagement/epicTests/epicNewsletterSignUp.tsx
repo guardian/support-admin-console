@@ -6,7 +6,8 @@ import { useForm } from 'react-hook-form';
 
 interface FormData {
   newsletterId: string;
-  successDescription: string;}
+  successDescription: string;
+}
 
 interface EpicTestNewsletterProps {
   newsletterSignup: NewsletterSignup;
@@ -25,15 +26,15 @@ const EpicTestNewsletter: React.FC<EpicTestNewsletterProps> = ({
     newsletterId: newsletterSignup.newsletterId,
     successDescription: newsletterSignup.successDescription,
   };
-  const {register, handleSubmit, errors} = useForm<FormData>({mode: 'onChange', defaultValues});
+  const { register, handleSubmit, errors } = useForm<FormData>({ mode: 'onChange', defaultValues });
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
   }, [errors.newsletterId, errors.successDescription]);
 
-  const onSubmit = ({newsletterId, successDescription}: FormData): void => {
-    updateNewsletterSignup({newsletterId, successDescription});
+  const onSubmit = ({ newsletterId, successDescription }: FormData): void => {
+    updateNewsletterSignup({ newsletterId, successDescription });
   };
 
   return (
@@ -51,7 +52,8 @@ const EpicTestNewsletter: React.FC<EpicTestNewsletterProps> = ({
           margin="normal"
           variant="outlined"
           disabled={isDisabled}
-          fullWidth/>
+          fullWidth
+        />
       </div>
       <div>
         <TextField
@@ -66,11 +68,11 @@ const EpicTestNewsletter: React.FC<EpicTestNewsletterProps> = ({
           margin="normal"
           variant="outlined"
           disabled={isDisabled}
-          fullWidth/>
+          fullWidth
+        />
       </div>
     </>
-)
-  ;
+  );
 };
 
 export default EpicTestNewsletter;
