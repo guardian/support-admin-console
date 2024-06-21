@@ -173,7 +173,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   const onCtasToggleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const value = event.target.value;
     if (value === 'newsletterSignup') {
-      onVariantChange({ ...variant, newsletterSignup: { url: '' } });
+      onVariantChange({ ...variant, newsletterSignup: { newsletterId: '', successDescription: '' } });
     } else {
       onVariantChange({ ...variant, newsletterSignup: undefined });
     }

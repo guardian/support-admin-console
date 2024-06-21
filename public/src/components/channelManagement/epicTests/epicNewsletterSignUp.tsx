@@ -5,8 +5,8 @@ import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 import { useForm } from 'react-hook-form';
 
 interface FormData {
-  url: string;
-}
+  newsletterId: string;
+  successDescription: string;}
 
 interface EpicTestNewsletterProps {
   newsletterSignup: NewsletterSignup;
@@ -22,37 +22,55 @@ const EpicTestNewsletter: React.FC<EpicTestNewsletterProps> = ({
   isDisabled,
 }: EpicTestNewsletterProps) => {
   const defaultValues: FormData = {
-    url: newsletterSignup.url,
+    newsletterId: newsletterSignup.newsletterId,
+    successDescription: newsletterSignup.successDescription,
   };
-  const { register, handleSubmit, errors } = useForm<FormData>({ mode: 'onChange', defaultValues });
+  const {register, handleSubmit, errors} = useForm<FormData>({mode: 'onChange', defaultValues});
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
-  }, [errors.url]);
+  }, [errors.newsletterId, errors.successDescription]);
 
-  const onSubmit = ({ url }: FormData): void => {
-    updateNewsletterSignup({ url });
+  const onSubmit = ({newsletterId, successDescription}: FormData): void => {
+    updateNewsletterSignup({newsletterId, successDescription});
   };
 
   return (
-    <div>
-      <TextField
-        inputRef={register({
-          required: EMPTY_ERROR_HELPER_TEXT,
-        })}
-        error={errors.url !== undefined}
-        helperText={errors.url?.message}
-        onBlur={handleSubmit(onSubmit)}
-        name="url"
-        label="Newsletter URL"
-        margin="normal"
-        variant="outlined"
-        disabled={isDisabled}
-        fullWidth
-      />
-    </div>
-  );
+    <>
+      <div>
+        <TextField
+          inputRef={register({
+            required: EMPTY_ERROR_HELPER_TEXT,
+          })}
+          error={errors.newsletterId !== undefined}
+          helperText={errors.newsletterId?.message}
+          onBlur={handleSubmit(onSubmit)}
+          name="newsletterId"
+          label="Newsletter Id"
+          margin="normal"
+          variant="outlined"
+          disabled={isDisabled}
+          fullWidth/>
+      </div>
+      <div>
+        <TextField
+          inputRef={register({
+            required: EMPTY_ERROR_HELPER_TEXT,
+          })}
+          error={errors.successDescription !== undefined}
+          helperText={errors.successDescription?.message}
+          onBlur={handleSubmit(onSubmit)}
+          name="signUpSuccessMessage"
+          label="Sign up success message"
+          margin="normal"
+          variant="outlined"
+          disabled={isDisabled}
+          fullWidth/>
+      </div>
+    </>
+)
+  ;
 };
 
 export default EpicTestNewsletter;

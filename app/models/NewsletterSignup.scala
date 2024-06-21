@@ -1,3 +1,3 @@
 package models
 
-case class NewsletterSignup(url: String)
+case class NewsletterSignup(newsletterId: String, successDescription: String)
