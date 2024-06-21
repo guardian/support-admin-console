@@ -10,8 +10,8 @@ import {
 } from '@mui/material';
 import React, { useEffect } from 'react';
 import useOpenable from '../../hooks/useOpenable';
-import { formatISO9075, subDays, subHours } from 'date-fns';
-import { LineChart, CartesianGrid, Line, XAxis, YAxis, Legend } from 'recharts';
+import { format, formatISO9075, subDays, subHours } from 'date-fns';
+import { LineChart, CartesianGrid, Line, XAxis, YAxis, Legend, Tooltip } from 'recharts';
 import { Test } from './helpers/shared';
 
 const useStyles = makeStyles(({}: Theme) => ({
@@ -53,7 +53,7 @@ const Colours = ['red', 'blue', 'green', 'orange', 'yellow'];
 
 const Chart = ({ data, variantNames }: ChartProps) => {
   const flattenedData = data.map(({ dateHour, views }) => ({
-    dateHour: dateHour,
+    dateHour: format(Date.parse(dateHour), 'yyyy-MM-dd hh:mm'),
     ...views,
   }));
 
@@ -63,6 +63,7 @@ const Chart = ({ data, variantNames }: ChartProps) => {
       <YAxis />
       <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
       <Legend />
+      <Tooltip />
       {variantNames.map((name, idx) => (
         <Line key={name} type="monotone" dataKey={name} stroke={Colours[idx]} />
       ))}
