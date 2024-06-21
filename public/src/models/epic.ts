@@ -11,6 +11,7 @@ import {
   UserCohort,
   BylineWithImage,
   Variant,
+  NewsletterSignup,
 } from '../components/channelManagement/helpers/shared';
 import { Region } from '../utils/models';
 import { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';
@@ -34,6 +35,7 @@ export interface EpicVariant extends Variant {
   defaultChoiceCardFrequency?: ContributionFrequency;
   bylineWithImage?: BylineWithImage;
   showSignInLink?: boolean;
+  newsletterSignup?: NewsletterSignup;
 }
 
 export interface MaxEpicViews {

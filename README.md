@@ -25,7 +25,7 @@ npm install
 npm run build-dev
 ```
 
-Run the play server:
+Run the play server on port http://localhost:9000/:
 ```
 sbt run
 ```
