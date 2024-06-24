@@ -203,7 +203,7 @@ class Athena() extends StrictLogging {
           .flatMap(row => {
             val data = ArticleEpicData(row)
             if (data.isEmpty) {
-              logger.error(s"Failed to parse row from athena: $row")
+              logger.info(s"Failed to parse row from athena: $row")
             }
             data
           })
@@ -221,7 +221,7 @@ class Athena() extends StrictLogging {
           .flatMap(row => {
             val variantViews = VariantViews.parse(row)
             if (variantViews.isEmpty) {
-              logger.error(s"Failed to parse row from athena: $variantViews")
+              logger.info(s"Failed to parse row from athena: $row")
             }
             variantViews
           })
