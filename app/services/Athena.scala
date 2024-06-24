@@ -187,6 +187,7 @@ class Athena() extends StrictLogging {
           .resultSet()
           .rows()
           .asScala.toList
+          .drop(1)  // first row is always the column names, so we discard this
           .map(row => {
             val values = row.data().asScala.toList.map(d => d.varCharValue())
             columnNames.zip(values).toMap // Map columnNames to values
@@ -203,7 +204,7 @@ class Athena() extends StrictLogging {
           .flatMap(row => {
             val data = ArticleEpicData(row)
             if (data.isEmpty) {
-              logger.info(s"Failed to parse row from athena: $row")
+              logger.error(s"Failed to parse row from athena: $row")
             }
             data
           })
@@ -221,7 +222,7 @@ class Athena() extends StrictLogging {
           .flatMap(row => {
             val variantViews = VariantViews.parse(row)
             if (variantViews.isEmpty) {
-              logger.info(s"Failed to parse row from athena: $row")
+              logger.error(s"Failed to parse row from athena: $row")
             }
             variantViews
           })
