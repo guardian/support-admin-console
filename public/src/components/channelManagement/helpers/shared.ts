@@ -185,7 +185,8 @@ export interface TestStatus {
 }
 
 export interface NewsletterSignup {
-  url: string;
+  newsletterId: string;
+  successDescription: string;
 }
 
 export interface Cta {
