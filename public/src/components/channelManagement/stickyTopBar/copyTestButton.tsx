@@ -16,13 +16,13 @@ const useStyles = makeStyles(({ palette }: Theme) => ({
   },
 }));
 
-interface TestCopyButtonProps {
+interface CopyTestButtonProps {
   existingNames: string[];
   existingNicknames: string[];
   sourceName: string;
   sourceNickname?: string;
   testNamePrefix?: string;
-  onTestCopy: (
+  onCopyTest: (
     oldName: string,
     newName: string,
     newNickname: string,
@@ -31,15 +31,15 @@ interface TestCopyButtonProps {
   disabled: boolean;
 }
 
-export const CopyTestButton: React.FC<TestCopyButtonProps> = ({
+export const CopyTestButton: React.FC<CopyTestButtonProps> = ({
   existingNames,
   existingNicknames,
   sourceName,
   sourceNickname,
   testNamePrefix,
-  onTestCopy,
+  onCopyTest,
   disabled,
-}: TestCopyButtonProps) => {
+}: CopyTestButtonProps) => {
   const classes = useStyles();
   const [isOpen, open, close] = useOpenable();
 
@@ -64,7 +64,7 @@ export const CopyTestButton: React.FC<TestCopyButtonProps> = ({
         testNamePrefix={testNamePrefix}
         mode="COPY"
         createTest={(newName, newNickname, campaignName) =>
-          onTestCopy(sourceName, newName, newNickname, campaignName)
+          onCopyTest(sourceName, newName, newNickname, campaignName)
         }
       />
     </>

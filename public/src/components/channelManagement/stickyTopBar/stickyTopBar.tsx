@@ -162,7 +162,7 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
                 sourceName={name}
                 sourceNickname={nickname}
                 testNamePrefix={testNamePrefix}
-                onTestCopy={onTestCopy}
+                onCopyTest={onTestCopy}
                 disabled={userHasTestListLocked}
               />
               <Button
