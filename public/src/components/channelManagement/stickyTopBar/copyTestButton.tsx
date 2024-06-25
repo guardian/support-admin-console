@@ -31,7 +31,7 @@ interface TestCopyButtonProps {
   disabled: boolean;
 }
 
-export const TestCopyButton: React.FC<TestCopyButtonProps> = ({
+export const CopyTestButton: React.FC<TestCopyButtonProps> = ({
   existingNames,
   existingNicknames,
   sourceName,

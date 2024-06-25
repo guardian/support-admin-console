@@ -23,7 +23,7 @@ interface TestLockDetailsProps {
   timestamp?: string;
 }
 
-export const TestLockDetails: React.FC<TestLockDetailsProps> = ({
+export const LockTestDetails: React.FC<TestLockDetailsProps> = ({
   email,
   timestamp,
 }: TestLockDetailsProps) => {

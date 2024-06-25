@@ -6,9 +6,9 @@ import { LockStatus, Status } from '../helpers/shared';
 import CloseIcon from '@mui/icons-material/Close';
 import SaveIcon from '@mui/icons-material/Save';
 import LockIcon from '@mui/icons-material/Lock';
-import { TestLockDetails } from './testLockDetails';
-import { TestArchiveButton } from './testArchiveButton';
-import { TestCopyButton } from './testCopyButton';
+import { LockTestDetails } from './lockTestDetails';
+import { ArchiveTestButton } from './archiveTestButton';
+import { CopyTestButton } from './copyTestButton';
 import { grey } from '@mui/material/colors';
 import { Link } from '@mui/icons-material';
 import { FrontendSettingsType } from '../../../utils/requests';
@@ -156,7 +156,7 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
         <div className={classes.lockContainer}>
           {!userHasTestLocked && !lockStatus.locked && (
             <>
-              <TestCopyButton
+              <CopyTestButton
                 existingNames={existingNames}
                 existingNicknames={existingNicknames}
                 sourceName={name}
@@ -177,7 +177,7 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
           )}
           {!userHasTestLocked && lockStatus.locked && (
             <>
-              <TestLockDetails email={lockStatus.email} timestamp={lockStatus.timestamp} />
+              <LockTestDetails email={lockStatus.email} timestamp={lockStatus.timestamp} />
               <Button
                 variant="outlined"
                 size="medium"
@@ -190,7 +190,7 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
           )}
           {userHasTestLocked && (
             <>
-              {!isNew && <TestArchiveButton onTestArchive={onTestArchive} />}
+              {!isNew && <ArchiveTestButton onTestArchive={onTestArchive} />}
               <Button
                 variant="outlined"
                 size="medium"

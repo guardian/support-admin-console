@@ -28,7 +28,7 @@ interface TestArchiveButtonProps {
   onTestArchive: () => void;
 }
 
-export const TestArchiveButton: React.FC<TestArchiveButtonProps> = ({
+export const ArchiveTestButton: React.FC<TestArchiveButtonProps> = ({
   onTestArchive,
 }: TestArchiveButtonProps) => {
   const classes = useStyles();
