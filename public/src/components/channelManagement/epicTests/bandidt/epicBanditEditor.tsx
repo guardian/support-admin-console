@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { RadioGroup, FormControlLabel, Radio } from '@mui/material';
-import { EpicTest } from '../../../models/epic';
+import { EpicTest } from '../../../../models/epic';
 
 interface EpicBanditEditorProps {
   test: EpicTest;

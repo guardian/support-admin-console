@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Dialog, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import useOpenable from '../../../hooks/useOpenable';
-import EpicVariantPreview from './epicVariantPreview';
+import VariantPreview from './variant/variantPreview';
 import { EpicTest } from '../../../models/epic';
 import { EpicModuleName } from '../helpers/shared';
 
@@ -52,7 +52,7 @@ export const EpicTestPreviewButton: React.FC<EpicTestPreviewProps> = ({
               <Typography variant={'h3'} className={classes.variantName}>
                 {variant.name}
               </Typography>
-              <EpicVariantPreview variant={variant} moduleName={moduleName} />
+              <VariantPreview variant={variant} moduleName={moduleName} />
             </div>
           ))}
         </div>

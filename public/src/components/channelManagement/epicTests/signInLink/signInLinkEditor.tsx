@@ -8,7 +8,7 @@ interface EpicTestSignInLinkEditorProps {
   isDisabled: boolean;
 }
 
-const EpicTestSignInLinkEditor: React.FC<EpicTestSignInLinkEditorProps> = ({
+const SignInLinkEditor: React.FC<EpicTestSignInLinkEditorProps> = ({
   showSignInLink,
   updateShowSignInLink,
   isDisabled,
@@ -34,4 +34,4 @@ const EpicTestSignInLinkEditor: React.FC<EpicTestSignInLinkEditorProps> = ({
   );
 };
 
-export default EpicTestSignInLinkEditor;
+export default SignInLinkEditor;

@@ -19,10 +19,10 @@ import TestEditorArticleCountEditor, {
   DEFAULT_ARTICLES_VIEWED_SETTINGS,
 } from '../testEditorArticleCountEditor';
 import TestVariantEditorWithPreviewTab from '../testVariantEditorWithPreviewTab';
-import EpicTestVariantEditor from './epicTestVariantEditor';
-import EpicVariantPreview from './epicVariantPreview';
+import VariantEditor from './variant/variantEditor';
+import VariantPreview from './variant/variantPreview';
 import TestEditorContextTargeting from '../testEditorContextTargeting';
-import EpicTestMaxViewsEditor from './epicTestMaxViewsEditor';
+import EpicTestMaxViewsEditor from './maxViews/epicTestMaxViewsEditor';
 import { ARTICLE_COUNT_TEMPLATE, COUNTRY_NAME_TEMPLATE } from '../helpers/validation';
 import TestVariantsSplitEditor from '../testVariantsSplitEditor';
 import { getDefaultVariant } from './utils/defaults';
@@ -34,7 +34,7 @@ import { useStyles } from '../helpers/testEditorStyles';
 import { EpicTestPreviewButton } from './epicTestPreview';
 import { ValidatedTestEditor, ValidatedTestEditorProps } from '../validatedTestEditor';
 import { TestEditorProps } from '../testsForm';
-import { EpicBanditEditor } from './epicBanditEditor';
+import { EpicBanditEditor } from './bandidt/epicBanditEditor';
 import { AnalyticsButton } from '../AnalyticsButton';
 
 const BANDIT_FEATURE_SWITCH = false;
@@ -195,7 +195,7 @@ export const getEpicTestEditor = (
     const renderVariantEditor = (variant: EpicVariant): React.ReactElement => (
       <TestVariantEditorWithPreviewTab
         variantEditor={
-          <EpicTestVariantEditor
+          <VariantEditor
             epicEditorConfig={epicEditorConfig}
             key={variant.name}
             variant={variant}
@@ -209,7 +209,7 @@ export const getEpicTestEditor = (
         }
         variantPreview={
           epicEditorConfig.allowVariantPreview ? (
-            <EpicVariantPreview variant={variant} moduleName={epicEditorConfig.moduleName} />
+            <VariantPreview variant={variant} moduleName={epicEditorConfig.moduleName} />
           ) : (
             undefined
           )
@@ -295,7 +295,7 @@ export const getEpicTestEditor = (
             </Typography>
 
             <div>
-              <EpicTestVariantEditor
+              <VariantEditor
                 key={test.variants[0].name}
                 variant={test.variants[0]}
                 epicEditorConfig={epicEditorConfig}

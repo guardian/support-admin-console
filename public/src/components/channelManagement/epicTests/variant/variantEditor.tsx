@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { FormControl, FormControlLabel, Radio, RadioGroup, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import EpicTestChoiceCardsEditor from './epicTestChoiceCardsEditor';
-import EpicTestSignInLinkEditor from './epicTestSignInLinkEditor';
-import TickerEditor from '../tickerEditor';
-import EpicTestVariantEditorCtasEditor from './epicTestVariantEditorCtasEditor';
+import EpicTestChoiceCardsEditor from '../choiceCards/epicTestChoiceCardsEditor';
+import SignInLinkEditor from '../signInLink/signInLinkEditor';
+import TickerEditor from '../../tickerEditor';
+import EpicTestVariantEditorCtasEditor from './ctasEditor';
 
 import {
   BylineWithImage,
@@ -15,7 +15,7 @@ import {
   NewsletterSignup,
   SecondaryCta,
   TickerSettings,
-} from '../helpers/shared';
+} from '../../helpers/shared';
 import {
   ARTICLE_COUNT_TEMPLATE,
   COUNTRY_NAME_TEMPLATE,
@@ -28,17 +28,17 @@ import {
   noHtmlValidator,
   templateValidatorForPlatform,
   VALID_TEMPLATES,
-} from '../helpers/validation';
+} from '../../helpers/validation';
 import {
   getRteCopyLength,
   RichTextEditor,
   RichTextEditorSingleLine,
-} from '../richTextEditor/richTextEditor';
-import VariantEditorSeparateArticleCountEditor from '../variantEditorSeparateArticleCountEditor';
-import { ImageEditorToggle } from '../imageEditor';
-import { BylineWithImageEditorToggle } from '../bylineWithImageEditor';
-import { EpicVariant, SeparateArticleCount } from '../../../models/epic';
-import { AppleNewsChoiceCards } from './appleChoiceCardsEditor';
+} from '../../richTextEditor/richTextEditor';
+import VariantEditorSeparateArticleCountEditor from '../../variantEditorSeparateArticleCountEditor';
+import { ImageEditorToggle } from '../../imageEditor';
+import { BylineWithImageEditorToggle } from '../../bylineWithImageEditor';
+import { EpicVariant, SeparateArticleCount } from '../../../../models/epic';
+import { AppleNewsChoiceCards } from '../choiceCards/appleChoiceCardsEditor';
 import EpicTestNewsletter from './epicNewsletterSignUp';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -94,7 +94,7 @@ interface EpicTestVariantEditorProps {
   onValidationChange: (isValid: boolean) => void;
 }
 
-const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
+const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   variant,
   onVariantChange,
   editMode,
@@ -485,7 +485,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
             Sign in link
           </Typography>
 
-          <EpicTestSignInLinkEditor
+          <SignInLinkEditor
             showSignInLink={variant.showSignInLink}
             updateShowSignInLink={updateShowSignInLink}
             isDisabled={!editMode}
@@ -511,4 +511,4 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   );
 };
 
-export default EpicTestVariantEditor;
+export default VariantEditor;

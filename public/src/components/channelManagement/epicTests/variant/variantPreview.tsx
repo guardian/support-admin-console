@@ -2,10 +2,10 @@ import React from 'react';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
-import { EpicModuleName } from '../helpers/shared';
-import { EpicVariant } from '../../../models/epic';
-import useTickerData, { TickerSettingsWithData } from '../hooks/useTickerData';
-import { SelectedAmountsVariant, mockAmountsCardData } from '../../../utils/models';
+import { EpicModuleName } from '../../helpers/shared';
+import { EpicVariant } from '../../../../models/epic';
+import useTickerData, { TickerSettingsWithData } from '../../hooks/useTickerData';
+import { SelectedAmountsVariant, mockAmountsCardData } from '../../../../utils/models';
 import lzstring from 'lz-string';
 
 // Article count TS defs
@@ -126,7 +126,7 @@ interface EpicVariantPreviewProps {
  * Uses the DCR storybook to render the component, iframed.
  * Props are passed in the args parameter in the url.
  */
-const EpicVariantPreview: React.FC<EpicVariantPreviewProps> = ({
+const VariantPreview: React.FC<EpicVariantPreviewProps> = ({
   variant,
   moduleName,
 }: EpicVariantPreviewProps) => {
@@ -150,4 +150,4 @@ const EpicVariantPreview: React.FC<EpicVariantPreviewProps> = ({
   );
 };
 
-export default EpicVariantPreview;
+export default VariantPreview;

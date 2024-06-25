@@ -1,10 +1,10 @@
 import React from 'react';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import VariantEditorCtaEditor from '../variantEditorCtaEditor';
-import VariantEditorSecondaryCtaEditor from '../variantEditorSecondaryCtaEditor';
-import { Cta, SecondaryCta } from '../helpers/shared';
-import { DEFAULT_PRIMARY_CTA, DEFAULT_SECONDARY_CTA } from './utils/defaults';
+import VariantEditorCtaEditor from '../../variantEditorCtaEditor';
+import VariantEditorSecondaryCtaEditor from '../../variantEditorSecondaryCtaEditor';
+import { Cta, SecondaryCta } from '../../helpers/shared';
+import { DEFAULT_PRIMARY_CTA, DEFAULT_SECONDARY_CTA } from '../utils/defaults';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
