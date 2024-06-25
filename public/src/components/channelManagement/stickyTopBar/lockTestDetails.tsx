@@ -18,15 +18,15 @@ const formattedName = (email: string): string => {
     : email;
 };
 
-interface TestLockDetailsProps {
+interface LockTestDetailsProps {
   email?: string;
   timestamp?: string;
 }
 
-export const LockTestDetails: React.FC<TestLockDetailsProps> = ({
+export const LockTestDetails: React.FC<LockTestDetailsProps> = ({
   email,
   timestamp,
-}: TestLockDetailsProps) => {
+}: LockTestDetailsProps) => {
   const classes = useStyles();
   if (email && timestamp) {
     const text = `Locked by ${formattedName(email)}, since ${formattedTimestamp(timestamp)}`;
