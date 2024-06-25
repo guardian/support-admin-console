@@ -24,13 +24,13 @@ const useStyles = makeStyles(({ palette }: Theme) => ({
   },
 }));
 
-interface TestArchiveButtonProps {
-  onTestArchive: () => void;
+interface ArchiveTestButtonProps {
+  onArchiveTest: () => void;
 }
 
-export const ArchiveTestButton: React.FC<TestArchiveButtonProps> = ({
-  onTestArchive,
-}: TestArchiveButtonProps) => {
+export const ArchiveTestButton: React.FC<ArchiveTestButtonProps> = ({
+  onArchiveTest,
+}: ArchiveTestButtonProps) => {
   const classes = useStyles();
   const [isOpen, open, close] = useOpenable();
 
@@ -62,7 +62,7 @@ export const ArchiveTestButton: React.FC<TestArchiveButtonProps> = ({
           <Button color="primary" onClick={close}>
             Cancel
           </Button>
-          <Button color="primary" onClick={onTestArchive}>
+          <Button color="primary" onClick={onArchiveTest}>
             Archive test
           </Button>
         </DialogActions>

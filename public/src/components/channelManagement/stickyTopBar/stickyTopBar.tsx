@@ -190,7 +190,7 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
           )}
           {userHasTestLocked && (
             <>
-              {!isNew && <ArchiveTestButton onTestArchive={onTestArchive} />}
+              {!isNew && <ArchiveTestButton onArchiveTest={onTestArchive} />}
               <Button
                 variant="outlined"
                 size="medium"
