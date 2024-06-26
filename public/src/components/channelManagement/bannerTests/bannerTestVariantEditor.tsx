@@ -9,7 +9,7 @@ import {
   templateValidatorForPlatform,
 } from '../helpers/validation';
 import { Cta, SecondaryCta } from '../helpers/shared';
-import BannerDesignSelector from './bannerUiSelector';
+import BannerDesignSelector from './bannerDesignSelector';
 import { BannerContent, BannerUi, BannerVariant } from '../../../models/banner';
 import { getDefaultVariant } from './utils/defaults';
 import useValidation from '../hooks/useValidation';
