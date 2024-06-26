@@ -9,14 +9,8 @@ import {
   templateValidatorForPlatform,
 } from '../helpers/validation';
 import { Cta, SecondaryCta } from '../helpers/shared';
-import BannerUiSelector from './bannerUiSelector';
-import {
-  BannerContent,
-  BannerTemplate,
-  BannerUi,
-  BannerVariant,
-  uiIsDesign,
-} from '../../../models/banner';
+import BannerDesignSelector from './bannerDesignSelector';
+import { BannerContent, BannerUi, BannerVariant } from '../../../models/banner';
 import { getDefaultVariant } from './utils/defaults';
 import useValidation from '../hooks/useValidation';
 import {
@@ -129,7 +123,6 @@ const getParagraphsOrMessageText = (
 
 const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorProps> = ({
   content,
-  template,
   onChange,
   onValidationChange,
   editMode,
@@ -220,38 +213,36 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
       </Typography>
 
       <div className={classes.contentContainer}>
-        {template !== BannerTemplate.EnvironmentBanner && (
-          <Controller
-            name="heading"
-            control={control}
-            rules={{
-              validate: templateValidator,
-            }}
-            render={data => {
-              return (
-                <RichTextEditorSingleLine
-                  error={errors.heading !== undefined}
-                  helperText={
-                    errors.heading
-                      ? errors.heading.message || errors.heading.type
-                      : HEADER_DEFAULT_HELPER_TEXT
-                  }
-                  copyData={data.value}
-                  updateCopy={pars => {
-                    data.onChange(pars);
-                    handleSubmit(setValidatedFields)();
-                  }}
-                  name="heading"
-                  label="Header"
-                  disabled={!editMode}
-                  rteMenuConstraints={{
-                    noBold: true,
-                  }}
-                />
-              );
-            }}
-          />
-        )}
+        <Controller
+          name="heading"
+          control={control}
+          rules={{
+            validate: templateValidator,
+          }}
+          render={data => {
+            return (
+              <RichTextEditorSingleLine
+                error={errors.heading !== undefined}
+                helperText={
+                  errors.heading
+                    ? errors.heading.message || errors.heading.type
+                    : HEADER_DEFAULT_HELPER_TEXT
+                }
+                copyData={data.value}
+                updateCopy={pars => {
+                  data.onChange(pars);
+                  handleSubmit(setValidatedFields)();
+                }}
+                name="heading"
+                label="Header"
+                disabled={!editMode}
+                rteMenuConstraints={{
+                  noBold: true,
+                }}
+              />
+            );
+          }}
+        />
 
         <div>
           <Controller
@@ -286,41 +277,36 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
             }}
           />
 
-          {(template === BannerTemplate.ContributionsBanner ||
-            template === BannerTemplate.WorldPressFreedomDayBanner ||
-            template === BannerTemplate.EuropeMomentLocalLanguageBanner ||
-            uiIsDesign(template)) && (
-            <Controller
-              name="highlightedText"
-              control={control}
-              rules={{
-                validate: templateValidator,
-              }}
-              render={data => {
-                return (
-                  <RichTextEditorSingleLine
-                    error={errors.highlightedText !== undefined}
-                    helperText={
-                      errors.highlightedText
-                        ? errors.highlightedText.message || errors.highlightedText.type
-                        : HIGHTLIGHTED_TEXT_HELPER_TEXT
-                    }
-                    copyData={data.value}
-                    updateCopy={pars => {
-                      data.onChange(pars);
-                      handleSubmit(setValidatedFields)();
-                    }}
-                    name="highlightedText"
-                    label="Highlighted text"
-                    disabled={!editMode}
-                    rteMenuConstraints={{
-                      noBold: true,
-                    }}
-                  />
-                );
-              }}
-            />
-          )}
+          <Controller
+            name="highlightedText"
+            control={control}
+            rules={{
+              validate: templateValidator,
+            }}
+            render={data => {
+              return (
+                <RichTextEditorSingleLine
+                  error={errors.highlightedText !== undefined}
+                  helperText={
+                    errors.highlightedText
+                      ? errors.highlightedText.message || errors.highlightedText.type
+                      : HIGHTLIGHTED_TEXT_HELPER_TEXT
+                  }
+                  copyData={data.value}
+                  updateCopy={pars => {
+                    data.onChange(pars);
+                    handleSubmit(setValidatedFields)();
+                  }}
+                  name="highlightedText"
+                  label="Highlighted text"
+                  disabled={!editMode}
+                  rteMenuConstraints={{
+                    noBold: true,
+                  }}
+                />
+              );
+            }}
+          />
         </div>
 
         <div className={classes.buttonsContainer}>
@@ -362,8 +348,6 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
   const classes = useStyles();
   const setValidationStatusForField = useValidation(onValidationChange);
 
-  const allowVariantTicker = uiIsDesign(variant.template);
-
   const onMobileContentRadioChange = (): void => {
     if (variant.mobileBannerContent === undefined) {
       onVariantChange({
@@ -392,11 +376,10 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
     <div className={classes.container}>
       <div className={classes.sectionContainer}>
         <Typography className={classes.sectionHeader} variant="h4">
-          Banner template
+          Banner design
         </Typography>
-        <BannerUiSelector
-          ui={variant.template}
-          designs={designs}
+        <BannerDesignSelector
+          designName={variant.template.designName}
           onUiChange={(ui: BannerUi): void =>
             onVariantChange({
               ...variant,
@@ -404,6 +387,8 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
             })
           }
           editMode={editMode}
+          designs={designs}
+          onValidationChange={(isValid): void => setValidationStatusForField('template', isValid)}
         />
       </div>
 
@@ -467,25 +452,23 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
         />
       </div>
 
-      {allowVariantTicker && (
-        <div className={classes.sectionContainer}>
-          <Typography className={classes.sectionHeader} variant="h4">
-            Ticker
-          </Typography>
+      <div className={classes.sectionContainer}>
+        <Typography className={classes.sectionHeader} variant="h4">
+          Ticker
+        </Typography>
 
-          <TickerEditor
-            tickerSettings={variant.tickerSettings}
-            updateTickerSettings={tickerSettings =>
-              onVariantChange({
-                ...variant,
-                tickerSettings,
-              })
-            }
-            isDisabled={!editMode}
-            onValidationChange={onValidationChange}
-          />
-        </div>
-      )}
+        <TickerEditor
+          tickerSettings={variant.tickerSettings}
+          updateTickerSettings={tickerSettings =>
+            onVariantChange({
+              ...variant,
+              tickerSettings,
+            })
+          }
+          isDisabled={!editMode}
+          onValidationChange={onValidationChange}
+        />
+      </div>
     </div>
   );
 };

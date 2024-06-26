@@ -1,4 +1,4 @@
-import { BannerVariant, uiIsDesign } from '../models/banner';
+import { BannerVariant } from '../models/banner';
 import { BannerDesign, HexColour } from '../models/bannerDesign';
 
 export const getDesignForVariant = (
@@ -7,9 +7,7 @@ export const getDesignForVariant = (
 ): BannerDesign | undefined => {
   const template = variant.template;
 
-  if (uiIsDesign(template)) {
-    return designs.find(d => d.name === template.designName);
-  }
+  return designs.find(d => d.name === template.designName);
 };
 
 export const hexColourStringRegex = /^([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})$/i;
