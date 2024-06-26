@@ -14,16 +14,9 @@ import { Region } from '../utils/models';
 import { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';
 import { SeparateArticleCount } from './epic';
 
-// There are currently no banner templates - only the Designable banner is available
-export enum BannerTemplate {
-  // ContributionsBanner = 'ContributionsBanner',
-}
-
-export interface BannerDesignName {
+export interface BannerUi {
   designName: string;
 }
-
-export type BannerUi = BannerTemplate | BannerDesignName;
 
 export interface BannerContent {
   heading?: string;
@@ -54,12 +47,4 @@ export interface BannerTest extends Test {
   deviceType?: DeviceType;
   campaignName?: string;
   contextTargeting: PageContextTargeting;
-}
-
-export function uiIsDesign(ui: BannerUi): ui is BannerDesignName {
-  return (ui as BannerDesignName).designName !== undefined;
-}
-
-export function isBannerTemplate(s: BannerUi | string): s is BannerTemplate {
-  return Object.values(BannerTemplate).includes(s as BannerTemplate);
 }

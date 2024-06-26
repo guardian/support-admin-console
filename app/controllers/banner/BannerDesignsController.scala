@@ -12,7 +12,7 @@ import zio.{IO, ZEnv, ZIO}
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.syntax.EncoderOps
 import io.circe.generic.auto._
-import models.BannerUI.BannerDesignName
+import models.BannerUI
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -176,7 +176,7 @@ class BannerDesignsController(
     getAllBannerTests().map { bannerTests =>
       bannerTests
         .filter(banner => banner.variants.exists(variant => variant.template match {
-          case BannerDesignName(name) if designName == name => true
+          case BannerUI(name) if designName == name => true
           case _ => false
         }))
     }

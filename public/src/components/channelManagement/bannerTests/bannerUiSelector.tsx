@@ -1,34 +1,41 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import { BannerUi, uiIsDesign } from '../../../models/banner';
+import { BannerUi } from '../../../models/banner';
 import { BannerDesign } from '../../../models/bannerDesign';
 
 interface BannerDesignSelectorProps {
-  ui: BannerUi;
+  designName: string;
   onUiChange: (updatedUi: BannerUi) => void;
   editMode: boolean;
   designs: BannerDesign[];
+  onValidationChange: (isValid: boolean) => void;
 }
 
 const BannerDesignSelector: React.FC<BannerDesignSelectorProps> = ({
-  ui,
+  designName,
   onUiChange,
   editMode,
   designs,
+  onValidationChange,
 }: BannerDesignSelectorProps) => {
+  const [isValid, setIsValid] = useState<boolean>(true);
   const onChange = (event: SelectChangeEvent): void => {
     const designName = event.target.value;
-    const isValidBannerDesign = designs.map(d => d.name).includes(designName);
-    if (isValidBannerDesign) {
-      onUiChange({ designName });
-    }
+    // const isValidBannerDesign = designs.map(d => d.name).includes(designName);
+    // if (isValidBannerDesign) {
+    onUiChange({ designName });
+    // }
   };
 
-  // It should always be a design now
-  const designName = uiIsDesign(ui) ? ui.designName : designs[0]?.name;
+  useEffect(() => {
+    const isValidBannerDesign = designs.map(d => d.name).includes(designName);
+    console.log('setIsValid', isValidBannerDesign);
+    setIsValid(isValidBannerDesign);
+    onValidationChange(isValidBannerDesign);
+  }, [designName, designs]);
 
   return (
-    <Select value={designName} onChange={onChange} disabled={!editMode}>
+    <Select value={designName} onChange={onChange} disabled={!editMode} error={!isValid}>
       {designs.map(design => (
         <MenuItem value={design.name} key={design.name}>
           {design.name}

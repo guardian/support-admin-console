@@ -3,7 +3,7 @@ import { Button, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import Drawer from '@mui/material/Drawer';
-import { BannerContent, BannerVariant, isBannerTemplate } from '../../../models/banner';
+import { BannerContent, BannerVariant } from '../../../models/banner';
 import Typography from '@mui/material/Typography';
 import { useModule } from '../../../hooks/useModule';
 import useTickerData, { TickerSettingsWithData } from '../hooks/useTickerData';
@@ -167,15 +167,10 @@ const BannerVariantPreview: React.FC<BannerVariantPreviewProps> = ({
   const [drawerOpen, setDrawerOpen] = useState<boolean>();
   const tickerSettingsWithData = useTickerData(variant.tickerSettings);
 
-  const moduleConfig = isBannerTemplate(variant.template)
-    ? {
-        path: `banners/${bannerModules[variant.template].path}`,
-        name: bannerModules[variant.template].name,
-      }
-    : {
-        path: `banners/${bannerModules['DesignableBanner'].path}`,
-        name: bannerModules['DesignableBanner'].name,
-      };
+  const moduleConfig = {
+    path: `banners/${bannerModules['DesignableBanner'].path}`,
+    name: bannerModules['DesignableBanner'].name,
+  };
 
   const Banner = useModule<BannerProps>(moduleConfig.path, moduleConfig.name);
 

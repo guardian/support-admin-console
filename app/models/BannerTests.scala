@@ -5,29 +5,7 @@ import io.circe.generic.extras.auto._
 import io.circe.generic.extras.semiauto._
 import io.circe.{Decoder, Encoder, Json}
 
-sealed trait BannerUI
-object BannerUI {
-  // For backwards compatibility BannerUI is either the name of a template, or has a nested designName field
-  case class BannerDesignName(designName: String) extends BannerUI
-  sealed trait BannerTemplate extends BannerUI
-
-  case object ContributionsBanner extends BannerTemplate
-  case object ContributionsBannerWithSignIn extends BannerTemplate
-  case object EnvironmentBanner extends BannerTemplate
-  case object WorldPressFreedomDayBanner extends BannerTemplate
-  case object EuropeMomentLocalLanguageBanner extends BannerTemplate
-
-  implicit val customConfig: Configuration = Configuration.default.withDefaults
-  import cats.syntax.functor._  // for the widen syntax
-
-  implicit val bannerUIDecoder: Decoder[BannerUI] = Decoder[BannerDesignName].widen or deriveEnumerationDecoder[BannerTemplate].widen
-
-  implicit val bannerUIEncoder: Encoder[BannerUI] = Encoder.instance {
-    case BannerDesignName(designName) =>
-      Json.obj("designName" -> Json.fromString(designName))
-    case template: BannerTemplate => Json.fromString(s"$template")
-  }
-}
+case class BannerUI(designName: String)
 
 case class BannerContent(
     heading: Option[String],
