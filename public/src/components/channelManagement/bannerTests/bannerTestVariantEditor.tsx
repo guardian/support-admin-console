@@ -9,14 +9,8 @@ import {
   templateValidatorForPlatform,
 } from '../helpers/validation';
 import { Cta, SecondaryCta } from '../helpers/shared';
-import BannerUiSelector from './bannerUiSelector';
-import {
-  BannerContent,
-  BannerTemplate,
-  BannerUi,
-  BannerVariant,
-  uiIsDesign,
-} from '../../../models/banner';
+import BannerDesignSelector from './bannerUiSelector';
+import { BannerContent, BannerUi, BannerVariant, uiIsDesign } from '../../../models/banner';
 import { getDefaultVariant } from './utils/defaults';
 import useValidation from '../hooks/useValidation';
 import {
@@ -220,38 +214,36 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
       </Typography>
 
       <div className={classes.contentContainer}>
-        {template !== BannerTemplate.EnvironmentBanner && (
-          <Controller
-            name="heading"
-            control={control}
-            rules={{
-              validate: templateValidator,
-            }}
-            render={data => {
-              return (
-                <RichTextEditorSingleLine
-                  error={errors.heading !== undefined}
-                  helperText={
-                    errors.heading
-                      ? errors.heading.message || errors.heading.type
-                      : HEADER_DEFAULT_HELPER_TEXT
-                  }
-                  copyData={data.value}
-                  updateCopy={pars => {
-                    data.onChange(pars);
-                    handleSubmit(setValidatedFields)();
-                  }}
-                  name="heading"
-                  label="Header"
-                  disabled={!editMode}
-                  rteMenuConstraints={{
-                    noBold: true,
-                  }}
-                />
-              );
-            }}
-          />
-        )}
+        <Controller
+          name="heading"
+          control={control}
+          rules={{
+            validate: templateValidator,
+          }}
+          render={data => {
+            return (
+              <RichTextEditorSingleLine
+                error={errors.heading !== undefined}
+                helperText={
+                  errors.heading
+                    ? errors.heading.message || errors.heading.type
+                    : HEADER_DEFAULT_HELPER_TEXT
+                }
+                copyData={data.value}
+                updateCopy={pars => {
+                  data.onChange(pars);
+                  handleSubmit(setValidatedFields)();
+                }}
+                name="heading"
+                label="Header"
+                disabled={!editMode}
+                rteMenuConstraints={{
+                  noBold: true,
+                }}
+              />
+            );
+          }}
+        />
 
         <div>
           <Controller
@@ -286,10 +278,7 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
             }}
           />
 
-          {(template === BannerTemplate.ContributionsBanner ||
-            template === BannerTemplate.WorldPressFreedomDayBanner ||
-            template === BannerTemplate.EuropeMomentLocalLanguageBanner ||
-            uiIsDesign(template)) && (
+          {uiIsDesign(template) && (
             <Controller
               name="highlightedText"
               control={control}
@@ -392,11 +381,10 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
     <div className={classes.container}>
       <div className={classes.sectionContainer}>
         <Typography className={classes.sectionHeader} variant="h4">
-          Banner template
+          Banner design
         </Typography>
-        <BannerUiSelector
+        <BannerDesignSelector
           ui={variant.template}
-          designs={designs}
           onUiChange={(ui: BannerUi): void =>
             onVariantChange({
               ...variant,
@@ -404,6 +392,7 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
             })
           }
           editMode={editMode}
+          designs={designs}
         />
       </div>
 

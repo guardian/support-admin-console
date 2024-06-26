@@ -3,12 +3,7 @@ import { Button, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import Drawer from '@mui/material/Drawer';
-import {
-  BannerContent,
-  BannerTemplate,
-  BannerVariant,
-  isBannerTemplate,
-} from '../../../models/banner';
+import { BannerContent, BannerVariant, isBannerTemplate } from '../../../models/banner';
 import Typography from '@mui/material/Typography';
 import { useModule } from '../../../hooks/useModule';
 import useTickerData, { TickerSettingsWithData } from '../hooks/useTickerData';
@@ -120,26 +115,6 @@ const buildProps = (
 };
 
 const bannerModules = {
-  [BannerTemplate.ContributionsBanner]: {
-    path: 'contributions/ContributionsBanner.js',
-    name: 'ContributionsBanner',
-  },
-  [BannerTemplate.ContributionsBannerWithSignIn]: {
-    path: 'contributions/ContributionsBannerWithSignIn.js',
-    name: 'ContributionsBannerWithSignIn',
-  },
-  [BannerTemplate.EnvironmentBanner]: {
-    path: 'environment/EnvironmentBanner.js',
-    name: 'EnvironmentBanner',
-  },
-  [BannerTemplate.WorldPressFreedomDayBanner]: {
-    path: 'worldPressFreedomDay/WorldPressFreedomDayBanner.js',
-    name: 'WorldPressFreedomDayBanner',
-  },
-  [BannerTemplate.EuropeMomentLocalLanguageBanner]: {
-    path: 'europeMomentLocalLanguage/EuropeMomentLocalLanguageBanner.js',
-    name: 'EuropeMomentLocalLanguageBanner',
-  },
   DesignableBanner: {
     path: 'designableBanner/DesignableBanner.js',
     name: 'DesignableBanner',

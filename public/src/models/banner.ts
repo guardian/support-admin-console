@@ -14,12 +14,9 @@ import { Region } from '../utils/models';
 import { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';
 import { SeparateArticleCount } from './epic';
 
+// There are currently no banner templates - only the Designable banner is available
 export enum BannerTemplate {
-  ContributionsBanner = 'ContributionsBanner',
-  ContributionsBannerWithSignIn = 'ContributionsBannerWithSignIn',
-  EnvironmentBanner = 'EnvironmentBanner',
-  WorldPressFreedomDayBanner = 'WorldPressFreedomDayBanner',
-  EuropeMomentLocalLanguageBanner = 'EuropeMomentLocalLanguageBanner',
+  // ContributionsBanner = 'ContributionsBanner',
 }
 
 export interface BannerDesignName {

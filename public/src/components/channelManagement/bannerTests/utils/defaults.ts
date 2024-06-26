@@ -1,5 +1,5 @@
 import { Cta, UserCohort } from '../../helpers/shared';
-import { BannerTest, BannerVariant, BannerTemplate } from '../../../../models/banner';
+import { BannerTest, BannerVariant } from '../../../../models/banner';
 
 import { getStage } from '../../../../utils/stage';
 
@@ -15,7 +15,7 @@ export const DEFAULT_SECONDARY_CTA: Cta = {
 
 const DEV_AND_CODE_DEFAULT_VARIANT: BannerVariant = {
   name: 'CONTROL',
-  template: BannerTemplate.ContributionsBanner,
+  template: { designName: 'TEST_NOT_SELECTED' },
   bannerContent: {
     heading: 'We chose a different approach. Will you support it?',
     paragraphs: [
@@ -29,7 +29,7 @@ const DEV_AND_CODE_DEFAULT_VARIANT: BannerVariant = {
 
 const PROD_DEFAULT_VARIANT: BannerVariant = {
   name: 'CONTROL',
-  template: BannerTemplate.ContributionsBanner,
+  template: { designName: 'TEST_NOT_SELECTED' },
   bannerContent: {
     paragraphs: [],
     highlightedText: 'Support the Guardian from as little as %%CURRENCY_SYMBOL%%1. Thank you.',
