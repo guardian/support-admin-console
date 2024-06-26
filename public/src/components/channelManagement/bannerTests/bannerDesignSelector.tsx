@@ -19,17 +19,14 @@ const BannerDesignSelector: React.FC<BannerDesignSelectorProps> = ({
   onValidationChange,
 }: BannerDesignSelectorProps) => {
   const [isValid, setIsValid] = useState<boolean>(true);
+
   const onChange = (event: SelectChangeEvent): void => {
     const designName = event.target.value;
-    // const isValidBannerDesign = designs.map(d => d.name).includes(designName);
-    // if (isValidBannerDesign) {
     onUiChange({ designName });
-    // }
   };
 
   useEffect(() => {
     const isValidBannerDesign = designs.map(d => d.name).includes(designName);
-    console.log('setIsValid', isValidBannerDesign);
     setIsValid(isValidBannerDesign);
     onValidationChange(isValidBannerDesign);
   }, [designName, designs]);
