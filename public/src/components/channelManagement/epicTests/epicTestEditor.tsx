@@ -240,7 +240,9 @@ export const getEpicTestEditor = (
               </Typography>
               <div className={classes.variantsHeaderButtonsContainer}>
                 <EpicTestPreviewButton test={test} moduleName={epicEditorConfig.moduleName} />
-                <AnalyticsButton test={test} channel={'Epic'} />
+                {epicEditorConfig.allowAnalyticsButton && (
+                  <AnalyticsButton test={test} channel={'Epic'} />
+                )}
               </div>
             </div>
             <div>

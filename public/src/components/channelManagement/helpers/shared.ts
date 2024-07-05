@@ -60,6 +60,7 @@ export interface EpicEditorConfig {
   requireVariantHeader: boolean;
   moduleName: EpicModuleName;
   allowNewsletterSignup: boolean;
+  allowAnalyticsButton: boolean;
 }
 
 export const ARTICLE_EPIC_CONFIG: EpicEditorConfig = {
@@ -87,6 +88,7 @@ export const ARTICLE_EPIC_CONFIG: EpicEditorConfig = {
   moduleName: 'ContributionsEpic',
   platform: 'DOTCOM',
   allowNewsletterSignup: false,
+  allowAnalyticsButton: true,
 };
 
 export const LIVEBLOG_EPIC_CONFIG: EpicEditorConfig = {
@@ -114,6 +116,7 @@ export const LIVEBLOG_EPIC_CONFIG: EpicEditorConfig = {
   moduleName: 'ContributionsLiveblogEpic',
   platform: 'DOTCOM',
   allowNewsletterSignup: true,
+  allowAnalyticsButton: false,
 };
 
 export const APPLE_NEWS_EPIC_CONFIG: EpicEditorConfig = {
@@ -142,6 +145,7 @@ export const APPLE_NEWS_EPIC_CONFIG: EpicEditorConfig = {
   moduleName: 'ContributionsEpic',
   platform: 'APPLE_NEWS',
   allowNewsletterSignup: false,
+  allowAnalyticsButton: false,
 };
 
 export const AMP_EPIC_CONFIG: EpicEditorConfig = {
@@ -169,6 +173,7 @@ export const AMP_EPIC_CONFIG: EpicEditorConfig = {
   moduleName: 'ContributionsEpic',
   platform: 'AMP',
   allowNewsletterSignup: false,
+  allowAnalyticsButton: false,
 };
 
 export interface LockStatus {
