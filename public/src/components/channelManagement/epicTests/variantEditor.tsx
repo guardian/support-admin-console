@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { FormControl, FormControlLabel, Radio, RadioGroup, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import EpicTestChoiceCardsEditor from './epicTestChoiceCardsEditor';
-import EpicTestSignInLinkEditor from './epicTestSignInLinkEditor';
+import ChoiceCardsEditor from './choiceCardsEditor';
+import SignInLinkEditor from './signInLinkEditor';
 import TickerEditor from '../tickerEditor';
-import EpicTestVariantEditorCtasEditor from './epicTestVariantEditorCtasEditor';
+import EpicTestVariantEditorCtasEditor from './variantCtasEditor';
 
 import {
   BylineWithImage,
@@ -39,7 +39,7 @@ import { ImageEditorToggle } from '../imageEditor';
 import { BylineWithImageEditorToggle } from '../bylineWithImageEditor';
 import { EpicVariant, SeparateArticleCount } from '../../../models/epic';
 import { AppleNewsChoiceCards } from './appleChoiceCardsEditor';
-import EpicTestNewsletter from './epicNewsletterSignUp';
+import EpicTestNewsletter from './newsletterSignUp';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const getUseStyles = (shouldAddPadding: boolean) => {
@@ -94,7 +94,7 @@ interface EpicTestVariantEditorProps {
   onValidationChange: (isValid: boolean) => void;
 }
 
-const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
+const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   variant,
   onVariantChange,
   editMode,
@@ -440,7 +440,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                 Choice Cards
               </Typography>
 
-              <EpicTestChoiceCardsEditor
+              <ChoiceCardsEditor
                 showChoiceCards={variant.showChoiceCards}
                 updateShowChoiceCards={updateShowChoiceCards}
                 isDisabled={!editMode}
@@ -485,7 +485,7 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
             Sign in link
           </Typography>
 
-          <EpicTestSignInLinkEditor
+          <SignInLinkEditor
             showSignInLink={variant.showSignInLink}
             updateShowSignInLink={updateShowSignInLink}
             isDisabled={!editMode}
@@ -511,4 +511,4 @@ const EpicTestVariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   );
 };
 
-export default EpicTestVariantEditor;
+export default VariantEditor;

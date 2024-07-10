@@ -19,10 +19,10 @@ import TestEditorArticleCountEditor, {
   DEFAULT_ARTICLES_VIEWED_SETTINGS,
 } from '../testEditorArticleCountEditor';
 import TestVariantEditorWithPreviewTab from '../testVariantEditorWithPreviewTab';
-import EpicTestVariantEditor from './epicTestVariantEditor';
-import EpicVariantPreview from './epicVariantPreview';
+import VariantEditor from './variantEditor';
+import VariantPreview from './variantPreview';
 import TestEditorContextTargeting from '../testEditorContextTargeting';
-import EpicTestMaxViewsEditor from './epicTestMaxViewsEditor';
+import MaxViewsEditor from './maxViewsEditor';
 import { ARTICLE_COUNT_TEMPLATE, COUNTRY_NAME_TEMPLATE } from '../helpers/validation';
 import TestVariantsSplitEditor from '../testVariantsSplitEditor';
 import { getDefaultVariant } from './utils/defaults';
@@ -31,10 +31,10 @@ import {
   ControlProportionSettings,
 } from '../helpers/controlProportionSettings';
 import { useStyles } from '../helpers/testEditorStyles';
-import { EpicTestPreviewButton } from './epicTestPreview';
+import { EpicTestPreviewButton } from './testPreview';
 import { ValidatedTestEditor, ValidatedTestEditorProps } from '../validatedTestEditor';
 import { TestEditorProps } from '../testsForm';
-import { EpicBanditEditor } from './epicBanditEditor';
+import { BanditEditor } from './banditEditor';
 import { AnalyticsButton } from '../AnalyticsButton';
 
 const BANDIT_FEATURE_SWITCH = true;
@@ -195,7 +195,7 @@ export const getEpicTestEditor = (
     const renderVariantEditor = (variant: EpicVariant): React.ReactElement => (
       <TestVariantEditorWithPreviewTab
         variantEditor={
-          <EpicTestVariantEditor
+          <VariantEditor
             epicEditorConfig={epicEditorConfig}
             key={variant.name}
             variant={variant}
@@ -209,7 +209,7 @@ export const getEpicTestEditor = (
         }
         variantPreview={
           epicEditorConfig.allowVariantPreview ? (
-            <EpicVariantPreview variant={variant} moduleName={epicEditorConfig.moduleName} />
+            <VariantPreview variant={variant} moduleName={epicEditorConfig.moduleName} />
           ) : (
             undefined
           )
@@ -265,7 +265,7 @@ export const getEpicTestEditor = (
             <Typography variant={'h3'} className={classes.sectionHeader}>
               Experiment Methodology
             </Typography>
-            <EpicBanditEditor
+            <BanditEditor
               test={test}
               isDisabled={!userHasTestLocked}
               onExperimentMethodologyChange={onExperimentMethodologyChange}
@@ -297,7 +297,7 @@ export const getEpicTestEditor = (
             </Typography>
 
             <div>
-              <EpicTestVariantEditor
+              <VariantEditor
                 key={test.variants[0].name}
                 variant={test.variants[0]}
                 epicEditorConfig={epicEditorConfig}
@@ -388,7 +388,7 @@ export const getEpicTestEditor = (
               label={`Use private view counter for this test (instead of the global one)`}
             />
 
-            <EpicTestMaxViewsEditor
+            <MaxViewsEditor
               maxEpicViews={test.alwaysAsk ? undefined : test.maxViews}
               isDisabled={!userHasTestLocked}
               onMaxViewsChanged={onMaxViewsChange}

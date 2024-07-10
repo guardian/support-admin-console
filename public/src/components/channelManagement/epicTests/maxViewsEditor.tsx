@@ -35,7 +35,7 @@ interface TestEditorArticleCountEditorProps {
   isDisabled: boolean;
 }
 
-const EpicTestMaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
+const MaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
   maxEpicViews,
   onMaxViewsChanged,
   onValidationChange,
@@ -159,4 +159,4 @@ const EpicTestMaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
   );
 };
 
-export default EpicTestMaxViewsEditor;
+export default MaxViewsEditor;

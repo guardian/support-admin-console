@@ -23,7 +23,7 @@ interface EpicTestChoiceCardsEditorProps {
   isDisabled: boolean;
 }
 
-const EpicTestChoiceCardsEditor: React.FC<EpicTestChoiceCardsEditorProps> = ({
+const ChoiceCardsEditor: React.FC<EpicTestChoiceCardsEditorProps> = ({
   showChoiceCards,
   updateShowChoiceCards,
   isDisabled,
@@ -51,4 +51,4 @@ const EpicTestChoiceCardsEditor: React.FC<EpicTestChoiceCardsEditorProps> = ({
   );
 };
 
-export default EpicTestChoiceCardsEditor;
+export default ChoiceCardsEditor;
