@@ -6,9 +6,9 @@ import { LockStatus, Status } from '../helpers/shared';
 import CloseIcon from '@mui/icons-material/Close';
 import SaveIcon from '@mui/icons-material/Save';
 import LockIcon from '@mui/icons-material/Lock';
-import { LockTestDetails } from './lockTestDetails';
-import { ArchiveTestButton } from './archiveTestButton';
-import { CopyTestButton } from './copyTestButton';
+import { TestLockDetails } from './testLockDetails';
+import { TestArchiveButton } from './testArchiveButton';
+import { TestCopyButton } from './testCopyButton';
 import { grey } from '@mui/material/colors';
 import { Link } from '@mui/icons-material';
 import { FrontendSettingsType } from '../../../utils/requests';
@@ -156,13 +156,13 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
         <div className={classes.lockContainer}>
           {!userHasTestLocked && !lockStatus.locked && (
             <>
-              <CopyTestButton
+              <TestCopyButton
                 existingNames={existingNames}
                 existingNicknames={existingNicknames}
                 sourceName={name}
                 sourceNickname={nickname}
                 testNamePrefix={testNamePrefix}
-                onCopyTest={onTestCopy}
+                onTestCopy={onTestCopy}
                 disabled={userHasTestListLocked}
               />
               <Button
@@ -177,7 +177,7 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
           )}
           {!userHasTestLocked && lockStatus.locked && (
             <>
-              <LockTestDetails email={lockStatus.email} timestamp={lockStatus.timestamp} />
+              <TestLockDetails email={lockStatus.email} timestamp={lockStatus.timestamp} />
               <Button
                 variant="outlined"
                 size="medium"
@@ -190,7 +190,7 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
           )}
           {userHasTestLocked && (
             <>
-              {!isNew && <ArchiveTestButton onArchiveTest={onTestArchive} />}
+              {!isNew && <TestArchiveButton onTestArchive={onTestArchive} />}
               <Button
                 variant="outlined"
                 size="medium"
