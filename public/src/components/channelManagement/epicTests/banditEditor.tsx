@@ -9,7 +9,7 @@ interface EpicBanditEditorProps {
   onExperimentMethodologyChange: (isBanditTest?: boolean) => void;
 }
 
-export const EpicBanditEditor: React.FC<EpicBanditEditorProps> = ({
+export const BanditEditor: React.FC<EpicBanditEditorProps> = ({
   test,
   isDisabled,
   onExperimentMethodologyChange,

@@ -9,7 +9,7 @@ import { useModule } from '../../../hooks/useModule';
 import useTickerData, { TickerSettingsWithData } from '../hooks/useTickerData';
 import { mockAmountsCardData, SelectedAmountsVariant } from '../../../utils/models';
 import { BannerDesign, BannerDesignProps } from '../../../models/bannerDesign';
-import { ArticleCounts } from '../epicTests/epicVariantPreview';
+import { ArticleCounts } from '../epicTests/variantPreview';
 import { SeparateArticleCount } from '../../../models/epic';
 
 // Mock prices data

@@ -8,7 +8,7 @@ import {
   EpicEditorConfig,
   LIVEBLOG_EPIC_CONFIG,
 } from '../helpers/shared';
-import { getEpicTestEditor } from './epicTestEditor';
+import { getEpicTestEditor } from './testEditor';
 import { EpicTest } from '../../../models/epic';
 
 const createDefaultEpicTest = (epicEditorConfig: EpicEditorConfig) => (

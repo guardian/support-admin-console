@@ -126,7 +126,7 @@ interface EpicVariantPreviewProps {
  * Uses the DCR storybook to render the component, iframed.
  * Props are passed in the args parameter in the url.
  */
-const EpicVariantPreview: React.FC<EpicVariantPreviewProps> = ({
+const VariantPreview: React.FC<EpicVariantPreviewProps> = ({
   variant,
   moduleName,
 }: EpicVariantPreviewProps) => {
@@ -150,4 +150,4 @@ const EpicVariantPreview: React.FC<EpicVariantPreviewProps> = ({
   );
 };
 
-export default EpicVariantPreview;
+export default VariantPreview;
