@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Checkbox, TableRow, TableCell } from '@mui/material';
 
-type BannerDeployChannelDeployerTableRowProps = {
+type BannerChannelDeployerTableRowProps = {
   region: string;
   timestamp: number;
   email: string;
@@ -59,13 +59,13 @@ const prettifiedUser = (email: string): string => {
     : email;
 };
 
-const BannerDeployChannelDeployerTableRow: React.FC<BannerDeployChannelDeployerTableRowProps> = ({
+const BannerChannelDeployerTableRow: React.FC<BannerChannelDeployerTableRowProps> = ({
   region,
   timestamp,
   email,
   shouldRedeploy,
   onRedeployClick,
-}: BannerDeployChannelDeployerTableRowProps) => {
+}: BannerChannelDeployerTableRowProps) => {
   return (
     <TableRow key={region}>
       <TableCell padding="checkbox">
@@ -81,4 +81,4 @@ const BannerDeployChannelDeployerTableRow: React.FC<BannerDeployChannelDeployerT
   );
 };
 
-export default BannerDeployChannelDeployerTableRow;
+export default BannerChannelDeployerTableRow;
