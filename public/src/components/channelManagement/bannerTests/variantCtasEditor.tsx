@@ -1,8 +1,8 @@
 import React from 'react';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import VariantEditorCtaEditor from '../variantEditorCtaEditor';
-import VariantEditorSecondaryCtaEditor from '../variantEditorSecondaryCtaEditor';
+import VariantCtaEditor from '../variantEditorCtaEditor';
+import VariantSecondaryCtaEditor from '../variantEditorSecondaryCtaEditor';
 import { Cta, SecondaryCta } from '../helpers/shared';
 import { DEFAULT_PRIMARY_CTA, DEFAULT_SECONDARY_CTA } from './utils/defaults';
 
@@ -14,7 +14,7 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   },
 }));
 
-interface BannerTestVariantEditorCtasEditorProps {
+interface VariantCtasEditorProps {
   primaryCta?: Cta;
   secondaryCta?: SecondaryCta;
   updatePrimaryCta: (updatedCta?: Cta) => void;
@@ -24,7 +24,7 @@ interface BannerTestVariantEditorCtasEditorProps {
   supportSecondaryCta: boolean;
 }
 
-const BannerTestVariantEditorCtasEditor: React.FC<BannerTestVariantEditorCtasEditorProps> = ({
+const VariantCtasEditor: React.FC<VariantCtasEditorProps> = ({
   primaryCta,
   secondaryCta,
   updatePrimaryCta,
@@ -32,12 +32,12 @@ const BannerTestVariantEditorCtasEditor: React.FC<BannerTestVariantEditorCtasEdi
   onValidationChange,
   isDisabled,
   supportSecondaryCta,
-}: BannerTestVariantEditorCtasEditorProps) => {
+}: VariantCtasEditorProps) => {
   const classes = useStyles();
 
   return (
     <div className={classes.container}>
-      <VariantEditorCtaEditor
+      <VariantCtaEditor
         label="Primary button"
         isDisabled={isDisabled}
         cta={primaryCta}
@@ -47,7 +47,7 @@ const BannerTestVariantEditorCtasEditor: React.FC<BannerTestVariantEditorCtasEdi
       />
 
       {supportSecondaryCta && (
-        <VariantEditorSecondaryCtaEditor
+        <VariantSecondaryCtaEditor
           label="Secondary button"
           isDisabled={isDisabled}
           cta={secondaryCta}
@@ -61,4 +61,4 @@ const BannerTestVariantEditorCtasEditor: React.FC<BannerTestVariantEditorCtasEdi
   );
 };
 
-export default BannerTestVariantEditorCtasEditor;
+export default VariantCtasEditor;

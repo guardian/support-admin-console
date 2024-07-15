@@ -9,7 +9,7 @@ import {
 } from '../helpers/shared';
 import { ARTICLE_COUNT_TEMPLATE } from '../helpers/validation';
 import { Typography } from '@mui/material';
-import BannerTestVariantEditor from './bannerTestVariantEditor';
+import VariantEditor from './variantEditor';
 import CampaignSelector from '../CampaignSelector';
 import TestVariantsEditor from '../testVariantsEditor';
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
@@ -148,7 +148,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
   };
 
   const renderVariantEditor = (variant: BannerVariant): React.ReactElement => (
-    <BannerTestVariantEditor
+    <VariantEditor
       key={`banner-${test.name}-${variant.name}`}
       variant={variant}
       onVariantChange={onVariantChange}

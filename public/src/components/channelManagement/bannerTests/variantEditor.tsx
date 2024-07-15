@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { FormControlLabel, Radio, RadioGroup, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import BannerTestVariantEditorCtasEditor from './bannerTestVariantEditorCtasEditor';
+import VariantCtasEditor from './variantCtasEditor';
 import {
   EMPTY_ERROR_HELPER_TEXT,
   getEmptyParagraphsError,
@@ -91,7 +91,7 @@ const getLabelSuffix = (deviceType: DeviceType): string => {
   }
 };
 
-interface BannerTestVariantContentEditorProps {
+interface VariantContentEditorProps {
   content: BannerContent;
   template: BannerUi;
   onChange: (updatedContent: BannerContent) => void;
@@ -121,13 +121,13 @@ const getParagraphsOrMessageText = (
   return bodyCopy;
 };
 
-const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorProps> = ({
+const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
   content,
   onChange,
   onValidationChange,
   editMode,
   deviceType,
-}: BannerTestVariantContentEditorProps) => {
+}: VariantContentEditorProps) => {
   const classes = useStyles();
 
   const templateValidator = templateValidatorForPlatform('DOTCOM');
@@ -314,7 +314,7 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
             {`Buttons${labelSuffix}`}
           </Typography>
 
-          <BannerTestVariantEditorCtasEditor
+          <VariantCtasEditor
             primaryCta={content.cta}
             secondaryCta={content.secondaryCta}
             updatePrimaryCta={updatePrimaryCta}
@@ -329,7 +329,7 @@ const BannerTestVariantContentEditor: React.FC<BannerTestVariantContentEditorPro
   );
 };
 
-interface BannerTestVariantEditorProps {
+interface VariantEditorProps {
   variant: BannerVariant;
   onVariantChange: (updatedVariant: BannerVariant) => void;
   editMode: boolean;
@@ -338,13 +338,13 @@ interface BannerTestVariantEditorProps {
   designs: BannerDesign[];
 }
 
-const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
+const VariantEditor: React.FC<VariantEditorProps> = ({
   variant,
   editMode,
   onValidationChange,
   onVariantChange,
   designs,
-}: BannerTestVariantEditorProps) => {
+}: VariantEditorProps) => {
   const classes = useStyles();
   const setValidationStatusForField = useValidation(onValidationChange);
 
@@ -393,7 +393,7 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
       </div>
 
       <div className={classes.sectionContainer}>
-        <BannerTestVariantContentEditor
+        <VariantContentEditor
           content={variant.bannerContent}
           template={variant.template}
           onChange={(updatedContent: BannerContent): void =>
@@ -426,7 +426,7 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
           />
         </RadioGroup>
         {variant.mobileBannerContent && (
-          <BannerTestVariantContentEditor
+          <VariantContentEditor
             content={variant.mobileBannerContent}
             template={variant.template}
             onChange={(updatedContent: BannerContent): void =>
@@ -473,4 +473,4 @@ const BannerTestVariantEditor: React.FC<BannerTestVariantEditorProps> = ({
   );
 };
 
-export default BannerTestVariantEditor;
+export default VariantEditor;

@@ -72,7 +72,7 @@ interface BannerTestNewVariantButtonProps {
   isDisabled: boolean;
 }
 
-const BannerTestNewVariantButton: React.FC<BannerTestNewVariantButtonProps> = ({
+const NewVariantButton: React.FC<BannerTestNewVariantButtonProps> = ({
   existingNames,
   createVariant,
   isDisabled,
@@ -139,4 +139,4 @@ const BannerTestNewVariantButton: React.FC<BannerTestNewVariantButtonProps> = ({
   );
 };
 
-export default BannerTestNewVariantButton;
+export default NewVariantButton;
