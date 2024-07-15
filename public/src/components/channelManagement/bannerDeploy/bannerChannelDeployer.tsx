@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { BannerChannel } from './bannerDeployDashboard';
-import BannerChannelDeployerTable from './bannerDeployChannelDeployerTable';
+import BannerChannelDeployerTable from './bannerChannelDeployerTable';
 
 import {
   fetchFrontendSettings,
@@ -47,13 +47,13 @@ interface DataFromServer {
   email: string;
 }
 
-interface BannerDeployChannelDeployerProps {
+interface BannerChannelDeployerProps {
   channel: BannerChannel;
 }
 
-const BannerDeployChannelDeployer: React.FC<BannerDeployChannelDeployerProps> = ({
+const BannerChannelDeployer: React.FC<BannerChannelDeployerProps> = ({
   channel,
-}: BannerDeployChannelDeployerProps) => {
+}: BannerChannelDeployerProps) => {
   const classes = useStyles();
 
   const isChannel1 = channel === 'CHANNEL1';
@@ -150,4 +150,4 @@ const BannerDeployChannelDeployer: React.FC<BannerDeployChannelDeployerProps> = 
   );
 };
 
-export default BannerDeployChannelDeployer;
+export default BannerChannelDeployer;

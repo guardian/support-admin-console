@@ -15,8 +15,8 @@ import {
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { BannerChannel } from './bannerDeployDashboard';
-import { BannerDeploys, BannersToRedeploy } from './bannerDeployChannelDeployer';
-import BannerDeployChannelDeployerTableRow from './bannerDeployChannelDeployerTableRow';
+import { BannerDeploys, BannersToRedeploy } from './bannerChannelDeployer';
+import BannerChannelDeployerTableRow from './bannerChannelDeployerTableRow';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   schedule: {
@@ -24,7 +24,7 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   },
 }));
 
-interface BannerDeployChannelDeployerTableProps {
+interface BannerChannelDeployerTableProps {
   channel: BannerChannel;
   bannerDeploys?: BannerDeploys;
   bannersToRedeploy: BannersToRedeploy;
@@ -32,13 +32,13 @@ interface BannerDeployChannelDeployerTableProps {
   onRedeployClick: (region: string, shouldRedeploy: boolean) => void;
 }
 
-const BannerDeployChannelDeployerTable: React.FC<BannerDeployChannelDeployerTableProps> = ({
+const BannerChannelDeployerTable: React.FC<BannerChannelDeployerTableProps> = ({
   channel,
   bannerDeploys,
   bannersToRedeploy,
   onRedeployAllClick,
   onRedeployClick,
-}: BannerDeployChannelDeployerTableProps) => {
+}: BannerChannelDeployerTableProps) => {
   const classes = useStyles();
 
   const isChannel1 = channel === 'CHANNEL1';
@@ -87,7 +87,7 @@ const BannerDeployChannelDeployerTable: React.FC<BannerDeployChannelDeployerTabl
         <TableBody>
           {bannerDeploys &&
             Object.keys(bannerDeploys).map(region => (
-              <BannerDeployChannelDeployerTableRow
+              <BannerChannelDeployerTableRow
                 key={region}
                 region={region}
                 timestamp={bannerDeploys[region as keyof BannerDeploys].timestamp}
@@ -104,4 +104,4 @@ const BannerDeployChannelDeployerTable: React.FC<BannerDeployChannelDeployerTabl
   );
 };
 
-export default BannerDeployChannelDeployerTable;
+export default BannerChannelDeployerTable;

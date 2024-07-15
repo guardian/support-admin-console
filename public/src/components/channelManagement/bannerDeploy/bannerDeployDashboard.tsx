@@ -3,7 +3,7 @@ import React from 'react';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
-import BannerDeployeChannelDeployer from './bannerDeployChannelDeployer';
+import BannerChannelDeployer from './bannerChannelDeployer';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const useStyles = makeStyles(({ spacing }: Theme) => ({
@@ -30,10 +30,10 @@ const BannerDeployDashboard: React.FC = () => {
     <div className={classes.scrollableContainer}>
       <div className={classes.container}>
         <div className={classes.tableContainer}>
-          <BannerDeployeChannelDeployer channel="CHANNEL1" />
+          <BannerChannelDeployer channel="CHANNEL1" />
         </div>
         <div className={classes.tableContainer}>
-          <BannerDeployeChannelDeployer channel="CHANNEL2" />
+          <BannerChannelDeployer channel="CHANNEL2" />
         </div>
       </div>
     </div>
