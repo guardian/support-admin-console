@@ -14,6 +14,7 @@ import type { App, CfnElement } from 'aws-cdk-lib';
 import { Duration, RemovalPolicy, Tags } from 'aws-cdk-lib';
 import { AttributeType, BillingMode, ProjectionType, Table } from 'aws-cdk-lib/aws-dynamodb';
 import { InstanceClass, InstanceSize, InstanceType } from 'aws-cdk-lib/aws-ec2';
+import {ApplicationListenerRule, ListenerAction, ListenerCondition} from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import type { Policy } from 'aws-cdk-lib/aws-iam';
 import { AccountPrincipal, ManagedPolicy, Role } from 'aws-cdk-lib/aws-iam';
 import { ParameterDataType, ParameterTier, StringParameter } from 'aws-cdk-lib/aws-ssm';
@@ -298,6 +299,25 @@ export class AdminConsole extends GuStack {
       scaling: { minimumInstances: 1, maximumInstances: 2 },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MICRO),
       withoutImdsv2: true,
+    });
+
+    // Rule to only allow known http methods
+    new ApplicationListenerRule(this, 'AllowKnownMethods', {
+      listener: ec2App.listener,
+      priority: 1,
+      conditions: [ListenerCondition.httpRequestMethods(['GET', 'PATCH', 'POST', 'PUT', 'DELETE', 'HEAD'])],
+      targetGroups: [ec2App.targetGroup],
+    });
+    // Default rule to block requests which don't match the above rule
+    new ApplicationListenerRule(this, 'BlockUnknownMethods', {
+      listener: ec2App.listener,
+      priority: 2,
+      conditions: [ListenerCondition.pathPatterns(['*'])],  // anything
+      action: ListenerAction.fixedResponse(400, {
+        contentType: 'application/json',
+        messageBody:
+          'Unsupported http method',
+      }),
     });
 
     ec2App.autoScalingGroup.role.addManagedPolicy(
