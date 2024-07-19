@@ -160,7 +160,6 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
             "HttpRequestMethodConfig": {
               "Values": [
                 "GET",
-                "PATCH",
                 "POST",
                 "PUT",
                 "DELETE",
