@@ -305,7 +305,7 @@ export class AdminConsole extends GuStack {
     new ApplicationListenerRule(this, 'AllowKnownMethods', {
       listener: ec2App.listener,
       priority: 1,
-      conditions: [ListenerCondition.httpRequestMethods(['GET', 'PATCH', 'POST', 'PUT', 'DELETE', 'HEAD'])],
+      conditions: [ListenerCondition.httpRequestMethods(['GET', 'POST', 'PUT', 'DELETE', 'HEAD'])],
       targetGroups: [ec2App.targetGroup],
     });
     // Default rule to block requests which don't match the above rule
