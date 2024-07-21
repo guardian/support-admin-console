@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { TextField, Theme, Typography, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import HeaderTestVariantEditorCtasEditor from './headerTestVariantEditorCtasEditor';
-import VariantEditorCopyLengthWarning from '../variants/variantEditorCopyLengthWarning';
+import VariantEditorCopyLengthWarning from '../../tests/variants/variantEditorCopyLengthWarning';
 import { templateValidatorForPlatform } from '../helpers/validation';
 import { Cta } from '../helpers/shared';
 import { HeaderContent, HeaderVariant } from '../../../models/header';

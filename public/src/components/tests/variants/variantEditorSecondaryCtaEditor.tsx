@@ -1,7 +1,7 @@
 import React from 'react';
 import { Theme, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Cta, SecondaryCta, SecondaryCtaType } from '../helpers/shared';
+import { Cta, SecondaryCta, SecondaryCtaType } from '../../channelManagement/helpers/shared';
 import VariantEditorCtaFieldsEditor from './variantEditorCtaFieldsEditor';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({

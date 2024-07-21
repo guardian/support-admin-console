@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { TextField } from '@mui/material';
-import { Cta } from '../helpers/shared';
-import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
+import { Cta } from '../../channelManagement/helpers/shared';
+import { EMPTY_ERROR_HELPER_TEXT } from '../../channelManagement/helpers/validation';
 
 interface FormData {
   text: string;

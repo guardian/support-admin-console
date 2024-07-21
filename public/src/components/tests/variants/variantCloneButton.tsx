@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button } from '@mui/material';
-import { Variant } from '../helpers/shared';
+import { Variant } from '../../channelManagement/helpers/shared';
 import useOpenable from '../../../hooks/useOpenable';
-import CreateVariantDialog from '../createVariantDialog';
+import CreateVariantDialog from '../../channelManagement/createVariantDialog';
 
 interface VariantEditorButtonsEditorProps<V extends Variant> {
   existingNames: string[];

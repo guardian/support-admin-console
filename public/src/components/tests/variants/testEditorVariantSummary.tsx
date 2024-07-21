@@ -6,7 +6,7 @@ import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import TestEditorVariantSummaryWebPreviewButton, {
   ArticleType,
 } from './testEditorVariantSummaryWebPreviewButton';
-import { TestPlatform, TestType } from '../helpers/shared';
+import { TestPlatform, TestType } from '../../channelManagement/helpers/shared';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {

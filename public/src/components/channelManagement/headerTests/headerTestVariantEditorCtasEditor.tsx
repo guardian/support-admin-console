@@ -1,7 +1,7 @@
 import React from 'react';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import VariantEditorCtaEditor from '../variants/variantEditorCtaEditor';
+import VariantEditorCtaEditor from '../../tests/variants/variantEditorCtaEditor';
 
 import { Cta } from '../helpers/shared';
 

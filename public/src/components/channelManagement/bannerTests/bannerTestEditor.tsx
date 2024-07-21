@@ -11,17 +11,17 @@ import { ARTICLE_COUNT_TEMPLATE } from '../helpers/validation';
 import { Typography } from '@mui/material';
 import VariantEditor from './variantEditor';
 import CampaignSelector from '../CampaignSelector';
-import TestVariantsEditor from '../variants/testVariantsEditor';
+import TestVariantsEditor from '../../tests/variants/testVariantsEditor';
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 import TestEditorArticleCountEditor, {
   DEFAULT_ARTICLES_VIEWED_SETTINGS,
 } from '../testEditorArticleCountEditor';
 import { BannerContent, BannerTest, BannerVariant } from '../../../models/banner';
 import { getDefaultVariant } from './utils/defaults';
-import TestEditorVariantSummary from '../variants/testEditorVariantSummary';
+import TestEditorVariantSummary from '../../tests/variants/testEditorVariantSummary';
 import BannerVariantPreview from './bannerVariantPreview';
 import { ControlProportionSettings } from '../helpers/controlProportionSettings';
-import TestVariantsSplitEditor from '../variants/testVariantsSplitEditor';
+import TestVariantsSplitEditor from '../../tests/variants/testVariantsSplitEditor';
 import { useStyles } from '../helpers/testEditorStyles';
 import { ValidatedTestEditorProps } from '../validatedTestEditor';
 import { BannerDesign } from '../../../models/bannerDesign';

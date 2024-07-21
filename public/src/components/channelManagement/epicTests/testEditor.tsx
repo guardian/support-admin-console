@@ -12,19 +12,19 @@ import {
 } from '../helpers/shared';
 import { FormControlLabel, Switch, Typography } from '@mui/material';
 import CampaignSelector from '../CampaignSelector';
-import TestVariantsEditor from '../variants/testVariantsEditor';
-import TestEditorVariantSummary from '../variants/testEditorVariantSummary';
+import TestVariantsEditor from '../../tests/variants/testVariantsEditor';
+import TestEditorVariantSummary from '../../tests/variants/testEditorVariantSummary';
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 import TestEditorArticleCountEditor, {
   DEFAULT_ARTICLES_VIEWED_SETTINGS,
 } from '../testEditorArticleCountEditor';
-import TestVariantEditorWithPreviewTab from '../variants/testVariantEditorWithPreviewTab';
+import TestVariantEditorWithPreviewTab from '../../tests/variants/testVariantEditorWithPreviewTab';
 import VariantEditor from './variantEditor';
 import VariantPreview from './variantPreview';
 import TestEditorContextTargeting from '../testEditorContextTargeting';
 import MaxViewsEditor from './maxViewsEditor';
 import { ARTICLE_COUNT_TEMPLATE, COUNTRY_NAME_TEMPLATE } from '../helpers/validation';
-import TestVariantsSplitEditor from '../variants/testVariantsSplitEditor';
+import TestVariantsSplitEditor from '../../tests/variants/testVariantsSplitEditor';
 import { getDefaultVariant } from './utils/defaults';
 import {
   canHaveCustomVariantSplit,
