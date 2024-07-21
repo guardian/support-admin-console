@@ -18,7 +18,7 @@ import TestEditorArticleCountEditor, {
 } from '../testEditorArticleCountEditor';
 import { BannerContent, BannerTest, BannerVariant } from '../../../models/banner';
 import { getDefaultVariant } from './utils/defaults';
-import TestEditorVariantSummary from '../../tests/variants/testEditorVariantSummary';
+import VariantSummary from '../../tests/variants/variantSummary';
 import BannerVariantPreview from './bannerVariantPreview';
 import { ControlProportionSettings } from '../helpers/controlProportionSettings';
 import TestVariantsSplitEditor from '../../tests/variants/testVariantsSplitEditor';
@@ -165,7 +165,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
     const design = getDesignForVariant(variant, designs);
 
     return (
-      <TestEditorVariantSummary
+      <VariantSummary
         name={variant.name}
         testName={test.name}
         testType="BANNER"

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Variant } from '../../channelManagement/helpers/shared';
-import TestNewVariantButton from './testNewVariantButton';
+import TestNewVariantButton from './newVariantButton';
 import TestVariantEditorsAccordion from './testVariantEditorsAccordion';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({

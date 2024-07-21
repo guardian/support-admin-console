@@ -12,7 +12,7 @@ import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelecto
 
 import { HeaderTest, HeaderVariant } from '../../../models/header';
 import { getDefaultVariant } from './utils/defaults';
-import TestEditorVariantSummary from '../../tests/variants/testEditorVariantSummary';
+import VariantSummary from '../../tests/variants/variantSummary';
 
 import { ControlProportionSettings } from '../helpers/controlProportionSettings';
 import TestVariantsSplitEditor from '../../tests/variants/testVariantsSplitEditor';
@@ -91,7 +91,7 @@ const HeaderTestEditor: React.FC<ValidatedTestEditorProps<HeaderTest>> = ({
   );
 
   const renderVariantSummary = (variant: HeaderVariant): React.ReactElement => (
-    <TestEditorVariantSummary
+    <VariantSummary
       name={variant.name}
       testName={test.name}
       testType="HEADER"

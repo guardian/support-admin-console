@@ -13,7 +13,7 @@ import {
 import { FormControlLabel, Switch, Typography } from '@mui/material';
 import CampaignSelector from '../CampaignSelector';
 import TestVariantsEditor from '../../tests/variants/testVariantsEditor';
-import TestEditorVariantSummary from '../../tests/variants/testEditorVariantSummary';
+import VariantSummary from '../../tests/variants/variantSummary';
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 import TestEditorArticleCountEditor, {
   DEFAULT_ARTICLES_VIEWED_SETTINGS,
@@ -218,7 +218,7 @@ export const getEpicTestEditor = (
     );
 
     const renderVariantSummary = (variant: EpicVariant): React.ReactElement => (
-      <TestEditorVariantSummary
+      <VariantSummary
         name={variant.name}
         testName={test.name}
         testType="EPIC"

@@ -3,9 +3,9 @@ import { Theme, Typography, AccordionSummary } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
-import TestEditorVariantSummaryWebPreviewButton, {
+import VariantSummaryWebPreviewButton, {
   ArticleType,
-} from './testEditorVariantSummaryWebPreviewButton';
+} from './variantSummaryWebPreviewButton';
 import { TestPlatform, TestType } from '../../channelManagement/helpers/shared';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
@@ -42,7 +42,7 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   },
 }));
 
-interface TestEditorVariantSummaryProps {
+interface VariantSummaryProps {
   name: string;
   testName: string;
   testType: TestType;
@@ -52,7 +52,7 @@ interface TestEditorVariantSummaryProps {
   articleType: ArticleType;
 }
 
-const TestEditorVariantSummary: React.FC<TestEditorVariantSummaryProps> = ({
+const VariantSummary: React.FC<VariantSummaryProps> = ({
   name,
   testName,
   testType,
@@ -60,7 +60,7 @@ const TestEditorVariantSummary: React.FC<TestEditorVariantSummaryProps> = ({
   topButton,
   platform,
   articleType,
-}: TestEditorVariantSummaryProps) => {
+}: VariantSummaryProps) => {
   const classes = useStyles();
 
   return (
@@ -75,7 +75,7 @@ const TestEditorVariantSummary: React.FC<TestEditorVariantSummaryProps> = ({
         </div>
         <div className={classes.buttonsContainer}>
           {topButton}
-          <TestEditorVariantSummaryWebPreviewButton
+          <VariantSummaryWebPreviewButton
             name={name}
             testName={testName}
             testType={testType}
@@ -89,4 +89,4 @@ const TestEditorVariantSummary: React.FC<TestEditorVariantSummaryProps> = ({
   );
 };
 
-export default TestEditorVariantSummary;
+export default VariantSummary;
