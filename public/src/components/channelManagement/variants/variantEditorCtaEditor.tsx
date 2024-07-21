@@ -1,7 +1,7 @@
 import React from 'react';
 import { Checkbox, FormControlLabel, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Cta } from './helpers/shared';
+import { Cta } from '../helpers/shared';
 import VariantEditorCtaFieldsEditor from './variantEditorCtaFieldsEditor';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({

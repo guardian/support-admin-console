@@ -3,8 +3,8 @@ import { Button, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 import AddIcon from '@mui/icons-material/Add';
-import useOpenable from '../../hooks/useOpenable';
-import CreateVariantDialog from './createVariantDialog';
+import useOpenable from '../../../hooks/useOpenable';
+import CreateVariantDialog from '../createVariantDialog';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   button: {

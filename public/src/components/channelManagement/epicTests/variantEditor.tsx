@@ -34,7 +34,7 @@ import {
   RichTextEditor,
   RichTextEditorSingleLine,
 } from '../richTextEditor/richTextEditor';
-import VariantEditorSeparateArticleCountEditor from '../variantEditorSeparateArticleCountEditor';
+import VariantEditorSeparateArticleCountEditor from '../variants/variantEditorSeparateArticleCountEditor';
 import { ImageEditorToggle } from '../imageEditor';
 import { BylineWithImageEditorToggle } from '../bylineWithImageEditor';
 import { EpicVariant, SeparateArticleCount } from '../../../models/epic';

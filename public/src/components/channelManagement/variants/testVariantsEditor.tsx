@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Variant } from './helpers/shared';
+import { Variant } from '../helpers/shared';
 import TestNewVariantButton from './testNewVariantButton';
 import TestVariantEditorsAccordion from './testVariantEditorsAccordion';
 

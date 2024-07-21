@@ -5,17 +5,17 @@ import { ConsentStatus, DeviceType, SignedInStatus, UserCohort } from '../helper
 
 import { Typography } from '@mui/material';
 import HeaderTestVariantEditor from './headerTestVariantEditor';
-import TestVariantsEditor from '../testVariantsEditor';
+import TestVariantsEditor from '../variants/testVariantsEditor';
 import CampaignSelector from '../CampaignSelector';
 
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 
 import { HeaderTest, HeaderVariant } from '../../../models/header';
 import { getDefaultVariant } from './utils/defaults';
-import TestEditorVariantSummary from '../testEditorVariantSummary';
+import TestEditorVariantSummary from '../variants/testEditorVariantSummary';
 
 import { ControlProportionSettings } from '../helpers/controlProportionSettings';
-import TestVariantsSplitEditor from '../testVariantsSplitEditor';
+import TestVariantsSplitEditor from '../variants/testVariantsSplitEditor';
 import { useStyles } from '../helpers/testEditorStyles';
 import { ValidatedTestEditorProps } from '../validatedTestEditor';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Theme, Accordion, AccordionDetails, AccordionActions } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Variant } from './helpers/shared';
+import { Variant } from '../helpers/shared';
 import VariantDeleteButton from './variantDeleteButton';
 import VariantCloneButton from './variantCloneButton';
 

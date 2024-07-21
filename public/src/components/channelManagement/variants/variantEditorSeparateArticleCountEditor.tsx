@@ -1,7 +1,7 @@
 import React from 'react';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import { SeparateArticleCount } from '../../models/epic';
+import { SeparateArticleCount } from '../../../models/epic';
 import { TextField } from '@mui/material';
 import { useForm } from 'react-hook-form';
 

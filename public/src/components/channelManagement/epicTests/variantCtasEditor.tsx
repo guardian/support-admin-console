@@ -1,8 +1,8 @@
 import React from 'react';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import VariantEditorCtaEditor from '../variantEditorCtaEditor';
-import VariantEditorSecondaryCtaEditor from '../variantEditorSecondaryCtaEditor';
+import VariantEditorCtaEditor from '../variants/variantEditorCtaEditor';
+import VariantEditorSecondaryCtaEditor from '../variants/variantEditorSecondaryCtaEditor';
 import { Cta, SecondaryCta } from '../helpers/shared';
 import { DEFAULT_PRIMARY_CTA, DEFAULT_SECONDARY_CTA } from './utils/defaults';
 

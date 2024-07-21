@@ -20,7 +20,7 @@ import {
 } from '../richTextEditor/richTextEditor';
 import TickerEditor from '../tickerEditor';
 import { BannerDesign } from '../../../models/bannerDesign';
-import VariantEditorSeparateArticleCountEditor from '../variantEditorSeparateArticleCountEditor';
+import VariantEditorSeparateArticleCountEditor from '../variants/variantEditorSeparateArticleCountEditor';
 import { SeparateArticleCount } from '../../../models/epic';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type

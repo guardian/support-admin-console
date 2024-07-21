@@ -8,7 +8,7 @@ import {
   DialogTitle,
 } from '@mui/material';
 
-import useOpenable from '../../hooks/useOpenable';
+import useOpenable from '../../../hooks/useOpenable';
 
 interface VariantEditorButtonsEditorProps {
   isDisabled: boolean;
