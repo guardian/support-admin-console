@@ -11,17 +11,17 @@ import { ARTICLE_COUNT_TEMPLATE } from '../helpers/validation';
 import { Typography } from '@mui/material';
 import VariantEditor from './variantEditor';
 import CampaignSelector from '../CampaignSelector';
-import TestVariantsEditor from '../testVariantsEditor';
+import VariantsEditor from '../../tests/variants/variantsEditor';
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 import TestEditorArticleCountEditor, {
   DEFAULT_ARTICLES_VIEWED_SETTINGS,
 } from '../testEditorArticleCountEditor';
 import { BannerContent, BannerTest, BannerVariant } from '../../../models/banner';
 import { getDefaultVariant } from './utils/defaults';
-import TestEditorVariantSummary from '../testEditorVariantSummary';
+import VariantSummary from '../../tests/variants/variantSummary';
 import BannerVariantPreview from './bannerVariantPreview';
 import { ControlProportionSettings } from '../helpers/controlProportionSettings';
-import TestVariantsSplitEditor from '../testVariantsSplitEditor';
+import TestVariantsSplitEditor from '../../tests/variants/testVariantsSplitEditor';
 import { useStyles } from '../helpers/testEditorStyles';
 import { ValidatedTestEditorProps } from '../validatedTestEditor';
 import { BannerDesign } from '../../../models/bannerDesign';
@@ -165,7 +165,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
     const design = getDesignForVariant(variant, designs);
 
     return (
-      <TestEditorVariantSummary
+      <VariantSummary
         name={variant.name}
         testName={test.name}
         testType="BANNER"
@@ -201,7 +201,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
             Variants
           </Typography>
           <div>
-            <TestVariantsEditor
+            <VariantsEditor
               variants={test.variants}
               createVariant={createVariant}
               testName={test.name}

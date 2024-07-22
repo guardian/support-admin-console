@@ -34,7 +34,7 @@ import {
   RichTextEditor,
   RichTextEditorSingleLine,
 } from '../richTextEditor/richTextEditor';
-import VariantEditorSeparateArticleCountEditor from '../variantEditorSeparateArticleCountEditor';
+import VariantSeparateArticleCountEditor from '../../tests/variants/variantSeparateArticleCountEditor';
 import { ImageEditorToggle } from '../imageEditor';
 import { BylineWithImageEditorToggle } from '../bylineWithImageEditor';
 import { EpicVariant, SeparateArticleCount } from '../../../models/epic';
@@ -456,7 +456,7 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
             Separate article count
           </Typography>
 
-          <VariantEditorSeparateArticleCountEditor
+          <VariantSeparateArticleCountEditor
             separateArticleCount={variant.separateArticleCount}
             updateSeparateArticleCount={updateSeparateArticleCount}
             isDisabled={!editMode}

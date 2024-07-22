@@ -3,8 +3,8 @@ import { Button, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 import AddIcon from '@mui/icons-material/Add';
-import useOpenable from '../../hooks/useOpenable';
-import CreateVariantDialog from './createVariantDialog';
+import useOpenable from '../../../hooks/useOpenable';
+import CreateVariantDialog from '../../channelManagement/createVariantDialog';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   button: {
@@ -30,17 +30,17 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   },
 }));
 
-interface BannerTestNewVariantButtonProps {
+interface NewVariantButtonProps {
   existingNames: string[];
   createVariant: (name: string) => void;
   isDisabled: boolean;
 }
 
-const BannerTestNewVariantButton: React.FC<BannerTestNewVariantButtonProps> = ({
+const NewVariantButton: React.FC<NewVariantButtonProps> = ({
   existingNames,
   createVariant,
   isDisabled,
-}: BannerTestNewVariantButtonProps) => {
+}: NewVariantButtonProps) => {
   const classes = useStyles();
   const [isOpen, open, close] = useOpenable();
 
@@ -63,4 +63,4 @@ const BannerTestNewVariantButton: React.FC<BannerTestNewVariantButtonProps> = ({
   );
 };
 
-export default BannerTestNewVariantButton;
+export default NewVariantButton;

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Theme, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Cta, SecondaryCta, SecondaryCtaType } from './helpers/shared';
-import VariantEditorCtaFieldsEditor from './variantEditorCtaFieldsEditor';
+import { Cta, SecondaryCta, SecondaryCtaType } from '../../channelManagement/helpers/shared';
+import VariantCtaFieldsEditor from './variantCtaFieldsEditor';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -80,7 +80,7 @@ const VariantEditorSecondaryCtaEditor: React.FC<VariantEditorSecondaryCtaEditorP
       </div>
 
       {cta?.type === SecondaryCtaType.Custom && (
-        <VariantEditorCtaFieldsEditor
+        <VariantCtaFieldsEditor
           cta={cta.cta}
           updateCta={updateCustomCta}
           onValidationChange={onValidationChange}

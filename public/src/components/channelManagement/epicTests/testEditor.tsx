@@ -12,19 +12,19 @@ import {
 } from '../helpers/shared';
 import { FormControlLabel, Switch, Typography } from '@mui/material';
 import CampaignSelector from '../CampaignSelector';
-import TestVariantsEditor from '../testVariantsEditor';
-import TestEditorVariantSummary from '../testEditorVariantSummary';
+import VariantsEditor from '../../tests/variants/variantsEditor';
+import VariantSummary from '../../tests/variants/variantSummary';
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 import TestEditorArticleCountEditor, {
   DEFAULT_ARTICLES_VIEWED_SETTINGS,
 } from '../testEditorArticleCountEditor';
-import TestVariantEditorWithPreviewTab from '../testVariantEditorWithPreviewTab';
+import VariantEditorWithPreviewTab from '../../tests/variants/variantEditorWithPreviewTab';
 import VariantEditor from './variantEditor';
 import VariantPreview from './variantPreview';
 import TestEditorContextTargeting from '../testEditorContextTargeting';
 import MaxViewsEditor from './maxViewsEditor';
 import { ARTICLE_COUNT_TEMPLATE, COUNTRY_NAME_TEMPLATE } from '../helpers/validation';
-import TestVariantsSplitEditor from '../testVariantsSplitEditor';
+import TestVariantsSplitEditor from '../../tests/variants/testVariantsSplitEditor';
 import { getDefaultVariant } from './utils/defaults';
 import {
   canHaveCustomVariantSplit,
@@ -193,7 +193,7 @@ export const getEpicTestEditor = (
     ): void => updateTest({ ...test, controlProportionSettings });
 
     const renderVariantEditor = (variant: EpicVariant): React.ReactElement => (
-      <TestVariantEditorWithPreviewTab
+      <VariantEditorWithPreviewTab
         variantEditor={
           <VariantEditor
             epicEditorConfig={epicEditorConfig}
@@ -218,7 +218,7 @@ export const getEpicTestEditor = (
     );
 
     const renderVariantSummary = (variant: EpicVariant): React.ReactElement => (
-      <TestEditorVariantSummary
+      <VariantSummary
         name={variant.name}
         testName={test.name}
         testType="EPIC"
@@ -246,7 +246,7 @@ export const getEpicTestEditor = (
               </div>
             </div>
             <div>
-              <TestVariantsEditor<EpicVariant>
+              <VariantsEditor<EpicVariant>
                 variants={test.variants}
                 testName={test.name}
                 editMode={userHasTestLocked}

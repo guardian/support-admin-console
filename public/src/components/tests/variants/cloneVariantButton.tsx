@@ -1,22 +1,22 @@
 import React from 'react';
 import { Button } from '@mui/material';
-import { Variant } from './helpers/shared';
-import useOpenable from '../../hooks/useOpenable';
-import CreateVariantDialog from './createVariantDialog';
+import { Variant } from '../../channelManagement/helpers/shared';
+import useOpenable from '../../../hooks/useOpenable';
+import CreateVariantDialog from '../../channelManagement/createVariantDialog';
 
-interface VariantEditorButtonsEditorProps<V extends Variant> {
+interface CloneVariantButtonProps<V extends Variant> {
   existingNames: string[];
   cloneVariant: (originalVariant: V, clonedVariantName: string) => void;
   currentVariant: V;
   isDisabled: boolean;
 }
 
-function VariantEditorButtonsEditor<V extends Variant>({
+function CloneVariantButtonsEditor<V extends Variant>({
   existingNames,
   cloneVariant,
   currentVariant,
   isDisabled,
-}: VariantEditorButtonsEditorProps<V>): React.ReactElement<VariantEditorButtonsEditorProps<V>> {
+}: CloneVariantButtonProps<V>): React.ReactElement<CloneVariantButtonProps<V>> {
   const [isOpen, open, close] = useOpenable();
 
   return (
@@ -35,4 +35,4 @@ function VariantEditorButtonsEditor<V extends Variant>({
   );
 }
 
-export default VariantEditorButtonsEditor;
+export default CloneVariantButtonsEditor;

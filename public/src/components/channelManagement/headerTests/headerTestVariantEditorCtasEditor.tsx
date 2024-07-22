@@ -1,7 +1,7 @@
 import React from 'react';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import VariantEditorCtaEditor from '../variantEditorCtaEditor';
+import VariantCtaEditor from '../../tests/variants/variantCtaEditor';
 
 import { Cta } from '../helpers/shared';
 
@@ -38,7 +38,7 @@ const HeaderTestVariantEditorCtasEditor: React.FC<HeaderTestVariantEditorCtasEdi
 
   return (
     <div className={classes.container}>
-      <VariantEditorCtaEditor
+      <VariantCtaEditor
         label="Primary button"
         isDisabled={isDisabled}
         cta={primaryCta}
@@ -48,7 +48,7 @@ const HeaderTestVariantEditorCtasEditor: React.FC<HeaderTestVariantEditorCtasEdi
       />
 
       {supportSecondaryCta && (
-        <VariantEditorCtaEditor
+        <VariantCtaEditor
           label="Secondary button"
           isDisabled={isDisabled}
           cta={secondaryCta}

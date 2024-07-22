@@ -2,7 +2,7 @@ import React from 'react';
 import { EpicVariant } from '../../../models/epic';
 import { Cta } from '../helpers/shared';
 import { FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
-import VariantEditorCtaFieldsEditor from '../variantEditorCtaFieldsEditor';
+import VariantCtaFieldsEditor from '../../tests/variants/variantCtaFieldsEditor';
 import { DEFAULT_PRIMARY_CTA } from './utils/defaults';
 
 interface AppleNewsChoiceCardsProps {
@@ -52,7 +52,7 @@ export const AppleNewsChoiceCards: React.FC<AppleNewsChoiceCardsProps> = ({
         />
       </RadioGroup>
       {primaryCtaEnabled && (
-        <VariantEditorCtaFieldsEditor
+        <VariantCtaFieldsEditor
           cta={variant.cta ?? DEFAULT_PRIMARY_CTA}
           updateCta={updatePrimaryCta}
           onValidationChange={onValidationChange}

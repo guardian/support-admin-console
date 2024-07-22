@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import { TestPlatform, TestType } from './helpers/shared';
-import { getStage, Stage } from '../../utils/stage';
+import { TestPlatform, TestType } from '../../channelManagement/helpers/shared';
+import { getStage, Stage } from '../../../utils/stage';
 
 export type ArticleType = 'Standard' | 'Liveblog';
 
@@ -42,7 +42,7 @@ const getPreviewUrl = (
   return `https://${getHostName(stage, platform)}/${ArticlePaths[articleType]}${queryString}`;
 };
 
-interface TestEditorVariantSummaryPreviewButtonProps {
+interface VariantSummaryPreviewButtonProps {
   name: string;
   testName: string;
   testType: TestType;
@@ -51,14 +51,14 @@ interface TestEditorVariantSummaryPreviewButtonProps {
   articleType: ArticleType;
 }
 
-const TestEditorVariantSummaryWebPreviewButton: React.FC<TestEditorVariantSummaryPreviewButtonProps> = ({
+const VariantSummaryWebPreviewButton: React.FC<VariantSummaryPreviewButtonProps> = ({
   name,
   testName,
   testType,
   platform,
   isDisabled,
   articleType,
-}: TestEditorVariantSummaryPreviewButtonProps) => {
+}: VariantSummaryPreviewButtonProps) => {
   const isIncompatiblePlatform = ['APPLE_NEWS', 'AMP'].includes(platform);
 
   const checkForDisabledButton = (): boolean => {
@@ -90,4 +90,4 @@ const TestEditorVariantSummaryWebPreviewButton: React.FC<TestEditorVariantSummar
     </Button>
   );
 };
-export default TestEditorVariantSummaryWebPreviewButton;
+export default VariantSummaryWebPreviewButton;

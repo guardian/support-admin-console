@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Variant } from './helpers/shared';
-import TestNewVariantButton from './testNewVariantButton';
-import TestVariantEditorsAccordion from './testVariantEditorsAccordion';
+import { Variant } from '../../channelManagement/helpers/shared';
+import VariantEditorsAccordion from './variantEditorsAccordion';
+import NewVariantButton from './newVariantButton';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -13,7 +13,7 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   },
 }));
 
-interface TestVariantsEditorProps<V extends Variant> {
+interface VariantsEditorProps<V extends Variant> {
   variants: V[];
   testName: string;
   editMode: boolean;
@@ -24,7 +24,7 @@ interface TestVariantsEditorProps<V extends Variant> {
   onVariantClone: (originalVariant: V, variantName: string) => void;
 }
 
-function TestVariantsEditor<V extends Variant>({
+function VariantsEditor<V extends Variant>({
   variants,
   testName,
   editMode,
@@ -33,7 +33,7 @@ function TestVariantsEditor<V extends Variant>({
   renderVariantSummary,
   onVariantDelete,
   onVariantClone,
-}: TestVariantsEditorProps<V>): React.ReactElement<TestVariantsEditorProps<V>> {
+}: VariantsEditorProps<V>): React.ReactElement<VariantsEditorProps<V>> {
   const classes = useStyles();
   const [selectedVariantKey, setSelectedVariantKey] = useState<string | null>(null);
 
@@ -51,7 +51,7 @@ function TestVariantsEditor<V extends Variant>({
 
   return (
     <div className={classes.container}>
-      <TestVariantEditorsAccordion<V>
+      <VariantEditorsAccordion<V>
         variants={variants}
         variantKeys={variantKeys}
         existingNames={variantNames}
@@ -64,7 +64,7 @@ function TestVariantsEditor<V extends Variant>({
         onVariantClone={onVariantClone}
       />
 
-      <TestNewVariantButton
+      <NewVariantButton
         existingNames={variantNames}
         createVariant={createVariant}
         isDisabled={!editMode}
@@ -73,4 +73,4 @@ function TestVariantsEditor<V extends Variant>({
   );
 }
 
-export default TestVariantsEditor;
+export default VariantsEditor;

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Checkbox, FormControlLabel, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Cta } from './helpers/shared';
-import VariantEditorCtaFieldsEditor from './variantEditorCtaFieldsEditor';
+import { Cta } from '../../channelManagement/helpers/shared';
+import VariantCtaFieldsEditor from './variantCtaFieldsEditor';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -20,7 +20,7 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   },
 }));
 
-interface VariantEditorCtaEditorProps {
+interface VariantCtaEditorProps {
   label: string;
   cta?: Cta;
   updateCta: (updatedCta?: Cta) => void;
@@ -29,14 +29,14 @@ interface VariantEditorCtaEditorProps {
   isDisabled: boolean;
 }
 
-const VariantEditorCtaEditor: React.FC<VariantEditorCtaEditorProps> = ({
+const VariantCtaEditor: React.FC<VariantCtaEditorProps> = ({
   label,
   cta,
   updateCta,
   onValidationChange,
   defaultCta,
   isDisabled,
-}: VariantEditorCtaEditorProps) => {
+}: VariantCtaEditorProps) => {
   const classes = useStyles();
   const isChecked = cta !== undefined;
 
@@ -63,7 +63,7 @@ const VariantEditorCtaEditor: React.FC<VariantEditorCtaEditorProps> = ({
 
       {cta && (
         <div className={classes.fieldsContainer}>
-          <VariantEditorCtaFieldsEditor
+          <VariantCtaFieldsEditor
             cta={cta}
             updateCta={updateCta}
             onValidationChange={onValidationChange}
@@ -75,4 +75,4 @@ const VariantEditorCtaEditor: React.FC<VariantEditorCtaEditorProps> = ({
   );
 };
 
-export default VariantEditorCtaEditor;
+export default VariantCtaEditor;
