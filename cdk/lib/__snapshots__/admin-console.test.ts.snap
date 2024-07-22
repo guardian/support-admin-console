@@ -144,6 +144,37 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
       },
       "Type": "AWS::SSM::Parameter",
     },
+    "AllowKnownMethods07D772B3": {
+      "Properties": {
+        "Actions": [
+          {
+            "TargetGroupArn": {
+              "Ref": "TargetGroupAdminconsole160A1621",
+            },
+            "Type": "forward",
+          },
+        ],
+        "Conditions": [
+          {
+            "Field": "http-request-method",
+            "HttpRequestMethodConfig": {
+              "Values": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "HEAD",
+              ],
+            },
+          },
+        ],
+        "ListenerArn": {
+          "Ref": "ListenerAdminconsole3E633904",
+        },
+        "Priority": 1,
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::ListenerRule",
+    },
     "ArchivedBannerDesignsDynamoTable": {
       "DeletionPolicy": "Retain",
       "Properties": {
@@ -383,6 +414,35 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
       },
       "Type": "AWS::DynamoDB::Table",
       "UpdateReplacePolicy": "Retain",
+    },
+    "BlockUnknownMethods281EDB58": {
+      "Properties": {
+        "Actions": [
+          {
+            "FixedResponseConfig": {
+              "ContentType": "application/json",
+              "MessageBody": "Unsupported http method",
+              "StatusCode": "400",
+            },
+            "Type": "fixed-response",
+          },
+        ],
+        "Conditions": [
+          {
+            "Field": "path-pattern",
+            "PathPatternConfig": {
+              "Values": [
+                "*",
+              ],
+            },
+          },
+        ],
+        "ListenerArn": {
+          "Ref": "ListenerAdminconsole3E633904",
+        },
+        "Priority": 2,
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::ListenerRule",
     },
     "CampaignsDynamoTable": {
       "DeletionPolicy": "Retain",
