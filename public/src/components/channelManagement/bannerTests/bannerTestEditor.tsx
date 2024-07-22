@@ -11,7 +11,7 @@ import { ARTICLE_COUNT_TEMPLATE } from '../helpers/validation';
 import { Typography } from '@mui/material';
 import VariantEditor from './variantEditor';
 import CampaignSelector from '../CampaignSelector';
-import TestVariantsEditor from '../../tests/variants/testVariantsEditor';
+import VariantsEditor from '../../tests/variants/variantsEditor';
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 import TestEditorArticleCountEditor, {
   DEFAULT_ARTICLES_VIEWED_SETTINGS,
@@ -201,7 +201,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
             Variants
           </Typography>
           <div>
-            <TestVariantsEditor
+            <VariantsEditor
               variants={test.variants}
               createVariant={createVariant}
               testName={test.name}

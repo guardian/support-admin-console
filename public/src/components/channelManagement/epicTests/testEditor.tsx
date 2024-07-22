@@ -12,13 +12,13 @@ import {
 } from '../helpers/shared';
 import { FormControlLabel, Switch, Typography } from '@mui/material';
 import CampaignSelector from '../CampaignSelector';
-import TestVariantsEditor from '../../tests/variants/testVariantsEditor';
+import VariantsEditor from '../../tests/variants/variantsEditor';
 import VariantSummary from '../../tests/variants/variantSummary';
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 import TestEditorArticleCountEditor, {
   DEFAULT_ARTICLES_VIEWED_SETTINGS,
 } from '../testEditorArticleCountEditor';
-import TestVariantEditorWithPreviewTab from '../../tests/variants/testVariantEditorWithPreviewTab';
+import VariantEditorWithPreviewTab from '../../tests/variants/variantEditorWithPreviewTab';
 import VariantEditor from './variantEditor';
 import VariantPreview from './variantPreview';
 import TestEditorContextTargeting from '../testEditorContextTargeting';
@@ -193,7 +193,7 @@ export const getEpicTestEditor = (
     ): void => updateTest({ ...test, controlProportionSettings });
 
     const renderVariantEditor = (variant: EpicVariant): React.ReactElement => (
-      <TestVariantEditorWithPreviewTab
+      <VariantEditorWithPreviewTab
         variantEditor={
           <VariantEditor
             epicEditorConfig={epicEditorConfig}
@@ -246,7 +246,7 @@ export const getEpicTestEditor = (
               </div>
             </div>
             <div>
-              <TestVariantsEditor<EpicVariant>
+              <VariantsEditor<EpicVariant>
                 variants={test.variants}
                 testName={test.name}
                 editMode={userHasTestLocked}

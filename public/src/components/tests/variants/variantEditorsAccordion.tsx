@@ -2,8 +2,8 @@ import React from 'react';
 import { Theme, Accordion, AccordionDetails, AccordionActions } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Variant } from '../../channelManagement/helpers/shared';
-import VariantDeleteButton from './variantDeleteButton';
-import VariantCloneButton from './variantCloneButton';
+import CloneVariantButton from './cloneVariantButton';
+import DeleteVariantButton from './deleteVariantButton';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   expansionPanelsContainer: {
@@ -31,7 +31,7 @@ interface TestVariantEditorsAccordionProps<V extends Variant> {
   onVariantClone: (originalVariant: V, variantName: string) => void;
 }
 
-function TestVariantEditorsAccordion<V extends Variant>({
+function VariantEditorsAccordion<V extends Variant>({
   variants,
   variantKeys,
   existingNames,
@@ -62,13 +62,13 @@ function TestVariantEditorsAccordion<V extends Variant>({
               {variantKey === selectedVariantKey && renderVariantEditor(variant)}
             </AccordionDetails>
             <AccordionActions>
-              <VariantCloneButton
+              <CloneVariantButton
                 isDisabled={!editMode}
                 existingNames={existingNames}
                 cloneVariant={onVariantClone}
                 currentVariant={variant}
               />
-              <VariantDeleteButton
+              <DeleteVariantButton
                 isDisabled={!editMode}
                 onConfirm={(): void => onVariantDelete(variant.name)}
               />
@@ -80,4 +80,4 @@ function TestVariantEditorsAccordion<V extends Variant>({
   );
 }
 
-export default TestVariantEditorsAccordion;
+export default VariantEditorsAccordion;

@@ -10,15 +10,15 @@ import {
 
 import useOpenable from '../../../hooks/useOpenable';
 
-interface VariantEditorButtonsEditorProps {
+interface DeleteVariantButtonProps {
   isDisabled: boolean;
   onConfirm: () => void;
 }
 
-const VariantEditorButtonsEditor: React.FC<VariantEditorButtonsEditorProps> = ({
+const DeleteVariantButtonsEditor: React.FC<DeleteVariantButtonProps> = ({
   isDisabled,
   onConfirm,
-}: VariantEditorButtonsEditorProps) => {
+}: DeleteVariantButtonProps) => {
   const [isOpen, open, close] = useOpenable();
 
   const submit = (): void => {
@@ -56,4 +56,4 @@ const VariantEditorButtonsEditor: React.FC<VariantEditorButtonsEditorProps> = ({
   );
 };
 
-export default VariantEditorButtonsEditor;
+export default DeleteVariantButtonsEditor;

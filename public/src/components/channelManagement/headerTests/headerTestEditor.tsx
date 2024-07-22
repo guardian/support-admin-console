@@ -5,7 +5,7 @@ import { ConsentStatus, DeviceType, SignedInStatus, UserCohort } from '../helper
 
 import { Typography } from '@mui/material';
 import HeaderTestVariantEditor from './headerTestVariantEditor';
-import TestVariantsEditor from '../../tests/variants/testVariantsEditor';
+import VariantsEditor from '../../tests/variants/variantsEditor';
 import CampaignSelector from '../CampaignSelector';
 
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
@@ -125,7 +125,7 @@ const HeaderTestEditor: React.FC<ValidatedTestEditorProps<HeaderTest>> = ({
           Variants
         </Typography>
         <div>
-          <TestVariantsEditor
+          <VariantsEditor
             variants={test.variants}
             createVariant={createVariant}
             testName={test.name}

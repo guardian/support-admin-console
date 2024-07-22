@@ -4,7 +4,10 @@ import { makeStyles } from '@mui/styles';
 import { Variant } from '../../channelManagement/helpers/shared';
 import { EMPTY_ERROR_HELPER_TEXT } from '../../channelManagement/helpers/validation';
 import { useForm } from 'react-hook-form';
-import { ControlProportionSettings, hasControl } from '../../channelManagement/helpers/controlProportionSettings';
+import {
+  ControlProportionSettings,
+  hasControl,
+} from '../../channelManagement/helpers/controlProportionSettings';
 
 const MAX_MVT = 1_000_000;
 

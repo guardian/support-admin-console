@@ -19,15 +19,15 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   },
 }));
 
-interface TestVariantEditorProps {
+interface VariantEditorProps {
   variantEditor: React.ReactElement;
   variantPreview?: React.ReactElement;
 }
 
-function TestVariantEditorWithPreviewTab({
+function VariantEditorWithPreviewTab({
   variantEditor,
   variantPreview,
-}: TestVariantEditorProps): React.ReactElement<TestVariantEditorProps> {
+}: VariantEditorProps): React.ReactElement<VariantEditorProps> {
   const classes = useStyles();
 
   const [value, setValue] = useState(0);
@@ -57,4 +57,4 @@ function TestVariantEditorWithPreviewTab({
   );
 }
 
-export default TestVariantEditorWithPreviewTab;
+export default VariantEditorWithPreviewTab;
