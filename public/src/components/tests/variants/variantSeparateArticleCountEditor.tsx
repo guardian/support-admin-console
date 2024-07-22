@@ -9,17 +9,17 @@ interface FormData {
   copy: string;
 }
 
-interface VariantEditorSeparateArticleCountEditorProps {
+interface VariantSeparateArticleCountEditorProps {
   separateArticleCount?: SeparateArticleCount;
   updateSeparateArticleCount: (separateArticleCount?: SeparateArticleCount) => void;
   isDisabled: boolean;
 }
 
-const VariantEditorSeparateArticleCountEditor: React.FC<VariantEditorSeparateArticleCountEditorProps> = ({
+const VariantSeparateArticleCountEditor: React.FC<VariantSeparateArticleCountEditorProps> = ({
   separateArticleCount,
   updateSeparateArticleCount,
   isDisabled,
-}: VariantEditorSeparateArticleCountEditorProps) => {
+}: VariantSeparateArticleCountEditorProps) => {
   const onChange = (): void => {
     updateSeparateArticleCount(Boolean(separateArticleCount) ? undefined : { type: 'above' });
   };
@@ -67,4 +67,4 @@ const VariantEditorSeparateArticleCountEditor: React.FC<VariantEditorSeparateArt
   );
 };
 
-export default VariantEditorSeparateArticleCountEditor;
+export default VariantSeparateArticleCountEditor;

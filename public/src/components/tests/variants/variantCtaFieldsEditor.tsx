@@ -9,19 +9,19 @@ interface FormData {
   baseUrl: string;
 }
 
-interface VariantEditorCtaFieldsEditorProps {
+interface VariantCtaFieldsEditorProps {
   cta: Cta;
   updateCta: (updatedCta: Cta) => void;
   onValidationChange: (isValid: boolean) => void;
   isDisabled: boolean;
 }
 
-const VariantEditorCtaFieldsEditor: React.FC<VariantEditorCtaFieldsEditorProps> = ({
+const VariantCtaFieldsEditor: React.FC<VariantCtaFieldsEditorProps> = ({
   cta,
   updateCta,
   onValidationChange,
   isDisabled,
-}: VariantEditorCtaFieldsEditorProps) => {
+}: VariantCtaFieldsEditorProps) => {
   const defaultValues: FormData = {
     text: cta.text,
     baseUrl: cta.baseUrl,
@@ -73,4 +73,4 @@ const VariantEditorCtaFieldsEditor: React.FC<VariantEditorCtaFieldsEditorProps> 
   );
 };
 
-export default VariantEditorCtaFieldsEditor;
+export default VariantCtaFieldsEditor;

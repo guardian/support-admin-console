@@ -20,7 +20,7 @@ import {
 } from '../richTextEditor/richTextEditor';
 import TickerEditor from '../tickerEditor';
 import { BannerDesign } from '../../../models/bannerDesign';
-import VariantEditorSeparateArticleCountEditor from '../../tests/variants/variantEditorSeparateArticleCountEditor';
+import VariantSeparateArticleCountEditor from '../../tests/variants/variantSeparateArticleCountEditor';
 import { SeparateArticleCount } from '../../../models/epic';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -445,7 +445,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
           Separate article count
         </Typography>
 
-        <VariantEditorSeparateArticleCountEditor
+        <VariantSeparateArticleCountEditor
           separateArticleCount={variant.separateArticleCountSettings}
           updateSeparateArticleCount={updateSeparateArticleCountSettings}
           isDisabled={!editMode}

@@ -18,7 +18,7 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   },
 }));
 
-interface TestVariantEditorsAccordionProps<V extends Variant> {
+interface VariantEditorsAccordionProps<V extends Variant> {
   variants: V[];
   variantKeys: string[];
   existingNames: string[];
@@ -42,7 +42,7 @@ function VariantEditorsAccordion<V extends Variant>({
   renderVariantSummary,
   onVariantDelete,
   onVariantClone,
-}: TestVariantEditorsAccordionProps<V>): React.ReactElement<TestVariantEditorsAccordionProps<V>> {
+}: VariantEditorsAccordionProps<V>): React.ReactElement<VariantEditorsAccordionProps<V>> {
   const classes = useStyles();
 
   return (

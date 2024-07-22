@@ -1,13 +1,13 @@
 import React from 'react';
 import Alert from '@mui/lab/Alert';
 
-interface VariantEditorCopyLengthWarningProps {
+interface VariantCopyLengthWarningProps {
   charLimit: number;
 }
 
-const VariantEditorCopyLengthWarning: React.FC<VariantEditorCopyLengthWarningProps> = ({
+const VariantCopyLengthWarning: React.FC<VariantCopyLengthWarningProps> = ({
   charLimit,
-}: VariantEditorCopyLengthWarningProps) => {
+}: VariantCopyLengthWarningProps) => {
   return (
     <Alert severity="warning">
       This copy is longer than the recommended <strong>{charLimit}</strong> characters. Please
@@ -16,4 +16,4 @@ const VariantEditorCopyLengthWarning: React.FC<VariantEditorCopyLengthWarningPro
   );
 };
 
-export default VariantEditorCopyLengthWarning;
+export default VariantCopyLengthWarning;

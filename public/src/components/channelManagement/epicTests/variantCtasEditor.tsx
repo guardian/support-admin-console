@@ -1,7 +1,7 @@
 import React from 'react';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import VariantEditorCtaEditor from '../../tests/variants/variantEditorCtaEditor';
+import VariantCtaEditor from '../../tests/variants/variantCtaEditor';
 import VariantEditorSecondaryCtaEditor from '../../tests/variants/variantEditorSecondaryCtaEditor';
 import { Cta, SecondaryCta } from '../helpers/shared';
 import { DEFAULT_PRIMARY_CTA, DEFAULT_SECONDARY_CTA } from './utils/defaults';
@@ -39,7 +39,7 @@ const EpicTestVariantEditorButtonsEditor: React.FC<EpicTestVariantEditorButtonsE
 
   return (
     <div className={classes.container}>
-      <VariantEditorCtaEditor
+      <VariantCtaEditor
         label="Primary button"
         isDisabled={isDisabled}
         cta={primaryCta}

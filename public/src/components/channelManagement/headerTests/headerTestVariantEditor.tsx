@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { TextField, Theme, Typography, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import HeaderTestVariantEditorCtasEditor from './headerTestVariantEditorCtasEditor';
-import VariantEditorCopyLengthWarning from '../../tests/variants/variantEditorCopyLengthWarning';
+import VariantCopyLengthWarning from '../../tests/variants/variantCopyLengthWarning';
 import { templateValidatorForPlatform } from '../helpers/validation';
 import { Cta } from '../helpers/shared';
 import { HeaderContent, HeaderVariant } from '../../../models/header';
@@ -144,7 +144,7 @@ const HeaderTestVariantContentEditor: React.FC<HeaderTestVariantContentEditorPro
               />
 
               {headingCopyLength > HEADING_COPY_RECOMMENDED_LENGTH && (
-                <VariantEditorCopyLengthWarning charLimit={HEADING_COPY_RECOMMENDED_LENGTH} />
+                <VariantCopyLengthWarning charLimit={HEADING_COPY_RECOMMENDED_LENGTH} />
               )}
             </div>
           </div>
@@ -167,7 +167,7 @@ const HeaderTestVariantContentEditor: React.FC<HeaderTestVariantContentEditorPro
               />
 
               {subheadingCopyLength > SUBHEADING_COPY_RECOMMENDED_LENGTH && (
-                <VariantEditorCopyLengthWarning charLimit={SUBHEADING_COPY_RECOMMENDED_LENGTH} />
+                <VariantCopyLengthWarning charLimit={SUBHEADING_COPY_RECOMMENDED_LENGTH} />
               )}
             </div>
           </div>
