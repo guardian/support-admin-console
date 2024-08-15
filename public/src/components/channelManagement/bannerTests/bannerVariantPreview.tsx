@@ -5,12 +5,12 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import Drawer from '@mui/material/Drawer';
 import { BannerContent, BannerVariant } from '../../../models/banner';
 import Typography from '@mui/material/Typography';
-import { useModule } from '../../../hooks/useModule';
 import useTickerData, { TickerSettingsWithData } from '../hooks/useTickerData';
 import { mockAmountsCardData, SelectedAmountsVariant } from '../../../utils/models';
 import { BannerDesign, BannerDesignProps } from '../../../models/bannerDesign';
 import { ArticleCounts } from '../epicTests/variantPreview';
 import { SeparateArticleCount } from '../../../models/epic';
+import { buildStorybookUrl } from '../helpers/dcrStorybook';
 
 // Mock prices data
 interface ProductPriceData {
@@ -114,16 +114,9 @@ const buildProps = (
   };
 };
 
-const bannerModules = {
-  DesignableBanner: {
-    path: 'designableBanner/DesignableBanner.js',
-    name: 'DesignableBanner',
-  },
-};
-
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   drawer: {
-    height: 'auto',
+    height: '400px',
     bottom: 0,
     top: 'auto',
     width: '100%',
@@ -149,6 +142,10 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
     left: spacing(3),
     padding: spacing(3),
   },
+  iframe: {
+    width: '100vw',
+    height: '100vh',
+  },
 }));
 
 interface BannerVariantPreviewProps {
@@ -167,43 +164,38 @@ const BannerVariantPreview: React.FC<BannerVariantPreviewProps> = ({
   const [drawerOpen, setDrawerOpen] = useState<boolean>();
   const tickerSettingsWithData = useTickerData(variant.tickerSettings);
 
-  const moduleConfig = {
-    path: `banners/${bannerModules['DesignableBanner'].path}`,
-    name: bannerModules['DesignableBanner'].name,
-  };
-
-  const Banner = useModule<BannerProps>(moduleConfig.path, moduleConfig.name);
-
   const toggleDrawer = (open: boolean) => (event: React.MouseEvent): void => {
     event.stopPropagation();
     setDrawerOpen(open);
   };
 
   const props = buildProps(variant, tickerSettingsWithData, design);
+  const storyName = 'components-marketing-designablebanner--default';
+  const storybookUrl = buildStorybookUrl(storyName, props);
 
   return (
     <div>
-      {Banner && (
-        <React.Fragment key={anchor}>
-          <Button startIcon={<VisibilityIcon />} size="small" onClick={toggleDrawer(true)}>
-            Live preview
-          </Button>
-          <Drawer
-            anchor={anchor}
-            open={drawerOpen}
-            onClose={toggleDrawer(false)}
-            classes={{ paper: classes.drawer }}
-          >
-            <div>
-              <div className={classes.hint} onClick={toggleDrawer(false)}>
-                <Typography>Click anywhere outside the banner to close</Typography>
-              </div>
-              <Banner {...props} />
-              {controls && <div className={classes.controlsContainer}>{controls}</div>}
+      <React.Fragment key={anchor}>
+        <Button startIcon={<VisibilityIcon />} size="small" onClick={toggleDrawer(true)}>
+          Live preview
+        </Button>
+        <Drawer
+          anchor={anchor}
+          open={drawerOpen}
+          onClose={toggleDrawer(false)}
+          classes={{ paper: classes.drawer }}
+        >
+          <div>
+            <div className={classes.hint} onClick={toggleDrawer(false)}>
+              <Typography>Click anywhere outside the banner to close</Typography>
             </div>
-          </Drawer>
-        </React.Fragment>
-      )}
+            <div>
+              <iframe className={classes.iframe} src={storybookUrl}></iframe>
+            </div>
+            {controls && <div className={classes.controlsContainer}>{controls}</div>}
+          </div>
+        </Drawer>
+      </React.Fragment>
     </div>
   );
 };

@@ -6,7 +6,7 @@ import { EpicModuleName } from '../helpers/shared';
 import { EpicVariant } from '../../../models/epic';
 import useTickerData, { TickerSettingsWithData } from '../hooks/useTickerData';
 import { SelectedAmountsVariant, mockAmountsCardData } from '../../../utils/models';
-import lzstring from 'lz-string';
+import { buildStorybookUrl } from '../helpers/dcrStorybook';
 
 // Article count TS defs
 export interface ArticleCounts {
@@ -134,18 +134,13 @@ const VariantPreview: React.FC<EpicVariantPreviewProps> = ({
 
   const tickerSettingsWithData = useTickerData(variant.tickerSettings);
   const props = buildProps(variant, tickerSettingsWithData);
-  const compressedProps = lzstring.compressToEncodedURIComponent(JSON.stringify(props));
 
   const storyName = StorybookNames[moduleName];
-  // this is the storybook url for the main branch of DCR
-  const dcrStorybookUrl = 'https://main--63e251470cfbe61776b0ef19.chromatic.com';
+  const storybookUrl = buildStorybookUrl(storyName, props);
 
   return (
     <div>
-      <iframe
-        className={classes.iframe}
-        src={`${dcrStorybookUrl}/iframe.html?id=${storyName}&viewMode=story&shortcuts=false&singleStory=true&args=json:${compressedProps}`}
-      ></iframe>
+      <iframe className={classes.iframe} src={storybookUrl}></iframe>
     </div>
   );
 };
