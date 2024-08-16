@@ -175,32 +175,6 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
             fullWidth
           />
 
-          <TextField
-            inputRef={register({ required: true })}
-            error={!!errors.goalReachedPrimary}
-            helperText={errors?.goalReachedPrimary?.message}
-            onBlur={handleSubmit(onSubmit)}
-            name="goalReachedPrimary"
-            label="Goal reached primary text"
-            margin="normal"
-            variant="outlined"
-            disabled={isDisabled}
-            fullWidth
-          />
-
-          <TextField
-            inputRef={register({ required: true })}
-            error={!!errors.goalReachedSecondary}
-            helperText={errors?.goalReachedSecondary?.message}
-            onBlur={handleSubmit(onSubmit)}
-            name="goalReachedSecondary"
-            label="Goal reached secondary text"
-            margin="normal"
-            variant="outlined"
-            disabled={isDisabled}
-            fullWidth
-          />
-
           {tickerSettings.countType === 'money' && (
             <TextField
               inputRef={register({ required: true })}
@@ -220,7 +194,7 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
             <FormControl component="fieldset">
               <FormLabel component="legend">Ticker end type</FormLabel>
               <RadioGroup
-                value={tickerSettings.endType}
+                value={TickerEndType.hardstop}
                 onChange={onEndTypeChanged}
                 aria-label="ticker-end-type"
                 name="ticker-end-type"
@@ -229,12 +203,6 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
                   value={TickerEndType.hardstop}
                   control={<Radio />}
                   label="Hard stop"
-                  disabled={isDisabled}
-                />
-                <FormControlLabel
-                  value={TickerEndType.unlimited}
-                  control={<Radio />}
-                  label="Unlimited"
                   disabled={isDisabled}
                 />
               </RadioGroup>
