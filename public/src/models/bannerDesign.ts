@@ -31,10 +31,11 @@ export interface CtaDesign {
 }
 
 export interface TickerDesign {
-  text: HexColour;
-  filledProgress: HexColour;
-  progressBarBackground: HexColour;
-  goalMarker: HexColour;
+  headlineColour: HexColour;
+  totalColour: HexColour;
+  goalColour: HexColour;
+  filledProgressColour: HexColour;
+  progressBarBackgroundColour: HexColour;
 }
 
 export interface BannerDesignHeaderImage {

@@ -32,27 +32,43 @@ export const TickerDesignEditor: React.FC<Props> = ({
   return (
     <div className={classes.container}>
       <ColourInput
-        colour={ticker.text}
+        colour={ticker.headlineColour}
         name="ticker.text"
         label="Text Colour"
         isDisabled={isDisabled}
-        onChange={colour => onChange({ ...ticker, text: colour })}
+        onChange={colour => onChange({ ...ticker, headlineColour: colour })}
         onValidationChange={onValidationChange}
       />
       <ColourInput
-        colour={ticker.progressBarBackground}
+        colour={ticker.totalColour}
         name="ticker.progressBarBackground"
         label="Progress Bar Background Colour"
         isDisabled={isDisabled}
-        onChange={colour => onChange({ ...ticker, progressBarBackground: colour })}
+        onChange={colour => onChange({ ...ticker, totalColour: colour })}
         onValidationChange={onValidationChange}
       />
       <ColourInput
-        colour={ticker.filledProgress}
+        colour={ticker.goalColour}
         name="ticker.filledProgress"
         label="Filled Progress Colour"
         isDisabled={isDisabled}
-        onChange={colour => onChange({ ...ticker, filledProgress: colour })}
+        onChange={colour => onChange({ ...ticker, goalColour: colour })}
+        onValidationChange={onValidationChange}
+      />
+      <ColourInput
+        colour={ticker.filledProgressColour}
+        name="ticker.text"
+        label="Text Colour"
+        isDisabled={isDisabled}
+        onChange={colour => onChange({ ...ticker, filledProgressColour: colour })}
+        onValidationChange={onValidationChange}
+      />
+      <ColourInput
+        colour={ticker.progressBarBackgroundColour}
+        name="ticker.progressBarBackground"
+        label="Progress Bar Background Colour"
+        isDisabled={isDisabled}
+        onChange={colour => onChange({ ...ticker, progressBarBackgroundColour: colour })}
         onValidationChange={onValidationChange}
       />
     </div>
