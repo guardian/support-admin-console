@@ -39,7 +39,7 @@ const DEFAULT_TICKER_SETTINGS: TickerSettings = {
   countType: TickerCountType.money,
   copy: {
     countLabel: 'Contributions',
-    goalReachedPrimary: "", //deprecated for now
+    goalReachedPrimary: '', //deprecated for now
     goalReachedSecondary: '', //deprecated for now
   },
   currencySymbol: '$',
@@ -54,7 +54,10 @@ interface TickerEditorProps {
     name: TickerName;
     currencySymbol: string;
     countType: TickerCountType;
-    copy: { goalReachedSecondary: string | undefined; countLabel: string; goalReachedPrimary: string | undefined }
+    copy: {
+      goalReachedSecondary: string | undefined;
+      countLabel: string;
+      goalReachedPrimary: string | undefined }
   }) => void;
   onValidationChange: (isValid: boolean) => void;
 }
