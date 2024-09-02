@@ -29,8 +29,8 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 
 interface FormData {
   countLabel: string;
-  goalReachedPrimary: string;
-  goalReachedSecondary: string;
+  goalReachedPrimary?: string; //deprecated for now
+  goalReachedSecondary?: string; //deprecated for now
   currencySymbol: string;
 }
 
@@ -38,9 +38,9 @@ const DEFAULT_TICKER_SETTINGS: TickerSettings = {
   endType: TickerEndType.unlimited,
   countType: TickerCountType.money,
   copy: {
-    countLabel: 'contributions',
-    goalReachedPrimary: "We've hit our goal!",
-    goalReachedSecondary: 'but you can still support us',
+    countLabel: 'Contributions',
+    goalReachedPrimary: "", //deprecated for now
+    goalReachedSecondary: '', //deprecated for now
   },
   currencySymbol: '$',
   name: TickerName.US,
@@ -49,7 +49,13 @@ const DEFAULT_TICKER_SETTINGS: TickerSettings = {
 interface TickerEditorProps {
   isDisabled: boolean;
   tickerSettings?: TickerSettings;
-  updateTickerSettings: (updatedTickerSettings?: TickerSettings) => void;
+  updateTickerSettings: (updatedTickerSettings?: {
+    endType: TickerEndType;
+    name: TickerName;
+    currencySymbol: string;
+    countType: TickerCountType;
+    copy: { goalReachedSecondary: string | undefined; countLabel: string; goalReachedPrimary: string | undefined }
+  }) => void;
   onValidationChange: (isValid: boolean) => void;
 }
 

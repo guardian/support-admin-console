@@ -81,7 +81,7 @@ const buildVariantForPreview = (
         currencySymbol: '£',
         copy: {
           countLabel: 'contributions in May',
-          goalReachedPrimary: "We've met our goal - thank you!",
+          goalReachedPrimary: '',
           goalReachedSecondary: '',
         },
         name: TickerName.US,
