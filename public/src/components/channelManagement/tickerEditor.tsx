@@ -49,7 +49,7 @@ const DEFAULT_TICKER_SETTINGS: TickerSettings = {
 interface TickerEditorProps {
   isDisabled: boolean;
   tickerSettings?: TickerSettings;
-  updateTickerSettings: (updatedTickerSettings?: TickerSettings | undefined) => void;
+  updateTickerSettings: (updatedTickerSettings?: TickerSettings) => void;
   onValidationChange: (isValid: boolean) => void;
 }
 
