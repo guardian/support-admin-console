@@ -29,8 +29,8 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 
 interface FormData {
   countLabel: string;
-  goalReachedPrimary?: string; //deprecated for now
-  goalReachedSecondary?: string; //deprecated for now
+  goalReachedPrimary: string; //deprecated for now
+  goalReachedSecondary: string; //deprecated for now
   currencySymbol: string;
 }
 
