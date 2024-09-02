@@ -57,8 +57,8 @@ interface TickerEditorProps {
     copy: {
       goalReachedSecondary: string | undefined;
       countLabel: string;
-      goalReachedPrimary: string | undefined
-    }
+      goalReachedPrimary: string | undefined;
+    };
   }) => void;
   onValidationChange: (isValid: boolean) => void;
 }
