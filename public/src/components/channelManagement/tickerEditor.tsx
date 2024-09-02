@@ -29,8 +29,8 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 
 interface FormData {
   countLabel: string;
-  goalReachedPrimary: string; //deprecated for now
-  goalReachedSecondary: string; //deprecated for now
+  goalReachedPrimary?: string; //deprecated for now
+  goalReachedSecondary?: string; //deprecated for now
   currencySymbol: string;
 }
 
@@ -109,14 +109,12 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
 
   const onSubmit = ({
     countLabel,
-    goalReachedPrimary,
-    goalReachedSecondary,
     currencySymbol,
   }: FormData): void => {
     tickerSettings &&
       updateTickerSettings({
         ...tickerSettings,
-        copy: { countLabel, goalReachedPrimary, goalReachedSecondary },
+        copy: { countLabel },
         currencySymbol: currencySymbol || '$',
       });
   };
