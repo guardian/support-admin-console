@@ -49,17 +49,7 @@ const DEFAULT_TICKER_SETTINGS: TickerSettings = {
 interface TickerEditorProps {
   isDisabled: boolean;
   tickerSettings?: TickerSettings;
-  updateTickerSettings: (updatedTickerSettings?: {
-    endType: TickerEndType;
-    name: TickerName;
-    currencySymbol: string;
-    countType: TickerCountType;
-    copy: {
-      goalReachedSecondary: string | undefined;
-      countLabel: string;
-      goalReachedPrimary: string | undefined;
-    };
-  }) => void;
+  updateTickerSettings: (updatedTickerSettings?: TickerSettings | undefined) => void;
   onValidationChange: (isValid: boolean) => void;
 }
 
