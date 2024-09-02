@@ -107,9 +107,7 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
     tickerSettings && updateTickerSettings({ ...tickerSettings, name: selectedName });
   };
 
-  const onSubmit = ({
-    countLabel, currencySymbol
-  }: FormData): void => {
+  const onSubmit = ({ countLabel, currencySymbol }: FormData): void => {
     tickerSettings &&
       updateTickerSettings({
         ...tickerSettings,
