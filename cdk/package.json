@@ -25,5 +25,8 @@
     "ts-jest": "29.1.2",
     "tslib": "2.6.2",
     "typescript": "5.3.3"
+  },
+  "resolutions": {
+    "json5": "^2.2.2"
   }
 }
