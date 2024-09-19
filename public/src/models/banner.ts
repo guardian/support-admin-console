@@ -47,4 +47,5 @@ export interface BannerTest extends Test {
   deviceType?: DeviceType;
   campaignName?: string;
   contextTargeting: PageContextTargeting;
+  isBanditTest?: boolean;
 }

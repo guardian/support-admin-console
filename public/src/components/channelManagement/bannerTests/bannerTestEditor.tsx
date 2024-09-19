@@ -32,6 +32,9 @@ import {
 } from '../../../utils/requests';
 import TestEditorContextTargeting from '../testEditorContextTargeting';
 import { getDesignForVariant } from '../../../utils/bannerDesigns';
+import { BanditEditor } from '../epicTests/banditEditor';
+
+const BANDIT_FEATURE_SWITCH = true;
 
 const copyHasTemplate = (content: BannerContent, template: string): boolean =>
   (content.heading && content.heading.includes(template)) ||
@@ -90,6 +93,10 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
       ...test,
       campaignName: campaign,
     });
+  };
+
+  const onExperimentMethodologyChange = (isBanditTest?: boolean): void => {
+    updateTest({ ...test, isBanditTest });
   };
 
   const onArticlesViewedSettingsValidationChanged = (isValid: boolean): void =>
@@ -213,6 +220,19 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
             />
           </div>
         </div>
+
+        {BANDIT_FEATURE_SWITCH && (
+          <div className={classes.sectionContainer}>
+            <Typography variant={'h3'} className={classes.sectionHeader}>
+              Experiment Methodology
+            </Typography>
+            <BanditEditor
+              test={test}
+              isDisabled={!userHasTestLocked}
+              onExperimentMethodologyChange={onExperimentMethodologyChange}
+            />
+          </div>
+        )}
 
         {test.variants.length > 1 && (
           <div className={classes.sectionContainer}>
