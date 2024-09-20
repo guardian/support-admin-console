@@ -34,8 +34,6 @@ import TestEditorContextTargeting from '../testEditorContextTargeting';
 import { getDesignForVariant } from '../../../utils/bannerDesigns';
 import { BanditEditor } from '../banditEditor';
 
-const BANDIT_FEATURE_SWITCH = true;
-
 const copyHasTemplate = (content: BannerContent, template: string): boolean =>
   (content.heading && content.heading.includes(template)) ||
   (content.paragraphs && content.paragraphs.some(para => para.includes(template))) ||
@@ -221,8 +219,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
           </div>
         </div>
 
-        {BANDIT_FEATURE_SWITCH && (
-          <div className={classes.sectionContainer}>
+        <div className={classes.sectionContainer}>
             <Typography variant={'h3'} className={classes.sectionHeader}>
               Experiment Methodology
             </Typography>
@@ -232,7 +229,6 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
               onExperimentMethodologyChange={onExperimentMethodologyChange}
             />
           </div>
-        )}
 
         {test.variants.length > 1 && (
           <div className={classes.sectionContainer}>
