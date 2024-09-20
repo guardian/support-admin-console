@@ -32,7 +32,7 @@ import {
 } from '../../../utils/requests';
 import TestEditorContextTargeting from '../testEditorContextTargeting';
 import { getDesignForVariant } from '../../../utils/bannerDesigns';
-import { BanditEditor } from '../epicTests/banditEditor';
+import { BanditEditor } from '../banditEditor';
 
 const BANDIT_FEATURE_SWITCH = true;
 

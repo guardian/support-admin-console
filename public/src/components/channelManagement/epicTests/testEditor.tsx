@@ -34,7 +34,7 @@ import { useStyles } from '../helpers/testEditorStyles';
 import { EpicTestPreviewButton } from './testPreview';
 import { ValidatedTestEditor, ValidatedTestEditorProps } from '../validatedTestEditor';
 import { TestEditorProps } from '../testsForm';
-import { BanditEditor } from './banditEditor';
+import { BanditEditor } from '../banditEditor';
 import { AnalyticsButton } from '../AnalyticsButton';
 
 const BANDIT_FEATURE_SWITCH = true;
