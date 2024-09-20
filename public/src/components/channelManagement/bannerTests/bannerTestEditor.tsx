@@ -220,15 +220,15 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
         </div>
 
         <div className={classes.sectionContainer}>
-            <Typography variant={'h3'} className={classes.sectionHeader}>
-              Experiment Methodology
-            </Typography>
-            <BanditEditor
-              test={test}
-              isDisabled={!userHasTestLocked}
-              onExperimentMethodologyChange={onExperimentMethodologyChange}
-            />
-          </div>
+          <Typography variant={'h3'} className={classes.sectionHeader}>
+            Experiment Methodology
+          </Typography>
+          <BanditEditor
+            test={test}
+            isDisabled={!userHasTestLocked}
+            onExperimentMethodologyChange={onExperimentMethodologyChange}
+          />
+        </div>
 
         {test.variants.length > 1 && (
           <div className={classes.sectionContainer}>
