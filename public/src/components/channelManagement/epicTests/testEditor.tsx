@@ -34,10 +34,8 @@ import { useStyles } from '../helpers/testEditorStyles';
 import { EpicTestPreviewButton } from './testPreview';
 import { ValidatedTestEditor, ValidatedTestEditorProps } from '../validatedTestEditor';
 import { TestEditorProps } from '../testsForm';
-import { BanditEditor } from './banditEditor';
+import { BanditEditor } from '../banditEditor';
 import { AnalyticsButton } from '../AnalyticsButton';
-
-const BANDIT_FEATURE_SWITCH = true;
 
 const copyHasTemplate = (test: EpicTest, template: string): boolean =>
   test.variants.some(
@@ -259,19 +257,16 @@ export const getEpicTestEditor = (
             </div>
           </div>
         )}
-
-        {BANDIT_FEATURE_SWITCH && (
-          <div className={classes.sectionContainer}>
-            <Typography variant={'h3'} className={classes.sectionHeader}>
-              Experiment Methodology
-            </Typography>
-            <BanditEditor
-              test={test}
-              isDisabled={!userHasTestLocked}
-              onExperimentMethodologyChange={onExperimentMethodologyChange}
-            />
-          </div>
-        )}
+        <div className={classes.sectionContainer}>
+          <Typography variant={'h3'} className={classes.sectionHeader}>
+            Experiment Methodology
+          </Typography>
+          <BanditEditor
+            test={test}
+            isDisabled={!userHasTestLocked}
+            onExperimentMethodologyChange={onExperimentMethodologyChange}
+          />
+        </div>
 
         {epicEditorConfig.allowCustomVariantSplit && canHaveCustomVariantSplit(test.variants) && (
           <div className={classes.sectionContainer}>
