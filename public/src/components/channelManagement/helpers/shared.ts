@@ -28,6 +28,7 @@ export interface Test {
   channel?: string;
   signedInStatus?: SignedInStatus;
   consentStatus?: ConsentStatus;
+  isBanditTest?: boolean;
 }
 
 export interface EpicEditorConfig {
