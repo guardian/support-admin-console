@@ -1,19 +1,19 @@
 import React from 'react';
-
 import { RadioGroup, FormControlLabel, Radio } from '@mui/material';
-import { EpicTest } from '../../../models/epic';
+import { EpicTest } from '../../models/epic';
+import { BannerTest } from '../../models/banner';
 
-interface EpicBanditEditorProps {
-  test: EpicTest;
+interface BanditEditorProps {
+  test: EpicTest | BannerTest;
   isDisabled: boolean;
   onExperimentMethodologyChange: (isBanditTest?: boolean) => void;
 }
 
-export const BanditEditor: React.FC<EpicBanditEditorProps> = ({
+export const BanditEditor: React.FC<BanditEditorProps> = ({
   test,
   isDisabled,
   onExperimentMethodologyChange,
-}: EpicBanditEditorProps) => {
+}: BanditEditorProps) => {
   const onRadioGroupChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     if (event.target.value === 'bandit') {
       onExperimentMethodologyChange(true);
