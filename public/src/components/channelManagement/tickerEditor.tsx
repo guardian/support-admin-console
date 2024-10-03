@@ -29,8 +29,8 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 
 interface FormData {
   countLabel: string;
-  goalReachedPrimary: string;
-  goalReachedSecondary: string;
+  goalReachedPrimary?: string; //deprecated for now
+  goalReachedSecondary?: string; //deprecated for now
   currencySymbol: string;
 }
 
@@ -38,9 +38,9 @@ const DEFAULT_TICKER_SETTINGS: TickerSettings = {
   endType: TickerEndType.unlimited,
   countType: TickerCountType.money,
   copy: {
-    countLabel: 'contributions',
-    goalReachedPrimary: "We've hit our goal!",
-    goalReachedSecondary: 'but you can still support us',
+    countLabel: 'Contributions',
+    goalReachedPrimary: '', //deprecated for now
+    goalReachedSecondary: '', //deprecated for now
   },
   currencySymbol: '$',
   name: TickerName.US,
@@ -107,16 +107,11 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
     tickerSettings && updateTickerSettings({ ...tickerSettings, name: selectedName });
   };
 
-  const onSubmit = ({
-    countLabel,
-    goalReachedPrimary,
-    goalReachedSecondary,
-    currencySymbol,
-  }: FormData): void => {
+  const onSubmit = ({ countLabel, currencySymbol }: FormData): void => {
     tickerSettings &&
       updateTickerSettings({
         ...tickerSettings,
-        copy: { countLabel, goalReachedPrimary, goalReachedSecondary },
+        copy: { countLabel },
         currencySymbol: currencySymbol || '$',
       });
   };
@@ -168,33 +163,7 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
             helperText={errors?.countLabel?.message}
             onBlur={handleSubmit(onSubmit)}
             name="countLabel"
-            label="Count Label"
-            margin="normal"
-            variant="outlined"
-            disabled={isDisabled}
-            fullWidth
-          />
-
-          <TextField
-            inputRef={register({ required: true })}
-            error={!!errors.goalReachedPrimary}
-            helperText={errors?.goalReachedPrimary?.message}
-            onBlur={handleSubmit(onSubmit)}
-            name="goalReachedPrimary"
-            label="Goal reached primary text"
-            margin="normal"
-            variant="outlined"
-            disabled={isDisabled}
-            fullWidth
-          />
-
-          <TextField
-            inputRef={register({ required: true })}
-            error={!!errors.goalReachedSecondary}
-            helperText={errors?.goalReachedSecondary?.message}
-            onBlur={handleSubmit(onSubmit)}
-            name="goalReachedSecondary"
-            label="Goal reached secondary text"
+            label="Heading"
             margin="normal"
             variant="outlined"
             disabled={isDisabled}
@@ -220,7 +189,7 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
             <FormControl component="fieldset">
               <FormLabel component="legend">Ticker end type</FormLabel>
               <RadioGroup
-                value={tickerSettings.endType}
+                value={TickerEndType.hardstop}
                 onChange={onEndTypeChanged}
                 aria-label="ticker-end-type"
                 name="ticker-end-type"
@@ -229,12 +198,6 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
                   value={TickerEndType.hardstop}
                   control={<Radio />}
                   label="Hard stop"
-                  disabled={isDisabled}
-                />
-                <FormControlLabel
-                  value={TickerEndType.unlimited}
-                  control={<Radio />}
-                  label="Unlimited"
                   disabled={isDisabled}
                 />
               </RadioGroup>
