@@ -82,31 +82,11 @@ case class CtaDesign(
 )
 
 case class TickerDesign(
-  text: HexColour, //deprecated
+  text: HexColour,
   filledProgress: HexColour,
   progressBarBackground: HexColour,
-  goalMarker: HexColour, //deprecated
-  headlineColour: Option[HexColour],  //new
-  totalColour: Option[HexColour], //new
-  goalColour: Option[HexColour] //new
+  goalMarker: HexColour
 )
-
-object TickerDesign {
-  import io.circe.generic.auto._
-  implicit val encoder = Encoder[TickerDesign]
-
-  // Modify the Decoder to use existing values for the new fields
-  val normalDecoder = Decoder[TickerDesign]
-  implicit val decoder = normalDecoder.map(design => {
-    val headlineColour = design.headlineColour.getOrElse(design.text)
-    val totalColour = design.totalColour.getOrElse(design.text)
-    val goalColour = design.goalColour.getOrElse(design.text)
-    design.copy(
-      headlineColour = Some(headlineColour),
-      totalColour = Some(totalColour),
-      goalColour = Some(goalColour))
-  })
-}
 
 case class BannerDesignColours(
   basic: BannerDesignBasicColours,

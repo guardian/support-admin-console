@@ -33,8 +33,8 @@ object TickerName {
 
 case class TickerCopy(
   countLabel: String,
-  goalReachedPrimary: Option[String] , //deprecated
-  goalReachedSecondary: Option[String] //deprecated
+  goalReachedPrimary: String,
+  goalReachedSecondary: String
 )
 
 case class TickerSettings(
