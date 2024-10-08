@@ -9,12 +9,12 @@ import {
   createMarkPositioner,
 } from 'remirror/extensions';
 import {
-  ComponentItem,
+  // ComponentItem, // TODO: removed for now 
   EditorComponent,
-  FloatingToolbar,
-  FloatingWrapper,
+  // FloatingToolbar,// TODO: removed for now 
+  // FloatingWrapper,// TODO: removed for now 
   Remirror,
-  ToolbarItemUnion,
+  // ToolbarItemUnion,// TODO: removed for now 
   useActive,
   useAttrs,
   useChainedCommands,
@@ -26,7 +26,7 @@ import {
 } from '@remirror/react';
 import './styles.scss';
 import { useRTEStyles } from './richTextEditorStyles';
-import { CreateExtensionPlugin, PlainExtension, InputRule } from 'remirror';
+import { CreateExtensionPlugin, PlainExtension, InputRule, EditorState, Handler } from 'remirror';
 import { Plugin } from 'prosemirror-state';
 import { MarkPasteRule } from '@remirror/pm/paste-rules';
 
@@ -226,73 +226,73 @@ function useFloatingLinkState() {
 }
 
 // ReMirror/ProseMirror FLOATING LINK MENU BUTTONS
-const FloatingLinkToolbar = () => {
-  const {
-    isEditing,
-    linkPositioner,
-    clickEdit,
-    onRemove,
-    submitHref,
-    href,
-    setHref,
-    cancelHref,
-  } = useFloatingLinkState();
-  const active = useActive();
-  const activeLink = active.link();
-  const { empty } = useCurrentSelection();
-  const linkEditItems: ToolbarItemUnion[] = useMemo(
-    () => [
-      {
-        type: ComponentItem.ToolbarGroup,
-        label: 'Link',
-        items: activeLink
-          ? [
-              { type: ComponentItem.ToolbarButton, onClick: () => clickEdit(), label: 'Edit link' },
-              { type: ComponentItem.ToolbarButton, onClick: onRemove, label: 'Remove link' },
-            ]
-          : [{ type: ComponentItem.ToolbarButton, onClick: () => clickEdit(), label: 'Add link' }],
-      },
-    ],
-    [clickEdit, onRemove, activeLink],
-  );
+// const FloatingLinkToolbar = () => { // TODO: removed for now
+//   const {
+//     isEditing,
+//     linkPositioner,
+//     clickEdit,
+//     onRemove,
+//     submitHref,
+//     href,
+//     setHref,
+//     cancelHref,
+//   } = useFloatingLinkState();
+//   const active = useActive();
+//   const activeLink = active.link();
+//   const { empty } = useCurrentSelection();
+//   const linkEditItems: ToolbarItemUnion[] = useMemo(
+//     () => [
+//       {
+//         type: ComponentItem.ToolbarGroup,
+//         label: 'Link',
+//         items: activeLink
+//           ? [
+//               { type: ComponentItem.ToolbarButton, onClick: () => clickEdit(), label: 'Edit link' },
+//               { type: ComponentItem.ToolbarButton, onClick: onRemove, label: 'Remove link' },
+//             ]
+//           : [{ type: ComponentItem.ToolbarButton, onClick: () => clickEdit(), label: 'Add link' }],
+//       },
+//     ],
+//     [clickEdit, onRemove, activeLink],
+//   );
 
-  const items: ToolbarItemUnion[] = useMemo(() => linkEditItems, [linkEditItems]);
+//   const items: ToolbarItemUnion[] = useMemo(() => linkEditItems, [linkEditItems]);
 
-  return (
-    <>
-      <FloatingToolbar items={items} positioner="selection" placement="top" enabled={!isEditing} />
-      <FloatingToolbar
-        items={linkEditItems}
-        positioner={linkPositioner}
-        placement="bottom"
-        enabled={!isEditing && empty}
-      />
-      <FloatingWrapper
-        positioner="always"
-        placement="bottom"
-        enabled={isEditing}
-        renderOutsideEditor
-      >
-        <input
-          style={{ zIndex: 20 }}
-          autoFocus
-          placeholder="Enter link..."
-          onChange={event => setHref(event.target.value)}
-          value={href}
-          onKeyDown={event => {
-            const { key } = event;
-            if (key === 'Enter') {
-              submitHref();
-            }
-            if (key === 'Escape') {
-              cancelHref();
-            }
-          }}
-        />
-      </FloatingWrapper>
-    </>
-  );
-};
+//   return (
+//     <>
+//       <FloatingToolbar items={items} positioner="selection" placement="top" enabled={!isEditing} />
+//       <FloatingToolbar
+//         items={linkEditItems}
+//         positioner={linkPositioner}
+//         placement="bottom"
+//         enabled={!isEditing && empty}
+//       />
+//       <FloatingWrapper
+//         positioner="always"
+//         placement="bottom"
+//         enabled={isEditing}
+//         renderOutsideEditor
+//       >
+//         <input
+//           style={{ zIndex: 20 }}
+//           autoFocus
+//           placeholder="Enter link..."
+//           onChange={event => setHref(event.target.value)}
+//           value={href}
+//           onKeyDown={event => {
+//             const { key } = event;
+//             if (key === 'Enter') {
+//               submitHref();
+//             }
+//             if (key === 'Escape') {
+//               cancelHref();
+//             }
+//           }}
+//         />
+//       </FloatingWrapper>
+//     </>
+//   );
+// };
 
 // ReMirror/ProseMirror TOP MENU BUTTONS
 const RichTextMenu: React.FC<RichTextMenuProps> = ({
@@ -523,10 +523,10 @@ const RichTextEditor: React.FC<RichTextEditorProps<string[]>> = ({
       const { getHTML, getText } = useHelpers();
 
       const handleSaveShortcut = useCallback(
-        ({ state }) => {
+        ({ state }:{ state: EditorState | undefined}) => { // TODO: should this be any or something else?
           if (noHtml) {
             // getText gives us the plain text representation with line breaks
-            updateCopy(getText(state).split('\n'));
+            updateCopy(getText({state}).split('\n'));
           } else {
             updateCopy(paragraphsToArray(getHTML(state)));
           }
@@ -541,10 +541,10 @@ const RichTextEditor: React.FC<RichTextEditorProps<string[]>> = ({
   // Instantiate the Remirror RTE component
   const { manager, state } = useRemirror({
     extensions: () => [
-      new MyBoldExtension(),
+      new MyBoldExtension({ exclude: { inputRules: true } }),
       new MyItalicExtension(),
       new LinkExtension({ autoLink: true }),
-      new TextHighlightExtension(),
+      new TextHighlightExtension({ exclude: { inputRules: true } }),
       new RemovePastedHtmlExtension(),
     ],
     content: parseCopyForParagraphs(copyData),
@@ -561,7 +561,7 @@ const RichTextEditor: React.FC<RichTextEditorProps<string[]>> = ({
         <Remirror manager={manager} initialContent={state} editable={!disabled} hooks={hooks}>
           <RichTextMenu disabled={disabled} label={label} rteMenuConstraints={menuConstraints} />
           <EditorComponent />
-          {!disabled && !noHtml && <FloatingLinkToolbar />}
+          {/* {!disabled && !noHtml && <FloatingLinkToolbar />} // TODO: removed for now */}
           <p className={error ? classes.errorText : classes.helperText}>{helperText}</p>
         </Remirror>
       </div>

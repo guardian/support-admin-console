@@ -26,7 +26,7 @@ const EpicTestNewsletter: React.FC<EpicTestNewsletterProps> = ({
     newsletterId: newsletterSignup.newsletterId,
     successDescription: newsletterSignup.successDescription,
   };
-  const { register, handleSubmit, errors } = useForm<FormData>({ mode: 'onChange', defaultValues });
+  const { register, handleSubmit, formState: {errors} } = useForm<FormData>({ mode: 'onChange', defaultValues });
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
@@ -41,7 +41,7 @@ const EpicTestNewsletter: React.FC<EpicTestNewsletterProps> = ({
     <>
       <div>
         <TextField
-          inputRef={register({
+          inputRef={register('newsletterId',{
             required: EMPTY_ERROR_HELPER_TEXT,
           })}
           error={errors.newsletterId !== undefined}
@@ -57,7 +57,7 @@ const EpicTestNewsletter: React.FC<EpicTestNewsletterProps> = ({
       </div>
       <div>
         <TextField
-          inputRef={register({
+          inputRef={register('successDescription',{
             required: EMPTY_ERROR_HELPER_TEXT,
           })}
           error={errors.successDescription !== undefined}

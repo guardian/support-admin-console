@@ -205,7 +205,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
       switchId: string;
       description: string;
     };
-    const { register, handleSubmit, errors } = useForm<FormData>();
+    const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
 
     const onSubmit = ({ switchId, description }: FormData): void => {
       const updatedState = cloneDeep(data);
@@ -233,7 +233,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
           <TextField
             className={classes.input}
             id={groupId + '-add-switch-switch-name'}
-            inputRef={register({
+            inputRef={register("switchId", {
               required: EMPTY_ERROR_HELPER_TEXT,
               validate: switchId => {
                 return createDuplicateValidator(Object.keys(groupData.switches))(switchId);
@@ -252,7 +252,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
           <TextField
             className={classes.input}
             id={groupId + '-add-switch-switch-description'}
-            inputRef={register({
+            inputRef={register('description',{
               required: EMPTY_ERROR_HELPER_TEXT,
               validate: description => {
                 return createDuplicateValidator(

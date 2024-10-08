@@ -1,5 +1,5 @@
 import React from 'react';
-import { ListItem, Theme } from '@mui/material';
+import { ListItem, ListItemButton, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { red } from '@mui/material/colors';
 import { Test } from './helpers/shared';
@@ -87,7 +87,7 @@ const TestListTest: React.FC<TestListTestProps> = ({
   }
 
   return (
-    <ListItem className={containerClasses.join(' ')} button={true} onClick={onClick} ref={ref}>
+    <ListItemButton className={containerClasses.join(' ')} onClick={onClick} ref={ref}>
       <div className={classes.labelAndNameContainer}>
         {isEdited && (isSelected ? <EditIcon className={classes.whitePencil} /> : <EditIcon />)}
         <TestListTestLiveLabel
@@ -102,7 +102,7 @@ const TestListTest: React.FC<TestListTestProps> = ({
       </div>
 
       {hasArticleCount && <TestListTestArticleCountLabel />}
-    </ListItem>
+    </ListItemButton>
   );
 };
 

@@ -49,7 +49,7 @@ const MaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
     minDaysBetweenViews: maxEpicViews?.minDaysBetweenViews.toString() || '',
   };
 
-  const { register, errors, handleSubmit, reset } = useForm<FormData>({
+  const { register, formState: { errors }, handleSubmit, reset } = useForm<FormData>({
     mode: 'onChange',
     defaultValues,
   });
@@ -104,7 +104,7 @@ const MaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
         <div className={classes.formContainer}>
           <div>
             <TextField
-              inputRef={register({
+              inputRef={register('maxViewsCount',{
                 required: EMPTY_ERROR_HELPER_TEXT,
                 validate: notNumberValidator,
               })}
@@ -121,7 +121,7 @@ const MaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
           </div>
           <div>
             <TextField
-              inputRef={register({
+              inputRef={register('maxViewsDays',{
                 required: EMPTY_ERROR_HELPER_TEXT,
                 validate: notNumberValidator,
               })}
@@ -138,7 +138,7 @@ const MaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
           </div>
           <div>
             <TextField
-              inputRef={register({
+              inputRef={register('minDaysBetweenViews',{
                 required: EMPTY_ERROR_HELPER_TEXT,
                 validate: notNumberValidator,
               })}

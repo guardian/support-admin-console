@@ -81,7 +81,7 @@ const GenericColourInput = <T extends unknown>({
 
   const defaultValues = { colour: convertToString(colour) };
 
-  const { register, reset, handleSubmit, errors } = useForm<{ colour: string }>({
+  const { register, reset, handleSubmit, formState: { errors } } = useForm<{ colour: string }>({
     mode: 'onChange',
     defaultValues,
   });
@@ -111,7 +111,7 @@ const GenericColourInput = <T extends unknown>({
     <div className={classes.container}>
       <TextField
         className={classes.field}
-        inputRef={register({
+        inputRef={register('colour', {
           required: required ? EMPTY_ERROR_HELPER_TEXT : false,
           pattern: colourValidation,
         })}

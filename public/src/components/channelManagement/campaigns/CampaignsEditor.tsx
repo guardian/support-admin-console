@@ -145,7 +145,7 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
 
   const updatePage = () => doDataFetch(name);
 
-  const { register, handleSubmit, errors, trigger, control } = useForm<FormData>({
+  const { register, handleSubmit, formState: { errors }, trigger, control } = useForm<FormData>({
     mode: 'onChange',
     defaultValues,
   });
@@ -191,7 +191,7 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
               </div>
 
               <TextField
-                inputRef={register()}
+                inputRef={register('description')}
                 error={errors.description !== undefined}
                 helperText={errors.description ? errors.description.message : ''}
                 onBlur={handleSubmit(onSubmit)}
@@ -210,7 +210,7 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
                   <FormControlLabel
                     control={
                       <Switch
-                        inputRef={register()}
+                        inputRef={register('isActive')}
                         name="isActive"
                         onChange={e => {
                           data.onChange(e.target.checked);

@@ -56,7 +56,7 @@ const TestVariantsSplitEditor: React.FC<TestVariantsSplitEditorProps> = ({
     percentage: controlProportionSettings ? controlProportionSettings.proportion * 100 : undefined,
   };
 
-  const { register, errors, handleSubmit, trigger, reset } = useForm<FormState>({
+  const { register, formState: {errors}, handleSubmit, trigger, reset } = useForm<FormState>({
     mode: 'onChange',
     defaultValues,
   });
@@ -166,7 +166,7 @@ const TestVariantsSplitEditor: React.FC<TestVariantsSplitEditorProps> = ({
           <div className={classes.variantsContainer}>
             <div>
               <TextField
-                inputRef={register({
+                inputRef={register('percentage',{
                   required: EMPTY_ERROR_HELPER_TEXT,
                   validate: validate,
                 })}

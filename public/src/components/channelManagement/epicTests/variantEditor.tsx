@@ -140,7 +140,7 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
    * `variant` in a useEffect.
    */
   const [validatedFields, setValidatedFields] = useState<FormData>(defaultValues);
-  const { handleSubmit, control, errors, trigger } = useForm<FormData>({
+  const { handleSubmit, control, formState: {errors}, trigger } = useForm<FormData>({
     mode: 'onChange',
     defaultValues,
   });

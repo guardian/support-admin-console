@@ -80,7 +80,7 @@ const NewVariantButton: React.FC<BannerTestNewVariantButtonProps> = ({
   const classes = useStyles();
   const [isOpen, open, close] = useOpenable();
 
-  const { register, handleSubmit, errors } = useForm<FormData>();
+  const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
 
   const onSubmit = ({ name }: FormData): void => {
     close();
@@ -111,7 +111,7 @@ const NewVariantButton: React.FC<BannerTestNewVariantButtonProps> = ({
         <DialogContent dividers>
           <TextField
             className={classes.input}
-            inputRef={register({
+            inputRef={register('name',{
               required: EMPTY_ERROR_HELPER_TEXT,
               pattern: {
                 value: VALID_CHARACTERS_REGEX,

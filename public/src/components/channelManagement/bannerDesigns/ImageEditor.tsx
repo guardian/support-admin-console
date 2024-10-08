@@ -22,7 +22,7 @@ export const ImageEditor: React.FC<Props> = ({
   onValidationChange,
   onChange,
 }: Props) => {
-  const { register, handleSubmit, errors, reset } = useForm<BannerDesignImage>({
+  const { register, handleSubmit, formState: { errors }, reset } = useForm<BannerDesignImage>({
     mode: 'onChange',
     defaultValues: image,
   });
@@ -42,7 +42,7 @@ export const ImageEditor: React.FC<Props> = ({
   return (
     <div>
       <TextField
-        inputRef={register({
+        inputRef={register('mobileUrl', {
           required: EMPTY_ERROR_HELPER_TEXT,
           pattern: imageUrlValidation,
         })}
@@ -57,7 +57,7 @@ export const ImageEditor: React.FC<Props> = ({
         fullWidth
       />
       <TextField
-        inputRef={register({
+        inputRef={register('tabletUrl', {
           required: EMPTY_ERROR_HELPER_TEXT,
           pattern: imageUrlValidation,
         })}
@@ -72,7 +72,7 @@ export const ImageEditor: React.FC<Props> = ({
         fullWidth
       />
       <TextField
-        inputRef={register({
+        inputRef={register('desktopUrl', {
           required: EMPTY_ERROR_HELPER_TEXT,
           pattern: imageUrlValidation,
         })}
@@ -87,7 +87,7 @@ export const ImageEditor: React.FC<Props> = ({
         fullWidth
       />
       <TextField
-        inputRef={register({
+        inputRef={register('altText', {
           required: EMPTY_ERROR_HELPER_TEXT,
         })}
         error={errors?.altText !== undefined}

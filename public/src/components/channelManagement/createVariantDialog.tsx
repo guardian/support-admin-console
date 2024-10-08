@@ -56,7 +56,7 @@ const CreateVariantDialog: React.FC<CreateVariantDialogProps> = ({
 }: CreateVariantDialogProps) => {
   const classes = useStyles();
 
-  const { register, handleSubmit, errors } = useForm<FormData>();
+  const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
 
   const onSubmit = ({ name }: FormData): void => {
     close();
@@ -82,7 +82,7 @@ const CreateVariantDialog: React.FC<CreateVariantDialogProps> = ({
       <DialogContent dividers>
         <TextField
           className={classes.input}
-          inputRef={register({
+          inputRef={register('name',{
             required: EMPTY_ERROR_HELPER_TEXT,
             pattern: {
               value: VALID_CHARACTERS_REGEX,

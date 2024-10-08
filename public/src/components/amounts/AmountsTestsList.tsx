@@ -1,5 +1,5 @@
 import React from 'react';
-import { List, ListItem, Typography } from '@mui/material';
+import { List, ListItem, ListItemButton, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { red } from '@mui/material/colors';
 import { AmountsTests, AmountsTest } from '../../utils/models';
@@ -137,13 +137,13 @@ export const AmountsTestsList: React.FC<AmountsTestsListProps> = ({
     test,
   }: AmountsTestButtonProps) => {
     return (
-      <ListItem
+      <ListItemButton
         className={getButtonStyling(test.isLive, test.testName === selectedTest?.testName)}
         onClick={(): void => onTestSelected(test.testName)}
-        button
+        component="li"
       >
         {test.testLabel || test.testName}
-      </ListItem>
+      </ListItemButton>
     );
   };
 

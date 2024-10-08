@@ -28,7 +28,7 @@ const VariantSeparateArticleCountEditor: React.FC<VariantSeparateArticleCountEdi
     copy: separateArticleCount?.copy ?? '',
   };
 
-  const { register, handleSubmit, errors } = useForm<FormData>({ mode: 'onChange', defaultValues });
+  const { register, handleSubmit, formState: {errors} } = useForm<FormData>({ mode: 'onChange', defaultValues });
 
   const onSubmit = ({ copy }: FormData): void => {
     updateSeparateArticleCount(
@@ -52,7 +52,7 @@ const VariantSeparateArticleCountEditor: React.FC<VariantSeparateArticleCountEdi
         label="Above"
       />
       <TextField
-        inputRef={register()}
+        inputRef={register('copy')}
         error={errors.copy !== undefined}
         helperText={errors.copy?.message}
         onBlur={handleSubmit(onSubmit)}

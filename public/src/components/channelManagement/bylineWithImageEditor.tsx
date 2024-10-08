@@ -33,7 +33,7 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
     name: '',
   };
 
-  const { register, handleSubmit, errors, trigger, getValues } = useForm<BylineWithImage>({
+  const { register, handleSubmit, formState: {errors }, trigger, getValues } = useForm<BylineWithImage>({
     mode: 'onChange',
     defaultValues,
   });
@@ -61,7 +61,7 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
   return (
     <div>
       <TextField
-        inputRef={register({
+        inputRef={register('name',{
           required: EMPTY_ERROR_HELPER_TEXT,
         })}
         error={errors.name !== undefined}
@@ -75,7 +75,7 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
         fullWidth
       />
       <TextField
-        inputRef={register()}
+        inputRef={register('description')} // TODO: should we remove this... nothing is happening here.
         onBlur={handleSubmit(update)}
         name="description"
         label="Title or description"
@@ -89,7 +89,7 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
         should be completed
       </p>
       <TextField
-        inputRef={register({
+        inputRef={register('headshot.mainUrl', {
           validate: mainUrl => {
             // required if altText is set
             if (!mainUrl && getValues().headshot?.altText) {
@@ -112,7 +112,7 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
         fullWidth
       />
       <TextField
-        inputRef={register({
+        inputRef={register('headshot.altText',{ // TODO: note that this and the mainUrl validation methods are switched. Likely to impact existing epics
           validate: altText => {
             // required if mainUrl is set
             if (!altText && getValues().headshot?.mainUrl) {
