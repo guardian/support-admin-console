@@ -41,7 +41,7 @@ const VariantCtaFieldsEditor: React.FC<VariantCtaFieldsEditorProps> = ({
   return (
     <div>
       <TextField
-        inputRef={register('text',{
+        {...register('text',{
           required: EMPTY_ERROR_HELPER_TEXT,
         })}
         error={errors.text !== undefined}
@@ -56,7 +56,7 @@ const VariantCtaFieldsEditor: React.FC<VariantCtaFieldsEditorProps> = ({
       />
 
       <TextField
-        inputRef={register('baseUrl',{
+        {...register('baseUrl',{
           required: EMPTY_ERROR_HELPER_TEXT,
         })}
         error={errors.baseUrl !== undefined}

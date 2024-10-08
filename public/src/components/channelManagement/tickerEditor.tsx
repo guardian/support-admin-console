@@ -163,7 +163,7 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
           </div>
 
           <TextField
-            inputRef={register('countLabel', { required: EMPTY_ERROR_HELPER_TEXT })}
+            {...register('countLabel', { required: EMPTY_ERROR_HELPER_TEXT })}
             error={!!errors.countLabel}
             helperText={errors?.countLabel?.message}
             onBlur={handleSubmit(onSubmit)}
@@ -176,7 +176,7 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
           />
 
           <TextField
-            inputRef={register('goalReachedPrimary', { required: true })}
+            {...register('goalReachedPrimary', { required: true })}
             error={!!errors.goalReachedPrimary}
             helperText={errors?.goalReachedPrimary?.message}
             onBlur={handleSubmit(onSubmit)}
@@ -189,7 +189,7 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
           />
 
           <TextField
-            inputRef={register('goalReachedSecondary', { required: true })}
+            {...register('goalReachedSecondary', { required: true })}
             error={!!errors.goalReachedSecondary}
             helperText={errors?.goalReachedSecondary?.message}
             onBlur={handleSubmit(onSubmit)}
@@ -203,7 +203,7 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
 
           {tickerSettings.countType === 'money' && (
             <TextField
-              inputRef={register('currencySymbol', { required: true })}
+              {...register('currencySymbol', { required: true })}
               error={!!errors.currencySymbol}
               helperText={errors?.currencySymbol?.message}
               onBlur={handleSubmit(onSubmit)}

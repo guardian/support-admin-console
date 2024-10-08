@@ -52,7 +52,7 @@ const VariantSeparateArticleCountEditor: React.FC<VariantSeparateArticleCountEdi
         label="Above"
       />
       <TextField
-        inputRef={register('copy')}
+        {...register('copy')}
         error={errors.copy !== undefined}
         helperText={errors.copy?.message}
         onBlur={handleSubmit(onSubmit)}

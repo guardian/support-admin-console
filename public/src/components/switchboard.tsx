@@ -233,7 +233,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
           <TextField
             className={classes.input}
             id={groupId + '-add-switch-switch-name'}
-            inputRef={register("switchId", {
+            {...register("switchId", {
               required: EMPTY_ERROR_HELPER_TEXT,
               validate: switchId => {
                 return createDuplicateValidator(Object.keys(groupData.switches))(switchId);
@@ -252,7 +252,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
           <TextField
             className={classes.input}
             id={groupId + '-add-switch-switch-description'}
-            inputRef={register('description',{
+            {...register('description',{
               required: EMPTY_ERROR_HELPER_TEXT,
               validate: description => {
                 return createDuplicateValidator(

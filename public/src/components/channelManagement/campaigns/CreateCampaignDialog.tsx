@@ -85,7 +85,7 @@ const CreateCampaignDialog: React.FC<CreateCampaignDialogProps> = ({
       <DialogContent dividers>
         <TextField
           className={classes.input}
-          inputRef={register('name',{
+          {...register('name',{
             required: EMPTY_ERROR_HELPER_TEXT,
             pattern: {
               value: VALID_CHARACTERS_REGEX,
@@ -104,7 +104,7 @@ const CreateCampaignDialog: React.FC<CreateCampaignDialogProps> = ({
         />
         <TextField
           className={classes.input}
-          inputRef={register('nickname', {
+          {...register('nickname', {
             required: EMPTY_ERROR_HELPER_TEXT,
             validate: createDuplicateValidator(existingNicknames),
           })}
@@ -117,7 +117,7 @@ const CreateCampaignDialog: React.FC<CreateCampaignDialogProps> = ({
           fullWidth
         />
         <TextField
-          inputRef={register('description')}
+          {...register('description')}
           error={errors.description !== undefined}
           helperText={errors.description ? errors.description.message : ''}
           name="description"

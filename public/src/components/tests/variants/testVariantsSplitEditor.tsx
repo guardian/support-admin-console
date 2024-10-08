@@ -166,7 +166,7 @@ const TestVariantsSplitEditor: React.FC<TestVariantsSplitEditorProps> = ({
           <div className={classes.variantsContainer}>
             <div>
               <TextField
-                inputRef={register('percentage',{
+                {...register('percentage',{
                   required: EMPTY_ERROR_HELPER_TEXT,
                   validate: validate,
                 })}

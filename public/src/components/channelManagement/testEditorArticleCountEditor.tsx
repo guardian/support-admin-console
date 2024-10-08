@@ -124,7 +124,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
           <div className={classes.formContainer}>
             <div>
               <TextField
-                inputRef={register('minViews', {
+                {...register('minViews', {
                   required: EMPTY_ERROR_HELPER_TEXT,
                   validate: notNumberValidator,
                 })}
@@ -141,7 +141,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
             </div>
             <div>
               <TextField
-                inputRef={register('maxViews', { validate: notNumberValidator })}
+                {...register('maxViews', { validate: notNumberValidator })}
                 error={errors.maxViews !== undefined}
                 helperText={errors.maxViews?.message}
                 onBlur={handleSubmit(onSubmit)}
@@ -155,7 +155,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
             </div>
             <div>
               <TextField
-                inputRef={register('periodInWeeks',{
+                {...register('periodInWeeks',{
                   required: EMPTY_ERROR_HELPER_TEXT,
                   validate: notNumberValidator,
                 })}

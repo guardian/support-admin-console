@@ -111,7 +111,7 @@ const NewVariantButton: React.FC<BannerTestNewVariantButtonProps> = ({
         <DialogContent dividers>
           <TextField
             className={classes.input}
-            inputRef={register('name',{
+            {...register('name',{
               required: EMPTY_ERROR_HELPER_TEXT,
               pattern: {
                 value: VALID_CHARACTERS_REGEX,

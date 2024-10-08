@@ -41,7 +41,7 @@ const EpicTestNewsletter: React.FC<EpicTestNewsletterProps> = ({
     <>
       <div>
         <TextField
-          inputRef={register('newsletterId',{
+          {...register('newsletterId',{
             required: EMPTY_ERROR_HELPER_TEXT,
           })}
           error={errors.newsletterId !== undefined}
@@ -57,7 +57,7 @@ const EpicTestNewsletter: React.FC<EpicTestNewsletterProps> = ({
       </div>
       <div>
         <TextField
-          inputRef={register('successDescription',{
+          {...register('successDescription',{
             required: EMPTY_ERROR_HELPER_TEXT,
           })}
           error={errors.successDescription !== undefined}

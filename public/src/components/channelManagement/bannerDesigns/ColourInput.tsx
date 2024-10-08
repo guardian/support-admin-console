@@ -111,7 +111,7 @@ const GenericColourInput = <T extends unknown>({
     <div className={classes.container}>
       <TextField
         className={classes.field}
-        inputRef={register('colour', {
+        {...register('colour', {
           required: required ? EMPTY_ERROR_HELPER_TEXT : false,
           pattern: colourValidation,
         })}

@@ -113,7 +113,7 @@ export const LinkTrackingBuilder: React.FC = () => {
         <TextField
           name="url"
           label="URL (without tracking)"
-          inputRef={register('url',{
+          {...register('url',{
             required: true,
             validate: value => {
               // Check it's a valid url and has no querystring
@@ -138,7 +138,7 @@ export const LinkTrackingBuilder: React.FC = () => {
         <TextField
           name="campaign"
           label="Campaign"
-          inputRef={register('campaign',{ required: true })}
+          {...register('campaign',{ required: true })}
           error={!!errors.campaign}
           helperText={errors?.campaign?.message}
         />
@@ -149,14 +149,14 @@ export const LinkTrackingBuilder: React.FC = () => {
         <TextField
           name="content"
           label="Creative / utm_content / AB test name"
-          inputRef={register('content',{ required: true })}
+          {...register('content',{ required: true })}
           error={!!errors.content}
           helperText={errors?.content?.message}
         />
         <TextField
           name="term"
           label="Audience segment / utm_term / AB test variant name"
-          inputRef={register('term',{ required: true })}
+          {...register('term',{ required: true })}
           error={!!errors.term}
           helperText={errors?.term?.message}
         />

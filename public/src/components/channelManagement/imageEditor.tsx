@@ -60,7 +60,7 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
   return (
     <div>
       <TextField
-        inputRef={register('mainUrl',{
+        {...register('mainUrl',{
           required: EMPTY_ERROR_HELPER_TEXT,
         })}
         error={errors.mainUrl !== undefined}
@@ -74,7 +74,7 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
         fullWidth
       />
       <TextField
-        inputRef={register('altText',{
+        {...register('altText',{
           required: EMPTY_ERROR_HELPER_TEXT,
         })}
         error={errors.altText !== undefined}

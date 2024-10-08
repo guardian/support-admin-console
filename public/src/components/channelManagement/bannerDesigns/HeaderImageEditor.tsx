@@ -96,7 +96,7 @@ export const HeaderImageEditor: React.FC<Props> = ({
       {headerImage && (
         <>
           <TextField
-            inputRef={register('mobileUrl',{
+            {...register('mobileUrl',{
               required: EMPTY_ERROR_HELPER_TEXT,
               pattern: imageUrlValidation,
             })}
@@ -111,7 +111,7 @@ export const HeaderImageEditor: React.FC<Props> = ({
             fullWidth
           />
           <TextField
-            inputRef={register('tabletUrl',{
+            {...register('tabletUrl',{
               required: EMPTY_ERROR_HELPER_TEXT,
               pattern: imageUrlValidation,
             })}
@@ -126,7 +126,7 @@ export const HeaderImageEditor: React.FC<Props> = ({
             fullWidth
           />
           <TextField
-            inputRef={register('desktopUrl',{
+            {...register('desktopUrl',{
               required: EMPTY_ERROR_HELPER_TEXT,
               pattern: imageUrlValidation,
             })}
@@ -141,7 +141,7 @@ export const HeaderImageEditor: React.FC<Props> = ({
             fullWidth
           />
           <TextField
-            inputRef={register('altText',{
+            {...register('altText',{
               required: EMPTY_ERROR_HELPER_TEXT,
             })}
             error={errors?.altText !== undefined}

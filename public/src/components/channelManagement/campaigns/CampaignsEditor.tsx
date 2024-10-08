@@ -191,7 +191,7 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
               </div>
 
               <TextField
-                inputRef={register('description')}
+                {...register('description')}
                 error={errors.description !== undefined}
                 helperText={errors.description ? errors.description.message : ''}
                 onBlur={handleSubmit(onSubmit)}
@@ -210,7 +210,7 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
                   <FormControlLabel
                     control={
                       <Switch
-                        inputRef={register('isActive')}
+                        {...register('isActive')}
                         name="isActive"
                         onChange={e => {
                           data.onChange(e.target.checked);

@@ -182,7 +182,7 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
         )}
         <TextField
           className={classes.input}
-          inputRef={register('name',{
+          {...register('name',{
             required: EMPTY_ERROR_HELPER_TEXT,
             pattern: {
               value: VALID_CHARACTERS_REGEX,
@@ -210,7 +210,7 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
         />
         <TextField
           className={classes.input}
-          inputRef={register('nickname',{
+          {...register('nickname',{
             required: EMPTY_ERROR_HELPER_TEXT,
             validate: createDuplicateValidator(existingNicknames),
           })}

@@ -1,0 +1,231 @@
+
+> build-dev
+> webpack --config webpack.dev.js
+
+asset app.bundle.js 25.1 MiB [compared for emit] (name: main)
+orphan modules 8.16 MiB [orphan] 12192 modules
+runtime modules 3.15 KiB 10 modules
+cacheable modules 8.22 MiB
+  modules by path ./node_modules/ 7.7 MiB
+    javascript modules 7.7 MiB 1610 modules
+    json modules 1.52 KiB
+      ./node_modules/character-entities-legacy/index.json 1.24 KiB [built] [code generated]
+      ./node_modules/character-reference-invalid/index.json 289 bytes [built] [code generated]
+  modules by path ./public/src/ 529 KiB 164 modules
+  data:image/jpeg;base64,/9j/4AAQSkZJRgAB.. 1.59 KiB [built] [code generated]
+  ./util.inspect (ignored) 15 bytes [built] [code generated]
+
+
+ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/previewContainer.tsx
+118:11-20
+[tsl] ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/previewContainer.tsx(118,12)
+      TS2322: Type 'Props' is not assignable to type 'IntrinsicAttributes & Props'.
+  Type 'Props' is not assignable to type 'IntrinsicAttributes'.
+
+
+ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/bannerTests/variantEditor.tsx
+./public/src/components/channelManagement/bannerTests/variantEditor.tsx 231:31-36
+[tsl] ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/bannerTests/variantEditor.tsx(231,32)
+      TS2339: Property 'value' does not exist on type '{ field: ControllerRenderProps<FormData, "heading">; fieldState: ControllerFieldState; formState: UseFormStateReturn<FormData>; }'.
+ @ ./public/src/components/channelManagement/bannerTests/bannerTestEditor.tsx 4:0-44 81:66-79
+ @ ./public/src/components/channelManagement/bannerTests/bannerTestsForm.tsx 4:0-50 7:62-78 8:62-78
+ @ ./public/src/main.tsx 8:0-113 105:124-140 106:125-141
+
+ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/bannerTests/variantEditor.tsx
+./public/src/components/channelManagement/bannerTests/variantEditor.tsx 233:23-31
+[tsl] ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/bannerTests/variantEditor.tsx(233,24)
+      TS2339: Property 'onChange' does not exist on type '{ field: ControllerRenderProps<FormData, "heading">; fieldState: ControllerFieldState; formState: UseFormStateReturn<FormData>; }'.
+ @ ./public/src/components/channelManagement/bannerTests/bannerTestEditor.tsx 4:0-44 81:66-79
+ @ ./public/src/components/channelManagement/bannerTests/bannerTestsForm.tsx 4:0-50 7:62-78 8:62-78
+ @ ./public/src/main.tsx 8:0-113 105:124-140 106:125-141
+
+ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/bannerTests/variantEditor.tsx
+./public/src/components/channelManagement/bannerTests/variantEditor.tsx 267:33-38
+[tsl] ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/bannerTests/variantEditor.tsx(267,34)
+      TS2339: Property 'value' does not exist on type '{ field: ControllerRenderProps<FormData, "paragraphs">; fieldState: ControllerFieldState; formState: UseFormStateReturn<FormData>; }'.
+ @ ./public/src/components/channelManagement/bannerTests/bannerTestEditor.tsx 4:0-44 81:66-79
+ @ ./public/src/components/channelManagement/bannerTests/bannerTestsForm.tsx 4:0-50 7:62-78 8:62-78
+ @ ./public/src/main.tsx 8:0-113 105:124-140 106:125-141
+
+ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/bannerTests/variantEditor.tsx
+./public/src/components/channelManagement/bannerTests/variantEditor.tsx 269:25-33
+[tsl] ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/bannerTests/variantEditor.tsx(269,26)
+      TS2339: Property 'onChange' does not exist on type '{ field: ControllerRenderProps<FormData, "paragraphs">; fieldState: ControllerFieldState; formState: UseFormStateReturn<FormData>; }'.
+ @ ./public/src/components/channelManagement/bannerTests/bannerTestEditor.tsx 4:0-44 81:66-79
+ @ ./public/src/components/channelManagement/bannerTests/bannerTestsForm.tsx 4:0-50 7:62-78 8:62-78
+ @ ./public/src/main.tsx 8:0-113 105:124-140 106:125-141
+
+ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/bannerTests/variantEditor.tsx
+./public/src/components/channelManagement/bannerTests/variantEditor.tsx 295:33-38
+[tsl] ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/bannerTests/variantEditor.tsx(295,34)
+      TS2339: Property 'value' does not exist on type '{ field: ControllerRenderProps<FormData, "highlightedText">; fieldState: ControllerFieldState; formState: UseFormStateReturn<FormData>; }'.
+ @ ./public/src/components/channelManagement/bannerTests/bannerTestEditor.tsx 4:0-44 81:66-79
+ @ ./public/src/components/channelManagement/bannerTests/bannerTestsForm.tsx 4:0-50 7:62-78 8:62-78
+ @ ./public/src/main.tsx 8:0-113 105:124-140 106:125-141
+
+ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/bannerTests/variantEditor.tsx
+./public/src/components/channelManagement/bannerTests/variantEditor.tsx 297:25-33
+[tsl] ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/bannerTests/variantEditor.tsx(297,26)
+      TS2339: Property 'onChange' does not exist on type '{ field: ControllerRenderProps<FormData, "highlightedText">; fieldState: ControllerFieldState; formState: UseFormStateReturn<FormData>; }'.
+ @ ./public/src/components/channelManagement/bannerTests/bannerTestEditor.tsx 4:0-44 81:66-79
+ @ ./public/src/components/channelManagement/bannerTests/bannerTestsForm.tsx 4:0-50 7:62-78 8:62-78
+ @ ./public/src/main.tsx 8:0-113 105:124-140 106:125-141
+
+ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/campaigns/CampaignsEditor.tsx
+./public/src/components/channelManagement/campaigns/CampaignsEditor.tsx 216:31-39
+[tsl] ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/campaigns/CampaignsEditor.tsx(216,32)
+      TS2339: Property 'onChange' does not exist on type '{ field: ControllerRenderProps<FormData, "isActive">; fieldState: ControllerFieldState; formState: UseFormStateReturn<FormData>; }'.
+ @ ./public/src/components/channelManagement/campaigns/CampaignsForm.tsx 5:0-48 80:108-123
+ @ ./public/src/main.tsx 20:0-83 109:125-138
+
+ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/campaigns/CampaignsEditor.tsx
+./public/src/components/channelManagement/campaigns/CampaignsEditor.tsx 219:38-43
+[tsl] ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/campaigns/CampaignsEditor.tsx(219,39)
+      TS2339: Property 'value' does not exist on type '{ field: ControllerRenderProps<FormData, "isActive">; fieldState: ControllerFieldState; formState: UseFormStateReturn<FormData>; }'.
+ @ ./public/src/components/channelManagement/campaigns/CampaignsForm.tsx 5:0-48 80:108-123
+ @ ./public/src/main.tsx 20:0-83 109:125-138
+
+ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/campaigns/CampaignsEditor.tsx
+./public/src/components/channelManagement/campaigns/CampaignsEditor.tsx 235:37-42
+[tsl] ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/campaigns/CampaignsEditor.tsx(235,38)
+      TS2339: Property 'value' does not exist on type '{ field: ControllerRenderProps<FormData, "notes">; fieldState: ControllerFieldState; formState: UseFormStateReturn<FormData>; }'.
+ @ ./public/src/components/channelManagement/campaigns/CampaignsForm.tsx 5:0-48 80:108-123
+ @ ./public/src/main.tsx 20:0-83 109:125-138
+
+ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/campaigns/CampaignsEditor.tsx
+./public/src/components/channelManagement/campaigns/CampaignsEditor.tsx 237:29-37
+[tsl] ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/campaigns/CampaignsEditor.tsx(237,30)
+      TS2339: Property 'onChange' does not exist on type '{ field: ControllerRenderProps<FormData, "notes">; fieldState: ControllerFieldState; formState: UseFormStateReturn<FormData>; }'.
+ @ ./public/src/components/channelManagement/campaigns/CampaignsForm.tsx 5:0-48 80:108-123
+ @ ./public/src/main.tsx 20:0-83 109:125-138
+
+ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/epicTests/variantEditor.tsx
+./public/src/components/channelManagement/epicTests/variantEditor.tsx 236:12-20
+[tsl] ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/epicTests/variantEditor.tsx(236,13)
+      TS2322: Type '(text: string) => string | undefined' is not assignable to type 'Validate<string | undefined, FormData> | Record<string, Validate<string | undefined, FormData>> | undefined'.
+  Type '(text: string) => string | undefined' is not assignable to type 'Validate<string | undefined, FormData>'.
+    Types of parameters 'text' and 'value' are incompatible.
+      Type 'string | undefined' is not assignable to type 'string'.
+        Type 'undefined' is not assignable to type 'string'.
+ @ ./public/src/components/channelManagement/epicTests/testEditor.tsx 9:0-44 103:136-149 124:40-53
+ @ ./public/src/components/channelManagement/epicTests/testsForm.tsx 5:0-49 7:73-90
+ @ ./public/src/main.tsx 7:0-156 101:122-142 102:131-152 103:133-155 104:126-142
+
+ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/epicTests/variantEditor.tsx
+./public/src/components/channelManagement/epicTests/variantEditor.tsx 247:31-36
+[tsl] ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/epicTests/variantEditor.tsx(247,32)
+      TS2339: Property 'value' does not exist on type '{ field: ControllerRenderProps<FormData, "heading">; fieldState: ControllerFieldState; formState: UseFormStateReturn<FormData>; }'.
+ @ ./public/src/components/channelManagement/epicTests/testEditor.tsx 9:0-44 103:136-149 124:40-53
+ @ ./public/src/components/channelManagement/epicTests/testsForm.tsx 5:0-49 7:73-90
+ @ ./public/src/main.tsx 7:0-156 101:122-142 102:131-152 103:133-155 104:126-142
+
+ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/epicTests/variantEditor.tsx
+./public/src/components/channelManagement/epicTests/variantEditor.tsx 249:23-31
+[tsl] ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/epicTests/variantEditor.tsx(249,24)
+      TS2339: Property 'onChange' does not exist on type '{ field: ControllerRenderProps<FormData, "heading">; fieldState: ControllerFieldState; formState: UseFormStateReturn<FormData>; }'.
+ @ ./public/src/components/channelManagement/epicTests/testEditor.tsx 9:0-44 103:136-149 124:40-53
+ @ ./public/src/components/channelManagement/epicTests/testsForm.tsx 5:0-49 7:73-90
+ @ ./public/src/main.tsx 7:0-156 101:122-142 102:131-152 103:133-155 104:126-142
+
+ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/epicTests/variantEditor.tsx
+./public/src/components/channelManagement/epicTests/variantEditor.tsx 289:29-34
+[tsl] ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/epicTests/variantEditor.tsx(289,30)
+      TS2339: Property 'value' does not exist on type '{ field: ControllerRenderProps<FormData, "paragraphs">; fieldState: ControllerFieldState; formState: UseFormStateReturn<FormData>; }'.
+ @ ./public/src/components/channelManagement/epicTests/testEditor.tsx 9:0-44 103:136-149 124:40-53
+ @ ./public/src/components/channelManagement/epicTests/testsForm.tsx 5:0-49 7:73-90
+ @ ./public/src/main.tsx 7:0-156 101:122-142 102:131-152 103:133-155 104:126-142
+
+ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/epicTests/variantEditor.tsx
+./public/src/components/channelManagement/epicTests/variantEditor.tsx 291:21-29
+[tsl] ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/epicTests/variantEditor.tsx(291,22)
+      TS2339: Property 'onChange' does not exist on type '{ field: ControllerRenderProps<FormData, "paragraphs">; fieldState: ControllerFieldState; formState: UseFormStateReturn<FormData>; }'.
+ @ ./public/src/components/channelManagement/epicTests/testEditor.tsx 9:0-44 103:136-149 124:40-53
+ @ ./public/src/components/channelManagement/epicTests/testsForm.tsx 5:0-49 7:73-90
+ @ ./public/src/main.tsx 7:0-156 101:122-142 102:131-152 103:133-155 104:126-142
+
+ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/epicTests/variantEditor.tsx
+./public/src/components/channelManagement/epicTests/variantEditor.tsx 317:12-20
+[tsl] ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/epicTests/variantEditor.tsx(317,13)
+      TS2322: Type '(text: string) => string | undefined' is not assignable to type 'Validate<string | undefined, FormData> | Record<string, Validate<string | undefined, FormData>> | undefined'.
+  Type '(text: string) => string | undefined' is not assignable to type 'Validate<string | undefined, FormData>'.
+    Types of parameters 'text' and 'value' are incompatible.
+      Type 'string | undefined' is not assignable to type 'string'.
+        Type 'undefined' is not assignable to type 'string'.
+ @ ./public/src/components/channelManagement/epicTests/testEditor.tsx 9:0-44 103:136-149 124:40-53
+ @ ./public/src/components/channelManagement/epicTests/testsForm.tsx 5:0-49 7:73-90
+ @ ./public/src/main.tsx 7:0-156 101:122-142 102:131-152 103:133-155 104:126-142
+
+ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/epicTests/variantEditor.tsx
+./public/src/components/channelManagement/epicTests/variantEditor.tsx 328:31-36
+[tsl] ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/epicTests/variantEditor.tsx(328,32)
+      TS2339: Property 'value' does not exist on type '{ field: ControllerRenderProps<FormData, "highlightedText">; fieldState: ControllerFieldState; formState: UseFormStateReturn<FormData>; }'.
+ @ ./public/src/components/channelManagement/epicTests/testEditor.tsx 9:0-44 103:136-149 124:40-53
+ @ ./public/src/components/channelManagement/epicTests/testsForm.tsx 5:0-49 7:73-90
+ @ ./public/src/main.tsx 7:0-156 101:122-142 102:131-152 103:133-155 104:126-142
+
+ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/epicTests/variantEditor.tsx
+./public/src/components/channelManagement/epicTests/variantEditor.tsx 330:23-31
+[tsl] ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/epicTests/variantEditor.tsx(330,24)
+      TS2339: Property 'onChange' does not exist on type '{ field: ControllerRenderProps<FormData, "highlightedText">; fieldState: ControllerFieldState; formState: UseFormStateReturn<FormData>; }'.
+ @ ./public/src/components/channelManagement/epicTests/testEditor.tsx 9:0-44 103:136-149 124:40-53
+ @ ./public/src/components/channelManagement/epicTests/testsForm.tsx 5:0-49 7:73-90
+ @ ./public/src/main.tsx 7:0-156 101:122-142 102:131-152 103:133-155 104:126-142
+
+ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/richTextEditor/richTextEditor.tsx
+./public/src/components/channelManagement/richTextEditor/richTextEditor.tsx 537:63-81
+[tsl] ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/richTextEditor/richTextEditor.tsx(537,64)
+      TS2345: Argument of type '({ state }: { state: EditorState | undefined; }) => true' is not assignable to parameter of type 'Handler<FocusEventHandler>'.
+  Type '({ state }: { state: EditorState | undefined; }) => true' is not assignable to type 'FocusEventHandler'.
+    Types of parameters '__0' and 'event' are incompatible.
+      Property 'state' is missing in type 'FocusEvent' but required in type '{ state: EditorState | undefined; }'.
+ @ ./public/src/components/channelManagement/campaigns/CampaignsEditor.tsx 9:0-66 150:56-70
+ @ ./public/src/components/channelManagement/campaigns/CampaignsForm.tsx 5:0-48 80:108-123
+ @ ./public/src/main.tsx 20:0-83 109:125-138
+
+ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/superMode/superModeTable.tsx
+./public/src/components/channelManagement/superMode/superModeTable.tsx 33:8-16
+[tsl] ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/channelManagement/superMode/superModeTable.tsx(33,9)
+      TS2322: Type '{ autoHeight: true; rows: { id: string; url: string; region: string; startTimestamp: string; endTimestamp: string; avPerView: number; }[]; columns: GridColDef[]; pageSize: number; rowsPerPageOptions: number[]; onRowDoubleClick: (params: GridRowParams<...>) => void; }' is not assignable to type 'IntrinsicAttributes & Omit<Partial<DataGridPropsWithDefaultValues<any>> & DataGridPropsWithComplexDefaultValueBeforeProcessing & DataGridPropsWithoutDefaultValue<...>, DataGridForcedPropsKey> & { ...; } & RefAttributes<...>'.
+  Property 'pageSize' does not exist on type 'IntrinsicAttributes & Omit<Partial<DataGridPropsWithDefaultValues<any>> & DataGridPropsWithComplexDefaultValueBeforeProcessing & DataGridPropsWithoutDefaultValue<...>, DataGridForcedPropsKey> & { ...; } & RefAttributes<...>'.
+ @ ./public/src/components/channelManagement/superMode/superModeDashboard.tsx 6:0-50 24:28-42
+ @ ./public/src/main.tsx 24:0-97 113:111-129
+
+ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/linkTracking/LinkTrackingBuilder.tsx
+./public/src/components/linkTracking/LinkTrackingBuilder.tsx 167:45-52
+[tsl] ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/linkTracking/LinkTrackingBuilder.tsx(167,46)
+      TS2322: Type 'Control<FormData, any>' is not assignable to type 'Control'.
+  Types of property '_reset' are incompatible.
+    Type 'UseFormReset<FormData>' is not assignable to type 'UseFormReset<FieldValues>'.
+      Types of parameters 'values' and 'values' are incompatible.
+        Type 'FieldValues | { [x: string]: any; } | ResetAction<FieldValues> | undefined' is not assignable to type 'FormData | { url?: string | undefined; campaign?: string | undefined; content?: string | undefined; term?: string | undefined; sourceAndMedium?: string | undefined; } | ResetAction<...> | undefined'.
+          Type 'ResetAction<FieldValues>' is not assignable to type 'FormData | { url?: string | undefined; campaign?: string | undefined; content?: string | undefined; term?: string | undefined; sourceAndMedium?: string | undefined; } | ResetAction<...> | undefined'.
+            Type 'ResetAction<FieldValues>' is not assignable to type 'ResetAction<FormData>'.
+              Type 'FieldValues' is missing the following properties from type 'FormData': url, campaign, content, term, sourceAndMedium
+ @ ./public/src/main.tsx 28:0-84 111:105-124
+
+ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/linkTracking/MediumSelector.tsx
+./public/src/components/linkTracking/MediumSelector.tsx 209:19-27
+[tsl] ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/linkTracking/MediumSelector.tsx(209,20)
+      TS2339: Property 'onChange' does not exist on type '{ field: ControllerRenderProps<FieldValues, "sourceAndMedium">; fieldState: ControllerFieldState; formState: UseFormStateReturn<FieldValues>; }'.
+ @ ./public/src/components/linkTracking/LinkTrackingBuilder.tsx 5:0-50 110:32-46
+ @ ./public/src/main.tsx 28:0-84 111:105-124
+
+ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/linkTracking/MediumSelector.tsx
+./public/src/components/linkTracking/MediumSelector.tsx 209:29-34
+[tsl] ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/linkTracking/MediumSelector.tsx(209,30)
+      TS2339: Property 'value' does not exist on type '{ field: ControllerRenderProps<FieldValues, "sourceAndMedium">; fieldState: ControllerFieldState; formState: UseFormStateReturn<FieldValues>; }'.
+ @ ./public/src/components/linkTracking/LinkTrackingBuilder.tsx 5:0-50 110:32-46
+ @ ./public/src/main.tsx 28:0-84 111:105-124
+
+ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/linkTracking/MediumSelector.tsx
+./public/src/components/linkTracking/MediumSelector.tsx 216:29-38
+[tsl] ERROR in /Users/sue_burt/code/support-admin-console/public/src/components/linkTracking/MediumSelector.tsx(216,30)
+      TS2551: Property 'formState' does not exist on type 'Control'. Did you mean '_formState'?
+ @ ./public/src/components/linkTracking/LinkTrackingBuilder.tsx 5:0-50 110:32-46
+ @ ./public/src/main.tsx 28:0-84 111:105-124
+
+
+75 errors have detailed information that is not shown.
+Use 'stats.errorDetails: true' resp. '--stats-error-details' to show it.
+
+webpack 5.95.0 compiled with 75 errors in 16817 ms
