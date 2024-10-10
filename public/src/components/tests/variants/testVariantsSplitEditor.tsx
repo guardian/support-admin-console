@@ -98,7 +98,7 @@ const TestVariantsSplitEditor: React.FC<TestVariantsSplitEditorProps> = ({
     }
   };
 
-  const validate = (text: string): string | boolean => {
+  const validate = (text: number | undefined): string | boolean => {
     const percentage = Number(text);
     if (!Number.isNaN(percentage)) {
       const controlExists = hasControl(variants);
