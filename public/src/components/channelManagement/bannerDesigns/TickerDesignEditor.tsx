@@ -31,13 +31,20 @@ export const TickerDesignEditor: React.FC<Props> = ({
 
   return (
     <div className={classes.container}>
-      {/* Deprecated */}
       <ColourInput
         colour={ticker.text}
         name="ticker.text"
         label="Text Colour"
         isDisabled={isDisabled}
         onChange={colour => onChange({ ...ticker, text: colour })}
+        onValidationChange={onValidationChange}
+      />
+      <ColourInput
+        colour={ticker.progressBarBackground}
+        name="ticker.progressBarBackground"
+        label="Progress Bar Background Colour"
+        isDisabled={isDisabled}
+        onChange={colour => onChange({ ...ticker, progressBarBackground: colour })}
         onValidationChange={onValidationChange}
       />
       <ColourInput
@@ -49,44 +56,11 @@ export const TickerDesignEditor: React.FC<Props> = ({
         onValidationChange={onValidationChange}
       />
       <ColourInput
-        colour={ticker.progressBarBackground}
-        name="ticker.progressBarBackground"
-        label="Progress Bar Background Colour"
-        isDisabled={isDisabled}
-        onChange={colour => onChange({ ...ticker, progressBarBackground: colour })}
-        onValidationChange={onValidationChange}
-      />
-      {/* Deprecated */}
-      <ColourInput
         colour={ticker.goalMarker}
         name="ticker.goalMarker"
         label="Goal Marker Colour"
         isDisabled={isDisabled}
         onChange={colour => onChange({ ...ticker, goalMarker: colour })}
-        onValidationChange={onValidationChange}
-      />
-      <ColourInput
-        colour={ticker.headlineColour}
-        name="ticker.headlineColour"
-        label="Headline Colour"
-        isDisabled={isDisabled}
-        onChange={colour => onChange({ ...ticker, headlineColour: colour })}
-        onValidationChange={onValidationChange}
-      />
-      <ColourInput
-        colour={ticker.totalColour}
-        name="ticker.totalColour"
-        label="Total Colour"
-        isDisabled={isDisabled}
-        onChange={colour => onChange({ ...ticker, totalColour: colour })}
-        onValidationChange={onValidationChange}
-      />
-      <ColourInput
-        colour={ticker.goalColour}
-        name="ticker.goalColour"
-        label="Goal Colour"
-        isDisabled={isDisabled}
-        onChange={colour => onChange({ ...ticker, goalColour: colour })}
         onValidationChange={onValidationChange}
       />
     </div>
