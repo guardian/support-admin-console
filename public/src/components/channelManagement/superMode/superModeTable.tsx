@@ -30,8 +30,8 @@ export const SuperModeTable: React.FC<SuperModeTableProps> = ({
         autoHeight
         rows={rows.map(row => ({ ...row, id: `${row.url}/${row.region}` }))}
         columns={columns}
-        pageSize={10}
-        rowsPerPageOptions={[10]}
+        paginationModel={{ pageSize: 10, page: 0 }}
+        pageSizeOptions={[10]}
         onRowDoubleClick={params => {
           const row = params.row as SuperModeRow;
           setSelectedRow(row);

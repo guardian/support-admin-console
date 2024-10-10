@@ -233,7 +233,7 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
           control={control}
           rules={{
             required: requireVariantHeader ? EMPTY_ERROR_HELPER_TEXT : undefined,
-            validate: lineValidator,
+            validate: lineValidator, 
           }}
           render={data => {
             return (
@@ -244,9 +244,9 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                     ? errors.heading.message || errors.heading.type
                     : HEADER_DEFAULT_HELPER_TEXT
                 }
-                copyData={data.value}
+                copyData={data.field.value} // TODO: added .field here
                 updateCopy={value => {
-                  data.onChange(value);
+                  data.field.onChange(value); // TODO: added .field here
                   handleSubmit(setValidatedFields)();
                 }}
                 name="heading"
@@ -286,9 +286,9 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                     errors.paragraphs.message || errors.paragraphs.type
                   : getParagraphsHelperText()
               }
-              copyData={data.value}
+              copyData={data.field.value} // TODO: added .field here
               updateCopy={pars => {
-                data.onChange(pars);
+                data.field.onChange(pars); // TODO: added .field here
                 handleSubmit(setValidatedFields)();
               }}
               name="paragraphs"
@@ -325,9 +325,9 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                     ? errors.highlightedText.message || errors.highlightedText.type
                     : HIGHTLIGHTED_TEXT_DEFAULT_HELPER_TEXT
                 }
-                copyData={data.value}
+                copyData={data.field.value} // TODO: added .field here
                 updateCopy={pars => {
-                  data.onChange(pars);
+                  data.field.onChange(pars); // TODO: added .field here
                   handleSubmit(setValidatedFields)();
                 }}
                 name="highlightedText"

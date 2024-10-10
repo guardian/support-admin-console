@@ -104,6 +104,7 @@ interface FormData {
   heading?: string;
   paragraphs: string[];
   highlightedText?: string;
+  value?: string | undefined;
 }
 
 // Temporary, while we migrate from messageText to paragraphs
@@ -228,10 +229,9 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                     ? errors.heading.message || errors.heading.type
                     : HEADER_DEFAULT_HELPER_TEXT
                 }
-                copyData={data.value}
+                copyData={data.field.value} // TODO: not sure if adding the `field.` here is correct but it now compiles
                 updateCopy={pars => {
-                  data.onChange(pars);
-                  handleSubmit(setValidatedFields)();
+                  data.field.onChange(pars); // TODO: not sure if adding the `field.` here is correct but it now compiles
                 }}
                 name="heading"
                 label="Header"
@@ -264,9 +264,9 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                         errors.paragraphs.message || errors.paragraphs.type
                       : getParagraphsHelperText()
                   }
-                  copyData={data.value}
+                  copyData={data.field.value} // TODO: not sure if adding the `field.` here is correct but it now compiles
                   updateCopy={pars => {
-                    data.onChange(pars);
+                    data.field.onChange(pars); // TODO: not sure if adding the `field.` here is correct but it now compiles
                     handleSubmit(setValidatedFields)();
                   }}
                   name="paragraphs"
@@ -292,9 +292,9 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                       ? errors.highlightedText.message || errors.highlightedText.type
                       : HIGHTLIGHTED_TEXT_HELPER_TEXT
                   }
-                  copyData={data.value}
+                  copyData={data.field.value} // TODO: not sure if adding the `field.` here is correct but it now compiles
                   updateCopy={pars => {
-                    data.onChange(pars);
+                    data.field.onChange(pars);// TODO: not sure if adding the `field.` here is correct but it now compiles
                     handleSubmit(setValidatedFields)();
                   }}
                   name="highlightedText"

@@ -213,10 +213,10 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
                         {...register('isActive')}
                         name="isActive"
                         onChange={e => {
-                          data.onChange(e.target.checked);
+                          data.field.onChange(e.target.checked); // TODO: added .field here
                           handleSubmit(onSubmit)();
                         }}
-                        checked={data.value}
+                        checked={data.field.value} // TODO: added .field here
                         disabled={!editMode}
                       />
                     }
@@ -232,9 +232,9 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
                   return (
                     <RichTextEditor
                       error={errors.notes !== undefined}
-                      copyData={data.value}
+                      copyData={data.field.value} // TODO: added .field here
                       updateCopy={pars => {
-                        data.onChange(pars);
+                        data.field.onChange(pars); // TODO: added .field here
                         handleSubmit(onSubmit)();
                       }}
                       name="notes"
