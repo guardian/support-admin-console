@@ -1,10 +1,10 @@
 import React from 'react';
-import { Button, TextField, Theme, Typography, Link } from '@mui/material';
+import { Button, TextField, Theme, Typography, Link, Select, MenuItem } from '@mui/material';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { makeStyles } from '@mui/styles';
-import { MediumSelector } from './MediumSelector';
 import lzstring from 'lz-string';
 import { Link as LinkIcon, OpenInNew } from '@mui/icons-material';
+import {OPTIONS, OptionGroup, Option } from './MediumSelector'
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {
@@ -42,6 +42,12 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
     fontWeight: 'normal',
     color: palette.grey[700],
     lineHeight: 1.5,
+  },
+  groupHeading: {
+    fontWeight: 700,
+  },
+  item: {
+    marginLeft: spacing(2),
   },
   header: {
     marginTop: spacing(3),
@@ -164,7 +170,40 @@ export const LinkTrackingBuilder: React.FC = () => {
         <Typography className={classes.header} variant="h4">
           Placement
         </Typography>
-        <MediumSelector onUpdate={resetLink} control={control} />
+
+        /**
+        * A selector for choosing a medium. The value is the source and medium separated by a double underscore.
+        * This is because the link tracking should contain both, but the source should not be chosen directly by the user.
+        */
+        <Select
+            {...register('sourceAndMedium')}
+            name="sourceAndMedium" 
+            // value={value}
+            error={!!errors?.sourceAndMedium}
+          >
+            {OPTIONS.map(group => {
+              const groupItem = (
+                <MenuItem
+                  className={classes.groupHeading}
+                  value={group.group}
+                  key={group.group}
+                  disabled
+                >
+                  {group.group}
+                </MenuItem>
+              );
+              const items = group.options.map(medium => (
+                <MenuItem
+                  className={classes.item}
+                  value={`${group.group}__${medium.value}`}
+                  key={`${group.group}-${medium.value}`}
+                >
+                  {medium.label}
+                </MenuItem>
+              ));
+              return [groupItem].concat(items);
+            })}
+          </Select>
       </div>
 
       <Button type="submit" variant="contained" color="primary" disabled={linkReady}>
