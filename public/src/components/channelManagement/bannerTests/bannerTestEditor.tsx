@@ -323,7 +323,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
 
         <div className={classes.sectionContainer}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
-            Deploy schedule
+            Deploy schedule override
           </Typography>
 
           <DeployScheduleEditor
