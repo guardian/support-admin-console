@@ -111,7 +111,6 @@ export const LinkTrackingBuilder: React.FC = () => {
     >
       <div className={classes.fieldsContainer}>
         <TextField
-          name="url"
           label="URL (without tracking)"
           {...register('url',{
             required: true,
@@ -128,6 +127,7 @@ export const LinkTrackingBuilder: React.FC = () => {
               }
             },
           })}
+          name="url"
           error={!!errors.url}
           helperText={errors?.url?.message}
         />
@@ -136,9 +136,9 @@ export const LinkTrackingBuilder: React.FC = () => {
           Campaign
         </Typography>
         <TextField
-          name="campaign"
           label="Campaign"
           {...register('campaign',{ required: true })}
+          name="campaign"
           error={!!errors.campaign}
           helperText={errors?.campaign?.message}
         />
@@ -147,16 +147,16 @@ export const LinkTrackingBuilder: React.FC = () => {
           Call to action / creative
         </Typography>
         <TextField
-          name="content"
           label="Creative / utm_content / AB test name"
           {...register('content',{ required: true })}
+          name="content"
           error={!!errors.content}
           helperText={errors?.content?.message}
         />
         <TextField
-          name="term"
           label="Audience segment / utm_term / AB test variant name"
           {...register('term',{ required: true })}
+          name="term"
           error={!!errors.term}
           helperText={errors?.term?.message}
         />
