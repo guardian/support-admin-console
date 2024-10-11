@@ -16,7 +16,12 @@ import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelecto
 import TestEditorArticleCountEditor, {
   DEFAULT_ARTICLES_VIEWED_SETTINGS,
 } from '../testEditorArticleCountEditor';
-import { BannerContent, BannerTest, BannerVariant } from '../../../models/banner';
+import {
+  BannerContent,
+  BannerTest,
+  BannerTestDeploySchedule,
+  BannerVariant,
+} from '../../../models/banner';
 import { getDefaultVariant } from './utils/defaults';
 import VariantSummary from '../../tests/variants/variantSummary';
 import BannerVariantPreview from './bannerVariantPreview';
@@ -33,6 +38,7 @@ import {
 import TestEditorContextTargeting from '../testEditorContextTargeting';
 import { getDesignForVariant } from '../../../utils/bannerDesigns';
 import { BanditEditor } from '../banditEditor';
+import { DeployScheduleEditor } from './deployScheduleEditor';
 
 const copyHasTemplate = (content: BannerContent, template: string): boolean =>
   (content.heading && content.heading.includes(template)) ||
@@ -149,6 +155,13 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
     updateTest({
       ...test,
       articlesViewedSettings: updatedArticlesViewedSettings,
+    });
+  };
+
+  const onDeployScheduleChange = (updatedDeploySchedule?: BannerTestDeploySchedule): void => {
+    updateTest({
+      ...test,
+      deploySchedule: updatedDeploySchedule,
     });
   };
 
@@ -304,6 +317,19 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
             articlesViewedSettings={test.articlesViewedSettings}
             onArticlesViewedSettingsChanged={onArticlesViewedSettingsChange}
             onValidationChange={onArticlesViewedSettingsValidationChanged}
+            isDisabled={!userHasTestLocked}
+          />
+        </div>
+
+        <div className={classes.sectionContainer}>
+          <Typography variant={'h3'} className={classes.sectionHeader}>
+            Deploy schedule
+          </Typography>
+
+          <DeployScheduleEditor
+            deploySchedule={test.deploySchedule}
+            onDeployScheduleChange={onDeployScheduleChange}
+            onValidationChange={isValid => setValidationStatusForField('deploySchedule', isValid)}
             isDisabled={!userHasTestLocked}
           />
         </div>
