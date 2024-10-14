@@ -523,7 +523,7 @@ const RichTextEditor: React.FC<RichTextEditorProps<string[]>> = ({
       const { getHTML, getText } = useHelpers();
 
       const handleSaveShortcut = useCallback(
-        ({ state }:{ state: EditorState | undefined}) => { // TODO: should this be any or something else?
+        ({ state }:{ state: EditorState | undefined}) => { // TODO: the blur event doesn't appear to have state
           if (noHtml) {
             // getText gives us the plain text representation with line breaks
             updateCopy(getText({state}).split('\n'));
@@ -534,7 +534,8 @@ const RichTextEditor: React.FC<RichTextEditorProps<string[]>> = ({
         },
         [getHTML],
       );
-      manager.getExtension(EventsExtension).addHandler('blur', handleSaveShortcut);
+      // TODO: what do we use to trigger the save at this point?
+      // manager.getExtension(EventsExtension).addHandler('blur', handleSaveShortcut);
     },
   ];
 
