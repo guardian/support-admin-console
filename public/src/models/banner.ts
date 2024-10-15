@@ -35,6 +35,10 @@ export interface BannerVariant extends Variant {
   tickerSettings?: TickerSettings;
 }
 
+export interface BannerTestDeploySchedule {
+  daysBetween: number;
+}
+
 export interface BannerTest extends Test {
   name: string;
   nickname?: string;
@@ -47,4 +51,5 @@ export interface BannerTest extends Test {
   deviceType?: DeviceType;
   campaignName?: string;
   contextTargeting: PageContextTargeting;
+  deploySchedule?: BannerTestDeploySchedule;
 }
