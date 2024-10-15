@@ -2526,6 +2526,9 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
             "Ref": "AMIAdminconsole",
           },
           "InstanceType": "t4g.micro",
+          "MetadataOptions": {
+            "HttpTokens": "required",
+          },
           "SecurityGroupIds": [
             {
               "Fn::GetAtt": [
