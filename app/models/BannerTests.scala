@@ -26,6 +26,8 @@ case class BannerVariant(
     tickerSettings: Option[TickerSettings] = None,
 )
 
+case class BannerTestDeploySchedule(daysBetween: Int)
+
 case class BannerTest(
     name: String,
     channel: Option[Channel],
@@ -44,6 +46,7 @@ case class BannerTest(
     signedInStatus: Option[SignedInStatus] = Some(SignedInStatus.All),
     isBanditTest: Option[Boolean] = None,
     consentStatus: Option[ConsentStatus] = Some(ConsentStatus.All),
+    deploySchedule: Option[BannerTestDeploySchedule] = None,
 ) extends ChannelTest[BannerTest] {
 
   override def withChannel(channel: Channel): BannerTest =
