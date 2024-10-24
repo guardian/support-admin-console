@@ -114,7 +114,7 @@ const TestMethodology: React.FC<TestMethodologyProps> = ({
           <div>
             <TextField
               type={'number'}
-              InputProps={{ inputProps: { min: 0, max: 1, step: 0.1 } }}
+              InputProps={{ inputProps: { min: 0.1, max: 1, step: 0.1 } }}
               value={methodology.epsilon}
               label={'Epsilon'}
               disabled={isDisabled}
