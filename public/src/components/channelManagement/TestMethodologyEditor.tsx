@@ -169,6 +169,7 @@ export const TestMethodologyEditor: React.FC<TestMethodologyEditorProps> = ({
         <TestMethodology
           key={`methodology-${idx}`}
           methodology={method}
+          // Only need to display test names if more than one methodology
           testName={methodologies.length > 1 ? testName : undefined}
           audiencePercentage={Math.round(100 / methodologies.length)}
           isDisabled={isDisabled}
