@@ -33,6 +33,7 @@ case class HeaderTest(
   campaignName: Option[String] = Some("NOT_IN_CAMPAIGN"),
   signedInStatus: Option[SignedInStatus] = Some(SignedInStatus.All),
   consentStatus: Option[ConsentStatus] = Some(ConsentStatus.All),
+  methodologies: List[Methodology] = Nil
 ) extends ChannelTest[HeaderTest] {
 
   override def withChannel(channel: Channel): HeaderTest = this.copy(channel = Some(channel))

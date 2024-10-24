@@ -13,6 +13,15 @@ export type EpicModuleName = 'ContributionsEpic' | 'ContributionsLiveblogEpic';
 
 export type Status = 'Live' | 'Draft' | 'Archived';
 
+interface ABTestMethodology {
+  name: 'ABTest';
+}
+interface EpsilonGreedyBanditMethodology {
+  name: 'EpsilonGreedyBandit';
+  epsilon: number;
+}
+export type Methodology = ABTestMethodology | EpsilonGreedyBanditMethodology;
+
 export interface Test {
   name: string;
   nickname?: string;
@@ -28,7 +37,7 @@ export interface Test {
   channel?: string;
   signedInStatus?: SignedInStatus;
   consentStatus?: ConsentStatus;
-  isBanditTest?: boolean;
+  methodologies: Methodology[];
 }
 
 export interface EpicEditorConfig {

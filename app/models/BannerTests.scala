@@ -44,9 +44,9 @@ case class BannerTest(
     deviceType: Option[DeviceType] = None,
     campaignName: Option[String] = Some("NOT_IN_CAMPAIGN"),
     signedInStatus: Option[SignedInStatus] = Some(SignedInStatus.All),
-    isBanditTest: Option[Boolean] = None,
     consentStatus: Option[ConsentStatus] = Some(ConsentStatus.All),
     deploySchedule: Option[BannerTestDeploySchedule] = None,
+    methodologies: List[Methodology] = Nil
 ) extends ChannelTest[BannerTest] {
 
   override def withChannel(channel: Channel): BannerTest =
