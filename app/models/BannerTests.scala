@@ -4,6 +4,7 @@ import io.circe.generic.extras.Configuration
 import io.circe.generic.extras.auto._
 import io.circe.generic.extras.semiauto._
 import io.circe.{Decoder, Encoder, Json}
+import models.Methodology.defaultMethodologies
 
 case class BannerUI(designName: String)
 
@@ -46,7 +47,7 @@ case class BannerTest(
     signedInStatus: Option[SignedInStatus] = Some(SignedInStatus.All),
     consentStatus: Option[ConsentStatus] = Some(ConsentStatus.All),
     deploySchedule: Option[BannerTestDeploySchedule] = None,
-    methodologies: List[Methodology] = Nil
+    methodologies: List[Methodology] = defaultMethodologies
 ) extends ChannelTest[BannerTest] {
 
   override def withChannel(channel: Channel): BannerTest =

@@ -5,6 +5,7 @@ import io.circe.generic.extras.Configuration
 import io.circe.generic.extras.auto._
 import io.circe.generic.extras.semiauto._
 import io.circe.{Decoder, Encoder}
+import models.Methodology.defaultMethodologies
 
 import scala.collection.immutable.IndexedSeq
 
@@ -62,7 +63,7 @@ case class EpicTest(
   campaignName: Option[String] = Some("NOT_IN_CAMPAIGN"),
   signedInStatus: Option[SignedInStatus] = Some(SignedInStatus.All),
   consentStatus: Option[ConsentStatus] = Some(ConsentStatus.All),
-  methodologies: List[Methodology] = Nil
+  methodologies: List[Methodology] = defaultMethodologies
 ) extends ChannelTest[EpicTest] {
 
   override def withChannel(channel: Channel): EpicTest = this.copy(channel = Some(channel))
