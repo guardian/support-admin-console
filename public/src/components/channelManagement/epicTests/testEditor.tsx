@@ -265,7 +265,6 @@ export const getEpicTestEditor = (
           </Typography>
           <TestMethodologyEditor
             methodologies={test.methodologies}
-            testName={test.name}
             isDisabled={!userHasTestLocked}
             onChange={onMethodologyChange}
           />
