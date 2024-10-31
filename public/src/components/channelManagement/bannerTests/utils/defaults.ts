@@ -53,6 +53,7 @@ const DEV_AND_CODE_DEFAULT_BANNER_TEST: BannerTest = {
   variants: [DEV_AND_CODE_DEFAULT_VARIANT],
   articlesViewedSettings: undefined,
   contextTargeting: { tagIds: [], sectionIds: [], excludedTagIds: [], excludedSectionIds: [] },
+  methodologies: [{ name: 'ABTest' }],
 };
 
 const PROD_DEFAULT_BANNER: BannerTest = {
@@ -64,6 +65,7 @@ const PROD_DEFAULT_BANNER: BannerTest = {
   variants: [],
   articlesViewedSettings: undefined,
   contextTargeting: { tagIds: [], sectionIds: [], excludedTagIds: [], excludedSectionIds: [] },
+  methodologies: [{ name: 'ABTest' }],
 };
 
 export const getDefaultTest = (): BannerTest => {

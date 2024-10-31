@@ -4,6 +4,7 @@ import {
   ArticlesViewedSettings,
   ConsentStatus,
   DeviceType,
+  Methodology,
   SignedInStatus,
   UserCohort,
 } from '../helpers/shared';
@@ -37,8 +38,8 @@ import {
 } from '../../../utils/requests';
 import TestEditorContextTargeting from '../testEditorContextTargeting';
 import { getDesignForVariant } from '../../../utils/bannerDesigns';
-import { BanditEditor } from '../banditEditor';
 import { DeployScheduleEditor } from './deployScheduleEditor';
+import { TestMethodologyEditor } from '../TestMethodologyEditor';
 
 const copyHasTemplate = (content: BannerContent, template: string): boolean =>
   (content.heading && content.heading.includes(template)) ||
@@ -99,8 +100,9 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
     });
   };
 
-  const onExperimentMethodologyChange = (isBanditTest?: boolean): void => {
-    updateTest({ ...test, isBanditTest });
+  const onMethodologyChange = (methodologies: Methodology[]): void => {
+    setValidationStatusForField('methodologies', methodologies.length > 0);
+    updateTest({ ...test, methodologies });
   };
 
   const onArticlesViewedSettingsValidationChanged = (isValid: boolean): void =>
@@ -236,17 +238,17 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
           <Typography variant={'h3'} className={classes.sectionHeader}>
             Experiment Methodology
           </Typography>
-          <BanditEditor
-            test={test}
+          <TestMethodologyEditor
+            methodologies={test.methodologies}
             isDisabled={!userHasTestLocked}
-            onExperimentMethodologyChange={onExperimentMethodologyChange}
+            onChange={onMethodologyChange}
           />
         </div>
 
         {test.variants.length > 1 && (
           <div className={classes.sectionContainer}>
             <Typography variant={'h3'} className={classes.sectionHeader}>
-              Variants split
+              Variants split (applies to AB tests only)
             </Typography>
             <div>
               <TestVariantsSplitEditor

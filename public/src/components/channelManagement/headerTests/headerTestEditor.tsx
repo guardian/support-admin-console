@@ -141,7 +141,7 @@ const HeaderTestEditor: React.FC<ValidatedTestEditorProps<HeaderTest>> = ({
       {test.variants.length > 1 && (
         <div className={classes.sectionContainer}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
-            Variants split
+            Variants split (applies to AB tests only)
           </Typography>
           <div>
             <TestVariantsSplitEditor
