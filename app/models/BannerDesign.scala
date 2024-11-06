@@ -23,7 +23,6 @@ case class HeaderImage(
   altText: String
 )
 
-// case class FontSize // is this needed?
 case class FontSize (
   size: String
 )
