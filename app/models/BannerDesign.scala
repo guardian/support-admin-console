@@ -23,6 +23,15 @@ case class HeaderImage(
   altText: String
 )
 
+// case class FontSize // is this needed?
+case class FontSize (
+  size: String
+)
+case class Font (
+  heading: FontSize
+)
+
+
 sealed trait BannerDesignVisual
 object BannerDesignVisual {
   case class Image(
@@ -124,4 +133,5 @@ case class BannerDesign(
   headerImage: Option[HeaderImage],
   colours: BannerDesignColours,
   lockStatus: Option[LockStatus],
+  fonts: Option[Font],
 )
