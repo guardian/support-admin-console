@@ -6,6 +6,7 @@ import {
   BannerDesignVisual,
   BasicColours,
   CtaDesign,
+  Font,
   HighlightedTextColours,
   TickerDesign,
 } from '../../../models/bannerDesign';
@@ -20,6 +21,7 @@ import { HeaderImageEditor } from './HeaderImageEditor';
 import { BannerVisualEditor } from './BannerVisualEditor';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { InfoOutlined } from '@mui/icons-material';
+import { HeadlineSizeEditor } from './HeadlineSizeEditor';
 
 type Props = {
   design: BannerDesign;
@@ -117,6 +119,17 @@ const BannerDesignForm: React.FC<Props> = ({
     });
   };
 
+  const onHeadlineSizeChange = (headerSize: 'small' | 'medium' | 'large' = 'medium'): void => {
+    onChange({
+      ...design,
+      fonts: {
+        heading: {
+          size: headerSize,
+        },
+      },
+    });
+  };
+
   const onCtaColoursChange = (name: 'primaryCta' | 'secondaryCta' | 'closeButton') => (
     cta: CtaDesign,
   ): void => {
@@ -181,6 +194,20 @@ const BannerDesignForm: React.FC<Props> = ({
             isDisabled={isDisabled}
             onValidationChange={onValidationChange}
             onChange={onHeaderImageChange}
+          />
+        </AccordionDetails>
+      </Accordion>
+
+      <Accordion className={classes.accordion}>
+        <AccordionSummary className={classes.sectionHeader} expandIcon={<ExpandMoreIcon />}>
+          Headline Size
+        </AccordionSummary>
+        <AccordionDetails>
+          <HeadlineSizeEditor
+            headerSize={design.fonts?.heading?.size}
+            isDisabled={isDisabled}
+            // onValidationChange={onValidationChange} // TODO: needed?
+            onChange={onHeadlineSizeChange}
           />
         </AccordionDetails>
       </Accordion>
