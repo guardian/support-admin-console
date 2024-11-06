@@ -6,7 +6,6 @@ import {
   BannerDesignVisual,
   BasicColours,
   CtaDesign,
-  Font,
   HighlightedTextColours,
   TickerDesign,
 } from '../../../models/bannerDesign';
