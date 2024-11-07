@@ -1,12 +1,12 @@
 import { FormControl, FormControlLabel, RadioGroup, Radio } from '@mui/material';
 import React from 'react';
-import { Font } from '../../../models/bannerDesign';
+import { FontSize } from '../../../models/bannerDesign';
 
 interface Props {
-  headerSize?: Font['size'];
+  headerSize?: FontSize;
   isDisabled: boolean;
   // onValidationChange: (fieldName: string, isValid: boolean) => void;
-  onChange: (headerSize: Font['size']) => void;
+  onChange: (headerSize: FontSize) => void;
 }
 
 export const HeadlineSizeEditor: React.FC<Props> = ({
@@ -17,10 +17,8 @@ export const HeadlineSizeEditor: React.FC<Props> = ({
 }: Props) => {
   const onRadioGroupChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     if (event.target.value === 'small') {
-      console.log('selected small');
       onChange('small');
     } else {
-      console.log('selected medium');
       onChange('medium');
     }
   };
@@ -35,7 +33,7 @@ export const HeadlineSizeEditor: React.FC<Props> = ({
           <FormControlLabel
             name="small"
             value="small"
-            // key="disabled"
+            key="small"
             control={<Radio />}
             label="Small heading size - use for tiny banners without copy"
             disabled={isDisabled}
@@ -43,7 +41,7 @@ export const HeadlineSizeEditor: React.FC<Props> = ({
           <FormControlLabel
             name="medium"
             value="medium"
-            // key="enabled"
+            key="medium"
             control={<Radio />}
             label="Medium heading size (default)"
             disabled={isDisabled}
