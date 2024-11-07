@@ -31,6 +31,11 @@ export const createDefaultBannerDesign = (name: string): BannerDesign => ({
   name,
   status: 'Draft',
   visual: defaultBannerChoiceCardsDesign,
+  fonts: {
+    heading: {
+      size: 'medium',
+    },
+  },
   colours: {
     basic: {
       background: stringToHexColour('F1F8FC'),
