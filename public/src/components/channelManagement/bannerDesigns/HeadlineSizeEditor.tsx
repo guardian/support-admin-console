@@ -38,7 +38,7 @@ export const HeadlineSizeEditor: React.FC<Props> = ({
             value="small"
             key="small"
             control={<Radio />}
-            label="Small heading size - use for tiny banners without copy"
+            label="Small heading size - use for tiny banners without body copy"
             disabled={isDisabled}
           />
           <FormControlLabel
