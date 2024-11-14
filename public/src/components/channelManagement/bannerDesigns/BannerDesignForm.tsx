@@ -6,6 +6,7 @@ import {
   BannerDesignVisual,
   BasicColours,
   CtaDesign,
+  FontSize,
   HighlightedTextColours,
   TickerDesign,
 } from '../../../models/bannerDesign';
@@ -118,7 +119,7 @@ const BannerDesignForm: React.FC<Props> = ({
     });
   };
 
-  const onHeadlineSizeChange = (headerSize: 'small' | 'medium' | 'large' = 'medium'): void => {
+  const onHeadlineSizeChange = (headerSize: FontSize): void => {
     onChange({
       ...design,
       fonts: {
