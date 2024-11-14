@@ -206,7 +206,6 @@ const BannerDesignForm: React.FC<Props> = ({
           <HeadlineSizeEditor
             headerSize={design.fonts?.heading?.size}
             isDisabled={isDisabled}
-            onValidationChange={onValidationChange}
             onChange={onHeadlineSizeChange}
           />
         </AccordionDetails>

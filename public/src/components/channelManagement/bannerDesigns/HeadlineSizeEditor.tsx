@@ -5,22 +5,18 @@ import { FontSize } from '../../../models/bannerDesign';
 interface Props {
   headerSize?: FontSize;
   isDisabled: boolean;
-  onValidationChange: (fieldName: string, isValid: boolean) => void;
   onChange: (headerSize: FontSize) => void;
 }
 
 export const HeadlineSizeEditor: React.FC<Props> = ({
   headerSize,
   isDisabled,
-  onValidationChange,
   onChange,
 }: Props) => {
   const onRadioGroupChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     if (event.target.value === 'small') {
-      onValidationChange('HeadlineSizeEditor', true);
       onChange('small');
     } else {
-      onValidationChange('HeadlineSizeEditor', true);
       onChange('medium');
     }
   };
