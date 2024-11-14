@@ -63,9 +63,18 @@ export interface ChoiceCardsDesign {
 }
 export type BannerDesignVisual = BannerDesignImage | ChoiceCardsDesign;
 
+export type FontSize = 'small' | 'medium' | 'large';
+
+export interface Font {
+  size?: FontSize;
+}
+
 export type BannerDesignProps = {
   visual?: BannerDesignVisual;
   headerImage?: BannerDesignHeaderImage;
+  fonts?: {
+    heading?: Font;
+  };
   colours: {
     basic: BasicColours;
     highlightedText: HighlightedTextColours;

@@ -23,6 +23,18 @@ case class HeaderImage(
   altText: String
 )
 
+sealed trait FontSize
+object FontSize {
+  case object small extends FontSize
+  case object medium extends FontSize
+  case object large extends FontSize
+
+  implicit val decoder: Decoder[FontSize] = deriveEnumerationDecoder[FontSize]
+  implicit val encoder: Encoder[FontSize] = deriveEnumerationEncoder[FontSize]
+}
+case class Font(size: FontSize)
+case class Fonts(heading: Font)
+
 sealed trait BannerDesignVisual
 object BannerDesignVisual {
   case class Image(
@@ -124,4 +136,5 @@ case class BannerDesign(
   headerImage: Option[HeaderImage],
   colours: BannerDesignColours,
   lockStatus: Option[LockStatus],
+  fonts: Option[Fonts],
 )
