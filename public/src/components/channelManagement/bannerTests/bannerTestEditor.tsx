@@ -4,6 +4,7 @@ import {
   ArticlesViewedSettings,
   ConsentStatus,
   DeviceType,
+  Methodology,
   SignedInStatus,
   UserCohort,
 } from '../helpers/shared';
@@ -16,7 +17,12 @@ import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelecto
 import TestEditorArticleCountEditor, {
   DEFAULT_ARTICLES_VIEWED_SETTINGS,
 } from '../testEditorArticleCountEditor';
-import { BannerContent, BannerTest, BannerVariant } from '../../../models/banner';
+import {
+  BannerContent,
+  BannerTest,
+  BannerTestDeploySchedule,
+  BannerVariant,
+} from '../../../models/banner';
 import { getDefaultVariant } from './utils/defaults';
 import VariantSummary from '../../tests/variants/variantSummary';
 import BannerVariantPreview from './bannerVariantPreview';
@@ -32,6 +38,8 @@ import {
 } from '../../../utils/requests';
 import TestEditorContextTargeting from '../testEditorContextTargeting';
 import { getDesignForVariant } from '../../../utils/bannerDesigns';
+import { DeployScheduleEditor } from './deployScheduleEditor';
+import { TestMethodologyEditor } from '../TestMethodologyEditor';
 
 const copyHasTemplate = (content: BannerContent, template: string): boolean =>
   (content.heading && content.heading.includes(template)) ||
@@ -92,6 +100,11 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
     });
   };
 
+  const onMethodologyChange = (methodologies: Methodology[]): void => {
+    setValidationStatusForField('methodologies', methodologies.length > 0);
+    updateTest({ ...test, methodologies });
+  };
+
   const onArticlesViewedSettingsValidationChanged = (isValid: boolean): void =>
     setValidationStatusForField('articlesViewedSettings', isValid);
 
@@ -144,6 +157,13 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
     updateTest({
       ...test,
       articlesViewedSettings: updatedArticlesViewedSettings,
+    });
+  };
+
+  const onDeployScheduleChange = (updatedDeploySchedule?: BannerTestDeploySchedule): void => {
+    updateTest({
+      ...test,
+      deploySchedule: updatedDeploySchedule,
     });
   };
 
@@ -214,10 +234,21 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
           </div>
         </div>
 
+        <div className={classes.sectionContainer}>
+          <Typography variant={'h3'} className={classes.sectionHeader}>
+            Experiment Methodology
+          </Typography>
+          <TestMethodologyEditor
+            methodologies={test.methodologies}
+            isDisabled={!userHasTestLocked}
+            onChange={onMethodologyChange}
+          />
+        </div>
+
         {test.variants.length > 1 && (
           <div className={classes.sectionContainer}>
             <Typography variant={'h3'} className={classes.sectionHeader}>
-              Variants split
+              Variants split (applies to AB tests only)
             </Typography>
             <div>
               <TestVariantsSplitEditor
@@ -288,6 +319,19 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
             articlesViewedSettings={test.articlesViewedSettings}
             onArticlesViewedSettingsChanged={onArticlesViewedSettingsChange}
             onValidationChange={onArticlesViewedSettingsValidationChanged}
+            isDisabled={!userHasTestLocked}
+          />
+        </div>
+
+        <div className={classes.sectionContainer}>
+          <Typography variant={'h3'} className={classes.sectionHeader}>
+            Deploy schedule override
+          </Typography>
+
+          <DeployScheduleEditor
+            deploySchedule={test.deploySchedule}
+            onDeployScheduleChange={onDeployScheduleChange}
+            onValidationChange={isValid => setValidationStatusForField('deploySchedule', isValid)}
             isDisabled={!userHasTestLocked}
           />
         </div>

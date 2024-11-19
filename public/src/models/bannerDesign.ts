@@ -31,10 +31,14 @@ export interface CtaDesign {
 }
 
 export interface TickerDesign {
-  text: HexColour;
+  text: HexColour; //deprecated
   filledProgress: HexColour;
   progressBarBackground: HexColour;
-  goalMarker: HexColour;
+  goalMarker: HexColour; //deprecated
+
+  headlineColour: HexColour; //new
+  totalColour: HexColour; //new
+  goalColour: HexColour; //new
 }
 
 export interface BannerDesignHeaderImage {
@@ -59,9 +63,18 @@ export interface ChoiceCardsDesign {
 }
 export type BannerDesignVisual = BannerDesignImage | ChoiceCardsDesign;
 
+export type FontSize = 'small' | 'medium' | 'large';
+
+export interface Font {
+  size?: FontSize;
+}
+
 export type BannerDesignProps = {
   visual?: BannerDesignVisual;
   headerImage?: BannerDesignHeaderImage;
+  fonts?: {
+    heading?: Font;
+  };
   colours: {
     basic: BasicColours;
     highlightedText: HighlightedTextColours;

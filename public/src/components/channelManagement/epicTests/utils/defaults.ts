@@ -72,6 +72,7 @@ const DEV_AND_CODE_DEFAULT_TEST: EpicTest = {
   variants: [DEV_AND_CODE_DEFAULT_VARIANT],
   highPriority: false, // has been removed from form, but might be used in future
   useLocalViewLog: false,
+  methodologies: [{ name: 'ABTest' }],
 };
 
 const PROD_DEFAULT_TEST: EpicTest = {
@@ -90,6 +91,7 @@ const PROD_DEFAULT_TEST: EpicTest = {
   variants: [],
   highPriority: false, // has been removed from form, but might be used in future
   useLocalViewLog: false,
+  methodologies: [{ name: 'ABTest' }],
 };
 
 export const getDefaultTest = (): EpicTest => {

@@ -9,6 +9,7 @@ import {
   SignedInStatus,
   PageContextTargeting,
   ConsentStatus,
+  Methodology,
 } from '../helpers/shared';
 import { FormControlLabel, Switch, Typography } from '@mui/material';
 import CampaignSelector from '../CampaignSelector';
@@ -34,10 +35,8 @@ import { useStyles } from '../helpers/testEditorStyles';
 import { EpicTestPreviewButton } from './testPreview';
 import { ValidatedTestEditor, ValidatedTestEditorProps } from '../validatedTestEditor';
 import { TestEditorProps } from '../testsForm';
-import { BanditEditor } from './banditEditor';
 import { AnalyticsButton } from '../AnalyticsButton';
-
-const BANDIT_FEATURE_SWITCH = true;
+import { TestMethodologyEditor } from '../TestMethodologyEditor';
 
 const copyHasTemplate = (test: EpicTest, template: string): boolean =>
   test.variants.some(
@@ -92,8 +91,9 @@ export const getEpicTestEditor = (
       });
     };
 
-    const onExperimentMethodologyChange = (isBanditTest?: boolean): void => {
-      updateTest({ ...test, isBanditTest });
+    const onMethodologyChange = (methodologies: Methodology[]): void => {
+      setValidationStatusForField('methodologies', methodologies.length > 0);
+      updateTest({ ...test, methodologies });
     };
 
     const onVariantsChange = (updatedVariantList: EpicVariant[]): void => {
@@ -259,24 +259,21 @@ export const getEpicTestEditor = (
             </div>
           </div>
         )}
-
-        {BANDIT_FEATURE_SWITCH && (
-          <div className={classes.sectionContainer}>
-            <Typography variant={'h3'} className={classes.sectionHeader}>
-              Experiment Methodology
-            </Typography>
-            <BanditEditor
-              test={test}
-              isDisabled={!userHasTestLocked}
-              onExperimentMethodologyChange={onExperimentMethodologyChange}
-            />
-          </div>
-        )}
+        <div className={classes.sectionContainer}>
+          <Typography variant={'h3'} className={classes.sectionHeader}>
+            Experiment Methodology
+          </Typography>
+          <TestMethodologyEditor
+            methodologies={test.methodologies}
+            isDisabled={!userHasTestLocked}
+            onChange={onMethodologyChange}
+          />
+        </div>
 
         {epicEditorConfig.allowCustomVariantSplit && canHaveCustomVariantSplit(test.variants) && (
           <div className={classes.sectionContainer}>
             <Typography variant={'h3'} className={classes.sectionHeader}>
-              Variants split
+              Variants split (applies to AB tests only)
             </Typography>
             <div>
               <TestVariantsSplitEditor
@@ -284,7 +281,7 @@ export const getEpicTestEditor = (
                 controlProportionSettings={test.controlProportionSettings}
                 onControlProportionSettingsChange={onControlProportionSettingsChange}
                 onValidationChange={onVariantsSplitSettingsValidationChanged}
-                isDisabled={!userHasTestLocked || !!test.isBanditTest}
+                isDisabled={!userHasTestLocked}
               />
             </div>
           </div>

@@ -4,6 +4,7 @@ import io.circe.generic.extras.Configuration
 import io.circe.generic.extras.auto._
 import io.circe.generic.extras.semiauto._
 import io.circe.{Decoder, Encoder}
+import models.Methodology.defaultMethodologies
 
 case class HeaderContent(
   heading: String,
@@ -33,6 +34,7 @@ case class HeaderTest(
   campaignName: Option[String] = Some("NOT_IN_CAMPAIGN"),
   signedInStatus: Option[SignedInStatus] = Some(SignedInStatus.All),
   consentStatus: Option[ConsentStatus] = Some(ConsentStatus.All),
+  methodologies: List[Methodology] = defaultMethodologies
 ) extends ChannelTest[HeaderTest] {
 
   override def withChannel(channel: Channel): HeaderTest = this.copy(channel = Some(channel))

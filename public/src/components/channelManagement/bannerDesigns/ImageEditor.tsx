@@ -4,11 +4,6 @@ import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { BannerDesignImage } from '../../../models/bannerDesign';
 
-const imageUrlValidation = {
-  value: /^https:\/\/i\.guim\.co\.uk\//,
-  message: 'Images must be valid URLs hosted on https://i.guim.co.uk/',
-};
-
 interface Props {
   image: BannerDesignImage;
   isDisabled: boolean;
@@ -44,7 +39,6 @@ export const ImageEditor: React.FC<Props> = ({
       <TextField
         {...register('mobileUrl', {
           required: EMPTY_ERROR_HELPER_TEXT,
-          pattern: imageUrlValidation,
         })}
         error={errors?.mobileUrl !== undefined}
         helperText={errors?.mobileUrl?.message}
@@ -59,7 +53,6 @@ export const ImageEditor: React.FC<Props> = ({
       <TextField
         {...register('tabletUrl', {
           required: EMPTY_ERROR_HELPER_TEXT,
-          pattern: imageUrlValidation,
         })}
         error={errors?.tabletUrl !== undefined}
         helperText={errors?.tabletUrl?.message}
@@ -74,7 +67,6 @@ export const ImageEditor: React.FC<Props> = ({
       <TextField
         {...register('desktopUrl', {
           required: EMPTY_ERROR_HELPER_TEXT,
-          pattern: imageUrlValidation,
         })}
         error={errors?.desktopUrl !== undefined}
         helperText={errors?.desktopUrl?.message}

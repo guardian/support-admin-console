@@ -298,7 +298,6 @@ export class AdminConsole extends GuStack {
       },
       scaling: { minimumInstances: 1, maximumInstances: 2 },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MICRO),
-      withoutImdsv2: true,
     });
 
     // Rule to only allow known http methods

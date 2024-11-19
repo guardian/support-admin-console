@@ -23,6 +23,18 @@ case class HeaderImage(
   altText: String
 )
 
+sealed trait FontSize
+object FontSize {
+  case object small extends FontSize
+  case object medium extends FontSize
+  case object large extends FontSize
+
+  implicit val decoder: Decoder[FontSize] = deriveEnumerationDecoder[FontSize]
+  implicit val encoder: Encoder[FontSize] = deriveEnumerationEncoder[FontSize]
+}
+case class Font(size: FontSize)
+case class Fonts(heading: Font)
+
 sealed trait BannerDesignVisual
 object BannerDesignVisual {
   case class Image(
@@ -82,11 +94,31 @@ case class CtaDesign(
 )
 
 case class TickerDesign(
-  text: HexColour,
+  text: HexColour, //deprecated
   filledProgress: HexColour,
   progressBarBackground: HexColour,
-  goalMarker: HexColour
+  goalMarker: HexColour, //deprecated
+  headlineColour: Option[HexColour],  //new
+  totalColour: Option[HexColour], //new
+  goalColour: Option[HexColour] //new
 )
+
+object TickerDesign {
+  import io.circe.generic.auto._
+  implicit val encoder = Encoder[TickerDesign]
+
+  // Modify the Decoder to use existing values for the new fields
+  val normalDecoder = Decoder[TickerDesign]
+  implicit val decoder = normalDecoder.map(design => {
+    val headlineColour = design.headlineColour.getOrElse(design.text)
+    val totalColour = design.totalColour.getOrElse(design.text)
+    val goalColour = design.goalColour.getOrElse(design.text)
+    design.copy(
+      headlineColour = Some(headlineColour),
+      totalColour = Some(totalColour),
+      goalColour = Some(goalColour))
+  })
+}
 
 case class BannerDesignColours(
   basic: BannerDesignBasicColours,
@@ -104,4 +136,5 @@ case class BannerDesign(
   headerImage: Option[HeaderImage],
   colours: BannerDesignColours,
   lockStatus: Option[LockStatus],
+  fonts: Option[Fonts],
 )

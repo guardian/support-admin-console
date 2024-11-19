@@ -31,6 +31,11 @@ export const createDefaultBannerDesign = (name: string): BannerDesign => ({
   name,
   status: 'Draft',
   visual: defaultBannerChoiceCardsDesign,
+  fonts: {
+    heading: {
+      size: 'medium',
+    },
+  },
   colours: {
     basic: {
       background: stringToHexColour('F1F8FC'),
@@ -77,10 +82,13 @@ export const createDefaultBannerDesign = (name: string): BannerDesign => ({
       },
     },
     ticker: {
-      text: stringToHexColour('052962'),
+      text: stringToHexColour('052962'), // deprecated
       filledProgress: stringToHexColour('052962'),
       progressBarBackground: stringToHexColour('FFFFFF'),
-      goalMarker: stringToHexColour('000000'),
+      goalMarker: stringToHexColour('000000'), //deprecated
+      headlineColour: stringToHexColour('052962'),
+      totalColour: stringToHexColour('052962'),
+      goalColour: stringToHexColour('052962'),
     },
   },
 });

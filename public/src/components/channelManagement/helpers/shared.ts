@@ -13,6 +13,15 @@ export type EpicModuleName = 'ContributionsEpic' | 'ContributionsLiveblogEpic';
 
 export type Status = 'Live' | 'Draft' | 'Archived';
 
+interface ABTestMethodology {
+  name: 'ABTest';
+}
+interface EpsilonGreedyBanditMethodology {
+  name: 'EpsilonGreedyBandit';
+  epsilon: number;
+}
+export type Methodology = ABTestMethodology | EpsilonGreedyBanditMethodology;
+
 export interface Test {
   name: string;
   nickname?: string;
@@ -28,6 +37,7 @@ export interface Test {
   channel?: string;
   signedInStatus?: SignedInStatus;
   consentStatus?: ConsentStatus;
+  methodologies: Methodology[];
 }
 
 export interface EpicEditorConfig {
@@ -107,7 +117,7 @@ export const LIVEBLOG_EPIC_CONFIG: EpicEditorConfig = {
   allowVariantSecondaryCta: true,
   allowVariantCustomSecondaryCta: true,
   allowVariantSeparateArticleCount: false,
-  allowVariantTicker: false,
+  allowVariantTicker: true,
   allowVariantChoiceCards: true,
   allowVariantSignInLink: false,
   allowBylineWithImage: false,
@@ -260,8 +270,8 @@ export enum TickerName {
 
 interface TickerCopy {
   countLabel: string;
-  goalReachedPrimary: string;
-  goalReachedSecondary: string;
+  goalReachedPrimary?: string;
+  goalReachedSecondary?: string;
 }
 export interface TickerSettings {
   endType: TickerEndType;

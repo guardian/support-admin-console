@@ -46,6 +46,7 @@ const DEV_AND_CODE_DEFAULT_BANNER_TEST: HeaderTest = {
   userCohort: UserCohort.AllNonSupporters,
   locations: [],
   variants: [],
+  methodologies: [{ name: 'ABTest' }],
 };
 
 const PROD_DEFAULT_BANNER: HeaderTest = {
@@ -55,6 +56,7 @@ const PROD_DEFAULT_BANNER: HeaderTest = {
   userCohort: UserCohort.AllNonSupporters,
   locations: [],
   variants: [],
+  methodologies: [{ name: 'ABTest' }],
 };
 
 export const getDefaultTest = (): HeaderTest => {
