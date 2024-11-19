@@ -1,9 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { makeStyles } from '@mui/styles';
 import { FormControl, FormControlLabel, Radio, RadioGroup, TextField, Theme } from '@mui/material';
 import { BannerTestDeploySchedule } from '../../../models/banner';
-import { useForm } from 'react-hook-form';
-import { EMPTY_ERROR_HELPER_TEXT, notNumberValidator } from '../helpers/validation';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -16,14 +14,12 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 interface DeployScheduleEditorProps {
   deploySchedule?: BannerTestDeploySchedule;
   onDeployScheduleChange: (deploySchedule?: BannerTestDeploySchedule) => void;
-  onValidationChange: (isValid: boolean) => void;
   isDisabled: boolean;
 }
 
 const DeployScheduleEditor: React.FC<DeployScheduleEditorProps> = ({
   deploySchedule,
   onDeployScheduleChange,
-  onValidationChange,
   isDisabled,
 }: DeployScheduleEditorProps) => {
   const classes = useStyles();
@@ -31,15 +27,6 @@ const DeployScheduleEditor: React.FC<DeployScheduleEditorProps> = ({
   const defaultValues: BannerTestDeploySchedule = {
     daysBetween: 1,
   };
-  const { register, errors, handleSubmit } = useForm<BannerTestDeploySchedule>({
-    mode: 'onChange',
-    defaultValues,
-  });
-
-  useEffect(() => {
-    const isValid = Object.keys(errors).length === 0 || !deploySchedule;
-    onValidationChange(isValid);
-  }, [errors.daysBetween]);
 
   const onRadioGroupChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     if (event.target.value === 'enabled') {
@@ -74,20 +61,18 @@ const DeployScheduleEditor: React.FC<DeployScheduleEditorProps> = ({
         </RadioGroup>
 
         {deploySchedule && (
-          <TextField
-            inputRef={register({
-              required: EMPTY_ERROR_HELPER_TEXT,
-              validate: notNumberValidator,
-            })}
-            error={errors.daysBetween !== undefined}
-            helperText={errors.daysBetween?.message || 'Must be a number'}
-            onBlur={handleSubmit(onSubmit)}
-            name="daysBetween"
+          <TextField 
+            type={'number'}
             label="Days between deploys"
+            disabled={isDisabled}
+            InputProps={{ inputProps: { min: 1, step: 1 } }}
+            onBlur={event => {
+              const daysBetween = parseInt(event.target.value);
+              onSubmit({daysBetween});
+            }}
             InputLabelProps={{ shrink: true }}
             variant="outlined"
             fullWidth
-            disabled={isDisabled}
           />
         )}
       </div>

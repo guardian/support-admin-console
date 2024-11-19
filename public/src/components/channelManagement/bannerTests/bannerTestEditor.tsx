@@ -331,7 +331,6 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
           <DeployScheduleEditor
             deploySchedule={test.deploySchedule}
             onDeployScheduleChange={onDeployScheduleChange}
-            onValidationChange={isValid => setValidationStatusForField('deploySchedule', isValid)}
             isDisabled={!userHasTestLocked}
           />
         </div>
