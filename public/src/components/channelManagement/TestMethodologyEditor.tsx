@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
+import Alert from '@mui/lab/Alert';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
@@ -70,16 +71,16 @@ const addMethodologyToTestName = (testName: string, methodology: Methodology): s
 interface TestMethodologyProps {
   methodology: Methodology;
   audiencePercentage: number;
-  testName?: string;
+  testName: string;
   isDisabled: boolean;
   onChange: (methodology: Methodology) => void;
   onDelete: () => void;
+  shouldSetTestName: boolean;
 }
 
 const TestMethodology: React.FC<TestMethodologyProps> = ({
   methodology,
   audiencePercentage,
-  testName,
   isDisabled,
   onChange,
   onDelete,
@@ -94,6 +95,7 @@ const TestMethodology: React.FC<TestMethodologyProps> = ({
       onChange({ name: 'ABTest' });
     }
   };
+
   return (
     <div className={classes.methodologyContainer}>
       <Tooltip title={'Percentage of the audience in this methodology'}>
@@ -127,9 +129,7 @@ const TestMethodology: React.FC<TestMethodologyProps> = ({
         )}
       </div>
       <div className={classes.testNameAndDeleteButton}>
-        {testName && (
-          <div className={classes.testName}>{addMethodologyToTestName(testName, methodology)}</div>
-        )}
+        {methodology.testName && <div className={classes.testName}>{methodology.testName}</div>}
         <div className={classes.deleteButton}>
           <Button onClick={onDelete} disabled={isDisabled} variant="outlined" size="medium">
             <CloseIcon />
@@ -155,8 +155,18 @@ export const TestMethodologyEditor: React.FC<TestMethodologyEditorProps> = ({
 }: TestMethodologyEditorProps) => {
   const classes = useStyles();
 
+  const updateTestNamesAndSubmit = (newMethodologies: Methodology[]): void => {
+    onChange(
+      newMethodologies.map(method => ({
+        ...method,
+        // Add testNames if more than 1 methodology
+        testName:
+          newMethodologies.length > 1 ? addMethodologyToTestName(testName, method) : undefined,
+      })),
+    );
+  };
   const onAddClick = () => {
-    onChange([...methodologies, { name: 'ABTest' }]);
+    updateTestNamesAndSubmit([...methodologies, { name: 'ABTest' }]);
   };
 
   return (
@@ -165,12 +175,13 @@ export const TestMethodologyEditor: React.FC<TestMethodologyEditorProps> = ({
         <div className={classes.error}>At least one test methodology is required</div>
       )}
 
+      <Alert severity="info">Methodologies cannot be changed after a test has been launched</Alert>
+
       {methodologies.map((method, idx) => (
         <TestMethodology
           key={`methodology-${idx}`}
           methodology={method}
-          // Only need to display test names if more than one methodology
-          testName={methodologies.length > 1 ? testName : undefined}
+          testName={testName}
           audiencePercentage={Math.round(100 / methodologies.length)}
           isDisabled={isDisabled}
           onChange={updatedMethodology => {
@@ -179,15 +190,17 @@ export const TestMethodologyEditor: React.FC<TestMethodologyEditorProps> = ({
               updatedMethodology,
               ...methodologies.slice(idx + 1),
             ];
-            onChange(updatedMethodologies);
+            updateTestNamesAndSubmit(updatedMethodologies);
           }}
           onDelete={() => {
             const updatedMethodologies = [
               ...methodologies.slice(0, idx),
               ...methodologies.slice(idx + 1),
             ];
-            onChange(updatedMethodologies);
+            updateTestNamesAndSubmit(updatedMethodologies);
           }}
+          // We only need to add a custom testName if there are several methodologies
+          shouldSetTestName={methodologies.length > 1}
         />
       ))}
       <Button

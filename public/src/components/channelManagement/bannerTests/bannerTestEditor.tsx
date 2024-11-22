@@ -241,7 +241,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
           <TestMethodologyEditor
             methodologies={test.methodologies}
             testName={test.name}
-            isDisabled={!userHasTestLocked}
+            isDisabled={!userHasTestLocked || test.status === 'Live'}
             onChange={onMethodologyChange}
           />
         </div>
