@@ -259,17 +259,19 @@ export const getEpicTestEditor = (
             </div>
           </div>
         )}
-        <div className={classes.sectionContainer}>
-          <Typography variant={'h3'} className={classes.sectionHeader}>
-            Experiment Methodology
-          </Typography>
-          <TestMethodologyEditor
-            methodologies={test.methodologies}
-            testName={test.name}
-            isDisabled={!userHasTestLocked || test.status === 'Live'}
-            onChange={onMethodologyChange}
-          />
-        </div>
+        {epicEditorConfig.allowMethodologyEditor && (
+          <div className={classes.sectionContainer}>
+            <Typography variant={'h3'} className={classes.sectionHeader}>
+              Experiment Methodology
+            </Typography>
+            <TestMethodologyEditor
+              methodologies={test.methodologies}
+              testName={test.name}
+              isDisabled={!userHasTestLocked || test.status === 'Live'}
+              onChange={onMethodologyChange}
+            />
+          </div>
+        )}
 
         {epicEditorConfig.allowCustomVariantSplit && canHaveCustomVariantSplit(test.variants) && (
           <div className={classes.sectionContainer}>
