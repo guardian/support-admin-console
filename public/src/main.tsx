@@ -39,6 +39,7 @@ import BannerDesigns from './components/channelManagement/bannerDesigns/';
 import DefaultPromos from './components/defaultPromos';
 import { StyledEngineProvider } from '@mui/material';
 import { LinkTrackingBuilder } from './components/linkTracking/LinkTrackingBuilder';
+import { SupportLandingPageTestsForm } from "./components/channelManagement/supportLandingPage/supportLandingPage";
 
 declare module '@mui/styles' {
   // https://mui.com/material-ui/migration/v5-style-changes/#%E2%9C%85-add-module-augmentation-for-defaulttheme-typescript
@@ -167,6 +168,10 @@ const AppRouter = () => {
           <Route
             path="/epic-tests/:testName?"
             element={createComponent(<ArticleEpicTestsForm />, 'Epic Tests')}
+          />
+          <Route
+            path="/support-landing-page-tests/:testName?"
+            element={createComponent(<SupportLandingPageTestsForm />, 'Support Landing Page Tests')}
           />
           <Route
             path="/liveblog-epic-tests/:testName?"
