@@ -7,7 +7,6 @@ import {
   getEmptyParagraphsError,
   templateValidatorForPlatform,
 } from '../helpers/validation';
-import { Cta, SecondaryCta } from '../helpers/shared';
 import { BannerContent } from '../../../models/banner';
 import { getDefaultVariant } from './utils/defaults';
 import useValidation from '../hooks/useValidation';
@@ -21,7 +20,7 @@ import {
   SupportLandingPageContent,
   SupportLandingPageVariant,
 } from '../../../models/supportLandingPage';
-import VariantCtasEditor from '../bannerTests/variantCtasEditor';
+import CampaignEditor from '../campaignEditor';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
@@ -167,13 +166,6 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
     onValidationChange(isValid);
   }, [errors.heading, errors.paragraphs, errors.highlightedText]);
 
-  const updatePrimaryCta = (updatedCta?: Cta): void => {
-    onChange({ ...content, cta: updatedCta });
-  };
-  const updateSecondaryCta = (updatedCta?: SecondaryCta): void => {
-    onChange({ ...content, secondaryCta: updatedCta });
-  };
-
   const labelSuffix = getLabelSuffix(deviceType);
 
   const getBodyCopyLength = () => {
@@ -307,22 +299,6 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
             }}
           />
         </div>
-
-        <div className={classes.buttonsContainer}>
-          <Typography className={classes.sectionHeader} variant="h4">
-            {`Buttons${labelSuffix}`}
-          </Typography>
-
-          <VariantCtasEditor
-            primaryCta={content.cta}
-            secondaryCta={content.secondaryCta}
-            updatePrimaryCta={updatePrimaryCta}
-            updateSecondaryCta={updateSecondaryCta}
-            isDisabled={!editMode}
-            onValidationChange={onValidationChange}
-            supportSecondaryCta={true}
-          />
-        </div>
       </div>
     </>
   );
@@ -426,6 +402,22 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
           isDisabled={!editMode}
           onValidationChange={onValidationChange}
         />
+
+        <Typography className={classes.sectionHeader} variant="h4">
+          Campaign
+        </Typography>
+
+        <CampaignEditor
+          variant={variant}
+          isDisabled={!editMode}
+          updateTickerSettings={tickerSettings =>
+            onVariantChange({
+              ...variant,
+              tickerSettings,
+            })
+          }
+          onValidationChange={onValidationChange}
+        ></CampaignEditor>
       </div>
     </div>
   );
