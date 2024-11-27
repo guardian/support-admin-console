@@ -44,6 +44,7 @@ export interface EpicEditorConfig {
   // test level settings
   allowMultipleVariants: boolean;
   allowCustomVariantSplit: boolean;
+  allowMethodologyEditor: boolean;
   allowContentTargeting: boolean;
   allowLocationTargeting: boolean;
   supportedRegions?: Region[];
@@ -76,6 +77,7 @@ export interface EpicEditorConfig {
 export const ARTICLE_EPIC_CONFIG: EpicEditorConfig = {
   allowMultipleVariants: true,
   allowCustomVariantSplit: true,
+  allowMethodologyEditor: true,
   allowContentTargeting: true,
   allowLocationTargeting: true,
   allowSupporterStatusTargeting: true,
@@ -104,6 +106,7 @@ export const ARTICLE_EPIC_CONFIG: EpicEditorConfig = {
 export const LIVEBLOG_EPIC_CONFIG: EpicEditorConfig = {
   allowMultipleVariants: true,
   allowCustomVariantSplit: true,
+  allowMethodologyEditor: false,
   allowContentTargeting: true,
   allowLocationTargeting: true,
   allowSupporterStatusTargeting: true,
@@ -132,6 +135,7 @@ export const LIVEBLOG_EPIC_CONFIG: EpicEditorConfig = {
 export const APPLE_NEWS_EPIC_CONFIG: EpicEditorConfig = {
   allowMultipleVariants: false,
   allowCustomVariantSplit: false,
+  allowMethodologyEditor: false,
   allowContentTargeting: true,
   allowLocationTargeting: true,
   supportedRegions: ['UnitedStates', 'AUDCountries', 'GBPCountries'],
@@ -161,6 +165,7 @@ export const APPLE_NEWS_EPIC_CONFIG: EpicEditorConfig = {
 export const AMP_EPIC_CONFIG: EpicEditorConfig = {
   allowMultipleVariants: true,
   allowCustomVariantSplit: false,
+  allowMethodologyEditor: false,
   allowContentTargeting: false,
   allowLocationTargeting: true,
   allowSupporterStatusTargeting: false,
