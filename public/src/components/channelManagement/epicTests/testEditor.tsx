@@ -259,7 +259,7 @@ export const getEpicTestEditor = (
             </div>
           </div>
         )}
-        {epicEditorConfig.allowCustomVariantSplit && (
+        {epicEditorConfig.allowMethodologyEditor && (
           <div className={classes.sectionContainer}>
             <Typography variant={'h3'} className={classes.sectionHeader}>
               Experiment Methodology
