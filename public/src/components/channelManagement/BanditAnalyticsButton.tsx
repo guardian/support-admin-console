@@ -41,51 +41,22 @@ interface BanditData {
 interface ChartProps {
   data: BanditData;
   variantNames: string[];
+  fieldName: keyof VariantSample;
 }
 
 const Colours = ['red', 'blue', 'green', 'orange', 'yellow'];
 
 type ChartDataPoint = Record<string, string | number>;
 
-const ImpressionsChart = ({ data, variantNames }: ChartProps) => {
+const SamplesChart = ({ data, variantNames, fieldName }: ChartProps) => {
   const chartData = data.samples
     .map(({ timestamp, variants }) => {
       if (variants.length > 0) {
         const sample: ChartDataPoint = {
           dateHour: format(Date.parse(timestamp), 'yyyy-MM-dd hh:mm'),
         };
-        variants.forEach(({ variantName, views }) => {
-          sample[variantName] = views;
-        });
-        return sample;
-      }
-      return undefined;
-    })
-    .filter(sample => !!sample);
-
-  return (
-    <LineChart width={800} height={500} data={chartData}>
-      <XAxis dataKey="dateHour" />
-      <YAxis />
-      <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-      <Legend />
-      <Tooltip />
-      {variantNames.map((name, idx) => (
-        <Line key={name} type="monotone" dataKey={name} stroke={Colours[idx]} />
-      ))}
-    </LineChart>
-  );
-};
-
-const ScoresChart = ({ data, variantNames }: ChartProps) => {
-  const chartData = data.samples
-    .map(({ timestamp, variants }) => {
-      if (variants.length > 0) {
-        const sample: ChartDataPoint = {
-          dateHour: format(Date.parse(timestamp), 'yyyy-MM-dd hh:mm'),
-        };
-        variants.forEach(({ variantName, mean }) => {
-          sample[variantName] = mean;
+        variants.forEach(variant => {
+          sample[variant.variantName] = variant[fieldName];
         });
         return sample;
       }
@@ -150,10 +121,10 @@ export const BanditAnalyticsButton: React.FC<BanditAnalyticsButton> = ({
           {data && (
             <div>
               <h2>Impressions</h2>
-              <ImpressionsChart data={data} variantNames={variantNames} />
+              <SamplesChart data={data} variantNames={variantNames} fieldName={'views'} />
 
               <h2>Scores</h2>
-              <ScoresChart data={data} variantNames={variantNames} />
+              <SamplesChart data={data} variantNames={variantNames} fieldName={'mean'} />
 
               <h2>Total impressions:</h2>
               {data.variantSummaries
