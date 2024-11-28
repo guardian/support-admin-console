@@ -38,7 +38,7 @@ interface BanditData {
   samples: TestSample[];
 }
 
-interface ChartProps {
+interface SamplesChartProps {
   data: BanditData;
   variantNames: string[];
   fieldName: keyof VariantSample;
@@ -48,7 +48,7 @@ const Colours = ['red', 'blue', 'green', 'orange', 'yellow'];
 
 type ChartDataPoint = Record<string, string | number>;
 
-const SamplesChart = ({ data, variantNames, fieldName }: ChartProps) => {
+const SamplesChart = ({ data, variantNames, fieldName }: SamplesChartProps) => {
   const chartData = data.samples
     .map(({ timestamp, variants }) => {
       if (variants.length > 0) {
