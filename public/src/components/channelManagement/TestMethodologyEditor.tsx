@@ -1,18 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Methodology } from './helpers/shared';
 import { makeStyles } from '@mui/styles';
-import {
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  TextField,
-  Theme,
-} from '@mui/material';
+import { MenuItem, Select, SelectChangeEvent, TextField, Theme } from '@mui/material';
+import { BanditAnalyticsButton } from './BanditAnalyticsButton';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
@@ -35,53 +25,6 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
 const defaultEpsilonGreedyBandit: Methodology = {
   name: 'EpsilonGreedyBandit',
   epsilon: 0.1,
-};
-
-interface VariantData {
-  variantName: string;
-  mean: number;
-  views: number;
-}
-
-interface BanditDataProps {
-  testName: string;
-  channel: string;
-}
-
-const BanditData: React.FC<BanditDataProps> = ({ testName, channel }: BanditDataProps) => {
-  const [variantData, setVariantData] = useState<VariantData[]>([]);
-
-  useEffect(() => {
-    fetch(`/frontend/bandit/${channel}/${testName}`)
-      .then(resp => resp.json())
-      .then(data => {
-        setVariantData(data);
-      });
-  }, [testName, channel]);
-
-  if (variantData.length > 0) {
-    return (
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Variant</TableCell>
-            <TableCell>£/view</TableCell>
-            <TableCell>Views</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {variantData.map(variant => (
-            <TableRow key={variant.variantName}>
-              <TableCell>{variant.variantName}</TableCell>
-              <TableCell>{variant.mean.toFixed(4)}</TableCell>
-              <TableCell>{variant.views}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    );
-  }
-  return null;
 };
 
 interface TestMethodologyProps {
@@ -136,7 +79,7 @@ const TestMethodology: React.FC<TestMethodologyProps> = ({
               }}
             />
           </div>
-          <BanditData testName={testName} channel={channel} />
+          <BanditAnalyticsButton testName={testName} channel={channel} />
         </>
       )}
     </div>
