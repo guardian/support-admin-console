@@ -98,6 +98,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     new DefaultPromosController(authAction,controllerComponents, stage, runtime),
     new SuperModeController(authAction, controllerComponents, stage, runtime, dynamoSuperModeService, athena),
     new AnalyticsController(authAction, controllerComponents, stage, runtime, athena),
-    assets
+    assets,
+    new SupportLandingPageController(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoArchivedChannelTests),
   )
 }

@@ -69,8 +69,8 @@ const buildProps = (
     },
     bannerChannel: 'contributions',
     isSupporter: false,
-    content: variant.bannerContent,
-    mobileContent: variant.mobileBannerContent,
+    content: variant.landingPageContent,
+    mobileContent: variant.mobileLandingPageContent,
     countryCode: 'GB',
     tickerSettings: tickerSettingsWithData,
   };

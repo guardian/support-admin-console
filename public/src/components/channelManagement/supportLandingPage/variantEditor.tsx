@@ -299,17 +299,17 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
   const setValidationStatusForField = useValidation(onValidationChange);
 
   const onMobileContentRadioChange = (): void => {
-    if (variant.mobileBannerContent === undefined) {
+    if (variant.mobileLandingPageContent === undefined) {
       onVariantChange({
         ...variant,
-        mobileBannerContent: getDefaultVariant().bannerContent,
+        mobileLandingPageContent: getDefaultVariant().landingPageContent,
       });
     } else {
       // remove mobile content and clear any validation errors
       setValidationStatusForField('mobileContent', true);
       onVariantChange({
         ...variant,
-        mobileBannerContent: undefined,
+        mobileLandingPageContent: undefined,
       });
     }
   };
@@ -325,15 +325,15 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
             <ConfigureComponentsEditor
               variant={variant}
               onVariantChange={onVariantChange}
-              content={variant.bannerContent}
-              onChange={(updatedContent: BannerContent): void =>
-                onVariantChange({ ...variant, bannerContent: updatedContent })
+              content={variant.landingPageContent}
+              onChange={(updatedContent: SupportLandingPageContent): void =>
+                onVariantChange({ ...variant, landingPageContent: updatedContent })
               }
               onValidationChange={(isValid: boolean): void =>
                 setValidationStatusForField(variant.name, isValid)
               }
               editMode={editMode}
-              deviceType={variant.mobileBannerContent === undefined ? 'ALL' : 'NOT_MOBILE'}
+              deviceType={variant.mobileLandingPageContent === undefined ? 'ALL' : 'NOT_MOBILE'}
             />
           </div>
         </div>

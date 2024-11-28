@@ -1,8 +1,7 @@
 package controllers
 
 import com.gu.googleauth.AuthAction
-import models.{BannerTest, Channel}
-import models.BannerTest._
+import models.{Channel, SupportLandingPageTest}
 import play.api.libs.circe.Circe
 import play.api.mvc.{AnyContent, ControllerComponents}
 import services.{DynamoArchivedChannelTests, DynamoChannelTests}
@@ -21,7 +20,7 @@ class SupportLandingPageController(
                              runtime: zio.Runtime[ZEnv],
                              dynamoTests: DynamoChannelTests,
                              dynamoArchivedTests: DynamoArchivedChannelTests,
-                           )(implicit ec: ExecutionContext) extends ChannelTestsController[BannerTest](
+                           )(implicit ec: ExecutionContext) extends ChannelTestsController[SupportLandingPageTest](
   authAction,
   components,
   stage,

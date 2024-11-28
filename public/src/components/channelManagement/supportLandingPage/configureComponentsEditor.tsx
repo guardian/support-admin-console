@@ -71,7 +71,7 @@ interface ConfigureComponentsEditorProps {
   variant: SupportLandingPageVariant;
   onVariantChange: (updatedVariant: SupportLandingPageVariant) => void;
   content?: SupportLandingPageContent;
-  onChange?: (updatedContent: BannerContent) => void;
+  onChange?: (updatedContent: SupportLandingPageContent) => void;
   onValidationChange?: (isValid: boolean) => void;
   editMode: boolean;
   deviceType?: DeviceType;
@@ -149,17 +149,17 @@ const ConfigureComponentsEditor: React.FC<ConfigureComponentsEditorProps> = ({
   const setValidationStatusForField = useValidation(onValidationChange);
 
   const onMobileContentRadioChange = (): void => {
-    if (variant.mobileBannerContent === undefined) {
+    if (variant.mobileLandingPageContent === undefined) {
       onVariantChange({
         ...variant,
-        mobileBannerContent: getDefaultVariant().bannerContent,
+        mobileLandingPageContent: getDefaultVariant().bannerContent,
       });
     } else {
       // remove mobile content and clear any validation errors
       setValidationStatusForField('mobileContent', true);
       onVariantChange({
         ...variant,
-        mobileBannerContent: undefined,
+        mobileLandingPageContent: undefined,
       });
     }
   };
@@ -181,18 +181,18 @@ const ConfigureComponentsEditor: React.FC<ConfigureComponentsEditorProps> = ({
       </div>
 
       <VariantContentEditor
-        content={variant.bannerContent}
+        content={variant.landingPageContent}
         onChange={(updatedContent: BannerContent): void =>
-          onVariantChange({ ...variant, bannerContent: updatedContent })
+          onVariantChange({ ...variant, landingPageContent: updatedContent })
         }
         onValidationChange={(isValid): void => setValidationStatusForField('mainContent', isValid)}
         editMode={editMode}
-        deviceType={variant.mobileBannerContent === undefined ? 'ALL' : 'NOT_MOBILE'}
+        deviceType={variant.mobileLandingPageContent === undefined ? 'ALL' : 'NOT_MOBILE'}
         showHeader={showHeader}
         showBody={showBody}
       />
       <RadioGroup
-        value={variant.mobileBannerContent !== undefined ? 'enabled' : 'disabled'}
+        value={variant.mobileLandingPageContent !== undefined ? 'enabled' : 'disabled'}
         onChange={onMobileContentRadioChange}
       >
         <FormControlLabel
@@ -210,11 +210,11 @@ const ConfigureComponentsEditor: React.FC<ConfigureComponentsEditorProps> = ({
           disabled={!editMode}
         />
       </RadioGroup>
-      {variant.mobileBannerContent && (
+      {variant.mobileLandingPageContent && (
         <VariantContentEditor
-          content={variant.mobileBannerContent}
-          onChange={(updatedContent: BannerContent): void =>
-            onVariantChange({ ...variant, mobileBannerContent: updatedContent })
+          content={variant.mobileLandingPageContent}
+          onChange={(updatedContent: SupportLandingPageContent): void =>
+            onVariantChange({ ...variant, mobileLandingPageContent: updatedContent })
           }
           onValidationChange={(isValid): void =>
             setValidationStatusForField('mobileContent', isValid)
