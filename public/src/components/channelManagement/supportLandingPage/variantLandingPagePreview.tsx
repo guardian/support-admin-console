@@ -147,7 +147,7 @@ const VariantLandingPagePreview: React.FC<VariantLandingPagePreviewProps> = ({
         >
           <div>
             <div className={classes.hint} onClick={toggleDrawer(false)}>
-              <Typography>Click anywhere outside the banner to close</Typography>
+              <Typography>Click anywhere outside the support landing page to close</Typography>
             </div>
             <div>
               <iframe className={classes.iframe} src={storybookUrl}></iframe>

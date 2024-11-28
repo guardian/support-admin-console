@@ -20,7 +20,8 @@ import {
   SupportLandingPageContent,
   SupportLandingPageVariant,
 } from '../../../models/supportLandingPage';
-import CampaignEditor from '../campaignEditor';
+import LandingPageTierEditor from '../landingPageTierEditor';
+import ConfigureComponentsEditor from './configureComponentsEditor';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
@@ -72,7 +73,6 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
 
 const HEADER_DEFAULT_HELPER_TEXT = 'Assitive text';
 const BODY_DEFAULT_HELPER_TEXT = 'Main banner message paragraph';
-const HIGHTLIGHTED_TEXT_HELPER_TEXT = 'Final sentence of body copy';
 
 const BODY_COPY_WITHOUT_SECONDARY_CTA_RECOMMENDED_LENGTH = 500;
 const BODY_COPY_WITH_SECONDARY_CTA_RECOMMENDED_LENGTH = 500;
@@ -93,9 +93,11 @@ const getLabelSuffix = (deviceType: DeviceType): string => {
 interface VariantContentEditorProps {
   content: SupportLandingPageContent;
   onChange: (updatedContent: BannerContent) => void;
-  onValidationChange: (isValid: boolean) => void;
+  onValidationChange?: (isValid: boolean) => void;
   editMode: boolean;
   deviceType: DeviceType;
+  showHeader: boolean;
+  showBody: boolean;
 }
 
 interface FormData {
@@ -119,12 +121,14 @@ const getParagraphsOrMessageText = (
   return bodyCopy;
 };
 
-const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
+export const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
   content,
   onChange,
   onValidationChange,
   editMode,
   deviceType,
+  showHeader,
+  showBody,
 }: VariantContentEditorProps) => {
   const classes = useStyles();
 
@@ -204,72 +208,9 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
       </Typography>
 
       <div className={classes.contentContainer}>
-        <Controller
-          name="heading"
-          control={control}
-          rules={{
-            validate: templateValidator,
-          }}
-          render={data => {
-            return (
-              <RichTextEditorSingleLine
-                error={errors.heading !== undefined}
-                helperText={
-                  errors.heading
-                    ? errors.heading.message || errors.heading.type
-                    : HEADER_DEFAULT_HELPER_TEXT
-                }
-                copyData={data.value}
-                updateCopy={pars => {
-                  data.onChange(pars);
-                  handleSubmit(setValidatedFields)();
-                }}
-                name="heading"
-                label="Header"
-                disabled={!editMode}
-                rteMenuConstraints={{
-                  noBold: true,
-                }}
-              />
-            );
-          }}
-        />
-
-        <div>
+        {showHeader && (
           <Controller
-            name="paragraphs"
-            control={control}
-            rules={{
-              required: true,
-              validate: (pars: string[]) =>
-                getEmptyParagraphsError(pars) ??
-                pars.map(templateValidator).find((result: string | undefined) => !!result),
-            }}
-            render={data => {
-              return (
-                <RichTextEditor
-                  error={errors.paragraphs !== undefined || copyLength > recommendedLength}
-                  helperText={
-                    errors.paragraphs
-                      ? // @ts-ignore -- react-hook-form doesn't believe it has a message field
-                        errors.paragraphs.message || errors.paragraphs.type
-                      : getParagraphsHelperText()
-                  }
-                  copyData={data.value}
-                  updateCopy={pars => {
-                    data.onChange(pars);
-                    handleSubmit(setValidatedFields)();
-                  }}
-                  name="paragraphs"
-                  label="Body copy"
-                  disabled={!editMode}
-                />
-              );
-            }}
-          />
-
-          <Controller
-            name="highlightedText"
+            name="heading"
             control={control}
             rules={{
               validate: templateValidator,
@@ -277,19 +218,19 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
             render={data => {
               return (
                 <RichTextEditorSingleLine
-                  error={errors.highlightedText !== undefined}
+                  error={errors.heading !== undefined}
                   helperText={
-                    errors.highlightedText
-                      ? errors.highlightedText.message || errors.highlightedText.type
-                      : HIGHTLIGHTED_TEXT_HELPER_TEXT
+                    errors.heading
+                      ? errors.heading.message || errors.heading.type
+                      : HEADER_DEFAULT_HELPER_TEXT
                   }
                   copyData={data.value}
                   updateCopy={pars => {
                     data.onChange(pars);
                     handleSubmit(setValidatedFields)();
                   }}
-                  name="highlightedText"
-                  label="Highlighted text"
+                  name="heading"
+                  label="Header"
                   disabled={!editMode}
                   rteMenuConstraints={{
                     noBold: true,
@@ -298,6 +239,42 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
               );
             }}
           />
+        )}
+
+        <div>
+          {showBody && (
+            <Controller
+              name="paragraphs"
+              control={control}
+              rules={{
+                required: true,
+                validate: (pars: string[]) =>
+                  getEmptyParagraphsError(pars) ??
+                  pars.map(templateValidator).find((result: string | undefined) => !!result),
+              }}
+              render={data => {
+                return (
+                  <RichTextEditor
+                    error={errors.paragraphs !== undefined || copyLength > recommendedLength}
+                    helperText={
+                      errors.paragraphs
+                        ? // @ts-ignore -- react-hook-form doesn't believe it has a message field
+                          errors.paragraphs.message || errors.paragraphs.type
+                        : getParagraphsHelperText()
+                    }
+                    copyData={data.value}
+                    updateCopy={pars => {
+                      data.onChange(pars);
+                      handleSubmit(setValidatedFields)();
+                    }}
+                    name="paragraphs"
+                    label="Body copy"
+                    disabled={!editMode}
+                  />
+                );
+              }}
+            />
+          )}
         </div>
       </div>
     </>
@@ -340,50 +317,34 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
   return (
     <div className={classes.container}>
       <div className={classes.sectionContainer}>
-        <VariantContentEditor
-          content={variant.bannerContent}
-          onChange={(updatedContent: BannerContent): void =>
-            onVariantChange({ ...variant, bannerContent: updatedContent })
-          }
-          onValidationChange={(isValid): void =>
-            setValidationStatusForField('mainContent', isValid)
-          }
-          editMode={editMode}
-          deviceType={variant.mobileBannerContent === undefined ? 'ALL' : 'NOT_MOBILE'}
-        />
+        <div className={classes.sectionContainer}>
+          <Typography variant={'h3'} className={classes.sectionHeader}>
+            Configure Components
+          </Typography>
+          <div>
+            <ConfigureComponentsEditor
+              variant={variant}
+              onVariantChange={onVariantChange}
+              content={variant.bannerContent}
+              onChange={(updatedContent: BannerContent): void =>
+                onVariantChange({ ...variant, bannerContent: updatedContent })
+              }
+              onValidationChange={(isValid: boolean): void =>
+                setValidationStatusForField(variant.name, isValid)
+              }
+              editMode={editMode}
+              deviceType={variant.mobileBannerContent === undefined ? 'ALL' : 'NOT_MOBILE'}
+            />
+          </div>
+        </div>
+      </div>
 
-        <RadioGroup
-          value={variant.mobileBannerContent !== undefined ? 'enabled' : 'disabled'}
-          onChange={onMobileContentRadioChange}
-        >
-          <FormControlLabel
-            value="disabled"
-            key="disabled"
-            control={<Radio />}
-            label="Show the same copy across devices"
-            disabled={!editMode}
-          />
-          <FormControlLabel
-            value="enabled"
-            key="enabled"
-            control={<Radio />}
-            label="Show different copy on mobile"
-            disabled={!editMode}
-          />
-        </RadioGroup>
-        {variant.mobileBannerContent && (
-          <VariantContentEditor
-            content={variant.mobileBannerContent}
-            onChange={(updatedContent: BannerContent): void =>
-              onVariantChange({ ...variant, mobileBannerContent: updatedContent })
-            }
-            onValidationChange={(isValid): void =>
-              setValidationStatusForField('mobileContent', isValid)
-            }
-            editMode={editMode}
-            deviceType={'MOBILE'}
-          />
-        )}
+      <div className={classes.sectionContainer}>
+        <Typography className={classes.sectionHeader} variant="h4">
+          Select Tiers
+        </Typography>
+
+        <LandingPageTierEditor />
       </div>
 
       <div className={classes.sectionContainer}>
@@ -402,22 +363,6 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
           isDisabled={!editMode}
           onValidationChange={onValidationChange}
         />
-
-        <Typography className={classes.sectionHeader} variant="h4">
-          Campaign
-        </Typography>
-
-        <CampaignEditor
-          variant={variant}
-          isDisabled={!editMode}
-          updateTickerSettings={tickerSettings =>
-            onVariantChange({
-              ...variant,
-              tickerSettings,
-            })
-          }
-          onValidationChange={onValidationChange}
-        ></CampaignEditor>
       </div>
     </div>
   );

@@ -7,7 +7,9 @@ const allValid = (validationStatus: ValidationStatus): boolean => {
 
 type FieldValidationChange = (fieldName: string, isValid: boolean) => void;
 
-const useValidation = (onValidationChanged: (isValid: boolean) => void): FieldValidationChange => {
+const useValidation = (
+  onValidationChanged: (isValid: boolean) => void,
+): FieldValidationChange => {
   const [validationStatus, setValidationStatus] = useState<ValidationStatus>({});
 
   const [wasValid, setWasValid] = useState(true);
