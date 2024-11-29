@@ -183,6 +183,7 @@ const HeaderTestEditor: React.FC<ValidatedTestEditorProps<HeaderTest>> = ({
           isDisabled={!userHasTestLocked}
           showSupporterStatusSelector={true}
           showDeviceTypeSelector={true}
+          showSignedInStatusSelector={true}
           selectedSignedInStatus={test.signedInStatus}
           onSignedInStatusChange={onSignedInStatusChange}
           selectedConsentStatus={test.consentStatus}
