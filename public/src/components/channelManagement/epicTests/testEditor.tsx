@@ -360,6 +360,7 @@ export const getEpicTestEditor = (
               isDisabled={!userHasTestLocked}
               showSupporterStatusSelector={epicEditorConfig.allowSupporterStatusTargeting}
               showDeviceTypeSelector={epicEditorConfig.allowDeviceTypeTargeting}
+              showSignedInStatusSelector={epicEditorConfig.showSignedInStatusSelector}
               selectedSignedInStatus={test.signedInStatus}
               onSignedInStatusChange={onSignedInStatusChange}
               selectedConsentStatus={test.consentStatus}
