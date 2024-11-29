@@ -541,10 +541,10 @@ const RichTextEditor: React.FC<RichTextEditorProps<string[]>> = ({
   // Instantiate the Remirror RTE component
   const { manager, state } = useRemirror({
     extensions: () => [
-      new MyBoldExtension(),
+      new MyBoldExtension({}),
       new MyItalicExtension(),
       new LinkExtension({ autoLink: true }),
-      new TextHighlightExtension(),
+      new TextHighlightExtension({}),
       new RemovePastedHtmlExtension(),
     ],
     content: parseCopyForParagraphs(copyData),
