@@ -75,7 +75,6 @@ interface TestMethodologyProps {
   isDisabled: boolean;
   onChange: (methodology: Methodology) => void;
   onDelete: () => void;
-  shouldSetTestName: boolean;
 }
 
 const TestMethodology: React.FC<TestMethodologyProps> = ({
@@ -199,8 +198,6 @@ export const TestMethodologyEditor: React.FC<TestMethodologyEditorProps> = ({
             ];
             updateTestNamesAndSubmit(updatedMethodologies);
           }}
-          // We only need to add a custom testName if there are several methodologies
-          shouldSetTestName={methodologies.length > 1}
         />
       ))}
       <Button
