@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { FormControlLabel, Radio, RadioGroup, Theme, Typography } from '@mui/material';
+import { Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import {
   EMPTY_ERROR_HELPER_TEXT,
@@ -15,12 +15,10 @@ import {
   RichTextEditor,
   RichTextEditorSingleLine,
 } from '../richTextEditor/richTextEditor';
-import TickerEditor from '../tickerEditor';
 import {
   SupportLandingPageContent,
   SupportLandingPageVariant,
 } from '../../../models/supportLandingPage';
-import LandingPageTierEditor from '../landingPageTierEditor';
 import ConfigureComponentsEditor from './configureComponentsEditor';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -201,6 +199,8 @@ export const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
     return `${BODY_DEFAULT_HELPER_TEXT} (${recommendedLength} chars)`;
   };
 
+  console.log('showHeader', showHeader);
+  console.log('showBody', showBody);
   return (
     <>
       <Typography className={classes.sectionHeader} variant="h4">
@@ -337,32 +337,6 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
             />
           </div>
         </div>
-      </div>
-
-      <div className={classes.sectionContainer}>
-        <Typography className={classes.sectionHeader} variant="h4">
-          Select Tiers
-        </Typography>
-
-        <LandingPageTierEditor />
-      </div>
-
-      <div className={classes.sectionContainer}>
-        <Typography className={classes.sectionHeader} variant="h4">
-          Ticker
-        </Typography>
-
-        <TickerEditor
-          tickerSettings={variant.tickerSettings}
-          updateTickerSettings={tickerSettings =>
-            onVariantChange({
-              ...variant,
-              tickerSettings,
-            })
-          }
-          isDisabled={!editMode}
-          onValidationChange={onValidationChange}
-        />
       </div>
     </div>
   );

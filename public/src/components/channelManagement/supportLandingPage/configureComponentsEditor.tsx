@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FormControlLabel, Radio, RadioGroup, Theme } from '@mui/material';
+import { Checkbox, FormControlLabel, Radio, RadioGroup, Theme, Typography } from "@mui/material";
 import { makeStyles } from '@mui/styles';
 import { templateValidatorForPlatform } from '../helpers/validation';
 import {
@@ -10,6 +10,8 @@ import { BannerContent } from '../../../models/banner';
 import { VariantContentEditor } from './variantEditor';
 import useValidation from '../hooks/useValidation';
 import { getDefaultVariant } from '../bannerTests/utils/defaults';
+import LandingPageTierEditor from "../landingPageTierEditor";
+import TickerEditor from "../tickerEditor";
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
@@ -90,21 +92,22 @@ const ConfigureComponentsEditor: React.FC<ConfigureComponentsEditorProps> = ({
 
   const templateValidator = templateValidatorForPlatform('DOTCOM');
 
+
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
   const options: CheckboxOption[] = [
     {
       label: 'Configure Header Copy',
       action: () => {
-        console.log('Header selected!');
-        setShowHeader(true);
+        console.log('Header selected!', showHeader);
+        setShowHeader(!showHeader);
       },
     },
     {
       label: 'Configure Body Copy',
       action: () => {
         console.log(' Body Copy selected!');
-        setShowBody(true);
+        setShowBody(!showBody);
       },
     },
     {
@@ -138,13 +141,14 @@ const ConfigureComponentsEditor: React.FC<ConfigureComponentsEditorProps> = ({
 
   const handleCheckboxChange = (option: CheckboxOption) => {
     if (selectedOptions.includes(option.label)) {
-      setSelectedOptions(selectedOptions.filter(item => item !== option.label));
+      option.action();
+      setSelectedOptions(selectedOptions.filter(item => item !== option.label);
     } else {
       setSelectedOptions([...selectedOptions, option.label]);
-
       option.action();
     }
   };
+
 
   const setValidationStatusForField = useValidation(onValidationChange);
 
@@ -166,19 +170,26 @@ const ConfigureComponentsEditor: React.FC<ConfigureComponentsEditorProps> = ({
 
   return (
     <>
+
       <div className={classes.contentContainer}>
         {options.map(option => (
           <div key={option.label}>
-            <input
-              type="checkbox"
-              id={option.label}
-              checked={selectedOptions.includes(option.label)}
-              onChange={() => handleCheckboxChange(option)}
+            <FormControlLabel
+              control={
+                <Checkbox
+                  id={option.label}
+                  checked={selectedOptions.includes(option.label)}
+                  onChange={() => handleCheckboxChange(option)}
+                  color="primary"
+                  disabled={!editMode}
+                />
+              }
+            label ={option.label}
             />
-            <label htmlFor={option.label}>{option.label}</label>
           </div>
         ))}
       </div>
+
 
       <VariantContentEditor
         content={variant.landingPageContent}
@@ -225,6 +236,33 @@ const ConfigureComponentsEditor: React.FC<ConfigureComponentsEditorProps> = ({
           showBody={showBody}
         />
       )}
+
+      <div className={classes.sectionContainer}>
+        <Typography className={classes.sectionHeader} variant="h4">
+          Select Tiers
+        </Typography>
+
+        <LandingPageTierEditor />
+      </div>
+
+      <div className={classes.sectionContainer}>
+        <Typography className={classes.sectionHeader} variant="h4">
+          Ticker
+        </Typography>
+
+        <TickerEditor
+          tickerSettings={variant.tickerSettings}
+          updateTickerSettings={tickerSettings =>
+            onVariantChange({
+              ...variant,
+              tickerSettings,
+            })
+          }
+          isDisabled={!editMode}
+          onValidationChange={onValidationChange}
+        />
+      </div>
+
     </>
   );
 };

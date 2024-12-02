@@ -110,17 +110,6 @@ const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLan
           </div>
         </div>
 
-        <div className={classes.sectionContainer}>
-          <Typography variant={'h3'} className={classes.sectionHeader}>
-            Campaign
-          </Typography>
-        </div>
-
-        <div className={classes.sectionContainer}>
-          <Typography variant={'h3'} className={classes.sectionHeader}>
-            Target audience
-          </Typography>
-        </div>
       </div>
     );
   }
