@@ -13,6 +13,7 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
 import Alert from '@mui/lab/Alert';
+import { addMethodologyToTestName } from './helpers/methodology';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
@@ -58,14 +59,6 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
 const defaultEpsilonGreedyBandit: Methodology = {
   name: 'EpsilonGreedyBandit',
   epsilon: 0.1,
-};
-
-const addMethodologyToTestName = (testName: string, methodology: Methodology): string => {
-  if (methodology.name === 'EpsilonGreedyBandit') {
-    return `${testName}_EpsilonGreedyBandit-${methodology.epsilon}`;
-  } else {
-    return `${testName}_ABTest`;
-  }
 };
 
 interface TestMethodologyProps {
