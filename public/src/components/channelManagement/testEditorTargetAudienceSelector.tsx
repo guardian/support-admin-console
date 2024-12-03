@@ -37,6 +37,7 @@ interface TestEditorTargetAudienceSelectorProps {
   isDisabled: boolean;
   showSupporterStatusSelector: boolean;
   showDeviceTypeSelector: boolean;
+  showSignedInStatusSelector: boolean;
   selectedSignedInStatus?: SignedInStatus;
   onSignedInStatusChange: (signedInStatus: SignedInStatus) => void;
   selectedConsentStatus?: ConsentStatus;
@@ -55,6 +56,7 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
   isDisabled,
   showSupporterStatusSelector,
   showDeviceTypeSelector,
+  showSignedInStatusSelector,
   selectedSignedInStatus,
   onSignedInStatusChange,
   selectedConsentStatus,
@@ -109,19 +111,21 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
         </>
       )}
 
-      <>
-        <Typography className={classes.heading}>Signed In Status</Typography>
-        <TypedRadioGroup
-          selectedValue={selectedSignedInStatus ?? 'All'}
-          onChange={onSignedInStatusChange}
-          isDisabled={isDisabled}
-          labels={{
-            All: 'All',
-            SignedIn: 'Signed in',
-            SignedOut: 'Signed out',
-          }}
-        />
-      </>
+      {showSignedInStatusSelector && (
+        <>
+          <Typography className={classes.heading}>Signed In Status</Typography>
+          <TypedRadioGroup
+            selectedValue={selectedSignedInStatus ?? 'All'}
+            onChange={onSignedInStatusChange}
+            isDisabled={isDisabled}
+            labels={{
+              All: 'All',
+              SignedIn: 'Signed in',
+              SignedOut: 'Signed out',
+            }}
+          />
+        </>
+      )}
 
       {showConsentStatusSelector && (
         <>

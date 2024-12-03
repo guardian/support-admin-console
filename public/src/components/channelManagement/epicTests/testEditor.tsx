@@ -268,7 +268,7 @@ export const getEpicTestEditor = (
               methodologies={test.methodologies}
               testName={test.name}
               channel={test.channel ?? ''}
-              isDisabled={!userHasTestLocked}
+              isDisabled={!userHasTestLocked || test.status === 'Live'}
               onChange={onMethodologyChange}
             />
           </div>
@@ -362,6 +362,7 @@ export const getEpicTestEditor = (
               isDisabled={!userHasTestLocked}
               showSupporterStatusSelector={epicEditorConfig.allowSupporterStatusTargeting}
               showDeviceTypeSelector={epicEditorConfig.allowDeviceTypeTargeting}
+              showSignedInStatusSelector={epicEditorConfig.showSignedInStatusSelector}
               selectedSignedInStatus={test.signedInStatus}
               onSignedInStatusChange={onSignedInStatusChange}
               selectedConsentStatus={test.consentStatus}
