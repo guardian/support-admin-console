@@ -20,7 +20,11 @@ interface EpsilonGreedyBanditMethodology {
   name: 'EpsilonGreedyBandit';
   epsilon: number;
 }
-export type Methodology = ABTestMethodology | EpsilonGreedyBanditMethodology;
+// each methodology may have an optional testName, which should be used for tracking
+export type Methodology = { testName?: string } & (
+  | ABTestMethodology
+  | EpsilonGreedyBanditMethodology
+);
 
 export interface Test {
   name: string;
