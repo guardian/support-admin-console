@@ -145,7 +145,7 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
 
   const updatePage = () => doDataFetch(name);
 
-  const { register, handleSubmit, errors, trigger, control } = useForm<FormData>({
+  const { register, handleSubmit, formState: { errors }, trigger, control } = useForm<FormData>({
     mode: 'onChange',
     defaultValues,
   });
@@ -191,7 +191,7 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
               </div>
 
               <TextField
-                inputRef={register()}
+                {...register('description')}
                 error={errors.description !== undefined}
                 helperText={errors.description ? errors.description.message : ''}
                 onBlur={handleSubmit(onSubmit)}
@@ -210,13 +210,13 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
                   <FormControlLabel
                     control={
                       <Switch
-                        inputRef={register()}
+                        {...register('isActive')}
                         name="isActive"
                         onChange={e => {
-                          data.onChange(e.target.checked);
+                          data.field.onChange(e.target.checked); // TODO: added .field here
                           handleSubmit(onSubmit)();
                         }}
-                        checked={data.value}
+                        checked={data.field.value} // TODO: added .field here
                         disabled={!editMode}
                       />
                     }
@@ -232,9 +232,9 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
                   return (
                     <RichTextEditor
                       error={errors.notes !== undefined}
-                      copyData={data.value}
+                      copyData={data.field.value} // TODO: added .field here
                       updateCopy={pars => {
-                        data.onChange(pars);
+                        data.field.onChange(pars); // TODO: added .field here
                         handleSubmit(onSubmit)();
                       }}
                       name="notes"

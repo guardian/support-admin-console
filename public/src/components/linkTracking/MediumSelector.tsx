@@ -1,18 +1,18 @@
 import { FormControl, MenuItem, Select, Theme } from '@mui/material';
 import React from 'react';
-import { Control, Controller } from 'react-hook-form';
+import { Control, Controller, useController, UseControllerProps } from 'react-hook-form';
 import { makeStyles } from '@mui/styles';
 
-interface Option {
+export interface Option {
   value: string;
   label: string;
 }
-interface OptionGroup {
+export interface OptionGroup {
   group: string;
   options: Option[];
 }
 
-const OPTIONS: OptionGroup[] = [
+export const OPTIONS: OptionGroup[] = [
   {
     group: 'AFFILIATES',
     options: [{ value: 'awin', label: 'Affiliates Window (awin)' }],
@@ -190,58 +190,60 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 }));
 
 interface Props {
-  control: Control;
+  control: UseControllerProps<FormData>;
   onUpdate: () => void;
 }
 
-/**
- * A selector for choosing a medium. The value is the source and medium separated by a double underscore.
- * This is because the link tracking should contain both, but the source should not be chosen directly by the user.
- */
-export const MediumSelector: React.FC<Props> = ({ control, onUpdate }: Props) => {
-  const classes = useStyles();
+// /**
+//  * A selector for choosing a medium. The value is the source and medium separated by a double underscore.
+//  * This is because the link tracking should contain both, but the source should not be chosen directly by the user.
+//  */
+// export const MediumSelector: React.FC<Props> = ({control, onUpdate }: Props) => {
+//   const classes = useStyles();
+//   const {field, fieldState } = useController(control);
 
-  return (
-    <FormControl>
-      <Controller
-        name="sourceAndMedium"
-        rules={{ required: true }}
-        render={({ onChange, value }) => (
-          <Select
-            value={value}
-            onChange={e => {
-              onUpdate();
-              onChange(e);
-            }}
-            error={!!control.formState.errors?.medium}
-          >
-            {OPTIONS.map(group => {
-              const groupItem = (
-                <MenuItem
-                  className={classes.groupHeading}
-                  value={group.group}
-                  key={group.group}
-                  disabled
-                >
-                  {group.group}
-                </MenuItem>
-              );
-              const items = group.options.map(medium => (
-                <MenuItem
-                  className={classes.item}
-                  value={`${group.group}__${medium.value}`}
-                  key={`${group.group}-${medium.value}`}
-                >
-                  {medium.label}
-                </MenuItem>
-              ));
-              return [groupItem].concat(items);
-            })}
-          </Select>
-        )}
-        control={control}
-        defaultValue={''}
-      />
-    </FormControl>
-  );
-};
+//   return (
+//     <FormControl>
+//       <Controller
+//         name="sourceAndMedium"
+//         rules={{ required: true }}
+//         render={() => (
+//           <Select
+//             name="sourceAndMedium" 
+//             value={value}
+//             onChange={e => {
+//               onUpdate();
+//               onChange(e);
+//             }}
+//             error={!!control.errors?.medium}
+//           >
+//             {OPTIONS.map(group => {
+//               const groupItem = (
+//                 <MenuItem
+//                   className={classes.groupHeading}
+//                   value={group.group}
+//                   key={group.group}
+//                   disabled
+//                 >
+//                   {group.group}
+//                 </MenuItem>
+//               );
+//               const items = group.options.map(medium => (
+//                 <MenuItem
+//                   className={classes.item}
+//                   value={`${group.group}__${medium.value}`}
+//                   key={`${group.group}-${medium.value}`}
+//                 >
+//                   {medium.label}
+//                 </MenuItem>
+//               ));
+//               return [groupItem].concat(items);
+//             })}
+//           </Select>
+//         )}
+//         control={control}
+//         defaultValue={''}
+//       />
+//     </FormControl>
+//   );
+// };

@@ -1,10 +1,10 @@
 import React from 'react';
-import { Button, TextField, Theme, Typography, Link } from '@mui/material';
+import { Button, TextField, Theme, Typography, Link, Select, MenuItem } from '@mui/material';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { makeStyles } from '@mui/styles';
-import { MediumSelector } from './MediumSelector';
 import lzstring from 'lz-string';
 import { Link as LinkIcon, OpenInNew } from '@mui/icons-material';
+import {OPTIONS, OptionGroup, Option } from './MediumSelector'
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {
@@ -42,6 +42,12 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
     fontWeight: 'normal',
     color: palette.grey[700],
     lineHeight: 1.5,
+  },
+  groupHeading: {
+    fontWeight: 700,
+  },
+  item: {
+    marginLeft: spacing(2),
   },
   header: {
     marginTop: spacing(3),
@@ -111,9 +117,8 @@ export const LinkTrackingBuilder: React.FC = () => {
     >
       <div className={classes.fieldsContainer}>
         <TextField
-          name="url"
           label="URL (without tracking)"
-          inputRef={register({
+          {...register('url',{
             required: true,
             validate: value => {
               // Check it's a valid url and has no querystring
@@ -128,6 +133,7 @@ export const LinkTrackingBuilder: React.FC = () => {
               }
             },
           })}
+          name="url"
           error={!!errors.url}
           helperText={errors?.url?.message}
         />
@@ -136,9 +142,9 @@ export const LinkTrackingBuilder: React.FC = () => {
           Campaign
         </Typography>
         <TextField
-          name="campaign"
           label="Campaign"
-          inputRef={register({ required: true })}
+          {...register('campaign',{ required: true })}
+          name="campaign"
           error={!!errors.campaign}
           helperText={errors?.campaign?.message}
         />
@@ -147,16 +153,16 @@ export const LinkTrackingBuilder: React.FC = () => {
           Call to action / creative
         </Typography>
         <TextField
-          name="content"
           label="Creative / utm_content / AB test name"
-          inputRef={register({ required: true })}
+          {...register('content',{ required: true })}
+          name="content"
           error={!!errors.content}
           helperText={errors?.content?.message}
         />
         <TextField
-          name="term"
           label="Audience segment / utm_term / AB test variant name"
-          inputRef={register({ required: true })}
+          {...register('term',{ required: true })}
+          name="term"
           error={!!errors.term}
           helperText={errors?.term?.message}
         />
@@ -164,7 +170,40 @@ export const LinkTrackingBuilder: React.FC = () => {
         <Typography className={classes.header} variant="h4">
           Placement
         </Typography>
-        <MediumSelector onUpdate={resetLink} control={control} />
+
+        /**
+        * A selector for choosing a medium. The value is the source and medium separated by a double underscore.
+        * This is because the link tracking should contain both, but the source should not be chosen directly by the user.
+        */
+        <Select
+            {...register('sourceAndMedium')}
+            name="sourceAndMedium" 
+            // value={value}
+            error={!!errors?.sourceAndMedium}
+          >
+            {OPTIONS.map(group => {
+              const groupItem = (
+                <MenuItem
+                  className={classes.groupHeading}
+                  value={group.group}
+                  key={group.group}
+                  disabled
+                >
+                  {group.group}
+                </MenuItem>
+              );
+              const items = group.options.map(medium => (
+                <MenuItem
+                  className={classes.item}
+                  value={`${group.group}__${medium.value}`}
+                  key={`${group.group}-${medium.value}`}
+                >
+                  {medium.label}
+                </MenuItem>
+              ));
+              return [groupItem].concat(items);
+            })}
+          </Select>
       </div>
 
       <Button type="submit" variant="contained" color="primary" disabled={linkReady}>

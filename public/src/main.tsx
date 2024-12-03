@@ -30,7 +30,6 @@ import IndexPage from './components/indexPage';
 import { getTheme } from './utils/theme';
 import ChannelSwitches from './components/channelManagement/ChannelSwitches';
 import CampaignsForm from './components/channelManagement/campaigns/CampaignsForm';
-import { FontWeightProperty } from 'csstype';
 import { makeStyles } from '@mui/styles';
 import QrCodePage from './components/utilities/QrCodePage';
 import AppsMeteringSwitches from './components/appsMeteringSwitches';
@@ -105,7 +104,7 @@ const useStyles = makeStyles(({ palette, mixins, typography, transitions }: Them
   toolbar: mixins.toolbar as CSSProperties, // createStyles expects material-ui's CSSProperties type, not react's
   heading: {
     fontSize: typography.pxToRem(24),
-    fontWeight: typography.fontWeightMedium as FontWeightProperty,
+    fontWeight: typography.fontWeightMedium,
   },
   toolbarContent: {
     width: '100%',
@@ -113,7 +112,7 @@ const useStyles = makeStyles(({ palette, mixins, typography, transitions }: Them
   },
   link: {
     fontSize: typography.pxToRem(12),
-    fontWeight: typography.fontWeightMedium as FontWeightProperty,
+    fontWeight: typography.fontWeightMedium,
     textDecoration: 'none',
   },
   guideButton: {

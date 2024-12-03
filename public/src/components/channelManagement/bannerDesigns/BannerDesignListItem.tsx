@@ -1,5 +1,5 @@
 import React from 'react';
-import { ListItem, Theme, Typography } from '@mui/material';
+import { ListItem, ListItemButton, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { BannerDesign } from '../../../models/bannerDesign';
 import EditIcon from '@mui/icons-material/Edit';
@@ -76,8 +76,7 @@ const BannerDesignListItem = ({
   }
 
   return (
-    <ListItem
-      button={true}
+    <ListItemButton
       className={itemContainerClasses.join(' ')}
       key={design.name}
       onClick={(): void => onDesignSelected(design.name)}
@@ -89,7 +88,7 @@ const BannerDesignListItem = ({
 
         <Typography className={textClasses.join(' ')}>{design.name}</Typography>
       </div>
-    </ListItem>
+    </ListItemButton>
   );
 };
 

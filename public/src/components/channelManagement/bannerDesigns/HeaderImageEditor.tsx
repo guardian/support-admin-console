@@ -31,7 +31,7 @@ export const HeaderImageEditor: React.FC<Props> = ({
     altText: headerImage?.altText ?? '',
   };
 
-  const { register, handleSubmit, errors, reset } = useForm<BannerDesignHeaderImage>({
+  const { register, handleSubmit, formState: { errors }, reset } = useForm<BannerDesignHeaderImage>({
     mode: 'onChange',
     defaultValues,
   });
@@ -91,7 +91,7 @@ export const HeaderImageEditor: React.FC<Props> = ({
       {headerImage && (
         <>
           <TextField
-            inputRef={register({
+            {...register('mobileUrl',{
               required: EMPTY_ERROR_HELPER_TEXT,
             })}
             error={errors?.mobileUrl !== undefined}
@@ -105,7 +105,7 @@ export const HeaderImageEditor: React.FC<Props> = ({
             fullWidth
           />
           <TextField
-            inputRef={register({
+            {...register('tabletUrl',{
               required: EMPTY_ERROR_HELPER_TEXT,
             })}
             error={errors?.tabletUrl !== undefined}
@@ -119,7 +119,7 @@ export const HeaderImageEditor: React.FC<Props> = ({
             fullWidth
           />
           <TextField
-            inputRef={register({
+            {...register('desktopUrl',{
               required: EMPTY_ERROR_HELPER_TEXT,
             })}
             error={errors?.desktopUrl !== undefined}
@@ -133,7 +133,7 @@ export const HeaderImageEditor: React.FC<Props> = ({
             fullWidth
           />
           <TextField
-            inputRef={register({
+            {...register('altText',{
               required: EMPTY_ERROR_HELPER_TEXT,
             })}
             error={errors?.altText !== undefined}

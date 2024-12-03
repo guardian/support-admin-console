@@ -7,6 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import { makeStyles } from '@mui/styles';
 import RRControlPanelLogo from './rrControlPanelLogo';
+import ListItemButton from '@mui/material/ListItemButton';
 
 const useStyles = makeStyles({
   list: {
@@ -138,102 +139,102 @@ export default function NavDrawer(): React.ReactElement {
       <div>
         <h2 className={classes.topSectionHeader}>Channel Management</h2>
         <Link key="Campaigns" to="/campaigns" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Campaigns">
+          <ListItemButton className={classes.listItem} component="li" key="Campaigns">
             <ListItemText primary="Campaigns" />
-          </ListItem>
+          </ListItemButton>
         </Link>
         <Link key="Header" to="/header-tests" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Header">
+          <ListItemButton className={classes.listItem} component="li" key="Header">
             <ListItemText primary="Header" />
-          </ListItem>
+          </ListItemButton>
         </Link>
         <Link key="Epic" to="/epic-tests" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Epic">
+          <ListItemButton className={classes.listItem} component="li" key="Epic">
             <ListItemText primary="Epic" />
-          </ListItem>
+          </ListItemButton>
         </Link>
         <Link key="Liveblog Epic" to="/liveblog-epic-tests" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Liveblog Epic">
+          <ListItemButton className={classes.listItem} component="li" key="Liveblog Epic">
             <ListItemText primary="Liveblog Epic" />
-          </ListItem>
+          </ListItemButton>
         </Link>
         <Link key="Apple News Epic" to="/apple-news-epic-tests" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Apple News Epic">
+          <ListItemButton className={classes.listItem} component="li" key="Apple News Epic">
             <ListItemText primary="Apple News Epic" />
             <img className={classes.icon} src="assets/images/apple-news-icon.png" />
-          </ListItem>
+          </ListItemButton>
         </Link>
         <Link key="AMP Epic" to="/amp-epic-tests" className={classes.link}>
-          <ListItem className={classes.listItem} button key="AMP Epic">
+          <ListItemButton className={classes.listItem} component="li" key="AMP Epic">
             <ListItemText primary="AMP Epic" />
             <img className={classes.icon} src="assets/images/amp-icon.png" />
-          </ListItem>
+          </ListItemButton>
         </Link>
         <Link key="Banner1" to="/banner-tests" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Banner1">
+          <ListItemButton className={classes.listItem} component="li" key="Banner1">
             <ListItemText primary="Banner 1" />
-          </ListItem>
+          </ListItemButton>
         </Link>
         <Link key="Banner2" to="/banner-tests2" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Banner2">
+          <ListItemButton className={classes.listItem} component="li" key="Banner2">
             <ListItemText primary="Banner 2" />
-          </ListItem>
+          </ListItemButton>
         </Link>
         <Link key="Banner Deploy" to="/banner-deploy" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Banner Deploy">
+          <ListItemButton className={classes.listItem} component="li" key="Banner Deploy">
             <ListItemText primary="Banner Deploy" />
-          </ListItem>
+          </ListItemButton>
         </Link>
         <Link key="Channel Switches" to="/channel-switches" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Channel Switches">
+          <ListItemButton className={classes.listItem} component="li" key="Channel Switches">
             <ListItemText primary="Channel Switches" />
-          </ListItem>
+          </ListItemButton>
         </Link>
         <Link key="Super Mode" to="/super-mode" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Super Mode">
+          <ListItemButton className={classes.listItem} component="li" key="Super Mode">
             <ListItemText primary="Epic Super Mode Dashboard" />
             <span className={classes.super}>🦸</span>
-          </ListItem>
+          </ListItemButton>
         </Link>
         <Link key="Banner Designs" to="/banner-designs" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Banner Designs">
+          <ListItemButton className={classes.listItem} component="li" key="Banner Designs">
             <ListItemText primary="Banner Designs" />
             <span className={classes.super}>🎨</span>
-          </ListItem>
+          </ListItemButton>
         </Link>
       </div>
 
       <div>
         <h2 className={classes.sectionHeader}>Admin Console</h2>
         <Link key="Switches" to="/switches" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Switches">
+          <ListItemButton className={classes.listItem} component="li" key="Switches">
             <ListItemText primary="Switches" />
-          </ListItem>
+          </ListItemButton>
         </Link>
         <Link key="Amounts" to="/amounts" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Amounts">
+          <ListItemButton className={classes.listItem} component="li" key="Amounts">
             <ListItemText primary="Amounts" />
-          </ListItem>
+          </ListItemButton>
         </Link>
         <Link key="QR Code Generator" to="/qr-code" className={classes.link}>
-          <ListItem className={classes.listItem} button key="QR Code Generator">
+          <ListItemButton className={classes.listItem} component="li" key="QR Code Generator">
             <ListItemText primary="QR Code Generator" />
-          </ListItem>
+          </ListItemButton>
         </Link>
         <Link key="Link Tracking Builder" to="/lynx" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Link Tracking Builder">
+          <ListItemButton className={classes.listItem} component="li" key="Link Tracking Builder">
             <ListItemText primary="Link Tracking Builder" />
-          </ListItem>
+          </ListItemButton>
         </Link>
         <Link key="Apps Metering Switches" to="/apps-metering-switches" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Apps Metering Switches">
+          <ListItemButton className={classes.listItem} component="li" key="Apps Metering Switches">
             <ListItemText primary="Apps Metering Switches" />
-          </ListItem>
+          </ListItemButton>
         </Link>
         <Link key="Default Promos" to="/default-promos" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Default Promos">
+          <ListItemButton className={classes.listItem} component="li" key="Default Promos">
             <ListItemText primary="Default Promos" />
-          </ListItem>
+          </ListItemButton>
         </Link>
       </div>
 
@@ -246,9 +247,9 @@ export default function NavDrawer(): React.ReactElement {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <ListItem className={classes.listItem} button key="Report an issue">
+          <ListItemButton className={classes.listItem} component="li" key="Report an issue">
             <ListItemText primary="Report an issue" />
-          </ListItem>
+          </ListItemButton>
         </a>
       </div>
     </div>
