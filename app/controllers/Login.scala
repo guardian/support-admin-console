@@ -1,6 +1,6 @@
 package controllers
 
-import com.gu.googleauth.{GoogleAuthConfig, GoogleGroupChecker, LoginSupport}
+import com.gu.googleauth.{AuthAction, Filters, GoogleAuthConfig, GoogleGroupChecker, LoginSupport}
 import play.api.libs.ws.WSClient
 import play.api.mvc._
 
@@ -34,7 +34,8 @@ class Login(
    * Looks up user's identity via Google
    */
   def oauth2Callback: Action[AnyContent] = Action.async { implicit request =>
-    processOauth2Callback(requiredGoogleGroups, googleGroupChecker)
+//    processOauth2Callback(requiredGoogleGroups, googleGroupChecker)
+    processOauth2Callback()
   }
 
   def logout: Action[AnyContent] = Action { implicit request =>

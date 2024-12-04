@@ -16,7 +16,7 @@ object LiveblogEpicTestsController {
 }
 
 class LiveblogEpicTestsController(
-  authAction: AuthAction[AnyContent],
+  authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
   components: ControllerComponents,
   stage: String,
   runtime: zio.Runtime[ZEnv],

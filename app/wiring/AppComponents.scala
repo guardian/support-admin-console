@@ -8,14 +8,14 @@ import controllers.banner._
 import controllers.epic._
 import play.api.ApplicationLoader.Context
 import play.api.libs.ws.ahc.AhcWSComponents
-import play.api.mvc.AnyContent
+import play.api.mvc.{ActionBuilder, AnyContent}
 import play.api.{BuiltInComponentsFromContext, NoHttpFiltersComponents}
 import router.Routes
 import services.{Athena, Aws, CapiService, DynamoArchivedBannerDesigns, DynamoArchivedChannelTests, DynamoBanditData, DynamoBannerDesigns, DynamoCampaigns, DynamoChannelTests, DynamoSuperMode, S3}
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.s3.model.GetObjectRequest
 
-class AppComponents(context: Context, stage: String) extends BuiltInComponentsFromContext(context) with AhcWSComponents with NoHttpFiltersComponents with AssetsComponents {
+class AppComponents(context: Context, stage: String) extends BuiltInComponentsFromContext(context) with AhcWSComponents with NoHttpFiltersComponents with AssetsComponents with Filters {
 
   private val authConfig = {
     val clientId = configuration.get[String]("googleAuth.clientId")
@@ -28,7 +28,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
   }
 
   // https://github.com/guardian/play-googleauth#implement-googlegroups-based-access-control-using-the-directory-api
-  private val googleGroupChecker = {
+  override def groupChecker = {
     val request = GetObjectRequest
       .builder()
       .bucket("support-admin-console")
@@ -50,7 +50,9 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
 
   private val requiredGoogleGroups: Set[String] = configuration.get[String]("googleAuth.requiredGroups").split(',').toSet
 
-  private val authAction = new AuthAction[AnyContent](authConfig, controllers.routes.Login.loginAction, controllerComponents.parsers.default)(executionContext)
+  private val authAction =
+    new AuthAction[AnyContent](authConfig, controllers.routes.Login.loginAction, controllerComponents.parsers.default)(executionContext) andThen
+      requireGroup[AuthAction.UserIdentityRequest](requiredGoogleGroups)
 
   private val runtime = zio.Runtime.default
 
@@ -80,7 +82,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
   override lazy val router: Router = new Routes(
     httpErrorHandler,
     new Application(authAction, controllerComponents, stage, sdcUrlOverride),
-    new Login(authConfig, wsClient, requiredGoogleGroups, googleGroupChecker, controllerComponents),
+    new Login(authConfig, wsClient, requiredGoogleGroups, groupChecker, controllerComponents),
     new SwitchesController(authAction, controllerComponents, stage, runtime),
     new AmountsController(authAction, controllerComponents, stage, runtime),
     new EpicTestsController(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoArchivedChannelTests),

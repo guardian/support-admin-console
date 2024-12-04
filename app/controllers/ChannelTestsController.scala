@@ -31,7 +31,7 @@ object ChannelTestsController {
   * Uses an S3 file for lock protection to prevent concurrent editing.
   */
 abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
-  authAction: AuthAction[AnyContent],
+  authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
   components: ControllerComponents,
   stage: String,
   lockFileName: String,
