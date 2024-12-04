@@ -17,7 +17,7 @@ import software.amazon.awssdk.services.s3.model.GetObjectRequest
 
 class AppComponents(context: Context, stage: String) extends BuiltInComponentsFromContext(context) with AhcWSComponents with NoHttpFiltersComponents with AssetsComponents with Filters {
 
-  private val authConfig = {
+  override def authConfig = {
     val clientId = configuration.get[String]("googleAuth.clientId")
     val clientSecret = configuration.get[String]("googleAuth.clientSecret")
     val redirectUrl = configuration.get[String]("googleAuth.redirectUrl")
