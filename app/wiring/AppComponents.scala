@@ -8,7 +8,7 @@ import controllers.banner._
 import controllers.epic._
 import play.api.ApplicationLoader.Context
 import play.api.libs.ws.ahc.AhcWSComponents
-import play.api.mvc.{ActionBuilder, AnyContent}
+import play.api.mvc.AnyContent
 import play.api.{BuiltInComponentsFromContext, NoHttpFiltersComponents}
 import router.Routes
 import services.{Athena, Aws, CapiService, DynamoArchivedBannerDesigns, DynamoArchivedChannelTests, DynamoBanditData, DynamoBannerDesigns, DynamoCampaigns, DynamoChannelTests, DynamoSuperMode, S3}
@@ -82,7 +82,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
   override lazy val router: Router = new Routes(
     httpErrorHandler,
     new Application(authAction, controllerComponents, stage, sdcUrlOverride),
-    new Login(authConfig, wsClient, requiredGoogleGroups, groupChecker, controllerComponents),
+    new Login(authConfig, wsClient, requiredGoogleGroups, controllerComponents),
     new SwitchesController(authAction, controllerComponents, stage, runtime),
     new AmountsController(authAction, controllerComponents, stage, runtime),
     new EpicTestsController(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoArchivedChannelTests),
