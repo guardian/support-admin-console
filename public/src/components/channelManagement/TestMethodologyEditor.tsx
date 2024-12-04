@@ -1,6 +1,7 @@
 import React from 'react';
 import { Methodology } from './helpers/shared';
 import { makeStyles } from '@mui/styles';
+import { BanditAnalyticsButton } from './BanditAnalyticsButton';
 import {
   Button,
   MenuItem,
@@ -63,8 +64,9 @@ const defaultEpsilonGreedyBandit: Methodology = {
 
 interface TestMethodologyProps {
   methodology: Methodology;
-  audiencePercentage: number;
   testName: string;
+  channel: string;
+  audiencePercentage: number;
   isDisabled: boolean;
   onChange: (methodology: Methodology) => void;
   onDelete: () => void;
@@ -72,6 +74,8 @@ interface TestMethodologyProps {
 
 const TestMethodology: React.FC<TestMethodologyProps> = ({
   methodology,
+  testName,
+  channel,
   audiencePercentage,
   isDisabled,
   onChange,
@@ -103,8 +107,8 @@ const TestMethodology: React.FC<TestMethodologyProps> = ({
           </MenuItem>
         </Select>
       </div>
-      <div>
-        {methodology.name === 'EpsilonGreedyBandit' && (
+      {methodology.name === 'EpsilonGreedyBandit' && (
+        <>
           <div>
             <TextField
               type={'number'}
@@ -118,8 +122,9 @@ const TestMethodology: React.FC<TestMethodologyProps> = ({
               }}
             />
           </div>
-        )}
-      </div>
+          <BanditAnalyticsButton testName={testName} channel={channel} />
+        </>
+      )}
       <div className={classes.testNameAndDeleteButton}>
         {methodology.testName && <div className={classes.testName}>{methodology.testName}</div>}
         <div className={classes.deleteButton}>
@@ -135,6 +140,7 @@ const TestMethodology: React.FC<TestMethodologyProps> = ({
 interface TestMethodologyEditorProps {
   methodologies: Methodology[];
   testName: string;
+  channel: string;
   onChange: (methodologies: Methodology[]) => void;
   isDisabled: boolean;
 }
@@ -142,6 +148,7 @@ interface TestMethodologyEditorProps {
 export const TestMethodologyEditor: React.FC<TestMethodologyEditorProps> = ({
   methodologies,
   testName,
+  channel,
   onChange,
   isDisabled,
 }: TestMethodologyEditorProps) => {
@@ -174,6 +181,7 @@ export const TestMethodologyEditor: React.FC<TestMethodologyEditorProps> = ({
           key={`methodology-${idx}`}
           methodology={method}
           testName={testName}
+          channel={channel}
           audiencePercentage={Math.round(100 / methodologies.length)}
           isDisabled={isDisabled}
           onChange={updatedMethodology => {
