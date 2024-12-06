@@ -3,14 +3,15 @@ package controllers
 import com.gu.googleauth.AuthAction
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.syntax.EncoderOps
-import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents, Result}
+import play.api.mvc.{AbstractController, Action, ActionBuilder, AnyContent, ControllerComponents, Result}
 import services.DynamoBanditData
 import utils.Circe.noNulls
 import zio.{IO, ZEnv, ZIO}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class BanditDataController(authAction: AuthAction[AnyContent],
+class BanditDataController(
+  authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
   components: ControllerComponents,
   stage: String,
   runtime: zio.Runtime[ZEnv],

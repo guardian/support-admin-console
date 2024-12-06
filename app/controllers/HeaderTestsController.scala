@@ -3,7 +3,7 @@ package controllers
 import com.gu.googleauth.AuthAction
 import models.{Channel, HeaderTest}
 import models.HeaderTest._
-import play.api.mvc.{AnyContent, ControllerComponents}
+import play.api.mvc.{ActionBuilder, AnyContent, ControllerComponents}
 import services.{DynamoArchivedChannelTests, DynamoChannelTests}
 import zio.ZEnv
 
@@ -14,7 +14,7 @@ object HeaderTestsController {
 }
 
 class HeaderTestsController(
-  authAction: AuthAction[AnyContent],
+  authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
   components: ControllerComponents,
   stage: String,
   runtime: zio.Runtime[ZEnv],

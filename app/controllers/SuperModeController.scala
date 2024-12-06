@@ -12,7 +12,7 @@ import zio.{IO, ZEnv, ZIO}
 import scala.concurrent.{ExecutionContext, Future}
 
 class SuperModeController(
-  authAction: AuthAction[AnyContent],
+  authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
   components: ControllerComponents,
   stage: String,
   runtime: zio.Runtime[ZEnv],

@@ -15,9 +15,9 @@ import services.{Athena, Aws, CapiService, DynamoArchivedBannerDesigns, DynamoAr
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.s3.model.GetObjectRequest
 
-class AppComponents(context: Context, stage: String) extends BuiltInComponentsFromContext(context) with AhcWSComponents with NoHttpFiltersComponents with AssetsComponents {
+class AppComponents(context: Context, stage: String) extends BuiltInComponentsFromContext(context) with AhcWSComponents with NoHttpFiltersComponents with AssetsComponents with Filters {
 
-  private val authConfig = {
+  override def authConfig = {
     val clientId = configuration.get[String]("googleAuth.clientId")
     val clientSecret = configuration.get[String]("googleAuth.clientSecret")
     val redirectUrl = configuration.get[String]("googleAuth.redirectUrl")
@@ -28,7 +28,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
   }
 
   // https://github.com/guardian/play-googleauth#implement-googlegroups-based-access-control-using-the-directory-api
-  private val googleGroupChecker = {
+  override def groupChecker = {
     val request = GetObjectRequest
       .builder()
       .bucket("support-admin-console")
@@ -48,9 +48,15 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     )
   }
 
+  private val twoFactorAuthEnforceGoogleGroup = configuration.get[String]("googleAuth.2faEnforceGroup")
   private val requiredGoogleGroups: Set[String] = configuration.get[String]("googleAuth.requiredGroups").split(',').toSet
 
-  private val authAction = new AuthAction[AnyContent](authConfig, controllers.routes.Login.loginAction, controllerComponents.parsers.default)(executionContext)
+  private val authAction =
+    new AuthAction[AnyContent](authConfig, controllers.routes.Login.loginAction, controllerComponents.parsers.default)(executionContext) andThen
+      // User must have 2fa enforced
+      requireGroup[AuthAction.UserIdentityRequest](Set(twoFactorAuthEnforceGoogleGroup)) andThen
+      // User must be in at least one of the required groups
+      requireGroup[AuthAction.UserIdentityRequest](requiredGoogleGroups)
 
   private val runtime = zio.Runtime.default
 
@@ -80,7 +86,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
   override lazy val router: Router = new Routes(
     httpErrorHandler,
     new Application(authAction, controllerComponents, stage, sdcUrlOverride),
-    new Login(authConfig, wsClient, requiredGoogleGroups, googleGroupChecker, controllerComponents),
+    new Login(authConfig, wsClient, requiredGoogleGroups, controllerComponents),
     new SwitchesController(authAction, controllerComponents, stage, runtime),
     new AmountsController(authAction, controllerComponents, stage, runtime),
     new EpicTestsController(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoArchivedChannelTests),

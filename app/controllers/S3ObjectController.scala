@@ -5,7 +5,7 @@ import io.circe.{Decoder, Encoder}
 import io.circe.generic.auto._
 import io.circe.syntax._
 import play.api.libs.circe.Circe
-import play.api.mvc.{AbstractController, AnyContent, ControllerComponents, Result}
+import play.api.mvc.{AbstractController, ActionBuilder, AnyContent, ControllerComponents, Result}
 import services.S3Client.S3ObjectSettings
 import services.{S3Json, VersionedS3Data}
 import utils.Circe.noNulls
@@ -21,7 +21,7 @@ case class VersionedS3DataWithEmail[T](value: T, version: String, email: String)
   * Controller for managing JSON data in a single object in S3
   */
 abstract class S3ObjectController[T : Decoder : Encoder](
-  authAction: AuthAction[AnyContent],
+  authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
   components: ControllerComponents,
   stage: String,
   filename: String,

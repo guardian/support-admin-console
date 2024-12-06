@@ -3,7 +3,7 @@ package controllers
 import com.gu.googleauth.AuthAction
 import play.api.mvc._
 
-class Application(authAction: AuthAction[AnyContent],
+class Application(authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
                   components: ControllerComponents,
                   stage: String,
                   sdcUrlOverride: Option[String])
