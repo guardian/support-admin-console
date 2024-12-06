@@ -54,7 +54,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
   private val authAction =
     new AuthAction[AnyContent](authConfig, controllers.routes.Login.loginAction, controllerComponents.parsers.default)(executionContext) andThen
       // User must have 2fa enforced
-      requireGroup[AuthAction.UserIdentityRequest](Set(twoFactorAuthEnforceGoogleGroup))
+      requireGroup[AuthAction.UserIdentityRequest](Set(twoFactorAuthEnforceGoogleGroup)) andThen
       // User must be in at least one of the required groups
       requireGroup[AuthAction.UserIdentityRequest](requiredGoogleGroups)
 
