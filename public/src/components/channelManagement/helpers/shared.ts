@@ -20,7 +20,11 @@ interface EpsilonGreedyBanditMethodology {
   name: 'EpsilonGreedyBandit';
   epsilon: number;
 }
-export type Methodology = ABTestMethodology | EpsilonGreedyBanditMethodology;
+// each methodology may have an optional testName, which should be used for tracking
+export type Methodology = { testName?: string } & (
+  | ABTestMethodology
+  | EpsilonGreedyBanditMethodology
+);
 
 export interface Test {
   name: string;
@@ -50,6 +54,7 @@ export interface EpicEditorConfig {
   supportedRegions?: Region[];
   allowSupporterStatusTargeting: boolean;
   allowDeviceTypeTargeting: boolean;
+  showSignedInStatusSelector: boolean;
   allowViewFrequencySettings: boolean;
   allowArticleCount: boolean;
   testNamePrefix?: string;
@@ -82,6 +87,7 @@ export const ARTICLE_EPIC_CONFIG: EpicEditorConfig = {
   allowLocationTargeting: true,
   allowSupporterStatusTargeting: true,
   allowDeviceTypeTargeting: true,
+  showSignedInStatusSelector: true,
   allowViewFrequencySettings: true,
   allowArticleCount: true,
   allowVariantHeader: true,
@@ -111,6 +117,7 @@ export const LIVEBLOG_EPIC_CONFIG: EpicEditorConfig = {
   allowLocationTargeting: true,
   allowSupporterStatusTargeting: true,
   allowDeviceTypeTargeting: true,
+  showSignedInStatusSelector: true,
   allowViewFrequencySettings: true,
   allowArticleCount: true,
   allowVariantHeader: true,
@@ -141,6 +148,7 @@ export const APPLE_NEWS_EPIC_CONFIG: EpicEditorConfig = {
   supportedRegions: ['UnitedStates', 'AUDCountries', 'GBPCountries'],
   allowSupporterStatusTargeting: false,
   allowDeviceTypeTargeting: false,
+  showSignedInStatusSelector: false,
   allowViewFrequencySettings: false,
   allowArticleCount: false,
   allowVariantHeader: true,
@@ -170,6 +178,7 @@ export const AMP_EPIC_CONFIG: EpicEditorConfig = {
   allowLocationTargeting: true,
   allowSupporterStatusTargeting: false,
   allowDeviceTypeTargeting: false,
+  showSignedInStatusSelector: false,
   allowViewFrequencySettings: false,
   allowArticleCount: false,
   allowVariantHeader: true,

@@ -240,7 +240,9 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
           </Typography>
           <TestMethodologyEditor
             methodologies={test.methodologies}
-            isDisabled={!userHasTestLocked}
+            testName={test.name}
+            channel={test.channel ?? ''}
+            isDisabled={!userHasTestLocked || test.status === 'Live'}
             onChange={onMethodologyChange}
           />
         </div>
@@ -302,6 +304,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
             isDisabled={!userHasTestLocked}
             showSupporterStatusSelector={true}
             showDeviceTypeSelector={true}
+            showSignedInStatusSelector={true}
             selectedSignedInStatus={test.signedInStatus}
             onSignedInStatusChange={onSignedInStatusChange}
             selectedConsentStatus={test.consentStatus}

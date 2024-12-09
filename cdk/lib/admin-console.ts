@@ -258,6 +258,9 @@ export class AdminConsole extends GuStack {
       new GuDynamoDBReadPolicy(this, `DynamoRead-super-mode/index/end`, {
         tableName: `super-mode-PROD/index/end`,
       }),
+      new GuDynamoDBReadPolicy(this, `DynamoRead-bandit-data`, {
+        tableName: `support-bandit-${this.stage}`,
+      }),
       new GuAllowPolicy(this, 'AthenaOutputBucket', {
         actions: ['s3:*'],
         resources: [`arn:aws:s3:::gu-support-analytics/*`, `arn:aws:s3:::gu-support-analytics`],

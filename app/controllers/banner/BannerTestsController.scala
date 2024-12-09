@@ -5,7 +5,7 @@ import controllers.ChannelTestsController
 import models.{BannerTest, Channel}
 import models.BannerTest._
 import play.api.libs.circe.Circe
-import play.api.mvc.{AnyContent, ControllerComponents}
+import play.api.mvc.{ActionBuilder, AnyContent, ControllerComponents}
 import services.{DynamoArchivedChannelTests, DynamoChannelTests}
 import zio.ZEnv
 
@@ -16,7 +16,7 @@ object BannerTestsController {
 }
 
 class BannerTestsController(
-  authAction: AuthAction[AnyContent],
+  authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
   components: ControllerComponents,
   stage: String,
   runtime: zio.Runtime[ZEnv],

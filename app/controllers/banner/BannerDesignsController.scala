@@ -4,8 +4,8 @@ import com.gu.googleauth.AuthAction
 import models.DynamoErrors.{DynamoDuplicateNameError, DynamoError, DynamoNoLockError}
 import models.{BannerDesign, BannerTest, Channel}
 import play.api.libs.circe.Circe
-import play.api.mvc.{AbstractController, AnyContent, ControllerComponents, Result}
-import services.{DynamoBannerDesigns, DynamoChannelTests, DynamoArchivedBannerDesigns}
+import play.api.mvc.{AbstractController, ActionBuilder, AnyContent, ControllerComponents, Result}
+import services.{DynamoArchivedBannerDesigns, DynamoBannerDesigns, DynamoChannelTests}
 import services.S3Client.S3ObjectSettings
 import utils.Circe.noNulls
 import zio.{IO, ZEnv, ZIO}
@@ -17,7 +17,7 @@ import models.BannerUI
 import scala.concurrent.{ExecutionContext, Future}
 
 class BannerDesignsController(
-    authAction: AuthAction[AnyContent],
+    authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
     components: ControllerComponents,
     stage: String,
     runtime: zio.Runtime[ZEnv],

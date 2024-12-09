@@ -1,6 +1,6 @@
 package controllers
 
-import com.gu.googleauth.{GoogleAuthConfig, GoogleGroupChecker, LoginSupport}
+import com.gu.googleauth.{GoogleAuthConfig, LoginSupport}
 import play.api.libs.ws.WSClient
 import play.api.mvc._
 
@@ -9,8 +9,6 @@ import scala.concurrent.ExecutionContext
 class Login(
   val authConfig: GoogleAuthConfig,
   val wsClient: WSClient,
-  requiredGoogleGroups: Set[String],
-  googleGroupChecker: GoogleGroupChecker,
   components: ControllerComponents
 )(implicit executionContext: ExecutionContext)
   extends AbstractController(components) with LoginSupport {
@@ -34,7 +32,7 @@ class Login(
    * Looks up user's identity via Google
    */
   def oauth2Callback: Action[AnyContent] = Action.async { implicit request =>
-    processOauth2Callback(requiredGoogleGroups, googleGroupChecker)
+    processOauth2Callback()
   }
 
   def logout: Action[AnyContent] = Action { implicit request =>
