@@ -6,6 +6,7 @@ import io.circe.generic.extras.Configuration
 
 case class ChannelSwitches(
   enableEpics: Boolean,
+  enableAppleNewsEpics: Boolean = true,
   enableBanners: Boolean,
   enableHeaders: Boolean = true,
   enableSuperMode: Boolean,
