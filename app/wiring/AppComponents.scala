@@ -49,14 +49,14 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
   }
 
   private val twoFactorAuthEnforceGoogleGroup = configuration.get[String]("googleAuth.2faEnforceGroup")
-  private val requiredGoogleGroups: Set[String] = configuration.get[String]("googleAuth.requiredGroups").split(',').toSet
+  private val allowedGoogleGroups: Set[String] = configuration.get[String]("googleAuth.allowedGroups").split(',').toSet
 
   private val authAction =
     new AuthAction[AnyContent](authConfig, controllers.routes.Login.loginAction, controllerComponents.parsers.default)(executionContext) andThen
       // User must have 2fa enforced
       requireGroup[AuthAction.UserIdentityRequest](Set(twoFactorAuthEnforceGoogleGroup)) andThen
-      // User must be in at least one of the required groups
-      requireGroup[AuthAction.UserIdentityRequest](requiredGoogleGroups)
+      // User must be in at least one of the allowed groups
+      requireGroup[AuthAction.UserIdentityRequest](allowedGoogleGroups)
 
   private val runtime = zio.Runtime.default
 
@@ -86,7 +86,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
   override lazy val router: Router = new Routes(
     httpErrorHandler,
     new Application(authAction, controllerComponents, stage, sdcUrlOverride),
-    new Login(authConfig, wsClient, requiredGoogleGroups, controllerComponents),
+    new Login(authConfig, wsClient, controllerComponents),
     new SwitchesController(authAction, controllerComponents, stage, runtime),
     new AmountsController(authAction, controllerComponents, stage, runtime),
     new EpicTestsController(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoArchivedChannelTests),
