@@ -9,7 +9,6 @@ import scala.concurrent.ExecutionContext
 class Login(
   val authConfig: GoogleAuthConfig,
   val wsClient: WSClient,
-  requiredGoogleGroups: Set[String],
   components: ControllerComponents
 )(implicit executionContext: ExecutionContext)
   extends AbstractController(components) with LoginSupport {
