@@ -19,6 +19,11 @@ case class EpsilonGreedyBandit(
   testName: Option[String] = None
 ) extends Methodology
 
+case class Roulette(
+  name: String = "Roulette",
+  testName: Option[String] = None
+) extends Methodology
+
 case object Methodology {
   val defaultMethodologies = List(ABTest())
 
