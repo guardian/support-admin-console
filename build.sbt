@@ -28,7 +28,7 @@ libraryDependencies ++= Seq(
   ws,
   "dev.zio" %% "zio" % zioVersion,
   "dev.zio" %% "zio-streams" % zioVersion,
-  "org.scalatest" %% "scalatest" % "3.2.10" % "test",
+  "org.scalatest" %% "scalatest" % "3.2.19" % "test",
   "org.gnieh" %% "diffson-circe" % "4.1.1" % "test",
 )
 
@@ -38,6 +38,13 @@ dependencyOverrides ++= List(
   // The version of netty-handler currently used by athena has a vulnerability - https://security.snyk.io/vuln/SNYK-JAVA-IONETTY-5725787
   "io.netty" % "netty-handler" % "4.1.100.Final",
   "io.netty" % "netty-codec-http2" % "4.1.100.Final"
+)
+
+excludeDependencies ++= Seq(
+  // Exclude htmlunit due to a vulnerability. Brought in via scalatest but we don't need it.
+  // The vulnerability is fixed in htmlunit v3 onwards, but the lib was renamed so we cannot force a newer version
+  // by specifying it in the dependencies.
+  ExclusionRule("net.sourceforge.htmlunit", "htmlunit"),
 )
 
 dynamoDBLocalPort := 8083
