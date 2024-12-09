@@ -87,7 +87,7 @@ const TestMethodology: React.FC<TestMethodologyProps> = ({
     const value = event.target.value as Methodology['name'];
     if (value === 'EpsilonGreedyBandit') {
       onChange(defaultEpsilonGreedyBandit);
-    } else if(value === 'Roulette'){
+    } else if (value === 'Roulette') {
       onChange({ name: 'Roulette' });
     } else {
       onChange({ name: 'ABTest' });

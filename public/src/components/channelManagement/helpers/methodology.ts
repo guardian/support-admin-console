@@ -8,8 +8,7 @@ export const addMethodologyToTestName = (testName: string, methodology: Methodol
     return `${firstPart}_EpsilonGreedyBandit-${methodology.epsilon}${suffix}`;
   } else if (methodology.name === 'Roulette') {
     return `${firstPart}_Roulette${suffix}`;
-  }
-  else {
+  } else {
     return `${firstPart}_ABTest${suffix}`;
   }
 };
