@@ -8,6 +8,7 @@ import TestListTestName from './testListTestName';
 import TestListTestArticleCountLabel from './testListTestArticleCountLabel';
 import useHover from '../../hooks/useHover';
 import EditIcon from '@mui/icons-material/Edit';
+import TestListBanditIcon from './testListBanditIcon';
 
 const useStyles = makeStyles(({ palette }: Theme) => ({
   test: {
@@ -20,6 +21,12 @@ const useStyles = makeStyles(({ palette }: Theme) => ({
     background: 'white',
     borderRadius: '4px',
     padding: '0 12px',
+  },
+  icons: {
+    display: 'flex',
+    '& > * + *': {
+      marginLeft: '2px',
+    },
   },
   live: {
     border: `1px solid ${red[500]}`,
@@ -53,6 +60,7 @@ const useStyles = makeStyles(({ palette }: Theme) => ({
     '& > * + *': {
       marginLeft: '4px',
     },
+    overflow: 'hidden',
   },
   whitePencil: {
     color: 'white',
@@ -75,6 +83,7 @@ const TestListTest: React.FC<TestListTestProps> = ({
   const classes = useStyles();
 
   const hasArticleCount = test.articlesViewedSettings !== undefined;
+  const isBanditTest = test.methodologies.find(method => method.name === 'EpsilonGreedyBandit');
 
   const [ref, isHovered] = useHover<HTMLDivElement>();
 
@@ -101,7 +110,10 @@ const TestListTest: React.FC<TestListTestProps> = ({
         />
       </div>
 
-      {hasArticleCount && <TestListTestArticleCountLabel />}
+      <div className={classes.icons}>
+        {hasArticleCount && <TestListTestArticleCountLabel />}
+        {isBanditTest && <TestListBanditIcon />}
+      </div>
     </ListItem>
   );
 };
