@@ -49,6 +49,7 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
       "GuCname",
       "GuStringParameter",
       "GuDynamoDBReadPolicy",
+      "GuGetS3ObjectsPolicy",
     ],
     "gu:cdk:version": "TEST",
   },
@@ -2467,6 +2468,22 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
               "Version": "2012-10-17",
             },
             "PolicyName": "dynamoPolicyForCapi",
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "s3:GetObject",
+                  "Effect": "Allow",
+                  "Resource": [
+                    "arn:aws:s3:::support-admin-console/PROD/*",
+                    "arn:aws:s3:::support-admin-console/channel-switches.json",
+                  ],
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "s3ReadPolicyForCapi",
           },
         ],
         "RoleName": "support-admin-console-channel-tests-capi-role-PROD",
