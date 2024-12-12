@@ -126,7 +126,9 @@ const TestMethodology: React.FC<TestMethodologyProps> = ({
           </div>
         </>
       )}
-      {isBandit(methodology) && <BanditAnalyticsButton testName={testName} channel={channel} />}
+      {isBandit(methodology) && (
+        <BanditAnalyticsButton testName={methodology.testName ?? testName} channel={channel} />
+      )}
       <div className={classes.testNameAndDeleteButton}>
         {methodology.testName && <div className={classes.testName}>{methodology.testName}</div>}
         <div className={classes.deleteButton}>
