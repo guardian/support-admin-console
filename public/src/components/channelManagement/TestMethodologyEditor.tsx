@@ -16,6 +16,8 @@ import AddIcon from '@mui/icons-material/Add';
 import Alert from '@mui/lab/Alert';
 import { addMethodologyToTestName } from './helpers/methodology';
 
+const isBandit = (methodology: Methodology): boolean => methodology.name === 'EpsilonGreedyBandit';
+
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
     '& > * + *': {
@@ -122,9 +124,9 @@ const TestMethodology: React.FC<TestMethodologyProps> = ({
               }}
             />
           </div>
-          <BanditAnalyticsButton testName={testName} channel={channel} />
         </>
       )}
+      {isBandit(methodology) && <BanditAnalyticsButton testName={testName} channel={channel} />}
       <div className={classes.testNameAndDeleteButton}>
         {methodology.testName && <div className={classes.testName}>{methodology.testName}</div>}
         <div className={classes.deleteButton}>
