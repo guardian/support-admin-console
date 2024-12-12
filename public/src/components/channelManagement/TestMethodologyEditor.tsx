@@ -16,7 +16,8 @@ import AddIcon from '@mui/icons-material/Add';
 import Alert from '@mui/lab/Alert';
 import { addMethodologyToTestName } from './helpers/methodology';
 
-const isBandit = (methodology: Methodology): boolean => methodology.name === 'EpsilonGreedyBandit';
+const isBandit = (methodology: Methodology): boolean =>
+  methodology.name === 'EpsilonGreedyBandit' || methodology.name === 'Roulette';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
@@ -89,6 +90,8 @@ const TestMethodology: React.FC<TestMethodologyProps> = ({
     const value = event.target.value as Methodology['name'];
     if (value === 'EpsilonGreedyBandit') {
       onChange(defaultEpsilonGreedyBandit);
+    } else if (value === 'Roulette') {
+      onChange({ name: 'Roulette' });
     } else {
       onChange({ name: 'ABTest' });
     }
@@ -106,6 +109,9 @@ const TestMethodology: React.FC<TestMethodologyProps> = ({
           </MenuItem>
           <MenuItem value={'EpsilonGreedyBandit'} key={'EpsilonGreedyBandit'}>
             Epsilon-greedy bandit
+          </MenuItem>
+          <MenuItem value={'Roulette'} key={'Roulette'}>
+            Roulette
           </MenuItem>
         </Select>
       </div>
