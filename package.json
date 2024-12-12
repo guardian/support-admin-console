@@ -21,7 +21,7 @@
     "ts-jest": "^29.1.1",
     "ts-loader": "^6.1.2",
     "tsconfig-paths-webpack-plugin": "^3.2.0",
-    "typescript": "^4.5.5",
+    "typescript": "^5.7.2",
     "webpack": "^5.94.0",
     "webpack-cli": "^5.0.2",
     "webpack-dev-server": "^4.13.3"
@@ -34,8 +34,8 @@
     "@mui/material": "^5.15.10",
     "@mui/styles": "^5.15.10",
     "@mui/x-data-grid": "^5.17.12",
-    "@remirror/pm": "^1.0.11",
-    "@remirror/react": "^1.0.21",
+    "@remirror/pm": "^2.0.9",
+    "@remirror/react": "^2.0.35",
     "@types/lodash": "^4.14.176",
     "@types/react-beautiful-dnd": "^13.0.0",
     "date-fns": "^2.29.3",
@@ -50,7 +50,7 @@
     "react-qr-code": "^2.0.7",
     "react-router-dom": "^6.2.1",
     "recharts": "2.12.6",
-    "remirror": "^1.0.60"
+    "remirror": "^2.0.40"
   },
   "resolutions": {
     "csstype": "^2.6.18"
