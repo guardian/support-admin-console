@@ -25,6 +25,7 @@ const useStyles = makeStyles(() => ({
 type SwitchName =
   | 'enableBanners'
   | 'enableEpics'
+  | 'enableAppleNewsEpics'
   | 'enableHeaders'
   | 'enableSuperMode'
   | 'enableHardcodedEpicTests'
@@ -84,6 +85,12 @@ const ChannelSwitches: React.FC<InnerProps<ChannelSwitches>> = ({
         name="enableEpics"
         label="Enable Epics (this does not include Apple News)"
         enabled={switches.enableEpics}
+        setSwitch={onSwitchChange}
+      />
+      <ChannelSwitch
+        name="enableAppleNewsEpics"
+        label="Enable Epics on Apple News"
+        enabled={switches.enableAppleNewsEpics}
         setSwitch={onSwitchChange}
       />
       <ChannelSwitch
