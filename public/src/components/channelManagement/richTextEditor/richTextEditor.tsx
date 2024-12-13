@@ -9,12 +9,11 @@ import {
   createMarkPositioner,
 } from 'remirror/extensions';
 import {
-  ComponentItem,
+  CommandButtonGroup,
   EditorComponent,
   FloatingToolbar,
   FloatingWrapper,
   Remirror,
-  ToolbarItemUnion,
   useActive,
   useAttrs,
   useChainedCommands,
@@ -225,11 +224,9 @@ function useFloatingLinkState() {
   );
 }
 
-// ReMirror/ProseMirror FLOATING LINK MENU BUTTONS
 const FloatingLinkToolbar = () => {
   const {
     isEditing,
-    linkPositioner,
     clickEdit,
     onRemove,
     submitHref,
@@ -239,34 +236,27 @@ const FloatingLinkToolbar = () => {
   } = useFloatingLinkState();
   const active = useActive();
   const activeLink = active.link();
-  const { empty } = useCurrentSelection();
-  const linkEditItems: ToolbarItemUnion[] = useMemo(
-    () => [
-      {
-        type: ComponentItem.ToolbarGroup,
-        label: 'Link',
-        items: activeLink
-          ? [
-              { type: ComponentItem.ToolbarButton, onClick: () => clickEdit(), label: 'Edit link' },
-              { type: ComponentItem.ToolbarButton, onClick: onRemove, label: 'Remove link' },
-            ]
-          : [{ type: ComponentItem.ToolbarButton, onClick: () => clickEdit(), label: 'Add link' }],
-      },
-    ],
-    [clickEdit, onRemove, activeLink],
-  );
-
-  const items: ToolbarItemUnion[] = useMemo(() => linkEditItems, [linkEditItems]);
-
   return (
     <>
-      <FloatingToolbar items={items} positioner="selection" placement="top" enabled={!isEditing} />
-      <FloatingToolbar
-        items={linkEditItems}
-        positioner={linkPositioner}
-        placement="bottom"
-        enabled={!isEditing && empty}
-      />
+      <FloatingToolbar placement="top">
+        <CommandButtonGroup>
+          {activeLink ? (
+            <>
+              <button className="remirror-button" onClick={clickEdit}>
+                Edit link
+              </button>
+              <button className="remirror-button" onClick={onRemove}>
+                Remove link
+              </button>
+            </>
+          ) : (
+            <button className="remirror-button" onClick={clickEdit}>
+              Add link
+            </button>
+          )}
+        </CommandButtonGroup>
+      </FloatingToolbar>
+
       <FloatingWrapper
         positioner="always"
         placement="bottom"
@@ -541,10 +531,10 @@ const RichTextEditor: React.FC<RichTextEditorProps<string[]>> = ({
   // Instantiate the Remirror RTE component
   const { manager, state } = useRemirror({
     extensions: () => [
-      new MyBoldExtension(),
+      new MyBoldExtension({}),
       new MyItalicExtension(),
       new LinkExtension({ autoLink: true }),
-      new TextHighlightExtension(),
+      new TextHighlightExtension({}),
       new RemovePastedHtmlExtension(),
     ],
     content: parseCopyForParagraphs(copyData),
