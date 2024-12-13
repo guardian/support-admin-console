@@ -242,24 +242,15 @@ const FloatingLinkToolbar = () => {
         <CommandButtonGroup>
           {activeLink ? (
             <>
-              <button
-                className={`remirror-button ${active.bold() && 'remirror-button-active'}`}
-                onClick={clickEdit}
-              >
+              <button className="remirror-button" onClick={clickEdit}>
                 Edit link
               </button>
-              <button
-                className={`remirror-button ${active.bold() && 'remirror-button-active'}`}
-                onClick={onRemove}
-              >
+              <button className="remirror-button" onClick={onRemove}>
                 Remove link
               </button>
             </>
           ) : (
-            <button
-              className={`remirror-button ${active.bold() && 'remirror-button-active'}`}
-              onClick={clickEdit}
-            >
+            <button className="remirror-button" onClick={clickEdit}>
               Add link
             </button>
           )}
