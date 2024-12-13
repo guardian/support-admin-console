@@ -16,12 +16,14 @@ case class ABTest(
 case class EpsilonGreedyBandit(
   name: String = "EpsilonGreedyBandit",
   epsilon: Double,
-  testName: Option[String] = None
+  testName: Option[String] = None,
+  sampleCount: Option[Int] = None
 ) extends Methodology
 
 case class Roulette(
   name: String = "Roulette",
-  testName: Option[String] = None
+  testName: Option[String] = None,
+  sampleCount: Option[Int] = None
 ) extends Methodology
 
 case object Methodology {

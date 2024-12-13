@@ -9,6 +9,9 @@ const useStyles = makeStyles(({}: Theme) => ({
   dialog: {
     padding: '10px',
   },
+  analyticsButton: {
+    height: '100%',
+  },
   heading: {
     margin: '6px 12px 0 12px',
     fontSize: 18,
@@ -107,7 +110,7 @@ export const BanditAnalyticsButton: React.FC<BanditAnalyticsButton> = ({
 
   return (
     <>
-      <Button variant="outlined" onClick={open}>
+      <Button className={classes.analyticsButton} variant="outlined" onClick={open}>
         Analytics
       </Button>
 
