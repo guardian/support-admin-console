@@ -37,7 +37,9 @@ dependencyOverrides ++= List(
   "com.fasterxml.jackson.core" % "jackson-core" % "2.17.2",
   // The version of netty-handler currently used by athena has a vulnerability - https://security.snyk.io/vuln/SNYK-JAVA-IONETTY-5725787
   "io.netty" % "netty-handler" % "4.1.100.Final",
-  "io.netty" % "netty-codec-http2" % "4.1.100.Final"
+  "io.netty" % "netty-codec-http2" % "4.1.100.Final",
+  // Related to Play 3.0.2-6 currently brings in a vulnerable version of commons-io
+  "commons-io" % "commons-io" % "2.14.0" % Test
 )
 
 excludeDependencies ++= Seq(
