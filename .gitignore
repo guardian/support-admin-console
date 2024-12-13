@@ -9,5 +9,6 @@ node_modules/
 .bloop/
 .metals/
 .bsp/
-project
+project/project
 dynamodb-local/
+project/metals.sbt
