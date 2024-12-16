@@ -86,7 +86,7 @@ class DynamoBanditData(stage: String, client: DynamoDbClient) extends StrictLogg
       .zipWithIndex
       .foldLeft(Array.empty[EnrichedTestSampleData]) { case (enrichedSamples, (sample, idx)) =>
         val variants = sample.variants.map(currentVariantSample => {
-          val startIdx = idx - sampleCount.getOrElse(0)
+          val startIdx = sampleCount.map(n => Math.max(idx - n, 0)).getOrElse(0)  // only use the last sampleCount samples, if defined
           val previousSamples = samplesByVariant(currentVariantSample.variantName).slice(startIdx, idx+1)
 
           val population = previousSamples.map(_.views).sum
