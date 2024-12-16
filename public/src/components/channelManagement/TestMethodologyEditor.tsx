@@ -1,5 +1,5 @@
 import React from 'react';
-import { Methodology } from './helpers/shared';
+import { BanditMethodology, Methodology } from './helpers/shared';
 import { makeStyles } from '@mui/styles';
 import { BanditAnalyticsButton } from './BanditAnalyticsButton';
 import {
@@ -7,6 +7,7 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
+  Switch,
   TextField,
   Theme,
   Tooltip,
@@ -15,8 +16,10 @@ import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
 import Alert from '@mui/lab/Alert';
 import { addMethodologyToTestName } from './helpers/methodology';
+import FileCopyIcon from '@mui/icons-material/FileCopy';
+import { grey } from '@mui/material/colors';
 
-const isBandit = (methodology: Methodology): boolean =>
+const isBandit = (methodology: Methodology): methodology is BanditMethodology =>
   methodology.name === 'EpsilonGreedyBandit' || methodology.name === 'Roulette';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
@@ -32,7 +35,9 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     borderRadius: '4px',
     padding: spacing(1),
     '& > * + *': {
-      marginLeft: spacing(1),
+      marginLeft: spacing(2),
+      paddingLeft: spacing(2),
+      borderLeft: `1px solid ${palette.grey[400]}`,
     },
   },
   audiencePercentage: {
@@ -51,18 +56,80 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
       height: '100%',
     },
   },
-  testName: {
+  copyNameButton: {
     marginRight: spacing(2),
-    fontWeight: 500,
+    fontSize: '14px',
+    fontWeight: 'normal',
+    color: palette.grey[700],
+    lineHeight: 1.5,
   },
   error: {
     color: 'red',
+  },
+  sampleCountContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    fontSize: '14px',
+    fontWeight: 500,
+  },
+  sampleCountInput: {
+    maxWidth: '90px',
+    marginLeft: spacing(1),
   },
 }));
 
 const defaultEpsilonGreedyBandit: Methodology = {
   name: 'EpsilonGreedyBandit',
   epsilon: 0.1,
+};
+
+interface MethodologySampleCountProps {
+  sampleCount?: number;
+  onChange: (sampleCount?: number) => void;
+  isDisabled: boolean;
+}
+const MethodologySampleCount: React.FC<MethodologySampleCountProps> = ({
+  sampleCount,
+  onChange,
+  isDisabled,
+}: MethodologySampleCountProps) => {
+  const classes = useStyles();
+
+  const onSwitchChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    if (event.target.checked) {
+      onChange(24);
+    } else {
+      onChange(undefined);
+    }
+  };
+
+  return (
+    <div className={classes.sampleCountContainer}>
+      <Tooltip
+        title={
+          'Only look back this many hours. If disabled, uses all data since the start of the test.'
+        }
+      >
+        <div>
+          <div>Window</div>
+          <Switch checked={!!sampleCount} onChange={onSwitchChange} disabled={isDisabled} />
+        </div>
+      </Tooltip>
+      <TextField
+        className={classes.sampleCountInput}
+        type={'number'}
+        InputProps={{ inputProps: { min: 6, step: 1 } }}
+        value={sampleCount}
+        label={'Hours'}
+        disabled={isDisabled || !sampleCount}
+        InputLabelProps={{ shrink: true }}
+        onChange={event => {
+          const samples = parseInt(event.target.value);
+          onChange(samples);
+        }}
+      />
+    </div>
+  );
 };
 
 interface TestMethodologyProps {
@@ -97,13 +164,15 @@ const TestMethodology: React.FC<TestMethodologyProps> = ({
     }
   };
 
+  const methodologyTestName = methodology.testName;
+
   return (
     <div className={classes.methodologyContainer}>
       <Tooltip title={'Percentage of the audience in this methodology'}>
         <div className={classes.audiencePercentage}>{audiencePercentage}%</div>
       </Tooltip>
       <div>
-        <Select value={methodology.name} onChange={onSelectChange}>
+        <Select value={methodology.name} disabled={isDisabled} onChange={onSelectChange}>
           <MenuItem value={'ABTest'} key={'ABTest'}>
             AB test
           </MenuItem>
@@ -115,6 +184,18 @@ const TestMethodology: React.FC<TestMethodologyProps> = ({
           </MenuItem>
         </Select>
       </div>
+      {isBandit(methodology) && (
+        <MethodologySampleCount
+          sampleCount={methodology.sampleCount}
+          onChange={sampleCount =>
+            onChange({
+              ...methodology,
+              sampleCount,
+            })
+          }
+          isDisabled={isDisabled}
+        />
+      )}
       {methodology.name === 'EpsilonGreedyBandit' && (
         <>
           <div>
@@ -133,10 +214,27 @@ const TestMethodology: React.FC<TestMethodologyProps> = ({
         </>
       )}
       {isBandit(methodology) && (
-        <BanditAnalyticsButton testName={methodology.testName ?? testName} channel={channel} />
+        <div>
+          <BanditAnalyticsButton
+            testName={methodology.testName ?? testName}
+            channel={channel}
+            sampleCount={methodology.sampleCount}
+          />
+        </div>
       )}
       <div className={classes.testNameAndDeleteButton}>
-        {methodology.testName && <div className={classes.testName}>{methodology.testName}</div>}
+        {methodologyTestName && (
+          <Button
+            className={classes.copyNameButton}
+            variant="outlined"
+            startIcon={<FileCopyIcon style={{ color: grey[700] }} />}
+            onClick={() => {
+              navigator.clipboard.writeText(methodologyTestName);
+            }}
+          >
+            Copy test name
+          </Button>
+        )}
         <div className={classes.deleteButton}>
           <Button onClick={onDelete} disabled={isDisabled} variant="outlined" size="medium">
             <CloseIcon />

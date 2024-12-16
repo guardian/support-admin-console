@@ -9,6 +9,7 @@ import utils.Circe.noNulls
 import zio.{IO, ZEnv, ZIO}
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Try
 
 class BanditDataController(
   authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
@@ -28,8 +29,9 @@ class BanditDataController(
 
   def getDataForTest(channel: String, testName: String): Action[AnyContent] = authAction.async { request =>
     run {
+      val sampleCount: Option[Int] = request.getQueryString("sampleCount").flatMap(s => Try(Integer.parseInt(s)).toOption)
       dynamo
-        .getDataForTest(testName, channel)
+        .getDataForTest(testName, channel, sampleCount)
         .map(data => Ok(noNulls(data.asJson)))
     }
   }

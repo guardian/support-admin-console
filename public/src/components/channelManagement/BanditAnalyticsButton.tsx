@@ -9,6 +9,9 @@ const useStyles = makeStyles(({}: Theme) => ({
   dialog: {
     padding: '10px',
   },
+  analyticsButton: {
+    height: '100%',
+  },
   heading: {
     margin: '6px 12px 0 12px',
     fontSize: 18,
@@ -81,11 +84,13 @@ const SamplesChart = ({ data, variantNames, fieldName }: SamplesChartProps) => {
 interface BanditAnalyticsButton {
   testName: string;
   channel: string;
+  sampleCount?: number;
 }
 
 export const BanditAnalyticsButton: React.FC<BanditAnalyticsButton> = ({
   testName,
   channel,
+  sampleCount,
 }: BanditAnalyticsButton) => {
   const classes = useStyles();
   const [isOpen, open, close] = useOpenable();
@@ -95,7 +100,8 @@ export const BanditAnalyticsButton: React.FC<BanditAnalyticsButton> = ({
   useEffect(() => {
     setLoading(true);
 
-    fetch(`/frontend/bandit/${channel}/${testName}`)
+    const queryString = sampleCount ? `?sampleCount=${sampleCount}` : '';
+    fetch(`/frontend/bandit/${channel}/${testName}${queryString}`)
       .then(resp => resp.json())
       .then(data => {
         setData(data);
@@ -107,7 +113,7 @@ export const BanditAnalyticsButton: React.FC<BanditAnalyticsButton> = ({
 
   return (
     <>
-      <Button variant="outlined" onClick={open}>
+      <Button className={classes.analyticsButton} variant="outlined" onClick={open}>
         Analytics
       </Button>
 

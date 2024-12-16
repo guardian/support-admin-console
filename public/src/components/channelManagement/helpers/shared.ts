@@ -19,9 +19,11 @@ interface ABTestMethodology {
 interface EpsilonGreedyBanditMethodology {
   name: 'EpsilonGreedyBandit';
   epsilon: number;
+  sampleCount?: number;
 }
 interface RouletteMethodology {
   name: 'Roulette';
+  sampleCount?: number;
 }
 // each methodology may have an optional testName, which should be used for tracking
 export type Methodology = { testName?: string } & (
@@ -29,6 +31,7 @@ export type Methodology = { testName?: string } & (
   | EpsilonGreedyBanditMethodology
   | RouletteMethodology
 );
+export type BanditMethodology = Exclude<Methodology, { name: 'ABTest' }>;
 
 export interface Test {
   name: string;
