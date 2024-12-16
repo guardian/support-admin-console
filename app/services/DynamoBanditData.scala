@@ -42,7 +42,7 @@ object BanditData {
 
 class DynamoBanditData(stage: String, client: DynamoDbClient) extends StrictLogging {
   // No DEV table for bandit data
-  private val tableName = s"support-bandit-${if (stage == "PROD") "PROD" else "CODE"}"
+  private val tableName = s"support-bandit-${if (stage == "PROD") "PROD" else "PROD"}"
 
   private def query(testName: String, channel: String): ZIO[ZEnv, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] = {
     effectBlocking {
@@ -60,12 +60,12 @@ class DynamoBanditData(stage: String, client: DynamoDbClient) extends StrictLogg
     }.mapError(DynamoGetError)
   }
 
-  private def sampleMean(samples: List[VariantSample], population: Double): Double =
+  private def sampleMean(samples: Array[VariantSample], population: Double): Double =
     samples.foldLeft(0D)((acc, sample) =>
       acc + (sample.views / population) * sample.annualisedValueInGBPPerView
     )
 
-  private def buildVariantSummaries(samples: List[TestSample]): List[VariantSummary] =
+  private def buildVariantSummaries(samples: Array[TestSample]): List[VariantSummary] =
     samples
       .flatMap(_.variants)
       .groupBy(variantSample => variantSample.variantName)
@@ -77,8 +77,8 @@ class DynamoBanditData(stage: String, client: DynamoDbClient) extends StrictLogg
       .toList
 
   // For each hourly sample, calculate the means up to that point, so that we can visualise how the Bandit's view of the variants changed over time
-  private def buildEnrichedSamples(samples: List[TestSample]): List[EnrichedTestSampleData] = {
-    val samplesByVariant: Map[String, List[VariantSample]] = samples
+  private def buildEnrichedSamples(samples: Array[TestSample], sampleCount: Option[Int]): List[EnrichedTestSampleData] = {
+    val samplesByVariant: Map[String, Array[VariantSample]] = samples
       .flatMap(_.variants)
       .groupBy(variantSample => variantSample.variantName)
 
@@ -86,7 +86,8 @@ class DynamoBanditData(stage: String, client: DynamoDbClient) extends StrictLogg
       .zipWithIndex
       .foldLeft(Array.empty[EnrichedTestSampleData]) { case (enrichedSamples, (sample, idx)) =>
         val variants = sample.variants.map(currentVariantSample => {
-          val previousSamples = samplesByVariant(currentVariantSample.variantName).take(idx+1)
+          val startIdx = idx - sampleCount.getOrElse(0)
+          val previousSamples = samplesByVariant(currentVariantSample.variantName).slice(startIdx, idx+1)
 
           val population = previousSamples.map(_.views).sum
           val mean = sampleMean(previousSamples, population)
@@ -98,7 +99,7 @@ class DynamoBanditData(stage: String, client: DynamoDbClient) extends StrictLogg
       .toList
   }
 
-  def getDataForTest(testName: String, channel: String): ZIO[ZEnv, DynamoError, BanditData] =
+  def getDataForTest(testName: String, channel: String, sampleCount: Option[Int]): ZIO[ZEnv, DynamoError, BanditData] =
     query(testName, channel)
       .map { results =>
         results.asScala
@@ -109,11 +110,11 @@ class DynamoBanditData(stage: String, client: DynamoDbClient) extends StrictLogg
               logger.error(s"Failed to decode item from Dynamo: ${error.getMessage}")
               None
           }
-          .toList
+          .toArray
       }
-      .map { samples: List[TestSample] =>
+      .map { samples: Array[TestSample] =>
         val variantSummaries = buildVariantSummaries(samples)
-        val enrichedSamples = buildEnrichedSamples(samples)
+        val enrichedSamples = buildEnrichedSamples(samples, sampleCount)
 
         BanditData(variantSummaries, enrichedSamples)
       }

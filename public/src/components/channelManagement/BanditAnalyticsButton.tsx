@@ -84,11 +84,13 @@ const SamplesChart = ({ data, variantNames, fieldName }: SamplesChartProps) => {
 interface BanditAnalyticsButton {
   testName: string;
   channel: string;
+  sampleCount?: number;
 }
 
 export const BanditAnalyticsButton: React.FC<BanditAnalyticsButton> = ({
   testName,
   channel,
+  sampleCount,
 }: BanditAnalyticsButton) => {
   const classes = useStyles();
   const [isOpen, open, close] = useOpenable();
@@ -98,7 +100,8 @@ export const BanditAnalyticsButton: React.FC<BanditAnalyticsButton> = ({
   useEffect(() => {
     setLoading(true);
 
-    fetch(`/frontend/bandit/${channel}/${testName}`)
+    const queryString = sampleCount ? `?sampleCount=${sampleCount}` : '';
+    fetch(`/frontend/bandit/${channel}/${testName}${queryString}`)
       .then(resp => resp.json())
       .then(data => {
         setData(data);

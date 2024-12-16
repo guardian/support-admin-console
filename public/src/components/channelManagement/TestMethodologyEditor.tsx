@@ -215,7 +215,11 @@ const TestMethodology: React.FC<TestMethodologyProps> = ({
       )}
       {isBandit(methodology) && (
         <div>
-          <BanditAnalyticsButton testName={methodology.testName ?? testName} channel={channel} />
+          <BanditAnalyticsButton
+            testName={methodology.testName ?? testName}
+            channel={channel}
+            sampleCount={methodology.sampleCount}
+          />
         </div>
       )}
       <div className={classes.testNameAndDeleteButton}>
