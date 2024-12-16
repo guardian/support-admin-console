@@ -42,7 +42,7 @@ object BanditData {
 
 class DynamoBanditData(stage: String, client: DynamoDbClient) extends StrictLogging {
   // No DEV table for bandit data
-  private val tableName = s"support-bandit-${if (stage == "PROD") "PROD" else "PROD"}"
+  private val tableName = s"support-bandit-${if (stage == "PROD") "PROD" else "CODE"}"
 
   private def query(testName: String, channel: String): ZIO[ZEnv, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] = {
     effectBlocking {
