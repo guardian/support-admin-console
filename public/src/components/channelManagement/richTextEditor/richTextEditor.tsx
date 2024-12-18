@@ -23,7 +23,7 @@ import {
   useRemirror,
   useUpdateReason,
 } from '@remirror/react';
-import './styles.scss';
+import './remirror-styles.css';
 import { useRTEStyles } from './richTextEditorStyles';
 import { CreateExtensionPlugin, PlainExtension, InputRule } from 'remirror';
 import { Plugin } from 'prosemirror-state';

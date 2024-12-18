@@ -1,0 +1,6 @@
+@import '~remirror/styles/all.css';
+/* 
+We're doing this to ensure the remirror specific styles stay in sync with remirror classes across upgrades. 
+Some of the custom buttons are overridden in richTextEditorStyles.tsx
+Yes, it does need to be imported into the richTextEditor (odd I know). 
+*/
