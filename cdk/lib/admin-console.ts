@@ -341,12 +341,17 @@ export class AdminConsole extends GuStack {
     const dynamoPolicyForCapi = new GuDynamoDBReadPolicy(this, `DynamoRead-for-capi`, {
       tableName: channelTestsDynamoTable.tableName,
     });
+    const s3ReadPolicyForCapi = new GuGetS3ObjectsPolicy(this, 's3Get-for-capi', {
+        bucketName: 'support-admin-console',
+        paths: [`${this.stage}/*`, 'channel-switches.json'],
+      });
 
     new Role(this, 'capi-role', {
       roleName: `support-admin-console-channel-tests-capi-role-${this.stage}`,
       assumedBy: new AccountPrincipal(capiAccountId.valueAsString),
       inlinePolicies: {
         dynamoPolicyForCapi: dynamoPolicyForCapi.document,
+        s3ReadPolicyForCapi: s3ReadPolicyForCapi.document,
       },
     });
 
