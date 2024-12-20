@@ -3,7 +3,7 @@ module.exports = {
   extends: [
     'plugin:@typescript-eslint/recommended',
     'plugin:react/recommended',
-    'prettier/@typescript-eslint',
+    // 'prettier/@typescript-eslint', // merged with prettier/recommended
     'plugin:prettier/recommended',
   ],
   parserOptions: {
@@ -30,6 +30,8 @@ module.exports = {
       },
     ],
     '@typescript-eslint/ban-ts-comment': 'off',
+    '@typescript-eslint/no-unnecessary-type-constraint': 'off', // added in version 8.0.0 - for discussion
+    'react/display-name': 'off', // added in version 8 - for discussion.
   },
   settings: {
     react: {
