@@ -3,7 +3,6 @@ module.exports = {
   extends: [
     'plugin:@typescript-eslint/recommended',
     'plugin:react/recommended',
-    // 'prettier/@typescript-eslint', // merged with prettier/recommended
     'plugin:prettier/recommended',
   ],
   parserOptions: {
