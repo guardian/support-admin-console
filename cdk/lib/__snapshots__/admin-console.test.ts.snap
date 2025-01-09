@@ -1117,7 +1117,7 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
       },
       "Type": "AWS::IAM::Policy",
     },
-    "DynamoReadsupermodeA2B60FEA": {
+    "DynamoReadsupermodecalculatorEF384DA0": {
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -1143,7 +1143,7 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
                       {
                         "Ref": "AWS::AccountId",
                       },
-                      ":table/super-mode-PROD",
+                      ":table/super-mode-calculator-PROD",
                     ],
                   ],
                 },
@@ -1159,7 +1159,7 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
                       {
                         "Ref": "AWS::AccountId",
                       },
-                      ":table/super-mode-PROD/index/*",
+                      ":table/super-mode-calculator-PROD/index/*",
                     ],
                   ],
                 },
@@ -1168,7 +1168,7 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "DynamoReadsupermodeA2B60FEA",
+        "PolicyName": "DynamoReadsupermodecalculatorEF384DA0",
         "Roles": [
           {
             "Ref": "InstanceRoleAdminconsole347DA627",
@@ -1177,7 +1177,7 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
       },
       "Type": "AWS::IAM::Policy",
     },
-    "DynamoReadsupermodeindexendFE67AC4E": {
+    "DynamoReadsupermodecalculatorindexend02A5F75C": {
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -1203,7 +1203,7 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
                       {
                         "Ref": "AWS::AccountId",
                       },
-                      ":table/super-mode-PROD/index/end",
+                      ":table/super-mode-calculator-PROD/index/end",
                     ],
                   ],
                 },
@@ -1219,7 +1219,7 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
                       {
                         "Ref": "AWS::AccountId",
                       },
-                      ":table/super-mode-PROD/index/end/index/*",
+                      ":table/super-mode-calculator-PROD/index/end/index/*",
                     ],
                   ],
                 },
@@ -1228,7 +1228,7 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "DynamoReadsupermodeindexendFE67AC4E",
+        "PolicyName": "DynamoReadsupermodecalculatorindexend02A5F75C",
         "Roles": [
           {
             "Ref": "InstanceRoleAdminconsole347DA627",
