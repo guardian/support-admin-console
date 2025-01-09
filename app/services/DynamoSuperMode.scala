@@ -17,7 +17,7 @@ import java.util.Date
 import scala.jdk.CollectionConverters._
 
 class DynamoSuperMode(client: DynamoDbClient) extends StrictLogging {
-  private val tableName = s"super-mode-PROD"
+  private val tableName = s"super-mode-calculator-PROD"
 
   private val dateFormat = new SimpleDateFormat("yyyy-MM-dd")
   private val timestampFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")

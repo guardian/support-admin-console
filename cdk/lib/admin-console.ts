@@ -252,11 +252,11 @@ export class AdminConsole extends GuStack {
       ...archivedTestsDynamoPolicies,
       ...bannerDesignsDynamoPolicies,
       ...archivedBannerDesignsDynamoPolicies,
-      new GuDynamoDBReadPolicy(this, `DynamoRead-super-mode`, {
-        tableName: 'super-mode-PROD', // always PROD for super mode
+      new GuDynamoDBReadPolicy(this, `DynamoRead-super-mode-calculator`, {
+        tableName: 'super-mode-calculator-PROD', // always PROD for super mode
       }),
-      new GuDynamoDBReadPolicy(this, `DynamoRead-super-mode/index/end`, {
-        tableName: `super-mode-PROD/index/end`,
+      new GuDynamoDBReadPolicy(this, `DynamoRead-super-mode-calculator/index/end`, {
+        tableName: `super-mode-calculator-PROD/index/end`,
       }),
       new GuDynamoDBReadPolicy(this, `DynamoRead-bandit-data`, {
         tableName: `support-bandit-${this.stage}`,
