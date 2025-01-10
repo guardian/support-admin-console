@@ -28,7 +28,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
   }
 
   // https://github.com/guardian/play-googleauth#implement-googlegroups-based-access-control-using-the-directory-api
-  override def groupChecker = {
+  override val groupChecker = {
     val request = GetObjectRequest
       .builder()
       .bucket("support-admin-console")
