@@ -71,7 +71,7 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   },
 }));
 
-const HEADER_DEFAULT_HELPER_TEXT = 'Assitive text';
+const HEADER_DEFAULT_HELPER_TEXT = 'Assistive text';
 const BODY_DEFAULT_HELPER_TEXT = 'Main banner message paragraph';
 const HIGHTLIGHTED_TEXT_HELPER_TEXT = 'Final sentence of body copy';
 

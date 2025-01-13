@@ -19,6 +19,13 @@ export const getEmptyParagraphsError = (pars: string[]): string | undefined => {
   return undefined;
 };
 
+export const getEmptyParagraphError = (pars: string): string | undefined => {
+  if (pars.length < 1) {
+    return EMPTY_ERROR_HELPER_TEXT;
+  }
+  return undefined;
+};
+
 const NOT_NUMBER_ERROR_HELPER_TEXT = 'Must be a number';
 
 export const notNumberValidator = (text: string): string | undefined =>
