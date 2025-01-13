@@ -10,6 +10,12 @@ import CampaignSelector from '../CampaignSelector';
 import TestEditorContextTargeting from '../testEditorContextTargeting';
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 import { ControlProportionSettings } from '../helpers/controlProportionSettings';
+import GutterVariantPreview from './gutterVariantPreview';
+import { useStyles } from '../helpers/testEditorStyles';
+import VariantSummary from '../../tests/variants/variantSummary';
+import VariantsEditor from '../../tests/variants/variantsEditor';
+import { TestMethodologyEditor } from '../TestMethodologyEditor';
+import TestVariantsSplitEditor from '../../tests/variants/testVariantsSplitEditor';
 
 const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
   test,
@@ -17,7 +23,7 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
   onTestChange,
   setValidationStatusForField,
 }: ValidatedTestEditorProps<GutterTest>) => {
-  // const classes = useStyles();
+  const classes = useStyles();
 
   const updateTest = (updatedTest: GutterTest): void => {
     onTestChange({
@@ -81,7 +87,7 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
         setValidationStatusForField(variant.name, isValid)
       }
       onVariantChange={onVariantChange}
-      // onDelete={(): void => onVariantDelete(variant.name)}
+      onDelete={(): void => onVariantDelete(variant.name)}
     />
   );
 
@@ -90,11 +96,11 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
       <VariantSummary
         name={variant.name}
         testName={test.name}
-        testType="BANNER"
+        testType="GUTTER"
         isInEditMode={userHasTestLocked}
-        topButton={<BannerVariantPreview variant={variant} design={design} />}
+        topButton={<GutterVariantPreview variant={variant} />}
         platform="DOTCOM" // hardcoded as gutters are only supported in DCR
-        articleType="Standard"
+        articleType="Liveblog"
       />
     );
   };
@@ -185,7 +191,7 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
           </Typography>
 
           <TestEditorContextTargeting
-            contextTargeting={test.contextTargeting}
+            contextTargeting={test.contextTargeting} // TODO: need to remove some tag stuff
             editMode={userHasTestLocked}
             updateContextTargeting={contextTargeting => updateTest({ ...test, contextTargeting })}
           />
@@ -201,16 +207,16 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
             onRegionsUpdate={onRegionsChange}
             selectedCohort={test.userCohort}
             onCohortChange={onCohortChange}
-            selectedDeviceType={test.deviceType ?? 'All'}
-            onDeviceTypeChange={onDeviceTypeChange}
+            selectedDeviceType={test.deviceType ?? 'All'} // TODO: need to find a way to remove.
+            onDeviceTypeChange={onDeviceTypeChange} // TODO: need to find a way to remove.
             isDisabled={!userHasTestLocked}
             showSupporterStatusSelector={true}
-            showDeviceTypeSelector={true}
+            showDeviceTypeSelector={false}
             showSignedInStatusSelector={true}
-            selectedSignedInStatus={test.signedInStatus}
-            onSignedInStatusChange={onSignedInStatusChange}
-            selectedConsentStatus={test.consentStatus}
-            onConsentStatusChange={onConsentStatusChange}
+            // selectedSignedInStatus={test.signedInStatus}
+            onSignedInStatusChange={onSignedInStatusChange} // TODO: need to find a way to remove?
+            // selectedConsentStatus={test.consentStatus} // TODO: need to find a way to remove.
+            onConsentStatusChange={onConsentStatusChange} // TODO: need to find a way to remove.
             showConsentStatusSelector={true}
           />
         </div>

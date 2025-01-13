@@ -1,5 +1,7 @@
+import { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';
 import {
   Cta,
+  PageContextTargeting,
   Status,
   Test,
   UserCohort,
@@ -25,8 +27,9 @@ export interface GutterTest extends Test {
   userCohort: UserCohort;
   locations: Region[];
   variants: GutterVariant[];
-  contextTargeting: { excludedTagIds: [] };
-  // controlProportionSettings?: ControlProportionSettings; // not sure what this is for
+  // TODO: we don't want the deviceType: but it's compulsory currently. Can we investigate the Epic configuration tool?
+  // contextTargeting: { excludedTagIds: [] };
+  controlProportionSettings?: ControlProportionSettings; // AB test proportions
   campaignName?: string;
-  //contextTargeting: PageContextTargeting; // not sure what this is for
+  contextTargeting: PageContextTargeting; // TODO: tags but we just want the excluded tags...
 }

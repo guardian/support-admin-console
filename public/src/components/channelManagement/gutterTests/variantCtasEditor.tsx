@@ -15,7 +15,7 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 
 interface VariantCtasEditorProps {
   primaryCta: Cta;
-  updatePrimaryCta: (updatedCta: Cta) => void;
+  updatePrimaryCta: (updatedCta?: Cta) => void;
   onValidationChange: (isValid: boolean) => void;
   isDisabled: boolean;
 }
