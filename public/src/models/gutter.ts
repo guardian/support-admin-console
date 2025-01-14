@@ -28,8 +28,6 @@ export interface GutterTest extends Test {
   userCohort: UserCohort;
   locations: Region[];
   variants: GutterVariant[];
-  // TODO: we don't want the deviceType: but it's compulsory currently. Can we investigate the Epic configuration tool?
-  // contextTargeting: { excludedTagIds: [] };
   controlProportionSettings?: ControlProportionSettings; // AB test proportions
   campaignName?: string;
   contextTargeting: PageContextTargeting; // TODO: tags but we just want the excluded tags...
