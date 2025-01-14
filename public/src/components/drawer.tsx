@@ -123,7 +123,7 @@ export default function NavDrawer(): React.ReactElement {
     return now.getMonth() == 9 && now.getDate() == 31;
   };
   /* HIDING GUTTER ASK UNTIL READY */
-  const showGutterAsk = true;
+  const showGutterAsk = false;
 
   const list = (anchor: string): React.ReactElement => (
     <div
