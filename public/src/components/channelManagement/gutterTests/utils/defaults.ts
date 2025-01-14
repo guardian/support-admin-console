@@ -58,7 +58,7 @@ const PROD_DEFAULT_GUTTER_TEST: GutterTest = {
   userCohort: UserCohort.AllNonSupporters,
   locations: [],
   variants: [],
-  contextTargeting: { tagIds: [], sectionIds: [], excludedTagIds: [], excludedSectionIds: []},
+  contextTargeting: { tagIds: [], sectionIds: [], excludedTagIds: [], excludedSectionIds: [] },
   methodologies: [{ name: 'ABTest' }],
   deviceType: 'Desktop',
 };

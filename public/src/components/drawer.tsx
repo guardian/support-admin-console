@@ -186,11 +186,13 @@ export default function NavDrawer(): React.ReactElement {
             <ListItemText primary="Banner Deploy" />
           </ListItem>
         </Link>
-        {showGutterAsk && <Link key="Gutter Ask" to="/gutter-ask" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Gutter Ask">
-            <ListItemText primary="Gutter Ask" />
-          </ListItem>
-        </Link>}
+        {showGutterAsk && (
+          <Link key="Gutter Ask" to="/gutter-ask" className={classes.link}>
+            <ListItem className={classes.listItem} button key="Gutter Ask">
+              <ListItemText primary="Gutter Ask" />
+            </ListItem>
+          </Link>
+        )}
         <Link key="Channel Switches" to="/channel-switches" className={classes.link}>
           <ListItem className={classes.listItem} button key="Channel Switches">
             <ListItemText primary="Channel Switches" />
