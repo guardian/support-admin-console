@@ -17,6 +17,7 @@ import {
   updateStatuses,
 } from '../../utils/requests';
 import { useParams } from 'react-router-dom';
+import { addMethodologyToTestName } from './helpers/methodology';
 
 const useStyles = makeStyles(({ spacing, typography }: Theme) => ({
   viewTextContainer: {
@@ -221,6 +222,10 @@ export const TestsForm = <T extends Test>(
           },
           isNew: true,
           campaignName,
+          methodologies: oldTest.methodologies.map(methodology => ({
+            ...methodology,
+            testName: addMethodologyToTestName(newName, methodology),
+          })),
         };
         setTests([...tests, newTest]);
         setSelectedTestName(newName);
