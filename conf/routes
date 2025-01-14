@@ -24,11 +24,11 @@ GET /amp-epic-tests/:name                           controllers.Application.inde
 GET /banner-tests                                   controllers.Application.index
 GET /banner-tests/:name                             controllers.Application.indexWithName(name: String)
 
-GET /banner-tests2                                  controllers.Application.index
-GET /banner-tests2/:name                            controllers.Application.indexWithName(name: String)
-
 GET /banner-deploy                                  controllers.Application.index
 GET /channel-switches                               controllers.Application.index
+
+GET /gutter-tests                                  controllers.Application.index
+GET /gutter-tests/:name                            controllers.Application.indexWithName(name: String)
 
 GET /campaigns                                      controllers.Application.index
 GET /campaigns/:name                                controllers.Application.indexWithName(name: String)
@@ -186,6 +186,22 @@ POST  /frontend/banner-deploy/update                   controllers.banner.Banner
 # ----- banner deploys ----- #
 GET   /frontend/banner-deploy2                         controllers.banner.BannerDeployController2.get
 POST  /frontend/banner-deploy2/update                  controllers.banner.BannerDeployController2.set
+
+# ----- Gutter channel tests ----- #
+GET   /frontend/gutter-tests                            controllers.gutter.GutterTestsController.get
+# banner list endpoints
+POST  /frontend/gutter-tests/list/lock                  controllers.gutter.GutterTestsController.lockList
+POST  /frontend/gutter-tests/list/unlock                controllers.gutter.GutterTestsController.unlockList
+POST  /frontend/gutter-tests/list/takecontrol           controllers.gutter.GutterTestsController.takeControlOfList
+POST  /frontend/gutter-tests/list/reorder               controllers.gutter.GutterTestsController.reorderList
+# banner test endpoints
+GET   /frontend/gutter-tests/test/:testName             controllers.gutter.GutterTestsController.getTest(testName: String)
+POST  /frontend/gutter-tests/test/update                controllers.gutter.GutterTestsController.updateTest
+POST  /frontend/gutter-tests/test/create                controllers.gutter.GutterTestsController.createTest
+POST  /frontend/gutter-tests/test/lock/:testName        controllers.gutter.GutterTestsController.lockTest(testName: String)
+POST  /frontend/gutter-tests/test/unlock/:testName      controllers.gutter.GutterTestsController.unlockTest(testName: String)
+POST  /frontend/gutter-tests/test/takecontrol/:testName controllers.gutter.GutterTestsController.forceLockTest(testName: String)
+POST  /frontend/gutter-tests/test/status/:rawStatus     controllers.gutter.GutterTestsController.setStatus(rawStatus: String)
 
 # ----- channel switches ----- #
 GET   /frontend/channel-switches                       controllers.ChannelSwitchesController.get

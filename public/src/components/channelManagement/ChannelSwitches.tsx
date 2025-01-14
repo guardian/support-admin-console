@@ -30,7 +30,8 @@ type SwitchName =
   | 'enableSuperMode'
   | 'enableHardcodedEpicTests'
   | 'enableHardcodedBannerTests'
-  | 'enableScheduledBannerDeploys';
+  | 'enableScheduledBannerDeploys'
+  | 'enableGutters';
 
 type ChannelSwitches = {
   [key in SwitchName]: boolean;
@@ -127,6 +128,12 @@ const ChannelSwitches: React.FC<InnerProps<ChannelSwitches>> = ({
         name="enableScheduledBannerDeploys"
         label="Enable scheduled banner deploys"
         enabled={switches.enableScheduledBannerDeploys}
+        setSwitch={onSwitchChange}
+      />
+      <ChannelSwitch
+        name="enableGutters"
+        label="Enable Gutters"
+        enabled={switches.enableGutters}
         setSwitch={onSwitchChange}
       />
 

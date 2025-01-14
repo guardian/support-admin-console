@@ -6,6 +6,7 @@ import play.api.routing.Router
 import controllers._
 import controllers.banner._
 import controllers.epic._
+import controllers.gutter._
 import play.api.ApplicationLoader.Context
 import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.mvc.AnyContent
@@ -107,6 +108,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     new SuperModeController(authAction, controllerComponents, stage, runtime, dynamoSuperModeService, athena),
     new AnalyticsController(authAction, controllerComponents, stage, runtime, athena),
     new BanditDataController(authAction, controllerComponents, stage, runtime, dynamoBanditData),
+    new GutterTestsController(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoArchivedChannelTests),
     assets
   )
 }
