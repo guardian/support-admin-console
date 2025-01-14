@@ -99,6 +99,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     new BannerTestsController2(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoArchivedChannelTests),
     new BannerDeployController(authAction, controllerComponents, stage, runtime),
     new BannerDeployController2(authAction, controllerComponents, stage, runtime),
+    new GutterTestsController(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoArchivedChannelTests),
     new ChannelSwitchesController(authAction, controllerComponents, stage, runtime),
     new CampaignsController(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoCampaignsService),
     new BannerDesignsController(authAction, controllerComponents, stage, runtime, dynamoBannerDesigns, dynamoTestsService, dynamoArchivedBannerDesigns),
@@ -108,7 +109,6 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     new SuperModeController(authAction, controllerComponents, stage, runtime, dynamoSuperModeService, athena),
     new AnalyticsController(authAction, controllerComponents, stage, runtime, athena),
     new BanditDataController(authAction, controllerComponents, stage, runtime, dynamoBanditData),
-    new GutterTestsController(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoArchivedChannelTests),
     assets
   )
 }

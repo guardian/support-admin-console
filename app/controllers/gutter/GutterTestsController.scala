@@ -1,6 +1,5 @@
 package controllers.gutter
 
-
 import com.gu.googleauth.AuthAction
 import controllers.ChannelTestsController
 import models.{GutterTest, Channel}
@@ -10,6 +9,7 @@ import play.api.mvc.{ActionBuilder, AnyContent, ControllerComponents}
 import services.{DynamoArchivedChannelTests, DynamoChannelTests}
 import zio.ZEnv
 
+import scala.concurrent.ExecutionContext
 
 object GutterTestsController {
   val name = "gutter-tests"
@@ -21,7 +21,7 @@ class GutterTestsController(
   stage: String,
   runtime: zio.Runtime[ZEnv],
   dynamoTests: DynamoChannelTests,
-  dynamoArchivedTests: DynamoArchivedChannelTests,
+  dynamoArchivedTests: DynamoArchivedChannelTests
 )(implicit ec: ExecutionContext) extends ChannelTestsController[GutterTest](
   authAction,
   components,
