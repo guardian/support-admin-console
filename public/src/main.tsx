@@ -195,7 +195,7 @@ const AppRouter = () => {
           />
           <Route
             path="/gutter-tests/:testName?"
-            element={createComponent(<GutterTestsForm />, 'Header Tests')}
+            element={createComponent(<GutterTestsForm />, 'Gutter Tests')}
           />
           <Route
             path="/channel-switches"
