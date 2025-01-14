@@ -7,7 +7,7 @@ import io.circe.{Decoder, Encoder, Json}
 import models.Methodology.defaultMethodologies
 
 case class GutterContent(
-    url: Option[String],
+    imageUrl: Option[String],
     altText: Option[String],
     bodyCopy: Option[List[String]],
     cta: Option[Cta],
@@ -15,7 +15,7 @@ case class GutterContent(
 
 case class GutterVariant(
     name: String,
-    bannerContent: Option[GutterContent],
+    gutterContent: Option[GutterContent],
 )
 
 case class GutterTest( // TODO: remove inappropriate ones.
