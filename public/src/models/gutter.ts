@@ -1,6 +1,7 @@
 import { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';
 import {
   Cta,
+  DeviceType,
   PageContextTargeting,
   Status,
   Test,
@@ -13,7 +14,7 @@ export interface GutterContent {
   imageUrl: string; // should this be a URL type?
   altText: string; // this might be better in a new type - or perhaps one exists already.
   bodyCopy: string;
-  cta: Cta;
+  cta?: Cta;
 }
 
 export interface GutterVariant extends Variant {
@@ -32,4 +33,5 @@ export interface GutterTest extends Test {
   controlProportionSettings?: ControlProportionSettings; // AB test proportions
   campaignName?: string;
   contextTargeting: PageContextTargeting; // TODO: tags but we just want the excluded tags...
+  deviceType: DeviceType; // TODO: find a way of removing this later.
 }

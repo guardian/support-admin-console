@@ -46,8 +46,9 @@ const DEV_AND_CODE_DEFAULT_GUTTER_TEST: GutterTest = {
   userCohort: UserCohort.AllNonSupporters,
   locations: [],
   variants: [DEV_AND_CODE_DEFAULT_VARIANT],
-  contextTargeting: { excludedTagIds: [] },
+  contextTargeting: { tagIds: [], sectionIds: [], excludedTagIds: [], excludedSectionIds: [] },
   methodologies: [{ name: 'ABTest' }],
+  deviceType: 'Desktop',
 };
 
 const PROD_DEFAULT_GUTTER_TEST: GutterTest = {
@@ -57,8 +58,9 @@ const PROD_DEFAULT_GUTTER_TEST: GutterTest = {
   userCohort: UserCohort.AllNonSupporters,
   locations: [],
   variants: [],
-  contextTargeting: { excludedTagIds: [] },
+  contextTargeting: { tagIds: [], sectionIds: [], excludedTagIds: [], excludedSectionIds: []},
   methodologies: [{ name: 'ABTest' }],
+  deviceType: 'Desktop',
 };
 
 export const getDefaultTest = (): GutterTest => {

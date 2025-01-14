@@ -1,7 +1,13 @@
 import React from 'react';
 import { GutterTest, GutterVariant } from '../../../models/gutter';
 import { Region } from '../../../utils/models';
-import { Methodology, SignedInStatus, UserCohort } from '../helpers/shared';
+import {
+  ConsentStatus,
+  DeviceType,
+  Methodology,
+  SignedInStatus,
+  UserCohort,
+} from '../helpers/shared';
 import { ValidatedTestEditorProps } from '../validatedTestEditor';
 import GutterVariantEditor from './gutterVariantEditor';
 import { Typography } from '@mui/material';
@@ -74,10 +80,17 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
     updateTest({ ...test, userCohort: updatedCohort });
   };
 
+  const onDeviceTypeChange = (updatedDeviceType: DeviceType): void => {
+    updateTest({ ...test, deviceType: updatedDeviceType });
+  };
+
   const onSignedInStatusChange = (signedInStatus: SignedInStatus): void => {
     onTestChange({ ...test, signedInStatus });
   };
 
+  const onConsentChange = (consentStatus: ConsentStatus): void => {
+    onTestChange({ ...test, consentStatus });
+  };
   const renderVariantEditor = (variant: GutterVariant): React.ReactElement => (
     <GutterVariantEditor
       key={`gutter-${test.name}-${variant.name}`}
@@ -211,13 +224,13 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
             onDeviceTypeChange={onDeviceTypeChange} // TODO: need to find a way to remove.
             isDisabled={!userHasTestLocked}
             showSupporterStatusSelector={true}
-            showDeviceTypeSelector={false}
+            showDeviceTypeSelector={false} // TODO: check this hides the device options
             showSignedInStatusSelector={true}
             // selectedSignedInStatus={test.signedInStatus}
-            onSignedInStatusChange={onSignedInStatusChange} // TODO: need to find a way to remove?
-            // selectedConsentStatus={test.consentStatus} // TODO: need to find a way to remove.
-            onConsentStatusChange={onConsentStatusChange} // TODO: need to find a way to remove.
-            showConsentStatusSelector={true}
+            onSignedInStatusChange={onSignedInStatusChange} // TODO: needed? If not, need to find a way to remove?
+            showConsentStatusSelector={false}
+            // selectedConsentStatus={test.consentStatus} // optional but why is the below not?
+            onConsentStatusChange={onConsentChange} // TODO: need to find a way to remove.
           />
         </div>
       </div>

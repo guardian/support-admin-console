@@ -72,7 +72,7 @@ interface FormData {
   imageUrl: string; // should this be a URL type?
   altText: string; // this might be better in a new type - or perhaps one exists already.
   bodyCopy: string;
-  cta: Cta;
+  cta?: Cta;
 }
 
 const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
@@ -140,7 +140,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
     onValidationChange(isValid);
   }, [errors.imageUrl, errors.altText, errors.bodyCopy, errors.cta?.baseUrl, errors.cta?.text]);
 
-  const updatePrimaryCta = (updatedCta: Cta): void => {
+  const updatePrimaryCta = (updatedCta?: Cta): void => {
     onChange({ ...content, cta: updatedCta });
   };
 
