@@ -7,8 +7,7 @@ import io.circe.{Decoder, Encoder, Json}
 import models.Methodology.defaultMethodologies
 
 case class GutterContent(
-    imageUrl: Option[String],
-    altText: Option[String],
+    image: Option[Image],
     bodyCopy: Option[List[String]],
     cta: Option[Cta],
 )
