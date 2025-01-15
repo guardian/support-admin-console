@@ -145,58 +145,56 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
   };
 
   return (
-    <>
+    <div className={classes.container}>
       {/* TODO: add image url and alt text fields here */}
 
       <Typography className={classes.sectionHeader} variant="h4">
         Body Copy
       </Typography>
 
-      <div>
-        <Controller
-          name="bodyContent"
-          control={control}
-          rules={{
-            required: true,
-            validate: (pars: string) => getEmptyParagraphError(pars),
-          }}
-          render={data => {
-            return (
-              <RichTextEditor
-                error={errors.bodyCopy !== undefined || copyLength > recommendedLength}
-                helperText={
-                  errors.bodyCopy
-                    ? // @ts-ignore -- react-hook-form doesn't believe it has a message field
-                      errors.bodyCopy.message || errors.bodyCopy.type
-                    : getParagraphsHelperText()
-                }
-                copyData={data.value}
-                updateCopy={pars => {
-                  data.onChange(pars);
-                  handleSubmit(setValidatedFields)();
-                }}
-                name="body copy"
-                label="Body copy"
-                disabled={!editMode}
-              />
-            );
-          }}
+      <Controller
+        name="bodyContent"
+        control={control}
+        rules={{
+          required: true,
+          validate: (pars: string) => getEmptyParagraphError(pars),
+        }}
+        render={data => {
+          return (
+            <RichTextEditor
+              error={errors.bodyCopy !== undefined || copyLength > recommendedLength}
+              helperText={
+                errors.bodyCopy
+                  ? // @ts-ignore -- react-hook-form doesn't believe it has a message field
+                    errors.bodyCopy.message || errors.bodyCopy.type
+                  : getParagraphsHelperText()
+              }
+              copyData={data.value}
+              updateCopy={pars => {
+                data.onChange(pars);
+                handleSubmit(setValidatedFields)();
+              }}
+              name="body copy"
+              label="Body copy"
+              disabled={!editMode}
+            />
+          );
+        }}
+      />
+
+      <div className={classes.buttonsContainer}>
+        <Typography className={classes.sectionHeader} variant="h4">
+          Button
+        </Typography>
+
+        <VariantCtasEditor
+          primaryCta={content.cta}
+          updatePrimaryCta={updatePrimaryCta}
+          isDisabled={!editMode}
+          onValidationChange={onValidationChange}
         />
-
-        <div className={classes.buttonsContainer}>
-          <Typography className={classes.sectionHeader} variant="h4">
-            Button
-          </Typography>
-
-          <VariantCtasEditor
-            primaryCta={content.cta}
-            updatePrimaryCta={updatePrimaryCta}
-            isDisabled={!editMode}
-            onValidationChange={onValidationChange}
-          />
-        </div>
       </div>
-    </>
+    </div>
   );
 };
 

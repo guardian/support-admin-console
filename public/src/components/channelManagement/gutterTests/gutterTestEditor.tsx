@@ -22,6 +22,8 @@ import VariantSummary from '../../tests/variants/variantSummary';
 import VariantsEditor from '../../tests/variants/variantsEditor';
 import { TestMethodologyEditor } from '../TestMethodologyEditor';
 import TestVariantsSplitEditor from '../../tests/variants/testVariantsSplitEditor';
+import VariantEditorWithPreviewTab from '../../tests/variants/variantEditorWithPreviewTab';
+import { GutterTestPreviewButton } from './gutterTestPreview';
 
 const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
   test,
@@ -92,15 +94,20 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
     onTestChange({ ...test, consentStatus });
   };
   const renderVariantEditor = (variant: GutterVariant): React.ReactElement => (
-    <GutterVariantEditor
-      key={`gutter-${test.name}-${variant.name}`}
-      variant={variant}
-      editMode={userHasTestLocked}
-      onValidationChange={(isValid: boolean): void =>
-        setValidationStatusForField(variant.name, isValid)
+    <VariantEditorWithPreviewTab
+      variantEditor={
+        <GutterVariantEditor
+          key={`gutter-${test.name}-${variant.name}`}
+          variant={variant}
+          editMode={userHasTestLocked}
+          onValidationChange={(isValid: boolean): void =>
+            setValidationStatusForField(variant.name, isValid)
+          }
+          onVariantChange={onVariantChange}
+          onDelete={(): void => onVariantDelete(variant.name)}
+        />
       }
-      onVariantChange={onVariantChange}
-      onDelete={(): void => onVariantDelete(variant.name)}
+      variantPreview={<GutterVariantPreview variant={variant} />}
     />
   );
 
@@ -111,7 +118,6 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
         testName={test.name}
         testType="GUTTER"
         isInEditMode={userHasTestLocked}
-        topButton={<GutterVariantPreview variant={variant} />}
         platform="DOTCOM" // hardcoded as gutters are only supported in DCR
         articleType="Liveblog"
       />
@@ -134,109 +140,112 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
     onVariantsChange([...test.variants, newVariant]);
   };
 
-  if (test) {
-    return (
-      <div className={classes.container}>
-        <div className={classes.sectionContainer}>
-          <Typography variant={'h3'} className={classes.sectionHeader}>
-            Variants
-          </Typography>
-          <div>
-            <VariantsEditor
-              variants={test.variants}
-              createVariant={createVariant}
-              testName={test.name}
-              editMode={userHasTestLocked}
-              renderVariantEditor={renderVariantEditor}
-              renderVariantSummary={renderVariantSummary}
-              onVariantDelete={onVariantDelete}
-              onVariantClone={onVariantClone}
-            />
-          </div>
+  // if (test) {
+  return (
+    <div className={classes.container}>
+      <div className={classes.sectionContainer}>
+        <Typography variant={'h3'} className={classes.sectionHeader}>
+          Variants
+        </Typography>
+        <div className={classes.variantsHeaderButtonsContainer}>
+          <GutterTestPreviewButton test={test} />
         </div>
-
-        <div className={classes.sectionContainer}>
-          <Typography variant={'h3'} className={classes.sectionHeader}>
-            Experiment Methodology
-          </Typography>
-          <TestMethodologyEditor
-            methodologies={test.methodologies}
+        <div>
+          <VariantsEditor<GutterVariant>
+            variants={test.variants}
             testName={test.name}
-            channel={test.channel ?? ''}
-            isDisabled={!userHasTestLocked || test.status === 'Live'}
-            onChange={onMethodologyChange}
-          />
-        </div>
-
-        {test.variants.length > 1 && (
-          <div className={classes.sectionContainer}>
-            <Typography variant={'h3'} className={classes.sectionHeader}>
-              Variants split (applies to AB tests only)
-            </Typography>
-            <div>
-              <TestVariantsSplitEditor
-                variants={test.variants}
-                controlProportionSettings={test.controlProportionSettings}
-                onControlProportionSettingsChange={onControlProportionSettingsChange}
-                onValidationChange={onVariantsSplitSettingsValidationChanged}
-                isDisabled={!userHasTestLocked}
-              />
-            </div>
-          </div>
-        )}
-
-        <div className={classes.sectionContainer}>
-          <Typography variant={'h3'} className={classes.sectionHeader}>
-            Campaign
-          </Typography>
-          <div>
-            <CampaignSelector
-              test={test}
-              onCampaignChange={onCampaignChange}
-              disabled={!userHasTestLocked}
-            />
-          </div>
-        </div>
-
-        <div className={classes.sectionContainer}>
-          <Typography variant={'h3'} className={classes.sectionHeader}>
-            Target context
-          </Typography>
-
-          <TestEditorContextTargeting
-            contextTargeting={test.contextTargeting} // TODO: need to remove some tag stuff
             editMode={userHasTestLocked}
-            updateContextTargeting={contextTargeting => updateTest({ ...test, contextTargeting })}
-          />
-        </div>
-
-        <div className={classes.sectionContainer}>
-          <Typography variant={'h3'} className={classes.sectionHeader}>
-            Target audience
-          </Typography>
-
-          <TestEditorTargetAudienceSelector
-            selectedRegions={test.locations}
-            onRegionsUpdate={onRegionsChange}
-            selectedCohort={test.userCohort}
-            onCohortChange={onCohortChange}
-            selectedDeviceType={test.deviceType ?? 'All'} // TODO: need to find a way to remove.
-            onDeviceTypeChange={onDeviceTypeChange} // TODO: need to find a way to remove.
-            isDisabled={!userHasTestLocked}
-            showSupporterStatusSelector={true}
-            showDeviceTypeSelector={false} // TODO: check this hides the device options
-            showSignedInStatusSelector={true}
-            // selectedSignedInStatus={test.signedInStatus}
-            onSignedInStatusChange={onSignedInStatusChange} // TODO: needed? If not, need to find a way to remove?
-            showConsentStatusSelector={false}
-            // selectedConsentStatus={test.consentStatus} // optional but why is the below not?
-            onConsentStatusChange={onConsentChange} // TODO: need to find a way to remove.
+            createVariant={createVariant}
+            renderVariantEditor={renderVariantEditor}
+            renderVariantSummary={renderVariantSummary}
+            onVariantDelete={onVariantDelete}
+            onVariantClone={onVariantClone}
           />
         </div>
       </div>
-    );
-  }
-  return null;
+
+      <div className={classes.sectionContainer}>
+        <Typography variant={'h3'} className={classes.sectionHeader}>
+          Experiment Methodology
+        </Typography>
+        <TestMethodologyEditor
+          methodologies={test.methodologies}
+          testName={test.name}
+          channel={test.channel ?? ''}
+          isDisabled={!userHasTestLocked || test.status === 'Live'}
+          onChange={onMethodologyChange}
+        />
+      </div>
+
+      {test.variants.length > 1 && (
+        <div className={classes.sectionContainer}>
+          <Typography variant={'h3'} className={classes.sectionHeader}>
+            Variants split (applies to AB tests only)
+          </Typography>
+          <div>
+            <TestVariantsSplitEditor
+              variants={test.variants}
+              controlProportionSettings={test.controlProportionSettings}
+              onControlProportionSettingsChange={onControlProportionSettingsChange}
+              onValidationChange={onVariantsSplitSettingsValidationChanged}
+              isDisabled={!userHasTestLocked}
+            />
+          </div>
+        </div>
+      )}
+
+      <div className={classes.sectionContainer}>
+        <Typography variant={'h3'} className={classes.sectionHeader}>
+          Campaign
+        </Typography>
+        <div>
+          <CampaignSelector
+            test={test}
+            onCampaignChange={onCampaignChange}
+            disabled={!userHasTestLocked}
+          />
+        </div>
+      </div>
+
+      <div className={classes.sectionContainer}>
+        <Typography variant={'h3'} className={classes.sectionHeader}>
+          Target context
+        </Typography>
+
+        <TestEditorContextTargeting
+          contextTargeting={test.contextTargeting} // TODO: need to remove some tag stuff
+          editMode={userHasTestLocked}
+          updateContextTargeting={contextTargeting => updateTest({ ...test, contextTargeting })}
+        />
+      </div>
+
+      <div className={classes.sectionContainer}>
+        <Typography variant={'h3'} className={classes.sectionHeader}>
+          Target audience
+        </Typography>
+
+        <TestEditorTargetAudienceSelector
+          selectedRegions={test.locations}
+          onRegionsUpdate={onRegionsChange}
+          selectedCohort={test.userCohort}
+          onCohortChange={onCohortChange}
+          selectedDeviceType={test.deviceType ?? 'All'} // TODO: need to find a way to remove.
+          onDeviceTypeChange={onDeviceTypeChange} // TODO: need to find a way to remove.
+          isDisabled={!userHasTestLocked}
+          showSupporterStatusSelector={true}
+          showDeviceTypeSelector={false} // TODO: check this hides the device options
+          showSignedInStatusSelector={true}
+          // selectedSignedInStatus={test.signedInStatus}
+          onSignedInStatusChange={onSignedInStatusChange} // TODO: needed? If not, need to find a way to remove?
+          showConsentStatusSelector={false}
+          // selectedConsentStatus={test.consentStatus} // optional but why is the below not?
+          onConsentStatusChange={onConsentChange} // TODO: need to find a way to remove.
+        />
+      </div>
+    </div>
+  );
+  // }
+  // return null;
 };
 
 export default GutterTestEditor;
