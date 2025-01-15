@@ -7,12 +7,15 @@ export const DEFAULT_PRIMARY_CTA: Cta = {
   baseUrl: 'https://support.theguardian.com/contribute',
 };
 
-const DEFAULT_IMAGE_URL = 'https://TODO'; // upload existing SVG and add to google with uploader.
+export const DEFAULT_IMAGE_URL = 'https://TODO'; // upload existing SVG and add to google with uploader.
+export const DEFAULT_IMAGE_ALT = 'Not for Sale';
 
 const DEV_AND_CODE_DEFAULT_VARIANT: GutterVariant = {
   gutterContent: {
-    imageUrl: DEFAULT_IMAGE_URL, // should this be a URL type?
-    altText: 'NOT FOR SALE', // this might be better in a new type - or perhaps one exists already.
+    image: {
+      mainUrl: DEFAULT_IMAGE_URL,
+      altText: DEFAULT_IMAGE_ALT,
+    },
     bodyCopy:
       'The Guardian’s expert news coverage is funded by people like you, not a billionaire owner. Will you help us keep our independent journalism free and open to all today?',
     cta: DEFAULT_PRIMARY_CTA,
@@ -22,8 +25,10 @@ const DEV_AND_CODE_DEFAULT_VARIANT: GutterVariant = {
 
 const PROD_DEFAULT_VARIANT: GutterVariant = {
   gutterContent: {
-    imageUrl: DEFAULT_IMAGE_URL, // should this be a URL type?
-    altText: 'NOT FOR SALE', // this might be better in a new type for image and alt - or perhaps one exists already.
+    image: {
+      mainUrl: DEFAULT_IMAGE_URL,
+      altText: DEFAULT_IMAGE_ALT,
+    },
     bodyCopy:
       'The Guardian’s expert news coverage is funded by people like you, not a billionaire owner. Will you help us keep our independent journalism free and open to all today?',
     cta: DEFAULT_PRIMARY_CTA,

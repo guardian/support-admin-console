@@ -5,9 +5,11 @@ import { makeStyles } from '@mui/styles';
 import { Theme, Typography } from '@mui/material';
 import VariantCtasEditor from './variantCtasEditor';
 import { EMPTY_ERROR_HELPER_TEXT, getEmptyParagraphError } from '../helpers/validation';
-import { Cta } from '../helpers/shared';
+import { Cta, Image } from '../helpers/shared';
 import { Controller, useForm } from 'react-hook-form';
 import { getRteCopyLength, RichTextEditor } from '../richTextEditor/richTextEditor';
+import { ImageEditorToggle } from '../imageEditor';
+import { DEFAULT_IMAGE_URL, DEFAULT_IMAGE_ALT } from './utils/defaults';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {
@@ -61,23 +63,22 @@ const BODY_COPY_RECOMMENDED_LENGTH = 500;
 const BODY_DEFAULT_HELPER_TEXT = 'Main gutter message paragraph';
 
 interface VariantContentEditorProps {
-  content: GutterContent;
-  onChange: (updatedContent: GutterContent) => void;
+  variant: GutterContent;
+  onVariantChange: (updatedContent: GutterContent) => void;
   onValidationChange: (isValid: boolean) => void;
   editMode: boolean;
 }
 
 // TODO: fix this data.
 interface FormData {
-  imageUrl: string; // should this be a URL type?
-  altText: string; // this might be better in a new type - or perhaps one exists already.
+  image: Image;
   bodyCopy: string;
   cta?: Cta;
 }
 
 const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
-  content,
-  onChange,
+  variant,
+  onVariantChange,
   onValidationChange,
   editMode,
 }: VariantContentEditorProps) => {
@@ -86,10 +87,10 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
   const getBodyCopyLength = () => {
     const bodyCopyRecommendedLength = BODY_COPY_RECOMMENDED_LENGTH;
 
-    if (content.bodyCopy != null) {
-      return [getRteCopyLength([...content.bodyCopy]), bodyCopyRecommendedLength];
+    if (variant.bodyCopy != null) {
+      return [getRteCopyLength([...variant.bodyCopy]), bodyCopyRecommendedLength];
     }
-    return [getRteCopyLength([content.bodyCopy]), bodyCopyRecommendedLength];
+    return [getRteCopyLength([variant.bodyCopy]), bodyCopyRecommendedLength];
   };
 
   const [copyLength, recommendedLength] = getBodyCopyLength();
@@ -105,10 +106,9 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
   };
 
   const defaultValues: FormData = {
-    imageUrl: content.imageUrl,
-    altText: content.altText,
-    bodyCopy: content.bodyCopy,
-    cta: content.cta,
+    image: variant.image,
+    bodyCopy: variant.bodyCopy,
+    cta: variant.cta,
   };
 
   /**
@@ -129,8 +129,8 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
   }, []);
 
   useEffect(() => {
-    onChange({
-      ...content,
+    onVariantChange({
+      ...variant,
       ...validatedFields,
     });
   }, [validatedFields]);
@@ -138,49 +138,76 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
-  }, [errors.imageUrl, errors.altText, errors.bodyCopy, errors.cta?.baseUrl, errors.cta?.text]);
+  }, [errors.image, errors.bodyCopy, errors.cta?.baseUrl, errors.cta?.text]);
+
+  const updateImage = (image?: Image): void => {
+    if (image) {
+      onVariantChange({ ...variant, image });
+    } else {
+      onVariantChange({
+        ...variant,
+        image: { mainUrl: DEFAULT_IMAGE_URL, altText: DEFAULT_IMAGE_ALT },
+      });
+    }
+  };
 
   const updatePrimaryCta = (updatedCta?: Cta): void => {
-    onChange({ ...content, cta: updatedCta });
+    onVariantChange({ ...variant, cta: updatedCta });
   };
 
   return (
     <div className={classes.container}>
       {/* TODO: add image url and alt text fields here */}
+      <div className={classes.sectionContainer}>
+        <Typography className={classes.sectionHeader} variant="h4">
+          Header Image
+        </Typography>
 
-      <Typography className={classes.sectionHeader} variant="h4">
-        Body Copy
-      </Typography>
+        <ImageEditorToggle
+          image={variant.image}
+          updateImage={updateImage}
+          isDisabled={!editMode}
+          onValidationChange={onValidationChange}
+          label={'Image - appears above copy instead of a heading.'}
+          guidance={'Ratio should be TBC?, format should be SVG.'}
+        />
+      </div>
 
-      <Controller
-        name="bodyContent"
-        control={control}
-        rules={{
-          required: true,
-          validate: (pars: string) => getEmptyParagraphError(pars),
-        }}
-        render={data => {
-          return (
-            <RichTextEditor
-              error={errors.bodyCopy !== undefined || copyLength > recommendedLength}
-              helperText={
-                errors.bodyCopy
-                  ? // @ts-ignore -- react-hook-form doesn't believe it has a message field
-                    errors.bodyCopy.message || errors.bodyCopy.type
-                  : getParagraphsHelperText()
-              }
-              copyData={data.value}
-              updateCopy={pars => {
-                data.onChange(pars);
-                handleSubmit(setValidatedFields)();
-              }}
-              name="body copy"
-              label="Body copy"
-              disabled={!editMode}
-            />
-          );
-        }}
-      />
+      <div className={classes.sectionContainer}>
+        <Typography className={classes.sectionHeader} variant="h4">
+          Body Copy
+        </Typography>
+
+        <Controller
+          name="bodyContent"
+          control={control}
+          rules={{
+            required: true,
+            validate: (pars: string) => getEmptyParagraphError(pars),
+          }}
+          render={data => {
+            return (
+              <RichTextEditor
+                error={errors.bodyCopy !== undefined || copyLength > recommendedLength}
+                helperText={
+                  errors.bodyCopy
+                    ? // @ts-ignore -- react-hook-form doesn't believe it has a message field
+                      errors.bodyCopy.message || errors.bodyCopy.type
+                    : getParagraphsHelperText()
+                }
+                copyData={data.value}
+                updateCopy={pars => {
+                  data.onChange(pars);
+                  handleSubmit(setValidatedFields)();
+                }}
+                name="body copy"
+                label="Body copy"
+                disabled={!editMode}
+              />
+            );
+          }}
+        />
+      </div>
 
       <div className={classes.buttonsContainer}>
         <Typography className={classes.sectionHeader} variant="h4">
@@ -188,7 +215,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
         </Typography>
 
         <VariantCtasEditor
-          primaryCta={content.cta}
+          primaryCta={variant.cta}
           updatePrimaryCta={updatePrimaryCta}
           isDisabled={!editMode}
           onValidationChange={onValidationChange}
@@ -219,8 +246,8 @@ const GutterVariantEditor: React.FC<GutterVariantEditorProps> = ({
     <div className={classes.container}>
       <div className={classes.sectionContainer}>
         <VariantContentEditor
-          content={variant.gutterContent}
-          onChange={(updatedContent: GutterContent): void =>
+          variant={variant.gutterContent}
+          onVariantChange={(updatedContent: GutterContent): void =>
             onVariantChange({ ...variant, gutterContent: updatedContent })
           }
           onValidationChange={(isValid): void =>

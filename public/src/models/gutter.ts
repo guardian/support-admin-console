@@ -2,6 +2,7 @@ import { ControlProportionSettings } from '../components/channelManagement/helpe
 import {
   Cta,
   DeviceType,
+  Image,
   PageContextTargeting,
   Status,
   Test,
@@ -11,8 +12,7 @@ import {
 import { Region } from '../utils/models';
 
 export interface GutterContent {
-  imageUrl: string; // should this be a URL type?
-  altText: string; // this might be better in a new type - or perhaps one exists already.
+  image: Image;
   bodyCopy: string;
   cta?: Cta;
 }
