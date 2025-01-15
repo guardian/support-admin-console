@@ -58,8 +58,7 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   },
 }));
 
-const BODY_COPY_RECOMMENDED_LENGTH = 500;
-// const HEADER_DEFAULT_HELPER_TEXT = 'Assistive text';
+const BODY_COPY_RECOMMENDED_LENGTH = 200;
 const BODY_DEFAULT_HELPER_TEXT = 'Main gutter message paragraph';
 
 interface VariantContentEditorProps {
@@ -157,7 +156,6 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
 
   return (
     <div className={classes.container}>
-      {/* TODO: add image url and alt text fields here */}
       <div className={classes.sectionContainer}>
         <Typography className={classes.sectionHeader} variant="h4">
           Header Image
@@ -169,7 +167,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
           isDisabled={!editMode}
           onValidationChange={onValidationChange}
           label={'Image - appears above copy instead of a heading.'}
-          guidance={'Ratio should be TBC?, format should be SVG.'}
+          guidance={'Ratio should be TBC?, file format should be SVG.'}
         />
       </div>
 
