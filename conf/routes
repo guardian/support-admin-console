@@ -24,6 +24,9 @@ GET /amp-epic-tests/:name                           controllers.Application.inde
 GET /banner-tests                                   controllers.Application.index
 GET /banner-tests/:name                             controllers.Application.indexWithName(name: String)
 
+GET /banner-tests2                                  controllers.Application.index
+GET /banner-tests2/:name                            controllers.Application.indexWithName(name: String)
+
 GET /banner-deploy                                  controllers.Application.index
 GET /channel-switches                               controllers.Application.index
 
