@@ -16,8 +16,9 @@ const DEV_AND_CODE_DEFAULT_VARIANT: GutterVariant = {
       mainUrl: DEFAULT_IMAGE_URL,
       altText: DEFAULT_IMAGE_ALT,
     },
-    bodyCopy:
+    bodyCopy: [
       'The Guardian’s expert news coverage is funded by people like you, not a billionaire owner. Will you help us keep our independent journalism free and open to all today?',
+    ],
     cta: DEFAULT_PRIMARY_CTA,
   },
   name: 'CONTROL',
@@ -29,8 +30,9 @@ const PROD_DEFAULT_VARIANT: GutterVariant = {
       mainUrl: DEFAULT_IMAGE_URL,
       altText: DEFAULT_IMAGE_ALT,
     },
-    bodyCopy:
+    bodyCopy: [
       'The Guardian’s expert news coverage is funded by people like you, not a billionaire owner. Will you help us keep our independent journalism free and open to all today?',
+    ],
     cta: DEFAULT_PRIMARY_CTA,
   },
   name: 'CONTROL',
@@ -51,13 +53,12 @@ const DEV_AND_CODE_DEFAULT_GUTTER_TEST: GutterTest = {
   userCohort: UserCohort.AllNonSupporters,
   locations: [],
   variants: [DEV_AND_CODE_DEFAULT_VARIANT],
-  contextTargeting: {
-    tagIds: [], // tags must include one of these
-    sectionIds: [], // section must be one of these
-    excludedTagIds: [], // tags must not include one of these
-    excludedSectionIds: [], // section must not be one of these
-  },
+  tagIds: [], // tags must include one of these
+  sectionIds: [], // section must be one of these
+  excludedTagIds: [], // tags must not include one of these
+  excludedSectionIds: [], // section must not be one of these
   methodologies: [{ name: 'ABTest' }],
+  campaignName: '',
   deviceType: 'Desktop',
 };
 
@@ -68,13 +69,12 @@ const PROD_DEFAULT_GUTTER_TEST: GutterTest = {
   userCohort: UserCohort.AllNonSupporters,
   locations: [],
   variants: [],
-  contextTargeting: {
-    tagIds: [], // tags must include one of these
-    sectionIds: [], // section must be one of these
-    excludedTagIds: [], // tags must not include one of these
-    excludedSectionIds: [], // section must not be one of these
-  },
+  tagIds: [], // tags must include one of these
+  sectionIds: [], // section must be one of these
+  excludedTagIds: [], // tags must not include one of these
+  excludedSectionIds: [], // section must not be one of these
   methodologies: [{ name: 'ABTest' }],
+  campaignName: '',
   deviceType: 'Desktop',
 };
 

@@ -3,7 +3,6 @@ import {
   Cta,
   DeviceType,
   Image,
-  PageContextTargeting,
   Status,
   Test,
   UserCohort,
@@ -13,7 +12,7 @@ import { Region } from '../utils/models';
 
 export interface GutterContent {
   image: Image;
-  bodyCopy: string;
+  bodyCopy: string[];
   cta?: Cta;
 }
 
@@ -28,8 +27,10 @@ export interface GutterTest extends Test {
   userCohort: UserCohort;
   locations: Region[];
   variants: GutterVariant[];
-  controlProportionSettings?: ControlProportionSettings; // AB test proportions
-  campaignName?: string;
-  contextTargeting: PageContextTargeting; // TODO: tags but we just want the excluded tags...
+  tagIds: string[];
+  sectionIds: string[];
+  excludedTagIds: string[];
+  excludedSectionIds: string[];
+  controlProportionSettings?: ControlProportionSettings;
   deviceType: DeviceType; // TODO: find a way of removing this later.
 }

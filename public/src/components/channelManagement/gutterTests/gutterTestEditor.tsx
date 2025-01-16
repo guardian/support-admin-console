@@ -5,6 +5,7 @@ import {
   ConsentStatus,
   DeviceType,
   Methodology,
+  PageContextTargeting,
   SignedInStatus,
   UserCohort,
 } from '../helpers/shared';
@@ -72,6 +73,16 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
 
   const onVariantDelete = (deletedVariantName: string): void => {
     onVariantsChange(test.variants.filter(variant => variant.name !== deletedVariantName));
+  };
+
+  const updateContextTargeting = (contextTargeting: PageContextTargeting): void => {
+    updateTest({
+      ...test,
+      tagIds: contextTargeting.tagIds,
+      sectionIds: contextTargeting.sectionIds,
+      excludedTagIds: contextTargeting.excludedTagIds,
+      excludedSectionIds: contextTargeting.excludedSectionIds,
+    });
   };
 
   const onRegionsChange = (updatedRegions: Region[]): void => {
@@ -212,9 +223,14 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
         </Typography>
 
         <TestEditorContextTargeting
-          contextTargeting={test.contextTargeting} // TODO: need to remove some tag stuff
+          contextTargeting={{
+            tagIds: test.tagIds,
+            sectionIds: test.sectionIds,
+            excludedTagIds: test.excludedTagIds,
+            excludedSectionIds: test.excludedSectionIds,
+          }}
           editMode={userHasTestLocked}
-          updateContextTargeting={contextTargeting => updateTest({ ...test, contextTargeting })}
+          updateContextTargeting={updateContextTargeting}
           onlyShowExcludedTags={true}
         />
       </div>
@@ -229,16 +245,14 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
           onRegionsUpdate={onRegionsChange}
           selectedCohort={test.userCohort}
           onCohortChange={onCohortChange}
+          showDeviceTypeSelector={false}
           selectedDeviceType={test.deviceType ?? 'All'} // TODO: need to find a way to remove.
           onDeviceTypeChange={onDeviceTypeChange} // TODO: need to find a way to remove.
           isDisabled={!userHasTestLocked}
           showSupporterStatusSelector={true}
-          showDeviceTypeSelector={false} // TODO: check this hides the device options
           showSignedInStatusSelector={true}
-          // selectedSignedInStatus={test.signedInStatus}
           onSignedInStatusChange={onSignedInStatusChange} // TODO: needed? If not, need to find a way to remove?
           showConsentStatusSelector={false}
-          // selectedConsentStatus={test.consentStatus} // optional but why is the below not?
           onConsentStatusChange={onConsentChange} // TODO: need to find a way to remove.
         />
       </div>

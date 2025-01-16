@@ -26,15 +26,16 @@ case class GutterTest( // TODO: remove inappropriate ones.
     nickname: Option[String],
     userCohort: UserCohort,
     locations: List[Region] = Nil,
-    contextTargeting: PageContextTargeting = PageContextTargeting(Nil,Nil,Nil,Nil),
+    tagIds: List[String] = Nil,
+    sectionIds: List[String] = Nil,
+    excludedTagIds: List[String] = Nil,
+    excludedSectionIds: List[String] = Nil,    
     variants: List[GutterVariant],
-    // articlesViewedSettings: Option[ArticlesViewedSettings] = None,
     controlProportionSettings: Option[ControlProportionSettings] = None,
     deviceType: Option[DeviceType] = None,
     campaignName: Option[String] = Some("NOT_IN_CAMPAIGN"),
     signedInStatus: Option[SignedInStatus] = Some(SignedInStatus.All),
     consentStatus: Option[ConsentStatus] = Some(ConsentStatus.All),
-    // deploySchedule: Option[BannerTestDeploySchedule] = None,
     methodologies: List[Methodology] = defaultMethodologies
 )extends ChannelTest[GutterTest] {
 

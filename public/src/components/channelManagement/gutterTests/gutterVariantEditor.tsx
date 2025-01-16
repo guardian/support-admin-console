@@ -71,7 +71,7 @@ interface VariantContentEditorProps {
 // TODO: fix this data.
 interface FormData {
   image: Image;
-  bodyCopy: string;
+  bodyCopy: string[];
   cta?: Cta;
 }
 
@@ -177,7 +177,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
         </Typography>
 
         <Controller
-          name="bodyContent"
+          name="copy"
           control={control}
           rules={{
             required: true,
@@ -193,12 +193,12 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                       errors.bodyCopy.message || errors.bodyCopy.type
                     : getParagraphsHelperText()
                 }
-                copyData={variant.value}
+                copyData={validatedFields.bodyCopy} // TODO: test whether this changes properly or always resets.
                 updateCopy={pars => {
                   variant.onChange(pars);
                   handleSubmit(setValidatedFields)();
                 }}
-                name="body copy"
+                name="copy"
                 label="Body copy"
                 disabled={!editMode}
                 rteMenuConstraints={{
