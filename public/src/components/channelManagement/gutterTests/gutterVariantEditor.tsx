@@ -183,7 +183,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
             required: true,
             validate: (pars: string) => getEmptyParagraphError(pars),
           }}
-          render={data => {
+          render={variant => {
             return (
               <RichTextEditor
                 error={errors.bodyCopy !== undefined || copyLength > recommendedLength}
@@ -193,14 +193,23 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                       errors.bodyCopy.message || errors.bodyCopy.type
                     : getParagraphsHelperText()
                 }
-                copyData={data.value}
+                copyData={variant.value}
                 updateCopy={pars => {
-                  data.onChange(pars);
+                  variant.onChange(pars);
                   handleSubmit(setValidatedFields)();
                 }}
                 name="body copy"
                 label="Body copy"
                 disabled={!editMode}
+                rteMenuConstraints={{
+                  // noHtml, // TODO: do we need to do anything with this?
+                  noCurrencyTemplate: true,
+                  noCountryNameTemplate: true,
+                  noArticleCountTemplate: true,
+                  noPriceTemplates: true,
+                  noDateTemplate: true,
+                  noDayTemplate: true,
+                }}
               />
             );
           }}

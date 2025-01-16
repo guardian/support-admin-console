@@ -140,7 +140,6 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
     onVariantsChange([...test.variants, newVariant]);
   };
 
-  // if (test) {
   return (
     <div className={classes.container}>
       <div className={classes.sectionContainer}>
@@ -163,7 +162,7 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
           />
         </div>
       </div>
-
+      {/* TODO: Do we want to remove the methodologies section to just leave AB tests? */}
       <div className={classes.sectionContainer}>
         <Typography variant={'h3'} className={classes.sectionHeader}>
           Experiment Methodology
@@ -216,6 +215,7 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
           contextTargeting={test.contextTargeting} // TODO: need to remove some tag stuff
           editMode={userHasTestLocked}
           updateContextTargeting={contextTargeting => updateTest({ ...test, contextTargeting })}
+          onlyShowExcludedTags={true}
         />
       </div>
 
@@ -244,8 +244,6 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
       </div>
     </div>
   );
-  // }
-  // return null;
 };
 
 export default GutterTestEditor;

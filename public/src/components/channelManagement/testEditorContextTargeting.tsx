@@ -19,12 +19,14 @@ interface TestEditorContextTargetingProps {
   contextTargeting: PageContextTargeting;
   editMode: boolean;
   updateContextTargeting: (contextTargeting: PageContextTargeting) => void;
+  onlyShowExcludedTags?: boolean;
 }
 
 const TestEditorContextTargeting: React.FC<TestEditorContextTargetingProps> = ({
   contextTargeting,
   editMode,
   updateContextTargeting,
+  onlyShowExcludedTags,
 }: TestEditorContextTargetingProps) => {
   const classes = useStyles();
 
@@ -32,23 +34,27 @@ const TestEditorContextTargeting: React.FC<TestEditorContextTargetingProps> = ({
 
   return (
     <div className={classes.container}>
-      <TagsEditor
-        label="Target tags"
-        ids={tagIds}
-        onUpdate={(newTagIds): void => {
-          updateContextTargeting({ ...contextTargeting, tagIds: newTagIds });
-        }}
-        disabled={!editMode}
-      />
+      {!onlyShowExcludedTags && (
+        <TagsEditor
+          label="Target tags"
+          ids={tagIds}
+          onUpdate={(newTagIds): void => {
+            updateContextTargeting({ ...contextTargeting, tagIds: newTagIds });
+          }}
+          disabled={!editMode}
+        />
+      )}
 
-      <SectionsEditor
-        label="Target sections"
-        ids={sectionIds}
-        onUpdate={(newSectionIds): void => {
-          updateContextTargeting({ ...contextTargeting, sectionIds: newSectionIds });
-        }}
-        disabled={!editMode}
-      />
+      {!onlyShowExcludedTags && (
+        <SectionsEditor
+          label="Target sections"
+          ids={sectionIds}
+          onUpdate={(newSectionIds): void => {
+            updateContextTargeting({ ...contextTargeting, sectionIds: newSectionIds });
+          }}
+          disabled={!editMode}
+        />
+      )}
 
       <TagsEditor
         label="Excluded tags"
@@ -59,17 +65,19 @@ const TestEditorContextTargeting: React.FC<TestEditorContextTargetingProps> = ({
         disabled={!editMode}
       />
 
-      <SectionsEditor
-        label="Excluded sections"
-        ids={excludedSectionIds}
-        onUpdate={(newExcludedSectionIds): void => {
-          updateContextTargeting({
-            ...contextTargeting,
-            excludedSectionIds: newExcludedSectionIds,
-          });
-        }}
-        disabled={!editMode}
-      />
+      {!onlyShowExcludedTags && (
+        <SectionsEditor
+          label="Excluded sections"
+          ids={excludedSectionIds}
+          onUpdate={(newExcludedSectionIds): void => {
+            updateContextTargeting({
+              ...contextTargeting,
+              excludedSectionIds: newExcludedSectionIds,
+            });
+          }}
+          disabled={!editMode}
+        />
+      )}
     </div>
   );
 };
