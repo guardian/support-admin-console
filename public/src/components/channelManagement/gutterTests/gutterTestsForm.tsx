@@ -12,6 +12,6 @@ const createDefaultGutterAskTest = (newTestName: string, newTestNickName: string
 
 export const GutterTestsForm = TestsForm(
   ValidatedTestEditor(GutterTestEditor),
-  FrontendSettingsType.gutterTests,
+  FrontendSettingsType.gutterLiveblogTests,
   createDefaultGutterAskTest,
 );
