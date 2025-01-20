@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Checkbox, FormControlLabel, FormGroup, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import {Region, regions, regionIds, europeanCountries} from '../../utils/models';
+import { Region, regions, regionIds, europeanCountries } from '../../utils/models';
 import { TestPlatform } from './helpers/shared';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
@@ -88,7 +88,8 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
                 onChange={onSingleRegionChange}
                 value={region}
                 disabled={
-                  isDisabled || (europeanCountries.includes(region) && selectedRegions.includes('EURCountries'))
+                  isDisabled ||
+                  (europeanCountries.includes(region) && selectedRegions.includes('EURCountries'))
                 }
               />
             }
