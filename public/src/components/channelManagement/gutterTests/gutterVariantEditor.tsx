@@ -4,7 +4,11 @@ import useValidation from '../hooks/useValidation';
 import { makeStyles } from '@mui/styles';
 import { Theme, Typography } from '@mui/material';
 import VariantCtasEditor from './variantCtasEditor';
-import { EMPTY_ERROR_HELPER_TEXT, getEmptyParagraphError } from '../helpers/validation';
+import {
+  EMPTY_ERROR_HELPER_TEXT,
+  getEmptyParagraphsError,
+  templateValidatorForPlatform,
+} from '../helpers/validation';
 import { Cta, Image } from '../helpers/shared';
 import { Controller, useForm } from 'react-hook-form';
 import { getRteCopyLength, RichTextEditor } from '../richTextEditor/richTextEditor';
@@ -61,18 +65,16 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
 const BODY_COPY_RECOMMENDED_LENGTH = 200;
 const BODY_DEFAULT_HELPER_TEXT = 'Main gutter message paragraph';
 
+interface FormData {
+  image: Image;
+  bodyCopy: string[];
+  cta?: Cta;
+}
 interface VariantContentEditorProps {
   variant: GutterContent;
   onVariantChange: (updatedContent: GutterContent) => void;
   onValidationChange: (isValid: boolean) => void;
   editMode: boolean;
-}
-
-// TODO: fix this data.
-interface FormData {
-  image: Image;
-  bodyCopy: string[];
-  cta?: Cta;
 }
 
 const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
@@ -103,6 +105,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
     }
     return `${BODY_DEFAULT_HELPER_TEXT} (${recommendedLength} chars)`;
   };
+  const templateValidator = templateValidatorForPlatform('DOTCOM');
 
   const defaultValues: FormData = {
     image: variant.image,
@@ -181,9 +184,11 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
           control={control}
           rules={{
             required: true,
-            validate: (pars: string) => getEmptyParagraphError(pars),
+            validate: (paras: string[]) =>
+              getEmptyParagraphsError(paras) ??
+              paras.map(templateValidator).find((result: string | undefined) => !!result),
           }}
-          render={variant => {
+          render={data => {
             return (
               <RichTextEditor
                 error={errors.bodyCopy !== undefined || copyLength > recommendedLength}
@@ -193,9 +198,9 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                       errors.bodyCopy.message || errors.bodyCopy.type
                     : getParagraphsHelperText()
                 }
-                copyData={validatedFields.bodyCopy} // TODO: test whether this changes properly or always resets.
-                updateCopy={pars => {
-                  variant.onChange(pars);
+                copyData={data.value} // TODO: test whether this changes properly or always resets.
+                updateCopy={paras => {
+                  data.onChange(paras);
                   handleSubmit(setValidatedFields)();
                 }}
                 name="copy"
