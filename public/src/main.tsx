@@ -194,7 +194,7 @@ const AppRouter = () => {
             element={createComponent(<BannerDeployDashboard />, 'Banner Deploy')}
           />
           <Route
-            path="/liveblog-gutter-tests/:testName?"
+            path="/gutter-liveblog-tests/:testName?"
             element={createComponent(<GutterTestsForm />, 'Liveblog Gutter Tests')}
           />
           <Route
