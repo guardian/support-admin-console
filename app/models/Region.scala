@@ -16,4 +16,5 @@ object Region extends Enum[Region] with CirceEnum[Region] {
   case object International extends Region
   case object NZDCountries extends Region
   case object Canada extends Region
+  case object Germany extends Region
 }

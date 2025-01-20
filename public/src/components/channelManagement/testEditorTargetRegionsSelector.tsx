@@ -35,14 +35,23 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
 
   const onSingleRegionChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const checked = event.target.checked;
-    const changedRegion = event.target.value;
+    const changedRegion = event.target.value as Region;
+
+    let updatedRegions = [...selectedRegions];
 
     if (checked) {
-      onRegionsUpdate([...selectedRegions, changedRegion as Region]);
+      updatedRegions.push(changedRegion);
+      if (changedRegion === 'EURCountries' && !updatedRegions.includes('Germany')) {
+        updatedRegions.push('Germany');
+      }
     } else {
-      const regionIndex = selectedRegions.indexOf(changedRegion as Region);
-      onRegionsUpdate(selectedRegions.filter((_, index) => index !== regionIndex));
+      updatedRegions = updatedRegions.filter(region => region !== changedRegion);
+      if (changedRegion === 'Germany' && updatedRegions.includes('EURCountries')) {
+        updatedRegions = updatedRegions.filter(region => region !== 'EURCountries');
+      }
     }
+
+    onRegionsUpdate(updatedRegions);
   };
 
   const checkLabelByChannel = (platform: TestPlatform | undefined, region: Region) => {
@@ -74,7 +83,8 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
                 checked={selectedRegions.includes(region)}
                 onChange={onSingleRegionChange}
                 value={region}
-                disabled={isDisabled}
+                disabled={isDisabled || (region === 'Germany' && selectedRegions.includes('EURCountries'))
+                }
               />
             }
             label={checkLabelByChannel(platform, region)}
