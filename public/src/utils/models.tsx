@@ -15,6 +15,8 @@ export const contributionIds = Object.keys(contributionTypes);
 
 export type ContributionType = keyof typeof contributionTypes;
 
+export const europeanCountries = ['Germany', 'Ireland', 'France', 'Netherlands', 'Switzerland' ];
+
 // This object should match the `CountryGroupId` type in the `support-dotcom-components` repo, file `packages/shared/src/lib/geolocation.ts`
 export const regions: CommonStringObject = {
   AUDCountries: 'AUD Countries',
@@ -24,7 +26,10 @@ export const regions: CommonStringObject = {
   GBPCountries: 'GBP Countries',
   UnitedStates: 'United States',
   International: 'International',
-  Germany: 'Germany',
+  ...europeanCountries.reduce((acc, country) => {
+    acc[country] = country;
+    return acc;
+  }, {} as CommonStringObject),
 };
 
 export const regionIds = Object.keys(regions);
