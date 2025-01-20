@@ -187,9 +187,9 @@ export default function NavDrawer(): React.ReactElement {
           </ListItem>
         </Link>
         {showGutterAsk && (
-          <Link key="Gutter" to="/gutter-tests" className={classes.link}>
-            <ListItem className={classes.listItem} button key="Gutter Ask">
-              <ListItemText primary="Gutter Ask" />
+          <Link key="LiveblogGutter" to="/liveblog-gutter-tests" className={classes.link}>
+            <ListItem className={classes.listItem} button key="Liveblog Gutter">
+              <ListItemText primary="Liveblog Gutter Ask" />
             </ListItem>
           </Link>
         )}

@@ -12,7 +12,7 @@ import zio.ZEnv
 import scala.concurrent.ExecutionContext
 
 object GutterTestsController {
-  val name = "gutter-tests"
+  val name = "liveblog-gutter-tests"
 }
 
 class GutterTestsController(
