@@ -83,7 +83,8 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
                 checked={selectedRegions.includes(region)}
                 onChange={onSingleRegionChange}
                 value={region}
-                disabled={isDisabled || (region === 'Germany' && selectedRegions.includes('EURCountries'))
+                disabled={
+                  isDisabled || (region === 'Germany' && selectedRegions.includes('EURCountries'))
                 }
               />
             }
