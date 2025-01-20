@@ -3,6 +3,7 @@ import {
   Cta,
   DeviceType,
   Image,
+  PageContextTargeting,
   Status,
   Test,
   UserCohort,
@@ -27,10 +28,7 @@ export interface GutterTest extends Test {
   userCohort: UserCohort;
   locations: Region[];
   variants: GutterVariant[];
-  tagIds: string[];
-  sectionIds: string[];
-  excludedTagIds: string[];
-  excludedSectionIds: string[];
+  contextTargeting: PageContextTargeting;
   controlProportionSettings?: ControlProportionSettings;
   deviceType: DeviceType; // TODO: find a way of removing this later.
 }
