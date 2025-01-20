@@ -33,6 +33,8 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
     onRegionsUpdate(event.target.checked ? allRegions : []);
   };
 
+  const europeanCountries = ['Germany'];
+
   const onSingleRegionChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const checked = event.target.checked;
     const changedRegion = event.target.value as Region;
@@ -41,12 +43,16 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
 
     if (checked) {
       updatedRegions.push(changedRegion);
-      if (changedRegion === 'EURCountries' && !updatedRegions.includes('Germany')) {
-        updatedRegions.push('Germany');
+      if (changedRegion === 'EURCountries') {
+        europeanCountries.forEach(country => {
+          if (!updatedRegions.includes(country)) {
+            updatedRegions.push(country);
+          }
+        });
       }
     } else {
       updatedRegions = updatedRegions.filter(region => region !== changedRegion);
-      if (changedRegion === 'Germany' && updatedRegions.includes('EURCountries')) {
+      if (europeanCountries.includes(changedRegion) && updatedRegions.includes('EURCountries')) {
         updatedRegions = updatedRegions.filter(region => region !== 'EURCountries');
       }
     }
