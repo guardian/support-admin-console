@@ -2,8 +2,6 @@ package services
 
 import com.typesafe.scalalogging.StrictLogging
 import io.circe.{Decoder, Encoder}
-import models.GroupedVariantViews.VariantName
-import models.{Channel, GroupedVariantViews, VariantViews}
 import services.AthenaError.{AthenaError, AthenaQueryFailed, AthenaResultPending}
 import zio.blocking.effectBlocking
 import zio.{ZEnv, ZIO}
@@ -126,36 +124,6 @@ class Athena() extends StrictLogging {
       .map(_.queryExecutionId())
   }
 
-  private def startVariantViewsQuery(from: String, to: String, channel: String, testName: String): ZIO[ZEnv, AthenaError, QueryExecutionId] = {
-    logger.info(s"Querying athena")
-
-    val query =
-      s"""
-         |SELECT date_hour, ab.variant, COUNT(*) AS views
-         |FROM acquisition.epic_views_prod, UNNEST(abtests) t(ab)
-         |WHERE date_hour >= TIMESTAMP '$from' AND date_hour < TIMESTAMP '$to'
-         |AND ab.name = ?
-         |GROUP BY 1,2 ORDER BY 1,2
-    """
-
-    val request = StartQueryExecutionRequest
-      .builder()
-      .queryString(
-        query.stripMargin
-      )
-      .executionParameters(testName)
-      .queryExecutionContext(queryExecutionContext)
-      .resultConfiguration(resultConfiguration)
-      .build()
-
-    effectBlocking(client.startQueryExecution(request))
-      .mapError(err => {
-        logger.error(s"Query failed with: ${err.getMessage}")
-        AthenaQueryFailed(err)
-      })
-      .map(_.queryExecutionId())
-  }
-
   // Repeatedly checks the status of the query execution until it either succeeds or fails
   private def pollQueryResult(queryExecutionId: String): ZIO[ZEnv, AthenaError, QueryExecutionId] =
     effectBlocking {
@@ -212,29 +180,4 @@ class Athena() extends StrictLogging {
       })
       .tapError(error => ZIO.succeed(logger.error(s"Athena error: ${error.getMessage}")))
       .tap(result => ZIO.succeed(logger.info(s"Athena result: ${result.length}")))
-
-  def getVariantViews(from: String, to: String, channel: String, testName: String): ZIO[ZEnv, Throwable, List[GroupedVariantViews]] = {
-    startVariantViewsQuery(from, to, channel, testName)
-      .flatMap(pollQueryResult)
-      .flatMap(getQueryResult)
-      .map(rows => {
-        rows
-          .flatMap(row => {
-            val variantViews = VariantViews.parse(row)
-            if (variantViews.isEmpty) {
-              logger.error(s"Failed to parse row from athena: $row")
-            }
-            variantViews
-          })
-          .groupBy(variantViews => variantViews.dateHour)
-          .map { case (dateHour, variantViewsList) => dateHour -> {
-            val viewCounts = variantViewsList.foldLeft(Map.empty[VariantName,Int])((acc, variantViews) => acc + (variantViews.name -> variantViews.views))
-            GroupedVariantViews(dateHour, viewCounts)
-          }}
-          .values.toList
-          .sortBy(_.dateHour)
-      })
-      .tapError(error => ZIO.succeed(logger.error(s"Athena error: ${error.getMessage}")))
-      .tap(result => ZIO.succeed(logger.info(s"Athena result: $result")))
-  }
 }
