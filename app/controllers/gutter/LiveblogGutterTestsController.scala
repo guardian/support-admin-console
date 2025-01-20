@@ -11,11 +11,11 @@ import zio.ZEnv
 
 import scala.concurrent.ExecutionContext
 
-object GutterTestsController {
+object LiveblogGutterTestsController {
   val name = "liveblog-gutter-tests"
 }
 
-class GutterTestsController(
+class LiveblogGutterTestsController(
   authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
   components: ControllerComponents,
   stage: String,
@@ -26,8 +26,8 @@ class GutterTestsController(
   authAction,
   components,
   stage,
-  lockFileName = GutterTestsController.name,
-  channel = Channel.Gutter,
+  lockFileName = LiveblogGutterTestsController.name,
+  channel = Channel.LiveblogGutter,
   runtime = runtime,
   dynamoTests,
   dynamoArchivedTests
