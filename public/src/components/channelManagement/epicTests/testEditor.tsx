@@ -35,7 +35,6 @@ import { useStyles } from '../helpers/testEditorStyles';
 import { EpicTestPreviewButton } from './testPreview';
 import { ValidatedTestEditor, ValidatedTestEditorProps } from '../validatedTestEditor';
 import { TestEditorProps } from '../testsForm';
-import { AnalyticsButton } from '../AnalyticsButton';
 import { TestMethodologyEditor } from '../TestMethodologyEditor';
 
 const copyHasTemplate = (test: EpicTest, template: string): boolean =>
@@ -240,9 +239,6 @@ export const getEpicTestEditor = (
               </Typography>
               <div className={classes.variantsHeaderButtonsContainer}>
                 <EpicTestPreviewButton test={test} moduleName={epicEditorConfig.moduleName} />
-                {epicEditorConfig.allowAnalyticsButton && (
-                  <AnalyticsButton test={test} channel={'Epic'} />
-                )}
               </div>
             </div>
             <div>
