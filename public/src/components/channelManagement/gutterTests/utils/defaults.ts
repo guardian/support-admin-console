@@ -53,10 +53,7 @@ const DEV_AND_CODE_DEFAULT_GUTTER_TEST: GutterTest = {
   userCohort: UserCohort.AllNonSupporters,
   locations: [],
   variants: [DEV_AND_CODE_DEFAULT_VARIANT],
-  tagIds: [], // tags must include one of these
-  sectionIds: [], // section must be one of these
-  excludedTagIds: [], // tags must not include one of these
-  excludedSectionIds: [], // section must not be one of these
+  contextTargeting: { tagIds: [], sectionIds: [], excludedTagIds: [], excludedSectionIds: [] },
   methodologies: [{ name: 'ABTest' }],
   campaignName: '',
   deviceType: 'Desktop',
@@ -69,10 +66,7 @@ const PROD_DEFAULT_GUTTER_TEST: GutterTest = {
   userCohort: UserCohort.AllNonSupporters,
   locations: [],
   variants: [],
-  tagIds: [], // tags must include one of these
-  sectionIds: [], // section must be one of these
-  excludedTagIds: [], // tags must not include one of these
-  excludedSectionIds: [], // section must not be one of these
+  contextTargeting: { tagIds: [], sectionIds: [], excludedTagIds: [], excludedSectionIds: [] },
   methodologies: [{ name: 'ABTest' }],
   campaignName: '',
   deviceType: 'Desktop',

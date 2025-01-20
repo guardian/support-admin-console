@@ -78,10 +78,7 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
   const updateContextTargeting = (contextTargeting: PageContextTargeting): void => {
     updateTest({
       ...test,
-      tagIds: contextTargeting.tagIds,
-      sectionIds: contextTargeting.sectionIds,
-      excludedTagIds: contextTargeting.excludedTagIds,
-      excludedSectionIds: contextTargeting.excludedSectionIds,
+      contextTargeting,
     });
   };
 
@@ -223,15 +220,9 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
         </Typography>
 
         <TestEditorContextTargeting
-          contextTargeting={{
-            tagIds: test.tagIds,
-            sectionIds: test.sectionIds,
-            excludedTagIds: test.excludedTagIds,
-            excludedSectionIds: test.excludedSectionIds,
-          }}
+          contextTargeting={test.contextTargeting}
           editMode={userHasTestLocked}
           updateContextTargeting={updateContextTargeting}
-          onlyShowExcludedTags={true}
         />
       </div>
 
