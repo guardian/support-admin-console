@@ -19,6 +19,7 @@ interface TestEditorContextTargetingProps {
   contextTargeting: PageContextTargeting;
   editMode: boolean;
   updateContextTargeting: (contextTargeting: PageContextTargeting) => void;
+  onlyShowExcludedTags?: boolean;
 }
 
 const TestEditorContextTargeting: React.FC<TestEditorContextTargetingProps> = ({

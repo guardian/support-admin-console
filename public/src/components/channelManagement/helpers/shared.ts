@@ -7,7 +7,7 @@ export interface Variant {
 
 export type TestPlatform = 'AMP' | 'APPLE_NEWS' | 'DOTCOM';
 
-export type TestType = 'EPIC' | 'BANNER' | 'HEADER';
+export type TestType = 'EPIC' | 'BANNER' | 'GUTTER' | 'HEADER';
 
 export type EpicModuleName = 'ContributionsEpic' | 'ContributionsLiveblogEpic';
 

@@ -15,6 +15,7 @@ import {
   BannerTestsForm1,
   BannerTestsForm2,
 } from './components/channelManagement/bannerTests/bannerTestsForm';
+import { GutterTestsForm } from './components/channelManagement/gutterTests/gutterTestsForm';
 
 import { HeaderTestsForm } from './components/channelManagement/headerTests/headerTestsForm';
 
@@ -191,6 +192,10 @@ const AppRouter = () => {
           <Route
             path="/banner-deploy"
             element={createComponent(<BannerDeployDashboard />, 'Banner Deploy')}
+          />
+          <Route
+            path="/gutter-liveblog-tests/:testName?"
+            element={createComponent(<GutterTestsForm />, 'Liveblog Gutter Tests')}
           />
           <Route
             path="/channel-switches"

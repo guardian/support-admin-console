@@ -30,6 +30,9 @@ GET /banner-tests2/:name                            controllers.Application.inde
 GET /banner-deploy                                  controllers.Application.index
 GET /channel-switches                               controllers.Application.index
 
+GET /gutter-liveblog-tests                                  controllers.Application.index
+GET /gutter-liveblog-tests/:name                            controllers.Application.indexWithName(name: String)
+
 GET /campaigns                                      controllers.Application.index
 GET /campaigns/:name                                controllers.Application.indexWithName(name: String)
 
@@ -186,6 +189,22 @@ POST  /frontend/banner-deploy/update                   controllers.banner.Banner
 # ----- banner deploys ----- #
 GET   /frontend/banner-deploy2                         controllers.banner.BannerDeployController2.get
 POST  /frontend/banner-deploy2/update                  controllers.banner.BannerDeployController2.set
+
+# ----- Gutter channel tests ----- #
+GET   /frontend/gutter-liveblog-tests                            controllers.gutter.GutterLiveblogTestsController.get
+# gutter list endpoints
+POST  /frontend/gutter-liveblog-tests/list/lock                  controllers.gutter.GutterLiveblogTestsController.lockList
+POST  /frontend/gutter-liveblog-tests/list/unlock                controllers.gutter.GutterLiveblogTestsController.unlockList
+POST  /frontend/gutter-liveblog-tests/list/takecontrol           controllers.gutter.GutterLiveblogTestsController.takeControlOfList
+POST  /frontend/gutter-liveblog-tests/list/reorder               controllers.gutter.GutterLiveblogTestsController.reorderList
+# gutter test endpoints
+GET   /frontend/gutter-liveblog-tests/test/:testName             controllers.gutter.GutterLiveblogTestsController.getTest(testName: String)
+POST  /frontend/gutter-liveblog-tests/test/update                controllers.gutter.GutterLiveblogTestsController.updateTest
+POST  /frontend/gutter-liveblog-tests/test/create                controllers.gutter.GutterLiveblogTestsController.createTest
+POST  /frontend/gutter-liveblog-tests/test/lock/:testName        controllers.gutter.GutterLiveblogTestsController.lockTest(testName: String)
+POST  /frontend/gutter-liveblog-tests/test/unlock/:testName      controllers.gutter.GutterLiveblogTestsController.unlockTest(testName: String)
+POST  /frontend/gutter-liveblog-tests/test/takecontrol/:testName controllers.gutter.GutterLiveblogTestsController.forceLockTest(testName: String)
+POST  /frontend/gutter-liveblog-tests/test/status/:rawStatus     controllers.gutter.GutterLiveblogTestsController.setStatus(rawStatus: String)
 
 # ----- channel switches ----- #
 GET   /frontend/channel-switches                       controllers.ChannelSwitchesController.get
