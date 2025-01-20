@@ -31,7 +31,7 @@ type SwitchName =
   | 'enableHardcodedEpicTests'
   | 'enableHardcodedBannerTests'
   | 'enableScheduledBannerDeploys'
-  | 'enableGutters';
+  | 'enableGutterLiveblogs';
 
 type ChannelSwitches = {
   [key in SwitchName]: boolean;
@@ -131,9 +131,9 @@ const ChannelSwitches: React.FC<InnerProps<ChannelSwitches>> = ({
         setSwitch={onSwitchChange}
       />
       <ChannelSwitch
-        name="enableGutters"
-        label="Enable Gutters"
-        enabled={switches.enableGutters}
+        name="enableGutterLiveblogs"
+        label="Enable Gutter Liveblogs"
+        enabled={switches.enableGutterLiveblogs}
         setSwitch={onSwitchChange}
       />
 
