@@ -24,6 +24,7 @@ export const regions: CommonStringObject = {
   GBPCountries: 'GBP Countries',
   UnitedStates: 'United States',
   International: 'International',
+  Germany: 'Germany',
 };
 
 export const regionIds = Object.keys(regions);
