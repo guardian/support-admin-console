@@ -65,7 +65,7 @@ const PROD_DEFAULT_GUTTER_TEST: GutterTest = {
   status: 'Draft',
   userCohort: UserCohort.AllNonSupporters,
   locations: [],
-  variants: [],
+  variants: [PROD_DEFAULT_VARIANT],
   contextTargeting: { tagIds: [], sectionIds: [], excludedTagIds: [], excludedSectionIds: [] },
   methodologies: [{ name: 'ABTest' }],
   campaignName: '',
