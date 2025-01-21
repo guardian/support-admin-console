@@ -1,12 +1,16 @@
 import { Cta, SecondaryCtaType, UserCohort } from '../../helpers/shared';
 
 import { getStage } from '../../../../utils/stage';
-import { EpicTest, EpicVariant, MaxEpicViews } from '../../../../models/epic';
+import { EpicTest, EpicVariant, MaxEpicViews, RegionTargetingType } from '../../../../models/epic';
 
 export const DEFAULT_MAX_EPIC_VIEWS: MaxEpicViews = {
   maxViewsCount: 4,
   maxViewsDays: 30,
   minDaysBetweenViews: 0,
+};
+export const DEFAULT_TARGETING_TYPE: RegionTargetingType = {
+  locations: [],
+  targetedCountries: [],
 };
 
 export const DEFAULT_PRIMARY_CTA: Cta = {
@@ -61,6 +65,8 @@ const DEV_AND_CODE_DEFAULT_TEST: EpicTest = {
   nickname: 'TEST',
   status: 'Draft',
   locations: [],
+  targetedCountries: [],
+  targetingType: DEFAULT_TARGETING_TYPE,
   tagIds: [],
   sections: [],
   excludedTagIds: [],
@@ -80,6 +86,8 @@ const PROD_DEFAULT_TEST: EpicTest = {
   nickname: 'TEST',
   status: 'Draft',
   locations: [],
+  targetedCountries: [],
+  targetingType: DEFAULT_TARGETING_TYPE,
   tagIds: [],
   sections: [],
   excludedTagIds: [],

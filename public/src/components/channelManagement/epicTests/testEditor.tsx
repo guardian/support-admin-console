@@ -151,7 +151,10 @@ export const getEpicTestEditor = (
     };
 
     const onRegionsChange = (updatedRegions: Region[]): void => {
-      updateTest({ ...test, locations: updatedRegions });
+      updateTest({ ...test, locations: updatedRegions }); // TODO change to targetingType
+    };
+    const onCountriesChange = (updatedCountries: string[]): void => {
+      updateTest({ ...test, targetedCountries: updatedCountries });
     };
 
     const onCohortChange = (updatedCohort: UserCohort): void => {
@@ -350,6 +353,8 @@ export const getEpicTestEditor = (
             <TestEditorTargetAudienceSelector
               selectedRegions={test.locations}
               onRegionsUpdate={onRegionsChange}
+              selectedCountries={test.targetedCountries} //TODO
+              onCountriesUpdate={onCountriesChange} //TODO
               selectedCohort={test.userCohort}
               onCohortChange={onCohortChange}
               supportedRegions={epicEditorConfig.supportedRegions}

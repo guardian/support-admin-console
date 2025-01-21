@@ -12,6 +12,7 @@ import {
 
 import TestEditorTargetRegionsSelector from './testEditorTargetRegionsSelector';
 import TypedRadioGroup from './TypedRadioGroup';
+import MultiSelectCountryEditor from './MultiSelectCountryEditor';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
@@ -29,6 +30,8 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
 interface TestEditorTargetAudienceSelectorProps {
   selectedRegions: Region[];
   onRegionsUpdate: (selectedRegions: Region[]) => void;
+  selectedCountries?: string[];
+  onCountriesUpdate?: (selectedCountries: string[]) => void;
   selectedCohort: UserCohort;
   onCohortChange: (updatedCohort: UserCohort) => void;
   supportedRegions?: Region[];
@@ -48,6 +51,8 @@ interface TestEditorTargetAudienceSelectorProps {
 const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelectorProps> = ({
   selectedRegions,
   onRegionsUpdate,
+  selectedCountries,
+  onCountriesUpdate,
   selectedCohort,
   onCohortChange,
   supportedRegions,
@@ -75,6 +80,12 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
         supportedRegions={supportedRegions}
         isDisabled={isDisabled}
         platform={platform}
+      />
+
+      <MultiSelectCountryEditor
+        disabled={isDisabled}
+        selectedCountries={selectedCountries}
+        onCountriesUpdate={onCountriesUpdate}
       />
 
       {showSupporterStatusSelector && (
