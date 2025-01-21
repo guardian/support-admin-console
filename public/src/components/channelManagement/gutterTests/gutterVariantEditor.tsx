@@ -180,7 +180,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
         </Typography>
 
         <Controller
-          name="copy"
+          name="bodyCopy"
           control={control}
           rules={{
             required: true,
@@ -198,7 +198,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                       errors.bodyCopy.message || errors.bodyCopy.type
                     : getParagraphsHelperText()
                 }
-                copyData={data.value} // TODO: test whether this changes properly or always resets.
+                copyData={data.value}
                 updateCopy={paras => {
                   data.onChange(paras);
                   handleSubmit(setValidatedFields)();
