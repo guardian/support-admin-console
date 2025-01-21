@@ -246,7 +246,6 @@ GET   /frontend/super-mode                             controllers.SuperModeCont
 GET   /frontend/epic-article-data                      controllers.SuperModeController.getArticleData()
 
 # ----- analytics ----- #
-GET   /frontend/analytics/:channel/:testName           controllers.AnalyticsController.getDataForVariants(channel: String, testName: String)
 GET   /frontend/bandit/:channel/:testName              controllers.BanditDataController.getDataForTest(channel: String, testName: String)
 
 # Map static resources from the /public folder to the /assets URL path
