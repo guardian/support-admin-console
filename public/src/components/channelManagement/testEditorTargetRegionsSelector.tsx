@@ -79,23 +79,27 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
         label={'All supported regions'}
       />
       <FormGroup className={classes.indentedContainer}>
-        {allRegions.map(region => (
-          <FormControlLabel
-            key={region}
-            control={
-              <Checkbox
-                checked={selectedRegions.includes(region)}
-                onChange={onSingleRegionChange}
-                value={region}
-                disabled={
-                  isDisabled ||
-                  (europeanCountries.includes(region) && selectedRegions.includes('EURCountries'))
-                }
-              />
-            }
-            label={checkLabelByChannel(platform, region)}
-          />
-        ))}
+        {allRegions.map(region => {
+          const isExtraIndented = europeanCountries.includes(region);
+          return (
+            <FormControlLabel
+              key={region}
+              className={isExtraIndented ? classes.indentedContainer : ''}
+              control={
+                <Checkbox
+                  checked={selectedRegions.includes(region)}
+                  onChange={onSingleRegionChange}
+                  value={region}
+                  disabled={
+                    isDisabled ||
+                    (europeanCountries.includes(region) && selectedRegions.includes('EURCountries'))
+                  }
+                />
+              }
+              label={checkLabelByChannel(platform, region)}
+            />
+          );
+        })}
       </FormGroup>
     </FormGroup>
   );

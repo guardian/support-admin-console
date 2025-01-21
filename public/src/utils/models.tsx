@@ -22,14 +22,14 @@ export const regions: CommonStringObject = {
   AUDCountries: 'AUD Countries',
   Canada: 'CN Countries',
   EURCountries: 'EUR Countries',
-  NZDCountries: 'NZD Countries',
-  GBPCountries: 'GBP Countries',
-  UnitedStates: 'United States',
-  International: 'International',
   ...europeanCountries.reduce((acc, country) => {
     acc[country] = country;
     return acc;
   }, {} as CommonStringObject),
+  NZDCountries: 'NZD Countries',
+  GBPCountries: 'GBP Countries',
+  UnitedStates: 'United States',
+  International: 'International',
 };
 
 export const regionIds = Object.keys(regions);
