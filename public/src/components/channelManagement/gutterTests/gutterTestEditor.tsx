@@ -4,7 +4,6 @@ import { Region } from '../../../utils/models';
 import {
   ConsentStatus,
   DeviceType,
-  Methodology,
   PageContextTargeting,
   SignedInStatus,
   UserCohort,
@@ -21,7 +20,6 @@ import GutterVariantPreview from './gutterVariantPreview';
 import { useStyles } from '../helpers/testEditorStyles';
 import VariantSummary from '../../tests/variants/variantSummary';
 import VariantsEditor from '../../tests/variants/variantsEditor';
-import { TestMethodologyEditor } from '../TestMethodologyEditor';
 import TestVariantsSplitEditor from '../../tests/variants/testVariantsSplitEditor';
 import VariantEditorWithPreviewTab from '../../tests/variants/variantEditorWithPreviewTab';
 import { GutterTestPreviewButton } from './gutterTestPreview';
@@ -45,11 +43,6 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
       ...test,
       campaignName: campaign,
     });
-  };
-
-  const onMethodologyChange = (methodologies: Methodology[]): void => {
-    setValidationStatusForField('methodologies', methodologies.length > 0);
-    updateTest({ ...test, methodologies });
   };
 
   const onVariantsSplitSettingsValidationChanged = (isValid: boolean): void =>
@@ -170,20 +163,6 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
           />
         </div>
       </div>
-      {/* TODO: Do we want to remove the methodologies section to just leave AB tests? */}
-      <div className={classes.sectionContainer}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
-          Experiment Methodology
-        </Typography>
-        <TestMethodologyEditor
-          methodologies={test.methodologies}
-          testName={test.name}
-          channel={test.channel ?? ''}
-          isDisabled={!userHasTestLocked || test.status === 'Live'}
-          onChange={onMethodologyChange}
-        />
-      </div>
-
       {test.variants.length > 1 && (
         <div className={classes.sectionContainer}>
           <Typography variant={'h3'} className={classes.sectionHeader}>
@@ -237,14 +216,15 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
           selectedCohort={test.userCohort}
           onCohortChange={onCohortChange}
           showDeviceTypeSelector={false}
-          selectedDeviceType={test.deviceType ?? 'All'} // TODO: need to find a way to remove.
-          onDeviceTypeChange={onDeviceTypeChange} // TODO: need to find a way to remove.
+          selectedDeviceType={test.deviceType ?? 'All'} // can't remove but hidden anyway.
+          onDeviceTypeChange={onDeviceTypeChange} // can't remove but hidden anywat.
           isDisabled={!userHasTestLocked}
           showSupporterStatusSelector={true}
           showSignedInStatusSelector={true}
-          onSignedInStatusChange={onSignedInStatusChange} // TODO: needed? If not, need to find a way to remove?
+          selectedSignedInStatus={test.signedInStatus}
+          onSignedInStatusChange={onSignedInStatusChange}
           showConsentStatusSelector={false}
-          onConsentStatusChange={onConsentChange} // TODO: need to find a way to remove.
+          onConsentStatusChange={onConsentChange} // can't remove but hidden anyway
         />
       </div>
     </div>
