@@ -23,8 +23,6 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
       "GuDynamoDBReadPolicy",
       "GuDynamoDBReadPolicy",
       "GuDynamoDBReadPolicy",
-      "GuAllowPolicy",
-      "GuAllowPolicy",
       "GuVpcParameter",
       "GuSubnetListParameter",
       "GuSubnetListParameter",
@@ -101,32 +99,6 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
     },
   },
   "Resources": {
-    "AcquisitionsBucket8EA032AA": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": "s3:*",
-              "Effect": "Allow",
-              "Resource": [
-                "arn:aws:s3:::acquisition-events/*",
-                "arn:aws:s3:::acquisition-events",
-                "arn:aws:s3:::gu-support-analytics/*",
-                "arn:aws:s3:::gu-support-analytics",
-              ],
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "AcquisitionsBucket8EA032AA",
-        "Roles": [
-          {
-            "Ref": "InstanceRoleAdminconsole347DA627",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
     "AlbSsmParam485C1D52": {
       "Properties": {
         "DataType": "text",
@@ -284,30 +256,6 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
       },
       "Type": "AWS::DynamoDB::Table",
       "UpdateReplacePolicy": "Retain",
-    },
-    "AthenaOutputBucket826361ED": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": "s3:*",
-              "Effect": "Allow",
-              "Resource": [
-                "arn:aws:s3:::gu-support-analytics/*",
-                "arn:aws:s3:::gu-support-analytics",
-              ],
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "AthenaOutputBucket826361ED",
-        "Roles": [
-          {
-            "Ref": "InstanceRoleAdminconsole347DA627",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
     },
     "AutoScalingGroupAdminconsoleASG0A6020EA": {
       "Properties": {
@@ -1822,20 +1770,6 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
           ],
           "Version": "2012-10-17",
         },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/AmazonAthenaFullAccess",
-              ],
-            ],
-          },
-        ],
         "Path": "/",
         "Tags": [
           {

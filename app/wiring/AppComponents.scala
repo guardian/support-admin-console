@@ -12,7 +12,7 @@ import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.mvc.AnyContent
 import play.api.{BuiltInComponentsFromContext, NoHttpFiltersComponents}
 import router.Routes
-import services.{Athena, Aws, CapiService, DynamoArchivedBannerDesigns, DynamoArchivedChannelTests, DynamoBanditData, DynamoBannerDesigns, DynamoCampaigns, DynamoChannelTests, DynamoSuperMode, S3}
+import services.{Aws, CapiService, DynamoArchivedBannerDesigns, DynamoArchivedChannelTests, DynamoBanditData, DynamoBannerDesigns, DynamoCampaigns, DynamoChannelTests, DynamoSuperMode, S3}
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.s3.model.GetObjectRequest
 
@@ -75,7 +75,6 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
   val dynamoCampaignsService = new DynamoCampaigns(stage, dynamoClient)
 
   val dynamoSuperModeService = new DynamoSuperMode(dynamoClient)
-  val athena = new Athena()
 
   val dynamoBannerDesigns = new DynamoBannerDesigns(stage, dynamoClient)
   val dynamoArchivedBannerDesigns = new DynamoArchivedBannerDesigns(stage, dynamoClient)
@@ -106,7 +105,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     new CapiController(authAction, capiService),
     new AppsMeteringSwitchesController(authAction, controllerComponents, stage, runtime),
     new DefaultPromosController(authAction,controllerComponents, stage, runtime),
-    new SuperModeController(authAction, controllerComponents, stage, runtime, dynamoSuperModeService, athena),
+    new SuperModeController(authAction, controllerComponents, stage, runtime, dynamoSuperModeService),
     new BanditDataController(authAction, controllerComponents, stage, runtime, dynamoBanditData),
     assets
   )
