@@ -25,6 +25,11 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     color: palette.grey[900],
     fontWeight: 500,
   },
+  container1: {
+    display: 'inline',
+    gap: spacing(12),
+    flexWrap: 'wrap',
+  },
 }));
 
 interface TestEditorTargetAudienceSelectorProps {
@@ -73,21 +78,22 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
 
   return (
     <div className={classes.container}>
-      <Typography className={classes.heading}>Region</Typography>
-      <TestEditorTargetRegionsSelector
-        selectedRegions={selectedRegions}
-        onRegionsUpdate={onRegionsUpdate}
-        supportedRegions={supportedRegions}
-        isDisabled={isDisabled}
-        platform={platform}
-      />
+      <div className={classes.container1}>
+        <Typography className={classes.heading}>Region</Typography>
+        <TestEditorTargetRegionsSelector
+          selectedRegions={selectedRegions}
+          onRegionsUpdate={onRegionsUpdate}
+          supportedRegions={supportedRegions}
+          isDisabled={isDisabled}
+          platform={platform}
+        />
 
-      <MultiSelectCountryEditor
-        disabled={isDisabled}
-        selectedCountries={selectedCountries}
-        onCountriesUpdate={onCountriesUpdate}
-      />
-
+        <MultiSelectCountryEditor
+          disabled={isDisabled}
+          selectedCountries={selectedCountries ?? []}
+          onCountriesUpdate={onCountriesUpdate ?? (() => {})}
+        />
+      </div>
       {showSupporterStatusSelector && (
         <>
           <Typography className={classes.heading}>Supporter Status</Typography>

@@ -45,6 +45,7 @@ export interface BannerTest extends Test {
   status: Status;
   userCohort: UserCohort;
   locations: Region[];
+  targetedCountries?: string[];
   variants: BannerVariant[];
   articlesViewedSettings?: ArticlesViewedSettings;
   controlProportionSettings?: ControlProportionSettings;

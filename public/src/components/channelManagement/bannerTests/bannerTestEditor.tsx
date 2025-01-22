@@ -135,6 +135,10 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
     updateTest({ ...test, locations: updatedRegions });
   };
 
+  const onCountriesChange = (updatedCountries: string[]): void => {
+    updateTest({ ...test, targetedCountries: updatedCountries });
+  };
+
   const onCohortChange = (updatedCohort: UserCohort): void => {
     updateTest({ ...test, userCohort: updatedCohort });
   };
@@ -297,6 +301,8 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
           <TestEditorTargetAudienceSelector
             selectedRegions={test.locations}
             onRegionsUpdate={onRegionsChange}
+            selectedCountries={test.targetedCountries}
+            onCountriesUpdate={onCountriesChange}
             selectedCohort={test.userCohort}
             onCohortChange={onCohortChange}
             selectedDeviceType={test.deviceType ?? 'All'}

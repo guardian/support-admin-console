@@ -44,18 +44,12 @@ export interface MaxEpicViews {
   minDaysBetweenViews: number;
 }
 
-export interface RegionTargetingType {
-  locations?: Region[];
-  targetedCountries?: string[];
-}
-
 export interface EpicTest extends Test {
   name: string;
   nickname?: string;
   status: Status;
   locations: Region[];
-  targetedCountries: string[];
-  targetingType?: RegionTargetingType;
+  targetedCountries?: string[];
   tagIds: string[];
   sections: string[];
   excludedTagIds: string[];

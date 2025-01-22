@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import { makeStyles } from '@mui/styles';
 import { grey } from '@mui/material/colors';
 import { Theme } from '@mui/material/styles';
-import { countryNames, Region } from '../../utils/models';
+import { countryNames } from '../../utils/models';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {

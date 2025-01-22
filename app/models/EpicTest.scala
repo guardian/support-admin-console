@@ -47,7 +47,6 @@ case class EpicTest(
   nickname: Option[String],
   locations: List[Region] = Nil,
   targetedCountries: List[String] = Nil,
-  regionTargetingType : Option[RegionTargetingType] = None,
   tagIds: List[String] = Nil,
   sections: List[String] = Nil,
   excludedTagIds: List[String] = Nil,
