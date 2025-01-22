@@ -62,7 +62,7 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   },
 }));
 
-const BODY_COPY_RECOMMENDED_LENGTH = 200;
+const BODY_COPY_RECOMMENDED_LENGTH = 300;
 const BODY_DEFAULT_HELPER_TEXT = 'Main gutter message paragraph';
 
 interface FormData {
@@ -101,7 +101,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
       return EMPTY_ERROR_HELPER_TEXT;
     }
     if (copyLength > recommendedLength) {
-      return `This copy is longer than the recommended length (${recommendedLength} chars). Please preview across breakpoints before publishing.`;
+      return `This copy is longer than the recommended length (${recommendedLength} chars). Please preview before publishing.`;
     }
     return `${BODY_DEFAULT_HELPER_TEXT} (${recommendedLength} chars)`;
   };
@@ -207,7 +207,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                 label="Body copy"
                 disabled={!editMode}
                 rteMenuConstraints={{
-                  // noHtml, // TODO: do we need to do anything with this?
+                  noHtml: true,
                   noCurrencyTemplate: true,
                   noCountryNameTemplate: true,
                   noArticleCountTemplate: true,
