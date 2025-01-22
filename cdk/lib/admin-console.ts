@@ -16,7 +16,7 @@ import { AttributeType, BillingMode, ProjectionType, Table } from 'aws-cdk-lib/a
 import { InstanceClass, InstanceSize, InstanceType } from 'aws-cdk-lib/aws-ec2';
 import {ApplicationListenerRule, ListenerAction, ListenerCondition} from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import type { Policy } from 'aws-cdk-lib/aws-iam';
-import { AccountPrincipal, ManagedPolicy, Role } from 'aws-cdk-lib/aws-iam';
+import { AccountPrincipal, Role } from 'aws-cdk-lib/aws-iam';
 import { ParameterDataType, ParameterTier, StringParameter } from 'aws-cdk-lib/aws-ssm';
 
 export interface AdminConsoleProps extends GuStackProps {
@@ -261,19 +261,6 @@ export class AdminConsole extends GuStack {
       new GuDynamoDBReadPolicy(this, `DynamoRead-bandit-data`, {
         tableName: `support-bandit-${this.stage}`,
       }),
-      new GuAllowPolicy(this, 'AthenaOutputBucket', {
-        actions: ['s3:*'],
-        resources: [`arn:aws:s3:::gu-support-analytics/*`, `arn:aws:s3:::gu-support-analytics`],
-      }),
-      new GuAllowPolicy(this, 'AcquisitionsBucket', {
-        actions: ['s3:*'],
-        resources: [
-          `arn:aws:s3:::acquisition-events/*`,
-          `arn:aws:s3:::acquisition-events`,
-          `arn:aws:s3:::gu-support-analytics/*`,
-          `arn:aws:s3:::gu-support-analytics`,
-        ],
-      }),
     ];
 
     const ec2App = new GuEc2App(this, {
@@ -321,10 +308,6 @@ export class AdminConsole extends GuStack {
           'Unsupported http method',
       }),
     });
-
-    ec2App.autoScalingGroup.role.addManagedPolicy(
-      ManagedPolicy.fromAwsManagedPolicyName('AmazonAthenaFullAccess'),
-    );
 
     new GuCname(this, 'cname', {
       app,
