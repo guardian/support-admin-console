@@ -2030,6 +2030,7 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
                 "arn:aws:s3:::gu-contributions-public/epic/PROD/*",
                 "arn:aws:s3:::gu-contributions-public/banner/PROD/*",
                 "arn:aws:s3:::gu-contributions-public/header/PROD/*",
+                "arn:aws:s3:::gu-contributions-public/gutter/PROD/*",
               ],
             },
           ],
