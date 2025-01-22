@@ -71,7 +71,6 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   },
 }));
 
-const HEADER_DEFAULT_HELPER_TEXT = 'Assistive text';
 const BODY_DEFAULT_HELPER_TEXT = 'Main banner message paragraph';
 const HIGHTLIGHTED_TEXT_HELPER_TEXT = 'Final sentence of body copy';
 
@@ -223,11 +222,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
             return (
               <RichTextEditorSingleLine
                 error={errors.heading !== undefined}
-                helperText={
-                  errors.heading
-                    ? errors.heading.message || errors.heading.type
-                    : HEADER_DEFAULT_HELPER_TEXT
-                }
+                helperText={errors.heading ? errors.heading.message || errors.heading.type : ''}
                 copyData={data.value}
                 updateCopy={pars => {
                   data.onChange(pars);
