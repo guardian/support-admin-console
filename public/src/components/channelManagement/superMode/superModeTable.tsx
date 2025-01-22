@@ -34,7 +34,7 @@ export const SuperModeTable: React.FC<SuperModeTableProps> = ({ rows }: SuperMod
       field: 'totalAcquisitions',
       headerName: 'Acquisitions',
       type: 'number',
-      width: 100,
+      width: 120,
     },
   ];
 
