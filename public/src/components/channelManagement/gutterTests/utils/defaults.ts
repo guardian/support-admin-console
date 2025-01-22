@@ -7,7 +7,7 @@ export const DEFAULT_PRIMARY_CTA: Cta = {
   baseUrl: 'https://support.theguardian.com/contribute',
 };
 
-export const DEFAULT_IMAGE_URL = 'https://TODO'; // upload existing SVG and add to google with uploader.
+export const DEFAULT_IMAGE_URL = 'https://uploads.guim.co.uk/2025/01/22/not_for_sale.svg';
 export const DEFAULT_IMAGE_ALT = 'Not for Sale';
 
 const DEV_AND_CODE_DEFAULT_VARIANT: GutterVariant = {

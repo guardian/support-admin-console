@@ -170,7 +170,9 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
           isDisabled={!editMode}
           onValidationChange={onValidationChange}
           label={'Image - appears above copy instead of a heading.'}
-          guidance={'Ratio should be TBC?, file format should be SVG.'}
+          guidance={
+            'The viewbox needs dimensions of 0, 0, 150, 100 and the file format should be SVG. The background colour will be Guardian blue.'
+          }
         />
       </div>
 
