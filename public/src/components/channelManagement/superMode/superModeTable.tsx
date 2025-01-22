@@ -18,6 +18,24 @@ export const SuperModeTable: React.FC<SuperModeTableProps> = ({ rows }: SuperMod
       type: 'number',
       width: 100,
     },
+    {
+      field: 'totalViews',
+      headerName: 'Views',
+      type: 'number',
+      width: 100,
+    },
+    {
+      field: 'totalAv',
+      headerName: '£AV',
+      type: 'number',
+      width: 100,
+    },
+    {
+      field: 'totalAcquisitions',
+      headerName: 'Acquisitions',
+      type: 'number',
+      width: 100,
+    },
   ];
 
   return (
