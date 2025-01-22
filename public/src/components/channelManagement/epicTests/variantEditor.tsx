@@ -73,7 +73,6 @@ const getUseStyles = (shouldAddPadding: boolean) => {
 
 const PARAGRAPHS_MAX_LENGTH = 2000;
 
-const HEADER_DEFAULT_HELPER_TEXT = `Assitive text`;
 const BODY_DEFAULT_HELPER_TEXT = `Maximum ${PARAGRAPHS_MAX_LENGTH} characters.`;
 const HIGHTLIGHTED_TEXT_DEFAULT_HELPER_TEXT = `Final sentence of body copy.`;
 
@@ -239,11 +238,7 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
             return (
               <RichTextEditorSingleLine
                 error={errors.heading !== undefined}
-                helperText={
-                  errors.heading
-                    ? errors.heading.message || errors.heading.type
-                    : HEADER_DEFAULT_HELPER_TEXT
-                }
+                helperText={errors.heading ? errors.heading.message || errors.heading.type : ''}
                 copyData={data.value}
                 updateCopy={value => {
                   data.onChange(value);
