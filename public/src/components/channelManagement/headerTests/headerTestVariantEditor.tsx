@@ -47,9 +47,6 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   },
 }));
 
-const HEADING_DEFAULT_HELPER_TEXT = 'Heading assitive text';
-const SUBHEADING_DEFAULT_HELPER_TEXT = 'Subheading assitive text';
-
 const HEADING_COPY_RECOMMENDED_LENGTH = 50;
 const SUBHEADING_COPY_RECOMMENDED_LENGTH = 50;
 
@@ -133,7 +130,7 @@ const HeaderTestVariantContentEditor: React.FC<HeaderTestVariantContentEditorPro
               <TextField
                 inputRef={register({ validate: templateValidator })}
                 error={errors.heading !== undefined}
-                helperText={errors.heading ? errors.heading.message : HEADING_DEFAULT_HELPER_TEXT}
+                helperText={errors.heading ? errors.heading.message : ''}
                 onBlur={handleSubmit(onSubmit)}
                 name="heading"
                 label="Heading"
@@ -154,9 +151,7 @@ const HeaderTestVariantContentEditor: React.FC<HeaderTestVariantContentEditorPro
               <TextField
                 inputRef={register({ validate: templateValidator })}
                 error={errors.subheading !== undefined}
-                helperText={
-                  errors.subheading ? errors.subheading.message : SUBHEADING_DEFAULT_HELPER_TEXT
-                }
+                helperText={errors.subheading ? errors.subheading.message : ''}
                 onBlur={handleSubmit(onSubmit)}
                 name="subheading"
                 label="Sub-heading"
