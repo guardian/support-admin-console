@@ -30,5 +30,5 @@ export interface GutterTest extends Test {
   variants: GutterVariant[];
   contextTargeting: PageContextTargeting;
   controlProportionSettings?: ControlProportionSettings;
-  deviceType: DeviceType; // TODO: find a way of removing this later.
+  deviceType: DeviceType;
 }

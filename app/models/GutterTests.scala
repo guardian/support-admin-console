@@ -17,7 +17,7 @@ case class GutterVariant(
     gutterContent: Option[GutterContent],
 )
 
-case class GutterTest( // TODO: remove inappropriate ones.
+case class GutterTest( 
     name: String,
     channel: Option[Channel],
     status: Option[Status],
