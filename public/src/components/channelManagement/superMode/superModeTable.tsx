@@ -4,13 +4,9 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
 interface SuperModeTableProps {
   rows: SuperModeRow[];
-  setSelectedRow: (row: SuperModeRow) => void;
 }
 
-export const SuperModeTable: React.FC<SuperModeTableProps> = ({
-  rows,
-  setSelectedRow,
-}: SuperModeTableProps) => {
+export const SuperModeTable: React.FC<SuperModeTableProps> = ({ rows }: SuperModeTableProps) => {
   const columns: GridColDef[] = [
     { field: 'url', headerName: 'Article', flex: 1 },
     { field: 'region', headerName: 'Region', width: 120 },
@@ -22,6 +18,24 @@ export const SuperModeTable: React.FC<SuperModeTableProps> = ({
       type: 'number',
       width: 100,
     },
+    {
+      field: 'totalViews',
+      headerName: 'Views',
+      type: 'number',
+      width: 100,
+    },
+    {
+      field: 'totalAv',
+      headerName: '£AV',
+      type: 'number',
+      width: 100,
+    },
+    {
+      field: 'totalAcquisitions',
+      headerName: 'Acquisitions',
+      type: 'number',
+      width: 120,
+    },
   ];
 
   return (
@@ -32,10 +46,6 @@ export const SuperModeTable: React.FC<SuperModeTableProps> = ({
         columns={columns}
         pageSize={10}
         rowsPerPageOptions={[10]}
-        onRowDoubleClick={params => {
-          const row = params.row as SuperModeRow;
-          setSelectedRow(row);
-        }}
       />
     </div>
   );

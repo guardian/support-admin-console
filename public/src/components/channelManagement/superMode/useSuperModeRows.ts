@@ -6,6 +6,7 @@ export interface SuperModeRow {
   startTimestamp: string;
   endTimestamp: string;
   avPerView: number;
+  totalAcquisitions?: number;
 }
 
 export const useSuperModeRows = (): SuperModeRow[] => {

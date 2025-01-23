@@ -224,7 +224,6 @@ POST  /support-frontend/default-promos/update              controllers.DefaultPr
 
 # ----- super mode ----- #
 GET   /frontend/super-mode                             controllers.SuperModeController.getSuperModeRows()
-GET   /frontend/epic-article-data                      controllers.SuperModeController.getArticleData()
 
 # ----- analytics ----- #
 GET   /frontend/bandit/:channel/:testName              controllers.BanditDataController.getDataForTest(channel: String, testName: String)
