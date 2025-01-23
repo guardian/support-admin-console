@@ -286,7 +286,7 @@ export const TestMethodologyEditor: React.FC<TestMethodologyEditorProps> = ({
 
       {methodologies.map((method, idx) => (
         <TestMethodology
-          key={`methodology-${idx}`}
+          key={`methodology-${testName}-${idx}`}
           methodology={method}
           testName={testName}
           channel={channel}
