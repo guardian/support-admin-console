@@ -261,6 +261,9 @@ export class AdminConsole extends GuStack {
       new GuDynamoDBReadPolicy(this, `DynamoRead-bandit-data`, {
         tableName: `support-bandit-${this.stage}`,
       }),
+      new GuDynamoDBReadPolicy(this, `DynamoRead-support-admin-console-archived-channel-tests`, {
+        tableName: `support-admin-console-archived-channel-tests-${this.stage}`,
+      }),
     ];
 
     const ec2App = new GuEc2App(this, {

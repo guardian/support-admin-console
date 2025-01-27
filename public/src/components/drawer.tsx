@@ -201,6 +201,12 @@ export default function NavDrawer(): React.ReactElement {
             <span className={classes.super}>🎨</span>
           </ListItem>
         </Link>
+        <Link key="Archived Tests" to="/archived-tests" className={classes.link}>
+          <ListItem className={classes.listItem} button key="Archived Tests">
+            <ListItemText primary="Archived Tests" />
+            <span className={classes.super}>🎨</span>
+          </ListItem>
+        </Link>
       </div>
 
       <div>
