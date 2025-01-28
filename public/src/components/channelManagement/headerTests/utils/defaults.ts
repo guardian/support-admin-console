@@ -1,4 +1,4 @@
-import { Cta, RegionTargeting, UserCohort } from "../../helpers/shared";
+import { Cta, RegionTargeting, UserCohort } from '../../helpers/shared';
 import { HeaderTest, HeaderVariant } from '../../../../models/header';
 
 import { getStage } from '../../../../utils/stage';
