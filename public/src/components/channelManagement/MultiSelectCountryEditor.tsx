@@ -5,6 +5,7 @@ import { makeStyles } from '@mui/styles';
 import { grey } from '@mui/material/colors';
 import { Theme } from '@mui/material/styles';
 import { countryNames } from '../../utils/models';
+import { RegionTargeting } from './helpers/shared';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -30,14 +31,14 @@ const options: Option[] = countryNames.map(id => ({
 
 interface MultiselectAutocompleteProps {
   disabled: boolean;
-  selectedCountries?: string[];
-  onCountriesUpdate: (selectedCountries: string[]) => void;
+  regionTargeting: RegionTargeting;
+  onRegionTargetingUpdate: (regionTargeting: RegionTargeting) => void;
 }
 
 const MultiselectAutocomplete: React.FC<MultiselectAutocompleteProps> = ({
   disabled,
-  selectedCountries,
-  onCountriesUpdate,
+  regionTargeting,
+  onRegionTargetingUpdate,
 }: MultiselectAutocompleteProps) => {
   const classes = useStyles();
 
@@ -54,7 +55,7 @@ const MultiselectAutocomplete: React.FC<MultiselectAutocompleteProps> = ({
         disabled={disabled}
         options={options}
         getOptionLabel={option => option.label}
-        value={selectedCountries?.map(country => {
+        value={regionTargeting.targetedCountries?.map(country => {
           const option = options.find(option => option.value === country);
           return option
             ? { label: country, value: option.value }
@@ -93,7 +94,10 @@ const MultiselectAutocomplete: React.FC<MultiselectAutocompleteProps> = ({
         }}
         onChange={(event, values: Option[], reason): void => {
           if (reason === 'selectOption' || reason === 'removeOption') {
-            onCountriesUpdate(values.map(value => value.label));
+            onRegionTargetingUpdate({
+              ...regionTargeting,
+              targetedCountries: values.map(value => value.label),
+            });
             setInputValue('');
           }
         }}

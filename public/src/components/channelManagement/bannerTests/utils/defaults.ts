@@ -1,4 +1,4 @@
-import { Cta, UserCohort } from '../../helpers/shared';
+import { Cta, RegionTargeting, UserCohort } from '../../helpers/shared';
 import { BannerTest, BannerVariant } from '../../../../models/banner';
 
 import { getStage } from '../../../../utils/stage';
@@ -44,13 +44,18 @@ export const getDefaultVariant = (): BannerVariant => {
   return PROD_DEFAULT_VARIANT;
 };
 
+export const DEFAULT_REGION_TARGETING: RegionTargeting = {
+  targetedRegions: [],
+  targetedCountries: [],
+};
+
 const DEV_AND_CODE_DEFAULT_BANNER_TEST: BannerTest = {
   name: 'TEST',
   nickname: 'TEST',
   status: 'Draft',
   userCohort: UserCohort.AllNonSupporters,
   locations: [],
-  targetedCountries: [],
+  regionTargeting: DEFAULT_REGION_TARGETING,
   variants: [DEV_AND_CODE_DEFAULT_VARIANT],
   articlesViewedSettings: undefined,
   contextTargeting: { tagIds: [], sectionIds: [], excludedTagIds: [], excludedSectionIds: [] },
@@ -63,7 +68,7 @@ const PROD_DEFAULT_BANNER: BannerTest = {
   status: 'Draft',
   userCohort: UserCohort.AllNonSupporters,
   locations: [],
-  targetedCountries: [],
+  regionTargeting: DEFAULT_REGION_TARGETING,
   variants: [],
   articlesViewedSettings: undefined,
   contextTargeting: { tagIds: [], sectionIds: [], excludedTagIds: [], excludedSectionIds: [] },

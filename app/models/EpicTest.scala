@@ -46,7 +46,7 @@ case class EpicTest(
   priority: Option[Int],
   nickname: Option[String],
   locations: List[Region] = Nil,
-  targetedCountries: List[String] = Nil,
+  regionTargeting: Option[RegionTargeting]=None,
   tagIds: List[String] = Nil,
   sections: List[String] = Nil,
   excludedTagIds: List[String] = Nil,

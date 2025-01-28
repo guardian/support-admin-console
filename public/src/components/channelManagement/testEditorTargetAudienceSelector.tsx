@@ -8,8 +8,8 @@ import {
   UserCohort,
   TestPlatform,
   ConsentStatus,
+  RegionTargeting,
 } from './helpers/shared';
-
 import TestEditorTargetRegionsSelector from './testEditorTargetRegionsSelector';
 import TypedRadioGroup from './TypedRadioGroup';
 import MultiSelectCountryEditor from './MultiSelectCountryEditor';
@@ -35,8 +35,8 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
 interface TestEditorTargetAudienceSelectorProps {
   selectedRegions: Region[];
   onRegionsUpdate: (selectedRegions: Region[]) => void;
-  selectedCountries?: string[];
-  onCountriesUpdate?: (selectedCountries: string[]) => void;
+  regionTargeting: RegionTargeting;
+  onRegionTargetingUpdate: (regionTargeting: RegionTargeting) => void;
   selectedCohort: UserCohort;
   onCohortChange: (updatedCohort: UserCohort) => void;
   supportedRegions?: Region[];
@@ -56,8 +56,8 @@ interface TestEditorTargetAudienceSelectorProps {
 const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelectorProps> = ({
   selectedRegions,
   onRegionsUpdate,
-  selectedCountries,
-  onCountriesUpdate,
+  regionTargeting,
+  onRegionTargetingUpdate,
   selectedCohort,
   onCohortChange,
   supportedRegions,
@@ -75,7 +75,7 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
   platform,
 }: TestEditorTargetAudienceSelectorProps) => {
   const classes = useStyles();
-
+  console.log('Step2', regionTargeting);
   return (
     <div className={classes.container}>
       <div className={classes.container1}>
@@ -83,6 +83,8 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
         <TestEditorTargetRegionsSelector
           selectedRegions={selectedRegions}
           onRegionsUpdate={onRegionsUpdate}
+          regionTargeting={regionTargeting}
+          onRegionTargetingUpdate={onRegionTargetingUpdate}
           supportedRegions={supportedRegions}
           isDisabled={isDisabled}
           platform={platform}
@@ -90,8 +92,8 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
 
         <MultiSelectCountryEditor
           disabled={isDisabled}
-          selectedCountries={selectedCountries ?? []}
-          onCountriesUpdate={onCountriesUpdate ?? (() => {})}
+          regionTargeting={regionTargeting}
+          onRegionTargetingUpdate={onRegionTargetingUpdate}
         />
       </div>
       {showSupporterStatusSelector && (

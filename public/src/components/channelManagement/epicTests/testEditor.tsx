@@ -10,6 +10,7 @@ import {
   PageContextTargeting,
   ConsentStatus,
   Methodology,
+  RegionTargeting,
 } from '../helpers/shared';
 import { FormControlLabel, Switch, Typography } from '@mui/material';
 import CampaignSelector from '../CampaignSelector';
@@ -54,6 +55,7 @@ export const getEpicTestEditor = (
     setValidationStatusForField,
   }: ValidatedTestEditorProps<EpicTest>) => {
     const classes = useStyles();
+    console.log('Step1', test.regionTargeting);
 
     const onMaxViewsValidationChange = (isValid: boolean): void =>
       setValidationStatusForField('maxViews', isValid);
@@ -153,8 +155,9 @@ export const getEpicTestEditor = (
     const onRegionsChange = (updatedRegions: Region[]): void => {
       updateTest({ ...test, locations: updatedRegions });
     };
-    const onCountriesChange = (updatedCountries: string[]): void => {
-      updateTest({ ...test, targetedCountries: updatedCountries });
+
+    const onRegionTargetingChange = (updatedRegionTargeting: RegionTargeting): void => {
+      updateTest({ ...test, regionTargeting: updatedRegionTargeting });
     };
 
     const onCohortChange = (updatedCohort: UserCohort): void => {
@@ -353,8 +356,10 @@ export const getEpicTestEditor = (
             <TestEditorTargetAudienceSelector
               selectedRegions={test.locations}
               onRegionsUpdate={onRegionsChange}
-              selectedCountries={test.targetedCountries}
-              onCountriesUpdate={onCountriesChange}
+              regionTargeting={
+                test.regionTargeting ?? { targetedRegions: [], targetedCountries: [] }
+              }
+              onRegionTargetingUpdate={onRegionTargetingChange}
               selectedCohort={test.userCohort}
               onCohortChange={onCohortChange}
               supportedRegions={epicEditorConfig.supportedRegions}

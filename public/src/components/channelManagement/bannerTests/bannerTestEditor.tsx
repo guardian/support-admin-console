@@ -5,6 +5,7 @@ import {
   ConsentStatus,
   DeviceType,
   Methodology,
+  RegionTargeting,
   SignedInStatus,
   UserCohort,
 } from '../helpers/shared';
@@ -135,8 +136,8 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
     updateTest({ ...test, locations: updatedRegions });
   };
 
-  const onCountriesChange = (updatedCountries: string[]): void => {
-    updateTest({ ...test, targetedCountries: updatedCountries });
+  const onRegionTargetingChange = (updatedRegionTargeting: RegionTargeting): void => {
+    updateTest({ ...test, regionTargeting: updatedRegionTargeting });
   };
 
   const onCohortChange = (updatedCohort: UserCohort): void => {
@@ -301,8 +302,8 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
           <TestEditorTargetAudienceSelector
             selectedRegions={test.locations}
             onRegionsUpdate={onRegionsChange}
-            selectedCountries={test.targetedCountries}
-            onCountriesUpdate={onCountriesChange}
+            regionTargeting={test.regionTargeting ?? { targetedRegions: [], targetedCountries: [] }}
+            onRegionTargetingUpdate={onRegionTargetingChange}
             selectedCohort={test.userCohort}
             onCohortChange={onCohortChange}
             selectedDeviceType={test.deviceType ?? 'All'}

@@ -12,6 +12,7 @@ import {
   BylineWithImage,
   Variant,
   NewsletterSignup,
+  RegionTargeting,
 } from '../components/channelManagement/helpers/shared';
 import { Region } from '../utils/models';
 import { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';
@@ -49,7 +50,7 @@ export interface EpicTest extends Test {
   nickname?: string;
   status: Status;
   locations: Region[];
-  targetedCountries?: string[];
+  regionTargeting: RegionTargeting;
   tagIds: string[];
   sections: string[];
   excludedTagIds: string[];

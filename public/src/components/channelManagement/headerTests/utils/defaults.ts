@@ -1,4 +1,4 @@
-import { Cta, UserCohort } from '../../helpers/shared';
+import { Cta, RegionTargeting, UserCohort } from "../../helpers/shared";
 import { HeaderTest, HeaderVariant } from '../../../../models/header';
 
 import { getStage } from '../../../../utils/stage';
@@ -39,12 +39,18 @@ export const getDefaultVariant = (): HeaderVariant => {
   return PROD_DEFAULT_VARIANT;
 };
 
+export const DEFAULT_REGION_TARGETING: RegionTargeting = {
+  targetedRegions: [],
+  targetedCountries: [],
+};
+
 const DEV_AND_CODE_DEFAULT_BANNER_TEST: HeaderTest = {
   name: '',
   nickname: '',
   status: 'Draft',
   userCohort: UserCohort.AllNonSupporters,
   locations: [],
+  regionTargeting: DEFAULT_REGION_TARGETING,
   variants: [],
   methodologies: [{ name: 'ABTest' }],
 };
@@ -55,6 +61,7 @@ const PROD_DEFAULT_BANNER: HeaderTest = {
   status: 'Draft',
   userCohort: UserCohort.AllNonSupporters,
   locations: [],
+  regionTargeting: DEFAULT_REGION_TARGETING,
   variants: [],
   methodologies: [{ name: 'ABTest' }],
 };

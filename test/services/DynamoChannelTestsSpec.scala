@@ -38,7 +38,8 @@ class DynamoChannelTestsSpec extends AsyncFlatSpec with Matchers with BeforeAndA
       lockStatus = None,
       priority = priority,
       maxViews = None,
-      variants = Nil
+      variants = Nil,
+      regionTargeting = None,
     )
 
   val epicTests = List(

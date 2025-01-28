@@ -1,7 +1,13 @@
 import React from 'react';
 import { Region } from '../../../utils/models';
 
-import { ConsentStatus, DeviceType, SignedInStatus, UserCohort } from '../helpers/shared';
+import {
+  ConsentStatus,
+  DeviceType,
+  RegionTargeting,
+  SignedInStatus,
+  UserCohort,
+} from '../helpers/shared';
 
 import { Typography } from '@mui/material';
 import HeaderTestVariantEditor from './headerTestVariantEditor';
@@ -59,6 +65,10 @@ const HeaderTestEditor: React.FC<ValidatedTestEditorProps<HeaderTest>> = ({
 
   const onRegionsChange = (updatedRegions: Region[]): void => {
     onTestChange({ ...test, locations: updatedRegions });
+  };
+
+  const onRegionTargetingChange = (updatedRegionTargeting: RegionTargeting): void => {
+    onTestChange({ ...test, regionTargeting: updatedRegionTargeting });
   };
 
   const onCohortChange = (updatedCohort: UserCohort): void => {
@@ -176,6 +186,8 @@ const HeaderTestEditor: React.FC<ValidatedTestEditorProps<HeaderTest>> = ({
         <TestEditorTargetAudienceSelector
           selectedRegions={test.locations}
           onRegionsUpdate={onRegionsChange}
+          regionTargeting={test.regionTargeting ?? { targetedRegions: [], targetedCountries: [] }}
+          onRegionTargetingUpdate={onRegionTargetingChange}
           selectedCohort={test.userCohort}
           onCohortChange={onCohortChange}
           selectedDeviceType={test.deviceType ?? 'All'}

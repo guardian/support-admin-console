@@ -1,4 +1,4 @@
-import { Cta, SecondaryCtaType, UserCohort } from '../../helpers/shared';
+import { Cta, RegionTargeting, SecondaryCtaType, UserCohort } from '../../helpers/shared';
 
 import { getStage } from '../../../../utils/stage';
 import { EpicTest, EpicVariant, MaxEpicViews } from '../../../../models/epic';
@@ -56,12 +56,17 @@ export const getDefaultVariant = (): EpicVariant => {
   return PROD_DEFAULT_VARIANT;
 };
 
+export const DEFAULT_REGION_TARGETING: RegionTargeting = {
+  targetedRegions: [],
+  targetedCountries: [],
+};
+
 const DEV_AND_CODE_DEFAULT_TEST: EpicTest = {
   name: 'TEST',
   nickname: 'TEST',
   status: 'Draft',
   locations: [],
-  targetedCountries: [],
+  regionTargeting: DEFAULT_REGION_TARGETING,
   tagIds: [],
   sections: [],
   excludedTagIds: [],
@@ -81,7 +86,7 @@ const PROD_DEFAULT_TEST: EpicTest = {
   nickname: 'TEST',
   status: 'Draft',
   locations: [],
-  targetedCountries: [],
+  regionTargeting: DEFAULT_REGION_TARGETING,
   tagIds: [],
   sections: [],
   excludedTagIds: [],

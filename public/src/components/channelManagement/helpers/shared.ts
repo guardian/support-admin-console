@@ -41,6 +41,7 @@ export interface Test {
   articlesViewedSettings?: ArticlesViewedSettings;
   variants: Variant[];
   locations: Region[];
+  regionTargeting: RegionTargeting;
   isNew?: boolean; // true if test has not yet been POSTed to backend
   campaignName?: string;
   priority?: number;
@@ -315,3 +316,8 @@ export interface BylineWithImage {
 }
 
 export type SignedInStatus = 'SignedIn' | 'SignedOut' | 'All';
+
+export interface RegionTargeting {
+  targetedRegions: Region[];
+  targetedCountries?: string[];
+}

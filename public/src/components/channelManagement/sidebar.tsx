@@ -85,7 +85,10 @@ function Sidebar<T extends Test>({
     if (userHasTestListLocked || 'ALL' === regionFilter) {
       return testsToFilter;
     }
-    return testsToFilter.filter(t => t.locations.indexOf(regionFilter) >= 0);
+
+    return testsToFilter.filter(
+      t => t.regionTargeting?.targetedRegions?.indexOf(regionFilter) >= 0,
+    );
   };
 
   return (

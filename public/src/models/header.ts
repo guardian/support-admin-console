@@ -5,6 +5,7 @@ import {
   UserCohort,
   DeviceType,
   Status,
+  RegionTargeting,
 } from '../components/channelManagement/helpers/shared';
 import { Region } from '../utils/models';
 import { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';
@@ -28,6 +29,7 @@ export interface HeaderTest extends Test {
   status: Status;
   userCohort: UserCohort;
   locations: Region[];
+  regionTargeting: RegionTargeting;
   variants: HeaderVariant[];
   controlProportionSettings?: ControlProportionSettings;
   deviceType?: DeviceType;
