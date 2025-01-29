@@ -40,7 +40,7 @@ export const getDefaultVariant = (): HeaderVariant => {
 };
 
 export const DEFAULT_REGION_TARGETING: RegionTargeting = {
-  targetedRegions: [],
+  targetedCountryGroups: [],
   targetedCountries: [],
 };
 

@@ -35,7 +35,7 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
 
   const onAllRegionsChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const updatedRegions = event.target.checked ? allRegions : [];
-    const updatedAllRegionTargeting = { ...regionTargeting, targetedRegions: updatedRegions };
+    const updatedAllRegionTargeting = { ...regionTargeting, targetedCountryGroups: updatedRegions };
     onRegionsUpdate(updatedRegions);
     onRegionTargetingUpdate(updatedAllRegionTargeting);
   };
@@ -48,15 +48,15 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
       onRegionsUpdate([...selectedRegions, changedRegion as Region]);
       onRegionTargetingUpdate({
         ...regionTargeting,
-        targetedRegions: [...regionTargeting.targetedRegions, changedRegion as Region],
+        targetedCountryGroups: [...regionTargeting.targetedCountryGroups, changedRegion as Region],
       });
     } else {
       const locationIndex = selectedRegions.indexOf(changedRegion as Region);
       onRegionsUpdate(selectedRegions.filter((_, index) => index !== locationIndex));
-      const regionIndex = regionTargeting.targetedRegions.indexOf(changedRegion as Region);
+      const regionIndex = regionTargeting.targetedCountryGroups.indexOf(changedRegion as Region);
       onRegionTargetingUpdate({
         ...regionTargeting,
-        targetedRegions: regionTargeting.targetedRegions.filter(
+        targetedCountryGroups: regionTargeting.targetedCountryGroups.filter(
           (_, index) => index !== regionIndex,
         ),
       });
@@ -76,7 +76,7 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
         control={
           <Checkbox
             checked={
-              regionTargeting.targetedRegions?.length === allRegions.length ||
+              regionTargeting.targetedCountryGroups?.length === allRegions.length ||
               selectedRegions.length === allRegions.length
             }
             value={'allRegions'}
@@ -93,7 +93,7 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
             control={
               <Checkbox
                 checked={
-                  regionTargeting.targetedRegions.includes(region) ||
+                  regionTargeting.targetedCountryGroups.includes(region) ||
                   selectedRegions.includes(region)
                 }
                 onChange={onSingleRegionChange}

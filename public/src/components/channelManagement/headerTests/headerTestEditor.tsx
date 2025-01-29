@@ -186,7 +186,9 @@ const HeaderTestEditor: React.FC<ValidatedTestEditorProps<HeaderTest>> = ({
         <TestEditorTargetAudienceSelector
           selectedRegions={test.locations}
           onRegionsUpdate={onRegionsChange}
-          regionTargeting={test.regionTargeting ?? { targetedRegions: [], targetedCountries: [] }}
+          regionTargeting={
+            test.regionTargeting ?? { targetedCountryGroups: [], targetedCountries: [] }
+          }
           onRegionTargetingUpdate={onRegionTargetingChange}
           selectedCohort={test.userCohort}
           onCohortChange={onCohortChange}

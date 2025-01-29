@@ -45,7 +45,7 @@ export const getDefaultVariant = (): BannerVariant => {
 };
 
 export const DEFAULT_REGION_TARGETING: RegionTargeting = {
-  targetedRegions: [],
+  targetedCountryGroups: [],
   targetedCountries: [],
 };
 

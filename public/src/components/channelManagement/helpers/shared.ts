@@ -318,6 +318,6 @@ export interface BylineWithImage {
 export type SignedInStatus = 'SignedIn' | 'SignedOut' | 'All';
 
 export interface RegionTargeting {
-  targetedRegions: Region[];
+  targetedCountryGroups: Region[];
   targetedCountries?: string[];
 }

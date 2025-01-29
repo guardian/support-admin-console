@@ -75,7 +75,7 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
   platform,
 }: TestEditorTargetAudienceSelectorProps) => {
   const classes = useStyles();
-  console.log('Step2', regionTargeting);
+
   return (
     <div className={classes.container}>
       <div className={classes.container1}>

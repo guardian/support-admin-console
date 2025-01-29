@@ -1,6 +1,6 @@
 package models
 
 case class RegionTargeting(
-                            targetedRegions: List[Region]= Nil,
+                            targetedCountryGroups: List[Region]= Nil,
                             targetedCountries: Option[List[String]] = None,
                           )

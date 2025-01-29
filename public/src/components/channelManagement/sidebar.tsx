@@ -88,7 +88,7 @@ function Sidebar<T extends Test>({
 
     return testsToFilter.filter(
       t =>
-        t.regionTargeting?.targetedRegions?.indexOf(regionFilter) >= 0 ||
+        t.regionTargeting?.targetedCountryGroups?.indexOf(regionFilter) >= 0 ||
         t.locations.indexOf(regionFilter) >= 0,
     );
   };

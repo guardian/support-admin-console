@@ -55,7 +55,6 @@ export const getEpicTestEditor = (
     setValidationStatusForField,
   }: ValidatedTestEditorProps<EpicTest>) => {
     const classes = useStyles();
-    console.log('Step1', test.regionTargeting);
 
     const onMaxViewsValidationChange = (isValid: boolean): void =>
       setValidationStatusForField('maxViews', isValid);
@@ -357,7 +356,7 @@ export const getEpicTestEditor = (
               selectedRegions={test.locations}
               onRegionsUpdate={onRegionsChange}
               regionTargeting={
-                test.regionTargeting ?? { targetedRegions: [], targetedCountries: [] }
+                test.regionTargeting ?? { targetedCountryGroups: [], targetedCountries: [] }
               }
               onRegionTargetingUpdate={onRegionTargetingChange}
               selectedCohort={test.userCohort}
