@@ -75,7 +75,10 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
       <FormControlLabel
         control={
           <Checkbox
-            checked={regionTargeting.targetedRegions?.length === allRegions.length}
+            checked={
+              regionTargeting.targetedRegions?.length === allRegions.length ||
+              selectedRegions.length === allRegions.length
+            }
             value={'allRegions'}
             onChange={onAllRegionsChange}
             disabled={isDisabled}
@@ -89,7 +92,10 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
             key={region}
             control={
               <Checkbox
-                checked={regionTargeting.targetedRegions.includes(region)}
+                checked={
+                  regionTargeting.targetedRegions.includes(region) ||
+                  selectedRegions.includes(region)
+                }
                 onChange={onSingleRegionChange}
                 value={region}
                 disabled={isDisabled}
