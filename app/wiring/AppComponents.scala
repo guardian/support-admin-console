@@ -6,6 +6,7 @@ import play.api.routing.Router
 import controllers._
 import controllers.banner._
 import controllers.epic._
+import controllers.gutter._
 import play.api.ApplicationLoader.Context
 import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.mvc.AnyContent
@@ -97,6 +98,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     new BannerTestsController2(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoArchivedChannelTests),
     new BannerDeployController(authAction, controllerComponents, stage, runtime),
     new BannerDeployController2(authAction, controllerComponents, stage, runtime),
+    new GutterLiveblogTestsController(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoArchivedChannelTests),
     new ChannelSwitchesController(authAction, controllerComponents, stage, runtime),
     new CampaignsController(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoCampaignsService),
     new BannerDesignsController(authAction, controllerComponents, stage, runtime, dynamoBannerDesigns, dynamoTestsService, dynamoArchivedBannerDesigns),

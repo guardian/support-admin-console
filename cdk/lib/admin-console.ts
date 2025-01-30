@@ -245,6 +245,7 @@ export class AdminConsole extends GuStack {
           `arn:aws:s3:::gu-contributions-public/epic/${this.stage}/*`,
           `arn:aws:s3:::gu-contributions-public/banner/${this.stage}/*`,
           `arn:aws:s3:::gu-contributions-public/header/${this.stage}/*`,
+          `arn:aws:s3:::gu-contributions-public/gutter/${this.stage}/*`,
         ],
       }),
       ...channelTestsDynamoPolicies,
