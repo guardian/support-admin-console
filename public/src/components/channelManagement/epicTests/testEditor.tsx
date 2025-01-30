@@ -81,6 +81,7 @@ export const getEpicTestEditor = (
         // To save dotcom from having to work this out
         hasCountryName: copyHasTemplate(updatedTest, COUNTRY_NAME_TEMPLATE),
         articlesViewedSettings: getArticlesViewedSettings(updatedTest),
+        locations: [], //This is a hack to prevent the test from being saved with the locations field
       });
     };
 
