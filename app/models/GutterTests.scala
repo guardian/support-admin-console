@@ -14,7 +14,7 @@ case class GutterContent(
 
 case class GutterVariant(
     name: String,
-    gutterContent: Option[GutterContent],
+    content: Option[GutterContent],
 )
 
 case class GutterTest( 

@@ -18,7 +18,7 @@ export interface GutterContent {
 }
 
 export interface GutterVariant extends Variant {
-  gutterContent: GutterContent;
+  content: GutterContent;
 }
 
 export interface GutterTest extends Test {

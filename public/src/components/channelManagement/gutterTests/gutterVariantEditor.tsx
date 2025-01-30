@@ -260,9 +260,9 @@ const GutterVariantEditor: React.FC<GutterVariantEditorProps> = ({
     <div className={classes.container}>
       <div className={classes.sectionContainer}>
         <VariantContentEditor
-          variant={variant.gutterContent}
+          variant={variant.content}
           onVariantChange={(updatedContent: GutterContent): void =>
-            onVariantChange({ ...variant, gutterContent: updatedContent })
+            onVariantChange({ ...variant, content: updatedContent })
           }
           onValidationChange={(isValid): void =>
             setValidationStatusForField('mainContent', isValid)
