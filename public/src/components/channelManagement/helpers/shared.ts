@@ -319,5 +319,5 @@ export type SignedInStatus = 'SignedIn' | 'SignedOut' | 'All';
 
 export interface RegionTargeting {
   targetedCountryGroups: Region[];
-  targetedCountries?: string[];
+  targetedCountryCodes?: string[];
 }

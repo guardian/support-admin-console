@@ -58,7 +58,7 @@ export const getDefaultVariant = (): EpicVariant => {
 
 export const DEFAULT_REGION_TARGETING: RegionTargeting = {
   targetedCountryGroups: [],
-  targetedCountries: [],
+  targetedCountryCodes: [],
 };
 
 const DEV_AND_CODE_DEFAULT_TEST: EpicTest = {

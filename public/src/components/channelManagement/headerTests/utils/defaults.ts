@@ -41,7 +41,7 @@ export const getDefaultVariant = (): HeaderVariant => {
 
 export const DEFAULT_REGION_TARGETING: RegionTargeting = {
   targetedCountryGroups: [],
-  targetedCountries: [],
+  targetedCountryCodes: [],
 };
 
 const DEV_AND_CODE_DEFAULT_BANNER_TEST: HeaderTest = {

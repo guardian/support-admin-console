@@ -55,11 +55,9 @@ const MultiselectAutocomplete: React.FC<MultiselectAutocompleteProps> = ({
         disabled={disabled}
         options={options}
         getOptionLabel={option => option.label}
-        value={regionTargeting.targetedCountries?.map(country => {
+        value={regionTargeting.targetedCountryCodes?.map(country => {
           const option = options.find(option => option.value === country);
-          return option
-            ? { label: country, value: option.value }
-            : { label: country, value: country };
+          return option ?? { label: country, value: country };
         })}
         inputValue={inputValue}
         componentsProps={{
@@ -96,7 +94,7 @@ const MultiselectAutocomplete: React.FC<MultiselectAutocompleteProps> = ({
           if (reason === 'selectOption' || reason === 'removeOption') {
             onRegionTargetingUpdate({
               ...regionTargeting,
-              targetedCountries: values.map(value => value.label),
+              targetedCountryCodes: values.map(value => value.value),
             });
             setInputValue('');
           }
