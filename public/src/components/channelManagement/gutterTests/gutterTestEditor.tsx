@@ -5,6 +5,7 @@ import {
   ConsentStatus,
   DeviceType,
   PageContextTargeting,
+  RegionTargeting,
   SignedInStatus,
   UserCohort,
 } from '../helpers/shared';
@@ -77,6 +78,10 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
 
   const onRegionsChange = (updatedRegions: Region[]): void => {
     updateTest({ ...test, locations: updatedRegions });
+  };
+
+  const onRegionTargetingChange = (updatedRegionTargeting: RegionTargeting): void => {
+    updateTest({ ...test, regionTargeting: updatedRegionTargeting });
   };
 
   const onCohortChange = (updatedCohort: UserCohort): void => {
@@ -213,6 +218,10 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
         <TestEditorTargetAudienceSelector
           selectedRegions={test.locations}
           onRegionsUpdate={onRegionsChange}
+          regionTargeting={
+            test.regionTargeting ?? { targetedCountryGroups: [], targetedCountries: [] }
+          }
+          onRegionTargetingUpdate={onRegionTargetingChange}
           selectedCohort={test.userCohort}
           onCohortChange={onCohortChange}
           showDeviceTypeSelector={false}
