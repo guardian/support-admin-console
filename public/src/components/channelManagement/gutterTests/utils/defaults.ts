@@ -11,7 +11,7 @@ export const DEFAULT_IMAGE_URL = 'https://uploads.guim.co.uk/2025/01/22/not_for_
 export const DEFAULT_IMAGE_ALT = 'Not for Sale';
 
 const DEV_AND_CODE_DEFAULT_VARIANT: GutterVariant = {
-  gutterContent: {
+  content: {
     image: {
       mainUrl: DEFAULT_IMAGE_URL,
       altText: DEFAULT_IMAGE_ALT,
@@ -25,7 +25,7 @@ const DEV_AND_CODE_DEFAULT_VARIANT: GutterVariant = {
 };
 
 const PROD_DEFAULT_VARIANT: GutterVariant = {
-  gutterContent: {
+  content: {
     image: {
       mainUrl: DEFAULT_IMAGE_URL,
       altText: DEFAULT_IMAGE_ALT,
