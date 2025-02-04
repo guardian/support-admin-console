@@ -67,8 +67,33 @@ const HeaderTestEditor: React.FC<ValidatedTestEditorProps<HeaderTest>> = ({
     onTestChange({ ...test, locations: updatedRegions });
   };
 
+  function concatUniqueLocations(countryGroups: Region[], locations: Region[]) {
+    //This function is needed , otherwise for existing tests, on selecting All regions for targeting,
+    // the locations field will be added to the targetedCountryGroups field, which ends up in the test having same region multiple times
+    const existingLocations = new Set(countryGroups);
+
+    // Iterate through locations and add only unique ones to countryGroups
+    for (const location of locations) {
+      if (!existingLocations.has(location)) {
+        countryGroups.push(location);
+      }
+    }
+
+    return countryGroups;
+  }
+
   const onRegionTargetingChange = (updatedRegionTargeting: RegionTargeting): void => {
-    onTestChange({ ...test, regionTargeting: updatedRegionTargeting });
+    onTestChange({
+      ...test,
+      regionTargeting: {
+        targetedCountryGroups: concatUniqueLocations(
+          updatedRegionTargeting.targetedCountryGroups,
+          test.locations,
+        ),
+        targetedCountryCodes: updatedRegionTargeting.targetedCountryCodes ?? [],
+      },
+      locations: [],
+    });
   };
 
   const onCohortChange = (updatedCohort: UserCohort): void => {

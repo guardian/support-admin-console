@@ -81,7 +81,6 @@ export const getEpicTestEditor = (
         // To save dotcom from having to work this out
         hasCountryName: copyHasTemplate(updatedTest, COUNTRY_NAME_TEMPLATE),
         articlesViewedSettings: getArticlesViewedSettings(updatedTest),
-        locations: [], //This is a hack to prevent the test from being saved with the locations field
       });
     };
 
@@ -156,8 +155,33 @@ export const getEpicTestEditor = (
       updateTest({ ...test, locations: updatedRegions });
     };
 
+    function concatUniqueLocations(countryGroups: Region[], locations: Region[]) {
+      //This function is needed , otherwise for existing tests, on selecting All regions for targeting,
+      // the locations field will be added to the targetedCountryGroups field, which ends up in the test having same region multiple times
+      const existingLocations = new Set(countryGroups);
+
+      // Iterate through locations and add only unique ones to countryGroups
+      for (const location of locations) {
+        if (!existingLocations.has(location)) {
+          countryGroups.push(location);
+        }
+      }
+
+      return countryGroups;
+    }
+
     const onRegionTargetingChange = (updatedRegionTargeting: RegionTargeting): void => {
-      updateTest({ ...test, regionTargeting: updatedRegionTargeting });
+      updateTest({
+        ...test,
+        regionTargeting: {
+          targetedCountryGroups: concatUniqueLocations(
+            updatedRegionTargeting.targetedCountryGroups,
+            test.locations,
+          ),
+          targetedCountryCodes: updatedRegionTargeting.targetedCountryCodes ?? [],
+        },
+        locations: [], //This is a hack to prevent the test from being saved with the locations field});
+      });
     };
 
     const onCohortChange = (updatedCohort: UserCohort): void => {

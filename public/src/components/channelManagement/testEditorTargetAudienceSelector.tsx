@@ -89,12 +89,13 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
           isDisabled={isDisabled}
           platform={platform}
         />
-
-        <MultiSelectCountryEditor
-          disabled={isDisabled}
-          regionTargeting={regionTargeting}
-          onRegionTargetingUpdate={onRegionTargetingUpdate}
-        />
+        {platform !== 'APPLE_NEWS' && (
+          <MultiSelectCountryEditor
+            disabled={isDisabled}
+            regionTargeting={regionTargeting}
+            onRegionTargetingUpdate={onRegionTargetingUpdate}
+          />
+        )}
       </div>
       {showSupporterStatusSelector && (
         <>
