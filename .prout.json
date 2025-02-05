@@ -1,0 +1,11 @@
+{
+  "checkpoints": {
+    "PROD": {
+      "url": "https://support.gutools.co.uk",
+      "overdue": "30M",
+      "messages": {
+        "seen": "prout/seen.md"
+      }
+    }
+  }
+}
