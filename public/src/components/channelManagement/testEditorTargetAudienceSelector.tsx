@@ -33,8 +33,6 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
 }));
 
 interface TestEditorTargetAudienceSelectorProps {
-  selectedRegions: Region[];
-  onRegionsUpdate: (selectedRegions: Region[]) => void;
   regionTargeting: RegionTargeting;
   onRegionTargetingUpdate: (regionTargeting: RegionTargeting) => void;
   selectedCohort: UserCohort;
@@ -54,8 +52,6 @@ interface TestEditorTargetAudienceSelectorProps {
   platform?: TestPlatform;
 }
 const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelectorProps> = ({
-  selectedRegions,
-  onRegionsUpdate,
   regionTargeting,
   onRegionTargetingUpdate,
   selectedCohort,
@@ -81,8 +77,6 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
       <div className={classes.container1}>
         <Typography className={classes.heading}>Region</Typography>
         <TestEditorTargetRegionsSelector
-          selectedRegions={selectedRegions}
-          onRegionsUpdate={onRegionsUpdate}
           regionTargeting={regionTargeting}
           onRegionTargetingUpdate={onRegionTargetingUpdate}
           supportedRegions={supportedRegions}

@@ -12,8 +12,6 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 }));
 
 interface TestEditorTargetRegionsSelectorProps {
-  selectedRegions: Region[];
-  onRegionsUpdate: (selectedRegions: Region[]) => void;
   regionTargeting: RegionTargeting;
   onRegionTargetingUpdate: (regionTargeting: RegionTargeting) => void;
   supportedRegions?: Region[];
@@ -22,8 +20,6 @@ interface TestEditorTargetRegionsSelectorProps {
 }
 
 const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorProps> = ({
-  selectedRegions,
-  onRegionsUpdate,
   regionTargeting,
   onRegionTargetingUpdate,
   supportedRegions,
@@ -36,7 +32,6 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
   const onAllRegionsChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const updatedRegions = event.target.checked ? allRegions : [];
     const updatedAllRegionTargeting = { ...regionTargeting, targetedCountryGroups: updatedRegions };
-    onRegionsUpdate(updatedRegions);
     onRegionTargetingUpdate(updatedAllRegionTargeting);
   };
 
@@ -45,14 +40,11 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
     const changedRegion = event.target.value;
 
     if (checked) {
-      onRegionsUpdate([...selectedRegions, changedRegion as Region]);
       onRegionTargetingUpdate({
         ...regionTargeting,
         targetedCountryGroups: [...regionTargeting.targetedCountryGroups, changedRegion as Region],
       });
     } else {
-      const locationIndex = selectedRegions.indexOf(changedRegion as Region);
-      onRegionsUpdate(selectedRegions.filter((_, index) => index !== locationIndex));
       const regionIndex = regionTargeting.targetedCountryGroups.indexOf(changedRegion as Region);
       onRegionTargetingUpdate({
         ...regionTargeting,
@@ -75,10 +67,7 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
       <FormControlLabel
         control={
           <Checkbox
-            checked={
-              regionTargeting.targetedCountryGroups?.length === allRegions.length ||
-              selectedRegions.length === allRegions.length
-            }
+            checked={regionTargeting.targetedCountryGroups?.length === allRegions.length}
             value={'allRegions'}
             onChange={onAllRegionsChange}
             disabled={isDisabled}
@@ -92,10 +81,7 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
             key={region}
             control={
               <Checkbox
-                checked={
-                  regionTargeting.targetedCountryGroups.includes(region) ||
-                  selectedRegions.includes(region)
-                }
+                checked={regionTargeting.targetedCountryGroups.includes(region)}
                 onChange={onSingleRegionChange}
                 value={region}
                 disabled={isDisabled}
