@@ -9,6 +9,13 @@ val circeVersion = "0.14.1"
 val awsVersion = "2.20.162"
 val zioVersion = "1.0.14"
 
+lazy val root = (project in file(".")).enablePlugins(PlayScala, RiffRaffArtifact, SbtWeb, JDebPackaging, SystemdPlugin,BuildInfoPlugin)
+  .settings(
+    buildInfoKeys := BuildInfoSettings.buildInfoKeys,
+    buildInfoPackage := "app",
+  )
+
+
 asciiGraphWidth := 999999999 // to ensure Snyk can read the the deeeeep dependency tree
 
 libraryDependencies ++= Seq(
@@ -58,8 +65,6 @@ Test / testOptions += {dynamoDBLocalTestCleanup.value}
 sources in(Compile, doc) := Seq.empty
 
 publishArtifact in(Compile, packageDoc) := false
-
-enablePlugins(PlayScala, RiffRaffArtifact, SbtWeb, JDebPackaging, SystemdPlugin)
 
 pipelineStages := Seq(digest)
 
