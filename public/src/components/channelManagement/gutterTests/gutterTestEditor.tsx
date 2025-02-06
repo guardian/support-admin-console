@@ -1,6 +1,5 @@
 import React from 'react';
 import { GutterTest, GutterVariant } from '../../../models/gutter';
-import { Region } from '../../../utils/models';
 import {
   ConsentStatus,
   DeviceType,
@@ -76,12 +75,8 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
     });
   };
 
-  const onRegionsChange = (updatedRegions: Region[]): void => {
-    updateTest({ ...test, locations: updatedRegions });
-  };
-
   const onRegionTargetingChange = (updatedRegionTargeting: RegionTargeting): void => {
-    updateTest({ ...test, regionTargeting: updatedRegionTargeting });
+    updateTest({ ...test, regionTargeting: updatedRegionTargeting, locations: [] });
   };
 
   const onCohortChange = (updatedCohort: UserCohort): void => {
@@ -216,10 +211,12 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
         </Typography>
 
         <TestEditorTargetAudienceSelector
-          selectedRegions={test.locations}
-          onRegionsUpdate={onRegionsChange}
           regionTargeting={
-            test.regionTargeting ?? { targetedCountryGroups: [], targetedCountryCodes: [] }
+            test.regionTargeting ?? {
+              // For backwards compatibility with the deprecated locations field
+              targetedCountryGroups: test.locations,
+              targetedCountryCodes: [],
+            }
           }
           onRegionTargetingUpdate={onRegionTargetingChange}
           selectedCohort={test.userCohort}

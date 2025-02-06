@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Region } from '../../../utils/models';
 import {
   ArticlesViewedSettings,
   ConsentStatus,
@@ -132,36 +131,11 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
     onVariantsChange(test.variants.filter(variant => variant.name !== deletedVariantName));
   };
 
-  const onRegionsChange = (updatedRegions: Region[]): void => {
-    updateTest({ ...test, locations: updatedRegions });
-  };
-
-  function concatUniqueLocations(countryGroups: Region[], locations: Region[]) {
-    //This function is needed , otherwise for existing tests, on selecting All regions for targeting,
-    // the locations field will be added to the targetedCountryGroups field, which ends up in the test having same region multiple times
-    const existingLocations = new Set(countryGroups);
-
-    // Iterate through locations and add only unique ones to countryGroups
-    for (const location of locations) {
-      if (!existingLocations.has(location)) {
-        countryGroups.push(location);
-      }
-    }
-
-    return countryGroups;
-  }
-
   const onRegionTargetingChange = (updatedRegionTargeting: RegionTargeting): void => {
     updateTest({
       ...test,
-      regionTargeting: {
-        targetedCountryGroups: concatUniqueLocations(
-          updatedRegionTargeting.targetedCountryGroups,
-          test.locations,
-        ),
-        targetedCountryCodes: updatedRegionTargeting.targetedCountryCodes ?? [],
-      },
-      locations: [],
+      regionTargeting: updatedRegionTargeting,
+      locations: [], // deprecated
     });
   };
 
@@ -325,10 +299,12 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
           </Typography>
 
           <TestEditorTargetAudienceSelector
-            selectedRegions={test.locations}
-            onRegionsUpdate={onRegionsChange}
             regionTargeting={
-              test.regionTargeting ?? { targetedCountryGroups: [], targetedCountryCodes: [] }
+              test.regionTargeting ?? {
+                // For backwards compatibility with the deprecated locations field
+                targetedCountryGroups: test.locations,
+                targetedCountryCodes: [],
+              }
             }
             onRegionTargetingUpdate={onRegionTargetingChange}
             selectedCohort={test.userCohort}
