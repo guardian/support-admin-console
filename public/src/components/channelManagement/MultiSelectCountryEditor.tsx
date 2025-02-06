@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import { makeStyles } from '@mui/styles';
 import { grey } from '@mui/material/colors';
 import { Theme } from '@mui/material/styles';
-import { countryNames } from '../../utils/models';
+import { countries } from '../../utils/models';
 import { RegionTargeting } from './helpers/shared';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
@@ -24,10 +24,7 @@ interface Option {
   value: string;
 }
 
-const options: Option[] = countryNames.map(id => ({
-  label: id[1],
-  value: id[0],
-}));
+const options: Option[] = Object.entries(countries).map(([value, label]) => ({ value, label }));
 
 interface MultiselectAutocompleteProps {
   disabled: boolean;

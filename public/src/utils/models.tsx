@@ -287,7 +287,6 @@ export const countries: CommonStringObject = {
   ZW: 'Zimbabwe',
 };
 
-export const countryNames = Object.entries(countries).map(_ => [_[0], _[1]]);
 export type Country = keyof typeof countries;
 
 export interface AmountValuesObject {
