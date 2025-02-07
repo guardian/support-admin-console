@@ -38,6 +38,7 @@ case class BannerTest(
     nickname: Option[String],
     userCohort: UserCohort,
     locations: List[Region] = Nil,
+    regionTargeting: Option[RegionTargeting]= None,
     contextTargeting: PageContextTargeting = PageContextTargeting(Nil,Nil,Nil,Nil),
     variants: List[BannerVariant],
     articlesViewedSettings: Option[ArticlesViewedSettings] = None,

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Region } from '../../../utils/models';
 import { EpicTest, EpicVariant, MaxEpicViews } from '../../../models/epic';
 import {
   ArticlesViewedSettings,
@@ -10,6 +9,7 @@ import {
   PageContextTargeting,
   ConsentStatus,
   Methodology,
+  RegionTargeting,
 } from '../helpers/shared';
 import { FormControlLabel, Switch, Typography } from '@mui/material';
 import CampaignSelector from '../CampaignSelector';
@@ -150,8 +150,12 @@ export const getEpicTestEditor = (
       });
     };
 
-    const onRegionsChange = (updatedRegions: Region[]): void => {
-      updateTest({ ...test, locations: updatedRegions });
+    const onRegionTargetingChange = (updatedRegionTargeting: RegionTargeting): void => {
+      updateTest({
+        ...test,
+        regionTargeting: updatedRegionTargeting,
+        locations: [], // deprecated
+      });
     };
 
     const onCohortChange = (updatedCohort: UserCohort): void => {
@@ -348,8 +352,14 @@ export const getEpicTestEditor = (
             </Typography>
 
             <TestEditorTargetAudienceSelector
-              selectedRegions={test.locations}
-              onRegionsUpdate={onRegionsChange}
+              regionTargeting={
+                test.regionTargeting ?? {
+                  // For backwards compatibility with the deprecated locations field
+                  targetedCountryGroups: test.locations,
+                  targetedCountryCodes: [],
+                }
+              }
+              onRegionTargetingUpdate={onRegionTargetingChange}
               selectedCohort={test.userCohort}
               onCohortChange={onCohortChange}
               supportedRegions={epicEditorConfig.supportedRegions}

@@ -8,10 +8,11 @@ import {
   UserCohort,
   TestPlatform,
   ConsentStatus,
+  RegionTargeting,
 } from './helpers/shared';
-
 import TestEditorTargetRegionsSelector from './testEditorTargetRegionsSelector';
 import TypedRadioGroup from './TypedRadioGroup';
+import MultiSelectCountryEditor from './MultiSelectCountryEditor';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
@@ -24,11 +25,16 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     color: palette.grey[900],
     fontWeight: 500,
   },
+  container1: {
+    display: 'inline',
+    gap: spacing(12),
+    flexWrap: 'wrap',
+  },
 }));
 
 interface TestEditorTargetAudienceSelectorProps {
-  selectedRegions: Region[];
-  onRegionsUpdate: (selectedRegions: Region[]) => void;
+  regionTargeting: RegionTargeting;
+  onRegionTargetingUpdate: (regionTargeting: RegionTargeting) => void;
   selectedCohort: UserCohort;
   onCohortChange: (updatedCohort: UserCohort) => void;
   supportedRegions?: Region[];
@@ -46,8 +52,8 @@ interface TestEditorTargetAudienceSelectorProps {
   platform?: TestPlatform;
 }
 const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelectorProps> = ({
-  selectedRegions,
-  onRegionsUpdate,
+  regionTargeting,
+  onRegionTargetingUpdate,
   selectedCohort,
   onCohortChange,
   supportedRegions,
@@ -68,15 +74,23 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
 
   return (
     <div className={classes.container}>
-      <Typography className={classes.heading}>Region</Typography>
-      <TestEditorTargetRegionsSelector
-        selectedRegions={selectedRegions}
-        onRegionsUpdate={onRegionsUpdate}
-        supportedRegions={supportedRegions}
-        isDisabled={isDisabled}
-        platform={platform}
-      />
-
+      <div className={classes.container1}>
+        <Typography className={classes.heading}>Region</Typography>
+        <TestEditorTargetRegionsSelector
+          regionTargeting={regionTargeting}
+          onRegionTargetingUpdate={onRegionTargetingUpdate}
+          supportedRegions={supportedRegions}
+          isDisabled={isDisabled}
+          platform={platform}
+        />
+        {platform !== 'APPLE_NEWS' && (
+          <MultiSelectCountryEditor
+            disabled={isDisabled}
+            regionTargeting={regionTargeting}
+            onRegionTargetingUpdate={onRegionTargetingUpdate}
+          />
+        )}
+      </div>
       {showSupporterStatusSelector && (
         <>
           <Typography className={classes.heading}>Supporter Status</Typography>

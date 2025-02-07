@@ -3,7 +3,7 @@ import React from 'react';
 import { Checkbox, FormControlLabel, FormGroup, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Region, regions, regionIds } from '../../utils/models';
-import { TestPlatform } from './helpers/shared';
+import { RegionTargeting, TestPlatform } from './helpers/shared';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   indentedContainer: {
@@ -12,16 +12,16 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 }));
 
 interface TestEditorTargetRegionsSelectorProps {
-  selectedRegions: Region[];
-  onRegionsUpdate: (selectedRegions: Region[]) => void;
+  regionTargeting: RegionTargeting;
+  onRegionTargetingUpdate: (regionTargeting: RegionTargeting) => void;
   supportedRegions?: Region[];
   isDisabled: boolean;
   platform?: TestPlatform;
 }
 
 const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorProps> = ({
-  selectedRegions,
-  onRegionsUpdate,
+  regionTargeting,
+  onRegionTargetingUpdate,
   supportedRegions,
   isDisabled,
   platform,
@@ -30,7 +30,9 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
   const allRegions = (supportedRegions as Region[]) || regionIds;
 
   const onAllRegionsChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    onRegionsUpdate(event.target.checked ? allRegions : []);
+    const updatedRegions = event.target.checked ? allRegions : [];
+    const updatedAllRegionTargeting = { ...regionTargeting, targetedCountryGroups: updatedRegions };
+    onRegionTargetingUpdate(updatedAllRegionTargeting);
   };
 
   const onSingleRegionChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -38,10 +40,18 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
     const changedRegion = event.target.value;
 
     if (checked) {
-      onRegionsUpdate([...selectedRegions, changedRegion as Region]);
+      onRegionTargetingUpdate({
+        ...regionTargeting,
+        targetedCountryGroups: [...regionTargeting.targetedCountryGroups, changedRegion as Region],
+      });
     } else {
-      const regionIndex = selectedRegions.indexOf(changedRegion as Region);
-      onRegionsUpdate(selectedRegions.filter((_, index) => index !== regionIndex));
+      const regionIndex = regionTargeting.targetedCountryGroups.indexOf(changedRegion as Region);
+      onRegionTargetingUpdate({
+        ...regionTargeting,
+        targetedCountryGroups: regionTargeting.targetedCountryGroups.filter(
+          (_, index) => index !== regionIndex,
+        ),
+      });
     }
   };
 
@@ -57,7 +67,7 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
       <FormControlLabel
         control={
           <Checkbox
-            checked={selectedRegions.length === allRegions.length}
+            checked={regionTargeting.targetedCountryGroups?.length === allRegions.length}
             value={'allRegions'}
             onChange={onAllRegionsChange}
             disabled={isDisabled}
@@ -71,7 +81,7 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
             key={region}
             control={
               <Checkbox
-                checked={selectedRegions.includes(region)}
+                checked={regionTargeting.targetedCountryGroups.includes(region)}
                 onChange={onSingleRegionChange}
                 value={region}
                 disabled={isDisabled}

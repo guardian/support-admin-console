@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Region } from '../../../utils/models';
 import {
   ArticlesViewedSettings,
   ConsentStatus,
   DeviceType,
   Methodology,
+  RegionTargeting,
   SignedInStatus,
   UserCohort,
 } from '../helpers/shared';
@@ -131,8 +131,12 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
     onVariantsChange(test.variants.filter(variant => variant.name !== deletedVariantName));
   };
 
-  const onRegionsChange = (updatedRegions: Region[]): void => {
-    updateTest({ ...test, locations: updatedRegions });
+  const onRegionTargetingChange = (updatedRegionTargeting: RegionTargeting): void => {
+    updateTest({
+      ...test,
+      regionTargeting: updatedRegionTargeting,
+      locations: [], // deprecated
+    });
   };
 
   const onCohortChange = (updatedCohort: UserCohort): void => {
@@ -295,8 +299,14 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
           </Typography>
 
           <TestEditorTargetAudienceSelector
-            selectedRegions={test.locations}
-            onRegionsUpdate={onRegionsChange}
+            regionTargeting={
+              test.regionTargeting ?? {
+                // For backwards compatibility with the deprecated locations field
+                targetedCountryGroups: test.locations,
+                targetedCountryCodes: [],
+              }
+            }
+            onRegionTargetingUpdate={onRegionTargetingChange}
             selectedCohort={test.userCohort}
             onCohortChange={onCohortChange}
             selectedDeviceType={test.deviceType ?? 'All'}

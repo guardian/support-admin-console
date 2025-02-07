@@ -1,7 +1,12 @@
 import React from 'react';
-import { Region } from '../../../utils/models';
 
-import { ConsentStatus, DeviceType, SignedInStatus, UserCohort } from '../helpers/shared';
+import {
+  ConsentStatus,
+  DeviceType,
+  RegionTargeting,
+  SignedInStatus,
+  UserCohort,
+} from '../helpers/shared';
 
 import { Typography } from '@mui/material';
 import HeaderTestVariantEditor from './headerTestVariantEditor';
@@ -57,8 +62,12 @@ const HeaderTestEditor: React.FC<ValidatedTestEditorProps<HeaderTest>> = ({
     onVariantsChange(test.variants.filter(variant => variant.name !== deletedVariantName));
   };
 
-  const onRegionsChange = (updatedRegions: Region[]): void => {
-    onTestChange({ ...test, locations: updatedRegions });
+  const onRegionTargetingChange = (updatedRegionTargeting: RegionTargeting): void => {
+    onTestChange({
+      ...test,
+      regionTargeting: updatedRegionTargeting,
+      locations: [], // deprecated
+    });
   };
 
   const onCohortChange = (updatedCohort: UserCohort): void => {
@@ -174,8 +183,14 @@ const HeaderTestEditor: React.FC<ValidatedTestEditorProps<HeaderTest>> = ({
         </Typography>
 
         <TestEditorTargetAudienceSelector
-          selectedRegions={test.locations}
-          onRegionsUpdate={onRegionsChange}
+          regionTargeting={
+            test.regionTargeting ?? {
+              // For backwards compatibility with the deprecated locations field
+              targetedCountryGroups: test.locations,
+              targetedCountryCodes: [],
+            }
+          }
+          onRegionTargetingUpdate={onRegionTargetingChange}
           selectedCohort={test.userCohort}
           onCohortChange={onCohortChange}
           selectedDeviceType={test.deviceType ?? 'All'}

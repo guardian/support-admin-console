@@ -27,6 +27,7 @@ case class HeaderTest(
   priority: Option[Int],
   nickname: Option[String],
   locations: List[Region] = Nil,
+  regionTargeting: Option[RegionTargeting]=None,
   userCohort: Option[UserCohort] = None,
   variants: List[HeaderVariant],
   controlProportionSettings: Option[ControlProportionSettings] = None,

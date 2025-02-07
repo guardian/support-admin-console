@@ -1,6 +1,6 @@
 import { GutterTest, GutterVariant } from '../../../../models/gutter';
 import { getStage } from '../../../../utils/stage';
-import { Cta, UserCohort } from '../../helpers/shared';
+import { Cta, RegionTargeting, UserCohort } from '../../helpers/shared';
 
 export const DEFAULT_PRIMARY_CTA: Cta = {
   text: 'Support us',
@@ -46,12 +46,18 @@ export const getDefaultVariant = (): GutterVariant => {
   return PROD_DEFAULT_VARIANT;
 };
 
+export const DEFAULT_REGION_TARGETING: RegionTargeting = {
+  targetedCountryGroups: [],
+  targetedCountryCodes: [],
+};
+
 const DEV_AND_CODE_DEFAULT_GUTTER_TEST: GutterTest = {
   name: 'TEST',
   nickname: 'TEST',
   status: 'Draft',
   userCohort: UserCohort.AllNonSupporters,
   locations: [],
+  regionTargeting: DEFAULT_REGION_TARGETING,
   variants: [DEV_AND_CODE_DEFAULT_VARIANT],
   contextTargeting: { tagIds: [], sectionIds: [], excludedTagIds: [], excludedSectionIds: [] },
   methodologies: [{ name: 'ABTest' }],
@@ -65,6 +71,7 @@ const PROD_DEFAULT_GUTTER_TEST: GutterTest = {
   status: 'Draft',
   userCohort: UserCohort.AllNonSupporters,
   locations: [],
+  regionTargeting: DEFAULT_REGION_TARGETING,
   variants: [PROD_DEFAULT_VARIANT],
   contextTargeting: { tagIds: [], sectionIds: [], excludedTagIds: [], excludedSectionIds: [] },
   methodologies: [{ name: 'ABTest' }],

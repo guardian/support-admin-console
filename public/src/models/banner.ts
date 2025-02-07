@@ -9,6 +9,7 @@ import {
   Status,
   TickerSettings,
   PageContextTargeting,
+  RegionTargeting,
 } from '../components/channelManagement/helpers/shared';
 import { Region } from '../utils/models';
 import { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';
@@ -45,6 +46,7 @@ export interface BannerTest extends Test {
   status: Status;
   userCohort: UserCohort;
   locations: Region[];
+  regionTargeting: RegionTargeting;
   variants: BannerVariant[];
   articlesViewedSettings?: ArticlesViewedSettings;
   controlProportionSettings?: ControlProportionSettings;
