@@ -69,8 +69,8 @@ const buildProps = (
     },
     bannerChannel: 'contributions',
     isSupporter: false,
-    content: variant.bannerContent,
-    mobileContent: variant.mobileBannerContent,
+    content: variant.landingPageContent,
+    mobileContent: variant.mobileLandingPageContent,
     countryCode: 'GB',
     tickerSettings: tickerSettingsWithData,
   };
@@ -147,7 +147,7 @@ const VariantLandingPagePreview: React.FC<VariantLandingPagePreviewProps> = ({
         >
           <div>
             <div className={classes.hint} onClick={toggleDrawer(false)}>
-              <Typography>Click anywhere outside the banner to close</Typography>
+              <Typography>Click anywhere outside the support landing page to close</Typography>
             </div>
             <div>
               <iframe className={classes.iframe} src={storybookUrl}></iframe>

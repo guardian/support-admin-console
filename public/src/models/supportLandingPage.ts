@@ -23,8 +23,8 @@ export interface SupportLandingPageContent {
 }
 
 export interface SupportLandingPageVariant extends Variant {
-  bannerContent: SupportLandingPageContent;
-  mobileBannerContent?: SupportLandingPageContent;
+  landingPageContent: SupportLandingPageContent;
+  mobileLandingPageContent?: SupportLandingPageContent;
   tickerSettings?: TickerSettings;
 }
 
@@ -36,5 +36,4 @@ export interface SupportLandingPageTest extends Test {
   locations: Region[];
   variants: SupportLandingPageVariant[];
   deviceType?: DeviceType;
-  campaignName?: string;
 }

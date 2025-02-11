@@ -12,6 +12,9 @@ GET /header-tests/:name                             controllers.Application.inde
 GET /epic-tests                                     controllers.Application.index
 GET /epic-tests/:name                               controllers.Application.indexWithName(name: String)
 
+GET /support-landing-page-tests                     controllers.Application.index
+GET /support-landing-page-tests/:name               controllers.Application.indexWithName(name: String)
+
 GET /liveblog-epic-tests                            controllers.Application.index
 GET /liveblog-epic-tests/:name                      controllers.Application.indexWithName(name: String)
 
@@ -251,4 +254,17 @@ GET   /frontend/bandit/:channel/:testName              controllers.BanditDataCon
 GET  /assets/*file                                  controllers.Assets.at(path="/public", file)
 
 # ----- Support Landing Page 'tests' ----- #
-GET   /frontend/support-landing-page-tests                            controllers.banner.BannerTestsController.get
+GET   /frontend/support-landing-page-tests                     controllers.SupportLandingPageController.get
+# landing page list endpoints
+POST  /frontend/support-landing-page-tests/list/lock                  controllers.SupportLandingPageController.lockList
+POST  /frontend/support-landing-page-tests/list/unlock                controllers.SupportLandingPageController.unlockList
+POST  /frontend/support-landing-page-tests/list/takecontrol           controllers.SupportLandingPageController.takeControlOfList
+POST  /frontend/support-landing-page-tests/list/reorder               controllers.SupportLandingPageController.reorderList
+# landing page test endpoints
+GET   /frontend/support-landing-page-tests/test/:testName             controllers.SupportLandingPageController.getTest(testName: String)
+POST  /frontend/support-landing-page-tests/test/update                controllers.SupportLandingPageController.updateTest
+POST  /frontend/support-landing-page-tests/test/create                controllers.SupportLandingPageController.createTest
+POST  /frontend/support-landing-page-tests/test/lock/:testName        controllers.SupportLandingPageController.lockTest(testName: String)
+POST  /frontend/support-landing-page-tests/test/unlock/:testName      controllers.SupportLandingPageController.unlockTest(testName: String)
+POST  /frontend/support-landing-page-tests/test/takecontrol/:testName controllers.SupportLandingPageController.forceLockTest(testName: String)
+POST  /frontend/support-landing-page-tests/test/status/:rawStatus     controllers.SupportLandingPageController.setStatus(rawStatus: String)
