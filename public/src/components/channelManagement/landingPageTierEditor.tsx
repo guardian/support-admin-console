@@ -1,18 +1,7 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import {
-  Checkbox,
-  FormControl,
-  FormLabel,
-  Radio,
-  RadioGroup,
-  TextField,
-  Theme,
-} from '@mui/material';
+import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import { TickerCountType, TickerEndType, TickerName, TickerSettings } from './helpers/shared';
-import { EMPTY_ERROR_HELPER_TEXT } from './helpers/validation';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -36,7 +25,7 @@ const LandingPageTierEditor: React.FC<LandingPageTierEditorProps> = ({}: Landing
 
   const defaultValues: FormData = {};
 
-  const { register, handleSubmit, errors, reset } = useForm<FormData>({
+  const { reset } = useForm<FormData>({
     mode: 'onChange',
     defaultValues,
   });
@@ -44,16 +33,6 @@ const LandingPageTierEditor: React.FC<LandingPageTierEditorProps> = ({}: Landing
   useEffect(() => {
     reset(defaultValues);
   }, []);
-
-  useEffect(() => {
-    const isValid = Object.keys(errors).length === 0;
-  }, []);
-
-  const onCheckboxChanged = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const isChecked = event.target.checked;
-  };
-
-  const onSubmit = ({}: FormData): void => {};
 
   return <div className={classes.container}></div>;
 };

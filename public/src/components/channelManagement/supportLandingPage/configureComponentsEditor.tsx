@@ -1,17 +1,13 @@
 import React, { useState } from 'react';
-import { Checkbox, FormControlLabel, Radio, RadioGroup, Theme, Typography } from "@mui/material";
+import { Checkbox, FormControlLabel, Radio, RadioGroup, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { templateValidatorForPlatform } from '../helpers/validation';
 import {
   SupportLandingPageContent,
   SupportLandingPageVariant,
 } from '../../../models/supportLandingPage';
-import { BannerContent } from '../../../models/banner';
 import { VariantContentEditor } from './variantEditor';
 import useValidation from '../hooks/useValidation';
 import { getDefaultVariant } from '../bannerTests/utils/defaults';
-import LandingPageTierEditor from "../landingPageTierEditor";
-import TickerEditor from "../tickerEditor";
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
@@ -80,18 +76,12 @@ interface ConfigureComponentsEditorProps {
 }
 
 const ConfigureComponentsEditor: React.FC<ConfigureComponentsEditorProps> = ({
-                                                                               variant,
-                                                                               onVariantChange,
-                                                                               content,
-                                                                               onChange,
-                                                                               onValidationChange,
-                                                                               editMode,
-                                                                               deviceType,
-                                                                             }: ConfigureComponentsEditorProps) => {
+  variant,
+  onVariantChange,
+  onValidationChange,
+  editMode,
+}: ConfigureComponentsEditorProps) => {
   const classes = useStyles();
-
-  const templateValidator = templateValidatorForPlatform('DOTCOM');
-
 
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
@@ -142,13 +132,12 @@ const ConfigureComponentsEditor: React.FC<ConfigureComponentsEditorProps> = ({
   const handleCheckboxChange = (option: CheckboxOption) => {
     if (selectedOptions.includes(option.label)) {
       option.action();
-      setSelectedOptions(selectedOptions.filter(item => item !== option.label);
+      setSelectedOptions(selectedOptions.filter(item => item !== option.label));
     } else {
       setSelectedOptions([...selectedOptions, option.label]);
       option.action();
     }
   };
-
 
   const setValidationStatusForField = useValidation(onValidationChange);
 
@@ -170,7 +159,6 @@ const ConfigureComponentsEditor: React.FC<ConfigureComponentsEditorProps> = ({
 
   return (
     <>
-
       <div className={classes.contentContainer}>
         {options.map(option => (
           <div key={option.label}>
@@ -184,24 +172,12 @@ const ConfigureComponentsEditor: React.FC<ConfigureComponentsEditorProps> = ({
                   disabled={!editMode}
                 />
               }
-              label ={option.label}
+              label={option.label}
             />
           </div>
         ))}
       </div>
 
-
-      <VariantContentEditor
-        content={variant.landingPageContent}
-        onChange={(updatedContent: BannerContent): void =>
-          onVariantChange({ ...variant, landingPageContent: updatedContent })
-        }
-        onValidationChange={(isValid): void => setValidationStatusForField('mainContent', isValid)}
-        editMode={editMode}
-        deviceType={variant.mobileLandingPageContent === undefined ? 'ALL' : 'NOT_MOBILE'}
-        showHeader={showHeader}
-        showBody={showBody}
-      />
       <RadioGroup
         value={variant.mobileLandingPageContent !== undefined ? 'enabled' : 'disabled'}
         onChange={onMobileContentRadioChange}
@@ -221,6 +197,17 @@ const ConfigureComponentsEditor: React.FC<ConfigureComponentsEditorProps> = ({
           disabled={!editMode}
         />
       </RadioGroup>
+      <VariantContentEditor
+        content={variant.landingPageContent}
+        onChange={(updatedContent: SupportLandingPageContent): void =>
+          onVariantChange({ ...variant, landingPageContent: updatedContent })
+        }
+        onValidationChange={(isValid): void => setValidationStatusForField('mainContent', isValid)}
+        editMode={editMode}
+        deviceType={variant.mobileLandingPageContent === undefined ? 'ALL' : 'NOT_MOBILE'}
+        showHeader={showHeader}
+        showBody={showBody}
+      />
       {variant.mobileLandingPageContent && (
         <VariantContentEditor
           content={variant.mobileLandingPageContent}
@@ -236,33 +223,31 @@ const ConfigureComponentsEditor: React.FC<ConfigureComponentsEditorProps> = ({
           showBody={showBody}
         />
       )}
+      {/*<div className={classes.sectionContainer}>*/}
+      {/*  <Typography className={classes.sectionHeader} variant="h4">*/}
+      {/*    Select Tiers*/}
+      {/*  </Typography>*/}
 
-      <div className={classes.sectionContainer}>
-        <Typography className={classes.sectionHeader} variant="h4">
-          Select Tiers
-        </Typography>
+      {/*  <LandingPageTierEditor />*/}
+      {/*</div>*/}
 
-        <LandingPageTierEditor />
-      </div>
+      {/*<div className={classes.sectionContainer}>*/}
+      {/*  <Typography className={classes.sectionHeader} variant="h4">*/}
+      {/*    Ticker*/}
+      {/*  </Typography>*/}
 
-      <div className={classes.sectionContainer}>
-        <Typography className={classes.sectionHeader} variant="h4">
-          Ticker
-        </Typography>
-
-        <TickerEditor
-          tickerSettings={variant.tickerSettings}
-          updateTickerSettings={tickerSettings =>
-            onVariantChange({
-              ...variant,
-              tickerSettings,
-            })
-          }
-          isDisabled={!editMode}
-          onValidationChange={onValidationChange}
-        />
-      </div>
-
+      {/*  <TickerEditor*/}
+      {/*    tickerSettings={variant.tickerSettings}*/}
+      {/*    updateTickerSettings={tickerSettings =>*/}
+      {/*      onVariantChange({*/}
+      {/*        ...variant,*/}
+      {/*        tickerSettings,*/}
+      {/*      })*/}
+      {/*    }*/}
+      {/*    isDisabled={!editMode}*/}
+      {/*    onValidationChange={onValidationChange}*/}
+      {/*  />*/}
+      {/*</div>*/}
     </>
   );
 };

@@ -8,7 +8,6 @@ import {
   templateValidatorForPlatform,
 } from '../helpers/validation';
 import { BannerContent } from '../../../models/banner';
-import { getDefaultVariant } from './utils/defaults';
 import useValidation from '../hooks/useValidation';
 import {
   getRteCopyLength,
@@ -165,7 +164,7 @@ export const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
-    onValidationChange(isValid);
+    onValidationChange(isValid ?? false);
   }, [errors.heading, errors.paragraphs, errors.highlightedText]);
 
   const labelSuffix = getLabelSuffix(deviceType);
@@ -199,8 +198,6 @@ export const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
     return `${BODY_DEFAULT_HELPER_TEXT} (${recommendedLength} chars)`;
   };
 
-  console.log('showHeader', showHeader);
-  console.log('showBody', showBody);
   return (
     <>
       <Typography className={classes.sectionHeader} variant="h4">
@@ -298,21 +295,21 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
   const classes = useStyles();
   const setValidationStatusForField = useValidation(onValidationChange);
 
-  const onMobileContentRadioChange = (): void => {
-    if (variant.mobileLandingPageContent === undefined) {
-      onVariantChange({
-        ...variant,
-        mobileLandingPageContent: getDefaultVariant().landingPageContent,
-      });
-    } else {
-      // remove mobile content and clear any validation errors
-      setValidationStatusForField('mobileContent', true);
-      onVariantChange({
-        ...variant,
-        mobileLandingPageContent: undefined,
-      });
-    }
-  };
+  // const onMobileContentRadioChange = (): void => {
+  //   if (variant.mobileLandingPageContent === undefined) {
+  //     onVariantChange({
+  //       ...variant,
+  //       mobileLandingPageContent: getDefaultVariant().mobileLandingPageContent,
+  //     });
+  //   } else {
+  //     // remove mobile content and clear any validation errors
+  //     setValidationStatusForField('mobileContent', true);
+  //     onVariantChange({
+  //       ...variant,
+  //       mobileLandingPageContent: undefined,
+  //     });
+  //   }
+  // };
 
   return (
     <div className={classes.container}>
