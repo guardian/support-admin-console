@@ -7,7 +7,6 @@ import {
   getEmptyParagraphsError,
   templateValidatorForPlatform,
 } from '../helpers/validation';
-import { BannerContent } from '../../../models/banner';
 import useValidation from '../hooks/useValidation';
 import {
   getRteCopyLength,
@@ -15,7 +14,7 @@ import {
   RichTextEditorSingleLine,
 } from '../richTextEditor/richTextEditor';
 import {
-  SupportLandingPageContent,
+  SupportLandingPageCopy,
   SupportLandingPageVariant,
 } from '../../../models/supportLandingPage';
 import ConfigureComponentsEditor from './configureComponentsEditor';
@@ -71,8 +70,8 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
 const HEADER_DEFAULT_HELPER_TEXT = 'Assitive text';
 const BODY_DEFAULT_HELPER_TEXT = 'Main banner message paragraph';
 
-const BODY_COPY_WITHOUT_SECONDARY_CTA_RECOMMENDED_LENGTH = 500;
-const BODY_COPY_WITH_SECONDARY_CTA_RECOMMENDED_LENGTH = 500;
+const headingCopyRecommendedLength = 500;
+const subheadingCopyRecommendedLength = 500;
 
 type DeviceType = 'ALL' | 'MOBILE' | 'NOT_MOBILE';
 
@@ -88,42 +87,24 @@ const getLabelSuffix = (deviceType: DeviceType): string => {
 };
 
 interface VariantContentEditorProps {
-  content: SupportLandingPageContent;
-  onChange: (updatedContent: BannerContent) => void;
+  copy: SupportLandingPageCopy;
+  onChange: (updatedCopy: SupportLandingPageCopy) => void;
   onValidationChange?: (isValid: boolean) => void;
   editMode: boolean;
-  deviceType: DeviceType;
   showHeader: boolean;
   showBody: boolean;
 }
 
 interface FormData {
   heading?: string;
-  paragraphs: string[];
-  highlightedText?: string;
+  subheading?: string;
 }
 
-// Temporary, while we migrate from messageText to paragraphs
-const getParagraphsOrMessageText = (
-  paras: string[] | undefined,
-  text: string | undefined,
-): string[] => {
-  const bodyCopy: string[] = [];
-
-  if (paras != null) {
-    bodyCopy.push(...paras);
-  } else if (text != null) {
-    bodyCopy.push(text);
-  }
-  return bodyCopy;
-};
-
 export const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
-  content,
+  copy,
   onChange,
   onValidationChange,
   editMode,
-  deviceType,
   showHeader,
   showBody,
 }: VariantContentEditorProps) => {
@@ -132,9 +113,8 @@ export const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
   const templateValidator = templateValidatorForPlatform('DOTCOM');
 
   const defaultValues: FormData = {
-    heading: content.heading || '',
-    paragraphs: getParagraphsOrMessageText(content.paragraphs, content.messageText),
-    highlightedText: content.highlightedText || '',
+    heading: copy.heading || '',
+    subheading: copy.subheading || '',
   };
 
   /**
@@ -156,9 +136,8 @@ export const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
 
   useEffect(() => {
     onChange({
-      ...content,
+      ...copy,
       ...validatedFields,
-      messageText: undefined,
     });
   }, [validatedFields]);
 
@@ -167,24 +146,18 @@ export const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
     if (onValidationChange) {
       onValidationChange(isValid);
     }
-  }, [errors.heading, errors.paragraphs, errors.highlightedText]);
-
-  const labelSuffix = getLabelSuffix(deviceType);
+  }, [errors.heading, errors.subheading]);
 
   const getBodyCopyLength = () => {
-    const bodyCopyRecommendedLength = content.secondaryCta
-      ? BODY_COPY_WITH_SECONDARY_CTA_RECOMMENDED_LENGTH
-      : BODY_COPY_WITHOUT_SECONDARY_CTA_RECOMMENDED_LENGTH;
-
-    if (content.paragraphs != null) {
+    if (copy.heading != null) {
       return [
-        getRteCopyLength([...content.paragraphs, content.highlightedText || '']),
-        bodyCopyRecommendedLength,
+        getRteCopyLength([...copy.heading, copy.subheading || '']),
+        headingCopyRecommendedLength,
       ];
     }
     return [
-      getRteCopyLength([content.messageText || '', content.highlightedText || '']),
-      bodyCopyRecommendedLength,
+      getRteCopyLength([copy.subheading, copy.subheading || '']),
+      subheadingCopyRecommendedLength,
     ];
   };
 
@@ -202,10 +175,6 @@ export const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
 
   return (
     <>
-      <Typography className={classes.sectionHeader} variant="h4">
-        {`Content${labelSuffix}`}
-      </Typography>
-
       <div className={classes.contentContainer}>
         {showHeader && (
           <Controller
@@ -254,11 +223,11 @@ export const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
               render={data => {
                 return (
                   <RichTextEditor
-                    error={errors.paragraphs !== undefined || copyLength > recommendedLength}
+                    error={errors.heading !== undefined || copyLength > recommendedLength}
                     helperText={
-                      errors.paragraphs
+                      errors.heading
                         ? // @ts-ignore -- react-hook-form doesn't believe it has a message field
-                          errors.paragraphs.message || errors.paragraphs.type
+                          errors.heading.message || errors.heading.type
                         : getParagraphsHelperText()
                     }
                     copyData={data.value}
@@ -297,45 +266,22 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
   const classes = useStyles();
   const setValidationStatusForField = useValidation(onValidationChange);
 
-  // const onMobileContentRadioChange = (): void => {
-  //   if (variant.mobileLandingPageContent === undefined) {
-  //     onVariantChange({
-  //       ...variant,
-  //       mobileLandingPageContent: getDefaultVariant().mobileLandingPageContent,
-  //     });
-  //   } else {
-  //     // remove mobile content and clear any validation errors
-  //     setValidationStatusForField('mobileContent', true);
-  //     onVariantChange({
-  //       ...variant,
-  //       mobileLandingPageContent: undefined,
-  //     });
-  //   }
-  // };
-
   return (
     <div className={classes.container}>
-      <div className={classes.sectionContainer}>
-        <div className={classes.sectionContainer}>
-          <Typography variant={'h3'} className={classes.sectionHeader}>
-            Configure Components
-          </Typography>
-          <div>
-            <ConfigureComponentsEditor
-              variant={variant}
-              onVariantChange={onVariantChange}
-              content={variant.landingPageContent}
-              onChange={(updatedContent: SupportLandingPageContent): void =>
-                onVariantChange({ ...variant, landingPageContent: updatedContent })
-              }
-              onValidationChange={(isValid: boolean): void =>
-                setValidationStatusForField(variant.name, isValid)
-              }
-              editMode={editMode}
-              deviceType={variant.mobileLandingPageContent === undefined ? 'ALL' : 'NOT_MOBILE'}
-            />
-          </div>
-        </div>
+      <Typography variant={'h3'} className={classes.sectionHeader}>
+        Configure Components
+      </Typography>
+      <div>
+        <ConfigureComponentsEditor
+          variant={variant}
+          onVariantChange={onVariantChange}
+          copy={variant.copy}
+          onChange={(updatedCopy: SupportLandingPageCopy): void =>
+            onVariantChange({ ...variant, copy: updatedCopy })
+          }
+          onValidationChange={onValidationChange}
+          editMode={editMode}
+        />
       </div>
     </div>
   );

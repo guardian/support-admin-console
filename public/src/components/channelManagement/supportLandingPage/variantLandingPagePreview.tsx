@@ -7,7 +7,10 @@ import { BannerContent } from '../../../models/banner';
 import Typography from '@mui/material/Typography';
 import useTickerData, { TickerSettingsWithData } from '../hooks/useTickerData';
 import { buildStorybookUrl } from '../helpers/dcrStorybook';
-import { SupportLandingPageVariant } from '../../../models/supportLandingPage';
+import {
+  SupportLandingPageCopy,
+  SupportLandingPageVariant,
+} from '../../../models/supportLandingPage';
 
 // Mock prices data
 interface ProductPriceData {
@@ -40,20 +43,14 @@ interface SupportLandingPageProps {
     products: string[];
   };
   isSupporter: boolean;
-  bannerChannel: string;
   countryCode?: string;
   prices?: Prices;
-  content: BannerContent;
-  mobileContent?: BannerContent;
-  tickerSettings?: TickerSettingsWithData;
+  copy: SupportLandingPageCopy;
 }
 
 const anchor = 'bottom';
 
-const buildProps = (
-  variant: SupportLandingPageVariant,
-  tickerSettingsWithData?: TickerSettingsWithData,
-): SupportLandingPageProps => {
+const buildProps = (variant: SupportLandingPageVariant): SupportLandingPageProps => {
   return {
     tracking: {
       ophanPageId: 'ophanPageId',
@@ -67,12 +64,12 @@ const buildProps = (
       componentType: 'ACQUISITIONS_ENGAGEMENT_BANNER',
       products: [],
     },
-    bannerChannel: 'contributions',
     isSupporter: false,
-    content: variant.landingPageContent,
-    mobileContent: variant.mobileLandingPageContent,
+    copy: {
+      heading: 'Support the Guardian',
+      subheading: 'Available for everyone, funded by readers',
+    },
     countryCode: 'GB',
-    tickerSettings: tickerSettingsWithData,
   };
 };
 
@@ -122,14 +119,13 @@ const VariantLandingPagePreview: React.FC<VariantLandingPagePreviewProps> = ({
   const classes = useStyles();
 
   const [drawerOpen, setDrawerOpen] = useState<boolean>();
-  const tickerSettingsWithData = useTickerData(variant.tickerSettings);
 
   const toggleDrawer = (open: boolean) => (event: React.MouseEvent): void => {
     event.stopPropagation();
     setDrawerOpen(open);
   };
 
-  const props = buildProps(variant, tickerSettingsWithData);
+  const props = buildProps(variant);
   const storyName = 'components-marketing-landingPage--default';
   const storybookUrl = buildStorybookUrl(storyName, props);
 

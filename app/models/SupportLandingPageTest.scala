@@ -5,21 +5,13 @@ import io.circe.generic.extras.auto._
 import io.circe.generic.extras.semiauto._
 import io.circe.{Decoder, Encoder, Json}
 import models.Methodology.defaultMethodologies
-
-case class SupportLandingPageContent(
-                                      heading: Option[String],
-                                      paragraphs: Option[List[String]],
-                                      messageText: Option[String],
-                                      highlightedText: Option[String],
-                                      cta: Option[Cta],
-                                      secondaryCta: Option[SecondaryCta]
-                                    )
-
+case class  SupportLandingPageCopy(
+                                       heading: String,
+                                       subheading: String,
+                                     )
 case class  SupportLandingPageVariant(
                                        name: String,
-                                       landingPageContent: Option[SupportLandingPageContent],
-                                       mobileLandingPageContent: Option[SupportLandingPageContent],
-                                       tickerSettings: Option[TickerSettings] = None,
+                                       copy: SupportLandingPageCopy,
                                      )
 
 
@@ -32,6 +24,7 @@ case class SupportLandingPageTest(
                                    nickname: Option[String],
                                    userCohort: UserCohort,
                                    locations: List[Region] = Nil,
+                                   targeting: List[Region]=Nil,
                                    variants: List[SupportLandingPageVariant],
                                    campaignName: Option[String] = Some("NOT_IN_CAMPAIGN"),
                                    methodologies: List[Methodology] = defaultMethodologies,

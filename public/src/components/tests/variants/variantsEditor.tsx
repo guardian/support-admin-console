@@ -4,6 +4,7 @@ import { makeStyles } from '@mui/styles';
 import { Variant } from '../../channelManagement/helpers/shared';
 import VariantEditorsAccordion from './variantEditorsAccordion';
 import NewVariantButton from './newVariantButton';
+import { SupportLandingPageVariant } from '../../../models/supportLandingPage';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {

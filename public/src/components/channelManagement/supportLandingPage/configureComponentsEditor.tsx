@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Checkbox, FormControlLabel, Radio, RadioGroup, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import {
-  SupportLandingPageContent,
+  SupportLandingPageCopy,
   SupportLandingPageVariant,
 } from '../../../models/supportLandingPage';
 import { VariantContentEditor } from './variantEditor';
@@ -63,16 +63,14 @@ interface CheckboxOption {
   action: () => void;
 }
 
-type DeviceType = 'ALL' | 'MOBILE' | 'NOT_MOBILE';
 
 interface ConfigureComponentsEditorProps {
   variant: SupportLandingPageVariant;
   onVariantChange: (updatedVariant: SupportLandingPageVariant) => void;
-  content?: SupportLandingPageContent;
-  onChange?: (updatedContent: SupportLandingPageContent) => void;
+  copy: SupportLandingPageCopy;
+  onChange?: (updatedCopy: SupportLandingPageCopy) => void;
   onValidationChange?: (isValid: boolean) => void;
   editMode: boolean;
-  deviceType?: DeviceType;
 }
 
 const ConfigureComponentsEditor: React.FC<ConfigureComponentsEditorProps> = ({
@@ -141,22 +139,6 @@ const ConfigureComponentsEditor: React.FC<ConfigureComponentsEditorProps> = ({
 
   const setValidationStatusForField = useValidation(onValidationChange ?? (() => {}));
 
-  const onMobileContentRadioChange = (): void => {
-    if (variant.mobileLandingPageContent === undefined) {
-      onVariantChange({
-        ...variant,
-        mobileLandingPageContent: getDefaultVariant().bannerContent,
-      });
-    } else {
-      // remove mobile content and clear any validation errors
-      setValidationStatusForField('mobileContent', true);
-      onVariantChange({
-        ...variant,
-        mobileLandingPageContent: undefined,
-      });
-    }
-  };
-
   return (
     <>
       <div className={classes.contentContainer}>
@@ -178,76 +160,16 @@ const ConfigureComponentsEditor: React.FC<ConfigureComponentsEditorProps> = ({
         ))}
       </div>
 
-      <RadioGroup
-        value={variant.mobileLandingPageContent !== undefined ? 'enabled' : 'disabled'}
-        onChange={onMobileContentRadioChange}
-      >
-        <FormControlLabel
-          value="disabled"
-          key="disabled"
-          control={<Radio />}
-          label="Show the same copy across devices"
-          disabled={!editMode}
-        />
-        <FormControlLabel
-          value="enabled"
-          key="enabled"
-          control={<Radio />}
-          label="Show different copy on mobile"
-          disabled={!editMode}
-        />
-      </RadioGroup>
       <VariantContentEditor
-        content={variant.landingPageContent}
-        onChange={(updatedContent: SupportLandingPageContent): void =>
-          onVariantChange({ ...variant, landingPageContent: updatedContent })
+        copy={variant.copy}
+        onChange={(updatedCopy: SupportLandingPageCopy): void =>
+          onVariantChange({ ...variant, copy: updatedCopy })
         }
-        onValidationChange={(isValid): void => setValidationStatusForField('mainContent', isValid)}
+        onValidationChange={(isValid): void => setValidationStatusForField('copy', isValid)}
         editMode={editMode}
-        deviceType={variant.mobileLandingPageContent === undefined ? 'ALL' : 'NOT_MOBILE'}
         showHeader={showHeader}
         showBody={showBody}
       />
-      {variant.mobileLandingPageContent && (
-        <VariantContentEditor
-          content={variant.mobileLandingPageContent}
-          onChange={(updatedContent: SupportLandingPageContent): void =>
-            onVariantChange({ ...variant, mobileLandingPageContent: updatedContent })
-          }
-          onValidationChange={(isValid): void =>
-            setValidationStatusForField('mobileContent', isValid)
-          }
-          editMode={editMode}
-          deviceType={'MOBILE'}
-          showHeader={showHeader}
-          showBody={showBody}
-        />
-      )}
-      {/*<div className={classes.sectionContainer}>*/}
-      {/*  <Typography className={classes.sectionHeader} variant="h4">*/}
-      {/*    Select Tiers*/}
-      {/*  </Typography>*/}
-
-      {/*  <LandingPageTierEditor />*/}
-      {/*</div>*/}
-
-      {/*<div className={classes.sectionContainer}>*/}
-      {/*  <Typography className={classes.sectionHeader} variant="h4">*/}
-      {/*    Ticker*/}
-      {/*  </Typography>*/}
-
-      {/*  <TickerEditor*/}
-      {/*    tickerSettings={variant.tickerSettings}*/}
-      {/*    updateTickerSettings={tickerSettings =>*/}
-      {/*      onVariantChange({*/}
-      {/*        ...variant,*/}
-      {/*        tickerSettings,*/}
-      {/*      })*/}
-      {/*    }*/}
-      {/*    isDisabled={!editMode}*/}
-      {/*    onValidationChange={onValidationChange}*/}
-      {/*  />*/}
-      {/*</div>*/}
     </>
   );
 };

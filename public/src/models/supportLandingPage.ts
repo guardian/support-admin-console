@@ -1,31 +1,20 @@
 import {
-  Cta,
   DeviceType,
-  SecondaryCta,
   Status,
   Test,
-  TickerSettings,
   UserCohort,
   Variant,
 } from '../components/channelManagement/helpers/shared';
 import { Region } from '../utils/models';
 
-export interface SupportLandingPageVariant extends Variant {
-  tickerSettings?: TickerSettings;
-}
-export interface SupportLandingPageContent {
-  heading?: string;
-  messageText?: string;
-  paragraphs: string[];
-  highlightedText?: string;
-  cta?: Cta;
-  secondaryCta?: SecondaryCta;
+export interface SupportLandingPageCopy {
+  heading: string;
+  subheading: string;
 }
 
 export interface SupportLandingPageVariant extends Variant {
-  landingPageContent: SupportLandingPageContent;
-  mobileLandingPageContent?: SupportLandingPageContent;
-  tickerSettings?: TickerSettings;
+  name: string;
+  copy: SupportLandingPageCopy;
 }
 
 export interface SupportLandingPageTest extends Test {
@@ -34,6 +23,7 @@ export interface SupportLandingPageTest extends Test {
   status: Status;
   userCohort: UserCohort;
   locations: Region[];
+  targeting: string[];
   variants: SupportLandingPageVariant[];
   deviceType?: DeviceType;
 }
