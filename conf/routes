@@ -249,3 +249,6 @@ GET   /frontend/bandit/:channel/:testName              controllers.BanditDataCon
 
 # Map static resources from the /public folder to the /assets URL path
 GET  /assets/*file                                  controllers.Assets.at(path="/public", file)
+
+# ----- Support Landing Page 'tests' ----- #
+GET   /frontend/support-landing-page-tests                            controllers.banner.BannerTestsController.get

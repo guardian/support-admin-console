@@ -210,6 +210,11 @@ export default function NavDrawer(): React.ReactElement {
             <span className={classes.super}>🎨</span>
           </ListItem>
         </Link>
+        <Link key="Support Landing Page" to="/support-landing-page-tests" className={classes.link}>
+          <ListItem className={classes.listItem} button key="Support Landing Page">
+            <ListItemText primary="Support Landing Page" />
+          </ListItem>
+        </Link>
       </div>
 
       <div>
