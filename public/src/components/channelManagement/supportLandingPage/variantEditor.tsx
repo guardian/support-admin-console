@@ -108,7 +108,7 @@ const getParagraphsOrMessageText = (
   paras: string[] | undefined,
   text: string | undefined,
 ): string[] => {
-  const bodyCopy = [];
+  const bodyCopy: string[] = [];
 
   if (paras != null) {
     bodyCopy.push(...paras);
@@ -164,7 +164,9 @@ export const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
-    onValidationChange(isValid ?? false);
+    if (onValidationChange) {
+      onValidationChange(isValid);
+    }
   }, [errors.heading, errors.paragraphs, errors.highlightedText]);
 
   const labelSuffix = getLabelSuffix(deviceType);

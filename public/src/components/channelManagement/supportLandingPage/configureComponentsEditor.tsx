@@ -139,7 +139,7 @@ const ConfigureComponentsEditor: React.FC<ConfigureComponentsEditorProps> = ({
     }
   };
 
-  const setValidationStatusForField = useValidation(onValidationChange);
+  const setValidationStatusForField = useValidation(onValidationChange ?? (() => {}));
 
   const onMobileContentRadioChange = (): void => {
     if (variant.mobileLandingPageContent === undefined) {
