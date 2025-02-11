@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Checkbox, FormControlLabel, Radio, RadioGroup, Theme } from '@mui/material';
+import { Checkbox, FormControlLabel, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import {
   SupportLandingPageCopy,
@@ -7,7 +7,6 @@ import {
 } from '../../../models/supportLandingPage';
 import { VariantContentEditor } from './variantEditor';
 import useValidation from '../hooks/useValidation';
-import { getDefaultVariant } from '../bannerTests/utils/defaults';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
@@ -63,7 +62,6 @@ interface CheckboxOption {
   action: () => void;
 }
 
-
 interface ConfigureComponentsEditorProps {
   variant: SupportLandingPageVariant;
   onVariantChange: (updatedVariant: SupportLandingPageVariant) => void;
@@ -87,15 +85,13 @@ const ConfigureComponentsEditor: React.FC<ConfigureComponentsEditorProps> = ({
     {
       label: 'Configure Header Copy',
       action: () => {
-        console.log('Header selected!', showHeader);
         setShowHeader(!showHeader);
       },
     },
     {
       label: 'Configure Body Copy',
       action: () => {
-        console.log(' Body Copy selected!');
-        setShowBody(!showBody);
+        setShowSubheading(!showSubheading);
       },
     },
     {
@@ -125,7 +121,7 @@ const ConfigureComponentsEditor: React.FC<ConfigureComponentsEditorProps> = ({
   ];
 
   const [showHeader, setShowHeader] = useState<boolean>(false);
-  const [showBody, setShowBody] = useState<boolean>(false);
+  const [showSubheading, setShowSubheading] = useState<boolean>(false);
 
   const handleCheckboxChange = (option: CheckboxOption) => {
     if (selectedOptions.includes(option.label)) {
@@ -168,7 +164,7 @@ const ConfigureComponentsEditor: React.FC<ConfigureComponentsEditorProps> = ({
         onValidationChange={(isValid): void => setValidationStatusForField('copy', isValid)}
         editMode={editMode}
         showHeader={showHeader}
-        showBody={showBody}
+        showSubheading={showSubheading}
       />
     </>
   );

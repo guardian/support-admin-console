@@ -73,26 +73,13 @@ const BODY_DEFAULT_HELPER_TEXT = 'Main banner message paragraph';
 const headingCopyRecommendedLength = 500;
 const subheadingCopyRecommendedLength = 500;
 
-type DeviceType = 'ALL' | 'MOBILE' | 'NOT_MOBILE';
-
-const getLabelSuffix = (deviceType: DeviceType): string => {
-  switch (deviceType) {
-    case 'MOBILE':
-      return ' (mobile only)';
-    case 'NOT_MOBILE':
-      return ' (tablet + desktop)';
-    default:
-      return ' (all devices)';
-  }
-};
-
 interface VariantContentEditorProps {
   copy: SupportLandingPageCopy;
   onChange: (updatedCopy: SupportLandingPageCopy) => void;
   onValidationChange?: (isValid: boolean) => void;
   editMode: boolean;
   showHeader: boolean;
-  showBody: boolean;
+  showSubheading: boolean;
 }
 
 interface FormData {
@@ -106,7 +93,7 @@ export const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
   onValidationChange,
   editMode,
   showHeader,
-  showBody,
+  showSubheading,
 }: VariantContentEditorProps) => {
   const classes = useStyles();
 
@@ -198,7 +185,7 @@ export const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                     handleSubmit(setValidatedFields)();
                   }}
                   name="heading"
-                  label="Header"
+                  label="Header copy"
                   disabled={!editMode}
                   rteMenuConstraints={{
                     noBold: true,
@@ -209,35 +196,35 @@ export const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
           />
         )}
 
+
         <div>
-          {showBody && (
+          {showSubheading && (
             <Controller
-              name="paragraphs"
+              name="subheading"
               control={control}
               rules={{
-                required: true,
-                validate: (pars: string[]) =>
-                  getEmptyParagraphsError(pars) ??
-                  pars.map(templateValidator).find((result: string | undefined) => !!result),
+                validate: templateValidator,
               }}
               render={data => {
                 return (
-                  <RichTextEditor
-                    error={errors.heading !== undefined || copyLength > recommendedLength}
+                  <RichTextEditorSingleLine
+                    error={errors.subheading !== undefined || copyLength > recommendedLength}
                     helperText={
-                      errors.heading
-                        ? // @ts-ignore -- react-hook-form doesn't believe it has a message field
-                          errors.heading.message || errors.heading.type
-                        : getParagraphsHelperText()
+                      errors.subheading
+                        ? errors.subheading.message || errors.subheading.type
+                        : HEADER_DEFAULT_HELPER_TEXT
                     }
                     copyData={data.value}
                     updateCopy={pars => {
                       data.onChange(pars);
                       handleSubmit(setValidatedFields)();
                     }}
-                    name="paragraphs"
-                    label="Body copy"
+                    name="subheading"
+                    label="Subheading copy"
                     disabled={!editMode}
+                    rteMenuConstraints={{
+                      noBold: true,
+                    }}
                   />
                 );
               }}
@@ -264,7 +251,6 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
   onVariantChange,
 }: VariantEditorProps) => {
   const classes = useStyles();
-  const setValidationStatusForField = useValidation(onValidationChange);
 
   return (
     <div className={classes.container}>
