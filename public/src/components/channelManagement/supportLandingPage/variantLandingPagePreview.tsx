@@ -116,9 +116,9 @@ interface VariantLandingPagePreviewProps {
 }
 
 const VariantLandingPagePreview: React.FC<VariantLandingPagePreviewProps> = ({
-                                                                               variant,
-                                                                               controls,
-                                                                             }: VariantLandingPagePreviewProps) => {
+  variant,
+  controls,
+}: VariantLandingPagePreviewProps) => {
   const classes = useStyles();
 
   const [drawerOpen, setDrawerOpen] = useState<boolean>();

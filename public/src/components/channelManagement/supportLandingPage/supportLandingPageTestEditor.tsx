@@ -13,11 +13,11 @@ import VariantEditor from './variantEditor';
 import VariantLandingPagePreview from './variantLandingPagePreview';
 
 const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLandingPageTest>> = ({
-                                                                                                    test,
-                                                                                                    userHasTestLocked,
-                                                                                                    onTestChange,
-                                                                                                    setValidationStatusForField,
-                                                                                                  }: ValidatedTestEditorProps<SupportLandingPageTest>) => {
+  test,
+  userHasTestLocked,
+  onTestChange,
+  setValidationStatusForField,
+}: ValidatedTestEditorProps<SupportLandingPageTest>) => {
   const classes = useStyles();
   console.log(test, userHasTestLocked, onTestChange, setValidationStatusForField);
 
@@ -108,18 +108,6 @@ const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLan
               onVariantClone={onVariantClone}
             />
           </div>
-        </div>
-
-        <div className={classes.sectionContainer}>
-          <Typography variant={'h3'} className={classes.sectionHeader}>
-            Campaign
-          </Typography>
-        </div>
-
-        <div className={classes.sectionContainer}>
-          <Typography variant={'h3'} className={classes.sectionHeader}>
-            Target audience
-          </Typography>
         </div>
       </div>
     );
