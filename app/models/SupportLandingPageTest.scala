@@ -15,8 +15,8 @@ case class  SupportLandingPageVariant(
                                      )
 
 case class Targeting(
-                            countryGroups: List[Region]= Nil,
-                          )
+                      countryGroups: List[Region]= Nil,
+                    )
 
 case class SupportLandingPageTest(
                                    name: String,
