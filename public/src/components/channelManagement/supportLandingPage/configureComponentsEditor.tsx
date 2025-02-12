@@ -127,9 +127,15 @@ const ConfigureComponentsEditor: React.FC<ConfigureComponentsEditorProps> = ({
     if (selectedOptions.includes(option.label)) {
       option.action();
       setSelectedOptions(selectedOptions.filter(item => item !== option.label));
+      onVariantChange({ ...variant, components: selectedOptions });
     } else {
       setSelectedOptions([...selectedOptions, option.label]);
       option.action();
+      const componentIndex = variant.components?.indexOf(option.label);
+      onVariantChange({
+        ...variant,
+        components: selectedOptions.filter((_, index) => index !== componentIndex),
+      });
     }
   };
 
@@ -144,10 +150,14 @@ const ConfigureComponentsEditor: React.FC<ConfigureComponentsEditorProps> = ({
               control={
                 <Checkbox
                   id={option.label}
-                  checked={selectedOptions.includes(option.label)}
+                  checked={
+                    variant.components?.includes(option.label) ||
+                    selectedOptions.includes(option.label)
+                  }
                   onChange={() => handleCheckboxChange(option)}
                   color="primary"
                   disabled={!editMode}
+                  value={option.label}
                 />
               }
               label={option.label}

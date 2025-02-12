@@ -1,4 +1,10 @@
-import { Methodology, Status, Variant } from '../components/channelManagement/helpers/shared';
+import {
+  Methodology,
+  RegionTargeting,
+  Status,
+  Test,
+  Variant,
+} from '../components/channelManagement/helpers/shared';
 import { Region } from '../utils/models';
 
 export interface SupportLandingPageCopy {
@@ -9,17 +15,18 @@ export interface SupportLandingPageCopy {
 export interface SupportLandingPageVariant extends Variant {
   name: string;
   copy: SupportLandingPageCopy;
+  components?: string[];
 }
 
 export interface Targeting {
   countryGroups: Region[];
 }
 
-export interface SupportLandingPageTest {
+export interface SupportLandingPageTest extends Test {
   name: string;
   nickname?: string;
   status: Status;
   targeting: Targeting;
   variants: SupportLandingPageVariant[];
-  methodologies?: Methodology[];
+  methodologies: Methodology[];
 }
