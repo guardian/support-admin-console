@@ -15,7 +15,7 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   },
 }));
 
-interface HeaderTestVariantEditorCtasEditorProps {
+interface HeaderTestVariantCtasEditorProps {
   primaryCta?: Cta;
   secondaryCta?: Cta;
   updatePrimaryCta: (updatedCta?: Cta) => void;
@@ -25,7 +25,7 @@ interface HeaderTestVariantEditorCtasEditorProps {
   supportSecondaryCta: boolean;
 }
 
-const HeaderTestVariantEditorCtasEditor: React.FC<HeaderTestVariantEditorCtasEditorProps> = ({
+const HeaderTestVariantCtasEditor: React.FC<HeaderTestVariantCtasEditorProps> = ({
   primaryCta,
   secondaryCta,
   updatePrimaryCta,
@@ -33,7 +33,7 @@ const HeaderTestVariantEditorCtasEditor: React.FC<HeaderTestVariantEditorCtasEdi
   onValidationChange,
   isDisabled,
   supportSecondaryCta,
-}: HeaderTestVariantEditorCtasEditorProps) => {
+}: HeaderTestVariantCtasEditorProps) => {
   const classes = useStyles();
 
   return (
@@ -61,4 +61,4 @@ const HeaderTestVariantEditorCtasEditor: React.FC<HeaderTestVariantEditorCtasEdi
   );
 };
 
-export default HeaderTestVariantEditorCtasEditor;
+export default HeaderTestVariantCtasEditor;
