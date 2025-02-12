@@ -115,6 +115,7 @@ const VariantLandingPagePreview: React.FC<VariantLandingPagePreviewProps> = ({
   controls,
 }: VariantLandingPagePreviewProps) => {
   const classes = useStyles();
+  const showPreview = false;
 
   const [drawerOpen, setDrawerOpen] = useState<boolean>();
 
@@ -130,9 +131,11 @@ const VariantLandingPagePreview: React.FC<VariantLandingPagePreviewProps> = ({
   return (
     <div>
       <React.Fragment key={anchor}>
-        <Button startIcon={<VisibilityIcon />} size="small" onClick={toggleDrawer(true)}>
-          Live preview
-        </Button>
+        {showPreview && (
+          <Button startIcon={<VisibilityIcon />} size="small" onClick={toggleDrawer(true)}>
+            Live preview
+          </Button>
+        )}
         <Drawer
           anchor={anchor}
           open={drawerOpen}
