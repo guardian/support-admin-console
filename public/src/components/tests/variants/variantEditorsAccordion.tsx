@@ -4,7 +4,6 @@ import { makeStyles } from '@mui/styles';
 import { Variant } from '../../channelManagement/helpers/shared';
 import CloneVariantButton from './cloneVariantButton';
 import DeleteVariantButton from './deleteVariantButton';
-import { SupportLandingPageVariant } from '../../../models/supportLandingPage';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   expansionPanelsContainer: {

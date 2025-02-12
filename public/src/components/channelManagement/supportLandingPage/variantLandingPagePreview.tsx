@@ -3,9 +3,7 @@ import { Button, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import Drawer from '@mui/material/Drawer';
-import { BannerContent } from '../../../models/banner';
 import Typography from '@mui/material/Typography';
-import useTickerData, { TickerSettingsWithData } from '../hooks/useTickerData';
 import { buildStorybookUrl } from '../helpers/dcrStorybook';
 import {
   SupportLandingPageCopy,

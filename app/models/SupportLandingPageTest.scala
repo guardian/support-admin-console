@@ -12,7 +12,6 @@ case class  SupportLandingPageCopy(
 case class  SupportLandingPageVariant(
                                        name: String,
                                        copy: SupportLandingPageCopy,
-                                       components: Option[List[String]]=None,
                                      )
 
 case class Targeting(

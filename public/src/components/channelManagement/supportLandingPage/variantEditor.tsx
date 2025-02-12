@@ -2,17 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import {
-  EMPTY_ERROR_HELPER_TEXT,
-  getEmptyParagraphsError,
-  templateValidatorForPlatform,
-} from '../helpers/validation';
-import useValidation from '../hooks/useValidation';
-import {
-  getRteCopyLength,
-  RichTextEditor,
-  RichTextEditorSingleLine,
-} from '../richTextEditor/richTextEditor';
+import { templateValidatorForPlatform } from '../helpers/validation';
+import { getRteCopyLength, RichTextEditorSingleLine } from '../richTextEditor/richTextEditor';
 import {
   SupportLandingPageCopy,
   SupportLandingPageVariant,
@@ -67,8 +58,8 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   },
 }));
 
-const HEADER_DEFAULT_HELPER_TEXT = 'Assitive text';
-const BODY_DEFAULT_HELPER_TEXT = 'Main banner message paragraph';
+const HEADER_DEFAULT_HELPER_TEXT = 'Heading text';
+const SUBHEADING_DEFAULT_HELPER_TEXT = 'Subheading text';
 
 const headingCopyRecommendedLength = 500;
 const subheadingCopyRecommendedLength = 500;
@@ -78,8 +69,6 @@ interface VariantContentEditorProps {
   onChange: (updatedCopy: SupportLandingPageCopy) => void;
   onValidationChange?: (isValid: boolean) => void;
   editMode: boolean;
-  showHeader: boolean;
-  showSubheading: boolean;
 }
 
 interface FormData {
@@ -92,8 +81,6 @@ export const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
   onChange,
   onValidationChange,
   editMode,
-  showHeader,
-  showSubheading,
 }: VariantContentEditorProps) => {
   const classes = useStyles();
 
@@ -135,7 +122,7 @@ export const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
     }
   }, [errors.heading, errors.subheading]);
 
-  const getBodyCopyLength = () => {
+  const getSubheadingCopyLength = () => {
     if (copy.heading != null) {
       return [
         getRteCopyLength([...copy.heading, copy.subheading || '']),
@@ -148,24 +135,45 @@ export const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
     ];
   };
 
-  const [copyLength, recommendedLength] = getBodyCopyLength();
-
-  const getParagraphsHelperText = () => {
-    if (!copyLength) {
-      return EMPTY_ERROR_HELPER_TEXT;
-    }
-    if (copyLength > recommendedLength) {
-      return `This copy is longer than the recommended length (${recommendedLength} chars). Please preview across breakpoints before publishing.`;
-    }
-    return `${BODY_DEFAULT_HELPER_TEXT} (${recommendedLength} chars)`;
-  };
+  const [copyLength, recommendedLength] = getSubheadingCopyLength();
 
   return (
     <>
       <div className={classes.contentContainer}>
-        {showHeader && (
+        <Controller
+          name="heading"
+          control={control}
+          rules={{
+            validate: templateValidator,
+          }}
+          render={data => {
+            return (
+              <RichTextEditorSingleLine
+                error={errors.heading !== undefined}
+                helperText={
+                  errors.heading
+                    ? errors.heading.message || errors.heading.type
+                    : HEADER_DEFAULT_HELPER_TEXT
+                }
+                copyData={data.value}
+                updateCopy={pars => {
+                  data.onChange(pars);
+                  handleSubmit(setValidatedFields)();
+                }}
+                name="heading"
+                label="Heading copy"
+                disabled={!editMode}
+                rteMenuConstraints={{
+                  noBold: true,
+                }}
+              />
+            );
+          }}
+        />
+
+        <div>
           <Controller
-            name="heading"
+            name="subheading"
             control={control}
             rules={{
               validate: templateValidator,
@@ -173,19 +181,19 @@ export const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
             render={data => {
               return (
                 <RichTextEditorSingleLine
-                  error={errors.heading !== undefined}
+                  error={errors.subheading !== undefined || copyLength > recommendedLength}
                   helperText={
-                    errors.heading
-                      ? errors.heading.message || errors.heading.type
-                      : HEADER_DEFAULT_HELPER_TEXT
+                    errors.subheading
+                      ? errors.subheading.message || errors.subheading.type
+                      : SUBHEADING_DEFAULT_HELPER_TEXT
                   }
                   copyData={data.value}
                   updateCopy={pars => {
                     data.onChange(pars);
                     handleSubmit(setValidatedFields)();
                   }}
-                  name="heading"
-                  label="Header copy"
+                  name="subheading"
+                  label="Subheading copy"
                   disabled={!editMode}
                   rteMenuConstraints={{
                     noBold: true,
@@ -194,42 +202,7 @@ export const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
               );
             }}
           />
-        )}
-
-
-        <div>
-          {showSubheading && (
-            <Controller
-              name="subheading"
-              control={control}
-              rules={{
-                validate: templateValidator,
-              }}
-              render={data => {
-                return (
-                  <RichTextEditorSingleLine
-                    error={errors.subheading !== undefined || copyLength > recommendedLength}
-                    helperText={
-                      errors.subheading
-                        ? errors.subheading.message || errors.subheading.type
-                        : HEADER_DEFAULT_HELPER_TEXT
-                    }
-                    copyData={data.value}
-                    updateCopy={pars => {
-                      data.onChange(pars);
-                      handleSubmit(setValidatedFields)();
-                    }}
-                    name="subheading"
-                    label="Subheading copy"
-                    disabled={!editMode}
-                    rteMenuConstraints={{
-                      noBold: true,
-                    }}
-                  />
-                );
-              }}
-            />
-          )}
+          =
         </div>
       </div>
     </>
