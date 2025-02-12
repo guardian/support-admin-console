@@ -23,7 +23,6 @@ const DEV_AND_CODE_DEFAULT_VARIANT: SupportLandingPageVariant = {
     subheading:
       'We believe every one of us deserves to read quality, independent, fact-checked news and measured explanation – that’s why we keep Guardian journalism open to all. Our editorial independence has never been so vital. No one sets our agenda, or edits our editor, so we can keep providing independent reporting each and every day. No matter how unpredictable the future feels, we will remain with you. Every contribution, however big or small, makes our work possible – in times of crisis and beyond.',
   },
-  components: [],
 };
 
 const PROD_DEFAULT_VARIANT: SupportLandingPageVariant = {
@@ -32,7 +31,6 @@ const PROD_DEFAULT_VARIANT: SupportLandingPageVariant = {
     heading: 'Support the Guardian',
     subheading: 'Support the Guardian from as little as %%CURRENCY_SYMBOL%%1. Thank you.',
   },
-  components: [],
 };
 
 export const getDefaultVariant = (): SupportLandingPageVariant => {
