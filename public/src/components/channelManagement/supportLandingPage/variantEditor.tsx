@@ -125,7 +125,7 @@ export const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
   const getSubheadingCopyLength = () => {
     if (copy.heading != null) {
       return [
-        getRteCopyLength([...copy.heading, copy.subheading || '']),
+        getRteCopyLength([...copy.heading, copy.heading || '']),
         headingCopyRecommendedLength,
       ];
     }
