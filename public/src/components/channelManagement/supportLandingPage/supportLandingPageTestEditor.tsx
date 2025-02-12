@@ -3,6 +3,7 @@ import { ValidatedTestEditorProps } from '../validatedTestEditor';
 import {
   SupportLandingPageTest,
   SupportLandingPageVariant,
+  Targeting,
 } from '../../../models/supportLandingPage';
 import { Typography } from '@mui/material';
 import VariantsEditor from '../../tests/variants/variantsEditor';
@@ -11,6 +12,7 @@ import { getDefaultVariant } from './utils/defaults';
 import VariantSummary from '../../tests/variants/variantSummary';
 import VariantEditor from './variantEditor';
 import VariantLandingPagePreview from './variantLandingPagePreview';
+import LandingPageTestEditorTargetAudienceSelector from './landingPageTestEditorTargetAudienceSelector';
 
 const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLandingPageTest>> = ({
   test,
@@ -19,7 +21,6 @@ const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLan
   setValidationStatusForField,
 }: ValidatedTestEditorProps<SupportLandingPageTest>) => {
   const classes = useStyles();
-  console.log(test, userHasTestLocked, onTestChange, setValidationStatusForField);
 
   const updateTest = (updatedTest: SupportLandingPageTest): void => {
     onTestChange({
@@ -49,6 +50,13 @@ const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLan
       name: name,
     };
     onVariantsChange([...test.variants, newVariant]);
+  };
+
+  const onTargetingChange = (updatedTargeting: Targeting): void => {
+    updateTest({
+      ...test,
+      targeting: updatedTargeting,
+    });
   };
 
   const renderVariantEditor = (variant: SupportLandingPageVariant): React.ReactElement => (
@@ -108,6 +116,18 @@ const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLan
               onVariantClone={onVariantClone}
             />
           </div>
+        </div>
+
+        <div className={classes.sectionContainer}>
+          <Typography variant={'h3'} className={classes.sectionHeader}>
+            Target audience
+          </Typography>
+
+          <LandingPageTestEditorTargetAudienceSelector
+            targeting={test.targeting}
+            onTargetingUpdate={onTargetingChange}
+            isDisabled={!userHasTestLocked}
+          />
         </div>
       </div>
     );

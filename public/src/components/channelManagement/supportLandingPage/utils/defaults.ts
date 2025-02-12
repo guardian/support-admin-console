@@ -1,8 +1,9 @@
-import { Cta, RegionTargeting, UserCohort } from '../../helpers/shared';
+import { Cta } from '../../helpers/shared';
 import { getStage } from '../../../../utils/stage';
 import {
   SupportLandingPageTest,
   SupportLandingPageVariant,
+  Targeting,
 } from '../../../../models/supportLandingPage';
 
 export const DEFAULT_PRIMARY_CTA: Cta = {
@@ -40,19 +41,15 @@ export const getDefaultVariant = (): SupportLandingPageVariant => {
   return PROD_DEFAULT_VARIANT;
 };
 
-export const DEFAULT_REGION_TARGETING: RegionTargeting = {
-  targetedCountryGroups: [],
-  targetedCountryCodes: [],
+export const DEFAULT_TARGETING: Targeting = {
+  countryGroups: [],
 };
 
 const DEV_AND_CODE_DEFAULT_LANDING_PAGE_TEST: SupportLandingPageTest = {
   name: 'TEST',
   nickname: 'TEST',
   status: 'Draft',
-  userCohort: UserCohort.AllNonSupporters,
-  locations: [],
-  targeting: [],
-  regionTargeting: DEFAULT_REGION_TARGETING,
+  targeting: DEFAULT_TARGETING,
   variants: [DEV_AND_CODE_DEFAULT_VARIANT],
   methodologies: [{ name: 'ABTest' }],
 };
@@ -61,10 +58,7 @@ const PROD_DEFAULT_LANDING_PAGE: SupportLandingPageTest = {
   name: '',
   nickname: '',
   status: 'Draft',
-  userCohort: UserCohort.AllNonSupporters,
-  locations: [],
-  targeting: [],
-  regionTargeting: DEFAULT_REGION_TARGETING,
+  targeting: DEFAULT_TARGETING,
   variants: [],
   methodologies: [{ name: 'ABTest' }],
 };
