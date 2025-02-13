@@ -14,9 +14,9 @@ case class  SupportLandingPageVariant(
                                        copy: SupportLandingPageCopy,
                                      )
 
-case class Targeting(
-                      countryGroups: List[Region]= Nil,
-                    )
+case class SupportLandingPageTestTargeting(
+                                            regionTargeting: RegionTargeting,
+                                           )
 
 case class SupportLandingPageTest(
                                    name: String,
@@ -25,7 +25,7 @@ case class SupportLandingPageTest(
                                    lockStatus: Option[LockStatus],
                                    priority: Option[Int],
                                    nickname: Option[String],
-                                   targeting: Targeting,
+                                   targeting: SupportLandingPageTestTargeting,
                                    variants: List[SupportLandingPageVariant],
                                    campaignName: Option[String] = Some("NOT_IN_CAMPAIGN"),
                                    methodologies: List[Methodology] = defaultMethodologies,

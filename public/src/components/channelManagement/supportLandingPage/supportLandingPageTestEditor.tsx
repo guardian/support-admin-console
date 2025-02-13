@@ -3,7 +3,6 @@ import { ValidatedTestEditorProps } from '../validatedTestEditor';
 import {
   SupportLandingPageTest,
   SupportLandingPageVariant,
-  Targeting,
 } from '../../../models/supportLandingPage';
 import { Typography } from '@mui/material';
 import VariantsEditor from '../../tests/variants/variantsEditor';
@@ -11,8 +10,8 @@ import { useStyles } from '../helpers/testEditorStyles';
 import { getDefaultVariant } from './utils/defaults';
 import VariantSummary from '../../tests/variants/variantSummary';
 import VariantEditor from './variantEditor';
-import VariantLandingPagePreview from './variantLandingPagePreview';
-import LandingPageTestEditorTargetAudienceSelector from './landingPageTestEditorTargetAudienceSelector';
+import TestEditorTargetRegionsSelector from '../testEditorTargetRegionsSelector';
+import { RegionTargeting } from '../helpers/shared';
 
 const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLandingPageTest>> = ({
   test,
@@ -52,10 +51,12 @@ const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLan
     onVariantsChange([...test.variants, newVariant]);
   };
 
-  const onTargetingChange = (updatedTargeting: Targeting): void => {
+  const onTargetingChange = (updatedTargeting: RegionTargeting): void => {
     updateTest({
       ...test,
-      targeting: updatedTargeting,
+      targeting: {
+        regionTargeting: updatedTargeting,
+      },
     });
   };
 
@@ -79,7 +80,6 @@ const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLan
         testName={test.name}
         testType="LANDING_PAGE"
         isInEditMode={userHasTestLocked}
-        topButton={<VariantLandingPagePreview variant={variant} />}
         platform="DOTCOM"
         articleType="Standard"
       />
@@ -123,9 +123,9 @@ const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLan
             Target audience
           </Typography>
 
-          <LandingPageTestEditorTargetAudienceSelector
-            targeting={test.targeting}
-            onTargetingUpdate={onTargetingChange}
+          <TestEditorTargetRegionsSelector
+            regionTargeting={test.targeting.regionTargeting}
+            onRegionTargetingUpdate={onTargetingChange}
             isDisabled={!userHasTestLocked}
           />
         </div>

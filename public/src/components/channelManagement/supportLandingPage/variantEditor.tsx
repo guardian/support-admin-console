@@ -8,7 +8,6 @@ import {
   SupportLandingPageCopy,
   SupportLandingPageVariant,
 } from '../../../models/supportLandingPage';
-import ConfigureComponentsEditor from './configureComponentsEditor';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
@@ -164,7 +163,12 @@ export const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                 label="Heading copy"
                 disabled={!editMode}
                 rteMenuConstraints={{
-                  noBold: true,
+                  noArticleCountTemplate: true,
+                  noCurrencyTemplate: true,
+                  noCountryNameTemplate: true,
+                  noDayTemplate: true,
+                  noDateTemplate: true,
+                  noPriceTemplates: true,
                 }}
               />
             );
@@ -196,7 +200,12 @@ export const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                   label="Subheading copy"
                   disabled={!editMode}
                   rteMenuConstraints={{
-                    noBold: true,
+                    noArticleCountTemplate: true,
+                    noCurrencyTemplate: true,
+                    noCountryNameTemplate: true,
+                    noDayTemplate: true,
+                    noDateTemplate: true,
+                    noPriceTemplates: true,
                   }}
                 />
               );
@@ -231,9 +240,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
         Configure Components
       </Typography>
       <div>
-        <ConfigureComponentsEditor
-          variant={variant}
-          onVariantChange={onVariantChange}
+        <VariantContentEditor
           copy={variant.copy}
           onChange={(updatedCopy: SupportLandingPageCopy): void =>
             onVariantChange({ ...variant, copy: updatedCopy })

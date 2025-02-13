@@ -2,8 +2,8 @@ import { Cta, RegionTargeting } from '../../helpers/shared';
 import { getStage } from '../../../../utils/stage';
 import {
   SupportLandingPageTest,
+  SupportLandingPageTestTargeting,
   SupportLandingPageVariant,
-  Targeting,
 } from '../../../../models/supportLandingPage';
 
 export const DEFAULT_PRIMARY_CTA: Cta = {
@@ -41,8 +41,11 @@ export const getDefaultVariant = (): SupportLandingPageVariant => {
   return PROD_DEFAULT_VARIANT;
 };
 
-export const DEFAULT_TARGETING: Targeting = {
-  countryGroups: [],
+export const DEFAULT_TARGETING: SupportLandingPageTestTargeting = {
+  regionTargeting: {
+    targetedCountryGroups: [],
+    targetedCountryCodes: [],
+  },
 };
 
 export const DEFAULT_REGION_TARGETING: RegionTargeting = {
