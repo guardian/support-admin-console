@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { TextField, Theme, Typography, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import HeaderTestVariantEditorCtasEditor from './headerTestVariantEditorCtasEditor';
+import HeaderTestVariantCtasEditor from './headerTestVariantCtasEditor';
 import VariantCopyLengthWarning from '../../tests/variants/variantCopyLengthWarning';
 import { templateValidatorForPlatform } from '../helpers/validation';
 import { Cta } from '../helpers/shared';
@@ -174,7 +174,7 @@ const HeaderTestVariantContentEditor: React.FC<HeaderTestVariantContentEditorPro
       </Typography>
 
       <div className={classes.buttonsContainer}>
-        <HeaderTestVariantEditorCtasEditor
+        <HeaderTestVariantCtasEditor
           primaryCta={content.primaryCta}
           secondaryCta={content.secondaryCta}
           updatePrimaryCta={updatePrimaryCta}
