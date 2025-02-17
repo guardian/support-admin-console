@@ -1,35 +1,25 @@
-import { Cta, RegionTargeting } from '../../helpers/shared';
+import { RegionTargeting } from '../../helpers/shared';
 import { getStage } from '../../../../utils/stage';
 import {
   SupportLandingPageTest,
-  SupportLandingPageTestTargeting,
   SupportLandingPageVariant,
 } from '../../../../models/supportLandingPage';
-
-export const DEFAULT_PRIMARY_CTA: Cta = {
-  text: 'Support the Guardian',
-  baseUrl: 'https://support.theguardian.com/contribute',
-};
-
-export const DEFAULT_SECONDARY_CTA: Cta = {
-  text: 'Support the Guardian',
-  baseUrl: 'https://support.theguardian.com/contribute',
-};
 
 const DEV_AND_CODE_DEFAULT_VARIANT: SupportLandingPageVariant = {
   name: 'CONTROL',
   copy: {
-    heading: 'We chose a different approach. Will you support it?',
+    heading: 'Support fearless, independent journalism',
     subheading:
-      'We believe every one of us deserves to read quality, independent, fact-checked news and measured explanation – that’s why we keep Guardian journalism open to all. Our editorial independence has never been so vital. No one sets our agenda, or edits our editor, so we can keep providing independent reporting each and every day. No matter how unpredictable the future feels, we will remain with you. Every contribution, however big or small, makes our work possible – in times of crisis and beyond.',
+      'We’re not owned by a billionaire or shareholders - our readers support us. Choose to join with one of the options below. <strong>Cancel anytime.</strong>',
   },
 };
 
 const PROD_DEFAULT_VARIANT: SupportLandingPageVariant = {
   name: 'CONTROL',
   copy: {
-    heading: 'Support the Guardian',
-    subheading: 'Support the Guardian from as little as %%CURRENCY_SYMBOL%%1. Thank you.',
+    heading: 'Support fearless, independent journalism',
+    subheading:
+      'We’re not owned by a billionaire or shareholders - our readers support us. Choose to join with one of the options below. <strong>Cancel anytime.</strong>',
   },
 };
 
@@ -41,13 +31,6 @@ export const getDefaultVariant = (): SupportLandingPageVariant => {
   return PROD_DEFAULT_VARIANT;
 };
 
-export const DEFAULT_TARGETING: SupportLandingPageTestTargeting = {
-  regionTargeting: {
-    targetedCountryGroups: [],
-    targetedCountryCodes: [],
-  },
-};
-
 export const DEFAULT_REGION_TARGETING: RegionTargeting = {
   targetedCountryGroups: [],
   targetedCountryCodes: [],
@@ -57,7 +40,6 @@ const DEV_AND_CODE_DEFAULT_LANDING_PAGE_TEST: SupportLandingPageTest = {
   name: 'TEST',
   nickname: 'TEST',
   status: 'Draft',
-  targeting: DEFAULT_TARGETING,
   locations: [],
   regionTargeting: DEFAULT_REGION_TARGETING,
   variants: [DEV_AND_CODE_DEFAULT_VARIANT],
@@ -68,7 +50,6 @@ const PROD_DEFAULT_LANDING_PAGE: SupportLandingPageTest = {
   name: '',
   nickname: '',
   status: 'Draft',
-  targeting: DEFAULT_TARGETING,
   locations: [],
   regionTargeting: DEFAULT_REGION_TARGETING,
   variants: [],
