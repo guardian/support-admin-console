@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Theme, Typography } from '@mui/material';
+import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { templateValidatorForPlatform } from '../helpers/validation';
 import { getRteCopyLength, RichTextEditorSingleLine } from '../richTextEditor/richTextEditor';
@@ -235,9 +235,6 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
 
   return (
     <div className={classes.container}>
-      <Typography variant={'h3'} className={classes.sectionHeader}>
-        Configure Components
-      </Typography>
       <div>
         <VariantContentEditor
           copy={variant.copy}
