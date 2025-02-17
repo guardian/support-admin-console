@@ -13,7 +13,7 @@ import { Typography } from '@mui/material';
 import VariantEditor from './variantEditor';
 import CampaignSelector from '../CampaignSelector';
 import VariantsEditor from '../../tests/variants/variantsEditor';
-import TestEditorTargetAudienceSelector from '../sharedTestComponents/testEditorTargetAudienceSelector';
+import TargetAudienceEditor from '../sharedTestComponents/targetAudienceEditor';
 import ArticleCountEditor, {
   DEFAULT_ARTICLES_VIEWED_SETTINGS,
 } from '../sharedTestComponents/articleCountEditor';
@@ -298,7 +298,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
             Target audience
           </Typography>
 
-          <TestEditorTargetAudienceSelector
+          <TargetAudienceEditor
             regionTargeting={
               test.regionTargeting ?? {
                 // For backwards compatibility with the deprecated locations field

@@ -15,7 +15,7 @@ import { FormControlLabel, Switch, Typography } from '@mui/material';
 import CampaignSelector from '../CampaignSelector';
 import VariantsEditor from '../../tests/variants/variantsEditor';
 import VariantSummary from '../../tests/variants/variantSummary';
-import TestEditorTargetAudienceSelector from '../sharedTestComponents/testEditorTargetAudienceSelector';
+import TargetAudienceEditor from '../sharedTestComponents/targetAudienceEditor';
 import ArticleCountEditor, {
   DEFAULT_ARTICLES_VIEWED_SETTINGS,
 } from '../sharedTestComponents/articleCountEditor';
@@ -351,7 +351,7 @@ export const getEpicTestEditor = (
               Target audience
             </Typography>
 
-            <TestEditorTargetAudienceSelector
+            <TargetAudienceEditor
               regionTargeting={
                 test.regionTargeting ?? {
                   // For backwards compatibility with the deprecated locations field

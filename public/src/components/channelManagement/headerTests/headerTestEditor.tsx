@@ -13,7 +13,7 @@ import HeaderTestVariantEditor from './headerTestVariantEditor';
 import VariantsEditor from '../../tests/variants/variantsEditor';
 import CampaignSelector from '../CampaignSelector';
 
-import TestEditorTargetAudienceSelector from '../sharedTestComponents/testEditorTargetAudienceSelector';
+import TargetAudienceEditor from '../sharedTestComponents/targetAudienceEditor';
 
 import { HeaderTest, HeaderVariant } from '../../../models/header';
 import { getDefaultVariant } from './utils/defaults';
@@ -182,7 +182,7 @@ const HeaderTestEditor: React.FC<ValidatedTestEditorProps<HeaderTest>> = ({
           Target audience
         </Typography>
 
-        <TestEditorTargetAudienceSelector
+        <TargetAudienceEditor
           regionTargeting={
             test.regionTargeting ?? {
               // For backwards compatibility with the deprecated locations field

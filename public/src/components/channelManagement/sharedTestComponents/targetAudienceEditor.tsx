@@ -32,7 +32,7 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   },
 }));
 
-interface TestEditorTargetAudienceSelectorProps {
+interface TargetAudienceEditorProps {
   regionTargeting: RegionTargeting;
   onRegionTargetingUpdate: (regionTargeting: RegionTargeting) => void;
   selectedCohort: UserCohort;
@@ -51,7 +51,7 @@ interface TestEditorTargetAudienceSelectorProps {
   showConsentStatusSelector: boolean;
   platform?: TestPlatform;
 }
-const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelectorProps> = ({
+const TargetAudienceEditor: React.FC<TargetAudienceEditorProps> = ({
   regionTargeting,
   onRegionTargetingUpdate,
   selectedCohort,
@@ -69,7 +69,7 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
   onConsentStatusChange,
   showConsentStatusSelector,
   platform,
-}: TestEditorTargetAudienceSelectorProps) => {
+}: TargetAudienceEditorProps) => {
   const classes = useStyles();
 
   return (
@@ -165,4 +165,4 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
   );
 };
 
-export default TestEditorTargetAudienceSelector;
+export default TargetAudienceEditor;

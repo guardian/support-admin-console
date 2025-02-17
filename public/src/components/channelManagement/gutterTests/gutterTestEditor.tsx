@@ -14,7 +14,7 @@ import { Typography } from '@mui/material';
 import { getDefaultVariant } from './utils/defaults';
 import CampaignSelector from '../CampaignSelector';
 import ContextTargetingEditor from '../sharedTestComponents/contextTargetingEditor';
-import TestEditorTargetAudienceSelector from '../sharedTestComponents/testEditorTargetAudienceSelector';
+import TargetAudienceEditor from '../sharedTestComponents/targetAudienceEditor';
 import { ControlProportionSettings } from '../helpers/controlProportionSettings';
 import GutterVariantPreview from './gutterVariantPreview';
 import { useStyles } from '../helpers/testEditorStyles';
@@ -210,7 +210,7 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
           Target audience
         </Typography>
 
-        <TestEditorTargetAudienceSelector
+        <TargetAudienceEditor
           regionTargeting={
             test.regionTargeting ?? {
               // For backwards compatibility with the deprecated locations field
