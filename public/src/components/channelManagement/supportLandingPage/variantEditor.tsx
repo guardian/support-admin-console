@@ -211,7 +211,6 @@ export const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
               );
             }}
           />
-          =
         </div>
       </div>
     </>
