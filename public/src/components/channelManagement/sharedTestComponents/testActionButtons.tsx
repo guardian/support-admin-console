@@ -37,7 +37,7 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   },
 }));
 
-interface TestEditorActionButtonsProps {
+interface TestActionButtonsProps {
   existingNames: string[];
   sourceName?: string | void;
   existingNicknames: string[];
@@ -49,7 +49,7 @@ interface TestEditorActionButtonsProps {
   onCopy: (name: string, nickname: string) => void;
 }
 
-const TestEditorActionButtons: React.FC<TestEditorActionButtonsProps> = ({
+const TestActionButtons: React.FC<TestActionButtonsProps> = ({
   existingNames,
   sourceName,
   existingNicknames,
@@ -59,7 +59,7 @@ const TestEditorActionButtons: React.FC<TestEditorActionButtonsProps> = ({
   onDelete,
   isDisabled,
   onCopy,
-}: TestEditorActionButtonsProps) => {
+}: TestActionButtonsProps) => {
   const classes = useStyles();
 
   const DeleteButton: React.FC = () => {
@@ -182,4 +182,4 @@ const TestEditorActionButtons: React.FC<TestEditorActionButtonsProps> = ({
   );
 };
 
-export default TestEditorActionButtons;
+export default TestActionButtons;
