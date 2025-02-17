@@ -3,8 +3,8 @@ import { List } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 
-import { Test } from '../helpers/shared';
-import TestListTest from './testListTest';
+import { Test } from '../../helpers/shared';
+import TestListItem from './testListItem';
 
 const useStyles = makeStyles(() => ({
   container: {},
@@ -55,7 +55,7 @@ const TestList = <T extends Test>({
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
                       >
-                        <TestListTest
+                        <TestListItem
                           test={test}
                           isSelected={test.name === selectedTestName}
                           isEdited={!!test.lockStatus?.locked}
@@ -65,7 +65,7 @@ const TestList = <T extends Test>({
                     )}
                   </Draggable>
                 ) : (
-                  <TestListTest
+                  <TestListItem
                     key={test.name}
                     test={test}
                     isSelected={test.name === selectedTestName}

@@ -35,15 +35,15 @@ const useStyles = makeStyles(({ palette }: Theme) => ({
   },
 }));
 
-interface TestListTestLiveLabelProps {
+interface LiveStatusLabelProps {
   isLive: boolean;
   shouldInvertColor: boolean;
 }
 
-const TestListTestLiveLabel: React.FC<TestListTestLiveLabelProps> = ({
+const LiveStatusLabel: React.FC<LiveStatusLabelProps> = ({
   isLive,
   shouldInvertColor,
-}: TestListTestLiveLabelProps) => {
+}: LiveStatusLabelProps) => {
   const classes = useStyles();
   const containerClasses = [classes.container];
   if (isLive) {
@@ -59,4 +59,4 @@ const TestListTestLiveLabel: React.FC<TestListTestLiveLabelProps> = ({
   );
 };
 
-export default TestListTestLiveLabel;
+export default LiveStatusLabel;

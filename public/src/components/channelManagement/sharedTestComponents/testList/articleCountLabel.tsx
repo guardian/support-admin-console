@@ -15,7 +15,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const TestListTestArticleCountLabel = (): JSX.Element => {
+const ArticleCountLabel = (): JSX.Element => {
   const classes = useStyles();
   return (
     <div className={classes.container}>
@@ -26,4 +26,4 @@ const TestListTestArticleCountLabel = (): JSX.Element => {
   );
 };
 
-export default TestListTestArticleCountLabel;
+export default ArticleCountLabel;

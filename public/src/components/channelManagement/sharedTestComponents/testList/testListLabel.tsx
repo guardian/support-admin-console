@@ -15,7 +15,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-interface TestListTestNameProps {
+interface TestListLabelProps {
   name: string;
   nickname?: string;
   shouldInverColor: boolean;
@@ -23,11 +23,11 @@ interface TestListTestNameProps {
 
 const TEST_NAME_CHARACTERS_TO_STRIP_REGEX = /^\d{4}-\d{2}-\d{2}_(contribs*_|moment_)*/;
 
-const TestListTestName: React.FC<TestListTestNameProps> = ({
+const TestListLabel: React.FC<TestListLabelProps> = ({
   name,
   nickname,
   shouldInverColor,
-}: TestListTestNameProps) => {
+}: TestListLabelProps) => {
   const classes = useStyles();
 
   const textClasses = [classes.text];
@@ -42,4 +42,4 @@ const TestListTestName: React.FC<TestListTestNameProps> = ({
   );
 };
 
-export default TestListTestName;
+export default TestListLabel;

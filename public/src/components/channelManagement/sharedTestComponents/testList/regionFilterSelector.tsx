@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from '@mui/material';
 
-import { regions, regionIds, RegionsAndAll } from '../../../utils/models';
+import { regions, regionIds, RegionsAndAll } from '../../../../utils/models';
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles(() => ({
@@ -10,15 +10,15 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-interface TestListSidebarFilterSelectorProps {
+interface RegionFilterSelectorProps {
   regionFilter: string;
   handleRegionFilterChange: (event: RegionsAndAll) => void;
 }
 
-const TestListSidebarFilterSelector: React.FC<TestListSidebarFilterSelectorProps> = ({
+const RegionFilterSelector: React.FC<RegionFilterSelectorProps> = ({
   regionFilter,
   handleRegionFilterChange,
-}: TestListSidebarFilterSelectorProps) => {
+}: RegionFilterSelectorProps) => {
   const classes = useStyles();
 
   return (
@@ -47,4 +47,4 @@ const TestListSidebarFilterSelector: React.FC<TestListSidebarFilterSelectorProps
   );
 };
 
-export default TestListSidebarFilterSelector;
+export default RegionFilterSelector;

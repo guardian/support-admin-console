@@ -2,13 +2,13 @@ import React from 'react';
 import { ListItem, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { red } from '@mui/material/colors';
-import { Test } from '../helpers/shared';
-import TestListTestLiveLabel from './testListTestLiveLabel';
-import TestListTestName from './testListTestName';
-import TestListTestArticleCountLabel from './testListTestArticleCountLabel';
-import useHover from '../../../hooks/useHover';
+import { Test } from '../../helpers/shared';
+import LiveStatusLabel from './liveStatusLabel';
+import TestListLabel from './testListLabel';
+import ArticleCountLabel from './articleCountLabel';
+import useHover from '../../../../hooks/useHover';
 import EditIcon from '@mui/icons-material/Edit';
-import TestListBanditIcon from './testListBanditIcon';
+import BanditIcon from './banditIcon';
 
 const useStyles = makeStyles(({ palette }: Theme) => ({
   test: {
@@ -67,19 +67,19 @@ const useStyles = makeStyles(({ palette }: Theme) => ({
   },
 }));
 
-interface TestListTestProps {
+interface TestListItemProps {
   test: Test;
   isSelected: boolean;
   isEdited: boolean;
   onClick: () => void;
 }
 
-const TestListTest: React.FC<TestListTestProps> = ({
+const TestListItem: React.FC<TestListItemProps> = ({
   test,
   isSelected,
   isEdited,
   onClick,
-}: TestListTestProps) => {
+}: TestListItemProps) => {
   const classes = useStyles();
 
   const hasArticleCount = test.articlesViewedSettings !== undefined;
@@ -101,11 +101,11 @@ const TestListTest: React.FC<TestListTestProps> = ({
     <ListItem className={containerClasses.join(' ')} button={true} onClick={onClick} ref={ref}>
       <div className={classes.labelAndNameContainer}>
         {isEdited && (isSelected ? <EditIcon className={classes.whitePencil} /> : <EditIcon />)}
-        <TestListTestLiveLabel
+        <LiveStatusLabel
           isLive={test.status === 'Live'}
           shouldInvertColor={shouldInvertColor}
         />
-        <TestListTestName
+        <TestListLabel
           name={test.name}
           nickname={test.nickname}
           shouldInverColor={shouldInvertColor}
@@ -113,11 +113,11 @@ const TestListTest: React.FC<TestListTestProps> = ({
       </div>
 
       <div className={classes.icons}>
-        {hasArticleCount && <TestListTestArticleCountLabel />}
-        {isBanditTest && <TestListBanditIcon />}
+        {hasArticleCount && <ArticleCountLabel />}
+        {isBanditTest && <BanditIcon />}
       </div>
     </ListItem>
   );
 };
 
-export default TestListTest;
+export default TestListItem;

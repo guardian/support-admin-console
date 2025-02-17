@@ -11,7 +11,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const TestListBanditIcon = (): JSX.Element => {
+const BanditIcon = (): JSX.Element => {
   const classes = useStyles();
   return (
     <div className={classes.container}>
@@ -20,4 +20,4 @@ const TestListBanditIcon = (): JSX.Element => {
   );
 };
 
-export default TestListBanditIcon;
+export default BanditIcon;
