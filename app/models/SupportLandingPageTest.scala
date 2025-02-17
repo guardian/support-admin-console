@@ -3,29 +3,31 @@ package models
 import io.circe.generic.extras.Configuration
 import io.circe.generic.extras.auto._
 import io.circe.generic.extras.semiauto._
-import io.circe.{Decoder, Encoder, Json}
+import io.circe.{Decoder, Encoder}
 import models.Methodology.defaultMethodologies
-case class  SupportLandingPageCopy(
-                                       heading: String,
-                                       subheading: String,
-                                     )
-case class  SupportLandingPageVariant(
-                                       name: String,
-                                       copy: SupportLandingPageCopy,
-                                     )
+
+case class SupportLandingPageCopy(
+  heading: String,
+  subheading: String,
+)
+
+case class SupportLandingPageVariant(
+  name: String,
+  copy: SupportLandingPageCopy,
+)
 
 case class SupportLandingPageTest(
-                                   name: String,
-                                   channel: Option[Channel],
-                                   status: Option[Status],
-                                   lockStatus: Option[LockStatus],
-                                   priority: Option[Int],
-                                   nickname: Option[String],
-                                   regionTargeting: Option[RegionTargeting]=None,
-                                   variants: List[SupportLandingPageVariant],
-                                   campaignName: Option[String] = Some("NOT_IN_CAMPAIGN"),
-                                   methodologies: List[Methodology] = defaultMethodologies,
-                                 ) extends ChannelTest[SupportLandingPageTest] {
+  name: String,
+  channel: Option[Channel],
+  status: Option[Status],
+  lockStatus: Option[LockStatus],
+  priority: Option[Int],
+  nickname: Option[String],
+  regionTargeting: Option[RegionTargeting] = None,
+  variants: List[SupportLandingPageVariant],
+  campaignName: Option[String] = Some("NOT_IN_CAMPAIGN"),
+  methodologies: List[Methodology] = defaultMethodologies,
+) extends ChannelTest[SupportLandingPageTest] {
 
   override def withChannel(channel: Channel): SupportLandingPageTest =
     this.copy(channel = Some(channel))
@@ -40,5 +42,3 @@ object SupportLandingPageTest {
   implicit val landingPageTestEncoder: Encoder[SupportLandingPageTest] =
     deriveConfiguredEncoder[SupportLandingPageTest]
 }
-
-
