@@ -15,18 +15,18 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   },
 }));
 
-interface TestEditorContextTargetingProps {
+interface ContextTargetingEditorProps {
   contextTargeting: PageContextTargeting;
   editMode: boolean;
   updateContextTargeting: (contextTargeting: PageContextTargeting) => void;
   onlyShowExcludedTags?: boolean;
 }
 
-const TestEditorContextTargeting: React.FC<TestEditorContextTargetingProps> = ({
+const ContextTargetingEditor: React.FC<ContextTargetingEditorProps> = ({
   contextTargeting,
   editMode,
   updateContextTargeting,
-}: TestEditorContextTargetingProps) => {
+}: ContextTargetingEditorProps) => {
   const classes = useStyles();
 
   const { tagIds, sectionIds, excludedTagIds, excludedSectionIds } = contextTargeting;
@@ -75,4 +75,4 @@ const TestEditorContextTargeting: React.FC<TestEditorContextTargetingProps> = ({
   );
 };
 
-export default TestEditorContextTargeting;
+export default ContextTargetingEditor;

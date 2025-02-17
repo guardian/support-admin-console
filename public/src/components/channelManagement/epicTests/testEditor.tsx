@@ -22,7 +22,7 @@ import ArticleCountEditor, {
 import VariantEditorWithPreviewTab from '../../tests/variants/variantEditorWithPreviewTab';
 import VariantEditor from './variantEditor';
 import VariantPreview from './variantPreview';
-import TestEditorContextTargeting from '../sharedTestComponents/testEditorContextTargeting';
+import ContextTargetingEditor from '../sharedTestComponents/contextTargetingEditor';
 import MaxViewsEditor from './maxViewsEditor';
 import { ARTICLE_COUNT_TEMPLATE, COUNTRY_NAME_TEMPLATE } from '../helpers/validation';
 import TestVariantsSplitEditor from '../../tests/variants/testVariantsSplitEditor';
@@ -332,7 +332,7 @@ export const getEpicTestEditor = (
               Target content
             </Typography>
 
-            <TestEditorContextTargeting
+            <ContextTargetingEditor
               contextTargeting={{
                 tagIds: test.tagIds,
                 sectionIds: test.sections,

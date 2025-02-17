@@ -36,7 +36,7 @@ import {
   fetchFrontendSettings,
   FrontendSettingsType,
 } from '../../../utils/requests';
-import TestEditorContextTargeting from '../sharedTestComponents/testEditorContextTargeting';
+import ContextTargetingEditor from '../sharedTestComponents/contextTargetingEditor';
 import { getDesignForVariant } from '../../../utils/bannerDesigns';
 import { DeployScheduleEditor } from './deployScheduleEditor';
 import { TestMethodologyEditor } from '../sharedTestComponents/TestMethodologyEditor';
@@ -286,7 +286,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
             Target context
           </Typography>
 
-          <TestEditorContextTargeting
+          <ContextTargetingEditor
             contextTargeting={test.contextTargeting}
             editMode={userHasTestLocked}
             updateContextTargeting={contextTargeting => updateTest({ ...test, contextTargeting })}

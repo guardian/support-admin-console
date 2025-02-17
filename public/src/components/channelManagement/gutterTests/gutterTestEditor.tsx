@@ -13,7 +13,7 @@ import GutterVariantEditor from './gutterVariantEditor';
 import { Typography } from '@mui/material';
 import { getDefaultVariant } from './utils/defaults';
 import CampaignSelector from '../CampaignSelector';
-import TestEditorContextTargeting from '../sharedTestComponents/testEditorContextTargeting';
+import ContextTargetingEditor from '../sharedTestComponents/contextTargetingEditor';
 import TestEditorTargetAudienceSelector from '../sharedTestComponents/testEditorTargetAudienceSelector';
 import { ControlProportionSettings } from '../helpers/controlProportionSettings';
 import GutterVariantPreview from './gutterVariantPreview';
@@ -198,7 +198,7 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
           Target context
         </Typography>
 
-        <TestEditorContextTargeting
+        <ContextTargetingEditor
           contextTargeting={test.contextTargeting}
           editMode={userHasTestLocked}
           updateContextTargeting={updateContextTargeting}
