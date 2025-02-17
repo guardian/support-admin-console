@@ -3,7 +3,7 @@ import { List } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 
-import { Test } from './helpers/shared';
+import { Test } from '../helpers/shared';
 import TestListTest from './testListTest';
 
 const useStyles = makeStyles(() => ({

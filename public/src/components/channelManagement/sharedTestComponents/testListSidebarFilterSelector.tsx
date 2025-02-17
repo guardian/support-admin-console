@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from '@mui/material';
 
-import { regions, regionIds, RegionsAndAll } from '../../utils/models';
+import { regions, regionIds, RegionsAndAll } from '../../../utils/models';
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles(() => ({

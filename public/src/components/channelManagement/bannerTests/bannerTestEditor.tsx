@@ -13,10 +13,10 @@ import { Typography } from '@mui/material';
 import VariantEditor from './variantEditor';
 import CampaignSelector from '../CampaignSelector';
 import VariantsEditor from '../../tests/variants/variantsEditor';
-import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
-import TestEditorArticleCountEditor, {
+import TestEditorTargetAudienceSelector from '../sharedTestComponents/testEditorTargetAudienceSelector';
+import ArticleCountEditor, {
   DEFAULT_ARTICLES_VIEWED_SETTINGS,
-} from '../testEditorArticleCountEditor';
+} from '../sharedTestComponents/articleCountEditor';
 import {
   BannerContent,
   BannerTest,
@@ -29,17 +29,17 @@ import BannerVariantPreview from './bannerVariantPreview';
 import { ControlProportionSettings } from '../helpers/controlProportionSettings';
 import TestVariantsSplitEditor from '../../tests/variants/testVariantsSplitEditor';
 import { useStyles } from '../helpers/testEditorStyles';
-import { ValidatedTestEditorProps } from '../validatedTestEditor';
+import { ValidatedTestEditorProps } from '../sharedTestComponents/validatedTestEditor';
 import { BannerDesign } from '../../../models/bannerDesign';
 import {
   BannerDesignsResponse,
   fetchFrontendSettings,
   FrontendSettingsType,
 } from '../../../utils/requests';
-import TestEditorContextTargeting from '../testEditorContextTargeting';
+import TestEditorContextTargeting from '../sharedTestComponents/testEditorContextTargeting';
 import { getDesignForVariant } from '../../../utils/bannerDesigns';
 import { DeployScheduleEditor } from './deployScheduleEditor';
-import { TestMethodologyEditor } from '../TestMethodologyEditor';
+import { TestMethodologyEditor } from '../sharedTestComponents/TestMethodologyEditor';
 
 const copyHasTemplate = (content: BannerContent, template: string): boolean =>
   (content.heading && content.heading.includes(template)) ||
@@ -328,7 +328,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
             Article count
           </Typography>
 
-          <TestEditorArticleCountEditor
+          <ArticleCountEditor
             articlesViewedSettings={test.articlesViewedSettings}
             onArticlesViewedSettingsChanged={onArticlesViewedSettingsChange}
             onValidationChange={onArticlesViewedSettingsValidationChanged}

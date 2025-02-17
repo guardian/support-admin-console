@@ -15,14 +15,14 @@ import { FormControlLabel, Switch, Typography } from '@mui/material';
 import CampaignSelector from '../CampaignSelector';
 import VariantsEditor from '../../tests/variants/variantsEditor';
 import VariantSummary from '../../tests/variants/variantSummary';
-import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
-import TestEditorArticleCountEditor, {
+import TestEditorTargetAudienceSelector from '../sharedTestComponents/testEditorTargetAudienceSelector';
+import ArticleCountEditor, {
   DEFAULT_ARTICLES_VIEWED_SETTINGS,
-} from '../testEditorArticleCountEditor';
+} from '../sharedTestComponents/articleCountEditor';
 import VariantEditorWithPreviewTab from '../../tests/variants/variantEditorWithPreviewTab';
 import VariantEditor from './variantEditor';
 import VariantPreview from './variantPreview';
-import TestEditorContextTargeting from '../testEditorContextTargeting';
+import TestEditorContextTargeting from '../sharedTestComponents/testEditorContextTargeting';
 import MaxViewsEditor from './maxViewsEditor';
 import { ARTICLE_COUNT_TEMPLATE, COUNTRY_NAME_TEMPLATE } from '../helpers/validation';
 import TestVariantsSplitEditor from '../../tests/variants/testVariantsSplitEditor';
@@ -33,9 +33,9 @@ import {
 } from '../helpers/controlProportionSettings';
 import { useStyles } from '../helpers/testEditorStyles';
 import { EpicTestPreviewButton } from './testPreview';
-import { ValidatedTestEditor, ValidatedTestEditorProps } from '../validatedTestEditor';
-import { TestEditorProps } from '../testsForm';
-import { TestMethodologyEditor } from '../TestMethodologyEditor';
+import { ValidatedTestEditor, ValidatedTestEditorProps } from '../sharedTestComponents/validatedTestEditor';
+import { TestEditorProps } from '../sharedTestComponents/testsForm';
+import { TestMethodologyEditor } from '../sharedTestComponents/TestMethodologyEditor';
 
 const copyHasTemplate = (test: EpicTest, template: string): boolean =>
   test.variants.some(
@@ -411,7 +411,7 @@ export const getEpicTestEditor = (
               Article count
             </Typography>
 
-            <TestEditorArticleCountEditor
+            <ArticleCountEditor
               articlesViewedSettings={test.articlesViewedSettings}
               onArticlesViewedSettingsChanged={onArticlesViewedSettingsChange}
               onValidationChange={onArticlesViewedSettingsValidationChanged}

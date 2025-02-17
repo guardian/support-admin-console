@@ -24,9 +24,9 @@ import {
   EMPTY_ERROR_HELPER_TEXT,
   INVALID_CHARACTERS_ERROR_HELPER_TEXT,
   VALID_CHARACTERS_REGEX,
-} from './helpers/validation';
-import { Campaign } from './campaigns/CampaignsForm';
-import { fetchFrontendSettings, FrontendSettingsType } from '../../utils/requests';
+} from '../helpers/validation';
+import { Campaign } from '../campaigns/CampaignsForm';
+import { fetchFrontendSettings, FrontendSettingsType } from '../../../utils/requests';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
 const useStyles = makeStyles(() => ({

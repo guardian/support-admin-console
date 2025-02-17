@@ -2,11 +2,11 @@ import React from 'react';
 import { ListItem, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { red } from '@mui/material/colors';
-import { Test } from './helpers/shared';
+import { Test } from '../helpers/shared';
 import TestListTestLiveLabel from './testListTestLiveLabel';
 import TestListTestName from './testListTestName';
 import TestListTestArticleCountLabel from './testListTestArticleCountLabel';
-import useHover from '../../hooks/useHover';
+import useHover from '../../../hooks/useHover';
 import EditIcon from '@mui/icons-material/Edit';
 import TestListBanditIcon from './testListBanditIcon';
 

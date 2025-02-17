@@ -2,8 +2,8 @@ import React from 'react';
 
 import { Checkbox, FormControlLabel, FormGroup, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Region, regions, regionIds } from '../../utils/models';
-import { RegionTargeting, TestPlatform } from './helpers/shared';
+import { Region, regions, regionIds } from '../../../utils/models';
+import { RegionTargeting, TestPlatform } from '../helpers/shared';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   indentedContainer: {

@@ -15,7 +15,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 import CreateTestDialog from './createTestDialog';
-import useOpenable from '../../hooks/useOpenable';
+import useOpenable from '../../../hooks/useOpenable';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {

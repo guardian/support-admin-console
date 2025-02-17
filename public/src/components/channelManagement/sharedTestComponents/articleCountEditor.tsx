@@ -3,9 +3,9 @@ import { useForm } from 'react-hook-form';
 
 import { FormControl, Radio, RadioGroup, FormControlLabel, TextField, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { ArticlesViewedSettings } from './helpers/shared';
-import { notNumberValidator, EMPTY_ERROR_HELPER_TEXT } from './helpers/validation';
-import MultiselectAutocomplete from './MutliSelectTagEditor';
+import { ArticlesViewedSettings } from '../helpers/shared';
+import { notNumberValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
+import MultiselectAutocomplete from '../MutliSelectTagEditor';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -36,19 +36,19 @@ interface FormData {
   tagIds: string[];
 }
 
-interface TestEditorArticleCountEditorProps {
+interface ArticleCountEditorProps {
   articlesViewedSettings?: ArticlesViewedSettings;
   onArticlesViewedSettingsChanged: (updatedArticlesViewedSettings?: ArticlesViewedSettings) => void;
   onValidationChange: (isValid: boolean) => void;
   isDisabled: boolean;
 }
 
-const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> = ({
+const ArticleCountEditor: React.FC<ArticleCountEditorProps> = ({
   articlesViewedSettings,
   onArticlesViewedSettingsChanged,
   onValidationChange,
   isDisabled,
-}: TestEditorArticleCountEditorProps) => {
+}: ArticleCountEditorProps) => {
   const classes = useStyles();
 
   const defaultValues: FormData = {
@@ -186,4 +186,4 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
   );
 };
 
-export default TestEditorArticleCountEditor;
+export default ArticleCountEditor;

@@ -1,5 +1,5 @@
 import { FrontendSettingsType } from '../../../utils/requests';
-import { TestsForm } from '../testsForm';
+import { TestsForm } from '../sharedTestComponents/testsForm';
 import { getDefaultTest, getDefaultVariant } from './utils/defaults';
 import {
   AMP_EPIC_CONFIG,

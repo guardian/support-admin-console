@@ -1,8 +1,8 @@
 import { FrontendSettingsType } from '../../../utils/requests';
-import { TestsForm } from '../testsForm';
+import { TestsForm } from '../sharedTestComponents/testsForm';
 import GutterTestEditor from './gutterTestEditor';
 import { getDefaultTest } from './utils/defaults';
-import { ValidatedTestEditor } from '../validatedTestEditor';
+import { ValidatedTestEditor } from '../sharedTestComponents/validatedTestEditor';
 
 const createDefaultGutterAskTest = (newTestName: string, newTestNickName: string) => ({
   ...getDefaultTest(),

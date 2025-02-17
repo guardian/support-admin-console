@@ -11,7 +11,7 @@ import {
   Typography,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import useOpenable from '../../hooks/useOpenable';
+import useOpenable from '../../../hooks/useOpenable';
 import CloseIcon from '@mui/icons-material/Close';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Region } from '../../utils/models';
+import { Region } from '../../../utils/models';
 import {
   DeviceType,
   SignedInStatus,
@@ -9,10 +9,10 @@ import {
   TestPlatform,
   ConsentStatus,
   RegionTargeting,
-} from './helpers/shared';
+} from '../helpers/shared';
 import TestEditorTargetRegionsSelector from './testEditorTargetRegionsSelector';
-import TypedRadioGroup from './TypedRadioGroup';
-import MultiSelectCountryEditor from './MultiSelectCountryEditor';
+import TypedRadioGroup from '../TypedRadioGroup';
+import MultiSelectCountryEditor from '../MultiSelectCountryEditor';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {

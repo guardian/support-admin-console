@@ -4,7 +4,7 @@ import { Button, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 import { grey } from '@mui/material/colors';
-import CreateTestDialog from '../createTestDialog';
+import CreateTestDialog from '../sharedTestComponents/createTestDialog';
 
 const useStyles = makeStyles(({ palette }: Theme) => ({
   buttonText: {

@@ -8,13 +8,13 @@ import {
   SignedInStatus,
   UserCohort,
 } from '../helpers/shared';
-import { ValidatedTestEditorProps } from '../validatedTestEditor';
+import { ValidatedTestEditorProps } from '../sharedTestComponents/validatedTestEditor';
 import GutterVariantEditor from './gutterVariantEditor';
 import { Typography } from '@mui/material';
 import { getDefaultVariant } from './utils/defaults';
 import CampaignSelector from '../CampaignSelector';
-import TestEditorContextTargeting from '../testEditorContextTargeting';
-import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
+import TestEditorContextTargeting from '../sharedTestComponents/testEditorContextTargeting';
+import TestEditorTargetAudienceSelector from '../sharedTestComponents/testEditorTargetAudienceSelector';
 import { ControlProportionSettings } from '../helpers/controlProportionSettings';
 import GutterVariantPreview from './gutterVariantPreview';
 import { useStyles } from '../helpers/testEditorStyles';

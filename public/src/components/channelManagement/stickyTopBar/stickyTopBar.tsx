@@ -12,7 +12,7 @@ import { TestCopyButton } from './testCopyButton';
 import { grey } from '@mui/material/colors';
 import { Link } from '@mui/icons-material';
 import { FrontendSettingsType } from '../../../utils/requests';
-import TestLiveSwitch from '../testLiveSwitch';
+import TestLiveSwitch from '../sharedTestComponents/testLiveSwitch';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {

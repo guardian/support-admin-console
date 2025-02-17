@@ -13,7 +13,7 @@ import HeaderTestVariantEditor from './headerTestVariantEditor';
 import VariantsEditor from '../../tests/variants/variantsEditor';
 import CampaignSelector from '../CampaignSelector';
 
-import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
+import TestEditorTargetAudienceSelector from '../sharedTestComponents/testEditorTargetAudienceSelector';
 
 import { HeaderTest, HeaderVariant } from '../../../models/header';
 import { getDefaultVariant } from './utils/defaults';
@@ -22,7 +22,7 @@ import VariantSummary from '../../tests/variants/variantSummary';
 import { ControlProportionSettings } from '../helpers/controlProportionSettings';
 import TestVariantsSplitEditor from '../../tests/variants/testVariantsSplitEditor';
 import { useStyles } from '../helpers/testEditorStyles';
-import { ValidatedTestEditorProps } from '../validatedTestEditor';
+import { ValidatedTestEditorProps } from '../sharedTestComponents/validatedTestEditor';
 
 const HeaderTestEditor: React.FC<ValidatedTestEditorProps<HeaderTest>> = ({
   test,

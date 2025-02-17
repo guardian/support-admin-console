@@ -4,7 +4,7 @@ import { makeStyles } from '@mui/styles';
 import AddIcon from '@mui/icons-material/Add';
 
 import CreateTestDialog from './createTestDialog';
-import useOpenable from '../../hooks/useOpenable';
+import useOpenable from '../../../hooks/useOpenable';
 
 const useStyles = makeStyles(() => ({
   button: {

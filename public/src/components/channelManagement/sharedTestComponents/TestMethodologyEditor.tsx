@@ -1,7 +1,7 @@
 import React from 'react';
-import { BanditMethodology, Methodology } from './helpers/shared';
+import { BanditMethodology, Methodology } from '../helpers/shared';
 import { makeStyles } from '@mui/styles';
-import { BanditAnalyticsButton } from './BanditAnalyticsButton';
+import { BanditAnalyticsButton } from '../BanditAnalyticsButton';
 import {
   Button,
   MenuItem,
@@ -15,7 +15,7 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
 import Alert from '@mui/lab/Alert';
-import { addMethodologyToTestName } from './helpers/methodology';
+import { addMethodologyToTestName } from '../helpers/methodology';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 import { grey } from '@mui/material/colors';
 

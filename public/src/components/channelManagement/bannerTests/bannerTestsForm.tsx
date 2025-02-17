@@ -1,9 +1,9 @@
 import { FrontendSettingsType } from '../../../utils/requests';
-import { TestsForm } from '../testsForm';
+import { TestsForm } from '../sharedTestComponents/testsForm';
 import { getDefaultTest } from './utils/defaults';
 import { BannerTest } from '../../../models/banner';
 import BannerTestEditor from './bannerTestEditor';
-import { ValidatedTestEditor } from '../validatedTestEditor';
+import { ValidatedTestEditor } from '../sharedTestComponents/validatedTestEditor';
 
 const createDefaultBannerTest = (newTestName: string, newTestNickname: string): BannerTest => ({
   ...getDefaultTest(),

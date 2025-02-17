@@ -1,11 +1,11 @@
 import React from 'react';
 import { Button, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Test } from './helpers/shared';
+import { Test } from '../helpers/shared';
 import ArchiveIcon from '@mui/icons-material/Archive';
 
 import BatchProcessTestDialog from './batchProcessTestDialog';
-import useOpenable from '../../hooks/useOpenable';
+import useOpenable from '../../../hooks/useOpenable';
 
 const useStyles = makeStyles(() => ({
   button: {
