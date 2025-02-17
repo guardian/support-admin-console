@@ -11,7 +11,7 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   },
 }));
 
-interface TestEditorTargetRegionsSelectorProps {
+interface RegionTargetingEditorProps {
   regionTargeting: RegionTargeting;
   onRegionTargetingUpdate: (regionTargeting: RegionTargeting) => void;
   supportedRegions?: Region[];
@@ -19,13 +19,13 @@ interface TestEditorTargetRegionsSelectorProps {
   platform?: TestPlatform;
 }
 
-const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorProps> = ({
+const RegionTargetingEditor: React.FC<RegionTargetingEditorProps> = ({
   regionTargeting,
   onRegionTargetingUpdate,
   supportedRegions,
   isDisabled,
   platform,
-}: TestEditorTargetRegionsSelectorProps) => {
+}: RegionTargetingEditorProps) => {
   const classes = useStyles();
   const allRegions = (supportedRegions as Region[]) || regionIds;
 
@@ -95,4 +95,4 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
   );
 };
 
-export default TestEditorTargetRegionsSelector;
+export default RegionTargetingEditor;

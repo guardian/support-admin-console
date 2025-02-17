@@ -10,7 +10,7 @@ import {
   ConsentStatus,
   RegionTargeting,
 } from '../helpers/shared';
-import TestEditorTargetRegionsSelector from './testEditorTargetRegionsSelector';
+import RegionTargetingEditor from './regionTargetingEditor';
 import TypedRadioGroup from '../TypedRadioGroup';
 import MultiSelectCountryEditor from '../MultiSelectCountryEditor';
 
@@ -76,7 +76,7 @@ const TargetAudienceEditor: React.FC<TargetAudienceEditorProps> = ({
     <div className={classes.container}>
       <div className={classes.containerSection}>
         <Typography className={classes.heading}>Region</Typography>
-        <TestEditorTargetRegionsSelector
+        <RegionTargetingEditor
           regionTargeting={regionTargeting}
           onRegionTargetingUpdate={onRegionTargetingUpdate}
           supportedRegions={supportedRegions}
