@@ -41,7 +41,7 @@ const GutterVariantPreview: React.FC<GutterVariantPreviewProps> = ({
 
   const props = buildProps(variant);
 
-  const storyName = 'components-marketing-stickyliveblogask--default';
+  const storyName = 'components-marketing-gutterask--default';
   const storybookUrl = buildStorybookUrl(storyName, props);
 
   return (
