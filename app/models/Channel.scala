@@ -14,6 +14,7 @@ object Channel {
   case object Banner2 extends Channel
   case object Header extends Channel
   case object GutterLiveblog extends Channel
+  case object SupportLandingPage extends Channel
 
   implicit val customConfig: Configuration = Configuration.default.withDefaults
   implicit val statusEncoder = deriveEnumerationEncoder[Channel]

@@ -41,6 +41,7 @@ object ChannelTest {
         case Header => HeaderTest.headerTestDecoder(c)
         case Banner1 | Banner2 => BannerTest.bannerTestDecoder(c)
         case epic => EpicTest.epicTestDecoder(c)
+        case SupportLandingPage =>SupportLandingPageTest.landingPageTestDecoder(c)
       }
     }
   }
@@ -50,6 +51,7 @@ object ChannelTest {
       case header: HeaderTest => HeaderTest.headerTestEncoder(header)
       case banner: BannerTest => BannerTest.bannerTestEncoder(banner)
       case epic: EpicTest => EpicTest.epicTestEncoder(epic)
+      case landingPage :SupportLandingPageTest => SupportLandingPageTest.landingPageTestEncoder(landingPage)
     }
   }
 }

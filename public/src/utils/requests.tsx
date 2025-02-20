@@ -23,6 +23,7 @@ export enum FrontendSettingsType {
   channelSwitches = 'channel-switches',
   campaigns = 'campaigns',
   bannerDesigns = 'banner-designs',
+  supportLandingPageTests = 'support-landing-page-tests',
 }
 
 export enum AppsSettingsType {
