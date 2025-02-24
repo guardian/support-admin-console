@@ -54,9 +54,7 @@ const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLan
   const onTargetingChange = (updatedTargeting: RegionTargeting): void => {
     updateTest({
       ...test,
-      targeting: {
-        regionTargeting: updatedTargeting,
-      },
+      regionTargeting: updatedTargeting,
     });
   };
 
@@ -124,7 +122,7 @@ const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLan
           </Typography>
 
           <TestEditorTargetRegionsSelector
-            regionTargeting={test.targeting.regionTargeting}
+            regionTargeting={test.regionTargeting}
             onRegionTargetingUpdate={onTargetingChange}
             isDisabled={!userHasTestLocked}
           />
