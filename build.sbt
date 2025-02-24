@@ -24,7 +24,6 @@ libraryDependencies ++= Seq(
   "com.gu" %% "simple-configuration-ssm" % "1.5.7",
   "software.amazon.awssdk" % "s3" % awsVersion,
   "software.amazon.awssdk" % "dynamodb" % awsVersion,
-  "software.amazon.awssdk" % "athena" % awsVersion,
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
@@ -42,8 +41,7 @@ libraryDependencies ++= Seq(
 dependencyOverrides ++= List(
   // Play still uses an old version of jackson-core which has a vulnerability - https://security.snyk.io/vuln/SNYK-JAVA-COMFASTERXMLJACKSONCORE-7569538
   "com.fasterxml.jackson.core" % "jackson-core" % "2.17.2",
-  // The version of netty-handler currently used by athena has a vulnerability - https://security.snyk.io/vuln/SNYK-JAVA-IONETTY-5725787
-  "io.netty" % "netty-handler" % "4.1.100.Final",
+  "io.netty" % "netty-handler" % "4.1.118.Final",
   "io.netty" % "netty-codec-http2" % "4.1.100.Final",
   // Related to Play 3.0.2-6 currently brings in a vulnerable version of commons-io
   "commons-io" % "commons-io" % "2.14.0" % Test

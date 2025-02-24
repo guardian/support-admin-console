@@ -23,6 +23,8 @@ const getHostName = (stage: Stage, platform: TestPlatform): string => {
 const getChannelName = (testType: TestType, articleType: ArticleType): string => {
   if (testType === 'EPIC' && articleType === 'Liveblog') {
     return 'liveblog-epic';
+  } else if (testType === 'GUTTER' && articleType === 'Liveblog') {
+    return 'gutter-liveblog';
   } else {
     return testType.toLowerCase();
   }
