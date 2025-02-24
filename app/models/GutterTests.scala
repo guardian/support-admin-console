@@ -26,6 +26,7 @@ case class GutterTest(
     nickname: Option[String],
     userCohort: UserCohort,
     locations: List[Region] = Nil,
+    regionTargeting: Option[RegionTargeting]=None,
     contextTargeting: PageContextTargeting = PageContextTargeting(Nil,Nil,Nil,Nil), 
     variants: List[GutterVariant],
     controlProportionSettings: Option[ControlProportionSettings] = None,
