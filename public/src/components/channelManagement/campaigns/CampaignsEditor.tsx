@@ -50,6 +50,7 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   },
 }));
 
+// TODO: when making the feature live, add the commented out Gutter Liveblog sections below.
 export const testChannelOrder = [
   'Header',
   'Epic',
@@ -58,6 +59,7 @@ export const testChannelOrder = [
   'EpicAMP',
   'Banner1',
   'Banner2',
+  // 'GutterLiveblog',
 ];
 
 export interface TestChannelItem {
@@ -98,6 +100,10 @@ export const testChannelData: TestChannelData = {
     name: 'Banner 2',
     link: 'banner-tests2',
   },
+  // GutterLiveblog: {
+  //   name: 'Gutter Liveblog',
+  //   link: 'gutter-liveblog-tests',
+  // },
 };
 
 interface FormData {
