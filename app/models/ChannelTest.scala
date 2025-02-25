@@ -40,6 +40,7 @@ object ChannelTest {
       c.downField("channel").as[Channel].flatMap {
         case Header => HeaderTest.headerTestDecoder(c)
         case Banner1 | Banner2 => BannerTest.bannerTestDecoder(c)
+        case GutterLiveblog => GutterTest.gutterTestDecoder(c)
         case epic => EpicTest.epicTestDecoder(c)
       }
     }
@@ -49,6 +50,7 @@ object ChannelTest {
     override def apply(test: ChannelTest[_]): Json = test match {
       case header: HeaderTest => HeaderTest.headerTestEncoder(header)
       case banner: BannerTest => BannerTest.bannerTestEncoder(banner)
+      case gutter: GutterTest => GutterTest.gutterTestEncoder(gutter)
       case epic: EpicTest => EpicTest.epicTestEncoder(epic)
     }
   }
