@@ -244,6 +244,11 @@ export default function NavDrawer(): React.ReactElement {
             <ListItemText primary="Default Promos" />
           </ListItem>
         </Link>
+        <Link key="Landing Page" to="/support-landing-page-tests" className={classes.link}>
+          <ListItem className={classes.listItem} button key="Landing Page">
+            <ListItemText primary="Landing Page" />
+          </ListItem>
+        </Link>
       </div>
 
       <div>
