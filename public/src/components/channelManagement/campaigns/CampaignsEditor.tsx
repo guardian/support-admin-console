@@ -58,6 +58,7 @@ export const testChannelOrder = [
   'EpicAMP',
   'Banner1',
   'Banner2',
+  'GutterLiveblog',
 ];
 
 export interface TestChannelItem {
@@ -97,6 +98,10 @@ export const testChannelData: TestChannelData = {
   Banner2: {
     name: 'Banner 2',
     link: 'banner-tests2',
+  },
+  GutterLiveblog: {
+    name: 'Gutter Liveblog',
+    link: 'gutter-liveblog-tests',
   },
 };
 
