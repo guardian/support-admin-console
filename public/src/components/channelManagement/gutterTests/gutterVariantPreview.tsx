@@ -1,20 +1,29 @@
 import React from 'react';
-import { GutterVariant } from '../../../models/gutter';
+import { GutterContent, GutterVariant } from '../../../models/gutter';
 import { buildStorybookUrl } from '../helpers/dcrStorybook';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 interface GutterProps {
-  url: string;
-  onCtaClick: () => void; // current props.
-  // TODO: once DCR done, implement the rest
+  variant: GutterContent;
+  enrichedUrl: string;
+  onCtaClick: () => void;
 }
-// TODO: remove this lint line when props passed in properly later
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 const buildProps = (variant: GutterVariant): GutterProps => ({
-  url: ' ',
+  variant: {
+    image: {
+      mainUrl: variant.content.image.mainUrl,
+      altText: variant.content.image.altText,
+    },
+    bodyCopy: variant.content.bodyCopy,
+    cta: {
+      baseUrl: variant.content.cta!.baseUrl,
+      text: variant.content.cta!.text,
+    },
+  },
+  enrichedUrl: ' ',
   onCtaClick: () => {},
-  // TODO: update with proper props later!
 });
 
 const useStyles = makeStyles(({}: Theme) => ({
