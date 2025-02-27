@@ -52,7 +52,6 @@ const GutterVariantPreview: React.FC<GutterVariantPreviewProps> = ({
 
   const storyName = 'components-marketing-gutterask--default';
   const storybookUrl = buildStorybookUrl(storyName, props);
-  console.log(storybookUrl);
 
   return (
     <div>
