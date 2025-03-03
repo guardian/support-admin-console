@@ -229,7 +229,10 @@ export class AdminConsole extends GuStack {
       }),
       new GuAllowPolicy(this, 'SSMGet', {
         actions: ['ssm:GetParametersByPath'],
-        resources: [`arn:aws:ssm:${this.region}:${this.account}:parameter/${app}/${this.stage}`],
+        resources: [
+          `arn:aws:ssm:${this.region}:${this.account}:parameter/${app}/${this.stage}`,
+          `arn:aws:ssm:${this.region}:${this.account}:parameter/support-admin-console/${this.stage}/gcp-wif-credentials-config`,
+        ],
       }),
       new GuGetS3ObjectsPolicy(this, 'SettingsBucketGet', {
         bucketName: 'support-admin-console',
@@ -349,5 +352,6 @@ export class AdminConsole extends GuStack {
       tier: ParameterTier.STANDARD,
       dataType: ParameterDataType.TEXT,
     });
+
   }
 }
