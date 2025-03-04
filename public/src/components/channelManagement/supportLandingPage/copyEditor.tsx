@@ -7,7 +7,7 @@ import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
-  contentContainer: {
+  container: {
     marginLeft: spacing(2),
   },
 }));
@@ -18,7 +18,7 @@ const SUBHEADING_DEFAULT_HELPER_TEXT = 'Subheading text';
 const headingCopyRecommendedLength = 500;
 const subheadingCopyRecommendedLength = 500;
 
-interface VariantContentEditorProps {
+interface CopyEditorProps {
   copy: SupportLandingPageCopy;
   onChange: (updatedCopy: SupportLandingPageCopy) => void;
   onValidationChange?: (isValid: boolean) => void;
@@ -30,12 +30,12 @@ interface FormData {
   subheading?: string;
 }
 
-export const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
+export const CopyEditor: React.FC<CopyEditorProps> = ({
   copy,
   onChange,
   onValidationChange,
   editMode,
-}: VariantContentEditorProps) => {
+}: CopyEditorProps) => {
   const classes = useStyles();
 
   const templateValidator = templateValidatorForPlatform('DOTCOM');
@@ -86,7 +86,7 @@ export const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
 
   return (
     <>
-      <div className={classes.contentContainer}>
+      <div className={classes.container}>
         <Controller
           name="heading"
           control={control}

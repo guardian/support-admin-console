@@ -53,7 +53,7 @@ interface ProductsEditorProps {
   editMode: boolean;
 }
 
-const ProductsEditor: React.FC<ProductsEditorProps> = ({
+export const ProductsEditor: React.FC<ProductsEditorProps> = ({
   products,
   onProductsChange,
   editMode,
@@ -203,5 +203,3 @@ const ProductsEditor: React.FC<ProductsEditorProps> = ({
     </div>
   );
 };
-
-export default ProductsEditor;

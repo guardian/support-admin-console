@@ -5,8 +5,8 @@ import {
   SupportLandingPageCopy,
   SupportLandingPageVariant,
 } from '../../../models/supportLandingPage';
-import { VariantContentEditor } from './copyEditor';
-import ProductsEditor from './productsEditor';
+import { CopyEditor } from './copyEditor';
+import { ProductsEditor } from './productsEditor';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -40,7 +40,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
   return (
     <div className={classes.container}>
       <div>
-        <VariantContentEditor
+        <CopyEditor
           copy={variant.copy}
           onChange={(updatedCopy: SupportLandingPageCopy): void =>
             onVariantChange({ ...variant, copy: updatedCopy })
