@@ -41,7 +41,7 @@ case class Products(
 case class SupportLandingPageVariant(
   name: String,
   copy: SupportLandingPageCopy,
-  products: Option[Products],
+  products: Products,
 )
 
 case class SupportLandingPageTest(
