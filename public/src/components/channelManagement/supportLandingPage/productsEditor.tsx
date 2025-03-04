@@ -47,33 +47,22 @@ const buildBenefitsHeading = (product: keyof Products) => {
   }
 };
 
-interface ProductsEditorProps {
-  products: Products;
-  onProductsChange: (updatedProducts: Products) => void;
+interface ProductEditorProps {
   editMode: boolean;
+  productKey: keyof Products;
+  product: LandingPageProductDescription;
+  onProductChange: (updatedProduct: LandingPageProductDescription) => void;
 }
 
-export const ProductsEditor: React.FC<ProductsEditorProps> = ({
-  products,
-  onProductsChange,
+export const ProductEditor: React.FC<ProductEditorProps> = ({
   editMode,
-}) => {
+  productKey,
+  product,
+  onProductChange,
+}: ProductEditorProps) => {
   const classes = useStyles();
 
-  const handleProductChange = (
-    productKey: keyof Products,
-    updatedProduct: LandingPageProductDescription,
-  ) => {
-    onProductsChange({
-      ...products,
-      [productKey]: updatedProduct,
-    });
-  };
-
-  const renderProductEditor = (
-    productKey: keyof Products,
-    product: LandingPageProductDescription,
-  ) => (
+  return (
     <Accordion key={productKey}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography variant="h6">{productKey}</Typography>
@@ -83,7 +72,7 @@ export const ProductsEditor: React.FC<ProductsEditorProps> = ({
           label="Title"
           required={true}
           value={product.title}
-          onChange={e => handleProductChange(productKey, { ...product, title: e.target.value })}
+          onChange={e => onProductChange({ ...product, title: e.target.value })}
           disabled={!editMode}
           fullWidth
         />
@@ -92,7 +81,7 @@ export const ProductsEditor: React.FC<ProductsEditorProps> = ({
           required={true}
           value={product.cta.copy}
           onChange={e => {
-            handleProductChange(productKey, { ...product, cta: { copy: e.target.value } });
+            onProductChange({ ...product, cta: { copy: e.target.value } });
           }}
           disabled={!editMode}
           fullWidth
@@ -102,12 +91,14 @@ export const ProductsEditor: React.FC<ProductsEditorProps> = ({
           value={product.label?.copy}
           onChange={e => {
             const label = e.target.value ? { copy: e.target.value } : undefined;
-            handleProductChange(productKey, { ...product, label });
+            onProductChange({ ...product, label });
           }}
           disabled={!editMode}
           fullWidth
         />
+
         <div className={classes.benefitsHeading}>{buildBenefitsHeading(productKey)}</div>
+
         {product.benefits.map((benefit, index) => {
           const updateBenefit = (updatedBenefit: ProductBenefit) => {
             const updatedBenefits = [
@@ -115,7 +106,7 @@ export const ProductsEditor: React.FC<ProductsEditorProps> = ({
               updatedBenefit,
               ...product.benefits.slice(index + 1),
             ];
-            handleProductChange(productKey, {
+            onProductChange({
               ...product,
               benefits: updatedBenefits,
             });
@@ -167,7 +158,7 @@ export const ProductsEditor: React.FC<ProductsEditorProps> = ({
                       ...product.benefits.slice(0, index),
                       ...product.benefits.slice(index + 1),
                     ];
-                    handleProductChange(productKey, { ...product, benefits: updatedBenefits });
+                    onProductChange({ ...product, benefits: updatedBenefits });
                   }}
                   disabled={!editMode}
                   variant="outlined"
@@ -181,7 +172,7 @@ export const ProductsEditor: React.FC<ProductsEditorProps> = ({
         })}
         <Button
           onClick={() =>
-            handleProductChange(productKey, {
+            onProductChange({
               ...product,
               benefits: [...product.benefits, { copy: '' }],
             })
@@ -195,13 +186,41 @@ export const ProductsEditor: React.FC<ProductsEditorProps> = ({
       </AccordionDetails>
     </Accordion>
   );
+};
+
+interface ProductsEditorProps {
+  products: Products;
+  onProductsChange: (updatedProducts: Products) => void;
+  editMode: boolean;
+}
+
+export const ProductsEditor: React.FC<ProductsEditorProps> = ({
+  products,
+  onProductsChange,
+  editMode,
+}) => {
+  const classes = useStyles();
 
   return (
     <div>
       <Typography className={classes.heading} variant="h5">
         Products
       </Typography>
-      {productKeys.map(productKey => renderProductEditor(productKey, products[productKey]))}
+
+      {productKeys.map(productKey => (
+        <ProductEditor
+          key={productKey}
+          productKey={productKey}
+          editMode={editMode}
+          product={products[productKey]}
+          onProductChange={updatedProduct =>
+            onProductsChange({
+              ...products,
+              [productKey]: updatedProduct,
+            })
+          }
+        />
+      ))}
     </div>
   );
 };
