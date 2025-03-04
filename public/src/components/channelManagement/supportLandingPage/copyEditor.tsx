@@ -6,51 +6,9 @@ import { getRteCopyLength, RichTextEditorSingleLine } from '../richTextEditor/ri
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
-  container: {
-    width: '100%',
-    paddingTop: spacing(2),
-    paddingLeft: spacing(4),
-    paddingRight: spacing(10),
-
-    '& > * + *': {
-      marginTop: spacing(3),
-    },
-  },
-  hook: {
-    maxWidth: '400px',
-  },
-  sectionHeader: {
-    fontSize: 16,
-    color: palette.grey[900],
-    fontWeight: 500,
-  },
-  sectionContainer: {
-    paddingTop: spacing(2),
-    paddingBottom: spacing(2),
-    borderBottom: `1px solid ${palette.grey[500]}`,
-    '& > * + *': {
-      marginTop: spacing(3),
-    },
-  },
+const useStyles = makeStyles(({ spacing }: Theme) => ({
   contentContainer: {
     marginLeft: spacing(2),
-  },
-  buttonsContainer: {
-    marginTop: spacing(2),
-  },
-  switchContainer: {
-    display: 'flex',
-    alignItems: 'center',
-
-    '& > * + *': {
-      marginLeft: spacing(1),
-    },
-  },
-  switchLabel: {
-    fontSize: '14px',
-    fontWeight: 500,
   },
 }));
 
@@ -87,13 +45,6 @@ export const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
     subheading: copy.subheading || '',
   };
 
-  /**
-   * Only some fields are validated by the useForm here.
-   * Ideally we'd combine the validated fields with the rest of the variant fields in a callback (inside the RTE Controllers below).
-   * But the callback closes over the old state of `content`, causing it to overwrite changes to non-validated fields.
-   * So instead we write updates to the validated fields to the `validatedFields` state, and merge with the rest of
-   * `content` in a useEffect.
-   */
   const [validatedFields, setValidatedFields] = useState<FormData>(defaultValues);
   const { handleSubmit, control, errors, trigger } = useForm<FormData>({
     mode: 'onChange',
