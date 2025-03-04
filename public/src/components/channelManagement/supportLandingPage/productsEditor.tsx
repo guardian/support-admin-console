@@ -81,6 +81,7 @@ export const ProductsEditor: React.FC<ProductsEditorProps> = ({
       <AccordionDetails className={classes.accordionDetails}>
         <TextField
           label="Title"
+          required={true}
           value={product.title}
           onChange={e => handleProductChange(productKey, { ...product, title: e.target.value })}
           disabled={!editMode}
@@ -88,6 +89,7 @@ export const ProductsEditor: React.FC<ProductsEditorProps> = ({
         />
         <TextField
           label="CTA Copy"
+          required={true}
           value={product.cta.copy}
           onChange={e => {
             handleProductChange(productKey, { ...product, cta: { copy: e.target.value } });
@@ -124,8 +126,8 @@ export const ProductsEditor: React.FC<ProductsEditorProps> = ({
               <Grid item xs={3}>
                 <TextField
                   label="Benefit Copy"
-                  value={benefit.copy}
                   required={true}
+                  value={benefit.copy}
                   onChange={e => updateBenefit({ ...benefit, copy: e.target.value })}
                   disabled={!editMode}
                   fullWidth

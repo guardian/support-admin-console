@@ -12,9 +12,6 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   },
 }));
 
-const HEADER_DEFAULT_HELPER_TEXT = 'Heading text';
-const SUBHEADING_DEFAULT_HELPER_TEXT = 'Subheading text';
-
 const headingCopyRecommendedLength = 500;
 const subheadingCopyRecommendedLength = 500;
 
@@ -26,8 +23,8 @@ interface CopyEditorProps {
 }
 
 interface FormData {
-  heading?: string;
-  subheading?: string;
+  heading: string;
+  subheading: string;
 }
 
 export const CopyEditor: React.FC<CopyEditorProps> = ({
@@ -91,17 +88,14 @@ export const CopyEditor: React.FC<CopyEditorProps> = ({
           name="heading"
           control={control}
           rules={{
+            required: true,
             validate: templateValidator,
           }}
           render={data => {
             return (
               <RichTextEditorSingleLine
                 error={errors.heading !== undefined}
-                helperText={
-                  errors.heading
-                    ? errors.heading.message || errors.heading.type
-                    : HEADER_DEFAULT_HELPER_TEXT
-                }
+                helperText={errors?.heading?.message || errors?.heading?.type}
                 copyData={data.value}
                 updateCopy={pars => {
                   data.onChange(pars);
@@ -128,17 +122,14 @@ export const CopyEditor: React.FC<CopyEditorProps> = ({
             name="subheading"
             control={control}
             rules={{
+              required: true,
               validate: templateValidator,
             }}
             render={data => {
               return (
                 <RichTextEditorSingleLine
                   error={errors.subheading !== undefined || copyLength > recommendedLength}
-                  helperText={
-                    errors.subheading
-                      ? errors.subheading.message || errors.subheading.type
-                      : SUBHEADING_DEFAULT_HELPER_TEXT
-                  }
+                  helperText={errors?.subheading?.message || errors?.subheading?.type}
                   copyData={data.value}
                   updateCopy={pars => {
                     data.onChange(pars);
