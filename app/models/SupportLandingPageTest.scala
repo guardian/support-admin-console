@@ -11,9 +11,37 @@ case class SupportLandingPageCopy(
   subheading: String,
 )
 
+case class ProductBenefit(
+  copy: String,
+  tooltip: Option[String] = None,
+  label: Option[Label] = None,
+)
+
+case class Label(
+  copy: String,
+)
+
+case class LandingPageProductDescription(
+  title: String,
+  label: Option[Label] = None,
+  benefits: List[ProductBenefit],
+  cta: LandingPageCta,
+)
+
+case class LandingPageCta(
+  copy: String,
+)
+
+case class Products(
+  Contribution: LandingPageProductDescription,
+  SupporterPlus: LandingPageProductDescription,
+  TierThree: LandingPageProductDescription,
+)
+
 case class SupportLandingPageVariant(
   name: String,
   copy: SupportLandingPageCopy,
+  products: Products,
 )
 
 case class SupportLandingPageTest(
