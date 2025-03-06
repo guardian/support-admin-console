@@ -1,8 +1,8 @@
-import { GuEc2App } from '@guardian/cdk';
-import { AccessScope } from '@guardian/cdk/lib/constants';
-import type { GuStackProps } from '@guardian/cdk/lib/constructs/core';
-import { GuStack, GuStringParameter } from '@guardian/cdk/lib/constructs/core';
-import { GuCname } from '@guardian/cdk/lib/constructs/dns';
+import {GuEc2App} from '@guardian/cdk';
+import {AccessScope} from '@guardian/cdk/lib/constants';
+import type {GuStackProps} from '@guardian/cdk/lib/constructs/core';
+import {GuStack, GuStringParameter} from '@guardian/cdk/lib/constructs/core';
+import {GuCname} from '@guardian/cdk/lib/constructs/dns';
 import {
   GuAllowPolicy,
   GuDynamoDBReadPolicy,
@@ -10,14 +10,14 @@ import {
   GuGetS3ObjectsPolicy,
   GuPutS3ObjectsPolicy,
 } from '@guardian/cdk/lib/constructs/iam';
-import type { App, CfnElement } from 'aws-cdk-lib';
-import { Duration, RemovalPolicy, Tags } from 'aws-cdk-lib';
-import { AttributeType, BillingMode, ProjectionType, Table } from 'aws-cdk-lib/aws-dynamodb';
-import { InstanceClass, InstanceSize, InstanceType } from 'aws-cdk-lib/aws-ec2';
+import type {App, CfnElement} from 'aws-cdk-lib';
+import {Duration, RemovalPolicy, Tags} from 'aws-cdk-lib';
+import {AttributeType, BillingMode, ProjectionType, Table} from 'aws-cdk-lib/aws-dynamodb';
+import {InstanceClass, InstanceSize, InstanceType} from 'aws-cdk-lib/aws-ec2';
 import {ApplicationListenerRule, ListenerAction, ListenerCondition} from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import type { Policy } from 'aws-cdk-lib/aws-iam';
-import { AccountPrincipal, Role } from 'aws-cdk-lib/aws-iam';
-import { ParameterDataType, ParameterTier, StringParameter } from 'aws-cdk-lib/aws-ssm';
+import type {Policy} from 'aws-cdk-lib/aws-iam';
+import {AccountPrincipal, Role} from 'aws-cdk-lib/aws-iam';
+import {ParameterDataType, ParameterTier, StringParameter} from 'aws-cdk-lib/aws-ssm';
 
 export interface AdminConsoleProps extends GuStackProps {
   domainName: string;
@@ -119,6 +119,35 @@ export class AdminConsole extends GuStack {
     return table;
   }
 
+  buildTestsAuditTable(): Table {
+    const id = `ChannelTestsAuditDynamoTable`;
+
+    const table = new Table(this, id, {
+      tableName: `support-admin-console-channel-tests-audit-${this.stage}`,
+      removalPolicy: RemovalPolicy.RETAIN,
+      pointInTimeRecovery: this.stage === 'PROD',
+      billingMode: BillingMode.PAY_PER_REQUEST,
+      partitionKey: {
+        // {channel}_{testName}, e.g. "Epic_2025-01-01_MY_TEST"
+        name: 'channelAndName',
+        type: AttributeType.STRING,
+      },
+      sortKey: {
+        name: 'timestamp',
+        type: AttributeType.STRING,
+      },
+    });
+
+    // Give it a better name
+    const defaultChild = table.node.defaultChild as unknown as CfnElement;
+    defaultChild.overrideLogicalId(id);
+
+    // Enable automated backups via https://github.com/guardian/aws-backup
+    Tags.of(table).add('devx-backup-enabled', 'true');
+
+    return table;
+  }
+
   buildArchivedBannerDesignsTable(): Table {
     const id = `ArchivedBannerDesignsDynamoTable`;
 
@@ -205,6 +234,7 @@ export class AdminConsole extends GuStack {
 
     const channelTestsDynamoTable = this.buildTestsTable();
     const archivedTestsDynamoTable = this.buildArchivedTestsTable();
+    const channelTestsAuditDynamoTable = this.buildTestsAuditTable();
     const campaignsDynamoTable = this.buildCampaignsTable();
     const bannerDesignsDynamoTable = this.buildBannerDesignsTable();
     const archivedBannerDesignsDynamoTable = this.buildArchivedBannerDesignsTable();
@@ -212,6 +242,7 @@ export class AdminConsole extends GuStack {
       this.buildChannelTestsDynamoPolicies(channelTestsDynamoTable);
     const campaignsDynamoPolicies = this.buildDynamoPolicies(campaignsDynamoTable);
     const archivedTestsDynamoPolicies = this.buildDynamoPolicies(archivedTestsDynamoTable);
+    const channelTestsAuditDynamoPolicies = this.buildDynamoPolicies(channelTestsAuditDynamoTable);
     const bannerDesignsDynamoPolicies = this.buildDynamoPolicies(bannerDesignsDynamoTable);
     const archivedBannerDesignsDynamoPolicies = this.buildDynamoPolicies(
       archivedBannerDesignsDynamoTable,
@@ -252,6 +283,7 @@ export class AdminConsole extends GuStack {
       ...channelTestsDynamoPolicies,
       ...campaignsDynamoPolicies,
       ...archivedTestsDynamoPolicies,
+      ...channelTestsAuditDynamoPolicies,
       ...bannerDesignsDynamoPolicies,
       ...archivedBannerDesignsDynamoPolicies,
       new GuDynamoDBReadPolicy(this, `DynamoRead-super-mode-calculator`, {
