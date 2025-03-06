@@ -200,7 +200,7 @@ const AppRouter = () => {
           />
           <Route
             path="/gutter-liveblog-tests/:testName?"
-            element={createComponent(<GutterTestsForm />, 'Liveblog Gutter Tests')}
+            element={createComponent(<GutterTestsForm />, 'Gutter Liveblog Tests')}
           />
           <Route
             path="/channel-switches"
