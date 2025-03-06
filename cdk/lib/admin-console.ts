@@ -1,8 +1,8 @@
-import {GuEc2App} from '@guardian/cdk';
-import {AccessScope} from '@guardian/cdk/lib/constants';
-import type {GuStackProps} from '@guardian/cdk/lib/constructs/core';
-import {GuStack, GuStringParameter} from '@guardian/cdk/lib/constructs/core';
-import {GuCname} from '@guardian/cdk/lib/constructs/dns';
+import { GuEc2App } from '@guardian/cdk';
+import { AccessScope } from '@guardian/cdk/lib/constants';
+import type { GuStackProps } from '@guardian/cdk/lib/constructs/core';
+import { GuStack, GuStringParameter } from '@guardian/cdk/lib/constructs/core';
+import { GuCname } from '@guardian/cdk/lib/constructs/dns';
 import {
   GuAllowPolicy,
   GuDynamoDBReadPolicy,
@@ -10,14 +10,18 @@ import {
   GuGetS3ObjectsPolicy,
   GuPutS3ObjectsPolicy,
 } from '@guardian/cdk/lib/constructs/iam';
-import type {App, CfnElement} from 'aws-cdk-lib';
-import {Duration, RemovalPolicy, Tags} from 'aws-cdk-lib';
-import {AttributeType, BillingMode, ProjectionType, Table} from 'aws-cdk-lib/aws-dynamodb';
-import {InstanceClass, InstanceSize, InstanceType} from 'aws-cdk-lib/aws-ec2';
-import {ApplicationListenerRule, ListenerAction, ListenerCondition} from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import type {Policy} from 'aws-cdk-lib/aws-iam';
-import {AccountPrincipal, Role} from 'aws-cdk-lib/aws-iam';
-import {ParameterDataType, ParameterTier, StringParameter} from 'aws-cdk-lib/aws-ssm';
+import type { App, CfnElement } from 'aws-cdk-lib';
+import { Duration, RemovalPolicy, Tags } from 'aws-cdk-lib';
+import { AttributeType, BillingMode, ProjectionType, Table } from 'aws-cdk-lib/aws-dynamodb';
+import { InstanceClass, InstanceSize, InstanceType } from 'aws-cdk-lib/aws-ec2';
+import {
+  ApplicationListenerRule,
+  ListenerAction,
+  ListenerCondition,
+} from 'aws-cdk-lib/aws-elasticloadbalancingv2';
+import type { Policy } from 'aws-cdk-lib/aws-iam';
+import { AccountPrincipal, Role } from 'aws-cdk-lib/aws-iam';
+import { ParameterDataType, ParameterTier, StringParameter } from 'aws-cdk-lib/aws-ssm';
 
 export interface AdminConsoleProps extends GuStackProps {
   domainName: string;
@@ -335,11 +339,10 @@ export class AdminConsole extends GuStack {
     new ApplicationListenerRule(this, 'BlockUnknownMethods', {
       listener: ec2App.listener,
       priority: 2,
-      conditions: [ListenerCondition.pathPatterns(['*'])],  // anything
+      conditions: [ListenerCondition.pathPatterns(['*'])], // anything
       action: ListenerAction.fixedResponse(400, {
         contentType: 'application/json',
-        messageBody:
-          'Unsupported http method',
+        messageBody: 'Unsupported http method',
       }),
     });
 
@@ -359,9 +362,9 @@ export class AdminConsole extends GuStack {
       tableName: channelTestsDynamoTable.tableName,
     });
     const s3ReadPolicyForCapi = new GuGetS3ObjectsPolicy(this, 's3Get-for-capi', {
-        bucketName: 'support-admin-console',
-        paths: [`${this.stage}/*`, 'channel-switches.json'],
-      });
+      bucketName: 'support-admin-console',
+      paths: [`${this.stage}/*`, 'channel-switches.json'],
+    });
 
     new Role(this, 'capi-role', {
       roleName: `support-admin-console-channel-tests-capi-role-${this.stage}`,
