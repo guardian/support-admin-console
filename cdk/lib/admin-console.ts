@@ -231,7 +231,7 @@ export class AdminConsole extends GuStack {
         actions: ['ssm:GetParametersByPath'],
         resources: [
           `arn:aws:ssm:${this.region}:${this.account}:parameter/${app}/${this.stage}`,
-          `arn:aws:ssm:${this.region}:${this.account}:parameter/support-admin-console/${this.stage}/gcp-wif-credentials-config`,
+          `arn:aws:ssm:${this.region}:${this.account}:parameter/reader-revenue-admin-console/${this.stage}/gcp-wif-credentials-config`,
         ],
       }),
       new GuGetS3ObjectsPolicy(this, 'SettingsBucketGet', {

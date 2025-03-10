@@ -2082,7 +2082,7 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
                       {
                         "Ref": "AWS::AccountId",
                       },
-                      ":parameter/support-admin-console/PROD/gcp-wif-credentials-config",
+                      ":parameter/reader-revenue-admin-console/PROD/gcp-wif-credentials-config",
                     ],
                   ],
                 },
