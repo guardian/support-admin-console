@@ -12,7 +12,7 @@ import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.mvc.AnyContent
 import play.api.{BuiltInComponentsFromContext, NoHttpFiltersComponents}
 import router.Routes
-import services.{Aws, CapiService, DynamoArchivedBannerDesigns, DynamoArchivedChannelTests, DynamoBanditData, DynamoBannerDesigns, DynamoCampaigns, DynamoChannelTests, DynamoSuperMode, S3}
+import services.{Aws, CapiService, DynamoArchivedBannerDesigns, DynamoArchivedChannelTests, DynamoBanditData, DynamoBannerDesigns, DynamoCampaigns, DynamoChannelTests, DynamoChannelTestsAudit, DynamoSuperMode, S3}
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.s3.model.GetObjectRequest
 
@@ -71,6 +71,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
 
   val dynamoTestsService = new DynamoChannelTests(stage, dynamoClient)
   val dynamoArchivedChannelTests = new DynamoArchivedChannelTests(stage, dynamoClient)
+  val dynamoTestsAuditService = new DynamoChannelTestsAudit(stage, dynamoClient)
 
   val dynamoCampaignsService = new DynamoCampaigns(stage, dynamoClient)
 
@@ -89,16 +90,16 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     new Login(authConfig, wsClient, controllerComponents),
     new SwitchesController(authAction, controllerComponents, stage, runtime),
     new AmountsController(authAction, controllerComponents, stage, runtime),
-    new EpicTestsController(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoArchivedChannelTests),
-    new HeaderTestsController(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoArchivedChannelTests),
-    new LiveblogEpicTestsController(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoArchivedChannelTests),
-    new AppleNewsEpicTestsController(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoArchivedChannelTests),
-    new AMPEpicTestsController(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoArchivedChannelTests),
-    new BannerTestsController(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoArchivedChannelTests),
-    new BannerTestsController2(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoArchivedChannelTests),
+    new EpicTestsController(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoArchivedChannelTests, dynamoTestsAuditService),
+    new HeaderTestsController(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoArchivedChannelTests, dynamoTestsAuditService),
+    new LiveblogEpicTestsController(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoArchivedChannelTests, dynamoTestsAuditService),
+    new AppleNewsEpicTestsController(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoArchivedChannelTests, dynamoTestsAuditService),
+    new AMPEpicTestsController(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoArchivedChannelTests, dynamoTestsAuditService),
+    new BannerTestsController(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoArchivedChannelTests, dynamoTestsAuditService),
+    new BannerTestsController2(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoArchivedChannelTests, dynamoTestsAuditService),
     new BannerDeployController(authAction, controllerComponents, stage, runtime),
     new BannerDeployController2(authAction, controllerComponents, stage, runtime),
-    new GutterLiveblogTestsController(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoArchivedChannelTests),
+    new GutterLiveblogTestsController(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoArchivedChannelTests, dynamoTestsAuditService),
     new ChannelSwitchesController(authAction, controllerComponents, stage, runtime),
     new CampaignsController(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoCampaignsService),
     new BannerDesignsController(authAction, controllerComponents, stage, runtime, dynamoBannerDesigns, dynamoTestsService, dynamoArchivedBannerDesigns),
@@ -108,6 +109,6 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     new SuperModeController(authAction, controllerComponents, stage, runtime, dynamoSuperModeService),
     new BanditDataController(authAction, controllerComponents, stage, runtime, dynamoBanditData),
     assets,
-    new SupportLandingPageController(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoArchivedChannelTests),
+    new SupportLandingPageController(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoArchivedChannelTests, dynamoTestsAuditService),
   )
 }
