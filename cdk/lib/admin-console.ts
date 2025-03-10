@@ -231,6 +231,11 @@ export class AdminConsole extends GuStack {
         actions: ['ssm:GetParametersByPath'],
         resources: [
           `arn:aws:ssm:${this.region}:${this.account}:parameter/${app}/${this.stage}`,
+        ],
+      }),
+      new GuAllowPolicy(this, 'SSMGetParam', {
+        actions: ['ssm:GetParameter'],
+        resources: [
           `arn:aws:ssm:${this.region}:${this.account}:parameter/reader-revenue-admin-console/${this.stage}/gcp-wif-credentials-config`,
         ],
       }),
