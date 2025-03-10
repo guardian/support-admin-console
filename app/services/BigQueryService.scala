@@ -1,32 +1,72 @@
 package services
 
+import com.google.api.gax.core.FixedCredentialsProvider
 import com.google.auth.Credentials
 import com.google.auth.oauth2.GoogleCredentials
-import com.google.cloud.bigquery.{BigQuery, BigQueryOptions}
+import com.google.cloud.RetryOption
+import com.google.cloud.bigquery.{BigQuery, BigQueryError, BigQueryOptions, JobInfo, QueryJobConfiguration, TableResult}
 import com.typesafe.scalalogging.LazyLogging
+import play.api.i18n.Lang.logger
 import services.Stage
 
 import java.io.ByteArrayInputStream
 
-class BigQueryService(stage: Stage, credentials: Credentials) extends LazyLogging {
-  private val projectId = s"datatech-platform-${stage.toString.toLowerCase}"
-  val bigQuery: BigQuery = {
-    BigQueryOptions
-      .newBuilder()
-      .setCredentials(credentials)
-      .setProjectId(projectId)
-      .setLocation("EU-WEST-1")
+class BigQueryService(bigQuery: BigQuery) extends LazyLogging {
+
+  def runQuery(queryString: String): Either[BigQueryError, TableResult] = {
+
+    val queryConfig = QueryJobConfiguration
+      .newBuilder(queryString)
       .build()
-      .getService
+
+    var queryJob = bigQuery.create(JobInfo.of(queryConfig))
+
+    queryJob = queryJob.waitFor(RetryOption.maxAttempts(0))
+    logger.info(s"Query: $queryString")
+    logger.info(s"QueryConfig: $queryConfig")
+
+    Option(queryJob) match {
+      case None =>
+        val error = new BigQueryError("Job no longer exists", "BigQueryHelper", "Cannot retrieve results")
+        logger.error(s"query failure: $error")
+        Left(error)
+      case Some(job) =>
+        Option(job.getStatus.getError) match {
+          case None =>
+            logger.debug("query success")
+            Right(job.getQueryResults())
+          case Some(error) =>
+            logger.error(s"query failure: $error")
+            Left(error)
+        }
+    }
   }
+
 
 }
 
 object BigQueryService {
 
-  def build(stage: Stage, jsonCredentials: String): BigQueryService =
-    new BigQueryService(
-      stage,
-      GoogleCredentials.fromStream(new ByteArrayInputStream(jsonCredentials.getBytes())),
+  def apply(stage: Stage, jsonCredentials: String): BigQueryService = {
+    val wifCredentialsConfig = GoogleCredentials.fromStream(
+      new ByteArrayInputStream(jsonCredentials.getBytes())
       )
+
+    val credentials =  FixedCredentialsProvider.create(wifCredentialsConfig).getCredentials
+    val projectId = s"datatech-platform-${stage.toString.toLowerCase}"
+    val bigQuery = ServiceAccount.bigQuery(credentials, projectId)
+    logger.info(s"BigQuery: $bigQuery");
+    new BigQueryService(bigQuery)
+  }
+
+
+
+  /** Uses application default credentials for local testing
+   * https://cloud.google.com/docs/authentication/application-default-credentials#personal
+   */
+  def apply(): BigQueryService = {
+    import com.google.cloud.bigquery.BigQueryOptions
+    val bigQuery = BigQueryOptions.getDefaultInstance.getService
+    new BigQueryService(bigQuery)
+  }
 }

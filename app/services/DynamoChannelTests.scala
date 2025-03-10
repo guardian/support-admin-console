@@ -1,6 +1,7 @@
 package services
 
-import com.google.cloud.bigquery.{BigQuery, QueryJobConfiguration, TableResult}
+import com.google.cloud.RetryOption
+import com.google.cloud.bigquery.{BigQuery, BigQueryError, JobInfo, QueryJobConfiguration, TableResult}
 import com.typesafe.scalalogging.StrictLogging
 import io.circe.generic.auto._
 import io.circe.syntax._
@@ -29,15 +30,15 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
     Map(
       "channel" -> AttributeValue.builder.s(channel.toString).build,
       "name" -> AttributeValue.builder.s(testName).build
-    ).asJava
+      ).asJava
 
   /**
-    * Attempts to retrieve a test from dynamodb. Fails if the test does not exist.
-    */
-  private def get(testName: String, channel: Channel): ZIO[ZEnv, DynamoGetError, java.util.Map[String, AttributeValue]] =
+   * Attempts to retrieve a test from dynamodb. Fails if the test does not exist.
+   */
+  private def get(testName: String, channel: Channel): ZIO[ZEnv, DynamoGetError, java.util.Map[String, AttributeValue]] = {
+    val x = getLTVData()
+    logger.info(s"getLTVData: $x");
     effectBlocking {
-     val x=  getLTVData()
-      logger.info(s"getLTVData: $x");
       val query = QueryRequest
         .builder
         .tableName(tableName)
@@ -46,9 +47,9 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
           Map(
             ":channel" -> AttributeValue.builder.s(channel.toString).build,
             ":name" -> AttributeValue.builder.s(testName).build
-          ).asJava
-        )
-        .expressionAttributeNames(Map("#name" -> "name").asJava)  // name is a reserved word in dynamodb
+            ).asJava
+          )
+        .expressionAttributeNames(Map("#name" -> "name").asJava) // name is a reserved word in dynamodb
         .build()
       client
         .query(query)
@@ -58,8 +59,9 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
       case Some(item) => ZIO.succeed(item)
       case None => ZIO.fail(DynamoGetError(new Exception(s"Test does not exist: $channel/$testName")))
     }.mapError(error =>
-      DynamoGetError(error)
-    )
+                      DynamoGetError(error)
+               )
+  }
 
   private def getAll(channel: Channel): ZIO[ZEnv, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
     effectBlocking {
@@ -71,13 +73,13 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
           .expressionAttributeValues(Map(
             ":channel" -> AttributeValue.builder.s(channel.toString).build,
             ":archived" -> AttributeValue.builder.s("Archived").build
-          ).asJava)
+            ).asJava)
           .expressionAttributeNames(Map(
             "#status" -> "status"
-          ).asJava)
+            ).asJava)
           .filterExpression("#status <> :archived")
           .build()
-      ).items
+        ).items
     }.mapError(DynamoGetError)
 
   private def getAllInCampaign(campaignName: String): ZIO[ZEnv, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
@@ -115,29 +117,22 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
       case other => DynamoPutError(other)
     }
 
-  def fetchLTV3Data(bigQuery: BigQuery): Unit = {
-    logger.info(s"Fetching LTV3 data: $bigQuery");
-
-    val query = s"""SELECT * FROM `datatech-platform-prod.reader_revenue.fact_holding_acquisition` WHERE acquired_date >= "2025-03-03"  order by acquired_date  """;
-    val queryConfig =
-      QueryJobConfiguration.newBuilder(query).setUseLegacySql(false).build
-    val tableResult: TableResult = bigQuery.query(queryConfig)
-
-    logger.info(s"Query: $query")
-    logger.info(s"QueryConfig: $queryConfig")
-    logger.info(s"TableResult: $tableResult")
-  }
-
   def getLTVData()={
     logger.info(s"Start BigQuery testing")
 
     SSMService.getParameter(s"/reader-revenue-admin-console/CODE/gcp-wif-credentials-config") match {
       case Right(clientConfig: String) => {
 
-        val bigQueryService: BigQueryService = BigQueryService.build(Stage.fromString("PROD").getOrElse(CODE), clientConfig)
-        val bigQuery = bigQueryService.bigQuery
-        val result = fetchLTV3Data(bigQuery)
-        logger.info(s"BigQuery: $bigQuery");
+        val bigQueryService: BigQueryService = BigQueryService(Stage.fromString("PROD").getOrElse(CODE), clientConfig)
+
+        val query = s"""SELECT * FROM `datatech-platform-prod.reader_revenue.fact_holding_acquisition` WHERE acquired_date >= "2025-03-03"  order by acquired_date  """;
+
+        val result = bigQueryService.runQuery(query) match {
+          case Left(error) =>
+            Left(error)
+          case Right(results) =>
+            Right(results)
+        }
         logger.info(s"Result: $result");
 
       }
