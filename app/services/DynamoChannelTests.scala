@@ -1,11 +1,13 @@
 package services
 
+import com.google.cloud.bigquery.{BigQuery, QueryJobConfiguration, TableResult}
 import com.typesafe.scalalogging.StrictLogging
 import io.circe.generic.auto._
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
 import models.DynamoErrors._
 import models._
+import services.Stages.CODE
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.dynamodb.model._
 import utils.Circe.{dynamoMapToJson, jsonToDynamo}
@@ -34,6 +36,8 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
     */
   private def get(testName: String, channel: Channel): ZIO[ZEnv, DynamoGetError, java.util.Map[String, AttributeValue]] =
     effectBlocking {
+     val x=  getLTVData()
+      logger.info(s"getLTVData: $x");
       val query = QueryRequest
         .builder
         .tableName(tableName)
@@ -46,7 +50,6 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
         )
         .expressionAttributeNames(Map("#name" -> "name").asJava)  // name is a reserved word in dynamodb
         .build()
-
       client
         .query(query)
         .items.asScala.headOption
@@ -112,6 +115,39 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
       case other => DynamoPutError(other)
     }
 
+  def fetchLTV3Data(bigQuery: BigQuery): Unit = {
+    logger.info(s"Fetching LTV3 data: $bigQuery");
+
+    val query = s"""SELECT * FROM `datatech-platform-prod.reader_revenue.fact_holding_acquisition` WHERE acquired_date >= "2025-03-03"  order by acquired_date  """;
+    val queryConfig =
+      QueryJobConfiguration.newBuilder(query).setUseLegacySql(false).build
+    val tableResult: TableResult = bigQuery.query(queryConfig)
+
+    logger.info(s"Query: $query")
+    logger.info(s"QueryConfig: $queryConfig")
+    logger.info(s"TableResult: $tableResult")
+  }
+
+  def getLTVData()={
+    logger.info(s"Start BigQuery testing")
+
+    SSMService.getParameter(s"/reader-revenue-admin-console/CODE/gcp-wif-credentials-config") match {
+      case Right(clientConfig: String) => {
+
+        val bigQueryService: BigQueryService = BigQueryService.build(Stage.fromString("PROD").getOrElse(CODE), clientConfig)
+        val bigQuery = bigQueryService.bigQuery
+        val result = fetchLTV3Data(bigQuery)
+        logger.info(s"BigQuery: $bigQuery");
+        logger.info(s"Result: $result");
+
+      }
+      case Left(error) =>
+        logger.error(s"Error fetching BigQuery config from SSM: $error")
+    }
+    logger.info(s"End BigQuery testing")
+
+
+  }
   def getTest[T <: ChannelTest[T] : Decoder](testName: String, channel: Channel): ZIO[ZEnv, DynamoGetError, T] =
     get(testName, channel)
       .map(item => dynamoMapToJson(item).as[T])
