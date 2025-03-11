@@ -1,13 +1,11 @@
 package services
 
 import com.google.api.gax.core.FixedCredentialsProvider
-import com.google.auth.Credentials
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.cloud.RetryOption
-import com.google.cloud.bigquery.{BigQuery, BigQueryError, BigQueryOptions, JobInfo, QueryJobConfiguration, TableResult}
+import com.google.cloud.bigquery.{BigQuery, BigQueryError,JobInfo, QueryJobConfiguration, TableResult}
 import com.typesafe.scalalogging.LazyLogging
 import play.api.i18n.Lang.logger
-import services.Stage
 
 import java.io.ByteArrayInputStream
 
@@ -18,16 +16,16 @@ class BigQueryService(bigQuery: BigQuery) extends LazyLogging {
     val queryConfig = QueryJobConfiguration
       .newBuilder(queryString)
       .build()
+    logger.info(s"Query: $queryString")
+    logger.info(s"QueryConfig: $queryConfig")
 
     var queryJob = bigQuery.create(JobInfo.of(queryConfig))
 
     queryJob = queryJob.waitFor(RetryOption.maxAttempts(0))
-    logger.info(s"Query: $queryString")
-    logger.info(s"QueryConfig: $queryConfig")
 
     Option(queryJob) match {
       case None =>
-        val error = new BigQueryError("Job no longer exists", "BigQueryHelper", "Cannot retrieve results")
+        val error = new BigQueryError("Job no longer exists", "BigQueryService", "Cannot retrieve results")
         logger.error(s"query failure: $error")
         Left(error)
       case Some(job) =>
