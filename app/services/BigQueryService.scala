@@ -3,11 +3,19 @@ package services
 import com.google.api.gax.core.FixedCredentialsProvider
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.cloud.RetryOption
-import com.google.cloud.bigquery.{BigQuery, BigQueryError,JobInfo, QueryJobConfiguration, TableResult}
+import com.google.cloud.bigquery.{BigQuery, BigQueryError, FieldValue, FieldValueList, JobInfo, QueryJobConfiguration, TableResult}
 import com.typesafe.scalalogging.LazyLogging
 import play.api.i18n.Lang.logger
 
 import java.io.ByteArrayInputStream
+import java.time.LocalDate
+import scala.jdk.CollectionConverters._
+
+case class BigQueryResult(
+                           acquired_date: LocalDate,
+                           acquisition_type: String,
+                           acquisition_ltv_3_year: Double,
+                         )
 
 class BigQueryService(bigQuery: BigQuery) extends LazyLogging {
 
@@ -41,6 +49,24 @@ class BigQueryService(bigQuery: BigQuery) extends LazyLogging {
         }
     }
   }
+
+  def getDateValue(fieldValue: FieldValue)   = {
+    LocalDate.parse(fieldValue.getStringValue)
+  }
+  def toBigQueryResult(row: FieldValueList): BigQueryResult = {
+    val bigQueryResult = BigQueryResult(
+      getDateValue(row.get("acquired_date")),
+      row.get("acquisition_type").getStringValue,
+      row.get("acquisition_ltv_3_year").getDoubleValue
+      )
+    logger.debug( bigQueryResult.toString)
+    bigQueryResult
+  }
+   def getBigQueryResult(result: TableResult): List[BigQueryResult] = {
+    val totalRows= result.getTotalRows
+    logger.info(s"Total Rows: $totalRows")
+     result.getValues.asScala.map(toBigQueryResult).toList
+   }
 
 
 }

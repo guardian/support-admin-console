@@ -1,7 +1,5 @@
 package services
 
-import com.google.cloud.RetryOption
-import com.google.cloud.bigquery.{BigQuery, BigQueryError, JobInfo, QueryJobConfiguration, TableResult}
 import com.typesafe.scalalogging.StrictLogging
 import io.circe.generic.auto._
 import io.circe.syntax._
@@ -123,15 +121,18 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
     SSMService.getParameter(s"/reader-revenue-admin-console/CODE/gcp-wif-credentials-config") match {
       case Right(clientConfig: String) => {
 
-        val bigQueryService: BigQueryService = BigQueryService(Stage.fromString(stage).getOrElse(CODE), clientConfig)
         val projectId = s"datatech-platform-${stage.toLowerCase}"
-        val query = s"""SELECT * FROM `datatech-platform-prod.reader_revenue.fact_holding_acquisition` WHERE acquired_date >= "2025-03-10"  order by acquired_date  """;
+        val bigQueryService: BigQueryService = BigQueryService(Stage.fromString(stage).getOrElse(CODE), clientConfig)
+        val query = s"""SELECT * FROM `datatech-platform-prod.reader_revenue.fact_holding_acquisition` WHERE acquired_date >= "2025-03-10"  order by acquired_date  limit 5 """;
 
         val result = bigQueryService.runQuery(query,projectId) match {
           case Left(error) =>
             Left(error)
           case Right(results) =>
-            Right(results)
+            val bigQueryResult = bigQueryService.getBigQueryResult(results)
+            logger.info(s"BigQueryResult: $bigQueryResult");
+            Right(bigQueryResult)
+
         }
         logger.info(s"Result: $result");
 
