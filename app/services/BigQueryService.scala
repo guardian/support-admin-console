@@ -11,13 +11,15 @@ import java.io.ByteArrayInputStream
 
 class BigQueryService(bigQuery: BigQuery) extends LazyLogging {
 
-  def runQuery(queryString: String): Either[BigQueryError, TableResult] = {
+  def runQuery(queryString: String,projectId: String): Either[BigQueryError, TableResult] = {
 
     val queryConfig = QueryJobConfiguration
       .newBuilder(queryString)
+      .setUseLegacySql(false)
       .build()
     logger.info(s"Query: $queryString")
     logger.info(s"QueryConfig: $queryConfig")
+    logger.info(s"projectId: $projectId")
 
     var queryJob = bigQuery.create(JobInfo.of(queryConfig))
 

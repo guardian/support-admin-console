@@ -123,11 +123,11 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
     SSMService.getParameter(s"/reader-revenue-admin-console/CODE/gcp-wif-credentials-config") match {
       case Right(clientConfig: String) => {
 
-        val bigQueryService: BigQueryService = BigQueryService(Stage.fromString("PROD").getOrElse(CODE), clientConfig)
+        val bigQueryService: BigQueryService = BigQueryService(Stage.fromString(stage).getOrElse(CODE), clientConfig)
+        val projectId = s"datatech-platform-${stage.toLowerCase}"
+        val query = s"""SELECT * FROM `datatech-platform-prod.reader_revenue.fact_holding_acquisition` WHERE acquired_date >= "2025-03-10"  order by acquired_date  """;
 
-        val query = s"""SELECT * FROM `datatech-platform-code.reader_revenue.fact_holding_acquisition` WHERE acquired_date >= "2025-03-10"  order by acquired_date  """;
-
-        val result = bigQueryService.runQuery(query) match {
+        val result = bigQueryService.runQuery(query,projectId) match {
           case Left(error) =>
             Left(error)
           case Right(results) =>
