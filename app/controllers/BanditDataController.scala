@@ -30,6 +30,8 @@ class BanditDataController(
     }
 
   def getDataForTest(channel: String, testName: String): Action[AnyContent] = authAction.async { request =>
+    val x = getLTVData(testName, channel,bigQueryService)
+    logger.info(s"getLTVData: $x");
     run {
       val sampleCount: Option[Int] = request.getQueryString("sampleCount").flatMap(s => Try(Integer.parseInt(s)).toOption)
       dynamo
@@ -38,7 +40,7 @@ class BanditDataController(
     }
   }
 
-  def getLTVData(testName: String, channel: Channel, bigQueryService: BigQueryService) = {
+  def getLTVData(testName: String, channel: String, bigQueryService: BigQueryService) = {
     logger.info(s"Start BigQuery testing")
 
         val projectId = s"datatech-platform-${stage.toLowerCase}"

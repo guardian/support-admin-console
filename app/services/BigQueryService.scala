@@ -16,12 +16,13 @@ case class BigQueryResult(
                            acquired_date: LocalDate,
                            acquisition_type: String,
                            acquisition_ltv_3_year: Double,
+
                          )
 
 class BigQueryService(bigQuery: BigQuery) extends LazyLogging {
 
 
-  def buildQuery(testName: String, channel: Channel, stage: String): String = {
+  def buildQuery(testName: String, channel:String, stage: String): String = {
      s"""SELECT * FROM `datatech-platform-prod.reader_revenue.fact_holding_acquisition` WHERE acquired_date >= "2025-03-12"  order by acquired_date  limit 5 """;
   }
   def runQuery(queryString: String,projectId: String): Either[BigQueryError, TableResult] = {

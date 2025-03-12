@@ -34,8 +34,6 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
    * Attempts to retrieve a test from dynamodb. Fails if the test does not exist.
    */
   private def get(testName: String, channel: Channel): ZIO[ZEnv, DynamoGetError, java.util.Map[String, AttributeValue]] = {
-    val x = getLTVData(testName, channel)
-    logger.info(s"getLTVData: $x");
     effectBlocking {
       val query = QueryRequest
         .builder
