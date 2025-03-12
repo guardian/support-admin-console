@@ -30,8 +30,6 @@ class BanditDataController(
     }
 
   def getDataForTest(channel: String, testName: String): Action[AnyContent] = authAction.async { request =>
-    val x = getLTVData(testName, channel,bigQueryService)
-    logger.info(s"getLTVData: $x");
     run {
       val sampleCount: Option[Int] = request.getQueryString("sampleCount").flatMap(s => Try(Integer.parseInt(s)).toOption)
       dynamo
@@ -40,25 +38,30 @@ class BanditDataController(
     }
   }
 
-  def getLTVData(testName: String, channel: String, bigQueryService: BigQueryService) = {
+  def getLTVDataForTest(testName: String, channel: String): Action[AnyContent] = authAction.async { request =>
     logger.info(s"Start BigQuery testing")
 
-        val projectId = s"datatech-platform-${stage.toLowerCase}"
-        val query = bigQueryService.buildQuery(testName, channel, stage.toLowerCase);
+    val projectId = s"datatech-platform-${stage.toLowerCase}"
+    val query = bigQueryService.buildQuery(testName, channel, stage.toLowerCase);
 
-        val result = bigQueryService.runQuery(query, projectId) match {
-          case Left(error) =>
-            Left(error)
-          case Right(results) =>
-            val bigQueryResult = bigQueryService.getBigQueryResult(results)
-            logger.info(s"BigQueryResult: $bigQueryResult");
-            Right(bigQueryResult)
+    val result = bigQueryService.runQuery(query, projectId) match {
+      case Left(error) =>
+        Left(error)
+      case Right(results) =>
+        val bigQueryResult = bigQueryService.getBigQueryResult(results)
+        logger.info(s"BigQueryResult: $bigQueryResult");
+        Right(bigQueryResult)
 
-        }
-        logger.info(s"Result: $result");
+    }
+    logger.info(s"Result: $result");
 
     logger.info(s"End BigQuery testing")
-
-
+    result match {
+      case Left(error) =>
+        Future.successful(InternalServerError(error.toString))
+      case Right(data) =>
+        Future.successful(Ok(noNulls(data.asJson)))
+    }
   }
+
 }
