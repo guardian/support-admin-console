@@ -5,7 +5,6 @@ import com.google.auth.oauth2.GoogleCredentials
 import com.google.cloud.RetryOption
 import com.google.cloud.bigquery.{BigQuery, BigQueryError, FieldValue, FieldValueList, JobInfo, QueryJobConfiguration, TableResult}
 import com.typesafe.scalalogging.LazyLogging
-import models.Channel
 import play.api.i18n.Lang.logger
 
 import java.io.ByteArrayInputStream
@@ -23,7 +22,7 @@ class BigQueryService(bigQuery: BigQuery) extends LazyLogging {
 
 
   def buildQuery(testName: String, channel:String, stage: String): String = {
-     s"""SELECT * FROM `datatech-platform-prod.reader_revenue.fact_holding_acquisition` WHERE acquired_date >= "2025-03-12"  order by acquired_date  limit 5 """;
+     s"""SELECT * FROM `datatech-platform-prod.reader_revenue.fact_holding_acquisition` WHERE acquired_date >= "2025-03-11"  order by acquired_date  limit 5 """;
   }
   def runQuery(queryString: String,projectId: String): Either[BigQueryError, TableResult] = {
 
