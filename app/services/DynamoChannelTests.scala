@@ -34,7 +34,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
    * Attempts to retrieve a test from dynamodb. Fails if the test does not exist.
    */
   private def get(testName: String, channel: Channel): ZIO[ZEnv, DynamoGetError, java.util.Map[String, AttributeValue]] = {
-    val x = getLTVData()
+    val x = getLTVData(testName, channel)
     logger.info(s"getLTVData: $x");
     effectBlocking {
       val query = QueryRequest
@@ -115,35 +115,6 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
       case other => DynamoPutError(other)
     }
 
-  def getLTVData()={
-    logger.info(s"Start BigQuery testing")
-
-    SSMService.getParameter(s"/reader-revenue-admin-console/CODE/gcp-wif-credentials-config") match {
-      case Right(clientConfig: String) => {
-
-        val projectId = s"datatech-platform-${stage.toLowerCase}"
-        val bigQueryService: BigQueryService = BigQueryService(Stage.fromString(stage).getOrElse(CODE), clientConfig)
-        val query = s"""SELECT * FROM `datatech-platform-prod.reader_revenue.fact_holding_acquisition` WHERE acquired_date >= "2025-03-10"  order by acquired_date  limit 5 """;
-
-        val result = bigQueryService.runQuery(query,projectId) match {
-          case Left(error) =>
-            Left(error)
-          case Right(results) =>
-            val bigQueryResult = bigQueryService.getBigQueryResult(results)
-            logger.info(s"BigQueryResult: $bigQueryResult");
-            Right(bigQueryResult)
-
-        }
-        logger.info(s"Result: $result");
-
-      }
-      case Left(error) =>
-        logger.error(s"Error fetching BigQuery config from SSM: $error")
-    }
-    logger.info(s"End BigQuery testing")
-
-
-  }
   def getTest[T <: ChannelTest[T] : Decoder](testName: String, channel: Channel): ZIO[ZEnv, DynamoGetError, T] =
     get(testName, channel)
       .map(item => dynamoMapToJson(item).as[T])

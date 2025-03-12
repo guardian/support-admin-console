@@ -233,12 +233,6 @@ export class AdminConsole extends GuStack {
           `arn:aws:ssm:${this.region}:${this.account}:parameter/${app}/${this.stage}`,
         ],
       }),
-      new GuAllowPolicy(this, 'SSMGetParam', {
-        actions: ['ssm:GetParameter'],
-        resources: [
-          `arn:aws:ssm:${this.region}:${this.account}:parameter/reader-revenue-admin-console/${this.stage}/gcp-wif-credentials-config`,
-        ],
-      }),
       new GuGetS3ObjectsPolicy(this, 'SettingsBucketGet', {
         bucketName: 'support-admin-console',
         paths: [`${this.stage}/*`, 'google-auth-service-account-certificate.json'],

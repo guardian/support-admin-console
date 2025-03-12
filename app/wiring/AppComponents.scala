@@ -12,7 +12,8 @@ import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.mvc.AnyContent
 import play.api.{BuiltInComponentsFromContext, NoHttpFiltersComponents}
 import router.Routes
-import services.{Aws, CapiService, DynamoArchivedBannerDesigns, DynamoArchivedChannelTests, DynamoBanditData, DynamoBannerDesigns, DynamoCampaigns, DynamoChannelTests, DynamoSuperMode, S3}
+import services.Stages.CODE
+import services.{Aws, BigQueryService, CapiService, DynamoArchivedBannerDesigns, DynamoArchivedChannelTests, DynamoBanditData, DynamoBannerDesigns, DynamoCampaigns, DynamoChannelTests, DynamoSuperMode, S3, Stage}
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.s3.model.GetObjectRequest
 
@@ -23,6 +24,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     val clientSecret = configuration.get[String]("googleAuth.clientSecret")
     val redirectUrl = configuration.get[String]("googleAuth.redirectUrl")
     val domain = configuration.get[String]("googleAuth.domain")
+
 
     //TODO - play secret rotation
     GoogleAuthConfig(clientId, clientSecret, redirectUrl, List(domain), antiForgeryChecker = AntiForgeryChecker.borrowSettingsFromPlay(httpConfiguration))
@@ -83,6 +85,10 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
 
   val sdcUrlOverride: Option[String] = sys.env.get("SDC_URL")
 
+  val bigQueryClientConfig = configuration.get[String]("gcp-wif-credentials-config")
+  val bigQueryService: BigQueryService = BigQueryService(Stage.fromString(stage).getOrElse(CODE), bigQueryClientConfig)
+
+
   override lazy val router: Router = new Routes(
     httpErrorHandler,
     new Application(authAction, controllerComponents, stage, sdcUrlOverride),
@@ -106,7 +112,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     new AppsMeteringSwitchesController(authAction, controllerComponents, stage, runtime),
     new DefaultPromosController(authAction,controllerComponents, stage, runtime),
     new SuperModeController(authAction, controllerComponents, stage, runtime, dynamoSuperModeService),
-    new BanditDataController(authAction, controllerComponents, stage, runtime, dynamoBanditData),
+    new BanditDataController(authAction, controllerComponents, stage, runtime, dynamoBanditData, bigQueryService),
     assets,
     new SupportLandingPageController(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoArchivedChannelTests),
   )

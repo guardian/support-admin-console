@@ -5,6 +5,7 @@ import com.google.auth.oauth2.GoogleCredentials
 import com.google.cloud.RetryOption
 import com.google.cloud.bigquery.{BigQuery, BigQueryError, FieldValue, FieldValueList, JobInfo, QueryJobConfiguration, TableResult}
 import com.typesafe.scalalogging.LazyLogging
+import models.Channel
 import play.api.i18n.Lang.logger
 
 import java.io.ByteArrayInputStream
@@ -19,15 +20,16 @@ case class BigQueryResult(
 
 class BigQueryService(bigQuery: BigQuery) extends LazyLogging {
 
+
+  def buildQuery(testName: String, channel: Channel, stage: String): String = {
+     s"""SELECT * FROM `datatech-platform-prod.reader_revenue.fact_holding_acquisition` WHERE acquired_date >= "2025-03-12"  order by acquired_date  limit 5 """;
+  }
   def runQuery(queryString: String,projectId: String): Either[BigQueryError, TableResult] = {
 
     val queryConfig = QueryJobConfiguration
       .newBuilder(queryString)
       .setUseLegacySql(false)
       .build()
-    logger.info(s"Query: $queryString")
-    logger.info(s"QueryConfig: $queryConfig")
-    logger.info(s"projectId: $projectId")
 
     var queryJob = bigQuery.create(JobInfo.of(queryConfig))
 
@@ -74,15 +76,16 @@ class BigQueryService(bigQuery: BigQuery) extends LazyLogging {
 object BigQueryService {
 
   def apply(stage: Stage, jsonCredentials: String): BigQueryService = {
-    val wifCredentialsConfig = GoogleCredentials.fromStream(
-      new ByteArrayInputStream(jsonCredentials.getBytes())
-      )
 
-    val credentials =  FixedCredentialsProvider.create(wifCredentialsConfig).getCredentials
-    val projectId = s"datatech-platform-${stage.toString.toLowerCase}"
-    val bigQuery = ServiceAccount.bigQuery(credentials, projectId)
-    logger.info(s"BigQuery: $bigQuery");
-    new BigQueryService(bigQuery)
+        val wifCredentialsConfig = GoogleCredentials.fromStream(
+          new ByteArrayInputStream(jsonCredentials.getBytes())
+          )
+
+        val credentials = FixedCredentialsProvider.create(wifCredentialsConfig).getCredentials
+        val projectId = s"datatech-platform-${stage.toString.toLowerCase}"
+        val bigQuery = ServiceAccount.bigQuery(credentials, projectId)
+        logger.info(s"BigQuery: $bigQuery");
+        new BigQueryService(bigQuery)
   }
 
 
