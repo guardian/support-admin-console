@@ -27,7 +27,7 @@ object DynamoChannelTestsAudit {
   implicit def encoder[T <: ChannelTest[T] : Encoder : Decoder] = deriveEncoder[ChannelTestAudit[T]]
   implicit def decoder[T <: ChannelTest[T] : Encoder : Decoder] = deriveDecoder[ChannelTestAudit[T]]
 
-  private val RetentionPeriodInYears = 3
+  private val RetentionPeriodInYears = 1
   def getTimeToLive(timestamp: OffsetDateTime): OffsetDateTime = timestamp.plusYears(RetentionPeriodInYears)
 }
 
