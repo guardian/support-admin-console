@@ -15,6 +15,10 @@ interface LTV3DataViewer {
   disabled: boolean;
 }
 
+const calculateTotalLTV3 = (testData: LTV3Data[]): number => {
+  return testData.reduce((sum, item) => sum + item.ltv3, 0);
+};
+
 export const LTV3DataViewer: React.FC<LTV3DataViewer> = ({
   testName,
   channel,
@@ -28,14 +32,16 @@ export const LTV3DataViewer: React.FC<LTV3DataViewer> = ({
         setData(data);
       });
   }, [testName, channel]);
+  const ltv3Total = data ? calculateTotalLTV3([data]) : 0;
   console.log(data);
+  console.log('Total LTV3:', ltv3Total);
   return (
     <>
       <div>
         <TextField
           type={'number'}
           InputProps={{ inputProps: { min: 0.1, max: 1, step: 0.1 } }}
-          value={data?.ltv3 ?? 0}
+          value={ltv3Total}
           label={'LTV3'}
           disabled={disabled}
         />
