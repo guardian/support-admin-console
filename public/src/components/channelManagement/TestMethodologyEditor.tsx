@@ -221,10 +221,15 @@ const TestMethodology: React.FC<TestMethodologyProps> = ({
             channel={channel}
             sampleCount={methodology.sampleCount}
           />
+        </div>
+      )}
+      {isBandit(methodology) && (
+        <div>
           <LTV3DataViewer
             testName={methodology.testName ?? testName}
             channel={channel}
             label={'LTV3'}
+            disabled={isDisabled}
           />
         </div>
       )}

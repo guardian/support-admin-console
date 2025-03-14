@@ -16,9 +16,22 @@ import scala.jdk.CollectionConverters._
 
 class BigQueryService(bigQuery: BigQuery) extends LazyLogging {
 
+//TestQuery:     s"""SELECT * FROM `datatech-platform-prod.reader_revenue.fact_holding_acquisition` WHERE acquired_date >= "2025-03-11"  order by acquired_date  limit 5 """;
 
   def buildQuery(testName: String, channel:String, stage: String): String = {
-     s"""SELECT * FROM `datatech-platform-prod.reader_revenue.fact_holding_acquisition` WHERE acquired_date >= "2025-03-11"  order by acquired_date  limit 5 """;
+    s"""WITH ltv3dataForTest AS (SELECT
+      ab.name AS test_name,
+      ab.variant AS variant_name,
+      component_type,
+      SUM(acquisition_ltv_3_year) AS ltv3,
+    FROM `datatech-platform-${stage}.reader_revenue.fact_holding_acquisition`
+    CROSS JOIN UNNEST(ab_tests) AS ab
+    WHERE  ab.name= '${testName}'
+    AND component_type= '${channel}'
+    GROUP BY 1,2,3
+    )
+    select test_name, variant_name,component_type, ltv3 from ltv3dataForTest
+    """
   }
   def runQuery(queryString: String,projectId: String):Either[BigQueryError, TableResult] = {
 
@@ -47,14 +60,11 @@ class BigQueryService(bigQuery: BigQuery) extends LazyLogging {
         }
     }
   }
-
-  def getDateValue(fieldValue: FieldValue)   = {
-    LocalDate.parse(fieldValue.getStringValue)
-  }
   def toBigQueryResult(row: FieldValueList): BigQueryResult = {
     val bigQueryResult = BigQueryResult(
-      getDateValue(row.get("acquired_date")),
-      row.get("acquisition_type").getStringValue,
+      row.get("test_name").getStringValue,
+      row.get("variant_name").getStringValue,
+      row.get("component_type").getStringValue,
       row.get("acquisition_ltv_3_year").getDoubleValue
       )
     logger.debug( bigQueryResult.toString)
