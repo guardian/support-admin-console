@@ -7,10 +7,8 @@ import com.google.cloud.bigquery.{BigQuery, BigQueryError, FieldValue, FieldValu
 import com.typesafe.scalalogging.LazyLogging
 import models.BigQueryResult
 import play.api.i18n.Lang.logger
-import zio.{ZEnv, ZIO}
 
 import java.io.ByteArrayInputStream
-import java.time.LocalDate
 import scala.jdk.CollectionConverters._
 
 
@@ -19,21 +17,28 @@ class BigQueryService(bigQuery: BigQuery) extends LazyLogging {
 //TestQuery:     s"""SELECT * FROM `datatech-platform-prod.reader_revenue.fact_holding_acquisition` WHERE acquired_date >= "2025-03-11"  order by acquired_date  limit 5 """;
 
   def buildQuery(testName: String, channel:String, stage: String): String = {
+
+    val channelInQuery = channel match {
+      case "Epic" => "ACQUISITIONS_EPIC"
+      case "Banner1" =>"ACQUISITIONS_ENGAGEMENT_BANNER"
+      case "Banner2" =>"ACQUISITIONS_SUBSCRIPTIONS_BANNER"
+    }
+
     s"""WITH ltv3dataForTest AS (SELECT
       ab.name AS test_name,
       ab.variant AS variant_name,
       component_type,
       SUM(acquisition_ltv_3_year) AS ltv3,
-    FROM `datatech-platform-${stage}.reader_revenue.fact_holding_acquisition`
+    FROM `datatech-platform-prod.reader_revenue.fact_holding_acquisition`
     CROSS JOIN UNNEST(ab_tests) AS ab
-    WHERE  ab.name= '${testName}'
-    AND component_type= '${channel}'
+    WHERE  ab.name= '$testName'
+    AND component_type ='$channelInQuery'
     GROUP BY 1,2,3
     )
-    select test_name, variant_name,component_type, ltv3 from ltv3dataForTest
+    select test_name, variant_name,component_type,ltv3 from ltv3dataForTest
     """
   }
-  def runQuery(queryString: String,projectId: String):Either[BigQueryError, TableResult] = {
+  def runQuery(queryString: String):Either[BigQueryError, TableResult] = {
 
     val queryConfig = QueryJobConfiguration
       .newBuilder(queryString)
@@ -65,7 +70,7 @@ class BigQueryService(bigQuery: BigQuery) extends LazyLogging {
       row.get("test_name").getStringValue,
       row.get("variant_name").getStringValue,
       row.get("component_type").getStringValue,
-      row.get("acquisition_ltv_3_year").getDoubleValue
+      row.get("ltv3").getDoubleValue
       )
     logger.debug( bigQueryResult.toString)
     bigQueryResult

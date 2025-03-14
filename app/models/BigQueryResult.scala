@@ -9,7 +9,7 @@ case class BigQueryResult(
                            test_name: String,
                            variant_name: String,
                            component_type: String,
-                           acquisition_ltv_3_year: Double,
+                           ltv3: Double,
                          )
 object BigQueryResult {
   implicit val decoder: Decoder[BigQueryResult] = deriveDecoder

@@ -249,7 +249,7 @@ GET   /frontend/super-mode                             controllers.SuperModeCont
 
 # ----- analytics ----- #
 GET   /frontend/bandit/:channel/:testName              controllers.BanditDataController.getDataForTest(channel: String, testName: String)
-GET   /frontend/bandit/:channel/:testName/ltv3         controllers.BanditDataController.getLTVDataForTest(channel: String, testName: String)
+GET   /frontend/bandit/:channel/:testName/ltv3         controllers.BanditDataController.getLTVDataForTest(testName: String,channel: String)
 
 # Map static resources from the /public folder to the /assets URL path
 GET  /assets/*file                                  controllers.Assets.at(path="/public", file)

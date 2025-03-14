@@ -43,8 +43,9 @@ class BanditDataController(
 
     val projectId = s"datatech-platform-${stage.toLowerCase}"
     val query = bigQueryService.buildQuery(testName, channel, stage.toLowerCase);
+    logger.info(s"Query: $query");
 
-    val result = bigQueryService.runQuery(query, projectId) match {
+    val result = bigQueryService.runQuery(query) match {
       case Left(error) =>
         Left(error)
       case Right(results) =>

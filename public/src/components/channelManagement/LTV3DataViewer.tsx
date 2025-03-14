@@ -3,7 +3,9 @@ import { TextField } from '@mui/material';
 
 interface LTV3Data {
   testName: string;
-  ltv3Data: number;
+  variant_name: string;
+  component_type: string;
+  ltv3: number;
 }
 
 interface LTV3DataViewer {
@@ -26,14 +28,14 @@ export const LTV3DataViewer: React.FC<LTV3DataViewer> = ({
         setData(data);
       });
   }, [testName, channel]);
-
+  console.log(data);
   return (
     <>
       <div>
         <TextField
           type={'number'}
           InputProps={{ inputProps: { min: 0.1, max: 1, step: 0.1 } }}
-          value={data?.ltv3Data ?? 0}
+          value={data?.ltv3 ?? 0}
           label={'LTV3'}
           disabled={disabled}
         />
