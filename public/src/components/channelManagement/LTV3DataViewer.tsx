@@ -24,7 +24,7 @@ export const LTV3DataViewer: React.FC<LTV3DataViewer> = ({
   channel,
   disabled,
 }: LTV3DataViewer) => {
-  const [data, setData] = React.useState<LTV3Data>();
+  const [data, setData] = React.useState<LTV3Data[]>();
   useEffect(() => {
     fetch(`/frontend/bandit/${channel}/${testName}/ltv3`)
       .then(resp => resp.json())
@@ -32,19 +32,14 @@ export const LTV3DataViewer: React.FC<LTV3DataViewer> = ({
         setData(data);
       });
   }, [testName, channel]);
-  const ltv3Total = data ? calculateTotalLTV3([data]) : 0;
-  console.log(data);
+
+  const ltv3Total = data ? calculateTotalLTV3(data) : 0;
+  console.log('Data', data);
   console.log('Total LTV3:', ltv3Total);
   return (
     <>
       <div>
-        <TextField
-          type={'number'}
-          InputProps={{ inputProps: { min: 0.1, max: 1, step: 0.1 } }}
-          value={ltv3Total}
-          label={'LTV3'}
-          disabled={disabled}
-        />
+        <TextField type={'number'} value={ltv3Total} label={'LTV3'} disabled={disabled} fullWidth />
       </div>
     </>
   );

@@ -77,6 +77,18 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     maxWidth: '90px',
     marginLeft: spacing(1),
   },
+  ltv3Container: {
+    display: 'flex',
+    blockSize: '100%',
+    alignItems: 'center',
+    flexDirection: 'row',
+    padding: spacing(1),
+    '& > * + *': {
+      marginLeft: spacing(2),
+      paddingLeft: spacing(2),
+      borderLeft: `1px solid ${palette.grey[400]}`,
+    },
+  },
 }));
 
 const defaultEpsilonGreedyBandit: Methodology = {
@@ -223,16 +235,18 @@ const TestMethodology: React.FC<TestMethodologyProps> = ({
           />
         </div>
       )}
-      {isBandit(methodology) && (
-        <div>
-          <LTV3DataViewer
-            testName={methodology.testName ?? testName}
-            channel={channel}
-            label={'LTV3'}
-            disabled={isDisabled}
-          />
-        </div>
-      )}
+      <div className={classes.ltv3Container}>
+        {isBandit(methodology) && (
+          <div>
+            <LTV3DataViewer
+              testName={methodology.testName ?? testName}
+              channel={channel}
+              label={'LTV3'}
+              disabled={isDisabled}
+            />
+          </div>
+        )}
+      </div>
       <div className={classes.testNameAndDeleteButton}>
         {methodologyTestName && (
           <Button
@@ -246,6 +260,7 @@ const TestMethodology: React.FC<TestMethodologyProps> = ({
             Copy test name
           </Button>
         )}
+
         <div className={classes.deleteButton}>
           <Button onClick={onDelete} disabled={isDisabled} variant="outlined" size="medium">
             <CloseIcon />
