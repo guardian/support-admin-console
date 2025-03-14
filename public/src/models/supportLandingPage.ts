@@ -5,9 +5,35 @@ export interface SupportLandingPageCopy {
   subheading: string;
 }
 
+export interface ProductBenefit {
+  copy: string;
+  tooltip?: string;
+  label?: {
+    copy: string;
+  };
+}
+
+export interface LandingPageProductDescription {
+  title: string;
+  label?: {
+    copy: string;
+  };
+  benefits: ProductBenefit[];
+  cta: {
+    copy: string;
+  };
+}
+
+export interface Products {
+  Contribution: LandingPageProductDescription;
+  SupporterPlus: LandingPageProductDescription;
+  TierThree: LandingPageProductDescription;
+}
+
 export interface SupportLandingPageVariant extends Variant {
   name: string;
   copy: SupportLandingPageCopy;
+  products: Products;
 }
 
 export interface SupportLandingPageTest extends Test {
