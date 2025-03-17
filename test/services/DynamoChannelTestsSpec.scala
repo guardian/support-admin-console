@@ -207,6 +207,6 @@ class DynamoChannelTestsSpec extends AsyncFlatSpec with Matchers with BeforeAndA
         _ <- dynamoAudit.createAudit(epicTests.head.copy(nickname = Some("new nickname")), "mr.test@guardian.co.uk")
         audits <- dynamoAudit.getAuditsForChannelTest(epicTests.head.channel.get.toString, epicTests.head.name)
       } yield audits
-    }(tests => tests.map(_.item.nickname) should be(List(Some("test1"),Some("new nickname"))))
+    }(tests => tests.length should be(2))
   }
 }

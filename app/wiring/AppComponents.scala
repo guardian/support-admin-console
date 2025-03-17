@@ -108,6 +108,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     new DefaultPromosController(authAction,controllerComponents, stage, runtime),
     new SuperModeController(authAction, controllerComponents, stage, runtime, dynamoSuperModeService),
     new BanditDataController(authAction, controllerComponents, stage, runtime, dynamoBanditData),
+    new ChannelTestsAuditController(authAction, controllerComponents, stage, runtime, dynamoTestsAuditService),
     assets,
     new SupportLandingPageController(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoArchivedChannelTests, dynamoTestsAuditService),
   )

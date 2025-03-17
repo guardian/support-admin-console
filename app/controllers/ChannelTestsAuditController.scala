@@ -2,13 +2,15 @@ package controllers
 
 import com.gu.googleauth.AuthAction
 import com.typesafe.scalalogging.LazyLogging
+import io.circe.syntax.EncoderOps
 import play.api.mvc.{AbstractController, Action, ActionBuilder, AnyContent, ControllerComponents, Result}
 import services.DynamoChannelTestsAudit
+import utils.Circe.noNulls
 import zio.{IO, ZEnv, ZIO}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ChannelTestsController(
+class ChannelTestsAuditController(
   authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
   components: ControllerComponents,
   stage: String,
@@ -27,6 +29,7 @@ class ChannelTestsController(
   def getAuditsForChannelTest(channel: String, testName: String): Action[AnyContent] = authAction.async { request =>
     run {
       dynamo.getAuditsForChannelTest(channel, testName)
+        .map(tests => Ok(noNulls(tests.asJson)))
     }
   }
 }
