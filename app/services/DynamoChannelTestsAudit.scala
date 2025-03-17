@@ -4,15 +4,17 @@ import com.typesafe.scalalogging.StrictLogging
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.syntax.EncoderOps
 import io.circe.{Decoder, Encoder}
-import models.ChannelTest
+import models.{Channel, ChannelTest}
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
-import software.amazon.awssdk.services.dynamodb.model._
+import software.amazon.awssdk.services.dynamodb.model.{AttributeValue, _}
 import zio.{ZEnv, ZIO}
 import models.DynamoErrors._
 import services.DynamoChannelTestsAudit.{ChannelTestAudit, getTimeToLive}
-import utils.Circe.jsonToDynamo
+import utils.Circe.{dynamoMapToJson, jsonToDynamo}
+import zio.blocking.effectBlocking
 
 import java.time.OffsetDateTime
+import scala.jdk.CollectionConverters.{ListHasAsScala, MapHasAsJava}
 
 object DynamoChannelTestsAudit {
   // The model that we write to the audit table
@@ -33,6 +35,20 @@ object DynamoChannelTestsAudit {
 
 class DynamoChannelTestsAudit(stage: String, client: DynamoDbClient) extends DynamoService(stage, client) with StrictLogging {
   protected val tableName = s"support-admin-console-channel-tests-audit-$stage"
+
+  private def getAuditsFromDynamo(channelAndName: String): ZIO[ZEnv, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
+    effectBlocking {
+      client.query(
+        QueryRequest
+          .builder
+          .tableName(tableName)
+          .keyConditionExpression("channelAndName = :channelAndName")
+          .expressionAttributeValues(Map(
+            ":channelAndName" -> AttributeValue.builder.s(channelAndName).build
+          ).asJava)
+          .build()
+      ).items
+    }.mapError(DynamoGetError)
 
   def createAudit[T <: ChannelTest[T] : Encoder : Decoder](test: T, userEmail: String): ZIO[ZEnv, DynamoError, Unit] = {
     val channelAndName = s"${test.channel.get}_${test.name}"
@@ -56,5 +72,27 @@ class DynamoChannelTestsAudit(stage: String, client: DynamoDbClient) extends Dyn
       .build()
 
     put(request)
+  }
+
+  // TODO - item needs to be a blob of json
+  def getAuditsForChannelTest(channel: String, name: String): ZIO[ZEnv, DynamoError, List[ChannelTestAudit[ChannelTest[_]]]] = {
+    val channelAndName = s"${channel}_${name}"
+
+    getAuditsFromDynamo(channelAndName).map { results =>
+      results.asScala
+        .map(i => {
+          println(s"item: $i")
+          i
+        })
+        .map(item => dynamoMapToJson(item).as[ChannelTestAudit[ChannelTest[_]]])
+        .flatMap {
+          case Right(audit) => Some(audit)
+          case Left(error) =>
+            logger.error(s"Failed to decode audit item from Dynamo: ${error.getMessage}")
+            None
+        }
+        .toList
+        .sortBy(_.timestamp)
+    }
   }
 }

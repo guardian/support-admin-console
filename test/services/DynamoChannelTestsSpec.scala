@@ -27,7 +27,9 @@ class DynamoChannelTestsSpec extends AsyncFlatSpec with Matchers with BeforeAndA
     .build
 
   private val dynamo = new DynamoChannelTests(stage, client)
+  private val dynamoAudit = new DynamoChannelTestsAudit(stage, client)
   private val tableName = s"support-admin-console-channel-tests-$stage"
+  private val auditTableName = s"support-admin-console-channel-tests-audit-$stage"
 
   def buildEpic(name: String, priority: Option[Int] = None): EpicTest =
     EpicTest(
@@ -76,11 +78,28 @@ class DynamoChannelTestsSpec extends AsyncFlatSpec with Matchers with BeforeAndA
         .billingMode(BillingMode.PAY_PER_REQUEST)
         .build
     )
+
+    client.createTable(
+      CreateTableRequest
+        .builder
+        .tableName(auditTableName)
+        .attributeDefinitions(
+          AttributeDefinition.builder.attributeName("channelAndName").attributeType("S").build,
+          AttributeDefinition.builder.attributeName("timestamp").attributeType("S").build
+        )
+        .keySchema(
+          KeySchemaElement.builder.attributeName("channelAndName").keyType(KeyType.HASH).build,
+          KeySchemaElement.builder.attributeName("timestamp").keyType(KeyType.RANGE).build
+        )
+        .billingMode(BillingMode.PAY_PER_REQUEST)
+        .build
+    )
   }
 
   override def afterEach(): Unit = {
     // Drop the table for the next test
     client.deleteTable(DeleteTableRequest.builder.tableName(tableName).build)
+    client.deleteTable(DeleteTableRequest.builder.tableName(auditTableName).build)
   }
 
   it should "create and then fetch epic tests" in {
@@ -179,5 +198,15 @@ class DynamoChannelTestsSpec extends AsyncFlatSpec with Matchers with BeforeAndA
         tests <- dynamo.getAllTests(Channel.Epic) // excludes archived tests
       } yield tests
     }(tests => tests.map(_.name) should be(List("test1")))
+  }
+
+  it should "create and fetch audits" in {
+    expectToSucceedWith {
+      for {
+        _ <- dynamoAudit.createAudit(epicTests.head, "mr.test@guardian.co.uk")
+        _ <- dynamoAudit.createAudit(epicTests.head.copy(nickname = Some("new nickname")), "mr.test@guardian.co.uk")
+        audits <- dynamoAudit.getAuditsForChannelTest(epicTests.head.channel.get.toString, epicTests.head.name)
+      } yield audits
+    }(tests => tests.map(_.item.nickname) should be(List(Some("test1"),Some("new nickname"))))
   }
 }
