@@ -70,8 +70,6 @@ class BigQueryService(bigQuery: BigQuery) extends LazyLogging {
     bigQueryResult
   }
    def getBigQueryResult(result: TableResult):List[BigQueryResult] = {
-    val totalRows= result.getTotalRows
-    logger.info(s"Total Rows: $totalRows")
      result.getValues.asScala.map(toBigQueryResult).toList
    }
 
