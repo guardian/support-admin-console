@@ -25,7 +25,6 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     val redirectUrl = configuration.get[String]("googleAuth.redirectUrl")
     val domain = configuration.get[String]("googleAuth.domain")
 
-
     //TODO - play secret rotation
     GoogleAuthConfig(clientId, clientSecret, redirectUrl, List(domain), antiForgeryChecker = AntiForgeryChecker.borrowSettingsFromPlay(httpConfiguration))
   }
@@ -87,7 +86,6 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
 
   val bigQueryClientConfig = configuration.get[String]("gcp-wif-credentials-config")
   val bigQueryService: BigQueryService = BigQueryService(Stage.fromString(stage).getOrElse(CODE), bigQueryClientConfig)
-
 
   override lazy val router: Router = new Routes(
     httpErrorHandler,

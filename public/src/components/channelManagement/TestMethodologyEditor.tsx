@@ -260,7 +260,6 @@ const TestMethodology: React.FC<TestMethodologyProps> = ({
             Copy test name
           </Button>
         )}
-
         <div className={classes.deleteButton}>
           <Button onClick={onDelete} disabled={isDisabled} variant="outlined" size="medium">
             <CloseIcon />

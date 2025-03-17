@@ -6,7 +6,6 @@ import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
 import models.DynamoErrors._
 import models._
-import services.Stages.CODE
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.dynamodb.model._
 import utils.Circe.{dynamoMapToJson, jsonToDynamo}
@@ -33,7 +32,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
   /**
    * Attempts to retrieve a test from dynamodb. Fails if the test does not exist.
    */
-  private def get(testName: String, channel: Channel): ZIO[ZEnv, DynamoGetError, java.util.Map[String, AttributeValue]] = {
+  private def get(testName: String, channel: Channel): ZIO[ZEnv, DynamoGetError, java.util.Map[String, AttributeValue]] =
     effectBlocking {
       val query = QueryRequest
         .builder
@@ -57,7 +56,6 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
     }.mapError(error =>
                       DynamoGetError(error)
                )
-  }
 
   private def getAll(channel: Channel): ZIO[ZEnv, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
     effectBlocking {

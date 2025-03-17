@@ -34,8 +34,6 @@ export const LTV3DataViewer: React.FC<LTV3DataViewer> = ({
   }, [testName, channel]);
 
   const ltv3Total = data ? calculateTotalLTV3(data) : 0;
-  console.log('Data', data);
-  console.log('Total LTV3:', ltv3Total);
   return (
     <>
       <div>

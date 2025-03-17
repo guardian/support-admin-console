@@ -3,8 +3,6 @@ package models
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.{Decoder, Encoder}
 
-import java.time.LocalDate
-
 case class BigQueryResult(
                            test_name: String,
                            variant_name: String,

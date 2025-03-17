@@ -386,6 +386,5 @@ export class AdminConsole extends GuStack {
       tier: ParameterTier.STANDARD,
       dataType: ParameterDataType.TEXT,
     });
-
   }
 }

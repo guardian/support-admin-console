@@ -6,16 +6,10 @@ import com.google.cloud.RetryOption
 import com.google.cloud.bigquery.{BigQuery, BigQueryError, FieldValue, FieldValueList, JobInfo, QueryJobConfiguration, TableResult}
 import com.typesafe.scalalogging.LazyLogging
 import models.BigQueryResult
-import play.api.i18n.Lang.logger
-
 import java.io.ByteArrayInputStream
 import scala.jdk.CollectionConverters._
 
-
 class BigQueryService(bigQuery: BigQuery) extends LazyLogging {
-
-//TestQuery:     s"""SELECT * FROM `datatech-platform-prod.reader_revenue.fact_holding_acquisition` WHERE acquired_date >= "2025-03-11"  order by acquired_date  limit 5 """;
-
   def buildQuery(testName: String, channel:String, stage: String): String = {
 
     val channelInQuery = channel match {
@@ -35,7 +29,7 @@ class BigQueryService(bigQuery: BigQuery) extends LazyLogging {
     AND component_type ='$channelInQuery'
     GROUP BY 1,2,3
     )
-    select test_name, variant_name,component_type,ltv3 from ltv3dataForTest
+    SELECT test_name, variant_name,component_type,ltv3 FROM ltv3dataForTest
     """
   }
   def runQuery(queryString: String):Either[BigQueryError, TableResult] = {
@@ -95,15 +89,9 @@ object BigQueryService {
         val credentials = FixedCredentialsProvider.create(wifCredentialsConfig).getCredentials
         val projectId = s"datatech-platform-${stage.toString.toLowerCase}"
         val bigQuery = ServiceAccount.bigQuery(credentials, projectId)
-        logger.info(s"BigQuery: $bigQuery");
         new BigQueryService(bigQuery)
   }
 
-
-
-  /** Uses application default credentials for local testing
-   * https://cloud.google.com/docs/authentication/application-default-credentials#personal
-   */
   def apply(): BigQueryService = {
     import com.google.cloud.bigquery.BigQueryOptions
     val bigQuery = BigQueryOptions.getDefaultInstance.getService

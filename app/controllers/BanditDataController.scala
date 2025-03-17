@@ -3,7 +3,6 @@ package controllers
 import com.gu.googleauth.AuthAction
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.syntax.EncoderOps
-import models.Channel
 import play.api.mvc.{AbstractController, Action, ActionBuilder, AnyContent, ControllerComponents, Result}
 import services.{BigQueryService, DynamoBanditData}
 import utils.Circe.noNulls
@@ -39,9 +38,7 @@ class BanditDataController(
   }
 
   def getLTVDataForTest(testName: String, channel: String): Action[AnyContent] = authAction.async { request =>
-    logger.info(s"Start BigQuery testing")
 
-    val projectId = s"datatech-platform-${stage.toLowerCase}"
     val query = bigQueryService.buildQuery(testName, channel, stage.toLowerCase);
     logger.info(s"Query: $query");
 
@@ -50,13 +47,9 @@ class BanditDataController(
         Left(error)
       case Right(results) =>
         val bigQueryResult = bigQueryService.getBigQueryResult(results)
-        logger.info(s"BigQueryResult: $bigQueryResult");
         Right(bigQueryResult)
 
     }
-    logger.info(s"Result: $result");
-
-    logger.info(s"End BigQuery testing")
     result match {
       case Left(error) =>
         Future.successful(InternalServerError(error.toString))
