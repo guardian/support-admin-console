@@ -14,7 +14,11 @@ import type { App, CfnElement } from 'aws-cdk-lib';
 import { Duration, RemovalPolicy, Tags } from 'aws-cdk-lib';
 import { AttributeType, BillingMode, ProjectionType, Table } from 'aws-cdk-lib/aws-dynamodb';
 import { InstanceClass, InstanceSize, InstanceType } from 'aws-cdk-lib/aws-ec2';
-import {ApplicationListenerRule, ListenerAction, ListenerCondition} from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import {
+  ApplicationListenerRule,
+  ListenerAction,
+  ListenerCondition,
+} from 'aws-cdk-lib/aws-elasticloadbalancingv2';
 import type { Policy } from 'aws-cdk-lib/aws-iam';
 import { AccountPrincipal, Role } from 'aws-cdk-lib/aws-iam';
 import { ParameterDataType, ParameterTier, StringParameter } from 'aws-cdk-lib/aws-ssm';
@@ -119,6 +123,35 @@ export class AdminConsole extends GuStack {
     return table;
   }
 
+  buildTestsAuditTable(): Table {
+    const id = `ChannelTestsAuditDynamoTable`;
+
+    const table = new Table(this, id, {
+      tableName: `support-admin-console-channel-tests-audit-${this.stage}`,
+      removalPolicy: RemovalPolicy.RETAIN,
+      pointInTimeRecovery: this.stage === 'PROD',
+      billingMode: BillingMode.PAY_PER_REQUEST,
+      partitionKey: {
+        // {channel}_{testName}, e.g. "Epic_2025-01-01_MY_TEST"
+        name: 'channelAndName',
+        type: AttributeType.STRING,
+      },
+      sortKey: {
+        name: 'timestamp',
+        type: AttributeType.STRING,
+      },
+    });
+
+    // Give it a better name
+    const defaultChild = table.node.defaultChild as unknown as CfnElement;
+    defaultChild.overrideLogicalId(id);
+
+    // Enable automated backups via https://github.com/guardian/aws-backup
+    Tags.of(table).add('devx-backup-enabled', 'true');
+
+    return table;
+  }
+
   buildArchivedBannerDesignsTable(): Table {
     const id = `ArchivedBannerDesignsDynamoTable`;
 
@@ -205,6 +238,7 @@ export class AdminConsole extends GuStack {
 
     const channelTestsDynamoTable = this.buildTestsTable();
     const archivedTestsDynamoTable = this.buildArchivedTestsTable();
+    const channelTestsAuditDynamoTable = this.buildTestsAuditTable();
     const campaignsDynamoTable = this.buildCampaignsTable();
     const bannerDesignsDynamoTable = this.buildBannerDesignsTable();
     const archivedBannerDesignsDynamoTable = this.buildArchivedBannerDesignsTable();
@@ -212,6 +246,7 @@ export class AdminConsole extends GuStack {
       this.buildChannelTestsDynamoPolicies(channelTestsDynamoTable);
     const campaignsDynamoPolicies = this.buildDynamoPolicies(campaignsDynamoTable);
     const archivedTestsDynamoPolicies = this.buildDynamoPolicies(archivedTestsDynamoTable);
+    const channelTestsAuditDynamoPolicies = this.buildDynamoPolicies(channelTestsAuditDynamoTable);
     const bannerDesignsDynamoPolicies = this.buildDynamoPolicies(bannerDesignsDynamoTable);
     const archivedBannerDesignsDynamoPolicies = this.buildDynamoPolicies(
       archivedBannerDesignsDynamoTable,
@@ -252,6 +287,7 @@ export class AdminConsole extends GuStack {
       ...channelTestsDynamoPolicies,
       ...campaignsDynamoPolicies,
       ...archivedTestsDynamoPolicies,
+      ...channelTestsAuditDynamoPolicies,
       ...bannerDesignsDynamoPolicies,
       ...archivedBannerDesignsDynamoPolicies,
       new GuDynamoDBReadPolicy(this, `DynamoRead-super-mode-calculator`, {
@@ -303,11 +339,10 @@ export class AdminConsole extends GuStack {
     new ApplicationListenerRule(this, 'BlockUnknownMethods', {
       listener: ec2App.listener,
       priority: 2,
-      conditions: [ListenerCondition.pathPatterns(['*'])],  // anything
+      conditions: [ListenerCondition.pathPatterns(['*'])], // anything
       action: ListenerAction.fixedResponse(400, {
         contentType: 'application/json',
-        messageBody:
-          'Unsupported http method',
+        messageBody: 'Unsupported http method',
       }),
     });
 
@@ -327,9 +362,9 @@ export class AdminConsole extends GuStack {
       tableName: channelTestsDynamoTable.tableName,
     });
     const s3ReadPolicyForCapi = new GuGetS3ObjectsPolicy(this, 's3Get-for-capi', {
-        bucketName: 'support-admin-console',
-        paths: [`${this.stage}/*`, 'channel-switches.json'],
-      });
+      bucketName: 'support-admin-console',
+      paths: [`${this.stage}/*`, 'channel-switches.json'],
+    });
 
     new Role(this, 'capi-role', {
       roleName: `support-admin-console-channel-tests-capi-role-${this.stage}`,
