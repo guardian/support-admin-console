@@ -1,6 +1,6 @@
 package services
 
-import models.{Channel, EpicTest, Status}
+import models.{Channel, ChannelTest, EpicTest, Status}
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 import software.amazon.awssdk.auth.credentials.{AwsBasicCredentials, StaticCredentialsProvider}
