@@ -6,11 +6,14 @@ import com.google.cloud.RetryOption
 import com.google.cloud.bigquery.{BigQuery, BigQueryError, FieldValueList, JobInfo, QueryJobConfiguration, TableResult}
 import com.typesafe.scalalogging.LazyLogging
 import models.BigQueryResult
-import zio.blocking.{Blocking, effectBlocking}
-import zio.{ZIO}
+import zio.blocking.{effectBlocking}
+import zio.{ZEnv, ZIO}
 
 import java.io.ByteArrayInputStream
 import scala.jdk.CollectionConverters._
+
+
+case class BigQueryError(message: String) extends Throwable
 
 class BigQueryService(bigQuery: BigQuery) extends LazyLogging {
   def buildQuery(testName: String, channel:String, stage: String): String = {
@@ -21,7 +24,7 @@ class BigQueryService(bigQuery: BigQuery) extends LazyLogging {
       case "Banner2" =>"ACQUISITIONS_SUBSCRIPTIONS_BANNER"
     }
 
-    s"""WITH ltv3dataForTest AS (SELECT
+    s"""SELECT
       ab.name AS test_name,
       ab.variant AS variant_name,
       component_type,
@@ -31,12 +34,10 @@ class BigQueryService(bigQuery: BigQuery) extends LazyLogging {
     WHERE  ab.name= '$testName'
     AND component_type ='$channelInQuery'
     GROUP BY 1,2,3
-    )
-    SELECT test_name, variant_name,component_type,ltv3 FROM ltv3dataForTest
     """
   }
 
-  def runQuery(queryString: String) : zio.RIO[Blocking, Either[BigQueryError, TableResult]] = {
+  def runQuery(queryString: String) : ZIO[ZEnv,  BigQueryError, TableResult] =
     effectBlocking {
       val queryConfig = QueryJobConfiguration
         .newBuilder(queryString)
@@ -47,23 +48,21 @@ class BigQueryService(bigQuery: BigQuery) extends LazyLogging {
 
       queryJob = queryJob.waitFor(RetryOption.maxAttempts(0))
 
-      Option(queryJob) match {
-        case None =>
-          val error = new BigQueryError("Job no longer exists", "BigQueryService", "Cannot retrieve results")
-          logger.error(s"query failure: $error")
-          Left(error)
+      Option(queryJob)
+
+    }.flatMap{
+        case None=> ZIO.fail( BigQueryError("Job no longer exists"))
         case Some(job) =>
           Option(job.getStatus.getError) match {
-            case None =>
-              logger.debug("query success")
-              Right(job.getQueryResults())
-            case Some(error) =>
-              logger.error(s"query failure: $error")
-              Left(error)
+            case None => ZIO.succeed(
+             job.getQueryResults()
+            )
+            case Some(error) => ZIO.fail( BigQueryError("Cannot retrieve results"))
           }
-      }
-    }
-  }
+      }.mapError(error=>{
+      logger.error(s"Error running query: $error")
+      BigQueryError(error.toString)
+    })
   def toBigQueryResult(row: FieldValueList): BigQueryResult = {
     val bigQueryResult = BigQueryResult(
       row.get("test_name").getStringValue,
@@ -78,22 +77,11 @@ class BigQueryService(bigQuery: BigQuery) extends LazyLogging {
      result.getValues.asScala.map(toBigQueryResult).toList
    }
 
-
-
-  def getLTV3Data(testName: String, channel: String, stage: String):ZIO[Blocking, Throwable,Either[BigQueryError, List[BigQueryResult]]] = {
+  def getLTV3Data(testName: String, channel: String, stage: String):ZIO[ZEnv,  BigQueryError, List[BigQueryResult]]= {
 
     val query = buildQuery(testName, channel, stage)
     logger.info(s"Query: $query");
-    val result = runQuery(query)
-
-    result.map  {
-      case Left(error)=>
-        logger.error(s"Error running query: $error")
-        Left(new BigQueryError("Error running query", "BigQueryService", "Cannot retrieve results"))
-      case Right(results) =>
-        val bigQueryResult = getBigQueryResult(results)
-        Right(bigQueryResult)
-    }
+    runQuery(query).map(result => getBigQueryResult(result))
   }
 }
 

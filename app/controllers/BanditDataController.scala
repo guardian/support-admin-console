@@ -39,10 +39,7 @@ class BanditDataController(
   def getLTVDataForTest(testName: String, channel: String): Action[AnyContent] = authAction.async {
     run {
       val result = bigQueryService.getLTV3Data(testName, channel, stage.toLowerCase)
-      result.map {
-        case Left(error) =>
-          InternalServerError(error.toString)
-        case Right(data) =>
+      result.map {data=>
           Ok(noNulls(data.asJson))
       }
     }
