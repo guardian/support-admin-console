@@ -74,6 +74,32 @@ class DynamoChannelTestsAudit(stage: String, client: DynamoDbClient) extends Dyn
     put(request)
   }
 
+  // Batch write many audits
+  def createAudits[T <: ChannelTest[T] : Encoder : Decoder](tests: List[T], userEmail: String): ZIO[ZEnv, DynamoPutError, Unit] = {
+    val timestamp = OffsetDateTime.now()
+    val ttlInSecondsSinceEpoch = getTimeToLive(timestamp).toInstant.getEpochSecond
+
+    val writeRequests = tests.map { test =>
+      val channelAndName = s"${test.channel.get}_${test.name}"
+      val audit = ChannelTestAudit(
+        channelAndName,
+        timestamp,
+        ttlInSecondsSinceEpoch,
+        userEmail,
+        item = test
+      )
+      val item = jsonToDynamo(audit.asJson).m()
+      WriteRequest.builder.putRequest(
+        PutRequest
+          .builder
+          .item(item)
+          .build()
+      ).build()
+    }
+
+    putAllBatched(writeRequests)
+  }
+
   def getAuditsForChannelTest(channel: String, name: String): ZIO[ZEnv, DynamoError, List[ChannelTestAudit[ChannelTest[_]]]] = {
     val channelAndName = s"${channel}_$name"
 
