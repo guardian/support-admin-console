@@ -7,7 +7,6 @@ import play.api.mvc.{AbstractController, Action, ActionBuilder, AnyContent, Cont
 import services.{BigQueryService, DynamoBanditData}
 import utils.Circe.noNulls
 import zio.{IO, ZEnv, ZIO}
-
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 
@@ -37,25 +36,15 @@ class BanditDataController(
     }
   }
 
-  def getLTVDataForTest(testName: String, channel: String): Action[AnyContent] = authAction.async { request =>
-
-    val query = bigQueryService.buildQuery(testName, channel, stage.toLowerCase);
-    logger.info(s"Query: $query");
-
-    val result = bigQueryService.runQuery(query) match {
-      case Left(error) =>
-        Left(error)
-      case Right(results) =>
-        val bigQueryResult = bigQueryService.getBigQueryResult(results)
-        Right(bigQueryResult)
-
-    }
-    result match {
-      case Left(error) =>
-        Future.successful(InternalServerError(error.toString))
-      case Right(data) =>
-        Future.successful(Ok(noNulls(data.asJson)))
+  def getLTVDataForTest(testName: String, channel: String): Action[AnyContent] = authAction.async {
+    run {
+      val result = bigQueryService.getLTV3Data(testName, channel, stage.toLowerCase)
+      result.map {
+        case Left(error) =>
+          InternalServerError(error.toString)
+        case Right(data) =>
+          Ok(noNulls(data.asJson))
+      }
     }
   }
-
 }
