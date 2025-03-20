@@ -204,9 +204,9 @@ class DynamoChannelTestsSpec extends AsyncFlatSpec with Matchers with BeforeAndA
     expectToSucceedWith {
       for {
         _ <- dynamoAudit.createAudit(epicTests.head, "mr.test@guardian.co.uk")
-        _ <- dynamoAudit.createAudit(epicTests.head.copy(nickname = Some("new nickname")), "mr.test@guardian.co.uk")
+        _ <- dynamoAudit.createAudit(epicTests.head, "ms.test@guardian.co.uk")
         audits <- dynamoAudit.getAuditsForChannelTest(epicTests.head.channel.get.toString, epicTests.head.name)
       } yield audits
-    }(tests => tests.length should be(2))
+    }(tests => tests.map(_.userEmail) should be(List("mr.test@guardian.co.uk", "ms.test@guardian.co.uk")))
   }
 }
