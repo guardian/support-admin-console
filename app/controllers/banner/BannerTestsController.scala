@@ -6,7 +6,7 @@ import models.{BannerTest, Channel}
 import models.BannerTest._
 import play.api.libs.circe.Circe
 import play.api.mvc.{ActionBuilder, AnyContent, ControllerComponents}
-import services.{DynamoArchivedChannelTests, DynamoChannelTests}
+import services.{DynamoArchivedChannelTests, DynamoChannelTests, DynamoChannelTestsAudit}
 import zio.ZEnv
 
 import scala.concurrent.ExecutionContext
@@ -22,6 +22,7 @@ class BannerTestsController(
   runtime: zio.Runtime[ZEnv],
   dynamoTests: DynamoChannelTests,
   dynamoArchivedTests: DynamoArchivedChannelTests,
+  dynamoTestsAudit: DynamoChannelTestsAudit
 )(implicit ec: ExecutionContext) extends ChannelTestsController[BannerTest](
   authAction,
   components,
@@ -30,5 +31,6 @@ class BannerTestsController(
   channel = Channel.Banner1,
   runtime = runtime,
   dynamoTests,
-  dynamoArchivedTests
+  dynamoArchivedTests,
+  dynamoTestsAudit
 ) with Circe

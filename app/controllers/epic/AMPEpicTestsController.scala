@@ -6,7 +6,7 @@ import models.{Channel, EpicTest}
 import models.EpicTest._
 import play.api.libs.circe.Circe
 import play.api.mvc._
-import services.{DynamoArchivedChannelTests, DynamoChannelTests}
+import services.{DynamoArchivedChannelTests, DynamoChannelTests, DynamoChannelTestsAudit}
 import zio.ZEnv
 
 import scala.concurrent.ExecutionContext
@@ -22,6 +22,7 @@ class AMPEpicTestsController(
   runtime: zio.Runtime[ZEnv],
   dynamoTests: DynamoChannelTests,
   dynamoArchivedTests: DynamoArchivedChannelTests,
+  dynamoTestsAudit: DynamoChannelTestsAudit
 )(implicit ec: ExecutionContext) extends ChannelTestsController[EpicTest](
   authAction,
   components,
@@ -30,5 +31,6 @@ class AMPEpicTestsController(
   channel = Channel.EpicAMP,
   runtime = runtime,
   dynamoTests,
-  dynamoArchivedTests
+  dynamoArchivedTests,
+  dynamoTestsAudit
 ) with Circe

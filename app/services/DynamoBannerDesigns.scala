@@ -74,16 +74,6 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
         .items()
     }.mapError(DynamoGetError)
 
-  private def put(putRequest: PutItemRequest): ZIO[ZEnv, DynamoError, Unit] =
-    effectBlocking {
-      val result = client.putItem(putRequest)
-      logger.info(s"PutItemResponse: $result")
-      ()
-    }.mapError {
-      case err: ConditionalCheckFailedException => DynamoDuplicateNameError(err)
-      case other                                => DynamoPutError(other)
-    }
-
   private def update(
       updateRequest: UpdateItemRequest): ZIO[ZEnv, DynamoError, Unit] =
     effectBlocking {

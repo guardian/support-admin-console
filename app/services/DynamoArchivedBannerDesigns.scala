@@ -15,16 +15,6 @@ class DynamoArchivedBannerDesigns(stage: String, client: DynamoDbClient) extends
 
   protected val tableName = s"support-admin-console-archived-banner-designs-$stage"
 
-  private def put(putRequest: PutItemRequest): ZIO[ZEnv, DynamoError, Unit] =
-    effectBlocking {
-      val result = client.putItem(putRequest)
-      logger.info(s"PutItemResponse: $result")
-      ()
-    }.mapError {
-      case err: ConditionalCheckFailedException => DynamoDuplicateNameError(err)
-      case other => DynamoPutError(other)
-    }
-
   def putRaw(item: java.util.Map[String, AttributeValue]): ZIO[ZEnv, DynamoError, Unit] = {
     // Add date attribute, which is the sort key. We first have to build a mutable Map, otherwise the Java Map throws when we insert
     val mutableItem = new util.HashMap(item)
