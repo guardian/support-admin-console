@@ -41,6 +41,7 @@ import DefaultPromos from './components/defaultPromos';
 import { StyledEngineProvider } from '@mui/material';
 import { LinkTrackingBuilder } from './components/linkTracking/LinkTrackingBuilder';
 import { SupportLandingPageTestsForm } from './components/channelManagement/supportLandingPage/supportLandingPage';
+import { AuditTestsDashboard } from "./components/channelManagement/auditTests/auditTestsDashboard";
 
 declare module '@mui/styles' {
   // https://mui.com/material-ui/migration/v5-style-changes/#%E2%9C%85-add-module-augmentation-for-defaulttheme-typescript
@@ -230,6 +231,10 @@ const AppRouter = () => {
           <Route
             path="/banner-designs/:name?"
             element={createComponent(<BannerDesigns />, 'Banner Designs')}
+          />
+          <Route
+            path="/audit-tests"
+            element={createComponent(<AuditTestsDashboard />, 'Audit Tests')}
           />
         </Routes>
       </div>

@@ -52,6 +52,7 @@ GET /super-mode                                     controllers.Application.inde
 GET /banner-designs                                 controllers.Application.index
 GET /banner-designs/:name                           controllers.Application.indexWithName(name: String)
 
+GET /audit-tests                                    controllers.Application.index
 # ----- Authentication ----- #
 GET  /login                                         controllers.Login.login
 GET  /loginAction                                   controllers.Login.loginAction
@@ -251,7 +252,11 @@ GET   /frontend/super-mode                             controllers.SuperModeCont
 GET   /frontend/bandit/:channel/:testName              controllers.BanditDataController.getDataForTest(channel: String, testName: String)
 
 # ----- audit ----- #
-GET   /frontend/audit/:channel/:testName              controllers.ChannelTestsAuditController.getAuditsForChannelTest(channel: String, testName: String)
+GET   /frontend/audit/:channel/:testName               controllers.ChannelTestsAuditController.getAuditsForChannelTest(channel: String, testName: String)
+
+# ----- audit tests ----- #
+GET   /frontend/audit-tests                            controllers.ChannelTestsAuditController.getAuditTestsDetails()
+
 
 # Map static resources from the /public folder to the /assets URL path
 GET  /assets/*file                                  controllers.Assets.at(path="/public", file)
