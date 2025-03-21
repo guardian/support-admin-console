@@ -47,11 +47,8 @@ export const AuditTestsDashboard: React.FC = () => {
   const classes = useStyles();
   const [testName, setTestName] = useState('');
   const { register, errors } = useForm<FormData>();
-  console.log('Test Name', testName);
   const [channel, setChannel] = useState('');
   const onSelectChannelChange = (event: SelectChangeEvent) => {
-    const value = event.target.value;
-    console.log('Channel', value);
     setChannel(event.target.value);
   };
 
