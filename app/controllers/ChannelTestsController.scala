@@ -246,6 +246,21 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
 
         case Some(status) =>
           dynamoTests.updateStatuses(testNames, channel, status)
+            .flatMap(_ => {
+              /**
+               * Fetch the full data for all the updated tests and then write audits.
+               * We use .forkDaemon here to avoid delaying the response to the client
+               * and instead run this task in the background.
+               */
+              dynamoTests
+                .getTests(channel, testNames)
+                .flatMap(tests => dynamoTestsAudit.createAudits(tests, request.user.email))
+                .tapError(error => {
+                  // Log the error but this will not affect the response to the client
+                  ZIO.succeed(logger.error(s"Error creating audits after status changes: ${error.getMessage}", error))
+                })
+                .forkDaemon
+            })
             .map(_ => Ok(status.toString))
 
         case None => ZIO.succeed(BadRequest(s"Invalid status: $rawStatus"))

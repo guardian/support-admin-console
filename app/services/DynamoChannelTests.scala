@@ -139,6 +139,19 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
     }.mapError(DynamoGetError)
   }
 
+  def getTests[T <: ChannelTest[T] : Decoder](channel: Channel, testNames: List[String]): ZIO[ZEnv, DynamoGetError, List[T]] = {
+    getRawTests(channel, testNames).map(rawTests => {
+      rawTests.flatMap(rawTest =>
+        dynamoMapToJson(rawTest).as[T] match {
+          case Right(test) => Some(test)
+          case Left(error) =>
+            logger.error(s"Failed to decode item from Dynamo: ${error.getMessage}")
+            None
+        }
+      )
+    })
+  }
+
   // Returns all tests in a campaign, sorted by channel
   import models.ChannelTest.channelTestDecoder
   def getAllTestsInCampaign(campaignName: String): ZIO[ZEnv, DynamoGetError, List[ChannelTest[_]]] =
