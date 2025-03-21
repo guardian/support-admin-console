@@ -18,6 +18,7 @@ import Alert from '@mui/lab/Alert';
 import { addMethodologyToTestName } from './helpers/methodology';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 import { grey } from '@mui/material/colors';
+import { LTV3DataViewer } from './LTV3DataViewer';
 
 const isBandit = (methodology: Methodology): methodology is BanditMethodology =>
   methodology.name === 'EpsilonGreedyBandit' || methodology.name === 'Roulette';
@@ -75,6 +76,18 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   sampleCountInput: {
     maxWidth: '90px',
     marginLeft: spacing(1),
+  },
+  ltv3Container: {
+    display: 'flex',
+    blockSize: '100%',
+    alignItems: 'center',
+    flexDirection: 'row',
+    padding: spacing(1),
+    '& > * + *': {
+      marginLeft: spacing(2),
+      paddingLeft: spacing(2),
+      borderLeft: `1px solid ${palette.grey[400]}`,
+    },
   },
 }));
 
@@ -222,6 +235,18 @@ const TestMethodology: React.FC<TestMethodologyProps> = ({
           />
         </div>
       )}
+      <div className={classes.ltv3Container}>
+        {isBandit(methodology) && (
+          <div>
+            <LTV3DataViewer
+              testName={methodology.testName ?? testName}
+              channel={channel}
+              label={'LTV3'}
+              disabled={isDisabled}
+            />
+          </div>
+        )}
+      </div>
       <div className={classes.testNameAndDeleteButton}>
         {methodologyTestName && (
           <Button
