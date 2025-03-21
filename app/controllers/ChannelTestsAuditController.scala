@@ -32,4 +32,13 @@ class ChannelTestsAuditController(
         .map(tests => Ok(noNulls(tests.asJson)))
     }
   }
+
+  def getAuditTestsDetails(): Action[AnyContent] = authAction.async { request =>
+    run {
+     logger.info("Getting all audit tests details")
+      dynamo.getAuditsForChannelTest("Epic", "Epic Test")
+        .map(tests => Ok(noNulls(tests.asJson)))
+    }
+  }
+
 }
