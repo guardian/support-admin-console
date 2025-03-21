@@ -12,8 +12,7 @@ import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.mvc.AnyContent
 import play.api.{BuiltInComponentsFromContext, NoHttpFiltersComponents}
 import router.Routes
-import services.Stages.CODE
-import services.{Aws, BigQueryService, CapiService, DynamoArchivedBannerDesigns, DynamoArchivedChannelTests, DynamoBanditData, DynamoBannerDesigns, DynamoCampaigns, DynamoChannelTests, DynamoChannelTestsAudit, DynamoSuperMode, S3, Stage}
+import services.{Aws, BigQueryService, CapiService, DynamoArchivedBannerDesigns, DynamoArchivedChannelTests, DynamoBanditData, DynamoBannerDesigns, DynamoCampaigns, DynamoChannelTests, DynamoChannelTestsAudit, DynamoSuperMode, S3}
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.s3.model.GetObjectRequest
 
@@ -86,7 +85,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
   val sdcUrlOverride: Option[String] = sys.env.get("SDC_URL")
 
   val bigQueryClientConfig = configuration.get[String]("gcp-wif-credentials-config")
-  val bigQueryService: BigQueryService = BigQueryService(Stage.fromString(stage).getOrElse(CODE), bigQueryClientConfig)
+  val bigQueryService: BigQueryService = BigQueryService(stage, bigQueryClientConfig)
 
   override lazy val router: Router = new Routes(
     httpErrorHandler,

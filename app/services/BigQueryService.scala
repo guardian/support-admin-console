@@ -3,10 +3,10 @@ package services
 import com.google.api.gax.core.FixedCredentialsProvider
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.cloud.RetryOption
-import com.google.cloud.bigquery.{BigQuery, BigQueryError, FieldValueList, JobInfo, QueryJobConfiguration, TableResult}
+import com.google.cloud.bigquery.{BigQuery, BigQueryOptions, FieldValueList, JobInfo, QueryJobConfiguration, TableResult}
 import com.typesafe.scalalogging.LazyLogging
 import models.BigQueryResult
-import zio.blocking.{effectBlocking}
+import zio.blocking.effectBlocking
 import zio.{ZEnv, ZIO}
 
 import java.io.ByteArrayInputStream
@@ -87,16 +87,20 @@ class BigQueryService(bigQuery: BigQuery) extends LazyLogging {
 
 object BigQueryService {
 
-  def apply(stage: Stage, jsonCredentials: String): BigQueryService = {
-
-        val wifCredentialsConfig = GoogleCredentials.fromStream(
+  def apply(stage: String, jsonCredentials: String): BigQueryService = {
+    val wifCredentialsConfig = GoogleCredentials.fromStream(
           new ByteArrayInputStream(jsonCredentials.getBytes())
           )
 
-        val credentials = FixedCredentialsProvider.create(wifCredentialsConfig).getCredentials
-        val projectId = s"datatech-platform-${stage.toString.toLowerCase}"
-        val bigQuery = ServiceAccount.bigQuery(credentials, projectId)
-        new BigQueryService(bigQuery)
+    val credentials = FixedCredentialsProvider.create(wifCredentialsConfig).getCredentials
+    val projectId = s"datatech-platform-${stage.toLowerCase}"
+    val bigQuery = BigQueryOptions
+          .newBuilder()
+          .setCredentials(credentials)
+          .setProjectId(projectId)
+          .build()
+          .getService
+    new BigQueryService(bigQuery)
   }
 
   def apply(): BigQueryService = {
