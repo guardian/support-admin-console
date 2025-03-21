@@ -1,16 +1,8 @@
 import { makeStyles } from '@mui/styles';
-import { Button, Theme } from '@mui/material';
+import { Button, Theme, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { LockStatus, Methodology, Status } from '../helpers/shared';
-import { SuperModeRow, useSuperModeRows } from '../superMode/useSuperModeRows';
-import { SuperModeTable } from '../superMode/superModeTable';
-import useOpenable from '../../../hooks/useOpenable';
 import { AuditTestsTable } from './auditTestsTAble';
-
 const useStyles = makeStyles(({}: Theme) => ({
-  dialog: {
-    padding: '10px',
-  },
   auditButton: {
     height: '100%',
   },
@@ -19,8 +11,8 @@ const useStyles = makeStyles(({}: Theme) => ({
     fontSize: 18,
     fontWeight: 500,
   },
-  chartContainer: {
-    margin: '12px',
+  tableContainer: {
+    width: '100%',
   },
 }));
 
@@ -32,41 +24,26 @@ interface AuditTestsButtonProps {
 export interface AuditDataRow {
   name: string;
   channel: string;
-  status?: Status;
-  lockStatus?: LockStatus;
-  priority?: number;
-  campaignName?: string;
-  methodologies: Methodology[];
   ttlInSecondsSinceEpoch: number;
+  userEmail: string;
+  timestamp: string;
 }
-
-export const getAuditTableRows = (testName: string, channel: string): AuditDataRow[] => {
-  const [rows, setRows] = useState<AuditDataRow[]>([]);
-  useEffect(() => {
-    fetch(`/frontend/audit/${channel}/${testName}`)
-      .then(resp => resp.json())
-      .then(rows => setRows(rows));
-  }, [testName, channel]);
-  return rows;
-};
 
 export const AuditTestsButton: React.FC<AuditTestsButtonProps> = ({
   testName,
   channel,
 }: AuditTestsButtonProps) => {
   const classes = useStyles();
-  const rows = getAuditTableRows(testName, channel);
+  const [open, setOpen] = useState(false);
+
   return (
     <>
-      <Button
-        className={classes.auditButton}
-        variant="outlined"
-        onClick={() => getAuditTableRows(testName, channel)}
-      >
+      <Button className={classes.auditButton} variant="outlined" onClick={() => setOpen(true)}>
         Get Audit Data
       </Button>
-
-      <AuditTestsTable rows={rows} />
+      <div className={classes.tableContainer}>
+        {open && <AuditTestsTable testName={testName} channel={channel} />}
+      </div>
     </>
   );
 };
