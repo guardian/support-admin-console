@@ -1,6 +1,6 @@
 import { SupportLandingPageCopy } from '../../../models/supportLandingPage';
 import React, { useEffect, useState } from 'react';
-import { templateValidatorForPlatform } from '../helpers/validation';
+import { copyLengthValidator, templateValidatorForPlatform } from '../helpers/validation';
 import { Controller, useForm } from 'react-hook-form';
 import { getRteCopyLength, RichTextEditorSingleLine } from '../richTextEditor/richTextEditor';
 import { makeStyles } from '@mui/styles';
@@ -89,7 +89,7 @@ export const CopyEditor: React.FC<CopyEditorProps> = ({
           control={control}
           rules={{
             required: true,
-            validate: templateValidator,
+            validate: copy => templateValidator(copy) ?? copyLengthValidator(75)(copy),
           }}
           render={data => {
             return (
@@ -123,7 +123,7 @@ export const CopyEditor: React.FC<CopyEditorProps> = ({
             control={control}
             rules={{
               required: true,
-              validate: templateValidator,
+              validate: copy => templateValidator(copy) ?? copyLengthValidator(165)(copy),
             }}
             render={data => {
               return (
