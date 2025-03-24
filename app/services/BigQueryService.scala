@@ -102,10 +102,4 @@ object BigQueryService {
           .getService
     new BigQueryService(bigQuery)
   }
-
-  def apply(): BigQueryService = {
-    import com.google.cloud.bigquery.BigQueryOptions
-    val bigQuery = BigQueryOptions.getDefaultInstance.getService
-    new BigQueryService(bigQuery)
-  }
 }

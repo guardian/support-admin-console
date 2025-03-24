@@ -21,13 +21,7 @@ asciiGraphWidth := 999999999 // to ensure Snyk can read the the deeeeep dependen
 libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
   "com.gu.play-googleauth" %% "play-v30" % "19.0.0",
-  "com.google.auth" % "google-auth-library-oauth2-http" % "1.33.1",
   "com.google.cloud" % "google-cloud-bigquery" % "2.43.1",
-  "com.google.cloud" % "google-cloud-storage" % "2.43.1",
-  "com.google.cloud" % "google-cloud-bigquerystorage" % "2.43.0",
-  "com.google.protobuf" % "protobuf-java" % "4.28.0",
-  "com.google.api" % "api-common" % "2.43.0",
-  "com.google.api" % "gax" % "2.43.0",
   "com.gu" %% "simple-configuration-ssm" % "1.5.7",
   "software.amazon.awssdk" % "s3" % awsVersion,
   "software.amazon.awssdk" % "dynamodb" % awsVersion,
@@ -43,25 +37,23 @@ libraryDependencies ++= Seq(
   "dev.zio" %% "zio-streams" % zioVersion,
   "org.scalatest" %% "scalatest" % "3.2.19" % "test",
   "org.gnieh" %% "diffson-circe" % "4.1.1" % "test",
-  "com.typesafe.scala-logging" % "scala-logging_2.13" % "3.9.5",
-  )
+ )
 
 dependencyOverrides ++= List(
   // Play still uses an old version of jackson-core which has a vulnerability - https://security.snyk.io/vuln/SNYK-JAVA-COMFASTERXMLJACKSONCORE-7569538
   "com.fasterxml.jackson.core" % "jackson-core" % "2.17.2",
-  "com.fasterxml.jackson.core" % "jackson-databind" % "2.14.0",
   "io.netty" % "netty-handler" % "4.1.118.Final",
   "io.netty" % "netty-codec-http2" % "4.1.100.Final",
   // Related to Play 3.0.2-6 currently brings in a vulnerable version of commons-io
   "commons-io" % "commons-io" % "2.14.0" % Test
-  )
+ )
 
 excludeDependencies ++= Seq(
   // Exclude htmlunit due to a vulnerability. Brought in via scalatest but we don't need it.
   // The vulnerability is fixed in htmlunit v3 onwards, but the lib was renamed so we cannot force a newer version
   // by specifying it in the dependencies.
   ExclusionRule("net.sourceforge.htmlunit", "htmlunit"),
-)
+ )
 
 dynamoDBLocalPort := 8083
 startDynamoDBLocal := {startDynamoDBLocal.dependsOn(Test / compile).value}
