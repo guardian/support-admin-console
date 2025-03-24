@@ -27,11 +27,11 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
     Map(
       "channel" -> AttributeValue.builder.s(channel.toString).build,
       "name" -> AttributeValue.builder.s(testName).build
-      ).asJava
+    ).asJava
 
   /**
-   * Attempts to retrieve a test from dynamodb. Fails if the test does not exist.
-   */
+    * Attempts to retrieve a test from dynamodb. Fails if the test does not exist.
+    */
   private def get(testName: String, channel: Channel): ZIO[ZEnv, DynamoGetError, java.util.Map[String, AttributeValue]] =
     effectBlocking {
       val query = QueryRequest
@@ -42,10 +42,11 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
           Map(
             ":channel" -> AttributeValue.builder.s(channel.toString).build,
             ":name" -> AttributeValue.builder.s(testName).build
-            ).asJava
-          )
-        .expressionAttributeNames(Map("#name" -> "name").asJava) // name is a reserved word in dynamodb
+          ).asJava
+        )
+        .expressionAttributeNames(Map("#name" -> "name").asJava)  // name is a reserved word in dynamodb
         .build()
+
       client
         .query(query)
         .items.asScala.headOption
@@ -54,8 +55,8 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
       case Some(item) => ZIO.succeed(item)
       case None => ZIO.fail(DynamoGetError(new Exception(s"Test does not exist: $channel/$testName")))
     }.mapError(error =>
-                      DynamoGetError(error)
-               )
+      DynamoGetError(error)
+    )
 
   private def getAll(channel: Channel): ZIO[ZEnv, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
     effectBlocking {
@@ -67,13 +68,13 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
           .expressionAttributeValues(Map(
             ":channel" -> AttributeValue.builder.s(channel.toString).build,
             ":archived" -> AttributeValue.builder.s("Archived").build
-            ).asJava)
+          ).asJava)
           .expressionAttributeNames(Map(
             "#status" -> "status"
-            ).asJava)
+          ).asJava)
           .filterExpression("#status <> :archived")
           .build()
-        ).items
+      ).items
     }.mapError(DynamoGetError)
 
   private def getAllInCampaign(campaignName: String): ZIO[ZEnv, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
