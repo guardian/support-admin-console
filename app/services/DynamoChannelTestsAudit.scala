@@ -4,7 +4,7 @@ import com.typesafe.scalalogging.StrictLogging
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.syntax.EncoderOps
 import io.circe.{Decoder, Encoder}
-import models.{ChannelTest}
+import models.ChannelTest
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.dynamodb.model.{AttributeValue, _}
 import zio.{ZEnv, ZIO}
@@ -18,20 +18,18 @@ import scala.jdk.CollectionConverters.{ListHasAsScala, MapHasAsJava}
 
 object DynamoChannelTestsAudit {
   // The model that we write to the audit table
-  case class ChannelTestAudit[T: Encoder : Decoder](
-                                                     channelAndName: String, // The partition key is the channel and test name combined
-                                                     timestamp: OffsetDateTime, // The range key is the timestamp of the change
-                                                     ttlInSecondsSinceEpoch: Long, // Expiry time in seconds since Epoch
-                                                     userEmail: String, // The email address of the user making the change
-                                                     item: T // The new state of the item being changed
-                                                   )
+  case class ChannelTestAudit[T : Encoder : Decoder](
+    channelAndName: String,       // The partition key is the channel and test name combined
+    timestamp: OffsetDateTime,    // The range key is the timestamp of the change
+    ttlInSecondsSinceEpoch: Long, // Expiry time in seconds since Epoch
+    userEmail: String,            // The email address of the user making the change
+    item: T                       // The new state of the item being changed
+  )
 
-  implicit def encoder[T: Encoder : Decoder] = deriveEncoder[ChannelTestAudit[T]]
-
-  implicit def decoder[T: Encoder : Decoder] = deriveDecoder[ChannelTestAudit[T]]
+  implicit def encoder[T : Encoder : Decoder] = deriveEncoder[ChannelTestAudit[T]]
+  implicit def decoder[T : Encoder : Decoder] = deriveDecoder[ChannelTestAudit[T]]
 
   private val RetentionPeriodInYears = 1
-
   def getTimeToLive(timestamp: OffsetDateTime): OffsetDateTime = timestamp.plusYears(RetentionPeriodInYears)
 }
 
