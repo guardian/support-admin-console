@@ -1,7 +1,7 @@
 import { makeStyles } from '@mui/styles';
 import { Button, Theme } from '@mui/material';
 import React, { useState } from 'react';
-import { AuditTestsTable } from './auditTestsTAble';
+import { AuditTestsTable } from './auditTestsTable';
 const useStyles = makeStyles(({}: Theme) => ({
   container: {
     display: 'flex',

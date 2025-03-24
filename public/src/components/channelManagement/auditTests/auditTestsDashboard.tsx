@@ -15,6 +15,7 @@ import { AuditTestsButton } from './AuditTestsButton';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
+    margin: '50px',
     display: 'flex',
     gap: spacing(5),
   },
