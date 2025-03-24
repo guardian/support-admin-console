@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { AuditDataRow } from './AuditTestsButton';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { Theme, Typography } from '@mui/material';
+import { Button, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles(({}: Theme) => ({
@@ -48,13 +48,17 @@ export const AuditTestsTable: React.FC<AuditTestsTableProps> = ({
     },
     { field: 'userEmail', headerName: 'User Email', width: 250 },
     {
-      field: 'channelAndName',
-      headerName: 'Test Name',
-      valueFormatter: params => {
-        return params.value;
+      field: 'action',
+      headerName: 'Compare',
+      sortable: false,
+      renderCell: params => {
+        const onClick = e => {
+          console.log('Compare', params.row, e);
+        };
+
+        return <Button onClick={onClick}>Compare</Button>;
       },
     },
-    { field: 'channel', headerName: 'Channel', width: 120 },
   ];
 
   return (
