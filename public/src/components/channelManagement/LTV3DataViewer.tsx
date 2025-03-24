@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { TextField } from '@mui/material';
+import { Typography } from '@mui/material';
 
 interface LTV3Data {
   testName: string;
@@ -8,22 +8,21 @@ interface LTV3Data {
   ltv3: number;
 }
 
-interface LTV3DataViewer {
+interface LTV3DataViewerProps {
   testName: string;
   channel: string;
   label?: string;
-  disabled: boolean;
 }
 
 const calculateTotalLTV3 = (testData: LTV3Data[]): number => {
   return testData.reduce((sum, item) => sum + item.ltv3, 0);
 };
 
-export const LTV3DataViewer: React.FC<LTV3DataViewer> = ({
+export const LTV3DataViewer: React.FC<LTV3DataViewerProps> = ({
   testName,
   channel,
-  disabled,
-}: LTV3DataViewer) => {
+  label,
+}: LTV3DataViewerProps) => {
   const [data, setData] = React.useState<LTV3Data[]>();
   useEffect(() => {
     fetch(`/frontend/bandit/${channel}/${testName}/ltv3`)
@@ -33,11 +32,12 @@ export const LTV3DataViewer: React.FC<LTV3DataViewer> = ({
       });
   }, [testName, channel]);
 
-  const ltv3Total = data ? calculateTotalLTV3(data) : 0;
+  const ltv3Total = data ? calculateTotalLTV3(data).toFixed(2) : 0;
   return (
     <>
       <div>
-        <TextField type={'number'} value={ltv3Total} label={'LTV3'} disabled={disabled} fullWidth />
+        <Typography variant="body1">{label}</Typography>
+        <h5>{ltv3Total}</h5>
       </div>
     </>
   );

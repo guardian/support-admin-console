@@ -242,7 +242,6 @@ const TestMethodology: React.FC<TestMethodologyProps> = ({
               testName={methodology.testName ?? testName}
               channel={channel}
               label={'LTV3'}
-              disabled={isDisabled}
             />
           </div>
         )}

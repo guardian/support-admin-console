@@ -16,12 +16,12 @@ import scala.jdk.CollectionConverters._
 case class BigQueryError(message: String) extends Throwable
 
 class BigQueryService(bigQuery: BigQuery) extends LazyLogging {
-  def buildQuery(testName: String, channel:String, stage: String): String = {
+  def buildQuery(testName: String, channel: String, stage: String): String = {
 
     val channelInQuery = channel match {
       case "Epic" => "ACQUISITIONS_EPIC"
-      case "Banner1" =>"ACQUISITIONS_ENGAGEMENT_BANNER"
-      case "Banner2" =>"ACQUISITIONS_SUBSCRIPTIONS_BANNER"
+      case "Banner1" => "ACQUISITIONS_ENGAGEMENT_BANNER"
+      case "Banner2" => "ACQUISITIONS_SUBSCRIPTIONS_BANNER"
     }
 
     s"""SELECT
@@ -37,7 +37,7 @@ class BigQueryService(bigQuery: BigQuery) extends LazyLogging {
     """
   }
 
-  def runQuery(queryString: String) : ZIO[ZEnv,  BigQueryError, TableResult] =
+  def runQuery(queryString: String): ZIO[ZEnv, BigQueryError, TableResult] =
     effectBlocking {
       val queryConfig = QueryJobConfiguration
         .newBuilder(queryString)
@@ -50,34 +50,36 @@ class BigQueryService(bigQuery: BigQuery) extends LazyLogging {
 
       Option(queryJob)
 
-    }.flatMap{
-        case None=> ZIO.fail( BigQueryError("Job no longer exists"))
-        case Some(job) =>
-          Option(job.getStatus.getError) match {
-            case None => ZIO.succeed(
-             job.getQueryResults()
-            )
-            case Some(error) => ZIO.fail( BigQueryError("Cannot retrieve results"))
-          }
-      }.mapError(error=>{
+    }.flatMap {
+      case None => ZIO.fail(BigQueryError("Cannot create query job"))
+      case Some(job) =>
+        Option(job.getStatus.getError) match {
+          case None => ZIO.succeed(
+            job.getQueryResults()
+          )
+          case Some(error) => ZIO.fail(BigQueryError("Cannot retrieve results"))
+        }
+    }.mapError(error => {
       logger.error(s"Error running query: $error")
       BigQueryError(error.toString)
     })
+
   def toBigQueryResult(row: FieldValueList): BigQueryResult = {
     val bigQueryResult = BigQueryResult(
       row.get("test_name").getStringValue,
       row.get("variant_name").getStringValue,
       row.get("component_type").getStringValue,
       row.get("ltv3").getDoubleValue
-      )
-    logger.debug( bigQueryResult.toString)
+    )
+    logger.debug(bigQueryResult.toString)
     bigQueryResult
   }
-   def getBigQueryResult(result: TableResult):List[BigQueryResult] = {
-     result.getValues.asScala.map(toBigQueryResult).toList
-   }
 
-  def getLTV3Data(testName: String, channel: String, stage: String):ZIO[ZEnv,  BigQueryError, List[BigQueryResult]]= {
+  def getBigQueryResult(result: TableResult): List[BigQueryResult] = {
+    result.getValues.asScala.map(toBigQueryResult).toList
+  }
+
+  def getLTV3Data(testName: String, channel: String, stage: String): ZIO[ZEnv, BigQueryError, List[BigQueryResult]] = {
 
     val query = buildQuery(testName, channel, stage)
     logger.info(s"Query: $query");
@@ -89,17 +91,17 @@ object BigQueryService {
 
   def apply(stage: String, jsonCredentials: String): BigQueryService = {
     val wifCredentialsConfig = GoogleCredentials.fromStream(
-          new ByteArrayInputStream(jsonCredentials.getBytes())
-          )
+      new ByteArrayInputStream(jsonCredentials.getBytes())
+    )
 
     val credentials = FixedCredentialsProvider.create(wifCredentialsConfig).getCredentials
     val projectId = s"datatech-platform-${stage.toLowerCase}"
     val bigQuery = BigQueryOptions
-          .newBuilder()
-          .setCredentials(credentials)
-          .setProjectId(projectId)
-          .build()
-          .getService
+      .newBuilder()
+      .setCredentials(credentials)
+      .setProjectId(projectId)
+      .build()
+      .getService
     new BigQueryService(bigQuery)
   }
 }
