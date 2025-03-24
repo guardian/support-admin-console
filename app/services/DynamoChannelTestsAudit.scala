@@ -117,28 +117,5 @@ class DynamoChannelTestsAudit(stage: String, client: DynamoDbClient) extends Dyn
     }
   }
 
-  private def getAll(): ZIO[ZEnv, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
-    effectBlocking {
-      client.scan(
-        ScanRequest
-          .builder
-          .tableName(tableName)
-          .build()
-      ).items
-    }.mapError(DynamoGetError)
-
-  def getAllAuditTests(): ZIO[ZEnv, DynamoError, List[ChannelTestAudit[ChannelTest[_]]]] =
-    getAll().map { results =>
-      results.asScala
-        .map(item => dynamoMapToJson(item).as[ChannelTestAudit[ChannelTest[_]]])
-        .flatMap {
-          case Right(audit) => Some(audit)
-          case Left(error) =>
-            logger.error(s"Failed to decode audit item from Dynamo: ${error.getMessage}")
-            None
-        }
-        .toList
-        .sortBy(_.timestamp)
-    }
 
 }

@@ -38,6 +38,9 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     marginTop: spacing(7),
     width: '800px',
   },
+  tableContainer: {
+    width: '100%',
+  },
 }));
 export const EMPTY_ERROR_HELPER_TEXT = 'Field cannot be empty - please enter some text';
 
@@ -128,7 +131,7 @@ export const AuditTestsDashboard: React.FC = () => {
           Get audit
         </Button>
       </div>
-      <div>
+      <div className={classes.tableContainer}>
         <AuditTestsTable testName={testName} rows={rows} />
       </div>
     </div>
