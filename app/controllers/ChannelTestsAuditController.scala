@@ -11,12 +11,12 @@ import zio.{IO, ZEnv, ZIO}
 import scala.concurrent.{ExecutionContext, Future}
 
 class ChannelTestsAuditController(
-  authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
-  components: ControllerComponents,
-  stage: String,
-  runtime: zio.Runtime[ZEnv],
-  dynamo: DynamoChannelTestsAudit
-)(implicit ec: ExecutionContext) extends AbstractController(components) with LazyLogging {
+                                   authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
+                                   components: ControllerComponents,
+                                   stage: String,
+                                   runtime: zio.Runtime[ZEnv],
+                                   dynamo: DynamoChannelTestsAudit
+                                 )(implicit ec: ExecutionContext) extends AbstractController(components) with LazyLogging {
 
   private def run(f: => ZIO[ZEnv, Throwable, Result]): Future[Result] =
     runtime.unsafeRunToFuture {
@@ -35,9 +35,8 @@ class ChannelTestsAuditController(
 
   def getAuditTestsDetails(): Action[AnyContent] = authAction.async { request =>
     run {
-     logger.info("Getting all audit tests details")
-      dynamo.getAuditsForChannelTest("Epic", "Epic Test")
-        .map(tests => Ok(noNulls(tests.asJson)))
+      logger.info("Getting all audit tests details")
+      dynamo.getAllAuditTests().map(tests => Ok(noNulls(tests.asJson)))
     }
   }
 
