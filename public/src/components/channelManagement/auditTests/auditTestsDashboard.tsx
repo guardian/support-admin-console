@@ -25,8 +25,6 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     width: '500px',
     borderColor: `2px solid ${{ color: grey[700] }}`,
     borderRadius: '2px',
-    gap: spacing(12),
-    marginBottom: spacing(3),
   },
   heading: {
     fontSize: 20,
@@ -34,9 +32,8 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     fontWeight: 500,
   },
   buttonContainer: {
-    justifyContent: 'bottom',
     marginTop: spacing(7),
-    width: '800px',
+    width: '300px',
   },
   tableContainer: {
     width: '100%',
