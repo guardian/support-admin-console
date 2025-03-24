@@ -52,8 +52,8 @@ export const AuditTestsTable: React.FC<AuditTestsTableProps> = ({
       headerName: 'Compare',
       sortable: false,
       renderCell: params => {
-        const onClick = e => {
-          console.log('Compare', params.row, e);
+        const onClick = () => {
+          console.log('Compare', params.row);
         };
 
         return <Button onClick={onClick}>Compare</Button>;
