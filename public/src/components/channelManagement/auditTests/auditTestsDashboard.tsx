@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {
+  Button,
   FormControl,
   MenuItem,
   Select,
@@ -11,7 +12,7 @@ import {
 import { makeStyles } from '@mui/styles';
 import { grey } from '@mui/material/colors';
 import { useForm } from 'react-hook-form';
-import { AuditTestsButton } from './AuditTestsButton';
+import { AuditDataRow, AuditTestsTable } from './auditTestsTable';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
@@ -51,6 +52,13 @@ export const AuditTestsDashboard: React.FC = () => {
   const [channel, setChannel] = useState('');
   const onSelectChannelChange = (event: SelectChangeEvent) => {
     setChannel(event.target.value);
+  };
+
+  const [rows, setRows] = useState<AuditDataRow[]>([]);
+  const fetchAuditData = () => {
+    fetch(`/frontend/audit/${channel}/${testName}`)
+      .then(resp => resp.json())
+      .then(rows => setRows(rows));
   };
 
   return (
@@ -116,7 +124,12 @@ export const AuditTestsDashboard: React.FC = () => {
         </div>
       </div>
       <div className={classes.buttonContainer}>
-        <AuditTestsButton testName={testName} channel={channel} />
+        <Button variant="outlined" onClick={fetchAuditData}>
+          Get audit
+        </Button>
+      </div>
+      <div>
+        <AuditTestsTable testName={testName} rows={rows} />
       </div>
     </div>
   );
