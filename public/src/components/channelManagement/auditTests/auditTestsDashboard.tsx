@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Button,
   FormControl,
   MenuItem,
   Select,
@@ -16,7 +15,8 @@ import { AuditTestsButton } from './AuditTestsButton';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
-    margin: '10px',
+    display: 'flex',
+    gap: spacing(5),
   },
   sectionContainer: {
     display: 'flexWrap',
@@ -32,9 +32,9 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     fontWeight: 500,
   },
   buttonContainer: {
-    display: 'flex',
-    justifyContent: 'top',
-    marginTop: spacing(2),
+    justifyContent: 'bottom',
+    marginTop: spacing(7),
+    width: '800px',
   },
 }));
 export const EMPTY_ERROR_HELPER_TEXT = 'Field cannot be empty - please enter some text';
@@ -54,7 +54,7 @@ export const AuditTestsDashboard: React.FC = () => {
 
   return (
     <div className={classes.container}>
-      <div className={classes.container}>
+      <div>
         <div className={classes.sectionContainer}>
           <Typography className={classes.heading}>Test Name</Typography>
           <TextField

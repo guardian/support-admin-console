@@ -1,8 +1,13 @@
 import { makeStyles } from '@mui/styles';
-import { Button, Theme, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import { Button, Theme } from '@mui/material';
+import React, { useState } from 'react';
 import { AuditTestsTable } from './auditTestsTAble';
 const useStyles = makeStyles(({}: Theme) => ({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '15px',
+  },
   auditButton: {
     height: '100%',
   },
@@ -38,11 +43,15 @@ export const AuditTestsButton: React.FC<AuditTestsButtonProps> = ({
 
   return (
     <>
-      <Button className={classes.auditButton} variant="outlined" onClick={() => setOpen(true)}>
-        Get Audit Data
-      </Button>
-      <div className={classes.tableContainer}>
-        {open && <AuditTestsTable testName={testName} channel={channel} />}
+      <div className={classes.container}>
+        <div className={classes.auditButton}>
+          <Button variant="outlined" onClick={() => setOpen(true)}>
+            Get Audit Data
+          </Button>
+        </div>
+        <div className={classes.tableContainer}>
+          {open && <AuditTestsTable testName={testName} channel={channel} />}
+        </div>
       </div>
     </>
   );
