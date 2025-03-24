@@ -254,9 +254,6 @@ GET   /frontend/bandit/:channel/:testName              controllers.BanditDataCon
 # ----- audit ----- #
 GET   /frontend/audit/:channel/:testName               controllers.ChannelTestsAuditController.getAuditsForChannelTest(channel: String, testName: String)
 
-# ----- audit tests ----- #
-GET   /frontend/audit-tests                            controllers.ChannelTestsAuditController.getAuditTestsDetails()
-
 
 # Map static resources from the /public folder to the /assets URL path
 GET  /assets/*file                                  controllers.Assets.at(path="/public", file)

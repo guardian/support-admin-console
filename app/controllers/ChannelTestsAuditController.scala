@@ -33,11 +33,4 @@ class ChannelTestsAuditController(
     }
   }
 
-  def getAuditTestsDetails(): Action[AnyContent] = authAction.async { request =>
-    run {
-      logger.info("Getting all audit tests details")
-      dynamo.getAllAuditTests().map(tests => Ok(noNulls(tests.asJson)))
-    }
-  }
-
 }
