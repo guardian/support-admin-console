@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { AuditDataRow } from './AuditTestsButton';
+import React from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Button, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -15,23 +14,24 @@ const useStyles = makeStyles(({}: Theme) => ({
   },
 }));
 
+export interface AuditDataRow {
+  name: string;
+  channel: string;
+  ttlInSecondsSinceEpoch: number;
+  userEmail: string;
+  timestamp: string;
+}
+
 interface AuditTestsTableProps {
   testName: string;
-  channel: string;
+  rows: AuditDataRow[];
 }
 
 export const AuditTestsTable: React.FC<AuditTestsTableProps> = ({
   testName,
-  channel,
+  rows,
 }: AuditTestsTableProps) => {
   const classes = useStyles();
-  const [rows, setRows] = useState<AuditDataRow[]>([]);
-
-  useEffect(() => {
-    fetch(`/frontend/audit/${channel}/${testName}`)
-      .then(resp => resp.json())
-      .then(rows => setRows(rows));
-  }, [testName, channel]);
 
   const columns: GridColDef[] = [
     {
