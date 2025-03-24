@@ -140,6 +140,7 @@ export class AdminConsole extends GuStack {
         name: 'timestamp',
         type: AttributeType.STRING,
       },
+      timeToLiveAttribute: 'ttlInSecondsSinceEpoch',
     });
 
     // Give it a better name

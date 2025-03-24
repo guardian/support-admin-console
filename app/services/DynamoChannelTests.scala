@@ -92,16 +92,6 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
       ).items
     }.mapError(DynamoGetError)
 
-  private def put(putRequest: PutItemRequest): ZIO[ZEnv, DynamoError, Unit] =
-    effectBlocking {
-      val result = client.putItem(putRequest)
-      logger.info(s"PutItemResponse: $result")
-      ()
-    }.mapError {
-      case err: ConditionalCheckFailedException => DynamoDuplicateNameError(err)
-      case other => DynamoPutError(other)
-    }
-
   private def update(updateRequest: UpdateItemRequest): ZIO[ZEnv, DynamoError, Unit] =
     effectBlocking {
       val result = client.updateItem(updateRequest)
@@ -148,6 +138,19 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
       client.batchGetItem(request)
         .responses().asScala.get(tableName).map(_.asScala.toList).getOrElse(Nil)
     }.mapError(DynamoGetError)
+  }
+
+  def getTests[T <: ChannelTest[T] : Decoder](channel: Channel, testNames: List[String]): ZIO[ZEnv, DynamoGetError, List[T]] = {
+    getRawTests(channel, testNames).map(rawTests => {
+      rawTests.flatMap(rawTest =>
+        dynamoMapToJson(rawTest).as[T] match {
+          case Right(test) => Some(test)
+          case Left(error) =>
+            logger.error(s"Failed to decode item from Dynamo: ${error.getMessage}")
+            None
+        }
+      )
+    })
   }
 
   // Returns all tests in a campaign, sorted by channel
@@ -227,11 +230,12 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
       .map(allTests => allTests.flatMap(_.priority).maxOption.getOrElse(0))
 
   // Creates a new test, with bottom priority
-  def createTest[T <: ChannelTest[T] : Encoder : Decoder](test: T, channel: Channel): ZIO[ZEnv, DynamoError, Unit] =
+  def createTest[T <: ChannelTest[T] : Encoder : Decoder](test: T, channel: Channel): ZIO[ZEnv, DynamoError, T] =
     getBottomPriority[T](channel)
       .flatMap(bottomPriority => {
         val priority = bottomPriority + 1
-        val item = jsonToDynamo(test.withChannel(channel).withPriority(priority).asJson).m()
+        val enrichedTest = test.withChannel(channel).withPriority(priority)
+        val item = jsonToDynamo(enrichedTest.asJson).m()
         val request = PutItemRequest
           .builder
           .tableName(tableName)
@@ -240,7 +244,8 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
           .conditionExpression("attribute_not_exists(#name)")
           .expressionAttributeNames(Map("#name" -> "name").asJava)
           .build()
-        put(request)
+
+        put(request).map(_ => enrichedTest)
       })
 
   def lockTest(testName: String, channel: Channel, email: String, force: Boolean): ZIO[ZEnv, DynamoError, Unit] = {

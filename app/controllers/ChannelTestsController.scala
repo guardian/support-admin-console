@@ -10,7 +10,7 @@ import models.DynamoErrors._
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.S3Client.{S3ClientError, S3ObjectSettings}
-import services.{DynamoArchivedChannelTests, DynamoChannelTests, S3Json, VersionedS3Data}
+import services.{DynamoArchivedChannelTests, DynamoChannelTests, DynamoChannelTestsAudit, S3Json, VersionedS3Data}
 import utils.Circe.noNulls
 import zio.{IO, UIO, ZEnv, ZIO}
 import com.typesafe.scalalogging.LazyLogging
@@ -39,6 +39,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
   runtime: zio.Runtime[ZEnv],
   dynamoTests: DynamoChannelTests,
   dynamoArchivedTests: DynamoArchivedChannelTests,
+  dynamoTestsAudit: DynamoChannelTestsAudit
 )(implicit ec: ExecutionContext) extends AbstractController(components) with Circe with LazyLogging {
 
   private val lockObjectSettings = S3ObjectSettings(
@@ -162,6 +163,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
       logger.info(s"${request.user.email} is updating $channel/'${test.name}'")
       dynamoTests
         .updateTest(test, channel, request.user.email)
+        .flatMap(_ => dynamoTestsAudit.createAudit(test, request.user.email))
         .map(_ => Ok("updated"))
         .catchSome { case DynamoNoLockError(error) =>
           logger.warn(s"Failed to save $channel/'${test.name}' because user ${request.user.email} does not have it locked: ${error.getMessage}")
@@ -176,6 +178,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
       logger.info(s"${request.user.email} is creating $channel/'${test.name}'")
       dynamoTests
         .createTest(test, channel)
+        .flatMap(newTest => dynamoTestsAudit.createAudit(newTest, request.user.email))
         .map(_ => Ok("created"))
         .catchSome { case DynamoDuplicateNameError(error) =>
           logger.warn(s"Failed to create $channel/'${test.name}' because name already exists: ${error.getMessage}")
@@ -243,6 +246,21 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
 
         case Some(status) =>
           dynamoTests.updateStatuses(testNames, channel, status)
+            .flatMap(_ => {
+              /**
+               * Fetch the full data for all the updated tests and then write audits.
+               * We use .forkDaemon here to avoid delaying the response to the client
+               * and instead run this task in the background.
+               */
+              dynamoTests
+                .getTests(channel, testNames)
+                .flatMap(tests => dynamoTestsAudit.createAudits(tests, request.user.email))
+                .tapError(error => {
+                  // Log the error but this will not affect the response to the client
+                  ZIO.succeed(logger.error(s"Error creating audits after status changes: ${error.getMessage}", error))
+                })
+                .forkDaemon
+            })
             .map(_ => Ok(status.toString))
 
         case None => ZIO.succeed(BadRequest(s"Invalid status: $rawStatus"))

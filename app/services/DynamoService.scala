@@ -1,15 +1,9 @@
 package services
 
 import com.typesafe.scalalogging.StrictLogging
-import models.DynamoErrors.DynamoPutError
+import models.DynamoErrors.{DynamoDuplicateNameError, DynamoError, DynamoPutError}
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
-import software.amazon.awssdk.services.dynamodb.model.{
-  BatchWriteItemRequest,
-  ReturnConsumedCapacity,
-  TransactWriteItem,
-  TransactWriteItemsRequest,
-  WriteRequest
-}
+import software.amazon.awssdk.services.dynamodb.model.{BatchWriteItemRequest, ConditionalCheckFailedException, PutItemRequest, ReturnConsumedCapacity, TransactWriteItem, TransactWriteItemsRequest, WriteRequest}
 import zio.{ZEnv, ZIO}
 import zio.blocking.effectBlocking
 import zio.stream.ZStream
@@ -21,6 +15,16 @@ import scala.jdk.CollectionConverters._
 abstract class DynamoService(stage: String, client: DynamoDbClient)
     extends StrictLogging {
   protected val tableName: String
+
+  protected def put(putRequest: PutItemRequest): ZIO[ZEnv, DynamoError, Unit] =
+    effectBlocking {
+      val result = client.putItem(putRequest)
+      logger.info(s"PutItemResponse: $result")
+      ()
+    }.mapError {
+      case err: ConditionalCheckFailedException => DynamoDuplicateNameError(err)
+      case other => DynamoPutError(other)
+    }
 
   // Sends a batch of write requests, and returns any unprocessed items
   protected def putAll(writeRequests: List[WriteRequest])
