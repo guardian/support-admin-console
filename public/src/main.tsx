@@ -234,7 +234,7 @@ const AppRouter = () => {
           />
           <Route
             path="/audit-tests"
-            element={createComponent(<AuditTestsDashboard />, 'Audit Tests')}
+            element={createComponent(<AuditTestsDashboard />, 'Test Audits')}
           />
         </Routes>
       </div>
