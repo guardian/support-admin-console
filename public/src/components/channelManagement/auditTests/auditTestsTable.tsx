@@ -64,7 +64,7 @@ export const AuditTestsTable: React.FC<AuditTestsTableProps> = ({
   return (
     <>
       <div className={classes.container}>
-        <Typography className={classes.heading}> Audit Test Details for {testName} </Typography>
+        <Typography className={classes.heading}> Audit Details for {testName} </Typography>
         <div style={{ width: '100%' }}>
           <DataGrid
             autoHeight
