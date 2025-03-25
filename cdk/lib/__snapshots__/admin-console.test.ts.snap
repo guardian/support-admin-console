@@ -275,6 +275,11 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
           },
         },
         "MaxSize": "2",
+        "MetricsCollection": [
+          {
+            "Granularity": "1Minute",
+          },
+        ],
         "MinSize": "1",
         "Tags": [
           {
@@ -1944,6 +1949,24 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
             "ReturnData": false,
           },
         ],
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-admin-console",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
         "Threshold": 0,
         "TreatMissingData": "notBreaching",
       },
@@ -2011,6 +2034,7 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
         },
         "Port": 443,
         "Protocol": "HTTPS",
+        "SslPolicy": "ELBSecurityPolicy-TLS13-1-2-2021-06",
       },
       "Type": "AWS::ElasticLoadBalancingV2::Listener",
     },
@@ -2501,6 +2525,24 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
         "Namespace": "AWS/ApplicationELB",
         "Period": 60,
         "Statistic": "Maximum",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-admin-console",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
         "Threshold": 1,
         "TreatMissingData": "notBreaching",
       },
@@ -2735,6 +2777,7 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
           "InstanceType": "t4g.micro",
           "MetadataOptions": {
             "HttpTokens": "required",
+            "InstanceMetadataTags": "enabled",
           },
           "SecurityGroupIds": [
             {
@@ -2815,14 +2858,14 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
               "Fn::Join": [
                 "",
                 [
-                  "#!/bin/bash -ev
-    aws --region ",
+                  "#!/bin/bash
+aws --region ",
                   {
                     "Ref": "AWS::Region",
                   },
                   " s3 cp s3://membership-dist/support/PROD/admin-console/support-admin-console_1.0-SNAPSHOT_all.deb /tmp
-    dpkg -i /tmp/support-admin-console_1.0-SNAPSHOT_all.deb
-    /opt/cloudwatch-logs/configure-logs application support PROD admin-console /var/log/support-admin-console/application.log",
+      dpkg -i /tmp/support-admin-console_1.0-SNAPSHOT_all.deb
+      /opt/cloudwatch-logs/configure-logs application support PROD admin-console /var/log/support-admin-console/application.log",
                 ],
               ],
             },

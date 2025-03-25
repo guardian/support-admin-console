@@ -13,7 +13,7 @@ import {
 import type { App, CfnElement } from 'aws-cdk-lib';
 import { Duration, RemovalPolicy, Tags } from 'aws-cdk-lib';
 import { AttributeType, BillingMode, ProjectionType, Table } from 'aws-cdk-lib/aws-dynamodb';
-import { InstanceClass, InstanceSize, InstanceType } from 'aws-cdk-lib/aws-ec2';
+import { InstanceClass, InstanceSize, InstanceType, UserData } from 'aws-cdk-lib/aws-ec2';
 import {
   ApplicationListenerRule,
   ListenerAction,
@@ -253,10 +253,13 @@ export class AdminConsole extends GuStack {
       archivedBannerDesignsDynamoTable,
     );
 
-    const userData = `#!/bin/bash -ev
-    aws --region ${this.region} s3 cp s3://membership-dist/${this.stack}/${this.stage}/${app}/support-admin-console_1.0-SNAPSHOT_all.deb /tmp
-    dpkg -i /tmp/support-admin-console_1.0-SNAPSHOT_all.deb
-    /opt/cloudwatch-logs/configure-logs application ${this.stack} ${this.stage} ${app} /var/log/support-admin-console/application.log`;
+    const userData = UserData.forLinux();
+    userData.addCommands(
+      `aws --region ${this.region} s3 cp s3://membership-dist/${this.stack}/${this.stage}/${app}/support-admin-console_1.0-SNAPSHOT_all.deb /tmp
+      dpkg -i /tmp/support-admin-console_1.0-SNAPSHOT_all.deb
+      /opt/cloudwatch-logs/configure-logs application ${this.stack} ${this.stage} ${app} /var/log/support-admin-console/application.log`
+    )
+
 
     const policies: Policy[] = [
       new GuAllowPolicy(this, 'Cloudwatch', {
