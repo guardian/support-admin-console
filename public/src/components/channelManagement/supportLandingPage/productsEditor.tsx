@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Products,
   LandingPageProductDescription,
@@ -18,6 +18,8 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { makeStyles } from '@mui/styles';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
+import { useFieldArray, useForm, Controller } from 'react-hook-form';
+import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 
 const productKeys: (keyof Products)[] = ['Contribution', 'SupporterPlus', 'TierThree'];
 
@@ -52,6 +54,7 @@ interface ProductEditorProps {
   productKey: keyof Products;
   product: LandingPageProductDescription;
   onProductChange: (updatedProduct: LandingPageProductDescription) => void;
+  onValidationChange: (isValid: boolean) => void;
 }
 
 export const ProductEditor: React.FC<ProductEditorProps> = ({
@@ -59,8 +62,21 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
   productKey,
   product,
   onProductChange,
+  onValidationChange,
 }: ProductEditorProps) => {
   const classes = useStyles();
+
+  const { handleSubmit, errors, register } = useForm<LandingPageProductDescription>({
+    mode: 'onChange',
+    defaultValues: product,
+  });
+
+  useEffect(() => {
+    const isValid = Object.keys(errors).length === 0;
+    // console.log({errors});
+    console.log('ProductEditor', {isValid});
+    onValidationChange(isValid);
+  }, [errors.title]);
 
   return (
     <Accordion key={productKey}>
@@ -69,30 +85,32 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
       </AccordionSummary>
       <AccordionDetails className={classes.accordionDetails}>
         <TextField
+          inputRef={register({ required: EMPTY_ERROR_HELPER_TEXT })}
+          error={!!errors.title}
           label="Title"
+          name="title"
           required={true}
-          value={product.title}
-          onChange={e => onProductChange({ ...product, title: e.target.value })}
+          onBlur={handleSubmit(onProductChange)}
           disabled={!editMode}
           fullWidth
         />
         <TextField
+          inputRef={register({ required: EMPTY_ERROR_HELPER_TEXT })}
+          error={!!errors.cta?.copy}
           label="CTA Copy"
+          name="cta.copy"
           required={true}
-          value={product.cta.copy}
-          onChange={e => {
-            onProductChange({ ...product, cta: { copy: e.target.value } });
-          }}
+          onBlur={handleSubmit(onProductChange)}
           disabled={!editMode}
           fullWidth
         />
         <TextField
+          inputRef={register()}
+          error={!!errors.label?.copy}
           label="Pill (optional)"
+          name="label.copy"
           value={product.label?.copy}
-          onChange={e => {
-            const label = e.target.value ? { copy: e.target.value } : undefined;
-            onProductChange({ ...product, label });
-          }}
+          onBlur={handleSubmit(onProductChange)}
           disabled={!editMode}
           fullWidth
         />
@@ -191,15 +209,37 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
 interface ProductsEditorProps {
   products: Products;
   onProductsChange: (updatedProducts: Products) => void;
+  onValidationChange: (isValid: boolean) => void;
   editMode: boolean;
 }
 
 export const ProductsEditor: React.FC<ProductsEditorProps> = ({
   products,
   onProductsChange,
+  onValidationChange,
   editMode,
 }) => {
   const classes = useStyles();
+
+  const { control, setError, clearErrors, errors } = useForm<Products>({
+    mode: 'onChange',
+    defaultValues: products,
+  });
+
+  useEffect(() => {
+    const isValid = Object.keys(errors).length === 0;
+    console.log('ProductsEditor', {errors});
+    console.log('ProductsEditor', {isValid});
+    onValidationChange(isValid);
+  }, [errors.Contribution, errors.SupporterPlus, errors.TierThree]);
+
+  const handleProductChange = (
+    productKey: keyof Products,
+    updatedProduct: LandingPageProductDescription,
+  ) => {
+    const updatedProducts = { ...products, [productKey]: updatedProduct };
+    onProductsChange(updatedProducts);
+  };
 
   return (
     <div>
@@ -208,17 +248,25 @@ export const ProductsEditor: React.FC<ProductsEditorProps> = ({
       </Typography>
 
       {productKeys.map(productKey => (
-        <ProductEditor
+        <Controller
           key={productKey}
-          productKey={productKey}
-          editMode={editMode}
-          product={products[productKey]}
-          onProductChange={updatedProduct =>
-            onProductsChange({
-              ...products,
-              [productKey]: updatedProduct,
-            })
-          }
+          control={control}
+          name={productKey}
+          render={field => (
+            <ProductEditor
+              productKey={productKey}
+              editMode={editMode}
+              product={field.value}
+              onProductChange={updatedProduct => handleProductChange(productKey, updatedProduct)}
+              onValidationChange={isValid => {
+                if (!isValid) {
+                  setError(productKey, { message: `Product ${productKey} is not valid` });
+                } else {
+                  clearErrors(productKey);
+                }
+              }}
+            />
+          )}
         />
       ))}
     </div>
