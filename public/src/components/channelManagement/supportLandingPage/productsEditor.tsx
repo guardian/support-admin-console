@@ -15,7 +15,7 @@ import { makeStyles } from '@mui/styles';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import { useFieldArray, useForm, Controller } from 'react-hook-form';
-import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
+import { copyLengthValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 
 const productKeys: (keyof Products)[] = ['Contribution', 'SupporterPlus', 'TierThree'];
 
@@ -77,7 +77,7 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
-  }, [errors.title, errors.cta, errors.benefits]);
+  }, [errors.title, errors.cta, errors.label, errors.benefits]);
 
   return (
     <Accordion key={productKey}>
@@ -88,6 +88,7 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
         <TextField
           inputRef={register({ required: EMPTY_ERROR_HELPER_TEXT })}
           error={!!errors.title}
+          helperText={errors?.title?.message}
           label="Title"
           name="title"
           required={true}
@@ -98,6 +99,7 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
         <TextField
           inputRef={register({ required: EMPTY_ERROR_HELPER_TEXT })}
           error={!!errors.cta?.copy}
+          helperText={errors?.cta?.copy?.message}
           label="CTA Copy"
           name="cta.copy"
           required={true}
@@ -106,11 +108,13 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
           fullWidth
         />
         <TextField
-          inputRef={register()}
+          inputRef={register({
+            validate: copyLengthValidator(30),
+          })}
           error={!!errors.label?.copy}
+          helperText={errors?.label?.copy?.message}
           label="Pill (optional)"
           name="label.copy"
-          value={product.label?.copy}
           onBlur={handleSubmit(onProductChange)}
           disabled={!editMode}
           fullWidth
