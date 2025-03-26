@@ -54,6 +54,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
         onProductsChange={updatedProducts =>
           onVariantChange({ ...variant, products: updatedProducts })
         }
+        onValidationChange={onValidationChange}
         editMode={editMode}
       />
     </div>
