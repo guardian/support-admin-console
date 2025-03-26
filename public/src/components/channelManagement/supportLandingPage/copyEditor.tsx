@@ -2,7 +2,7 @@ import { SupportLandingPageCopy } from '../../../models/supportLandingPage';
 import React, { useEffect, useState } from 'react';
 import { copyLengthValidator, templateValidatorForPlatform } from '../helpers/validation';
 import { Controller, useForm } from 'react-hook-form';
-import { getRteCopyLength, RichTextEditorSingleLine } from '../richTextEditor/richTextEditor';
+import { RichTextEditorSingleLine } from '../richTextEditor/richTextEditor';
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material';
 
@@ -11,9 +11,6 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
     marginLeft: spacing(2),
   },
 }));
-
-const headingCopyRecommendedLength = 500;
-const subheadingCopyRecommendedLength = 500;
 
 interface CopyEditorProps {
   copy: SupportLandingPageCopy;
@@ -66,21 +63,6 @@ export const CopyEditor: React.FC<CopyEditorProps> = ({
     }
   }, [errors.heading, errors.subheading]);
 
-  const getSubheadingCopyLength = () => {
-    if (copy.heading != null) {
-      return [
-        getRteCopyLength([...copy.heading, copy.heading || '']),
-        headingCopyRecommendedLength,
-      ];
-    }
-    return [
-      getRteCopyLength([copy.subheading, copy.subheading || '']),
-      subheadingCopyRecommendedLength,
-    ];
-  };
-
-  const [copyLength, recommendedLength] = getSubheadingCopyLength();
-
   return (
     <>
       <div className={classes.container}>
@@ -128,7 +110,7 @@ export const CopyEditor: React.FC<CopyEditorProps> = ({
             render={data => {
               return (
                 <RichTextEditorSingleLine
-                  error={errors.subheading !== undefined || copyLength > recommendedLength}
+                  error={errors.subheading !== undefined}
                   helperText={errors?.subheading?.message || errors?.subheading?.type}
                   copyData={data.value}
                   updateCopy={pars => {
