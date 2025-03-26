@@ -1,9 +1,5 @@
 import React, { useEffect } from 'react';
-import {
-  Products,
-  LandingPageProductDescription,
-  ProductBenefit,
-} from '../../../models/supportLandingPage';
+import { Products, LandingPageProductDescription } from '../../../models/supportLandingPage';
 import {
   TextField,
   Typography,
@@ -66,17 +62,22 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
 }: ProductEditorProps) => {
   const classes = useStyles();
 
-  const { handleSubmit, errors, register } = useForm<LandingPageProductDescription>({
+  // Validation for this product as a whole
+  const { control, handleSubmit, errors, register } = useForm<LandingPageProductDescription>({
     mode: 'onChange',
     defaultValues: product,
   });
 
+  // Validation specifically for the benefits array
+  const { fields: benefits, append, remove } = useFieldArray({
+    control,
+    name: 'benefits',
+  });
+
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
-    // console.log({errors});
-    console.log('ProductEditor', {isValid});
     onValidationChange(isValid);
-  }, [errors.title]);
+  }, [errors.title, errors.cta, errors.benefits]);
 
   return (
     <Accordion key={productKey}>
@@ -117,84 +118,66 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
 
         <div className={classes.benefitsHeading}>{buildBenefitsHeading(productKey)}</div>
 
-        {product.benefits.map((benefit, index) => {
-          const updateBenefit = (updatedBenefit: ProductBenefit) => {
-            const updatedBenefits = [
-              ...product.benefits.slice(0, index),
-              updatedBenefit,
-              ...product.benefits.slice(index + 1),
-            ];
-            onProductChange({
-              ...product,
-              benefits: updatedBenefits,
-            });
-          };
-
-          return (
-            <Grid container columns={9} spacing={1} key={index}>
-              <Grid item xs={3}>
-                <TextField
-                  label="Benefit Copy"
-                  required={true}
-                  value={benefit.copy}
-                  onChange={e => updateBenefit({ ...benefit, copy: e.target.value })}
-                  disabled={!editMode}
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={3}>
-                <TextField
-                  label="Tooltip (optional)"
-                  value={benefit.tooltip || ''}
-                  required={false}
-                  onChange={e => {
-                    const tooltip = e.target.value || undefined;
-                    updateBenefit({ ...benefit, tooltip });
-                  }}
-                  disabled={!editMode}
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={2}>
-                <TextField
-                  label="Pill (optional)"
-                  value={benefit.label?.copy || ''}
-                  required={false}
-                  onChange={e => {
-                    const label = e.target.value ? { copy: e.target.value } : undefined;
-                    updateBenefit({ ...benefit, label });
-                  }}
-                  disabled={!editMode}
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={1}>
-                <Button
-                  className={classes.deleteButton}
-                  onClick={() => {
-                    const updatedBenefits = [
-                      ...product.benefits.slice(0, index),
-                      ...product.benefits.slice(index + 1),
-                    ];
-                    onProductChange({ ...product, benefits: updatedBenefits });
-                  }}
-                  disabled={!editMode}
-                  variant="outlined"
-                  size="medium"
-                >
-                  <CloseIcon />
-                </Button>
-              </Grid>
+        {benefits.map((benefit, index) => (
+          <Grid container columns={9} spacing={1} key={benefit.id}>
+            <Grid item xs={3}>
+              <TextField
+                label="Benefit Copy"
+                required={true}
+                name={`benefits[${index}].copy`}
+                inputRef={register({ required: EMPTY_ERROR_HELPER_TEXT })}
+                error={!!errors.benefits?.[index]?.copy}
+                defaultValue={benefit.copy}
+                onBlur={handleSubmit(onProductChange)}
+                disabled={!editMode}
+                fullWidth
+              />
             </Grid>
-          );
-        })}
+            <Grid item xs={3}>
+              <TextField
+                label="Tooltip (optional)"
+                name={`benefits[${index}].tooltip`}
+                inputRef={register()}
+                error={!!errors.benefits?.[index]?.tooltip}
+                defaultValue={benefit.tooltip}
+                onBlur={handleSubmit(onProductChange)}
+                disabled={!editMode}
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={2}>
+              <TextField
+                label="Pill (optional)"
+                name={`benefits[${index}].label.copy`}
+                inputRef={register()}
+                error={!!errors.benefits?.[index]?.label?.copy}
+                defaultValue={benefit.label?.copy}
+                onBlur={handleSubmit(onProductChange)}
+                disabled={!editMode}
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={1}>
+              <Button
+                className={classes.deleteButton}
+                onClick={() => {
+                  remove(index);
+                  onProductChange({
+                    ...product,
+                    benefits: product.benefits.filter((_, i) => i !== index),
+                  });
+                }}
+                disabled={!editMode}
+                variant="outlined"
+                size="medium"
+              >
+                <CloseIcon />
+              </Button>
+            </Grid>
+          </Grid>
+        ))}
         <Button
-          onClick={() =>
-            onProductChange({
-              ...product,
-              benefits: [...product.benefits, { copy: '' }],
-            })
-          }
+          onClick={() => append({ copy: '' })}
           disabled={!editMode}
           variant="outlined"
           size="medium"
@@ -221,6 +204,7 @@ export const ProductsEditor: React.FC<ProductsEditorProps> = ({
 }) => {
   const classes = useStyles();
 
+  // Validation for all 3 products
   const { control, setError, clearErrors, errors } = useForm<Products>({
     mode: 'onChange',
     defaultValues: products,
@@ -228,18 +212,8 @@ export const ProductsEditor: React.FC<ProductsEditorProps> = ({
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
-    console.log('ProductsEditor', {errors});
-    console.log('ProductsEditor', {isValid});
     onValidationChange(isValid);
   }, [errors.Contribution, errors.SupporterPlus, errors.TierThree]);
-
-  const handleProductChange = (
-    productKey: keyof Products,
-    updatedProduct: LandingPageProductDescription,
-  ) => {
-    const updatedProducts = { ...products, [productKey]: updatedProduct };
-    onProductsChange(updatedProducts);
-  };
 
   return (
     <div>
@@ -257,7 +231,9 @@ export const ProductsEditor: React.FC<ProductsEditorProps> = ({
               productKey={productKey}
               editMode={editMode}
               product={field.value}
-              onProductChange={updatedProduct => handleProductChange(productKey, updatedProduct)}
+              onProductChange={updatedProduct =>
+                onProductsChange({ ...products, [productKey]: updatedProduct })
+              }
               onValidationChange={isValid => {
                 if (!isValid) {
                   setError(productKey, { message: `Product ${productKey} is not valid` });
