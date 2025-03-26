@@ -63,10 +63,12 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
   const classes = useStyles();
 
   // Validation for this product as a whole
-  const { control, handleSubmit, errors, register } = useForm<LandingPageProductDescription>({
-    mode: 'onChange',
-    defaultValues: product,
-  });
+  const { control, handleSubmit, errors, register, reset } = useForm<LandingPageProductDescription>(
+    {
+      mode: 'onChange',
+      defaultValues: product,
+    },
+  );
 
   // Validation specifically for the benefits array
   const { fields: benefits, append, remove } = useFieldArray({
@@ -78,6 +80,10 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
   }, [errors.title, errors.cta, errors.label, errors.benefits]);
+
+  useEffect(() => {
+    reset(product);
+  }, [product, reset]);
 
   return (
     <Accordion key={productKey}>
@@ -129,8 +135,12 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
                 label="Benefit Copy"
                 required={true}
                 name={`benefits[${index}].copy`}
-                inputRef={register({ required: EMPTY_ERROR_HELPER_TEXT })}
+                inputRef={register({
+                  required: EMPTY_ERROR_HELPER_TEXT,
+                  validate: copyLengthValidator(116),
+                })}
                 error={!!errors.benefits?.[index]?.copy}
+                helperText={errors.benefits?.[index]?.copy?.message}
                 defaultValue={benefit.copy}
                 onBlur={handleSubmit(onProductChange)}
                 disabled={!editMode}
@@ -182,7 +192,7 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
         ))}
         <Button
           onClick={() => append({ copy: '' })}
-          disabled={!editMode}
+          disabled={!editMode || benefits.length >= 8}
           variant="outlined"
           size="medium"
         >
@@ -209,7 +219,7 @@ export const ProductsEditor: React.FC<ProductsEditorProps> = ({
   const classes = useStyles();
 
   // Validation for all 3 products
-  const { control, setError, clearErrors, errors } = useForm<Products>({
+  const { control, setError, clearErrors, errors, reset } = useForm<Products>({
     mode: 'onChange',
     defaultValues: products,
   });
@@ -218,6 +228,10 @@ export const ProductsEditor: React.FC<ProductsEditorProps> = ({
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
   }, [errors.Contribution, errors.SupporterPlus, errors.TierThree]);
+
+  useEffect(() => {
+    reset(products);
+  }, [products, reset]);
 
   return (
     <div>
