@@ -1,5 +1,5 @@
 import React from 'react';
-import { BanditMethodology, Methodology } from './helpers/shared';
+import { BanditMethodology, Methodology, Variant } from './helpers/shared';
 import { makeStyles } from '@mui/styles';
 import { BanditAnalyticsButton } from './BanditAnalyticsButton';
 import {
@@ -19,6 +19,7 @@ import { addMethodologyToTestName } from './helpers/methodology';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 import { grey } from '@mui/material/colors';
 import { LTV3DataViewer } from './LTV3DataViewer';
+import { LTV3DataButton } from './public/src/components/channelManagement/LTV3DataButton';
 
 const isBandit = (methodology: Methodology): methodology is BanditMethodology =>
   methodology.name === 'EpsilonGreedyBandit' || methodology.name === 'Roulette';
@@ -272,6 +273,7 @@ const TestMethodology: React.FC<TestMethodologyProps> = ({
 interface TestMethodologyEditorProps {
   methodologies: Methodology[];
   testName: string;
+  variants: Variant[];
   channel: string;
   onChange: (methodologies: Methodology[]) => void;
   isDisabled: boolean;
@@ -280,6 +282,7 @@ interface TestMethodologyEditorProps {
 export const TestMethodologyEditor: React.FC<TestMethodologyEditorProps> = ({
   methodologies,
   testName,
+  variants,
   channel,
   onChange,
   isDisabled,
@@ -341,6 +344,15 @@ export const TestMethodologyEditor: React.FC<TestMethodologyEditorProps> = ({
       >
         <AddIcon />
       </Button>
+      <div>
+        <LTV3DataButton
+          testName={testName}
+          variants={variants}
+          channel={channel}
+          label={'LTV3Data'}
+          methodologies={methodologies}
+        />
+      </div>
     </div>
   );
 };
