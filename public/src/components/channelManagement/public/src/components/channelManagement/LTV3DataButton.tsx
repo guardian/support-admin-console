@@ -54,15 +54,15 @@ export const LTV3DataButton: React.FC<LTV3DataButtonProps> = ({
   methodologies,
 }: LTV3DataButtonProps) => {
   const classes = useStyles();
-  // const [data, setData] = React.useState<LTV3Data[]>();
+  const [data, setData] = React.useState<LTV3Data[]>();
   const [isOpen, open, close] = useOpenable();
-  // useEffect(() => {
-  //   fetch(`/frontend/bandit/${channel}/${testName}/ltv3`)
-  //     .then(resp => resp.json())
-  //     .then(data => {
-  //       setData(data);
-  //     });
-  // }, [testName, channel]);
+  useEffect(() => {
+    fetch(`/frontend/bandit/${channel}/${testName}/ltv3`)
+      .then(resp => resp.json())
+      .then(data => {
+        setData(data);
+      });
+  }, [testName, channel]);
   const variantNames = variants.map(variant => variant.name);
 
   // const data1 = [
@@ -101,46 +101,69 @@ export const LTV3DataButton: React.FC<LTV3DataButtonProps> = ({
           <div className={classes.heading}>
             <h3>LTV3 data for the test : {testName}</h3>
           </div>
-          <div className={classes.container}>
+
+          {methodologies === undefined && (
             <TableContainer component={Paper}>
               <Table>
                 <TableHead>
                   <TableRow>
                     <TableCell>Variants</TableCell>
-                    {methodologies?.map(methodology => {
-                      return (
-                        <TableCell key={methodology.testName}>{methodology.testName}</TableCell>
-                      );
-                    })}
+                    <TableCell>LTV3</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {methodologies?.map(methodology => {
-                    const [data, setData] = React.useState<LTV3Data[]>();
-                    useEffect(() => {
-                      fetch(`/frontend/bandit/${channel}/${methodology.testName}/ltv3`)
-                        .then(resp => resp.json())
-                        .then(data => {
-                          setData(data);
-                        });
-                    }, [testName, channel]);
-
-                    console.log('Data: ', data);
-                    return (
-                      <>
-                        {data?.map(row => (
-                          <TableRow key={row.variant_name}>
-                            <TableCell>{row.variant_name}</TableCell>
-                            <TableCell>{row.ltv3}</TableCell>
-                          </TableRow>
-                        ))}
-                      </>
-                    );
-                  })}
+                  {data?.map(row => (
+                    <TableRow key={row.variant_name}>
+                      <TableCell>{row.variant_name}</TableCell>
+                      <TableCell>{row.ltv3}</TableCell>
+                    </TableRow>
+                  ))}
                 </TableBody>
               </Table>
             </TableContainer>
-          </div>
+          )}
+          {methodologies !== undefined && (
+            <div className={classes.container}>
+              <TableContainer component={Paper}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Variants</TableCell>
+                      {methodologies?.map(methodology => {
+                        return (
+                          <TableCell key={methodology.testName}>{methodology.testName}</TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {methodologies?.map(methodology => {
+                      const [data, setData] = React.useState<LTV3Data[]>();
+                      useEffect(() => {
+                        fetch(`/frontend/bandit/${channel}/${methodology.testName}/ltv3`)
+                          .then(resp => resp.json())
+                          .then(data => {
+                            setData(data);
+                          });
+                      }, [testName, channel]);
+
+                      console.log('Data: ', data);
+                      return (
+                        <>
+                          {data?.map(row => (
+                            <TableRow key={row.variant_name}>
+                              <TableCell>{row.variant_name}</TableCell>
+                              <TableCell>{row.ltv3}</TableCell>
+                            </TableRow>
+                          ))}
+                        </>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </div>
+          )}
         </Dialog>
       </div>
     </>
