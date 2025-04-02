@@ -26,7 +26,7 @@ const getChannelName = (testType: TestType, articleType: ArticleType): string =>
   } else if (testType === 'GUTTER' && articleType === 'Liveblog') {
     return 'gutter-liveblog';
   } else {
-    return testType.toLowerCase();
+    return testType.toLowerCase().replace('_', '-');
   }
 };
 
