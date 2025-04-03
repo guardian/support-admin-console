@@ -3,7 +3,7 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Button, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { diff, IChange } from 'json-diff-ts';
-import { AuditTestJsonDiffDialog } from './auditTestJsonDiffDialog';
+import { AuditTestCompareVersionsDialog } from './auditTestCompareVersionsDialog';
 
 const useStyles = makeStyles(({}: Theme) => ({
   heading: {
@@ -46,8 +46,6 @@ export const AuditTestsTable: React.FC<AuditTestsTableProps> = ({
   const getJsonDiff = (version: number): IChange[] => {
     const currentVersion = sortedRows[version].item;
     const previousVersion = sortedRows[version + 1].item;
-    console.log('Current Version', currentVersion);
-    console.log('Previous Version', previousVersion);
     return diff(previousVersion, currentVersion, {
       embeddedObjKeys: { variants: 'name', 'regionTargeting.targetedCountryGroups': '$value' },
       keysToSkip: ['lockStatus'],
@@ -56,7 +54,7 @@ export const AuditTestsTable: React.FC<AuditTestsTableProps> = ({
 
   const columns: GridColDef[] = [
     {
-      field: 'index',
+      field: 'displayedIndex',
       headerName: 'Index',
       type: 'number',
       width: 20,
@@ -82,11 +80,13 @@ export const AuditTestsTable: React.FC<AuditTestsTableProps> = ({
         const onClick = () => {
           const version: number = +params.row.index;
           const jsonDiff = getJsonDiff(version);
-          console.log('JSONDIFF', jsonDiff);
           setOpen(true);
           setJsonDiff(jsonDiff);
         };
-
+        //To hide and disable  the button for the last row
+        if (params.row.index === (sortedRows.length - 1).toString()) {
+          return <Button disabled></Button>;
+        }
         return <Button onClick={onClick}>Compare</Button>;
       },
     },
@@ -103,6 +103,7 @@ export const AuditTestsTable: React.FC<AuditTestsTableProps> = ({
               ...row,
               id: `${row.timestamp}`,
               index: `${sortedRows.indexOf(row)}`,
+              displayedIndex: `${sortedRows.length - sortedRows.indexOf(row)}`, // to display the index in reverse order
             }))}
             columns={columns}
             pageSize={10}
@@ -111,7 +112,7 @@ export const AuditTestsTable: React.FC<AuditTestsTableProps> = ({
         </div>
         {open && (
           <div>
-            <AuditTestJsonDiffDialog jsonDiff={jsonDiff} open={open} setOpen={setOpen} />
+            <AuditTestCompareVersionsDialog jsonDiff={jsonDiff} open={open} setOpen={setOpen} />
           </div>
         )}
       </div>

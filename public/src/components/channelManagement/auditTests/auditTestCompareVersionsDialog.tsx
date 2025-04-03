@@ -3,31 +3,6 @@ import Dialog from '@mui/material/Dialog';
 import { IChange } from 'json-diff-ts';
 import { makeStyles } from '@mui/styles';
 import { Theme, Typography } from '@mui/material';
-import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
-import { isUndefined } from 'lodash';
-
-const getData = (row: IChange) => {
-  const nestedChangeData = isUndefined(row.changes)
-    ? ''
-    : JSON.stringify(row.changes.map(r => r.changes));
-
-  const furtherNestedChangeData = isUndefined(row.changes?.map(r => r.changes))
-    ? ''
-    : JSON.stringify(row.changes?.map(r => r.changes?.map(e => e.changes)));
-
-  return (
-    <TableRow key={row.key} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-      <TableCell component="th" scope="row">
-        {row.key}
-      </TableCell>
-      <TableCell align="right">{row.type.toString()}</TableCell>
-      <TableCell align="right">{JSON.stringify(row.changes)}</TableCell>
-      <TableCell align="right">{nestedChangeData}</TableCell>
-      <TableCell align="right">{furtherNestedChangeData}</TableCell>
-    </TableRow>
-  );
-};
 
 const ListItem = ({ diff }: { diff: IChange }) => {
   if (diff.type === 'ADD') {
@@ -89,27 +64,20 @@ const useStyles = makeStyles(({}: Theme) => ({
     margin: '12px',
   },
 }));
-interface AuditTestJsonDiffDialogProps {
+interface AuditTestCompareVersionsDialogProps {
   jsonDiff: IChange[];
   open: boolean;
   setOpen: (open: boolean) => void;
 }
-export const AuditTestJsonDiffDialog: React.FC<AuditTestJsonDiffDialogProps> = ({
+export const AuditTestCompareVersionsDialog: React.FC<AuditTestCompareVersionsDialogProps> = ({
   jsonDiff,
   open,
   setOpen,
-}: AuditTestJsonDiffDialogProps) => {
+}: AuditTestCompareVersionsDialogProps) => {
   const classes = useStyles();
   const handleClose = () => {
     setOpen(false);
   };
-  const data = jsonDiff;
-  const changes = jsonDiff.map(change => change.changes);
-  console.log('Changes', changes);
-  console.log('Data', data);
-
-  const finalData = jsonDiff.map(row => getData(row));
-  console.log('FinalData', finalData);
   return (
     <>
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="lg" className={classes.dialog}>
