@@ -47,7 +47,11 @@ export const AuditTestsTable: React.FC<AuditTestsTableProps> = ({
     const currentVersion = sortedRows[version].item;
     const previousVersion = sortedRows[version + 1].item;
     return diff(previousVersion, currentVersion, {
-      embeddedObjKeys: { variants: 'name', 'regionTargeting.targetedCountryGroups': '$value' },
+      embeddedObjKeys: {
+        variants: 'name',
+        'regionTargeting.targetedCountryGroups': '$value',
+        'regionTargeting.targetedCountryCodes': '$value',
+      },
       keysToSkip: ['lockStatus'],
     });
   };

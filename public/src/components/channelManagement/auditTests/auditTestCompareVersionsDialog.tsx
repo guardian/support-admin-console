@@ -4,6 +4,12 @@ import { IChange } from 'json-diff-ts';
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material';
 
+const useStyles = makeStyles(({}: Theme) => ({
+  dialog: {
+    padding: '10px',
+  },
+}));
+
 const ListItem = ({ diff }: { diff: IChange }) => {
   if (diff.type === 'ADD') {
     return (
@@ -37,7 +43,7 @@ const ListItem = ({ diff }: { diff: IChange }) => {
     </li>
   );
 };
-
+// Recursively render the diff changes
 const List = ({ diffs }: { diffs: IChange[] }) => {
   return (
     <ul>
@@ -48,28 +54,13 @@ const List = ({ diffs }: { diffs: IChange[] }) => {
   );
 };
 
-const useStyles = makeStyles(({}: Theme) => ({
-  dialog: {
-    padding: '10px',
-  },
-  button: {
-    height: '100%',
-  },
-  heading: {
-    margin: '6px 12px 0 12px',
-    fontSize: 18,
-    fontWeight: 500,
-  },
-  chartContainer: {
-    margin: '12px',
-  },
-}));
 interface AuditTestCompareVersionsDialogProps {
   jsonDiff: IChange[];
   open: boolean;
   setOpen: (open: boolean) => void;
   versionToCompare: number; //to display which version is being compared
 }
+
 export const AuditTestCompareVersionsDialog: React.FC<AuditTestCompareVersionsDialogProps> = ({
   jsonDiff,
   open,
@@ -80,6 +71,7 @@ export const AuditTestCompareVersionsDialog: React.FC<AuditTestCompareVersionsDi
   const handleClose = () => {
     setOpen(false);
   };
+
   return (
     <>
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="lg" className={classes.dialog}>

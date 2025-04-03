@@ -32,5 +32,4 @@ class ChannelTestsAuditController(
         .map(tests => Ok(noNulls(tests.asJson)))
     }
   }
-
 }

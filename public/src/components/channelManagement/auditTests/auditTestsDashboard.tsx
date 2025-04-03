@@ -11,7 +11,6 @@ import {
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { grey } from '@mui/material/colors';
-import { useForm } from 'react-hook-form';
 import { AuditDataRow, AuditTestsTable } from './auditTestsTable';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
@@ -40,16 +39,10 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     margin: spacing(7),
   },
 }));
-export const EMPTY_ERROR_HELPER_TEXT = 'Field cannot be empty - please enter some text';
-
-interface FormData {
-  name: string;
-}
 
 export const AuditTestsDashboard: React.FC = () => {
   const classes = useStyles();
   const [testName, setTestName] = useState('');
-  const { register, errors } = useForm<FormData>();
   const [channel, setChannel] = useState('');
   const onSelectChannelChange = (event: SelectChangeEvent) => {
     setChannel(event.target.value);
@@ -70,10 +63,6 @@ export const AuditTestsDashboard: React.FC = () => {
             <Typography className={classes.heading}>Test Name</Typography>
             <TextField
               id="test-name"
-              inputRef={register({
-                required: EMPTY_ERROR_HELPER_TEXT,
-              })}
-              error={errors.name !== undefined}
               name="name"
               margin="normal"
               variant="outlined"

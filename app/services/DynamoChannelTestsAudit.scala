@@ -116,6 +116,4 @@ class DynamoChannelTestsAudit(stage: String, client: DynamoDbClient) extends Dyn
         .sortBy(_.timestamp)
     }
   }
-
-
 }

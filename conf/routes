@@ -252,8 +252,7 @@ GET   /frontend/super-mode                             controllers.SuperModeCont
 GET   /frontend/bandit/:channel/:testName              controllers.BanditDataController.getDataForTest(channel: String, testName: String)
 
 # ----- audit ----- #
-GET   /frontend/audit/:channel/:testName               controllers.ChannelTestsAuditController.getAuditsForChannelTest(channel: String, testName: String)
-
+GET   /frontend/audit/:channel/:testName              controllers.ChannelTestsAuditController.getAuditsForChannelTest(channel: String, testName: String)
 
 # Map static resources from the /public folder to the /assets URL path
 GET  /assets/*file                                  controllers.Assets.at(path="/public", file)
