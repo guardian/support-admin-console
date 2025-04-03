@@ -2,6 +2,8 @@ import React from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Button, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { diff, IChange } from 'json-diff-ts';
+import { AuditTestJsonDiffDialog } from './auditTestJsonDiffDialog';
 
 const useStyles = makeStyles(({}: Theme) => ({
   heading: {
@@ -20,6 +22,7 @@ export interface AuditDataRow {
   ttlInSecondsSinceEpoch: number;
   userEmail: string;
   timestamp: string;
+  item: never;
 }
 
 interface AuditTestsTableProps {
@@ -33,7 +36,31 @@ export const AuditTestsTable: React.FC<AuditTestsTableProps> = ({
 }: AuditTestsTableProps) => {
   const classes = useStyles();
 
+  const [open, setOpen] = React.useState(false);
+  const [jsonDiff, setJsonDiff] = React.useState<IChange[]>([]);
+
+  const sortedRows = [...rows].sort(
+    (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
+  );
+
+  const getJsonDiff = (version: number): IChange[] => {
+    const currentVersion = sortedRows[version].item;
+    const previousVersion = sortedRows[version + 1].item;
+    console.log('Current Version', currentVersion);
+    console.log('Previous Version', previousVersion);
+    return diff(previousVersion, currentVersion, {
+      embeddedObjKeys: { variants: 'name', 'regionTargeting.targetedCountryGroups': '$value' },
+      keysToSkip: ['lockStatus'],
+    });
+  };
+
   const columns: GridColDef[] = [
+    {
+      field: 'index',
+      headerName: 'Index',
+      type: 'number',
+      width: 20,
+    },
     {
       field: 'timestamp',
       headerName: 'Timestamp',
@@ -53,9 +80,14 @@ export const AuditTestsTable: React.FC<AuditTestsTableProps> = ({
       sortable: false,
       renderCell: params => {
         const onClick = () => {
-          console.log('Compare', params.row);
+          const version: number = +params.row.index;
+          const jsonDiff = getJsonDiff(version);
+          console.log('JSONDIFF', jsonDiff);
+          setOpen(true);
+          setJsonDiff(jsonDiff);
         };
 
+        // return <AuditTestJsonDiffDialog jsonDiff={jsonDiff} open={open} />
         return <Button onClick={onClick}>Compare</Button>;
       },
     },
@@ -68,12 +100,21 @@ export const AuditTestsTable: React.FC<AuditTestsTableProps> = ({
         <div style={{ width: '100%' }}>
           <DataGrid
             autoHeight
-            rows={rows.map(row => ({ ...row, id: `${row.timestamp}` }))}
+            rows={sortedRows.map(row => ({
+              ...row,
+              id: `${row.timestamp}`,
+              index: `${sortedRows.indexOf(row)}`,
+            }))}
             columns={columns}
             pageSize={10}
             rowsPerPageOptions={[10]}
           />
         </div>
+        {open && (
+          <div>
+            <AuditTestJsonDiffDialog jsonDiff={jsonDiff} open={open} />
+          </div>
+        )}
       </div>
     </>
   );
