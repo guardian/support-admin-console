@@ -2,7 +2,7 @@ import * as React from 'react';
 import Dialog from '@mui/material/Dialog';
 import { IChange } from 'json-diff-ts';
 import { makeStyles } from '@mui/styles';
-import { Theme, Typography } from '@mui/material';
+import { Theme } from '@mui/material';
 
 const ListItem = ({ diff }: { diff: IChange }) => {
   if (diff.type === 'ADD') {
@@ -68,11 +68,13 @@ interface AuditTestCompareVersionsDialogProps {
   jsonDiff: IChange[];
   open: boolean;
   setOpen: (open: boolean) => void;
+  versionToCompare: number; //to display which version is being compared
 }
 export const AuditTestCompareVersionsDialog: React.FC<AuditTestCompareVersionsDialogProps> = ({
   jsonDiff,
   open,
   setOpen,
+  versionToCompare,
 }: AuditTestCompareVersionsDialogProps) => {
   const classes = useStyles();
   const handleClose = () => {
@@ -81,7 +83,9 @@ export const AuditTestCompareVersionsDialog: React.FC<AuditTestCompareVersionsDi
   return (
     <>
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="lg" className={classes.dialog}>
-        <Typography>Version changes</Typography>
+        <h4>
+          Version changes between Version {versionToCompare} and Version {versionToCompare - 1}
+        </h4>
         <div>
           <List diffs={jsonDiff} />
         </div>

@@ -38,7 +38,7 @@ export const AuditTestsTable: React.FC<AuditTestsTableProps> = ({
 
   const [open, setOpen] = React.useState(false);
   const [jsonDiff, setJsonDiff] = React.useState<IChange[]>([]);
-
+  const [versionToCompare, setVersionToCompare] = React.useState<number>(0);
   const sortedRows = [...rows].sort(
     (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
   );
@@ -82,6 +82,7 @@ export const AuditTestsTable: React.FC<AuditTestsTableProps> = ({
           const jsonDiff = getJsonDiff(version);
           setOpen(true);
           setJsonDiff(jsonDiff);
+          setVersionToCompare(sortedRows.length - version);
         };
         //To hide and disable  the button for the last row
         if (params.row.index === (sortedRows.length - 1).toString()) {
@@ -112,7 +113,12 @@ export const AuditTestsTable: React.FC<AuditTestsTableProps> = ({
         </div>
         {open && (
           <div>
-            <AuditTestCompareVersionsDialog jsonDiff={jsonDiff} open={open} setOpen={setOpen} />
+            <AuditTestCompareVersionsDialog
+              jsonDiff={jsonDiff}
+              open={open}
+              setOpen={setOpen}
+              versionToCompare={versionToCompare}
+            />
           </div>
         )}
       </div>
