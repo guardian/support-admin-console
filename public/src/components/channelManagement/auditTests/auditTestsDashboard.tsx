@@ -37,6 +37,7 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   },
   tableContainer: {
     width: '100%',
+    margin: spacing(7),
   },
 }));
 export const EMPTY_ERROR_HELPER_TEXT = 'Field cannot be empty - please enter some text';
@@ -61,73 +62,74 @@ export const AuditTestsDashboard: React.FC = () => {
       .then(rows => setRows(rows));
   };
 
-
   return (
-    <div className={classes.container}>
-      <div>
-        <div className={classes.sectionContainer}>
-          <Typography className={classes.heading}>Test Name</Typography>
-          <TextField
-            id="test-name"
-            inputRef={register({
-              required: EMPTY_ERROR_HELPER_TEXT,
-            })}
-            error={errors.name !== undefined}
-            name="name"
-            margin="normal"
-            variant="outlined"
-            autoFocus
-            fullWidth
-            onChange={event => {
-              setTestName(event.target.value);
-            }}
-          />
+    <div>
+      <div className={classes.container}>
+        <div>
+          <div className={classes.sectionContainer}>
+            <Typography className={classes.heading}>Test Name</Typography>
+            <TextField
+              id="test-name"
+              inputRef={register({
+                required: EMPTY_ERROR_HELPER_TEXT,
+              })}
+              error={errors.name !== undefined}
+              name="name"
+              margin="normal"
+              variant="outlined"
+              autoFocus
+              fullWidth
+              onChange={event => {
+                setTestName(event.target.value);
+              }}
+            />
+          </div>
+          <div className={classes.sectionContainer}>
+            <Typography className={classes.heading}>Channel</Typography>
+            <FormControl fullWidth>
+              <Select
+                labelId="channel"
+                id="channel-select"
+                value={channel}
+                label="Channel"
+                onChange={onSelectChannelChange}
+              >
+                <MenuItem value={'Epic'} key={'Epic'}>
+                  Epic
+                </MenuItem>
+                <MenuItem value={'EpicAMP'} key={'EpicAMP'}>
+                  EpicAMP
+                </MenuItem>
+                <MenuItem value={'EpicAppleNews'} key={'EpicAppleNews'}>
+                  EpicAppleNews
+                </MenuItem>
+                <MenuItem value={'EpicLiveblog'} key={'EpicLiveblog'}>
+                  EpicLiveblog
+                </MenuItem>
+                <MenuItem value={'Banner1'} key={'Banner1'}>
+                  Banner1
+                </MenuItem>
+                <MenuItem value={'Banner2'} key={'Banner2'}>
+                  Banner2
+                </MenuItem>
+                <MenuItem value={'Header'} key={'Header'}>
+                  Header
+                </MenuItem>
+                <MenuItem value={'GutterLiveblog'} key={'GutterLiveblog'}>
+                  GutterLiveblog
+                </MenuItem>
+                <MenuItem value={'SupportLandingPage'} key={'SupportLandingPage'}>
+                  SupportLandingPage
+                </MenuItem>
+              </Select>
+            </FormControl>
+          </div>
         </div>
-        <div className={classes.sectionContainer}>
-          <Typography className={classes.heading}>Channel</Typography>
-          <FormControl fullWidth>
-            <Select
-              labelId="channel"
-              id="channel-select"
-              value={channel}
-              label="Channel"
-              onChange={onSelectChannelChange}
-            >
-              <MenuItem value={'Epic'} key={'Epic'}>
-                Epic
-              </MenuItem>
-              <MenuItem value={'EpicAMP'} key={'EpicAMP'}>
-                EpicAMP
-              </MenuItem>
-              <MenuItem value={'EpicAppleNews'} key={'EpicAppleNews'}>
-                EpicAppleNews
-              </MenuItem>
-              <MenuItem value={'EpicLiveblog'} key={'EpicLiveblog'}>
-                EpicLiveblog
-              </MenuItem>
-              <MenuItem value={'Banner1'} key={'Banner1'}>
-                Banner1
-              </MenuItem>
-              <MenuItem value={'Banner2'} key={'Banner2'}>
-                Banner2
-              </MenuItem>
-              <MenuItem value={'Header'} key={'Header'}>
-                Header
-              </MenuItem>
-              <MenuItem value={'GutterLiveblog'} key={'GutterLiveblog'}>
-                GutterLiveblog
-              </MenuItem>
-              <MenuItem value={'SupportLandingPage'} key={'SupportLandingPage'}>
-                SupportLandingPage
-              </MenuItem>
-            </Select>
-          </FormControl>
+        <div className={classes.buttonContainer}>
+          <Button variant="outlined" onClick={fetchAuditData}>
+            Get audit
+          </Button>
         </div>
-      </div>
-      <div className={classes.buttonContainer}>
-        <Button variant="outlined" onClick={fetchAuditData}>
-          Get audit
-        </Button>
       </div>
       <div className={classes.tableContainer}>
         <AuditTestsTable testName={testName} rows={rows} />

@@ -87,7 +87,6 @@ export const AuditTestsTable: React.FC<AuditTestsTableProps> = ({
           setJsonDiff(jsonDiff);
         };
 
-        // return <AuditTestJsonDiffDialog jsonDiff={jsonDiff} open={open} />
         return <Button onClick={onClick}>Compare</Button>;
       },
     },
@@ -112,7 +111,7 @@ export const AuditTestsTable: React.FC<AuditTestsTableProps> = ({
         </div>
         {open && (
           <div>
-            <AuditTestJsonDiffDialog jsonDiff={jsonDiff} open={open} />
+            <AuditTestJsonDiffDialog jsonDiff={jsonDiff} open={open} setOpen={setOpen} />
           </div>
         )}
       </div>

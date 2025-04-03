@@ -5,8 +5,6 @@ import { makeStyles } from '@mui/styles';
 import { Theme, Typography } from '@mui/material';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
-import TableBody from '@mui/material/TableBody';
-import { AuditDisplayTable } from './auditDisplayTable';
 import { isUndefined } from 'lodash';
 
 const getData = (row: IChange) => {
@@ -24,8 +22,6 @@ const getData = (row: IChange) => {
         {row.key}
       </TableCell>
       <TableCell align="right">{row.type.toString()}</TableCell>
-      {/*<TableCell align="right">{row.value?.toString() ?? ''}</TableCell>*/}
-      {/*<TableCell align="right">{row.oldValue?.toString() ?? ''}</TableCell>*/}
       <TableCell align="right">{JSON.stringify(row.changes)}</TableCell>
       <TableCell align="right">{nestedChangeData}</TableCell>
       <TableCell align="right">{furtherNestedChangeData}</TableCell>
@@ -96,13 +92,17 @@ const useStyles = makeStyles(({}: Theme) => ({
 interface AuditTestJsonDiffDialogProps {
   jsonDiff: IChange[];
   open: boolean;
+  setOpen: (open: boolean) => void;
 }
 export const AuditTestJsonDiffDialog: React.FC<AuditTestJsonDiffDialogProps> = ({
   jsonDiff,
   open,
+  setOpen,
 }: AuditTestJsonDiffDialogProps) => {
   const classes = useStyles();
-
+  const handleClose = () => {
+    setOpen(false);
+  };
   const data = jsonDiff;
   const changes = jsonDiff.map(change => change.changes);
   console.log('Changes', changes);
@@ -112,7 +112,7 @@ export const AuditTestJsonDiffDialog: React.FC<AuditTestJsonDiffDialogProps> = (
   console.log('FinalData', finalData);
   return (
     <>
-      <Dialog open={open} fullWidth maxWidth="lg" className={classes.dialog}>
+      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="lg" className={classes.dialog}>
         <Typography>Version changes</Typography>
         <div>
           <List diffs={jsonDiff} />
