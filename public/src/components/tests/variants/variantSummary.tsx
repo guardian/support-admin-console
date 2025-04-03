@@ -73,16 +73,14 @@ const VariantSummary: React.FC<VariantSummaryProps> = ({
         </div>
         <div className={classes.buttonsContainer}>
           {topButton}
-          {testType !== 'LANDING_PAGE' && (
-            <VariantSummaryWebPreviewButton
-              name={name}
-              testName={testName}
-              testType={testType}
-              platform={platform}
-              isDisabled={isInEditMode}
-              articleType={articleType}
-            />
-          )}
+          <VariantSummaryWebPreviewButton
+            name={name}
+            testName={testName}
+            testType={testType}
+            platform={platform}
+            isDisabled={isInEditMode}
+            articleType={articleType}
+          />
         </div>
       </div>
     </AccordionSummary>

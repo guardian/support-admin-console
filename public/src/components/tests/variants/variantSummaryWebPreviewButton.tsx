@@ -26,7 +26,7 @@ const getChannelName = (testType: TestType, articleType: ArticleType): string =>
   } else if (testType === 'GUTTER' && articleType === 'Liveblog') {
     return 'gutter-liveblog';
   } else {
-    return testType.toLowerCase();
+    return testType.toLowerCase().replace('_', '-');
   }
 };
 
@@ -39,9 +39,16 @@ const getPreviewUrl = (
 ): string => {
   const stage = getStage();
   const channelName = getChannelName(testType, articleType);
-  const queryString = `?dcr&force-${channelName}=${testName}:${variantName}`;
+  const queryString = `?force-${channelName}=${testName}:${variantName}`;
 
-  return `https://${getHostName(stage, platform)}/${ArticlePaths[articleType]}${queryString}`;
+  if (testType === 'LANDING_PAGE') {
+    // link to the support site landing page
+    return `https://support.${
+      stage !== 'PROD' ? 'code.dev-' : ''
+    }theguardian.com/contribute${queryString}`;
+  } else {
+    return `https://${getHostName(stage, platform)}/${ArticlePaths[articleType]}${queryString}`;
+  }
 };
 
 interface VariantSummaryPreviewButtonProps {

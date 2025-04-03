@@ -122,8 +122,6 @@ export default function NavDrawer(): React.ReactElement {
     const now = new Date();
     return now.getMonth() == 9 && now.getDate() == 31;
   };
-  /* HIDING GUTTER ASK UNTIL READY */
-  const showGutterAsk = false;
 
   const list = (anchor: string): React.ReactElement => (
     <div
@@ -186,13 +184,11 @@ export default function NavDrawer(): React.ReactElement {
             <ListItemText primary="Banner Deploy" />
           </ListItem>
         </Link>
-        {showGutterAsk && (
-          <Link key="GutterLiveblog" to="/gutter-liveblog-tests" className={classes.link}>
-            <ListItem className={classes.listItem} button key="Gutter Liveblog">
-              <ListItemText primary="Gutter Liveblog Ask" />
-            </ListItem>
-          </Link>
-        )}
+        <Link key="GutterLiveblog" to="/gutter-liveblog-tests" className={classes.link}>
+          <ListItem className={classes.listItem} button key="Gutter Liveblog">
+            <ListItemText primary="Gutter Liveblog Ask" />
+          </ListItem>
+        </Link>
         <Link key="Channel Switches" to="/channel-switches" className={classes.link}>
           <ListItem className={classes.listItem} button key="Channel Switches">
             <ListItemText primary="Channel Switches" />
