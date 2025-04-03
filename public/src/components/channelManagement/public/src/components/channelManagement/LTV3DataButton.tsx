@@ -126,63 +126,40 @@ export const LTV3DataButton: React.FC<LTV3DataButtonProps> = ({
             <div className={classes.container}>
               <TableContainer component={Paper}>
                 <Table>
-                  {methodologies?.map(methodology => {
-                    const [data, setData] = React.useState<LTV3Data[]>();
-                    const dataSet: LTV3Data[][] = [];
-                    useEffect(() => {
-                      fetch(`/frontend/bandit/${channel}/${methodology.testName}/ltv3`)
-                        .then(resp => resp.json())
-                        .then(data => {
-                          setData(data);
-                          dataSet.push(data);
-                        });
-                    }, [testName, channel]);
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Variants</TableCell>
+                      {methodologies?.map(methodology => {
+                        return (
+                          <TableCell key={methodology.testName}>{methodology.testName}</TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {methodologies?.map(methodology => {
+                      const [data, setData] = React.useState<LTV3Data[]>();
+                      useEffect(() => {
+                        fetch(`/frontend/bandit/${channel}/${methodology.testName}/ltv3`)
+                          .then(resp => resp.json())
+                          .then(data => {
+                            setData(data);
+                          });
+                      }, [testName, channel]);
 
-                    console.log('Data: ', data);
-                    console.log('DataSet: ', dataSet);
-
-                    const uniqueVariants = [
-                      ...new Set(dataSet?.flat(1).map(item => item.variant_name)),
-                    ];
-                    const uniqueTestNames = [
-                      ...new Set(dataSet?.flat(1).map(item => item.testName)),
-                    ];
-
-                    console.log(' uniqueVariants', uniqueVariants);
-                    console.log('  uniqueTestNames', uniqueTestNames);
-                    return (
-                      <>
-                        <TableHead>
-                          <TableRow>
-                            <TableCell>Variants</TableCell>
-                            {uniqueTestNames?.map(testName => {
-                              return <TableCell key={testName}>{testName}</TableCell>;
-                            })}
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          {uniqueVariants?.map(variant => (
-                            <TableRow key={variant}>
-                              <TableCell>{variant}</TableCell>
-                              {uniqueTestNames?.map(testName => {
-                                const dataForTest = dataSet
-                                  ?.flat(1)
-                                  .find(
-                                    data =>
-                                      data.testName === testName && data.variant_name === variant,
-                                  );
-                                return (
-                                  <TableCell key={`${variant}-${testName}`}>
-                                    {dataForTest?.ltv3}
-                                  </TableCell>
-                                );
-                              })}
+                      console.log('Data: ', data);
+                      return (
+                        <>
+                          {data?.map(row => (
+                            <TableRow key={row.variant_name}>
+                              <TableCell>{row.variant_name}</TableCell>
+                              <TableCell>{row.ltv3}</TableCell>
                             </TableRow>
                           ))}
-                        </TableBody>
-                      </>
-                    );
-                  })}
+                        </>
+                      );
+                    })}
+                  </TableBody>
                 </Table>
               </TableContainer>
             </div>
