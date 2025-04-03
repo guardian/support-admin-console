@@ -64,7 +64,6 @@
     "build-dev": "webpack --config webpack.dev.js",
     "watch": "webpack --config webpack.dev.js --watch",
     "lint": "eslint .",
-    "fix": "npm run lint -- --fix",
     "test": "echo 'Running JS tests' && jest"
   },
   "packageManager": "pnpm@8.15.7"
