@@ -9,9 +9,7 @@ import {
   createMarkPositioner,
 } from 'remirror/extensions';
 import {
-  CommandButtonGroup,
   EditorComponent,
-  FloatingToolbar,
   FloatingWrapper,
   Remirror,
   useActive,
@@ -23,6 +21,7 @@ import {
   useRemirror,
   useUpdateReason,
 } from '@remirror/react';
+import { CommandButtonGroup, FloatingToolbar } from '@remirror/react-ui';
 import './remirror-styles.css';
 import { useRTEStyles } from './richTextEditorStyles';
 import { CreateExtensionPlugin, PlainExtension, InputRule } from 'remirror';
