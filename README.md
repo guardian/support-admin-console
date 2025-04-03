@@ -21,8 +21,8 @@ Fetch DEV config by getting `membership` janus credentials and running:
 
 Build the client:
 ```
-npm install
-npm run build-dev
+pnpm install
+pnpm build-dev
 ```
 
 Run the play server on port http://localhost:9000/:
@@ -32,7 +32,7 @@ sbt run
 
 Refresh automatically:
 ```
-npm run watch
+pnpm watch
 ```
 
 ### Running scala tests
@@ -56,7 +56,7 @@ The stack is defined in [admin-console.ts](cdk/lib/admin-console.ts).
 
 When you make a change to the stack you must update the snapshot by going to the cdk directory and running:
 
-`yarn test -u`
+`pnpm test-update`
 
 Riffraff will make the cloudformation changes during the deploy.
 
