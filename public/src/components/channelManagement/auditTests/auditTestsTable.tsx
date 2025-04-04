@@ -91,7 +91,7 @@ export const AuditTestsTable: React.FC<AuditTestsTableProps> = ({
         };
         //To hide and disable  the button for the last row
         if (params.row.index === (sortedRows.length - 1).toString()) {
-          return <Button disabled></Button>;
+          return null;
         }
         return <Button onClick={onClick}>Compare</Button>;
       },
