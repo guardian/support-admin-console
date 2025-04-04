@@ -35,6 +35,11 @@ Refresh automatically:
 pnpm watch
 ```
 
+Or you can use the devrun.sh script to build and run both client + server (and watch for changes):
+```
+./devrun.sh
+```
+
 ### Running scala tests
 The scala backend tests use dynamodb-local. This doesn't support Apple Silicon (M1).
 

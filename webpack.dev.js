@@ -36,4 +36,8 @@ module.exports = {
     port: 9001,
     publicPath: '/public/build',
   },
+  watchOptions: {
+    aggregateTimeout: 200,
+    poll: 500,
+  },
 };
