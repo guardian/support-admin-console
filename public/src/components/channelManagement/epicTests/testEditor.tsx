@@ -267,7 +267,6 @@ export const getEpicTestEditor = (
             <TestMethodologyEditor
               methodologies={test.methodologies}
               testName={test.name}
-              variants={test.variants}
               channel={test.channel ?? ''}
               isDisabled={!userHasTestLocked || test.status === 'Live'}
               onChange={onMethodologyChange}

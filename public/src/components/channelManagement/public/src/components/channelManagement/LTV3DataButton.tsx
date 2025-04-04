@@ -2,7 +2,14 @@ import React, { useEffect } from 'react';
 import { Button, Dialog, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import useOpenable from '../../../../../../hooks/useOpenable';
-import { Methodology, Variant } from '../../../../helpers/shared';
+import { Methodology } from '../../../../helpers/shared';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
 
 const useStyles = makeStyles(({}: Theme) => ({
   button: {
@@ -33,7 +40,6 @@ interface LTV3Data {
 
 interface LTV3DataButtonProps {
   testName: string;
-  variants: Variant[];
   channel: string;
   label?: string;
   methodologies: Methodology[];
@@ -41,40 +47,11 @@ interface LTV3DataButtonProps {
 
 export const LTV3DataButton: React.FC<LTV3DataButtonProps> = ({
   testName,
-  variants,
   channel,
   label,
   methodologies,
 }: LTV3DataButtonProps) => {
   const classes = useStyles();
-
-  console.log('Test name: ', testName);
-  console.log(
-    'Methodologies Name: ',
-    methodologies.map(methodology => methodology.name),
-  );
-  console.log(
-    'Methodologies Test Name exists: ',
-    methodologies.map(methodology => methodology.testName),
-  );
-  console.log(
-    'Variant Names: ',
-    variants.map(variant => variant.name),
-  );
-  console.log(
-    'Methodologies: ',
-    methodologies.map(methodology => methodology.testName),
-  );
-  console.log('Methodologies Old: ', methodologies);
-  console.log('Methodologies Length: ', methodologies.length);
-
-  console.log(
-    'Print Method',
-    methodologies?.map(methodology =>
-      methodology?.testName === undefined ? 'No test name' : 'Has test name',
-    ),
-  );
-
   const [isOpen, open, close] = useOpenable();
 
   const [dataSet, setDataSet] = React.useState<LTV3Data[][]>([]);
@@ -96,6 +73,11 @@ export const LTV3DataButton: React.FC<LTV3DataButtonProps> = ({
   }, [testNamesForLTV3Data, channel]);
 
   console.log('DataSet: ', dataSet);
+
+  const uniqueVariantNames = [...new Set(dataSet.flat().map(item => item.variant_name))];
+
+  const uniqueTestNames = [...new Set(dataSet.flat().map(item => item.testName))];
+
   return (
     <>
       <div>
@@ -105,7 +87,33 @@ export const LTV3DataButton: React.FC<LTV3DataButtonProps> = ({
         <Dialog open={isOpen} onClose={close} maxWidth="lg" className={classes.dialog}>
           <div className={classes.heading}>
             <h3>LTV3 data for the test : {testName}</h3>
-            <h3>{dataSet}</h3>
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Variants</TableCell>
+                    {uniqueTestNames.map(testName => (
+                      <TableCell key={testName}>{testName}</TableCell>
+                    ))}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {uniqueVariantNames?.map(row => (
+                    <TableRow key={row}>
+                      <TableCell>{row}</TableCell>
+                      {uniqueTestNames.map(testName => {
+                        const ltv3Value =
+                          dataSet
+                            .flat()
+                            .find(item => item.variant_name === row && item.testName === testName)
+                            ?.ltv3 ?? 0;
+                        return <TableCell key={testName}>{ltv3Value.toFixed(2)}</TableCell>;
+                      })}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </div>
         </Dialog>
       </div>

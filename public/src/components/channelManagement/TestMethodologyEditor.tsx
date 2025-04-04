@@ -1,5 +1,5 @@
 import React from 'react';
-import { BanditMethodology, Methodology, Variant } from './helpers/shared';
+import { BanditMethodology, Methodology } from './helpers/shared';
 import { makeStyles } from '@mui/styles';
 import { BanditAnalyticsButton } from './BanditAnalyticsButton';
 import {
@@ -273,7 +273,6 @@ const TestMethodology: React.FC<TestMethodologyProps> = ({
 interface TestMethodologyEditorProps {
   methodologies: Methodology[];
   testName: string;
-  variants: Variant[];
   channel: string;
   onChange: (methodologies: Methodology[]) => void;
   isDisabled: boolean;
@@ -282,7 +281,6 @@ interface TestMethodologyEditorProps {
 export const TestMethodologyEditor: React.FC<TestMethodologyEditorProps> = ({
   methodologies,
   testName,
-  variants,
   channel,
   onChange,
   isDisabled,
@@ -347,7 +345,6 @@ export const TestMethodologyEditor: React.FC<TestMethodologyEditorProps> = ({
       <div>
         <LTV3DataButton
           testName={testName}
-          variants={variants}
           channel={channel}
           label={'LTV3Data'}
           methodologies={methodologies}
