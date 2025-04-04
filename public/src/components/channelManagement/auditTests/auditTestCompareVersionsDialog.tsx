@@ -8,20 +8,56 @@ const useStyles = makeStyles(({}: Theme) => ({
   dialog: {
     padding: '10px',
   },
+  listStyleAdd: {
+    color: 'green',
+    maxWidth: '1000px',
+    overflowX: 'auto',
+    whiteSpace: 'pre-wrap',
+    wordBreak: 'break-all',
+  },
+  listStyleRemove: {
+    color: 'red',
+    maxWidth: '1000px',
+    overflowX: 'auto',
+    whiteSpace: 'pre-wrap',
+    wordBreak: 'break-all',
+  },
 }));
 
 const ListItem = ({ diff }: { diff: IChange }) => {
+  const classes = useStyles();
   if (diff.type === 'ADD') {
+    if (typeof diff.value === 'string') {
+      return (
+        <li>
+          <p style={{ color: 'green' }}> Added : {diff.value}</p>
+        </li>
+      );
+    }
     return (
       <li>
-        <p style={{ color: 'green' }}>Added : {diff.value}</p>
+        <p className={classes.listStyleAdd}> Added :{diff.key}</p>
+        <pre>
+          <p className={classes.listStyleAdd}> Added : {JSON.stringify(diff.value)}</p>
+        </pre>
       </li>
     );
   }
   if (diff.type === 'REMOVE') {
+    const classes = useStyles();
+    if (typeof diff.value === 'string') {
+      return (
+        <li>
+          <p style={{ color: 'red' }}> Removed : {diff.value}</p>
+        </li>
+      );
+    }
     return (
       <li>
-        <p style={{ color: 'red' }}>Removed: {diff.value}</p>
+        <p className={classes.listStyleRemove}> Removed : {diff.key}</p>
+        <pre>
+          <p className={classes.listStyleRemove}> Removed : {JSON.stringify(diff.value)}</p>
+        </pre>
       </li>
     );
   }

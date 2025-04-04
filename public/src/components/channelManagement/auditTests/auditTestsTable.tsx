@@ -51,6 +51,7 @@ export const AuditTestsTable: React.FC<AuditTestsTableProps> = ({
         variants: 'name',
         'regionTargeting.targetedCountryGroups': '$value',
         'regionTargeting.targetedCountryCodes': '$value',
+        'articlesViewedSettings.tagIds': '$value',
       },
       keysToSkip: ['lockStatus'],
     });
