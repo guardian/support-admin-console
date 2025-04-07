@@ -205,6 +205,30 @@ export class AdminConsole extends GuStack {
     return table;
   }
 
+  buildPermissionsTable(): Table {
+    const id = `RRCPPermissionsDynamoTable`;
+
+    const table = new Table(this, id, {
+      tableName: `support-admin-console-permissions-${this.stage}`,
+      removalPolicy: RemovalPolicy.RETAIN,
+      pointInTimeRecovery: this.stage === 'PROD',
+      billingMode: BillingMode.PAY_PER_REQUEST,
+      partitionKey: {
+        name: 'email',
+        type: AttributeType.STRING,
+      },
+    });
+
+    // Give it a better name
+    const defaultChild = table.node.defaultChild as unknown as CfnElement;
+    defaultChild.overrideLogicalId(id);
+
+    // Enable automated backups via https://github.com/guardian/aws-backup
+    Tags.of(table).add('devx-backup-enabled', 'true');
+
+    return table;
+  }
+
   buildChannelTestsDynamoPolicies(table: Table): GuAllowPolicy[] {
     return [
       new GuDynamoDBReadPolicy(this, `DynamoRead-${table.node.id}`, {
@@ -243,6 +267,8 @@ export class AdminConsole extends GuStack {
     const campaignsDynamoTable = this.buildCampaignsTable();
     const bannerDesignsDynamoTable = this.buildBannerDesignsTable();
     const archivedBannerDesignsDynamoTable = this.buildArchivedBannerDesignsTable();
+    const permissionsTable = this.buildPermissionsTable();
+
     const channelTestsDynamoPolicies =
       this.buildChannelTestsDynamoPolicies(channelTestsDynamoTable);
     const campaignsDynamoPolicies = this.buildDynamoPolicies(campaignsDynamoTable);
@@ -252,6 +278,7 @@ export class AdminConsole extends GuStack {
     const archivedBannerDesignsDynamoPolicies = this.buildDynamoPolicies(
       archivedBannerDesignsDynamoTable,
     );
+    const permissionsDynamoPolicies = this.buildDynamoPolicies(permissionsTable);
 
     const userData = UserData.forLinux();
     userData.addCommands(
@@ -294,6 +321,7 @@ export class AdminConsole extends GuStack {
       ...channelTestsAuditDynamoPolicies,
       ...bannerDesignsDynamoPolicies,
       ...archivedBannerDesignsDynamoPolicies,
+      ...permissionsDynamoPolicies,
       new GuDynamoDBReadPolicy(this, `DynamoRead-super-mode-calculator`, {
         tableName: 'super-mode-calculator-PROD', // always PROD for super mode
       }),
