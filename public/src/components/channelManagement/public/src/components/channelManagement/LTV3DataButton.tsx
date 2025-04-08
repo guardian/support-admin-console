@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Button, Dialog, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import useOpenable from '../../../../../../hooks/useOpenable';
@@ -32,7 +32,7 @@ const useStyles = makeStyles(({}: Theme) => ({
 }));
 
 interface LTV3Data {
-  testName: string;
+  test_name: string;
   variant_name: string;
   component_type: string;
   ltv3: number;
@@ -58,7 +58,9 @@ export const LTV3DataButton: React.FC<LTV3DataButtonProps> = ({
   const testNamesForLTV3Data = methodologies.map(methodology =>
     methodology.testName === undefined ? testName : methodology.testName,
   );
-  useEffect(() => {
+
+  const handleClick = () => {
+    open();
     const fetchData = async () => {
       const promises = testNamesForLTV3Data?.map(async testName => {
         const response = await fetch(`frontend/bandit/${channel}/${testName}/ltv3`);
@@ -69,19 +71,15 @@ export const LTV3DataButton: React.FC<LTV3DataButtonProps> = ({
       const allResults = await Promise.all(promises);
       setDataSet(allResults);
     };
-    fetchData().then(r => console.log('Data fetched: ', r));
-  }, [testNamesForLTV3Data, channel]);
-
-  console.log('DataSet: ', dataSet);
+    fetchData().then(() => console.log('LTV3 Data fetched successfully'));
+  };
 
   const uniqueVariantNames = [...new Set(dataSet.flat().map(item => item.variant_name))];
-
-  const uniqueTestNames = [...new Set(dataSet.flat().map(item => item.testName))];
-
+  const uniqueTestNames = [...new Set(dataSet.flat().map(item => item.test_name))];
   return (
     <>
       <div>
-        <Button className={classes.button} variant="outlined" onClick={open}>
+        <Button className={classes.button} variant="outlined" onClick={handleClick}>
           {label}
         </Button>
         <Dialog open={isOpen} onClose={close} maxWidth="lg" className={classes.dialog}>
@@ -105,7 +103,7 @@ export const LTV3DataButton: React.FC<LTV3DataButtonProps> = ({
                         const ltv3Value =
                           dataSet
                             .flat()
-                            .find(item => item.variant_name === row && item.testName === testName)
+                            .find(item => item.variant_name === row && item.test_name === testName)
                             ?.ltv3 ?? 0;
                         return <TableCell key={testName}>{ltv3Value.toFixed(2)}</TableCell>;
                       })}
