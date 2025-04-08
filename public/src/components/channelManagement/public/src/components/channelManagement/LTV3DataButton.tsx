@@ -23,6 +23,10 @@ const useStyles = makeStyles(({}: Theme) => ({
     fontSize: 18,
     fontWeight: 500,
   },
+  totalContainer: {
+    fontSize: 15,
+    fontWeight: 500,
+  },
 }));
 
 export interface LTV3Data {
@@ -103,6 +107,20 @@ export const LTV3DataButton: React.FC<LTV3DataButtonProps> = ({
                       })}
                     </TableRow>
                   ))}
+                  <TableRow>
+                    <TableCell className={classes.totalContainer}>Total</TableCell>
+                    {uniqueTestNames.map(testName => {
+                      const totalLTV3 = dataSet
+                        .flat()
+                        .filter(item => item.test_name === testName)
+                        .reduce((sum, item) => sum + item.ltv3, 0);
+                      return (
+                        <TableCell className={classes.totalContainer} key={testName}>
+                          {totalLTV3.toFixed(2)}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
                 </TableBody>
               </Table>
             </TableContainer>
