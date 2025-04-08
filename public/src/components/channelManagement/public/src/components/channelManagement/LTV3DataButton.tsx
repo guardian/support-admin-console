@@ -23,15 +23,9 @@ const useStyles = makeStyles(({}: Theme) => ({
     fontSize: 18,
     fontWeight: 500,
   },
-  container: {
-    width: '100%',
-  },
-  sectionContainer: {
-    display: 'flex',
-  },
 }));
 
-interface LTV3Data {
+export interface LTV3Data {
   test_name: string;
   variant_name: string;
   component_type: string;

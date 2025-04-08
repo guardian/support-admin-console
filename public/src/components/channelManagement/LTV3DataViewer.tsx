@@ -1,12 +1,6 @@
 import React, { useEffect } from 'react';
 import { Typography } from '@mui/material';
-
-interface LTV3Data {
-  testName: string;
-  variant_name: string;
-  component_type: string;
-  ltv3: number;
-}
+import { LTV3Data } from './public/src/components/channelManagement/LTV3DataButton';
 
 interface LTV3DataViewerProps {
   testName: string;
