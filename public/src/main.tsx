@@ -212,7 +212,7 @@ const AppRouter = () => {
             element={createComponent(<BannerDesigns />, 'Banner Designs')}
           />
           <Route
-            path="/audit-tests"
+            path="/audit-tests/:channel?/:testName?"
             element={createComponent(<AuditTestsDashboard />, 'Test Audits')}
           />
         </Routes>

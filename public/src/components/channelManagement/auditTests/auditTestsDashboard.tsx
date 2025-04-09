@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   FormControl,
@@ -12,6 +12,7 @@ import {
 import { makeStyles } from '@mui/styles';
 import { grey } from '@mui/material/colors';
 import { AuditDataRow, AuditTestsTable } from './auditTestsTable';
+import { useParams } from 'react-router-dom';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
@@ -42,6 +43,9 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
 
 export const AuditTestsDashboard: React.FC = () => {
   const classes = useStyles();
+  const testNameInQueryParams = useParams().testName;
+  const channelInQueryParams = useParams().channel;
+
   const [testName, setTestName] = useState('');
   const [channel, setChannel] = useState('');
   const onSelectChannelChange = (event: SelectChangeEvent) => {
@@ -55,6 +59,13 @@ export const AuditTestsDashboard: React.FC = () => {
       .then(rows => setRows(rows));
   };
 
+  useEffect(() => {
+    if (testNameInQueryParams != null && channelInQueryParams != null) {
+      setTestName(testNameInQueryParams);
+      setChannel(channelInQueryParams);
+    }
+  }, [testNameInQueryParams, channelInQueryParams]);
+
   return (
     <div>
       <div className={classes.container}>
@@ -66,6 +77,7 @@ export const AuditTestsDashboard: React.FC = () => {
               name="name"
               margin="normal"
               variant="outlined"
+              value={testName}
               autoFocus
               fullWidth
               onChange={event => {

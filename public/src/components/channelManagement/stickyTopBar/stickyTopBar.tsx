@@ -83,6 +83,7 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
 interface StickyTopBarProps {
   name: string;
   nickname?: string;
+  channel?: string;
   campaignName?: string;
   isNew: boolean;
   status: Status;
@@ -97,6 +98,7 @@ interface StickyTopBarProps {
   onTestSave: (testName: string) => void;
   onTestArchive: () => void;
   onTestCopy: (oldName: string, newName: string, newNickname: string) => void;
+  onTestAudit: (testName: string, channel?: string) => void;
   onStatusChange: (status: Status) => void;
   settingsType: FrontendSettingsType;
 }
@@ -104,6 +106,7 @@ interface StickyTopBarProps {
 const StickyTopBar: React.FC<StickyTopBarProps> = ({
   name,
   nickname,
+  channel,
   isNew,
   status,
   lockStatus,
@@ -117,6 +120,7 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
   onTestSave,
   onTestArchive,
   onTestCopy,
+  onTestAudit,
   onStatusChange,
   settingsType,
 }: StickyTopBarProps) => {
@@ -209,6 +213,9 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
               </Button>
             </>
           )}
+          <Button variant="outlined" size="medium" onClick={() => onTestAudit(name, channel)}>
+            <Typography className={classes.buttonText}>Audit details</Typography>
+          </Button>
         </div>
       </div>
     </header>

@@ -48,6 +48,7 @@ export const ValidatedTestEditor = <T extends Test>(
     onTestSave,
     onTestArchive,
     onTestCopy,
+    onTestAudit,
     existingNames,
     existingNicknames,
     settingsType,
@@ -71,6 +72,7 @@ export const ValidatedTestEditor = <T extends Test>(
         <StickyTopBar
           name={test.name}
           nickname={test.nickname}
+          channel={test.channel}
           campaignName={test.campaignName}
           isNew={!!test.isNew}
           status={test.status}
@@ -85,6 +87,7 @@ export const ValidatedTestEditor = <T extends Test>(
           onTestSave={onSave}
           onTestArchive={() => onTestArchive(test.name)}
           onTestCopy={onTestCopy}
+          onTestAudit={onTestAudit}
           onStatusChange={onStatusChange}
           settingsType={settingsType}
         />
