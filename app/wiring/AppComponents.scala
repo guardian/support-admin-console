@@ -12,7 +12,7 @@ import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.mvc.AnyContent
 import play.api.{BuiltInComponentsFromContext, NoHttpFiltersComponents}
 import router.Routes
-import services.{Aws, CapiService, DynamoArchivedBannerDesigns, DynamoArchivedChannelTests, DynamoBanditData, DynamoBannerDesigns, DynamoCampaigns, DynamoChannelTests, DynamoChannelTestsAudit, DynamoPermissionsCache, DynamoSuperMode, S3}
+import services.{Aws, BigQueryService, CapiService, DynamoArchivedBannerDesigns, DynamoArchivedChannelTests, DynamoBanditData, DynamoBannerDesigns, DynamoCampaigns, DynamoChannelTests, DynamoChannelTestsAudit, DynamoPermissionsCache, DynamoSuperMode, S3}
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.s3.model.GetObjectRequest
 
@@ -86,6 +86,9 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
 
   val sdcUrlOverride: Option[String] = sys.env.get("SDC_URL")
 
+  val bigQueryClientConfig = configuration.get[String]("gcp-wif-credentials-config")
+  val bigQueryService: BigQueryService = BigQueryService(stage, bigQueryClientConfig)
+
   override lazy val router: Router = new Routes(
     httpErrorHandler,
     new Application(authAction, controllerComponents, stage, sdcUrlOverride),
@@ -109,7 +112,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     new AppsMeteringSwitchesController(authAction, controllerComponents, stage, runtime),
     new DefaultPromosController(authAction,controllerComponents, stage, runtime),
     new SuperModeController(authAction, controllerComponents, stage, runtime, dynamoSuperModeService),
-    new BanditDataController(authAction, controllerComponents, stage, runtime, dynamoBanditData),
+    new BanditDataController(authAction, controllerComponents, stage, runtime, dynamoBanditData, bigQueryService),
     new ChannelTestsAuditController(authAction, controllerComponents, stage, runtime, dynamoTestsAuditService),
     assets,
     new SupportLandingPageController(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoArchivedChannelTests, dynamoTestsAuditService),

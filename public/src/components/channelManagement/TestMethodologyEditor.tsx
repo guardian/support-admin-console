@@ -18,6 +18,7 @@ import Alert from '@mui/lab/Alert';
 import { addMethodologyToTestName } from './helpers/methodology';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 import { grey } from '@mui/material/colors';
+import { LTV3DataButton } from './public/src/components/channelManagement/LTV3DataButton';
 
 const isBandit = (methodology: Methodology): methodology is BanditMethodology =>
   methodology.name === 'EpsilonGreedyBandit' || methodology.name === 'Roulette';
@@ -317,6 +318,14 @@ export const TestMethodologyEditor: React.FC<TestMethodologyEditorProps> = ({
       >
         <AddIcon />
       </Button>
+      <div>
+        <LTV3DataButton
+          testName={testName}
+          channel={channel}
+          label={'LTV3Data'}
+          methodologies={methodologies}
+        />
+      </div>
     </div>
   );
 };

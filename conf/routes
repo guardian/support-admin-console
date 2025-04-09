@@ -250,6 +250,7 @@ GET   /frontend/super-mode                             controllers.SuperModeCont
 
 # ----- analytics ----- #
 GET   /frontend/bandit/:channel/:testName              controllers.BanditDataController.getDataForTest(channel: String, testName: String)
+GET   /frontend/bandit/:channel/:testName/ltv3         controllers.BanditDataController.getLTVDataForTest(testName: String,channel: String)
 
 # ----- audit ----- #
 GET   /frontend/audit/:channel/:testName              controllers.ChannelTestsAuditController.getAuditsForChannelTest(channel: String, testName: String)
