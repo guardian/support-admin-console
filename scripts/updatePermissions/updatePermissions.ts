@@ -1,7 +1,9 @@
-import AWS from 'aws-sdk';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient, UpdateCommand, PutCommand } from '@aws-sdk/lib-dynamodb';
 
-AWS.config.update({ region: 'eu-west-1' });
-const dynamoDB = new AWS.DynamoDB.DocumentClient();
+const REGION = 'eu-west-1';
+const client = new DynamoDBClient({ region: REGION });
+const dynamoDB = DynamoDBDocumentClient.from(client);
 
 const { Stage, PermissionName, PermissionLevel, Emails } = process.env;
 if (!Stage || !PermissionLevel || !PermissionName || !Emails) {
@@ -25,8 +27,8 @@ async function updatePermissions(
 ): Promise<void> {
   for (const email of emailAddresses) {
     try {
-      await dynamoDB
-        .update({
+      await dynamoDB.send(
+        new UpdateCommand({
           TableName: TABLE_NAME,
           Key: { email },
           UpdateExpression: 'SET #permissions = list_append(if_not_exists(#permissions, :emptyList), :newPermission)',
@@ -39,22 +41,21 @@ async function updatePermissions(
           },
           ConditionExpression: 'attribute_exists(email)',
         })
-        .promise();
+      );
       console.log(`Successfully updated permissions for ${email}`);
-    } catch (error) {
-      // @ts-ignore
-      if (error.code === 'ConditionalCheckFailedException') {
+    } catch (error: any) {
+      if (error.name === 'ConditionalCheckFailedException') {
         // Item does not exist, create it
         try {
-          await dynamoDB
-            .put({
+          await dynamoDB.send(
+            new PutCommand({
               TableName: TABLE_NAME,
               Item: {
                 email,
                 permissions: [{ name: permissionName, permission: permissionLevel }],
               },
             })
-            .promise();
+          );
           console.log(`Created new item and added permissions for ${email}`);
         } catch (putError) {
           console.error(`Failed to create item for ${email}:`, putError);
