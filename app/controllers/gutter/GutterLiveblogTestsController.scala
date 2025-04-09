@@ -1,5 +1,6 @@
 package controllers.gutter
 
+import actions.AuthAndPermissionActions
 import com.gu.googleauth.AuthAction
 import controllers.ChannelTestsController
 import models.{Channel, GutterTest}
@@ -24,7 +25,7 @@ class GutterLiveblogTestsController(
   dynamoArchivedTests: DynamoArchivedChannelTests,
   dynamoTestsAudit: DynamoChannelTestsAudit
 )(implicit ec: ExecutionContext) extends ChannelTestsController[GutterTest](
-  authAction,
+  AuthAndPermissionActions.withoutPermissionsChecks(authAction),
   components,
   stage,
   lockFileName = GutterLiveblogTestsController.name,

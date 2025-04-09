@@ -6,7 +6,7 @@ import io.circe.generic.extras.Configuration
 import io.circe.generic.extras.semiauto.{deriveEnumerationDecoder, deriveEnumerationEncoder}
 import io.circe.generic.auto._
 import models.DynamoErrors.DynamoGetError
-import services.UserPermissions.{UserPermissions, decoder}
+import services.UserPermissions.{PagePermission, UserPermissions, decoder}
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.dynamodb.model.{AttributeValue, ScanRequest}
 import utils.Circe.dynamoMapToJson
@@ -76,8 +76,10 @@ class DynamoPermissionsCache(
           .toMap
     )
 
-  private def updatePermissions(permissions: Map[Email, UserPermissions]) =
-    ZIO.succeed(permissionsCache.set(permissions))
+  private def updatePermissions(permissions: Map[Email, UserPermissions]) = {
+    permissionsCache.set(permissions)
+    ZIO.succeed()
+  }
 
   // Poll every minute in the background
   runtime.unsafeRunAsync_ {
@@ -86,6 +88,7 @@ class DynamoPermissionsCache(
       .repeat(Schedule.fixed(1.minute))
   }
 
-  def getPermissionsForUser(email: Email): Option[UserPermissions] =
-    permissionsCache.get().get(email)
+  def getPermissionsForUser(email: Email): Option[List[PagePermission]] = {
+    permissionsCache.get().get(email).map(_.permissions)
+  }
 }

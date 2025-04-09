@@ -1,5 +1,6 @@
 package controllers
 
+import actions.AuthAndPermissionActions
 import com.gu.googleauth.AuthAction
 import models.{Channel, HeaderTest}
 import models.HeaderTest._
@@ -22,7 +23,7 @@ class HeaderTestsController(
   dynamoArchivedTests: DynamoArchivedChannelTests,
   dynamoTestsAudit: DynamoChannelTestsAudit
 )(implicit ec: ExecutionContext) extends ChannelTestsController[HeaderTest](
-  authAction,
+  AuthAndPermissionActions.withoutPermissionsChecks(authAction),
   components,
   stage,
   lockFileName = HeaderTestsController.name,

@@ -1,6 +1,6 @@
 package controllers
 
-import com.gu.googleauth.AuthAction
+import actions.AuthAndPermissionActions
 import controllers.ChannelTestsController.ChannelTestsResponse
 import io.circe.{Decoder, Encoder}
 import io.circe.syntax._
@@ -31,7 +31,7 @@ object ChannelTestsController {
   * Uses an S3 file for lock protection to prevent concurrent editing.
   */
 abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
-  authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
+  authActions: AuthAndPermissionActions,
   components: ControllerComponents,
   stage: String,
   lockFileName: String,
@@ -72,7 +72,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
       .updateAsJson(lockStatus)(s3Client)
       .apply(lockObjectSettings)
 
-  def get = authAction.async { request =>
+  def get = authActions.read.async { request =>
     runWithLockStatus { case VersionedS3Data(lockStatus, _) =>
       dynamoTests
         .getAllTests[T](channel)
@@ -91,7 +91,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
     * Handlers for test list ordering
     */
 
-  def lockList = authAction.async { request =>
+  def lockList = authActions.write.async { request =>
     runWithLockStatus { case VersionedS3Data(lockStatus, lockFileVersion) =>
       logger.info(s"User ${request.user.email} is locking $channel test list")
 
@@ -106,7 +106,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
     }
   }
 
-  def unlockList = authAction.async { request =>
+  def unlockList = authActions.write.async { request =>
     runWithLockStatus { case VersionedS3Data(lockStatus, lockFileVersion) =>
       logger.info(s"User ${request.user.email} is unlocking $channel test list")
 
@@ -119,7 +119,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
     }
   }
 
-  def takeControlOfList = authAction.async { request =>
+  def takeControlOfList = authActions.write.async { request =>
     runWithLockStatus { case VersionedS3Data(lockStatus, lockFileVersion) =>
       logger.info(s"User ${request.user.email} is force-unlocking $channel test list, taking it from ${lockStatus.email}")
 
@@ -127,7 +127,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
     }
   }
 
-  def reorderList = authAction.async(circe.json[List[String]]) { request =>
+  def reorderList = authActions.write.async(circe.json[List[String]]) { request =>
     runWithLockStatus { case VersionedS3Data(lockStatus, lockFileVersion) =>
       if (lockStatus.email.contains(request.user.email)) {
         logger.info(s"${request.user.email} is reordering $channel list")
@@ -149,7 +149,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
     * Handlers for test editing
     */
 
-  def getTest(testName: String) = authAction.async { request =>
+  def getTest(testName: String) = authActions.read.async { request =>
     run {
       dynamoTests
         .getTest(testName, channel)
@@ -157,7 +157,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
     }
   }
 
-  def updateTest = authAction.async(circe.json[T]) { request =>
+  def updateTest = authActions.write.async(circe.json[T]) { request =>
     run {
       val test = request.body
       logger.info(s"${request.user.email} is updating $channel/'${test.name}'")
@@ -172,7 +172,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
     }
   }
 
-  def createTest = authAction.async(circe.json[T]) { request =>
+  def createTest = authActions.write.async(circe.json[T]) { request =>
     run {
       val test = request.body
       logger.info(s"${request.user.email} is creating $channel/'${test.name}'")
@@ -187,7 +187,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
     }
   }
 
-  def lockTest(testName: String) = authAction.async { request =>
+  def lockTest(testName: String) = authActions.write.async { request =>
     run {
       logger.info(s"${request.user.email} is locking $channel/'$testName'")
       dynamoTests.lockTest(testName, channel, request.user.email, force = false)
@@ -199,7 +199,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
     }
   }
 
-  def unlockTest(testName: String) = authAction.async { request =>
+  def unlockTest(testName: String) = authActions.write.async { request =>
     run {
       logger.info(s"${request.user.email} is unlocking $channel/'$testName'")
       dynamoTests.unlockTest(testName, channel, request.user.email)
@@ -211,7 +211,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
     }
   }
 
-  def forceLockTest(testName: String) = authAction.async { request =>
+  def forceLockTest(testName: String) = authActions.write.async { request =>
     run {
       logger.info(s"${request.user.email} is force locking $channel/'$testName'")
       dynamoTests.lockTest(testName, channel, request.user.email, force = true)
@@ -226,7 +226,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
     case _ => None
   }
 
-  def setStatus(rawStatus: String) = authAction.async(circe.json[List[String]]) { request =>
+  def setStatus(rawStatus: String) = authActions.write.async(circe.json[List[String]]) { request =>
     run {
       val testNames = request.body
       logger.info(s"${request.user.email} is changing status to $rawStatus on: $testNames")
