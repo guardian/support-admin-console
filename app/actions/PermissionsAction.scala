@@ -21,9 +21,9 @@ object AuthAndPermissionActions {
 }
 
 class PermissionsAction(
-  permissionsService: DynamoPermissionsCache,
   page: String,
   requiredPermission: Permission,
+  permissionsService: DynamoPermissionsCache,
   val parse: PlayBodyParsers,
   val executionContext: ExecutionContext,
 ) extends ActionFilter[UserIdentityRequest] with Results with LazyLogging {

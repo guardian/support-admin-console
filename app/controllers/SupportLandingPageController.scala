@@ -32,9 +32,9 @@ class SupportLandingPageController(
     // users must have write access to make changes
     write = authAction andThen
       new PermissionsAction(
+        page = SupportLandingPageController.name,
+        requiredPermission = Permission.Write,
         permissionsService,
-        SupportLandingPageController.name,
-        Permission.Write,
         components.parsers,
         ec
       ),
