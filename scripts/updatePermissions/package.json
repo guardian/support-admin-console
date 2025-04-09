@@ -1,7 +1,7 @@
 {
   "name": "update-permissions",
   "version": "1.0.0",
-  "description": "A script to update user permissions in a DynamoDB table.",
+  "description": "A script to update user permissions in the DynamoDB table.",
   "main": "updatePermissions.ts",
   "scripts": {
     "updatePermissions": "ts-node updatePermissions.ts"
