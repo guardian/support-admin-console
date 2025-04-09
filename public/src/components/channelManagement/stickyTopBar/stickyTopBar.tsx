@@ -6,6 +6,7 @@ import { LockStatus, Status } from '../helpers/shared';
 import CloseIcon from '@mui/icons-material/Close';
 import SaveIcon from '@mui/icons-material/Save';
 import LockIcon from '@mui/icons-material/Lock';
+import HistoryIcon from '@mui/icons-material/History';
 import { TestLockDetails } from './testLockDetails';
 import { TestArchiveButton } from './testArchiveButton';
 import { TestCopyButton } from './testCopyButton';
@@ -83,6 +84,7 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
 interface StickyTopBarProps {
   name: string;
   nickname?: string;
+  channel?: string;
   campaignName?: string;
   isNew: boolean;
   status: Status;
@@ -97,6 +99,7 @@ interface StickyTopBarProps {
   onTestSave: (testName: string) => void;
   onTestArchive: () => void;
   onTestCopy: (oldName: string, newName: string, newNickname: string) => void;
+  onTestAudit: (testName: string, channel?: string) => void;
   onStatusChange: (status: Status) => void;
   settingsType: FrontendSettingsType;
 }
@@ -104,6 +107,7 @@ interface StickyTopBarProps {
 const StickyTopBar: React.FC<StickyTopBarProps> = ({
   name,
   nickname,
+  channel,
   isNew,
   status,
   lockStatus,
@@ -117,6 +121,7 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
   onTestSave,
   onTestArchive,
   onTestCopy,
+  onTestAudit,
   onStatusChange,
   settingsType,
 }: StickyTopBarProps) => {
@@ -209,6 +214,14 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
               </Button>
             </>
           )}
+          <Button
+            variant="outlined"
+            size="medium"
+            startIcon={<HistoryIcon className={classes.icon} />}
+            onClick={() => onTestAudit(name, channel)}
+          >
+            <Typography className={classes.buttonText}>Audit</Typography>
+          </Button>
         </div>
       </div>
     </header>

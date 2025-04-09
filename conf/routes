@@ -53,6 +53,7 @@ GET /banner-designs                                 controllers.Application.inde
 GET /banner-designs/:name                           controllers.Application.indexWithName(name: String)
 
 GET /audit-tests                                    controllers.Application.index
+GET /audit-tests/:channel/:name                     controllers.Application.indexWithNameAndChannel(name: String, channel: String)
 # ----- Authentication ----- #
 GET  /login                                         controllers.Login.login
 GET  /loginAction                                   controllers.Login.loginAction

@@ -69,6 +69,7 @@ export interface TestEditorProps<T extends Test> {
   onTestSave: (testName: string) => void;
   onTestArchive: (testName: string) => void;
   onTestCopy: (oldName: string, newName: string, newNickname: string) => void;
+  onTestAudit: (testName: string, channel?: string) => void;
   onStatusChange: (status: Status) => void;
   existingNames: string[];
   existingNicknames: string[];
@@ -175,6 +176,14 @@ export const TestsForm = <T extends Test>(
         .catch(error => {
           alert(`Error while archiving test: ${error}`);
         });
+    };
+
+    const onTestAudit = (testName: string, channel?: string): void => {
+      const redirectPathname = window.location.pathname.replace(
+        window.location.pathname,
+        `audit-tests/${channel}/${testName}`,
+      );
+      window.location.href = redirectPathname; // Redirect to the audit page
     };
 
     const onStatusChange = (status: Status, testName: string): void => {
@@ -306,6 +315,7 @@ export const TestsForm = <T extends Test>(
               onTestSave={onTestSave}
               onTestArchive={onTestArchive}
               onTestCopy={onTestCopy}
+              onTestAudit={onTestAudit}
               onStatusChange={status => onStatusChange(status, selectedTest.name)}
               settingsType={settingsType}
             />
