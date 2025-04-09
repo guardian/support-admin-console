@@ -6,6 +6,7 @@ import { LockStatus, Status } from '../helpers/shared';
 import CloseIcon from '@mui/icons-material/Close';
 import SaveIcon from '@mui/icons-material/Save';
 import LockIcon from '@mui/icons-material/Lock';
+import HistoryIcon from '@mui/icons-material/History';
 import { TestLockDetails } from './testLockDetails';
 import { TestArchiveButton } from './testArchiveButton';
 import { TestCopyButton } from './testCopyButton';
@@ -213,8 +214,13 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
               </Button>
             </>
           )}
-          <Button variant="outlined" size="medium" onClick={() => onTestAudit(name, channel)}>
-            <Typography className={classes.buttonText}>Audit details</Typography>
+          <Button
+            variant="outlined"
+            size="medium"
+            startIcon={<HistoryIcon className={classes.icon} />}
+            onClick={() => onTestAudit(name, channel)}
+          >
+            <Typography className={classes.buttonText}>Audit</Typography>
           </Button>
         </div>
       </div>
