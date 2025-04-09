@@ -10,36 +10,12 @@ import services.UserPermissions.Permission
 import scala.concurrent.{ExecutionContext, Future}
 
 case class AuthAndPermissionActions(
-  read: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],  // ensures user has Read or Write permission
-  write: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent]  // ensures user has Write permission
+  read: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],  // for endpoints that read data
+  write: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent]  // for endpoints that write data
 )
 
 object AuthAndPermissionActions {
-  def withPermissionsChecks(
-    name: String,
-    authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
-    permissionsService: DynamoPermissionsCache,
-    parse: PlayBodyParsers,
-    executionContext: ExecutionContext,
-  ): AuthAndPermissionActions = AuthAndPermissionActions(
-    read = authAction andThen
-      new PermissionsAction(
-        permissionsService,
-        name,
-        Permission.Read,
-        parse,
-        executionContext
-      ),
-    write = authAction andThen
-      new PermissionsAction(
-        permissionsService,
-        name,
-        Permission.Write,
-        parse,
-        executionContext
-      ),
-  )
-
+  // Does google auth check but no permissions checks
   def withoutPermissionsChecks(authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent]): AuthAndPermissionActions =
     AuthAndPermissionActions(authAction, authAction)
 }
@@ -68,11 +44,11 @@ class PermissionsAction(
               case Permission.Write => None // user has full access
               case Permission.Read =>
                 if (requiredPermission != Permission.Write) None
-                else Some(logAndForbid(s"Invalid permission for user, for page $page"))
+                else Some(logAndForbid(s"Invalid permission for user ${request.user.email}, for page $page"))
             }
-          case None => Some(logAndForbid(s"No permission found for user, for page $page"))
+          case None => Some(logAndForbid(s"No permission found for user ${request.user.email}, for page $page"))
         }
-      case None => Some(logAndForbid("No permissions found for user"))
+      case None => Some(logAndForbid(s"No permissions found for user ${request.user.email}"))
     }
   }
 }
