@@ -72,7 +72,7 @@ class PermissionAction(
   permissionsService: DynamoPermissionsCache,
   val parse: PlayBodyParsers,
   val executionContext: ExecutionContext,
-) extends ActionFilter[UserIdentityRequest] with Results with LazyLogging {
+) extends ActionFilter[UserIdentityRequest] {
 
   // In the filter function we return None if the user has permission to access the resource,
   // otherwise we return a 403 Forbidden to the client
