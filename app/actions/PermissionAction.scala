@@ -43,6 +43,8 @@ object PermissionAction extends Results with LazyLogging {
     Forbidden(message)
   }
 
+  // In the filter function we return None if the user has permission to access the resource,
+  // otherwise we return a 403 Forbidden to the client
   def checkPermission(
     email: String,
     page: String,
@@ -73,9 +75,6 @@ class PermissionAction(
   val parse: PlayBodyParsers,
   val executionContext: ExecutionContext,
 ) extends ActionFilter[UserIdentityRequest] {
-
-  // In the filter function we return None if the user has permission to access the resource,
-  // otherwise we return a 403 Forbidden to the client
   override protected def filter[A](request: UserIdentityRequest[A]): Future[Option[Result]] = Future.successful {
     checkPermission(
       request.user.email,
