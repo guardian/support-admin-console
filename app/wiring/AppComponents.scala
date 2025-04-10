@@ -115,6 +115,6 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
     new BanditDataController(authAction, controllerComponents, stage, runtime, dynamoBanditData, bigQueryService),
     new ChannelTestsAuditController(authAction, controllerComponents, stage, runtime, dynamoTestsAuditService),
     assets,
-    new SupportLandingPageController(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoArchivedChannelTests, dynamoTestsAuditService),
+    new SupportLandingPageController(authAction, controllerComponents, stage, runtime, dynamoTestsService, dynamoArchivedChannelTests, dynamoTestsAuditService, permissionsService),
   )
 }

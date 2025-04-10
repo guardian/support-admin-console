@@ -1,11 +1,12 @@
 package controllers
 
+import actions.{AuthAndPermissionActions, PermissionAction}
 import com.gu.googleauth.AuthAction
-import models.{BannerTest, Channel, SupportLandingPageTest}
-import models.BannerTest._
+import models.{Channel, SupportLandingPageTest}
 import play.api.libs.circe.Circe
 import play.api.mvc.{ActionBuilder, AnyContent, ControllerComponents}
-import services.{DynamoArchivedChannelTests, DynamoChannelTests, DynamoChannelTestsAudit}
+import services.UserPermissions.Permission
+import services.{DynamoArchivedChannelTests, DynamoChannelTests, DynamoChannelTestsAudit, DynamoPermissionsCache}
 import zio.ZEnv
 
 import scala.concurrent.ExecutionContext
@@ -21,9 +22,24 @@ class SupportLandingPageController(
   runtime: zio.Runtime[ZEnv],
   dynamoTests: DynamoChannelTests,
   dynamoArchivedTests: DynamoArchivedChannelTests,
-  dynamoTestsAudit: DynamoChannelTestsAudit
-)(implicit ec: ExecutionContext) extends ChannelTestsController[SupportLandingPageTest](
-  authAction,
+  dynamoTestsAudit: DynamoChannelTestsAudit,
+  permissionsService: DynamoPermissionsCache
+)(implicit executionContext: ExecutionContext) extends ChannelTestsController[SupportLandingPageTest](
+  new AuthAndPermissionActions(
+    authAction,
+    // all users have read access
+    readPermissionAction = None,
+    // users must have write access to make changes
+    writePermissionAction = Some(
+      new PermissionAction(
+        page = SupportLandingPageController.name,
+        requiredPermission = Permission.Write,
+        permissionsService,
+        components.parsers,
+        executionContext
+      )
+    )
+  ),
   components,
   stage,
   lockFileName = SupportLandingPageController.name,

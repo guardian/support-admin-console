@@ -1,5 +1,6 @@
 package controllers.banner
 
+import actions.AuthAndPermissionActions
 import com.gu.googleauth.AuthAction
 import controllers.ChannelTestsController
 import models.{BannerTest, Channel}
@@ -24,7 +25,7 @@ class BannerTestsController2(
   dynamoArchivedTests: DynamoArchivedChannelTests,
   dynamoTestsAudit: DynamoChannelTestsAudit
 )(implicit ec: ExecutionContext) extends ChannelTestsController[BannerTest](
-  authAction,
+  AuthAndPermissionActions.withoutPermissionsChecks(authAction),
   components,
   stage,
   lockFileName = BannerTestsController.name,

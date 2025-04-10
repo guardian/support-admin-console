@@ -1,5 +1,6 @@
 package controllers.epic
 
+import actions.AuthAndPermissionActions
 import com.gu.googleauth.AuthAction
 import controllers.ChannelTestsController
 import models.{Channel, EpicTest}
@@ -24,7 +25,7 @@ class AMPEpicTestsController(
   dynamoArchivedTests: DynamoArchivedChannelTests,
   dynamoTestsAudit: DynamoChannelTestsAudit
 )(implicit ec: ExecutionContext) extends ChannelTestsController[EpicTest](
-  authAction,
+  AuthAndPermissionActions.withoutPermissionsChecks(authAction),
   components,
   stage,
   lockFileName = AMPEpicTestsController.name,
