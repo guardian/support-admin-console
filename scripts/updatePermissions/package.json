@@ -1,0 +1,20 @@
+{
+  "name": "update-permissions",
+  "version": "1.0.0",
+  "description": "A script to update user permissions in the DynamoDB table.",
+  "main": "updatePermissions.ts",
+  "scripts": {
+    "updatePermissions": "ts-node updatePermissions.ts"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.782.0",
+    "@aws-sdk/lib-dynamodb": "^3.782.0"
+  },
+  "devDependencies": {
+    "@types/aws-sdk": "^2.7.0",
+    "@types/node": "^22.14.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  },
+  "packageManager": "pnpm@8.15.7"
+}
