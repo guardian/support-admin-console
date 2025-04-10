@@ -24,7 +24,7 @@ class SupportLandingPageController(
   dynamoArchivedTests: DynamoArchivedChannelTests,
   dynamoTestsAudit: DynamoChannelTestsAudit,
   permissionsService: DynamoPermissionsCache
-)(implicit ec: ExecutionContext) extends ChannelTestsController[SupportLandingPageTest](
+)(implicit executionContext: ExecutionContext) extends ChannelTestsController[SupportLandingPageTest](
   new AuthAndPermissionActions(
     authAction,
     // all users have read access
@@ -36,7 +36,7 @@ class SupportLandingPageController(
         requiredPermission = Permission.Write,
         permissionsService,
         components.parsers,
-        ec
+        executionContext
       )
     )
   ),
