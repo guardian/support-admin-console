@@ -11,7 +11,6 @@ import scala.concurrent.Future
 
 class PermissionActionSpec extends AsyncFlatSpec with Matchers {
 
-  private val stage = "TEST"
   private val page = "support-landing-page-tests"
 
   private val permissions = Map(
@@ -21,7 +20,7 @@ class PermissionActionSpec extends AsyncFlatSpec with Matchers {
   )
 
   it should "return 403 if no permissions for user" in {
-    val email = "no-permission@guardian.co.uk"
+    val email = "mr.test@guardian.co.uk"
     val result = PermissionAction.checkPermission(
       email,
       page,
