@@ -9,18 +9,34 @@ import services.UserPermissions.Permission
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class AuthAndPermissionActions(
-  read: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],  // for endpoints that read data
-  write: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent]  // for endpoints that write data
-)
+/**
+ * This class provides separate Actions for read and write endpoints.
+ * Each will first perform a google auth check, then do the permissions check for the user.
+ */
+class AuthAndPermissionActions(
+  authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
+  readPermissionAction: Option[PermissionAction],
+  writePermissionAction: Option[PermissionAction]
+) {
+  // for endpoints that read data
+  val read = readPermissionAction match {
+    case Some(readAction) => authAction andThen readAction
+    case None => authAction
+  }
+  // for endpoints that write data
+  val write = writePermissionAction match {
+    case Some(writeAction) => authAction andThen writeAction
+    case None => authAction
+  }
+}
 
 object AuthAndPermissionActions {
   // Does google auth check but no permissions checks
-  def withoutPermissionsChecks(authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent]): AuthAndPermissionActions =
-    AuthAndPermissionActions(authAction, authAction)
+  def withoutPermissionsChecks(authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent]) =
+    new AuthAndPermissionActions(authAction, None, None)
 }
 
-class PermissionsAction(
+class PermissionAction(
   page: String,
   requiredPermission: Permission,
   permissionsService: DynamoPermissionsCache,

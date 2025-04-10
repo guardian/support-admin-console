@@ -1,9 +1,8 @@
 package controllers
 
-import actions.{AuthAndPermissionActions, PermissionsAction}
+import actions.{AuthAndPermissionActions, PermissionAction}
 import com.gu.googleauth.AuthAction
-import models.{BannerTest, Channel, SupportLandingPageTest}
-import models.BannerTest._
+import models.{Channel, SupportLandingPageTest}
 import play.api.libs.circe.Circe
 import play.api.mvc.{ActionBuilder, AnyContent, ControllerComponents}
 import services.UserPermissions.Permission
@@ -26,18 +25,20 @@ class SupportLandingPageController(
   dynamoTestsAudit: DynamoChannelTestsAudit,
   permissionsService: DynamoPermissionsCache
 )(implicit ec: ExecutionContext) extends ChannelTestsController[SupportLandingPageTest](
-  AuthAndPermissionActions(
+  new AuthAndPermissionActions(
+    authAction,
     // all users have read access
-    read = authAction,
+    readPermissionAction = None,
     // users must have write access to make changes
-    write = authAction andThen
-      new PermissionsAction(
+    writePermissionAction = Some(
+      new PermissionAction(
         page = SupportLandingPageController.name,
         requiredPermission = Permission.Write,
         permissionsService,
         components.parsers,
         ec
-      ),
+      )
+    )
   ),
   components,
   stage,
