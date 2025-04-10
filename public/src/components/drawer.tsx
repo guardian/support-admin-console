@@ -220,6 +220,11 @@ export default function NavDrawer(): React.ReactElement {
             <ListItemText primary="Switches" />
           </ListItem>
         </Link>
+        <Link key="Choice Cards Config" to="/choice-cards-config" className={classes.link}>
+          <ListItem className={classes.listItem} button key="Choice Cards Config">
+            <ListItemText primary="Choice Cards Config" />
+          </ListItem>
+        </Link>
         <Link key="Amounts" to="/amounts" className={classes.link}>
           <ListItem className={classes.listItem} button key="Amounts">
             <ListItemText primary="Amounts" />
