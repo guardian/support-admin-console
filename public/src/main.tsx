@@ -155,6 +155,10 @@ const AppRouter = () => {
             element={createComponent(<SupportLandingPageTestsForm />, 'Support Landing Page Tests')}
           />
           <Route
+            path="/choice-cards-config/:testName?"
+            element={createComponent(<SupportLandingPageTestsForm />, 'Choice Card Tests')}
+          />
+          <Route
             path="/liveblog-epic-tests/:testName?"
             element={createComponent(<LiveblogEpicTestsForm />, 'Liveblog Epic Tests')}
           />
@@ -210,6 +214,10 @@ const AppRouter = () => {
           <Route
             path="/banner-designs/:name?"
             element={createComponent(<BannerDesigns />, 'Banner Designs')}
+          />
+          <Route
+            path="/audit-tests"
+            element={createComponent(<AuditTestsDashboard />, 'Test Audits')}
           />
           <Route
             path="/audit-tests"
