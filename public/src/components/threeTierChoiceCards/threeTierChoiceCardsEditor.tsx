@@ -56,7 +56,7 @@ const ThreeTierChoiceCardsEditor: React.FC<ValidatedTestEditorProps<ThreeTierCho
 
   const renderVariantEditor = (variant: ThreeTierChoiceCardVariant): React.ReactElement => (
     <VariantEditor
-      key={`support-landing-page-${test.name}-${variant.name}`}
+      key={`three-tier-choice-cards-${test.name}-${variant.name}`}
       variant={variant}
       onVariantChange={onVariantChange}
       onDelete={(): void => onVariantDelete(variant.name)}
