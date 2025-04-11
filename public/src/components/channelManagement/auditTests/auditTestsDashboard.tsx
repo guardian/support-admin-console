@@ -45,6 +45,7 @@ export const AuditTestsDashboard: React.FC = () => {
   const classes = useStyles();
   const testNameInQueryParams = useParams().testName;
   const channelInQueryParams = useParams().channel;
+  const [fromUrl, setFromUrl] = useState(false); // used to trigger initial fetch once if set from url
 
   const [testName, setTestName] = useState('');
   const [channel, setChannel] = useState('');
@@ -60,11 +61,19 @@ export const AuditTestsDashboard: React.FC = () => {
   };
 
   useEffect(() => {
-    if (testNameInQueryParams != null && channelInQueryParams != null) {
+    if (testNameInQueryParams && channelInQueryParams) {
       setTestName(testNameInQueryParams);
       setChannel(channelInQueryParams);
+      setFromUrl(true);
     }
   }, [testNameInQueryParams, channelInQueryParams]);
+
+  useEffect(() => {
+    if (fromUrl && testName && channel) {
+      setFromUrl(false);
+      fetchAuditData();
+    }
+  }, [testName, channel]);
 
   return (
     <div>
