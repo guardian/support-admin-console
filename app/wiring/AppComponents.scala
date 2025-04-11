@@ -91,7 +91,7 @@ class AppComponents(context: Context, stage: String) extends BuiltInComponentsFr
 
   override lazy val router: Router = new Routes(
     httpErrorHandler,
-    new Application(authAction, controllerComponents, stage, sdcUrlOverride),
+    new Application(authAction, controllerComponents, stage, permissionsService, sdcUrlOverride),
     new Login(authConfig, wsClient, controllerComponents),
     new SwitchesController(authAction, controllerComponents, stage, runtime),
     new AmountsController(authAction, controllerComponents, stage, runtime),

@@ -49,6 +49,11 @@ declare module '@mui/styles' {
   interface DefaultTheme extends Theme {}
 }
 
+interface PagePermission {
+  name: string;
+  permission: 'Read' | 'Write';
+}
+
 type Stage = 'DEV' | 'CODE' | 'PROD';
 declare global {
   /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -56,6 +61,7 @@ declare global {
     guardian: {
       stage: Stage;
       sdcUrlOverride: string | undefined;
+      permissions: PagePermission[];
     };
   }
   /* eslint-enable @typescript-eslint/no-explicit-any */

@@ -61,12 +61,14 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
     },
     marginLeft: spacing(1),
   },
-  buttonText: {
-    fontSize: '14px',
-    fontWeight: 500,
-    textTransform: 'uppercase',
-    letterSpacing: '1px',
+  button: {
     color: palette.grey[800],
+    '& > p': {
+      fontSize: '14px',
+      textTransform: 'uppercase',
+      letterSpacing: '1px',
+      fontWeight: 500,
+    },
   },
   icon: {
     color: grey[700],
@@ -102,6 +104,7 @@ interface StickyTopBarProps {
   onTestAudit: (testName: string, channel?: string) => void;
   onStatusChange: (status: Status) => void;
   settingsType: FrontendSettingsType;
+  allowEditing: boolean;
 }
 
 const StickyTopBar: React.FC<StickyTopBarProps> = ({
@@ -124,6 +127,7 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
   onTestAudit,
   onStatusChange,
   settingsType,
+  allowEditing,
 }: StickyTopBarProps) => {
   const classes = useStyles();
   const mainHeader = nickname ? nickname : name;
@@ -155,7 +159,7 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
           <TestLiveSwitch
             isLive={status === 'Live'}
             onChange={(isLive: boolean) => onStatusChange(isLive ? 'Live' : 'Draft')}
-            disabled={userHasTestLocked && lockStatus.locked} // cannot change test status while still editing it
+            disabled={(userHasTestLocked && lockStatus.locked) || !allowEditing} // cannot change test status while still editing it
           />
         </div>
         <div className={classes.lockContainer}>
@@ -168,15 +172,17 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
                 sourceNickname={nickname}
                 testNamePrefix={testNamePrefix}
                 onTestCopy={onTestCopy}
-                disabled={userHasTestListLocked}
+                disabled={userHasTestListLocked || !allowEditing}
               />
               <Button
+                className={classes.button}
                 variant="outlined"
                 size="medium"
                 startIcon={<EditIcon className={classes.icon} />}
                 onClick={() => onTestLock(name, false)}
+                disabled={!allowEditing}
               >
-                <Typography className={classes.buttonText}>Edit test</Typography>
+                <Typography>Edit test</Typography>
               </Button>
             </>
           )}
@@ -184,12 +190,13 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
             <>
               <TestLockDetails email={lockStatus.email} timestamp={lockStatus.timestamp} />
               <Button
+                className={classes.button}
                 variant="outlined"
                 size="medium"
                 startIcon={<LockIcon className={classes.icon} />}
                 onClick={() => onTestLock(name, true)}
               >
-                <Typography className={classes.buttonText}>Take control</Typography>
+                <Typography>Take control</Typography>
               </Button>
             </>
           )}
@@ -197,30 +204,33 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
             <>
               {!isNew && <TestArchiveButton onTestArchive={onTestArchive} />}
               <Button
+                className={classes.button}
                 variant="outlined"
                 size="medium"
                 startIcon={<CloseIcon className={classes.icon} />}
                 onClick={() => onTestUnlock(name)}
               >
-                <Typography className={classes.buttonText}>Discard</Typography>
+                <Typography>Discard</Typography>
               </Button>
               <Button
+                className={classes.button}
                 variant="outlined"
                 size="medium"
                 startIcon={<SaveIcon className={classes.icon} />}
                 onClick={() => onTestSave(name)}
               >
-                <Typography className={classes.buttonText}>Save test</Typography>
+                <Typography>Save test</Typography>
               </Button>
             </>
           )}
           <Button
+            className={classes.button}
             variant="outlined"
             size="medium"
             startIcon={<HistoryIcon className={classes.icon} />}
             onClick={() => onTestAudit(name, channel)}
           >
-            <Typography className={classes.buttonText}>Audit</Typography>
+            <Typography>Audit</Typography>
           </Button>
         </div>
       </div>

@@ -7,12 +7,14 @@ import { grey } from '@mui/material/colors';
 import CreateTestDialog from '../createTestDialog';
 
 const useStyles = makeStyles(({ palette }: Theme) => ({
-  buttonText: {
-    fontSize: '14px',
-    fontWeight: 500,
-    textTransform: 'uppercase',
-    letterSpacing: '1px',
+  button: {
     color: palette.grey[800],
+    '& > p': {
+      fontSize: '14px',
+      fontWeight: 500,
+      textTransform: 'uppercase',
+      letterSpacing: '1px',
+    },
   },
 }));
 
@@ -46,13 +48,14 @@ export const TestCopyButton: React.FC<TestCopyButtonProps> = ({
   return (
     <>
       <Button
+        className={classes.button}
         onClick={open}
         variant="outlined"
         startIcon={<FileCopyIcon style={{ color: grey[700] }} />}
         size="medium"
         disabled={disabled}
       >
-        <Typography className={classes.buttonText}>Copy test</Typography>
+        <Typography>Copy test</Typography>
       </Button>
       <CreateTestDialog
         isOpen={isOpen}

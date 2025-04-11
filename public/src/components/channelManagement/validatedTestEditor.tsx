@@ -53,6 +53,7 @@ export const ValidatedTestEditor = <T extends Test>(
     existingNicknames,
     settingsType,
     onStatusChange,
+    allowEditing,
   }: TestEditorProps<T>) => {
     const classes = useStyles();
     const [isValid, setIsValid] = useState<boolean>(true);
@@ -90,6 +91,7 @@ export const ValidatedTestEditor = <T extends Test>(
           onTestAudit={onTestAudit}
           onStatusChange={onStatusChange}
           settingsType={settingsType}
+          allowEditing={allowEditing}
         />
 
         <div className={classes.scrollableContainer}>
