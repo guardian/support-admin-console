@@ -1,4 +1,8 @@
-@(stage: String, sdcUrlOverride: Option[String])
+@import services.UserPermissions.PagePermission
+@import io.circe.generic.auto._
+
+@import io.circe.syntax.EncoderOps
+@(stage: String, permissions: List[PagePermission], sdcUrlOverride: Option[String])
 <!DOCTYPE html>
 <html>
   <head>
@@ -18,6 +22,7 @@
       @if(sdcUrlOverride.isDefined) {
         window.guardian.sdcUrlOverride = "@sdcUrlOverride.get";
       }
+      window.guardian.permissions = @Html(permissions.asJson.spaces2)
     </script>
     <script src="@routes.Assets.at("build/app.bundle.js")"></script>
       <!-- build-commit-id: @app.BuildInfo.gitCommitId -->

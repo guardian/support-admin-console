@@ -18,6 +18,7 @@ import {
 } from '../../utils/requests';
 import { useParams } from 'react-router-dom';
 import { addMethodologyToTestName } from './helpers/methodology';
+import { hasPermission } from '../../utils/permissions';
 
 const useStyles = makeStyles(({ spacing, typography }: Theme) => ({
   viewTextContainer: {
@@ -74,6 +75,7 @@ export interface TestEditorProps<T extends Test> {
   existingNames: string[];
   existingNicknames: string[];
   settingsType: FrontendSettingsType;
+  allowEditing: boolean;
 }
 
 /**
@@ -282,6 +284,12 @@ export const TestsForm = <T extends Test>(
 
     const userHasTestListLocked = testListLockStatus.email === email;
 
+    // Currently only the Landing Page tool has permissioning
+    const allowEditing =
+      settingsType === FrontendSettingsType.supportLandingPageTests
+        ? hasPermission(FrontendSettingsType.supportLandingPageTests, 'Write')
+        : true;
+
     return (
       <div className={classes.body}>
         <div className={classes.leftCol}>
@@ -298,6 +306,7 @@ export const TestsForm = <T extends Test>(
             testListLockStatus={testListLockStatus}
             userHasTestListLocked={testListLockStatus.email === email}
             savingTestList={savingTestList}
+            allowEditing={allowEditing}
           />
         </div>
 
@@ -318,6 +327,7 @@ export const TestsForm = <T extends Test>(
               onTestAudit={onTestAudit}
               onStatusChange={status => onStatusChange(status, selectedTest.name)}
               settingsType={settingsType}
+              allowEditing={allowEditing}
             />
           ) : (
             <div className={classes.viewTextContainer}>

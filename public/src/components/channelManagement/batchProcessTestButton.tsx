@@ -23,11 +23,13 @@ const useStyles = makeStyles(() => ({
 interface BatchProcessTestButtonProps {
   draftTests: Test[];
   onBatchTestArchive: (batchTestNames: string[]) => void;
+  disabled: boolean;
 }
 
 const BatchProcessTestButton: React.FC<BatchProcessTestButtonProps> = ({
   draftTests,
   onBatchTestArchive,
+  disabled,
 }: BatchProcessTestButtonProps) => {
   const classes = useStyles();
   const [isOpen, open, close] = useOpenable();
@@ -38,6 +40,7 @@ const BatchProcessTestButton: React.FC<BatchProcessTestButtonProps> = ({
         className={classes.button}
         startIcon={<ArchiveIcon />}
         onClick={open}
+        disabled={disabled}
       >
         <Typography className={classes.text}>Batch archive tests</Typography>
       </Button>

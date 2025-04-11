@@ -62,6 +62,7 @@ interface SidebarProps<T extends Test> {
   testListLockStatus: LockStatus;
   userHasTestListLocked: boolean;
   savingTestList: boolean;
+  allowEditing: boolean;
 }
 
 function Sidebar<T extends Test>({
@@ -77,6 +78,7 @@ function Sidebar<T extends Test>({
   testListLockStatus,
   userHasTestListLocked,
   savingTestList,
+  allowEditing,
 }: SidebarProps<T>): React.ReactElement<SidebarProps<T>> {
   const classes = useStyles();
   const [regionFilter, setRegionFilter] = useState<RegionsAndAll>('ALL');
@@ -101,13 +103,14 @@ function Sidebar<T extends Test>({
           existingNicknames={tests.map(t => t.nickname || '')}
           testNamePrefix={testNamePrefix}
           createTest={createTest}
-          disabled={userHasTestListLocked}
+          disabled={userHasTestListLocked || !allowEditing}
         />
 
         <BatchProcessTestButton
           // filter out live tests and any test currently being edited
           draftTests={tests.filter(t => !(t.status === 'Live' && t.name !== selectedTestName))}
           onBatchTestArchive={onBatchTestArchive}
+          disabled={!allowEditing}
         />
 
         {userHasTestListLocked && (
@@ -136,6 +139,7 @@ function Sidebar<T extends Test>({
               startIcon={<EditIcon />}
               className={classes.reorderListButton}
               onClick={() => onTestListLock(true)}
+              disabled={!allowEditing}
             >
               <Typography className={classes.buttonText}>Take control</Typography>
             </Button>
@@ -152,6 +156,7 @@ function Sidebar<T extends Test>({
             startIcon={<EditIcon />}
             className={classes.reorderListButton}
             onClick={() => onTestListLock(false)}
+            disabled={!allowEditing}
           >
             <Typography className={classes.buttonText}>Reorder test list</Typography>
           </Button>
