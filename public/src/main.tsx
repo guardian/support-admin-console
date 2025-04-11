@@ -42,6 +42,7 @@ import { StyledEngineProvider } from '@mui/material';
 import { LinkTrackingBuilder } from './components/linkTracking/LinkTrackingBuilder';
 import { SupportLandingPageTestsForm } from './components/channelManagement/supportLandingPage/supportLandingPage';
 import { AuditTestsDashboard } from './components/channelManagement/auditTests/auditTestsDashboard';
+import {ThreeTierChoiceCardsForm} from "./components/threeTierChoiceCards/threeTierChoiceCardsConfig";
 
 declare module '@mui/styles' {
   // https://mui.com/material-ui/migration/v5-style-changes/#%E2%9C%85-add-module-augmentation-for-defaulttheme-typescript
@@ -156,7 +157,7 @@ const AppRouter = () => {
           />
           <Route
             path="/choice-cards-config/:testName?"
-            element={createComponent(<SupportLandingPageTestsForm />, 'Choice Card Tests')}
+            element={createComponent(<ThreeTierChoiceCardsForm />, 'Three Tier Choice Card Config')}
           />
           <Route
             path="/liveblog-epic-tests/:testName?"

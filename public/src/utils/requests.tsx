@@ -24,6 +24,7 @@ export enum FrontendSettingsType {
   campaigns = 'campaigns',
   bannerDesigns = 'banner-designs',
   supportLandingPageTests = 'support-landing-page-tests',
+  threeTierChoiceCards = 'three-tier-choice-cards',
 }
 
 export enum AppsSettingsType {
