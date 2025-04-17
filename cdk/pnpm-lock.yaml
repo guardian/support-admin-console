@@ -10,7 +10,7 @@ overrides:
 devDependencies:
   '@guardian/cdk':
     specifier: 61.3.2
-    version: 61.3.2(aws-cdk-lib@2.189.0)(aws-cdk@2.1005.0)(constructs@10.3.0)
+    version: 61.3.2(aws-cdk-lib@2.189.1)(aws-cdk@2.1005.0)(constructs@10.3.0)
   '@guardian/eslint-config-typescript':
     specifier: 10.0.1
     version: 10.0.1(eslint@8.56.0)(tslib@2.6.2)(typescript@5.3.3)
@@ -24,8 +24,8 @@ devDependencies:
     specifier: 2.1005.0
     version: 2.1005.0
   aws-cdk-lib:
-    specifier: 2.189.0
-    version: 2.189.0(constructs@10.3.0)
+    specifier: 2.189.1
+    version: 2.189.1(constructs@10.3.0)
   constructs:
     specifier: 10.3.0
     version: 10.3.0
@@ -61,8 +61,8 @@ packages:
       '@jridgewell/trace-mapping': 0.3.25
     dev: true
 
-  /@aws-cdk/asset-awscli-v1@2.2.231:
-    resolution: {integrity: sha512-vPqD/K2pK/ALhU5r5Nafdc2nLB+LJKxNyxUmQnLsazU6AWDJfkqjHQx8m3J4Cjl2C3chQkIRMdzSDuXIlo43GA==}
+  /@aws-cdk/asset-awscli-v1@2.2.232:
+    resolution: {integrity: sha512-x9aFQG9gA+RgGj9bGB+WC6y1Nq2/Y8R2yXFoKWoQZOet8PRFJ8M5/FeXoh9XmdWI4weJVctLU4WTIve6rOvPtA==}
     dev: true
 
   /@aws-cdk/asset-node-proxy-agent-v6@2.1.0:
@@ -428,7 +428,7 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
-  /@guardian/cdk@61.3.2(aws-cdk-lib@2.189.0)(aws-cdk@2.1005.0)(constructs@10.3.0):
+  /@guardian/cdk@61.3.2(aws-cdk-lib@2.189.1)(aws-cdk@2.1005.0)(constructs@10.3.0):
     resolution: {integrity: sha512-cK4zzISvDGRqF083WCDlWNXiV1lDehEt3tzl5Sbj1lKRMO7mMrTB1+4E9YKur7uoFiOxVQCxYnNzRkeb9qS9FA==}
     hasBin: true
     peerDependencies:
@@ -438,7 +438,7 @@ packages:
     dependencies:
       '@oclif/core': 3.26.6
       aws-cdk: 2.1005.0
-      aws-cdk-lib: 2.189.0(constructs@10.3.0)
+      aws-cdk-lib: 2.189.1(constructs@10.3.0)
       aws-sdk: 2.1692.0
       chalk: 4.1.2
       codemaker: 1.111.0
@@ -1243,13 +1243,13 @@ packages:
       possible-typed-array-names: 1.1.0
     dev: true
 
-  /aws-cdk-lib@2.189.0(constructs@10.3.0):
-    resolution: {integrity: sha512-B5Uha7uRntOAyuKfU0eFtxij3ZVTzGAbetw5qaXlURa68wsWpKlU72/OyKugB6JYkhjCZkSTVVBxd1pVTosxEw==}
+  /aws-cdk-lib@2.189.1(constructs@10.3.0):
+    resolution: {integrity: sha512-9JU0yUr2iRTJ1oCPrHyx7hOtBDWyUfyOcdb6arlumJnMcQr2cyAMASY8HuAXHc8Y10ipVp8dRTW+J4/132IIYA==}
     engines: {node: '>= 14.15.0'}
     peerDependencies:
       constructs: ^10.0.0
     dependencies:
-      '@aws-cdk/asset-awscli-v1': 2.2.231
+      '@aws-cdk/asset-awscli-v1': 2.2.232
       '@aws-cdk/asset-node-proxy-agent-v6': 2.1.0
       '@aws-cdk/cloud-assembly-schema': 41.2.0
       constructs: 10.3.0
