@@ -89,3 +89,10 @@ Updates are only permitted if the user has a lock.
 A separate S3 object is used for recording the lock status.
 
 Optionally sends a Fastly PURGE request after updates to S3.
+
+### Permissions
+Some tools require permissions, in addition to membership of the Google group.
+
+Permissions are stored in a DynamoDb table, `support-admin-console-permissions-${Stage}`.
+
+See [./scripts/updatePermissions](./scripts/updatePermissions) for a script for maintaining these permissions.
