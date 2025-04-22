@@ -273,16 +273,14 @@ export interface TestEditorState {
   validationStatus: ValidationStatus;
 }
 
-export enum TickerEndType {
-  unlimited = 'unlimited',
-  hardstop = 'hardstop',
-}
 export enum TickerCountType {
   money = 'money',
+  supporterCount = 'supporterCount',
 }
 export enum TickerName {
   US = 'US',
   AU = 'AU',
+  GLOBAL = 'global',
 }
 
 interface TickerCopy {
@@ -291,7 +289,6 @@ interface TickerCopy {
   goalReachedSecondary?: string;
 }
 export interface TickerSettings {
-  endType: TickerEndType;
   countType: TickerCountType;
   currencySymbol: string;
   copy: TickerCopy;

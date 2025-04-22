@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import { TickerCountType, TickerEndType, TickerName, TickerSettings } from './helpers/shared';
+import { TickerCountType, TickerName, TickerSettings } from './helpers/shared';
 import { EMPTY_ERROR_HELPER_TEXT } from './helpers/validation';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
@@ -35,7 +35,6 @@ interface FormData {
 }
 
 const DEFAULT_TICKER_SETTINGS: TickerSettings = {
-  endType: TickerEndType.unlimited,
   countType: TickerCountType.money,
   copy: {
     countLabel: 'Contributions',
@@ -97,17 +96,18 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
     updateTickerSettings(isChecked ? DEFAULT_TICKER_SETTINGS : undefined);
   };
 
-  const onEndTypeChanged = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const selectedType = event.target.value as TickerEndType;
-    tickerSettings && updateTickerSettings({ ...tickerSettings, endType: selectedType });
-  };
-
   const onNameChanged = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const selectedName = event.target.value as TickerName;
-    tickerSettings && updateTickerSettings({ ...tickerSettings, name: selectedName });
+    tickerSettings &&
+      updateTickerSettings({
+        ...tickerSettings,
+        name: selectedName,
+        currencySymbol: selectedName === TickerName.GLOBAL ? '' : '$',
+      });
   };
 
   const onSubmit = ({ countLabel, currencySymbol }: FormData): void => {
+    console.log('onSubmit', currencySymbol);
     tickerSettings &&
       updateTickerSettings({
         ...tickerSettings,
@@ -153,6 +153,12 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
                   label="AU"
                   disabled={isDisabled}
                 />
+                <FormControlLabel
+                  value={TickerName.GLOBAL}
+                  control={<Radio />}
+                  label="GLOBAL"
+                  disabled={isDisabled}
+                />
               </RadioGroup>
             </FormControl>
           </div>
@@ -170,39 +176,18 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
             fullWidth
           />
 
-          {tickerSettings.countType === 'money' && (
-            <TextField
-              inputRef={register({ required: true })}
-              error={!!errors.currencySymbol}
-              helperText={errors?.currencySymbol?.message}
-              onBlur={handleSubmit(onSubmit)}
-              name="currencySymbol"
-              label="Currency"
-              margin="normal"
-              variant="outlined"
-              disabled={isDisabled}
-              fullWidth
-            />
-          )}
-
-          <div>
-            <FormControl component="fieldset">
-              <FormLabel component="legend">Ticker end type</FormLabel>
-              <RadioGroup
-                value={TickerEndType.hardstop}
-                onChange={onEndTypeChanged}
-                aria-label="ticker-end-type"
-                name="ticker-end-type"
-              >
-                <FormControlLabel
-                  value={TickerEndType.hardstop}
-                  control={<Radio />}
-                  label="Hard stop"
-                  disabled={isDisabled}
-                />
-              </RadioGroup>
-            </FormControl>
-          </div>
+          <TextField
+            inputRef={register({ required: true })}
+            error={!!errors.currencySymbol}
+            helperText={errors?.currencySymbol?.message}
+            onBlur={handleSubmit(onSubmit)}
+            name="currencySymbol"
+            label="Currency"
+            margin="normal"
+            variant="outlined"
+            disabled={isDisabled}
+            fullWidth
+          />
         </div>
       )}
     </div>

@@ -7,6 +7,8 @@ import {
 } from '../../../models/supportLandingPage';
 import { CopyEditor } from './copyEditor';
 import { ProductsEditor } from './productsEditor';
+import { TickerSettings } from '../helpers/shared';
+import TickerEditor from '../tickerEditor';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -56,6 +58,14 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
         }
         onValidationChange={onValidationChange}
         editMode={editMode}
+      />
+      <TickerEditor
+        tickerSettings={variant.tickerSettings}
+        updateTickerSettings={(updatedTickerSettings?: TickerSettings): void => {
+          onVariantChange({ ...variant, tickerSettings: updatedTickerSettings });
+        }}
+        isDisabled={!editMode}
+        onValidationChange={onValidationChange}
       />
     </div>
   );
