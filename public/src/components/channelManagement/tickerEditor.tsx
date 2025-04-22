@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import { TickerCountType, TickerName, TickerSettings } from './helpers/shared';
+import { TickerName, TickerSettings } from './helpers/shared';
 import { EMPTY_ERROR_HELPER_TEXT } from './helpers/validation';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
@@ -29,17 +29,12 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 
 interface FormData {
   countLabel: string;
-  goalReachedPrimary?: string; //deprecated for now
-  goalReachedSecondary?: string; //deprecated for now
   currencySymbol: string;
 }
 
 const DEFAULT_TICKER_SETTINGS: TickerSettings = {
-  countType: TickerCountType.money,
   copy: {
     countLabel: 'Contributions',
-    goalReachedPrimary: '', //deprecated for now
-    goalReachedSecondary: '', //deprecated for now
   },
   currencySymbol: '$',
   name: TickerName.US,
@@ -62,8 +57,6 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
 
   const defaultValues: FormData = {
     countLabel: tickerSettings?.copy.countLabel || '',
-    goalReachedPrimary: tickerSettings?.copy.goalReachedPrimary || '',
-    goalReachedSecondary: tickerSettings?.copy.goalReachedSecondary || '',
     currencySymbol: tickerSettings?.currencySymbol || '',
   };
 
@@ -74,22 +67,12 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
 
   useEffect(() => {
     reset(defaultValues);
-  }, [
-    defaultValues.countLabel,
-    defaultValues.goalReachedPrimary,
-    defaultValues.goalReachedSecondary,
-    defaultValues.currencySymbol,
-  ]);
+  }, [defaultValues.countLabel, defaultValues.currencySymbol]);
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
-  }, [
-    errors.countLabel,
-    errors.goalReachedPrimary,
-    errors.goalReachedSecondary,
-    errors.currencySymbol,
-  ]);
+  }, [errors.countLabel, errors.currencySymbol]);
 
   const onCheckboxChanged = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const isChecked = event.target.checked;
@@ -107,12 +90,11 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
   };
 
   const onSubmit = ({ countLabel, currencySymbol }: FormData): void => {
-    console.log('onSubmit', currencySymbol);
     tickerSettings &&
       updateTickerSettings({
         ...tickerSettings,
         copy: { countLabel },
-        currencySymbol: currencySymbol || '$',
+        currencySymbol: currencySymbol,
       });
   };
 
@@ -176,18 +158,20 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
             fullWidth
           />
 
-          <TextField
-            inputRef={register({ required: true })}
-            error={!!errors.currencySymbol}
-            helperText={errors?.currencySymbol?.message}
-            onBlur={handleSubmit(onSubmit)}
-            name="currencySymbol"
-            label="Currency"
-            margin="normal"
-            variant="outlined"
-            disabled={isDisabled}
-            fullWidth
-          />
+          {(tickerSettings.name === 'US' || tickerSettings.name === 'AU') && (
+            <TextField
+              inputRef={register({ required: true })}
+              error={!!errors.currencySymbol}
+              helperText={errors?.currencySymbol?.message}
+              onBlur={handleSubmit(onSubmit)}
+              name="currencySymbol"
+              label="Currency"
+              margin="normal"
+              variant="outlined"
+              disabled={isDisabled}
+              fullWidth
+            />
+          )}
         </div>
       )}
     </div>

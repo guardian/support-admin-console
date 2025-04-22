@@ -285,11 +285,8 @@ export enum TickerName {
 
 interface TickerCopy {
   countLabel: string;
-  goalReachedPrimary?: string;
-  goalReachedSecondary?: string;
 }
 export interface TickerSettings {
-  countType: TickerCountType;
   currencySymbol: string;
   copy: TickerCopy;
   name: TickerName;
