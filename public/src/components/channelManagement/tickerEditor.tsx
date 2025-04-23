@@ -94,7 +94,7 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
       updateTickerSettings({
         ...tickerSettings,
         copy: { countLabel },
-        currencySymbol: currencySymbol,
+        currencySymbol: currencySymbol ?? '',
       });
   };
 
