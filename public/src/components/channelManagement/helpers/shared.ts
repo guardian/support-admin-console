@@ -273,10 +273,6 @@ export interface TestEditorState {
   validationStatus: ValidationStatus;
 }
 
-export enum TickerCountType {
-  money = 'money',
-  supporterCount = 'supporterCount',
-}
 export enum TickerName {
   US = 'US',
   AU = 'AU',
