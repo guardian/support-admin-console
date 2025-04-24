@@ -42,6 +42,7 @@ case class SupportLandingPageVariant(
   name: String,
   copy: SupportLandingPageCopy,
   products: Products,
+  tickerSettings: Option[TickerSettings] = None,
 )
 
 case class SupportLandingPageTest(

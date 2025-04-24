@@ -1,4 +1,10 @@
-import { Methodology, Status, Test, Variant } from '../components/channelManagement/helpers/shared';
+import {
+  Methodology,
+  Status,
+  Test,
+  TickerSettings,
+  Variant,
+} from '../components/channelManagement/helpers/shared';
 
 export interface SupportLandingPageCopy {
   heading: string;
@@ -34,6 +40,7 @@ export interface SupportLandingPageVariant extends Variant {
   name: string;
   copy: SupportLandingPageCopy;
   products: Products;
+  tickerSettings?: TickerSettings;
 }
 
 export interface SupportLandingPageTest extends Test {

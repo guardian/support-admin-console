@@ -3,7 +3,7 @@ import BannerVariantPreview from '../bannerTests/bannerVariantPreview';
 import { BannerDesign } from '../../../models/bannerDesign';
 import { Checkbox, FormControlLabel } from '@mui/material';
 import { BannerVariant } from '../../../models/banner';
-import { SecondaryCtaType, TickerCountType, TickerEndType, TickerName } from '../helpers/shared';
+import { SecondaryCtaType, TickerName } from '../helpers/shared';
 
 interface Props {
   design: BannerDesign;
@@ -76,13 +76,9 @@ const buildVariantForPreview = (
   separateArticleCount: true,
   tickerSettings: shouldShowTicker
     ? {
-        countType: TickerCountType.money,
-        endType: TickerEndType.hardstop,
         currencySymbol: '£',
         copy: {
           countLabel: 'contributions in May',
-          goalReachedPrimary: '',
-          goalReachedSecondary: '',
         },
         name: TickerName.US,
       }
