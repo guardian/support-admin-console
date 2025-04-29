@@ -16,6 +16,7 @@ object TickerName {
 
 case class TickerCopy(
   countLabel: String,
+  goalCopy: String = "goal" ,
 )
 
 case class TickerSettings(

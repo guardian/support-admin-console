@@ -29,12 +29,14 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 
 interface FormData {
   countLabel: string;
+  goalCopy: string;
   currencySymbol: string;
 }
 
 const DEFAULT_TICKER_SETTINGS: TickerSettings = {
   copy: {
     countLabel: 'Contributions',
+    goalCopy: 'goal',
   },
   currencySymbol: '$',
   name: TickerName.US,
@@ -57,6 +59,7 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
 
   const defaultValues: FormData = {
     countLabel: tickerSettings?.copy.countLabel || '',
+    goalCopy: tickerSettings?.copy.goalCopy || '',
     currencySymbol: tickerSettings?.currencySymbol || '',
   };
 
@@ -67,12 +70,12 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
 
   useEffect(() => {
     reset(defaultValues);
-  }, [defaultValues.countLabel, defaultValues.currencySymbol]);
+  }, [defaultValues.countLabel, defaultValues.goalCopy, defaultValues.currencySymbol]);
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
-  }, [errors.countLabel, errors.currencySymbol]);
+  }, [errors.countLabel, errors.goalCopy, errors.currencySymbol]);
 
   const onCheckboxChanged = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const isChecked = event.target.checked;
@@ -89,11 +92,11 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
       });
   };
 
-  const onSubmit = ({ countLabel, currencySymbol }: FormData): void => {
+  const onSubmit = ({ countLabel, goalCopy, currencySymbol }: FormData): void => {
     tickerSettings &&
       updateTickerSettings({
         ...tickerSettings,
-        copy: { countLabel },
+        copy: { countLabel, goalCopy: goalCopy ?? 'goal' },
         currencySymbol: currencySymbol ?? '',
       });
   };
@@ -152,6 +155,19 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
             onBlur={handleSubmit(onSubmit)}
             name="countLabel"
             label="Heading"
+            margin="normal"
+            variant="outlined"
+            disabled={isDisabled}
+            fullWidth
+          />
+
+          <TextField
+            inputRef={register({ required: EMPTY_ERROR_HELPER_TEXT })}
+            error={!!errors.goalCopy}
+            helperText={errors?.goalCopy?.message}
+            onBlur={handleSubmit(onSubmit)}
+            name="goalCopy"
+            label="Goal Copy"
             margin="normal"
             variant="outlined"
             disabled={isDisabled}
