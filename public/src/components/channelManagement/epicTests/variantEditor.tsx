@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { FormControl, FormControlLabel, Radio, RadioGroup, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import ChoiceCardsEditor from './choiceCardsEditor';
+import ChoiceCardsEditor from '../choiceCards/ChoiceCardsEditor';
 import SignInLinkEditor from './signInLinkEditor';
 import TickerEditor from '../tickerEditor';
 import EpicTestVariantEditorCtasEditor from './variantCtasEditor';
@@ -40,6 +40,7 @@ import { BylineWithImageEditorToggle } from '../bylineWithImageEditor';
 import { EpicVariant, SeparateArticleCount } from '../../../models/epic';
 import { AppleNewsChoiceCards } from './appleChoiceCardsEditor';
 import EpicTestNewsletter from './newsletterSignUp';
+import {ChoiceCardsSettings} from "../../../models/choiceCards";
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const getUseStyles = (shouldAddPadding: boolean) => {
@@ -194,8 +195,9 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   const updateTickerSettings = (updatedTickerSettings?: TickerSettings): void => {
     onVariantChange({ ...variant, tickerSettings: updatedTickerSettings });
   };
-  const updateShowChoiceCards = (updatedshowChoiceCards?: boolean): void => {
-    onVariantChange({ ...variant, showChoiceCards: updatedshowChoiceCards });
+  const updateChoiceCardsSettings = (choiceCardsSettings: ChoiceCardsSettings): void => {
+    console.log('updateChoiceCardsSettings', choiceCardsSettings)
+    onVariantChange({ ...variant, choiceCardsSettings });
   };
   const updateShowSignInLink = (updatedShowSignInLink?: boolean): void => {
     onVariantChange({ ...variant, showSignInLink: updatedShowSignInLink });
@@ -436,8 +438,11 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
               </Typography>
 
               <ChoiceCardsEditor
-                showChoiceCards={variant.showChoiceCards}
-                updateShowChoiceCards={updateShowChoiceCards}
+                choiceCardsSettings={
+                  variant.choiceCardsSettings ? variant.choiceCardsSettings :
+                    (variant.showChoiceCards ? { type: 'DefaultChoiceCards' } : { type: 'NoChoiceCards' })
+                }
+                updateChoiceCardsSettings={updateChoiceCardsSettings}
                 isDisabled={!editMode}
               />
             </div>
@@ -493,13 +498,13 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
           <Typography className={classes.sectionHeader} variant="h4">
             Apple News Choice Cards
           </Typography>
-          <AppleNewsChoiceCards
-            variant={variant}
-            editMode={editMode}
-            updateShowChoiceCards={updateShowChoiceCards}
-            updatePrimaryCta={updatePrimaryCta}
-            onValidationChange={onValidationChange}
-          />
+          {/*<AppleNewsChoiceCards*/}
+          {/*  variant={variant}*/}
+          {/*  editMode={editMode}*/}
+          {/*  updateShowChoiceCards={updateChoiceCardsSettings}*/}
+          {/*  updatePrimaryCta={updatePrimaryCta}*/}
+          {/*  onValidationChange={onValidationChange}*/}
+          {/*/>*/}
         </div>
       )}
     </div>
