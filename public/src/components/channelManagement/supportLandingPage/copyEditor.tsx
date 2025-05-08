@@ -105,7 +105,7 @@ export const CopyEditor: React.FC<CopyEditorProps> = ({
             control={control}
             rules={{
               required: true,
-              validate: copy => templateValidator(copy) ?? copyLengthValidator(165)(copy),
+              validate: templateValidator,
             }}
             render={data => {
               return (
