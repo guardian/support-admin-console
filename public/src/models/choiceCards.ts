@@ -23,7 +23,7 @@ export type ChoiceCardsSettings =
   { type: 'NoChoiceCards' } |
   { type: 'DefaultChoiceCards' } |
   {
-    type: 'CustomChoiceCards'
+    type: 'CustomChoiceCards';
     choiceCardsOverride: ChoiceCard[];
     mobleChoiceCardsOverride?: ChoiceCard[];
   }
