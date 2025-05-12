@@ -23,10 +23,8 @@ interface FormData {
   label: string;
   countdownStartInMillis: string;
   countdownDeadlineInMillis: string;
-  theme: {
-    backgroundColor: string;
-    foregroundColor: string;
-  };
+  backgroundColor: string;
+  foregroundColor: string;
 }
 
 const DEFAULT_COUNTDOWN_SETTINGS: CountDownSettings = {
@@ -55,13 +53,13 @@ const CountDownEditor: React.FC<CountDownEditorProps> = ({
   const classes = useStyles();
 
   const defaultValues: FormData = {
-    label: countDownSettings?.label || '',
-    countdownStartInMillis: countDownSettings?.countdownStartInMillis || '',
-    countdownDeadlineInMillis: countDownSettings?.countdownDeadlineInMillis || '',
-    theme: {
-      backgroundColor: countDownSettings?.theme.backgroundColor || '#1e3e72',
-      foregroundColor: countDownSettings?.theme.foregroundColor || '#ffffff',
-    },
+    label: countDownSettings?.label || 'Last chance to claim your 30% discount offer',
+    countdownStartInMillis:
+      countDownSettings?.countdownStartInMillis || new Date().toISOString().slice(0, 16),
+    countdownDeadlineInMillis:
+      countDownSettings?.countdownDeadlineInMillis || new Date().toISOString().slice(0, 16),
+    backgroundColor: countDownSettings?.theme.backgroundColor || '#1e3e72',
+    foregroundColor: countDownSettings?.theme.foregroundColor || '#ffffff',
   };
 
   const { register, handleSubmit, errors, reset } = useForm<FormData>({
@@ -75,8 +73,8 @@ const CountDownEditor: React.FC<CountDownEditorProps> = ({
     defaultValues.label,
     defaultValues.countdownStartInMillis,
     defaultValues.countdownStartInMillis,
-    defaultValues.theme.backgroundColor,
-    defaultValues.theme.foregroundColor,
+    defaultValues.backgroundColor,
+    defaultValues.foregroundColor,
   ]);
 
   useEffect(() => {
@@ -86,8 +84,8 @@ const CountDownEditor: React.FC<CountDownEditorProps> = ({
     errors.label,
     errors.countdownStartInMillis,
     errors.countdownDeadlineInMillis,
-    errors.theme?.backgroundColor,
-    errors.theme?.foregroundColor,
+    errors.backgroundColor,
+    errors.foregroundColor,
   ]);
 
   const onCheckboxChanged = (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -98,20 +96,23 @@ const CountDownEditor: React.FC<CountDownEditorProps> = ({
     label,
     countdownStartInMillis,
     countdownDeadlineInMillis,
-    theme,
+    backgroundColor,
+    foregroundColor,
   }: FormData): void => {
     countDownSettings &&
       updateCountDownSettings({
         ...countDownSettings,
-        label,
-        countdownStartInMillis,
-        countdownDeadlineInMillis,
+        label: label || DEFAULT_COUNTDOWN_SETTINGS.label,
+        countdownStartInMillis:
+          countdownStartInMillis || DEFAULT_COUNTDOWN_SETTINGS.countdownStartInMillis,
+        countdownDeadlineInMillis:
+          countdownDeadlineInMillis || DEFAULT_COUNTDOWN_SETTINGS.countdownDeadlineInMillis,
         theme: {
-          backgroundColor: theme.backgroundColor,
-          foregroundColor: theme.foregroundColor,
+          backgroundColor: backgroundColor || DEFAULT_COUNTDOWN_SETTINGS.theme.backgroundColor,
+          foregroundColor: foregroundColor || DEFAULT_COUNTDOWN_SETTINGS.theme.foregroundColor,
         },
       });
-  };;
+  };
   return (
     <div className={classes.container}>
       <FormControlLabel
@@ -173,29 +174,27 @@ const CountDownEditor: React.FC<CountDownEditorProps> = ({
 
           <TextField
             inputRef={register({ required: true })}
-            error={!!errors.theme?.backgroundColor}
-            helperText={errors?.theme?.backgroundColor?.message}
+            error={!!errors.backgroundColor}
+            helperText={errors?.backgroundColor?.message}
             onBlur={handleSubmit(onSubmit)}
             name="backgroundColor"
             label="Background Color"
             margin="normal"
             variant="outlined"
             disabled={isDisabled}
-            value={defaultValues.theme.backgroundColor}
             fullWidth
           />
 
           <TextField
             inputRef={register({ required: true })}
-            error={!!errors.theme?.foregroundColor}
-            helperText={errors?.theme?.foregroundColor?.message}
+            error={!!errors.foregroundColor}
+            helperText={errors?.foregroundColor?.message}
             onBlur={handleSubmit(onSubmit)}
             name="foregroundColor"
             label="Foreground Color"
             margin="normal"
             variant="outlined"
             disabled={isDisabled}
-            value={defaultValues.theme.foregroundColor}
             fullWidth
           />
         </div>
