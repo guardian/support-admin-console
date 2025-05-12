@@ -289,6 +289,16 @@ export interface TickerSettings {
   name: TickerName;
 }
 
+export interface CountDownSettings {
+  label: string;
+  countdownStartInMillis: string;
+  countdownDeadlineInMillis: string;
+  theme: {
+    backgroundColor: string;
+    foregroundColor: string;
+  };
+}
+
 export type ContributionFrequency = 'ONE_OFF' | 'MONTHLY' | 'ANNUAL';
 
 export type DeviceType = 'Mobile' | 'Desktop' | 'All' | 'iOS' | 'Android';

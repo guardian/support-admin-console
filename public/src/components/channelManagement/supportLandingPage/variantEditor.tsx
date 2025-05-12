@@ -7,8 +7,9 @@ import {
 } from '../../../models/supportLandingPage';
 import { CopyEditor } from './copyEditor';
 import { ProductsEditor } from './productsEditor';
-import { TickerSettings } from '../helpers/shared';
+import { CountDownSettings, TickerSettings } from '../helpers/shared';
 import TickerEditor from '../tickerEditor';
+import CountDownEditor from '../countDownEditor';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -63,6 +64,14 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
         tickerSettings={variant.tickerSettings}
         updateTickerSettings={(updatedTickerSettings?: TickerSettings): void => {
           onVariantChange({ ...variant, tickerSettings: updatedTickerSettings });
+        }}
+        isDisabled={!editMode}
+        onValidationChange={onValidationChange}
+      />
+      <CountDownEditor
+        countDownSettings={variant.countDownSettings}
+        updateCountDownSettings={(updatedCountDownSettings?: CountDownSettings): void => {
+          onVariantChange({ ...variant, countDownSettings: updatedCountDownSettings });
         }}
         isDisabled={!editMode}
         onValidationChange={onValidationChange}
