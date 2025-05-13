@@ -289,7 +289,7 @@ export interface TickerSettings {
   name: TickerName;
 }
 
-export interface CountDownSettings {
+export interface CountdownSettings {
   label: string;
   countdownStartInMillis: string;
   countdownDeadlineInMillis: string;

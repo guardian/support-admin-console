@@ -1,5 +1,5 @@
 import {
-  CountDownSettings,
+  CountdownSettings,
   Methodology,
   Status,
   Test,
@@ -42,7 +42,7 @@ export interface SupportLandingPageVariant extends Variant {
   copy: SupportLandingPageCopy;
   products: Products;
   tickerSettings?: TickerSettings;
-  countDownSettings?: CountDownSettings;
+  countdownSettings?: CountdownSettings;
 }
 
 export interface SupportLandingPageTest extends Test {

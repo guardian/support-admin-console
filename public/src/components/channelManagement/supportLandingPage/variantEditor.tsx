@@ -7,9 +7,9 @@ import {
 } from '../../../models/supportLandingPage';
 import { CopyEditor } from './copyEditor';
 import { ProductsEditor } from './productsEditor';
-import { CountDownSettings, TickerSettings } from '../helpers/shared';
+import { CountdownSettings, TickerSettings } from '../helpers/shared';
 import TickerEditor from '../tickerEditor';
-import CountDownEditor from '../countDownEditor';
+import CountdownEditor from '../countdownEditor';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -68,10 +68,10 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
         isDisabled={!editMode}
         onValidationChange={onValidationChange}
       />
-      <CountDownEditor
-        countDownSettings={variant.countDownSettings}
-        updateCountDownSettings={(updatedCountDownSettings?: CountDownSettings): void => {
-          onVariantChange({ ...variant, countDownSettings: updatedCountDownSettings });
+      <CountdownEditor
+        countdownSettings={variant.countdownSettings}
+        updateCountdownSettings={(updatedCountdownSettings?: CountdownSettings): void => {
+          onVariantChange({ ...variant, countdownSettings: updatedCountdownSettings });
         }}
         isDisabled={!editMode}
         onValidationChange={onValidationChange}
