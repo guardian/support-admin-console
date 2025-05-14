@@ -293,6 +293,7 @@ export interface CountdownSettings {
   label: string;
   countdownStartTimestamp: string;
   countdownDeadlineTimestamp: string;
+  useLocalTime: boolean;
   theme: {
     backgroundColor: string;
     foregroundColor: string;

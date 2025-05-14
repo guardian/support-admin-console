@@ -9,5 +9,6 @@ case class CountdownSettings(
                               label: String,
                               countdownStartTimestamp: String,
                               countdownDeadlineTimestamp: String,
+                              useLocalTime: Boolean,
                               theme: CountdownTheme,
 )
