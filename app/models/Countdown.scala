@@ -6,8 +6,8 @@ case class CountdownTheme(
 )
 
 case class CountdownSettings(
-  label: String,
-  countdownStartInMillis: String,
-  countdownDeadlineInMillis: String,
-  theme: CountdownTheme,
+                              label: String,
+                              countdownStartTimestamp: String,
+                              countdownDeadlineTimestamp: String,
+                              theme: CountdownTheme,
 )

@@ -21,16 +21,16 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 
 interface FormData {
   label: string;
-  countdownStartInMillis: string;
-  countdownDeadlineInMillis: string;
+  countdownStartTimestamp: string;
+  countdownDeadlineTimestamp: string;
   backgroundColor: string;
   foregroundColor: string;
 }
 
 const DEFAULT_COUNTDOWN_SETTINGS: CountdownSettings = {
   label: 'Last chance to claim your 30% discount offer',
-  countdownStartInMillis: '',
-  countdownDeadlineInMillis: '',
+  countdownStartTimestamp: '',
+  countdownDeadlineTimestamp: '',
   theme: {
     backgroundColor: '#1e3e72',
     foregroundColor: '#ffffff',
@@ -54,10 +54,10 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
 
   const defaultValues: FormData = {
     label: countdownSettings?.label || 'Last chance to claim your 30% discount offer',
-    countdownStartInMillis:
-      countdownSettings?.countdownStartInMillis || new Date().toISOString().slice(0, 19),
-    countdownDeadlineInMillis:
-      countdownSettings?.countdownDeadlineInMillis || new Date().toISOString().slice(0, 19),
+    countdownStartTimestamp:
+      countdownSettings?.countdownStartTimestamp || new Date().toISOString().slice(0, 19),
+    countdownDeadlineTimestamp:
+      countdownSettings?.countdownDeadlineTimestamp || new Date().toISOString().slice(0, 19),
     backgroundColor: countdownSettings?.theme.backgroundColor || '#1e3e72',
     foregroundColor: countdownSettings?.theme.foregroundColor || '#ffffff',
   };
@@ -71,8 +71,8 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
     reset(defaultValues);
   }, [
     defaultValues.label,
-    defaultValues.countdownStartInMillis,
-    defaultValues.countdownStartInMillis,
+    defaultValues.countdownStartTimestamp,
+    defaultValues.countdownStartTimestamp,
     defaultValues.backgroundColor,
     defaultValues.foregroundColor,
   ]);
@@ -82,8 +82,8 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
     onValidationChange(isValid);
   }, [
     errors.label,
-    errors.countdownStartInMillis,
-    errors.countdownDeadlineInMillis,
+    errors.countdownStartTimestamp,
+    errors.countdownDeadlineTimestamp,
     errors.backgroundColor,
     errors.foregroundColor,
   ]);
@@ -94,8 +94,8 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
   };
   const onSubmit = ({
     label,
-    countdownStartInMillis,
-    countdownDeadlineInMillis,
+    countdownStartTimestamp,
+    countdownDeadlineTimestamp,
     backgroundColor,
     foregroundColor,
   }: FormData): void => {
@@ -103,10 +103,10 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
       updateCountdownSettings({
         ...countdownSettings,
         label: label || DEFAULT_COUNTDOWN_SETTINGS.label,
-        countdownStartInMillis:
-          countdownStartInMillis || DEFAULT_COUNTDOWN_SETTINGS.countdownStartInMillis,
-        countdownDeadlineInMillis:
-          countdownDeadlineInMillis || DEFAULT_COUNTDOWN_SETTINGS.countdownDeadlineInMillis,
+        countdownStartTimestamp:
+          countdownStartTimestamp || DEFAULT_COUNTDOWN_SETTINGS.countdownStartTimestamp,
+        countdownDeadlineTimestamp:
+          countdownDeadlineTimestamp || DEFAULT_COUNTDOWN_SETTINGS.countdownDeadlineTimestamp,
         theme: {
           backgroundColor: backgroundColor || DEFAULT_COUNTDOWN_SETTINGS.theme.backgroundColor,
           foregroundColor: foregroundColor || DEFAULT_COUNTDOWN_SETTINGS.theme.foregroundColor,
@@ -144,10 +144,10 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
 
           <TextField
             inputRef={register({ required: EMPTY_ERROR_HELPER_TEXT })}
-            error={!!errors.countdownStartInMillis}
-            helperText={errors?.countdownStartInMillis?.message}
+            error={!!errors.countdownStartTimestamp}
+            helperText={errors?.countdownStartTimestamp?.message}
             onBlur={handleSubmit(onSubmit)}
-            name="countdownStartInMillis"
+            name="countdownStartTimestamp"
             label="Start Date"
             type={'datetime-local'}
             defaultValue={new Date().toISOString().slice(0, 19)}
@@ -159,10 +159,10 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
 
           <TextField
             inputRef={register({ required: EMPTY_ERROR_HELPER_TEXT })}
-            error={!!errors.countdownDeadlineInMillis}
-            helperText={errors?.countdownDeadlineInMillis?.message}
+            error={!!errors.countdownDeadlineTimestamp}
+            helperText={errors?.countdownDeadlineTimestamp?.message}
             onBlur={handleSubmit(onSubmit)}
-            name="countdownDeadlineInMillis"
+            name="countdownDeadlineTimestamp"
             label="End Date"
             type={'datetime-local'}
             defaultValue={new Date().toISOString().slice(0, 19)}

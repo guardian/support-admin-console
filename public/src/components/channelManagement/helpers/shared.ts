@@ -291,8 +291,8 @@ export interface TickerSettings {
 
 export interface CountdownSettings {
   label: string;
-  countdownStartInMillis: string;
-  countdownDeadlineInMillis: string;
+  countdownStartTimestamp: string;
+  countdownDeadlineTimestamp: string;
   theme: {
     backgroundColor: string;
     foregroundColor: string;
