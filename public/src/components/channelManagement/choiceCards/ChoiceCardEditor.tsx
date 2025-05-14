@@ -96,6 +96,23 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
           )}
 
           <TextField
+            label={
+              choiceCard.product.supportTier === 'OneOff'
+                ? 'Label'
+                : `Label is auto-generated for ${choiceCard.product.supportTier}`
+            }
+            variant="filled"
+            fullWidth
+            margin="normal"
+            disabled={isDisabled || choiceCard.product.supportTier !== 'OneOff'}
+            error={!!errors.label}
+            helperText={errors.label?.message}
+            name="label"
+            inputRef={register()}
+            onBlur={handleSubmit(handleFormChange)}
+          />
+
+          <TextField
             label="Benefits Label"
             variant="filled"
             fullWidth
