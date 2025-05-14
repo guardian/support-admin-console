@@ -1,5 +1,5 @@
-import {ChoiceCard, Product} from "../../../models/choiceCards";
-import React from "react";
+import { ChoiceCard } from '../../../models/choiceCards';
+import React from 'react';
 import {
   Checkbox,
   InputLabel,
@@ -10,11 +10,14 @@ import {
   RadioGroup,
   Button,
   Radio,
-  AccordionSummary, Typography, Accordion, AccordionDetails
-} from "@mui/material";
-import {useFieldArray, useForm, Controller} from "react-hook-form";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+  AccordionSummary,
+  Typography,
+  Accordion,
+  AccordionDetails,
+} from '@mui/material';
+import { useFieldArray, useForm, Controller } from 'react-hook-form';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 interface ChoiceCardEditorProps {
   choiceCard: ChoiceCard;
@@ -26,14 +29,19 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
   onChange,
   isDisabled,
 }) => {
-  const { control, handleSubmit, register, formState: { errors } } = useForm<ChoiceCard>({
+  const {
+    control,
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm<ChoiceCard>({
     defaultValues: choiceCard,
-    mode: "onChange",
+    mode: 'onChange',
   });
 
   const { fields: benefits, append, remove } = useFieldArray({
     control,
-    name: "benefits",
+    name: 'benefits',
   });
 
   const handleFormChange = (data: ChoiceCard) => {
@@ -52,7 +60,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
             <Controller
               name="product.supportTier"
               control={control}
-              render={(field) => (
+              render={field => (
                 <Select {...field} labelId="supportTier-label">
                   <MenuItem value="Contribution">Recurring Contribution</MenuItem>
                   <MenuItem value="SupporterPlus">Supporter Plus</MenuItem>
@@ -62,22 +70,22 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
             />
           </FormControl>
 
-          {["Contribution", "SupporterPlus"].includes(choiceCard.product.supportTier) && (
+          {['Contribution', 'SupporterPlus'].includes(choiceCard.product.supportTier) && (
             <FormControl component="fieldset" margin="normal" disabled={isDisabled}>
               <RadioGroup row>
                 <Controller
                   name="product.ratePlan"
                   control={control}
-                  render={(field) => (
+                  render={field => (
                     <>
                       <FormControlLabel
                         value="Monthly"
-                        control={<Radio {...field} checked={field.value === "Monthly"} />}
+                        control={<Radio {...field} checked={field.value === 'Monthly'} />}
                         label="Monthly"
                       />
                       <FormControlLabel
                         value="Annual"
-                        control={<Radio {...field} checked={field.value === "Annual"} />}
+                        control={<Radio {...field} checked={field.value === 'Annual'} />}
                         label="Annual"
                       />
                     </>
@@ -115,13 +123,8 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
             <Controller
               name="isDefault"
               control={control}
-              render={(field) => (
-                <Checkbox
-                  {...field}
-                  checked={field.value}
-                  color="primary"
-                  disabled={isDisabled}
-                />
+              render={field => (
+                <Checkbox {...field} checked={field.value} color="primary" disabled={isDisabled} />
               )}
             />
             <label>Is Default</label>
@@ -147,7 +150,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
                 </Button>
               </div>
             ))}
-            <Button onClick={() => append({ copy: "" })} disabled={isDisabled}>
+            <Button onClick={() => append({ copy: '' })} disabled={isDisabled}>
               Add Benefit
             </Button>
           </div>
@@ -155,4 +158,4 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
       </AccordionDetails>
     </Accordion>
   );
-}
+};

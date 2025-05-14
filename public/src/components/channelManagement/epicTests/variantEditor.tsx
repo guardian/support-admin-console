@@ -40,7 +40,7 @@ import { BylineWithImageEditorToggle } from '../bylineWithImageEditor';
 import { EpicVariant, SeparateArticleCount } from '../../../models/epic';
 import { AppleNewsChoiceCards } from './appleChoiceCardsEditor';
 import EpicTestNewsletter from './newsletterSignUp';
-import {ChoiceCardsSettings} from "../../../models/choiceCards";
+import { ChoiceCardsSettings } from '../../../models/choiceCards';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const getUseStyles = (shouldAddPadding: boolean) => {
@@ -195,9 +195,12 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   const updateTickerSettings = (updatedTickerSettings?: TickerSettings): void => {
     onVariantChange({ ...variant, tickerSettings: updatedTickerSettings });
   };
-  const updateChoiceCardsSettings = (choiceCardsSettings: ChoiceCardsSettings): void => {
-    console.log('updateChoiceCardsSettings', choiceCardsSettings)
-    onVariantChange({ ...variant, choiceCardsSettings });
+  const updateChoiceCardsSettings = (
+    showChoiceCards?: boolean,
+    choiceCardsSettings?: ChoiceCardsSettings,
+  ): void => {
+    console.log('updateChoiceCardsSettings', choiceCardsSettings);
+    onVariantChange({ ...variant, showChoiceCards, choiceCardsSettings });
   };
   const updateShowSignInLink = (updatedShowSignInLink?: boolean): void => {
     onVariantChange({ ...variant, showSignInLink: updatedShowSignInLink });
@@ -438,10 +441,8 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
               </Typography>
 
               <ChoiceCardsEditor
-                choiceCardsSettings={
-                  variant.choiceCardsSettings ? variant.choiceCardsSettings :
-                    (variant.showChoiceCards ? { type: 'DefaultChoiceCards' } : { type: 'NoChoiceCards' })
-                }
+                showChoiceCards={variant.showChoiceCards ?? false}
+                choiceCardsSettings={variant.choiceCardsSettings}
                 updateChoiceCardsSettings={updateChoiceCardsSettings}
                 isDisabled={!editMode}
               />
@@ -498,13 +499,13 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
           <Typography className={classes.sectionHeader} variant="h4">
             Apple News Choice Cards
           </Typography>
-          {/*<AppleNewsChoiceCards*/}
-          {/*  variant={variant}*/}
-          {/*  editMode={editMode}*/}
-          {/*  updateShowChoiceCards={updateChoiceCardsSettings}*/}
-          {/*  updatePrimaryCta={updatePrimaryCta}*/}
-          {/*  onValidationChange={onValidationChange}*/}
-          {/*/>*/}
+          <AppleNewsChoiceCards
+            variant={variant}
+            editMode={editMode}
+            updateShowChoiceCards={showChoiceCards => updateChoiceCardsSettings(showChoiceCards)}
+            updatePrimaryCta={updatePrimaryCta}
+            onValidationChange={onValidationChange}
+          />
         </div>
       )}
     </div>

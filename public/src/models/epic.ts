@@ -16,7 +16,7 @@ import {
 } from '../components/channelManagement/helpers/shared';
 import { Region } from '../utils/models';
 import { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';
-import {ChoiceCardsSettings} from "./choiceCards";
+import { ChoiceCardsSettings } from './choiceCards';
 
 export interface SeparateArticleCount {
   type: 'above';
@@ -33,9 +33,9 @@ export interface EpicVariant extends Variant {
   cta?: Cta;
   secondaryCta?: SecondaryCta;
   separateArticleCount?: SeparateArticleCount;
-  showChoiceCards?: boolean;  // deprecated, use choiceCardSettings
-  defaultChoiceCardFrequency?: ContributionFrequency; // deprecated, use choiceCardSettings
+  showChoiceCards?: boolean;
   choiceCardsSettings?: ChoiceCardsSettings;
+  defaultChoiceCardFrequency?: ContributionFrequency; // deprecated, use choiceCardSettings
   bylineWithImage?: BylineWithImage;
   showSignInLink?: boolean;
   newsletterSignup?: NewsletterSignup;

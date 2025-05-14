@@ -1,11 +1,9 @@
 import React from 'react';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import {Radio, RadioGroup, TextField, Theme, Typography} from '@mui/material';
+import { Radio, RadioGroup, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import {ChoiceCard, ChoiceCardsSettings} from "../../../models/choiceCards";
-import {DEFAULT_ARTICLES_VIEWED_SETTINGS} from "../testEditorArticleCountEditor";
-import {ChoiceCardEditor} from "./ChoiceCardEditor";
+import { ChoiceCardsSettings } from '../../../models/choiceCards';
+import { ChoiceCardEditor } from './ChoiceCardEditor';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -20,17 +18,72 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   },
 }));
 
+type ChoiceCardsSelection = 'NoChoiceCards' | 'DefaultChoiceCards' | 'CustomChoiceCards';
+const getChoiceCardsSelection = (
+  showChoiceCards: boolean,
+  choiceCardsSettings?: ChoiceCardsSettings,
+): ChoiceCardsSelection => {
+  if (showChoiceCards) {
+    if (choiceCardsSettings) {
+      return 'CustomChoiceCards';
+    } else {
+      return 'DefaultChoiceCards';
+    }
+  } else {
+    return 'NoChoiceCards';
+  }
+};
+
+const defaultChoiceCardsSettings: ChoiceCardsSettings = {
+  choiceCards: [
+    {
+      product: { supportTier: 'Contribution', ratePlan: 'Monthly' },
+      label: '',
+      benefits: [{ copy: 'Give to the Guardian every month with Support' }],
+      isDefault: false,
+    },
+    {
+      product: { supportTier: 'SupporterPlus', ratePlan: 'Monthly' },
+      label: '',
+      benefitsLabel: 'Unlock <strong>All-access digital</strong> benefits:',
+      benefits: [
+        { copy: 'Unlimited access to the Guardian app' },
+        { copy: 'Unlimited access to our new Feast App' },
+        { copy: 'Ad-free reading on all your devices' },
+        {
+          copy: 'Exclusive newsletter for supporters, sent every week from the Guardian newsroom',
+        },
+        { copy: 'Far fewer asks for support' },
+      ],
+      isDefault: true,
+    },
+    {
+      product: {
+        supportTier: 'OneOff',
+      },
+      label: `Support with another amount`,
+      isDefault: false,
+      benefits: [
+        {
+          copy: 'We welcome support of any size, any time',
+        },
+      ],
+    },
+  ],
+};
+
 interface EpicTestChoiceCardsEditorProps {
-  // showChoiceCards?: boolean;
-  // updateShowChoiceCards: (showChoiceCards?: boolean) => void;
-  choiceCardsSettings: ChoiceCardsSettings;
-  updateChoiceCardsSettings: (choiceCardSettings: ChoiceCardsSettings) => void;
+  showChoiceCards: boolean;
+  choiceCardsSettings?: ChoiceCardsSettings;
+  updateChoiceCardsSettings: (
+    showChoiceCards: boolean,
+    choiceCardSettings?: ChoiceCardsSettings,
+  ) => void;
   isDisabled: boolean;
 }
 
 const ChoiceCardsEditor: React.FC<EpicTestChoiceCardsEditorProps> = ({
-  // showChoiceCards,
-  // updateShowChoiceCards,
+  showChoiceCards,
   choiceCardsSettings,
   updateChoiceCardsSettings,
   isDisabled,
@@ -39,36 +92,19 @@ const ChoiceCardsEditor: React.FC<EpicTestChoiceCardsEditorProps> = ({
 
   const onRadioGroupChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     if (event.target.value === 'DefaultChoiceCards') {
-      updateChoiceCardsSettings({type: 'DefaultChoiceCards'});
+      updateChoiceCardsSettings(true);
     } else if (event.target.value === 'CustomChoiceCards') {
-      updateChoiceCardsSettings({
-        type: 'CustomChoiceCards',
-        choiceCardsOverride: [
-          {
-            product: {supportTier: 'Contribution', ratePlan: 'Monthly'},
-            benefits: [{copy: 'B1'}, {copy: 'B2'}],
-            isDefault: false,
-            benefitsLabel: 'Unlock Support benefits:',
-          },
-          {
-            product: {supportTier: 'SupporterPlus', ratePlan: 'Monthly'},
-            benefits: [{copy: 'B1'}, {copy: 'B2'}],
-            isDefault: false,
-            benefitsLabel: 'Unlock All-access digital benefits:',
-          }
-        ],
-      });
+      updateChoiceCardsSettings(true, defaultChoiceCardsSettings);
     } else {
-      updateChoiceCardsSettings({ type: 'NoChoiceCards' });
+      updateChoiceCardsSettings(false);
     }
   };
 
+  const choiceCardsSelection = getChoiceCardsSelection(showChoiceCards, choiceCardsSettings);
+
   return (
     <div className={classes.container}>
-      <RadioGroup
-        value={choiceCardsSettings.type}
-        onChange={onRadioGroupChange}
-      >
+      <RadioGroup value={choiceCardsSelection} onChange={onRadioGroupChange}>
         <FormControlLabel
           value="NoChoiceCards"
           key="NoChoiceCards"
@@ -91,28 +127,25 @@ const ChoiceCardsEditor: React.FC<EpicTestChoiceCardsEditorProps> = ({
           disabled={isDisabled}
         />
       </RadioGroup>
-      { choiceCardsSettings.type === 'CustomChoiceCards' && (
-        choiceCardsSettings.choiceCardsOverride.map(((choiceCard, idx) =>
-          (<ChoiceCardEditor
-              key={`choice-card-${idx}`}
-              choiceCard={choiceCard}
-              onChange={updatedCard => {
-                console.log({updatedCard})
-                const choiceCardsOverride =
-                  [
-                    ...choiceCardsSettings.choiceCardsOverride.slice(0, idx),
-                    updatedCard,
-                    ...choiceCardsSettings.choiceCardsOverride.slice(idx+1),
-                  ]
-                updateChoiceCardsSettings({
-                  type: 'CustomChoiceCards',
-                  choiceCardsOverride,
-                })
-              }}
-              isDisabled={isDisabled}
-            />)
-        )
-      ))}
+      {choiceCardsSelection === 'CustomChoiceCards' &&
+        choiceCardsSettings?.choiceCards.map((choiceCard, idx) => (
+          <ChoiceCardEditor
+            key={`choice-card-${idx}`}
+            choiceCard={choiceCard}
+            onChange={updatedCard => {
+              console.log({ updatedCard });
+              const choiceCards = [
+                ...choiceCardsSettings.choiceCards.slice(0, idx),
+                updatedCard,
+                ...choiceCardsSettings.choiceCards.slice(idx + 1),
+              ];
+              updateChoiceCardsSettings(true, {
+                choiceCards,
+              });
+            }}
+            isDisabled={isDisabled}
+          />
+        ))}
     </div>
   );
 };
