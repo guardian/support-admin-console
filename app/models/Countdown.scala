@@ -6,7 +6,7 @@ case class CountdownTheme(
 )
 
 case class CountdownSettings(
-                              label: String,
+                              overwriteHeadingLabel: String,
                               countdownStartTimestamp: String,
                               countdownDeadlineTimestamp: String,
                               useLocalTime: Boolean,

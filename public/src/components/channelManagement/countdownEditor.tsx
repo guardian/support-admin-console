@@ -21,7 +21,7 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 }));
 
 interface FormData {
-  label: string;
+  overwriteHeadingLabel: string;
   countdownStartTimestamp: string;
   countdownDeadlineTimestamp: string;
   useLocalTime: boolean;
@@ -30,7 +30,7 @@ interface FormData {
 }
 
 const DEFAULT_COUNTDOWN_SETTINGS: CountdownSettings = {
-  label: 'Last chance to claim your 30% discount offer',
+  overwriteHeadingLabel: 'Last chance to claim your 30% discount offer',
   countdownStartTimestamp: '',
   countdownDeadlineTimestamp: '',
   useLocalTime: false,
@@ -56,7 +56,8 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
   const classes = useStyles();
 
   const defaultValues: FormData = {
-    label: countdownSettings?.label || 'Last chance to claim your 30% discount offer',
+    overwriteHeadingLabel:
+      countdownSettings?.overwriteHeadingLabel || 'Last chance to claim your 30% discount offer',
     countdownStartTimestamp:
       countdownSettings?.countdownStartTimestamp || new Date().toISOString().slice(0, 19),
     countdownDeadlineTimestamp:
@@ -74,7 +75,7 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
   useEffect(() => {
     reset(defaultValues);
   }, [
-    defaultValues.label,
+    defaultValues.overwriteHeadingLabel,
     defaultValues.countdownStartTimestamp,
     defaultValues.countdownDeadlineTimestamp,
     defaultValues.useLocalTime,
@@ -86,7 +87,7 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
   }, [
-    errors.label,
+    errors.overwriteHeadingLabel,
     errors.countdownStartTimestamp,
     errors.countdownDeadlineTimestamp,
     errors.useLocalTime,
@@ -107,7 +108,7 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
     } as CountdownSettings);
   };
   const onSubmit = ({
-    label,
+    overwriteHeadingLabel,
     countdownStartTimestamp,
     countdownDeadlineTimestamp,
     backgroundColor,
@@ -116,7 +117,8 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
     countdownSettings &&
       updateCountdownSettings({
         ...countdownSettings,
-        label: label || DEFAULT_COUNTDOWN_SETTINGS.label,
+        overwriteHeadingLabel:
+          overwriteHeadingLabel || DEFAULT_COUNTDOWN_SETTINGS.overwriteHeadingLabel,
         countdownStartTimestamp:
           countdownStartTimestamp || DEFAULT_COUNTDOWN_SETTINGS.countdownStartTimestamp,
         countdownDeadlineTimestamp:
@@ -145,11 +147,11 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
         <div className={classes.fieldsContainer}>
           <TextField
             inputRef={register({ required: EMPTY_ERROR_HELPER_TEXT })}
-            error={!!errors.label}
-            helperText={errors?.label?.message}
+            error={!!errors.overwriteHeadingLabel}
+            helperText={errors?.overwriteHeadingLabel?.message}
             onBlur={handleSubmit(onSubmit)}
-            name="label"
-            label="Label"
+            name="overwriteHeadingLabel"
+            label="Overwrite heading text"
             margin="normal"
             variant="outlined"
             disabled={isDisabled}

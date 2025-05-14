@@ -290,7 +290,7 @@ export interface TickerSettings {
 }
 
 export interface CountdownSettings {
-  label: string;
+  overwriteHeadingLabel: string;
   countdownStartTimestamp: string;
   countdownDeadlineTimestamp: string;
   useLocalTime: boolean;
