@@ -13,11 +13,20 @@ import {
   AccordionSummary,
   Typography,
   Accordion,
-  AccordionDetails,
+  AccordionDetails, Theme,
 } from '@mui/material';
 import { useFieldArray, useForm, Controller } from 'react-hook-form';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import {makeStyles} from "@mui/styles";
+
+const useStyles = makeStyles(({ spacing }: Theme) => ({
+  productContainer: {
+    '& > * + *': {
+      marginLeft: spacing(2),
+    },
+  },
+}));
 
 interface ChoiceCardEditorProps {
   choiceCard: ChoiceCard;
@@ -29,10 +38,13 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
   onChange,
   isDisabled,
 }) => {
+  const classes = useStyles();
+
   const {
     control,
     handleSubmit,
     register,
+    trigger,
     formState: { errors },
   } = useForm<ChoiceCard>({
     defaultValues: choiceCard,
@@ -45,6 +57,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
   });
 
   const handleFormChange = (data: ChoiceCard) => {
+    console.log('handleFormChange',data)
     onChange(data);
   };
 
@@ -55,45 +68,58 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
       </AccordionSummary>
       <AccordionDetails>
         <form onChange={handleSubmit(handleFormChange)}>
-          <FormControl disabled={isDisabled} margin="normal">
-            <InputLabel id="supportTier-label">Support Tier</InputLabel>
-            <Controller
-              name="product.supportTier"
-              control={control}
-              render={field => (
-                <Select {...field} labelId="supportTier-label">
-                  <MenuItem value="Contribution">Recurring Contribution</MenuItem>
-                  <MenuItem value="SupporterPlus">Supporter Plus</MenuItem>
-                  <MenuItem value="OneOff">Single Contribution</MenuItem>
-                </Select>
-              )}
-            />
-          </FormControl>
-
-          {['Contribution', 'SupporterPlus'].includes(choiceCard.product.supportTier) && (
-            <FormControl component="fieldset" margin="normal" disabled={isDisabled}>
-              <RadioGroup row>
-                <Controller
-                  name="product.ratePlan"
-                  control={control}
-                  render={field => (
-                    <>
-                      <FormControlLabel
-                        value="Monthly"
-                        control={<Radio {...field} checked={field.value === 'Monthly'} />}
-                        label="Monthly"
-                      />
-                      <FormControlLabel
-                        value="Annual"
-                        control={<Radio {...field} checked={field.value === 'Annual'} />}
-                        label="Annual"
-                      />
-                    </>
-                  )}
-                />
-              </RadioGroup>
+          <div className={classes.productContainer}>
+            <FormControl disabled={isDisabled} margin="normal">
+              <InputLabel id="supportTier-label">Support Tier</InputLabel>
+              <Controller
+                name="product.supportTier"
+                control={control}
+                render={(field ) => (
+                  <Select
+                    {...field}
+                    labelId="supportTier-label"
+                    value={field.value}
+                    onChange={e => {
+                      console.log(e)
+                      field.onChange(e);
+                      handleFormChange({ ...choiceCard, product: { ...choiceCard.product, supportTier: e.target.value } });
+                      // handleSubmit(handleFormChange);
+                      // trigger();
+                    }}
+                  >
+                    <MenuItem value="Contribution">Recurring Contribution</MenuItem>
+                    <MenuItem value="SupporterPlus">Supporter Plus</MenuItem>
+                    <MenuItem value="OneOff">Single Contribution</MenuItem>
+                  </Select>
+                )}
+              />
             </FormControl>
-          )}
+
+            {['Contribution', 'SupporterPlus'].includes(choiceCard.product.supportTier) && (
+              <FormControl component="fieldset" margin="normal" disabled={isDisabled}>
+                <RadioGroup row>
+                  <Controller
+                    name="product.ratePlan"
+                    control={control}
+                    render={field => (
+                      <>
+                        <FormControlLabel
+                          value="Monthly"
+                          control={<Radio {...field} checked={field.value === 'Monthly'} />}
+                          label="Monthly"
+                        />
+                        <FormControlLabel
+                          value="Annual"
+                          control={<Radio {...field} checked={field.value === 'Annual'} />}
+                          label="Annual"
+                        />
+                      </>
+                    )}
+                  />
+                </RadioGroup>
+              </FormControl>
+            )}
+          </div>
 
           <TextField
             label={
