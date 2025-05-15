@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import Sidebar from './sidebar';
-import { LockStatus, Methodology, Status, Test } from './helpers/shared';
+import { LockStatus, Status, Test } from './helpers/shared';
 import {
   fetchFrontendSettings,
   fetchTest,
@@ -220,20 +220,13 @@ export const TestsForm = <T extends Test>(
     ): void => {
       const oldTest = tests.find(test => test.name === oldName);
       if (oldTest) {
-        // Add testNames only if more than 1 methodology
-        const copyMethodologies = (methodologies: Methodology[]): Methodology[] => {
-          if (methodologies.length > 1) {
-            return methodologies.map(methodology => ({
-              ...methodology,
-              testName: addMethodologyToTestName(newName, methodology),
-            }));
-          } else {
-            return methodologies.map(methodology => ({
-              ...methodology,
-              testName: undefined, // in case the old test somehow has a custom testName
-            }));
-          }
-        };
+        // Replace any testNames on the methodologies
+        const methodologies = oldTest.methodologies.map(methodology => ({
+          ...methodology,
+          testName: methodology.testName
+            ? addMethodologyToTestName(newName, methodology)
+            : undefined,
+        }));
 
         const newTest: T = {
           ...oldTest,
@@ -248,7 +241,7 @@ export const TestsForm = <T extends Test>(
           },
           isNew: true,
           campaignName,
-          methodologies: copyMethodologies(oldTest.methodologies),
+          methodologies,
         };
         setTests([...tests, newTest]);
         setSelectedTestName(newName);
