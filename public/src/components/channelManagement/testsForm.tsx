@@ -220,14 +220,13 @@ export const TestsForm = <T extends Test>(
     ): void => {
       const oldTest = tests.find(test => test.name === oldName);
       if (oldTest) {
-        // Add testNames if more than 1 methodology
-        const methodologies =
-          oldTest.methodologies.length > 1
-            ? oldTest.methodologies.map(methodology => ({
-                ...methodology,
-                testName: addMethodologyToTestName(newName, methodology),
-              }))
-            : oldTest.methodologies;
+        // Replace any testNames on the methodologies
+        const methodologies = oldTest.methodologies.map(methodology => ({
+          ...methodology,
+          testName: methodology.testName
+            ? addMethodologyToTestName(newName, methodology)
+            : undefined,
+        }));
 
         const newTest: T = {
           ...oldTest,
