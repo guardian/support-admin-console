@@ -52,17 +52,15 @@ const VariantSeparateArticleCountEditor: React.FC<VariantSeparateArticleCountEdi
         label="Above"
       />
       <TextField
-        inputRef={register()}
         error={errors.copy !== undefined}
         helperText={errors.copy?.message}
         onBlur={handleSubmit(onSubmit)}
-        name="copy"
+        {...register('copy')}
         label="Article count copy"
         margin="normal"
         variant="outlined"
         disabled={isDisabled || !Boolean(separateArticleCount)}
-        fullWidth
-      />
+        fullWidth />
     </div>
   );
 };

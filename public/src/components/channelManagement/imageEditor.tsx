@@ -60,33 +60,29 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
   return (
     <div>
       <TextField
-        inputRef={register({
-          required: EMPTY_ERROR_HELPER_TEXT,
-        })}
         error={errors.mainUrl !== undefined}
         helperText={errors.mainUrl?.message ?? guidance}
         onBlur={handleSubmit(updateImage)}
-        name="mainUrl"
+        {...register('mainUrl', {
+          required: EMPTY_ERROR_HELPER_TEXT,
+        })}
         label="Image URL"
         margin="normal"
         variant="outlined"
         disabled={isDisabled}
-        fullWidth
-      />
+        fullWidth />
       <TextField
-        inputRef={register({
-          required: EMPTY_ERROR_HELPER_TEXT,
-        })}
         error={errors.altText !== undefined}
         helperText={errors.altText?.message}
         onBlur={handleSubmit(updateImage)}
-        name="altText"
+        {...register('altText', {
+          required: EMPTY_ERROR_HELPER_TEXT,
+        })}
         label="Image alt-text"
         margin="normal"
         variant="outlined"
         disabled={isDisabled}
-        fullWidth
-      />
+        fullWidth />
     </div>
   );
 };

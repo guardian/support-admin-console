@@ -166,20 +166,18 @@ const TestVariantsSplitEditor: React.FC<TestVariantsSplitEditorProps> = ({
           <div className={classes.variantsContainer}>
             <div>
               <TextField
-                inputRef={register({
-                  required: EMPTY_ERROR_HELPER_TEXT,
-                  validate: validate,
-                })}
                 error={errors.percentage !== undefined}
                 helperText={errors.percentage?.message || 'Must be a number'}
                 onBlur={handleSubmit(onSubmit(controlProportionSettings))}
-                name="percentage"
+                {...register('percentage', {
+                  required: EMPTY_ERROR_HELPER_TEXT,
+                  validate: validate,
+                })}
                 label="CONTROL"
                 InputLabelProps={{ shrink: true }}
                 variant="outlined"
                 fullWidth
-                disabled={isDisabled}
-              />
+                disabled={isDisabled} />
             </div>
 
             {renderVariants(controlProportionSettings.proportion)}

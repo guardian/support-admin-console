@@ -61,35 +61,37 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
   return (
     <div>
       <TextField
-        inputRef={register({
-          required: EMPTY_ERROR_HELPER_TEXT,
-        })}
         error={errors.name !== undefined}
         helperText={errors.name?.message}
         onBlur={handleSubmit(update)}
-        name="name"
+        {...register('name', {
+          required: EMPTY_ERROR_HELPER_TEXT,
+        })}
         label="Name"
         margin="normal"
         variant="outlined"
         disabled={isDisabled}
-        fullWidth
-      />
+        fullWidth />
       <TextField
-        inputRef={register()}
         onBlur={handleSubmit(update)}
-        name="description"
+        {...register('description')}
         label="Title or description"
         margin="normal"
         variant="outlined"
         disabled={isDisabled}
-        fullWidth
-      />
+        fullWidth />
       <p>
         Note: if including a headshot image alongside the byline, both of the following fields
         should be completed
       </p>
       <TextField
-        inputRef={register({
+        error={errors?.headshot?.mainUrl !== undefined}
+        helperText={
+          errors?.headshot?.mainUrl?.message ??
+          'Image dimensions should be roughly square, with a transparent background'
+        }
+        onBlur={handleSubmit(update)}
+        {...register('headshot.mainUrl', {
           validate: mainUrl => {
             // required if altText is set
             if (!mainUrl && getValues().headshot?.altText) {
@@ -98,21 +100,16 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
             return true;
           },
         })}
-        error={errors?.headshot?.mainUrl !== undefined}
-        helperText={
-          errors?.headshot?.mainUrl?.message ??
-          'Image dimensions should be roughly square, with a transparent background'
-        }
-        onBlur={handleSubmit(update)}
-        name="headshot.mainUrl"
         label="Image URL"
         margin="normal"
         variant="outlined"
         disabled={isDisabled}
-        fullWidth
-      />
+        fullWidth />
       <TextField
-        inputRef={register({
+        error={errors?.headshot?.altText !== undefined}
+        helperText={errors?.headshot?.altText?.message ?? ''}
+        onBlur={handleSubmit(update)}
+        {...register('headshot.altText', {
           validate: altText => {
             // required if mainUrl is set
             if (!altText && getValues().headshot?.mainUrl) {
@@ -121,16 +118,11 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
             return true;
           },
         })}
-        error={errors?.headshot?.altText !== undefined}
-        helperText={errors?.headshot?.altText?.message ?? ''}
-        onBlur={handleSubmit(update)}
-        name="headshot.altText"
         label="Image alt-text"
         margin="normal"
         variant="outlined"
         disabled={isDisabled}
-        fullWidth
-      />
+        fullWidth />
     </div>
   );
 };

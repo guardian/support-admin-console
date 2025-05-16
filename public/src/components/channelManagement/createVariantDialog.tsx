@@ -82,7 +82,9 @@ const CreateVariantDialog: React.FC<CreateVariantDialogProps> = ({
       <DialogContent dividers>
         <TextField
           className={classes.input}
-          inputRef={register({
+          error={errors.name !== undefined}
+          helperText={errors.name ? errors.name.message : NAME_DEFAULT_HELPER_TEXT}
+          {...register('name', {
             required: EMPTY_ERROR_HELPER_TEXT,
             pattern: {
               value: VALID_CHARACTERS_REGEX,
@@ -90,15 +92,11 @@ const CreateVariantDialog: React.FC<CreateVariantDialogProps> = ({
             },
             validate: createDuplicateValidator(existingNames),
           })}
-          error={errors.name !== undefined}
-          helperText={errors.name ? errors.name.message : NAME_DEFAULT_HELPER_TEXT}
-          name="name"
           label="Variant name"
           margin="normal"
           variant="outlined"
           autoFocus
-          fullWidth
-        />
+          fullWidth />
       </DialogContent>
       <DialogActions>
         <Button onClick={handleSubmit(onSubmit)} color="primary">

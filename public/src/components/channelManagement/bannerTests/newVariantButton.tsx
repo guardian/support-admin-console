@@ -87,56 +87,52 @@ const NewVariantButton: React.FC<BannerTestNewVariantButtonProps> = ({
     createVariant(name.toUpperCase());
   };
 
-  return (
-    <>
-      <Button className={classes.button} onClick={open} disabled={isDisabled}>
-        <div className={classes.container}>
-          <AddIcon />
-          <Typography className={classes.text}>New variant</Typography>
-        </div>
-      </Button>
-      <Dialog
-        open={isOpen}
-        onClose={close}
-        aria-labelledby="new-variant-dialog-title"
-        aria-describedby="new-variant-dialog-description"
-        fullWidth
-      >
-        <div className={classes.dialogHeader}>
-          <DialogTitle id="new-variant-dialog-title">Create a new variant</DialogTitle>
-          <IconButton onClick={close} aria-label="close">
-            <CloseIcon />
-          </IconButton>
-        </div>
-        <DialogContent dividers>
-          <TextField
-            className={classes.input}
-            inputRef={register({
-              required: EMPTY_ERROR_HELPER_TEXT,
-              pattern: {
-                value: VALID_CHARACTERS_REGEX,
-                message: INVALID_CHARACTERS_ERROR_HELPER_TEXT,
-              },
-              validate: createDuplicateValidator(existingNames),
-            })}
-            error={errors.name !== undefined}
-            helperText={errors.name ? errors.name.message : NAME_DEFAULT_HELPER_TEXT}
-            name="name"
-            label="Variant name"
-            margin="normal"
-            variant="outlined"
-            autoFocus
-            fullWidth
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleSubmit(onSubmit)} color="primary">
-            Create variant
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </>
-  );
+  return <>
+    <Button className={classes.button} onClick={open} disabled={isDisabled}>
+      <div className={classes.container}>
+        <AddIcon />
+        <Typography className={classes.text}>New variant</Typography>
+      </div>
+    </Button>
+    <Dialog
+      open={isOpen}
+      onClose={close}
+      aria-labelledby="new-variant-dialog-title"
+      aria-describedby="new-variant-dialog-description"
+      fullWidth
+    >
+      <div className={classes.dialogHeader}>
+        <DialogTitle id="new-variant-dialog-title">Create a new variant</DialogTitle>
+        <IconButton onClick={close} aria-label="close">
+          <CloseIcon />
+        </IconButton>
+      </div>
+      <DialogContent dividers>
+        <TextField
+          className={classes.input}
+          error={errors.name !== undefined}
+          helperText={errors.name ? errors.name.message : NAME_DEFAULT_HELPER_TEXT}
+          {...register('name', {
+            required: EMPTY_ERROR_HELPER_TEXT,
+            pattern: {
+              value: VALID_CHARACTERS_REGEX,
+              message: INVALID_CHARACTERS_ERROR_HELPER_TEXT,
+            },
+            validate: createDuplicateValidator(existingNames),
+          })}
+          label="Variant name"
+          margin="normal"
+          variant="outlined"
+          autoFocus
+          fullWidth />
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleSubmit(onSubmit)} color="primary">
+          Create variant
+        </Button>
+      </DialogActions>
+    </Dialog>
+  </>;
 };
 
 export default NewVariantButton;

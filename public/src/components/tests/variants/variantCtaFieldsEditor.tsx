@@ -41,34 +41,30 @@ const VariantCtaFieldsEditor: React.FC<VariantCtaFieldsEditorProps> = ({
   return (
     <div>
       <TextField
-        inputRef={register({
-          required: EMPTY_ERROR_HELPER_TEXT,
-        })}
         error={errors.text !== undefined}
         helperText={errors.text?.message}
         onBlur={handleSubmit(onSubmit)}
-        name="text"
+        {...register('text', {
+          required: EMPTY_ERROR_HELPER_TEXT,
+        })}
         label="Button copy"
         margin="normal"
         variant="outlined"
         disabled={isDisabled}
-        fullWidth
-      />
+        fullWidth />
 
       <TextField
-        inputRef={register({
-          required: EMPTY_ERROR_HELPER_TEXT,
-        })}
         error={errors.baseUrl !== undefined}
         helperText={errors.baseUrl?.message}
         onBlur={handleSubmit(onSubmit)}
-        name="baseUrl"
+        {...register('baseUrl', {
+          required: EMPTY_ERROR_HELPER_TEXT,
+        })}
         label="Button destination"
         margin="normal"
         variant="outlined"
         disabled={isDisabled}
-        fullWidth
-      />
+        fullWidth />
     </div>
   );
 };

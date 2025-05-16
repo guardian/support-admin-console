@@ -182,7 +182,9 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
         )}
         <TextField
           className={classes.input}
-          inputRef={register({
+          error={errors.name !== undefined}
+          helperText={errors.name ? errors.name.message : NAME_DEFAULT_HELPER_TEXT}
+          {...register('name', {
             required: EMPTY_ERROR_HELPER_TEXT,
             pattern: {
               value: VALID_CHARACTERS_REGEX,
@@ -196,9 +198,6 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
               );
             },
           })}
-          error={errors.name !== undefined}
-          helperText={errors.name ? errors.name.message : NAME_DEFAULT_HELPER_TEXT}
-          name="name"
           label="Full test name"
           margin="normal"
           variant="outlined"
@@ -206,22 +205,19 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
             startAdornment: <InputAdornment position="start">{buildPrefix()}</InputAdornment>,
           }}
           autoFocus
-          fullWidth
-        />
+          fullWidth />
         <TextField
           className={classes.input}
-          inputRef={register({
+          error={errors.nickname !== undefined}
+          helperText={errors.nickname ? errors.nickname.message : NICKNAME_DEFAULT_HELPER_TEXT}
+          {...register('nickname', {
             required: EMPTY_ERROR_HELPER_TEXT,
             validate: createDuplicateValidator(existingNicknames),
           })}
-          error={errors.nickname !== undefined}
-          helperText={errors.nickname ? errors.nickname.message : NICKNAME_DEFAULT_HELPER_TEXT}
-          name="nickname"
           label="Nickname"
           margin="normal"
           variant="outlined"
-          fullWidth
-        />
+          fullWidth />
       </DialogContent>
       <DialogActions>
         <Button onClick={handleSubmit(onSubmit)} color="primary">

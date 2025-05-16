@@ -149,44 +149,38 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
           </div>
 
           <TextField
-            inputRef={register({ required: EMPTY_ERROR_HELPER_TEXT })}
             error={!!errors.countLabel}
             helperText={errors?.countLabel?.message}
             onBlur={handleSubmit(onSubmit)}
-            name="countLabel"
+            {...register('countLabel', { required: EMPTY_ERROR_HELPER_TEXT })}
             label="Heading"
             margin="normal"
             variant="outlined"
             disabled={isDisabled}
-            fullWidth
-          />
+            fullWidth />
 
           <TextField
-            inputRef={register({ required: EMPTY_ERROR_HELPER_TEXT })}
             error={!!errors.goalCopy}
             helperText={errors?.goalCopy?.message}
             onBlur={handleSubmit(onSubmit)}
-            name="goalCopy"
+            {...register('goalCopy', { required: EMPTY_ERROR_HELPER_TEXT })}
             label="Goal Copy"
             margin="normal"
             variant="outlined"
             disabled={isDisabled}
-            fullWidth
-          />
+            fullWidth />
 
           {(tickerSettings.name === 'US' || tickerSettings.name === 'AU') && (
             <TextField
-              inputRef={register({ required: true })}
               error={!!errors.currencySymbol}
               helperText={errors?.currencySymbol?.message}
               onBlur={handleSubmit(onSubmit)}
-              name="currencySymbol"
+              {...register('currencySymbol', { required: true })}
               label="Currency"
               margin="normal"
               variant="outlined"
               disabled={isDisabled}
-              fullWidth
-            />
+              fullWidth />
           )}
         </div>
       )}

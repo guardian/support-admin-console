@@ -111,11 +111,10 @@ const GenericColourInput = <T extends unknown>({
     <div className={classes.container}>
       <TextField
         className={classes.field}
-        inputRef={register({
+        {...register('colour', {
           required: required ? EMPTY_ERROR_HELPER_TEXT : false,
           pattern: colourValidation,
         })}
-        name="colour"
         onBlur={handleSubmit(({ colour }) => handleColourChange(colour))}
         label={label}
         error={errors?.colour !== undefined}
@@ -124,8 +123,7 @@ const GenericColourInput = <T extends unknown>({
         variant="outlined"
         fullWidth={false}
         disabled={isDisabled}
-        required={required}
-      />
+        required={required} />
       <div className={classes.colour} onClick={() => !isDisabled && setIsPickerOpen(true)}>
         {isPickerOpen && (
           <ClickAwayListener onClickAway={() => setIsPickerOpen(false)}>

@@ -111,9 +111,7 @@ export const LinkTrackingBuilder: React.FC = () => {
     >
       <div className={classes.fieldsContainer}>
         <TextField
-          name="url"
-          label="URL (without tracking)"
-          inputRef={register({
+          {...register('url', {
             required: true,
             validate: value => {
               // Check it's a valid url and has no querystring
@@ -128,38 +126,32 @@ export const LinkTrackingBuilder: React.FC = () => {
               }
             },
           })}
+          label="URL (without tracking)"
           error={!!errors.url}
-          helperText={errors?.url?.message}
-        />
+          helperText={errors?.url?.message} />
 
         <Typography className={classes.header} variant="h4">
           Campaign
         </Typography>
         <TextField
-          name="campaign"
+          {...register('campaign', { required: true })}
           label="Campaign"
-          inputRef={register({ required: true })}
           error={!!errors.campaign}
-          helperText={errors?.campaign?.message}
-        />
+          helperText={errors?.campaign?.message} />
 
         <Typography className={classes.header} variant="h4">
           Call to action / creative
         </Typography>
         <TextField
-          name="content"
+          {...register('content', { required: true })}
           label="Creative / utm_content / AB test name"
-          inputRef={register({ required: true })}
           error={!!errors.content}
-          helperText={errors?.content?.message}
-        />
+          helperText={errors?.content?.message} />
         <TextField
-          name="term"
+          {...register('term', { required: true })}
           label="Audience segment / utm_term / AB test variant name"
-          inputRef={register({ required: true })}
           error={!!errors.term}
-          helperText={errors?.term?.message}
-        />
+          helperText={errors?.term?.message} />
 
         <Typography className={classes.header} variant="h4">
           Placement

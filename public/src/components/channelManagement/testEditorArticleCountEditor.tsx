@@ -124,51 +124,45 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
           <div className={classes.formContainer}>
             <div>
               <TextField
-                inputRef={register({
-                  required: EMPTY_ERROR_HELPER_TEXT,
-                  validate: notNumberValidator,
-                })}
                 error={errors.minViews !== undefined}
                 helperText={errors.minViews?.message}
                 onBlur={handleSubmit(onSubmit)}
-                name="minViews"
+                {...register('minViews', {
+                  required: EMPTY_ERROR_HELPER_TEXT,
+                  validate: notNumberValidator,
+                })}
                 label="Minimum page views"
                 InputLabelProps={{ shrink: true }}
                 variant="filled"
                 fullWidth
-                disabled={isDisabled}
-              />
+                disabled={isDisabled} />
             </div>
             <div>
               <TextField
-                inputRef={register({ validate: notNumberValidator })}
                 error={errors.maxViews !== undefined}
                 helperText={errors.maxViews?.message}
                 onBlur={handleSubmit(onSubmit)}
-                name="maxViews"
+                {...register('maxViews', { validate: notNumberValidator })}
                 label="Maximum page views"
                 InputLabelProps={{ shrink: true }}
                 variant="filled"
                 fullWidth
-                disabled={isDisabled}
-              />
+                disabled={isDisabled} />
             </div>
             <div>
               <TextField
-                inputRef={register({
-                  required: EMPTY_ERROR_HELPER_TEXT,
-                  validate: notNumberValidator,
-                })}
                 error={errors.periodInWeeks !== undefined}
                 helperText={errors.periodInWeeks?.message}
                 onBlur={handleSubmit(onSubmit)}
-                name="periodInWeeks"
+                {...register('periodInWeeks', {
+                  required: EMPTY_ERROR_HELPER_TEXT,
+                  validate: notNumberValidator,
+                })}
                 label="Time period in weeks"
                 InputLabelProps={{ shrink: true }}
                 variant="filled"
                 fullWidth
-                disabled={isDisabled}
-              />
+                disabled={isDisabled} />
             </div>
           </div>
           <div>

@@ -91,61 +91,53 @@ export const HeaderImageEditor: React.FC<Props> = ({
       {headerImage && (
         <>
           <TextField
-            inputRef={register({
-              required: EMPTY_ERROR_HELPER_TEXT,
-            })}
             error={errors?.mobileUrl !== undefined}
             helperText={errors?.mobileUrl?.message}
             onBlur={handleSubmit(onSubmit)}
-            name="mobileUrl"
+            {...register('mobileUrl', {
+              required: EMPTY_ERROR_HELPER_TEXT,
+            })}
             label="Header Image URL (Mobile)"
             margin="normal"
             variant="outlined"
             disabled={isDisabled}
-            fullWidth
-          />
+            fullWidth />
           <TextField
-            inputRef={register({
-              required: EMPTY_ERROR_HELPER_TEXT,
-            })}
             error={errors?.tabletUrl !== undefined}
             helperText={errors?.tabletUrl?.message}
             onBlur={handleSubmit(onSubmit)}
-            name="tabletUrl"
+            {...register('tabletUrl', {
+              required: EMPTY_ERROR_HELPER_TEXT,
+            })}
             label="Header Image URL (Tablet)"
             margin="normal"
             variant="outlined"
             disabled={isDisabled}
-            fullWidth
-          />
+            fullWidth />
           <TextField
-            inputRef={register({
-              required: EMPTY_ERROR_HELPER_TEXT,
-            })}
             error={errors?.desktopUrl !== undefined}
             helperText={errors?.desktopUrl?.message}
             onBlur={handleSubmit(onSubmit)}
-            name="desktopUrl"
+            {...register('desktopUrl', {
+              required: EMPTY_ERROR_HELPER_TEXT,
+            })}
             label="Header Image URL (Dekstop and above)"
             margin="normal"
             variant="outlined"
             disabled={isDisabled}
-            fullWidth
-          />
+            fullWidth />
           <TextField
-            inputRef={register({
-              required: EMPTY_ERROR_HELPER_TEXT,
-            })}
             error={errors?.altText !== undefined}
             helperText={errors?.altText?.message}
             onBlur={handleSubmit(onSubmit)}
-            name="altText"
+            {...register('altText', {
+              required: EMPTY_ERROR_HELPER_TEXT,
+            })}
             label="Header Image Description (alt text)"
             margin="normal"
             variant="outlined"
             disabled={isDisabled}
-            fullWidth
-          />
+            fullWidth />
         </>
       )}
     </div>

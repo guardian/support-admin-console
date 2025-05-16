@@ -104,54 +104,48 @@ const MaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
         <div className={classes.formContainer}>
           <div>
             <TextField
-              inputRef={register({
-                required: EMPTY_ERROR_HELPER_TEXT,
-                validate: notNumberValidator,
-              })}
               error={errors.maxViewsCount !== undefined}
               helperText={errors.maxViewsCount?.message}
               onBlur={handleSubmit(onSubmit)}
-              name="maxViewsCount"
+              {...register('maxViewsCount', {
+                required: EMPTY_ERROR_HELPER_TEXT,
+                validate: notNumberValidator,
+              })}
               label="Maximum view counts"
               InputLabelProps={{ shrink: true }}
               variant="filled"
               fullWidth
-              disabled={isDisabled}
-            />
+              disabled={isDisabled} />
           </div>
           <div>
             <TextField
-              inputRef={register({
-                required: EMPTY_ERROR_HELPER_TEXT,
-                validate: notNumberValidator,
-              })}
               error={errors.maxViewsDays !== undefined}
               helperText={errors.maxViewsDays?.message}
               onBlur={handleSubmit(onSubmit)}
-              name="maxViewsDays"
+              {...register('maxViewsDays', {
+                required: EMPTY_ERROR_HELPER_TEXT,
+                validate: notNumberValidator,
+              })}
               label="Number of days"
               InputLabelProps={{ shrink: true }}
               variant="filled"
               fullWidth
-              disabled={isDisabled}
-            />
+              disabled={isDisabled} />
           </div>
           <div>
             <TextField
-              inputRef={register({
-                required: EMPTY_ERROR_HELPER_TEXT,
-                validate: notNumberValidator,
-              })}
               error={errors.minDaysBetweenViews !== undefined}
               helperText={errors.minDaysBetweenViews?.message}
               onBlur={handleSubmit(onSubmit)}
-              name="minDaysBetweenViews"
+              {...register('minDaysBetweenViews', {
+                required: EMPTY_ERROR_HELPER_TEXT,
+                validate: notNumberValidator,
+              })}
               label="Minimum days between views"
               InputLabelProps={{ shrink: true }}
               variant="filled"
               fullWidth
-              disabled={isDisabled}
-            />
+              disabled={isDisabled} />
           </div>
         </div>
       )}

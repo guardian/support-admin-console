@@ -233,26 +233,26 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
           <TextField
             className={classes.input}
             id={groupId + '-add-switch-switch-name'}
-            inputRef={register({
+            error={errors.switchId !== undefined}
+            helperText={errors.switchId ? errors.switchId.message : ''}
+            {...register('switchId', {
               required: EMPTY_ERROR_HELPER_TEXT,
               validate: switchId => {
                 return createDuplicateValidator(Object.keys(groupData.switches))(switchId);
               },
             })}
-            error={errors.switchId !== undefined}
-            helperText={errors.switchId ? errors.switchId.message : ''}
-            name="switchId"
             label="Switch name"
             margin="normal"
             variant="outlined"
             autoFocus
-            fullWidth
-          />
+            fullWidth />
           <span />
           <TextField
             className={classes.input}
             id={groupId + '-add-switch-switch-description'}
-            inputRef={register({
+            error={errors.description !== undefined}
+            helperText={errors.description ? errors.description.message : ''}
+            {...register('description', {
               required: EMPTY_ERROR_HELPER_TEXT,
               validate: description => {
                 return createDuplicateValidator(
@@ -260,15 +260,11 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
                 )(description);
               },
             })}
-            error={errors.description !== undefined}
-            helperText={errors.description ? errors.description.message : ''}
-            name="description"
             label="Description"
             margin="normal"
             variant="outlined"
             autoFocus
-            fullWidth
-          />
+            fullWidth />
           <span />
           <div className={classes.buttons}>
             <Button

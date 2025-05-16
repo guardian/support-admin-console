@@ -75,20 +75,18 @@ const DeployScheduleEditor: React.FC<DeployScheduleEditorProps> = ({
 
         {deploySchedule && (
           <TextField
-            inputRef={register({
-              required: EMPTY_ERROR_HELPER_TEXT,
-              validate: notNumberValidator,
-            })}
             error={errors.daysBetween !== undefined}
             helperText={errors.daysBetween?.message || 'Must be a number'}
             onBlur={handleSubmit(onSubmit)}
-            name="daysBetween"
+            {...register('daysBetween', {
+              required: EMPTY_ERROR_HELPER_TEXT,
+              validate: notNumberValidator,
+            })}
             label="Days between deploys"
             InputLabelProps={{ shrink: true }}
             variant="outlined"
             fullWidth
-            disabled={isDisabled}
-          />
+            disabled={isDisabled} />
         )}
       </div>
     </FormControl>

@@ -37,61 +37,53 @@ export const ImageEditor: React.FC<Props> = ({
   return (
     <div>
       <TextField
-        inputRef={register({
-          required: EMPTY_ERROR_HELPER_TEXT,
-        })}
         error={errors?.mobileUrl !== undefined}
         helperText={errors?.mobileUrl?.message}
         onBlur={handleSubmit(onChange)}
-        name="mobileUrl"
+        {...register('mobileUrl', {
+          required: EMPTY_ERROR_HELPER_TEXT,
+        })}
         label="Banner Image URL (Mobile)"
         margin="normal"
         variant="outlined"
         disabled={isDisabled}
-        fullWidth
-      />
+        fullWidth />
       <TextField
-        inputRef={register({
-          required: EMPTY_ERROR_HELPER_TEXT,
-        })}
         error={errors?.tabletUrl !== undefined}
         helperText={errors?.tabletUrl?.message}
         onBlur={handleSubmit(onChange)}
-        name="tabletUrl"
+        {...register('tabletUrl', {
+          required: EMPTY_ERROR_HELPER_TEXT,
+        })}
         label="Banner Image URL (Tablet)"
         margin="normal"
         variant="outlined"
         disabled={isDisabled}
-        fullWidth
-      />
+        fullWidth />
       <TextField
-        inputRef={register({
-          required: EMPTY_ERROR_HELPER_TEXT,
-        })}
         error={errors?.desktopUrl !== undefined}
         helperText={errors?.desktopUrl?.message}
         onBlur={handleSubmit(onChange)}
-        name="desktopUrl"
+        {...register('desktopUrl', {
+          required: EMPTY_ERROR_HELPER_TEXT,
+        })}
         label="Banner Image URL (Desktop and above)"
         margin="normal"
         variant="outlined"
         disabled={isDisabled}
-        fullWidth
-      />
+        fullWidth />
       <TextField
-        inputRef={register({
-          required: EMPTY_ERROR_HELPER_TEXT,
-        })}
         error={errors?.altText !== undefined}
         helperText={errors?.altText?.message}
         onBlur={handleSubmit(onChange)}
-        name="altText"
+        {...register('altText', {
+          required: EMPTY_ERROR_HELPER_TEXT,
+        })}
         label="Banner Image Description (alt text)"
         margin="normal"
         variant="outlined"
         disabled={isDisabled}
-        fullWidth
-      />
+        fullWidth />
     </div>
   );
 };

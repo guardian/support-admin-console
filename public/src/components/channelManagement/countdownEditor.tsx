@@ -158,17 +158,15 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
       {!!countdownSettings && (
         <div className={classes.fieldsContainer}>
           <TextField
-            inputRef={register({ required: EMPTY_ERROR_HELPER_TEXT })}
             error={!!errors.overwriteHeadingLabel}
             helperText={errors?.overwriteHeadingLabel?.message}
             onBlur={handleSubmit(onSubmit)}
-            name="overwriteHeadingLabel"
+            {...register('overwriteHeadingLabel', { required: EMPTY_ERROR_HELPER_TEXT })}
             label="Overwrite heading text"
             margin="normal"
             variant="outlined"
             disabled={isDisabled}
-            fullWidth
-          />
+            fullWidth />
 
           <div className={classes.switchContainer}>
             <Typography>UTC</Typography>
@@ -198,60 +196,52 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
           </Alert>
 
           <TextField
-            inputRef={register({ required: EMPTY_ERROR_HELPER_TEXT })}
             error={!!errors.countdownStartTimestamp}
             helperText={errors?.countdownStartTimestamp?.message}
             onBlur={handleSubmit(onSubmit)}
-            name="countdownStartTimestamp"
+            {...register('countdownStartTimestamp', { required: EMPTY_ERROR_HELPER_TEXT })}
             label="Start Date"
             type={'datetime-local'}
             defaultValue={new Date().toISOString().slice(0, 19)}
             margin="normal"
             variant="outlined"
             disabled={isDisabled}
-            fullWidth
-          />
+            fullWidth />
 
           <TextField
-            inputRef={register({ required: EMPTY_ERROR_HELPER_TEXT })}
             error={!!errors.countdownDeadlineTimestamp}
             helperText={errors?.countdownDeadlineTimestamp?.message}
             onBlur={handleSubmit(onSubmit)}
-            name="countdownDeadlineTimestamp"
+            {...register('countdownDeadlineTimestamp', { required: EMPTY_ERROR_HELPER_TEXT })}
             label="End Date"
             type={'datetime-local'}
             defaultValue={new Date().toISOString().slice(0, 19)}
             margin="normal"
             variant="outlined"
             disabled={isDisabled}
-            fullWidth
-          />
+            fullWidth />
 
           <TextField
-            inputRef={register({ required: true })}
             error={!!errors.backgroundColor}
             helperText={errors?.backgroundColor?.message}
             onBlur={handleSubmit(onSubmit)}
-            name="backgroundColor"
+            {...register('backgroundColor', { required: true })}
             label="Background Color"
             margin="normal"
             variant="outlined"
             disabled={isDisabled}
-            fullWidth
-          />
+            fullWidth />
 
           <TextField
-            inputRef={register({ required: true })}
             error={!!errors.foregroundColor}
             helperText={errors?.foregroundColor?.message}
             onBlur={handleSubmit(onSubmit)}
-            name="foregroundColor"
+            {...register('foregroundColor', { required: true })}
             label="Foreground Color"
             margin="normal"
             variant="outlined"
             disabled={isDisabled}
-            fullWidth
-          />
+            fullWidth />
         </div>
       )}
     </div>

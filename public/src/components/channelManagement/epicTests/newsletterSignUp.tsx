@@ -37,42 +37,36 @@ const EpicTestNewsletter: React.FC<EpicTestNewsletterProps> = ({
     updateNewsletterSignup({ newsletterId, successDescription });
   };
 
-  return (
-    <>
-      <div>
-        <TextField
-          inputRef={register({
-            required: EMPTY_ERROR_HELPER_TEXT,
-          })}
-          error={errors.newsletterId !== undefined}
-          helperText={errors.newsletterId?.message}
-          onBlur={handleSubmit(onSubmit)}
-          name="newsletterId"
-          label="Newsletter Id"
-          margin="normal"
-          variant="outlined"
-          disabled={isDisabled}
-          fullWidth
-        />
-      </div>
-      <div>
-        <TextField
-          inputRef={register({
-            required: EMPTY_ERROR_HELPER_TEXT,
-          })}
-          error={errors.successDescription !== undefined}
-          helperText={errors.successDescription?.message}
-          onBlur={handleSubmit(onSubmit)}
-          name="successDescription"
-          label="Sign up success message"
-          margin="normal"
-          variant="outlined"
-          disabled={isDisabled}
-          fullWidth
-        />
-      </div>
-    </>
-  );
+  return <>
+    <div>
+      <TextField
+        error={errors.newsletterId !== undefined}
+        helperText={errors.newsletterId?.message}
+        onBlur={handleSubmit(onSubmit)}
+        {...register('newsletterId', {
+          required: EMPTY_ERROR_HELPER_TEXT,
+        })}
+        label="Newsletter Id"
+        margin="normal"
+        variant="outlined"
+        disabled={isDisabled}
+        fullWidth />
+    </div>
+    <div>
+      <TextField
+        error={errors.successDescription !== undefined}
+        helperText={errors.successDescription?.message}
+        onBlur={handleSubmit(onSubmit)}
+        {...register('successDescription', {
+          required: EMPTY_ERROR_HELPER_TEXT,
+        })}
+        label="Sign up success message"
+        margin="normal"
+        variant="outlined"
+        disabled={isDisabled}
+        fullWidth />
+    </div>
+  </>;
 };
 
 export default EpicTestNewsletter;

@@ -196,17 +196,15 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
               </div>
 
               <TextField
-                inputRef={register()}
                 error={errors.description !== undefined}
                 helperText={errors.description ? errors.description.message : ''}
                 onBlur={handleSubmit(onSubmit)}
-                name="description"
+                {...register('description')}
                 label="Description"
                 margin="normal"
                 variant="outlined"
                 disabled={!editMode}
-                fullWidth
-              />
+                fullWidth />
 
               <Controller
                 name="isActive"
@@ -215,15 +213,13 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
                   <FormControlLabel
                     control={
                       <Switch
-                        inputRef={register()}
-                        name="isActive"
+                        {...register('isActive')}
                         onChange={e => {
                           data.onChange(e.target.checked);
                           handleSubmit(onSubmit)();
                         }}
                         checked={data.value}
-                        disabled={!editMode}
-                      />
+                        disabled={!editMode} />
                     }
                     label={'Include this campaign in Channel Test campaign selectors'}
                   />
