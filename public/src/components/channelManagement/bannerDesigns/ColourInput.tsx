@@ -81,7 +81,13 @@ const GenericColourInput = <T extends unknown>({
 
   const defaultValues = { colour: convertToString(colour) };
 
-  const { register, reset, handleSubmit, errors } = useForm<{ colour: string }>({
+  const {
+    register,
+    reset,
+    handleSubmit,
+
+    formState: { errors },
+  } = useForm<{ colour: string }>({
     mode: 'onChange',
     defaultValues,
   });
@@ -123,7 +129,8 @@ const GenericColourInput = <T extends unknown>({
         variant="outlined"
         fullWidth={false}
         disabled={isDisabled}
-        required={required} />
+        required={required}
+      />
       <div className={classes.colour} onClick={() => !isDisabled && setIsPickerOpen(true)}>
         {isPickerOpen && (
           <ClickAwayListener onClickAway={() => setIsPickerOpen(false)}>

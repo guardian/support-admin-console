@@ -79,7 +79,13 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
     foregroundColor: countdownSettings?.theme.foregroundColor || '#ffffff',
   };
 
-  const { register, handleSubmit, errors, reset } = useForm<FormData>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+
+    formState: { errors },
+  } = useForm<FormData>({
     mode: 'onChange',
     defaultValues,
   });
@@ -166,7 +172,8 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
             margin="normal"
             variant="outlined"
             disabled={isDisabled}
-            fullWidth />
+            fullWidth
+          />
 
           <div className={classes.switchContainer}>
             <Typography>UTC</Typography>
@@ -206,7 +213,8 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
             margin="normal"
             variant="outlined"
             disabled={isDisabled}
-            fullWidth />
+            fullWidth
+          />
 
           <TextField
             error={!!errors.countdownDeadlineTimestamp}
@@ -219,7 +227,8 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
             margin="normal"
             variant="outlined"
             disabled={isDisabled}
-            fullWidth />
+            fullWidth
+          />
 
           <TextField
             error={!!errors.backgroundColor}
@@ -230,7 +239,8 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
             margin="normal"
             variant="outlined"
             disabled={isDisabled}
-            fullWidth />
+            fullWidth
+          />
 
           <TextField
             error={!!errors.foregroundColor}
@@ -241,7 +251,8 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
             margin="normal"
             variant="outlined"
             disabled={isDisabled}
-            fullWidth />
+            fullWidth
+          />
         </div>
       )}
     </div>

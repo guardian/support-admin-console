@@ -33,7 +33,14 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
     name: '',
   };
 
-  const { register, handleSubmit, errors, trigger, getValues } = useForm<BylineWithImage>({
+  const {
+    register,
+    handleSubmit,
+    trigger,
+    getValues,
+
+    formState: { errors },
+  } = useForm<BylineWithImage>({
     mode: 'onChange',
     defaultValues,
   });
@@ -71,7 +78,8 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
         margin="normal"
         variant="outlined"
         disabled={isDisabled}
-        fullWidth />
+        fullWidth
+      />
       <TextField
         onBlur={handleSubmit(update)}
         {...register('description')}
@@ -79,7 +87,8 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
         margin="normal"
         variant="outlined"
         disabled={isDisabled}
-        fullWidth />
+        fullWidth
+      />
       <p>
         Note: if including a headshot image alongside the byline, both of the following fields
         should be completed
@@ -104,7 +113,8 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
         margin="normal"
         variant="outlined"
         disabled={isDisabled}
-        fullWidth />
+        fullWidth
+      />
       <TextField
         error={errors?.headshot?.altText !== undefined}
         helperText={errors?.headshot?.altText?.message ?? ''}
@@ -122,7 +132,8 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
         margin="normal"
         variant="outlined"
         disabled={isDisabled}
-        fullWidth />
+        fullWidth
+      />
     </div>
   );
 };

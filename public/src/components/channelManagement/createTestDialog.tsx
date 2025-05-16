@@ -91,7 +91,12 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
     nickname: sourceNickname || '',
   };
 
-  const { register, handleSubmit, errors } = useForm<FormData>({
+  const {
+    register,
+    handleSubmit,
+
+    formState: { errors },
+  } = useForm<FormData>({
     defaultValues,
   });
 
@@ -205,7 +210,8 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
             startAdornment: <InputAdornment position="start">{buildPrefix()}</InputAdornment>,
           }}
           autoFocus
-          fullWidth />
+          fullWidth
+        />
         <TextField
           className={classes.input}
           error={errors.nickname !== undefined}
@@ -217,7 +223,8 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
           label="Nickname"
           margin="normal"
           variant="outlined"
-          fullWidth />
+          fullWidth
+        />
       </DialogContent>
       <DialogActions>
         <Button onClick={handleSubmit(onSubmit)} color="primary">

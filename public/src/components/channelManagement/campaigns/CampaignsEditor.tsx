@@ -150,7 +150,14 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
 
   const updatePage = () => doDataFetch(name);
 
-  const { register, handleSubmit, errors, trigger, control } = useForm<FormData>({
+  const {
+    register,
+    handleSubmit,
+    trigger,
+    control,
+
+    formState: { errors },
+  } = useForm<FormData>({
     mode: 'onChange',
     defaultValues,
   });
@@ -204,7 +211,8 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
                 margin="normal"
                 variant="outlined"
                 disabled={!editMode}
-                fullWidth />
+                fullWidth
+              />
 
               <Controller
                 name="isActive"
@@ -219,7 +227,8 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
                           handleSubmit(onSubmit)();
                         }}
                         checked={data.value}
-                        disabled={!editMode} />
+                        disabled={!editMode}
+                      />
                     }
                     label={'Include this campaign in Channel Test campaign selectors'}
                   />

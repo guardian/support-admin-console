@@ -49,7 +49,13 @@ const MaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
     minDaysBetweenViews: maxEpicViews?.minDaysBetweenViews.toString() || '',
   };
 
-  const { register, errors, handleSubmit, reset } = useForm<FormData>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+
+    formState: { errors },
+  } = useForm<FormData>({
     mode: 'onChange',
     defaultValues,
   });
@@ -115,7 +121,8 @@ const MaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
               InputLabelProps={{ shrink: true }}
               variant="filled"
               fullWidth
-              disabled={isDisabled} />
+              disabled={isDisabled}
+            />
           </div>
           <div>
             <TextField
@@ -130,7 +137,8 @@ const MaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
               InputLabelProps={{ shrink: true }}
               variant="filled"
               fullWidth
-              disabled={isDisabled} />
+              disabled={isDisabled}
+            />
           </div>
           <div>
             <TextField
@@ -145,7 +153,8 @@ const MaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
               InputLabelProps={{ shrink: true }}
               variant="filled"
               fullWidth
-              disabled={isDisabled} />
+              disabled={isDisabled}
+            />
           </div>
         </div>
       )}

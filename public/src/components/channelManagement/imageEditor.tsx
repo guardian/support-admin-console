@@ -43,7 +43,13 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
 }: ImageEditorProps) => {
   const defaultValues: Image = image;
 
-  const { register, handleSubmit, errors, trigger } = useForm<Image>({
+  const {
+    register,
+    handleSubmit,
+    trigger,
+
+    formState: { errors },
+  } = useForm<Image>({
     mode: 'onChange',
     defaultValues,
   });
@@ -70,7 +76,8 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
         margin="normal"
         variant="outlined"
         disabled={isDisabled}
-        fullWidth />
+        fullWidth
+      />
       <TextField
         error={errors.altText !== undefined}
         helperText={errors.altText?.message}
@@ -82,7 +89,8 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
         margin="normal"
         variant="outlined"
         disabled={isDisabled}
-        fullWidth />
+        fullWidth
+      />
     </div>
   );
 };

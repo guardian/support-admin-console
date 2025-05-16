@@ -31,7 +31,12 @@ const DeployScheduleEditor: React.FC<DeployScheduleEditorProps> = ({
   const defaultValues: BannerTestDeploySchedule = {
     daysBetween: 1,
   };
-  const { register, errors, handleSubmit } = useForm<BannerTestDeploySchedule>({
+  const {
+    register,
+    handleSubmit,
+
+    formState: { errors },
+  } = useForm<BannerTestDeploySchedule>({
     mode: 'onChange',
     defaultValues,
   });
@@ -86,7 +91,8 @@ const DeployScheduleEditor: React.FC<DeployScheduleEditorProps> = ({
             InputLabelProps={{ shrink: true }}
             variant="outlined"
             fullWidth
-            disabled={isDisabled} />
+            disabled={isDisabled}
+          />
         )}
       </div>
     </FormControl>

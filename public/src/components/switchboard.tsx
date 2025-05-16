@@ -205,7 +205,12 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
       switchId: string;
       description: string;
     };
-    const { register, handleSubmit, errors } = useForm<FormData>();
+    const {
+      register,
+      handleSubmit,
+
+      formState: { errors },
+    } = useForm<FormData>();
 
     const onSubmit = ({ switchId, description }: FormData): void => {
       const updatedState = cloneDeep(data);
@@ -245,7 +250,8 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
             margin="normal"
             variant="outlined"
             autoFocus
-            fullWidth />
+            fullWidth
+          />
           <span />
           <TextField
             className={classes.input}
@@ -264,7 +270,8 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
             margin="normal"
             variant="outlined"
             autoFocus
-            fullWidth />
+            fullWidth
+          />
           <span />
           <div className={classes.buttons}>
             <Button

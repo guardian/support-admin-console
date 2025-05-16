@@ -63,12 +63,17 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
   const classes = useStyles();
 
   // Validation for this product as a whole
-  const { control, handleSubmit, errors, register, reset } = useForm<LandingPageProductDescription>(
-    {
-      mode: 'onChange',
-      defaultValues: product,
-    },
-  );
+  const {
+    control,
+    handleSubmit,
+    register,
+    reset,
+
+    formState: { errors },
+  } = useForm<LandingPageProductDescription>({
+    mode: 'onChange',
+    defaultValues: product,
+  });
 
   // Validation specifically for the benefits array
   const { fields: benefits, append, remove } = useFieldArray({
@@ -99,7 +104,8 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
           required={true}
           onBlur={handleSubmit(onProductChange)}
           disabled={!editMode}
-          fullWidth />
+          fullWidth
+        />
         <TextField
           error={!!errors.cta?.copy}
           helperText={errors?.cta?.copy?.message}
@@ -108,7 +114,8 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
           required={true}
           onBlur={handleSubmit(onProductChange)}
           disabled={!editMode}
-          fullWidth />
+          fullWidth
+        />
         <TextField
           error={!!errors.label?.copy}
           helperText={errors?.label?.copy?.message}
@@ -118,7 +125,8 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
           })}
           onBlur={handleSubmit(onProductChange)}
           disabled={!editMode}
-          fullWidth />
+          fullWidth
+        />
 
         <div className={classes.benefitsHeading}>{buildBenefitsHeading(productKey)}</div>
 
@@ -137,7 +145,8 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
                 defaultValue={benefit.copy}
                 onBlur={handleSubmit(onProductChange)}
                 disabled={!editMode}
-                fullWidth />
+                fullWidth
+              />
             </Grid>
             <Grid item xs={3}>
               <TextField
@@ -147,7 +156,8 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
                 defaultValue={benefit.tooltip}
                 onBlur={handleSubmit(onProductChange)}
                 disabled={!editMode}
-                fullWidth />
+                fullWidth
+              />
             </Grid>
             <Grid item xs={2}>
               <TextField
@@ -157,7 +167,8 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
                 defaultValue={benefit.label?.copy}
                 onBlur={handleSubmit(onProductChange)}
                 disabled={!editMode}
-                fullWidth />
+                fullWidth
+              />
             </Grid>
             <Grid item xs={1}>
               <Button
@@ -207,7 +218,14 @@ export const ProductsEditor: React.FC<ProductsEditorProps> = ({
   const classes = useStyles();
 
   // Validation for all 3 products
-  const { control, setError, clearErrors, errors, reset } = useForm<Products>({
+  const {
+    control,
+    setError,
+    clearErrors,
+    reset,
+
+    formState: { errors },
+  } = useForm<Products>({
     mode: 'onChange',
     defaultValues: products,
   });

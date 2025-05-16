@@ -31,7 +31,13 @@ export const HeaderImageEditor: React.FC<Props> = ({
     altText: headerImage?.altText ?? '',
   };
 
-  const { register, handleSubmit, errors, reset } = useForm<BannerDesignHeaderImage>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+
+    formState: { errors },
+  } = useForm<BannerDesignHeaderImage>({
     mode: 'onChange',
     defaultValues,
   });
@@ -101,7 +107,8 @@ export const HeaderImageEditor: React.FC<Props> = ({
             margin="normal"
             variant="outlined"
             disabled={isDisabled}
-            fullWidth />
+            fullWidth
+          />
           <TextField
             error={errors?.tabletUrl !== undefined}
             helperText={errors?.tabletUrl?.message}
@@ -113,7 +120,8 @@ export const HeaderImageEditor: React.FC<Props> = ({
             margin="normal"
             variant="outlined"
             disabled={isDisabled}
-            fullWidth />
+            fullWidth
+          />
           <TextField
             error={errors?.desktopUrl !== undefined}
             helperText={errors?.desktopUrl?.message}
@@ -125,7 +133,8 @@ export const HeaderImageEditor: React.FC<Props> = ({
             margin="normal"
             variant="outlined"
             disabled={isDisabled}
-            fullWidth />
+            fullWidth
+          />
           <TextField
             error={errors?.altText !== undefined}
             helperText={errors?.altText?.message}
@@ -137,7 +146,8 @@ export const HeaderImageEditor: React.FC<Props> = ({
             margin="normal"
             variant="outlined"
             disabled={isDisabled}
-            fullWidth />
+            fullWidth
+          />
         </>
       )}
     </div>

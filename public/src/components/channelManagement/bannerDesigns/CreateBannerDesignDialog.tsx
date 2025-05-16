@@ -55,7 +55,12 @@ const CreateBannerDesignDialog: React.FC<CreateBannerDesignDialogProps> = ({
     name: '',
   };
 
-  const { register, handleSubmit, errors } = useForm<FormData>({
+  const {
+    register,
+    handleSubmit,
+
+    formState: { errors },
+  } = useForm<FormData>({
     defaultValues,
   });
 
@@ -89,7 +94,8 @@ const CreateBannerDesignDialog: React.FC<CreateBannerDesignDialogProps> = ({
           margin="normal"
           variant="outlined"
           autoFocus
-          fullWidth />
+          fullWidth
+        />
       </DialogContent>
       <DialogActions>
         <Button onClick={handleSubmit(onSubmit)} color="primary">

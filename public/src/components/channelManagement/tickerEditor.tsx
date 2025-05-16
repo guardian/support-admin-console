@@ -63,7 +63,13 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
     currencySymbol: tickerSettings?.currencySymbol || '',
   };
 
-  const { register, handleSubmit, errors, reset } = useForm<FormData>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+
+    formState: { errors },
+  } = useForm<FormData>({
     mode: 'onChange',
     defaultValues,
   });
@@ -157,7 +163,8 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
             margin="normal"
             variant="outlined"
             disabled={isDisabled}
-            fullWidth />
+            fullWidth
+          />
 
           <TextField
             error={!!errors.goalCopy}
@@ -168,7 +175,8 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
             margin="normal"
             variant="outlined"
             disabled={isDisabled}
-            fullWidth />
+            fullWidth
+          />
 
           {(tickerSettings.name === 'US' || tickerSettings.name === 'AU') && (
             <TextField
@@ -180,7 +188,8 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
               margin="normal"
               variant="outlined"
               disabled={isDisabled}
-              fullWidth />
+              fullWidth
+            />
           )}
         </div>
       )}

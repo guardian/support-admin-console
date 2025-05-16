@@ -87,7 +87,13 @@ const HeaderTestVariantContentEditor: React.FC<HeaderTestVariantContentEditorPro
     subheading: content.subheading || '',
   };
 
-  const { register, handleSubmit, errors, trigger } = useForm<HeaderContent>({
+  const {
+    register,
+    handleSubmit,
+    trigger,
+
+    formState: { errors },
+  } = useForm<HeaderContent>({
     mode: 'onChange',
     defaultValues,
   });
@@ -117,69 +123,73 @@ const HeaderTestVariantContentEditor: React.FC<HeaderTestVariantContentEditorPro
   const headingCopyLength = content.heading?.length ?? 0;
   const subheadingCopyLength = content.subheading?.length ?? 0;
 
-  return <>
-    {deviceType !== 'MOBILE' && (
-      <>
-        <Typography className={classes.sectionHeader} variant="h4">
-          {`Content${labelSuffix}`}
-        </Typography>
+  return (
+    <>
+      {deviceType !== 'MOBILE' && (
+        <>
+          <Typography className={classes.sectionHeader} variant="h4">
+            {`Content${labelSuffix}`}
+          </Typography>
 
-        <div className={classes.contentContainer}>
-          <div>
-            <TextField
-              error={errors.heading !== undefined}
-              helperText={errors.heading ? errors.heading.message : ''}
-              onBlur={handleSubmit(onSubmit)}
-              {...register('heading', { validate: templateValidator })}
-              label="Heading"
-              margin="normal"
-              variant="outlined"
-              disabled={!editMode}
-              fullWidth />
+          <div className={classes.contentContainer}>
+            <div>
+              <TextField
+                error={errors.heading !== undefined}
+                helperText={errors.heading ? errors.heading.message : ''}
+                onBlur={handleSubmit(onSubmit)}
+                {...register('heading', { validate: templateValidator })}
+                label="Heading"
+                margin="normal"
+                variant="outlined"
+                disabled={!editMode}
+                fullWidth
+              />
 
-            {headingCopyLength > HEADING_COPY_RECOMMENDED_LENGTH && (
-              <VariantCopyLengthWarning charLimit={HEADING_COPY_RECOMMENDED_LENGTH} />
-            )}
+              {headingCopyLength > HEADING_COPY_RECOMMENDED_LENGTH && (
+                <VariantCopyLengthWarning charLimit={HEADING_COPY_RECOMMENDED_LENGTH} />
+              )}
+            </div>
           </div>
-        </div>
 
-        <div className={classes.contentContainer}>
-          <div>
-            <TextField
-              error={errors.subheading !== undefined}
-              helperText={errors.subheading ? errors.subheading.message : ''}
-              onBlur={handleSubmit(onSubmit)}
-              {...register('subheading', { validate: templateValidator })}
-              label="Sub-heading"
-              margin="normal"
-              variant="outlined"
-              disabled={!editMode}
-              fullWidth />
+          <div className={classes.contentContainer}>
+            <div>
+              <TextField
+                error={errors.subheading !== undefined}
+                helperText={errors.subheading ? errors.subheading.message : ''}
+                onBlur={handleSubmit(onSubmit)}
+                {...register('subheading', { validate: templateValidator })}
+                label="Sub-heading"
+                margin="normal"
+                variant="outlined"
+                disabled={!editMode}
+                fullWidth
+              />
 
-            {subheadingCopyLength > SUBHEADING_COPY_RECOMMENDED_LENGTH && (
-              <VariantCopyLengthWarning charLimit={SUBHEADING_COPY_RECOMMENDED_LENGTH} />
-            )}
+              {subheadingCopyLength > SUBHEADING_COPY_RECOMMENDED_LENGTH && (
+                <VariantCopyLengthWarning charLimit={SUBHEADING_COPY_RECOMMENDED_LENGTH} />
+              )}
+            </div>
           </div>
-        </div>
-      </>
-    )}
+        </>
+      )}
 
-    <Typography className={classes.sectionHeader} variant="h4">
-      {`Buttons${labelSuffix}`}
-    </Typography>
+      <Typography className={classes.sectionHeader} variant="h4">
+        {`Buttons${labelSuffix}`}
+      </Typography>
 
-    <div className={classes.buttonsContainer}>
-      <HeaderTestVariantCtasEditor
-        primaryCta={content.primaryCta}
-        secondaryCta={content.secondaryCta}
-        updatePrimaryCta={updatePrimaryCta}
-        updateSecondaryCta={updateSecondaryCta}
-        isDisabled={!editMode}
-        onValidationChange={onValidationChange}
-        supportSecondaryCta={deviceType !== 'MOBILE'}
-      />
-    </div>
-  </>;
+      <div className={classes.buttonsContainer}>
+        <HeaderTestVariantCtasEditor
+          primaryCta={content.primaryCta}
+          secondaryCta={content.secondaryCta}
+          updatePrimaryCta={updatePrimaryCta}
+          updateSecondaryCta={updateSecondaryCta}
+          isDisabled={!editMode}
+          onValidationChange={onValidationChange}
+          supportSecondaryCta={deviceType !== 'MOBILE'}
+        />
+      </div>
+    </>
+  );
 };
 
 interface HeaderTestVariantEditorProps {

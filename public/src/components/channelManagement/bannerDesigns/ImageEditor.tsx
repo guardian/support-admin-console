@@ -17,7 +17,13 @@ export const ImageEditor: React.FC<Props> = ({
   onValidationChange,
   onChange,
 }: Props) => {
-  const { register, handleSubmit, errors, reset } = useForm<BannerDesignImage>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+
+    formState: { errors },
+  } = useForm<BannerDesignImage>({
     mode: 'onChange',
     defaultValues: image,
   });
@@ -47,7 +53,8 @@ export const ImageEditor: React.FC<Props> = ({
         margin="normal"
         variant="outlined"
         disabled={isDisabled}
-        fullWidth />
+        fullWidth
+      />
       <TextField
         error={errors?.tabletUrl !== undefined}
         helperText={errors?.tabletUrl?.message}
@@ -59,7 +66,8 @@ export const ImageEditor: React.FC<Props> = ({
         margin="normal"
         variant="outlined"
         disabled={isDisabled}
-        fullWidth />
+        fullWidth
+      />
       <TextField
         error={errors?.desktopUrl !== undefined}
         helperText={errors?.desktopUrl?.message}
@@ -71,7 +79,8 @@ export const ImageEditor: React.FC<Props> = ({
         margin="normal"
         variant="outlined"
         disabled={isDisabled}
-        fullWidth />
+        fullWidth
+      />
       <TextField
         error={errors?.altText !== undefined}
         helperText={errors?.altText?.message}
@@ -83,7 +92,8 @@ export const ImageEditor: React.FC<Props> = ({
         margin="normal"
         variant="outlined"
         disabled={isDisabled}
-        fullWidth />
+        fullWidth
+      />
     </div>
   );
 };

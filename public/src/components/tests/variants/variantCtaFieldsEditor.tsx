@@ -27,7 +27,12 @@ const VariantCtaFieldsEditor: React.FC<VariantCtaFieldsEditorProps> = ({
     baseUrl: cta.baseUrl,
   };
 
-  const { register, handleSubmit, errors } = useForm<FormData>({ mode: 'onChange', defaultValues });
+  const {
+    register,
+    handleSubmit,
+
+    formState: { errors },
+  } = useForm<FormData>({ mode: 'onChange', defaultValues });
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
@@ -51,7 +56,8 @@ const VariantCtaFieldsEditor: React.FC<VariantCtaFieldsEditorProps> = ({
         margin="normal"
         variant="outlined"
         disabled={isDisabled}
-        fullWidth />
+        fullWidth
+      />
 
       <TextField
         error={errors.baseUrl !== undefined}
@@ -64,7 +70,8 @@ const VariantCtaFieldsEditor: React.FC<VariantCtaFieldsEditorProps> = ({
         margin="normal"
         variant="outlined"
         disabled={isDisabled}
-        fullWidth />
+        fullWidth
+      />
     </div>
   );
 };

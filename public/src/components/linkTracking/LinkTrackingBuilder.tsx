@@ -128,7 +128,8 @@ export const LinkTrackingBuilder: React.FC = () => {
           })}
           label="URL (without tracking)"
           error={!!errors.url}
-          helperText={errors?.url?.message} />
+          helperText={errors?.url?.message}
+        />
 
         <Typography className={classes.header} variant="h4">
           Campaign
@@ -137,7 +138,8 @@ export const LinkTrackingBuilder: React.FC = () => {
           {...register('campaign', { required: true })}
           label="Campaign"
           error={!!errors.campaign}
-          helperText={errors?.campaign?.message} />
+          helperText={errors?.campaign?.message}
+        />
 
         <Typography className={classes.header} variant="h4">
           Call to action / creative
@@ -146,12 +148,14 @@ export const LinkTrackingBuilder: React.FC = () => {
           {...register('content', { required: true })}
           label="Creative / utm_content / AB test name"
           error={!!errors.content}
-          helperText={errors?.content?.message} />
+          helperText={errors?.content?.message}
+        />
         <TextField
           {...register('term', { required: true })}
           label="Audience segment / utm_term / AB test variant name"
           error={!!errors.term}
-          helperText={errors?.term?.message} />
+          helperText={errors?.term?.message}
+        />
 
         <Typography className={classes.header} variant="h4">
           Placement

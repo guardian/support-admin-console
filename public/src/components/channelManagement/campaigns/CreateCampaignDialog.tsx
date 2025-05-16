@@ -61,7 +61,12 @@ const CreateCampaignDialog: React.FC<CreateCampaignDialogProps> = ({
     description: '',
   };
 
-  const { register, handleSubmit, errors } = useForm<FormData>({
+  const {
+    register,
+    handleSubmit,
+
+    formState: { errors },
+  } = useForm<FormData>({
     defaultValues,
   });
 
@@ -99,7 +104,8 @@ const CreateCampaignDialog: React.FC<CreateCampaignDialogProps> = ({
           margin="normal"
           variant="outlined"
           autoFocus
-          fullWidth />
+          fullWidth
+        />
         <TextField
           className={classes.input}
           error={errors.nickname !== undefined}
@@ -111,7 +117,8 @@ const CreateCampaignDialog: React.FC<CreateCampaignDialogProps> = ({
           label="Nickname"
           margin="normal"
           variant="outlined"
-          fullWidth />
+          fullWidth
+        />
         <TextField
           error={errors.description !== undefined}
           helperText={errors.description ? errors.description.message : ''}
@@ -119,7 +126,8 @@ const CreateCampaignDialog: React.FC<CreateCampaignDialogProps> = ({
           label="Description"
           margin="normal"
           variant="outlined"
-          fullWidth />
+          fullWidth
+        />
       </DialogContent>
       <DialogActions>
         <Button onClick={handleSubmit(onSubmit)} color="primary">

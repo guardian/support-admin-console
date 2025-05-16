@@ -56,7 +56,14 @@ const TestVariantsSplitEditor: React.FC<TestVariantsSplitEditorProps> = ({
     percentage: controlProportionSettings ? controlProportionSettings.proportion * 100 : undefined,
   };
 
-  const { register, errors, handleSubmit, trigger, reset } = useForm<FormState>({
+  const {
+    register,
+    handleSubmit,
+    trigger,
+    reset,
+
+    formState: { errors },
+  } = useForm<FormState>({
     mode: 'onChange',
     defaultValues,
   });
@@ -177,7 +184,8 @@ const TestVariantsSplitEditor: React.FC<TestVariantsSplitEditorProps> = ({
                 InputLabelProps={{ shrink: true }}
                 variant="outlined"
                 fullWidth
-                disabled={isDisabled} />
+                disabled={isDisabled}
+              />
             </div>
 
             {renderVariants(controlProportionSettings.proportion)}

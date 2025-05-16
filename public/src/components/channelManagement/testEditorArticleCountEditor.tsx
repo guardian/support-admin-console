@@ -58,7 +58,13 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
     tagIds: articlesViewedSettings?.tagIds || [],
   };
 
-  const { register, errors, handleSubmit, reset } = useForm<FormData>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+
+    formState: { errors },
+  } = useForm<FormData>({
     mode: 'onChange',
     defaultValues,
   });
@@ -135,7 +141,8 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
                 InputLabelProps={{ shrink: true }}
                 variant="filled"
                 fullWidth
-                disabled={isDisabled} />
+                disabled={isDisabled}
+              />
             </div>
             <div>
               <TextField
@@ -147,7 +154,8 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
                 InputLabelProps={{ shrink: true }}
                 variant="filled"
                 fullWidth
-                disabled={isDisabled} />
+                disabled={isDisabled}
+              />
             </div>
             <div>
               <TextField
@@ -162,7 +170,8 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
                 InputLabelProps={{ shrink: true }}
                 variant="filled"
                 fullWidth
-                disabled={isDisabled} />
+                disabled={isDisabled}
+              />
             </div>
           </div>
           <div>

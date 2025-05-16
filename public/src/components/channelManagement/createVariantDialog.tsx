@@ -56,7 +56,12 @@ const CreateVariantDialog: React.FC<CreateVariantDialogProps> = ({
 }: CreateVariantDialogProps) => {
   const classes = useStyles();
 
-  const { register, handleSubmit, errors } = useForm<FormData>();
+  const {
+    register,
+    handleSubmit,
+
+    formState: { errors },
+  } = useForm<FormData>();
 
   const onSubmit = ({ name }: FormData): void => {
     close();
@@ -96,7 +101,8 @@ const CreateVariantDialog: React.FC<CreateVariantDialogProps> = ({
           margin="normal"
           variant="outlined"
           autoFocus
-          fullWidth />
+          fullWidth
+        />
       </DialogContent>
       <DialogActions>
         <Button onClick={handleSubmit(onSubmit)} color="primary">
