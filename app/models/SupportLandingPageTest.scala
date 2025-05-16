@@ -43,6 +43,7 @@ case class SupportLandingPageVariant(
   copy: SupportLandingPageCopy,
   products: Products,
   tickerSettings: Option[TickerSettings] = None,
+  countdownSettings: Option[CountdownSettings] = None,
 )
 
 case class SupportLandingPageTest(
