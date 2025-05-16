@@ -6,6 +6,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import { CountdownSettings } from './helpers/shared';
 import { EMPTY_ERROR_HELPER_TEXT } from './helpers/validation';
 import Switch from '@mui/material/Switch';
+import Alert from '@mui/lab/Alert';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -16,6 +17,17 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   fieldsContainer: {
     '& > * + *': {
       marginTop: spacing(3),
+    },
+  },
+  switchContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    '& > p': {
+      fontWeight: 500,
+    },
+
+    '& > * + *': {
+      marginLeft: spacing(1),
     },
   },
 }));
@@ -158,30 +170,32 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
             fullWidth
           />
 
-          <FormControlLabel
-            control={
-              <Switch
-                checked={!!countdownSettings.useLocalTime}
-                onChange={onUseLocalTimeChanged}
-                onBlur={handleSubmit(onSubmit)}
-                name="useLocalTime"
-                disabled={isDisabled}
-              />
-            }
-            label="Use Local Time"
-          />
-          <Typography variant="subtitle1" gutterBottom>
-            Local time: E.g. in a US campaign, end at midnight local time. This means users on the
-            east coast stop seeing the countdown before users on the west coast. And if a user on
-            the west coast and a user on the east coast view the page at the same moment, they will
-            each see a different number of hours remaining on the countdown.
-          </Typography>
-          <Typography variant="subtitle1" gutterBottom>
-            UTC: E.g. for a promo code with a midnight expiry, which is always in UTC. This means
-            all users will stop seeing the countdown at the same time, and it will show the same
-            hours/minutes remaining. It also means e.g. if a user on the US east coast views the
-            page at 19:00 local time, then the countdown says 1 hour remaining.
-          </Typography>
+          <div className={classes.switchContainer}>
+            <Typography>UTC</Typography>
+            <Switch
+              checked={countdownSettings.useLocalTime}
+              onChange={onUseLocalTimeChanged}
+              onBlur={handleSubmit(onSubmit)}
+              name="useLocalTime"
+              disabled={isDisabled}
+            />
+            <Typography>Local time</Typography>
+          </div>
+          <Alert severity="info">
+            <p>
+              <strong>Local time</strong>: E.g. in a US campaign, to end at midnight in the
+              user&apos;s local time. This means users on the east coast stop seeing the countdown
+              before users on the west coast. And if a user on the west coast and a user on the east
+              coast view the page at the same moment, they will each see a different number of hours
+              remaining on the countdown.
+            </p>
+            <p>
+              <strong>UTC</strong>: E.g. for a promo code with a midnight expiry, which is always in
+              UTC. This means all users will stop seeing the countdown at the same time, and it will
+              show the same hours/minutes remaining. It also means e.g. if a user on the US east
+              coast views the page at 19:00 local time, then the countdown says 1 hour remaining.
+            </p>
+          </Alert>
 
           <TextField
             inputRef={register({ required: EMPTY_ERROR_HELPER_TEXT })}
