@@ -69,8 +69,8 @@ dependencies:
     specifier: ^18.2.0
     version: 18.3.1(react@18.3.1)
   react-hook-form:
-    specifier: ^6.15.8
-    version: 6.15.8(react@18.3.1)
+    specifier: ^7.56.3
+    version: 7.56.3(react@18.3.1)
   react-qr-code:
     specifier: ^2.0.7
     version: 2.0.15(react@18.3.1)
@@ -7433,10 +7433,11 @@ packages:
       scheduler: 0.23.2
     dev: false
 
-  /react-hook-form@6.15.8(react@18.3.1):
-    resolution: {integrity: sha512-prq82ofMbnRyj5wqDe8hsTRcdR25jQ+B8KtCS7BLCzjFHAwNuCjRwzPuP4eYLsEBjEIeYd6try+pdLdw0kPkpg==}
+  /react-hook-form@7.56.3(react@18.3.1):
+    resolution: {integrity: sha512-IK18V6GVbab4TAo1/cz3kqajxbDPGofdF0w7VHdCo0Nt8PrPlOZcuuDq9YYIV1BtjcX78x0XsldbQRQnQXWXmw==}
+    engines: {node: '>=18.0.0'}
     peerDependencies:
-      react: ^16.8.0 || ^17
+      react: ^16.8.0 || ^17 || ^18 || ^19
     dependencies:
       react: 18.3.1
     dev: false
