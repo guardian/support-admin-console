@@ -105,9 +105,8 @@ const TestVariantsSplitEditor: React.FC<TestVariantsSplitEditorProps> = ({
     }
   };
 
-  const validate = (text: string): string | boolean => {
-    const percentage = Number(text);
-    if (!Number.isNaN(percentage)) {
+  const validate = (percentage: number | undefined): string | boolean => {
+    if (percentage && !Number.isNaN(percentage)) {
       const controlExists = hasControl(variants);
       if (controlExists) {
         const max = 100 / variants.length;
@@ -177,7 +176,8 @@ const TestVariantsSplitEditor: React.FC<TestVariantsSplitEditorProps> = ({
                 helperText={errors.percentage?.message || 'Must be a number'}
                 {...register('percentage', {
                   required: EMPTY_ERROR_HELPER_TEXT,
-                  validate: validate,
+                  valueAsNumber: true,
+                  validate,
                 })}
                 onBlur={handleSubmit(onSubmit(controlProportionSettings))}
                 label="CONTROL"

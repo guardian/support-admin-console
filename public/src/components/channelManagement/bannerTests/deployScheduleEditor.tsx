@@ -3,7 +3,7 @@ import { makeStyles } from '@mui/styles';
 import { FormControl, FormControlLabel, Radio, RadioGroup, TextField, Theme } from '@mui/material';
 import { BannerTestDeploySchedule } from '../../../models/banner';
 import { useForm } from 'react-hook-form';
-import { EMPTY_ERROR_HELPER_TEXT, notNumberValidator } from '../helpers/validation';
+import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -84,7 +84,7 @@ const DeployScheduleEditor: React.FC<DeployScheduleEditorProps> = ({
             helperText={errors.daysBetween?.message || 'Must be a number'}
             {...register('daysBetween', {
               required: EMPTY_ERROR_HELPER_TEXT,
-              validate: notNumberValidator,
+              valueAsNumber: true,
             })}
             onBlur={handleSubmit(onSubmit)}
             label="Days between deploys"

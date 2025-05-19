@@ -121,7 +121,11 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   const classes = getUseStyles(allowMultipleVariants)();
 
   const templateValidator = templateValidatorForPlatform(platform);
-  const lineValidator = (text: string) => templateValidator(text) ?? htmlValidator(text);
+  const lineValidator = (text: string | undefined) => {
+    if (text) {
+      return templateValidator(text) ?? htmlValidator(text);
+    }
+  };
 
   const defaultValues: FormData = {
     heading: variant.heading,
