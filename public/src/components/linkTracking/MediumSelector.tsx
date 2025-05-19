@@ -1,7 +1,8 @@
 import { FormControl, MenuItem, Select, Theme } from '@mui/material';
 import React from 'react';
-import { Control, Controller } from 'react-hook-form';
+import { Control, Controller, FieldErrors } from 'react-hook-form';
 import { makeStyles } from '@mui/styles';
+import { LinkTrackingFormData } from './linkTrackingFormData';
 
 interface Option {
   value: string;
@@ -192,7 +193,9 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 }));
 
 interface Props {
-  control: Control;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any is expected
+  control: Control<LinkTrackingFormData, any, LinkTrackingFormData>;
+  errors: FieldErrors<LinkTrackingFormData>;
   onUpdate: () => void;
 }
 
@@ -200,7 +203,7 @@ interface Props {
  * A selector for choosing a medium. The value is the source and medium separated by a double underscore.
  * This is because the link tracking should contain both, but the source should not be chosen directly by the user.
  */
-export const MediumSelector: React.FC<Props> = ({ control, onUpdate }: Props) => {
+export const MediumSelector: React.FC<Props> = ({ control, errors, onUpdate }: Props) => {
   const classes = useStyles();
 
   return (
@@ -216,7 +219,7 @@ export const MediumSelector: React.FC<Props> = ({ control, onUpdate }: Props) =>
               onUpdate();
               onChange(e);
             }}
-            error={!!control.formState.errors?.medium}
+            error={!!errors?.sourceAndMedium}
           >
             {OPTIONS.map(group => {
               const groupItem = (

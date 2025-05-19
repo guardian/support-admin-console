@@ -5,6 +5,7 @@ import { makeStyles } from '@mui/styles';
 import { MediumSelector } from './MediumSelector';
 import lzstring from 'lz-string';
 import { Link as LinkIcon, OpenInNew } from '@mui/icons-material';
+import { LinkTrackingFormData } from './linkTrackingFormData';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {
@@ -67,14 +68,6 @@ const addHttps = (url: string): string => {
   }
 };
 
-interface FormData {
-  url: string;
-  campaign: string;
-  content: string;
-  term: string;
-  sourceAndMedium: string; // This is the source and medium separated by a double underscore
-}
-
 export const LinkTrackingBuilder: React.FC = () => {
   const classes = useStyles();
   const [link, setLink] = React.useState<string>('');
@@ -84,13 +77,19 @@ export const LinkTrackingBuilder: React.FC = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>({
+  } = useForm<LinkTrackingFormData>({
     defaultValues: {
       url: 'https://support.theguardian.com',
     },
   });
 
-  const onSubmit: SubmitHandler<FormData> = ({ url, campaign, content, term, sourceAndMedium }) => {
+  const onSubmit: SubmitHandler<LinkTrackingFormData> = ({
+    url,
+    campaign,
+    content,
+    term,
+    sourceAndMedium,
+  }) => {
     const urlWithHttps = addHttps(url);
     const [source, medium] = sourceAndMedium.split('__');
 
@@ -160,7 +159,7 @@ export const LinkTrackingBuilder: React.FC = () => {
         <Typography className={classes.header} variant="h4">
           Placement
         </Typography>
-        <MediumSelector onUpdate={resetLink} control={control} />
+        <MediumSelector onUpdate={resetLink} errors={errors} control={control} />
       </div>
 
       <Button type="submit" variant="contained" color="primary" disabled={linkReady}>
