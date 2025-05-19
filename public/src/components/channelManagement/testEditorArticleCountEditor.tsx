@@ -132,11 +132,11 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
               <TextField
                 error={errors.minViews !== undefined}
                 helperText={errors.minViews?.message}
-                onBlur={handleSubmit(onSubmit)}
                 {...register('minViews', {
                   required: EMPTY_ERROR_HELPER_TEXT,
                   validate: notNumberValidator,
                 })}
+                onBlur={handleSubmit(onSubmit)}
                 label="Minimum page views"
                 InputLabelProps={{ shrink: true }}
                 variant="filled"
@@ -148,8 +148,8 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
               <TextField
                 error={errors.maxViews !== undefined}
                 helperText={errors.maxViews?.message}
-                onBlur={handleSubmit(onSubmit)}
                 {...register('maxViews', { validate: notNumberValidator })}
+                onBlur={handleSubmit(onSubmit)}
                 label="Maximum page views"
                 InputLabelProps={{ shrink: true }}
                 variant="filled"
@@ -161,11 +161,11 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
               <TextField
                 error={errors.periodInWeeks !== undefined}
                 helperText={errors.periodInWeeks?.message}
-                onBlur={handleSubmit(onSubmit)}
                 {...register('periodInWeeks', {
                   required: EMPTY_ERROR_HELPER_TEXT,
                   validate: notNumberValidator,
                 })}
+                onBlur={handleSubmit(onSubmit)}
                 label="Time period in weeks"
                 InputLabelProps={{ shrink: true }}
                 variant="filled"

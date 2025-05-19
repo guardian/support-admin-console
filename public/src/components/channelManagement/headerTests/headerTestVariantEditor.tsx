@@ -136,8 +136,8 @@ const HeaderTestVariantContentEditor: React.FC<HeaderTestVariantContentEditorPro
               <TextField
                 error={errors.heading !== undefined}
                 helperText={errors.heading ? errors.heading.message : ''}
-                onBlur={handleSubmit(onSubmit)}
                 {...register('heading', { validate: templateValidator })}
+                onBlur={handleSubmit(onSubmit)}
                 label="Heading"
                 margin="normal"
                 variant="outlined"
@@ -156,8 +156,8 @@ const HeaderTestVariantContentEditor: React.FC<HeaderTestVariantContentEditorPro
               <TextField
                 error={errors.subheading !== undefined}
                 helperText={errors.subheading ? errors.subheading.message : ''}
-                onBlur={handleSubmit(onSubmit)}
                 {...register('subheading', { validate: templateValidator })}
+                onBlur={handleSubmit(onSubmit)}
                 label="Sub-heading"
                 margin="normal"
                 variant="outlined"

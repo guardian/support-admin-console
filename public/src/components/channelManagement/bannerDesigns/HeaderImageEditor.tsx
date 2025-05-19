@@ -99,10 +99,10 @@ export const HeaderImageEditor: React.FC<Props> = ({
           <TextField
             error={errors?.mobileUrl !== undefined}
             helperText={errors?.mobileUrl?.message}
-            onBlur={handleSubmit(onSubmit)}
             {...register('mobileUrl', {
               required: EMPTY_ERROR_HELPER_TEXT,
             })}
+            onBlur={handleSubmit(onSubmit)}
             label="Header Image URL (Mobile)"
             margin="normal"
             variant="outlined"
@@ -112,10 +112,10 @@ export const HeaderImageEditor: React.FC<Props> = ({
           <TextField
             error={errors?.tabletUrl !== undefined}
             helperText={errors?.tabletUrl?.message}
-            onBlur={handleSubmit(onSubmit)}
             {...register('tabletUrl', {
               required: EMPTY_ERROR_HELPER_TEXT,
             })}
+            onBlur={handleSubmit(onSubmit)}
             label="Header Image URL (Tablet)"
             margin="normal"
             variant="outlined"
@@ -125,10 +125,10 @@ export const HeaderImageEditor: React.FC<Props> = ({
           <TextField
             error={errors?.desktopUrl !== undefined}
             helperText={errors?.desktopUrl?.message}
-            onBlur={handleSubmit(onSubmit)}
             {...register('desktopUrl', {
               required: EMPTY_ERROR_HELPER_TEXT,
             })}
+            onBlur={handleSubmit(onSubmit)}
             label="Header Image URL (Dekstop and above)"
             margin="normal"
             variant="outlined"
@@ -138,10 +138,10 @@ export const HeaderImageEditor: React.FC<Props> = ({
           <TextField
             error={errors?.altText !== undefined}
             helperText={errors?.altText?.message}
-            onBlur={handleSubmit(onSubmit)}
             {...register('altText', {
               required: EMPTY_ERROR_HELPER_TEXT,
             })}
+            onBlur={handleSubmit(onSubmit)}
             label="Header Image Description (alt text)"
             margin="normal"
             variant="outlined"

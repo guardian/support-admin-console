@@ -45,10 +45,10 @@ export const ImageEditor: React.FC<Props> = ({
       <TextField
         error={errors?.mobileUrl !== undefined}
         helperText={errors?.mobileUrl?.message}
-        onBlur={handleSubmit(onChange)}
         {...register('mobileUrl', {
           required: EMPTY_ERROR_HELPER_TEXT,
         })}
+        onBlur={handleSubmit(onChange)}
         label="Banner Image URL (Mobile)"
         margin="normal"
         variant="outlined"
@@ -58,10 +58,10 @@ export const ImageEditor: React.FC<Props> = ({
       <TextField
         error={errors?.tabletUrl !== undefined}
         helperText={errors?.tabletUrl?.message}
-        onBlur={handleSubmit(onChange)}
         {...register('tabletUrl', {
           required: EMPTY_ERROR_HELPER_TEXT,
         })}
+        onBlur={handleSubmit(onChange)}
         label="Banner Image URL (Tablet)"
         margin="normal"
         variant="outlined"
@@ -71,10 +71,10 @@ export const ImageEditor: React.FC<Props> = ({
       <TextField
         error={errors?.desktopUrl !== undefined}
         helperText={errors?.desktopUrl?.message}
-        onBlur={handleSubmit(onChange)}
         {...register('desktopUrl', {
           required: EMPTY_ERROR_HELPER_TEXT,
         })}
+        onBlur={handleSubmit(onChange)}
         label="Banner Image URL (Desktop and above)"
         margin="normal"
         variant="outlined"
@@ -84,10 +84,10 @@ export const ImageEditor: React.FC<Props> = ({
       <TextField
         error={errors?.altText !== undefined}
         helperText={errors?.altText?.message}
-        onBlur={handleSubmit(onChange)}
         {...register('altText', {
           required: EMPTY_ERROR_HELPER_TEXT,
         })}
+        onBlur={handleSubmit(onChange)}
         label="Banner Image Description (alt text)"
         margin="normal"
         variant="outlined"

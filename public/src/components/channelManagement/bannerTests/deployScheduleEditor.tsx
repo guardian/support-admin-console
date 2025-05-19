@@ -82,11 +82,11 @@ const DeployScheduleEditor: React.FC<DeployScheduleEditorProps> = ({
           <TextField
             error={errors.daysBetween !== undefined}
             helperText={errors.daysBetween?.message || 'Must be a number'}
-            onBlur={handleSubmit(onSubmit)}
             {...register('daysBetween', {
               required: EMPTY_ERROR_HELPER_TEXT,
               validate: notNumberValidator,
             })}
+            onBlur={handleSubmit(onSubmit)}
             label="Days between deploys"
             InputLabelProps={{ shrink: true }}
             variant="outlined"

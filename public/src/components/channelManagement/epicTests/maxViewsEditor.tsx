@@ -112,11 +112,11 @@ const MaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
             <TextField
               error={errors.maxViewsCount !== undefined}
               helperText={errors.maxViewsCount?.message}
-              onBlur={handleSubmit(onSubmit)}
               {...register('maxViewsCount', {
                 required: EMPTY_ERROR_HELPER_TEXT,
                 validate: notNumberValidator,
               })}
+              onBlur={handleSubmit(onSubmit)}
               label="Maximum view counts"
               InputLabelProps={{ shrink: true }}
               variant="filled"
@@ -128,11 +128,11 @@ const MaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
             <TextField
               error={errors.maxViewsDays !== undefined}
               helperText={errors.maxViewsDays?.message}
-              onBlur={handleSubmit(onSubmit)}
               {...register('maxViewsDays', {
                 required: EMPTY_ERROR_HELPER_TEXT,
                 validate: notNumberValidator,
               })}
+              onBlur={handleSubmit(onSubmit)}
               label="Number of days"
               InputLabelProps={{ shrink: true }}
               variant="filled"
@@ -144,11 +144,11 @@ const MaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
             <TextField
               error={errors.minDaysBetweenViews !== undefined}
               helperText={errors.minDaysBetweenViews?.message}
-              onBlur={handleSubmit(onSubmit)}
               {...register('minDaysBetweenViews', {
                 required: EMPTY_ERROR_HELPER_TEXT,
                 validate: notNumberValidator,
               })}
+              onBlur={handleSubmit(onSubmit)}
               label="Minimum days between views"
               InputLabelProps={{ shrink: true }}
               variant="filled"

@@ -48,10 +48,10 @@ const EpicTestNewsletter: React.FC<EpicTestNewsletterProps> = ({
         <TextField
           error={errors.newsletterId !== undefined}
           helperText={errors.newsletterId?.message}
-          onBlur={handleSubmit(onSubmit)}
           {...register('newsletterId', {
             required: EMPTY_ERROR_HELPER_TEXT,
           })}
+          onBlur={handleSubmit(onSubmit)}
           label="Newsletter Id"
           margin="normal"
           variant="outlined"
@@ -63,10 +63,10 @@ const EpicTestNewsletter: React.FC<EpicTestNewsletterProps> = ({
         <TextField
           error={errors.successDescription !== undefined}
           helperText={errors.successDescription?.message}
-          onBlur={handleSubmit(onSubmit)}
           {...register('successDescription', {
             required: EMPTY_ERROR_HELPER_TEXT,
           })}
+          onBlur={handleSubmit(onSubmit)}
           label="Sign up success message"
           margin="normal"
           variant="outlined"

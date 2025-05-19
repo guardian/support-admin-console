@@ -48,10 +48,10 @@ const VariantCtaFieldsEditor: React.FC<VariantCtaFieldsEditorProps> = ({
       <TextField
         error={errors.text !== undefined}
         helperText={errors.text?.message}
-        onBlur={handleSubmit(onSubmit)}
         {...register('text', {
           required: EMPTY_ERROR_HELPER_TEXT,
         })}
+        onBlur={handleSubmit(onSubmit)}
         label="Button copy"
         margin="normal"
         variant="outlined"
@@ -62,10 +62,10 @@ const VariantCtaFieldsEditor: React.FC<VariantCtaFieldsEditorProps> = ({
       <TextField
         error={errors.baseUrl !== undefined}
         helperText={errors.baseUrl?.message}
-        onBlur={handleSubmit(onSubmit)}
         {...register('baseUrl', {
           required: EMPTY_ERROR_HELPER_TEXT,
         })}
+        onBlur={handleSubmit(onSubmit)}
         label="Button destination"
         margin="normal"
         variant="outlined"

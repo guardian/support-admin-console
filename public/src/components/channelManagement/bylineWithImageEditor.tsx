@@ -70,10 +70,10 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
       <TextField
         error={errors.name !== undefined}
         helperText={errors.name?.message}
-        onBlur={handleSubmit(update)}
         {...register('name', {
           required: EMPTY_ERROR_HELPER_TEXT,
         })}
+        onBlur={handleSubmit(update)}
         label="Name"
         margin="normal"
         variant="outlined"
@@ -81,8 +81,8 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
         fullWidth
       />
       <TextField
-        onBlur={handleSubmit(update)}
         {...register('description')}
+        onBlur={handleSubmit(update)}
         label="Title or description"
         margin="normal"
         variant="outlined"
@@ -99,7 +99,6 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
           errors?.headshot?.mainUrl?.message ??
           'Image dimensions should be roughly square, with a transparent background'
         }
-        onBlur={handleSubmit(update)}
         {...register('headshot.mainUrl', {
           validate: mainUrl => {
             // required if altText is set
@@ -109,6 +108,7 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
             return true;
           },
         })}
+        onBlur={handleSubmit(update)}
         label="Image URL"
         margin="normal"
         variant="outlined"
@@ -118,7 +118,6 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
       <TextField
         error={errors?.headshot?.altText !== undefined}
         helperText={errors?.headshot?.altText?.message ?? ''}
-        onBlur={handleSubmit(update)}
         {...register('headshot.altText', {
           validate: altText => {
             // required if mainUrl is set
@@ -128,6 +127,7 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
             return true;
           },
         })}
+        onBlur={handleSubmit(update)}
         label="Image alt-text"
         margin="normal"
         variant="outlined"

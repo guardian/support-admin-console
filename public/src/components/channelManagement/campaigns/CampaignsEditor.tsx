@@ -205,8 +205,8 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
               <TextField
                 error={errors.description !== undefined}
                 helperText={errors.description ? errors.description.message : ''}
-                onBlur={handleSubmit(onSubmit)}
                 {...register('description')}
+                onBlur={handleSubmit(onSubmit)}
                 label="Description"
                 margin="normal"
                 variant="outlined"

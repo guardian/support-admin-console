@@ -31,7 +31,6 @@ const VariantSeparateArticleCountEditor: React.FC<VariantSeparateArticleCountEdi
   const {
     register,
     handleSubmit,
-
     formState: { errors },
   } = useForm<FormData>({ mode: 'onChange', defaultValues });
 
@@ -59,8 +58,8 @@ const VariantSeparateArticleCountEditor: React.FC<VariantSeparateArticleCountEdi
       <TextField
         error={errors.copy !== undefined}
         helperText={errors.copy?.message}
-        onBlur={handleSubmit(onSubmit)}
         {...register('copy')}
+        onBlur={handleSubmit(onSubmit)}
         label="Article count copy"
         margin="normal"
         variant="outlined"

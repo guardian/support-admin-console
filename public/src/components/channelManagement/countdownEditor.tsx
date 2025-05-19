@@ -166,8 +166,8 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
           <TextField
             error={!!errors.overwriteHeadingLabel}
             helperText={errors?.overwriteHeadingLabel?.message}
-            onBlur={handleSubmit(onSubmit)}
             {...register('overwriteHeadingLabel', { required: EMPTY_ERROR_HELPER_TEXT })}
+            onBlur={handleSubmit(onSubmit)}
             label="Overwrite heading text"
             margin="normal"
             variant="outlined"
@@ -205,8 +205,8 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
           <TextField
             error={!!errors.countdownStartTimestamp}
             helperText={errors?.countdownStartTimestamp?.message}
-            onBlur={handleSubmit(onSubmit)}
             {...register('countdownStartTimestamp', { required: EMPTY_ERROR_HELPER_TEXT })}
+            onBlur={handleSubmit(onSubmit)}
             label="Start Date"
             type={'datetime-local'}
             defaultValue={new Date().toISOString().slice(0, 19)}
@@ -219,8 +219,8 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
           <TextField
             error={!!errors.countdownDeadlineTimestamp}
             helperText={errors?.countdownDeadlineTimestamp?.message}
-            onBlur={handleSubmit(onSubmit)}
             {...register('countdownDeadlineTimestamp', { required: EMPTY_ERROR_HELPER_TEXT })}
+            onBlur={handleSubmit(onSubmit)}
             label="End Date"
             type={'datetime-local'}
             defaultValue={new Date().toISOString().slice(0, 19)}
@@ -233,8 +233,8 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
           <TextField
             error={!!errors.backgroundColor}
             helperText={errors?.backgroundColor?.message}
-            onBlur={handleSubmit(onSubmit)}
             {...register('backgroundColor', { required: true })}
+            onBlur={handleSubmit(onSubmit)}
             label="Background Color"
             margin="normal"
             variant="outlined"
@@ -245,8 +245,8 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
           <TextField
             error={!!errors.foregroundColor}
             helperText={errors?.foregroundColor?.message}
-            onBlur={handleSubmit(onSubmit)}
             {...register('foregroundColor', { required: true })}
+            onBlur={handleSubmit(onSubmit)}
             label="Foreground Color"
             margin="normal"
             variant="outlined"

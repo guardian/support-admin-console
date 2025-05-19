@@ -157,8 +157,8 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
           <TextField
             error={!!errors.countLabel}
             helperText={errors?.countLabel?.message}
-            onBlur={handleSubmit(onSubmit)}
             {...register('countLabel', { required: EMPTY_ERROR_HELPER_TEXT })}
+            onBlur={handleSubmit(onSubmit)}
             label="Heading"
             margin="normal"
             variant="outlined"
@@ -169,8 +169,8 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
           <TextField
             error={!!errors.goalCopy}
             helperText={errors?.goalCopy?.message}
-            onBlur={handleSubmit(onSubmit)}
             {...register('goalCopy', { required: EMPTY_ERROR_HELPER_TEXT })}
+            onBlur={handleSubmit(onSubmit)}
             label="Goal Copy"
             margin="normal"
             variant="outlined"
@@ -182,8 +182,8 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
             <TextField
               error={!!errors.currencySymbol}
               helperText={errors?.currencySymbol?.message}
-              onBlur={handleSubmit(onSubmit)}
               {...register('currencySymbol', { required: true })}
+              onBlur={handleSubmit(onSubmit)}
               label="Currency"
               margin="normal"
               variant="outlined"

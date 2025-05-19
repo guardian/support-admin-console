@@ -68,10 +68,10 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
       <TextField
         error={errors.mainUrl !== undefined}
         helperText={errors.mainUrl?.message ?? guidance}
-        onBlur={handleSubmit(updateImage)}
         {...register('mainUrl', {
           required: EMPTY_ERROR_HELPER_TEXT,
         })}
+        onBlur={handleSubmit(updateImage)}
         label="Image URL"
         margin="normal"
         variant="outlined"
@@ -81,10 +81,10 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
       <TextField
         error={errors.altText !== undefined}
         helperText={errors.altText?.message}
-        onBlur={handleSubmit(updateImage)}
         {...register('altText', {
           required: EMPTY_ERROR_HELPER_TEXT,
         })}
+        onBlur={handleSubmit(updateImage)}
         label="Image alt-text"
         margin="normal"
         variant="outlined"
