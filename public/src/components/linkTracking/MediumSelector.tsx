@@ -208,7 +208,8 @@ export const MediumSelector: React.FC<Props> = ({ control, onUpdate }: Props) =>
       <Controller
         name="sourceAndMedium"
         rules={{ required: true }}
-        render={({ onChange, value }) => (
+        // render={({ onChange, value }) => (
+        render={({ field: { onChange, value } }) => (
           <Select
             value={value}
             onChange={e => {

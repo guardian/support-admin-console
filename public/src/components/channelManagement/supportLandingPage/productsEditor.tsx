@@ -250,7 +250,7 @@ export const ProductsEditor: React.FC<ProductsEditorProps> = ({
           key={productKey}
           control={control}
           name={productKey}
-          render={field => (
+          render={({ field }) => (
             <ProductEditor
               productKey={productKey}
               editMode={editMode}

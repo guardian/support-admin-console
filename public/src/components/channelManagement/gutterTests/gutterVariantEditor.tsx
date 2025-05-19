@@ -196,7 +196,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
               getEmptyParagraphsError(paras) ??
               paras.map(templateValidator).find((result: string | undefined) => !!result),
           }}
-          render={data => {
+          render={({ field }) => {
             return (
               <RichTextEditor
                 error={errors.bodyCopy !== undefined || copyLength > recommendedLength}
@@ -206,9 +206,9 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                       errors.bodyCopy.message || errors.bodyCopy.type
                     : getParagraphsHelperText()
                 }
-                copyData={data.value}
+                copyData={field.value}
                 updateCopy={paras => {
-                  data.onChange(paras);
+                  field.onChange(paras);
                   handleSubmit(setValidatedFields)();
                 }}
                 name="copy"

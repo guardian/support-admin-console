@@ -217,16 +217,16 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
               <Controller
                 name="isActive"
                 control={control}
-                render={data => (
+                render={({ field }) => (
                   <FormControlLabel
                     control={
                       <Switch
                         {...register('isActive')}
                         onChange={e => {
-                          data.onChange(e.target.checked);
+                          field.onChange(e.target.checked);
                           handleSubmit(onSubmit)();
                         }}
-                        checked={data.value}
+                        checked={field.value}
                         disabled={!editMode}
                       />
                     }
@@ -238,13 +238,13 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
               <Controller
                 name="notes"
                 control={control}
-                render={data => {
+                render={({ field }) => {
                   return (
                     <RichTextEditor
                       error={errors.notes !== undefined}
-                      copyData={data.value}
+                      copyData={field.value}
                       updateCopy={pars => {
-                        data.onChange(pars);
+                        field.onChange(pars);
                         handleSubmit(onSubmit)();
                       }}
                       name="notes"
