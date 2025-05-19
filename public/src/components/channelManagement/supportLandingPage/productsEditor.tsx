@@ -136,7 +136,7 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
               <TextField
                 label="Benefit Copy"
                 required={true}
-                {...register(`benefits[${index}].copy`, {
+                {...register(`benefits.${index}.copy`, {
                   required: EMPTY_ERROR_HELPER_TEXT,
                   validate: copyLengthValidator(116),
                 })}
@@ -151,7 +151,7 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
             <Grid item xs={3}>
               <TextField
                 label="Tooltip (optional)"
-                {...register(`benefits[${index}].tooltip`)}
+                {...register(`benefits.${index}.tooltip`)}
                 error={!!errors.benefits?.[index]?.tooltip}
                 defaultValue={benefit.tooltip}
                 onBlur={handleSubmit(onProductChange)}
@@ -162,7 +162,7 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
             <Grid item xs={2}>
               <TextField
                 label="Pill (optional)"
-                {...register(`benefits[${index}].label.copy`)}
+                {...register(`benefits.${index}.label.copy`)}
                 error={!!errors.benefits?.[index]?.label?.copy}
                 defaultValue={benefit.label?.copy}
                 onBlur={handleSubmit(onProductChange)}
