@@ -95,7 +95,7 @@ const GenericColourInput = <T extends unknown>({
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(name, isValid);
-  }, [errors]);
+  }, [errors.colour]);
 
   useEffect(() => {
     // necessary to reset fields if user discards changes

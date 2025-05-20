@@ -33,7 +33,7 @@ export const ImageEditor: React.FC<Props> = ({
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
-  }, [errors]);
+  }, [errors.desktopUrl, errors.tabletUrl, errors.mobileUrl, errors.altText]);
 
   useEffect(() => {
     // necessary to reset fields if user discards changes

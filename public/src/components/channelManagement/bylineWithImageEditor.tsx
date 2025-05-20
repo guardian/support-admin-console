@@ -52,7 +52,7 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
-  }, [errors]);
+  }, [errors.name, errors.description, errors.headshot]);
 
   const update = (byline: BylineWithImage): void => {
     if (!byline.headshot?.mainUrl && !byline.headshot?.altText) {

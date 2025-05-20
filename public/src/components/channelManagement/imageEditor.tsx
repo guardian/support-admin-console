@@ -61,7 +61,7 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
-  }, [errors]);
+  }, [errors.altText, errors.mainUrl]);
 
   return (
     <div>
