@@ -43,7 +43,13 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
 }: ImageEditorProps) => {
   const defaultValues: Image = image;
 
-  const { register, handleSubmit, errors, trigger } = useForm<Image>({
+  const {
+    register,
+    handleSubmit,
+    trigger,
+
+    formState: { errors },
+  } = useForm<Image>({
     mode: 'onChange',
     defaultValues,
   });
@@ -55,18 +61,17 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
-  }, [errors]);
+  }, [errors.altText, errors.mainUrl]);
 
   return (
     <div>
       <TextField
-        inputRef={register({
-          required: EMPTY_ERROR_HELPER_TEXT,
-        })}
         error={errors.mainUrl !== undefined}
         helperText={errors.mainUrl?.message ?? guidance}
+        {...register('mainUrl', {
+          required: EMPTY_ERROR_HELPER_TEXT,
+        })}
         onBlur={handleSubmit(updateImage)}
-        name="mainUrl"
         label="Image URL"
         margin="normal"
         variant="outlined"
@@ -74,13 +79,12 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
         fullWidth
       />
       <TextField
-        inputRef={register({
-          required: EMPTY_ERROR_HELPER_TEXT,
-        })}
         error={errors.altText !== undefined}
         helperText={errors.altText?.message}
+        {...register('altText', {
+          required: EMPTY_ERROR_HELPER_TEXT,
+        })}
         onBlur={handleSubmit(updateImage)}
-        name="altText"
         label="Image alt-text"
         margin="normal"
         variant="outlined"

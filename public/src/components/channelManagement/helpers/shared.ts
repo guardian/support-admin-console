@@ -281,11 +281,23 @@ export enum TickerName {
 
 interface TickerCopy {
   countLabel: string;
+  goalCopy: string;
 }
 export interface TickerSettings {
   currencySymbol: string;
   copy: TickerCopy;
   name: TickerName;
+}
+
+export interface CountdownSettings {
+  overwriteHeadingLabel: string;
+  countdownStartTimestamp: string;
+  countdownDeadlineTimestamp: string;
+  useLocalTime: boolean;
+  theme: {
+    backgroundColor: string;
+    foregroundColor: string;
+  };
 }
 
 export type ContributionFrequency = 'ONE_OFF' | 'MONTHLY' | 'ANNUAL';

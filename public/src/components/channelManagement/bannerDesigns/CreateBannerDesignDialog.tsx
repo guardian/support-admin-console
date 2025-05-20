@@ -55,7 +55,12 @@ const CreateBannerDesignDialog: React.FC<CreateBannerDesignDialogProps> = ({
     name: '',
   };
 
-  const { register, handleSubmit, errors } = useForm<FormData>({
+  const {
+    register,
+    handleSubmit,
+
+    formState: { errors },
+  } = useForm<FormData>({
     defaultValues,
   });
 
@@ -75,7 +80,9 @@ const CreateBannerDesignDialog: React.FC<CreateBannerDesignDialogProps> = ({
       <DialogContent dividers>
         <TextField
           className={classes.input}
-          inputRef={register({
+          error={errors.name !== undefined}
+          helperText={errors.name ? errors.name.message : ''}
+          {...register('name', {
             required: EMPTY_ERROR_HELPER_TEXT,
             pattern: {
               value: VALID_CHARACTERS_REGEX,
@@ -83,9 +90,6 @@ const CreateBannerDesignDialog: React.FC<CreateBannerDesignDialogProps> = ({
             },
             validate: createDuplicateValidator(existingNames),
           })}
-          error={errors.name !== undefined}
-          helperText={errors.name ? errors.name.message : ''}
-          name="name"
           label="Banner design name"
           margin="normal"
           variant="outlined"

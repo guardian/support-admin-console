@@ -27,7 +27,12 @@ const VariantCtaFieldsEditor: React.FC<VariantCtaFieldsEditorProps> = ({
     baseUrl: cta.baseUrl,
   };
 
-  const { register, handleSubmit, errors } = useForm<FormData>({ mode: 'onChange', defaultValues });
+  const {
+    register,
+    handleSubmit,
+
+    formState: { errors },
+  } = useForm<FormData>({ mode: 'onChange', defaultValues });
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
@@ -41,13 +46,12 @@ const VariantCtaFieldsEditor: React.FC<VariantCtaFieldsEditorProps> = ({
   return (
     <div>
       <TextField
-        inputRef={register({
-          required: EMPTY_ERROR_HELPER_TEXT,
-        })}
         error={errors.text !== undefined}
         helperText={errors.text?.message}
+        {...register('text', {
+          required: EMPTY_ERROR_HELPER_TEXT,
+        })}
         onBlur={handleSubmit(onSubmit)}
-        name="text"
         label="Button copy"
         margin="normal"
         variant="outlined"
@@ -56,13 +60,12 @@ const VariantCtaFieldsEditor: React.FC<VariantCtaFieldsEditorProps> = ({
       />
 
       <TextField
-        inputRef={register({
-          required: EMPTY_ERROR_HELPER_TEXT,
-        })}
         error={errors.baseUrl !== undefined}
         helperText={errors.baseUrl?.message}
+        {...register('baseUrl', {
+          required: EMPTY_ERROR_HELPER_TEXT,
+        })}
         onBlur={handleSubmit(onSubmit)}
-        name="baseUrl"
         label="Button destination"
         margin="normal"
         variant="outlined"

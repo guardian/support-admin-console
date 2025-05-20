@@ -79,6 +79,7 @@ const buildVariantForPreview = (
         currencySymbol: '£',
         copy: {
           countLabel: 'contributions in May',
+          goalCopy: 'goal',
         },
         name: TickerName.US,
       }

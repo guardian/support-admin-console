@@ -5,6 +5,7 @@ import { makeStyles } from '@mui/styles';
 import { MediumSelector } from './MediumSelector';
 import lzstring from 'lz-string';
 import { Link as LinkIcon, OpenInNew } from '@mui/icons-material';
+import { LinkTrackingFormData } from './linkTrackingFormData';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {
@@ -67,14 +68,6 @@ const addHttps = (url: string): string => {
   }
 };
 
-interface FormData {
-  url: string;
-  campaign: string;
-  content: string;
-  term: string;
-  sourceAndMedium: string; // This is the source and medium separated by a double underscore
-}
-
 export const LinkTrackingBuilder: React.FC = () => {
   const classes = useStyles();
   const [link, setLink] = React.useState<string>('');
@@ -84,13 +77,19 @@ export const LinkTrackingBuilder: React.FC = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>({
+  } = useForm<LinkTrackingFormData>({
     defaultValues: {
       url: 'https://support.theguardian.com',
     },
   });
 
-  const onSubmit: SubmitHandler<FormData> = ({ url, campaign, content, term, sourceAndMedium }) => {
+  const onSubmit: SubmitHandler<LinkTrackingFormData> = ({
+    url,
+    campaign,
+    content,
+    term,
+    sourceAndMedium,
+  }) => {
     const urlWithHttps = addHttps(url);
     const [source, medium] = sourceAndMedium.split('__');
 
@@ -111,9 +110,7 @@ export const LinkTrackingBuilder: React.FC = () => {
     >
       <div className={classes.fieldsContainer}>
         <TextField
-          name="url"
-          label="URL (without tracking)"
-          inputRef={register({
+          {...register('url', {
             required: true,
             validate: value => {
               // Check it's a valid url and has no querystring
@@ -128,6 +125,7 @@ export const LinkTrackingBuilder: React.FC = () => {
               }
             },
           })}
+          label="URL (without tracking)"
           error={!!errors.url}
           helperText={errors?.url?.message}
         />
@@ -136,9 +134,8 @@ export const LinkTrackingBuilder: React.FC = () => {
           Campaign
         </Typography>
         <TextField
-          name="campaign"
+          {...register('campaign', { required: true })}
           label="Campaign"
-          inputRef={register({ required: true })}
           error={!!errors.campaign}
           helperText={errors?.campaign?.message}
         />
@@ -147,16 +144,14 @@ export const LinkTrackingBuilder: React.FC = () => {
           Call to action / creative
         </Typography>
         <TextField
-          name="content"
+          {...register('content', { required: true })}
           label="Creative / utm_content / AB test name"
-          inputRef={register({ required: true })}
           error={!!errors.content}
           helperText={errors?.content?.message}
         />
         <TextField
-          name="term"
+          {...register('term', { required: true })}
           label="Audience segment / utm_term / AB test variant name"
-          inputRef={register({ required: true })}
           error={!!errors.term}
           helperText={errors?.term?.message}
         />
@@ -164,7 +159,7 @@ export const LinkTrackingBuilder: React.FC = () => {
         <Typography className={classes.header} variant="h4">
           Placement
         </Typography>
-        <MediumSelector onUpdate={resetLink} control={control} />
+        <MediumSelector onUpdate={resetLink} errors={errors} control={control} />
       </div>
 
       <Button type="submit" variant="contained" color="primary" disabled={linkReady}>

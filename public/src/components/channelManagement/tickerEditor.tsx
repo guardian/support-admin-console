@@ -29,12 +29,14 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 
 interface FormData {
   countLabel: string;
+  goalCopy: string;
   currencySymbol: string;
 }
 
 const DEFAULT_TICKER_SETTINGS: TickerSettings = {
   copy: {
     countLabel: 'Contributions',
+    goalCopy: 'goal',
   },
   currencySymbol: '$',
   name: TickerName.US,
@@ -57,22 +59,29 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
 
   const defaultValues: FormData = {
     countLabel: tickerSettings?.copy.countLabel || '',
+    goalCopy: tickerSettings?.copy.goalCopy || '',
     currencySymbol: tickerSettings?.currencySymbol || '',
   };
 
-  const { register, handleSubmit, errors, reset } = useForm<FormData>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+
+    formState: { errors },
+  } = useForm<FormData>({
     mode: 'onChange',
     defaultValues,
   });
 
   useEffect(() => {
     reset(defaultValues);
-  }, [defaultValues.countLabel, defaultValues.currencySymbol]);
+  }, [defaultValues.countLabel, defaultValues.goalCopy, defaultValues.currencySymbol]);
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
-  }, [errors.countLabel, errors.currencySymbol]);
+  }, [errors.countLabel, errors.goalCopy, errors.currencySymbol]);
 
   const onCheckboxChanged = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const isChecked = event.target.checked;
@@ -89,11 +98,11 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
       });
   };
 
-  const onSubmit = ({ countLabel, currencySymbol }: FormData): void => {
+  const onSubmit = ({ countLabel, goalCopy, currencySymbol }: FormData): void => {
     tickerSettings &&
       updateTickerSettings({
         ...tickerSettings,
-        copy: { countLabel },
+        copy: { countLabel, goalCopy: goalCopy ?? 'goal' },
         currencySymbol: currencySymbol ?? '',
       });
   };
@@ -146,12 +155,23 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
           </div>
 
           <TextField
-            inputRef={register({ required: EMPTY_ERROR_HELPER_TEXT })}
             error={!!errors.countLabel}
             helperText={errors?.countLabel?.message}
+            {...register('countLabel', { required: EMPTY_ERROR_HELPER_TEXT })}
             onBlur={handleSubmit(onSubmit)}
-            name="countLabel"
             label="Heading"
+            margin="normal"
+            variant="outlined"
+            disabled={isDisabled}
+            fullWidth
+          />
+
+          <TextField
+            error={!!errors.goalCopy}
+            helperText={errors?.goalCopy?.message}
+            {...register('goalCopy', { required: EMPTY_ERROR_HELPER_TEXT })}
+            onBlur={handleSubmit(onSubmit)}
+            label="Goal Copy"
             margin="normal"
             variant="outlined"
             disabled={isDisabled}
@@ -160,11 +180,10 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
 
           {(tickerSettings.name === 'US' || tickerSettings.name === 'AU') && (
             <TextField
-              inputRef={register({ required: true })}
               error={!!errors.currencySymbol}
               helperText={errors?.currencySymbol?.message}
+              {...register('currencySymbol', { required: true })}
               onBlur={handleSubmit(onSubmit)}
-              name="currencySymbol"
               label="Currency"
               margin="normal"
               variant="outlined"

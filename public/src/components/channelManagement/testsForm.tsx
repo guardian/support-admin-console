@@ -220,6 +220,14 @@ export const TestsForm = <T extends Test>(
     ): void => {
       const oldTest = tests.find(test => test.name === oldName);
       if (oldTest) {
+        // Replace any testNames on the methodologies
+        const methodologies = oldTest.methodologies.map(methodology => ({
+          ...methodology,
+          testName: methodology.testName
+            ? addMethodologyToTestName(newName, methodology)
+            : undefined,
+        }));
+
         const newTest: T = {
           ...oldTest,
           name: newName,
@@ -233,10 +241,7 @@ export const TestsForm = <T extends Test>(
           },
           isNew: true,
           campaignName,
-          methodologies: oldTest.methodologies.map(methodology => ({
-            ...methodology,
-            testName: addMethodologyToTestName(newName, methodology),
-          })),
+          methodologies,
         };
         setTests([...tests, newTest]);
         setSelectedTestName(newName);

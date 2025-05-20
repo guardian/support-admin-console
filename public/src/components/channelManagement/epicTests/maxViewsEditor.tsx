@@ -49,7 +49,13 @@ const MaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
     minDaysBetweenViews: maxEpicViews?.minDaysBetweenViews.toString() || '',
   };
 
-  const { register, errors, handleSubmit, reset } = useForm<FormData>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+
+    formState: { errors },
+  } = useForm<FormData>({
     mode: 'onChange',
     defaultValues,
   });
@@ -104,14 +110,13 @@ const MaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
         <div className={classes.formContainer}>
           <div>
             <TextField
-              inputRef={register({
+              error={errors.maxViewsCount !== undefined}
+              helperText={errors.maxViewsCount?.message}
+              {...register('maxViewsCount', {
                 required: EMPTY_ERROR_HELPER_TEXT,
                 validate: notNumberValidator,
               })}
-              error={errors.maxViewsCount !== undefined}
-              helperText={errors.maxViewsCount?.message}
               onBlur={handleSubmit(onSubmit)}
-              name="maxViewsCount"
               label="Maximum view counts"
               InputLabelProps={{ shrink: true }}
               variant="filled"
@@ -121,14 +126,13 @@ const MaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
           </div>
           <div>
             <TextField
-              inputRef={register({
+              error={errors.maxViewsDays !== undefined}
+              helperText={errors.maxViewsDays?.message}
+              {...register('maxViewsDays', {
                 required: EMPTY_ERROR_HELPER_TEXT,
                 validate: notNumberValidator,
               })}
-              error={errors.maxViewsDays !== undefined}
-              helperText={errors.maxViewsDays?.message}
               onBlur={handleSubmit(onSubmit)}
-              name="maxViewsDays"
               label="Number of days"
               InputLabelProps={{ shrink: true }}
               variant="filled"
@@ -138,14 +142,13 @@ const MaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
           </div>
           <div>
             <TextField
-              inputRef={register({
+              error={errors.minDaysBetweenViews !== undefined}
+              helperText={errors.minDaysBetweenViews?.message}
+              {...register('minDaysBetweenViews', {
                 required: EMPTY_ERROR_HELPER_TEXT,
                 validate: notNumberValidator,
               })}
-              error={errors.minDaysBetweenViews !== undefined}
-              helperText={errors.minDaysBetweenViews?.message}
               onBlur={handleSubmit(onSubmit)}
-              name="minDaysBetweenViews"
               label="Minimum days between views"
               InputLabelProps={{ shrink: true }}
               variant="filled"

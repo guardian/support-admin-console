@@ -150,7 +150,14 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
 
   const updatePage = () => doDataFetch(name);
 
-  const { register, handleSubmit, errors, trigger, control } = useForm<FormData>({
+  const {
+    register,
+    handleSubmit,
+    trigger,
+    control,
+
+    formState: { errors },
+  } = useForm<FormData>({
     mode: 'onChange',
     defaultValues,
   });
@@ -196,11 +203,10 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
               </div>
 
               <TextField
-                inputRef={register()}
                 error={errors.description !== undefined}
                 helperText={errors.description ? errors.description.message : ''}
+                {...register('description')}
                 onBlur={handleSubmit(onSubmit)}
-                name="description"
                 label="Description"
                 margin="normal"
                 variant="outlined"
@@ -211,17 +217,16 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
               <Controller
                 name="isActive"
                 control={control}
-                render={data => (
+                render={({ field }) => (
                   <FormControlLabel
                     control={
                       <Switch
-                        inputRef={register()}
-                        name="isActive"
+                        {...register('isActive')}
                         onChange={e => {
-                          data.onChange(e.target.checked);
+                          field.onChange(e.target.checked);
                           handleSubmit(onSubmit)();
                         }}
-                        checked={data.value}
+                        checked={field.value}
                         disabled={!editMode}
                       />
                     }
@@ -233,13 +238,13 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
               <Controller
                 name="notes"
                 control={control}
-                render={data => {
+                render={({ field }) => {
                   return (
                     <RichTextEditor
                       error={errors.notes !== undefined}
-                      copyData={data.value}
+                      copyData={field.value}
                       updateCopy={pars => {
-                        data.onChange(pars);
+                        field.onChange(pars);
                         handleSubmit(onSubmit)();
                       }}
                       name="notes"
