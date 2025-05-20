@@ -31,7 +31,13 @@ export const HeaderImageEditor: React.FC<Props> = ({
     altText: headerImage?.altText ?? '',
   };
 
-  const { register, handleSubmit, errors, reset } = useForm<BannerDesignHeaderImage>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+
+    formState: { errors },
+  } = useForm<BannerDesignHeaderImage>({
     mode: 'onChange',
     defaultValues,
   });
@@ -91,13 +97,12 @@ export const HeaderImageEditor: React.FC<Props> = ({
       {headerImage && (
         <>
           <TextField
-            inputRef={register({
-              required: EMPTY_ERROR_HELPER_TEXT,
-            })}
             error={errors?.mobileUrl !== undefined}
             helperText={errors?.mobileUrl?.message}
+            {...register('mobileUrl', {
+              required: EMPTY_ERROR_HELPER_TEXT,
+            })}
             onBlur={handleSubmit(onSubmit)}
-            name="mobileUrl"
             label="Header Image URL (Mobile)"
             margin="normal"
             variant="outlined"
@@ -105,13 +110,12 @@ export const HeaderImageEditor: React.FC<Props> = ({
             fullWidth
           />
           <TextField
-            inputRef={register({
-              required: EMPTY_ERROR_HELPER_TEXT,
-            })}
             error={errors?.tabletUrl !== undefined}
             helperText={errors?.tabletUrl?.message}
+            {...register('tabletUrl', {
+              required: EMPTY_ERROR_HELPER_TEXT,
+            })}
             onBlur={handleSubmit(onSubmit)}
-            name="tabletUrl"
             label="Header Image URL (Tablet)"
             margin="normal"
             variant="outlined"
@@ -119,13 +123,12 @@ export const HeaderImageEditor: React.FC<Props> = ({
             fullWidth
           />
           <TextField
-            inputRef={register({
-              required: EMPTY_ERROR_HELPER_TEXT,
-            })}
             error={errors?.desktopUrl !== undefined}
             helperText={errors?.desktopUrl?.message}
+            {...register('desktopUrl', {
+              required: EMPTY_ERROR_HELPER_TEXT,
+            })}
             onBlur={handleSubmit(onSubmit)}
-            name="desktopUrl"
             label="Header Image URL (Dekstop and above)"
             margin="normal"
             variant="outlined"
@@ -133,13 +136,12 @@ export const HeaderImageEditor: React.FC<Props> = ({
             fullWidth
           />
           <TextField
-            inputRef={register({
-              required: EMPTY_ERROR_HELPER_TEXT,
-            })}
             error={errors?.altText !== undefined}
             helperText={errors?.altText?.message}
+            {...register('altText', {
+              required: EMPTY_ERROR_HELPER_TEXT,
+            })}
             onBlur={handleSubmit(onSubmit)}
-            name="altText"
             label="Header Image Description (alt text)"
             margin="normal"
             variant="outlined"

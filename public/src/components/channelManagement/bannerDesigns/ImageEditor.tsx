@@ -17,7 +17,13 @@ export const ImageEditor: React.FC<Props> = ({
   onValidationChange,
   onChange,
 }: Props) => {
-  const { register, handleSubmit, errors, reset } = useForm<BannerDesignImage>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+
+    formState: { errors },
+  } = useForm<BannerDesignImage>({
     mode: 'onChange',
     defaultValues: image,
   });
@@ -27,7 +33,7 @@ export const ImageEditor: React.FC<Props> = ({
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
-  }, [errors]);
+  }, [errors.desktopUrl, errors.tabletUrl, errors.mobileUrl, errors.altText]);
 
   useEffect(() => {
     // necessary to reset fields if user discards changes
@@ -37,13 +43,12 @@ export const ImageEditor: React.FC<Props> = ({
   return (
     <div>
       <TextField
-        inputRef={register({
-          required: EMPTY_ERROR_HELPER_TEXT,
-        })}
         error={errors?.mobileUrl !== undefined}
         helperText={errors?.mobileUrl?.message}
+        {...register('mobileUrl', {
+          required: EMPTY_ERROR_HELPER_TEXT,
+        })}
         onBlur={handleSubmit(onChange)}
-        name="mobileUrl"
         label="Banner Image URL (Mobile)"
         margin="normal"
         variant="outlined"
@@ -51,13 +56,12 @@ export const ImageEditor: React.FC<Props> = ({
         fullWidth
       />
       <TextField
-        inputRef={register({
-          required: EMPTY_ERROR_HELPER_TEXT,
-        })}
         error={errors?.tabletUrl !== undefined}
         helperText={errors?.tabletUrl?.message}
+        {...register('tabletUrl', {
+          required: EMPTY_ERROR_HELPER_TEXT,
+        })}
         onBlur={handleSubmit(onChange)}
-        name="tabletUrl"
         label="Banner Image URL (Tablet)"
         margin="normal"
         variant="outlined"
@@ -65,13 +69,12 @@ export const ImageEditor: React.FC<Props> = ({
         fullWidth
       />
       <TextField
-        inputRef={register({
-          required: EMPTY_ERROR_HELPER_TEXT,
-        })}
         error={errors?.desktopUrl !== undefined}
         helperText={errors?.desktopUrl?.message}
+        {...register('desktopUrl', {
+          required: EMPTY_ERROR_HELPER_TEXT,
+        })}
         onBlur={handleSubmit(onChange)}
-        name="desktopUrl"
         label="Banner Image URL (Desktop and above)"
         margin="normal"
         variant="outlined"
@@ -79,13 +82,12 @@ export const ImageEditor: React.FC<Props> = ({
         fullWidth
       />
       <TextField
-        inputRef={register({
-          required: EMPTY_ERROR_HELPER_TEXT,
-        })}
         error={errors?.altText !== undefined}
         helperText={errors?.altText?.message}
+        {...register('altText', {
+          required: EMPTY_ERROR_HELPER_TEXT,
+        })}
         onBlur={handleSubmit(onChange)}
-        name="altText"
         label="Banner Image Description (alt text)"
         margin="normal"
         variant="outlined"

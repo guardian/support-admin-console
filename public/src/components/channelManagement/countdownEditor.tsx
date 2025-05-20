@@ -79,7 +79,13 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
     foregroundColor: countdownSettings?.theme.foregroundColor || '#ffffff',
   };
 
-  const { register, handleSubmit, errors, reset } = useForm<FormData>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+
+    formState: { errors },
+  } = useForm<FormData>({
     mode: 'onChange',
     defaultValues,
   });
@@ -158,11 +164,10 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
       {!!countdownSettings && (
         <div className={classes.fieldsContainer}>
           <TextField
-            inputRef={register({ required: EMPTY_ERROR_HELPER_TEXT })}
             error={!!errors.overwriteHeadingLabel}
             helperText={errors?.overwriteHeadingLabel?.message}
+            {...register('overwriteHeadingLabel', { required: EMPTY_ERROR_HELPER_TEXT })}
             onBlur={handleSubmit(onSubmit)}
-            name="overwriteHeadingLabel"
             label="Overwrite heading text"
             margin="normal"
             variant="outlined"
@@ -198,11 +203,10 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
           </Alert>
 
           <TextField
-            inputRef={register({ required: EMPTY_ERROR_HELPER_TEXT })}
             error={!!errors.countdownStartTimestamp}
             helperText={errors?.countdownStartTimestamp?.message}
+            {...register('countdownStartTimestamp', { required: EMPTY_ERROR_HELPER_TEXT })}
             onBlur={handleSubmit(onSubmit)}
-            name="countdownStartTimestamp"
             label="Start Date"
             type={'datetime-local'}
             defaultValue={new Date().toISOString().slice(0, 19)}
@@ -213,11 +217,10 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
           />
 
           <TextField
-            inputRef={register({ required: EMPTY_ERROR_HELPER_TEXT })}
             error={!!errors.countdownDeadlineTimestamp}
             helperText={errors?.countdownDeadlineTimestamp?.message}
+            {...register('countdownDeadlineTimestamp', { required: EMPTY_ERROR_HELPER_TEXT })}
             onBlur={handleSubmit(onSubmit)}
-            name="countdownDeadlineTimestamp"
             label="End Date"
             type={'datetime-local'}
             defaultValue={new Date().toISOString().slice(0, 19)}
@@ -228,11 +231,10 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
           />
 
           <TextField
-            inputRef={register({ required: true })}
             error={!!errors.backgroundColor}
             helperText={errors?.backgroundColor?.message}
+            {...register('backgroundColor', { required: true })}
             onBlur={handleSubmit(onSubmit)}
-            name="backgroundColor"
             label="Background Color"
             margin="normal"
             variant="outlined"
@@ -241,11 +243,10 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
           />
 
           <TextField
-            inputRef={register({ required: true })}
             error={!!errors.foregroundColor}
             helperText={errors?.foregroundColor?.message}
+            {...register('foregroundColor', { required: true })}
             onBlur={handleSubmit(onSubmit)}
-            name="foregroundColor"
             label="Foreground Color"
             margin="normal"
             variant="outlined"

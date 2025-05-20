@@ -40,7 +40,13 @@ export const CopyEditor: React.FC<CopyEditorProps> = ({
   };
 
   const [validatedFields, setValidatedFields] = useState<FormData>(defaultValues);
-  const { handleSubmit, control, errors, trigger } = useForm<FormData>({
+  const {
+    handleSubmit,
+    control,
+    trigger,
+
+    formState: { errors },
+  } = useForm<FormData>({
     mode: 'onChange',
     defaultValues,
   });
@@ -73,14 +79,14 @@ export const CopyEditor: React.FC<CopyEditorProps> = ({
             required: true,
             validate: copy => templateValidator(copy) ?? copyLengthValidator(75)(copy),
           }}
-          render={data => {
+          render={({ field }) => {
             return (
               <RichTextEditorSingleLine
                 error={errors.heading !== undefined}
                 helperText={errors?.heading?.message || errors?.heading?.type}
-                copyData={data.value}
+                copyData={field.value}
                 updateCopy={pars => {
-                  data.onChange(pars);
+                  field.onChange(pars);
                   handleSubmit(setValidatedFields)();
                 }}
                 name="heading"
@@ -107,14 +113,14 @@ export const CopyEditor: React.FC<CopyEditorProps> = ({
               required: true,
               validate: templateValidator,
             }}
-            render={data => {
+            render={({ field }) => {
               return (
                 <RichTextEditorSingleLine
                   error={errors.subheading !== undefined}
                   helperText={errors?.subheading?.message || errors?.subheading?.type}
-                  copyData={data.value}
+                  copyData={field.value}
                   updateCopy={pars => {
-                    data.onChange(pars);
+                    field.onChange(pars);
                     handleSubmit(setValidatedFields)();
                   }}
                   name="subheading"

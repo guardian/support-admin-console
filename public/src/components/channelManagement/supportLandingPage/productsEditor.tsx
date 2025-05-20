@@ -63,12 +63,17 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
   const classes = useStyles();
 
   // Validation for this product as a whole
-  const { control, handleSubmit, errors, register, reset } = useForm<LandingPageProductDescription>(
-    {
-      mode: 'onChange',
-      defaultValues: product,
-    },
-  );
+  const {
+    control,
+    handleSubmit,
+    register,
+    reset,
+
+    formState: { errors },
+  } = useForm<LandingPageProductDescription>({
+    mode: 'onChange',
+    defaultValues: product,
+  });
 
   // Validation specifically for the benefits array
   const { fields: benefits, append, remove } = useFieldArray({
@@ -92,35 +97,32 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
       </AccordionSummary>
       <AccordionDetails className={classes.accordionDetails}>
         <TextField
-          inputRef={register({ required: EMPTY_ERROR_HELPER_TEXT })}
           error={!!errors.title}
           helperText={errors?.title?.message}
           label="Title"
-          name="title"
+          {...register('title', { required: EMPTY_ERROR_HELPER_TEXT })}
           required={true}
           onBlur={handleSubmit(onProductChange)}
           disabled={!editMode}
           fullWidth
         />
         <TextField
-          inputRef={register({ required: EMPTY_ERROR_HELPER_TEXT })}
           error={!!errors.cta?.copy}
           helperText={errors?.cta?.copy?.message}
           label="CTA Copy"
-          name="cta.copy"
+          {...register('cta.copy', { required: EMPTY_ERROR_HELPER_TEXT })}
           required={true}
           onBlur={handleSubmit(onProductChange)}
           disabled={!editMode}
           fullWidth
         />
         <TextField
-          inputRef={register({
-            validate: copyLengthValidator(30),
-          })}
           error={!!errors.label?.copy}
           helperText={errors?.label?.copy?.message}
           label="Pill (optional)"
-          name="label.copy"
+          {...register('label.copy', {
+            validate: copyLengthValidator(30),
+          })}
           onBlur={handleSubmit(onProductChange)}
           disabled={!editMode}
           fullWidth
@@ -134,8 +136,7 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
               <TextField
                 label="Benefit Copy"
                 required={true}
-                name={`benefits[${index}].copy`}
-                inputRef={register({
+                {...register(`benefits.${index}.copy`, {
                   required: EMPTY_ERROR_HELPER_TEXT,
                   validate: copyLengthValidator(116),
                 })}
@@ -150,8 +151,7 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
             <Grid item xs={3}>
               <TextField
                 label="Tooltip (optional)"
-                name={`benefits[${index}].tooltip`}
-                inputRef={register()}
+                {...register(`benefits.${index}.tooltip`)}
                 error={!!errors.benefits?.[index]?.tooltip}
                 defaultValue={benefit.tooltip}
                 onBlur={handleSubmit(onProductChange)}
@@ -162,8 +162,7 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
             <Grid item xs={2}>
               <TextField
                 label="Pill (optional)"
-                name={`benefits[${index}].label.copy`}
-                inputRef={register()}
+                {...register(`benefits.${index}.label.copy`)}
                 error={!!errors.benefits?.[index]?.label?.copy}
                 defaultValue={benefit.label?.copy}
                 onBlur={handleSubmit(onProductChange)}
@@ -219,7 +218,14 @@ export const ProductsEditor: React.FC<ProductsEditorProps> = ({
   const classes = useStyles();
 
   // Validation for all 3 products
-  const { control, setError, clearErrors, errors, reset } = useForm<Products>({
+  const {
+    control,
+    setError,
+    clearErrors,
+    reset,
+
+    formState: { errors },
+  } = useForm<Products>({
     mode: 'onChange',
     defaultValues: products,
   });
@@ -244,7 +250,7 @@ export const ProductsEditor: React.FC<ProductsEditorProps> = ({
           key={productKey}
           control={control}
           name={productKey}
-          render={field => (
+          render={({ field }) => (
             <ProductEditor
               productKey={productKey}
               editMode={editMode}

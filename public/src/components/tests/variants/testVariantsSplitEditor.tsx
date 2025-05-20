@@ -56,7 +56,14 @@ const TestVariantsSplitEditor: React.FC<TestVariantsSplitEditorProps> = ({
     percentage: controlProportionSettings ? controlProportionSettings.proportion * 100 : undefined,
   };
 
-  const { register, errors, handleSubmit, trigger, reset } = useForm<FormState>({
+  const {
+    register,
+    handleSubmit,
+    trigger,
+    reset,
+
+    formState: { errors },
+  } = useForm<FormState>({
     mode: 'onChange',
     defaultValues,
   });
@@ -98,9 +105,8 @@ const TestVariantsSplitEditor: React.FC<TestVariantsSplitEditorProps> = ({
     }
   };
 
-  const validate = (text: string): string | boolean => {
-    const percentage = Number(text);
-    if (!Number.isNaN(percentage)) {
+  const validate = (percentage: number | undefined): string | boolean => {
+    if (percentage && !Number.isNaN(percentage)) {
       const controlExists = hasControl(variants);
       if (controlExists) {
         const max = 100 / variants.length;
@@ -166,14 +172,14 @@ const TestVariantsSplitEditor: React.FC<TestVariantsSplitEditorProps> = ({
           <div className={classes.variantsContainer}>
             <div>
               <TextField
-                inputRef={register({
-                  required: EMPTY_ERROR_HELPER_TEXT,
-                  validate: validate,
-                })}
                 error={errors.percentage !== undefined}
                 helperText={errors.percentage?.message || 'Must be a number'}
+                {...register('percentage', {
+                  required: EMPTY_ERROR_HELPER_TEXT,
+                  valueAsNumber: true,
+                  validate,
+                })}
                 onBlur={handleSubmit(onSubmit(controlProportionSettings))}
-                name="percentage"
                 label="CONTROL"
                 InputLabelProps={{ shrink: true }}
                 variant="outlined"

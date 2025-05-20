@@ -33,7 +33,14 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
     name: '',
   };
 
-  const { register, handleSubmit, errors, trigger, getValues } = useForm<BylineWithImage>({
+  const {
+    register,
+    handleSubmit,
+    trigger,
+    getValues,
+
+    formState: { errors },
+  } = useForm<BylineWithImage>({
     mode: 'onChange',
     defaultValues,
   });
@@ -45,7 +52,7 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
-  }, [errors]);
+  }, [errors.name, errors.description, errors.headshot]);
 
   const update = (byline: BylineWithImage): void => {
     if (!byline.headshot?.mainUrl && !byline.headshot?.altText) {
@@ -61,13 +68,12 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
   return (
     <div>
       <TextField
-        inputRef={register({
-          required: EMPTY_ERROR_HELPER_TEXT,
-        })}
         error={errors.name !== undefined}
         helperText={errors.name?.message}
+        {...register('name', {
+          required: EMPTY_ERROR_HELPER_TEXT,
+        })}
         onBlur={handleSubmit(update)}
-        name="name"
         label="Name"
         margin="normal"
         variant="outlined"
@@ -75,9 +81,8 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
         fullWidth
       />
       <TextField
-        inputRef={register()}
+        {...register('description')}
         onBlur={handleSubmit(update)}
-        name="description"
         label="Title or description"
         margin="normal"
         variant="outlined"
@@ -89,7 +94,12 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
         should be completed
       </p>
       <TextField
-        inputRef={register({
+        error={errors?.headshot?.mainUrl !== undefined}
+        helperText={
+          errors?.headshot?.mainUrl?.message ??
+          'Image dimensions should be roughly square, with a transparent background'
+        }
+        {...register('headshot.mainUrl', {
           validate: mainUrl => {
             // required if altText is set
             if (!mainUrl && getValues().headshot?.altText) {
@@ -98,13 +108,7 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
             return true;
           },
         })}
-        error={errors?.headshot?.mainUrl !== undefined}
-        helperText={
-          errors?.headshot?.mainUrl?.message ??
-          'Image dimensions should be roughly square, with a transparent background'
-        }
         onBlur={handleSubmit(update)}
-        name="headshot.mainUrl"
         label="Image URL"
         margin="normal"
         variant="outlined"
@@ -112,7 +116,9 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
         fullWidth
       />
       <TextField
-        inputRef={register({
+        error={errors?.headshot?.altText !== undefined}
+        helperText={errors?.headshot?.altText?.message ?? ''}
+        {...register('headshot.altText', {
           validate: altText => {
             // required if mainUrl is set
             if (!altText && getValues().headshot?.mainUrl) {
@@ -121,10 +127,7 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
             return true;
           },
         })}
-        error={errors?.headshot?.altText !== undefined}
-        helperText={errors?.headshot?.altText?.message ?? ''}
         onBlur={handleSubmit(update)}
-        name="headshot.altText"
         label="Image alt-text"
         margin="normal"
         variant="outlined"

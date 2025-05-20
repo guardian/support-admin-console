@@ -145,7 +145,13 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
    * `content` in a useEffect.
    */
   const [validatedFields, setValidatedFields] = useState<FormData>(defaultValues);
-  const { handleSubmit, control, errors, trigger } = useForm<FormData>({
+  const {
+    handleSubmit,
+    control,
+    trigger,
+
+    formState: { errors },
+  } = useForm<FormData>({
     mode: 'onChange',
     defaultValues,
   });
@@ -218,14 +224,14 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
           rules={{
             validate: templateValidator,
           }}
-          render={data => {
+          render={({ field }) => {
             return (
               <RichTextEditorSingleLine
                 error={errors.heading !== undefined}
                 helperText={errors.heading ? errors.heading.message || errors.heading.type : ''}
-                copyData={data.value}
+                copyData={field.value}
                 updateCopy={pars => {
-                  data.onChange(pars);
+                  field.onChange(pars);
                   handleSubmit(setValidatedFields)();
                 }}
                 name="heading"
@@ -249,7 +255,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                 getEmptyParagraphsError(pars) ??
                 pars.map(templateValidator).find((result: string | undefined) => !!result),
             }}
-            render={data => {
+            render={({ field }) => {
               return (
                 <RichTextEditor
                   error={errors.paragraphs !== undefined || copyLength > recommendedLength}
@@ -259,9 +265,9 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                         errors.paragraphs.message || errors.paragraphs.type
                       : getParagraphsHelperText()
                   }
-                  copyData={data.value}
+                  copyData={field.value}
                   updateCopy={pars => {
-                    data.onChange(pars);
+                    field.onChange(pars);
                     handleSubmit(setValidatedFields)();
                   }}
                   name="paragraphs"
@@ -278,7 +284,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
             rules={{
               validate: templateValidator,
             }}
-            render={data => {
+            render={({ field }) => {
               return (
                 <RichTextEditorSingleLine
                   error={errors.highlightedText !== undefined}
@@ -287,9 +293,9 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                       ? errors.highlightedText.message || errors.highlightedText.type
                       : HIGHTLIGHTED_TEXT_HELPER_TEXT
                   }
-                  copyData={data.value}
+                  copyData={field.value}
                   updateCopy={pars => {
-                    data.onChange(pars);
+                    field.onChange(pars);
                     handleSubmit(setValidatedFields)();
                   }}
                   name="highlightedText"

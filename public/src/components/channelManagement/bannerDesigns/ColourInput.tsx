@@ -81,7 +81,13 @@ const GenericColourInput = <T extends unknown>({
 
   const defaultValues = { colour: convertToString(colour) };
 
-  const { register, reset, handleSubmit, errors } = useForm<{ colour: string }>({
+  const {
+    register,
+    reset,
+    handleSubmit,
+
+    formState: { errors },
+  } = useForm<{ colour: string }>({
     mode: 'onChange',
     defaultValues,
   });
@@ -89,7 +95,7 @@ const GenericColourInput = <T extends unknown>({
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(name, isValid);
-  }, [errors]);
+  }, [errors.colour]);
 
   useEffect(() => {
     // necessary to reset fields if user discards changes
@@ -111,11 +117,10 @@ const GenericColourInput = <T extends unknown>({
     <div className={classes.container}>
       <TextField
         className={classes.field}
-        inputRef={register({
+        {...register('colour', {
           required: required ? EMPTY_ERROR_HELPER_TEXT : false,
           pattern: colourValidation,
         })}
-        name="colour"
         onBlur={handleSubmit(({ colour }) => handleColourChange(colour))}
         label={label}
         error={errors?.colour !== undefined}

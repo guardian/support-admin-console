@@ -58,7 +58,13 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
     tagIds: articlesViewedSettings?.tagIds || [],
   };
 
-  const { register, errors, handleSubmit, reset } = useForm<FormData>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+
+    formState: { errors },
+  } = useForm<FormData>({
     mode: 'onChange',
     defaultValues,
   });
@@ -124,14 +130,13 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
           <div className={classes.formContainer}>
             <div>
               <TextField
-                inputRef={register({
+                error={errors.minViews !== undefined}
+                helperText={errors.minViews?.message}
+                {...register('minViews', {
                   required: EMPTY_ERROR_HELPER_TEXT,
                   validate: notNumberValidator,
                 })}
-                error={errors.minViews !== undefined}
-                helperText={errors.minViews?.message}
                 onBlur={handleSubmit(onSubmit)}
-                name="minViews"
                 label="Minimum page views"
                 InputLabelProps={{ shrink: true }}
                 variant="filled"
@@ -141,11 +146,10 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
             </div>
             <div>
               <TextField
-                inputRef={register({ validate: notNumberValidator })}
                 error={errors.maxViews !== undefined}
                 helperText={errors.maxViews?.message}
+                {...register('maxViews', { validate: notNumberValidator })}
                 onBlur={handleSubmit(onSubmit)}
-                name="maxViews"
                 label="Maximum page views"
                 InputLabelProps={{ shrink: true }}
                 variant="filled"
@@ -155,14 +159,13 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
             </div>
             <div>
               <TextField
-                inputRef={register({
+                error={errors.periodInWeeks !== undefined}
+                helperText={errors.periodInWeeks?.message}
+                {...register('periodInWeeks', {
                   required: EMPTY_ERROR_HELPER_TEXT,
                   validate: notNumberValidator,
                 })}
-                error={errors.periodInWeeks !== undefined}
-                helperText={errors.periodInWeeks?.message}
                 onBlur={handleSubmit(onSubmit)}
-                name="periodInWeeks"
                 label="Time period in weeks"
                 InputLabelProps={{ shrink: true }}
                 variant="filled"

@@ -87,7 +87,13 @@ const HeaderTestVariantContentEditor: React.FC<HeaderTestVariantContentEditorPro
     subheading: content.subheading || '',
   };
 
-  const { register, handleSubmit, errors, trigger } = useForm<HeaderContent>({
+  const {
+    register,
+    handleSubmit,
+    trigger,
+
+    formState: { errors },
+  } = useForm<HeaderContent>({
     mode: 'onChange',
     defaultValues,
   });
@@ -128,11 +134,10 @@ const HeaderTestVariantContentEditor: React.FC<HeaderTestVariantContentEditorPro
           <div className={classes.contentContainer}>
             <div>
               <TextField
-                inputRef={register({ validate: templateValidator })}
                 error={errors.heading !== undefined}
                 helperText={errors.heading ? errors.heading.message : ''}
+                {...register('heading', { validate: templateValidator })}
                 onBlur={handleSubmit(onSubmit)}
-                name="heading"
                 label="Heading"
                 margin="normal"
                 variant="outlined"
@@ -149,11 +154,10 @@ const HeaderTestVariantContentEditor: React.FC<HeaderTestVariantContentEditorPro
           <div className={classes.contentContainer}>
             <div>
               <TextField
-                inputRef={register({ validate: templateValidator })}
                 error={errors.subheading !== undefined}
                 helperText={errors.subheading ? errors.subheading.message : ''}
+                {...register('subheading', { validate: templateValidator })}
                 onBlur={handleSubmit(onSubmit)}
-                name="subheading"
                 label="Sub-heading"
                 margin="normal"
                 variant="outlined"

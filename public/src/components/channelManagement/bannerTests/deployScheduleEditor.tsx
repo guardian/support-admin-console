@@ -3,7 +3,7 @@ import { makeStyles } from '@mui/styles';
 import { FormControl, FormControlLabel, Radio, RadioGroup, TextField, Theme } from '@mui/material';
 import { BannerTestDeploySchedule } from '../../../models/banner';
 import { useForm } from 'react-hook-form';
-import { EMPTY_ERROR_HELPER_TEXT, notNumberValidator } from '../helpers/validation';
+import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -31,7 +31,12 @@ const DeployScheduleEditor: React.FC<DeployScheduleEditorProps> = ({
   const defaultValues: BannerTestDeploySchedule = {
     daysBetween: 1,
   };
-  const { register, errors, handleSubmit } = useForm<BannerTestDeploySchedule>({
+  const {
+    register,
+    handleSubmit,
+
+    formState: { errors },
+  } = useForm<BannerTestDeploySchedule>({
     mode: 'onChange',
     defaultValues,
   });
@@ -75,14 +80,13 @@ const DeployScheduleEditor: React.FC<DeployScheduleEditorProps> = ({
 
         {deploySchedule && (
           <TextField
-            inputRef={register({
-              required: EMPTY_ERROR_HELPER_TEXT,
-              validate: notNumberValidator,
-            })}
             error={errors.daysBetween !== undefined}
             helperText={errors.daysBetween?.message || 'Must be a number'}
+            {...register('daysBetween', {
+              required: EMPTY_ERROR_HELPER_TEXT,
+              valueAsNumber: true,
+            })}
             onBlur={handleSubmit(onSubmit)}
-            name="daysBetween"
             label="Days between deploys"
             InputLabelProps={{ shrink: true }}
             variant="outlined"

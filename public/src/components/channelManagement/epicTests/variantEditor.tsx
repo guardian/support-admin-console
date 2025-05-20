@@ -121,7 +121,11 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   const classes = getUseStyles(allowMultipleVariants)();
 
   const templateValidator = templateValidatorForPlatform(platform);
-  const lineValidator = (text: string) => templateValidator(text) ?? htmlValidator(text);
+  const lineValidator = (text: string | undefined) => {
+    if (text) {
+      return templateValidator(text) ?? htmlValidator(text);
+    }
+  };
 
   const defaultValues: FormData = {
     heading: variant.heading,
@@ -139,7 +143,13 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
    * `variant` in a useEffect.
    */
   const [validatedFields, setValidatedFields] = useState<FormData>(defaultValues);
-  const { handleSubmit, control, errors, trigger } = useForm<FormData>({
+  const {
+    handleSubmit,
+    control,
+    trigger,
+
+    formState: { errors },
+  } = useForm<FormData>({
     mode: 'onChange',
     defaultValues,
   });
@@ -234,14 +244,14 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
             required: requireVariantHeader ? EMPTY_ERROR_HELPER_TEXT : undefined,
             validate: lineValidator,
           }}
-          render={data => {
+          render={({ field }) => {
             return (
               <RichTextEditorSingleLine
                 error={errors.heading !== undefined}
                 helperText={errors.heading ? errors.heading.message || errors.heading.type : ''}
-                copyData={data.value}
+                copyData={field.value}
                 updateCopy={value => {
-                  data.onChange(value);
+                  field.onChange(value);
                   handleSubmit(setValidatedFields)();
                 }}
                 name="heading"
@@ -271,7 +281,7 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
             getEmptyParagraphsError(pars) ??
             pars.map(lineValidator).find((result: string | undefined) => !!result),
         }}
-        render={data => {
+        render={({ field }) => {
           return (
             <RichTextEditor
               error={errors.paragraphs !== undefined}
@@ -281,9 +291,9 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                     errors.paragraphs.message || errors.paragraphs.type
                   : getParagraphsHelperText()
               }
-              copyData={data.value}
+              copyData={field.value}
               updateCopy={pars => {
-                data.onChange(pars);
+                field.onChange(pars);
                 handleSubmit(setValidatedFields)();
               }}
               name="paragraphs"
@@ -311,7 +321,7 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
             required: false,
             validate: lineValidator,
           }}
-          render={data => {
+          render={({ field }) => {
             return (
               <RichTextEditorSingleLine
                 error={errors.highlightedText !== undefined}
@@ -320,9 +330,9 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                     ? errors.highlightedText.message || errors.highlightedText.type
                     : HIGHTLIGHTED_TEXT_DEFAULT_HELPER_TEXT
                 }
-                copyData={data.value}
+                copyData={field.value}
                 updateCopy={pars => {
-                  data.onChange(pars);
+                  field.onChange(pars);
                   handleSubmit(setValidatedFields)();
                 }}
                 name="highlightedText"

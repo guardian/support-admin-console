@@ -61,7 +61,12 @@ const CreateCampaignDialog: React.FC<CreateCampaignDialogProps> = ({
     description: '',
   };
 
-  const { register, handleSubmit, errors } = useForm<FormData>({
+  const {
+    register,
+    handleSubmit,
+
+    formState: { errors },
+  } = useForm<FormData>({
     defaultValues,
   });
 
@@ -85,7 +90,9 @@ const CreateCampaignDialog: React.FC<CreateCampaignDialogProps> = ({
       <DialogContent dividers>
         <TextField
           className={classes.input}
-          inputRef={register({
+          error={errors.name !== undefined}
+          helperText={errors.name ? errors.name.message : ''}
+          {...register('name', {
             required: EMPTY_ERROR_HELPER_TEXT,
             pattern: {
               value: VALID_CHARACTERS_REGEX,
@@ -93,9 +100,6 @@ const CreateCampaignDialog: React.FC<CreateCampaignDialogProps> = ({
             },
             validate: createDuplicateValidator(existingNames),
           })}
-          error={errors.name !== undefined}
-          helperText={errors.name ? errors.name.message : ''}
-          name="name"
           label="Campaign name"
           margin="normal"
           variant="outlined"
@@ -104,23 +108,21 @@ const CreateCampaignDialog: React.FC<CreateCampaignDialogProps> = ({
         />
         <TextField
           className={classes.input}
-          inputRef={register({
+          error={errors.nickname !== undefined}
+          helperText={errors.nickname ? errors.nickname.message : ''}
+          {...register('nickname', {
             required: EMPTY_ERROR_HELPER_TEXT,
             validate: createDuplicateValidator(existingNicknames),
           })}
-          error={errors.nickname !== undefined}
-          helperText={errors.nickname ? errors.nickname.message : ''}
-          name="nickname"
           label="Nickname"
           margin="normal"
           variant="outlined"
           fullWidth
         />
         <TextField
-          inputRef={register()}
           error={errors.description !== undefined}
           helperText={errors.description ? errors.description.message : ''}
-          name="description"
+          {...register('description')}
           label="Description"
           margin="normal"
           variant="outlined"
