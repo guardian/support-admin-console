@@ -1,4 +1,4 @@
-import {ChoiceCard, Product} from '../../../models/choiceCards';
+import { ChoiceCard, Product } from '../../../models/choiceCards';
 import React from 'react';
 import {
   Checkbox,
@@ -13,12 +13,13 @@ import {
   AccordionSummary,
   Typography,
   Accordion,
-  AccordionDetails, Theme,
+  AccordionDetails,
+  Theme,
 } from '@mui/material';
 import { useFieldArray, useForm, Controller } from 'react-hook-form';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {makeStyles} from "@mui/styles";
+import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   productContainer: {
@@ -36,7 +37,7 @@ const productDisplayName = (product: Product) => {
   } else {
     return `Supporter Plus - ${product.ratePlan}`;
   }
-}
+};
 
 interface ChoiceCardEditorProps {
   choiceCard: ChoiceCard;
@@ -81,7 +82,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
               <Controller
                 name="product.supportTier"
                 control={control}
-                render={({field} ) => (
+                render={({ field }) => (
                   <Select
                     {...field}
                     labelId="supportTier-label"
@@ -106,7 +107,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
                             ratePlan: choiceCard.product.ratePlan,
                           };
                         }
-                      }
+                      };
                       const updatedProduct = buildProduct();
                       onChange({
                         ...choiceCard,
@@ -114,7 +115,9 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
                       });
                       // The ratePlan UI doesn't update unless we trigger an update on that field
                       if (updatedProduct.supportTier !== 'OneOff') {
-                        setValue('product.ratePlan', updatedProduct.ratePlan, {shouldValidate: true});
+                        setValue('product.ratePlan', updatedProduct.ratePlan, {
+                          shouldValidate: true,
+                        });
                       }
                     }}
                   >
@@ -132,21 +135,9 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
                   name="product.ratePlan"
                   control={control}
                   render={({ field }) => (
-                    <RadioGroup
-                      row
-                      {...field}
-                      onChange={(e) => field.onChange(e.target.value)}
-                    >
-                      <FormControlLabel
-                        value="Monthly"
-                        control={<Radio />}
-                        label="Monthly"
-                      />
-                      <FormControlLabel
-                        value="Annual"
-                        control={<Radio />}
-                        label="Annual"
-                      />
+                    <RadioGroup row {...field} onChange={e => field.onChange(e.target.value)}>
+                      <FormControlLabel value="Monthly" control={<Radio />} label="Monthly" />
+                      <FormControlLabel value="Annual" control={<Radio />} label="Annual" />
                     </RadioGroup>
                   )}
                 />
@@ -196,7 +187,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
             <Controller
               name="isDefault"
               control={control}
-              render={({field}) => (
+              render={({ field }) => (
                 <Checkbox {...field} checked={field.value} color="primary" disabled={isDisabled} />
               )}
             />
