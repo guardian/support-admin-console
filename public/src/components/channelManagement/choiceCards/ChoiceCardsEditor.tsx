@@ -1,9 +1,11 @@
 import React from 'react';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import { Radio, RadioGroup, Theme } from '@mui/material';
+import { Button, Radio, RadioGroup, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { ChoiceCardsSettings } from '../../../models/choiceCards';
+import { ChoiceCard, ChoiceCardsSettings } from '../../../models/choiceCards';
 import { ChoiceCardEditor } from './ChoiceCardEditor';
+import CloseIcon from '@mui/icons-material/Close';
+import AddIcon from '@mui/icons-material/Add';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -15,6 +17,14 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
     '& > * + *': {
       marginTop: spacing(3),
     },
+  },
+  choiceCardContainer: {
+    display: 'flex',
+  },
+  deleteButton: {
+    height: '100%',
+    padding: `${spacing(2)} ${spacing(1)}`,
+    marginLeft: spacing(1),
   },
 }));
 
@@ -32,44 +42,6 @@ const getChoiceCardsSelection = (
   } else {
     return 'NoChoiceCards';
   }
-};
-
-const defaultChoiceCardsSettings: ChoiceCardsSettings = {
-  choiceCards: [
-    {
-      product: { supportTier: 'Contribution', ratePlan: 'Monthly' },
-      label: '',
-      benefits: [{ copy: 'Give to the Guardian every month with Support' }],
-      isDefault: false,
-    },
-    {
-      product: { supportTier: 'SupporterPlus', ratePlan: 'Monthly' },
-      label: '',
-      benefitsLabel: 'Unlock <strong>All-access digital</strong> benefits:',
-      benefits: [
-        { copy: 'Unlimited access to the Guardian app' },
-        { copy: 'Unlimited access to our new Feast App' },
-        { copy: 'Ad-free reading on all your devices' },
-        {
-          copy: 'Exclusive newsletter for supporters, sent every week from the Guardian newsroom',
-        },
-        { copy: 'Far fewer asks for support' },
-      ],
-      isDefault: true,
-    },
-    {
-      product: {
-        supportTier: 'OneOff',
-      },
-      label: `Support with another amount`,
-      isDefault: false,
-      benefits: [
-        {
-          copy: 'We welcome support of any size, any time',
-        },
-      ],
-    },
-  ],
 };
 
 interface EpicTestChoiceCardsEditorProps {
@@ -94,9 +66,29 @@ const ChoiceCardsEditor: React.FC<EpicTestChoiceCardsEditorProps> = ({
     if (event.target.value === 'DefaultChoiceCards') {
       updateChoiceCardsSettings(true);
     } else if (event.target.value === 'CustomChoiceCards') {
-      updateChoiceCardsSettings(true, defaultChoiceCardsSettings);
+      updateChoiceCardsSettings(true, { choiceCards: [] });
     } else {
       updateChoiceCardsSettings(false);
+    }
+  };
+
+  const handleDelete = (index: number): void => {
+    if (choiceCardsSettings) {
+      const updatedChoiceCards = choiceCardsSettings.choiceCards.filter((_, idx) => idx !== index);
+      updateChoiceCardsSettings(true, { choiceCards: updatedChoiceCards });
+    }
+  };
+
+  const handleCreate = (): void => {
+    if (choiceCardsSettings) {
+      const newChoiceCard: ChoiceCard = {
+        product: { supportTier: 'Contribution', ratePlan: 'Monthly' },
+        label: '',
+        benefits: [],
+        isDefault: false,
+      };
+      const updatedChoiceCards = [...choiceCardsSettings.choiceCards, newChoiceCard];
+      updateChoiceCardsSettings(true, { choiceCards: updatedChoiceCards });
     }
   };
 
@@ -129,24 +121,49 @@ const ChoiceCardsEditor: React.FC<EpicTestChoiceCardsEditorProps> = ({
       </RadioGroup>
       {choiceCardsSelection === 'CustomChoiceCards' &&
         choiceCardsSettings?.choiceCards.map((choiceCard, idx) => (
-          <ChoiceCardEditor
-            key={`choice-card-${idx}`}
-            choiceCard={choiceCard}
-            onChange={updatedCard => {
-              console.log({ updatedCard });
-              const choiceCards = [
-                ...choiceCardsSettings.choiceCards.slice(0, idx),
-                updatedCard,
-                ...choiceCardsSettings.choiceCards.slice(idx + 1),
-              ];
-              updateChoiceCardsSettings(true, {
-                choiceCards,
-              });
-            }}
-            isDisabled={isDisabled}
-            index={idx}
-          />
+          <div className={classes.choiceCardContainer} key={`choice-card-${idx}`}>
+            <ChoiceCardEditor
+              choiceCard={choiceCard}
+              onChange={updatedCard => {
+                console.log({ updatedCard });
+                const choiceCards = [
+                  ...choiceCardsSettings.choiceCards.slice(0, idx),
+                  updatedCard,
+                  ...choiceCardsSettings.choiceCards.slice(idx + 1),
+                ];
+                updateChoiceCardsSettings(true, {
+                  choiceCards,
+                });
+              }}
+              isDisabled={isDisabled}
+              index={idx}
+            />
+            <Button
+              className={classes.deleteButton}
+              onClick={() => handleDelete(idx)}
+              disabled={isDisabled}
+              variant="outlined"
+              size="small"
+              startIcon={<CloseIcon />}
+            >
+              Delete
+            </Button>
+          </div>
         ))}
+      {choiceCardsSelection === 'CustomChoiceCards' && (
+        <Button
+          onClick={handleCreate}
+          disabled={
+            isDisabled ||
+            (choiceCardsSettings?.choiceCards && choiceCardsSettings.choiceCards.length >= 3)
+          }
+          variant="contained"
+          size="medium"
+          startIcon={<AddIcon />}
+        >
+          Create new choice card
+        </Button>
+      )}
     </div>
   );
 };
