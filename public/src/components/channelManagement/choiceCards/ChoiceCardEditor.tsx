@@ -80,13 +80,21 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
     name: 'benefits',
   });
 
+  const onFormChange = (update: ChoiceCard) => {
+    const pill = update.pill?.copy ? update.pill : undefined;
+    onChange({
+      ...update,
+      pill,
+    });
+  };
+
   return (
     <Accordion key={`${choiceCard.product.supportTier}-${index}`}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography variant="h6">{productDisplayName(choiceCard.product)}</Typography>
       </AccordionSummary>
       <AccordionDetails>
-        <form onChange={handleSubmit(onChange)}>
+        <form onChange={handleSubmit(onFormChange)}>
           <div className={classes.productContainer}>
             <FormControl disabled={isDisabled} margin="normal">
               <InputLabel id="supportTier-label">Support Tier</InputLabel>
@@ -120,7 +128,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
                         }
                       };
                       const updatedProduct = buildProduct();
-                      onChange({
+                      onFormChange({
                         ...choiceCard,
                         product: updatedProduct,
                       });
@@ -169,7 +177,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
             error={!!errors.label}
             helperText={errors.label?.message}
             {...register('label')}
-            onBlur={handleSubmit(onChange)}
+            onBlur={handleSubmit(onFormChange)}
           />
 
           <TextField
@@ -180,8 +188,10 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
             disabled={isDisabled}
             error={!!errors.benefitsLabel}
             helperText={errors.benefitsLabel?.message}
-            {...register('benefitsLabel')}
-            onBlur={handleSubmit(onChange)}
+            {...register('benefitsLabel', {
+              setValueAs: value => value || undefined,
+            })}
+            onBlur={handleSubmit(onFormChange)}
           />
 
           <TextField
@@ -190,8 +200,10 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
             fullWidth
             margin="normal"
             disabled={isDisabled}
-            {...register('pill.copy')}
-            onBlur={handleSubmit(onChange)}
+            {...register('pill.copy', {
+              setValueAs: value => value || undefined,
+            })}
+            onBlur={handleSubmit(onFormChange)}
           />
 
           <FormControlLabel
@@ -223,7 +235,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
                   margin="normal"
                   disabled={isDisabled}
                   {...register(`benefits.${index}.copy`)}
-                  onBlur={handleSubmit(onChange)}
+                  onBlur={handleSubmit(onFormChange)}
                   defaultValue={benefit.copy}
                 />
                 <Button
