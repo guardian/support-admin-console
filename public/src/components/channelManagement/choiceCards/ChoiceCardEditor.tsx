@@ -28,13 +28,13 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   },
 }));
 
-const productDisplayName = (productTier: Product['supportTier']) => {
-  if (productTier === 'OneOff') {
+const productDisplayName = (product: Product) => {
+  if (product.supportTier === 'OneOff') {
     return 'One-off Contribution';
-  } else if (productTier === 'Contribution') {
-    return 'Recurring Contribution';
+  } else if (product.supportTier === 'Contribution') {
+    return `Recurring Contribution - ${product.ratePlan}`;
   } else {
-    return 'Supporter Plus';
+    return `Supporter Plus - ${product.ratePlan}`;
   }
 }
 
@@ -42,11 +42,13 @@ interface ChoiceCardEditorProps {
   choiceCard: ChoiceCard;
   onChange: (choiceCard: ChoiceCard) => void;
   isDisabled: boolean;
+  index: number;
 }
 export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
   choiceCard,
   onChange,
   isDisabled,
+  index,
 }) => {
   const classes = useStyles();
 
@@ -54,7 +56,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
     control,
     handleSubmit,
     register,
-    trigger,
+    setValue,
     formState: { errors },
   } = useForm<ChoiceCard>({
     defaultValues: choiceCard,
@@ -66,18 +68,13 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
     name: 'benefits',
   });
 
-  const handleFormChange = (data: ChoiceCard) => {
-    console.log('handleFormChange',data)
-    onChange(data);
-  };
-
   return (
-    <Accordion key={choiceCard.product.supportTier}>
+    <Accordion key={`${choiceCard.product.supportTier}-${index}`}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography variant="h6">{productDisplayName(choiceCard.product.supportTier)}</Typography>
+        <Typography variant="h6">{productDisplayName(choiceCard.product)}</Typography>
       </AccordionSummary>
       <AccordionDetails>
-        <form onChange={handleSubmit(handleFormChange)}>
+        <form onChange={handleSubmit(onChange)}>
           <div className={classes.productContainer}>
             <FormControl disabled={isDisabled} margin="normal">
               <InputLabel id="supportTier-label">Support Tier</InputLabel>
@@ -90,7 +87,6 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
                     labelId="supportTier-label"
                     value={field.value}
                     onChange={e => {
-                      console.log(e)
                       field.onChange(e);
                       const newSupportTier = e.target.value as Product['supportTier'];
                       const oldSupportTier = choiceCard.product.supportTier;
@@ -99,7 +95,6 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
                         if (newSupportTier === 'OneOff') {
                           return { supportTier: 'OneOff' };
                         } else if (oldSupportTier === 'OneOff') {
-                          debugger
                           // Default to monthly
                           return {
                             supportTier: newSupportTier,
@@ -112,12 +107,15 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
                           };
                         }
                       }
-                      handleFormChange({
+                      const updatedProduct = buildProduct();
+                      onChange({
                         ...choiceCard,
-                        product: buildProduct(),
+                        product: updatedProduct,
                       });
-                      // handleSubmit(handleFormChange)();
-                      // trigger();
+                      // The ratePlan UI doesn't update unless we trigger an update on that field
+                      if (updatedProduct.supportTier !== 'OneOff') {
+                        setValue('product.ratePlan', updatedProduct.ratePlan, {shouldValidate: true});
+                      }
                     }}
                   >
                     <MenuItem value="Contribution">Recurring Contribution</MenuItem>
@@ -169,7 +167,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
             error={!!errors.label}
             helperText={errors.label?.message}
             {...register('label')}
-            onBlur={handleSubmit(handleFormChange)}
+            onBlur={handleSubmit(onChange)}
           />
 
           <TextField
@@ -181,7 +179,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
             error={!!errors.benefitsLabel}
             helperText={errors.benefitsLabel?.message}
             {...register('benefitsLabel')}
-            onBlur={handleSubmit(handleFormChange)}
+            onBlur={handleSubmit(onChange)}
           />
 
           <TextField
@@ -191,7 +189,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
             margin="normal"
             disabled={isDisabled}
             {...register('pill.copy')}
-            onBlur={handleSubmit(handleFormChange)}
+            onBlur={handleSubmit(onChange)}
           />
 
           <FormControl margin="normal">
@@ -216,7 +214,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
                   margin="normal"
                   disabled={isDisabled}
                   {...register(`benefits.${index}.copy`)}
-                  onBlur={handleSubmit(handleFormChange)}
+                  onBlur={handleSubmit(onChange)}
                   defaultValue={benefit.copy}
                 />
                 <Button onClick={() => remove(index)} disabled={isDisabled}>

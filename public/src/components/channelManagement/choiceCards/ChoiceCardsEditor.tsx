@@ -144,6 +144,7 @@ const ChoiceCardsEditor: React.FC<EpicTestChoiceCardsEditorProps> = ({
               });
             }}
             isDisabled={isDisabled}
+            index={idx}
           />
         ))}
     </div>
