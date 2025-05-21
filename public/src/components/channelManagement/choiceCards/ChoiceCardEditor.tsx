@@ -20,12 +20,23 @@ import { useFieldArray, useForm, Controller } from 'react-hook-form';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { makeStyles } from '@mui/styles';
+import AddIcon from '@mui/icons-material/Add';
+import CloseIcon from '@mui/icons-material/Close';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   productContainer: {
     '& > * + *': {
       marginLeft: spacing(2),
     },
+  },
+  benefitsHeading: {
+    fontWeight: 700,
+  },
+  benefitContainer: {
+    display: 'flex',
+  },
+  deleteButton: {
+    margin: `${spacing(2)} 0 ${spacing(1)} ${spacing(1)}`,
   },
 }));
 
@@ -123,7 +134,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
                   >
                     <MenuItem value="Contribution">Recurring Contribution</MenuItem>
                     <MenuItem value="SupporterPlus">Supporter Plus</MenuItem>
-                    <MenuItem value="OneOff">Single Contribution</MenuItem>
+                    <MenuItem value="OneOff">One-off Contribution</MenuItem>
                   </Select>
                 )}
               />
@@ -183,21 +194,28 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
             onBlur={handleSubmit(onChange)}
           />
 
-          <FormControl margin="normal">
-            <Controller
-              name="isDefault"
-              control={control}
-              render={({ field }) => (
-                <Checkbox {...field} checked={field.value} color="primary" disabled={isDisabled} />
-              )}
-            />
-            <label>Is Default</label>
-          </FormControl>
+          <FormControlLabel
+            control={
+              <Controller
+                name="isDefault"
+                control={control}
+                render={({ field }) => (
+                  <Checkbox
+                    {...field}
+                    checked={field.value}
+                    color="primary"
+                    disabled={isDisabled}
+                  />
+                )}
+              />
+            }
+            label="Is Default"
+          />
 
           <div>
-            <label>Benefits</label>
+            <label className={classes.benefitsHeading}>Benefits</label>
             {benefits.map((benefit, index) => (
-              <div key={benefit.id}>
+              <div className={classes.benefitContainer} key={benefit.id}>
                 <TextField
                   label={`Benefit ${index + 1}`}
                   variant="filled"
@@ -208,13 +226,24 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
                   onBlur={handleSubmit(onChange)}
                   defaultValue={benefit.copy}
                 />
-                <Button onClick={() => remove(index)} disabled={isDisabled}>
-                  Remove
+                <Button
+                  className={classes.deleteButton}
+                  onClick={() => remove(index)}
+                  disabled={isDisabled}
+                  variant="outlined"
+                  size="medium"
+                >
+                  <CloseIcon />
                 </Button>
               </div>
             ))}
-            <Button onClick={() => append({ copy: '' })} disabled={isDisabled}>
-              Add Benefit
+            <Button
+              onClick={() => append({ copy: '' })}
+              disabled={isDisabled || benefits.length >= 8}
+              variant="outlined"
+              size="medium"
+            >
+              <AddIcon />
             </Button>
           </div>
         </form>
