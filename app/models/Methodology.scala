@@ -31,6 +31,6 @@ case object Methodology {
 
   implicit val customConfig: Configuration = Configuration.default.withDiscriminator("name")
 
-  implicit val secondaryCtaDecoder = Decoder[Methodology]
-  implicit val secondaryCtaEncoder = Encoder[Methodology]
+  implicit val methodologyDecoder = Decoder[Methodology]
+  implicit val methodologyEncoder = Encoder[Methodology]
 }
