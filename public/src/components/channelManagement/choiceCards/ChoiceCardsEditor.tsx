@@ -125,7 +125,6 @@ const ChoiceCardsEditor: React.FC<EpicTestChoiceCardsEditorProps> = ({
             <ChoiceCardEditor
               choiceCard={choiceCard}
               onChange={updatedCard => {
-                console.log({ updatedCard });
                 const choiceCards = [
                   ...choiceCardsSettings.choiceCards.slice(0, idx),
                   updatedCard,

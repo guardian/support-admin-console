@@ -237,14 +237,16 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
                 </Button>
               </div>
             ))}
-            <Button
-              onClick={() => append({ copy: '' })}
-              disabled={isDisabled || benefits.length >= 8}
-              variant="outlined"
-              size="medium"
-            >
-              <AddIcon />
-            </Button>
+            <div>
+              <Button
+                onClick={() => append({ copy: '' })}
+                disabled={isDisabled || benefits.length >= 8}
+                variant="outlined"
+                size="medium"
+              >
+                <AddIcon />
+              </Button>
+            </div>
           </div>
         </form>
       </AccordionDetails>

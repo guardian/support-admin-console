@@ -209,7 +209,6 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
     showChoiceCards?: boolean,
     choiceCardsSettings?: ChoiceCardsSettings,
   ): void => {
-    console.log('updateChoiceCardsSettings', choiceCardsSettings);
     onVariantChange({ ...variant, showChoiceCards, choiceCardsSettings });
   };
   const updateShowSignInLink = (updatedShowSignInLink?: boolean): void => {
@@ -241,21 +240,6 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
 
   return (
     <div className={classes.container}>
-      {allowVariantChoiceCards && (
-        <div className={classes.sectionContainer}>
-          <Typography className={classes.sectionHeader} variant="h4">
-            Choice Cards
-          </Typography>
-
-          <ChoiceCardsEditor
-            showChoiceCards={variant.showChoiceCards ?? false}
-            choiceCardsSettings={variant.choiceCardsSettings}
-            updateChoiceCardsSettings={updateChoiceCardsSettings}
-            isDisabled={!editMode}
-          />
-        </div>
-      )}
-
       {allowVariantHeader && (
         <Controller
           name="heading"
@@ -459,20 +443,20 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
             </div>
           </div>
 
-          {/*{allowVariantChoiceCards && (*/}
-          {/*  <div className={classes.sectionContainer}>*/}
-          {/*    <Typography className={classes.sectionHeader} variant="h4">*/}
-          {/*      Choice Cards*/}
-          {/*    </Typography>*/}
+          {allowVariantChoiceCards && (
+            <div className={classes.sectionContainer}>
+              <Typography className={classes.sectionHeader} variant="h4">
+                Choice Cards
+              </Typography>
 
-          {/*    <ChoiceCardsEditor*/}
-          {/*      showChoiceCards={variant.showChoiceCards ?? false}*/}
-          {/*      choiceCardsSettings={variant.choiceCardsSettings}*/}
-          {/*      updateChoiceCardsSettings={updateChoiceCardsSettings}*/}
-          {/*      isDisabled={!editMode}*/}
-          {/*    />*/}
-          {/*  </div>*/}
-          {/*)}*/}
+              <ChoiceCardsEditor
+                showChoiceCards={variant.showChoiceCards ?? false}
+                choiceCardsSettings={variant.choiceCardsSettings}
+                updateChoiceCardsSettings={updateChoiceCardsSettings}
+                isDisabled={!editMode}
+              />
+            </div>
+          )}
         </>
       )}
 
