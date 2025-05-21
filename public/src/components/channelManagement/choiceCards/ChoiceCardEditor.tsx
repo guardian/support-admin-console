@@ -1,4 +1,4 @@
-import { ChoiceCard } from '../../../models/choiceCards';
+import {ChoiceCard, Product} from '../../../models/choiceCards';
 import React from 'react';
 import {
   Checkbox,
@@ -27,6 +27,16 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
     },
   },
 }));
+
+const productDisplayName = (productTier: Product['supportTier']) => {
+  if (productTier === 'OneOff') {
+    return 'One-off Contribution';
+  } else if (productTier === 'Contribution') {
+    return 'Recurring Contribution';
+  } else {
+    return 'Supporter Plus';
+  }
+}
 
 interface ChoiceCardEditorProps {
   choiceCard: ChoiceCard;
@@ -64,7 +74,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
   return (
     <Accordion key={choiceCard.product.supportTier}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography variant="h6">{choiceCard.product.supportTier}</Typography>
+        <Typography variant="h6">{productDisplayName(choiceCard.product.supportTier)}</Typography>
       </AccordionSummary>
       <AccordionDetails>
         <form onChange={handleSubmit(handleFormChange)}>
@@ -74,7 +84,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
               <Controller
                 name="product.supportTier"
                 control={control}
-                render={(field ) => (
+                render={({field} ) => (
                   <Select
                     {...field}
                     labelId="supportTier-label"
@@ -82,8 +92,31 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
                     onChange={e => {
                       console.log(e)
                       field.onChange(e);
-                      handleFormChange({ ...choiceCard, product: { ...choiceCard.product, supportTier: e.target.value } });
-                      // handleSubmit(handleFormChange);
+                      const newSupportTier = e.target.value as Product['supportTier'];
+                      const oldSupportTier = choiceCard.product.supportTier;
+
+                      const buildProduct = (): Product => {
+                        if (newSupportTier === 'OneOff') {
+                          return { supportTier: 'OneOff' };
+                        } else if (oldSupportTier === 'OneOff') {
+                          debugger
+                          // Default to monthly
+                          return {
+                            supportTier: newSupportTier,
+                            ratePlan: 'Monthly',
+                          };
+                        } else {
+                          return {
+                            supportTier: newSupportTier,
+                            ratePlan: choiceCard.product.ratePlan,
+                          };
+                        }
+                      }
+                      handleFormChange({
+                        ...choiceCard,
+                        product: buildProduct(),
+                      });
+                      // handleSubmit(handleFormChange)();
                       // trigger();
                     }}
                   >
@@ -97,26 +130,28 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
 
             {['Contribution', 'SupporterPlus'].includes(choiceCard.product.supportTier) && (
               <FormControl component="fieldset" margin="normal" disabled={isDisabled}>
-                <RadioGroup row>
-                  <Controller
-                    name="product.ratePlan"
-                    control={control}
-                    render={field => (
-                      <>
-                        <FormControlLabel
-                          value="Monthly"
-                          control={<Radio {...field} checked={field.value === 'Monthly'} />}
-                          label="Monthly"
-                        />
-                        <FormControlLabel
-                          value="Annual"
-                          control={<Radio {...field} checked={field.value === 'Annual'} />}
-                          label="Annual"
-                        />
-                      </>
-                    )}
-                  />
-                </RadioGroup>
+                <Controller
+                  name="product.ratePlan"
+                  control={control}
+                  render={({ field }) => (
+                    <RadioGroup
+                      row
+                      {...field}
+                      onChange={(e) => field.onChange(e.target.value)}
+                    >
+                      <FormControlLabel
+                        value="Monthly"
+                        control={<Radio />}
+                        label="Monthly"
+                      />
+                      <FormControlLabel
+                        value="Annual"
+                        control={<Radio />}
+                        label="Annual"
+                      />
+                    </RadioGroup>
+                  )}
+                />
               </FormControl>
             )}
           </div>
@@ -133,8 +168,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
             disabled={isDisabled || choiceCard.product.supportTier !== 'OneOff'}
             error={!!errors.label}
             helperText={errors.label?.message}
-            name="label"
-            inputRef={register()}
+            {...register('label')}
             onBlur={handleSubmit(handleFormChange)}
           />
 
@@ -146,8 +180,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
             disabled={isDisabled}
             error={!!errors.benefitsLabel}
             helperText={errors.benefitsLabel?.message}
-            name="benefitsLabel"
-            inputRef={register()}
+            {...register('benefitsLabel')}
             onBlur={handleSubmit(handleFormChange)}
           />
 
@@ -157,8 +190,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
             fullWidth
             margin="normal"
             disabled={isDisabled}
-            name="pill.copy"
-            inputRef={register()}
+            {...register('pill.copy')}
             onBlur={handleSubmit(handleFormChange)}
           />
 
@@ -166,7 +198,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
             <Controller
               name="isDefault"
               control={control}
-              render={field => (
+              render={({field}) => (
                 <Checkbox {...field} checked={field.value} color="primary" disabled={isDisabled} />
               )}
             />
@@ -183,8 +215,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
                   fullWidth
                   margin="normal"
                   disabled={isDisabled}
-                  name={`benefits[${index}].copy`}
-                  inputRef={register()}
+                  {...register(`benefits.${index}.copy`)}
                   onBlur={handleSubmit(handleFormChange)}
                   defaultValue={benefit.copy}
                 />
