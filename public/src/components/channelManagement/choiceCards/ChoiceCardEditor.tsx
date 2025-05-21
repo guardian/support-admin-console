@@ -81,6 +81,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
   });
 
   const onFormChange = (update: ChoiceCard) => {
+    // react-hook-form may give us a pill field with undefined copy, so check for that
     const pill = update.pill?.copy ? update.pill : undefined;
     onChange({
       ...update,
