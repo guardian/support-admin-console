@@ -92,7 +92,9 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
   return (
     <Accordion key={`${choiceCard.product.supportTier}-${index}`}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography variant="h6">{productDisplayName(choiceCard.product)}</Typography>
+        <Typography variant="h6">
+          {productDisplayName(choiceCard.product)} {choiceCard.isDefault ? ' [Default]' : ''}
+        </Typography>
       </AccordionSummary>
       <AccordionDetails>
         <form onChange={handleSubmit(onFormChange)}>
