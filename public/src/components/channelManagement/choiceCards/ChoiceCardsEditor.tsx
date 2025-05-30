@@ -2,11 +2,10 @@ import React from 'react';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { Button, Radio, RadioGroup, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { ChoiceCardsSettings } from '../../../models/choiceCards';
+import { ChoiceCard, ChoiceCardsSettings } from '../../../models/choiceCards';
 import { ChoiceCardEditor } from './ChoiceCardEditor';
 import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
-import { useFieldArray, useForm } from 'react-hook-form';
 import Alert from '@mui/lab/Alert';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
@@ -61,42 +60,55 @@ const ChoiceCardsEditor: React.FC<EpicTestChoiceCardsEditorProps> = ({
   choiceCardsSettings,
   updateChoiceCardsSettings,
   isDisabled,
-}: EpicTestChoiceCardsEditorProps) => {
+}) => {
   const classes = useStyles();
-
-  // const { control, handleSubmit, setValue } = useForm<ChoiceCardsSettings>({
-  const formMethods = useForm<ChoiceCardsSettings>({
-    defaultValues: {
-      choiceCards: choiceCardsSettings?.choiceCards || [],
-    },
-  });
-
-  const { fields, append, remove } = useFieldArray({
-    control: formMethods.control,
-    name: 'choiceCards',
-  });
-
-  const onRadioGroupChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    if (event.target.value === 'DefaultChoiceCards') {
-      updateChoiceCardsSettings(true);
-    } else if (event.target.value === 'CustomChoiceCards') {
-      updateChoiceCardsSettings(true, { choiceCards: [] });
-    } else {
-      updateChoiceCardsSettings(false);
-      formMethods.setValue('choiceCards', []);
-    }
-  };
-
-  const handleFieldChange = formMethods.handleSubmit(data => {
-    console.log('handleFieldChange', data);
-    updateChoiceCardsSettings(showChoiceCards, { choiceCards: data.choiceCards });
-  });
 
   const choiceCardsSelection = getChoiceCardsSelection(showChoiceCards, choiceCardsSettings);
 
+  const handleRadioGroupChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const value = event.target.value as ChoiceCardsSelection;
+    if (value === 'DefaultChoiceCards') {
+      updateChoiceCardsSettings(true);
+    } else if (value === 'CustomChoiceCards') {
+      updateChoiceCardsSettings(true, { choiceCards: [] });
+    } else {
+      updateChoiceCardsSettings(false);
+    }
+  };
+
+  const handleChoiceCardChange = (index: number, updatedCard: ChoiceCard): void => {
+    if (choiceCardsSettings) {
+      const updatedCards = [...choiceCardsSettings.choiceCards];
+      updatedCards[index] = updatedCard;
+      updateChoiceCardsSettings(showChoiceCards, { choiceCards: updatedCards });
+    }
+  };
+
+  const handleAddChoiceCard = (): void => {
+    if (choiceCardsSettings) {
+      const updatedCards: ChoiceCard[] = [
+        ...choiceCardsSettings.choiceCards,
+        {
+          product: { supportTier: 'Contribution', ratePlan: 'Monthly' },
+          label: '',
+          benefits: [],
+          isDefault: false,
+        },
+      ];
+      updateChoiceCardsSettings(showChoiceCards, { choiceCards: updatedCards });
+    }
+  };
+
+  const handleRemoveChoiceCard = (index: number): void => {
+    if (choiceCardsSettings) {
+      const updatedCards = choiceCardsSettings.choiceCards.filter((_, i) => i !== index);
+      updateChoiceCardsSettings(showChoiceCards, { choiceCards: updatedCards });
+    }
+  };
+
   return (
     <div className={classes.container}>
-      <RadioGroup value={choiceCardsSelection} onChange={onRadioGroupChange}>
+      <RadioGroup value={choiceCardsSelection} onChange={handleRadioGroupChange}>
         <FormControlLabel
           value="NoChoiceCards"
           key="NoChoiceCards"
@@ -119,28 +131,22 @@ const ChoiceCardsEditor: React.FC<EpicTestChoiceCardsEditorProps> = ({
           disabled={isDisabled}
         />
       </RadioGroup>
-      {choiceCardsSelection === 'CustomChoiceCards' && (
+      {choiceCardsSelection === 'CustomChoiceCards' && choiceCardsSettings && (
         <>
-          {!fields.some(card => card.isDefault) && (
+          {!choiceCardsSettings.choiceCards.some(card => card.isDefault) && (
             <Alert severity="info">One card should be set as the default</Alert>
           )}
-          {fields.map((choiceCard, idx) => (
-            <div className={classes.choiceCardContainer} key={choiceCard.id}>
+          {choiceCardsSettings.choiceCards.map((choiceCard, idx) => (
+            <div className={classes.choiceCardContainer} key={idx}>
               <ChoiceCardEditor
                 choiceCard={choiceCard}
-                onChange={updatedCard => {
-                  console.log('updatedCard', updatedCard);
-                  formMethods.setValue(`choiceCards.${idx}`, updatedCard);
-                  handleFieldChange();
-                }}
+                onChange={updatedCard => handleChoiceCardChange(idx, updatedCard)}
                 isDisabled={isDisabled}
                 index={idx}
-                // control={control}
-                formMethods={formMethods}
               />
               <Button
                 className={classes.deleteButton}
-                onClick={() => remove(idx)}
+                onClick={() => handleRemoveChoiceCard(idx)}
                 disabled={isDisabled}
                 variant="outlined"
                 size="small"
@@ -151,16 +157,8 @@ const ChoiceCardsEditor: React.FC<EpicTestChoiceCardsEditorProps> = ({
             </div>
           ))}
           <Button
-            onClick={() => {
-              append({
-                product: { supportTier: 'Contribution', ratePlan: 'Monthly' },
-                label: '',
-                benefits: [],
-                isDefault: false,
-              });
-              handleFieldChange();
-            }}
-            disabled={isDisabled || fields.length >= 3}
+            onClick={handleAddChoiceCard}
+            disabled={isDisabled || choiceCardsSettings.choiceCards.length >= 3}
             variant="contained"
             size="medium"
             startIcon={<AddIcon />}

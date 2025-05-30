@@ -1,4 +1,3 @@
-import { ChoiceCard, ChoiceCardsSettings, Product } from '../../../models/choiceCards';
 import React from 'react';
 import {
   Checkbox,
@@ -16,12 +15,12 @@ import {
   AccordionDetails,
   Theme,
 } from '@mui/material';
-import { useFieldArray, Controller, UseFormReturn } from 'react-hook-form';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { makeStyles } from '@mui/styles';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
+import { ChoiceCard, Product, RatePlan } from '../../../models/choiceCards';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   productContainer: {
@@ -55,230 +54,158 @@ interface ChoiceCardEditorProps {
   onChange: (choiceCard: ChoiceCard) => void;
   isDisabled: boolean;
   index: number;
-  // control: Control<ChoiceCardsSettings, any, ChoiceCardsSettings>
-  formMethods: UseFormReturn<ChoiceCardsSettings>;
 }
+
 export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
   choiceCard,
   onChange,
   isDisabled,
   index,
-  formMethods,
 }) => {
   const classes = useStyles();
-  const { control, getValues } = formMethods;
 
-  const { fields: benefits, append, remove } = useFieldArray({
-    control,
-    name: `choiceCards.${index}.benefits`,
-  });
-
-  const handleCardChange = () => {
-    const updatedState = getValues(`choiceCards.${index}`);
-    // special handling of pill, because react-hook-form may give us an undefined copy field
-    const pill = updatedState.pill?.copy ? updatedState.pill : null;
-    console.log(index, { pill });
-    console.log('handleCardChange', updatedState);
-    onChange({
-      ...updatedState,
-      pill,
-    });
+  const handleFieldChange = <K extends keyof ChoiceCard>(field: K, value: ChoiceCard[K]): void => {
+    const updatedCard = { ...choiceCard, [field]: value };
+    console.log('handleFieldChange', field, value);
+    onChange(updatedCard);
   };
+
+  const handleBenefitsChange = (index: number, value: string) => {
+    const updatedBenefits = [...choiceCard.benefits];
+    updatedBenefits[index] = { copy: value };
+    handleFieldChange('benefits', updatedBenefits);
+  };
+
+  const addBenefit = () => {
+    const updatedBenefits = [...choiceCard.benefits, { copy: '' }];
+    handleFieldChange('benefits', updatedBenefits);
+  };
+
+  const removeBenefit = (index: number) => {
+    const updatedBenefits = choiceCard.benefits.filter((_, i) => i !== index);
+    handleFieldChange('benefits', updatedBenefits);
+  };
+
+  console.log(choiceCard);
 
   return (
     <Accordion key={`${choiceCard.product.supportTier}-${index}`}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography variant="h6">
-          {productDisplayName(getValues(`choiceCards.${index}.product`))}{' '}
-          {getValues(`choiceCards.${index}.isDefault`) ? ' [Default]' : ''}
+          {productDisplayName(choiceCard.product)} {choiceCard.isDefault ? ' [Default]' : ''}
         </Typography>
       </AccordionSummary>
       <AccordionDetails>
         <div className={classes.productContainer}>
           <FormControl disabled={isDisabled} margin="normal">
             <InputLabel id={`supportTier-label-${index}`}>Support Tier</InputLabel>
-            <Controller
-              name={`choiceCards.${index}.product.supportTier`}
-              control={control}
-              render={({ field }) => (
-                <Select
-                  {...field}
-                  labelId={`supportTier-label-${index}`}
-                  onChange={e => {
-                    const newSupportTier = e.target.value as Product['supportTier'];
-
-                    const buildProduct = (): Product => {
-                      if (newSupportTier === 'OneOff') {
-                        return { supportTier: 'OneOff' };
-                      } else {
-                        return {
-                          supportTier: newSupportTier,
-                          // keep existing ratePlan if possible
-                          ratePlan: getValues(`choiceCards.${index}.product.ratePlan`) ?? 'Monthly',
-                        };
-                      }
-                    };
-                    formMethods.setValue(`choiceCards.${index}.product`, buildProduct(), {
-                      shouldValidate: true,
-                    });
-
-                    handleCardChange();
-                  }}
-                >
-                  <MenuItem value="Contribution">Recurring Contribution</MenuItem>
-                  <MenuItem value="SupporterPlus">Supporter Plus</MenuItem>
-                  <MenuItem value="OneOff">One-off Contribution</MenuItem>
-                </Select>
-              )}
-            />
+            <Select
+              value={choiceCard.product.supportTier}
+              onChange={e => {
+                const supportTier = e.target.value as ChoiceCard['product']['supportTier'];
+                if (e.target.value === 'OneOff') {
+                  handleFieldChange('product', { supportTier: 'OneOff' });
+                } else {
+                  const ratePlan =
+                    choiceCard.product.supportTier !== 'OneOff'
+                      ? choiceCard.product.ratePlan
+                      : 'Monthly';
+                  handleFieldChange('product', {
+                    supportTier,
+                    ratePlan,
+                  });
+                }
+              }}
+              labelId={`supportTier-label-${index}`}
+            >
+              <MenuItem value="Contribution">Recurring Contribution</MenuItem>
+              <MenuItem value="SupporterPlus">Supporter Plus</MenuItem>
+              <MenuItem value="OneOff">One-off Contribution</MenuItem>
+            </Select>
           </FormControl>
 
-          {['Contribution', 'SupporterPlus'].includes(
-            getValues(`choiceCards.${index}.product.supportTier`),
-          ) && (
+          {choiceCard.product.supportTier !== 'OneOff' && (
             <FormControl component="fieldset" margin="normal" disabled={isDisabled}>
-              <Controller
-                name={`choiceCards.${index}.product.ratePlan`}
-                control={control}
-                render={({ field }) => (
-                  <RadioGroup
-                    row
-                    {...field}
-                    onChange={e => {
-                      field.onChange(e.target.value);
-                      handleCardChange();
-                    }}
-                  >
-                    <FormControlLabel value="Monthly" control={<Radio />} label="Monthly" />
-                    <FormControlLabel value="Annual" control={<Radio />} label="Annual" />
-                  </RadioGroup>
-                )}
-              />
+              <RadioGroup
+                row
+                value={choiceCard.product.ratePlan}
+                onChange={e =>
+                  handleFieldChange('product', {
+                    supportTier: choiceCard.product.supportTier,
+                    ratePlan: e.target.value as RatePlan,
+                  })
+                }
+              >
+                <FormControlLabel value="Monthly" control={<Radio />} label="Monthly" />
+                <FormControlLabel value="Annual" control={<Radio />} label="Annual" />
+              </RadioGroup>
             </FormControl>
           )}
         </div>
 
-        <Controller
-          name={`choiceCards.${index}.label`}
-          control={control}
-          render={({ field, fieldState }) => (
-            <TextField
-              {...field}
-              label={
-                choiceCard.product.supportTier === 'OneOff'
-                  ? 'Label'
-                  : `Label is auto-generated for ${choiceCard.product.supportTier}`
-              }
-              variant="filled"
-              fullWidth
-              margin="normal"
-              disabled={
-                isDisabled || getValues(`choiceCards.${index}.product.supportTier`) !== 'OneOff'
-              }
-              required={getValues(`choiceCards.${index}.product.supportTier`) === 'OneOff'}
-              error={!!fieldState.error}
-              helperText={fieldState.error?.message}
-              onChange={e => {
-                field.onChange(e);
-                handleCardChange();
-              }}
-            />
-          )}
+        <TextField
+          value={choiceCard.label}
+          label={
+            choiceCard.product.supportTier === 'OneOff'
+              ? 'Label'
+              : `Label is auto-generated for this product`
+          }
+          variant="filled"
+          fullWidth
+          margin="normal"
+          disabled={isDisabled || choiceCard.product.supportTier !== 'OneOff'}
+          onChange={e => handleFieldChange('label', e.target.value)}
         />
 
-        <Controller
-          name={`choiceCards.${index}.pill.copy`}
-          control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              required={false}
-              label="Pill Copy"
-              variant="filled"
-              fullWidth
-              margin="normal"
-              disabled={isDisabled}
-              onChange={e => {
-                field.onChange(e);
-                handleCardChange();
-              }}
-            />
-          )}
+        <TextField
+          value={choiceCard.pill?.copy || ''}
+          label="Pill Copy"
+          variant="filled"
+          fullWidth
+          margin="normal"
+          disabled={isDisabled}
+          onChange={e => handleFieldChange('pill', { copy: e.target.value })}
         />
 
         <FormControlLabel
           control={
-            <Controller
-              name={`choiceCards.${index}.isDefault`}
-              control={control}
-              render={({ field }) => (
-                <Checkbox
-                  {...field}
-                  checked={field.value}
-                  color="primary"
-                  disabled={isDisabled}
-                  onChange={e => {
-                    field.onChange(e.target.checked);
-                    handleCardChange();
-                  }}
-                />
-              )}
+            <Checkbox
+              checked={choiceCard.isDefault}
+              color="primary"
+              disabled={isDisabled}
+              onChange={e => handleFieldChange('isDefault', e.target.checked)}
             />
           }
           label="Is Default"
         />
 
-        <Controller
-          name={`choiceCards.${index}.benefitsLabel`}
-          control={control}
-          render={({ field, fieldState }) => (
-            <TextField
-              {...field}
-              required={false}
-              label="Benefits Label"
-              variant="filled"
-              fullWidth
-              margin="normal"
-              disabled={isDisabled}
-              error={!!fieldState.error}
-              helperText={fieldState.error?.message}
-              onChange={e => {
-                field.onChange(e);
-                handleCardChange();
-              }}
-            />
-          )}
+        <TextField
+          value={choiceCard.benefitsLabel || ''}
+          label="Benefits Label"
+          variant="filled"
+          fullWidth
+          margin="normal"
+          disabled={isDisabled}
+          onChange={e => handleFieldChange('benefitsLabel', e.target.value)}
         />
 
         <div>
           <label className={classes.benefitsHeading}>Benefits</label>
-          {benefits.map((benefit, benefitIndex) => (
-            <div className={classes.benefitContainer} key={benefit.id}>
-              <Controller
-                name={`choiceCards.${index}.benefits.${benefitIndex}.copy`}
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    label={`Benefit ${benefitIndex + 1}`}
-                    variant="filled"
-                    fullWidth
-                    margin="normal"
-                    required={true}
-                    disabled={isDisabled}
-                    onChange={e => {
-                      field.onChange(e);
-                      handleCardChange();
-                    }}
-                  />
-                )}
+          {choiceCard.benefits.map((benefit, benefitIndex) => (
+            <div className={classes.benefitContainer} key={benefitIndex}>
+              <TextField
+                value={benefit.copy}
+                label={`Benefit ${benefitIndex + 1}`}
+                variant="filled"
+                fullWidth
+                margin="normal"
+                required={true}
+                disabled={isDisabled}
+                onChange={e => handleBenefitsChange(benefitIndex, e.target.value)}
               />
               <Button
                 className={classes.deleteButton}
-                onClick={() => {
-                  remove(benefitIndex);
-                  handleCardChange();
-                }}
+                onClick={() => removeBenefit(benefitIndex)}
                 disabled={isDisabled}
                 variant="outlined"
                 size="medium"
@@ -288,11 +215,8 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
             </div>
           ))}
           <Button
-            onClick={() => {
-              append({ copy: '' });
-              handleCardChange();
-            }}
-            disabled={isDisabled || benefits.length >= 8}
+            onClick={addBenefit}
+            disabled={isDisabled || choiceCard.benefits.length >= 8}
             variant="outlined"
             size="medium"
           >

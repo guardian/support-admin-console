@@ -2,10 +2,12 @@ export interface ProductBenefit {
   copy: string;
 }
 
+export type RatePlan = 'Monthly' | 'Annual';
+
 export type Product =
   | {
       supportTier: 'Contribution' | 'SupporterPlus';
-      ratePlan: 'Monthly' | 'Annual';
+      ratePlan: RatePlan;
     }
   | {
       supportTier: 'OneOff';
