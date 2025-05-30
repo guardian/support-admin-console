@@ -86,8 +86,6 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
     handleFieldChange('benefits', updatedBenefits);
   };
 
-  console.log(choiceCard);
-
   return (
     <Accordion key={`${choiceCard.product.supportTier}-${index}`}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -143,6 +141,18 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
           )}
         </div>
 
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={choiceCard.isDefault}
+              color="primary"
+              disabled={isDisabled}
+              onChange={e => handleFieldChange('isDefault', e.target.checked)}
+            />
+          }
+          label="Is default choice"
+        />
+
         <TextField
           value={choiceCard.label}
           label={
@@ -165,18 +175,6 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
           margin="normal"
           disabled={isDisabled}
           onChange={e => handleFieldChange('pill', { copy: e.target.value })}
-        />
-
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={choiceCard.isDefault}
-              color="primary"
-              disabled={isDisabled}
-              onChange={e => handleFieldChange('isDefault', e.target.checked)}
-            />
-          }
-          label="Is Default"
         />
 
         <TextField
