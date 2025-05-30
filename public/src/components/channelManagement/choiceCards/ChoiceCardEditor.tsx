@@ -21,8 +21,12 @@ import { makeStyles } from '@mui/styles';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import { ChoiceCard, Product, RatePlan } from '../../../models/choiceCards';
+import { RichTextEditorSingleLine, RteMenuConstraints } from '../richTextEditor/richTextEditor';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
+  container: {
+    width: '100%',
+  },
   productContainer: {
     '& > * + *': {
       marginLeft: spacing(2),
@@ -33,11 +37,27 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   },
   benefitContainer: {
     display: 'flex',
+    alignItems: 'center',
+    '& > :first-child': {
+      flex: 1,
+    },
   },
   deleteButton: {
     margin: `${spacing(2)} 0 ${spacing(1)} ${spacing(1)}`,
   },
 }));
+
+const richTextEditorConfig: RteMenuConstraints = {
+  noHtml: false,
+  noBold: false,
+  noItalic: false,
+  noCurrencyTemplate: false,
+  noCountryNameTemplate: true,
+  noArticleCountTemplate: true,
+  noPriceTemplates: true,
+  noDateTemplate: true,
+  noDayTemplate: true,
+};
 
 const productDisplayName = (product: Product) => {
   if (product.supportTier === 'OneOff') {
@@ -87,7 +107,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
   };
 
   return (
-    <Accordion key={`${choiceCard.product.supportTier}-${index}`}>
+    <Accordion key={`${choiceCard.product.supportTier}-${index}`} className={classes.container}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography variant="h6">
           {productDisplayName(choiceCard.product)} {choiceCard.isDefault ? ' [Default]' : ''}
@@ -153,23 +173,21 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
           label="Is default choice"
         />
 
-        <TextField
-          value={choiceCard.label}
-          label={
-            choiceCard.product.supportTier === 'OneOff'
-              ? 'Label'
-              : `Label is auto-generated for this product`
-          }
-          variant="filled"
-          fullWidth
-          margin="normal"
-          disabled={isDisabled || choiceCard.product.supportTier !== 'OneOff'}
-          onChange={e => handleFieldChange('label', e.target.value)}
-        />
+        {choiceCard.product.supportTier === 'OneOff' && (
+          <RichTextEditorSingleLine
+            copyData={choiceCard.label}
+            updateCopy={value => handleFieldChange('label', value ?? '')}
+            name={`label-${index}`}
+            label="Label"
+            disabled={isDisabled}
+            error={false}
+            rteMenuConstraints={richTextEditorConfig}
+          />
+        )}
 
         <TextField
           value={choiceCard.pill?.copy || ''}
-          label="Pill Copy"
+          label="Pill Copy (optional)"
           variant="filled"
           fullWidth
           margin="normal"
@@ -177,29 +195,28 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
           onChange={e => handleFieldChange('pill', { copy: e.target.value })}
         />
 
-        <TextField
-          value={choiceCard.benefitsLabel || ''}
-          label="Benefits Label"
-          variant="filled"
-          fullWidth
-          margin="normal"
+        <RichTextEditorSingleLine
+          copyData={choiceCard.benefitsLabel || ''}
+          updateCopy={value => handleFieldChange('benefitsLabel', value ?? '')}
+          name={`benefitsLabel-${index}`}
+          label="Benefits Label (optional)"
           disabled={isDisabled}
-          onChange={e => handleFieldChange('benefitsLabel', e.target.value)}
+          error={false}
+          rteMenuConstraints={richTextEditorConfig}
         />
 
         <div>
           <label className={classes.benefitsHeading}>Benefits</label>
           {choiceCard.benefits.map((benefit, benefitIndex) => (
             <div className={classes.benefitContainer} key={benefitIndex}>
-              <TextField
-                value={benefit.copy}
+              <RichTextEditorSingleLine
+                copyData={benefit.copy}
+                updateCopy={value => handleBenefitsChange(benefitIndex, value ?? '')}
+                name={`benefit-${benefitIndex}`}
                 label={`Benefit ${benefitIndex + 1}`}
-                variant="filled"
-                fullWidth
-                margin="normal"
-                required={true}
                 disabled={isDisabled}
-                onChange={e => handleBenefitsChange(benefitIndex, e.target.value)}
+                error={false}
+                rteMenuConstraints={richTextEditorConfig}
               />
               <Button
                 className={classes.deleteButton}
