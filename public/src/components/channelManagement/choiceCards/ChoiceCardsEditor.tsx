@@ -2,10 +2,12 @@ import React from 'react';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { Button, Radio, RadioGroup, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { ChoiceCard, ChoiceCardsSettings } from '../../../models/choiceCards';
+import { ChoiceCardsSettings } from '../../../models/choiceCards';
 import { ChoiceCardEditor } from './ChoiceCardEditor';
 import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
+import { useFieldArray, useForm } from 'react-hook-form';
+import Alert from '@mui/lab/Alert';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -62,6 +64,18 @@ const ChoiceCardsEditor: React.FC<EpicTestChoiceCardsEditorProps> = ({
 }: EpicTestChoiceCardsEditorProps) => {
   const classes = useStyles();
 
+  // const { control, handleSubmit, setValue } = useForm<ChoiceCardsSettings>({
+  const formMethods = useForm<ChoiceCardsSettings>({
+    defaultValues: {
+      choiceCards: choiceCardsSettings?.choiceCards || [],
+    },
+  });
+
+  const { fields, append, remove } = useFieldArray({
+    control: formMethods.control,
+    name: 'choiceCards',
+  });
+
   const onRadioGroupChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     if (event.target.value === 'DefaultChoiceCards') {
       updateChoiceCardsSettings(true);
@@ -69,28 +83,14 @@ const ChoiceCardsEditor: React.FC<EpicTestChoiceCardsEditorProps> = ({
       updateChoiceCardsSettings(true, { choiceCards: [] });
     } else {
       updateChoiceCardsSettings(false);
+      formMethods.setValue('choiceCards', []);
     }
   };
 
-  const handleDelete = (index: number): void => {
-    if (choiceCardsSettings) {
-      const updatedChoiceCards = choiceCardsSettings.choiceCards.filter((_, idx) => idx !== index);
-      updateChoiceCardsSettings(true, { choiceCards: updatedChoiceCards });
-    }
-  };
-
-  const handleCreate = (): void => {
-    if (choiceCardsSettings) {
-      const newChoiceCard: ChoiceCard = {
-        product: { supportTier: 'Contribution', ratePlan: 'Monthly' },
-        label: '',
-        benefits: [],
-        isDefault: false,
-      };
-      const updatedChoiceCards = [...choiceCardsSettings.choiceCards, newChoiceCard];
-      updateChoiceCardsSettings(true, { choiceCards: updatedChoiceCards });
-    }
-  };
+  const handleFieldChange = formMethods.handleSubmit(data => {
+    console.log('handleFieldChange', data);
+    updateChoiceCardsSettings(showChoiceCards, { choiceCards: data.choiceCards });
+  });
 
   const choiceCardsSelection = getChoiceCardsSelection(showChoiceCards, choiceCardsSettings);
 
@@ -119,49 +119,55 @@ const ChoiceCardsEditor: React.FC<EpicTestChoiceCardsEditorProps> = ({
           disabled={isDisabled}
         />
       </RadioGroup>
-      {choiceCardsSelection === 'CustomChoiceCards' &&
-        choiceCardsSettings?.choiceCards.map((choiceCard, idx) => (
-          <div className={classes.choiceCardContainer} key={`choice-card-${idx}`}>
-            <ChoiceCardEditor
-              choiceCard={choiceCard}
-              onChange={updatedCard => {
-                const choiceCards = [
-                  ...choiceCardsSettings.choiceCards.slice(0, idx),
-                  updatedCard,
-                  ...choiceCardsSettings.choiceCards.slice(idx + 1),
-                ];
-                updateChoiceCardsSettings(true, {
-                  choiceCards,
-                });
-              }}
-              isDisabled={isDisabled}
-              index={idx}
-            />
-            <Button
-              className={classes.deleteButton}
-              onClick={() => handleDelete(idx)}
-              disabled={isDisabled}
-              variant="outlined"
-              size="small"
-              startIcon={<CloseIcon />}
-            >
-              Delete
-            </Button>
-          </div>
-        ))}
       {choiceCardsSelection === 'CustomChoiceCards' && (
-        <Button
-          onClick={handleCreate}
-          disabled={
-            isDisabled ||
-            (choiceCardsSettings?.choiceCards && choiceCardsSettings.choiceCards.length >= 3)
-          }
-          variant="contained"
-          size="medium"
-          startIcon={<AddIcon />}
-        >
-          Create new choice card
-        </Button>
+        <>
+          {!fields.some(card => card.isDefault) && (
+            <Alert severity="info">One card should be set as the default</Alert>
+          )}
+          {fields.map((choiceCard, idx) => (
+            <div className={classes.choiceCardContainer} key={choiceCard.id}>
+              <ChoiceCardEditor
+                choiceCard={choiceCard}
+                onChange={updatedCard => {
+                  console.log('updatedCard', updatedCard);
+                  formMethods.setValue(`choiceCards.${idx}`, updatedCard);
+                  handleFieldChange();
+                }}
+                isDisabled={isDisabled}
+                index={idx}
+                // control={control}
+                formMethods={formMethods}
+              />
+              <Button
+                className={classes.deleteButton}
+                onClick={() => remove(idx)}
+                disabled={isDisabled}
+                variant="outlined"
+                size="small"
+                startIcon={<CloseIcon />}
+              >
+                Delete
+              </Button>
+            </div>
+          ))}
+          <Button
+            onClick={() => {
+              append({
+                product: { supportTier: 'Contribution', ratePlan: 'Monthly' },
+                label: '',
+                benefits: [],
+                isDefault: false,
+              });
+              handleFieldChange();
+            }}
+            disabled={isDisabled || fields.length >= 3}
+            variant="contained"
+            size="medium"
+            startIcon={<AddIcon />}
+          >
+            Create new choice card
+          </Button>
+        </>
       )}
     </div>
   );

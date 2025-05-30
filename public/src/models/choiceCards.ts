@@ -18,7 +18,7 @@ export interface ChoiceCard {
   benefits: ProductBenefit[];
   pill?: {
     copy: string; // e.g. "Recommended", will be overridden if a promo applies
-  };
+  } | null;
   isDefault: boolean;
 }
 
