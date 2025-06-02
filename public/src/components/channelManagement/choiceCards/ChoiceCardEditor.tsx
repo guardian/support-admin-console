@@ -25,6 +25,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import { RichTextEditorSingleLine, RteMenuConstraints } from '../richTextEditor/richTextEditor';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
+  container: {
+    width: '100%',
+  },
   productContainer: {
     '& > * + *': {
       marginLeft: spacing(2),
@@ -35,6 +38,10 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   },
   benefitContainer: {
     display: 'flex',
+    alignItems: 'center',
+    '& > :first-child': {
+      flex: 1,
+    },
   },
   deleteButton: {
     margin: `${spacing(2)} 0 ${spacing(1)} ${spacing(1)}`,
@@ -99,7 +106,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
   };
 
   return (
-    <Accordion key={`${choiceCard.product.supportTier}-${index}`}>
+    <Accordion key={`${choiceCard.product.supportTier}-${index}`} className={classes.container}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography variant="h6">
           {productDisplayName(getValues(`choiceCards.${index}.product`))}{' '}
@@ -171,6 +178,28 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
           )}
         </div>
 
+        <FormControlLabel
+          control={
+            <Controller
+              name={`choiceCards.${index}.isDefault`}
+              control={control}
+              render={({ field }) => (
+                <Checkbox
+                  {...field}
+                  checked={field.value}
+                  color="primary"
+                  disabled={isDisabled}
+                  onChange={e => {
+                    field.onChange(e.target.checked);
+                    handleCardChange();
+                  }}
+                />
+              )}
+            />
+          }
+          label="Is Default"
+        />
+
         {getValues(`choiceCards.${index}.product.supportTier`) === 'OneOff' && (
           <Controller
             name={`choiceCards.${index}.label`}
@@ -199,7 +228,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
             <TextField
               {...field}
               required={false}
-              label="Pill Copy"
+              label="Pill Copy (optional)"
               variant="filled"
               fullWidth
               margin="normal"
@@ -210,28 +239,6 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
               }}
             />
           )}
-        />
-
-        <FormControlLabel
-          control={
-            <Controller
-              name={`choiceCards.${index}.isDefault`}
-              control={control}
-              render={({ field }) => (
-                <Checkbox
-                  {...field}
-                  checked={field.value}
-                  color="primary"
-                  disabled={isDisabled}
-                  onChange={e => {
-                    field.onChange(e.target.checked);
-                    handleCardChange();
-                  }}
-                />
-              )}
-            />
-          }
-          label="Is Default"
         />
 
         <Controller
