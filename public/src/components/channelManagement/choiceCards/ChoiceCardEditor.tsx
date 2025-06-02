@@ -22,6 +22,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { makeStyles } from '@mui/styles';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
+import { RichTextEditorSingleLine, RteMenuConstraints } from '../richTextEditor/richTextEditor';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   productContainer: {
@@ -39,6 +40,18 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
     margin: `${spacing(2)} 0 ${spacing(1)} ${spacing(1)}`,
   },
 }));
+
+const richTextEditorConfig: RteMenuConstraints = {
+  noHtml: false,
+  noBold: false,
+  noItalic: false,
+  noCurrencyTemplate: false,
+  noCountryNameTemplate: true,
+  noArticleCountTemplate: true,
+  noPriceTemplates: true,
+  noDateTemplate: true,
+  noDayTemplate: true,
+};
 
 const productDisplayName = (product: Product) => {
   if (product.supportTier === 'OneOff') {
@@ -158,33 +171,26 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
           )}
         </div>
 
-        <Controller
-          name={`choiceCards.${index}.label`}
-          control={control}
-          render={({ field, fieldState }) => (
-            <TextField
-              {...field}
-              label={
-                choiceCard.product.supportTier === 'OneOff'
-                  ? 'Label'
-                  : `Label is auto-generated for ${choiceCard.product.supportTier}`
-              }
-              variant="filled"
-              fullWidth
-              margin="normal"
-              disabled={
-                isDisabled || getValues(`choiceCards.${index}.product.supportTier`) !== 'OneOff'
-              }
-              required={getValues(`choiceCards.${index}.product.supportTier`) === 'OneOff'}
-              error={!!fieldState.error}
-              helperText={fieldState.error?.message}
-              onChange={e => {
-                field.onChange(e);
-                handleCardChange();
-              }}
-            />
-          )}
-        />
+        {getValues(`choiceCards.${index}.product.supportTier`) === 'OneOff' && (
+          <Controller
+            name={`choiceCards.${index}.label`}
+            control={control}
+            render={({ field }) => (
+              <RichTextEditorSingleLine
+                copyData={field.value}
+                updateCopy={value => {
+                  field.onChange(value);
+                  handleCardChange();
+                }}
+                name={`label-${index}`}
+                label="Label"
+                disabled={isDisabled}
+                error={false}
+                rteMenuConstraints={richTextEditorConfig}
+              />
+            )}
+          />
+        )}
 
         <Controller
           name={`choiceCards.${index}.pill.copy`}
@@ -231,21 +237,18 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
         <Controller
           name={`choiceCards.${index}.benefitsLabel`}
           control={control}
-          render={({ field, fieldState }) => (
-            <TextField
-              {...field}
-              required={false}
-              label="Benefits Label"
-              variant="filled"
-              fullWidth
-              margin="normal"
-              disabled={isDisabled}
-              error={!!fieldState.error}
-              helperText={fieldState.error?.message}
-              onChange={e => {
-                field.onChange(e);
+          render={({ field }) => (
+            <RichTextEditorSingleLine
+              copyData={choiceCard.benefitsLabel || ''}
+              updateCopy={value => {
+                field.onChange(value);
                 handleCardChange();
               }}
+              name={`benefitsLabel-${index}`}
+              label="Benefits Label (optional)"
+              disabled={isDisabled}
+              error={false}
+              rteMenuConstraints={richTextEditorConfig}
             />
           )}
         />
@@ -258,18 +261,17 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
                 name={`choiceCards.${index}.benefits.${benefitIndex}.copy`}
                 control={control}
                 render={({ field }) => (
-                  <TextField
-                    {...field}
-                    label={`Benefit ${benefitIndex + 1}`}
-                    variant="filled"
-                    fullWidth
-                    margin="normal"
-                    required={true}
-                    disabled={isDisabled}
-                    onChange={e => {
-                      field.onChange(e);
+                  <RichTextEditorSingleLine
+                    copyData={benefit.copy}
+                    updateCopy={value => {
+                      field.onChange(value);
                       handleCardChange();
                     }}
+                    name={`benefit-${benefitIndex}`}
+                    label={`Benefit ${benefitIndex + 1}`}
+                    disabled={isDisabled}
+                    error={false}
+                    rteMenuConstraints={richTextEditorConfig}
                   />
                 )}
               />
