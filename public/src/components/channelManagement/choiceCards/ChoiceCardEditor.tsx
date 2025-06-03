@@ -23,6 +23,7 @@ import { makeStyles } from '@mui/styles';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import { RichTextEditorSingleLine, RteMenuConstraints } from '../richTextEditor/richTextEditor';
+import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -196,7 +197,10 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
           <Controller
             name={`choiceCards.${index}.label`}
             control={control}
-            render={({ field }) => (
+            rules={{
+              required: EMPTY_ERROR_HELPER_TEXT,
+            }}
+            render={({ field, fieldState }) => (
               <RichTextEditorSingleLine
                 copyData={field.value}
                 updateCopy={value => {
@@ -206,7 +210,8 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
                 name={`label-${index}`}
                 label="Label"
                 disabled={isDisabled}
-                error={false}
+                error={!!fieldState.error}
+                helperText={fieldState.error?.message}
                 rteMenuConstraints={richTextEditorConfig}
               />
             )}
