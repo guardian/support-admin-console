@@ -64,7 +64,6 @@ const ChoiceCardsEditor: React.FC<EpicTestChoiceCardsEditorProps> = ({
 }: EpicTestChoiceCardsEditorProps) => {
   const classes = useStyles();
 
-  // const { control, handleSubmit, setValue } = useForm<ChoiceCardsSettings>({
   const formMethods = useForm<ChoiceCardsSettings>({
     defaultValues: {
       choiceCards: choiceCardsSettings?.choiceCards || [],
@@ -134,13 +133,11 @@ const ChoiceCardsEditor: React.FC<EpicTestChoiceCardsEditorProps> = ({
               <ChoiceCardEditor
                 choiceCard={choiceCard}
                 onChange={updatedCard => {
-                  console.log('updatedCard', updatedCard);
                   formMethods.setValue(`choiceCards.${idx}`, updatedCard);
                   handleFieldChange();
                 }}
                 isDisabled={isDisabled}
                 index={idx}
-                // control={control}
                 formMethods={formMethods}
               />
               <Button
