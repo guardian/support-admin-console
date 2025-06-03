@@ -85,5 +85,12 @@ export const templateValidatorForPlatform = (platform: TestPlatform) => (
 export const noHtmlValidator = (s: string): string | undefined =>
   /<\/?[a-z][\s\S]*>/i.test(s) ? 'HTML is not allowed' : undefined;
 
-export const copyLengthValidator = (maxLength: number) => (copy: string): string | undefined =>
-  copy.length > maxLength ? `Max length is ${maxLength}` : undefined;
+// If copy is defined then enforce maxLength requirement
+export const copyLengthValidator = (maxLength: number) => (
+  copy: string | undefined,
+): string | undefined => {
+  if (copy) {
+    return copy.length > maxLength ? `Max length is ${maxLength}` : undefined;
+  }
+  return undefined;
+};
