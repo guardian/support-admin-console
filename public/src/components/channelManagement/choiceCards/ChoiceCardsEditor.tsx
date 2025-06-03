@@ -87,9 +87,14 @@ const ChoiceCardsEditor: React.FC<EpicTestChoiceCardsEditorProps> = ({
     }
   };
 
-  const handleFieldChange = formMethods.handleSubmit(data => {
-    console.log('handleFieldChange', data);
-    updateChoiceCardsSettings(showChoiceCards, { choiceCards: data.choiceCards });
+  const handleFieldChange = formMethods.handleSubmit(updatedSettings => {
+    // special handling of pill field, because react-hook-form may give us an undefined nested copy field - `pill: { copy: undefined }`
+    const choiceCards = updatedSettings.choiceCards.map(card => ({
+      ...card,
+      pill: card.pill?.copy ? card.pill : undefined,
+    }));
+
+    updateChoiceCardsSettings(showChoiceCards, { choiceCards });
   });
 
   const choiceCardsSelection = getChoiceCardsSelection(showChoiceCards, choiceCardsSettings);

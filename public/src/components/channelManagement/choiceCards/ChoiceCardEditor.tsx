@@ -95,14 +95,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
 
   const handleCardChange = () => {
     const updatedState = getValues(`choiceCards.${index}`);
-    // special handling of pill, because react-hook-form may give us an undefined copy field
-    const pill = updatedState.pill?.copy ? updatedState.pill : null;
-    console.log(index, { pill });
-    console.log('handleCardChange', updatedState);
-    onChange({
-      ...updatedState,
-      pill,
-    });
+    onChange(updatedState);
   };
 
   return (
