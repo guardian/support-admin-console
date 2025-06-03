@@ -183,7 +183,7 @@ export const TestsForm = <T extends Test>(
     const onTestAudit = (testName: string, channel?: string): void => {
       const redirectPathname = window.location.pathname.replace(
         window.location.pathname,
-        `audit-tests/${channel}/${testName}`,
+        `/audit-tests/${channel}/${testName}`,
       );
       window.location.href = redirectPathname; // Redirect to the audit page
     };
