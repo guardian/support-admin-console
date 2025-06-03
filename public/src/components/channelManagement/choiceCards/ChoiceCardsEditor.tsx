@@ -46,7 +46,7 @@ const getChoiceCardsSelection = (
   }
 };
 
-interface EpicTestChoiceCardsEditorProps {
+interface ChoiceCardsEditorProps {
   showChoiceCards: boolean;
   choiceCardsSettings?: ChoiceCardsSettings;
   updateChoiceCardsSettings: (
@@ -56,12 +56,12 @@ interface EpicTestChoiceCardsEditorProps {
   isDisabled: boolean;
 }
 
-const ChoiceCardsEditor: React.FC<EpicTestChoiceCardsEditorProps> = ({
+const ChoiceCardsEditor: React.FC<ChoiceCardsEditorProps> = ({
   showChoiceCards,
   choiceCardsSettings,
   updateChoiceCardsSettings,
   isDisabled,
-}: EpicTestChoiceCardsEditorProps) => {
+}: ChoiceCardsEditorProps) => {
   const classes = useStyles();
 
   const formMethods = useForm<ChoiceCardsSettings>({
