@@ -7,6 +7,7 @@ import { EpicVariant } from '../../../models/epic';
 import useTickerData, { TickerSettingsWithData } from '../hooks/useTickerData';
 import { SelectedAmountsVariant, mockAmountsCardData } from '../../../utils/models';
 import { buildStorybookUrl } from '../helpers/dcrStorybook';
+import Alert from '@mui/lab/Alert';
 
 // Article count TS defs
 export interface ArticleCounts {
@@ -140,6 +141,10 @@ const VariantPreview: React.FC<EpicVariantPreviewProps> = ({
 
   return (
     <div>
+      <Alert severity="info">
+        The Live Preview does not support choice cards. Please use the Web Preview to view choice
+        cards.
+      </Alert>
       <iframe className={classes.iframe} src={storybookUrl}></iframe>
     </div>
   );
