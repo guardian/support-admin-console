@@ -2,7 +2,6 @@ import { ChoiceCard, ChoiceCardsSettings, Product } from '../../../models/choice
 import React from 'react';
 import {
   Checkbox,
-  InputLabel,
   MenuItem,
   Select,
   FormControl,
@@ -109,7 +108,6 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
       <AccordionDetails>
         <div className={classes.productContainer}>
           <FormControl disabled={isDisabled} margin="normal">
-            <InputLabel id={`supportTier-label-${index}`}>Support Tier</InputLabel>
             <Controller
               name={`choiceCards.${index}.product.supportTier`}
               control={control}
