@@ -386,7 +386,8 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
     });
   };
 
-  const design = designs.find(d => d.name === variant.template.designName);
+  const designHasChoiceCards =
+    designs.find(d => d.name === variant.template.designName)?.visual?.kind === 'ChoiceCards';
 
   return (
     <div className={classes.container}>
@@ -422,7 +423,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
           deviceType={variant.mobileBannerContent === undefined ? 'ALL' : 'NOT_MOBILE'}
         />
 
-        {design?.visual?.kind === 'ChoiceCards' && (
+        {designHasChoiceCards && (
           <div className={classes.sectionContainer}>
             <Typography className={classes.sectionHeader} variant="h4">
               Choice Cards
