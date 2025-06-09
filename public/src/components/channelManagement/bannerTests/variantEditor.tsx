@@ -22,6 +22,8 @@ import TickerEditor from '../tickerEditor';
 import { BannerDesign } from '../../../models/bannerDesign';
 import VariantSeparateArticleCountEditor from '../../tests/variants/variantSeparateArticleCountEditor';
 import { SeparateArticleCount } from '../../../models/epic';
+import ChoiceCardsEditor from '../choiceCards/ChoiceCardsEditor';
+import { ChoiceCardsSettings } from '../../../models/choiceCards';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
@@ -373,6 +375,19 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
       separateArticleCountSettings: updatedSeparateArticleCountSettings,
     });
   };
+
+  const updateChoiceCardsSettings = (
+    showChoiceCards: boolean, // unused for banners, as this comes from the banner design
+    choiceCardsSettings?: ChoiceCardsSettings,
+  ): void => {
+    onVariantChange({
+      ...variant,
+      choiceCardsSettings,
+    });
+  };
+
+  const design = designs.find(d => d.name === variant.template.designName);
+
   return (
     <div className={classes.container}>
       <div className={classes.sectionContainer}>
@@ -406,6 +421,22 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
           editMode={editMode}
           deviceType={variant.mobileBannerContent === undefined ? 'ALL' : 'NOT_MOBILE'}
         />
+
+        {design?.visual?.kind === 'ChoiceCards' && (
+          <div className={classes.sectionContainer}>
+            <Typography className={classes.sectionHeader} variant="h4">
+              Choice Cards
+            </Typography>
+
+            <ChoiceCardsEditor
+              showChoiceCards={true}
+              allowNoChoiceCards={false}
+              choiceCardsSettings={variant.choiceCardsSettings}
+              updateChoiceCardsSettings={updateChoiceCardsSettings}
+              isDisabled={!editMode}
+            />
+          </div>
+        )}
 
         <RadioGroup
           value={variant.mobileBannerContent !== undefined ? 'enabled' : 'disabled'}

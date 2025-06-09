@@ -48,6 +48,7 @@ const getChoiceCardsSelection = (
 
 interface ChoiceCardsEditorProps {
   showChoiceCards: boolean;
+  allowNoChoiceCards: boolean;
   choiceCardsSettings?: ChoiceCardsSettings;
   updateChoiceCardsSettings: (
     showChoiceCards: boolean,
@@ -60,6 +61,7 @@ const ChoiceCardsEditor: React.FC<ChoiceCardsEditorProps> = ({
   showChoiceCards,
   choiceCardsSettings,
   updateChoiceCardsSettings,
+  allowNoChoiceCards,
   isDisabled,
 }: ChoiceCardsEditorProps) => {
   const classes = useStyles();
@@ -101,13 +103,15 @@ const ChoiceCardsEditor: React.FC<ChoiceCardsEditorProps> = ({
   return (
     <div className={classes.container}>
       <RadioGroup value={choiceCardsSelection} onChange={onRadioGroupChange}>
-        <FormControlLabel
-          value="NoChoiceCards"
-          key="NoChoiceCards"
-          control={<Radio />}
-          label="No choice cards"
-          disabled={isDisabled}
-        />
+        {allowNoChoiceCards && (
+          <FormControlLabel
+            value="NoChoiceCards"
+            key="NoChoiceCards"
+            control={<Radio />}
+            label="No choice cards"
+            disabled={isDisabled}
+          />
+        )}
         <FormControlLabel
           value="DefaultChoiceCards"
           key="DefaultChoiceCards"

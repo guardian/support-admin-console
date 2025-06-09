@@ -14,6 +14,7 @@ import {
 import { Region } from '../utils/models';
 import { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';
 import { SeparateArticleCount } from './epic';
+import { ChoiceCardsSettings } from './choiceCards';
 
 export interface BannerUi {
   designName: string;
@@ -34,6 +35,7 @@ export interface BannerVariant extends Variant {
   separateArticleCount?: boolean;
   separateArticleCountSettings?: SeparateArticleCount;
   tickerSettings?: TickerSettings;
+  choiceCardsSettings?: ChoiceCardsSettings;
 }
 
 export interface BannerTestDeploySchedule {
