@@ -24,6 +24,7 @@ import VariantSeparateArticleCountEditor from '../../tests/variants/variantSepar
 import { SeparateArticleCount } from '../../../models/epic';
 import ChoiceCardsEditor from '../choiceCards/ChoiceCardsEditor';
 import { ChoiceCardsSettings } from '../../../models/choiceCards';
+import Alert from '@mui/lab/Alert';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
@@ -457,12 +458,15 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
           />
         )}
 
-        {designHasChoiceCards && (
-          <div className={classes.sectionContainer}>
-            <Typography className={classes.sectionHeader} variant="h4">
-              Choice Cards
-            </Typography>
+        <div>
+          <Typography className={classes.sectionHeader} variant="h4">
+            Choice Cards
+          </Typography>
+          {!designHasChoiceCards && (
+            <Alert severity="info">The selected design does not have choice cards</Alert>
+          )}
 
+          {designHasChoiceCards && (
             <ChoiceCardsEditor
               showChoiceCards={true}
               allowNoChoiceCards={false}
@@ -470,8 +474,8 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
               updateChoiceCardsSettings={updateChoiceCardsSettings}
               isDisabled={!editMode}
             />
-          </div>
-        )}
+          )}
+        </div>
       </div>
       <div className={classes.sectionContainer}>
         <Typography className={classes.sectionHeader} variant="h4">
