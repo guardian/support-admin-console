@@ -457,26 +457,27 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
             deviceType={'MOBILE'}
           />
         )}
-
-        <div>
-          <Typography className={classes.sectionHeader} variant="h4">
-            Choice Cards
-          </Typography>
-          {!designHasChoiceCards && (
-            <Alert severity="info">The selected design does not have choice cards</Alert>
-          )}
-
-          {designHasChoiceCards && (
-            <ChoiceCardsEditor
-              showChoiceCards={true}
-              allowNoChoiceCards={false}
-              choiceCardsSettings={variant.choiceCardsSettings}
-              updateChoiceCardsSettings={updateChoiceCardsSettings}
-              isDisabled={!editMode}
-            />
-          )}
-        </div>
       </div>
+
+      <div className={classes.sectionContainer}>
+        <Typography className={classes.sectionHeader} variant="h4">
+          Choice Cards
+        </Typography>
+        {!designHasChoiceCards && (
+          <Alert severity="info">The selected design does not have choice cards</Alert>
+        )}
+
+        {designHasChoiceCards && (
+          <ChoiceCardsEditor
+            showChoiceCards={true}
+            allowNoChoiceCards={false}
+            choiceCardsSettings={variant.choiceCardsSettings}
+            updateChoiceCardsSettings={updateChoiceCardsSettings}
+            isDisabled={!editMode}
+          />
+        )}
+      </div>
+
       <div className={classes.sectionContainer}>
         <Typography className={classes.sectionHeader} variant="h4">
           Separate article count
