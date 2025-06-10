@@ -423,22 +423,6 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
           deviceType={variant.mobileBannerContent === undefined ? 'ALL' : 'NOT_MOBILE'}
         />
 
-        {designHasChoiceCards && (
-          <div className={classes.sectionContainer}>
-            <Typography className={classes.sectionHeader} variant="h4">
-              Choice Cards
-            </Typography>
-
-            <ChoiceCardsEditor
-              showChoiceCards={true}
-              allowNoChoiceCards={false}
-              choiceCardsSettings={variant.choiceCardsSettings}
-              updateChoiceCardsSettings={updateChoiceCardsSettings}
-              isDisabled={!editMode}
-            />
-          </div>
-        )}
-
         <RadioGroup
           value={variant.mobileBannerContent !== undefined ? 'enabled' : 'disabled'}
           onChange={onMobileContentRadioChange}
@@ -471,6 +455,22 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
             editMode={editMode}
             deviceType={'MOBILE'}
           />
+        )}
+
+        {designHasChoiceCards && (
+          <div className={classes.sectionContainer}>
+            <Typography className={classes.sectionHeader} variant="h4">
+              Choice Cards
+            </Typography>
+
+            <ChoiceCardsEditor
+              showChoiceCards={true}
+              allowNoChoiceCards={false}
+              choiceCardsSettings={variant.choiceCardsSettings}
+              updateChoiceCardsSettings={updateChoiceCardsSettings}
+              isDisabled={!editMode}
+            />
+          </div>
         )}
       </div>
       <div className={classes.sectionContainer}>
