@@ -25,6 +25,7 @@ import { SeparateArticleCount } from '../../../models/epic';
 import ChoiceCardsEditor from '../choiceCards/ChoiceCardsEditor';
 import { ChoiceCardsSettings } from '../../../models/choiceCards';
 import Alert from '@mui/lab/Alert';
+import PromoCodesEditor from '../choiceCards/PromoCodesEditor';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
@@ -387,6 +388,13 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
     });
   };
 
+  const updatePromoCodes = (promoCodes: string[]): void => {
+    onVariantChange({
+      ...variant,
+      promoCodes,
+    });
+  };
+
   const designHasChoiceCards =
     designs.find(d => d.name === variant.template.designName)?.visual?.kind === 'ChoiceCards';
 
@@ -457,6 +465,12 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
             deviceType={'MOBILE'}
           />
         )}
+
+        <PromoCodesEditor
+          promoCodes={variant.promoCodes ?? []}
+          updatePromoCodes={updatePromoCodes}
+          isDisabled={!editMode}
+        />
       </div>
 
       <div className={classes.sectionContainer}>

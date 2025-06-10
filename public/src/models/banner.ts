@@ -36,6 +36,7 @@ export interface BannerVariant extends Variant {
   separateArticleCountSettings?: SeparateArticleCount;
   tickerSettings?: TickerSettings;
   choiceCardsSettings?: ChoiceCardsSettings;
+  promoCodes?: string[];
 }
 
 export interface BannerTestDeploySchedule {
