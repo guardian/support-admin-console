@@ -36,7 +36,7 @@ libraryDependencies ++= Seq(
   "dev.zio" %% "zio" % zioVersion,
   "dev.zio" %% "zio-streams" % zioVersion,
   "org.scalatest" %% "scalatest" % "3.2.19" % "test",
-  "org.gnieh" %% "diffson-circe" % "4.1.1" % "test",
+  "org.gnieh" %% "diffson-circe" % "4.6.0" % "test",
  )
 
 dependencyOverrides ++= List(
