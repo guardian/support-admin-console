@@ -451,6 +451,7 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
 
               <ChoiceCardsEditor
                 showChoiceCards={variant.showChoiceCards ?? false}
+                allowNoChoiceCards={true}
                 choiceCardsSettings={variant.choiceCardsSettings}
                 updateChoiceCardsSettings={updateChoiceCardsSettings}
                 isDisabled={!editMode}

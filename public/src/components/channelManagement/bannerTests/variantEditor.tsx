@@ -22,6 +22,9 @@ import TickerEditor from '../tickerEditor';
 import { BannerDesign } from '../../../models/bannerDesign';
 import VariantSeparateArticleCountEditor from '../../tests/variants/variantSeparateArticleCountEditor';
 import { SeparateArticleCount } from '../../../models/epic';
+import ChoiceCardsEditor from '../choiceCards/ChoiceCardsEditor';
+import { ChoiceCardsSettings } from '../../../models/choiceCards';
+import Alert from '@mui/lab/Alert';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
@@ -373,6 +376,20 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
       separateArticleCountSettings: updatedSeparateArticleCountSettings,
     });
   };
+
+  const updateChoiceCardsSettings = (
+    showChoiceCards: boolean, // unused for banners, as this comes from the banner design
+    choiceCardsSettings?: ChoiceCardsSettings,
+  ): void => {
+    onVariantChange({
+      ...variant,
+      choiceCardsSettings,
+    });
+  };
+
+  const designHasChoiceCards =
+    designs.find(d => d.name === variant.template.designName)?.visual?.kind === 'ChoiceCards';
+
   return (
     <div className={classes.container}>
       <div className={classes.sectionContainer}>
@@ -441,6 +458,26 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
           />
         )}
       </div>
+
+      <div className={classes.sectionContainer}>
+        <Typography className={classes.sectionHeader} variant="h4">
+          Choice Cards
+        </Typography>
+        {!designHasChoiceCards && (
+          <Alert severity="info">The selected design does not have choice cards</Alert>
+        )}
+
+        {designHasChoiceCards && (
+          <ChoiceCardsEditor
+            showChoiceCards={true}
+            allowNoChoiceCards={false}
+            choiceCardsSettings={variant.choiceCardsSettings}
+            updateChoiceCardsSettings={updateChoiceCardsSettings}
+            isDisabled={!editMode}
+          />
+        )}
+      </div>
+
       <div className={classes.sectionContainer}>
         <Typography className={classes.sectionHeader} variant="h4">
           Separate article count
