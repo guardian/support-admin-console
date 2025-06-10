@@ -6,7 +6,7 @@ addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "2.3.1")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.1.3")
 
-addSbtPlugin("com.localytics" % "sbt-dynamodb" % "2.0.2")
+addSbtPlugin("com.localytics" % "sbt-dynamodb" % "2.0.3")
 
 addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.13.1")
 
