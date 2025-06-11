@@ -19,6 +19,7 @@ export interface GutterContent {
 
 export interface GutterVariant extends Variant {
   content: GutterContent;
+  promoCodes?: string[];
 }
 
 export interface GutterTest extends Test {

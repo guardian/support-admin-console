@@ -17,6 +17,7 @@ case class HeaderVariant(
   name: String,
   content: HeaderContent,
   mobileContent: Option[HeaderContent],
+  promoCodes: List[String] = Nil
 )
 
 case class HeaderTest(
