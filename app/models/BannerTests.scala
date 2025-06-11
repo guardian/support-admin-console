@@ -26,6 +26,7 @@ case class BannerVariant(
     separateArticleCountSettings: Option[SeparateArticleCount],
     tickerSettings: Option[TickerSettings] = None,
     choiceCardsSettings: Option[ChoiceCardsSettings],
+    promoCodes: List[String] = Nil
 )
 
 case class BannerTestDeploySchedule(daysBetween: Int)

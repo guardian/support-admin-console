@@ -15,9 +15,10 @@ case class GutterContent(
 case class GutterVariant(
     name: String,
     content: Option[GutterContent],
+    promoCodes: List[String] = Nil
 )
 
-case class GutterTest( 
+case class GutterTest(
     name: String,
     channel: Option[Channel],
     status: Option[Status],
@@ -27,7 +28,7 @@ case class GutterTest(
     userCohort: UserCohort,
     locations: List[Region] = Nil,
     regionTargeting: Option[RegionTargeting]=None,
-    contextTargeting: PageContextTargeting = PageContextTargeting(Nil,Nil,Nil,Nil), 
+    contextTargeting: PageContextTargeting = PageContextTargeting(Nil,Nil,Nil,Nil),
     variants: List[GutterVariant],
     controlProportionSettings: Option[ControlProportionSettings] = None,
     deviceType: Option[DeviceType] = None,

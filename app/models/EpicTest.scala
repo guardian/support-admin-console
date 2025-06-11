@@ -32,6 +32,7 @@ case class EpicVariant(
   cta: Option[Cta],
   secondaryCta: Option[SecondaryCta],
   separateArticleCount: Option[SeparateArticleCount],
+  promoCodes: List[String] = Nil,
   showChoiceCards: Option[Boolean],
   choiceCardsSettings: Option[ChoiceCardsSettings],
   bylineWithImage: Option[BylineWithImage],
