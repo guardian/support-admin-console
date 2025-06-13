@@ -124,7 +124,7 @@ export const getEpicTestEditor = (
           variant => variant.name !== deletedVariantName,
         );
         const controlProportionSettings = canHaveCustomVariantSplit(updatedVariantList)
-          ? test.controlProportionSettings
+          ? current.controlProportionSettings
           : undefined;
 
         return {
