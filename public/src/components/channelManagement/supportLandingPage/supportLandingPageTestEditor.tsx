@@ -21,26 +21,30 @@ const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLan
 }: ValidatedTestEditorProps<SupportLandingPageTest>) => {
   const classes = useStyles();
 
-  const updateTest = (updatedTest: SupportLandingPageTest): void => {
-    onTestChange({
-      ...updatedTest,
+  const onVariantsChange = (
+    update: (current: SupportLandingPageVariant[]) => SupportLandingPageVariant[],
+  ): void => {
+    onTestChange(current => {
+      const updatedVariantList = update(current.variants);
+      return { ...current, variants: updatedVariantList };
     });
   };
 
-  const onVariantsChange = (updatedVariantList: SupportLandingPageVariant[]): void => {
-    updateTest({ ...test, variants: updatedVariantList });
-  };
-
-  const onVariantChange = (updatedVariant: SupportLandingPageVariant): void => {
-    onVariantsChange(
-      test.variants.map(variant =>
-        variant.name === updatedVariant.name ? updatedVariant : variant,
-      ),
+  const onVariantChange = (variantName: string) => (
+    update: (current: SupportLandingPageVariant) => SupportLandingPageVariant,
+  ): void => {
+    onVariantsChange(current =>
+      current.map(variant => {
+        if (variant.name === variantName) {
+          return update(variant);
+        }
+        return variant;
+      }),
     );
   };
 
   const onVariantDelete = (deletedVariantName: string): void => {
-    onVariantsChange(test.variants.filter(variant => variant.name !== deletedVariantName));
+    onVariantsChange(current => current.filter(variant => variant.name !== deletedVariantName));
   };
 
   const createVariant = (name: string): void => {
@@ -48,21 +52,21 @@ const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLan
       ...getDefaultVariant(),
       name: name,
     };
-    onVariantsChange([...test.variants, newVariant]);
+    onVariantsChange(current => [...current, newVariant]);
   };
 
   const onTargetingChange = (updatedTargeting: RegionTargeting): void => {
-    updateTest({
-      ...test,
+    onTestChange(current => ({
+      ...current,
       regionTargeting: updatedTargeting,
-    });
+    }));
   };
 
   const renderVariantEditor = (variant: SupportLandingPageVariant): React.ReactElement => (
     <VariantEditor
       key={`support-landing-page-${test.name}-${variant.name}`}
       variant={variant}
-      onVariantChange={onVariantChange}
+      onVariantChange={onVariantChange(variant.name)}
       onDelete={(): void => onVariantDelete(variant.name)}
       editMode={userHasTestLocked}
       onValidationChange={(isValid: boolean): void =>
@@ -92,7 +96,7 @@ const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLan
       ...originalVariant,
       name: clonedVariantName,
     };
-    onVariantsChange([...test.variants, newVariant]);
+    onVariantsChange(current => [...current, newVariant]);
   };
 
   if (test) {

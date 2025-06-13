@@ -1,5 +1,5 @@
 import { Test } from './helpers/shared';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { TestEditorProps } from './testsForm';
 import StickyTopBar from './stickyTopBar/stickyTopBar';
 import { Theme } from '@mui/material';
@@ -26,7 +26,7 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
 export interface ValidatedTestEditorProps<T extends Test> {
   test: T;
   userHasTestLocked: boolean;
-  onTestChange: (test: T) => void;
+  onTestChange: (update: (current: T) => T) => void;
   setValidationStatusForField: (fieldName: string, isValid: boolean) => void;
 }
 
@@ -56,6 +56,13 @@ export const ValidatedTestEditor = <T extends Test>(
     allowEditing,
   }: TestEditorProps<T>) => {
     const classes = useStyles();
+    /**
+     * The useRef is necessary here to avoid bugs where updates can be lost.
+     * This can happen when a RichTextEditor field changes a field after another field has changed.
+     * For some reason in that case it can "close over" the old version of the test data, causing other changes to be lost.
+     * In future we should explore refactoring these components to make better use of react-hook-form and react.
+     */
+    const testRef = useRef(test);
     const [isValid, setIsValid] = useState<boolean>(true);
 
     const setValidationStatusForField = useValidation(setIsValid);
@@ -66,6 +73,11 @@ export const ValidatedTestEditor = <T extends Test>(
       } else {
         alert('Test contains errors. Please fix any errors before saving.');
       }
+    };
+
+    const onUpdate = (updatedTest: T): void => {
+      testRef.current = updatedTest;
+      onTestChange(updatedTest);
     };
 
     return (
@@ -96,9 +108,9 @@ export const ValidatedTestEditor = <T extends Test>(
 
         <div className={classes.scrollableContainer}>
           <TestEditor
-            test={test}
+            test={testRef.current}
             userHasTestLocked={userHasTestLocked}
-            onTestChange={onTestChange}
+            onTestChange={update => onUpdate(update(testRef.current))}
             setValidationStatusForField={setValidationStatusForField}
           />
         </div>

@@ -32,17 +32,11 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
 }: ValidatedTestEditorProps<GutterTest>) => {
   const classes = useStyles();
 
-  const updateTest = (updatedTest: GutterTest): void => {
-    onTestChange({
-      ...updatedTest,
-    });
-  };
-
   const onCampaignChange = (campaign?: string): void => {
-    updateTest({
-      ...test,
+    onTestChange(current => ({
+      ...current,
       campaignName: campaign,
-    });
+    }));
   };
 
   const onVariantsSplitSettingsValidationChanged = (isValid: boolean): void =>
@@ -50,49 +44,61 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
 
   const onControlProportionSettingsChange = (
     controlProportionSettings?: ControlProportionSettings,
-  ): void => updateTest({ ...test, controlProportionSettings });
+  ): void => onTestChange(current => ({ ...current, controlProportionSettings }));
 
-  const onVariantsChange = (updatedVariantList: GutterVariant[]): void => {
-    updateTest({ ...test, variants: updatedVariantList });
+  const onVariantsChange = (update: (current: GutterVariant[]) => GutterVariant[]): void => {
+    onTestChange(current => {
+      const updatedVariantList = update(current.variants);
+      return { ...current, variants: updatedVariantList };
+    });
   };
 
-  const onVariantChange = (updatedVariant: GutterVariant): void => {
-    onVariantsChange(
-      test.variants.map(variant =>
-        variant.name === updatedVariant.name ? updatedVariant : variant,
-      ),
+  const onVariantChange = (variantName: string) => (
+    update: (current: GutterVariant) => GutterVariant,
+  ): void => {
+    onVariantsChange(current =>
+      current.map(variant => {
+        if (variant.name === variantName) {
+          return update(variant);
+        }
+        return variant;
+      }),
     );
   };
 
   const onVariantDelete = (deletedVariantName: string): void => {
-    onVariantsChange(test.variants.filter(variant => variant.name !== deletedVariantName));
+    onVariantsChange(current => current.filter(variant => variant.name !== deletedVariantName));
   };
 
   const updateContextTargeting = (contextTargeting: PageContextTargeting): void => {
-    updateTest({
-      ...test,
+    onTestChange(current => ({
+      ...current,
       contextTargeting,
-    });
+    }));
   };
 
   const onRegionTargetingChange = (updatedRegionTargeting: RegionTargeting): void => {
-    updateTest({ ...test, regionTargeting: updatedRegionTargeting, locations: [] });
+    onTestChange(current => ({
+      ...current,
+      regionTargeting: updatedRegionTargeting,
+      locations: [],
+    }));
   };
 
   const onCohortChange = (updatedCohort: UserCohort): void => {
-    updateTest({ ...test, userCohort: updatedCohort });
+    onTestChange(current => ({ ...current, userCohort: updatedCohort }));
   };
 
   const onDeviceTypeChange = (updatedDeviceType: DeviceType): void => {
-    updateTest({ ...test, deviceType: updatedDeviceType });
+    onTestChange(current => ({ ...current, deviceType: updatedDeviceType }));
   };
 
   const onSignedInStatusChange = (signedInStatus: SignedInStatus): void => {
-    onTestChange({ ...test, signedInStatus });
+    onTestChange(current => ({ ...current, signedInStatus }));
   };
 
   const onConsentChange = (consentStatus: ConsentStatus): void => {
-    onTestChange({ ...test, consentStatus });
+    onTestChange(current => ({ ...current, consentStatus }));
   };
   const renderVariantEditor = (variant: GutterVariant): React.ReactElement => (
     <VariantEditorWithPreviewTab
@@ -104,7 +110,7 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
           onValidationChange={(isValid: boolean): void =>
             setValidationStatusForField(variant.name, isValid)
           }
-          onVariantChange={onVariantChange}
+          onVariantChange={onVariantChange(variant.name)}
           onDelete={(): void => onVariantDelete(variant.name)}
         />
       }
@@ -130,7 +136,7 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
       ...getDefaultVariant(),
       name: name,
     };
-    onVariantsChange([...test.variants, newVariant]);
+    onVariantsChange(current => [...current, newVariant]);
   };
 
   const onVariantClone = (originalVariant: GutterVariant, clonedVariantName: string): void => {
@@ -138,7 +144,7 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
       ...originalVariant,
       name: clonedVariantName,
     };
-    onVariantsChange([...test.variants, newVariant]);
+    onVariantsChange(current => [...current, newVariant]);
   };
 
   return (
