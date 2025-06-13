@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ArticlesViewedSettings,
   ConsentStatus,
@@ -92,7 +92,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
         ...updatedTest,
         // To save dotcom from having to work this out
         articlesViewedSettings: getArticlesViewedSettings(updatedTest),
-      }
+      };
     });
   };
 
@@ -121,18 +121,20 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
   const onVariantsChange = (update: (prev: BannerVariant[]) => BannerVariant[]): void => {
     updateTest(prev => {
       const updatedVariantList = update(prev.variants);
-      return { ...prev, variants: updatedVariantList }
+      return { ...prev, variants: updatedVariantList };
     });
   };
 
-  const onVariantChange = (variantName: string) => (update: (prev: BannerVariant) => BannerVariant): void => {
+  const onVariantChange = (variantName: string) => (
+    update: (prev: BannerVariant) => BannerVariant,
+  ): void => {
     onVariantsChange(prev =>
       prev.map(variant => {
         if (variant.name === variantName) {
           return update(variant);
         }
         return variant;
-      })
+      }),
     );
   };
 
@@ -298,7 +300,9 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
           <TestEditorContextTargeting
             contextTargeting={test.contextTargeting}
             editMode={userHasTestLocked}
-            updateContextTargeting={contextTargeting => updateTest(prev => ({ ...prev, contextTargeting }))}
+            updateContextTargeting={contextTargeting =>
+              updateTest(prev => ({ ...prev, contextTargeting }))
+            }
           />
         </div>
 

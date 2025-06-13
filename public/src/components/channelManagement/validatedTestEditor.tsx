@@ -1,5 +1,5 @@
 import { Test } from './helpers/shared';
-import React, {useRef, useState} from 'react';
+import React, { useRef, useState } from 'react';
 import { TestEditorProps } from './testsForm';
 import StickyTopBar from './stickyTopBar/stickyTopBar';
 import { Theme } from '@mui/material';
@@ -26,7 +26,7 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
 export interface ValidatedTestEditorProps<T extends Test> {
   test: T;
   userHasTestLocked: boolean;
-  onTestChange: (update: ((prev: T) => T)) => void;
+  onTestChange: (update: (prev: T) => T) => void;
   setValidationStatusForField: (fieldName: string, isValid: boolean) => void;
 }
 
@@ -78,7 +78,7 @@ export const ValidatedTestEditor = <T extends Test>(
     const onUpdate = (updatedTest: T): void => {
       testRef.current = updatedTest;
       onTestChange(updatedTest);
-    }
+    };
 
     return (
       <div className={classes.testEditorContainer}>

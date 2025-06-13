@@ -335,7 +335,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
 
 interface VariantEditorProps {
   variant: BannerVariant;
-  onVariantChange: (update: ((prev: BannerVariant) => BannerVariant)) => void;
+  onVariantChange: (update: (prev: BannerVariant) => BannerVariant) => void;
   editMode: boolean;
   onDelete: () => void;
   onValidationChange: (isValid: boolean) => void;
