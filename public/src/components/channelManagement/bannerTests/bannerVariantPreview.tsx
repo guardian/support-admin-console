@@ -11,6 +11,7 @@ import { BannerDesign, BannerDesignProps } from '../../../models/bannerDesign';
 import { ArticleCounts } from '../epicTests/variantPreview';
 import { SeparateArticleCount } from '../../../models/epic';
 import { buildStorybookUrl } from '../helpers/dcrStorybook';
+import Alert from "@mui/lab/Alert";
 
 // Mock prices data
 interface ProductPriceData {
@@ -188,6 +189,10 @@ const BannerVariantPreview: React.FC<BannerVariantPreviewProps> = ({
           <div>
             <div className={classes.hint} onClick={toggleDrawer(false)}>
               <Typography>Click anywhere outside the banner to close</Typography>
+              <Alert severity="info">
+                The Live Preview does not support choice cards. Please use the Web Preview to view choice
+                cards.
+              </Alert>
             </div>
             <div>
               <iframe className={classes.iframe} src={storybookUrl}></iframe>
