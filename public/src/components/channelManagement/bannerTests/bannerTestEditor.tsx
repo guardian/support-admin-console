@@ -86,8 +86,8 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
   };
 
   const updateTest = (update: (current: BannerTest) => BannerTest): void => {
-    onTestChange(prev => {
-      const updatedTest = update(prev);
+    onTestChange(current => {
+      const updatedTest = update(current);
       return {
         ...updatedTest,
         // To save dotcom from having to work this out

@@ -74,55 +74,72 @@ export const getEpicTestEditor = (
       return undefined;
     };
 
-    const updateTest = (updatedTest: EpicTest): void => {
-      onTestChange({
-        ...updatedTest,
-        // To save dotcom from having to work this out
-        hasCountryName: copyHasTemplate(updatedTest, COUNTRY_NAME_TEMPLATE),
-        articlesViewedSettings: getArticlesViewedSettings(updatedTest),
+    const updateTest = (update: (current: EpicTest) => EpicTest): void => {
+      onTestChange(current => {
+        const updatedTest = update(current);
+        return {
+          ...updatedTest,
+          // To save dotcom from having to work this out
+          hasCountryName: copyHasTemplate(updatedTest, COUNTRY_NAME_TEMPLATE),
+          articlesViewedSettings: getArticlesViewedSettings(updatedTest),
+        };
       });
     };
 
     const onCampaignChange = (campaign?: string): void => {
-      updateTest({
-        ...test,
+      updateTest(current => ({
+        ...current,
         campaignName: campaign,
-      });
+      }));
     };
 
     const onMethodologyChange = (methodologies: Methodology[]): void => {
       setValidationStatusForField('methodologies', methodologies.length > 0);
-      updateTest({ ...test, methodologies });
+      updateTest(current => ({ ...current, methodologies }));
     };
 
-    const onVariantsChange = (updatedVariantList: EpicVariant[]): void => {
-      updateTest({ ...test, variants: updatedVariantList });
+    const onVariantsChange = (update: (current: EpicVariant[]) => EpicVariant[]): void => {
+      updateTest(current => {
+        const updatedVariantList = update(current.variants);
+        return { ...current, variants: updatedVariantList };
+      });
     };
 
-    const onVariantChange = (updatedVariant: EpicVariant): void => {
-      const updatedVariantList = test.variants.map(variant =>
-        variant.name === updatedVariant.name ? updatedVariant : variant,
+    const onVariantChange = (variantName: string) => (
+      update: (current: EpicVariant) => EpicVariant,
+    ): void => {
+      onVariantsChange(current =>
+        current.map(variant => {
+          if (variant.name === variantName) {
+            return update(variant);
+          }
+          return variant;
+        }),
       );
-      onVariantsChange(updatedVariantList);
     };
 
-    const onVariantDelete = (deletedVariantName: string): void => {
-      const updatedVariantList = test.variants.filter(
-        variant => variant.name !== deletedVariantName,
-      );
-      const controlProportionSettings = canHaveCustomVariantSplit(updatedVariantList)
-        ? test.controlProportionSettings
-        : undefined;
+    const onVariantDelete = (deletedVariantName: string): void =>
+      updateTest(current => {
+        const updatedVariantList = current.variants.filter(
+          variant => variant.name !== deletedVariantName,
+        );
+        const controlProportionSettings = canHaveCustomVariantSplit(updatedVariantList)
+          ? test.controlProportionSettings
+          : undefined;
 
-      updateTest({ ...test, variants: updatedVariantList, controlProportionSettings });
-    };
+        return {
+          ...current,
+          variants: updatedVariantList,
+          controlProportionSettings,
+        };
+      });
 
     const createVariant = (name: string): void => {
       const newVariant: EpicVariant = {
         ...getDefaultVariant(),
         name: name,
       };
-      onVariantsChange([...test.variants, newVariant]);
+      onVariantsChange(current => [...current, newVariant]);
     };
 
     const onVariantClone = (originalVariant: EpicVariant, clonedVariantName: string): void => {
@@ -130,70 +147,70 @@ export const getEpicTestEditor = (
         ...originalVariant,
         name: clonedVariantName,
       };
-      onVariantsChange([...test.variants, newVariant]);
+      onVariantsChange(current => [...current, newVariant]);
     };
 
     const onSwitchChange = (fieldName: string) => (
       event: React.ChangeEvent<HTMLInputElement>,
     ): void => {
       const updatedBool = event.target.checked;
-      updateTest({ ...test, [fieldName]: updatedBool });
+      updateTest(current => ({ ...current, [fieldName]: updatedBool }));
     };
 
     const updateContextTargeting = (contextTargeting: PageContextTargeting): void => {
-      updateTest({
-        ...test,
+      updateTest(current => ({
+        ...current,
         tagIds: contextTargeting.tagIds,
         sections: contextTargeting.sectionIds,
         excludedTagIds: contextTargeting.excludedTagIds,
         excludedSections: contextTargeting.excludedSectionIds,
-      });
+      }));
     };
 
     const onRegionTargetingChange = (updatedRegionTargeting: RegionTargeting): void => {
-      updateTest({
-        ...test,
+      updateTest(current => ({
+        ...current,
         regionTargeting: updatedRegionTargeting,
         locations: [], // deprecated
-      });
+      }));
     };
 
     const onCohortChange = (updatedCohort: UserCohort): void => {
-      updateTest({ ...test, userCohort: updatedCohort });
+      updateTest(current => ({ ...current, userCohort: updatedCohort }));
     };
 
     const onDeviceTypeChange = (updatedDeviceType: DeviceType): void => {
-      updateTest({ ...test, deviceType: updatedDeviceType });
+      updateTest(current => ({ ...current, deviceType: updatedDeviceType }));
     };
 
     const onSignedInStatusChange = (signedInStatus: SignedInStatus): void => {
-      onTestChange({ ...test, signedInStatus });
+      onTestChange(current => ({ ...current, signedInStatus }));
     };
 
     const onConsentChange = (consentStatus: ConsentStatus): void => {
-      onTestChange({ ...test, consentStatus });
+      onTestChange(current => ({ ...current, consentStatus }));
     };
 
     const onArticlesViewedSettingsChange = (
       updatedArticlesViewedSettings?: ArticlesViewedSettings,
     ): void => {
-      updateTest({
-        ...test,
+      updateTest(current => ({
+        ...current,
         articlesViewedSettings: updatedArticlesViewedSettings,
-      });
+      }));
     };
 
     const onMaxViewsChange = (updatedMaxViews?: MaxEpicViews): void => {
-      updateTest({
-        ...test,
+      updateTest(current => ({
+        ...current,
         alwaysAsk: !updatedMaxViews,
         maxViews: updatedMaxViews,
-      });
+      }));
     };
 
     const onControlProportionSettingsChange = (
       controlProportionSettings?: ControlProportionSettings,
-    ): void => updateTest({ ...test, controlProportionSettings });
+    ): void => updateTest(current => ({ ...current, controlProportionSettings }));
 
     const renderVariantEditor = (variant: EpicVariant): React.ReactElement => (
       <VariantEditorWithPreviewTab
@@ -203,7 +220,7 @@ export const getEpicTestEditor = (
             key={variant.name}
             variant={variant}
             editMode={userHasTestLocked}
-            onVariantChange={onVariantChange}
+            onVariantChange={onVariantChange(variant.name)}
             onDelete={(): void => onVariantDelete(variant.name)}
             onValidationChange={(isValid: boolean): void =>
               setValidationStatusForField(variant.name, isValid)
@@ -303,7 +320,7 @@ export const getEpicTestEditor = (
                 variant={test.variants[0]}
                 epicEditorConfig={epicEditorConfig}
                 editMode={userHasTestLocked}
-                onVariantChange={onVariantChange}
+                onVariantChange={onVariantChange(test.variants[0].name)}
                 onDelete={(): void => onVariantDelete(test.variants[0].name)}
                 onValidationChange={(isValid: boolean): void =>
                   setValidationStatusForField(test.variants[0].name, isValid)
