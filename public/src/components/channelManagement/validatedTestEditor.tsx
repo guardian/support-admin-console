@@ -26,7 +26,7 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
 export interface ValidatedTestEditorProps<T extends Test> {
   test: T;
   userHasTestLocked: boolean;
-  onTestChange: (update: (prev: T) => T) => void;
+  onTestChange: (update: (current: T) => T) => void;
   setValidationStatusForField: (fieldName: string, isValid: boolean) => void;
 }
 
