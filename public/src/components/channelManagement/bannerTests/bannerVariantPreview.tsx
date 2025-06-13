@@ -170,7 +170,7 @@ const BannerVariantPreview: React.FC<BannerVariantPreviewProps> = ({
   };
 
   const props = buildProps(variant, tickerSettingsWithData, design);
-  const storyName = 'components-marketing-designablebannerv2--with-three-tier-choice-cards';
+  const storyName = 'components-marketing-designablebannerv2--default';
   const storybookUrl = buildStorybookUrl(storyName, props);
 
   return (
