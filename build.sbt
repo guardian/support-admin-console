@@ -44,7 +44,7 @@ dependencyOverrides ++= List(
   "com.fasterxml.jackson.core" % "jackson-core" % "2.17.3",
   "com.fasterxml.jackson.core" % "jackson-databind" % "2.14.3",
   "io.netty" % "netty-handler" % "4.1.118.Final",
-  "io.netty" % "netty-codec-http2" % "4.1.100.Final",
+  "io.netty" % "netty-codec-http2" % "4.1.122.Final",
   // Related to Play 3.0.2-6 currently brings in a vulnerable version of commons-io
 <<<<<<< HEAD
   "commons-io" % "commons-io" % "2.14.0" % Test,
