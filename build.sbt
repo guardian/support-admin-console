@@ -31,7 +31,7 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-generic-extras" % circeVersion,
   "com.dripower" %% "play-circe" % "3014.1",
   "com.beachape" %% "enumeratum" % "1.7.6",
-  "com.beachape" %% "enumeratum-circe" % "1.7.0",
+  "com.beachape" %% "enumeratum-circe" % "1.7.5",
   ws,
   "dev.zio" %% "zio" % zioVersion,
   "dev.zio" %% "zio-streams" % zioVersion,
