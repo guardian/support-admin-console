@@ -318,6 +318,7 @@ export const TestsForm = <T extends Test>(
         <div className={classes.rightCol}>
           {selectedTest ? (
             <TestEditor
+              key={`${selectedTest.name}${selectedTest.lockStatus?.locked ? '-locked' : ''}`}
               test={selectedTest}
               userHasTestLocked={selectedTest.lockStatus?.email === email}
               userHasTestListLocked={userHasTestListLocked}
