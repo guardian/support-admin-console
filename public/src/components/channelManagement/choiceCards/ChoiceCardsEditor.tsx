@@ -2,11 +2,11 @@ import React from 'react';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { Button, Radio, RadioGroup, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { ChoiceCardsSettings } from '../../../models/choiceCards';
+import { ChoiceCard, ChoiceCardsSettings } from '../../../models/choiceCards';
 import { ChoiceCardEditor } from './ChoiceCardEditor';
 import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import Alert from '@mui/lab/Alert';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
@@ -46,6 +46,9 @@ const getChoiceCardsSelection = (
   }
 };
 
+const countDefaultCards = (choiceCards: ChoiceCard[]): number =>
+  choiceCards.filter(card => card.isDefault).length;
+
 interface ChoiceCardsEditorProps {
   showChoiceCards: boolean;
   allowNoChoiceCards: boolean;
@@ -55,6 +58,7 @@ interface ChoiceCardsEditorProps {
     choiceCardSettings?: ChoiceCardsSettings,
   ) => void;
   isDisabled: boolean;
+  onValidationChange: (isValid: boolean) => void;
 }
 
 const ChoiceCardsEditor: React.FC<ChoiceCardsEditorProps> = ({
@@ -63,19 +67,51 @@ const ChoiceCardsEditor: React.FC<ChoiceCardsEditorProps> = ({
   updateChoiceCardsSettings,
   allowNoChoiceCards,
   isDisabled,
+  onValidationChange,
 }: ChoiceCardsEditorProps) => {
   const classes = useStyles();
 
-  const formMethods = useForm<ChoiceCardsSettings>({
+  const formMethods = useForm<ChoiceCardsSettings & { hasOneDefault: boolean }>({
     defaultValues: {
       choiceCards: choiceCardsSettings?.choiceCards || [],
+      hasOneDefault: countDefaultCards(choiceCardsSettings?.choiceCards || []) === 1,
     },
+    mode: 'onChange',
   });
 
   const { fields, append, remove } = useFieldArray({
     control: formMethods.control,
     name: 'choiceCards',
   });
+
+  // Watch the choiceCards array for updates in order to update the hasOneDefault field
+  const choiceCards = useWatch({
+    control: formMethods.control,
+    name: 'choiceCards',
+  });
+
+  const choiceCardsSelection = getChoiceCardsSelection(showChoiceCards, choiceCardsSettings);
+  const defaultCardCount = countDefaultCards(choiceCards || []);
+
+  React.useEffect(() => {
+    if (choiceCardsSelection === 'CustomChoiceCards') {
+      if (defaultCardCount !== 1) {
+        formMethods.setError('hasOneDefault', {
+          type: 'custom',
+          message:
+            defaultCardCount === 0
+              ? 'One card must be set as the default'
+              : 'Only one card can be set as the default',
+        });
+        onValidationChange(false);
+      } else {
+        formMethods.clearErrors('hasOneDefault');
+        onValidationChange(true);
+      }
+    } else {
+      onValidationChange(true);
+    }
+  }, [fields, choiceCardsSelection, formMethods, defaultCardCount]);
 
   const onRadioGroupChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     if (event.target.value === 'DefaultChoiceCards') {
@@ -97,8 +133,6 @@ const ChoiceCardsEditor: React.FC<ChoiceCardsEditorProps> = ({
 
     updateChoiceCardsSettings(showChoiceCards, { choiceCards });
   });
-
-  const choiceCardsSelection = getChoiceCardsSelection(showChoiceCards, choiceCardsSettings);
 
   return (
     <div className={classes.container}>
@@ -129,8 +163,8 @@ const ChoiceCardsEditor: React.FC<ChoiceCardsEditorProps> = ({
       </RadioGroup>
       {choiceCardsSelection === 'CustomChoiceCards' && (
         <>
-          {!fields.some(card => card.isDefault) && (
-            <Alert severity="info">One card should be set as the default</Alert>
+          {formMethods.formState.errors?.hasOneDefault && (
+            <Alert severity="info">{formMethods.formState.errors.hasOneDefault.message}</Alert>
           )}
           {fields.map((choiceCard, idx) => (
             <div className={classes.choiceCardContainer} key={choiceCard.id}>

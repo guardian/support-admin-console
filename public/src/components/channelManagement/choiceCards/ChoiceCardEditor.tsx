@@ -75,7 +75,7 @@ interface ChoiceCardEditorProps {
   onChange: (choiceCard: ChoiceCard) => void;
   isDisabled: boolean;
   index: number;
-  formMethods: UseFormReturn<ChoiceCardsSettings>;
+  formMethods: UseFormReturn<ChoiceCardsSettings & { hasOneDefault: boolean }>;
 }
 export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
   choiceCard,
