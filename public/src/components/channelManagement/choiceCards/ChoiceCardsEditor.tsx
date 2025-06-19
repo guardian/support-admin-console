@@ -164,7 +164,7 @@ const ChoiceCardsEditor: React.FC<ChoiceCardsEditorProps> = ({
       {choiceCardsSelection === 'CustomChoiceCards' && (
         <>
           {formMethods.formState.errors?.hasOneDefault && (
-            <Alert severity="info">{formMethods.formState.errors.hasOneDefault.message}</Alert>
+            <Alert severity="error">{formMethods.formState.errors.hasOneDefault.message}</Alert>
           )}
           {fields.map((choiceCard, idx) => (
             <div className={classes.choiceCardContainer} key={choiceCard.id}>
