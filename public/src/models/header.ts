@@ -21,6 +21,7 @@ export interface HeaderVariant extends Variant {
   name: string;
   content: HeaderContent;
   mobileContent?: HeaderContent;
+  promoCodes?: string[];
 }
 
 export interface HeaderTest extends Test {

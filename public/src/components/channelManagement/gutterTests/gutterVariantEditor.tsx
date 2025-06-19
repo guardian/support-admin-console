@@ -14,6 +14,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { getRteCopyLength, RichTextEditor } from '../richTextEditor/richTextEditor';
 import { ImageEditorToggle } from '../imageEditor';
 import { DEFAULT_IMAGE_URL, DEFAULT_IMAGE_ALT } from './utils/defaults';
+import PromoCodesEditor from '../choiceCards/PromoCodesEditor';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {
@@ -274,6 +275,13 @@ const GutterVariantEditor: React.FC<GutterVariantEditorProps> = ({
             setValidationStatusForField('mainContent', isValid)
           }
           editMode={editMode}
+        />
+        <PromoCodesEditor
+          promoCodes={variant.promoCodes ?? []}
+          updatePromoCodes={promoCodes => {
+            onVariantChange(current => ({ ...current, promoCodes }));
+          }}
+          isDisabled={!editMode}
         />
       </div>
     </div>

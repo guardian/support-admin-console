@@ -41,6 +41,7 @@ import { EpicVariant, SeparateArticleCount } from '../../../models/epic';
 import { AppleNewsChoiceCards } from './appleChoiceCardsEditor';
 import EpicTestNewsletter from './newsletterSignUp';
 import { ChoiceCardsSettings } from '../../../models/choiceCards';
+import PromoCodesEditor from '../choiceCards/PromoCodesEditor';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const getUseStyles = (shouldAddPadding: boolean) => {
@@ -222,6 +223,9 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   };
   const updateNewsletterSignup = (updateNewsletterSignup?: NewsletterSignup): void => {
     onVariantChange(current => ({ ...current, newsletterSignup: updateNewsletterSignup }));
+  };
+  const updatePromoCodes = (promoCodes: string[]): void => {
+    onVariantChange(current => ({ ...current, promoCodes }));
   };
 
   const getParagraphsHelperText = () => {
@@ -442,6 +446,12 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
               />
             </div>
           </div>
+
+          <PromoCodesEditor
+            promoCodes={variant.promoCodes ?? []}
+            updatePromoCodes={updatePromoCodes}
+            isDisabled={!editMode}
+          />
 
           {allowVariantChoiceCards && (
             <div className={classes.sectionContainer}>

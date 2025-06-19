@@ -9,6 +9,7 @@ import { templateValidatorForPlatform } from '../helpers/validation';
 import { Cta } from '../helpers/shared';
 import { HeaderContent, HeaderVariant } from '../../../models/header';
 import useValidation from '../hooks/useValidation';
+import PromoCodesEditor from '../choiceCards/PromoCodesEditor';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
@@ -278,6 +279,14 @@ const HeaderTestVariantEditor: React.FC<HeaderTestVariantEditorProps> = ({
           deviceType={'MOBILE'}
         />
       )}
+
+      <PromoCodesEditor
+        promoCodes={variant.promoCodes ?? []}
+        updatePromoCodes={promoCodes => {
+          onVariantChange(current => ({ ...current, promoCodes }));
+        }}
+        isDisabled={!editMode}
+      />
     </div>
   );
 };
