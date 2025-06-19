@@ -85,24 +85,27 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
     return undefined;
   };
 
-  const updateTest = (updatedTest: BannerTest): void => {
-    onTestChange({
-      ...updatedTest,
-      // To save dotcom from having to work this out
-      articlesViewedSettings: getArticlesViewedSettings(updatedTest),
+  const updateTest = (update: (current: BannerTest) => BannerTest): void => {
+    onTestChange(current => {
+      const updatedTest = update(current);
+      return {
+        ...updatedTest,
+        // To save dotcom from having to work this out
+        articlesViewedSettings: getArticlesViewedSettings(updatedTest),
+      };
     });
   };
 
   const onCampaignChange = (campaign?: string): void => {
-    updateTest({
-      ...test,
+    updateTest(current => ({
+      ...current,
       campaignName: campaign,
-    });
+    }));
   };
 
   const onMethodologyChange = (methodologies: Methodology[]): void => {
     setValidationStatusForField('methodologies', methodologies.length > 0);
-    updateTest({ ...test, methodologies });
+    updateTest(current => ({ ...current, methodologies }));
   };
 
   const onArticlesViewedSettingsValidationChanged = (isValid: boolean): void =>
@@ -113,69 +116,77 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
 
   const onControlProportionSettingsChange = (
     controlProportionSettings?: ControlProportionSettings,
-  ): void => updateTest({ ...test, controlProportionSettings });
+  ): void => updateTest(current => ({ ...current, controlProportionSettings }));
 
-  const onVariantsChange = (updatedVariantList: BannerVariant[]): void => {
-    updateTest({ ...test, variants: updatedVariantList });
+  const onVariantsChange = (update: (current: BannerVariant[]) => BannerVariant[]): void => {
+    updateTest(current => {
+      const updatedVariantList = update(current.variants);
+      return { ...current, variants: updatedVariantList };
+    });
   };
 
-  const onVariantChange = (updatedVariant: BannerVariant): void => {
-    onVariantsChange(
-      test.variants.map(variant =>
-        variant.name === updatedVariant.name ? updatedVariant : variant,
-      ),
+  const onVariantChange = (variantName: string) => (
+    update: (current: BannerVariant) => BannerVariant,
+  ): void => {
+    onVariantsChange(current =>
+      current.map(variant => {
+        if (variant.name === variantName) {
+          return update(variant);
+        }
+        return variant;
+      }),
     );
   };
 
   const onVariantDelete = (deletedVariantName: string): void => {
-    onVariantsChange(test.variants.filter(variant => variant.name !== deletedVariantName));
+    onVariantsChange(current => current.filter(variant => variant.name !== deletedVariantName));
   };
 
   const onRegionTargetingChange = (updatedRegionTargeting: RegionTargeting): void => {
-    updateTest({
-      ...test,
+    updateTest(current => ({
+      ...current,
       regionTargeting: updatedRegionTargeting,
       locations: [], // deprecated
-    });
+    }));
   };
 
   const onCohortChange = (updatedCohort: UserCohort): void => {
-    updateTest({ ...test, userCohort: updatedCohort });
+    updateTest(current => ({ ...current, userCohort: updatedCohort }));
   };
 
   const onDeviceTypeChange = (updatedDeviceType: DeviceType): void => {
-    updateTest({ ...test, deviceType: updatedDeviceType });
+    updateTest(current => ({ ...current, deviceType: updatedDeviceType }));
   };
 
   const onSignedInStatusChange = (signedInStatus: SignedInStatus): void => {
-    onTestChange({ ...test, signedInStatus });
+    onTestChange(current => ({ ...current, signedInStatus }));
   };
 
   const onConsentStatusChange = (consentStatus: ConsentStatus): void => {
-    onTestChange({ ...test, consentStatus });
+    onTestChange(current => ({ ...current, consentStatus }));
   };
 
   const onArticlesViewedSettingsChange = (
     updatedArticlesViewedSettings?: ArticlesViewedSettings,
   ): void => {
-    updateTest({
-      ...test,
+    updateTest(current => ({
+      ...current,
       articlesViewedSettings: updatedArticlesViewedSettings,
-    });
+    }));
   };
 
   const onDeployScheduleChange = (updatedDeploySchedule?: BannerTestDeploySchedule): void => {
-    updateTest({
-      ...test,
+    updateTest(current => ({
+      ...current,
       deploySchedule: updatedDeploySchedule,
-    });
+    }));
   };
 
   const renderVariantEditor = (variant: BannerVariant): React.ReactElement => (
     <VariantEditor
       key={`banner-${test.name}-${variant.name}`}
       variant={variant}
-      onVariantChange={onVariantChange}
+      onVariantChange={onVariantChange(variant.name)}
       onDelete={(): void => onVariantDelete(variant.name)}
       editMode={userHasTestLocked}
       designs={designs}
@@ -206,7 +217,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
       ...getDefaultVariant(),
       name: name,
     };
-    onVariantsChange([...test.variants, newVariant]);
+    onVariantsChange(current => [...current, newVariant]);
   };
 
   const onVariantClone = (originalVariant: BannerVariant, clonedVariantName: string): void => {
@@ -214,7 +225,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
       ...originalVariant,
       name: clonedVariantName,
     };
-    onVariantsChange([...test.variants, newVariant]);
+    onVariantsChange(current => [...current, newVariant]);
   };
 
   if (test) {
@@ -289,7 +300,9 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
           <TestEditorContextTargeting
             contextTargeting={test.contextTargeting}
             editMode={userHasTestLocked}
-            updateContextTargeting={contextTargeting => updateTest({ ...test, contextTargeting })}
+            updateContextTargeting={contextTargeting =>
+              updateTest(current => ({ ...current, contextTargeting }))
+            }
           />
         </div>
 

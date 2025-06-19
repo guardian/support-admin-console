@@ -26,7 +26,9 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 
 interface VariantEditorProps {
   variant: SupportLandingPageVariant;
-  onVariantChange: (updatedVariant: SupportLandingPageVariant) => void;
+  onVariantChange: (
+    update: (current: SupportLandingPageVariant) => SupportLandingPageVariant,
+  ) => void;
   editMode: boolean;
   onDelete: () => void;
   onValidationChange: (isValid: boolean) => void;
@@ -46,7 +48,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
         <CopyEditor
           copy={variant.copy}
           onChange={(updatedCopy: SupportLandingPageCopy): void =>
-            onVariantChange({ ...variant, copy: updatedCopy })
+            onVariantChange(current => ({ ...current, copy: updatedCopy }))
           }
           onValidationChange={onValidationChange}
           editMode={editMode}
@@ -55,7 +57,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
       <ProductsEditor
         products={variant.products}
         onProductsChange={updatedProducts =>
-          onVariantChange({ ...variant, products: updatedProducts })
+          onVariantChange(current => ({ ...current, products: updatedProducts }))
         }
         onValidationChange={onValidationChange}
         editMode={editMode}
@@ -63,7 +65,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
       <TickerEditor
         tickerSettings={variant.tickerSettings}
         updateTickerSettings={(updatedTickerSettings?: TickerSettings): void => {
-          onVariantChange({ ...variant, tickerSettings: updatedTickerSettings });
+          onVariantChange(current => ({ ...current, tickerSettings: updatedTickerSettings }));
         }}
         isDisabled={!editMode}
         onValidationChange={onValidationChange}
@@ -71,7 +73,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
       <CountdownEditor
         countdownSettings={variant.countdownSettings}
         updateCountdownSettings={(updatedCountdownSettings?: CountdownSettings): void => {
-          onVariantChange({ ...variant, countdownSettings: updatedCountdownSettings });
+          onVariantChange(current => ({ ...current, countdownSettings: updatedCountdownSettings }));
         }}
         isDisabled={!editMode}
         onValidationChange={onValidationChange}
