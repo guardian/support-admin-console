@@ -279,7 +279,7 @@ const GutterVariantEditor: React.FC<GutterVariantEditorProps> = ({
         <PromoCodesEditor
           promoCodes={variant.promoCodes ?? []}
           updatePromoCodes={promoCodes => {
-            onVariantChange({ ...variant, promoCodes });
+            onVariantChange(current => ({ ...current, promoCodes }));
           }}
           isDisabled={!editMode}
         />

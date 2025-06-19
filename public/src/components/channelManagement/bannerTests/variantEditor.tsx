@@ -389,10 +389,10 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
   };
 
   const updatePromoCodes = (promoCodes: string[]): void => {
-    onVariantChange({
-      ...variant,
+    onVariantChange(current => ({
+      ...current,
       promoCodes,
-    });
+    }));
   };
 
   const designHasChoiceCards =

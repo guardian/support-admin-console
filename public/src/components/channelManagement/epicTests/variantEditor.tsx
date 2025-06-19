@@ -225,7 +225,7 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
     onVariantChange(current => ({ ...current, newsletterSignup: updateNewsletterSignup }));
   };
   const updatePromoCodes = (promoCodes: string[]): void => {
-    onVariantChange({ ...variant, promoCodes });
+    onVariantChange(current => ({ ...current, promoCodes }));
   };
 
   const getParagraphsHelperText = () => {
