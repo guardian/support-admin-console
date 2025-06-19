@@ -488,6 +488,9 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
             choiceCardsSettings={variant.choiceCardsSettings}
             updateChoiceCardsSettings={updateChoiceCardsSettings}
             isDisabled={!editMode}
+            onValidationChange={(isValid): void =>
+              setValidationStatusForField('choiceCardsSettings', isValid)
+            }
           />
         )}
       </div>
