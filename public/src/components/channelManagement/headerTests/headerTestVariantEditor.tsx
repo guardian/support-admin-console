@@ -195,7 +195,7 @@ const HeaderTestVariantContentEditor: React.FC<HeaderTestVariantContentEditorPro
 
 interface HeaderTestVariantEditorProps {
   variant: HeaderVariant;
-  onVariantChange: (updatedVariant: HeaderVariant) => void;
+  onVariantChange: (update: (current: HeaderVariant) => HeaderVariant) => void;
   editMode: boolean;
   onDelete: () => void;
   onValidationChange: (isValid: boolean) => void;
@@ -214,20 +214,20 @@ const HeaderTestVariantEditor: React.FC<HeaderTestVariantEditorProps> = ({
 
   const onMobileContentRadioChange = (): void => {
     if (variant.mobileContent === undefined) {
-      onVariantChange({
-        ...variant,
+      onVariantChange(current => ({
+        ...current,
         mobileContent: {
           heading: '',
           subheading: '',
         },
-      });
+      }));
     } else {
       // remove mobile content and clear any validation errors
       setValidationStatusForField('mobileContent', true);
-      onVariantChange({
-        ...variant,
+      onVariantChange(current => ({
+        ...current,
         mobileContent: undefined,
-      });
+      }));
     }
   };
 
@@ -237,7 +237,7 @@ const HeaderTestVariantEditor: React.FC<HeaderTestVariantEditorProps> = ({
         <HeaderTestVariantContentEditor
           content={content}
           onChange={(updatedContent: HeaderContent): void =>
-            onVariantChange({ ...variant, content: updatedContent })
+            onVariantChange(current => ({ ...current, content: updatedContent }))
           }
           onValidationChange={(isValid): void =>
             setValidationStatusForField('mainContent', isValid)
@@ -270,7 +270,7 @@ const HeaderTestVariantEditor: React.FC<HeaderTestVariantEditorProps> = ({
         <HeaderTestVariantContentEditor
           content={variant.mobileContent}
           onChange={(updatedContent: HeaderContent): void =>
-            onVariantChange({ ...variant, mobileContent: updatedContent })
+            onVariantChange(current => ({ ...current, mobileContent: updatedContent }))
           }
           onValidationChange={(isValid): void =>
             setValidationStatusForField('mobileContent', isValid)

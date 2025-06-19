@@ -248,7 +248,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
 
 interface GutterVariantEditorProps {
   variant: GutterVariant;
-  onVariantChange: (updatedVariant: GutterVariant) => void;
+  onVariantChange: (update: (current: GutterVariant) => GutterVariant) => void;
   editMode: boolean;
   onValidationChange: (isValid: boolean) => void;
   onDelete: () => void;
@@ -269,7 +269,7 @@ const GutterVariantEditor: React.FC<GutterVariantEditorProps> = ({
         <VariantContentEditor
           variant={variant.content}
           onVariantChange={(updatedContent: GutterContent): void =>
-            onVariantChange({ ...variant, content: updatedContent })
+            onVariantChange(current => ({ ...current, content: updatedContent }))
           }
           onValidationChange={(isValid): void =>
             setValidationStatusForField('mainContent', isValid)

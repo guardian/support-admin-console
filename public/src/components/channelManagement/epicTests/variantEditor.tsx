@@ -89,7 +89,7 @@ interface FormData {
 interface EpicTestVariantEditorProps {
   variant: EpicVariant;
   epicEditorConfig: EpicEditorConfig;
-  onVariantChange: (updatedVariant: EpicVariant) => void;
+  onVariantChange: (update: (current: EpicVariant) => EpicVariant) => void;
   editMode: boolean;
   onDelete: () => void;
   onValidationChange: (isValid: boolean) => void;
@@ -161,10 +161,10 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   }, []);
 
   useEffect(() => {
-    onVariantChange({
-      ...variant,
+    onVariantChange(current => ({
+      ...current,
       ...validatedFields,
-    });
+    }));
   }, [validatedFields]);
 
   useEffect(() => {
@@ -184,45 +184,45 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   const onCtasToggleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const value = event.target.value;
     if (value === 'newsletterSignup') {
-      onVariantChange({
-        ...variant,
+      onVariantChange(current => ({
+        ...current,
         newsletterSignup: { newsletterId: '', successDescription: '' },
-      });
+      }));
     } else {
-      onVariantChange({ ...variant, newsletterSignup: undefined });
+      onVariantChange(current => ({ ...current, newsletterSignup: undefined }));
     }
   };
 
   // Handling other form field updates
   const updatePrimaryCta = (updatedCta?: Cta): void => {
-    onVariantChange({ ...variant, cta: updatedCta });
+    onVariantChange(current => ({ ...current, cta: updatedCta }));
   };
   const updateSecondaryCta = (updatedCta?: SecondaryCta): void => {
-    onVariantChange({ ...variant, secondaryCta: updatedCta });
+    onVariantChange(current => ({ ...current, secondaryCta: updatedCta }));
   };
   const updateSeparateArticleCount = (updatedSeparateArticleCount?: SeparateArticleCount): void => {
-    onVariantChange({ ...variant, separateArticleCount: updatedSeparateArticleCount });
+    onVariantChange(current => ({ ...current, separateArticleCount: updatedSeparateArticleCount }));
   };
   const updateTickerSettings = (updatedTickerSettings?: TickerSettings): void => {
-    onVariantChange({ ...variant, tickerSettings: updatedTickerSettings });
+    onVariantChange(current => ({ ...current, tickerSettings: updatedTickerSettings }));
   };
   const updateChoiceCardsSettings = (
     showChoiceCards?: boolean,
     choiceCardsSettings?: ChoiceCardsSettings,
   ): void => {
-    onVariantChange({ ...variant, showChoiceCards, choiceCardsSettings });
+    onVariantChange(current => ({ ...current, showChoiceCards, choiceCardsSettings }));
   };
   const updateShowSignInLink = (updatedShowSignInLink?: boolean): void => {
-    onVariantChange({ ...variant, showSignInLink: updatedShowSignInLink });
+    onVariantChange(current => ({ ...current, showSignInLink: updatedShowSignInLink }));
   };
   const updateImage = (image?: Image): void => {
-    onVariantChange({ ...variant, image });
+    onVariantChange(current => ({ ...current, image }));
   };
   const updateBylineWithImage = (bylineWithImage?: BylineWithImage): void => {
-    onVariantChange({ ...variant, bylineWithImage });
+    onVariantChange(current => ({ ...current, bylineWithImage }));
   };
   const updateNewsletterSignup = (updateNewsletterSignup?: NewsletterSignup): void => {
-    onVariantChange({ ...variant, newsletterSignup: updateNewsletterSignup });
+    onVariantChange(current => ({ ...current, newsletterSignup: updateNewsletterSignup }));
   };
   const updatePromoCodes = (promoCodes: string[]): void => {
     onVariantChange({ ...variant, promoCodes });
