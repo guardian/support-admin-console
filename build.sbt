@@ -28,7 +28,7 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
-  "io.circe" %% "circe-generic-extras" % circeVersion,
+  "io.circe" %% "circe-generic-extras" % "0.14.4",
   "com.dripower" %% "play-circe" % "3014.1",
   "com.beachape" %% "enumeratum" % "1.7.6",
   "com.beachape" %% "enumeratum-circe" % "1.7.5",
