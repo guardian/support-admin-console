@@ -3,11 +3,11 @@ name := "support-admin-console"
 
 version := "1.0-SNAPSHOT"
 
-scalaVersion := "2.13.10"
+scalaVersion := "2.13.16"
 
-val circeVersion = "0.14.1"
+val circeVersion = "0.14.14"
 val awsVersion = "2.31.60"
-val zioVersion = "1.0.14"
+val zioVersion = "1.0.18"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala, RiffRaffArtifact, SbtWeb, JDebPackaging, SystemdPlugin,BuildInfoPlugin)
   .settings(
@@ -21,32 +21,32 @@ asciiGraphWidth := 999999999 // to ensure Snyk can read the the deeeeep dependen
 libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
   "com.gu.play-googleauth" %% "play-v30" % "19.0.1",
-  "com.google.cloud" % "google-cloud-bigquery" % "2.43.1",
+  "com.google.cloud" % "google-cloud-bigquery" % "2.43.3",
   "com.gu" %% "simple-configuration-ssm" % "5.1.2",
   "software.amazon.awssdk" % "s3" % awsVersion,
   "software.amazon.awssdk" % "dynamodb" % awsVersion,
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
-  "io.circe" %% "circe-generic-extras" % circeVersion,
+  "io.circe" %% "circe-generic-extras" % "0.14.4",
   "com.dripower" %% "play-circe" % "3014.1",
-  "com.beachape" %% "enumeratum" % "1.7.0",
-  "com.beachape" %% "enumeratum-circe" % "1.7.0",
+  "com.beachape" %% "enumeratum" % "1.7.6",
+  "com.beachape" %% "enumeratum-circe" % "1.7.5",
   ws,
   "dev.zio" %% "zio" % zioVersion,
   "dev.zio" %% "zio-streams" % zioVersion,
   "org.scalatest" %% "scalatest" % "3.2.19" % "test",
-  "org.gnieh" %% "diffson-circe" % "4.1.1" % "test",
+  "org.gnieh" %% "diffson-circe" % "4.6.0" % "test",
  )
 
 dependencyOverrides ++= List(
   // Play still uses an old version of jackson-core which has a vulnerability - https://security.snyk.io/vuln/SNYK-JAVA-COMFASTERXMLJACKSONCORE-7569538
-  "com.fasterxml.jackson.core" % "jackson-core" % "2.17.2",
-  "com.fasterxml.jackson.core" % "jackson-databind" % "2.14.0",
-  "io.netty" % "netty-handler" % "4.1.118.Final",
-  "io.netty" % "netty-codec-http2" % "4.1.100.Final",
+  "com.fasterxml.jackson.core" % "jackson-core" % "2.17.3",
+  "com.fasterxml.jackson.core" % "jackson-databind" % "2.14.3",
+  "io.netty" % "netty-handler" % "4.1.122.Final",
+  "io.netty" % "netty-codec-http2" % "4.1.122.Final",
   // Related to Play 3.0.2-6 currently brings in a vulnerable version of commons-io
-  "commons-io" % "commons-io" % "2.14.0" % Test,
+  "commons-io" % "commons-io" % "2.19.0" % Test,
   "commons-beanutils" % "commons-beanutils" % "1.11.0"
  )
 
