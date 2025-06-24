@@ -46,12 +46,8 @@ dependencyOverrides ++= List(
   "io.netty" % "netty-handler" % "4.1.122.Final",
   "io.netty" % "netty-codec-http2" % "4.1.122.Final",
   // Related to Play 3.0.2-6 currently brings in a vulnerable version of commons-io
-<<<<<<< HEAD
-  "commons-io" % "commons-io" % "2.14.0" % Test,
+  "commons-io" % "commons-io" % "2.19.0" % Test,
   "commons-beanutils" % "commons-beanutils" % "1.11.0"
-=======
-  "commons-io" % "commons-io" % "2.19.0" % Test
->>>>>>> 047f98cf (Update commons-io to 2.19.0)
  )
 
 excludeDependencies ++= Seq(
