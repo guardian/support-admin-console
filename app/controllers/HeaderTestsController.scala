@@ -6,7 +6,6 @@ import models.{Channel, HeaderTest}
 import models.HeaderTest._
 import play.api.mvc.{ActionBuilder, AnyContent, ControllerComponents}
 import services.{DynamoArchivedChannelTests, DynamoChannelTests, DynamoChannelTestsAudit}
-import zio.ZEnv
 
 import scala.concurrent.ExecutionContext
 
@@ -18,7 +17,7 @@ class HeaderTestsController(
   authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
   components: ControllerComponents,
   stage: String,
-  runtime: zio.Runtime[ZEnv],
+  runtime: zio.Runtime[Any],
   dynamoTests: DynamoChannelTests,
   dynamoArchivedTests: DynamoArchivedChannelTests,
   dynamoTestsAudit: DynamoChannelTestsAudit

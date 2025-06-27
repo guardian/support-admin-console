@@ -8,7 +8,7 @@ import play.api.mvc.{AbstractController, ActionBuilder, AnyContent, ControllerCo
 import services.{DynamoArchivedBannerDesigns, DynamoBannerDesigns, DynamoChannelTests}
 import services.S3Client.S3ObjectSettings
 import utils.Circe.noNulls
-import zio.{IO, ZEnv, ZIO}
+import zio.{Unsafe, ZIO}
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.syntax.EncoderOps
 import io.circe.generic.auto._
@@ -20,7 +20,7 @@ class BannerDesignsController(
     authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
     components: ControllerComponents,
     stage: String,
-    runtime: zio.Runtime[ZEnv],
+    runtime: zio.Runtime[Any],
     dynamoDesigns: DynamoBannerDesigns,
     dynamoTests: DynamoChannelTests,
     dynamoArchivedDesigns: DynamoArchivedBannerDesigns
@@ -45,15 +45,15 @@ class BannerDesignsController(
 
   val s3Client = services.S3
 
-  private def run(f: => ZIO[ZEnv, Throwable, Result]): Future[Result] =
-    runtime.unsafeRunToFuture {
+  private def run(f: => ZIO[Any, Throwable, Result]): Future[Result] =
+    Unsafe.unsafe { implicit unsafe => runtime.unsafe.runToFuture {
       f.catchAll(error => {
         logger.error(
           s"Returning InternalServerError to client: ${error.getMessage}",
           error)
         ZIO.succeed(InternalServerError(error.getMessage))
       })
-    }
+    }}
 
   def getAll = authAction.async { request =>
     run {
@@ -163,7 +163,7 @@ class BannerDesignsController(
       case _       => None
     }
 
-  private def getAllBannerTests(): ZIO[ZEnv, DynamoError, List[BannerTest]] = {
+  private def getAllBannerTests(): ZIO[Any, DynamoError, List[BannerTest]] = {
     import models.BannerTest._
     ZIO.collectAllPar(List(
       dynamoTests.getAllTests(Channel.Banner1),
@@ -172,7 +172,7 @@ class BannerDesignsController(
   }
 
   // Returns any tests currently using the design
-  private def getTestsUsingDesign(designName: String): ZIO[ZEnv, DynamoError, List[BannerTest]] =
+  private def getTestsUsingDesign(designName: String): ZIO[Any, DynamoError, List[BannerTest]] =
     getAllBannerTests().map { bannerTests =>
       bannerTests
         .filter(banner => banner.variants.exists(variant => variant.template match {

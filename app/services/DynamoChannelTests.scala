@@ -9,9 +9,7 @@ import models._
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.dynamodb.model._
 import utils.Circe.{dynamoMapToJson, jsonToDynamo}
-import zio.duration.durationInt
-import zio.stream.ZStream
-import zio.{ZEnv, ZIO}
+import zio._
 
 import java.time.OffsetDateTime
 import scala.jdk.CollectionConverters._
@@ -32,7 +30,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
   /**
     * Attempts to retrieve a test from dynamodb. Fails if the test does not exist.
     */
-  private def get(testName: String, channel: Channel): ZIO[ZEnv, DynamoGetError, java.util.Map[String, AttributeValue]] =
+  private def get(testName: String, channel: Channel): ZIO[Any, DynamoGetError, java.util.Map[String, AttributeValue]] =
     attemptBlocking {
       val query = QueryRequest
         .builder
@@ -58,7 +56,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
       DynamoGetError(error)
     )
 
-  private def getAll(channel: Channel): ZIO[ZEnv, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
+  private def getAll(channel: Channel): ZIO[Any, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
     attemptBlocking {
       client.query(
         QueryRequest
@@ -77,7 +75,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
       ).items
     }.mapError(DynamoGetError)
 
-  private def getAllInCampaign(campaignName: String): ZIO[ZEnv, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
+  private def getAllInCampaign(campaignName: String): ZIO[Any, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
     attemptBlocking {
       client.query(
         QueryRequest
@@ -92,7 +90,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
       ).items
     }.mapError(DynamoGetError)
 
-  private def update(updateRequest: UpdateItemRequest): ZIO[ZEnv, DynamoError, Unit] =
+  private def update(updateRequest: UpdateItemRequest): ZIO[Any, DynamoError, Unit] =
     attemptBlocking {
       val result = client.updateItem(updateRequest)
       logger.info(s"UpdateItemResponse: $result")
@@ -102,7 +100,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
       case other => DynamoPutError(other)
     }
 
-  def getTest[T <: ChannelTest[T] : Decoder](testName: String, channel: Channel): ZIO[ZEnv, DynamoGetError, T] =
+  def getTest[T <: ChannelTest[T] : Decoder](testName: String, channel: Channel): ZIO[Any, DynamoGetError, T] =
     get(testName, channel)
       .map(item => dynamoMapToJson(item).as[T])
       .flatMap {
@@ -110,7 +108,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
         case Left(error) => ZIO.fail(DynamoGetError(error))
       }
 
-  def getAllTests[T <: ChannelTest[T] : Decoder](channel: Channel): ZIO[ZEnv, DynamoGetError, List[T]] =
+  def getAllTests[T <: ChannelTest[T] : Decoder](channel: Channel): ZIO[Any, DynamoGetError, List[T]] =
     getAll(channel).map(results =>
       results.asScala
         .map(item => dynamoMapToJson(item).as[T])
@@ -125,7 +123,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
     )
 
   // Does not decode the Dynamodb data
-  def getRawTests(channel: Channel, testNames: List[String]): ZIO[ZEnv, DynamoGetError, List[java.util.Map[String, AttributeValue]]] = {
+  def getRawTests(channel: Channel, testNames: List[String]): ZIO[Any, DynamoGetError, List[java.util.Map[String, AttributeValue]]] = {
     // Build a batch item request
     val items = testNames.map(testName => buildKey(channel, testName))
     val keysAndAttributes = KeysAndAttributes.builder().keys(items.asJava).build()
@@ -140,7 +138,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
     }.mapError(DynamoGetError)
   }
 
-  def getTests[T <: ChannelTest[T] : Decoder](channel: Channel, testNames: List[String]): ZIO[ZEnv, DynamoGetError, List[T]] = {
+  def getTests[T <: ChannelTest[T] : Decoder](channel: Channel, testNames: List[String]): ZIO[Any, DynamoGetError, List[T]] = {
     getRawTests(channel, testNames).map(rawTests => {
       rawTests.flatMap(rawTest =>
         dynamoMapToJson(rawTest).as[T] match {
@@ -155,7 +153,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
 
   // Returns all tests in a campaign, sorted by channel
   import models.ChannelTest.channelTestDecoder
-  def getAllTestsInCampaign(campaignName: String): ZIO[ZEnv, DynamoGetError, List[ChannelTest[_]]] =
+  def getAllTestsInCampaign(campaignName: String): ZIO[Any, DynamoGetError, List[ChannelTest[_]]] =
     getAllInCampaign(campaignName)
       .map(results =>
         results.asScala
@@ -170,7 +168,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
           .sortBy(_.channel.toString)
       )
 
-  def createOrUpdateTests[T <: ChannelTest[T] : Encoder](tests: List[T], channel: Channel): ZIO[ZEnv, DynamoPutError, Unit] = {
+  def createOrUpdateTests[T <: ChannelTest[T] : Encoder](tests: List[T], channel: Channel): ZIO[Any, DynamoPutError, Unit] = {
     val writeRequests = tests.zipWithIndex.map { case (test, priority) =>
       // Add the priority and channel fields, which we don't have in S3
       val prioritised = test.withPriority(priority).withChannel(channel)
@@ -198,7 +196,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
     s"set ${subExprs.mkString(", ")} remove lockStatus" // Unlock the test at the same time
   }
 
-  def updateTest[T <: ChannelTest[T] : Encoder](test: T, channel: Channel, email: String): ZIO[ZEnv, DynamoError, Unit] = {
+  def updateTest[T <: ChannelTest[T] : Encoder](test: T, channel: Channel, email: String): ZIO[Any, DynamoError, Unit] = {
     val item = jsonToDynamo(test.asJson).m().asScala.toMap -
       "status" -      // Do not update status - this is a separate action
       "priority" -    // Do not update priority - this is a separate action
@@ -225,12 +223,12 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
   }
 
   // Returns the value of the bottom priority test - which is the highest value, because 0 is top priority
-  private def getBottomPriority[T <: ChannelTest[T] : Decoder](channel: Channel): ZIO[ZEnv, DynamoError, Int] =
+  private def getBottomPriority[T <: ChannelTest[T] : Decoder](channel: Channel): ZIO[Any, DynamoError, Int] =
     getAllTests[T](channel)
       .map(allTests => allTests.flatMap(_.priority).maxOption.getOrElse(0))
 
   // Creates a new test, with bottom priority
-  def createTest[T <: ChannelTest[T] : Encoder : Decoder](test: T, channel: Channel): ZIO[ZEnv, DynamoError, T] =
+  def createTest[T <: ChannelTest[T] : Encoder : Decoder](test: T, channel: Channel): ZIO[Any, DynamoError, T] =
     getBottomPriority[T](channel)
       .flatMap(bottomPriority => {
         val priority = bottomPriority + 1
@@ -248,7 +246,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
         put(request).map(_ => enrichedTest)
       })
 
-  def lockTest(testName: String, channel: Channel, email: String, force: Boolean): ZIO[ZEnv, DynamoError, Unit] = {
+  def lockTest(testName: String, channel: Channel, email: String, force: Boolean): ZIO[Any, DynamoError, Unit] = {
     val lockStatus = LockStatus(
       locked = true,
       email = Some(email),
@@ -280,7 +278,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
   }
 
   // Removes the lockStatus attribute if the user currently has it locked
-  def unlockTest(testName: String, channel: Channel, email: String): ZIO[ZEnv, DynamoError, Unit] = {
+  def unlockTest(testName: String, channel: Channel, email: String): ZIO[Any, DynamoError, Unit] = {
     val request = UpdateItemRequest
       .builder
       .tableName(tableName)
@@ -295,7 +293,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
     update(request)
   }
 
-  def deleteTests(testNames: List[String], channel: Channel): ZIO[ZEnv, DynamoPutError, Unit] = {
+  def deleteTests(testNames: List[String], channel: Channel): ZIO[Any, DynamoPutError, Unit] = {
     val deleteRequests = testNames.map { testName =>
       WriteRequest
         .builder
@@ -313,7 +311,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
   }
 
   // Set `priority` attribute based on the ordering of the List
-  def setPriorities(testNames: List[String], channel: Channel): ZIO[ZEnv, DynamoError, Unit] = {
+  def setPriorities(testNames: List[String], channel: Channel): ZIO[Any, DynamoError, Unit] = {
     val items = testNames.zipWithIndex.map { case (testName, priority) =>
       TransactWriteItem
         .builder
@@ -336,7 +334,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
     putAllBatchedTransaction(items)
   }
 
-  def updateStatuses(testNames: List[String], channel: Channel, status: Status): ZIO[ZEnv, DynamoError, Unit] = {
+  def updateStatuses(testNames: List[String], channel: Channel, status: Status): ZIO[Any, DynamoError, Unit] = {
     val items = testNames.map { testName =>
       TransactWriteItem
         .builder

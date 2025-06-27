@@ -7,7 +7,7 @@ import io.circe.{Decoder, Encoder}
 import models.ChannelTest
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.dynamodb.model.{AttributeValue, _}
-import zio.{ZEnv, ZIO}
+import zio.ZIO
 import models.DynamoErrors._
 import DynamoChannelTestsAudit.{ChannelTestAudit, getTimeToLive}
 import utils.Circe.{dynamoMapToJson, jsonToDynamo}
@@ -36,7 +36,7 @@ object DynamoChannelTestsAudit {
 class DynamoChannelTestsAudit(stage: String, client: DynamoDbClient) extends DynamoService(stage, client) with StrictLogging {
   protected val tableName = s"support-admin-console-channel-tests-audit-$stage"
 
-  private def getAuditsFromDynamo(channelAndName: String): ZIO[ZEnv, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
+  private def getAuditsFromDynamo(channelAndName: String): ZIO[Any, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
     attemptBlocking {
       client.query(
         QueryRequest
@@ -50,7 +50,7 @@ class DynamoChannelTestsAudit(stage: String, client: DynamoDbClient) extends Dyn
       ).items
     }.mapError(DynamoGetError)
 
-  def createAudit[T <: ChannelTest[T] : Encoder : Decoder](test: T, userEmail: String): ZIO[ZEnv, DynamoError, Unit] = {
+  def createAudit[T <: ChannelTest[T] : Encoder : Decoder](test: T, userEmail: String): ZIO[Any, DynamoError, Unit] = {
     val channelAndName = s"${test.channel.get}_${test.name}"
     val timestamp = OffsetDateTime.now()
     val ttlInSecondsSinceEpoch = getTimeToLive(timestamp).toInstant.getEpochSecond
@@ -75,7 +75,7 @@ class DynamoChannelTestsAudit(stage: String, client: DynamoDbClient) extends Dyn
   }
 
   // Batch write many audits
-  def createAudits[T <: ChannelTest[T] : Encoder : Decoder](tests: List[T], userEmail: String): ZIO[ZEnv, DynamoPutError, Unit] = {
+  def createAudits[T <: ChannelTest[T] : Encoder : Decoder](tests: List[T], userEmail: String): ZIO[Any, DynamoPutError, Unit] = {
     val timestamp = OffsetDateTime.now()
     val ttlInSecondsSinceEpoch = getTimeToLive(timestamp).toInstant.getEpochSecond
 
@@ -100,7 +100,7 @@ class DynamoChannelTestsAudit(stage: String, client: DynamoDbClient) extends Dyn
     putAllBatched(writeRequests)
   }
 
-  def getAuditsForChannelTest(channel: String, name: String): ZIO[ZEnv, DynamoError, List[ChannelTestAudit[ChannelTest[_]]]] = {
+  def getAuditsForChannelTest(channel: String, name: String): ZIO[Any, DynamoError, List[ChannelTestAudit[ChannelTest[_]]]] = {
     val channelAndName = s"${channel}_$name"
 
     getAuditsFromDynamo(channelAndName).map { results =>

@@ -13,7 +13,6 @@ import utils.Circe.noNulls
 
 import scala.jdk.CollectionConverters._
 import zio.ZIO.attemptBlocking
-import zio.managed._
 
 
 case class VersionedS3Data[T](value: T, version: String)
@@ -27,7 +26,7 @@ trait S3Client {
 
 object S3Client {
   type RawVersionedS3Data = VersionedS3Data[String]
-  type S3Action[T] = S3ObjectSettings => ZIO[ZEnv, S3ClientError,T]
+  type S3Action[T] = S3ObjectSettings => ZIO[Any, S3ClientError,T]
 
   case class S3ObjectSettings(
     bucket: String,
@@ -67,20 +66,21 @@ object S3 extends S3Client with StrictLogging {
       .key(objectSettings.key)
       .build
 
-    ZManaged
-      .fromAutoCloseable(attemptBlocking(s3Client.getObject(request)))
-      .use { s3Object =>
-        ZIO.attempt {
-          VersionedS3Data(
-            value = scala.io.Source.fromInputStream(s3Object).mkString,
-            version = s3Object.response().versionId()
-          )
+    ZIO.scoped {
+      ZIO.fromAutoCloseable(attemptBlocking(s3Client.getObject(request)))
+        .flatMap { s3Object =>
+          ZIO.attempt {
+            VersionedS3Data(
+              value = scala.io.Source.fromInputStream(s3Object).mkString,
+              version = s3Object.response().versionId()
+            )
+          }
         }
-      }
-      .mapError { e =>
-        logger.error(s"Error reading $objectSettings from S3: ${e.getMessage}", e)
-        S3GetObjectError(e)
-      }
+        .mapError { e =>
+          logger.error(s"Error reading $objectSettings from S3: ${e.getMessage}", e)
+          S3GetObjectError(e)
+        }
+    }
   }
 
   def update(data: RawVersionedS3Data): S3Action[Unit] = { objectSettings =>
@@ -156,7 +156,7 @@ object S3Json extends StrictLogging {
     override def getMessage = s"Error decoding json from S3 ($objectSettings): ${error.getMessage}"
   }
 
-  def getFromJson[T : Decoder](s3: S3Client): S3ObjectSettings => ZIO[ZEnv,Throwable,VersionedS3Data[T]] = { objectSettings =>
+  def getFromJson[T : Decoder](s3: S3Client): S3ObjectSettings => ZIO[Any,Throwable,VersionedS3Data[T]] = { objectSettings =>
     s3.get(objectSettings).flatMap { raw =>
 
       ZIO.fromEither(decode[T](raw.value))

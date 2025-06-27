@@ -7,7 +7,7 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.dynamodb.model.{AttributeValue, QueryRequest}
 import utils.Circe.dynamoMapToJson
 import io.circe.generic.auto._
-import zio.{ZEnv, ZIO}
+import zio.ZIO
 
 import scala.jdk.CollectionConverters._
 import zio.ZIO.attemptBlocking
@@ -44,7 +44,7 @@ class DynamoBanditData(stage: String, client: DynamoDbClient) extends StrictLogg
   // No DEV table for bandit data
   private val tableName = s"support-bandit-${if (stage == "PROD") "PROD" else "CODE"}"
 
-  private def query(testName: String, channel: String): ZIO[ZEnv, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] = {
+  private def query(testName: String, channel: String): ZIO[Any, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] = {
     attemptBlocking {
       client.query(
         QueryRequest
@@ -99,7 +99,7 @@ class DynamoBanditData(stage: String, client: DynamoDbClient) extends StrictLogg
       .toList
   }
 
-  def getDataForTest(testName: String, channel: String, sampleCount: Option[Int]): ZIO[ZEnv, DynamoError, BanditData] =
+  def getDataForTest(testName: String, channel: String, sampleCount: Option[Int]): ZIO[Any, DynamoError, BanditData] =
     query(testName, channel)
       .map { results =>
         results.asScala

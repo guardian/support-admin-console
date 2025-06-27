@@ -7,7 +7,7 @@ import models.SuperModeRow._
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.dynamodb.model.{AttributeValue, QueryRequest}
 import utils.Circe.dynamoMapToJson
-import zio.{ZEnv, ZIO}
+import zio.ZIO
 
 import java.text.SimpleDateFormat
 import java.time.Instant
@@ -22,7 +22,7 @@ class DynamoSuperMode(client: DynamoDbClient) extends StrictLogging {
   private val dateFormat = new SimpleDateFormat("yyyy-MM-dd")
   private val timestampFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
 
-  private def get(endDate: String, endTimestamp: String): ZIO[ZEnv, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
+  private def get(endDate: String, endTimestamp: String): ZIO[Any, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
     attemptBlocking {
       client.query(
         QueryRequest
@@ -38,7 +38,7 @@ class DynamoSuperMode(client: DynamoDbClient) extends StrictLogging {
       ).items()
     }.mapError(DynamoGetError)
 
-  private def getRowsForDate(date: String, endTimestamp: String): ZIO[ZEnv, DynamoGetError, List[SuperModeRow]] =
+  private def getRowsForDate(date: String, endTimestamp: String): ZIO[Any, DynamoGetError, List[SuperModeRow]] =
     get(date, endTimestamp).map(results =>
       results.asScala
         .map(item => dynamoMapToJson(item).as[SuperModeRow])
@@ -52,7 +52,7 @@ class DynamoSuperMode(client: DynamoDbClient) extends StrictLogging {
         .sortBy(_.endTimestamp)
     )
 
-  def getCurrentSuperModeRows(): ZIO[ZEnv, DynamoGetError, List[SuperModeRow]] = {
+  def getCurrentSuperModeRows(): ZIO[Any, DynamoGetError, List[SuperModeRow]] = {
     /**
      * Articles that are currently in super mode will have an endTimestamp later than now.
      * Because the index partition key is endDate, we have to make 2 queries for today and tomorrow

@@ -12,7 +12,7 @@ import play.api.mvc._
 import services.S3Client.{S3ClientError, S3ObjectSettings}
 import services.{DynamoArchivedChannelTests, DynamoChannelTests, DynamoChannelTestsAudit, S3Json, VersionedS3Data}
 import utils.Circe.noNulls
-import zio.{IO, UIO, ZEnv, ZIO}
+import zio.{Unsafe, ZIO}
 import com.typesafe.scalalogging.LazyLogging
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -36,7 +36,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
   stage: String,
   lockFileName: String,
   channel: Channel,
-  runtime: zio.Runtime[ZEnv],
+  runtime: zio.Runtime[Any],
   dynamoTests: DynamoChannelTests,
   dynamoArchivedTests: DynamoArchivedChannelTests,
   dynamoTestsAudit: DynamoChannelTestsAudit
@@ -51,15 +51,15 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
 
   val s3Client = services.S3
 
-  private def run(f: => ZIO[ZEnv, Throwable, Result]): Future[Result] =
-    runtime.unsafeRunToFuture {
+  private def run(f: => ZIO[Any, Throwable, Result]): Future[Result] =
+    Unsafe.unsafe { implicit unsafe => runtime.unsafe.runToFuture {
       f.catchAll(error => {
         logger.error(s"Returning InternalServerError to client: ${error.getMessage}", error)
         ZIO.succeed(InternalServerError(error.getMessage))
       })
-    }
+    }}
 
-  private def runWithLockStatus(f: VersionedS3Data[LockStatus] => ZIO[ZEnv, Throwable, Result]): Future[Result] =
+  private def runWithLockStatus(f: VersionedS3Data[LockStatus] => ZIO[Any, Throwable, Result]): Future[Result] =
     run {
       S3Json
         .getFromJson[LockStatus](s3Client)
@@ -67,7 +67,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
         .flatMap(f)
     }
 
-  private def setLockStatus(lockStatus: VersionedS3Data[LockStatus]): ZIO[ZEnv, S3ClientError, Unit] =
+  private def setLockStatus(lockStatus: VersionedS3Data[LockStatus]): ZIO[Any, S3ClientError, Unit] =
     S3Json
       .updateAsJson(lockStatus)(s3Client)
       .apply(lockObjectSettings)
