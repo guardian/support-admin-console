@@ -7,7 +7,7 @@ import services.S3Client.{RawVersionedS3Data, S3Action, S3ObjectSettings}
 import models.SupportFrontendSwitches.{SupportFrontendSwitches, Switch, SwitchGroup}
 import models._
 import org.scalatest.matchers.should.Matchers
-import zio.IO
+import zio.{Unsafe, ZIO}
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
@@ -119,7 +119,7 @@ class S3JsonSpec extends AnyFlatSpec with Matchers with EitherValues {
     var mockStore: Option[RawVersionedS3Data] = None
 
     def get: S3Action[RawVersionedS3Data] = { _ =>
-      IO.succeed {
+      ZIO.succeed {
         VersionedS3Data[String](
           expectedJson,
           "v1"
@@ -128,17 +128,17 @@ class S3JsonSpec extends AnyFlatSpec with Matchers with EitherValues {
     }
     def update(data: RawVersionedS3Data): S3Action[Unit] = _ => {
       mockStore = Some(data)
-      IO.succeed(())
+      ZIO.succeed(())
     }
-    def createOrUpdate(data: String): S3Action[Unit] = _ => IO.succeed(())
-    def listKeys: S3Action[List[String]] = _ => IO.succeed(Nil)
+    def createOrUpdate(data: String): S3Action[Unit] = _ => ZIO.succeed(())
+    def listKeys: S3Action[List[String]] = _ => ZIO.succeed(Nil)
   }
 
   it should "decode from json" in {
     val result = Await.result(
-      runtime.unsafeRunToFuture {
+      Unsafe.unsafe { implicit unsafe => runtime.unsafe.runToFuture {
         S3Json.getFromJson[SupportFrontendSwitches](dummyS3Client).apply(objectSettings)
-      },
+      }},
       1.second
     )
 
@@ -158,7 +158,7 @@ class S3JsonSpec extends AnyFlatSpec with Matchers with EitherValues {
     } yield json
 
     val jsonFromClient: RawVersionedS3Data = Await.result(
-      runtime.unsafeRunToFuture(program),
+      Unsafe.unsafe { implicit unsafe => runtime.unsafe.runToFuture(program) },
       1.second
     )
 

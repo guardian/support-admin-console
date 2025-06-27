@@ -7,7 +7,6 @@ import play.api.libs.circe.Circe
 import play.api.mvc.{ActionBuilder, AnyContent, ControllerComponents}
 import services.UserPermissions.Permission
 import services.{DynamoArchivedChannelTests, DynamoChannelTests, DynamoChannelTestsAudit, DynamoPermissionsCache}
-import zio.ZEnv
 
 import scala.concurrent.ExecutionContext
 
@@ -19,7 +18,7 @@ class SupportLandingPageController(
   authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
   components: ControllerComponents,
   stage: String,
-  runtime: zio.Runtime[ZEnv],
+  runtime: zio.Runtime[Any],
   dynamoTests: DynamoChannelTests,
   dynamoArchivedTests: DynamoArchivedChannelTests,
   dynamoTestsAudit: DynamoChannelTestsAudit,

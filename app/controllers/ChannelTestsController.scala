@@ -12,7 +12,7 @@ import play.api.mvc._
 import services.S3Client.{S3ClientError, S3ObjectSettings}
 import services.{DynamoArchivedChannelTests, DynamoChannelTests, DynamoChannelTestsAudit, S3Json, VersionedS3Data}
 import utils.Circe.noNulls
-import zio.{IO, UIO, ZEnv, ZIO}
+import zio.{Unsafe, ZIO}
 import com.typesafe.scalalogging.LazyLogging
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -36,7 +36,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
   stage: String,
   lockFileName: String,
   channel: Channel,
-  runtime: zio.Runtime[ZEnv],
+  runtime: zio.Runtime[Any],
   dynamoTests: DynamoChannelTests,
   dynamoArchivedTests: DynamoArchivedChannelTests,
   dynamoTestsAudit: DynamoChannelTestsAudit
@@ -51,15 +51,15 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
 
   val s3Client = services.S3
 
-  private def run(f: => ZIO[ZEnv, Throwable, Result]): Future[Result] =
-    runtime.unsafeRunToFuture {
+  private def run(f: => ZIO[Any, Throwable, Result]): Future[Result] =
+    Unsafe.unsafe { implicit unsafe => runtime.unsafe.runToFuture {
       f.catchAll(error => {
         logger.error(s"Returning InternalServerError to client: ${error.getMessage}", error)
-        IO.succeed(InternalServerError(error.getMessage))
+        ZIO.succeed(InternalServerError(error.getMessage))
       })
-    }
+    }}
 
-  private def runWithLockStatus(f: VersionedS3Data[LockStatus] => ZIO[ZEnv, Throwable, Result]): Future[Result] =
+  private def runWithLockStatus(f: VersionedS3Data[LockStatus] => ZIO[Any, Throwable, Result]): Future[Result] =
     run {
       S3Json
         .getFromJson[LockStatus](s3Client)
@@ -67,7 +67,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
         .flatMap(f)
     }
 
-  private def setLockStatus(lockStatus: VersionedS3Data[LockStatus]): ZIO[ZEnv, S3ClientError, Unit] =
+  private def setLockStatus(lockStatus: VersionedS3Data[LockStatus]): ZIO[Any, S3ClientError, Unit] =
     S3Json
       .updateAsJson(lockStatus)(s3Client)
       .apply(lockObjectSettings)
@@ -101,7 +101,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
         setLockStatus(VersionedS3Data(newLockStatus, lockFileVersion)).map(_ => Ok("locked"))
       } else {
         logger.info(s"User ${request.user.email} failed to take control of $channel test list because it was already locked")
-        IO.succeed(Conflict(s"File $channel is already locked"))
+        ZIO.succeed(Conflict(s"File $channel is already locked"))
       }
     }
   }
@@ -114,7 +114,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
         setLockStatus(VersionedS3Data(LockStatus.unlocked, lockFileVersion)).map(_ => Ok("unlocked"))
       } else {
         logger.info(s"User ${request.user.email} tried to unlock $channel test list, but they did not have a lock")
-        IO.succeed(BadRequest(s"$channel test list is not currently locked by this user"))
+        ZIO.succeed(BadRequest(s"$channel test list is not currently locked by this user"))
       }
     }
   }
@@ -138,9 +138,9 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
           _ <- setLockStatus(VersionedS3Data(LockStatus.unlocked, lockFileVersion))
         } yield Ok("updated")
 
-        result.tapError(error => UIO(logger.error(s"Failed to update $channel test list (user ${request.user.email}: $error")))
+        result.tapError(error => ZIO.succeed(logger.error(s"Failed to update $channel test list (user ${request.user.email}: $error")))
       } else {
-        IO.succeed(Conflict(s"You do not currently have $channel test list open for edit"))
+        ZIO.succeed(Conflict(s"You do not currently have $channel test list open for edit"))
       }
     }
   }
@@ -167,7 +167,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
         .map(_ => Ok("updated"))
         .catchSome { case DynamoNoLockError(error) =>
           logger.warn(s"Failed to save $channel/'${test.name}' because user ${request.user.email} does not have it locked: ${error.getMessage}")
-          IO.succeed(Conflict(s"You do not currently have $channel test '${test.name}' open for edit"))
+          ZIO.succeed(Conflict(s"You do not currently have $channel test '${test.name}' open for edit"))
         }
     }
   }
@@ -182,7 +182,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
         .map(_ => Ok("created"))
         .catchSome { case DynamoDuplicateNameError(error) =>
           logger.warn(s"Failed to create $channel/'${test.name}' because name already exists: ${error.getMessage}")
-          IO.succeed(BadRequest(s"Cannot create $channel test '${test.name}' because it already exists. Please use a different name"))
+          ZIO.succeed(BadRequest(s"Cannot create $channel test '${test.name}' because it already exists. Please use a different name"))
         }
     }
   }
@@ -194,7 +194,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
         .map(_ => Ok("locked"))
         .catchSome { case DynamoNoLockError(error) =>
           logger.warn(s"Failed to lock $channel/'$testName' because it is already locked: ${error.getMessage}")
-          IO.succeed(Conflict(s"$channel test '$testName' is already locked for edit by another user, or it doesn't exist"))
+          ZIO.succeed(Conflict(s"$channel test '$testName' is already locked for edit by another user, or it doesn't exist"))
         }
     }
   }
@@ -206,7 +206,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
         .map(_ => Ok("unlocked"))
         .catchSome { case DynamoNoLockError(error) =>
           logger.warn(s"Failed to unlock $channel/'$testName' because user ${request.user.email} does not have it locked: ${error.getMessage}")
-          IO.succeed(Conflict(s"You do not currently have $channel test '$testName' open for edit"))
+          ZIO.succeed(Conflict(s"You do not currently have $channel test '$testName' open for edit"))
         }
     }
   }

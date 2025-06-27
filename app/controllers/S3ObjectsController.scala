@@ -7,8 +7,7 @@ import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.S3Client.S3ObjectSettings
 import services.{S3Json, VersionedS3Data}
-import zio.blocking.Blocking
-import zio.{IO, ZEnv, ZIO}
+import zio.{Unsafe, ZIO}
 import S3ObjectsController.extractFilename
 import com.typesafe.scalalogging.LazyLogging
 import utils.Circe.noNulls
@@ -35,17 +34,17 @@ abstract class S3ObjectsController[T : Decoder : Encoder](
   stage: String,
   path: String,
   nameGenerator: T => String,
-  runtime: zio.Runtime[ZEnv]
+  runtime: zio.Runtime[Any]
 )(implicit ec: ExecutionContext) extends AbstractController(components) with Circe with LazyLogging {
 
   val s3Client = services.S3
 
-  private def run(f: => ZIO[ZEnv, Throwable, Result]): Future[Result] =
-    runtime.unsafeRunToFuture {
+  private def run(f: => ZIO[Any, Throwable, Result]): Future[Result] =
+    Unsafe.unsafe { implicit unsafe => runtime.unsafe.runToFuture {
       f.catchAll { error =>
-        IO.succeed(InternalServerError(error.getMessage))
+        ZIO.succeed(InternalServerError(error.getMessage))
       }
-    }
+    }}
 
   private def buildObjectSettings(name: String) = S3ObjectSettings(
     bucket = "support-admin-console",

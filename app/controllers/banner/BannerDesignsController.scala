@@ -8,7 +8,7 @@ import play.api.mvc.{AbstractController, ActionBuilder, AnyContent, ControllerCo
 import services.{DynamoArchivedBannerDesigns, DynamoBannerDesigns, DynamoChannelTests}
 import services.S3Client.S3ObjectSettings
 import utils.Circe.noNulls
-import zio.{IO, ZEnv, ZIO}
+import zio.{Unsafe, ZIO}
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.syntax.EncoderOps
 import io.circe.generic.auto._
@@ -20,7 +20,7 @@ class BannerDesignsController(
     authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
     components: ControllerComponents,
     stage: String,
-    runtime: zio.Runtime[ZEnv],
+    runtime: zio.Runtime[Any],
     dynamoDesigns: DynamoBannerDesigns,
     dynamoTests: DynamoChannelTests,
     dynamoArchivedDesigns: DynamoArchivedBannerDesigns
@@ -45,15 +45,15 @@ class BannerDesignsController(
 
   val s3Client = services.S3
 
-  private def run(f: => ZIO[ZEnv, Throwable, Result]): Future[Result] =
-    runtime.unsafeRunToFuture {
+  private def run(f: => ZIO[Any, Throwable, Result]): Future[Result] =
+    Unsafe.unsafe { implicit unsafe => runtime.unsafe.runToFuture {
       f.catchAll(error => {
         logger.error(
           s"Returning InternalServerError to client: ${error.getMessage}",
           error)
-        IO.succeed(InternalServerError(error.getMessage))
+        ZIO.succeed(InternalServerError(error.getMessage))
       })
-    }
+    }}
 
   def getAll = authAction.async { request =>
     run {
@@ -91,7 +91,7 @@ class BannerDesignsController(
           case DynamoNoLockError(error) =>
             logger.warn(
               s"Failed to save '${design.name}' because user ${request.user.email} does not have it locked: ${error.getMessage}")
-            IO.succeed(Conflict(
+            ZIO.succeed(Conflict(
               s"You do not currently have design '${design.name}' open for edit"))
         }
     }
@@ -108,7 +108,7 @@ class BannerDesignsController(
           case DynamoDuplicateNameError(error) =>
             logger.warn(
               s"Failed to create '${design.name}' because name already exists: ${error.getMessage}")
-            IO.succeed(BadRequest(
+            ZIO.succeed(BadRequest(
               s"Cannot create design '${design.name}' because it already exists. Please use a different name"))
         }
     }
@@ -124,7 +124,7 @@ class BannerDesignsController(
           case DynamoNoLockError(error) =>
             logger.warn(
               s"Failed to lock '$designName' because it is already locked: ${error.getMessage}")
-            IO.succeed(Conflict(
+            ZIO.succeed(Conflict(
               s"Design '$designName' is already locked for edit by another user"))
         }
     }
@@ -140,7 +140,7 @@ class BannerDesignsController(
           case DynamoNoLockError(error) =>
             logger.warn(
               s"Failed to unlock '$designName' because user ${request.user.email} does not have it locked: ${error.getMessage}")
-            IO.succeed(Conflict(
+            ZIO.succeed(Conflict(
               s"You do not currently have design '$designName' open for edit"))
         }
     }
@@ -163,7 +163,7 @@ class BannerDesignsController(
       case _       => None
     }
 
-  private def getAllBannerTests(): ZIO[ZEnv, DynamoError, List[BannerTest]] = {
+  private def getAllBannerTests(): ZIO[Any, DynamoError, List[BannerTest]] = {
     import models.BannerTest._
     ZIO.collectAllPar(List(
       dynamoTests.getAllTests(Channel.Banner1),
@@ -172,7 +172,7 @@ class BannerDesignsController(
   }
 
   // Returns any tests currently using the design
-  private def getTestsUsingDesign(designName: String): ZIO[ZEnv, DynamoError, List[BannerTest]] =
+  private def getTestsUsingDesign(designName: String): ZIO[Any, DynamoError, List[BannerTest]] =
     getAllBannerTests().map { bannerTests =>
       bannerTests
         .filter(banner => banner.variants.exists(variant => variant.template match {

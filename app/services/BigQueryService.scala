@@ -6,11 +6,11 @@ import com.google.cloud.RetryOption
 import com.google.cloud.bigquery.{BigQuery, BigQueryOptions, FieldValueList, JobInfo, QueryJobConfiguration, TableResult}
 import com.typesafe.scalalogging.LazyLogging
 import models.BigQueryResult
-import zio.blocking.effectBlocking
-import zio.{ZEnv, ZIO}
+import zio.ZIO
 
 import java.io.ByteArrayInputStream
 import scala.jdk.CollectionConverters._
+import zio.ZIO.attemptBlocking
 
 
 case class BigQueryError(message: String) extends Throwable
@@ -37,8 +37,8 @@ class BigQueryService(bigQuery: BigQuery) extends LazyLogging {
     """
   }
 
-  def runQuery(queryString: String): ZIO[ZEnv, BigQueryError, TableResult] =
-    effectBlocking {
+  def runQuery(queryString: String): ZIO[Any, BigQueryError, TableResult] =
+    attemptBlocking {
       val queryConfig = QueryJobConfiguration
         .newBuilder(queryString)
         .setUseLegacySql(false)
@@ -79,7 +79,7 @@ class BigQueryService(bigQuery: BigQuery) extends LazyLogging {
     result.getValues.asScala.map(toBigQueryResult).toList
   }
 
-  def getLTV3Data(testName: String, channel: String, stage: String): ZIO[ZEnv, BigQueryError, List[BigQueryResult]] = {
+  def getLTV3Data(testName: String, channel: String, stage: String): ZIO[Any, BigQueryError, List[BigQueryResult]] = {
 
     val query = buildQuery(testName, channel, stage)
     logger.info(s"Query: $query");

@@ -9,11 +9,11 @@ import models.BannerDesign
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.dynamodb.model._
 import utils.Circe.{dynamoMapToJson, jsonToDynamo}
-import zio.blocking.effectBlocking
-import zio.{ZEnv, ZIO}
+import zio.ZIO
 
 import java.time.OffsetDateTime
 import scala.jdk.CollectionConverters._
+import zio.ZIO.attemptBlocking
 
 class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
     extends DynamoService(stage, client)
@@ -31,8 +31,8 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
     * Attempts to retrieve a banner design from dynamodb. Fails if the banner design does not exist.
     */
   private def get(designName: String)
-    : ZIO[ZEnv, DynamoGetError, java.util.Map[String, AttributeValue]] =
-    effectBlocking {
+    : ZIO[Any, DynamoGetError, java.util.Map[String, AttributeValue]] =
+    attemptBlocking {
       val query = QueryRequest.builder
         .tableName(tableName)
         .keyConditionExpression("#name = :name")
@@ -60,10 +60,10 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
       .mapError(error => DynamoGetError(error))
 
   private def getAll()
-    : ZIO[ZEnv,
+    : ZIO[Any,
           DynamoGetError,
           java.util.List[java.util.Map[String, AttributeValue]]] =
-    effectBlocking {
+    attemptBlocking {
       client
         .scan(
           ScanRequest
@@ -75,8 +75,8 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
     }.mapError(DynamoGetError)
 
   private def update(
-      updateRequest: UpdateItemRequest): ZIO[ZEnv, DynamoError, Unit] =
-    effectBlocking {
+      updateRequest: UpdateItemRequest): ZIO[Any, DynamoError, Unit] =
+    attemptBlocking {
       val result = client.updateItem(updateRequest)
       logger.info(s"UpdateItemResponse: $result")
       ()
@@ -85,8 +85,8 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
       case other                                => DynamoPutError(other)
     }
 
-  private def delete(deleteRequest: DeleteItemRequest): ZIO[ZEnv, DynamoError, Unit] =
-    effectBlocking {
+  private def delete(deleteRequest: DeleteItemRequest): ZIO[Any, DynamoError, Unit] =
+    attemptBlocking {
       val result = client.deleteItem(deleteRequest)
       logger.info(s"DeleteItemResponse: $result")
       ()
@@ -96,7 +96,7 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
     }
 
   def getBannerDesign(
-      designName: String): ZIO[ZEnv, DynamoGetError, BannerDesign] =
+      designName: String): ZIO[Any, DynamoGetError, BannerDesign] =
     get(designName)
       .map(item => dynamoMapToJson(item).as[BannerDesign])
       .flatMap {
@@ -104,7 +104,7 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
         case Left(error)         => ZIO.fail(DynamoGetError(error))
       }
 
-  def getAllBannerDesigns(): ZIO[ZEnv, DynamoGetError, List[BannerDesign]] =
+  def getAllBannerDesigns(): ZIO[Any, DynamoGetError, List[BannerDesign]] =
     getAll().map(
       results =>
         results.asScala
@@ -133,7 +133,7 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
   }
 
   def createBannerDesign(
-      bannerDesign: BannerDesign): ZIO[ZEnv, DynamoError, Unit] = {
+      bannerDesign: BannerDesign): ZIO[Any, DynamoError, Unit] = {
     val item = jsonToDynamo(bannerDesign.asJson).m()
     val request = PutItemRequest.builder
       .tableName(tableName)
@@ -146,7 +146,7 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
   }
 
   def updateBannerDesign(bannerDesign: BannerDesign,
-                         email: String): ZIO[ZEnv, DynamoError, Unit] = {
+                         email: String): ZIO[Any, DynamoError, Unit] = {
     val item = jsonToDynamo(bannerDesign.asJson).m().asScala.toMap -
       "lockStatus" - // Unlock by removing lockStatus
       "name" - // key field"
@@ -173,7 +173,7 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
 
   def lockBannerDesign(designName: String,
                        email: String,
-                       force: Boolean): ZIO[ZEnv, DynamoError, Unit] = {
+                       force: Boolean): ZIO[Any, DynamoError, Unit] = {
     val lockStatus = LockStatus(
       locked = true,
       email = Some(email),
@@ -202,7 +202,7 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
 
   // Removes the lockStatus attribute if the user currently has it locked
   def unlockBannerDesign(designName: String,
-                         email: String): ZIO[ZEnv, DynamoError, Unit] = {
+                         email: String): ZIO[Any, DynamoError, Unit] = {
     val request = UpdateItemRequest.builder
       .tableName(tableName)
       .key(buildKey(designName))
@@ -216,7 +216,7 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
     update(request)
   }
 
-  def deleteBannerDesign(designName: String): ZIO[ZEnv, DynamoError, Unit] = {
+  def deleteBannerDesign(designName: String): ZIO[Any, DynamoError, Unit] = {
     val request = DeleteItemRequest.builder
       .tableName(tableName)
       .key(buildKey(designName))
@@ -228,7 +228,7 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
   def updateStatus(
       designName: String,
       status: BannerDesignStatus
-  ): ZIO[ZEnv, DynamoError, Unit] = {
+  ): ZIO[Any, DynamoError, Unit] = {
     val updateRequest = UpdateItemRequest.builder
       .tableName(tableName)
       .key(buildKey(designName))
@@ -249,7 +249,7 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
   }
 
   // Does not decode the Dynamodb data
-  def getRawDesign(designName: String): ZIO[ZEnv, DynamoGetError,java.util.Map[String, AttributeValue]] = {
+  def getRawDesign(designName: String): ZIO[Any, DynamoGetError,java.util.Map[String, AttributeValue]] = {
     get(designName)
   }
 
