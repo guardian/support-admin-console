@@ -136,7 +136,6 @@ class S3JsonSpec extends AnyFlatSpec with Matchers with EitherValues {
 
   it should "decode from json" in {
     val result = Await.result(
-//      runtime.unsafeRunToFuture {
       Unsafe.unsafe { implicit unsafe => runtime.unsafe.runToFuture {
         S3Json.getFromJson[SupportFrontendSwitches](dummyS3Client).apply(objectSettings)
       }},
