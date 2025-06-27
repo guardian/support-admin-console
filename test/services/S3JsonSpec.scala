@@ -7,7 +7,7 @@ import services.S3Client.{RawVersionedS3Data, S3Action, S3ObjectSettings}
 import models.SupportFrontendSwitches.{SupportFrontendSwitches, Switch, SwitchGroup}
 import models._
 import org.scalatest.matchers.should.Matchers
-import zio.IO
+import zio.{Unsafe, ZIO}
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
@@ -136,9 +136,10 @@ class S3JsonSpec extends AnyFlatSpec with Matchers with EitherValues {
 
   it should "decode from json" in {
     val result = Await.result(
-      runtime.unsafeRunToFuture {
+//      runtime.unsafeRunToFuture {
+      Unsafe.unsafe { implicit unsafe => runtime.unsafe.runToFuture {
         S3Json.getFromJson[SupportFrontendSwitches](dummyS3Client).apply(objectSettings)
-      },
+      }},
       1.second
     )
 
@@ -158,7 +159,7 @@ class S3JsonSpec extends AnyFlatSpec with Matchers with EitherValues {
     } yield json
 
     val jsonFromClient: RawVersionedS3Data = Await.result(
-      runtime.unsafeRunToFuture(program),
+      Unsafe.unsafe { implicit unsafe => runtime.unsafe.runToFuture(program) },
       1.second
     )
 
