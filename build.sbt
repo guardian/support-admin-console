@@ -7,7 +7,7 @@ scalaVersion := "2.13.16"
 
 val circeVersion = "0.14.14"
 val awsVersion = "2.31.60"
-val zioVersion = "1.0.18"
+val zioVersion = "2.1.19"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala, RiffRaffArtifact, SbtWeb, JDebPackaging, SystemdPlugin,BuildInfoPlugin)
   .settings(

@@ -9,11 +9,11 @@ import models.BannerDesign
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.dynamodb.model._
 import utils.Circe.{dynamoMapToJson, jsonToDynamo}
-import zio.blocking.effectBlocking
 import zio.{ZEnv, ZIO}
 
 import java.time.OffsetDateTime
 import scala.jdk.CollectionConverters._
+import zio.ZIO.attemptBlocking
 
 class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
     extends DynamoService(stage, client)
@@ -32,7 +32,7 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
     */
   private def get(designName: String)
     : ZIO[ZEnv, DynamoGetError, java.util.Map[String, AttributeValue]] =
-    effectBlocking {
+    attemptBlocking {
       val query = QueryRequest.builder
         .tableName(tableName)
         .keyConditionExpression("#name = :name")
@@ -63,7 +63,7 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
     : ZIO[ZEnv,
           DynamoGetError,
           java.util.List[java.util.Map[String, AttributeValue]]] =
-    effectBlocking {
+    attemptBlocking {
       client
         .scan(
           ScanRequest
@@ -76,7 +76,7 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
 
   private def update(
       updateRequest: UpdateItemRequest): ZIO[ZEnv, DynamoError, Unit] =
-    effectBlocking {
+    attemptBlocking {
       val result = client.updateItem(updateRequest)
       logger.info(s"UpdateItemResponse: $result")
       ()
@@ -86,7 +86,7 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
     }
 
   private def delete(deleteRequest: DeleteItemRequest): ZIO[ZEnv, DynamoError, Unit] =
-    effectBlocking {
+    attemptBlocking {
       val result = client.deleteItem(deleteRequest)
       logger.info(s"DeleteItemResponse: $result")
       ()

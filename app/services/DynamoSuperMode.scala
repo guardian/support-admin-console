@@ -8,13 +8,13 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.dynamodb.model.{AttributeValue, QueryRequest}
 import utils.Circe.dynamoMapToJson
 import zio.{ZEnv, ZIO}
-import zio.blocking.effectBlocking
 
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import java.util.Date
 import scala.jdk.CollectionConverters._
+import zio.ZIO.attemptBlocking
 
 class DynamoSuperMode(client: DynamoDbClient) extends StrictLogging {
   private val tableName = s"super-mode-calculator-PROD"
@@ -23,7 +23,7 @@ class DynamoSuperMode(client: DynamoDbClient) extends StrictLogging {
   private val timestampFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
 
   private def get(endDate: String, endTimestamp: String): ZIO[ZEnv, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
-    effectBlocking {
+    attemptBlocking {
       client.query(
         QueryRequest
           .builder()

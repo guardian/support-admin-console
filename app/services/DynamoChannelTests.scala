@@ -9,13 +9,13 @@ import models._
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.dynamodb.model._
 import utils.Circe.{dynamoMapToJson, jsonToDynamo}
-import zio.blocking.effectBlocking
 import zio.duration.durationInt
 import zio.stream.ZStream
 import zio.{ZEnv, ZIO}
 
 import java.time.OffsetDateTime
 import scala.jdk.CollectionConverters._
+import zio.ZIO.attemptBlocking
 
 
 class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoService(stage, client) with StrictLogging {
@@ -33,7 +33,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
     * Attempts to retrieve a test from dynamodb. Fails if the test does not exist.
     */
   private def get(testName: String, channel: Channel): ZIO[ZEnv, DynamoGetError, java.util.Map[String, AttributeValue]] =
-    effectBlocking {
+    attemptBlocking {
       val query = QueryRequest
         .builder
         .tableName(tableName)
@@ -59,7 +59,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
     )
 
   private def getAll(channel: Channel): ZIO[ZEnv, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
-    effectBlocking {
+    attemptBlocking {
       client.query(
         QueryRequest
           .builder
@@ -78,7 +78,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
     }.mapError(DynamoGetError)
 
   private def getAllInCampaign(campaignName: String): ZIO[ZEnv, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
-    effectBlocking {
+    attemptBlocking {
       client.query(
         QueryRequest
           .builder
@@ -93,7 +93,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
     }.mapError(DynamoGetError)
 
   private def update(updateRequest: UpdateItemRequest): ZIO[ZEnv, DynamoError, Unit] =
-    effectBlocking {
+    attemptBlocking {
       val result = client.updateItem(updateRequest)
       logger.info(s"UpdateItemResponse: $result")
       ()
@@ -134,7 +134,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient) extends DynamoSe
       .requestItems(Map(tableName -> keysAndAttributes).asJava)
       .build()
 
-    effectBlocking {
+    attemptBlocking {
       client.batchGetItem(request)
         .responses().asScala.get(tableName).map(_.asScala.toList).getOrElse(Nil)
     }.mapError(DynamoGetError)

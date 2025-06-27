@@ -22,7 +22,7 @@ class ChannelTestsAuditController(
     runtime.unsafeRunToFuture {
       f.catchAll(error => {
         logger.error(s"Returning InternalServerError to client: ${error.getMessage}", error)
-        IO.succeed(InternalServerError(error.getMessage))
+        ZIO.succeed(InternalServerError(error.getMessage))
       })
     }
 

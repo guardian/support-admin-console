@@ -11,10 +11,10 @@ import zio.{ZEnv, ZIO}
 import models.DynamoErrors._
 import DynamoChannelTestsAudit.{ChannelTestAudit, getTimeToLive}
 import utils.Circe.{dynamoMapToJson, jsonToDynamo}
-import zio.blocking.effectBlocking
 
 import java.time.OffsetDateTime
 import scala.jdk.CollectionConverters.{ListHasAsScala, MapHasAsJava}
+import zio.ZIO.attemptBlocking
 
 object DynamoChannelTestsAudit {
   // The model that we write to the audit table
@@ -37,7 +37,7 @@ class DynamoChannelTestsAudit(stage: String, client: DynamoDbClient) extends Dyn
   protected val tableName = s"support-admin-console-channel-tests-audit-$stage"
 
   private def getAuditsFromDynamo(channelAndName: String): ZIO[ZEnv, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
-    effectBlocking {
+    attemptBlocking {
       client.query(
         QueryRequest
           .builder

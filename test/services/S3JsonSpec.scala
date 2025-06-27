@@ -119,7 +119,7 @@ class S3JsonSpec extends AnyFlatSpec with Matchers with EitherValues {
     var mockStore: Option[RawVersionedS3Data] = None
 
     def get: S3Action[RawVersionedS3Data] = { _ =>
-      IO.succeed {
+      ZIO.succeed {
         VersionedS3Data[String](
           expectedJson,
           "v1"
@@ -128,10 +128,10 @@ class S3JsonSpec extends AnyFlatSpec with Matchers with EitherValues {
     }
     def update(data: RawVersionedS3Data): S3Action[Unit] = _ => {
       mockStore = Some(data)
-      IO.succeed(())
+      ZIO.succeed(())
     }
-    def createOrUpdate(data: String): S3Action[Unit] = _ => IO.succeed(())
-    def listKeys: S3Action[List[String]] = _ => IO.succeed(Nil)
+    def createOrUpdate(data: String): S3Action[Unit] = _ => ZIO.succeed(())
+    def listKeys: S3Action[List[String]] = _ => ZIO.succeed(Nil)
   }
 
   it should "decode from json" in {

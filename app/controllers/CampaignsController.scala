@@ -29,7 +29,7 @@ class CampaignsController(
     runtime.unsafeRunToFuture {
       f.catchAll(error => {
         logger.error(s"Returning InternalServerError to client: ${error.getMessage}", error)
-        IO.succeed(InternalServerError(error.getMessage))
+        ZIO.succeed(InternalServerError(error.getMessage))
       })
     }
 
@@ -49,7 +49,7 @@ class CampaignsController(
         .map(_ => Ok("created"))
         .catchSome { case DynamoDuplicateNameError(error) =>
           logger.warn(s"Failed to create '${campaign.name}' because name already exists: ${error.getMessage}")
-          IO.succeed(BadRequest(s"Cannot create campaign '${campaign.name}' because it already exists. Please use a different name"))
+          ZIO.succeed(BadRequest(s"Cannot create campaign '${campaign.name}' because it already exists. Please use a different name"))
         }
     }
   }

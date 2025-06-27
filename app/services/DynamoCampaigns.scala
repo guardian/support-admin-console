@@ -6,11 +6,11 @@ import models.DynamoErrors._
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.dynamodb.model.{AttributeValue, ConditionalCheckFailedException, PutItemRequest, ScanRequest}
 import utils.Circe.{dynamoMapToJson, jsonToDynamo}
-import zio.blocking.effectBlocking
 import zio.{ZEnv, ZIO}
 import io.circe.syntax._
 
 import scala.jdk.CollectionConverters._
+import zio.ZIO.attemptBlocking
 
 
 class DynamoCampaigns(stage: String, client: DynamoDbClient) extends StrictLogging {
@@ -18,7 +18,7 @@ class DynamoCampaigns(stage: String, client: DynamoDbClient) extends StrictLoggi
   private val tableName = s"support-admin-console-campaigns-$stage"
 
   private def getAll(): ZIO[ZEnv, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
-    effectBlocking {
+    attemptBlocking {
       client.scan(
         ScanRequest
           .builder()
@@ -28,7 +28,7 @@ class DynamoCampaigns(stage: String, client: DynamoDbClient) extends StrictLoggi
     }.mapError(DynamoGetError)
 
   private def put(putRequest: PutItemRequest): ZIO[ZEnv, DynamoError, Unit] =
-    effectBlocking {
+    attemptBlocking {
       val result = client.putItem(putRequest)
       logger.info(s"PutItemResponse: $result")
       ()

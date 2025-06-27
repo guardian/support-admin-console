@@ -5,11 +5,11 @@ import models.DynamoErrors.{DynamoDuplicateNameError, DynamoError, DynamoPutErro
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.dynamodb.model.{BatchWriteItemRequest, ConditionalCheckFailedException, PutItemRequest, ReturnConsumedCapacity, TransactWriteItem, TransactWriteItemsRequest, WriteRequest}
 import zio.{ZEnv, ZIO}
-import zio.blocking.effectBlocking
 import zio.stream.ZStream
 import zio.duration.durationInt
 
 import scala.jdk.CollectionConverters._
+import zio.ZIO.attemptBlocking
 
 // Shared functionality for DynamoDb services
 abstract class DynamoService(stage: String, client: DynamoDbClient)
@@ -17,7 +17,7 @@ abstract class DynamoService(stage: String, client: DynamoDbClient)
   protected val tableName: String
 
   protected def put(putRequest: PutItemRequest): ZIO[ZEnv, DynamoError, Unit] =
-    effectBlocking {
+    attemptBlocking {
       val result = client.putItem(putRequest)
       logger.info(s"PutItemResponse: $result")
       ()
@@ -29,7 +29,7 @@ abstract class DynamoService(stage: String, client: DynamoDbClient)
   // Sends a batch of write requests, and returns any unprocessed items
   protected def putAll(writeRequests: List[WriteRequest])
     : ZIO[ZEnv, DynamoPutError, List[WriteRequest]] =
-    effectBlocking {
+    attemptBlocking {
       val batchWriteRequest =
         BatchWriteItemRequest.builder
           .requestItems(Map(tableName -> writeRequests.asJava).asJava)
@@ -62,9 +62,9 @@ abstract class DynamoService(stage: String, client: DynamoDbClient)
     val batches = writeRequests.grouped(BATCH_SIZE).toList
     ZStream(()).forever
       .fixed(2.seconds) // wait 2 seconds between batches
-      .timeoutError(DynamoPutError(
+      .timeoutFail(DynamoPutError(
         new Throwable("Timed out writing batches to dynamodb")))(1.minute)
-      .foldWhileM(batches)(_.nonEmpty) {
+      .runFoldWhileZIO(batches)(_.nonEmpty) {
         case (nextBatch :: remainingBatches, _) =>
           putAll(nextBatch).map {
             case Nil         => remainingBatches
@@ -87,16 +87,16 @@ abstract class DynamoService(stage: String, client: DynamoDbClient)
     ZStream
       .fromIterable(batches)
       .fixed(2.seconds) // wait 2 seconds between batches
-      .timeoutError(DynamoPutError(
+      .timeoutFail(DynamoPutError(
         new Throwable("Timed out writing batches to dynamodb")))(1.minute)
-      .mapM(putAllTransaction)
+      .mapZIO(putAllTransaction)
       .runCollect
       .unit
   }
 
   private def putAllTransaction(
       items: List[TransactWriteItem]): ZIO[ZEnv, DynamoPutError, Unit] =
-    effectBlocking {
+    attemptBlocking {
       val request = TransactWriteItemsRequest.builder
         .transactItems(items.asJava)
         .build()

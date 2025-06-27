@@ -4,7 +4,6 @@ import com.typesafe.scalalogging.StrictLogging
 import models.DynamoErrors.{DynamoDuplicateNameError, DynamoError, DynamoPutError}
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.dynamodb.model.{AttributeValue, ConditionalCheckFailedException, PutItemRequest}
-import zio.blocking.effectBlocking
 import zio.{ZEnv, ZIO}
 
 import java.text.SimpleDateFormat

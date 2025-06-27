@@ -7,10 +7,10 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.dynamodb.model.{AttributeValue, QueryRequest}
 import utils.Circe.dynamoMapToJson
 import io.circe.generic.auto._
-import zio.blocking.effectBlocking
 import zio.{ZEnv, ZIO}
 
 import scala.jdk.CollectionConverters._
+import zio.ZIO.attemptBlocking
 
 /**
  * Models for data received from DynamoDb
@@ -45,7 +45,7 @@ class DynamoBanditData(stage: String, client: DynamoDbClient) extends StrictLogg
   private val tableName = s"support-bandit-${if (stage == "PROD") "PROD" else "CODE"}"
 
   private def query(testName: String, channel: String): ZIO[ZEnv, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] = {
-    effectBlocking {
+    attemptBlocking {
       client.query(
         QueryRequest
           .builder()

@@ -10,12 +10,12 @@ import services.UserPermissions.{PagePermission, UserPermissions, decoder}
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.dynamodb.model.{AttributeValue, ScanRequest}
 import utils.Circe.dynamoMapToJson
-import zio.blocking.effectBlocking
 import zio.duration.durationInt
 import zio.{Schedule, ZEnv, ZIO}
 
 import scala.jdk.CollectionConverters._
 import java.util.concurrent.atomic.AtomicReference
+import zio.ZIO.attemptBlocking
 
 object UserPermissions {
   // The model for the user permissions that we store in DynamoDb
@@ -49,7 +49,7 @@ class DynamoPermissionsCache(
   private val permissionsCache = new AtomicReference[Map[Email, UserPermissions]](Map.empty)
 
   private def getAll: ZIO[ZEnv, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
-    effectBlocking {
+    attemptBlocking {
       client
         .scan(
           ScanRequest
@@ -82,7 +82,7 @@ class DynamoPermissionsCache(
   }
 
   // Poll every minute in the background
-  runtime.unsafeRunAsync_ {
+  runtime.unsafeRunAsync {
     fetchPermissions()
       .map(updatePermissions)
       .repeat(Schedule.fixed(1.minute))

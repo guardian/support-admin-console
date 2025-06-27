@@ -51,7 +51,7 @@ class BannerDesignsController(
         logger.error(
           s"Returning InternalServerError to client: ${error.getMessage}",
           error)
-        IO.succeed(InternalServerError(error.getMessage))
+        ZIO.succeed(InternalServerError(error.getMessage))
       })
     }
 
@@ -91,7 +91,7 @@ class BannerDesignsController(
           case DynamoNoLockError(error) =>
             logger.warn(
               s"Failed to save '${design.name}' because user ${request.user.email} does not have it locked: ${error.getMessage}")
-            IO.succeed(Conflict(
+            ZIO.succeed(Conflict(
               s"You do not currently have design '${design.name}' open for edit"))
         }
     }
@@ -108,7 +108,7 @@ class BannerDesignsController(
           case DynamoDuplicateNameError(error) =>
             logger.warn(
               s"Failed to create '${design.name}' because name already exists: ${error.getMessage}")
-            IO.succeed(BadRequest(
+            ZIO.succeed(BadRequest(
               s"Cannot create design '${design.name}' because it already exists. Please use a different name"))
         }
     }
@@ -124,7 +124,7 @@ class BannerDesignsController(
           case DynamoNoLockError(error) =>
             logger.warn(
               s"Failed to lock '$designName' because it is already locked: ${error.getMessage}")
-            IO.succeed(Conflict(
+            ZIO.succeed(Conflict(
               s"Design '$designName' is already locked for edit by another user"))
         }
     }
@@ -140,7 +140,7 @@ class BannerDesignsController(
           case DynamoNoLockError(error) =>
             logger.warn(
               s"Failed to unlock '$designName' because user ${request.user.email} does not have it locked: ${error.getMessage}")
-            IO.succeed(Conflict(
+            ZIO.succeed(Conflict(
               s"You do not currently have design '$designName' open for edit"))
         }
     }

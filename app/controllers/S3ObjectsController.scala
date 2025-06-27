@@ -7,7 +7,7 @@ import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.S3Client.S3ObjectSettings
 import services.{S3Json, VersionedS3Data}
-import zio.blocking.Blocking
+
 import zio.{IO, ZEnv, ZIO}
 import S3ObjectsController.extractFilename
 import com.typesafe.scalalogging.LazyLogging
@@ -43,7 +43,7 @@ abstract class S3ObjectsController[T : Decoder : Encoder](
   private def run(f: => ZIO[ZEnv, Throwable, Result]): Future[Result] =
     runtime.unsafeRunToFuture {
       f.catchAll { error =>
-        IO.succeed(InternalServerError(error.getMessage))
+        ZIO.succeed(InternalServerError(error.getMessage))
       }
     }
 

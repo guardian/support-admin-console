@@ -9,7 +9,7 @@ import play.api.mvc.{AbstractController, ActionBuilder, AnyContent, ControllerCo
 import services.S3Client.S3ObjectSettings
 import services.{S3Json, VersionedS3Data}
 import utils.Circe.noNulls
-import zio.blocking.Blocking
+
 import zio.{IO, ZEnv, ZIO}
 import com.typesafe.scalalogging.LazyLogging
 
@@ -39,7 +39,7 @@ abstract class S3ObjectController[T : Decoder : Encoder](
     runtime.unsafeRunToFuture {
       f.catchAll { error =>
         logger.error(s"Returning InternalServerError to client: ${error.getMessage}", error)
-        IO.succeed(InternalServerError(error.getMessage))
+        ZIO.succeed(InternalServerError(error.getMessage))
       }
     }
 
