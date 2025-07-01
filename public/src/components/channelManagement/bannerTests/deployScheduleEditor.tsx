@@ -29,7 +29,7 @@ const DeployScheduleEditor: React.FC<DeployScheduleEditorProps> = ({
   const classes = useStyles();
 
   const defaultValues: BannerTestDeploySchedule = {
-    daysBetween: 1,
+    daysBetween: deploySchedule?.daysBetween ?? 1,
   };
   const {
     register,
