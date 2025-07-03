@@ -8,11 +8,11 @@ import services.S3Client._
 import software.amazon.awssdk.core.sync.RequestBody
 import software.amazon.awssdk.services.s3.model.{GetObjectRequest, HeadObjectRequest, ListObjectsRequest, ObjectCannedACL, PutObjectRequest}
 import zio._
-import zio.blocking.effectBlocking
 import software.amazon.awssdk.services.s3.{S3Client => AwsS3Client}
 import utils.Circe.noNulls
 
 import scala.jdk.CollectionConverters._
+import zio.ZIO.attemptBlocking
 
 
 case class VersionedS3Data[T](value: T, version: String)
@@ -26,7 +26,7 @@ trait S3Client {
 
 object S3Client {
   type RawVersionedS3Data = VersionedS3Data[String]
-  type S3Action[T] = S3ObjectSettings => ZIO[ZEnv, S3ClientError,T]
+  type S3Action[T] = S3ObjectSettings => ZIO[Any, S3ClientError,T]
 
   case class S3ObjectSettings(
     bucket: String,
@@ -66,20 +66,21 @@ object S3 extends S3Client with StrictLogging {
       .key(objectSettings.key)
       .build
 
-    ZManaged
-      .fromAutoCloseable(effectBlocking(s3Client.getObject(request)))
-      .use { s3Object =>
-        Task {
-          VersionedS3Data(
-            value = scala.io.Source.fromInputStream(s3Object).mkString,
-            version = s3Object.response().versionId()
-          )
+    ZIO.scoped {
+      ZIO.fromAutoCloseable(attemptBlocking(s3Client.getObject(request)))
+        .flatMap { s3Object =>
+          ZIO.attempt {
+            VersionedS3Data(
+              value = scala.io.Source.fromInputStream(s3Object).mkString,
+              version = s3Object.response().versionId()
+            )
+          }
         }
-      }
-      .mapError { e =>
-        logger.error(s"Error reading $objectSettings from S3: ${e.getMessage}", e)
-        S3GetObjectError(e)
-      }
+        .mapError { e =>
+          logger.error(s"Error reading $objectSettings from S3: ${e.getMessage}", e)
+          S3GetObjectError(e)
+        }
+    }
   }
 
   def update(data: RawVersionedS3Data): S3Action[Unit] = { objectSettings =>
@@ -89,7 +90,7 @@ object S3 extends S3Client with StrictLogging {
       .key(objectSettings.key)
       .build
 
-    effectBlocking(s3Client.headObject(request))
+    attemptBlocking(s3Client.headObject(request))
       .mapError(e => {
         logger.error(s"Error getting object metadata for $objectSettings: ${e.getMessage}", e)
         S3GetObjectError(e)
@@ -99,13 +100,13 @@ object S3 extends S3Client with StrictLogging {
           createOrUpdate(data.value)(objectSettings)
         } else {
           logger.warn(s"Cannot update S3 object $objectSettings because provided version (${data.version}) does not match latest version (${response.versionId()})")
-          IO.fail(S3VersionMatchError)
+          ZIO.fail(S3VersionMatchError)
         }
       })
   }
 
   def createOrUpdate(data: String): S3Action[Unit] = { objectSettings =>
-      UIO.effectTotal {
+      ZIO.succeed {
         val request = PutObjectRequest.builder
           .bucket(objectSettings.bucket)
           .key(objectSettings.key)
@@ -122,7 +123,7 @@ object S3 extends S3Client with StrictLogging {
           .build()
 
       }.flatMap { request =>
-        effectBlocking {
+        attemptBlocking {
           s3Client.putObject(request, RequestBody.fromString(data))
         }.unit
       }
@@ -133,7 +134,7 @@ object S3 extends S3Client with StrictLogging {
   }
 
   def listKeys: S3Action[List[String]] = { objectSettings =>
-    effectBlocking {
+    attemptBlocking {
       val request = ListObjectsRequest
         .builder
         .bucket(objectSettings.bucket)
@@ -155,10 +156,10 @@ object S3Json extends StrictLogging {
     override def getMessage = s"Error decoding json from S3 ($objectSettings): ${error.getMessage}"
   }
 
-  def getFromJson[T : Decoder](s3: S3Client): S3ObjectSettings => ZIO[ZEnv,Throwable,VersionedS3Data[T]] = { objectSettings =>
+  def getFromJson[T : Decoder](s3: S3Client): S3ObjectSettings => ZIO[Any,Throwable,VersionedS3Data[T]] = { objectSettings =>
     s3.get(objectSettings).flatMap { raw =>
 
-      IO.fromEither(decode[T](raw.value))
+      ZIO.fromEither(decode[T](raw.value))
         .map(decoded => raw.copy(value = decoded))
         .mapError { error =>
           logger.error(s"Error decoding json from S3 ($objectSettings): ${error.getMessage}", error)

@@ -8,7 +8,6 @@ import models.EpicTest._
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.{DynamoArchivedChannelTests, DynamoChannelTests, DynamoChannelTestsAudit}
-import zio.ZEnv
 
 import scala.concurrent.ExecutionContext
 
@@ -20,7 +19,7 @@ class LiveblogEpicTestsController(
   authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
   components: ControllerComponents,
   stage: String,
-  runtime: zio.Runtime[ZEnv],
+  runtime: zio.Runtime[Any],
   dynamoTests: DynamoChannelTests,
   dynamoArchivedTests: DynamoArchivedChannelTests,
   dynamoTestsAudit: DynamoChannelTestsAudit

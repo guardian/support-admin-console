@@ -6,19 +6,19 @@ import models.DynamoErrors._
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.dynamodb.model.{AttributeValue, ConditionalCheckFailedException, PutItemRequest, ScanRequest}
 import utils.Circe.{dynamoMapToJson, jsonToDynamo}
-import zio.blocking.effectBlocking
-import zio.{ZEnv, ZIO}
+import zio.ZIO
 import io.circe.syntax._
 
 import scala.jdk.CollectionConverters._
+import zio.ZIO.attemptBlocking
 
 
 class DynamoCampaigns(stage: String, client: DynamoDbClient) extends StrictLogging {
 
   private val tableName = s"support-admin-console-campaigns-$stage"
 
-  private def getAll(): ZIO[ZEnv, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
-    effectBlocking {
+  private def getAll(): ZIO[Any, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
+    attemptBlocking {
       client.scan(
         ScanRequest
           .builder()
@@ -27,8 +27,8 @@ class DynamoCampaigns(stage: String, client: DynamoDbClient) extends StrictLoggi
       ).items()
     }.mapError(DynamoGetError)
 
-  private def put(putRequest: PutItemRequest): ZIO[ZEnv, DynamoError, Unit] =
-    effectBlocking {
+  private def put(putRequest: PutItemRequest): ZIO[Any, DynamoError, Unit] =
+    attemptBlocking {
       val result = client.putItem(putRequest)
       logger.info(s"PutItemResponse: $result")
       ()
@@ -37,7 +37,7 @@ class DynamoCampaigns(stage: String, client: DynamoDbClient) extends StrictLoggi
       case other => DynamoPutError(other)
     }
 
-  def getAllCampaigns(): ZIO[ZEnv, DynamoGetError, List[Campaign]] =
+  def getAllCampaigns(): ZIO[Any, DynamoGetError, List[Campaign]] =
     getAll().map(results =>
       results.asScala
         .map(item => dynamoMapToJson(item).as[Campaign])
@@ -51,7 +51,7 @@ class DynamoCampaigns(stage: String, client: DynamoDbClient) extends StrictLoggi
         .sortBy(_.name)
     )
 
-  def createCampaign(campaign: Campaign): ZIO[ZEnv, DynamoError, Unit] = {
+  def createCampaign(campaign: Campaign): ZIO[Any, DynamoError, Unit] = {
     val item = jsonToDynamo(campaign.asJson).m()
     val request = PutItemRequest
       .builder
@@ -64,7 +64,7 @@ class DynamoCampaigns(stage: String, client: DynamoDbClient) extends StrictLoggi
     put(request)
   }
 
-  def updateCampaign(campaign: Campaign): ZIO[ZEnv, DynamoError, Unit] = {
+  def updateCampaign(campaign: Campaign): ZIO[Any, DynamoError, Unit] = {
     val item = jsonToDynamo(campaign.asJson).m()
     val request = PutItemRequest
       .builder

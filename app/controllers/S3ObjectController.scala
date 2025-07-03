@@ -9,8 +9,7 @@ import play.api.mvc.{AbstractController, ActionBuilder, AnyContent, ControllerCo
 import services.S3Client.S3ObjectSettings
 import services.{S3Json, VersionedS3Data}
 import utils.Circe.noNulls
-import zio.blocking.Blocking
-import zio.{IO, ZEnv, ZIO}
+import zio.{Unsafe, ZIO}
 import com.typesafe.scalalogging.LazyLogging
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -25,7 +24,7 @@ abstract class S3ObjectController[T : Decoder : Encoder](
   components: ControllerComponents,
   stage: String,
   filename: String,
-  val runtime: zio.Runtime[ZEnv])(implicit ec: ExecutionContext) extends AbstractController(components) with Circe with LazyLogging {
+  val runtime: zio.Runtime[Any])(implicit ec: ExecutionContext) extends AbstractController(components) with Circe with LazyLogging {
 
   private val dataObjectSettings = S3ObjectSettings(
     bucket = "support-admin-console",
@@ -35,13 +34,13 @@ abstract class S3ObjectController[T : Decoder : Encoder](
   )
   private val s3Client = services.S3
 
-  protected def run(f: => ZIO[ZEnv, Throwable, Result]): Future[Result] =
-    runtime.unsafeRunToFuture {
+  protected def run(f: => ZIO[Any, Throwable, Result]): Future[Result] =
+    Unsafe.unsafe { implicit unsafe => runtime.unsafe.runToFuture {
       f.catchAll { error =>
         logger.error(s"Returning InternalServerError to client: ${error.getMessage}", error)
-        IO.succeed(InternalServerError(error.getMessage))
+        ZIO.succeed(InternalServerError(error.getMessage))
       }
-    }
+    }}
 
   /**
     * Returns current version of the object in s3 as json, with the version id.
