@@ -16,21 +16,23 @@ object EpicTestsController {
 }
 
 class EpicTestsController(
-  authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
-  components: ControllerComponents,
-  stage: String,
-  runtime: zio.Runtime[Any],
-  dynamoTests: DynamoChannelTests,
-  dynamoArchivedTests: DynamoArchivedChannelTests,
-  dynamoTestsAudit: DynamoChannelTestsAudit
-)(implicit ec: ExecutionContext) extends ChannelTestsController[EpicTest](
-  AuthAndPermissionActions.withoutPermissionsChecks(authAction),
-  components,
-  stage,
-  lockFileName = EpicTestsController.name,
-  channel = Channel.Epic,
-  runtime = runtime,
-  dynamoTests,
-  dynamoArchivedTests,
-  dynamoTestsAudit
-) with Circe
+    authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
+    components: ControllerComponents,
+    stage: String,
+    runtime: zio.Runtime[Any],
+    dynamoTests: DynamoChannelTests,
+    dynamoArchivedTests: DynamoArchivedChannelTests,
+    dynamoTestsAudit: DynamoChannelTestsAudit
+)(implicit ec: ExecutionContext)
+    extends ChannelTestsController[EpicTest](
+      AuthAndPermissionActions.withoutPermissionsChecks(authAction),
+      components,
+      stage,
+      lockFileName = EpicTestsController.name,
+      channel = Channel.Epic,
+      runtime = runtime,
+      dynamoTests,
+      dynamoArchivedTests,
+      dynamoTestsAudit
+    )
+    with Circe

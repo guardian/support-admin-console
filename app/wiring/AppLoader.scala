@@ -19,8 +19,10 @@ class AppLoader extends ApplicationLoader with StrictLogging {
     def addConfigToContext(identity: AppIdentity): Try[Context] = Try {
       val loadedConfig = ConfigurationLoader.load(identity) {
         case AwsIdentity(app, stack, stage, _) => SSMConfigurationLocation(s"/$app/$stage", Aws.region.id())
-        case DevIdentity(app) =>
-          FileConfigurationLocation(new File(s"/etc/gu/support-admin-console.private.conf")) //assume conf is available locally
+        case DevIdentity(app)                  =>
+          FileConfigurationLocation(
+            new File(s"/etc/gu/support-admin-console.private.conf")
+          ) // assume conf is available locally
       }
 
       context.copy(initialConfiguration = context.initialConfiguration ++ Configuration(loadedConfig))
@@ -33,11 +35,10 @@ class AppLoader extends ApplicationLoader with StrictLogging {
       newContext <- addConfigToContext(identity)
       stage = identity match {
         case AwsIdentity(_, _, s, _) => s
-        case _ => "DEV"
+        case _                       => "DEV"
       }
       application <- Try(new AppComponents(newContext, stage).application)
     } yield application
-
 
     application match {
       case Success(app) => app

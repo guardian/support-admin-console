@@ -5,11 +5,11 @@ import io.circe.generic.extras.auto._
 import io.circe.{Decoder, Encoder}
 
 case class Campaign(
-  name: String,
-  nickname: String,
-  description: Option[String],
-  notes: Option[List[String]],
-  isActive: Option[Boolean],
+    name: String,
+    nickname: String,
+    description: Option[String],
+    notes: Option[List[String]],
+    isActive: Option[Boolean]
 )
 
 object Campaigns {

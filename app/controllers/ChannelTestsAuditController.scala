@@ -11,24 +11,29 @@ import zio.{Unsafe, ZIO}
 import scala.concurrent.{ExecutionContext, Future}
 
 class ChannelTestsAuditController(
-  authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
-  components: ControllerComponents,
-  stage: String,
-  runtime: zio.Runtime[Any],
-  dynamo: DynamoChannelTestsAudit
-)(implicit ec: ExecutionContext) extends AbstractController(components) with LazyLogging {
+    authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
+    components: ControllerComponents,
+    stage: String,
+    runtime: zio.Runtime[Any],
+    dynamo: DynamoChannelTestsAudit
+)(implicit ec: ExecutionContext)
+    extends AbstractController(components)
+    with LazyLogging {
 
   private def run(f: => ZIO[Any, Throwable, Result]): Future[Result] =
-    Unsafe.unsafe { implicit unsafe => runtime.unsafe.runToFuture {
-      f.catchAll(error => {
-        logger.error(s"Returning InternalServerError to client: ${error.getMessage}", error)
-        ZIO.succeed(InternalServerError(error.getMessage))
-      })
-    }}
+    Unsafe.unsafe { implicit unsafe =>
+      runtime.unsafe.runToFuture {
+        f.catchAll(error => {
+          logger.error(s"Returning InternalServerError to client: ${error.getMessage}", error)
+          ZIO.succeed(InternalServerError(error.getMessage))
+        })
+      }
+    }
 
   def getAuditsForChannelTest(channel: String, testName: String): Action[AnyContent] = authAction.async { request =>
     run {
-      dynamo.getAuditsForChannelTest(channel, testName)
+      dynamo
+        .getAuditsForChannelTest(channel, testName)
         .map(tests => Ok(noNulls(tests.asJson)))
     }
   }

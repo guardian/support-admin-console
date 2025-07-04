@@ -4,9 +4,9 @@ import io.circe.generic.auto._
 import io.circe.{Decoder, Encoder}
 
 case class AppsMeteringSwitches(
-  enabled: Boolean,
-  excludeBreakingNews: Boolean,
-  requireApiKey: Boolean
+    enabled: Boolean,
+    excludeBreakingNews: Boolean,
+    requireApiKey: Boolean
 )
 
 object AppsMeteringSwitches {

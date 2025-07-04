@@ -33,14 +33,14 @@ object UserPermissions {
   implicit val decoder = Decoder[UserPermissions]
 }
 
-/**
- * Polls the user permissions DynamoDb table and caches all permissions in memory
- */
+/** Polls the user permissions DynamoDb table and caches all permissions in memory
+  */
 class DynamoPermissionsCache(
-  stage: String,
-  client: DynamoDbClient,
-  runtime: zio.Runtime[Any]
-) extends DynamoService(stage, client) with StrictLogging {
+    stage: String,
+    client: DynamoDbClient,
+    runtime: zio.Runtime[Any]
+) extends DynamoService(stage, client)
+    with StrictLogging {
   type Email = String
 
   protected val tableName = s"support-admin-console-permissions-$stage"
@@ -60,19 +60,17 @@ class DynamoPermissionsCache(
     }.mapError(DynamoGetError)
 
   private def fetchPermissions(): ZIO[Any, DynamoGetError, Map[Email, UserPermissions]] =
-    getAll.map(
-      results =>
-        results.asScala
-          .map(item => dynamoMapToJson(item).as[UserPermissions])
-          .flatMap {
-            case Right(userPermissions) => Some(userPermissions)
-            case Left(error) =>
-              logger.error(
-                s"Failed to decode UserPermissions from Dynamo: ${error.getMessage}")
-              None
-          }
-          .map(userPermissions => userPermissions.email -> userPermissions)
-          .toMap
+    getAll.map(results =>
+      results.asScala
+        .map(item => dynamoMapToJson(item).as[UserPermissions])
+        .flatMap {
+          case Right(userPermissions) => Some(userPermissions)
+          case Left(error)            =>
+            logger.error(s"Failed to decode UserPermissions from Dynamo: ${error.getMessage}")
+            None
+        }
+        .map(userPermissions => userPermissions.email -> userPermissions)
+        .toMap
     )
 
   private def updatePermissions(permissions: Map[Email, UserPermissions]) = {
@@ -81,11 +79,13 @@ class DynamoPermissionsCache(
   }
 
   // Poll every minute in the background
-  Unsafe.unsafe { implicit unsafe => runtime.unsafe.runToFuture {
-    fetchPermissions()
-      .map(updatePermissions)
-      .repeat(Schedule.fixed(1.minute))
-  }}
+  Unsafe.unsafe { implicit unsafe =>
+    runtime.unsafe.runToFuture {
+      fetchPermissions()
+        .map(updatePermissions)
+        .repeat(Schedule.fixed(1.minute))
+    }
+  }
 
   def getPermissionsForUser(email: Email): Option[List[PagePermission]] = {
     permissionsCache.get().get(email).map(_.permissions)

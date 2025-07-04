@@ -16,21 +16,23 @@ object BannerTestsController2 {
 }
 
 class BannerTestsController2(
-  authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
-  components: ControllerComponents,
-  stage: String,
-  runtime: zio.Runtime[Any],
-  dynamoTests: DynamoChannelTests,
-  dynamoArchivedTests: DynamoArchivedChannelTests,
-  dynamoTestsAudit: DynamoChannelTestsAudit
-)(implicit ec: ExecutionContext) extends ChannelTestsController[BannerTest](
-  AuthAndPermissionActions.withoutPermissionsChecks(authAction),
-  components,
-  stage,
-  lockFileName = BannerTestsController.name,
-  channel = Channel.Banner2,
-  runtime = runtime,
-  dynamoTests,
-  dynamoArchivedTests,
-  dynamoTestsAudit
-) with Circe
+    authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
+    components: ControllerComponents,
+    stage: String,
+    runtime: zio.Runtime[Any],
+    dynamoTests: DynamoChannelTests,
+    dynamoArchivedTests: DynamoArchivedChannelTests,
+    dynamoTestsAudit: DynamoChannelTestsAudit
+)(implicit ec: ExecutionContext)
+    extends ChannelTestsController[BannerTest](
+      AuthAndPermissionActions.withoutPermissionsChecks(authAction),
+      components,
+      stage,
+      lockFileName = BannerTestsController.name,
+      channel = Channel.Banner2,
+      runtime = runtime,
+      dynamoTests,
+      dynamoArchivedTests,
+      dynamoTestsAudit
+    )
+    with Circe

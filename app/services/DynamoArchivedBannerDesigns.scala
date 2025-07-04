@@ -10,7 +10,9 @@ import java.text.SimpleDateFormat
 import java.util
 import java.util.Date
 
-class DynamoArchivedBannerDesigns(stage: String, client: DynamoDbClient) extends DynamoService(stage, client) with StrictLogging {
+class DynamoArchivedBannerDesigns(stage: String, client: DynamoDbClient)
+    extends DynamoService(stage, client)
+    with StrictLogging {
 
   protected val tableName = s"support-admin-console-archived-banner-designs-$stage"
 
@@ -21,8 +23,7 @@ class DynamoArchivedBannerDesigns(stage: String, client: DynamoDbClient) extends
     mutableItem.put("date", AttributeValue.builder.s(date).build())
 
     put(
-      PutItemRequest
-        .builder
+      PutItemRequest.builder
         .tableName(tableName)
         .item(mutableItem)
         .build()

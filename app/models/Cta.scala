@@ -8,12 +8,12 @@ case class Cta(text: String, baseUrl: String)
 sealed trait SecondaryCta
 
 case class CustomSecondaryCta(
-  `type`: String = "CustomSecondaryCta",
-  cta: Cta,
+    `type`: String = "CustomSecondaryCta",
+    cta: Cta
 ) extends SecondaryCta
 
 case class ContributionsReminderSecondaryCta(
-  `type`: String = "ContributionsReminderSecondaryCta",
+    `type`: String = "ContributionsReminderSecondaryCta"
 ) extends SecondaryCta
 
 object SecondaryCta {

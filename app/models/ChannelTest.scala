@@ -38,22 +38,22 @@ object ChannelTest {
   implicit def channelTestDecoder = new Decoder[ChannelTest[_]] {
     override def apply(c: HCursor): Result[ChannelTest[_]] = {
       c.downField("channel").as[Channel].flatMap {
-        case Header => HeaderTest.headerTestDecoder(c)
-        case Banner1 | Banner2 => BannerTest.bannerTestDecoder(c)
-        case GutterLiveblog => GutterTest.gutterTestDecoder(c)
-        case SupportLandingPage =>SupportLandingPageTest.landingPageTestDecoder(c)
-        case epic => EpicTest.epicTestDecoder(c)
+        case Header             => HeaderTest.headerTestDecoder(c)
+        case Banner1 | Banner2  => BannerTest.bannerTestDecoder(c)
+        case GutterLiveblog     => GutterTest.gutterTestDecoder(c)
+        case SupportLandingPage => SupportLandingPageTest.landingPageTestDecoder(c)
+        case epic               => EpicTest.epicTestDecoder(c)
       }
     }
   }
 
   implicit def channelTestEncoder = new Encoder[ChannelTest[_]] {
     override def apply(test: ChannelTest[_]): Json = test match {
-      case header: HeaderTest => HeaderTest.headerTestEncoder(header)
-      case banner: BannerTest => BannerTest.bannerTestEncoder(banner)
-      case gutter: GutterTest => GutterTest.gutterTestEncoder(gutter)
-      case landingPage :SupportLandingPageTest => SupportLandingPageTest.landingPageTestEncoder(landingPage)
-      case epic: EpicTest => EpicTest.epicTestEncoder(epic)
+      case header: HeaderTest                  => HeaderTest.headerTestEncoder(header)
+      case banner: BannerTest                  => BannerTest.bannerTestEncoder(banner)
+      case gutter: GutterTest                  => GutterTest.gutterTestEncoder(gutter)
+      case landingPage: SupportLandingPageTest => SupportLandingPageTest.landingPageTestEncoder(landingPage)
+      case epic: EpicTest                      => EpicTest.epicTestEncoder(epic)
     }
   }
 }

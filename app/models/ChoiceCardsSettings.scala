@@ -26,17 +26,17 @@ object ChoiceCardsSettings {
   }
   object Product {
     case class Contribution(
-      supportTier: String = "Contribution",
-      ratePlan: RatePlan
+        supportTier: String = "Contribution",
+        ratePlan: RatePlan
     ) extends Product
 
     case class SupporterPlus(
-      supportTier: String = "SupporterPlus",
-      ratePlan: RatePlan
+        supportTier: String = "SupporterPlus",
+        ratePlan: RatePlan
     ) extends Product
 
     case class OneOff(
-      supportTier: String = "OneOff"
+        supportTier: String = "OneOff"
     ) extends Product
 
     import io.circe.generic.extras.auto._
@@ -48,12 +48,12 @@ object ChoiceCardsSettings {
   case class Pill(copy: String)
 
   case class ChoiceCard(
-    product: Product,
-    label: String,
-    benefitsLabel: Option[String],
-    benefits: List[ProductBenefit],
-    pill: Option[Pill],
-    isDefault: Boolean
+      product: Product,
+      label: String,
+      benefitsLabel: Option[String],
+      benefits: List[ProductBenefit],
+      pill: Option[Pill],
+      isDefault: Boolean
   )
 
   implicit val choiceCardsSettingsDecoder = Decoder[ChoiceCardsSettings]

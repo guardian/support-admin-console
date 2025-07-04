@@ -3,7 +3,14 @@ package services
 import com.google.api.gax.core.FixedCredentialsProvider
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.cloud.RetryOption
-import com.google.cloud.bigquery.{BigQuery, BigQueryOptions, FieldValueList, JobInfo, QueryJobConfiguration, TableResult}
+import com.google.cloud.bigquery.{
+  BigQuery,
+  BigQueryOptions,
+  FieldValueList,
+  JobInfo,
+  QueryJobConfiguration,
+  TableResult
+}
 import com.typesafe.scalalogging.LazyLogging
 import models.BigQueryResult
 import zio.ZIO
@@ -12,14 +19,13 @@ import java.io.ByteArrayInputStream
 import scala.jdk.CollectionConverters._
 import zio.ZIO.attemptBlocking
 
-
 case class BigQueryError(message: String) extends Throwable
 
 class BigQueryService(bigQuery: BigQuery) extends LazyLogging {
   def buildQuery(testName: String, channel: String, stage: String): String = {
 
     val channelInQuery = channel match {
-      case "Epic" => "ACQUISITIONS_EPIC"
+      case "Epic"    => "ACQUISITIONS_EPIC"
       case "Banner1" => "ACQUISITIONS_ENGAGEMENT_BANNER"
       case "Banner2" => "ACQUISITIONS_SUBSCRIPTIONS_BANNER"
     }
@@ -51,12 +57,13 @@ class BigQueryService(bigQuery: BigQuery) extends LazyLogging {
       Option(queryJob)
 
     }.flatMap {
-      case None => ZIO.fail(BigQueryError("Cannot create query job"))
+      case None      => ZIO.fail(BigQueryError("Cannot create query job"))
       case Some(job) =>
         Option(job.getStatus.getError) match {
-          case None => ZIO.succeed(
-            job.getQueryResults()
-          )
+          case None =>
+            ZIO.succeed(
+              job.getQueryResults()
+            )
           case Some(error) => ZIO.fail(BigQueryError("Cannot retrieve results"))
         }
     }.mapError(error => {

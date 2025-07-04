@@ -16,26 +16,31 @@ import zio.{Unsafe, ZIO}
 import scala.concurrent.{ExecutionContext, Future}
 
 class CampaignsController(
-  authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
-  components: ControllerComponents,
-  stage: String,
-  runtime: zio.Runtime[Any],
-  dynamoChannelTests: DynamoChannelTests,
-  dynamoCampaigns: DynamoCampaigns
+    authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
+    components: ControllerComponents,
+    stage: String,
+    runtime: zio.Runtime[Any],
+    dynamoChannelTests: DynamoChannelTests,
+    dynamoCampaigns: DynamoCampaigns
 )(implicit ec: ExecutionContext)
-  extends AbstractController(components) with Circe with LazyLogging{
+    extends AbstractController(components)
+    with Circe
+    with LazyLogging {
 
   private def run(f: => ZIO[Any, Throwable, Result]): Future[Result] =
-    Unsafe.unsafe { implicit unsafe => runtime.unsafe.runToFuture {
-      f.catchAll(error => {
-        logger.error(s"Returning InternalServerError to client: ${error.getMessage}", error)
-        ZIO.succeed(InternalServerError(error.getMessage))
-      })
-    }}
+    Unsafe.unsafe { implicit unsafe =>
+      runtime.unsafe.runToFuture {
+        f.catchAll(error => {
+          logger.error(s"Returning InternalServerError to client: ${error.getMessage}", error)
+          ZIO.succeed(InternalServerError(error.getMessage))
+        })
+      }
+    }
 
   def get(): Action[AnyContent] = authAction.async { request =>
     run {
-      dynamoCampaigns.getAllCampaigns()
+      dynamoCampaigns
+        .getAllCampaigns()
         .map(campaigns => Ok(noNulls(campaigns.asJson)))
     }
   }
@@ -49,7 +54,11 @@ class CampaignsController(
         .map(_ => Ok("created"))
         .catchSome { case DynamoDuplicateNameError(error) =>
           logger.warn(s"Failed to create '${campaign.name}' because name already exists: ${error.getMessage}")
-          ZIO.succeed(BadRequest(s"Cannot create campaign '${campaign.name}' because it already exists. Please use a different name"))
+          ZIO.succeed(
+            BadRequest(
+              s"Cannot create campaign '${campaign.name}' because it already exists. Please use a different name"
+            )
+          )
         }
     }
   }
@@ -66,7 +75,8 @@ class CampaignsController(
 
   def getTests(campaignName: String): Action[AnyContent] = authAction.async { request =>
     run {
-      dynamoChannelTests.getAllTestsInCampaign(campaignName)
+      dynamoChannelTests
+        .getAllTestsInCampaign(campaignName)
         .map(tests => Ok(noNulls(tests.asJson)))
     }
   }

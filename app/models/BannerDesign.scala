@@ -17,10 +17,10 @@ object BannerDesignStatus {
 }
 
 case class HeaderImage(
-  mobileUrl: String,
-  tabletUrl: String,
-  desktopUrl: String,
-  altText: String
+    mobileUrl: String,
+    tabletUrl: String,
+    desktopUrl: String,
+    altText: String
 )
 
 sealed trait FontSize
@@ -38,21 +38,21 @@ case class Fonts(heading: Font)
 sealed trait BannerDesignVisual
 object BannerDesignVisual {
   case class Image(
-    kind: String = "Image",
-    mobileUrl: String,
-    tabletUrl: String,
-    desktopUrl: String,
-    altText: String
+      kind: String = "Image",
+      mobileUrl: String,
+      tabletUrl: String,
+      desktopUrl: String,
+      altText: String
   ) extends BannerDesignVisual
 
   case class ChoiceCards(
-    kind: String = "ChoiceCards",
-    buttonColour: Option[HexColour],
-    buttonTextColour: Option[HexColour],
-    buttonBorderColour: Option[HexColour],
-    buttonSelectColour: Option[HexColour],
-    buttonSelectTextColour: Option[HexColour],
-    buttonSelectBorderColour: Option[HexColour]
+      kind: String = "ChoiceCards",
+      buttonColour: Option[HexColour],
+      buttonTextColour: Option[HexColour],
+      buttonBorderColour: Option[HexColour],
+      buttonSelectColour: Option[HexColour],
+      buttonSelectTextColour: Option[HexColour],
+      buttonSelectBorderColour: Option[HexColour]
   ) extends BannerDesignVisual
 
   import io.circe.generic.extras.auto._
@@ -63,44 +63,44 @@ object BannerDesignVisual {
 }
 
 case class HexColour(
-  r: String,
-  g: String,
-  b: String,
-  kind: String,
+    r: String,
+    g: String,
+    b: String,
+    kind: String
 )
 
 case class BannerDesignBasicColours(
-  background: HexColour,
-  bodyText: HexColour,
-  headerText: HexColour,
-  articleCountText: HexColour,
-  logo: HexColour
+    background: HexColour,
+    bodyText: HexColour,
+    headerText: HexColour,
+    articleCountText: HexColour,
+    logo: HexColour
 )
 
 case class BannerDesignHighlightedTextColours(
-  text: HexColour,
-  highlight: HexColour
+    text: HexColour,
+    highlight: HexColour
 )
 
 case class CtaStateDesign(
-  text: HexColour,
-  background: HexColour,
-  border: Option[HexColour]
+    text: HexColour,
+    background: HexColour,
+    border: Option[HexColour]
 )
 
 case class CtaDesign(
-  default: CtaStateDesign,
-  hover: CtaStateDesign
+    default: CtaStateDesign,
+    hover: CtaStateDesign
 )
 
 case class TickerDesign(
-  text: HexColour, //deprecated
-  filledProgress: HexColour,
-  progressBarBackground: HexColour,
-  goalMarker: HexColour, //deprecated
-  headlineColour: Option[HexColour],  //new
-  totalColour: Option[HexColour], //new
-  goalColour: Option[HexColour] //new
+    text: HexColour, // deprecated
+    filledProgress: HexColour,
+    progressBarBackground: HexColour,
+    goalMarker: HexColour, // deprecated
+    headlineColour: Option[HexColour], // new
+    totalColour: Option[HexColour], // new
+    goalColour: Option[HexColour] // new
 )
 
 object TickerDesign {
@@ -113,28 +113,25 @@ object TickerDesign {
     val headlineColour = design.headlineColour.getOrElse(design.text)
     val totalColour = design.totalColour.getOrElse(design.text)
     val goalColour = design.goalColour.getOrElse(design.text)
-    design.copy(
-      headlineColour = Some(headlineColour),
-      totalColour = Some(totalColour),
-      goalColour = Some(goalColour))
+    design.copy(headlineColour = Some(headlineColour), totalColour = Some(totalColour), goalColour = Some(goalColour))
   })
 }
 
 case class BannerDesignColours(
-  basic: BannerDesignBasicColours,
-  highlightedText: BannerDesignHighlightedTextColours,
-  primaryCta: CtaDesign,
-  secondaryCta: CtaDesign,
-  closeButton: CtaDesign,
-  ticker: TickerDesign
+    basic: BannerDesignBasicColours,
+    highlightedText: BannerDesignHighlightedTextColours,
+    primaryCta: CtaDesign,
+    secondaryCta: CtaDesign,
+    closeButton: CtaDesign,
+    ticker: TickerDesign
 )
 
 case class BannerDesign(
-  name: String,
-  status: BannerDesignStatus,
-  visual: Option[BannerDesignVisual],
-  headerImage: Option[HeaderImage],
-  colours: BannerDesignColours,
-  lockStatus: Option[LockStatus],
-  fonts: Option[Fonts],
+    name: String,
+    status: BannerDesignStatus,
+    visual: Option[BannerDesignVisual],
+    headerImage: Option[HeaderImage],
+    colours: BannerDesignColours,
+    lockStatus: Option[LockStatus],
+    fonts: Option[Fonts]
 )

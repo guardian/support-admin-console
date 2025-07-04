@@ -20,27 +20,29 @@ import scala.concurrent.{ExecutionContext, Future}
 object ChannelTestsController {
   // The model returned by this controller for GET requests
   case class ChannelTestsResponse[T](
-    tests: List[T],
-    status: LockStatus,
-    userEmail: String
+      tests: List[T],
+      status: LockStatus,
+      userEmail: String
   )
 }
 
-/**
-  * Controller for managing channel tests config in Dynamodb.
-  * Uses an S3 file for lock protection to prevent concurrent editing.
+/** Controller for managing channel tests config in Dynamodb. Uses an S3 file for lock protection to prevent concurrent
+  * editing.
   */
-abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
-  authActions: AuthAndPermissionActions,
-  components: ControllerComponents,
-  stage: String,
-  lockFileName: String,
-  channel: Channel,
-  runtime: zio.Runtime[Any],
-  dynamoTests: DynamoChannelTests,
-  dynamoArchivedTests: DynamoArchivedChannelTests,
-  dynamoTestsAudit: DynamoChannelTestsAudit
-)(implicit ec: ExecutionContext) extends AbstractController(components) with Circe with LazyLogging {
+abstract class ChannelTestsController[T <: ChannelTest[T]: Decoder: Encoder](
+    authActions: AuthAndPermissionActions,
+    components: ControllerComponents,
+    stage: String,
+    lockFileName: String,
+    channel: Channel,
+    runtime: zio.Runtime[Any],
+    dynamoTests: DynamoChannelTests,
+    dynamoArchivedTests: DynamoArchivedChannelTests,
+    dynamoTestsAudit: DynamoChannelTestsAudit
+)(implicit ec: ExecutionContext)
+    extends AbstractController(components)
+    with Circe
+    with LazyLogging {
 
   private val lockObjectSettings = S3ObjectSettings(
     bucket = "support-admin-console",
@@ -52,12 +54,14 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
   val s3Client = services.S3
 
   private def run(f: => ZIO[Any, Throwable, Result]): Future[Result] =
-    Unsafe.unsafe { implicit unsafe => runtime.unsafe.runToFuture {
-      f.catchAll(error => {
-        logger.error(s"Returning InternalServerError to client: ${error.getMessage}", error)
-        ZIO.succeed(InternalServerError(error.getMessage))
-      })
-    }}
+    Unsafe.unsafe { implicit unsafe =>
+      runtime.unsafe.runToFuture {
+        f.catchAll(error => {
+          logger.error(s"Returning InternalServerError to client: ${error.getMessage}", error)
+          ZIO.succeed(InternalServerError(error.getMessage))
+        })
+      }
+    }
 
   private def runWithLockStatus(f: VersionedS3Data[LockStatus] => ZIO[Any, Throwable, Result]): Future[Result] =
     run {
@@ -87,8 +91,7 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
     }
   }
 
-  /**
-    * Handlers for test list ordering
+  /** Handlers for test list ordering
     */
 
   def lockList = authActions.write.async { request =>
@@ -100,7 +103,9 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
 
         setLockStatus(VersionedS3Data(newLockStatus, lockFileVersion)).map(_ => Ok("locked"))
       } else {
-        logger.info(s"User ${request.user.email} failed to take control of $channel test list because it was already locked")
+        logger.info(
+          s"User ${request.user.email} failed to take control of $channel test list because it was already locked"
+        )
         ZIO.succeed(Conflict(s"File $channel is already locked"))
       }
     }
@@ -121,7 +126,9 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
 
   def takeControlOfList = authActions.write.async { request =>
     runWithLockStatus { case VersionedS3Data(lockStatus, lockFileVersion) =>
-      logger.info(s"User ${request.user.email} is force-unlocking $channel test list, taking it from ${lockStatus.email}")
+      logger.info(
+        s"User ${request.user.email} is force-unlocking $channel test list, taking it from ${lockStatus.email}"
+      )
 
       setLockStatus(VersionedS3Data(LockStatus.locked(request.user.email), lockFileVersion)).map(_ => Ok("unlocked"))
     }
@@ -138,15 +145,16 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
           _ <- setLockStatus(VersionedS3Data(LockStatus.unlocked, lockFileVersion))
         } yield Ok("updated")
 
-        result.tapError(error => ZIO.succeed(logger.error(s"Failed to update $channel test list (user ${request.user.email}: $error")))
+        result.tapError(error =>
+          ZIO.succeed(logger.error(s"Failed to update $channel test list (user ${request.user.email}: $error"))
+        )
       } else {
         ZIO.succeed(Conflict(s"You do not currently have $channel test list open for edit"))
       }
     }
   }
 
-  /**
-    * Handlers for test editing
+  /** Handlers for test editing
     */
 
   def getTest(testName: String) = authActions.read.async { request =>
@@ -166,7 +174,9 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
         .flatMap(_ => dynamoTestsAudit.createAudit(test, request.user.email))
         .map(_ => Ok("updated"))
         .catchSome { case DynamoNoLockError(error) =>
-          logger.warn(s"Failed to save $channel/'${test.name}' because user ${request.user.email} does not have it locked: ${error.getMessage}")
+          logger.warn(
+            s"Failed to save $channel/'${test.name}' because user ${request.user.email} does not have it locked: ${error.getMessage}"
+          )
           ZIO.succeed(Conflict(s"You do not currently have $channel test '${test.name}' open for edit"))
         }
     }
@@ -182,7 +192,11 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
         .map(_ => Ok("created"))
         .catchSome { case DynamoDuplicateNameError(error) =>
           logger.warn(s"Failed to create $channel/'${test.name}' because name already exists: ${error.getMessage}")
-          ZIO.succeed(BadRequest(s"Cannot create $channel test '${test.name}' because it already exists. Please use a different name"))
+          ZIO.succeed(
+            BadRequest(
+              s"Cannot create $channel test '${test.name}' because it already exists. Please use a different name"
+            )
+          )
         }
     }
   }
@@ -190,11 +204,14 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
   def lockTest(testName: String) = authActions.write.async { request =>
     run {
       logger.info(s"${request.user.email} is locking $channel/'$testName'")
-      dynamoTests.lockTest(testName, channel, request.user.email, force = false)
+      dynamoTests
+        .lockTest(testName, channel, request.user.email, force = false)
         .map(_ => Ok("locked"))
         .catchSome { case DynamoNoLockError(error) =>
           logger.warn(s"Failed to lock $channel/'$testName' because it is already locked: ${error.getMessage}")
-          ZIO.succeed(Conflict(s"$channel test '$testName' is already locked for edit by another user, or it doesn't exist"))
+          ZIO.succeed(
+            Conflict(s"$channel test '$testName' is already locked for edit by another user, or it doesn't exist")
+          )
         }
     }
   }
@@ -202,10 +219,13 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
   def unlockTest(testName: String) = authActions.write.async { request =>
     run {
       logger.info(s"${request.user.email} is unlocking $channel/'$testName'")
-      dynamoTests.unlockTest(testName, channel, request.user.email)
+      dynamoTests
+        .unlockTest(testName, channel, request.user.email)
         .map(_ => Ok("unlocked"))
         .catchSome { case DynamoNoLockError(error) =>
-          logger.warn(s"Failed to unlock $channel/'$testName' because user ${request.user.email} does not have it locked: ${error.getMessage}")
+          logger.warn(
+            s"Failed to unlock $channel/'$testName' because user ${request.user.email} does not have it locked: ${error.getMessage}"
+          )
           ZIO.succeed(Conflict(s"You do not currently have $channel test '$testName' open for edit"))
         }
     }
@@ -214,16 +234,17 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
   def forceLockTest(testName: String) = authActions.write.async { request =>
     run {
       logger.info(s"${request.user.email} is force locking $channel/'$testName'")
-      dynamoTests.lockTest(testName, channel, request.user.email, force = true)
+      dynamoTests
+        .lockTest(testName, channel, request.user.email, force = true)
         .map(_ => Ok("locked"))
     }
   }
 
   private def parseStatus(rawStatus: String): Option[models.Status] = rawStatus.toLowerCase match {
-    case "live" => Some(models.Status.Live)
-    case "draft" => Some(models.Status.Draft)
+    case "live"     => Some(models.Status.Live)
+    case "draft"    => Some(models.Status.Draft)
     case "archived" => Some(models.Status.Archived)
-    case _ => None
+    case _          => None
   }
 
   def setStatus(rawStatus: String) = authActions.write.async(circe.json[List[String]]) { request =>
@@ -245,13 +266,13 @@ abstract class ChannelTestsController[T <: ChannelTest[T] : Decoder : Encoder](
             }
 
         case Some(status) =>
-          dynamoTests.updateStatuses(testNames, channel, status)
+          dynamoTests
+            .updateStatuses(testNames, channel, status)
             .flatMap(_ => {
-              /**
-               * Fetch the full data for all the updated tests and then write audits.
-               * We use .forkDaemon here to avoid delaying the response to the client
-               * and instead run this task in the background.
-               */
+
+              /** Fetch the full data for all the updated tests and then write audits. We use .forkDaemon here to avoid
+                * delaying the response to the client and instead run this task in the background.
+                */
               dynamoTests
                 .getTests(channel, testNames)
                 .flatMap(tests => dynamoTestsAudit.createAudits(tests, request.user.email))

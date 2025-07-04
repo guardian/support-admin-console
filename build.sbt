@@ -9,10 +9,18 @@ val circeVersion = "0.14.14"
 val awsVersion = "2.31.60"
 val zioVersion = "2.1.19"
 
+lazy val scalafmtSettings = Seq(
+  scalafmtFilter.withRank(KeyRanks.Invisible) := "diff-dirty",
+  (Test / test) := ((Test / test) dependsOn (Test / scalafmtCheckAll)).value,
+  (Test / testOnly) := ((Test / testOnly) dependsOn (Test / scalafmtCheckAll)).evaluated,
+  (Test / testQuick) := ((Test / testQuick) dependsOn (Test / scalafmtCheckAll)).evaluated,
+)
+
 lazy val root = (project in file(".")).enablePlugins(PlayScala, RiffRaffArtifact, SbtWeb, JDebPackaging, SystemdPlugin,BuildInfoPlugin)
   .settings(
     buildInfoKeys := BuildInfoSettings.buildInfoKeys,
     buildInfoPackage := "app",
+    scalafmtSettings,
   )
 
 
