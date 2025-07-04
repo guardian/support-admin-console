@@ -50,7 +50,7 @@ dependencyOverrides ++= List(
   // Play still uses an old version of jackson-core which has a vulnerability - https://security.snyk.io/vuln/SNYK-JAVA-COMFASTERXMLJACKSONCORE-7569538
   "com.fasterxml.jackson.core" % "jackson-core" % "2.19.1",
   "com.fasterxml.jackson.core" % "jackson-databind" % "2.19.1",
-  "io.netty" % "netty-handler" % "4.1.122.Final",
+  "io.netty" % "netty-handler" % "4.2.2.Final",
   "io.netty" % "netty-codec-http2" % "4.2.2.Final",
   // Related to Play 3.0.2-6 currently brings in a vulnerable version of commons-io
   "commons-io" % "commons-io" % "2.19.0" % Test,
