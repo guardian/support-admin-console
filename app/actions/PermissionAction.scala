@@ -50,7 +50,6 @@ object PermissionAction extends Results with LazyLogging {
       requiredPermission: Permission,
       userPermissions: Option[List[UserPermissions.PagePermission]]
   ): Option[Result] = {
-    logger.info("testing")
     userPermissions match {
       case Some(permissions) =>
         permissions.find(permission => permission.name == page) match {
