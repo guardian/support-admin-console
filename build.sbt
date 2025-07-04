@@ -1,4 +1,3 @@
-
 name := "support-admin-console"
 
 version := "1.0-SNAPSHOT"
@@ -13,16 +12,16 @@ lazy val scalafmtSettings = Seq(
   scalafmtFilter.withRank(KeyRanks.Invisible) := "diff-dirty",
   (Test / test) := ((Test / test) dependsOn (Test / scalafmtCheckAll)).value,
   (Test / testOnly) := ((Test / testOnly) dependsOn (Test / scalafmtCheckAll)).evaluated,
-  (Test / testQuick) := ((Test / testQuick) dependsOn (Test / scalafmtCheckAll)).evaluated,
+  (Test / testQuick) := ((Test / testQuick) dependsOn (Test / scalafmtCheckAll)).evaluated
 )
 
-lazy val root = (project in file(".")).enablePlugins(PlayScala, RiffRaffArtifact, SbtWeb, JDebPackaging, SystemdPlugin,BuildInfoPlugin)
+lazy val root = (project in file("."))
+  .enablePlugins(PlayScala, RiffRaffArtifact, SbtWeb, JDebPackaging, SystemdPlugin, BuildInfoPlugin)
   .settings(
     buildInfoKeys := BuildInfoSettings.buildInfoKeys,
     buildInfoPackage := "app",
-    scalafmtSettings,
+    scalafmtSettings
   )
-
 
 asciiGraphWidth := 999999999 // to ensure Snyk can read the the deeeeep dependency tree
 
@@ -38,14 +37,14 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-parser" % circeVersion,
   "io.circe" %% "circe-generic-extras" % "0.14.4",
   "com.dripower" %% "play-circe" % "3014.1",
-  "com.beachape" %% "enumeratum" % "1.7.6",
+  "com.beachape" %% "enumeratum" % "1.9.0",
   "com.beachape" %% "enumeratum-circe" % "1.7.5",
   ws,
   "dev.zio" %% "zio" % zioVersion,
   "dev.zio" %% "zio-streams" % zioVersion,
   "org.scalatest" %% "scalatest" % "3.2.19" % "test",
-  "org.gnieh" %% "diffson-circe" % "4.6.0" % "test",
- )
+  "org.gnieh" %% "diffson-circe" % "4.6.0" % "test"
+)
 
 dependencyOverrides ++= List(
   // Play still uses an old version of jackson-core which has a vulnerability - https://security.snyk.io/vuln/SNYK-JAVA-COMFASTERXMLJACKSONCORE-7569538
@@ -56,24 +55,24 @@ dependencyOverrides ++= List(
   // Related to Play 3.0.2-6 currently brings in a vulnerable version of commons-io
   "commons-io" % "commons-io" % "2.19.0" % Test,
   "commons-beanutils" % "commons-beanutils" % "1.11.0"
- )
+)
 
 excludeDependencies ++= Seq(
   // Exclude htmlunit due to a vulnerability. Brought in via scalatest but we don't need it.
   // The vulnerability is fixed in htmlunit v3 onwards, but the lib was renamed so we cannot force a newer version
   // by specifying it in the dependencies.
-  ExclusionRule("net.sourceforge.htmlunit", "htmlunit"),
- )
+  ExclusionRule("net.sourceforge.htmlunit", "htmlunit")
+)
 
 dynamoDBLocalPort := 8083
-startDynamoDBLocal := {startDynamoDBLocal.dependsOn(Test / compile).value}
-Test / testQuick := {(Test / testQuick).dependsOn(startDynamoDBLocal).evaluated}
-Test / test := {(Test / test).dependsOn(startDynamoDBLocal).value}
-Test / testOptions += {dynamoDBLocalTestCleanup.value}
+startDynamoDBLocal := { startDynamoDBLocal.dependsOn(Test / compile).value }
+Test / testQuick := { (Test / testQuick).dependsOn(startDynamoDBLocal).evaluated }
+Test / test := { (Test / test).dependsOn(startDynamoDBLocal).value }
+Test / testOptions += { dynamoDBLocalTestCleanup.value }
 
-sources in(Compile, doc) := Seq.empty
+sources in (Compile, doc) := Seq.empty
 
-publishArtifact in(Compile, packageDoc) := false
+publishArtifact in (Compile, packageDoc) := false
 
 pipelineStages := Seq(digest)
 
@@ -82,7 +81,13 @@ riffRaffManifestProjectName := "support:admin-console"
 riffRaffPackageName := "admin-console"
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
-riffRaffArtifactResources += (file("cdk/cdk.out/AdminConsole-PROD.template.json"), "cfn/AdminConsole-PROD.template.json")
-riffRaffArtifactResources += (file("cdk/cdk.out/AdminConsole-CODE.template.json"), "cfn/AdminConsole-CODE.template.json")
+riffRaffArtifactResources += (
+  file("cdk/cdk.out/AdminConsole-PROD.template.json"),
+  "cfn/AdminConsole-PROD.template.json"
+)
+riffRaffArtifactResources += (
+  file("cdk/cdk.out/AdminConsole-CODE.template.json"),
+  "cfn/AdminConsole-CODE.template.json"
+)
 
 javaOptions in run ++= Seq("-Xms2G", "-Xmx2G", "-Xss4M")
