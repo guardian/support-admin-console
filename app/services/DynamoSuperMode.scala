@@ -22,20 +22,27 @@ class DynamoSuperMode(client: DynamoDbClient) extends StrictLogging {
   private val dateFormat = new SimpleDateFormat("yyyy-MM-dd")
   private val timestampFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
 
-  private def get(endDate: String, endTimestamp: String): ZIO[Any, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
+  private def get(
+      endDate: String,
+      endTimestamp: String
+  ): ZIO[Any, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
     attemptBlocking {
-      client.query(
-        QueryRequest
-          .builder()
-          .tableName(tableName)
-          .indexName("end")
-          .keyConditionExpression("endDate = :endDate AND endTimestamp > :endTimestamp")
-          .expressionAttributeValues(Map(
-            ":endDate" -> AttributeValue.builder.s(endDate).build,
-            ":endTimestamp" -> AttributeValue.builder.s(endTimestamp).build
-          ).asJava)
-          .build()
-      ).items()
+      client
+        .query(
+          QueryRequest
+            .builder()
+            .tableName(tableName)
+            .indexName("end")
+            .keyConditionExpression("endDate = :endDate AND endTimestamp > :endTimestamp")
+            .expressionAttributeValues(
+              Map(
+                ":endDate" -> AttributeValue.builder.s(endDate).build,
+                ":endTimestamp" -> AttributeValue.builder.s(endTimestamp).build
+              ).asJava
+            )
+            .build()
+        )
+        .items()
     }.mapError(DynamoGetError)
 
   private def getRowsForDate(date: String, endTimestamp: String): ZIO[Any, DynamoGetError, List[SuperModeRow]] =
@@ -43,7 +50,7 @@ class DynamoSuperMode(client: DynamoDbClient) extends StrictLogging {
       results.asScala
         .map(item => dynamoMapToJson(item).as[SuperModeRow])
         .flatMap {
-          case Right(row) => Some(row)
+          case Right(row)  => Some(row)
           case Left(error) =>
             logger.error(s"Failed to decode item from Dynamo: ${error.getMessage}")
             None
@@ -53,18 +60,22 @@ class DynamoSuperMode(client: DynamoDbClient) extends StrictLogging {
     )
 
   def getCurrentSuperModeRows(): ZIO[Any, DynamoGetError, List[SuperModeRow]] = {
-    /**
-     * Articles that are currently in super mode will have an endTimestamp later than now.
-     * Because the index partition key is endDate, we have to make 2 queries for today and tomorrow
-     */
+
+    /** Articles that are currently in super mode will have an endTimestamp later than now. Because the index partition
+      * key is endDate, we have to make 2 queries for today and tomorrow
+      */
     val today = Instant.now()
     val tomorrow = today.plus(1, ChronoUnit.DAYS)
 
     val endTimestamp = timestampFormat.format(Date.from(today))
 
-    ZIO.collectAll(List(
-      getRowsForDate(dateFormat.format(Date.from(today)), endTimestamp),
-      getRowsForDate(dateFormat.format(Date.from(tomorrow)), endTimestamp)
-    )).map(_.flatten)
+    ZIO
+      .collectAll(
+        List(
+          getRowsForDate(dateFormat.format(Date.from(today)), endTimestamp),
+          getRowsForDate(dateFormat.format(Date.from(tomorrow)), endTimestamp)
+        )
+      )
+      .map(_.flatten)
   }
 }

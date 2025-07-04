@@ -7,7 +7,9 @@ import services.CapiService
 
 import scala.concurrent.ExecutionContext
 
-class CapiController(authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent], capiService: CapiService)(implicit ec: ExecutionContext) {
+class CapiController(authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent], capiService: CapiService)(
+    implicit ec: ExecutionContext
+) {
 
   def getTags() = authAction.async { request =>
     capiService

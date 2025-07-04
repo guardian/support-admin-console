@@ -1,7 +1,7 @@
 package models
 
 import io.circe.generic.extras.Configuration
-import io.circe.generic.extras.semiauto.{ deriveEnumerationDecoder, deriveEnumerationEncoder }
+import io.circe.generic.extras.semiauto.{deriveEnumerationDecoder, deriveEnumerationEncoder}
 import io.circe.{Decoder, Encoder}
 
 sealed trait DeviceType

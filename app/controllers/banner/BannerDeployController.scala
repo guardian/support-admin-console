@@ -8,6 +8,16 @@ import play.api.mvc.{ActionBuilder, AnyContent, ControllerComponents}
 
 import scala.concurrent.ExecutionContext
 
-class BannerDeployController(authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent], components: ControllerComponents, stage: String, runtime: zio.Runtime[Any])(implicit ec: ExecutionContext)
-  extends S3ObjectController[BannerDeploys](authAction, components, stage, filename = "banner-deploy/channel1.json", runtime) {
-}
+class BannerDeployController(
+    authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
+    components: ControllerComponents,
+    stage: String,
+    runtime: zio.Runtime[Any]
+)(implicit ec: ExecutionContext)
+    extends S3ObjectController[BannerDeploys](
+      authAction,
+      components,
+      stage,
+      filename = "banner-deploy/channel1.json",
+      runtime
+    ) {}

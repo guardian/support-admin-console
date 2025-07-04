@@ -31,7 +31,7 @@ class BannerDesignsController(
 
   case class BannerDesignsResponse(
       bannerDesigns: List[BannerDesign],
-      userEmail: String,
+      userEmail: String
   )
 
   val lockFileName = "banner-designs"
@@ -46,14 +46,14 @@ class BannerDesignsController(
   val s3Client = services.S3
 
   private def run(f: => ZIO[Any, Throwable, Result]): Future[Result] =
-    Unsafe.unsafe { implicit unsafe => runtime.unsafe.runToFuture {
-      f.catchAll(error => {
-        logger.error(
-          s"Returning InternalServerError to client: ${error.getMessage}",
-          error)
-        ZIO.succeed(InternalServerError(error.getMessage))
-      })
-    }}
+    Unsafe.unsafe { implicit unsafe =>
+      runtime.unsafe.runToFuture {
+        f.catchAll(error => {
+          logger.error(s"Returning InternalServerError to client: ${error.getMessage}", error)
+          ZIO.succeed(InternalServerError(error.getMessage))
+        })
+      }
+    }
 
   def getAll = authAction.async { request =>
     run {
@@ -69,8 +69,7 @@ class BannerDesignsController(
     }
   }
 
-  /**
-    * Handlers for design editing
+  /** Handlers for design editing
     */
   def get(designName: String) = authAction.async { request =>
     run {
@@ -87,12 +86,11 @@ class BannerDesignsController(
       dynamoDesigns
         .updateBannerDesign(design, request.user.email)
         .map(_ => Ok("updated"))
-        .catchSome {
-          case DynamoNoLockError(error) =>
-            logger.warn(
-              s"Failed to save '${design.name}' because user ${request.user.email} does not have it locked: ${error.getMessage}")
-            ZIO.succeed(Conflict(
-              s"You do not currently have design '${design.name}' open for edit"))
+        .catchSome { case DynamoNoLockError(error) =>
+          logger.warn(
+            s"Failed to save '${design.name}' because user ${request.user.email} does not have it locked: ${error.getMessage}"
+          )
+          ZIO.succeed(Conflict(s"You do not currently have design '${design.name}' open for edit"))
         }
     }
   }
@@ -104,12 +102,11 @@ class BannerDesignsController(
       dynamoDesigns
         .createBannerDesign(design)
         .map(_ => Ok("created"))
-        .catchSome {
-          case DynamoDuplicateNameError(error) =>
-            logger.warn(
-              s"Failed to create '${design.name}' because name already exists: ${error.getMessage}")
-            ZIO.succeed(BadRequest(
-              s"Cannot create design '${design.name}' because it already exists. Please use a different name"))
+        .catchSome { case DynamoDuplicateNameError(error) =>
+          logger.warn(s"Failed to create '${design.name}' because name already exists: ${error.getMessage}")
+          ZIO.succeed(
+            BadRequest(s"Cannot create design '${design.name}' because it already exists. Please use a different name")
+          )
         }
     }
   }
@@ -120,12 +117,9 @@ class BannerDesignsController(
       dynamoDesigns
         .lockBannerDesign(designName, request.user.email, force = false)
         .map(_ => Ok("locked"))
-        .catchSome {
-          case DynamoNoLockError(error) =>
-            logger.warn(
-              s"Failed to lock '$designName' because it is already locked: ${error.getMessage}")
-            ZIO.succeed(Conflict(
-              s"Design '$designName' is already locked for edit by another user"))
+        .catchSome { case DynamoNoLockError(error) =>
+          logger.warn(s"Failed to lock '$designName' because it is already locked: ${error.getMessage}")
+          ZIO.succeed(Conflict(s"Design '$designName' is already locked for edit by another user"))
         }
     }
   }
@@ -136,12 +130,11 @@ class BannerDesignsController(
       dynamoDesigns
         .unlockBannerDesign(designName, request.user.email)
         .map(_ => Ok("unlocked"))
-        .catchSome {
-          case DynamoNoLockError(error) =>
-            logger.warn(
-              s"Failed to unlock '$designName' because user ${request.user.email} does not have it locked: ${error.getMessage}")
-            ZIO.succeed(Conflict(
-              s"You do not currently have design '$designName' open for edit"))
+        .catchSome { case DynamoNoLockError(error) =>
+          logger.warn(
+            s"Failed to unlock '$designName' because user ${request.user.email} does not have it locked: ${error.getMessage}"
+          )
+          ZIO.succeed(Conflict(s"You do not currently have design '$designName' open for edit"))
         }
     }
   }
@@ -155,8 +148,7 @@ class BannerDesignsController(
     }
   }
 
-  private def parseStatus(
-      rawStatus: String): Option[models.BannerDesignStatus] =
+  private def parseStatus(rawStatus: String): Option[models.BannerDesignStatus] =
     rawStatus.toLowerCase match {
       case "live"  => Some(models.BannerDesignStatus.Live)
       case "draft" => Some(models.BannerDesignStatus.Draft)
@@ -165,27 +157,34 @@ class BannerDesignsController(
 
   private def getAllBannerTests(): ZIO[Any, DynamoError, List[BannerTest]] = {
     import models.BannerTest._
-    ZIO.collectAllPar(List(
-      dynamoTests.getAllTests(Channel.Banner1),
-      dynamoTests.getAllTests(Channel.Banner2)
-    )).map(_.flatten)
+    ZIO
+      .collectAllPar(
+        List(
+          dynamoTests.getAllTests(Channel.Banner1),
+          dynamoTests.getAllTests(Channel.Banner2)
+        )
+      )
+      .map(_.flatten)
   }
 
   // Returns any tests currently using the design
   private def getTestsUsingDesign(designName: String): ZIO[Any, DynamoError, List[BannerTest]] =
     getAllBannerTests().map { bannerTests =>
       bannerTests
-        .filter(banner => banner.variants.exists(variant => variant.template match {
-          case BannerUI(name) if designName == name => true
-          case _ => false
-        }))
+        .filter(banner =>
+          banner.variants.exists(variant =>
+            variant.template match {
+              case BannerUI(name) if designName == name => true
+              case _                                    => false
+            }
+          )
+        )
     }
 
   def setStatus(designName: String, rawStatus: String) =
     authAction.async { request =>
       run {
-        logger.info(
-          s"${request.user.email} is changing status to $rawStatus on: $designName")
+        logger.info(s"${request.user.email} is changing status to $rawStatus on: $designName")
 
         parseStatus(rawStatus) match {
           case Some(status) =>
@@ -198,7 +197,11 @@ class BannerDesignsController(
                     .map(_ => Ok(status.toString))
                 case tests =>
                   val testNames = tests.map(banner => banner.name)
-                  ZIO.succeed(BadRequest(s"Cannot change status of design $designName because it's still in use by the following test(s): ${testNames.mkString(", ")}"))
+                  ZIO.succeed(
+                    BadRequest(
+                      s"Cannot change status of design $designName because it's still in use by the following test(s): ${testNames.mkString(", ")}"
+                    )
+                  )
               }
 
           case None =>

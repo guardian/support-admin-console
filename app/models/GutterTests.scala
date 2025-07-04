@@ -9,7 +9,7 @@ import models.Methodology.defaultMethodologies
 case class GutterContent(
     image: Option[Image],
     bodyCopy: Option[List[String]],
-    cta: Option[Cta],
+    cta: Option[Cta]
 )
 
 case class GutterVariant(
@@ -27,8 +27,8 @@ case class GutterTest(
     nickname: Option[String],
     userCohort: UserCohort,
     locations: List[Region] = Nil,
-    regionTargeting: Option[RegionTargeting]=None,
-    contextTargeting: PageContextTargeting = PageContextTargeting(Nil,Nil,Nil,Nil),
+    regionTargeting: Option[RegionTargeting] = None,
+    contextTargeting: PageContextTargeting = PageContextTargeting(Nil, Nil, Nil, Nil),
     variants: List[GutterVariant],
     controlProportionSettings: Option[ControlProportionSettings] = None,
     deviceType: Option[DeviceType] = None,
@@ -36,7 +36,7 @@ case class GutterTest(
     signedInStatus: Option[SignedInStatus] = Some(SignedInStatus.All),
     consentStatus: Option[ConsentStatus] = Some(ConsentStatus.All),
     methodologies: List[Methodology] = defaultMethodologies
-)extends ChannelTest[GutterTest] {
+) extends ChannelTest[GutterTest] {
 
   override def withChannel(channel: Channel): GutterTest =
     this.copy(channel = Some(channel))

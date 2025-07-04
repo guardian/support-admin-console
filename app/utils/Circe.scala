@@ -5,9 +5,8 @@ import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 
 import scala.jdk.CollectionConverters._
 
-
 object Circe {
-  def decodeStringAndCollect[T](pf: PartialFunction[String,T]): Decoder[T] = Decoder.decodeString.emap { s =>
+  def decodeStringAndCollect[T](pf: PartialFunction[String, T]): Decoder[T] = Decoder.decodeString.emap { s =>
     pf.lift(s)
       .map(Right.apply)
       .getOrElse(Left(s"Unexpected value: $s"))
@@ -56,11 +55,9 @@ object Circe {
   }
 
   def dynamoMapToJson(item: java.util.Map[String, AttributeValue]): Json = {
-    val jsonMap: Map[String, Json] = item
-        .asScala
-        .view
-        .mapValues(dynamoToJson)
-        .toMap
+    val jsonMap: Map[String, Json] = item.asScala.view
+      .mapValues(dynamoToJson)
+      .toMap
 
     Json.fromJsonObject(JsonObject.fromMap(jsonMap))
   }

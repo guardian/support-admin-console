@@ -9,21 +9,21 @@ sealed trait Methodology {
 }
 
 case class ABTest(
-  name: String = "ABTest",
-  testName: Option[String] = None
+    name: String = "ABTest",
+    testName: Option[String] = None
 ) extends Methodology
 
 case class EpsilonGreedyBandit(
-  name: String = "EpsilonGreedyBandit",
-  epsilon: Double,
-  testName: Option[String] = None,
-  sampleCount: Option[Int] = None
+    name: String = "EpsilonGreedyBandit",
+    epsilon: Double,
+    testName: Option[String] = None,
+    sampleCount: Option[Int] = None
 ) extends Methodology
 
 case class Roulette(
-  name: String = "Roulette",
-  testName: Option[String] = None,
-  sampleCount: Option[Int] = None
+    name: String = "Roulette",
+    testName: Option[String] = None,
+    sampleCount: Option[Int] = None
 ) extends Methodology
 
 case object Methodology {

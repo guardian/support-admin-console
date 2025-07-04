@@ -20,31 +20,34 @@ object S3ObjectsController {
 
   def extractFilename(key: String): Option[String] = key match {
     case jsonFilenamePattern(filename) => Some(filename)
-    case _ => None
+    case _                             => None
   }
 }
 
-/**
-  * Controller for managing JSON data in objects under a specific S3 path:
-  * `$stage/$path/$name.json`
+/** Controller for managing JSON data in objects under a specific S3 path: `$stage/$path/$name.json`
   */
-abstract class S3ObjectsController[T : Decoder : Encoder](
-  authAction: AuthAction[AnyContent],
-  components: ControllerComponents,
-  stage: String,
-  path: String,
-  nameGenerator: T => String,
-  runtime: zio.Runtime[Any]
-)(implicit ec: ExecutionContext) extends AbstractController(components) with Circe with LazyLogging {
+abstract class S3ObjectsController[T: Decoder: Encoder](
+    authAction: AuthAction[AnyContent],
+    components: ControllerComponents,
+    stage: String,
+    path: String,
+    nameGenerator: T => String,
+    runtime: zio.Runtime[Any]
+)(implicit ec: ExecutionContext)
+    extends AbstractController(components)
+    with Circe
+    with LazyLogging {
 
   val s3Client = services.S3
 
   private def run(f: => ZIO[Any, Throwable, Result]): Future[Result] =
-    Unsafe.unsafe { implicit unsafe => runtime.unsafe.runToFuture {
-      f.catchAll { error =>
-        ZIO.succeed(InternalServerError(error.getMessage))
+    Unsafe.unsafe { implicit unsafe =>
+      runtime.unsafe.runToFuture {
+        f.catchAll { error =>
+          ZIO.succeed(InternalServerError(error.getMessage))
+        }
       }
-    }}
+    }
 
   private def buildObjectSettings(name: String) = S3ObjectSettings(
     bucket = "support-admin-console",
@@ -52,9 +55,7 @@ abstract class S3ObjectsController[T : Decoder : Encoder](
     publicRead = false
   )
 
-  /**
-    * Saves a single object of type T to a new file.
-    * Overwrites any existing object of the same name.
+  /** Saves a single object of type T to a new file. Overwrites any existing object of the same name.
     */
   def set = authAction.async(circe.json[T]) { request =>
     val data = request.body
@@ -73,11 +74,10 @@ abstract class S3ObjectsController[T : Decoder : Encoder](
     }
   }
 
-  /**
-    * Fetches all object keys from S3 and returns just the names
+  /** Fetches all object keys from S3 and returns just the names
     */
   def list = authAction.async { request =>
-    val objectSettings = buildObjectSettings("")  //empty string means list all files
+    val objectSettings = buildObjectSettings("") // empty string means list all files
 
     run {
       s3Client
@@ -93,8 +93,7 @@ abstract class S3ObjectsController[T : Decoder : Encoder](
     }
   }
 
-  /**
-    * Returns the object data for the given name
+  /** Returns the object data for the given name
     */
   def get(name: String) = authAction.async { request =>
     val objectSettings = buildObjectSettings(name)

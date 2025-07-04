@@ -14,17 +14,20 @@ import com.typesafe.scalalogging.LazyLogging
 
 import scala.concurrent.{ExecutionContext, Future}
 
-
 case class VersionedS3DataWithEmail[T](value: T, version: String, email: String)
-/**
-  * Controller for managing JSON data in a single object in S3
+
+/** Controller for managing JSON data in a single object in S3
   */
-abstract class S3ObjectController[T : Decoder : Encoder](
-  authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
-  components: ControllerComponents,
-  stage: String,
-  filename: String,
-  val runtime: zio.Runtime[Any])(implicit ec: ExecutionContext) extends AbstractController(components) with Circe with LazyLogging {
+abstract class S3ObjectController[T: Decoder: Encoder](
+    authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
+    components: ControllerComponents,
+    stage: String,
+    filename: String,
+    val runtime: zio.Runtime[Any]
+)(implicit ec: ExecutionContext)
+    extends AbstractController(components)
+    with Circe
+    with LazyLogging {
 
   private val dataObjectSettings = S3ObjectSettings(
     bucket = "support-admin-console",
@@ -35,16 +38,17 @@ abstract class S3ObjectController[T : Decoder : Encoder](
   private val s3Client = services.S3
 
   protected def run(f: => ZIO[Any, Throwable, Result]): Future[Result] =
-    Unsafe.unsafe { implicit unsafe => runtime.unsafe.runToFuture {
-      f.catchAll { error =>
-        logger.error(s"Returning InternalServerError to client: ${error.getMessage}", error)
-        ZIO.succeed(InternalServerError(error.getMessage))
+    Unsafe.unsafe { implicit unsafe =>
+      runtime.unsafe.runToFuture {
+        f.catchAll { error =>
+          logger.error(s"Returning InternalServerError to client: ${error.getMessage}", error)
+          ZIO.succeed(InternalServerError(error.getMessage))
+        }
       }
-    }}
+    }
 
-  /**
-    * Returns current version of the object in s3 as json, with the version id.
-    * The s3 data is validated against the model.
+  /** Returns current version of the object in s3 as json, with the version id. The s3 data is validated against the
+    * model.
     */
   def get = authAction.async { request =>
     run {
@@ -58,9 +62,8 @@ abstract class S3ObjectController[T : Decoder : Encoder](
     }
   }
 
-  /**
-    * Updates the object in s3 if the supplied version matches the current version in s3.
-    * The POSTed json is validated against the model.
+  /** Updates the object in s3 if the supplied version matches the current version in s3. The POSTed json is validated
+    * against the model.
     */
   def set = authAction.async(circe.json[VersionedS3Data[T]]) { request =>
     run {

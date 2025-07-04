@@ -21,17 +21,14 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
 
   protected val tableName = s"support-admin-console-banner-designs-$stage"
 
-  private def buildKey(
-      designName: String): java.util.Map[String, AttributeValue] =
+  private def buildKey(designName: String): java.util.Map[String, AttributeValue] =
     Map(
       "name" -> AttributeValue.builder.s(designName).build
     ).asJava
 
-  /**
-    * Attempts to retrieve a banner design from dynamodb. Fails if the banner design does not exist.
+  /** Attempts to retrieve a banner design from dynamodb. Fails if the banner design does not exist.
     */
-  private def get(designName: String)
-    : ZIO[Any, DynamoGetError, java.util.Map[String, AttributeValue]] =
+  private def get(designName: String): ZIO[Any, DynamoGetError, java.util.Map[String, AttributeValue]] =
     attemptBlocking {
       val query = QueryRequest.builder
         .tableName(tableName)
@@ -51,18 +48,12 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
         .headOption
 
     }.flatMap {
-        case Some(item) => ZIO.succeed(item)
-        case None =>
-          ZIO.fail(
-            DynamoGetError(
-              new Exception(s"Banner design does not exist: $designName")))
-      }
-      .mapError(error => DynamoGetError(error))
+      case Some(item) => ZIO.succeed(item)
+      case None       =>
+        ZIO.fail(DynamoGetError(new Exception(s"Banner design does not exist: $designName")))
+    }.mapError(error => DynamoGetError(error))
 
-  private def getAll()
-    : ZIO[Any,
-          DynamoGetError,
-          java.util.List[java.util.Map[String, AttributeValue]]] =
+  private def getAll(): ZIO[Any, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
     attemptBlocking {
       client
         .scan(
@@ -74,8 +65,7 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
         .items()
     }.mapError(DynamoGetError)
 
-  private def update(
-      updateRequest: UpdateItemRequest): ZIO[Any, DynamoError, Unit] =
+  private def update(updateRequest: UpdateItemRequest): ZIO[Any, DynamoError, Unit] =
     attemptBlocking {
       val result = client.updateItem(updateRequest)
       logger.info(s"UpdateItemResponse: $result")
@@ -95,8 +85,7 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
       case other                                => DynamoPutError(other)
     }
 
-  def getBannerDesign(
-      designName: String): ZIO[Any, DynamoGetError, BannerDesign] =
+  def getBannerDesign(designName: String): ZIO[Any, DynamoGetError, BannerDesign] =
     get(designName)
       .map(item => dynamoMapToJson(item).as[BannerDesign])
       .flatMap {
@@ -105,35 +94,29 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
       }
 
   def getAllBannerDesigns(): ZIO[Any, DynamoGetError, List[BannerDesign]] =
-    getAll().map(
-      results =>
-        results.asScala
-          .map(item => dynamoMapToJson(item).as[BannerDesign])
-          .flatMap {
-            case Right(bannerDesign) => Some(bannerDesign)
-            case Left(error) =>
-              logger.error(
-                s"Failed to decode item from Dynamo: ${error.getMessage}")
-              None
-          }
-          .toList
+    getAll().map(results =>
+      results.asScala
+        .map(item => dynamoMapToJson(item).as[BannerDesign])
+        .flatMap {
+          case Right(bannerDesign) => Some(bannerDesign)
+          case Left(error)         =>
+            logger.error(s"Failed to decode item from Dynamo: ${error.getMessage}")
+            None
+        }
+        .toList
     )
 
-  /**
-    * With an UpdateItem request we have to provide an expression to specify each attribute to be updated.
-    * We do this by iterating over the attributes in `item` and building an expression
+  /** With an UpdateItem request we have to provide an expression to specify each attribute to be updated. We do this by
+    * iterating over the attributes in `item` and building an expression
     */
-  private def buildUpdateBannerDesignExpression(
-      item: Map[String, AttributeValue]): String = {
-    val subExprs = item.foldLeft[List[String]](Nil) {
-      case (acc, (key, value)) =>
-        s"$key = :$key" +: acc
+  private def buildUpdateBannerDesignExpression(item: Map[String, AttributeValue]): String = {
+    val subExprs = item.foldLeft[List[String]](Nil) { case (acc, (key, value)) =>
+      s"$key = :$key" +: acc
     }
     s"set ${subExprs.mkString(", ")} remove lockStatus" // Unlock the banner design at the same time
   }
 
-  def createBannerDesign(
-      bannerDesign: BannerDesign): ZIO[Any, DynamoError, Unit] = {
+  def createBannerDesign(bannerDesign: BannerDesign): ZIO[Any, DynamoError, Unit] = {
     val item = jsonToDynamo(bannerDesign.asJson).m()
     val request = PutItemRequest.builder
       .tableName(tableName)
@@ -145,8 +128,7 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
     put(request)
   }
 
-  def updateBannerDesign(bannerDesign: BannerDesign,
-                         email: String): ZIO[Any, DynamoError, Unit] = {
+  def updateBannerDesign(bannerDesign: BannerDesign, email: String): ZIO[Any, DynamoError, Unit] = {
     val item = jsonToDynamo(bannerDesign.asJson).m().asScala.toMap -
       "lockStatus" - // Unlock by removing lockStatus
       "name" - // key field"
@@ -171,9 +153,7 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
     update(updateRequest)
   }
 
-  def lockBannerDesign(designName: String,
-                       email: String,
-                       force: Boolean): ZIO[Any, DynamoError, Unit] = {
+  def lockBannerDesign(designName: String, email: String, force: Boolean): ZIO[Any, DynamoError, Unit] = {
     val lockStatus = LockStatus(
       locked = true,
       email = Some(email),
@@ -187,7 +167,8 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
         .expressionAttributeValues(
           Map(
             ":lockStatus" -> jsonToDynamo(lockStatus.asJson)
-          ).asJava)
+          ).asJava
+        )
 
       if (!force) {
         // Check it isn't already locked
@@ -201,16 +182,17 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
   }
 
   // Removes the lockStatus attribute if the user currently has it locked
-  def unlockBannerDesign(designName: String,
-                         email: String): ZIO[Any, DynamoError, Unit] = {
+  def unlockBannerDesign(designName: String, email: String): ZIO[Any, DynamoError, Unit] = {
     val request = UpdateItemRequest.builder
       .tableName(tableName)
       .key(buildKey(designName))
       .updateExpression("remove lockStatus")
       .conditionExpression("lockStatus.email = :email")
-      .expressionAttributeValues(Map(
-        ":email" -> AttributeValue.builder.s(email).build
-      ).asJava)
+      .expressionAttributeValues(
+        Map(
+          ":email" -> AttributeValue.builder.s(email).build
+        ).asJava
+      )
       .build()
 
     update(request)
@@ -237,11 +219,14 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
         Map(
           ":status" -> jsonToDynamo(status.asJson),
           ":name" -> AttributeValue.builder.s(designName).build
-        ).asJava)
-      .expressionAttributeNames(Map(
-        "#status" -> "status",
-        "#name" -> "name"
-      ).asJava)
+        ).asJava
+      )
+      .expressionAttributeNames(
+        Map(
+          "#status" -> "status",
+          "#name" -> "name"
+        ).asJava
+      )
       .conditionExpression("#name = :name") // only update if it already exists in the table
       .build()
 
@@ -249,7 +234,7 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
   }
 
   // Does not decode the Dynamodb data
-  def getRawDesign(designName: String): ZIO[Any, DynamoGetError,java.util.Map[String, AttributeValue]] = {
+  def getRawDesign(designName: String): ZIO[Any, DynamoGetError, java.util.Map[String, AttributeValue]] = {
     get(designName)
   }
 
