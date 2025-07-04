@@ -47,6 +47,11 @@ If while running `sbt test` you get the error `cannot load library: java.lang.Un
 1. download the correct `.dylib` from e.g. https://repo1.maven.org/maven2/io/github/ganadist/sqlite4java/libsqlite4java-osx-arm64/1.0.392/libsqlite4java-osx-arm64-1.0.392.dylib
 2. copy it into the `dynamodb-local/DynamoDBLocal_lib/` directory in this project
 
+We use [scalafmt](https://scalameta.org/scalafmt/) for consistent formatting of scala code. The tests will check that any changed files have correct formatting.
+
+To fix formatting issues run:
+
+`sbt scalafmt`
 
 ### SSH
 You can ssh using [ssm-scala](https://github.com/guardian/ssm-scala):
