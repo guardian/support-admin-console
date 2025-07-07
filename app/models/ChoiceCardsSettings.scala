@@ -4,7 +4,12 @@ import io.circe.{Decoder, Encoder}
 import io.circe.generic.extras.Configuration
 import io.circe.generic.auto._
 import ChoiceCardsSettings._
-import io.circe.generic.extras.semiauto.{deriveEnumerationDecoder, deriveEnumerationEncoder}
+import io.circe.generic.extras.semiauto.{
+  deriveConfiguredDecoder,
+  deriveConfiguredEncoder,
+  deriveEnumerationDecoder,
+  deriveEnumerationEncoder
+}
 
 case class ChoiceCardsSettings(choiceCards: List[ChoiceCard])
 
@@ -17,8 +22,8 @@ object ChoiceCardsSettings {
     object Annual extends RatePlan
 
     implicit val customConfig: Configuration = Configuration.default.withDefaults
-    implicit val ratePlanEncoder = deriveEnumerationEncoder[RatePlan]
-    implicit val ratePlanDecoder = deriveEnumerationDecoder[RatePlan]
+    implicit val ratePlanEncoder: Encoder[RatePlan] = deriveEnumerationEncoder[RatePlan]
+    implicit val ratePlanDecoder: Decoder[RatePlan] = deriveEnumerationDecoder[RatePlan]
   }
 
   sealed trait Product {
@@ -39,10 +44,9 @@ object ChoiceCardsSettings {
         supportTier: String = "OneOff"
     ) extends Product
 
-    import io.circe.generic.extras.auto._
     implicit val customConfig: Configuration = Configuration.default.withDiscriminator("supportTier")
-    implicit val productDecoder = Decoder[Product]
-    implicit val productEncoder = Encoder[Product]
+    implicit val productDecoder: Decoder[Product] = deriveConfiguredDecoder[Product]
+    implicit val productEncoder: Encoder[Product] = deriveConfiguredEncoder[Product]
   }
 
   case class Pill(copy: String)
@@ -56,6 +60,7 @@ object ChoiceCardsSettings {
       isDefault: Boolean
   )
 
-  implicit val choiceCardsSettingsDecoder = Decoder[ChoiceCardsSettings]
-  implicit val choiceCardsSettingsEncoder = Encoder[ChoiceCardsSettings]
+  implicit val customConfig: Configuration = Configuration.default.withDefaults
+  implicit val choiceCardsSettingsDecoder: Decoder[ChoiceCardsSettings] = deriveConfiguredDecoder[ChoiceCardsSettings]
+  implicit val choiceCardsSettingsEncoder: Encoder[ChoiceCardsSettings] = deriveConfiguredEncoder[ChoiceCardsSettings]
 }
