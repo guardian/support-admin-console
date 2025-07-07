@@ -75,7 +75,7 @@ class DynamoPermissionsCache(
 
   private def updatePermissions(permissions: Map[Email, UserPermissions]) = {
     permissionsCache.set(permissions)
-    ZIO.succeed()
+    ZIO.succeed(())
   }
 
   // Poll every minute in the background
