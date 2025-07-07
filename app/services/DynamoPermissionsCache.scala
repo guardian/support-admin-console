@@ -6,7 +6,7 @@ import io.circe.generic.extras.Configuration
 import io.circe.generic.extras.semiauto.{deriveEnumerationDecoder, deriveEnumerationEncoder}
 import io.circe.generic.auto._
 import models.DynamoErrors.DynamoGetError
-import services.UserPermissions.{PagePermission, UserPermissions, decoder}
+import services.UserPermissions._
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.dynamodb.model.{AttributeValue, ScanRequest}
 import utils.Circe.dynamoMapToJson
@@ -29,8 +29,8 @@ object UserPermissions {
   case class PagePermission(name: String, permission: Permission)
   case class UserPermissions(email: String, permissions: List[PagePermission])
 
-  implicit val encoder = Encoder[UserPermissions]
-  implicit val decoder = Decoder[UserPermissions]
+  implicit val encoder: Encoder[UserPermissions] = Encoder[UserPermissions]
+  implicit val decoder: Decoder[UserPermissions] = Decoder[UserPermissions]
 }
 
 /** Polls the user permissions DynamoDb table and caches all permissions in memory
