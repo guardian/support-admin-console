@@ -15,7 +15,10 @@ import { AuditDataRow, AuditTestsTable } from './auditTestsTable';
 import { useParams } from 'react-router-dom';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
-  container: {
+  mainContainer: {
+    overflow: 'scroll',
+  },
+  searchContainer: {
     margin: '50px',
     display: 'flex',
     gap: spacing(5),
@@ -36,7 +39,6 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     width: '300px',
   },
   tableContainer: {
-    width: '100%',
     margin: spacing(7),
   },
 }));
@@ -76,8 +78,8 @@ export const AuditTestsDashboard: React.FC = () => {
   }, [testName, channel]);
 
   return (
-    <div>
-      <div className={classes.container}>
+    <div className={classes.mainContainer}>
+      <div className={classes.searchContainer}>
         <div>
           <div className={classes.sectionContainer}>
             <Typography className={classes.heading}>Test Name</Typography>
