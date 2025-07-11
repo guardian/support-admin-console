@@ -15,8 +15,8 @@ object Status {
   case object Archived extends Status
 
   implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val statusEncoder = deriveEnumerationEncoder[Status]
-  implicit val statusDecoder = deriveEnumerationDecoder[Status]
+  implicit val statusEncoder: Encoder[Status] = deriveEnumerationEncoder[Status]
+  implicit val statusDecoder: Decoder[Status] = deriveEnumerationDecoder[Status]
 }
 
 trait ChannelTest[T] {
@@ -35,7 +35,7 @@ trait ChannelTest[T] {
 object ChannelTest {
   import Channel._
 
-  implicit def channelTestDecoder = new Decoder[ChannelTest[_]] {
+  implicit def channelTestDecoder: Decoder[ChannelTest[_]] = new Decoder[ChannelTest[_]] {
     override def apply(c: HCursor): Result[ChannelTest[_]] = {
       c.downField("channel").as[Channel].flatMap {
         case Header             => HeaderTest.headerTestDecoder(c)
@@ -47,7 +47,7 @@ object ChannelTest {
     }
   }
 
-  implicit def channelTestEncoder = new Encoder[ChannelTest[_]] {
+  implicit def channelTestEncoder: Encoder[ChannelTest[_]] = new Encoder[ChannelTest[_]] {
     override def apply(test: ChannelTest[_]): Json = test match {
       case header: HeaderTest                  => HeaderTest.headerTestEncoder(header)
       case banner: BannerTest                  => BannerTest.bannerTestEncoder(banner)

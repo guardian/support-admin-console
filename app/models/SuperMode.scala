@@ -1,7 +1,7 @@
 package models
 
 import io.circe.{Decoder, Encoder}
-import io.circe.generic.auto._
+import io.circe.generic.semiauto._
 
 case class SuperModeRow(
     url: String,
@@ -15,6 +15,6 @@ case class SuperModeRow(
 )
 
 object SuperModeRow {
-  implicit val encoder = Encoder[SuperModeRow]
-  implicit val decoder = Decoder[SuperModeRow]
+  implicit val encoder: Encoder[SuperModeRow] = deriveEncoder[SuperModeRow]
+  implicit val decoder: Decoder[SuperModeRow] = deriveDecoder[SuperModeRow]
 }

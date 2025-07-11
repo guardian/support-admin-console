@@ -1,5 +1,6 @@
 package models
 
+import io.circe.{Decoder, Encoder}
 import io.circe.generic.extras.Configuration
 import io.circe.generic.extras.semiauto.{deriveEnumerationDecoder, deriveEnumerationEncoder}
 
@@ -17,6 +18,6 @@ object Channel {
   case object SupportLandingPage extends Channel
 
   implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val statusEncoder = deriveEnumerationEncoder[Channel]
-  implicit val statusDecoder = deriveEnumerationDecoder[Channel]
+  implicit val statusEncoder: Encoder[Channel] = deriveEnumerationEncoder[Channel]
+  implicit val statusDecoder: Decoder[Channel] = deriveEnumerationDecoder[Channel]
 }
