@@ -29,7 +29,7 @@ asciiGraphWidth := 999999999 // to ensure Snyk can read the the deeeeep dependen
 libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
   "com.gu.play-googleauth" %% "play-v30" % "24.1.1",
-  "com.google.cloud" % "google-cloud-bigquery" % "2.43.3",
+  "com.google.cloud" % "google-cloud-bigquery" % "2.52.0",
   "com.gu" %% "simple-configuration-ssm" % "6.0.0",
   "software.amazon.awssdk" % "s3" % awsVersion,
   "software.amazon.awssdk" % "dynamodb" % awsVersion,
@@ -38,8 +38,8 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-parser" % circeVersion,
   "io.circe" %% "circe-generic-extras" % "0.14.4",
   "com.dripower" %% "play-circe" % "3014.1",
-  "com.beachape" %% "enumeratum" % "1.7.6",
-  "com.beachape" %% "enumeratum-circe" % "1.7.5",
+  "com.beachape" %% "enumeratum" % "1.9.0",
+  "com.beachape" %% "enumeratum-circe" % "1.9.0",
   ws,
   "dev.zio" %% "zio" % zioVersion,
   "dev.zio" %% "zio-streams" % zioVersion,
@@ -57,8 +57,8 @@ dependencyOverrides ++= List(
   "com.fasterxml.jackson.module" % "jackson-module-parameter-names" % jacksonVersion,
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion,
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
-  "io.netty" % "netty-handler" % "4.1.122.Final",
-  "io.netty" % "netty-codec-http2" % "4.1.122.Final",
+  "io.netty" % "netty-handler" % "4.2.2.Final",
+  "io.netty" % "netty-codec-http2" % "4.2.2.Final",
   // Related to Play 3.0.2-6 currently brings in a vulnerable version of commons-io
   "commons-io" % "commons-io" % "2.19.0" % Test,
   "commons-beanutils" % "commons-beanutils" % "1.11.0"
