@@ -303,6 +303,26 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
             <AddIcon />
           </Button>
         </div>
+
+        <Controller
+          name={`choiceCards.${index}.destinationUrl`}
+          control={control}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              required={false}
+              label="Destination URL (optional)"
+              variant="filled"
+              fullWidth
+              margin="normal"
+              disabled={isDisabled}
+              onChange={e => {
+                field.onChange(e);
+                handleCardChange();
+              }}
+            />
+          )}
+        />
       </AccordionDetails>
     </Accordion>
   );
