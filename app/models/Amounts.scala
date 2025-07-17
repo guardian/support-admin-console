@@ -29,11 +29,13 @@ object AmountsTestTargeting {
   case class Region(targetingType: String = "Region", region: RegionEnum) extends AmountsTestTargeting
   case class Country(targetingType: String = "Country", countries: List[String]) extends AmountsTestTargeting
 
-  import io.circe.generic.extras.auto._
+  import io.circe.generic.extras.semiauto._
   implicit val customConfig: Configuration = Configuration.default.withDiscriminator("targetingType")
 
-  implicit val amountsTestTargetingDecoder = Decoder[AmountsTestTargeting]
-  implicit val amountsTestTargetingEncoder = Encoder[AmountsTestTargeting]
+  implicit val amountsTestTargetingDecoder: Decoder[AmountsTestTargeting] =
+    deriveConfiguredDecoder[AmountsTestTargeting]
+  implicit val amountsTestTargetingEncoder: Encoder[AmountsTestTargeting] =
+    deriveConfiguredEncoder[AmountsTestTargeting]
 }
 
 case class AmountsTest(
@@ -53,6 +55,6 @@ object AmountsTests {
 
   implicit val customConfig: Configuration = Configuration.default.withDefaults
 
-  implicit val decoder = Decoder[AmountsTests]
-  implicit val encoder = Encoder[AmountsTests]
+  implicit val decoder: Decoder[AmountsTests] = Decoder.decodeList[AmountsTest]
+  implicit val encoder: Encoder[AmountsTests] = Encoder.encodeList[AmountsTest]
 }

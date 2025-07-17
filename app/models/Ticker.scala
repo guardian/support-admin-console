@@ -1,4 +1,5 @@
 package models
+import io.circe.{Decoder, Encoder}
 import io.circe.generic.extras.Configuration
 import io.circe.generic.extras.semiauto.{deriveEnumerationDecoder, deriveEnumerationEncoder}
 
@@ -9,8 +10,8 @@ object TickerName {
   case object global extends TickerName
 
   implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val encoder = deriveEnumerationEncoder[TickerName]
-  implicit val decoder = deriveEnumerationDecoder[TickerName]
+  implicit val encoder: Encoder[TickerName] = deriveEnumerationEncoder[TickerName]
+  implicit val decoder: Decoder[TickerName] = deriveEnumerationDecoder[TickerName]
 }
 
 case class TickerCopy(
