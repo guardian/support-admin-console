@@ -1,10 +1,10 @@
-addSbtPlugin("org.playframework" % "sbt-plugin" % "3.0.7")
+addSbtPlugin("org.playframework" % "sbt-plugin" % "3.0.8")
 
 addSbtPlugin("com.gu" % "sbt-riffraff-artifact" % "1.1.18")
 
 addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "2.3.1")
 
-addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.1.4")
+addSbtPlugin("com.github.sbt" % "sbt-digest" % "2.1.0")
 
 addSbtPlugin("com.localytics" % "sbt-dynamodb" % "2.0.3")
 
