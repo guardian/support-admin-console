@@ -20,6 +20,7 @@ export interface ChoiceCard {
     copy: string; // e.g. "Recommended", will be overridden if a promo applies
   };
   isDefault: boolean;
+  destinationUrl?: string | null;
 }
 
 export interface ChoiceCardsSettings {

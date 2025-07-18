@@ -22,7 +22,7 @@ import { makeStyles } from '@mui/styles';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import { RichTextEditorSingleLine, RteMenuConstraints } from '../richTextEditor/richTextEditor';
-import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
+import { EMPTY_ERROR_HELPER_TEXT, optionalUrlValidator } from '../helpers/validation';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -303,6 +303,32 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
             <AddIcon />
           </Button>
         </div>
+
+        <Controller
+          name={`choiceCards.${index}.destinationUrl`}
+          control={control}
+          rules={{
+            validate: (value?: string | null) => optionalUrlValidator(value),
+          }}
+          render={({ field, fieldState }) => (
+            <TextField
+              {...field}
+              required={false}
+              label="Destination URL (optional)"
+              variant="filled"
+              fullWidth
+              margin="normal"
+              disabled={isDisabled}
+              error={!!fieldState.error}
+              helperText={fieldState.error?.message}
+              onChange={e => {
+                const trimmedValue = e.target.value.trim();
+                field.onChange(trimmedValue);
+                handleCardChange();
+              }}
+            />
+          )}
+        />
       </AccordionDetails>
     </Accordion>
   );
