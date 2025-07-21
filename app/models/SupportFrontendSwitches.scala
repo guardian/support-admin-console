@@ -1,8 +1,8 @@
 package models
 
 import io.circe.generic.extras.Configuration
+import io.circe.generic.extras.semiauto._
 import io.circe.generic.extras.auto._
-import io.circe.generic.extras.semiauto.{deriveEnumerationDecoder, deriveEnumerationEncoder}
 import io.circe.{Decoder, Encoder}
 
 sealed trait SwitchState
@@ -20,6 +20,6 @@ object SupportFrontendSwitches {
   implicit val customConfig: Configuration = Configuration.default.withDefaults
   implicit val stateDecoder: Decoder[SwitchState] = deriveEnumerationDecoder[SwitchState]
   implicit val stateEncoder: Encoder[SwitchState] = deriveEnumerationEncoder[SwitchState]
-  implicit val SupportFrontendSwitchesDecoder = Decoder[SupportFrontendSwitches]
-  implicit val SupportFrontendSwitchesEncoder = Encoder[SupportFrontendSwitches]
+  implicit val SupportFrontendSwitchesDecoder: Decoder[SupportFrontendSwitches] = Decoder[SupportFrontendSwitches]
+  implicit val SupportFrontendSwitchesEncoder: Encoder[SupportFrontendSwitches] = Encoder[SupportFrontendSwitches]
 }

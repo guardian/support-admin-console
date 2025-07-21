@@ -23,8 +23,8 @@ case class VariantSample(
 )
 case class TestSample(testName: String, variants: List[VariantSample], timestamp: String)
 object TestSample {
-  implicit val decoder = Decoder[TestSample]
-  implicit val encoder = Encoder[TestSample]
+  implicit val decoder: Decoder[TestSample] = Decoder[TestSample]
+  implicit val encoder: Encoder[TestSample] = Encoder[TestSample]
 }
 
 /** Models for data returned to the client
@@ -39,8 +39,8 @@ case class VariantSummary(variantName: String, mean: Double, views: Double)
 
 case class BanditData(variantSummaries: List[VariantSummary], samples: List[EnrichedTestSampleData])
 object BanditData {
-  implicit val decoder = Decoder[BanditData]
-  implicit val encoder = Encoder[BanditData]
+  implicit val decoder: Decoder[BanditData] = Decoder[BanditData]
+  implicit val encoder: Encoder[BanditData] = Encoder[BanditData]
 }
 
 class DynamoBanditData(stage: String, client: DynamoDbClient) extends StrictLogging {
