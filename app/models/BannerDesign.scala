@@ -2,7 +2,7 @@ package models
 
 import io.circe.{Decoder, Encoder}
 import io.circe.generic.extras.Configuration
-import io.circe.generic.semiauto.deriveDecoder
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 
 sealed trait BannerDesignStatus
 
@@ -108,7 +108,7 @@ case class TickerDesign(
 
 object TickerDesign {
   import io.circe.generic.auto._
-  implicit val encoder: Encoder[TickerDesign] = Encoder[TickerDesign]
+  implicit val encoder: Encoder[TickerDesign] = deriveEncoder[TickerDesign]
 
   // Modify the Decoder to use existing values for the new fields
   private val normalDecoder: Decoder[TickerDesign] = deriveDecoder[TickerDesign]

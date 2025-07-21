@@ -100,8 +100,8 @@ class S3JsonSpec extends AnyFlatSpec with Matchers with EitherValues {
       "campaignSwitches" -> SwitchGroup(
         description = "Campaign switches",
         switches = Map(
-          "enableCampaign"-> Switch("Enable contributions campaign", On),
-          "forceAll"-> Switch("Force all users into the campaign", On)
+          "enableCampaign" -> Switch("Enable contributions campaign", On),
+          "forceAll" -> Switch("Force all users into the campaign", On)
         )
       )
     ),
@@ -136,9 +136,11 @@ class S3JsonSpec extends AnyFlatSpec with Matchers with EitherValues {
 
   it should "decode from json" in {
     val result = Await.result(
-      Unsafe.unsafe { implicit unsafe => runtime.unsafe.runToFuture {
-        S3Json.getFromJson[SupportFrontendSwitches](dummyS3Client).apply(objectSettings)
-      }},
+      Unsafe.unsafe { implicit unsafe =>
+        runtime.unsafe.runToFuture {
+          S3Json.getFromJson[SupportFrontendSwitches](dummyS3Client).apply(objectSettings)
+        }
+      },
       1.second
     )
 
@@ -152,6 +154,7 @@ class S3JsonSpec extends AnyFlatSpec with Matchers with EitherValues {
     import diffson.jsonpatch.lcsdiff._
     import io.circe.parser._
 
+    import SupportFrontendSwitches.SupportFrontendSwitchesEncoder
     val program = for {
       _ <- S3Json.updateAsJson[SupportFrontendSwitches](expectedDecoded)(dummyS3Client).apply(objectSettings)
       json <- dummyS3Client.get(objectSettings)
