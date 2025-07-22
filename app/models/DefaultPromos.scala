@@ -1,6 +1,6 @@
 package models
 
-import io.circe.generic.auto._
+import io.circe.generic.semiauto._
 import io.circe.{Decoder, Encoder}
 
 case class DefaultPromos(
@@ -12,6 +12,6 @@ case class DefaultPromos(
 )
 
 object DefaultPromos {
-  implicit val decoder = Decoder[DefaultPromos]
-  implicit val encoder = Encoder[DefaultPromos]
+  implicit val decoder: Decoder[DefaultPromos] = deriveDecoder[DefaultPromos]
+  implicit val encoder: Encoder[DefaultPromos] = deriveEncoder[DefaultPromos]
 }

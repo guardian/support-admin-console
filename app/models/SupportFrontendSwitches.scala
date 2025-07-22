@@ -1,9 +1,9 @@
 package models
 
 import io.circe.generic.extras.Configuration
+import io.circe.generic.extras.semiauto._
 import io.circe.generic.extras.auto._
-import io.circe.generic.extras.semiauto.{deriveEnumerationDecoder, deriveEnumerationEncoder}
-import io.circe.{Decoder, Encoder}
+import io.circe.{Decoder, Encoder, KeyDecoder, KeyEncoder}
 
 sealed trait SwitchState
 case object On extends SwitchState
@@ -20,6 +20,14 @@ object SupportFrontendSwitches {
   implicit val customConfig: Configuration = Configuration.default.withDefaults
   implicit val stateDecoder: Decoder[SwitchState] = deriveEnumerationDecoder[SwitchState]
   implicit val stateEncoder: Encoder[SwitchState] = deriveEnumerationEncoder[SwitchState]
-  implicit val SupportFrontendSwitchesDecoder = Decoder[SupportFrontendSwitches]
-  implicit val SupportFrontendSwitchesEncoder = Encoder[SupportFrontendSwitches]
+  import io.circe.generic.extras.semiauto._
+
+  implicit val switchDecoder: Decoder[Switch] = deriveConfiguredDecoder[Switch]
+  implicit val switchEncoder: Encoder[Switch] = deriveConfiguredEncoder[Switch]
+  implicit val switchGroupDecoder: Decoder[SwitchGroup] = deriveConfiguredDecoder[SwitchGroup]
+  implicit val switchGroupEncoder: Encoder[SwitchGroup] = deriveConfiguredEncoder[SwitchGroup]
+  implicit val SupportFrontendSwitchesDecoder: Decoder[SupportFrontendSwitches] =
+    Decoder.decodeMap[GroupName, SwitchGroup](KeyDecoder.decodeKeyString, switchGroupDecoder)
+  implicit val SupportFrontendSwitchesEncoder: Encoder[SupportFrontendSwitches] =
+    Encoder.encodeMap[GroupName, SwitchGroup](KeyEncoder.encodeKeyString, switchGroupEncoder)
 }

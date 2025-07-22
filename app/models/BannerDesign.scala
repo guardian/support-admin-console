@@ -2,7 +2,7 @@ package models
 
 import io.circe.{Decoder, Encoder}
 import io.circe.generic.extras.Configuration
-import io.circe.generic.extras.semiauto.{deriveEnumerationDecoder, deriveEnumerationEncoder}
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 
 sealed trait BannerDesignStatus
 
@@ -11,9 +11,10 @@ object BannerDesignStatus {
 
   case object Draft extends BannerDesignStatus
 
+  import io.circe.generic.extras.semiauto._
   implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val statusEncoder = deriveEnumerationEncoder[BannerDesignStatus]
-  implicit val statusDecoder = deriveEnumerationDecoder[BannerDesignStatus]
+  implicit val statusEncoder: Encoder[BannerDesignStatus] = deriveEnumerationEncoder[BannerDesignStatus]
+  implicit val statusDecoder: Decoder[BannerDesignStatus] = deriveEnumerationDecoder[BannerDesignStatus]
 }
 
 case class HeaderImage(
@@ -29,6 +30,7 @@ object FontSize {
   case object medium extends FontSize
   case object large extends FontSize
 
+  import io.circe.generic.extras.semiauto._
   implicit val decoder: Decoder[FontSize] = deriveEnumerationDecoder[FontSize]
   implicit val encoder: Encoder[FontSize] = deriveEnumerationEncoder[FontSize]
 }
@@ -58,8 +60,9 @@ object BannerDesignVisual {
   import io.circe.generic.extras.auto._
   implicit val customConfig: Configuration = Configuration.default.withDiscriminator("kind")
 
-  implicit val encoder = Encoder[BannerDesignVisual]
-  implicit val decoder = Decoder[BannerDesignVisual]
+  import io.circe.generic.extras.semiauto._
+  implicit val encoder: Encoder[BannerDesignVisual] = deriveConfiguredEncoder[BannerDesignVisual]
+  implicit val decoder: Decoder[BannerDesignVisual] = deriveConfiguredDecoder[BannerDesignVisual]
 }
 
 case class HexColour(
@@ -105,11 +108,11 @@ case class TickerDesign(
 
 object TickerDesign {
   import io.circe.generic.auto._
-  implicit val encoder = Encoder[TickerDesign]
+  implicit val encoder: Encoder[TickerDesign] = deriveEncoder[TickerDesign]
 
   // Modify the Decoder to use existing values for the new fields
-  val normalDecoder = Decoder[TickerDesign]
-  implicit val decoder = normalDecoder.map(design => {
+  private val normalDecoder: Decoder[TickerDesign] = deriveDecoder[TickerDesign]
+  implicit val decoder: Decoder[TickerDesign] = normalDecoder.map(design => {
     val headlineColour = design.headlineColour.getOrElse(design.text)
     val totalColour = design.totalColour.getOrElse(design.text)
     val goalColour = design.goalColour.getOrElse(design.text)

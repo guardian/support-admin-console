@@ -1,7 +1,7 @@
 package models
 
 import io.circe.generic.extras.Configuration
-import io.circe.generic.extras.auto._
+import io.circe.generic.extras.semiauto._
 import io.circe.{Decoder, Encoder}
 
 sealed trait Methodology {
@@ -31,6 +31,6 @@ case object Methodology {
 
   implicit val customConfig: Configuration = Configuration.default.withDiscriminator("name")
 
-  implicit val methodologyDecoder = Decoder[Methodology]
-  implicit val methodologyEncoder = Encoder[Methodology]
+  implicit val methodologyDecoder: Decoder[Methodology] = deriveConfiguredDecoder[Methodology]
+  implicit val methodologyEncoder: Encoder[Methodology] = deriveConfiguredEncoder[Methodology]
 }

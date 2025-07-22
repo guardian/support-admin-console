@@ -7,6 +7,7 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.dynamodb.model.{AttributeValue, QueryRequest}
 import utils.Circe.dynamoMapToJson
 import io.circe.generic.auto._
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import zio.ZIO
 
 import scala.jdk.CollectionConverters._
@@ -23,8 +24,8 @@ case class VariantSample(
 )
 case class TestSample(testName: String, variants: List[VariantSample], timestamp: String)
 object TestSample {
-  implicit val decoder = Decoder[TestSample]
-  implicit val encoder = Encoder[TestSample]
+  implicit val decoder: Decoder[TestSample] = deriveDecoder[TestSample]
+  implicit val encoder: Encoder[TestSample] = deriveEncoder[TestSample]
 }
 
 /** Models for data returned to the client
@@ -39,8 +40,8 @@ case class VariantSummary(variantName: String, mean: Double, views: Double)
 
 case class BanditData(variantSummaries: List[VariantSummary], samples: List[EnrichedTestSampleData])
 object BanditData {
-  implicit val decoder = Decoder[BanditData]
-  implicit val encoder = Encoder[BanditData]
+  implicit val decoder: Decoder[BanditData] = deriveDecoder[BanditData]
+  implicit val encoder: Encoder[BanditData] = deriveEncoder[BanditData]
 }
 
 class DynamoBanditData(stage: String, client: DynamoDbClient) extends StrictLogging {

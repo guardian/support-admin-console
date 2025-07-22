@@ -25,7 +25,7 @@ class AppLoader extends ApplicationLoader with StrictLogging {
           ) // assume conf is available locally
       }
 
-      context.copy(initialConfiguration = context.initialConfiguration ++ Configuration(loadedConfig))
+      context.copy(initialConfiguration = Configuration(loadedConfig).withFallback(context.initialConfiguration))
     }
 
     val application: Try[Application] = for {
