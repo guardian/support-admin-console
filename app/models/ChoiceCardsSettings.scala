@@ -57,7 +57,8 @@ object ChoiceCardsSettings {
       benefitsLabel: Option[String],
       benefits: List[ProductBenefit],
       pill: Option[Pill],
-      isDefault: Boolean
+      isDefault: Boolean,
+      destinationUrl: Option[String]
   )
 
   implicit val customConfig: Configuration = Configuration.default.withDefaults
