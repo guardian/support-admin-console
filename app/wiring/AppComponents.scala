@@ -12,23 +12,10 @@ import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.mvc.AnyContent
 import play.api.{BuiltInComponentsFromContext, NoHttpFiltersComponents}
 import router.Routes
-import services.{
-  Aws,
-  BigQueryService,
-  CapiService,
-  DynamoArchivedBannerDesigns,
-  DynamoArchivedChannelTests,
-  DynamoBanditData,
-  DynamoBannerDesigns,
-  DynamoCampaigns,
-  DynamoChannelTests,
-  DynamoChannelTestsAudit,
-  DynamoPermissionsCache,
-  DynamoSuperMode,
-  S3
-}
+import services.{Aws, BigQueryService, CapiService, DynamoArchivedBannerDesigns, DynamoArchivedChannelTests, DynamoBanditData, DynamoBannerDesigns, DynamoCampaigns, DynamoChannelTests, DynamoChannelTestsAudit, DynamoPermissionsCache, DynamoSuperMode, S3}
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.s3.model.GetObjectRequest
+import java.time.Duration
 
 class AppComponents(context: Context, stage: String)
     extends BuiltInComponentsFromContext(context)
@@ -70,7 +57,8 @@ class AppComponents(context: Context, stage: String)
 
     new GoogleGroupChecker(
       impersonatedUser,
-      googleServiceAccountCredential
+      googleServiceAccountCredential,
+      Duration.ofHours(1)
     )
   }
 
