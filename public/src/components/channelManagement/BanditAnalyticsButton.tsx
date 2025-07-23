@@ -49,23 +49,29 @@ interface SamplesChartProps {
 
 const Colours = ['red', 'blue', 'green', 'orange', 'yellow'];
 
-type ChartDataPoint = Record<string, string | number>;
+type ChartDataPoint = Record<string, string | number | null>;
 
 const SamplesChart = ({ data, variantNames, fieldName }: SamplesChartProps) => {
-  const chartData = data.samples
-    .map(({ timestamp, variants }) => {
-      if (variants.length > 0) {
-        const sample: ChartDataPoint = {
-          dateHour: format(Date.parse(timestamp), 'yyyy-MM-dd hh:mm'),
-        };
-        variants.forEach(variant => {
-          sample[variant.variantName] = variant[fieldName];
-        });
-        return sample;
-      }
-      return undefined;
-    })
-    .filter(sample => !!sample);
+  const chartData = data.samples.map(({ timestamp, variants }) => {
+    const sample: ChartDataPoint = {
+      dateHour: format(Date.parse(timestamp), 'yyyy-MM-dd hh:mm'),
+    };
+
+    if (variants.length > 0) {
+      variants.forEach(variant => {
+        sample[variant.variantName] = variant[fieldName];
+      });
+      return sample;
+    }
+
+    // When no variants are present, set all variant values to null
+    // This will create a gap in the chart line
+    variantNames.forEach(variantName => {
+      sample[variantName] = null;
+    });
+
+    return sample;
+  });
 
   return (
     <LineChart width={800} height={500} data={chartData}>
@@ -75,7 +81,13 @@ const SamplesChart = ({ data, variantNames, fieldName }: SamplesChartProps) => {
       <Legend />
       <Tooltip />
       {variantNames.map((name, idx) => (
-        <Line key={name} type="monotone" dataKey={name} stroke={Colours[idx]} />
+        <Line
+          key={name}
+          type="monotone"
+          dataKey={name}
+          stroke={Colours[idx]}
+          connectNulls={false}
+        />
       ))}
     </LineChart>
   );
