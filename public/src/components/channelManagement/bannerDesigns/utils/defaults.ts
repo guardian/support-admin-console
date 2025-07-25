@@ -53,20 +53,11 @@ export const createDefaultBannerDesign = (name: string): BannerDesign => ({
         text: stringToHexColour('FFFFFF'),
         background: stringToHexColour('0077B6'),
       },
-      hover: {
-        text: stringToHexColour('FFFFFF'),
-        background: stringToHexColour('004E7C'),
-      },
     },
     secondaryCta: {
       default: {
         text: stringToHexColour('004E7C'),
         background: stringToHexColour('F1F8FC'),
-        border: stringToHexColour('004E7C'),
-      },
-      hover: {
-        text: stringToHexColour('004E7C'),
-        background: stringToHexColour('E5E5E5'),
         border: stringToHexColour('004E7C'),
       },
     },
@@ -75,10 +66,6 @@ export const createDefaultBannerDesign = (name: string): BannerDesign => ({
         text: stringToHexColour('052962'),
         background: stringToHexColour('F1F8FC'),
         border: stringToHexColour('052962'),
-      },
-      hover: {
-        text: stringToHexColour('052962'),
-        background: stringToHexColour('E5E5E5'),
       },
     },
     ticker: {

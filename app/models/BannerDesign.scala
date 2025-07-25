@@ -93,7 +93,6 @@ case class CtaStateDesign(
 
 case class CtaDesign(
     default: CtaStateDesign,
-    hover: CtaStateDesign
 )
 
 case class TickerDesign(

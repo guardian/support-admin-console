@@ -79,35 +79,6 @@ export const CtaColoursEditor: React.FC<Props> = ({
             onValidationChange={onValidationChange}
           />
         </div>
-
-        <div className={classes.stateContainer}>
-          <div className={classes.stateLabel}>Hover</div>
-
-          <ColourInput
-            colour={cta.hover.text}
-            name={`${name}.text`}
-            label="Text Colour"
-            isDisabled={isDisabled}
-            onChange={colour => onChange({ ...cta, hover: { ...cta.hover, text: colour } })}
-            onValidationChange={onValidationChange}
-          />
-          <ColourInput
-            colour={cta.hover.background}
-            name={`${name}.background`}
-            label="Background Colour"
-            isDisabled={isDisabled}
-            onChange={colour => onChange({ ...cta, hover: { ...cta.hover, background: colour } })}
-            onValidationChange={onValidationChange}
-          />
-          <OptionalColourInput
-            colour={cta.hover.border}
-            name={`${name}.border`}
-            label="Border Colour"
-            isDisabled={isDisabled}
-            onChange={colour => onChange({ ...cta, hover: { ...cta.hover, border: colour } })}
-            onValidationChange={onValidationChange}
-          />
-        </div>
       </div>
     </div>
   );
