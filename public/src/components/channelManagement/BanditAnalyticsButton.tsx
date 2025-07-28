@@ -60,7 +60,13 @@ const SamplesChart = ({ data, variantNames, fieldName }: SamplesChartProps) => {
       <Legend />
       <Tooltip />
       {variantNames.map((name, idx) => (
-        <Line key={name} type="monotone" dataKey={name} stroke={Colours[idx]} />
+        <Line
+          key={name}
+          type="monotone"
+          dataKey={name}
+          stroke={Colours[idx]}
+          connectNulls={false}
+        />
       ))}
     </LineChart>
   );
