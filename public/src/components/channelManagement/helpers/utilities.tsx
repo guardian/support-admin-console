@@ -1,7 +1,6 @@
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { Typography } from '@mui/material';
-import { format } from 'date-fns';
 import React from 'react';
 
 export const renderVisibilityIcons = (isOn: boolean): React.ReactNode => {
