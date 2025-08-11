@@ -2,8 +2,8 @@ import { makeStyles } from '@mui/styles';
 import { Button, Dialog, Theme, Typography } from '@mui/material';
 import React, { useEffect } from 'react';
 import useOpenable from '../../hooks/useOpenable';
-import { format } from 'date-fns';
 import { LineChart, CartesianGrid, Line, XAxis, YAxis, Legend, Tooltip } from 'recharts';
+import { buildChartData } from './helpers/utilities';
 
 const useStyles = makeStyles(({}: Theme) => ({
   dialog: {
@@ -49,29 +49,8 @@ interface SamplesChartProps {
 
 const Colours = ['red', 'blue', 'green', 'orange', 'yellow'];
 
-type ChartDataPoint = Record<string, string | number | null>;
-
 const SamplesChart = ({ data, variantNames, fieldName }: SamplesChartProps) => {
-  const chartData = data.samples.map(({ timestamp, variants }) => {
-    const sample: ChartDataPoint = {
-      dateHour: format(Date.parse(timestamp), 'yyyy-MM-dd hh:mm'),
-    };
-
-    if (variants.length > 0) {
-      variants.forEach(variant => {
-        sample[variant.variantName] = variant[fieldName];
-      });
-      return sample;
-    }
-
-    // When no variants are present, set all variant values to null
-    // This will create a gap in the chart line
-    variantNames.forEach(variantName => {
-      sample[variantName] = null;
-    });
-
-    return sample;
-  });
+  const chartData = buildChartData(data.samples, variantNames, fieldName);
 
   return (
     <LineChart width={800} height={500} data={chartData}>
