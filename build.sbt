@@ -58,7 +58,7 @@ dependencyOverrides ++= List(
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion,
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
   "io.netty" % "netty-handler" % "4.2.3.Final",
-  "io.netty" % "netty-codec-http2" % "4.2.3.Final",
+  "io.netty" % "netty-codec-http2" % "4.2.4.Final",
   // Related to Play 3.0.2-6 currently brings in a vulnerable version of commons-io
   "commons-io" % "commons-io" % "2.20.0" % Test,
   "commons-beanutils" % "commons-beanutils" % "1.11.0"
