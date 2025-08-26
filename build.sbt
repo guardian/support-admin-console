@@ -29,7 +29,7 @@ asciiGraphWidth := 999999999 // to ensure Snyk can read the the deeeeep dependen
 libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
   "com.gu.play-googleauth" %% "play-v30" % "24.1.2",
-  "com.google.cloud" % "google-cloud-bigquery" % "2.54.0",
+  "com.google.cloud" % "google-cloud-bigquery" % "2.54.1",
   "com.gu" %% "simple-configuration-ssm" % "6.1.0",
   "software.amazon.awssdk" % "s3" % awsVersion,
   "software.amazon.awssdk" % "dynamodb" % awsVersion,
@@ -57,8 +57,8 @@ dependencyOverrides ++= List(
   "com.fasterxml.jackson.module" % "jackson-module-parameter-names" % jacksonVersion,
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion,
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
-  "io.netty" % "netty-handler" % "4.2.3.Final",
-  "io.netty" % "netty-codec-http2" % "4.2.3.Final",
+  "io.netty" % "netty-handler" % "4.2.4.Final",
+  "io.netty" % "netty-codec-http2" % "4.2.4.Final",
   // Related to Play 3.0.2-6 currently brings in a vulnerable version of commons-io
   "commons-io" % "commons-io" % "2.20.0" % Test,
   "commons-beanutils" % "commons-beanutils" % "1.11.0"
