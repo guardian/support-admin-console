@@ -27,6 +27,11 @@ export interface AdminConsoleProps extends GuStackProps {
   domainName: string;
 }
 
+// Enable automated backups via https://github.com/guardian/aws-backup
+const enableBackups = (table: Table) => {
+  Tags.of(table).add('devx-backup-enabled', 'true');
+}
+
 export class AdminConsole extends GuStack {
   // Build a dynamodb table to store tests for all channels
   buildTestsTable(): Table {
@@ -65,9 +70,7 @@ export class AdminConsole extends GuStack {
     const defaultChild = table.node.defaultChild as unknown as CfnElement;
     defaultChild.overrideLogicalId(id);
 
-    // Enable automated backups via https://github.com/guardian/aws-backup
-    Tags.of(table).add('devx-backup-enabled', 'true');
-
+    enableBackups(table);
     return table;
   }
 
@@ -89,9 +92,7 @@ export class AdminConsole extends GuStack {
     const defaultChild = table.node.defaultChild as unknown as CfnElement;
     defaultChild.overrideLogicalId(id);
 
-    // Enable automated backups via https://github.com/guardian/aws-backup
-    Tags.of(table).add('devx-backup-enabled', 'true');
-
+    enableBackups(table);
     return table;
   }
 
@@ -117,9 +118,7 @@ export class AdminConsole extends GuStack {
     const defaultChild = table.node.defaultChild as unknown as CfnElement;
     defaultChild.overrideLogicalId(id);
 
-    // Enable automated backups via https://github.com/guardian/aws-backup
-    Tags.of(table).add('devx-backup-enabled', 'true');
-
+    enableBackups(table);
     return table;
   }
 
@@ -147,9 +146,7 @@ export class AdminConsole extends GuStack {
     const defaultChild = table.node.defaultChild as unknown as CfnElement;
     defaultChild.overrideLogicalId(id);
 
-    // Enable automated backups via https://github.com/guardian/aws-backup
-    Tags.of(table).add('devx-backup-enabled', 'true');
-
+    enableBackups(table);
     return table;
   }
 
@@ -175,9 +172,7 @@ export class AdminConsole extends GuStack {
     const defaultChild = table.node.defaultChild as unknown as CfnElement;
     defaultChild.overrideLogicalId(id);
 
-    // Enable automated backups via https://github.com/guardian/aws-backup
-    Tags.of(table).add('devx-backup-enabled', 'true');
-
+    enableBackups(table);
     return table;
   }
 
@@ -199,9 +194,7 @@ export class AdminConsole extends GuStack {
     const defaultChild = table.node.defaultChild as unknown as CfnElement;
     defaultChild.overrideLogicalId(id);
 
-    // Enable automated backups via https://github.com/guardian/aws-backup
-    Tags.of(table).add('devx-backup-enabled', 'true');
-
+    enableBackups(table);
     return table;
   }
 
@@ -223,9 +216,7 @@ export class AdminConsole extends GuStack {
     const defaultChild = table.node.defaultChild as unknown as CfnElement;
     defaultChild.overrideLogicalId(id);
 
-    // Enable automated backups via https://github.com/guardian/aws-backup
-    Tags.of(table).add('devx-backup-enabled', 'true');
-
+    enableBackups(table);
     return table;
   }
 
@@ -241,8 +232,7 @@ export class AdminConsole extends GuStack {
       },
     });
 
-    // Enable automated backups via https://github.com/guardian/aws-backup
-    Tags.of(table).add('devx-backup-enabled', 'true');
+    enableBackups(table);
     return table;
   }
 
@@ -258,8 +248,7 @@ export class AdminConsole extends GuStack {
       },
     });
 
-    // Enable automated backups via https://github.com/guardian/aws-backup
-    Tags.of(table).add('devx-backup-enabled', 'true');
+    enableBackups(table);
     return table;
   }
 
