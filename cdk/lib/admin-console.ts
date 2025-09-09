@@ -248,6 +248,15 @@ export class AdminConsole extends GuStack {
       },
     });
 
+    table.addGlobalSecondaryIndex({
+      indexName: 'campaignCode-index',
+      projectionType: ProjectionType.ALL,
+      partitionKey: {
+        name: 'campaignCode',
+        type: AttributeType.STRING,
+      },
+    });
+
     enableBackups(table);
     return table;
   }
