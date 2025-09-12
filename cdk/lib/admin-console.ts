@@ -27,6 +27,11 @@ export interface AdminConsoleProps extends GuStackProps {
   domainName: string;
 }
 
+// Enable automated backups via https://github.com/guardian/aws-backup
+const enableBackups = (table: Table) => {
+  Tags.of(table).add('devx-backup-enabled', 'true');
+}
+
 export class AdminConsole extends GuStack {
   // Build a dynamodb table to store tests for all channels
   buildTestsTable(): Table {
@@ -65,9 +70,7 @@ export class AdminConsole extends GuStack {
     const defaultChild = table.node.defaultChild as unknown as CfnElement;
     defaultChild.overrideLogicalId(id);
 
-    // Enable automated backups via https://github.com/guardian/aws-backup
-    Tags.of(table).add('devx-backup-enabled', 'true');
-
+    enableBackups(table);
     return table;
   }
 
@@ -89,9 +92,7 @@ export class AdminConsole extends GuStack {
     const defaultChild = table.node.defaultChild as unknown as CfnElement;
     defaultChild.overrideLogicalId(id);
 
-    // Enable automated backups via https://github.com/guardian/aws-backup
-    Tags.of(table).add('devx-backup-enabled', 'true');
-
+    enableBackups(table);
     return table;
   }
 
@@ -117,9 +118,7 @@ export class AdminConsole extends GuStack {
     const defaultChild = table.node.defaultChild as unknown as CfnElement;
     defaultChild.overrideLogicalId(id);
 
-    // Enable automated backups via https://github.com/guardian/aws-backup
-    Tags.of(table).add('devx-backup-enabled', 'true');
-
+    enableBackups(table);
     return table;
   }
 
@@ -147,9 +146,7 @@ export class AdminConsole extends GuStack {
     const defaultChild = table.node.defaultChild as unknown as CfnElement;
     defaultChild.overrideLogicalId(id);
 
-    // Enable automated backups via https://github.com/guardian/aws-backup
-    Tags.of(table).add('devx-backup-enabled', 'true');
-
+    enableBackups(table);
     return table;
   }
 
@@ -175,9 +172,7 @@ export class AdminConsole extends GuStack {
     const defaultChild = table.node.defaultChild as unknown as CfnElement;
     defaultChild.overrideLogicalId(id);
 
-    // Enable automated backups via https://github.com/guardian/aws-backup
-    Tags.of(table).add('devx-backup-enabled', 'true');
-
+    enableBackups(table);
     return table;
   }
 
@@ -199,9 +194,7 @@ export class AdminConsole extends GuStack {
     const defaultChild = table.node.defaultChild as unknown as CfnElement;
     defaultChild.overrideLogicalId(id);
 
-    // Enable automated backups via https://github.com/guardian/aws-backup
-    Tags.of(table).add('devx-backup-enabled', 'true');
-
+    enableBackups(table);
     return table;
   }
 
@@ -223,9 +216,48 @@ export class AdminConsole extends GuStack {
     const defaultChild = table.node.defaultChild as unknown as CfnElement;
     defaultChild.overrideLogicalId(id);
 
-    // Enable automated backups via https://github.com/guardian/aws-backup
-    Tags.of(table).add('devx-backup-enabled', 'true');
+    enableBackups(table);
+    return table;
+  }
 
+  buildPromosCampaignsTable(): Table {
+    const table = new Table(this, 'PromosCampaignsDynamoTable', {
+      tableName: `support-admin-console-promos-campaigns-${this.stage}`,
+      removalPolicy: RemovalPolicy.RETAIN,
+      pointInTimeRecovery: this.stage === 'PROD',
+      billingMode: BillingMode.PAY_PER_REQUEST,
+      partitionKey: {
+        name: 'campaignCode',
+        type: AttributeType.STRING,
+      },
+    });
+
+    enableBackups(table);
+    return table;
+  }
+
+  buildPromosTable(): Table {
+    const table = new Table(this, 'PromosDynamoTable', {
+      tableName: `support-admin-console-promos-${this.stage}`,
+      removalPolicy: RemovalPolicy.RETAIN,
+      pointInTimeRecovery: this.stage === 'PROD',
+      billingMode: BillingMode.PAY_PER_REQUEST,
+      partitionKey: {
+        name: 'promoCode',
+        type: AttributeType.STRING,
+      },
+    });
+
+    table.addGlobalSecondaryIndex({
+      indexName: 'campaignCode-index',
+      projectionType: ProjectionType.ALL,
+      partitionKey: {
+        name: 'campaignCode',
+        type: AttributeType.STRING,
+      },
+    });
+
+    enableBackups(table);
     return table;
   }
 
@@ -268,6 +300,8 @@ export class AdminConsole extends GuStack {
     const bannerDesignsDynamoTable = this.buildBannerDesignsTable();
     const archivedBannerDesignsDynamoTable = this.buildArchivedBannerDesignsTable();
     const permissionsTable = this.buildPermissionsTable();
+    const promosCampaignsDynamoTable = this.buildPromosCampaignsTable();
+    const promosTable = this.buildPromosTable();
 
     const channelTestsDynamoPolicies =
       this.buildChannelTestsDynamoPolicies(channelTestsDynamoTable);
@@ -279,6 +313,8 @@ export class AdminConsole extends GuStack {
       archivedBannerDesignsDynamoTable,
     );
     const permissionsDynamoPolicies = this.buildDynamoPolicies(permissionsTable);
+    const promosCampaignsDynamoPolicies = this.buildDynamoPolicies(promosCampaignsDynamoTable);
+    const promosDynamoPolicies = this.buildDynamoPolicies(promosTable);
 
     const userData = UserData.forLinux();
     userData.addCommands(
@@ -322,6 +358,8 @@ export class AdminConsole extends GuStack {
       ...bannerDesignsDynamoPolicies,
       ...archivedBannerDesignsDynamoPolicies,
       ...permissionsDynamoPolicies,
+      ...promosCampaignsDynamoPolicies,
+      ...promosDynamoPolicies,
       new GuDynamoDBReadPolicy(this, `DynamoRead-super-mode-calculator`, {
         tableName: 'super-mode-calculator-PROD', // always PROD for super mode
       }),
