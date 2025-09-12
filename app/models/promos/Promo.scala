@@ -1,6 +1,8 @@
 package models.promos
 
 import com.gu.i18n.Country
+import io.circe.{Decoder, Encoder}
+import io.circe.generic.semiauto.deriveDecoder
 
 case class AppliesTo(
   productRatePlanIds: Set[String],
@@ -13,7 +15,12 @@ case class Promo(
   campaignCode: String,
   appliesTo: AppliesTo,
   startTimestamp: String,
-  endTimestamp: String,
+  endTimestamp: Option[String],
   description: Option[String],
   // TODO - landing page config for print products
 )
+
+object Promo {
+  implicit val decoder: Decoder[Promo] = deriveDecoder[Promo]
+  implicit val encoder: Encoder[Promo] = deriveDecoder[Promo]
+}
