@@ -40,6 +40,7 @@ abstract class DynamoService(stage: String, client: DynamoDbClient) extends Stri
         ZIO.fail(DynamoGetError(new Exception(s"Item does not exist: ${query.keyConditionExpression()}")))
     }.mapError(error => DynamoGetError(error))
 
+  // Performs a full scan of the table
   protected def getAll(): ZIO[Any, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
     attemptBlocking {
       client
