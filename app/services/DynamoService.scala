@@ -26,6 +26,7 @@ import zio.ZIO.attemptBlocking
 abstract class DynamoService(stage: String, client: DynamoDbClient) extends StrictLogging {
   protected val tableName: String
 
+  // Attempts to retrieve an item. Fails if the item does not exist.
   protected def get(query: QueryRequest): ZIO[Any, DynamoGetError, java.util.Map[String, AttributeValue]] =
     attemptBlocking {
       client
