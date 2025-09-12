@@ -18,29 +18,6 @@ class DynamoPromos(stage: String, client: DynamoDbClient) extends DynamoService(
   protected val tableName = s"support-admin-console-promos-$stage"
   private val campaignCodeIndex = "campaignCode-index"
 
-  private def get(promoCode: String): ZIO[Any, DynamoGetError, java.util.Map[String, AttributeValue]] =
-    attemptBlocking {
-      val query = QueryRequest.builder
-        .tableName(tableName)
-        .keyConditionExpression("promoCode = :promoCode")
-        .expressionAttributeValues(
-          Map(
-            ":promoCode" -> AttributeValue.builder.s(promoCode).build
-          ).asJava
-        )
-        .build()
-
-      client
-        .query(query)
-        .items
-        .asScala
-        .headOption
-
-    }.flatMap {
-      case Some(item) => ZIO.succeed(item)
-      case None       => ZIO.fail(DynamoGetError(new Exception(s"promoCode does not exist: $promoCode")))
-    }.mapError(error => DynamoGetError(error))
-
   private def getAllInCampaign(
     campaignCode: String
   ): ZIO[Any, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
@@ -61,20 +38,20 @@ class DynamoPromos(stage: String, client: DynamoDbClient) extends DynamoService(
         .items
     }.mapError(DynamoGetError)
 
-  def createPromo(campaign: Promo): ZIO[Any, DynamoError, Unit] = {
-    val item = jsonToDynamo(campaign.asJson).m()
+  def createPromo(promo: Promo): ZIO[Any, DynamoError, Unit] = {
+    val item = jsonToDynamo(promo.asJson).m()
     val request = PutItemRequest.builder
       .tableName(tableName)
       .item(item)
       // Do not overwrite if already in dynamo
-      .conditionExpression("attribute_not_exists(#name)")
-      .expressionAttributeNames(Map("#name" -> "name").asJava)
+      .conditionExpression("attribute_not_exists(#promoCode)")
+      .expressionAttributeNames(Map("#promoCode" -> "promoCode").asJava)
       .build()
     put(request)
   }
 
-  def updatePromo(campaign: Promo): ZIO[Any, DynamoError, Unit] = {
-    val item = jsonToDynamo(campaign.asJson).m()
+  def updatePromo(promo: Promo): ZIO[Any, DynamoError, Unit] = {
+    val item = jsonToDynamo(promo.asJson).m()
     val request = PutItemRequest.builder
       .tableName(tableName)
       .item(item)
@@ -82,13 +59,24 @@ class DynamoPromos(stage: String, client: DynamoDbClient) extends DynamoService(
     put(request)
   }
 
-  def getPromo(promoCode: String): ZIO[Any, DynamoError, Promo] =
-    get(promoCode)
+  def getPromo(promoCode: String): ZIO[Any, DynamoError, Promo] = {
+    val query = QueryRequest.builder
+      .tableName(tableName)
+      .keyConditionExpression("promoCode = :promoCode")
+      .expressionAttributeValues(
+        Map(
+          ":promoCode" -> AttributeValue.builder.s(promoCode).build
+        ).asJava
+      )
+      .build()
+
+    get(query)
       .map(item => dynamoMapToJson(item).as[Promo])
       .flatMap {
         case Right(test) => ZIO.succeed(test)
         case Left(error) => ZIO.fail(DynamoGetError(error))
       }
+  }
 
   def getAllPromosInCampaign(campaignCode: String): ZIO[Any, DynamoError, List[Promo]] = {
     getAllInCampaign(campaignCode)

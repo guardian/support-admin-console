@@ -2,7 +2,8 @@ package models.promos
 
 import com.gu.i18n.Country
 import io.circe.{Decoder, Encoder}
-import io.circe.generic.semiauto.deriveDecoder
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+import io.circe.generic.auto._
 
 case class AppliesTo(
   productRatePlanIds: Set[String],
@@ -22,5 +23,5 @@ case class Promo(
 
 object Promo {
   implicit val decoder: Decoder[Promo] = deriveDecoder[Promo]
-  implicit val encoder: Encoder[Promo] = deriveDecoder[Promo]
+  implicit val encoder: Encoder[Promo] = deriveEncoder[Promo]
 }
