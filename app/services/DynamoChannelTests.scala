@@ -30,32 +30,20 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient)
 
   /** Attempts to retrieve a test from dynamodb. Fails if the test does not exist.
     */
-  private def get(testName: String, channel: Channel): ZIO[Any, DynamoGetError, java.util.Map[String, AttributeValue]] =
-    attemptBlocking {
-      val query = QueryRequest.builder
-        .tableName(tableName)
-        .keyConditionExpression("channel = :channel AND #name = :name")
-        .expressionAttributeValues(
-          Map(
-            ":channel" -> AttributeValue.builder.s(channel.toString).build,
-            ":name" -> AttributeValue.builder.s(testName).build
-          ).asJava
-        )
-        .expressionAttributeNames(Map("#name" -> "name").asJava) // name is a reserved word in dynamodb
-        .build()
+  private def buildQuery(testName: String, channel: Channel): QueryRequest =
+    QueryRequest.builder
+      .tableName(tableName)
+      .keyConditionExpression("channel = :channel AND #name = :name")
+      .expressionAttributeValues(
+        Map(
+          ":channel" -> AttributeValue.builder.s(channel.toString).build,
+          ":name" -> AttributeValue.builder.s(testName).build
+        ).asJava
+      )
+      .expressionAttributeNames(Map("#name" -> "name").asJava) // name is a reserved word in dynamodb
+      .build()
 
-      client
-        .query(query)
-        .items
-        .asScala
-        .headOption
-
-    }.flatMap {
-      case Some(item) => ZIO.succeed(item)
-      case None       => ZIO.fail(DynamoGetError(new Exception(s"Test does not exist: $channel/$testName")))
-    }.mapError(error => DynamoGetError(error))
-
-  private def getAll(
+  private def getAllInChannel(
       channel: Channel
   ): ZIO[Any, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
     attemptBlocking {
@@ -112,7 +100,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient)
     }
 
   def getTest[T <: ChannelTest[T]: Decoder](testName: String, channel: Channel): ZIO[Any, DynamoGetError, T] =
-    get(testName, channel)
+    get(buildQuery(testName, channel))
       .map(item => dynamoMapToJson(item).as[T])
       .flatMap {
         case Right(test) => ZIO.succeed(test)
@@ -120,7 +108,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient)
       }
 
   def getAllTests[T <: ChannelTest[T]: Decoder](channel: Channel): ZIO[Any, DynamoGetError, List[T]] =
-    getAll(channel).map(results =>
+    getAllInChannel(channel).map(results =>
       results.asScala
         .map(item => dynamoMapToJson(item).as[T])
         .flatMap {
