@@ -220,9 +220,9 @@ export class AdminConsole extends GuStack {
     return table;
   }
 
-  buildPromosCampaignsTable(): Table {
-    const table = new Table(this, 'PromosCampaignsDynamoTable', {
-      tableName: `support-admin-console-promos-campaigns-${this.stage}`,
+  buildPromoCampaignsTable(): Table {
+    const table = new Table(this, 'PromoCampaignsDynamoTable', {
+      tableName: `support-admin-console-promo-campaigns-${this.stage}`,
       removalPolicy: RemovalPolicy.RETAIN,
       pointInTimeRecovery: this.stage === 'PROD',
       billingMode: BillingMode.PAY_PER_REQUEST,
@@ -300,7 +300,7 @@ export class AdminConsole extends GuStack {
     const bannerDesignsDynamoTable = this.buildBannerDesignsTable();
     const archivedBannerDesignsDynamoTable = this.buildArchivedBannerDesignsTable();
     const permissionsTable = this.buildPermissionsTable();
-    const promosCampaignsDynamoTable = this.buildPromosCampaignsTable();
+    const promoCampaignsDynamoTable = this.buildPromoCampaignsTable();
     const promosTable = this.buildPromosTable();
 
     const channelTestsDynamoPolicies =
@@ -313,7 +313,7 @@ export class AdminConsole extends GuStack {
       archivedBannerDesignsDynamoTable,
     );
     const permissionsDynamoPolicies = this.buildDynamoPolicies(permissionsTable);
-    const promosCampaignsDynamoPolicies = this.buildDynamoPolicies(promosCampaignsDynamoTable);
+    const promoCampaignsDynamoPolicies = this.buildDynamoPolicies(promoCampaignsDynamoTable);
     const promosDynamoPolicies = this.buildDynamoPolicies(promosTable);
 
     const userData = UserData.forLinux();
@@ -358,7 +358,7 @@ export class AdminConsole extends GuStack {
       ...bannerDesignsDynamoPolicies,
       ...archivedBannerDesignsDynamoPolicies,
       ...permissionsDynamoPolicies,
-      ...promosCampaignsDynamoPolicies,
+      ...promoCampaignsDynamoPolicies,
       ...promosDynamoPolicies,
       new GuDynamoDBReadPolicy(this, `DynamoRead-super-mode-calculator`, {
         tableName: 'super-mode-calculator-PROD', // always PROD for super mode
