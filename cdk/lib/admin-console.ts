@@ -254,10 +254,6 @@ export class AdminConsole extends GuStack {
       permissionsTable,
     ]);
 
-    const channelTestsIndexPolicy = new GuDynamoDBReadPolicy(this, `DynamoRead-${channelTestsDynamoTable.node.id}/index/campaignName-name-index`, {
-      tableName: `${channelTestsDynamoTable.tableName}/index/campaignName-name-index`,
-    });
-
     const userData = UserData.forLinux();
     userData.addCommands(
       `aws --region ${this.region} s3 cp s3://membership-dist/${this.stack}/${this.stage}/${app}/support-admin-console_1.0-SNAPSHOT_all.deb /tmp
@@ -294,7 +290,6 @@ export class AdminConsole extends GuStack {
         ],
       }),
       dynamoPolicy,
-      channelTestsIndexPolicy,
       new GuDynamoDBReadPolicy(this, `DynamoRead-super-mode-calculator`, {
         tableName: 'super-mode-calculator-PROD', // always PROD for super mode
       }),
