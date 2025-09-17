@@ -21,7 +21,7 @@ import {
 import type { Policy } from 'aws-cdk-lib/aws-iam';
 import { AccountPrincipal, Role } from 'aws-cdk-lib/aws-iam';
 import { ParameterDataType, ParameterTier, StringParameter } from 'aws-cdk-lib/aws-ssm';
-import {DynamoPolicy} from "./dynamo-policy";
+import {MultiDynamoTableReadPolicy, MultiDynamoTableWritePolicy} from "./dynamo-policy";
 
 export interface AdminConsoleProps extends GuStackProps {
   domainName: string;
@@ -244,14 +244,26 @@ export class AdminConsole extends GuStack {
     const archivedBannerDesignsDynamoTable = this.buildArchivedBannerDesignsTable();
     const permissionsTable = this.buildPermissionsTable();
 
-    const dynamoPolicy = new DynamoPolicy(this, `DynamoPolicy`, [
-      channelTestsDynamoTable,
-      campaignsDynamoTable,
-      archivedTestsDynamoTable,
-      channelTestsAuditDynamoTable,
-      bannerDesignsDynamoTable,
-      archivedBannerDesignsDynamoTable,
-      permissionsTable,
+    const dynamoReadPolicy = new MultiDynamoTableReadPolicy(this, `DynamoReadPolicy`, [
+      channelTestsDynamoTable.tableName,
+      campaignsDynamoTable.tableName,
+      archivedTestsDynamoTable.tableName,
+      channelTestsAuditDynamoTable.tableName,
+      bannerDesignsDynamoTable.tableName,
+      archivedBannerDesignsDynamoTable.tableName,
+      permissionsTable.tableName,
+      'super-mode-calculator-PROD', // always PROD for super mode
+      `support-bandit-${this.stage}`,
+    ]);
+
+    const dynamoWritePolicy = new MultiDynamoTableWritePolicy(this, `DynamoWritePolicy`, [
+      channelTestsDynamoTable.tableName,
+      campaignsDynamoTable.tableName,
+      archivedTestsDynamoTable.tableName,
+      channelTestsAuditDynamoTable.tableName,
+      bannerDesignsDynamoTable.tableName,
+      archivedBannerDesignsDynamoTable.tableName,
+      permissionsTable.tableName,
     ]);
 
     const userData = UserData.forLinux();
@@ -289,16 +301,8 @@ export class AdminConsole extends GuStack {
           `arn:aws:s3:::gu-contributions-public/supportLandingPage/${this.stage}/*`,
         ],
       }),
-      dynamoPolicy,
-      new GuDynamoDBReadPolicy(this, `DynamoRead-super-mode-calculator`, {
-        tableName: 'super-mode-calculator-PROD', // always PROD for super mode
-      }),
-      new GuDynamoDBReadPolicy(this, `DynamoRead-super-mode-calculator/index/end`, {
-        tableName: `super-mode-calculator-PROD/index/end`,
-      }),
-      new GuDynamoDBReadPolicy(this, `DynamoRead-bandit-data`, {
-        tableName: `support-bandit-${this.stage}`,
-      }),
+      dynamoReadPolicy,
+      dynamoWritePolicy,
     ];
 
     const ec2App = new GuEc2App(this, {
