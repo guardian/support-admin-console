@@ -6,8 +6,8 @@ scalaVersion := "2.13.16"
 
 val circeVersion = "0.14.14"
 val awsVersion = "2.32.33"
-val zioVersion = "2.1.20"
-val jacksonVersion = "2.19.2"
+val zioVersion = "2.1.21"
+val jacksonVersion = "2.20"
 
 lazy val scalafmtSettings = Seq(
   scalafmtFilter.withRank(KeyRanks.Invisible) := "diff-dirty",
@@ -27,9 +27,9 @@ lazy val root = (project in file("."))
 asciiGraphWidth := 999999999 // to ensure Snyk can read the the deeeeep dependency tree
 
 libraryDependencies ++= Seq(
-  "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
+  "com.typesafe.scala-logging" %% "scala-logging" % "3.9.6",
   "com.gu.play-googleauth" %% "play-v30" % "25.2.2",
-  "com.google.cloud" % "google-cloud-bigquery" % "2.54.1",
+  "com.google.cloud" % "google-cloud-bigquery" % "2.54.2",
   "com.gu" %% "simple-configuration-ssm" % "7.0.1",
   "software.amazon.awssdk" % "s3" % awsVersion,
   "software.amazon.awssdk" % "dynamodb" % awsVersion,
@@ -57,8 +57,8 @@ dependencyOverrides ++= List(
   "com.fasterxml.jackson.module" % "jackson-module-parameter-names" % jacksonVersion,
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion,
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
-  "io.netty" % "netty-handler" % "4.2.4.Final",
-  "io.netty" % "netty-codec-http2" % "4.2.4.Final",
+  "io.netty" % "netty-handler" % "4.2.6.Final",
+  "io.netty" % "netty-codec-http2" % "4.2.6.Final",
   // Related to Play 3.0.2-6 currently brings in a vulnerable version of commons-io
   "commons-io" % "commons-io" % "2.20.0" % Test,
   "commons-beanutils" % "commons-beanutils" % "1.11.0"
