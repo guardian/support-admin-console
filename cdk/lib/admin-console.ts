@@ -19,8 +19,7 @@ import {
   ListenerAction,
   ListenerCondition,
 } from 'aws-cdk-lib/aws-elasticloadbalancingv2';
-import type { Policy } from 'aws-cdk-lib/aws-iam';
-import { AccountPrincipal, Role } from 'aws-cdk-lib/aws-iam';
+import {AccountPrincipal, Effect, Policy, PolicyStatement, Role } from 'aws-cdk-lib/aws-iam';
 import { ParameterDataType, ParameterTier, StringParameter } from 'aws-cdk-lib/aws-ssm';
 
 export interface AdminConsoleProps extends GuStackProps {
@@ -287,7 +286,6 @@ export class AdminConsole extends GuStack {
       /opt/cloudwatch-logs/configure-logs application ${this.stack} ${this.stage} ${app} /var/log/support-admin-console/application.log`
     )
 
-
     const policies: Policy[] = [
       new GuAllowPolicy(this, 'Cloudwatch', {
         actions: ['logs:CreateLogGroup', 'logs:CreateLogStream', 'logs:PutLogEvents'],
@@ -359,6 +357,17 @@ export class AdminConsole extends GuStack {
       scaling: { minimumInstances: 1, maximumInstances: 2 },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MICRO),
     });
+
+    const newPolicy = new Policy(this, 'something', {
+      statements: [
+        new PolicyStatement({
+          effect: Effect.ALLOW,
+          actions: ['s3:GetObject'],
+          resources: ['*'],
+        }),
+      ],
+    });
+    newPolicy.attachToRole(ec2App.autoScalingGroup.role);
 
     // Rule to only allow known http methods
     new ApplicationListenerRule(this, 'AllowKnownMethods', {
