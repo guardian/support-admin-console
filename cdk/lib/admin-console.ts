@@ -263,32 +263,38 @@ export class AdminConsole extends GuStack {
     const app = 'admin-console';
 
     const channelTestsDynamoTable = this.buildTestsTable();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- e
     const archivedTestsDynamoTable = this.buildArchivedTestsTable();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- e
     const channelTestsAuditDynamoTable = this.buildTestsAuditTable();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- e
     const campaignsDynamoTable = this.buildCampaignsTable();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- e
     const bannerDesignsDynamoTable = this.buildBannerDesignsTable();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- e
     const archivedBannerDesignsDynamoTable = this.buildArchivedBannerDesignsTable();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- e
     const permissionsTable = this.buildPermissionsTable();
 
     const dynamoPolicies = [
       ...this.buildDynamoPolicies(channelTestsDynamoTable),
-      ...this.buildDynamoPolicies(campaignsDynamoTable),
-      ...this.buildDynamoPolicies(archivedTestsDynamoTable),
-      ...this.buildDynamoPolicies(channelTestsAuditDynamoTable),
-      ...this.buildDynamoPolicies(bannerDesignsDynamoTable),
-      ...this.buildDynamoPolicies(
-        archivedBannerDesignsDynamoTable,
-      ),
-      ...this.buildDynamoPolicies(permissionsTable),
-      new Policy(this, `DynamoRead-${channelTestsDynamoTable.node.id}-index-Policy`, {
-        statements: [
-          new PolicyStatement({
-            effect: Effect.ALLOW,
-            actions: ['dynamodb:BatchGetItem', 'dynamodb:GetItem', 'dynamodb:Query', 'dynamodb:Scan'],
-            resources: [`${channelTestsDynamoTable.tableArn}/index/campaignName-name-index`],
-          }),
-        ],
-      }),
+      // ...this.buildDynamoPolicies(campaignsDynamoTable),
+      // ...this.buildDynamoPolicies(archivedTestsDynamoTable),
+      // ...this.buildDynamoPolicies(channelTestsAuditDynamoTable),
+      // ...this.buildDynamoPolicies(bannerDesignsDynamoTable),
+      // ...this.buildDynamoPolicies(
+      //   archivedBannerDesignsDynamoTable,
+      // ),
+      // ...this.buildDynamoPolicies(permissionsTable),
+      // new Policy(this, `DynamoRead-${channelTestsDynamoTable.node.id}-index-Policy`, {
+      //   statements: [
+      //     new PolicyStatement({
+      //       effect: Effect.ALLOW,
+      //       actions: ['dynamodb:BatchGetItem', 'dynamodb:GetItem', 'dynamodb:Query', 'dynamodb:Scan'],
+      //       resources: [`${channelTestsDynamoTable.tableArn}/index/campaignName-name-index`],
+      //     }),
+      //   ],
+      // }),
     ];
 
     const userData = UserData.forLinux();
