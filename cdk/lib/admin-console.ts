@@ -6,7 +6,6 @@ import { GuCname } from '@guardian/cdk/lib/constructs/dns';
 import {
   GuAllowPolicy,
   GuDynamoDBReadPolicy,
-  GuDynamoDBWritePolicy,
   GuGetS3ObjectsPolicy,
   GuPutS3ObjectsPolicy,
 } from '@guardian/cdk/lib/constructs/iam';
@@ -228,27 +227,30 @@ export class AdminConsole extends GuStack {
     return table;
   }
 
-  buildChannelTestsDynamoPolicies(table: Table): GuAllowPolicy[] {
-    return [
-      new GuDynamoDBReadPolicy(this, `DynamoRead-${table.node.id}`, {
-        tableName: table.tableName,
-      }),
-      new GuDynamoDBReadPolicy(this, `DynamoRead-${table.node.id}/index/campaignName-name-index`, {
-        tableName: `${table.tableName}/index/campaignName-name-index`,
-      }),
-      new GuDynamoDBWritePolicy(this, `DynamoWrite-${table.node.id}`, {
-        tableName: table.tableName,
-      }),
-    ];
-  }
-
   buildDynamoPolicies(table: Table): GuAllowPolicy[] {
     return [
-      new GuDynamoDBReadPolicy(this, `DynamoRead-${table.node.id}`, {
-        tableName: table.tableName,
+      new Policy(this, `DynamoRead-${table.node.id}-Policy`, {
+        statements: [
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: ['dynamodb:BatchGetItem', 'dynamodb:GetItem', 'dynamodb:Query', 'dynamodb:Scan'],
+            resources: [table.tableArn],
+          }),
+        ],
       }),
-      new GuDynamoDBWritePolicy(this, `DynamoWrite-${table.node.id}`, {
-        tableName: table.tableName,
+      new Policy(this, `DynamoWrite-${table.node.id}-Policy`, {
+        statements: [
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: [
+              'dynamodb:BatchWriteItem',
+              'dynamodb:DeleteItem',
+              'dynamodb:PutItem',
+              'dynamodb:UpdateItem',
+            ],
+            resources: [table.tableArn],
+          }),
+        ],
       }),
     ];
   }
@@ -268,16 +270,26 @@ export class AdminConsole extends GuStack {
     const archivedBannerDesignsDynamoTable = this.buildArchivedBannerDesignsTable();
     const permissionsTable = this.buildPermissionsTable();
 
-    const channelTestsDynamoPolicies =
-      this.buildChannelTestsDynamoPolicies(channelTestsDynamoTable);
-    const campaignsDynamoPolicies = this.buildDynamoPolicies(campaignsDynamoTable);
-    const archivedTestsDynamoPolicies = this.buildDynamoPolicies(archivedTestsDynamoTable);
-    const channelTestsAuditDynamoPolicies = this.buildDynamoPolicies(channelTestsAuditDynamoTable);
-    const bannerDesignsDynamoPolicies = this.buildDynamoPolicies(bannerDesignsDynamoTable);
-    const archivedBannerDesignsDynamoPolicies = this.buildDynamoPolicies(
-      archivedBannerDesignsDynamoTable,
-    );
-    const permissionsDynamoPolicies = this.buildDynamoPolicies(permissionsTable);
+    const dynamoPolicies = [
+      ...this.buildDynamoPolicies(channelTestsDynamoTable),
+      ...this.buildDynamoPolicies(campaignsDynamoTable),
+      ...this.buildDynamoPolicies(archivedTestsDynamoTable),
+      ...this.buildDynamoPolicies(channelTestsAuditDynamoTable),
+      ...this.buildDynamoPolicies(bannerDesignsDynamoTable),
+      ...this.buildDynamoPolicies(
+        archivedBannerDesignsDynamoTable,
+      ),
+      ...this.buildDynamoPolicies(permissionsTable),
+      new Policy(this, `DynamoRead-${channelTestsDynamoTable.node.id}-index-Policy`, {
+        statements: [
+          new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: ['dynamodb:BatchGetItem', 'dynamodb:GetItem', 'dynamodb:Query', 'dynamodb:Scan'],
+            resources: [`${channelTestsDynamoTable.tableArn}/index/campaignName-name-index`],
+          }),
+        ],
+      }),
+    ];
 
     const userData = UserData.forLinux();
     userData.addCommands(
@@ -313,13 +325,6 @@ export class AdminConsole extends GuStack {
           `arn:aws:s3:::gu-contributions-public/supportLandingPage/${this.stage}/*`,
         ],
       }),
-      ...channelTestsDynamoPolicies,
-      ...campaignsDynamoPolicies,
-      ...archivedTestsDynamoPolicies,
-      ...channelTestsAuditDynamoPolicies,
-      ...bannerDesignsDynamoPolicies,
-      ...archivedBannerDesignsDynamoPolicies,
-      ...permissionsDynamoPolicies,
       new GuDynamoDBReadPolicy(this, `DynamoRead-super-mode-calculator`, {
         tableName: 'super-mode-calculator-PROD', // always PROD for super mode
       }),
@@ -358,16 +363,7 @@ export class AdminConsole extends GuStack {
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MICRO),
     });
 
-    const newPolicy = new Policy(this, 'something', {
-      statements: [
-        new PolicyStatement({
-          effect: Effect.ALLOW,
-          actions: ['s3:GetObject'],
-          resources: ['*'],
-        }),
-      ],
-    });
-    newPolicy.attachToRole(ec2App.autoScalingGroup.role);
+    dynamoPolicies.forEach(policy => policy.attachToRole(ec2App.autoScalingGroup.role));
 
     // Rule to only allow known http methods
     new ApplicationListenerRule(this, 'AllowKnownMethods', {
