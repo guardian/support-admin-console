@@ -6,7 +6,6 @@ import { GuCname } from '@guardian/cdk/lib/constructs/dns';
 import {
   GuAllowPolicy,
   GuDynamoDBReadPolicy,
-  GuDynamoDBWritePolicy,
   GuGetS3ObjectsPolicy,
   GuPutS3ObjectsPolicy,
 } from '@guardian/cdk/lib/constructs/iam';
@@ -22,6 +21,7 @@ import {
 import type { Policy } from 'aws-cdk-lib/aws-iam';
 import { AccountPrincipal, Role } from 'aws-cdk-lib/aws-iam';
 import { ParameterDataType, ParameterTier, StringParameter } from 'aws-cdk-lib/aws-ssm';
+import {MultiDynamoTableReadPolicy, MultiDynamoTableWritePolicy} from "./dynamo-managed-policy";
 
 export interface AdminConsoleProps extends GuStackProps {
   domainName: string;
@@ -229,31 +229,6 @@ export class AdminConsole extends GuStack {
     return table;
   }
 
-  buildChannelTestsDynamoPolicies(table: Table): GuAllowPolicy[] {
-    return [
-      new GuDynamoDBReadPolicy(this, `DynamoRead-${table.node.id}`, {
-        tableName: table.tableName,
-      }),
-      new GuDynamoDBReadPolicy(this, `DynamoRead-${table.node.id}/index/campaignName-name-index`, {
-        tableName: `${table.tableName}/index/campaignName-name-index`,
-      }),
-      new GuDynamoDBWritePolicy(this, `DynamoWrite-${table.node.id}`, {
-        tableName: table.tableName,
-      }),
-    ];
-  }
-
-  buildDynamoPolicies(table: Table): GuAllowPolicy[] {
-    return [
-      new GuDynamoDBReadPolicy(this, `DynamoRead-${table.node.id}`, {
-        tableName: table.tableName,
-      }),
-      new GuDynamoDBWritePolicy(this, `DynamoWrite-${table.node.id}`, {
-        tableName: table.tableName,
-      }),
-    ];
-  }
-
   constructor(scope: App, id: string, props: AdminConsoleProps) {
     super(scope, id, props);
 
@@ -269,16 +244,27 @@ export class AdminConsole extends GuStack {
     const archivedBannerDesignsDynamoTable = this.buildArchivedBannerDesignsTable();
     const permissionsTable = this.buildPermissionsTable();
 
-    const channelTestsDynamoPolicies =
-      this.buildChannelTestsDynamoPolicies(channelTestsDynamoTable);
-    const campaignsDynamoPolicies = this.buildDynamoPolicies(campaignsDynamoTable);
-    const archivedTestsDynamoPolicies = this.buildDynamoPolicies(archivedTestsDynamoTable);
-    const channelTestsAuditDynamoPolicies = this.buildDynamoPolicies(channelTestsAuditDynamoTable);
-    const bannerDesignsDynamoPolicies = this.buildDynamoPolicies(bannerDesignsDynamoTable);
-    const archivedBannerDesignsDynamoPolicies = this.buildDynamoPolicies(
-      archivedBannerDesignsDynamoTable,
-    );
-    const permissionsDynamoPolicies = this.buildDynamoPolicies(permissionsTable);
+    const dynamoReadPolicy = new MultiDynamoTableReadPolicy(this, `DynamoReadPolicy`, [
+      channelTestsDynamoTable.tableName,
+      campaignsDynamoTable.tableName,
+      archivedTestsDynamoTable.tableName,
+      channelTestsAuditDynamoTable.tableName,
+      bannerDesignsDynamoTable.tableName,
+      archivedBannerDesignsDynamoTable.tableName,
+      permissionsTable.tableName,
+      'super-mode-calculator-PROD', // always PROD for super mode
+      `support-bandit-${this.stage}`,
+    ]);
+
+    const dynamoWritePolicy = new MultiDynamoTableWritePolicy(this, `DynamoWritePolicy`, [
+      channelTestsDynamoTable.tableName,
+      campaignsDynamoTable.tableName,
+      archivedTestsDynamoTable.tableName,
+      channelTestsAuditDynamoTable.tableName,
+      bannerDesignsDynamoTable.tableName,
+      archivedBannerDesignsDynamoTable.tableName,
+      permissionsTable.tableName,
+    ]);
 
     const userData = UserData.forLinux();
     userData.addCommands(
@@ -315,22 +301,6 @@ export class AdminConsole extends GuStack {
           `arn:aws:s3:::gu-contributions-public/supportLandingPage/${this.stage}/*`,
         ],
       }),
-      ...channelTestsDynamoPolicies,
-      ...campaignsDynamoPolicies,
-      ...archivedTestsDynamoPolicies,
-      ...channelTestsAuditDynamoPolicies,
-      ...bannerDesignsDynamoPolicies,
-      ...archivedBannerDesignsDynamoPolicies,
-      ...permissionsDynamoPolicies,
-      new GuDynamoDBReadPolicy(this, `DynamoRead-super-mode-calculator`, {
-        tableName: 'super-mode-calculator-PROD', // always PROD for super mode
-      }),
-      new GuDynamoDBReadPolicy(this, `DynamoRead-super-mode-calculator/index/end`, {
-        tableName: `super-mode-calculator-PROD/index/end`,
-      }),
-      new GuDynamoDBReadPolicy(this, `DynamoRead-bandit-data`, {
-        tableName: `support-bandit-${this.stage}`,
-      }),
     ];
 
     const ec2App = new GuEc2App(this, {
@@ -359,6 +329,9 @@ export class AdminConsole extends GuStack {
       scaling: { minimumInstances: 1, maximumInstances: 2 },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MICRO),
     });
+
+    dynamoReadPolicy.attachToRole(ec2App.autoScalingGroup.role);
+    dynamoWritePolicy.attachToRole(ec2App.autoScalingGroup.role);
 
     // Rule to only allow known http methods
     new ApplicationListenerRule(this, 'AllowKnownMethods', {
