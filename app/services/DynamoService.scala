@@ -1,13 +1,16 @@
 package services
 
 import com.typesafe.scalalogging.StrictLogging
-import models.DynamoErrors.{DynamoDuplicateNameError, DynamoError, DynamoPutError}
+import models.DynamoErrors.{DynamoDuplicateNameError, DynamoError, DynamoGetError, DynamoPutError}
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.dynamodb.model.{
+  AttributeValue,
   BatchWriteItemRequest,
   ConditionalCheckFailedException,
   PutItemRequest,
+  QueryRequest,
   ReturnConsumedCapacity,
+  ScanRequest,
   TransactWriteItem,
   TransactWriteItemsRequest,
   WriteRequest
@@ -22,6 +25,34 @@ import zio.ZIO.attemptBlocking
 // Shared functionality for DynamoDb services
 abstract class DynamoService(stage: String, client: DynamoDbClient) extends StrictLogging {
   protected val tableName: String
+
+  // Attempts to retrieve an item. Fails if the item does not exist.
+  protected def get(query: QueryRequest): ZIO[Any, DynamoGetError, java.util.Map[String, AttributeValue]] =
+    attemptBlocking {
+      client
+        .query(query)
+        .items
+        .asScala
+        .headOption
+
+    }.flatMap {
+      case Some(item) => ZIO.succeed(item)
+      case None       =>
+        ZIO.fail(DynamoGetError(new Exception(s"Item does not exist: ${query.keyConditionExpression()}")))
+    }.mapError(error => DynamoGetError(error))
+
+  // Performs a full scan of the table
+  protected def getAll(): ZIO[Any, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
+    attemptBlocking {
+      client
+        .scan(
+          ScanRequest
+            .builder()
+            .tableName(tableName)
+            .build()
+        )
+        .items()
+    }.mapError(DynamoGetError)
 
   protected def put(putRequest: PutItemRequest): ZIO[Any, DynamoError, Unit] =
     attemptBlocking {

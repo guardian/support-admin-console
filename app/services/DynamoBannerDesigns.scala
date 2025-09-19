@@ -26,44 +26,17 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
       "name" -> AttributeValue.builder.s(designName).build
     ).asJava
 
-  /** Attempts to retrieve a banner design from dynamodb. Fails if the banner design does not exist.
-    */
-  private def get(designName: String): ZIO[Any, DynamoGetError, java.util.Map[String, AttributeValue]] =
-    attemptBlocking {
-      val query = QueryRequest.builder
-        .tableName(tableName)
-        .keyConditionExpression("#name = :name")
-        .expressionAttributeValues(
-          Map(
-            ":name" -> AttributeValue.builder.s(designName).build
-          ).asJava
-        )
-        .expressionAttributeNames(Map("#name" -> "name").asJava) // name is a reserved word in dynamodb
-        .build()
-
-      client
-        .query(query)
-        .items
-        .asScala
-        .headOption
-
-    }.flatMap {
-      case Some(item) => ZIO.succeed(item)
-      case None       =>
-        ZIO.fail(DynamoGetError(new Exception(s"Banner design does not exist: $designName")))
-    }.mapError(error => DynamoGetError(error))
-
-  private def getAll(): ZIO[Any, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
-    attemptBlocking {
-      client
-        .scan(
-          ScanRequest
-            .builder()
-            .tableName(tableName)
-            .build()
-        )
-        .items()
-    }.mapError(DynamoGetError)
+  private def buildQuery(designName: String): QueryRequest =
+    QueryRequest.builder
+      .tableName(tableName)
+      .keyConditionExpression("#name = :name")
+      .expressionAttributeValues(
+        Map(
+          ":name" -> AttributeValue.builder.s(designName).build
+        ).asJava
+      )
+      .expressionAttributeNames(Map("#name" -> "name").asJava) // name is a reserved word in dynamodb
+      .build()
 
   private def update(updateRequest: UpdateItemRequest): ZIO[Any, DynamoError, Unit] =
     attemptBlocking {
@@ -86,7 +59,7 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
     }
 
   def getBannerDesign(designName: String): ZIO[Any, DynamoGetError, BannerDesign] =
-    get(designName)
+    get(buildQuery(designName))
       .map(item => dynamoMapToJson(item).as[BannerDesign])
       .flatMap {
         case Right(bannerDesign) => ZIO.succeed(bannerDesign)
@@ -234,8 +207,7 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
   }
 
   // Does not decode the Dynamodb data
-  def getRawDesign(designName: String): ZIO[Any, DynamoGetError, java.util.Map[String, AttributeValue]] = {
-    get(designName)
-  }
+  def getRawDesign(designName: String): ZIO[Any, DynamoGetError, java.util.Map[String, AttributeValue]] =
+    get(buildQuery(designName))
 
 }
