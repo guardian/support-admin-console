@@ -21,7 +21,7 @@ import {
 import type { Policy } from 'aws-cdk-lib/aws-iam';
 import { AccountPrincipal, Role } from 'aws-cdk-lib/aws-iam';
 import { ParameterDataType, ParameterTier, StringParameter } from 'aws-cdk-lib/aws-ssm';
-import {MultiDynamoTableReadPolicy, MultiDynamoTableWritePolicy} from "./dynamo-policy";
+import {MultiDynamoTableReadPolicy, MultiDynamoTableWritePolicy} from "./dynamo-managed-policy";
 
 export interface AdminConsoleProps extends GuStackProps {
   domainName: string;
@@ -301,8 +301,6 @@ export class AdminConsole extends GuStack {
           `arn:aws:s3:::gu-contributions-public/supportLandingPage/${this.stage}/*`,
         ],
       }),
-      dynamoReadPolicy,
-      dynamoWritePolicy,
     ];
 
     const ec2App = new GuEc2App(this, {
@@ -331,6 +329,9 @@ export class AdminConsole extends GuStack {
       scaling: { minimumInstances: 1, maximumInstances: 2 },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MICRO),
     });
+
+    dynamoReadPolicy.attachToRole(ec2App.autoScalingGroup.role);
+    dynamoWritePolicy.attachToRole(ec2App.autoScalingGroup.role);
 
     // Rule to only allow known http methods
     new ApplicationListenerRule(this, 'AllowKnownMethods', {

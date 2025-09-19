@@ -653,6 +653,8 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
     },
     "DynamoReadPolicy15DC9FD5": {
       "Properties": {
+        "Description": "",
+        "Path": "/",
         "PolicyDocument": {
           "Statement": [
             {
@@ -1007,17 +1009,18 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "DynamoReadPolicy15DC9FD5",
         "Roles": [
           {
             "Ref": "InstanceRoleAdminconsole347DA627",
           },
         ],
       },
-      "Type": "AWS::IAM::Policy",
+      "Type": "AWS::IAM::ManagedPolicy",
     },
     "DynamoWritePolicy408EF0D5": {
       "Properties": {
+        "Description": "",
+        "Path": "/",
         "PolicyDocument": {
           "Statement": [
             {
@@ -1307,14 +1310,13 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "DynamoWritePolicy408EF0D5",
         "Roles": [
           {
             "Ref": "InstanceRoleAdminconsole347DA627",
           },
         ],
       },
-      "Type": "AWS::IAM::Policy",
+      "Type": "AWS::IAM::ManagedPolicy",
     },
     "GetDistributablePolicyAdminconsole6DA8CA46": {
       "Properties": {
