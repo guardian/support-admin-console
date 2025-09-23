@@ -123,6 +123,8 @@ export default function NavDrawer(): React.ReactElement {
     return now.getMonth() == 9 && now.getDate() == 31;
   };
 
+  const showMenuItemUnderDevelopment = true; // TODO: set to false when pushing me to remote!
+
   const list = (anchor: string): React.ReactElement => (
     <div
       className={classes.list}
@@ -240,6 +242,13 @@ export default function NavDrawer(): React.ReactElement {
             <ListItemText primary="Apps Metering Switches" />
           </ListItem>
         </Link>
+        {showMenuItemUnderDevelopment && (
+          <Link key="Promo Tool" to="/promo-tool" className={classes.link}>
+            <ListItem className={classes.listItem} button key="Promo Tool">
+              <ListItemText primary="Promo Tool" />
+            </ListItem>
+          </Link>
+        )}
         <Link key="Default Promos" to="/default-promos" className={classes.link}>
           <ListItem className={classes.listItem} button key="Default Promos">
             <ListItemText primary="Default Promos" />
