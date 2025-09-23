@@ -1,0 +1,223 @@
+{
+  "styles": [
+    {
+      "id": "business-as-usual",
+      "label": "Business as usual",
+      "themes": [
+        {
+          "id": "support-default",
+          "label": "Support, Default",
+          "colours": {
+            "background": "#FFFFFF",
+            "heading": "#052962",
+            "bodyText": "#000000",
+            "articleCountText": "#000000",
+            "highlightText": "#000000",
+            "highlightBackground": "#FFE500",
+            "primaryCta": { "text": "#FFFFFF", "background": "#FF4E46", "border": null },
+            "secondaryCta": { "text": "#004E7C", "background": "#F1F8FC", "border": "#004E7C" },
+            "closeButton": { "text": "#000000", "background": "#FFFFFF", "border": "#000000" },
+            "ticker": {
+              "text": "#052962",
+              "filledProgress": "#052962",
+              "progressBarBackground": "#FFFFFF",
+              "goalMarker": "#000000",
+              "headlineColour": "#052962",
+              "totalColour": "#052962",
+              "goalColour": "#052962"
+            },
+            "choiceCards": {
+              "buttonColour": "#FFFFFF",
+              "buttonTextColour": "#767676",
+              "buttonBorderColour": "#999999",
+              "buttonSelectColour": "#E3F6FF",
+              "buttonSelectTextColour": "#062962",
+              "buttonSelectBorderColour": "#017ABC"
+            },
+            "logo": "#000000"
+          }
+        },
+        {
+          "id": "support-bold",
+          "label": "Support, Bold",
+          "colours": {
+            "background": "#E8F0F8",
+            "heading": "#052962",
+            "bodyText": "#000000",
+            "articleCountText": "#000000",
+            "highlightText": "#000000",
+            "highlightBackground": "#FFD700",
+            "primaryCta": { "text": "#052962", "background": "#FFE500", "border": "#052962" },
+            "secondaryCta": { "text": "#052962", "background": "#FFFFFF", "border": "#052962" },
+            "closeButton": { "text": "#052962", "background": "#E8F0F8", "border": "#052962" },
+            "ticker": {
+              "text": "#052962",
+              "filledProgress": "#052962",
+              "progressBarBackground": "#FFFFFF",
+              "goalMarker": "#000000",
+              "headlineColour": "#052962",
+              "totalColour": "#052962",
+              "goalColour": "#052962"
+            },
+            "choiceCards": {
+              "buttonColour": "#FFFFFF",
+              "buttonTextColour": "#767676",
+              "buttonBorderColour": "#999999",
+              "buttonSelectColour": "#E3F6FF",
+              "buttonSelectTextColour": "#062962",
+              "buttonSelectBorderColour": "#017ABC"
+            },
+            "logo": "#000000"
+          }
+        },
+        {
+          "id": "hope-default",
+          "label": "Hope, Default",
+          "colours": {
+            "background": "#F0FFF6",
+            "heading": "#004E2A",
+            "bodyText": "#102A43",
+            "articleCountText": "#102A43",
+            "highlightText": "#004E2A",
+            "highlightBackground": "#C6F7E2",
+            "primaryCta": { "text": "#FFFFFF", "background": "#2CB67D", "border": null },
+            "secondaryCta": { "text": "#2CB67D", "background": "#FFFFFF", "border": "#2CB67D" },
+            "closeButton": { "text": "#004E2A", "background": "#F0FFF6", "border": "#004E2A" },
+            "ticker": {
+              "text": "#004E2A",
+              "filledProgress": "#004E2A",
+              "progressBarBackground": "#FFFFFF",
+              "goalMarker": "#000000",
+              "headlineColour": "#004E2A",
+              "totalColour": "#004E2A",
+              "goalColour": "#004E2A"
+            },
+            "choiceCards": {
+              "buttonColour": "#FFFFFF",
+              "buttonTextColour": "#767676",
+              "buttonBorderColour": "#999999",
+              "buttonSelectColour": "#E3F6FF",
+              "buttonSelectTextColour": "#062962",
+              "buttonSelectBorderColour": "#017ABC"
+            },
+            "logo": "#000000"
+          }
+        },
+        {
+          "id": "hope-gentle",
+          "label": "Hope, Gentle",
+          "colours": {
+            "background": "#F7FCFA",
+            "heading": "#1C4532",
+            "bodyText": "#1F2937",
+            "articleCountText": "#1F2937",
+            "highlightText": "#1C4532",
+            "highlightBackground": "#DEF7EC",
+            "primaryCta": { "text": "#1C4532", "background": "#C6F7E2", "border": "#1C4532" },
+            "secondaryCta": { "text": "#1C4532", "background": "#FFFFFF", "border": "#1C4532" },
+            "closeButton": { "text": "#1C4532", "background": "#F7FCFA", "border": "#1C4532" },
+            "ticker": {
+              "text": "#1C4532",
+              "filledProgress": "#1C4532",
+              "progressBarBackground": "#FFFFFF",
+              "goalMarker": "#000000",
+              "headlineColour": "#1C4532",
+              "totalColour": "#1C4532",
+              "goalColour": "#1C4532"
+            },
+            "choiceCards": {
+              "buttonColour": "#FFFFFF",
+              "buttonTextColour": "#767676",
+              "buttonBorderColour": "#999999",
+              "buttonSelectColour": "#E3F6FF",
+              "buttonSelectTextColour": "#062962",
+              "buttonSelectBorderColour": "#017ABC"
+            },
+            "logo": "#000000"
+          }
+        },
+        {
+          "id": "urgency",
+          "label": "Urgency",
+          "colours": {
+            "background": "#FFF5F5",
+            "heading": "#7A0619",
+            "bodyText": "#111827",
+            "articleCountText": "#111827",
+            "highlightText": "#7A0619",
+            "highlightBackground": "#FECACA",
+            "primaryCta": { "text": "#FFFFFF", "background": "#C81E1E", "border": null },
+            "secondaryCta": { "text": "#7A0619", "background": "#FFFFFF", "border": "#C81E1E" },
+            "closeButton": { "text": "#7A0619", "background": "#FFF5F5", "border": "#7A0619" },
+            "ticker": {
+              "text": "#7A0619",
+              "filledProgress": "#7A0619",
+              "progressBarBackground": "#FFFFFF",
+              "goalMarker": "#000000",
+              "headlineColour": "#7A0619",
+              "totalColour": "#7A0619",
+              "goalColour": "#7A0619"
+            },
+            "choiceCards": {
+              "buttonColour": "#FFFFFF",
+              "buttonTextColour": "#767676",
+              "buttonBorderColour": "#999999",
+              "buttonSelectColour": "#E3F6FF",
+              "buttonSelectTextColour": "#062962",
+              "buttonSelectBorderColour": "#017ABC"
+            },
+            "logo": "#000000"
+          }
+        },
+        {
+          "id": "empowerment",
+          "label": "Empowerment",
+          "colours": {
+            "background": "#F5F3FF",
+            "heading": "#4C1D95",
+            "bodyText": "#111827",
+            "articleCountText": "#111827",
+            "highlightText": "#4C1D95",
+            "highlightBackground": "#DDD6FE",
+            "primaryCta": { "text": "#FFFFFF", "background": "#6D28D9", "border": null },
+            "secondaryCta": { "text": "#6D28D9", "background": "#FFFFFF", "border": "#6D28D9" },
+            "closeButton": { "text": "#4C1D95", "background": "#F5F3FF", "border": "#4C1D95" },
+            "ticker": {
+              "text": "#4C1D95",
+              "filledProgress": "#4C1D95",
+              "progressBarBackground": "#FFFFFF",
+              "goalMarker": "#000000",
+              "headlineColour": "#4C1D95",
+              "totalColour": "#4C1D95",
+              "goalColour": "#4C1D95"
+            },
+            "choiceCards": {
+              "buttonColour": "#FFFFFF",
+              "buttonTextColour": "#767676",
+              "buttonBorderColour": "#999999",
+              "buttonSelectColour": "#E3F6FF",
+              "buttonSelectTextColour": "#062962",
+              "buttonSelectBorderColour": "#017ABC"
+            },
+            "logo": "#000000"
+          }
+        }
+      ]
+    },
+    {
+      "id": "feast",
+      "label": "Feast",
+      "themes": "@ref:business-as-usual"
+    },
+    {
+      "id": "guardian-weekly",
+      "label": "Guardian Weekly",
+      "themes": "@ref:business-as-usual"
+    },
+    {
+      "id": "marketing",
+      "label": "Marketing",
+      "themes": "@ref:business-as-usual"
+    }
+  ]
+}
