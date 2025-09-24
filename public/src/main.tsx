@@ -42,6 +42,7 @@ import { StyledEngineProvider } from '@mui/material';
 import { LinkTrackingBuilder } from './components/linkTracking/LinkTrackingBuilder';
 import { SupportLandingPageTestsForm } from './components/channelManagement/supportLandingPage/supportLandingPage';
 import { AuditTestsDashboard } from './components/channelManagement/auditTests/auditTestsDashboard';
+import PromoTool from './components/promoTool/promoTool';
 
 declare module '@mui/styles' {
   // https://mui.com/material-ui/migration/v5-style-changes/#%E2%9C%85-add-module-augmentation-for-defaulttheme-typescript
@@ -209,6 +210,7 @@ const AppRouter = () => {
             path="/super-mode"
             element={createComponent(<SuperModeDashboard />, 'Epic Super Mode dashboard 🦸')}
           />
+          <Route path="/promo-tool" element={createComponent(<PromoTool />, 'Promo Tool')} />
           <Route
             path="/default-promos"
             element={createComponent(<DefaultPromos />, 'Default Promos')}
