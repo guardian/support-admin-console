@@ -27,6 +27,10 @@ const useStyles = makeStyles(({ spacing, typography }: Theme) => ({
     width: '100%',
     height: '100%',
   },
+  headline2: {
+    color: '#555',
+    fontSize: 18,
+  },
   leftCol: {
     height: '100%',
     flexShrink: 0,
@@ -57,7 +61,10 @@ const PromoTool: React.FC = () => {
           onPromoCampaignSelected={dummySelectedPromoCampaignFunction}
         />
       </div>
-      <div className={classes.rightCol}>List of Promos for campaign</div>
+      <div className={classes.rightCol}>
+        {' '}
+        <h2 className={classes.headline2}>List of Promos for campaign</h2>
+      </div>
     </div>
   );
 };
