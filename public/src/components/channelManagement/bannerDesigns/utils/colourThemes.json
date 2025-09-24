@@ -8,31 +8,31 @@
           "id": "support-default",
           "label": "Support, Default",
           "colours": {
-            "background": "#FFFFFF",
+            "background": "#F1F8FC",
             "heading": "#052962",
-            "bodyText": "#000000",
-            "articleCountText": "#000000",
-            "highlightText": "#000000",
+            "bodyText": "#121212",
+            "articleCountText": "#121212",
+            "highlightText": "#121212",
             "highlightBackground": "#FFE500",
-            "primaryCta": { "text": "#FFFFFF", "background": "#FF4E46", "border": null },
-            "secondaryCta": { "text": "#004E7C", "background": "#F1F8FC", "border": "#004E7C" },
-            "closeButton": { "text": "#000000", "background": "#FFFFFF", "border": "#000000" },
+            "primaryCta": { "text": "#121212", "background": "#FFE500", "border": null },
+            "secondaryCta": { "text": "#121212", "background": "#F1F8FC", "border": "#121212" },
+            "closeButton": { "text": "#121212", "background": "#FFFFFF", "border": "#121212" },
             "ticker": {
               "text": "#052962",
               "filledProgress": "#052962",
-              "progressBarBackground": "#FFFFFF",
-              "goalMarker": "#000000",
+              "progressBarBackground": "#D4DFE9",
+              "goalMarker": "#121212",
               "headlineColour": "#052962",
               "totalColour": "#052962",
               "goalColour": "#052962"
             },
             "choiceCards": {
               "buttonColour": "#FFFFFF",
-              "buttonTextColour": "#767676",
-              "buttonBorderColour": "#999999",
-              "buttonSelectColour": "#E3F6FF",
-              "buttonSelectTextColour": "#062962",
-              "buttonSelectBorderColour": "#017ABC"
+              "buttonTextColour": "#000000",
+              "buttonBorderColour": "#707070",
+              "buttonSelectColour": "#0077B6",
+              "buttonSelectTextColour": "#052962",
+              "buttonSelectBorderColour": "#052962"
             },
             "logo": "#000000"
           }

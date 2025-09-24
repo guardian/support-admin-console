@@ -52,6 +52,8 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
     display: 'flex',
     gap: spacing(3),
     width: '100%',
+    flexWrap: 'wrap',
+    maxWidth: 900,
   },
   selectors: {
     display: 'flex',
