@@ -3,13 +3,17 @@ import { makeStyles } from '@mui/styles';
 import { MenuItem, Select, TextField } from '@mui/material';
 import PromoCampaignsList from './promoCampaignsList';
 import NewPromoCampaignButton from './newPromoCampaignButton';
-import { productTypes, PromoCampaign, PromoCampaigns } from './utils/promoModels';
+import { Products, PromoCampaign, PromoCampaigns } from './utils/promoModels';
 
 const useStyles = makeStyles(() => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
     paddingLeft: '32px',
+  },
+  headline2: {
+    color: '#555',
+    fontSize: 18,
   },
   listsContainer: {
     position: 'relative',
@@ -55,13 +59,15 @@ function PromoCampaignsSidebar({
 
   return (
     <div className={classes.root}>
-      <Select className={classes.select} value={productTypes[0]} aria-label="Select Product">
-        {productTypes.map(c => (
-          <MenuItem value={c} key={`product-${c}`}>
-            {c}
+      <h2 className={classes.headline2}>Select Product to filter Promo Campaigns</h2>
+      <Select className={classes.select} value={Products[0].code} aria-label="Select Product">
+        {Products.map(c => (
+          <MenuItem value={c.code} key={`product-${c.code}`}>
+            {c.name}
           </MenuItem>
         ))}
       </Select>
+      <h2 className={classes.headline2}>Promo Campaigns</h2>
       <div className={classes.buttonsContainer}>
         <NewPromoCampaignButton
         // existingNames={promoCampaigns.map(c => c.name)}
