@@ -1,6 +1,7 @@
 import React from 'react';
 import { Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
+import { withPreviewStyles } from '../previewContainer';
 
 export interface PreviewColours {
   background: string; // hex with '#'
@@ -18,24 +19,29 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
     justifyContent: 'center',
   },
   card: {
-    borderRadius: 8,
+    borderRadius: 12,
     padding: spacing(2),
-    maxWidth: 420,
-    minWidth: 360,
+    minWidth: 418,
   },
   heading: {
-    fontSize: 28,
-    fontWeight: 700,
-    marginBottom: spacing(1),
+    fontFamily: 'GH Guardian Headline',
+    fontSize: 42,
+    fontWeight: 500,
+    lineHeight: 1.15,
+    marginBottom: spacing('4px'),
   },
   body: {
-    fontSize: 14,
-    marginBottom: spacing(1),
+    fontFamily: 'GuardianTextSans',
+    fontSize: 15,
+    fontWeight: 400,
+    lineHeight: 1.3,
   },
   highlight: {
+    fontFamily: 'GuardianTextSans',
+    fontSize: 15,
+    fontWeight: 700,
+    lineHeight: 1.3,
     display: 'inline-block',
-    padding: '2px 6px',
-    borderRadius: 3,
     marginBottom: spacing(2),
   },
   buttons: {
@@ -44,9 +50,13 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   },
   button: {
     borderRadius: 1000,
-    padding: '8px 14px',
-    fontWeight: 600,
     cursor: 'default',
+    fontFamily: 'GuardianTextSans',
+    fontSize: 17,
+    fontWeight: 700,
+    padding: '6px 18px',
+    textAlign: 'center',
+    width: '50%',
   },
 }));
 
@@ -104,4 +114,4 @@ const PalettePreview: React.FC<Props> = ({ colours }) => {
   );
 };
 
-export default PalettePreview;
+export default withPreviewStyles(PalettePreview);
