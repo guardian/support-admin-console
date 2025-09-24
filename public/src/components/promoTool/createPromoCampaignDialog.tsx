@@ -93,6 +93,22 @@ const CreatePromoCampaignDialog: React.FC<CreatePromoCampaignDialogProps> = ({
         </IconButton>
       </div>
       <DialogContent dividers>
+        <Select
+          labelId="promo-campaign-product-label"
+          id="promo-campaign-product"
+          label="Product"
+          value="SupporterPlus"
+          margin="dense"
+          variant="outlined"
+          fullWidth
+          // onChange={handleChange}
+        >
+          {Products.map(c => (
+            <MenuItem value={c.code} key={`product-${c.code}`}>
+              {c.name}
+            </MenuItem>
+          ))}
+        </Select>
         <TextField
           className={classes.input}
           error={errors.name !== undefined}
@@ -111,22 +127,6 @@ const CreatePromoCampaignDialog: React.FC<CreatePromoCampaignDialogProps> = ({
           autoFocus
           fullWidth
         />
-        <Select
-          labelId="promo-campaign-product-label"
-          id="promo-campaign-product"
-          label="Product"
-          value="SupporterPlus"
-          margin="dense"
-          variant="outlined"
-          fullWidth
-          // onChange={handleChange}
-        >
-          {Products.map(c => (
-            <MenuItem value={c.code} key={`product-${c.code}`}>
-              {c.name}
-            </MenuItem>
-          ))}
-        </Select>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleSubmit(onSubmit)} color="primary">
