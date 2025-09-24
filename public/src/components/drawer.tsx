@@ -123,7 +123,7 @@ export default function NavDrawer(): React.ReactElement {
     return now.getMonth() == 9 && now.getDate() == 31;
   };
 
-  const showMenuItemUnderDevelopment = true; // TODO: set to false when pushing me to remote!
+  const showMenuItemUnderDevelopment = false; // TODO: ensure set to false when pushing to remote!
 
   const list = (anchor: string): React.ReactElement => (
     <div
