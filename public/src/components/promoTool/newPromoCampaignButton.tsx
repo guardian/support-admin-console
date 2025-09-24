@@ -4,7 +4,6 @@ import { makeStyles } from '@mui/styles';
 import AddIcon from '@mui/icons-material/Add';
 // import { PromoCampaign } from './utils/promoModels';
 import useOpenable from '../../hooks/useOpenable';
-// import CreateCampaignDialog from '../channelManagement/campaigns/CreateCampaignDialog';
 import CreatePromoCampaignDialog from './createPromoCampaignDialog';
 
 const useStyles = makeStyles(() => ({
@@ -34,18 +33,16 @@ const NewPromoCampaignButton: React.FC = () => {
   const [isOpen, open, close] = useOpenable();
   const classes = useStyles();
 
-  console.log(isOpen, close); // TODO: to stop annoying stuff.
-
   return (
     <>
       <Button className={classes.button} variant="outlined" startIcon={<AddIcon />} onClick={open}>
         <Typography className={classes.text}>Create new promo campaign</Typography>
       </Button>
       <CreatePromoCampaignDialog
-      // isOpen={isOpen}
-      // close={close}
-      // existingNames={existingNames}
-      // createPromoCampaign={createPromoCampaign}
+        isOpen={isOpen}
+        close={close}
+        existingNames={[]} // TODO
+        createPromoCampaign={() => {}} // TODO
       />
     </>
   );
