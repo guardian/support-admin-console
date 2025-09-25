@@ -47,22 +47,24 @@ interface StyleJson {
   themes: ThemeJson[] | string; // string for @ref
 }
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
+const useStyles = makeStyles(({ breakpoints, spacing }: Theme) => ({
   container: {
     display: 'flex',
+    alignItems: 'flex-start',
     gap: spacing(3),
     width: '100%',
+    flexDirection: 'column',
     flexWrap: 'wrap',
-    maxWidth: 900,
+
+    [breakpoints.up('md')]: {
+      flexDirection: 'row',
+    },
   },
   selectors: {
     display: 'flex',
     flexDirection: 'column',
     gap: spacing(2),
     minWidth: 320,
-  },
-  preview: {
-    flex: 1,
   },
 }));
 
@@ -186,9 +188,7 @@ const PaletteSelector: React.FC<Props> = ({ onChange, initialStyleId, initialThe
           </Select>
         </FormControl>
       </div>
-      <div className={classes.preview}>
-        {selectedColours && <PalettePreview colours={selectedColours} />}
-      </div>
+      {selectedColours && <PalettePreview colours={selectedColours} />}
     </div>
   );
 };

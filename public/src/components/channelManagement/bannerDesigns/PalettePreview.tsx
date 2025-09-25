@@ -28,30 +28,46 @@ export interface PreviewColours {
   };
 }
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
+const useStyles = makeStyles(({ breakpoints, spacing }: Theme) => ({
   container: {
     display: 'flex',
     justifyContent: 'center',
+    width: '100%',
+    maxWidth: 320,
+    [breakpoints.up('md')]: {
+      flexDirection: 'row',
+      maxWidth: 'unset',
+    },
   },
   card: {
     borderRadius: 12,
     padding: spacing(2),
-    minWidth: 700,
+    width: '100%',
   },
   contentRow: {
     display: 'flex',
     gap: spacing(2),
     alignItems: 'flex-start',
+    flexDirection: 'column',
+    width: '100%',
+    maxWidth: 320,
+    [breakpoints.up('md')]: {
+      flexDirection: 'row',
+      maxWidth: 'max-content',
+    },
   },
   leftCol: {
-    flex: 1,
-    minWidth: 360,
+    width: 286,
   },
   rightCol: {
-    width: 270,
+    flex: 1,
+    minWidth: 286,
     display: 'flex',
     flexDirection: 'column',
     gap: spacing(1.5),
+    [breakpoints.up('md')]: {
+      minWidth: 370,
+    },
   },
   heading: {
     fontFamily: 'GH Guardian Headline',
@@ -99,6 +115,11 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   buttons: {
     display: 'flex',
     gap: spacing(1.5),
+    flexDirection: 'column',
+
+    [breakpoints.up('md')]: {
+      flexDirection: 'row',
+    },
   },
   button: {
     borderRadius: 1000,
@@ -108,7 +129,10 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
     fontWeight: 700,
     padding: '6px 18px',
     textAlign: 'center',
-    width: '50%',
+    width: '100%',
+    [breakpoints.up('md')]: {
+      width: '50%',
+    },
   },
   choiceCard: {
     borderRadius: 12,
@@ -225,32 +249,6 @@ const PalettePreview: React.FC<Props> = ({ colours }) => {
             >
               Highlighted text.
             </div>
-            <div className={classes.buttons}>
-              <div
-                className={classes.button}
-                style={{
-                  color: colours.primaryCta.text,
-                  background: colours.primaryCta.background,
-                  border: colours.primaryCta.border
-                    ? `2px solid ${colours.primaryCta.border}`
-                    : 'none',
-                }}
-              >
-                Primary action
-              </div>
-              <div
-                className={classes.button}
-                style={{
-                  color: colours.secondaryCta.text,
-                  background: colours.secondaryCta.background,
-                  border: colours.secondaryCta.border
-                    ? `2px solid ${colours.secondaryCta.border}`
-                    : 'none',
-                }}
-              >
-                Secondary action
-              </div>
-            </div>
           </div>
           {colours.choiceCards && (
             <div className={classes.rightCol}>
@@ -341,6 +339,33 @@ const PalettePreview: React.FC<Props> = ({ colours }) => {
                     style={{ border: `1px solid ${colours.choiceCards.buttonBorderColour}` }}
                   />
                   Support with £X/month
+                </div>
+              </div>
+
+              <div className={classes.buttons}>
+                <div
+                  className={classes.button}
+                  style={{
+                    color: colours.primaryCta.text,
+                    background: colours.primaryCta.background,
+                    border: colours.primaryCta.border
+                      ? `2px solid ${colours.primaryCta.border}`
+                      : 'none',
+                  }}
+                >
+                  Primary action
+                </div>
+                <div
+                  className={classes.button}
+                  style={{
+                    color: colours.secondaryCta.text,
+                    background: colours.secondaryCta.background,
+                    border: colours.secondaryCta.border
+                      ? `2px solid ${colours.secondaryCta.border}`
+                      : 'none',
+                  }}
+                >
+                  Secondary action
                 </div>
               </div>
             </div>
