@@ -282,7 +282,7 @@ const PalettePreview: React.FC<Props> = ({ colours }) => {
                     >
                       <span
                         className={classes.radioDot}
-                        style={{ background: colours.choiceCards.buttonSelectTextColour }}
+                        style={{ background: colours.choiceCards.buttonSelectBorderColour }}
                       />
                     </span>
                   </span>

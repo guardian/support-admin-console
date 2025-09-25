@@ -104,6 +104,39 @@
           }
         },
         {
+          "id": "hope-default-image",
+          "label": "Hope, Default (Image)",
+          "colours": {
+            "background": "#0077B6",
+            "heading": "#FFFFFF",
+            "bodyText": "#FFFFFF",
+            "articleCountText": "#FFFFFF",
+            "highlightText": "#000000",
+            "highlightBackground": "#90DCFF",
+            "primaryCta": { "text": "#000000", "background": "#90DCFF", "border": null },
+            "secondaryCta": { "text": "#FFFFFF", "background": "#0077B6", "border": "#FFFFFF" },
+            "closeButton": { "text": "#000000", "background": "#90DCFF", "border": "#000000" },
+            "ticker": {
+              "text": "#FFFFFF",
+              "filledProgress": "#FFFFFF",
+              "progressBarBackground": "#A0CAE0",
+              "goalMarker": "#121212",
+              "headlineColour": "#FFFFFF",
+              "totalColour": "#90DCFF",
+              "goalColour": "#FFFFFF"
+            },
+            "choiceCards": {
+              "buttonColour": "#FFFFFF",
+              "buttonTextColour": "#000000",
+              "buttonBorderColour": "#707070",
+              "buttonSelectColour": "#2F91C4",
+              "buttonSelectTextColour": "#121212",
+              "buttonSelectBorderColour": "#2F91C4"
+            },
+            "logo": "#FFFFFF"
+          }
+        },
+        {
           "id": "hope-gentle",
           "label": "Hope, Gentle",
           "colours": {
