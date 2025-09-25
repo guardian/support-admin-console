@@ -140,31 +140,31 @@
           "id": "hope-gentle",
           "label": "Hope, Gentle",
           "colours": {
-            "background": "#F7FCFA",
-            "heading": "#1C4532",
-            "bodyText": "#1F2937",
-            "articleCountText": "#1F2937",
-            "highlightText": "#1C4532",
-            "highlightBackground": "#DEF7EC",
-            "primaryCta": { "text": "#1C4532", "background": "#C6F7E2", "border": "#1C4532" },
-            "secondaryCta": { "text": "#1C4532", "background": "#FFFFFF", "border": "#1C4532" },
-            "closeButton": { "text": "#1C4532", "background": "#F7FCFA", "border": "#1C4532" },
+            "background": "#90DCFF",
+            "heading": "#121212",
+            "bodyText": "#121212",
+            "articleCountText": "#121212",
+            "highlightText": "#F6F6F6",
+            "highlightBackground": "#0077B6",
+            "primaryCta": { "text": "#F6F6F6", "background": "#0077B6", "border": null },
+            "secondaryCta": { "text": "#121212", "background": "#90DCFF", "border": "#121212" },
+            "closeButton": { "text": "#F6F6F6", "background": "#0077B6", "border": "#F6F6F6" },
             "ticker": {
-              "text": "#1C4532",
-              "filledProgress": "#1C4532",
-              "progressBarBackground": "#FFFFFF",
-              "goalMarker": "#000000",
-              "headlineColour": "#1C4532",
-              "totalColour": "#1C4532",
-              "goalColour": "#1C4532"
+              "text": "#F6F6F6",
+              "filledProgress": "#A0CAE0",
+              "progressBarBackground": "#F6F6F6",
+              "goalMarker": "#121212",
+              "headlineColour": "#121212",
+              "totalColour": "#121212",
+              "goalColour": "#121212"
             },
             "choiceCards": {
-              "buttonColour": "#FFFFFF",
-              "buttonTextColour": "#767676",
-              "buttonBorderColour": "#999999",
-              "buttonSelectColour": "#E3F6FF",
-              "buttonSelectTextColour": "#062962",
-              "buttonSelectBorderColour": "#017ABC"
+              "buttonColour": "#F6F6F6",
+              "buttonTextColour": "#121212",
+              "buttonBorderColour": "#121212",
+              "buttonSelectColour": "#0077B6",
+              "buttonSelectTextColour": "#121212",
+              "buttonSelectBorderColour": "#0077B6"
             },
             "logo": "#000000"
           }
