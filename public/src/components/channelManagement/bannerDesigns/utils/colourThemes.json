@@ -203,6 +203,39 @@
           }
         },
         {
+          "id": "urgency-image",
+          "label": "Urgency, Image",
+          "colours": {
+            "background": "#AB0613",
+            "heading": "#FFFFFF",
+            "bodyText": "#FFFFFF",
+            "articleCountText": "#FFFFFF",
+            "highlightText": "#FFFFFF",
+            "highlightBackground": "#660505",
+            "primaryCta": { "text": "#FFFFFF", "background": "#660505", "border": null },
+            "secondaryCta": { "text": "#FFFFFF", "background": "#AB0613", "border": "#FFFFFF" },
+            "closeButton": { "text": "#FFFFFF", "background": "#FFFFFF", "border": "#FFFFFF" },
+            "ticker": {
+              "text": "#FFFFFF",
+              "filledProgress": "#FFFFFF",
+              "progressBarBackground": "#B93742",
+              "goalMarker": "#FFFFFF",
+              "headlineColour": "#FFFFFF",
+              "totalColour": "#FFFFFF",
+              "goalColour": "#FFFFFF"
+            },
+            "choiceCards": {
+              "buttonColour": "#FFFFFF",
+              "buttonTextColour": "#000000",
+              "buttonBorderColour": "#707070",
+              "buttonSelectColour": "#8B0000",
+              "buttonSelectTextColour": "#660505",
+              "buttonSelectBorderColour": "#8B0000"
+            },
+            "logo": "#FFFFFF"
+          }
+        },
+        {
           "id": "empowerment",
           "label": "Empowerment",
           "colours": {
