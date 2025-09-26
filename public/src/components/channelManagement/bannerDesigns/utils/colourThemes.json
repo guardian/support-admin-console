@@ -311,7 +311,107 @@
     {
       "id": "guardian-weekly",
       "label": "Guardian Weekly",
-      "themes": "@ref:business-as-usual"
+      "themes": [
+        {
+          "id": "guardian-weekly-dark-image",
+          "label": "Dark, Image",
+          "colours": {
+            "background": "#222527",
+            "heading": "#F6F6F6",
+            "bodyText": "#F6F6F6",
+            "articleCountText": "#F6F6F6",
+            "highlightText": "#000000",
+            "highlightBackground": "#FFD900",
+            "primaryCta": { "text": "#000000", "background": "#FFD900", "border": null },
+            "secondaryCta": { "text": "#F6F6F6", "background": "#222527", "border": "#F6F6F6" },
+            "closeButton": { "text": "#F6F6F6", "background": "#FFFFFF", "border": "#F6F6F6" },
+            "ticker": {
+              "text": "#F6F6F6",
+              "filledProgress": "#F6F6F6",
+              "progressBarBackground": "#4B4F52",
+              "goalMarker": "#F6F6F6",
+              "headlineColour": "#F6F6F6",
+              "totalColour": "#F6F6F6",
+              "goalColour": "#F6F6F6"
+            },
+            "choiceCards": {
+              "buttonColour": "#F6F6F6",
+              "buttonTextColour": "#000000",
+              "buttonBorderColour": "#707070",
+              "buttonSelectColour": "#FFD900",
+              "buttonSelectTextColour": "#4B4F52",
+              "buttonSelectBorderColour": "#FFD900"
+            },
+            "logo": "#000000"
+          }
+        },
+        {
+          "id": "guardian-weekly-light-image",
+          "label": "Light, Image",
+          "colours": {
+            "background": "#F1F8FC",
+            "heading": "#052962",
+            "bodyText": "#121212",
+            "articleCountText": "#121212",
+            "highlightText": "#121212",
+            "highlightBackground": "#FFE500",
+            "primaryCta": { "text": "#121212", "background": "#FFE500", "border": null },
+            "secondaryCta": { "text": "#121212", "background": "#F1F8FC", "border": "#121212" },
+            "closeButton": { "text": "#121212", "background": "#FFFFFF", "border": "#121212" },
+            "ticker": {
+              "text": "#052962",
+              "filledProgress": "#052962",
+              "progressBarBackground": "#D4DFE9",
+              "goalMarker": "#121212",
+              "headlineColour": "#052962",
+              "totalColour": "#052962",
+              "goalColour": "#052962"
+            },
+            "choiceCards": {
+              "buttonColour": "#FFFFFF",
+              "buttonTextColour": "#000000",
+              "buttonBorderColour": "#707070",
+              "buttonSelectColour": "#0077B6",
+              "buttonSelectTextColour": "#052962",
+              "buttonSelectBorderColour": "#052962"
+            },
+            "logo": "#000000"
+          }
+        },
+        {
+          "id": "guardian-weekly-brand-image",
+          "label": "Brand, Image",
+          "colours": {
+            "background": "#F1F8FC",
+            "heading": "#052962",
+            "bodyText": "#121212",
+            "articleCountText": "#121212",
+            "highlightText": "#121212",
+            "highlightBackground": "#FFE500",
+            "primaryCta": { "text": "#121212", "background": "#FFE500", "border": null },
+            "secondaryCta": { "text": "#121212", "background": "#F1F8FC", "border": "#121212" },
+            "closeButton": { "text": "#121212", "background": "#FFFFFF", "border": "#121212" },
+            "ticker": {
+              "text": "#052962",
+              "filledProgress": "#052962",
+              "progressBarBackground": "#D4DFE9",
+              "goalMarker": "#121212",
+              "headlineColour": "#052962",
+              "totalColour": "#052962",
+              "goalColour": "#052962"
+            },
+            "choiceCards": {
+              "buttonColour": "#FFFFFF",
+              "buttonTextColour": "#000000",
+              "buttonBorderColour": "#707070",
+              "buttonSelectColour": "#0077B6",
+              "buttonSelectTextColour": "#052962",
+              "buttonSelectBorderColour": "#052962"
+            },
+            "logo": "#000000"
+          }
+        }
+      ]
     },
     {
       "id": "marketing",
