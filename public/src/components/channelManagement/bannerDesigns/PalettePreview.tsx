@@ -263,8 +263,8 @@ const PalettePreview: React.FC<Props> = ({ colours }) => {
                 <div
                   className={classes.recommendedBadge}
                   style={{
-                    background: colours.choiceCards.buttonSelectColour,
-                    color: colours.choiceCards.buttonColour,
+                    background: colours.highlightBackground,
+                    color: colours.highlightText,
                   }}
                 >
                   Recommended

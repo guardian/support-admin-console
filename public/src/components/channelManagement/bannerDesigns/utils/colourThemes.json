@@ -342,38 +342,38 @@
               "buttonSelectTextColour": "#4B4F52",
               "buttonSelectBorderColour": "#FFD900"
             },
-            "logo": "#000000"
+            "logo": "#F6F6F6"
           }
         },
         {
           "id": "guardian-weekly-light-image",
           "label": "Light, Image",
           "colours": {
-            "background": "#F1F8FC",
+            "background": "#F6F6F6",
             "heading": "#052962",
             "bodyText": "#121212",
             "articleCountText": "#121212",
             "highlightText": "#121212",
             "highlightBackground": "#FFE500",
             "primaryCta": { "text": "#121212", "background": "#FFE500", "border": null },
-            "secondaryCta": { "text": "#121212", "background": "#F1F8FC", "border": "#121212" },
+            "secondaryCta": { "text": "#121212", "background": "#F6F6F6", "border": "#121212" },
             "closeButton": { "text": "#121212", "background": "#FFFFFF", "border": "#121212" },
             "ticker": {
-              "text": "#052962",
-              "filledProgress": "#052962",
-              "progressBarBackground": "#D4DFE9",
+              "text": "#121212",
+              "filledProgress": "#121212",
+              "progressBarBackground": "#FFE500",
               "goalMarker": "#121212",
-              "headlineColour": "#052962",
-              "totalColour": "#052962",
-              "goalColour": "#052962"
+              "headlineColour": "#121212",
+              "totalColour": "#121212",
+              "goalColour": "#121212"
             },
             "choiceCards": {
-              "buttonColour": "#FFFFFF",
+              "buttonColour": "#F6F6F6",
               "buttonTextColour": "#000000",
               "buttonBorderColour": "#707070",
-              "buttonSelectColour": "#0077B6",
-              "buttonSelectTextColour": "#052962",
-              "buttonSelectBorderColour": "#052962"
+              "buttonSelectColour": "#FFE500",
+              "buttonSelectTextColour": "#4B4F52",
+              "buttonSelectBorderColour": "#121212"
             },
             "logo": "#000000"
           }
