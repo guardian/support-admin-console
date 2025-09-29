@@ -69,11 +69,7 @@ function PromoCampaignsSidebar({
       </Select>
       <h2 className={classes.headline2}>Promo Campaigns</h2>
       <div className={classes.buttonsContainer}>
-        <NewPromoCampaignButton
-        // existingNames={promoCampaigns.map(c => c.name)}
-        // existingNicknames={promoCampaigns.map(c => c.name || '')}
-        // createCampaign={createPromoCampaign}
-        />
+        <NewPromoCampaignButton />
         <TextField
           className={classes.searchField}
           label="Filter Promo Campaigns"

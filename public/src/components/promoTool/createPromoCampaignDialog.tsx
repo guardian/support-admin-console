@@ -12,13 +12,6 @@ import {
 import { makeStyles } from '@mui/styles';
 import React from 'react';
 import CloseIcon from '@mui/icons-material/Close';
-import { useForm } from 'react-hook-form';
-import {
-  createDuplicateValidator,
-  EMPTY_ERROR_HELPER_TEXT,
-  INVALID_CHARACTERS_ERROR_HELPER_TEXT,
-  VALID_CHARACTERS_REGEX,
-} from '../channelManagement/helpers/validation';
 import { Products } from './utils/promoModels';
 
 const useStyles = makeStyles(() => ({
@@ -37,9 +30,6 @@ const useStyles = makeStyles(() => ({
 
 interface FormData {
   name: string;
-  // campaignCode: String, // id? UUID? - allow them to create?  needs to be unique
-  // product: PromoProduct, // drop down of the PromoProducts.
-  // created: String // stringified today's date?
 }
 
 interface CreatePromoCampaignDialogProps {
@@ -51,36 +41,8 @@ interface CreatePromoCampaignDialogProps {
 const CreatePromoCampaignDialog: React.FC<CreatePromoCampaignDialogProps> = ({
   isOpen,
   close,
-  existingNames,
-  createPromoCampaign,
 }: CreatePromoCampaignDialogProps) => {
   const classes = useStyles();
-
-  const defaultValues: FormData = {
-    // TODO: make sure these reflect our campaign fields.
-    name: '',
-    // campaignCode: String,
-    // product: PromoProduct,
-    // created: String // stringified today's date?
-    // description: '',
-  };
-
-  const {
-    register,
-    handleSubmit,
-
-    formState: { errors },
-  } = useForm<FormData>({
-    defaultValues,
-  });
-
-  const onSubmit = (vals: FormData): void => {
-    createPromoCampaign({
-      name: vals.name.toUpperCase(),
-      // description: vals.description,
-    });
-    close();
-  };
 
   return (
     <Dialog open={isOpen} onClose={close} aria-labelledby="create-test-dialog-title">
@@ -101,7 +63,6 @@ const CreatePromoCampaignDialog: React.FC<CreatePromoCampaignDialogProps> = ({
           margin="dense"
           variant="outlined"
           fullWidth
-          // onChange={handleChange}
         >
           {Products.map(c => (
             <MenuItem value={c.code} key={`product-${c.code}`}>
@@ -111,16 +72,6 @@ const CreatePromoCampaignDialog: React.FC<CreatePromoCampaignDialogProps> = ({
         </Select>
         <TextField
           className={classes.input}
-          error={errors.name !== undefined}
-          helperText={errors.name ? errors.name.message : ''}
-          {...register('name', {
-            required: EMPTY_ERROR_HELPER_TEXT,
-            pattern: {
-              value: VALID_CHARACTERS_REGEX,
-              message: INVALID_CHARACTERS_ERROR_HELPER_TEXT,
-            },
-            validate: createDuplicateValidator(existingNames),
-          })}
           label="Promo Campaign name"
           margin="normal"
           variant="outlined"
@@ -129,9 +80,7 @@ const CreatePromoCampaignDialog: React.FC<CreatePromoCampaignDialogProps> = ({
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleSubmit(onSubmit)} color="primary">
-          Create Promo Campaign
-        </Button>
+        <Button color="primary">Create Promo Campaign</Button>
       </DialogActions>
     </Dialog>
   );
