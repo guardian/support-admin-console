@@ -25,6 +25,9 @@ export interface PreviewColours {
     buttonSelectColour: string;
     buttonSelectTextColour: string;
     buttonSelectBorderColour: string;
+    buttonSelectMarkerColour: string;
+    pillBackgroundColour: string;
+    pillTextColour: string;
   };
 }
 
@@ -173,8 +176,8 @@ const useStyles = makeStyles(({ breakpoints, spacing }: Theme) => ({
     borderRadius: '50%',
   },
   radioRing: {
-    width: 14,
-    height: 14,
+    width: 15,
+    height: 15,
     borderRadius: '50%',
     display: 'inline-flex',
     alignItems: 'center',
@@ -255,7 +258,7 @@ const PalettePreview: React.FC<Props> = ({ colours }) => {
               <div
                 className={classes.choiceCard}
                 style={{
-                  background: colours.choiceCards.buttonColour,
+                  background: colours.choiceCards.buttonSelectColour,
                   border: `2px solid ${colours.choiceCards.buttonSelectBorderColour}`,
                   color: colours.choiceCards.buttonSelectTextColour,
                 }}
@@ -263,8 +266,8 @@ const PalettePreview: React.FC<Props> = ({ colours }) => {
                 <div
                   className={classes.recommendedBadge}
                   style={{
-                    background: colours.highlightBackground,
-                    color: colours.highlightText,
+                    background: colours.choiceCards.pillBackgroundColour,
+                    color: colours.choiceCards.pillTextColour,
                   }}
                 >
                   Recommended
@@ -290,7 +293,7 @@ const PalettePreview: React.FC<Props> = ({ colours }) => {
                 </div>
                 <ul
                   className={classes.choiceList}
-                  style={{ color: colours.choiceCards.buttonTextColour }}
+                  style={{ color: colours.choiceCards.buttonSelectTextColour }}
                 >
                   <li className={classes.choiceItem}>
                     <svg
@@ -302,7 +305,7 @@ const PalettePreview: React.FC<Props> = ({ colours }) => {
                     >
                       <path
                         d="M2.771 0.4245C3.96324 0.424652 4.93018 1.3914 4.93018 2.58368C4.93001 3.77582 3.96313 4.74173 2.771 4.74188C1.57873 4.74188 0.611979 3.77591 0.611816 2.58368C0.611816 1.39131 1.57863 0.4245 2.771 0.4245ZM2.38818 3.04657L1.89795 2.5788L1.7251 2.75067L2.31006 3.57001H2.40771L4.01709 1.90399L3.84033 1.73114L2.38818 3.04657Z"
-                        fill={colours.choiceCards.buttonSelectColour}
+                        fill={colours.choiceCards.buttonSelectMarkerColour}
                       />
                     </svg>
                     Item 1
@@ -317,7 +320,7 @@ const PalettePreview: React.FC<Props> = ({ colours }) => {
                     >
                       <path
                         d="M2.771 0.4245C3.96324 0.424652 4.93018 1.3914 4.93018 2.58368C4.93001 3.77582 3.96313 4.74173 2.771 4.74188C1.57873 4.74188 0.611979 3.77591 0.611816 2.58368C0.611816 1.39131 1.57863 0.4245 2.771 0.4245ZM2.38818 3.04657L1.89795 2.5788L1.7251 2.75067L2.31006 3.57001H2.40771L4.01709 1.90399L3.84033 1.73114L2.38818 3.04657Z"
-                        fill={colours.choiceCards.buttonSelectColour}
+                        fill={colours.choiceCards.buttonSelectMarkerColour}
                       />
                     </svg>
                     Item 2
