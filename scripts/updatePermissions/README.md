@@ -7,6 +7,7 @@ We do not yet have a tool for maintaining these permissions, so for now we can u
 ### Usage:
 From this directory, run:
 ```
+AWS_PROFILE=membership \
 Stage=DEV \
 PermissionLevel=Write \
 PermissionName=support-landing-page-tests \
