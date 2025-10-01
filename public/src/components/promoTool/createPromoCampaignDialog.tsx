@@ -5,14 +5,13 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
-  MenuItem,
-  Select,
   TextField,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React from 'react';
 import CloseIcon from '@mui/icons-material/Close';
-import { Products } from './utils/promoModels';
+import { promoProductNames } from './utils/promoModels';
+import { ProductSelector } from './productSelector';
 
 const useStyles = makeStyles(() => ({
   dialogHeader: {
@@ -55,21 +54,7 @@ const CreatePromoCampaignDialog: React.FC<CreatePromoCampaignDialogProps> = ({
         </IconButton>
       </div>
       <DialogContent dividers>
-        <Select
-          labelId="promo-campaign-product-label"
-          id="promo-campaign-product"
-          label="Product"
-          value="SupporterPlus"
-          margin="dense"
-          variant="outlined"
-          fullWidth
-        >
-          {Products.map(c => (
-            <MenuItem value={c.code} key={`product-${c.code}`}>
-              {c.name}
-            </MenuItem>
-          ))}
-        </Select>
+        <ProductSelector promoProductNames={promoProductNames} />
         <TextField
           className={classes.input}
           label="Promo Campaign name"

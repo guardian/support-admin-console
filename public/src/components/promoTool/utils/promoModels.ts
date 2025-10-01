@@ -1,37 +1,19 @@
 import { Country } from '../../../utils/models';
 
-export interface Product {
-  code: string;
-  name: string;
-}
+export type PromoProduct = 'SupporterPlus' | 'TierThree' | 'DigitalPack' | 'Newspaper' | 'Weekly';
 
 // applying user recognisable names to PromoProduct codes
-export const Products: Product[] = [
-  {
-    code: 'SupporterPlus',
-    name: 'Supporter Plus',
-  },
-  {
-    code: 'TierThree',
-    name: 'Tier Three',
-  },
-  {
-    code: 'DigitalPack',
-    name: 'Digital Pack',
-  },
-  {
-    code: 'Newspaper',
-    name: 'Newspaper',
-  },
-  {
-    code: 'Weekly',
-    name: 'Guardian Weekly',
-  },
-];
+export const promoProductNames: Record<PromoProduct, string> = {
+  SupporterPlus: 'Supporter Plus',
+  TierThree: 'Tier Three',
+  DigitalPack: 'Digital Pack',
+  Newspaper: 'Newspaper',
+  Weekly: 'Guardian Weekly',
+};
 
 export interface PromoCampaign {
   campaignCode: string;
-  product: Product;
+  product: PromoProduct;
   name: string;
   created: string;
 }
@@ -56,13 +38,13 @@ export type PromoCampaigns = PromoCampaign[];
 /* TODO: replace these dummy variables when we have data/endpoints to call */
 export const dummySelectedCampaign: PromoCampaign = {
   campaignCode: 'C1234567',
-  product: { code: 'ThreeTier', name: 'Three Tier' },
+  product: 'TierThree',
   name: 'US Thanksgiving 2025 30% off',
   created: '2025-09-20',
 };
 export const dummySelectedCampaign2: PromoCampaign = {
   campaignCode: 'C345678',
-  product: { code: 'ThreeTier', name: 'Three Tier' },
+  product: 'TierThree',
   name: 'US New Year 2025 50% off',
   created: '2025-08-20',
 };
