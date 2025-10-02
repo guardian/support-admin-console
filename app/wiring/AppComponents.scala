@@ -104,7 +104,7 @@ class AppComponents(context: Context, stage: String)
   val bigQueryClientConfig = configuration.get[String]("gcp-wif-credentials-config")
   val bigQueryService: BigQueryService = BigQueryService(stage, bigQueryClientConfig)
 
-  val productCatalogCache = new ProductCatalogCache(runtime, wsClient)
+  val productCatalogCache = new ProductCatalogCache(stage, runtime, wsClient)
 
   override lazy val router: Router = new Routes(
     httpErrorHandler,

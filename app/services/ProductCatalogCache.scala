@@ -10,11 +10,14 @@ import java.util.concurrent.atomic.AtomicReference
 import scala.concurrent.ExecutionContext
 
 class ProductCatalogCache(
+  stage: String,
   runtime: zio.Runtime[Any],
   wsClient: WSClient
 )(implicit val ec: ExecutionContext) extends StrictLogging {
-
-  private val url = "https://product-catalog.guardianapis.com/product-catalog.json"
+  private val url = {
+    if (stage == "PROD") "https://product-catalog.guardianapis.com/product-catalog.json"
+    else "https://product-catalog.code.dev-guardianapis.com/product-catalog.json"
+  }
   private val catalogCache = new AtomicReference[Option[ProductCatalog]](None)
 
   private def fetchCatalog(): ZIO[Any, Throwable, ProductCatalog] =
