@@ -277,6 +277,40 @@
           }
         },
         {
+          "id": "hope-bold",
+          "label": "Hope, Bold",
+          "colours": {
+            "background": "#0077B6",
+            "heading": "#FFFFFF",
+            "bodyText": "#FFFFFF",
+            "articleCountText": "#FFFFFF",
+            "highlightText": "#121212",
+            "highlightBackground": "#D8F1FF",
+            "primaryCta": { "text": "#000000", "background": "#90DCFF", "border": null },
+            "secondaryCta": { "text": "#FFFFFF", "background": "#0077B6", "border": "#FFFFFF" },
+            "closeButton": { "text": "#F6F6F6", "background": "#0171AD", "border": "#0171AD" },
+            "ticker": {
+              "filledProgress": "#90DCFF",
+              "progressBarBackground": "#329AD0",
+              "headlineColour": "#FFFFFF",
+              "totalColour": "#FFFFFF",
+              "goalColour": "#FFFFFF"
+            },
+            "choiceCards": {
+              "buttonColour": "#0077B6",
+              "buttonTextColour": "#F6F6F6",
+              "buttonBorderColour": "#DCDCDC",
+              "buttonSelectColour": "#D8F1FF",
+              "buttonSelectTextColour": "#121212",
+              "buttonSelectBorderColour": "#005689",
+              "buttonSelectMarkerColour": "#00B2FF",
+              "pillTextColour": "#000000",
+              "pillBackgroundColour": "#00B2FF"
+            },
+            "logo": "#F6F6F6"
+          }
+        },
+        {
           "id": "urgency",
           "label": "Urgency, Default",
           "colours": {

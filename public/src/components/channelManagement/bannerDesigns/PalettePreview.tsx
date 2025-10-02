@@ -196,7 +196,7 @@ const useStyles = makeStyles(({ breakpoints, spacing }: Theme) => ({
   },
   choiceList: {
     margin: 0,
-    paddingLeft: spacing(0.5),
+    padding: 0,
     fontFamily: 'GuardianTextSans',
     fontSize: 14,
     fontWeight: 400,
