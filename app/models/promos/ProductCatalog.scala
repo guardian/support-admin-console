@@ -99,14 +99,17 @@ object ProductCatalog {
   )
 
   case class TierThreeRatePlans(
-    Annual: RatePlan,
-    Monthly: RatePlan,
-    Quarterly: RatePlan
+    DomesticMonthly: RatePlan,
+    DomesticAnnual: RatePlan,
+    RestOfWorldMonthly: RatePlan,
+    RestOfWorldAnnual: RatePlan
   )
   case class TierThree(
     customerFacingName: String,
     ratePlans: TierThreeRatePlans
   )
+
+  import io.circe.generic.auto._
 
   implicit val encoder: Encoder[ProductCatalog] = deriveEncoder[ProductCatalog]
   implicit val decoder: Decoder[ProductCatalog] = deriveDecoder[ProductCatalog]

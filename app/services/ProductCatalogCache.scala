@@ -40,6 +40,10 @@ class ProductCatalogCache(
     runtime.unsafe.runToFuture {
       fetchCatalog()
         .map(updateCatalog)
+        .catchAll(error => {
+          logger.error(s"Error fetching product catalog: ${error.getMessage}")
+          ZIO.succeed(()) // allow it to repeat
+        })
         .repeat(Schedule.fixed(5.minutes))
     }
   }
