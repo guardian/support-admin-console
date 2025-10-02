@@ -517,9 +517,214 @@
       ]
     },
     {
-      "id": "feast",
-      "label": "Feast",
-      "themes": "@ref:business-as-usual"
+      "id": "feast-marketing",
+      "label": "Feast Marketing",
+      "themes": [
+        {
+          "id": "light-turmeric-default",
+          "label": "Light Turmeric, Default (Image)",
+          "colours": {
+            "background": "#FFF1D7",
+            "heading": "#20201D",
+            "bodyText": "#20201D",
+            "articleCountText": "#20201D",
+            "highlightText": "#FAFAFA",
+            "highlightBackground": "#A36000",
+            "primaryCta": { "text": "#FAFAFA", "background": "#A36000", "border": null },
+            "secondaryCta": { "text": "#20201D", "background": "#FFF1D7", "border": "#20201D" },
+            "closeButton": { "text": "#FAFAFA", "background": "#A36000", "border": "#A36000" },
+            "ticker": {
+              "filledProgress": "#A36000",
+              "progressBarBackground": "#FAFAFA",
+              "headlineColour": "#20201D",
+              "totalColour": "#20201D",
+              "goalColour": "#20201D"
+            },
+            "choiceCards": {
+              "buttonColour": "#FFF1D7",
+              "buttonTextColour": "#20201D",
+              "buttonBorderColour": "#20201D",
+              "buttonSelectColour": "#FAFAFA",
+              "buttonSelectTextColour": "#20201D",
+              "buttonSelectBorderColour": "#A36000",
+              "buttonSelectMarkerColour": "#A36000",
+              "pillTextColour": "#FAFAFA",
+              "pillBackgroundColour": "#A36000"
+            },
+            "logo": "#20201D"
+          }
+        },
+        {
+          "id": "support-default",
+          "label": "Support, Default",
+          "colours": {
+            "background": "#F1F8FC",
+            "heading": "#052962",
+            "bodyText": "#121212",
+            "articleCountText": "#121212",
+            "highlightText": "#121212",
+            "highlightBackground": "#FFE500",
+            "primaryCta": { "text": "#121212", "background": "#FFE500", "border": null },
+            "secondaryCta": { "text": "#121212", "background": "#F1F8FC", "border": "#121212" },
+            "closeButton": { "text": "#121212", "background": "#FFFFFF", "border": "#121212" },
+            "ticker": {
+              "filledProgress": "#052962",
+              "progressBarBackground": "#D4DFE9",
+              "headlineColour": "#052962",
+              "totalColour": "#052962",
+              "goalColour": "#052962"
+            },
+            "choiceCards": {
+              "buttonColour": "#F1F8FC",
+              "buttonTextColour": "#000000",
+              "buttonBorderColour": "#707070",
+              "buttonSelectColour": "#FFFFFF",
+              "buttonSelectTextColour": "#052962",
+              "buttonSelectBorderColour": "#052962",
+              "buttonSelectMarkerColour": "#0077B6",
+              "pillTextColour": "#F6F6F6",
+              "pillBackgroundColour": "#0077B6"
+            },
+            "logo": "#000000"
+          }
+        },
+        {
+          "id": "support-default",
+          "label": "Support, Default",
+          "colours": {
+            "background": "#F1F8FC",
+            "heading": "#052962",
+            "bodyText": "#121212",
+            "articleCountText": "#121212",
+            "highlightText": "#121212",
+            "highlightBackground": "#FFE500",
+            "primaryCta": { "text": "#121212", "background": "#FFE500", "border": null },
+            "secondaryCta": { "text": "#121212", "background": "#F1F8FC", "border": "#121212" },
+            "closeButton": { "text": "#121212", "background": "#FFFFFF", "border": "#121212" },
+            "ticker": {
+              "filledProgress": "#052962",
+              "progressBarBackground": "#D4DFE9",
+              "headlineColour": "#052962",
+              "totalColour": "#052962",
+              "goalColour": "#052962"
+            },
+            "choiceCards": {
+              "buttonColour": "#F1F8FC",
+              "buttonTextColour": "#000000",
+              "buttonBorderColour": "#707070",
+              "buttonSelectColour": "#FFFFFF",
+              "buttonSelectTextColour": "#052962",
+              "buttonSelectBorderColour": "#052962",
+              "buttonSelectMarkerColour": "#0077B6",
+              "pillTextColour": "#F6F6F6",
+              "pillBackgroundColour": "#0077B6"
+            },
+            "logo": "#000000"
+          }
+        },
+        {
+          "id": "support-default",
+          "label": "Support, Default",
+          "colours": {
+            "background": "#F1F8FC",
+            "heading": "#052962",
+            "bodyText": "#121212",
+            "articleCountText": "#121212",
+            "highlightText": "#121212",
+            "highlightBackground": "#FFE500",
+            "primaryCta": { "text": "#121212", "background": "#FFE500", "border": null },
+            "secondaryCta": { "text": "#121212", "background": "#F1F8FC", "border": "#121212" },
+            "closeButton": { "text": "#121212", "background": "#FFFFFF", "border": "#121212" },
+            "ticker": {
+              "filledProgress": "#052962",
+              "progressBarBackground": "#D4DFE9",
+              "headlineColour": "#052962",
+              "totalColour": "#052962",
+              "goalColour": "#052962"
+            },
+            "choiceCards": {
+              "buttonColour": "#F1F8FC",
+              "buttonTextColour": "#000000",
+              "buttonBorderColour": "#707070",
+              "buttonSelectColour": "#FFFFFF",
+              "buttonSelectTextColour": "#052962",
+              "buttonSelectBorderColour": "#052962",
+              "buttonSelectMarkerColour": "#0077B6",
+              "pillTextColour": "#F6F6F6",
+              "pillBackgroundColour": "#0077B6"
+            },
+            "logo": "#000000"
+          }
+        },
+        {
+          "id": "support-default",
+          "label": "Support, Default",
+          "colours": {
+            "background": "#F1F8FC",
+            "heading": "#052962",
+            "bodyText": "#121212",
+            "articleCountText": "#121212",
+            "highlightText": "#121212",
+            "highlightBackground": "#FFE500",
+            "primaryCta": { "text": "#121212", "background": "#FFE500", "border": null },
+            "secondaryCta": { "text": "#121212", "background": "#F1F8FC", "border": "#121212" },
+            "closeButton": { "text": "#121212", "background": "#FFFFFF", "border": "#121212" },
+            "ticker": {
+              "filledProgress": "#052962",
+              "progressBarBackground": "#D4DFE9",
+              "headlineColour": "#052962",
+              "totalColour": "#052962",
+              "goalColour": "#052962"
+            },
+            "choiceCards": {
+              "buttonColour": "#F1F8FC",
+              "buttonTextColour": "#000000",
+              "buttonBorderColour": "#707070",
+              "buttonSelectColour": "#FFFFFF",
+              "buttonSelectTextColour": "#052962",
+              "buttonSelectBorderColour": "#052962",
+              "buttonSelectMarkerColour": "#0077B6",
+              "pillTextColour": "#F6F6F6",
+              "pillBackgroundColour": "#0077B6"
+            },
+            "logo": "#000000"
+          }
+        },
+        {
+          "id": "support-default",
+          "label": "Support, Default",
+          "colours": {
+            "background": "#F1F8FC",
+            "heading": "#052962",
+            "bodyText": "#121212",
+            "articleCountText": "#121212",
+            "highlightText": "#121212",
+            "highlightBackground": "#FFE500",
+            "primaryCta": { "text": "#121212", "background": "#FFE500", "border": null },
+            "secondaryCta": { "text": "#121212", "background": "#F1F8FC", "border": "#121212" },
+            "closeButton": { "text": "#121212", "background": "#FFFFFF", "border": "#121212" },
+            "ticker": {
+              "filledProgress": "#052962",
+              "progressBarBackground": "#D4DFE9",
+              "headlineColour": "#052962",
+              "totalColour": "#052962",
+              "goalColour": "#052962"
+            },
+            "choiceCards": {
+              "buttonColour": "#F1F8FC",
+              "buttonTextColour": "#000000",
+              "buttonBorderColour": "#707070",
+              "buttonSelectColour": "#FFFFFF",
+              "buttonSelectTextColour": "#052962",
+              "buttonSelectBorderColour": "#052962",
+              "buttonSelectMarkerColour": "#0077B6",
+              "pillTextColour": "#F6F6F6",
+              "pillBackgroundColour": "#0077B6"
+            },
+            "logo": "#000000"
+          }
+        }
+      ]
     },
     {
       "id": "guardian-weekly",
