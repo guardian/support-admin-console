@@ -5,6 +5,43 @@ import io.circe.{Decoder, Encoder}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import ProductCatalog._
 
+/**
+ * Example JSON from the product catalog, excluding fields that we do not care about here:
+ *
+ * {
+ *  "SupporterPlus": {
+ *     "customerFacingName": "All-access digital",
+ *     "ratePlans": {
+ *       "Monthly": {
+ *         "id": "8ad08cbd8586721c01858804e3275376",
+ *         "pricing": {
+ *           "USD": 15,
+ *           "NZD": 20,
+ *           "EUR": 12,
+ *           "GBP": 12,
+ *           "CAD": 15,
+ *           "AUD": 20
+ *         },
+ *         "billingPeriod": "Month"
+ *       },
+ *       "Annual": {
+ *         "id": "8ad08e1a8586721801858805663f6fab",
+ *         "pricing": {
+ *           "USD": 150,
+ *           "NZD": 200,
+ *           "EUR": 120,
+ *           "GBP": 120,
+ *           "CAD": 150,
+ *           "AUD": 200
+ *         },
+ *         "billingPeriod": "Annual"
+ *       }
+ *     }
+ *   },
+ *   ...
+ * }
+ */
+
 case class ProductCatalog(
   GuardianWeeklyDomestic: ProductDetails[GuardianWeeklyRatePlans],
   GuardianWeeklyRestOfWorld: ProductDetails[GuardianWeeklyRatePlans],
