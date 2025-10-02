@@ -77,8 +77,6 @@ export const PromoCampaignsListItem = ({
     textClasses.push(classes.textInverted);
   }
 
-  console.log(`The promoCode Name is: ${promoCampaign.name} and it is ${isSelected}`);
-
   return (
     <ListItem
       button={true}
