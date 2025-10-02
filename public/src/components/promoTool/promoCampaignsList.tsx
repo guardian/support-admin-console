@@ -107,7 +107,7 @@ const PromoCampaignsList = ({
     if (promoCampaign.campaignCode === selectedPromoCampaign?.campaignCode) {
       classGroup.push('classes.selected');
     } else {
-      classGroup.push('classes.unselelected');
+      classGroup.push('classes.unselected');
     }
     return classGroup.join(' ');
   };
