@@ -169,10 +169,8 @@ const BannerDesignForm: React.FC<Props> = ({
         },
         ticker: sp.colours.ticker
           ? {
-              text: toHex(sp.colours.ticker.text), // deprecated
               filledProgress: toHex(sp.colours.ticker.filledProgress),
               progressBarBackground: toHex(sp.colours.ticker.progressBarBackground),
-              goalMarker: toHex(sp.colours.ticker.goalMarker), // deprecated
               headlineColour: toHex(sp.colours.ticker.headlineColour),
               totalColour: toHex(sp.colours.ticker.totalColour),
               goalColour: toHex(sp.colours.ticker.goalColour),
@@ -191,6 +189,8 @@ const BannerDesignForm: React.FC<Props> = ({
         buttonSelectColour: toHex(sp.colours.choiceCards.buttonSelectColour),
         buttonSelectTextColour: toHex(sp.colours.choiceCards.buttonSelectTextColour),
         buttonSelectBorderColour: toHex(sp.colours.choiceCards.buttonSelectBorderColour),
+        pillTextColour: toHex(sp.colours.choiceCards.pillTextColour),
+        pillBackgroundColour: toHex(sp.colours.choiceCards.pillBackgroundColour),
       } as typeof updated.visual;
     }
 
@@ -220,12 +220,19 @@ const BannerDesignForm: React.FC<Props> = ({
           Main Image or Choice Cards
         </AccordionSummary>
         <AccordionDetails>
-          <BannerVisualEditor
-            visual={design.visual}
-            isDisabled={isDisabled}
-            onValidationChange={onValidationChange}
-            onChange={onVisualChange}
-          />
+          <>
+            <BannerVisualEditor
+              visual={design.visual}
+              isDisabled={isDisabled}
+              onValidationChange={onValidationChange}
+              onChange={onVisualChange}
+            />
+            <PaletteSelector
+              onChange={applySelectedPalette}
+              initialStyleId={detectStyleAndThemeForDesign(design)?.styleId || 'business-as-usual'}
+              initialThemeId={detectStyleAndThemeForDesign(design)?.themeId || 'support-default'}
+            />
+          </>
         </AccordionDetails>
       </Accordion>
 
@@ -252,19 +259,6 @@ const BannerDesignForm: React.FC<Props> = ({
             headerSize={design.fonts?.heading?.size}
             isDisabled={isDisabled}
             onChange={onHeadlineSizeChange}
-          />
-        </AccordionDetails>
-      </Accordion>
-
-      <Accordion className={classes.accordion}>
-        <AccordionSummary className={classes.sectionHeader} expandIcon={<ExpandMoreIcon />}>
-          Banner Design
-        </AccordionSummary>
-        <AccordionDetails>
-          <PaletteSelector
-            onChange={applySelectedPalette}
-            initialStyleId={detectStyleAndThemeForDesign(design)?.styleId || 'business-as-usual'}
-            initialThemeId={detectStyleAndThemeForDesign(design)?.themeId || 'support-default'}
           />
         </AccordionDetails>
       </Accordion>
