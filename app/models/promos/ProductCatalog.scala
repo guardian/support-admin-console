@@ -6,13 +6,13 @@ import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import ProductCatalog._
 
 case class ProductCatalog(
-  GuardianWeeklyDomestic: GuardianWeeklyDomestic,
-  GuardianWeeklyRestOfWorld: GuardianWeeklyRestOfWorld,
-  HomeDelivery: HomeDelivery,
-  SubscriptionCard: SubscriptionCard,
-  NationalDelivery: NationalDelivery,
-  SupporterPlus: SupporterPlus,
-  TierThree: TierThree
+  GuardianWeeklyDomestic: ProductDetails[GuardianWeeklyRatePlans],
+  GuardianWeeklyRestOfWorld: ProductDetails[GuardianWeeklyRatePlans],
+  HomeDelivery: ProductDetails[HomeDeliveryAndSubscriptionCardRatePlans],
+  SubscriptionCard: ProductDetails[HomeDeliveryAndSubscriptionCardRatePlans],
+  NationalDelivery: ProductDetails[NationalDeliveryRatePlans],
+  SupporterPlus: ProductDetails[SupporterPlusRatePlans],
+  TierThree: ProductDetails[TierThreeRatePlans]
 )
 
 object ProductCatalog {
@@ -44,21 +44,13 @@ object ProductCatalog {
     implicit val decoder: Decoder[BillingPeriod] = deriveEnumerationDecoder[BillingPeriod]
   }
 
+  sealed trait ProductRatePlans
+
   case class GuardianWeeklyRatePlans(
     Annual: RatePlan,
     Monthly: RatePlan,
     Quarterly: RatePlan
-  )
-
-  case class GuardianWeeklyDomestic(
-    customerFacingName: String,
-    ratePlans: GuardianWeeklyRatePlans
-  )
-
-  case class GuardianWeeklyRestOfWorld(
-    customerFacingName: String,
-    ratePlans: GuardianWeeklyRatePlans
-  )
+  ) extends ProductRatePlans
 
   case class HomeDeliveryAndSubscriptionCardRatePlans(
     EverydayPlus: RatePlan,
@@ -67,48 +59,43 @@ object ProductCatalog {
     SixdayPlus: RatePlan,
     // The only non-"Plus" rate plan is Sunday (Observer)
     Sunday: RatePlan
-  )
-
-  case class HomeDelivery(
-    customerFacingName: String,
-    ratePlans: HomeDeliveryAndSubscriptionCardRatePlans
-  )
-
-  case class SubscriptionCard(
-    customerFacingName: String,
-    ratePlans: HomeDeliveryAndSubscriptionCardRatePlans
-  )
+  ) extends ProductRatePlans
 
   case class NationalDeliveryRatePlans(
     EverydayPlus: RatePlan,
     SixdayPlus: RatePlan,
     WeekendPlus: RatePlan
-  )
-
-  case class NationalDelivery(
-    customerFacingName: String,
-    ratePlans: NationalDeliveryRatePlans
-  )
+  ) extends ProductRatePlans
 
   case class SupporterPlusRatePlans(
     Annual: RatePlan,
     Monthly: RatePlan,
-  )
-  case class SupporterPlus(
-    customerFacingName: String,
-    ratePlans: SupporterPlusRatePlans
-  )
+  ) extends ProductRatePlans
 
   case class TierThreeRatePlans(
     DomesticMonthly: RatePlan,
     DomesticAnnual: RatePlan,
     RestOfWorldMonthly: RatePlan,
     RestOfWorldAnnual: RatePlan
-  )
-  case class TierThree(
-    customerFacingName: String,
-    ratePlans: TierThreeRatePlans
-  )
+  ) extends ProductRatePlans
+
+  trait ProductDetails[R <: ProductRatePlans] {
+    def customerFacingName: String
+    def ratePlans: R
+  }
+
+  object ProductDetails {
+    implicit def productDetailsEncoder[R <: ProductRatePlans : Encoder]: Encoder[ProductDetails[R]] =
+      Encoder.forProduct2("customerFacingName", "ratePlans")(pd => (pd.customerFacingName, pd.ratePlans))
+
+    implicit def productDetailsDecoder[R <: ProductRatePlans : Decoder]: Decoder[ProductDetails[R]] =
+      Decoder.forProduct2[ProductDetails[R], String, R]("customerFacingName", "ratePlans")((name, rps) =>
+        new ProductDetails[R] {
+          val customerFacingName: String = name
+          val ratePlans: R = rps
+        }
+      )
+  }
 
   import io.circe.generic.auto._
 
