@@ -45,10 +45,10 @@ interface PromoCampaignsSidebarProps {
 
 function PromoCampaignsSidebar({
   promoCampaigns,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  createPromoCampaign,
   selectedPromoCampaign,
   onPromoCampaignSelected,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  createPromoCampaign,
 }: PromoCampaignsSidebarProps): React.ReactElement {
   const classes = useStyles();
   const [promoCampaignSearch, setPromoCampaignSearch] = useState('');
