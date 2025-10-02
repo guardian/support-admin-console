@@ -1,13 +1,9 @@
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PromoCampaignsSidebar from './promoCampaignsSidebar';
-import {
-  dummyCampaigns,
-  dummyCreatePromoCampaignFunction,
-  dummySelectedCampaign,
-  dummySelectedPromoCampaignFunction,
-} from './utils/promoModels';
+import { dummyCampaigns, PromoCampaign } from './utils/promoModels';
+import { useParams } from 'react-router-dom';
 
 const useStyles = makeStyles(({ spacing, typography }: Theme) => ({
   viewTextContainer: {
@@ -50,15 +46,42 @@ const useStyles = makeStyles(({ spacing, typography }: Theme) => ({
 const PromoTool: React.FC = () => {
   const classes = useStyles();
 
+  const [promoCampaigns, setPromoCampaigns] = useState<PromoCampaign[]>([]);
+  const { promoCampaignCode } = useParams<{ promoCampaignCode?: string }>(); // querystring parameter
+  const [selectedPromoCampaignCode, setSelectedPromoCampaignCode] = useState<string | undefined>();
+
+  // TODO: replace
+  const dummyFetch = () => setPromoCampaigns(dummyCampaigns);
+  const onDummyCreate = (newPromoCampaign: PromoCampaign): void => {
+    // TODO: validate etc
+    setPromoCampaigns([newPromoCampaign, ...promoCampaigns]);
+  };
+
+  // set selected promoCampaign
+  useEffect(() => {
+    if (promoCampaignCode != null) {
+      setSelectedPromoCampaignCode(promoCampaignCode);
+    }
+  }, [promoCampaignCode, promoCampaigns]);
+
+  // fetch promoCampaignsList
+  useEffect(() => {
+    dummyFetch();
+  }, []);
+
+  const selectedPromoCampaign = promoCampaigns.find(
+    a => a.campaignCode === selectedPromoCampaignCode,
+  );
+
   return (
     <div className={classes.body}>
-      {/* TODO: there should probably be a form rather than a div */}
+      {/* TODO: form rather than a div? */}
       <div className={classes.leftCol}>
         <PromoCampaignsSidebar
-          promoCampaigns={dummyCampaigns}
-          selectedPromoCampaign={dummySelectedCampaign}
-          createPromoCampaign={dummyCreatePromoCampaignFunction}
-          onPromoCampaignSelected={dummySelectedPromoCampaignFunction}
+          promoCampaigns={promoCampaigns}
+          selectedPromoCampaign={selectedPromoCampaign}
+          createPromoCampaign={onDummyCreate}
+          onPromoCampaignSelected={code => setSelectedPromoCampaignCode(code)}
         />
       </div>
       <div className={classes.rightCol}>
