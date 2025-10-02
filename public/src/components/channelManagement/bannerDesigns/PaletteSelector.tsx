@@ -16,10 +16,8 @@ interface ThemeColoursJson {
   secondaryCta: { text: string; background: string; border?: string | null };
   closeButton?: { text: string; background: string; border?: string | null };
   ticker?: {
-    text: string;
     filledProgress: string;
     progressBarBackground: string;
-    goalMarker: string;
     headlineColour: string;
     totalColour: string;
     goalColour: string;
@@ -31,6 +29,9 @@ interface ThemeColoursJson {
     buttonSelectColour: string;
     buttonSelectTextColour: string;
     buttonSelectBorderColour: string;
+    buttonSelectMarkerColour: string;
+    pillTextColour: string;
+    pillBackgroundColour: string;
   };
   logo?: string;
 }

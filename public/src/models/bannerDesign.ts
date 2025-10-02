@@ -59,6 +59,8 @@ export interface ChoiceCardsDesign {
   buttonSelectColour?: HexColour;
   buttonSelectTextColour?: HexColour;
   buttonSelectBorderColour?: HexColour;
+  pillTextColour?: HexColour;
+  pillBackgroundColour?: HexColour;
 }
 export type BannerDesignVisual = BannerDesignImage | ChoiceCardsDesign;
 
