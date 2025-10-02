@@ -4,6 +4,7 @@ import PalettePreview, { PreviewColours } from './PalettePreview';
 import themes from './utils/colourThemes.json';
 import { Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
+import { HELP_GUIDE_URL } from '../../../main';
 
 interface ThemeColoursJson {
   background: string;
@@ -52,6 +53,7 @@ const useStyles = makeStyles(({ breakpoints, spacing }: Theme) => ({
   container: {
     display: 'flex',
     alignItems: 'flex-start',
+    justifyContent: 'space-between',
     gap: spacing(3),
     width: '100%',
     flexDirection: 'column',
@@ -201,7 +203,21 @@ const PaletteSelector: React.FC<Props> = ({
           </Select>
         </FormControl>
       </div>
-      {selectedColours && <PalettePreview colours={selectedColours} visualKind={visualKind} />}
+      {selectedColours && (
+        <>
+          <PalettePreview colours={selectedColours} visualKind={visualKind} />
+          <div>
+            <p>
+              The colours used in the Main Image and Choice Card banners are sometimes different,
+              even when they belong to the same colour theme. Refer to the{' '}
+              <a href={HELP_GUIDE_URL} target="_blank" rel="noopener noreferrer">
+                user guide
+              </a>{' '}
+              for a complete list of colours within each theme.
+            </p>
+          </div>
+        </>
+      )}
     </div>
   );
 };
