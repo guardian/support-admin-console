@@ -3,6 +3,7 @@ package services.promo
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import com.typesafe.scalalogging.StrictLogging
 import io.circe.{Decoder, Encoder}
+import io.circe.syntax._
 import models.promos.PromoCampaign
 import models.DynamoErrors.DynamoGetError
 import zio.ZIO
@@ -15,6 +16,9 @@ import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 import services.DynamoService
 import scala.jdk.CollectionConverters._
 import models.promos.PromoProduct
+import utils.Circe.jsonToDynamo
+import software.amazon.awssdk.services.dynamodb.model.PutItemRequest
+import models.DynamoErrors.DynamoError
 
 class DynamoPromoCampaigns(stage: String, client: DynamoDbClient)
     extends DynamoService(stage, client)
@@ -68,4 +72,16 @@ class DynamoPromoCampaigns(stage: String, client: DynamoDbClient)
         }
         .toList
     }.mapError(DynamoGetError)
+
+  def createPromoCampaign(promoCampaign: PromoCampaign): ZIO[Any, DynamoError, Unit] = {
+    val item = jsonToDynamo(promoCampaign.asJson).m()
+    val request = PutItemRequest.builder
+      .tableName(tableName)
+      .item(item)
+      // Do not overwrite if already in dynamo
+      .conditionExpression("attribute_not_exists(#campaignCode)")
+      .expressionAttributeNames(Map("#campaignCode" -> "campaignCode").asJava)
+      .build()
+    put(request)
+  }
 }
