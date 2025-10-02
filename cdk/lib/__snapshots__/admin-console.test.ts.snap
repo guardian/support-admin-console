@@ -2002,8 +2002,26 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
             "AttributeName": "campaignCode",
             "AttributeType": "S",
           },
+          {
+            "AttributeName": "product",
+            "AttributeType": "S",
+          },
         ],
         "BillingMode": "PAY_PER_REQUEST",
+        "GlobalSecondaryIndexes": [
+          {
+            "IndexName": "product-index",
+            "KeySchema": [
+              {
+                "AttributeName": "product",
+                "KeyType": "HASH",
+              },
+            ],
+            "Projection": {
+              "ProjectionType": "ALL",
+            },
+          },
+        ],
         "KeySchema": [
           {
             "AttributeName": "campaignCode",
