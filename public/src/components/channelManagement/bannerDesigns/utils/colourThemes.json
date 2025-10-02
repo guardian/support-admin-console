@@ -345,8 +345,8 @@
           }
         },
         {
-          "id": "urgency-image",
-          "label": "Urgency, Image",
+          "id": "urgency-default-image",
+          "label": "Urgency, Default (Image)",
           "colours": {
             "background": "#AB0613",
             "heading": "#FFFFFF",
@@ -386,8 +386,8 @@
             "heading": "#FFFFFF",
             "bodyText": "#FFFFFF",
             "articleCountText": "#FFFFFF",
-            "highlightText": "#FFFFFF",
-            "highlightBackground": "#660505",
+            "highlightText": "#121212",
+            "highlightBackground": "#FFD8D1",
             "primaryCta": { "text": "#000000", "background": "#FFE500", "border": null },
             "secondaryCta": { "text": "#FFFFFF", "background": "#AB0613", "border": "#FFFFFF" },
             "closeButton": { "text": "#FFFFFF", "background": "#FFFFFF", "border": "#FFFFFF" },
@@ -424,7 +424,7 @@
             "highlightBackground": "#FFE500",
             "primaryCta": { "text": "#121212", "background": "#FFE500", "border": null },
             "secondaryCta": { "text": "#121212", "background": "#F6F6F6", "border": "#121212" },
-            "closeButton": { "text": "#121212", "background": "#FFFFFF", "border": "#121212" },
+            "closeButton": { "text": "#000000", "background": "#EAEAEA", "border": "#EAEAEA" },
             "ticker": {
               "filledProgress": "#BB3B80",
               "progressBarBackground": "#E1B5CD",
@@ -433,7 +433,7 @@
               "goalColour": "#121212"
             },
             "choiceCards": {
-              "buttonColour": "#FFFFFF",
+              "buttonColour": "#F6F6F6",
               "buttonTextColour": "#000000",
               "buttonBorderColour": "#707070",
               "buttonSelectColour": "#FDFDFD",
@@ -447,18 +447,18 @@
           }
         },
         {
-          "id": "empowerment-bold",
-          "label": "Empowerment, Bold",
+          "id": "empowerment-default-image",
+          "label": "Empowerment, Default (Image)",
           "colours": {
             "background": "#BB3B80",
             "heading": "#FFFFFF",
             "bodyText": "#FFFFFF",
             "articleCountText": "#FFFFFF",
-            "highlightText": "#121212",
-            "highlightBackground": "#FEF1F8",
-            "primaryCta": { "text": "#000000", "background": "#FFE500", "border": null },
+            "highlightText": "#FFFFFF",
+            "highlightBackground": "#7D0068",
+            "primaryCta": { "text": "#FFFFFF", "background": "#7D0068", "border": null },
             "secondaryCta": { "text": "#FFFFFF", "background": "#BB3B80", "border": "#FFFFFF" },
-            "closeButton": { "text": "#FFFFFF", "background": "#7D0068", "border": "#FFFFFF" },
+            "closeButton": { "text": "#FFFFFF", "background": "#BE4586", "border": "#BE4586" },
             "ticker": {
               "filledProgress": "#510043",
               "progressBarBackground": "#E1B5CD",
@@ -481,8 +481,8 @@
           }
         },
         {
-          "id": "empowerment-bold-image",
-          "label": "Empowerment, Bold (Image)",
+          "id": "empowerment-bold",
+          "label": "Empowerment, Bold",
           "colours": {
             "background": "#BB3B80",
             "heading": "#FFFFFF",
@@ -490,12 +490,12 @@
             "articleCountText": "#FFFFFF",
             "highlightText": "#121212",
             "highlightBackground": "#FEF1F8",
-            "primaryCta": { "text": "#FFFFFF", "background": "#7D0068", "border": null },
+            "primaryCta": { "text": "#000000", "background": "#FFE500", "border": null },
             "secondaryCta": { "text": "#FFFFFF", "background": "#BB3B80", "border": "#FFFFFF" },
-            "closeButton": { "text": "#FFFFFF", "background": "#7D0068", "border": "#FFFFFF" },
+            "closeButton": { "text": "#FFFFFF", "background": "#BE4586", "border": "#BE4586" },
             "ticker": {
               "filledProgress": "#510043",
-              "progressBarBackground": "#E1B5CD",
+              "progressBarBackground": "#AB2C7A",
               "headlineColour": "#FFFFFF",
               "totalColour": "#FFFFFF",
               "goalColour": "#FFFFFF"
