@@ -56,6 +56,7 @@ const useStyles = makeStyles(({ breakpoints, spacing }: Theme) => ({
     width: '100%',
     flexDirection: 'column',
     flexWrap: 'wrap',
+    marginTop: spacing(2),
 
     [breakpoints.up('md')]: {
       flexDirection: 'row',
@@ -81,6 +82,7 @@ type Props = {
   onChange: (selected: SelectedPalette) => void;
   initialStyleId?: string;
   initialThemeId?: string;
+  visualKind?: 'Image' | 'ChoiceCards' | 'None';
 };
 
 const resolveRefThemes = (styles: StyleJson[]): StyleJson[] => {
@@ -95,7 +97,12 @@ const resolveRefThemes = (styles: StyleJson[]): StyleJson[] => {
   });
 };
 
-const PaletteSelector: React.FC<Props> = ({ onChange, initialStyleId, initialThemeId }) => {
+const PaletteSelector: React.FC<Props> = ({
+  onChange,
+  initialStyleId,
+  initialThemeId,
+  visualKind,
+}) => {
   const classes = useStyles();
   const styles: StyleJson[] = useMemo(
     () => resolveRefThemes((themes as { styles: StyleJson[] }).styles),
@@ -160,6 +167,11 @@ const PaletteSelector: React.FC<Props> = ({ onChange, initialStyleId, initialThe
     emit(styleId, newThemeId);
   };
 
+  // If no visual selected, don't render the preview at all
+  if (visualKind === 'None') {
+    return null;
+  }
+
   return (
     <div className={classes.container}>
       <div className={classes.selectors}>
@@ -189,7 +201,7 @@ const PaletteSelector: React.FC<Props> = ({ onChange, initialStyleId, initialThe
           </Select>
         </FormControl>
       </div>
-      {selectedColours && <PalettePreview colours={selectedColours} />}
+      {selectedColours && <PalettePreview colours={selectedColours} visualKind={visualKind} />}
     </div>
   );
 };

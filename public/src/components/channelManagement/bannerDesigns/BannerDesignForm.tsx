@@ -231,6 +231,7 @@ const BannerDesignForm: React.FC<Props> = ({
               onChange={applySelectedPalette}
               initialStyleId={detectStyleAndThemeForDesign(design)?.styleId || 'business-as-usual'}
               initialThemeId={detectStyleAndThemeForDesign(design)?.themeId || 'support-default'}
+              visualKind={design.visual?.kind ?? 'None'}
             />
           </>
         </AccordionDetails>

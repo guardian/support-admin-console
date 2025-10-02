@@ -53,14 +53,6 @@ export const BannerVisualEditor: React.FC<Props> = ({
             onChange={onChange}
           />
         )}
-        {visual?.kind === 'ChoiceCards' && (
-          <div>
-            <p>
-              Colours for choice cards are now controlled by the selected Colour theme in the Banner
-              Design section.
-            </p>
-          </div>
-        )}
       </div>
     </div>
   );
