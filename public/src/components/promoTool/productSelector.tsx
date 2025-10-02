@@ -7,11 +7,6 @@ interface ProductSelectorProps {
   promoProductNames: Record<PromoProduct, string>;
 }
 
-interface MapableData {
-  name: string;
-  description: string;
-}
-
 const useStyles = makeStyles(() => ({
   select: {
     marginBottom: '8px',
@@ -22,25 +17,13 @@ const useStyles = makeStyles(() => ({
 export function ProductSelector({ promoProductNames }: ProductSelectorProps): React.ReactElement {
   const classes = useStyles();
 
-  const createMapableDataStructure = () => {
-    {
-      const useableDataStructure: MapableData[] = new Array<MapableData>();
-      Object.entries(promoProductNames).forEach(([promoProductkey, promoProductvalue]) => {
-        useableDataStructure.push({ name: promoProductkey, description: promoProductvalue });
-      });
-      return useableDataStructure;
-    }
-  };
-
-  const mapableDataStructure = createMapableDataStructure();
-
   return (
     <>
       <InputLabel>Select a Product</InputLabel>
       <Select className={classes.select} value="" aria-label="Select Product">
-        {mapableDataStructure.map(product => (
-          <MenuItem value={product.name} key={product.name}>
-            {product.description}
+        {Object.entries(promoProductNames).map(([code, description]) => (
+          <MenuItem value={code} key={code}>
+            {description}
           </MenuItem>
         ))}
       </Select>
