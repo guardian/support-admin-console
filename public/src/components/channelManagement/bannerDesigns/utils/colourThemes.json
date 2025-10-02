@@ -555,37 +555,37 @@
           }
         },
         {
-          "id": "support-default",
-          "label": "Support, Default",
+          "id": "light-turmeric-basil",
+          "label": "Light Turmeric, Basil (Image)",
           "colours": {
-            "background": "#F1F8FC",
-            "heading": "#052962",
-            "bodyText": "#121212",
-            "articleCountText": "#121212",
-            "highlightText": "#121212",
-            "highlightBackground": "#FFE500",
-            "primaryCta": { "text": "#121212", "background": "#FFE500", "border": null },
-            "secondaryCta": { "text": "#121212", "background": "#F1F8FC", "border": "#121212" },
-            "closeButton": { "text": "#121212", "background": "#FFFFFF", "border": "#121212" },
+            "background": "#FFF1D7",
+            "heading": "#20201D",
+            "bodyText": "#20201D",
+            "articleCountText": "#20201D",
+            "highlightText": "#20201D",
+            "highlightBackground": "#879F84",
+            "primaryCta": { "text": "#20201D", "background": "#879F84", "border": null },
+            "secondaryCta": { "text": "#20201D", "background": "#FFF1D7", "border": "#20201D" },
+            "closeButton": { "text": "#20201D", "background": "#879F84", "border": "#879F84" },
             "ticker": {
-              "filledProgress": "#052962",
-              "progressBarBackground": "#D4DFE9",
-              "headlineColour": "#052962",
-              "totalColour": "#052962",
-              "goalColour": "#052962"
+              "filledProgress": "#879F84",
+              "progressBarBackground": "#FAFAFA",
+              "headlineColour": "#20201D",
+              "totalColour": "#20201D",
+              "goalColour": "#20201D"
             },
             "choiceCards": {
-              "buttonColour": "#F1F8FC",
-              "buttonTextColour": "#000000",
-              "buttonBorderColour": "#707070",
-              "buttonSelectColour": "#FFFFFF",
-              "buttonSelectTextColour": "#052962",
-              "buttonSelectBorderColour": "#052962",
-              "buttonSelectMarkerColour": "#0077B6",
-              "pillTextColour": "#F6F6F6",
-              "pillBackgroundColour": "#0077B6"
+              "buttonColour": "#FFF1D7",
+              "buttonTextColour": "#20201D",
+              "buttonBorderColour": "#20201D",
+              "buttonSelectColour": "#FAFAFA",
+              "buttonSelectTextColour": "#20201D",
+              "buttonSelectBorderColour": "#879F84",
+              "buttonSelectMarkerColour": "#879F84",
+              "pillTextColour": "#FAFAFA",
+              "pillBackgroundColour": "#879F84"
             },
-            "logo": "#000000"
+            "logo": "#20201D"
           }
         },
         {
