@@ -37,9 +37,6 @@ const useStyles = makeStyles(() => ({
     background: `${grey[700]}`,
     border: `1px solid ${grey[700]}`,
   },
-  whitePencil: {
-    color: 'white',
-  },
   labelAndNameContainer: {
     display: 'flex',
     alignItems: 'center',
