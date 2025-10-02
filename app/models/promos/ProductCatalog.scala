@@ -31,6 +31,7 @@ object ProductCatalog {
     id: String,
     pricing: Pricing
   )
+
   sealed trait BillingPeriod
   object BillingPeriod {
     case object Month extends BillingPeriod
