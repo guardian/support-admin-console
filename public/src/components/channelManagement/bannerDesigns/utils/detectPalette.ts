@@ -12,10 +12,8 @@ type ThemeColours = {
   secondaryCta: { text: string; background: string; border?: string | null };
   closeButton?: { text: string; background: string; border?: string | null };
   ticker?: {
-    text: string;
     filledProgress: string;
     progressBarBackground: string;
-    goalMarker: string;
     headlineColour: string;
     totalColour: string;
     goalColour: string;

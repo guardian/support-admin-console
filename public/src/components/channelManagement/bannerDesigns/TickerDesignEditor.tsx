@@ -31,15 +31,6 @@ export const TickerDesignEditor: React.FC<Props> = ({
 
   return (
     <div className={classes.container}>
-      {/* Deprecated */}
-      <ColourInput
-        colour={ticker.text}
-        name="ticker.text"
-        label="Text Colour"
-        isDisabled={isDisabled}
-        onChange={colour => onChange({ ...ticker, text: colour })}
-        onValidationChange={onValidationChange}
-      />
       <ColourInput
         colour={ticker.filledProgress}
         name="ticker.filledProgress"
@@ -54,15 +45,6 @@ export const TickerDesignEditor: React.FC<Props> = ({
         label="Progress Bar Background Colour"
         isDisabled={isDisabled}
         onChange={colour => onChange({ ...ticker, progressBarBackground: colour })}
-        onValidationChange={onValidationChange}
-      />
-      {/* Deprecated */}
-      <ColourInput
-        colour={ticker.goalMarker}
-        name="ticker.goalMarker"
-        label="Goal Marker Colour"
-        isDisabled={isDisabled}
-        onChange={colour => onChange({ ...ticker, goalMarker: colour })}
         onValidationChange={onValidationChange}
       />
       <ColourInput

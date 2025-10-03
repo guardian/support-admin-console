@@ -16,10 +16,8 @@
 | `colours.closeButton.text`                     | `colours.closeButton.default.text`                    | `closeButtonSettings.default.textColour`        |
 | `colours.closeButton.background`               | `colours.closeButton.default.background`              | `closeButtonSettings.default.backgroundColour`  |
 | `colours.closeButton.border`                   | `colours.closeButton.default.border`                  | `closeButtonSettings.default.border`            |
-| `colours.ticker.text`                          | `colours.ticker.text`                                 | — _(no direct field)_                           |
 | `colours.ticker.filledProgress`                | `colours.ticker.filledProgress`                       | `tickerStylingSettings.filledProgressColour`    |
 | `colours.ticker.progressBarBackground`         | `colours.ticker.progressBarBackground`                | `tickerStylingSettings.progressBarBackground`   |
-| `colours.ticker.goalMarker`                    | `colours.ticker.goalMarker`                           | — _(no direct field)_                           |
 | `colours.ticker.headlineColour`                | `colours.ticker.headlineColour`                       | `tickerStylingSettings.headlineColour`          |
 | `colours.ticker.totalColour`                   | `colours.ticker.totalColour`                          | `tickerStylingSettings.totalColour`             |
 | `colours.ticker.goalColour`                    | `colours.ticker.goalColour`                           | `tickerStylingSettings.goalColour`              |
