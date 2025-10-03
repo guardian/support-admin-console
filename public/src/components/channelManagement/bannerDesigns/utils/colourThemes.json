@@ -973,6 +973,74 @@
             },
             "logo": "#121212"
           }
+        },
+        {
+          "id": "marketing-lifestyle",
+          "label": "Marketing, Lifestyle",
+          "colours": {
+            "background": "#7D0068",
+            "heading": "#FF9941",
+            "bodyText": "#FFFFFF",
+            "articleCountText": "#FFFFFF",
+            "highlightText": "#121212",
+            "highlightBackground": "#FF9941",
+            "primaryCta": { "text": "#000000", "background": "#FF9941", "border": null },
+            "secondaryCta": { "text": "#F6F6F6", "background": "#7D0068", "border": "#F6F6F6" },
+            "closeButton": { "text": "#F6F6F6", "background": "#830E70", "border": "#830E70" },
+            "ticker": {
+              "filledProgress": "#FF9941",
+              "progressBarBackground": "#AA365A",
+              "headlineColour": "#F6F6F6",
+              "totalColour": "#F6F6F6",
+              "goalColour": "#F6F6F6"
+            },
+            "choiceCards": {
+              "buttonColour": "#7D0068",
+              "buttonTextColour": "#F6F6F6",
+              "buttonBorderColour": "#DCDCDC",
+              "buttonSelectColour": "#FEF1F8",
+              "buttonSelectTextColour": "#121212",
+              "buttonSelectBorderColour": "#510043",
+              "buttonSelectMarkerColour": "#FFABDB",
+              "pillTextColour": "#000000",
+              "pillBackgroundColour": "#FFABDB"
+            },
+            "logo": "#F6F6F6"
+          }
+        },
+        {
+          "id": "marketing-lifestyle-image",
+          "label": "Marketing, Lifestyle (Image)",
+          "colours": {
+            "background": "#7D0068",
+            "heading": "#FF9941",
+            "bodyText": "#FFFFFF",
+            "articleCountText": "#FFFFFF",
+            "highlightText": "#121212",
+            "highlightBackground": "#FF9941",
+            "primaryCta": { "text": "#000000", "background": "#FF9941", "border": null },
+            "secondaryCta": { "text": "#F6F6F6", "background": "#7D0068", "border": "#F6F6F6" },
+            "closeButton": { "text": "#F6F6F6", "background": "#830E70", "border": "#830E70" },
+            "ticker": {
+              "filledProgress": "#FF9941",
+              "progressBarBackground": "#AA365A",
+              "headlineColour": "#F6F6F6",
+              "totalColour": "#F6F6F6",
+              "goalColour": "#F6F6F6"
+            },
+            "choiceCards": {
+              "buttonColour": "#7D0068",
+              "buttonTextColour": "#F6F6F6",
+              "buttonBorderColour": "#DCDCDC",
+              "buttonSelectColour": "#FEF1F8",
+              "buttonSelectTextColour": "#121212",
+              "buttonSelectBorderColour": "#510043",
+              "buttonSelectMarkerColour": "#FFABDB",
+              "pillTextColour": "#000000",
+              "pillBackgroundColour": "#FFABDB"
+            },
+            "logo": "#F6F6F6"
+          }
         }
       ]
     }
