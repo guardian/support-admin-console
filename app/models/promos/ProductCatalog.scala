@@ -49,7 +49,8 @@ case class ProductCatalog(
   SubscriptionCard: ProductDetails[HomeDeliveryAndSubscriptionCardRatePlans],
   NationalDelivery: ProductDetails[NationalDeliveryRatePlans],
   SupporterPlus: ProductDetails[SupporterPlusRatePlans],
-  TierThree: ProductDetails[TierThreeRatePlans]
+  TierThree: ProductDetails[TierThreeRatePlans],
+  DigitalSubscription: ProductDetails[DigitalSubscriptionRatePlans]
 )
 
 object ProductCatalog {
@@ -114,6 +115,12 @@ object ProductCatalog {
     DomesticAnnual: RatePlan,
     RestOfWorldMonthly: RatePlan,
     RestOfWorldAnnual: RatePlan
+  ) extends ProductRatePlans
+
+  case class DigitalSubscriptionRatePlans(
+    Monthly: RatePlan,
+    Annual: RatePlan,
+    Quarterly: RatePlan
   ) extends ProductRatePlans
 
   trait ProductDetails[R <: ProductRatePlans] {
