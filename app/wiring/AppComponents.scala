@@ -12,9 +12,10 @@ import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.mvc.AnyContent
 import play.api.{BuiltInComponentsFromContext, NoHttpFiltersComponents}
 import router.Routes
-import services.{Aws, BigQueryService, CapiService, DynamoArchivedBannerDesigns, DynamoArchivedChannelTests, DynamoBanditData, DynamoBannerDesigns, DynamoCampaigns, DynamoChannelTests, DynamoChannelTestsAudit, DynamoPermissionsCache, DynamoSuperMode, S3}
+import services.{Aws, BigQueryService, CapiService, DynamoArchivedBannerDesigns, DynamoArchivedChannelTests, DynamoBanditData, DynamoBannerDesigns, DynamoCampaigns, DynamoChannelTests, DynamoChannelTestsAudit, DynamoPermissionsCache, DynamoSuperMode, ProductCatalogCache, S3}
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.s3.model.GetObjectRequest
+
 import java.time.Duration
 
 class AppComponents(context: Context, stage: String)
@@ -102,6 +103,8 @@ class AppComponents(context: Context, stage: String)
 
   val bigQueryClientConfig = configuration.get[String]("gcp-wif-credentials-config")
   val bigQueryService: BigQueryService = BigQueryService(stage, bigQueryClientConfig)
+
+  val productCatalogCache = new ProductCatalogCache(stage, runtime, wsClient)
 
   override lazy val router: Router = new Routes(
     httpErrorHandler,
