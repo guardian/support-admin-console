@@ -905,6 +905,74 @@
             },
             "logo": "#650054"
           }
+        },
+        {
+          "id": "marketing-opinion",
+          "label": "Marketing, Opinion",
+          "colours": {
+            "background": "#FF9941",
+            "heading": "#09615B",
+            "bodyText": "#121212",
+            "articleCountText": "#121212",
+            "highlightText": "#121212",
+            "highlightBackground": "#FFE7D4",
+            "primaryCta": { "text": "#121212", "background": "#FFE7D4", "border": null },
+            "secondaryCta": { "text": "#121212", "background": "#FF9941", "border": "#121212" },
+            "closeButton": { "text": "#121212", "background": "#F2913E", "border": "#F2913E" },
+            "ticker": {
+              "filledProgress": "#FFE7D4",
+              "progressBarBackground": "#FFB474",
+              "headlineColour": "#121212",
+              "totalColour": "#121212",
+              "goalColour": "#121212"
+            },
+            "choiceCards": {
+              "buttonColour": "#FF9941",
+              "buttonTextColour": "#121212",
+              "buttonBorderColour": "#DCDCDC",
+              "buttonSelectColour": "#FFE7D4",
+              "buttonSelectTextColour": "#121212",
+              "buttonSelectBorderColour": "#09615B",
+              "buttonSelectMarkerColour": "#E05E00",
+              "pillTextColour": "#FFFFFF",
+              "pillBackgroundColour": "#E05E00"
+            },
+            "logo": "#121212"
+          }
+        },
+        {
+          "id": "marketing-opinion-image",
+          "label": "Marketing, Opinion (Image)",
+          "colours": {
+            "background": "#FF9941",
+            "heading": "#09615B",
+            "bodyText": "#121212",
+            "articleCountText": "#121212",
+            "highlightText": "#121212",
+            "highlightBackground": "#FFE7D4",
+            "primaryCta": { "text": "#121212", "background": "#FFE7D4", "border": null },
+            "secondaryCta": { "text": "#121212", "background": "#FF9941", "border": "#121212" },
+            "closeButton": { "text": "#121212", "background": "#F2913E", "border": "#F2913E" },
+            "ticker": {
+              "filledProgress": "#FFE7D4",
+              "progressBarBackground": "#FFB474",
+              "headlineColour": "#121212",
+              "totalColour": "#121212",
+              "goalColour": "#121212"
+            },
+            "choiceCards": {
+              "buttonColour": "#FF9941",
+              "buttonTextColour": "#121212",
+              "buttonBorderColour": "#DCDCDC",
+              "buttonSelectColour": "#FFE7D4",
+              "buttonSelectTextColour": "#121212",
+              "buttonSelectBorderColour": "#09615B",
+              "buttonSelectMarkerColour": "#E05E00",
+              "pillTextColour": "#FFFFFF",
+              "pillBackgroundColour": "#E05E00"
+            },
+            "logo": "#121212"
+          }
         }
       ]
     }
