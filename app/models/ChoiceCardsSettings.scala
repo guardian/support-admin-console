@@ -49,6 +49,16 @@ object ChoiceCardsSettings {
     implicit val productEncoder: Encoder[Product] = deriveConfiguredEncoder[Product]
   }
 
+  sealed trait Destination
+  object Destination {
+    case object LandingPage extends Destination
+    case object Checkout extends Destination
+
+    implicit val customConfig: Configuration = Configuration.default.withDefaults
+    implicit val encoder: Encoder[Destination] = deriveEnumerationEncoder[Destination]
+    implicit val decoder: Decoder[Destination] = deriveEnumerationDecoder[Destination]
+  }
+
   case class Pill(copy: String)
 
   case class ChoiceCard(
@@ -58,7 +68,7 @@ object ChoiceCardsSettings {
       benefits: List[ProductBenefit],
       pill: Option[Pill],
       isDefault: Boolean,
-      destinationUrl: Option[String]
+      destination: Option[Destination]
   )
 
   implicit val customConfig: Configuration = Configuration.default.withDefaults

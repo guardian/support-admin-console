@@ -22,7 +22,8 @@ import { makeStyles } from '@mui/styles';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import { RichTextEditorSingleLine, RteMenuConstraints } from '../richTextEditor/richTextEditor';
-import { EMPTY_ERROR_HELPER_TEXT, optionalUrlValidator } from '../helpers/validation';
+import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
+import TypedRadioGroup from '../TypedRadioGroup';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -33,7 +34,7 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
       marginLeft: spacing(2),
     },
   },
-  benefitsHeading: {
+  subHeading: {
     fontWeight: 700,
   },
   benefitContainer: {
@@ -45,6 +46,9 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   },
   deleteButton: {
     margin: `${spacing(2)} 0 ${spacing(1)} ${spacing(1)}`,
+  },
+  addButton: {
+    marginBottom: spacing(2),
   },
 }));
 
@@ -256,7 +260,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
         />
 
         <div>
-          <label className={classes.benefitsHeading}>Benefits</label>
+          <label className={classes.subHeading}>Benefits</label>
           {benefits.map((benefit, benefitIndex) => (
             <div className={classes.benefitContainer} key={benefit.id}>
               <Controller
@@ -299,34 +303,31 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
             disabled={isDisabled || benefits.length >= 8}
             variant="outlined"
             size="medium"
+            className={classes.addButton}
           >
             <AddIcon />
           </Button>
         </div>
 
         <Controller
-          name={`choiceCards.${index}.destinationUrl`}
+          name={`choiceCards.${index}.destination`}
           control={control}
-          rules={{
-            validate: (value?: string | null) => optionalUrlValidator(value),
-          }}
-          render={({ field, fieldState }) => (
-            <TextField
-              {...field}
-              required={false}
-              label="Destination URL (optional)"
-              variant="filled"
-              fullWidth
-              margin="normal"
-              disabled={isDisabled}
-              error={!!fieldState.error}
-              helperText={fieldState.error?.message}
-              onChange={e => {
-                const trimmedValue = e.target.value.trim();
-                field.onChange(trimmedValue);
-                handleCardChange();
-              }}
-            />
+          render={({ field }) => (
+            <>
+              <label className={classes.subHeading}>Destination</label>
+              <TypedRadioGroup
+                selectedValue={field.value ?? 'LandingPage'}
+                onChange={destination => {
+                  field.onChange(destination);
+                  handleCardChange();
+                }}
+                isDisabled={isDisabled}
+                labels={{
+                  LandingPage: 'Landing page',
+                  Checkout: 'Checkout',
+                }}
+              />
+            </>
           )}
         />
       </AccordionDetails>
