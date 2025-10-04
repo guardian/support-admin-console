@@ -30,7 +30,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
   "com.gu.play-googleauth" %% "play-v30" % "27.0.0",
   "com.google.cloud" % "google-cloud-bigquery" % "2.54.1",
-  "com.gu" %% "simple-configuration-ssm" % "7.0.1",
+  "com.gu" %% "simple-configuration-ssm" % "7.0.2",
   "software.amazon.awssdk" % "s3" % awsVersion,
   "software.amazon.awssdk" % "dynamodb" % awsVersion,
   "io.circe" %% "circe-core" % circeVersion,
