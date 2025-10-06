@@ -16,6 +16,8 @@ import services.{Aws, BigQueryService, CapiService, DynamoArchivedBannerDesigns,
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.s3.model.GetObjectRequest
 import java.time.Duration
+import controllers.promos.PromoCampaignsController
+import services.promo.DynamoPromoCampaigns
 
 class AppComponents(context: Context, stage: String)
     extends BuiltInComponentsFromContext(context)
@@ -90,6 +92,7 @@ class AppComponents(context: Context, stage: String)
   val dynamoTestsAuditService = new DynamoChannelTestsAudit(stage, dynamoClient)
 
   val dynamoCampaignsService = new DynamoCampaigns(stage, dynamoClient)
+  val dynamoPromoCampaignsService = new DynamoPromoCampaigns(stage, dynamoClient)
 
   val dynamoSuperModeService = new DynamoSuperMode(dynamoClient)
 
@@ -217,6 +220,13 @@ class AppComponents(context: Context, stage: String)
       dynamoArchivedChannelTests,
       dynamoTestsAuditService,
       permissionsService
-    )
+    ),
+    new PromoCampaignsController(
+      authAction,
+      controllerComponents,
+      stage,
+      runtime,
+      dynamoPromoCampaignsService,
+    ),
   )
 }
