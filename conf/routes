@@ -276,5 +276,6 @@ POST  /frontend/support-landing-page-tests/test/takecontrol/:testName controller
 POST  /frontend/support-landing-page-tests/test/status/:rawStatus     controllers.SupportLandingPageController.setStatus(rawStatus: String)
 
 # Promo Campaigns endpoints
-GET /promos/campaigns/:campaignCode         controllers.promos.PromoCampaignsController.get(campaignCode: String)
+GET /promos/campaign/:campaignCode          controllers.promos.PromoCampaignsController.get(campaignCode: String)
 GET /promos/campaigns/:product              controllers.promos.PromoCampaignsController.getAll(product: String)
+POST /promos/campaign                       controllers.promos.PromoCampaignsController.create

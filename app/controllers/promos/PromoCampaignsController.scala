@@ -14,6 +14,7 @@ import utils.Circe.noNulls
 import io.circe.syntax._
 import io.circe.parser._
 import models.promos.PromoProduct
+import models.promos.PromoCampaign
 
 class PromoCampaignsController(
     authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
@@ -55,6 +56,26 @@ class PromoCampaignsController(
               Ok(noNulls(promoCampaigns.asJson))
             }
         )
+    }
+  }
+
+  def create = authAction.async(circe.json[PromoCampaign]) { request =>
+    run {
+      val promoCampaign = request.body
+      logger.info(s"${request.user.email} is creating '${promoCampaign.campaignCode}'")
+      dynamoPromoCampaigns
+        .createPromoCampaign(promoCampaign)
+        .map(_ => Ok("created"))
+        .catchSome { case DynamoDuplicateNameError(error) =>
+          logger.warn(
+            s"Failed to create '${promoCampaign.campaignCode}' because name already exists: ${error.getMessage}"
+          )
+          ZIO.succeed(
+            BadRequest(
+              s"Cannot create promo campaign '${promoCampaign.campaignCode}' because it already exists. Please use a different name"
+            )
+          )
+        }
     }
   }
 }
