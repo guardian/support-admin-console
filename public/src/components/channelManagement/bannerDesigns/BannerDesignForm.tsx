@@ -183,12 +183,15 @@ const BannerDesignForm: React.FC<Props> = ({
     if (updated.visual?.kind === 'ChoiceCards' && sp.colours.choiceCards) {
       updated.visual = {
         ...updated.visual,
+        style: sp.styleId,
+        colourTheme: sp.themeId,
         buttonColour: toHex(sp.colours.choiceCards.buttonColour),
         buttonTextColour: toHex(sp.colours.choiceCards.buttonTextColour),
         buttonBorderColour: toHex(sp.colours.choiceCards.buttonBorderColour),
         buttonSelectColour: toHex(sp.colours.choiceCards.buttonSelectColour),
         buttonSelectTextColour: toHex(sp.colours.choiceCards.buttonSelectTextColour),
         buttonSelectBorderColour: toHex(sp.colours.choiceCards.buttonSelectBorderColour),
+        buttonSelectMarkerColour: toHex(sp.colours.choiceCards.buttonSelectMarkerColour),
         pillTextColour: toHex(sp.colours.choiceCards.pillTextColour),
         pillBackgroundColour: toHex(sp.colours.choiceCards.pillBackgroundColour),
       } as typeof updated.visual;

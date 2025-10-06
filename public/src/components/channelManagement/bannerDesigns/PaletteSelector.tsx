@@ -122,6 +122,25 @@ const PaletteSelector: React.FC<Props> = ({
   const [themeId, setThemeId] = useState<string>(defaultThemeId);
 
   useEffect(() => {
+    const initialS = initialStyleId || defaultStyleId;
+    const initialT = initialThemeId || defaultThemeId;
+    const styleExists = styles.some(s => s.id === initialS);
+    const styleToUse = styleExists ? initialS : defaultStyleId;
+    const styleObj = styles.find(s => s.id === styleToUse);
+    const themeExists = styleObj
+      ? (styleObj.themes as ThemeJson[]).some(t => t.id === initialT)
+      : false;
+    const themeToUse = themeExists
+      ? initialT
+      : (styleObj?.themes as ThemeJson[])[0]?.id || defaultThemeId;
+    setStyleId(styleToUse);
+    setThemeId(themeToUse);
+    if (styleToUse && themeToUse) {
+      emit(styleToUse, themeToUse);
+    }
+  }, [initialStyleId, initialThemeId, styles]);
+
+  useEffect(() => {
     // when style changes, if current theme id doesn't exist in that style, reset to first
     const exists = availableThemes.some(t => t.id === themeId);
     const newThemeId = exists ? themeId : availableThemes[0]?.id;
