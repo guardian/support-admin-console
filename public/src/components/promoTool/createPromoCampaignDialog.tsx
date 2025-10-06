@@ -10,7 +10,6 @@ import {
 import { makeStyles } from '@mui/styles';
 import React from 'react';
 import CloseIcon from '@mui/icons-material/Close';
-import { promoProductNames } from './utils/promoModels';
 import { ProductSelector } from './productSelector';
 
 const useStyles = makeStyles(() => ({
@@ -54,7 +53,7 @@ const CreatePromoCampaignDialog: React.FC<CreatePromoCampaignDialogProps> = ({
         </IconButton>
       </div>
       <DialogContent dividers>
-        <ProductSelector promoProductNames={promoProductNames} />
+        <ProductSelector />
         <TextField
           className={classes.input}
           label="Promo Campaign name"

@@ -3,7 +3,7 @@ import { makeStyles } from '@mui/styles';
 import { TextField } from '@mui/material';
 import PromoCampaignsList from './promoCampaignsList';
 import NewPromoCampaignButton from './newPromoCampaignButton';
-import { promoProductNames, PromoCampaign, PromoCampaigns } from './utils/promoModels';
+import { PromoCampaign, PromoCampaigns } from './utils/promoModels';
 import { ProductSelector } from './productSelector';
 
 const useStyles = makeStyles(() => ({
@@ -62,7 +62,7 @@ function PromoCampaignsSidebar({
   return (
     <div className={classes.root}>
       <h2 className={classes.headline2}>Select Product to filter Promo Campaigns</h2>
-      <ProductSelector promoProductNames={promoProductNames} />
+      <ProductSelector />
       <h2 className={classes.headline2}>Promo Campaigns</h2>
       <div className={classes.buttonsContainer}>
         <NewPromoCampaignButton />

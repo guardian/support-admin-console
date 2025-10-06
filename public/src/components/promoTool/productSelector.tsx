@@ -1,11 +1,7 @@
 import React from 'react';
-import { PromoProduct } from './utils/promoModels';
 import { makeStyles } from '@mui/styles';
 import { InputLabel, MenuItem, Select } from '@mui/material';
-
-interface ProductSelectorProps {
-  promoProductNames: Record<PromoProduct, string>;
-}
+import { promoProductNames } from './utils/promoModels';
 
 const useStyles = makeStyles(() => ({
   select: {
@@ -14,7 +10,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export function ProductSelector({ promoProductNames }: ProductSelectorProps): React.ReactElement {
+export function ProductSelector(): React.ReactElement {
   const classes = useStyles();
 
   return (
