@@ -94,18 +94,3 @@ export const copyLengthValidator = (maxLength: number) => (
   }
   return undefined;
 };
-
-export const optionalUrlValidator = (value?: string | null): string | undefined => {
-  const trimmedValue = (value && value.trim()) ?? '';
-
-  if (!trimmedValue) {
-    return undefined;
-  }
-
-  try {
-    new URL(trimmedValue);
-    return undefined;
-  } catch {
-    return 'Please enter a valid URL';
-  }
-};

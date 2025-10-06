@@ -11,6 +11,8 @@ export type Product =
       supportTier: 'OneOff';
     };
 
+type Destination = 'LandingPage' | 'Checkout';
+
 export interface ChoiceCard {
   product: Product;
   label: string;
@@ -20,7 +22,7 @@ export interface ChoiceCard {
     copy: string; // e.g. "Recommended", will be overridden if a promo applies
   };
   isDefault: boolean;
-  destinationUrl?: string | null;
+  destination?: Destination;
 }
 
 export interface ChoiceCardsSettings {
