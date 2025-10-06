@@ -27,3 +27,6 @@
 | `colours.choiceCards.buttonSelectColour`       | `visual(kind="ChoiceCards").buttonSelectColour`       | `choiceCardSettings.buttonSelectColour`         |
 | `colours.choiceCards.buttonSelectTextColour`   | `visual(kind="ChoiceCards").buttonSelectTextColour`   | `choiceCardSettings.buttonSelectTextColour`     |
 | `colours.choiceCards.buttonSelectBorderColour` | `visual(kind="ChoiceCards").buttonSelectBorderColour` | `choiceCardSettings.buttonSelectBorderColour`   |
+| `colours.choiceCards.buttonSelectMarkerColour` | _(no direct field)_                                   | _(no direct field)_                             |
+| `colours.choiceCards.pillTextColour`           | _(no direct field)_                                   | _(no direct field)_                             |
+| `colours.choiceCards.pillBackgroundColour`     | _(no direct field)_                                   | _(no direct field)_                             |
