@@ -7,6 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import { makeStyles } from '@mui/styles';
 import RRControlPanelLogo from './rrControlPanelLogo';
+import { getStage } from '../utils/stage';
 
 const useStyles = makeStyles({
   list: {
@@ -240,6 +241,13 @@ export default function NavDrawer(): React.ReactElement {
             <ListItemText primary="Apps Metering Switches" />
           </ListItem>
         </Link>
+        {getStage() !== 'PROD' && (
+          <Link key="Promo Tool" to="/promo-tool" className={classes.link}>
+            <ListItem className={classes.listItem} button key="Promo Tool">
+              <ListItemText primary="Promo Tool" />
+            </ListItem>
+          </Link>
+        )}
         <Link key="Default Promos" to="/default-promos" className={classes.link}>
           <ListItem className={classes.listItem} button key="Default Promos">
             <ListItemText primary="Default Promos" />
