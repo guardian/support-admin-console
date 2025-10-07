@@ -78,13 +78,13 @@ Test / testQuick := { (Test / testQuick).dependsOn(startDynamoDBLocal).evaluated
 Test / test := { (Test / test).dependsOn(startDynamoDBLocal).value }
 Test / testOptions += { dynamoDBLocalTestCleanup.value }
 
-sources in (Compile, doc) := Seq.empty
+Compile / doc / sources := Seq.empty
 
-publishArtifact in (Compile, packageDoc) := false
+Compile / packageDoc / publishArtifact := false
 
 pipelineStages := Seq(digest)
 
-riffRaffPackageType := (packageBin in Debian).value
+riffRaffPackageType := (Debian / packageBin).value
 riffRaffManifestProjectName := "support:admin-console"
 riffRaffPackageName := "admin-console"
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
@@ -98,4 +98,4 @@ riffRaffArtifactResources += (
   "cfn/AdminConsole-CODE.template.json"
 )
 
-javaOptions in run ++= Seq("-Xms2G", "-Xmx2G", "-Xss4M")
+run / javaOptions ++= Seq("-Xms2G", "-Xmx2G", "-Xss4M")
