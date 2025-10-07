@@ -28,9 +28,9 @@ asciiGraphWidth := 999999999 // to ensure Snyk can read the the deeeeep dependen
 
 libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
-  "com.gu.play-googleauth" %% "play-v30" % "25.2.2",
+  "com.gu.play-googleauth" %% "play-v30" % "27.0.0",
   "com.google.cloud" % "google-cloud-bigquery" % "2.54.1",
-  "com.gu" %% "simple-configuration-ssm" % "7.0.1",
+  "com.gu" %% "simple-configuration-ssm" % "7.0.2",
   "software.amazon.awssdk" % "s3" % awsVersion,
   "software.amazon.awssdk" % "dynamodb" % awsVersion,
   "io.circe" %% "circe-core" % circeVersion,
@@ -43,6 +43,7 @@ libraryDependencies ++= Seq(
   ws,
   "dev.zio" %% "zio" % zioVersion,
   "dev.zio" %% "zio-streams" % zioVersion,
+  "com.gu" %% "support-internationalisation" % "0.16",
   "org.scalatest" %% "scalatest" % "3.2.19" % "test",
   "org.gnieh" %% "diffson-circe" % "4.6.0" % "test"
 )

@@ -4,29 +4,11 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
 {
   "Metadata": {
     "gu:cdk:constructs": [
-      "GuDynamoDBReadPolicy",
-      "GuDynamoDBReadPolicy",
-      "GuDynamoDBWritePolicy",
-      "GuDynamoDBReadPolicy",
-      "GuDynamoDBWritePolicy",
-      "GuDynamoDBReadPolicy",
-      "GuDynamoDBWritePolicy",
-      "GuDynamoDBReadPolicy",
-      "GuDynamoDBWritePolicy",
-      "GuDynamoDBReadPolicy",
-      "GuDynamoDBWritePolicy",
-      "GuDynamoDBReadPolicy",
-      "GuDynamoDBWritePolicy",
-      "GuDynamoDBReadPolicy",
-      "GuDynamoDBWritePolicy",
       "GuAllowPolicy",
       "GuAllowPolicy",
       "GuGetS3ObjectsPolicy",
       "GuPutS3ObjectsPolicy",
       "GuAllowPolicy",
-      "GuDynamoDBReadPolicy",
-      "GuDynamoDBReadPolicy",
-      "GuDynamoDBReadPolicy",
       "GuVpcParameter",
       "GuSubnetListParameter",
       "GuSubnetListParameter",
@@ -669,8 +651,10 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
       },
       "Type": "AWS::IAM::Policy",
     },
-    "DynamoReadArchivedBannerDesignsDynamoTable44A0398A": {
+    "DynamoReadPolicy15DC9FD5": {
       "Properties": {
+        "Description": "",
+        "Path": "/",
         "PolicyDocument": {
           "Statement": [
             {
@@ -697,7 +681,7 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
                       },
                       ":table/",
                       {
-                        "Ref": "ArchivedBannerDesignsDynamoTable",
+                        "Ref": "ChannelTestsDynamoTable",
                       },
                     ],
                   ],
@@ -716,174 +700,12 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
                       },
                       ":table/",
                       {
-                        "Ref": "ArchivedBannerDesignsDynamoTable",
+                        "Ref": "ChannelTestsDynamoTable",
                       },
                       "/index/*",
                     ],
                   ],
                 },
-              ],
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "DynamoReadArchivedBannerDesignsDynamoTable44A0398A",
-        "Roles": [
-          {
-            "Ref": "InstanceRoleAdminconsole347DA627",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "DynamoReadArchivedChannelTestsDynamoTable1835BCEF": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "dynamodb:BatchGetItem",
-                "dynamodb:GetItem",
-                "dynamodb:Scan",
-                "dynamodb:Query",
-                "dynamodb:GetRecords",
-              ],
-              "Effect": "Allow",
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:dynamodb:",
-                      {
-                        "Ref": "AWS::Region",
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":table/",
-                      {
-                        "Ref": "ArchivedChannelTestsDynamoTable",
-                      },
-                    ],
-                  ],
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:dynamodb:",
-                      {
-                        "Ref": "AWS::Region",
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":table/",
-                      {
-                        "Ref": "ArchivedChannelTestsDynamoTable",
-                      },
-                      "/index/*",
-                    ],
-                  ],
-                },
-              ],
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "DynamoReadArchivedChannelTestsDynamoTable1835BCEF",
-        "Roles": [
-          {
-            "Ref": "InstanceRoleAdminconsole347DA627",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "DynamoReadBannerDesignsDynamoTable74192C24": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "dynamodb:BatchGetItem",
-                "dynamodb:GetItem",
-                "dynamodb:Scan",
-                "dynamodb:Query",
-                "dynamodb:GetRecords",
-              ],
-              "Effect": "Allow",
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:dynamodb:",
-                      {
-                        "Ref": "AWS::Region",
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":table/",
-                      {
-                        "Ref": "BannerDesignsDynamoTable",
-                      },
-                    ],
-                  ],
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:dynamodb:",
-                      {
-                        "Ref": "AWS::Region",
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":table/",
-                      {
-                        "Ref": "BannerDesignsDynamoTable",
-                      },
-                      "/index/*",
-                    ],
-                  ],
-                },
-              ],
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "DynamoReadBannerDesignsDynamoTable74192C24",
-        "Roles": [
-          {
-            "Ref": "InstanceRoleAdminconsole347DA627",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "DynamoReadCampaignsDynamoTable13FF797A": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "dynamodb:BatchGetItem",
-                "dynamodb:GetItem",
-                "dynamodb:Scan",
-                "dynamodb:Query",
-                "dynamodb:GetRecords",
-              ],
-              "Effect": "Allow",
-              "Resource": [
                 {
                   "Fn::Join": [
                     "",
@@ -923,34 +745,45 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
                     ],
                   ],
                 },
-              ],
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "DynamoReadCampaignsDynamoTable13FF797A",
-        "Roles": [
-          {
-            "Ref": "InstanceRoleAdminconsole347DA627",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "DynamoReadChannelTestsAuditDynamoTableFCA49D1C": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "dynamodb:BatchGetItem",
-                "dynamodb:GetItem",
-                "dynamodb:Scan",
-                "dynamodb:Query",
-                "dynamodb:GetRecords",
-              ],
-              "Effect": "Allow",
-              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "ArchivedChannelTestsDynamoTable",
+                      },
+                    ],
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "ArchivedChannelTestsDynamoTable",
+                      },
+                      "/index/*",
+                    ],
+                  ],
+                },
                 {
                   "Fn::Join": [
                     "",
@@ -990,34 +823,6 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
                     ],
                   ],
                 },
-              ],
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "DynamoReadChannelTestsAuditDynamoTableFCA49D1C",
-        "Roles": [
-          {
-            "Ref": "InstanceRoleAdminconsole347DA627",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "DynamoReadChannelTestsDynamoTable934E3DAF": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "dynamodb:BatchGetItem",
-                "dynamodb:GetItem",
-                "dynamodb:Scan",
-                "dynamodb:Query",
-                "dynamodb:GetRecords",
-              ],
-              "Effect": "Allow",
-              "Resource": [
                 {
                   "Fn::Join": [
                     "",
@@ -1032,7 +837,7 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
                       },
                       ":table/",
                       {
-                        "Ref": "ChannelTestsDynamoTable",
+                        "Ref": "BannerDesignsDynamoTable",
                       },
                     ],
                   ],
@@ -1051,40 +856,12 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
                       },
                       ":table/",
                       {
-                        "Ref": "ChannelTestsDynamoTable",
+                        "Ref": "BannerDesignsDynamoTable",
                       },
                       "/index/*",
                     ],
                   ],
                 },
-              ],
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "DynamoReadChannelTestsDynamoTable934E3DAF",
-        "Roles": [
-          {
-            "Ref": "InstanceRoleAdminconsole347DA627",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "DynamoReadChannelTestsDynamoTableindexcampaignNamenameindex265299CD": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "dynamodb:BatchGetItem",
-                "dynamodb:GetItem",
-                "dynamodb:Scan",
-                "dynamodb:Query",
-                "dynamodb:GetRecords",
-              ],
-              "Effect": "Allow",
-              "Resource": [
                 {
                   "Fn::Join": [
                     "",
@@ -1099,9 +876,8 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
                       },
                       ":table/",
                       {
-                        "Ref": "ChannelTestsDynamoTable",
+                        "Ref": "ArchivedBannerDesignsDynamoTable",
                       },
-                      "/index/campaignName-name-index",
                     ],
                   ],
                 },
@@ -1119,40 +895,12 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
                       },
                       ":table/",
                       {
-                        "Ref": "ChannelTestsDynamoTable",
+                        "Ref": "ArchivedBannerDesignsDynamoTable",
                       },
-                      "/index/campaignName-name-index/index/*",
+                      "/index/*",
                     ],
                   ],
                 },
-              ],
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "DynamoReadChannelTestsDynamoTableindexcampaignNamenameindex265299CD",
-        "Roles": [
-          {
-            "Ref": "InstanceRoleAdminconsole347DA627",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "DynamoReadRRCPPermissionsDynamoTable28457DA1": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "dynamodb:BatchGetItem",
-                "dynamodb:GetItem",
-                "dynamodb:Scan",
-                "dynamodb:Query",
-                "dynamodb:GetRecords",
-              ],
-              "Effect": "Allow",
-              "Resource": [
                 {
                   "Fn::Join": [
                     "",
@@ -1192,34 +940,116 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
                     ],
                   ],
                 },
-              ],
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "DynamoReadRRCPPermissionsDynamoTable28457DA1",
-        "Roles": [
-          {
-            "Ref": "InstanceRoleAdminconsole347DA627",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "DynamoReadbanditdata59979FC4": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "dynamodb:BatchGetItem",
-                "dynamodb:GetItem",
-                "dynamodb:Scan",
-                "dynamodb:Query",
-                "dynamodb:GetRecords",
-              ],
-              "Effect": "Allow",
-              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "PromoCampaignsDynamoTableEAB74AB9",
+                      },
+                    ],
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "PromoCampaignsDynamoTableEAB74AB9",
+                      },
+                      "/index/*",
+                    ],
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "PromosDynamoTable471905A5",
+                      },
+                    ],
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "PromosDynamoTable471905A5",
+                      },
+                      "/index/*",
+                    ],
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/super-mode-calculator-PROD",
+                    ],
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/super-mode-calculator-PROD/index/*",
+                    ],
+                  ],
+                },
                 {
                   "Fn::Join": [
                     "",
@@ -1257,467 +1087,18 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "DynamoReadbanditdata59979FC4",
         "Roles": [
           {
             "Ref": "InstanceRoleAdminconsole347DA627",
           },
         ],
       },
-      "Type": "AWS::IAM::Policy",
+      "Type": "AWS::IAM::ManagedPolicy",
     },
-    "DynamoReadsupermodecalculatorEF384DA0": {
+    "DynamoWritePolicy408EF0D5": {
       "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "dynamodb:BatchGetItem",
-                "dynamodb:GetItem",
-                "dynamodb:Scan",
-                "dynamodb:Query",
-                "dynamodb:GetRecords",
-              ],
-              "Effect": "Allow",
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:dynamodb:",
-                      {
-                        "Ref": "AWS::Region",
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":table/super-mode-calculator-PROD",
-                    ],
-                  ],
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:dynamodb:",
-                      {
-                        "Ref": "AWS::Region",
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":table/super-mode-calculator-PROD/index/*",
-                    ],
-                  ],
-                },
-              ],
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "DynamoReadsupermodecalculatorEF384DA0",
-        "Roles": [
-          {
-            "Ref": "InstanceRoleAdminconsole347DA627",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "DynamoReadsupermodecalculatorindexend02A5F75C": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "dynamodb:BatchGetItem",
-                "dynamodb:GetItem",
-                "dynamodb:Scan",
-                "dynamodb:Query",
-                "dynamodb:GetRecords",
-              ],
-              "Effect": "Allow",
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:dynamodb:",
-                      {
-                        "Ref": "AWS::Region",
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":table/super-mode-calculator-PROD/index/end",
-                    ],
-                  ],
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:dynamodb:",
-                      {
-                        "Ref": "AWS::Region",
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":table/super-mode-calculator-PROD/index/end/index/*",
-                    ],
-                  ],
-                },
-              ],
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "DynamoReadsupermodecalculatorindexend02A5F75C",
-        "Roles": [
-          {
-            "Ref": "InstanceRoleAdminconsole347DA627",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "DynamoWriteArchivedBannerDesignsDynamoTableB6640A8F": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "dynamodb:BatchWriteItem",
-                "dynamodb:PutItem",
-                "dynamodb:DeleteItem",
-                "dynamodb:UpdateItem",
-              ],
-              "Effect": "Allow",
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:dynamodb:",
-                      {
-                        "Ref": "AWS::Region",
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":table/",
-                      {
-                        "Ref": "ArchivedBannerDesignsDynamoTable",
-                      },
-                    ],
-                  ],
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:dynamodb:",
-                      {
-                        "Ref": "AWS::Region",
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":table/",
-                      {
-                        "Ref": "ArchivedBannerDesignsDynamoTable",
-                      },
-                      "/index/*",
-                    ],
-                  ],
-                },
-              ],
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "DynamoWriteArchivedBannerDesignsDynamoTableB6640A8F",
-        "Roles": [
-          {
-            "Ref": "InstanceRoleAdminconsole347DA627",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "DynamoWriteArchivedChannelTestsDynamoTableB9A0E0BA": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "dynamodb:BatchWriteItem",
-                "dynamodb:PutItem",
-                "dynamodb:DeleteItem",
-                "dynamodb:UpdateItem",
-              ],
-              "Effect": "Allow",
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:dynamodb:",
-                      {
-                        "Ref": "AWS::Region",
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":table/",
-                      {
-                        "Ref": "ArchivedChannelTestsDynamoTable",
-                      },
-                    ],
-                  ],
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:dynamodb:",
-                      {
-                        "Ref": "AWS::Region",
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":table/",
-                      {
-                        "Ref": "ArchivedChannelTestsDynamoTable",
-                      },
-                      "/index/*",
-                    ],
-                  ],
-                },
-              ],
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "DynamoWriteArchivedChannelTestsDynamoTableB9A0E0BA",
-        "Roles": [
-          {
-            "Ref": "InstanceRoleAdminconsole347DA627",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "DynamoWriteBannerDesignsDynamoTable36E4A766": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "dynamodb:BatchWriteItem",
-                "dynamodb:PutItem",
-                "dynamodb:DeleteItem",
-                "dynamodb:UpdateItem",
-              ],
-              "Effect": "Allow",
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:dynamodb:",
-                      {
-                        "Ref": "AWS::Region",
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":table/",
-                      {
-                        "Ref": "BannerDesignsDynamoTable",
-                      },
-                    ],
-                  ],
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:dynamodb:",
-                      {
-                        "Ref": "AWS::Region",
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":table/",
-                      {
-                        "Ref": "BannerDesignsDynamoTable",
-                      },
-                      "/index/*",
-                    ],
-                  ],
-                },
-              ],
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "DynamoWriteBannerDesignsDynamoTable36E4A766",
-        "Roles": [
-          {
-            "Ref": "InstanceRoleAdminconsole347DA627",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "DynamoWriteCampaignsDynamoTableB29B2DDA": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "dynamodb:BatchWriteItem",
-                "dynamodb:PutItem",
-                "dynamodb:DeleteItem",
-                "dynamodb:UpdateItem",
-              ],
-              "Effect": "Allow",
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:dynamodb:",
-                      {
-                        "Ref": "AWS::Region",
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":table/",
-                      {
-                        "Ref": "CampaignsDynamoTable",
-                      },
-                    ],
-                  ],
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:dynamodb:",
-                      {
-                        "Ref": "AWS::Region",
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":table/",
-                      {
-                        "Ref": "CampaignsDynamoTable",
-                      },
-                      "/index/*",
-                    ],
-                  ],
-                },
-              ],
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "DynamoWriteCampaignsDynamoTableB29B2DDA",
-        "Roles": [
-          {
-            "Ref": "InstanceRoleAdminconsole347DA627",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "DynamoWriteChannelTestsAuditDynamoTableEECEA480": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "dynamodb:BatchWriteItem",
-                "dynamodb:PutItem",
-                "dynamodb:DeleteItem",
-                "dynamodb:UpdateItem",
-              ],
-              "Effect": "Allow",
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:dynamodb:",
-                      {
-                        "Ref": "AWS::Region",
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":table/",
-                      {
-                        "Ref": "ChannelTestsAuditDynamoTable",
-                      },
-                    ],
-                  ],
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:dynamodb:",
-                      {
-                        "Ref": "AWS::Region",
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":table/",
-                      {
-                        "Ref": "ChannelTestsAuditDynamoTable",
-                      },
-                      "/index/*",
-                    ],
-                  ],
-                },
-              ],
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "DynamoWriteChannelTestsAuditDynamoTableEECEA480",
-        "Roles": [
-          {
-            "Ref": "InstanceRoleAdminconsole347DA627",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "DynamoWriteChannelTestsDynamoTable593B6212": {
-      "Properties": {
+        "Description": "",
+        "Path": "/",
         "PolicyDocument": {
           "Statement": [
             {
@@ -1768,33 +1149,201 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
                     ],
                   ],
                 },
-              ],
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "DynamoWriteChannelTestsDynamoTable593B6212",
-        "Roles": [
-          {
-            "Ref": "InstanceRoleAdminconsole347DA627",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "DynamoWriteRRCPPermissionsDynamoTable399523AC": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "dynamodb:BatchWriteItem",
-                "dynamodb:PutItem",
-                "dynamodb:DeleteItem",
-                "dynamodb:UpdateItem",
-              ],
-              "Effect": "Allow",
-              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "CampaignsDynamoTable",
+                      },
+                    ],
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "CampaignsDynamoTable",
+                      },
+                      "/index/*",
+                    ],
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "ArchivedChannelTestsDynamoTable",
+                      },
+                    ],
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "ArchivedChannelTestsDynamoTable",
+                      },
+                      "/index/*",
+                    ],
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "ChannelTestsAuditDynamoTable",
+                      },
+                    ],
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "ChannelTestsAuditDynamoTable",
+                      },
+                      "/index/*",
+                    ],
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "BannerDesignsDynamoTable",
+                      },
+                    ],
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "BannerDesignsDynamoTable",
+                      },
+                      "/index/*",
+                    ],
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "ArchivedBannerDesignsDynamoTable",
+                      },
+                    ],
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "ArchivedBannerDesignsDynamoTable",
+                      },
+                      "/index/*",
+                    ],
+                  ],
+                },
                 {
                   "Fn::Join": [
                     "",
@@ -1834,19 +1383,96 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
                     ],
                   ],
                 },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "PromoCampaignsDynamoTableEAB74AB9",
+                      },
+                    ],
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "PromoCampaignsDynamoTableEAB74AB9",
+                      },
+                      "/index/*",
+                    ],
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "PromosDynamoTable471905A5",
+                      },
+                    ],
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":table/",
+                      {
+                        "Ref": "PromosDynamoTable471905A5",
+                      },
+                      "/index/*",
+                    ],
+                  ],
+                },
               ],
             },
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "DynamoWriteRRCPPermissionsDynamoTable399523AC",
         "Roles": [
           {
             "Ref": "InstanceRoleAdminconsole347DA627",
           },
         ],
       },
-      "Type": "AWS::IAM::Policy",
+      "Type": "AWS::IAM::ManagedPolicy",
     },
     "GetDistributablePolicyAdminconsole6DA8CA46": {
       "Properties": {
@@ -2367,6 +1993,116 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
         ],
       },
       "Type": "AWS::IAM::Policy",
+    },
+    "PromoCampaignsDynamoTableEAB74AB9": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "campaignCode",
+            "AttributeType": "S",
+          },
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "KeySchema": [
+          {
+            "AttributeName": "campaignCode",
+            "KeyType": "HASH",
+          },
+        ],
+        "PointInTimeRecoverySpecification": {
+          "PointInTimeRecoveryEnabled": true,
+        },
+        "TableName": "support-admin-console-promo-campaigns-PROD",
+        "Tags": [
+          {
+            "Key": "devx-backup-enabled",
+            "Value": "true",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-admin-console",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+      },
+      "Type": "AWS::DynamoDB::Table",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "PromosDynamoTable471905A5": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "promoCode",
+            "AttributeType": "S",
+          },
+          {
+            "AttributeName": "campaignCode",
+            "AttributeType": "S",
+          },
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "GlobalSecondaryIndexes": [
+          {
+            "IndexName": "campaignCode-index",
+            "KeySchema": [
+              {
+                "AttributeName": "campaignCode",
+                "KeyType": "HASH",
+              },
+            ],
+            "Projection": {
+              "ProjectionType": "ALL",
+            },
+          },
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "promoCode",
+            "KeyType": "HASH",
+          },
+        ],
+        "PointInTimeRecoverySpecification": {
+          "PointInTimeRecoveryEnabled": true,
+        },
+        "TableName": "support-admin-console-promos-PROD",
+        "Tags": [
+          {
+            "Key": "devx-backup-enabled",
+            "Value": "true",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-admin-console",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+      },
+      "Type": "AWS::DynamoDB::Table",
+      "UpdateReplacePolicy": "Retain",
     },
     "PublicSettingsBucketPut4D9A09A1": {
       "Properties": {
