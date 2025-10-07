@@ -21,7 +21,7 @@ import {
 import type { Policy } from 'aws-cdk-lib/aws-iam';
 import { AccountPrincipal, Role } from 'aws-cdk-lib/aws-iam';
 import { ParameterDataType, ParameterTier, StringParameter } from 'aws-cdk-lib/aws-ssm';
-import {MultiDynamoTableReadPolicy, MultiDynamoTableWritePolicy} from "./dynamo-managed-policy";
+import { MultiDynamoTableReadPolicy, MultiDynamoTableWritePolicy } from './dynamo-managed-policy';
 
 export interface AdminConsoleProps extends GuStackProps {
   domainName: string;
@@ -30,7 +30,7 @@ export interface AdminConsoleProps extends GuStackProps {
 // Enable automated backups via https://github.com/guardian/aws-backup
 const enableBackups = (table: Table) => {
   Tags.of(table).add('devx-backup-enabled', 'true');
-}
+};
 
 export class AdminConsole extends GuStack {
   // Build a dynamodb table to store tests for all channels
@@ -232,6 +232,15 @@ export class AdminConsole extends GuStack {
       },
     });
 
+    table.addGlobalSecondaryIndex({
+      indexName: 'product-index',
+      projectionType: ProjectionType.ALL,
+      partitionKey: {
+        name: 'product',
+        type: AttributeType.STRING,
+      },
+    });
+
     enableBackups(table);
     return table;
   }
@@ -308,9 +317,8 @@ export class AdminConsole extends GuStack {
     userData.addCommands(
       `aws --region ${this.region} s3 cp s3://membership-dist/${this.stack}/${this.stage}/${app}/support-admin-console_1.0-SNAPSHOT_all.deb /tmp
       dpkg -i /tmp/support-admin-console_1.0-SNAPSHOT_all.deb
-      /opt/cloudwatch-logs/configure-logs application ${this.stack} ${this.stage} ${app} /var/log/support-admin-console/application.log`
-    )
-
+      /opt/cloudwatch-logs/configure-logs application ${this.stack} ${this.stage} ${app} /var/log/support-admin-console/application.log`,
+    );
 
     const policies: Policy[] = [
       new GuAllowPolicy(this, 'Cloudwatch', {
