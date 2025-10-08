@@ -20,6 +20,7 @@ interface PromoCampaignsListProps {
   promoCampaignSearch: string;
   selectedPromoCampaign?: PromoCampaign | null;
   onPromoCampaignSelected: (campaignCode: string) => void;
+  selectedProduct?: string | null;
 }
 
 const PromoCampaignsList = ({
@@ -27,6 +28,7 @@ const PromoCampaignsList = ({
   promoCampaignSearch,
   selectedPromoCampaign,
   onPromoCampaignSelected,
+  selectedProduct,
 }: PromoCampaignsListProps): React.ReactElement => {
   const classes = useStyles();
 
@@ -38,6 +40,19 @@ const PromoCampaignsList = ({
       } else if (c.name && c.name.indexOf(promoCampaignSearch) >= 0) {
         return true;
       } else if (c.name.indexOf(promoCampaignSearch) >= 0) {
+        return true;
+      }
+      return false;
+    });
+  };
+
+  const filterPromoCampaignsByProduct = (campaignArray: PromoCampaigns) => {
+    return campaignArray.filter(c => {
+      if (!selectedProduct) {
+        return true;
+      } else if (c.name && c.name.indexOf(selectedProduct)) {
+        return true;
+      } else if (c.name.indexOf(selectedProduct) >= 0) {
         return true;
       }
       return false;
@@ -60,7 +75,9 @@ const PromoCampaignsList = ({
     return campaignArray;
   };
 
-  const filteredAndSortedPromoCampaigns = sortPromoCampaigns(filterPromoCampaigns(promoCampaigns));
+  const filteredAndSortedPromoCampaigns = sortPromoCampaigns(
+    filterPromoCampaigns(filterPromoCampaignsByProduct(promoCampaigns)),
+  );
 
   return (
     <div className={classes.container}>

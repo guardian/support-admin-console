@@ -81,6 +81,7 @@ function PromoCampaignsSidebar({
           promoCampaignSearch={promoCampaignSearch}
           selectedPromoCampaign={selectedPromoCampaign}
           onPromoCampaignSelected={onPromoCampaignSelected}
+          selectedProduct={'SupporterPlus'} // TODO: use state
         />
       </div>
     </div>
