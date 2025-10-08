@@ -3,7 +3,7 @@ import { makeStyles } from '@mui/styles';
 import { TextField } from '@mui/material';
 import PromoCampaignsList from './promoCampaignsList';
 import NewPromoCampaignButton from './newPromoCampaignButton';
-import { PromoCampaign, PromoCampaigns } from './utils/promoModels';
+import { Products, PromoCampaign, PromoCampaigns } from './utils/promoModels';
 import { ProductSelector } from './productSelector';
 
 const useStyles = makeStyles(() => ({
@@ -52,7 +52,7 @@ function PromoCampaignsSidebar({
 }: PromoCampaignsSidebarProps): React.ReactElement {
   const classes = useStyles();
   const [promoCampaignSearch, setPromoCampaignSearch] = useState('');
-  const [selectedProduct, setSelectedProduct] = useState('SupporterPlus');
+  const [selectedProduct, setSelectedProduct] = useState<Products>('SupporterPlus');
 
   const searchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e && e.target) {
@@ -63,7 +63,10 @@ function PromoCampaignsSidebar({
   return (
     <div className={classes.root}>
       <h2 className={classes.headline2}>Select Product to filter Promo Campaigns</h2>
-      <ProductSelector selectedValue={selectedProduct} handleSelectedValue={setSelectedProduct} />
+      <ProductSelector
+        selectedValue={selectedProduct.toString()}
+        handleSelectedValue={setSelectedProduct}
+      />
       <h2 className={classes.headline2}>Promo Campaigns</h2>
       <div className={classes.buttonsContainer}>
         <NewPromoCampaignButton />
@@ -82,7 +85,7 @@ function PromoCampaignsSidebar({
           promoCampaignSearch={promoCampaignSearch}
           selectedPromoCampaign={selectedPromoCampaign}
           onPromoCampaignSelected={onPromoCampaignSelected}
-          selectedProduct={selectedProduct}
+          selectedProduct={selectedProduct.toString()}
         />
       </div>
     </div>

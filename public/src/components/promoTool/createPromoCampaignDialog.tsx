@@ -11,6 +11,7 @@ import { makeStyles } from '@mui/styles';
 import React, { useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import { ProductSelector } from './productSelector';
+import { Products } from './utils/promoModels';
 
 const useStyles = makeStyles(() => ({
   dialogHeader: {
@@ -41,8 +42,7 @@ const CreatePromoCampaignDialog: React.FC<CreatePromoCampaignDialogProps> = ({
   close,
 }: CreatePromoCampaignDialogProps) => {
   const classes = useStyles();
-
-  const [selectedProduct, setSelectedProduct] = useState('');
+  const [selectedProduct, setSelectedProduct] = useState<Products>('SupporterPlus');
 
   return (
     <Dialog open={isOpen} onClose={close} aria-labelledby="create-test-dialog-title">
@@ -55,7 +55,10 @@ const CreatePromoCampaignDialog: React.FC<CreatePromoCampaignDialogProps> = ({
         </IconButton>
       </div>
       <DialogContent dividers>
-        <ProductSelector selectedValue={selectedProduct} handleSelectedValue={setSelectedProduct} />
+        <ProductSelector
+          selectedValue={selectedProduct.toString()}
+          handleSelectedValue={setSelectedProduct}
+        />
         <TextField
           className={classes.input}
           label="Promo Campaign name"
