@@ -8,19 +8,14 @@ import {
 } from '../../../models/bannerDesign';
 import { Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
-// Removed granular colour editors in favour of palette selection
-// import { BasicColoursEditor } from './BasicColoursEditor';
-// import { HighlightedTextColoursEditor } from './HighlightedTextColoursEditor';
-// import { CtaColoursEditor } from './CtaColoursEditor';
 import { BannerDesignUsage } from './BannerDesignUsage';
-// import { TickerDesignEditor } from './TickerDesignEditor';
 import { HeaderImageEditor } from './HeaderImageEditor';
 import { BannerVisualEditor } from './BannerVisualEditor';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { InfoOutlined } from '@mui/icons-material';
 import { HeadlineSizeEditor } from './HeadlineSizeEditor';
 import PaletteSelector, { SelectedPalette } from './PaletteSelector';
-import { detectStyleAndThemeForDesign } from './utils/detectPalette';
+import { stringToHexColour } from '../../../utils/bannerDesigns';
 
 type Props = {
   design: BannerDesign;
@@ -35,7 +30,7 @@ export const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     flexDirection: 'column',
     height: '100%',
     width: '100%',
-    background: palette.background.paper, // #FFFFFF
+    background: palette.background.paper,
     '& > * + *': {
       marginTop: spacing(1),
     },
@@ -98,8 +93,6 @@ const BannerDesignForm: React.FC<Props> = ({
     });
   };
 
-  // Palette-driven: individual colour change handlers removed
-
   const onHeadlineSizeChange = (headerSize: FontSize): void => {
     onChange({
       ...design,
@@ -111,90 +104,80 @@ const BannerDesignForm: React.FC<Props> = ({
     });
   };
 
-  // Palette-driven: CTA colour change handlers removed
-
-  // Palette-driven: Ticker colour change handler removed
-
   const applySelectedPalette = (sp: SelectedPalette): void => {
-    // Helper to convert '#RRGGBB' -> {r,g,b,kind:'hex'}
-    const toHex = (hex: string) => {
-      const value = hex.replace('#', '').toUpperCase();
-      return {
-        r: value.slice(0, 2),
-        g: value.slice(2, 4),
-        b: value.slice(4, 6),
-        kind: 'hex' as const,
-      };
-    };
-
-    const updated = {
+    const updated: BannerDesign = {
       ...design,
       colours: {
         ...design.colours,
         basic: {
-          background: toHex(sp.colours.background),
-          bodyText: toHex(sp.colours.bodyText),
-          headerText: toHex(sp.colours.heading),
-          articleCountText: toHex(sp.colours.articleCountText || sp.colours.bodyText),
-          logo: toHex(sp.colours.logo || '#000000'),
+          background: stringToHexColour(sp.colours.background),
+          bodyText: stringToHexColour(sp.colours.bodyText),
+          headerText: stringToHexColour(sp.colours.heading),
+          articleCountText: stringToHexColour(sp.colours.articleCountText || sp.colours.bodyText),
+          logo: stringToHexColour(sp.colours.logo || '#000000'),
         },
         highlightedText: {
-          text: toHex(sp.colours.highlightText),
-          highlight: toHex(sp.colours.highlightBackground),
+          text: stringToHexColour(sp.colours.highlightText),
+          highlight: stringToHexColour(sp.colours.highlightBackground),
         },
         primaryCta: {
           default: {
-            text: toHex(sp.colours.primaryCta.text),
-            background: toHex(sp.colours.primaryCta.background),
-            border: sp.colours.primaryCta.border ? toHex(sp.colours.primaryCta.border) : undefined,
+            text: stringToHexColour(sp.colours.primaryCta.text),
+            background: stringToHexColour(sp.colours.primaryCta.background),
+            border: sp.colours.primaryCta.border
+              ? stringToHexColour(sp.colours.primaryCta.border)
+              : undefined,
           },
         },
         secondaryCta: {
           default: {
-            text: toHex(sp.colours.secondaryCta.text),
-            background: toHex(sp.colours.secondaryCta.background),
+            text: stringToHexColour(sp.colours.secondaryCta.text),
+            background: stringToHexColour(sp.colours.secondaryCta.background),
             border: sp.colours.secondaryCta.border
-              ? toHex(sp.colours.secondaryCta.border)
+              ? stringToHexColour(sp.colours.secondaryCta.border)
               : undefined,
           },
         },
         closeButton: {
           default: {
-            text: toHex(sp.colours.closeButton?.text || '#000000'),
-            background: toHex(sp.colours.closeButton?.background || sp.colours.background),
+            text: stringToHexColour(sp.colours.closeButton?.text || '#000000'),
+            background: stringToHexColour(
+              sp.colours.closeButton?.background || sp.colours.background,
+            ),
             border: sp.colours.closeButton?.border
-              ? toHex(sp.colours.closeButton.border)
-              : toHex('#000000'),
+              ? stringToHexColour(sp.colours.closeButton.border)
+              : stringToHexColour('#000000'),
           },
         },
         ticker: sp.colours.ticker
           ? {
-              filledProgress: toHex(sp.colours.ticker.filledProgress),
-              progressBarBackground: toHex(sp.colours.ticker.progressBarBackground),
-              headlineColour: toHex(sp.colours.ticker.headlineColour),
-              totalColour: toHex(sp.colours.ticker.totalColour),
-              goalColour: toHex(sp.colours.ticker.goalColour),
+              filledProgress: stringToHexColour(sp.colours.ticker.filledProgress),
+              progressBarBackground: stringToHexColour(sp.colours.ticker.progressBarBackground),
+              headlineColour: stringToHexColour(sp.colours.ticker.headlineColour),
+              totalColour: stringToHexColour(sp.colours.ticker.totalColour),
+              goalColour: stringToHexColour(sp.colours.ticker.goalColour),
             }
           : design.colours.ticker,
       },
-    } as typeof design;
+    };
 
-    // Apply choice card colours when the visual is ChoiceCards
     if (updated.visual?.kind === 'ChoiceCards' && sp.colours.choiceCards) {
       updated.visual = {
         ...updated.visual,
-        style: sp.styleId,
-        colourTheme: sp.themeId,
-        buttonColour: toHex(sp.colours.choiceCards.buttonColour),
-        buttonTextColour: toHex(sp.colours.choiceCards.buttonTextColour),
-        buttonBorderColour: toHex(sp.colours.choiceCards.buttonBorderColour),
-        buttonSelectColour: toHex(sp.colours.choiceCards.buttonSelectColour),
-        buttonSelectTextColour: toHex(sp.colours.choiceCards.buttonSelectTextColour),
-        buttonSelectBorderColour: toHex(sp.colours.choiceCards.buttonSelectBorderColour),
-        buttonSelectMarkerColour: toHex(sp.colours.choiceCards.buttonSelectMarkerColour),
-        pillTextColour: toHex(sp.colours.choiceCards.pillTextColour),
-        pillBackgroundColour: toHex(sp.colours.choiceCards.pillBackgroundColour),
-      } as typeof updated.visual;
+        buttonColour: stringToHexColour(sp.colours.choiceCards.buttonColour),
+        buttonTextColour: stringToHexColour(sp.colours.choiceCards.buttonTextColour),
+        buttonBorderColour: stringToHexColour(sp.colours.choiceCards.buttonBorderColour),
+        buttonSelectColour: stringToHexColour(sp.colours.choiceCards.buttonSelectColour),
+        buttonSelectTextColour: stringToHexColour(sp.colours.choiceCards.buttonSelectTextColour),
+        buttonSelectBorderColour: stringToHexColour(
+          sp.colours.choiceCards.buttonSelectBorderColour,
+        ),
+        buttonSelectMarkerColour: stringToHexColour(
+          sp.colours.choiceCards.buttonSelectMarkerColour,
+        ),
+        pillTextColour: stringToHexColour(sp.colours.choiceCards.pillTextColour),
+        pillBackgroundColour: stringToHexColour(sp.colours.choiceCards.pillBackgroundColour),
+      };
     }
 
     onChange(updated);
@@ -220,7 +203,7 @@ const BannerDesignForm: React.FC<Props> = ({
 
       <Accordion className={classes.accordion}>
         <AccordionSummary className={classes.sectionHeader} expandIcon={<ExpandMoreIcon />}>
-          Main Image or Choice Cards
+          Banner Theme
         </AccordionSummary>
         <AccordionDetails>
           <>
@@ -232,8 +215,8 @@ const BannerDesignForm: React.FC<Props> = ({
             />
             <PaletteSelector
               onChange={applySelectedPalette}
-              initialStyleId={detectStyleAndThemeForDesign(design)?.styleId || 'business-as-usual'}
-              initialThemeId={detectStyleAndThemeForDesign(design)?.themeId || 'support-default'}
+              initialStyleId={design?.style || 'business-as-usual'}
+              initialThemeId={design?.colourTheme || 'support-default'}
               visualKind={design.visual?.kind ?? 'None'}
             />
           </>

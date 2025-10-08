@@ -3,7 +3,6 @@ import { BannerDesignVisual } from '../../../models/bannerDesign';
 import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { defaultBannerChoiceCardsDesign, defaultBannerImage } from './utils/defaults';
 import { ImageEditor } from './ImageEditor';
-// Colour inputs removed - palette driven
 
 interface Props {
   visual?: BannerDesignVisual;

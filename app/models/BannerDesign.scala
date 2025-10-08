@@ -41,8 +41,6 @@ sealed trait BannerDesignVisual
 object BannerDesignVisual {
   case class Image(
       kind: String = "Image",
-      style: Option[String],
-      colourTheme: Option[String],
       mobileUrl: String,
       tabletUrl: String,
       desktopUrl: String,
@@ -51,8 +49,6 @@ object BannerDesignVisual {
 
   case class ChoiceCards(
       kind: String = "ChoiceCards",
-      style: Option[String],
-      colourTheme: Option[String],
       buttonColour: Option[HexColour],
       buttonTextColour: Option[HexColour],
       buttonBorderColour: Option[HexColour],
@@ -135,6 +131,8 @@ case class BannerDesignColours(
 
 case class BannerDesign(
     name: String,
+    style: Option[String],
+    colourTheme: Option[String],
     status: BannerDesignStatus,
     visual: Option[BannerDesignVisual],
     headerImage: Option[HeaderImage],
