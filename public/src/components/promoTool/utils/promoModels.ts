@@ -2,7 +2,7 @@ import { Country } from '../../../utils/models';
 
 export type PromoProduct = 'SupporterPlus' | 'TierThree' | 'DigitalPack' | 'Newspaper' | 'Weekly';
 
-// applying user recognisable names to PromoProduct codes
+// This does not work in the context of a select 
 export const promoProductNames: Record<PromoProduct, string> = {
   SupporterPlus: 'Supporter Plus',
   TierThree: 'Tier Three',
