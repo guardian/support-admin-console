@@ -1,7 +1,7 @@
 import React from 'react';
 import { List } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { PromoCampaign, PromoCampaigns } from './utils/promoModels';
+import { Products, PromoCampaign, PromoCampaigns } from './utils/promoModels';
 import { PromoCampaignsListItem } from './promoCampaignsListItem';
 
 const useStyles = makeStyles(() => ({
@@ -20,7 +20,7 @@ interface PromoCampaignsListProps {
   promoCampaignSearch: string;
   selectedPromoCampaign?: PromoCampaign | null;
   onPromoCampaignSelected: (campaignCode: string) => void;
-  selectedProduct?: string | null;
+  selectedProduct?: Products;
 }
 
 const PromoCampaignsList = ({
@@ -32,7 +32,6 @@ const PromoCampaignsList = ({
 }: PromoCampaignsListProps): React.ReactElement => {
   const classes = useStyles();
 
-  // TODO: need to filter by product too
   const filterPromoCampaigns = (campaignArray: PromoCampaigns) => {
     return campaignArray.filter(c => {
       if (!promoCampaignSearch) {
@@ -50,9 +49,7 @@ const PromoCampaignsList = ({
     return campaignArray.filter(c => {
       if (!selectedProduct) {
         return true;
-      } else if (c.name && c.name.indexOf(selectedProduct)) {
-        return true;
-      } else if (c.name.indexOf(selectedProduct) >= 0) {
+      } else if (c.product && c.product === selectedProduct.toString()) {
         return true;
       }
       return false;

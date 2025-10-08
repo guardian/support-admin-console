@@ -56,7 +56,7 @@ function PromoCampaignsSidebar({
 
   const searchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e && e.target) {
-      setPromoCampaignSearch(e.target.value.toUpperCase());
+      setPromoCampaignSearch(e.target.value);
     }
   };
 
@@ -85,7 +85,7 @@ function PromoCampaignsSidebar({
           promoCampaignSearch={promoCampaignSearch}
           selectedPromoCampaign={selectedPromoCampaign}
           onPromoCampaignSelected={onPromoCampaignSelected}
-          selectedProduct={selectedProduct.toString()}
+          selectedProduct={selectedProduct}
         />
       </div>
     </div>
