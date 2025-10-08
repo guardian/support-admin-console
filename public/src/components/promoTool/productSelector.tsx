@@ -32,7 +32,7 @@ export const ProductSelector: React.FC<ProductSelectorProps> =
         onChange={(event: SelectChangeEvent): void =>
           handleProductSelectorChange(event.target.value)
         }
-        value=""
+        value="SupporterPlus"
         aria-label="Select Product"
       >
         {Object.entries(promoProductNames).map(([code, description]) => (

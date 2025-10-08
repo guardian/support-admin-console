@@ -52,7 +52,7 @@ function PromoCampaignsSidebar({
 }: PromoCampaignsSidebarProps): React.ReactElement {
   const classes = useStyles();
   const [promoCampaignSearch, setPromoCampaignSearch] = useState('');
-  const [selectedProduct, setSelectedProduct] = useState('');
+  const [selectedProduct, setSelectedProduct] = useState('SupporterPlus');
 
   const searchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e && e.target) {
