@@ -1,15 +1,21 @@
-import { Country } from '../../../utils/models';
+import { CommonStringObject, Country } from '../../../utils/models';
 
 export type PromoProduct = 'SupporterPlus' | 'TierThree' | 'DigitalPack' | 'Newspaper' | 'Weekly';
 
-// This does not work in the context of a select 
-export const promoProductNames: Record<PromoProduct, string> = {
+// Can't get the 'id' of a Record in this way so changed to use CommonStringObject
+export const PromoProductNames: CommonStringObject = {
   SupporterPlus: 'Supporter Plus',
   TierThree: 'Tier Three',
   DigitalPack: 'Digital Pack',
   Newspaper: 'Newspaper',
   Weekly: 'Guardian Weekly',
 };
+
+export const productIds = Object.keys(PromoProductNames);
+
+export type Product = keyof typeof PromoProductNames;
+
+export type Products = Product;
 
 export interface PromoCampaign {
   campaignCode: string;
