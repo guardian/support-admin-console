@@ -50,7 +50,7 @@ export const dummySelectedCampaign: PromoCampaign = {
 };
 export const dummySelectedCampaign2: PromoCampaign = {
   campaignCode: 'C345678',
-  product: 'TierThree',
+  product: 'SupporterPlus',
   name: 'US New Year 2025 50% off',
   created: '2025-08-20',
 };
