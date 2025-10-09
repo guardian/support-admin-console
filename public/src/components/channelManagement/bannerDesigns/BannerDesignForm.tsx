@@ -104,79 +104,91 @@ const BannerDesignForm: React.FC<Props> = ({
     });
   };
 
-  const applySelectedPalette = (sp: SelectedPalette): void => {
+  const applySelectedPalette = (selectedPalette: SelectedPalette): void => {
     const updated: BannerDesign = {
       ...design,
       colours: {
         ...design.colours,
         basic: {
-          background: stringToHexColour(sp.colours.background),
-          bodyText: stringToHexColour(sp.colours.bodyText),
-          headerText: stringToHexColour(sp.colours.heading),
-          articleCountText: stringToHexColour(sp.colours.articleCountText || sp.colours.bodyText),
-          logo: stringToHexColour(sp.colours.logo || '#000000'),
+          background: stringToHexColour(selectedPalette.colours.background),
+          bodyText: stringToHexColour(selectedPalette.colours.bodyText),
+          headerText: stringToHexColour(selectedPalette.colours.heading),
+          articleCountText: stringToHexColour(
+            selectedPalette.colours.articleCountText || selectedPalette.colours.bodyText,
+          ),
+          logo: stringToHexColour(selectedPalette.colours.logo || '#000000'),
         },
         highlightedText: {
-          text: stringToHexColour(sp.colours.highlightText),
-          highlight: stringToHexColour(sp.colours.highlightBackground),
+          text: stringToHexColour(selectedPalette.colours.highlightText),
+          highlight: stringToHexColour(selectedPalette.colours.highlightBackground),
         },
         primaryCta: {
           default: {
-            text: stringToHexColour(sp.colours.primaryCta.text),
-            background: stringToHexColour(sp.colours.primaryCta.background),
-            border: sp.colours.primaryCta.border
-              ? stringToHexColour(sp.colours.primaryCta.border)
+            text: stringToHexColour(selectedPalette.colours.primaryCta.text),
+            background: stringToHexColour(selectedPalette.colours.primaryCta.background),
+            border: selectedPalette.colours.primaryCta.border
+              ? stringToHexColour(selectedPalette.colours.primaryCta.border)
               : undefined,
           },
         },
         secondaryCta: {
           default: {
-            text: stringToHexColour(sp.colours.secondaryCta.text),
-            background: stringToHexColour(sp.colours.secondaryCta.background),
-            border: sp.colours.secondaryCta.border
-              ? stringToHexColour(sp.colours.secondaryCta.border)
+            text: stringToHexColour(selectedPalette.colours.secondaryCta.text),
+            background: stringToHexColour(selectedPalette.colours.secondaryCta.background),
+            border: selectedPalette.colours.secondaryCta.border
+              ? stringToHexColour(selectedPalette.colours.secondaryCta.border)
               : undefined,
           },
         },
         closeButton: {
           default: {
-            text: stringToHexColour(sp.colours.closeButton?.text || '#000000'),
+            text: stringToHexColour(selectedPalette.colours.closeButton?.text || '#000000'),
             background: stringToHexColour(
-              sp.colours.closeButton?.background || sp.colours.background,
+              selectedPalette.colours.closeButton?.background || selectedPalette.colours.background,
             ),
-            border: sp.colours.closeButton?.border
-              ? stringToHexColour(sp.colours.closeButton.border)
+            border: selectedPalette.colours.closeButton?.border
+              ? stringToHexColour(selectedPalette.colours.closeButton.border)
               : stringToHexColour('#000000'),
           },
         },
-        ticker: sp.colours.ticker
+        ticker: selectedPalette.colours.ticker
           ? {
-              filledProgress: stringToHexColour(sp.colours.ticker.filledProgress),
-              progressBarBackground: stringToHexColour(sp.colours.ticker.progressBarBackground),
-              headlineColour: stringToHexColour(sp.colours.ticker.headlineColour),
-              totalColour: stringToHexColour(sp.colours.ticker.totalColour),
-              goalColour: stringToHexColour(sp.colours.ticker.goalColour),
+              filledProgress: stringToHexColour(selectedPalette.colours.ticker.filledProgress),
+              progressBarBackground: stringToHexColour(
+                selectedPalette.colours.ticker.progressBarBackground,
+              ),
+              headlineColour: stringToHexColour(selectedPalette.colours.ticker.headlineColour),
+              totalColour: stringToHexColour(selectedPalette.colours.ticker.totalColour),
+              goalColour: stringToHexColour(selectedPalette.colours.ticker.goalColour),
             }
           : design.colours.ticker,
       },
     };
 
-    if (updated.visual?.kind === 'ChoiceCards' && sp.colours.choiceCards) {
+    if (updated.visual?.kind === 'ChoiceCards' && selectedPalette.colours.choiceCards) {
       updated.visual = {
         ...updated.visual,
-        buttonColour: stringToHexColour(sp.colours.choiceCards.buttonColour),
-        buttonTextColour: stringToHexColour(sp.colours.choiceCards.buttonTextColour),
-        buttonBorderColour: stringToHexColour(sp.colours.choiceCards.buttonBorderColour),
-        buttonSelectColour: stringToHexColour(sp.colours.choiceCards.buttonSelectColour),
-        buttonSelectTextColour: stringToHexColour(sp.colours.choiceCards.buttonSelectTextColour),
+        buttonColour: stringToHexColour(selectedPalette.colours.choiceCards.buttonColour),
+        buttonTextColour: stringToHexColour(selectedPalette.colours.choiceCards.buttonTextColour),
+        buttonBorderColour: stringToHexColour(
+          selectedPalette.colours.choiceCards.buttonBorderColour,
+        ),
+        buttonSelectColour: stringToHexColour(
+          selectedPalette.colours.choiceCards.buttonSelectColour,
+        ),
+        buttonSelectTextColour: stringToHexColour(
+          selectedPalette.colours.choiceCards.buttonSelectTextColour,
+        ),
         buttonSelectBorderColour: stringToHexColour(
-          sp.colours.choiceCards.buttonSelectBorderColour,
+          selectedPalette.colours.choiceCards.buttonSelectBorderColour,
         ),
         buttonSelectMarkerColour: stringToHexColour(
-          sp.colours.choiceCards.buttonSelectMarkerColour,
+          selectedPalette.colours.choiceCards.buttonSelectMarkerColour,
         ),
-        pillTextColour: stringToHexColour(sp.colours.choiceCards.pillTextColour),
-        pillBackgroundColour: stringToHexColour(sp.colours.choiceCards.pillBackgroundColour),
+        pillTextColour: stringToHexColour(selectedPalette.colours.choiceCards.pillTextColour),
+        pillBackgroundColour: stringToHexColour(
+          selectedPalette.colours.choiceCards.pillBackgroundColour,
+        ),
       };
     }
 
@@ -216,7 +228,12 @@ const BannerDesignForm: React.FC<Props> = ({
             <PaletteSelector
               onChange={applySelectedPalette}
               initialStyleId={design?.style || 'business-as-usual'}
-              initialThemeId={design?.colourTheme || 'support-default'}
+              initialThemeId={
+                design?.colourTheme ||
+                (design.visual?.kind === 'ChoiceCards'
+                  ? 'support-default'
+                  : 'support-default-image')
+              }
               visualKind={design.visual?.kind ?? 'None'}
             />
           </>

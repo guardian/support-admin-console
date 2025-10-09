@@ -32,6 +32,7 @@ export type ThemeColours = {
 export type ThemeDefinition = {
   id: string;
   label: string;
+  kind: 'Image' | 'ChoiceCards';
   colours: ThemeColours;
 };
 
@@ -50,6 +51,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
         {
           id: 'support-default',
           label: 'Support, Default',
+          kind: 'ChoiceCards',
           colours: {
             background: '#F1F8FC',
             heading: '#052962',
@@ -84,6 +86,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
         {
           id: 'support-default-image',
           label: 'Support, Default (Image)',
+          kind: 'Image',
           colours: {
             background: '#F1F8FC',
             heading: '#052962',
@@ -118,6 +121,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
         {
           id: 'support-bold',
           label: 'Support, Bold',
+          kind: 'ChoiceCards',
           colours: {
             background: '#FFE500',
             heading: '#121212',
@@ -152,6 +156,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
         {
           id: 'support-bold-image',
           label: 'Support, Bold (Image)',
+          kind: 'Image',
           colours: {
             background: '#FFE500',
             heading: '#121212',
@@ -186,6 +191,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
         {
           id: 'hope-default',
           label: 'Hope, Default',
+          kind: 'ChoiceCards',
           colours: {
             background: '#F6F6F6',
             heading: '#0077B6',
@@ -220,6 +226,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
         {
           id: 'hope-default-image',
           label: 'Hope, Default (Image)',
+          kind: 'Image',
           colours: {
             background: '#0077B6',
             heading: '#FFFFFF',
@@ -254,6 +261,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
         {
           id: 'hope-gentle',
           label: 'Hope, Gentle',
+          kind: 'ChoiceCards',
           colours: {
             background: '#90DCFF',
             heading: '#121212',
@@ -288,6 +296,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
         {
           id: 'hope-gentle-image',
           label: 'Hope, Gentle (Image)',
+          kind: 'Image',
           colours: {
             background: '#90DCFF',
             heading: '#121212',
@@ -322,6 +331,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
         {
           id: 'hope-bold',
           label: 'Hope, Bold',
+          kind: 'ChoiceCards',
           colours: {
             background: '#0077B6',
             heading: '#FFFFFF',
@@ -356,6 +366,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
         {
           id: 'urgency',
           label: 'Urgency, Default',
+          kind: 'ChoiceCards',
           colours: {
             background: '#F6F6F6',
             heading: '#C70000',
@@ -390,6 +401,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
         {
           id: 'urgency-default-image',
           label: 'Urgency, Default (Image)',
+          kind: 'Image',
           colours: {
             background: '#AB0613',
             heading: '#FFFFFF',
@@ -424,6 +436,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
         {
           id: 'urgency-bold',
           label: 'Urgency, Bold',
+          kind: 'ChoiceCards',
           colours: {
             background: '#AB0613',
             heading: '#FFFFFF',
@@ -458,6 +471,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
         {
           id: 'empowerment',
           label: 'Empowerment, Default',
+          kind: 'ChoiceCards',
           colours: {
             background: '#F6F6F6',
             heading: '#BB3B80',
@@ -492,6 +506,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
         {
           id: 'empowerment-default-image',
           label: 'Empowerment, Default (Image)',
+          kind: 'Image',
           colours: {
             background: '#BB3B80',
             heading: '#FFFFFF',
@@ -526,6 +541,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
         {
           id: 'empowerment-bold',
           label: 'Empowerment, Bold',
+          kind: 'ChoiceCards',
           colours: {
             background: '#BB3B80',
             heading: '#FFFFFF',
@@ -566,6 +582,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
         {
           id: 'light-turmeric-default',
           label: 'Light Turmeric, Default (Image)',
+          kind: 'Image',
           colours: {
             background: '#FFF1D7',
             heading: '#20201D',
@@ -600,6 +617,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
         {
           id: 'light-turmeric-basil',
           label: 'Light Turmeric, Basil (Image)',
+          kind: 'Image',
           colours: {
             background: '#FFF1D7',
             heading: '#20201D',
@@ -634,6 +652,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
         {
           id: 'light-turmeric-blueberry',
           label: 'Light Turmeric, Blueberry (Image)',
+          kind: 'Image',
           colours: {
             background: '#FFF1D7',
             heading: '#20201D',
@@ -668,6 +687,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
         {
           id: 'light-paprika-default',
           label: 'Light Paprika, Default (Image)',
+          kind: 'Image',
           colours: {
             background: '#F7EFE9',
             heading: '#20201D',
@@ -702,6 +722,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
         {
           id: 'light-paprika-kaffir-a',
           label: 'Light Paprika, Kaffir A (Image)',
+          kind: 'Image',
           colours: {
             background: '#F7EFE9',
             heading: '#20201D',
@@ -736,6 +757,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
         {
           id: 'light-paprika-kaffir-b',
           label: 'Light Paprika, Kaffir B (Image)',
+          kind: 'Image',
           colours: {
             background: '#F7EFE9',
             heading: '#20201D',
@@ -776,6 +798,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
         {
           id: 'guardian-weekly-dark-image',
           label: 'Dark, Image',
+          kind: 'Image',
           colours: {
             background: '#222527',
             heading: '#F6F6F6',
@@ -810,6 +833,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
         {
           id: 'guardian-weekly-light-image',
           label: 'Light, Image',
+          kind: 'Image',
           colours: {
             background: '#F6F6F6',
             heading: '#052962',
@@ -844,6 +868,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
         {
           id: 'guardian-weekly-brand-image',
           label: 'Brand, Image',
+          kind: 'Image',
           colours: {
             background: '#0077B6',
             heading: '#FFFFFF',
@@ -884,6 +909,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
         {
           id: 'marketing-labs',
           label: 'Marketing, Labs',
+          kind: 'ChoiceCards',
           colours: {
             background: '#65A897',
             heading: '#650054',
@@ -918,6 +944,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
         {
           id: 'marketing-labs-image',
           label: 'Marketing, Labs (Image)',
+          kind: 'Image',
           colours: {
             background: '#65A897',
             heading: '#650054',
@@ -952,6 +979,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
         {
           id: 'marketing-opinion',
           label: 'Marketing, Opinion',
+          kind: 'ChoiceCards',
           colours: {
             background: '#FF9941',
             heading: '#09615B',
@@ -986,6 +1014,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
         {
           id: 'marketing-opinion-image',
           label: 'Marketing, Opinion (Image)',
+          kind: 'Image',
           colours: {
             background: '#FF9941',
             heading: '#09615B',
@@ -1020,6 +1049,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
         {
           id: 'marketing-lifestyle',
           label: 'Marketing, Lifestyle',
+          kind: 'ChoiceCards',
           colours: {
             background: '#7D0068',
             heading: '#FF9941',
@@ -1054,6 +1084,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
         {
           id: 'marketing-lifestyle-image',
           label: 'Marketing, Lifestyle (Image)',
+          kind: 'Image',
           colours: {
             background: '#7D0068',
             heading: '#FF9941',
@@ -1088,6 +1119,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
         {
           id: 'marketing-labs-light',
           label: 'Marketing, Labs Light',
+          kind: 'ChoiceCards',
           colours: {
             background: '#A8E3DF',
             heading: '#510043',
@@ -1122,6 +1154,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
         {
           id: 'marketing-labs-light-image',
           label: 'Marketing, Labs Light (Image)',
+          kind: 'Image',
           colours: {
             background: '#A8E3DF',
             heading: '#510043',

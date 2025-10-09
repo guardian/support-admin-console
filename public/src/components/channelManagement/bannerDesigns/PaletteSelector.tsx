@@ -3,7 +3,7 @@ import { Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useMemo, useState } from 'react';
 import { HELP_GUIDE_URL } from '../../../main';
-import PalettePreview, { PreviewColours } from './PalettePreview';
+import PalettePreview from './PalettePreview';
 import { colourThemes, ThemeColours, ThemeDefinition, ThemeStyle } from './utils/colourThemes';
 
 const useStyles = makeStyles(({ breakpoints, spacing }: Theme) => ({
@@ -51,55 +51,63 @@ const PaletteSelector: React.FC<Props> = ({
   visualKind,
 }) => {
   const classes = useStyles();
-  const styles: ThemeStyle[] = useMemo(() => colourThemes.styles, []);
+  const { styles } = colourThemes;
 
   const defaultStyleId = initialStyleId ?? 'business-as-usual';
-  const [styleId, setStyleId] = useState<string>(defaultStyleId);
-  const availableThemes = useMemo(() => {
-    const s = styles.find(st => st.id === styleId);
-    return s?.themes ?? [];
-  }, [styles, styleId]);
-
   const defaultThemeId = initialThemeId ?? 'support-default';
-  const [themeId, setThemeId] = useState<string>(defaultThemeId);
+
+  const getStyle = (styleId: string) => {
+    const style = styles.find(
+      style => style.id === styleId && style.themes.some(t => t.kind === visualKind),
+    );
+
+    if (!style) {
+      return styles.find(style => style.id === defaultStyleId)!;
+    }
+    return style;
+  };
+
+  const [style, setStyle] = useState<ThemeStyle>(getStyle(defaultStyleId));
+
+  const getTheme = (style: ThemeStyle, themeId: string) => {
+    const theme =
+      style.themes.find(theme => theme.id === themeId && theme.kind === visualKind) ??
+      style.themes.find(theme => theme.kind === visualKind); // Fallback to any theme matching the visualKind
+
+    if (!theme) {
+      const defaultStyle = getStyle(defaultStyleId);
+      setStyle(defaultStyle);
+      return defaultStyle.themes.find(theme => theme.kind === visualKind)!;
+    }
+
+    return theme;
+  };
+
+  const [theme, setTheme] = useState<ThemeDefinition>(getTheme(style, defaultThemeId));
+
+  const availableStyles = useMemo(() => {
+    return styles.filter(style => style.themes.some(t => t.kind === visualKind));
+  }, [styles, visualKind]);
+
+  const availableThemes = useMemo(() => {
+    return style.themes.filter(theme => theme.kind === visualKind);
+  }, [styles, style, visualKind]);
 
   useEffect(() => {
-    const initialStyle = initialStyleId || defaultStyleId;
-    const initialTheme = initialThemeId || defaultThemeId;
-    const styleExists = styles.some(s => s.id === initialStyle);
-    const styleToUse = styleExists ? initialStyle : defaultStyleId;
-    const styleObj = styles.find(s => s.id === styleToUse);
-    const themeExists = styleObj ? styleObj.themes.some(t => t.id === initialTheme) : false;
-    const themeToUse = themeExists
-      ? initialTheme
-      : (styleObj?.themes as ThemeDefinition[])[0]?.id || defaultThemeId;
-    setStyleId(styleToUse);
-    setThemeId(themeToUse);
-    if (styleToUse && themeToUse) {
-      setSelectedPalette(styleToUse, themeToUse);
-    }
-  }, [initialStyleId, initialThemeId, styles]);
+    const style = getStyle(initialStyleId || defaultStyleId);
+    const theme = getTheme(style, initialThemeId || defaultThemeId);
+    setStyle(style);
+    setTheme(theme);
+    setSelectedPalette(style, theme);
+  }, [initialStyleId, initialThemeId, visualKind, styles]);
 
-  useEffect(() => {
-    const newThemeId = availableThemes[0]?.id;
-    if (newThemeId && newThemeId !== themeId) {
-      setThemeId(newThemeId);
-    }
-  }, [availableThemes]);
+  const selectedColours = useMemo(() => theme.colours, [theme]);
 
-  const selectedColours: PreviewColours | undefined = useMemo(() => {
-    const style = styles.find(st => st.id === styleId);
-    const theme = (style?.themes as ThemeDefinition[]).find(theme => theme.id === themeId);
-    return theme?.colours;
-  }, [styles, styleId, themeId]);
-
-  const setSelectedPalette = (styleId: string, themeId: string) => {
-    const style = styles.find(st => st.id === styleId)!;
-    const theme = (style.themes as ThemeDefinition[]).find(t => t.id === themeId)!;
+  const setSelectedPalette = (style: ThemeStyle, theme: ThemeDefinition) => {
     onChange({
-      styleId,
+      styleId: style.id,
       styleLabel: style.label,
-      themeId,
+      themeId: theme.id,
       themeLabel: theme.label,
       colours: theme.colours,
     });
@@ -107,24 +115,23 @@ const PaletteSelector: React.FC<Props> = ({
 
   const onStyleChange = (e: SelectChangeEvent<string>) => {
     const newStyleId = e.target.value;
-    setStyleId(newStyleId);
-    const themesForStyle =
-      (styles.find(s => s.id === newStyleId)?.themes as ThemeDefinition[]) ?? [];
-    const nextThemeId = themesForStyle.some(t => t.id === themeId)
-      ? themeId
-      : themesForStyle[0]?.id;
-    if (nextThemeId && nextThemeId !== themeId) {
-      setThemeId(nextThemeId);
-    }
-    if (nextThemeId) {
-      setSelectedPalette(newStyleId, nextThemeId);
+    const newStyle = getStyle(newStyleId);
+    setStyle(newStyle);
+
+    const newTheme = getTheme(newStyle, theme.id);
+    setTheme(newTheme);
+
+    if (newTheme && newTheme.id !== theme.id) {
+      setTheme(newTheme);
+      setSelectedPalette(newStyle, newTheme);
     }
   };
 
   const onThemeChange = (e: SelectChangeEvent<string>) => {
     const newThemeId = e.target.value;
-    setThemeId(newThemeId);
-    setSelectedPalette(styleId, newThemeId);
+    const newTheme = getTheme(style, newThemeId);
+    setTheme(newTheme);
+    setSelectedPalette(style, newTheme);
   };
 
   if (visualKind === 'None') {
@@ -136,10 +143,10 @@ const PaletteSelector: React.FC<Props> = ({
       <div className={classes.selectors}>
         <FormControl required fullWidth>
           <InputLabel id="style-label">Style</InputLabel>
-          <Select labelId="style-label" label="Style" value={styleId} onChange={onStyleChange}>
-            {styles.map(s => (
-              <MenuItem key={s.id} value={s.id}>
-                {s.label}
+          <Select labelId="style-label" label="Style" value={style.id} onChange={onStyleChange}>
+            {availableStyles.map(style => (
+              <MenuItem key={style.id} value={style.id}>
+                {style.label}
               </MenuItem>
             ))}
           </Select>
@@ -149,12 +156,12 @@ const PaletteSelector: React.FC<Props> = ({
           <Select
             labelId="theme-label"
             label="Colour theme"
-            value={themeId}
+            value={theme.id}
             onChange={onThemeChange}
           >
-            {availableThemes.map(t => (
-              <MenuItem key={t.id} value={t.id}>
-                {t.label}
+            {availableThemes.map(theme => (
+              <MenuItem key={theme.id} value={theme.id}>
+                {theme.label}
               </MenuItem>
             ))}
           </Select>
