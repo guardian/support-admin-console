@@ -11,7 +11,13 @@ import { makeStyles } from '@mui/styles';
 import React, { useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import { ProductSelector } from './productSelector';
-import { Products } from './utils/promoModels';
+import { Products, PromoProduct } from './utils/promoModels';
+import { useForm } from 'react-hook-form';
+import {
+  EMPTY_ERROR_HELPER_TEXT,
+  INVALID_CHARACTERS_ERROR_HELPER_TEXT,
+  VALID_CHARACTERS_REGEX,
+} from '../channelManagement/helpers/validation';
 
 const useStyles = makeStyles(() => ({
   dialogHeader: {
@@ -31,18 +37,37 @@ interface FormData {
   name: string;
 }
 
+const NAME_DEFAULT_HELPER_TEXT = 'Format: TBC'; // TODO: should there be formatting advice?
+
 interface CreatePromoCampaignDialogProps {
   isOpen: boolean;
   close: () => void;
   existingNames: string[];
-  createPromoCampaign: (data: FormData) => void;
+  createPromoCampaign: (name: string, product: PromoProduct) => void;
+  // createPromoCampaign: (data: FormData) => void;
 }
 const CreatePromoCampaignDialog: React.FC<CreatePromoCampaignDialogProps> = ({
   isOpen,
   close,
+  createPromoCampaign,
 }: CreatePromoCampaignDialogProps) => {
   const classes = useStyles();
   const [selectedProduct, setSelectedProduct] = useState<Products>('SupporterPlus');
+
+  const {
+    register,
+    handleSubmit,
+
+    formState: { errors },
+  } = useForm<FormData>();
+
+  const onSubmit = ({ name }: FormData): void => {
+    // console.log(`name: ${name}`);
+    // console.log(`selectedProduct: ${selectedProduct}`);
+
+    createPromoCampaign(name, selectedProduct as PromoProduct); // REINSTATE when we know what's happening.
+    close();
+  };
 
   return (
     <Dialog open={isOpen} onClose={close} aria-labelledby="create-test-dialog-title">
@@ -61,6 +86,16 @@ const CreatePromoCampaignDialog: React.FC<CreatePromoCampaignDialogProps> = ({
         />
         <TextField
           className={classes.input}
+          error={errors.name !== undefined}
+          helperText={errors.name ? errors.name.message : NAME_DEFAULT_HELPER_TEXT}
+          {...register('name', {
+            required: EMPTY_ERROR_HELPER_TEXT,
+            pattern: {
+              value: VALID_CHARACTERS_REGEX,
+              message: INVALID_CHARACTERS_ERROR_HELPER_TEXT,
+            },
+            // validate: createDuplicateValidator(existingNames), TODO: relevant?
+          })}
           label="Promo Campaign name"
           margin="normal"
           variant="outlined"
@@ -69,7 +104,9 @@ const CreatePromoCampaignDialog: React.FC<CreatePromoCampaignDialogProps> = ({
         />
       </DialogContent>
       <DialogActions>
-        <Button color="primary">Create Promo Campaign</Button>
+        <Button color="primary" onClick={handleSubmit(onSubmit)}>
+          Create Promo Campaign
+        </Button>
       </DialogActions>
     </Dialog>
   );

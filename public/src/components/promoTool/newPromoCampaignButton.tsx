@@ -4,6 +4,7 @@ import { makeStyles } from '@mui/styles';
 import AddIcon from '@mui/icons-material/Add';
 import useOpenable from '../../hooks/useOpenable';
 import CreatePromoCampaignDialog from './createPromoCampaignDialog';
+import { PromoProduct } from './utils/promoModels';
 
 const useStyles = makeStyles(() => ({
   button: {
@@ -18,7 +19,13 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const NewPromoCampaignButton: React.FC = () => {
+interface NewPromoCampaignButtonProps {
+  createPromoCampaign: (name: string, product: PromoProduct) => void;
+}
+
+const NewPromoCampaignButton: React.FC<NewPromoCampaignButtonProps> = ({
+  createPromoCampaign,
+}: NewPromoCampaignButtonProps) => {
   const [isOpen, open, close] = useOpenable();
   const classes = useStyles();
 
@@ -36,7 +43,7 @@ const NewPromoCampaignButton: React.FC = () => {
         isOpen={isOpen}
         close={close}
         existingNames={[]} // TODO
-        createPromoCampaign={() => {}} // TODO
+        createPromoCampaign={createPromoCampaign}
       />
     </>
   );
