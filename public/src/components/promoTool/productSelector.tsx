@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@mui/styles';
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import { productIds, Products, PromoProduct, PromoProductNames } from './utils/promoModels';
+import { productIds, PromoProduct, PromoProductNames } from './utils/promoModels';
 
 const useStyles = makeStyles(() => ({
   select: {
@@ -12,7 +12,7 @@ const useStyles = makeStyles(() => ({
 
 export interface ProductSelectorProps {
   selectedValue: string;
-  handleSelectedValue: (event: Products) => void;
+  handleSelectedValue: (product: PromoProduct) => void;
 }
 
 export const ProductSelector: React.FC<ProductSelectorProps> = ({
@@ -20,8 +20,6 @@ export const ProductSelector: React.FC<ProductSelectorProps> = ({
   handleSelectedValue,
 }: ProductSelectorProps) => {
   const classes = useStyles();
-
-  console.log(productIds);
 
   const handleProductSelectorChange = (selectedValue: PromoProduct) => {
     handleSelectedValue(selectedValue);
