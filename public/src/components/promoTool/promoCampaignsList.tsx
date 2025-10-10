@@ -32,6 +32,8 @@ const PromoCampaignsList = ({
 }: PromoCampaignsListProps): React.ReactElement => {
   const classes = useStyles();
 
+  // TODO: fetch list of campaigns from service
+
   const filterPromoCampaigns = (campaignArray: PromoCampaigns) => {
     return campaignArray.filter(c => {
       if (!promoCampaignSearch) {
@@ -44,7 +46,6 @@ const PromoCampaignsList = ({
       return false;
     });
   };
-
   const filterPromoCampaignsByProduct = (campaignArray: PromoCampaigns) => {
     return campaignArray.filter(c => {
       if (!selectedProduct) {
@@ -55,7 +56,6 @@ const PromoCampaignsList = ({
       return false;
     });
   };
-
   const sortPromoCampaigns = (campaignArray: PromoCampaigns) => {
     campaignArray.sort((a, b) => {
       const A = a.name;
@@ -71,7 +71,6 @@ const PromoCampaignsList = ({
     });
     return campaignArray;
   };
-
   const filteredAndSortedPromoCampaigns = sortPromoCampaigns(
     filterPromoCampaigns(filterPromoCampaignsByProduct(promoCampaigns)),
   );
