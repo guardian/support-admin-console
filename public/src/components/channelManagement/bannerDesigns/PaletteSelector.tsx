@@ -1,4 +1,11 @@
-import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import {
+  FormControl,
+  FormHelperText,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from '@mui/material';
 import { Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -30,11 +37,9 @@ const useStyles = makeStyles(({ breakpoints, spacing }: Theme) => ({
 }));
 
 export interface SelectedPalette {
-  styleId: string;
-  styleLabel: string;
-  themeId: string;
-  themeLabel: string;
-  colours: ThemeColours;
+  styleId?: string;
+  themeId?: string;
+  colours?: ThemeColours;
 }
 
 type Props = {
@@ -53,78 +58,60 @@ const PaletteSelector: React.FC<Props> = ({
   const classes = useStyles();
   const { styles } = colourThemes;
 
-  const defaultStyleId = initialStyleId ?? 'business-as-usual';
-  const defaultThemeId = initialThemeId ?? 'support-default';
+  const getStyle = (styleId?: string) =>
+    styles.find(style => style.id === styleId && style.themes.some(t => t.kind === visualKind));
 
-  const getStyle = (styleId: string) => {
-    const style = styles.find(
-      style => style.id === styleId && style.themes.some(t => t.kind === visualKind),
-    );
+  const [style, setStyle] = useState<ThemeStyle | undefined>(getStyle(initialStyleId));
 
-    if (!style) {
-      return styles.find(style => style.id === defaultStyleId)!;
-    }
-    return style;
-  };
-
-  const [style, setStyle] = useState<ThemeStyle>(getStyle(defaultStyleId));
-
-  const getTheme = (style: ThemeStyle, themeId: string) => {
+  const getTheme = (style?: ThemeStyle, themeId?: string) => {
     const theme =
-      style.themes.find(theme => theme.id === themeId && theme.kind === visualKind) ??
-      style.themes.find(theme => theme.kind === visualKind); // Fallback to any theme matching the visualKind
-
-    if (!theme) {
-      const defaultStyle = getStyle(defaultStyleId);
-      setStyle(defaultStyle);
-      return defaultStyle.themes.find(theme => theme.kind === visualKind)!;
-    }
-
+      style?.themes.find(theme => theme.id === themeId && theme.kind === visualKind) ??
+      style?.themes.find(theme => theme.kind === visualKind); // Fallback to any theme matching the visualKind
     return theme;
   };
 
-  const [theme, setTheme] = useState<ThemeDefinition>(getTheme(style, defaultThemeId));
+  const [theme, setTheme] = useState<ThemeDefinition | undefined>(getTheme(style, initialThemeId));
 
   const availableStyles = useMemo(() => {
     return styles.filter(style => style.themes.some(t => t.kind === visualKind));
   }, [styles, visualKind]);
 
   const availableThemes = useMemo(() => {
-    return style.themes.filter(theme => theme.kind === visualKind);
+    return style?.themes.filter(theme => theme.kind === visualKind) ?? [];
   }, [styles, style, visualKind]);
 
   useEffect(() => {
-    const style = getStyle(initialStyleId || defaultStyleId);
-    const theme = getTheme(style, initialThemeId || defaultThemeId);
+    const style = getStyle(initialStyleId || initialStyleId);
+    const theme = getTheme(style, initialThemeId || initialThemeId);
     setStyle(style);
     setTheme(theme);
     setSelectedPalette(style, theme);
   }, [initialStyleId, initialThemeId, visualKind, styles]);
 
-  const selectedColours = useMemo(() => theme.colours, [theme]);
+  const selectedColours = useMemo(() => theme?.colours, [theme]);
 
-  const setSelectedPalette = (style: ThemeStyle, theme: ThemeDefinition) => {
+  const setSelectedPalette = (style?: ThemeStyle, theme?: ThemeDefinition) => {
+    console.log('Setting selected palette', { style, theme });
     onChange({
-      styleId: style.id,
-      styleLabel: style.label,
-      themeId: theme.id,
-      themeLabel: theme.label,
-      colours: theme.colours,
+      styleId: style?.id,
+      themeId: theme?.id,
+      colours: theme?.colours,
     });
   };
 
   const onStyleChange = (e: SelectChangeEvent<string>) => {
     const newStyleId = e.target.value;
     const newStyle = getStyle(newStyleId);
+
     setStyle(newStyle);
-
-    const newTheme = getTheme(newStyle, theme.id);
-    setTheme(newTheme);
-
-    if (newTheme && newTheme.id !== theme.id) {
-      setTheme(newTheme);
-      setSelectedPalette(newStyle, newTheme);
+    if (!newStyle) {
+      setTheme(undefined);
+      return;
     }
+
+    const newTheme = getTheme(newStyle, theme?.id);
+    setTheme(newTheme);
+    setSelectedPalette(newStyle, newTheme);
   };
 
   const onThemeChange = (e: SelectChangeEvent<string>) => {
@@ -141,22 +128,28 @@ const PaletteSelector: React.FC<Props> = ({
   return (
     <div className={classes.container}>
       <div className={classes.selectors}>
-        <FormControl required fullWidth>
+        <FormControl required fullWidth error={!style}>
           <InputLabel id="style-label">Style</InputLabel>
-          <Select labelId="style-label" label="Style" value={style.id} onChange={onStyleChange}>
+          <Select
+            labelId="style-label"
+            label="Style"
+            value={style?.id ?? ''}
+            onChange={onStyleChange}
+          >
             {availableStyles.map(style => (
               <MenuItem key={style.id} value={style.id}>
                 {style.label}
               </MenuItem>
             ))}
           </Select>
+          {!style && <FormHelperText>Select a style</FormHelperText>}
         </FormControl>
-        <FormControl required fullWidth>
+        <FormControl required fullWidth error={!theme}>
           <InputLabel id="theme-label">Colour theme</InputLabel>
           <Select
             labelId="theme-label"
             label="Colour theme"
-            value={theme.id}
+            value={theme?.id ?? ''}
             onChange={onThemeChange}
           >
             {availableThemes.map(theme => (
@@ -165,6 +158,7 @@ const PaletteSelector: React.FC<Props> = ({
               </MenuItem>
             ))}
           </Select>
+          {!theme && <FormHelperText>Select a colour theme</FormHelperText>}
         </FormControl>
       </div>
       {selectedColours && (

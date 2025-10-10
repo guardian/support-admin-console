@@ -105,8 +105,15 @@ const BannerDesignForm: React.FC<Props> = ({
   };
 
   const applySelectedPalette = (selectedPalette: SelectedPalette): void => {
+    if (!selectedPalette.styleId || !selectedPalette.themeId || !selectedPalette.colours) {
+      setValidationStatus('colourTheme', false);
+      return;
+    }
+
     const updated: BannerDesign = {
       ...design,
+      style: selectedPalette.styleId,
+      colourTheme: selectedPalette.themeId,
       colours: {
         ...design.colours,
         basic: {
@@ -192,6 +199,7 @@ const BannerDesignForm: React.FC<Props> = ({
       };
     }
 
+    setValidationStatus('colourTheme', true);
     onChange(updated);
   };
 
@@ -227,13 +235,8 @@ const BannerDesignForm: React.FC<Props> = ({
             />
             <PaletteSelector
               onChange={applySelectedPalette}
-              initialStyleId={design?.style || 'business-as-usual'}
-              initialThemeId={
-                design?.colourTheme ||
-                (design.visual?.kind === 'ChoiceCards'
-                  ? 'support-default'
-                  : 'support-default-image')
-              }
+              initialStyleId={design?.style}
+              initialThemeId={design?.colourTheme}
               visualKind={design.visual?.kind ?? 'None'}
             />
           </>
