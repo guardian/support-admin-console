@@ -5,7 +5,7 @@ version := "1.0-SNAPSHOT"
 scalaVersion := "2.13.16"
 
 val circeVersion = "0.14.14"
-val awsVersion = "2.32.33"
+val awsVersion = "2.35.4"
 val zioVersion = "2.1.20"
 val jacksonVersion = "2.19.2"
 
@@ -28,7 +28,7 @@ asciiGraphWidth := 999999999 // to ensure Snyk can read the the deeeeep dependen
 
 libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
-  "com.gu.play-googleauth" %% "play-v30" % "27.0.0",
+  "com.gu.play-googleauth" %% "play-v30" % "28.0.0",
   "com.google.cloud" % "google-cloud-bigquery" % "2.54.1",
   "com.gu" %% "simple-configuration-ssm" % "7.0.2",
   "software.amazon.awssdk" % "s3" % awsVersion,
@@ -60,6 +60,8 @@ dependencyOverrides ++= List(
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
   "io.netty" % "netty-handler" % "4.2.4.Final",
   "io.netty" % "netty-codec-http2" % "4.2.4.Final",
+  // google-cloud-bigquery pulls in a vulnerable version of grpc-netty-shaded
+  "io.grpc" % "grpc-netty-shaded" % "1.75.0",
   // Related to Play 3.0.2-6 currently brings in a vulnerable version of commons-io
   "commons-io" % "commons-io" % "2.20.0" % Test,
   "commons-beanutils" % "commons-beanutils" % "1.11.0"
@@ -78,13 +80,13 @@ Test / testQuick := { (Test / testQuick).dependsOn(startDynamoDBLocal).evaluated
 Test / test := { (Test / test).dependsOn(startDynamoDBLocal).value }
 Test / testOptions += { dynamoDBLocalTestCleanup.value }
 
-sources in (Compile, doc) := Seq.empty
+Compile / doc / sources := Seq.empty
 
-publishArtifact in (Compile, packageDoc) := false
+Compile / packageDoc / publishArtifact := false
 
 pipelineStages := Seq(digest)
 
-riffRaffPackageType := (packageBin in Debian).value
+riffRaffPackageType := (Debian / packageBin).value
 riffRaffManifestProjectName := "support:admin-console"
 riffRaffPackageName := "admin-console"
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
@@ -98,4 +100,4 @@ riffRaffArtifactResources += (
   "cfn/AdminConsole-CODE.template.json"
 )
 
-javaOptions in run ++= Seq("-Xms2G", "-Xmx2G", "-Xss4M")
+run / javaOptions ++= Seq("-Xms2G", "-Xmx2G", "-Xss4M")
