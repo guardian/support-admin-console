@@ -189,7 +189,7 @@ const useStyles = makeStyles(({ breakpoints, spacing }: Theme) => ({
     top: -12,
     right: 8,
     borderRadius: 4,
-    padding: '4px 8px',
+    padding: '2px 6px',
     fontFamily: 'GuardianTextSans',
     fontSize: 12,
     fontWeight: 700,
