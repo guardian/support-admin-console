@@ -46,7 +46,7 @@ type Props = {
   onChange: (selected: SelectedPalette) => void;
   initialStyleId?: string;
   initialThemeId?: string;
-  visualKind?: 'Image' | 'ChoiceCards' | 'None';
+  visualKind?: 'Image' | 'ChoiceCards';
 };
 
 const PaletteSelector: React.FC<Props> = ({
@@ -120,10 +120,6 @@ const PaletteSelector: React.FC<Props> = ({
     setTheme(newTheme);
     setSelectedPalette(style, newTheme);
   };
-
-  if (visualKind === 'None') {
-    return null;
-  }
 
   return (
     <div className={classes.container}>

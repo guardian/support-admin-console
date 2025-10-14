@@ -235,7 +235,7 @@ const PalettePreview: React.FC<Props> = ({ colours, visualKind = 'Image' }) => {
             <div className={classes.heading} style={{ color: colours.heading }}>
               Heading
             </div>
-            {colours.ticker && (
+            {visualKind === 'ChoiceCards' && colours.ticker && (
               <div className={classes.tickerContainer}>
                 <div
                   className={classes.tickerBar}
