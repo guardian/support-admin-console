@@ -12,11 +12,11 @@ const ArticlePaths: Record<ArticleType, string> = {
   Liveblog: 'world/live/2022/oct/07/nobel-peace-prize-2022-live-winners',
 };
 
-const getHostName = (stage: Stage, platform: TestPlatform): string => {
+const getHostName = (stage: Stage): string => {
   if (stage === 'PROD') {
-    return platform === 'AMP' ? 'amp.theguardian.com' : 'theguardian.com';
+    return 'theguardian.com';
   } else {
-    return platform === 'AMP' ? 'amp.code.dev-theguardian.com' : 'm.code.dev-theguardian.com';
+    return 'm.code.dev-theguardian.com';
   }
 };
 
@@ -34,7 +34,6 @@ const getPreviewUrl = (
   testName: string,
   variantName: string,
   testType: TestType,
-  platform: TestPlatform,
   articleType: ArticleType,
 ): string => {
   const stage = getStage();
@@ -47,7 +46,7 @@ const getPreviewUrl = (
       stage !== 'PROD' ? 'code.dev-' : ''
     }theguardian.com/contribute${queryString}`;
   } else {
-    return `https://${getHostName(stage, platform)}/${ArticlePaths[articleType]}${queryString}`;
+    return `https://${getHostName(stage)}/${ArticlePaths[articleType]}${queryString}`;
   }
 };
 
@@ -68,7 +67,7 @@ const VariantSummaryWebPreviewButton: React.FC<VariantSummaryPreviewButtonProps>
   isDisabled,
   articleType,
 }: VariantSummaryPreviewButtonProps) => {
-  const isIncompatiblePlatform = ['APPLE_NEWS', 'AMP'].includes(platform);
+  const isIncompatiblePlatform = ['APPLE_NEWS'].includes(platform);
 
   const checkForDisabledButton = (): boolean => {
     if (isIncompatiblePlatform) {
@@ -90,7 +89,7 @@ const VariantSummaryWebPreviewButton: React.FC<VariantSummaryPreviewButtonProps>
       size="small"
       onClick={(event): void => event.stopPropagation()}
       onFocus={(event): void => event.stopPropagation()}
-      href={getPreviewUrl(testName, name, testType, platform, articleType)}
+      href={getPreviewUrl(testName, name, testType, articleType)}
       target="_blank"
       rel="noopener noreferrer"
       disabled={checkForDisabledButton()}

@@ -22,9 +22,6 @@ GET /liveblog-epic-tests/:name                      controllers.Application.inde
 GET /apple-news-epic-tests                          controllers.Application.index
 GET /apple-news-epic-tests/:name                    controllers.Application.indexWithName(name: String)
 
-GET /amp-epic-tests                                 controllers.Application.index
-GET /amp-epic-tests/:name                           controllers.Application.indexWithName(name: String)
-
 GET /banner-tests                                   controllers.Application.index
 GET /banner-tests/:name                             controllers.Application.indexWithName(name: String)
 
@@ -135,23 +132,6 @@ POST  /frontend/apple-news-epic-tests/test/lock/:testName        controllers.epi
 POST  /frontend/apple-news-epic-tests/test/unlock/:testName      controllers.epic.AppleNewsEpicTestsController.unlockTest(testName: String)
 POST  /frontend/apple-news-epic-tests/test/takecontrol/:testName controllers.epic.AppleNewsEpicTestsController.forceLockTest(testName: String)
 POST  /frontend/apple-news-epic-tests/test/status/:rawStatus     controllers.epic.AppleNewsEpicTestsController.setStatus(rawStatus: String)
-
-
-# ----- AMP epic 'tests' ----- #
-GET   /frontend/amp-epic-tests                          controllers.epic.AMPEpicTestsController.get
-# AMP epic list endpoints
-POST  /frontend/amp-epic-tests/list/lock                  controllers.epic.AMPEpicTestsController.lockList
-POST  /frontend/amp-epic-tests/list/unlock                controllers.epic.AMPEpicTestsController.unlockList
-POST  /frontend/amp-epic-tests/list/takecontrol           controllers.epic.AMPEpicTestsController.takeControlOfList
-POST  /frontend/amp-epic-tests/list/reorder               controllers.epic.AMPEpicTestsController.reorderList
-# AMP epic test endpoints
-GET   /frontend/amp-epic-tests/test/:testName             controllers.epic.AMPEpicTestsController.getTest(testName: String)
-POST  /frontend/amp-epic-tests/test/update                controllers.epic.AMPEpicTestsController.updateTest
-POST  /frontend/amp-epic-tests/test/create                controllers.epic.AMPEpicTestsController.createTest
-POST  /frontend/amp-epic-tests/test/lock/:testName        controllers.epic.AMPEpicTestsController.lockTest(testName: String)
-POST  /frontend/amp-epic-tests/test/unlock/:testName      controllers.epic.AMPEpicTestsController.unlockTest(testName: String)
-POST  /frontend/amp-epic-tests/test/takecontrol/:testName controllers.epic.AMPEpicTestsController.forceLockTest(testName: String)
-POST  /frontend/amp-epic-tests/test/status/:rawStatus     controllers.epic.AMPEpicTestsController.setStatus(rawStatus: String)
 
 
 # ----- Banner channel 1 tests ----- #

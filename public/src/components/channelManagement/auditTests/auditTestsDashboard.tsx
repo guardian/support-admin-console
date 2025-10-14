@@ -109,9 +109,6 @@ export const AuditTestsDashboard: React.FC = () => {
                 <MenuItem value={'Epic'} key={'Epic'}>
                   Epic
                 </MenuItem>
-                <MenuItem value={'EpicAMP'} key={'EpicAMP'}>
-                  EpicAMP
-                </MenuItem>
                 <MenuItem value={'EpicAppleNews'} key={'EpicAppleNews'}>
                   EpicAppleNews
                 </MenuItem>
