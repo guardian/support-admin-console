@@ -5,7 +5,7 @@ export interface Variant {
   name: string;
 }
 
-export type TestPlatform = 'AMP' | 'APPLE_NEWS' | 'DOTCOM';
+export type TestPlatform = 'APPLE_NEWS' | 'DOTCOM';
 
 export type TestType = 'EPIC' | 'BANNER' | 'GUTTER' | 'HEADER' | 'LANDING_PAGE';
 
@@ -171,35 +171,6 @@ export const APPLE_NEWS_EPIC_CONFIG: EpicEditorConfig = {
   requireVariantHeader: false,
   moduleName: 'ContributionsEpic',
   platform: 'APPLE_NEWS',
-  allowNewsletterSignup: false,
-};
-
-export const AMP_EPIC_CONFIG: EpicEditorConfig = {
-  allowMultipleVariants: true,
-  allowCustomVariantSplit: false,
-  allowMethodologyEditor: false,
-  allowContentTargeting: false,
-  allowLocationTargeting: true,
-  allowSupporterStatusTargeting: false,
-  allowDeviceTypeTargeting: false,
-  showSignedInStatusSelector: false,
-  allowViewFrequencySettings: false,
-  allowArticleCount: false,
-  allowVariantHeader: true,
-  allowVariantHighlightedText: true,
-  allowVariantImageUrl: false,
-  allowVariantCustomPrimaryCta: true,
-  allowVariantSecondaryCta: true,
-  allowVariantCustomSecondaryCta: false,
-  allowVariantSeparateArticleCount: false,
-  allowVariantTicker: true,
-  allowVariantChoiceCards: true,
-  allowVariantSignInLink: false,
-  allowBylineWithImage: false,
-  allowVariantPreview: false,
-  requireVariantHeader: false,
-  moduleName: 'ContributionsEpic',
-  platform: 'AMP',
   allowNewsletterSignup: false,
 };
 

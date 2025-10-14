@@ -8,7 +8,6 @@ sealed trait Channel
 
 object Channel {
   case object Epic extends Channel
-  case object EpicAMP extends Channel
   case object EpicAppleNews extends Channel
   case object EpicLiveblog extends Channel
   case object Banner1 extends Channel
