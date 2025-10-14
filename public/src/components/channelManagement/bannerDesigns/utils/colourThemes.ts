@@ -7,7 +7,7 @@ export type ThemeColours = {
   highlightBackground: string;
   primaryCta: { text: string; background: string; border?: string | null };
   secondaryCta: { text: string; background: string; border?: string | null };
-  closeButton?: { text: string; background: string; border?: string | null };
+  closeButton: { text: string; background: string; border?: string | null };
   ticker: {
     filledProgress: string;
     progressBarBackground: string;

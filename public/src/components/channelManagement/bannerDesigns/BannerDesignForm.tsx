@@ -123,7 +123,7 @@ const BannerDesignForm: React.FC<Props> = ({
           articleCountText: stringToHexColour(
             selectedPalette.colours.articleCountText || selectedPalette.colours.bodyText,
           ),
-          logo: stringToHexColour(selectedPalette.colours.logo || '#000000'),
+          logo: stringToHexColour(selectedPalette.colours.logo),
         },
         highlightedText: {
           text: stringToHexColour(selectedPalette.colours.highlightText),
