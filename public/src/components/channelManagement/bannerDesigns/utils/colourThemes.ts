@@ -61,7 +61,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
             highlightBackground: '#FFE500',
             primaryCta: { text: '#052962', background: '#FFE500', border: null },
             secondaryCta: { text: '#000000', background: '#F1F8FC', border: '#000000' },
-            closeButton: { text: '#000000', background: '#FFFFFF', border: '#000000' },
+            closeButton: { text: '#000000', background: '#E6ECEF', border: '#E6ECEF' },
             ticker: {
               filledProgress: '#052962',
               progressBarBackground: '#D4DFE9',
@@ -96,7 +96,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
             highlightBackground: '#FFE500',
             primaryCta: { text: '#052962', background: '#FFE500', border: null },
             secondaryCta: { text: '#000000', background: '#F1F8FC', border: '#000000' },
-            closeButton: { text: '#000000', background: '#FFFFFF', border: '#000000' },
+            closeButton: { text: '#000000', background: '#E6ECEF', border: '#E6ECEF' },
             ticker: {
               filledProgress: '#052962',
               progressBarBackground: '#D4DFE9',
@@ -131,7 +131,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
             highlightBackground: '#052962',
             primaryCta: { text: '#FFFFFF', background: '#052962', border: null },
             secondaryCta: { text: '#000000', background: '#FFE500', border: '#000000' },
-            closeButton: { text: '#000000', background: '#FFFFFF', border: '#000000' },
+            closeButton: { text: '#000000', background: '#F2DA01', border: '#F2DA01' },
             ticker: {
               filledProgress: '#052962',
               progressBarBackground: '#CDBF14',
@@ -166,7 +166,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
             highlightBackground: '#052962',
             primaryCta: { text: '#FFFFFF', background: '#052962', border: null },
             secondaryCta: { text: '#000000', background: '#FFE500', border: '#000000' },
-            closeButton: { text: '#000000', background: '#FFFFFF', border: '#000000' },
+            closeButton: { text: '#000000', background: '#F2DA01', border: '#F2DA01' },
             ticker: {
               filledProgress: '#052962',
               progressBarBackground: '#CDBF14',
@@ -201,7 +201,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
             highlightBackground: '#90DCFF',
             primaryCta: { text: '#000000', background: '#90DCFF', border: null },
             secondaryCta: { text: '#000000', background: '#F6F6F6', border: '#000000' },
-            closeButton: { text: '#000000', background: '#FFFFFF', border: '#000000' },
+            closeButton: { text: '#000000', background: '#EAEAEA', border: '#EAEAEA' },
             ticker: {
               filledProgress: '#0077B6',
               progressBarBackground: '#A0CAE0',
@@ -236,7 +236,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
             highlightBackground: '#90DCFF',
             primaryCta: { text: '#000000', background: '#90DCFF', border: null },
             secondaryCta: { text: '#FFFFFF', background: '#0077B6', border: '#FFFFFF' },
-            closeButton: { text: '#000000', background: '#90DCFF', border: '#000000' },
+            closeButton: { text: '#FFFFFF', background: '#0F7EBA', border: '#0F7EBA' },
             ticker: {
               filledProgress: '#90DCFF',
               progressBarBackground: '#329AD0',
@@ -271,7 +271,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
             highlightBackground: '#0077B6',
             primaryCta: { text: '#FFFFFF', background: '#0077B6', border: null },
             secondaryCta: { text: '#000000', background: '#90DCFF', border: '#000000' },
-            closeButton: { text: '#F6F6F6', background: '#0077B6', border: '#F6F6F6' },
+            closeButton: { text: '#000000', background: '#89D1F2', border: '#89D1F2' },
             ticker: {
               filledProgress: '#0077B6',
               progressBarBackground: '#5EB9E5',
@@ -306,7 +306,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
             highlightBackground: '#0077B6',
             primaryCta: { text: '#FFFFFF', background: '#0077B6', border: null },
             secondaryCta: { text: '#000000', background: '#90DCFF', border: '#000000' },
-            closeButton: { text: '#F6F6F6', background: '#0077B6', border: '#F6F6F6' },
+            closeButton: { text: '#000000', background: '#89D1F2', border: '#89D1F2' },
             ticker: {
               filledProgress: '#0077B6',
               progressBarBackground: '#5EB9E5',
@@ -376,7 +376,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
             highlightBackground: '#FFE500',
             primaryCta: { text: '#000000', background: '#FFE500', border: null },
             secondaryCta: { text: '#000000', background: '#F6F6F6', border: '#000000' },
-            closeButton: { text: '#000000', background: '#FFFFFF', border: '#000000' },
+            closeButton: { text: '#000000', background: '#EAEAEA', border: '#EAEAEA' },
             ticker: {
               filledProgress: '#C70000',
               progressBarBackground: '#E6A0A0',
@@ -411,7 +411,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
             highlightBackground: '#660505',
             primaryCta: { text: '#FFFFFF', background: '#660505', border: null },
             secondaryCta: { text: '#FFFFFF', background: '#AB0613', border: '#FFFFFF' },
-            closeButton: { text: '#FFFFFF', background: '#FFFFFF', border: '#FFFFFF' },
+            closeButton: { text: '#FFFFFF', background: '#AF121F', border: '#AF121F' },
             ticker: {
               filledProgress: '#FF5943',
               progressBarBackground: '#BC171D',
@@ -446,7 +446,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
             highlightBackground: '#FFD8D1',
             primaryCta: { text: '#000000', background: '#FFE500', border: null },
             secondaryCta: { text: '#FFFFFF', background: '#AB0613', border: '#FFFFFF' },
-            closeButton: { text: '#FFFFFF', background: '#FFFFFF', border: '#FFFFFF' },
+            closeButton: { text: '#FFFFFF', background: '#A30511', border: '#A30511' },
             ticker: {
               filledProgress: '#FF5943',
               progressBarBackground: '#BC171D',
@@ -592,7 +592,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
             highlightBackground: '#A36000',
             primaryCta: { text: '#FAFAFA', background: '#A36000', border: null },
             secondaryCta: { text: '#20201D', background: '#FFF1D7', border: '#20201D' },
-            closeButton: { text: '#FAFAFA', background: '#A36000', border: '#A36000' },
+            closeButton: { text: '#000000', background: '#F2E5CC', border: '#F2E5CC' },
             ticker: {
               filledProgress: '#A36000',
               progressBarBackground: '#FAFAFA',
@@ -627,7 +627,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
             highlightBackground: '#879F84',
             primaryCta: { text: '#20201D', background: '#879F84', border: null },
             secondaryCta: { text: '#20201D', background: '#FFF1D7', border: '#20201D' },
-            closeButton: { text: '#20201D', background: '#879F84', border: '#879F84' },
+            closeButton: { text: '#000000', background: '#F2E5CC', border: '#F2E5CC' },
             ticker: {
               filledProgress: '#879F84',
               progressBarBackground: '#FAFAFA',
@@ -662,7 +662,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
             highlightBackground: '#20809E',
             primaryCta: { text: '#FAFAFA', background: '#20809E', border: null },
             secondaryCta: { text: '#20201D', background: '#FFF1D7', border: '#20201D' },
-            closeButton: { text: '#FAFAFA', background: '#20809E', border: '#20809E' },
+            closeButton: { text: '#000000', background: '#F2E5CC', border: '#F2E5CC' },
             ticker: {
               filledProgress: '#20809E',
               progressBarBackground: '#FAFAFA',
@@ -697,7 +697,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
             highlightBackground: '#F56900',
             primaryCta: { text: '#20201D', background: '#F56900', border: null },
             secondaryCta: { text: '#20201D', background: '#F7EFE9', border: '#20201D' },
-            closeButton: { text: '#FAFAFA', background: '#F56900', border: '#F56900' },
+            closeButton: { text: '#000000', background: '#EBE4DD', border: '#EBE4DD' },
             ticker: {
               filledProgress: '#F56900',
               progressBarBackground: '#FAFAFA',
@@ -732,7 +732,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
             highlightBackground: '#BED01E',
             primaryCta: { text: '#20201D', background: '#BED01E', border: null },
             secondaryCta: { text: '#20201D', background: '#F7EFE9', border: '#20201D' },
-            closeButton: { text: '#20201D', background: '#BED01E', border: '#BED01E' },
+            closeButton: { text: '#000000', background: '#EBE4DD', border: '#EBE4DD' },
             ticker: {
               filledProgress: '#BED01E',
               progressBarBackground: '#FAFAFA',
@@ -767,7 +767,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
             highlightBackground: '#697311',
             primaryCta: { text: '#FAFAFA', background: '#697311', border: null },
             secondaryCta: { text: '#20201D', background: '#F7EFE9', border: '#20201D' },
-            closeButton: { text: '#FAFAFA', background: '#697311', border: '#697311' },
+            closeButton: { text: '#000000', background: '#EBE4DD', border: '#EBE4DD' },
             ticker: {
               filledProgress: '#697311',
               progressBarBackground: '#FAFAFA',
@@ -808,7 +808,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
             highlightBackground: '#FFD900',
             primaryCta: { text: '#000000', background: '#FFD900', border: null },
             secondaryCta: { text: '#F6F6F6', background: '#222527', border: '#F6F6F6' },
-            closeButton: { text: '#F6F6F6', background: '#FFFFFF', border: '#F6F6F6' },
+            closeButton: { text: '#FFFFFF', background: '#2D3032', border: '#2D3032' },
             ticker: {
               filledProgress: '#F6F6F6',
               progressBarBackground: '#4B4F52',
@@ -843,7 +843,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
             highlightBackground: '#FFE500',
             primaryCta: { text: '#000000', background: '#FFE500', border: null },
             secondaryCta: { text: '#000000', background: '#F6F6F6', border: '#000000' },
-            closeButton: { text: '#000000', background: '#FFFFFF', border: '#000000' },
+            closeButton: { text: '#000000', background: '#EAEAEA', border: '#EAEAEA' },
             ticker: {
               filledProgress: '#000000',
               progressBarBackground: '#FFE500',
@@ -878,7 +878,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
             highlightBackground: '#052962',
             primaryCta: { text: '#FFFFFF', background: '#052962', border: null },
             secondaryCta: { text: '#FFFFFF', background: '#0077B6', border: '#FFFFFF' },
-            closeButton: { text: '#FFFFFF', background: '#052962', border: '#FFFFFF' },
+            closeButton: { text: '#FFFFFF', background: '#0F7EBA', border: '#0F7EBA' },
             ticker: {
               filledProgress: '#FFFFFF',
               progressBarBackground: '#2F91C4',

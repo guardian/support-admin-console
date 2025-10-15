@@ -11,6 +11,7 @@ export interface PreviewColours {
   highlightBackground: string;
   primaryCta: { text: string; background: string; border?: string | null };
   secondaryCta: { text: string; background: string; border?: string | null };
+  closeButton: { text: string; background: string; border?: string | null };
   ticker?: {
     filledProgress: string;
     progressBarBackground: string;
@@ -424,6 +425,29 @@ const PalettePreview: React.FC<Props> = ({ colours, visualKind = 'Image' }) => {
               </div>
             </div>
           )}
+          <div>
+            <button
+              style={{
+                width: '40px',
+                height: '40px',
+                borderRadius: '50%',
+                border: `1px solid ${colours.closeButton.border || 'transparent'}`,
+                backgroundColor: `${colours.closeButton.background}`,
+                color: `${colours.closeButton.text}`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <svg viewBox="-3 -3 30 30" fill={`${colours.closeButton.text}`}>
+                <path
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="m1 7.224 10.498 10.498h1.004L23 7.224l-.98-.954L12 14.708 1.98 6.27z"
+                ></path>
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
     </div>
