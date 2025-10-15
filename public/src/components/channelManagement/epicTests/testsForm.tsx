@@ -2,7 +2,6 @@ import { FrontendSettingsType } from '../../../utils/requests';
 import { TestsForm } from '../testsForm';
 import { getDefaultTest, getDefaultVariant } from './utils/defaults';
 import {
-  AMP_EPIC_CONFIG,
   APPLE_NEWS_EPIC_CONFIG,
   ARTICLE_EPIC_CONFIG,
   EpicEditorConfig,
@@ -43,8 +42,4 @@ export const LiveblogEpicTestsForm = buildEpicTestsForm(
 export const AppleNewsEpicTestsForm = buildEpicTestsForm(
   APPLE_NEWS_EPIC_CONFIG,
   FrontendSettingsType.appleNewsEpicTests,
-);
-export const AMPEpicTestsForm = buildEpicTestsForm(
-  AMP_EPIC_CONFIG,
-  FrontendSettingsType.ampEpicTests,
 );

@@ -206,7 +206,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
         testType="BANNER"
         isInEditMode={userHasTestLocked}
         topButton={<BannerVariantPreview variant={variant} design={design} />}
-        platform="DOTCOM" // hardcoded as banners are currently not supported in AMP or Apple News
+        platform="DOTCOM" // hardcoded as banners are currently not supported in Apple News
         articleType="Standard"
       />
     );

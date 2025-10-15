@@ -14,7 +14,6 @@ export enum FrontendSettingsType {
   epicTests = 'epic-tests',
   liveblogEpicTests = 'liveblog-epic-tests',
   appleNewsEpicTests = 'apple-news-epic-tests',
-  ampEpicTests = 'amp-epic-tests',
   bannerTests = 'banner-tests',
   bannerTests2 = 'banner-tests2',
   bannerDeploy = 'banner-deploy',

@@ -364,8 +364,8 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
 
         {!checkIfTestIsCountryTier() && (
           <Typography className={classes.note}>
-            Note: users arriving at the checkout page from Apple News/Google AMP article CTAs will
-            only see their region&apos;s amounts test, with options for single, monthly and annual
+            Note: users arriving at the checkout page from Apple News/Google article CTAs will only
+            see their region&apos;s amounts test, with options for single, monthly and annual
             contributions.
           </Typography>
         )}
