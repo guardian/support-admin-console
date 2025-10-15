@@ -171,7 +171,7 @@ const variantFields = {
     template: {
       label: 'Banner template',
       type: 'string',
-      exclude: ['Header', 'Epic', 'EpicLiveblog', 'EpicAppleNews', 'EpicAMP'],
+      exclude: ['Header', 'Epic', 'EpicLiveblog', 'EpicAppleNews'],
       optional: false,
     },
     showSignInLink: {
@@ -222,7 +222,7 @@ const variantFields = {
     subheading: {
       label: 'Sub-heading',
       type: 'string-block',
-      exclude: ['Epic', 'EpicLiveblog', 'EpicAppleNews', 'EpicAMP', 'Banner1', 'Banner2'],
+      exclude: ['Epic', 'EpicLiveblog', 'EpicAppleNews', 'Banner1', 'Banner2'],
       optional: true,
     },
     paragraphs: {
@@ -246,7 +246,7 @@ const variantFields = {
     primaryCta: {
       label: 'Main CTA',
       type: 'object',
-      exclude: ['Epic', 'EpicLiveblog', 'EpicAppleNews', 'EpicAMP', 'Banner1', 'Banner2'],
+      exclude: ['Epic', 'EpicLiveblog', 'EpicAppleNews', 'Banner1', 'Banner2'],
       optional: true,
     },
     secondaryCta: {
@@ -378,15 +378,7 @@ const TestDataDialog: React.FC<TestDataDialogProps> = ({
 
     if (
       channel == null ||
-      ![
-        'Header',
-        'Epic',
-        'EpicLiveblog',
-        'EpicAppleNews',
-        'EpicAMP',
-        'Banner1',
-        'Banner2',
-      ].includes(channel)
+      !['Header', 'Epic', 'EpicLiveblog', 'EpicAppleNews', 'Banner1', 'Banner2'].includes(channel)
     ) {
       res += `WARNING: Test channel not recognised!`;
     } else if (!variants.length) {
@@ -415,7 +407,7 @@ ${parseData(channel, variantFields.copy, v.mobileContent)}
 `;
         }
       });
-    } else if (['Epic', 'EpicLiveblog', 'EpicAppleNews', 'EpicAMP'].includes(channel)) {
+    } else if (['Epic', 'EpicLiveblog', 'EpicAppleNews'].includes(channel)) {
       variants.forEach(v => {
         res += `Variant: ${v.name}
 ---------------------------------------------------------------------

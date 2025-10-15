@@ -55,7 +55,6 @@ export const testChannelOrder = [
   'Epic',
   'EpicLiveblog',
   'EpicAppleNews',
-  'EpicAMP',
   'Banner1',
   'Banner2',
   'GutterLiveblog',
@@ -86,10 +85,6 @@ export const testChannelData: TestChannelData = {
   EpicAppleNews: {
     name: 'Apple News Epic',
     link: 'apple-news-epic-tests',
-  },
-  EpicAMP: {
-    name: 'AMP Epic',
-    link: 'amp-epic-tests',
   },
   Banner1: {
     name: 'Banner 1',

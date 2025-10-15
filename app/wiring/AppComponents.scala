@@ -151,15 +151,6 @@ class AppComponents(context: Context, stage: String)
       dynamoArchivedChannelTests,
       dynamoTestsAuditService
     ),
-    new AMPEpicTestsController(
-      authAction,
-      controllerComponents,
-      stage,
-      runtime,
-      dynamoTestsService,
-      dynamoArchivedChannelTests,
-      dynamoTestsAuditService
-    ),
     new BannerTestsController(
       authAction,
       controllerComponents,
