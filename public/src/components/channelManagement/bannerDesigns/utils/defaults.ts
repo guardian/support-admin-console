@@ -69,10 +69,8 @@ export const createDefaultBannerDesign = (name: string): BannerDesign => ({
       },
     },
     ticker: {
-      text: stringToHexColour('052962'), // deprecated
       filledProgress: stringToHexColour('052962'),
       progressBarBackground: stringToHexColour('FFFFFF'),
-      goalMarker: stringToHexColour('000000'), //deprecated
       headlineColour: stringToHexColour('052962'),
       totalColour: stringToHexColour('052962'),
       goalColour: stringToHexColour('052962'),
