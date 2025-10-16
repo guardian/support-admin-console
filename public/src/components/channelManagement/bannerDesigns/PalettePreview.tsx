@@ -425,7 +425,8 @@ const PalettePreview: React.FC<Props> = ({ colours, visualKind = 'Image' }) => {
               </div>
             </div>
           )}
-          <div>
+          {/** Close button hidden, use for troubleshooting only */}
+          {/* <div>
             <button
               style={{
                 width: '40px',
@@ -447,7 +448,7 @@ const PalettePreview: React.FC<Props> = ({ colours, visualKind = 'Image' }) => {
                 ></path>
               </svg>
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

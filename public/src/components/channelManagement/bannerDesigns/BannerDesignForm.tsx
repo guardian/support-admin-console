@@ -238,6 +238,7 @@ const BannerDesignForm: React.FC<Props> = ({
               initialStyleId={design?.style}
               initialThemeId={design?.colourTheme}
               visualKind={design.visual?.kind ?? 'Image'}
+              isDisabled={isDisabled}
             />
           </>
         </AccordionDetails>

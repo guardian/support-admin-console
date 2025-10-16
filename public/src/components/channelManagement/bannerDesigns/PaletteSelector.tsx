@@ -47,6 +47,7 @@ type Props = {
   initialStyleId?: string;
   initialThemeId?: string;
   visualKind?: 'Image' | 'ChoiceCards';
+  isDisabled: boolean;
 };
 
 const PaletteSelector: React.FC<Props> = ({
@@ -54,6 +55,7 @@ const PaletteSelector: React.FC<Props> = ({
   initialStyleId,
   initialThemeId,
   visualKind,
+  isDisabled,
 }) => {
   const classes = useStyles();
   const { styles } = colourThemes;
@@ -131,6 +133,7 @@ const PaletteSelector: React.FC<Props> = ({
             label="Style"
             value={style?.id ?? ''}
             onChange={onStyleChange}
+            disabled={isDisabled}
           >
             {availableStyles.map(style => (
               <MenuItem key={style.id} value={style.id}>
@@ -147,6 +150,7 @@ const PaletteSelector: React.FC<Props> = ({
             label="Colour theme"
             value={theme?.id ?? ''}
             onChange={onThemeChange}
+            disabled={isDisabled}
           >
             {availableThemes.map(theme => (
               <MenuItem key={theme.id} value={theme.id}>
