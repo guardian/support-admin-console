@@ -204,7 +204,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
             closeButton: { text: '#000000', background: '#EAEAEA', border: '#EAEAEA' },
             ticker: {
               filledProgress: '#0077B6',
-              progressBarBackground: '#A0CAE0',
+              progressBarBackground: '#B8D6E6',
               headlineColour: '#0077B6',
               totalColour: '#0077B6',
               goalColour: '#000000',
@@ -379,7 +379,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
             closeButton: { text: '#000000', background: '#EAEAEA', border: '#EAEAEA' },
             ticker: {
               filledProgress: '#C70000',
-              progressBarBackground: '#E6A0A0',
+              progressBarBackground: '#EDC5C5',
               headlineColour: '#C70000',
               totalColour: '#C70000',
               goalColour: '#000000',
@@ -484,7 +484,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
             closeButton: { text: '#000000', background: '#EAEAEA', border: '#EAEAEA' },
             ticker: {
               filledProgress: '#BB3B80',
-              progressBarBackground: '#E1B5CD',
+              progressBarBackground: '#E7C7D9',
               headlineColour: '#000000',
               totalColour: '#BB3B80',
               goalColour: '#000000',
