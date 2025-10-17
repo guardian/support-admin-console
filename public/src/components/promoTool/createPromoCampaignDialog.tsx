@@ -11,7 +11,7 @@ import { makeStyles } from '@mui/styles';
 import React, { useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import { ProductSelector } from './productSelector';
-import { Products, PromoProduct } from './utils/promoModels';
+import { PromoProduct } from './utils/promoModels';
 import { useForm } from 'react-hook-form';
 import {
   EMPTY_ERROR_HELPER_TEXT,
@@ -51,7 +51,7 @@ const CreatePromoCampaignDialog: React.FC<CreatePromoCampaignDialogProps> = ({
   createPromoCampaign,
 }: CreatePromoCampaignDialogProps) => {
   const classes = useStyles();
-  const [selectedProduct, setSelectedProduct] = useState<Products>('SupporterPlus');
+  const [selectedProduct, setSelectedProduct] = useState<PromoProduct>('SupporterPlus');
 
   const {
     register,
