@@ -50,5 +50,3 @@ const NewPromoCampaignButton: React.FC<NewPromoCampaignButtonProps> = ({
 };
 
 export default NewPromoCampaignButton;
-
-// TODO: carry on with this

@@ -44,7 +44,6 @@ interface CreatePromoCampaignDialogProps {
   close: () => void;
   existingNames: string[];
   createPromoCampaign: (name: string, product: PromoProduct) => void;
-  // createPromoCampaign: (data: FormData) => void;
 }
 const CreatePromoCampaignDialog: React.FC<CreatePromoCampaignDialogProps> = ({
   isOpen,
