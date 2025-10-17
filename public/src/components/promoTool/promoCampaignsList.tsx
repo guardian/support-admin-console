@@ -32,8 +32,6 @@ const PromoCampaignsList = ({
 }: PromoCampaignsListProps): React.ReactElement => {
   const classes = useStyles();
 
-  // TODO: fetch list of campaigns from service
-
   const filterPromoCampaigns = (campaignArray: PromoCampaigns) => {
     return campaignArray.filter(c => {
       if (!promoCampaignSearch) {
