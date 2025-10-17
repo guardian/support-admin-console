@@ -2,8 +2,10 @@ import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import PromoCampaignsSidebar from './promoCampaignsSidebar';
-import { dummyCampaigns, PromoCampaign } from './utils/promoModels';
+import { PromoCampaign, PromoProduct } from './utils/promoModels';
 import { useParams } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
+import { createPromoCampaign, fetchPromoCampaigns } from '../../utils/requests';
 
 const useStyles = makeStyles(({ spacing, typography }: Theme) => ({
   viewTextContainer: {
@@ -49,12 +51,34 @@ const PromoTool: React.FC = () => {
   const [promoCampaigns, setPromoCampaigns] = useState<PromoCampaign[]>([]);
   const { promoCampaignCode } = useParams<{ promoCampaignCode?: string }>(); // querystring parameter
   const [selectedPromoCampaignCode, setSelectedPromoCampaignCode] = useState<string | undefined>();
+  const [selectedPromoProduct, setSelectedPromoProduct] = useState<PromoProduct>('SupporterPlus');
 
-  // TODO: replace
-  const dummyFetch = () => setPromoCampaigns(dummyCampaigns);
-  const onDummyCreate = (newPromoCampaign: PromoCampaign): void => {
-    // TODO: validate etc
-    setPromoCampaigns([newPromoCampaign, ...promoCampaigns]);
+  const createNewPromoCampaign = (name: string, product: PromoProduct): void => {
+    const newPromoCampaign: PromoCampaign = {
+      campaignCode: uuidv4(),
+      name: name,
+      product: product,
+      created: new Date().toISOString(),
+    };
+
+    createPromoCampaign(newPromoCampaign)
+      .then(() => {
+        setSelectedPromoCampaignCode(newPromoCampaign.campaignCode);
+        setPromoCampaigns([newPromoCampaign, ...promoCampaigns]);
+      })
+      .catch(error => {
+        alert(`Error while saving new PromoCampaign: ${error}`);
+      });
+  };
+
+  const fetchPromoCampaignsList = (product: string): void => {
+    fetchPromoCampaigns(JSON.stringify(product))
+      .then(campaigns => {
+        setPromoCampaigns(campaigns);
+      })
+      .catch(error => {
+        console.error(error);
+      });
   };
 
   // set selected promoCampaign
@@ -64,10 +88,9 @@ const PromoTool: React.FC = () => {
     }
   }, [promoCampaignCode, promoCampaigns]);
 
-  // fetch promoCampaignsList
   useEffect(() => {
-    dummyFetch();
-  }, []);
+    fetchPromoCampaignsList(selectedPromoProduct);
+  }, [selectedPromoProduct]);
 
   const selectedPromoCampaign = promoCampaigns.find(
     a => a.campaignCode === selectedPromoCampaignCode,
@@ -80,8 +103,10 @@ const PromoTool: React.FC = () => {
         <PromoCampaignsSidebar
           promoCampaigns={promoCampaigns}
           selectedPromoCampaign={selectedPromoCampaign}
-          createPromoCampaign={onDummyCreate}
+          createPromoCampaign={createNewPromoCampaign}
           onPromoCampaignSelected={code => setSelectedPromoCampaignCode(code)}
+          selectedProduct={selectedPromoProduct}
+          setSelectedProduct={setSelectedPromoProduct}
         />
       </div>
       <div className={classes.rightCol}>
