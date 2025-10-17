@@ -60,18 +60,24 @@ const PromoTool: React.FC = () => {
       product: product,
       created: new Date().toISOString(),
     };
-    console.log(`newPromoCampaign.campaignCode: ${newPromoCampaign.campaignCode}`);
-    console.log(`newPromoCampaign.name: ${newPromoCampaign.name}`);
-    console.log(`newPromoCampaign.product: ${newPromoCampaign.product}`);
-    console.log(`newPromoCampaign.created: ${newPromoCampaign.created}`);
+
     createPromoCampaign(newPromoCampaign)
       .then(() => {
-        console.log('saved ok');
         setSelectedPromoCampaignCode(newPromoCampaign.campaignCode);
         setPromoCampaigns([newPromoCampaign, ...promoCampaigns]);
       })
       .catch(error => {
         alert(`Error while saving new PromoCampaign: ${error}`);
+      });
+  };
+
+  const fetchPromoCampaignsList = (product: string): void => {
+    fetchPromoCampaigns(JSON.stringify(product))
+      .then(campaigns => {
+        setPromoCampaigns(campaigns);
+      })
+      .catch(error => {
+        console.log(error);
       });
   };
 
@@ -82,16 +88,8 @@ const PromoTool: React.FC = () => {
     }
   }, [promoCampaignCode, promoCampaigns]);
 
-  // fetch promoCampaignsList
   useEffect(() => {
-    fetchPromoCampaigns(selectedPromoProduct.toString())
-      .then(() => {
-        console.log('got something back');
-      })
-      .catch(error => {
-        console.log(error);
-        alert(`Error fetching: ${error}`);
-      });
+    fetchPromoCampaignsList(selectedPromoProduct);
   }, [selectedPromoProduct]);
 
   const selectedPromoCampaign = promoCampaigns.find(
