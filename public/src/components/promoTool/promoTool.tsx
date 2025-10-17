@@ -77,7 +77,7 @@ const PromoTool: React.FC = () => {
         setPromoCampaigns(campaigns);
       })
       .catch(error => {
-        console.log(error);
+        console.error(error);
       });
   };
 
