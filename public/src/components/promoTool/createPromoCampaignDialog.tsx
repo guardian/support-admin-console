@@ -62,9 +62,6 @@ const CreatePromoCampaignDialog: React.FC<CreatePromoCampaignDialogProps> = ({
   } = useForm<FormData>();
 
   const onSubmit = ({ name }: FormData): void => {
-    // console.log(`name: ${name}`);
-    // console.log(`selectedProduct: ${selectedProduct}`);
-
     createPromoCampaign(name, selectedProduct as PromoProduct); // REINSTATE when we know what's happening.
     close();
   };
@@ -94,7 +91,7 @@ const CreatePromoCampaignDialog: React.FC<CreatePromoCampaignDialogProps> = ({
               value: VALID_CHARACTERS_REGEX,
               message: INVALID_CHARACTERS_ERROR_HELPER_TEXT,
             },
-            // validate: createDuplicateValidator(existingNames), TODO: relevant?
+            // validate: createDuplicateValidator(existingNames), TODO: would this be useful?
           })}
           label="Promo Campaign name"
           margin="normal"
@@ -113,5 +110,3 @@ const CreatePromoCampaignDialog: React.FC<CreatePromoCampaignDialogProps> = ({
 };
 
 export default CreatePromoCampaignDialog;
-
-// TODO: carry on with this next
