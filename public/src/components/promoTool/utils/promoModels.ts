@@ -15,8 +15,6 @@ export const productIds = Object.keys(PromoProductNames);
 
 export type Product = keyof typeof PromoProductNames;
 
-export type Products = Product;
-
 export interface PromoCampaign {
   campaignCode: string;
   product: PromoProduct;
