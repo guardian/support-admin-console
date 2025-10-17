@@ -61,7 +61,7 @@ const CreatePromoCampaignDialog: React.FC<CreatePromoCampaignDialogProps> = ({
   } = useForm<FormData>();
 
   const onSubmit = ({ name }: FormData): void => {
-    createPromoCampaign(name, selectedProduct as PromoProduct); // REINSTATE when we know what's happening.
+    createPromoCampaign(name, selectedProduct as PromoProduct);
     close();
   };
 
