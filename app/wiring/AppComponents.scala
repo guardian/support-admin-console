@@ -247,6 +247,12 @@ class AppComponents(context: Context, stage: String)
       stage,
       runtime,
       dynamoPromosService
+    ),
+    new ProductCatalogController(
+      authAction,
+      controllerComponents,
+      runtime,
+      productCatalogCache
     )
   )
 }

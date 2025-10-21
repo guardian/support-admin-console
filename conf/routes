@@ -264,3 +264,6 @@ POST /promos/campaign/create                controllers.promos.PromoCampaignsCon
 # Promos endpoints
 GET /promo/:promoCode                 controllers.promos.PromosController.get(promoCode: String)
 POST /promo/create                    controllers.promos.PromosController.create
+
+# Product Catalog endpoint
+GET /product-catalog/:product         controllers.ProductCatalogController.getProductDetails(product: String)
