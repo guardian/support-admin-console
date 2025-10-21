@@ -14,6 +14,7 @@ import { ProductSelector } from './productSelector';
 import { PromoProduct } from './utils/promoModels';
 import { useForm } from 'react-hook-form';
 import {
+  createDuplicateValidator,
   EMPTY_ERROR_HELPER_TEXT,
   INVALID_CHARACTERS_ERROR_HELPER_TEXT,
   VALID_CHARACTERS_REGEX,
@@ -42,13 +43,14 @@ const NAME_DEFAULT_HELPER_TEXT = 'Format: TBC'; // TODO: should there be formatt
 interface CreatePromoCampaignDialogProps {
   isOpen: boolean;
   close: () => void;
-  existingNames: string[];
   createPromoCampaign: (name: string, product: PromoProduct) => void;
+  existingNames: string[];
 }
 const CreatePromoCampaignDialog: React.FC<CreatePromoCampaignDialogProps> = ({
   isOpen,
   close,
   createPromoCampaign,
+  existingNames,
 }: CreatePromoCampaignDialogProps) => {
   const classes = useStyles();
   const [selectedProduct, setSelectedProduct] = useState<PromoProduct>('SupporterPlus');
@@ -90,7 +92,7 @@ const CreatePromoCampaignDialog: React.FC<CreatePromoCampaignDialogProps> = ({
               value: VALID_CHARACTERS_REGEX,
               message: INVALID_CHARACTERS_ERROR_HELPER_TEXT,
             },
-            // validate: createDuplicateValidator(existingNames), TODO: would this be useful?
+            validate: createDuplicateValidator(existingNames),
           })}
           label="Promo Campaign name"
           margin="normal"
