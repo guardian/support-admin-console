@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@mui/styles';
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import { productIds, PromoProduct, PromoProductNames } from './utils/promoModels';
+import { PromoProduct, promoProductNames } from './utils/promoModels';
 
 const useStyles = makeStyles(() => ({
   select: {
@@ -36,9 +36,9 @@ export const ProductSelector: React.FC<ProductSelectorProps> = ({
         }
         aria-label="Select a Product"
       >
-        {productIds.map((product, index) => (
+        {Object.entries(promoProductNames).map(([product, label], index) => (
           <MenuItem value={product} key={index}>
-            {PromoProductNames[product]}
+            {label}
           </MenuItem>
         ))}
       </Select>

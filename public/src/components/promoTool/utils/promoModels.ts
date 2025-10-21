@@ -1,19 +1,14 @@
-import { CommonStringObject, Country } from '../../../utils/models';
+import { Country } from '../../../utils/models';
 
 export type PromoProduct = 'SupporterPlus' | 'TierThree' | 'DigitalPack' | 'Newspaper' | 'Weekly';
 
-// Can't get the 'id' of a Record in this way so changed to use CommonStringObject
-export const PromoProductNames: CommonStringObject = {
+export const promoProductNames: Record<PromoProduct, string> = {
   SupporterPlus: 'Supporter Plus',
   TierThree: 'Tier Three',
   DigitalPack: 'Digital Pack',
   Newspaper: 'Newspaper',
   Weekly: 'Guardian Weekly',
 };
-
-export const productIds = Object.keys(PromoProductNames);
-
-export type Product = keyof typeof PromoProductNames;
 
 export interface PromoCampaign {
   campaignCode: string;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { List } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Product, PromoCampaign, PromoCampaigns } from './utils/promoModels';
+import { PromoCampaign, PromoCampaigns, PromoProduct } from './utils/promoModels';
 import { PromoCampaignsListItem } from './promoCampaignsListItem';
 
 const useStyles = makeStyles(() => ({
@@ -20,7 +20,7 @@ interface PromoCampaignsListProps {
   promoCampaignSearch: string;
   selectedPromoCampaign?: PromoCampaign | null;
   onPromoCampaignSelected: (campaignCode: string) => void;
-  selectedProduct?: Product;
+  selectedProduct?: PromoProduct;
 }
 
 const PromoCampaignsList = ({
@@ -48,7 +48,7 @@ const PromoCampaignsList = ({
     return campaignArray.filter(c => {
       if (!selectedProduct) {
         return true;
-      } else if (c.product && c.product === selectedProduct.toString()) {
+      } else if (c.product === selectedProduct) {
         return true;
       }
       return false;
