@@ -1,7 +1,7 @@
 import React from 'react';
 import { List } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { PromoCampaign, PromoCampaigns } from './utils/promoModels';
+import { PromoCampaign, PromoCampaigns, PromoProduct } from './utils/promoModels';
 import { PromoCampaignsListItem } from './promoCampaignsListItem';
 
 const useStyles = makeStyles(() => ({
@@ -20,6 +20,7 @@ interface PromoCampaignsListProps {
   promoCampaignSearch: string;
   selectedPromoCampaign?: PromoCampaign | null;
   onPromoCampaignSelected: (campaignCode: string) => void;
+  selectedProduct?: PromoProduct;
 }
 
 const PromoCampaignsList = ({
@@ -27,10 +28,10 @@ const PromoCampaignsList = ({
   promoCampaignSearch,
   selectedPromoCampaign,
   onPromoCampaignSelected,
+  selectedProduct,
 }: PromoCampaignsListProps): React.ReactElement => {
   const classes = useStyles();
 
-  // TODO: need to filter by product too
   const filterPromoCampaigns = (campaignArray: PromoCampaigns) => {
     return campaignArray.filter(c => {
       if (!promoCampaignSearch) {
@@ -43,7 +44,16 @@ const PromoCampaignsList = ({
       return false;
     });
   };
-
+  const filterPromoCampaignsByProduct = (campaignArray: PromoCampaigns) => {
+    return campaignArray.filter(c => {
+      if (!selectedProduct) {
+        return true;
+      } else if (c.product === selectedProduct) {
+        return true;
+      }
+      return false;
+    });
+  };
   const sortPromoCampaigns = (campaignArray: PromoCampaigns) => {
     campaignArray.sort((a, b) => {
       const A = a.name;
@@ -59,8 +69,9 @@ const PromoCampaignsList = ({
     });
     return campaignArray;
   };
-
-  const filteredAndSortedPromoCampaigns = sortPromoCampaigns(filterPromoCampaigns(promoCampaigns));
+  const filteredAndSortedPromoCampaigns = sortPromoCampaigns(
+    filterPromoCampaigns(filterPromoCampaignsByProduct(promoCampaigns)),
+  );
 
   return (
     <div className={classes.container}>

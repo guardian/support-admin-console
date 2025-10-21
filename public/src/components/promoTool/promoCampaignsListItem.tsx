@@ -47,14 +47,12 @@ const useStyles = makeStyles(() => ({
 }));
 
 interface Props {
-  key: string;
   promoCampaign: PromoCampaign;
   isSelected: boolean;
   onPromoCampaignSelected: (promoCampaignCode: string) => void;
 }
 
 export const PromoCampaignsListItem = ({
-  key,
   promoCampaign,
   isSelected,
   onPromoCampaignSelected,
@@ -78,7 +76,6 @@ export const PromoCampaignsListItem = ({
     <ListItem
       button={true}
       className={itemContainerClasses.join(' ')}
-      key={key}
       onClick={(): void => onPromoCampaignSelected(promoCampaign.campaignCode)}
       ref={ref}
     >
