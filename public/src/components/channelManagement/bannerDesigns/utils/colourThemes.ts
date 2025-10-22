@@ -907,8 +907,8 @@ export const colourThemes: { styles: ThemeStyle[] } = {
       label: 'Marketing',
       themes: [
         {
-          id: 'marketing-labs',
-          label: 'Marketing, Labs',
+          id: 'marketing-mid-teal',
+          label: 'Marketing, Mid Teal',
           kind: 'ChoiceCards',
           colours: {
             background: '#65A897',
@@ -942,8 +942,8 @@ export const colourThemes: { styles: ThemeStyle[] } = {
           },
         },
         {
-          id: 'marketing-labs-image',
-          label: 'Marketing, Labs (Image)',
+          id: 'marketing-mid-teal-image',
+          label: 'Marketing, Mid Teal (Image)',
           kind: 'Image',
           colours: {
             background: '#65A897',
@@ -977,8 +977,8 @@ export const colourThemes: { styles: ThemeStyle[] } = {
           },
         },
         {
-          id: 'marketing-opinion',
-          label: 'Marketing, Opinion',
+          id: 'marketing-bright-orange',
+          label: 'Marketing, Bright Orange',
           kind: 'ChoiceCards',
           colours: {
             background: '#FF9941',
@@ -1012,8 +1012,8 @@ export const colourThemes: { styles: ThemeStyle[] } = {
           },
         },
         {
-          id: 'marketing-opinion-image',
-          label: 'Marketing, Opinion (Image)',
+          id: 'marketing-bright-orange-image',
+          label: 'Marketing, Bright Orange (Image)',
           kind: 'Image',
           colours: {
             background: '#FF9941',
@@ -1047,8 +1047,8 @@ export const colourThemes: { styles: ThemeStyle[] } = {
           },
         },
         {
-          id: 'marketing-lifestyle',
-          label: 'Marketing, Lifestyle',
+          id: 'marketing-deep-purple',
+          label: 'Marketing, Deep Purple',
           kind: 'ChoiceCards',
           colours: {
             background: '#7D0068',
@@ -1082,8 +1082,8 @@ export const colourThemes: { styles: ThemeStyle[] } = {
           },
         },
         {
-          id: 'marketing-lifestyle-image',
-          label: 'Marketing, Lifestyle (Image)',
+          id: 'marketing-deep-purple-image',
+          label: 'Marketing, Deep Purple (Image)',
           kind: 'Image',
           colours: {
             background: '#7D0068',
@@ -1117,8 +1117,8 @@ export const colourThemes: { styles: ThemeStyle[] } = {
           },
         },
         {
-          id: 'marketing-labs-light',
-          label: 'Marketing, Labs Light',
+          id: 'marketing-pale-cyan',
+          label: 'Marketing, Pale Cyan',
           kind: 'ChoiceCards',
           colours: {
             background: '#A8E3DF',
@@ -1152,8 +1152,8 @@ export const colourThemes: { styles: ThemeStyle[] } = {
           },
         },
         {
-          id: 'marketing-labs-light-image',
-          label: 'Marketing, Labs Light (Image)',
+          id: 'marketing-pale-cyan-image',
+          label: 'Marketing, Pale Cyan (Image)',
           kind: 'Image',
           colours: {
             background: '#A8E3DF',
