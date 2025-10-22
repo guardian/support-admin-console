@@ -1,6 +1,7 @@
 import { Test, Status } from '../components/channelManagement/helpers/shared';
 import { Campaign } from '../components/channelManagement/campaigns/CampaignsForm';
 import { BannerDesign, Status as BannerDesignStatus } from '../models/bannerDesign';
+import { PromoCampaign } from '../components/promoTool/utils/promoModels';
 
 export enum SupportFrontendSettingsType {
   switches = 'switches',
@@ -215,4 +216,12 @@ export function fetchAppsSettings<T>(settingsType: AppsSettingsType): Promise<T>
 
 export function saveAppsSettings<T>(settingsType: AppsSettingsType, data: T): Promise<Response> {
   return saveSettings(`/apps/${settingsType}/update`, data);
+}
+
+export function createPromoCampaign(promoCampaign: PromoCampaign): Promise<Response> {
+  return saveSettings(`/promos/campaign`, promoCampaign);
+}
+
+export function fetchPromoCampaigns(promoProduct: string): Promise<PromoCampaign[]> {
+  return fetchSettings(`/promos/campaigns/${promoProduct}`);
 }
