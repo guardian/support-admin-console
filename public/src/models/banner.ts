@@ -57,4 +57,5 @@ export interface BannerTest extends Test {
   campaignName?: string;
   contextTargeting: PageContextTargeting;
   deploySchedule?: BannerTestDeploySchedule;
+  frontsOnly?: boolean;
 }

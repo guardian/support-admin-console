@@ -40,6 +40,7 @@ import TestEditorContextTargeting from '../testEditorContextTargeting';
 import { getDesignForVariant } from '../../../utils/bannerDesigns';
 import { DeployScheduleEditor } from './deployScheduleEditor';
 import { TestMethodologyEditor } from '../TestMethodologyEditor';
+import { FrontsOnlyEditor } from './frontsOnlyEditor';
 
 const copyHasTemplate = (content: BannerContent, template: string): boolean =>
   (content.heading && content.heading.includes(template)) ||
@@ -179,6 +180,13 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
     updateTest(current => ({
       ...current,
       deploySchedule: updatedDeploySchedule,
+    }));
+  };
+
+  const onFrontsOnlyChange = (frontsOnly: boolean): void => {
+    updateTest(current => ({
+      ...current,
+      frontsOnly,
     }));
   };
 
@@ -358,6 +366,18 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
             deploySchedule={test.deploySchedule}
             onDeployScheduleChange={onDeployScheduleChange}
             onValidationChange={isValid => setValidationStatusForField('deploySchedule', isValid)}
+            isDisabled={!userHasTestLocked}
+          />
+        </div>
+
+        <div className={classes.sectionContainer}>
+          <Typography variant={'h3'} className={classes.sectionHeader}>
+            Fronts only
+          </Typography>
+
+          <FrontsOnlyEditor
+            frontsOnly={test.frontsOnly}
+            onFrontsOnlyChange={onFrontsOnlyChange}
             isDisabled={!userHasTestLocked}
           />
         </div>
