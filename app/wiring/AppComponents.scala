@@ -12,13 +12,30 @@ import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.mvc.AnyContent
 import play.api.{BuiltInComponentsFromContext, NoHttpFiltersComponents}
 import router.Routes
-import services.{Aws, BigQueryService, CapiService, DynamoArchivedBannerDesigns, DynamoArchivedChannelTests, DynamoBanditData, DynamoBannerDesigns, DynamoCampaigns, DynamoChannelTests, DynamoChannelTestsAudit, DynamoPermissionsCache, DynamoSuperMode, ProductCatalogCache, S3}
+import services.{
+  Aws,
+  BigQueryService,
+  CapiService,
+  DynamoArchivedBannerDesigns,
+  DynamoArchivedChannelTests,
+  DynamoBanditData,
+  DynamoBannerDesigns,
+  DynamoCampaigns,
+  DynamoChannelTests,
+  DynamoChannelTestsAudit,
+  DynamoPermissionsCache,
+  DynamoSuperMode,
+  ProductCatalogCache,
+  S3
+}
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.s3.model.GetObjectRequest
 
 import java.time.Duration
 import controllers.promos.PromoCampaignsController
 import services.promo.DynamoPromoCampaigns
+import services.promo.DynamoPromos
+import controllers.promos.PromosController
 
 class AppComponents(context: Context, stage: String)
     extends BuiltInComponentsFromContext(context)
@@ -94,6 +111,8 @@ class AppComponents(context: Context, stage: String)
 
   val dynamoCampaignsService = new DynamoCampaigns(stage, dynamoClient)
   val dynamoPromoCampaignsService = new DynamoPromoCampaigns(stage, dynamoClient)
+
+  val dynamoPromosService = new DynamoPromos(stage, dynamoClient)
 
   val dynamoSuperModeService = new DynamoSuperMode(dynamoClient)
 
@@ -220,7 +239,14 @@ class AppComponents(context: Context, stage: String)
       controllerComponents,
       stage,
       runtime,
-      dynamoPromoCampaignsService,
+      dynamoPromoCampaignsService
     ),
+    new PromosController(
+      authAction,
+      controllerComponents,
+      stage,
+      runtime,
+      dynamoPromosService
+    )
   )
 }

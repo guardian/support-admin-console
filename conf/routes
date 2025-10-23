@@ -260,3 +260,6 @@ POST  /frontend/support-landing-page-tests/test/status/:rawStatus     controller
 GET /promos/campaign/:campaignCode          controllers.promos.PromoCampaignsController.get(campaignCode: String)
 GET /promos/campaigns/:product              controllers.promos.PromoCampaignsController.getAll(product: String)
 POST /promos/campaign                       controllers.promos.PromoCampaignsController.create
+
+# Promos endpoints
+GET /promo/:promoCode          controllers.promos.PromosController.get(promoCode: String)
