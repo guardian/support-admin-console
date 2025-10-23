@@ -45,4 +45,15 @@ class DynamoPromos(stage: String, client: DynamoDbClient) extends DynamoService(
         case Left(error)  => ZIO.fail(DynamoGetError(error))
       }
 
+  def createPromo(promo: Promo): ZIO[Any, DynamoError, Unit] = {
+    val item = jsonToDynamo(promo.asJson).m()
+    val request = PutItemRequest.builder
+      .tableName(tableName)
+      .item(item)
+      // Do not overwrite if already in dynamo
+      .conditionExpression("attribute_not_exists(#promoCode)")
+      .expressionAttributeNames(Map("#promoCode" -> "promoCode").asJava)
+      .build()
+    put(request)
+  }
 }
