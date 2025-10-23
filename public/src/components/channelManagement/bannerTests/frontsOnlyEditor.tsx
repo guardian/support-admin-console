@@ -21,7 +21,7 @@ const FrontsOnlyEditor: React.FC<FrontsOnlyEditorProps> = ({
       control={
         <Switch checked={frontsOnly ?? false} onChange={handleChange} disabled={isDisabled} />
       }
-      label="Enable targeting for fronts only (where ad slot does not appear)"
+      label="Enable targeting for fronts ONLY (where sticky ad slot does not appear)"
     />
   );
 };
