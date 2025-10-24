@@ -219,7 +219,7 @@ export function saveAppsSettings<T>(settingsType: AppsSettingsType, data: T): Pr
 }
 
 export function createPromoCampaign(promoCampaign: PromoCampaign): Promise<Response> {
-  return saveSettings(`/promos/campaign`, promoCampaign);
+  return saveSettings(`/promos/campaign/create`, promoCampaign);
 }
 
 export function fetchPromoCampaigns(promoProduct: string): Promise<PromoCampaign[]> {
