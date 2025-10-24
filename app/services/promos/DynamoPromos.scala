@@ -95,4 +95,20 @@ class DynamoPromos(stage: String, client: DynamoDbClient) extends DynamoService(
 
     update(request)
   }
+
+  def unlockPromo(promoCode: String, email: String): ZIO[Any, DynamoError, Unit] = {
+    val request = UpdateItemRequest.builder
+      .tableName(tableName)
+      .key(Map("promoCode" -> AttributeValue.builder.s(promoCode).build()).asJava)
+      .updateExpression("remove lockStatus")
+      .conditionExpression("lockStatus.email = :email")
+      .expressionAttributeValues(
+        Map(
+          ":email" -> AttributeValue.builder.s(email).build
+        ).asJava
+      )
+      .build()
+
+    update(request)
+  }
 }

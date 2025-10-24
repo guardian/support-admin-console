@@ -265,3 +265,4 @@ POST /promos/campaign/create                controllers.promos.PromoCampaignsCon
 GET /promo/:promoCode                 controllers.promos.PromosController.get(promoCode: String)
 POST /promo/create                    controllers.promos.PromosController.create
 POST /promo/lock/:promoCode           controllers.promos.PromosController.lockPromo(promoCode: String)
+POST /promo/unlock/:promoCode         controllers.promos.PromosController.unlockPromo(promoCode: String)

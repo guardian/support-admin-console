@@ -79,4 +79,19 @@ class PromosController(
         }
     }
   }
+
+  def unlockPromo(promoCode: String) = authActions.write.async { request =>
+    run {
+      logger.info(s"${request.user.email} is unlocking '$promoCode'")
+      dynamoPromos
+        .unlockPromo(promoCode, request.user.email)
+        .map(_ => Ok("unlocked"))
+        .catchSome { case DynamoNoLockError(error) =>
+          logger.warn(
+            s"Failed to unlock '$promoCode' because user ${request.user.email} does not have it locked: ${error.getMessage}"
+          )
+          ZIO.succeed(Conflict(s"You do not currently have promo '$promoCode' open for edit"))
+        }
+    }
+  }
 }
