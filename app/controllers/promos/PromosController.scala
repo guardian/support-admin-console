@@ -1,23 +1,23 @@
 package controllers.promos
 
-import com.gu.googleauth.AuthAction
+import actions.AuthAndPermissionActions
+import com.typesafe.scalalogging.LazyLogging
+import io.circe.parser._
+import io.circe.syntax._
 import models.DynamoErrors.{DynamoDuplicateNameError, DynamoError, DynamoNoLockError}
+import models.promos.Promo
+import models.promos.PromoProduct
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, ActionBuilder, AnyContent, ControllerComponents, Result}
 import scala.concurrent.ExecutionContext
-import com.typesafe.scalalogging.LazyLogging
-import zio.ZIO
 import scala.concurrent.Future
-import zio.Unsafe
-import utils.Circe.noNulls
-import io.circe.syntax._
-import io.circe.parser._
-import models.promos.PromoProduct
 import services.promo.DynamoPromos
-import models.promos.Promo
+import utils.Circe.noNulls
+import zio.Unsafe
+import zio.ZIO
 
 class PromosController(
-    authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
+    authActions: AuthAndPermissionActions,
     components: ControllerComponents,
     stage: String,
     runtime: zio.Runtime[Any],
@@ -37,7 +37,7 @@ class PromosController(
       }
     }
 
-  def get(promoCode: String) = authAction.async { request =>
+  def get(promoCode: String) = authActions.read.async { request =>
     run {
       dynamoPromos
         .getPromo(promoCode)
@@ -45,7 +45,7 @@ class PromosController(
     }
   }
 
-  def create = authAction.async(circe.json[Promo]) { request =>
+  def create = authActions.write.async(circe.json[Promo]) { request =>
     run {
       val promo = request.body
       logger.info(s"${request.user.email} is creating '${promo.promoCode}'")
@@ -60,6 +60,21 @@ class PromosController(
             BadRequest(
               s"Cannot create promo '${promo.promoCode}' because it already exists. Please use a different code"
             )
+          )
+        }
+    }
+  }
+
+  def lockPromo(promoCode: String) = authActions.write.async { request =>
+    run {
+      logger.info(s"${request.user.email} is locking promo '$promoCode'")
+      dynamoPromos
+        .lockPromo(promoCode, request.user.email, force = false)
+        .map(_ => Ok("locked"))
+        .catchSome { case DynamoNoLockError(error) =>
+          logger.warn(s"Failed to lock promo '$promoCode' because it is already locked: ${error.getMessage}")
+          ZIO.succeed(
+            Conflict(s"Promo '$promoCode' is already locked for edit by another user, or it doesn't exist")
           )
         }
     }
