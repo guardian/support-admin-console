@@ -8,7 +8,7 @@ import models.DynamoErrors.{DynamoDuplicateNameError, DynamoError, DynamoNoLockE
 import models.promos.Promo
 import models.promos.PromoProduct
 import play.api.libs.circe.Circe
-import play.api.mvc.{AbstractController, ActionBuilder, AnyContent, ControllerComponents, Result}
+import play.api.mvc.{AbstractController, Action, ActionBuilder, AnyContent, ControllerComponents, Result}
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import services.promo.DynamoPromos
@@ -92,6 +92,14 @@ class PromosController(
           )
           ZIO.succeed(Conflict(s"You do not currently have promo '$promoCode' open for edit"))
         }
+    }
+  }
+
+  def getAllPromos(campaignCode: String): Action[AnyContent] = authActions.read.async { request =>
+    run {
+      dynamoPromos
+        .getAllPromos(campaignCode)
+        .map(promos => Ok(noNulls(promos.asJson)))
     }
   }
 }

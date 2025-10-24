@@ -111,4 +111,36 @@ class DynamoPromos(stage: String, client: DynamoDbClient) extends DynamoService(
 
     update(request)
   }
+
+  def getAllPromos(campaignCode: String): ZIO[Any, DynamoGetError, List[Promo]] =
+    getAllInCampaign(campaignCode).map(results =>
+      results.asScala
+        .map(item => dynamoMapToJson(item).as[Promo])
+        .flatMap {
+          case Right(promo) => Some(promo)
+          case Left(error)  =>
+            logger.error(s"Failed to decode item from Dynamo: ${error.getMessage}")
+            None
+        }
+        .toList
+    )
+
+  private def getAllInCampaign(
+      campaignCode: String
+  ): ZIO[Any, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
+    attemptBlocking {
+      client
+        .query(
+          QueryRequest.builder
+            .tableName(tableName)
+            .keyConditionExpression("campaignCode = :campaignCode")
+            .expressionAttributeValues(
+              Map(
+                ":campaignCode" -> AttributeValue.builder.s(campaignCode).build
+              ).asJava
+            )
+            .build()
+        )
+        .items
+    }.mapError(DynamoGetError)
 }
