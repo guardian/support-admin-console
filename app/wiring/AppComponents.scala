@@ -36,6 +36,7 @@ import controllers.promos.PromoCampaignsController
 import services.promo.DynamoPromoCampaigns
 import services.promo.DynamoPromos
 import controllers.promos.PromosController
+import actions.AuthAndPermissionActions
 
 class AppComponents(context: Context, stage: String)
     extends BuiltInComponentsFromContext(context)
@@ -242,7 +243,7 @@ class AppComponents(context: Context, stage: String)
       dynamoPromoCampaignsService
     ),
     new PromosController(
-      authAction,
+      AuthAndPermissionActions.withoutPermissionsChecks(authAction),
       controllerComponents,
       stage,
       runtime,
