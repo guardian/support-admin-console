@@ -4,24 +4,18 @@ import {
   BannerDesign,
   BannerDesignHeaderImage,
   BannerDesignVisual,
-  BasicColours,
-  CtaDesign,
   FontSize,
-  HighlightedTextColours,
-  TickerDesign,
 } from '../../../models/bannerDesign';
 import { Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
-import { BasicColoursEditor } from './BasicColoursEditor';
-import { HighlightedTextColoursEditor } from './HighlightedTextColoursEditor';
-import { CtaColoursEditor } from './CtaColoursEditor';
 import { BannerDesignUsage } from './BannerDesignUsage';
-import { TickerDesignEditor } from './TickerDesignEditor';
 import { HeaderImageEditor } from './HeaderImageEditor';
 import { BannerVisualEditor } from './BannerVisualEditor';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { InfoOutlined } from '@mui/icons-material';
 import { HeadlineSizeEditor } from './HeadlineSizeEditor';
+import PaletteSelector, { SelectedPalette } from './PaletteSelector';
+import { stringToHexColour } from '../../../utils/bannerDesigns';
 
 type Props = {
   design: BannerDesign;
@@ -36,7 +30,7 @@ export const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     flexDirection: 'column',
     height: '100%',
     width: '100%',
-    background: palette.background.paper, // #FFFFFF
+    background: palette.background.paper,
     '& > * + *': {
       marginTop: spacing(1),
     },
@@ -99,26 +93,6 @@ const BannerDesignForm: React.FC<Props> = ({
     });
   };
 
-  const onBasicColoursChange = (basicColours: BasicColours): void => {
-    onChange({
-      ...design,
-      colours: {
-        ...design.colours,
-        basic: basicColours,
-      },
-    });
-  };
-
-  const onHighlightedTextColoursChange = (highlightedTextColours: HighlightedTextColours): void => {
-    onChange({
-      ...design,
-      colours: {
-        ...design.colours,
-        highlightedText: highlightedTextColours,
-      },
-    });
-  };
-
   const onHeadlineSizeChange = (headerSize: FontSize): void => {
     onChange({
       ...design,
@@ -130,26 +104,103 @@ const BannerDesignForm: React.FC<Props> = ({
     });
   };
 
-  const onCtaColoursChange = (name: 'primaryCta' | 'secondaryCta' | 'closeButton') => (
-    cta: CtaDesign,
-  ): void => {
-    onChange({
-      ...design,
-      colours: {
-        ...design.colours,
-        [name]: cta,
-      },
-    });
-  };
+  const applySelectedPalette = (selectedPalette: SelectedPalette): void => {
+    if (!selectedPalette.styleId || !selectedPalette.themeId || !selectedPalette.colours) {
+      setValidationStatus('colourTheme', false);
+      return;
+    }
 
-  const onTickerDesignChange = (ticker: TickerDesign): void => {
-    onChange({
+    const updated: BannerDesign = {
       ...design,
+      style: selectedPalette.styleId,
+      colourTheme: selectedPalette.themeId,
       colours: {
         ...design.colours,
-        ticker,
+        basic: {
+          background: stringToHexColour(selectedPalette.colours.background),
+          bodyText: stringToHexColour(selectedPalette.colours.bodyText),
+          headerText: stringToHexColour(selectedPalette.colours.heading),
+          articleCountText: stringToHexColour(
+            selectedPalette.colours.articleCountText || selectedPalette.colours.bodyText,
+          ),
+          logo: stringToHexColour(selectedPalette.colours.logo),
+        },
+        highlightedText: {
+          text: stringToHexColour(selectedPalette.colours.highlightText),
+          highlight: stringToHexColour(selectedPalette.colours.highlightBackground),
+        },
+        primaryCta: {
+          default: {
+            text: stringToHexColour(selectedPalette.colours.primaryCta.text),
+            background: stringToHexColour(selectedPalette.colours.primaryCta.background),
+            border: selectedPalette.colours.primaryCta.border
+              ? stringToHexColour(selectedPalette.colours.primaryCta.border)
+              : undefined,
+          },
+        },
+        secondaryCta: {
+          default: {
+            text: stringToHexColour(selectedPalette.colours.secondaryCta.text),
+            background: stringToHexColour(selectedPalette.colours.secondaryCta.background),
+            border: selectedPalette.colours.secondaryCta.border
+              ? stringToHexColour(selectedPalette.colours.secondaryCta.border)
+              : undefined,
+          },
+        },
+        closeButton: {
+          default: {
+            text: stringToHexColour(selectedPalette.colours.closeButton?.text || '#000000'),
+            background: stringToHexColour(
+              selectedPalette.colours.closeButton?.background || selectedPalette.colours.background,
+            ),
+            border: selectedPalette.colours.closeButton?.border
+              ? stringToHexColour(selectedPalette.colours.closeButton.border)
+              : stringToHexColour('#000000'),
+          },
+        },
+        ticker: selectedPalette.colours.ticker
+          ? {
+              filledProgress: stringToHexColour(selectedPalette.colours.ticker.filledProgress),
+              progressBarBackground: stringToHexColour(
+                selectedPalette.colours.ticker.progressBarBackground,
+              ),
+              headlineColour: stringToHexColour(selectedPalette.colours.ticker.headlineColour),
+              totalColour: stringToHexColour(selectedPalette.colours.ticker.totalColour),
+              goalColour: stringToHexColour(selectedPalette.colours.ticker.goalColour),
+            }
+          : design.colours.ticker,
       },
-    });
+    };
+
+    if (updated.visual?.kind === 'ChoiceCards' && selectedPalette.colours.choiceCards) {
+      updated.visual = {
+        ...updated.visual,
+        buttonColour: stringToHexColour(selectedPalette.colours.choiceCards.buttonColour),
+        buttonTextColour: stringToHexColour(selectedPalette.colours.choiceCards.buttonTextColour),
+        buttonBorderColour: stringToHexColour(
+          selectedPalette.colours.choiceCards.buttonBorderColour,
+        ),
+        buttonSelectColour: stringToHexColour(
+          selectedPalette.colours.choiceCards.buttonSelectColour,
+        ),
+        buttonSelectTextColour: stringToHexColour(
+          selectedPalette.colours.choiceCards.buttonSelectTextColour,
+        ),
+        buttonSelectBorderColour: stringToHexColour(
+          selectedPalette.colours.choiceCards.buttonSelectBorderColour,
+        ),
+        buttonSelectMarkerColour: stringToHexColour(
+          selectedPalette.colours.choiceCards.buttonSelectMarkerColour,
+        ),
+        pillTextColour: stringToHexColour(selectedPalette.colours.choiceCards.pillTextColour),
+        pillBackgroundColour: stringToHexColour(
+          selectedPalette.colours.choiceCards.pillBackgroundColour,
+        ),
+      };
+    }
+
+    setValidationStatus('colourTheme', true);
+    onChange(updated);
   };
 
   return (
@@ -172,15 +223,24 @@ const BannerDesignForm: React.FC<Props> = ({
 
       <Accordion className={classes.accordion}>
         <AccordionSummary className={classes.sectionHeader} expandIcon={<ExpandMoreIcon />}>
-          Main Image or Choice Cards
+          Banner Theme
         </AccordionSummary>
         <AccordionDetails>
-          <BannerVisualEditor
-            visual={design.visual}
-            isDisabled={isDisabled}
-            onValidationChange={onValidationChange}
-            onChange={onVisualChange}
-          />
+          <>
+            <BannerVisualEditor
+              visual={design.visual}
+              isDisabled={isDisabled}
+              onValidationChange={onValidationChange}
+              onChange={onVisualChange}
+            />
+            <PaletteSelector
+              onChange={applySelectedPalette}
+              initialStyleId={design?.style}
+              initialThemeId={design?.colourTheme}
+              visualKind={design.visual?.kind ?? 'Image'}
+              isDisabled={isDisabled}
+            />
+          </>
         </AccordionDetails>
       </Accordion>
 
@@ -207,82 +267,6 @@ const BannerDesignForm: React.FC<Props> = ({
             headerSize={design.fonts?.heading?.size}
             isDisabled={isDisabled}
             onChange={onHeadlineSizeChange}
-          />
-        </AccordionDetails>
-      </Accordion>
-
-      <Accordion className={classes.accordion}>
-        <AccordionSummary className={classes.sectionHeader} expandIcon={<ExpandMoreIcon />}>
-          Basic Colours
-        </AccordionSummary>
-        <AccordionDetails>
-          <BasicColoursEditor
-            basicColours={design.colours.basic}
-            isDisabled={isDisabled}
-            onChange={onBasicColoursChange}
-            onValidationChange={onValidationChange}
-          />
-        </AccordionDetails>
-      </Accordion>
-
-      <Accordion className={classes.accordion}>
-        <AccordionSummary className={classes.sectionHeader} expandIcon={<ExpandMoreIcon />}>
-          Highlighted Text Colours
-        </AccordionSummary>
-        <AccordionDetails>
-          <HighlightedTextColoursEditor
-            colours={design.colours.highlightedText}
-            isDisabled={isDisabled}
-            onChange={onHighlightedTextColoursChange}
-            onValidationChange={onValidationChange}
-          />
-        </AccordionDetails>
-      </Accordion>
-
-      <Accordion className={[classes.accordion, classes.colourSectionContainer].join(' ')}>
-        <AccordionSummary className={classes.sectionHeader} expandIcon={<ExpandMoreIcon />}>
-          CTA Colours
-        </AccordionSummary>
-
-        <AccordionDetails className={classes.ctaEditors}>
-          <CtaColoursEditor
-            cta={design.colours.primaryCta}
-            isDisabled={isDisabled}
-            onChange={onCtaColoursChange('primaryCta')}
-            onValidationChange={onValidationChange}
-            name={'colours.primaryCta'}
-            label="Primary CTA"
-          />
-          <CtaColoursEditor
-            cta={design.colours.secondaryCta}
-            isDisabled={isDisabled}
-            onChange={onCtaColoursChange('secondaryCta')}
-            onValidationChange={onValidationChange}
-            name={'colours.secondaryCta'}
-            label="Secondary CTA"
-          />
-          <CtaColoursEditor
-            cta={design.colours.closeButton}
-            isDisabled={isDisabled}
-            onChange={onCtaColoursChange('closeButton')}
-            onValidationChange={onValidationChange}
-            name={'colours.closeButton'}
-            label="Close button"
-          />
-        </AccordionDetails>
-      </Accordion>
-
-      <Accordion className={[classes.accordion, classes.colourSectionContainer].join(' ')}>
-        <AccordionSummary className={classes.sectionHeader} expandIcon={<ExpandMoreIcon />}>
-          Ticker Colours
-        </AccordionSummary>
-
-        <AccordionDetails>
-          <TickerDesignEditor
-            ticker={design.colours.ticker}
-            isDisabled={isDisabled}
-            onChange={onTickerDesignChange}
-            onValidationChange={onValidationChange}
           />
         </AccordionDetails>
       </Accordion>

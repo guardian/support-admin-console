@@ -16,8 +16,9 @@ const isValidHexColourString = (colourString: string): boolean =>
   hexColourStringRegex.test(colourString);
 
 export const stringToHexColour = (colourString: string): HexColour => {
-  if (isValidHexColourString(colourString)) {
-    const matches = hexColourStringRegex.exec(colourString);
+  const colour = colourString.replace('#', '');
+  if (isValidHexColourString(colour)) {
+    const matches = hexColourStringRegex.exec(colour);
     return {
       r: (matches?.[1] as string).toUpperCase(),
       g: (matches?.[2] as string).toUpperCase(),
