@@ -267,3 +267,4 @@ POST /promo/create                    controllers.promos.PromosController.create
 POST /promo/lock/:promoCode           controllers.promos.PromosController.lockPromo(promoCode: String)
 POST /promo/unlock/:promoCode         controllers.promos.PromosController.unlockPromo(promoCode: String)
 POST /promos/:campaignCode            controllers.promos.PromosController.getAllPromos(campaignCode: String)
+POST /promo/force-lock/:promoCode     controllers.promos.PromosController.forceLock(promoCode: String)

@@ -102,4 +102,13 @@ class PromosController(
         .map(promos => Ok(noNulls(promos.asJson)))
     }
   }
+
+  def forceLock(promoCode: String) = authActions.write.async { request =>
+    run {
+      logger.info(s"${request.user.email} is force locking '$promoCode'")
+      dynamoPromos
+        .lockPromo(promoCode, request.user.email, force = true)
+        .map(_ => Ok("locked"))
+    }
+  }
 }
