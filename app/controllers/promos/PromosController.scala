@@ -111,4 +111,20 @@ class PromosController(
         .map(_ => Ok("locked"))
     }
   }
+
+  def update = authActions.write.async(circe.json[Promo]) { request =>
+    run {
+      val promo = request.body
+      logger.info(s"${request.user.email} is updating '${promo.promoCode}'")
+      dynamoPromos
+        .updatePromo(promo, request.user.email)
+        .map(_ => Ok("updated"))
+        .catchSome { case DynamoNoLockError(error) =>
+          logger.warn(
+            s"Failed to save '${promo.promoCode}' because user ${request.user.email} does not have it locked: ${error.getMessage}"
+          )
+          ZIO.succeed(Conflict(s"You do not currently have promo '${promo.promoCode}' open for edit"))
+        }
+    }
+  }
 }

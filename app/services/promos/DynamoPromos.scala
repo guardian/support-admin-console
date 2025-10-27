@@ -23,6 +23,11 @@ class DynamoPromos(stage: String, client: DynamoDbClient) extends DynamoService(
   protected val tableName = s"support-admin-console-promos-$stage"
   private val campaignCodeIndex = "campaignCode-index"
 
+  private def buildKey(promoCode: String): java.util.Map[String, AttributeValue] =
+    Map(
+      "promoCode" -> AttributeValue.builder.s(promoCode).build
+    ).asJava
+
   private def buildQuery(promoCode: String): QueryRequest =
     QueryRequest.builder
       .tableName(tableName)
@@ -143,4 +148,35 @@ class DynamoPromos(stage: String, client: DynamoDbClient) extends DynamoService(
         )
         .items
     }.mapError(DynamoGetError)
+
+  def updatePromo(promo: Promo, email: String): ZIO[Any, DynamoError, Unit] = {
+    val item = jsonToDynamo(promo.asJson).m().asScala.toMap -
+      "lockStatus" - // Unlock on update by removing lockStatus
+      "promoCode" - // promoCode is the primary key and cannot be updated
+      "campaignCode" // campaignCode cannot be updated
+
+    val updateExpression = buildUpdatePromoExpression(item)
+
+    val attributeValues = item.map { case (key, value) => s":$key" -> value }
+    // Add email, for the conditional update
+    val attributeValuesWithEmail = attributeValues + (":email" -> AttributeValue.builder
+      .s(email)
+      .build)
+
+    val updateRequest = UpdateItemRequest.builder
+      .tableName(tableName)
+      .key(buildKey(promo.promoCode))
+      .updateExpression(updateExpression)
+      .expressionAttributeValues(attributeValuesWithEmail.asJava)
+      .build()
+
+    update(updateRequest)
+  }
+
+  private def buildUpdatePromoExpression(item: Map[String, AttributeValue]): String = {
+    val subExprs = item.foldLeft[List[String]](Nil) { case (acc, (key, value)) =>
+      s"$key = :$key" +: acc
+    }
+    s"set ${subExprs.mkString(", ")} remove lockStatus" // Unlock the promo at the same time
+  }
 }
