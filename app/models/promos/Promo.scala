@@ -1,6 +1,5 @@
 package models.promos
 
-import com.gu.i18n.Country
 import io.circe.Decoder
 import io.circe.Encoder
 import io.circe.generic.semiauto._
@@ -8,12 +7,10 @@ import models.LockStatus
 
 case class AppliesTo(
     productRatePlanIds: Set[String],
-    countries: Set[Country]
+    countries: Set[String]
 )
 
 object AppliesTo {
-  implicit val countryDecoder: Decoder[Country] = deriveDecoder[Country]
-  implicit val countryEncoder: Encoder[Country] = deriveEncoder[Country]
   implicit val decoder: Decoder[AppliesTo] = deriveDecoder[AppliesTo]
   implicit val encoder: Encoder[AppliesTo] = deriveEncoder[AppliesTo]
 }

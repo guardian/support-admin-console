@@ -2,10 +2,21 @@ import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import PromoCampaignsSidebar from './promoCampaignsSidebar';
-import { PromoCampaign, PromoProduct } from './utils/promoModels';
+import { PromoCampaign, PromoProduct, Promo } from './utils/promoModels';
 import { useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
-import { createPromoCampaign, fetchPromoCampaigns } from '../../utils/requests';
+import {
+  createPromoCampaign,
+  fetchPromoCampaigns,
+  fetchAllPromos,
+  createPromo,
+  lockPromo,
+  unlockPromo,
+  updatePromo,
+} from '../../utils/requests';
+import PromosList from './promosList';
+import PromoEditor from './promoEditor';
+import CreatePromoDialog from './createPromoDialog';
 
 const useStyles = makeStyles(({ spacing, typography }: Theme) => ({
   viewTextContainer: {
@@ -49,9 +60,13 @@ const PromoTool: React.FC = () => {
   const classes = useStyles();
 
   const [promoCampaigns, setPromoCampaigns] = useState<PromoCampaign[]>([]);
+  const [promos, setPromos] = useState<Promo[]>([]);
   const { promoCampaignCode } = useParams<{ promoCampaignCode?: string }>(); // querystring parameter
   const [selectedPromoCampaignCode, setSelectedPromoCampaignCode] = useState<string | undefined>();
   const [selectedPromoProduct, setSelectedPromoProduct] = useState<PromoProduct>('SupporterPlus');
+  const [selectedPromoCode, setSelectedPromoCode] = useState<string | undefined>();
+  const [isEditing, setIsEditing] = useState(false);
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
 
   const createNewPromoCampaign = (name: string, product: PromoProduct): void => {
     const newPromoCampaign: PromoCampaign = {
@@ -81,6 +96,110 @@ const PromoTool: React.FC = () => {
       });
   };
 
+  const fetchPromosList = (campaignCode: string): void => {
+    fetchAllPromos(campaignCode)
+      .then(fetchedPromos => {
+        setPromos(fetchedPromos);
+      })
+      .catch(error => {
+        console.error('Error fetching promos:', error);
+        alert(`Error fetching promos: ${error.message}`);
+      });
+  };
+
+  const handleCreatePromo = (promoCode: string, name: string): void => {
+    if (!selectedPromoCampaignCode) {
+      alert('Please select a campaign first');
+      return;
+    }
+
+    const newPromo: Promo = {
+      promoCode,
+      name,
+      campaignCode: selectedPromoCampaignCode,
+      appliesTo: {
+        productRatePlanIds: [],
+        countries: [],
+      },
+      startTimestamp: new Date().toISOString(),
+      endTimestamp: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days from now
+      description: '',
+    };
+
+    createPromo(newPromo)
+      .then(() => {
+        setPromos([...promos, newPromo]);
+        setSelectedPromoCode(promoCode);
+      })
+      .catch(error => {
+        alert(`Error creating promo: ${error.message}`);
+      });
+  };
+
+  const handleEditPromo = (): void => {
+    if (selectedPromo) {
+      lockPromo(selectedPromo.promoCode, false)
+        .then(() => {
+          setIsEditing(true);
+          fetchPromosList(selectedPromoCampaignCode!);
+        })
+        .catch(error => {
+          alert(`Error locking promo: ${error.message}`);
+        });
+    }
+  };
+
+  const handleLockPromo = (force: boolean): void => {
+    if (selectedPromo) {
+      lockPromo(selectedPromo.promoCode, force)
+        .then(() => {
+          setIsEditing(true);
+          fetchPromosList(selectedPromoCampaignCode!);
+        })
+        .catch(error => {
+          alert(`Error locking promo: ${error.message}`);
+        });
+    }
+  };
+
+  const handleUnlockPromo = (): void => {
+    if (selectedPromo) {
+      unlockPromo(selectedPromo.promoCode)
+        .then(() => {
+          setIsEditing(false);
+          fetchPromosList(selectedPromoCampaignCode!);
+        })
+        .catch(error => {
+          alert(`Error unlocking promo: ${error.message}`);
+        });
+    }
+  };
+
+  const handleSavePromo = (promo: Promo): void => {
+    updatePromo(promo)
+      .then(() => {
+        setIsEditing(false);
+        fetchPromosList(selectedPromoCampaignCode!);
+      })
+      .catch(error => {
+        alert(`Error saving promo: ${error.message}`);
+      });
+  };
+
+  const handleCancelEdit = (): void => {
+    if (selectedPromo) {
+      unlockPromo(selectedPromo.promoCode)
+        .then(() => {
+          setIsEditing(false);
+          fetchPromosList(selectedPromoCampaignCode!);
+        })
+        .catch(error => {
+          console.error('Error unlocking promo:', error);
+          setIsEditing(false);
+        });
+    }
+  };
+
   // set selected promoCampaign
   useEffect(() => {
     if (promoCampaignCode != null) {
@@ -92,13 +211,23 @@ const PromoTool: React.FC = () => {
     fetchPromoCampaignsList(selectedPromoProduct);
   }, [selectedPromoProduct]);
 
+  useEffect(() => {
+    if (selectedPromoCampaignCode) {
+      fetchPromosList(selectedPromoCampaignCode);
+      setSelectedPromoCode(undefined);
+    } else {
+      setPromos([]);
+    }
+  }, [selectedPromoCampaignCode]);
+
   const selectedPromoCampaign = promoCampaigns.find(
     a => a.campaignCode === selectedPromoCampaignCode,
   );
 
+  const selectedPromo = promos.find(p => p.promoCode === selectedPromoCode);
+
   return (
     <div className={classes.body}>
-      {/* TODO: form rather than a div? */}
       <div className={classes.leftCol}>
         <PromoCampaignsSidebar
           promoCampaigns={promoCampaigns}
@@ -110,9 +239,39 @@ const PromoTool: React.FC = () => {
         />
       </div>
       <div className={classes.rightCol}>
-        {' '}
-        <h2 className={classes.headline2}>List of Promos for campaign</h2>
+        {selectedPromoCampaign ? (
+          <div style={{ width: '100%', padding: '24px' }}>
+            <h2 className={classes.headline2}>Promo codes for {selectedPromoCampaign.name}</h2>
+            <PromosList
+              promos={promos}
+              selectedPromo={selectedPromo}
+              onPromoSelected={setSelectedPromoCode}
+              onCreatePromo={() => setCreateDialogOpen(true)}
+            />
+            {selectedPromo && (
+              <PromoEditor
+                promo={selectedPromo}
+                isEditing={isEditing}
+                onSave={handleSavePromo}
+                onCancel={handleCancelEdit}
+                onEdit={handleEditPromo}
+                onLock={handleLockPromo}
+                onUnlock={handleUnlockPromo}
+              />
+            )}
+          </div>
+        ) : (
+          <div className={classes.viewTextContainer}>
+            <p className={classes.viewText}>Select a campaign to view promo codes</p>
+          </div>
+        )}
       </div>
+      <CreatePromoDialog
+        open={createDialogOpen}
+        onClose={() => setCreateDialogOpen(false)}
+        onCreate={handleCreatePromo}
+        existingCodes={promos.map(p => p.promoCode)}
+      />
     </div>
   );
 };

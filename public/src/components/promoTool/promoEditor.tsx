@@ -1,0 +1,287 @@
+import React, { useState, useEffect } from 'react';
+import {
+  Box,
+  TextField,
+  Button,
+  Paper,
+  Typography,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+  Grid,
+} from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { Theme } from '@mui/material/styles';
+import { Promo } from './utils/promoModels';
+import { countries } from '../../utils/models';
+
+const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
+  root: {
+    padding: spacing(3),
+    maxWidth: 800,
+    margin: '0 auto',
+  },
+  header: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: spacing(3),
+  },
+  section: {
+    marginBottom: spacing(3),
+  },
+  sectionTitle: {
+    marginBottom: spacing(2),
+    fontWeight: 600,
+  },
+  formField: {
+    marginBottom: spacing(2),
+  },
+  buttonGroup: {
+    display: 'flex',
+    gap: spacing(1),
+    marginTop: spacing(2),
+  },
+  lockBanner: {
+    padding: spacing(2),
+    marginBottom: spacing(2),
+    backgroundColor: palette.warning.light,
+    borderRadius: 4,
+  },
+  countriesContainer: {
+    maxHeight: 300,
+    overflowY: 'auto',
+    border: '1px solid #ddd',
+    borderRadius: 4,
+    padding: spacing(2),
+  },
+}));
+
+interface PromoEditorProps {
+  promo: Promo | null;
+  isEditing: boolean;
+  onSave: (promo: Promo) => void;
+  onCancel: () => void;
+  onEdit: () => void;
+  onLock: (force: boolean) => void;
+  onUnlock: () => void;
+  userEmail?: string;
+}
+
+const PromoEditor = ({
+  promo,
+  isEditing,
+  onSave,
+  onCancel,
+  onEdit,
+  onLock,
+  onUnlock,
+  userEmail,
+}: PromoEditorProps): React.ReactElement => {
+  const classes = useStyles();
+  const [editedPromo, setEditedPromo] = useState<Promo | null>(promo);
+  const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
+
+  useEffect(() => {
+    setEditedPromo(promo);
+    if (promo) {
+      setSelectedCountries(promo.appliesTo.countries || []);
+    } else {
+      setSelectedCountries([]);
+    }
+  }, [promo]);
+
+  if (!promo) {
+    return (
+      <Box className={classes.root}>
+        <Typography variant="h6" color="textSecondary">
+          Select a promo code to view details
+        </Typography>
+      </Box>
+    );
+  }
+
+  const handleFieldChange = (field: keyof Promo, value: string) => {
+    if (editedPromo) {
+      setEditedPromo({
+        ...editedPromo,
+        [field]: value,
+      });
+    }
+  };
+
+  const handleDateChange = (field: 'startTimestamp' | 'endTimestamp', value: string) => {
+    if (editedPromo && value) {
+      const isoDate = new Date(value).toISOString();
+      setEditedPromo({
+        ...editedPromo,
+        [field]: isoDate,
+      });
+    }
+  };
+
+  const formatDateForInput = (isoString: string): string => {
+    const date = new Date(isoString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  };
+
+  const handleCountryToggle = (countryCode: string) => {
+    setSelectedCountries(prev => {
+      const newCountries = prev.includes(countryCode)
+        ? prev.filter(c => c !== countryCode)
+        : [...prev, countryCode];
+
+      if (editedPromo) {
+        setEditedPromo({
+          ...editedPromo,
+          appliesTo: {
+            ...editedPromo.appliesTo,
+            countries: newCountries,
+          },
+        });
+      }
+      return newCountries;
+    });
+  };
+
+  const handleSave = () => {
+    if (editedPromo) {
+      onSave(editedPromo);
+    }
+  };
+
+  const isLockedByOther = promo.lockStatus?.locked && promo.lockStatus?.email !== userEmail;
+  const isLockedByUser = promo.lockStatus?.locked && promo.lockStatus?.email === userEmail;
+
+  return (
+    <Paper className={classes.root}>
+      <div className={classes.header}>
+        <Typography variant="h5">{promo.promoCode}</Typography>
+        <Box>
+          {!isEditing && !isLockedByOther && (
+            <Button variant="contained" color="primary" onClick={onEdit}>
+              Edit
+            </Button>
+          )}
+          {isLockedByUser && (
+            <Button variant="outlined" color="secondary" onClick={onUnlock}>
+              Cancel Edit
+            </Button>
+          )}
+        </Box>
+      </div>
+
+      {isLockedByOther && (
+        <Box className={classes.lockBanner}>
+          <Typography variant="body2">
+            This promo is currently locked by {promo.lockStatus?.email}
+          </Typography>
+          <Button
+            size="small"
+            variant="outlined"
+            onClick={() => onLock(true)}
+            style={{ marginTop: 8 }}
+          >
+            Take Control
+          </Button>
+        </Box>
+      )}
+
+      <div className={classes.section}>
+        <Typography className={classes.sectionTitle}>Basic Information</Typography>
+        <TextField
+          className={classes.formField}
+          fullWidth
+          label="Name"
+          value={editedPromo?.name || ''}
+          onChange={e => handleFieldChange('name', e.target.value)}
+          disabled={!isEditing}
+        />
+        <TextField
+          className={classes.formField}
+          fullWidth
+          label="Description"
+          multiline
+          rows={3}
+          value={editedPromo?.description || ''}
+          onChange={e => handleFieldChange('description', e.target.value)}
+          disabled={!isEditing}
+        />
+      </div>
+
+      <div className={classes.section}>
+        <Typography className={classes.sectionTitle}>Duration</Typography>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label="Start Date"
+              type="datetime-local"
+              value={editedPromo ? formatDateForInput(editedPromo.startTimestamp) : ''}
+              onChange={e => handleDateChange('startTimestamp', e.target.value)}
+              disabled={!isEditing}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label="End Date"
+              type="datetime-local"
+              value={editedPromo ? formatDateForInput(editedPromo.endTimestamp) : ''}
+              onChange={e => handleDateChange('endTimestamp', e.target.value)}
+              disabled={!isEditing}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+          </Grid>
+        </Grid>
+      </div>
+
+      <div className={classes.section}>
+        <Typography className={classes.sectionTitle}>Availability</Typography>
+        <Typography variant="subtitle2" gutterBottom>
+          Countries
+        </Typography>
+        <Box className={classes.countriesContainer}>
+          <FormGroup>
+            {Object.entries(countries).map(([code, name]) => (
+              <FormControlLabel
+                key={code}
+                control={
+                  <Checkbox
+                    checked={selectedCountries.includes(code)}
+                    onChange={() => handleCountryToggle(code)}
+                    disabled={!isEditing}
+                  />
+                }
+                label={`${name} (${code})`}
+              />
+            ))}
+          </FormGroup>
+        </Box>
+      </div>
+
+      {isEditing && (
+        <div className={classes.buttonGroup}>
+          <Button variant="contained" color="primary" onClick={handleSave}>
+            Save
+          </Button>
+          <Button variant="outlined" onClick={onCancel}>
+            Cancel
+          </Button>
+        </div>
+      )}
+    </Paper>
+  );
+};
+
+export default PromoEditor;

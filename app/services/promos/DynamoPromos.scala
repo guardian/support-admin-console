@@ -138,6 +138,7 @@ class DynamoPromos(stage: String, client: DynamoDbClient) extends DynamoService(
         .query(
           QueryRequest.builder
             .tableName(tableName)
+            .indexName(campaignCodeIndex)
             .keyConditionExpression("campaignCode = :campaignCode")
             .expressionAttributeValues(
               Map(
@@ -163,11 +164,15 @@ class DynamoPromos(stage: String, client: DynamoDbClient) extends DynamoService(
       .s(email)
       .build)
 
+    val attributeNames = Map("#name" -> "name").asJava
+
     val updateRequest = UpdateItemRequest.builder
       .tableName(tableName)
       .key(buildKey(promo.promoCode))
       .updateExpression(updateExpression)
       .expressionAttributeValues(attributeValuesWithEmail.asJava)
+      .expressionAttributeNames(attributeNames)
+      .conditionExpression("lockStatus.email = :email")
       .build()
 
     update(updateRequest)
@@ -175,7 +180,8 @@ class DynamoPromos(stage: String, client: DynamoDbClient) extends DynamoService(
 
   private def buildUpdatePromoExpression(item: Map[String, AttributeValue]): String = {
     val subExprs = item.foldLeft[List[String]](Nil) { case (acc, (key, value)) =>
-      s"$key = :$key" +: acc
+      val attributeName = if (key == "name") "#name" else key
+      s"$attributeName = :$key" +: acc
     }
     s"set ${subExprs.mkString(", ")} remove lockStatus" // Unlock the promo at the same time
   }

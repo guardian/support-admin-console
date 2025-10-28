@@ -1,7 +1,7 @@
 import { Test, Status } from '../components/channelManagement/helpers/shared';
 import { Campaign } from '../components/channelManagement/campaigns/CampaignsForm';
 import { BannerDesign, Status as BannerDesignStatus } from '../models/bannerDesign';
-import { PromoCampaign } from '../components/promoTool/utils/promoModels';
+import { PromoCampaign, Promo } from '../components/promoTool/utils/promoModels';
 
 export enum SupportFrontendSettingsType {
   switches = 'switches',
@@ -224,4 +224,33 @@ export function createPromoCampaign(promoCampaign: PromoCampaign): Promise<Respo
 
 export function fetchPromoCampaigns(promoProduct: string): Promise<PromoCampaign[]> {
   return fetchSettings(`/promos/campaigns/${promoProduct}`);
+}
+
+export function fetchPromo(promoCode: string): Promise<Promo> {
+  return fetchSettings(`/promo/${promoCode}`);
+}
+
+export function createPromo(promo: Promo): Promise<Response> {
+  return saveSettings(`/promo/create`, promo);
+}
+
+export function lockPromo(promoCode: string, force: boolean): Promise<Response> {
+  const path = force ? `/promo/takecontrol/${promoCode}` : `/promo/lock/${promoCode}`;
+  return makeFetch(path, {
+    method: 'POST',
+  });
+}
+
+export function unlockPromo(promoCode: string): Promise<Response> {
+  return makeFetch(`/promo/unlock/${promoCode}`, {
+    method: 'POST',
+  });
+}
+
+export function updatePromo(promo: Promo): Promise<Response> {
+  return saveSettings(`/promo/update`, promo);
+}
+
+export function fetchAllPromos(campaignCode: string): Promise<Promo[]> {
+  return fetchSettings(`/promos/${campaignCode}`);
 }
