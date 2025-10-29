@@ -50,7 +50,8 @@ case class BannerTest(
     signedInStatus: Option[SignedInStatus] = Some(SignedInStatus.All),
     consentStatus: Option[ConsentStatus] = Some(ConsentStatus.All),
     deploySchedule: Option[BannerTestDeploySchedule] = None,
-    methodologies: List[Methodology] = defaultMethodologies
+    methodologies: List[Methodology] = defaultMethodologies,
+    frontsOnly: Option[Boolean] = None
 ) extends ChannelTest[BannerTest] {
 
   override def withChannel(channel: Channel): BannerTest =
