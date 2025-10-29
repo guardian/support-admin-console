@@ -30,11 +30,8 @@ export interface CtaDesign {
 }
 
 export interface TickerDesign {
-  text: HexColour; //deprecated
   filledProgress: HexColour;
   progressBarBackground: HexColour;
-  goalMarker: HexColour; //deprecated
-
   headlineColour: HexColour; //new
   totalColour: HexColour; //new
   goalColour: HexColour; //new
@@ -59,6 +56,9 @@ export interface ChoiceCardsDesign {
   buttonSelectColour?: HexColour;
   buttonSelectTextColour?: HexColour;
   buttonSelectBorderColour?: HexColour;
+  buttonSelectMarkerColour?: HexColour;
+  pillTextColour?: HexColour;
+  pillBackgroundColour?: HexColour;
 }
 export type BannerDesignVisual = BannerDesignImage | ChoiceCardsDesign;
 
@@ -69,6 +69,8 @@ export interface Font {
 }
 
 export type BannerDesignProps = {
+  style?: string;
+  colourTheme?: string;
   visual?: BannerDesignVisual;
   headerImage?: BannerDesignHeaderImage;
   fonts?: {

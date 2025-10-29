@@ -54,7 +54,10 @@ object BannerDesignVisual {
       buttonBorderColour: Option[HexColour],
       buttonSelectColour: Option[HexColour],
       buttonSelectTextColour: Option[HexColour],
-      buttonSelectBorderColour: Option[HexColour]
+      buttonSelectBorderColour: Option[HexColour],
+      buttonSelectMarkerColour: Option[HexColour],
+      pillTextColour: Option[HexColour],
+      pillBackgroundColour: Option[HexColour]
   ) extends BannerDesignVisual
 
   import io.circe.generic.extras.auto._
@@ -92,14 +95,12 @@ case class CtaStateDesign(
 )
 
 case class CtaDesign(
-    default: CtaStateDesign,
+    default: CtaStateDesign
 )
 
 case class TickerDesign(
-    text: HexColour, // deprecated
     filledProgress: HexColour,
     progressBarBackground: HexColour,
-    goalMarker: HexColour, // deprecated
     headlineColour: Option[HexColour], // new
     totalColour: Option[HexColour], // new
     goalColour: Option[HexColour] // new
@@ -112,9 +113,9 @@ object TickerDesign {
   // Modify the Decoder to use existing values for the new fields
   private val normalDecoder: Decoder[TickerDesign] = deriveDecoder[TickerDesign]
   implicit val decoder: Decoder[TickerDesign] = normalDecoder.map(design => {
-    val headlineColour = design.headlineColour.getOrElse(design.text)
-    val totalColour = design.totalColour.getOrElse(design.text)
-    val goalColour = design.goalColour.getOrElse(design.text)
+    val headlineColour = design.headlineColour.getOrElse(design.filledProgress)
+    val totalColour = design.totalColour.getOrElse(design.filledProgress)
+    val goalColour = design.goalColour.getOrElse(design.filledProgress)
     design.copy(headlineColour = Some(headlineColour), totalColour = Some(totalColour), goalColour = Some(goalColour))
   })
 }
@@ -130,6 +131,8 @@ case class BannerDesignColours(
 
 case class BannerDesign(
     name: String,
+    style: Option[String],
+    colourTheme: Option[String],
     status: BannerDesignStatus,
     visual: Option[BannerDesignVisual],
     headerImage: Option[HeaderImage],
