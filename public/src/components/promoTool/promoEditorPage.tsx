@@ -46,11 +46,12 @@ const PromoEditorPage: React.FC = () => {
         .then(response => {
           setPromo(response.promo);
           setUserEmail(response.userEmail);
-          setLoading(false);
         })
         .catch(error => {
           console.error('Error fetching promo:', error);
           alert(`Error fetching promo: ${error.message}`);
+        })
+        .finally(() => {
           setLoading(false);
         });
     }
@@ -71,6 +72,7 @@ const PromoEditorPage: React.FC = () => {
           setPromo(response.promo);
         })
         .catch(error => {
+          setIsEditing(false);
           alert(`Error locking promo: ${error.message}`);
         });
     }
@@ -87,6 +89,7 @@ const PromoEditorPage: React.FC = () => {
           setPromo(response.promo);
         })
         .catch(error => {
+          setIsEditing(false);
           alert(`Error locking promo: ${error.message}`);
         });
     }
