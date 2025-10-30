@@ -1,30 +1,32 @@
 package services.promo
 
-import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import com.typesafe.scalalogging.StrictLogging
 import io.circe.{Decoder, Encoder}
-import io.circe.syntax._
-import models.promos.PromoCampaign
-import models.DynamoErrors.DynamoGetError
-import zio.ZIO
-import zio.ZIO.attemptBlocking
-import software.amazon.awssdk.services.dynamodb.model.QueryRequest
-import utils.Circe.dynamoMapToJson
 import io.circe.generic.auto._
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
-import software.amazon.awssdk.services.dynamodb.model.AttributeValue
-import services.DynamoService
-import scala.jdk.CollectionConverters._
-import models.promos.PromoProduct
-import utils.Circe.jsonToDynamo
-import software.amazon.awssdk.services.dynamodb.model.PutItemRequest
-import models.DynamoErrors.DynamoError
+import io.circe.syntax._
+import java.time.OffsetDateTime
+import models.DynamoErrors._
+import models.LockStatus
 import models.promos.Promo
+import scala.jdk.CollectionConverters._
+import services.DynamoService
+import software.amazon.awssdk.services.dynamodb.DynamoDbClient
+import software.amazon.awssdk.services.dynamodb.model._
+import utils.Circe.dynamoMapToJson
+import utils.Circe.jsonToDynamo
+import zio.ZIO
+import zio.ZIO.attemptBlocking
 
 class DynamoPromos(stage: String, client: DynamoDbClient) extends DynamoService(stage, client) with StrictLogging {
 
   protected val tableName = s"support-admin-console-promos-$stage"
   private val campaignCodeIndex = "campaignCode-index"
+
+  private def buildKey(promoCode: String): java.util.Map[String, AttributeValue] =
+    Map(
+      "promoCode" -> AttributeValue.builder.s(promoCode).build
+    ).asJava
 
   private def buildQuery(promoCode: String): QueryRequest =
     QueryRequest.builder
@@ -55,5 +57,132 @@ class DynamoPromos(stage: String, client: DynamoDbClient) extends DynamoService(
       .expressionAttributeNames(Map("#promoCode" -> "promoCode").asJava)
       .build()
     put(request)
+  }
+
+  private def update(updateRequest: UpdateItemRequest): ZIO[Any, DynamoError, Unit] =
+    attemptBlocking {
+      val result = client.updateItem(updateRequest)
+      logger.info(s"UpdateItemResponse: $result")
+      ()
+    }.mapError {
+      case err: ConditionalCheckFailedException => DynamoNoLockError(err)
+      case other                                => DynamoPutError(other)
+    }
+
+  def lockPromo(promoCode: String, email: String, force: Boolean): ZIO[Any, DynamoError, Unit] = {
+    val lockStatus = LockStatus(
+      locked = true,
+      email = Some(email),
+      timestamp = Some(OffsetDateTime.now())
+    )
+    val request = {
+      val builder = UpdateItemRequest.builder
+        .tableName(tableName)
+        .key(Map("promoCode" -> AttributeValue.builder.s(promoCode).build()).asJava)
+        .updateExpression("set lockStatus = :lockStatus")
+        .expressionAttributeValues(
+          Map(
+            ":lockStatus" -> jsonToDynamo(lockStatus.asJson)
+          ).asJava
+        )
+        .expressionAttributeNames(Map("#promoCode" -> "promoCode").asJava)
+
+      val itemExistsExpression = "attribute_exists(#promoCode)" // only update if it already exists in the table
+      if (!force) {
+        // Check it isn't already locked
+        builder.conditionExpression(s"$itemExistsExpression and attribute_not_exists(lockStatus.email)")
+      } else {
+        builder.conditionExpression(itemExistsExpression)
+      }
+
+      builder.build()
+    }
+
+    update(request)
+  }
+
+  def unlockPromo(promoCode: String, email: String): ZIO[Any, DynamoError, Unit] = {
+    val request = UpdateItemRequest.builder
+      .tableName(tableName)
+      .key(Map("promoCode" -> AttributeValue.builder.s(promoCode).build()).asJava)
+      .updateExpression("remove lockStatus")
+      .conditionExpression("lockStatus.email = :email")
+      .expressionAttributeValues(
+        Map(
+          ":email" -> AttributeValue.builder.s(email).build
+        ).asJava
+      )
+      .build()
+
+    update(request)
+  }
+
+  def getAllPromos(campaignCode: String): ZIO[Any, DynamoGetError, List[Promo]] =
+    getAllInCampaign(campaignCode).map(results =>
+      results.asScala
+        .map(item => dynamoMapToJson(item).as[Promo])
+        .flatMap {
+          case Right(promo) => Some(promo)
+          case Left(error)  =>
+            logger.error(s"Failed to decode item from Dynamo: ${error.getMessage}")
+            None
+        }
+        .toList
+    )
+
+  private def getAllInCampaign(
+      campaignCode: String
+  ): ZIO[Any, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
+    attemptBlocking {
+      client
+        .query(
+          QueryRequest.builder
+            .tableName(tableName)
+            .indexName(campaignCodeIndex)
+            .keyConditionExpression("campaignCode = :campaignCode")
+            .expressionAttributeValues(
+              Map(
+                ":campaignCode" -> AttributeValue.builder.s(campaignCode).build
+              ).asJava
+            )
+            .build()
+        )
+        .items
+    }.mapError(DynamoGetError)
+
+  def updatePromo(promo: Promo, email: String): ZIO[Any, DynamoError, Unit] = {
+    val item = jsonToDynamo(promo.asJson).m().asScala.toMap -
+      "lockStatus" - // Unlock on update by removing lockStatus
+      "promoCode" - // promoCode is the primary key and cannot be updated
+      "campaignCode" // campaignCode cannot be updated
+
+    val updateExpression = buildUpdatePromoExpression(item)
+
+    val attributeValues = item.map { case (key, value) => s":$key" -> value }
+    // Add email, for the conditional update
+    val attributeValuesWithEmail = attributeValues + (":email" -> AttributeValue.builder
+      .s(email)
+      .build)
+
+    val attributeNames = Map("#name" -> "name").asJava
+
+    val updateRequest = UpdateItemRequest.builder
+      .tableName(tableName)
+      .key(buildKey(promo.promoCode))
+      .updateExpression(updateExpression)
+      .expressionAttributeValues(attributeValuesWithEmail.asJava)
+      .expressionAttributeNames(attributeNames)
+      .conditionExpression("lockStatus.email = :email")
+      .build()
+
+    update(updateRequest)
+  }
+
+  private def buildUpdatePromoExpression(item: Map[String, AttributeValue]): String = {
+    val subExprs = item.foldLeft[List[String]](Nil) { case (acc, (key, value)) =>
+      val attributeName = if (key == "name") "#name" else key
+      s"$attributeName = :$key" +: acc
+    }
+    s"set ${subExprs.mkString(", ")} remove lockStatus" // Unlock the promo at the same time
   }
 }
