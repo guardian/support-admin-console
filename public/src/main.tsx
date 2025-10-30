@@ -42,6 +42,7 @@ import { LinkTrackingBuilder } from './components/linkTracking/LinkTrackingBuild
 import { SupportLandingPageTestsForm } from './components/channelManagement/supportLandingPage/supportLandingPage';
 import { AuditTestsDashboard } from './components/channelManagement/auditTests/auditTestsDashboard';
 import PromoTool from './components/promoTool/promoTool';
+import PromoEditorPage from './components/promoTool/promoEditorPage';
 
 declare module '@mui/styles' {
   // https://mui.com/material-ui/migration/v5-style-changes/#%E2%9C%85-add-module-augmentation-for-defaulttheme-typescript
@@ -86,7 +87,8 @@ const useStyles = makeStyles(({ palette, mixins, typography, transitions }: Them
   appContent: {
     display: 'flex',
     flexDirection: 'column',
-    overflow: 'hidden',
+    overflowX: 'hidden',
+    overflowY: 'auto',
     flexGrow: 1,
     backgroundColor: palette.grey[100],
   },
@@ -206,6 +208,14 @@ const AppRouter = () => {
             element={createComponent(<SuperModeDashboard />, 'Epic Super Mode dashboard 🦸')}
           />
           <Route path="/promo-tool" element={createComponent(<PromoTool />, 'Promo Tool')} />
+          <Route
+            path="/promo-tool/:campaignCode"
+            element={createComponent(<PromoTool />, 'Promo Tool')}
+          />
+          <Route
+            path="/promo-tool/:campaignCode/:promoCode"
+            element={createComponent(<PromoEditorPage />, 'Edit Promo')}
+          />
           <Route
             path="/default-promos"
             element={createComponent(<DefaultPromos />, 'Default Promos')}
