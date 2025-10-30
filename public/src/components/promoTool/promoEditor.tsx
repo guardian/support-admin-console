@@ -135,23 +135,24 @@ const PromoEditor = ({
     return `${year}-${month}-${day}T${hours}:${minutes}`;
   };
 
-  const handleCountryToggle = (countryCode: string) => {
-    setSelectedCountries(prev => {
-      const newCountries = prev.includes(countryCode)
-        ? prev.filter(c => c !== countryCode)
-        : [...prev, countryCode];
+  const updateCountries = (newCountries: string[]) => {
+    setSelectedCountries(newCountries);
+    if (editedPromo) {
+      setEditedPromo({
+        ...editedPromo,
+        appliesTo: {
+          ...editedPromo.appliesTo,
+          countries: newCountries,
+        },
+      });
+    }
+  };
 
-      if (editedPromo) {
-        setEditedPromo({
-          ...editedPromo,
-          appliesTo: {
-            ...editedPromo.appliesTo,
-            countries: newCountries,
-          },
-        });
-      }
-      return newCountries;
-    });
+  const handleCountryToggle = (countryCode: string) => {
+    const newCountries = selectedCountries.includes(countryCode)
+      ? selectedCountries.filter(c => c !== countryCode)
+      : [...selectedCountries, countryCode];
+    updateCountries(newCountries);
   };
 
   const handleSelectAll = () => {
@@ -162,33 +163,16 @@ const PromoEditor = ({
         code.toLowerCase().includes(countryFilter.toLowerCase()),
     );
 
+    let newCountries: string[];
     if (selectAll) {
       // Deselect all filtered countries
-      const newCountries = selectedCountries.filter(c => !filteredCountryCodes.includes(c));
-      setSelectedCountries(newCountries);
-      if (editedPromo) {
-        setEditedPromo({
-          ...editedPromo,
-          appliesTo: {
-            ...editedPromo.appliesTo,
-            countries: newCountries,
-          },
-        });
-      }
+      newCountries = selectedCountries.filter(c => !filteredCountryCodes.includes(c));
     } else {
       // Select all filtered countries
-      const newCountries = [...new Set([...selectedCountries, ...filteredCountryCodes])];
-      setSelectedCountries(newCountries);
-      if (editedPromo) {
-        setEditedPromo({
-          ...editedPromo,
-          appliesTo: {
-            ...editedPromo.appliesTo,
-            countries: newCountries,
-          },
-        });
-      }
+      newCountries = [...new Set([...selectedCountries, ...filteredCountryCodes])];
     }
+
+    updateCountries(newCountries);
     setSelectAll(!selectAll);
   };
 
