@@ -41,7 +41,13 @@ class PromosController(
     run {
       dynamoPromos
         .getPromo(promoCode)
-        .map(promo => Ok(noNulls(promo.asJson)))
+        .map { promo =>
+          val response = Map(
+            "promo" -> promo.asJson,
+            "userEmail" -> request.user.email.asJson
+          ).asJson
+          Ok(noNulls(response))
+        }
     }
   }
 

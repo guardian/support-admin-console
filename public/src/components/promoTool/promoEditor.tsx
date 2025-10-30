@@ -20,12 +20,8 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     padding: spacing(3),
     maxWidth: 800,
     margin: '0 auto',
-  },
-  header: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: spacing(3),
+    maxHeight: 'calc(100vh - 100px)',
+    overflowY: 'auto',
   },
   section: {
     marginBottom: spacing(3),
@@ -41,6 +37,14 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     display: 'flex',
     gap: spacing(1),
     marginTop: spacing(2),
+    position: 'sticky',
+    bottom: 0,
+    backgroundColor: 'white',
+    padding: spacing(2),
+    borderTop: '1px solid #ddd',
+    marginLeft: -spacing(3),
+    marginRight: -spacing(3),
+    marginBottom: -spacing(3),
   },
   lockBanner: {
     padding: spacing(2),
@@ -55,6 +59,9 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     borderRadius: 4,
     padding: spacing(2),
   },
+  countrySearch: {
+    marginBottom: spacing(2),
+  },
 }));
 
 interface PromoEditorProps {
@@ -62,9 +69,7 @@ interface PromoEditorProps {
   isEditing: boolean;
   onSave: (promo: Promo) => void;
   onCancel: () => void;
-  onEdit: () => void;
   onLock: (force: boolean) => void;
-  onUnlock: () => void;
   userEmail?: string;
 }
 
@@ -73,14 +78,14 @@ const PromoEditor = ({
   isEditing,
   onSave,
   onCancel,
-  onEdit,
   onLock,
-  onUnlock,
   userEmail,
 }: PromoEditorProps): React.ReactElement => {
   const classes = useStyles();
   const [editedPromo, setEditedPromo] = useState<Promo | null>(promo);
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
+  const [countryFilter, setCountryFilter] = useState<string>('');
+  const [selectAll, setSelectAll] = useState<boolean>(false);
 
   useEffect(() => {
     setEditedPromo(promo);
@@ -149,6 +154,50 @@ const PromoEditor = ({
     });
   };
 
+  const handleSelectAll = () => {
+    const allCountryCodes = Object.keys(countries);
+    const filteredCountryCodes = allCountryCodes.filter(
+      code =>
+        countries[code].toLowerCase().includes(countryFilter.toLowerCase()) ||
+        code.toLowerCase().includes(countryFilter.toLowerCase()),
+    );
+
+    if (selectAll) {
+      // Deselect all filtered countries
+      const newCountries = selectedCountries.filter(c => !filteredCountryCodes.includes(c));
+      setSelectedCountries(newCountries);
+      if (editedPromo) {
+        setEditedPromo({
+          ...editedPromo,
+          appliesTo: {
+            ...editedPromo.appliesTo,
+            countries: newCountries,
+          },
+        });
+      }
+    } else {
+      // Select all filtered countries
+      const newCountries = [...new Set([...selectedCountries, ...filteredCountryCodes])];
+      setSelectedCountries(newCountries);
+      if (editedPromo) {
+        setEditedPromo({
+          ...editedPromo,
+          appliesTo: {
+            ...editedPromo.appliesTo,
+            countries: newCountries,
+          },
+        });
+      }
+    }
+    setSelectAll(!selectAll);
+  };
+
+  const filteredCountries = Object.entries(countries).filter(
+    ([code, name]) =>
+      name.toLowerCase().includes(countryFilter.toLowerCase()) ||
+      code.toLowerCase().includes(countryFilter.toLowerCase()),
+  );
+
   const handleSave = () => {
     if (editedPromo) {
       onSave(editedPromo);
@@ -158,37 +207,25 @@ const PromoEditor = ({
   const isLockedByOther = promo.lockStatus?.locked && promo.lockStatus?.email !== userEmail;
   const isLockedByUser = promo.lockStatus?.locked && promo.lockStatus?.email === userEmail;
 
+  const lockMessage = isLockedByUser
+    ? 'This promo is currently locked by you'
+    : `This promo is currently locked by ${promo.lockStatus?.email}`;
+
   return (
     <Paper className={classes.root}>
-      <div className={classes.header}>
-        <Typography variant="h5">{promo.promoCode}</Typography>
-        <Box>
-          {!isEditing && !isLockedByOther && (
-            <Button variant="contained" color="primary" onClick={onEdit}>
-              Edit
-            </Button>
-          )}
-          {isLockedByUser && (
-            <Button variant="outlined" color="secondary" onClick={onUnlock}>
-              Cancel Edit
-            </Button>
-          )}
-        </Box>
-      </div>
-
-      {isLockedByOther && (
+      {(isLockedByOther || isLockedByUser) && (
         <Box className={classes.lockBanner}>
-          <Typography variant="body2">
-            This promo is currently locked by {promo.lockStatus?.email}
-          </Typography>
-          <Button
-            size="small"
-            variant="outlined"
-            onClick={() => onLock(true)}
-            style={{ marginTop: 8 }}
-          >
-            Take Control
-          </Button>
+          <Typography variant="body2">{lockMessage}</Typography>
+          {isLockedByOther && (
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={() => onLock(true)}
+              style={{ marginTop: 8 }}
+            >
+              Take Control
+            </Button>
+          )}
         </Box>
       )}
 
@@ -251,9 +288,33 @@ const PromoEditor = ({
         <Typography variant="subtitle2" gutterBottom>
           Countries
         </Typography>
+        <TextField
+          className={classes.countrySearch}
+          fullWidth
+          size="small"
+          placeholder="Search countries..."
+          value={countryFilter}
+          onChange={e => setCountryFilter(e.target.value)}
+          disabled={!isEditing}
+        />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={selectAll}
+              onChange={handleSelectAll}
+              disabled={!isEditing}
+              indeterminate={
+                selectedCountries.length > 0 &&
+                selectedCountries.length <
+                  filteredCountries.filter(([code]) => selectedCountries.includes(code)).length
+              }
+            />
+          }
+          label="Select All"
+        />
         <Box className={classes.countriesContainer}>
           <FormGroup>
-            {Object.entries(countries).map(([code, name]) => (
+            {filteredCountries.map(([code, name]) => (
               <FormControlLabel
                 key={code}
                 control={

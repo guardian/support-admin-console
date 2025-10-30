@@ -26,16 +26,16 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 
 interface PromosListProps {
   promos: Promo[];
-  selectedPromo?: Promo | null;
-  onPromoSelected: (promoCode: string) => void;
   onCreatePromo: () => void;
+  onClonePromo: (promo: Promo) => void;
+  onViewPromo: (promoCode: string) => void;
 }
 
 const PromosList = ({
   promos,
-  selectedPromo,
-  onPromoSelected,
   onCreatePromo,
+  onClonePromo,
+  onViewPromo,
 }: PromosListProps): React.ReactElement => {
   const classes = useStyles();
 
@@ -54,15 +54,12 @@ const PromosList = ({
       ) : (
         <List className={classes.list}>
           {promos.map(promo => {
-            const isSelected = Boolean(
-              selectedPromo && selectedPromo.promoCode === promo.promoCode,
-            );
             return (
               <PromoListItem
                 key={promo.promoCode}
                 promo={promo}
-                isSelected={isSelected}
-                onPromoSelected={onPromoSelected}
+                onClonePromo={onClonePromo}
+                onViewPromo={onViewPromo}
               />
             );
           })}

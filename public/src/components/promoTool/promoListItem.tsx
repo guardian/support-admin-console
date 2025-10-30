@@ -37,14 +37,14 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
 
 interface PromoListItemProps {
   promo: Promo;
-  isSelected: boolean;
-  onPromoSelected: (promoCode: string) => void;
+  onClonePromo: (promo: Promo) => void;
+  onViewPromo: (promoCode: string) => void;
 }
 
 export const PromoListItem = ({
   promo,
-  isSelected,
-  onPromoSelected,
+  onClonePromo,
+  onViewPromo,
 }: PromoListItemProps): React.ReactElement => {
   const classes = useStyles();
 
@@ -61,21 +61,31 @@ export const PromoListItem = ({
 
   return (
     <ListItem className={classes.listItem} disablePadding>
-      <ListItemButton
-        className={classes.listItemButton}
-        selected={isSelected}
-        onClick={() => onPromoSelected(promo.promoCode)}
-      >
+      <ListItemButton className={classes.listItemButton}>
         <ListItemText
           primary={
             <Box display="flex" justifyContent="space-between" alignItems="center">
               <span className={classes.promoCode}>{promo.promoCode}</span>
               <Box className={classes.actionButtons}>
                 {promo.lockStatus?.locked && <Chip label="Locked" size="small" color="warning" />}
-                <Button size="small" variant="outlined">
+                <Button
+                  size="small"
+                  variant="outlined"
+                  onClick={e => {
+                    e.stopPropagation();
+                    onClonePromo(promo);
+                  }}
+                >
                   Clone
                 </Button>
-                <Button size="small" variant="outlined">
+                <Button
+                  size="small"
+                  variant="outlined"
+                  onClick={e => {
+                    e.stopPropagation();
+                    onViewPromo(promo.promoCode);
+                  }}
+                >
                   View
                 </Button>
               </Box>

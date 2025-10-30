@@ -222,11 +222,21 @@ export function createPromoCampaign(promoCampaign: PromoCampaign): Promise<Respo
   return saveSettings(`/promos/campaign/create`, promoCampaign);
 }
 
-export function fetchPromoCampaigns(promoProduct: string): Promise<PromoCampaign[]> {
+export interface PromoCampaignsResponse {
+  promoCampaigns: PromoCampaign[];
+  userEmail: string;
+}
+
+export function fetchPromoCampaigns(promoProduct: string): Promise<PromoCampaignsResponse> {
   return fetchSettings(`/promos/campaigns/${promoProduct}`);
 }
 
-export function fetchPromo(promoCode: string): Promise<Promo> {
+export interface PromoResponse {
+  promo: Promo;
+  userEmail: string;
+}
+
+export function fetchPromo(promoCode: string): Promise<PromoResponse> {
   return fetchSettings(`/promo/${promoCode}`);
 }
 
