@@ -243,7 +243,7 @@ class AppComponents(context: Context, stage: String)
       dynamoPromoCampaignsService
     ),
     new PromosController(
-      AuthAndPermissionActions.withoutPermissionsChecks(authAction),
+      authAction,
       controllerComponents,
       stage,
       runtime,

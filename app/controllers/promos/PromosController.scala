@@ -15,9 +15,10 @@ import services.promo.DynamoPromos
 import utils.Circe.noNulls
 import zio.Unsafe
 import zio.ZIO
+import com.gu.googleauth.AuthAction
 
 class PromosController(
-    authActions: AuthAndPermissionActions,
+    authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
     components: ControllerComponents,
     stage: String,
     runtime: zio.Runtime[Any],
@@ -37,7 +38,7 @@ class PromosController(
       }
     }
 
-  def get(promoCode: String) = authActions.read.async { request =>
+  def get(promoCode: String) = authAction.async { request =>
     run {
       dynamoPromos
         .getPromo(promoCode)
@@ -51,7 +52,7 @@ class PromosController(
     }
   }
 
-  def create = authActions.write.async(circe.json[Promo]) { request =>
+  def create = authAction.async(circe.json[Promo]) { request =>
     run {
       val promo = request.body
       logger.info(s"${request.user.email} is creating '${promo.promoCode}'")
@@ -71,7 +72,7 @@ class PromosController(
     }
   }
 
-  def lockPromo(promoCode: String) = authActions.write.async { request =>
+  def lockPromo(promoCode: String) = authAction.async { request =>
     run {
       logger.info(s"${request.user.email} is locking promo '$promoCode'")
       dynamoPromos
@@ -86,7 +87,7 @@ class PromosController(
     }
   }
 
-  def unlockPromo(promoCode: String) = authActions.write.async { request =>
+  def unlockPromo(promoCode: String) = authAction.async { request =>
     run {
       logger.info(s"${request.user.email} is unlocking '$promoCode'")
       dynamoPromos
@@ -101,7 +102,7 @@ class PromosController(
     }
   }
 
-  def getAllPromos(campaignCode: String): Action[AnyContent] = authActions.read.async { request =>
+  def getAllPromos(campaignCode: String): Action[AnyContent] = authAction.async { request =>
     run {
       dynamoPromos
         .getAllPromos(campaignCode)
@@ -109,7 +110,7 @@ class PromosController(
     }
   }
 
-  def forceLock(promoCode: String) = authActions.write.async { request =>
+  def forceLock(promoCode: String) = authAction.async { request =>
     run {
       logger.info(s"${request.user.email} is force locking '$promoCode'")
       dynamoPromos
@@ -118,7 +119,7 @@ class PromosController(
     }
   }
 
-  def update = authActions.write.async(circe.json[Promo]) { request =>
+  def update = authAction.async(circe.json[Promo]) { request =>
     run {
       val promo = request.body
       logger.info(s"${request.user.email} is updating '${promo.promoCode}'")
