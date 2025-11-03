@@ -1,4 +1,4 @@
-import { Country } from '../../../utils/models';
+import { LockStatus } from '../../channelManagement/helpers/shared';
 
 export type PromoProduct = 'SupporterPlus' | 'TierThree' | 'DigitalPack' | 'Newspaper' | 'Weekly';
 
@@ -18,8 +18,8 @@ export interface PromoCampaign {
 }
 
 export interface AppliesTo {
-  productRatePlanIds: Set<string>; // TODO: where do we get these?
-  countries: Set<Country>;
+  productRatePlanIds: string[];
+  countries: string[];
 }
 
 export interface Promo {
@@ -30,6 +30,7 @@ export interface Promo {
   startTimestamp: string;
   endTimestamp: string;
   description?: string;
+  lockStatus?: LockStatus;
 }
 
 export type PromoCampaigns = PromoCampaign[];
