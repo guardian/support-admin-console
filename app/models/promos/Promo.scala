@@ -23,7 +23,8 @@ case class Promo(
     startTimestamp: String,
     endTimestamp: String,
     description: Option[String],
-    lockStatus: Option[LockStatus]
+    lockStatus: Option[LockStatus],
+    discount: Option[DiscountDetails]
     // TODO - landing page config for print products
 )
 
