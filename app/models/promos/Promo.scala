@@ -28,8 +28,6 @@ case class Promo(
 )
 
 object Promo {
-  implicit val lockStatusDecoder: Decoder[LockStatus] = deriveDecoder[LockStatus]
-  implicit val lockStatusEncoder: Encoder[LockStatus] = deriveEncoder[LockStatus]
   implicit val decoder: Decoder[Promo] = deriveDecoder[Promo]
   implicit val encoder: Encoder[Promo] = deriveEncoder[Promo]
 }
