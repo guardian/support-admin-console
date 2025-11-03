@@ -84,7 +84,7 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
     */
   private def buildUpdateBannerDesignExpression(item: Map[String, AttributeValue]): String = {
     val subExprs = item.foldLeft[List[String]](Nil) { case (acc, (key, value)) =>
-      s"$key = :$key" +: acc
+      s"#$key = :$key" +: acc
     }
     s"set ${subExprs.mkString(", ")} remove lockStatus" // Unlock the banner design at the same time
   }
