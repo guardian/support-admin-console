@@ -24,7 +24,8 @@ case class Promo(
     appliesTo: AppliesTo,
     startTimestamp: String,
     endTimestamp: String,
-    description: Option[String]
+    description: Option[String],
+    discount: Option[DiscountDetails]
     // TODO - landing page config for print products
 )
 
