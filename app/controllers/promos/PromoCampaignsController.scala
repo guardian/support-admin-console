@@ -52,13 +52,7 @@ class PromoCampaignsController(
         .flatMap(promoProduct =>
           dynamoPromoCampaigns
             .getAllPromoCampaigns(promoProduct)
-            .map { promoCampaigns =>
-              val response = Map(
-                "promoCampaigns" -> promoCampaigns.asJson,
-                "userEmail" -> request.user.email.asJson
-              ).asJson
-              Ok(noNulls(response))
-            }
+            .map(promoCampaigns => Ok(noNulls(promoCampaigns.asJson)))
         )
     }
   }
