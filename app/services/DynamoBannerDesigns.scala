@@ -115,14 +115,11 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
       .s(email)
       .build)
 
-    val expressionAttributeNames = item.keys.map(key => s"#$key" -> key).toMap
-
     val updateRequest = UpdateItemRequest.builder
       .tableName(tableName)
       .key(buildKey(bannerDesign.name))
       .updateExpression(updateExpression)
       .expressionAttributeValues(attributeValuesWithEmail.asJava)
-      .expressionAttributeNames(expressionAttributeNames.asJava)
       .conditionExpression("lockStatus.email = :email")
       .build()
 
