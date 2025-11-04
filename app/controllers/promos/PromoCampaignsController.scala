@@ -52,9 +52,7 @@ class PromoCampaignsController(
         .flatMap(promoProduct =>
           dynamoPromoCampaigns
             .getAllPromoCampaigns(promoProduct)
-            .map { promoCampaigns =>
-              Ok(noNulls(promoCampaigns.asJson))
-            }
+            .map(promoCampaigns => Ok(noNulls(promoCampaigns.asJson)))
         )
     }
   }

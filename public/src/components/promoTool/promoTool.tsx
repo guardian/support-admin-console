@@ -87,7 +87,7 @@ const PromoTool: React.FC = () => {
   const fetchPromoCampaignsList = (product: string): void => {
     fetchPromoCampaigns(JSON.stringify(product))
       .then(campaigns => {
-        setPromoCampaigns(campaigns.promoCampaigns);
+        setPromoCampaigns(campaigns);
       })
       .catch(error => {
         console.error(error);

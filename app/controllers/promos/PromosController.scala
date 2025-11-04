@@ -1,20 +1,21 @@
 package controllers.promos
 
-import com.gu.googleauth.AuthAction
-import models.DynamoErrors.{DynamoDuplicateNameError, DynamoError, DynamoNoLockError}
-import play.api.libs.circe.Circe
-import play.api.mvc.{AbstractController, ActionBuilder, AnyContent, ControllerComponents, Result}
-import scala.concurrent.ExecutionContext
+import actions.AuthAndPermissionActions
 import com.typesafe.scalalogging.LazyLogging
-import zio.ZIO
-import scala.concurrent.Future
-import zio.Unsafe
-import utils.Circe.noNulls
-import io.circe.syntax._
 import io.circe.parser._
-import models.promos.PromoProduct
-import services.promo.DynamoPromos
+import io.circe.syntax._
+import models.DynamoErrors.{DynamoDuplicateNameError, DynamoError, DynamoNoLockError}
 import models.promos.Promo
+import models.promos.PromoProduct
+import play.api.libs.circe.Circe
+import play.api.mvc.{AbstractController, Action, ActionBuilder, AnyContent, ControllerComponents, Result}
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
+import services.promo.DynamoPromos
+import utils.Circe.noNulls
+import zio.Unsafe
+import zio.ZIO
+import com.gu.googleauth.AuthAction
 
 class PromosController(
     authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
@@ -41,7 +42,13 @@ class PromosController(
     run {
       dynamoPromos
         .getPromo(promoCode)
-        .map(promo => Ok(noNulls(promo.asJson)))
+        .map { promo =>
+          val response = Map(
+            "promo" -> promo.asJson,
+            "userEmail" -> request.user.email.asJson
+          ).asJson
+          Ok(noNulls(response))
+        }
     }
   }
 
@@ -61,6 +68,69 @@ class PromosController(
               s"Cannot create promo '${promo.promoCode}' because it already exists. Please use a different code"
             )
           )
+        }
+    }
+  }
+
+  def lockPromo(promoCode: String) = authAction.async { request =>
+    run {
+      logger.info(s"${request.user.email} is locking promo '$promoCode'")
+      dynamoPromos
+        .lockPromo(promoCode, request.user.email, force = false)
+        .map(_ => Ok("locked"))
+        .catchSome { case DynamoNoLockError(error) =>
+          logger.warn(s"Failed to lock promo '$promoCode' because it is already locked: ${error.getMessage}")
+          ZIO.succeed(
+            Conflict(s"Promo '$promoCode' is already locked for edit by another user, or it doesn't exist")
+          )
+        }
+    }
+  }
+
+  def unlockPromo(promoCode: String) = authAction.async { request =>
+    run {
+      logger.info(s"${request.user.email} is unlocking '$promoCode'")
+      dynamoPromos
+        .unlockPromo(promoCode, request.user.email)
+        .map(_ => Ok("unlocked"))
+        .catchSome { case DynamoNoLockError(error) =>
+          logger.warn(
+            s"Failed to unlock '$promoCode' because user ${request.user.email} does not have it locked: ${error.getMessage}"
+          )
+          ZIO.succeed(Conflict(s"You do not currently have promo '$promoCode' open for edit"))
+        }
+    }
+  }
+
+  def getAllPromos(campaignCode: String): Action[AnyContent] = authAction.async { request =>
+    run {
+      dynamoPromos
+        .getAllPromos(campaignCode)
+        .map(promos => Ok(noNulls(promos.asJson)))
+    }
+  }
+
+  def forceLock(promoCode: String) = authAction.async { request =>
+    run {
+      logger.info(s"${request.user.email} is force locking '$promoCode'")
+      dynamoPromos
+        .lockPromo(promoCode, request.user.email, force = true)
+        .map(_ => Ok("locked"))
+    }
+  }
+
+  def update = authAction.async(circe.json[Promo]) { request =>
+    run {
+      val promo = request.body
+      logger.info(s"${request.user.email} is updating '${promo.promoCode}'")
+      dynamoPromos
+        .updatePromo(promo, request.user.email)
+        .map(_ => Ok("updated"))
+        .catchSome { case DynamoNoLockError(error) =>
+          logger.warn(
+            s"Failed to save '${promo.promoCode}' because user ${request.user.email} does not have it locked: ${error.getMessage}"
+          )
+          ZIO.succeed(Conflict(s"You do not currently have promo '${promo.promoCode}' open for edit"))
         }
     }
   }
