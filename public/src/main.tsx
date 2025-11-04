@@ -43,6 +43,7 @@ import { SupportLandingPageTestsForm } from './components/channelManagement/supp
 import { AuditTestsDashboard } from './components/channelManagement/auditTests/auditTestsDashboard';
 import PromoTool from './components/promoTool/promoTool';
 import PromoEditorPage from './components/promoTool/promoEditorPage';
+import Bookmarklets from './components/bookmarklets/Bookmarklets';
 
 declare module '@mui/styles' {
   // https://mui.com/material-ui/migration/v5-style-changes/#%E2%9C%85-add-module-augmentation-for-defaulttheme-typescript
@@ -228,6 +229,7 @@ const AppRouter = () => {
             path="/audit-tests/:channel?/:testName?"
             element={createComponent(<AuditTestsDashboard />, 'Test Audits')}
           />
+          <Route path="/bookmarklets" element={createComponent(<Bookmarklets />, 'Bookmarklets')} />
         </Routes>
       </div>
     </Router>

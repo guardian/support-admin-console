@@ -6,6 +6,7 @@ GET /                                               controllers.Application.inde
 GET /switches                                       controllers.Application.index
 GET /amounts                                        controllers.Application.index
 GET /promo-tool                                     controllers.Application.index
+GET /bookmarklets                                   controllers.Application.index
 
 GET /header-tests                                   controllers.Application.index
 GET /header-tests/:name                             controllers.Application.indexWithName(name: String)
