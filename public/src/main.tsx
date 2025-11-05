@@ -229,7 +229,10 @@ const AppRouter = () => {
             path="/audit-tests/:channel?/:testName?"
             element={createComponent(<AuditTestsDashboard />, 'Test Audits')}
           />
-          <Route path="/bookmarklets" element={createComponent(<Bookmarklets />, 'Bookmarklets')} />
+          <Route
+            path="/bookmarklets"
+            element={createComponent(<Bookmarklets />, 'Reader Revenue Bookmarklets')}
+          />
         </Routes>
       </div>
     </Router>
