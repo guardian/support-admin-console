@@ -13,8 +13,11 @@ import {
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material/styles';
-import { Promo } from './utils/promoModels';
+import { Promo, PromoProduct, mapPromoProductToCatalogProducts } from './utils/promoModels';
 import { countries } from '../../utils/models';
+import RatePlanSelector from './ratePlanSelector';
+import { RatePlanWithProduct, getRatePlansWithProduct } from './utils/productCatalog';
+import { fetchProductDetails } from '../../utils/requests';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   root: {
@@ -72,6 +75,7 @@ interface PromoEditorProps {
   onCancel: () => void;
   onLock: (force: boolean) => void;
   userEmail?: string;
+  campaignProduct: PromoProduct;
 }
 
 const PromoEditor = ({
@@ -81,12 +85,16 @@ const PromoEditor = ({
   onCancel,
   onLock,
   userEmail,
+  campaignProduct,
 }: PromoEditorProps): React.ReactElement => {
   const classes = useStyles();
   const [editedPromo, setEditedPromo] = useState<Promo | null>(promo);
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
   const [countryFilter, setCountryFilter] = useState<string>('');
   const [selectAll, setSelectAll] = useState<boolean>(false);
+  const [annualRatePlans, setAnnualRatePlans] = useState<RatePlanWithProduct[]>([]);
+  const [monthlyRatePlans, setMonthlyRatePlans] = useState<RatePlanWithProduct[]>([]);
+  const [loadingProducts, setLoadingProducts] = useState<boolean>(true);
 
   useEffect(() => {
     setEditedPromo(promo);
@@ -96,6 +104,31 @@ const PromoEditor = ({
       setSelectedCountries([]);
     }
   }, [promo]);
+
+  useEffect(() => {
+    const catalogProducts = mapPromoProductToCatalogProducts(campaignProduct);
+    setLoadingProducts(true);
+
+    Promise.all(catalogProducts.map(productName => fetchProductDetails(productName)))
+      .then(products => {
+        const allAnnualPlans: RatePlanWithProduct[] = [];
+        const allMonthlyPlans: RatePlanWithProduct[] = [];
+
+        products.forEach((product, index) => {
+          const productName = catalogProducts[index];
+          allAnnualPlans.push(...getRatePlansWithProduct(product, productName, 'Annual'));
+          allMonthlyPlans.push(...getRatePlansWithProduct(product, productName, 'Month'));
+        });
+
+        setAnnualRatePlans(allAnnualPlans);
+        setMonthlyRatePlans(allMonthlyPlans);
+        setLoadingProducts(false);
+      })
+      .catch(error => {
+        console.error('Error fetching product details:', error);
+        setLoadingProducts(false);
+      });
+  }, [campaignProduct]);
 
   if (!promo) {
     return (
@@ -149,6 +182,15 @@ const PromoEditor = ({
             [e.target.name]: Number(e.target.value),
           },
         };
+      });
+    }
+  };
+
+  const handleRatePlanSelected = (ratePlanId: string) => {
+    if (editedPromo) {
+      setEditedPromo({
+        ...editedPromo,
+        ratePlanId,
       });
     }
   };
@@ -326,6 +368,17 @@ const PromoEditor = ({
           </Grid>
         </Grid>
       </div>
+
+      {!loadingProducts && (annualRatePlans.length > 0 || monthlyRatePlans.length > 0) && (
+        <RatePlanSelector
+          annualRatePlans={annualRatePlans}
+          monthlyRatePlans={monthlyRatePlans}
+          selectedRatePlanId={editedPromo?.ratePlanId}
+          onRatePlanSelected={handleRatePlanSelected}
+          discountPercentage={editedPromo?.discount?.amount}
+          isDisabled={!isEditing}
+        />
+      )}
 
       <div className={classes.section}>
         <Typography className={classes.sectionTitle}>Availability</Typography>
