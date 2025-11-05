@@ -76,8 +76,7 @@ const PromoTool: React.FC = () => {
 
     createPromoCampaign(newPromoCampaign)
       .then(() => {
-        setSelectedPromoCampaignCode(newPromoCampaign.campaignCode);
-        setPromoCampaigns([newPromoCampaign, ...promoCampaigns]);
+        navigate(`/promo-tool/${newPromoCampaign.campaignCode}`);
       })
       .catch(error => {
         alert(`Error while saving new PromoCampaign: ${error}`);
@@ -167,6 +166,10 @@ const PromoTool: React.FC = () => {
     navigate(`/promo-tool/${selectedPromoCampaignCode}/${promoCode}`);
   };
 
+  const handlePromoCampaignSelected = (campaignCode: string): void => {
+    navigate(`/promo-tool/${campaignCode}`);
+  };
+
   // set selected promoCampaign
   useEffect(() => {
     if (promoCampaignCode != null) {
@@ -197,7 +200,7 @@ const PromoTool: React.FC = () => {
           promoCampaigns={promoCampaigns}
           selectedPromoCampaign={selectedPromoCampaign}
           createPromoCampaign={createNewPromoCampaign}
-          onPromoCampaignSelected={code => setSelectedPromoCampaignCode(code)}
+          onPromoCampaignSelected={handlePromoCampaignSelected}
           selectedProduct={selectedPromoProduct}
           setSelectedProduct={setSelectedPromoProduct}
         />
