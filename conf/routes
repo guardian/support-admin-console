@@ -6,6 +6,8 @@ GET /                                               controllers.Application.inde
 GET /switches                                       controllers.Application.index
 GET /amounts                                        controllers.Application.index
 GET /promo-tool                                     controllers.Application.index
+GET /promo-tool/:campaignCode                       controllers.Application.indexWithCampaignCode(campaignCode: String)
+GET /promo-tool/:campaignCode/:promoCode            controllers.Application.indexWithCampaignAndPromoCode(campaignCode: String, promoCode: String)
 GET /bookmarklets                                   controllers.Application.index
 
 GET /header-tests                                   controllers.Application.index
