@@ -1,41 +1,49 @@
 import { makeStyles } from '@mui/styles';
 import React from 'react';
+import { Theme } from '@mui/material/styles';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(({ typography, palette, spacing }: Theme) => ({
   container: {
-    margin: '50px',
+    margin: 'auto',
+    maxWidth: '80%',
+  },
+  emphasis: {
+    fontWeight: 700,
   },
   grid: {
     display: 'flex',
     justifyContent: 'space-around',
     overflow: 'hidden',
-    gap: '10px',
+    gap: '15px',
   },
   column: {
-    border: 'solid 1px black',
-    padding: '15px',
+    border: `solid 1px ${palette.grey[400]}`,
+    padding: '5px 15px',
     margin: '5px',
     justifySelf: 'stretch',
     flexGrow: 1,
   },
   btn: {
     display: 'block',
-    border: 'solid 2px pink',
-    width: '80%',
-    margin: '1px',
+    border: 'solid 2px #cccccc',
+    width: '100%',
+    margin: '15px 0',
     padding: '5px',
     borderRadius: '8px',
-    backgroundColor: 'pink',
+    backgroundColor: palette.grey[400],
+    textDecoration: 'none',
+    fontSize: typography.pxToRem(24),
   },
 }));
 
 const Bookmarklets: React.FC = () => {
   const classes = useStyles();
+  const instruction = 'Drag me into your bookmarks bar to use when on the Guardian Website';
   return (
     <div className={classes.container}>
       <h2>Reader Revenue Bookmarklets</h2>
 
-      <em>
+      <em className={classes.emphasis}>
         For use on <a href="https://www.theguardian.com">theguardian.com</a> (they will not do
         anything when clicked if you’re not on The Guardian’s website)
       </em>
@@ -70,49 +78,48 @@ const Bookmarklets: React.FC = () => {
           folder so it appears in your bookmarks bar
         </li>
       </ol>
-      <hr />
       <div className={classes.grid}>
         <div className={classes.column}>
           <h3>As non-supporter</h3>
           <em>(to see normal acquisition messaging)</em>
-
           <a
             href="javascript:window.guardian.readerRevenue.showMeTheEpic()"
+            title={instruction}
             className={classes.btn}
           >
             Show me the epic!
           </a>
-          <br />
           <a
             href="javascript:window.guardian.readerRevenue.showMeTheBanner()"
+            title={instruction}
             className={classes.btn}
           >
             Show me the banner!
           </a>
-          <br />
           <a
             href="javascript:window.guardian.readerRevenue.showMeTheDoubleBanner()"
+            title={instruction}
             className={classes.btn}
           >
             Show me the double banner!
           </a>
-          <br />
           <a
             href="javascript:window.guardian.readerRevenue.showNextVariant()"
+            title={instruction}
             className={classes.btn}
           >
             Next variant
           </a>
-          <br />
           <a
             href="javascript:window.guardian.readerRevenue.showPreviousVariant()"
+            title={instruction}
             className={classes.btn}
           >
             Previous variant
           </a>
-          <br />
           <a
             href="javascript:window.guardian.readerRevenue.changeGeolocation()"
+            title={instruction}
             className={classes.btn}
           >
             Change geolocation
@@ -120,45 +127,46 @@ const Bookmarklets: React.FC = () => {
         </div>
         <div className={classes.column}>
           <h3>As supporter</h3>
-          <em>(e.g. to see thank you epic)</em>
-          <br />
+          <em>(e.g. to see supporter specific epic)</em>
+
           <a
             href="javascript:window.guardian.readerRevenue.showMeTheEpic(true);"
+            title={instruction}
             className={classes.btn}
           >
             Show me the epic!
           </a>
-          <br />
           <a
             href="javascript:window.guardian.readerRevenue.showMeTheBanner(true)"
+            title={instruction}
             className={classes.btn}
           >
             Show me the banner!
           </a>
-          <br />
           <a
             href="javascript:window.guardian.readerRevenue.showMeTheDoubleBanner(true)"
+            title={instruction}
             className={classes.btn}
           >
             Show me the double banner!
           </a>
-          <br />
           <a
             href="javascript:window.guardian.readerRevenue.showNextVariant(true)"
+            title={instruction}
             className={classes.btn}
           >
             Next variant
           </a>
-          <br />
           <a
             href="javascript:window.guardian.readerRevenue.showPreviousVariant(true)"
+            title={instruction}
             className={classes.btn}
           >
             Previous variant
           </a>
-          <br />
           <a
             href="javascript:window.guardian.readerRevenue.changeGeolocation(true)"
+            title={instruction}
             className={classes.btn}
           >
             Change geolocation
