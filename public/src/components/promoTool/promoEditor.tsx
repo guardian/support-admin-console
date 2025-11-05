@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ChangeEvent } from 'react';
 import {
   Box,
   TextField,
@@ -9,6 +9,7 @@ import {
   FormControlLabel,
   Checkbox,
   Grid,
+  MenuItem,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material/styles';
@@ -133,6 +134,23 @@ const PromoEditor = ({
     const hours = String(date.getHours()).padStart(2, '0');
     const minutes = String(date.getMinutes()).padStart(2, '0');
     return `${year}-${month}-${day}T${hours}:${minutes}`;
+  };
+
+  const handleDiscountChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (isEditing) {
+      setEditedPromo(prevPromo => {
+        if (!prevPromo || !e.target.value) {
+          return prevPromo;
+        }
+        return {
+          ...prevPromo,
+          discount: {
+            ...prevPromo.discount,
+            [e.target.name]: Number(e.target.value),
+          },
+        };
+      });
+    }
   };
 
   const updateCountries = (newCountries: string[]) => {
@@ -262,6 +280,48 @@ const PromoEditor = ({
               InputLabelProps={{
                 shrink: true,
               }}
+            />
+          </Grid>
+        </Grid>
+      </div>
+
+      <div className={classes.section}>
+        <Typography className={classes.sectionTitle}>Discount</Typography>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
+            {' '}
+            <TextField
+              name="durationMonths"
+              label="Duration (months)"
+              value={editedPromo?.discount?.durationMonths || ''}
+              onChange={e => handleDiscountChange(e)}
+              select
+              fullWidth
+              disabled={!isEditing}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            >
+              {Array.from({ length: 12 }, (_, i) => i + 1).map(month => (
+                <MenuItem key={month} value={month}>
+                  {month}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              name="amount"
+              label="Amount (%)"
+              value={editedPromo?.discount?.amount || ''}
+              onChange={e => handleDiscountChange(e)}
+              fullWidth
+              disabled={!isEditing}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              type="number"
+              inputProps={{ min: 0, max: 100, step: 0.1 }}
             />
           </Grid>
         </Grid>

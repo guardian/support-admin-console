@@ -22,6 +22,11 @@ export interface AppliesTo {
   countries: string[];
 }
 
+export interface DiscountDetails {
+  amount?: number;
+  durationMonths?: number;
+}
+
 export interface Promo {
   promoCode: string;
   name: string;
@@ -29,6 +34,7 @@ export interface Promo {
   appliesTo: AppliesTo;
   startTimestamp: string;
   endTimestamp: string;
+  discount?: DiscountDetails;
   description?: string;
   lockStatus?: LockStatus;
 }
