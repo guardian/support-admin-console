@@ -2,7 +2,7 @@ import { makeStyles } from '@mui/styles';
 import React from 'react';
 import { Theme } from '@mui/material/styles';
 
-const useStyles = makeStyles(({ typography, palette, spacing }: Theme) => ({
+const useStyles = makeStyles(({ typography, palette }: Theme) => ({
   container: {
     margin: 'auto',
     maxWidth: '80%',
