@@ -25,4 +25,6 @@ class Application(
   // Handler for endpoints with a resource name in the path. The client takes care of using the name
   def indexWithName(name: String) = index
   def indexWithNameAndChannel(name: String, channel: String) = index
+  def indexWithCampaignCode(campaignCode: String) = index
+  def indexWithCampaignAndPromoCode(campaignCode: String, promoCode: String) = index
 }
