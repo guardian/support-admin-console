@@ -66,27 +66,29 @@ const PromoEditorPage: React.FC = () => {
   }, [campaignCode]);
 
   useEffect(() => {
-    if (promoCode) {
-      fetchPromo(promoCode)
-        .then(response => {
-          setPromo(response.promo);
-          setUserEmail(response.userEmail);
-
-          if (
-            response.promo.lockStatus?.locked &&
-            response.promo.lockStatus?.email === response.userEmail
-          ) {
-            setIsEditing(true);
-          }
-        })
-        .catch(error => {
-          console.error('Error fetching promo:', error);
-          alert(`Error fetching promo: ${error.message}`);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
+    if (!promoCode) {
+      return;
     }
+
+    fetchPromo(promoCode)
+      .then(response => {
+        setPromo(response.promo);
+        setUserEmail(response.userEmail);
+
+        if (
+          response.promo.lockStatus?.locked &&
+          response.promo.lockStatus?.email === response.userEmail
+        ) {
+          setIsEditing(true);
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching promo:', error);
+        alert(`Error fetching promo: ${error.message}`);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, [promoCode]);
 
   const handleBack = () => {
