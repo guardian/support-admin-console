@@ -50,6 +50,33 @@ export interface RatePlanWithProduct extends RatePlan {
   ratePlanName: string;
 }
 
+export function calculateProportionalDiscount(
+  discountPercentage: number,
+  discountDurationMonths: number,
+  ratePlanTermMonths: number,
+): number {
+  // If discount duration is not specified or term length is invalid, apply full discount
+  if (!discountDurationMonths || !ratePlanTermMonths || ratePlanTermMonths <= 0) {
+    return discountPercentage;
+  }
+
+  // Calculate the ratio of discount period to billing period
+  const periodRatio = discountDurationMonths / ratePlanTermMonths;
+
+  // Number of billing periods covered by the discount
+  const numberOfNewPeriods = Math.ceil(periodRatio);
+
+  // Avoid division by zero
+  if (numberOfNewPeriods === 0) {
+    return discountPercentage;
+  }
+
+  // Proportional discount percentage
+  const proportionalDiscount = (discountPercentage * periodRatio) / numberOfNewPeriods;
+
+  return proportionalDiscount;
+}
+
 export function calculateDiscountedPrice(
   originalPrice: number,
   discountPercentage: number,
@@ -57,10 +84,20 @@ export function calculateDiscountedPrice(
   return Number((originalPrice * (1 - discountPercentage / 100)).toFixed(2));
 }
 
-export function applyDiscountToPricing(pricing: Pricing, discountPercentage: number): Pricing {
+export function applyDiscountToPricing(
+  pricing: Pricing,
+  discountPercentage: number,
+  discountDurationMonths: number | undefined,
+  ratePlanTermMonths: number,
+): Pricing {
+  // Calculate proportional discount based on term length
+  const effectiveDiscount = discountDurationMonths
+    ? calculateProportionalDiscount(discountPercentage, discountDurationMonths, ratePlanTermMonths)
+    : discountPercentage;
+
   const discountedPricing: Pricing = {};
   Object.entries(pricing).forEach(([currency, price]) => {
-    discountedPricing[currency] = calculateDiscountedPrice(price, discountPercentage);
+    discountedPricing[currency] = calculateDiscountedPrice(price, effectiveDiscount);
   });
   return discountedPricing;
 }
@@ -78,12 +115,14 @@ export function getAllRatePlansWithProduct(
   product: Product,
   productName: string,
 ): RatePlanWithProduct[] {
-  return Object.entries(product.ratePlans).map(([ratePlanName, ratePlan]) => ({
-    ...ratePlan,
-    productName,
-    productDisplayName: product.customerFacingName,
-    ratePlanName,
-  }));
+  return Object.entries(product.ratePlans).map(([ratePlanName, ratePlan]) => {
+    return {
+      ...ratePlan,
+      productName,
+      productDisplayName: product.customerFacingName,
+      ratePlanName,
+    };
+  });
 }
 
 export function getProductByType(

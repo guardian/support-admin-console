@@ -375,6 +375,7 @@ const PromoEditor = ({
           selectedRatePlanIds={editedPromo?.appliesTo.productRatePlanIds || []}
           onRatePlansSelected={handleRatePlansSelected}
           discountPercentage={editedPromo?.discount?.amount}
+          discountDurationMonths={editedPromo?.discount?.durationMonths}
           isDisabled={!isEditing}
         />
       )}

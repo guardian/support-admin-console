@@ -72,6 +72,7 @@ interface RatePlanSelectorProps {
   selectedRatePlanIds: string[];
   onRatePlansSelected: (ratePlanIds: string[]) => void;
   discountPercentage?: number;
+  discountDurationMonths?: number;
   isDisabled: boolean;
 }
 
@@ -80,6 +81,7 @@ const RatePlanSelector: React.FC<RatePlanSelectorProps> = ({
   selectedRatePlanIds,
   onRatePlansSelected,
   discountPercentage,
+  discountDurationMonths,
   isDisabled,
 }) => {
   const classes = useStyles();
@@ -137,7 +139,12 @@ const RatePlanSelector: React.FC<RatePlanSelectorProps> = ({
     const isSelected = selectedRatePlanIds.includes(ratePlan.id);
     const discountedPricing =
       discountPercentage && discountPercentage > 0
-        ? applyDiscountToPricing(ratePlan.pricing, discountPercentage)
+        ? applyDiscountToPricing(
+            ratePlan.pricing,
+            discountPercentage,
+            discountDurationMonths,
+            ratePlan.termLengthInMonths,
+          )
         : undefined;
 
     return (
@@ -163,8 +170,6 @@ const RatePlanSelector: React.FC<RatePlanSelectorProps> = ({
     );
   };
 
-  console.log('Rendering RatePlanSelector with ratePlans:', ratePlans);
-
   if (ratePlans.length === 0) {
     return (
       <Box className={classes.section}>
@@ -177,11 +182,7 @@ const RatePlanSelector: React.FC<RatePlanSelectorProps> = ({
     <Box className={classes.section}>
       <Typography className={classes.sectionTitle}>Rate Plans</Typography>
       <FormControl component="fieldset" fullWidth disabled={isDisabled}>
-        <FormLabel component="legend">
-          {discountPercentage && discountPercentage > 0
-            ? `Select rate plans (${discountPercentage}% discount will be applied)`
-            : 'Select rate plans'}
-        </FormLabel>
+        <FormLabel component="legend">Select rate plans</FormLabel>
         <FormGroup>{ratePlans.map(ratePlan => renderRatePlan(ratePlan))}</FormGroup>
       </FormControl>
     </Box>
