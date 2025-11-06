@@ -22,11 +22,13 @@ const useStyles = makeStyles(() => ({
 interface NewPromoCampaignButtonProps {
   createPromoCampaign: (name: string, product: PromoProduct) => void;
   existingNames: string[];
+  selectedProduct: PromoProduct;
 }
 
 const NewPromoCampaignButton: React.FC<NewPromoCampaignButtonProps> = ({
   createPromoCampaign,
   existingNames,
+  selectedProduct,
 }: NewPromoCampaignButtonProps) => {
   const [isOpen, open, close] = useOpenable();
   const classes = useStyles();
@@ -46,6 +48,7 @@ const NewPromoCampaignButton: React.FC<NewPromoCampaignButtonProps> = ({
         close={close}
         existingNames={existingNames}
         createPromoCampaign={createPromoCampaign}
+        selectedProduct={selectedProduct}
       />
     </>
   );

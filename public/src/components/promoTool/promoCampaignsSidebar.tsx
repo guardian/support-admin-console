@@ -75,6 +75,7 @@ function PromoCampaignsSidebar({
         <NewPromoCampaignButton
           createPromoCampaign={createPromoCampaign}
           existingNames={promoCampaigns.map(c => c.name)}
+          selectedProduct={selectedProduct}
         />
         <TextField
           className={classes.searchField}
