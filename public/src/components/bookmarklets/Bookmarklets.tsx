@@ -57,7 +57,7 @@ const Bookmarklets: React.FC = () => {
           Click this link to download the Reader Revenue bookmarklets for Chrome import:
           <br />
           {/* Find in the public/images directory */}
-          <a href="/assets/images/rr-bookmarklets-for-chrome-import.html" download>
+          <a href="/assets/rr-bookmarklets-for-chrome-import.html" download>
             Bookmarklets for Chrome import
           </a>
         </li>
