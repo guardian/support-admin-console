@@ -34,6 +34,7 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
     minHeight: '400px',
+    flexDirection: 'column',
   },
 }));
 
@@ -46,16 +47,20 @@ const PromoEditorPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [userEmail, setUserEmail] = useState<string>('');
   const [campaignProduct, setCampaignProduct] = useState<PromoProduct | null>(null);
+  const [campaignProductLoading, setCampaignProductLoading] = useState(true);
 
-  // Fetch campaign product based on campaignCode from URL
   useEffect(() => {
     if (campaignCode) {
+      setCampaignProductLoading(true);
       fetchPromoCampaign(campaignCode)
         .then(campaign => {
           setCampaignProduct(campaign.product);
         })
         .catch(error => {
           console.error('Error fetching campaign:', error);
+        })
+        .finally(() => {
+          setCampaignProductLoading(false);
         });
     }
   }, [campaignCode]);
@@ -233,12 +238,22 @@ const PromoEditorPage: React.FC = () => {
           campaignProduct={campaignProduct}
         />
       )}
-      {!campaignProduct && (
+      {campaignProductLoading && (
         <div className={classes.loading}>
           <CircularProgress />
           <Typography variant="body2" style={{ marginTop: 16 }}>
             Loading campaign information...
           </Typography>
+        </div>
+      )}
+      {!campaignProductLoading && !campaignProduct && (
+        <div className={classes.loading}>
+          <Typography variant="h6" color="error">
+            Failed to load campaign information
+          </Typography>
+          <Button onClick={handleBack} startIcon={<ArrowBackIcon />} style={{ marginTop: 16 }}>
+            Back to campaign
+          </Button>
         </div>
       )}
     </div>

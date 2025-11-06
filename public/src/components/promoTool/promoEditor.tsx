@@ -118,10 +118,11 @@ const PromoEditor = ({
         });
 
         setAllRatePlans(ratePlans);
-        setLoadingProducts(false);
       })
       .catch(error => {
         console.error('Error fetching product details:', error);
+      })
+      .finally(() => {
         setLoadingProducts(false);
       });
   }, [campaignProduct]);
