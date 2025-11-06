@@ -48,7 +48,6 @@ export interface Promo {
   discount?: DiscountDetails;
   description?: string;
   lockStatus?: LockStatus;
-  ratePlanId?: string;
 }
 
 export type PromoCampaigns = PromoCampaign[];

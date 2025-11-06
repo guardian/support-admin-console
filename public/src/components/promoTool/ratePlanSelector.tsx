@@ -2,13 +2,13 @@ import React from 'react';
 import {
   Box,
   Typography,
-  Radio,
-  RadioGroup,
+  Checkbox,
   FormControlLabel,
   FormControl,
   FormLabel,
   Paper,
   Grid,
+  FormGroup,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material/styles';
@@ -68,23 +68,29 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
 }));
 
 interface RatePlanSelectorProps {
-  annualRatePlans: RatePlanWithProduct[];
-  monthlyRatePlans: RatePlanWithProduct[];
-  selectedRatePlanId?: string;
-  onRatePlanSelected: (ratePlanId: string) => void;
+  ratePlans: RatePlanWithProduct[];
+  selectedRatePlanIds: string[];
+  onRatePlansSelected: (ratePlanIds: string[]) => void;
   discountPercentage?: number;
   isDisabled: boolean;
 }
 
 const RatePlanSelector: React.FC<RatePlanSelectorProps> = ({
-  annualRatePlans,
-  monthlyRatePlans,
-  selectedRatePlanId,
-  onRatePlanSelected,
+  ratePlans,
+  selectedRatePlanIds,
+  onRatePlansSelected,
   discountPercentage,
   isDisabled,
 }) => {
   const classes = useStyles();
+
+  const handleToggleRatePlan = (ratePlanId: string) => {
+    if (selectedRatePlanIds.includes(ratePlanId)) {
+      onRatePlansSelected(selectedRatePlanIds.filter(id => id !== ratePlanId));
+    } else {
+      onRatePlansSelected([...selectedRatePlanIds, ratePlanId]);
+    }
+  };
 
   const renderPricing = (pricing: Pricing, discountedPricing?: Pricing) => {
     const currencies = Object.keys(pricing).sort();
@@ -128,7 +134,7 @@ const RatePlanSelector: React.FC<RatePlanSelectorProps> = ({
   };
 
   const renderRatePlan = (ratePlan: RatePlanWithProduct) => {
-    const isSelected = selectedRatePlanId === ratePlan.id;
+    const isSelected = selectedRatePlanIds.includes(ratePlan.id);
     const discountedPricing =
       discountPercentage && discountPercentage > 0
         ? applyDiscountToPricing(ratePlan.pricing, discountPercentage)
@@ -138,12 +144,11 @@ const RatePlanSelector: React.FC<RatePlanSelectorProps> = ({
       <Paper
         key={ratePlan.id}
         className={`${classes.ratePlanCard} ${isSelected ? classes.selectedCard : ''}`}
-        onClick={() => !isDisabled && onRatePlanSelected(ratePlan.id)}
+        onClick={() => !isDisabled && handleToggleRatePlan(ratePlan.id)}
         elevation={isSelected ? 3 : 1}
       >
         <FormControlLabel
-          value={ratePlan.id}
-          control={<Radio />}
+          control={<Checkbox checked={isSelected} />}
           label={
             <Box>
               <Typography className={classes.ratePlanTitle}>
@@ -158,10 +163,9 @@ const RatePlanSelector: React.FC<RatePlanSelectorProps> = ({
     );
   };
 
-  const hasAnnual = annualRatePlans.length > 0;
-  const hasMonthly = monthlyRatePlans.length > 0;
+  console.log('Rendering RatePlanSelector with ratePlans:', ratePlans);
 
-  if (!hasAnnual && !hasMonthly) {
+  if (ratePlans.length === 0) {
     return (
       <Box className={classes.section}>
         <Typography color="textSecondary">No rate plans available for this product</Typography>
@@ -171,34 +175,14 @@ const RatePlanSelector: React.FC<RatePlanSelectorProps> = ({
 
   return (
     <Box className={classes.section}>
-      <Typography className={classes.sectionTitle}>Rate Plan</Typography>
+      <Typography className={classes.sectionTitle}>Rate Plans</Typography>
       <FormControl component="fieldset" fullWidth disabled={isDisabled}>
         <FormLabel component="legend">
           {discountPercentage && discountPercentage > 0
-            ? `Select a rate plan (${discountPercentage}% discount will be applied)`
-            : 'Select a rate plan'}
+            ? `Select rate plans (${discountPercentage}% discount will be applied)`
+            : 'Select rate plans'}
         </FormLabel>
-        <RadioGroup
-          value={selectedRatePlanId || ''}
-          onChange={e => onRatePlanSelected(e.target.value)}
-        >
-          {hasAnnual && (
-            <>
-              <Typography variant="subtitle2" style={{ marginTop: 16, marginBottom: 8 }}>
-                Annual Plans
-              </Typography>
-              {annualRatePlans.map(ratePlan => renderRatePlan(ratePlan))}
-            </>
-          )}
-          {hasMonthly && (
-            <>
-              <Typography variant="subtitle2" style={{ marginTop: 16, marginBottom: 8 }}>
-                Monthly Plans
-              </Typography>
-              {monthlyRatePlans.map(ratePlan => renderRatePlan(ratePlan))}
-            </>
-          )}
-        </RadioGroup>
+        <FormGroup>{ratePlans.map(ratePlan => renderRatePlan(ratePlan))}</FormGroup>
       </FormControl>
     </Box>
   );

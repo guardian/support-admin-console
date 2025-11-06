@@ -74,19 +74,16 @@ export function filterRatePlansByBillingPeriod(
     .map(([ratePlanName, ratePlan]) => ({ ratePlanName, ratePlan }));
 }
 
-export function getRatePlansWithProduct(
+export function getAllRatePlansWithProduct(
   product: Product,
   productName: string,
-  billingPeriod: 'Annual' | 'Month',
 ): RatePlanWithProduct[] {
-  return filterRatePlansByBillingPeriod(product, billingPeriod).map(
-    ({ ratePlanName, ratePlan }) => ({
-      ...ratePlan,
-      productName,
-      productDisplayName: product.customerFacingName,
-      ratePlanName,
-    }),
-  );
+  return Object.entries(product.ratePlans).map(([ratePlanName, ratePlan]) => ({
+    ...ratePlan,
+    productName,
+    productDisplayName: product.customerFacingName,
+    ratePlanName,
+  }));
 }
 
 export function getProductByType(
