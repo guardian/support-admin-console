@@ -272,3 +272,6 @@ POST /promo/unlock/:promoCode         controllers.promos.PromosController.unlock
 GET /promos/:campaignCode            controllers.promos.PromosController.getAllPromos(campaignCode: String)
 POST /promo/takecontrol/:promoCode    controllers.promos.PromosController.forceLock(promoCode: String)
 POST /promo/update                    controllers.promos.PromosController.update
+
+# Product Catalog endpoint
+GET /product-catalog/:product         controllers.ProductCatalogController.getProductDetails(product: String)
