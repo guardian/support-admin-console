@@ -16,9 +16,11 @@ import {
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
-    padding: spacing(3),
-    maxWidth: 1200,
     margin: '0 auto',
+    maxWidth: 1200,
+    minWidth: 800,
+    padding: spacing(3),
+    width: '100%',
   },
   header: {
     display: 'flex',
