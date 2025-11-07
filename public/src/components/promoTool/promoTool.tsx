@@ -76,6 +76,7 @@ const PromoTool: React.FC = () => {
 
     createPromoCampaign(newPromoCampaign)
       .then(() => {
+        fetchPromoCampaignsList(product); // Refetch campaigns list to update the sidebar
         navigate(`/promo-tool/${newPromoCampaign.campaignCode}`);
       })
       .catch(error => {
