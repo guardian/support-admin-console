@@ -13,13 +13,28 @@ import {
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material/styles';
-import { Promo, PromoProduct, mapPromoProductToCatalogProducts } from './utils/promoModels';
+import {
+  LandingPage,
+  Promo,
+  PromoProduct,
+  mapPromoProductToCatalogProducts,
+} from './utils/promoModels';
 import { countries } from '../../utils/models';
 import RatePlanSelector from './ratePlanSelector';
 import { RatePlanWithProduct, getAllRatePlansWithProduct } from './utils/productCatalog';
 import { fetchProductDetails } from '../../utils/requests';
+import { PromoLandingPage } from './promoLandingPage';
 
-const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
+function cleanObject<T extends object>(obj: T): T | undefined {
+  if (!obj) {
+    return undefined;
+  }
+  const cleaned = Object.fromEntries(
+    Object.entries(obj).filter(([, value]) => value !== undefined),
+  );
+  return Object.keys(cleaned).length === 0 ? undefined : (cleaned as T);
+}
+export const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   root: {
     padding: spacing(3),
     maxWidth: 800,
@@ -94,6 +109,14 @@ const PromoEditor = ({
   const [selectAll, setSelectAll] = useState<boolean>(false);
   const [allRatePlans, setAllRatePlans] = useState<RatePlanWithProduct[]>([]);
   const [loadingProducts, setLoadingProducts] = useState<boolean>(true);
+  const [promotionHasLandingPage, setPromotionHasLandingPage] = useState<boolean>(
+    !!promo?.landingPage,
+  );
+  const [backupLandingPage, setBackupLandingPage] = useState<LandingPage | undefined>(
+    promo?.landingPage || campaignProduct === 'Newspaper'
+      ? { defaultProduct: 'delivery' }
+      : undefined,
+  );
 
   useEffect(() => {
     setEditedPromo(promo);
@@ -241,6 +264,29 @@ const PromoEditor = ({
       name.toLowerCase().includes(countryFilter.toLowerCase()) ||
       code.toLowerCase().includes(countryFilter.toLowerCase()),
   );
+
+  const handlePromotionHasLandingPageChange = () => {
+    if (isEditing && editedPromo) {
+      setEditedPromo({
+        ...editedPromo,
+        landingPage: promotionHasLandingPage ? undefined : backupLandingPage,
+      });
+    }
+    setPromotionHasLandingPage(prev => !prev);
+  };
+
+  const handleLandingPageChange = (updatedLandingPage: LandingPage) => {
+    const landingPage = cleanObject(updatedLandingPage);
+    if (isEditing && promotionHasLandingPage) {
+      if (editedPromo) {
+        setBackupLandingPage(landingPage);
+        setEditedPromo({
+          ...editedPromo,
+          landingPage,
+        });
+      }
+    }
+  };
 
   const handleSave = () => {
     if (editedPromo) {
@@ -426,6 +472,28 @@ const PromoEditor = ({
             ))}
           </FormGroup>
         </Box>
+      </div>
+
+      <div className={classes.section}>
+        <Typography className={classes.sectionTitle}>Landing page</Typography>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={promotionHasLandingPage}
+              onChange={handlePromotionHasLandingPageChange}
+              disabled={!isEditing}
+            />
+          }
+          label="This promotion has a landing page"
+        />
+        {promotionHasLandingPage && (
+          <PromoLandingPage
+            landingPage={backupLandingPage}
+            updateLandingPage={handleLandingPageChange}
+            product={campaignProduct}
+            isEditing={isEditing}
+          />
+        )}
       </div>
 
       {isEditing && (

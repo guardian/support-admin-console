@@ -38,6 +38,13 @@ export interface DiscountDetails {
   durationMonths?: number;
 }
 
+export interface LandingPage {
+  title?: string;
+  description?: string;
+  roundelHtml?: string;
+  defaultProduct?: 'voucher' | 'delivery' | 'nationalDelivery';
+}
+
 export interface Promo {
   promoCode: string;
   name: string;
@@ -48,6 +55,7 @@ export interface Promo {
   discount?: DiscountDetails;
   description?: string;
   lockStatus?: LockStatus;
+  landingPage?: LandingPage;
 }
 
 export type PromoCampaigns = PromoCampaign[];

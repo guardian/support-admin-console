@@ -24,8 +24,8 @@ case class Promo(
     endTimestamp: String,
     description: Option[String],
     lockStatus: Option[LockStatus],
-    discount: Option[DiscountDetails]
-    // TODO - landing page config for print products
+    discount: Option[DiscountDetails],
+    landingPage: Option[PromoLandingPage]
 )
 
 object Promo {
