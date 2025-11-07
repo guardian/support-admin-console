@@ -107,7 +107,7 @@ const Bookmarklets: React.FC = () => {
         <div className={classes.column}>
           <Typography variant="h3">As a non-supporter</Typography>
           <em color="text.secondary">(to see normal acquisition messaging)</em>
-          <Tooltip title={instruction} arrow>
+          <Tooltip title={instruction} arrow placement="bottom-end">
             <Button
               href="javascript:window.guardian.readerRevenue.showMeTheEpic()"
               className={classes.btn}
@@ -116,99 +116,120 @@ const Bookmarklets: React.FC = () => {
               Show me the epic!
             </Button>
           </Tooltip>
-          <Button
-            href="javascript:window.guardian.readerRevenue.showMeTheBanner()"
-            title={instruction}
-            className={classes.btn}
-            color="primary"
-          >
-            Show me the banner!
-          </Button>
-          <Button
-            href="javascript:window.guardian.readerRevenue.showMeTheDoubleBanner()"
-            title={instruction}
-            className={classes.btn}
-            color="primary"
-          >
-            Show me the double banner!
-          </Button>
-          <Button
-            href="javascript:window.guardian.readerRevenue.showNextVariant()"
-            title={instruction}
-            className={classes.btn}
-            color="primary"
-          >
-            Next variant
-          </Button>
-          <Button
-            href="javascript:window.guardian.readerRevenue.showPreviousVariant()"
-            title={instruction}
-            className={classes.btn}
-            color="primary"
-          >
-            Previous variant
-          </Button>
-          <Button
-            href="javascript:window.guardian.readerRevenue.changeGeolocation()"
-            title={instruction}
-            className={classes.btn}
-            color="primary"
-          >
-            Change geolocation
-          </Button>
+          <Tooltip title={instruction} arrow placement="bottom-end">
+            <Button
+              href="javascript:window.guardian.readerRevenue.showMeTheBanner()"
+              title={instruction}
+              className={classes.btn}
+              color="primary"
+            >
+              Show me the banner!
+            </Button>
+          </Tooltip>
+          <Tooltip title={instruction} arrow placement="bottom-end">
+            <Button
+              href="javascript:window.guardian.readerRevenue.showMeTheDoubleBanner()"
+              title={instruction}
+              className={classes.btn}
+              color="primary"
+            >
+              Show me the double banner!
+            </Button>
+          </Tooltip>
+          <Tooltip title={instruction} arrow placement="bottom-end">
+            <Button
+              href="javascript:window.guardian.readerRevenue.showNextVariant()"
+              title={instruction}
+              className={classes.btn}
+              color="primary"
+            >
+              Next variant
+            </Button>
+          </Tooltip>
+          <Tooltip title={instruction} arrow placement="bottom-end">
+            <Button
+              href="javascript:window.guardian.readerRevenue.showPreviousVariant()"
+              title={instruction}
+              className={classes.btn}
+              color="primary"
+            >
+              Previous variant
+            </Button>
+          </Tooltip>
+          <Tooltip title={instruction} arrow placement="bottom-end">
+            <Button
+              href="javascript:window.guardian.readerRevenue.changeGeolocation()"
+              title={instruction}
+              className={classes.btn}
+              color="primary"
+            >
+              Change geolocation
+            </Button>
+          </Tooltip>
         </div>
         <div className={classes.column}>
           <Typography variant="h3">As a supporter</Typography>
           <em>(e.g. to see a supporter specific epic)</em>
-
-          <Button
-            href="javascript:window.guardian.readerRevenue.showMeTheEpic(true);"
-            title={instruction}
-            className={classes.btn}
-            color="primary"
-          >
-            Show me the epic!
-          </Button>
-          <Button
-            href="javascript:window.guardian.readerRevenue.showMeTheBanner(true)"
-            title={instruction}
-            className={classes.btn}
-            color="primary"
-          >
-            Show me the banner!
-          </Button>
-          <Button
-            href="javascript:window.guardian.readerRevenue.showMeTheDoubleBanner(true)"
-            title={instruction}
-            className={classes.btn}
-            color="primary"
-          >
-            Show me the double banner!
-          </Button>
-          <Button
-            href="javascript:window.guardian.readerRevenue.showNextVariant(true)"
-            title={instruction}
-            className={classes.btn}
-            color="primary"
-          >
-            Next variant
-          </Button>
-          <Button
-            href="javascript:window.guardian.readerRevenue.showPreviousVariant(true)"
-            title={instruction}
-            className={classes.btn}
-            color="primary"
-          >
-            Previous variant
-          </Button>
-          <Button
-            href="javascript:window.guardian.readerRevenue.changeGeolocation(true)"
-            title={instruction}
-            className={classes.btn}
-            color="primary"
-          >
-            Change geolocation
-          </Button>
+          <Tooltip title={instruction} arrow placement="bottom-end">
+            <Button
+              href="javascript:window.guardian.readerRevenue.showMeTheEpic(true);"
+              title={instruction}
+              className={classes.btn}
+              color="primary"
+            >
+              Show me the epic!
+            </Button>
+          </Tooltip>
+          <Tooltip title={instruction} arrow placement="bottom-end">
+            <Button
+              href="javascript:window.guardian.readerRevenue.showMeTheBanner(true)"
+              title={instruction}
+              className={classes.btn}
+              color="primary"
+            >
+              Show me the banner!
+            </Button>
+          </Tooltip>
+          <Tooltip title={instruction} arrow placement="bottom-end">
+            <Button
+              href="javascript:window.guardian.readerRevenue.showMeTheDoubleBanner(true)"
+              title={instruction}
+              className={classes.btn}
+              color="primary"
+            >
+              Show me the double banner!
+            </Button>
+          </Tooltip>
+          <Tooltip title={instruction} arrow placement="bottom-end">
+            <Button
+              href="javascript:window.guardian.readerRevenue.showNextVariant(true)"
+              title={instruction}
+              className={classes.btn}
+              color="primary"
+            >
+              Next variant
+            </Button>
+          </Tooltip>
+          <Tooltip title={instruction} arrow placement="bottom-end">
+            <Button
+              href="javascript:window.guardian.readerRevenue.showPreviousVariant(true)"
+              title={instruction}
+              className={classes.btn}
+              color="primary"
+            >
+              Previous variant
+            </Button>
+          </Tooltip>
+          <Tooltip title={instruction} arrow placement="bottom-end">
+            <Button
+              href="javascript:window.guardian.readerRevenue.changeGeolocation(true)"
+              title={instruction}
+              className={classes.btn}
+              color="primary"
+            >
+              Change geolocation
+            </Button>
+          </Tooltip>
         </div>
       </div>
     </div>
