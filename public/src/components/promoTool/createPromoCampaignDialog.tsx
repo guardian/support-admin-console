@@ -8,7 +8,7 @@ import {
   TextField,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import { ProductSelector } from './productSelector';
 import { PromoProduct } from './utils/promoModels';
@@ -45,15 +45,21 @@ interface CreatePromoCampaignDialogProps {
   close: () => void;
   createPromoCampaign: (name: string, product: PromoProduct) => void;
   existingNames: string[];
+  selectedProduct: PromoProduct;
 }
 const CreatePromoCampaignDialog: React.FC<CreatePromoCampaignDialogProps> = ({
   isOpen,
   close,
   createPromoCampaign,
   existingNames,
+  selectedProduct: initialSelectedProduct,
 }: CreatePromoCampaignDialogProps) => {
   const classes = useStyles();
-  const [selectedProduct, setSelectedProduct] = useState<PromoProduct>('SupporterPlus');
+  const [selectedProduct, setSelectedProduct] = useState<PromoProduct>(initialSelectedProduct);
+
+  useEffect(() => {
+    setSelectedProduct(initialSelectedProduct);
+  }, [initialSelectedProduct]);
 
   const {
     register,
