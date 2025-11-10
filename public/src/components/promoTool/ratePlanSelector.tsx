@@ -143,7 +143,7 @@ const RatePlanSelector: React.FC<RatePlanSelectorProps> = ({
             ratePlan.pricing,
             discountPercentage,
             discountDurationMonths,
-            ratePlan.termLengthInMonths,
+            ratePlan.billingPeriod,
           )
         : undefined;
 

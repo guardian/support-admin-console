@@ -19,7 +19,6 @@ export interface RatePlan {
   charges: Charges;
   billingPeriod: string;
   termType: string;
-  termLengthInMonths: number;
 }
 
 export interface RatePlans {
@@ -48,6 +47,21 @@ export interface RatePlanWithProduct extends RatePlan {
   productName: string;
   productDisplayName: string;
   ratePlanName: string;
+}
+
+export function billingPeriodToMonths(billingPeriod: string): number {
+  switch (billingPeriod) {
+    case 'Month':
+    case 'OneTime':
+      return 1;
+    case 'Quarter':
+      return 3;
+    case 'Annual':
+      return 12;
+    default:
+      console.warn(`Unknown billing period: ${billingPeriod}, defaulting to 1 month`);
+      return 1;
+  }
 }
 
 export function calculateProportionalDiscount(
@@ -88,8 +102,10 @@ export function applyDiscountToPricing(
   pricing: Pricing,
   discountPercentage: number,
   discountDurationMonths: number | undefined,
-  ratePlanTermMonths: number,
+  billingPeriod: string,
 ): Pricing {
+  const ratePlanTermMonths = billingPeriodToMonths(billingPeriod);
+
   // Calculate proportional discount based on term length
   const effectiveDiscount = discountDurationMonths
     ? calculateProportionalDiscount(discountPercentage, discountDurationMonths, ratePlanTermMonths)
