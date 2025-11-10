@@ -5,7 +5,6 @@ import {
   Button,
   Paper,
   Typography,
-  FormGroup,
   FormControlLabel,
   Checkbox,
   Grid,
@@ -13,8 +12,8 @@ import {
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material/styles';
-import { Promo } from './utils/promoModels';
-import { countries } from '../../utils/models';
+import { Promo, CountryGroup } from './utils/promoModels';
+import { fetchCountryGroups } from '../../utils/requests';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   root: {
@@ -53,15 +52,10 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     backgroundColor: palette.warning.light,
     borderRadius: 4,
   },
-  countriesContainer: {
-    maxHeight: 300,
-    overflowY: 'auto',
+  countryGroupsContainer: {
     border: '1px solid #ddd',
     borderRadius: 4,
     padding: spacing(2),
-  },
-  countrySearch: {
-    marginBottom: spacing(2),
   },
 }));
 
@@ -84,16 +78,21 @@ const PromoEditor = ({
 }: PromoEditorProps): React.ReactElement => {
   const classes = useStyles();
   const [editedPromo, setEditedPromo] = useState<Promo | null>(promo);
-  const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
-  const [countryFilter, setCountryFilter] = useState<string>('');
-  const [selectAll, setSelectAll] = useState<boolean>(false);
+  const [countryGroups, setCountryGroups] = useState<CountryGroup[]>([]);
+  const [selectedCountryGroups, setSelectedCountryGroups] = useState<string[]>([]);
+
+  useEffect(() => {
+    fetchCountryGroups()
+      .then(groups => setCountryGroups(groups))
+      .catch(error => console.error('Error fetching country groups:', error));
+  }, []);
 
   useEffect(() => {
     setEditedPromo(promo);
     if (promo) {
-      setSelectedCountries(promo.appliesTo.countries || []);
+      setSelectedCountryGroups(promo.appliesTo.countryGroups || []);
     } else {
-      setSelectedCountries([]);
+      setSelectedCountryGroups([]);
     }
   }, [promo]);
 
@@ -153,52 +152,25 @@ const PromoEditor = ({
     }
   };
 
-  const updateCountries = (newCountries: string[]) => {
-    setSelectedCountries(newCountries);
+  const updateCountryGroups = (newCountryGroups: string[]) => {
+    setSelectedCountryGroups(newCountryGroups);
     if (editedPromo) {
       setEditedPromo({
         ...editedPromo,
         appliesTo: {
           ...editedPromo.appliesTo,
-          countries: newCountries,
+          countryGroups: newCountryGroups,
         },
       });
     }
   };
 
-  const handleCountryToggle = (countryCode: string) => {
-    const newCountries = selectedCountries.includes(countryCode)
-      ? selectedCountries.filter(c => c !== countryCode)
-      : [...selectedCountries, countryCode];
-    updateCountries(newCountries);
+  const handleCountryGroupToggle = (countryGroupId: string) => {
+    const newCountryGroups = selectedCountryGroups.includes(countryGroupId)
+      ? selectedCountryGroups.filter(countryGroup => countryGroup !== countryGroupId)
+      : [...selectedCountryGroups, countryGroupId];
+    updateCountryGroups(newCountryGroups);
   };
-
-  const handleSelectAll = () => {
-    const allCountryCodes = Object.keys(countries);
-    const filteredCountryCodes = allCountryCodes.filter(
-      code =>
-        countries[code].toLowerCase().includes(countryFilter.toLowerCase()) ||
-        code.toLowerCase().includes(countryFilter.toLowerCase()),
-    );
-
-    let newCountries: string[];
-    if (selectAll) {
-      // Deselect all filtered countries
-      newCountries = selectedCountries.filter(c => !filteredCountryCodes.includes(c));
-    } else {
-      // Select all filtered countries
-      newCountries = [...new Set([...selectedCountries, ...filteredCountryCodes])];
-    }
-
-    updateCountries(newCountries);
-    setSelectAll(!selectAll);
-  };
-
-  const filteredCountries = Object.entries(countries).filter(
-    ([code, name]) =>
-      name.toLowerCase().includes(countryFilter.toLowerCase()) ||
-      code.toLowerCase().includes(countryFilter.toLowerCase()),
-  );
 
   const handleSave = () => {
     if (editedPromo) {
@@ -330,48 +302,25 @@ const PromoEditor = ({
       <div className={classes.section}>
         <Typography className={classes.sectionTitle}>Availability</Typography>
         <Typography variant="subtitle2" gutterBottom>
-          Countries
+          Country Groups
         </Typography>
-        <TextField
-          className={classes.countrySearch}
-          fullWidth
-          size="small"
-          placeholder="Search countries..."
-          value={countryFilter}
-          onChange={e => setCountryFilter(e.target.value)}
-          disabled={!isEditing}
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={selectAll}
-              onChange={handleSelectAll}
-              disabled={!isEditing}
-              indeterminate={
-                selectedCountries.length > 0 &&
-                selectedCountries.length <
-                  filteredCountries.filter(([code]) => selectedCountries.includes(code)).length
-              }
-            />
-          }
-          label="Select All"
-        />
-        <Box className={classes.countriesContainer}>
-          <FormGroup>
-            {filteredCountries.map(([code, name]) => (
-              <FormControlLabel
-                key={code}
-                control={
-                  <Checkbox
-                    checked={selectedCountries.includes(code)}
-                    onChange={() => handleCountryToggle(code)}
-                    disabled={!isEditing}
-                  />
-                }
-                label={`${name} (${code})`}
-              />
+        <Box className={classes.countryGroupsContainer}>
+          <Grid container spacing={2}>
+            {countryGroups.map(group => (
+              <Grid item xs={6} key={group.id}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={selectedCountryGroups.includes(group.id)}
+                      onChange={() => handleCountryGroupToggle(group.id)}
+                      disabled={!isEditing}
+                    />
+                  }
+                  label={group.name}
+                />
+              </Grid>
             ))}
-          </FormGroup>
+          </Grid>
         </Box>
       </div>
 

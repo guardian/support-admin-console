@@ -19,7 +19,16 @@ export interface PromoCampaign {
 
 export interface AppliesTo {
   productRatePlanIds: string[];
+  countryGroups: string[];
+}
+
+export interface CountryGroup {
+  name: string;
+  id: string;
+  defaultCountry?: string;
   countries: string[];
+  currency: string;
+  postalCode: string;
 }
 
 export interface DiscountDetails {

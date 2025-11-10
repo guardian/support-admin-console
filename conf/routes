@@ -275,3 +275,6 @@ POST /promo/update                    controllers.promos.PromosController.update
 
 # Product Catalog endpoint
 GET /product-catalog/:product         controllers.ProductCatalogController.getProductDetails(product: String)
+
+# Country Groups endpoint
+GET /country-groups                   controllers.promos.CountryController.all
