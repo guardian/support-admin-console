@@ -5,7 +5,7 @@ import { useStyles } from './promoEditor';
 
 type PromoLandingPageProps = {
   landingPage?: LandingPage;
-  updateLandingPage: (landingPage: LandingPage) => void;
+  updateLandingPage: (landingPage: LandingPage | undefined) => void;
   isEditing: boolean;
 };
 
@@ -15,6 +15,16 @@ export const PromoLandingPage = ({
   isEditing,
 }: PromoLandingPageProps) => {
   const classes = useStyles();
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    const updated = { ...landingPage, [name]: value || undefined };
+    Object.keys(updated).forEach(
+      key =>
+        updated[key as keyof LandingPage] === undefined && delete updated[key as keyof LandingPage],
+    );
+    updateLandingPage(Object.keys(updated).length === 0 ? undefined : updated);
+  };
+
   return (
     <div>
       <TextField
@@ -22,9 +32,9 @@ export const PromoLandingPage = ({
         fullWidth
         label="Title"
         value={landingPage?.title || ''}
-        onChange={e => updateLandingPage({ ...landingPage, title: e.target.value || undefined })}
+        onChange={handleChange}
         disabled={!isEditing}
-        name="landingPageTitle"
+        name="title"
       />
       <TextField
         className={classes.formField}
@@ -33,22 +43,18 @@ export const PromoLandingPage = ({
         multiline
         rows={3}
         value={landingPage?.description || ''}
-        onChange={e =>
-          updateLandingPage({ ...landingPage, description: e.target.value || undefined })
-        }
+        onChange={handleChange}
         disabled={!isEditing}
-        name="landingPageDescription"
+        name="description"
       />
       <TextField
         className={classes.formField}
         fullWidth
         label="Product page price card"
         value={landingPage?.roundelHtml || ''}
-        onChange={e =>
-          updateLandingPage({ ...landingPage, roundelHtml: e.target.value || undefined })
-        }
+        onChange={handleChange}
         disabled={!isEditing}
-        name="landingPageRoundelHtml"
+        name="roundelHtml"
       />
       <span>
         For examples of how to format text using Markdown see{' '}

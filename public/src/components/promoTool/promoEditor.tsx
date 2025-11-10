@@ -25,15 +25,6 @@ import { RatePlanWithProduct, getAllRatePlansWithProduct } from './utils/product
 import { fetchProductDetails } from '../../utils/requests';
 import { PromoLandingPage } from './promoLandingPage';
 
-function cleanObject<T extends object>(obj: T): T | undefined {
-  if (!obj) {
-    return undefined;
-  }
-  const cleaned = Object.fromEntries(
-    Object.entries(obj).filter(([, value]) => value !== undefined),
-  );
-  return Object.keys(cleaned).length === 0 ? undefined : (cleaned as T);
-}
 export const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   root: {
     padding: spacing(3),
@@ -273,8 +264,7 @@ const PromoEditor = ({
     setPromotionHasLandingPage(prev => !prev);
   };
 
-  const handleLandingPageChange = (updatedLandingPage: LandingPage) => {
-    const landingPage = cleanObject(updatedLandingPage);
+  const handleLandingPageChange = (landingPage: LandingPage | undefined) => {
     if (isEditing && editedPromo && promotionHasLandingPage) {
       setBackupLandingPage(landingPage);
       setEditedPromo({
