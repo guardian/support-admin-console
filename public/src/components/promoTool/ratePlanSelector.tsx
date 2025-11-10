@@ -159,7 +159,7 @@ const RatePlanSelector: React.FC<RatePlanSelectorProps> = ({
           label={
             <Box>
               <Typography className={classes.ratePlanTitle}>
-                {ratePlan.productDisplayName} - {ratePlan.ratePlanName}
+                {ratePlan.productDisplayName} ({ratePlan.productName}) - {ratePlan.ratePlanName}
               </Typography>
               {renderPricing(ratePlan.pricing, discountedPricing)}
             </Box>
