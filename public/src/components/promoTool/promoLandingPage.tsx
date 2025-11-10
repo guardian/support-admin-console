@@ -20,7 +20,7 @@ export const PromoLandingPage = ({
   return (
     <div>
       {product === 'Newspaper' && (
-        <fieldset className={classes.formField}>
+        <fieldset className={classes.formField} disabled={!isEditing}>
           <legend id="default-product-group">Default product</legend>
           <FormGroup row>
             <FormControlLabel
