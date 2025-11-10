@@ -13,7 +13,8 @@ case class ChannelSwitches(
     enableHardcodedEpicTests: Boolean,
     enableHardcodedBannerTests: Boolean,
     enableScheduledBannerDeploys: Boolean = true,
-    enableGutterLiveblogs: Boolean = true
+    enableGutterLiveblogs: Boolean = true,
+    enableMParticle: Boolean = false
 )
 
 object ChannelSwitches {
