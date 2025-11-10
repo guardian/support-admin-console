@@ -277,14 +277,12 @@ const PromoEditor = ({
 
   const handleLandingPageChange = (updatedLandingPage: LandingPage) => {
     const landingPage = cleanObject(updatedLandingPage);
-    if (isEditing && promotionHasLandingPage) {
-      if (editedPromo) {
-        setBackupLandingPage(landingPage);
-        setEditedPromo({
-          ...editedPromo,
-          landingPage,
-        });
-      }
+    if (isEditing && editedPromo && promotionHasLandingPage) {
+      setBackupLandingPage(landingPage);
+      setEditedPromo({
+        ...editedPromo,
+        landingPage,
+      });
     }
   };
 
