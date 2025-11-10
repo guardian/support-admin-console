@@ -113,9 +113,7 @@ const PromoEditor = ({
     !!promo?.landingPage,
   );
   const [backupLandingPage, setBackupLandingPage] = useState<LandingPage | undefined>(
-    promo?.landingPage || campaignProduct === 'Newspaper'
-      ? { defaultProduct: 'delivery' }
-      : undefined,
+    promo?.landingPage,
   );
 
   useEffect(() => {

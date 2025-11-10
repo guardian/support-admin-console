@@ -1,11 +1,10 @@
 import React from 'react';
-import { LandingPage, PromoProduct } from './utils/promoModels';
-import { Checkbox, FormControlLabel, FormGroup, TextField } from '@mui/material';
+import { LandingPage } from './utils/promoModels';
+import { TextField } from '@mui/material';
 import { useStyles } from './promoEditor';
 
 type PromoLandingPageProps = {
   landingPage?: LandingPage;
-  product?: PromoProduct;
   updateLandingPage: (landingPage: LandingPage) => void;
   isEditing: boolean;
 };
@@ -13,66 +12,11 @@ type PromoLandingPageProps = {
 export const PromoLandingPage = ({
   landingPage,
   updateLandingPage,
-  product,
   isEditing,
 }: PromoLandingPageProps) => {
   const classes = useStyles();
   return (
     <div>
-      {product === 'Newspaper' && (
-        <fieldset className={classes.formField} disabled={!isEditing}>
-          <legend id="default-product-group">Default product</legend>
-          <FormGroup row>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={landingPage?.defaultProduct === 'voucher'}
-                  onChange={() =>
-                    updateLandingPage({
-                      ...landingPage,
-                      defaultProduct: 'voucher',
-                    })
-                  }
-                  name="voucher"
-                />
-              }
-              label="Voucher"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={
-                    landingPage?.defaultProduct === 'delivery' || !landingPage?.defaultProduct
-                  }
-                  onChange={() =>
-                    updateLandingPage({
-                      ...landingPage,
-                      defaultProduct: 'delivery',
-                    })
-                  }
-                  name="delivery"
-                />
-              }
-              label="Home Delivery"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={landingPage?.defaultProduct === 'nationalDelivery'}
-                  onChange={() =>
-                    updateLandingPage({
-                      ...landingPage,
-                      defaultProduct: 'nationalDelivery',
-                    })
-                  }
-                  name="nationalDelivery"
-                />
-              }
-              label="National Delivery"
-            />
-          </FormGroup>
-        </fieldset>
-      )}
       <TextField
         className={classes.formField}
         fullWidth

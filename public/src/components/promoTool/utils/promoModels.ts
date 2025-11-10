@@ -42,7 +42,6 @@ export interface LandingPage {
   title?: string;
   description?: string;
   roundelHtml?: string;
-  defaultProduct?: 'voucher' | 'delivery' | 'nationalDelivery';
 }
 
 export interface Promo {
