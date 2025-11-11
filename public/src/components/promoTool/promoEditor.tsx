@@ -287,6 +287,8 @@ const PromoEditor = ({
     ? 'This promo is currently locked by you'
     : `This promo is currently locked by ${promo.lockStatus?.email}`;
 
+  const showLandingPageSection = ['Newspaper', 'Weekly'].includes(campaignProduct ?? '');
+
   return (
     <Paper className={classes.root}>
       {(isLockedByOther || isLockedByUser) && (
@@ -459,28 +461,28 @@ const PromoEditor = ({
           </FormGroup>
         </Box>
       </div>
-
-      <div className={classes.section}>
-        <Typography className={classes.sectionTitle}>Landing page</Typography>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={promotionHasLandingPage}
-              onChange={handlePromotionHasLandingPageChange}
-              disabled={!isEditing}
-            />
-          }
-          label="This promotion has a landing page"
-        />
-        {promotionHasLandingPage && (
-          <PromoLandingPage
-            landingPage={backupLandingPage}
-            updateLandingPage={handleLandingPageChange}
-            product={campaignProduct}
-            isEditing={isEditing}
+      {showLandingPageSection && (
+        <div className={classes.section}>
+          <Typography className={classes.sectionTitle}>Landing page</Typography>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={promotionHasLandingPage}
+                onChange={handlePromotionHasLandingPageChange}
+                disabled={!isEditing}
+              />
+            }
+            label="This promotion has a landing page"
           />
-        )}
-      </div>
+          {promotionHasLandingPage && (
+            <PromoLandingPage
+              landingPage={backupLandingPage}
+              updateLandingPage={handleLandingPageChange}
+              isEditing={isEditing}
+            />
+          )}
+        </div>
+      )}
 
       {isEditing && (
         <div className={classes.buttonGroup}>
