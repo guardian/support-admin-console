@@ -13,13 +13,19 @@ import {
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material/styles';
-import { Promo, PromoProduct, mapPromoProductToCatalogProducts } from './utils/promoModels';
+import {
+  LandingPage,
+  Promo,
+  PromoProduct,
+  mapPromoProductToCatalogProducts,
+} from './utils/promoModels';
 import { countries } from '../../utils/models';
 import RatePlanSelector from './ratePlanSelector';
 import { RatePlanWithProduct, getAllRatePlansWithProduct } from './utils/productCatalog';
 import { fetchProductDetails } from '../../utils/requests';
+import { PromoLandingPage } from './promoLandingPage';
 
-const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
+export const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   root: {
     padding: spacing(3),
     maxWidth: 800,
@@ -94,6 +100,12 @@ const PromoEditor = ({
   const [selectAll, setSelectAll] = useState<boolean>(false);
   const [allRatePlans, setAllRatePlans] = useState<RatePlanWithProduct[]>([]);
   const [loadingProducts, setLoadingProducts] = useState<boolean>(true);
+  const [promotionHasLandingPage, setPromotionHasLandingPage] = useState<boolean>(
+    !!promo?.landingPage,
+  );
+  const [backupLandingPage, setBackupLandingPage] = useState<LandingPage | undefined>(
+    promo?.landingPage,
+  );
 
   useEffect(() => {
     setEditedPromo(promo);
@@ -242,6 +254,26 @@ const PromoEditor = ({
       code.toLowerCase().includes(countryFilter.toLowerCase()),
   );
 
+  const handlePromotionHasLandingPageChange = () => {
+    if (isEditing && editedPromo) {
+      setEditedPromo({
+        ...editedPromo,
+        landingPage: promotionHasLandingPage ? undefined : backupLandingPage,
+      });
+    }
+    setPromotionHasLandingPage(prev => !prev);
+  };
+
+  const handleLandingPageChange = (landingPage: LandingPage | undefined) => {
+    if (isEditing && editedPromo && promotionHasLandingPage) {
+      setBackupLandingPage(landingPage);
+      setEditedPromo({
+        ...editedPromo,
+        landingPage,
+      });
+    }
+  };
+
   const handleSave = () => {
     if (editedPromo) {
       onSave(editedPromo);
@@ -254,6 +286,8 @@ const PromoEditor = ({
   const lockMessage = isLockedByUser
     ? 'This promo is currently locked by you'
     : `This promo is currently locked by ${promo.lockStatus?.email}`;
+
+  const showLandingPageSection = ['Newspaper', 'Weekly'].includes(campaignProduct ?? '');
 
   return (
     <Paper className={classes.root}>
@@ -427,6 +461,28 @@ const PromoEditor = ({
           </FormGroup>
         </Box>
       </div>
+      {showLandingPageSection && (
+        <div className={classes.section}>
+          <Typography className={classes.sectionTitle}>Landing page</Typography>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={promotionHasLandingPage}
+                onChange={handlePromotionHasLandingPageChange}
+                disabled={!isEditing}
+              />
+            }
+            label="This promotion has a landing page"
+          />
+          {promotionHasLandingPage && (
+            <PromoLandingPage
+              landingPage={backupLandingPage}
+              updateLandingPage={handleLandingPageChange}
+              isEditing={isEditing}
+            />
+          )}
+        </div>
+      )}
 
       {isEditing && (
         <div className={classes.buttonGroup}>
