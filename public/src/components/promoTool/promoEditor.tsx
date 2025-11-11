@@ -13,8 +13,11 @@ import {
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material/styles';
-import { Promo } from './utils/promoModels';
+import { Promo, PromoProduct, mapPromoProductToCatalogProducts } from './utils/promoModels';
 import { countries } from '../../utils/models';
+import RatePlanSelector from './ratePlanSelector';
+import { RatePlanWithProduct, getAllRatePlansWithProduct } from './utils/productCatalog';
+import { fetchProductDetails } from '../../utils/requests';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   root: {
@@ -72,6 +75,7 @@ interface PromoEditorProps {
   onCancel: () => void;
   onLock: (force: boolean) => void;
   userEmail?: string;
+  campaignProduct: PromoProduct;
 }
 
 const PromoEditor = ({
@@ -81,12 +85,15 @@ const PromoEditor = ({
   onCancel,
   onLock,
   userEmail,
+  campaignProduct,
 }: PromoEditorProps): React.ReactElement => {
   const classes = useStyles();
   const [editedPromo, setEditedPromo] = useState<Promo | null>(promo);
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
   const [countryFilter, setCountryFilter] = useState<string>('');
   const [selectAll, setSelectAll] = useState<boolean>(false);
+  const [allRatePlans, setAllRatePlans] = useState<RatePlanWithProduct[]>([]);
+  const [loadingProducts, setLoadingProducts] = useState<boolean>(true);
 
   useEffect(() => {
     setEditedPromo(promo);
@@ -96,6 +103,29 @@ const PromoEditor = ({
       setSelectedCountries([]);
     }
   }, [promo]);
+
+  useEffect(() => {
+    const catalogProducts = mapPromoProductToCatalogProducts(campaignProduct);
+    setLoadingProducts(true);
+
+    Promise.all(catalogProducts.map(productName => fetchProductDetails(productName)))
+      .then(products => {
+        const ratePlans: RatePlanWithProduct[] = [];
+
+        products.forEach((product, index) => {
+          const productName = catalogProducts[index];
+          ratePlans.push(...getAllRatePlansWithProduct(product, productName));
+        });
+
+        setAllRatePlans(ratePlans);
+      })
+      .catch(error => {
+        console.error('Error fetching product details:', error);
+      })
+      .finally(() => {
+        setLoadingProducts(false);
+      });
+  }, [campaignProduct]);
 
   if (!promo) {
     return (
@@ -149,6 +179,18 @@ const PromoEditor = ({
             [e.target.name]: Number(e.target.value),
           },
         };
+      });
+    }
+  };
+
+  const handleRatePlansSelected = (ratePlanIds: string[]) => {
+    if (editedPromo) {
+      setEditedPromo({
+        ...editedPromo,
+        appliesTo: {
+          ...editedPromo.appliesTo,
+          productRatePlanIds: ratePlanIds,
+        },
       });
     }
   };
@@ -326,6 +368,17 @@ const PromoEditor = ({
           </Grid>
         </Grid>
       </div>
+
+      {!loadingProducts && allRatePlans.length > 0 && (
+        <RatePlanSelector
+          ratePlans={allRatePlans}
+          selectedRatePlanIds={editedPromo?.appliesTo.productRatePlanIds || []}
+          onRatePlansSelected={handleRatePlansSelected}
+          discountPercentage={editedPromo?.discount?.amount}
+          discountDurationMonths={editedPromo?.discount?.durationMonths}
+          isDisabled={!isEditing}
+        />
+      )}
 
       <div className={classes.section}>
         <Typography className={classes.sectionTitle}>Availability</Typography>

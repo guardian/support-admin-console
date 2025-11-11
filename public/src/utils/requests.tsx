@@ -2,6 +2,7 @@ import { Test, Status } from '../components/channelManagement/helpers/shared';
 import { Campaign } from '../components/channelManagement/campaigns/CampaignsForm';
 import { BannerDesign, Status as BannerDesignStatus } from '../models/bannerDesign';
 import { PromoCampaign, Promo } from '../components/promoTool/utils/promoModels';
+import { Product } from '../components/promoTool/utils/productCatalog';
 
 export enum SupportFrontendSettingsType {
   switches = 'switches',
@@ -226,6 +227,10 @@ export function fetchPromoCampaigns(promoProduct: string): Promise<PromoCampaign
   return fetchSettings(`/promos/campaigns/${promoProduct}`);
 }
 
+export function fetchPromoCampaign(campaignCode: string): Promise<PromoCampaign> {
+  return fetchSettings(`/promos/campaign/${campaignCode}`);
+}
+
 export interface PromoResponse {
   promo: Promo;
   userEmail: string;
@@ -258,4 +263,8 @@ export function updatePromo(promo: Promo): Promise<Response> {
 
 export function fetchAllPromos(campaignCode: string): Promise<Promo[]> {
   return fetchSettings(`/promos/${campaignCode}`);
+}
+
+export function fetchProductDetails(product: string): Promise<Product> {
+  return fetchSettings(`/product-catalog/${product}`);
 }

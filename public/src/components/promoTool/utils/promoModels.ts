@@ -10,6 +10,17 @@ export const promoProductNames: Record<PromoProduct, string> = {
   Weekly: 'Guardian Weekly',
 };
 
+export function mapPromoProductToCatalogProducts(promoProduct: PromoProduct): string[] {
+  const mapping: Record<PromoProduct, string[]> = {
+    SupporterPlus: ['SupporterPlus'],
+    TierThree: ['TierThree'],
+    DigitalPack: ['DigitalSubscription'],
+    Newspaper: ['HomeDelivery', 'NationalDelivery', 'SubscriptionCard'],
+    Weekly: ['GuardianWeeklyDomestic', 'GuardianWeeklyRestOfWorld'],
+  };
+  return mapping[promoProduct];
+}
+
 export interface PromoCampaign {
   campaignCode: string;
   product: PromoProduct;
