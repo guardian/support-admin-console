@@ -350,7 +350,7 @@ const PromoEditor = ({
               fullWidth
               label="End Date"
               type="datetime-local"
-              value={editedPromo ? formatDateForInput(editedPromo.endTimestamp) : ''}
+              value={editedPromo?.endTimestamp ? formatDateForInput(editedPromo.endTimestamp) : ''}
               onChange={e => handleDateChange('endTimestamp', e.target.value)}
               disabled={!isEditing}
               InputLabelProps={{

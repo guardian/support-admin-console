@@ -120,7 +120,6 @@ const PromoTool: React.FC = () => {
         countries: [],
       },
       startTimestamp: new Date().toISOString(),
-      endTimestamp: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days from now
       description: '',
     };
 

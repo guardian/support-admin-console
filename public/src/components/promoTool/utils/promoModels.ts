@@ -50,7 +50,7 @@ export interface Promo {
   campaignCode: string;
   appliesTo: AppliesTo;
   startTimestamp: string;
-  endTimestamp: string;
+  endTimestamp?: string;
   discount?: DiscountDetails;
   description?: string;
   lockStatus?: LockStatus;

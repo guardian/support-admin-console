@@ -21,7 +21,7 @@ case class Promo(
     campaignCode: String,
     appliesTo: AppliesTo,
     startTimestamp: String,
-    endTimestamp: String,
+    endTimestamp: Option[String],
     description: Option[String],
     lockStatus: Option[LockStatus],
     discount: Option[DiscountDetails],
