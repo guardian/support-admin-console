@@ -48,7 +48,10 @@ export const PromoListItem = ({
 }: PromoListItemProps): React.ReactElement => {
   const classes = useStyles();
 
-  const formatDate = (timestamp: string) => {
+  const formatDate = (timestamp?: string) => {
+    if (!timestamp || isNaN(Date.parse(timestamp))) {
+      return 'N/A';
+    }
     const date = new Date(timestamp);
     return date.toLocaleDateString('en-GB', {
       day: '2-digit',
@@ -93,7 +96,7 @@ export const PromoListItem = ({
           }
           secondary={
             <span className={classes.dates}>
-              {formatDate(promo.startTimestamp)} - {formatDate(promo.endTimestamp)}
+              {formatDate(promo.startTimestamp)} - {formatDate(promo?.endTimestamp)}
             </span>
           }
         />

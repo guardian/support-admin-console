@@ -12,10 +12,20 @@ import {
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material/styles';
-import { Promo, CountryGroup } from './utils/promoModels';
+import {
+  CountryGroup,
+  LandingPage,
+  Promo,
+  PromoProduct,
+  mapPromoProductToCatalogProducts,
+} from './utils/promoModels';
 import { fetchCountryGroups } from '../../utils/requests';
+import RatePlanSelector from './ratePlanSelector';
+import { RatePlanWithProduct, getAllRatePlansWithProduct } from './utils/productCatalog';
+import { fetchProductDetails } from '../../utils/requests';
+import { PromoLandingPage } from './promoLandingPage';
 
-const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
+export const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   root: {
     padding: spacing(3),
     maxWidth: 800,
@@ -66,6 +76,7 @@ interface PromoEditorProps {
   onCancel: () => void;
   onLock: (force: boolean) => void;
   userEmail?: string;
+  campaignProduct: PromoProduct;
 }
 
 const PromoEditor = ({
@@ -75,11 +86,20 @@ const PromoEditor = ({
   onCancel,
   onLock,
   userEmail,
+  campaignProduct,
 }: PromoEditorProps): React.ReactElement => {
   const classes = useStyles();
   const [editedPromo, setEditedPromo] = useState<Promo | null>(promo);
   const [countryGroups, setCountryGroups] = useState<CountryGroup[]>([]);
   const [selectedCountryGroups, setSelectedCountryGroups] = useState<string[]>([]);
+  const [allRatePlans, setAllRatePlans] = useState<RatePlanWithProduct[]>([]);
+  const [loadingProducts, setLoadingProducts] = useState<boolean>(true);
+  const [promotionHasLandingPage, setPromotionHasLandingPage] = useState<boolean>(
+    !!promo?.landingPage,
+  );
+  const [backupLandingPage, setBackupLandingPage] = useState<LandingPage | undefined>(
+    promo?.landingPage,
+  );
 
   useEffect(() => {
     fetchCountryGroups()
@@ -95,6 +115,29 @@ const PromoEditor = ({
       setSelectedCountryGroups([]);
     }
   }, [promo]);
+
+  useEffect(() => {
+    const catalogProducts = mapPromoProductToCatalogProducts(campaignProduct);
+    setLoadingProducts(true);
+
+    Promise.all(catalogProducts.map(productName => fetchProductDetails(productName)))
+      .then(products => {
+        const ratePlans: RatePlanWithProduct[] = [];
+
+        products.forEach((product, index) => {
+          const productName = catalogProducts[index];
+          ratePlans.push(...getAllRatePlansWithProduct(product, productName));
+        });
+
+        setAllRatePlans(ratePlans);
+      })
+      .catch(error => {
+        console.error('Error fetching product details:', error);
+      })
+      .finally(() => {
+        setLoadingProducts(false);
+      });
+  }, [campaignProduct]);
 
   if (!promo) {
     return (
@@ -152,6 +195,18 @@ const PromoEditor = ({
     }
   };
 
+  const handleRatePlansSelected = (ratePlanIds: string[]) => {
+    if (editedPromo) {
+      setEditedPromo({
+        ...editedPromo,
+        appliesTo: {
+          ...editedPromo.appliesTo,
+          productRatePlanIds: ratePlanIds,
+        },
+      });
+    }
+  };
+
   const updateCountryGroups = (newCountryGroups: string[]) => {
     setSelectedCountryGroups(newCountryGroups);
     if (editedPromo) {
@@ -172,6 +227,26 @@ const PromoEditor = ({
     updateCountryGroups(newCountryGroups);
   };
 
+  const handlePromotionHasLandingPageChange = () => {
+    if (isEditing && editedPromo) {
+      setEditedPromo({
+        ...editedPromo,
+        landingPage: promotionHasLandingPage ? undefined : backupLandingPage,
+      });
+    }
+    setPromotionHasLandingPage(prev => !prev);
+  };
+
+  const handleLandingPageChange = (landingPage: LandingPage | undefined) => {
+    if (isEditing && editedPromo && promotionHasLandingPage) {
+      setBackupLandingPage(landingPage);
+      setEditedPromo({
+        ...editedPromo,
+        landingPage,
+      });
+    }
+  };
+
   const handleSave = () => {
     if (editedPromo) {
       onSave(editedPromo);
@@ -184,6 +259,8 @@ const PromoEditor = ({
   const lockMessage = isLockedByUser
     ? 'This promo is currently locked by you'
     : `This promo is currently locked by ${promo.lockStatus?.email}`;
+
+  const showLandingPageSection = ['Newspaper', 'Weekly'].includes(campaignProduct ?? '');
 
   return (
     <Paper className={classes.root}>
@@ -246,7 +323,7 @@ const PromoEditor = ({
               fullWidth
               label="End Date"
               type="datetime-local"
-              value={editedPromo ? formatDateForInput(editedPromo.endTimestamp) : ''}
+              value={editedPromo?.endTimestamp ? formatDateForInput(editedPromo.endTimestamp) : ''}
               onChange={e => handleDateChange('endTimestamp', e.target.value)}
               disabled={!isEditing}
               InputLabelProps={{
@@ -299,6 +376,17 @@ const PromoEditor = ({
         </Grid>
       </div>
 
+      {!loadingProducts && allRatePlans.length > 0 && (
+        <RatePlanSelector
+          ratePlans={allRatePlans}
+          selectedRatePlanIds={editedPromo?.appliesTo.productRatePlanIds || []}
+          onRatePlansSelected={handleRatePlansSelected}
+          discountPercentage={editedPromo?.discount?.amount}
+          discountDurationMonths={editedPromo?.discount?.durationMonths}
+          isDisabled={!isEditing}
+        />
+      )}
+
       <div className={classes.section}>
         <Typography className={classes.sectionTitle}>Availability</Typography>
         <Typography variant="subtitle2" gutterBottom>
@@ -323,6 +411,28 @@ const PromoEditor = ({
           </Grid>
         </Box>
       </div>
+      {showLandingPageSection && (
+        <div className={classes.section}>
+          <Typography className={classes.sectionTitle}>Landing page</Typography>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={promotionHasLandingPage}
+                onChange={handlePromotionHasLandingPageChange}
+                disabled={!isEditing}
+              />
+            }
+            label="This promotion has a landing page"
+          />
+          {promotionHasLandingPage && (
+            <PromoLandingPage
+              landingPage={backupLandingPage}
+              updateLandingPage={handleLandingPageChange}
+              isEditing={isEditing}
+            />
+          )}
+        </div>
+      )}
 
       {isEditing && (
         <div className={classes.buttonGroup}>

@@ -5,14 +5,22 @@ import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material/styles';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import PromoEditor from './promoEditor';
-import { Promo } from './utils/promoModels';
-import { fetchPromo, lockPromo, unlockPromo, updatePromo } from '../../utils/requests';
+import { Promo, PromoProduct } from './utils/promoModels';
+import {
+  fetchPromo,
+  lockPromo,
+  unlockPromo,
+  updatePromo,
+  fetchPromoCampaign,
+} from '../../utils/requests';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
-    padding: spacing(3),
-    maxWidth: 1200,
     margin: '0 auto',
+    maxWidth: 1200,
+    minWidth: 800,
+    padding: spacing(3),
+    width: '100%',
   },
   header: {
     display: 'flex',
@@ -28,6 +36,7 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
     minHeight: '400px',
+    flexDirection: 'column',
   },
 }));
 
@@ -39,22 +48,49 @@ const PromoEditorPage: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [userEmail, setUserEmail] = useState<string>('');
+  const [campaignProduct, setCampaignProduct] = useState<PromoProduct | null>(null);
+  const [campaignProductLoading, setCampaignProductLoading] = useState(true);
 
   useEffect(() => {
-    if (promoCode) {
-      fetchPromo(promoCode)
-        .then(response => {
-          setPromo(response.promo);
-          setUserEmail(response.userEmail);
+    if (campaignCode) {
+      setCampaignProductLoading(true);
+      fetchPromoCampaign(campaignCode)
+        .then(campaign => {
+          setCampaignProduct(campaign.product);
         })
         .catch(error => {
-          console.error('Error fetching promo:', error);
-          alert(`Error fetching promo: ${error.message}`);
+          console.error('Error fetching campaign:', error);
         })
         .finally(() => {
-          setLoading(false);
+          setCampaignProductLoading(false);
         });
     }
+  }, [campaignCode]);
+
+  useEffect(() => {
+    if (!promoCode) {
+      return;
+    }
+
+    fetchPromo(promoCode)
+      .then(response => {
+        setPromo(response.promo);
+        setUserEmail(response.userEmail);
+
+        if (
+          response.promo.lockStatus?.locked &&
+          response.promo.lockStatus?.email === response.userEmail
+        ) {
+          setIsEditing(true);
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching promo:', error);
+        alert(`Error fetching promo: ${error.message}`);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, [promoCode]);
 
   const handleBack = () => {
@@ -179,26 +215,51 @@ const PromoEditorPage: React.FC = () => {
         <Typography variant="h4" style={{ flexGrow: 1 }}>
           {promo.promoCode}
         </Typography>
-        {!promo.lockStatus?.locked ||
-        (promo.lockStatus?.locked && promo.lockStatus?.email !== userEmail) ? (
+        {!promo.lockStatus?.locked && (
           <Button variant="contained" color="primary" onClick={handleEditPromo}>
             Edit
           </Button>
-        ) : null}
+        )}
         {promo.lockStatus?.locked && promo.lockStatus?.email === userEmail && (
           <Button variant="outlined" color="secondary" onClick={handleUnlockPromo}>
             Cancel Edit
           </Button>
         )}
+        {promo.lockStatus?.locked && promo.lockStatus?.email !== userEmail && (
+          <Button variant="outlined" onClick={handleBack}>
+            Close
+          </Button>
+        )}
       </div>
-      <PromoEditor
-        promo={promo}
-        isEditing={isEditing}
-        onSave={handleSavePromo}
-        onCancel={handleCancelEdit}
-        onLock={handleLockPromo}
-        userEmail={userEmail}
-      />
+      {campaignProduct && (
+        <PromoEditor
+          promo={promo}
+          isEditing={isEditing}
+          onSave={handleSavePromo}
+          onCancel={handleCancelEdit}
+          onLock={handleLockPromo}
+          userEmail={userEmail}
+          campaignProduct={campaignProduct}
+        />
+      )}
+      {campaignProductLoading && (
+        <div className={classes.loading}>
+          <CircularProgress />
+          <Typography variant="body2" style={{ marginTop: 16 }}>
+            Loading campaign information...
+          </Typography>
+        </div>
+      )}
+      {!campaignProductLoading && !campaignProduct && (
+        <div className={classes.loading}>
+          <Typography variant="h6" color="error">
+            Failed to load campaign information
+          </Typography>
+          <Button onClick={handleBack} startIcon={<ArrowBackIcon />} style={{ marginTop: 16 }}>
+            Back to campaign
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
