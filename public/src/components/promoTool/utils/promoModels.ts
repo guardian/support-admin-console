@@ -34,12 +34,9 @@ export interface AppliesTo {
 }
 
 export interface CountryGroup {
-  name: string;
   id: string;
-  defaultCountry?: string;
+  name: string;
   countries: string[];
-  currency: string;
-  postalCode: string;
 }
 
 export interface DiscountDetails {
