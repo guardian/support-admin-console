@@ -14,7 +14,8 @@ case class ChannelSwitches(
     enableHardcodedBannerTests: Boolean,
     enableScheduledBannerDeploys: Boolean = true,
     enableGutterLiveblogs: Boolean = true,
-    enableMParticle: Boolean = false
+    enableMParticle: Boolean = false,
+    enableAuxia: Boolean = false
 )
 
 object ChannelSwitches {

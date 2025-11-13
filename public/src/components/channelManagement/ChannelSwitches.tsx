@@ -32,7 +32,8 @@ type SwitchName =
   | 'enableHardcodedBannerTests'
   | 'enableScheduledBannerDeploys'
   | 'enableGutterLiveblogs'
-  | 'enableMParticle';
+  | 'enableMParticle'
+  | 'enableAuxia';
 
 type ChannelSwitches = {
   [key in SwitchName]: boolean;
@@ -141,6 +142,12 @@ const ChannelSwitches: React.FC<InnerProps<ChannelSwitches>> = ({
         name="enableMParticle"
         label="Enable mParticle API use"
         enabled={switches.enableMParticle}
+        setSwitch={onSwitchChange}
+      />
+      <ChannelSwitch
+        name="enableAuxia"
+        label="Enable Auxia"
+        enabled={switches.enableAuxia}
         setSwitch={onSwitchChange}
       />
 
