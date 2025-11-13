@@ -1,7 +1,7 @@
 import { Test, Status } from '../components/channelManagement/helpers/shared';
 import { Campaign } from '../components/channelManagement/campaigns/CampaignsForm';
 import { BannerDesign, Status as BannerDesignStatus } from '../models/bannerDesign';
-import { PromoCampaign, Promo } from '../components/promoTool/utils/promoModels';
+import { PromoCampaign, Promo, CountryGroup } from '../components/promoTool/utils/promoModels';
 import { Product } from '../components/promoTool/utils/productCatalog';
 
 export enum SupportFrontendSettingsType {
@@ -263,6 +263,10 @@ export function updatePromo(promo: Promo): Promise<Response> {
 
 export function fetchAllPromos(campaignCode: string): Promise<Promo[]> {
   return fetchSettings(`/promos/${campaignCode}`);
+}
+
+export function fetchCountryGroups(): Promise<CountryGroup[]> {
+  return fetchSettings('/country-groups');
 }
 
 export function fetchProductDetails(product: string): Promise<Product> {

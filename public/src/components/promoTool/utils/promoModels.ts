@@ -30,6 +30,12 @@ export interface PromoCampaign {
 
 export interface AppliesTo {
   productRatePlanIds: string[];
+  countryGroups: string[];
+}
+
+export interface CountryGroup {
+  id: string;
+  name: string;
   countries: string[];
 }
 

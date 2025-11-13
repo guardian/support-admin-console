@@ -117,7 +117,7 @@ const PromoTool: React.FC = () => {
       campaignCode: selectedPromoCampaignCode,
       appliesTo: {
         productRatePlanIds: [],
-        countries: [],
+        countryGroups: [],
       },
       startTimestamp: new Date().toISOString(),
       description: '',
