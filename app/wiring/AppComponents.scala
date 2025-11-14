@@ -33,9 +33,10 @@ import software.amazon.awssdk.services.s3.model.GetObjectRequest
 
 import java.time.Duration
 import controllers.promos.PromoCampaignsController
+import controllers.promos.PromosController
+import controllers.promos.CountryController
 import services.promo.DynamoPromoCampaigns
 import services.promo.DynamoPromos
-import controllers.promos.PromosController
 
 class AppComponents(context: Context, stage: String)
     extends BuiltInComponentsFromContext(context)
@@ -253,6 +254,10 @@ class AppComponents(context: Context, stage: String)
       controllerComponents,
       runtime,
       productCatalogCache
+    ),
+    new CountryController(
+      authAction,
+      controllerComponents
     )
   )
 }

@@ -10,6 +10,17 @@ export const promoProductNames: Record<PromoProduct, string> = {
   Weekly: 'Guardian Weekly',
 };
 
+export function mapPromoProductToCatalogProducts(promoProduct: PromoProduct): string[] {
+  const mapping: Record<PromoProduct, string[]> = {
+    SupporterPlus: ['SupporterPlus'],
+    TierThree: ['TierThree'],
+    DigitalPack: ['DigitalSubscription'],
+    Newspaper: ['HomeDelivery', 'NationalDelivery', 'SubscriptionCard'],
+    Weekly: ['GuardianWeeklyDomestic', 'GuardianWeeklyRestOfWorld'],
+  };
+  return mapping[promoProduct];
+}
+
 export interface PromoCampaign {
   campaignCode: string;
   product: PromoProduct;
@@ -19,6 +30,12 @@ export interface PromoCampaign {
 
 export interface AppliesTo {
   productRatePlanIds: string[];
+  countryGroups: string[];
+}
+
+export interface CountryGroup {
+  id: string;
+  name: string;
   countries: string[];
 }
 
@@ -27,16 +44,23 @@ export interface DiscountDetails {
   durationMonths?: number;
 }
 
+export interface LandingPage {
+  title?: string;
+  description?: string;
+  roundelHtml?: string;
+}
+
 export interface Promo {
   promoCode: string;
   name: string;
   campaignCode: string;
   appliesTo: AppliesTo;
   startTimestamp: string;
-  endTimestamp: string;
+  endTimestamp?: string;
   discount?: DiscountDetails;
   description?: string;
   lockStatus?: LockStatus;
+  landingPage?: LandingPage;
 }
 
 export type PromoCampaigns = PromoCampaign[];

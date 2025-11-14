@@ -5,7 +5,6 @@ import {
   Button,
   Paper,
   Typography,
-  FormGroup,
   FormControlLabel,
   Checkbox,
   Grid,
@@ -13,10 +12,20 @@ import {
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material/styles';
-import { Promo } from './utils/promoModels';
-import { countries } from '../../utils/models';
+import {
+  CountryGroup,
+  LandingPage,
+  Promo,
+  PromoProduct,
+  mapPromoProductToCatalogProducts,
+} from './utils/promoModels';
+import { fetchCountryGroups } from '../../utils/requests';
+import RatePlanSelector from './ratePlanSelector';
+import { RatePlanWithProduct, getAllRatePlansWithProduct } from './utils/productCatalog';
+import { fetchProductDetails } from '../../utils/requests';
+import { PromoLandingPage } from './promoLandingPage';
 
-const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
+export const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   root: {
     padding: spacing(3),
     maxWidth: 800,
@@ -53,15 +62,10 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     backgroundColor: palette.warning.light,
     borderRadius: 4,
   },
-  countriesContainer: {
-    maxHeight: 300,
-    overflowY: 'auto',
+  countryGroupsContainer: {
     border: '1px solid #ddd',
     borderRadius: 4,
     padding: spacing(2),
-  },
-  countrySearch: {
-    marginBottom: spacing(2),
   },
 }));
 
@@ -72,6 +76,7 @@ interface PromoEditorProps {
   onCancel: () => void;
   onLock: (force: boolean) => void;
   userEmail?: string;
+  campaignProduct: PromoProduct;
 }
 
 const PromoEditor = ({
@@ -81,21 +86,58 @@ const PromoEditor = ({
   onCancel,
   onLock,
   userEmail,
+  campaignProduct,
 }: PromoEditorProps): React.ReactElement => {
   const classes = useStyles();
   const [editedPromo, setEditedPromo] = useState<Promo | null>(promo);
-  const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
-  const [countryFilter, setCountryFilter] = useState<string>('');
-  const [selectAll, setSelectAll] = useState<boolean>(false);
+  const [countryGroups, setCountryGroups] = useState<CountryGroup[]>([]);
+  const [selectedCountryGroups, setSelectedCountryGroups] = useState<string[]>([]);
+  const [allRatePlans, setAllRatePlans] = useState<RatePlanWithProduct[]>([]);
+  const [loadingProducts, setLoadingProducts] = useState<boolean>(true);
+  const [promotionHasLandingPage, setPromotionHasLandingPage] = useState<boolean>(
+    !!promo?.landingPage,
+  );
+  const [backupLandingPage, setBackupLandingPage] = useState<LandingPage | undefined>(
+    promo?.landingPage,
+  );
+
+  useEffect(() => {
+    fetchCountryGroups()
+      .then(groups => setCountryGroups(groups))
+      .catch(error => console.error('Error fetching country groups:', error));
+  }, []);
 
   useEffect(() => {
     setEditedPromo(promo);
     if (promo) {
-      setSelectedCountries(promo.appliesTo.countries || []);
+      setSelectedCountryGroups(promo.appliesTo.countryGroups || []);
     } else {
-      setSelectedCountries([]);
+      setSelectedCountryGroups([]);
     }
   }, [promo]);
+
+  useEffect(() => {
+    const catalogProducts = mapPromoProductToCatalogProducts(campaignProduct);
+    setLoadingProducts(true);
+
+    Promise.all(catalogProducts.map(productName => fetchProductDetails(productName)))
+      .then(products => {
+        const ratePlans: RatePlanWithProduct[] = [];
+
+        products.forEach((product, index) => {
+          const productName = catalogProducts[index];
+          ratePlans.push(...getAllRatePlansWithProduct(product, productName));
+        });
+
+        setAllRatePlans(ratePlans);
+      })
+      .catch(error => {
+        console.error('Error fetching product details:', error);
+      })
+      .finally(() => {
+        setLoadingProducts(false);
+      });
+  }, [campaignProduct]);
 
   if (!promo) {
     return (
@@ -153,52 +195,57 @@ const PromoEditor = ({
     }
   };
 
-  const updateCountries = (newCountries: string[]) => {
-    setSelectedCountries(newCountries);
+  const handleRatePlansSelected = (ratePlanIds: string[]) => {
     if (editedPromo) {
       setEditedPromo({
         ...editedPromo,
         appliesTo: {
           ...editedPromo.appliesTo,
-          countries: newCountries,
+          productRatePlanIds: ratePlanIds,
         },
       });
     }
   };
 
-  const handleCountryToggle = (countryCode: string) => {
-    const newCountries = selectedCountries.includes(countryCode)
-      ? selectedCountries.filter(c => c !== countryCode)
-      : [...selectedCountries, countryCode];
-    updateCountries(newCountries);
-  };
-
-  const handleSelectAll = () => {
-    const allCountryCodes = Object.keys(countries);
-    const filteredCountryCodes = allCountryCodes.filter(
-      code =>
-        countries[code].toLowerCase().includes(countryFilter.toLowerCase()) ||
-        code.toLowerCase().includes(countryFilter.toLowerCase()),
-    );
-
-    let newCountries: string[];
-    if (selectAll) {
-      // Deselect all filtered countries
-      newCountries = selectedCountries.filter(c => !filteredCountryCodes.includes(c));
-    } else {
-      // Select all filtered countries
-      newCountries = [...new Set([...selectedCountries, ...filteredCountryCodes])];
+  const updateCountryGroups = (newCountryGroups: string[]) => {
+    setSelectedCountryGroups(newCountryGroups);
+    if (editedPromo) {
+      setEditedPromo({
+        ...editedPromo,
+        appliesTo: {
+          ...editedPromo.appliesTo,
+          countryGroups: newCountryGroups,
+        },
+      });
     }
-
-    updateCountries(newCountries);
-    setSelectAll(!selectAll);
   };
 
-  const filteredCountries = Object.entries(countries).filter(
-    ([code, name]) =>
-      name.toLowerCase().includes(countryFilter.toLowerCase()) ||
-      code.toLowerCase().includes(countryFilter.toLowerCase()),
-  );
+  const handleCountryGroupToggle = (countryGroupId: string) => {
+    const newCountryGroups = selectedCountryGroups.includes(countryGroupId)
+      ? selectedCountryGroups.filter(countryGroup => countryGroup !== countryGroupId)
+      : [...selectedCountryGroups, countryGroupId];
+    updateCountryGroups(newCountryGroups);
+  };
+
+  const handlePromotionHasLandingPageChange = () => {
+    if (isEditing && editedPromo) {
+      setEditedPromo({
+        ...editedPromo,
+        landingPage: promotionHasLandingPage ? undefined : backupLandingPage,
+      });
+    }
+    setPromotionHasLandingPage(prev => !prev);
+  };
+
+  const handleLandingPageChange = (landingPage: LandingPage | undefined) => {
+    if (isEditing && editedPromo && promotionHasLandingPage) {
+      setBackupLandingPage(landingPage);
+      setEditedPromo({
+        ...editedPromo,
+        landingPage,
+      });
+    }
+  };
 
   const handleSave = () => {
     if (editedPromo) {
@@ -212,6 +259,8 @@ const PromoEditor = ({
   const lockMessage = isLockedByUser
     ? 'This promo is currently locked by you'
     : `This promo is currently locked by ${promo.lockStatus?.email}`;
+
+  const showLandingPageSection = ['Newspaper', 'Weekly'].includes(campaignProduct ?? '');
 
   return (
     <Paper className={classes.root}>
@@ -274,7 +323,7 @@ const PromoEditor = ({
               fullWidth
               label="End Date"
               type="datetime-local"
-              value={editedPromo ? formatDateForInput(editedPromo.endTimestamp) : ''}
+              value={editedPromo?.endTimestamp ? formatDateForInput(editedPromo.endTimestamp) : ''}
               onChange={e => handleDateChange('endTimestamp', e.target.value)}
               disabled={!isEditing}
               InputLabelProps={{
@@ -327,53 +376,63 @@ const PromoEditor = ({
         </Grid>
       </div>
 
+      {!loadingProducts && allRatePlans.length > 0 && (
+        <RatePlanSelector
+          ratePlans={allRatePlans}
+          selectedRatePlanIds={editedPromo?.appliesTo.productRatePlanIds || []}
+          onRatePlansSelected={handleRatePlansSelected}
+          discountPercentage={editedPromo?.discount?.amount}
+          discountDurationMonths={editedPromo?.discount?.durationMonths}
+          isDisabled={!isEditing}
+        />
+      )}
+
       <div className={classes.section}>
         <Typography className={classes.sectionTitle}>Availability</Typography>
         <Typography variant="subtitle2" gutterBottom>
-          Countries
+          Country Groups
         </Typography>
-        <TextField
-          className={classes.countrySearch}
-          fullWidth
-          size="small"
-          placeholder="Search countries..."
-          value={countryFilter}
-          onChange={e => setCountryFilter(e.target.value)}
-          disabled={!isEditing}
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={selectAll}
-              onChange={handleSelectAll}
-              disabled={!isEditing}
-              indeterminate={
-                selectedCountries.length > 0 &&
-                selectedCountries.length <
-                  filteredCountries.filter(([code]) => selectedCountries.includes(code)).length
-              }
-            />
-          }
-          label="Select All"
-        />
-        <Box className={classes.countriesContainer}>
-          <FormGroup>
-            {filteredCountries.map(([code, name]) => (
-              <FormControlLabel
-                key={code}
-                control={
-                  <Checkbox
-                    checked={selectedCountries.includes(code)}
-                    onChange={() => handleCountryToggle(code)}
-                    disabled={!isEditing}
-                  />
-                }
-                label={`${name} (${code})`}
-              />
+        <Box className={classes.countryGroupsContainer}>
+          <Grid container spacing={2}>
+            {countryGroups.map(group => (
+              <Grid item xs={6} key={group.id}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={selectedCountryGroups.includes(group.id)}
+                      onChange={() => handleCountryGroupToggle(group.id)}
+                      disabled={!isEditing}
+                    />
+                  }
+                  label={group.name}
+                />
+              </Grid>
             ))}
-          </FormGroup>
+          </Grid>
         </Box>
       </div>
+      {showLandingPageSection && (
+        <div className={classes.section}>
+          <Typography className={classes.sectionTitle}>Landing page</Typography>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={promotionHasLandingPage}
+                onChange={handlePromotionHasLandingPageChange}
+                disabled={!isEditing}
+              />
+            }
+            label="This promotion has a landing page"
+          />
+          {promotionHasLandingPage && (
+            <PromoLandingPage
+              landingPage={backupLandingPage}
+              updateLandingPage={handleLandingPageChange}
+              isEditing={isEditing}
+            />
+          )}
+        </div>
+      )}
 
       {isEditing && (
         <div className={classes.buttonGroup}>

@@ -67,7 +67,8 @@ object ProductCatalog {
   case class RatePlan(
     billingPeriod: BillingPeriod,
     id: String,
-    pricing: Pricing
+    pricing: Pricing,
+    termLengthInMonths: Option[Int] = None
   )
 
   sealed trait BillingPeriod

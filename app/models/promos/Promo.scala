@@ -7,7 +7,7 @@ import models.LockStatus
 
 case class AppliesTo(
     productRatePlanIds: Set[String],
-    countries: Set[String]
+    countryGroups: Option[Set[String]]
 )
 
 object AppliesTo {
@@ -21,11 +21,11 @@ case class Promo(
     campaignCode: String,
     appliesTo: AppliesTo,
     startTimestamp: String,
-    endTimestamp: String,
+    endTimestamp: Option[String],
     description: Option[String],
     lockStatus: Option[LockStatus],
-    discount: Option[DiscountDetails]
-    // TODO - landing page config for print products
+    discount: Option[DiscountDetails],
+    landingPage: Option[PromoLandingPage]
 )
 
 object Promo {
