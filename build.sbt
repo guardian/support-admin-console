@@ -58,8 +58,8 @@ dependencyOverrides ++= List(
   "com.fasterxml.jackson.module" % "jackson-module-parameter-names" % jacksonVersion,
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion,
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
-  "io.netty" % "netty-handler" % "4.2.4.Final",
-  "io.netty" % "netty-codec-http2" % "4.2.4.Final",
+  "io.netty" % "netty-handler" % "4.2.7.Final",
+  "io.netty" % "netty-codec-http2" % "4.2.7.Final",
   // google-cloud-bigquery pulls in a vulnerable version of grpc-netty-shaded
   "io.grpc" % "grpc-netty-shaded" % "1.75.0",
   // Related to Play 3.0.2-6 currently brings in a vulnerable version of commons-io
