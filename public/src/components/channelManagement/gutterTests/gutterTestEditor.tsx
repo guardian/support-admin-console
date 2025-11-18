@@ -237,6 +237,7 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
           onSignedInStatusChange={onSignedInStatusChange}
           showConsentStatusSelector={false}
           onConsentStatusChange={onConsentChange} // can't remove but hidden anyway
+          mParticleAudienceEditor={undefined}
         />
       </div>
     </div>
