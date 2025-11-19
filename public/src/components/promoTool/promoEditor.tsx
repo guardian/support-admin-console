@@ -53,6 +53,7 @@ export const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     marginLeft: -spacing(3),
     marginRight: -spacing(3),
     marginBottom: -spacing(3),
+    zIndex: 2,
   },
   lockBanner: {
     padding: spacing(2),
