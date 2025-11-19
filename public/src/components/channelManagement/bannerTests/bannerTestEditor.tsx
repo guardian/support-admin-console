@@ -341,7 +341,6 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
             selectedConsentStatus={test.consentStatus}
             onConsentStatusChange={onConsentStatusChange}
             showConsentStatusSelector={true}
-            mParticleAudienceEditor={undefined}
           />
         </div>
 

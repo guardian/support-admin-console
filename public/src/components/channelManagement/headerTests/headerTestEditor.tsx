@@ -212,7 +212,6 @@ const HeaderTestEditor: React.FC<ValidatedTestEditorProps<HeaderTest>> = ({
           selectedConsentStatus={test.consentStatus}
           onConsentStatusChange={onConsentChange}
           showConsentStatusSelector={false}
-          mParticleAudienceEditor={undefined}
         />
       </div>
     </div>
