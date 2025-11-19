@@ -30,8 +30,6 @@ export const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     padding: spacing(3),
     maxWidth: 800,
     margin: '0 auto',
-    maxHeight: 'calc(100vh - 100px)',
-    overflowY: 'auto',
   },
   section: {
     marginBottom: spacing(3),
