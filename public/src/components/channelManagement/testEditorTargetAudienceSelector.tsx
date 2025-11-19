@@ -13,11 +13,11 @@ import {
 import TestEditorTargetRegionsSelector from './testEditorTargetRegionsSelector';
 import TypedRadioGroup from './TypedRadioGroup';
 import MultiSelectCountryEditor from './MultiSelectCountryEditor';
+import { MParticleAudienceEditor } from './mParticleAudienceEditor';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
     display: 'flex',
-    gap: spacing(12),
     flexWrap: 'wrap',
   },
   heading: {
@@ -29,6 +29,12 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     display: 'inline',
     gap: spacing(12),
     flexWrap: 'wrap',
+    marginRight: spacing(12),
+    marginBottom: spacing(4),
+  },
+  mParticleContainer: {
+    display: 'block',
+    width: '100%',
   },
 }));
 
@@ -50,6 +56,10 @@ interface TestEditorTargetAudienceSelectorProps {
   onConsentStatusChange: (consentStatus: ConsentStatus) => void;
   showConsentStatusSelector: boolean;
   platform?: TestPlatform;
+  mParticleAudienceEditor?: {
+    mParticleAudience?: number;
+    onMParticleAudienceChange: (mParticleAudience?: number) => void;
+  };
 }
 const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelectorProps> = ({
   regionTargeting,
@@ -69,6 +79,7 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
   onConsentStatusChange,
   showConsentStatusSelector,
   platform,
+  mParticleAudienceEditor,
 }: TestEditorTargetAudienceSelectorProps) => {
   const classes = useStyles();
 
@@ -157,6 +168,18 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
                 HasConsented: 'Has consented',
                 HasNotConsented: 'Has not consented',
               }}
+            />
+          </>
+        )}
+      </div>
+      <div className={classes.mParticleContainer}>
+        {mParticleAudienceEditor && (
+          <>
+            <Typography className={classes.heading}>mParticle audience ID</Typography>
+            <MParticleAudienceEditor
+              disabled={isDisabled}
+              mParticleAudience={mParticleAudienceEditor.mParticleAudience}
+              onChange={mParticleAudienceEditor.onMParticleAudienceChange}
             />
           </>
         )}
