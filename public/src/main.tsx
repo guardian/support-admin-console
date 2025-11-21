@@ -40,6 +40,7 @@ import DefaultPromos from './components/defaultPromos';
 import { StyledEngineProvider } from '@mui/material';
 import { LinkTrackingBuilder } from './components/linkTracking/LinkTrackingBuilder';
 import { SupportLandingPageTestsForm } from './components/channelManagement/supportLandingPage/supportLandingPage';
+import { CheckoutNudgeTestsForm } from './components/channelManagement/checkoutNudge/checkoutNudge';
 import { AuditTestsDashboard } from './components/channelManagement/auditTests/auditTestsDashboard';
 import PromoTool from './components/promoTool/promoTool';
 import PromoEditorPage from './components/promoTool/promoEditorPage';
@@ -162,6 +163,10 @@ const AppRouter = () => {
           <Route
             path="/support-landing-page-tests/:testName?"
             element={createComponent(<SupportLandingPageTestsForm />, 'Support Landing Page Tests')}
+          />
+          <Route
+            path="/checkout-nudge-tests/:testName?"
+            element={createComponent(<CheckoutNudgeTestsForm />, 'Checkout Nudge Tests')}
           />
           <Route
             path="/liveblog-epic-tests/:testName?"
