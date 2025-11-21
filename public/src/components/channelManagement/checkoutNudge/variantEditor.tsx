@@ -85,7 +85,8 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
 
   React.useEffect(() => {
     // Basic validation: if nudge exists, heading should be present
-    const isValid = !hasNudge || (!!variant.nudge?.nudgeCopy.heading && !!variant.nudge?.thankyouCopy.heading);
+    const isValid =
+      !hasNudge || (!!variant.nudge?.nudgeCopy.heading && !!variant.nudge?.thankyouCopy.heading);
     onValidationChange(isValid);
   }, [variant, hasNudge, onValidationChange]);
 
@@ -131,7 +132,10 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
               label="Rate Plan"
               value={variant.nudge.nudgeToProduct.ratePlan || ''}
               onChange={(e): void =>
-                updateNudgeToProduct(current => ({ ...current, ratePlan: e.target.value || undefined }))
+                updateNudgeToProduct(current => ({
+                  ...current,
+                  ratePlan: e.target.value || undefined,
+                }))
               }
               disabled={!editMode}
               fullWidth

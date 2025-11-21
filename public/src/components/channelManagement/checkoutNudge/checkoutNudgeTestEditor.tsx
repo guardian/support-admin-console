@@ -135,7 +135,10 @@ const CheckoutNudgeTestEditor: React.FC<ValidatedTestEditorProps<CheckoutNudgeTe
             label="Rate Plan (Optional)"
             value={test.nudgeFromProduct.ratePlan || ''}
             onChange={(e): void =>
-              updateNudgeFromProduct(current => ({ ...current, ratePlan: e.target.value || undefined }))
+              updateNudgeFromProduct(current => ({
+                ...current,
+                ratePlan: e.target.value || undefined,
+              }))
             }
             disabled={!userHasTestLocked}
             fullWidth
