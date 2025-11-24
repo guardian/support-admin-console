@@ -1,29 +1,44 @@
 import { Methodology, Status, Test, Variant } from '../components/channelManagement/helpers/shared';
 
+export type ProductType = 
+  | 'OneTimeContribution'
+  | 'Contribution'
+  | 'SupporterPlus'
+  | 'TierThree';
+
+export type RatePlan = 
+  | 'OneTime'
+  | 'Monthly'
+  | 'Annual';
+
 export interface Product {
-  product: string;
-  ratePlan?: string;
+  product: ProductType;
+  ratePlan?: RatePlan;
 }
 
 export interface Copy {
   heading: string;
-  body?: string;
+  body: string;
+}
+
+export interface ThanYouCopy {
+  heading: string;
+  body: string;
 }
 
 export interface Benefits {
   label: string;
 }
 
-export interface CheckoutNudge {
-  nudgeCopy: Copy;
-  thankyouCopy: Copy;
-  benefits?: Benefits;
+export interface Nudge {
   nudgeToProduct: Product;
+  nudgeCopy: Copy;
+  thankyouCopy: ThanYouCopy;
+  benefits?: Benefits;
 }
 
 export interface CheckoutNudgeVariant extends Variant {
-  name: string;
-  nudge?: CheckoutNudge;
+  nudge?: Nudge;
 }
 
 export interface CheckoutNudgeTest extends Test {

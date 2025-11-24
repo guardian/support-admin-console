@@ -1,14 +1,40 @@
 package models
 
-import io.circe.generic.extras.Configuration
-import io.circe.generic.extras.auto._
-import io.circe.generic.extras.semiauto._
 import io.circe.{Decoder, Encoder}
+import io.circe.generic.auto._
+import io.circe.generic.extras.Configuration
+import io.circe.generic.extras.semiauto._
+import io.circe.syntax._
 import models.Methodology.defaultMethodologies
 
+sealed trait ProductType
+
+object ProductType {
+  case object OneTimeContribution extends ProductType
+  case object Contribution extends ProductType
+  case object SupporterPlus extends ProductType
+  case object TierThree extends ProductType
+
+  implicit val customConfig: Configuration = Configuration.default.withDefaults
+  implicit val encoder: Encoder[ProductType] = deriveEnumerationEncoder[ProductType]
+  implicit val decoder: Decoder[ProductType] = deriveEnumerationDecoder[ProductType]
+}
+
+sealed trait RatePlan
+
+object RatePlan {
+  case object OneTime extends RatePlan
+  case object Monthly extends RatePlan
+  case object Annual extends RatePlan
+
+  implicit val customConfig: Configuration = Configuration.default.withDefaults
+  implicit val encoder: Encoder[RatePlan] = deriveEnumerationEncoder[RatePlan]
+  implicit val decoder: Decoder[RatePlan] = deriveEnumerationDecoder[RatePlan]
+}
+
 case class Product(
-    product: String,
-    ratePlan: Option[String] = None
+    product: ProductType,
+    ratePlan: Option[RatePlan] = None
 )
 
 case class Copy(

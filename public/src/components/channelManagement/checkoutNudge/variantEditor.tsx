@@ -1,6 +1,6 @@
 import React from 'react';
 import { TextField, Typography, FormControlLabel, Checkbox, MenuItem } from '@mui/material';
-import { CheckoutNudgeVariant, Product, Copy } from '../../../models/checkoutNudge';
+import { CheckoutNudgeVariant, Product, Copy, ProductType, RatePlan } from '../../../models/checkoutNudge';
 import { useStyles } from '../helpers/testEditorStyles';
 import { PRODUCTS, RATE_PLANS } from './utils/defaults';
 
@@ -115,7 +115,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
               label="Product"
               value={variant.nudge.nudgeToProduct.product}
               onChange={(e): void =>
-                updateNudgeToProduct(current => ({ ...current, product: e.target.value }))
+                updateNudgeToProduct(current => ({ ...current, product: e.target.value as ProductType }))
               }
               disabled={!editMode}
               fullWidth
@@ -134,7 +134,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
               onChange={(e): void =>
                 updateNudgeToProduct(current => ({
                   ...current,
-                  ratePlan: e.target.value || undefined,
+                  ratePlan: e.target.value ? (e.target.value as RatePlan) : undefined,
                 }))
               }
               disabled={!editMode}
@@ -168,7 +168,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
               label="Body"
               value={variant.nudge.nudgeCopy.body || ''}
               onChange={(e): void =>
-                updateNudgeCopy(current => ({ ...current, body: e.target.value || undefined }))
+                updateNudgeCopy(current => ({ ...current, body: e.target.value }))
               }
               disabled={!editMode}
               fullWidth
@@ -195,9 +195,9 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
             />
             <TextField
               label="Body"
-              value={variant.nudge.thankyouCopy.body || ''}
+              value={variant.nudge.thankyouCopy.body}
               onChange={(e): void =>
-                updateThankyouCopy(current => ({ ...current, body: e.target.value || undefined }))
+                updateThankyouCopy(current => ({ ...current, body: e.target.value }))
               }
               disabled={!editMode}
               fullWidth
