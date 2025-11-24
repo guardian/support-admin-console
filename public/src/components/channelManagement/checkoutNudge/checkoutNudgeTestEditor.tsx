@@ -90,7 +90,7 @@ const CheckoutNudgeTestEditor: React.FC<ValidatedTestEditorProps<CheckoutNudgeTe
       <VariantSummary
         name={variant.name}
         testName={test.name}
-        testType="LANDING_PAGE"
+        testType="CHECKOUT_NUDGE"
         isInEditMode={userHasTestLocked}
         platform="DOTCOM"
         articleType="Standard"
