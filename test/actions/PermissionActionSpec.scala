@@ -21,36 +21,42 @@ class PermissionActionSpec extends AsyncFlatSpec with Matchers {
 
   it should "return 403 if no permissions for user" in {
     val email = "mr.test@guardian.co.uk"
-    val result = PermissionAction.checkPermission(
-      email,
-      page,
-      Permission.Write,
-      None
-    ).get
+    val result = PermissionAction
+      .checkPermission(
+        email,
+        page,
+        Permission.Write,
+        None
+      )
+      .get
     status(Future.successful(result)) should be(Status.FORBIDDEN)
     contentAsString(Future.successful(result)) should be(s"No permissions found for user ${email}")
   }
 
   it should "return 403 if no permission for that page for user" in {
     val email = "no-permission@guardian.co.uk"
-    val result = PermissionAction.checkPermission(
-      email,
-      page,
-      Permission.Write,
-      permissions.get(email)
-    ).get
+    val result = PermissionAction
+      .checkPermission(
+        email,
+        page,
+        Permission.Write,
+        permissions.get(email)
+      )
+      .get
     status(Future.successful(result)) should be(Status.FORBIDDEN)
     contentAsString(Future.successful(result)) should be(s"No permission found for user ${email}, for page $page")
   }
 
   it should "return 403 if user only has Read permission" in {
     val email = "read-permission@guardian.co.uk"
-    val result = PermissionAction.checkPermission(
-      email,
-      page,
-      Permission.Write,
-      permissions.get(email)
-    ).get
+    val result = PermissionAction
+      .checkPermission(
+        email,
+        page,
+        Permission.Write,
+        permissions.get(email)
+      )
+      .get
     status(Future.successful(result)) should be(Status.FORBIDDEN)
     contentAsString(Future.successful(result)) should be(s"Invalid permission for user ${email}, for page $page")
   }

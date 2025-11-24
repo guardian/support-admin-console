@@ -10,10 +10,11 @@ import java.util.concurrent.atomic.AtomicReference
 import scala.concurrent.ExecutionContext
 
 class ProductCatalogCache(
-  stage: String,
-  runtime: zio.Runtime[Any],
-  wsClient: WSClient
-)(implicit val ec: ExecutionContext) extends StrictLogging {
+    stage: String,
+    runtime: zio.Runtime[Any],
+    wsClient: WSClient
+)(implicit val ec: ExecutionContext)
+    extends StrictLogging {
   private val url = {
     if (stage == "PROD") "https://product-catalog.guardianapis.com/product-catalog.json"
     else "https://product-catalog.code.dev-guardianapis.com/product-catalog.json"
@@ -21,17 +22,19 @@ class ProductCatalogCache(
   private val catalogCache = new AtomicReference[Option[ProductCatalog]](None)
 
   private def fetchCatalog(): ZIO[Any, Throwable, ProductCatalog] =
-    ZIO.fromFuture { implicit ec =>
-      wsClient
-        .url(url)
-        .get()
-        .map { response =>
-          decode[ProductCatalog](response.body)
-        }
-    }.flatMap {
-      case Right(catalog) => ZIO.succeed(catalog)
-      case Left(error)    => ZIO.fail(new Exception(error.getMessage))
-    }
+    ZIO
+      .fromFuture { implicit ec =>
+        wsClient
+          .url(url)
+          .get()
+          .map { response =>
+            decode[ProductCatalog](response.body)
+          }
+      }
+      .flatMap {
+        case Right(catalog) => ZIO.succeed(catalog)
+        case Left(error)    => ZIO.fail(new Exception(error.getMessage))
+      }
 
   private def updateCatalog(catalog: ProductCatalog) = {
     catalogCache.set(Some(catalog))
