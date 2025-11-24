@@ -206,13 +206,6 @@ export default function NavDrawer(): React.ReactElement {
             <ListItemText primary="Test Audits" />
           </ListItem>
         </Link>
-        {window.guardian.stage !== 'PROD' && (
-          <Link key="Checkout Nudge Tests" to="/checkout-nudge-tests" className={classes.link}>
-            <ListItem className={classes.listItem} button key="Checkout Nudge Tests">
-              <ListItemText primary="Checkout Nudge Tests" />
-            </ListItem>
-          </Link>
-        )}
       </div>
 
       <div>
@@ -264,6 +257,13 @@ export default function NavDrawer(): React.ReactElement {
             <ListItemText primary="Bookmarklets" />
           </ListItem>
         </Link>
+        {window.guardian.stage !== 'PROD' && (
+          <Link key="Checkout Nudge Tests" to="/checkout-nudge-tests" className={classes.link}>
+            <ListItem className={classes.listItem} button key="Checkout Nudge Tests">
+              <ListItemText primary="Checkout Nudge Tests" />
+            </ListItem>
+          </Link>
+        )}
       </div>
 
       <div>
