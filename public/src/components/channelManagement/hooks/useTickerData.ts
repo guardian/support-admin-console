@@ -17,7 +17,7 @@ const useTickerData = (
 
   useEffect(() => {
     if (tickerSettings) {
-      fetch(`https://support.theguardian.com/ticker/${tickerSettings.name}.json`)
+      fetch(`https://contributions.guardianapis.com/ticker/${tickerSettings.name}`)
         .then(resp => resp.json())
         .then(json => {
           setTickerData({
