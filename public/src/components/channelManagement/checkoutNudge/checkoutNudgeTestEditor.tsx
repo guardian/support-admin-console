@@ -1,6 +1,12 @@
 import React from 'react';
 import { ValidatedTestEditorProps } from '../validatedTestEditor';
-import { CheckoutNudgeTest, CheckoutNudgeVariant, Product, ProductType, RatePlan } from '../../../models/checkoutNudge';
+import {
+  CheckoutNudgeTest,
+  CheckoutNudgeVariant,
+  Product,
+  ProductType,
+  RatePlan,
+} from '../../../models/checkoutNudge';
 import { Typography, TextField, MenuItem } from '@mui/material';
 import VariantsEditor from '../../tests/variants/variantsEditor';
 import { useStyles } from '../helpers/testEditorStyles';
@@ -118,7 +124,10 @@ const CheckoutNudgeTestEditor: React.FC<ValidatedTestEditorProps<CheckoutNudgeTe
             label="Product"
             value={test.nudgeFromProduct.product}
             onChange={(e): void =>
-              updateNudgeFromProduct(current => ({ ...current, product: e.target.value as ProductType }))
+              updateNudgeFromProduct(current => ({
+                ...current,
+                product: e.target.value as ProductType,
+              }))
             }
             disabled={!userHasTestLocked}
             fullWidth

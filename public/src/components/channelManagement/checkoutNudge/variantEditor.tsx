@@ -1,6 +1,12 @@
 import React from 'react';
 import { TextField, Typography, FormControlLabel, Checkbox, MenuItem } from '@mui/material';
-import { CheckoutNudgeVariant, Product, Copy, ProductType, RatePlan } from '../../../models/checkoutNudge';
+import {
+  CheckoutNudgeVariant,
+  Product,
+  Copy,
+  ProductType,
+  RatePlan,
+} from '../../../models/checkoutNudge';
 import { useStyles } from '../helpers/testEditorStyles';
 import { PRODUCTS, RATE_PLANS } from './utils/defaults';
 
@@ -115,7 +121,10 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
               label="Product"
               value={variant.nudge.nudgeToProduct.product}
               onChange={(e): void =>
-                updateNudgeToProduct(current => ({ ...current, product: e.target.value as ProductType }))
+                updateNudgeToProduct(current => ({
+                  ...current,
+                  product: e.target.value as ProductType,
+                }))
               }
               disabled={!editMode}
               fullWidth

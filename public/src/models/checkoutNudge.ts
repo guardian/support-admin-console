@@ -1,15 +1,8 @@
 import { Methodology, Status, Test, Variant } from '../components/channelManagement/helpers/shared';
 
-export type ProductType = 
-  | 'OneTimeContribution'
-  | 'Contribution'
-  | 'SupporterPlus'
-  | 'TierThree';
+export type ProductType = 'OneTimeContribution' | 'Contribution' | 'SupporterPlus' | 'TierThree';
 
-export type RatePlan = 
-  | 'OneTime'
-  | 'Monthly'
-  | 'Annual';
+export type RatePlan = 'OneTime' | 'Monthly' | 'Annual';
 
 export interface Product {
   product: ProductType;
