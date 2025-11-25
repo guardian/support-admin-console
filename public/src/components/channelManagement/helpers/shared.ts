@@ -63,6 +63,7 @@ export interface EpicEditorConfig {
   allowSupporterStatusTargeting: boolean;
   allowDeviceTypeTargeting: boolean;
   showSignedInStatusSelector: boolean;
+  allowMParticleAudienceEditor: boolean;
   allowViewFrequencySettings: boolean;
   allowArticleCount: boolean;
   testNamePrefix?: string;
@@ -95,6 +96,7 @@ export const ARTICLE_EPIC_CONFIG: EpicEditorConfig = {
   allowSupporterStatusTargeting: true,
   allowDeviceTypeTargeting: true,
   showSignedInStatusSelector: true,
+  allowMParticleAudienceEditor: true,
   allowViewFrequencySettings: true,
   allowArticleCount: true,
   allowVariantHeader: true,
@@ -124,6 +126,7 @@ export const LIVEBLOG_EPIC_CONFIG: EpicEditorConfig = {
   allowSupporterStatusTargeting: true,
   allowDeviceTypeTargeting: true,
   showSignedInStatusSelector: true,
+  allowMParticleAudienceEditor: false,
   allowViewFrequencySettings: true,
   allowArticleCount: true,
   allowVariantHeader: true,
@@ -154,6 +157,7 @@ export const APPLE_NEWS_EPIC_CONFIG: EpicEditorConfig = {
   allowSupporterStatusTargeting: false,
   allowDeviceTypeTargeting: false,
   showSignedInStatusSelector: false,
+  allowMParticleAudienceEditor: false,
   allowViewFrequencySettings: false,
   allowArticleCount: false,
   allowVariantHeader: true,

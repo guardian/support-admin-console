@@ -191,6 +191,10 @@ export const getEpicTestEditor = (
       onTestChange(current => ({ ...current, consentStatus }));
     };
 
+    const onMParticleAudienceChange = (mParticleAudience?: number): void => {
+      onTestChange(current => ({ ...current, mParticleAudience }));
+    };
+
     const onArticlesViewedSettingsChange = (
       updatedArticlesViewedSettings?: ArticlesViewedSettings,
     ): void => {
@@ -392,6 +396,14 @@ export const getEpicTestEditor = (
               onConsentStatusChange={onConsentChange}
               showConsentStatusSelector={false}
               platform={epicEditorConfig.platform}
+              mParticleAudienceEditor={
+                epicEditorConfig.allowMParticleAudienceEditor
+                  ? {
+                      mParticleAudience: test.mParticleAudience,
+                      onMParticleAudienceChange: onMParticleAudienceChange,
+                    }
+                  : undefined
+              }
             />
           </div>
         )}
