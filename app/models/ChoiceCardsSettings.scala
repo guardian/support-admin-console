@@ -39,6 +39,10 @@ object ChoiceCardsSettings {
         supportTier: String = "SupporterPlus",
         ratePlan: RatePlan
     ) extends Product
+    case class DigitalSubscription(
+        supportTier: String = "DigitalSubscription",
+        ratePlan: RatePlan
+    ) extends Product
 
     case class OneOff(
         supportTier: String = "OneOff"

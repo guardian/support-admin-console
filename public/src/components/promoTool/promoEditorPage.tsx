@@ -94,6 +94,9 @@ const PromoEditorPage: React.FC = () => {
   }, [promoCode]);
 
   const handleBack = () => {
+    if (typeof window !== 'undefined' && campaignProduct) {
+      window.localStorage.setItem('promoToolSelectedProduct', campaignProduct);
+    }
     navigate(`/promo-tool/${campaignCode}`);
   };
 
