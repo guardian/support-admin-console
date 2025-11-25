@@ -5,6 +5,7 @@ import io.circe.{Decoder, Encoder}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import ProductCatalog._
 
+// format: off
 /**
  * Example JSON from the product catalog, excluding fields that we do not care about here:
  *
@@ -41,34 +42,35 @@ import ProductCatalog._
  *   ...
  * }
  */
+// format: on
 
 case class ProductCatalog(
-  GuardianWeeklyDomestic: ProductDetails[GuardianWeeklyRatePlans],
-  GuardianWeeklyRestOfWorld: ProductDetails[GuardianWeeklyRatePlans],
-  HomeDelivery: ProductDetails[HomeDeliveryAndSubscriptionCardRatePlans],
-  SubscriptionCard: ProductDetails[HomeDeliveryAndSubscriptionCardRatePlans],
-  NationalDelivery: ProductDetails[NationalDeliveryRatePlans],
-  SupporterPlus: ProductDetails[SupporterPlusRatePlans],
-  TierThree: ProductDetails[TierThreeRatePlans],
-  DigitalSubscription: ProductDetails[DigitalSubscriptionRatePlans]
+    GuardianWeeklyDomestic: ProductDetails[GuardianWeeklyRatePlans],
+    GuardianWeeklyRestOfWorld: ProductDetails[GuardianWeeklyRatePlans],
+    HomeDelivery: ProductDetails[HomeDeliveryAndSubscriptionCardRatePlans],
+    SubscriptionCard: ProductDetails[HomeDeliveryAndSubscriptionCardRatePlans],
+    NationalDelivery: ProductDetails[NationalDeliveryRatePlans],
+    SupporterPlus: ProductDetails[SupporterPlusRatePlans],
+    TierThree: ProductDetails[TierThreeRatePlans],
+    DigitalSubscription: ProductDetails[DigitalSubscriptionRatePlans]
 )
 
 object ProductCatalog {
   // All currencies here are optional, and the product catalog will define which are available for a given rate plan
   case class Pricing(
-    AUD: Option[Double] = None,
-    CAD: Option[Double] = None,
-    EUR: Option[Double] = None,
-    GBP: Option[Double] = None,
-    NZD: Option[Double] = None,
-    USD: Option[Double] = None
+      AUD: Option[Double] = None,
+      CAD: Option[Double] = None,
+      EUR: Option[Double] = None,
+      GBP: Option[Double] = None,
+      NZD: Option[Double] = None,
+      USD: Option[Double] = None
   )
 
   case class RatePlan(
-    billingPeriod: BillingPeriod,
-    id: String,
-    pricing: Pricing,
-    termLengthInMonths: Option[Int] = None
+      billingPeriod: BillingPeriod,
+      id: String,
+      pricing: Pricing,
+      termLengthInMonths: Option[Int] = None
   )
 
   sealed trait BillingPeriod
@@ -86,42 +88,42 @@ object ProductCatalog {
   sealed trait ProductRatePlans
 
   case class GuardianWeeklyRatePlans(
-    Annual: RatePlan,
-    Monthly: RatePlan,
-    Quarterly: RatePlan
+      Annual: RatePlan,
+      Monthly: RatePlan,
+      Quarterly: RatePlan
   ) extends ProductRatePlans
 
   case class HomeDeliveryAndSubscriptionCardRatePlans(
-    EverydayPlus: RatePlan,
-    SaturdayPlus: RatePlan,
-    WeekendPlus: RatePlan,
-    SixdayPlus: RatePlan,
-    // The only non-"Plus" rate plan is Sunday (Observer)
-    Sunday: RatePlan
+      EverydayPlus: RatePlan,
+      SaturdayPlus: RatePlan,
+      WeekendPlus: RatePlan,
+      SixdayPlus: RatePlan,
+      // The only non-"Plus" rate plan is Sunday (Observer)
+      Sunday: RatePlan
   ) extends ProductRatePlans
 
   case class NationalDeliveryRatePlans(
-    EverydayPlus: RatePlan,
-    SixdayPlus: RatePlan,
-    WeekendPlus: RatePlan
+      EverydayPlus: RatePlan,
+      SixdayPlus: RatePlan,
+      WeekendPlus: RatePlan
   ) extends ProductRatePlans
 
   case class SupporterPlusRatePlans(
-    Annual: RatePlan,
-    Monthly: RatePlan,
+      Annual: RatePlan,
+      Monthly: RatePlan
   ) extends ProductRatePlans
 
   case class TierThreeRatePlans(
-    DomesticMonthly: RatePlan,
-    DomesticAnnual: RatePlan,
-    RestOfWorldMonthly: RatePlan,
-    RestOfWorldAnnual: RatePlan
+      DomesticMonthly: RatePlan,
+      DomesticAnnual: RatePlan,
+      RestOfWorldMonthly: RatePlan,
+      RestOfWorldAnnual: RatePlan
   ) extends ProductRatePlans
 
   case class DigitalSubscriptionRatePlans(
-    Monthly: RatePlan,
-    Annual: RatePlan,
-    Quarterly: RatePlan
+      Monthly: RatePlan,
+      Annual: RatePlan,
+      Quarterly: RatePlan
   ) extends ProductRatePlans
 
   trait ProductDetails[R <: ProductRatePlans] {
@@ -130,10 +132,10 @@ object ProductCatalog {
   }
 
   object ProductDetails {
-    implicit def productDetailsEncoder[R <: ProductRatePlans : Encoder]: Encoder[ProductDetails[R]] =
+    implicit def productDetailsEncoder[R <: ProductRatePlans: Encoder]: Encoder[ProductDetails[R]] =
       Encoder.forProduct2("customerFacingName", "ratePlans")(pd => (pd.customerFacingName, pd.ratePlans))
 
-    implicit def productDetailsDecoder[R <: ProductRatePlans : Decoder]: Decoder[ProductDetails[R]] =
+    implicit def productDetailsDecoder[R <: ProductRatePlans: Decoder]: Decoder[ProductDetails[R]] =
       Decoder.forProduct2[ProductDetails[R], String, R]("customerFacingName", "ratePlans")((name, rps) =>
         new ProductDetails[R] {
           val customerFacingName: String = name

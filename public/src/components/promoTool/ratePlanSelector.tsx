@@ -151,11 +151,15 @@ const RatePlanSelector: React.FC<RatePlanSelectorProps> = ({
       <Paper
         key={ratePlan.id}
         className={`${classes.ratePlanCard} ${isSelected ? classes.selectedCard : ''}`}
-        onClick={() => !isDisabled && handleToggleRatePlan(ratePlan.id)}
         elevation={isSelected ? 3 : 1}
       >
         <FormControlLabel
-          control={<Checkbox checked={isSelected} />}
+          control={
+            <Checkbox
+              checked={isSelected}
+              onChange={() => !isDisabled && handleToggleRatePlan(ratePlan.id)}
+            />
+          }
           label={
             <Box>
               <Typography className={classes.ratePlanTitle}>

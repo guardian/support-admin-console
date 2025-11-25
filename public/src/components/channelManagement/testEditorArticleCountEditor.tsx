@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { FormControl, Radio, RadioGroup, FormControlLabel, TextField, Theme } from '@mui/material';
@@ -51,12 +51,15 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
 }: TestEditorArticleCountEditorProps) => {
   const classes = useStyles();
 
-  const defaultValues: FormData = {
-    minViews: articlesViewedSettings?.minViews?.toString() || '',
-    maxViews: articlesViewedSettings?.maxViews?.toString() || '',
-    periodInWeeks: articlesViewedSettings?.periodInWeeks.toString() || '',
-    tagIds: articlesViewedSettings?.tagIds || [],
-  };
+  const defaultValues: FormData = useMemo(
+    () => ({
+      minViews: articlesViewedSettings?.minViews?.toString() || '',
+      maxViews: articlesViewedSettings?.maxViews?.toString() || '',
+      periodInWeeks: articlesViewedSettings?.periodInWeeks.toString() || '',
+      tagIds: articlesViewedSettings?.tagIds || [],
+    }),
+    [articlesViewedSettings],
+  );
 
   const {
     register,
