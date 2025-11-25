@@ -64,7 +64,10 @@ export const PromoListItem = ({
 
   return (
     <ListItem className={classes.listItem} disablePadding>
-      <ListItemButton className={classes.listItemButton}>
+      <ListItemButton
+        className={classes.listItemButton}
+        onClick={() => onViewPromo(promo.promoCode)}
+      >
         <ListItemText
           primary={
             <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -80,16 +83,6 @@ export const PromoListItem = ({
                   }}
                 >
                   Clone
-                </Button>
-                <Button
-                  size="small"
-                  variant="outlined"
-                  onClick={e => {
-                    e.stopPropagation();
-                    onViewPromo(promo.promoCode);
-                  }}
-                >
-                  View
                 </Button>
               </Box>
             </Box>

@@ -2,7 +2,7 @@ import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import PromoCampaignsSidebar from './promoCampaignsSidebar';
-import { PromoCampaign, PromoProduct, Promo } from './utils/promoModels';
+import { PromoCampaign, PromoProduct, Promo, promoProductNames } from './utils/promoModels';
 import { useParams, useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import {
@@ -61,7 +61,16 @@ const PromoTool: React.FC = () => {
   const [promos, setPromos] = useState<Promo[]>([]);
   const { campaignCode: promoCampaignCode } = useParams<{ campaignCode?: string }>();
   const [selectedPromoCampaignCode, setSelectedPromoCampaignCode] = useState<string | undefined>();
-  const [selectedPromoProduct, setSelectedPromoProduct] = useState<PromoProduct>('SupporterPlus');
+  const [selectedPromoProduct, setSelectedPromoProduct] = useState<PromoProduct>(() => {
+    if (typeof window === 'undefined') {
+      return 'SupporterPlus';
+    }
+    const stored = window.localStorage.getItem('promoToolSelectedProduct');
+    const validProducts = Object.keys(promoProductNames) as PromoProduct[];
+    return stored && (validProducts as string[]).includes(stored)
+      ? (stored as PromoProduct)
+      : 'SupporterPlus';
+  });
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [cloneDialogOpen, setCloneDialogOpen] = useState(false);
   const [promoToClone, setPromoToClone] = useState<Promo | undefined>();
@@ -169,6 +178,12 @@ const PromoTool: React.FC = () => {
   const handlePromoCampaignSelected = (campaignCode: string): void => {
     navigate(`/promo-tool/${campaignCode}`);
   };
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem('promoToolSelectedProduct', selectedPromoProduct);
+    }
+  }, [selectedPromoProduct]);
 
   // set selected promoCampaign
   useEffect(() => {
