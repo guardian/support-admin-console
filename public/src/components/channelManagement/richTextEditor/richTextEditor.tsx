@@ -30,6 +30,7 @@ import { MarkPasteRule } from '@remirror/pm/paste-rules';
 
 import {
   ARTICLE_COUNT_TEMPLATE,
+  CAMPAIGN_DEADLINE_TEMPLATE,
   COUNTRY_NAME_TEMPLATE,
   CURRENCY_TEMPLATE,
   DATE,
@@ -69,6 +70,7 @@ interface RteMenuConstraints {
   noPriceTemplates?: boolean;
   noDateTemplate?: boolean;
   noDayTemplate?: boolean;
+  noCampaignDeadlineTemplate?: boolean;
 }
 
 /**
@@ -306,6 +308,7 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
     noArticleCountTemplate,
     noDateTemplate,
     noDayTemplate,
+    noCampaignDeadlineTemplate,
   } = rteMenuConstraints;
 
   const clickBold = () => {
@@ -363,6 +366,14 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
                   onClick={() => insertTemplate(ARTICLE_COUNT_TEMPLATE)}
                 >
                   Articles
+                </button>
+              )}
+              {!noCampaignDeadlineTemplate && (
+                <button
+                  className="remirror-button"
+                  onClick={() => insertTemplate(CAMPAIGN_DEADLINE_TEMPLATE)}
+                >
+                  Countdown Deadline
                 </button>
               )}
               {!noCurrencyTemplate && (
@@ -462,6 +473,7 @@ const getRteCopyLength = (copy: string[]): number => {
   paragraphsCheck = paragraphsCheck.replace(/%%CURRENCY_SYMBOL%%/g, ' ');
   paragraphsCheck = paragraphsCheck.replace(/%%ARTICLE_COUNT%%/g, '     ');
   paragraphsCheck = paragraphsCheck.replace(/%%COUNTRY_NAME%%/g, '          ');
+  paragraphsCheck = paragraphsCheck.replace(/%%CAMPAIGN_DEADLINE%%/g, '             ');
 
   return paragraphsCheck.length;
 };
