@@ -85,6 +85,7 @@ export interface EpicEditorConfig {
   requireVariantHeader: boolean;
   moduleName: EpicModuleName;
   allowNewsletterSignup: boolean;
+  allowVariantIsCollapsible?: boolean;
 }
 
 export const ARTICLE_EPIC_CONFIG: EpicEditorConfig = {
@@ -115,6 +116,7 @@ export const ARTICLE_EPIC_CONFIG: EpicEditorConfig = {
   moduleName: 'ContributionsEpic',
   platform: 'DOTCOM',
   allowNewsletterSignup: false,
+  allowVariantIsCollapsible: true,
 };
 
 export const LIVEBLOG_EPIC_CONFIG: EpicEditorConfig = {
@@ -145,6 +147,7 @@ export const LIVEBLOG_EPIC_CONFIG: EpicEditorConfig = {
   moduleName: 'ContributionsLiveblogEpic',
   platform: 'DOTCOM',
   allowNewsletterSignup: true,
+  allowVariantIsCollapsible: true,
 };
 
 export const APPLE_NEWS_EPIC_CONFIG: EpicEditorConfig = {
