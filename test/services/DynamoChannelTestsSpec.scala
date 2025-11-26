@@ -8,7 +8,14 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import models.EpicTest._
 import org.scalatest.{Assertion, Assertions, BeforeAndAfterEach}
 import models.DynamoErrors.{DynamoError, DynamoNoLockError}
-import software.amazon.awssdk.services.dynamodb.model.{AttributeDefinition, BillingMode, CreateTableRequest, DeleteTableRequest, KeySchemaElement, KeyType}
+import software.amazon.awssdk.services.dynamodb.model.{
+  AttributeDefinition,
+  BillingMode,
+  CreateTableRequest,
+  DeleteTableRequest,
+  KeySchemaElement,
+  KeyType
+}
 import zio.{Unsafe, ZIO}
 
 import java.net.URI
@@ -19,8 +26,7 @@ class DynamoChannelTestsSpec extends AsyncFlatSpec with Matchers with BeforeAndA
   private val runtime = zio.Runtime.default
 
   // Use a local instance of dynamodb, available via the sbt-dynamodb plugin
-  private val client = DynamoDbClient
-    .builder
+  private val client = DynamoDbClient.builder
     .region(Aws.region)
     .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create("id", "secret")))
     .endpointOverride(new URI("http://localhost:8083"))
@@ -41,7 +47,7 @@ class DynamoChannelTestsSpec extends AsyncFlatSpec with Matchers with BeforeAndA
       priority = priority,
       maxViews = None,
       variants = Nil,
-      regionTargeting = None,
+      regionTargeting = None
     )
 
   val epicTests = List(
@@ -54,18 +60,21 @@ class DynamoChannelTestsSpec extends AsyncFlatSpec with Matchers with BeforeAndA
     Unsafe.unsafe { implicit unsafe => runtime.unsafe.runToFuture(program.map(assert)) }
 
   // Check if the program fails and run `assert` against the error
-  def expectToFailWith[T](program: ZIO[Any, DynamoError, T])(assert: PartialFunction[DynamoError, Assertion]): Future[Assertion] =
-    Unsafe.unsafe { implicit unsafe => runtime.unsafe.runToFuture {
-      program
-        .map(result => Assertions.fail(s"Expected an error, but got $result"))
-        .catchSome(assert.andThen(assertionResult => ZIO.succeed(assertionResult)))
-    }}
+  def expectToFailWith[T](
+      program: ZIO[Any, DynamoError, T]
+  )(assert: PartialFunction[DynamoError, Assertion]): Future[Assertion] =
+    Unsafe.unsafe { implicit unsafe =>
+      runtime.unsafe.runToFuture {
+        program
+          .map(result => Assertions.fail(s"Expected an error, but got $result"))
+          .catchSome(assert.andThen(assertionResult => ZIO.succeed(assertionResult)))
+      }
+    }
 
   override def beforeEach(): Unit = {
     // Create a channel-tests table
     client.createTable(
-      CreateTableRequest
-        .builder
+      CreateTableRequest.builder
         .tableName(tableName)
         .attributeDefinitions(
           AttributeDefinition.builder.attributeName("channel").attributeType("S").build,
@@ -80,8 +89,7 @@ class DynamoChannelTestsSpec extends AsyncFlatSpec with Matchers with BeforeAndA
     )
 
     client.createTable(
-      CreateTableRequest
-        .builder
+      CreateTableRequest.builder
         .tableName(auditTableName)
         .attributeDefinitions(
           AttributeDefinition.builder.attributeName("channelAndName").attributeType("S").build,
@@ -184,7 +192,7 @@ class DynamoChannelTestsSpec extends AsyncFlatSpec with Matchers with BeforeAndA
     expectToSucceedWith {
       for {
         _ <- dynamo.createOrUpdateTests(epicTests, Channel.Epic)
-        _ <- dynamo.setPriorities(List("test2", "test1"), Channel.Epic) //swap the priorities
+        _ <- dynamo.setPriorities(List("test2", "test1"), Channel.Epic) // swap the priorities
         tests <- dynamo.getAllTests(Channel.Epic)
       } yield tests
     }(tests => tests.map(_.name) should be(List("test2", "test1")))

@@ -11,8 +11,12 @@ import models.AmountsTestTargeting
 class AmountsSpec extends AnyFlatSpec with Matchers with EitherValues {
 
   it should "decode amounts" in {
-    decode[AmountsTestTargeting]("""{ "targetingType": "Country", "countries": ["GB"] }""") should be(Right(AmountsTestTargeting.Country(countries = List("GB"))))
-    decode[AmountsTestTargeting]("""{ "targetingType": "Region", "region": "GBPCountries" }""") should be(Right(AmountsTestTargeting.Region(region = GBPCountries)))
+    decode[AmountsTestTargeting]("""{ "targetingType": "Country", "countries": ["GB"] }""") should be(
+      Right(AmountsTestTargeting.Country(countries = List("GB")))
+    )
+    decode[AmountsTestTargeting]("""{ "targetingType": "Region", "region": "GBPCountries" }""") should be(
+      Right(AmountsTestTargeting.Region(region = GBPCountries))
+    )
   }
 
   it should "encode amounts" in {
