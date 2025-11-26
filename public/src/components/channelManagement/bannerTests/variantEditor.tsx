@@ -243,6 +243,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                 disabled={!editMode}
                 rteMenuConstraints={{
                   noBold: true,
+                  noCampaignDeadlineTemplate: true,
                 }}
               />
             );
@@ -277,6 +278,9 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                   name="paragraphs"
                   label="Body copy"
                   disabled={!editMode}
+                  rteMenuConstraints={{
+                    noCampaignDeadlineTemplate: true,
+                  }}
                 />
               );
             }}
@@ -307,6 +311,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                   disabled={!editMode}
                   rteMenuConstraints={{
                     noBold: true,
+                    noCampaignDeadlineTemplate: true,
                   }}
                 />
               );
