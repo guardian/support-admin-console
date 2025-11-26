@@ -30,8 +30,6 @@ export const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     padding: spacing(3),
     maxWidth: 800,
     margin: '0 auto',
-    maxHeight: 'calc(100vh - 100px)',
-    overflowY: 'auto',
   },
   section: {
     marginBottom: spacing(3),
@@ -55,6 +53,7 @@ export const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     marginLeft: -spacing(3),
     marginRight: -spacing(3),
     marginBottom: -spacing(3),
+    zIndex: 2,
   },
   lockBanner: {
     padding: spacing(2),
