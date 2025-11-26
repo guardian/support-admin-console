@@ -69,9 +69,10 @@ const productDisplayName = (product: Product) => {
     return 'One-off Contribution';
   } else if (product.supportTier === 'Contribution') {
     return `Recurring Contribution - ${product.ratePlan}`;
-  } else {
-    return `Supporter Plus - ${product.ratePlan}`;
+  } else if (product.supportTier === 'DigitalSubscription') {
+    return `Digital Subscription - ${product.ratePlan}`;
   }
+  return `Supporter Plus - ${product.ratePlan}`;
 };
 
 interface ChoiceCardEditorProps {
@@ -142,13 +143,14 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
                 >
                   <MenuItem value="Contribution">Recurring Contribution</MenuItem>
                   <MenuItem value="SupporterPlus">Supporter Plus</MenuItem>
+                  <MenuItem value="DigitalSubscription">Digital Subscription</MenuItem>
                   <MenuItem value="OneOff">One-off Contribution</MenuItem>
                 </Select>
               )}
             />
           </FormControl>
 
-          {['Contribution', 'SupporterPlus'].includes(
+          {['Contribution', 'SupporterPlus', 'DigitalSubscription'].includes(
             getValues(`choiceCards.${index}.product.supportTier`),
           ) && (
             <FormControl component="fieldset" margin="normal" disabled={isDisabled}>

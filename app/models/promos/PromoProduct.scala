@@ -11,7 +11,7 @@ case object Newspaper extends PromoProduct
 case object Weekly extends PromoProduct
 
 object PromoProduct {
-    implicit val customConfig: Configuration = Configuration.default.withDefaults
-    implicit val decoder: Decoder[PromoProduct] = deriveEnumerationDecoder[PromoProduct]
-    implicit val encoder: Encoder[PromoProduct] = deriveEnumerationEncoder[PromoProduct]
+  implicit val customConfig: Configuration = Configuration.default.withDefaults
+  implicit val decoder: Decoder[PromoProduct] = deriveEnumerationDecoder[PromoProduct]
+  implicit val encoder: Encoder[PromoProduct] = deriveEnumerationEncoder[PromoProduct]
 }
