@@ -4,7 +4,7 @@ export interface ProductBenefit {
 
 export type Product =
   | {
-      supportTier: 'Contribution' | 'SupporterPlus';
+      supportTier: 'Contribution' | 'SupporterPlus' | 'DigitalSubscription';
       ratePlan: 'Monthly' | 'Annual';
     }
   | {
