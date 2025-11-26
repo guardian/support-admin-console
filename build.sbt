@@ -2,7 +2,7 @@ name := "support-admin-console"
 
 version := "1.0-SNAPSHOT"
 
-scalaVersion := "2.13.17"
+scalaVersion := "2.13.18"
 
 val circeVersion = "0.14.15"
 val awsVersion = "2.35.11"
