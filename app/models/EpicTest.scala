@@ -39,8 +39,7 @@ case class EpicVariant(
     defaultChoiceCardFrequency: Option[String],
     showSignInLink: Option[Boolean],
     newsletterSignup: Option[NewsletterSignup],
-    isCollapsible: Option[Boolean] = None,
-    collapsibleVariant: Option[String] = None
+    isCollapsible: Option[Boolean] = None
 )
 case class EpicTest(
     name: String,

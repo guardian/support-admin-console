@@ -23,8 +23,6 @@ export interface SeparateArticleCount {
   copy?: string;
 }
 
-export type CollapsibleVariant = 'maybeLater' | 'close';
-
 export interface EpicVariant extends Variant {
   heading?: string;
   paragraphs: string[];
@@ -43,7 +41,6 @@ export interface EpicVariant extends Variant {
   showSignInLink?: boolean;
   newsletterSignup?: NewsletterSignup;
   isCollapsible?: boolean;
-  collapsibleVariant?: CollapsibleVariant;
 }
 
 export interface MaxEpicViews {

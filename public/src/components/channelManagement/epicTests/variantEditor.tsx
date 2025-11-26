@@ -37,7 +37,7 @@ import {
 import VariantSeparateArticleCountEditor from '../../tests/variants/variantSeparateArticleCountEditor';
 import { ImageEditorToggle } from '../imageEditor';
 import { BylineWithImageEditorToggle } from '../bylineWithImageEditor';
-import { CollapsibleVariant, EpicVariant, SeparateArticleCount } from '../../../models/epic';
+import { EpicVariant, SeparateArticleCount } from '../../../models/epic';
 import { AppleNewsChoiceCards } from './appleChoiceCardsEditor';
 import EpicTestNewsletter from './newsletterSignUp';
 import { ChoiceCardsSettings } from '../../../models/choiceCards';
@@ -230,14 +230,10 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
     onVariantChange(current => ({ ...current, promoCodes }));
   };
 
-  const updateIsCollapsibleSettings = (
-    isCollapsible: boolean,
-    collapsibleVariant?: CollapsibleVariant,
-  ): void => {
+  const updateIsCollapsibleSettings = (isCollapsible: boolean): void => {
     onVariantChange(current => ({
       ...current,
       isCollapsible,
-      collapsibleVariant: isCollapsible ? collapsibleVariant : undefined,
     }));
   };
 
@@ -550,7 +546,6 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
           </Typography>
           <IsCollapsibleEditor
             isCollapsible={variant.isCollapsible}
-            collapsibleVariant={variant.collapsibleVariant}
             isDisabled={!editMode}
             updateIsCollapsibleSettings={updateIsCollapsibleSettings}
           />
