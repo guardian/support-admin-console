@@ -51,7 +51,6 @@ libraryDependencies ++= Seq(
 dependencyOverrides ++= List(
   // Play still uses an old version of jackson-core which has a vulnerability - https://security.snyk.io/vuln/SNYK-JAVA-COMFASTERXMLJACKSONCORE-7569538
   "com.fasterxml.jackson.core" % "jackson-core" % jacksonVersion,
-  "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
   "com.fasterxml.jackson.datatype" % "jackson-datatype-jdk8" % jacksonVersion,
   "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % jacksonVersion,
   "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % jacksonVersion,
