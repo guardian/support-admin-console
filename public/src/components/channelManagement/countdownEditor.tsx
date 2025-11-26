@@ -1,12 +1,17 @@
 import React, { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { Checkbox, TextField, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { CountdownSettings } from './helpers/shared';
-import { EMPTY_ERROR_HELPER_TEXT } from './helpers/validation';
+import {
+  copyLengthValidator,
+  EMPTY_ERROR_HELPER_TEXT,
+  templateValidatorForPlatform,
+} from './helpers/validation';
 import Switch from '@mui/material/Switch';
 import Alert from '@mui/lab/Alert';
+import { RichTextEditorSingleLine } from './richTextEditor/richTextEditor';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -66,6 +71,7 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
   onValidationChange,
 }: CountdownEditorProps) => {
   const classes = useStyles();
+  const templateValidator = templateValidatorForPlatform('DOTCOM'); // TODO: should this be support-frontend?
 
   const defaultValues: FormData = {
     overwriteHeadingLabel:
@@ -82,6 +88,7 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
   const {
     register,
     handleSubmit,
+    control,
     reset,
 
     formState: { errors },
@@ -163,16 +170,40 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
 
       {!!countdownSettings && (
         <div className={classes.fieldsContainer}>
-          <TextField
-            error={!!errors.overwriteHeadingLabel}
-            helperText={errors?.overwriteHeadingLabel?.message}
-            {...register('overwriteHeadingLabel', { required: EMPTY_ERROR_HELPER_TEXT })}
-            onBlur={handleSubmit(onSubmit)}
-            label="Overwrite heading text"
-            margin="normal"
-            variant="outlined"
-            disabled={isDisabled}
-            fullWidth
+          <Controller
+            name="overwriteHeadingLabel"
+            control={control}
+            rules={{
+              required: true,
+              validate: copy => templateValidator(copy) ?? copyLengthValidator(75)(copy),
+            }}
+            render={({ field }) => {
+              return (
+                <RichTextEditorSingleLine
+                  error={errors.overwriteHeadingLabel !== undefined}
+                  helperText={
+                    errors?.overwriteHeadingLabel?.message || errors?.overwriteHeadingLabel?.type
+                  }
+                  copyData={field.value}
+                  updateCopy={pars => {
+                    field.onChange(pars);
+                    handleSubmit(onSubmit)();
+                  }}
+                  name="overwriteHeadingLabel"
+                  label="Overwrite Heading Label Copy"
+                  disabled={isDisabled}
+                  rteMenuConstraints={{
+                    noArticleCountTemplate: true,
+                    noCurrencyTemplate: true,
+                    noCountryNameTemplate: true,
+                    noDayTemplate: true,
+                    noDateTemplate: true,
+                    noPriceTemplates: true,
+                    noCampaignDeadlineTemplate: false,
+                  }}
+                />
+              );
+            }}
           />
 
           <div className={classes.switchContainer}>
