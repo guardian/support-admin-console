@@ -38,8 +38,7 @@ case class EpicVariant(
     bylineWithImage: Option[BylineWithImage],
     defaultChoiceCardFrequency: Option[String],
     showSignInLink: Option[Boolean],
-    newsletterSignup: Option[NewsletterSignup],
-    isCollapsible: Option[Boolean] = None
+    newsletterSignup: Option[NewsletterSignup]
 )
 case class EpicTest(
     name: String,

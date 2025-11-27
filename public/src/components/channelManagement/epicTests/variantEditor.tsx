@@ -42,7 +42,6 @@ import { AppleNewsChoiceCards } from './appleChoiceCardsEditor';
 import EpicTestNewsletter from './newsletterSignUp';
 import { ChoiceCardsSettings } from '../../../models/choiceCards';
 import PromoCodesEditor from '../choiceCards/PromoCodesEditor';
-import IsCollapsibleEditor from './isCollapsibleEditor';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const getUseStyles = (shouldAddPadding: boolean) => {
@@ -119,7 +118,6 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
     platform,
     requireVariantHeader,
     allowNewsletterSignup,
-    allowVariantIsCollapsible,
   } = epicEditorConfig;
 
   const classes = getUseStyles(allowMultipleVariants)();
@@ -228,13 +226,6 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   };
   const updatePromoCodes = (promoCodes: string[]): void => {
     onVariantChange(current => ({ ...current, promoCodes }));
-  };
-
-  const updateIsCollapsibleSettings = (isCollapsible: boolean): void => {
-    onVariantChange(current => ({
-      ...current,
-      isCollapsible,
-    }));
   };
 
   const getParagraphsHelperText = () => {
@@ -535,19 +526,6 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
             updateShowChoiceCards={showChoiceCards => updateChoiceCardsSettings(showChoiceCards)}
             updatePrimaryCta={updatePrimaryCta}
             onValidationChange={onValidationChange}
-          />
-        </div>
-      )}
-
-      {allowVariantIsCollapsible && (
-        <div className={classes.sectionContainer}>
-          <Typography className={classes.sectionHeader} variant="h4">
-            Two step banner
-          </Typography>
-          <IsCollapsibleEditor
-            isCollapsible={variant.isCollapsible}
-            isDisabled={!editMode}
-            updateIsCollapsibleSettings={updateIsCollapsibleSettings}
           />
         </div>
       )}
