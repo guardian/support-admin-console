@@ -474,7 +474,6 @@ const getRteCopyLength = (copy: string[]): number => {
   paragraphsCheck = paragraphsCheck.replace(/%%CURRENCY_SYMBOL%%/g, ' ');
   paragraphsCheck = paragraphsCheck.replace(/%%ARTICLE_COUNT%%/g, '     ');
   paragraphsCheck = paragraphsCheck.replace(/%%COUNTRY_NAME%%/g, '          ');
-  paragraphsCheck = paragraphsCheck.replace(/%%CAMPAIGN_DEADLINE%%/g, '             ');
 
   return paragraphsCheck.length;
 };
