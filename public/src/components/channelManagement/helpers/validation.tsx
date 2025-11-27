@@ -47,6 +47,7 @@ export const PRICE_GUARDIANWEEKLY_MONTHLY = '%%PRICE_GUARDIANWEEKLY_MONTHLY%%';
 export const PRICE_GUARDIANWEEKLY_ANNUAL = '%%PRICE_GUARDIANWEEKLY_ANNUAL%%';
 export const DAY_OF_THE_WEEK = '%%DAY_OF_THE_WEEK%%';
 export const DATE = '%%DATE%%';
+export const CAMPAIGN_DEADLINE_TEMPLATE = '%%CAMPAIGN_DEADLINE%%';
 
 export const VALID_TEMPLATES = {
   APPLE_NEWS: [CURRENCY_TEMPLATE],
@@ -61,6 +62,7 @@ export const VALID_TEMPLATES = {
     DAY_OF_THE_WEEK,
     DATE,
   ],
+  SUPPORT: [CAMPAIGN_DEADLINE_TEMPLATE],
 };
 
 export const templateValidatorForPlatform = (platform: TestPlatform) => (

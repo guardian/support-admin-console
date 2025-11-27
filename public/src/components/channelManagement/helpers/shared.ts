@@ -5,7 +5,7 @@ export interface Variant {
   name: string;
 }
 
-export type TestPlatform = 'APPLE_NEWS' | 'DOTCOM';
+export type TestPlatform = 'APPLE_NEWS' | 'DOTCOM' | 'SUPPORT';
 
 export type TestType = 'EPIC' | 'BANNER' | 'GUTTER' | 'HEADER' | 'LANDING_PAGE';
 

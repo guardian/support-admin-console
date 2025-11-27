@@ -62,6 +62,7 @@ const richTextEditorConfig: RteMenuConstraints = {
   noPriceTemplates: true,
   noDateTemplate: true,
   noDayTemplate: true,
+  noCampaignDeadlineTemplate: true,
 };
 
 const productDisplayName = (product: Product) => {
