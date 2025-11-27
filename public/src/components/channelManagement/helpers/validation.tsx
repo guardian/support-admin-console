@@ -61,8 +61,8 @@ export const VALID_TEMPLATES = {
     PRICE_GUARDIANWEEKLY_ANNUAL,
     DAY_OF_THE_WEEK,
     DATE,
-    CAMPAIGN_DEADLINE_TEMPLATE,
   ],
+  SUPPORT: [CAMPAIGN_DEADLINE_TEMPLATE],
 };
 
 export const templateValidatorForPlatform = (platform: TestPlatform) => (

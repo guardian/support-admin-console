@@ -71,7 +71,7 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
   onValidationChange,
 }: CountdownEditorProps) => {
   const classes = useStyles();
-  const templateValidator = templateValidatorForPlatform('DOTCOM'); // TODO: should this be support-frontend?
+  const templateValidator = templateValidatorForPlatform('SUPPORT');
 
   const defaultValues: FormData = {
     overwriteHeadingLabel:
@@ -190,7 +190,7 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
                     handleSubmit(onSubmit)();
                   }}
                   name="overwriteHeadingLabel"
-                  label="Overwrite Heading Label Copy"
+                  label="Overwrite Heading Text"
                   disabled={isDisabled}
                   rteMenuConstraints={{
                     noArticleCountTemplate: true,
