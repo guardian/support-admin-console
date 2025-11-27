@@ -40,7 +40,6 @@ export interface EpicVariant extends Variant {
   bylineWithImage?: BylineWithImage;
   showSignInLink?: boolean;
   newsletterSignup?: NewsletterSignup;
-  isCollapsible?: boolean;
 }
 
 export interface MaxEpicViews {
