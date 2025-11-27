@@ -372,6 +372,7 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
                 <button
                   className="remirror-button"
                   onClick={() => insertTemplate(CAMPAIGN_DEADLINE_TEMPLATE)}
+                  title="This will be swapped out with either: 'Final day', '1 day left' or 'x days left' to match the countdown deadline."
                 >
                   Countdown Deadline
                 </button>
