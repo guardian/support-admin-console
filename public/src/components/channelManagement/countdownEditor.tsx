@@ -175,7 +175,7 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
             control={control}
             rules={{
               required: true,
-              validate: copy => templateValidator(copy) ?? copyLengthValidator(75)(copy),
+              validate: copy => templateValidator(copy) ?? copyLengthValidator(96)(copy),
             }}
             render={({ field }) => {
               return (
