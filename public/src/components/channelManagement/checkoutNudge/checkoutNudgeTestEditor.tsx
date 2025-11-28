@@ -15,6 +15,7 @@ import VariantSummary from '../../tests/variants/variantSummary';
 import VariantEditor from './variantEditor';
 import TestEditorTargetRegionsSelector from '../testEditorTargetRegionsSelector';
 import { RegionTargeting } from '../helpers/shared';
+import { getStage } from '../../../utils/stage';
 
 const CheckoutNudgeTestEditor: React.FC<ValidatedTestEditorProps<CheckoutNudgeTest>> = ({
   test,
@@ -85,6 +86,25 @@ const CheckoutNudgeTestEditor: React.FC<ValidatedTestEditorProps<CheckoutNudgeTe
     />
   );
 
+  const getWebPreviewUrl = (variantName: string): string => {
+    const stage = getStage();
+    const supportHost = `https://support.${stage !== 'PROD' ? 'code.dev-' : ''}theguardian.com`;
+
+    const { product, ratePlan } = test.nudgeFromProduct;
+    const path = product === 'OneTimeContribution' ? 'uk/one-time-checkout' : 'uk/checkout';
+
+    const queryParams = new URLSearchParams();
+    queryParams.append('product', product);
+    if (ratePlan) {
+      queryParams.append('ratePlan', ratePlan);
+    }
+    queryParams.append('fromNudge', 'true');
+
+    return `${supportHost}/${path}?${queryParams.toString()}&force-checkout-nudge=${
+      test.name
+    }:${variantName}`;
+  };
+
   const renderVariantSummary = (variant: CheckoutNudgeVariant): React.ReactElement => {
     return (
       <VariantSummary
@@ -94,6 +114,7 @@ const CheckoutNudgeTestEditor: React.FC<ValidatedTestEditorProps<CheckoutNudgeTe
         isInEditMode={userHasTestLocked}
         platform="DOTCOM"
         articleType="Standard"
+        webPreviewUrl={getWebPreviewUrl(variant.name)}
       />
     );
   };
