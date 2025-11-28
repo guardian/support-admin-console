@@ -19,6 +19,9 @@ GET /epic-tests/:name                               controllers.Application.inde
 GET /support-landing-page-tests                     controllers.Application.index
 GET /support-landing-page-tests/:name               controllers.Application.indexWithName(name: String)
 
+GET /checkout-nudge-tests                           controllers.Application.index
+GET /checkout-nudge-tests/:name                     controllers.Application.indexWithName(name: String)
+
 GET /liveblog-epic-tests                            controllers.Application.index
 GET /liveblog-epic-tests/:name                      controllers.Application.indexWithName(name: String)
 
@@ -258,6 +261,22 @@ POST  /frontend/support-landing-page-tests/test/lock/:testName        controller
 POST  /frontend/support-landing-page-tests/test/unlock/:testName      controllers.SupportLandingPageController.unlockTest(testName: String)
 POST  /frontend/support-landing-page-tests/test/takecontrol/:testName controllers.SupportLandingPageController.forceLockTest(testName: String)
 POST  /frontend/support-landing-page-tests/test/status/:rawStatus     controllers.SupportLandingPageController.setStatus(rawStatus: String)
+
+# ----- Checkout Nudge 'tests' ----- #
+GET   /frontend/checkout-nudge-tests                     controllers.CheckoutNudgeController.get
+# checkout nudge list endpoints
+POST  /frontend/checkout-nudge-tests/list/lock                  controllers.CheckoutNudgeController.lockList
+POST  /frontend/checkout-nudge-tests/list/unlock                controllers.CheckoutNudgeController.unlockList
+POST  /frontend/checkout-nudge-tests/list/takecontrol           controllers.CheckoutNudgeController.takeControlOfList
+POST  /frontend/checkout-nudge-tests/list/reorder               controllers.CheckoutNudgeController.reorderList
+# checkout nudge test endpoints
+GET   /frontend/checkout-nudge-tests/test/:testName             controllers.CheckoutNudgeController.getTest(testName: String)
+POST  /frontend/checkout-nudge-tests/test/update                controllers.CheckoutNudgeController.updateTest
+POST  /frontend/checkout-nudge-tests/test/create                controllers.CheckoutNudgeController.createTest
+POST  /frontend/checkout-nudge-tests/test/lock/:testName        controllers.CheckoutNudgeController.lockTest(testName: String)
+POST  /frontend/checkout-nudge-tests/test/unlock/:testName      controllers.CheckoutNudgeController.unlockTest(testName: String)
+POST  /frontend/checkout-nudge-tests/test/takecontrol/:testName controllers.CheckoutNudgeController.forceLockTest(testName: String)
+POST  /frontend/checkout-nudge-tests/test/status/:rawStatus     controllers.CheckoutNudgeController.setStatus(rawStatus: String)
 
 # Promo Campaigns endpoints
 GET /promos/campaign/:campaignCode          controllers.promos.PromoCampaignsController.get(campaignCode: String)

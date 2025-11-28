@@ -48,6 +48,7 @@ interface VariantSummaryProps {
   topButton?: React.ReactElement;
   platform: TestPlatform;
   articleType: ArticleType;
+  webPreviewUrl?: string;
 }
 
 const VariantSummary: React.FC<VariantSummaryProps> = ({
@@ -58,6 +59,7 @@ const VariantSummary: React.FC<VariantSummaryProps> = ({
   topButton,
   platform,
   articleType,
+  webPreviewUrl,
 }: VariantSummaryProps) => {
   const classes = useStyles();
 
@@ -80,6 +82,7 @@ const VariantSummary: React.FC<VariantSummaryProps> = ({
             platform={platform}
             isDisabled={isInEditMode}
             articleType={articleType}
+            webPreviewUrl={webPreviewUrl}
           />
         </div>
       </div>
