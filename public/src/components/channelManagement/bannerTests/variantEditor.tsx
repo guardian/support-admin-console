@@ -26,6 +26,7 @@ import ChoiceCardsEditor from '../choiceCards/ChoiceCardsEditor';
 import { ChoiceCardsSettings } from '../../../models/choiceCards';
 import Alert from '@mui/lab/Alert';
 import PromoCodesEditor from '../choiceCards/PromoCodesEditor';
+import IsCollapsibleEditor from './isCollapsibleEditor';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
@@ -243,6 +244,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                 disabled={!editMode}
                 rteMenuConstraints={{
                   noBold: true,
+                  noCampaignDeadlineTemplate: true,
                 }}
               />
             );
@@ -277,6 +279,9 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                   name="paragraphs"
                   label="Body copy"
                   disabled={!editMode}
+                  rteMenuConstraints={{
+                    noCampaignDeadlineTemplate: true,
+                  }}
                 />
               );
             }}
@@ -307,6 +312,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                   disabled={!editMode}
                   rteMenuConstraints={{
                     noBold: true,
+                    noCampaignDeadlineTemplate: true,
                   }}
                 />
               );
@@ -392,6 +398,13 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
     onVariantChange(current => ({
       ...current,
       promoCodes,
+    }));
+  };
+
+  const updateIsCollapsibleSettings = (isCollapsible: boolean): void => {
+    onVariantChange(current => ({
+      ...current,
+      isCollapsible,
     }));
   };
 
@@ -522,6 +535,16 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
           }
           isDisabled={!editMode}
           onValidationChange={onValidationChange}
+        />
+      </div>
+      <div className={classes.sectionContainer}>
+        <Typography className={classes.sectionHeader} variant="h4">
+          Two step banner
+        </Typography>
+        <IsCollapsibleEditor
+          isCollapsible={variant.isCollapsible}
+          isDisabled={!editMode}
+          updateIsCollapsibleSettings={updateIsCollapsibleSettings}
         />
       </div>
     </div>
