@@ -30,6 +30,7 @@ import { MarkPasteRule } from '@remirror/pm/paste-rules';
 
 import {
   ARTICLE_COUNT_TEMPLATE,
+  CAMPAIGN_DEADLINE_TEMPLATE,
   COUNTRY_NAME_TEMPLATE,
   CURRENCY_TEMPLATE,
   DATE,
@@ -69,6 +70,7 @@ interface RteMenuConstraints {
   noPriceTemplates?: boolean;
   noDateTemplate?: boolean;
   noDayTemplate?: boolean;
+  noCampaignDeadlineTemplate?: boolean;
 }
 
 /**
@@ -306,6 +308,7 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
     noArticleCountTemplate,
     noDateTemplate,
     noDayTemplate,
+    noCampaignDeadlineTemplate,
   } = rteMenuConstraints;
 
   const clickBold = () => {
@@ -363,6 +366,15 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
                   onClick={() => insertTemplate(ARTICLE_COUNT_TEMPLATE)}
                 >
                   Articles
+                </button>
+              )}
+              {!noCampaignDeadlineTemplate && (
+                <button
+                  className="remirror-button"
+                  onClick={() => insertTemplate(CAMPAIGN_DEADLINE_TEMPLATE)}
+                  title="This will be swapped out with either: 'Final day', '1 day left' or 'x days left' to match the countdown deadline."
+                >
+                  Countdown Deadline
                 </button>
               )}
               {!noCurrencyTemplate && (

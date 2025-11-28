@@ -274,6 +274,7 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                   noPriceTemplates: true,
                   noDateTemplate,
                   noDayTemplate,
+                  noCampaignDeadlineTemplate: true,
                 }}
               />
             );
@@ -315,6 +316,7 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                 noPriceTemplates: true,
                 noDateTemplate,
                 noDayTemplate,
+                noCampaignDeadlineTemplate: true,
               }}
             />
           );
@@ -355,6 +357,7 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                   noPriceTemplates: true,
                   noDateTemplate,
                   noDayTemplate,
+                  noCampaignDeadlineTemplate: true,
                 }}
               />
             );

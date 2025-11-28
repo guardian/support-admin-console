@@ -252,6 +252,7 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
                         noPriceTemplates: true,
                         noDateTemplate: true,
                         noDayTemplate: true,
+                        noCampaignDeadlineTemplate: true,
                       }}
                     />
                   );
