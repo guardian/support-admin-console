@@ -35,7 +35,8 @@ case class LandingPageCta(
 case class Products(
     Contribution: LandingPageProductDescription,
     SupporterPlus: LandingPageProductDescription,
-    TierThree: LandingPageProductDescription
+    TierThree: LandingPageProductDescription,
+    DigitalSubscription: Option[LandingPageProductDescription] = None
 )
 
 case class SupportLandingPageVariant(

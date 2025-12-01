@@ -57,6 +57,12 @@ const defaultProducts = {
     ],
     cta: { copy: 'Support' },
   },
+  DigitalSubscription: {
+    title: 'Digital plus',
+    pillLabel: { copy: 'New' },
+    benefits: [],
+    cta: { copy: 'Support' },
+  },
 };
 
 const DEV_AND_CODE_DEFAULT_VARIANT: SupportLandingPageVariant = {

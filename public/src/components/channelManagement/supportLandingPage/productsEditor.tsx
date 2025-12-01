@@ -17,7 +17,12 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useFieldArray, useForm, Controller } from 'react-hook-form';
 import { copyLengthValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 
-const productKeys: (keyof Products)[] = ['Contribution', 'SupporterPlus', 'TierThree'];
+const productKeys: (keyof Products)[] = [
+  'Contribution',
+  'SupporterPlus',
+  'TierThree',
+  'DigitalSubscription',
+];
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   heading: {
@@ -217,7 +222,7 @@ export const ProductsEditor: React.FC<ProductsEditorProps> = ({
 }) => {
   const classes = useStyles();
 
-  // Validation for all 3 products
+  // Validation for all 4 products
   const {
     control,
     setError,
@@ -233,7 +238,7 @@ export const ProductsEditor: React.FC<ProductsEditorProps> = ({
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
-  }, [errors.Contribution, errors.SupporterPlus, errors.TierThree]);
+  }, [errors.Contribution, errors.SupporterPlus, errors.TierThree, errors.DigitalSubscription]);
 
   useEffect(() => {
     reset(products);

@@ -35,6 +35,7 @@ export interface Products {
   Contribution: LandingPageProductDescription;
   SupporterPlus: LandingPageProductDescription;
   TierThree: LandingPageProductDescription;
+  DigitalSubscription: LandingPageProductDescription;
 }
 
 export interface SupportLandingPageVariant extends Variant {
