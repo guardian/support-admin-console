@@ -8,7 +8,7 @@ import {
   RatePlan,
 } from '../../../models/checkoutNudge';
 import { useStyles } from '../helpers/testEditorStyles';
-import { PRODUCTS, RATE_PLANS } from './utils/defaults';
+import { PRODUCTS, getAvailableRatePlans, ONE_TIME_PLANS, RECURRING_PLANS } from './utils/defaults';
 
 interface VariantEditorProps {
   variant: CheckoutNudgeVariant;
@@ -89,6 +89,11 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
     }));
   };
 
+  const getAvailableRatePlansForProduct = (): typeof ONE_TIME_PLANS | typeof RECURRING_PLANS => {
+    const { product } = variant.nudge?.nudgeToProduct || { product: 'Contribution' };
+    return getAvailableRatePlans(product);
+  };
+
   React.useEffect(() => {
     // Basic validation: if nudge exists, heading should be present
     const isValid =
@@ -150,7 +155,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
               fullWidth
               margin="normal"
             >
-              {RATE_PLANS.map(option => (
+              {getAvailableRatePlansForProduct().map((option: { value: string; label: string }) => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
                 </MenuItem>

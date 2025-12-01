@@ -10,7 +10,13 @@ import {
 import { Typography, TextField, MenuItem } from '@mui/material';
 import VariantsEditor from '../../tests/variants/variantsEditor';
 import { useStyles } from '../helpers/testEditorStyles';
-import { getDefaultVariant, PRODUCTS, RATE_PLANS } from './utils/defaults';
+import {
+  getDefaultVariant,
+  getAvailableRatePlans,
+  PRODUCTS,
+  ONE_TIME_PLANS,
+  RECURRING_PLANS,
+} from './utils/defaults';
 import VariantSummary from '../../tests/variants/variantSummary';
 import VariantEditor from './variantEditor';
 import TestEditorTargetRegionsSelector from '../testEditorTargetRegionsSelector';
@@ -130,94 +136,97 @@ const CheckoutNudgeTestEditor: React.FC<ValidatedTestEditorProps<CheckoutNudgeTe
     onVariantsChange(current => [...current, newVariant]);
   };
 
-  if (test) {
-    return (
-      <div className={classes.container}>
-        <div className={classes.sectionContainer}>
-          <Typography variant={'h3'} className={classes.sectionHeader}>
-            Nudge From Product
-          </Typography>
-          <Typography variant="body2" color="textSecondary" style={{ marginBottom: 16 }}>
-            Configure which product checkout this nudge appears on
-          </Typography>
-          <TextField
-            select
-            label="Product"
-            value={test.nudgeFromProduct.product}
-            onChange={(e): void =>
-              updateNudgeFromProduct(current => ({
-                ...current,
-                product: e.target.value as ProductType,
-              }))
-            }
-            disabled={!userHasTestLocked}
-            fullWidth
-            margin="normal"
-          >
-            {PRODUCTS.map(option => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </TextField>
-          <TextField
-            select
-            label="Rate Plan (Optional)"
-            value={test.nudgeFromProduct.ratePlan || ''}
-            onChange={(e): void =>
-              updateNudgeFromProduct(current => ({
-                ...current,
-                ratePlan: e.target.value ? (e.target.value as RatePlan) : undefined,
-              }))
-            }
-            disabled={!userHasTestLocked}
-            fullWidth
-            margin="normal"
-          >
-            <MenuItem value="">
-              <em>Any</em>
+  const getAvailableRatePlansForProduct = (): typeof ONE_TIME_PLANS | typeof RECURRING_PLANS => {
+    return getAvailableRatePlans(test.nudgeFromProduct.product);
+  };
+
+  if (!test) {
+    return null;
+  }
+
+  return (
+    <div className={classes.container}>
+      <div className={classes.sectionContainer}>
+        <Typography variant={'h3'} className={classes.sectionHeader}>
+          Nudge From Product
+        </Typography>
+        <Typography variant="body2" color="textSecondary" style={{ marginBottom: 16 }}>
+          Configure which product checkout this nudge appears on
+        </Typography>
+        <TextField
+          select
+          label="Product"
+          value={test.nudgeFromProduct.product}
+          onChange={(e): void =>
+            updateNudgeFromProduct(current => ({
+              ...current,
+              product: e.target.value as ProductType,
+            }))
+          }
+          disabled={!userHasTestLocked}
+          fullWidth
+          margin="normal"
+        >
+          {PRODUCTS.map(option => (
+            <MenuItem key={option.value} value={option.value}>
+              {option.label}
             </MenuItem>
-            {RATE_PLANS.map(option => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </TextField>
-        </div>
-
-        <div className={classes.sectionContainer}>
-          <Typography variant={'h3'} className={classes.sectionHeader}>
-            Variants
-          </Typography>
-          <div>
-            <VariantsEditor
-              variants={test.variants}
-              createVariant={createVariant}
-              testName={test.name}
-              editMode={userHasTestLocked}
-              renderVariantEditor={renderVariantEditor}
-              renderVariantSummary={renderVariantSummary}
-              onVariantDelete={onVariantDelete}
-              onVariantClone={onVariantClone}
-            />
-          </div>
-        </div>
-
-        <div className={classes.sectionContainer}>
-          <Typography variant={'h3'} className={classes.sectionHeader}>
-            Target audience
-          </Typography>
-
-          <TestEditorTargetRegionsSelector
-            regionTargeting={test.regionTargeting}
-            onRegionTargetingUpdate={onTargetingChange}
-            isDisabled={!userHasTestLocked}
+          ))}
+        </TextField>
+        <TextField
+          select
+          label="Rate Plan (Optional)"
+          value={test.nudgeFromProduct.ratePlan || ''}
+          onChange={(e): void =>
+            updateNudgeFromProduct(current => ({
+              ...current,
+              ratePlan: e.target.value ? (e.target.value as RatePlan) : undefined,
+            }))
+          }
+          disabled={!userHasTestLocked}
+          fullWidth
+          margin="normal"
+        >
+          <MenuItem value="">
+            <em>Any</em>
+          </MenuItem>
+          {getAvailableRatePlansForProduct().map(option => (
+            <MenuItem key={option.value} value={option.value}>
+              {option.label}
+            </MenuItem>
+          ))}
+        </TextField>
+      </div>
+      <div className={classes.sectionContainer}>
+        <Typography variant={'h3'} className={classes.sectionHeader}>
+          Variants
+        </Typography>
+        <div>
+          <VariantsEditor
+            variants={test.variants}
+            createVariant={createVariant}
+            testName={test.name}
+            editMode={userHasTestLocked}
+            renderVariantEditor={renderVariantEditor}
+            renderVariantSummary={renderVariantSummary}
+            onVariantDelete={onVariantDelete}
+            onVariantClone={onVariantClone}
           />
         </div>
       </div>
-    );
-  }
-  return null;
+      <div className={classes.sectionContainer}>
+        <Typography variant={'h3'} className={classes.sectionHeader}>
+          Target audience
+        </Typography>
+
+        <TestEditorTargetRegionsSelector
+          regionTargeting={test.regionTargeting}
+          onRegionTargetingUpdate={onTargetingChange}
+          isDisabled={!userHasTestLocked}
+        />
+      </div>
+    </div>
+  );
 };
 
 export default CheckoutNudgeTestEditor;
