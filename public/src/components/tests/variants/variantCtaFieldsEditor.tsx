@@ -2,7 +2,10 @@ import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { TextField } from '@mui/material';
 import { Cta } from '../../channelManagement/helpers/shared';
-import { EMPTY_ERROR_HELPER_TEXT } from '../../channelManagement/helpers/validation';
+import {
+  copyLengthValidator,
+  EMPTY_ERROR_HELPER_TEXT,
+} from '../../channelManagement/helpers/validation';
 
 interface FormData {
   text: string;
@@ -14,6 +17,7 @@ interface VariantCtaFieldsEditorProps {
   updateCta: (updatedCta: Cta) => void;
   onValidationChange: (isValid: boolean) => void;
   isDisabled: boolean;
+  copyLength?: number;
 }
 
 const VariantCtaFieldsEditor: React.FC<VariantCtaFieldsEditorProps> = ({
@@ -21,6 +25,7 @@ const VariantCtaFieldsEditor: React.FC<VariantCtaFieldsEditorProps> = ({
   updateCta,
   onValidationChange,
   isDisabled,
+  copyLength = 100,
 }: VariantCtaFieldsEditorProps) => {
   const defaultValues: FormData = {
     text: cta.text,
@@ -50,6 +55,7 @@ const VariantCtaFieldsEditor: React.FC<VariantCtaFieldsEditorProps> = ({
         helperText={errors.text?.message}
         {...register('text', {
           required: EMPTY_ERROR_HELPER_TEXT,
+          validate: copyLengthValidator(copyLength),
         })}
         onBlur={handleSubmit(onSubmit)}
         label="Button copy"
