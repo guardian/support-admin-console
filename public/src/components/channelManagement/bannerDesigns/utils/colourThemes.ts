@@ -461,7 +461,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
               buttonSelectColour: '#FFD8D1',
               buttonSelectTextColour: '#000000',
               buttonSelectBorderColour: '#8B0000',
-              buttonSelectMarkerColour: '#8B0000',
+              buttonSelectMarkerColour: '#FF5943',
               pillTextColour: '#000000',
               pillBackgroundColour: '#FF5943',
             },
