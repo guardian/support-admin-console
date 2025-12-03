@@ -235,6 +235,16 @@ class AppComponents(context: Context, stage: String)
       dynamoTestsAuditService,
       permissionsService
     ),
+    new CheckoutNudgeController(
+      authAction,
+      controllerComponents,
+      stage,
+      runtime,
+      dynamoTestsService,
+      dynamoArchivedChannelTests,
+      dynamoTestsAuditService,
+      permissionsService
+    ),
     new PromoCampaignsController(
       authAction,
       controllerComponents,
