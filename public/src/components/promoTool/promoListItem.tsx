@@ -128,7 +128,7 @@ export const PromoListItem = ({
 
   const getRatePlansText = () => {
     if (!promo.appliesTo.productRatePlanIds || promo.appliesTo.productRatePlanIds.length === 0) {
-      return 'No rating plans';
+      return 'No rate plans';
     }
 
     const ratePlanNames = promo.appliesTo.productRatePlanIds.map(ratePlanId => {
