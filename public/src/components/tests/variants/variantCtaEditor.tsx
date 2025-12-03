@@ -27,6 +27,7 @@ interface VariantCtaEditorProps {
   onValidationChange: (isValid: boolean) => void;
   defaultCta: Cta;
   isDisabled: boolean;
+  copyLength?: number;
 }
 
 const VariantCtaEditor: React.FC<VariantCtaEditorProps> = ({
@@ -36,6 +37,7 @@ const VariantCtaEditor: React.FC<VariantCtaEditorProps> = ({
   onValidationChange,
   defaultCta,
   isDisabled,
+  copyLength,
 }: VariantCtaEditorProps) => {
   const classes = useStyles();
   const isChecked = cta !== undefined;
@@ -68,6 +70,7 @@ const VariantCtaEditor: React.FC<VariantCtaEditorProps> = ({
             updateCta={updateCta}
             onValidationChange={onValidationChange}
             isDisabled={isDisabled}
+            copyLength={copyLength}
           />
         </div>
       )}

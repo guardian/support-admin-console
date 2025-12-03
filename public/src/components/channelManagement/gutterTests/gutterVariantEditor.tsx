@@ -65,6 +65,7 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
 
 const BODY_COPY_RECOMMENDED_LENGTH = 300;
 const BODY_DEFAULT_HELPER_TEXT = 'Main gutter message paragraph';
+const CTA_COPY_MAX_LENGTH = 15;
 
 interface FormData {
   image: Image;
@@ -241,6 +242,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
           updatePrimaryCta={updatePrimaryCta}
           isDisabled={!editMode}
           onValidationChange={onValidationChange}
+          copyLength={CTA_COPY_MAX_LENGTH}
         />
       </div>
     </div>
