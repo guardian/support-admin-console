@@ -2,7 +2,8 @@ import React from 'react';
 import { List, Button, Box } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material/styles';
-import { Promo } from './utils/promoModels';
+import { Promo, CountryGroup } from './utils/promoModels';
+import { RatePlanWithProduct } from './utils/productCatalog';
 import { PromoListItem } from './promoListItem';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
@@ -29,6 +30,8 @@ interface PromosListProps {
   onCreatePromo: () => void;
   onClonePromo: (promo: Promo) => void;
   onViewPromo: (promoCode: string) => void;
+  countryGroups?: CountryGroup[];
+  ratePlans?: RatePlanWithProduct[];
 }
 
 const PromosList = ({
@@ -36,6 +39,8 @@ const PromosList = ({
   onCreatePromo,
   onClonePromo,
   onViewPromo,
+  countryGroups,
+  ratePlans,
 }: PromosListProps): React.ReactElement => {
   const classes = useStyles();
 
@@ -60,6 +65,8 @@ const PromosList = ({
                 promo={promo}
                 onClonePromo={onClonePromo}
                 onViewPromo={onViewPromo}
+                countryGroups={countryGroups}
+                ratePlans={ratePlans}
               />
             );
           })}
