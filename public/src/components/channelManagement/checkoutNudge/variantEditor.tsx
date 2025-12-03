@@ -143,7 +143,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
             </TextField>
             <TextField
               select
-              label="Rate Plan"
+              label="Rate Plan (Optional)"
               value={variant.nudge.nudgeToProduct.ratePlan || ''}
               onChange={(e): void =>
                 updateNudgeToProduct(current => ({
@@ -155,6 +155,9 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
               fullWidth
               margin="normal"
             >
+              <MenuItem value="">
+                <em>Any</em>
+              </MenuItem>
               {getAvailableRatePlansForProduct().map((option: { value: string; label: string }) => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
