@@ -2,7 +2,14 @@ import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import PromoCampaignsSidebar from './promoCampaignsSidebar';
-import { PromoCampaign, PromoProduct, Promo, promoProductNames } from './utils/promoModels';
+import {
+  PromoCampaign,
+  PromoProduct,
+  Promo,
+  promoProductNames,
+  CountryGroup,
+  mapPromoProductToCatalogProducts,
+} from './utils/promoModels';
 import { useParams, useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import {
@@ -10,7 +17,10 @@ import {
   fetchPromoCampaigns,
   fetchAllPromos,
   createPromo,
+  fetchCountryGroups,
+  fetchProductDetails,
 } from '../../utils/requests';
+import { RatePlanWithProduct, getAllRatePlansWithProduct } from './utils/productCatalog';
 import PromosList from './promosList';
 import CreatePromoDialog from './createPromoDialog';
 
@@ -59,13 +69,15 @@ const PromoTool: React.FC = () => {
 
   const [promoCampaigns, setPromoCampaigns] = useState<PromoCampaign[]>([]);
   const [promos, setPromos] = useState<Promo[]>([]);
+  const [countryGroups, setCountryGroups] = useState<CountryGroup[]>([]);
+  const [ratePlans, setRatePlans] = useState<RatePlanWithProduct[]>([]);
   const { campaignCode: promoCampaignCode } = useParams<{ campaignCode?: string }>();
   const [selectedPromoCampaignCode, setSelectedPromoCampaignCode] = useState<string | undefined>();
   const [selectedPromoProduct, setSelectedPromoProduct] = useState<PromoProduct>(() => {
-    if (typeof window === 'undefined') {
+    if (globalThis.window === undefined) {
       return 'SupporterPlus';
     }
-    const stored = window.localStorage.getItem('promoToolSelectedProduct');
+    const stored = globalThis.window.localStorage.getItem('promoToolSelectedProduct');
     const validProducts = Object.keys(promoProductNames) as PromoProduct[];
     return stored && (validProducts as string[]).includes(stored)
       ? (stored as PromoProduct)
@@ -180,12 +192,11 @@ const PromoTool: React.FC = () => {
   };
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      window.localStorage.setItem('promoToolSelectedProduct', selectedPromoProduct);
+    if (globalThis.window !== undefined) {
+      globalThis.window.localStorage.setItem('promoToolSelectedProduct', selectedPromoProduct);
     }
   }, [selectedPromoProduct]);
 
-  // set selected promoCampaign
   useEffect(() => {
     if (promoCampaignCode != null) {
       setSelectedPromoCampaignCode(promoCampaignCode);
@@ -197,15 +208,47 @@ const PromoTool: React.FC = () => {
   }, [selectedPromoProduct]);
 
   useEffect(() => {
+    fetchCountryGroups()
+      .then(setCountryGroups)
+      .catch(error => {
+        console.error('Error fetching country groups:', error);
+      });
+
+    if (selectedPromoProduct) {
+      const catalogProducts = mapPromoProductToCatalogProducts(selectedPromoProduct);
+      const fetchPromises = catalogProducts.map(catalogProduct => {
+        return fetchProductDetails(catalogProduct)
+          .then(product => {
+            return getAllRatePlansWithProduct(product, catalogProduct);
+          })
+          .catch(error => {
+            console.error(`Error fetching rate plans for ${catalogProduct}:`, error);
+            return [];
+          });
+      });
+
+      Promise.all(fetchPromises)
+        .then(allRatePlansArrays => {
+          const combinedRatePlans = allRatePlansArrays.flat();
+          setRatePlans(combinedRatePlans);
+        })
+        .catch(error => {
+          console.error('Error combining rate plans:', error);
+          setRatePlans([]);
+        });
+    }
+  }, [selectedPromoProduct]);
+
+  useEffect(() => {
     if (selectedPromoCampaignCode) {
       fetchPromosList(selectedPromoCampaignCode);
-    } else {
-      setPromos([]);
+      return;
     }
+    setPromos([]);
   }, [selectedPromoCampaignCode]);
 
   const selectedPromoCampaign = promoCampaigns.find(
-    a => a.campaignCode === selectedPromoCampaignCode,
+    promoCampaign => promoCampaign.campaignCode === selectedPromoCampaignCode,
   );
 
   return (
@@ -229,6 +272,8 @@ const PromoTool: React.FC = () => {
               onCreatePromo={() => setCreateDialogOpen(true)}
               onClonePromo={handleOpenCloneDialog}
               onViewPromo={handleViewPromo}
+              countryGroups={countryGroups}
+              ratePlans={ratePlans}
             />
           </div>
         ) : (
