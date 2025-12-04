@@ -227,7 +227,7 @@ export const ProductsEditor: React.FC<ProductsEditorProps> = ({
 }) => {
   const classes = useStyles();
 
-  // Validation for all 4 products
+  // Validation for all 3 products
   const {
     control,
     setError,
