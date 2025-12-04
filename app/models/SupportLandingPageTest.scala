@@ -38,12 +38,18 @@ case class Products(
     TierThree: LandingPageProductDescription
 )
 
+case class DefaultProductSelection(
+    productType: String,
+    billingPeriod: String
+)
+
 case class SupportLandingPageVariant(
     name: String,
     copy: SupportLandingPageCopy,
     products: Products,
     tickerSettings: Option[TickerSettings] = None,
-    countdownSettings: Option[CountdownSettings] = None
+    countdownSettings: Option[CountdownSettings] = None,
+    defaultProductSelection: Option[DefaultProductSelection] = None
 )
 
 case class SupportLandingPageTest(
