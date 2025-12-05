@@ -7,6 +7,7 @@ import {
 } from '../../../models/supportLandingPage';
 import { CopyEditor } from './copyEditor';
 import { ProductsEditor } from './productsEditor';
+import DefaultProductSelector from './defaultProductSelector';
 import { CountdownSettings, TickerSettings } from '../helpers/shared';
 import TickerEditor from '../tickerEditor';
 import CountdownEditor from '../countdownEditor';
@@ -54,6 +55,16 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
           editMode={editMode}
         />
       </div>
+      <DefaultProductSelector
+        defaultProductSelection={variant.defaultProductSelection}
+        onDefaultProductSelectionChange={updatedDefaultProductSelection =>
+          onVariantChange(current => ({
+            ...current,
+            defaultProductSelection: updatedDefaultProductSelection,
+          }))
+        }
+        editMode={editMode}
+      />
       <ProductsEditor
         products={variant.products}
         onProductsChange={updatedProducts =>
