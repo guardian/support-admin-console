@@ -83,8 +83,8 @@ const DefaultProductSelector: React.FC<DefaultProductSelectorProps> = ({
         return 'Contribution';
       case 'SupporterPlus':
         return 'Supporter Plus';
-      case 'TierThree':
-        return 'Digital + Print';
+      case 'DigitalSubscription':
+        return 'Digital Plus';
       default:
         return productType;
     }
@@ -110,7 +110,11 @@ const DefaultProductSelector: React.FC<DefaultProductSelectorProps> = ({
               <FormControlLabel value="" control={<Radio />} label="No default (user chooses)" />
               <FormControlLabel value="Contribution" control={<Radio />} label="Contribution" />
               <FormControlLabel value="SupporterPlus" control={<Radio />} label="Supporter Plus" />
-              <FormControlLabel value="TierThree" control={<Radio />} label="Digital + Print" />
+              <FormControlLabel
+                value="DigitalSubscription"
+                control={<Radio />}
+                label="Digital Plus"
+              />
             </RadioGroup>
           </FormControl>
         </Grid>

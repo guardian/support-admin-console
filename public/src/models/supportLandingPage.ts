@@ -39,7 +39,7 @@ export interface Products {
 }
 
 export interface DefaultProductSelection {
-  productType: 'Contribution' | 'SupporterPlus' | 'TierThree';
+  productType: 'Contribution' | 'SupporterPlus' | 'DigitalSubscription';
   billingPeriod: 'Monthly' | 'Annual' | 'OneTime';
 }
 
