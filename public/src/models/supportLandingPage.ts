@@ -22,6 +22,7 @@ export interface ProductBenefit {
 
 export interface LandingPageProductDescription {
   title: string;
+  titlePill?: string;
   label?: {
     copy: string;
   };
@@ -34,7 +35,7 @@ export interface LandingPageProductDescription {
 export interface Products {
   Contribution: LandingPageProductDescription;
   SupporterPlus: LandingPageProductDescription;
-  TierThree: LandingPageProductDescription;
+  DigitalSubscription: LandingPageProductDescription;
 }
 
 export interface DefaultProductSelection {

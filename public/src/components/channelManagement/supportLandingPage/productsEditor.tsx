@@ -17,7 +17,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useFieldArray, useForm, Controller } from 'react-hook-form';
 import { copyLengthValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 
-const productKeys: (keyof Products)[] = ['Contribution', 'SupporterPlus', 'TierThree'];
+const productKeys: (keyof Products)[] = ['Contribution', 'SupporterPlus', 'DigitalSubscription'];
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   heading: {
@@ -38,7 +38,7 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 }));
 
 const buildBenefitsHeading = (product: keyof Products) => {
-  if (product === 'TierThree') {
+  if (product === 'DigitalSubscription') {
     return 'Benefits (in addition to Supporter Plus benefits):';
   } else {
     return 'Benefits:';
@@ -102,6 +102,16 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
           label="Title"
           {...register('title', { required: EMPTY_ERROR_HELPER_TEXT })}
           required={true}
+          onBlur={handleSubmit(onProductChange)}
+          disabled={!editMode}
+          fullWidth
+        />
+        <TextField
+          error={!!errors.titlePill}
+          helperText={errors?.titlePill?.message}
+          label="Title Pill"
+          {...register('titlePill')}
+          required={false}
           onBlur={handleSubmit(onProductChange)}
           disabled={!editMode}
           fullWidth
@@ -233,7 +243,7 @@ export const ProductsEditor: React.FC<ProductsEditorProps> = ({
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
-  }, [errors.Contribution, errors.SupporterPlus, errors.TierThree]);
+  }, [errors.Contribution, errors.SupporterPlus, errors.DigitalSubscription]);
 
   useEffect(() => {
     reset(products);
