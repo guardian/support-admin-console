@@ -38,12 +38,18 @@ export interface Products {
   DigitalSubscription: LandingPageProductDescription;
 }
 
+export interface DefaultProductSelection {
+  productType: 'Contribution' | 'SupporterPlus' | 'DigitalSubscription';
+  billingPeriod: 'Monthly' | 'Annual' | 'OneTime';
+}
+
 export interface SupportLandingPageVariant extends Variant {
   name: string;
   copy: SupportLandingPageCopy;
   products: Products;
   tickerSettings?: TickerSettings;
   countdownSettings?: CountdownSettings;
+  defaultProductSelection?: DefaultProductSelection;
 }
 
 export interface SupportLandingPageTest extends Test {
