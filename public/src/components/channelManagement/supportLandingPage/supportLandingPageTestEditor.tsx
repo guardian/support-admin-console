@@ -89,10 +89,7 @@ const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLan
           <VariantSummaryURLGeneratorButton
             name={variant.name}
             testName={test.name}
-            testType="LANDING_PAGE"
-            platform="DOTCOM"
             isDisabled={userHasTestLocked}
-            articleType="Standard"
           />
         }
       />
