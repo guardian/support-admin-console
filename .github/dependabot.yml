@@ -1,0 +1,42 @@
+# To get started with Dependabot version updates, you'll need to specify which
+# package ecosystems to update and where the package manifests are located.
+# Please see the documentation for all configuration options:
+# https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+
+version: 2
+updates:
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    cooldown:
+      default-days: 7
+
+  - package-ecosystem: 'npm'
+    directory: '/scripts/updatePermissions'
+    schedule:
+      interval: 'weekly'
+    cooldown:
+      default-days: 7
+
+  - package-ecosystem: 'npm'
+    directory: '/cdk'
+    # The version of aws-cdk-lib libraries must match those from @guardian/cdk.
+    # We'd never be able to update them here independently, so just ignore them.
+    ignore:
+      - dependency-name: 'aws-cdk'
+      - dependency-name: 'aws-cdk-lib'
+      - dependency-name: '@aws-cdk/*'
+    schedule:
+      interval: 'weekly'
+    cooldown:
+      default-days: 7
+
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    cooldown:
+      default-days: 7
+# Note: The backend uses Scala (SBT). Dependabot does not currently support SBT natively.
+# For Scala projects, Scala Steward is typically used for dependency updates.
