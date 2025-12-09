@@ -180,7 +180,7 @@ const RatePlanSelector: React.FC<RatePlanSelectorProps> = ({
                   variant="outlined"
                   startIcon={<VisibilityIcon />}
                   className={classes.previewButton}
-                  href={getPromoPreviewUrl(promoCode, ratePlan.productName, ratePlan.ratePlanName)}
+                  href={getPromoPreviewUrl(promoCode)}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={e => e.stopPropagation()}
