@@ -23,6 +23,7 @@ case class Label(
 
 case class LandingPageProductDescription(
     title: String,
+    titlePill: Option[String] = None,
     label: Option[Label] = None,
     benefits: List[ProductBenefit],
     cta: LandingPageCta
@@ -35,7 +36,12 @@ case class LandingPageCta(
 case class Products(
     Contribution: LandingPageProductDescription,
     SupporterPlus: LandingPageProductDescription,
-    TierThree: LandingPageProductDescription
+    DigitalSubscription: Option[LandingPageProductDescription] = None
+)
+
+case class DefaultProductSelection(
+    productType: String,
+    billingPeriod: String
 )
 
 case class SupportLandingPageVariant(
@@ -43,7 +49,8 @@ case class SupportLandingPageVariant(
     copy: SupportLandingPageCopy,
     products: Products,
     tickerSettings: Option[TickerSettings] = None,
-    countdownSettings: Option[CountdownSettings] = None
+    countdownSettings: Option[CountdownSettings] = None,
+    defaultProductSelection: Option[DefaultProductSelection] = None
 )
 
 case class SupportLandingPageTest(

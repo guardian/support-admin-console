@@ -9,6 +9,7 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
       "GuGetS3ObjectsPolicy",
       "GuPutS3ObjectsPolicy",
       "GuAllowPolicy",
+      "GuAllowPolicy",
       "GuVpcParameter",
       "GuSubnetListParameter",
       "GuSubnetListParameter",
@@ -2250,6 +2251,27 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
           "Version": "2012-10-17",
         },
         "PolicyName": "SettingsBucketGet3389C916",
+        "Roles": [
+          {
+            "Ref": "InstanceRoleAdminconsole347DA627",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "SettingsBucketList82835507": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:ListBucket",
+              "Effect": "Allow",
+              "Resource": "arn:aws:s3:::support-admin-console",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "SettingsBucketList82835507",
         "Roles": [
           {
             "Ref": "InstanceRoleAdminconsole347DA627",

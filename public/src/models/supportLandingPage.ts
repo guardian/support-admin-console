@@ -22,6 +22,7 @@ export interface ProductBenefit {
 
 export interface LandingPageProductDescription {
   title: string;
+  titlePill?: string;
   label?: {
     copy: string;
   };
@@ -34,7 +35,12 @@ export interface LandingPageProductDescription {
 export interface Products {
   Contribution: LandingPageProductDescription;
   SupporterPlus: LandingPageProductDescription;
-  TierThree: LandingPageProductDescription;
+  DigitalSubscription: LandingPageProductDescription;
+}
+
+export interface DefaultProductSelection {
+  productType: 'Contribution' | 'SupporterPlus' | 'DigitalSubscription';
+  billingPeriod: 'Monthly' | 'Annual' | 'OneTime';
 }
 
 export interface SupportLandingPageVariant extends Variant {
@@ -43,6 +49,7 @@ export interface SupportLandingPageVariant extends Variant {
   products: Products;
   tickerSettings?: TickerSettings;
   countdownSettings?: CountdownSettings;
+  defaultProductSelection?: DefaultProductSelection;
 }
 
 export interface SupportLandingPageTest extends Test {

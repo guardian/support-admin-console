@@ -91,7 +91,7 @@ function Sidebar<T extends Test>({
     return testsToFilter.filter(
       t =>
         t.regionTargeting?.targetedCountryGroups?.indexOf(regionFilter) >= 0 ||
-        t.locations.indexOf(regionFilter) >= 0,
+        t.locations?.indexOf(regionFilter) >= 0,
     );
   };
 
