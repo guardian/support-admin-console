@@ -57,6 +57,7 @@ interface VariantSummaryPreviewButtonProps {
   platform: TestPlatform;
   isDisabled: boolean;
   articleType: ArticleType;
+  webPreviewUrl?: string;
 }
 
 const VariantSummaryWebPreviewButton: React.FC<VariantSummaryPreviewButtonProps> = ({
@@ -66,6 +67,7 @@ const VariantSummaryWebPreviewButton: React.FC<VariantSummaryPreviewButtonProps>
   platform,
   isDisabled,
   articleType,
+  webPreviewUrl,
 }: VariantSummaryPreviewButtonProps) => {
   const isIncompatiblePlatform = ['APPLE_NEWS'].includes(platform);
 
@@ -83,13 +85,15 @@ const VariantSummaryWebPreviewButton: React.FC<VariantSummaryPreviewButtonProps>
     return 'WEB PREVIEW';
   };
 
+  const url = webPreviewUrl || getPreviewUrl(testName, name, testType, articleType);
+
   return (
     <Button
       startIcon={<VisibilityIcon />}
       size="small"
       onClick={(event): void => event.stopPropagation()}
       onFocus={(event): void => event.stopPropagation()}
-      href={getPreviewUrl(testName, name, testType, articleType)}
+      href={url}
       target="_blank"
       rel="noopener noreferrer"
       disabled={checkForDisabledButton()}
