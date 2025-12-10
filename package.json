@@ -33,7 +33,7 @@
     "@mui/icons-material": "^5.15.10",
     "@mui/lab": "^5.0.0-alpha.165",
     "@mui/material": "^5.15.10",
-    "@mui/styles": "^5.15.10",
+    "@mui/styles": "^6.4.8",
     "@mui/x-data-grid": "^5.17.12",
     "@remirror/pm": "^3.0.0",
     "@remirror/react": "^3.0.1",
