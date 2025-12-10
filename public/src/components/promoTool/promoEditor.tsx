@@ -383,7 +383,6 @@ const PromoEditor = ({
           discountPercentage={editedPromo?.discount?.amount}
           discountDurationMonths={editedPromo?.discount?.durationMonths}
           isDisabled={!isEditing}
-          promoCode={promo.promoCode}
         />
       )}
 

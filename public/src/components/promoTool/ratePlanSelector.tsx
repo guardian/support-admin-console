@@ -13,9 +13,6 @@ import {
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material/styles';
 import { RatePlanWithProduct, Pricing, applyDiscountToPricing } from './utils/productCatalog';
-import { getPromoPreviewUrl } from './utils/previewUrl';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import { Button } from '@mui/material';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   section: {
@@ -68,9 +65,6 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     fontWeight: 500,
     marginBottom: spacing(1),
   },
-  previewButton: {
-    marginTop: spacing(1),
-  },
 }));
 
 interface RatePlanSelectorProps {
@@ -80,7 +74,6 @@ interface RatePlanSelectorProps {
   discountPercentage?: number;
   discountDurationMonths?: number;
   isDisabled: boolean;
-  promoCode: string;
 }
 
 const RatePlanSelector: React.FC<RatePlanSelectorProps> = ({
@@ -90,7 +83,6 @@ const RatePlanSelector: React.FC<RatePlanSelectorProps> = ({
   discountPercentage,
   discountDurationMonths,
   isDisabled,
-  promoCode,
 }) => {
   const classes = useStyles();
 
@@ -174,20 +166,6 @@ const RatePlanSelector: React.FC<RatePlanSelectorProps> = ({
                 {ratePlan.productDisplayName} ({ratePlan.productName}) - {ratePlan.ratePlanName}
               </Typography>
               {renderPricing(ratePlan.pricing, discountedPricing)}
-              {isSelected && (
-                <Button
-                  size="small"
-                  variant="outlined"
-                  startIcon={<VisibilityIcon />}
-                  className={classes.previewButton}
-                  href={getPromoPreviewUrl(promoCode)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={e => e.stopPropagation()}
-                >
-                  Preview
-                </Button>
-              )}
             </Box>
           }
           disabled={isDisabled}
