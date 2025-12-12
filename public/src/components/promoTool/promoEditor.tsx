@@ -302,12 +302,12 @@ const PromoEditor = ({
       </div>
 
       <div className={classes.section}>
-        <Typography className={classes.sectionTitle}>Duration</Typography>
+        <Typography className={classes.sectionTitle}>Duration (UTC)</Typography>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
-              label="Start Date"
+              label="Start Date (UTC)"
               type="datetime-local"
               value={editedPromo ? formatDateForInput(editedPromo.startTimestamp) : ''}
               onChange={e => handleDateChange('startTimestamp', e.target.value)}
@@ -320,7 +320,7 @@ const PromoEditor = ({
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
-              label="End Date"
+              label="End Date (UTC)"
               type="datetime-local"
               value={editedPromo?.endTimestamp ? formatDateForInput(editedPromo.endTimestamp) : ''}
               onChange={e => handleDateChange('endTimestamp', e.target.value)}
