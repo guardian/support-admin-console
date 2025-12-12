@@ -21,7 +21,7 @@
     "ts-jest": "^29.2.5",
     "ts-loader": "^9.5.1",
     "tsconfig-paths-webpack-plugin": "^4.2.0",
-    "typescript": "^5.7.2",
+    "typescript": "^5.9.3",
     "webpack": "^5.97.1",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.2.2"
@@ -33,7 +33,7 @@
     "@mui/icons-material": "^5.15.10",
     "@mui/lab": "^5.0.0-alpha.165",
     "@mui/material": "^5.15.10",
-    "@mui/styles": "^5.15.10",
+    "@mui/styles": "^6.4.8",
     "@mui/x-data-grid": "^5.17.12",
     "@remirror/pm": "^3.0.1",
     "@remirror/react": "^3.0.1",
