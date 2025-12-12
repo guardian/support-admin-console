@@ -12,7 +12,6 @@ import VariantSummary from '../../tests/variants/variantSummary';
 import VariantEditor from './variantEditor';
 import TestEditorTargetRegionsSelector from '../testEditorTargetRegionsSelector';
 import { RegionTargeting } from '../helpers/shared';
-import VariantSummaryURLGeneratorButton from '../../tests/variants/variantSummaryURLGeneratorButton';
 
 const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLandingPageTest>> = ({
   test,
@@ -67,6 +66,7 @@ const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLan
     <VariantEditor
       key={`support-landing-page-${test.name}-${variant.name}`}
       variant={variant}
+      testName={test.name}
       onVariantChange={onVariantChange(variant.name)}
       onDelete={(): void => onVariantDelete(variant.name)}
       editMode={userHasTestLocked}
@@ -85,13 +85,6 @@ const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLan
         isInEditMode={userHasTestLocked}
         platform="DOTCOM"
         articleType="Standard"
-        topButton={
-          <VariantSummaryURLGeneratorButton
-            name={variant.name}
-            testName={test.name}
-            isDisabled={userHasTestLocked}
-          />
-        }
       />
     );
   };

@@ -11,6 +11,7 @@ import DefaultProductSelector from './defaultProductSelector';
 import { CountdownSettings, TickerSettings } from '../helpers/shared';
 import TickerEditor from '../tickerEditor';
 import CountdownEditor from '../countdownEditor';
+import URLGenerator from './urlGenerator';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -33,6 +34,7 @@ interface VariantEditorProps {
   editMode: boolean;
   onDelete: () => void;
   onValidationChange: (isValid: boolean) => void;
+  testName: string;
 }
 
 const VariantEditor: React.FC<VariantEditorProps> = ({
@@ -40,6 +42,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
   editMode,
   onValidationChange,
   onVariantChange,
+  testName,
 }: VariantEditorProps) => {
   const classes = useStyles();
 
@@ -89,6 +92,9 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
         isDisabled={!editMode}
         onValidationChange={onValidationChange}
       />
+      <div>
+        <URLGenerator variant={variant} testName={testName} />
+      </div>
     </div>
   );
 };
