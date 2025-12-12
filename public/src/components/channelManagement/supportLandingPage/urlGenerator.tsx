@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { SupportLandingPageVariant } from '../../../models/supportLandingPage';
-import VariantSummaryURLGeneratorButton from '../../tests/variants/variantSummaryURLGeneratorButton';
+import VariantSummaryURLGeneratorButton from './urlGeneratorButton';
 import { getStage } from '../../../utils/stage';
 import { Checkbox, FormControlLabel, TextField, Theme, Typography, Box } from '@mui/material';
 import { makeStyles } from '@mui/styles';
