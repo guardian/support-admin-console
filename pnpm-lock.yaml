@@ -24,8 +24,8 @@ dependencies:
     specifier: ^5.15.10
     version: 5.18.0(@emotion/react@11.14.0)(@emotion/styled@11.14.1)(@types/react@17.0.90)(react-dom@18.3.1)(react@18.3.1)
   '@mui/styles':
-    specifier: ^5.15.10
-    version: 5.18.0(@types/react@17.0.90)(react@18.3.1)
+    specifier: ^6.4.8
+    version: 6.4.8(@types/react@17.0.90)(react@18.3.1)
   '@mui/x-data-grid':
     specifier: ^8.21.0
     version: 8.21.0(@emotion/react@11.14.0)(@mui/material@5.18.0)(@mui/system@7.3.6)(@types/react@17.0.90)(react-dom@18.3.1)(react@18.3.1)
@@ -1253,6 +1253,23 @@ packages:
       react: 18.3.1
     dev: false
 
+  /@mui/private-theming@6.4.9(@types/react@17.0.90)(react@18.3.1):
+    resolution: {integrity: sha512-LktcVmI5X17/Q5SkwjCcdOLBzt1hXuc14jYa7NPShog0GBDCDvKtcnP0V7a2s6EiVRlv7BzbWEJzH6+l/zaCxw==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      '@types/react': ^17.0.0 || ^18.0.0 || ^19.0.0
+      react: ^17.0.0 || ^18.0.0 || ^19.0.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.28.4
+      '@mui/utils': 6.4.9(@types/react@17.0.90)(react@18.3.1)
+      '@types/react': 17.0.90
+      prop-types: 15.8.1
+      react: 18.3.1
+    dev: false
+
   /@mui/private-theming@7.3.6(@types/react@17.0.90)(react@18.3.1):
     resolution: {integrity: sha512-Ws9wZpqM+FlnbZXaY/7yvyvWQo1+02Tbx50mVdNmzWEi51C51y56KAbaDCYyulOOBL6BJxuaqG8rNNuj7ivVyw==}
     engines: {node: '>=14.0.0'}
@@ -1316,9 +1333,10 @@ packages:
       react: 18.3.1
     dev: false
 
-  /@mui/styles@5.18.0(@types/react@17.0.90)(react@18.3.1):
-    resolution: {integrity: sha512-GDgFUfl2MMN8iGrYTuhJ0hHRoja2kVOlXnHb5d3BBQCHFxOBaAPDKQxaNkoAwRf/vBhhwXWDsJA2XlkNHUPBgA==}
-    engines: {node: '>=12.0.0'}
+  /@mui/styles@6.4.8(@types/react@17.0.90)(react@18.3.1):
+    resolution: {integrity: sha512-1q5ZAidCBqnEaGNv/GgJfi8LeCDdEuZNJ/cQRJW1GEVKY1rSUNqceSIWW12aUcDswm5nsGlq3fdc89vypAEIcw==}
+    engines: {node: '>=14.0.0'}
+    deprecated: Deprecated, check the migration instruction in https://mui.com/material-ui/migration/migrating-from-jss/
     peerDependencies:
       '@types/react': ^17.0.0 || ^18.0.0 || ^19.0.0
       react: ^17.0.0 || ^18.0.0 || ^19.0.0
@@ -1328,9 +1346,9 @@ packages:
     dependencies:
       '@babel/runtime': 7.28.4
       '@emotion/hash': 0.9.2
-      '@mui/private-theming': 5.17.1(@types/react@17.0.90)(react@18.3.1)
+      '@mui/private-theming': 6.4.9(@types/react@17.0.90)(react@18.3.1)
       '@mui/types': 7.2.24(@types/react@17.0.90)
-      '@mui/utils': 5.17.1(@types/react@17.0.90)(react@18.3.1)
+      '@mui/utils': 6.4.9(@types/react@17.0.90)(react@18.3.1)
       '@types/react': 17.0.90
       clsx: 2.1.1
       csstype: 2.6.21
@@ -1432,6 +1450,26 @@ packages:
   /@mui/utils@5.17.1(@types/react@17.0.90)(react@18.3.1):
     resolution: {integrity: sha512-jEZ8FTqInt2WzxDV8bhImWBqeQRD99c/id/fq83H0ER9tFl+sfZlaAoCdznGvbSQQ9ividMxqSV2c7cC1vBcQg==}
     engines: {node: '>=12.0.0'}
+    peerDependencies:
+      '@types/react': ^17.0.0 || ^18.0.0 || ^19.0.0
+      react: ^17.0.0 || ^18.0.0 || ^19.0.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.28.4
+      '@mui/types': 7.2.24(@types/react@17.0.90)
+      '@types/prop-types': 15.7.15
+      '@types/react': 17.0.90
+      clsx: 2.1.1
+      prop-types: 15.8.1
+      react: 18.3.1
+      react-is: 19.2.3
+    dev: false
+
+  /@mui/utils@6.4.9(@types/react@17.0.90)(react@18.3.1):
+    resolution: {integrity: sha512-Y12Q9hbK9g+ZY0T3Rxrx9m2m10gaphDuUMgWxyV5kNJevVxXYCLclYUCC9vXaIk1/NdNDTcW2Yfr2OGvNFNmHg==}
+    engines: {node: '>=14.0.0'}
     peerDependencies:
       '@types/react': ^17.0.0 || ^18.0.0 || ^19.0.0
       react: ^17.0.0 || ^18.0.0 || ^19.0.0
