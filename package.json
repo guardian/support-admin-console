@@ -31,7 +31,6 @@
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "@mui/icons-material": "^5.15.10",
-    "@mui/lab": "^5.0.0-alpha.165",
     "@mui/material": "^5.15.10",
     "@mui/styles": "^5.15.10",
     "@mui/x-data-grid": "^5.17.12",
