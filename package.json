@@ -34,7 +34,7 @@
     "@mui/lab": "^5.0.0-alpha.165",
     "@mui/material": "^5.15.10",
     "@mui/styles": "^5.15.10",
-    "@mui/x-data-grid": "^5.17.12",
+    "@mui/x-data-grid": "^8.21.0",
     "@remirror/pm": "^3.0.1",
     "@remirror/react": "^3.0.1",
     "@remirror/react-ui": "^1.0.1",

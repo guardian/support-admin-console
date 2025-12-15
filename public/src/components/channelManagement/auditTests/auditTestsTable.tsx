@@ -67,11 +67,11 @@ export const AuditTestsTable: React.FC<AuditTestsTableProps> = ({
     {
       field: 'timestamp',
       headerName: 'Timestamp',
-      valueFormatter: params => {
-        if (!params.value) {
+      valueFormatter: (value: string) => {
+        if (!value) {
           return '';
         }
-        const date = new Date(params.value);
+        const date = new Date(value);
         return date.toLocaleString();
       },
       width: 200,
@@ -112,8 +112,12 @@ export const AuditTestsTable: React.FC<AuditTestsTableProps> = ({
               displayedIndex: `${sortedRows.length - sortedRows.indexOf(row)}`, // to display the index in reverse order
             }))}
             columns={columns}
-            pageSize={10}
-            rowsPerPageOptions={[10]}
+            initialState={{
+              pagination: {
+                paginationModel: { pageSize: 10, page: 0 },
+              },
+            }}
+            pageSizeOptions={[10]}
           />
         </div>
         {open && (
