@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { TextField } from '@mui/material';
+import { TextField, ClassNameMap, ClickAwayListener } from '@mui/material';
 import debounce from 'lodash/debounce';
 import {
   hexColourStringRegex,
@@ -11,7 +11,6 @@ import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 import { Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
 import { HexColour } from '../../../models/bannerDesign';
-import { ClassNameMap, ClickAwayListener } from '@mui/material';
 import { HexColorPicker } from 'react-colorful';
 
 const useStyles = makeStyles<Theme, { colour: string; isDisabled: boolean }>(

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Typography, Button, TextField } from '@mui/material';
-import { Autocomplete } from '@mui/lab';
+import { Typography, Button, TextField, Autocomplete } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
 import { Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';

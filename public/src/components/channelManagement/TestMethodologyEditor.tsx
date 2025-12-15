@@ -11,10 +11,10 @@ import {
   TextField,
   Theme,
   Tooltip,
+  Alert,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
-import Alert from '@mui/lab/Alert';
 import { addMethodologyToTestName } from './helpers/methodology';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 import { grey } from '@mui/material/colors';

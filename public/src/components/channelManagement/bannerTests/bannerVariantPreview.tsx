@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Theme } from '@mui/material';
+import { Button, Theme, Alert } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import Drawer from '@mui/material/Drawer';
@@ -11,7 +11,6 @@ import { BannerDesign, BannerDesignProps } from '../../../models/bannerDesign';
 import { ArticleCounts } from '../epicTests/variantPreview';
 import { SeparateArticleCount } from '../../../models/epic';
 import { buildStorybookUrl } from '../helpers/dcrStorybook';
-import Alert from '@mui/lab/Alert';
 
 // Mock prices data
 interface ProductPriceData {

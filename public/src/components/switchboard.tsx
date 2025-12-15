@@ -13,10 +13,10 @@ import {
   IconButton,
   List,
   ListItem,
+  Alert,
 } from '@mui/material';
 import SwitchUI from '@mui/material/Switch';
 import SaveIcon from '@mui/icons-material/Save';
-import Alert from '@mui/lab/Alert';
 
 import cloneDeep from 'lodash/cloneDeep';
 
