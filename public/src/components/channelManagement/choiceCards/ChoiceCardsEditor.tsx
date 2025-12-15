@@ -7,7 +7,7 @@ import { ChoiceCardEditor } from './ChoiceCardEditor';
 import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
-import Alert from '@mui/lab/Alert';
+import Alert from '@mui/material/Alert';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
