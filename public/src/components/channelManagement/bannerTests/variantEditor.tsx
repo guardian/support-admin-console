@@ -24,7 +24,7 @@ import VariantSeparateArticleCountEditor from '../../tests/variants/variantSepar
 import { SeparateArticleCount } from '../../../models/epic';
 import ChoiceCardsEditor from '../choiceCards/ChoiceCardsEditor';
 import { ChoiceCardsSettings } from '../../../models/choiceCards';
-import Alert from '@mui/lab/Alert';
+import Alert from '@mui/material/Alert';
 import PromoCodesEditor from '../choiceCards/PromoCodesEditor';
 import IsCollapsibleEditor from './isCollapsibleEditor';
 

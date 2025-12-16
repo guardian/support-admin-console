@@ -1,5 +1,5 @@
 import React from 'react';
-import Alert from '@mui/lab/Alert';
+import Alert from '@mui/material/Alert';
 
 interface VariantCopyLengthWarningProps {
   charLimit: number;
