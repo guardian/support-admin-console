@@ -59,14 +59,18 @@ const VariantEditorSecondaryCtaEditor: React.FC<VariantEditorSecondaryCtaEditorP
     <div className={classes.container}>
       <div className={classes.selectContainer}>
         <FormControl className={classes.formControl}>
-          <InputLabel id="secondaryCtaTypeLabel">{label}</InputLabel>
+          <InputLabel id="secondaryCtaTypeLabel" htmlFor="secondary-cta-type">
+            {label}
+          </InputLabel>
           <Select
             id={'secondaryCtaType'}
+            name="secondary-cta-type"
             labelId={'secondaryCtaTypeLabel'}
             label={label}
             value={cta?.type || 'None'}
             onChange={handleChange}
             disabled={isDisabled}
+            inputProps={{ id: 'secondary-cta-type' }}
           >
             <MenuItem value={'None'}>None</MenuItem>
             {allowVariantCustomSecondaryCta && (

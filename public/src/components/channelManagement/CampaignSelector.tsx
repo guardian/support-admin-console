@@ -90,6 +90,7 @@ const CampaignSelector: React.FC<CampaignSelectorProps> = ({
         <Select
           value={test.campaignName}
           displayEmpty
+          name="campaign-selector"
           renderValue={(campaign): string => {
             return campaign as string;
           }}

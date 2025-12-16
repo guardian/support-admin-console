@@ -32,7 +32,13 @@ const BannerDesignSelector: React.FC<BannerDesignSelectorProps> = ({
   }, [designName, designs]);
 
   return (
-    <Select value={designName} onChange={onChange} disabled={!editMode} error={!isValid}>
+    <Select
+      value={designName}
+      onChange={onChange}
+      disabled={!editMode}
+      error={!isValid}
+      name="banner-design-selector"
+    >
       {designs.map(design => (
         <MenuItem value={design.name} key={design.name}>
           {design.name}

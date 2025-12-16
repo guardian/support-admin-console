@@ -32,7 +32,12 @@ export const BannerVisualEditor: React.FC<Props> = ({
 
   return (
     <div>
-      <Select value={visual?.kind || 'None'} onChange={onVisualTypeChange} disabled={isDisabled}>
+      <Select
+        value={visual?.kind || 'None'}
+        onChange={onVisualTypeChange}
+        disabled={isDisabled}
+        name="visual-type-select"
+      >
         <MenuItem value="Image" key="Image">
           Main Image
         </MenuItem>
