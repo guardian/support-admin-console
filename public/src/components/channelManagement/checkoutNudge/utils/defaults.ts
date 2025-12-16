@@ -8,7 +8,7 @@ export const PRODUCTS = [
   { value: 'OneTimeContribution', label: 'One-Time Contribution' },
   { value: 'Contribution', label: 'Contribution' },
   { value: 'SupporterPlus', label: 'Supporter Plus' },
-  { value: 'DigitalSubscription', label: 'Digital Subscription' },
+  { value: 'DigitalSubscription', label: 'Digital Plus' },
 ];
 
 export const ONE_TIME_PLANS = [{ value: 'OneTime', label: 'One Time' }] as const;
