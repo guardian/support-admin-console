@@ -1,4 +1,4 @@
-import { Autocomplete } from '@mui/lab';
+import { Autocomplete } from '@mui/material';
 import React, { useEffect } from 'react';
 import { TextField } from '@mui/material';
 

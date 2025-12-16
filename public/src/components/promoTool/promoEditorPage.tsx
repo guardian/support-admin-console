@@ -4,8 +4,10 @@ import { Button, CircularProgress, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material/styles';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import PromoEditor from './promoEditor';
 import { Promo, PromoProduct } from './utils/promoModels';
+import { getPromoPreviewUrl } from './utils/previewUrl';
 import {
   fetchPromo,
   lockPromo,
@@ -218,6 +220,15 @@ const PromoEditorPage: React.FC = () => {
         <Typography variant="h4" style={{ flexGrow: 1 }}>
           {promo.promoCode}
         </Typography>
+        <Button
+          variant="outlined"
+          startIcon={<VisibilityIcon />}
+          href={getPromoPreviewUrl(promo.promoCode)}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Preview
+        </Button>
         {!promo.lockStatus?.locked && (
           <Button variant="contained" color="primary" onClick={handleEditPromo}>
             Edit

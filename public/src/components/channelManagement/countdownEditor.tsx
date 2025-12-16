@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Checkbox, TextField, Theme, Typography } from '@mui/material';
+import { Checkbox, TextField, Theme, Typography, Alert } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { CountdownSettings } from './helpers/shared';
@@ -10,7 +10,6 @@ import {
   templateValidatorForPlatform,
 } from './helpers/validation';
 import Switch from '@mui/material/Switch';
-import Alert from '@mui/lab/Alert';
 import { RichTextEditorSingleLine } from './richTextEditor/richTextEditor';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({

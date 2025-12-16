@@ -83,6 +83,18 @@ export const LinkTrackingBuilder: React.FC = () => {
     },
   });
 
+  const urlContainsTrackingParams = (url: URL): boolean => {
+    const params = new URLSearchParams(url.search);
+
+    return (
+      params.has('utm_medium') ||
+      params.has('utm_campaign') ||
+      params.has('utm_content') ||
+      params.has('utm_term') ||
+      params.has('utm_source')
+    );
+  };
+
   const onSubmit: SubmitHandler<LinkTrackingFormData> = ({
     url,
     campaign,
@@ -93,7 +105,11 @@ export const LinkTrackingBuilder: React.FC = () => {
     const urlWithHttps = addHttps(url);
     const [source, medium] = sourceAndMedium.split('__');
 
-    const link = `${urlWithHttps}?utm_medium=${medium}&utm_campaign=${campaign}&utm_content=${content}&utm_term=${term}&utm_source=${source}`;
+    const trackingParams = `utm_medium=${medium}&utm_campaign=${campaign}&utm_content=${content}&utm_term=${term}&utm_source=${source}`;
+    const link = urlWithHttps.includes('?')
+      ? `${urlWithHttps}&${trackingParams}`
+      : `${urlWithHttps}?${trackingParams}`;
+
     setLink(link);
   };
 
@@ -113,10 +129,10 @@ export const LinkTrackingBuilder: React.FC = () => {
           {...register('url', {
             required: true,
             validate: value => {
-              // Check it's a valid url and has no querystring
+              // Check it's a valid url and has no existing tracking params
               try {
                 const url = new URL(addHttps(value));
-                if (value.endsWith('?') || url.search !== '') {
+                if (urlContainsTrackingParams(url)) {
                   return 'URL must not already have tracking';
                 }
                 return true;

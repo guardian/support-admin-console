@@ -44,8 +44,12 @@ export const SuperModeTable: React.FC<SuperModeTableProps> = ({ rows }: SuperMod
         autoHeight
         rows={rows.map(row => ({ ...row, id: `${row.url}/${row.region}` }))}
         columns={columns}
-        pageSize={10}
-        rowsPerPageOptions={[10]}
+        initialState={{
+          pagination: {
+            paginationModel: { pageSize: 10, page: 0 },
+          },
+        }}
+        pageSizeOptions={[10]}
       />
     </div>
   );
