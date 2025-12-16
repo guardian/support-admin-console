@@ -205,7 +205,7 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
   const buildDefaultContributionControl = () => {
     return (
       <FormControl className={classes.contributionControls}>
-        <FormLabel id={`${variantName}_default_contribution_selector`}>
+        <FormLabel component="legend" id={`${variantName}_default_contribution_selector`}>
           Default contributions type
         </FormLabel>
         <RadioGroup
@@ -239,10 +239,10 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
         variant="standard"
         className={classes.contributionControls}
       >
-        <FormLabel id={`${variantName}_display_contribution_selector`}>
+        <FormLabel component="legend" id={`${variantName}_display_contribution_selector`}>
           Display contributions type
         </FormLabel>
-        <FormGroup row>
+        <FormGroup row aria-labelledby={`${variantName}_display_contribution_selector`}>
           {contributionIds.map(k => {
             return (
               <FormControlLabel

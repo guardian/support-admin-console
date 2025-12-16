@@ -173,7 +173,12 @@ const TestMethodology: React.FC<TestMethodologyProps> = ({
         <div className={classes.audiencePercentage}>{audiencePercentage}%</div>
       </Tooltip>
       <div>
-        <Select value={methodology.name} disabled={isDisabled} onChange={onSelectChange}>
+        <Select
+          value={methodology.name}
+          disabled={isDisabled}
+          onChange={onSelectChange}
+          name="methodology-select"
+        >
           <MenuItem value={'ABTest'} key={'ABTest'}>
             AB test
           </MenuItem>

@@ -23,12 +23,15 @@ const TestListSidebarFilterSelector: React.FC<TestListSidebarFilterSelectorProps
 
   return (
     <FormControl className={classes.container} fullWidth>
-      <InputLabel id="filter-region-select-label">Filter by Region</InputLabel>
+      <InputLabel id="filter-region-select-label" htmlFor="filter-region-select">
+        Filter by Region
+      </InputLabel>
       <Select
         labelId="filter-region-select-label"
-        id="filter-region-select"
+        name="filter-region-select"
         value={regionFilter}
         label="Filter by Region"
+        inputProps={{ id: 'filter-region-select' }}
         onChange={(event: SelectChangeEvent<RegionsAndAll>): void =>
           handleRegionFilterChange(event.target.value)
         }

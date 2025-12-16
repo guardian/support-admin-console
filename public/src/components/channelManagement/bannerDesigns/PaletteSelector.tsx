@@ -127,13 +127,18 @@ const PaletteSelector: React.FC<Props> = ({
     <div className={classes.container}>
       <div className={classes.selectors}>
         <FormControl required fullWidth error={!style}>
-          <InputLabel id="style-label">Style</InputLabel>
+          <InputLabel id="style-label" htmlFor="style-select">
+            Style
+          </InputLabel>
           <Select
             labelId="style-label"
             label="Style"
             value={style?.id ?? ''}
             onChange={onStyleChange}
             disabled={isDisabled}
+            inputProps={{
+              id: 'style-select',
+            }}
           >
             {availableStyles.map(style => (
               <MenuItem key={style.id} value={style.id}>
@@ -144,13 +149,18 @@ const PaletteSelector: React.FC<Props> = ({
           {!style && <FormHelperText>Select a style</FormHelperText>}
         </FormControl>
         <FormControl required fullWidth error={!theme}>
-          <InputLabel id="theme-label">Colour theme</InputLabel>
+          <InputLabel id="theme-label" htmlFor="theme-select">
+            Colour theme
+          </InputLabel>
           <Select
             labelId="theme-label"
             label="Colour theme"
             value={theme?.id ?? ''}
             onChange={onThemeChange}
             disabled={isDisabled}
+            inputProps={{
+              id: 'theme-select',
+            }}
           >
             {availableThemes.map(theme => (
               <MenuItem key={theme.id} value={theme.id}>
