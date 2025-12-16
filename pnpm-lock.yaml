@@ -110,8 +110,8 @@ devDependencies:
     specifier: ^9.1.2
     version: 9.2.1
   css-loader:
-    specifier: ^6.7.3
-    version: 6.11.0(webpack@5.103.0)
+    specifier: ^7.1.2
+    version: 7.1.2(webpack@5.103.0)
   csstype:
     specifier: ^2.6.18
     version: 2.6.21
@@ -4352,12 +4352,12 @@ packages:
       hyphenate-style-name: 1.1.0
     dev: false
 
-  /css-loader@6.11.0(webpack@5.103.0):
-    resolution: {integrity: sha512-CTJ+AEQJjq5NzLga5pE39qdiSV56F8ywCIsqNIRF0r7BDgWsN25aazToqAFg7ZrtA/U016xudB3ffgweORxX7g==}
-    engines: {node: '>= 12.13.0'}
+  /css-loader@7.1.2(webpack@5.103.0):
+    resolution: {integrity: sha512-6WvYYn7l/XEGN8Xu2vWFt9nVzrCn39vKyTEFf/ExEyoksJjjSZV/0/35XPlMbpnr6VGhZIUg5yJrL8tGfes/FA==}
+    engines: {node: '>= 18.12.0'}
     peerDependencies:
       '@rspack/core': 0.x || 1.x
-      webpack: ^5.0.0
+      webpack: ^5.27.0
     peerDependenciesMeta:
       '@rspack/core':
         optional: true
