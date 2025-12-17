@@ -148,7 +148,9 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
         {testNamePrefix === undefined && (
           <div className={classes.campaignSelectorContainer}>
             <FormControl className={classes.campaignSelector}>
-              <InputLabel id="campaign-selector">Campaign</InputLabel>
+              <InputLabel id="campaign-selector" htmlFor="campaign-select">
+                Campaign
+              </InputLabel>
               <Select
                 value={campaignName}
                 displayEmpty
@@ -160,6 +162,9 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
                 }}
                 onChange={(event: SelectChangeEvent<string | undefined>): void => {
                   setCampaignName(event.target.value);
+                }}
+                inputProps={{
+                  id: 'campaign-select',
                 }}
               >
                 <MenuItem value={undefined} key={'campaignName-none'}>
@@ -211,6 +216,7 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
           }}
           autoFocus
           fullWidth
+          autoComplete={'off'}
         />
         <TextField
           className={classes.input}

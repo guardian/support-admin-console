@@ -181,6 +181,7 @@ export const PromoListItem = ({
               </Box>
             </Box>
           }
+          secondaryTypographyProps={{ component: 'div' }}
           secondary={
             <Box>
               <span className={classes.dates}>

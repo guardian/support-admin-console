@@ -8,6 +8,7 @@ interface Section {
 }
 
 interface SectionEditorProps {
+  id?: string;
   label: string;
   disabled: boolean;
   ids: string[];
@@ -19,6 +20,7 @@ interface SectionEditorProps {
  * Fetches all sections on mount.
  */
 export const SectionsEditor: React.FC<SectionEditorProps> = ({
+  id = 'capi-sections',
   label,
   disabled,
   ids,
@@ -51,7 +53,7 @@ export const SectionsEditor: React.FC<SectionEditorProps> = ({
 
   return (
     <Autocomplete
-      id={'capi-sections'}
+      id={id}
       disabled={disabled}
       multiple
       getOptionLabel={(option): string => option.name || option.id}
