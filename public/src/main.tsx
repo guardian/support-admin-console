@@ -31,7 +31,7 @@ import { getTheme } from './utils/theme';
 import ChannelSwitches from './components/channelManagement/ChannelSwitches';
 import CampaignsForm from './components/channelManagement/campaigns/CampaignsForm';
 import { FontWeightProperty } from 'csstype';
-import { makeStyles } from '@mui/styles';
+import { makeStyles, ThemeProvider as StylesThemeProvider } from '@mui/styles';
 import QrCodePage from './components/utilities/QrCodePage';
 import AppsMeteringSwitches from './components/appsMeteringSwitches';
 import { SuperModeDashboard } from './components/channelManagement/superMode/superModeDashboard';
@@ -250,7 +250,9 @@ if (container) {
   root.render(
     <ThemeProvider theme={getTheme()}>
       <StyledEngineProvider injectFirst>
-        <AppRouter />
+        <StylesThemeProvider theme={getTheme()}>
+          <AppRouter />
+        </StylesThemeProvider>
       </StyledEngineProvider>
     </ThemeProvider>,
   );
