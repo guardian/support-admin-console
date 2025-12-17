@@ -1,11 +1,16 @@
 import { LockStatus } from '../../channelManagement/helpers/shared';
 
-export type PromoProduct = 'SupporterPlus' | 'TierThree' | 'DigitalPack' | 'Newspaper' | 'Weekly';
+export type PromoProduct =
+  | 'SupporterPlus'
+  | 'TierThree'
+  | 'DigitalSubscription'
+  | 'Newspaper'
+  | 'Weekly';
 
 export const promoProductNames: Record<PromoProduct, string> = {
   SupporterPlus: 'Supporter Plus',
   TierThree: 'Tier Three',
-  DigitalPack: 'Digital Pack',
+  DigitalSubscription: 'Digital Plus',
   Newspaper: 'Newspaper',
   Weekly: 'Guardian Weekly',
 };
@@ -14,7 +19,7 @@ export function mapPromoProductToCatalogProducts(promoProduct: PromoProduct): st
   const mapping: Record<PromoProduct, string[]> = {
     SupporterPlus: ['SupporterPlus'],
     TierThree: ['TierThree'],
-    DigitalPack: ['DigitalSubscription'],
+    DigitalSubscription: ['DigitalSubscription'],
     Newspaper: ['HomeDelivery', 'NationalDelivery', 'SubscriptionCard'],
     Weekly: ['GuardianWeeklyDomestic', 'GuardianWeeklyRestOfWorld'],
   };
