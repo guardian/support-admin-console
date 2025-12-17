@@ -121,6 +121,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
                 <Select
                   {...field}
                   labelId={`supportTier-label-${index}`}
+                  inputProps={{ id: `supportTier-${index}` }}
                   onChange={e => {
                     const newSupportTier = e.target.value as Product['supportTier'];
 
@@ -263,7 +264,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
         />
 
         <div>
-          <label className={classes.subHeading}>Benefits</label>
+          <Typography className={classes.subHeading}>Benefits</Typography>
           {benefits.map((benefit, benefitIndex) => (
             <div className={classes.benefitContainer} key={benefit.id}>
               <Controller
@@ -317,7 +318,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
           control={control}
           render={({ field }) => (
             <>
-              <label className={classes.subHeading}>Destination</label>
+              <Typography className={classes.subHeading}>Destination</Typography>
               <TypedRadioGroup
                 selectedValue={field.value ?? 'LandingPage'}
                 onChange={destination => {

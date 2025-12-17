@@ -180,7 +180,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     const isChecked = switchData.state === 'On';
 
     return (
-      <div className={classes.switchLayout}>
+      <div className={classes.switchLayout} key={switchId}>
         <FormControlLabel
           label={switchData.description}
           checked={switchData.state === 'On'}

@@ -10,6 +10,7 @@ interface Tag {
 }
 
 interface TagEditorProps {
+  id?: string;
   label: string;
   disabled: boolean;
   ids: string[];
@@ -21,6 +22,7 @@ interface TagEditorProps {
  * Searches for tags based on the user's input.
  */
 export const TagsEditor: React.FC<TagEditorProps> = ({
+  id = 'capi-tags',
   label,
   disabled,
   ids,
@@ -79,7 +81,7 @@ export const TagsEditor: React.FC<TagEditorProps> = ({
 
   return (
     <Autocomplete
-      id={'capi-tags'}
+      id={id}
       disabled={disabled}
       multiple
       getOptionLabel={(option): string => option.name || option.id}

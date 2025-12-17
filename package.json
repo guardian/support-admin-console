@@ -5,10 +5,10 @@
     "@types/react": "~17.0.58",
     "@types/react-dom": "^18.2.19",
     "@types/react-router-dom": "^5.3.3",
-    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "concurrently": "^9.1.2",
-    "css-loader": "^6.7.3",
+    "css-loader": "^7.1.2",
     "csstype": "^2.6.18",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
@@ -23,7 +23,7 @@
     "tsconfig-paths-webpack-plugin": "^4.2.0",
     "typescript": "^5.9.3",
     "webpack": "^5.97.1",
-    "webpack-cli": "^5.1.4",
+    "webpack-cli": "^6.0.1",
     "webpack-dev-server": "^5.2.2"
   },
   "dependencies": {
@@ -48,7 +48,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.56.3",
     "react-qr-code": "^2.0.7",
-    "react-router-dom": "^6.2.1",
+    "react-router-dom": "^7.10.1",
     "recharts": "2.12.6",
     "remirror": "^3.0.1",
     "uuid": "^13.0.0"
@@ -71,6 +71,5 @@
     "watch": "webpack --config webpack.dev.js --watch",
     "lint": "eslint .",
     "test": "echo 'Running JS tests' && jest"
-  },
-  "packageManager": "pnpm@8.15.7"
+  }
 }

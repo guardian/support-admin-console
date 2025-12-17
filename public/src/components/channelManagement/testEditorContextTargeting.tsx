@@ -34,6 +34,7 @@ const TestEditorContextTargeting: React.FC<TestEditorContextTargetingProps> = ({
   return (
     <div className={classes.container}>
       <TagsEditor
+        id="target-tags"
         label="Target tags"
         ids={tagIds}
         onUpdate={(newTagIds): void => {
@@ -43,6 +44,7 @@ const TestEditorContextTargeting: React.FC<TestEditorContextTargetingProps> = ({
       />
 
       <SectionsEditor
+        id="target-sections"
         label="Target sections"
         ids={sectionIds}
         onUpdate={(newSectionIds): void => {
@@ -52,6 +54,7 @@ const TestEditorContextTargeting: React.FC<TestEditorContextTargetingProps> = ({
       />
 
       <TagsEditor
+        id="excluded-tags"
         label="Excluded tags"
         ids={excludedTagIds}
         onUpdate={(newExcludedTagIds): void => {
@@ -61,6 +64,7 @@ const TestEditorContextTargeting: React.FC<TestEditorContextTargetingProps> = ({
       />
 
       <SectionsEditor
+        id="excluded-sections"
         label="Excluded sections"
         ids={excludedSectionIds}
         onUpdate={(newExcludedSectionIds): void => {

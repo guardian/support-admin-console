@@ -119,7 +119,6 @@ const Bookmarklets: React.FC = () => {
           <Tooltip title={instruction} arrow placement="bottom-end">
             <Button
               href="javascript:window.guardian.readerRevenue.showMeTheBanner()"
-              title={instruction}
               className={classes.btn}
               color="primary"
             >
@@ -129,7 +128,6 @@ const Bookmarklets: React.FC = () => {
           <Tooltip title={instruction} arrow placement="bottom-end">
             <Button
               href="javascript:window.guardian.readerRevenue.showMeTheDoubleBanner()"
-              title={instruction}
               className={classes.btn}
               color="primary"
             >
@@ -139,7 +137,6 @@ const Bookmarklets: React.FC = () => {
           <Tooltip title={instruction} arrow placement="bottom-end">
             <Button
               href="javascript:window.guardian.readerRevenue.showNextVariant()"
-              title={instruction}
               className={classes.btn}
               color="primary"
             >
@@ -149,7 +146,6 @@ const Bookmarklets: React.FC = () => {
           <Tooltip title={instruction} arrow placement="bottom-end">
             <Button
               href="javascript:window.guardian.readerRevenue.showPreviousVariant()"
-              title={instruction}
               className={classes.btn}
               color="primary"
             >
@@ -159,7 +155,6 @@ const Bookmarklets: React.FC = () => {
           <Tooltip title={instruction} arrow placement="bottom-end">
             <Button
               href="javascript:window.guardian.readerRevenue.changeGeolocation()"
-              title={instruction}
               className={classes.btn}
               color="primary"
             >
@@ -173,7 +168,6 @@ const Bookmarklets: React.FC = () => {
           <Tooltip title={instruction} arrow placement="bottom-end">
             <Button
               href="javascript:window.guardian.readerRevenue.showMeTheEpic(true);"
-              title={instruction}
               className={classes.btn}
               color="primary"
             >
@@ -183,7 +177,6 @@ const Bookmarklets: React.FC = () => {
           <Tooltip title={instruction} arrow placement="bottom-end">
             <Button
               href="javascript:window.guardian.readerRevenue.showMeTheBanner(true)"
-              title={instruction}
               className={classes.btn}
               color="primary"
             >
@@ -193,7 +186,6 @@ const Bookmarklets: React.FC = () => {
           <Tooltip title={instruction} arrow placement="bottom-end">
             <Button
               href="javascript:window.guardian.readerRevenue.showMeTheDoubleBanner(true)"
-              title={instruction}
               className={classes.btn}
               color="primary"
             >
@@ -203,7 +195,6 @@ const Bookmarklets: React.FC = () => {
           <Tooltip title={instruction} arrow placement="bottom-end">
             <Button
               href="javascript:window.guardian.readerRevenue.showNextVariant(true)"
-              title={instruction}
               className={classes.btn}
               color="primary"
             >
@@ -213,7 +204,6 @@ const Bookmarklets: React.FC = () => {
           <Tooltip title={instruction} arrow placement="bottom-end">
             <Button
               href="javascript:window.guardian.readerRevenue.showPreviousVariant(true)"
-              title={instruction}
               className={classes.btn}
               color="primary"
             >
@@ -223,7 +213,6 @@ const Bookmarklets: React.FC = () => {
           <Tooltip title={instruction} arrow placement="bottom-end">
             <Button
               href="javascript:window.guardian.readerRevenue.changeGeolocation(true)"
-              title={instruction}
               className={classes.btn}
               color="primary"
             >
