@@ -7,6 +7,7 @@ import controllers._
 import controllers.banner._
 import controllers.epic._
 import controllers.gutter._
+import controllers.AccessManagementController
 import play.api.ApplicationLoader.Context
 import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.mvc.AnyContent
@@ -268,6 +269,7 @@ class AppComponents(context: Context, stage: String)
     new CountryController(
       authAction,
       controllerComponents
-    )
+    ),
+    new AccessManagementController(authAction, controllerComponents, stage, runtime, permissionsService)
   )
 }

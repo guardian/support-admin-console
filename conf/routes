@@ -297,3 +297,8 @@ GET /product-catalog/:product         controllers.ProductCatalogController.getPr
 
 # Country Groups endpoint
 GET /country-groups                   controllers.promos.CountryController.all
+
+# ----- Access Management ----- #
+GET /access-management                              controllers.Application.index
+GET   /frontend/access-management/users              controllers.AccessManagementController.getUsers
+POST  /frontend/access-management/users              controllers.AccessManagementController.updateUser

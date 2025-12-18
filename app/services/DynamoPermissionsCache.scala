@@ -6,11 +6,13 @@ import io.circe.generic.extras.Configuration
 import io.circe.generic.extras.semiauto.{deriveEnumerationDecoder, deriveEnumerationEncoder}
 import io.circe.generic.auto._
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
-import models.DynamoErrors.DynamoGetError
+import models.DynamoErrors.{DynamoGetError, DynamoError}
 import services.UserPermissions._
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
-import utils.Circe.dynamoMapToJson
+import utils.Circe.{dynamoMapToJson, jsonToDynamo}
 import zio._
+import io.circe.syntax._
+import software.amazon.awssdk.services.dynamodb.model.PutItemRequest
 
 import scala.jdk.CollectionConverters._
 import java.util.concurrent.atomic.AtomicReference
@@ -76,5 +78,21 @@ class DynamoPermissionsCache(
 
   def getPermissionsForUser(email: Email): Option[List[PagePermission]] = {
     permissionsCache.get().get(email).map(_.permissions)
+  }
+
+  def getAllUsers(): ZIO[Any, Nothing, List[UserPermissions]] = {
+    ZIO.succeed(permissionsCache.get().values.toList)
+  }
+
+  def upsertUser(user: UserPermissions): ZIO[Any, DynamoError, Unit] = {
+    val item = jsonToDynamo(user.asJson).m()
+    val request = PutItemRequest.builder
+      .tableName(tableName)
+      .item(item)
+      .build()
+    put(request).tap(_ => 
+      // Update cache after successful write
+      ZIO.succeed(permissionsCache.updateAndGet(cache => cache + (user.email -> user)))
+    )
   }
 }
