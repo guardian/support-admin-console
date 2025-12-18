@@ -45,6 +45,7 @@ import { AuditTestsDashboard } from './components/channelManagement/auditTests/a
 import PromoTool from './components/promoTool/promoTool';
 import PromoEditorPage from './components/promoTool/promoEditorPage';
 import Bookmarklets from './components/bookmarklets/Bookmarklets';
+import AccessManagement from './components/accessManagement/AccessManagement';
 
 declare module '@mui/styles' {
   // https://mui.com/material-ui/migration/v5-style-changes/#%E2%9C%85-add-module-augmentation-for-defaulttheme-typescript
@@ -237,6 +238,10 @@ const AppRouter = () => {
           <Route
             path="/bookmarklets"
             element={createComponent(<Bookmarklets />, 'Reader Revenue Bookmarklets')}
+          />
+          <Route
+            path="/access-management"
+            element={createComponent(<AccessManagement />, 'Access Management')}
           />
         </Routes>
       </div>

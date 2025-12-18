@@ -1,6 +1,5 @@
 import React from 'react';
 import Drawer from '@mui/material/Drawer';
-import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import { Link } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
@@ -8,6 +7,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { makeStyles } from '@mui/styles';
 import RRControlPanelLogo from './rrControlPanelLogo';
 import { getStage } from '../utils/stage';
+import ListItemButton from '@mui/material/ListItemButton';
 
 const useStyles = makeStyles({
   list: {
@@ -139,132 +139,137 @@ export default function NavDrawer(): React.ReactElement {
       <div>
         <h2 className={classes.topSectionHeader}>Channels</h2>
         <Link key="Campaigns" to="/campaigns" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Campaigns">
+          <ListItemButton className={classes.listItem} key="Campaigns">
             <ListItemText primary="Campaigns" />
-          </ListItem>
+          </ListItemButton>
         </Link>
         <Link key="Header" to="/header-tests" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Header">
+          <ListItemButton className={classes.listItem} key="Header">
             <ListItemText primary="Header" />
-          </ListItem>
+          </ListItemButton>
         </Link>
         <Link key="Epic" to="/epic-tests" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Epic">
+          <ListItemButton className={classes.listItem} key="Epic">
             <ListItemText primary="Epic" />
-          </ListItem>
+          </ListItemButton>
         </Link>
         <Link key="Apple News Epic" to="/apple-news-epic-tests" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Apple News Epic">
+          <ListItemButton className={classes.listItem} key="Apple News Epic">
             <ListItemText primary="Apple News Epic" />
             <img className={classes.icon} src="assets/images/apple-news-icon.png" />
-          </ListItem>
+          </ListItemButton>
         </Link>
         <Link key="Liveblog Epic" to="/liveblog-epic-tests" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Liveblog Epic">
+          <ListItemButton className={classes.listItem} key="Liveblog Epic">
             <ListItemText primary="Liveblog Epic" />
-          </ListItem>
+          </ListItemButton>
         </Link>
         <Link key="Liveblog Gutter" to="/gutter-liveblog-tests" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Liveblog Gutter">
+          <ListItemButton className={classes.listItem} key="Liveblog Gutter">
             <ListItemText primary="Liveblog Gutter" />
-          </ListItem>
+          </ListItemButton>
         </Link>
         <Link key="Banner 1" to="/banner-tests" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Banner 1">
+          <ListItemButton className={classes.listItem} key="Banner 1">
             <ListItemText primary="Banner 1" />
-          </ListItem>
+          </ListItemButton>
         </Link>
         <Link key="Banner 2" to="/banner-tests2" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Banner 2">
+          <ListItemButton className={classes.listItem} key="Banner 2">
             <ListItemText primary="Banner 2" />
-          </ListItem>
+          </ListItemButton>
         </Link>
         <Link key="Banner Design" to="/banner-designs" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Banner Design">
+          <ListItemButton className={classes.listItem} key="Banner Design">
             <ListItemText primary="Banner Design" />
             <span className={classes.super}>🎨</span>
-          </ListItem>
+          </ListItemButton>
         </Link>
       </div>
 
       <div>
         <h2 className={classes.sectionHeader}>Support Site</h2>
         <Link key="Landing Page" to="/support-landing-page-tests" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Landing Page">
+          <ListItemButton className={classes.listItem} key="Landing Page">
             <ListItemText primary="Landing Page" />
-          </ListItem>
+          </ListItemButton>
         </Link>
         <Link key="Checkout Nudge" to="/checkout-nudge-tests" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Checkout Nudge">
+          <ListItemButton className={classes.listItem} key="Checkout Nudge">
             <ListItemText primary="Checkout Nudge" />
-          </ListItem>
+          </ListItemButton>
         </Link>
         <Link key="Single Amounts" to="/amounts" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Single Amounts">
+          <ListItemButton className={classes.listItem} key="Single Amounts">
             <ListItemText primary="Single Amounts" />
-          </ListItem>
+          </ListItemButton>
         </Link>
         {getStage() !== 'PROD' && (
           <Link key="Promo Tool" to="/promo-tool" className={classes.link}>
-            <ListItem className={classes.listItem} button key="Promo Tool">
+            <ListItemButton className={classes.listItem} key="Promo Tool">
               <ListItemText primary="Promo Tool" />
-            </ListItem>
+            </ListItemButton>
           </Link>
         )}
         <Link key="Default Promos" to="/default-promos" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Default Promos">
+          <ListItemButton className={classes.listItem} key="Default Promos">
             <ListItemText primary="Default Promos" />
-          </ListItem>
+          </ListItemButton>
         </Link>
       </div>
 
       <div>
         <h2 className={classes.sectionHeader}>Admin Console</h2>
         <Link key="Banner Deploy" to="/banner-deploy" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Banner Deploy">
+          <ListItemButton className={classes.listItem} key="Banner Deploy">
             <ListItemText primary="Banner Deploy" />
-          </ListItem>
+          </ListItemButton>
         </Link>
         <Link key="Switches" to="/switches" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Switches">
+          <ListItemButton className={classes.listItem} key="Switches">
             <ListItemText primary="Switches" />
-          </ListItem>
+          </ListItemButton>
         </Link>
         <Link key="Channel Switches" to="/channel-switches" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Channel Switches">
+          <ListItemButton className={classes.listItem} key="Channel Switches">
             <ListItemText primary="Channel Switches" />
-          </ListItem>
+          </ListItemButton>
         </Link>
         <Link key="App Meter Switches" to="/apps-metering-switches" className={classes.link}>
-          <ListItem className={classes.listItem} button key="App Meter Switches">
+          <ListItemButton className={classes.listItem} key="App Meter Switches">
             <ListItemText primary="App Meter Switches" />
-          </ListItem>
+          </ListItemButton>
         </Link>
         <Link key="Test Audits" to="/audit-tests" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Test Audits">
+          <ListItemButton className={classes.listItem} key="Test Audits">
             <ListItemText primary="Test Audits" />
-          </ListItem>
+          </ListItemButton>
         </Link>
         <Link key="Super Mode Dashboard" to="/super-mode" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Super Mode Dashboard">
+          <ListItemButton className={classes.listItem} key="Super Mode Dashboard">
             <ListItemText primary="Super Mode Dashboard" />
             <span className={classes.super}>🦸</span>
-          </ListItem>
+          </ListItemButton>
         </Link>
         <Link key="Link Tracking Builder" to="/lynx" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Link Tracking Builder">
+          <ListItemButton className={classes.listItem} key="Link Tracking Builder">
             <ListItemText primary="Link Tracking Builder" />
-          </ListItem>
+          </ListItemButton>
         </Link>
         <Link key="QR Code Generator" to="/qr-code" className={classes.link}>
-          <ListItem className={classes.listItem} button key="QR Code Generator">
+          <ListItemButton className={classes.listItem} key="QR Code Generator">
             <ListItemText primary="QR Code Generator" />
-          </ListItem>
+          </ListItemButton>
         </Link>
         <Link key="Bookmarklets" to="/bookmarklets" className={classes.link}>
-          <ListItem className={classes.listItem} button key="Bookmarklets">
+          <ListItemButton className={classes.listItem} key="Bookmarklets">
             <ListItemText primary="Bookmarklets" />
-          </ListItem>
+          </ListItemButton>
+        </Link>
+        <Link key="AccessManagement" to="/access-management" className={classes.link}>
+          <ListItemButton className={classes.listItem} key="AccessManagement">
+            <ListItemText primary="Access Management" />
+          </ListItemButton>
         </Link>
       </div>
 
@@ -277,9 +282,9 @@ export default function NavDrawer(): React.ReactElement {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <ListItem className={classes.listItem} button key="Report an issue">
+          <ListItemButton className={classes.listItem} key="Report an issue">
             <ListItemText primary="Report an issue" />
-          </ListItem>
+          </ListItemButton>
         </a>
       </div>
     </div>
