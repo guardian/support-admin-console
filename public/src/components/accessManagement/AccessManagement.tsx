@@ -11,7 +11,7 @@ import {
   Typography,
 } from '@mui/material';
 import React, { useEffect } from 'react';
-import { PermissionLevel, UserPermissions } from '../channelManagement/helpers/shared';
+import { UserPermissions } from '../channelManagement/helpers/shared';
 import { makeStyles } from '@mui/styles';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
@@ -67,19 +67,11 @@ const AccessManagement = () => {
   const classes = useStyles();
   const [users, setUsers] = React.useState<UserPermissions[]>();
   const [loading, setLoading] = React.useState(false);
-  const [modalOpen, setModalOpen] = React.useState(false);
+  const [editModalOpen, setEditModalOpen] = React.useState(false);
   const [selectedUser, setSelectedUser] = React.useState<UserPermissions | null>(null);
-  const [landingPagePerm, setLandingPagePerm] = React.useState<PermissionLevel>('None');
-  const [checkoutNudgePerm, setCheckoutNudgePerm] = React.useState<PermissionLevel>('None');
   const [addUserModalOpen, setAddUserModalOpen] = React.useState(false);
-  const [newUserEmail, setNewUserEmail] = React.useState('');
-  const [newUserLandingPagePerm, setNewUserLandingPagePerm] = React.useState<PermissionLevel>(
-    'None',
-  );
-  const [newUserCheckoutNudgePerm, setNewUserCheckoutNudgePerm] = React.useState<PermissionLevel>(
-    'None',
-  );
   const canEditPermissions = hasPermission('access-management', 'Write');
+
   useEffect(() => {
     const getUsers = async () => {
       setLoading(true);
@@ -95,131 +87,29 @@ const AccessManagement = () => {
     };
     getUsers();
   }, []);
-  const handleOpenModal = (user: UserPermissions) => {
+
+  const handleOpenEditModal = (user: UserPermissions) => {
     setSelectedUser(user);
-    const landingPagePermission = user.permissions.find(
-      p => p.name === 'support-landing-page-tests',
-    );
-    const checkoutNudgePermission = user.permissions.find(p => p.name === 'checkout-nudge-tests');
-    setLandingPagePerm(landingPagePermission ? landingPagePermission.permission : 'None');
-    setCheckoutNudgePerm(checkoutNudgePermission ? checkoutNudgePermission.permission : 'None');
-    setModalOpen(true);
+    setEditModalOpen(true);
   };
 
-  const handleCloseModal = () => {
-    setModalOpen(false);
+  const handleCloseEditModal = () => {
+    setEditModalOpen(false);
     setSelectedUser(null);
-    setLandingPagePerm('None');
-    setCheckoutNudgePerm('None');
   };
 
-  const handleOpenAddUserModal = () => {
-    setNewUserEmail('');
-    setNewUserLandingPagePerm('None');
-    setNewUserCheckoutNudgePerm('None');
-    setAddUserModalOpen(true);
-  };
-
-  const handleCloseAddUserModal = () => {
-    setAddUserModalOpen(false);
-    setNewUserEmail('');
-    setNewUserLandingPagePerm('None');
-    setNewUserCheckoutNudgePerm('None');
-  };
-
-  const handleAddUser = async () => {
-    if (!newUserEmail) {
-      return;
-    }
-
-    const permissions = [];
-
-    if (newUserLandingPagePerm !== 'None') {
-      permissions.push({
-        name: 'support-landing-page-tests',
-        permission: newUserLandingPagePerm as 'Read' | 'Write',
-      });
-    }
-
-    if (newUserCheckoutNudgePerm !== 'None') {
-      permissions.push({
-        name: 'checkout-nudge-tests',
-        permission: newUserCheckoutNudgePerm as 'Read' | 'Write',
-      });
-    }
-
-    const newUser: UserPermissions = {
-      email: newUserEmail,
-      permissions,
-    };
-
-    try {
-      const response = await fetch('frontend/access-management/users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newUser),
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setUsers(prevUsers => (prevUsers ? [...prevUsers, data] : [data]));
-        handleCloseAddUserModal();
-      } else {
-        console.error('Failed to add user:', response.statusText);
-      }
-    } catch (error) {
-      console.error('Error adding user:', error);
-    }
-  };
-
-  const handleSavePermissions = async () => {
-    if (!selectedUser) {
-      return;
-    }
-    const updatedPermissions = selectedUser.permissions.filter(
-      p => p.name !== 'support-landing-page-tests' && p.name !== 'checkout-nudge-tests',
+  const handleUserUpdated = (updatedUser: UserPermissions) => {
+    setUsers(prevUsers =>
+      prevUsers
+        ? prevUsers.map(user => (user.email === updatedUser.email ? updatedUser : user))
+        : [updatedUser],
     );
+    handleCloseEditModal();
+  };
 
-    if (landingPagePerm !== 'None') {
-      updatedPermissions.push({
-        name: 'support-landing-page-tests',
-        permission: landingPagePerm as 'Read' | 'Write',
-      });
-    }
-
-    if (checkoutNudgePerm !== 'None') {
-      updatedPermissions.push({
-        name: 'checkout-nudge-tests',
-        permission: checkoutNudgePerm as 'Read' | 'Write',
-      });
-    }
-
-    const updatedUser: UserPermissions = {
-      email: selectedUser.email,
-      permissions: updatedPermissions,
-    };
-
-    try {
-      const response = await fetch('frontend/access-management/users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedUser),
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setUsers(prevUsers =>
-          prevUsers ? prevUsers.map(user => (user.email === data.email ? data : user)) : [data],
-        );
-        handleCloseModal();
-      } else {
-        console.error('Failed to update user:', response.statusText);
-      }
-    } catch (error) {
-      console.error('Error updating user:', error);
-    }
+  const handleUserAdded = (newUser: UserPermissions) => {
+    setUsers(prevUsers => (prevUsers ? [...prevUsers, newUser] : [newUser]));
+    setAddUserModalOpen(false);
   };
   return (
     <div className={classes.container}>
@@ -268,7 +158,7 @@ const AccessManagement = () => {
                             variant="outlined"
                             size="small"
                             startIcon={<EditIcon />}
-                            onClick={() => handleOpenModal(user)}
+                            onClick={() => handleOpenEditModal(user)}
                           >
                             Edit permissions
                           </Button>
@@ -288,7 +178,7 @@ const AccessManagement = () => {
               variant="contained"
               color="primary"
               startIcon={<AddIcon />}
-              onClick={handleOpenAddUserModal}
+              onClick={() => setAddUserModalOpen(true)}
               className={classes.addUserButton}
             >
               Add user
@@ -298,28 +188,16 @@ const AccessManagement = () => {
       )}
 
       <AccessManagementDialog
-        modalOpen={modalOpen}
-        handleCloseModal={handleCloseModal}
-        selectedUser={selectedUser}
-        landingPagePerm={landingPagePerm}
-        setLandingPagePerm={setLandingPagePerm}
-        checkoutNudgePerm={checkoutNudgePerm}
-        setCheckoutNudgePerm={setCheckoutNudgePerm}
-        handleSavePermissions={handleSavePermissions}
-        classes={classes}
+        open={editModalOpen}
+        onClose={handleCloseEditModal}
+        user={selectedUser}
+        onUserUpdated={handleUserUpdated}
       />
 
       <AddUserDialog
-        modalOpen={addUserModalOpen}
-        handleCloseModal={handleCloseAddUserModal}
-        email={newUserEmail}
-        setEmail={setNewUserEmail}
-        landingPagePerm={newUserLandingPagePerm}
-        setLandingPagePerm={setNewUserLandingPagePerm}
-        checkoutNudgePerm={newUserCheckoutNudgePerm}
-        setCheckoutNudgePerm={setNewUserCheckoutNudgePerm}
-        handleAddUser={handleAddUser}
-        classes={classes}
+        open={addUserModalOpen}
+        onClose={() => setAddUserModalOpen(false)}
+        onUserAdded={handleUserAdded}
       />
     </div>
   );

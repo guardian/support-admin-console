@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Button,
   Dialog,
@@ -12,40 +12,100 @@ import {
   Radio,
   RadioGroup,
   TextField,
+  Theme,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { PermissionLevel } from '../channelManagement/helpers/shared';
+import { makeStyles } from '@mui/styles';
+import { PermissionLevel, UserPermissions } from '../channelManagement/helpers/shared';
+
+const useStyles = makeStyles(({ spacing }: Theme) => ({
+  dialogHeader: {
+    display: 'flex',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    paddingRight: spacing(1),
+  },
+  dialogTitle: {
+    wordBreak: 'break-word',
+    overflowWrap: 'break-word',
+    paddingRight: spacing(1),
+    flexShrink: 1,
+  },
+  formControl: {
+    marginBottom: spacing(3),
+  },
+}));
 
 interface AddUserDialogProps {
-  modalOpen: boolean;
-  handleCloseModal: () => void;
-  email: string;
-  setEmail: (value: string) => void;
-  landingPagePerm: PermissionLevel;
-  setLandingPagePerm: (value: PermissionLevel) => void;
-  checkoutNudgePerm: PermissionLevel;
-  setCheckoutNudgePerm: (value: PermissionLevel) => void;
-  handleAddUser: () => void;
-  classes: { [key: string]: string };
+  open: boolean;
+  onClose: () => void;
+  onUserAdded: (user: UserPermissions) => void;
 }
 
-const AddUserDialog = ({
-  modalOpen,
-  handleCloseModal,
-  email,
-  setEmail,
-  landingPagePerm,
-  setLandingPagePerm,
-  checkoutNudgePerm,
-  setCheckoutNudgePerm,
-  handleAddUser,
-  classes,
-}: AddUserDialogProps) => {
+const AddUserDialog = ({ open, onClose, onUserAdded }: AddUserDialogProps) => {
+  const classes = useStyles();
+  const [email, setEmail] = useState('');
+  const [landingPagePerm, setLandingPagePerm] = useState<PermissionLevel>('None');
+  const [checkoutNudgePerm, setCheckoutNudgePerm] = useState<PermissionLevel>('None');
+
+  const handleClose = () => {
+    setEmail('');
+    setLandingPagePerm('None');
+    setCheckoutNudgePerm('None');
+    onClose();
+  };
+
+  const handleSubmit = async () => {
+    if (!email.trim()) {
+      return;
+    }
+
+    const permissions = [];
+
+    if (landingPagePerm !== 'None') {
+      permissions.push({
+        name: 'support-landing-page-tests',
+        permission: landingPagePerm as 'Read' | 'Write',
+      });
+    }
+
+    if (checkoutNudgePerm !== 'None') {
+      permissions.push({
+        name: 'checkout-nudge-tests',
+        permission: checkoutNudgePerm as 'Read' | 'Write',
+      });
+    }
+
+    const newUser: UserPermissions = {
+      email,
+      permissions,
+    };
+
+    try {
+      const response = await fetch('frontend/access-management/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newUser),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        onUserAdded(data);
+        handleClose();
+      } else {
+        console.error('Failed to add user:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error adding user:', error);
+    }
+  };
+
   return (
-    <Dialog open={modalOpen} onClose={handleCloseModal} maxWidth="sm" fullWidth>
+    <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
       <div className={classes.dialogHeader}>
         <DialogTitle className={classes.dialogTitle}>Add New User</DialogTitle>
-        <IconButton onClick={handleCloseModal} size="small">
+        <IconButton onClick={handleClose} size="small">
           <CloseIcon />
         </IconButton>
       </div>
@@ -88,13 +148,8 @@ const AddUserDialog = ({
         </FormControl>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleCloseModal}>Cancel</Button>
-        <Button
-          onClick={handleAddUser}
-          variant="contained"
-          color="primary"
-          disabled={!email.trim()}
-        >
+        <Button onClick={handleClose}>Cancel</Button>
+        <Button onClick={handleSubmit} variant="contained" color="primary" disabled={!email.trim()}>
           Add User
         </Button>
       </DialogActions>
