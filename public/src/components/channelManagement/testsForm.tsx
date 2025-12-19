@@ -60,6 +60,11 @@ interface ChannelTestsResponse<T> {
   status: LockStatus;
 }
 
+const RequirePermission = [
+  FrontendSettingsType.supportLandingPageTests,
+  FrontendSettingsType.checkoutNudgeTests,
+];
+
 export interface TestEditorProps<T extends Test> {
   test: T;
   userHasTestLocked: boolean;
@@ -289,11 +294,9 @@ export const TestsForm = <T extends Test>(
 
     const userHasTestListLocked = testListLockStatus.email === email;
 
-    // Currently only the Landing Page tool has permissioning
-    const allowEditing =
-      settingsType === FrontendSettingsType.supportLandingPageTests
-        ? hasPermission(FrontendSettingsType.supportLandingPageTests, 'Write')
-        : true;
+    const allowEditing = RequirePermission.includes(settingsType)
+      ? hasPermission(settingsType, 'Write')
+      : true;
 
     return (
       <div className={classes.body}>
