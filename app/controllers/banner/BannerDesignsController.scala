@@ -5,10 +5,10 @@ import models.DynamoErrors.{DynamoDuplicateNameError, DynamoError, DynamoNoLockE
 import models.{BannerDesign, BannerTest, Channel}
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, ActionBuilder, AnyContent, ControllerComponents, Result}
-import services.{DynamoArchivedBannerDesigns, DynamoBannerDesigns, DynamoChannelTests}
+import services.{ChatService, DynamoArchivedBannerDesigns, DynamoBannerDesigns, DynamoChannelTests}
 import services.S3Client.S3ObjectSettings
 import utils.Circe.noNulls
-import zio.{Unsafe, ZIO}
+import zio.{UIO, Unsafe, ZIO}
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.syntax.EncoderOps
 import io.circe.generic.auto._
@@ -23,7 +23,8 @@ class BannerDesignsController(
     runtime: zio.Runtime[Any],
     dynamoDesigns: DynamoBannerDesigns,
     dynamoTests: DynamoChannelTests,
-    dynamoArchivedDesigns: DynamoArchivedBannerDesigns
+    dynamoArchivedDesigns: DynamoArchivedBannerDesigns,
+    chatService: ChatService
 )(implicit ec: ExecutionContext)
     extends AbstractController(components)
     with Circe
@@ -35,13 +36,6 @@ class BannerDesignsController(
   )
 
   val lockFileName = "banner-designs"
-
-  private val lockObjectSettings = S3ObjectSettings(
-    bucket = "support-admin-console",
-    key = s"$stage/locks/$lockFileName.lock",
-    publicRead = false,
-    cacheControl = None
-  )
 
   val s3Client = services.S3
 
@@ -79,6 +73,17 @@ class BannerDesignsController(
     }
   }
 
+  private def sendChatMessage(design: BannerDesign, email: String, created: Boolean, host: String): UIO[Unit] = {
+    val message =
+      s"""Banner design ${design.name} has just been ${if (created) "created" else "updated"} by user $email.
+         |http://$host/banner-designs/${design.name}
+         |""".stripMargin
+    ZIO
+      .fromFuture(_ => chatService.sendMessage(message))
+      .as(())
+      .catchAll(_ => ZIO.unit)
+  }
+
   def update = authAction.async(circe.json[BannerDesign]) { request =>
     run {
       val design = request.body
@@ -86,6 +91,12 @@ class BannerDesignsController(
       dynamoDesigns
         .updateBannerDesign(design, request.user.email)
         .map(_ => Ok("updated"))
+        .tap(_ => sendChatMessage(
+          design = design,
+          email = request.user.email,
+          created = false,
+          host = request.host)
+        )
         .catchSome { case DynamoNoLockError(error) =>
           logger.warn(
             s"Failed to save '${design.name}' because user ${request.user.email} does not have it locked: ${error.getMessage}"
@@ -102,6 +113,12 @@ class BannerDesignsController(
       dynamoDesigns
         .createBannerDesign(design)
         .map(_ => Ok("created"))
+        .tap(_ => sendChatMessage(
+          design = design,
+          email = request.user.email,
+          created = true,
+          host = request.host)
+        )
         .catchSome { case DynamoDuplicateNameError(error) =>
           logger.warn(s"Failed to create '${design.name}' because name already exists: ${error.getMessage}")
           ZIO.succeed(
