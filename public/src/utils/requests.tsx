@@ -26,7 +26,6 @@ export enum FrontendSettingsType {
   bannerDesigns = 'banner-designs',
   supportLandingPageTests = 'support-landing-page-tests',
   checkoutNudgeTests = 'checkout-nudge-tests',
-  accessManagement = 'access-management',
 }
 
 export enum AppsSettingsType {
