@@ -17,7 +17,7 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { hasPermission } from '../../utils/permissions';
-import { fetchUsersWithPermissions } from '../../utils/requests';
+import { fetchUsersWithPermissions, FrontendSettingsType } from '../../utils/requests';
 import AccessManagementDialog from './UpdatePermissionsDialog';
 import AddUserDialog from './AddUserDialog';
 
@@ -71,7 +71,7 @@ const AccessManagement = () => {
   const [editModalOpen, setEditModalOpen] = React.useState(false);
   const [selectedUser, setSelectedUser] = React.useState<UserPermissions | null>(null);
   const [addUserModalOpen, setAddUserModalOpen] = React.useState(false);
-  const canEditPermissions = hasPermission('access-management', 'Write');
+  const canEditPermissions = hasPermission(FrontendSettingsType.accessManagement, 'Write');
 
   useEffect(() => {
     const getUsers = async () => {
