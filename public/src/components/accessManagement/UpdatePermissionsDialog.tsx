@@ -16,6 +16,7 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import { makeStyles } from '@mui/styles';
 import { PermissionLevel, UserPermissions } from '../channelManagement/helpers/shared';
+import { saveUserPermissions } from '../../utils/requests';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   dialogHeader: {
@@ -92,19 +93,9 @@ const AccessManagementDialog = ({
     };
 
     try {
-      const response = await fetch('frontend/access-management/users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedUser),
-      });
-      if (response.ok) {
-        const data = await response.json();
-        onUserUpdated(data);
-      } else {
-        console.error('Failed to update user:', response.statusText);
-      }
+      const response = await saveUserPermissions(updatedUser);
+      const data = await response.json();
+      onUserUpdated(data);
     } catch (error) {
       console.error('Error updating user:', error);
     }

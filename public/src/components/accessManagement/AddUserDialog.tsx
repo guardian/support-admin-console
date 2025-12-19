@@ -17,6 +17,7 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import { makeStyles } from '@mui/styles';
 import { PermissionLevel, UserPermissions } from '../channelManagement/helpers/shared';
+import { saveUserPermissions } from '../../utils/requests';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   dialogHeader: {
@@ -82,20 +83,10 @@ const AddUserDialog = ({ open, onClose, onUserAdded }: AddUserDialogProps) => {
     };
 
     try {
-      const response = await fetch('frontend/access-management/users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newUser),
-      });
-      if (response.ok) {
-        const data = await response.json();
-        onUserAdded(data);
-        handleClose();
-      } else {
-        console.error('Failed to add user:', response.statusText);
-      }
+      const response = await saveUserPermissions(newUser);
+      const data = await response.json();
+      onUserAdded(data);
+      handleClose();
     } catch (error) {
       console.error('Error adding user:', error);
     }

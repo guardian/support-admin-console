@@ -17,6 +17,7 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { hasPermission } from '../../utils/permissions';
+import { fetchUsersWithPermissions } from '../../utils/requests';
 import AccessManagementDialog from './UpdatePermissionsDialog';
 import AddUserDialog from './AddUserDialog';
 
@@ -76,8 +77,7 @@ const AccessManagement = () => {
     const getUsers = async () => {
       setLoading(true);
       try {
-        const response = await fetch('frontend/access-management/users');
-        const data = await response.json();
+        const data = await fetchUsersWithPermissions();
         setUsers(data);
       } catch (error) {
         console.error('Error fetching users:', error);
