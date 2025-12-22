@@ -227,7 +227,7 @@ const AppRouter = () => {
             element={createComponent(<DefaultPromos />, 'Default Promos')}
           />
           <Route
-            path="/banner-designs/:name?"
+            path="/banner-designs/:bannerDesignName?"
             element={createComponent(<BannerDesigns />, 'Banner Designs')}
           />
           <Route
