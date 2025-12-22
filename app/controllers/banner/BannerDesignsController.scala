@@ -124,12 +124,14 @@ class BannerDesignsController(
       dynamoDesigns
         .updateBannerDesign(design, request.user.email)
         .map(_ => Ok("updated"))
-        .tap(_ => sendChatMessage(
-          design = design,
-          email = request.user.email,
-          created = false,
-          host = request.host)
-        )
+        .tap(_ => stage match {
+          case "PROD" => sendChatMessage(
+            design = design,
+            email = request.user.email,
+            created = false,
+            host = request.host)
+          case _ => ZIO.succeed(())
+        })
         .catchSome { case DynamoNoLockError(error) =>
           logger.warn(
             s"Failed to save '${design.name}' because user ${request.user.email} does not have it locked: ${error.getMessage}"
@@ -146,12 +148,14 @@ class BannerDesignsController(
       dynamoDesigns
         .createBannerDesign(design)
         .map(_ => Ok("created"))
-        .tap(_ => sendChatMessage(
-          design = design,
-          email = request.user.email,
-          created = true,
-          host = request.host)
-        )
+        .tap(_ => stage match {
+          case "PROD" => sendChatMessage(
+            design = design,
+            email = request.user.email,
+            created = true,
+            host = request.host)
+          case _ => ZIO.succeed(())
+        })
         .catchSome { case DynamoDuplicateNameError(error) =>
           logger.warn(s"Failed to create '${design.name}' because name already exists: ${error.getMessage}")
           ZIO.succeed(
