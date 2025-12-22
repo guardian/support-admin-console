@@ -2,17 +2,15 @@ package controllers.banner
 
 import com.gu.googleauth.AuthAction
 import models.DynamoErrors.{DynamoDuplicateNameError, DynamoError, DynamoNoLockError}
-import models.{BannerDesign, BannerTest, Channel}
+import models.{BannerDesign, BannerDesignVisual, BannerTest, BannerUI, Channel}
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, ActionBuilder, AnyContent, ControllerComponents, Result}
-import services.{GoogleChatService, DynamoArchivedBannerDesigns, DynamoBannerDesigns, DynamoChannelTests}
-import services.S3Client.S3ObjectSettings
+import services.{DynamoArchivedBannerDesigns, DynamoBannerDesigns, DynamoChannelTests, GoogleChatService}
 import utils.Circe.noNulls
 import zio.{UIO, Unsafe, ZIO}
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.syntax.EncoderOps
 import io.circe.generic.auto._
-import models.BannerUI
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -74,10 +72,45 @@ class BannerDesignsController(
   }
 
   private def sendChatMessage(design: BannerDesign, email: String, created: Boolean, host: String): UIO[Unit] = {
-    val message =
-      s"""Banner design '${design.name}' has just been ${if (created) "created" else "updated"} by user $email.
-         |http://$host/banner-designs/${design.name}
-         |""".stripMargin
+    import services.GoogleChatMessage._
+
+    val action = if (created) "created" else "updated"
+    val designUrl = s"http://$host/banner-designs/${design.name}"
+
+    val textWidget = Widget.TextParagraph(s"<b>${design.name}</b>")
+    val buttonWidget = Widget.ButtonList(List(
+      Button(
+        text = "View Design",
+        onClick = OnClick(OpenLink(designUrl))
+      )
+    ))
+
+    val headerImageWidget = design.headerImage.map { headerImage =>
+      Widget.Image(headerImage.desktopUrl, "Header image")
+    }
+
+    val mainImageWidget = design.visual match {
+      case Some(image: BannerDesignVisual.Image) =>
+        Some(Widget.Image(image.desktopUrl, "Main image"))
+      case _ => None
+    }
+
+    val widgets = List(Some(textWidget), Some(buttonWidget), headerImageWidget, mainImageWidget).flatten
+
+    val message = GoogleChatMessage(
+      text = s"Banner design '${design.name}' has been $action",
+      cardsV2 = List(CardV2(
+        cardId = "banner-design-notification",
+        card = Card(
+          header = CardHeader(
+            title = s"Banner Design ${action.capitalize}",
+            subtitle = s"by $email"
+          ),
+          sections = List(CardSection(widgets))
+        )
+      ))
+    )
+
     ZIO
       .fromFuture(_ => chatService.sendMessage(message))
       .as(())
