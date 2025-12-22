@@ -2,17 +2,15 @@ package controllers.banner
 
 import com.gu.googleauth.AuthAction
 import models.DynamoErrors.{DynamoDuplicateNameError, DynamoError, DynamoNoLockError}
-import models.{BannerDesign, BannerTest, Channel}
+import models.{BannerDesign, BannerDesignVisual, BannerTest, BannerUI, Channel}
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, ActionBuilder, AnyContent, ControllerComponents, Result}
-import services.{DynamoArchivedBannerDesigns, DynamoBannerDesigns, DynamoChannelTests}
-import services.S3Client.S3ObjectSettings
+import services.{DynamoArchivedBannerDesigns, DynamoBannerDesigns, DynamoChannelTests, GoogleChatService}
 import utils.Circe.noNulls
-import zio.{Unsafe, ZIO}
+import zio.{UIO, Unsafe, ZIO}
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.syntax.EncoderOps
 import io.circe.generic.auto._
-import models.BannerUI
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -23,7 +21,8 @@ class BannerDesignsController(
     runtime: zio.Runtime[Any],
     dynamoDesigns: DynamoBannerDesigns,
     dynamoTests: DynamoChannelTests,
-    dynamoArchivedDesigns: DynamoArchivedBannerDesigns
+    dynamoArchivedDesigns: DynamoArchivedBannerDesigns,
+    chatService: GoogleChatService
 )(implicit ec: ExecutionContext)
     extends AbstractController(components)
     with Circe
@@ -35,13 +34,6 @@ class BannerDesignsController(
   )
 
   val lockFileName = "banner-designs"
-
-  private val lockObjectSettings = S3ObjectSettings(
-    bucket = "support-admin-console",
-    key = s"$stage/locks/$lockFileName.lock",
-    publicRead = false,
-    cacheControl = None
-  )
 
   val s3Client = services.S3
 
@@ -79,6 +71,52 @@ class BannerDesignsController(
     }
   }
 
+  private def sendChatMessage(design: BannerDesign, email: String, created: Boolean, host: String): UIO[Unit] = {
+    import services.GoogleChatMessage._
+
+    val action = if (created) "created" else "updated"
+    val designUrl = s"http://$host/banner-designs/${design.name}"
+
+    val textWidget = Widget.TextParagraph(s"<b>${design.name}</b>")
+    val buttonWidget = Widget.ButtonList(List(
+      Button(
+        text = "View Design",
+        onClick = OnClick(OpenLink(designUrl))
+      )
+    ))
+
+    val headerImageWidget = design.headerImage.map { headerImage =>
+      Widget.Image(headerImage.desktopUrl, "Header image")
+    }
+
+    val mainImageWidget = design.visual match {
+      case Some(image: BannerDesignVisual.Image) =>
+        Some(Widget.Image(image.desktopUrl, "Main image"))
+      case _ => None
+    }
+
+    val widgets = List(Some(textWidget), Some(buttonWidget), headerImageWidget, mainImageWidget).flatten
+
+    val message = GoogleChatMessage(
+      text = s"Banner design '${design.name}' has been $action",
+      cardsV2 = List(CardV2(
+        cardId = "banner-design-notification",
+        card = Card(
+          header = CardHeader(
+            title = s"Banner Design ${action.capitalize}",
+            subtitle = s"by $email"
+          ),
+          sections = List(CardSection(widgets))
+        )
+      ))
+    )
+
+    ZIO
+      .fromFuture(_ => chatService.sendMessage(message))
+      .as(())
+      .catchAll(_ => ZIO.unit)
+  }
+
   def update = authAction.async(circe.json[BannerDesign]) { request =>
     run {
       val design = request.body
@@ -86,6 +124,14 @@ class BannerDesignsController(
       dynamoDesigns
         .updateBannerDesign(design, request.user.email)
         .map(_ => Ok("updated"))
+        .tap(_ => stage match {
+          case "PROD" => sendChatMessage(
+            design = design,
+            email = request.user.email,
+            created = false,
+            host = request.host)
+          case _ => ZIO.succeed(())
+        })
         .catchSome { case DynamoNoLockError(error) =>
           logger.warn(
             s"Failed to save '${design.name}' because user ${request.user.email} does not have it locked: ${error.getMessage}"
@@ -102,6 +148,14 @@ class BannerDesignsController(
       dynamoDesigns
         .createBannerDesign(design)
         .map(_ => Ok("created"))
+        .tap(_ => stage match {
+          case "PROD" => sendChatMessage(
+            design = design,
+            email = request.user.email,
+            created = true,
+            host = request.host)
+          case _ => ZIO.succeed(())
+        })
         .catchSome { case DynamoDuplicateNameError(error) =>
           logger.warn(s"Failed to create '${design.name}' because name already exists: ${error.getMessage}")
           ZIO.succeed(
