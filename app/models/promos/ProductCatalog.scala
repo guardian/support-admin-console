@@ -90,7 +90,9 @@ object ProductCatalog {
   case class GuardianWeeklyRatePlans(
       Annual: RatePlan,
       Monthly: RatePlan,
-      Quarterly: RatePlan
+      Quarterly: RatePlan,
+      OneYearGift: RatePlan,
+      ThreeMonthGift: RatePlan
   ) extends ProductRatePlans
 
   case class HomeDeliveryAndSubscriptionCardRatePlans(
