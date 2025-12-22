@@ -75,7 +75,7 @@ class BannerDesignsController(
 
   private def sendChatMessage(design: BannerDesign, email: String, created: Boolean, host: String): UIO[Unit] = {
     val message =
-      s"""Banner design ${design.name} has just been ${if (created) "created" else "updated"} by user $email.
+      s"""Banner design '${design.name}' has just been ${if (created) "created" else "updated"} by user $email.
          |http://$host/banner-designs/${design.name}
          |""".stripMargin
     ZIO
