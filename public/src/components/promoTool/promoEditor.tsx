@@ -264,7 +264,6 @@ const PromoEditor = ({
     : `This promo is currently locked by ${promo.lockStatus?.email}`;
 
   const showLandingPageSection = ['Newspaper', 'Weekly'].includes(campaignProduct ?? '');
-
   return (
     <Paper className={classes.root}>
       {(isLockedByOther || isLockedByUser) && (
@@ -397,20 +396,28 @@ const PromoEditor = ({
         </Typography>
         <Box className={classes.countryGroupsContainer}>
           <Grid container spacing={2}>
-            {countryGroups.map(group => (
-              <Grid item xs={6} key={group.id}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={selectedCountryGroups.includes(group.id)}
-                      onChange={() => handleCountryGroupToggle(group.id)}
-                      disabled={!isEditing}
-                    />
-                  }
-                  label={group.name}
-                />
-              </Grid>
-            ))}
+            {countryGroups.map(group => {
+              const isGroupSelected = selectedCountryGroups.includes(group.id);
+              const hasSelectedCountries = group.countries.some(country =>
+                selectedCountryGroups.includes(country),
+              );
+              const isChecked = isGroupSelected || hasSelectedCountries;
+
+              return (
+                <Grid item xs={6} key={group.id}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={isChecked}
+                        onChange={() => handleCountryGroupToggle(group.id)}
+                        disabled={!isEditing}
+                      />
+                    }
+                    label={group.name}
+                  />
+                </Grid>
+              );
+            })}
           </Grid>
         </Box>
       </div>
