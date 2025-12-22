@@ -5,7 +5,7 @@ import models.DynamoErrors.{DynamoDuplicateNameError, DynamoError, DynamoNoLockE
 import models.{BannerDesign, BannerTest, Channel}
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, ActionBuilder, AnyContent, ControllerComponents, Result}
-import services.{ChatService, DynamoArchivedBannerDesigns, DynamoBannerDesigns, DynamoChannelTests}
+import services.{GoogleChatService, DynamoArchivedBannerDesigns, DynamoBannerDesigns, DynamoChannelTests}
 import services.S3Client.S3ObjectSettings
 import utils.Circe.noNulls
 import zio.{UIO, Unsafe, ZIO}
@@ -24,7 +24,7 @@ class BannerDesignsController(
     dynamoDesigns: DynamoBannerDesigns,
     dynamoTests: DynamoChannelTests,
     dynamoArchivedDesigns: DynamoArchivedBannerDesigns,
-    chatService: ChatService
+    chatService: GoogleChatService
 )(implicit ec: ExecutionContext)
     extends AbstractController(components)
     with Circe

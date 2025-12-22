@@ -7,7 +7,11 @@ import io.circe.syntax._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ChatService(url: String, wsClient: WSClient)(implicit val ec: ExecutionContext) extends LazyLogging {
+/**
+ * This class sends messages to a Google Chat webhook url.
+ * We can use this for notifying people about changes made by the tools.
+ */
+class GoogleChatService(url: String, wsClient: WSClient)(implicit val ec: ExecutionContext) extends LazyLogging {
   case class Message(text: String)
 
   def sendMessage(message: String): Future[Unit] =
