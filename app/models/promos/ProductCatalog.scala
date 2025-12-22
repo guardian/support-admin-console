@@ -119,7 +119,10 @@ object ProductCatalog {
       DomesticMonthly: RatePlan,
       DomesticAnnual: RatePlan,
       RestOfWorldMonthly: RatePlan,
-      RestOfWorldAnnual: RatePlan
+      RestOfWorldAnnual: RatePlan,
+      DomesticAnnualV2: RatePlan,
+      RestOfWorldAnnualV2: RatePlan,
+      DomesticMonthlyV2: RatePlan
   ) extends ProductRatePlans
 
   case class DigitalSubscriptionRatePlans(
