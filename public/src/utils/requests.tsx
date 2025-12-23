@@ -1,4 +1,4 @@
-import { Test, Status } from '../components/channelManagement/helpers/shared';
+import { Test, Status, UserPermissions } from '../components/channelManagement/helpers/shared';
 import { Campaign } from '../components/channelManagement/campaigns/CampaignsForm';
 import { BannerDesign, Status as BannerDesignStatus } from '../models/bannerDesign';
 import { PromoCampaign, Promo, CountryGroup } from '../components/promoTool/utils/promoModels';
@@ -26,6 +26,7 @@ export enum FrontendSettingsType {
   bannerDesigns = 'banner-designs',
   supportLandingPageTests = 'support-landing-page-tests',
   checkoutNudgeTests = 'checkout-nudge-tests',
+  accessManagement = 'access-management',
 }
 
 export enum AppsSettingsType {
@@ -272,4 +273,12 @@ export function fetchCountryGroups(): Promise<CountryGroup[]> {
 
 export function fetchProductDetails(product: string): Promise<Product> {
   return fetchSettings(`/product-catalog/${product}`);
+}
+
+export function fetchUsersWithPermissions(): Promise<UserPermissions[]> {
+  return fetchSettings('/frontend/access-management/users');
+}
+
+export function saveUserPermissions(user: UserPermissions): Promise<Response> {
+  return saveSettings('/frontend/access-management/users', user);
 }

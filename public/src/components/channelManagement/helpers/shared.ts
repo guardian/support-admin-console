@@ -298,3 +298,14 @@ export interface RegionTargeting {
   targetedCountryGroups: Region[];
   targetedCountryCodes?: string[];
 }
+
+export type PermissionLevel = 'Read' | 'Write' | 'None';
+export interface PagePermission {
+  name: string;
+  permission: PermissionLevel;
+}
+
+export interface UserPermissions {
+  email: string;
+  permissions: PagePermission[];
+}
