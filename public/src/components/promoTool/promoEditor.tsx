@@ -19,10 +19,13 @@ import {
   PromoProduct,
   mapPromoProductToCatalogProducts,
 } from './utils/promoModels';
-import { fetchCountryGroups } from '../../utils/requests';
+import { fetchCountryGroups, fetchProductDetails } from '../../utils/requests';
 import RatePlanSelector from './ratePlanSelector';
-import { RatePlanWithProduct, getAllRatePlansWithProduct } from './utils/productCatalog';
-import { fetchProductDetails } from '../../utils/requests';
+import {
+  RatePlanWithProduct,
+  getAllRatePlansWithProduct,
+  orderRatePlans,
+} from './utils/productCatalog';
 import { PromoLandingPage } from './promoLandingPage';
 
 export const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
@@ -128,6 +131,7 @@ const PromoEditor = ({
           ratePlans.push(...getAllRatePlansWithProduct(product, productName));
         });
 
+        ratePlans.sort(orderRatePlans(campaignProduct));
         setAllRatePlans(ratePlans);
       })
       .catch(error => {
