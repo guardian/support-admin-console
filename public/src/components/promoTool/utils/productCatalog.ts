@@ -147,3 +147,51 @@ export function getProductByType(
 ): Product | undefined {
   return catalog[productType];
 }
+
+export const compareStrings = (a: string, b: string): number => {
+  if (a < b) {
+    return -1;
+  }
+  if (a > b) {
+    return 1;
+  }
+  return 0;
+};
+
+export const sortByCustomOrder = (a: string, b: string, customOrder: string[]): number => {
+  const aIndex = customOrder.indexOf(a);
+  const bIndex = customOrder.indexOf(b);
+
+  if (aIndex !== -1 && bIndex !== -1) {
+    return aIndex - bIndex;
+  }
+  if (aIndex !== -1) {
+    return -1;
+  }
+  if (bIndex !== -1) {
+    return 1;
+  }
+
+  return 0;
+};
+
+export const orderRatePlans = (product: string) => (
+  a: RatePlanWithProduct,
+  b: RatePlanWithProduct,
+): number => {
+  const customOrders: Partial<Record<string, string[]>> = {
+    Newspaper: ['SixdayPlus', 'SaturdayPlus', 'EverydayPlus', 'WeekendPlus', 'Sunday'],
+    Weekly: ['Monthly', 'Quarterly', 'Annual'],
+  };
+
+  const customOrder = customOrders[product];
+
+  if (customOrder) {
+    const productNameComparison = compareStrings(a.productName, b.productName);
+    if (productNameComparison !== 0) {
+      return productNameComparison;
+    }
+    return sortByCustomOrder(a.ratePlanName, b.ratePlanName, customOrder);
+  }
+  return 0;
+};
