@@ -90,7 +90,7 @@ class DynamoPermissionsCache(
       .tableName(tableName)
       .item(item)
       .build()
-    put(request).tap(_ => 
+    put(request).tap(_ =>
       // Update cache after successful write
       ZIO.succeed(permissionsCache.updateAndGet(cache => cache + (user.email -> user)))
     )
