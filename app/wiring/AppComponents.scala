@@ -13,22 +13,7 @@ import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.mvc.AnyContent
 import play.api.{BuiltInComponentsFromContext, NoHttpFiltersComponents}
 import router.Routes
-import services.{
-  Aws,
-  BigQueryService,
-  CapiService,
-  DynamoArchivedBannerDesigns,
-  DynamoArchivedChannelTests,
-  DynamoBanditData,
-  DynamoBannerDesigns,
-  DynamoCampaigns,
-  DynamoChannelTests,
-  DynamoChannelTestsAudit,
-  DynamoPermissionsCache,
-  DynamoSuperMode,
-  ProductCatalogCache,
-  S3
-}
+import services.{Aws, BigQueryService, CapiService, GoogleChatService, DynamoArchivedBannerDesigns, DynamoArchivedChannelTests, DynamoBanditData, DynamoBannerDesigns, DynamoCampaigns, DynamoChannelTests, DynamoChannelTestsAudit, DynamoPermissionsCache, DynamoSuperMode, ProductCatalogCache, S3}
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.s3.model.GetObjectRequest
 
@@ -99,6 +84,8 @@ class AppComponents(context: Context, stage: String)
   private val runtime = zio.Runtime.default
 
   val capiService = new CapiService(configuration.get[String]("capi.apiKey"), wsClient)
+
+  val chatService = new GoogleChatService(configuration.get[String]("chat.webhookUrl"), wsClient)
 
   val dynamoClient = DynamoDbClient.builder
     .region(Aws.region)
@@ -217,7 +204,8 @@ class AppComponents(context: Context, stage: String)
       runtime,
       dynamoBannerDesigns,
       dynamoTestsService,
-      dynamoArchivedBannerDesigns
+      dynamoArchivedBannerDesigns,
+      chatService
     ),
     new CapiController(authAction, capiService),
     new AppsMeteringSwitchesController(authAction, controllerComponents, stage, runtime),
