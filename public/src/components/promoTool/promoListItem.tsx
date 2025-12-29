@@ -146,11 +146,19 @@ export const PromoListItem = ({
     if (!promo.appliesTo.countryGroups || promo.appliesTo.countryGroups.length === 0) {
       return 'All regions';
     }
-    const regionNames = promo.appliesTo.countryGroups.map(groupId => {
-      const group = countryGroups?.find(cg => cg.id === groupId);
-      return group ? group.name : groupId;
+    const regionNames = promo.appliesTo.countryGroups.map(item => {
+      const groupById = countryGroups?.find(cg => cg.id === item);
+      if (groupById) {
+        return groupById.name;
+      }
+      const groupByCountryCode = countryGroups?.find(cg => cg.countries.includes(item));
+      if (groupByCountryCode) {
+        return groupByCountryCode.name;
+      }
+      return item;
     });
-    return regionNames.join(', ');
+    const uniqueRegionNames = [...new Set(regionNames)];
+    return uniqueRegionNames.join(', ');
   };
 
   return (
