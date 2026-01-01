@@ -60,7 +60,7 @@ dependencyOverrides ++= List(
   "io.netty" % "netty-handler" % "4.2.7.Final",
   "io.netty" % "netty-codec-http2" % "4.2.7.Final",
   // google-cloud-bigquery pulls in a vulnerable version of grpc-netty-shaded
-  "io.grpc" % "grpc-netty-shaded" % "1.77.0",
+  "io.grpc" % "grpc-netty-shaded" % "1.77.1",
   // Related to Play 3.0.2-6 currently brings in a vulnerable version of commons-io
   "commons-io" % "commons-io" % "2.21.0" % Test,
   "commons-beanutils" % "commons-beanutils" % "1.11.0"
