@@ -148,16 +148,6 @@ export function getProductByType(
   return catalog[productType];
 }
 
-export const compareStrings = (a: string, b: string): number => {
-  if (a < b) {
-    return -1;
-  }
-  if (a > b) {
-    return 1;
-  }
-  return 0;
-};
-
 export const sortByCustomOrder = (a: string, b: string, customOrder: string[]): number => {
   const aIndex = customOrder.indexOf(a);
   const bIndex = customOrder.indexOf(b);
@@ -187,7 +177,7 @@ export const orderRatePlans = (product: string) => (
   const customOrder = customOrders[product];
 
   if (customOrder) {
-    const productNameComparison = compareStrings(a.productName, b.productName);
+    const productNameComparison = a.productName.localeCompare(b.productName);
     if (productNameComparison !== 0) {
       return productNameComparison;
     }
