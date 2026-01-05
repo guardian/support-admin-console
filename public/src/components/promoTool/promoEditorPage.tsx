@@ -223,7 +223,7 @@ const PromoEditorPage: React.FC = () => {
         <Button
           variant="outlined"
           startIcon={<VisibilityIcon />}
-          href={getPromoPreviewUrl(promo.promoCode)}
+          href={getPromoPreviewUrl(promo.promoCode, campaignProduct)}
           target="_blank"
           rel="noopener noreferrer"
         >
