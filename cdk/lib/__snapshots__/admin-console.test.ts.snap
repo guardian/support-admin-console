@@ -2096,6 +2096,9 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
         "PointInTimeRecoverySpecification": {
           "PointInTimeRecoveryEnabled": true,
         },
+        "StreamSpecification": {
+          "StreamViewType": "NEW_AND_OLD_IMAGES",
+        },
         "TableName": "support-admin-console-promos-PROD",
         "Tags": [
           {
