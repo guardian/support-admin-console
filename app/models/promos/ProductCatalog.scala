@@ -90,9 +90,7 @@ object ProductCatalog {
   case class GuardianWeeklyRatePlans(
       Annual: RatePlan,
       Monthly: RatePlan,
-      Quarterly: RatePlan,
-      OneYearGift: RatePlan,
-      ThreeMonthGift: RatePlan
+      Quarterly: RatePlan
   ) extends ProductRatePlans
 
   case class HomeDeliveryAndSubscriptionCardRatePlans(
@@ -119,10 +117,7 @@ object ProductCatalog {
       DomesticMonthly: RatePlan,
       DomesticAnnual: RatePlan,
       RestOfWorldMonthly: RatePlan,
-      RestOfWorldAnnual: RatePlan,
-      DomesticAnnualV2: RatePlan,
-      RestOfWorldAnnualV2: RatePlan,
-      DomesticMonthlyV2: RatePlan
+      RestOfWorldAnnual: RatePlan
   ) extends ProductRatePlans
 
   case class DigitalSubscriptionRatePlans(
