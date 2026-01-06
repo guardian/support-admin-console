@@ -10,7 +10,7 @@ overrides:
 devDependencies:
   '@guardian/cdk':
     specifier: 61.3.2
-    version: 61.3.2(aws-cdk-lib@2.189.1)(aws-cdk@2.1005.0)(constructs@10.4.3)
+    version: 61.3.2(aws-cdk-lib@2.189.1)(aws-cdk@2.1005.0)(constructs@10.4.4)
   '@guardian/eslint-config-typescript':
     specifier: 10.0.1
     version: 10.0.1(eslint@8.56.0)(tslib@2.8.1)(typescript@5.3.3)
@@ -25,10 +25,10 @@ devDependencies:
     version: 2.1005.0
   aws-cdk-lib:
     specifier: 2.189.1
-    version: 2.189.1(constructs@10.4.3)
+    version: 2.189.1(constructs@10.4.4)
   constructs:
-    specifier: 10.4.3
-    version: 10.4.3
+    specifier: 10.4.4
+    version: 10.4.4
   eslint:
     specifier: 8.56.0
     version: 8.56.0
@@ -388,8 +388,8 @@ packages:
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
     dev: true
 
-  /@emnapi/core@1.7.1:
-    resolution: {integrity: sha512-o1uhUASyo921r2XtHYOHy7gdkGLge8ghBEQHMWmyJFoXlpU58kIrhhN3w26lpQb6dspetweapMn2CSNwQ8I4wg==}
+  /@emnapi/core@1.8.1:
+    resolution: {integrity: sha512-AvT9QFpxK0Zd8J0jopedNm+w/2fIzvtPKPjqyw9jwvBaReTTqPBk9Hixaz7KbjimP+QNz605/XnjFcDAL2pqBg==}
     requiresBuild: true
     dependencies:
       '@emnapi/wasi-threads': 1.1.0
@@ -397,8 +397,8 @@ packages:
     dev: true
     optional: true
 
-  /@emnapi/runtime@1.7.1:
-    resolution: {integrity: sha512-PVtJr5CmLwYAU9PZDMITZoR5iAOShYREoR45EyyLrbntV50mdePTgUn4AmOw90Ifcj+x2kRjdzr1HP3RrNiHGA==}
+  /@emnapi/runtime@1.8.1:
+    resolution: {integrity: sha512-mehfKSMWjjNol8659Z8KxEMrdSJDDot5SXMq00dM8BN4o+CLNXQ0xH2V7EchNHV4RmbZLmmPdEaXZc5H2FXmDg==}
     requiresBuild: true
     dependencies:
       tslib: 2.8.1
@@ -450,7 +450,7 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
-  /@guardian/cdk@61.3.2(aws-cdk-lib@2.189.1)(aws-cdk@2.1005.0)(constructs@10.4.3):
+  /@guardian/cdk@61.3.2(aws-cdk-lib@2.189.1)(aws-cdk@2.1005.0)(constructs@10.4.4):
     resolution: {integrity: sha512-cK4zzISvDGRqF083WCDlWNXiV1lDehEt3tzl5Sbj1lKRMO7mMrTB1+4E9YKur7uoFiOxVQCxYnNzRkeb9qS9FA==}
     hasBin: true
     peerDependencies:
@@ -460,11 +460,11 @@ packages:
     dependencies:
       '@oclif/core': 3.26.6
       aws-cdk: 2.1005.0
-      aws-cdk-lib: 2.189.1(constructs@10.4.3)
+      aws-cdk-lib: 2.189.1(constructs@10.4.4)
       aws-sdk: 2.1692.0
       chalk: 4.1.2
       codemaker: 1.111.0
-      constructs: 10.4.3
+      constructs: 10.4.4
       git-url-parse: 16.0.1
       js-yaml: 4.1.0
       lodash.camelcase: 4.3.0
@@ -840,8 +840,8 @@ packages:
     resolution: {integrity: sha512-ZVWUcfwY4E/yPitQJl481FjFo3K22D6qF0DuFH6Y/nbnE11GY5uguDxZMGXPQ8WQ0128MXQD7TnfHyK4oWoIJQ==}
     requiresBuild: true
     dependencies:
-      '@emnapi/core': 1.7.1
-      '@emnapi/runtime': 1.7.1
+      '@emnapi/core': 1.8.1
+      '@emnapi/runtime': 1.8.1
       '@tybys/wasm-util': 0.10.1
     dev: true
     optional: true
@@ -1496,7 +1496,7 @@ packages:
       possible-typed-array-names: 1.1.0
     dev: true
 
-  /aws-cdk-lib@2.189.1(constructs@10.4.3):
+  /aws-cdk-lib@2.189.1(constructs@10.4.4):
     resolution: {integrity: sha512-9JU0yUr2iRTJ1oCPrHyx7hOtBDWyUfyOcdb6arlumJnMcQr2cyAMASY8HuAXHc8Y10ipVp8dRTW+J4/132IIYA==}
     engines: {node: '>= 14.15.0'}
     peerDependencies:
@@ -1505,7 +1505,7 @@ packages:
       '@aws-cdk/asset-awscli-v1': 2.2.232
       '@aws-cdk/asset-node-proxy-agent-v6': 2.1.0
       '@aws-cdk/cloud-assembly-schema': 41.2.0
-      constructs: 10.4.3
+      constructs: 10.4.4
     dev: true
     bundledDependencies:
       - '@balena/dockerignore'
@@ -1833,8 +1833,8 @@ packages:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
     dev: true
 
-  /constructs@10.4.3:
-    resolution: {integrity: sha512-3+ZB67qWGM1vEstNpj6pGaLNN1qz4gxC1CBhEUhZDZk0PqzQWY65IzC1Doq17MGPa9xa2wJ1G/DJ3swU8kWAHQ==}
+  /constructs@10.4.4:
+    resolution: {integrity: sha512-lP0qC1oViYf1cutHo9/KQ8QL637f/W29tDmv/6sy35F5zs+MD9f66nbAAIjicwc7fwyuF3rkg6PhZh4sfvWIpA==}
     dev: true
 
   /convert-source-map@2.0.0:
