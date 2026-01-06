@@ -24,6 +24,12 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v6
 
+      - run: npm install --global corepack@0.31.0
+        shell: bash
+
+      - run: corepack enable
+        shell: bash
+
       - name: Use Node.js
         uses: actions/setup-node@v6
         with:
