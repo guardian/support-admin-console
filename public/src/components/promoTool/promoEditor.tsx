@@ -111,12 +111,17 @@ const PromoEditor = ({
 
   useEffect(() => {
     setEditedPromo(promo);
-    if (promo) {
-      setSelectedCountryGroups(promo.appliesTo.countryGroups || []);
+    if (promo && countryGroups.length > 0) {
+      const countryCodes = promo.appliesTo.countryGroups || [];
+      const matchedGroupIds = countryCodes
+        .map(countryCode => countryGroups.find(cg => cg.countries.includes(countryCode)))
+        .filter((group): group is CountryGroup => group != undefined)
+        .map(group => group.id);
+      setSelectedCountryGroups([...new Set(matchedGroupIds)]);
     } else {
       setSelectedCountryGroups([]);
     }
-  }, [promo]);
+  }, [promo, countryGroups]);
 
   useEffect(() => {
     const catalogProducts = mapPromoProductToCatalogProducts(campaignProduct);
@@ -210,24 +215,28 @@ const PromoEditor = ({
     }
   };
 
-  const updateCountryGroups = (newCountryGroups: string[]) => {
-    setSelectedCountryGroups(newCountryGroups);
+  const updateCountryGroups = (newCountryGroupIds: string[]) => {
+    setSelectedCountryGroups(newCountryGroupIds);
     if (editedPromo) {
+      const selectedCountries = countryGroups
+        .filter(group => newCountryGroupIds.includes(group.id))
+        .flatMap(group => group.countries);
+
       setEditedPromo({
         ...editedPromo,
         appliesTo: {
           ...editedPromo.appliesTo,
-          countryGroups: newCountryGroups,
+          countryGroups: selectedCountries,
         },
       });
     }
   };
 
   const handleCountryGroupToggle = (countryGroupId: string) => {
-    const newCountryGroups = selectedCountryGroups.includes(countryGroupId)
-      ? selectedCountryGroups.filter(countryGroup => countryGroup !== countryGroupId)
+    const newCountryGroupIds = selectedCountryGroups.includes(countryGroupId)
+      ? selectedCountryGroups.filter(id => id !== countryGroupId)
       : [...selectedCountryGroups, countryGroupId];
-    updateCountryGroups(newCountryGroups);
+    updateCountryGroups(newCountryGroupIds);
   };
 
   const handlePromotionHasLandingPageChange = () => {
@@ -264,7 +273,6 @@ const PromoEditor = ({
     : `This promo is currently locked by ${promo.lockStatus?.email}`;
 
   const showLandingPageSection = ['Newspaper', 'Weekly'].includes(campaignProduct ?? '');
-
   return (
     <Paper className={classes.root}>
       {(isLockedByOther || isLockedByUser) && (
