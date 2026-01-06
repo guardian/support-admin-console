@@ -71,5 +71,6 @@
     "watch": "webpack --config webpack.dev.js --watch",
     "lint": "eslint .",
     "test": "echo 'Running JS tests' && jest"
-  }
+  },
+  "packageManager": "pnpm@9.15.9"
 }
