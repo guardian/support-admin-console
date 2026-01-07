@@ -112,7 +112,7 @@ const PromoEditor = ({
   useEffect(() => {
     setEditedPromo(promo);
     if (promo && countryGroups.length > 0) {
-      const countryCodes = promo.appliesTo.countryGroups || [];
+      const countryCodes = promo.appliesTo.countries || [];
       const matchedGroupIds = countryCodes
         .map(countryCode => countryGroups.find(cg => cg.countries.includes(countryCode)))
         .filter((group): group is CountryGroup => group != undefined)
@@ -226,7 +226,7 @@ const PromoEditor = ({
         ...editedPromo,
         appliesTo: {
           ...editedPromo.appliesTo,
-          countryGroups: selectedCountries,
+          countries: selectedCountries,
         },
       });
     }
