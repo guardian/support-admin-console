@@ -62,12 +62,13 @@ class AccessManagementController(
     }
   }
 
-  def updateUser(): Action[UserPermissions] = authAndPermissionActions.write.async(circe.json[UserPermissions]) { request =>
-    val user = request.body
-    run {
-      permissionsService
-        .upsertUser(user)
-        .map(_ => Ok(noNulls(user.asJson)))
-    }
+  def updateUser(): Action[UserPermissions] = authAndPermissionActions.write.async(circe.json[UserPermissions]) {
+    request =>
+      val user = request.body
+      run {
+        permissionsService
+          .upsertUser(user)
+          .map(_ => Ok(noNulls(user.asJson)))
+      }
   }
 }
