@@ -143,19 +143,15 @@ export const PromoListItem = ({
   };
 
   const getRegionsText = () => {
-    if (!promo.appliesTo.countryGroups || promo.appliesTo.countryGroups.length === 0) {
+    if (!promo.appliesTo.countries || promo.appliesTo.countries.length === 0) {
       return 'All regions';
     }
-    const regionNames = promo.appliesTo.countryGroups.map(item => {
-      const groupById = countryGroups?.find(cg => cg.id === item);
-      if (groupById) {
-        return groupById.name;
+    const regionNames = promo.appliesTo.countries.map(country => {
+      const countryGroup = countryGroups?.find(cg => cg.countries.includes(country));
+      if (countryGroup) {
+        return countryGroup.name;
       }
-      const groupByCountryCode = countryGroups?.find(cg => cg.countries.includes(item));
-      if (groupByCountryCode) {
-        return groupByCountryCode.name;
-      }
-      return item;
+      return country;
     });
     const uniqueRegionNames = [...new Set(regionNames)];
     return uniqueRegionNames.join(', ');

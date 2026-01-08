@@ -7,7 +7,7 @@ import models.LockStatus
 
 case class AppliesTo(
     productRatePlanIds: Set[String],
-    countryGroups: Option[Set[String]]
+    countries: Option[Set[String]]
 )
 
 object AppliesTo {
