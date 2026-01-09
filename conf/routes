@@ -20,6 +20,7 @@ GET /support-landing-page-tests                     controllers.Application.inde
 GET /support-landing-page-tests/:name               controllers.Application.indexWithName(name: String)
 
 GET /student-landing-page                           controllers.Application.index
+GET /student-landing-page/:name                     controllers.Application.indexWithName(name: String)
 
 GET /checkout-nudge-tests                           controllers.Application.index
 GET /checkout-nudge-tests/:name                     controllers.Application.indexWithName(name: String)
