@@ -46,6 +46,7 @@ import PromoTool from './components/promoTool/promoTool';
 import PromoEditorPage from './components/promoTool/promoEditorPage';
 import Bookmarklets from './components/bookmarklets/Bookmarklets';
 import AccessManagement from './components/accessManagement/AccessManagement';
+import { StudentLandingPage } from './components/channelManagement/studentLandingPage/studentLandingPage';
 
 declare module '@mui/styles' {
   // https://mui.com/material-ui/migration/v5-style-changes/#%E2%9C%85-add-module-augmentation-for-defaulttheme-typescript
@@ -164,6 +165,10 @@ const AppRouter = () => {
           <Route
             path="/support-landing-page-tests/:testName?"
             element={createComponent(<SupportLandingPageTestsForm />, 'Support Landing Page Tests')}
+          />
+          <Route
+            path="/student-landing-page/:testName?"
+            element={createComponent(<StudentLandingPage />, 'Student Landing Page')}
           />
           <Route
             path="/checkout-nudge-tests/:testName?"
