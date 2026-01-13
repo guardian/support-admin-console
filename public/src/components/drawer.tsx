@@ -195,9 +195,13 @@ export default function NavDrawer(): React.ReactElement {
           </ListItemButton>
         </Link>
         {getStage() != 'PROD' && (
-          <Link key="Student Landing Page" to="/student-landing-page" className={classes.link}>
-            <ListItemButton className={classes.listItem} key="Student Landing Page">
-              <ListItemText primary="Student Landing Page" />
+          <Link
+            key="Student Landing Page Offers"
+            to="/student-landing-page-tests"
+            className={classes.link}
+          >
+            <ListItemButton className={classes.listItem} key="Student Landing Page Offers">
+              <ListItemText primary="Student Landing Page Offers" />
             </ListItemButton>
           </Link>
         )}

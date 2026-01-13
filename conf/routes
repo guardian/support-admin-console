@@ -19,8 +19,8 @@ GET /epic-tests/:name                               controllers.Application.inde
 GET /support-landing-page-tests                     controllers.Application.index
 GET /support-landing-page-tests/:name               controllers.Application.indexWithName(name: String)
 
-GET /student-landing-page                           controllers.Application.index
-GET /student-landing-page/:name                     controllers.Application.indexWithName(name: String)
+GET /student-landing-page-tests                     controllers.Application.index
+GET /student-landing-page-tests/:name               controllers.Application.indexWithName(name: String)
 
 GET /checkout-nudge-tests                           controllers.Application.index
 GET /checkout-nudge-tests/:name                     controllers.Application.indexWithName(name: String)
@@ -305,3 +305,21 @@ GET /country-groups                   controllers.promos.CountryController.all
 GET /access-management                              controllers.Application.index
 GET   /frontend/access-management/users              controllers.AccessManagementController.getUsers
 POST  /frontend/access-management/users              controllers.AccessManagementController.updateUser
+
+# ----- Student Landing Page 'tests' ----- #
+GET   /frontend/student-landing-page-tests                            controllers.StudentLandingPageController.get
+# student landing page list endpoints
+
+POST  /frontend/student-landing-page-tests/list/lock                  controllers.StudentLandingPageController.lockList
+POST  /frontend/student-landing-page-tests/list/unlock                controllers.StudentLandingPageController.unlockList
+POST  /frontend/student-landing-page-tests/list/takecontrol           controllers.StudentLandingPageController.takeControlOfList
+POST  /frontend/student-landing-page-tests/list/reorder               controllers.StudentLandingPageController.reorderList
+
+# student landing page test endpoints
+# GET   /frontend/student-landing-page-tests/test/:testName             controllers.StudentLandingPageController.getTest(testName: String)
+# POST  /frontend/student-landing-page-tests/test/update                controllers.StudentLandingPageController.updateTest
+# POST  /frontend/student-landing-page-tests/test/create                controllers.StudentLandingPageController.createTest
+# POST  /frontend/student-landing-page-tests/test/lock/:testName        controllers.StudentLandingPageController.lockTest(testName: String)
+# POST  /frontend/support-landing-page-tests/test/unlock/:testName      controllers.StudentLandingPageController.unlockTest(testName: String)
+# POST  /frontend/student-landing-page-tests/test/takecontrol/:testName controllers.StudentLandingPageController.forceLockTest(testName: String)
+# POST  /frontend/student-landing-page-tests/test/status/:rawStatus     controllers.StudentLandingPageController.setStatus(rawStatus: String)
