@@ -258,6 +258,16 @@ class AppComponents(context: Context, stage: String)
       authAction,
       controllerComponents
     ),
-    new AccessManagementController(authAction, controllerComponents, stage, runtime, permissionsService)
+    new AccessManagementController(authAction, controllerComponents, stage, runtime, permissionsService),
+    new StudentLandingPageController(
+      authAction,
+      controllerComponents,
+      stage,
+      runtime,
+      dynamoTestsService,
+      dynamoArchivedChannelTests,
+      dynamoTestsAuditService,
+      permissionsService
+    ),
   )
 }
