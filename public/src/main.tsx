@@ -168,7 +168,10 @@ const AppRouter = () => {
           />
           <Route
             path="/student-landing-page-tests/:testName?"
-            element={createComponent(<StudentLandingPageTestsForm />, 'Student Landing Page Offers')}
+            element={createComponent(
+              <StudentLandingPageTestsForm />,
+              'Student Landing Page Offers',
+            )}
           />
           <Route
             path="/checkout-nudge-tests/:testName?"

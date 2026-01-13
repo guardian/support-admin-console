@@ -1,5 +1,5 @@
-import { StudentLandingPageTest } from "../../../../models/studentLandingPage";
-import { RegionTargeting, UserCohort } from "../../helpers/shared";
+import { StudentLandingPageTest } from '../../../../models/studentLandingPage';
+import { RegionTargeting, UserCohort } from '../../helpers/shared';
 
 // TODO: check if these are correct for this application
 
@@ -21,4 +21,4 @@ export const getDefaultTest = (): StudentLandingPageTest => {
     contextTargeting: { tagIds: [], sectionIds: [], excludedTagIds: [], excludedSectionIds: [] },
     methodologies: [{ name: 'ABTest' }],
   };
-}
+};
