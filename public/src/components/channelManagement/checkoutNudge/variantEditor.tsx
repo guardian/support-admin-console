@@ -9,6 +9,7 @@ import {
 } from '../../../models/checkoutNudge';
 import { useStyles } from '../helpers/testEditorStyles';
 import { PRODUCTS, getAvailableRatePlans, ONE_TIME_PLANS, RECURRING_PLANS } from './utils/defaults';
+import PromoCodesEditor from '../choiceCards/PromoCodesEditor';
 
 interface VariantEditorProps {
   variant: CheckoutNudgeVariant;
@@ -240,6 +241,19 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
           </div>
         </>
       )}
+
+      <div className={classes.sectionContainer}>
+        <Typography variant="h4" className={classes.sectionHeader}>
+          Promo Codes
+        </Typography>
+        <PromoCodesEditor
+          promoCodes={variant.promoCodes ?? []}
+          updatePromoCodes={(promoCodes: string[]): void => {
+            onVariantChange(current => ({ ...current, promoCodes }));
+          }}
+          isDisabled={!editMode}
+        />
+      </div>
     </div>
   );
 };

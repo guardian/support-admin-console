@@ -36,6 +36,7 @@ export interface Nudge {
 
 export interface CheckoutNudgeVariant extends Variant {
   nudge?: Nudge;
+  promoCodes?: string[];
 }
 
 export interface CheckoutNudgeTest extends Test {
