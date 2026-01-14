@@ -4,6 +4,7 @@ import {
   Status,
   Test,
   UserCohort,
+  Variant,
 } from '../components/channelManagement/helpers/shared';
 import { Region } from '../utils/models';
 
@@ -14,6 +15,10 @@ export interface StudentLandingPageTest extends Test {
   userCohort: UserCohort;
   locations: Region[];
   regionTargeting: RegionTargeting;
-  variants: [];
+  variants: StudentLandingPageVariant[];
   contextTargeting: PageContextTargeting;
+}
+export interface StudentLandingPageVariant extends Variant {
+  heading: string;
+  subheading: string;
 }

@@ -1,4 +1,7 @@
-import { StudentLandingPageTest } from '../../../../models/studentLandingPage';
+import {
+  StudentLandingPageTest,
+  StudentLandingPageVariant,
+} from '../../../../models/studentLandingPage';
 import { RegionTargeting, UserCohort } from '../../helpers/shared';
 
 // TODO: check if these are correct for this application
@@ -16,9 +19,17 @@ export const getDefaultTest = (): StudentLandingPageTest => {
     userCohort: UserCohort.AllNonSupporters,
     locations: [],
     regionTargeting: DEFAULT_REGION_TARGETING,
-    variants: [],
+    variants: [getDefaultVariant()],
     articlesViewedSettings: undefined,
     contextTargeting: { tagIds: [], sectionIds: [], excludedTagIds: [], excludedSectionIds: [] },
     methodologies: [{ name: 'ABTest' }],
+  };
+};
+
+export const getDefaultVariant = (): StudentLandingPageVariant => {
+  return {
+    name: 'control',
+    heading: '',
+    subheading: '',
   };
 };
