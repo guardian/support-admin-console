@@ -1,3 +1,6 @@
+// TODO: fix the unused variables then delete the line below.
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import React from 'react';
 import {
   StudentLandingPageTest,
