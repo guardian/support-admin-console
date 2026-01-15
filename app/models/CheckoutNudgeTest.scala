@@ -48,7 +48,8 @@ case class Benefits(
 
 case class CheckoutNudgeVariant(
     name: String,
-    nudge: Option[CheckoutNudge] = None
+    nudge: Option[CheckoutNudge] = None,
+    promoCodes: Option[List[String]] = None
 )
 
 case class CheckoutNudge(
@@ -69,7 +70,7 @@ case class CheckoutNudgeTest(
     nudgeFromProduct: Product,
     variants: List[CheckoutNudgeVariant],
     campaignName: Option[String] = Some("NOT_IN_CAMPAIGN"),
-    methodologies: List[Methodology] = defaultMethodologies
+    methodologies: List[Methodology] = defaultMethodologies,
 ) extends ChannelTest[CheckoutNudgeTest] {
 
   override def withChannel(channel: Channel): CheckoutNudgeTest =

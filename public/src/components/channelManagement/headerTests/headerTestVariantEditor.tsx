@@ -9,7 +9,7 @@ import { templateValidatorForPlatform } from '../helpers/validation';
 import { Cta } from '../helpers/shared';
 import { HeaderContent, HeaderVariant } from '../../../models/header';
 import useValidation from '../hooks/useValidation';
-import PromoCodesEditor from '../choiceCards/PromoCodesEditor';
+import PromoCodesEditor from '../../shared/PromoCodesEditor';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
