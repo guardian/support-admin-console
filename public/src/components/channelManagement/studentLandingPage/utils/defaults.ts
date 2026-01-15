@@ -28,7 +28,7 @@ export const getDefaultTest = (): StudentLandingPageTest => {
 
 export const getDefaultVariant = (): StudentLandingPageVariant => {
   return {
-    name: 'control',
+    name: 'offer',
     heading: '',
     subheading: '',
   };
