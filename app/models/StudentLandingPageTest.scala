@@ -6,6 +6,11 @@ import io.circe.generic.extras.semiauto._
 import io.circe.generic.extras.Configuration
 import models.Methodology.defaultMethodologies
 
+case class StudentLandingPageVariant(
+    name: String,
+    heading: String,
+)
+
 case class StudentLandingPageTest(
     name: String,
     channel: Option[Channel],
@@ -14,7 +19,7 @@ case class StudentLandingPageTest(
     priority: Option[Int],
     nickname: Option[String],
     regionTargeting: Option[RegionTargeting] = None,
-    variants: List[SupportLandingPageVariant],
+    variants: List[StudentLandingPageVariant],
     campaignName: Option[String] = Some("NOT_IN_CAMPAIGN"),
     methodologies: List[Methodology] = defaultMethodologies
 ) extends ChannelTest[StudentLandingPageTest] {
@@ -27,8 +32,8 @@ case class StudentLandingPageTest(
 
 object StudentLandingPageTest {
   implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val landingPageTestDecoder: Decoder[StudentLandingPageTest] =
+  implicit val studentLandingPageTestDecoder: Decoder[StudentLandingPageTest] =
     deriveConfiguredDecoder[StudentLandingPageTest]
-  implicit val landingPageTestEncoder: Encoder[StudentLandingPageTest] =
+  implicit val studentLandingPageTestEncoder: Encoder[StudentLandingPageTest] =
     deriveConfiguredEncoder[StudentLandingPageTest]
 }
