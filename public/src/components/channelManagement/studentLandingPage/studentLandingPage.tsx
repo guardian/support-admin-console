@@ -3,7 +3,7 @@ import { FrontendSettingsType } from '../../../utils/requests';
 import { TestsForm } from '../testsForm';
 import { ValidatedTestEditor } from '../validatedTestEditor';
 import { StudentLandingPageTestEditor } from './studentLandingPageTestEditor';
-import { getDefaultTest } from './utils/defaults';
+import { getDefaultTest, getDefaultVariant } from './utils/defaults';
 
 const createDefaultStudentLandingPageTest = (
   newTestName: string,
@@ -12,6 +12,7 @@ const createDefaultStudentLandingPageTest = (
   ...getDefaultTest(),
   name: newTestName,
   nickname: newTestNickname,
+  variants: [getDefaultVariant()],
 });
 
 export const StudentLandingPageTestsForm = TestsForm(

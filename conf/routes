@@ -318,7 +318,7 @@ POST  /frontend/student-landing-page-tests/list/reorder               controller
 # student landing page test endpoints
 # GET   /frontend/student-landing-page-tests/test/:testName             controllers.StudentLandingPageController.getTest(testName: String)
 # POST  /frontend/student-landing-page-tests/test/update                controllers.StudentLandingPageController.updateTest
-# POST  /frontend/student-landing-page-tests/test/create                controllers.StudentLandingPageController.createTest
+POST  /frontend/student-landing-page-tests/test/create                controllers.StudentLandingPageController.createTest
 # POST  /frontend/student-landing-page-tests/test/lock/:testName        controllers.StudentLandingPageController.lockTest(testName: String)
 # POST  /frontend/support-landing-page-tests/test/unlock/:testName      controllers.StudentLandingPageController.unlockTest(testName: String)
 # POST  /frontend/student-landing-page-tests/test/takecontrol/:testName controllers.StudentLandingPageController.forceLockTest(testName: String)
