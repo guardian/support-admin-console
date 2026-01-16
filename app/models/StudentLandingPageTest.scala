@@ -9,6 +9,7 @@ import models.Methodology.defaultMethodologies
 case class StudentLandingPageVariant(
     name: String,
     heading: String,
+    subheading: String,
 )
 
 case class StudentLandingPageTest(
