@@ -224,11 +224,11 @@ const AppRouter = () => {
           />
           <Route path="/promo-tool" element={createComponent(<PromoTool />, 'Promo Tool')} />
           <Route
-            path="/promo-tool/:campaignCode"
+            path="/promo-tool/campaign/:campaignCode"
             element={createComponent(<PromoTool />, 'Promo Tool')}
           />
           <Route
-            path="/promo-tool/:campaignCode/:promoCode"
+            path="/promo-tool/promo/:promoCode"
             element={createComponent(<PromoEditorPage />, 'Edit Promo')}
           />
           <Route

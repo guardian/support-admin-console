@@ -26,5 +26,5 @@ class Application(
   def indexWithName(name: String) = index
   def indexWithNameAndChannel(name: String, channel: String) = index
   def indexWithCampaignCode(campaignCode: String) = index
-  def indexWithCampaignAndPromoCode(campaignCode: String, promoCode: String) = index
+  def indexWithPromoCode(promoCode: String) = index
 }
