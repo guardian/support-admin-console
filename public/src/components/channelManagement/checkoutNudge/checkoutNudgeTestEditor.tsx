@@ -96,15 +96,12 @@ const CheckoutNudgeTestEditor: React.FC<ValidatedTestEditorProps<CheckoutNudgeTe
     const stage = getStage();
     const supportHost = `https://support.${stage !== 'PROD' ? 'code.dev-' : ''}theguardian.com`;
 
-    const { product, ratePlan } = test.nudgeFromProduct;
+    const { product, ratePlan = 'Monthly' } = test.nudgeFromProduct;
     const path = product === 'OneTimeContribution' ? 'uk/one-time-checkout' : 'uk/checkout';
 
     const queryParams = new URLSearchParams();
     queryParams.append('product', product);
-    if (ratePlan) {
-      queryParams.append('ratePlan', ratePlan);
-    }
-    queryParams.append('fromNudge', 'true');
+    queryParams.append('ratePlan', ratePlan);
 
     return `${supportHost}/${path}?${queryParams.toString()}&force-checkout-nudge=${
       test.name
