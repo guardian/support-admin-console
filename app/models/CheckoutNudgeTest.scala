@@ -70,7 +70,7 @@ case class CheckoutNudgeTest(
     nudgeFromProduct: Product,
     variants: List[CheckoutNudgeVariant],
     campaignName: Option[String] = Some("NOT_IN_CAMPAIGN"),
-    methodologies: List[Methodology] = defaultMethodologies,
+    methodologies: List[Methodology] = defaultMethodologies
 ) extends ChannelTest[CheckoutNudgeTest] {
 
   override def withChannel(channel: Channel): CheckoutNudgeTest =

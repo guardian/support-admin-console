@@ -78,12 +78,14 @@ class BannerDesignsController(
     val designUrl = s"http://$host/banner-designs/${design.name}"
 
     val textWidget = Widget.TextParagraph(s"<b>${design.name}</b>")
-    val buttonWidget = Widget.ButtonList(List(
-      Button(
-        text = "View Design",
-        onClick = OnClick(OpenLink(designUrl))
+    val buttonWidget = Widget.ButtonList(
+      List(
+        Button(
+          text = "View Design",
+          onClick = OnClick(OpenLink(designUrl))
+        )
       )
-    ))
+    )
 
     val headerImageWidget = design.headerImage.map { headerImage =>
       Widget.Image(headerImage.desktopUrl, "Header image")
@@ -99,16 +101,18 @@ class BannerDesignsController(
 
     val message = GoogleChatMessage(
       text = s"Banner design '${design.name}' has been $action",
-      cardsV2 = List(CardV2(
-        cardId = "banner-design-notification",
-        card = Card(
-          header = CardHeader(
-            title = s"Banner Design ${action.capitalize}",
-            subtitle = s"by $email"
-          ),
-          sections = List(CardSection(widgets))
+      cardsV2 = List(
+        CardV2(
+          cardId = "banner-design-notification",
+          card = Card(
+            header = CardHeader(
+              title = s"Banner Design ${action.capitalize}",
+              subtitle = s"by $email"
+            ),
+            sections = List(CardSection(widgets))
+          )
         )
-      ))
+      )
     )
 
     ZIO
@@ -124,14 +128,13 @@ class BannerDesignsController(
       dynamoDesigns
         .updateBannerDesign(design, request.user.email)
         .map(_ => Ok("updated"))
-        .tap(_ => stage match {
-          case "PROD" => sendChatMessage(
-            design = design,
-            email = request.user.email,
-            created = false,
-            host = request.host)
-          case _ => ZIO.succeed(())
-        })
+        .tap(_ =>
+          stage match {
+            case "PROD" =>
+              sendChatMessage(design = design, email = request.user.email, created = false, host = request.host)
+            case _ => ZIO.succeed(())
+          }
+        )
         .catchSome { case DynamoNoLockError(error) =>
           logger.warn(
             s"Failed to save '${design.name}' because user ${request.user.email} does not have it locked: ${error.getMessage}"
@@ -148,14 +151,13 @@ class BannerDesignsController(
       dynamoDesigns
         .createBannerDesign(design)
         .map(_ => Ok("created"))
-        .tap(_ => stage match {
-          case "PROD" => sendChatMessage(
-            design = design,
-            email = request.user.email,
-            created = true,
-            host = request.host)
-          case _ => ZIO.succeed(())
-        })
+        .tap(_ =>
+          stage match {
+            case "PROD" =>
+              sendChatMessage(design = design, email = request.user.email, created = true, host = request.host)
+            case _ => ZIO.succeed(())
+          }
+        )
         .catchSome { case DynamoDuplicateNameError(error) =>
           logger.warn(s"Failed to create '${design.name}' because name already exists: ${error.getMessage}")
           ZIO.succeed(
