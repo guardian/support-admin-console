@@ -40,7 +40,7 @@ export class AdminConsole extends GuStack {
     const table = new Table(this, id, {
       tableName: `support-admin-console-channel-tests-${this.stage}`,
       removalPolicy: RemovalPolicy.RETAIN,
-      pointInTimeRecovery: this.stage === 'PROD',
+      pointInTimeRecoverySpecification: { pointInTimeRecoveryEnabled: this.stage === 'PROD' },
       // Use on-demand billing during migration from S3, because we have infrequent spikes when users click save. We can switch to provisioned after
       billingMode: BillingMode.PAY_PER_REQUEST,
       partitionKey: {
@@ -80,7 +80,7 @@ export class AdminConsole extends GuStack {
     const table = new Table(this, id, {
       tableName: `support-admin-console-campaigns-${this.stage}`,
       removalPolicy: RemovalPolicy.RETAIN,
-      pointInTimeRecovery: this.stage === 'PROD',
+      pointInTimeRecoverySpecification: { pointInTimeRecoveryEnabled: this.stage === 'PROD' },
       billingMode: BillingMode.PAY_PER_REQUEST,
       partitionKey: {
         name: 'name',
@@ -102,7 +102,7 @@ export class AdminConsole extends GuStack {
     const table = new Table(this, id, {
       tableName: `support-admin-console-archived-channel-tests-${this.stage}`,
       removalPolicy: RemovalPolicy.RETAIN,
-      pointInTimeRecovery: this.stage === 'PROD',
+      pointInTimeRecoverySpecification: { pointInTimeRecoveryEnabled: this.stage === 'PROD' },
       billingMode: BillingMode.PAY_PER_REQUEST,
       partitionKey: {
         name: 'channel',
@@ -128,7 +128,7 @@ export class AdminConsole extends GuStack {
     const table = new Table(this, id, {
       tableName: `support-admin-console-channel-tests-audit-${this.stage}`,
       removalPolicy: RemovalPolicy.RETAIN,
-      pointInTimeRecovery: this.stage === 'PROD',
+      pointInTimeRecoverySpecification: { pointInTimeRecoveryEnabled: this.stage === 'PROD' },
       billingMode: BillingMode.PAY_PER_REQUEST,
       partitionKey: {
         // {channel}_{testName}, e.g. "Epic_2025-01-01_MY_TEST"
@@ -156,7 +156,7 @@ export class AdminConsole extends GuStack {
     const table = new Table(this, id, {
       tableName: `support-admin-console-archived-banner-designs-${this.stage}`,
       removalPolicy: RemovalPolicy.RETAIN,
-      pointInTimeRecovery: this.stage === 'PROD',
+      pointInTimeRecoverySpecification: { pointInTimeRecoveryEnabled: this.stage === 'PROD' },
       billingMode: BillingMode.PAY_PER_REQUEST,
       partitionKey: {
         name: 'name',
@@ -182,7 +182,7 @@ export class AdminConsole extends GuStack {
     const table = new Table(this, id, {
       tableName: `support-admin-console-banner-designs-${this.stage}`,
       removalPolicy: RemovalPolicy.RETAIN,
-      pointInTimeRecovery: this.stage === 'PROD',
+      pointInTimeRecoverySpecification: { pointInTimeRecoveryEnabled: this.stage === 'PROD' },
       billingMode: BillingMode.PAY_PER_REQUEST,
       partitionKey: {
         name: 'name',
@@ -204,7 +204,7 @@ export class AdminConsole extends GuStack {
     const table = new Table(this, id, {
       tableName: `support-admin-console-permissions-${this.stage}`,
       removalPolicy: RemovalPolicy.RETAIN,
-      pointInTimeRecovery: this.stage === 'PROD',
+      pointInTimeRecoverySpecification: { pointInTimeRecoveryEnabled: this.stage === 'PROD' },
       billingMode: BillingMode.PAY_PER_REQUEST,
       partitionKey: {
         name: 'email',
@@ -224,7 +224,7 @@ export class AdminConsole extends GuStack {
     const table = new Table(this, 'PromoCampaignsDynamoTable', {
       tableName: `support-admin-console-promo-campaigns-${this.stage}`,
       removalPolicy: RemovalPolicy.RETAIN,
-      pointInTimeRecovery: this.stage === 'PROD',
+      pointInTimeRecoverySpecification: { pointInTimeRecoveryEnabled: this.stage === 'PROD' },
       billingMode: BillingMode.PAY_PER_REQUEST,
       partitionKey: {
         name: 'campaignCode',
@@ -249,7 +249,7 @@ export class AdminConsole extends GuStack {
     const table = new Table(this, 'PromosDynamoTable', {
       tableName: `support-admin-console-promos-${this.stage}`,
       removalPolicy: RemovalPolicy.RETAIN,
-      pointInTimeRecovery: this.stage === 'PROD',
+      pointInTimeRecoverySpecification: { pointInTimeRecoveryEnabled: this.stage === 'PROD' },
       billingMode: BillingMode.PAY_PER_REQUEST,
       partitionKey: {
         name: 'promoCode',
@@ -379,6 +379,7 @@ export class AdminConsole extends GuStack {
       },
       scaling: { minimumInstances: 1, maximumInstances: 2 },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MICRO),
+      instanceMetricGranularity: '1Minute',
     });
 
     dynamoReadPolicy.attachToRole(ec2App.autoScalingGroup.role);
