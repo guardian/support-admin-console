@@ -10,7 +10,7 @@ const codeProps: AdminConsoleProps = {
   stage: 'CODE',
   domainName: 'support.code.dev-gutools.co.uk',
   env: {
-    region: "eu-west-1",
+    region: 'eu-west-1',
   },
 };
 new AdminConsole(app, 'AdminConsole-CODE', codeProps);
@@ -20,7 +20,7 @@ export const prodProps: AdminConsoleProps = {
   stage: 'PROD',
   domainName: 'support.gutools.co.uk',
   env: {
-    region: "eu-west-1",
+    region: 'eu-west-1',
   },
 };
 new AdminConsole(app, 'AdminConsole-PROD', prodProps);
