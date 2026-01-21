@@ -11,8 +11,20 @@ import {
 } from '@guardian/cdk/lib/constructs/iam';
 import type { App, CfnElement } from 'aws-cdk-lib';
 import { Duration, RemovalPolicy, Tags } from 'aws-cdk-lib';
-import { AttributeType, BillingMode, ProjectionType, StreamViewType, Table } from 'aws-cdk-lib/aws-dynamodb';
-import { InstanceClass, InstanceSize, InstanceType, UserData } from 'aws-cdk-lib/aws-ec2';
+import {
+  AttributeType,
+  BillingMode,
+  ProjectionType,
+  StreamViewType,
+  Table,
+} from 'aws-cdk-lib/aws-dynamodb';
+import {
+  InstanceClass,
+  InstanceSize,
+  InstanceType,
+  SecurityGroup,
+  UserData,
+} from 'aws-cdk-lib/aws-ec2';
 import {
   ApplicationListenerRule,
   ListenerAction,
@@ -40,7 +52,7 @@ export class AdminConsole extends GuStack {
     const table = new Table(this, id, {
       tableName: `support-admin-console-channel-tests-${this.stage}`,
       removalPolicy: RemovalPolicy.RETAIN,
-      pointInTimeRecovery: this.stage === 'PROD',
+      pointInTimeRecoverySpecification: { pointInTimeRecoveryEnabled: this.stage === 'PROD' },
       // Use on-demand billing during migration from S3, because we have infrequent spikes when users click save. We can switch to provisioned after
       billingMode: BillingMode.PAY_PER_REQUEST,
       partitionKey: {
@@ -80,7 +92,7 @@ export class AdminConsole extends GuStack {
     const table = new Table(this, id, {
       tableName: `support-admin-console-campaigns-${this.stage}`,
       removalPolicy: RemovalPolicy.RETAIN,
-      pointInTimeRecovery: this.stage === 'PROD',
+      pointInTimeRecoverySpecification: { pointInTimeRecoveryEnabled: this.stage === 'PROD' },
       billingMode: BillingMode.PAY_PER_REQUEST,
       partitionKey: {
         name: 'name',
@@ -102,7 +114,7 @@ export class AdminConsole extends GuStack {
     const table = new Table(this, id, {
       tableName: `support-admin-console-archived-channel-tests-${this.stage}`,
       removalPolicy: RemovalPolicy.RETAIN,
-      pointInTimeRecovery: this.stage === 'PROD',
+      pointInTimeRecoverySpecification: { pointInTimeRecoveryEnabled: this.stage === 'PROD' },
       billingMode: BillingMode.PAY_PER_REQUEST,
       partitionKey: {
         name: 'channel',
@@ -128,7 +140,7 @@ export class AdminConsole extends GuStack {
     const table = new Table(this, id, {
       tableName: `support-admin-console-channel-tests-audit-${this.stage}`,
       removalPolicy: RemovalPolicy.RETAIN,
-      pointInTimeRecovery: this.stage === 'PROD',
+      pointInTimeRecoverySpecification: { pointInTimeRecoveryEnabled: this.stage === 'PROD' },
       billingMode: BillingMode.PAY_PER_REQUEST,
       partitionKey: {
         // {channel}_{testName}, e.g. "Epic_2025-01-01_MY_TEST"
@@ -156,7 +168,7 @@ export class AdminConsole extends GuStack {
     const table = new Table(this, id, {
       tableName: `support-admin-console-archived-banner-designs-${this.stage}`,
       removalPolicy: RemovalPolicy.RETAIN,
-      pointInTimeRecovery: this.stage === 'PROD',
+      pointInTimeRecoverySpecification: { pointInTimeRecoveryEnabled: this.stage === 'PROD' },
       billingMode: BillingMode.PAY_PER_REQUEST,
       partitionKey: {
         name: 'name',
@@ -182,7 +194,7 @@ export class AdminConsole extends GuStack {
     const table = new Table(this, id, {
       tableName: `support-admin-console-banner-designs-${this.stage}`,
       removalPolicy: RemovalPolicy.RETAIN,
-      pointInTimeRecovery: this.stage === 'PROD',
+      pointInTimeRecoverySpecification: { pointInTimeRecoveryEnabled: this.stage === 'PROD' },
       billingMode: BillingMode.PAY_PER_REQUEST,
       partitionKey: {
         name: 'name',
@@ -204,7 +216,7 @@ export class AdminConsole extends GuStack {
     const table = new Table(this, id, {
       tableName: `support-admin-console-permissions-${this.stage}`,
       removalPolicy: RemovalPolicy.RETAIN,
-      pointInTimeRecovery: this.stage === 'PROD',
+      pointInTimeRecoverySpecification: { pointInTimeRecoveryEnabled: this.stage === 'PROD' },
       billingMode: BillingMode.PAY_PER_REQUEST,
       partitionKey: {
         name: 'email',
@@ -224,7 +236,7 @@ export class AdminConsole extends GuStack {
     const table = new Table(this, 'PromoCampaignsDynamoTable', {
       tableName: `support-admin-console-promo-campaigns-${this.stage}`,
       removalPolicy: RemovalPolicy.RETAIN,
-      pointInTimeRecovery: this.stage === 'PROD',
+      pointInTimeRecoverySpecification: { pointInTimeRecoveryEnabled: this.stage === 'PROD' },
       billingMode: BillingMode.PAY_PER_REQUEST,
       partitionKey: {
         name: 'campaignCode',
@@ -249,7 +261,7 @@ export class AdminConsole extends GuStack {
     const table = new Table(this, 'PromosDynamoTable', {
       tableName: `support-admin-console-promos-${this.stage}`,
       removalPolicy: RemovalPolicy.RETAIN,
-      pointInTimeRecovery: this.stage === 'PROD',
+      pointInTimeRecoverySpecification: { pointInTimeRecoveryEnabled: this.stage === 'PROD' },
       billingMode: BillingMode.PAY_PER_REQUEST,
       partitionKey: {
         name: 'promoCode',
@@ -379,6 +391,7 @@ export class AdminConsole extends GuStack {
       },
       scaling: { minimumInstances: 1, maximumInstances: 2 },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MICRO),
+      instanceMetricGranularity: '1Minute',
     });
 
     dynamoReadPolicy.attachToRole(ec2App.autoScalingGroup.role);
@@ -439,6 +452,20 @@ export class AdminConsole extends GuStack {
       stringValue: ec2App.loadBalancer.loadBalancerArn,
       tier: ParameterTier.STANDARD,
       dataType: ParameterDataType.TEXT,
+    });
+
+    const { vpc } = ec2App;
+
+    // A temporary security group with a fixed logical ID, replicating the one removed from GuCDK v61.5.0.
+    const tempSecurityGroup = new SecurityGroup(this, 'WazuhSecurityGroup', {
+      vpc,
+      // Must keep the same description, else CloudFormation will try to replace the security group
+      // See https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-securitygroup.html#cfn-ec2-securitygroup-groupdescription.
+      description: 'Allow outbound traffic from wazuh agent to manager',
+    });
+    this.overrideLogicalId(tempSecurityGroup, {
+      logicalId: 'WazuhSecurityGroup',
+      reason: "Part one of updating to GuCDK 61.5.0+ whilst using Riff-Raff's ASG deployment type",
     });
   }
 }
