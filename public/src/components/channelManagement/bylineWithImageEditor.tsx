@@ -100,7 +100,7 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
           'Image dimensions should be roughly square, with a transparent background'
         }
         {...register('headshot.mainUrl', {
-          validate: mainUrl => {
+          validate: (mainUrl) => {
             // required if altText is set
             if (!mainUrl && getValues().headshot?.altText) {
               return 'Required if alt-text is set';
@@ -119,7 +119,7 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
         error={errors?.headshot?.altText !== undefined}
         helperText={errors?.headshot?.altText?.message ?? ''}
         {...register('headshot.altText', {
-          validate: altText => {
+          validate: (altText) => {
             // required if mainUrl is set
             if (!altText && getValues().headshot?.mainUrl) {
               return 'Required if image url is set';

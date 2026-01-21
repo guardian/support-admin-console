@@ -19,7 +19,7 @@ export const PromoLandingPage = ({
     const { name, value } = e.target;
     const updated = { ...landingPage, [name]: value || undefined };
     Object.keys(updated).forEach(
-      key =>
+      (key) =>
         updated[key as keyof LandingPage] === undefined && delete updated[key as keyof LandingPage],
     );
     updateLandingPage(Object.keys(updated).length === 0 ? undefined : updated);

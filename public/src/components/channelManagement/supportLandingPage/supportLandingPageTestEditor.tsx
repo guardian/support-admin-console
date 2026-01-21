@@ -24,27 +24,27 @@ const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLan
   const onVariantsChange = (
     update: (current: SupportLandingPageVariant[]) => SupportLandingPageVariant[],
   ): void => {
-    onTestChange(current => {
+    onTestChange((current) => {
       const updatedVariantList = update(current.variants);
       return { ...current, variants: updatedVariantList };
     });
   };
 
-  const onVariantChange = (variantName: string) => (
-    update: (current: SupportLandingPageVariant) => SupportLandingPageVariant,
-  ): void => {
-    onVariantsChange(current =>
-      current.map(variant => {
-        if (variant.name === variantName) {
-          return update(variant);
-        }
-        return variant;
-      }),
-    );
-  };
+  const onVariantChange =
+    (variantName: string) =>
+    (update: (current: SupportLandingPageVariant) => SupportLandingPageVariant): void => {
+      onVariantsChange((current) =>
+        current.map((variant) => {
+          if (variant.name === variantName) {
+            return update(variant);
+          }
+          return variant;
+        }),
+      );
+    };
 
   const onVariantDelete = (deletedVariantName: string): void => {
-    onVariantsChange(current => current.filter(variant => variant.name !== deletedVariantName));
+    onVariantsChange((current) => current.filter((variant) => variant.name !== deletedVariantName));
   };
 
   const createVariant = (name: string): void => {
@@ -52,11 +52,11 @@ const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLan
       ...getDefaultVariant(),
       name: name,
     };
-    onVariantsChange(current => [...current, newVariant]);
+    onVariantsChange((current) => [...current, newVariant]);
   };
 
   const onTargetingChange = (updatedTargeting: RegionTargeting): void => {
-    onTestChange(current => ({
+    onTestChange((current) => ({
       ...current,
       regionTargeting: updatedTargeting,
     }));
@@ -97,7 +97,7 @@ const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLan
       ...originalVariant,
       name: clonedVariantName,
     };
-    onVariantsChange(current => [...current, newVariant]);
+    onVariantsChange((current) => [...current, newVariant]);
   };
 
   if (test) {

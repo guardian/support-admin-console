@@ -76,7 +76,7 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
         label={'All supported regions'}
       />
       <FormGroup className={classes.indentedContainer}>
-        {allRegions.map(region => (
+        {allRegions.map((region) => (
           <FormControlLabel
             key={region}
             control={

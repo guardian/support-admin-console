@@ -74,7 +74,7 @@ function PromoCampaignsSidebar({
       <div className={classes.buttonsContainer}>
         <NewPromoCampaignButton
           createPromoCampaign={createPromoCampaign}
-          existingNames={promoCampaigns.map(c => c.name)}
+          existingNames={promoCampaigns.map((c) => c.name)}
           selectedProduct={selectedProduct}
         />
         <TextField

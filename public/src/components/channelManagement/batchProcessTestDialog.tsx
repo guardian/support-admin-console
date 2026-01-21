@@ -74,7 +74,7 @@ const BatchProcessTestDialog: React.FC<BatchProcessTestDialogProps> = ({
   };
 
   const getTestNickname = (name: string): string => {
-    const test = draftTests.find(t => name === t.name);
+    const test = draftTests.find((t) => name === t.name);
 
     if (test) {
       return test.nickname || name;

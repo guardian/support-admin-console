@@ -103,7 +103,7 @@ const BannerDesigns: React.FC = () => {
   };
 
   const onDesignChange = (updatedDesign: BannerDesign): void => {
-    const updatedDesigns = bannerDesigns.map(design =>
+    const updatedDesigns = bannerDesigns.map((design) =>
       design.name === updatedDesign.name ? updatedDesign : design,
     );
 
@@ -116,28 +116,28 @@ const BannerDesigns: React.FC = () => {
   const onLock = (designName: string, force: boolean): void => {
     lockBannerDesign(designName, force)
       .then(() => refreshDesign(designName))
-      .catch(error => {
+      .catch((error) => {
         alert(`Error while locking test: ${error}`);
         refreshDesign(designName);
       });
   };
 
   const onUnlock = (designName: string): void => {
-    const design = bannerDesigns.find(design => design.name === designName);
+    const design = bannerDesigns.find((design) => design.name === designName);
     if (design && design.isNew) {
       // if it's a new design then just drop from the in-memory list
-      setBannerDesigns(bannerDesigns.filter(design => design.name !== designName));
+      setBannerDesigns(bannerDesigns.filter((design) => design.name !== designName));
     } else {
       unlockBannerDesign(designName)
         .then(() => refreshDesign(designName))
-        .catch(error => {
+        .catch((error) => {
           alert(`Error while unlocking test: ${error}`);
         });
     }
   };
 
   const onSave = (designName: string): void => {
-    const design = bannerDesigns.find(design => design.name === designName);
+    const design = bannerDesigns.find((design) => design.name === designName);
 
     if (design) {
       if (design.isNew) {
@@ -147,13 +147,13 @@ const BannerDesigns: React.FC = () => {
         };
         createBannerDesign(unlocked)
           .then(() => refreshDesign(designName))
-          .catch(error => {
+          .catch((error) => {
             alert(`Error while creating new design: ${error}`);
           });
       } else {
         updateBannerDesign(design)
           .then(() => refreshDesign(designName))
-          .catch(error => {
+          .catch((error) => {
             alert(`Error while saving design: ${error}`);
           });
       }
@@ -163,7 +163,7 @@ const BannerDesigns: React.FC = () => {
   const onArchive = (designName: string): void => {
     archiveBannerDesign(designName)
       .then(() => refreshDesigns())
-      .catch(error => {
+      .catch((error) => {
         alert(`Error while archiving design: ${error}`);
       });
   };
@@ -172,13 +172,13 @@ const BannerDesigns: React.FC = () => {
     if (bannerDesignName) {
       updateBannerDesignStatus(bannerDesignName, status)
         .then(() => refreshDesign(bannerDesignName))
-        .catch(error => {
+        .catch((error) => {
           alert(`Error while setting banner design status to ${status}: ${error}`);
         });
     }
   };
 
-  const selectedBannerDesign = bannerDesigns.find(b => b.name === selectedBannerDesignName);
+  const selectedBannerDesign = bannerDesigns.find((b) => b.name === selectedBannerDesignName);
 
   return (
     <div className={classes.body}>
@@ -186,7 +186,7 @@ const BannerDesigns: React.FC = () => {
         <BannerDesignsSidebar
           designs={bannerDesigns}
           selectedDesign={selectedBannerDesign}
-          onDesignSelected={name => setSelectedBannerDesignName(name)}
+          onDesignSelected={(name) => setSelectedBannerDesignName(name)}
           createDesign={createDesign}
         />
       </div>
@@ -202,7 +202,7 @@ const BannerDesigns: React.FC = () => {
             userHasLock={selectedBannerDesign.lockStatus?.email === userEmail}
             lockStatus={selectedBannerDesign.lockStatus || { locked: false }}
             onChange={onDesignChange}
-            onStatusChange={status => onStatusChange(selectedBannerDesignName, status)}
+            onStatusChange={(status) => onStatusChange(selectedBannerDesignName, status)}
           />
         ) : (
           <div className={classes.viewTextContainer}>

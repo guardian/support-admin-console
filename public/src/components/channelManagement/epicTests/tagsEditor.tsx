@@ -33,8 +33,8 @@ export const TagsEditor: React.FC<TagEditorProps> = ({
 
   const fetchTags = (value: string): Promise<void> =>
     fetch(`/capi/tags?web-title=${value}&page-size=1000`)
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         const newOptions = data.response.results.map(
           (tag: { id: string; webTitle: string; sectionId: string }) => ({
             id: tag.id,
@@ -92,7 +92,7 @@ export const TagsEditor: React.FC<TagEditorProps> = ({
       autoComplete
       includeInputInList
       filterSelectedOptions
-      value={ids.map<Tag>(id => ({ id }))}
+      value={ids.map<Tag>((id) => ({ id }))}
       inputValue={inputValue}
       onInputChange={(event, newInputValue, reason): void => {
         if (reason === 'input') {
@@ -107,7 +107,7 @@ export const TagsEditor: React.FC<TagEditorProps> = ({
       }}
       onChange={(event, values: Tag[], reason): void => {
         if (reason === 'selectOption' || reason === 'removeOption') {
-          onUpdate(values.map(value => value.id));
+          onUpdate(values.map((value) => value.id));
           setInputValue('');
         }
       }}

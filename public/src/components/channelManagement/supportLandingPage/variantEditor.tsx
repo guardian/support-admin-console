@@ -52,7 +52,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
         <CopyEditor
           copy={variant.copy}
           onChange={(updatedCopy: SupportLandingPageCopy): void =>
-            onVariantChange(current => ({ ...current, copy: updatedCopy }))
+            onVariantChange((current) => ({ ...current, copy: updatedCopy }))
           }
           onValidationChange={onValidationChange}
           editMode={editMode}
@@ -60,8 +60,8 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
       </div>
       <DefaultProductSelector
         defaultProductSelection={variant.defaultProductSelection}
-        onDefaultProductSelectionChange={updatedDefaultProductSelection =>
-          onVariantChange(current => ({
+        onDefaultProductSelectionChange={(updatedDefaultProductSelection) =>
+          onVariantChange((current) => ({
             ...current,
             defaultProductSelection: updatedDefaultProductSelection,
           }))
@@ -70,8 +70,8 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
       />
       <ProductsEditor
         products={variant.products}
-        onProductsChange={updatedProducts =>
-          onVariantChange(current => ({ ...current, products: updatedProducts }))
+        onProductsChange={(updatedProducts) =>
+          onVariantChange((current) => ({ ...current, products: updatedProducts }))
         }
         onValidationChange={onValidationChange}
         editMode={editMode}
@@ -79,7 +79,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
       <TickerEditor
         tickerSettings={variant.tickerSettings}
         updateTickerSettings={(updatedTickerSettings?: TickerSettings): void => {
-          onVariantChange(current => ({ ...current, tickerSettings: updatedTickerSettings }));
+          onVariantChange((current) => ({ ...current, tickerSettings: updatedTickerSettings }));
         }}
         isDisabled={!editMode}
         onValidationChange={onValidationChange}
@@ -87,7 +87,10 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
       <CountdownEditor
         countdownSettings={variant.countdownSettings}
         updateCountdownSettings={(updatedCountdownSettings?: CountdownSettings): void => {
-          onVariantChange(current => ({ ...current, countdownSettings: updatedCountdownSettings }));
+          onVariantChange((current) => ({
+            ...current,
+            countdownSettings: updatedCountdownSettings,
+          }));
         }}
         isDisabled={!editMode}
         onValidationChange={onValidationChange}

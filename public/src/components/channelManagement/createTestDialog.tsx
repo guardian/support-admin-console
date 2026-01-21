@@ -170,7 +170,7 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
                 <MenuItem value={undefined} key={'campaignName-none'}>
                   No campaign
                 </MenuItem>
-                {campaigns.map(campaign => (
+                {campaigns.map((campaign) => (
                   <MenuItem value={campaign.name} key={`campaign-${campaign.name}`}>
                     {campaign.name}
                   </MenuItem>
@@ -200,7 +200,7 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
               value: VALID_CHARACTERS_REGEX,
               message: INVALID_CHARACTERS_ERROR_HELPER_TEXT,
             },
-            validate: name => {
+            validate: (name) => {
               const withPrefix = addPrefix(name);
               return (
                 doubleUnderscoresValidator(withPrefix) ??

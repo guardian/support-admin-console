@@ -28,10 +28,10 @@ function withS3Data<T>(
 
     const fetchData = (): Promise<void> =>
       fetchSettings()
-        .then(data => {
+        .then((data) => {
           setDataFromServer(data);
         })
-        .catch(err => alert(err));
+        .catch((err) => alert(err));
 
     useEffect(() => {
       fetchData();

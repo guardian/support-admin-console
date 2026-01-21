@@ -57,7 +57,10 @@ const AccessManagementDialog = ({
   useEffect(() => {
     if (user) {
       const landingPagePermission = user.permissions.find(
-        p => p.name === 'support-landing-page-tests',
+        (p) => p.name === 'support-landing-page-tests',
+      );
+      const checkoutNudgePermission = user.permissions.find(
+        (p) => p.name === 'checkout-nudge-tests',
       );
       const checkoutNudgePermission = user.permissions.find(p => p.name === 'checkout-nudge-tests');
       const studentLandingPagePermission = user.permissions.find(
@@ -77,7 +80,7 @@ const AccessManagementDialog = ({
     }
 
     const updatedPermissions = user.permissions.filter(
-      p => p.name !== 'support-landing-page-tests' && p.name !== 'checkout-nudge-tests',
+      (p) => p.name !== 'support-landing-page-tests' && p.name !== 'checkout-nudge-tests',
     );
 
     if (landingPagePerm !== 'None') {
@@ -130,7 +133,7 @@ const AccessManagementDialog = ({
           <FormLabel component="legend">Support Landing Page Tests</FormLabel>
           <RadioGroup
             value={landingPagePerm}
-            onChange={e => setLandingPagePerm(e.target.value as 'Read' | 'Write' | 'None')}
+            onChange={(e) => setLandingPagePerm(e.target.value as 'Read' | 'Write' | 'None')}
           >
             <FormControlLabel value="None" control={<Radio />} label="No Access" />
             <FormControlLabel value="Read" control={<Radio />} label="Read Only" />
@@ -142,7 +145,7 @@ const AccessManagementDialog = ({
           <FormLabel component="legend">Checkout Nudge Tests</FormLabel>
           <RadioGroup
             value={checkoutNudgePerm}
-            onChange={e => setCheckoutNudgePerm(e.target.value as 'Read' | 'Write' | 'None')}
+            onChange={(e) => setCheckoutNudgePerm(e.target.value as 'Read' | 'Write' | 'None')}
           >
             <FormControlLabel value="None" control={<Radio />} label="No Access" />
             <FormControlLabel value="Read" control={<Radio />} label="Read Only" />

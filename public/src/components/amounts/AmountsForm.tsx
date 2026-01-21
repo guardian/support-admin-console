@@ -53,7 +53,7 @@ const AmountsForm: React.FC<InnerProps<AmountsTests>> = ({
   const [selectedTest, setSelectedTest] = useState<AmountsTest | undefined>();
 
   const onTestSelected = (name: string) => {
-    const currentTest = configuredAmounts.find(test => test.testName === name);
+    const currentTest = configuredAmounts.find((test) => test.testName === name);
     if (currentTest) {
       setSelectedTest({ ...currentTest });
     } else {
@@ -63,7 +63,7 @@ const AmountsForm: React.FC<InnerProps<AmountsTests>> = ({
 
   const checkTestNameIsUnique = (name: string): boolean => {
     const allTestNames: string[] = [];
-    configuredAmounts.forEach(t => {
+    configuredAmounts.forEach((t) => {
       allTestNames.push(t.testName);
       if (t.liveTestName) {
         allTestNames.push(t.liveTestName);
@@ -74,7 +74,7 @@ const AmountsForm: React.FC<InnerProps<AmountsTests>> = ({
 
   const checkLiveTestNameIsUnique = (name: string, test: string): boolean => {
     const allTestNames: string[] = [];
-    configuredAmounts.forEach(t => {
+    configuredAmounts.forEach((t) => {
       if (t.targeting.targetingType === 'Region') {
         allTestNames.push(t.testName);
       }
@@ -87,7 +87,7 @@ const AmountsForm: React.FC<InnerProps<AmountsTests>> = ({
 
   const checkTestLabelIsUnique = (name: string): boolean => {
     const allTestLabels: string[] = [];
-    configuredAmounts.forEach(t => {
+    configuredAmounts.forEach((t) => {
       if (t.testLabel) {
         allTestLabels.push(t.testLabel);
       } else {
@@ -146,13 +146,13 @@ const AmountsForm: React.FC<InnerProps<AmountsTests>> = ({
   };
 
   const updateLocalTest = (updated: AmountsTest) => {
-    const updatedTests = configuredAmounts.filter(t => t.testName !== updated.testName);
+    const updatedTests = configuredAmounts.filter((t) => t.testName !== updated.testName);
     updatedTests.push(updated);
     update(updatedTests);
   };
 
   const deleteLocalTest = (name: string) => {
-    const updatedTests = configuredAmounts.filter(t => t.testName !== name);
+    const updatedTests = configuredAmounts.filter((t) => t.testName !== name);
     updateAndSendToS3(updatedTests);
     setSelectedTest(undefined);
   };

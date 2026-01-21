@@ -125,7 +125,7 @@ export default function QrCodePage(): JSX.Element {
               label="URL"
               name="url"
               fullWidth={true}
-              onChange={e => setUrl(e.target.value)}
+              onChange={(e) => setUrl(e.target.value)}
               type="text"
               required
               value={url}
@@ -137,7 +137,7 @@ export default function QrCodePage(): JSX.Element {
               name="size"
               fullWidth={true}
               defaultValue={256}
-              onChange={e => setCodeSize(parseInt(e.target.value))}
+              onChange={(e) => setCodeSize(parseInt(e.target.value))}
               type="text"
               inputMode="numeric"
               required
@@ -153,7 +153,7 @@ export default function QrCodePage(): JSX.Element {
               label="File name (optional)"
               name="fileName"
               fullWidth={true}
-              onChange={e => setFileName(e.target.value)}
+              onChange={(e) => setFileName(e.target.value)}
               type="text"
             />
           </FormControl>

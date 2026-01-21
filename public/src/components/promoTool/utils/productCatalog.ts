@@ -165,23 +165,22 @@ export const sortByCustomOrder = (a: string, b: string, customOrder: string[]): 
   return 0;
 };
 
-export const orderRatePlans = (product: string) => (
-  a: RatePlanWithProduct,
-  b: RatePlanWithProduct,
-): number => {
-  const customOrders: Partial<Record<string, string[]>> = {
-    Newspaper: ['SixdayPlus', 'SaturdayPlus', 'EverydayPlus', 'WeekendPlus', 'Sunday'],
-    Weekly: ['Monthly', 'Quarterly', 'Annual', 'OneYearGift', 'ThreeMonthGift'],
-  };
+export const orderRatePlans =
+  (product: string) =>
+  (a: RatePlanWithProduct, b: RatePlanWithProduct): number => {
+    const customOrders: Partial<Record<string, string[]>> = {
+      Newspaper: ['SixdayPlus', 'SaturdayPlus', 'EverydayPlus', 'WeekendPlus', 'Sunday'],
+      Weekly: ['Monthly', 'Quarterly', 'Annual', 'OneYearGift', 'ThreeMonthGift'],
+    };
 
-  const customOrder = customOrders[product];
+    const customOrder = customOrders[product];
 
-  if (customOrder) {
-    const productNameComparison = a.productName.localeCompare(b.productName);
-    if (productNameComparison !== 0) {
-      return productNameComparison;
+    if (customOrder) {
+      const productNameComparison = a.productName.localeCompare(b.productName);
+      if (productNameComparison !== 0) {
+        return productNameComparison;
+      }
+      return sortByCustomOrder(a.ratePlanName, b.ratePlanName, customOrder);
     }
-    return sortByCustomOrder(a.ratePlanName, b.ratePlanName, customOrder);
-  }
-  return 0;
-};
+    return 0;
+  };

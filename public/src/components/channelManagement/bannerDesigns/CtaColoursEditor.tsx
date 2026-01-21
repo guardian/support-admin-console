@@ -57,7 +57,7 @@ export const CtaColoursEditor: React.FC<Props> = ({
             name={`${name}.text`}
             label="Text Colour"
             isDisabled={isDisabled}
-            onChange={colour => onChange({ ...cta, default: { ...cta.default, text: colour } })}
+            onChange={(colour) => onChange({ ...cta, default: { ...cta.default, text: colour } })}
             onValidationChange={onValidationChange}
           />
           <ColourInput
@@ -65,7 +65,7 @@ export const CtaColoursEditor: React.FC<Props> = ({
             name={`${name}.background`}
             label="Background Colour"
             isDisabled={isDisabled}
-            onChange={colour =>
+            onChange={(colour) =>
               onChange({ ...cta, default: { ...cta.default, background: colour } })
             }
             onValidationChange={onValidationChange}
@@ -75,7 +75,7 @@ export const CtaColoursEditor: React.FC<Props> = ({
             name={`${name}.border`}
             label="Border Colour"
             isDisabled={isDisabled}
-            onChange={colour => onChange({ ...cta, default: { ...cta.default, border: colour } })}
+            onChange={(colour) => onChange({ ...cta, default: { ...cta.default, border: colour } })}
             onValidationChange={onValidationChange}
           />
         </div>

@@ -77,7 +77,7 @@ export const CopyEditor: React.FC<CopyEditorProps> = ({
           control={control}
           rules={{
             required: true,
-            validate: copy => templateValidator(copy) ?? copyLengthValidator(75)(copy),
+            validate: (copy) => templateValidator(copy) ?? copyLengthValidator(75)(copy),
           }}
           render={({ field }) => {
             return (
@@ -85,7 +85,7 @@ export const CopyEditor: React.FC<CopyEditorProps> = ({
                 error={errors.heading !== undefined}
                 helperText={errors?.heading?.message || errors?.heading?.type}
                 copyData={field.value}
-                updateCopy={pars => {
+                updateCopy={(pars) => {
                   field.onChange(pars);
                   handleSubmit(setValidatedFields)();
                 }}
@@ -120,7 +120,7 @@ export const CopyEditor: React.FC<CopyEditorProps> = ({
                   error={errors.subheading !== undefined}
                   helperText={errors?.subheading?.message || errors?.subheading?.type}
                   copyData={field.value}
-                  updateCopy={pars => {
+                  updateCopy={(pars) => {
                     field.onChange(pars);
                     handleSubmit(setValidatedFields)();
                   }}

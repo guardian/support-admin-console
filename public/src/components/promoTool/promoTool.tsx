@@ -100,27 +100,27 @@ const PromoTool: React.FC = () => {
         fetchPromoCampaignsList(product); // Refetch campaigns list to update the sidebar
         navigate(`/promo-tool/campaign/${newPromoCampaign.campaignCode}`);
       })
-      .catch(error => {
+      .catch((error) => {
         alert(`Error while saving new PromoCampaign: ${error}`);
       });
   };
 
   const fetchPromoCampaignsList = (product: string): void => {
     fetchPromoCampaigns(JSON.stringify(product))
-      .then(campaigns => {
+      .then((campaigns) => {
         setPromoCampaigns(campaigns);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error);
       });
   };
 
   const fetchPromosList = (campaignCode: string): void => {
     fetchAllPromos(campaignCode)
-      .then(fetchedPromos => {
+      .then((fetchedPromos) => {
         setPromos(fetchedPromos);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('Error fetching promos:', error);
         alert(`Error fetching promos: ${error.message}`);
       });
@@ -150,7 +150,7 @@ const PromoTool: React.FC = () => {
         // Navigate to the editor page
         navigate(`/promo-tool/promo/${promoCode}`);
       })
-      .catch(error => {
+      .catch((error) => {
         alert(`Error creating promo: ${error.message}`);
       });
   };
@@ -173,7 +173,7 @@ const PromoTool: React.FC = () => {
         // Navigate to the editor page
         navigate(`/promo-tool/promo/${promoCode}`);
       })
-      .catch(error => {
+      .catch((error) => {
         alert(`Error cloning promo: ${error.message}`);
       });
   };
@@ -210,29 +210,29 @@ const PromoTool: React.FC = () => {
   useEffect(() => {
     fetchCountryGroups()
       .then(setCountryGroups)
-      .catch(error => {
+      .catch((error) => {
         console.error('Error fetching country groups:', error);
       });
 
     if (selectedPromoProduct) {
       const catalogProducts = mapPromoProductToCatalogProducts(selectedPromoProduct);
-      const fetchPromises = catalogProducts.map(catalogProduct => {
+      const fetchPromises = catalogProducts.map((catalogProduct) => {
         return fetchProductDetails(catalogProduct)
-          .then(product => {
+          .then((product) => {
             return getAllRatePlansWithProduct(product, catalogProduct);
           })
-          .catch(error => {
+          .catch((error) => {
             console.error(`Error fetching rate plans for ${catalogProduct}:`, error);
             return [];
           });
       });
 
       Promise.all(fetchPromises)
-        .then(allRatePlansArrays => {
+        .then((allRatePlansArrays) => {
           const combinedRatePlans = allRatePlansArrays.flat();
           setRatePlans(combinedRatePlans);
         })
-        .catch(error => {
+        .catch((error) => {
           console.error('Error combining rate plans:', error);
           setRatePlans([]);
         });
@@ -248,7 +248,7 @@ const PromoTool: React.FC = () => {
   }, [selectedPromoCampaignCode]);
 
   const selectedPromoCampaign = promoCampaigns.find(
-    promoCampaign => promoCampaign.campaignCode === selectedPromoCampaignCode,
+    (promoCampaign) => promoCampaign.campaignCode === selectedPromoCampaignCode,
   );
 
   return (
@@ -286,7 +286,7 @@ const PromoTool: React.FC = () => {
         open={createDialogOpen}
         onClose={() => setCreateDialogOpen(false)}
         onCreate={handleCreatePromo}
-        existingCodes={promos.map(p => p.promoCode)}
+        existingCodes={promos.map((p) => p.promoCode)}
       />
       <CreatePromoDialog
         open={cloneDialogOpen}
@@ -295,7 +295,7 @@ const PromoTool: React.FC = () => {
           setPromoToClone(undefined);
         }}
         onCreate={handleClonePromo}
-        existingCodes={promos.map(p => p.promoCode)}
+        existingCodes={promos.map((p) => p.promoCode)}
       />
     </div>
   );

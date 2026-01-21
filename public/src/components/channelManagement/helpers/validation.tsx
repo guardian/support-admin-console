@@ -13,7 +13,7 @@ export const MAXLENGTH_ERROR_HELPER_TEXT =
   'This copy is longer than the recommended length. Please preview across breakpoints before publishing.';
 
 export const getEmptyParagraphsError = (pars: string[]): string | undefined => {
-  if (pars.filter(p => p).join('').length <= 0) {
+  if (pars.filter((p) => p).join('').length <= 0) {
     return EMPTY_ERROR_HELPER_TEXT;
   }
   return undefined;
@@ -29,7 +29,7 @@ export const DUPLICATE_ERROR_HELPER_TEXT = 'Name already exists - please try ano
 export const createDuplicateValidator = (
   existing: string[],
 ): ((text: string) => string | undefined) => {
-  const existingLowerCased = existing.map(value => value.toLowerCase());
+  const existingLowerCased = existing.map((value) => value.toLowerCase());
   return (text: string): string | undefined => {
     if (existingLowerCased.includes(text.toLowerCase())) {
       return DUPLICATE_ERROR_HELPER_TEXT;
@@ -65,33 +65,33 @@ export const VALID_TEMPLATES = {
   SUPPORT: [CAMPAIGN_DEADLINE_TEMPLATE],
 };
 
-export const templateValidatorForPlatform = (platform: TestPlatform) => (
-  text?: string,
-): string | undefined => {
-  if (text) {
-    const templates: string[] | null = text.match(/%\S*%/g);
+export const templateValidatorForPlatform =
+  (platform: TestPlatform) =>
+  (text?: string): string | undefined => {
+    if (text) {
+      const templates: string[] | null = text.match(/%\S*%/g);
 
-    if (templates !== null) {
-      const invalidTemplate = templates.find(
-        template => !VALID_TEMPLATES[platform].includes(template),
-      );
-      if (invalidTemplate) {
-        return `Invalid template: ${invalidTemplate}`;
+      if (templates !== null) {
+        const invalidTemplate = templates.find(
+          (template) => !VALID_TEMPLATES[platform].includes(template),
+        );
+        if (invalidTemplate) {
+          return `Invalid template: ${invalidTemplate}`;
+        }
       }
     }
-  }
-  return undefined;
-};
+    return undefined;
+  };
 
 export const noHtmlValidator = (s: string): string | undefined =>
   /<\/?[a-z][\s\S]*>/i.test(s) ? 'HTML is not allowed' : undefined;
 
 // If copy is defined then enforce maxLength requirement
-export const copyLengthValidator = (maxLength: number) => (
-  copy: string | undefined,
-): string | undefined => {
-  if (copy) {
-    return copy.length > maxLength ? `Max length is ${maxLength}` : undefined;
-  }
-  return undefined;
-};
+export const copyLengthValidator =
+  (maxLength: number) =>
+  (copy: string | undefined): string | undefined => {
+    if (copy) {
+      return copy.length > maxLength ? `Max length is ${maxLength}` : undefined;
+    }
+    return undefined;
+  };

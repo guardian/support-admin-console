@@ -93,7 +93,11 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
   const classes = useStyles();
   const { control, getValues } = formMethods;
 
-  const { fields: benefits, append, remove } = useFieldArray({
+  const {
+    fields: benefits,
+    append,
+    remove,
+  } = useFieldArray({
     control,
     name: `choiceCards.${index}.benefits`,
   });
@@ -122,7 +126,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
                   {...field}
                   labelId={`supportTier-label-${index}`}
                   inputProps={{ id: `supportTier-${index}` }}
-                  onChange={e => {
+                  onChange={(e) => {
                     const newSupportTier = e.target.value as Product['supportTier'];
 
                     const buildProduct = (): Product => {
@@ -163,7 +167,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
                   <RadioGroup
                     row
                     {...field}
-                    onChange={e => {
+                    onChange={(e) => {
                       field.onChange(e.target.value);
                       handleCardChange();
                     }}
@@ -188,7 +192,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
                   checked={field.value}
                   color="primary"
                   disabled={isDisabled}
-                  onChange={e => {
+                  onChange={(e) => {
                     field.onChange(e.target.checked);
                     handleCardChange();
                   }}
@@ -209,7 +213,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
             render={({ field, fieldState }) => (
               <RichTextEditorSingleLine
                 copyData={field.value}
-                updateCopy={value => {
+                updateCopy={(value) => {
                   field.onChange(value);
                   handleCardChange();
                 }}
@@ -236,7 +240,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
               fullWidth
               margin="normal"
               disabled={isDisabled}
-              onChange={e => {
+              onChange={(e) => {
                 field.onChange(e);
                 handleCardChange();
               }}
@@ -250,7 +254,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
           render={({ field }) => (
             <RichTextEditorSingleLine
               copyData={choiceCard.benefitsLabel || ''}
-              updateCopy={value => {
+              updateCopy={(value) => {
                 field.onChange(value);
                 handleCardChange();
               }}
@@ -273,7 +277,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
                 render={({ field }) => (
                   <RichTextEditorSingleLine
                     copyData={benefit.copy}
-                    updateCopy={value => {
+                    updateCopy={(value) => {
                       field.onChange(value);
                       handleCardChange();
                     }}
@@ -321,7 +325,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
               <Typography className={classes.subHeading}>Destination</Typography>
               <TypedRadioGroup
                 selectedValue={field.value ?? 'LandingPage'}
-                onChange={destination => {
+                onChange={(destination) => {
                   field.onChange(destination);
                   handleCardChange();
                 }}

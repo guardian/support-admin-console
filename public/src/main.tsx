@@ -30,7 +30,6 @@ import IndexPage from './components/indexPage';
 import { getTheme } from './utils/theme';
 import ChannelSwitches from './components/channelManagement/ChannelSwitches';
 import CampaignsForm from './components/channelManagement/campaigns/CampaignsForm';
-import { FontWeightProperty } from 'csstype';
 import { makeStyles, ThemeProvider as StylesThemeProvider } from '@mui/styles';
 import QrCodePage from './components/utilities/QrCodePage';
 import AppsMeteringSwitches from './components/appsMeteringSwitches';
@@ -50,7 +49,7 @@ import { StudentLandingPageTestsForm } from './components/channelManagement/stud
 
 declare module '@mui/styles' {
   // https://mui.com/material-ui/migration/v5-style-changes/#%E2%9C%85-add-module-augmentation-for-defaulttheme-typescript
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface, @typescript-eslint/no-empty-object-type
   interface DefaultTheme extends Theme {}
 }
 
@@ -99,7 +98,7 @@ const useStyles = makeStyles(({ palette, mixins, typography, transitions }: Them
   toolbar: mixins.toolbar as CSSProperties, // createStyles expects material-ui's CSSProperties type, not react's
   heading: {
     fontSize: typography.pxToRem(24),
-    fontWeight: typography.fontWeightMedium as FontWeightProperty,
+    fontWeight: typography.fontWeightMedium,
   },
   toolbarContent: {
     width: '100%',
@@ -107,7 +106,7 @@ const useStyles = makeStyles(({ palette, mixins, typography, transitions }: Them
   },
   link: {
     fontSize: typography.pxToRem(12),
-    fontWeight: typography.fontWeightMedium as FontWeightProperty,
+    fontWeight: typography.fontWeightMedium,
     textDecoration: 'none',
   },
   guideButton: {

@@ -84,7 +84,7 @@ const TestListTest: React.FC<TestListTestProps> = ({
 
   const hasArticleCount = test.articlesViewedSettings !== undefined;
   const isBanditTest = test.methodologies.find(
-    method => method.name === 'EpsilonGreedyBandit' || method.name === 'Roulette',
+    (method) => method.name === 'EpsilonGreedyBandit' || method.name === 'Roulette',
   );
 
   const [ref, isHovered] = useHover<HTMLDivElement>();

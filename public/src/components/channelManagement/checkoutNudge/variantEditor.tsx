@@ -30,7 +30,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
   const hasNudge = !!variant.nudge;
 
   const updateNudgeToProduct = (update: (current: Product) => Product): void => {
-    onVariantChange(current => ({
+    onVariantChange((current) => ({
       ...current,
       nudge: current.nudge
         ? {
@@ -42,7 +42,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
   };
 
   const updateNudgeCopy = (update: (current: Copy) => Copy): void => {
-    onVariantChange(current => ({
+    onVariantChange((current) => ({
       ...current,
       nudge: current.nudge
         ? {
@@ -54,7 +54,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
   };
 
   const updateThankyouCopy = (update: (current: Copy) => Copy): void => {
-    onVariantChange(current => ({
+    onVariantChange((current) => ({
       ...current,
       nudge: current.nudge
         ? {
@@ -66,7 +66,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
   };
 
   const updateBenefits = (label: string): void => {
-    onVariantChange(current => ({
+    onVariantChange((current) => ({
       ...current,
       nudge: current.nudge
         ? {
@@ -78,7 +78,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
   };
 
   const toggleNudge = (): void => {
-    onVariantChange(current => ({
+    onVariantChange((current) => ({
       ...current,
       nudge: current.nudge
         ? undefined
@@ -127,7 +127,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
               label="Product"
               value={variant.nudge.nudgeToProduct.product}
               onChange={(e): void =>
-                updateNudgeToProduct(current => ({
+                updateNudgeToProduct((current) => ({
                   ...current,
                   product: e.target.value as ProductType,
                 }))
@@ -136,7 +136,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
               fullWidth
               margin="normal"
             >
-              {PRODUCTS.map(option => (
+              {PRODUCTS.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
                 </MenuItem>
@@ -147,7 +147,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
               label="Rate Plan (Optional)"
               value={variant.nudge.nudgeToProduct.ratePlan || ''}
               onChange={(e): void =>
-                updateNudgeToProduct(current => ({
+                updateNudgeToProduct((current) => ({
                   ...current,
                   ratePlan: e.target.value ? (e.target.value as RatePlan) : undefined,
                 }))
@@ -175,7 +175,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
               label="Heading"
               value={variant.nudge.nudgeCopy.heading}
               onChange={(e): void =>
-                updateNudgeCopy(current => ({ ...current, heading: e.target.value }))
+                updateNudgeCopy((current) => ({ ...current, heading: e.target.value }))
               }
               disabled={!editMode}
               fullWidth
@@ -186,7 +186,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
               label="Body"
               value={variant.nudge.nudgeCopy.body || ''}
               onChange={(e): void =>
-                updateNudgeCopy(current => ({ ...current, body: e.target.value }))
+                updateNudgeCopy((current) => ({ ...current, body: e.target.value }))
               }
               disabled={!editMode}
               fullWidth
@@ -204,7 +204,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
               label="Heading"
               value={variant.nudge.thankyouCopy.heading}
               onChange={(e): void =>
-                updateThankyouCopy(current => ({ ...current, heading: e.target.value }))
+                updateThankyouCopy((current) => ({ ...current, heading: e.target.value }))
               }
               disabled={!editMode}
               fullWidth
@@ -215,7 +215,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
               label="Body"
               value={variant.nudge.thankyouCopy.body}
               onChange={(e): void =>
-                updateThankyouCopy(current => ({ ...current, body: e.target.value }))
+                updateThankyouCopy((current) => ({ ...current, body: e.target.value }))
               }
               disabled={!editMode}
               fullWidth
@@ -249,7 +249,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
         <PromoCodesEditor
           promoCodes={variant.promoCodes ?? []}
           updatePromoCodes={(promoCodes: string[]): void => {
-            onVariantChange(current => ({ ...current, promoCodes }));
+            onVariantChange((current) => ({ ...current, promoCodes }));
           }}
           isDisabled={!editMode}
         />

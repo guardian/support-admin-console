@@ -87,7 +87,7 @@ export const CreateVariantDialog: React.FC<CreateVariantDialogProps> = ({
           helperText={errorMessage}
           margin="normal"
           variant="outlined"
-          onChange={e => updateName(e.target.value)}
+          onChange={(e) => updateName(e.target.value)}
           autoFocus
           fullWidth
         />

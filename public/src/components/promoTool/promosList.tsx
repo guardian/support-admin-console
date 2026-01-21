@@ -58,7 +58,7 @@ const PromosList = ({
         </Box>
       ) : (
         <List className={classes.list}>
-          {promos.map(promo => {
+          {promos.map((promo) => {
             return (
               <PromoListItem
                 key={promo.promoCode}

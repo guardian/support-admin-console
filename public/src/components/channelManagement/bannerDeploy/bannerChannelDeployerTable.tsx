@@ -43,7 +43,7 @@ const BannerChannelDeployerTable: React.FC<BannerChannelDeployerTableProps> = ({
 
   const isChannel1 = channel === 'CHANNEL1';
   const shouldRedeployAllBanners = Object.values(bannersToRedeploy).every(
-    shouldRedeploy => shouldRedeploy,
+    (shouldRedeploy) => shouldRedeploy,
   );
 
   const Schedule = (): JSX.Element => (
@@ -86,7 +86,7 @@ const BannerChannelDeployerTable: React.FC<BannerChannelDeployerTableProps> = ({
         </TableHead>
         <TableBody>
           {bannerDeploys &&
-            Object.keys(bannerDeploys).map(region => (
+            Object.keys(bannerDeploys).map((region) => (
               <BannerChannelDeployerTableRow
                 key={region}
                 region={region}

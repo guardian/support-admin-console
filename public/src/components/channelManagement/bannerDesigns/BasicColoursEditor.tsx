@@ -43,7 +43,7 @@ export const BasicColoursEditor: React.FC<Props> = ({
         name="colours.basic.background"
         label="Background Colour"
         isDisabled={isDisabled}
-        onChange={colour => onChange({ ...basicColours, background: colour })}
+        onChange={(colour) => onChange({ ...basicColours, background: colour })}
         onValidationChange={onValidationChange}
       />
       <ColourInput
@@ -51,7 +51,7 @@ export const BasicColoursEditor: React.FC<Props> = ({
         name="colours.basic.bodyText"
         label="Body Text Colour"
         isDisabled={isDisabled}
-        onChange={colour => onChange({ ...basicColours, bodyText: colour })}
+        onChange={(colour) => onChange({ ...basicColours, bodyText: colour })}
         onValidationChange={onValidationChange}
       />
       <ColourInput
@@ -59,7 +59,7 @@ export const BasicColoursEditor: React.FC<Props> = ({
         name="colours.basic.headerText"
         label="Header Text Colour"
         isDisabled={isDisabled}
-        onChange={colour => onChange({ ...basicColours, headerText: colour })}
+        onChange={(colour) => onChange({ ...basicColours, headerText: colour })}
         onValidationChange={onValidationChange}
       />
       <ColourInput
@@ -67,13 +67,13 @@ export const BasicColoursEditor: React.FC<Props> = ({
         name="colours.basic.articleCountText"
         label="Article Count Text Colour"
         isDisabled={isDisabled}
-        onChange={colour => onChange({ ...basicColours, articleCountText: colour })}
+        onChange={(colour) => onChange({ ...basicColours, articleCountText: colour })}
         onValidationChange={onValidationChange}
       />
       <div className={classes.header}>Guardian Logo Colour</div>
       <TypedRadioGroup
         selectedValue={hexColourToString(basicColours.logo)}
-        onChange={colour => onChange({ ...basicColours, logo: stringToHexColour(colour) })}
+        onChange={(colour) => onChange({ ...basicColours, logo: stringToHexColour(colour) })}
         isDisabled={isDisabled}
         labels={{ '000000': 'Black', FFFFFF: 'White' }}
       />

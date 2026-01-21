@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { ValidationStatus } from '../helpers/validation';
 
 const allValid = (validationStatus: ValidationStatus): boolean => {
-  return Object.values(validationStatus).every(status => status);
+  return Object.values(validationStatus).every((status) => status);
 };
 
 type FieldValidationChange = (fieldName: string, isValid: boolean) => void;
@@ -21,7 +21,7 @@ const useValidation = (onValidationChanged: (isValid: boolean) => void): FieldVa
   }, [validationStatus]);
 
   const setValidationStatusForField = (field: string, isValid: boolean): void => {
-    setValidationStatus(current => ({ ...current, [field]: isValid }));
+    setValidationStatus((current) => ({ ...current, [field]: isValid }));
   };
 
   return setValidationStatusForField;
