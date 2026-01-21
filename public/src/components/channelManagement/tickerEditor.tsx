@@ -90,21 +90,23 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
 
   const onNameChanged = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const selectedName = event.target.value as TickerName;
-    tickerSettings &&
+    if (tickerSettings) {
       updateTickerSettings({
         ...tickerSettings,
         name: selectedName,
         currencySymbol: selectedName === TickerName.GLOBAL ? '' : '$',
       });
+    }
   };
 
   const onSubmit = ({ countLabel, goalCopy, currencySymbol }: FormData): void => {
-    tickerSettings &&
+    if (tickerSettings) {
       updateTickerSettings({
         ...tickerSettings,
         copy: { countLabel, goalCopy: goalCopy ?? 'goal' },
         currencySymbol: currencySymbol ?? '',
       });
+    }
   };
 
   return (
