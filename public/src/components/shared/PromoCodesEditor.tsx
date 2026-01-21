@@ -187,7 +187,7 @@ const PromoCodesEditor: React.FC<PromoCodesEditorProps> = ({
       await fetchPromo(trimmedCode);
       updatePromoCodes([...promoCodes, trimmedCode]);
       setNewPromoCode('');
-    } catch (error) {
+    } catch {
       // Still add it but it will show as error
       updatePromoCodes([...promoCodes, trimmedCode]);
       setNewPromoCode('');
