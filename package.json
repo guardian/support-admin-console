@@ -51,9 +51,6 @@
     "remirror": "^3.0.1",
     "uuid": "^13.0.0"
   },
-  "resolutions": {
-    "csstype": "^2.6.18"
-  },
   "overrides": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
