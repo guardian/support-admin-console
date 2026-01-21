@@ -25,6 +25,7 @@ export enum FrontendSettingsType {
   campaigns = 'campaigns',
   bannerDesigns = 'banner-designs',
   supportLandingPageTests = 'support-landing-page-tests',
+  studentLandingPageTests = 'student-landing-page-tests',
   checkoutNudgeTests = 'checkout-nudge-tests',
   accessManagement = 'access-management',
 }

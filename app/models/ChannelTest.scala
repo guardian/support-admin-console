@@ -43,6 +43,7 @@ object ChannelTest {
         case GutterLiveblog     => GutterTest.gutterTestDecoder(c)
         case SupportLandingPage => SupportLandingPageTest.landingPageTestDecoder(c)
         case CheckoutNudge      => CheckoutNudgeTest.checkoutNudgeTestDecoder(c)
+        case StudentLandingPage => StudentLandingPageTest.studentLandingPageTestDecoder(c)
         case epic               => EpicTest.epicTestDecoder(c)
       }
     }
@@ -50,12 +51,14 @@ object ChannelTest {
 
   implicit def channelTestEncoder: Encoder[ChannelTest[_]] = new Encoder[ChannelTest[_]] {
     override def apply(test: ChannelTest[_]): Json = test match {
-      case header: HeaderTest                  => HeaderTest.headerTestEncoder(header)
-      case banner: BannerTest                  => BannerTest.bannerTestEncoder(banner)
-      case gutter: GutterTest                  => GutterTest.gutterTestEncoder(gutter)
-      case landingPage: SupportLandingPageTest => SupportLandingPageTest.landingPageTestEncoder(landingPage)
-      case checkoutNudge: CheckoutNudgeTest    => CheckoutNudgeTest.checkoutNudgeTestEncoder(checkoutNudge)
-      case epic: EpicTest                      => EpicTest.epicTestEncoder(epic)
+      case header: HeaderTest                         => HeaderTest.headerTestEncoder(header)
+      case banner: BannerTest                         => BannerTest.bannerTestEncoder(banner)
+      case gutter: GutterTest                         => GutterTest.gutterTestEncoder(gutter)
+      case landingPage: SupportLandingPageTest        => SupportLandingPageTest.landingPageTestEncoder(landingPage)
+      case checkoutNudge: CheckoutNudgeTest           => CheckoutNudgeTest.checkoutNudgeTestEncoder(checkoutNudge)
+      case studentLandingPage: StudentLandingPageTest =>
+        StudentLandingPageTest.studentLandingPageTestEncoder(studentLandingPage)
+      case epic: EpicTest => EpicTest.epicTestEncoder(epic)
     }
   }
 }

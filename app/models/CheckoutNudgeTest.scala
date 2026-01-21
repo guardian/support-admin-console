@@ -48,7 +48,8 @@ case class Benefits(
 
 case class CheckoutNudgeVariant(
     name: String,
-    nudge: Option[CheckoutNudge] = None
+    nudge: Option[CheckoutNudge] = None,
+    promoCodes: Option[List[String]] = None
 )
 
 case class CheckoutNudge(

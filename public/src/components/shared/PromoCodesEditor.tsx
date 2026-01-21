@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import { TextField, Theme } from '@mui/material';
-import { parsePromoInput } from '../../../utils/parsePromoInput';
+import { parsePromoInput } from '../../utils/parsePromoInput';
 
 interface PromoCodesEditorProps {
   promoCodes: string[];
