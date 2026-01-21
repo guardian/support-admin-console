@@ -130,8 +130,8 @@ importers:
         specifier: ^30.2.0
         version: 30.2.0(@types/node@25.0.3)(babel-plugin-macros@3.1.0)
       json-diff-ts:
-        specifier: 4.1.0
-        version: 4.1.0
+        specifier: 4.8.2
+        version: 4.8.2
       prettier:
         specifier: ^1.19.1
         version: 1.19.1
@@ -3328,8 +3328,8 @@ packages:
   json-buffer@3.0.1:
     resolution: {integrity: sha512-4bV5BfR2mqfQTJm+V5tPPdf+ZpuhiIvTuAB5g8kcrXOZpTT/QwwVRWBywX1ozr6lEuPdbHxwaJlm9G6mI2sfSQ==}
 
-  json-diff-ts@4.1.0:
-    resolution: {integrity: sha512-WriM1FhU8xnvlvDsmoB5YgwkL2uOy/p4rKPmJz0Bo221nHHEQbh6WspTowEl2qxy9yP5gGYv0pUQ7kNnjrn/TQ==}
+  json-diff-ts@4.8.2:
+    resolution: {integrity: sha512-7LgOTnfK5XnBs0o0AtHTkry5QGZT7cSlAgu5GtiomUeoHqOavAUDcONNm/bCe4Lapt0AHnaidD5iSE+ItvxKkA==}
 
   json-parse-even-better-errors@2.3.1:
     resolution: {integrity: sha512-xyFwyhro/JEof6Ghe2iz2NcXoj2sloNsWr/XsERDK/oiPCfaNhl5ONfp+jQdAZRQQ0IJWNzH9zIZF7li91kh2w==}
@@ -9125,9 +9125,7 @@ snapshots:
 
   json-buffer@3.0.1: {}
 
-  json-diff-ts@4.1.0:
-    dependencies:
-      lodash: 4.17.21
+  json-diff-ts@4.8.2: {}
 
   json-parse-even-better-errors@2.3.1: {}
 
