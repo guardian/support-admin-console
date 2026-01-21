@@ -111,9 +111,6 @@ importers:
       css-loader:
         specifier: ^7.1.2
         version: 7.1.2(webpack@5.104.1)
-      csstype:
-        specifier: ^2.6.18
-        version: 2.6.21
       eslint:
         specifier: ^8.57.0
         version: 8.57.1
