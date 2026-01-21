@@ -106,7 +106,7 @@ export const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
           name="name"
           label="Test name"
           value={name}
-          onChange={e => updateTestName(e.target.value)}
+          onChange={(e) => updateTestName(e.target.value)}
           error={!!nameError.length}
           helperText={nameError}
           margin="normal"
@@ -118,7 +118,7 @@ export const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
           name="name"
           label="Test label"
           value={label}
-          onChange={e => updateTestLabel(e.target.value)}
+          onChange={(e) => updateTestLabel(e.target.value)}
           error={!!labelError.length}
           helperText={labelError}
           margin="normal"

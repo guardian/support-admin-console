@@ -47,7 +47,7 @@ const getChoiceCardsSelection = (
 };
 
 const countDefaultCards = (choiceCards: ChoiceCard[]): number =>
-  choiceCards.filter(card => card.isDefault).length;
+  choiceCards.filter((card) => card.isDefault).length;
 
 interface ChoiceCardsEditorProps {
   showChoiceCards: boolean;
@@ -124,9 +124,9 @@ const ChoiceCardsEditor: React.FC<ChoiceCardsEditorProps> = ({
     }
   };
 
-  const handleFieldChange = formMethods.handleSubmit(updatedSettings => {
+  const handleFieldChange = formMethods.handleSubmit((updatedSettings) => {
     // special handling of pill field, because react-hook-form may give us an undefined nested copy field - `pill: { copy: undefined }`
-    const choiceCards = updatedSettings.choiceCards.map(card => ({
+    const choiceCards = updatedSettings.choiceCards.map((card) => ({
       ...card,
       pill: card.pill?.copy ? card.pill : undefined,
     }));
@@ -170,7 +170,7 @@ const ChoiceCardsEditor: React.FC<ChoiceCardsEditorProps> = ({
             <div className={classes.choiceCardContainer} key={choiceCard.id}>
               <ChoiceCardEditor
                 choiceCard={choiceCard}
-                onChange={updatedCard => {
+                onChange={(updatedCard) => {
                   formMethods.setValue(`choiceCards.${idx}`, updatedCard);
                   handleFieldChange();
                 }}

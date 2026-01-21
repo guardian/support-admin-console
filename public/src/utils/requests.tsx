@@ -36,9 +36,9 @@ export enum AppsSettingsType {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function makeFetch(path: string, options?: RequestInit): Promise<any> {
-  return fetch(path, options).then(resp => {
+  return fetch(path, options).then((resp) => {
     if (!resp.ok) {
-      return resp.text().then(msg => Promise.reject(new Error(msg)));
+      return resp.text().then((msg) => Promise.reject(new Error(msg)));
     }
 
     return resp;
@@ -47,7 +47,7 @@ function makeFetch(path: string, options?: RequestInit): Promise<any> {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function fetchSettings(path: string): Promise<any> {
-  return makeFetch(path).then(resp => resp.json());
+  return makeFetch(path).then((resp) => resp.json());
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

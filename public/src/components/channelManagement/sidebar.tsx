@@ -83,13 +83,13 @@ function Sidebar<T extends Test>({
   const classes = useStyles();
   const [regionFilter, setRegionFilter] = useState<RegionsAndAll>('ALL');
 
-  const filterTests = function(testsToFilter: Test[]): Test[] {
+  const filterTests = function (testsToFilter: Test[]): Test[] {
     if (userHasTestListLocked || 'ALL' === regionFilter) {
       return testsToFilter;
     }
 
     return testsToFilter.filter(
-      t =>
+      (t) =>
         t.regionTargeting?.targetedCountryGroups?.indexOf(regionFilter) >= 0 ||
         t.locations?.indexOf(regionFilter) >= 0,
     );
@@ -99,8 +99,8 @@ function Sidebar<T extends Test>({
     <div className={classes.root}>
       <div className={classes.buttonsContainer}>
         <NewTestButton
-          existingNames={tests.map(t => t.name)}
-          existingNicknames={tests.map(t => t.nickname || '')}
+          existingNames={tests.map((t) => t.name)}
+          existingNicknames={tests.map((t) => t.nickname || '')}
           testNamePrefix={testNamePrefix}
           createTest={createTest}
           disabled={userHasTestListLocked || !allowEditing}
@@ -108,7 +108,7 @@ function Sidebar<T extends Test>({
 
         <BatchProcessTestButton
           // filter out live tests and any test currently being edited
-          draftTests={tests.filter(t => !(t.status === 'Live' && t.name !== selectedTestName))}
+          draftTests={tests.filter((t) => !(t.status === 'Live' && t.name !== selectedTestName))}
           onBatchTestArchive={onBatchTestArchive}
           disabled={!allowEditing}
         />

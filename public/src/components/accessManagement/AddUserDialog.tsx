@@ -108,7 +108,7 @@ const AddUserDialog = ({ open, onClose, onUserAdded }: AddUserDialogProps) => {
           type="email"
           fullWidth
           value={email}
-          onChange={e => setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)}
           placeholder="user@guardian.co.uk"
           variant="outlined"
           style={{ marginBottom: '24px' }}
@@ -118,7 +118,7 @@ const AddUserDialog = ({ open, onClose, onUserAdded }: AddUserDialogProps) => {
           <FormLabel component="legend">Support Landing Page Tests</FormLabel>
           <RadioGroup
             value={landingPagePerm}
-            onChange={e => setLandingPagePerm(e.target.value as 'Read' | 'Write' | 'None')}
+            onChange={(e) => setLandingPagePerm(e.target.value as 'Read' | 'Write' | 'None')}
           >
             <FormControlLabel value="None" control={<Radio />} label="No Access" />
             <FormControlLabel value="Read" control={<Radio />} label="Read Only" />
@@ -130,7 +130,7 @@ const AddUserDialog = ({ open, onClose, onUserAdded }: AddUserDialogProps) => {
           <FormLabel component="legend">Checkout Nudge Tests</FormLabel>
           <RadioGroup
             value={checkoutNudgePerm}
-            onChange={e => setCheckoutNudgePerm(e.target.value as 'Read' | 'Write' | 'None')}
+            onChange={(e) => setCheckoutNudgePerm(e.target.value as 'Read' | 'Write' | 'None')}
           >
             <FormControlLabel value="None" control={<Radio />} label="No Access" />
             <FormControlLabel value="Read" control={<Radio />} label="Read Only" />

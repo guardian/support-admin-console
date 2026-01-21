@@ -121,7 +121,7 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
   const { name, nickname, description, notes, isActive } = campaign;
 
   const doDataFetch = (name: string) => {
-    fetchCampaignTests(name).then(tests => {
+    fetchCampaignTests(name).then((tests) => {
       // sort by test priority; each channel sets its own priority list
       const sortedTests = tests.sort((a: Test, b: Test) => {
         if (a.priority != null && b.priority != null) {
@@ -163,10 +163,10 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
 
   const filterTests = (channel: string) => {
     if (showArchivedTests) {
-      return testData.filter(test => test.channel === channel);
+      return testData.filter((test) => test.channel === channel);
     } else {
-      const filteredTests = testData.filter(test => test.channel === channel);
-      return filteredTests.filter(test => test.status !== 'Archived');
+      const filteredTests = testData.filter((test) => test.channel === channel);
+      return filteredTests.filter((test) => test.status !== 'Archived');
     }
   };
 
@@ -217,7 +217,7 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
                     control={
                       <Switch
                         {...register('isActive')}
-                        onChange={e => {
+                        onChange={(e) => {
                           field.onChange(e.target.checked);
                           handleSubmit(onSubmit)();
                         }}
@@ -238,7 +238,7 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
                     <RichTextEditor
                       error={errors.notes !== undefined}
                       copyData={field.value}
-                      updateCopy={pars => {
+                      updateCopy={(pars) => {
                         field.onChange(pars);
                         handleSubmit(onSubmit)();
                       }}
@@ -261,7 +261,7 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
             </div>
           </div>
         )}
-        {testChannelOrder.map(channel => (
+        {testChannelOrder.map((channel) => (
           <ChannelCard
             channelData={testChannelData[channel]}
             tests={filterTests(channel)}

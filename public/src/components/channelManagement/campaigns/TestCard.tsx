@@ -142,7 +142,9 @@ function TestCard({ test, keyId, linkPath }: TestCardProps): React.ReactElement 
   const getVariantNames = (variants: Variant[]) => {
     if (variants.length > 0) {
       return (
-        <div className={classes.variantsData}>Variants: {variants.map(v => v.name).join(', ')}</div>
+        <div className={classes.variantsData}>
+          Variants: {variants.map((v) => v.name).join(', ')}
+        </div>
       );
     }
     return <div className={classes.dataWarning}>No Variants have been created for this Test.</div>;

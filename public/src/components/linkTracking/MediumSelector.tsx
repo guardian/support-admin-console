@@ -215,13 +215,13 @@ export const MediumSelector: React.FC<Props> = ({ control, errors, onUpdate }: P
         render={({ field: { onChange, value } }) => (
           <Select
             value={value}
-            onChange={e => {
+            onChange={(e) => {
               onUpdate();
               onChange(e);
             }}
             error={!!errors?.sourceAndMedium}
           >
-            {OPTIONS.map(group => {
+            {OPTIONS.map((group) => {
               const groupItem = (
                 <MenuItem
                   className={classes.groupHeading}
@@ -232,7 +232,7 @@ export const MediumSelector: React.FC<Props> = ({ control, errors, onUpdate }: P
                   {group.group}
                 </MenuItem>
               );
-              const items = group.options.map(medium => (
+              const items = group.options.map((medium) => (
                 <MenuItem
                   className={classes.item}
                   value={`${group.group}__${medium.value}`}

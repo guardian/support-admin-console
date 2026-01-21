@@ -81,7 +81,7 @@ export const AuditTestsTable: React.FC<AuditTestsTableProps> = ({
       field: 'action',
       headerName: 'Compare',
       sortable: false,
-      renderCell: params => {
+      renderCell: (params) => {
         const onClick = () => {
           const version: number = +params.row.index;
           const jsonDiff = getJsonDiff(version);
@@ -105,7 +105,7 @@ export const AuditTestsTable: React.FC<AuditTestsTableProps> = ({
         <div style={{ width: '100%' }}>
           <DataGrid
             autoHeight
-            rows={sortedRows.map(row => ({
+            rows={sortedRows.map((row) => ({
               ...row,
               id: `${row.timestamp}`,
               index: `${sortedRows.indexOf(row)}`,

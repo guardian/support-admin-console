@@ -58,8 +58,8 @@ export const AuditTestsDashboard: React.FC = () => {
   const [rows, setRows] = useState<AuditDataRow[]>([]);
   const fetchAuditData = () => {
     fetch(`/frontend/audit/${channel}/${testName}`)
-      .then(resp => resp.json())
-      .then(rows => setRows(rows));
+      .then((resp) => resp.json())
+      .then((rows) => setRows(rows));
   };
 
   useEffect(() => {
@@ -91,7 +91,7 @@ export const AuditTestsDashboard: React.FC = () => {
               value={testName}
               autoFocus
               fullWidth
-              onChange={event => {
+              onChange={(event) => {
                 setTestName(event.target.value);
               }}
             />

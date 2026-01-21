@@ -42,7 +42,7 @@ export const SuperModeTable: React.FC<SuperModeTableProps> = ({ rows }: SuperMod
     <div style={{ width: '100%' }}>
       <DataGrid
         autoHeight
-        rows={rows.map(row => ({ ...row, id: `${row.url}/${row.region}` }))}
+        rows={rows.map((row) => ({ ...row, id: `${row.url}/${row.region}` }))}
         columns={columns}
         initialState={{
           pagination: {

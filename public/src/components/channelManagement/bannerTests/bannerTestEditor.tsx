@@ -44,12 +44,12 @@ import { FrontsOnlyEditor } from './frontsOnlyEditor';
 
 const copyHasTemplate = (content: BannerContent, template: string): boolean =>
   (content.heading && content.heading.includes(template)) ||
-  (content.paragraphs && content.paragraphs.some(para => para.includes(template))) ||
+  (content.paragraphs && content.paragraphs.some((para) => para.includes(template))) ||
   (content.messageText != null && content.messageText.includes(template));
 
 const testCopyHasTemplate = (test: BannerTest, template: string): boolean =>
   test.variants.some(
-    variant =>
+    (variant) =>
       (variant.bannerContent && copyHasTemplate(variant.bannerContent, template)) ||
       (variant.mobileBannerContent && copyHasTemplate(variant.mobileBannerContent, template)),
   );
@@ -67,7 +67,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
   const fetchBannerDesigns = (): void => {
     fetchFrontendSettings(FrontendSettingsType.bannerDesigns).then(
       (response: BannerDesignsResponse) => {
-        setDesigns(response.bannerDesigns.filter(design => design.status === 'Live'));
+        setDesigns(response.bannerDesigns.filter((design) => design.status === 'Live'));
       },
     );
   };
@@ -87,7 +87,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
   };
 
   const updateTest = (update: (current: BannerTest) => BannerTest): void => {
-    onTestChange(current => {
+    onTestChange((current) => {
       const updatedTest = update(current);
       return {
         ...updatedTest,
@@ -98,7 +98,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
   };
 
   const onCampaignChange = (campaign?: string): void => {
-    updateTest(current => ({
+    updateTest((current) => ({
       ...current,
       campaignName: campaign,
     }));
@@ -106,7 +106,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
 
   const onMethodologyChange = (methodologies: Methodology[]): void => {
     setValidationStatusForField('methodologies', methodologies.length > 0);
-    updateTest(current => ({ ...current, methodologies }));
+    updateTest((current) => ({ ...current, methodologies }));
   };
 
   const onArticlesViewedSettingsValidationChanged = (isValid: boolean): void =>
@@ -117,34 +117,34 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
 
   const onControlProportionSettingsChange = (
     controlProportionSettings?: ControlProportionSettings,
-  ): void => updateTest(current => ({ ...current, controlProportionSettings }));
+  ): void => updateTest((current) => ({ ...current, controlProportionSettings }));
 
   const onVariantsChange = (update: (current: BannerVariant[]) => BannerVariant[]): void => {
-    updateTest(current => {
+    updateTest((current) => {
       const updatedVariantList = update(current.variants);
       return { ...current, variants: updatedVariantList };
     });
   };
 
-  const onVariantChange = (variantName: string) => (
-    update: (current: BannerVariant) => BannerVariant,
-  ): void => {
-    onVariantsChange(current =>
-      current.map(variant => {
-        if (variant.name === variantName) {
-          return update(variant);
-        }
-        return variant;
-      }),
-    );
-  };
+  const onVariantChange =
+    (variantName: string) =>
+    (update: (current: BannerVariant) => BannerVariant): void => {
+      onVariantsChange((current) =>
+        current.map((variant) => {
+          if (variant.name === variantName) {
+            return update(variant);
+          }
+          return variant;
+        }),
+      );
+    };
 
   const onVariantDelete = (deletedVariantName: string): void => {
-    onVariantsChange(current => current.filter(variant => variant.name !== deletedVariantName));
+    onVariantsChange((current) => current.filter((variant) => variant.name !== deletedVariantName));
   };
 
   const onRegionTargetingChange = (updatedRegionTargeting: RegionTargeting): void => {
-    updateTest(current => ({
+    updateTest((current) => ({
       ...current,
       regionTargeting: updatedRegionTargeting,
       locations: [], // deprecated
@@ -152,39 +152,39 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
   };
 
   const onCohortChange = (updatedCohort: UserCohort): void => {
-    updateTest(current => ({ ...current, userCohort: updatedCohort }));
+    updateTest((current) => ({ ...current, userCohort: updatedCohort }));
   };
 
   const onDeviceTypeChange = (updatedDeviceType: DeviceType): void => {
-    updateTest(current => ({ ...current, deviceType: updatedDeviceType }));
+    updateTest((current) => ({ ...current, deviceType: updatedDeviceType }));
   };
 
   const onSignedInStatusChange = (signedInStatus: SignedInStatus): void => {
-    onTestChange(current => ({ ...current, signedInStatus }));
+    onTestChange((current) => ({ ...current, signedInStatus }));
   };
 
   const onConsentStatusChange = (consentStatus: ConsentStatus): void => {
-    onTestChange(current => ({ ...current, consentStatus }));
+    onTestChange((current) => ({ ...current, consentStatus }));
   };
 
   const onArticlesViewedSettingsChange = (
     updatedArticlesViewedSettings?: ArticlesViewedSettings,
   ): void => {
-    updateTest(current => ({
+    updateTest((current) => ({
       ...current,
       articlesViewedSettings: updatedArticlesViewedSettings,
     }));
   };
 
   const onDeployScheduleChange = (updatedDeploySchedule?: BannerTestDeploySchedule): void => {
-    updateTest(current => ({
+    updateTest((current) => ({
       ...current,
       deploySchedule: updatedDeploySchedule,
     }));
   };
 
   const onFrontsOnlyChange = (frontsOnly: boolean): void => {
-    updateTest(current => ({
+    updateTest((current) => ({
       ...current,
       frontsOnly,
     }));
@@ -225,7 +225,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
       ...getDefaultVariant(),
       name: name,
     };
-    onVariantsChange(current => [...current, newVariant]);
+    onVariantsChange((current) => [...current, newVariant]);
   };
 
   const onVariantClone = (originalVariant: BannerVariant, clonedVariantName: string): void => {
@@ -233,7 +233,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
       ...originalVariant,
       name: clonedVariantName,
     };
-    onVariantsChange(current => [...current, newVariant]);
+    onVariantsChange((current) => [...current, newVariant]);
   };
 
   if (test) {
@@ -308,8 +308,8 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
           <TestEditorContextTargeting
             contextTargeting={test.contextTargeting}
             editMode={userHasTestLocked}
-            updateContextTargeting={contextTargeting =>
-              updateTest(current => ({ ...current, contextTargeting }))
+            updateContextTargeting={(contextTargeting) =>
+              updateTest((current) => ({ ...current, contextTargeting }))
             }
           />
         </div>
@@ -365,7 +365,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
           <DeployScheduleEditor
             deploySchedule={test.deploySchedule}
             onDeployScheduleChange={onDeployScheduleChange}
-            onValidationChange={isValid => setValidationStatusForField('deploySchedule', isValid)}
+            onValidationChange={(isValid) => setValidationStatusForField('deploySchedule', isValid)}
             isDisabled={!userHasTestLocked}
           />
         </div>

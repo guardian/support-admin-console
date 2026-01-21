@@ -42,7 +42,7 @@ const BannerDesignsSidebar = ({
     <div className={classes.root}>
       <div className={classes.buttonsContainer}>
         <NewBannerDesignButton
-          existingNames={designs.map(c => c.name)}
+          existingNames={designs.map((c) => c.name)}
           createDesign={createDesign}
         />
       </div>

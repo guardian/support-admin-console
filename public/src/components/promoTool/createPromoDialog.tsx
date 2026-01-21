@@ -72,7 +72,7 @@ const CreatePromoDialog = ({
           autoFocus
           label="Promo Code"
           value={promoCode}
-          onChange={e => {
+          onChange={(e) => {
             setPromoCode(e.target.value);
             setError('');
           }}
@@ -83,7 +83,7 @@ const CreatePromoDialog = ({
         <TextField
           label="Name"
           value={name}
-          onChange={e => setName(e.target.value)}
+          onChange={(e) => setName(e.target.value)}
           placeholder="Name for internal use..."
         />
       </DialogContent>

@@ -42,7 +42,7 @@ export const GutterTestPreviewButton: React.FC<GutterTestPreviewProps> = ({
 
       <Dialog open={isOpen} onClose={close} fullWidth maxWidth="xl" className={classes.dialog}>
         <div className={classes.variantPreviewsContainer}>
-          {test.variants.map(variant => (
+          {test.variants.map((variant) => (
             <div
               className={classes.variantPreviewContainer}
               key={`variant-preview-${variant.name}`}

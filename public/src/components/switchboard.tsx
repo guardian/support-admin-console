@@ -151,7 +151,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
   const setPendingChange = (changeName: string, description: string, groupId: string): void => {
     const unsavedChange = `${changeName} “${description}” in “${groupId}”`;
     // Add the changeName to the list of pendingChanges
-    setPendingChanges(prevChanges => [...prevChanges, unsavedChange]);
+    setPendingChanges((prevChanges) => [...prevChanges, unsavedChange]);
   };
 
   const updateSwitchSetting = (
@@ -242,7 +242,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
             helperText={errors.switchId ? errors.switchId.message : ''}
             {...register('switchId', {
               required: EMPTY_ERROR_HELPER_TEXT,
-              validate: switchId => {
+              validate: (switchId) => {
                 return createDuplicateValidator(Object.keys(groupData.switches))(switchId);
               },
             })}
@@ -260,9 +260,9 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
             helperText={errors.description ? errors.description.message : ''}
             {...register('description', {
               required: EMPTY_ERROR_HELPER_TEXT,
-              validate: description => {
+              validate: (description) => {
                 return createDuplicateValidator(
-                  Object.values(groupData.switches).map(switchData => switchData.description),
+                  Object.values(groupData.switches).map((switchData) => switchData.description),
                 )(description);
               },
             })}
@@ -293,7 +293,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     <>
       {Object.entries(data)
         .sort(sortByDescription)
-        .map(group => createGroupsFromData(group))}
+        .map((group) => createGroupsFromData(group))}
     </>
   );
 

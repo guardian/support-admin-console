@@ -10,15 +10,14 @@ import {
 import { getEpicTestEditor } from './testEditor';
 import { EpicTest } from '../../../models/epic';
 
-const createDefaultEpicTest = (epicEditorConfig: EpicEditorConfig) => (
-  newTestName: string,
-  newTestNickname: string,
-): EpicTest => ({
-  ...getDefaultTest(),
-  name: newTestName,
-  nickname: newTestNickname,
-  variants: epicEditorConfig.allowMultipleVariants ? [] : [{ ...getDefaultVariant() }],
-});
+const createDefaultEpicTest =
+  (epicEditorConfig: EpicEditorConfig) =>
+  (newTestName: string, newTestNickname: string): EpicTest => ({
+    ...getDefaultTest(),
+    name: newTestName,
+    nickname: newTestNickname,
+    variants: epicEditorConfig.allowMultipleVariants ? [] : [{ ...getDefaultVariant() }],
+  });
 
 const buildEpicTestsForm = (
   epicEditorConfig: EpicEditorConfig,

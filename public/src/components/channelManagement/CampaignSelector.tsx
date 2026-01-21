@@ -71,7 +71,7 @@ const CampaignSelector: React.FC<CampaignSelectorProps> = ({
   };
 
   const filterCampaigns = (campaignArray: Campaign[]) => {
-    return campaignArray.filter(c => {
+    return campaignArray.filter((c) => {
       if (c.name === unassignedCampaign.name) {
         return false;
       }
@@ -102,7 +102,7 @@ const CampaignSelector: React.FC<CampaignSelectorProps> = ({
           <MenuItem value={unassignedCampaign.name} key={'campaignName-none'}>
             {unassignedCampaign.nickname}
           </MenuItem>
-          {availableCampaigns.map(c => (
+          {availableCampaigns.map((c) => (
             <MenuItem value={c.name} key={`campaign-${c.name}`}>
               {c.nickname || c.name}
             </MenuItem>

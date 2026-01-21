@@ -26,7 +26,7 @@ const BannerDesignSelector: React.FC<BannerDesignSelectorProps> = ({
   };
 
   useEffect(() => {
-    const isValidBannerDesign = designs.map(d => d.name).includes(designName);
+    const isValidBannerDesign = designs.map((d) => d.name).includes(designName);
     setIsValid(isValidBannerDesign);
     onValidationChange(isValidBannerDesign);
   }, [designName, designs]);
@@ -39,7 +39,7 @@ const BannerDesignSelector: React.FC<BannerDesignSelectorProps> = ({
       error={!isValid}
       name="banner-design-selector"
     >
-      {designs.map(design => (
+      {designs.map((design) => (
         <MenuItem value={design.name} key={design.name}>
           {design.name}
         </MenuItem>

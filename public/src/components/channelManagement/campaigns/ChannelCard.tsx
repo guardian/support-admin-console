@@ -55,7 +55,7 @@ function ChannelCard({ channelData, tests }: ChannelCardProps): React.ReactEleme
         </Link>
       </div>
       {tests.length > 0 ? (
-        tests.map(test => {
+        tests.map((test) => {
           const key = getKey(test);
           return (
             <TestCard

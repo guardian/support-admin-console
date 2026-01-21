@@ -50,7 +50,7 @@ const DefaultPromos: React.FC<InnerProps<DefaultPromos>> = ({
         value={gwPromosString}
         name="guardianWeeklyDefaultPromos"
         fullWidth={true}
-        onChange={e => {
+        onChange={(e) => {
           const inputValue = e.target.value;
           setGwPromosString(inputValue);
 
@@ -67,7 +67,7 @@ const DefaultPromos: React.FC<InnerProps<DefaultPromos>> = ({
         value={paperPromosString}
         name="paperDefaultPromos"
         fullWidth={true}
-        onChange={e => {
+        onChange={(e) => {
           const inputValue = e.target.value;
           setpaperPromosString(inputValue);
 
@@ -84,7 +84,7 @@ const DefaultPromos: React.FC<InnerProps<DefaultPromos>> = ({
         value={digitalPromoString}
         name="digitalDefaultPromos"
         fullWidth={true}
-        onChange={e => {
+        onChange={(e) => {
           const inputValue = e.target.value;
           setdigitalPromosString(inputValue);
 
@@ -101,7 +101,7 @@ const DefaultPromos: React.FC<InnerProps<DefaultPromos>> = ({
         value={supporterPlusPromoString}
         name="supporterPlusDefaultPromos"
         fullWidth={true}
-        onChange={e => {
+        onChange={(e) => {
           const inputValue = e.target.value;
           setSupporterPlusPromosString(inputValue);
 
@@ -118,7 +118,7 @@ const DefaultPromos: React.FC<InnerProps<DefaultPromos>> = ({
         value={tierThreePromosString}
         name="tierThreeDefaultPromos"
         fullWidth={true}
-        onChange={e => {
+        onChange={(e) => {
           const inputValue = e.target.value;
           setTierThreePromos(inputValue);
 
@@ -148,5 +148,5 @@ const DefaultPromos: React.FC<InnerProps<DefaultPromos>> = ({
 export default withS3Data<DefaultPromos>(
   DefaultPromos,
   () => fetchSupportFrontendSettings(SupportFrontendSettingsType.defaultPromos),
-  data => saveSupportFrontendSettings(SupportFrontendSettingsType.defaultPromos, data),
+  (data) => saveSupportFrontendSettings(SupportFrontendSettingsType.defaultPromos, data),
 );

@@ -108,7 +108,7 @@ const CampaignsList = ({
   };
 
   const filterCampaigns = (campaignArray: Campaigns) => {
-    return campaignArray.filter(c => {
+    return campaignArray.filter((c) => {
       if (!campaignSearch) {
         return true;
       } else if (c.nickname && c.nickname.indexOf(campaignSearch) >= 0) {
@@ -141,7 +141,7 @@ const CampaignsList = ({
   return (
     <div className={classes.container}>
       <List className={classes.list}>
-        {sortedCampaigns.map(campaign => (
+        {sortedCampaigns.map((campaign) => (
           <ListItem className={classes.listItem} key={campaign.name}>
             <Button
               key={`${campaign.name}-button`}

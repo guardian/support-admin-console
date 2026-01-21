@@ -34,27 +34,27 @@ const CheckoutNudgeTestEditor: React.FC<ValidatedTestEditorProps<CheckoutNudgeTe
   const onVariantsChange = (
     update: (current: CheckoutNudgeVariant[]) => CheckoutNudgeVariant[],
   ): void => {
-    onTestChange(current => {
+    onTestChange((current) => {
       const updatedVariantList = update(current.variants);
       return { ...current, variants: updatedVariantList };
     });
   };
 
-  const onVariantChange = (variantName: string) => (
-    update: (current: CheckoutNudgeVariant) => CheckoutNudgeVariant,
-  ): void => {
-    onVariantsChange(current =>
-      current.map(variant => {
-        if (variant.name === variantName) {
-          return update(variant);
-        }
-        return variant;
-      }),
-    );
-  };
+  const onVariantChange =
+    (variantName: string) =>
+    (update: (current: CheckoutNudgeVariant) => CheckoutNudgeVariant): void => {
+      onVariantsChange((current) =>
+        current.map((variant) => {
+          if (variant.name === variantName) {
+            return update(variant);
+          }
+          return variant;
+        }),
+      );
+    };
 
   const onVariantDelete = (deletedVariantName: string): void => {
-    onVariantsChange(current => current.filter(variant => variant.name !== deletedVariantName));
+    onVariantsChange((current) => current.filter((variant) => variant.name !== deletedVariantName));
   };
 
   const createVariant = (name: string): void => {
@@ -62,18 +62,18 @@ const CheckoutNudgeTestEditor: React.FC<ValidatedTestEditorProps<CheckoutNudgeTe
       ...getDefaultVariant(),
       name: name,
     };
-    onVariantsChange(current => [...current, newVariant]);
+    onVariantsChange((current) => [...current, newVariant]);
   };
 
   const onTargetingChange = (updatedTargeting: RegionTargeting): void => {
-    onTestChange(current => ({
+    onTestChange((current) => ({
       ...current,
       regionTargeting: updatedTargeting,
     }));
   };
 
   const updateNudgeFromProduct = (update: (current: Product) => Product): void => {
-    onTestChange(current => ({
+    onTestChange((current) => ({
       ...current,
       nudgeFromProduct: update(current.nudgeFromProduct),
     }));
@@ -130,7 +130,7 @@ const CheckoutNudgeTestEditor: React.FC<ValidatedTestEditorProps<CheckoutNudgeTe
       ...originalVariant,
       name: clonedVariantName,
     };
-    onVariantsChange(current => [...current, newVariant]);
+    onVariantsChange((current) => [...current, newVariant]);
   };
 
   const getAvailableRatePlansForProduct = (): typeof ONE_TIME_PLANS | typeof RECURRING_PLANS => {
@@ -155,7 +155,7 @@ const CheckoutNudgeTestEditor: React.FC<ValidatedTestEditorProps<CheckoutNudgeTe
           label="Product"
           value={test.nudgeFromProduct.product}
           onChange={(e): void =>
-            updateNudgeFromProduct(current => ({
+            updateNudgeFromProduct((current) => ({
               ...current,
               product: e.target.value as ProductType,
             }))
@@ -164,7 +164,7 @@ const CheckoutNudgeTestEditor: React.FC<ValidatedTestEditorProps<CheckoutNudgeTe
           fullWidth
           margin="normal"
         >
-          {PRODUCTS.map(option => (
+          {PRODUCTS.map((option) => (
             <MenuItem key={option.value} value={option.value}>
               {option.label}
             </MenuItem>
@@ -175,7 +175,7 @@ const CheckoutNudgeTestEditor: React.FC<ValidatedTestEditorProps<CheckoutNudgeTe
           label="Rate Plan (Optional)"
           value={test.nudgeFromProduct.ratePlan || ''}
           onChange={(e): void =>
-            updateNudgeFromProduct(current => ({
+            updateNudgeFromProduct((current) => ({
               ...current,
               ratePlan: e.target.value ? (e.target.value as RatePlan) : undefined,
             }))
@@ -187,7 +187,7 @@ const CheckoutNudgeTestEditor: React.FC<ValidatedTestEditorProps<CheckoutNudgeTe
           <MenuItem value="">
             <em>Any</em>
           </MenuItem>
-          {getAvailableRatePlansForProduct().map(option => (
+          {getAvailableRatePlansForProduct().map((option) => (
             <MenuItem key={option.value} value={option.value}>
               {option.label}
             </MenuItem>

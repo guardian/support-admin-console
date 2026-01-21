@@ -62,20 +62,14 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
 }: AmountsVariantEditorProps) => {
   const classes = useStyles();
 
-  const {
-    amountsCardData,
-    defaultContributionType,
-    displayContributionType,
-    variantName,
-  } = variant;
+  const { amountsCardData, defaultContributionType, displayContributionType, variantName } =
+    variant;
 
-  const [currentContributionDefault, setCurrentContributionDefault] = useState(
-    defaultContributionType,
-  );
+  const [currentContributionDefault, setCurrentContributionDefault] =
+    useState(defaultContributionType);
 
-  const [currentContributionDisplay, setCurrentContributionDisplay] = useState(
-    displayContributionType,
-  );
+  const [currentContributionDisplay, setCurrentContributionDisplay] =
+    useState(displayContributionType);
 
   useEffect(() => {
     setCurrentContributionDefault(defaultContributionType);
@@ -164,7 +158,7 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
         updatedDisplayContribution.push(...currentContributionDisplay, updatedContribution);
       }
     } else {
-      const filteredContributions = currentContributionDisplay.filter(c => {
+      const filteredContributions = currentContributionDisplay.filter((c) => {
         return c !== updatedContribution;
       });
       updatedDisplayContribution.push(...filteredContributions);
@@ -177,7 +171,7 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
   const buildAmountsCardRows = () => {
     return (
       <div>
-        {contributionIds.map(k => {
+        {contributionIds.map((k) => {
           const cardData: AmountValuesObject = amountsCardData[k as ContributionType];
           if (cardData != null) {
             return (
@@ -212,10 +206,10 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
           aria-labelledby={`${variantName}_default_contribution_selector`}
           name={`${variantName}_default_contribution_selector`}
           value={currentContributionDefault}
-          onChange={e => updateDefaultContribution(e)}
+          onChange={(e) => updateDefaultContribution(e)}
           row
         >
-          {contributionIds.map(k => {
+          {contributionIds.map((k) => {
             return (
               <FormControlLabel
                 key={`${variantName}_${k}`}
@@ -243,14 +237,14 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
           Display contributions type
         </FormLabel>
         <FormGroup row aria-labelledby={`${variantName}_display_contribution_selector`}>
-          {contributionIds.map(k => {
+          {contributionIds.map((k) => {
             return (
               <FormControlLabel
                 key={`${variantName}_${k}`}
                 control={
                   <Checkbox
                     checked={currentContributionDisplay.includes(k as ContributionType)}
-                    onChange={e => updateDisplayContribution(e)}
+                    onChange={(e) => updateDisplayContribution(e)}
                     name={k}
                   />
                 }

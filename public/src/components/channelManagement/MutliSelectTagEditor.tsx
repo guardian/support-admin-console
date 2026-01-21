@@ -41,7 +41,7 @@ const options: Option[] = [
   'technology/technology',
   'business/business',
   'tone/recipes',
-].map(id => ({
+].map((id) => ({
   label: id,
   value: id,
 }));
@@ -69,8 +69,8 @@ const MultiselectAutocomplete: React.FC<MultiselectAutocompleteProps> = ({
         multiple
         disabled={disabled}
         options={options}
-        getOptionLabel={option => option.label}
-        value={tagIds?.map<Option>(tag => ({ label: tag, value: tag }))}
+        getOptionLabel={(option) => option.label}
+        value={tagIds?.map<Option>((tag) => ({ label: tag, value: tag }))}
         inputValue={inputValue}
         componentsProps={{
           popper: {
@@ -91,7 +91,7 @@ const MultiselectAutocomplete: React.FC<MultiselectAutocompleteProps> = ({
             setInputValue(newInputValue);
           }
         }}
-        renderInput={params => (
+        renderInput={(params) => (
           <TextField
             {...params}
             variant="outlined"
@@ -104,7 +104,7 @@ const MultiselectAutocomplete: React.FC<MultiselectAutocompleteProps> = ({
         }}
         onChange={(event, values: Option[], reason): void => {
           if (reason === 'selectOption' || reason === 'removeOption') {
-            onUpdate(values.map(value => value.label));
+            onUpdate(values.map((value) => value.label));
             setInputValue('');
           }
         }}

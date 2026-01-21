@@ -36,7 +36,7 @@ export const HighlightedTextColoursEditor: React.FC<Props> = ({
         name="colours.highlightedText.text"
         label="Text Colour"
         isDisabled={isDisabled}
-        onChange={colour => onChange({ ...colours, text: colour })}
+        onChange={(colour) => onChange({ ...colours, text: colour })}
         onValidationChange={onValidationChange}
       />
       <ColourInput
@@ -44,7 +44,7 @@ export const HighlightedTextColoursEditor: React.FC<Props> = ({
         name="colours.highlightedText.highlight"
         label="Background Colour"
         isDisabled={isDisabled}
-        onChange={colour => onChange({ ...colours, highlight: colour })}
+        onChange={(colour) => onChange({ ...colours, highlight: colour })}
         onValidationChange={onValidationChange}
       />
     </div>

@@ -26,8 +26,8 @@ const useStyles = makeStyles<Theme, { colour: string; isDisabled: boolean }>(
       width: '55px',
       height: '55px',
       marginBottom: '8px',
-      backgroundColor: props => props.colour,
-      cursor: props => (props.isDisabled ? 'not-allowed' : 'pointer'),
+      backgroundColor: (props) => props.colour,
+      cursor: (props) => (props.isDisabled ? 'not-allowed' : 'pointer'),
       position: 'relative',
     },
     field: {

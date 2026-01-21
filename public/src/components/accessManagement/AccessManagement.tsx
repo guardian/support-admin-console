@@ -60,7 +60,7 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 const formatPermissionName = (name: string): string => {
   return name
     .split('-')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
 };
 
@@ -99,16 +99,16 @@ const AccessManagement = () => {
   };
 
   const handleUserUpdated = (updatedUser: UserPermissions) => {
-    setUsers(prevUsers =>
+    setUsers((prevUsers) =>
       prevUsers
-        ? prevUsers.map(user => (user.email === updatedUser.email ? updatedUser : user))
+        ? prevUsers.map((user) => (user.email === updatedUser.email ? updatedUser : user))
         : [updatedUser],
     );
     handleCloseEditModal();
   };
 
   const handleUserAdded = (newUser: UserPermissions) => {
-    setUsers(prevUsers => (prevUsers ? [...prevUsers, newUser] : [newUser]));
+    setUsers((prevUsers) => (prevUsers ? [...prevUsers, newUser] : [newUser]));
     setAddUserModalOpen(false);
   };
   return (
@@ -128,11 +128,11 @@ const AccessManagement = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {users.map(user => (
+                  {users.map((user) => (
                     <TableRow key={user.email} hover>
                       <TableCell>{user.email}</TableCell>
                       <TableCell>
-                        {user.permissions.map(perm => (
+                        {user.permissions.map((perm) => (
                           <div
                             key={`${user.email}-${perm.name}`}
                             className={classes.permissionItem}

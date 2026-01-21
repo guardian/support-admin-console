@@ -106,7 +106,7 @@ export const previewStyles = `
 `;
 
 export function withPreviewStyles<Props>(Component: React.FC<Props>): React.FC<Props> {
-  const Wrapped: React.FC<Props> = props => {
+  const Wrapped: React.FC<Props> = (props) => {
     return (
       <div>
         <style>

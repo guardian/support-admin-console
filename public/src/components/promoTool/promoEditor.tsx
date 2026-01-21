@@ -105,8 +105,8 @@ const PromoEditor = ({
 
   useEffect(() => {
     fetchCountryGroups()
-      .then(groups => setCountryGroups(groups))
-      .catch(error => console.error('Error fetching country groups:', error));
+      .then((groups) => setCountryGroups(groups))
+      .catch((error) => console.error('Error fetching country groups:', error));
   }, []);
 
   useEffect(() => {
@@ -114,9 +114,9 @@ const PromoEditor = ({
     if (promo && countryGroups.length > 0) {
       const countryCodes = promo.appliesTo.countries || [];
       const matchedGroupIds = countryCodes
-        .map(countryCode => countryGroups.find(cg => cg.countries.includes(countryCode)))
+        .map((countryCode) => countryGroups.find((cg) => cg.countries.includes(countryCode)))
         .filter((group): group is CountryGroup => group != undefined)
-        .map(group => group.id);
+        .map((group) => group.id);
       setSelectedCountryGroups([...new Set(matchedGroupIds)]);
     } else {
       setSelectedCountryGroups([]);
@@ -127,8 +127,8 @@ const PromoEditor = ({
     const catalogProducts = mapPromoProductToCatalogProducts(campaignProduct);
     setLoadingProducts(true);
 
-    Promise.all(catalogProducts.map(productName => fetchProductDetails(productName)))
-      .then(products => {
+    Promise.all(catalogProducts.map((productName) => fetchProductDetails(productName)))
+      .then((products) => {
         const ratePlans: RatePlanWithProduct[] = [];
 
         products.forEach((product, index) => {
@@ -139,7 +139,7 @@ const PromoEditor = ({
         ratePlans.sort(orderRatePlans(campaignProduct));
         setAllRatePlans(ratePlans);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('Error fetching product details:', error);
       })
       .finally(() => {
@@ -188,7 +188,7 @@ const PromoEditor = ({
 
   const handleDiscountChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (isEditing) {
-      setEditedPromo(prevPromo => {
+      setEditedPromo((prevPromo) => {
         if (!prevPromo || !e.target.value) {
           return prevPromo;
         }
@@ -219,8 +219,8 @@ const PromoEditor = ({
     setSelectedCountryGroups(newCountryGroupIds);
     if (editedPromo) {
       const selectedCountries = countryGroups
-        .filter(group => newCountryGroupIds.includes(group.id))
-        .flatMap(group => group.countries);
+        .filter((group) => newCountryGroupIds.includes(group.id))
+        .flatMap((group) => group.countries);
 
       setEditedPromo({
         ...editedPromo,
@@ -234,7 +234,7 @@ const PromoEditor = ({
 
   const handleCountryGroupToggle = (countryGroupId: string) => {
     const newCountryGroupIds = selectedCountryGroups.includes(countryGroupId)
-      ? selectedCountryGroups.filter(id => id !== countryGroupId)
+      ? selectedCountryGroups.filter((id) => id !== countryGroupId)
       : [...selectedCountryGroups, countryGroupId];
     updateCountryGroups(newCountryGroupIds);
   };
@@ -246,7 +246,7 @@ const PromoEditor = ({
         landingPage: promotionHasLandingPage ? undefined : backupLandingPage,
       });
     }
-    setPromotionHasLandingPage(prev => !prev);
+    setPromotionHasLandingPage((prev) => !prev);
   };
 
   const handleLandingPageChange = (landingPage: LandingPage | undefined) => {
@@ -298,7 +298,7 @@ const PromoEditor = ({
           fullWidth
           label="Name"
           value={editedPromo?.name || ''}
-          onChange={e => handleFieldChange('name', e.target.value)}
+          onChange={(e) => handleFieldChange('name', e.target.value)}
           disabled={!isEditing}
         />
         <TextField
@@ -308,7 +308,7 @@ const PromoEditor = ({
           multiline
           rows={3}
           value={editedPromo?.description || ''}
-          onChange={e => handleFieldChange('description', e.target.value)}
+          onChange={(e) => handleFieldChange('description', e.target.value)}
           disabled={!isEditing}
         />
       </div>
@@ -322,7 +322,7 @@ const PromoEditor = ({
               label="Start Date (UTC)"
               type="datetime-local"
               value={editedPromo ? formatDateForInput(editedPromo.startTimestamp) : ''}
-              onChange={e => handleDateChange('startTimestamp', e.target.value)}
+              onChange={(e) => handleDateChange('startTimestamp', e.target.value)}
               disabled={!isEditing}
               InputLabelProps={{
                 shrink: true,
@@ -335,7 +335,7 @@ const PromoEditor = ({
               label="End Date (UTC)"
               type="datetime-local"
               value={editedPromo?.endTimestamp ? formatDateForInput(editedPromo.endTimestamp) : ''}
-              onChange={e => handleDateChange('endTimestamp', e.target.value)}
+              onChange={(e) => handleDateChange('endTimestamp', e.target.value)}
               disabled={!isEditing}
               InputLabelProps={{
                 shrink: true,
@@ -354,7 +354,7 @@ const PromoEditor = ({
               name="durationMonths"
               label="Duration (months)"
               value={editedPromo?.discount?.durationMonths || ''}
-              onChange={e => handleDiscountChange(e)}
+              onChange={(e) => handleDiscountChange(e)}
               select
               fullWidth
               disabled={!isEditing}
@@ -362,7 +362,7 @@ const PromoEditor = ({
                 shrink: true,
               }}
             >
-              {Array.from({ length: 12 }, (_, i) => i + 1).map(month => (
+              {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
                 <MenuItem key={month} value={month}>
                   {month}
                 </MenuItem>
@@ -374,7 +374,7 @@ const PromoEditor = ({
               name="amount"
               label="Amount (%)"
               value={editedPromo?.discount?.amount || ''}
-              onChange={e => handleDiscountChange(e)}
+              onChange={(e) => handleDiscountChange(e)}
               fullWidth
               disabled={!isEditing}
               InputLabelProps={{
@@ -405,7 +405,7 @@ const PromoEditor = ({
         </Typography>
         <Box className={classes.countryGroupsContainer}>
           <Grid container spacing={2}>
-            {countryGroups.map(group => (
+            {countryGroups.map((group) => (
               <Grid item xs={6} key={group.id}>
                 <FormControlLabel
                   control={

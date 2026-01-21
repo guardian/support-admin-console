@@ -113,7 +113,7 @@ class RemovePastedHtmlExtension extends PlainExtension {
       key: this.pluginKey,
 
       props: {
-        transformPastedHTML: html => {
+        transformPastedHTML: (html) => {
           const doc = new DOMParser().parseFromString(html, 'text/html');
           const paras = Array.from(doc.getElementsByTagName('p'));
           /**
@@ -122,7 +122,7 @@ class RemovePastedHtmlExtension extends PlainExtension {
            */
           if (paras.length > 0) {
             return Array.from(doc.getElementsByTagName('p'))
-              .map(p => `<p>${p.textContent}</p>`)
+              .map((p) => `<p>${p.textContent}</p>`)
               .join(' ');
           } else {
             return doc.body.textContent || '';
@@ -141,7 +141,7 @@ function useLinkShortcut() {
   useExtension(
     LinkExtension,
     ({ addHandler }) =>
-      addHandler('onShortcut', props => {
+      addHandler('onShortcut', (props) => {
         if (!isEditing) {
           setIsEditing(true);
         }
@@ -163,10 +163,7 @@ function useFloatingLinkState() {
   const linkPositioner = useMemo(() => createMarkPositioner({ type: 'link' }), []);
 
   const onRemove = useCallback(() => {
-    return chain
-      .removeLink()
-      .focus()
-      .run();
+    return chain.removeLink().focus().run();
   }, [chain]);
 
   const updateReason = useUpdateReason();
@@ -226,15 +223,8 @@ function useFloatingLinkState() {
 }
 
 const FloatingLinkToolbar = () => {
-  const {
-    isEditing,
-    clickEdit,
-    onRemove,
-    submitHref,
-    href,
-    setHref,
-    cancelHref,
-  } = useFloatingLinkState();
+  const { isEditing, clickEdit, onRemove, submitHref, href, setHref, cancelHref } =
+    useFloatingLinkState();
   const active = useActive();
   const activeLink = active.link();
   return (
@@ -268,9 +258,9 @@ const FloatingLinkToolbar = () => {
           style={{ zIndex: 20 }}
           autoFocus
           placeholder="Enter link..."
-          onChange={event => setHref(event.target.value)}
+          onChange={(event) => setHref(event.target.value)}
           value={href}
-          onKeyDown={event => {
+          onKeyDown={(event) => {
             const { key } = event;
             if (key === 'Enter') {
               submitHref();
@@ -312,23 +302,13 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
   } = rteMenuConstraints;
 
   const clickBold = () => {
-    chain
-      .toggleBold()
-      .focus()
-      .run();
+    chain.toggleBold().focus().run();
   };
   const clickItalic = () => {
-    chain
-      .toggleItalic()
-      .focus()
-      .run();
+    chain.toggleItalic().focus().run();
   };
 
-  const insertTemplate = (template: string): void =>
-    chain
-      .insertText(template)
-      .focus()
-      .run();
+  const insertTemplate = (template: string): void => chain.insertText(template).focus().run();
 
   return (
     <div>
@@ -461,14 +441,14 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
 const parseCopyForParagraphs = (copy: string[]): string => {
   let res = '';
 
-  copy.forEach(paragraph => {
+  copy.forEach((paragraph) => {
     res += `<p>${paragraph}</p>`;
   });
   return res;
 };
 
 const getRteCopyLength = (copy: string[]): number => {
-  let paragraphsCheck = copy.filter(p => p).join('');
+  let paragraphsCheck = copy.filter((p) => p).join('');
 
   paragraphsCheck = paragraphsCheck.replace(/<.*?>/g, '');
   paragraphsCheck = paragraphsCheck.replace(/%%CURRENCY_SYMBOL%%/g, ' ');
@@ -484,7 +464,7 @@ const paragraphsToArray = (html: string): string[] => {
 
   const elements = Array.from(frag.children);
 
-  const paragraphs = elements.filter(p => {
+  const paragraphs = elements.filter((p) => {
     if (p == null) {
       return false;
     }
@@ -494,7 +474,7 @@ const paragraphsToArray = (html: string): string[] => {
     return false;
   });
 
-  return paragraphs.map(p => p.innerHTML);
+  return paragraphs.map((p) => p.innerHTML);
 };
 
 // Component function

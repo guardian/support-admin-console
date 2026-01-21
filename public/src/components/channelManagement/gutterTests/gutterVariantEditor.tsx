@@ -209,7 +209,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                     : getParagraphsHelperText()
                 }
                 copyData={field.value}
-                updateCopy={paras => {
+                updateCopy={(paras) => {
                   field.onChange(paras);
                   handleSubmit(setValidatedFields)();
                 }}
@@ -272,7 +272,7 @@ const GutterVariantEditor: React.FC<GutterVariantEditorProps> = ({
         <VariantContentEditor
           variant={variant.content}
           onVariantChange={(updatedContent: GutterContent): void =>
-            onVariantChange(current => ({ ...current, content: updatedContent }))
+            onVariantChange((current) => ({ ...current, content: updatedContent }))
           }
           onValidationChange={(isValid): void =>
             setValidationStatusForField('mainContent', isValid)
@@ -281,8 +281,8 @@ const GutterVariantEditor: React.FC<GutterVariantEditorProps> = ({
         />
         <PromoCodesEditor
           promoCodes={variant.promoCodes ?? []}
-          updatePromoCodes={promoCodes => {
-            onVariantChange(current => ({ ...current, promoCodes }));
+          updatePromoCodes={(promoCodes) => {
+            onVariantChange((current) => ({ ...current, promoCodes }));
           }}
           isDisabled={!editMode}
         />

@@ -164,10 +164,12 @@ const BannerVariantPreview: React.FC<BannerVariantPreviewProps> = ({
   const [drawerOpen, setDrawerOpen] = useState<boolean>();
   const tickerSettingsWithData = useTickerData(variant.tickerSettings);
 
-  const toggleDrawer = (open: boolean) => (event: React.MouseEvent): void => {
-    event.stopPropagation();
-    setDrawerOpen(open);
-  };
+  const toggleDrawer =
+    (open: boolean) =>
+    (event: React.MouseEvent): void => {
+      event.stopPropagation();
+      setDrawerOpen(open);
+    };
 
   const props = buildProps(variant, tickerSettingsWithData, design);
   const storyName = 'components-marketing-designablebanner--default';

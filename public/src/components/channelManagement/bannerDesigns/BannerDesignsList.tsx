@@ -33,7 +33,7 @@ const BannerDesignsList = ({
   return (
     <div className={classes.container}>
       <List className={classes.list}>
-        {designs.map(design => {
+        {designs.map((design) => {
           const isSelected = Boolean(selectedDesign && selectedDesign.name === design.name);
 
           return (

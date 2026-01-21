@@ -36,7 +36,7 @@ export const TickerDesignEditor: React.FC<Props> = ({
         name="ticker.filledProgress"
         label="Filled Progress Colour"
         isDisabled={isDisabled}
-        onChange={colour => onChange({ ...ticker, filledProgress: colour })}
+        onChange={(colour) => onChange({ ...ticker, filledProgress: colour })}
         onValidationChange={onValidationChange}
       />
       <ColourInput
@@ -44,7 +44,7 @@ export const TickerDesignEditor: React.FC<Props> = ({
         name="ticker.progressBarBackground"
         label="Progress Bar Background Colour"
         isDisabled={isDisabled}
-        onChange={colour => onChange({ ...ticker, progressBarBackground: colour })}
+        onChange={(colour) => onChange({ ...ticker, progressBarBackground: colour })}
         onValidationChange={onValidationChange}
       />
       <ColourInput
@@ -52,7 +52,7 @@ export const TickerDesignEditor: React.FC<Props> = ({
         name="ticker.headlineColour"
         label="Headline Colour"
         isDisabled={isDisabled}
-        onChange={colour => onChange({ ...ticker, headlineColour: colour })}
+        onChange={(colour) => onChange({ ...ticker, headlineColour: colour })}
         onValidationChange={onValidationChange}
       />
       <ColourInput
@@ -60,7 +60,7 @@ export const TickerDesignEditor: React.FC<Props> = ({
         name="ticker.totalColour"
         label="Total Colour"
         isDisabled={isDisabled}
-        onChange={colour => onChange({ ...ticker, totalColour: colour })}
+        onChange={(colour) => onChange({ ...ticker, totalColour: colour })}
         onValidationChange={onValidationChange}
       />
       <ColourInput
@@ -68,7 +68,7 @@ export const TickerDesignEditor: React.FC<Props> = ({
         name="ticker.goalColour"
         label="Goal Colour"
         isDisabled={isDisabled}
-        onChange={colour => onChange({ ...ticker, goalColour: colour })}
+        onChange={(colour) => onChange({ ...ticker, goalColour: colour })}
         onValidationChange={onValidationChange}
       />
     </div>

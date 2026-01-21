@@ -84,17 +84,19 @@ const CampaignsForm: React.FC = () => {
   const createCampaign = (campaign: Campaign): void => {
     setCampaigns([...campaigns, campaign]);
     setSelectedCampaignName(campaign.name);
-    sendCreateCampaignRequest(campaign).catch(error => alert(`Error creating campaign: ${error}`));
+    sendCreateCampaignRequest(campaign).catch((error) =>
+      alert(`Error creating campaign: ${error}`),
+    );
   };
 
   const updateCampaign = (updatedCampaign: Campaign): void => {
     sendUpdateCampaignRequest(updatedCampaign)
       .then(() => fetchSettings())
-      .then(c => setCampaigns(c))
-      .catch(error => alert(`Error updating campaign ${updatedCampaign.name}: ${error}`));
+      .then((c) => setCampaigns(c))
+      .catch((error) => alert(`Error updating campaign ${updatedCampaign.name}: ${error}`));
   };
 
-  let selectedCampaign = campaigns.find(c => c.name === selectedCampaignName);
+  let selectedCampaign = campaigns.find((c) => c.name === selectedCampaignName);
   if (selectedCampaignName === unassignedCampaign.name) {
     selectedCampaign = unassignedCampaign;
   }
