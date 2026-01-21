@@ -14,7 +14,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { getRteCopyLength, RichTextEditor } from '../richTextEditor/richTextEditor';
 import { ImageEditorToggle } from '../imageEditor';
 import { DEFAULT_IMAGE_URL, DEFAULT_IMAGE_ALT } from './utils/defaults';
-import PromoCodesEditor from '../choiceCards/PromoCodesEditor';
+import PromoCodesEditor from '../../shared/PromoCodesEditor';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {

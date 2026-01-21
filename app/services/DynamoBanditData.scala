@@ -71,8 +71,9 @@ class DynamoBanditData(stage: String, client: DynamoDbClient) extends StrictLogg
     }.mapError(DynamoGetError)
   }
 
-  private def sampleMean(samples: Array[VariantSample], population: Double): Double =
-    samples.foldLeft(0d)((acc, sample) => acc + (sample.views / population) * sample.annualisedValueInGBPPerView)
+  private def sampleMean(samples: Seq[VariantSample], population: Double): Double =
+    if (population == 0) 0
+    else samples.foldLeft(0d)((acc, sample) => acc + (sample.views / population) * sample.annualisedValueInGBPPerView)
 
   private def buildVariantSummaries(samples: Array[TestSample]): List[VariantSummary] =
     samples
@@ -90,19 +91,19 @@ class DynamoBanditData(stage: String, client: DynamoDbClient) extends StrictLogg
       samples: Array[TestSample],
       sampleCount: Option[Int]
   ): List[EnrichedTestSampleData] = {
-    val samplesByVariant: Map[String, Array[VariantSample]] = samples
-      .flatMap(_.variants)
-      .groupBy(variantSample => variantSample.variantName)
-
     samples.zipWithIndex
       .foldLeft(Array.empty[EnrichedTestSampleData]) { case (enrichedSamples, (sample, idx)) =>
         val variants = sample.variants.map(currentVariantSample => {
           val startIdx =
             sampleCount.map(n => Math.max(idx - n, 0)).getOrElse(0) // only use the last sampleCount samples, if defined
-          val previousSamples = samplesByVariant(currentVariantSample.variantName).slice(startIdx, idx + 1)
 
-          val population = previousSamples.map(_.views).sum
-          val mean = sampleMean(previousSamples, population)
+          val previousVariantSamples = samples
+            .slice(startIdx, idx + 1)
+            .flatMap(_.variants)
+            .filter(_.variantName == currentVariantSample.variantName)
+
+          val population = previousVariantSamples.map(_.views).sum
+          val mean = sampleMean(previousVariantSamples, population)
           EnrichedVariantSampleData(currentVariantSample.variantName, currentVariantSample.views, mean)
         })
 
