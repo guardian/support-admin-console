@@ -128,7 +128,7 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
               error={errors.heading !== undefined}
               helperText={errors.heading ? errors.heading.message || errors.heading.type : ''}
               copyData={field.value}
-              updateCopy={value => {
+              updateCopy={(value) => {
                 field.onChange(value);
                 handleSubmit(setValidatedFields)();
               }}
@@ -164,7 +164,7 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
                 errors.subheading ? errors.subheading.message || errors.subheading.type : ''
               }
               copyData={field.value}
-              updateCopy={value => {
+              updateCopy={(value) => {
                 field.onChange(value);
                 handleSubmit(setValidatedFields)();
               }}

@@ -62,9 +62,8 @@ const AccessManagementDialog = ({
       const checkoutNudgePermission = user.permissions.find(
         (p) => p.name === 'checkout-nudge-tests',
       );
-      const checkoutNudgePermission = user.permissions.find(p => p.name === 'checkout-nudge-tests');
       const studentLandingPagePermission = user.permissions.find(
-        p => p.name === 'student-landing-page-tests',
+        (p) => p.name === 'student-landing-page-tests',
       );
       setLandingPagePerm(landingPagePermission ? landingPagePermission.permission : 'None');
       setCheckoutNudgePerm(checkoutNudgePermission ? checkoutNudgePermission.permission : 'None');
@@ -157,7 +156,7 @@ const AccessManagementDialog = ({
           <FormLabel component="legend">Student Landing Page Tests</FormLabel>
           <RadioGroup
             value={studentLandingPagePerm}
-            onChange={e => setStudentLandingPagePerm(e.target.value as 'Read' | 'Write' | 'None')}
+            onChange={(e) => setStudentLandingPagePerm(e.target.value as 'Read' | 'Write' | 'None')}
           >
             <FormControlLabel value="None" control={<Radio />} label="No Access" />
             <FormControlLabel value="Read" control={<Radio />} label="Read Only" />
