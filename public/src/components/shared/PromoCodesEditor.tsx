@@ -142,7 +142,7 @@ const PromoCodesEditor: React.FC<PromoCodesEditorProps> = ({
                 console.error('Failed to fetch campaign:', err);
               }
 
-              setPromoDetails(prev => {
+              setPromoDetails((prev) => {
                 const updated = new Map(prev);
                 updated.set(code, {
                   code,
@@ -155,7 +155,7 @@ const PromoCodesEditor: React.FC<PromoCodesEditorProps> = ({
               });
             })
             .catch(() => {
-              setPromoDetails(prev => {
+              setPromoDetails((prev) => {
                 const updated = new Map(prev);
                 updated.set(code, {
                   code,
@@ -197,20 +197,21 @@ const PromoCodesEditor: React.FC<PromoCodesEditorProps> = ({
   };
 
   const handleDeletePromo = (code: string) => {
-    updatePromoCodes(promoCodes.filter(c => c !== code));
+    updatePromoCodes(promoCodes.filter((c) => c !== code));
   };
 
-  const handleAccordionChange = (code: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
-    setExpandedCodes(prev => {
-      const newSet = new Set(prev);
-      if (isExpanded) {
-        newSet.add(code);
-      } else {
-        newSet.delete(code);
-      }
-      return newSet;
-    });
-  };
+  const handleAccordionChange =
+    (code: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+      setExpandedCodes((prev) => {
+        const newSet = new Set(prev);
+        if (isExpanded) {
+          newSet.add(code);
+        } else {
+          newSet.delete(code);
+        }
+        return newSet;
+      });
+    };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
@@ -239,7 +240,7 @@ const PromoCodesEditor: React.FC<PromoCodesEditorProps> = ({
 
   return (
     <div className={classes.container}>
-      {promoCodes.map(code => {
+      {promoCodes.map((code) => {
         const details = promoDetails.get(code);
         const expired = details?.promo ? isExpired(details.promo.endTimestamp) : false;
         const hasError = details?.error;
@@ -254,10 +255,7 @@ const PromoCodesEditor: React.FC<PromoCodesEditorProps> = ({
             onChange={handleAccordionChange(code)}
             elevation={1}
           >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              className={classes.accordionSummary}
-            >
+            <AccordionSummary expandIcon={<ExpandMoreIcon />} className={classes.accordionSummary}>
               <div className={classes.promoHeader}>
                 <div className={classes.promoCodeContainer}>
                   <Typography className={classes.promoCodeLabel}>Promo Code:</Typography>
@@ -318,7 +316,7 @@ const PromoCodesEditor: React.FC<PromoCodesEditorProps> = ({
         <TextField
           label="Add Promo Code"
           value={newPromoCode}
-          onChange={e => setNewPromoCode(e.target.value.toUpperCase())}
+          onChange={(e) => setNewPromoCode(e.target.value.toUpperCase())}
           onKeyPress={handleKeyPress}
           disabled={isDisabled || addingPromo}
           placeholder="e.g. PROMO123"
