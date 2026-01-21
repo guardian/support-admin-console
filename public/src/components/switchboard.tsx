@@ -324,7 +324,9 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     const userConfirmation = confirm(
       `Deleting switch "${description}". If this switch hasn’t been removed from support-frontend yet, this will cause errors! Make sure you delete it there first. Are you sure you want to proceed?`,
     );
-    userConfirmation ? confirmRemoveData(group, switchId, description) : '';
+    if (userConfirmation) {
+      confirmRemoveData(group, switchId, description);
+    }
   };
 
   const confirmRemoveData = (

@@ -138,7 +138,7 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
     backgroundColor,
     foregroundColor,
   }: FormData): void => {
-    countdownSettings &&
+    if (countdownSettings) {
       updateCountdownSettings({
         ...countdownSettings,
         overwriteHeadingLabel:
@@ -152,6 +152,7 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
           foregroundColor: foregroundColor || DEFAULT_COUNTDOWN_SETTINGS.theme.foregroundColor,
         },
       });
+    }
   };
   return (
     <div className={classes.container}>
