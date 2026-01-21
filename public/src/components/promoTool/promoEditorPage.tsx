@@ -45,7 +45,7 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 const PromoEditorPage: React.FC = () => {
   const classes = useStyles();
   const navigate = useNavigate();
-  const { campaignCode, promoCode } = useParams<{ campaignCode: string; promoCode: string }>();
+  const { promoCode } = useParams<{ promoCode: string }>();
   const [promo, setPromo] = useState<Promo | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -54,28 +54,13 @@ const PromoEditorPage: React.FC = () => {
   const [campaignProductLoading, setCampaignProductLoading] = useState(true);
 
   useEffect(() => {
-    if (campaignCode) {
-      setCampaignProductLoading(true);
-      fetchPromoCampaign(campaignCode)
-        .then(campaign => {
-          setCampaignProduct(campaign.product);
-        })
-        .catch(error => {
-          console.error('Error fetching campaign:', error);
-        })
-        .finally(() => {
-          setCampaignProductLoading(false);
-        });
-    }
-  }, [campaignCode]);
-
-  useEffect(() => {
     if (!promoCode) {
       return;
     }
 
-    fetchPromo(promoCode)
-      .then(response => {
+    const loadPromoAndCampaign = async () => {
+      try {
+        const response = await fetchPromo(promoCode);
         setPromo(response.promo);
         setUserEmail(response.userEmail);
 
@@ -85,21 +70,31 @@ const PromoEditorPage: React.FC = () => {
         ) {
           setIsEditing(true);
         }
-      })
-      .catch(error => {
+
+        setCampaignProductLoading(true);
+        const campaign = await fetchPromoCampaign(response.promo.campaignCode);
+        setCampaignProduct(campaign.product);
+      } catch (error) {
         console.error('Error fetching promo:', error);
-        alert(`Error fetching promo: ${error.message}`);
-      })
-      .finally(() => {
+        alert(`Error fetching promo: ${String(error)}`);
+      } finally {
         setLoading(false);
-      });
+        setCampaignProductLoading(false);
+      }
+    };
+
+    loadPromoAndCampaign();
   }, [promoCode]);
 
   const handleBack = () => {
     if (typeof window !== 'undefined' && campaignProduct) {
       window.localStorage.setItem('promoToolSelectedProduct', campaignProduct);
     }
-    navigate(`/promo-tool/${campaignCode}`);
+    if (promo) {
+      navigate(`/promo-tool/campaign/${promo.campaignCode}`);
+    } else {
+      navigate('/promo-tool');
+    }
   };
 
   const handleEditPromo = () => {

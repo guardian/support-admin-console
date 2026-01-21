@@ -13,7 +13,23 @@ import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.mvc.AnyContent
 import play.api.{BuiltInComponentsFromContext, NoHttpFiltersComponents}
 import router.Routes
-import services.{Aws, BigQueryService, CapiService, GoogleChatService, DynamoArchivedBannerDesigns, DynamoArchivedChannelTests, DynamoBanditData, DynamoBannerDesigns, DynamoCampaigns, DynamoChannelTests, DynamoChannelTestsAudit, DynamoPermissionsCache, DynamoSuperMode, ProductCatalogCache, S3}
+import services.{
+  Aws,
+  BigQueryService,
+  CapiService,
+  GoogleChatService,
+  DynamoArchivedBannerDesigns,
+  DynamoArchivedChannelTests,
+  DynamoBanditData,
+  DynamoBannerDesigns,
+  DynamoCampaigns,
+  DynamoChannelTests,
+  DynamoChannelTestsAudit,
+  DynamoPermissionsCache,
+  DynamoSuperMode,
+  ProductCatalogCache,
+  S3
+}
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.s3.model.GetObjectRequest
 
@@ -268,6 +284,6 @@ class AppComponents(context: Context, stage: String)
       dynamoArchivedChannelTests,
       dynamoTestsAuditService,
       permissionsService
-    ),
+    )
   )
 }

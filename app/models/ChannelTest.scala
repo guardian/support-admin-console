@@ -55,10 +55,10 @@ object ChannelTest {
       case banner: BannerTest                         => BannerTest.bannerTestEncoder(banner)
       case gutter: GutterTest                         => GutterTest.gutterTestEncoder(gutter)
       case landingPage: SupportLandingPageTest        => SupportLandingPageTest.landingPageTestEncoder(landingPage)
-      case checkoutNudge: CheckoutNudgeTest => CheckoutNudgeTest.checkoutNudgeTestEncoder(checkoutNudge)
+      case checkoutNudge: CheckoutNudgeTest           => CheckoutNudgeTest.checkoutNudgeTestEncoder(checkoutNudge)
       case studentLandingPage: StudentLandingPageTest =>
         StudentLandingPageTest.studentLandingPageTestEncoder(studentLandingPage)
-      case epic: EpicTest                   => EpicTest.epicTestEncoder(epic)
+      case epic: EpicTest => EpicTest.epicTestEncoder(epic)
     }
   }
 }
