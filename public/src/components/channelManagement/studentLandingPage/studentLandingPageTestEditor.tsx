@@ -11,15 +11,15 @@ import { Typography } from '@mui/material';
 import { useStyles } from '../helpers/testEditorStyles'; // TODO: is this appropriate (shared)
 import { VariantEditor } from './variantEditor';
 
-export const StudentLandingPageTestEditor: React.FC<ValidatedTestEditorProps<
-  StudentLandingPageTest
->> = ({ test, userHasTestLocked, onTestChange, setValidationStatusForField }) => {
+export const StudentLandingPageTestEditor: React.FC<
+  ValidatedTestEditorProps<StudentLandingPageTest>
+> = ({ test, userHasTestLocked, onTestChange, setValidationStatusForField }) => {
   const classes = useStyles();
 
   const updateTest = (
     update: (current: StudentLandingPageTest) => StudentLandingPageTest,
   ): void => {
-    onTestChange(current => {
+    onTestChange((current) => {
       const updatedTest = update(current);
       return {
         ...updatedTest,
@@ -30,24 +30,24 @@ export const StudentLandingPageTestEditor: React.FC<ValidatedTestEditorProps<
   const onVariantsChange = (
     update: (current: StudentLandingPageVariant[]) => StudentLandingPageVariant[],
   ): void => {
-    updateTest(current => {
+    updateTest((current) => {
       const updatedVariantList = update(current.variants);
       return { ...current, variants: updatedVariantList };
     });
   };
 
-  const onVariantChange = (variantName: string) => (
-    update: (current: StudentLandingPageVariant) => StudentLandingPageVariant,
-  ): void => {
-    onVariantsChange(current =>
-      current.map(variant => {
-        if (variant.name === variantName) {
-          return update(variant);
-        }
-        return variant;
-      }),
-    );
-  };
+  const onVariantChange =
+    (variantName: string) =>
+    (update: (current: StudentLandingPageVariant) => StudentLandingPageVariant): void => {
+      onVariantsChange((current) =>
+        current.map((variant) => {
+          if (variant.name === variantName) {
+            return update(variant);
+          }
+          return variant;
+        }),
+      );
+    };
 
   return (
     <div className={classes.sectionContainer} key={test.name}>

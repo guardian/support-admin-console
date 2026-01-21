@@ -19,7 +19,9 @@ interface OfferFormData {
 interface StudentLandingPageVariantEditorProps {
   variant: StudentLandingPageVariant;
   editMode: boolean;
-  onVariantChange: (update: (current: StudentLandingPageVariant) => StudentLandingPageVariant) => void;
+  onVariantChange: (
+    update: (current: StudentLandingPageVariant) => StudentLandingPageVariant,
+  ) => void;
   onValidationChange: (isValid: boolean) => void;
 }
 
@@ -78,7 +80,7 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
   });
 
   useEffect(() => {
-    onVariantChange(current => ({
+    onVariantChange((current) => ({
       ...current,
       ...validatedFields,
     }));
