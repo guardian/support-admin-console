@@ -19,6 +19,7 @@ interface OfferFormData {
 interface StudentLandingPageVariantEditorProps {
   variant: StudentLandingPageVariant;
   editMode: boolean;
+  onVariantChange: (update: (current: StudentLandingPageVariant) => StudentLandingPageVariant) => void;
   onValidationChange: (isValid: boolean) => void;
 }
 
@@ -54,6 +55,7 @@ const getUseStyles = (shouldAddPadding: boolean) => {
 export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
   variant,
   editMode,
+  onVariantChange,
   onValidationChange,
 }: StudentLandingPageVariantEditorProps) => {
   const classes = getUseStyles(false)();
@@ -75,12 +77,12 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
     defaultValues,
   });
 
-  // useEffect(() => {
-  //   onVariantChange(current => ({
-  //     ...current,
-  //     ...validatedFields,
-  //   }));
-  // }, [validatedFields]);
+  useEffect(() => {
+    onVariantChange(current => ({
+      ...current,
+      ...validatedFields,
+    }));
+  }, [validatedFields]);
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
