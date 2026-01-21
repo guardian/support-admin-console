@@ -128,7 +128,7 @@ export const LinkTrackingBuilder: React.FC = () => {
         <TextField
           {...register('url', {
             required: true,
-            validate: value => {
+            validate: (value) => {
               // Check it's a valid url and has no existing tracking params
               try {
                 const url = new URL(addHttps(value));

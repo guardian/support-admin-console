@@ -235,7 +235,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                 error={errors.heading !== undefined}
                 helperText={errors.heading ? errors.heading.message || errors.heading.type : ''}
                 copyData={field.value}
-                updateCopy={pars => {
+                updateCopy={(pars) => {
                   field.onChange(pars);
                   handleSubmit(setValidatedFields)();
                 }}
@@ -272,7 +272,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                       : getParagraphsHelperText()
                   }
                   copyData={field.value}
-                  updateCopy={pars => {
+                  updateCopy={(pars) => {
                     field.onChange(pars);
                     handleSubmit(setValidatedFields)();
                   }}
@@ -303,7 +303,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                       : HIGHTLIGHTED_TEXT_HELPER_TEXT
                   }
                   copyData={field.value}
-                  updateCopy={pars => {
+                  updateCopy={(pars) => {
                     field.onChange(pars);
                     handleSubmit(setValidatedFields)();
                   }}
@@ -361,14 +361,14 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
 
   const onMobileContentRadioChange = (): void => {
     if (variant.mobileBannerContent === undefined) {
-      onVariantChange(current => ({
+      onVariantChange((current) => ({
         ...current,
         mobileBannerContent: getDefaultVariant().bannerContent,
       }));
     } else {
       // remove mobile content and clear any validation errors
       setValidationStatusForField('mobileContent', true);
-      onVariantChange(current => ({
+      onVariantChange((current) => ({
         ...current,
         mobileBannerContent: undefined,
       }));
@@ -378,7 +378,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
   const updateSeparateArticleCountSettings = (
     updatedSeparateArticleCountSettings?: SeparateArticleCount,
   ): void => {
-    onVariantChange(current => ({
+    onVariantChange((current) => ({
       ...current,
       separateArticleCountSettings: updatedSeparateArticleCountSettings,
     }));
@@ -388,28 +388,28 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
     showChoiceCards: boolean, // unused for banners, as this comes from the banner design
     choiceCardsSettings?: ChoiceCardsSettings,
   ): void => {
-    onVariantChange(current => ({
+    onVariantChange((current) => ({
       ...current,
       choiceCardsSettings,
     }));
   };
 
   const updatePromoCodes = (promoCodes: string[]): void => {
-    onVariantChange(current => ({
+    onVariantChange((current) => ({
       ...current,
       promoCodes,
     }));
   };
 
   const updateIsCollapsibleSettings = (isCollapsible: boolean): void => {
-    onVariantChange(current => ({
+    onVariantChange((current) => ({
       ...current,
       isCollapsible,
     }));
   };
 
   const designHasChoiceCards =
-    designs.find(d => d.name === variant.template.designName)?.visual?.kind === 'ChoiceCards';
+    designs.find((d) => d.name === variant.template.designName)?.visual?.kind === 'ChoiceCards';
 
   return (
     <div className={classes.container}>
@@ -420,7 +420,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
         <BannerDesignSelector
           designName={variant.template.designName}
           onUiChange={(ui: BannerUi): void =>
-            onVariantChange(current => ({
+            onVariantChange((current) => ({
               ...current,
               template: ui,
             }))
@@ -436,7 +436,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
           content={variant.bannerContent}
           template={variant.template}
           onChange={(updatedContent: BannerContent): void =>
-            onVariantChange(current => ({ ...current, bannerContent: updatedContent }))
+            onVariantChange((current) => ({ ...current, bannerContent: updatedContent }))
           }
           onValidationChange={(isValid): void =>
             setValidationStatusForField('mainContent', isValid)
@@ -469,7 +469,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
             content={variant.mobileBannerContent}
             template={variant.template}
             onChange={(updatedContent: BannerContent): void =>
-              onVariantChange(current => ({ ...current, mobileBannerContent: updatedContent }))
+              onVariantChange((current) => ({ ...current, mobileBannerContent: updatedContent }))
             }
             onValidationChange={(isValid): void =>
               setValidationStatusForField('mobileContent', isValid)
@@ -527,8 +527,8 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
 
         <TickerEditor
           tickerSettings={variant.tickerSettings}
-          updateTickerSettings={tickerSettings =>
-            onVariantChange(current => ({
+          updateTickerSettings={(tickerSettings) =>
+            onVariantChange((current) => ({
               ...current,
               tickerSettings,
             }))

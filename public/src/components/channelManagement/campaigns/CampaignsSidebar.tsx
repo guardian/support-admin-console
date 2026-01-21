@@ -53,8 +53,8 @@ function CampaignsSidebar({
     <div className={classes.root}>
       <div className={classes.buttonsContainer}>
         <NewCampaignButton
-          existingNames={campaigns.map(c => c.name)}
-          existingNicknames={campaigns.map(c => c.nickname || '')}
+          existingNames={campaigns.map((c) => c.name)}
+          existingNicknames={campaigns.map((c) => c.nickname || '')}
           createCampaign={createCampaign}
         />
         <TextField

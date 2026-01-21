@@ -36,7 +36,7 @@ const HeaderTestEditor: React.FC<ValidatedTestEditorProps<HeaderTest>> = ({
     setValidationStatusForField('variantsSplitSettings', isValid);
 
   const onCampaignChange = (campaign?: string): void => {
-    onTestChange(current => ({
+    onTestChange((current) => ({
       ...current,
       campaignName: campaign,
     }));
@@ -44,34 +44,34 @@ const HeaderTestEditor: React.FC<ValidatedTestEditorProps<HeaderTest>> = ({
 
   const onControlProportionSettingsChange = (
     controlProportionSettings?: ControlProportionSettings,
-  ): void => onTestChange(current => ({ ...current, controlProportionSettings }));
+  ): void => onTestChange((current) => ({ ...current, controlProportionSettings }));
 
   const onVariantsChange = (update: (current: HeaderVariant[]) => HeaderVariant[]): void => {
-    onTestChange(current => {
+    onTestChange((current) => {
       const updatedVariantList = update(current.variants);
       return { ...current, variants: updatedVariantList };
     });
   };
 
-  const onVariantChange = (variantName: string) => (
-    update: (current: HeaderVariant) => HeaderVariant,
-  ): void => {
-    onVariantsChange(current =>
-      current.map(variant => {
-        if (variant.name === variantName) {
-          return update(variant);
-        }
-        return variant;
-      }),
-    );
-  };
+  const onVariantChange =
+    (variantName: string) =>
+    (update: (current: HeaderVariant) => HeaderVariant): void => {
+      onVariantsChange((current) =>
+        current.map((variant) => {
+          if (variant.name === variantName) {
+            return update(variant);
+          }
+          return variant;
+        }),
+      );
+    };
 
   const onVariantDelete = (deletedVariantName: string): void => {
-    onVariantsChange(current => current.filter(variant => variant.name !== deletedVariantName));
+    onVariantsChange((current) => current.filter((variant) => variant.name !== deletedVariantName));
   };
 
   const onRegionTargetingChange = (updatedRegionTargeting: RegionTargeting): void => {
-    onTestChange(current => ({
+    onTestChange((current) => ({
       ...current,
       regionTargeting: updatedRegionTargeting,
       locations: [], // deprecated
@@ -79,19 +79,19 @@ const HeaderTestEditor: React.FC<ValidatedTestEditorProps<HeaderTest>> = ({
   };
 
   const onCohortChange = (updatedCohort: UserCohort): void => {
-    onTestChange(current => ({ ...current, userCohort: updatedCohort }));
+    onTestChange((current) => ({ ...current, userCohort: updatedCohort }));
   };
 
   const onDeviceTypeChange = (updatedDeviceType: DeviceType): void => {
-    onTestChange(current => ({ ...current, deviceType: updatedDeviceType }));
+    onTestChange((current) => ({ ...current, deviceType: updatedDeviceType }));
   };
 
   const onSignedInStatusChange = (signedInStatus: SignedInStatus): void => {
-    onTestChange(current => ({ ...current, signedInStatus }));
+    onTestChange((current) => ({ ...current, signedInStatus }));
   };
 
   const onConsentChange = (consentStatus: ConsentStatus): void => {
-    onTestChange(current => ({ ...current, consentStatus }));
+    onTestChange((current) => ({ ...current, consentStatus }));
   };
 
   const renderVariantEditor = (variant: HeaderVariant): React.ReactElement => (
@@ -124,7 +124,7 @@ const HeaderTestEditor: React.FC<ValidatedTestEditorProps<HeaderTest>> = ({
       ...getDefaultVariant(),
       name: name,
     };
-    onVariantsChange(current => [...current, newVariant]);
+    onVariantsChange((current) => [...current, newVariant]);
   };
 
   const onVariantClone = (originalVariant: HeaderVariant, clonedVariantName: string): void => {
@@ -132,7 +132,7 @@ const HeaderTestEditor: React.FC<ValidatedTestEditorProps<HeaderTest>> = ({
       ...originalVariant,
       name: clonedVariantName,
     };
-    onVariantsChange(current => [...current, newVariant]);
+    onVariantsChange((current) => [...current, newVariant]);
   };
 
   return (

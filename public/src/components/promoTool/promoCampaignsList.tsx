@@ -33,7 +33,7 @@ const PromoCampaignsList = ({
   const classes = useStyles();
 
   const filterPromoCampaigns = (campaignArray: PromoCampaigns) => {
-    return campaignArray.filter(c => {
+    return campaignArray.filter((c) => {
       if (!promoCampaignSearch) {
         return true;
       } else if (c.name && c.name.indexOf(promoCampaignSearch) >= 0) {
@@ -45,7 +45,7 @@ const PromoCampaignsList = ({
     });
   };
   const filterPromoCampaignsByProduct = (campaignArray: PromoCampaigns) => {
-    return campaignArray.filter(c => {
+    return campaignArray.filter((c) => {
       if (!selectedProduct) {
         return true;
       } else if (c.product === selectedProduct) {
@@ -76,10 +76,10 @@ const PromoCampaignsList = ({
   return (
     <div className={classes.container}>
       <List className={classes.list}>
-        {filteredAndSortedPromoCampaigns.map(promoCampaign => {
+        {filteredAndSortedPromoCampaigns.map((promoCampaign) => {
           const isSelected = Boolean(
             selectedPromoCampaign &&
-              selectedPromoCampaign.campaignCode === promoCampaign.campaignCode,
+            selectedPromoCampaign.campaignCode === promoCampaign.campaignCode,
           );
           return (
             <PromoCampaignsListItem

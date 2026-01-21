@@ -31,7 +31,7 @@ export const BannerDesignUsage: React.FC<Props> = ({ designName }: Props) => {
   const [testNames, setTestNames] = useState<Test[]>([]);
 
   useEffect(() => {
-    getBannerDesignUsage(designName).then(tests => setTestNames(tests));
+    getBannerDesignUsage(designName).then((tests) => setTestNames(tests));
   }, [designName]);
 
   const TestButton = (test: Test) => {
@@ -49,7 +49,7 @@ export const BannerDesignUsage: React.FC<Props> = ({ designName }: Props) => {
     <List className={localClasses.list}>
       {testNames.length === 0
         ? 'Not currently used by any banner tests'
-        : testNames.map(test => (
+        : testNames.map((test) => (
             <TestButton
               key={`${test.channel}/${test.name}`}
               name={test.name}

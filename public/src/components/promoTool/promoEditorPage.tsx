@@ -104,10 +104,10 @@ const PromoEditorPage: React.FC = () => {
           setIsEditing(true);
           return fetchPromo(promo.promoCode);
         })
-        .then(response => {
+        .then((response) => {
           setPromo(response.promo);
         })
-        .catch(error => {
+        .catch((error) => {
           setIsEditing(false);
           alert(`Error locking promo: ${error.message}`);
         });
@@ -121,10 +121,10 @@ const PromoEditorPage: React.FC = () => {
           setIsEditing(true);
           return fetchPromo(promo.promoCode);
         })
-        .then(response => {
+        .then((response) => {
           setPromo(response.promo);
         })
-        .catch(error => {
+        .catch((error) => {
           setIsEditing(false);
           alert(`Error locking promo: ${error.message}`);
         });
@@ -138,10 +138,10 @@ const PromoEditorPage: React.FC = () => {
           setIsEditing(false);
           return fetchPromo(promo.promoCode);
         })
-        .then(response => {
+        .then((response) => {
           setPromo(response.promo);
         })
-        .catch(error => {
+        .catch((error) => {
           alert(`Error unlocking promo: ${error.message}`);
         });
     }
@@ -153,10 +153,10 @@ const PromoEditorPage: React.FC = () => {
         setIsEditing(false);
         return fetchPromo(updatedPromo.promoCode);
       })
-      .then(response => {
+      .then((response) => {
         setPromo(response.promo);
       })
-      .catch(error => {
+      .catch((error) => {
         alert(`Error saving promo: ${error.message}`);
       });
   };
@@ -168,10 +168,10 @@ const PromoEditorPage: React.FC = () => {
           setIsEditing(false);
           return fetchPromo(promo.promoCode);
         })
-        .then(response => {
+        .then((response) => {
           setPromo(response.promo);
         })
-        .catch(error => {
+        .catch((error) => {
           console.error('Error unlocking promo:', error);
           setIsEditing(false);
         });

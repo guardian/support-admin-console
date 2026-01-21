@@ -85,8 +85,8 @@ const TestList = <T extends Test>({
     // active is the item being dragged, over is the other item we're dragging onto
     const { active, over } = event;
     if (over && active.id !== over.id) {
-      const oldIndex = tests.findIndex(test => test.name === active.id);
-      const newIndex = tests.findIndex(test => test.name === over.id);
+      const oldIndex = tests.findIndex((test) => test.name === active.id);
+      const newIndex = tests.findIndex((test) => test.name === over.id);
       onTestPriorityChange(newIndex, oldIndex);
     }
   };
@@ -94,10 +94,10 @@ const TestList = <T extends Test>({
   return (
     <div className={classes.container}>
       <DndContext onDragEnd={onDragEnd} collisionDetection={closestCenter}>
-        <SortableContext items={tests.map(test => test.name)}>
+        <SortableContext items={tests.map((test) => test.name)}>
           <div ref={setDroppableNodeRef}>
             <List className={classes.list}>
-              {tests.map(test => {
+              {tests.map((test) => {
                 return (
                   <TestListItem
                     key={`TestListItem-${test.name}`}

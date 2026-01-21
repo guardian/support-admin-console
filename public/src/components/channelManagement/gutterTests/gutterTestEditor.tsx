@@ -33,7 +33,7 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
   const classes = useStyles();
 
   const onCampaignChange = (campaign?: string): void => {
-    onTestChange(current => ({
+    onTestChange((current) => ({
       ...current,
       campaignName: campaign,
     }));
@@ -44,41 +44,41 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
 
   const onControlProportionSettingsChange = (
     controlProportionSettings?: ControlProportionSettings,
-  ): void => onTestChange(current => ({ ...current, controlProportionSettings }));
+  ): void => onTestChange((current) => ({ ...current, controlProportionSettings }));
 
   const onVariantsChange = (update: (current: GutterVariant[]) => GutterVariant[]): void => {
-    onTestChange(current => {
+    onTestChange((current) => {
       const updatedVariantList = update(current.variants);
       return { ...current, variants: updatedVariantList };
     });
   };
 
-  const onVariantChange = (variantName: string) => (
-    update: (current: GutterVariant) => GutterVariant,
-  ): void => {
-    onVariantsChange(current =>
-      current.map(variant => {
-        if (variant.name === variantName) {
-          return update(variant);
-        }
-        return variant;
-      }),
-    );
-  };
+  const onVariantChange =
+    (variantName: string) =>
+    (update: (current: GutterVariant) => GutterVariant): void => {
+      onVariantsChange((current) =>
+        current.map((variant) => {
+          if (variant.name === variantName) {
+            return update(variant);
+          }
+          return variant;
+        }),
+      );
+    };
 
   const onVariantDelete = (deletedVariantName: string): void => {
-    onVariantsChange(current => current.filter(variant => variant.name !== deletedVariantName));
+    onVariantsChange((current) => current.filter((variant) => variant.name !== deletedVariantName));
   };
 
   const updateContextTargeting = (contextTargeting: PageContextTargeting): void => {
-    onTestChange(current => ({
+    onTestChange((current) => ({
       ...current,
       contextTargeting,
     }));
   };
 
   const onRegionTargetingChange = (updatedRegionTargeting: RegionTargeting): void => {
-    onTestChange(current => ({
+    onTestChange((current) => ({
       ...current,
       regionTargeting: updatedRegionTargeting,
       locations: [],
@@ -86,19 +86,19 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
   };
 
   const onCohortChange = (updatedCohort: UserCohort): void => {
-    onTestChange(current => ({ ...current, userCohort: updatedCohort }));
+    onTestChange((current) => ({ ...current, userCohort: updatedCohort }));
   };
 
   const onDeviceTypeChange = (updatedDeviceType: DeviceType): void => {
-    onTestChange(current => ({ ...current, deviceType: updatedDeviceType }));
+    onTestChange((current) => ({ ...current, deviceType: updatedDeviceType }));
   };
 
   const onSignedInStatusChange = (signedInStatus: SignedInStatus): void => {
-    onTestChange(current => ({ ...current, signedInStatus }));
+    onTestChange((current) => ({ ...current, signedInStatus }));
   };
 
   const onConsentChange = (consentStatus: ConsentStatus): void => {
-    onTestChange(current => ({ ...current, consentStatus }));
+    onTestChange((current) => ({ ...current, consentStatus }));
   };
   const renderVariantEditor = (variant: GutterVariant): React.ReactElement => (
     <VariantEditorWithPreviewTab
@@ -136,7 +136,7 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
       ...getDefaultVariant(),
       name: name,
     };
-    onVariantsChange(current => [...current, newVariant]);
+    onVariantsChange((current) => [...current, newVariant]);
   };
 
   const onVariantClone = (originalVariant: GutterVariant, clonedVariantName: string): void => {
@@ -144,7 +144,7 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
       ...originalVariant,
       name: clonedVariantName,
     };
-    onVariantsChange(current => [...current, newVariant]);
+    onVariantsChange((current) => [...current, newVariant]);
   };
 
   return (

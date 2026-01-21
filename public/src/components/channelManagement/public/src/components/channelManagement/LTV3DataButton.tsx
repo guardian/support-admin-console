@@ -53,14 +53,14 @@ export const LTV3DataButton: React.FC<LTV3DataButtonProps> = ({
   const [isOpen, open, close] = useOpenable();
 
   const [dataSet, setDataSet] = React.useState<LTV3Data[][]>([]);
-  const testNamesForLTV3Data = methodologies.map(methodology =>
+  const testNamesForLTV3Data = methodologies.map((methodology) =>
     methodology.testName === undefined ? testName : methodology.testName,
   );
 
   const handleClick = () => {
     open();
     const fetchData = async () => {
-      const promises = testNamesForLTV3Data?.map(async testName => {
+      const promises = testNamesForLTV3Data?.map(async (testName) => {
         const response = await fetch(`frontend/bandit/${channel}/${testName}/ltv3`);
         const data = (await response.json()) as LTV3Data[];
         return data;
@@ -72,8 +72,8 @@ export const LTV3DataButton: React.FC<LTV3DataButtonProps> = ({
     fetchData().then(() => console.log('LTV3 Data fetched successfully'));
   };
 
-  const uniqueVariantNames = [...new Set(dataSet.flat().map(item => item.variant_name))];
-  const uniqueTestNames = [...new Set(dataSet.flat().map(item => item.test_name))];
+  const uniqueVariantNames = [...new Set(dataSet.flat().map((item) => item.variant_name))];
+  const uniqueTestNames = [...new Set(dataSet.flat().map((item) => item.test_name))];
   return (
     <>
       <div>
@@ -88,31 +88,32 @@ export const LTV3DataButton: React.FC<LTV3DataButtonProps> = ({
                 <TableHead>
                   <TableRow>
                     <TableCell>Variants</TableCell>
-                    {uniqueTestNames.map(testName => (
+                    {uniqueTestNames.map((testName) => (
                       <TableCell key={testName}>{testName}</TableCell>
                     ))}
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {uniqueVariantNames?.map(row => (
+                  {uniqueVariantNames?.map((row) => (
                     <TableRow key={row}>
                       <TableCell>{row}</TableCell>
-                      {uniqueTestNames.map(testName => {
+                      {uniqueTestNames.map((testName) => {
                         const ltv3Value =
                           dataSet
                             .flat()
-                            .find(item => item.variant_name === row && item.test_name === testName)
-                            ?.ltv3 ?? 0;
+                            .find(
+                              (item) => item.variant_name === row && item.test_name === testName,
+                            )?.ltv3 ?? 0;
                         return <TableCell key={testName}>{ltv3Value.toFixed(2)}</TableCell>;
                       })}
                     </TableRow>
                   ))}
                   <TableRow>
                     <TableCell className={classes.totalContainer}>Total</TableCell>
-                    {uniqueTestNames.map(testName => {
+                    {uniqueTestNames.map((testName) => {
                       const totalLTV3 = dataSet
                         .flat()
-                        .filter(item => item.test_name === testName)
+                        .filter((item) => item.test_name === testName)
                         .reduce((sum, item) => sum + item.ltv3, 0);
                       return (
                         <TableCell className={classes.totalContainer} key={testName}>

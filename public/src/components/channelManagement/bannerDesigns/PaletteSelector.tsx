@@ -61,25 +61,25 @@ const PaletteSelector: React.FC<Props> = ({
   const { styles } = colourThemes;
 
   const getStyle = (styleId?: string) =>
-    styles.find(style => style.id === styleId && style.themes.some(t => t.kind === visualKind));
+    styles.find((style) => style.id === styleId && style.themes.some((t) => t.kind === visualKind));
 
   const [style, setStyle] = useState<ThemeStyle | undefined>(getStyle(initialStyleId));
 
   const getTheme = (style?: ThemeStyle, themeId?: string) => {
     const theme =
-      style?.themes.find(theme => theme.id === themeId && theme.kind === visualKind) ??
-      style?.themes.find(theme => theme.kind === visualKind); // Fallback to any theme matching the visualKind
+      style?.themes.find((theme) => theme.id === themeId && theme.kind === visualKind) ??
+      style?.themes.find((theme) => theme.kind === visualKind); // Fallback to any theme matching the visualKind
     return theme;
   };
 
   const [theme, setTheme] = useState<ThemeDefinition | undefined>(getTheme(style, initialThemeId));
 
   const availableStyles = useMemo(() => {
-    return styles.filter(style => style.themes.some(t => t.kind === visualKind));
+    return styles.filter((style) => style.themes.some((t) => t.kind === visualKind));
   }, [styles, visualKind]);
 
   const availableThemes = useMemo(() => {
-    return style?.themes.filter(theme => theme.kind === visualKind) ?? [];
+    return style?.themes.filter((theme) => theme.kind === visualKind) ?? [];
   }, [styles, style, visualKind]);
 
   useEffect(() => {
@@ -140,7 +140,7 @@ const PaletteSelector: React.FC<Props> = ({
               id: 'style-select',
             }}
           >
-            {availableStyles.map(style => (
+            {availableStyles.map((style) => (
               <MenuItem key={style.id} value={style.id}>
                 {style.label}
               </MenuItem>
@@ -162,7 +162,7 @@ const PaletteSelector: React.FC<Props> = ({
               id: 'theme-select',
             }}
           >
-            {availableThemes.map(theme => (
+            {availableThemes.map((theme) => (
               <MenuItem key={theme.id} value={theme.id}>
                 {theme.label}
               </MenuItem>

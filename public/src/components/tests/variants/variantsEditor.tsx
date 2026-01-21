@@ -45,9 +45,9 @@ function VariantsEditor<V extends Variant>({
   const onVariantSelected = (variantKey: string): void =>
     setSelectedVariantKey(variantKey === selectedVariantKey ? null : variantKey);
 
-  const variantKeys = variants.map(variant => `${testName}-${variant.name}`);
+  const variantKeys = variants.map((variant) => `${testName}-${variant.name}`);
 
-  const variantNames = variants.map(variant => variant.name);
+  const variantNames = variants.map((variant) => variant.name);
 
   return (
     <div className={classes.container}>

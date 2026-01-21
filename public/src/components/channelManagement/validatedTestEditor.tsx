@@ -110,7 +110,7 @@ export const ValidatedTestEditor = <T extends Test>(
           <TestEditor
             test={testRef.current}
             userHasTestLocked={userHasTestLocked}
-            onTestChange={update => onUpdate(update(testRef.current))}
+            onTestChange={(update) => onUpdate(update(testRef.current))}
             setValidationStatusForField={setValidationStatusForField}
           />
         </div>

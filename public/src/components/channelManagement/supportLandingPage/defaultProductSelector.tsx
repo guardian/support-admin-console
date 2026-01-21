@@ -102,7 +102,7 @@ const DefaultProductSelector: React.FC<DefaultProductSelectorProps> = ({
             <FormLabel component="legend">Default Product</FormLabel>
             <RadioGroup
               value={defaultProductSelection?.productType || ''}
-              onChange={e => {
+              onChange={(e) => {
                 const value = e.target.value as DefaultProductSelection['productType'] | '';
                 handleProductTypeChange(value);
               }}
@@ -128,7 +128,7 @@ const DefaultProductSelector: React.FC<DefaultProductSelectorProps> = ({
               </FormLabel>
               <RadioGroup
                 value={defaultProductSelection.billingPeriod}
-                onChange={e =>
+                onChange={(e) =>
                   handleBillingPeriodChange(
                     e.target.value as DefaultProductSelection['billingPeriod'],
                   )

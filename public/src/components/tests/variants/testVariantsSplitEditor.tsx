@@ -94,16 +94,16 @@ const TestVariantsSplitEditor: React.FC<TestVariantsSplitEditorProps> = ({
     }
   };
 
-  const onSubmit = (controlProportionSettings: ControlProportionSettings) => ({
-    percentage,
-  }: FormState): void => {
-    if (percentage) {
-      onControlProportionSettingsChange({
-        proportion: round(percentage / 100),
-        offset: controlProportionSettings.offset,
-      });
-    }
-  };
+  const onSubmit =
+    (controlProportionSettings: ControlProportionSettings) =>
+    ({ percentage }: FormState): void => {
+      if (percentage) {
+        onControlProportionSettingsChange({
+          proportion: round(percentage / 100),
+          offset: controlProportionSettings.offset,
+        });
+      }
+    };
 
   const validate = (percentage: number | undefined): string | boolean => {
     if (percentage && !Number.isNaN(percentage)) {
@@ -126,8 +126,8 @@ const TestVariantsSplitEditor: React.FC<TestVariantsSplitEditorProps> = ({
   const renderVariants = (controlProportion: number): ReactElement[] => {
     const percentage = ((1 - controlProportion) / (variants.length - 1)) * 100;
     return variants
-      .filter(v => v.name.toLowerCase() !== 'control')
-      .map(variant => (
+      .filter((v) => v.name.toLowerCase() !== 'control')
+      .map((variant) => (
         <div key={`${variant.name}_proportion`}>
           <TextField
             value={+percentage.toFixed(2)}

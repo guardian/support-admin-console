@@ -45,7 +45,7 @@ export const ArticleDetails: React.FC<ArticleDetailsProps> = ({
 
   useEffect(() => {
     fetch(`/capi/content/${url}`)
-      .then(resp => resp.json())
+      .then((resp) => resp.json())
       .then(setContent);
   }, []);
 

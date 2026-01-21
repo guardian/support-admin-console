@@ -7,7 +7,7 @@ export const getDesignForVariant = (
 ): BannerDesign | undefined => {
   const template = variant.template;
 
-  return designs.find(d => d.name === template.designName);
+  return designs.find((d) => d.name === template.designName);
 };
 
 export const hexColourStringRegex = /^([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})$/i;

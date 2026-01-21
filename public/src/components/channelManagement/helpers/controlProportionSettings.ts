@@ -6,11 +6,11 @@ export interface ControlProportionSettings {
 }
 
 export function hasControl(variants: Variant[]): boolean {
-  return variants.findIndex(v => v.name.toLowerCase() === 'control') > -1;
+  return variants.findIndex((v) => v.name.toLowerCase() === 'control') > -1;
 }
 
 export function hasNonControlVariant(variants: Variant[]): boolean {
-  return variants.filter(v => v.name !== 'control').length > 0;
+  return variants.filter((v) => v.name !== 'control').length > 0;
 }
 
 export function canHaveCustomVariantSplit(variants: Variant[]): boolean {

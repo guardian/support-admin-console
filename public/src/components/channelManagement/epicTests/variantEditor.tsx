@@ -161,7 +161,7 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   }, []);
 
   useEffect(() => {
-    onVariantChange(current => ({
+    onVariantChange((current) => ({
       ...current,
       ...validatedFields,
     }));
@@ -184,48 +184,51 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   const onCtasToggleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const value = event.target.value;
     if (value === 'newsletterSignup') {
-      onVariantChange(current => ({
+      onVariantChange((current) => ({
         ...current,
         newsletterSignup: { newsletterId: '', successDescription: '' },
       }));
     } else {
-      onVariantChange(current => ({ ...current, newsletterSignup: undefined }));
+      onVariantChange((current) => ({ ...current, newsletterSignup: undefined }));
     }
   };
 
   // Handling other form field updates
   const updatePrimaryCta = (updatedCta?: Cta): void => {
-    onVariantChange(current => ({ ...current, cta: updatedCta }));
+    onVariantChange((current) => ({ ...current, cta: updatedCta }));
   };
   const updateSecondaryCta = (updatedCta?: SecondaryCta): void => {
-    onVariantChange(current => ({ ...current, secondaryCta: updatedCta }));
+    onVariantChange((current) => ({ ...current, secondaryCta: updatedCta }));
   };
   const updateSeparateArticleCount = (updatedSeparateArticleCount?: SeparateArticleCount): void => {
-    onVariantChange(current => ({ ...current, separateArticleCount: updatedSeparateArticleCount }));
+    onVariantChange((current) => ({
+      ...current,
+      separateArticleCount: updatedSeparateArticleCount,
+    }));
   };
   const updateTickerSettings = (updatedTickerSettings?: TickerSettings): void => {
-    onVariantChange(current => ({ ...current, tickerSettings: updatedTickerSettings }));
+    onVariantChange((current) => ({ ...current, tickerSettings: updatedTickerSettings }));
   };
   const updateChoiceCardsSettings = (
     showChoiceCards?: boolean,
     choiceCardsSettings?: ChoiceCardsSettings,
   ): void => {
-    onVariantChange(current => ({ ...current, showChoiceCards, choiceCardsSettings }));
+    onVariantChange((current) => ({ ...current, showChoiceCards, choiceCardsSettings }));
   };
   const updateShowSignInLink = (updatedShowSignInLink?: boolean): void => {
-    onVariantChange(current => ({ ...current, showSignInLink: updatedShowSignInLink }));
+    onVariantChange((current) => ({ ...current, showSignInLink: updatedShowSignInLink }));
   };
   const updateImage = (image?: Image): void => {
-    onVariantChange(current => ({ ...current, image }));
+    onVariantChange((current) => ({ ...current, image }));
   };
   const updateBylineWithImage = (bylineWithImage?: BylineWithImage): void => {
-    onVariantChange(current => ({ ...current, bylineWithImage }));
+    onVariantChange((current) => ({ ...current, bylineWithImage }));
   };
   const updateNewsletterSignup = (updateNewsletterSignup?: NewsletterSignup): void => {
-    onVariantChange(current => ({ ...current, newsletterSignup: updateNewsletterSignup }));
+    onVariantChange((current) => ({ ...current, newsletterSignup: updateNewsletterSignup }));
   };
   const updatePromoCodes = (promoCodes: string[]): void => {
-    onVariantChange(current => ({ ...current, promoCodes }));
+    onVariantChange((current) => ({ ...current, promoCodes }));
   };
 
   const getParagraphsHelperText = () => {
@@ -258,7 +261,7 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                 error={errors.heading !== undefined}
                 helperText={errors.heading ? errors.heading.message || errors.heading.type : ''}
                 copyData={field.value}
-                updateCopy={value => {
+                updateCopy={(value) => {
                   field.onChange(value);
                   handleSubmit(setValidatedFields)();
                 }}
@@ -301,7 +304,7 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                   : getParagraphsHelperText()
               }
               copyData={field.value}
-              updateCopy={pars => {
+              updateCopy={(pars) => {
                 field.onChange(pars);
                 handleSubmit(setValidatedFields)();
               }}
@@ -341,7 +344,7 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                     : HIGHTLIGHTED_TEXT_DEFAULT_HELPER_TEXT
                 }
                 copyData={field.value}
-                updateCopy={pars => {
+                updateCopy={(pars) => {
                   field.onChange(pars);
                   handleSubmit(setValidatedFields)();
                 }}
@@ -526,7 +529,7 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
           <AppleNewsChoiceCards
             variant={variant}
             editMode={editMode}
-            updateShowChoiceCards={showChoiceCards => updateChoiceCardsSettings(showChoiceCards)}
+            updateShowChoiceCards={(showChoiceCards) => updateChoiceCardsSettings(showChoiceCards)}
             updatePrimaryCta={updatePrimaryCta}
             onValidationChange={onValidationChange}
           />

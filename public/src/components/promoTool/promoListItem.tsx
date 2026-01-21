@@ -131,8 +131,8 @@ export const PromoListItem = ({
       return 'No rate plans';
     }
 
-    const ratePlanNames = promo.appliesTo.productRatePlanIds.map(ratePlanId => {
-      const ratePlan = ratePlans?.find(rp => rp.id === ratePlanId);
+    const ratePlanNames = promo.appliesTo.productRatePlanIds.map((ratePlanId) => {
+      const ratePlan = ratePlans?.find((rp) => rp.id === ratePlanId);
       if (ratePlan) {
         return `${ratePlan.productDisplayName} - ${ratePlan.ratePlanName}`;
       }
@@ -146,8 +146,8 @@ export const PromoListItem = ({
     if (!promo.appliesTo.countries || promo.appliesTo.countries.length === 0) {
       return 'All regions';
     }
-    const regionNames = promo.appliesTo.countries.map(country => {
-      const countryGroup = countryGroups?.find(cg => cg.countries.includes(country));
+    const regionNames = promo.appliesTo.countries.map((country) => {
+      const countryGroup = countryGroups?.find((cg) => cg.countries.includes(country));
       if (countryGroup) {
         return countryGroup.name;
       }
@@ -175,7 +175,7 @@ export const PromoListItem = ({
                 <Button
                   size="small"
                   variant="outlined"
-                  onClick={e => {
+                  onClick={(e) => {
                     e.stopPropagation();
                     onClonePromo(promo);
                   }}

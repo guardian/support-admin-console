@@ -74,14 +74,14 @@ export function buildChartData(
     };
 
     if (variants.length > 0) {
-      variants.forEach(variant => {
+      variants.forEach((variant) => {
         sample[variant.variantName] = variant[fieldName];
       });
       return sample;
     }
 
     // When no variants are present, set all variant values to null
-    variantNames.forEach(variantName => {
+    variantNames.forEach((variantName) => {
       sample[variantName] = null;
     });
 

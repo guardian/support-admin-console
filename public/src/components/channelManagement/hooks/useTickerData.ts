@@ -18,14 +18,14 @@ const useTickerData = (
   useEffect(() => {
     if (tickerSettings) {
       fetch(`https://contributions.guardianapis.com/ticker/${tickerSettings.name}`)
-        .then(resp => resp.json())
-        .then(json => {
+        .then((resp) => resp.json())
+        .then((json) => {
           setTickerData({
             total: parseInt(json.total),
             goal: parseInt(json.goal),
           });
         })
-        .catch(err => alert(`Error fetching ticker data: ${err}`));
+        .catch((err) => alert(`Error fetching ticker data: ${err}`));
     }
   }, [tickerSettings]);
 

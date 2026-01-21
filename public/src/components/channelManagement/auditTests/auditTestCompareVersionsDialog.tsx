@@ -83,7 +83,7 @@ const ListItem = ({ diff }: { diff: IChange }) => {
 const List = ({ diffs }: { diffs: IChange[] }) => {
   return (
     <ul>
-      {diffs.map(diff => (
+      {diffs.map((diff) => (
         <ListItem key={diff.key} diff={diff} />
       ))}
     </ul>

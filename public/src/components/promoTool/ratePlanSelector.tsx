@@ -88,7 +88,7 @@ const RatePlanSelector: React.FC<RatePlanSelectorProps> = ({
 
   const handleToggleRatePlan = (ratePlanId: string) => {
     if (selectedRatePlanIds.includes(ratePlanId)) {
-      onRatePlansSelected(selectedRatePlanIds.filter(id => id !== ratePlanId));
+      onRatePlansSelected(selectedRatePlanIds.filter((id) => id !== ratePlanId));
     } else {
       onRatePlansSelected([...selectedRatePlanIds, ratePlanId]);
     }
@@ -108,7 +108,7 @@ const RatePlanSelector: React.FC<RatePlanSelectorProps> = ({
     return (
       <Box className={classes.priceList}>
         <Grid container spacing={1}>
-          {currencies.map(currency => {
+          {currencies.map((currency) => {
             const originalPrice = pricing[currency];
             const discountedPrice = discountedPricing?.[currency];
 
@@ -187,7 +187,7 @@ const RatePlanSelector: React.FC<RatePlanSelectorProps> = ({
       <Typography className={classes.sectionTitle}>Rate Plans</Typography>
       <FormControl component="fieldset" fullWidth disabled={isDisabled}>
         <FormLabel component="legend">Select rate plans</FormLabel>
-        <FormGroup>{ratePlans.map(ratePlan => renderRatePlan(ratePlan))}</FormGroup>
+        <FormGroup>{ratePlans.map((ratePlan) => renderRatePlan(ratePlan))}</FormGroup>
       </FormControl>
     </Box>
   );

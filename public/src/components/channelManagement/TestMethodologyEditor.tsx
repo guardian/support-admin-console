@@ -124,7 +124,7 @@ const MethodologySampleCount: React.FC<MethodologySampleCountProps> = ({
         label={'Hours'}
         disabled={isDisabled || !sampleCount}
         InputLabelProps={{ shrink: true }}
-        onChange={event => {
+        onChange={(event) => {
           const samples = parseInt(event.target.value);
           onChange(samples);
         }}
@@ -193,7 +193,7 @@ const TestMethodology: React.FC<TestMethodologyProps> = ({
       {isBandit(methodology) && (
         <MethodologySampleCount
           sampleCount={methodology.sampleCount}
-          onChange={sampleCount =>
+          onChange={(sampleCount) =>
             onChange({
               ...methodology,
               sampleCount,
@@ -211,7 +211,7 @@ const TestMethodology: React.FC<TestMethodologyProps> = ({
               value={methodology.epsilon}
               label={'Epsilon'}
               disabled={isDisabled}
-              onChange={event => {
+              onChange={(event) => {
                 const epsilon = parseFloat(event.target.value);
                 onChange({ ...methodology, epsilon });
               }}
@@ -270,7 +270,7 @@ export const TestMethodologyEditor: React.FC<TestMethodologyEditorProps> = ({
 
   const updateTestNamesAndSubmit = (newMethodologies: Methodology[]): void => {
     onChange(
-      newMethodologies.map(method => ({
+      newMethodologies.map((method) => ({
         ...method,
         // Add testNames if more than 1 methodology
         testName:
@@ -298,7 +298,7 @@ export const TestMethodologyEditor: React.FC<TestMethodologyEditorProps> = ({
           channel={channel}
           audiencePercentage={Math.round(100 / methodologies.length)}
           isDisabled={isDisabled}
-          onChange={updatedMethodology => {
+          onChange={(updatedMethodology) => {
             const updatedMethodologies = [
               ...methodologies.slice(0, idx),
               updatedMethodology,

@@ -71,7 +71,7 @@ const StatusUpdateDialog: React.FC<StatusUpdateDialogProps> = ({
 
   useEffect(() => {
     const res: TestStatus = {};
-    tests.map(test => {
+    tests.map((test) => {
       const key = getStatusKey(test);
       res[key] = test.status;
     });
@@ -91,7 +91,7 @@ const StatusUpdateDialog: React.FC<StatusUpdateDialogProps> = ({
 
   const onSubmit = (): void => {
     const changes: UpdateStatusesArguments[] = [];
-    tests.forEach(test => {
+    tests.forEach((test) => {
       const key = getStatusKey(test);
       if (test.status !== testData[key]) {
         const { channel, name } = test;
@@ -106,7 +106,7 @@ const StatusUpdateDialog: React.FC<StatusUpdateDialogProps> = ({
     if (changes.length > 0) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const promises: Promise<any>[] = [];
-      changes.forEach(change => {
+      changes.forEach((change) => {
         promises.push(updateStatuses(...change));
       });
 
@@ -116,7 +116,7 @@ const StatusUpdateDialog: React.FC<StatusUpdateDialogProps> = ({
   };
 
   const orderTests = () => {
-    const nonArchivedTests = tests.filter(t => t.status !== 'Archived');
+    const nonArchivedTests = tests.filter((t) => t.status !== 'Archived');
 
     nonArchivedTests.sort((a, b) => {
       const tcoLength = testChannelOrder.length;
@@ -143,7 +143,7 @@ const StatusUpdateDialog: React.FC<StatusUpdateDialogProps> = ({
         <>
           <DialogContent dividers>
             <List>
-              {orderTests().map(t => {
+              {orderTests().map((t) => {
                 const labelId = `checkbox-label-${t.name}`;
                 const key = getStatusKey(t);
                 const [channelLabel, testLabel] = key.split('|');

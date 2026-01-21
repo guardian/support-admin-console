@@ -53,7 +53,7 @@ export const BannerVisualEditor: React.FC<Props> = ({
           <ImageEditor
             image={visual}
             isDisabled={isDisabled}
-            onValidationChange={isValid => onValidationChange('visual.image', isValid)}
+            onValidationChange={(isValid) => onValidationChange('visual.image', isValid)}
             onChange={onChange}
           />
         )}

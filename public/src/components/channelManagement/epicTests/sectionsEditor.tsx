@@ -31,8 +31,8 @@ export const SectionsEditor: React.FC<SectionEditorProps> = ({
 
   useEffect(() => {
     fetch(`/capi/sections`)
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         const processedOptions = data.response.results.map(
           (section: { id: string; webTitle: string }) => ({
             id: section.id,
@@ -61,7 +61,7 @@ export const SectionsEditor: React.FC<SectionEditorProps> = ({
       autoComplete
       includeInputInList
       filterSelectedOptions
-      value={ids.map<Section>(id => ({ id }))}
+      value={ids.map<Section>((id) => ({ id }))}
       inputValue={inputValue}
       onInputChange={(event, newInputValue, reason): void => {
         if (reason === 'input') {
@@ -76,7 +76,7 @@ export const SectionsEditor: React.FC<SectionEditorProps> = ({
       }}
       onChange={(event, values: Section[], reason): void => {
         if (reason === 'selectOption' || reason === 'removeOption') {
-          onUpdate(values.map(value => value.id));
+          onUpdate(values.map((value) => value.id));
           setInputValue('');
         }
       }}

@@ -76,7 +76,11 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
   });
 
   // Validation specifically for the benefits array
-  const { fields: benefits, append, remove } = useFieldArray({
+  const {
+    fields: benefits,
+    append,
+    remove,
+  } = useFieldArray({
     control,
     name: 'benefits',
   });
@@ -255,7 +259,7 @@ export const ProductsEditor: React.FC<ProductsEditorProps> = ({
         Products
       </Typography>
 
-      {productKeys.map(productKey => (
+      {productKeys.map((productKey) => (
         <Controller
           key={productKey}
           control={control}
@@ -265,10 +269,10 @@ export const ProductsEditor: React.FC<ProductsEditorProps> = ({
               productKey={productKey}
               editMode={editMode}
               product={field.value}
-              onProductChange={updatedProduct =>
+              onProductChange={(updatedProduct) =>
                 onProductsChange({ ...products, [productKey]: updatedProduct })
               }
-              onValidationChange={isValid => {
+              onValidationChange={(isValid) => {
                 if (!isValid) {
                   setError(productKey, { message: `Product ${productKey} is not valid` });
                 } else {

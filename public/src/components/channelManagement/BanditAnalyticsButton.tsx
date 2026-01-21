@@ -93,14 +93,14 @@ export const BanditAnalyticsButton: React.FC<BanditAnalyticsButton> = ({
 
     const queryString = sampleCount ? `?sampleCount=${sampleCount}` : '';
     fetch(`/frontend/bandit/${channel}/${testName}${queryString}`)
-      .then(resp => resp.json())
-      .then(data => {
+      .then((resp) => resp.json())
+      .then((data) => {
         setData(data);
         setLoading(false);
       });
   }, [testName, channel]);
 
-  const variantNames = data?.variantSummaries.map(variant => variant.variantName) ?? [];
+  const variantNames = data?.variantSummaries.map((variant) => variant.variantName) ?? [];
 
   return (
     <>

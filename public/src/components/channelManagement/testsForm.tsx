@@ -116,7 +116,9 @@ export const TestsForm = <T extends Test>(
     }, []);
 
     const onTestChange = (updatedTest: T): void => {
-      const updatedTests = tests.map(test => (test.name === updatedTest.name ? updatedTest : test));
+      const updatedTests = tests.map((test) =>
+        test.name === updatedTest.name ? updatedTest : test,
+      );
 
       setTests(updatedTests);
     };
@@ -127,27 +129,27 @@ export const TestsForm = <T extends Test>(
     const onTestLock = (testName: string, force: boolean): void => {
       lockTest(settingsType, testName, force)
         .then(() => refreshTest(testName))
-        .catch(error => {
+        .catch((error) => {
           alert(`Error while locking test: ${error}`);
           refreshTest(testName);
         });
     };
     const onTestUnlock = (testName: string): void => {
-      const test = tests.find(test => test.name === testName);
+      const test = tests.find((test) => test.name === testName);
       if (test && test.isNew) {
         // if it's a new test then just drop from the in-memory list
-        setTests(tests.filter(test => test.name !== testName));
+        setTests(tests.filter((test) => test.name !== testName));
       } else {
         unlockTest(settingsType, testName)
           .then(() => refreshTest(testName))
-          .catch(error => {
+          .catch((error) => {
             alert(`Error while unlocking test: ${error}`);
           });
       }
     };
 
     const onTestSave = (testName: string): void => {
-      const test = tests.find(test => test.name === testName);
+      const test = tests.find((test) => test.name === testName);
       if (test) {
         if (test.isNew) {
           const unlocked = {
@@ -156,13 +158,13 @@ export const TestsForm = <T extends Test>(
           };
           createTest(settingsType, unlocked)
             .then(() => refreshTest(testName))
-            .catch(error => {
+            .catch((error) => {
               alert(`Error while creating new test: ${error}`);
             });
         } else {
           updateTest(settingsType, test)
             .then(() => refreshTest(testName))
-            .catch(error => {
+            .catch((error) => {
               alert(`Error while saving test: ${error}`);
             });
         }
@@ -172,15 +174,15 @@ export const TestsForm = <T extends Test>(
     const onTestsArchive = (testNames: string[]): void => {
       updateStatuses(settingsType, testNames, 'Archived')
         .then(() => fetchTests())
-        .catch(error => {
+        .catch((error) => {
           alert(`Error while archiving test: ${error}`);
         });
     };
 
     const onTestArchive = (testName: string): void => {
       updateStatuses(settingsType, [testName], 'Archived')
-        .then(() => setTests(tests.filter(test => test.name !== testName)))
-        .catch(error => {
+        .then(() => setTests(tests.filter((test) => test.name !== testName)))
+        .catch((error) => {
           alert(`Error while archiving test: ${error}`);
         });
     };
@@ -196,7 +198,7 @@ export const TestsForm = <T extends Test>(
     const onStatusChange = (status: Status, testName: string): void => {
       updateStatuses(settingsType, [testName], status)
         .then(() => refreshTest(testName))
-        .catch(error => {
+        .catch((error) => {
           alert(`Error while setting test status to ${status}: ${error}`);
         });
     };
@@ -223,10 +225,10 @@ export const TestsForm = <T extends Test>(
       newNickname: string,
       campaignName?: string,
     ): void => {
-      const oldTest = tests.find(test => test.name === oldName);
+      const oldTest = tests.find((test) => test.name === oldName);
       if (oldTest) {
         // Replace any testNames on the methodologies
-        const methodologies = oldTest.methodologies.map(methodology => ({
+        const methodologies = oldTest.methodologies.map((methodology) => ({
           ...methodology,
           testName: methodology.testName
             ? addMethodologyToTestName(newName, methodology)
@@ -266,31 +268,31 @@ export const TestsForm = <T extends Test>(
       setSavingTestList(true);
       saveTestListOrder(
         settingsType,
-        tests.map(test => test.name),
+        tests.map((test) => test.name),
       )
         .then(() => fetchTests())
         .then(() => setSavingTestList(false))
-        .catch(error => {
+        .catch((error) => {
           alert(`Error while saving: ${error}`);
         });
     };
 
     const onTestListLock = (force: boolean): void => {
       // For simplicity, do not allow reordering if there are any unsaved *new* tests
-      const newTest = tests.find(test => test.isNew);
+      const newTest = tests.find((test) => test.isNew);
       if (newTest) {
         alert(`Please save new test '${newTest.name}' before reordering`);
       } else {
         const lockAction = force ? requestTestListTakeControl : requestTestListLock;
         lockAction(settingsType)
           .then(() => fetchTests())
-          .catch(error => {
+          .catch((error) => {
             alert(`Error - can't request lock! - ${error}`);
           });
       }
     };
 
-    const selectedTest = tests.find(test => test.name === selectedTestName);
+    const selectedTest = tests.find((test) => test.name === selectedTestName);
 
     const userHasTestListLocked = testListLockStatus.email === email;
 
@@ -325,8 +327,8 @@ export const TestsForm = <T extends Test>(
               test={selectedTest}
               userHasTestLocked={selectedTest.lockStatus?.email === email}
               userHasTestListLocked={userHasTestListLocked}
-              existingNames={tests.map(test => test.name)}
-              existingNicknames={tests.map(test => test.nickname || '')}
+              existingNames={tests.map((test) => test.name)}
+              existingNicknames={tests.map((test) => test.nickname || '')}
               onTestChange={onTestChange}
               onTestLock={onTestLock}
               onTestUnlock={onTestUnlock}
@@ -334,7 +336,7 @@ export const TestsForm = <T extends Test>(
               onTestArchive={onTestArchive}
               onTestCopy={onTestCopy}
               onTestAudit={onTestAudit}
-              onStatusChange={status => onStatusChange(status, selectedTest.name)}
+              onStatusChange={(status) => onStatusChange(status, selectedTest.name)}
               settingsType={settingsType}
               allowEditing={allowEditing}
             />

@@ -8,9 +8,9 @@ import { Typography } from '@mui/material';
 import { useStyles } from '../helpers/testEditorStyles'; // TODO: is this appropriate (shared)
 import { VariantEditor } from './variantEditor';
 
-export const StudentLandingPageTestEditor: React.FC<ValidatedTestEditorProps<
-  StudentLandingPageTest
->> = ({ test, userHasTestLocked, onTestChange, setValidationStatusForField }) => {
+export const StudentLandingPageTestEditor: React.FC<
+  ValidatedTestEditorProps<StudentLandingPageTest>
+> = ({ test, userHasTestLocked, onTestChange, setValidationStatusForField }) => {
   const classes = useStyles();
 
   return (

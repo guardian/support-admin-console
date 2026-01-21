@@ -293,7 +293,7 @@ const TestDataDialog: React.FC<TestDataDialogProps> = ({
 
     let res = '';
 
-    keys.forEach(key => {
+    keys.forEach((key) => {
       const rule = fields[key];
       const val = data[key];
 
@@ -324,7 +324,7 @@ const TestDataDialog: React.FC<TestDataDialogProps> = ({
             } else if (!val.length) {
               res += ' (Empty)';
             } else {
-              val.forEach(function(v: string) {
+              val.forEach(function (v: string) {
                 res += `\n${v}`;
               });
             }
@@ -384,7 +384,7 @@ const TestDataDialog: React.FC<TestDataDialogProps> = ({
     } else if (!variants.length) {
       res += `WARNING: no variants have been created for this Test!`;
     } else if (['Header'].includes(channel)) {
-      variants.forEach(v => {
+      variants.forEach((v) => {
         res += `Variant: ${v.name}
 ---------------------------------------------------------------------
 ${parseData(channel, variantFields.core, v)}
@@ -408,7 +408,7 @@ ${parseData(channel, variantFields.copy, v.mobileContent)}
         }
       });
     } else if (['Epic', 'EpicLiveblog', 'EpicAppleNews'].includes(channel)) {
-      variants.forEach(v => {
+      variants.forEach((v) => {
         res += `Variant: ${v.name}
 ---------------------------------------------------------------------
 ${parseData(channel, variantFields.core, v)}
@@ -418,7 +418,7 @@ ${parseData(channel, variantFields.copy, v)}
 `;
       });
     } else if (['Banner1', 'Banner2'].includes(channel)) {
-      variants.forEach(v => {
+      variants.forEach((v) => {
         res += `Variant: ${v.name}
 ---------------------------------------------------------------------
 ${parseData(channel, variantFields.core, v)}

@@ -86,7 +86,7 @@ export const AmountsVariantEditorRow: React.FC<AmountsVariantEditorRowProps> = (
   };
 
   const deleteAmount = (val: number) => {
-    const update = amounts.filter(a => a !== val);
+    const update = amounts.filter((a) => a !== val);
     updateAmounts(label, update);
   };
 
@@ -101,7 +101,7 @@ export const AmountsVariantEditorRow: React.FC<AmountsVariantEditorRowProps> = (
       </div>
       <div className={classes.amountsAndInputContainer}>
         <div className={classes.amountsContainer}>
-          {amounts.map(amount => (
+          {amounts.map((amount) => (
             <AmountsVariantEditorRowAmount
               key={`${label}_${amount}`}
               amount={amount}

@@ -146,11 +146,14 @@ const URLGenerator = ({ variant, testName }: URLGeneratorProps) => {
         <TextField
           label="Promo Code (optional)"
           value={promoCode}
-          onChange={e => setPromoCode(e.target.value)}
+          onChange={(e) => setPromoCode(e.target.value)}
         />
         <FormControlLabel
           control={
-            <Checkbox checked={enableOneTime} onChange={e => setEnableOneTime(e.target.checked)} />
+            <Checkbox
+              checked={enableOneTime}
+              onChange={(e) => setEnableOneTime(e.target.checked)}
+            />
           }
           label="Enable One Time"
         />

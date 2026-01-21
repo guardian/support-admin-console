@@ -105,19 +105,19 @@ export default function NavDrawer(): React.ReactElement {
     left: false,
   });
 
-  const toggleDrawer = (anchor: string, open: boolean) => (
-    event: React.KeyboardEvent | React.MouseEvent,
-  ): void => {
-    if (
-      event.type === 'keydown' &&
-      ((event as React.KeyboardEvent).key === 'Tab' ||
-        (event as React.KeyboardEvent).key === 'Shift')
-    ) {
-      return;
-    }
+  const toggleDrawer =
+    (anchor: string, open: boolean) =>
+    (event: React.KeyboardEvent | React.MouseEvent): void => {
+      if (
+        event.type === 'keydown' &&
+        ((event as React.KeyboardEvent).key === 'Tab' ||
+          (event as React.KeyboardEvent).key === 'Shift')
+      ) {
+        return;
+      }
 
-    setState({ ...state, [anchor]: open });
-  };
+      setState({ ...state, [anchor]: open });
+    };
 
   const isHalloween = () => {
     const now = new Date();

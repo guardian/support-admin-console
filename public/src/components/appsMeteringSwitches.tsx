@@ -106,5 +106,5 @@ const AppsMeteringSwitches: React.FC<InnerProps<AppsMeteringSwitches>> = ({
 export default withS3Data<AppsMeteringSwitches>(
   AppsMeteringSwitches,
   () => fetchAppsSettings(AppsSettingsType.appsMeteringSwitches),
-  data => saveAppsSettings(AppsSettingsType.appsMeteringSwitches, data),
+  (data) => saveAppsSettings(AppsSettingsType.appsMeteringSwitches, data),
 );

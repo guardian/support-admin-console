@@ -105,13 +105,13 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
 
   const convertToCountryTag = (vals: Country[]): CountryTag[] => {
     const output: CountryTag[] = [];
-    vals.forEach(id => output.push({ id, label: countries[id] }));
+    vals.forEach((id) => output.push({ id, label: countries[id] }));
     return output;
   };
 
   const convertFromCountryTag = (vals: CountryTag[]): Country[] => {
     const output: Country[] = [];
-    vals.forEach(tag => output.push(tag.id));
+    vals.forEach((tag) => output.push(tag.id));
     return output;
   };
 
@@ -211,7 +211,7 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
 
   const updateVariant = (variant: AmountsVariant) => {
     const newState: AmountsVariant[] = [];
-    testVariants.forEach(v => {
+    testVariants.forEach((v) => {
       if (v.variantName === variant.variantName) {
         newState.push(variant);
       } else {
@@ -234,12 +234,12 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
   };
 
   const getExistingVariantNames = () => {
-    return testVariants.map(v => v.variantName);
+    return testVariants.map((v) => v.variantName);
   };
 
   const deleteVariant = (variant: AmountsVariant) => {
     const deleteName = variant.variantName;
-    const newState = testVariants.filter(v => deleteName !== v.variantName);
+    const newState = testVariants.filter((v) => deleteName !== v.variantName);
     setTestVariants(newState);
     setSaveButtonIsDisabled(false);
   };
@@ -317,7 +317,7 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
           name="liveTestName"
           label={checkIfTestIsCountryTier() ? 'Live test name' : 'Live A/B test name'}
           value={currentLiveTestName}
-          onChange={e => updateLiveTestName(e.target.value)}
+          onChange={(e) => updateLiveTestName(e.target.value)}
           error={!!currentLiveTestError.length}
           helperText={currentLiveTestError}
           margin="normal"
@@ -332,7 +332,7 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
               name="order"
               label="Test order"
               value={currentOrder}
-              onChange={e => updateOrder(parseInt(e.target.value, 10))}
+              onChange={(e) => updateOrder(parseInt(e.target.value, 10))}
               error={!!currentOrderError.length}
               helperText={currentOrderError}
               margin="normal"
@@ -345,10 +345,10 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
               multiple
               id="selected-countries"
               options={countryTags}
-              getOptionLabel={opt => opt.label}
+              getOptionLabel={(opt) => opt.label}
               onChange={(event, value) => updateCountry(value)}
               value={currentCountry}
-              renderInput={params => (
+              renderInput={(params) => (
                 <TextField
                   {...params}
                   label="Included countries"
@@ -377,7 +377,7 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
         />
         {addButtonBar()}
       </div>
-      <div>{testVariants.map(v => addVariantForm(v))}</div>
+      <div>{testVariants.map((v) => addVariantForm(v))}</div>
       {addButtonBar()}
     </div>
   );
