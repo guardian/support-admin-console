@@ -21,6 +21,7 @@ const useStyles = makeStyles(() => ({
 type SwitchName = 'enabled' | 'excludeBreakingNews' | 'requireApiKey';
 
 type AppsMeteringSwitches = {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   [key in SwitchName]: boolean;
 };
 
