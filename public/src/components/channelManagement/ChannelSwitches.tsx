@@ -36,6 +36,7 @@ type SwitchName =
   | 'enableAuxia';
 
 type ChannelSwitches = {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   [key in SwitchName]: boolean;
 };
 
