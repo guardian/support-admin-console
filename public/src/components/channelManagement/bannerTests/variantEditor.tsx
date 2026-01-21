@@ -25,7 +25,7 @@ import { SeparateArticleCount } from '../../../models/epic';
 import ChoiceCardsEditor from '../choiceCards/ChoiceCardsEditor';
 import { ChoiceCardsSettings } from '../../../models/choiceCards';
 import Alert from '@mui/material/Alert';
-import PromoCodesEditor from '../choiceCards/PromoCodesEditor';
+import PromoCodesEditor from '../../shared/PromoCodesEditor';
 import IsCollapsibleEditor from './isCollapsibleEditor';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type

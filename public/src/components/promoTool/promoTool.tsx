@@ -98,7 +98,7 @@ const PromoTool: React.FC = () => {
     createPromoCampaign(newPromoCampaign)
       .then(() => {
         fetchPromoCampaignsList(product); // Refetch campaigns list to update the sidebar
-        navigate(`/promo-tool/${newPromoCampaign.campaignCode}`);
+        navigate(`/promo-tool/campaign/${newPromoCampaign.campaignCode}`);
       })
       .catch(error => {
         alert(`Error while saving new PromoCampaign: ${error}`);
@@ -148,7 +148,7 @@ const PromoTool: React.FC = () => {
       .then(() => {
         setPromos([...promos, newPromo]);
         // Navigate to the editor page
-        navigate(`/promo-tool/${selectedPromoCampaignCode}/${promoCode}`);
+        navigate(`/promo-tool/promo/${promoCode}`);
       })
       .catch(error => {
         alert(`Error creating promo: ${error.message}`);
@@ -171,7 +171,7 @@ const PromoTool: React.FC = () => {
         setPromos([...promos, clonedPromo]);
         setPromoToClone(undefined);
         // Navigate to the editor page
-        navigate(`/promo-tool/${selectedPromoCampaignCode}/${promoCode}`);
+        navigate(`/promo-tool/promo/${promoCode}`);
       })
       .catch(error => {
         alert(`Error cloning promo: ${error.message}`);
@@ -184,11 +184,11 @@ const PromoTool: React.FC = () => {
   };
 
   const handleViewPromo = (promoCode: string): void => {
-    navigate(`/promo-tool/${selectedPromoCampaignCode}/${promoCode}`);
+    navigate(`/promo-tool/promo/${promoCode}`);
   };
 
   const handlePromoCampaignSelected = (campaignCode: string): void => {
-    navigate(`/promo-tool/${campaignCode}`);
+    navigate(`/promo-tool/campaign/${campaignCode}`);
   };
 
   useEffect(() => {
