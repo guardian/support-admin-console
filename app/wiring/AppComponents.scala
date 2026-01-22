@@ -255,14 +255,16 @@ class AppComponents(context: Context, stage: String)
       controllerComponents,
       stage,
       runtime,
-      dynamoPromoCampaignsService
+      dynamoPromoCampaignsService,
+      permissionsService
     ),
     new PromosController(
       authAction,
       controllerComponents,
       stage,
       runtime,
-      dynamoPromosService
+      dynamoPromosService,
+      permissionsService
     ),
     new ProductCatalogController(
       authAction,
