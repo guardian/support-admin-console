@@ -110,7 +110,9 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
     }
     if (field.includes('???')) {
       console.log('hit the ??? message');
-      messages.push(`Please update the subheading to include the academic institution\'s acronym instead of the ???`);
+      messages.push(
+        `Please update the subheading to include the academic institution\'s acronym instead of the ???`,
+      );
     }
     if (messages.length > 0) {
       return messages.toString(); // TODO enhance
