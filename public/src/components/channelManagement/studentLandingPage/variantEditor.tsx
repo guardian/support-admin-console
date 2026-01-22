@@ -66,7 +66,7 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
     heading: variant.heading,
     subheading: variant.subheading,
   };
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   const [validatedFields, setValidatedFields] = useState<OfferFormData>(defaultValues);
 
   const {
