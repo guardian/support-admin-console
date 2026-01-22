@@ -213,7 +213,7 @@ const PromoCodesEditor: React.FC<PromoCodesEditorProps> = ({
       });
     };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       e.preventDefault();
       handleAddPromo();
@@ -317,7 +317,7 @@ const PromoCodesEditor: React.FC<PromoCodesEditorProps> = ({
           label="Add Promo Code"
           value={newPromoCode}
           onChange={(e) => setNewPromoCode(e.target.value.toUpperCase())}
-          onKeyPress={handleKeyPress}
+          onKeyDown={handleKeyDown}
           disabled={isDisabled || addingPromo}
           placeholder="e.g. PROMO123"
           size="small"
