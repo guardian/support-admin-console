@@ -80,6 +80,7 @@ interface PromoListItemProps {
   onViewPromo: (promoCode: string) => void;
   countryGroups?: CountryGroup[];
   ratePlans?: RatePlanWithProduct[];
+  allowEditing: boolean;
 }
 
 export const PromoListItem = ({
@@ -88,6 +89,7 @@ export const PromoListItem = ({
   onViewPromo,
   countryGroups,
   ratePlans,
+  allowEditing,
 }: PromoListItemProps): React.ReactElement => {
   const classes = useStyles();
 
@@ -179,6 +181,7 @@ export const PromoListItem = ({
                     e.stopPropagation();
                     onClonePromo(promo);
                   }}
+                  disabled={!allowEditing}
                 >
                   Clone
                 </Button>

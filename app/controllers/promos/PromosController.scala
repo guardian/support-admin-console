@@ -1,14 +1,13 @@
 package controllers.promos
 
-import actions.AuthAndPermissionActions
+import actions.{AuthAndPermissionActions, PermissionAction}
 import com.typesafe.scalalogging.LazyLogging
-import io.circe.parser._
 import io.circe.syntax._
-import models.DynamoErrors.{DynamoDuplicateNameError, DynamoError, DynamoNoLockError}
+import models.DynamoErrors.{DynamoDuplicateNameError, DynamoNoLockError}
 import models.promos.Promo
-import models.promos.PromoProduct
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, ActionBuilder, AnyContent, ControllerComponents, Result}
+
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import services.promo.DynamoPromos
@@ -16,17 +15,36 @@ import utils.Circe.noNulls
 import zio.Unsafe
 import zio.ZIO
 import com.gu.googleauth.AuthAction
+import services.DynamoPermissionsCache
+import services.UserPermissions.Permission
 
 class PromosController(
     authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
     components: ControllerComponents,
     stage: String,
     runtime: zio.Runtime[Any],
-    dynamoPromos: DynamoPromos
+    dynamoPromos: DynamoPromos,
+    permissionsService: DynamoPermissionsCache
 )(implicit ec: ExecutionContext)
     extends AbstractController(components)
     with Circe
     with LazyLogging {
+
+  private val authActions = new AuthAndPermissionActions(
+    authAction,
+    // all users have read access
+    readPermissionAction = None,
+    // users must have write access to make changes
+    writePermissionAction = Some(
+      new PermissionAction(
+        page = "promos-tool",
+        requiredPermission = Permission.Write,
+        permissionsService,
+        components.parsers,
+        ec
+      )
+    )
+  )
 
   private def run(f: => ZIO[Any, Throwable, Result]): Future[Result] =
     Unsafe.unsafe { implicit unsafe =>
@@ -38,7 +56,7 @@ class PromosController(
       }
     }
 
-  def get(promoCode: String) = authAction.async { request =>
+  def get(promoCode: String) = authActions.read.async { request =>
     run {
       dynamoPromos
         .getPromo(promoCode)
@@ -52,7 +70,7 @@ class PromosController(
     }
   }
 
-  def create = authAction.async(circe.json[Promo]) { request =>
+  def create = authActions.write.async(circe.json[Promo]) { request =>
     run {
       val promo = request.body
       logger.info(s"${request.user.email} is creating '${promo.promoCode}'")
@@ -72,7 +90,7 @@ class PromosController(
     }
   }
 
-  def lockPromo(promoCode: String) = authAction.async { request =>
+  def lockPromo(promoCode: String) = authActions.write.async { request =>
     run {
       logger.info(s"${request.user.email} is locking promo '$promoCode'")
       dynamoPromos
@@ -87,7 +105,7 @@ class PromosController(
     }
   }
 
-  def unlockPromo(promoCode: String) = authAction.async { request =>
+  def unlockPromo(promoCode: String) = authActions.write.async { request =>
     run {
       logger.info(s"${request.user.email} is unlocking '$promoCode'")
       dynamoPromos
@@ -102,7 +120,7 @@ class PromosController(
     }
   }
 
-  def getAllPromos(campaignCode: String): Action[AnyContent] = authAction.async { request =>
+  def getAllPromos(campaignCode: String): Action[AnyContent] = authActions.read.async { request =>
     run {
       dynamoPromos
         .getAllPromos(campaignCode)
@@ -110,7 +128,7 @@ class PromosController(
     }
   }
 
-  def forceLock(promoCode: String) = authAction.async { request =>
+  def forceLock(promoCode: String) = authActions.write.async { request =>
     run {
       logger.info(s"${request.user.email} is force locking '$promoCode'")
       dynamoPromos
@@ -119,7 +137,7 @@ class PromosController(
     }
   }
 
-  def update = authAction.async(circe.json[Promo]) { request =>
+  def update = authActions.write.async(circe.json[Promo]) { request =>
     run {
       val promo = request.body
       logger.info(s"${request.user.email} is updating '${promo.promoCode}'")

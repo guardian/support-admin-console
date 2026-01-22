@@ -15,6 +15,7 @@ import {
   updatePromo,
   fetchPromoCampaign,
 } from '../../utils/requests';
+import { hasPermission } from '../../utils/permissions';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -52,6 +53,7 @@ const PromoEditorPage: React.FC = () => {
   const [userEmail, setUserEmail] = useState<string>('');
   const [campaignProduct, setCampaignProduct] = useState<PromoProduct | null>(null);
   const [campaignProductLoading, setCampaignProductLoading] = useState(true);
+  const allowEditing = hasPermission('promos-tool', 'Write');
 
   useEffect(() => {
     if (!promoCode) {
@@ -225,12 +227,22 @@ const PromoEditorPage: React.FC = () => {
           Preview
         </Button>
         {!promo.lockStatus?.locked && (
-          <Button variant="contained" color="primary" onClick={handleEditPromo}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleEditPromo}
+            disabled={!allowEditing}
+          >
             Edit
           </Button>
         )}
         {promo.lockStatus?.locked && promo.lockStatus?.email === userEmail && (
-          <Button variant="outlined" color="secondary" onClick={handleUnlockPromo}>
+          <Button
+            variant="outlined"
+            color="secondary"
+            onClick={handleUnlockPromo}
+            disabled={!allowEditing}
+          >
             Cancel Edit
           </Button>
         )}

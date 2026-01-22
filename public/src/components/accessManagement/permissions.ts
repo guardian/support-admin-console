@@ -13,6 +13,10 @@ export const permissions: Permission[] = [
     displayName: 'Checkout Nudge Tests',
   },
   {
+    name: 'promos-tool',
+    displayName: 'Promos Tool',
+  },
+  {
     name: 'access-management',
     displayName: 'Access Management',
   },
