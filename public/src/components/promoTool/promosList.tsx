@@ -32,6 +32,7 @@ interface PromosListProps {
   onViewPromo: (promoCode: string) => void;
   countryGroups?: CountryGroup[];
   ratePlans?: RatePlanWithProduct[];
+  allowEditing: boolean;
 }
 
 const PromosList = ({
@@ -41,6 +42,7 @@ const PromosList = ({
   onViewPromo,
   countryGroups,
   ratePlans,
+  allowEditing,
 }: PromosListProps): React.ReactElement => {
   const classes = useStyles();
 
@@ -48,7 +50,12 @@ const PromosList = ({
     <div className={classes.container}>
       <div className={classes.header}>
         <h3>Promo codes</h3>
-        <Button variant="contained" color="primary" onClick={onCreatePromo}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={onCreatePromo}
+          disabled={!allowEditing}
+        >
           Create promo code
         </Button>
       </div>
@@ -67,6 +74,7 @@ const PromosList = ({
                 onViewPromo={onViewPromo}
                 countryGroups={countryGroups}
                 ratePlans={ratePlans}
+                allowEditing={allowEditing}
               />
             );
           })}

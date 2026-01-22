@@ -23,6 +23,7 @@ import {
 import { RatePlanWithProduct, getAllRatePlansWithProduct } from './utils/productCatalog';
 import PromosList from './promosList';
 import CreatePromoDialog from './createPromoDialog';
+import { hasPermission } from '../../utils/permissions';
 
 const useStyles = makeStyles(({ spacing, typography }: Theme) => ({
   viewTextContainer: {
@@ -86,6 +87,7 @@ const PromoTool: React.FC = () => {
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [cloneDialogOpen, setCloneDialogOpen] = useState(false);
   const [promoToClone, setPromoToClone] = useState<Promo | undefined>();
+  const allowEditing = hasPermission('promos-tool', 'Write');
 
   const createNewPromoCampaign = (name: string, product: PromoProduct): void => {
     const newPromoCampaign: PromoCampaign = {
@@ -261,6 +263,7 @@ const PromoTool: React.FC = () => {
           onPromoCampaignSelected={handlePromoCampaignSelected}
           selectedProduct={selectedPromoProduct}
           setSelectedProduct={setSelectedPromoProduct}
+          allowEditing={allowEditing}
         />
       </div>
       <div className={classes.rightCol}>
@@ -274,6 +277,7 @@ const PromoTool: React.FC = () => {
               onViewPromo={handleViewPromo}
               countryGroups={countryGroups}
               ratePlans={ratePlans}
+              allowEditing={allowEditing}
             />
           </div>
         ) : (
