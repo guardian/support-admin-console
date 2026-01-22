@@ -18,6 +18,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { makeStyles } from '@mui/styles';
 import { PermissionLevel, UserPermissions } from '../channelManagement/helpers/shared';
 import { saveUserPermissions } from '../../utils/requests';
+import { PermissionName, permissions } from './permissions';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   dialogHeader: {
@@ -46,14 +47,19 @@ interface AddUserDialogProps {
 const AddUserDialog = ({ open, onClose, onUserAdded }: AddUserDialogProps) => {
   const classes = useStyles();
   const [email, setEmail] = useState('');
-  const [landingPagePerm, setLandingPagePerm] = useState<PermissionLevel>('None');
-  const [checkoutNudgePerm, setCheckoutNudgePerm] = useState<PermissionLevel>('None');
+  const [selectedPermissions, setSelectedPermissions] = useState<
+    Record<PermissionName, PermissionLevel>
+  >({});
 
   const handleClose = () => {
-    setEmail('');
-    setLandingPagePerm('None');
-    setCheckoutNudgePerm('None');
     onClose();
+  };
+
+  const handlePermissionChange = (permissionName: string, value: PermissionLevel) => {
+    setSelectedPermissions((prev) => ({
+      ...prev,
+      [permissionName]: value,
+    }));
   };
 
   const handleSubmit = async () => {
@@ -61,25 +67,16 @@ const AddUserDialog = ({ open, onClose, onUserAdded }: AddUserDialogProps) => {
       return;
     }
 
-    const permissions = [];
-
-    if (landingPagePerm !== 'None') {
-      permissions.push({
-        name: 'support-landing-page-tests',
-        permission: landingPagePerm as 'Read' | 'Write',
-      });
-    }
-
-    if (checkoutNudgePerm !== 'None') {
-      permissions.push({
-        name: 'checkout-nudge-tests',
-        permission: checkoutNudgePerm as 'Read' | 'Write',
-      });
-    }
+    const userPermissions = Object.entries(selectedPermissions)
+      .filter(([, level]) => level !== 'None')
+      .map(([name, level]) => ({
+        name,
+        permission: level,
+      }));
 
     const newUser: UserPermissions = {
       email,
-      permissions,
+      permissions: userPermissions,
     };
 
     try {
@@ -114,29 +111,24 @@ const AddUserDialog = ({ open, onClose, onUserAdded }: AddUserDialogProps) => {
           style={{ marginBottom: '24px' }}
         />
 
-        <FormControl component="fieldset" className={classes.formControl} fullWidth>
-          <FormLabel component="legend">Support Landing Page Tests</FormLabel>
-          <RadioGroup
-            value={landingPagePerm}
-            onChange={(e) => setLandingPagePerm(e.target.value as 'Read' | 'Write' | 'None')}
+        {permissions.map((perm) => (
+          <FormControl
+            key={perm.name}
+            component="fieldset"
+            className={classes.formControl}
+            fullWidth
           >
-            <FormControlLabel value="None" control={<Radio />} label="No Access" />
-            <FormControlLabel value="Read" control={<Radio />} label="Read Only" />
-            <FormControlLabel value="Write" control={<Radio />} label="Read & Write" />
-          </RadioGroup>
-        </FormControl>
-
-        <FormControl component="fieldset" className={classes.formControl} fullWidth>
-          <FormLabel component="legend">Checkout Nudge Tests</FormLabel>
-          <RadioGroup
-            value={checkoutNudgePerm}
-            onChange={(e) => setCheckoutNudgePerm(e.target.value as 'Read' | 'Write' | 'None')}
-          >
-            <FormControlLabel value="None" control={<Radio />} label="No Access" />
-            <FormControlLabel value="Read" control={<Radio />} label="Read Only" />
-            <FormControlLabel value="Write" control={<Radio />} label="Read & Write" />
-          </RadioGroup>
-        </FormControl>
+            <FormLabel component="legend">{perm.displayName}</FormLabel>
+            <RadioGroup
+              value={selectedPermissions[perm.name] || 'None'}
+              onChange={(e) => handlePermissionChange(perm.name, e.target.value as PermissionLevel)}
+            >
+              <FormControlLabel value="None" control={<Radio />} label="No Access" />
+              <FormControlLabel value="Read" control={<Radio />} label="Read Only" />
+              <FormControlLabel value="Write" control={<Radio />} label="Read & Write" />
+            </RadioGroup>
+          </FormControl>
+        ))}
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
