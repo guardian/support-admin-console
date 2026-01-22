@@ -8,7 +8,6 @@ import {
   FormControlLabel,
   Checkbox,
   Grid,
-  MenuItem,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material/styles';
@@ -355,19 +354,14 @@ const PromoEditor = ({
               label="Duration (months)"
               value={editedPromo?.discount?.durationMonths || ''}
               onChange={(e) => handleDiscountChange(e)}
-              select
               fullWidth
               disabled={!isEditing}
               InputLabelProps={{
                 shrink: true,
               }}
-            >
-              {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
-                <MenuItem key={month} value={month}>
-                  {month}
-                </MenuItem>
-              ))}
-            </TextField>
+              type="number"
+              inputProps={{ min: 1, step: 1 }}
+            />
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
