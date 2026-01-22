@@ -8,8 +8,8 @@ import { Controller, useForm } from 'react-hook-form';
 import { RichTextEditorSingleLine } from '../richTextEditor/richTextEditor';
 import { EMPTY_ERROR_HELPER_TEXT, noHtmlValidator } from '../helpers/validation';
 
-const HEADLINE_MAX_LENGTH = 20; // TODO: what should the max length of the heading be?
-const SUBHEADING_MAX_LENGTH = 20; // TODO: what should the max length of the subheading be?
+const HEADLINE_MAX_LENGTH = 65; // TODO: what should the max length of the heading be? Based on existing copy.
+const SUBHEADING_MAX_LENGTH = 160; // TODO: what should the max length of the subheading be? Based on existing with buffer.
 
 interface OfferFormData {
   heading: string;
