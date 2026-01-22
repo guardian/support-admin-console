@@ -16,6 +16,10 @@ export const permissions: Permission[] = [
     name: 'access-management',
     displayName: 'Access Management',
   },
+  {
+    name: 'student-landing-page-tests',
+    displayName: 'Student Landing Page Tests',
+  },
 ];
 
 export type PermissionName = (typeof permissions)[number]['name'];
