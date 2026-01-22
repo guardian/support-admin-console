@@ -23,12 +23,14 @@ interface NewPromoCampaignButtonProps {
   createPromoCampaign: (name: string, product: PromoProduct) => void;
   existingNames: string[];
   selectedProduct: PromoProduct;
+  allowEditing: boolean;
 }
 
 const NewPromoCampaignButton: React.FC<NewPromoCampaignButtonProps> = ({
   createPromoCampaign,
   existingNames,
   selectedProduct,
+  allowEditing,
 }: NewPromoCampaignButtonProps) => {
   const [isOpen, open, close] = useOpenable();
   const classes = useStyles();
@@ -40,6 +42,7 @@ const NewPromoCampaignButton: React.FC<NewPromoCampaignButtonProps> = ({
         variant="outlined"
         startIcon={<AddIcon className="classes.icon" />}
         onClick={open}
+        disabled={!allowEditing}
       >
         <Typography className={classes.text}>Create new promo campaign</Typography>
       </Button>

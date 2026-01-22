@@ -43,6 +43,7 @@ interface PromoCampaignsSidebarProps {
   onPromoCampaignSelected: (campaignName: string) => void;
   selectedProduct: PromoProduct;
   setSelectedProduct: (product: PromoProduct) => void;
+  allowEditing: boolean;
 }
 
 function PromoCampaignsSidebar({
@@ -53,6 +54,7 @@ function PromoCampaignsSidebar({
   createPromoCampaign,
   selectedProduct,
   setSelectedProduct,
+  allowEditing,
 }: PromoCampaignsSidebarProps): React.ReactElement {
   const classes = useStyles();
   const [promoCampaignSearch, setPromoCampaignSearch] = useState('');
@@ -76,6 +78,7 @@ function PromoCampaignsSidebar({
           createPromoCampaign={createPromoCampaign}
           existingNames={promoCampaigns.map((c) => c.name)}
           selectedProduct={selectedProduct}
+          allowEditing={allowEditing}
         />
         <TextField
           className={classes.searchField}
