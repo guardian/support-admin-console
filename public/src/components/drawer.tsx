@@ -215,13 +215,11 @@ export default function NavDrawer(): React.ReactElement {
             <ListItemText primary="Single Amounts" />
           </ListItemButton>
         </Link>
-        {getStage() !== 'PROD' && (
-          <Link key="Promo Tool" to="/promo-tool" className={classes.link}>
-            <ListItemButton className={classes.listItem} key="Promo Tool">
-              <ListItemText primary="Promo Tool" />
-            </ListItemButton>
-          </Link>
-        )}
+        <Link key="Promo Tool" to="/promo-tool" className={classes.link}>
+          <ListItemButton className={classes.listItem} key="Promo Tool">
+            <ListItemText primary="Promo Tool" />
+          </ListItemButton>
+        </Link>
         <Link key="Default Promos" to="/default-promos" className={classes.link}>
           <ListItemButton className={classes.listItem} key="Default Promos">
             <ListItemText primary="Default Promos" />
