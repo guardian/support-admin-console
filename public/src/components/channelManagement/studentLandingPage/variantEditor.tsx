@@ -1,5 +1,3 @@
-// TODO: fix the unused variables then delete the line below.
-
 import React, { useEffect, useState } from 'react';
 import { Institution, StudentLandingPageVariant } from '../../../models/studentLandingPage';
 import { makeStyles } from '@mui/styles';
@@ -26,7 +24,6 @@ interface OfferFormData {
   heading: string;
   subheading: string;
   institution: Institution;
-  // promoCodes: string[];
 }
 
 interface StudentLandingPageVariantEditorProps {
@@ -79,7 +76,6 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
     heading: variant.heading,
     subheading: variant.subheading,
     institution: variant.institution,
-    // promoCodes: variant.promoCodes,
   };
 
   const [validatedFields, setValidatedFields] = useState<OfferFormData>(defaultValues);
@@ -122,7 +118,6 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
     errors.institution?.logoUrl,
     errors.institution?.acronym,
     errors.institution?.name,
-    // errors.promoCodes,
   ]);
 
   const isValidField = (field: string, fieldName: string, maxLength: number) => {
@@ -172,11 +167,6 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
   const isValidInstitutionUrl = (field: string) => {
     return isValidField(field, 'logoUrl', LOGO_URL_MAX_LENGTH);
   };
-
-  // const PROMOCODE_MAX_LENGTH = 50;
-  // const isValidPromoCode = (field: string) => {
-  //   return isValidField(field, 'promoCode', PROMOCODE_MAX_LENGTH);
-  // };
 
   return (
     <div className={classes.container}>
