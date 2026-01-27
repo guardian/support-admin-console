@@ -6,10 +6,10 @@ import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material/styles';
 import { Controller, useForm } from 'react-hook-form';
 import { RichTextEditorSingleLine } from '../richTextEditor/richTextEditor';
-import { EMPTY_ERROR_HELPER_TEXT, noHtmlValidator } from '../helpers/validation';
+import { noHtmlValidator } from '../helpers/validation';
 
-const HEADLINE_MAX_LENGTH = 20; // TODO: what should the max length of the heading be?
-const SUBHEADING_MAX_LENGTH = 20; // TODO: what should the max length of the subheading be?
+const HEADLINE_MAX_LENGTH = 65; // TODO: what should the max length of the heading be? Based on existing copy.
+const SUBHEADING_MAX_LENGTH = 210; // TODO: what should the max length of the subheading be? Based on existing with buffer.
 
 interface OfferFormData {
   heading: string;
@@ -66,18 +66,23 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
     heading: variant.heading,
     subheading: variant.subheading,
   };
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   const [validatedFields, setValidatedFields] = useState<OfferFormData>(defaultValues);
 
   const {
     handleSubmit,
     control,
+    trigger,
 
     formState: { errors },
   } = useForm<OfferFormData>({
     mode: 'onChange',
     defaultValues,
   });
+
+  useEffect(() => {
+    trigger();
+  }, []);
 
   useEffect(() => {
     onVariantChange((current) => ({
@@ -103,10 +108,15 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
     if (field.length > maxLength) {
       messages.push(`The headline must not exceed ${maxLength} characters (including spaces) `);
     }
+    if (field.includes('???')) {
+      console.log('hit the ??? message');
+      messages.push(
+        `Please update the subheading to include the academic institution\'s acronym instead of the ???`,
+      );
+    }
     if (messages.length > 0) {
       return messages.toString(); // TODO enhance
     }
-
     return true;
   };
 
@@ -177,7 +187,6 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
               disabled={!editMode}
               rteMenuConstraints={{
                 noHtml: true,
-                noBold: true,
                 noCurrencyTemplate: true,
                 noCountryNameTemplate: true,
                 noArticleCountTemplate: true,
