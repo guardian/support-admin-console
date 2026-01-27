@@ -109,7 +109,13 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
-  }, [errors.heading, errors.subheading, errors.institution]);
+  }, [
+    errors.heading,
+    errors.subheading,
+    errors.institution?.logoUrl,
+    errors.institution?.acronym,
+    errors.institution?.name,
+  ]);
 
   const isValidField = (field: string, fieldName: string, maxLength: number) => {
     const messages = [];
