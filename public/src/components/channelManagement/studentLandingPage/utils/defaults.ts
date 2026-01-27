@@ -26,11 +26,20 @@ export const getDefaultTest = (): StudentLandingPageTest => {
   };
 };
 
+export const getDefaultInstitution = () => {
+  return {
+    acronym: 'UTS',
+    name: '',
+    logoUrl: '',
+  };
+};
+
 export const getDefaultVariant = (): StudentLandingPageVariant => {
   return {
     name: 'offer',
     heading: 'Subscribe to fearless, independent and inspiring journalism',
     subheading:
       'For a limited time, students with a valid ??? email address can unlock the premium experience of Guardian journalism, including unmetered app access, free for two years.',
+    institution: getDefaultInstitution(),
   };
 };
