@@ -28,4 +28,5 @@ export interface StudentLandingPageVariant extends Variant {
   heading: string;
   subheading: string;
   institution: Institution;
+  promoCodes: string[];
 }
