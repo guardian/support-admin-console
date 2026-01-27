@@ -1,5 +1,5 @@
 // TODO: fix the unused variables then delete the line below.
-/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import React, { useEffect, useState } from 'react';
 import { Institution, StudentLandingPageVariant } from '../../../models/studentLandingPage';
 import { makeStyles } from '@mui/styles';
@@ -8,6 +8,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { RichTextEditorSingleLine } from '../richTextEditor/richTextEditor';
 import { noHtmlValidator } from '../helpers/validation';
 import { Typography } from '@mui/material';
+import PromoCodesEditor from '../../shared/PromoCodesEditor';
 
 const RTEMenuConstraints = {
   noHtml: true,
@@ -25,6 +26,7 @@ interface OfferFormData {
   heading: string;
   subheading: string;
   institution: Institution;
+  // promoCodes: string[];
 }
 
 interface StudentLandingPageVariantEditorProps {
@@ -77,9 +79,17 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
     heading: variant.heading,
     subheading: variant.subheading,
     institution: variant.institution,
+    // promoCodes: variant.promoCodes,
   };
 
   const [validatedFields, setValidatedFields] = useState<OfferFormData>(defaultValues);
+
+  const updatePromoCodes = (promoCodes: string[]): void => {
+    onVariantChange((current) => ({
+      ...current,
+      promoCodes,
+    }));
+  };
 
   const {
     handleSubmit,
@@ -112,6 +122,7 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
     errors.institution?.logoUrl,
     errors.institution?.acronym,
     errors.institution?.name,
+    // errors.promoCodes,
   ]);
 
   const isValidField = (field: string, fieldName: string, maxLength: number) => {
@@ -127,7 +138,6 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
       messages.push(`The headline must not exceed ${maxLength} characters (including spaces) `);
     }
     if (field.includes('???')) {
-      console.log('hit the ??? message');
       messages.push(
         `Please update the subheading to include the academic institution\'s acronym instead of the ???`,
       );
@@ -162,6 +172,11 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
   const isValidInstitutionUrl = (field: string) => {
     return isValidField(field, 'logoUrl', LOGO_URL_MAX_LENGTH);
   };
+
+  // const PROMOCODE_MAX_LENGTH = 50;
+  // const isValidPromoCode = (field: string) => {
+  //   return isValidField(field, 'promoCode', PROMOCODE_MAX_LENGTH);
+  // };
 
   return (
     <div className={classes.container}>
@@ -317,6 +332,11 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
                 />
               );
             }}
+          />
+          <PromoCodesEditor
+            promoCodes={variant.promoCodes ?? []}
+            updatePromoCodes={updatePromoCodes}
+            isDisabled={!editMode}
           />
         </div>
       </div>
