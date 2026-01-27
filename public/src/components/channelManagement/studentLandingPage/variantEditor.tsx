@@ -9,9 +9,6 @@ import { RichTextEditorSingleLine } from '../richTextEditor/richTextEditor';
 import { noHtmlValidator } from '../helpers/validation';
 import { Typography } from '@mui/material';
 
-const HEADLINE_MAX_LENGTH = 65; // TODO: what should the max length of the heading be? Based on existing copy.
-const SUBHEADING_MAX_LENGTH = 210; // TODO: what should the max length of the subheading be? Based on existing with buffer.
-
 const RTEMenuConstraints = {
   noHtml: true,
   noBold: true,
@@ -141,24 +138,29 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
     return true;
   };
 
+  const HEADLINE_MAX_LENGTH = 65; // TODO: confirm the max length of this field
   const isValidHeadline = (field: string) => {
     return isValidField(field, 'headline', HEADLINE_MAX_LENGTH);
   };
 
+  const SUBHEADING_MAX_LENGTH = 210; // TODO: confirm the max length of this field
   const isValidSubHeading = (field: string) => {
     return isValidField(field, 'subheading', SUBHEADING_MAX_LENGTH);
   };
 
+  const ACRONYM_MAX_LENGTH = 4;
   const isValidAcronym = (field: string) => {
-    return isValidField(field, 'acronym', 4);
+    return isValidField(field, 'acronym', ACRONYM_MAX_LENGTH);
   };
 
+  const INSTITUTION_MAX_LENGTH = 150;
   const isValidInstitutionName = (field: string) => {
-    return isValidField(field, 'name', 150);
+    return isValidField(field, 'name', INSTITUTION_MAX_LENGTH);
   };
 
+  const LOGO_URL_MAX_LENGTH = 150;
   const isValidInstitutionUrl = (field: string) => {
-    return isValidField(field, 'logoUrl', 150);
+    return isValidField(field, 'logoUrl', LOGO_URL_MAX_LENGTH);
   };
 
   return (
@@ -308,7 +310,10 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
                   name="subheading"
                   label="Subheading"
                   disabled={!editMode}
-                  rteMenuConstraints={{ ...RTEMenuConstraints, noBold: false }}
+                  rteMenuConstraints={{
+                    ...RTEMenuConstraints,
+                    noBold: false,
+                  }}
                 />
               );
             }}
