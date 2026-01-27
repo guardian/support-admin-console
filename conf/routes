@@ -61,6 +61,9 @@ GET /banner-designs/:name                           controllers.Application.inde
 
 GET /audit-tests                                    controllers.Application.index
 GET /audit-tests/:channel/:name                     controllers.Application.indexWithNameAndChannel(name: String, channel: String)
+
+GET /single-checkout-tests                           controllers.Application.index
+GET /single-checkout-tests/:name                     controllers.Application.indexWithName(name: String)
 # ----- Authentication ----- #
 GET  /login                                         controllers.Login.login
 GET  /loginAction                                   controllers.Login.loginAction
@@ -323,3 +326,6 @@ POST  /frontend/student-landing-page-tests/test/lock/:testName        controller
 POST  /frontend/student-landing-page-tests/test/unlock/:testName      controllers.StudentLandingPageController.unlockTest(testName: String)
 POST  /frontend/student-landing-page-tests/test/takecontrol/:testName controllers.StudentLandingPageController.forceLockTest(testName: String)
 POST  /frontend/student-landing-page-tests/test/status/:rawStatus     controllers.StudentLandingPageController.setStatus(rawStatus: String)
+
+# single checkout tests endpoints
+GET   /frontend/single-checkout-tests                            controllers.SingleCheckoutController.get
