@@ -327,5 +327,18 @@ POST  /frontend/student-landing-page-tests/test/unlock/:testName      controller
 POST  /frontend/student-landing-page-tests/test/takecontrol/:testName controllers.StudentLandingPageController.forceLockTest(testName: String)
 POST  /frontend/student-landing-page-tests/test/status/:rawStatus     controllers.StudentLandingPageController.setStatus(rawStatus: String)
 
-# single checkout tests endpoints
+# ----- Single Checkout 'tests' ----- #
 GET   /frontend/single-checkout-tests                            controllers.SingleCheckoutController.get
+# single checkout list endpoints
+POST  /frontend/single-checkout-tests/list/lock                  controllers.SingleCheckoutController.lockList
+POST  /frontend/single-checkout-tests/list/unlock                controllers.SingleCheckoutController.unlockList
+POST  /frontend/single-checkout-tests/list/takecontrol           controllers.SingleCheckoutController.takeControlOfList
+POST  /frontend/single-checkout-tests/list/reorder               controllers.SingleCheckoutController.reorderList
+# single checkout test endpoints
+GET   /frontend/single-checkout-tests/test/:testName             controllers.SingleCheckoutController.getTest(testName: String)
+POST  /frontend/single-checkout-tests/test/update                controllers.SingleCheckoutController.updateTest
+POST  /frontend/single-checkout-tests/test/create                controllers.SingleCheckoutController.createTest
+POST  /frontend/single-checkout-tests/test/lock/:testName        controllers.SingleCheckoutController.lockTest(testName: String)
+POST  /frontend/single-checkout-tests/test/unlock/:testName      controllers.SingleCheckoutController.unlockTest(testName: String)
+POST  /frontend/single-checkout-tests/test/takecontrol/:testName controllers.SingleCheckoutController.forceLockTest(testName: String)
+POST  /frontend/single-checkout-tests/test/status/:rawStatus     controllers.SingleCheckoutController.setStatus(rawStatus: String)

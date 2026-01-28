@@ -26,10 +26,12 @@ const useStyles = makeStyles(({ palette }: Theme) => ({
 
 interface TestArchiveButtonProps {
   onTestArchive: () => void;
+  channel?: string;
 }
 
 export const TestArchiveButton: React.FC<TestArchiveButtonProps> = ({
   onTestArchive,
+  channel,
 }: TestArchiveButtonProps) => {
   const classes = useStyles();
   const [isOpen, open, close] = useOpenable();
@@ -54,8 +56,8 @@ export const TestArchiveButton: React.FC<TestArchiveButtonProps> = ({
         <DialogTitle id="archive-test-dialog-title">Are you sure?</DialogTitle>
         <DialogContent>
           <DialogContentText id="archive-test-dialog-description">
-            Archiving this test will remove it from the banner tool - you can only restore it with
-            an engineer&apos;s help.
+            Archiving this test will remove it from the {channel || 'banner'} tool - you can only
+            restore it with an engineer&apos;s help.
           </DialogContentText>
         </DialogContent>
         <DialogActions>

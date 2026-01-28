@@ -312,18 +312,22 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient)
   }
 
   def deleteTests(testNames: List[String], channel: Channel): ZIO[Any, DynamoPutError, Unit] = {
-    val deleteRequests = testNames.map { testName =>
-      WriteRequest.builder
-        .deleteRequest(
-          DeleteRequest.builder
-            .key(buildKey(channel, testName))
-            .build()
-        )
-        .build()
-    }
+    if (testNames.isEmpty) {
+      ZIO.unit
+    } else {
+      val deleteRequests = testNames.map { testName =>
+        WriteRequest.builder
+          .deleteRequest(
+            DeleteRequest.builder
+              .key(buildKey(channel, testName))
+              .build()
+          )
+          .build()
+      }
 
-    logger.info(s"About to batch delete: $deleteRequests")
-    putAllBatched(deleteRequests)
+      logger.info(s"About to batch delete: $deleteRequests")
+      putAllBatched(deleteRequests)
+    }
   }
 
   // Set `priority` attribute based on the ordering of the List
