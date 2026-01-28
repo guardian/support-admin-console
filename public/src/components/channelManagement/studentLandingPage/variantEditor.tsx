@@ -1,5 +1,3 @@
-// TODO: fix the unused variables then delete the line below.
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { Institution, StudentLandingPageVariant } from '../../../models/studentLandingPage';
 import { makeStyles } from '@mui/styles';
@@ -8,6 +6,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { RichTextEditorSingleLine } from '../richTextEditor/richTextEditor';
 import { noHtmlValidator } from '../helpers/validation';
 import { Typography } from '@mui/material';
+import PromoCodesEditor from '../../shared/PromoCodesEditor';
 
 const RTEMenuConstraints = {
   noHtml: true,
@@ -81,6 +80,13 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
 
   const [validatedFields, setValidatedFields] = useState<OfferFormData>(defaultValues);
 
+  const updatePromoCodes = (promoCodes: string[]): void => {
+    onVariantChange((current) => ({
+      ...current,
+      promoCodes,
+    }));
+  };
+
   const {
     handleSubmit,
     control,
@@ -127,7 +133,6 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
       messages.push(`The headline must not exceed ${maxLength} characters (including spaces) `);
     }
     if (field.includes('???')) {
-      console.log('hit the ??? message');
       messages.push(
         `Please update the subheading to include the academic institution\'s acronym instead of the ???`,
       );
@@ -317,6 +322,11 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
                 />
               );
             }}
+          />
+          <PromoCodesEditor
+            promoCodes={variant.promoCodes ?? []}
+            updatePromoCodes={updatePromoCodes}
+            isDisabled={!editMode}
           />
         </div>
       </div>

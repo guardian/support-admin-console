@@ -41,5 +41,6 @@ export const getDefaultVariant = (): StudentLandingPageVariant => {
     subheading:
       'For a limited time, students with a valid ??? email address can unlock the premium experience of Guardian journalism, including unmetered app access, free for two years.',
     institution: getDefaultInstitution(),
+    promoCodes: [],
   };
 };
