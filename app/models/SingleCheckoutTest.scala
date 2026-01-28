@@ -10,7 +10,7 @@ import models.Channel.SingleCheckout
 case class SingleCheckoutVariant(
     name: String,
     heading: String,
-    subheading: String,
+    subheading: String
 )
 
 case class SingleCheckoutTest(
@@ -23,7 +23,7 @@ case class SingleCheckoutTest(
     regionTargeting: Option[RegionTargeting] = None,
     variants: List[SingleCheckoutVariant],
     methodologies: List[Methodology] = defaultMethodologies,
-    campaignName: Option[String] = Some("NOT_IN_CAMPAIGN"),
+    campaignName: Option[String] = Some("NOT_IN_CAMPAIGN")
 ) extends ChannelTest[SingleCheckoutTest] {
 
   override def withChannel(channel: Channel): SingleCheckoutTest =

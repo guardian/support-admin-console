@@ -59,8 +59,8 @@ object ChannelTest {
       case checkoutNudge: CheckoutNudgeTest           => CheckoutNudgeTest.checkoutNudgeTestEncoder(checkoutNudge)
       case studentLandingPage: StudentLandingPageTest =>
         StudentLandingPageTest.studentLandingPageTestEncoder(studentLandingPage)
-      case singleCheckout: SingleCheckoutTest         => SingleCheckoutTest.SingleCheckoutTestEncoder(singleCheckout)
-      case epic: EpicTest => EpicTest.epicTestEncoder(epic)
+      case singleCheckout: SingleCheckoutTest => SingleCheckoutTest.SingleCheckoutTestEncoder(singleCheckout)
+      case epic: EpicTest                     => EpicTest.epicTestEncoder(epic)
     }
   }
 }
