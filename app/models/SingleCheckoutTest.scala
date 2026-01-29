@@ -7,16 +7,10 @@ import io.circe.{Decoder, Encoder}
 import models.Methodology.defaultMethodologies
 import models.Channel.SingleCheckout
 
-case class AmountsData(
-    ONE_OFF: AmountValuesObject,
-    MONTHLY: AmountValuesObject,
-    ANNUAL: AmountValuesObject
-)
-
 case class Amounts(
     defaultContributionType: String,
     displayContributionType: List[String],
-    amountsCardData: AmountsData
+    amountsCardData: AmountsCardData
 )
 
 case class SingleCheckoutVariant(
