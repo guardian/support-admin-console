@@ -1,14 +1,8 @@
 import React from 'react';
-import { TextField } from '@mui/material';
+import { TextField, Typography } from '@mui/material';
 import { SingleCheckoutVariant } from '../../../models/singleCheckout';
-import { makeStyles } from '@mui/styles';
-
-const useStyles = makeStyles(() => ({
-  textField: {
-    marginTop: '8px',
-    marginBottom: '8px',
-  },
-}));
+import { useStyles } from '../helpers/testEditorStyles';
+import { AmountsSection } from './AmountsSection';
 
 interface VariantEditorProps {
   variant: SingleCheckoutVariant;
@@ -48,31 +42,38 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
   };
 
   return (
-    <div>
-      <TextField
-        className={classes.textField}
-        label="Heading"
-        value={variant.heading}
-        onChange={onHeadingChange}
-        disabled={!editMode}
-        fullWidth
-        required
-        error={editMode && variant.heading.trim() === ''}
-        helperText={editMode && variant.heading.trim() === '' ? 'Heading is required' : ''}
-      />
-      <TextField
-        className={classes.textField}
-        label="Subheading"
-        value={variant.subheading}
-        onChange={onSubheadingChange}
-        disabled={!editMode}
-        fullWidth
-        required
-        multiline
-        rows={3}
-        error={editMode && variant.subheading.trim() === ''}
-        helperText={editMode && variant.subheading.trim() === '' ? 'Subheading is required' : ''}
-      />
+    <div className={classes.container}>
+      <div className={classes.sectionContainer}>
+        <Typography variant="h4" className={classes.sectionHeader}>
+          Copy
+        </Typography>
+        <TextField
+          label="Heading"
+          value={variant.heading}
+          onChange={onHeadingChange}
+          disabled={!editMode}
+          fullWidth
+          margin="normal"
+          required
+          error={editMode && variant.heading.trim() === ''}
+          helperText={editMode && variant.heading.trim() === '' ? 'Heading is required' : ''}
+        />
+        <TextField
+          label="Subheading"
+          value={variant.subheading}
+          onChange={onSubheadingChange}
+          disabled={!editMode}
+          fullWidth
+          margin="normal"
+          required
+          multiline
+          rows={3}
+          error={editMode && variant.subheading.trim() === ''}
+          helperText={editMode && variant.subheading.trim() === '' ? 'Subheading is required' : ''}
+        />
+      </div>
+
+      <AmountsSection variant={variant} onVariantChange={onVariantChange} editMode={editMode} />
     </div>
   );
 };

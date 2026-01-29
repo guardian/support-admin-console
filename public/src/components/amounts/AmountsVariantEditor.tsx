@@ -1,25 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
-import {
-  Checkbox,
-  Divider,
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  FormLabel,
-  Radio,
-  RadioGroup,
-} from '@mui/material';
-import { AmountsVariantEditorRow } from './AmountsVariantEditorRow';
 import { DeleteVariantButton } from './DeleteVariantButton';
+import { DisplayContributionControl } from './DisplayContributionControl';
+import { DefaultContributionControl } from './DefaultContributionControl';
+import { AmountsCardRows } from './AmountsCardRows';
 
-import {
-  AmountsVariant,
-  ContributionType,
-  contributionIds,
-  AmountValuesObject,
-} from '../../utils/models';
+import { AmountsVariant, ContributionType } from '../../utils/models';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
@@ -168,96 +155,6 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
 
   const confirmDeletion = () => deleteVariant(variant);
 
-  const buildAmountsCardRows = () => {
-    return (
-      <div>
-        {contributionIds.map((k) => {
-          const cardData: AmountValuesObject = amountsCardData[k as ContributionType];
-          if (cardData != null) {
-            return (
-              <div key={`${variantName}_${k}_row`}>
-                <Divider />
-                <AmountsVariantEditorRow
-                  label={k as ContributionType}
-                  amounts={cardData.amounts}
-                  defaultAmount={cardData.defaultAmount}
-                  hideChooseYourAmount={cardData.hideChooseYourAmount}
-                  updateAmounts={updateAmounts}
-                  updateChooseAmount={updateChooseAmount}
-                  updateDefaultAmount={updateDefaultAmount}
-                />
-              </div>
-            );
-          } else {
-            return <></>;
-          }
-        })}
-      </div>
-    );
-  };
-
-  const buildDefaultContributionControl = () => {
-    return (
-      <FormControl className={classes.contributionControls}>
-        <FormLabel component="legend" id={`${variantName}_default_contribution_selector`}>
-          Default contributions type
-        </FormLabel>
-        <RadioGroup
-          aria-labelledby={`${variantName}_default_contribution_selector`}
-          name={`${variantName}_default_contribution_selector`}
-          value={currentContributionDefault}
-          onChange={(e) => updateDefaultContribution(e)}
-          row
-        >
-          {contributionIds.map((k) => {
-            return (
-              <FormControlLabel
-                key={`${variantName}_${k}`}
-                value={k}
-                control={<Radio />}
-                label={k}
-                disabled={!currentContributionDisplay.includes(k as ContributionType)}
-              />
-            );
-          })}
-        </RadioGroup>
-      </FormControl>
-    );
-  };
-
-  const buildDisplayContributionControl = () => {
-    return (
-      <FormControl
-        required
-        component="fieldset"
-        variant="standard"
-        className={classes.contributionControls}
-      >
-        <FormLabel component="legend" id={`${variantName}_display_contribution_selector`}>
-          Display contributions type
-        </FormLabel>
-        <FormGroup row aria-labelledby={`${variantName}_display_contribution_selector`}>
-          {contributionIds.map((k) => {
-            return (
-              <FormControlLabel
-                key={`${variantName}_${k}`}
-                control={
-                  <Checkbox
-                    checked={currentContributionDisplay.includes(k as ContributionType)}
-                    onChange={(e) => updateDisplayContribution(e)}
-                    name={k}
-                  />
-                }
-                label={k}
-                disabled={!isCountryTest}
-              />
-            );
-          })}
-        </FormGroup>
-      </FormControl>
-    );
-  };
-
   const checkIfVariantIsControl = () => {
     return 'CONTROL' === variantName.toUpperCase();
   };
@@ -270,9 +167,25 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
           <DeleteVariantButton variantName={variantName} confirmDeletion={confirmDeletion} />
         )}
       </div>
-      {buildDisplayContributionControl()}
-      {buildDefaultContributionControl()}
-      {buildAmountsCardRows()}
+      <DisplayContributionControl
+        variantName={variantName}
+        currentContributionDisplay={currentContributionDisplay}
+        updateDisplayContribution={updateDisplayContribution}
+        isCountryTest={isCountryTest}
+      />
+      <DefaultContributionControl
+        variantName={variantName}
+        currentContributionDefault={currentContributionDefault}
+        currentContributionDisplay={currentContributionDisplay}
+        updateDefaultContribution={updateDefaultContribution}
+      />
+      <AmountsCardRows
+        variantName={variantName}
+        amountsCardData={amountsCardData}
+        updateAmounts={updateAmounts}
+        updateChooseAmount={updateChooseAmount}
+        updateDefaultAmount={updateDefaultAmount}
+      />
     </div>
   );
 };

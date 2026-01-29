@@ -61,6 +61,7 @@ interface AmountsVariantEditorRowProps {
   updateAmounts: (label: ContributionType, val: number[]) => void;
   updateChooseAmount: (label: ContributionType, val: boolean) => void;
   updateDefaultAmount: (label: ContributionType, val: number) => void;
+  disabled?: boolean;
 }
 
 export const AmountsVariantEditorRow: React.FC<AmountsVariantEditorRowProps> = ({
@@ -71,6 +72,7 @@ export const AmountsVariantEditorRow: React.FC<AmountsVariantEditorRowProps> = (
   updateAmounts,
   updateChooseAmount,
   updateDefaultAmount,
+  disabled = false,
 }: AmountsVariantEditorRowProps) => {
   const classes = useStyles();
 
@@ -108,17 +110,18 @@ export const AmountsVariantEditorRow: React.FC<AmountsVariantEditorRowProps> = (
               isDefault={amount === defaultAmount}
               setAsDefault={() => setAmountAsDefault(amount)}
               deleteAmount={() => deleteAmount(amount)}
+              disabled={disabled}
             />
           ))}
         </div>
-        <AmountsVariantEditorRowInput amounts={amounts} addAmount={addAmount} />
+        <AmountsVariantEditorRowInput amounts={amounts} addAmount={addAmount} disabled={disabled} />
       </div>
       <div className={classes.otherAmountSwitchContainer}>
         <LiveSwitch
           label="Include CHOOSE button"
           isLive={!hideChooseYourAmount}
           onChange={() => updateChooseSwitch(!hideChooseYourAmount)}
-          isDisabled={false}
+          isDisabled={disabled}
         />
       </div>
     </div>
