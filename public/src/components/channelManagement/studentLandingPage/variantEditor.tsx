@@ -66,9 +66,6 @@ const getUseStyles = (shouldAddPadding: boolean) => {
     choiceCardContainer: {
       display: 'flex',
     },
-    deleteButton: {
-      margin: `${spacing(2)} 0 ${spacing(1)} ${spacing(1)}`,
-    },
   }));
   return useStyles;
 };
