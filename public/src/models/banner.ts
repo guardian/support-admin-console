@@ -59,4 +59,5 @@ export interface BannerTest extends Test {
   contextTargeting: PageContextTargeting;
   deploySchedule?: BannerTestDeploySchedule;
   frontsOnly?: boolean;
+  mParticleAudience?: number;
 }
