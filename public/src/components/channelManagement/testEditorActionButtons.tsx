@@ -43,7 +43,6 @@ interface TestEditorActionButtonsProps {
   existingNicknames: string[];
   sourceNickname?: string | void;
   testNamePrefix?: string;
-  channel: string;
   onArchive: () => void;
   onDelete: () => void;
   isDisabled: boolean;
@@ -56,7 +55,6 @@ const TestEditorActionButtons: React.FC<TestEditorActionButtonsProps> = ({
   existingNicknames,
   sourceNickname,
   testNamePrefix,
-  channel,
   onArchive,
   onDelete,
   isDisabled,
@@ -88,7 +86,7 @@ const TestEditorActionButtons: React.FC<TestEditorActionButtonsProps> = ({
           <DialogTitle id="delete-test-dialog-title">Are you sure?</DialogTitle>
           <DialogContent>
             <DialogContentText id="delete-test-dialog-description">
-              Deleting this test will remove it from the {channel} tool permanently.
+              Deleting this test will remove it from the RRCP permanently.
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -128,8 +126,8 @@ const TestEditorActionButtons: React.FC<TestEditorActionButtonsProps> = ({
           <DialogTitle id="archive-test-dialog-title">Are you sure?</DialogTitle>
           <DialogContent>
             <DialogContentText id="archive-test-dialog-description">
-              Archiving this test will remove it from the {channel} tool - you can only restore it
-              with an engineer&apos;s help.
+              Archiving this test will remove it from the RRCP - you can only restore it with an
+              engineer&apos;s help.
             </DialogContentText>
           </DialogContent>
           <DialogActions>

@@ -63,7 +63,7 @@ const SingleCheckoutTestEditor: React.FC<ValidatedTestEditorProps<SingleCheckout
   const getWebPreviewUrl = (variantName: string): string => {
     const stage = getStage();
     const supportHost = `https://support.${stage !== 'PROD' ? 'code.dev-' : ''}theguardian.com`;
-    return `${supportHost}/uk/one-time-checkout?force-single-checkout=${test.name}:${variantName}`;
+    return `${supportHost}/one-time-checkout?force-single-checkout=${test.name}:${variantName}`;
   };
 
   const renderVariantEditor = useCallback(
