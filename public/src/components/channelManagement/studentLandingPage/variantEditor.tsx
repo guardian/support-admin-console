@@ -7,9 +7,7 @@ import { RichTextEditorSingleLine } from '../richTextEditor/richTextEditor';
 import { noHtmlValidator } from '../helpers/validation';
 import { Typography } from '@mui/material';
 import PromoCodesEditor from '../../shared/PromoCodesEditor';
-// import ChoiceCardsEditor from '../choiceCards/ChoiceCardsEditor';
-// import { ChoiceCardsSettings } from '../../../models/choiceCards';
-// import useValidation from '../hooks/useValidation';
+
 import { AcademicInstitutionDetailEditor } from './academicInstitutionDetails';
 
 const RTEMenuConstraints = {
@@ -77,7 +75,6 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
   onValidationChange,
 }: StudentLandingPageVariantEditorProps) => {
   const classes = getUseStyles(false)();
-  // const setValidationStatusForField = useValidation(onValidationChange);
 
   const defaultValues: OfferFormData = {
     heading: variant.heading,
@@ -96,16 +93,6 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
   const updateInstitutionDetails = (institution: Institution): void => {
     onVariantChange((current) => ({ ...current, institution }));
   };
-
-  // const updateChoiceCardsSettings = (
-  //   showChoiceCards: boolean, // irrelevant here
-  //   choiceCardSettings: ChoiceCardsSettings | undefined,
-  // ): void => {
-  //   onVariantChange((current) => ({
-  //     ...current,
-  //     choiceCardSettings,
-  //   }));
-  // };
 
   const {
     handleSubmit,
@@ -239,18 +226,6 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
             isDisabled={!editMode}
           />
         </div>
-        {/* <div className={classes.choiceCardContainer}>
-          <ChoiceCardsEditor
-            showChoiceCards={true}
-            allowNoChoiceCards={false}
-            choiceCardsSettings={variant.choiceCardsSettings}
-            updateChoiceCardsSettings={updateChoiceCardsSettings}
-            isDisabled={!editMode}
-            onValidationChange={(isValid): void =>
-              setValidationStatusForField('choiceCardsSettings', isValid)
-            }
-          />
-        </div> */}
       </div>
     </div>
   );
