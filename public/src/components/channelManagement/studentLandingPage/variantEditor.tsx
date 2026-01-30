@@ -7,9 +7,10 @@ import { RichTextEditorSingleLine } from '../richTextEditor/richTextEditor';
 import { noHtmlValidator } from '../helpers/validation';
 import { Typography } from '@mui/material';
 import PromoCodesEditor from '../../shared/PromoCodesEditor';
-import ChoiceCardsEditor from '../choiceCards/ChoiceCardsEditor';
-import { ChoiceCardsSettings } from '../../../models/choiceCards';
-import useValidation from '../hooks/useValidation';
+// import ChoiceCardsEditor from '../choiceCards/ChoiceCardsEditor';
+// import { ChoiceCardsSettings } from '../../../models/choiceCards';
+// import useValidation from '../hooks/useValidation';
+import { AcademicInstitutionDetailEditor } from './academicInstitutionDetails';
 
 const RTEMenuConstraints = {
   noHtml: true,
@@ -67,7 +68,6 @@ interface StudentLandingPageVariantEditorProps {
 interface OfferFormData {
   heading: string;
   subheading: string;
-  institution: Institution;
 }
 
 export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
@@ -77,12 +77,11 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
   onValidationChange,
 }: StudentLandingPageVariantEditorProps) => {
   const classes = getUseStyles(false)();
-  const setValidationStatusForField = useValidation(onValidationChange);
+  // const setValidationStatusForField = useValidation(onValidationChange);
 
   const defaultValues: OfferFormData = {
     heading: variant.heading,
     subheading: variant.subheading,
-    institution: variant.institution,
   };
 
   const [validatedFields, setValidatedFields] = useState<OfferFormData>(defaultValues);
@@ -94,15 +93,19 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
     }));
   };
 
-  const updateChoiceCardsSettings = (
-    showChoiceCards: boolean, // irrelevant here
-    choiceCardSettings: ChoiceCardsSettings | undefined,
-  ): void => {
-    onVariantChange((current) => ({
-      ...current,
-      choiceCardSettings,
-    }));
+  const updateInstitutionDetails = (institution: Institution): void => {
+    onVariantChange((current) => ({ ...current, institution }));
   };
+
+  // const updateChoiceCardsSettings = (
+  //   showChoiceCards: boolean, // irrelevant here
+  //   choiceCardSettings: ChoiceCardsSettings | undefined,
+  // ): void => {
+  //   onVariantChange((current) => ({
+  //     ...current,
+  //     choiceCardSettings,
+  //   }));
+  // };
 
   const {
     handleSubmit,
@@ -129,13 +132,7 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
-  }, [
-    errors.heading,
-    errors.subheading,
-    errors.institution?.logoUrl,
-    errors.institution?.acronym,
-    errors.institution?.name,
-  ]);
+  }, [errors.heading, errors.subheading]);
 
   const isValidField = (field: string, fieldName: string, maxLength: number) => {
     const messages = [];
@@ -147,7 +144,7 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
       messages.push(`${htmlValidation} `);
     }
     if (field.length > maxLength) {
-      messages.push(`The headline must not exceed ${maxLength} characters (including spaces) `);
+      messages.push(`The ${fieldName} must not exceed ${maxLength} characters (including spaces) `);
     }
     if (field.includes('???')) {
       messages.push(
@@ -170,118 +167,14 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
     return isValidField(field, 'subheading', SUBHEADING_MAX_LENGTH);
   };
 
-  const ACRONYM_MAX_LENGTH = 4;
-  const isValidAcronym = (field: string) => {
-    return isValidField(field, 'acronym', ACRONYM_MAX_LENGTH);
-  };
-
-  const INSTITUTION_MAX_LENGTH = 150;
-  const isValidInstitutionName = (field: string) => {
-    return isValidField(field, 'name', INSTITUTION_MAX_LENGTH);
-  };
-
-  const LOGO_URL_MAX_LENGTH = 150;
-  const isValidInstitutionUrl = (field: string) => {
-    return isValidField(field, 'logoUrl', LOGO_URL_MAX_LENGTH);
-  };
-
   return (
     <div className={classes.container}>
-      <div className={classes.container}>
-        <Typography variant={'h4'} className={classes.sectionHeader}>
-          Institution Details
-        </Typography>
-
-        <div className={classes.container}>
-          <Controller
-            name="institution.name"
-            control={control}
-            rules={{
-              validate: isValidInstitutionName,
-            }}
-            render={({ field }) => {
-              return (
-                <RichTextEditorSingleLine
-                  error={errors.institution?.name !== undefined}
-                  helperText={
-                    errors.institution?.name
-                      ? errors.institution?.name.message || errors.institution?.name.type
-                      : ''
-                  }
-                  copyData={field.value}
-                  updateCopy={(value) => {
-                    field.onChange(value);
-                    handleSubmit(setValidatedFields)();
-                  }}
-                  name="institution.name"
-                  label="Full name of Institution"
-                  disabled={!editMode}
-                  rteMenuConstraints={RTEMenuConstraints}
-                />
-              );
-            }}
-          />
-
-          <Controller
-            name="institution.acronym"
-            control={control}
-            rules={{
-              validate: isValidAcronym,
-            }}
-            render={({ field }) => {
-              return (
-                <RichTextEditorSingleLine
-                  error={errors.institution?.acronym !== undefined}
-                  helperText={
-                    errors.institution?.acronym
-                      ? errors.institution?.acronym.message || errors.institution?.acronym.type
-                      : ''
-                  }
-                  copyData={field.value}
-                  updateCopy={(value) => {
-                    field.onChange(value);
-                    handleSubmit(setValidatedFields)();
-                  }}
-                  name="acronym"
-                  label="Acronym of Institution"
-                  disabled={!editMode}
-                  rteMenuConstraints={RTEMenuConstraints}
-                />
-              );
-            }}
-          />
-
-          <Controller
-            name="institution.logoUrl"
-            control={control}
-            rules={{
-              validate: isValidInstitutionUrl,
-            }}
-            render={({ field }) => {
-              return (
-                <RichTextEditorSingleLine
-                  error={errors.institution?.logoUrl !== undefined}
-                  helperText={
-                    errors.institution?.logoUrl
-                      ? errors.institution?.logoUrl.message || errors.institution?.logoUrl.type
-                      : ''
-                  }
-                  copyData={field.value}
-                  updateCopy={(value) => {
-                    field.onChange(value);
-                    handleSubmit(setValidatedFields)();
-                  }}
-                  name="logoUrl"
-                  label="URL for logo of Institution"
-                  disabled={!editMode}
-                  rteMenuConstraints={RTEMenuConstraints}
-                />
-              );
-            }}
-          />
-        </div>
-      </div>
-
+      <AcademicInstitutionDetailEditor
+        variant={variant}
+        editMode={editMode}
+        updateInstitutionDetails={updateInstitutionDetails}
+        onValidationChange={onValidationChange}
+      />
       <div className={classes.container}>
         <Typography variant={'h4'} className={classes.sectionHeader}>
           Copy
@@ -346,7 +239,7 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
             isDisabled={!editMode}
           />
         </div>
-        <div className={classes.choiceCardContainer}>
+        {/* <div className={classes.choiceCardContainer}>
           <ChoiceCardsEditor
             showChoiceCards={true}
             allowNoChoiceCards={false}
@@ -357,7 +250,7 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
               setValidationStatusForField('choiceCardsSettings', isValid)
             }
           />
-        </div>
+        </div> */}
       </div>
     </div>
   );
