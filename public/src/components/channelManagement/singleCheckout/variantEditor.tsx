@@ -2,6 +2,8 @@ import React from 'react';
 import { AmountsSection } from './AmountsSection';
 import { SingleCheckoutVariant } from '../../../models/singleCheckout';
 import { CopyEditor } from '../../shared/copyEditor';
+import TickerEditor from '../tickerEditor';
+import { TickerSettings } from '../helpers/shared';
 
 interface VariantEditorProps {
   variant: SingleCheckoutVariant;
@@ -32,6 +34,14 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
         editMode={editMode}
       />
       <AmountsSection variant={variant} onVariantChange={onVariantChange} editMode={editMode} />
+      <TickerEditor
+        tickerSettings={variant.tickerSettings}
+        updateTickerSettings={(updatedTickerSettings?: TickerSettings): void => {
+          onVariantChange((current) => ({ ...current, tickerSettings: updatedTickerSettings }));
+        }}
+        isDisabled={!editMode}
+        onValidationChange={onValidationChange}
+      />
     </div>
   );
 };
