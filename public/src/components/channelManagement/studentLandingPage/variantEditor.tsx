@@ -23,21 +23,6 @@ const RTEMenuConstraints = {
   noCampaignDeadlineTemplate: true,
 };
 
-interface OfferFormData {
-  heading: string;
-  subheading: string;
-  institution: Institution;
-}
-
-interface StudentLandingPageVariantEditorProps {
-  variant: StudentLandingPageVariant;
-  editMode: boolean;
-  onVariantChange: (
-    update: (current: StudentLandingPageVariant) => StudentLandingPageVariant,
-  ) => void;
-  onValidationChange: (isValid: boolean) => void;
-}
-
 const getUseStyles = (shouldAddPadding: boolean) => {
   const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
     container: {
@@ -69,6 +54,21 @@ const getUseStyles = (shouldAddPadding: boolean) => {
   }));
   return useStyles;
 };
+
+interface StudentLandingPageVariantEditorProps {
+  variant: StudentLandingPageVariant;
+  editMode: boolean;
+  onVariantChange: (
+    update: (current: StudentLandingPageVariant) => StudentLandingPageVariant,
+  ) => void;
+  onValidationChange: (isValid: boolean) => void;
+}
+
+interface OfferFormData {
+  heading: string;
+  subheading: string;
+  institution: Institution;
+}
 
 export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
   variant,
