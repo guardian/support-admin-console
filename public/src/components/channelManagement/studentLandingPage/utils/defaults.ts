@@ -1,4 +1,3 @@
-import { ChoiceCardsSettings } from '../../../../models/choiceCards';
 import {
   StudentLandingPageTest,
   StudentLandingPageVariant,
@@ -29,27 +28,9 @@ export const getDefaultTest = (): StudentLandingPageTest => {
 
 export const getDefaultInstitution = () => {
   return {
-    acronym: 'UTS',
+    acronym: '',
     name: '',
     logoUrl: '',
-  };
-};
-
-export const getDefaultChoiceCardSetting = (): ChoiceCardsSettings => {
-  return {
-    choiceCards: [
-      {
-        product: { supportTier: 'DigitalSubscription', ratePlan: 'Monthly' },
-        label: 'Label',
-        benefitsLabel: 'Benefits Label', // e.g. "Unlock All-access digital benefits:"
-        benefits: [{ copy: 'Benefit 1' }],
-        pill: {
-          copy: 'pill copy', // e.g. "Recommended", will be overridden if a promo applies
-        },
-        isDefault: true,
-        destination: 'Checkout',
-      },
-    ],
   };
 };
 
@@ -61,6 +42,5 @@ export const getDefaultVariant = (): StudentLandingPageVariant => {
       'For a limited time, students with a valid ??? email address can unlock the premium experience of Guardian journalism, including unmetered app access, free for two years.',
     institution: getDefaultInstitution(),
     promoCodes: [],
-    choiceCardsSettings: getDefaultChoiceCardSetting(),
   };
 };
