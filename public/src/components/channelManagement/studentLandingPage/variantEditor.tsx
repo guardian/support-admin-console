@@ -22,37 +22,34 @@ const RTEMenuConstraints = {
   noCampaignDeadlineTemplate: true,
 };
 
-const getUseStyles = (shouldAddPadding: boolean) => {
-  const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
-    container: {
-      width: '98%',
-      paddingTop: shouldAddPadding ? spacing(2) : 0,
-      paddingLeft: shouldAddPadding ? spacing(4) : 0,
-      paddingRight: shouldAddPadding ? spacing(10) : 0,
+const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
+  container: (props: { shouldAddPadding: boolean }) => ({
+    width: '98%',
+    paddingTop: props.shouldAddPadding ? spacing(2) : 0,
+    paddingLeft: props.shouldAddPadding ? spacing(4) : 0,
+    paddingRight: props.shouldAddPadding ? spacing(10) : 0,
 
-      '& > * + *': {
-        marginTop: spacing(1),
-      },
+    '& > * + *': {
+      marginTop: spacing(1),
     },
-    sectionHeader: {
-      fontSize: 16,
-      color: palette.grey[900],
-      fontWeight: 500,
-    },
-    sectionContainer: {
-      paddingTop: spacing(1),
-      paddingBottom: spacing(2),
+  }),
+  sectionHeader: {
+    fontSize: 16,
+    color: palette.grey[900],
+    fontWeight: 500,
+  },
+  sectionContainer: {
+    paddingTop: spacing(1),
+    paddingBottom: spacing(2),
 
-      '& > * + *': {
-        marginTop: spacing(3),
-      },
+    '& > * + *': {
+      marginTop: spacing(3),
     },
-    choiceCardContainer: {
-      display: 'flex',
-    },
-  }));
-  return useStyles;
-};
+  },
+  choiceCardContainer: {
+    display: 'flex',
+  },
+}));
 
 interface StudentLandingPageVariantEditorProps {
   variant: StudentLandingPageVariant;
@@ -74,7 +71,7 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
   onVariantChange,
   onValidationChange,
 }: StudentLandingPageVariantEditorProps) => {
-  const classes = getUseStyles(false)();
+  const classes = useStyles({ shouldAddPadding: false });
 
   const defaultValues: OfferFormData = {
     heading: variant.heading,
