@@ -1,8 +1,10 @@
-import { SupportLandingPageCopy } from '../../../models/supportLandingPage';
 import React, { useEffect, useState } from 'react';
-import { copyLengthValidator, templateValidatorForPlatform } from '../helpers/validation';
+import {
+  copyLengthValidator,
+  templateValidatorForPlatform,
+} from '../channelManagement/helpers/validation';
 import { Controller, useForm } from 'react-hook-form';
-import { RichTextEditorSingleLine } from '../richTextEditor/richTextEditor';
+import { RichTextEditorSingleLine } from '../channelManagement/richTextEditor/richTextEditor';
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material';
 
@@ -12,9 +14,14 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   },
 }));
 
+interface Copy {
+  heading: string;
+  subheading: string;
+}
+
 interface CopyEditorProps {
-  copy: SupportLandingPageCopy;
-  onChange: (updatedCopy: SupportLandingPageCopy) => void;
+  copy: Copy;
+  onChange: (updatedCopy: Copy) => void;
   onValidationChange?: (isValid: boolean) => void;
   editMode: boolean;
 }
