@@ -14,6 +14,7 @@ interface AmountsVariantEditorRowAmountPrefs {
   isDefault: boolean;
   setAsDefault: () => void;
   deleteAmount: () => void;
+  disabled?: boolean;
 }
 
 export const AmountsVariantEditorRowAmount: React.FC<AmountsVariantEditorRowAmountPrefs> = ({
@@ -21,6 +22,7 @@ export const AmountsVariantEditorRowAmount: React.FC<AmountsVariantEditorRowAmou
   isDefault,
   setAsDefault,
   deleteAmount,
+  disabled = false,
 }: AmountsVariantEditorRowAmountPrefs) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -53,6 +55,7 @@ export const AmountsVariantEditorRowAmount: React.FC<AmountsVariantEditorRowAmou
         variant="outlined"
         disableElevation
         className={isDefault ? classes.default : ''}
+        disabled={disabled}
       >
         {amount}
       </Button>

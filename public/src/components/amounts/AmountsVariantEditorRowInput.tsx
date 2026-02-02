@@ -15,11 +15,13 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 interface AmountsVariantEditorRowInputProps {
   amounts: number[];
   addAmount: (amount: number) => void;
+  disabled?: boolean;
 }
 
 export const AmountsVariantEditorRowInput: React.FC<AmountsVariantEditorRowInputProps> = ({
   amounts,
   addAmount,
+  disabled = false,
 }: AmountsVariantEditorRowInputProps) => {
   const [currentValue, setCurrentValue] = useState<number | undefined>();
   const [currentError, setCurrentError] = useState('');
@@ -63,8 +65,9 @@ export const AmountsVariantEditorRowInput: React.FC<AmountsVariantEditorRowInput
         onChange={checkInput}
         fullWidth={false}
         type="number"
+        disabled={disabled}
       />
-      <Button className={classes.button} onClick={onSubmit} variant="outlined">
+      <Button className={classes.button} onClick={onSubmit} variant="outlined" disabled={disabled}>
         +
       </Button>
     </div>
