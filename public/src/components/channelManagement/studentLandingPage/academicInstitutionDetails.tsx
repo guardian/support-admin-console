@@ -7,16 +7,16 @@ import { TextField, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
-  container: (props: { shouldAddPadding: boolean }) => ({
+  container: {
     width: '98%',
-    paddingTop: props.shouldAddPadding ? spacing(2) : 0,
-    paddingLeft: props.shouldAddPadding ? spacing(4) : 0,
-    paddingRight: props.shouldAddPadding ? spacing(10) : 0,
+    paddingTop: 0,
+    paddingLeft: 0,
+    paddingRight: 0,
 
     '& > * + *': {
       marginTop: spacing(1),
     },
-  }),
+  },
   sectionHeader: {
     fontSize: 16,
     color: palette.grey[900],
@@ -54,7 +54,7 @@ export const AcademicInstitutionDetailEditor: React.FC<AcademicInstituteDetailEd
   updateInstitutionDetails,
   onValidationChange,
 }) => {
-  const classes = useStyles({ shouldAddPadding: false });
+  const classes = useStyles();
 
   const defaultValues: FormData = {
     acronym: variant.institution.acronym,
