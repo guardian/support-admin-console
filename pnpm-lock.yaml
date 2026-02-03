@@ -37,7 +37,7 @@ importers:
         version: 3.0.3(@remirror/pm@3.0.1)(@types/node@25.0.3)(@types/react-dom@18.3.7(@types/react@17.0.90))(@types/react@17.0.90)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@remirror/react-ui':
         specifier: ^1.0.1
-        version: 1.0.3(@remirror/pm@3.0.1)(@types/node@25.0.3)(@types/react-dom@18.3.7(@types/react@17.0.90))(@types/react@17.0.90)(prettier@3.7.4)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 1.0.3(@remirror/pm@3.0.1)(@types/node@25.0.3)(@types/react-dom@18.3.7(@types/react@17.0.90))(@types/react@17.0.90)(prettier@3.8.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@types/lodash':
         specifier: ^4.17.23
         version: 4.17.23
@@ -79,7 +79,7 @@ importers:
         version: 3.6.0(@types/react@17.0.90)(react-dom@18.3.1(react@18.3.1))(react-is@19.2.4)(react@18.3.1)(redux@5.0.1)
       remirror:
         specifier: ^3.0.1
-        version: 3.0.3(@remirror/pm@3.0.1)(@types/node@25.0.3)(prettier@3.7.4)
+        version: 3.0.3(@remirror/pm@3.0.1)(@types/node@25.0.3)(prettier@3.8.1)
       uuid:
         specifier: ^13.0.0
         version: 13.0.0
@@ -116,7 +116,7 @@ importers:
         version: 10.1.8(eslint@8.57.1)
       eslint-plugin-prettier:
         specifier: ^5.5.5
-        version: 5.5.5(@types/eslint@9.6.1)(eslint-config-prettier@10.1.8(eslint@8.57.1))(eslint@8.57.1)(prettier@3.7.4)
+        version: 5.5.5(@types/eslint@9.6.1)(eslint-config-prettier@10.1.8(eslint@8.57.1))(eslint@8.57.1)(prettier@3.8.1)
       eslint-plugin-react:
         specifier: ^7.37.2
         version: 7.37.5(eslint@8.57.1)
@@ -127,8 +127,8 @@ importers:
         specifier: 4.8.2
         version: 4.8.2
       prettier:
-        specifier: ^3.7.4
-        version: 3.7.4
+        specifier: ^3.8.1
+        version: 3.8.1
       style-loader:
         specifier: ^4.0.0
         version: 4.0.0(webpack@5.104.1)
@@ -3791,8 +3791,8 @@ packages:
     resolution: {integrity: sha512-SxToR7P8Y2lWmv/kTzVLC1t/GDI2WGjMwNhLLE9qtH8Q13C+aEmuRlzDst4Up4s0Wc8sF2M+J57iB3cMLqftfg==}
     engines: {node: '>=6.0.0'}
 
-  prettier@3.7.4:
-    resolution: {integrity: sha512-v6UNi1+3hSlVvv8fSaoUbggEM5VErKmmpGA7Pl3HF8V6uKY7rvClBOJlH6yNwQtfTueNkGVpOv/mtWL9L4bgRA==}
+  prettier@3.8.1:
+    resolution: {integrity: sha512-UOnG6LftzbdaHZcKoPFtOcCKztrQ57WkHDeRD9t/PTQtmT0NHSeWWepj6pS0z/N7+08BHFDQVUrfmfMRcZwbMg==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -5887,7 +5887,7 @@ snapshots:
       - jsdom
       - supports-color
 
-  '@remirror/extension-code-block@3.0.2(@remirror/pm@3.0.1)(@types/node@25.0.3)(prettier@3.7.4)':
+  '@remirror/extension-code-block@3.0.2(@remirror/pm@3.0.1)(@types/node@25.0.3)(prettier@3.8.1)':
     dependencies:
       '@babel/runtime': 7.28.6
       '@remirror/core': 3.0.2(@remirror/pm@3.0.1)(@types/node@25.0.3)
@@ -5898,7 +5898,7 @@ snapshots:
       '@types/refractor': 3.4.1
       refractor: 3.6.0
     optionalDependencies:
-      prettier: 3.7.4
+      prettier: 3.8.1
     transitivePeerDependencies:
       - '@types/node'
       - jsdom
@@ -6485,7 +6485,7 @@ snapshots:
       - jsdom
       - supports-color
 
-  '@remirror/preset-wysiwyg@3.0.2(@remirror/pm@3.0.1)(@types/node@25.0.3)(prettier@3.7.4)':
+  '@remirror/preset-wysiwyg@3.0.2(@remirror/pm@3.0.1)(@types/node@25.0.3)(prettier@3.8.1)':
     dependencies:
       '@babel/runtime': 7.28.6
       '@remirror/core': 3.0.2(@remirror/pm@3.0.1)(@types/node@25.0.3)
@@ -6493,7 +6493,7 @@ snapshots:
       '@remirror/extension-blockquote': 3.0.2(@remirror/pm@3.0.1)(@types/node@25.0.3)
       '@remirror/extension-bold': 3.0.2(@remirror/pm@3.0.1)(@types/node@25.0.3)
       '@remirror/extension-code': 3.0.2(@remirror/pm@3.0.1)(@types/node@25.0.3)
-      '@remirror/extension-code-block': 3.0.2(@remirror/pm@3.0.1)(@types/node@25.0.3)(prettier@3.7.4)
+      '@remirror/extension-code-block': 3.0.2(@remirror/pm@3.0.1)(@types/node@25.0.3)(prettier@3.8.1)
       '@remirror/extension-drop-cursor': 3.0.2(@remirror/pm@3.0.1)(@types/node@25.0.3)
       '@remirror/extension-embed': 3.0.2(@remirror/pm@3.0.1)(@types/node@25.0.3)
       '@remirror/extension-find': 1.0.2(@remirror/pm@3.0.1)(@types/node@25.0.3)
@@ -6612,7 +6612,7 @@ snapshots:
       - '@types/node'
       - jsdom
 
-  '@remirror/react-ui@1.0.3(@remirror/pm@3.0.1)(@types/node@25.0.3)(@types/react-dom@18.3.7(@types/react@17.0.90))(@types/react@17.0.90)(prettier@3.7.4)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@remirror/react-ui@1.0.3(@remirror/pm@3.0.1)(@types/node@25.0.3)(@types/react-dom@18.3.7(@types/react@17.0.90))(@types/react@17.0.90)(prettier@3.8.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@babel/runtime': 7.28.4
       '@emotion/react': 11.14.0(@types/react@17.0.90)(react@18.3.1)
@@ -6624,7 +6624,7 @@ snapshots:
       '@remirror/extension-bold': 3.0.2(@remirror/pm@3.0.1)(@types/node@25.0.3)
       '@remirror/extension-callout': 3.0.2(@remirror/pm@3.0.1)(@types/node@25.0.3)
       '@remirror/extension-code': 3.0.2(@remirror/pm@3.0.1)(@types/node@25.0.3)
-      '@remirror/extension-code-block': 3.0.2(@remirror/pm@3.0.1)(@types/node@25.0.3)(prettier@3.7.4)
+      '@remirror/extension-code-block': 3.0.2(@remirror/pm@3.0.1)(@types/node@25.0.3)(prettier@3.8.1)
       '@remirror/extension-columns': 3.0.2(@remirror/pm@3.0.1)(@types/node@25.0.3)
       '@remirror/extension-find': 1.0.2(@remirror/pm@3.0.1)(@types/node@25.0.3)
       '@remirror/extension-font-size': 3.0.2(@remirror/pm@3.0.1)(@types/node@25.0.3)
@@ -8007,10 +8007,10 @@ snapshots:
     dependencies:
       eslint: 8.57.1
 
-  eslint-plugin-prettier@5.5.5(@types/eslint@9.6.1)(eslint-config-prettier@10.1.8(eslint@8.57.1))(eslint@8.57.1)(prettier@3.7.4):
+  eslint-plugin-prettier@5.5.5(@types/eslint@9.6.1)(eslint-config-prettier@10.1.8(eslint@8.57.1))(eslint@8.57.1)(prettier@3.8.1):
     dependencies:
       eslint: 8.57.1
-      prettier: 3.7.4
+      prettier: 3.8.1
       prettier-linter-helpers: 1.0.1
       synckit: 0.11.12
     optionalDependencies:
@@ -9539,7 +9539,7 @@ snapshots:
     dependencies:
       fast-diff: 1.3.0
 
-  prettier@3.7.4: {}
+  prettier@3.8.1: {}
 
   pretty-format@30.2.0:
     dependencies:
@@ -9865,7 +9865,7 @@ snapshots:
       gopd: 1.2.0
       set-function-name: 2.0.2
 
-  remirror@3.0.3(@remirror/pm@3.0.1)(@types/node@25.0.3)(prettier@3.7.4):
+  remirror@3.0.3(@remirror/pm@3.0.1)(@types/node@25.0.3)(prettier@3.8.1):
     dependencies:
       '@babel/runtime': 7.28.4
       '@remirror/core': 3.0.2(@remirror/pm@3.0.1)(@types/node@25.0.3)
@@ -9880,7 +9880,7 @@ snapshots:
       '@remirror/extension-bold': 3.0.2(@remirror/pm@3.0.1)(@types/node@25.0.3)
       '@remirror/extension-callout': 3.0.2(@remirror/pm@3.0.1)(@types/node@25.0.3)
       '@remirror/extension-code': 3.0.2(@remirror/pm@3.0.1)(@types/node@25.0.3)
-      '@remirror/extension-code-block': 3.0.2(@remirror/pm@3.0.1)(@types/node@25.0.3)(prettier@3.7.4)
+      '@remirror/extension-code-block': 3.0.2(@remirror/pm@3.0.1)(@types/node@25.0.3)(prettier@3.8.1)
       '@remirror/extension-collaboration': 3.0.2(@remirror/pm@3.0.1)(@types/node@25.0.3)
       '@remirror/extension-columns': 3.0.2(@remirror/pm@3.0.1)(@types/node@25.0.3)
       '@remirror/extension-diff': 3.0.2(@remirror/pm@3.0.1)(@types/node@25.0.3)
@@ -9926,12 +9926,12 @@ snapshots:
       '@remirror/pm': 3.0.1
       '@remirror/preset-core': 3.0.2(@remirror/pm@3.0.1)(@types/node@25.0.3)
       '@remirror/preset-formatting': 3.0.2(@remirror/pm@3.0.1)(@types/node@25.0.3)
-      '@remirror/preset-wysiwyg': 3.0.2(@remirror/pm@3.0.1)(@types/node@25.0.3)(prettier@3.7.4)
+      '@remirror/preset-wysiwyg': 3.0.2(@remirror/pm@3.0.1)(@types/node@25.0.3)(prettier@3.8.1)
       '@remirror/theme': 3.0.0(@remirror/pm@3.0.1)
       '@types/refractor': 3.4.1
       refractor: 3.6.0
     optionalDependencies:
-      prettier: 3.7.4
+      prettier: 3.8.1
     transitivePeerDependencies:
       - '@remirror/extension-react-tables'
       - '@types/node'
