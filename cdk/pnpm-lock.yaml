@@ -10,7 +10,7 @@ overrides:
 devDependencies:
   '@guardian/cdk':
     specifier: 62.3.0
-    version: 62.3.0(aws-cdk-lib@2.232.1)(aws-cdk@2.1033.0)(constructs@10.4.4)
+    version: 62.3.0(aws-cdk-lib@2.232.1)(aws-cdk@2.1033.0)(constructs@10.4.5)
   '@guardian/eslint-config-typescript':
     specifier: 10.0.1
     version: 10.0.1(eslint@8.56.0)(tslib@2.8.1)(typescript@5.3.3)
@@ -25,10 +25,10 @@ devDependencies:
     version: 2.1033.0
   aws-cdk-lib:
     specifier: 2.232.1
-    version: 2.232.1(constructs@10.4.4)
+    version: 2.232.1(constructs@10.4.5)
   constructs:
-    specifier: 10.4.4
-    version: 10.4.4
+    specifier: 10.4.5
+    version: 10.4.5
   eslint:
     specifier: 8.56.0
     version: 8.56.0
@@ -1067,7 +1067,7 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
-  /@guardian/cdk@62.3.0(aws-cdk-lib@2.232.1)(aws-cdk@2.1033.0)(constructs@10.4.4):
+  /@guardian/cdk@62.3.0(aws-cdk-lib@2.232.1)(aws-cdk@2.1033.0)(constructs@10.4.5):
     resolution: {integrity: sha512-7nkl1RtCeswg8fnahl5sLplN1LnEByU7GFLS+ERSMxHzYOb63ki7gHmKrLv/bNFmLfpxwKQIiwuay9025dw/4w==}
     hasBin: true
     peerDependencies:
@@ -1080,10 +1080,10 @@ packages:
       '@aws-sdk/credential-providers': 3.971.0
       '@oclif/core': 3.26.6
       aws-cdk: 2.1033.0
-      aws-cdk-lib: 2.232.1(constructs@10.4.4)
+      aws-cdk-lib: 2.232.1(constructs@10.4.5)
       chalk: 4.1.2
       codemaker: 1.125.0
-      constructs: 10.4.4
+      constructs: 10.4.5
       git-url-parse: 16.0.1
       js-yaml: 4.1.1
       read-pkg-up: 7.0.1
@@ -2526,7 +2526,7 @@ packages:
       possible-typed-array-names: 1.1.0
     dev: true
 
-  /aws-cdk-lib@2.232.1(constructs@10.4.4):
+  /aws-cdk-lib@2.232.1(constructs@10.4.5):
     resolution: {integrity: sha512-F1vNcpWBo85pSxa0DJ5DO4k7Ok4vVp0vh1cFO4Y12LLX07ixOcnJn/6B97/XVC0fgZNvzPx/sYgioEd0u8oKkQ==}
     engines: {node: '>= 18.0.0'}
     peerDependencies:
@@ -2535,7 +2535,7 @@ packages:
       '@aws-cdk/asset-awscli-v1': 2.2.242
       '@aws-cdk/asset-node-proxy-agent-v6': 2.1.0
       '@aws-cdk/cloud-assembly-schema': 48.20.0
-      constructs: 10.4.4
+      constructs: 10.4.5
     dev: true
     bundledDependencies:
       - '@balena/dockerignore'
@@ -2838,8 +2838,8 @@ packages:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
     dev: true
 
-  /constructs@10.4.4:
-    resolution: {integrity: sha512-lP0qC1oViYf1cutHo9/KQ8QL637f/W29tDmv/6sy35F5zs+MD9f66nbAAIjicwc7fwyuF3rkg6PhZh4sfvWIpA==}
+  /constructs@10.4.5:
+    resolution: {integrity: sha512-fOoP70YLevMZr5avJHx2DU3LNYmC6wM8OwdrNewMZou1kZnPGOeVzBrRjZNgFDHUlulYUjkpFRSpTE3D+n+ZSg==}
     dev: true
 
   /convert-source-map@2.0.0:
