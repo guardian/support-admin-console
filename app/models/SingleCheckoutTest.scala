@@ -12,7 +12,7 @@ case class SingleCheckoutVariant(
     heading: String,
     subheading: String,
     amounts: AmountValuesObject,
-    tickerSettings: Option[TickerSettings] = None,
+    tickerSettings: Option[TickerSettings] = None
 )
 
 case class SingleCheckoutTest(
