@@ -39,8 +39,8 @@ importers:
         specifier: ^1.0.1
         version: 1.0.3(@remirror/pm@3.0.1)(@types/node@25.0.3)(@types/react-dom@18.3.7(@types/react@17.0.90))(@types/react@17.0.90)(prettier@3.7.4)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@types/lodash':
-        specifier: ^4.14.176
-        version: 4.17.21
+        specifier: ^4.17.23
+        version: 4.17.23
       date-fns:
         specifier: ^4.1.0
         version: 4.1.0
@@ -1434,8 +1434,8 @@ packages:
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
-  '@types/lodash@4.17.21':
-    resolution: {integrity: sha512-FOvQ0YPD5NOfPgMzJihoT+Za5pdkDJWcbpuj1DjaKZIr/gxodQjY/uWEFlTNqW2ugXHUiL8lRQgw63dzKHZdeQ==}
+  '@types/lodash@4.17.23':
+    resolution: {integrity: sha512-RDvF6wTulMPjrNdCoYRC8gNR880JNGT8uB+REUpC2Ns4pRqQJhGz90wh7rgdXDPpCczF3VGktDuFGVnz8zP7HA==}
 
   '@types/marked@4.3.2':
     resolution: {integrity: sha512-a79Yc3TOk6dGdituy8hmTTJXjOkZ7zsFYV10L337ttq/rec8lRMDBpV7fL3uLx6TgbFCa5DU/h8FmIBQPSbU0w==}
@@ -6882,7 +6882,7 @@ snapshots:
 
   '@types/json-schema@7.0.15': {}
 
-  '@types/lodash@4.17.21': {}
+  '@types/lodash@4.17.23': {}
 
   '@types/marked@4.3.2': {}
 
