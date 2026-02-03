@@ -5,7 +5,7 @@ import {
   SupportLandingPageCopy,
   SupportLandingPageVariant,
 } from '../../../models/supportLandingPage';
-import { CopyEditor } from './copyEditor';
+import { CopyEditor } from '../../shared/copyEditor';
 import { ProductsEditor } from './productsEditor';
 import DefaultProductSelector from './defaultProductSelector';
 import { CountdownSettings, TickerSettings } from '../helpers/shared';

@@ -18,7 +18,15 @@ export interface StudentLandingPageTest extends Test {
   variants: StudentLandingPageVariant[];
   contextTargeting: PageContextTargeting;
 }
+
+export interface Institution {
+  acronym: string;
+  name: string;
+  logoUrl: string;
+}
 export interface StudentLandingPageVariant extends Variant {
   heading: string;
   subheading: string;
+  institution: Institution;
+  promoCodes: string[];
 }

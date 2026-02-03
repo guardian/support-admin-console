@@ -6,10 +6,17 @@ import io.circe.generic.extras.semiauto._
 import io.circe.generic.extras.Configuration
 import models.Methodology.defaultMethodologies
 
+case class Institution(
+    acronym: String,
+    name: String,
+    logoUrl: String
+)
 case class StudentLandingPageVariant(
     name: String,
     heading: String,
-    subheading: String
+    subheading: String,
+    institution: Institution,
+    promoCodes: List[String],
 )
 
 case class StudentLandingPageTest(

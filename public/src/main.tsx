@@ -46,6 +46,7 @@ import PromoEditorPage from './components/promoTool/promoEditorPage';
 import Bookmarklets from './components/bookmarklets/Bookmarklets';
 import AccessManagement from './components/accessManagement/AccessManagement';
 import { StudentLandingPageTestsForm } from './components/channelManagement/studentLandingPage/studentLandingPage';
+import { SingleCheckoutTestsForm } from './components/channelManagement/singleCheckout/singleCheckout';
 
 declare module '@mui/styles' {
   // https://mui.com/material-ui/migration/v5-style-changes/#%E2%9C%85-add-module-augmentation-for-defaulttheme-typescript
@@ -249,6 +250,10 @@ const AppRouter = () => {
           <Route
             path="/access-management"
             element={createComponent(<AccessManagement />, 'Access Management')}
+          />
+          <Route
+            path="/single-checkout-tests/:testName?"
+            element={createComponent(<SingleCheckoutTestsForm />, 'Single Checkout Tests')}
           />
         </Routes>
       </div>

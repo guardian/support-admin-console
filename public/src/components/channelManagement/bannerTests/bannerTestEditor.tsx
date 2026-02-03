@@ -190,6 +190,10 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
     }));
   };
 
+  const onMParticleAudienceChange = (mParticleAudience?: number): void => {
+    onTestChange((current) => ({ ...current, mParticleAudience }));
+  };
+
   const renderVariantEditor = (variant: BannerVariant): React.ReactElement => (
     <VariantEditor
       key={`banner-${test.name}-${variant.name}`}
@@ -341,6 +345,10 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
             selectedConsentStatus={test.consentStatus}
             onConsentStatusChange={onConsentStatusChange}
             showConsentStatusSelector={true}
+            mParticleAudienceEditor={{
+              mParticleAudience: test.mParticleAudience,
+              onMParticleAudienceChange: onMParticleAudienceChange,
+            }}
           />
         </div>
 

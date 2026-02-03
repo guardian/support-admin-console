@@ -44,6 +44,7 @@ object ChannelTest {
         case SupportLandingPage => SupportLandingPageTest.landingPageTestDecoder(c)
         case CheckoutNudge      => CheckoutNudgeTest.checkoutNudgeTestDecoder(c)
         case StudentLandingPage => StudentLandingPageTest.studentLandingPageTestDecoder(c)
+        case SingleCheckout     => SingleCheckoutTest.SingleCheckoutTestDecoder(c)
         case epic               => EpicTest.epicTestDecoder(c)
       }
     }
@@ -58,7 +59,8 @@ object ChannelTest {
       case checkoutNudge: CheckoutNudgeTest           => CheckoutNudgeTest.checkoutNudgeTestEncoder(checkoutNudge)
       case studentLandingPage: StudentLandingPageTest =>
         StudentLandingPageTest.studentLandingPageTestEncoder(studentLandingPage)
-      case epic: EpicTest => EpicTest.epicTestEncoder(epic)
+      case singleCheckout: SingleCheckoutTest => SingleCheckoutTest.SingleCheckoutTestEncoder(singleCheckout)
+      case epic: EpicTest                     => EpicTest.epicTestEncoder(epic)
     }
   }
 }

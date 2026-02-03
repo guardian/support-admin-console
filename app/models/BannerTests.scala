@@ -52,7 +52,8 @@ case class BannerTest(
     consentStatus: Option[ConsentStatus] = Some(ConsentStatus.All),
     deploySchedule: Option[BannerTestDeploySchedule] = None,
     methodologies: List[Methodology] = defaultMethodologies,
-    frontsOnly: Option[Boolean] = None
+    frontsOnly: Option[Boolean] = None,
+    mParticleAudience: Option[Int] = None
 ) extends ChannelTest[BannerTest] {
 
   override def withChannel(channel: Channel): BannerTest =

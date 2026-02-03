@@ -286,6 +286,16 @@ class AppComponents(context: Context, stage: String)
       dynamoArchivedChannelTests,
       dynamoTestsAuditService,
       permissionsService
+    ),
+    new SingleCheckoutController(
+      authAction,
+      controllerComponents,
+      stage,
+      runtime,
+      dynamoTestsService,
+      dynamoArchivedChannelTests,
+      dynamoTestsAuditService,
+      permissionsService
     )
   )
 }

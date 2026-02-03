@@ -297,7 +297,6 @@ export interface AmountValuesObject {
 }
 
 export type AmountsCardData = {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   [key in ContributionType]: AmountValuesObject;
 };
 
