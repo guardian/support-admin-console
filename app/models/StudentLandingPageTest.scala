@@ -16,7 +16,7 @@ case class StudentLandingPageVariant(
     heading: String,
     subheading: String,
     institution: Institution,
-    promoCodes: List[String]
+    promoCodes: List[String],
 )
 
 case class StudentLandingPageTest(

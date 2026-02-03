@@ -28,7 +28,7 @@ export const getDefaultTest = (): StudentLandingPageTest => {
 
 export const getDefaultInstitution = () => {
   return {
-    acronym: 'UTS',
+    acronym: '',
     name: '',
     logoUrl: '',
   };

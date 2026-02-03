@@ -10,7 +10,9 @@ import models.Channel.SingleCheckout
 case class SingleCheckoutVariant(
     name: String,
     heading: String,
-    subheading: String
+    subheading: String,
+    amounts: AmountValuesObject,
+    tickerSettings: Option[TickerSettings] = None
 )
 
 case class SingleCheckoutTest(
