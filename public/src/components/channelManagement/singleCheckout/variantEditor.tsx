@@ -1,8 +1,9 @@
 import React from 'react';
-import { TextField, Typography } from '@mui/material';
-import { SingleCheckoutVariant } from '../../../models/singleCheckout';
-import { useStyles } from '../helpers/testEditorStyles';
 import { AmountsSection } from './AmountsSection';
+import { SingleCheckoutVariant } from '../../../models/singleCheckout';
+import { CopyEditor } from '../../shared/copyEditor';
+import TickerEditor from '../tickerEditor';
+import { TickerSettings } from '../helpers/shared';
 
 interface VariantEditorProps {
   variant: SingleCheckoutVariant;
@@ -18,62 +19,29 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
   editMode,
   onValidationChange,
 }: VariantEditorProps) => {
-  const classes = useStyles();
-
-  React.useEffect(() => {
-    const isValid = variant.heading.trim() !== '' && variant.subheading.trim() !== '';
-    onValidationChange(isValid);
-  }, [variant.heading, variant.subheading, onValidationChange]);
-
-  const onHeadingChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const newHeading = e.target.value;
-    onVariantChange((current) => ({
-      ...current,
-      heading: newHeading,
-    }));
-  };
-
-  const onSubheadingChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const newSubheading = e.target.value;
-    onVariantChange((current) => ({
-      ...current,
-      subheading: newSubheading,
-    }));
-  };
-
   return (
-    <div className={classes.container}>
-      <div className={classes.sectionContainer}>
-        <Typography variant="h4" className={classes.sectionHeader}>
-          Copy
-        </Typography>
-        <TextField
-          label="Heading"
-          value={variant.heading}
-          onChange={onHeadingChange}
-          disabled={!editMode}
-          fullWidth
-          margin="normal"
-          required
-          error={editMode && variant.heading.trim() === ''}
-          helperText={editMode && variant.heading.trim() === '' ? 'Heading is required' : ''}
-        />
-        <TextField
-          label="Subheading"
-          value={variant.subheading}
-          onChange={onSubheadingChange}
-          disabled={!editMode}
-          fullWidth
-          margin="normal"
-          required
-          multiline
-          rows={3}
-          error={editMode && variant.subheading.trim() === ''}
-          helperText={editMode && variant.subheading.trim() === '' ? 'Subheading is required' : ''}
-        />
-      </div>
-
+    <div>
+      <CopyEditor
+        copy={{ heading: variant.heading, subheading: variant.subheading }}
+        onChange={(updatedCopy) =>
+          onVariantChange((current) => ({
+            ...current,
+            heading: updatedCopy.heading,
+            subheading: updatedCopy.subheading,
+          }))
+        }
+        onValidationChange={onValidationChange}
+        editMode={editMode}
+      />
       <AmountsSection variant={variant} onVariantChange={onVariantChange} editMode={editMode} />
+      <TickerEditor
+        tickerSettings={variant.tickerSettings}
+        updateTickerSettings={(updatedTickerSettings?: TickerSettings): void => {
+          onVariantChange((current) => ({ ...current, tickerSettings: updatedTickerSettings }));
+        }}
+        isDisabled={!editMode}
+        onValidationChange={onValidationChange}
+      />
     </div>
   );
 };

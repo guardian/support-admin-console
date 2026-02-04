@@ -11,7 +11,8 @@ case class SingleCheckoutVariant(
     name: String,
     heading: String,
     subheading: String,
-    amounts: AmountValuesObject
+    amounts: AmountValuesObject,
+    tickerSettings: Option[TickerSettings] = None
 )
 
 case class SingleCheckoutTest(
