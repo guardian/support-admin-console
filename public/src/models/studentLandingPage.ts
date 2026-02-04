@@ -7,6 +7,7 @@ import {
   Variant,
 } from '../components/channelManagement/helpers/shared';
 import { Region } from '../utils/models';
+import { ResponsiveImage } from './shared';
 
 export interface StudentLandingPageTest extends Test {
   name: string;
@@ -29,4 +30,5 @@ export interface StudentLandingPageVariant extends Variant {
   subheading: string;
   institution: Institution;
   promoCodes: string[];
+  image: ResponsiveImage;
 }
