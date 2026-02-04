@@ -9,6 +9,16 @@ import { Typography } from '@mui/material';
 import PromoCodesEditor from '../../shared/PromoCodesEditor';
 
 import { AcademicInstitutionDetailEditor } from './academicInstitutionDetails';
+import { ImageGuidance, ResponsiveImageEditor } from '../../shared/ResponsiveImageEditor';
+import { ResponsiveImage } from '../../../models/shared';
+
+const HEADLINE_MAX_LENGTH = 65; // TODO: confirm the max length of this field
+const SUBHEADING_MAX_LENGTH = 210; // TODO: confirm the max length of this field
+const imageGuidance: ImageGuidance = {
+  mobileUrl: '1:1 min width of ? max width of ?',
+  tabletUrl: '1:1 min width of ? max width of ?',
+  desktopUrl: '1:1 min width of ? max width of ?',
+};
 
 const RTEMenuConstraints = {
   noHtml: true,
@@ -91,6 +101,10 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
     onVariantChange((current) => ({ ...current, institution }));
   };
 
+  const updateImage = (image: ResponsiveImage): void => {
+    onVariantChange((current) => ({ ...current, image }));
+  };
+
   const {
     handleSubmit,
     control,
@@ -141,12 +155,10 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
     return true;
   };
 
-  const HEADLINE_MAX_LENGTH = 65; // TODO: confirm the max length of this field
   const isValidHeadline = (field: string) => {
     return isValidField(field, 'headline', HEADLINE_MAX_LENGTH);
   };
 
-  const SUBHEADING_MAX_LENGTH = 210; // TODO: confirm the max length of this field
   const isValidSubHeading = (field: string) => {
     return isValidField(field, 'subheading', SUBHEADING_MAX_LENGTH);
   };
@@ -159,6 +171,7 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
         updateInstitutionDetails={updateInstitutionDetails}
         onValidationChange={onValidationChange}
       />
+      <hr />
       <div className={classes.container}>
         <Typography variant={'h4'} className={classes.sectionHeader}>
           Copy
@@ -217,12 +230,30 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
               );
             }}
           />
-          <PromoCodesEditor
-            promoCodes={variant.promoCodes ?? []}
-            updatePromoCodes={updatePromoCodes}
+        </div>
+        <div className={classes.container}>
+          <Typography variant={'h4'} className={classes.sectionHeader}>
+            Image
+          </Typography>
+          <Typography>Please set 3 images which will be used at the 3 breakpoints</Typography>
+          <ResponsiveImageEditor
+            image={variant.image}
             isDisabled={!editMode}
+            onValidationChange={onValidationChange}
+            onChange={updateImage}
+            imageGuidance={imageGuidance}
           />
         </div>
+      </div>
+      <div className={classes.container}>
+        <Typography variant={'h4'} className={classes.sectionHeader}>
+          Promo Code
+        </Typography>
+        <PromoCodesEditor
+          promoCodes={variant.promoCodes ?? []}
+          updatePromoCodes={updatePromoCodes}
+          isDisabled={!editMode}
+        />
       </div>
     </div>
   );

@@ -11,12 +11,20 @@ case class Institution(
     name: String,
     logoUrl: String
 )
+
+case class ResponsiveImage(
+  mobileUrl: String,
+  tabletUrl: String,
+  desktopUrl: String,
+  altText: String,
+)
 case class StudentLandingPageVariant(
     name: String,
     heading: String,
     subheading: String,
     institution: Institution,
     promoCodes: List[String],
+    image: ResponsiveImage,
 )
 
 case class StudentLandingPageTest(

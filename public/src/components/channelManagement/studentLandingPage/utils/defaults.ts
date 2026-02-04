@@ -1,3 +1,4 @@
+import { ResponsiveImage } from '../../../../models/shared';
 import {
   StudentLandingPageTest,
   StudentLandingPageVariant,
@@ -34,6 +35,13 @@ export const getDefaultInstitution = () => {
   };
 };
 
+const DEFAULT_IMAGE: ResponsiveImage = {
+  mobileUrl: '',
+  tabletUrl: '',
+  desktopUrl: '',
+  altText: '',
+};
+
 export const getDefaultVariant = (): StudentLandingPageVariant => {
   return {
     name: 'offer',
@@ -42,5 +50,6 @@ export const getDefaultVariant = (): StudentLandingPageVariant => {
       'For a limited time, students with a valid ??? email address can unlock the premium experience of Guardian journalism, including unmetered app access, free for two years.',
     institution: getDefaultInstitution(),
     promoCodes: [],
+    image: DEFAULT_IMAGE,
   };
 };

@@ -1,4 +1,5 @@
 import { LockStatus } from '../components/channelManagement/helpers/shared';
+import { ResponsiveImage } from './shared';
 
 export interface HexColour {
   r: string;
@@ -37,12 +38,7 @@ export interface TickerDesign {
   goalColour: HexColour; //new
 }
 
-export interface BannerDesignHeaderImage {
-  mobileUrl: string;
-  tabletUrl: string;
-  desktopUrl: string;
-  altText: string;
-}
+export type BannerDesignHeaderImage = ResponsiveImage;
 
 export interface BannerDesignImage extends BannerDesignHeaderImage {
   kind: 'Image';
