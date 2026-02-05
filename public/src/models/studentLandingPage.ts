@@ -31,4 +31,5 @@ export interface StudentLandingPageVariant extends Variant {
   institution: Institution;
   promoCodes: string[];
   image: ResponsiveImage;
+  // region?: Region;
 }

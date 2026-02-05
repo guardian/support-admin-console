@@ -51,5 +51,6 @@ export const getDefaultVariant = (): StudentLandingPageVariant => {
     institution: getDefaultInstitution(),
     promoCodes: [],
     image: DEFAULT_IMAGE,
+    // region: '',
   };
 };

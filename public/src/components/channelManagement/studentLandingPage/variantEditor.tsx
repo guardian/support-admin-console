@@ -163,6 +163,8 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
     return isValidField(field, 'subheading', SUBHEADING_MAX_LENGTH);
   };
 
+  // console.log(`region is: ${variant.region}`);
+
   return (
     <div className={classes.container}>
       <AcademicInstitutionDetailEditor
