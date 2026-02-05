@@ -86,6 +86,7 @@ export const StudentLandingPageTestEditor: React.FC<
         </div>
       </div>
 
+      {/* If you need to update the supportedRegions, note that you will also need to adjust the route in support-frontend too */}
       <TestEditorTargetRegionsSelector
         regionTargeting={test.regionTargeting}
         supportedRegions={['AUDCountries', 'NZDCountries']}
