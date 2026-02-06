@@ -53,6 +53,9 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     color: palette.warning.light,
     marginTop: 0,
   },
+  resetMargin: {
+    marginTop: 0,
+  },
 }));
 
 export const StudentLandingPageTestEditor: React.FC<
@@ -131,15 +134,17 @@ export const StudentLandingPageTestEditor: React.FC<
       <div className={classes.sectionContainer}>
         <Typography className={classes.sectionHeader}>Country</Typography>
         <FormHelperText className={classes.warn}>{helperText}</FormHelperText>
-        <TypedRadioGroup
-          selectedValue={test.country}
-          onChange={updateCountry}
-          isDisabled={!userHasTestLocked}
-          labels={{
-            au: 'Australia',
-            nz: 'New Zealand',
-          }}
-        />
+        <div className={classes.resetMargin}>
+          <TypedRadioGroup
+            selectedValue={test.country}
+            onChange={updateCountry}
+            isDisabled={!userHasTestLocked}
+            labels={{
+              au: 'Australia',
+              nz: 'New Zealand',
+            }}
+          />
+        </div>
       </div>
     </>
   );
