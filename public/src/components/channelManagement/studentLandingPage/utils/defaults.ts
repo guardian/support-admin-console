@@ -5,8 +5,6 @@ import {
 } from '../../../../models/studentLandingPage';
 import { RegionTargeting } from '../../helpers/shared';
 
-// TODO: check if these are correct for this application
-
 export const DEFAULT_REGION_TARGETING: RegionTargeting = {
   targetedCountryGroups: [],
   targetedCountryCodes: [],
@@ -19,7 +17,7 @@ export const getDefaultTest = (): StudentLandingPageTest => {
     status: 'Draft',
     country: '',
     locations: [],
-    regionTargeting: DEFAULT_REGION_TARGETING,
+    regionTargeting: DEFAULT_REGION_TARGETING, // unused but required
     variants: [getDefaultVariant()],
     methodologies: [{ name: 'ABTest' }],
   };
