@@ -34,7 +34,7 @@ case class StudentLandingPageTest(
     lockStatus: Option[LockStatus],
     priority: Option[Int],
     nickname: Option[String],
-    regionTargeting: Option[RegionTargeting] = None,
+    // regionTargeting: Option[RegionTargeting] = None,
     country: String,
     variants: List[StudentLandingPageVariant],
     campaignName: Option[String] = Some("NOT_IN_CAMPAIGN"),
