@@ -49,9 +49,10 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
       marginLeft: spacing(2),
     },
   },
-  warn: {
-    color: palette.warning.light,
-    marginTop: 0,
+  errorText: {
+    color: 'rgba(0 0 0 / 1)',
+    backgroundColor: 'rgba(255 255 0 / 1)',
+    margin: '0.5em 0 0 1.5em',
   },
   resetMargin: {
     marginTop: 0,
@@ -133,7 +134,7 @@ export const StudentLandingPageTestEditor: React.FC<
       {/* If you need to update the countries in the labels argument, note that you will also need to adjust the route in support-frontend too */}
       <div className={classes.sectionContainer}>
         <Typography className={classes.sectionHeader}>Country</Typography>
-        <FormHelperText className={classes.warn}>{helperText}</FormHelperText>
+        <FormHelperText className={classes.errorText}>{helperText}</FormHelperText>
         <div className={classes.resetMargin}>
           <TypedRadioGroup
             selectedValue={test.country}
