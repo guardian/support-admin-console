@@ -3,7 +3,7 @@ import {
   StudentLandingPageTest,
   StudentLandingPageVariant,
 } from '../../../../models/studentLandingPage';
-import { RegionTargeting, UserCohort } from '../../helpers/shared';
+import { RegionTargeting } from '../../helpers/shared';
 
 // TODO: check if these are correct for this application
 
@@ -17,12 +17,10 @@ export const getDefaultTest = (): StudentLandingPageTest => {
     name: '',
     nickname: '',
     status: 'Draft',
-    userCohort: UserCohort.AllNonSupporters,
+    country: '',
     locations: [],
     regionTargeting: DEFAULT_REGION_TARGETING,
     variants: [getDefaultVariant()],
-    articlesViewedSettings: undefined,
-    contextTargeting: { tagIds: [], sectionIds: [], excludedTagIds: [], excludedSectionIds: [] },
     methodologies: [{ name: 'ABTest' }],
   };
 };
@@ -51,6 +49,5 @@ export const getDefaultVariant = (): StudentLandingPageVariant => {
     institution: getDefaultInstitution(),
     promoCodes: [],
     image: DEFAULT_IMAGE,
-    // region: '',
   };
 };

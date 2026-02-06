@@ -1,23 +1,12 @@
-import {
-  PageContextTargeting,
-  RegionTargeting,
-  Status,
-  Test,
-  UserCohort,
-  Variant,
-} from '../components/channelManagement/helpers/shared';
-import { Region } from '../utils/models';
+import { Status, Test, Variant } from '../components/channelManagement/helpers/shared';
 import { ResponsiveImage } from './shared';
 
 export interface StudentLandingPageTest extends Test {
   name: string;
   nickname?: string;
   status: Status;
-  userCohort: UserCohort;
-  locations: Region[];
-  regionTargeting: RegionTargeting;
+  country: string;
   variants: StudentLandingPageVariant[];
-  contextTargeting: PageContextTargeting;
 }
 
 export interface Institution {
@@ -31,5 +20,4 @@ export interface StudentLandingPageVariant extends Variant {
   institution: Institution;
   promoCodes: string[];
   image: ResponsiveImage;
-  // region?: Region;
 }
