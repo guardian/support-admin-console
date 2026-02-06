@@ -1,7 +1,4 @@
-// TODO: fix the unused variables then delete the line below.
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StudentLandingPageTest,
   StudentLandingPageVariant,
@@ -59,12 +56,25 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   },
 }));
 
+const isFieldSet = (field: string) => {
+  if (!field) {
+    return false;
+  }
+  return true;
+};
+
 export const StudentLandingPageTestEditor: React.FC<
   ValidatedTestEditorProps<StudentLandingPageTest>
 > = ({ test, userHasTestLocked, onTestChange, setValidationStatusForField }) => {
   const classes = useStyles();
 
   const [helperText, setHelperText] = useState<string>('Please choose a country');
+
+  useEffect(() => {
+    if (isFieldSet(test.country)) {
+      setHelperText('');
+    }
+  }, []);
 
   const updateTest = (
     update: (current: StudentLandingPageTest) => StudentLandingPageTest,
@@ -78,7 +88,7 @@ export const StudentLandingPageTestEditor: React.FC<
   };
 
   const updateCountry = (updatedCountry: string): void => {
-    if (updatedCountry.length < 2) {
+    if (!isFieldSet(updatedCountry)) {
       setHelperText('Please choose a country');
     } else {
       setHelperText('');
