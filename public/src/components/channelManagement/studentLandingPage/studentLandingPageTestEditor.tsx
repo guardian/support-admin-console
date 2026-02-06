@@ -1,29 +1,66 @@
 // TODO: fix the unused variables then delete the line below.
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   StudentLandingPageTest,
   StudentLandingPageVariant,
 } from '../../../models/studentLandingPage';
 import { ValidatedTestEditorProps } from '../validatedTestEditor';
-import { Typography } from '@mui/material';
-import { useStyles } from '../helpers/testEditorStyles'; // TODO: is this appropriate (shared)
+import { FormHelperText, Theme, Typography } from '@mui/material';
 import { VariantEditor } from './variantEditor';
-import TestEditorTargetRegionsSelector from '../testEditorTargetRegionsSelector';
-import { RegionTargeting } from '../helpers/shared';
-import { Region, regions } from '../../../utils/models';
+import TypedRadioGroup from '../TypedRadioGroup';
+import { makeStyles } from '@mui/styles';
+
+const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    width: '100%',
+    background: palette.background.paper, // #FFFFFF
+  },
+  sectionContainer: {
+    paddingTop: spacing(1),
+    paddingBottom: spacing(6),
+    borderBottom: `1px solid ${palette.grey[500]}`,
+
+    '& > * + *': {
+      marginTop: spacing(4),
+    },
+  },
+  sectionHeader: {
+    fontSize: 18,
+    fontWeight: 500,
+    color: palette.grey[700],
+  },
+  variantsHeaderContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+  },
+  buttonsContainer: {
+    paddingTop: spacing(4),
+    paddingBottom: spacing(12),
+  },
+  variantsHeaderButtonsContainer: {
+    display: 'flex',
+    '& > * + *': {
+      marginLeft: spacing(2),
+    },
+  },
+  warn: {
+    color: palette.warning.light,
+    marginTop: 0,
+  },
+}));
 
 export const StudentLandingPageTestEditor: React.FC<
   ValidatedTestEditorProps<StudentLandingPageTest>
 > = ({ test, userHasTestLocked, onTestChange, setValidationStatusForField }) => {
   const classes = useStyles();
 
-  // const [region, setRegion] = useState<Region>();
-
-  // useEffect(() => {
-  //   test.variants[0].region = region;
-  // }, [region]);
+  const [helperText, setHelperText] = useState<string>('Please choose a country');
 
   const updateTest = (
     update: (current: StudentLandingPageTest) => StudentLandingPageTest,
@@ -36,11 +73,15 @@ export const StudentLandingPageTestEditor: React.FC<
     });
   };
 
-  const onTargetingChange = (updatedTargeting: RegionTargeting): void => {
-    // setRegion(updatedTargeting.targetedCountryGroups[0]);
+  const updateCountry = (updatedCountry: string): void => {
+    if (updatedCountry.length < 2) {
+      setHelperText('Please choose a country');
+    } else {
+      setHelperText('');
+    }
     onTestChange((current) => ({
       ...current,
-      regionTargeting: updatedTargeting,
+      country: updatedCountry,
     }));
   };
 
@@ -86,13 +127,20 @@ export const StudentLandingPageTestEditor: React.FC<
         </div>
       </div>
 
-      {/* If you need to update the supportedRegions, note that you will also need to adjust the route in support-frontend too */}
-      <TestEditorTargetRegionsSelector
-        regionTargeting={test.regionTargeting}
-        supportedRegions={['AUDCountries', 'NZDCountries']}
-        onRegionTargetingUpdate={onTargetingChange}
-        isDisabled={!userHasTestLocked}
-      />
+      {/* If you need to update the countries in the labels argument, note that you will also need to adjust the route in support-frontend too */}
+      <div className={classes.sectionContainer}>
+        <Typography className={classes.sectionHeader}>Country</Typography>
+        <FormHelperText className={classes.warn}>{helperText}</FormHelperText>
+        <TypedRadioGroup
+          selectedValue={test.country}
+          onChange={updateCountry}
+          isDisabled={!userHasTestLocked}
+          labels={{
+            au: 'Australia',
+            nz: 'New Zealand',
+          }}
+        />
+      </div>
     </>
   );
 };
