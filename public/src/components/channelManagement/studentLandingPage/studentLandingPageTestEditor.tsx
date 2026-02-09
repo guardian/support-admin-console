@@ -8,6 +8,7 @@ import { FormHelperText, Theme, Typography } from '@mui/material';
 import { VariantEditor } from './variantEditor';
 import TypedRadioGroup from '../TypedRadioGroup';
 import { makeStyles } from '@mui/styles';
+import { Region } from '../../../utils/models';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
@@ -71,7 +72,7 @@ export const StudentLandingPageTestEditor: React.FC<
   const [helperText, setHelperText] = useState<string>('Please choose a country');
 
   useEffect(() => {
-    if (isFieldSet(test.country)) {
+    if (isFieldSet(test.regionId as string)) {
       setHelperText('');
     }
   }, []);
@@ -87,15 +88,15 @@ export const StudentLandingPageTestEditor: React.FC<
     });
   };
 
-  const updateCountry = (updatedCountry: string): void => {
-    if (!isFieldSet(updatedCountry)) {
+  const updateRegion = (updatedRegion: Region): void => {
+    if (!isFieldSet(updatedRegion as string)) {
       setHelperText('Please choose a country');
     } else {
       setHelperText('');
     }
     onTestChange((current) => ({
       ...current,
-      country: updatedCountry,
+      regionId: updatedRegion,
     }));
   };
 
@@ -147,12 +148,12 @@ export const StudentLandingPageTestEditor: React.FC<
         <FormHelperText className={classes.errorText}>{helperText}</FormHelperText>
         <div className={classes.resetMargin}>
           <TypedRadioGroup
-            selectedValue={test.country}
-            onChange={updateCountry}
+            selectedValue={test.regionId as string}
+            onChange={updateRegion}
             isDisabled={!userHasTestLocked}
             labels={{
-              au: 'Australia',
-              nz: 'New Zealand',
+              AUDCountries: 'Australia',
+              NZDCountries: 'New Zealand',
             }}
           />
         </div>

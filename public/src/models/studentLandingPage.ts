@@ -1,11 +1,12 @@
 import { Status, Test, Variant } from '../components/channelManagement/helpers/shared';
+import { Region } from '../utils/models';
 import { ResponsiveImage } from './shared';
 
 export interface StudentLandingPageTest extends Test {
   name: string;
   nickname?: string;
   status: Status;
-  country: string;
+  regionId: Region;
   variants: StudentLandingPageVariant[];
 }
 
