@@ -287,7 +287,7 @@ class AppComponents(context: Context, stage: String)
       dynamoTestsAuditService,
       permissionsService
     ),
-    new SingleCheckoutController(
+    new OneTimeCheckoutController(
       authAction,
       controllerComponents,
       stage,

@@ -2,7 +2,7 @@ package controllers
 
 import actions.{AuthAndPermissionActions, PermissionAction}
 import com.gu.googleauth.AuthAction
-import models.{Channel, SingleCheckoutTest}
+import models.{Channel, OneTimeCheckoutTest}
 import play.api.libs.circe.Circe
 import play.api.mvc.{ActionBuilder, AnyContent, ControllerComponents}
 import services.UserPermissions.Permission
@@ -10,11 +10,11 @@ import services.{DynamoArchivedChannelTests, DynamoChannelTests, DynamoChannelTe
 
 import scala.concurrent.ExecutionContext
 
-object SingleCheckoutController {
-  val name = "single-checkout-tests"
+object OneTimeCheckoutController {
+  val name = "one-time-checkout-tests"
 }
 
-class SingleCheckoutController(
+class OneTimeCheckoutController(
     authAction: ActionBuilder[AuthAction.UserIdentityRequest, AnyContent],
     components: ControllerComponents,
     stage: String,
@@ -24,12 +24,12 @@ class SingleCheckoutController(
     dynamoTestsAudit: DynamoChannelTestsAudit,
     permissionsService: DynamoPermissionsCache
 )(implicit executionContext: ExecutionContext)
-    extends ChannelTestsController[SingleCheckoutTest](
+    extends ChannelTestsController[OneTimeCheckoutTest](
       AuthAndPermissionActions.withoutPermissionsChecks(authAction),
       components,
       stage,
-      lockFileName = SingleCheckoutController.name,
-      channel = Channel.SingleCheckout,
+      lockFileName = OneTimeCheckoutController.name,
+      channel = Channel.OneTimeCheckout,
       runtime = runtime,
       dynamoTests,
       dynamoArchivedTests,

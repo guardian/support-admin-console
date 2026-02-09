@@ -2,12 +2,12 @@ import React from 'react';
 import { Typography } from '@mui/material';
 import { useStyles } from '../helpers/testEditorStyles';
 import { ContributionType, contributionTypes } from '../../../utils/models';
-import { SingleCheckoutVariant } from '../../../models/singleCheckout';
+import { OneTimeCheckoutVariant } from '../../../models/oneTimeCheckout';
 import { AmountsVariantEditorRow } from '../../amounts/AmountsVariantEditorRow';
 
 interface AmountsSectionProps {
-  variant: SingleCheckoutVariant;
-  onVariantChange: (update: (current: SingleCheckoutVariant) => SingleCheckoutVariant) => void;
+  variant: OneTimeCheckoutVariant;
+  onVariantChange: (update: (current: OneTimeCheckoutVariant) => OneTimeCheckoutVariant) => void;
   editMode: boolean;
 }
 

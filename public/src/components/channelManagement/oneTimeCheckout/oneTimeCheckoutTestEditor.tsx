@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { ValidatedTestEditorProps } from '../validatedTestEditor';
-import { SingleCheckoutTest, SingleCheckoutVariant } from '../../../models/singleCheckout';
+import { OneTimeCheckoutTest, OneTimeCheckoutVariant } from '../../../models/oneTimeCheckout';
 import { Typography } from '@mui/material';
 import VariantsEditor from '../../tests/variants/variantsEditor';
 import { useStyles } from '../helpers/testEditorStyles';
@@ -11,16 +11,16 @@ import TestEditorTargetRegionsSelector from '../testEditorTargetRegionsSelector'
 import { RegionTargeting } from '../helpers/shared';
 import { getStage } from '../../../utils/stage';
 
-const SingleCheckoutTestEditor: React.FC<ValidatedTestEditorProps<SingleCheckoutTest>> = ({
+const OneTimeCheckoutTestEditor: React.FC<ValidatedTestEditorProps<OneTimeCheckoutTest>> = ({
   test,
   userHasTestLocked,
   onTestChange,
   setValidationStatusForField,
-}: ValidatedTestEditorProps<SingleCheckoutTest>) => {
+}: ValidatedTestEditorProps<OneTimeCheckoutTest>) => {
   const classes = useStyles();
 
   const onVariantsChange = (
-    update: (current: SingleCheckoutVariant[]) => SingleCheckoutVariant[],
+    update: (current: OneTimeCheckoutVariant[]) => OneTimeCheckoutVariant[],
   ): void => {
     onTestChange((current) => {
       const updatedVariantList = update(current.variants);
@@ -30,7 +30,7 @@ const SingleCheckoutTestEditor: React.FC<ValidatedTestEditorProps<SingleCheckout
 
   const onVariantChange =
     (variantName: string) =>
-    (update: (current: SingleCheckoutVariant) => SingleCheckoutVariant): void => {
+    (update: (current: OneTimeCheckoutVariant) => OneTimeCheckoutVariant): void => {
       onVariantsChange((current) =>
         current.map((variant) => {
           if (variant.name === variantName) {
@@ -46,7 +46,7 @@ const SingleCheckoutTestEditor: React.FC<ValidatedTestEditorProps<SingleCheckout
   };
 
   const createVariant = (name: string): void => {
-    const newVariant: SingleCheckoutVariant = {
+    const newVariant: OneTimeCheckoutVariant = {
       ...getDefaultVariant(),
       name: name,
     };
@@ -63,13 +63,13 @@ const SingleCheckoutTestEditor: React.FC<ValidatedTestEditorProps<SingleCheckout
   const getWebPreviewUrl = (variantName: string): string => {
     const stage = getStage();
     const supportHost = `https://support.${stage !== 'PROD' ? 'code.dev-' : ''}theguardian.com`;
-    return `${supportHost}/one-time-checkout?force-single-checkout=${test.name}:${variantName}`;
+    return `${supportHost}/one-time-checkout?force-one-time-checkout=${test.name}:${variantName}`;
   };
 
   const renderVariantEditor = useCallback(
-    (variant: SingleCheckoutVariant): React.ReactElement => (
+    (variant: OneTimeCheckoutVariant): React.ReactElement => (
       <VariantEditor
-        key={`single-checkout-${test.name}-${variant.name}`}
+        key={`one-time-checkout-${test.name}-${variant.name}`}
         variant={variant}
         onVariantChange={onVariantChange(variant.name)}
         onDelete={(): void => onVariantDelete(variant.name)}
@@ -83,11 +83,11 @@ const SingleCheckoutTestEditor: React.FC<ValidatedTestEditorProps<SingleCheckout
   );
 
   const renderVariantSummary = useCallback(
-    (variant: SingleCheckoutVariant): React.ReactElement => (
+    (variant: OneTimeCheckoutVariant): React.ReactElement => (
       <VariantSummary
         name={variant.name}
         testName={test.name}
-        testType="SINGLE_CHECKOUT"
+        testType="ONE_TIME_CHECKOUT"
         isInEditMode={userHasTestLocked}
         platform="DOTCOM"
         articleType="Standard"
@@ -98,10 +98,10 @@ const SingleCheckoutTestEditor: React.FC<ValidatedTestEditorProps<SingleCheckout
   );
 
   const onVariantClone = (
-    originalVariant: SingleCheckoutVariant,
+    originalVariant: OneTimeCheckoutVariant,
     clonedVariantName: string,
   ): void => {
-    const newVariant: SingleCheckoutVariant = {
+    const newVariant: OneTimeCheckoutVariant = {
       ...originalVariant,
       name: clonedVariantName,
     };
@@ -146,4 +146,4 @@ const SingleCheckoutTestEditor: React.FC<ValidatedTestEditorProps<SingleCheckout
   );
 };
 
-export default SingleCheckoutTestEditor;
+export default OneTimeCheckoutTestEditor;
