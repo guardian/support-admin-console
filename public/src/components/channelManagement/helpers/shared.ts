@@ -14,7 +14,7 @@ export type TestType =
   | 'HEADER'
   | 'LANDING_PAGE'
   | 'CHECKOUT_NUDGE'
-  | 'SINGLE_CHECKOUT';
+  | 'ONE_TIME_CHECKOUT';
 
 export type EpicModuleName = 'ContributionsEpic' | 'ContributionsLiveblogEpic';
 
