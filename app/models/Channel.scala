@@ -17,7 +17,7 @@ object Channel {
   case object SupportLandingPage extends Channel
   case object CheckoutNudge extends Channel
   case object StudentLandingPage extends Channel
-  case object SingleCheckout extends Channel
+  case object OneTimeCheckout extends Channel
 
   implicit val customConfig: Configuration = Configuration.default.withDefaults
   implicit val statusEncoder: Encoder[Channel] = deriveEnumerationEncoder[Channel]
