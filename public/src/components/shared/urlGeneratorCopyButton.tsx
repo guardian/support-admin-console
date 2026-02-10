@@ -12,7 +12,7 @@ const URLGeneratorCopyButton: React.FC<URLGeneratorCopyButtonProps> = ({
   const [copied, setCopied] = React.useState(false);
 
   const getButtonCopy = (): string => {
-    return copied ? 'COPIED!' : 'COPY VARIANT URL';
+    return copied ? 'COPIED!' : 'COPY URL';
   };
 
   const handleCopy = async (e: React.MouseEvent<HTMLButtonElement>) => {
