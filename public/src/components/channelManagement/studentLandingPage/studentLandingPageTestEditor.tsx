@@ -9,6 +9,7 @@ import { VariantEditor } from './variantEditor';
 import TypedRadioGroup from '../TypedRadioGroup';
 import { makeStyles } from '@mui/styles';
 import { Region } from '../../../utils/models';
+import { StudentLandingPageLinkBuilder } from './studentLandingPageLinkBuilder';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
@@ -157,6 +158,19 @@ export const StudentLandingPageTestEditor: React.FC<
             }}
           />
         </div>
+      </div>
+      {/* deliberately forcing MRR to save before generating this
+        otherwise they could copy and paste an incomplete URL into various 
+        promotions including emails which can't be altered once sent. */}
+      <div className={classes.sectionContainer} key={test.name}>
+        <Typography variant={'h3'} className={classes.sectionHeader}>
+          Link Builder
+        </Typography>
+        <StudentLandingPageLinkBuilder
+          regionId={test.regionId}
+          institution={test.variants[0].institution}
+          promoCode={test.variants[0].promoCodes[0]}
+        />
       </div>
     </>
   );
