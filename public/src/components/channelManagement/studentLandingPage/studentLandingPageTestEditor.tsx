@@ -142,7 +142,6 @@ export const StudentLandingPageTestEditor: React.FC<
           />
         </div>
       </div>
-
       {/* If you need to update the countries in the labels argument, note that you will also need to adjust the route in support-frontend too */}
       <div className={classes.sectionContainer}>
         <Typography className={classes.sectionHeader}>Country</Typography>
@@ -159,18 +158,18 @@ export const StudentLandingPageTestEditor: React.FC<
           />
         </div>
       </div>
-      {/* deliberately forcing MRR to save before generating this
-        otherwise they could copy and paste an incomplete URL into various 
-        promotions including emails which can't be altered once sent. */}
       <div className={classes.sectionContainer} key={test.name}>
         <Typography variant={'h3'} className={classes.sectionHeader}>
-          Link Builder
+          Link for Promotional Materials
         </Typography>
-        <StudentLandingPageLinkBuilder
-          regionId={test.regionId}
-          institution={test.variants[0].institution}
-          promoCode={test.variants[0].promoCodes[0]}
-        />
+        {!userHasTestLocked && (
+          <StudentLandingPageLinkBuilder
+            regionId={test.regionId}
+            institution={test.variants[0].institution}
+            promoCode={test.variants[0].promoCodes[0]}
+          />
+        )}
+        {userHasTestLocked && <p>Please save so that the link can be generated.</p>}
       </div>
     </>
   );
