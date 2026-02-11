@@ -88,7 +88,7 @@ export const StudentLandingPageLinkBuilder: React.FC<StudentLandingPageLinkBuild
     setUrl('');
     setErrorMessage('');
     const baseErrorMessage =
-      'We cannot yet generate the link because something is missing.  Please check the following: ';
+      'The link cannot be generated yet because something is missing - please check the following: ';
     const errorMessageBuilder = [baseErrorMessage];
     if (!regionId) {
       errorMessageBuilder.push('The Country is required. ');
