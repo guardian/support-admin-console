@@ -84,9 +84,11 @@ export const StudentLandingPageLinkBuilder: React.FC<StudentLandingPageLinkBuild
     );
   };
 
-  const validatePropsExist = () => {
+  useEffect(() => {
+    setUrl('');
+    setErrorMessage('');
     const baseErrorMessage =
-      'We cannot yet generate the link because something is missing.  Please check the following and save: ';
+      'We cannot yet generate the link because something is missing.  Please check the following: ';
     const errorMessageBuilder = [baseErrorMessage];
     if (!regionId) {
       errorMessageBuilder.push('The Country is required. ');
@@ -99,18 +101,11 @@ export const StudentLandingPageLinkBuilder: React.FC<StudentLandingPageLinkBuild
     }
     if (errorMessageBuilder.length > 1) {
       setErrorMessage(errorMessageBuilder.join(' '));
-      return false;
     } else {
       setErrorMessage('');
-      return true;
-    }
-  };
-
-  useEffect(() => {
-    if (validatePropsExist()) {
       buildFullUrl();
     }
-  }, []);
+  }, [regionId, institution.acronym, promoCode]);
 
   return (
     <>
