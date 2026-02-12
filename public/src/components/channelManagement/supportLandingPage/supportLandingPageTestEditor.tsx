@@ -12,6 +12,7 @@ import VariantSummary from '../../tests/variants/variantSummary';
 import VariantEditor from './variantEditor';
 import TestEditorTargetRegionsSelector from '../testEditorTargetRegionsSelector';
 import { RegionTargeting } from '../helpers/shared';
+import { MParticleAudienceEditor } from '../mParticleAudienceEditor';
 
 const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLandingPageTest>> = ({
   test,
@@ -130,6 +131,25 @@ const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLan
             regionTargeting={test.regionTargeting}
             onRegionTargetingUpdate={onTargetingChange}
             isDisabled={!userHasTestLocked}
+          />
+
+          <Typography
+            variant={'h4'}
+            className={classes.sectionHeader}
+            style={{ marginTop: '20px' }}
+          >
+            mParticle Audience
+          </Typography>
+
+          <MParticleAudienceEditor
+            mParticleAudience={test.mParticleAudience}
+            disabled={!userHasTestLocked}
+            onChange={(mParticleAudience) => {
+              onTestChange((current) => ({
+                ...current,
+                mParticleAudience,
+              }));
+            }}
           />
         </div>
       </div>
