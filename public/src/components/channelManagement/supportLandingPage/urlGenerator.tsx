@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { SupportLandingPageVariant } from '../../../models/supportLandingPage';
-import VariantSummaryURLGeneratorButton from './urlGeneratorButton';
+import URLGeneratorCopyButton from '../../shared/urlGeneratorCopyButton';
 import { getStage } from '../../../utils/stage';
 import { Checkbox, FormControlLabel, TextField, Theme, Typography, Box } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -157,7 +157,7 @@ const URLGenerator = ({ variant, testName }: URLGeneratorProps) => {
           }
           label="Enable One Time"
         />
-        <VariantSummaryURLGeneratorButton url={url} />
+        <URLGeneratorCopyButton url={url} />
       </div>
       <div className={classes.urlPreviewBlock}>
         <span className={classes.urlPreviewTitle}>URL preview:</span>
