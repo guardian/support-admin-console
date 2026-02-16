@@ -2,17 +2,17 @@ import React from 'react';
 import { Button } from '@mui/material';
 import CopyIcon from '@mui/icons-material/CopyAll';
 
-interface VariantSummaryURLGeneratorButtonProps {
+interface URLGeneratorCopyButtonProps {
   url: string;
 }
 
-const VariantSummaryURLGeneratorButton: React.FC<VariantSummaryURLGeneratorButtonProps> = ({
+const URLGeneratorCopyButton: React.FC<URLGeneratorCopyButtonProps> = ({
   url,
-}: VariantSummaryURLGeneratorButtonProps) => {
+}: URLGeneratorCopyButtonProps) => {
   const [copied, setCopied] = React.useState(false);
 
   const getButtonCopy = (): string => {
-    return copied ? 'COPIED!' : 'COPY VARIANT URL';
+    return copied ? 'COPIED!' : 'COPY URL';
   };
 
   const handleCopy = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -32,4 +32,4 @@ const VariantSummaryURLGeneratorButton: React.FC<VariantSummaryURLGeneratorButto
     </Button>
   );
 };
-export default VariantSummaryURLGeneratorButton;
+export default URLGeneratorCopyButton;

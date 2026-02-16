@@ -14,6 +14,7 @@ import { ResponsiveImage } from '../../../models/shared';
 
 const HEADLINE_MAX_LENGTH = 65; // TODO: confirm the max length of this field
 const SUBHEADING_MAX_LENGTH = 210; // TODO: confirm the max length of this field
+
 const imageGuidance: ImageGuidance = {
   mobileUrl: '1:1 min width of ? max width of ?',
   tabletUrl: '1:1 min width of ? max width of ?',
