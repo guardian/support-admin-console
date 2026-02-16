@@ -7,17 +7,17 @@ import {
 } from '../components/channelManagement/helpers/shared';
 import { AmountValuesObject } from '../utils/models';
 
-export interface SingleCheckoutVariant extends Variant {
+export interface OneTimeCheckoutVariant extends Variant {
   heading: string;
   subheading: string;
   amounts: AmountValuesObject;
   tickerSettings?: TickerSettings;
 }
 
-export interface SingleCheckoutTest extends Test {
+export interface OneTimeCheckoutTest extends Test {
   name: string;
   nickname?: string;
   status: Status;
-  variants: SingleCheckoutVariant[];
+  variants: OneTimeCheckoutVariant[];
   methodologies: Methodology[];
 }

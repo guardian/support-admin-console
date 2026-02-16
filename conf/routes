@@ -62,8 +62,8 @@ GET /banner-designs/:name                           controllers.Application.inde
 GET /audit-tests                                    controllers.Application.index
 GET /audit-tests/:channel/:name                     controllers.Application.indexWithNameAndChannel(name: String, channel: String)
 
-GET /single-checkout-tests                           controllers.Application.index
-GET /single-checkout-tests/:name                     controllers.Application.indexWithName(name: String)
+GET /one-time-checkout-tests                           controllers.Application.index
+GET /one-time-checkout-tests/:name                     controllers.Application.indexWithName(name: String)
 # ----- Authentication ----- #
 GET  /login                                         controllers.Login.login
 GET  /loginAction                                   controllers.Login.loginAction
@@ -327,18 +327,18 @@ POST  /frontend/student-landing-page-tests/test/unlock/:testName      controller
 POST  /frontend/student-landing-page-tests/test/takecontrol/:testName controllers.StudentLandingPageController.forceLockTest(testName: String)
 POST  /frontend/student-landing-page-tests/test/status/:rawStatus     controllers.StudentLandingPageController.setStatus(rawStatus: String)
 
-# ----- Single Checkout 'tests' ----- #
-GET   /frontend/single-checkout-tests                            controllers.SingleCheckoutController.get
-# single checkout list endpoints
-POST  /frontend/single-checkout-tests/list/lock                  controllers.SingleCheckoutController.lockList
-POST  /frontend/single-checkout-tests/list/unlock                controllers.SingleCheckoutController.unlockList
-POST  /frontend/single-checkout-tests/list/takecontrol           controllers.SingleCheckoutController.takeControlOfList
-POST  /frontend/single-checkout-tests/list/reorder               controllers.SingleCheckoutController.reorderList
-# single checkout test endpoints
-GET   /frontend/single-checkout-tests/test/:testName             controllers.SingleCheckoutController.getTest(testName: String)
-POST  /frontend/single-checkout-tests/test/update                controllers.SingleCheckoutController.updateTest
-POST  /frontend/single-checkout-tests/test/create                controllers.SingleCheckoutController.createTest
-POST  /frontend/single-checkout-tests/test/lock/:testName        controllers.SingleCheckoutController.lockTest(testName: String)
-POST  /frontend/single-checkout-tests/test/unlock/:testName      controllers.SingleCheckoutController.unlockTest(testName: String)
-POST  /frontend/single-checkout-tests/test/takecontrol/:testName controllers.SingleCheckoutController.forceLockTest(testName: String)
-POST  /frontend/single-checkout-tests/test/status/:rawStatus     controllers.SingleCheckoutController.setStatus(rawStatus: String)
+# ----- One Time Checkout 'tests' ----- #
+GET   /frontend/one-time-checkout-tests                            controllers.OneTimeCheckoutController.get
+# one time checkout list endpoints
+POST  /frontend/one-time-checkout-tests/list/lock                  controllers.OneTimeCheckoutController.lockList
+POST  /frontend/one-time-checkout-tests/list/unlock                controllers.OneTimeCheckoutController.unlockList
+POST  /frontend/one-time-checkout-tests/list/takecontrol           controllers.OneTimeCheckoutController.takeControlOfList
+POST  /frontend/one-time-checkout-tests/list/reorder               controllers.OneTimeCheckoutController.reorderList
+# one time checkout test endpoints
+GET   /frontend/one-time-checkout-tests/test/:testName             controllers.OneTimeCheckoutController.getTest(testName: String)
+POST  /frontend/one-time-checkout-tests/test/update                controllers.OneTimeCheckoutController.updateTest
+POST  /frontend/one-time-checkout-tests/test/create                controllers.OneTimeCheckoutController.createTest
+POST  /frontend/one-time-checkout-tests/test/lock/:testName        controllers.OneTimeCheckoutController.lockTest(testName: String)
+POST  /frontend/one-time-checkout-tests/test/unlock/:testName      controllers.OneTimeCheckoutController.unlockTest(testName: String)
+POST  /frontend/one-time-checkout-tests/test/takecontrol/:testName controllers.OneTimeCheckoutController.forceLockTest(testName: String)
+POST  /frontend/one-time-checkout-tests/test/status/:rawStatus     controllers.OneTimeCheckoutController.setStatus(rawStatus: String)
