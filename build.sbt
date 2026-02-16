@@ -29,7 +29,7 @@ asciiGraphWidth := 999999999 // to ensure Snyk can read the the deeeeep dependen
 libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.6",
   "com.gu.play-googleauth" %% "play-v30" % "32.0.2",
-  "com.google.cloud" % "google-cloud-bigquery" % "2.57.2",
+  "com.google.cloud" % "google-cloud-bigquery" % "2.58.0",
   "com.gu" %% "simple-configuration-ssm" % "9.1.0",
   "software.amazon.awssdk" % "s3" % awsVersion,
   "software.amazon.awssdk" % "dynamodb" % awsVersion,
