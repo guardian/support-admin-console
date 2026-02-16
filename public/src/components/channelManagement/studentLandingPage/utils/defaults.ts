@@ -1,10 +1,9 @@
+import { ResponsiveImage } from '../../../../models/shared';
 import {
   StudentLandingPageTest,
   StudentLandingPageVariant,
 } from '../../../../models/studentLandingPage';
-import { RegionTargeting, UserCohort } from '../../helpers/shared';
-
-// TODO: check if these are correct for this application
+import { RegionTargeting } from '../../helpers/shared';
 
 export const DEFAULT_REGION_TARGETING: RegionTargeting = {
   targetedCountryGroups: [],
@@ -16,12 +15,10 @@ export const getDefaultTest = (): StudentLandingPageTest => {
     name: '',
     nickname: '',
     status: 'Draft',
-    userCohort: UserCohort.AllNonSupporters,
+    regionId: '',
     locations: [],
-    regionTargeting: DEFAULT_REGION_TARGETING,
+    regionTargeting: DEFAULT_REGION_TARGETING, // unused but required
     variants: [getDefaultVariant()],
-    articlesViewedSettings: undefined,
-    contextTargeting: { tagIds: [], sectionIds: [], excludedTagIds: [], excludedSectionIds: [] },
     methodologies: [{ name: 'ABTest' }],
   };
 };
@@ -34,6 +31,13 @@ export const getDefaultInstitution = () => {
   };
 };
 
+const DEFAULT_IMAGE: ResponsiveImage = {
+  mobileUrl: '',
+  tabletUrl: '',
+  desktopUrl: '',
+  altText: '',
+};
+
 export const getDefaultVariant = (): StudentLandingPageVariant => {
   return {
     name: 'offer',
@@ -42,5 +46,6 @@ export const getDefaultVariant = (): StudentLandingPageVariant => {
       'For a limited time, students with a valid ??? email address can unlock the premium experience of Guardian journalism, including unmetered app access, free for two years.',
     institution: getDefaultInstitution(),
     promoCodes: [],
+    image: DEFAULT_IMAGE,
   };
 };

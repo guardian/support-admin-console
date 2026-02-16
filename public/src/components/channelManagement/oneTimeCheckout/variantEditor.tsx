@@ -1,13 +1,13 @@
 import React from 'react';
 import { AmountsSection } from './AmountsSection';
-import { SingleCheckoutVariant } from '../../../models/singleCheckout';
+import { OneTimeCheckoutVariant } from '../../../models/oneTimeCheckout';
 import { CopyEditor } from '../../shared/copyEditor';
 import TickerEditor from '../tickerEditor';
 import { TickerSettings } from '../helpers/shared';
 
 interface VariantEditorProps {
-  variant: SingleCheckoutVariant;
-  onVariantChange: (update: (current: SingleCheckoutVariant) => SingleCheckoutVariant) => void;
+  variant: OneTimeCheckoutVariant;
+  onVariantChange: (update: (current: OneTimeCheckoutVariant) => OneTimeCheckoutVariant) => void;
   onDelete: () => void;
   editMode: boolean;
   onValidationChange: (isValid: boolean) => void;

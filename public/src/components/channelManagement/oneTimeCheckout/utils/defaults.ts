@@ -1,6 +1,6 @@
-import { SingleCheckoutTest, SingleCheckoutVariant } from '../../../../models/singleCheckout';
+import { OneTimeCheckoutTest, OneTimeCheckoutVariant } from '../../../../models/oneTimeCheckout';
 
-export const getDefaultVariant = (): SingleCheckoutVariant => ({
+export const getDefaultVariant = (): OneTimeCheckoutVariant => ({
   name: 'control',
   heading: '',
   subheading: '',
@@ -11,7 +11,7 @@ export const getDefaultVariant = (): SingleCheckoutVariant => ({
   },
 });
 
-export const getDefaultTest = (): SingleCheckoutTest => ({
+export const getDefaultTest = (): OneTimeCheckoutTest => ({
   name: '',
   nickname: '',
   status: 'Draft',
