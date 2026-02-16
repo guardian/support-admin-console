@@ -58,4 +58,5 @@ export interface SupportLandingPageTest extends Test {
   status: Status;
   variants: SupportLandingPageVariant[];
   methodologies: Methodology[];
+  mParticleAudience?: number;
 }
