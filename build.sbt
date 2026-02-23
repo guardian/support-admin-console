@@ -5,7 +5,7 @@ version := "1.0-SNAPSHOT"
 scalaVersion := "2.13.18"
 
 val circeVersion = "0.14.15"
-val awsVersion = "2.40.17"
+val awsVersion = "2.41.24"
 val zioVersion = "2.1.24"
 val jacksonVersion = "2.21.0"
 
@@ -28,8 +28,8 @@ asciiGraphWidth := 999999999 // to ensure Snyk can read the the deeeeep dependen
 
 libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.6",
-  "com.gu.play-googleauth" %% "play-v30" % "31.0.0",
-  "com.google.cloud" % "google-cloud-bigquery" % "2.57.2",
+  "com.gu.play-googleauth" %% "play-v30" % "32.0.2",
+  "com.google.cloud" % "google-cloud-bigquery" % "2.58.0",
   "com.gu" %% "simple-configuration-ssm" % "9.1.0",
   "software.amazon.awssdk" % "s3" % awsVersion,
   "software.amazon.awssdk" % "dynamodb" % awsVersion,
@@ -38,8 +38,8 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-parser" % circeVersion,
   "io.circe" %% "circe-generic-extras" % "0.14.4",
   "com.dripower" %% "play-circe" % "3014.1",
-  "com.beachape" %% "enumeratum" % "1.9.2",
-  "com.beachape" %% "enumeratum-circe" % "1.9.2",
+  "com.beachape" %% "enumeratum" % "1.9.4",
+  "com.beachape" %% "enumeratum-circe" % "1.9.4",
   ws,
   "dev.zio" %% "zio" % zioVersion,
   "dev.zio" %% "zio-streams" % zioVersion,
