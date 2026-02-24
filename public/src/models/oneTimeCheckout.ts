@@ -20,4 +20,5 @@ export interface OneTimeCheckoutTest extends Test {
   status: Status;
   variants: OneTimeCheckoutVariant[];
   methodologies: Methodology[];
+  mParticleAudience?: number;
 }
