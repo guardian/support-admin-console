@@ -25,7 +25,8 @@ case class OneTimeCheckoutTest(
     regionTargeting: Option[RegionTargeting] = None,
     variants: List[OneTimeCheckoutVariant],
     methodologies: List[Methodology] = defaultMethodologies,
-    campaignName: Option[String] = Some("NOT_IN_CAMPAIGN")
+    campaignName: Option[String] = Some("NOT_IN_CAMPAIGN"),
+    mParticleAudience: Option[Int] = None
 ) extends ChannelTest[OneTimeCheckoutTest] {
 
   override def withChannel(channel: Channel): OneTimeCheckoutTest =
