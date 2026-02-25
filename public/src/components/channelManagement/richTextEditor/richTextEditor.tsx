@@ -39,6 +39,7 @@ import {
   PRICE_DIGISUB_MONTHLY,
   PRICE_GUARDIANWEEKLY_ANNUAL,
   PRICE_GUARDIANWEEKLY_MONTHLY,
+  PRICE_PRODUCT_WEEKLY,
 } from '../helpers/validation';
 
 // Typescript
@@ -68,6 +69,7 @@ interface RteMenuConstraints {
   noCountryNameTemplate?: boolean;
   noArticleCountTemplate?: boolean;
   noPriceTemplates?: boolean;
+  noProductWeeklyTemplate?: boolean;
   noDateTemplate?: boolean;
   noDayTemplate?: boolean;
   noCampaignDeadlineTemplate?: boolean;
@@ -293,6 +295,7 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
     noItalic,
     noCopyTemplates,
     noPriceTemplates,
+    noProductWeeklyTemplate,
     noCurrencyTemplate,
     noCountryNameTemplate,
     noArticleCountTemplate,
@@ -381,6 +384,14 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
               {!noDateTemplate && (
                 <button className="remirror-button" onClick={() => insertTemplate(DATE)}>
                   Date
+                </button>
+              )}
+              {!noProductWeeklyTemplate && (
+                <button
+                  className="remirror-button"
+                  onClick={() => insertTemplate(PRICE_PRODUCT_WEEKLY)}
+                >
+                  Product weekly
                 </button>
               )}
               {!noPriceTemplates && (

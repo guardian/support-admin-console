@@ -24,6 +24,7 @@ case class Label(
 case class LandingPageProductDescription(
     title: String,
     titlePill: Option[String] = None,
+    billingPeriodsCopy: Option[String] = None,
     label: Option[Label] = None,
     benefits: List[ProductBenefit],
     cta: LandingPageCta

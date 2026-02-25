@@ -16,6 +16,7 @@ import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import { useFieldArray, useForm, Controller } from 'react-hook-form';
 import { copyLengthValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
+import { RichTextEditorSingleLine } from '../richTextEditor/richTextEditor';
 
 const productKeys: (keyof Products)[] = ['Contribution', 'SupporterPlus', 'DigitalSubscription'];
 
@@ -119,6 +120,33 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
           onBlur={handleSubmit(onProductChange)}
           disabled={!editMode}
           fullWidth
+        />
+        <Controller
+          name="billingPeriodsCopy"
+          control={control}
+          render={({ field }) => (
+            <RichTextEditorSingleLine
+              error={!!errors.billingPeriodsCopy}
+              helperText={errors.billingPeriodsCopy ? errors.billingPeriodsCopy.message || '' : ''}
+              copyData={field.value}
+              updateCopy={(value) => {
+                field.onChange(value);
+                handleSubmit(onProductChange)();
+              }}
+              name="billingPeriodsCopy"
+              label="Billing Periods Copy"
+              disabled={!editMode}
+              rteMenuConstraints={{
+                noArticleCountTemplate: true,
+                noCampaignDeadlineTemplate: true,
+                noDayTemplate: true,
+                noDateTemplate: true,
+                noCountryNameTemplate: true,
+                noCurrencyTemplate: true,
+                noPriceTemplates: true,
+              }}
+            />
+          )}
         />
         <TextField
           error={!!errors.cta?.copy}
