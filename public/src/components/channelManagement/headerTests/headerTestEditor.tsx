@@ -14,6 +14,7 @@ import VariantsEditor from '../../tests/variants/variantsEditor';
 import CampaignSelector from '../CampaignSelector';
 
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
+import { MParticleAudienceEditor } from '../mParticleAudienceEditor';
 
 import { HeaderTest, HeaderVariant } from '../../../models/header';
 import { getDefaultVariant } from './utils/defaults';
@@ -212,6 +213,21 @@ const HeaderTestEditor: React.FC<ValidatedTestEditorProps<HeaderTest>> = ({
           selectedConsentStatus={test.consentStatus}
           onConsentStatusChange={onConsentChange}
           showConsentStatusSelector={false}
+        />
+
+        <Typography variant={'h4'} className={classes.sectionHeader} style={{ marginTop: '20px' }}>
+          mParticle Audience
+        </Typography>
+
+        <MParticleAudienceEditor
+          mParticleAudience={test.mParticleAudience}
+          disabled={!userHasTestLocked}
+          onChange={(mParticleAudience) => {
+            onTestChange((current) => ({
+              ...current,
+              mParticleAudience,
+            }));
+          }}
         />
       </div>
     </div>
