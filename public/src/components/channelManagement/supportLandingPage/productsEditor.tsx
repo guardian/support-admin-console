@@ -170,6 +170,8 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
                 noCountryNameTemplate: true,
                 noCurrencyTemplate: true,
                 noPriceTemplates: true,
+                noBold: true,
+                noItalic: true,
               }}
             />
           )}
