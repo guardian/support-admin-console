@@ -9,6 +9,7 @@ import VariantSummary from '../../tests/variants/variantSummary';
 import VariantEditor from './variantEditor';
 import TestEditorTargetRegionsSelector from '../testEditorTargetRegionsSelector';
 import { RegionTargeting } from '../helpers/shared';
+import { MParticleAudienceEditor } from '../mParticleAudienceEditor';
 import { getStage } from '../../../utils/stage';
 
 const OneTimeCheckoutTestEditor: React.FC<ValidatedTestEditorProps<OneTimeCheckoutTest>> = ({
@@ -140,6 +141,21 @@ const OneTimeCheckoutTestEditor: React.FC<ValidatedTestEditorProps<OneTimeChecko
           regionTargeting={test.regionTargeting}
           onRegionTargetingUpdate={onTargetingChange}
           isDisabled={!userHasTestLocked}
+        />
+
+        <Typography variant={'h4'} className={classes.sectionHeader} style={{ marginTop: '20px' }}>
+          mParticle Audience
+        </Typography>
+
+        <MParticleAudienceEditor
+          mParticleAudience={test.mParticleAudience}
+          disabled={!userHasTestLocked}
+          onChange={(mParticleAudience) => {
+            onTestChange((current) => ({
+              ...current,
+              mParticleAudience,
+            }));
+          }}
         />
       </div>
     </div>
