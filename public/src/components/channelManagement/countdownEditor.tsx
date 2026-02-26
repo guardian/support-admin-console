@@ -199,6 +199,7 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
                     noDayTemplate: true,
                     noDateTemplate: true,
                     noPriceTemplates: true,
+                    noProductWeeklyTemplate: true,
                     noCampaignDeadlineTemplate: false,
                   }}
                 />

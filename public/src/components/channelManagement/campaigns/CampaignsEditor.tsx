@@ -250,6 +250,7 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
                         noCountryNameTemplate: true,
                         noArticleCountTemplate: true,
                         noPriceTemplates: true,
+                        noProductWeeklyTemplate: true,
                         noDateTemplate: true,
                         noDayTemplate: true,
                         noCampaignDeadlineTemplate: true,

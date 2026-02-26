@@ -391,7 +391,7 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
                   className="remirror-button"
                   onClick={() => insertTemplate(PRICE_PRODUCT_WEEKLY)}
                 >
-                  Product weekly
+                  Product weekly price
                 </button>
               )}
               {!noPriceTemplates && (

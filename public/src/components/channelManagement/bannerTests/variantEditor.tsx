@@ -245,6 +245,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                 rteMenuConstraints={{
                   noBold: true,
                   noCampaignDeadlineTemplate: true,
+                  noProductWeeklyTemplate: true,
                 }}
               />
             );
@@ -281,6 +282,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                   disabled={!editMode}
                   rteMenuConstraints={{
                     noCampaignDeadlineTemplate: true,
+                    noProductWeeklyTemplate: true,
                   }}
                 />
               );
@@ -313,6 +315,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                   rteMenuConstraints={{
                     noBold: true,
                     noCampaignDeadlineTemplate: true,
+                    noProductWeeklyTemplate: true,
                   }}
                 />
               );

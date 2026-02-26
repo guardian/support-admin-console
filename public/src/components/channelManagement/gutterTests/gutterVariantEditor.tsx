@@ -222,6 +222,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                   noCountryNameTemplate: true,
                   noArticleCountTemplate: true,
                   noPriceTemplates: true,
+                  noProductWeeklyTemplate: true,
                   noDateTemplate: true,
                   noDayTemplate: true,
                   noCampaignDeadlineTemplate: true,
