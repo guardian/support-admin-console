@@ -66,7 +66,7 @@ export const StudentLandingPageLinkBuilder: React.FC<StudentLandingPageLinkBuild
 
   const [url, setUrl] = useState('');
   const [errorMessage, setErrorMessage] = useState(
-    'Please set the above fields and save the test.',
+    'Please set the fields and save the test - this will create the link which can then be previewed.',
   );
 
   const stage = getStage();

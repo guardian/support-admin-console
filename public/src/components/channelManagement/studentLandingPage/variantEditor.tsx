@@ -24,6 +24,8 @@ const imageGuidance: ImageGuidance = {
 const RTEMenuConstraints = {
   noHtml: true,
   noBold: true,
+  noItalic: true,
+  noCopyTemplates: true,
   noCurrencyTemplate: true,
   noCountryNameTemplate: true,
   noArticleCountTemplate: true,
@@ -226,7 +228,9 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
                   disabled={!editMode}
                   rteMenuConstraints={{
                     ...RTEMenuConstraints,
+                    noHtml: false,
                     noBold: false,
+                    noLink: true,
                   }}
                 />
               );
