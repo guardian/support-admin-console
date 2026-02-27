@@ -88,11 +88,14 @@ object ProductCatalog {
   sealed trait ProductRatePlans
 
   case class GuardianWeeklyRatePlans(
-      Annual: RatePlan,
-      Monthly: RatePlan,
-      Quarterly: RatePlan,
-      OneYearGift: RatePlan,
-      ThreeMonthGift: RatePlan
+      Annual: Option[RatePlan],
+      AnnualPlus: Option[RatePlan],
+      Monthly: Option[RatePlan],
+      MonthlyPlus: Option[RatePlan],
+      Quarterly: Option[RatePlan],
+      QuarterlyPlus: Option[RatePlan],
+      OneYearGift: Option[RatePlan],
+      ThreeMonthGift: Option[RatePlan]
   ) extends ProductRatePlans
 
   case class HomeDeliveryAndSubscriptionCardRatePlans(

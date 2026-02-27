@@ -170,7 +170,16 @@ export const orderRatePlans =
   (a: RatePlanWithProduct, b: RatePlanWithProduct): number => {
     const customOrders: Partial<Record<string, string[]>> = {
       Newspaper: ['SixdayPlus', 'SaturdayPlus', 'EverydayPlus', 'WeekendPlus', 'Sunday'],
-      Weekly: ['Monthly', 'Quarterly', 'Annual', 'OneYearGift', 'ThreeMonthGift'],
+      Weekly: [
+        'Monthly',
+        'MonthlyPlus',
+        'Quarterly',
+        'QuarterlyPlus',
+        'Annual',
+        'AnnualPlus',
+        'OneYearGift',
+        'ThreeMonthGift',
+      ],
     };
 
     const customOrder = customOrders[product];
