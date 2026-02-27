@@ -230,6 +230,7 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
                     ...RTEMenuConstraints,
                     noHtml: false,
                     noBold: false,
+                    noLink: true,
                   }}
                 />
               );
