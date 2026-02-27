@@ -226,6 +226,7 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
                   disabled={!editMode}
                   rteMenuConstraints={{
                     ...RTEMenuConstraints,
+                    noHtml: false,
                     noBold: false,
                   }}
                 />
