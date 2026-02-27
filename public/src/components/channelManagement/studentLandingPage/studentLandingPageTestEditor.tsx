@@ -140,7 +140,11 @@ export const StudentLandingPageTestEditor: React.FC<
               promoCode={test.variants[0].promoCodes[0]}
             />
           )}
-          {userHasTestLocked && <p className={classes.errorText}>Please update the fields below and save so that the preview link can be generated.</p>}
+          {userHasTestLocked && (
+            <p className={classes.errorText}>
+              Please update the fields below and save so that the preview link can be generated.
+            </p>
+          )}
         </div>
 
         <div>

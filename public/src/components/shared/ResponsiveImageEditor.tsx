@@ -23,7 +23,6 @@ export const ResponsiveImageEditor: React.FC<ResponsiveImageEditorProps> = ({
   onChange,
   imageGuidance,
 }: ResponsiveImageEditorProps) => {
-
   const EMPTY_ERROR_HELPER_TEXT = 'Please add a URL for an image in these dimensions';
 
   const {
