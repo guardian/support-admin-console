@@ -129,6 +129,19 @@ export const StudentLandingPageTestEditor: React.FC<
         <Typography variant={'h3'} className={classes.sectionHeader}>
           Offer
         </Typography>
+        <div className={classes.sectionContainer} key={test.name}>
+          <Typography variant={'h4'} className={classes.sectionHeader}>
+            Preview link for Promotional Materials
+          </Typography>
+          {!userHasTestLocked && (
+            <StudentLandingPageLinkBuilder
+              regionId={test.regionId}
+              institution={test.variants[0].institution}
+              promoCode={test.variants[0].promoCodes[0]}
+            />
+          )}
+          {userHasTestLocked && <p className={classes.errorText}>Please update the fields below and save so that the preview link can be generated.</p>}
+        </div>
 
         <div>
           <VariantEditor
@@ -157,19 +170,6 @@ export const StudentLandingPageTestEditor: React.FC<
             }}
           />
         </div>
-      </div>
-      <div className={classes.sectionContainer} key={test.name}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
-          Link for Promotional Materials
-        </Typography>
-        {!userHasTestLocked && (
-          <StudentLandingPageLinkBuilder
-            regionId={test.regionId}
-            institution={test.variants[0].institution}
-            promoCode={test.variants[0].promoCodes[0]}
-          />
-        )}
-        {userHasTestLocked && <p>Please save so that the link can be generated.</p>}
       </div>
     </>
   );
