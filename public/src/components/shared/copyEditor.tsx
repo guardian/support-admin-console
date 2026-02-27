@@ -106,6 +106,7 @@ export const CopyEditor: React.FC<CopyEditorProps> = ({
                   noDayTemplate: true,
                   noDateTemplate: true,
                   noPriceTemplates: true,
+                  noProductWeeklyTemplate: true,
                   noCampaignDeadlineTemplate: true,
                 }}
               />
@@ -141,6 +142,7 @@ export const CopyEditor: React.FC<CopyEditorProps> = ({
                     noDayTemplate: true,
                     noDateTemplate: true,
                     noPriceTemplates: true,
+                    noProductWeeklyTemplate: true,
                     noCampaignDeadlineTemplate: true,
                   }}
                 />

@@ -15,7 +15,12 @@ import { makeStyles } from '@mui/styles';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import { useFieldArray, useForm, Controller } from 'react-hook-form';
-import { copyLengthValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
+import {
+  copyLengthValidator,
+  EMPTY_ERROR_HELPER_TEXT,
+  PRICE_PRODUCT_WEEKLY,
+} from '../helpers/validation';
+import { RichTextEditorSingleLine } from '../richTextEditor/richTextEditor';
 
 const productKeys: (keyof Products)[] = ['Contribution', 'SupporterPlus', 'DigitalSubscription'];
 
@@ -44,6 +49,25 @@ const buildBenefitsHeading = (product: keyof Products) => {
     return 'Benefits:';
   }
 };
+
+// Validator for billingPeriodsCopy that accounts for template rendering
+const billingPeriodsCopyValidator =
+  (maxLength: number) =>
+  (copy: string | undefined): string | undefined => {
+    if (!copy) {
+      return undefined;
+    }
+
+    // Replace PRICE_PRODUCT_WEEKLY template (24 chars) with its rendered length (6 chars for '£00.00')
+    const renderedLength = copy.replace(
+      new RegExp(PRICE_PRODUCT_WEEKLY.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'),
+      'X'.repeat(6),
+    ).length;
+
+    return renderedLength > maxLength
+      ? `Max length is ${maxLength} (rendered: ${renderedLength})`
+      : undefined;
+  };
 
 interface ProductEditorProps {
   editMode: boolean;
@@ -88,7 +112,7 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
-  }, [errors.title, errors.cta, errors.label, errors.benefits]);
+  }, [errors.title, errors.billingPeriodsCopy, errors.cta, errors.label, errors.benefits]);
 
   useEffect(() => {
     reset(product);
@@ -119,6 +143,38 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
           onBlur={handleSubmit(onProductChange)}
           disabled={!editMode}
           fullWidth
+        />
+        <Controller
+          name="billingPeriodsCopy"
+          control={control}
+          rules={{
+            validate: billingPeriodsCopyValidator(42),
+          }}
+          render={({ field }) => (
+            <RichTextEditorSingleLine
+              error={!!errors.billingPeriodsCopy}
+              helperText={errors.billingPeriodsCopy ? errors.billingPeriodsCopy.message || '' : ''}
+              copyData={field.value}
+              updateCopy={(value) => {
+                field.onChange(value);
+                handleSubmit(onProductChange)();
+              }}
+              name="billingPeriodsCopy"
+              label="Billing Periods Copy"
+              disabled={!editMode}
+              rteMenuConstraints={{
+                noArticleCountTemplate: true,
+                noCampaignDeadlineTemplate: true,
+                noDayTemplate: true,
+                noDateTemplate: true,
+                noCountryNameTemplate: true,
+                noCurrencyTemplate: true,
+                noPriceTemplates: true,
+                noBold: true,
+                noItalic: true,
+              }}
+            />
+          )}
         />
         <TextField
           error={!!errors.cta?.copy}
