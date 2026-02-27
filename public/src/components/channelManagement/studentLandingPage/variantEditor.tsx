@@ -24,6 +24,8 @@ const imageGuidance: ImageGuidance = {
 const RTEMenuConstraints = {
   noHtml: true,
   noBold: true,
+  noItalic: true,
+  noCopyTemplates: true,
   noCurrencyTemplate: true,
   noCountryNameTemplate: true,
   noArticleCountTemplate: true,
