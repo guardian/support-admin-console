@@ -133,17 +133,17 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
     onValidationChange(isValid);
   }, [errors.heading, errors.subheading]);
 
-  const isValidField = (field: string, fieldName: string, maxLength: number, allowHtml=false,) => {
+  const isValidField = (field: string, fieldName: string, maxLength: number, allowHtml = false) => {
     const messages = [];
     if (field.length <= 0) {
       messages.push(`Please enter a ${fieldName} `);
     }
     if (!allowHtml) {
       const htmlValidation = noHtmlValidator(field);
-    if (htmlValidation) {
-      messages.push(`${htmlValidation} `);
+      if (htmlValidation) {
+        messages.push(`${htmlValidation} `);
+      }
     }
-  }
     if (field.length > maxLength) {
       messages.push(`The ${fieldName} must not exceed ${maxLength} characters (including spaces) `);
     }
