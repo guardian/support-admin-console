@@ -2,14 +2,15 @@ import React, { useEffect } from 'react';
 import { ResponsiveImage } from '../../models/shared';
 import { TextField } from '@mui/material';
 import { useForm } from 'react-hook-form';
+import { StudentLandingPageVariant } from '../../models/studentLandingPage';
 
 export interface ImageGuidance {
-  mobileUrl: string;
-  tabletUrl: string;
-  desktopUrl: string;
+  mobileUrlGuidance: string;
+  tabletUrlGuidance: string;
+  desktopUrlGuidance: string;
 }
 interface ResponsiveImageEditorProps {
-  image: ResponsiveImage;
+  variant: StudentLandingPageVariant;
   isDisabled: boolean;
   onValidationChange: (isValid: boolean) => void;
   onChange: (image: ResponsiveImage) => void;
@@ -17,13 +18,17 @@ interface ResponsiveImageEditorProps {
 }
 
 export const ResponsiveImageEditor: React.FC<ResponsiveImageEditorProps> = ({
-  image,
+  variant,
   isDisabled,
   onValidationChange,
   onChange,
   imageGuidance,
 }: ResponsiveImageEditorProps) => {
   const EMPTY_ERROR_HELPER_TEXT = 'Please add a URL for an image in these dimensions';
+
+  const defaultValues: ResponsiveImage = {
+    ...variant.image,
+  };
 
   const {
     register,
@@ -33,7 +38,7 @@ export const ResponsiveImageEditor: React.FC<ResponsiveImageEditorProps> = ({
     formState: { errors },
   } = useForm<ResponsiveImage>({
     mode: 'onChange',
-    defaultValues: image,
+    defaultValues,
   });
 
   useEffect(() => {
@@ -42,17 +47,16 @@ export const ResponsiveImageEditor: React.FC<ResponsiveImageEditorProps> = ({
   }, [errors.desktopUrl, errors.tabletUrl, errors.mobileUrl, errors.altText]);
 
   useEffect(() => {
-    // necessary to reset fields if user discards changes
-    reset(image);
-  }, [image]);
+    reset(variant.image);
+  }, [variant.image, reset]);
 
   return (
     <div>
       <TextField
         error={errors?.mobileUrl !== undefined}
-        helperText={errors?.mobileUrl?.message ?? imageGuidance?.mobileUrl}
+        helperText={errors?.mobileUrl?.message ?? imageGuidance?.mobileUrlGuidance}
         {...register('mobileUrl', {
-          required: `${EMPTY_ERROR_HELPER_TEXT} - ${imageGuidance?.mobileUrl}`,
+          required: `${EMPTY_ERROR_HELPER_TEXT} - ${imageGuidance?.mobileUrlGuidance}`,
         })}
         onBlur={handleSubmit(onChange)}
         label="Mobile Image URL"
@@ -63,9 +67,9 @@ export const ResponsiveImageEditor: React.FC<ResponsiveImageEditorProps> = ({
       />
       <TextField
         error={errors?.tabletUrl !== undefined}
-        helperText={errors?.tabletUrl?.message ?? imageGuidance?.tabletUrl}
+        helperText={errors?.tabletUrl?.message ?? imageGuidance?.tabletUrlGuidance}
         {...register('tabletUrl', {
-          required: `${EMPTY_ERROR_HELPER_TEXT} - ${imageGuidance?.tabletUrl}`,
+          required: `${EMPTY_ERROR_HELPER_TEXT} - ${imageGuidance?.tabletUrlGuidance}`,
         })}
         onBlur={handleSubmit(onChange)}
         label="Tablet Image URL"
@@ -76,9 +80,9 @@ export const ResponsiveImageEditor: React.FC<ResponsiveImageEditorProps> = ({
       />
       <TextField
         error={errors?.desktopUrl !== undefined}
-        helperText={errors?.desktopUrl?.message ?? imageGuidance?.desktopUrl}
+        helperText={errors?.desktopUrl?.message ?? imageGuidance?.desktopUrlGuidance}
         {...register('desktopUrl', {
-          required: `${EMPTY_ERROR_HELPER_TEXT} - ${imageGuidance?.desktopUrl}`,
+          required: `${EMPTY_ERROR_HELPER_TEXT} - ${imageGuidance?.desktopUrlGuidance}`,
         })}
         onBlur={handleSubmit(onChange)}
         label="Desktop URL"

@@ -16,15 +16,12 @@ const HEADLINE_MAX_LENGTH = 65; // TODO: confirm the max length of this field
 const SUBHEADING_MAX_LENGTH = 210; // TODO: confirm the max length of this field
 
 const imageGuidance: ImageGuidance = {
-  mobileUrl: '1:1 min width of ? max width of ?',
-  tabletUrl: '1:1 min width of ? max width of ?',
-  desktopUrl: '1:1 min width of ? max width of ?',
+  mobileUrlGuidance: '1:1 min width of ? max width of ?',
+  tabletUrlGuidance: '1:1 min width of ? max width of ?',
+  desktopUrlGuidance: '1:1 min width of ? max width of ?',
 };
 
 const RTEMenuConstraints = {
-  noHtml: true,
-  noBold: true,
-  noItalic: true,
   noCopyTemplates: true,
   noCurrencyTemplate: true,
   noCountryNameTemplate: true,
@@ -200,7 +197,13 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
                   name="heading"
                   label="Heading"
                   disabled={!editMode}
-                  rteMenuConstraints={RTEMenuConstraints}
+                  rteMenuConstraints={{
+                    ...RTEMenuConstraints,
+                    noHtml: true,
+                    noBold: true,
+                    noItalic: true,
+                    noLink: true,
+                  }}
                 />
               );
             }}
@@ -228,9 +231,10 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
                   disabled={!editMode}
                   rteMenuConstraints={{
                     ...RTEMenuConstraints,
-                    noHtml: false,
-                    noBold: false,
                     noLink: true,
+                    noItalic: true,
+                    noBold: false,
+                    noHtml: false,
                   }}
                 />
               );
@@ -243,7 +247,7 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
           </Typography>
           <Typography>Please set 3 images which will be used at the 3 breakpoints</Typography>
           <ResponsiveImageEditor
-            image={variant.image}
+            variant={variant}
             isDisabled={!editMode}
             onValidationChange={onValidationChange}
             onChange={updateImage}
