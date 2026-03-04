@@ -73,6 +73,7 @@ interface RteMenuConstraints {
   noDateTemplate?: boolean;
   noDayTemplate?: boolean;
   noCampaignDeadlineTemplate?: boolean;
+  noLink?: boolean;
 }
 
 /**
@@ -503,7 +504,7 @@ const RichTextEditor: React.FC<RichTextEditorProps<string[]>> = ({
 
   const menuConstraints = rteMenuConstraints || {};
 
-  const { noHtml } = menuConstraints;
+  const { noHtml, noLink } = menuConstraints;
 
   // Make sure the supplied copy is in an Array, for processing
   if (copyData == null) {
@@ -553,7 +554,7 @@ const RichTextEditor: React.FC<RichTextEditorProps<string[]>> = ({
         <Remirror manager={manager} initialContent={state} editable={!disabled} hooks={hooks}>
           <RichTextMenu disabled={disabled} label={label} rteMenuConstraints={menuConstraints} />
           <EditorComponent />
-          {!disabled && !noHtml && <FloatingLinkToolbar />}
+          {!disabled && !noHtml && !noLink && <FloatingLinkToolbar />}
           <p className={error ? classes.errorText : classes.helperText}>{helperText}</p>
         </Remirror>
       </div>

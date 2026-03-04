@@ -16,14 +16,13 @@ const HEADLINE_MAX_LENGTH = 65; // TODO: confirm the max length of this field
 const SUBHEADING_MAX_LENGTH = 210; // TODO: confirm the max length of this field
 
 const imageGuidance: ImageGuidance = {
-  mobileUrl: '1:1 min width of ? max width of ?',
-  tabletUrl: '1:1 min width of ? max width of ?',
-  desktopUrl: '1:1 min width of ? max width of ?',
+  mobileUrlGuidance: '1:1 min width of ? max width of ?',
+  tabletUrlGuidance: '1:1 min width of ? max width of ?',
+  desktopUrlGuidance: '1:1 min width of ? max width of ?',
 };
 
 const RTEMenuConstraints = {
-  noHtml: true,
-  noBold: true,
+  noCopyTemplates: true,
   noCurrencyTemplate: true,
   noCountryNameTemplate: true,
   noArticleCountTemplate: true,
@@ -134,14 +133,16 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
     onValidationChange(isValid);
   }, [errors.heading, errors.subheading]);
 
-  const isValidField = (field: string, fieldName: string, maxLength: number) => {
+  const isValidField = (field: string, fieldName: string, maxLength: number, allowHtml = false) => {
     const messages = [];
     if (field.length <= 0) {
       messages.push(`Please enter a ${fieldName} `);
     }
-    const htmlValidation = noHtmlValidator(field);
-    if (htmlValidation) {
-      messages.push(`${htmlValidation} `);
+    if (!allowHtml) {
+      const htmlValidation = noHtmlValidator(field);
+      if (htmlValidation) {
+        messages.push(`${htmlValidation} `);
+      }
     }
     if (field.length > maxLength) {
       messages.push(`The ${fieldName} must not exceed ${maxLength} characters (including spaces) `);
@@ -162,7 +163,7 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
   };
 
   const isValidSubHeading = (field: string) => {
-    return isValidField(field, 'subheading', SUBHEADING_MAX_LENGTH);
+    return isValidField(field, 'subheading', SUBHEADING_MAX_LENGTH, true);
   };
 
   return (
@@ -198,7 +199,13 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
                   name="heading"
                   label="Heading"
                   disabled={!editMode}
-                  rteMenuConstraints={RTEMenuConstraints}
+                  rteMenuConstraints={{
+                    ...RTEMenuConstraints,
+                    noHtml: true,
+                    noBold: true,
+                    noItalic: true,
+                    noLink: true,
+                  }}
                 />
               );
             }}
@@ -226,7 +233,10 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
                   disabled={!editMode}
                   rteMenuConstraints={{
                     ...RTEMenuConstraints,
+                    noLink: true,
+                    noItalic: true,
                     noBold: false,
+                    noHtml: false,
                   }}
                 />
               );
@@ -239,7 +249,7 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
           </Typography>
           <Typography>Please set 3 images which will be used at the 3 breakpoints</Typography>
           <ResponsiveImageEditor
-            image={variant.image}
+            variant={variant}
             isDisabled={!editMode}
             onValidationChange={onValidationChange}
             onChange={updateImage}
