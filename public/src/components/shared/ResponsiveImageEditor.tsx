@@ -33,6 +33,7 @@ export const ResponsiveImageEditor: React.FC<ResponsiveImageEditorProps> = ({
   const {
     register,
     handleSubmit,
+    trigger,
     reset,
 
     formState: { errors },
@@ -40,6 +41,10 @@ export const ResponsiveImageEditor: React.FC<ResponsiveImageEditorProps> = ({
     mode: 'onChange',
     defaultValues,
   });
+
+  useEffect(() => {
+    trigger();
+  },[])
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
