@@ -76,6 +76,12 @@ interface OfferFormData {
   subheading: string;
 }
 
+interface VariantSectionValidity {
+  copy: boolean;
+  institution: boolean;
+  image: boolean;
+}
+
 export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
   variant,
   editMode,
@@ -90,6 +96,11 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
   };
 
   const [validatedFields, setValidatedFields] = useState<OfferFormData>(defaultValues);
+  const [sectionValidity, setSectionValidity] = useState<VariantSectionValidity>({
+    copy: false,
+    institution: false,
+    image: false,
+  });
 
   const updatePromoCodes = (promoCodes: string[]): void => {
     onVariantChange((current) => ({
@@ -130,8 +141,22 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
-    onValidationChange(isValid);
+    setSectionValidity((current) => ({
+      ...current,
+      copy: isValid,
+    }));
   }, [errors.heading, errors.subheading]);
+
+  useEffect(() => {
+    onValidationChange(
+      sectionValidity.copy && sectionValidity.institution && sectionValidity.image,
+    );
+  }, [
+    onValidationChange,
+    sectionValidity.copy,
+    sectionValidity.institution,
+    sectionValidity.image,
+  ]);
 
   const isValidField = (field: string, fieldName: string, maxLength: number, allowHtml = false) => {
     const messages = [];
@@ -172,7 +197,12 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
         variant={variant}
         editMode={editMode}
         updateInstitutionDetails={updateInstitutionDetails}
-        onValidationChange={onValidationChange}
+        onValidationChange={(isValid) => 
+          setSectionValidity((current) => ({
+            ...current,
+            institution: isValid,
+          }))
+        }
       />
       <hr />
       <div className={classes.container}>
@@ -251,7 +281,12 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
           <ResponsiveImageEditor
             variant={variant}
             isDisabled={!editMode}
-            onValidationChange={onValidationChange}
+            onValidationChange={(isValid) =>
+              setSectionValidity((current) => ({
+                ...current,
+                image: isValid,
+              }))
+            }
             onChange={updateImage}
             imageGuidance={imageGuidance}
           />
