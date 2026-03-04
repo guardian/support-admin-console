@@ -140,7 +140,7 @@ export const StudentLandingPageTestEditor: React.FC<
                 institution={test.variants[0].institution}
                 promoCode={test.variants[0].promoCodes[0]}
               />
-              <p className={classes.errorText}>
+              <p>
                 Please check the preview link is working as expected before adding to any
                 promotional material.
               </p>
