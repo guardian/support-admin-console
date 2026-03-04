@@ -70,6 +70,7 @@ export const AcademicInstitutionDetailEditor: React.FC<AcademicInstituteDetailEd
     formState: { errors },
   } = useForm<FormData>({
     mode: 'onChange',
+    shouldFocusError: false,
     defaultValues,
   });
 

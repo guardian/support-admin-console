@@ -134,11 +134,17 @@ export const StudentLandingPageTestEditor: React.FC<
             Preview link for Promotional Materials
           </Typography>
           {!userHasTestLocked && (
-            <StudentLandingPageLinkBuilder
-              regionId={test.regionId}
-              institution={test.variants[0].institution}
-              promoCode={test.variants[0].promoCodes[0]}
-            />
+            <>
+              <StudentLandingPageLinkBuilder
+                regionId={test.regionId}
+                institution={test.variants[0].institution}
+                promoCode={test.variants[0].promoCodes[0]}
+              />
+              <p>
+                Please check the preview link is working as expected before adding to any
+                promotional material.
+              </p>
+            </>
           )}
           {userHasTestLocked && (
             <p className={classes.errorText}>
