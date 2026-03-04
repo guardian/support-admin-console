@@ -40,12 +40,12 @@ export const ResponsiveImageEditor: React.FC<ResponsiveImageEditorProps> = ({
   } = useForm<ResponsiveImage>({
     mode: 'onChange',
     defaultValues,
-    shouldFocusError:false,
+    shouldFocusError: false,
   });
 
   useEffect(() => {
     trigger();
-  },[])
+  }, []);
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
