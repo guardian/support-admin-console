@@ -73,10 +73,11 @@ export const StudentLandingPageTestEditor: React.FC<
   const [helperText, setHelperText] = useState<string>('Please choose a country');
 
   useEffect(() => {
+    setValidationStatusForField('regionId', isFieldSet(test.regionId as string));
     if (isFieldSet(test.regionId as string)) {
       setHelperText('');
     }
-  }, []);
+  }, [test.regionId]);
 
   const updateTest = (
     update: (current: StudentLandingPageTest) => StudentLandingPageTest,
