@@ -33,13 +33,19 @@ export const ResponsiveImageEditor: React.FC<ResponsiveImageEditorProps> = ({
   const {
     register,
     handleSubmit,
+    trigger,
     reset,
 
     formState: { errors },
   } = useForm<ResponsiveImage>({
     mode: 'onChange',
     defaultValues,
+    shouldFocusError: false,
   });
+
+  useEffect(() => {
+    trigger();
+  }, []);
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
@@ -53,11 +59,11 @@ export const ResponsiveImageEditor: React.FC<ResponsiveImageEditorProps> = ({
   return (
     <div>
       <TextField
-        error={errors?.mobileUrl !== undefined}
-        helperText={errors?.mobileUrl?.message ?? imageGuidance?.mobileUrlGuidance}
         {...register('mobileUrl', {
           required: `${EMPTY_ERROR_HELPER_TEXT} - ${imageGuidance?.mobileUrlGuidance}`,
         })}
+        error={errors?.mobileUrl !== undefined}
+        helperText={errors?.mobileUrl?.message ?? imageGuidance?.mobileUrlGuidance}
         onBlur={handleSubmit(onChange)}
         label="Mobile Image URL"
         margin="normal"
@@ -66,11 +72,11 @@ export const ResponsiveImageEditor: React.FC<ResponsiveImageEditorProps> = ({
         fullWidth
       />
       <TextField
-        error={errors?.tabletUrl !== undefined}
-        helperText={errors?.tabletUrl?.message ?? imageGuidance?.tabletUrlGuidance}
         {...register('tabletUrl', {
           required: `${EMPTY_ERROR_HELPER_TEXT} - ${imageGuidance?.tabletUrlGuidance}`,
         })}
+        error={errors?.tabletUrl !== undefined}
+        helperText={errors?.tabletUrl?.message ?? imageGuidance?.tabletUrlGuidance}
         onBlur={handleSubmit(onChange)}
         label="Tablet Image URL"
         margin="normal"
@@ -79,11 +85,11 @@ export const ResponsiveImageEditor: React.FC<ResponsiveImageEditorProps> = ({
         fullWidth
       />
       <TextField
-        error={errors?.desktopUrl !== undefined}
-        helperText={errors?.desktopUrl?.message ?? imageGuidance?.desktopUrlGuidance}
         {...register('desktopUrl', {
           required: `${EMPTY_ERROR_HELPER_TEXT} - ${imageGuidance?.desktopUrlGuidance}`,
         })}
+        error={errors?.desktopUrl !== undefined}
+        helperText={errors?.desktopUrl?.message ?? imageGuidance?.desktopUrlGuidance}
         onBlur={handleSubmit(onChange)}
         label="Desktop URL"
         margin="normal"
@@ -92,11 +98,11 @@ export const ResponsiveImageEditor: React.FC<ResponsiveImageEditorProps> = ({
         fullWidth
       />
       <TextField
-        error={errors?.altText !== undefined}
-        helperText={errors?.altText?.message ?? 'A descriptive message for the user'}
         {...register('altText', {
           required: 'Please add some descriptive text for the image',
         })}
+        error={errors?.altText !== undefined}
+        helperText={errors?.altText?.message ?? 'A descriptive message for the user'}
         onBlur={handleSubmit(onChange)}
         label="Image Description (alt text)"
         margin="normal"
