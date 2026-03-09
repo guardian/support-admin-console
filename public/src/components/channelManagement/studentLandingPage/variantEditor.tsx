@@ -197,7 +197,7 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
         variant={variant}
         editMode={editMode}
         updateInstitutionDetails={updateInstitutionDetails}
-        onValidationChange={(isValid) => 
+        onValidationChange={(isValid) =>
           setSectionValidity((current) => ({
             ...current,
             institution: isValid,
