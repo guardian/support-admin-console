@@ -218,6 +218,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                 disabled={!editMode}
                 rteMenuConstraints={{
                   noHtml: true,
+                  noStrikethrough: true,
                   noCurrencyTemplate: true,
                   noCountryNameTemplate: true,
                   noArticleCountTemplate: true,
