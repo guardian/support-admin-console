@@ -5,6 +5,7 @@ import {
   ItalicExtension,
   LinkExtension,
   ShortcutHandlerProps,
+  StrikeExtension,
   TextHighlightExtension,
   createMarkPositioner,
 } from 'remirror/extensions';
@@ -74,6 +75,7 @@ interface RteMenuConstraints {
   noDayTemplate?: boolean;
   noCampaignDeadlineTemplate?: boolean;
   noLink?: boolean;
+  noStrikethrough?: boolean;
 }
 
 /**
@@ -294,6 +296,7 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
     noHtml,
     noBold,
     noItalic,
+    noStrikethrough,
     noCopyTemplates,
     noPriceTemplates,
     noProductWeeklyTemplate,
@@ -310,6 +313,9 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
   };
   const clickItalic = () => {
     chain.toggleItalic().focus().run();
+  };
+  const clickStrikethrough = () => {
+    chain.toggleStrike().focus().run();
   };
 
   const insertTemplate = (template: string): void => chain.insertText(template).focus().run();
@@ -337,11 +343,19 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
                   Italic
                 </button>
               )}
+              {!noStrikethrough && (
+                <button
+                  className={`remirror-button ${active.strike() && 'remirror-button-active'}`}
+                  onClick={() => clickStrikethrough()}
+                >
+                  Strikethrough
+                </button>
+              )}
             </>
           )}
           {!noCopyTemplates && (
             <>
-              {(!noBold || !noItalic) && (
+              {(!noBold || !noItalic || !noStrikethrough) && (
                 <span className={classes.remirrorButtonSpacer}>&nbsp;</span>
               )}
               {!noArticleCountTemplate && (
@@ -536,6 +550,7 @@ const RichTextEditor: React.FC<RichTextEditorProps<string[]>> = ({
     extensions: () => [
       new MyBoldExtension({}),
       new MyItalicExtension(),
+      new StrikeExtension(),
       new LinkExtension({ autoLink: true }),
       new TextHighlightExtension({}),
       new RemovePastedHtmlExtension(),

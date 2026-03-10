@@ -315,6 +315,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                   label="Highlighted text"
                   disabled={!editMode}
                   rteMenuConstraints={{
+                    noStrikethrough: true,
                     noBold: true,
                     noCampaignDeadlineTemplate: true,
                     noProductWeeklyTemplate: true,

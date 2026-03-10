@@ -100,6 +100,7 @@ export const CopyEditor: React.FC<CopyEditorProps> = ({
                 label="Heading copy"
                 disabled={!editMode}
                 rteMenuConstraints={{
+                  noStrikethrough: true,
                   noArticleCountTemplate: true,
                   noCurrencyTemplate: true,
                   noCountryNameTemplate: true,
@@ -136,6 +137,7 @@ export const CopyEditor: React.FC<CopyEditorProps> = ({
                   label="Subheading copy"
                   disabled={!editMode}
                   rteMenuConstraints={{
+                    noStrikethrough: true,
                     noArticleCountTemplate: true,
                     noCurrencyTemplate: true,
                     noCountryNameTemplate: true,

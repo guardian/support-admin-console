@@ -22,6 +22,7 @@ const imageGuidance: ImageGuidance = {
 };
 
 const RTEMenuConstraints = {
+  noStrikethrough: true,
   noCopyTemplates: true,
   noCurrencyTemplate: true,
   noCountryNameTemplate: true,
