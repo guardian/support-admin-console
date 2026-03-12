@@ -193,6 +193,7 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
                   label="Overwrite Heading Text"
                   disabled={isDisabled}
                   rteMenuConstraints={{
+                    noStrikethrough: true,
                     noArticleCountTemplate: true,
                     noCurrencyTemplate: true,
                     noCountryNameTemplate: true,

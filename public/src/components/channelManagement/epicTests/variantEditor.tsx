@@ -356,6 +356,7 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                 rteMenuConstraints={{
                   noHtml,
                   noBold: true,
+                  noStrikethrough: true,
                   noCurrencyTemplate,
                   noCountryNameTemplate,
                   noArticleCountTemplate,

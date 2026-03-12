@@ -246,6 +246,7 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
                       label="Notes and links"
                       disabled={!editMode}
                       rteMenuConstraints={{
+                        noStrikethrough: true,
                         noCurrencyTemplate: true,
                         noCountryNameTemplate: true,
                         noArticleCountTemplate: true,
