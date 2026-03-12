@@ -23,6 +23,7 @@ interface EpicTestVariantEditorButtonsEditorProps {
   onValidationChange: (isValid: boolean) => void;
   isDisabled: boolean;
   supportSecondaryCta: boolean;
+  isPrimaryCtaUrlDisabled?: boolean;
 }
 
 const EpicTestVariantEditorButtonsEditor: React.FC<EpicTestVariantEditorButtonsEditorProps> = ({
@@ -34,6 +35,7 @@ const EpicTestVariantEditorButtonsEditor: React.FC<EpicTestVariantEditorButtonsE
   onValidationChange,
   isDisabled,
   supportSecondaryCta,
+  isPrimaryCtaUrlDisabled,
 }: EpicTestVariantEditorButtonsEditorProps) => {
   const classes = useStyles();
 
@@ -46,6 +48,7 @@ const EpicTestVariantEditorButtonsEditor: React.FC<EpicTestVariantEditorButtonsE
         updateCta={updatePrimaryCta}
         defaultCta={DEFAULT_PRIMARY_CTA}
         onValidationChange={onValidationChange}
+        isPrimaryCtaUrlDisabled={isPrimaryCtaUrlDisabled}
       />
 
       {supportSecondaryCta && (
