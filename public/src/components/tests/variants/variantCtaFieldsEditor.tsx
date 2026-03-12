@@ -18,6 +18,7 @@ interface VariantCtaFieldsEditorProps {
   onValidationChange: (isValid: boolean) => void;
   isDisabled: boolean;
   copyLength?: number;
+  isPrimaryCtaUrlDisabled?: boolean;
 }
 
 const VariantCtaFieldsEditor: React.FC<VariantCtaFieldsEditorProps> = ({
@@ -26,6 +27,7 @@ const VariantCtaFieldsEditor: React.FC<VariantCtaFieldsEditorProps> = ({
   onValidationChange,
   isDisabled,
   copyLength = 100,
+  isPrimaryCtaUrlDisabled = false,
 }: VariantCtaFieldsEditorProps) => {
   const defaultValues: FormData = {
     text: cta.text,
@@ -67,7 +69,10 @@ const VariantCtaFieldsEditor: React.FC<VariantCtaFieldsEditorProps> = ({
 
       <TextField
         error={errors.baseUrl !== undefined}
-        helperText={errors.baseUrl?.message}
+        helperText={
+          errors.baseUrl?.message ||
+          (isPrimaryCtaUrlDisabled ? 'URL is not applied for enabled choice cards.' : undefined)
+        }
         {...register('baseUrl', {
           required: EMPTY_ERROR_HELPER_TEXT,
         })}
@@ -75,7 +80,7 @@ const VariantCtaFieldsEditor: React.FC<VariantCtaFieldsEditorProps> = ({
         label="Button destination"
         margin="normal"
         variant="outlined"
-        disabled={isDisabled}
+        disabled={isDisabled || isPrimaryCtaUrlDisabled}
         fullWidth
       />
     </div>

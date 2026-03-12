@@ -102,6 +102,7 @@ interface VariantContentEditorProps {
   onValidationChange: (isValid: boolean) => void;
   editMode: boolean;
   deviceType: DeviceType;
+  isPrimaryCtaUrlDisabled?: boolean;
 }
 
 interface FormData {
@@ -131,6 +132,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
   onValidationChange,
   editMode,
   deviceType,
+  isPrimaryCtaUrlDisabled,
 }: VariantContentEditorProps) => {
   const classes = useStyles();
 
@@ -339,6 +341,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
             isDisabled={!editMode}
             onValidationChange={onValidationChange}
             supportSecondaryCta={true}
+            isPrimaryCtaUrlDisabled={isPrimaryCtaUrlDisabled}
           />
         </div>
       </div>
@@ -449,6 +452,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
           }
           editMode={editMode}
           deviceType={variant.mobileBannerContent === undefined ? 'ALL' : 'NOT_MOBILE'}
+          isPrimaryCtaUrlDisabled={designHasChoiceCards}
         />
 
         <RadioGroup
@@ -482,6 +486,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
             }
             editMode={editMode}
             deviceType={'MOBILE'}
+            isPrimaryCtaUrlDisabled={designHasChoiceCards}
           />
         )}
 

@@ -22,6 +22,7 @@ interface VariantCtasEditorProps {
   onValidationChange: (isValid: boolean) => void;
   isDisabled: boolean;
   supportSecondaryCta: boolean;
+  isPrimaryCtaUrlDisabled?: boolean;
 }
 
 const VariantCtasEditor: React.FC<VariantCtasEditorProps> = ({
@@ -32,6 +33,7 @@ const VariantCtasEditor: React.FC<VariantCtasEditorProps> = ({
   onValidationChange,
   isDisabled,
   supportSecondaryCta,
+  isPrimaryCtaUrlDisabled,
 }: VariantCtasEditorProps) => {
   const classes = useStyles();
 
@@ -44,6 +46,7 @@ const VariantCtasEditor: React.FC<VariantCtasEditorProps> = ({
         updateCta={updatePrimaryCta}
         defaultCta={DEFAULT_PRIMARY_CTA}
         onValidationChange={onValidationChange}
+        isPrimaryCtaUrlDisabled={isPrimaryCtaUrlDisabled}
       />
 
       {supportSecondaryCta && (

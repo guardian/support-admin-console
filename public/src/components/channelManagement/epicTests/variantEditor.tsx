@@ -451,6 +451,7 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                 updateSecondaryCta={updateSecondaryCta}
                 allowVariantCustomSecondaryCta={allowVariantCustomSecondaryCta}
                 isDisabled={!editMode}
+                isPrimaryCtaUrlDisabled={variant.showChoiceCards ?? false}
                 onValidationChange={onValidationChange}
                 supportSecondaryCta={allowVariantSecondaryCta}
               />
