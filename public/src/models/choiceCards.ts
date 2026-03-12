@@ -13,6 +13,11 @@ export type Product =
 
 type Destination = 'LandingPage' | 'Checkout';
 
+export interface DestinationTest {
+  testName: string;
+  variantName: string;
+}
+
 export interface ChoiceCard {
   product: Product;
   label: string;
@@ -23,6 +28,7 @@ export interface ChoiceCard {
   };
   isDefault: boolean;
   destination?: Destination;
+  destinationTest?: DestinationTest;
 }
 
 export interface ChoiceCardsSettings {

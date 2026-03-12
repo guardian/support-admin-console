@@ -129,6 +129,10 @@ const ChoiceCardsEditor: React.FC<ChoiceCardsEditorProps> = ({
     const choiceCards = updatedSettings.choiceCards.map((card) => ({
       ...card,
       pill: card.pill?.copy ? card.pill : undefined,
+      destinationTest:
+        card.destinationTest?.testName || card.destinationTest?.variantName
+          ? card.destinationTest
+          : undefined,
     }));
 
     updateChoiceCardsSettings(showChoiceCards, { choiceCards });

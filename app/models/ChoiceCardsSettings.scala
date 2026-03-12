@@ -63,6 +63,8 @@ object ChoiceCardsSettings {
     implicit val decoder: Decoder[Destination] = deriveEnumerationDecoder[Destination]
   }
 
+  case class DestinationTest(testName: String, variantName: String)
+
   case class Pill(copy: String)
 
   case class ChoiceCard(
@@ -72,7 +74,8 @@ object ChoiceCardsSettings {
       benefits: List[ProductBenefit],
       pill: Option[Pill],
       isDefault: Boolean,
-      destination: Option[Destination]
+      destination: Option[Destination],
+      destinationTest: Option[DestinationTest]
   )
 
   implicit val customConfig: Configuration = Configuration.default.withDefaults

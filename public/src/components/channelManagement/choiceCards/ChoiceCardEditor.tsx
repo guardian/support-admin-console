@@ -337,6 +337,46 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
                   Checkout: 'Checkout',
                 }}
               />
+
+              <Controller
+                name={`choiceCards.${index}.destinationTest.testName`}
+                control={control}
+                render={({ field: destinationTestNameField }) => (
+                  <TextField
+                    required={false}
+                    label="Destination test name (optional)"
+                    variant="filled"
+                    fullWidth
+                    margin="normal"
+                    disabled={isDisabled}
+                    value={destinationTestNameField.value ?? ''}
+                    onChange={(e) => {
+                      destinationTestNameField.onChange(e.target.value);
+                      handleCardChange();
+                    }}
+                  />
+                )}
+              />
+
+              <Controller
+                name={`choiceCards.${index}.destinationTest.variantName`}
+                control={control}
+                render={({ field: destinationVariantNameField }) => (
+                  <TextField
+                    required={false}
+                    label="Destination variant name (optional)"
+                    variant="filled"
+                    fullWidth
+                    margin="normal"
+                    disabled={isDisabled}
+                    value={destinationVariantNameField.value ?? ''}
+                    onChange={(e) => {
+                      destinationVariantNameField.onChange(e.target.value);
+                      handleCardChange();
+                    }}
+                  />
+                )}
+              />
             </>
           )}
         />
