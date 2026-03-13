@@ -163,7 +163,6 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
               label="Billing Periods Copy"
               disabled={!editMode}
               rteMenuConstraints={{
-                noStrikethrough: true,
                 noArticleCountTemplate: true,
                 noCampaignDeadlineTemplate: true,
                 noDayTemplate: true,

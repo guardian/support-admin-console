@@ -56,7 +56,7 @@ const richTextEditorConfig: RteMenuConstraints = {
   noHtml: false,
   noBold: false,
   noItalic: false,
-  noStrikethrough: true,
+  noStrikethrough: false,
   noCurrencyTemplate: false,
   noCountryNameTemplate: true,
   noArticleCountTemplate: true,

@@ -217,7 +217,9 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                 label="Body copy"
                 disabled={!editMode}
                 rteMenuConstraints={{
-                  noHtml: true,
+                  noHtml: false,
+                  noBold: true,
+                  noItalic: true,
                   noCurrencyTemplate: true,
                   noCountryNameTemplate: true,
                   noArticleCountTemplate: true,
