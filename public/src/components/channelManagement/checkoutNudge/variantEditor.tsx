@@ -10,6 +10,7 @@ import {
 import { useStyles } from '../helpers/testEditorStyles';
 import { PRODUCTS, getAvailableRatePlans, ONE_TIME_PLANS, RECURRING_PLANS } from './utils/defaults';
 import PromoCodesEditor from '../../shared/PromoCodesEditor';
+import { RichTextEditorSingleLine, RteMenuConstraints } from '../richTextEditor/richTextEditor';
 
 interface VariantEditorProps {
   variant: CheckoutNudgeVariant;
@@ -18,6 +19,11 @@ interface VariantEditorProps {
   editMode: boolean;
   onValidationChange: (isValid: boolean) => void;
 }
+
+const richTextEditorConfig: RteMenuConstraints = {
+  noCopyTemplates: true,
+  noLink: true,
+};
 
 const VariantEditor: React.FC<VariantEditorProps> = ({
   variant,
@@ -171,28 +177,25 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
             <Typography variant="h4" className={classes.sectionHeader}>
               Nudge Copy
             </Typography>
-            <TextField
+            <RichTextEditorSingleLine
               label="Heading"
-              value={variant.nudge.nudgeCopy.heading}
-              onChange={(e): void =>
-                updateNudgeCopy((current) => ({ ...current, heading: e.target.value }))
+              copyData={variant.nudge.nudgeCopy.heading}
+              updateCopy={(heading): void =>
+                updateNudgeCopy((current) => ({ ...current, heading: heading || '' }))
               }
               disabled={!editMode}
-              fullWidth
-              margin="normal"
-              required
+              error={!variant.nudge.nudgeCopy.heading}
+              rteMenuConstraints={richTextEditorConfig}
             />
-            <TextField
+            <RichTextEditorSingleLine
               label="Body"
-              value={variant.nudge.nudgeCopy.body || ''}
-              onChange={(e): void =>
-                updateNudgeCopy((current) => ({ ...current, body: e.target.value }))
+              copyData={variant.nudge.nudgeCopy.body || ''}
+              updateCopy={(body): void =>
+                updateNudgeCopy((current) => ({ ...current, body: body || '' }))
               }
               disabled={!editMode}
-              fullWidth
-              margin="normal"
-              multiline
-              rows={3}
+              error={false}
+              rteMenuConstraints={richTextEditorConfig}
             />
           </div>
 
@@ -200,28 +203,25 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
             <Typography variant="h4" className={classes.sectionHeader}>
               Thank You Copy
             </Typography>
-            <TextField
+            <RichTextEditorSingleLine
               label="Heading"
-              value={variant.nudge.thankyouCopy.heading}
-              onChange={(e): void =>
-                updateThankyouCopy((current) => ({ ...current, heading: e.target.value }))
+              copyData={variant.nudge.thankyouCopy.heading}
+              updateCopy={(heading): void =>
+                updateThankyouCopy((current) => ({ ...current, heading: heading || '' }))
               }
               disabled={!editMode}
-              fullWidth
-              margin="normal"
-              required
+              error={!variant.nudge.thankyouCopy.heading}
+              rteMenuConstraints={richTextEditorConfig}
             />
-            <TextField
+            <RichTextEditorSingleLine
               label="Body"
-              value={variant.nudge.thankyouCopy.body}
-              onChange={(e): void =>
-                updateThankyouCopy((current) => ({ ...current, body: e.target.value }))
+              copyData={variant.nudge.thankyouCopy.body || ''}
+              updateCopy={(body): void =>
+                updateThankyouCopy((current) => ({ ...current, body: body || '' }))
               }
               disabled={!editMode}
-              fullWidth
-              margin="normal"
-              multiline
-              rows={3}
+              error={false}
+              rteMenuConstraints={richTextEditorConfig}
             />
           </div>
 
