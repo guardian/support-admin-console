@@ -21,19 +21,6 @@ const imageGuidance: ImageGuidance = {
   desktopUrlGuidance: '1:1 min width of ? max width of ?',
 };
 
-const RTEMenuConstraints = {
-  noStrikethrough: true,
-  noCopyTemplates: true,
-  noCurrencyTemplate: true,
-  noCountryNameTemplate: true,
-  noArticleCountTemplate: true,
-  noPriceTemplates: true,
-  noProductWeeklyTemplate: true,
-  noDateTemplate: true,
-  noDayTemplate: true,
-  noCampaignDeadlineTemplate: true,
-};
-
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {
     width: '98%',
@@ -230,13 +217,6 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
                   name="heading"
                   label="Heading"
                   disabled={!editMode}
-                  rteMenuConstraints={{
-                    ...RTEMenuConstraints,
-                    noHtml: true,
-                    noBold: true,
-                    noItalic: true,
-                    noLink: true,
-                  }}
                 />
               );
             }}
@@ -263,11 +243,8 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
                   label="Subheading"
                   disabled={!editMode}
                   rteMenuConstraints={{
-                    ...RTEMenuConstraints,
-                    noLink: true,
-                    noItalic: true,
-                    noBold: false,
-                    noHtml: false,
+                    enableBold: true,
+                    enableHtml: true,
                   }}
                 />
               );

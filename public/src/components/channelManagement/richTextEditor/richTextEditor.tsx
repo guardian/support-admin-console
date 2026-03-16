@@ -62,20 +62,20 @@ interface RichTextMenuProps {
 }
 
 interface RteMenuConstraints {
-  noHtml?: boolean;
-  noBold?: boolean;
-  noItalic?: boolean;
-  noCopyTemplates?: boolean;
-  noCurrencyTemplate?: boolean;
-  noCountryNameTemplate?: boolean;
-  noArticleCountTemplate?: boolean;
-  noPriceTemplates?: boolean;
-  noProductWeeklyTemplate?: boolean;
-  noDateTemplate?: boolean;
-  noDayTemplate?: boolean;
-  noCampaignDeadlineTemplate?: boolean;
-  noLink?: boolean;
-  noStrikethrough?: boolean;
+  enableHtml?: boolean;
+  enableBold?: boolean;
+  enableItalic?: boolean;
+  enableCopyTemplates?: boolean;
+  enableCurrencyTemplate?: boolean;
+  enableCountryNameTemplate?: boolean;
+  enableArticleCountTemplate?: boolean;
+  enablePriceTemplates?: boolean;
+  enableProductWeeklyTemplate?: boolean;
+  enableDateTemplate?: boolean;
+  enableDayTemplate?: boolean;
+  enableCampaignDeadlineTemplate?: boolean;
+  enableLink?: boolean;
+  enableStrikethrough?: boolean;
 }
 
 /**
@@ -293,19 +293,19 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
   const [priceButtonsVisible, setPriceButtonsVisible] = useState<boolean>(false);
 
   const {
-    noHtml,
-    noBold,
-    noItalic,
-    noStrikethrough,
-    noCopyTemplates,
-    noPriceTemplates,
-    noProductWeeklyTemplate,
-    noCurrencyTemplate,
-    noCountryNameTemplate,
-    noArticleCountTemplate,
-    noDateTemplate,
-    noDayTemplate,
-    noCampaignDeadlineTemplate,
+    enableHtml,
+    enableBold,
+    enableItalic,
+    enableStrikethrough,
+    enableCopyTemplates,
+    enablePriceTemplates,
+    enableProductWeeklyTemplate,
+    enableCurrencyTemplate,
+    enableCountryNameTemplate,
+    enableArticleCountTemplate,
+    enableDateTemplate,
+    enableDayTemplate,
+    enableCampaignDeadlineTemplate,
   } = rteMenuConstraints;
 
   const clickBold = () => {
@@ -325,9 +325,9 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
       <span className={classes.fieldLabel}>{label != null ? label : 'Editable field'}</span>
       {!disabled && (
         <>
-          {!noHtml && (
+          {enableHtml && (
             <>
-              {!noBold && (
+              {enableBold && (
                 <button
                   className={`remirror-button ${active.bold() && 'remirror-button-active'}`}
                   onClick={() => clickBold()}
@@ -335,7 +335,7 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
                   Bold
                 </button>
               )}
-              {!noItalic && (
+              {enableItalic && (
                 <button
                   className={`remirror-button ${active.italic() && 'remirror-button-active'}`}
                   onClick={() => clickItalic()}
@@ -343,7 +343,7 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
                   Italic
                 </button>
               )}
-              {!noStrikethrough && (
+              {enableStrikethrough && (
                 <button
                   className={`remirror-button ${active.strike() && 'remirror-button-active'}`}
                   onClick={() => clickStrikethrough()}
@@ -353,12 +353,12 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
               )}
             </>
           )}
-          {!noCopyTemplates && (
+          {enableCopyTemplates && (
             <>
-              {(!noBold || !noItalic || !noStrikethrough) && (
+              {(enableBold || enableItalic || enableStrikethrough) && (
                 <span className={classes.remirrorButtonSpacer}>&nbsp;</span>
               )}
-              {!noArticleCountTemplate && (
+              {enableArticleCountTemplate && (
                 <button
                   className="remirror-button"
                   onClick={() => insertTemplate(ARTICLE_COUNT_TEMPLATE)}
@@ -366,7 +366,7 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
                   Articles
                 </button>
               )}
-              {!noCampaignDeadlineTemplate && (
+              {enableCampaignDeadlineTemplate && (
                 <button
                   className="remirror-button"
                   onClick={() => insertTemplate(CAMPAIGN_DEADLINE_TEMPLATE)}
@@ -375,7 +375,7 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
                   Countdown Deadline
                 </button>
               )}
-              {!noCurrencyTemplate && (
+              {enableCurrencyTemplate && (
                 <button
                   className="remirror-button"
                   onClick={() => insertTemplate(CURRENCY_TEMPLATE)}
@@ -383,7 +383,7 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
                   Currency
                 </button>
               )}
-              {!noCountryNameTemplate && (
+              {enableCountryNameTemplate && (
                 <button
                   className="remirror-button"
                   onClick={() => insertTemplate(COUNTRY_NAME_TEMPLATE)}
@@ -391,17 +391,17 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
                   Country
                 </button>
               )}
-              {!noDayTemplate && (
+              {enableDayTemplate && (
                 <button className="remirror-button" onClick={() => insertTemplate(DAY_OF_THE_WEEK)}>
                   Day of week
                 </button>
               )}
-              {!noDateTemplate && (
+              {enableDateTemplate && (
                 <button className="remirror-button" onClick={() => insertTemplate(DATE)}>
                   Date
                 </button>
               )}
-              {!noProductWeeklyTemplate && (
+              {enableProductWeeklyTemplate && (
                 <button
                   className="remirror-button"
                   onClick={() => insertTemplate(PRICE_PRODUCT_WEEKLY)}
@@ -409,7 +409,7 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
                   Product weekly price
                 </button>
               )}
-              {!noPriceTemplates && (
+              {enablePriceTemplates && (
                 <>
                   <span className={classes.remirrorButtonSpacer}>&nbsp;</span>
                   <div className={classes.dropdownMenu}>
@@ -517,8 +517,7 @@ const RichTextEditor: React.FC<RichTextEditorProps<string[]>> = ({
   const classes = useRTEStyles();
 
   const menuConstraints = rteMenuConstraints || {};
-
-  const { noHtml, noLink } = menuConstraints;
+  const { enableHtml, enableLink } = menuConstraints;
 
   // Make sure the supplied copy is in an Array, for processing
   if (copyData == null) {
@@ -531,7 +530,7 @@ const RichTextEditor: React.FC<RichTextEditorProps<string[]>> = ({
 
       const handleSaveShortcut = useCallback(
         ({ state }) => {
-          if (noHtml) {
+          if (!enableHtml) {
             // getText gives us the plain text representation with line breaks
             updateCopy(getText(state).split('\n'));
           } else {
@@ -539,7 +538,7 @@ const RichTextEditor: React.FC<RichTextEditorProps<string[]>> = ({
           }
           return true;
         },
-        [getHTML],
+        [getHTML, getText, enableHtml],
       );
       manager.getExtension(EventsExtension).addHandler('blur', handleSaveShortcut);
     },
@@ -569,7 +568,7 @@ const RichTextEditor: React.FC<RichTextEditorProps<string[]>> = ({
         <Remirror manager={manager} initialContent={state} editable={!disabled} hooks={hooks}>
           <RichTextMenu disabled={disabled} label={label} rteMenuConstraints={menuConstraints} />
           <EditorComponent />
-          {!disabled && !noHtml && !noLink && <FloatingLinkToolbar />}
+          {!disabled && enableHtml && enableLink && <FloatingLinkToolbar />}
           <p className={error ? classes.errorText : classes.helperText}>{helperText}</p>
         </Remirror>
       </div>

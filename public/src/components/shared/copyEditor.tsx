@@ -100,15 +100,12 @@ export const CopyEditor: React.FC<CopyEditorProps> = ({
                 label="Heading copy"
                 disabled={!editMode}
                 rteMenuConstraints={{
-                  noStrikethrough: false,
-                  noArticleCountTemplate: true,
-                  noCurrencyTemplate: true,
-                  noCountryNameTemplate: true,
-                  noDayTemplate: true,
-                  noDateTemplate: true,
-                  noPriceTemplates: true,
-                  noProductWeeklyTemplate: true,
-                  noCampaignDeadlineTemplate: true,
+                  enableHtml: true,
+                  enableBold: true,
+                  enableItalic: true,
+                  enableStrikethrough: true,
+                  enableCopyTemplates: true,
+                  enableLink: true,
                 }}
               />
             );
@@ -137,15 +134,20 @@ export const CopyEditor: React.FC<CopyEditorProps> = ({
                   label="Subheading copy"
                   disabled={!editMode}
                   rteMenuConstraints={{
-                    noStrikethrough: false,
-                    noArticleCountTemplate: true,
-                    noCurrencyTemplate: true,
-                    noCountryNameTemplate: true,
-                    noDayTemplate: true,
-                    noDateTemplate: true,
-                    noPriceTemplates: true,
-                    noProductWeeklyTemplate: true,
-                    noCampaignDeadlineTemplate: true,
+                    enableHtml: true,
+                    enableBold: true,
+                    enableItalic: true,
+                    enableStrikethrough: true,
+                    enableCopyTemplates: true,
+                    enableLink: true,
+                    enableArticleCountTemplate: false,
+                    enableCurrencyTemplate: false,
+                    enableCountryNameTemplate: false,
+                    enableDayTemplate: false,
+                    enableDateTemplate: false,
+                    enablePriceTemplates: false,
+                    enableProductWeeklyTemplate: false,
+                    enableCampaignDeadlineTemplate: false,
                   }}
                 />
               );
