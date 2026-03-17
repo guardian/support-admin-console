@@ -301,9 +301,6 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                     enableDateTemplate: true,
                     enableDayTemplate: true,
                     enableLink: true,
-                    enableCampaignDeadlineTemplate: false,
-                    enableProductWeeklyTemplate: false,
-                    enablePriceTemplates: false,
                   }}
                 />
               );
@@ -345,9 +342,6 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                     enableDateTemplate: true,
                     enableDayTemplate: true,
                     enableLink: true,
-                    enableCampaignDeadlineTemplate: false,
-                    enableProductWeeklyTemplate: false,
-                    enablePriceTemplates: false,
                   }}
                 />
               );

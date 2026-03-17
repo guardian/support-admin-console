@@ -140,14 +140,6 @@ export const CopyEditor: React.FC<CopyEditorProps> = ({
                     enableStrikethrough: true,
                     enableCopyTemplates: true,
                     enableLink: true,
-                    enableArticleCountTemplate: false,
-                    enableCurrencyTemplate: false,
-                    enableCountryNameTemplate: false,
-                    enableDayTemplate: false,
-                    enableDateTemplate: false,
-                    enablePriceTemplates: false,
-                    enableProductWeeklyTemplate: false,
-                    enableCampaignDeadlineTemplate: false,
                   }}
                 />
               );
