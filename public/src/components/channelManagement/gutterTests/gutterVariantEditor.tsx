@@ -217,17 +217,10 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                 label="Body copy"
                 disabled={!editMode}
                 rteMenuConstraints={{
-                  noHtml: false,
-                  noBold: true,
-                  noItalic: true,
-                  noCurrencyTemplate: true,
-                  noCountryNameTemplate: true,
-                  noArticleCountTemplate: true,
-                  noPriceTemplates: true,
-                  noProductWeeklyTemplate: true,
-                  noDateTemplate: true,
-                  noDayTemplate: true,
-                  noCampaignDeadlineTemplate: true,
+                  enableHtml: true,
+                  enableStrikethrough: true,
+                  enableCopyTemplates: true,
+                  enableLink: true,
                 }}
               />
             );

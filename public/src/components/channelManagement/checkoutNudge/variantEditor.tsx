@@ -21,8 +21,10 @@ interface VariantEditorProps {
 }
 
 const richTextEditorConfig: RteMenuConstraints = {
-  noCopyTemplates: true,
-  noLink: true,
+  enableHtml: true,
+  enableBold: true,
+  enableItalic: true,
+  enableStrikethrough: true,
 };
 
 const VariantEditor: React.FC<VariantEditorProps> = ({

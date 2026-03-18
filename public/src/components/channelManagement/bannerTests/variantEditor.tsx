@@ -245,10 +245,16 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                 label="Header"
                 disabled={!editMode}
                 rteMenuConstraints={{
-                  noBold: true,
-                  noCampaignDeadlineTemplate: true,
-                  noProductWeeklyTemplate: true,
-                  noPriceTemplates: true,
+                  enableHtml: true,
+                  enableItalic: true,
+                  enableStrikethrough: true,
+                  enableCopyTemplates: true,
+                  enableCurrencyTemplate: true,
+                  enableCountryNameTemplate: true,
+                  enableArticleCountTemplate: true,
+                  enableDateTemplate: true,
+                  enableDayTemplate: true,
+                  enableLink: true,
                 }}
               />
             );
@@ -284,9 +290,17 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                   label="Body copy"
                   disabled={!editMode}
                   rteMenuConstraints={{
-                    noCampaignDeadlineTemplate: true,
-                    noProductWeeklyTemplate: true,
-                    noPriceTemplates: true,
+                    enableHtml: true,
+                    enableBold: true,
+                    enableItalic: true,
+                    enableStrikethrough: true,
+                    enableCopyTemplates: true,
+                    enableCurrencyTemplate: true,
+                    enableCountryNameTemplate: true,
+                    enableArticleCountTemplate: true,
+                    enableDateTemplate: true,
+                    enableDayTemplate: true,
+                    enableLink: true,
                   }}
                 />
               );
@@ -317,10 +331,17 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                   label="Highlighted text"
                   disabled={!editMode}
                   rteMenuConstraints={{
-                    noBold: true,
-                    noCampaignDeadlineTemplate: true,
-                    noProductWeeklyTemplate: true,
-                    noPriceTemplates: true,
+                    enableHtml: true,
+                    enableBold: false,
+                    enableItalic: true,
+                    enableStrikethrough: true,
+                    enableCopyTemplates: true,
+                    enableCurrencyTemplate: true,
+                    enableCountryNameTemplate: true,
+                    enableArticleCountTemplate: true,
+                    enableDateTemplate: true,
+                    enableDayTemplate: true,
+                    enableLink: true,
                   }}
                 />
               );

@@ -172,14 +172,14 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
     onValidationChange(isValid);
   }, [errors.heading, errors.paragraphs, errors.highlightedText, errors.image]);
 
-  const noHtml = platform !== 'DOTCOM';
-  const htmlValidator = noHtml ? noHtmlValidator : () => undefined;
+  const enableHtml = platform === 'DOTCOM';
+  const htmlValidator = enableHtml ? () => undefined : noHtmlValidator;
 
-  const noCurrencyTemplate = !VALID_TEMPLATES[platform].includes(CURRENCY_TEMPLATE);
-  const noCountryNameTemplate = !VALID_TEMPLATES[platform].includes(COUNTRY_NAME_TEMPLATE);
-  const noArticleCountTemplate = !VALID_TEMPLATES[platform].includes(ARTICLE_COUNT_TEMPLATE);
-  const noDateTemplate = !VALID_TEMPLATES[platform].includes(DATE);
-  const noDayTemplate = !VALID_TEMPLATES[platform].includes(DAY_OF_THE_WEEK);
+  const enableCurrencyTemplate = VALID_TEMPLATES[platform].includes(CURRENCY_TEMPLATE);
+  const enableCountryNameTemplate = VALID_TEMPLATES[platform].includes(COUNTRY_NAME_TEMPLATE);
+  const enableArticleCountTemplate = VALID_TEMPLATES[platform].includes(ARTICLE_COUNT_TEMPLATE);
+  const enableDateTemplate = VALID_TEMPLATES[platform].includes(DATE);
+  const enableDayTemplate = VALID_TEMPLATES[platform].includes(DAY_OF_THE_WEEK);
 
   const onCtasToggleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const value = event.target.value;
@@ -269,16 +269,16 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                 label="Header"
                 disabled={!editMode}
                 rteMenuConstraints={{
-                  noHtml,
-                  noBold: true,
-                  noCurrencyTemplate,
-                  noCountryNameTemplate,
-                  noArticleCountTemplate,
-                  noPriceTemplates: true,
-                  noProductWeeklyTemplate: true,
-                  noDateTemplate,
-                  noDayTemplate,
-                  noCampaignDeadlineTemplate: true,
+                  enableHtml,
+                  enableItalic: true,
+                  enableStrikethrough: true,
+                  enableCopyTemplates: true,
+                  enableLink: true,
+                  enableCurrencyTemplate,
+                  enableCountryNameTemplate,
+                  enableArticleCountTemplate,
+                  enableDateTemplate,
+                  enableDayTemplate,
                 }}
               />
             );
@@ -313,15 +313,17 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
               label="Body copy"
               disabled={!editMode}
               rteMenuConstraints={{
-                noHtml,
-                noCurrencyTemplate,
-                noCountryNameTemplate,
-                noArticleCountTemplate,
-                noPriceTemplates: true,
-                noProductWeeklyTemplate: true,
-                noDateTemplate,
-                noDayTemplate,
-                noCampaignDeadlineTemplate: true,
+                enableHtml,
+                enableBold: true,
+                enableItalic: true,
+                enableStrikethrough: true,
+                enableCopyTemplates: true,
+                enableLink: true,
+                enableCurrencyTemplate,
+                enableCountryNameTemplate,
+                enableArticleCountTemplate,
+                enableDateTemplate,
+                enableDayTemplate,
               }}
             />
           );
@@ -354,17 +356,16 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                 label="Highlighted text"
                 disabled={!editMode}
                 rteMenuConstraints={{
-                  noHtml,
-                  noBold: true,
-                  noStrikethrough: false,
-                  noCurrencyTemplate,
-                  noCountryNameTemplate,
-                  noArticleCountTemplate,
-                  noPriceTemplates: true,
-                  noProductWeeklyTemplate: true,
-                  noDateTemplate,
-                  noDayTemplate,
-                  noCampaignDeadlineTemplate: true,
+                  enableHtml,
+                  enableItalic: true,
+                  enableStrikethrough: true,
+                  enableCopyTemplates: true,
+                  enableLink: true,
+                  enableCurrencyTemplate,
+                  enableCountryNameTemplate,
+                  enableArticleCountTemplate,
+                  enableDateTemplate,
+                  enableDayTemplate,
                 }}
               />
             );

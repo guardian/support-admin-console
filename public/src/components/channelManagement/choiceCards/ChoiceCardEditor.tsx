@@ -53,18 +53,13 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 }));
 
 const richTextEditorConfig: RteMenuConstraints = {
-  noHtml: false,
-  noBold: false,
-  noItalic: false,
-  noStrikethrough: false,
-  noCurrencyTemplate: false,
-  noCountryNameTemplate: true,
-  noArticleCountTemplate: true,
-  noPriceTemplates: true,
-  noProductWeeklyTemplate: true,
-  noDateTemplate: true,
-  noDayTemplate: true,
-  noCampaignDeadlineTemplate: true,
+  enableHtml: true,
+  enableBold: true,
+  enableItalic: true,
+  enableStrikethrough: true,
+  enableCopyTemplates: true,
+  enableLink: true,
+  enableCurrencyTemplate: true,
 };
 
 const productDisplayName = (product: Product) => {
