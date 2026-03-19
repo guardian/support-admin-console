@@ -33,7 +33,8 @@ type SwitchName =
   | 'enableScheduledBannerDeploys'
   | 'enableGutterLiveblogs'
   | 'enableMParticle'
-  | 'enableAuxia';
+  | 'enableAuxia'
+  | 'enableAuxiaForBanners';
 
 type ChannelSwitches = {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -147,8 +148,14 @@ const ChannelSwitches: React.FC<InnerProps<ChannelSwitches>> = ({
       />
       <ChannelSwitch
         name="enableAuxia"
-        label="Enable Auxia"
+        label="Enable Auxia for sign-in gate"
         enabled={switches.enableAuxia}
+        setSwitch={onSwitchChange}
+      />
+      <ChannelSwitch
+        name="enableAuxiaForBanners"
+        label="Enable Auxia for banners"
+        enabled={switches.enableAuxiaForBanners}
         setSwitch={onSwitchChange}
       />
 
