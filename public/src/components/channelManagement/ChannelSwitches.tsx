@@ -153,7 +153,7 @@ const ChannelSwitches: React.FC<InnerProps<ChannelSwitches>> = ({
         setSwitch={onSwitchChange}
       />
       <ChannelSwitch
-        name="enableAuxia"
+        name="enableAuxiaForBanners"
         label="Enable Auxia for banners"
         enabled={switches.enableAuxiaForBanners}
         setSwitch={onSwitchChange}
