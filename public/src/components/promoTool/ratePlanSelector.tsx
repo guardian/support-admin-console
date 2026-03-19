@@ -12,7 +12,12 @@ import {
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material/styles';
-import { RatePlanWithProduct, Pricing, applyDiscountToPricing } from './utils/productCatalog';
+import {
+  RatePlanWithProduct,
+  Pricing,
+  applyDiscountToPricing,
+  billingPeriodToMonths,
+} from './utils/productCatalog';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   section: {
@@ -64,6 +69,16 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   ratePlanTitle: {
     fontWeight: 500,
     marginBottom: spacing(1),
+  },
+  fractionalInfo: {
+    marginTop: spacing(0.5),
+    color: palette.info.main,
+    fontSize: '0.8rem',
+  },
+  fractionalError: {
+    marginTop: spacing(0.5),
+    color: palette.error.main,
+    fontSize: '0.8rem',
   },
 }));
 
@@ -137,6 +152,13 @@ const RatePlanSelector: React.FC<RatePlanSelectorProps> = ({
 
   const renderRatePlan = (ratePlan: RatePlanWithProduct) => {
     const isSelected = selectedRatePlanIds.includes(ratePlan.id);
+
+    const billingPeriodMonths = billingPeriodToMonths(ratePlan.billingPeriod);
+    const isFractionalDuration =
+      discountDurationMonths != null &&
+      discountDurationMonths > 0 &&
+      discountDurationMonths % billingPeriodMonths !== 0;
+
     const discountedPricing =
       discountPercentage && discountPercentage > 0
         ? applyDiscountToPricing(
@@ -146,6 +168,8 @@ const RatePlanSelector: React.FC<RatePlanSelectorProps> = ({
             ratePlan.billingPeriod,
           )
         : undefined;
+
+    const canToggle = !isDisabled && (!isFractionalDuration || isSelected);
 
     return (
       <Paper
@@ -157,7 +181,7 @@ const RatePlanSelector: React.FC<RatePlanSelectorProps> = ({
           control={
             <Checkbox
               checked={isSelected}
-              onChange={() => !isDisabled && handleToggleRatePlan(ratePlan.id)}
+              onChange={() => canToggle && handleToggleRatePlan(ratePlan.id)}
             />
           }
           label={
@@ -166,9 +190,20 @@ const RatePlanSelector: React.FC<RatePlanSelectorProps> = ({
                 {ratePlan.productDisplayName} ({ratePlan.productName}) - {ratePlan.ratePlanName}
               </Typography>
               {renderPricing(ratePlan.pricing, discountedPricing)}
+              {isFractionalDuration && isSelected && (
+                <Typography className={classes.fractionalError}>
+                  The promotion is not a whole number of billing periods. Uncheck this billing plan
+                  to fix this error.
+                </Typography>
+              )}
+              {isFractionalDuration && !isSelected && (
+                <Typography className={classes.fractionalInfo}>
+                  The promotion is not a whole number of billing periods.
+                </Typography>
+              )}
             </Box>
           }
-          disabled={isDisabled}
+          disabled={isDisabled || (isFractionalDuration && !isSelected)}
         />
       </Paper>
     );
