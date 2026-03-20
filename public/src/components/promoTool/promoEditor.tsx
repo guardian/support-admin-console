@@ -24,6 +24,7 @@ import {
   RatePlanWithProduct,
   getAllRatePlansWithProduct,
   orderRatePlans,
+  billingPeriodToMonths,
 } from './utils/productCatalog';
 import { PromoLandingPage } from './promoLandingPage';
 
@@ -259,10 +260,19 @@ const PromoEditor = ({
   };
 
   const handleSave = () => {
-    if (editedPromo) {
+    if (editedPromo && !hasFractionalSelectedPlan) {
       onSave(editedPromo);
     }
   };
+
+  const hasFractionalSelectedPlan = allRatePlans.some((plan) => {
+    const isSelected = editedPromo?.appliesTo.productRatePlanIds.includes(plan.id);
+    const durationMonths = editedPromo?.discount?.durationMonths;
+    if (!isSelected || durationMonths == null || durationMonths <= 0) {
+      return false;
+    }
+    return durationMonths % billingPeriodToMonths(plan.billingPeriod) !== 0;
+  });
 
   const isLockedByOther = promo.lockStatus?.locked && promo.lockStatus?.email !== userEmail;
   const isLockedByUser = promo.lockStatus?.locked && promo.lockStatus?.email === userEmail;
@@ -441,7 +451,12 @@ const PromoEditor = ({
 
       {isEditing && (
         <div className={classes.buttonGroup}>
-          <Button variant="contained" color="primary" onClick={handleSave}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSave}
+            disabled={hasFractionalSelectedPlan}
+          >
             Save
           </Button>
           <Button variant="outlined" onClick={onCancel}>
