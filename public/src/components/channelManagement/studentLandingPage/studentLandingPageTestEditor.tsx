@@ -73,11 +73,11 @@ export const StudentLandingPageTestEditor: React.FC<
   const [helperText, setHelperText] = useState<string>('Please choose a country');
 
   useEffect(() => {
-    setValidationStatusForField('regionId', isFieldSet(test.regionId as string));
-    if (isFieldSet(test.regionId as string)) {
+    setValidationStatusForField('countryGroupId', isFieldSet(test.countryGroupId as string));
+    if (isFieldSet(test.countryGroupId as string)) {
       setHelperText('');
     }
-  }, [test.regionId]);
+  }, [test.countryGroupId]);
 
   const updateTest = (
     update: (current: StudentLandingPageTest) => StudentLandingPageTest,
@@ -90,15 +90,15 @@ export const StudentLandingPageTestEditor: React.FC<
     });
   };
 
-  const updateRegion = (updatedRegion: Region): void => {
-    if (!isFieldSet(updatedRegion as string)) {
+  const updateCountryGroupId = (updatedCountryGroupId: Region): void => {
+    if (!isFieldSet(updatedCountryGroupId as string)) {
       setHelperText('Please choose a country');
     } else {
       setHelperText('');
     }
     onTestChange((current) => ({
       ...current,
-      regionId: updatedRegion,
+      countryGroupId: updatedCountryGroupId,
     }));
   };
 
@@ -137,7 +137,7 @@ export const StudentLandingPageTestEditor: React.FC<
           {!userHasTestLocked && (
             <>
               <StudentLandingPageLinkBuilder
-                regionId={test.regionId}
+                countryGroupId={test.countryGroupId}
                 institution={test.variants[0].institution}
                 promoCode={test.variants[0].promoCodes[0]}
               />
@@ -172,8 +172,8 @@ export const StudentLandingPageTestEditor: React.FC<
         <FormHelperText className={classes.errorText}>{helperText}</FormHelperText>
         <div className={classes.resetMargin}>
           <TypedRadioGroup
-            selectedValue={test.regionId as string}
-            onChange={updateRegion}
+            selectedValue={test.countryGroupId as string}
+            onChange={updateCountryGroupId}
             isDisabled={!userHasTestLocked}
             labels={{
               AUDCountries: 'Australia',

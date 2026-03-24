@@ -6,7 +6,7 @@ export interface StudentLandingPageTest extends Test {
   name: string;
   nickname?: string;
   status: Status;
-  regionId: Region;
+  countryGroupId: Region;
   variants: StudentLandingPageVariant[];
 }
 
