@@ -7,7 +7,7 @@ import { makeStyles } from '@mui/styles';
 import { FormHelperText, Link, Theme } from '@mui/material';
 
 interface StudentLandingPageLinkBuilderProps {
-  regionId: Region;
+  countryGroupId: Region;
   institution: Institution;
   promoCode: string;
 }
@@ -58,7 +58,7 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 }));
 
 export const StudentLandingPageLinkBuilder: React.FC<StudentLandingPageLinkBuilderProps> = ({
-  regionId,
+  countryGroupId,
   institution,
   promoCode,
 }: StudentLandingPageLinkBuilderProps) => {
@@ -75,7 +75,7 @@ export const StudentLandingPageLinkBuilder: React.FC<StudentLandingPageLinkBuild
   };
 
   const getCountryIdFromRegion = () => {
-    return regionId.toString().substring(0, 2).toLowerCase();
+    return countryGroupId.toString().substring(0, 2).toLowerCase();
   };
 
   const buildFullUrl = () => {
@@ -90,7 +90,7 @@ export const StudentLandingPageLinkBuilder: React.FC<StudentLandingPageLinkBuild
     const baseErrorMessage =
       'The link cannot be generated yet because something is missing - please check the following: ';
     const errorMessageBuilder = [baseErrorMessage];
-    if (!regionId) {
+    if (!countryGroupId) {
       errorMessageBuilder.push('The Country is required. ');
     }
     if (!institution.acronym) {
@@ -105,7 +105,7 @@ export const StudentLandingPageLinkBuilder: React.FC<StudentLandingPageLinkBuild
       setErrorMessage('');
       buildFullUrl();
     }
-  }, [regionId, institution.acronym, promoCode]);
+  }, [countryGroupId, institution.acronym, promoCode]);
 
   return (
     <>
