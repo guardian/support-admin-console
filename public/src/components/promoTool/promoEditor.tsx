@@ -443,7 +443,7 @@ const PromoEditor = ({
                 disabled={!isEditing}
               />
             }
-            label="Override Hero Header content"
+            label="Override Product page top section content"
           />
           {promotionHasLandingPage && (
             <>
