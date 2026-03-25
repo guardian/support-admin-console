@@ -64,6 +64,12 @@ export const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     backgroundColor: palette.warning.light,
     borderRadius: 4,
   },
+  infoBanner: {
+    padding: spacing(1),
+    marginBottom: spacing(1),
+    backgroundColor: palette.info.light,
+    borderRadius: 4,
+  },
   countryGroupsContainer: {
     border: '1px solid #ddd',
     borderRadius: 4,
@@ -437,14 +443,22 @@ const PromoEditor = ({
                 disabled={!isEditing}
               />
             }
-            label="This promotion has a landing page"
+            label="Override Hero Header content"
           />
           {promotionHasLandingPage && (
-            <PromoLandingPage
-              landingPage={backupLandingPage}
-              updateLandingPage={handleLandingPageChange}
-              isEditing={isEditing}
-            />
+            <>
+              <Box className={classes.infoBanner}>
+                <Typography variant="body2">
+                  Tip: When this option is enabled, the landing page top section content will be
+                  replaced by the data specified bellow.
+                </Typography>
+              </Box>
+              <PromoLandingPage
+                landingPage={backupLandingPage}
+                updateLandingPage={handleLandingPageChange}
+                isEditing={isEditing}
+              />
+            </>
           )}
         </div>
       )}
