@@ -29,13 +29,13 @@ abstract class S3ObjectController[T: Decoder: Encoder](
     with Circe
     with LazyLogging {
 
-  private val dataObjectSettings = S3ObjectSettings(
+  protected val dataObjectSettings = S3ObjectSettings(
     bucket = "support-admin-console",
     key = s"$stage/$filename",
     publicRead = false,
     cacheControl = None
   )
-  private val s3Client = services.S3
+  protected val s3Client = services.S3
 
   protected def run(f: => ZIO[Any, Throwable, Result]): Future[Result] =
     Unsafe.unsafe { implicit unsafe =>

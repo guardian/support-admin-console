@@ -56,6 +56,8 @@ GET /default-promos                                 controllers.Application.inde
 
 GET /super-mode                                     controllers.Application.index
 
+GET /exclusions                                     controllers.Application.index
+
 GET /banner-designs                                 controllers.Application.index
 GET /banner-designs/:name                           controllers.Application.indexWithName(name: String)
 
@@ -207,6 +209,10 @@ POST  /frontend/gutter-liveblog-tests/test/status/:rawStatus     controllers.gut
 # ----- channel switches ----- #
 GET   /frontend/channel-switches                       controllers.ChannelSwitchesController.get
 POST  /frontend/channel-switches/update                controllers.ChannelSwitchesController.set
+
+# ----- exclusions ----- #
+GET   /frontend/exclusions                             controllers.ExclusionsController.get
+POST  /frontend/exclusions/update                      controllers.ExclusionsController.set
 
 # ----- campaigns ----- #
 GET   /frontend/campaigns                              controllers.CampaignsController.get()
