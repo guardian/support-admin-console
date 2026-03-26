@@ -47,12 +47,11 @@ class ExclusionsController(
       runtime
     )
     with Circe {
-
-  override protected def recoverGetFromS3Error
+    override protected def recoverGetFromS3Error
       : PartialFunction[Throwable, ZIO[Any, Throwable, VersionedS3Data[ChannelExclusionSettings]]] = {
     case S3GetObjectError(_: NoSuchKeyException) =>
       ZIO.succeed(VersionedS3Data(ChannelExclusionSettings(), ""))
     case S3GetObjectError(error) if Option(error.getMessage).exists(_.contains("The specified key does not exist")) =>
       ZIO.succeed(VersionedS3Data(ChannelExclusionSettings(), ""))
-  }
+    }
 }
