@@ -20,6 +20,7 @@ import { hasPermission } from '../../utils/permissions';
 import { fetchUsersWithPermissions, FrontendSettingsType } from '../../utils/requests';
 import AccessManagementDialog from './UpdatePermissionsDialog';
 import AddUserDialog from './AddUserDialog';
+import { permissions } from './permissions';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -58,10 +59,13 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 }));
 
 const formatPermissionName = (name: string): string => {
-  return name
-    .split('-')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
+  return (
+    permissions.find((perm) => perm.name === name)?.displayName ??
+    name
+      .split('-')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ')
+  );
 };
 
 const AccessManagement = () => {
