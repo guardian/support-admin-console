@@ -1,5 +1,6 @@
 package controllers
 
+import actions.AuthAndPermissionActions
 import com.gu.googleauth.AuthAction
 import models.AppsMeteringSwitches
 import models.AppsMeteringSwitches._
@@ -14,7 +15,7 @@ class AppsMeteringSwitchesController(
     runtime: zio.Runtime[Any]
 )(implicit ec: ExecutionContext)
     extends S3ObjectController[AppsMeteringSwitches](
-      authAction,
+      AuthAndPermissionActions.withoutPermissionsChecks(authAction),
       components,
       stage,
       filename = "apps-metering-switches.json",

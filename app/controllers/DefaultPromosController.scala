@@ -1,5 +1,6 @@
 package controllers
 
+import actions.AuthAndPermissionActions
 import com.gu.googleauth.AuthAction
 import models.DefaultPromos
 import play.api.mvc.{ActionBuilder, AnyContent, ControllerComponents}
@@ -13,7 +14,7 @@ class DefaultPromosController(
     runtime: zio.Runtime[Any]
 )(implicit ec: ExecutionContext)
     extends S3ObjectController[DefaultPromos](
-      authAction,
+      AuthAndPermissionActions.withoutPermissionsChecks(authAction),
       components,
       stage,
       filename = "default-promos.json",

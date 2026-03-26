@@ -1,5 +1,6 @@
 package controllers
 
+import actions.AuthAndPermissionActions
 import com.gu.googleauth.AuthAction
 import models.ChannelSwitches
 import play.api.mvc.{ActionBuilder, AnyContent, ControllerComponents}
@@ -13,7 +14,7 @@ class ChannelSwitchesController(
     runtime: zio.Runtime[Any]
 )(implicit ec: ExecutionContext)
     extends S3ObjectController[ChannelSwitches](
-      authAction,
+      AuthAndPermissionActions.withoutPermissionsChecks(authAction),
       components,
       stage,
       filename = "channel-switches.json",
