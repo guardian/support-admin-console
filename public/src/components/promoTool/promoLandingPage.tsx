@@ -30,6 +30,15 @@ export const PromoLandingPage = ({
       <TextField
         className={classes.formField}
         fullWidth
+        label="Label"
+        value={landingPage?.roundelHtml || ''}
+        onChange={handleChange}
+        disabled={!isEditing}
+        name="roundelHtml"
+      />
+      <TextField
+        className={classes.formField}
+        fullWidth
         label="Title"
         value={landingPage?.title || ''}
         onChange={handleChange}
@@ -39,22 +48,13 @@ export const PromoLandingPage = ({
       <TextField
         className={classes.formField}
         fullWidth
-        label="Description for product page (supports Markdown)"
+        label="Description (supports Markdown)"
         multiline
         rows={3}
         value={landingPage?.description || ''}
         onChange={handleChange}
         disabled={!isEditing}
         name="description"
-      />
-      <TextField
-        className={classes.formField}
-        fullWidth
-        label="Product page price card"
-        value={landingPage?.roundelHtml || ''}
-        onChange={handleChange}
-        disabled={!isEditing}
-        name="roundelHtml"
       />
       <span>
         For examples of how to format text using Markdown see{' '}
