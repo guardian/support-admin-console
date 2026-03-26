@@ -443,14 +443,14 @@ const PromoEditor = ({
                 disabled={!isEditing}
               />
             }
-            label="Override Product page top section content"
+            label="Override product page hero content"
           />
           {promotionHasLandingPage && (
             <>
               <Box className={classes.infoBanner}>
                 <Typography variant="body2">
                   Tip: When this option is enabled, the landing page top section content will be
-                  replaced by the data specified bellow.
+                  replaced by the data specified below.
                 </Typography>
               </Box>
               <PromoLandingPage
