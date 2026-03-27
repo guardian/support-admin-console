@@ -1,23 +1,12 @@
 import React, { useState } from 'react';
-import {
-  Button,
-  Divider,
-  IconButton,
-  TextField,
-  Typography,
-  Theme,
-  FormControl,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-  Box,
-} from '@mui/material';
+import { Button, Divider, TextField, Typography, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { SectionsEditor } from '../channelManagement/epicTests/sectionsEditor';
 import { TagsEditor } from '../channelManagement/epicTests/tagsEditor';
 import { ExclusionRule } from '../../models/exclusions';
+import RuleHeader from './RuleHeader';
+import ContentTypesSelector from './ContentTypesSelector';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   sectionHeader: {
@@ -32,12 +21,6 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     display: 'flex',
     flexDirection: 'column',
     gap: spacing(1),
-  },
-  ruleHeader: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    gap: spacing(2),
-    alignItems: 'flex-start',
   },
   ruleFields: {
     display: 'flex',
@@ -54,9 +37,6 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   },
   addRuleButton: {
     marginTop: spacing(1),
-  },
-  contentTypeSection: {
-    flex: '1 1 100%',
   },
 }));
 
@@ -87,71 +67,23 @@ const ChannelExclusionsSection: React.FC<ChannelExclusionsSectionProps> = ({
 
   const renderRule = (rule: ExclusionRule, index: number) => (
     <div key={index} className={classes.ruleCard}>
-      <div className={classes.ruleHeader}>
-        {editMode ? (
-          <TextField
-            className={classes.field}
-            label="Rule Name"
-            value={rule.name ?? ''}
-            onChange={(e) => onUpdateRule(index, { ...rule, name: e.target.value })}
-            onBlur={() => handleNameBlur(index)}
-            variant="outlined"
-            size="small"
-            required
-            error={touchedNameFields.has(index) && !rule.name?.trim()}
-            helperText={
-              touchedNameFields.has(index) && !rule.name?.trim() ? 'Rule name is required' : ' '
-            }
-            disabled={!editMode}
-          />
-        ) : (
-          <Typography variant="subtitle1">{rule.name}</Typography>
-        )}
-        <IconButton
-          size="small"
-          onClick={() => onDeleteRule(index)}
-          aria-label="Delete rule"
-          disabled={!editMode}
-        >
-          <DeleteIcon fontSize="small" />
-        </IconButton>
-      </div>
+      <RuleHeader
+        rule={rule}
+        index={index}
+        editMode={editMode}
+        onUpdateRule={onUpdateRule}
+        onDeleteRule={onDeleteRule}
+        touchedNameFields={touchedNameFields}
+        onNameBlur={handleNameBlur}
+      />
 
       <div className={classes.ruleFields}>
-        <Box className={classes.contentTypeSection}>
-          <Typography variant="subtitle2" sx={{ mb: 1 }}>
-            Content Types
-          </Typography>
-          <FormControl disabled={!editMode}>
-            <RadioGroup
-              row
-              value={
-                rule.contentTypes === undefined ||
-                (rule.contentTypes.length === 2 &&
-                  rule.contentTypes.includes('Fronts') &&
-                  rule.contentTypes.includes('Articles'))
-                  ? 'both'
-                  : rule.contentTypes?.length === 1 && rule.contentTypes.includes('Fronts')
-                    ? 'fronts'
-                    : 'articles'
-              }
-              onChange={(e) => {
-                const value = e.target.value;
-                if (value === 'fronts') {
-                  onUpdateRule(index, { ...rule, contentTypes: ['Fronts'] });
-                } else if (value === 'articles') {
-                  onUpdateRule(index, { ...rule, contentTypes: ['Articles'] });
-                } else {
-                  onUpdateRule(index, { ...rule, contentTypes: ['Fronts', 'Articles'] });
-                }
-              }}
-            >
-              <FormControlLabel value="fronts" control={<Radio />} label="Fronts" />
-              <FormControlLabel value="articles" control={<Radio />} label="Articles" />
-              <FormControlLabel value="both" control={<Radio />} label="Fronts & Articles" />
-            </RadioGroup>
-          </FormControl>
-        </Box>
+        <ContentTypesSelector
+          rule={rule}
+          index={index}
+          editMode={editMode}
+          onUpdateRule={onUpdateRule}
+        />
         <div className={classes.field}>
           <SectionsEditor
             label="Section IDs"
