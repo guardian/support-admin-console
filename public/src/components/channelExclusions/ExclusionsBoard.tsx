@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
@@ -50,17 +50,23 @@ const canEdit = hasPermission(FrontendSettingsType.exclusionsSettings, 'Write');
 const ExclusionsBoard: React.FC<InnerProps<ExclusionSettings>> = ({
   data,
   update,
-  sendToS3,
+  updateAndSendToS3,
   saving,
 }) => {
   const classes = useStyles();
   const [settings, setSettings] = useState<ExclusionSettings>(data ?? {});
   const [editMode, setEditMode] = useState(false);
 
+  useEffect(() => {
+    if (data) {
+      setSettings(data);
+    }
+  }, [data]);
+
   const handleEdit = () => setEditMode(true);
 
   const handleSave = () => {
-    sendToS3();
+    updateAndSendToS3(settings);
     setEditMode(false);
   };
 

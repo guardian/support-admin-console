@@ -37,7 +37,7 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
     gap: spacing(2),
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   ruleFields: {
     display: 'flex',
