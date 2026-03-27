@@ -10,10 +10,10 @@ import {
   saveFrontendSettings,
 } from '../../utils/requests';
 import { hasPermission } from '../../utils/permissions';
-import ExclusionsTopBar from './ExclusionsTopBar';
 import ChannelExclusionsSection from './ChannelExclusionsSection';
 
 type ChannelKey = keyof ExclusionSettings;
+type EditingRule = { channel: ChannelKey; index: number } | null;
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   wrapper: {
@@ -32,7 +32,11 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   gridContainer: {
     display: 'grid',
     gridTemplateColumns: 'repeat(2, 1fr)',
+    alignItems: 'stretch',
     gap: spacing(3),
+  },
+  gridItem: {
+    height: '100%',
   },
 }));
 
@@ -55,25 +59,36 @@ const ExclusionsBoard: React.FC<InnerProps<ExclusionSettings>> = ({
 }) => {
   const classes = useStyles();
   const [settings, setSettings] = useState<ExclusionSettings>(data ?? {});
+  const [initialSettings, setInitialSettings] = useState<ExclusionSettings>(data ?? {});
   const [editMode, setEditMode] = useState(false);
+  const [editingRule, setEditingRule] = useState<EditingRule>(null);
 
   useEffect(() => {
-    if (data) {
+    if (data && !editMode) {
       setSettings(data);
+      setInitialSettings(data);
     }
-  }, [data]);
-
-  const handleEdit = () => setEditMode(true);
+  }, [data, editMode]);
 
   const handleSave = () => {
     updateAndSendToS3(settings);
     setEditMode(false);
+    setEditingRule(null);
   };
 
   const handleCancel = () => {
-    setSettings(data ?? {});
-    update(data ?? {});
+    setSettings(initialSettings);
+    update(initialSettings);
     setEditMode(false);
+    setEditingRule(null);
+  };
+
+  const startEditingRule = (channel: ChannelKey, index: number) => {
+    if (!editMode) {
+      setInitialSettings(settings);
+    }
+    setEditMode(true);
+    setEditingRule({ channel, index });
   };
 
   const applyChange = (updated: ExclusionSettings) => {
@@ -88,41 +103,46 @@ const ExclusionsBoard: React.FC<InnerProps<ExclusionSettings>> = ({
   };
 
   const addRule = (channel: ChannelKey) => {
-    const rules = [...(settings[channel]?.rules ?? []), { ...EMPTY_RULE }];
+    const currentRules = settings[channel]?.rules ?? [];
+    const rules = [...currentRules, { ...EMPTY_RULE }];
     applyChange({ ...settings, [channel]: { rules } });
+    startEditingRule(channel, rules.length - 1);
   };
 
   const deleteRule = (channel: ChannelKey, index: number) => {
     const rules = (settings[channel]?.rules ?? []).filter((_, i) => i !== index);
-    applyChange({ ...settings, [channel]: { rules } });
+    const updatedSettings = { ...settings, [channel]: { rules } };
+
+    applyChange(updatedSettings);
+    updateAndSendToS3(updatedSettings);
+    setEditMode(false);
+    setEditingRule(null);
   };
 
   return (
     <div className={classes.wrapper}>
       <form className={classes.form}>
-        <ExclusionsTopBar
-          editMode={editMode}
-          canEdit={canEdit}
-          saving={saving}
-          onEdit={handleEdit}
-          onSave={handleSave}
-          onCancel={handleCancel}
-        />
-
         <div className={classes.gridContainer}>
           {(Object.keys(CHANNEL_LABELS) as ChannelKey[]).map((channel) => {
             const rules = settings[channel]?.rules ?? [];
             return (
-              <ChannelExclusionsSection
-                key={channel}
-                channel={channel}
-                label={CHANNEL_LABELS[channel]}
-                rules={rules}
-                editMode={editMode}
-                onUpdateRule={(index, rule) => updateRule(channel, index, rule)}
-                onDeleteRule={(index) => deleteRule(channel, index)}
-                onAddRule={() => addRule(channel)}
-              />
+              <div key={channel} className={classes.gridItem}>
+                <ChannelExclusionsSection
+                  channel={channel}
+                  label={CHANNEL_LABELS[channel]}
+                  rules={rules}
+                  editMode={editMode}
+                  canEdit={canEdit}
+                  saving={saving}
+                  editingRuleIndex={editingRule?.channel === channel ? editingRule.index : null}
+                  onStartEditRule={(index) => startEditingRule(channel, index)}
+                  onSaveEdit={handleSave}
+                  onCancelEdit={handleCancel}
+                  onUpdateRule={(index, rule) => updateRule(channel, index, rule)}
+                  onDeleteRule={(index) => deleteRule(channel, index)}
+                  onAddRule={() => addRule(channel)}
+                />
+              </div>
             );
           })}
         </div>
