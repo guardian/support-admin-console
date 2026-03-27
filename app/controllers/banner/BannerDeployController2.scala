@@ -1,5 +1,6 @@
 package controllers.banner
 
+import actions.AuthAndPermissionActions
 import com.gu.googleauth.AuthAction
 import controllers.S3ObjectController
 import io.circe.generic.auto._
@@ -15,7 +16,7 @@ class BannerDeployController2(
     runtime: zio.Runtime[Any]
 )(implicit ec: ExecutionContext)
     extends S3ObjectController[BannerDeploys](
-      authAction,
+      AuthAndPermissionActions.withoutPermissionsChecks(authAction),
       components,
       stage,
       filename = "banner-deploy/channel2.json",

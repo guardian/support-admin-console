@@ -205,6 +205,13 @@ class AppComponents(context: Context, stage: String)
       dynamoTestsAuditService
     ),
     new ChannelSwitchesController(authAction, controllerComponents, stage, runtime),
+        new ExclusionsController(
+      authAction,
+      controllerComponents,
+      stage,
+      runtime,
+      permissionsService
+    ),
     new CampaignsController(
       authAction,
       controllerComponents,

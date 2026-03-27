@@ -1,5 +1,6 @@
 package controllers
 
+import actions.AuthAndPermissionActions
 import com.gu.googleauth.AuthAction
 import play.api.mvc.{ActionBuilder, AnyContent, ControllerComponents}
 import models.SupportFrontendSwitches.{
@@ -17,7 +18,7 @@ class SwitchesController(
     runtime: zio.Runtime[Any]
 )(implicit ec: ExecutionContext)
     extends S3ObjectController[SupportFrontendSwitches](
-      authAction,
+      AuthAndPermissionActions.withoutPermissionsChecks(authAction),
       components,
       stage,
       filename = "switches_v2.json",

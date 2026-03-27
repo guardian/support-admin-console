@@ -1,5 +1,6 @@
 package controllers
 
+import actions.AuthAndPermissionActions
 import com.gu.googleauth.AuthAction
 import models.AmountsTests
 import models.AmountsTests._
@@ -14,7 +15,7 @@ class AmountsController(
     runtime: zio.Runtime[Any]
 )(implicit ec: ExecutionContext)
     extends S3ObjectController[AmountsTests](
-      authAction,
+      AuthAndPermissionActions.withoutPermissionsChecks(authAction),
       components,
       stage,
       filename = "configured-amounts-v3.json",
