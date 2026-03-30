@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
+import { useForm } from 'react-hook-form';
 import { ExclusionRule, ExclusionSettings } from '../../models/exclusions';
 import withS3Data, { DataFromServer, InnerProps } from '../../hocs/withS3Data';
 import {
@@ -11,9 +12,13 @@ import {
 } from '../../utils/requests';
 import { hasPermission } from '../../utils/permissions';
 import ChannelExclusionsSection from './ChannelExclusionsSection';
-
-type ChannelKey = keyof ExclusionSettings;
-type EditingRule = { channel: ChannelKey; index: number } | null;
+import {
+  ChannelKey,
+  getIndexesForChannel,
+  makeRuleKey,
+  remapRuleKeysAfterRemoval,
+  validateRule,
+} from './util';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   wrapper: {
@@ -58,65 +63,159 @@ const ExclusionsBoard: React.FC<InnerProps<ExclusionSettings>> = ({
   saving,
 }) => {
   const classes = useStyles();
-  const [settings, setSettings] = useState<ExclusionSettings>(data ?? {});
-  const [initialSettings, setInitialSettings] = useState<ExclusionSettings>(data ?? {});
-  const [editMode, setEditMode] = useState(false);
-  const [editingRule, setEditingRule] = useState<EditingRule>(null);
+  const { watch, getValues, reset } = useForm<ExclusionSettings>({
+    defaultValues: data ?? {},
+  });
+  const settings = watch();
+  const [savedSettings, setSavedSettings] = useState<ExclusionSettings>(data ?? {});
+  const [editingRules, setEditingRules] = useState<Set<string>>(new Set());
+  const [unsavedRules, setUnsavedRules] = useState<Set<string>>(new Set());
+
+  const editMode = editingRules.size > 0;
 
   useEffect(() => {
     if (data && !editMode) {
-      setSettings(data);
-      setInitialSettings(data);
+      reset(data);
+      setSavedSettings(data);
     }
-  }, [data, editMode]);
+  }, [data, editMode, reset]);
 
-  const handleSave = () => {
-    updateAndSendToS3(settings);
-    setEditMode(false);
-    setEditingRule(null);
-  };
-
-  const handleCancel = () => {
-    setSettings(initialSettings);
-    update(initialSettings);
-    setEditMode(false);
-    setEditingRule(null);
+  const applyChange = (updated: ExclusionSettings) => {
+    reset(updated);
+    update(updated);
   };
 
   const startEditingRule = (channel: ChannelKey, index: number) => {
-    if (!editMode) {
-      setInitialSettings(settings);
-    }
-    setEditMode(true);
-    setEditingRule({ channel, index });
+    const ruleKey = makeRuleKey(channel, index);
+    const nextEditingRules = new Set(editingRules);
+    nextEditingRules.add(ruleKey);
+    setEditingRules(nextEditingRules);
   };
 
-  const applyChange = (updated: ExclusionSettings) => {
-    setSettings(updated);
-    update(updated);
+  const handleSaveRule = (channel: ChannelKey, index: number) => {
+    const currentSettings = getValues();
+    const ruleToSave = currentSettings[channel]?.rules?.[index];
+
+    if (!ruleToSave) {
+      return;
+    }
+
+    const validationError = validateRule(ruleToSave, CHANNEL_LABELS[channel], index);
+
+    if (validationError) {
+      alert(validationError);
+      return;
+    }
+
+    const persistedChannelRules = [...(savedSettings[channel]?.rules ?? [])];
+
+    if (index >= persistedChannelRules.length) {
+      persistedChannelRules.push(ruleToSave);
+    } else {
+      persistedChannelRules[index] = ruleToSave;
+    }
+
+    const nextSavedSettings = {
+      ...savedSettings,
+      [channel]: { rules: persistedChannelRules },
+    };
+
+    setSavedSettings(nextSavedSettings);
+    updateAndSendToS3(nextSavedSettings);
+
+    const ruleKey = makeRuleKey(channel, index);
+    const nextUnsavedRules = new Set(unsavedRules);
+    nextUnsavedRules.delete(ruleKey);
+    setUnsavedRules(nextUnsavedRules);
+
+    const nextEditingRules = new Set(editingRules);
+    nextEditingRules.delete(ruleKey);
+    setEditingRules(nextEditingRules);
+  };
+
+  const handleCancelRule = (channel: ChannelKey, index: number) => {
+    const currentSettings = getValues();
+    const currentRules = [...(currentSettings[channel]?.rules ?? [])];
+    const persistedRules = savedSettings[channel]?.rules ?? [];
+
+    if (index >= persistedRules.length) {
+      currentRules.splice(index, 1);
+    } else {
+      currentRules[index] = persistedRules[index];
+    }
+
+    const updatedSettings = {
+      ...currentSettings,
+      [channel]: { rules: currentRules },
+    };
+
+    applyChange(updatedSettings);
+
+    if (index >= persistedRules.length) {
+      setUnsavedRules(remapRuleKeysAfterRemoval(unsavedRules, channel, index));
+      setEditingRules(remapRuleKeysAfterRemoval(editingRules, channel, index));
+      return;
+    }
+
+    const ruleKey = makeRuleKey(channel, index);
+    const nextUnsavedRules = new Set(unsavedRules);
+    nextUnsavedRules.delete(ruleKey);
+    setUnsavedRules(nextUnsavedRules);
+
+    const nextEditingRules = new Set(editingRules);
+    nextEditingRules.delete(ruleKey);
+    setEditingRules(nextEditingRules);
   };
 
   const updateRule = (channel: ChannelKey, index: number, rule: ExclusionRule) => {
     const rules = [...(settings[channel]?.rules ?? [])];
     rules[index] = rule;
     applyChange({ ...settings, [channel]: { rules } });
+
+    const ruleKey = makeRuleKey(channel, index);
+    const nextUnsavedRules = new Set(unsavedRules);
+    nextUnsavedRules.add(ruleKey);
+    setUnsavedRules(nextUnsavedRules);
+
+    const nextEditingRules = new Set(editingRules);
+    nextEditingRules.add(ruleKey);
+    setEditingRules(nextEditingRules);
   };
 
   const addRule = (channel: ChannelKey) => {
-    const currentRules = settings[channel]?.rules ?? [];
+    const currentRules = getValues(channel)?.rules ?? [];
     const rules = [...currentRules, { ...EMPTY_RULE }];
-    applyChange({ ...settings, [channel]: { rules } });
-    startEditingRule(channel, rules.length - 1);
+    applyChange({ ...getValues(), [channel]: { rules } });
+
+    const index = rules.length - 1;
+    const ruleKey = makeRuleKey(channel, index);
+
+    const nextEditingRules = new Set(editingRules);
+    nextEditingRules.add(ruleKey);
+    setEditingRules(nextEditingRules);
+
+    const nextUnsavedRules = new Set(unsavedRules);
+    nextUnsavedRules.add(ruleKey);
+    setUnsavedRules(nextUnsavedRules);
   };
 
   const deleteRule = (channel: ChannelKey, index: number) => {
-    const rules = (settings[channel]?.rules ?? []).filter((_, i) => i !== index);
-    const updatedSettings = { ...settings, [channel]: { rules } };
+    const currentSettings = getValues();
+    const rules = (currentSettings[channel]?.rules ?? []).filter((_, i) => i !== index);
+    const updatedSettings = { ...currentSettings, [channel]: { rules } };
 
     applyChange(updatedSettings);
-    updateAndSendToS3(updatedSettings);
-    setEditMode(false);
-    setEditingRule(null);
+
+    const persistedRules = savedSettings[channel]?.rules ?? [];
+    if (index < persistedRules.length) {
+      const nextPersistedRules = persistedRules.filter((_, i) => i !== index);
+      const nextSavedSettings = { ...savedSettings, [channel]: { rules: nextPersistedRules } };
+      setSavedSettings(nextSavedSettings);
+      updateAndSendToS3(nextSavedSettings);
+    }
+
+    setUnsavedRules(remapRuleKeysAfterRemoval(unsavedRules, channel, index));
+    setEditingRules(remapRuleKeysAfterRemoval(editingRules, channel, index));
   };
 
   return (
@@ -134,10 +233,11 @@ const ExclusionsBoard: React.FC<InnerProps<ExclusionSettings>> = ({
                   editMode={editMode}
                   canEdit={canEdit}
                   saving={saving}
-                  editingRuleIndex={editingRule?.channel === channel ? editingRule.index : null}
+                  editingRuleIndexes={getIndexesForChannel(editingRules, channel)}
+                  unsavedRuleIndexes={getIndexesForChannel(unsavedRules, channel)}
                   onStartEditRule={(index) => startEditingRule(channel, index)}
-                  onSaveEdit={handleSave}
-                  onCancelEdit={handleCancel}
+                  onSaveEdit={(index) => handleSaveRule(channel, index)}
+                  onCancelEdit={(index) => handleCancelRule(channel, index)}
                   onUpdateRule={(index, rule) => updateRule(channel, index, rule)}
                   onDeleteRule={(index) => deleteRule(channel, index)}
                   onAddRule={() => addRule(channel)}

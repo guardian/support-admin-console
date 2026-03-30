@@ -34,6 +34,7 @@ interface RuleHeaderProps {
   rule: ExclusionRule;
   index: number;
   editMode: boolean;
+  isUnsaved: boolean;
   canEdit: boolean;
   saving: boolean;
   onUpdateRule: (index: number, rule: ExclusionRule) => void;
@@ -49,6 +50,7 @@ const RuleHeader: React.FC<RuleHeaderProps> = ({
   rule,
   index,
   editMode,
+  isUnsaved,
   canEdit,
   saving,
   onUpdateRule,
@@ -82,13 +84,25 @@ const RuleHeader: React.FC<RuleHeaderProps> = ({
           disabled={!editMode}
         />
       ) : (
-        <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
-          {rule.name}
-        </Typography>
+        <div>
+          <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+            {rule.name}
+          </Typography>
+          {isUnsaved && (
+            <Typography variant="caption" color="warning.main">
+              Unsaved
+            </Typography>
+          )}
+        </div>
       )}
       <div className={classes.actionButtons}>
         {editMode ? (
           <>
+            {isUnsaved && (
+              <Typography variant="caption" color="warning.main">
+                Unsaved
+              </Typography>
+            )}
             <Button
               size="small"
               variant="contained"

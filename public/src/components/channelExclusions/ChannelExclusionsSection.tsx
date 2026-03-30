@@ -63,22 +63,25 @@ interface ChannelExclusionsSectionProps {
   editMode: boolean;
   canEdit: boolean;
   saving: boolean;
-  editingRuleIndex: number | null;
+  editingRuleIndexes: number[];
+  unsavedRuleIndexes: number[];
   onStartEditRule: (index: number) => void;
-  onSaveEdit: () => void;
-  onCancelEdit: () => void;
+  onSaveEdit: (index: number) => void;
+  onCancelEdit: (index: number) => void;
   onUpdateRule: (index: number, rule: ExclusionRule) => void;
   onDeleteRule: (index: number) => void;
   onAddRule: () => void;
 }
 
 const ChannelExclusionsSection: React.FC<ChannelExclusionsSectionProps> = ({
+  channel,
   label,
   rules,
   editMode,
   canEdit,
   saving,
-  editingRuleIndex,
+  editingRuleIndexes,
+  unsavedRuleIndexes,
   onStartEditRule,
   onSaveEdit,
   onCancelEdit,
@@ -91,10 +94,10 @@ const ChannelExclusionsSection: React.FC<ChannelExclusionsSectionProps> = ({
   const [expandedRuleIndex, setExpandedRuleIndex] = useState<number | false>(false);
 
   useEffect(() => {
-    if (editingRuleIndex !== null) {
-      setExpandedRuleIndex(editingRuleIndex);
+    if (editingRuleIndexes.length > 0) {
+      setExpandedRuleIndex(editingRuleIndexes[editingRuleIndexes.length - 1]);
     }
-  }, [editingRuleIndex]);
+  }, [editingRuleIndexes]);
 
   const handleNameBlur = (index: number) => {
     setTouchedNameFields((prev) => new Set(prev).add(index));
@@ -106,7 +109,8 @@ const ChannelExclusionsSection: React.FC<ChannelExclusionsSectionProps> = ({
   };
 
   const renderRule = (rule: ExclusionRule, index: number) => {
-    const isRuleInEditMode = editMode && editingRuleIndex === index;
+    const isRuleInEditMode = editMode && editingRuleIndexes.includes(index);
+    const isRuleUnsaved = unsavedRuleIndexes.includes(index);
 
     return (
       <Accordion
@@ -121,12 +125,13 @@ const ChannelExclusionsSection: React.FC<ChannelExclusionsSectionProps> = ({
             rule={rule}
             index={index}
             editMode={isRuleInEditMode}
+            isUnsaved={isRuleUnsaved}
             canEdit={canEdit}
             saving={saving}
             onUpdateRule={onUpdateRule}
             onStartEditRule={handleStartEditRule}
-            onSaveRule={onSaveEdit}
-            onCancelRule={onCancelEdit}
+            onSaveRule={() => onSaveEdit(index)}
+            onCancelRule={() => onCancelEdit(index)}
             onDeleteRule={onDeleteRule}
             touchedNameFields={touchedNameFields}
             onNameBlur={handleNameBlur}
@@ -243,7 +248,7 @@ const ChannelExclusionsSection: React.FC<ChannelExclusionsSectionProps> = ({
         onClick={onAddRule}
         disabled={!canEdit}
       >
-        Add rule
+        Add {channel} rule
       </Button>
 
       {rules.length === 0 && (
