@@ -12,6 +12,7 @@ overrides:
   flatted@<3.4.0: '>=3.4.0'
   picomatch@<2.3.2: 2.3.2
   'picomatch@>=4.0.0 <4.0.4 ': 4.0.4
+  handlebars@<4.7.9: '>=4.7.9'
 
 devDependencies:
   '@guardian/cdk':
@@ -3557,8 +3558,8 @@ packages:
     resolution: {integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==}
     dev: true
 
-  /handlebars@4.7.8:
-    resolution: {integrity: sha512-vafaFqs8MZkRrSX7sFVUdo3ap/eNiLnb4IakshzvP56X5Nr1iGKAIqdX6tMlm6HcNRIkr6AxO5jFEoJzzpT8aQ==}
+  /handlebars@4.7.9:
+    resolution: {integrity: sha512-4E71E0rpOaQuJR2A3xDZ+GM1HyWYv1clR58tC8emQNeQe3RH7MAzSbat+V0wG78LQBo6m6bzSG/L4pBuCsgnUQ==}
     engines: {node: '>=0.4.7'}
     hasBin: true
     dependencies:
@@ -5331,7 +5332,7 @@ packages:
       '@babel/core': 7.28.5
       bs-logger: 0.2.6
       fast-json-stable-stringify: 2.1.0
-      handlebars: 4.7.8
+      handlebars: 4.7.9
       jest: 30.2.0(@types/node@25.2.3)
       json5: 2.2.3
       lodash.memoize: 4.1.2
