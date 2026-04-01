@@ -30,37 +30,34 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   },
 }));
 
-interface RuleHeaderProps {
+interface RuleHeaderState {
   rule: ExclusionRule;
   index: number;
   editMode: boolean;
   isUnsaved: boolean;
   canEdit: boolean;
   saving: boolean;
-  onUpdateRule: (index: number, rule: ExclusionRule) => void;
-  onStartEditRule: (index: number) => void;
-  onSaveRule: () => void;
-  onCancelRule: () => void;
-  onDeleteRule: (index: number) => void;
   touchedNameFields: Set<number>;
-  onNameBlur: (index: number) => void;
 }
 
-const RuleHeader: React.FC<RuleHeaderProps> = ({
-  rule,
-  index,
-  editMode,
-  isUnsaved,
-  canEdit,
-  saving,
-  onUpdateRule,
-  onStartEditRule,
-  onSaveRule,
-  onCancelRule,
-  onDeleteRule,
-  touchedNameFields,
-  onNameBlur,
-}) => {
+interface RuleHeaderHandlers {
+  onUpdateRule: (index: number, rule: ExclusionRule) => void;
+  onStartEditRule: () => void;
+  onSaveRule: () => void;
+  onCancelRule: () => void;
+  onDeleteRule: () => void;
+  onNameBlur: () => void;
+}
+
+interface RuleHeaderProps {
+  state: RuleHeaderState;
+  handlers: RuleHeaderHandlers;
+}
+
+const RuleHeader: React.FC<RuleHeaderProps> = ({ state, handlers }) => {
+  const { rule, index, editMode, isUnsaved, canEdit, saving, touchedNameFields } = state;
+  const { onUpdateRule, onStartEditRule, onSaveRule, onCancelRule, onDeleteRule, onNameBlur } =
+    handlers;
   const classes = useStyles();
 
   return (
@@ -72,7 +69,7 @@ const RuleHeader: React.FC<RuleHeaderProps> = ({
           value={rule.name ?? ''}
           onClick={(e) => e.stopPropagation()}
           onChange={(e) => onUpdateRule(index, { ...rule, name: e.target.value })}
-          onBlur={() => onNameBlur(index)}
+          onBlur={onNameBlur}
           variant="outlined"
           size="small"
           required
@@ -129,7 +126,7 @@ const RuleHeader: React.FC<RuleHeaderProps> = ({
               size="small"
               onClick={(e) => {
                 e.stopPropagation();
-                onDeleteRule(index);
+                onDeleteRule();
               }}
               aria-label="Delete rule"
               disabled={!canEdit || saving}
@@ -142,7 +139,7 @@ const RuleHeader: React.FC<RuleHeaderProps> = ({
             size="small"
             onClick={(e) => {
               e.stopPropagation();
-              onStartEditRule(index);
+              onStartEditRule();
             }}
             aria-label="Edit rule"
             disabled={!canEdit}
