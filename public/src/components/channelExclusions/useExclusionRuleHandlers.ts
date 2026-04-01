@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { ExclusionRule as ExclusionRuleType, ExclusionSettings } from '../../models/exclusions';
 import { ChannelKey, validateRule } from './util';
@@ -42,29 +42,36 @@ export const useExclusionRuleHandlers = ({
   index,
   rule,
 }: UseExclusionRuleHandlersParams): UseExclusionRuleHandlersReturn => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(!rule.name?.trim());
   const [isRuleInEditMode, setIsRuleInEditMode] = useState(!rule.name?.trim());
   const [isRuleUnsaved, setIsRuleUnsaved] = useState(!rule.name?.trim());
   const [savedRule, setSavedRule] = useState<ExclusionRuleType>(rule);
   const [touchedNameFields, setTouchedNameFields] = useState<Set<number>>(new Set());
+  const lastSetRuleRef = useRef(rule);
   const { watch, reset, setValue } = useForm<ExclusionRuleFormValues>({
     defaultValues: { rule },
   });
   const formRule = watch('rule');
 
   useEffect(() => {
+    if (rule !== lastSetRuleRef.current) {
+      // A different rule was placed at this index slot (e.g. after a deletion)
+      lastSetRuleRef.current = rule;
+      setIsRuleInEditMode(!rule.name?.trim());
+      setIsRuleUnsaved(!rule.name?.trim());
+      setIsExpanded(!rule.name?.trim());
+      setTouchedNameFields(new Set());
+      setSavedRule(rule);
+    }
     reset({ rule });
   }, [rule, reset]);
-
-  useEffect(() => {
-    setSavedRule(rule);
-  }, [index, rule]);
 
   const handleNameBlur = () => {
     setTouchedNameFields((prev) => new Set(prev).add(index));
   };
 
   const updateRuleInSettings = (updatedRule: ExclusionRuleType, persist: boolean) => {
+    lastSetRuleRef.current = updatedRule;
     const currentRules = data[channel]?.rules ?? [];
     const nextRules = [...currentRules];
     nextRules[index] = updatedRule;
@@ -79,7 +86,10 @@ export const useExclusionRuleHandlers = ({
     onUpdateSettings(updatedSettings);
   };
 
-  const handleStartEditRule = () => setIsRuleInEditMode(true);
+  const handleStartEditRule = () => {
+    setIsRuleInEditMode(true);
+    setIsExpanded(true);
+  };
 
   const handleSaveRule = () => {
     const validationError = validateRule(formRule, label, index);
