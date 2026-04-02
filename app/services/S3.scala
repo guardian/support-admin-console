@@ -10,6 +10,7 @@ import software.amazon.awssdk.services.s3.model.{
   GetObjectRequest,
   HeadObjectRequest,
   ListObjectsRequest,
+  NoSuchKeyException,
   ObjectCannedACL,
   PutObjectRequest
 }
@@ -59,6 +60,28 @@ object S3Client {
 
 object S3 extends S3Client with StrictLogging {
 
+  private def versionMismatch(
+      objectSettings: S3ObjectSettings,
+      providedVersion: String,
+      latestVersion: String
+  ): ZIO[Any, S3ClientError, Unit] = {
+    logger.warn(
+      s"Cannot update S3 object $objectSettings because provided version ($providedVersion) does not match latest version ($latestVersion)"
+    )
+    ZIO.fail(S3VersionMatchError)
+  }
+
+  private def createIfNewObject(
+      objectSettings: S3ObjectSettings,
+      data: RawVersionedS3Data
+  ): ZIO[Any, S3ClientError, Unit] = {
+    if (data.version.isEmpty) {
+      createOrUpdate(data.value)(objectSettings)
+    } else {
+      ZIO.fail(S3VersionMatchError)
+    }
+  }
+
   val s3Client: AwsS3Client = AwsS3Client.builder
     .region(Aws.region)
     .credentialsProvider(Aws.credentialsProvider.build)
@@ -100,15 +123,18 @@ object S3 extends S3Client with StrictLogging {
         S3GetObjectError(e)
       })
       .flatMap(response => {
-        if (response.versionId() == data.version) {
+        val latestVersion = response.versionId()
+        if (latestVersion == data.version) {
           createOrUpdate(data.value)(objectSettings)
         } else {
-          logger.warn(
-            s"Cannot update S3 object $objectSettings because provided version (${data.version}) does not match latest version (${response.versionId()})"
-          )
-          ZIO.fail(S3VersionMatchError)
+          versionMismatch(objectSettings, data.version, latestVersion)
         }
       })
+      .catchSome {
+        case S3GetObjectError(_: NoSuchKeyException) =>
+          // Key doesn't exist yet - allow creation only for new objects.
+          createIfNewObject(objectSettings, data)
+      }
   }
 
   def createOrUpdate(data: String): S3Action[Unit] = { objectSettings =>
