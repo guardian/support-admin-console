@@ -29,13 +29,13 @@ abstract class S3ObjectController[T: Decoder: Encoder](
     with Circe
     with LazyLogging {
 
-  protected val dataObjectSettings = S3ObjectSettings(
+  private val dataObjectSettings = S3ObjectSettings(
     bucket = "support-admin-console",
     key = s"$stage/$filename",
     publicRead = false,
     cacheControl = None
   )
-  protected val s3Client = services.S3
+  private val s3Client = services.S3
 
   // Subclasses can recover specific S3 get errors (for example missing key with defaults).
   protected def recoverGetFromS3Error: PartialFunction[Throwable, ZIO[Any, Throwable, VersionedS3Data[T]]] =
