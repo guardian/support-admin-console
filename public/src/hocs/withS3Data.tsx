@@ -52,7 +52,11 @@ function withS3Data<T>(
 
       saveSettings(dataFromServer)
         .then(fetchData)
-        .then(() => setIsSaving(false));
+        .then(() => setIsSaving(false))
+        .catch((err) => {
+          setIsSaving(false);
+          alert(`Error saving data: ${err}`);
+        });
     };
 
     const updateAndSendToS3 = (data: T): void => {
@@ -62,6 +66,9 @@ function withS3Data<T>(
       setIsSaving(true);
 
       saveSettings({ ...dataFromServer, value: data })
+        .catch((err) => {
+          alert(`Error saving data: ${err}`);
+        })
         .then(fetchData)
         .then(() => setIsSaving(false));
     };

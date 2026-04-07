@@ -29,6 +29,7 @@ export enum FrontendSettingsType {
   checkoutNudgeTests = 'checkout-nudge-tests',
   accessManagement = 'access-management',
   oneTimeCheckout = 'one-time-checkout-tests',
+  exclusionsSettings = 'exclusions',
 }
 
 export enum AppsSettingsType {
@@ -147,7 +148,7 @@ export function saveSupportFrontendSettings(
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function fetchFrontendSettings(settingsType: FrontendSettingsType): Promise<any> {
+export function fetchFrontendSettings<T = any>(settingsType: FrontendSettingsType): Promise<T> {
   return fetchSettings(`/frontend/${settingsType}`);
 }
 

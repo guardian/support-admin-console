@@ -47,6 +47,7 @@ import Bookmarklets from './components/bookmarklets/Bookmarklets';
 import AccessManagement from './components/accessManagement/AccessManagement';
 import { StudentLandingPageTestsForm } from './components/channelManagement/studentLandingPage/studentLandingPage';
 import { OneTimeCheckoutTestsForm } from './components/channelManagement/oneTimeCheckout/oneTimeCheckout';
+import ExclusionsBoard from './components/channelExclusions/ExclusionsBoard';
 
 declare module '@mui/styles' {
   // https://mui.com/material-ui/migration/v5-style-changes/#%E2%9C%85-add-module-augmentation-for-defaulttheme-typescript
@@ -255,6 +256,7 @@ const AppRouter = () => {
             path="/one-time-checkout-tests/:testName?"
             element={createComponent(<OneTimeCheckoutTestsForm />, 'One Time Checkout Tests')}
           />
+          <Route path="/exclusions" element={createComponent(<ExclusionsBoard />, 'Exclusions')} />
         </Routes>
       </div>
     </Router>
