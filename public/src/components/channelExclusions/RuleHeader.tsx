@@ -60,6 +60,16 @@ const RuleHeader: React.FC<RuleHeaderProps> = ({ state, handlers }) => {
     handlers;
   const classes = useStyles();
 
+  const handleDeleteClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const userConfirmation = confirm(
+      `Are you sure you want to delete the rule "${rule.name}"? This action cannot be undone.`,
+    );
+    if (userConfirmation) {
+      onDeleteRule();
+    }
+  };
+
   return (
     <div className={classes.ruleHeader}>
       {editMode ? (
@@ -124,10 +134,7 @@ const RuleHeader: React.FC<RuleHeaderProps> = ({ state, handlers }) => {
             </Button>
             <IconButton
               size="small"
-              onClick={(e) => {
-                e.stopPropagation();
-                onDeleteRule();
-              }}
+              onClick={handleDeleteClick}
               aria-label="Delete rule"
               disabled={!canEdit || saving}
             >
