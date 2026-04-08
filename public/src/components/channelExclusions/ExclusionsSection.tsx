@@ -19,6 +19,9 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   addRuleButton: {
     marginBottom: spacing(2),
   },
+  addRuleButtonBottom: {
+    marginTop: spacing(2),
+  },
   bottomDivider: {
     marginTop: 'auto',
   },
@@ -46,9 +49,10 @@ const ExclusionsSection: React.FC<ExclusionsSectionProps> = ({
   onPersistSettings,
 }) => {
   const classes = useStyles();
+  const rules = data[channel]?.rules ?? [];
 
   const handleAddRule = () => {
-    const currentRules = data[channel]?.rules ?? [];
+    const currentRules = rules;
     const newRules = [...currentRules, { ...EMPTY_RULE }];
     const updatedSettings = {
       ...data,
@@ -74,13 +78,13 @@ const ExclusionsSection: React.FC<ExclusionsSectionProps> = ({
         Add {channel} rule
       </Button>
 
-      {(data[channel]?.rules ?? []).length === 0 && (
+      {rules.length === 0 && (
         <Typography variant="body2" color="textSecondary">
           No rules defined.
         </Typography>
       )}
 
-      {(data[channel]?.rules ?? []).map((rule, i) => (
+      {rules.map((rule, i) => (
         <ExclusionRule
           key={i}
           channel={channel}
@@ -94,6 +98,19 @@ const ExclusionsSection: React.FC<ExclusionsSectionProps> = ({
           onPersistSettings={onPersistSettings}
         />
       ))}
+
+      {rules.length > 8 && (
+        <Button
+          className={classes.addRuleButtonBottom}
+          variant="outlined"
+          size="small"
+          startIcon={<AddIcon />}
+          onClick={handleAddRule}
+          disabled={!canEdit}
+        >
+          Add {channel} rule
+        </Button>
+      )}
 
       <Divider className={classes.bottomDivider} sx={{ mt: 3 }} />
     </div>
