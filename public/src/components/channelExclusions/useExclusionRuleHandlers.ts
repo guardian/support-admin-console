@@ -33,6 +33,10 @@ interface UseExclusionRuleHandlersReturn {
   handleUpdateRuleWithIndex: (_idx: number, updatedRule: ExclusionRuleType) => void;
 }
 
+const rulesAreEqual = (left: ExclusionRuleType, right: ExclusionRuleType): boolean => {
+  return JSON.stringify(left) === JSON.stringify(right);
+};
+
 export const useExclusionRuleHandlers = ({
   channel,
   label,
@@ -54,6 +58,13 @@ export const useExclusionRuleHandlers = ({
   const formRule = watch('rule');
 
   useEffect(() => {
+    const serverRuleMatchesLastSaved = rulesAreEqual(rule, savedRule);
+
+    // Keep local draft when an unrelated save refreshes this rule from server.
+    if (isRuleUnsaved && isRuleInEditMode && serverRuleMatchesLastSaved) {
+      return;
+    }
+
     if (rule !== lastSetRuleRef.current) {
       // A different rule was placed at this index slot (e.g. after a deletion)
       lastSetRuleRef.current = rule;
@@ -64,7 +75,7 @@ export const useExclusionRuleHandlers = ({
       setSavedRule(rule);
     }
     reset({ rule });
-  }, [rule, reset]);
+  }, [isRuleInEditMode, isRuleUnsaved, reset, rule, savedRule]);
 
   const handleNameBlur = () => {
     setTouchedNameFields((prev) => new Set(prev).add(index));
@@ -138,7 +149,6 @@ export const useExclusionRuleHandlers = ({
     setIsRuleInEditMode(true);
     setIsRuleUnsaved(true);
     setValue('rule', updatedRule, { shouldDirty: true });
-    updateRuleInSettings(updatedRule, false);
   };
 
   const handleUpdateRuleWithIndex = (_idx: number, updatedRule: ExclusionRuleType) => {
