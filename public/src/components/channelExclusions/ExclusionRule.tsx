@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Alert,
   Accordion,
   AccordionDetails,
   AccordionSummary,
@@ -126,6 +127,10 @@ const ExclusionRule: React.FC<ExclusionRuleProps> = ({
               editMode={isRuleInEditMode}
               onUpdateRule={handleUpdateRuleWithIndex}
             />
+            <Alert severity="info" className={classes.fullRowField}>
+              Pages for this exclusion are determined by Section IDs <strong>OR</strong> Tag IDs. If
+              either list matches, the rule exclusion will apply.
+            </Alert>
             <div className={classes.fullRowField}>
               <Typography variant="subtitle2" sx={{ mb: 1 }}>
                 Section IDs
