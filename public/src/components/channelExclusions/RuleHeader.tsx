@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Button, IconButton, TextField, Typography, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -59,6 +59,25 @@ const RuleHeader: React.FC<RuleHeaderProps> = ({ state, handlers }) => {
   const { onUpdateRule, onStartEditRule, onSaveRule, onCancelRule, onDeleteRule, onNameBlur } =
     handlers;
   const classes = useStyles();
+  const nameInputRef = useRef<HTMLInputElement | null>(null);
+  const hasAutoFocusedRef = useRef(false);
+
+  useEffect(() => {
+    if (!editMode || rule.name?.trim()) {
+      hasAutoFocusedRef.current = false;
+      return;
+    }
+    if (hasAutoFocusedRef.current) {
+      return;
+    }
+    hasAutoFocusedRef.current = true;
+    const input = nameInputRef.current;
+    if (!input) {
+      return;
+    }
+    input.focus();
+    input.select();
+  }, [editMode, rule.name]);
 
   const handleDeleteClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -77,6 +96,7 @@ const RuleHeader: React.FC<RuleHeaderProps> = ({ state, handlers }) => {
           className={classes.field}
           label="Rule Name"
           value={rule.name ?? ''}
+          inputRef={nameInputRef}
           onClick={(e) => e.stopPropagation()}
           onChange={(e) => onUpdateRule(index, { ...rule, name: e.target.value })}
           onBlur={onNameBlur}
