@@ -11,8 +11,9 @@ import { getDefaultVariant } from './utils/defaults';
 import VariantSummary from '../../tests/variants/variantSummary';
 import VariantEditor from './variantEditor';
 import TestEditorTargetRegionsSelector from '../testEditorTargetRegionsSelector';
-import { RegionTargeting } from '../helpers/shared';
+import { Methodology, RegionTargeting } from '../helpers/shared';
 import { MParticleAudienceEditor } from '../mParticleAudienceEditor';
+import { TestMethodologyEditor } from '../TestMethodologyEditor';
 
 const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLandingPageTest>> = ({
   test,
@@ -61,6 +62,11 @@ const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLan
       ...current,
       regionTargeting: updatedTargeting,
     }));
+  };
+
+  const onMethodologyChange = (methodologies: Methodology[]): void => {
+    setValidationStatusForField('methodologies', methodologies.length > 0);
+    onTestChange((current) => ({ ...current, methodologies }));
   };
 
   const renderVariantEditor = (variant: SupportLandingPageVariant): React.ReactElement => (
@@ -120,6 +126,19 @@ const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLan
               onVariantClone={onVariantClone}
             />
           </div>
+        </div>
+
+        <div className={classes.sectionContainer}>
+          <Typography variant={'h3'} className={classes.sectionHeader}>
+            Experiment Methodology
+          </Typography>
+          <TestMethodologyEditor
+            methodologies={test.methodologies}
+            testName={test.name}
+            channel={test.channel ?? ''}
+            isDisabled={!userHasTestLocked || test.status === 'Live'}
+            onChange={onMethodologyChange}
+          />
         </div>
 
         <div className={classes.sectionContainer}>

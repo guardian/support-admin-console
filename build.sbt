@@ -7,7 +7,7 @@ scalaVersion := "2.13.18"
 val circeVersion = "0.14.15"
 val awsVersion = "2.41.34"
 val zioVersion = "2.1.24"
-val jacksonVersion = "2.21.1"
+val jacksonVersion = "2.21.2"
 
 lazy val scalafmtSettings = Seq(
   scalafmtFilter.withRank(KeyRanks.Invisible) := "diff-dirty",
@@ -29,7 +29,7 @@ asciiGraphWidth := 999999999 // to ensure Snyk can read the the deeeeep dependen
 libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.6",
   "com.gu.play-googleauth" %% "play-v30" % "32.0.2",
-  "com.google.cloud" % "google-cloud-bigquery" % "2.61.0",
+  "com.google.cloud" % "google-cloud-bigquery" % "2.62.0",
   "com.gu" %% "simple-configuration-ssm" % "9.1.3",
   "software.amazon.awssdk" % "s3" % awsVersion,
   "software.amazon.awssdk" % "dynamodb" % awsVersion,
@@ -45,7 +45,7 @@ libraryDependencies ++= Seq(
   "dev.zio" %% "zio-streams" % zioVersion,
   "com.gu" %% "support-internationalisation" % "0.16",
   "org.scalatest" %% "scalatest" % "3.2.19" % "test",
-  "org.gnieh" %% "diffson-circe" % "4.6.1" % "test"
+  "org.gnieh" %% "diffson-circe" % "4.7.0" % "test"
 )
 
 dependencyOverrides ++= List(
