@@ -61,7 +61,7 @@ export const SectionsEditor: React.FC<SectionEditorProps> = ({
       autoComplete
       includeInputInList
       filterSelectedOptions
-      value={ids.map<Section>((id) => ({ id }))}
+      value={ids.map<Section>((id) => options.find((option) => option.id === id) || { id })}
       inputValue={inputValue}
       onInputChange={(event, newInputValue, reason): void => {
         if (reason === 'input') {

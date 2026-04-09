@@ -24,6 +24,10 @@ export const permissions: Permission[] = [
     name: 'student-landing-page-tests',
     displayName: 'Student Landing Page Tests',
   },
+  {
+    name: 'exclusions',
+    displayName: 'Channel Exclusions Settings',
+  },
 ];
 
 export type PermissionName = (typeof permissions)[number]['name'];
