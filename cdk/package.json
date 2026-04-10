@@ -14,6 +14,8 @@
   "devDependencies": {
     "@guardian/cdk": "62.5.1",
     "@guardian/eslint-config-typescript": "10.0.1",
+    "@typescript-eslint/eslint-plugin": "7.3.1",
+    "@typescript-eslint/parser": "7.3.1",
     "@types/jest": "^30.0.0",
     "@types/node": "25.2.3",
     "aws-cdk": "2.1108.0",
@@ -30,7 +32,7 @@
   "resolutions": {
     "json5": "^2.2.2"
   },
-  "packageManager": "pnpm@8.15.7",
+  "packageManager": "pnpm@10.33.0",
   "pnpm": {
     "overrides": {
       "minimatch@>=9.0.0 <9.0.7": ">=9.0.7 <10",
