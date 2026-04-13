@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FormControl, FormControlLabel, Radio, RadioGroup, Typography, Box } from '@mui/material';
 import { ExclusionRule } from '../../models/exclusions';
+import { ChannelKey } from './util';
 
 const hasBothContentTypes = (rule: ExclusionRule): boolean =>
   rule.contentTypes === undefined ||
@@ -11,6 +12,7 @@ const hasBothContentTypes = (rule: ExclusionRule): boolean =>
 interface ContentTypesSelectorProps {
   rule: ExclusionRule;
   index: number;
+  channel: ChannelKey;
   editMode: boolean;
   onUpdateRule: (index: number, rule: ExclusionRule) => void;
 }
@@ -18,10 +20,26 @@ interface ContentTypesSelectorProps {
 const ContentTypesSelector: React.FC<ContentTypesSelectorProps> = ({
   rule,
   index,
+  channel,
   editMode,
   onUpdateRule,
 }) => {
+  const forceArticlesOnly = channel === 'epic' || channel === 'gutterAsk';
+
+  useEffect(() => {
+    if (
+      forceArticlesOnly &&
+      !(rule.contentTypes?.length === 1 && rule.contentTypes.includes('Articles'))
+    ) {
+      onUpdateRule(index, { ...rule, contentTypes: ['Articles'] });
+    }
+  }, [forceArticlesOnly, index, onUpdateRule, rule]);
+
   const getContentTypeValue = (): string => {
+    if (forceArticlesOnly) {
+      return 'articles';
+    }
+
     if (hasBothContentTypes(rule)) {
       return 'both';
     }
@@ -43,10 +61,15 @@ const ContentTypesSelector: React.FC<ContentTypesSelectorProps> = ({
 
   return (
     <Box sx={{ flex: '1 1 100%' }}>
-      <Typography variant="subtitle2" sx={{ mb: 1 }}>
-        Content Types
-      </Typography>
-      <FormControl disabled={!editMode}>
+      <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1, mb: 1 }}>
+        <Typography variant="subtitle2">Content Types</Typography>
+        {forceArticlesOnly && (
+          <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+            ({channel} is only used in articles)
+          </Typography>
+        )}
+      </Box>
+      <FormControl disabled={!editMode || forceArticlesOnly}>
         <RadioGroup
           row
           value={getContentTypeValue()}

@@ -124,6 +124,7 @@ const ExclusionRule: React.FC<ExclusionRuleProps> = ({
             <ContentTypesSelector
               rule={formRule}
               index={index}
+              channel={channel}
               editMode={isRuleInEditMode}
               onUpdateRule={handleUpdateRuleWithIndex}
             />
