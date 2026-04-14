@@ -24,6 +24,7 @@ const ContentTypesSelector: React.FC<ContentTypesSelectorProps> = ({
   editMode,
   onUpdateRule,
 }) => {
+  // Epic and Gutter Ask exclusions target article pages only, so content type is locked.
   const forceArticlesOnly = channel === 'epic' || channel === 'gutterAsk';
 
   useEffect(() => {
