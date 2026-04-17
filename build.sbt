@@ -6,7 +6,7 @@ scalaVersion := "2.13.18"
 
 val circeVersion = "0.14.15"
 val awsVersion = "2.42.27"
-val zioVersion = "2.1.24"
+val zioVersion = "2.1.25"
 val jacksonVersion = "2.21.2"
 
 lazy val scalafmtSettings = Seq(
@@ -38,13 +38,13 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-parser" % circeVersion,
   "io.circe" %% "circe-generic-extras" % "0.14.4",
   "com.dripower" %% "play-circe" % "3014.1",
-  "com.beachape" %% "enumeratum" % "1.9.6",
-  "com.beachape" %% "enumeratum-circe" % "1.9.6",
+  "com.beachape" %% "enumeratum" % "1.9.7",
+  "com.beachape" %% "enumeratum-circe" % "1.9.7",
   ws,
   "dev.zio" %% "zio" % zioVersion,
   "dev.zio" %% "zio-streams" % zioVersion,
   "com.gu" %% "support-internationalisation" % "0.16",
-  "org.scalatest" %% "scalatest" % "3.2.19" % "test",
+  "org.scalatest" %% "scalatest" % "3.2.20" % "test",
   "org.gnieh" %% "diffson-circe" % "4.7.0" % "test"
 )
 
