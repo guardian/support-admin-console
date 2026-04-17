@@ -6,7 +6,7 @@ scalaVersion := "2.13.18"
 
 val circeVersion = "0.14.15"
 val awsVersion = "2.42.27"
-val zioVersion = "2.1.24"
+val zioVersion = "2.1.25"
 val jacksonVersion = "2.21.2"
 
 lazy val scalafmtSettings = Seq(
