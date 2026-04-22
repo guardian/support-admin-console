@@ -60,22 +60,22 @@ export const CopyEditor: React.FC<CopyEditorProps> = ({
   });
 
   useEffect(() => {
-    trigger();
-  }, []);
+    void trigger();
+  }, [trigger]);
 
   useEffect(() => {
     onChange({
       ...copy,
       ...validatedFields,
     });
-  }, [validatedFields]);
+  }, [validatedFields, copy, onChange]);
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     if (onValidationChange) {
       onValidationChange(isValid);
     }
-  }, [errors.heading, errors.subheading]);
+  }, [errors, onValidationChange]);
 
   return (
     <>
@@ -91,11 +91,11 @@ export const CopyEditor: React.FC<CopyEditorProps> = ({
             return (
               <RichTextEditorSingleLine
                 error={errors.heading !== undefined}
-                helperText={errors?.heading?.message || errors?.heading?.type}
+                helperText={errors.heading?.message ?? errors.heading?.type}
                 copyData={field.value}
                 updateCopy={(pars) => {
                   field.onChange(pars);
-                  handleSubmit(setValidatedFields)();
+                  void handleSubmit(setValidatedFields)();
                 }}
                 name="heading"
                 label="Heading copy"
@@ -125,11 +125,11 @@ export const CopyEditor: React.FC<CopyEditorProps> = ({
               return (
                 <RichTextEditorSingleLine
                   error={errors.subheading !== undefined}
-                  helperText={errors?.subheading?.message || errors?.subheading?.type}
+                  helperText={errors.subheading?.message ?? errors.subheading?.type}
                   copyData={field.value}
                   updateCopy={(pars) => {
                     field.onChange(pars);
-                    handleSubmit(setValidatedFields)();
+                    void handleSubmit(setValidatedFields)();
                   }}
                   name="subheading"
                   label="Subheading copy"
