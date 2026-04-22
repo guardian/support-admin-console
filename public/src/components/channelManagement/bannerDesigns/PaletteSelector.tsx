@@ -3,10 +3,11 @@ import { FormControl, FormHelperText, InputLabel, MenuItem, Select } from '@mui/
 import type { Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
 import React from 'react';
-import { useEffect, useMemo, useState } from 'react';
-import { HELP_GUIDE_URL } from '../../../main';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { HELP_GUIDE_URL } from '../../../utils/constants';
 import PalettePreview from './PalettePreview';
-import type { ThemeColours, ThemeDefinition, ThemeStyle } from './utils/colourThemes';
+import type { SelectedPalette } from './types';
+import type { ThemeDefinition, ThemeStyle } from './utils/colourThemes';
 import { colourThemes } from './utils/colourThemes';
 
 const useStyles = makeStyles(({ breakpoints, spacing }: Theme) => ({
@@ -32,12 +33,6 @@ const useStyles = makeStyles(({ breakpoints, spacing }: Theme) => ({
   },
 }));
 
-export interface SelectedPalette {
-  styleId?: string;
-  themeId?: string;
-  colours?: ThemeColours;
-}
-
 type Props = {
   onChange: (selected: SelectedPalette) => void;
   initialStyleId?: string;
@@ -56,18 +51,25 @@ const PaletteSelector: React.FC<Props> = ({
   const classes = useStyles();
   const { styles } = colourThemes;
 
-  const getStyle = (styleId?: string) =>
-    styles.find((style) => style.id === styleId && style.themes.some((t) => t.kind === visualKind));
+  const getStyle = useCallback(
+    (styleId?: string) =>
+      styles.find(
+        (style) => style.id === styleId && style.themes.some((t) => t.kind === visualKind),
+      ),
+    [styles, visualKind],
+  );
+
+  const getTheme = useCallback(
+    (style?: ThemeStyle, themeId?: string) => {
+      const theme =
+        style?.themes.find((theme) => theme.id === themeId && theme.kind === visualKind) ??
+        style?.themes.find((theme) => theme.kind === visualKind); // Fallback to any theme matching the visualKind
+      return theme;
+    },
+    [visualKind],
+  );
 
   const [style, setStyle] = useState<ThemeStyle | undefined>(getStyle(initialStyleId));
-
-  const getTheme = (style?: ThemeStyle, themeId?: string) => {
-    const theme =
-      style?.themes.find((theme) => theme.id === themeId && theme.kind === visualKind) ??
-      style?.themes.find((theme) => theme.kind === visualKind); // Fallback to any theme matching the visualKind
-    return theme;
-  };
-
   const [theme, setTheme] = useState<ThemeDefinition | undefined>(getTheme(style, initialThemeId));
 
   const availableStyles = useMemo(() => {
@@ -76,48 +78,77 @@ const PaletteSelector: React.FC<Props> = ({
 
   const availableThemes = useMemo(() => {
     return style?.themes.filter((theme) => theme.kind === visualKind) ?? [];
-  }, [styles, style, visualKind]);
+  }, [style, visualKind]);
 
+  const setSelectedPalette = useCallback(
+    (style?: ThemeStyle, theme?: ThemeDefinition) => {
+      console.log('Setting selected palette', { style, theme });
+      onChange({
+        styleId: style?.id,
+        themeId: theme?.id,
+        colours: theme?.colours,
+      });
+    },
+    [onChange],
+  );
+
+  const prevProps = useRef({ initialStyleId, initialThemeId, visualKind });
+
+  // Sync internal state when props change
   useEffect(() => {
-    const style = getStyle(initialStyleId || initialStyleId);
-    const theme = getTheme(style, initialThemeId || initialThemeId);
-    setStyle(style);
-    setTheme(theme);
+    const {
+      initialStyleId: prevStyleId,
+      initialThemeId: prevThemeId,
+      visualKind: prevVisualKind,
+    } = prevProps.current;
+    if (
+      initialStyleId !== prevStyleId ||
+      initialThemeId !== prevThemeId ||
+      visualKind !== prevVisualKind
+    ) {
+      const newStyle = getStyle(initialStyleId);
+      const newTheme = getTheme(newStyle, initialThemeId);
+      setStyle(newStyle);
+      setTheme(newTheme);
+      setSelectedPalette(newStyle, newTheme);
+      prevProps.current = { initialStyleId, initialThemeId, visualKind };
+    }
+  }, [initialStyleId, initialThemeId, visualKind, getStyle, getTheme, setSelectedPalette]);
+
+  // Sync onChange when style/theme change from user interactions
+  useEffect(() => {
     setSelectedPalette(style, theme);
-  }, [initialStyleId, initialThemeId, visualKind, styles]);
+  }, [style, theme, setSelectedPalette]);
 
   const selectedColours = useMemo(() => theme?.colours, [theme]);
 
-  const setSelectedPalette = (style?: ThemeStyle, theme?: ThemeDefinition) => {
-    console.log('Setting selected palette', { style, theme });
-    onChange({
-      styleId: style?.id,
-      themeId: theme?.id,
-      colours: theme?.colours,
-    });
-  };
+  const onStyleChange = useCallback(
+    (e: SelectChangeEvent) => {
+      const newStyleId = e.target.value;
+      const newStyle = getStyle(newStyleId);
 
-  const onStyleChange = (e: SelectChangeEvent) => {
-    const newStyleId = e.target.value;
-    const newStyle = getStyle(newStyleId);
+      setStyle(newStyle);
+      if (!newStyle) {
+        setTheme(undefined);
+        return;
+      }
 
-    setStyle(newStyle);
-    if (!newStyle) {
-      setTheme(undefined);
-      return;
-    }
+      const newTheme = getTheme(newStyle, theme?.id);
+      setTheme(newTheme);
+      setSelectedPalette(newStyle, newTheme);
+    },
+    [getStyle, getTheme, theme, setSelectedPalette],
+  );
 
-    const newTheme = getTheme(newStyle, theme?.id);
-    setTheme(newTheme);
-    setSelectedPalette(newStyle, newTheme);
-  };
-
-  const onThemeChange = (e: SelectChangeEvent) => {
-    const newThemeId = e.target.value;
-    const newTheme = getTheme(style, newThemeId);
-    setTheme(newTheme);
-    setSelectedPalette(style, newTheme);
-  };
+  const onThemeChange = useCallback(
+    (e: SelectChangeEvent) => {
+      const newThemeId = e.target.value;
+      const newTheme = getTheme(style, newThemeId);
+      setTheme(newTheme);
+      setSelectedPalette(style, newTheme);
+    },
+    [getTheme, style, setSelectedPalette],
+  );
 
   return (
     <div className={classes.container}>

@@ -15,8 +15,8 @@ import { BannerDesignUsage } from './BannerDesignUsage';
 import { BannerVisualEditor } from './BannerVisualEditor';
 import { HeaderImageEditor } from './HeaderImageEditor';
 import { HeadlineSizeEditor } from './HeadlineSizeEditor';
-import type { SelectedPalette } from './PaletteSelector';
 import PaletteSelector from './PaletteSelector';
+import type { SelectedPalette } from './types';
 
 type Props = {
   design: BannerDesign;

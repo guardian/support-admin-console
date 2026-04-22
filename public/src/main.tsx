@@ -45,11 +45,12 @@ import PromoEditorPage from './components/promoTool/promoEditorPage';
 import PromoTool from './components/promoTool/promoTool';
 import Switchboard from './components/switchboard';
 import QrCodePage from './components/utilities/QrCodePage';
+import { HELP_GUIDE_URL } from './utils/constants';
 import { getTheme } from './utils/theme';
 
 declare module '@mui/styles' {
   // https://mui.com/material-ui/migration/v5-style-changes/#%E2%9C%85-add-module-augmentation-for-defaulttheme-typescript
-  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type -- Required by MUI v5 migration for theme type augmentation
   interface DefaultTheme extends Theme {}
 }
 
@@ -112,9 +113,6 @@ const useStyles = makeStyles(({ palette, mixins, typography, transitions }: Them
     color: palette.grey[100],
   },
 }));
-
-export const HELP_GUIDE_URL =
-  'https://docs.google.com/document/d/1ErgEoQJRpiVMHZZpUmAnq3MGY8tJCaHTun0INzLcLRc/edit';
 
 const AppRouter = () => {
   const classes = useStyles();
