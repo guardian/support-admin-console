@@ -3,8 +3,8 @@ import { Button, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React from 'react';
 import useOpenable from '../../../hooks/useOpenable';
-import type { Campaign } from './CampaignsForm';
 import CreateCampaignDialog from './CreateCampaignDialog';
+import type { Campaign } from './types';
 
 const useStyles = makeStyles(() => ({
   button: {

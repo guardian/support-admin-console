@@ -89,7 +89,7 @@ const AccessManagement = () => {
         setLoading(false);
       }
     };
-    getUsers();
+    void getUsers();
   }, []);
 
   const handleOpenEditModal = (user: UserPermissions) => {

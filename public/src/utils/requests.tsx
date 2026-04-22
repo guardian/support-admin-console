@@ -1,4 +1,4 @@
-import type { Campaign } from '../components/channelManagement/campaigns/CampaignsForm';
+import type { Campaign } from '../components/channelManagement/campaigns/types';
 import type { Status, Test, UserPermissions } from '../components/channelManagement/helpers/shared';
 import type { Product } from '../components/promoTool/utils/productCatalog';
 import type { CountryGroup, Promo, PromoCampaign } from '../components/promoTool/utils/promoModels';

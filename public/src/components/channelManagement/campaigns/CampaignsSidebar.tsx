@@ -2,9 +2,9 @@ import { TextField } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React from 'react';
 import { useState } from 'react';
-import type { Campaign, Campaigns } from './CampaignsForm';
 import CampaignsList from './CampaignsList';
 import NewCampaignButton from './NewCampaignButton';
+import type { Campaign, Campaigns } from './types';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -45,9 +45,7 @@ function CampaignsSidebar({
   const [campaignSearch, setCampaignSearch] = useState('');
 
   const searchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e && e.target) {
-      setCampaignSearch(e.target.value.toUpperCase());
-    }
+    setCampaignSearch(e.target.value.toUpperCase());
   };
 
   return (

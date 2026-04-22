@@ -1,7 +1,7 @@
 import type { Theme } from '@mui/material';
 import { Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import {
@@ -12,6 +12,8 @@ import {
 } from '../../../utils/requests';
 import CampaignsEditor from './CampaignsEditor';
 import CampaignsSidebar from './CampaignsSidebar';
+import type { Campaign } from './types';
+import { unassignedCampaign } from './types';
 
 const useStyles = makeStyles(({ spacing, typography }: Theme) => ({
   viewTextContainer: {
@@ -47,44 +49,32 @@ const useStyles = makeStyles(({ spacing, typography }: Theme) => ({
   },
 }));
 
-export interface Campaign {
-  name: string;
-  nickname: string;
-  description?: string;
-  notes?: string[];
-  isActive?: boolean;
-}
-export type Campaigns = Campaign[];
-
-export const unassignedCampaign = {
-  name: 'NOT_IN_CAMPAIGN',
-  nickname: 'TESTS NOT IN A CAMPAIGN',
-  description: 'Tests not assigned to a campaign',
-};
-
 const CampaignsForm: React.FC = () => {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const { campaignName } = useParams<{ campaignName?: string }>(); // querystring parameter
-  const [selectedCampaignName, setSelectedCampaignName] = useState<string | undefined>();
+  const [internalSelectedCampaignName, setInternalSelectedCampaignName] = useState<
+    string | undefined
+  >();
   const classes = useStyles();
+
+  const selectedCampaignName = useMemo(() => {
+    if (campaignName != null) {
+      return campaignName;
+    }
+    return internalSelectedCampaignName;
+  }, [campaignName, internalSelectedCampaignName]);
 
   const fetchSettings = (): Promise<Campaign[]> => {
     return fetchFrontendSettings(FrontendSettingsType.Campaigns);
   };
 
   useEffect(() => {
-    fetchSettings().then(setCampaigns);
+    void fetchSettings().then(setCampaigns);
   }, []);
-
-  useEffect(() => {
-    if (campaignName != null) {
-      setSelectedCampaignName(campaignName);
-    }
-  }, [campaignName, campaigns]);
 
   const createCampaign = (campaign: Campaign): void => {
     setCampaigns([...campaigns, campaign]);
-    setSelectedCampaignName(campaign.name);
+    setInternalSelectedCampaignName(campaign.name);
     sendCreateCampaignRequest(campaign).catch((error) =>
       alert(`Error creating campaign: ${error}`),
     );
@@ -109,7 +99,7 @@ const CampaignsForm: React.FC = () => {
           campaigns={campaigns}
           createCampaign={createCampaign}
           selectedCampaign={selectedCampaign}
-          onCampaignSelected={setSelectedCampaignName}
+          onCampaignSelected={setInternalSelectedCampaignName}
         />
       </div>
       <div className={classes.rightCol}>

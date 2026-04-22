@@ -88,7 +88,7 @@ const BannerChannelDeployer: React.FC<BannerChannelDeployerProps> = ({
 
   const fetchDataFromServer = (): void => {
     fetchFrontendSettings(settingsType)
-      .then((data) => setDataFromServer(data))
+      .then((data: DataFromServer) => setDataFromServer(data))
       .catch((err) => alert(err));
   };
 
@@ -130,7 +130,7 @@ const BannerChannelDeployer: React.FC<BannerChannelDeployerProps> = ({
       .catch((err) => alert(err));
   };
 
-  useEffect(fetchDataFromServer, []);
+  useEffect(fetchDataFromServer, [settingsType]);
 
   return (
     <div className={classes.container}>

@@ -181,7 +181,7 @@ const AmountsForm: React.FC<InnerProps<AmountsTests>> = ({
   );
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- fetchSupportFrontendSettings returns any type
 const fetchSettings = (): Promise<any> =>
   fetchSupportFrontendSettings(SupportFrontendSettingsType.Amounts);
 

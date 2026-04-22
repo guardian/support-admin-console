@@ -4,8 +4,8 @@ import { makeStyles } from '@mui/styles';
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { fetchFrontendSettings, FrontendSettingsType } from '../../utils/requests';
-import type { Campaign } from './campaigns/CampaignsForm';
-import { unassignedCampaign } from './campaigns/CampaignsForm';
+import type { Campaign } from './campaigns/types';
+import { unassignedCampaign } from './campaigns/types';
 import type { Test } from './helpers/shared';
 
 const useStyles = makeStyles(() => ({
@@ -51,7 +51,7 @@ const CampaignSelector: React.FC<CampaignSelectorProps> = ({
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
 
   useEffect(() => {
-    fetchFrontendSettings(FrontendSettingsType.Campaigns).then(setCampaigns);
+    void fetchFrontendSettings(FrontendSettingsType.Campaigns).then(setCampaigns);
   }, []);
 
   const setCampaignName = (campaign?: string) => onCampaignChange(campaign);

@@ -21,7 +21,7 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { fetchFrontendSettings, FrontendSettingsType } from '../../utils/requests';
-import type { Campaign } from './campaigns/CampaignsForm';
+import type { Campaign } from './campaigns/types';
 import {
   createDuplicateValidator,
   EMPTY_ERROR_HELPER_TEXT,
@@ -87,8 +87,8 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
   const classes = useStyles();
 
   const defaultValues = {
-    name: sourceName || '',
-    nickname: sourceNickname || '',
+    name: sourceName ?? '',
+    nickname: sourceNickname ?? '',
   };
 
   const {
@@ -105,7 +105,7 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
   const [campaignNamePrefix, setCampaignNamePrefix] = useState<boolean>(false);
 
   useEffect(() => {
-    fetchFrontendSettings(FrontendSettingsType.Campaigns).then(setCampaigns);
+    void fetchFrontendSettings(FrontendSettingsType.Campaigns).then(setCampaigns);
   }, []);
 
   const buildPrefix = (): string => {
@@ -121,7 +121,7 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
 
   // There should only be one instance of a double-underscore, as this is used by the AB tests dashboard to group together tests with a common prefix
   const doubleUnderscoresValidator = (s: string): string | undefined => {
-    const count = (s.match(/__/g) || []).length;
+    const count = (s.match(/__/g) ?? []).length;
     if (count < 2) {
       return undefined;
     } else {
@@ -233,7 +233,7 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleSubmit(onSubmit)} color="primary">
+        <Button onClick={(e) => void handleSubmit(onSubmit)(e)} color="primary">
           {mode === 'NEW' ? 'Create test' : 'Confirm'}
         </Button>
       </DialogActions>

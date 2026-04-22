@@ -7,10 +7,10 @@ import { Controller, useForm } from 'react-hook-form';
 import { fetchCampaignTests } from '../../../utils/requests';
 import type { Test } from '../helpers/shared';
 import { RichTextEditor } from '../richTextEditor/richTextEditor';
-import { unassignedCampaign } from './CampaignsForm';
-import type { Campaign } from './CampaignsForm';
 import ChannelCard from './ChannelCard';
 import StickyTopBar from './StickyCampaignBar';
+import type { Campaign } from './types';
+import { unassignedCampaign } from './types';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   testEditorContainer: {
@@ -122,7 +122,7 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
   const { name, nickname, description, notes, isActive } = campaign;
 
   const doDataFetch = (name: string) => {
-    fetchCampaignTests(name).then((tests) => {
+    void fetchCampaignTests(name).then((tests) => {
       // sort by test priority; each channel sets its own priority list
       const sortedTests = tests.sort((a: Test, b: Test) => {
         if (a.priority != null && b.priority != null) {
@@ -141,8 +141,10 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
   };
 
   useEffect(() => {
-    doDataFetch(name);
-  }, [name]);
+    if (campaign.name !== unassignedCampaign.name) {
+      doDataFetch(campaign.name);
+    }
+  }, [campaign.name]);
 
   const updatePage = () => doDataFetch(name);
 
@@ -159,8 +161,8 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
   });
 
   useEffect(() => {
-    trigger();
-  }, []);
+    void trigger();
+  }, [trigger]);
 
   const filterTests = (channel: string) => {
     if (showArchivedTests) {
@@ -202,7 +204,7 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
                 error={errors.description !== undefined}
                 helperText={errors.description ? errors.description.message : ''}
                 {...register('description')}
-                onBlur={handleSubmit(onSubmit)}
+                onBlur={() => void handleSubmit(onSubmit)()}
                 label="Description"
                 margin="normal"
                 variant="outlined"
@@ -220,7 +222,7 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
                         {...register('isActive')}
                         onChange={(e) => {
                           field.onChange(e.target.checked);
-                          handleSubmit(onSubmit)();
+                          void handleSubmit(onSubmit)();
                         }}
                         checked={field.value}
                         disabled={!editMode}
@@ -241,7 +243,7 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
                       copyData={field.value}
                       updateCopy={(pars) => {
                         field.onChange(pars);
-                        handleSubmit(onSubmit)();
+                        void handleSubmit(onSubmit)();
                       }}
                       name="notes"
                       label="Notes and links"
