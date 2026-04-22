@@ -1,29 +1,20 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const useValidatableField = (
   defaultHelperText: string,
   getError: (value: string) => string | null,
 ): [string, (value: string) => void, boolean, string, () => boolean] => {
   const [value, setValue] = useState('');
-  const [hasError, setHasError] = useState(false);
-  const [helperText, setHelperText] = useState(defaultHelperText);
-
-  useEffect(() => {
-    setHelperText(defaultHelperText);
-    setHasError(false);
-  }, [value]);
+  const [error, setError] = useState<string | null>(null);
 
   const check = (): boolean => {
-    let isValid = true;
-    const error = getError(value);
-    if (error) {
-      setHelperText(error);
-      setHasError(true);
-
-      isValid = false;
-    }
-    return isValid;
+    const validationError = getError(value);
+    setError(validationError);
+    return validationError === null;
   };
+
+  const hasError = error !== null;
+  const helperText = error ?? defaultHelperText;
 
   return [value, setValue, hasError, helperText, check];
 };
