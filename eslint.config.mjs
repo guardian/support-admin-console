@@ -1,9 +1,12 @@
-const js = require('@eslint/js');
-const tseslint = require('typescript-eslint');
-const reactPlugin = require('eslint-plugin-react');
-const prettierConfig = require('eslint-config-prettier');
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import guardian from '@guardian/eslint-config';
+import prettierPlugin from 'eslint-plugin-prettier/recommended';
+import globals from 'globals';
 
-module.exports = [
+const tsconfigRootDir = dirname(fileURLToPath(import.meta.url));
+
+export default [
   {
     ignores: [
       'cdk/',
@@ -22,31 +25,21 @@ module.exports = [
       'webpack.*.js',
       'jest.config.js',
       '.prettierrc.js',
-      'eslint.config.js',
+      'eslint.config.mjs',
     ],
   },
-  js.configs.recommended,
-  ...tseslint.configs.recommended,
-  reactPlugin.configs.flat.recommended,
-  prettierConfig,
+  ...guardian.configs.recommended,
+  ...guardian.configs.react,
+  ...guardian.configs.jest,
+  prettierPlugin,
   {
-    files: ['**/*.{js,jsx,ts,tsx}'],
     languageOptions: {
-      ecmaVersion: 2018,
-      sourceType: 'module',
-      parser: tseslint.parser,
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
       globals: {
-        ...tseslint.configs.recommended[0].languageOptions?.globals,
+        ...globals.browser,
+        ...globals.node,
       },
-    },
-    settings: {
-      react: {
-        version: 'detect',
+      parserOptions: {
+        tsconfigRootDir,
       },
     },
     rules: {
