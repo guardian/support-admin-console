@@ -150,7 +150,7 @@ export const AcademicInstitutionDetailEditor: React.FC<AcademicInstituteDetailEd
           error={errors.logoUrl !== undefined}
           helperText={
             errors?.logoUrl?.message ??
-            'Image dimensions should be 61 wide by 27 high, with a transparent background and the foreground colour needs to be white'
+            'Image dimensions should be 61px wide by 27px high, with a transparent background and the foreground colour needs to be white'
           }
           onBlur={handleSubmit(update)}
           label="Logo for Institution"
