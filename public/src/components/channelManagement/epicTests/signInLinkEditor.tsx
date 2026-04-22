@@ -14,7 +14,7 @@ const SignInLinkEditor: React.FC<EpicTestSignInLinkEditorProps> = ({
   isDisabled,
 }: EpicTestSignInLinkEditorProps) => {
   const onChange = (): void => {
-    updateShowSignInLink(!Boolean(showSignInLink));
+    updateShowSignInLink(!showSignInLink);
   };
 
   return (

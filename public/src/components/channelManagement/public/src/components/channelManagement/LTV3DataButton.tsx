@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Dialog, Theme } from '@mui/material';
+import { Button, Dialog } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import useOpenable from '../../../../../../hooks/useOpenable';
 import { Methodology } from '../../../../helpers/shared';
@@ -11,7 +11,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-const useStyles = makeStyles(({}: Theme) => ({
+const useStyles = makeStyles({
   button: {
     height: '100%',
   },
@@ -27,7 +27,7 @@ const useStyles = makeStyles(({}: Theme) => ({
     fontSize: 15,
     fontWeight: 500,
   },
-}));
+});
 
 export interface LTV3Data {
   test_name: string;

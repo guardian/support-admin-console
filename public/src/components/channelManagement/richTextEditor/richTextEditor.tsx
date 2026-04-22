@@ -587,7 +587,7 @@ const RichTextEditorSingleLine: React.FC<RichTextEditorProps<string>> = ({
   rteMenuConstraints,
 }: RichTextEditorProps<string>) => {
   const onUpdate = (paras: string[] | undefined): void => {
-    if (!!paras) {
+    if (paras) {
       updateCopy(paras.join(' '));
     } else {
       updateCopy(undefined);
@@ -602,7 +602,7 @@ const RichTextEditorSingleLine: React.FC<RichTextEditorProps<string>> = ({
       name={name}
       error={error}
       updateCopy={onUpdate}
-      copyData={!!copyData ? [copyData] : undefined}
+      copyData={copyData ? [copyData] : undefined}
       rteMenuConstraints={rteMenuConstraints}
     />
   );

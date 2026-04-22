@@ -1,11 +1,11 @@
 import React from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { Button, Theme, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { diff, IChange } from 'json-diff-ts';
 import { AuditTestCompareVersionsDialog } from './auditTestCompareVersionsDialog';
 
-const useStyles = makeStyles(({}: Theme) => ({
+const useStyles = makeStyles({
   heading: {
     margin: '6px 12px 0 12px',
     fontSize: 18,
@@ -14,7 +14,7 @@ const useStyles = makeStyles(({}: Theme) => ({
   container: {
     marginTop: '10px',
   },
-}));
+});
 
 export interface AuditDataRow {
   name: string;

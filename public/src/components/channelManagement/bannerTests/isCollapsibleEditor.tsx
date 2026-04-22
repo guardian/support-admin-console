@@ -25,7 +25,7 @@ const IsCollapsibleEditor: React.FC<IsCollapsibleEditorProps> = ({
   const classes = useStyles();
 
   const onChange = (): void => {
-    updateIsCollapsibleSettings(!Boolean(isCollapsible));
+    updateIsCollapsibleSettings(!isCollapsible);
   };
 
   return (

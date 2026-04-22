@@ -21,7 +21,7 @@ const VariantSeparateArticleCountEditor: React.FC<VariantSeparateArticleCountEdi
   isDisabled,
 }: VariantSeparateArticleCountEditorProps) => {
   const onChange = (): void => {
-    updateSeparateArticleCount(Boolean(separateArticleCount) ? undefined : { type: 'above' });
+    updateSeparateArticleCount(separateArticleCount ? undefined : { type: 'above' });
   };
 
   const defaultValues: FormData = {
@@ -63,7 +63,7 @@ const VariantSeparateArticleCountEditor: React.FC<VariantSeparateArticleCountEdi
         label="Article count copy"
         margin="normal"
         variant="outlined"
-        disabled={isDisabled || !Boolean(separateArticleCount)}
+        disabled={isDisabled || !separateArticleCount}
         fullWidth
       />
     </div>

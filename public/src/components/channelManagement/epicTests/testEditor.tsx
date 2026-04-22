@@ -65,7 +65,7 @@ export const getEpicTestEditor = (
       setValidationStatusForField('variantsSplitSettings', isValid);
 
     const getArticlesViewedSettings = (test: EpicTest): ArticlesViewedSettings | undefined => {
-      if (!!test.articlesViewedSettings) {
+      if (test.articlesViewedSettings) {
         return test.articlesViewedSettings;
       }
       if (epicEditorConfig.allowArticleCount && copyHasTemplate(test, ARTICLE_COUNT_TEMPLATE)) {

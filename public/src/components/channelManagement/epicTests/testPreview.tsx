@@ -1,12 +1,12 @@
 import React from 'react';
-import { Button, Dialog, Theme, Typography } from '@mui/material';
+import { Button, Dialog, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import useOpenable from '../../../hooks/useOpenable';
 import VariantPreview from './variantPreview';
 import { EpicTest } from '../../../models/epic';
 import { EpicModuleName } from '../helpers/shared';
 
-const useStyles = makeStyles(({}: Theme) => ({
+const useStyles = makeStyles({
   dialog: {
     padding: '10px',
   },
@@ -22,7 +22,7 @@ const useStyles = makeStyles(({}: Theme) => ({
     fontSize: 26,
     fontWeight: 500,
   },
-}));
+});
 
 interface EpicTestPreviewProps {
   test: EpicTest;

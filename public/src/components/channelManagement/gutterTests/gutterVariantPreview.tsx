@@ -1,7 +1,6 @@
 import React from 'react';
 import { GutterContent, GutterVariant } from '../../../models/gutter';
 import { buildStorybookUrl } from '../helpers/dcrStorybook';
-import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 interface GutterProps {
@@ -26,7 +25,7 @@ const buildProps = (variant: GutterVariant): GutterProps => ({
   onCtaClick: () => {},
 });
 
-const useStyles = makeStyles(({}: Theme) => ({
+const useStyles = makeStyles({
   container: {
     width: '620px',
   },
@@ -34,7 +33,7 @@ const useStyles = makeStyles(({}: Theme) => ({
     width: '620px',
     height: '800px',
   },
-}));
+});
 
 interface GutterVariantPreviewProps {
   variant: GutterVariant;

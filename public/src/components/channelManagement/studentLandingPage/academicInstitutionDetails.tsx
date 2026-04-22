@@ -125,7 +125,7 @@ export const AcademicInstitutionDetailEditor: React.FC<AcademicInstituteDetailEd
                 return `max length is ${ACRONYM_MAX_LENGTH}`;
               }
               const htmlCheck = noHtmlValidator(acronym);
-              if (!!htmlCheck) {
+              if (htmlCheck) {
                 return htmlCheck;
               }
               return true;

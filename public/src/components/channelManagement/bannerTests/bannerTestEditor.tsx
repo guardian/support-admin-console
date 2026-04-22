@@ -77,7 +77,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
   }, []);
 
   const getArticlesViewedSettings = (test: BannerTest): ArticlesViewedSettings | undefined => {
-    if (!!test.articlesViewedSettings) {
+    if (test.articlesViewedSettings) {
       return test.articlesViewedSettings;
     }
     if (testCopyHasTemplate(test, ARTICLE_COUNT_TEMPLATE)) {

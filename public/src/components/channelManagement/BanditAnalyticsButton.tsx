@@ -1,11 +1,11 @@
 import { makeStyles } from '@mui/styles';
-import { Button, Dialog, Theme, Typography } from '@mui/material';
+import { Button, Dialog, Typography } from '@mui/material';
 import React, { useEffect } from 'react';
 import useOpenable from '../../hooks/useOpenable';
 import { LineChart, CartesianGrid, Line, XAxis, YAxis, Legend, Tooltip } from 'recharts';
 import { buildChartData } from './helpers/utilities';
 
-const useStyles = makeStyles(({}: Theme) => ({
+const useStyles = makeStyles({
   dialog: {
     padding: '10px',
   },
@@ -20,7 +20,7 @@ const useStyles = makeStyles(({}: Theme) => ({
   chartContainer: {
     margin: '12px',
   },
-}));
+});
 
 interface VariantSummary {
   variantName: string;

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 import { EpicModuleName } from '../helpers/shared';
@@ -108,7 +107,7 @@ const StorybookNames: Record<EpicModuleName, string> = {
   ContributionsEpic: 'components-marketing-contributionsepic--default',
 };
 
-const useStyles = makeStyles(({}: Theme) => ({
+const useStyles = makeStyles({
   container: {
     width: '620px',
   },
@@ -116,7 +115,7 @@ const useStyles = makeStyles(({}: Theme) => ({
     width: '620px',
     height: '800px',
   },
-}));
+});
 
 interface EpicVariantPreviewProps {
   variant: EpicVariant;
