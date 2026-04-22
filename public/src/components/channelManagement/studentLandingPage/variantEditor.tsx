@@ -14,8 +14,8 @@ import { AcademicInstitutionDetailEditor } from './academicInstitutionDetails';
 // import { ImageGuidance, ResponsiveImageEditor } from '../../shared/ResponsiveImageEditor';
 // import { ResponsiveImage } from '../../../models/shared';
 
-const HEADLINE_MAX_LENGTH = 65; // TODO: confirm the max length of this field
-const SUBHEADING_MAX_LENGTH = 210; // TODO: confirm the max length of this field
+const HEADLINE_MAX_LENGTH = 75;
+const SUBHEADING_MAX_LENGTH = 230;
 
 // hidden until we can get the hero image sorted out in support-frontend as part of a future phase
 // const imageGuidance: ImageGuidance = {
