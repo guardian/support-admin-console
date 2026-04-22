@@ -264,7 +264,27 @@ const variantFields = {
   },
 };
 
-type CommonObjectInput = Record<string, any>;
+type FieldType =
+  | 'string'
+  | 'number'
+  | 'boolean'
+  | 'string-array'
+  | 'string-block'
+  | 'string-block-array'
+  | 'object'
+  | 'object-or-other'
+  | 'other';
+
+interface FieldDefinition {
+  label: string;
+  type: FieldType;
+  exclude: string[];
+  optional: boolean;
+}
+
+type FieldDefinitions = Record<string, FieldDefinition>;
+
+type CommonObjectInput = Record<string, unknown>;
 
 interface TestDataDialogProps {
   isOpen: boolean;
@@ -283,7 +303,7 @@ const TestDataDialog: React.FC<TestDataDialogProps> = ({
 
   const parseData = (
     channel: string,
-    fields: CommonObjectInput,
+    fields: FieldDefinitions,
     data: CommonObjectInput,
   ): string => {
     const keys = Object.keys(fields);
@@ -291,10 +311,10 @@ const TestDataDialog: React.FC<TestDataDialogProps> = ({
     let res = '';
 
     keys.forEach((key) => {
-      const rule = fields[key];
+      const rule = fields[key] as FieldDefinition | undefined;
       const val = data[key];
 
-      if (rule != null && !rule.exclude.includes(channel)) {
+      if (rule !== undefined && !rule.exclude.includes(channel)) {
         let formatter = rule.type;
 
         if ('object-or-other' === formatter) {
@@ -305,9 +325,17 @@ const TestDataDialog: React.FC<TestDataDialogProps> = ({
           case 'string-block':
             res += `${rule.label}:`;
             if (rule.optional) {
-              res += `${val != null ? `\n` + val : ' (Not set)'}`;
+              const displayVal =
+                val != null ? (typeof val === 'string' ? val : JSON.stringify(val)) : ' (Not set)';
+              res += `\n${displayVal}`;
             } else {
-              res += `${val != null ? `\n` + val : ' (Data missing)'}`;
+              const displayVal =
+                val != null
+                  ? typeof val === 'string'
+                    ? val
+                    : JSON.stringify(val)
+                  : ' (Data missing)';
+              res += `\n${displayVal}`;
             }
             res += `\n\n`;
             break;
@@ -318,10 +346,10 @@ const TestDataDialog: React.FC<TestDataDialogProps> = ({
               res += ' (Not set)';
             } else if (val == null) {
               res += ' (Data missing)';
-            } else if (!val.length) {
+            } else if (!Array.isArray(val) || !val.length) {
               res += ' (Empty)';
             } else {
-              val.forEach(function (v: string) {
+              (val as string[]).forEach(function (v: string) {
                 res += `\n${v}`;
               });
             }
@@ -334,10 +362,10 @@ const TestDataDialog: React.FC<TestDataDialogProps> = ({
               res += '(Not set)';
             } else if (val == null) {
               res += '(Data missing)';
-            } else if (!val.length) {
+            } else if (!Array.isArray(val) || !val.length) {
               res += '(Empty)';
             } else {
-              res += `${val.join(', ')}`;
+              res += `${(val as string[]).join(', ')}`;
             }
             res += `\n`;
             break;
@@ -350,8 +378,8 @@ const TestDataDialog: React.FC<TestDataDialogProps> = ({
               res += ` (Data missing)\n`;
             } else {
               res += `\n`;
-              for (const [k, v] of Object.entries(val)) {
-                res += `\t${k}: ${v}\n`;
+              for (const [k, v] of Object.entries(val as Record<string, unknown>)) {
+                res += `\t${k}: ${String(v)}\n`;
               }
             }
             break;
@@ -359,9 +387,11 @@ const TestDataDialog: React.FC<TestDataDialogProps> = ({
           default:
             res += `${rule.label}: `;
             if (rule.optional) {
-              res += `${val != null ? val : '(Not set)'}`;
+              const displayVal = val ?? '(Not set)';
+              res += typeof displayVal === 'string' ? displayVal : JSON.stringify(displayVal);
             } else {
-              res += `${val != null ? val : '(Data missing)'}`;
+              const displayVal = val ?? '(Data missing)';
+              res += typeof displayVal === 'string' ? displayVal : JSON.stringify(displayVal);
             }
             res += `\n`;
         }
@@ -374,7 +404,6 @@ const TestDataDialog: React.FC<TestDataDialogProps> = ({
     let res = '';
 
     if (
-      channel == null ||
       !['Header', 'Epic', 'EpicLiveblog', 'EpicAppleNews', 'Banner1', 'Banner2'].includes(channel)
     ) {
       res += `WARNING: Test channel not recognised!`;
@@ -382,12 +411,12 @@ const TestDataDialog: React.FC<TestDataDialogProps> = ({
       res += `WARNING: no variants have been created for this Test!`;
     } else if (['Header'].includes(channel)) {
       variants.forEach((v) => {
-        res += `Variant: ${v.name}
+        res += `Variant: ${String(v.name)}
 ---------------------------------------------------------------------
-${parseData(channel, variantFields.core, v)}
+${parseData(channel, variantFields.core as FieldDefinitions, v)}
 Copy and CTAs
 ~~~~~~~~~~~~~~~~~~~~~~~~
-${parseData(channel, variantFields.copy, v.content)}`;
+${parseData(channel, variantFields.copy as FieldDefinitions, v.content as CommonObjectInput)}`;
 
         if (v.mobileContent == null) {
           res += `
@@ -400,28 +429,28 @@ Mobile copy and CTAs
           res += `
 Mobile copy and CTAs
 ~~~~~~~~~~~~~~~~~~~~~~~~
-${parseData(channel, variantFields.copy, v.mobileContent)}
+${parseData(channel, variantFields.copy as FieldDefinitions, v.mobileContent as CommonObjectInput)}
 `;
         }
       });
     } else if (['Epic', 'EpicLiveblog', 'EpicAppleNews'].includes(channel)) {
       variants.forEach((v) => {
-        res += `Variant: ${v.name}
+        res += `Variant: ${String(v.name)}
 ---------------------------------------------------------------------
-${parseData(channel, variantFields.core, v)}
+${parseData(channel, variantFields.core as FieldDefinitions, v)}
 Copy and CTAs
 ~~~~~~~~~~~~~~~~~~~~~~~~
-${parseData(channel, variantFields.copy, v)}
+${parseData(channel, variantFields.copy as FieldDefinitions, v)}
 `;
       });
     } else if (['Banner1', 'Banner2'].includes(channel)) {
       variants.forEach((v) => {
-        res += `Variant: ${v.name}
+        res += `Variant: ${String(v.name)}
 ---------------------------------------------------------------------
-${parseData(channel, variantFields.core, v)}
+${parseData(channel, variantFields.core as FieldDefinitions, v)}
 Copy and CTAs
 ~~~~~~~~~~~~~~~~~~~~~~~~
-${parseData(channel, variantFields.copy, v.bannerContent)}
+${parseData(channel, variantFields.copy as FieldDefinitions, v.bannerContent as CommonObjectInput)}
 `;
 
         if (v.mobileBannerContent == null) {
@@ -435,7 +464,7 @@ Mobile copy and CTAs
           res += `
 Mobile copy and CTAs
 ~~~~~~~~~~~~~~~~~~~~~~~~
-${parseData(channel, variantFields.copy, v.mobileBannerContent)}
+${parseData(channel, variantFields.copy as FieldDefinitions, v.mobileBannerContent as CommonObjectInput)}
 `;
         }
       });
@@ -445,37 +474,37 @@ ${parseData(channel, variantFields.copy, v.mobileBannerContent)}
   };
 
   const parseTestData = (data: CommonObjectInput): string => {
-    const channel = data.channel;
+    const channel = String(data.channel);
 
     return `
 TEST CORE DETAILS (${datetimeStamp})
 =====================================================================
-${parseData(channel, testFields.core, data)}
+${parseData(channel, testFields.core as FieldDefinitions, data)}
 
 TEST TARGETING
 ---------------------------------------------------------------------
-${parseData(channel, testFields.targeting, data)}
+${parseData(channel, testFields.targeting as FieldDefinitions, data)}
 
 TEST VARIANTS
 =====================================================================
-${parseData(channel, testFields.variants, data)}
-${parseTestVariantData(channel, data.variants)}
+${parseData(channel, testFields.variants as FieldDefinitions, data)}
+${parseTestVariantData(channel, data.variants as CommonObjectInput[])}
 `;
   };
 
   // Parse the test's data
-  const parsedTest = parseTestData(test);
+  const parsedTest = parseTestData(test as unknown as CommonObjectInput);
 
   // Copy parsed data to the clipboard
   const onCopyToClipboard = () => {
-    navigator.clipboard.writeText(parsedTest);
+    void navigator.clipboard.writeText(parsedTest);
   };
 
   return (
     <Dialog open={isOpen} onClose={close} aria-labelledby="create-test-dialog-title">
       <div className={classes.dialogHeader}>
         <DialogTitle id="create-campaign-dialog-title">
-          Viewing: {test.nickname ? test.nickname : test.name}
+          Viewing: {test.nickname ?? test.name}
         </DialogTitle>
         <IconButton onClick={close} aria-label="close">
           <CloseIcon />
