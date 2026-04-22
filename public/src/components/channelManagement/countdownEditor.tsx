@@ -1,15 +1,17 @@
-import React, { useEffect } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { Checkbox, TextField, Theme, Typography, Alert } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import type { Theme } from '@mui/material';
+import { Alert, Checkbox, TextField, Typography } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import { CountdownSettings } from './helpers/shared';
+import Switch from '@mui/material/Switch';
+import { makeStyles } from '@mui/styles';
+import React from 'react';
+import { useEffect } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import type { CountdownSettings } from './helpers/shared';
 import {
   copyLengthValidator,
   EMPTY_ERROR_HELPER_TEXT,
   templateValidatorForPlatform,
 } from './helpers/validation';
-import Switch from '@mui/material/Switch';
 import { RichTextEditorSingleLine } from './richTextEditor/richTextEditor';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({

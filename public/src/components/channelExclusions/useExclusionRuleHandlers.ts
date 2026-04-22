@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { ExclusionRule as ExclusionRuleType, ExclusionSettings } from '../../models/exclusions';
-import { ChannelKey, validateRule } from './util';
+import type {
+  ExclusionRule as ExclusionRuleType,
+  ExclusionSettings,
+} from '../../models/exclusions';
+import type { ChannelKey } from './util';
+import { validateRule } from './util';
 
 interface ExclusionRuleFormValues {
   rule: ExclusionRuleType;

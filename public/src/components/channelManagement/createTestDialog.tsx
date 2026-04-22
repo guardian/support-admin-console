@@ -1,33 +1,33 @@
-import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import CloseIcon from '@mui/icons-material/Close';
+import type { SelectChangeEvent } from '@mui/material';
 import {
   Button,
+  Checkbox,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  IconButton,
-  TextField,
-  InputAdornment,
-  Select,
-  MenuItem,
-  InputLabel,
   FormControl,
-  Checkbox,
-  SelectChangeEvent,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
 } from '@mui/material';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import { makeStyles } from '@mui/styles';
-import CloseIcon from '@mui/icons-material/Close';
-
+import React from 'react';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { fetchFrontendSettings, FrontendSettingsType } from '../../utils/requests';
+import type { Campaign } from './campaigns/CampaignsForm';
 import {
   createDuplicateValidator,
   EMPTY_ERROR_HELPER_TEXT,
   INVALID_CHARACTERS_ERROR_HELPER_TEXT,
   VALID_CHARACTERS_REGEX,
 } from './helpers/validation';
-import { Campaign } from './campaigns/CampaignsForm';
-import { fetchFrontendSettings, FrontendSettingsType } from '../../utils/requests';
-import FormControlLabel from '@mui/material/FormControlLabel';
 
 const useStyles = makeStyles(() => ({
   dialogHeader: {
@@ -105,7 +105,7 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
   const [campaignNamePrefix, setCampaignNamePrefix] = useState<boolean>(false);
 
   useEffect(() => {
-    fetchFrontendSettings(FrontendSettingsType.campaigns).then(setCampaigns);
+    fetchFrontendSettings(FrontendSettingsType.Campaigns).then(setCampaigns);
   }, []);
 
   const buildPrefix = (): string => {
@@ -158,7 +158,7 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
                   if (campaign === undefined) {
                     return ''; // triggers the displayEmpty behaviour
                   }
-                  return campaign as string;
+                  return campaign;
                 }}
                 onChange={(event: SelectChangeEvent<string | undefined>): void => {
                   setCampaignName(event.target.value);

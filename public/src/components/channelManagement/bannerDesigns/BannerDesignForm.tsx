@@ -1,21 +1,22 @@
-import React from 'react';
+import { InfoOutlined } from '@mui/icons-material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
-import {
+import type { Theme } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
+import React from 'react';
+import type {
   BannerDesign,
   BannerDesignHeaderImage,
   BannerDesignVisual,
   FontSize,
 } from '../../../models/bannerDesign';
-import { Theme } from '@mui/material/styles';
-import { makeStyles } from '@mui/styles';
-import { BannerDesignUsage } from './BannerDesignUsage';
-import { HeaderImageEditor } from './HeaderImageEditor';
-import { BannerVisualEditor } from './BannerVisualEditor';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { InfoOutlined } from '@mui/icons-material';
-import { HeadlineSizeEditor } from './HeadlineSizeEditor';
-import PaletteSelector, { SelectedPalette } from './PaletteSelector';
 import { stringToHexColour } from '../../../utils/bannerDesigns';
+import { BannerDesignUsage } from './BannerDesignUsage';
+import { BannerVisualEditor } from './BannerVisualEditor';
+import { HeaderImageEditor } from './HeaderImageEditor';
+import { HeadlineSizeEditor } from './HeadlineSizeEditor';
+import type { SelectedPalette } from './PaletteSelector';
+import PaletteSelector from './PaletteSelector';
 
 type Props = {
   design: BannerDesign;

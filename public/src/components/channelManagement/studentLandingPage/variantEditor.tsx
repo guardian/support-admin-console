@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { Institution, StudentLandingPageVariant } from '../../../models/studentLandingPage';
-import { makeStyles } from '@mui/styles';
-import { Theme } from '@mui/material/styles';
-import { Controller, useForm } from 'react-hook-form';
-import { RichTextEditorSingleLine } from '../richTextEditor/richTextEditor';
-import { noHtmlValidator } from '../helpers/validation';
 import { Typography } from '@mui/material';
+import type { Theme } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
+import React from 'react';
+import { useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import type { Institution, StudentLandingPageVariant } from '../../../models/studentLandingPage';
 import PromoCodesEditor from '../../shared/PromoCodesEditor';
-
+import { noHtmlValidator } from '../helpers/validation';
+import { RichTextEditorSingleLine } from '../richTextEditor/richTextEditor';
 import { AcademicInstitutionDetailEditor } from './academicInstitutionDetails';
 
 // hidden until we can get the hero image sorted out in support-frontend as part of a future phase

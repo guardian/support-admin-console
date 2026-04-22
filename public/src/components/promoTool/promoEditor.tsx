@@ -1,32 +1,29 @@
-import React, { useState, useEffect, ChangeEvent } from 'react';
 import {
   Box,
-  TextField,
   Button,
-  Paper,
-  Typography,
-  FormControlLabel,
   Checkbox,
+  FormControlLabel,
   Grid,
+  Paper,
+  TextField,
+  Typography,
 } from '@mui/material';
+import type { Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
-import { Theme } from '@mui/material/styles';
-import {
-  CountryGroup,
-  LandingPage,
-  Promo,
-  PromoProduct,
-  mapPromoProductToCatalogProducts,
-} from './utils/promoModels';
+import { useEffect, useState } from 'react';
+import React from 'react';
+import type { ChangeEvent } from 'react';
 import { fetchCountryGroups, fetchProductDetails } from '../../utils/requests';
+import { PromoLandingPage } from './promoLandingPage';
 import RatePlanSelector from './ratePlanSelector';
 import {
-  RatePlanWithProduct,
+  billingPeriodToMonths,
   getAllRatePlansWithProduct,
   orderRatePlans,
-  billingPeriodToMonths,
 } from './utils/productCatalog';
-import { PromoLandingPage } from './promoLandingPage';
+import type { RatePlanWithProduct } from './utils/productCatalog';
+import { mapPromoProductToCatalogProducts } from './utils/promoModels';
+import type { CountryGroup, LandingPage, Promo, PromoProduct } from './utils/promoModels';
 
 export const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   root: {

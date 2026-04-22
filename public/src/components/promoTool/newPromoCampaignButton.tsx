@@ -1,10 +1,10 @@
-import React from 'react';
+import AddIcon from '@mui/icons-material/Add';
 import { Button, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import AddIcon from '@mui/icons-material/Add';
+import React from 'react';
 import useOpenable from '../../hooks/useOpenable';
 import CreatePromoCampaignDialog from './createPromoCampaignDialog';
-import { PromoProduct } from './utils/promoModels';
+import type { PromoProduct } from './utils/promoModels';
 
 const useStyles = makeStyles(() => ({
   button: {

@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
-import { FormControl, FormControlLabel, Radio, RadioGroup, Typography, Box } from '@mui/material';
-import { ExclusionRule } from '../../models/exclusions';
-import { ChannelKey } from './util';
+import { Box, FormControl, FormControlLabel, Radio, RadioGroup, Typography } from '@mui/material';
+import React from 'react';
+import { useEffect } from 'react';
+import type { ExclusionRule } from '../../models/exclusions';
+import type { ChannelKey } from './util';
 
 const hasBothContentTypes = (rule: ExclusionRule): boolean =>
   rule.contentTypes === undefined ||

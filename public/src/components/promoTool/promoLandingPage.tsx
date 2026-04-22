@@ -1,7 +1,7 @@
-import React from 'react';
-import { LandingPage } from './utils/promoModels';
 import { TextField } from '@mui/material';
+import React from 'react';
 import { useStyles } from './promoEditor';
+import type { LandingPage } from './utils/promoModels';
 
 type PromoLandingPageProps = {
   landingPage?: LandingPage;

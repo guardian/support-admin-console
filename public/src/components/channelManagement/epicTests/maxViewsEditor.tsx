@@ -1,11 +1,12 @@
-import React, { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-
-import { FormControl, Radio, RadioGroup, FormControlLabel, TextField, Theme } from '@mui/material';
+import type { Theme } from '@mui/material';
+import { FormControl, FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { notNumberValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
+import React from 'react';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import type { MaxEpicViews } from '../../../models/epic';
+import { EMPTY_ERROR_HELPER_TEXT, notNumberValidator } from '../helpers/validation';
 import { DEFAULT_MAX_EPIC_VIEWS } from './utils/defaults';
-import { MaxEpicViews } from '../../../models/epic';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {

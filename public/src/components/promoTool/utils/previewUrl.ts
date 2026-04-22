@@ -1,5 +1,5 @@
 import { getStage } from '../../../utils/stage';
-import { PromoProduct } from './promoModels';
+import type { PromoProduct } from './promoModels';
 
 export const getPromoPreviewUrl = (promoCode: string, product?: PromoProduct | null): string => {
   const stage = getStage();

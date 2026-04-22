@@ -1,9 +1,10 @@
-import React from 'react';
-
-import { Checkbox, FormControlLabel, FormGroup, Theme } from '@mui/material';
+import type { Theme } from '@mui/material';
+import { Checkbox, FormControlLabel, FormGroup } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Region, regions, regionIds } from '../../utils/models';
-import { RegionTargeting, TestPlatform } from './helpers/shared';
+import React from 'react';
+import type { Region } from '../../utils/models';
+import { regionIds, regions } from '../../utils/models';
+import type { RegionTargeting, TestPlatform } from './helpers/shared';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   indentedContainer: {
@@ -42,10 +43,10 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
     if (checked) {
       onRegionTargetingUpdate({
         ...regionTargeting,
-        targetedCountryGroups: [...regionTargeting.targetedCountryGroups, changedRegion as Region],
+        targetedCountryGroups: [...regionTargeting.targetedCountryGroups, changedRegion],
       });
     } else {
-      const regionIndex = regionTargeting.targetedCountryGroups.indexOf(changedRegion as Region);
+      const regionIndex = regionTargeting.targetedCountryGroups.indexOf(changedRegion);
       onRegionTargetingUpdate({
         ...regionTargeting,
         targetedCountryGroups: regionTargeting.targetedCountryGroups.filter(

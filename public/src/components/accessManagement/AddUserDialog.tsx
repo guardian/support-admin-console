@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import CloseIcon from '@mui/icons-material/Close';
+import type { Theme } from '@mui/material';
 import {
   Button,
   Dialog,
@@ -12,13 +13,13 @@ import {
   Radio,
   RadioGroup,
   TextField,
-  Theme,
 } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
 import { makeStyles } from '@mui/styles';
-import { PermissionLevel, UserPermissions } from '../channelManagement/helpers/shared';
+import React, { useState } from 'react';
 import { saveUserPermissions } from '../../utils/requests';
-import { PermissionName, permissions } from './permissions';
+import type { PermissionLevel, UserPermissions } from '../channelManagement/helpers/shared';
+import type { PermissionName } from './permissions';
+import { permissions } from './permissions';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   dialogHeader: {

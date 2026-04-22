@@ -1,5 +1,5 @@
 import { addMethodologyToTestName } from './methodology';
-import { Methodology } from './shared';
+import type { Methodology } from './shared';
 
 describe('addMethodologyToTestName', () => {
   it('should add EpsilonGreedyBandit to name', () => {

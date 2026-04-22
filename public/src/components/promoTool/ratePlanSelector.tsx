@@ -1,23 +1,19 @@
-import React from 'react';
 import {
   Box,
-  Typography,
   Checkbox,
-  FormControlLabel,
   FormControl,
-  FormLabel,
-  Paper,
-  Grid,
+  FormControlLabel,
   FormGroup,
+  FormLabel,
+  Grid,
+  Paper,
+  Typography,
 } from '@mui/material';
+import type { Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
-import { Theme } from '@mui/material/styles';
-import {
-  RatePlanWithProduct,
-  Pricing,
-  applyDiscountToPricing,
-  billingPeriodToMonths,
-} from './utils/productCatalog';
+import React from 'react';
+import type { Pricing, RatePlanWithProduct } from './utils/productCatalog';
+import { applyDiscountToPricing, billingPeriodToMonths } from './utils/productCatalog';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   section: {

@@ -1,5 +1,5 @@
-import { LockStatus } from '../components/channelManagement/helpers/shared';
-import { ResponsiveImage } from './shared';
+import type { LockStatus } from '../components/channelManagement/helpers/shared';
+import type { ResponsiveImage } from './shared';
 
 export interface HexColour {
   r: string;

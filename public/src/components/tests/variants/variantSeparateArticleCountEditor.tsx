@@ -1,9 +1,9 @@
-import React from 'react';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import { SeparateArticleCount } from '../../../models/epic';
 import { TextField } from '@mui/material';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import React from 'react';
 import { useForm } from 'react-hook-form';
+import type { SeparateArticleCount } from '../../../models/epic';
 
 interface FormData {
   copy: string;

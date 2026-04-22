@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import BannerVariantPreview from '../bannerTests/bannerVariantPreview';
-import { BannerDesign } from '../../../models/bannerDesign';
 import { Checkbox, FormControlLabel } from '@mui/material';
-import { BannerVariant } from '../../../models/banner';
+import React from 'react';
+import { useState } from 'react';
+import type { BannerVariant } from '../../../models/banner';
+import type { BannerDesign } from '../../../models/bannerDesign';
+import BannerVariantPreview from '../bannerTests/bannerVariantPreview';
 import { SecondaryCtaType, TickerName } from '../helpers/shared';
 
 interface Props {

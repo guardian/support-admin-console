@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
-import { ResponsiveImage } from '../../models/shared';
 import { TextField } from '@mui/material';
+import React from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { StudentLandingPageVariant } from '../../models/studentLandingPage';
+import type { ResponsiveImage } from '../../models/shared';
+import type { StudentLandingPageVariant } from '../../models/studentLandingPage';
 
 export interface ImageGuidance {
   mobileUrlGuidance: string;

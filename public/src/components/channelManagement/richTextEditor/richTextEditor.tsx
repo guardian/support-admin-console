@@ -1,14 +1,3 @@
-import React, { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
-import {
-  BoldExtension,
-  EventsExtension,
-  ItalicExtension,
-  LinkExtension,
-  ShortcutHandlerProps,
-  StrikeExtension,
-  TextHighlightExtension,
-  createMarkPositioner,
-} from 'remirror/extensions';
 import {
   EditorComponent,
   FloatingWrapper,
@@ -23,12 +12,22 @@ import {
   useUpdateReason,
 } from '@remirror/react';
 import { CommandButtonGroup, FloatingToolbar } from '@remirror/react-ui';
-import './remirror-styles.css';
-import { useRTEStyles } from './richTextEditorStyles';
-import { CreateExtensionPlugin, PlainExtension, InputRule } from 'remirror';
 import { Plugin } from 'prosemirror-state';
-import { MarkPasteRule } from '@remirror/pm/paste-rules';
-
+import React from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
+import type { CreateExtensionPlugin, InputRule } from 'remirror';
+import { PlainExtension } from 'remirror';
+import type { ShortcutHandlerProps } from 'remirror/extensions';
+import {
+  BoldExtension,
+  createMarkPositioner,
+  EventsExtension,
+  ItalicExtension,
+  LinkExtension,
+  StrikeExtension,
+  TextHighlightExtension,
+} from 'remirror/extensions';
+import './remirror-styles.css';
 import {
   ARTICLE_COUNT_TEMPLATE,
   CAMPAIGN_DEADLINE_TEMPLATE,
@@ -42,6 +41,8 @@ import {
   PRICE_GUARDIANWEEKLY_MONTHLY,
   PRICE_PRODUCT_WEEKLY,
 } from '../helpers/validation';
+import { useRTEStyles } from './richTextEditorStyles';
+import type { MarkPasteRule } from '@remirror/pm/paste-rules';
 
 // Typescript
 interface RichTextEditorProps<T> {

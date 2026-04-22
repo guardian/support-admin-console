@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
 import { TextField } from '@mui/material';
-import { Cta } from '../../channelManagement/helpers/shared';
+import React from 'react';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import type { Cta } from '../../channelManagement/helpers/shared';
 import {
   copyLengthValidator,
   EMPTY_ERROR_HELPER_TEXT,

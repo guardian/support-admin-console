@@ -1,11 +1,11 @@
-import React from 'react';
+import type { DragEndEvent } from '@dnd-kit/core';
+import { closestCenter, DndContext, useDroppable } from '@dnd-kit/core';
+import { SortableContext, useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { List } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { closestCenter, DragEndEvent, DndContext, useDroppable } from '@dnd-kit/core';
-import { CSS } from '@dnd-kit/utilities';
-import { SortableContext, useSortable } from '@dnd-kit/sortable';
-
-import { Test } from './helpers/shared';
+import React from 'react';
+import type { Test } from './helpers/shared';
 import TestListTest from './testListTest';
 
 const useStyles = makeStyles(() => ({

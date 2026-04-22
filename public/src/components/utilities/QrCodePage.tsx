@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import type { Theme } from '@mui/material';
 import {
   Box,
   Button,
@@ -7,13 +7,13 @@ import {
   FormControl,
   Paper,
   TextField,
-  Theme,
   Typography,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import lzstring from 'lz-string';
+import React, { useState } from 'react';
 import QRCode from 'react-qr-code';
 import { useSearchParams } from 'react-router-dom';
-import lzstring from 'lz-string';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {

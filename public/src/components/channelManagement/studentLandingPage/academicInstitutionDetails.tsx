@@ -1,10 +1,12 @@
+import type { Theme } from '@mui/material';
+import { TextField } from '@mui/material';
 import Typography from '@mui/material/Typography';
-import React, { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { Institution, StudentLandingPageVariant } from '../../../models/studentLandingPage';
-import { EMPTY_ERROR_HELPER_TEXT, noHtmlValidator } from '../helpers/validation';
-import { TextField, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import React from 'react';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import type { Institution, StudentLandingPageVariant } from '../../../models/studentLandingPage';
+import { EMPTY_ERROR_HELPER_TEXT, noHtmlValidator } from '../helpers/validation';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {

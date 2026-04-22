@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { ValidationStatus } from '../helpers/validation';
+import { useEffect, useState } from 'react';
+import type { ValidationStatus } from '../helpers/validation';
 
 const allValid = (validationStatus: ValidationStatus): boolean => {
   return Object.values(validationStatus).every((status) => status);

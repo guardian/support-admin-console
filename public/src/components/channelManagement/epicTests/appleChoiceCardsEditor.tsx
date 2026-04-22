@@ -1,8 +1,8 @@
-import React from 'react';
-import { EpicVariant } from '../../../models/epic';
-import { Cta } from '../helpers/shared';
 import { FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
+import React from 'react';
+import type { EpicVariant } from '../../../models/epic';
 import VariantCtaFieldsEditor from '../../tests/variants/variantCtaFieldsEditor';
+import type { Cta } from '../helpers/shared';
 import { DEFAULT_PRIMARY_CTA } from './utils/defaults';
 
 interface AppleNewsChoiceCardsProps {

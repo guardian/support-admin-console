@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { Theme, Typography } from '@mui/material';
+import type { Theme } from '@mui/material';
+import { Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import BannerDesignsSidebar from './BannerDesignsSidebar';
-import BannerDesignEditor from './BannerDesignEditor';
+import { useEffect, useState } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
-
+import type { BannerDesign } from '../../../models/bannerDesign';
+import type { Status } from '../../../models/bannerDesign';
+import type { BannerDesignsResponse } from '../../../utils/requests';
 import {
   archiveBannerDesign,
-  BannerDesignsResponse,
   createBannerDesign,
   fetchBannerDesign,
   fetchFrontendSettings,
@@ -17,9 +18,9 @@ import {
   updateBannerDesign,
   updateBannerDesignStatus,
 } from '../../../utils/requests';
-import { BannerDesign } from '../../../models/bannerDesign';
+import BannerDesignEditor from './BannerDesignEditor';
+import BannerDesignsSidebar from './BannerDesignsSidebar';
 import { createDefaultBannerDesign } from './utils/defaults';
-import { Status } from '../../../models/bannerDesign';
 
 const useStyles = makeStyles(({ spacing, typography }: Theme) => ({
   viewTextContainer: {
@@ -70,7 +71,7 @@ const BannerDesigns: React.FC = () => {
   const classes = useStyles();
 
   const refreshDesigns = () => {
-    fetchFrontendSettings(FrontendSettingsType.bannerDesigns).then(
+    fetchFrontendSettings(FrontendSettingsType.BannerDesigns).then(
       (response: BannerDesignsResponse) => {
         setBannerDesigns(response.bannerDesigns);
         setUserEmail(response.userEmail);
@@ -124,7 +125,7 @@ const BannerDesigns: React.FC = () => {
 
   const onUnlock = (designName: string): void => {
     const design = bannerDesigns.find((design) => design.name === designName);
-    if (design && design.isNew) {
+    if (design?.isNew) {
       // if it's a new design then just drop from the in-memory list
       setBannerDesigns(bannerDesigns.filter((design) => design.name !== designName));
     } else {

@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-
-import { Button, Theme } from '@mui/material';
+import type { Theme } from '@mui/material';
+import { Button } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { BannerChannel } from './bannerDeployDashboard';
-import BannerChannelDeployerTable from './bannerChannelDeployerTable';
-
+import React from 'react';
+import { useEffect, useState } from 'react';
 import {
   fetchFrontendSettings,
-  saveFrontendSettings,
   FrontendSettingsType,
+  saveFrontendSettings,
 } from '../../../utils/requests';
+import BannerChannelDeployerTable from './bannerChannelDeployerTable';
+import type { BannerChannel } from './bannerDeployDashboard';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -57,8 +57,8 @@ const BannerChannelDeployer: React.FC<BannerChannelDeployerProps> = ({
 
   const isChannel1 = channel === 'CHANNEL1';
   const settingsType = isChannel1
-    ? FrontendSettingsType.bannerDeploy
-    : FrontendSettingsType.bannerDeploy2;
+    ? FrontendSettingsType.BannerDeploy
+    : FrontendSettingsType.BannerDeploy2;
 
   const [dataFromServer, setDataFromServer] = useState<DataFromServer | null>(null);
   const [bannersToRedeploy, setBannersToRedeploy] = useState<BannersToRedeploy>({

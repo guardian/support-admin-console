@@ -1,9 +1,9 @@
+import type { BannerTest } from '../../../models/banner';
 import { FrontendSettingsType } from '../../../utils/requests';
 import { TestsForm } from '../testsForm';
-import { getDefaultTest } from './utils/defaults';
-import { BannerTest } from '../../../models/banner';
-import BannerTestEditor from './bannerTestEditor';
 import { ValidatedTestEditor } from '../validatedTestEditor';
+import BannerTestEditor from './bannerTestEditor';
+import { getDefaultTest } from './utils/defaults';
 
 const createDefaultBannerTest = (newTestName: string, newTestNickname: string): BannerTest => ({
   ...getDefaultTest(),
@@ -13,12 +13,12 @@ const createDefaultBannerTest = (newTestName: string, newTestNickname: string): 
 
 export const BannerTestsForm1 = TestsForm(
   ValidatedTestEditor(BannerTestEditor),
-  FrontendSettingsType.bannerTests,
+  FrontendSettingsType.BannerTests,
   createDefaultBannerTest,
 );
 
 export const BannerTestsForm2 = TestsForm(
   ValidatedTestEditor(BannerTestEditor),
-  FrontendSettingsType.bannerTests2,
+  FrontendSettingsType.BannerTests2,
   createDefaultBannerTest,
 );

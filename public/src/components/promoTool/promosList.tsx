@@ -1,10 +1,10 @@
-import React from 'react';
-import { List, Button, Box } from '@mui/material';
+import { Box, Button, List } from '@mui/material';
+import type { Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
-import { Theme } from '@mui/material/styles';
-import { Promo, CountryGroup } from './utils/promoModels';
-import { RatePlanWithProduct } from './utils/productCatalog';
+import React from 'react';
 import { PromoListItem } from './promoListItem';
+import type { RatePlanWithProduct } from './utils/productCatalog';
+import type { CountryGroup, Promo } from './utils/promoModels';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {

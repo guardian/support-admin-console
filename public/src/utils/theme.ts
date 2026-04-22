@@ -1,6 +1,7 @@
-import { createTheme, Theme } from '@mui/material/styles';
-import purple from '@mui/material/colors/purple';
 import green from '@mui/material/colors/green';
+import purple from '@mui/material/colors/purple';
+import type { Theme } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
 import { getStage } from './stage';
 
 const DEV_AND_CODE_THEME = createTheme({

@@ -1,8 +1,9 @@
-import { FormControl, FormControlLabel, RadioGroup, Radio, TextField } from '@mui/material';
-import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
-import React, { useEffect } from 'react';
+import { FormControl, FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material';
+import React from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { BannerDesignHeaderImage } from '../../../models/bannerDesign';
+import type { BannerDesignHeaderImage } from '../../../models/bannerDesign';
+import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 
 export const DEFAULT_HEADER_IMAGE_SETTINGS: BannerDesignHeaderImage = {
   mobileUrl: '',

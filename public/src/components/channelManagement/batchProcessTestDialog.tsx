@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import CloseIcon from '@mui/icons-material/Close';
 import {
   Button,
+  Checkbox,
   Dialog,
   DialogActions,
   DialogContent,
@@ -10,13 +11,13 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  Checkbox,
   Typography,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Test } from './helpers/shared';
-import CloseIcon from '@mui/icons-material/Close';
+import React from 'react';
+import { useState } from 'react';
 import useOpenable from '../../hooks/useOpenable';
+import type { Test } from './helpers/shared';
 
 const useStyles = makeStyles(() => ({
   dialogHeader: {
@@ -106,7 +107,7 @@ const BatchProcessTestDialog: React.FC<BatchProcessTestDialogProps> = ({
                 <ListItemIcon>
                   <Checkbox
                     edge="start"
-                    checked={selectedTests.indexOf(t.name) >= 0}
+                    checked={selectedTests.includes(t.name)}
                     inputProps={{ 'aria-labelledby': labelId }}
                     onChange={handleToggle(t.name)}
                   />

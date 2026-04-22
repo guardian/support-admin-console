@@ -1,4 +1,4 @@
-import { StudentLandingPageTest } from '../../../models/studentLandingPage';
+import type { StudentLandingPageTest } from '../../../models/studentLandingPage';
 import { FrontendSettingsType } from '../../../utils/requests';
 import { TestsForm } from '../testsForm';
 import { ValidatedTestEditor } from '../validatedTestEditor';
@@ -17,6 +17,6 @@ const createDefaultStudentLandingPageTest = (
 
 export const StudentLandingPageTestsForm = TestsForm(
   ValidatedTestEditor(StudentLandingPageTestEditor),
-  FrontendSettingsType.studentLandingPageTests,
+  FrontendSettingsType.StudentLandingPageTests,
   createDefaultStudentLandingPageTest,
 );

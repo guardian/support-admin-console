@@ -1,19 +1,19 @@
+import { Typography } from '@mui/material';
 import React from 'react';
-import { ValidatedTestEditorProps } from '../validatedTestEditor';
-import {
+import type {
   SupportLandingPageTest,
   SupportLandingPageVariant,
 } from '../../../models/supportLandingPage';
-import { Typography } from '@mui/material';
 import VariantsEditor from '../../tests/variants/variantsEditor';
-import { useStyles } from '../helpers/testEditorStyles';
-import { getDefaultVariant } from './utils/defaults';
 import VariantSummary from '../../tests/variants/variantSummary';
-import VariantEditor from './variantEditor';
-import TestEditorTargetRegionsSelector from '../testEditorTargetRegionsSelector';
-import { Methodology, RegionTargeting } from '../helpers/shared';
+import type { Methodology, RegionTargeting } from '../helpers/shared';
+import { useStyles } from '../helpers/testEditorStyles';
 import { MParticleAudienceEditor } from '../mParticleAudienceEditor';
+import TestEditorTargetRegionsSelector from '../testEditorTargetRegionsSelector';
 import { TestMethodologyEditor } from '../TestMethodologyEditor';
+import type { ValidatedTestEditorProps } from '../validatedTestEditor';
+import { getDefaultVariant } from './utils/defaults';
+import VariantEditor from './variantEditor';
 
 const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLandingPageTest>> = ({
   test,

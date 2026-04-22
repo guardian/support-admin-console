@@ -1,8 +1,10 @@
-import React, { useEffect } from 'react';
+import type { Theme } from '@mui/material';
+import { FormControl, FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { FormControl, FormControlLabel, Radio, RadioGroup, TextField, Theme } from '@mui/material';
-import { BannerTestDeploySchedule } from '../../../models/banner';
+import React from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import type { BannerTestDeploySchedule } from '../../../models/banner';
 import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({

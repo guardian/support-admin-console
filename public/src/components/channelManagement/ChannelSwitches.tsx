@@ -1,14 +1,15 @@
-import React from 'react';
+import Button from '@mui/material/Button';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
 import { makeStyles } from '@mui/styles';
+import React from 'react';
+import type { DataFromServer, InnerProps } from '../../hocs/withS3Data';
+import withS3Data from '../../hocs/withS3Data';
 import {
   fetchFrontendSettings,
   FrontendSettingsType,
   saveFrontendSettings,
 } from '../../utils/requests';
-import Switch from '@mui/material/Switch';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Button from '@mui/material/Button';
-import withS3Data, { DataFromServer, InnerProps } from '../../hocs/withS3Data';
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -36,9 +37,7 @@ type SwitchName =
   | 'enableAuxia'
   | 'enableAuxiaForBanners';
 
-type ChannelSwitches = {
-  [key in SwitchName]: boolean;
-};
+type ChannelSwitches = Record<SwitchName, boolean>;
 
 interface ChannelSwitchProps {
   name: SwitchName;
@@ -173,8 +172,8 @@ const ChannelSwitches: React.FC<InnerProps<ChannelSwitches>> = ({
 };
 
 const fetchSettings = (): Promise<DataFromServer<ChannelSwitches>> =>
-  fetchFrontendSettings(FrontendSettingsType.channelSwitches);
+  fetchFrontendSettings(FrontendSettingsType.ChannelSwitches);
 const saveSettings = (data: DataFromServer<ChannelSwitches>): Promise<Response> =>
-  saveFrontendSettings(FrontendSettingsType.channelSwitches, data);
+  saveFrontendSettings(FrontendSettingsType.ChannelSwitches, data);
 
 export default withS3Data<ChannelSwitches>(ChannelSwitches, fetchSettings, saveSettings);

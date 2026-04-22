@@ -1,4 +1,5 @@
-import React from 'react';
+import CloseIcon from '@mui/icons-material/Close';
+import type { Theme } from '@mui/material';
 import {
   Button,
   Dialog,
@@ -7,12 +8,11 @@ import {
   DialogTitle,
   IconButton,
   Switch,
-  Theme,
   Typography,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import React from 'react';
 import useOpenable from '../../hooks/useOpenable';
-import CloseIcon from '@mui/icons-material/Close';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {

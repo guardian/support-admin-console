@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { fetchFrontendSettings, FrontendSettingsType } from '../../utils/requests';
-import { Campaign, unassignedCampaign } from './campaigns/CampaignsForm';
-import { Test } from './helpers/shared';
-
-import { Select, MenuItem, FormControl, SelectChangeEvent } from '@mui/material';
+import type { SelectChangeEvent } from '@mui/material';
+import { FormControl, MenuItem, Select } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import React from 'react';
+import { useEffect, useState } from 'react';
+import { fetchFrontendSettings, FrontendSettingsType } from '../../utils/requests';
+import type { Campaign } from './campaigns/CampaignsForm';
+import { unassignedCampaign } from './campaigns/CampaignsForm';
+import type { Test } from './helpers/shared';
 
 const useStyles = makeStyles(() => ({
   dialogHeader: {
@@ -49,7 +51,7 @@ const CampaignSelector: React.FC<CampaignSelectorProps> = ({
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
 
   useEffect(() => {
-    fetchFrontendSettings(FrontendSettingsType.campaigns).then(setCampaigns);
+    fetchFrontendSettings(FrontendSettingsType.Campaigns).then(setCampaigns);
   }, []);
 
   const setCampaignName = (campaign?: string) => onCampaignChange(campaign);

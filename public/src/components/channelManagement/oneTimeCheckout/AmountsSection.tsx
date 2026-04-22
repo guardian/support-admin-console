@@ -1,9 +1,10 @@
-import React from 'react';
 import { Typography } from '@mui/material';
-import { useStyles } from '../helpers/testEditorStyles';
-import { ContributionType, contributionTypes } from '../../../utils/models';
-import { OneTimeCheckoutVariant } from '../../../models/oneTimeCheckout';
+import React from 'react';
+import type { OneTimeCheckoutVariant } from '../../../models/oneTimeCheckout';
+import type { ContributionType } from '../../../utils/models';
+import { contributionTypes } from '../../../utils/models';
 import { AmountsVariantEditorRow } from '../../amounts/AmountsVariantEditorRow';
+import { useStyles } from '../helpers/testEditorStyles';
 
 interface AmountsSectionProps {
   variant: OneTimeCheckoutVariant;

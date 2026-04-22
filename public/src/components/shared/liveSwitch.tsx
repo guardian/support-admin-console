@@ -1,6 +1,7 @@
-import React from 'react';
-import { Switch, Theme, Typography } from '@mui/material';
+import type { Theme } from '@mui/material';
+import { Switch, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import React from 'react';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {

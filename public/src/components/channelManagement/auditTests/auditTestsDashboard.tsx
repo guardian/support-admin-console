@@ -1,18 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import {
-  Button,
-  FormControl,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  TextField,
-  Theme,
-  Typography,
-} from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import type { SelectChangeEvent, Theme } from '@mui/material';
+import { Button, FormControl, MenuItem, Select, TextField, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import { AuditDataRow, AuditTestsTable } from './auditTestsTable';
+import { makeStyles } from '@mui/styles';
+import { useEffect, useState } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
+import type { AuditDataRow } from './auditTestsTable';
+import { AuditTestsTable } from './auditTestsTable';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   mainContainer: {

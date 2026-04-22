@@ -1,22 +1,21 @@
-import React from 'react';
-
+import type { Theme } from '@mui/material';
 import {
   Checkbox,
   Paper,
-  Theme,
   Table,
+  TableBody,
+  TableCell,
   TableContainer,
   TableHead,
-  TableBody,
   TableRow,
-  TableCell,
   Toolbar,
   Typography,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { BannerChannel } from './bannerDeployDashboard';
-import { BannerDeploys, BannersToRedeploy } from './bannerChannelDeployer';
+import React from 'react';
+import type { BannerDeploys, BannersToRedeploy } from './bannerChannelDeployer';
 import BannerChannelDeployerTableRow from './bannerChannelDeployerTableRow';
+import type { BannerChannel } from './bannerDeployDashboard';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   schedule: {

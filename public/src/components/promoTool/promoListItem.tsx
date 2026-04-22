@@ -1,17 +1,17 @@
-import React from 'react';
 import {
+  Box,
+  Button,
+  Chip,
   ListItem,
   ListItemButton,
   ListItemText,
-  Box,
-  Chip,
-  Button,
   Typography,
 } from '@mui/material';
+import type { Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
-import { Theme } from '@mui/material/styles';
-import { Promo, CountryGroup } from './utils/promoModels';
-import { RatePlanWithProduct } from './utils/productCatalog';
+import React from 'react';
+import type { RatePlanWithProduct } from './utils/productCatalog';
+import type { CountryGroup, Promo } from './utils/promoModels';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   listItem: {

@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
 import { TextField } from '@mui/material';
-import { NewsletterSignup } from '../helpers/shared';
-import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
+import React from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import type { NewsletterSignup } from '../helpers/shared';
+import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 
 interface FormData {
   newsletterId: string;

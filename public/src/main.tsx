@@ -1,53 +1,51 @@
+import { StyledEngineProvider } from '@mui/material';
+import AppBar from '@mui/material/AppBar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import type { Theme } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import type { CSSProperties } from '@mui/styles';
+import { makeStyles, ThemeProvider as StylesThemeProvider } from '@mui/styles';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Switchboard from './components/switchboard';
-import BannerDeployDashboard from './components/channelManagement/bannerDeploy/bannerDeployDashboard';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import AccessManagement from './components/accessManagement/AccessManagement';
 import AmountsForm from './components/amounts/AmountsForm';
-import {
-  ArticleEpicTestsForm,
-  LiveblogEpicTestsForm,
-  AppleNewsEpicTestsForm,
-} from './components/channelManagement/epicTests/testsForm';
+import AppsMeteringSwitches from './components/appsMeteringSwitches';
+import Bookmarklets from './components/bookmarklets/Bookmarklets';
+import ExclusionsBoard from './components/channelExclusions/ExclusionsBoard';
+import { AuditTestsDashboard } from './components/channelManagement/auditTests/auditTestsDashboard';
+import BannerDeployDashboard from './components/channelManagement/bannerDeploy/bannerDeployDashboard';
+import BannerDesigns from './components/channelManagement/bannerDesigns/';
 import {
   BannerTestsForm1,
   BannerTestsForm2,
 } from './components/channelManagement/bannerTests/bannerTestsForm';
-import { GutterTestsForm } from './components/channelManagement/gutterTests/gutterTestsForm';
-
-import { HeaderTestsForm } from './components/channelManagement/headerTests/headerTestsForm';
-
-import { Theme, ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import AppBar from '@mui/material/AppBar';
-import { CSSProperties } from '@mui/styles';
-import NavDrawer from './components/drawer';
-import Button from '@mui/material/Button';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import IndexPage from './components/indexPage';
-import { getTheme } from './utils/theme';
-import ChannelSwitches from './components/channelManagement/ChannelSwitches';
 import CampaignsForm from './components/channelManagement/campaigns/CampaignsForm';
-import { makeStyles, ThemeProvider as StylesThemeProvider } from '@mui/styles';
-import QrCodePage from './components/utilities/QrCodePage';
-import AppsMeteringSwitches from './components/appsMeteringSwitches';
-import { SuperModeDashboard } from './components/channelManagement/superMode/superModeDashboard';
-import BannerDesigns from './components/channelManagement/bannerDesigns/';
-import DefaultPromos from './components/defaultPromos';
-import { StyledEngineProvider } from '@mui/material';
-import { LinkTrackingBuilder } from './components/linkTracking/LinkTrackingBuilder';
-import { SupportLandingPageTestsForm } from './components/channelManagement/supportLandingPage/supportLandingPage';
+import ChannelSwitches from './components/channelManagement/ChannelSwitches';
 import { CheckoutNudgeTestsForm } from './components/channelManagement/checkoutNudge/checkoutNudge';
-import { AuditTestsDashboard } from './components/channelManagement/auditTests/auditTestsDashboard';
-import PromoTool from './components/promoTool/promoTool';
-import PromoEditorPage from './components/promoTool/promoEditorPage';
-import Bookmarklets from './components/bookmarklets/Bookmarklets';
-import AccessManagement from './components/accessManagement/AccessManagement';
-import { StudentLandingPageTestsForm } from './components/channelManagement/studentLandingPage/studentLandingPage';
+import {
+  AppleNewsEpicTestsForm,
+  ArticleEpicTestsForm,
+  LiveblogEpicTestsForm,
+} from './components/channelManagement/epicTests/testsForm';
+import { GutterTestsForm } from './components/channelManagement/gutterTests/gutterTestsForm';
+import { HeaderTestsForm } from './components/channelManagement/headerTests/headerTestsForm';
 import { OneTimeCheckoutTestsForm } from './components/channelManagement/oneTimeCheckout/oneTimeCheckout';
-import ExclusionsBoard from './components/channelExclusions/ExclusionsBoard';
+import { StudentLandingPageTestsForm } from './components/channelManagement/studentLandingPage/studentLandingPage';
+import { SuperModeDashboard } from './components/channelManagement/superMode/superModeDashboard';
+import { SupportLandingPageTestsForm } from './components/channelManagement/supportLandingPage/supportLandingPage';
+import DefaultPromos from './components/defaultPromos';
+import NavDrawer from './components/drawer';
+import IndexPage from './components/indexPage';
+import { LinkTrackingBuilder } from './components/linkTracking/LinkTrackingBuilder';
+import PromoEditorPage from './components/promoTool/promoEditorPage';
+import PromoTool from './components/promoTool/promoTool';
+import Switchboard from './components/switchboard';
+import QrCodePage from './components/utilities/QrCodePage';
+import { getTheme } from './utils/theme';
 
 declare module '@mui/styles' {
   // https://mui.com/material-ui/migration/v5-style-changes/#%E2%9C%85-add-module-augmentation-for-defaulttheme-typescript

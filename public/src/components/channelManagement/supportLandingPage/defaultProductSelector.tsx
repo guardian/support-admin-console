@@ -1,16 +1,16 @@
-import React from 'react';
+import type { Theme } from '@mui/material';
 import {
   FormControl,
   FormControlLabel,
   FormLabel,
-  RadioGroup,
-  Radio,
-  Typography,
-  Theme,
   Grid,
+  Radio,
+  RadioGroup,
+  Typography,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { DefaultProductSelection } from '../../../models/supportLandingPage';
+import React from 'react';
+import type { DefaultProductSelection } from '../../../models/supportLandingPage';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {

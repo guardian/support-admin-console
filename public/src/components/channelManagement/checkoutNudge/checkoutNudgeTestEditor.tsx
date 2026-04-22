@@ -1,27 +1,22 @@
+import { MenuItem, TextField, Typography } from '@mui/material';
 import React from 'react';
-import { ValidatedTestEditorProps } from '../validatedTestEditor';
-import {
+import type {
   CheckoutNudgeTest,
   CheckoutNudgeVariant,
   Product,
   ProductType,
   RatePlan,
 } from '../../../models/checkoutNudge';
-import { Typography, TextField, MenuItem } from '@mui/material';
-import VariantsEditor from '../../tests/variants/variantsEditor';
-import { useStyles } from '../helpers/testEditorStyles';
-import {
-  getDefaultVariant,
-  getAvailableRatePlans,
-  PRODUCTS,
-  ONE_TIME_PLANS,
-  RECURRING_PLANS,
-} from './utils/defaults';
-import VariantSummary from '../../tests/variants/variantSummary';
-import VariantEditor from './variantEditor';
-import TestEditorTargetRegionsSelector from '../testEditorTargetRegionsSelector';
-import { RegionTargeting } from '../helpers/shared';
 import { getStage } from '../../../utils/stage';
+import VariantsEditor from '../../tests/variants/variantsEditor';
+import VariantSummary from '../../tests/variants/variantSummary';
+import type { RegionTargeting } from '../helpers/shared';
+import { useStyles } from '../helpers/testEditorStyles';
+import TestEditorTargetRegionsSelector from '../testEditorTargetRegionsSelector';
+import type { ValidatedTestEditorProps } from '../validatedTestEditor';
+import type { ONE_TIME_PLANS, RECURRING_PLANS } from './utils/defaults';
+import { getAvailableRatePlans, getDefaultVariant, PRODUCTS } from './utils/defaults';
+import VariantEditor from './variantEditor';
 
 const CheckoutNudgeTestEditor: React.FC<ValidatedTestEditorProps<CheckoutNudgeTest>> = ({
   test,

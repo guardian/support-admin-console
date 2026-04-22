@@ -1,9 +1,9 @@
-import { ResponsiveImage } from '../../../../models/shared';
-import {
+import type { ResponsiveImage } from '../../../../models/shared';
+import type {
   StudentLandingPageTest,
   StudentLandingPageVariant,
 } from '../../../../models/studentLandingPage';
-import { RegionTargeting } from '../../helpers/shared';
+import type { RegionTargeting } from '../../helpers/shared';
 
 export const DEFAULT_REGION_TARGETING: RegionTargeting = {
   targetedCountryGroups: [],

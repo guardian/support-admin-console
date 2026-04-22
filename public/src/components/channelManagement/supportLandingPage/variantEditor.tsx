@@ -1,16 +1,16 @@
-import React from 'react';
-import { Theme } from '@mui/material';
+import type { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import {
+import React from 'react';
+import type {
   SupportLandingPageCopy,
   SupportLandingPageVariant,
 } from '../../../models/supportLandingPage';
 import { CopyEditor } from '../../shared/copyEditor';
-import { ProductsEditor } from './productsEditor';
-import DefaultProductSelector from './defaultProductSelector';
-import { CountdownSettings, TickerSettings } from '../helpers/shared';
-import TickerEditor from '../tickerEditor';
 import CountdownEditor from '../countdownEditor';
+import type { CountdownSettings, TickerSettings } from '../helpers/shared';
+import TickerEditor from '../tickerEditor';
+import DefaultProductSelector from './defaultProductSelector';
+import { ProductsEditor } from './productsEditor';
 import URLGenerator from './urlGenerator';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({

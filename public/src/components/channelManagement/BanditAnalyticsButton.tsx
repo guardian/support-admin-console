@@ -1,8 +1,8 @@
-import { makeStyles } from '@mui/styles';
 import { Button, Dialog, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React, { useEffect } from 'react';
+import { CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis } from 'recharts';
 import useOpenable from '../../hooks/useOpenable';
-import { LineChart, CartesianGrid, Line, XAxis, YAxis, Legend, Tooltip } from 'recharts';
 import { buildChartData } from './helpers/utilities';
 
 const useStyles = makeStyles({

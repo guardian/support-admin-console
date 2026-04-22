@@ -1,7 +1,8 @@
-import React from 'react';
-import { Checkbox, FormControlLabel, Theme } from '@mui/material';
+import type { Theme } from '@mui/material';
+import { Checkbox, FormControlLabel } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Cta } from '../../channelManagement/helpers/shared';
+import React from 'react';
+import type { Cta } from '../../channelManagement/helpers/shared';
 import VariantCtaFieldsEditor from './variantCtaFieldsEditor';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({

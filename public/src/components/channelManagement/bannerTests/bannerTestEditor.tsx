@@ -1,5 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import { Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
+import React from 'react';
+import type {
+  BannerContent,
+  BannerTest,
+  BannerTestDeploySchedule,
+  BannerVariant,
+} from '../../../models/banner';
+import { BannerDesign } from '../../../models/bannerDesign';
+import { getDesignForVariant } from '../../../utils/bannerDesigns';
 import {
+  BannerDesignsResponse,
+  fetchFrontendSettings,
+  FrontendSettingsType,
+} from '../../../utils/requests';
+import TestVariantsSplitEditor from '../../tests/variants/testVariantsSplitEditor';
+import VariantsEditor from '../../tests/variants/variantsEditor';
+import VariantSummary from '../../tests/variants/variantSummary';
+import CampaignSelector from '../CampaignSelector';
+import { ControlProportionSettings } from '../helpers/controlProportionSettings';
+import type {
   ArticlesViewedSettings,
   ConsentStatus,
   DeviceType,
@@ -8,42 +28,23 @@ import {
   SignedInStatus,
   UserCohort,
 } from '../helpers/shared';
+import { useStyles } from '../helpers/testEditorStyles';
 import { ARTICLE_COUNT_TEMPLATE } from '../helpers/validation';
-import { Typography } from '@mui/material';
-import VariantEditor from './variantEditor';
-import CampaignSelector from '../CampaignSelector';
-import VariantsEditor from '../../tests/variants/variantsEditor';
-import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 import TestEditorArticleCountEditor, {
   DEFAULT_ARTICLES_VIEWED_SETTINGS,
 } from '../testEditorArticleCountEditor';
-import {
-  BannerContent,
-  BannerTest,
-  BannerTestDeploySchedule,
-  BannerVariant,
-} from '../../../models/banner';
-import { getDefaultVariant } from './utils/defaults';
-import VariantSummary from '../../tests/variants/variantSummary';
-import BannerVariantPreview from './bannerVariantPreview';
-import { ControlProportionSettings } from '../helpers/controlProportionSettings';
-import TestVariantsSplitEditor from '../../tests/variants/testVariantsSplitEditor';
-import { useStyles } from '../helpers/testEditorStyles';
-import { ValidatedTestEditorProps } from '../validatedTestEditor';
-import { BannerDesign } from '../../../models/bannerDesign';
-import {
-  BannerDesignsResponse,
-  fetchFrontendSettings,
-  FrontendSettingsType,
-} from '../../../utils/requests';
 import TestEditorContextTargeting from '../testEditorContextTargeting';
-import { getDesignForVariant } from '../../../utils/bannerDesigns';
-import { DeployScheduleEditor } from './deployScheduleEditor';
+import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 import { TestMethodologyEditor } from '../TestMethodologyEditor';
+import { ValidatedTestEditorProps } from '../validatedTestEditor';
+import BannerVariantPreview from './bannerVariantPreview';
+import { DeployScheduleEditor } from './deployScheduleEditor';
 import { FrontsOnlyEditor } from './frontsOnlyEditor';
+import { getDefaultVariant } from './utils/defaults';
+import VariantEditor from './variantEditor';
 
 const copyHasTemplate = (content: BannerContent, template: string): boolean =>
-  (content.heading && content.heading.includes(template)) ||
+  content.heading?.includes(template) ||
   (content.paragraphs && content.paragraphs.some((para) => para.includes(template))) ||
   (content.messageText != null && content.messageText.includes(template));
 
@@ -65,7 +66,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
   const [designs, setDesigns] = useState<BannerDesign[]>([]);
 
   const fetchBannerDesigns = (): void => {
-    fetchFrontendSettings(FrontendSettingsType.bannerDesigns).then(
+    fetchFrontendSettings(FrontendSettingsType.BannerDesigns).then(
       (response: BannerDesignsResponse) => {
         setDesigns(response.bannerDesigns.filter((design) => design.status === 'Live'));
       },

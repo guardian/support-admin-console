@@ -1,7 +1,9 @@
 import { Button, TextField } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useState } from 'react';
-import withS3Data, { InnerProps } from '../hocs/withS3Data';
+import React from 'react';
+import { useState } from 'react';
+import type { InnerProps } from '../hocs/withS3Data';
+import withS3Data from '../hocs/withS3Data';
 import { parsePromoInput } from '../utils/parsePromoInput';
 import {
   fetchSupportFrontendSettings,
@@ -11,9 +13,7 @@ import {
 
 type ProductName = 'guardianWeekly' | 'paper' | 'digital' | 'supporterPlus' | 'tierThree';
 
-type DefaultPromos = {
-  [key in ProductName]: string[];
-};
+type DefaultPromos = Record<ProductName, string[]>;
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -146,6 +146,6 @@ const DefaultPromos: React.FC<InnerProps<DefaultPromos>> = ({
 
 export default withS3Data<DefaultPromos>(
   DefaultPromos,
-  () => fetchSupportFrontendSettings(SupportFrontendSettingsType.defaultPromos),
-  (data) => saveSupportFrontendSettings(SupportFrontendSettingsType.defaultPromos, data),
+  () => fetchSupportFrontendSettings(SupportFrontendSettingsType.DefaultPromos),
+  (data) => saveSupportFrontendSettings(SupportFrontendSettingsType.DefaultPromos, data),
 );

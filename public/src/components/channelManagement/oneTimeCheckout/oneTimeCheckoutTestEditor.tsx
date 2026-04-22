@@ -1,16 +1,17 @@
-import React, { useCallback } from 'react';
-import { ValidatedTestEditorProps } from '../validatedTestEditor';
-import { OneTimeCheckoutTest, OneTimeCheckoutVariant } from '../../../models/oneTimeCheckout';
 import { Typography } from '@mui/material';
-import VariantsEditor from '../../tests/variants/variantsEditor';
-import { useStyles } from '../helpers/testEditorStyles';
-import { getDefaultVariant } from './utils/defaults';
-import VariantSummary from '../../tests/variants/variantSummary';
-import VariantEditor from './variantEditor';
-import TestEditorTargetRegionsSelector from '../testEditorTargetRegionsSelector';
-import { RegionTargeting } from '../helpers/shared';
-import { MParticleAudienceEditor } from '../mParticleAudienceEditor';
+import React from 'react';
+import { useCallback } from 'react';
+import type { OneTimeCheckoutTest, OneTimeCheckoutVariant } from '../../../models/oneTimeCheckout';
 import { getStage } from '../../../utils/stage';
+import VariantsEditor from '../../tests/variants/variantsEditor';
+import VariantSummary from '../../tests/variants/variantSummary';
+import type { RegionTargeting } from '../helpers/shared';
+import { useStyles } from '../helpers/testEditorStyles';
+import { MParticleAudienceEditor } from '../mParticleAudienceEditor';
+import TestEditorTargetRegionsSelector from '../testEditorTargetRegionsSelector';
+import type { ValidatedTestEditorProps } from '../validatedTestEditor';
+import { getDefaultVariant } from './utils/defaults';
+import VariantEditor from './variantEditor';
 
 const OneTimeCheckoutTestEditor: React.FC<ValidatedTestEditorProps<OneTimeCheckoutTest>> = ({
   test,

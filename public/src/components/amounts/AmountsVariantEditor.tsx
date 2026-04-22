@@ -1,6 +1,3 @@
-import React, { useState, useEffect } from 'react';
-import { Theme } from '@mui/material/styles';
-import { makeStyles } from '@mui/styles';
 import {
   Checkbox,
   Divider,
@@ -11,15 +8,14 @@ import {
   Radio,
   RadioGroup,
 } from '@mui/material';
+import type { Theme } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
+import React from 'react';
+import { useEffect, useState } from 'react';
+import type { AmountsVariant, AmountValuesObject, ContributionType } from '../../utils/models';
+import { contributionIds } from '../../utils/models';
 import { AmountsVariantEditorRow } from './AmountsVariantEditorRow';
 import { DeleteVariantButton } from './DeleteVariantButton';
-
-import {
-  AmountsVariant,
-  ContributionType,
-  contributionIds,
-  AmountValuesObject,
-} from '../../utils/models';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
@@ -144,12 +140,12 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
   };
 
   const updateDefaultContribution = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const updatedDefault = (event.target as HTMLInputElement).value as ContributionType;
+    const updatedDefault = (event.target as HTMLInputElement).value;
     setCurrentContributionDefault(updatedDefault);
   };
 
   const updateDisplayContribution = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const updatedContribution = event.target.name as ContributionType;
+    const updatedContribution = event.target.name;
     const includeContribution = event.target.checked;
     const updatedDisplayContribution: ContributionType[] = [];
 
@@ -172,13 +168,13 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
     return (
       <div>
         {contributionIds.map((k) => {
-          const cardData: AmountValuesObject = amountsCardData[k as ContributionType];
+          const cardData: AmountValuesObject = amountsCardData[k];
           if (cardData != null) {
             return (
               <div key={`${variantName}_${k}_row`}>
                 <Divider />
                 <AmountsVariantEditorRow
-                  label={k as ContributionType}
+                  label={k}
                   amounts={cardData.amounts}
                   defaultAmount={cardData.defaultAmount}
                   hideChooseYourAmount={cardData.hideChooseYourAmount}
@@ -216,7 +212,7 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
                 value={k}
                 control={<Radio />}
                 label={k}
-                disabled={!currentContributionDisplay.includes(k as ContributionType)}
+                disabled={!currentContributionDisplay.includes(k)}
               />
             );
           })}
@@ -243,7 +239,7 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
                 key={`${variantName}_${k}`}
                 control={
                   <Checkbox
-                    checked={currentContributionDisplay.includes(k as ContributionType)}
+                    checked={currentContributionDisplay.includes(k)}
                     onChange={(e) => updateDisplayContribution(e)}
                     name={k}
                   />

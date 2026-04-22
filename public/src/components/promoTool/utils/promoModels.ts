@@ -1,4 +1,4 @@
-import { LockStatus } from '../../channelManagement/helpers/shared';
+import type { LockStatus } from '../../channelManagement/helpers/shared';
 
 export type PromoProduct =
   | 'SupporterPlus'

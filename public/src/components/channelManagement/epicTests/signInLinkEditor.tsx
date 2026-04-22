@@ -1,6 +1,6 @@
-import React from 'react';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import React from 'react';
 
 interface EpicTestSignInLinkEditorProps {
   showSignInLink?: boolean;

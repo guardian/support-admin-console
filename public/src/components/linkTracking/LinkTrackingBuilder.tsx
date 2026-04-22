@@ -1,11 +1,13 @@
-import React from 'react';
-import { Button, TextField, Theme, Typography, Link } from '@mui/material';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { makeStyles } from '@mui/styles';
-import { MediumSelector } from './MediumSelector';
-import lzstring from 'lz-string';
 import { Link as LinkIcon, OpenInNew } from '@mui/icons-material';
-import { LinkTrackingFormData } from './linkTrackingFormData';
+import type { Theme } from '@mui/material';
+import { Button, Link, TextField, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import lzstring from 'lz-string';
+import React from 'react';
+import type { SubmitHandler } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
+import type { LinkTrackingFormData } from './linkTrackingFormData';
+import { MediumSelector } from './MediumSelector';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {

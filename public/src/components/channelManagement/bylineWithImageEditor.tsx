@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react';
-import { Checkbox, TextField, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-import { useForm } from 'react-hook-form';
-import { EMPTY_ERROR_HELPER_TEXT } from './helpers/validation';
+import type { Theme } from '@mui/material';
+import { Checkbox, TextField } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import { BylineWithImage } from './helpers/shared';
+import { makeStyles } from '@mui/styles';
+import React from 'react';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import type { BylineWithImage } from './helpers/shared';
+import { EMPTY_ERROR_HELPER_TEXT } from './helpers/validation';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {

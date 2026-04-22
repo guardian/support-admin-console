@@ -1,10 +1,10 @@
-import React from 'react';
 import { Button, Dialog, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import React from 'react';
 import useOpenable from '../../../hooks/useOpenable';
+import type { EpicTest } from '../../../models/epic';
+import type { EpicModuleName } from '../helpers/shared';
 import VariantPreview from './variantPreview';
-import { EpicTest } from '../../../models/epic';
-import { EpicModuleName } from '../helpers/shared';
 
 const useStyles = makeStyles({
   dialog: {

@@ -1,5 +1,5 @@
-import { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';
-import {
+import type { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';
+import type {
   Cta,
   DeviceType,
   Image,
@@ -9,7 +9,7 @@ import {
   UserCohort,
   Variant,
 } from '../components/channelManagement/helpers/shared';
-import { Region } from '../utils/models';
+import type { Region } from '../utils/models';
 
 export interface GutterContent {
   image: Image;

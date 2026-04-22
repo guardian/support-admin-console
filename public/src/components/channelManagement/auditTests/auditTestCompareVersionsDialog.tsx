@@ -1,7 +1,7 @@
-import * as React from 'react';
 import Dialog from '@mui/material/Dialog';
-import { IChange } from 'json-diff-ts';
 import { makeStyles } from '@mui/styles';
+import type { IChange } from 'json-diff-ts';
+import * as React from 'react';
 
 const useStyles = makeStyles({
   dialog: {

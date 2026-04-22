@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from 'react';
-
-import { Typography, Button, TextField, Autocomplete } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
-import { Theme } from '@mui/material/styles';
+import { Autocomplete, Button, TextField, Typography } from '@mui/material';
+import type { Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
+import { useEffect, useState } from 'react';
+import React from 'react';
+import type { AmountsTest, AmountsVariant, Country } from '../../utils/models';
+import { countries } from '../../utils/models';
 import LiveSwitch from '../shared/liveSwitch';
-
 import { AmountsVariantEditor } from './AmountsVariantEditor';
 import { CreateVariantButton } from './CreateVariantButton';
 import { DeleteTestButton } from './DeleteTestButton';
-
-import { AmountsTest, AmountsVariant, Country, countries } from '../../utils/models';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -178,7 +177,7 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
   };
 
   const updateLiveTestName = (update: string) => {
-    if (!update || !update.trim()) {
+    if (!update?.trim()) {
       setCurrentLiveTestName('');
       setCurrentLiveTestError(nameErrorMessages.REQUIRED);
       setSaveButtonIsDisabled(true);

@@ -1,4 +1,7 @@
-import { OneTimeCheckoutTest, OneTimeCheckoutVariant } from '../../../../models/oneTimeCheckout';
+import type {
+  OneTimeCheckoutTest,
+  OneTimeCheckoutVariant,
+} from '../../../../models/oneTimeCheckout';
 
 export const getDefaultVariant = (): OneTimeCheckoutVariant => ({
   name: 'control',

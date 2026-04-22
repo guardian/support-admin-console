@@ -1,14 +1,14 @@
+import type { EpicTest } from '../../../models/epic';
 import { FrontendSettingsType } from '../../../utils/requests';
-import { TestsForm } from '../testsForm';
-import { getDefaultTest, getDefaultVariant } from './utils/defaults';
+import type { EpicEditorConfig } from '../helpers/shared';
 import {
   APPLE_NEWS_EPIC_CONFIG,
   ARTICLE_EPIC_CONFIG,
-  EpicEditorConfig,
   LIVEBLOG_EPIC_CONFIG,
 } from '../helpers/shared';
+import { TestsForm } from '../testsForm';
 import { getEpicTestEditor } from './testEditor';
-import { EpicTest } from '../../../models/epic';
+import { getDefaultTest, getDefaultVariant } from './utils/defaults';
 
 const createDefaultEpicTest =
   (epicEditorConfig: EpicEditorConfig) =>
@@ -32,13 +32,13 @@ const buildEpicTestsForm = (
 
 export const ArticleEpicTestsForm = buildEpicTestsForm(
   ARTICLE_EPIC_CONFIG,
-  FrontendSettingsType.epicTests,
+  FrontendSettingsType.EpicTests,
 );
 export const LiveblogEpicTestsForm = buildEpicTestsForm(
   LIVEBLOG_EPIC_CONFIG,
-  FrontendSettingsType.liveblogEpicTests,
+  FrontendSettingsType.LiveblogEpicTests,
 );
 export const AppleNewsEpicTestsForm = buildEpicTestsForm(
   APPLE_NEWS_EPIC_CONFIG,
-  FrontendSettingsType.appleNewsEpicTests,
+  FrontendSettingsType.AppleNewsEpicTests,
 );

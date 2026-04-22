@@ -1,11 +1,10 @@
-import React from 'react';
+import AddIcon from '@mui/icons-material/Add';
 import { Button, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import AddIcon from '@mui/icons-material/Add';
-
-import { Campaign } from './CampaignsForm';
-import CreateCampaignDialog from './CreateCampaignDialog';
+import React from 'react';
 import useOpenable from '../../../hooks/useOpenable';
+import type { Campaign } from './CampaignsForm';
+import CreateCampaignDialog from './CreateCampaignDialog';
 
 const useStyles = makeStyles(() => ({
   button: {

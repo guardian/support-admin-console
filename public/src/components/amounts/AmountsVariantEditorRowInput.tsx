@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
-import { Button, TextField, Theme } from '@mui/material';
+import type { Theme } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { useState } from 'react';
+import React from 'react';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   textField: {
@@ -34,7 +36,7 @@ export const AmountsVariantEditorRowInput: React.FC<AmountsVariantEditorRowInput
   };
 
   const checkKey = (event: React.KeyboardEvent<HTMLInputElement>): void => {
-    if (event && event.key === 'Enter') {
+    if (event?.key === 'Enter') {
       onSubmit();
     }
   };

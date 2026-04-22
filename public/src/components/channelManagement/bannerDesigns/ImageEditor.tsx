@@ -1,8 +1,9 @@
 import { TextField } from '@mui/material';
-import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
-import React, { useEffect } from 'react';
+import React from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { BannerDesignImage } from '../../../models/bannerDesign';
+import type { BannerDesignImage } from '../../../models/bannerDesign';
+import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 
 interface Props {
   image: BannerDesignImage;

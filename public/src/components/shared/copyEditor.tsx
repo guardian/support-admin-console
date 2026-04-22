@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import type { Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import React from 'react';
+import { useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import {
   copyLengthValidator,
   templateValidatorForPlatform,
 } from '../channelManagement/helpers/validation';
-import { Controller, useForm } from 'react-hook-form';
 import { RichTextEditorSingleLine } from '../channelManagement/richTextEditor/richTextEditor';
-import { makeStyles } from '@mui/styles';
-import { Theme } from '@mui/material';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {

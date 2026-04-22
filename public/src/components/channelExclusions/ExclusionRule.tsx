@@ -1,22 +1,25 @@
-import React from 'react';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import type { Theme } from '@mui/material';
 import {
-  Alert,
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Alert,
   TextField,
   Typography,
-  Theme,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { ExclusionRule as ExclusionRuleType, ExclusionSettings } from '../../models/exclusions';
-import { ChannelKey } from './util';
-import RuleHeader from './RuleHeader';
-import ContentTypesSelector from './ContentTypesSelector';
+import React from 'react';
+import type {
+  ExclusionRule as ExclusionRuleType,
+  ExclusionSettings,
+} from '../../models/exclusions';
 import { SectionsEditor } from '../channelManagement/epicTests/sectionsEditor';
 import { TagsEditor } from '../channelManagement/epicTests/tagsEditor';
+import ContentTypesSelector from './ContentTypesSelector';
+import RuleHeader from './RuleHeader';
 import { useExclusionRuleHandlers } from './useExclusionRuleHandlers';
+import type { ChannelKey } from './util';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   accordion: {

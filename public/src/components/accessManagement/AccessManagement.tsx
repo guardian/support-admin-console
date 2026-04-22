@@ -1,3 +1,6 @@
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import {
   Button,
   Paper,
@@ -7,20 +10,17 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Theme,
   Typography,
 } from '@mui/material';
-import React, { useEffect } from 'react';
-import { UserPermissions } from '../channelManagement/helpers/shared';
+import type { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import React, { useEffect } from 'react';
 import { hasPermission } from '../../utils/permissions';
 import { fetchUsersWithPermissions, FrontendSettingsType } from '../../utils/requests';
-import AccessManagementDialog from './UpdatePermissionsDialog';
+import type { UserPermissions } from '../channelManagement/helpers/shared';
 import AddUserDialog from './AddUserDialog';
 import { permissions } from './permissions';
+import AccessManagementDialog from './UpdatePermissionsDialog';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -75,7 +75,7 @@ const AccessManagement = () => {
   const [editModalOpen, setEditModalOpen] = React.useState(false);
   const [selectedUser, setSelectedUser] = React.useState<UserPermissions | null>(null);
   const [addUserModalOpen, setAddUserModalOpen] = React.useState(false);
-  const canEditPermissions = hasPermission(FrontendSettingsType.accessManagement, 'Write');
+  const canEditPermissions = hasPermission(FrontendSettingsType.AccessManagement, 'Write');
 
   useEffect(() => {
     const getUsers = async () => {

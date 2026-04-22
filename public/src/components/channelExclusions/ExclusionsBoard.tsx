@@ -1,17 +1,17 @@
-import React from 'react';
-
-import { Theme } from '@mui/material/styles';
+import type { Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
-import { ExclusionSettings } from '../../models/exclusions';
-import withS3Data, { DataFromServer, InnerProps } from '../../hocs/withS3Data';
+import React from 'react';
+import type { DataFromServer, InnerProps } from '../../hocs/withS3Data';
+import withS3Data from '../../hocs/withS3Data';
+import type { ExclusionSettings } from '../../models/exclusions';
+import { hasPermission } from '../../utils/permissions';
 import {
   fetchFrontendSettings,
   FrontendSettingsType,
   saveFrontendSettings,
 } from '../../utils/requests';
-import { hasPermission } from '../../utils/permissions';
 import ExclusionsSection from './ExclusionsSection';
-import { ChannelKey } from './util';
+import type { ChannelKey } from './util';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   wrapper: {
@@ -43,7 +43,7 @@ const CHANNEL_LABELS: Record<ChannelKey, string> = {
   header: 'Header',
 };
 
-const canEdit = hasPermission(FrontendSettingsType.exclusionsSettings, 'Write');
+const canEdit = hasPermission(FrontendSettingsType.ExclusionsSettings, 'Write');
 
 const ExclusionsBoard: React.FC<InnerProps<ExclusionSettings>> = ({
   data,
@@ -86,12 +86,12 @@ const ExclusionsBoard: React.FC<InnerProps<ExclusionSettings>> = ({
 
 const fetchSettings = (): Promise<DataFromServer<ExclusionSettings>> => {
   return fetchFrontendSettings<DataFromServer<ExclusionSettings>>(
-    FrontendSettingsType.exclusionsSettings,
+    FrontendSettingsType.ExclusionsSettings,
   );
 };
 
 const saveSettings = (data: DataFromServer<ExclusionSettings>): Promise<Response> => {
-  return saveFrontendSettings(FrontendSettingsType.exclusionsSettings, data);
+  return saveFrontendSettings(FrontendSettingsType.ExclusionsSettings, data);
 };
 
 export default withS3Data<ExclusionSettings>(ExclusionsBoard, fetchSettings, saveSettings);

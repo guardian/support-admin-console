@@ -1,6 +1,6 @@
-import { Status, Test, Variant } from '../components/channelManagement/helpers/shared';
-import { Region } from '../utils/models';
-import { ResponsiveImage } from './shared';
+import type { Status, Test, Variant } from '../components/channelManagement/helpers/shared';
+import type { Region } from '../utils/models';
+import type { ResponsiveImage } from './shared';
 
 export interface StudentLandingPageTest extends Test {
   name: string;

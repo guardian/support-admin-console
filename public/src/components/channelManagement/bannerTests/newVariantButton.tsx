@@ -1,5 +1,6 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
+import AddIcon from '@mui/icons-material/Add';
+import CloseIcon from '@mui/icons-material/Close';
+import type { Theme } from '@mui/material';
 import {
   Button,
   Dialog,
@@ -8,21 +9,17 @@ import {
   DialogTitle,
   IconButton,
   TextField,
-  Theme,
   Typography,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-
-import AddIcon from '@mui/icons-material/Add';
-import CloseIcon from '@mui/icons-material/Close';
-
+import React from 'react';
+import { useForm } from 'react-hook-form';
 import useOpenable from '../../../hooks/useOpenable';
-
 import {
+  createDuplicateValidator,
   EMPTY_ERROR_HELPER_TEXT,
   INVALID_CHARACTERS_ERROR_HELPER_TEXT,
   VALID_CHARACTERS_REGEX,
-  createDuplicateValidator,
 } from '../helpers/validation';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({

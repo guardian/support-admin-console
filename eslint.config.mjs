@@ -56,6 +56,7 @@ export default [
           args: 'after-used',
         },
       ],
+      '@typescript-eslint/consistent-type-imports': 'off',
       '@typescript-eslint/ban-ts-comment': 'off',
       '@typescript-eslint/no-unnecessary-type-constraint': 'off',
       'react/display-name': 'off',

@@ -1,28 +1,28 @@
-import React from 'react';
+import ArchiveIcon from '@mui/icons-material/Archive';
+import CloseIcon from '@mui/icons-material/Close';
+import EditIcon from '@mui/icons-material/Edit';
+import LockIcon from '@mui/icons-material/Lock';
+import SaveIcon from '@mui/icons-material/Save';
+import type { Theme } from '@mui/material';
 import {
-  Theme,
-  Typography,
   Button,
   Dialog,
-  DialogTitle,
+  DialogActions,
   DialogContent,
   DialogContentText,
-  DialogActions,
+  DialogTitle,
   Tooltip,
+  Typography,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-import EditIcon from '@mui/icons-material/Edit';
-import { LockDetails } from './LockDetails';
-import LockIcon from '@mui/icons-material/Lock';
-import CloseIcon from '@mui/icons-material/Close';
-import SaveIcon from '@mui/icons-material/Save';
 import { grey } from '@mui/material/colors';
-import { LockStatus } from '../helpers/shared';
-import LiveSwitch from '../../shared/liveSwitch';
-import { BannerDesign, Status } from '../../../models/bannerDesign';
-import { BannerDesignPreview } from './BannerDesignPreview';
+import { makeStyles } from '@mui/styles';
+import React from 'react';
 import useOpenable from '../../../hooks/useOpenable';
-import ArchiveIcon from '@mui/icons-material/Archive';
+import type { BannerDesign, Status } from '../../../models/bannerDesign';
+import LiveSwitch from '../../shared/liveSwitch';
+import type { LockStatus } from '../helpers/shared';
+import { BannerDesignPreview } from './BannerDesignPreview';
+import { LockDetails } from './LockDetails';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {

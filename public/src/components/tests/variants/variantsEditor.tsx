@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { Theme } from '@mui/material';
+import type { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Variant } from '../../channelManagement/helpers/shared';
-import VariantEditorsAccordion from './variantEditorsAccordion';
+import React from 'react';
+import { useEffect, useState } from 'react';
+import type { Variant } from '../../channelManagement/helpers/shared';
 import NewVariantButton from './newVariantButton';
+import VariantEditorsAccordion from './variantEditorsAccordion';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {

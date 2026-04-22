@@ -1,8 +1,10 @@
-import { FormControl, MenuItem, Select, Theme } from '@mui/material';
-import React from 'react';
-import { Control, Controller, FieldErrors } from 'react-hook-form';
+import type { Theme } from '@mui/material';
+import { FormControl, MenuItem, Select } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { LinkTrackingFormData } from './linkTrackingFormData';
+import React from 'react';
+import type { Control, FieldErrors } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
+import type { LinkTrackingFormData } from './linkTrackingFormData';
 
 interface Option {
   value: string;

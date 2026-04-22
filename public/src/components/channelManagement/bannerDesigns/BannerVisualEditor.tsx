@@ -1,8 +1,9 @@
+import type { SelectChangeEvent } from '@mui/material';
+import { MenuItem, Select } from '@mui/material';
 import React from 'react';
-import { BannerDesignVisual } from '../../../models/bannerDesign';
-import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import { defaultBannerChoiceCardsDesign, defaultBannerImage } from './utils/defaults';
+import type { BannerDesignVisual } from '../../../models/bannerDesign';
 import { ImageEditor } from './ImageEditor';
+import { defaultBannerChoiceCardsDesign, defaultBannerImage } from './utils/defaults';
 
 interface Props {
   visual?: BannerDesignVisual;

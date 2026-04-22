@@ -1,11 +1,10 @@
-import React from 'react';
 import { Button } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-
-import { Test } from '../helpers/shared';
+import React from 'react';
+import useOpenable from '../../../hooks/useOpenable';
+import type { Test } from '../helpers/shared';
 import { formattedTimestamp } from '../helpers/utilities';
 import TestDataDialog from './TestDataDialog';
-import useOpenable from '../../../hooks/useOpenable';
 
 const useStyles = makeStyles(() => ({
   button: {

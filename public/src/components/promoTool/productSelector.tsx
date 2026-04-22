@@ -1,7 +1,9 @@
-import React from 'react';
+import type { SelectChangeEvent } from '@mui/material';
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import { PromoProduct, promoProductNames } from './utils/promoModels';
+import React from 'react';
+import type { PromoProduct } from './utils/promoModels';
+import { promoProductNames } from './utils/promoModels';
 
 const useStyles = makeStyles(() => ({
   select: {

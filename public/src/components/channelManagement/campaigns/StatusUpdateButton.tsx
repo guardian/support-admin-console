@@ -1,10 +1,9 @@
-import React from 'react';
 import { Button, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-
-import { Test } from '../helpers/shared';
-import StatusUpdateDialog from './StatusUpdateDialog';
+import React from 'react';
 import useOpenable from '../../../hooks/useOpenable';
+import type { Test } from '../helpers/shared';
+import StatusUpdateDialog from './StatusUpdateDialog';
 
 const useStyles = makeStyles(() => ({
   button: {

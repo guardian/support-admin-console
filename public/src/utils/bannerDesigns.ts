@@ -1,5 +1,5 @@
-import { BannerVariant } from '../models/banner';
-import { BannerDesign, HexColour } from '../models/bannerDesign';
+import type { BannerVariant } from '../models/banner';
+import type { BannerDesign, HexColour } from '../models/bannerDesign';
 
 export const getDesignForVariant = (
   variant: BannerVariant,

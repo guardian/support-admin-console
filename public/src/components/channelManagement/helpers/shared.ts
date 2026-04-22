@@ -1,5 +1,5 @@
-import { Region } from '../../../utils/models';
-import { ValidationStatus } from './validation';
+import type { Region } from '../../../utils/models';
+import type { ValidationStatus } from './validation';
 
 export interface Variant {
   name: string;
@@ -240,9 +240,7 @@ export interface PageContextTargeting {
 }
 
 // Stores tests which have been modified
-export type ModifiedTests = {
-  [testName: string]: TestStatus;
-};
+export type ModifiedTests = Record<string, TestStatus>;
 
 export interface ArticlesViewedSettings {
   minViews: number;

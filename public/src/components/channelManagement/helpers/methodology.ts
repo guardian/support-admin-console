@@ -1,4 +1,4 @@
-import { Methodology } from './shared';
+import type { Methodology } from './shared';
 
 export const addMethodologyToTestName = (testName: string, methodology: Methodology): string => {
   // Handle the regional suffix, e.g. MY_TEST__UK becomes MY_TEST_ABTest__UK

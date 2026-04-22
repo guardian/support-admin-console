@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { FormControl, FormControlLabel, Radio, RadioGroup, Theme, Typography } from '@mui/material';
+import type { Theme } from '@mui/material';
+import { FormControl, FormControlLabel, Radio, RadioGroup, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import React from 'react';
+import { useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import type { ChoiceCardsSettings } from '../../../models/choiceCards';
+import type { EpicVariant, SeparateArticleCount } from '../../../models/epic';
+import PromoCodesEditor from '../../shared/PromoCodesEditor';
+import VariantSeparateArticleCountEditor from '../../tests/variants/variantSeparateArticleCountEditor';
+import { BylineWithImageEditorToggle } from '../bylineWithImageEditor';
 import ChoiceCardsEditor from '../choiceCards/ChoiceCardsEditor';
-import SignInLinkEditor from './signInLinkEditor';
-import TickerEditor from '../tickerEditor';
-import EpicTestVariantEditorCtasEditor from './variantCtasEditor';
-
-import {
+import type {
   BylineWithImage,
   Cta,
   EpicEditorConfig,
@@ -29,19 +32,17 @@ import {
   templateValidatorForPlatform,
   VALID_TEMPLATES,
 } from '../helpers/validation';
+import { ImageEditorToggle } from '../imageEditor';
 import {
   getRteCopyLength,
   RichTextEditor,
   RichTextEditorSingleLine,
 } from '../richTextEditor/richTextEditor';
-import VariantSeparateArticleCountEditor from '../../tests/variants/variantSeparateArticleCountEditor';
-import { ImageEditorToggle } from '../imageEditor';
-import { BylineWithImageEditorToggle } from '../bylineWithImageEditor';
-import { EpicVariant, SeparateArticleCount } from '../../../models/epic';
+import TickerEditor from '../tickerEditor';
 import { AppleNewsChoiceCards } from './appleChoiceCardsEditor';
 import EpicTestNewsletter from './newsletterSignUp';
-import { ChoiceCardsSettings } from '../../../models/choiceCards';
-import PromoCodesEditor from '../../shared/PromoCodesEditor';
+import SignInLinkEditor from './signInLinkEditor';
+import EpicTestVariantEditorCtasEditor from './variantCtasEditor';
 
 const getUseStyles = (shouldAddPadding: boolean) => {
   const useStyles = makeStyles(({ palette, spacing }: Theme) => ({

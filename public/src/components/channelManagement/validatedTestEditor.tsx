@@ -1,10 +1,11 @@
-import { Test } from './helpers/shared';
-import React, { useRef, useState } from 'react';
-import { TestEditorProps } from './testsForm';
-import StickyTopBar from './stickyTopBar/stickyTopBar';
-import { Theme } from '@mui/material';
+import type { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { useRef, useState } from 'react';
+import React from 'react';
+import type { Test } from './helpers/shared';
 import useValidation from './hooks/useValidation';
+import StickyTopBar from './stickyTopBar/stickyTopBar';
+import type { TestEditorProps } from './testsForm';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   testEditorContainer: {

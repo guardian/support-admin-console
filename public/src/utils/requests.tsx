@@ -1,43 +1,42 @@
-import { Test, Status, UserPermissions } from '../components/channelManagement/helpers/shared';
-import { Campaign } from '../components/channelManagement/campaigns/CampaignsForm';
-import { BannerDesign, Status as BannerDesignStatus } from '../models/bannerDesign';
-import { PromoCampaign, Promo, CountryGroup } from '../components/promoTool/utils/promoModels';
-import { Product } from '../components/promoTool/utils/productCatalog';
+import type { Campaign } from '../components/channelManagement/campaigns/CampaignsForm';
+import type { Status, Test, UserPermissions } from '../components/channelManagement/helpers/shared';
+import type { Product } from '../components/promoTool/utils/productCatalog';
+import type { CountryGroup, Promo, PromoCampaign } from '../components/promoTool/utils/promoModels';
+import type { BannerDesign, Status as BannerDesignStatus } from '../models/bannerDesign';
 
 export enum SupportFrontendSettingsType {
-  switches = 'switches',
-  contributionTypes = 'contribution-types',
-  amounts = 'amounts',
-  defaultPromos = 'default-promos',
+  Switches = 'switches',
+  ContributionTypes = 'contribution-types',
+  Amounts = 'amounts',
+  DefaultPromos = 'default-promos',
 }
 
 export enum FrontendSettingsType {
-  headerTests = 'header-tests',
-  epicTests = 'epic-tests',
-  liveblogEpicTests = 'liveblog-epic-tests',
-  appleNewsEpicTests = 'apple-news-epic-tests',
-  bannerTests = 'banner-tests',
-  bannerTests2 = 'banner-tests2',
-  bannerDeploy = 'banner-deploy',
-  bannerDeploy2 = 'banner-deploy2',
-  gutterLiveblogTests = 'gutter-liveblog-tests',
-  channelSwitches = 'channel-switches',
-  campaigns = 'campaigns',
-  bannerDesigns = 'banner-designs',
-  supportLandingPageTests = 'support-landing-page-tests',
-  studentLandingPageTests = 'student-landing-page-tests',
-  checkoutNudgeTests = 'checkout-nudge-tests',
-  accessManagement = 'access-management',
-  oneTimeCheckout = 'one-time-checkout-tests',
-  exclusionsSettings = 'exclusions',
+  HeaderTests = 'header-tests',
+  EpicTests = 'epic-tests',
+  LiveblogEpicTests = 'liveblog-epic-tests',
+  AppleNewsEpicTests = 'apple-news-epic-tests',
+  BannerTests = 'banner-tests',
+  BannerTests2 = 'banner-tests2',
+  BannerDeploy = 'banner-deploy',
+  BannerDeploy2 = 'banner-deploy2',
+  GutterLiveblogTests = 'gutter-liveblog-tests',
+  ChannelSwitches = 'channel-switches',
+  Campaigns = 'campaigns',
+  BannerDesigns = 'banner-designs',
+  SupportLandingPageTests = 'support-landing-page-tests',
+  StudentLandingPageTests = 'student-landing-page-tests',
+  CheckoutNudgeTests = 'checkout-nudge-tests',
+  AccessManagement = 'access-management',
+  OneTimeCheckout = 'one-time-checkout-tests',
+  ExclusionsSettings = 'exclusions',
 }
 
 export enum AppsSettingsType {
-  appsMeteringSwitches = 'apps-metering-switches',
+  AppsMeteringSwitches = 'apps-metering-switches',
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function makeFetch(path: string, options?: RequestInit): Promise<any> {
+function makeFetch(path: string, options?: RequestInit): Promise<Response> {
   return fetch(path, options).then((resp) => {
     if (!resp.ok) {
       return resp.text().then((msg) => Promise.reject(new Error(msg)));
@@ -47,12 +46,12 @@ function makeFetch(path: string, options?: RequestInit): Promise<any> {
   });
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Settings can be any JSON structure from the API
 function fetchSettings(path: string): Promise<any> {
   return makeFetch(path).then((resp) => resp.json());
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Settings data can be any JSON structure sent to the API
 function saveSettings(path: string, data: any): Promise<Response> {
   return makeFetch(path, {
     method: 'POST',
@@ -130,7 +129,7 @@ export function requestTestListTakeControl(settingsType: FrontendSettingsType): 
 
 export function fetchSupportFrontendSettings(
   settingsType: SupportFrontendSettingsType,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Support frontend settings can be any JSON structure from the API
 ): Promise<any> {
   return fetchSettings(`/support-frontend/${settingsType}`);
 }
@@ -141,13 +140,13 @@ export function fetchCampaignTests(campaign: string): Promise<Test[]> {
 
 export function saveSupportFrontendSettings(
   settingsType: SupportFrontendSettingsType,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Support frontend settings data can be any JSON structure sent to the API
   data: any,
 ): Promise<Response> {
   return saveSettings(`/support-frontend/${settingsType}/update`, data);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Frontend settings can be any JSON structure, generic T allows caller to specify type
 export function fetchFrontendSettings<T = any>(settingsType: FrontendSettingsType): Promise<T> {
   return fetchSettings(`/frontend/${settingsType}`);
 }
@@ -158,30 +157,30 @@ export interface BannerDesignsResponse {
 }
 
 export function fetchBannerDesign(designName: string): Promise<BannerDesign> {
-  return fetchSettings(`/frontend/${FrontendSettingsType.bannerDesigns}/${designName}`);
+  return fetchSettings(`/frontend/${FrontendSettingsType.BannerDesigns}/${designName}`);
 }
 
 export function lockBannerDesign(designName: string, force: boolean): Promise<Response> {
   const path = force
-    ? `/frontend/${FrontendSettingsType.bannerDesigns}/takecontrol/${designName}`
-    : `/frontend/${FrontendSettingsType.bannerDesigns}/lock/${designName}`;
+    ? `/frontend/${FrontendSettingsType.BannerDesigns}/takecontrol/${designName}`
+    : `/frontend/${FrontendSettingsType.BannerDesigns}/lock/${designName}`;
   return makeFetch(path, {
     method: 'POST',
   });
 }
 
 export function unlockBannerDesign(designName: string): Promise<Response> {
-  return makeFetch(`/frontend/${FrontendSettingsType.bannerDesigns}/unlock/${designName}`, {
+  return makeFetch(`/frontend/${FrontendSettingsType.BannerDesigns}/unlock/${designName}`, {
     method: 'POST',
   });
 }
 
 export function updateBannerDesign(design: BannerDesign): Promise<Response> {
-  return saveSettings(`/frontend/${FrontendSettingsType.bannerDesigns}/update`, design);
+  return saveSettings(`/frontend/${FrontendSettingsType.BannerDesigns}/update`, design);
 }
 
 export function createBannerDesign(design: BannerDesign): Promise<Response> {
-  return saveSettings(`/frontend/${FrontendSettingsType.bannerDesigns}/create`, design);
+  return saveSettings(`/frontend/${FrontendSettingsType.BannerDesigns}/create`, design);
 }
 
 export function updateBannerDesignStatus(
@@ -189,7 +188,7 @@ export function updateBannerDesignStatus(
   status: BannerDesignStatus,
 ): Promise<Response> {
   return makeFetch(
-    `/frontend/${FrontendSettingsType.bannerDesigns}/status/${designName}/${status}`,
+    `/frontend/${FrontendSettingsType.BannerDesigns}/status/${designName}/${status}`,
     {
       method: 'POST',
     },
@@ -197,20 +196,20 @@ export function updateBannerDesignStatus(
 }
 
 export function archiveBannerDesign(designName: string): Promise<Response> {
-  return makeFetch(`/frontend/${FrontendSettingsType.bannerDesigns}/archive/${designName}`, {
+  return makeFetch(`/frontend/${FrontendSettingsType.BannerDesigns}/archive/${designName}`, {
     method: 'POST',
   });
 }
 
 export function getBannerDesignUsage(
   designName: string,
-): Promise<{ name: string; channel: string }[]> {
-  return fetchSettings(`/frontend/${FrontendSettingsType.bannerDesigns}/usage/${designName}`);
+): Promise<Array<{ name: string; channel: string }>> {
+  return fetchSettings(`/frontend/${FrontendSettingsType.BannerDesigns}/usage/${designName}`);
 }
 
 export function saveFrontendSettings(
   settingsType: FrontendSettingsType,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Frontend settings data can be any JSON structure sent to the API
   data: any,
 ): Promise<Response> {
   return saveSettings(`/frontend/${settingsType}/update`, data);

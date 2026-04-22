@@ -1,7 +1,7 @@
-import React from 'react';
-import { CtaDesign } from '../../../models/bannerDesign';
-import { Theme } from '@mui/material/styles';
+import type { Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
+import React from 'react';
+import type { CtaDesign } from '../../../models/bannerDesign';
 import { ColourInput, OptionalColourInput } from './ColourInput';
 
 const useLocalStyles = makeStyles(({ palette }: Theme) => ({

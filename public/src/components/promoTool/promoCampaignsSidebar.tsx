@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { makeStyles } from '@mui/styles';
 import { TextField } from '@mui/material';
-import PromoCampaignsList from './promoCampaignsList';
+import { makeStyles } from '@mui/styles';
+import React from 'react';
+import { useState } from 'react';
 import NewPromoCampaignButton from './newPromoCampaignButton';
-import { PromoCampaign, PromoCampaigns, PromoProduct } from './utils/promoModels';
 import { ProductSelector } from './productSelector';
+import PromoCampaignsList from './promoCampaignsList';
+import type { PromoCampaign, PromoCampaigns, PromoProduct } from './utils/promoModels';
 
 const useStyles = makeStyles(() => ({
   root: {

@@ -1,11 +1,11 @@
-import React from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
+import { grey } from '@mui/material/colors';
+import type { Theme } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import { makeStyles } from '@mui/styles';
-import { grey } from '@mui/material/colors';
-import { Theme } from '@mui/material/styles';
+import React from 'react';
 import { countries } from '../../utils/models';
-import { RegionTargeting } from './helpers/shared';
+import type { RegionTargeting } from './helpers/shared';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {

@@ -1,14 +1,14 @@
-import {
+import type { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';
+import type {
   Cta,
-  Test,
-  Variant,
-  UserCohort,
   DeviceType,
-  Status,
   RegionTargeting,
+  Status,
+  Test,
+  UserCohort,
+  Variant,
 } from '../components/channelManagement/helpers/shared';
-import { Region } from '../utils/models';
-import { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';
+import type { Region } from '../utils/models';
 
 export interface HeaderContent {
   heading?: string;

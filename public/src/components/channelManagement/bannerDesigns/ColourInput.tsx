@@ -1,17 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { TextField, ClassNameMap, ClickAwayListener } from '@mui/material';
+import type { ClassNameMap } from '@mui/material';
+import { ClickAwayListener, TextField } from '@mui/material';
+import type { Theme } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
 import debounce from 'lodash/debounce';
+import { useEffect, useState } from 'react';
+import React from 'react';
+import { HexColorPicker } from 'react-colorful';
+import { useForm } from 'react-hook-form';
+import type { HexColour } from '../../../models/bannerDesign';
 import {
   hexColourStringRegex,
   hexColourToString,
   stringToHexColour,
 } from '../../../utils/bannerDesigns';
-import { useForm } from 'react-hook-form';
 import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
-import { Theme } from '@mui/material/styles';
-import { makeStyles } from '@mui/styles';
-import { HexColour } from '../../../models/bannerDesign';
-import { HexColorPicker } from 'react-colorful';
 
 const useStyles = makeStyles<Theme, { colour: string; isDisabled: boolean }>(
   ({ palette }: Theme) => ({
@@ -61,7 +63,7 @@ interface GenericProps<T> extends Props<T> {
   convertToString: (colour: T) => string;
   convertFromString: (colourString: string) => T;
   required: boolean;
-  styles: ClassNameMap<string>;
+  styles: ClassNameMap;
 }
 
 const GenericColourInput = <T extends unknown>({

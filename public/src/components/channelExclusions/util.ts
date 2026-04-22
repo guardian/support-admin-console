@@ -1,4 +1,4 @@
-import { ExclusionRule, ExclusionSettings } from '../../models/exclusions';
+import type { ExclusionRule, ExclusionSettings } from '../../models/exclusions';
 
 export type ChannelKey = keyof ExclusionSettings;
 

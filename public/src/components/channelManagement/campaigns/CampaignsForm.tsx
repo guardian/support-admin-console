@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { Theme, Typography } from '@mui/material';
+import type { Theme } from '@mui/material';
+import { Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import CampaignsSidebar from './CampaignsSidebar';
-import CampaignsEditor from './CampaignsEditor';
+import { useEffect, useState } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
-
 import {
   fetchFrontendSettings,
   FrontendSettingsType,
   sendCreateCampaignRequest,
   sendUpdateCampaignRequest,
 } from '../../../utils/requests';
+import CampaignsEditor from './CampaignsEditor';
+import CampaignsSidebar from './CampaignsSidebar';
 
 const useStyles = makeStyles(({ spacing, typography }: Theme) => ({
   viewTextContainer: {
@@ -68,7 +69,7 @@ const CampaignsForm: React.FC = () => {
   const classes = useStyles();
 
   const fetchSettings = (): Promise<Campaign[]> => {
-    return fetchFrontendSettings(FrontendSettingsType.campaigns);
+    return fetchFrontendSettings(FrontendSettingsType.Campaigns);
   };
 
   useEffect(() => {

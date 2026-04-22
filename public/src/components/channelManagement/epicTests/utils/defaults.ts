@@ -1,7 +1,7 @@
-import { Cta, RegionTargeting, SecondaryCtaType, UserCohort } from '../../helpers/shared';
-
+import type { EpicTest, EpicVariant, MaxEpicViews } from '../../../../models/epic';
 import { getStage } from '../../../../utils/stage';
-import { EpicTest, EpicVariant, MaxEpicViews } from '../../../../models/epic';
+import type { Cta, RegionTargeting } from '../../helpers/shared';
+import { SecondaryCtaType, UserCohort } from '../../helpers/shared';
 
 export const DEFAULT_MAX_EPIC_VIEWS: MaxEpicViews = {
   maxViewsCount: 4,

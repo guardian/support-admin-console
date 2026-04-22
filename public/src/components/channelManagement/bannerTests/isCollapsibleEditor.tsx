@@ -1,7 +1,8 @@
-import React from 'react';
+import type { Theme } from '@mui/material';
+import { Checkbox } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import { Checkbox, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import React from 'react';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {

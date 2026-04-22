@@ -1,9 +1,9 @@
-import { RegionTargeting } from '../../helpers/shared';
-import { getStage } from '../../../../utils/stage';
-import {
+import type {
   SupportLandingPageTest,
   SupportLandingPageVariant,
 } from '../../../../models/supportLandingPage';
+import { getStage } from '../../../../utils/stage';
+import type { RegionTargeting } from '../../helpers/shared';
 
 const defaultProducts = {
   Contribution: {

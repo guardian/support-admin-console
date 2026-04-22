@@ -1,4 +1,7 @@
-import React from 'react';
+import ArchiveIcon from '@mui/icons-material/Archive';
+import DeleteIcon from '@mui/icons-material/Delete';
+import FileCopyIcon from '@mui/icons-material/FileCopy';
+import type { Theme } from '@mui/material';
 import {
   Button,
   Dialog,
@@ -6,16 +9,13 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Theme,
   Typography,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { grey } from '@mui/material/colors';
-import DeleteIcon from '@mui/icons-material/Delete';
-import ArchiveIcon from '@mui/icons-material/Archive';
-import FileCopyIcon from '@mui/icons-material/FileCopy';
-import CreateTestDialog from './createTestDialog';
+import { makeStyles } from '@mui/styles';
+import React from 'react';
 import useOpenable from '../../hooks/useOpenable';
+import CreateTestDialog from './createTestDialog';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {

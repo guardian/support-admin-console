@@ -1,9 +1,9 @@
 import React from 'react';
-import { AmountsSection } from './AmountsSection';
-import { OneTimeCheckoutVariant } from '../../../models/oneTimeCheckout';
+import type { OneTimeCheckoutVariant } from '../../../models/oneTimeCheckout';
 import { CopyEditor } from '../../shared/copyEditor';
+import type { TickerSettings } from '../helpers/shared';
 import TickerEditor from '../tickerEditor';
-import { TickerSettings } from '../helpers/shared';
+import { AmountsSection } from './AmountsSection';
 
 interface VariantEditorProps {
   variant: OneTimeCheckoutVariant;

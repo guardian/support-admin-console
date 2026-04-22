@@ -1,9 +1,10 @@
-import React from 'react';
-import { ListItem, Theme, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-import { BannerDesign } from '../../../models/bannerDesign';
 import EditIcon from '@mui/icons-material/Edit';
+import type { Theme } from '@mui/material';
+import { ListItem, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import React from 'react';
 import useHover from '../../../hooks/useHover';
+import type { BannerDesign } from '../../../models/bannerDesign';
 
 const useStyles = makeStyles(({ palette }: Theme) => ({
   listItem: {

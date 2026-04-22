@@ -1,4 +1,4 @@
-import { Variant } from './shared';
+import type { Variant } from './shared';
 
 export interface ControlProportionSettings {
   proportion: number;

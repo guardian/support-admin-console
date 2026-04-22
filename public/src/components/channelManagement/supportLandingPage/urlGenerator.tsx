@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { SupportLandingPageVariant } from '../../../models/supportLandingPage';
-import URLGeneratorCopyButton from '../../shared/urlGeneratorCopyButton';
-import { getStage } from '../../../utils/stage';
-import { Checkbox, FormControlLabel, TextField, Theme, Typography, Box } from '@mui/material';
+import type { Theme } from '@mui/material';
+import { Box, Checkbox, FormControlLabel, TextField, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import React, { useEffect, useState } from 'react';
+import type { SupportLandingPageVariant } from '../../../models/supportLandingPage';
+import { getStage } from '../../../utils/stage';
+import URLGeneratorCopyButton from '../../shared/urlGeneratorCopyButton';
 
 interface URLGeneratorProps {
   variant: SupportLandingPageVariant;

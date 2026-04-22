@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import { BannerUi } from '../../../models/banner';
-import { BannerDesign } from '../../../models/bannerDesign';
+import type { SelectChangeEvent } from '@mui/material';
+import { MenuItem, Select } from '@mui/material';
+import React from 'react';
+import { useEffect, useState } from 'react';
+import type { BannerUi } from '../../../models/banner';
+import type { BannerDesign } from '../../../models/bannerDesign';
 
 interface BannerDesignSelectorProps {
   designName: string;

@@ -1,7 +1,7 @@
-import React from 'react';
-import { GutterContent, GutterVariant } from '../../../models/gutter';
-import { buildStorybookUrl } from '../helpers/dcrStorybook';
 import { makeStyles } from '@mui/styles';
+import React from 'react';
+import type { GutterContent, GutterVariant } from '../../../models/gutter';
+import { buildStorybookUrl } from '../helpers/dcrStorybook';
 
 interface GutterProps {
   variant: GutterContent;

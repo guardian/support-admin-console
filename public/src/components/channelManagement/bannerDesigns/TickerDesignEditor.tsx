@@ -1,8 +1,8 @@
-import { TickerDesign } from '../../../models/bannerDesign';
-import React from 'react';
-import { ColourInput } from './ColourInput';
-import { Theme } from '@mui/material/styles';
+import type { Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
+import React from 'react';
+import type { TickerDesign } from '../../../models/bannerDesign';
+import { ColourInput } from './ColourInput';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {

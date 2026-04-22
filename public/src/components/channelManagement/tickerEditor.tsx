@@ -1,17 +1,12 @@
-import React, { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import {
-  Checkbox,
-  FormControl,
-  FormLabel,
-  Radio,
-  RadioGroup,
-  TextField,
-  Theme,
-} from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import type { Theme } from '@mui/material';
+import { Checkbox, FormControl, FormLabel, Radio, RadioGroup, TextField } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import { TickerName, TickerSettings } from './helpers/shared';
+import { makeStyles } from '@mui/styles';
+import React from 'react';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import type { TickerSettings } from './helpers/shared';
+import { TickerName } from './helpers/shared';
 import { EMPTY_ERROR_HELPER_TEXT } from './helpers/validation';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({

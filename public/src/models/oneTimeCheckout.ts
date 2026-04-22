@@ -1,11 +1,11 @@
-import {
+import type {
   Methodology,
   Status,
   Test,
-  Variant,
   TickerSettings,
+  Variant,
 } from '../components/channelManagement/helpers/shared';
-import { AmountValuesObject } from '../utils/models';
+import type { AmountValuesObject } from '../utils/models';
 
 export interface OneTimeCheckoutVariant extends Variant {
   heading: string;

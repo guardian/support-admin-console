@@ -1,9 +1,11 @@
-import React, { useEffect, useRef } from 'react';
-import { Button, IconButton, TextField, Typography, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { ExclusionRule } from '../../models/exclusions';
+import type { Theme } from '@mui/material';
+import { Button, IconButton, TextField, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { useEffect, useRef } from 'react';
+import React from 'react';
+import type { ExclusionRule } from '../../models/exclusions';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   ruleHeader: {

@@ -1,17 +1,13 @@
-import {
-  FormControl,
-  FormHelperText,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-} from '@mui/material';
-import { Theme } from '@mui/material/styles';
+import type { SelectChangeEvent } from '@mui/material';
+import { FormControl, FormHelperText, InputLabel, MenuItem, Select } from '@mui/material';
+import type { Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
-import React, { useEffect, useMemo, useState } from 'react';
+import React from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { HELP_GUIDE_URL } from '../../../main';
 import PalettePreview from './PalettePreview';
-import { colourThemes, ThemeColours, ThemeDefinition, ThemeStyle } from './utils/colourThemes';
+import type { ThemeColours, ThemeDefinition, ThemeStyle } from './utils/colourThemes';
+import { colourThemes } from './utils/colourThemes';
 
 const useStyles = makeStyles(({ breakpoints, spacing }: Theme) => ({
   container: {
@@ -101,7 +97,7 @@ const PaletteSelector: React.FC<Props> = ({
     });
   };
 
-  const onStyleChange = (e: SelectChangeEvent<string>) => {
+  const onStyleChange = (e: SelectChangeEvent) => {
     const newStyleId = e.target.value;
     const newStyle = getStyle(newStyleId);
 
@@ -116,7 +112,7 @@ const PaletteSelector: React.FC<Props> = ({
     setSelectedPalette(newStyle, newTheme);
   };
 
-  const onThemeChange = (e: SelectChangeEvent<string>) => {
+  const onThemeChange = (e: SelectChangeEvent) => {
     const newThemeId = e.target.value;
     const newTheme = getTheme(style, newThemeId);
     setTheme(newTheme);

@@ -1,8 +1,8 @@
-import React from 'react';
 import { List, ListItem, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { red } from '@mui/material/colors';
-import { AmountsTests, AmountsTest } from '../../utils/models';
+import { makeStyles } from '@mui/styles';
+import React from 'react';
+import type { AmountsTest, AmountsTests } from '../../utils/models';
 import { CreateTestButton } from './CreateTestButton';
 
 const useStyles = makeStyles(({ palette }) => ({

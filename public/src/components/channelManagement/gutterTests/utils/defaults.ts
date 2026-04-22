@@ -1,6 +1,7 @@
-import { GutterTest, GutterVariant } from '../../../../models/gutter';
+import type { GutterTest, GutterVariant } from '../../../../models/gutter';
 import { getStage } from '../../../../utils/stage';
-import { Cta, RegionTargeting, UserCohort } from '../../helpers/shared';
+import type { Cta, RegionTargeting } from '../../helpers/shared';
+import { UserCohort } from '../../helpers/shared';
 
 export const DEFAULT_PRIMARY_CTA: Cta = {
   text: 'Support us',

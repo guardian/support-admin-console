@@ -1,13 +1,14 @@
-import React from 'react';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import { Button, Radio, RadioGroup, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-import { ChoiceCard, ChoiceCardsSettings } from '../../../models/choiceCards';
-import { ChoiceCardEditor } from './ChoiceCardEditor';
-import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
-import { useFieldArray, useForm, useWatch } from 'react-hook-form';
+import CloseIcon from '@mui/icons-material/Close';
+import type { Theme } from '@mui/material';
+import { Button, Radio, RadioGroup } from '@mui/material';
 import Alert from '@mui/material/Alert';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import { makeStyles } from '@mui/styles';
+import React from 'react';
+import { useFieldArray, useForm, useWatch } from 'react-hook-form';
+import type { ChoiceCard, ChoiceCardsSettings } from '../../../models/choiceCards';
+import { ChoiceCardEditor } from './ChoiceCardEditor';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {

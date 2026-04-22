@@ -1,7 +1,8 @@
-import React from 'react';
-import { Theme, Accordion, AccordionDetails, AccordionActions } from '@mui/material';
+import type { Theme } from '@mui/material';
+import { Accordion, AccordionActions, AccordionDetails } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Variant } from '../../channelManagement/helpers/shared';
+import React from 'react';
+import type { Variant } from '../../channelManagement/helpers/shared';
 import CloneVariantButton from './cloneVariantButton';
 import DeleteVariantButton from './deleteVariantButton';
 

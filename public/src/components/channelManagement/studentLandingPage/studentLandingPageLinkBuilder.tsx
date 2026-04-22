@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { Region } from '../../../utils/models';
-import { Institution } from '../../../models/studentLandingPage';
+import type { Theme } from '@mui/material';
+import { FormHelperText, Link } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import React from 'react';
+import { useEffect, useState } from 'react';
+import type { Institution } from '../../../models/studentLandingPage';
+import type { Region } from '../../../utils/models';
 import { getStage } from '../../../utils/stage';
 import URLGeneratorCopyButton from '../../shared/urlGeneratorCopyButton';
-import { makeStyles } from '@mui/styles';
-import { FormHelperText, Link, Theme } from '@mui/material';
 
 interface StudentLandingPageLinkBuilderProps {
   countryGroupId: Region;

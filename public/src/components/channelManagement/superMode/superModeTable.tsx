@@ -1,6 +1,7 @@
-import { SuperModeRow } from './useSuperModeRows';
+import type { GridColDef } from '@mui/x-data-grid';
+import { DataGrid } from '@mui/x-data-grid';
 import React from 'react';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import type { SuperModeRow } from './useSuperModeRows';
 
 interface SuperModeTableProps {
   rows: SuperModeRow[];

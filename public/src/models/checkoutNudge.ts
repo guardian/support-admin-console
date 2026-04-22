@@ -1,4 +1,9 @@
-import { Methodology, Status, Test, Variant } from '../components/channelManagement/helpers/shared';
+import type {
+  Methodology,
+  Status,
+  Test,
+  Variant,
+} from '../components/channelManagement/helpers/shared';
 
 export type ProductType =
   | 'OneTimeContribution'

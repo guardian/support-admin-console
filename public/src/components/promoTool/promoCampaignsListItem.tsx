@@ -1,9 +1,9 @@
-import React from 'react';
 import { ListItem, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { grey } from '@mui/material/colors';
-import { PromoCampaign } from './utils/promoModels';
+import { makeStyles } from '@mui/styles';
+import React from 'react';
 import useHover from '../../hooks/useHover';
+import type { PromoCampaign } from './utils/promoModels';
 
 const useStyles = makeStyles(() => ({
   listItem: {

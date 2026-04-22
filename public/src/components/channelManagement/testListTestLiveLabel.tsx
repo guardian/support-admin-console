@@ -1,7 +1,8 @@
-import React from 'react';
-import { Typography, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import type { Theme } from '@mui/material';
+import { Typography } from '@mui/material';
 import { red } from '@mui/material/colors';
+import { makeStyles } from '@mui/styles';
+import React from 'react';
 
 const useStyles = makeStyles(({ palette }: Theme) => ({
   container: {
