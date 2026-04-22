@@ -2,7 +2,7 @@ import type { SelectChangeEvent } from '@mui/material';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React from 'react';
-import type { RegionsAndAll } from '../../utils/models';
+import type { Region, RegionsAndAll } from '../../utils/models';
 import { regionIds, regions } from '../../utils/models';
 
 const useStyles = makeStyles(() => ({
@@ -33,7 +33,9 @@ const TestListSidebarFilterSelector: React.FC<TestListSidebarFilterSelectorProps
         value={regionFilter}
         label="Filter by Region"
         inputProps={{ id: 'filter-region-select' }}
-        onChange={(event: SelectChangeEvent): void => handleRegionFilterChange(event.target.value)}
+        onChange={(event: SelectChangeEvent): void =>
+          handleRegionFilterChange(event.target.value as RegionsAndAll)
+        }
       >
         <MenuItem key="ALL" value="ALL">
           Show all tests
@@ -41,7 +43,7 @@ const TestListSidebarFilterSelector: React.FC<TestListSidebarFilterSelectorProps
 
         {regionIds.map((region, index) => (
           <MenuItem key={index} value={region}>
-            {regions[region]}
+            {regions[region as Region]}
           </MenuItem>
         ))}
       </Select>

@@ -28,17 +28,20 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
   platform,
 }: TestEditorTargetRegionsSelectorProps) => {
   const classes = useStyles();
-  const allRegions = (supportedRegions as Region[]) || regionIds;
+  const allRegions = supportedRegions ?? regionIds;
 
   const onAllRegionsChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const updatedRegions = event.target.checked ? allRegions : [];
-    const updatedAllRegionTargeting = { ...regionTargeting, targetedCountryGroups: updatedRegions };
+    const updatedAllRegionTargeting = {
+      ...regionTargeting,
+      targetedCountryGroups: updatedRegions as Region[],
+    };
     onRegionTargetingUpdate(updatedAllRegionTargeting);
   };
 
   const onSingleRegionChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const checked = event.target.checked;
-    const changedRegion = event.target.value;
+    const changedRegion = event.target.value as Region;
 
     if (checked) {
       onRegionTargetingUpdate({
@@ -68,7 +71,7 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
       <FormControlLabel
         control={
           <Checkbox
-            checked={regionTargeting.targetedCountryGroups?.length === allRegions.length}
+            checked={regionTargeting.targetedCountryGroups.length === allRegions.length}
             value={'allRegions'}
             onChange={onAllRegionsChange}
             disabled={isDisabled}
@@ -82,13 +85,13 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
             key={region}
             control={
               <Checkbox
-                checked={regionTargeting.targetedCountryGroups.includes(region)}
+                checked={regionTargeting.targetedCountryGroups.includes(region as Region)}
                 onChange={onSingleRegionChange}
                 value={region}
                 disabled={isDisabled}
               />
             }
-            label={checkLabelByChannel(platform, region)}
+            label={checkLabelByChannel(platform, region as Region)}
           />
         ))}
       </FormGroup>

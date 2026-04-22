@@ -180,6 +180,11 @@ export const StudentLandingPageTestEditor: React.FC<
             labels={{
               AUDCountries: 'Australia',
               NZDCountries: 'New Zealand',
+              Canada: 'Canada',
+              EURCountries: 'Europe',
+              GBPCountries: 'UK',
+              UnitedStates: 'United States',
+              International: 'International',
             }}
           />
         </div>
