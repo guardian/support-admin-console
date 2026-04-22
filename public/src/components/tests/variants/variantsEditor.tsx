@@ -1,7 +1,7 @@
 import type { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React from 'react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import type { Variant } from '../../channelManagement/helpers/shared';
 import NewVariantButton from './newVariantButton';
 import VariantEditorsAccordion from './variantEditorsAccordion';
@@ -38,13 +38,13 @@ function VariantsEditor<V extends Variant>({
   const classes = useStyles();
   const [selectedVariantKey, setSelectedVariantKey] = useState<string | null>(null);
 
-  // unselect a variant if the test changes
-  useEffect(() => {
-    setSelectedVariantKey(null);
-  }, [testName]);
+  // Reset selected variant if it doesn't belong to current test
+  const currentSelectedVariantKey = selectedVariantKey?.startsWith(`${testName}-`)
+    ? selectedVariantKey
+    : null;
 
   const onVariantSelected = (variantKey: string): void =>
-    setSelectedVariantKey(variantKey === selectedVariantKey ? null : variantKey);
+    setSelectedVariantKey(variantKey === currentSelectedVariantKey ? null : variantKey);
 
   const variantKeys = variants.map((variant) => `${testName}-${variant.name}`);
 
@@ -57,7 +57,7 @@ function VariantsEditor<V extends Variant>({
         variantKeys={variantKeys}
         existingNames={variantNames}
         editMode={editMode}
-        selectedVariantKey={selectedVariantKey}
+        selectedVariantKey={currentSelectedVariantKey}
         onVariantSelected={onVariantSelected}
         renderVariantEditor={renderVariantEditor}
         renderVariantSummary={renderVariantSummary}
