@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import lzstring from 'lz-string';
+// eslint-disable-next-line -- React import required for JSX transformation with legacy JSX config
 import React, { useState } from 'react';
 import QRCode from 'react-qr-code';
 import { useSearchParams } from 'react-router-dom';
@@ -104,7 +105,7 @@ export default function QrCodePage(): JSX.Element {
 
       const downloadLink = document.createElement('a');
       downloadLink.href = svgUrl;
-      downloadLink.download = `${fileName ?? 'qrCode'}.svg`;
+      downloadLink.download = `${fileName || 'qrCode'}.svg`;
       downloadLink.rel = 'noopener';
       downloadLink.click();
 
