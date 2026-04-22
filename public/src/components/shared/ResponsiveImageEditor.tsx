@@ -45,12 +45,14 @@ export const ResponsiveImageEditor: React.FC<ResponsiveImageEditorProps> = ({
   });
 
   useEffect(() => {
-    trigger();
+    void trigger();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- Only run once on mount
   }, []);
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- onValidationChange is stable from parent
   }, [errors.desktopUrl, errors.tabletUrl, errors.mobileUrl, errors.altText]);
 
   useEffect(() => {
@@ -63,9 +65,11 @@ export const ResponsiveImageEditor: React.FC<ResponsiveImageEditorProps> = ({
         {...register('mobileUrl', {
           required: `${EMPTY_ERROR_HELPER_TEXT} - ${imageGuidance?.mobileUrlGuidance}`,
         })}
-        error={errors?.mobileUrl !== undefined}
-        helperText={errors?.mobileUrl?.message ?? imageGuidance?.mobileUrlGuidance}
-        onBlur={handleSubmit(onChange)}
+        error={errors.mobileUrl !== undefined}
+        helperText={errors.mobileUrl?.message ?? imageGuidance?.mobileUrlGuidance}
+        onBlur={() => {
+          void handleSubmit(onChange)();
+        }}
         label="Mobile Image URL"
         margin="normal"
         variant="outlined"
@@ -76,9 +80,11 @@ export const ResponsiveImageEditor: React.FC<ResponsiveImageEditorProps> = ({
         {...register('tabletUrl', {
           required: `${EMPTY_ERROR_HELPER_TEXT} - ${imageGuidance?.tabletUrlGuidance}`,
         })}
-        error={errors?.tabletUrl !== undefined}
-        helperText={errors?.tabletUrl?.message ?? imageGuidance?.tabletUrlGuidance}
-        onBlur={handleSubmit(onChange)}
+        error={errors.tabletUrl !== undefined}
+        helperText={errors.tabletUrl?.message ?? imageGuidance?.tabletUrlGuidance}
+        onBlur={() => {
+          void handleSubmit(onChange)();
+        }}
         label="Tablet Image URL"
         margin="normal"
         variant="outlined"
@@ -89,9 +95,11 @@ export const ResponsiveImageEditor: React.FC<ResponsiveImageEditorProps> = ({
         {...register('desktopUrl', {
           required: `${EMPTY_ERROR_HELPER_TEXT} - ${imageGuidance?.desktopUrlGuidance}`,
         })}
-        error={errors?.desktopUrl !== undefined}
-        helperText={errors?.desktopUrl?.message ?? imageGuidance?.desktopUrlGuidance}
-        onBlur={handleSubmit(onChange)}
+        error={errors.desktopUrl !== undefined}
+        helperText={errors.desktopUrl?.message ?? imageGuidance?.desktopUrlGuidance}
+        onBlur={() => {
+          void handleSubmit(onChange)();
+        }}
         label="Desktop URL"
         margin="normal"
         variant="outlined"
@@ -102,9 +110,11 @@ export const ResponsiveImageEditor: React.FC<ResponsiveImageEditorProps> = ({
         {...register('altText', {
           required: 'Please add some descriptive text for the image',
         })}
-        error={errors?.altText !== undefined}
-        helperText={errors?.altText?.message ?? 'A descriptive message for the user'}
-        onBlur={handleSubmit(onChange)}
+        error={errors.altText !== undefined}
+        helperText={errors.altText?.message ?? 'A descriptive message for the user'}
+        onBlur={() => {
+          void handleSubmit(onChange)();
+        }}
         label="Image Description (alt text)"
         margin="normal"
         variant="outlined"
