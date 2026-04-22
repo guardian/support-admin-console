@@ -9,17 +9,20 @@ import { Typography } from '@mui/material';
 import PromoCodesEditor from '../../shared/PromoCodesEditor';
 
 import { AcademicInstitutionDetailEditor } from './academicInstitutionDetails';
-import { ImageGuidance, ResponsiveImageEditor } from '../../shared/ResponsiveImageEditor';
-import { ResponsiveImage } from '../../../models/shared';
+
+// hidden until we can get the hero image sorted out in support-frontend as part of a future phase
+// import { ImageGuidance, ResponsiveImageEditor } from '../../shared/ResponsiveImageEditor';
+// import { ResponsiveImage } from '../../../models/shared';
 
 const HEADLINE_MAX_LENGTH = 65; // TODO: confirm the max length of this field
 const SUBHEADING_MAX_LENGTH = 210; // TODO: confirm the max length of this field
 
-const imageGuidance: ImageGuidance = {
-  mobileUrlGuidance: '1:1 min width of ? max width of ?',
-  tabletUrlGuidance: '1:1 min width of ? max width of ?',
-  desktopUrlGuidance: '1:1 min width of ? max width of ?',
-};
+// hidden until we can get the hero image sorted out in support-frontend as part of a future phase
+// const imageGuidance: ImageGuidance = {
+//   mobileUrlGuidance: '1:1 min width of ? max width of ?',
+//   tabletUrlGuidance: '1:1 min width of ? max width of ?',
+//   desktopUrlGuidance: '1:1 min width of ? max width of ?',
+// };
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {
@@ -87,7 +90,7 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
   const [sectionValidity, setSectionValidity] = useState<VariantSectionValidity>({
     copy: false,
     institution: false,
-    image: false,
+    image: true, // change this back to false when we add the hero image bits back in.
   });
 
   const updatePromoCodes = (promoCodes: string[]): void => {
@@ -101,9 +104,10 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
     onVariantChange((current) => ({ ...current, institution }));
   };
 
-  const updateImage = (image: ResponsiveImage): void => {
-    onVariantChange((current) => ({ ...current, image }));
-  };
+  // hidden until we can get the hero image sorted out in support-frontend.
+  // const updateImage = (image: ResponsiveImage): void => {
+  //   onVariantChange((current) => ({ ...current, image }));
+  // };
 
   const {
     handleSubmit,
@@ -166,7 +170,7 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
       );
     }
     if (messages.length > 0) {
-      return messages.toString(); // TODO enhance
+      return messages.toString();
     }
     return true;
   };
@@ -251,6 +255,7 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
             }}
           />
         </div>
+        {/* hidden until we can get the hero image sorted out in support-frontend as part of a future phase
         <div className={classes.container}>
           <Typography variant={'h4'} className={classes.sectionHeader}>
             Image
@@ -268,7 +273,7 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
             onChange={updateImage}
             imageGuidance={imageGuidance}
           />
-        </div>
+        </div> */}
       </div>
       <div className={classes.container}>
         <Typography variant={'h4'} className={classes.sectionHeader}>

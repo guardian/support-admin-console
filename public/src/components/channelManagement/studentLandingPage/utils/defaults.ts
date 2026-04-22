@@ -32,10 +32,13 @@ export const getDefaultInstitution = () => {
 };
 
 const DEFAULT_IMAGE: ResponsiveImage = {
-  mobileUrl: '',
-  tabletUrl: '',
-  desktopUrl: '',
-  altText: '',
+  mobileUrl:
+    'https://i.guim.co.uk/img/media/811f456e9786d119d766e55f2df821c056d415b0/0_0_2588_1276/master/2588.jpg',
+  tabletUrl:
+    'https://i.guim.co.uk/img/media/14e65d1ade49300434e31603dd5b43e25e98e6c2/0_0_1396_1632/master/1396.jpg',
+  desktopUrl:
+    'https://i.guim.co.uk/img/media/f58d5cf9b591f4ddb4ad7a4b9c7bd12ae80dd333/0_0_2295_1632/master/2295.jpg',
+  altText: 'The Guardian and Feast Apps',
 };
 
 export const getDefaultVariant = (): StudentLandingPageVariant => {
