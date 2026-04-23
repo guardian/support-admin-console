@@ -86,9 +86,7 @@ export const AcademicInstitutionDetailEditor: React.FC<AcademicInstituteDetailEd
   }, [errors.logoUrl, errors.acronym, errors.name, errors.identifier]);
 
   const update = (institution: Institution): void => {
-    console.log('before replace string: ' + institution.identifier);
-    institution.identifier = institution.identifier.replace(' ', '-');
-    console.log('after replace string: ' + institution.identifier);
+    institution.identifier = institution.identifier.trim().replace(' ', '-');
     updateInstitutionDetails(institution);
   };
 
