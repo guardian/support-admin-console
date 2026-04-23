@@ -25,6 +25,7 @@ export const getDefaultTest = (): StudentLandingPageTest => {
 
 export const getDefaultInstitution = () => {
   return {
+    identifier: '',
     acronym: '',
     name: '',
     logoUrl: '',

@@ -78,9 +78,11 @@ export const StudentLandingPageLinkBuilder: React.FC<StudentLandingPageLinkBuild
     return countryGroupId.toString().substring(0, 2).toLowerCase();
   };
 
+  const identifierOrAcronym = institution.identifier ?? institution.acronym; // TODO: once identifier in all tests, switch to identifier only.
+
   const buildFullUrl = () => {
     setUrl(
-      `${buildBaseUrl()}/${getCountryIdFromRegion()}/student/${institution.acronym}?promoCode=${promoCode}`,
+      `${buildBaseUrl()}/${getCountryIdFromRegion()}/student/${identifierOrAcronym}?promoCode=${promoCode}`,
     );
   };
 
@@ -92,6 +94,9 @@ export const StudentLandingPageLinkBuilder: React.FC<StudentLandingPageLinkBuild
     const errorMessageBuilder = [baseErrorMessage];
     if (!countryGroupId) {
       errorMessageBuilder.push('The Country is required. ');
+    }
+    if (!institution.identifier) {
+      errorMessageBuilder.push("The Institution's Unique Identifier is required. ");
     }
     if (!institution.acronym) {
       errorMessageBuilder.push("The Institution's Acronym is required. ");

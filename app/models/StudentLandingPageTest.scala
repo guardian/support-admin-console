@@ -7,6 +7,7 @@ import io.circe.generic.extras.Configuration
 import models.Methodology.defaultMethodologies
 
 case class Institution(
+    identifier: Option[String], // TODO: once all tests updated in all stages, remove option
     acronym: String,
     name: String,
     logoUrl: String
