@@ -1,4 +1,3 @@
-import { identity } from 'lodash';
 import { ResponsiveImage } from '../../../../models/shared';
 import {
   StudentLandingPageTest,

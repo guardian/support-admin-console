@@ -11,7 +11,7 @@ export interface StudentLandingPageTest extends Test {
 }
 
 export interface Institution {
-  identifier: string
+  identifier: string;
   acronym: string;
   name: string;
   logoUrl: string;
