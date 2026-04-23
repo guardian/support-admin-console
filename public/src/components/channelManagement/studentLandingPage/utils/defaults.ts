@@ -1,3 +1,4 @@
+import { identity } from 'lodash';
 import { ResponsiveImage } from '../../../../models/shared';
 import {
   StudentLandingPageTest,
@@ -25,6 +26,7 @@ export const getDefaultTest = (): StudentLandingPageTest => {
 
 export const getDefaultInstitution = () => {
   return {
+    identifier: '',
     acronym: '',
     name: '',
     logoUrl: '',
