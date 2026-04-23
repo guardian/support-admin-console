@@ -145,6 +145,10 @@ export const StudentLandingPageTestEditor: React.FC<
                 Please check the preview link is working as expected before adding to any
                 promotional material.
               </p>
+              <p>
+                NOTE: Once promotional material has been sent, do not change the Unique Institution
+                Identifier or the location, otherwise it will break the link for students.
+              </p>
             </>
           )}
           {userHasTestLocked && (
