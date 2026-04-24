@@ -130,10 +130,9 @@ object S3 extends S3Client with StrictLogging {
           versionMismatch(objectSettings, data.version, latestVersion)
         }
       })
-      .catchSome {
-        case S3GetObjectError(_: NoSuchKeyException) =>
-          // Key doesn't exist yet - allow creation only for new objects.
-          createIfNewObject(objectSettings, data)
+      .catchSome { case S3GetObjectError(_: NoSuchKeyException) =>
+        // Key doesn't exist yet - allow creation only for new objects.
+        createIfNewObject(objectSettings, data)
       }
   }
 
