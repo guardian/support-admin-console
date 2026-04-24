@@ -12,7 +12,7 @@ const dcrStorybookUrl = 'https://main--63e251470cfbe61776b0ef19.chromatic.com';
 const compressProps = (props: any): string =>
   lzstring.compressToEncodedURIComponent(JSON.stringify(props));
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const buildStorybookUrl = (storyName: string, props: any): string => {
   const compressedProps = compressProps(props);
   return `${dcrStorybookUrl}/iframe.html?id=${storyName}&viewMode=story&shortcuts=false&singleStory=true&args=json:${compressedProps}`;

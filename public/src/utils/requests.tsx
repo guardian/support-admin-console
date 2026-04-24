@@ -141,7 +141,7 @@ export function fetchCampaignTests(campaign: string): Promise<Test[]> {
 
 export function saveSupportFrontendSettings(
   settingsType: SupportFrontendSettingsType,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any,
 ): Promise<Response> {
   return saveSettings(`/support-frontend/${settingsType}/update`, data);
@@ -210,7 +210,7 @@ export function getBannerDesignUsage(
 
 export function saveFrontendSettings(
   settingsType: FrontendSettingsType,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any,
 ): Promise<Response> {
   return saveSettings(`/frontend/${settingsType}/update`, data);
