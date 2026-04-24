@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import CloseIcon from '@mui/icons-material/Close';
 import {
   Button,
   Dialog,
@@ -14,10 +14,10 @@ import {
   TextField,
   Theme,
 } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
 import { makeStyles } from '@mui/styles';
-import { PermissionLevel, UserPermissions } from '../channelManagement/helpers/shared';
+import React, { useState } from 'react'; // eslint-disable-line @typescript-eslint/no-unused-vars -- Required for JSX compilation
 import { saveUserPermissions } from '../../utils/requests';
+import { PermissionLevel, UserPermissions } from '../channelManagement/helpers/shared';
 import { PermissionName, permissions } from './permissions';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
@@ -81,7 +81,7 @@ const AddUserDialog = ({ open, onClose, onUserAdded }: AddUserDialogProps) => {
 
     try {
       const response = await saveUserPermissions(newUser);
-      const data = await response.json();
+      const data = (await response.json()) as UserPermissions;
       onUserAdded(data);
       handleClose();
     } catch (error) {
@@ -120,7 +120,7 @@ const AddUserDialog = ({ open, onClose, onUserAdded }: AddUserDialogProps) => {
           >
             <FormLabel component="legend">{perm.displayName}</FormLabel>
             <RadioGroup
-              value={selectedPermissions[perm.name] || 'None'}
+              value={selectedPermissions[perm.name] ?? 'None'}
               onChange={(e) => handlePermissionChange(perm.name, e.target.value as PermissionLevel)}
             >
               <FormControlLabel value="None" control={<Radio />} label="No Access" />
@@ -132,7 +132,14 @@ const AddUserDialog = ({ open, onClose, onUserAdded }: AddUserDialogProps) => {
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleSubmit} variant="contained" color="primary" disabled={!email.trim()}>
+        <Button
+          onClick={() => {
+            void handleSubmit();
+          }}
+          variant="contained"
+          color="primary"
+          disabled={!email.trim()}
+        >
           Add User
         </Button>
       </DialogActions>
