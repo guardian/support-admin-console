@@ -1,38 +1,4 @@
 {
-  "public/src/components/amounts/AmountsTestEditor.tsx": {
-    "@typescript-eslint/no-unnecessary-condition": {
-      "count": 1
-    },
-    "@typescript-eslint/prefer-nullish-coalescing": {
-      "count": 4
-    },
-    "@typescript-eslint/prefer-optional-chain": {
-      "count": 1
-    },
-    "import/order": {
-      "count": 8
-    },
-    "react-hooks/exhaustive-deps": {
-      "count": 2
-    },
-    "react-hooks/immutability": {
-      "count": 3
-    },
-    "sort-imports": {
-      "count": 3
-    }
-  },
-  "public/src/components/amounts/AmountsTestsList.tsx": {
-    "@typescript-eslint/prefer-nullish-coalescing": {
-      "count": 5
-    },
-    "import/order": {
-      "count": 2
-    },
-    "sort-imports": {
-      "count": 1
-    }
-  },
   "public/src/components/amounts/AmountsVariantEditor.tsx": {
     "@typescript-eslint/no-unnecessary-condition": {
       "count": 4
@@ -53,22 +19,6 @@
   "public/src/components/amounts/AmountsVariantEditorRow.tsx": {
     "import/order": {
       "count": 3
-    }
-  },
-  "public/src/components/amounts/AmountsVariantEditorRowAmount.tsx": {
-    "import/order": {
-      "count": 2
-    }
-  },
-  "public/src/components/amounts/AmountsVariantEditorRowInput.tsx": {
-    "@typescript-eslint/no-unnecessary-condition": {
-      "count": 3
-    },
-    "@typescript-eslint/prefer-optional-chain": {
-      "count": 2
-    },
-    "import/order": {
-      "count": 1
     }
   },
   "public/src/components/amounts/CreateTestButton.tsx": {
