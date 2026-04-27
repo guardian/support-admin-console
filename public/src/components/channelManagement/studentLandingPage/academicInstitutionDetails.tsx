@@ -36,7 +36,6 @@ const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
 }));
 
 interface FormData {
-  identifier: string;
   acronym: string;
   name: string;
   logoUrl: string;
@@ -58,7 +57,6 @@ export const AcademicInstitutionDetailEditor: React.FC<AcademicInstituteDetailEd
   const classes = useStyles();
 
   const defaultValues: FormData = {
-    identifier: variant.institution.identifier,
     acronym: variant.institution.acronym,
     name: variant.institution.name,
     logoUrl: variant.institution.logoUrl,
@@ -83,44 +81,22 @@ export const AcademicInstitutionDetailEditor: React.FC<AcademicInstituteDetailEd
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
-  }, [errors.logoUrl, errors.acronym, errors.name, errors.identifier]);
+  }, [errors.logoUrl, errors.acronym, errors.name]);
 
   const update = (institution: Institution): void => {
-    institution.identifier = institution.identifier.trim().replace(' ', '-');
     updateInstitutionDetails(institution);
   };
 
   const ACRONYM_MAX_LENGTH = 4;
-  const IDENTIFIER_MAX_LENGTH = 50;
   const INSTITUTION_MAX_LENGTH = 150;
   const LOGO_URL_MAX_LENGTH = 150;
-  const IDENTIFIER_HELPER_TEXT =
-    'This will be used to identify the university when the student clicks on the link.  It must be unique to the region (au/nz ,etc) and be recognisable to students.  For example: UOL_Leicester';
-
+ 
   return (
     <div className={classes.container}>
       <Typography variant={'h4'} className={classes.sectionHeader}>
         Institution Details
       </Typography>
       <div className={classes.container}>
-        <TextField
-          {...register('identifier', {
-            required: IDENTIFIER_HELPER_TEXT,
-            maxLength: IDENTIFIER_MAX_LENGTH,
-            validate: (identifier) => {
-              return noHtmlValidator(identifier);
-            },
-          })}
-          error={errors.identifier !== undefined}
-          helperText={errors.identifier ? errors.identifier.message || errors.identifier.type : ''}
-          onBlur={handleSubmit(update)}
-          label="Unique Institution Identifier (e.g., UoL-Leicester)"
-          margin="normal"
-          variant="outlined"
-          disabled={!editMode}
-          fullWidth
-        />
-
         <TextField
           {...register('name', {
             required: EMPTY_ERROR_HELPER_TEXT,
