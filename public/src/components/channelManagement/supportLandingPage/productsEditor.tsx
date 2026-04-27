@@ -1,20 +1,20 @@
-import React, { useEffect } from 'react';
-import { Products, LandingPageProductDescription } from '../../../models/supportLandingPage';
-import {
-  TextField,
-  Typography,
-  Grid,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Theme,
-  Button,
-} from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { makeStyles } from '@mui/styles';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
-import { useFieldArray, useForm, Controller } from 'react-hook-form';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Button,
+  Grid,
+  TextField,
+  Theme,
+  Typography,
+} from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import React, { useEffect } from 'react';
+import { Controller, useFieldArray, useForm } from 'react-hook-form';
+import { LandingPageProductDescription, Products } from '../../../models/supportLandingPage';
 import {
   copyLengthValidator,
   EMPTY_ERROR_HELPER_TEXT,
@@ -22,7 +22,7 @@ import {
 } from '../helpers/validation';
 import { RichTextEditorSingleLine } from '../richTextEditor/richTextEditor';
 
-const productKeys: (keyof Products)[] = ['Contribution', 'SupporterPlus', 'DigitalSubscription'];
+const productKeys: Array<keyof Products> = ['Contribution', 'SupporterPlus', 'DigitalSubscription'];
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   heading: {

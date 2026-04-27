@@ -1,3 +1,4 @@
+import CloseIcon from '@mui/icons-material/Close';
 import {
   Button,
   Dialog,
@@ -9,9 +10,6 @@ import {
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
-import CloseIcon from '@mui/icons-material/Close';
-import { ProductSelector } from './productSelector';
-import { PromoProduct } from './utils/promoModels';
 import { useForm } from 'react-hook-form';
 import {
   createDuplicateValidator,
@@ -19,6 +17,8 @@ import {
   INVALID_CHARACTERS_ERROR_HELPER_TEXT,
   VALID_CHARACTERS_REGEX,
 } from '../channelManagement/helpers/validation';
+import { ProductSelector } from './productSelector';
+import { PromoProduct } from './utils/promoModels';
 
 const useStyles = makeStyles(() => ({
   dialogHeader: {
@@ -69,7 +69,7 @@ const CreatePromoCampaignDialog: React.FC<CreatePromoCampaignDialogProps> = ({
   } = useForm<FormData>();
 
   const onSubmit = ({ name }: FormData): void => {
-    createPromoCampaign(name, selectedProduct as PromoProduct);
+    createPromoCampaign(name, selectedProduct);
     close();
   };
 

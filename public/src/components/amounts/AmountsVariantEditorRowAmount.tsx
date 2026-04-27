@@ -1,7 +1,7 @@
-import React from 'react';
 import { Button, Menu, MenuItem } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { red } from '@mui/material/colors';
+import { makeStyles } from '@mui/styles';
+import React from 'react';
 
 const useStyles = makeStyles(() => ({
   default: {
@@ -25,6 +25,8 @@ export const AmountsVariantEditorRowAmount: React.FC<AmountsVariantEditorRowAmou
   disabled = false,
 }: AmountsVariantEditorRowAmountPrefs) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const buttonRef = React.useRef<HTMLButtonElement | null>(null);
+  const menuId = `amount-menu-${amount}`;
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>): void => {
     setAnchorEl(event.currentTarget);
@@ -32,6 +34,7 @@ export const AmountsVariantEditorRowAmount: React.FC<AmountsVariantEditorRowAmou
 
   const handleClose = (): void => {
     setAnchorEl(null);
+    buttonRef.current?.focus();
   };
 
   const onDelete = (): void => {
@@ -49,7 +52,8 @@ export const AmountsVariantEditorRowAmount: React.FC<AmountsVariantEditorRowAmou
   return (
     <div>
       <Button
-        aria-controls="simple-menu"
+        ref={buttonRef}
+        aria-controls={anchorEl ? menuId : undefined}
         aria-haspopup="true"
         onClick={handleClick}
         variant="outlined"
@@ -59,13 +63,7 @@ export const AmountsVariantEditorRowAmount: React.FC<AmountsVariantEditorRowAmou
       >
         {amount}
       </Button>
-      <Menu
-        id="simple-menu"
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-      >
+      <Menu id={menuId} anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
         <MenuItem onClick={onDefault}>Make default</MenuItem>
         <MenuItem onClick={onDelete}>Delete</MenuItem>
       </Menu>

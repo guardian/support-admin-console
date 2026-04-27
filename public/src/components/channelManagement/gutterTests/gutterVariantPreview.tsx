@@ -1,8 +1,8 @@
+import { Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React from 'react';
 import { GutterContent, GutterVariant } from '../../../models/gutter';
 import { buildStorybookUrl } from '../helpers/dcrStorybook';
-import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 
 interface GutterProps {
   variant: GutterContent;

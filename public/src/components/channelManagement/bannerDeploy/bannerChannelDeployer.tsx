@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from 'react';
-
 import { Button, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { BannerChannel } from './bannerDeployDashboard';
-import BannerChannelDeployerTable from './bannerChannelDeployerTable';
-
+import React, { useEffect, useState } from 'react';
 import {
   fetchFrontendSettings,
-  saveFrontendSettings,
   FrontendSettingsType,
+  saveFrontendSettings,
 } from '../../../utils/requests';
+import BannerChannelDeployerTable from './bannerChannelDeployerTable';
+import { BannerChannel } from './bannerDeployDashboard';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {

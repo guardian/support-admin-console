@@ -1,19 +1,19 @@
-import React from 'react';
-import { Theme, Typography, Button } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-import EditIcon from '@mui/icons-material/Edit';
-import { LockStatus, Status } from '../helpers/shared';
+import { Link } from '@mui/icons-material';
 import CloseIcon from '@mui/icons-material/Close';
-import SaveIcon from '@mui/icons-material/Save';
-import LockIcon from '@mui/icons-material/Lock';
+import EditIcon from '@mui/icons-material/Edit';
 import HistoryIcon from '@mui/icons-material/History';
-import { TestLockDetails } from './testLockDetails';
+import LockIcon from '@mui/icons-material/Lock';
+import SaveIcon from '@mui/icons-material/Save';
+import { Button, Theme, Typography } from '@mui/material';
+import { grey } from '@mui/material/colors';
+import { makeStyles } from '@mui/styles';
+import React from 'react';
+import { FrontendSettingsType } from '../../../utils/requests';
+import { LockStatus, Status } from '../helpers/shared';
+import TestLiveSwitch from '../testLiveSwitch';
 import { TestArchiveButton } from './testArchiveButton';
 import { TestCopyButton } from './testCopyButton';
-import { grey } from '@mui/material/colors';
-import { Link } from '@mui/icons-material';
-import { FrontendSettingsType } from '../../../utils/requests';
-import TestLiveSwitch from '../testLiveSwitch';
+import { TestLockDetails } from './testLockDetails';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {

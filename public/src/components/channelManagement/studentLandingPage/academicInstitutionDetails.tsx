@@ -1,10 +1,10 @@
+import { TextField, Theme } from '@mui/material';
 import Typography from '@mui/material/Typography';
+import { makeStyles } from '@mui/styles';
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Institution, StudentLandingPageVariant } from '../../../models/studentLandingPage';
 import { EMPTY_ERROR_HELPER_TEXT, noHtmlValidator } from '../helpers/validation';
-import { TextField, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {
@@ -125,7 +125,7 @@ export const AcademicInstitutionDetailEditor: React.FC<AcademicInstituteDetailEd
                 return `max length is ${ACRONYM_MAX_LENGTH}`;
               }
               const htmlCheck = noHtmlValidator(acronym);
-              if (!!htmlCheck) {
+              if (htmlCheck) {
                 return htmlCheck;
               }
               return true;

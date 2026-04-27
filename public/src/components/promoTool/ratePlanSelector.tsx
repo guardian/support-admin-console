@@ -1,22 +1,22 @@
-import React from 'react';
 import {
   Box,
-  Typography,
   Checkbox,
-  FormControlLabel,
   FormControl,
-  FormLabel,
-  Paper,
-  Grid,
+  FormControlLabel,
   FormGroup,
+  FormLabel,
+  Grid,
+  Paper,
+  Typography,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
+import React from 'react';
 import {
-  RatePlanWithProduct,
-  Pricing,
   applyDiscountToPricing,
   billingPeriodToMonths,
+  Pricing,
+  RatePlanWithProduct,
 } from './utils/productCatalog';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({

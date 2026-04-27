@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from 'react';
 import { Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import CampaignsSidebar from './CampaignsSidebar';
-import CampaignsEditor from './CampaignsEditor';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-
 import {
   fetchFrontendSettings,
   FrontendSettingsType,
   sendCreateCampaignRequest,
   sendUpdateCampaignRequest,
 } from '../../../utils/requests';
+import CampaignsEditor from './CampaignsEditor';
+import CampaignsSidebar from './CampaignsSidebar';
 
 const useStyles = makeStyles(({ spacing, typography }: Theme) => ({
   viewTextContainer: {

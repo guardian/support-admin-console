@@ -1,14 +1,14 @@
+import { EpicTest } from '../../../models/epic';
 import { FrontendSettingsType } from '../../../utils/requests';
-import { TestsForm } from '../testsForm';
-import { getDefaultTest, getDefaultVariant } from './utils/defaults';
 import {
   APPLE_NEWS_EPIC_CONFIG,
   ARTICLE_EPIC_CONFIG,
   EpicEditorConfig,
   LIVEBLOG_EPIC_CONFIG,
 } from '../helpers/shared';
+import { TestsForm } from '../testsForm';
 import { getEpicTestEditor } from './testEditor';
-import { EpicTest } from '../../../models/epic';
+import { getDefaultTest, getDefaultVariant } from './utils/defaults';
 
 const createDefaultEpicTest =
   (epicEditorConfig: EpicEditorConfig) =>

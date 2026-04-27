@@ -1,8 +1,8 @@
-import React from 'react';
-import { BanditMethodology, Methodology } from './helpers/shared';
-import { makeStyles } from '@mui/styles';
-import { BanditAnalyticsButton } from './BanditAnalyticsButton';
+import AddIcon from '@mui/icons-material/Add';
+import CloseIcon from '@mui/icons-material/Close';
+import FileCopyIcon from '@mui/icons-material/FileCopy';
 import {
+  Alert,
   Button,
   MenuItem,
   Select,
@@ -11,13 +11,13 @@ import {
   TextField,
   Theme,
   Tooltip,
-  Alert,
 } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import AddIcon from '@mui/icons-material/Add';
-import { addMethodologyToTestName } from './helpers/methodology';
-import FileCopyIcon from '@mui/icons-material/FileCopy';
 import { grey } from '@mui/material/colors';
+import { makeStyles } from '@mui/styles';
+import React from 'react';
+import { BanditAnalyticsButton } from './BanditAnalyticsButton';
+import { addMethodologyToTestName } from './helpers/methodology';
+import { BanditMethodology, Methodology } from './helpers/shared';
 import { LTV3DataButton } from './public/src/components/channelManagement/LTV3DataButton';
 
 const isBandit = (methodology: Methodology): methodology is BanditMethodology =>

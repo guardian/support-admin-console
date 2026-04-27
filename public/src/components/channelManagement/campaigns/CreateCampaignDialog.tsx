@@ -1,4 +1,4 @@
-import React from 'react';
+import CloseIcon from '@mui/icons-material/Close';
 import {
   Button,
   Dialog,
@@ -9,14 +9,14 @@ import {
   TextField,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import CloseIcon from '@mui/icons-material/Close';
+import React from 'react';
+import { useForm } from 'react-hook-form';
 import {
   createDuplicateValidator,
   EMPTY_ERROR_HELPER_TEXT,
   INVALID_CHARACTERS_ERROR_HELPER_TEXT,
   VALID_CHARACTERS_REGEX,
 } from '../helpers/validation';
-import { useForm } from 'react-hook-form';
 
 const useStyles = makeStyles(() => ({
   dialogHeader: {

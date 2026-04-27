@@ -1,10 +1,10 @@
-import React from 'react';
-import { makeStyles } from '@mui/styles';
-import { AppsSettingsType, fetchAppsSettings, saveAppsSettings } from '../utils/requests';
-import Switch from '@mui/material/Switch';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import Button from '@mui/material/Button';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import { makeStyles } from '@mui/styles';
+import React from 'react';
 import withS3Data, { InnerProps } from '../hocs/withS3Data';
+import { AppsSettingsType, fetchAppsSettings, saveAppsSettings } from '../utils/requests';
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -20,9 +20,7 @@ const useStyles = makeStyles(() => ({
 
 type SwitchName = 'enabled' | 'excludeBreakingNews' | 'requireApiKey';
 
-type AppsMeteringSwitches = {
-  [key in SwitchName]: boolean;
-};
+type AppsMeteringSwitches = Record<SwitchName, boolean>;
 
 interface AppsMeteringSwitchProps {
   name: SwitchName;

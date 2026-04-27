@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import CloseIcon from '@mui/icons-material/Close';
 import {
   Button,
   Dialog,
@@ -9,7 +9,7 @@ import {
   TextField,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import CloseIcon from '@mui/icons-material/Close';
+import React, { useState } from 'react';
 
 const useStyles = makeStyles(() => ({
   dialogHeader: {
@@ -52,7 +52,7 @@ export const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
   const [labelError, setLabelError] = useState<string>(errorMessages.REQUIRED);
 
   const updateTestName = (update: string) => {
-    if (!update || !update.trim()) {
+    if (!update.trim()) {
       setName('');
       setNameError(errorMessages.REQUIRED);
     } else {
@@ -66,7 +66,7 @@ export const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
   };
 
   const updateTestLabel = (update: string) => {
-    if (!update || !update.trim()) {
+    if (!update.trim()) {
       setLabel('');
       setLabelError(errorMessages.REQUIRED);
     } else {

@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Theme, TextField, FormControlLabel, Switch, Button, Typography } from '@mui/material';
+import { Button, FormControlLabel, Switch, TextField, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import StickyTopBar from './StickyCampaignBar';
-import { Campaign, unassignedCampaign } from './CampaignsForm';
-import { Test } from '../helpers/shared';
-import ChannelCard from './ChannelCard';
+import React, { useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { fetchCampaignTests } from '../../../utils/requests';
-import { useForm, Controller } from 'react-hook-form';
+import { Test } from '../helpers/shared';
 import { RichTextEditor } from '../richTextEditor/richTextEditor';
+import { Campaign, unassignedCampaign } from './CampaignsForm';
+import ChannelCard from './ChannelCard';
+import StickyTopBar from './StickyCampaignBar';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   testEditorContainer: {
@@ -65,9 +65,7 @@ export interface TestChannelItem {
   link: string;
 }
 
-export interface TestChannelData {
-  [index: string]: TestChannelItem;
-}
+export type TestChannelData = Record<string, TestChannelItem>;
 
 export const testChannelData: TestChannelData = {
   Header: {

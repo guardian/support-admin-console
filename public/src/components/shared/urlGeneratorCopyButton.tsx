@@ -1,6 +1,6 @@
-import React from 'react';
-import { Button } from '@mui/material';
 import CopyIcon from '@mui/icons-material/CopyAll';
+import { Button } from '@mui/material';
+import React from 'react';
 
 interface URLGeneratorCopyButtonProps {
   url: string;

@@ -5,13 +5,9 @@ export interface Charge {
   id: string;
 }
 
-export interface Charges {
-  [key: string]: Charge;
-}
+export type Charges = Record<string, Charge>;
 
-export interface Pricing {
-  [currencyCode: string]: number;
-}
+export type Pricing = Record<string, number>;
 
 export interface RatePlan {
   id: string;
@@ -21,9 +17,7 @@ export interface RatePlan {
   termType: string;
 }
 
-export interface RatePlans {
-  [ratePlanName: string]: RatePlan;
-}
+export type RatePlans = Record<string, RatePlan>;
 
 export interface Product {
   billingSystem: string;
@@ -33,9 +27,7 @@ export interface Product {
   ratePlans: RatePlans;
 }
 
-export interface ProductCatalog {
-  [productName: string]: Product;
-}
+export type ProductCatalog = Record<string, Product>;
 
 export interface RatePlanWithDiscount extends RatePlan {
   ratePlanName: string;

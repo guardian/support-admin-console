@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { GutterContent, GutterVariant } from '../../../models/gutter';
-import useValidation from '../hooks/useValidation';
-import { makeStyles } from '@mui/styles';
 import { Theme, Typography } from '@mui/material';
-import VariantCtasEditor from './variantCtasEditor';
+import { makeStyles } from '@mui/styles';
+import React, { useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { GutterContent, GutterVariant } from '../../../models/gutter';
+import PromoCodesEditor from '../../shared/PromoCodesEditor';
+import { Cta, Image } from '../helpers/shared';
 import {
   EMPTY_ERROR_HELPER_TEXT,
   getEmptyParagraphsError,
   templateValidatorForPlatform,
 } from '../helpers/validation';
-import { Cta, Image } from '../helpers/shared';
-import { Controller, useForm } from 'react-hook-form';
-import { getRteCopyLength, RichTextEditor } from '../richTextEditor/richTextEditor';
+import useValidation from '../hooks/useValidation';
 import { ImageEditorToggle } from '../imageEditor';
-import { DEFAULT_IMAGE_URL, DEFAULT_IMAGE_ALT } from './utils/defaults';
-import PromoCodesEditor from '../../shared/PromoCodesEditor';
+import { getRteCopyLength, RichTextEditor } from '../richTextEditor/richTextEditor';
+import { DEFAULT_IMAGE_ALT, DEFAULT_IMAGE_URL } from './utils/defaults';
+import VariantCtasEditor from './variantCtasEditor';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {

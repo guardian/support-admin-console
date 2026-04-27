@@ -101,7 +101,7 @@ const PaletteSelector: React.FC<Props> = ({
     });
   };
 
-  const onStyleChange = (e: SelectChangeEvent<string>) => {
+  const onStyleChange = (e: SelectChangeEvent) => {
     const newStyleId = e.target.value;
     const newStyle = getStyle(newStyleId);
 
@@ -116,7 +116,7 @@ const PaletteSelector: React.FC<Props> = ({
     setSelectedPalette(newStyle, newTheme);
   };
 
-  const onThemeChange = (e: SelectChangeEvent<string>) => {
+  const onThemeChange = (e: SelectChangeEvent) => {
     const newThemeId = e.target.value;
     const newTheme = getTheme(style, newThemeId);
     setTheme(newTheme);

@@ -1,9 +1,8 @@
-import React from 'react';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import LiveSwitch from '../shared/liveSwitch';
+import React from 'react';
 import { ContributionType } from '../../utils/models';
-
+import LiveSwitch from '../shared/liveSwitch';
 import { AmountsVariantEditorRowAmount } from './AmountsVariantEditorRowAmount';
 import { AmountsVariantEditorRowInput } from './AmountsVariantEditorRowInput';
 

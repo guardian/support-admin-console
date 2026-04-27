@@ -1,9 +1,9 @@
-import React from 'react';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import { SeparateArticleCount } from '../../../models/epic';
 import { TextField } from '@mui/material';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import React from 'react';
 import { useForm } from 'react-hook-form';
+import { SeparateArticleCount } from '../../../models/epic';
 
 interface FormData {
   copy: string;
@@ -21,7 +21,7 @@ const VariantSeparateArticleCountEditor: React.FC<VariantSeparateArticleCountEdi
   isDisabled,
 }: VariantSeparateArticleCountEditorProps) => {
   const onChange = (): void => {
-    updateSeparateArticleCount(Boolean(separateArticleCount) ? undefined : { type: 'above' });
+    updateSeparateArticleCount(separateArticleCount ? undefined : { type: 'above' });
   };
 
   const defaultValues: FormData = {
@@ -63,7 +63,7 @@ const VariantSeparateArticleCountEditor: React.FC<VariantSeparateArticleCountEdi
         label="Article count copy"
         margin="normal"
         variant="outlined"
-        disabled={isDisabled || !Boolean(separateArticleCount)}
+        disabled={isDisabled || !separateArticleCount}
         fullWidth
       />
     </div>

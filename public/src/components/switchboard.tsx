@@ -1,40 +1,35 @@
-import React, { useState } from 'react';
-
-import { Theme } from '@mui/material/styles';
-import { makeStyles } from '@mui/styles';
-
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
+import SaveIcon from '@mui/icons-material/Save';
 import {
-  Typography,
+  Alert,
   Button,
-  FormLabel,
   FormControl,
   FormControlLabel,
-  TextField,
+  FormLabel,
   IconButton,
   List,
   ListItem,
-  Alert,
+  TextField,
+  Typography,
 } from '@mui/material';
+import ListItemText from '@mui/material/ListItemText';
+import { Theme } from '@mui/material/styles';
 import SwitchUI from '@mui/material/Switch';
-import SaveIcon from '@mui/icons-material/Save';
-
+import { makeStyles } from '@mui/styles';
 import cloneDeep from 'lodash/cloneDeep';
-
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import withS3Data, { DataFromServer, InnerProps } from '../hocs/withS3Data';
 import {
-  SupportFrontendSettingsType,
   fetchSupportFrontendSettings,
   saveSupportFrontendSettings,
+  SupportFrontendSettingsType,
 } from '../utils/requests';
-
-import withS3Data, { InnerProps, DataFromServer } from '../hocs/withS3Data';
-import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
 import {
   createDuplicateValidator,
   EMPTY_ERROR_HELPER_TEXT,
 } from './channelManagement/helpers/validation';
-import { useForm } from 'react-hook-form';
-import ListItemText from '@mui/material/ListItemText';
 
 enum SwitchState {
   On = 'On',
@@ -48,14 +43,10 @@ interface Switch {
 
 interface SwitchGroup {
   description: string;
-  switches: {
-    [switchName: string]: Switch;
-  };
+  switches: Record<string, Switch>;
 }
 
-interface SupportFrontendSwitches {
-  [groupName: string]: SwitchGroup;
-}
+type SupportFrontendSwitches = Record<string, SwitchGroup>;
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   formControl: {

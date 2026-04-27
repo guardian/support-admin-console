@@ -1,7 +1,6 @@
-import { Cta, RegionTargeting, UserCohort } from '../../helpers/shared';
 import { BannerTest, BannerVariant } from '../../../../models/banner';
-
 import { getStage } from '../../../../utils/stage';
+import { Cta, RegionTargeting, UserCohort } from '../../helpers/shared';
 
 export const DEFAULT_PRIMARY_CTA: Cta = {
   text: 'Support the Guardian',

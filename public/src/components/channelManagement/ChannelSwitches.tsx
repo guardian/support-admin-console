@@ -1,14 +1,14 @@
-import React from 'react';
+import Button from '@mui/material/Button';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
 import { makeStyles } from '@mui/styles';
+import React from 'react';
+import withS3Data, { DataFromServer, InnerProps } from '../../hocs/withS3Data';
 import {
   fetchFrontendSettings,
   FrontendSettingsType,
   saveFrontendSettings,
 } from '../../utils/requests';
-import Switch from '@mui/material/Switch';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Button from '@mui/material/Button';
-import withS3Data, { DataFromServer, InnerProps } from '../../hocs/withS3Data';
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -36,9 +36,7 @@ type SwitchName =
   | 'enableAuxia'
   | 'enableAuxiaForBanners';
 
-type ChannelSwitches = {
-  [key in SwitchName]: boolean;
-};
+type ChannelSwitches = Record<SwitchName, boolean>;
 
 interface ChannelSwitchProps {
   name: SwitchName;

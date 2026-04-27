@@ -1,28 +1,28 @@
-import React from 'react';
+import ArchiveIcon from '@mui/icons-material/Archive';
+import CloseIcon from '@mui/icons-material/Close';
+import EditIcon from '@mui/icons-material/Edit';
+import LockIcon from '@mui/icons-material/Lock';
+import SaveIcon from '@mui/icons-material/Save';
 import {
-  Theme,
-  Typography,
   Button,
   Dialog,
-  DialogTitle,
+  DialogActions,
   DialogContent,
   DialogContentText,
-  DialogActions,
+  DialogTitle,
+  Theme,
   Tooltip,
+  Typography,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-import EditIcon from '@mui/icons-material/Edit';
-import { LockDetails } from './LockDetails';
-import LockIcon from '@mui/icons-material/Lock';
-import CloseIcon from '@mui/icons-material/Close';
-import SaveIcon from '@mui/icons-material/Save';
 import { grey } from '@mui/material/colors';
-import { LockStatus } from '../helpers/shared';
-import LiveSwitch from '../../shared/liveSwitch';
+import { makeStyles } from '@mui/styles';
+import React from 'react';
 import { BannerDesign, Status } from '../../../models/bannerDesign';
+import LiveSwitch from '../../shared/liveSwitch';
+import { LockStatus } from '../helpers/shared';
 import { BannerDesignPreview } from './BannerDesignPreview';
+import { LockDetails } from './LockDetails';
 import useOpenable from '../../../hooks/useOpenable';
-import ArchiveIcon from '@mui/icons-material/Archive';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {

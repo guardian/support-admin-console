@@ -1,6 +1,5 @@
+import { Checkbox, TableCell, TableRow } from '@mui/material';
 import React from 'react';
-
-import { Checkbox, TableRow, TableCell } from '@mui/material';
 
 type BannerChannelDeployerTableRowProps = {
   region: string;

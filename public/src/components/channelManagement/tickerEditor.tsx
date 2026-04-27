@@ -1,5 +1,3 @@
-import React, { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
 import {
   Checkbox,
   FormControl,
@@ -9,8 +7,10 @@ import {
   TextField,
   Theme,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import { makeStyles } from '@mui/styles';
+import React, { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { TickerName, TickerSettings } from './helpers/shared';
 import { EMPTY_ERROR_HELPER_TEXT } from './helpers/validation';
 

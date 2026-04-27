@@ -1,5 +1,5 @@
-import { TickerSettings } from '../helpers/shared';
 import { useEffect, useState } from 'react';
+import { TickerSettings } from '../helpers/shared';
 
 interface TickerData {
   total: number;
