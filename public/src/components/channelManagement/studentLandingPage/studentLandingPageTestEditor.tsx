@@ -136,9 +136,7 @@ export const StudentLandingPageTestEditor: React.FC<
           </Typography>
           {!userHasTestLocked && (
             <>
-              <StudentLandingPageLinkBuilder
-                test={test}
-              />
+              <StudentLandingPageLinkBuilder test={test} />
               <p>
                 Please check the preview link is working as expected before adding to any
                 promotional material.

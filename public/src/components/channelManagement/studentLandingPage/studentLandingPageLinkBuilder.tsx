@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Region } from '../../../utils/models';
-import { Institution, StudentLandingPageTest } from '../../../models/studentLandingPage';
+import { StudentLandingPageTest } from '../../../models/studentLandingPage';
 import { getStage } from '../../../utils/stage';
 import URLGeneratorCopyButton from '../../shared/urlGeneratorCopyButton';
 import { makeStyles } from '@mui/styles';

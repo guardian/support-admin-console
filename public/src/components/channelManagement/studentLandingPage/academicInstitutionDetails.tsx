@@ -90,7 +90,7 @@ export const AcademicInstitutionDetailEditor: React.FC<AcademicInstituteDetailEd
   const ACRONYM_MAX_LENGTH = 4;
   const INSTITUTION_MAX_LENGTH = 150;
   const LOGO_URL_MAX_LENGTH = 150;
- 
+
   return (
     <div className={classes.container}>
       <Typography variant={'h4'} className={classes.sectionHeader}>
