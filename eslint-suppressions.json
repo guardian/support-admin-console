@@ -2,20 +2,6 @@
   "public/src/components/channelManagement/CampaignSelector.tsx": {
     "@typescript-eslint/no-floating-promises": {
       "count": 1
-    },
-    "import/order": {
-      "count": 3
-    },
-    "sort-imports": {
-      "count": 1
-    }
-  },
-  "public/src/components/channelManagement/ChannelSwitches.tsx": {
-    "@typescript-eslint/consistent-indexed-object-style": {
-      "count": 1
-    },
-    "import/order": {
-      "count": 5
     }
   },
   "public/src/components/channelManagement/MultiSelectCountryEditor.tsx": {
@@ -24,9 +10,6 @@
     },
     "@typescript-eslint/restrict-template-expressions": {
       "count": 1
-    },
-    "import/order": {
-      "count": 3
     }
   },
   "public/src/components/channelManagement/MutliSelectTagEditor.tsx": {
@@ -35,39 +18,16 @@
     },
     "@typescript-eslint/restrict-template-expressions": {
       "count": 1
-    },
-    "import/order": {
-      "count": 3
     }
   },
   "public/src/components/channelManagement/TestMethodologyEditor.tsx": {
     "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    },
-    "import/order": {
-      "count": 7
-    },
-    "sort-imports": {
-      "count": 1
-    }
-  },
-  "public/src/components/channelManagement/TypedRadioGroup.tsx": {
-    "@typescript-eslint/array-type": {
-      "count": 1
-    },
-    "@typescript-eslint/consistent-indexed-object-style": {
-      "count": 1
-    },
-    "import/order": {
       "count": 1
     }
   },
   "public/src/components/channelManagement/auditTests/auditTestCompareVersionsDialog.tsx": {
     "@typescript-eslint/no-unsafe-enum-comparison": {
       "count": 2
-    },
-    "import/order": {
-      "count": 4
     },
     "no-empty-pattern": {
       "count": 1
@@ -89,9 +49,6 @@
     "@typescript-eslint/restrict-template-expressions": {
       "count": 1
     },
-    "import/order": {
-      "count": 3
-    },
     "react-hooks/exhaustive-deps": {
       "count": 1
     },
@@ -101,9 +58,6 @@
   },
   "public/src/components/channelManagement/auditTests/auditTestsTable.tsx": {
     "@typescript-eslint/no-unsafe-member-access": {
-      "count": 2
-    },
-    "import/order": {
       "count": 2
     },
     "no-empty-pattern": {
@@ -117,52 +71,26 @@
     "import/no-cycle": {
       "count": 2
     },
-    "import/order": {
-      "count": 5
-    },
     "react-hooks/exhaustive-deps": {
       "count": 1
-    },
-    "sort-imports": {
-      "count": 2
     }
   },
   "public/src/components/channelManagement/bannerDeploy/bannerChannelDeployerTable.tsx": {
     "import/no-cycle": {
       "count": 1
     },
-    "import/order": {
-      "count": 3
-    },
     "react-hooks/static-components": {
-      "count": 1
-    },
-    "sort-imports": {
-      "count": 1
-    }
-  },
-  "public/src/components/channelManagement/bannerDeploy/bannerChannelDeployerTableRow.tsx": {
-    "import/order": {
-      "count": 2
-    },
-    "sort-imports": {
       "count": 1
     }
   },
   "public/src/components/channelManagement/bannerDeploy/bannerDeployDashboard.tsx": {
     "import/no-cycle": {
       "count": 1
-    },
-    "import/order": {
-      "count": 3
     }
   },
   "public/src/components/channelManagement/bannerDesigns/BannerDesignEditor.tsx": {
     "import/no-cycle": {
       "count": 1
-    },
-    "import/order": {
-      "count": 5
     }
   },
   "public/src/components/channelManagement/bannerDesigns/BannerDesignForm.tsx": {
@@ -171,56 +99,16 @@
     },
     "import/no-cycle": {
       "count": 1
-    },
-    "import/order": {
-      "count": 7
-    }
-  },
-  "public/src/components/channelManagement/bannerDesigns/BannerDesignListItem.tsx": {
-    "import/order": {
-      "count": 4
-    }
-  },
-  "public/src/components/channelManagement/bannerDesigns/BannerDesignPreview.tsx": {
-    "import/order": {
-      "count": 3
     }
   },
   "public/src/components/channelManagement/bannerDesigns/BannerDesignUsage.tsx": {
     "@typescript-eslint/no-floating-promises": {
       "count": 1
-    },
-    "import/order": {
-      "count": 4
-    },
-    "sort-imports": {
-      "count": 1
-    }
-  },
-  "public/src/components/channelManagement/bannerDesigns/BannerDesignsList.tsx": {
-    "@typescript-eslint/prefer-optional-chain": {
-      "count": 1
-    },
-    "import/order": {
-      "count": 1
-    }
-  },
-  "public/src/components/channelManagement/bannerDesigns/BannerDesignsSidebar.tsx": {
-    "import/order": {
-      "count": 2
     }
   },
   "public/src/components/channelManagement/bannerDesigns/BannerVisualEditor.tsx": {
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 1
-    },
-    "import/order": {
-      "count": 2
-    }
-  },
-  "public/src/components/channelManagement/bannerDesigns/BasicColoursEditor.tsx": {
-    "import/order": {
-      "count": 3
     }
   },
   "public/src/components/channelManagement/bannerDesigns/ColourInput.tsx": {
@@ -230,30 +118,13 @@
     "@typescript-eslint/no-unnecessary-condition": {
       "count": 2
     },
-    "@typescript-eslint/no-unnecessary-type-arguments": {
-      "count": 1
-    },
-    "import/order": {
-      "count": 6
-    },
     "react-hooks/exhaustive-deps": {
       "count": 2
-    },
-    "sort-imports": {
-      "count": 1
     }
   },
   "public/src/components/channelManagement/bannerDesigns/CreateBannerDesignDialog.tsx": {
     "@typescript-eslint/no-misused-promises": {
       "count": 1
-    },
-    "import/order": {
-      "count": 4
-    }
-  },
-  "public/src/components/channelManagement/bannerDesigns/CtaColoursEditor.tsx": {
-    "import/order": {
-      "count": 2
     }
   },
   "public/src/components/channelManagement/bannerDesigns/HeaderImageEditor.tsx": {
@@ -263,23 +134,7 @@
     "@typescript-eslint/no-unnecessary-condition": {
       "count": 8
     },
-    "import/order": {
-      "count": 1
-    },
     "react-hooks/exhaustive-deps": {
-      "count": 2
-    },
-    "sort-imports": {
-      "count": 1
-    }
-  },
-  "public/src/components/channelManagement/bannerDesigns/HeadlineSizeEditor.tsx": {
-    "sort-imports": {
-      "count": 1
-    }
-  },
-  "public/src/components/channelManagement/bannerDesigns/HighlightedTextColoursEditor.tsx": {
-    "import/order": {
       "count": 2
     }
   },
@@ -290,32 +145,11 @@
     "@typescript-eslint/no-unnecessary-condition": {
       "count": 8
     },
-    "import/order": {
-      "count": 1
-    },
     "react-hooks/exhaustive-deps": {
       "count": 2
     }
   },
-  "public/src/components/channelManagement/bannerDesigns/LockDetails.tsx": {
-    "import/order": {
-      "count": 2
-    }
-  },
-  "public/src/components/channelManagement/bannerDesigns/NewBannerDesignButton.tsx": {
-    "import/order": {
-      "count": 3
-    }
-  },
-  "public/src/components/channelManagement/bannerDesigns/PalettePreview.tsx": {
-    "import/order": {
-      "count": 1
-    }
-  },
   "public/src/components/channelManagement/bannerDesigns/PaletteSelector.tsx": {
-    "@typescript-eslint/no-unnecessary-type-arguments": {
-      "count": 2
-    },
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 2
     },
@@ -329,19 +163,6 @@
       "count": 1
     }
   },
-  "public/src/components/channelManagement/bannerDesigns/StickyTopBar.tsx": {
-    "import/order": {
-      "count": 13
-    },
-    "sort-imports": {
-      "count": 1
-    }
-  },
-  "public/src/components/channelManagement/bannerDesigns/TickerDesignEditor.tsx": {
-    "import/order": {
-      "count": 3
-    }
-  },
   "public/src/components/channelManagement/bannerDesigns/index.tsx": {
     "@typescript-eslint/no-floating-promises": {
       "count": 2
@@ -349,23 +170,14 @@
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 1
     },
-    "@typescript-eslint/prefer-optional-chain": {
-      "count": 1
-    },
     "import/no-cycle": {
       "count": 1
-    },
-    "import/order": {
-      "count": 6
     },
     "react-hooks/set-state-in-effect": {
       "count": 1
     }
   },
   "public/src/components/channelManagement/bannerTests/bannerDesignSelector.tsx": {
-    "import/order": {
-      "count": 1
-    },
     "react-hooks/exhaustive-deps": {
       "count": 1
     },
@@ -384,29 +196,7 @@
       "count": 1
     },
     "@typescript-eslint/prefer-optional-chain": {
-      "count": 3
-    },
-    "import/order": {
-      "count": 18
-    },
-    "no-extra-boolean-cast": {
-      "count": 1
-    }
-  },
-  "public/src/components/channelManagement/bannerTests/bannerTestsForm.tsx": {
-    "import/order": {
-      "count": 3
-    }
-  },
-  "public/src/components/channelManagement/bannerTests/bannerVariantPreview.tsx": {
-    "@typescript-eslint/consistent-indexed-object-style": {
-      "count": 1
-    },
-    "import/order": {
-      "count": 7
-    },
-    "sort-imports": {
-      "count": 1
+      "count": 2
     }
   },
   "public/src/components/channelManagement/bannerTests/deployScheduleEditor.tsx": {
@@ -416,44 +206,12 @@
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 1
     },
-    "import/order": {
-      "count": 3
-    },
     "react-hooks/exhaustive-deps": {
-      "count": 1
-    }
-  },
-  "public/src/components/channelManagement/bannerTests/frontsOnlyEditor.tsx": {
-    "import/order": {
-      "count": 1
-    }
-  },
-  "public/src/components/channelManagement/bannerTests/isCollapsibleEditor.tsx": {
-    "import/order": {
-      "count": 2
-    },
-    "no-extra-boolean-cast": {
       "count": 1
     }
   },
   "public/src/components/channelManagement/bannerTests/newVariantButton.tsx": {
     "@typescript-eslint/no-misused-promises": {
-      "count": 1
-    },
-    "import/order": {
-      "count": 7
-    },
-    "sort-imports": {
-      "count": 1
-    }
-  },
-  "public/src/components/channelManagement/bannerTests/utils/defaults.ts": {
-    "import/order": {
-      "count": 2
-    }
-  },
-  "public/src/components/channelManagement/bannerTests/variantCtasEditor.tsx": {
-    "import/order": {
       "count": 1
     }
   },
@@ -467,30 +225,13 @@
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 8
     },
-    "import/order": {
-      "count": 17
-    },
     "react-hooks/exhaustive-deps": {
       "count": 3
     }
   },
-  "public/src/components/channelManagement/batchProcessTestButton.tsx": {
-    "import/order": {
-      "count": 6
-    }
-  },
   "public/src/components/channelManagement/batchProcessTestDialog.tsx": {
-    "@typescript-eslint/prefer-includes": {
-      "count": 1
-    },
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 2
-    },
-    "import/order": {
-      "count": 4
-    },
-    "sort-imports": {
-      "count": 1
     }
   },
   "public/src/components/channelManagement/bylineWithImageEditor.tsx": {
@@ -503,17 +244,11 @@
     "@typescript-eslint/no-unnecessary-condition": {
       "count": 5
     },
-    "import/order": {
-      "count": 4
-    },
     "react-hooks/exhaustive-deps": {
       "count": 2
     }
   },
   "public/src/components/channelManagement/campaigns/CampaignsEditor.tsx": {
-    "@typescript-eslint/consistent-indexed-object-style": {
-      "count": 1
-    },
     "@typescript-eslint/no-floating-promises": {
       "count": 4
     },
@@ -523,14 +258,8 @@
     "import/no-cycle": {
       "count": 3
     },
-    "import/order": {
-      "count": 6
-    },
     "react-hooks/exhaustive-deps": {
       "count": 1
-    },
-    "sort-imports": {
-      "count": 3
     }
   },
   "public/src/components/channelManagement/campaigns/CampaignsForm.tsx": {
@@ -540,25 +269,13 @@
     "import/no-cycle": {
       "count": 3
     },
-    "import/order": {
-      "count": 4
-    },
     "react-hooks/set-state-in-effect": {
       "count": 1
     }
   },
   "public/src/components/channelManagement/campaigns/CampaignsList.tsx": {
-    "@typescript-eslint/prefer-includes": {
-      "count": 2
-    },
     "import/no-cycle": {
       "count": 1
-    },
-    "import/order": {
-      "count": 2
-    },
-    "sort-imports": {
-      "count": 2
     }
   },
   "public/src/components/channelManagement/campaigns/CampaignsSidebar.tsx": {
@@ -570,57 +287,30 @@
     },
     "import/no-cycle": {
       "count": 1
-    },
-    "import/order": {
-      "count": 2
-    },
-    "sort-imports": {
-      "count": 1
     }
   },
   "public/src/components/channelManagement/campaigns/ChannelCard.tsx": {
     "import/no-cycle": {
-      "count": 1
-    },
-    "import/order": {
-      "count": 3
-    },
-    "sort-imports": {
       "count": 1
     }
   },
   "public/src/components/channelManagement/campaigns/CreateCampaignDialog.tsx": {
     "@typescript-eslint/no-misused-promises": {
       "count": 1
-    },
-    "import/order": {
-      "count": 4
     }
   },
   "public/src/components/channelManagement/campaigns/NewCampaignButton.tsx": {
     "import/no-cycle": {
       "count": 1
-    },
-    "import/order": {
-      "count": 5
     }
   },
   "public/src/components/channelManagement/campaigns/StatusUpdateButton.tsx": {
     "import/no-cycle": {
       "count": 1
-    },
-    "import/order": {
-      "count": 4
     }
   },
   "public/src/components/channelManagement/campaigns/StatusUpdateDialog.tsx": {
     "@eslint-community/eslint-comments/require-description": {
-      "count": 1
-    },
-    "@typescript-eslint/array-type": {
-      "count": 1
-    },
-    "@typescript-eslint/consistent-indexed-object-style": {
       "count": 1
     },
     "@typescript-eslint/no-floating-promises": {
@@ -629,20 +319,11 @@
     "@typescript-eslint/no-unnecessary-condition": {
       "count": 1
     },
-    "@typescript-eslint/no-unnecessary-type-assertion": {
-      "count": 1
-    },
     "import/no-cycle": {
       "count": 1
     },
-    "import/order": {
-      "count": 4
-    },
     "react-hooks/set-state-in-effect": {
       "count": 1
-    },
-    "sort-imports": {
-      "count": 4
     }
   },
   "public/src/components/channelManagement/campaigns/StickyCampaignBar.tsx": {
@@ -654,46 +335,17 @@
     },
     "import/no-cycle": {
       "count": 1
-    },
-    "import/order": {
-      "count": 5
-    },
-    "sort-imports": {
-      "count": 1
     }
   },
   "public/src/components/channelManagement/campaigns/TestCard.tsx": {
-    "@typescript-eslint/array-type": {
-      "count": 1
-    },
     "@typescript-eslint/no-unnecessary-condition": {
-      "count": 1
-    },
-    "@typescript-eslint/prefer-includes": {
       "count": 1
     },
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 1
-    },
-    "import/order": {
-      "count": 1
-    },
-    "sort-imports": {
-      "count": 1
-    }
-  },
-  "public/src/components/channelManagement/campaigns/TestDataButton.tsx": {
-    "import/order": {
-      "count": 4
     }
   },
   "public/src/components/channelManagement/campaigns/TestDataDialog.tsx": {
-    "@eslint-community/eslint-comments/require-description": {
-      "count": 1
-    },
-    "@typescript-eslint/consistent-indexed-object-style": {
-      "count": 1
-    },
     "@typescript-eslint/no-floating-promises": {
       "count": 1
     },
@@ -717,14 +369,6 @@
     },
     "@typescript-eslint/restrict-template-expressions": {
       "count": 1
-    },
-    "import/order": {
-      "count": 3
-    }
-  },
-  "public/src/components/channelManagement/checkoutNudge/checkoutNudge.tsx": {
-    "import/order": {
-      "count": 1
     }
   },
   "public/src/components/channelManagement/checkoutNudge/checkoutNudgeTestEditor.tsx": {
@@ -733,12 +377,6 @@
     },
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 1
-    },
-    "import/order": {
-      "count": 8
-    },
-    "sort-imports": {
-      "count": 2
     }
   },
   "public/src/components/channelManagement/checkoutNudge/variantEditor.tsx": {
@@ -747,12 +385,6 @@
     },
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 7
-    },
-    "import/order": {
-      "count": 3
-    },
-    "sort-imports": {
-      "count": 3
     }
   },
   "public/src/components/channelManagement/choiceCards/ChoiceCardEditor.tsx": {
@@ -761,12 +393,6 @@
     },
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 1
-    },
-    "import/order": {
-      "count": 8
-    },
-    "sort-imports": {
-      "count": 2
     }
   },
   "public/src/components/channelManagement/choiceCards/ChoiceCardsEditor.tsx": {
@@ -778,9 +404,6 @@
     },
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 2
-    },
-    "import/order": {
-      "count": 7
     },
     "react-hooks/exhaustive-deps": {
       "count": 1
@@ -799,14 +422,8 @@
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 7
     },
-    "import/order": {
-      "count": 4
-    },
     "react-hooks/exhaustive-deps": {
       "count": 2
-    },
-    "sort-imports": {
-      "count": 1
     }
   },
   "public/src/components/channelManagement/createTestDialog.tsx": {
@@ -816,30 +433,13 @@
     "@typescript-eslint/no-misused-promises": {
       "count": 1
     },
-    "@typescript-eslint/no-unnecessary-type-assertion": {
-      "count": 1
-    },
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 3
-    },
-    "import/order": {
-      "count": 7
-    },
-    "sort-imports": {
-      "count": 1
     }
   },
   "public/src/components/channelManagement/createVariantDialog.tsx": {
     "@typescript-eslint/no-misused-promises": {
       "count": 1
-    },
-    "import/order": {
-      "count": 3
-    }
-  },
-  "public/src/components/channelManagement/epicTests/appleChoiceCardsEditor.tsx": {
-    "import/order": {
-      "count": 2
     }
   },
   "public/src/components/channelManagement/epicTests/maxViewsEditor.tsx": {
@@ -849,21 +449,12 @@
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 3
     },
-    "import/order": {
-      "count": 4
-    },
     "react-hooks/exhaustive-deps": {
-      "count": 2
-    },
-    "sort-imports": {
       "count": 2
     }
   },
   "public/src/components/channelManagement/epicTests/newsletterSignUp.tsx": {
     "@typescript-eslint/no-misused-promises": {
-      "count": 2
-    },
-    "import/order": {
       "count": 2
     },
     "react-hooks/exhaustive-deps": {
@@ -888,17 +479,6 @@
     },
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 3
-    },
-    "import/order": {
-      "count": 1
-    }
-  },
-  "public/src/components/channelManagement/epicTests/signInLinkEditor.tsx": {
-    "import/order": {
-      "count": 2
-    },
-    "no-extra-boolean-cast": {
-      "count": 1
     }
   },
   "public/src/components/channelManagement/epicTests/tagsEditor.tsx": {
@@ -923,16 +503,10 @@
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 2
     },
-    "import/order": {
-      "count": 1
-    },
     "react-hooks/exhaustive-deps": {
       "count": 2
     },
     "react-hooks/use-memo": {
-      "count": 1
-    },
-    "sort-imports": {
       "count": 1
     }
   },
@@ -942,40 +516,10 @@
     },
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 1
-    },
-    "@typescript-eslint/prefer-optional-chain": {
-      "count": 1
-    },
-    "import/order": {
-      "count": 17
-    },
-    "no-extra-boolean-cast": {
-      "count": 1
-    },
-    "sort-imports": {
-      "count": 1
     }
   },
   "public/src/components/channelManagement/epicTests/testPreview.tsx": {
-    "import/order": {
-      "count": 2
-    },
     "no-empty-pattern": {
-      "count": 1
-    }
-  },
-  "public/src/components/channelManagement/epicTests/testsForm.tsx": {
-    "import/order": {
-      "count": 3
-    }
-  },
-  "public/src/components/channelManagement/epicTests/utils/defaults.ts": {
-    "import/order": {
-      "count": 3
-    }
-  },
-  "public/src/components/channelManagement/epicTests/variantCtasEditor.tsx": {
-    "import/order": {
       "count": 1
     }
   },
@@ -986,42 +530,22 @@
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 3
     },
-    "import/order": {
-      "count": 15
-    },
     "react-hooks/exhaustive-deps": {
       "count": 3
     }
   },
   "public/src/components/channelManagement/epicTests/variantPreview.tsx": {
-    "import/order": {
-      "count": 7
-    },
     "no-empty-pattern": {
-      "count": 1
-    },
-    "sort-imports": {
       "count": 1
     }
   },
   "public/src/components/channelManagement/gutterTests/gutterTestEditor.tsx": {
     "@typescript-eslint/no-unnecessary-condition": {
       "count": 2
-    },
-    "import/order": {
-      "count": 12
     }
   },
   "public/src/components/channelManagement/gutterTests/gutterTestPreview.tsx": {
-    "import/order": {
-      "count": 1
-    },
     "no-empty-pattern": {
-      "count": 1
-    }
-  },
-  "public/src/components/channelManagement/gutterTests/gutterTestsForm.tsx": {
-    "import/order": {
       "count": 1
     }
   },
@@ -1035,40 +559,18 @@
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 1
     },
-    "import/order": {
-      "count": 9
-    },
     "react-hooks/exhaustive-deps": {
       "count": 3
-    },
-    "sort-imports": {
-      "count": 1
     }
   },
   "public/src/components/channelManagement/gutterTests/gutterVariantPreview.tsx": {
-    "import/order": {
-      "count": 2
-    },
     "no-empty-pattern": {
-      "count": 1
-    }
-  },
-  "public/src/components/channelManagement/gutterTests/variantCtasEditor.tsx": {
-    "import/order": {
       "count": 1
     }
   },
   "public/src/components/channelManagement/headerTests/headerTestEditor.tsx": {
     "@typescript-eslint/no-unnecessary-condition": {
       "count": 1
-    },
-    "import/order": {
-      "count": 15
-    }
-  },
-  "public/src/components/channelManagement/headerTests/headerTestVariantCtasEditor.tsx": {
-    "import/order": {
-      "count": 3
     }
   },
   "public/src/components/channelManagement/headerTests/headerTestVariantEditor.tsx": {
@@ -1081,23 +583,7 @@
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 2
     },
-    "import/order": {
-      "count": 7
-    },
     "react-hooks/exhaustive-deps": {
-      "count": 2
-    },
-    "sort-imports": {
-      "count": 1
-    }
-  },
-  "public/src/components/channelManagement/headerTests/headerTestsForm.tsx": {
-    "import/order": {
-      "count": 3
-    }
-  },
-  "public/src/components/channelManagement/headerTests/utils/defaults.ts": {
-    "import/order": {
       "count": 2
     }
   },
@@ -1107,17 +593,11 @@
     }
   },
   "public/src/components/channelManagement/helpers/shared.ts": {
-    "@typescript-eslint/consistent-indexed-object-style": {
-      "count": 1
-    },
     "import/no-cycle": {
       "count": 1
     }
   },
   "public/src/components/channelManagement/helpers/validation.tsx": {
-    "@typescript-eslint/consistent-indexed-object-style": {
-      "count": 1
-    },
     "import/no-cycle": {
       "count": 1
     }
@@ -1128,9 +608,6 @@
     },
     "@typescript-eslint/no-unsafe-member-access": {
       "count": 2
-    },
-    "import/order": {
-      "count": 1
     }
   },
   "public/src/components/channelManagement/hooks/useValidation.ts": {
@@ -1138,9 +615,6 @@
       "count": 1
     },
     "react-hooks/set-state-in-effect": {
-      "count": 1
-    },
-    "sort-imports": {
       "count": 1
     }
   },
@@ -1151,53 +625,24 @@
     "@typescript-eslint/no-misused-promises": {
       "count": 2
     },
-    "import/order": {
-      "count": 5
-    },
     "react-hooks/exhaustive-deps": {
       "count": 2
-    }
-  },
-  "public/src/components/channelManagement/mParticleAudienceEditor.tsx": {
-    "import/order": {
-      "count": 1
-    }
-  },
-  "public/src/components/channelManagement/newTestButton.tsx": {
-    "import/order": {
-      "count": 5
     }
   },
   "public/src/components/channelManagement/oneTimeCheckout/AmountsSection.tsx": {
     "@typescript-eslint/no-unnecessary-condition": {
       "count": 4
-    },
-    "import/order": {
-      "count": 3
-    }
-  },
-  "public/src/components/channelManagement/oneTimeCheckout/oneTimeCheckout.tsx": {
-    "import/order": {
-      "count": 1
     }
   },
   "public/src/components/channelManagement/oneTimeCheckout/oneTimeCheckoutTestEditor.tsx": {
     "@typescript-eslint/no-unnecessary-condition": {
       "count": 1
     },
-    "import/order": {
-      "count": 9
-    },
     "react-hooks/exhaustive-deps": {
       "count": 3
     },
     "react-hooks/preserve-manual-memoization": {
       "count": 1
-    }
-  },
-  "public/src/components/channelManagement/oneTimeCheckout/variantEditor.tsx": {
-    "import/order": {
-      "count": 2
     }
   },
   "public/src/components/channelManagement/public/src/components/channelManagement/LTV3DataButton.tsx": {
@@ -1209,9 +654,6 @@
     },
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 1
-    },
-    "import/order": {
-      "count": 9
     },
     "no-empty-pattern": {
       "count": 1
@@ -1227,19 +669,10 @@
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 5
     },
-    "import/order": {
-      "count": 7
-    },
-    "no-extra-boolean-cast": {
-      "count": 2
-    },
     "react-hooks/exhaustive-deps": {
       "count": 1
     },
     "react-hooks/rules-of-hooks": {
-      "count": 2
-    },
-    "sort-imports": {
       "count": 2
     }
   },
@@ -1252,9 +685,6 @@
     },
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 1
-    },
-    "import/order": {
-      "count": 9
     }
   },
   "public/src/components/channelManagement/stickyTopBar/stickyTopBar.tsx": {
@@ -1262,27 +692,6 @@
       "count": 1
     },
     "@typescript-eslint/prefer-nullish-coalescing": {
-      "count": 1
-    },
-    "import/order": {
-      "count": 13
-    },
-    "sort-imports": {
-      "count": 1
-    }
-  },
-  "public/src/components/channelManagement/stickyTopBar/testArchiveButton.tsx": {
-    "import/order": {
-      "count": 4
-    }
-  },
-  "public/src/components/channelManagement/stickyTopBar/testCopyButton.tsx": {
-    "import/order": {
-      "count": 4
-    }
-  },
-  "public/src/components/channelManagement/stickyTopBar/testLockDetails.tsx": {
-    "import/order": {
       "count": 1
     }
   },
@@ -1299,20 +708,11 @@
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 2
     },
-    "import/order": {
-      "count": 2
-    },
-    "no-extra-boolean-cast": {
-      "count": 1
-    },
     "react-hooks/exhaustive-deps": {
       "count": 2
     }
   },
   "public/src/components/channelManagement/studentLandingPage/studentLandingPageLinkBuilder.tsx": {
-    "import/order": {
-      "count": 3
-    },
     "react-hooks/exhaustive-deps": {
       "count": 1
     },
@@ -1321,9 +721,6 @@
     }
   },
   "public/src/components/channelManagement/studentLandingPage/studentLandingPageTestEditor.tsx": {
-    "import/order": {
-      "count": 5
-    },
     "react-hooks/exhaustive-deps": {
       "count": 1
     },
@@ -1341,9 +738,6 @@
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 2
     },
-    "import/order": {
-      "count": 7
-    },
     "no-useless-escape": {
       "count": 1
     },
@@ -1358,21 +752,8 @@
     "@typescript-eslint/no-floating-promises": {
       "count": 1
     },
-    "import/order": {
-      "count": 1
-    },
     "react-hooks/exhaustive-deps": {
       "count": 1
-    }
-  },
-  "public/src/components/channelManagement/superMode/superModeDashboard.tsx": {
-    "import/order": {
-      "count": 2
-    }
-  },
-  "public/src/components/channelManagement/superMode/superModeTable.tsx": {
-    "import/order": {
-      "count": 2
     }
   },
   "public/src/components/channelManagement/superMode/useSuperModeRows.ts": {
@@ -1386,18 +767,9 @@
   "public/src/components/channelManagement/supportLandingPage/defaultProductSelector.tsx": {
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 1
-    },
-    "import/order": {
-      "count": 1
-    },
-    "sort-imports": {
-      "count": 1
     }
   },
   "public/src/components/channelManagement/supportLandingPage/productsEditor.tsx": {
-    "@typescript-eslint/array-type": {
-      "count": 1
-    },
     "@typescript-eslint/no-floating-promises": {
       "count": 1
     },
@@ -1410,27 +782,13 @@
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 1
     },
-    "import/order": {
-      "count": 5
-    },
     "react-hooks/exhaustive-deps": {
       "count": 2
-    },
-    "sort-imports": {
-      "count": 3
-    }
-  },
-  "public/src/components/channelManagement/supportLandingPage/supportLandingPage.tsx": {
-    "import/order": {
-      "count": 1
     }
   },
   "public/src/components/channelManagement/supportLandingPage/supportLandingPageTestEditor.tsx": {
     "@typescript-eslint/no-unnecessary-condition": {
       "count": 1
-    },
-    "import/order": {
-      "count": 7
     }
   },
   "public/src/components/channelManagement/supportLandingPage/urlGenerator.tsx": {
@@ -1443,29 +801,8 @@
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 1
     },
-    "import/order": {
-      "count": 3
-    },
     "react-hooks/set-state-in-effect": {
       "count": 1
-    },
-    "sort-imports": {
-      "count": 1
-    }
-  },
-  "public/src/components/channelManagement/supportLandingPage/utils/defaults.ts": {
-    "import/order": {
-      "count": 2
-    }
-  },
-  "public/src/components/channelManagement/supportLandingPage/variantEditor.tsx": {
-    "import/order": {
-      "count": 5
-    }
-  },
-  "public/src/components/channelManagement/testEditorActionButtons.tsx": {
-    "import/order": {
-      "count": 6
     }
   },
   "public/src/components/channelManagement/testEditorArticleCountEditor.tsx": {
@@ -1478,108 +815,27 @@
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 6
     },
-    "import/order": {
-      "count": 3
-    },
     "react-hooks/exhaustive-deps": {
       "count": 2
-    },
-    "sort-imports": {
-      "count": 2
-    }
-  },
-  "public/src/components/channelManagement/testEditorContextTargeting.tsx": {
-    "import/order": {
-      "count": 3
-    }
-  },
-  "public/src/components/channelManagement/testEditorTargetAudienceSelector.tsx": {
-    "import/order": {
-      "count": 4
-    },
-    "sort-imports": {
-      "count": 1
     }
   },
   "public/src/components/channelManagement/testEditorTargetRegionsSelector.tsx": {
     "@typescript-eslint/no-unnecessary-condition": {
       "count": 2
-    },
-    "import/order": {
-      "count": 2
-    },
-    "sort-imports": {
-      "count": 1
-    }
-  },
-  "public/src/components/channelManagement/testList.tsx": {
-    "import/order": {
-      "count": 5
-    },
-    "sort-imports": {
-      "count": 1
     }
   },
   "public/src/components/channelManagement/testListBanditIcon.tsx": {
     "@typescript-eslint/no-unused-vars": {
       "count": 1
-    },
-    "import/order": {
-      "count": 2
-    }
-  },
-  "public/src/components/channelManagement/testListSidebarFilterSelector.tsx": {
-    "import/order": {
-      "count": 3
-    },
-    "sort-imports": {
-      "count": 2
-    }
-  },
-  "public/src/components/channelManagement/testListTest.tsx": {
-    "import/order": {
-      "count": 7
     }
   },
   "public/src/components/channelManagement/testListTestArticleCountLabel.tsx": {
     "@typescript-eslint/no-unused-vars": {
       "count": 1
-    },
-    "import/order": {
-      "count": 1
-    }
-  },
-  "public/src/components/channelManagement/testListTestLiveLabel.tsx": {
-    "import/order": {
-      "count": 2
-    },
-    "sort-imports": {
-      "count": 1
     }
   },
   "public/src/components/channelManagement/testListTestName.tsx": {
     "@typescript-eslint/prefer-nullish-coalescing": {
-      "count": 1
-    },
-    "import/order": {
-      "count": 1
-    }
-  },
-  "public/src/components/channelManagement/testLiveSwitch.tsx": {
-    "import/order": {
-      "count": 3
-    }
-  },
-  "public/src/components/channelManagement/testPriorityLabelList.tsx": {
-    "import/order": {
-      "count": 2
-    }
-  },
-  "public/src/components/channelManagement/testPriorityLabelListLabel.tsx": {
-    "import/order": {
-      "count": 1
-    },
-    "sort-imports": {
       "count": 1
     }
   },
@@ -1590,14 +846,8 @@
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 2
     },
-    "import/order": {
-      "count": 5
-    },
     "react-hooks/rules-of-hooks": {
       "count": 8
-    },
-    "sort-imports": {
-      "count": 1
     }
   },
   "public/src/components/channelManagement/tickerEditor.tsx": {
@@ -1613,9 +863,6 @@
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 3
     },
-    "import/order": {
-      "count": 3
-    },
     "react-hooks/exhaustive-deps": {
       "count": 2
     }
@@ -1624,25 +871,7 @@
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 1
     },
-    "import/order": {
-      "count": 4
-    },
     "react-hooks/refs": {
-      "count": 1
-    }
-  },
-  "public/src/components/defaultPromos.tsx": {
-    "@typescript-eslint/consistent-indexed-object-style": {
-      "count": 1
-    }
-  },
-  "public/src/components/drawer.tsx": {
-    "import/order": {
-      "count": 7
-    }
-  },
-  "public/src/components/indexPage.tsx": {
-    "import/order": {
       "count": 1
     }
   },
@@ -1655,65 +884,21 @@
     },
     "@typescript-eslint/no-unnecessary-condition": {
       "count": 4
-    },
-    "import/order": {
-      "count": 5
-    },
-    "sort-imports": {
-      "count": 2
     }
   },
   "public/src/components/linkTracking/MediumSelector.tsx": {
     "@typescript-eslint/no-unnecessary-condition": {
-      "count": 1
-    },
-    "import/order": {
       "count": 1
     }
   },
   "public/src/components/promoTool/createPromoCampaignDialog.tsx": {
     "@typescript-eslint/no-misused-promises": {
       "count": 1
-    },
-    "@typescript-eslint/no-unnecessary-type-assertion": {
-      "count": 1
-    },
-    "import/order": {
-      "count": 3
-    }
-  },
-  "public/src/components/promoTool/createPromoDialog.tsx": {
-    "import/order": {
-      "count": 2
-    },
-    "sort-imports": {
-      "count": 1
-    }
-  },
-  "public/src/components/promoTool/newPromoCampaignButton.tsx": {
-    "import/order": {
-      "count": 3
-    }
-  },
-  "public/src/components/promoTool/productSelector.tsx": {
-    "import/order": {
-      "count": 2
     }
   },
   "public/src/components/promoTool/promoCampaignsList.tsx": {
-    "@typescript-eslint/prefer-includes": {
-      "count": 2
-    },
     "@typescript-eslint/prefer-optional-chain": {
       "count": 1
-    },
-    "import/order": {
-      "count": 2
-    }
-  },
-  "public/src/components/promoTool/promoCampaignsListItem.tsx": {
-    "import/order": {
-      "count": 3
     }
   },
   "public/src/components/promoTool/promoCampaignsSidebar.tsx": {
@@ -1722,9 +907,6 @@
     },
     "@typescript-eslint/prefer-optional-chain": {
       "count": 1
-    },
-    "import/order": {
-      "count": 4
     }
   },
   "public/src/components/promoTool/promoEditor.tsx": {
@@ -1740,14 +922,8 @@
     "import/no-cycle": {
       "count": 1
     },
-    "import/order": {
-      "count": 5
-    },
     "react-hooks/set-state-in-effect": {
       "count": 2
-    },
-    "sort-imports": {
-      "count": 4
     }
   },
   "public/src/components/promoTool/promoEditorPage.tsx": {
@@ -1759,12 +935,6 @@
     },
     "@typescript-eslint/no-unsafe-member-access": {
       "count": 4
-    },
-    "import/order": {
-      "count": 8
-    },
-    "sort-imports": {
-      "count": 2
     }
   },
   "public/src/components/promoTool/promoLandingPage.tsx": {
@@ -1773,20 +943,11 @@
     },
     "import/no-cycle": {
       "count": 1
-    },
-    "import/order": {
-      "count": 2
     }
   },
   "public/src/components/promoTool/promoListItem.tsx": {
     "@typescript-eslint/no-unnecessary-condition": {
       "count": 3
-    },
-    "import/order": {
-      "count": 3
-    },
-    "sort-imports": {
-      "count": 2
     }
   },
   "public/src/components/promoTool/promoTool.tsx": {
@@ -1799,40 +960,8 @@
     "@typescript-eslint/no-unsafe-member-access": {
       "count": 3
     },
-    "import/order": {
-      "count": 7
-    },
     "react-hooks/set-state-in-effect": {
       "count": 2
-    },
-    "sort-imports": {
-      "count": 4
-    }
-  },
-  "public/src/components/promoTool/promosList.tsx": {
-    "import/order": {
-      "count": 4
-    },
-    "sort-imports": {
-      "count": 2
-    }
-  },
-  "public/src/components/promoTool/ratePlanSelector.tsx": {
-    "import/order": {
-      "count": 2
-    },
-    "sort-imports": {
-      "count": 2
-    }
-  },
-  "public/src/components/promoTool/utils/previewUrl.test.ts": {
-    "import/order": {
-      "count": 1
-    }
-  },
-  "public/src/components/promoTool/utils/productCatalog.ts": {
-    "@typescript-eslint/consistent-indexed-object-style": {
-      "count": 4
     }
   },
   "public/src/components/shared/PromoCodesEditor.tsx": {
@@ -1848,14 +977,8 @@
     "@typescript-eslint/require-await": {
       "count": 1
     },
-    "import/order": {
-      "count": 4
-    },
     "react-hooks/exhaustive-deps": {
       "count": 1
-    },
-    "sort-imports": {
-      "count": 3
     }
   },
   "public/src/components/shared/ResponsiveImageEditor.tsx": {
@@ -1867,9 +990,6 @@
     },
     "@typescript-eslint/no-unnecessary-condition": {
       "count": 8
-    },
-    "import/order": {
-      "count": 2
     },
     "react-hooks/exhaustive-deps": {
       "count": 2
@@ -1885,32 +1005,18 @@
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 2
     },
-    "import/order": {
-      "count": 3
-    },
     "react-hooks/exhaustive-deps": {
       "count": 3
-    }
-  },
-  "public/src/components/shared/liveSwitch.tsx": {
-    "import/order": {
-      "count": 1
     }
   },
   "public/src/components/shared/urlGeneratorCopyButton.tsx": {
     "@typescript-eslint/no-misused-promises": {
       "count": 1
-    },
-    "import/order": {
-      "count": 2
     }
   },
   "public/src/components/switchboard.tsx": {
     "@eslint-community/eslint-comments/require-description": {
       "count": 1
-    },
-    "@typescript-eslint/consistent-indexed-object-style": {
-      "count": 2
     },
     "@typescript-eslint/no-misused-promises": {
       "count": 1
@@ -1918,29 +1024,8 @@
     "@typescript-eslint/no-unsafe-enum-comparison": {
       "count": 2
     },
-    "import/order": {
-      "count": 16
-    },
     "react-hooks/rules-of-hooks": {
       "count": 1
-    },
-    "sort-imports": {
-      "count": 3
-    }
-  },
-  "public/src/components/tests/variants/cloneVariantButton.tsx": {
-    "import/order": {
-      "count": 2
-    }
-  },
-  "public/src/components/tests/variants/deleteVariantButton.tsx": {
-    "import/order": {
-      "count": 2
-    }
-  },
-  "public/src/components/tests/variants/newVariantButton.tsx": {
-    "import/order": {
-      "count": 4
     }
   },
   "public/src/components/tests/variants/testVariantsSplitEditor.tsx": {
@@ -1953,24 +1038,8 @@
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 1
     },
-    "import/order": {
-      "count": 3
-    },
     "react-hooks/exhaustive-deps": {
       "count": 3
-    },
-    "sort-imports": {
-      "count": 1
-    }
-  },
-  "public/src/components/tests/variants/variantCopyLengthWarning.tsx": {
-    "import/order": {
-      "count": 1
-    }
-  },
-  "public/src/components/tests/variants/variantCtaEditor.tsx": {
-    "import/order": {
-      "count": 1
     }
   },
   "public/src/components/tests/variants/variantCtaFieldsEditor.tsx": {
@@ -1978,9 +1047,6 @@
       "count": 2
     },
     "@typescript-eslint/prefer-nullish-coalescing": {
-      "count": 1
-    },
-    "import/order": {
       "count": 1
     },
     "react-hooks/exhaustive-deps": {
@@ -1993,64 +1059,19 @@
     },
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 1
-    },
-    "import/order": {
-      "count": 1
-    },
-    "sort-imports": {
-      "count": 1
-    }
-  },
-  "public/src/components/tests/variants/variantEditorWithPreviewTab.tsx": {
-    "import/newline-after-import": {
-      "count": 1
-    },
-    "import/order": {
-      "count": 1
-    },
-    "sort-imports": {
-      "count": 1
-    }
-  },
-  "public/src/components/tests/variants/variantEditorsAccordion.tsx": {
-    "import/order": {
-      "count": 1
-    },
-    "sort-imports": {
-      "count": 1
     }
   },
   "public/src/components/tests/variants/variantSeparateArticleCountEditor.tsx": {
     "@typescript-eslint/no-misused-promises": {
-      "count": 1
-    },
-    "import/order": {
-      "count": 4
-    },
-    "no-extra-boolean-cast": {
-      "count": 2
-    }
-  },
-  "public/src/components/tests/variants/variantSummary.tsx": {
-    "import/order": {
-      "count": 4
-    },
-    "sort-imports": {
       "count": 1
     }
   },
   "public/src/components/tests/variants/variantSummaryWebPreviewButton.tsx": {
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 1
-    },
-    "import/order": {
-      "count": 3
     }
   },
   "public/src/components/tests/variants/variantsEditor.tsx": {
-    "import/order": {
-      "count": 2
-    },
     "react-hooks/set-state-in-effect": {
       "count": 1
     }
@@ -2061,17 +1082,11 @@
     },
     "@typescript-eslint/no-unused-vars": {
       "count": 1
-    },
-    "import/order": {
-      "count": 3
     }
   },
   "public/src/hocs/withS3Data.tsx": {
     "@typescript-eslint/no-floating-promises": {
       "count": 2
-    },
-    "sort-imports": {
-      "count": 1
     }
   },
   "public/src/hooks/useHover.ts": {
@@ -2080,9 +1095,6 @@
     },
     "react-hooks/refs": {
       "count": 2
-    },
-    "sort-imports": {
-      "count": 1
     }
   },
   "public/src/hooks/useValidatableField.ts": {
@@ -2090,9 +1102,6 @@
       "count": 1
     },
     "react-hooks/set-state-in-effect": {
-      "count": 1
-    },
-    "sort-imports": {
       "count": 1
     }
   },
@@ -2102,52 +1111,9 @@
     },
     "import/no-cycle": {
       "count": 1
-    },
-    "import/order": {
-      "count": 38
-    },
-    "sort-imports": {
-      "count": 2
-    }
-  },
-  "public/src/models/banner.ts": {
-    "import/order": {
-      "count": 2
-    },
-    "sort-imports": {
-      "count": 1
-    }
-  },
-  "public/src/models/epic.ts": {
-    "import/order": {
-      "count": 1
-    },
-    "sort-imports": {
-      "count": 1
-    }
-  },
-  "public/src/models/exclusions.ts": {
-    "@typescript-eslint/array-type": {
-      "count": 1
-    }
-  },
-  "public/src/models/header.ts": {
-    "import/order": {
-      "count": 1
-    },
-    "sort-imports": {
-      "count": 1
-    }
-  },
-  "public/src/models/oneTimeCheckout.ts": {
-    "sort-imports": {
-      "count": 1
     }
   },
   "public/src/utils/models.tsx": {
-    "@typescript-eslint/consistent-indexed-object-style": {
-      "count": 2
-    },
     "@typescript-eslint/no-redundant-type-constituents": {
       "count": 1
     }
@@ -2155,9 +1121,6 @@
   "public/src/utils/requests.tsx": {
     "@eslint-community/eslint-comments/require-description": {
       "count": 7
-    },
-    "@typescript-eslint/array-type": {
-      "count": 1
     },
     "@typescript-eslint/naming-convention": {
       "count": 23
@@ -2173,17 +1136,6 @@
     },
     "import/no-cycle": {
       "count": 1
-    },
-    "import/order": {
-      "count": 3
-    },
-    "sort-imports": {
-      "count": 2
-    }
-  },
-  "public/src/utils/theme.ts": {
-    "import/order": {
-      "count": 2
     }
   }
 }

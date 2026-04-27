@@ -1,8 +1,7 @@
-import React from 'react';
-import { FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from '@mui/material';
-
-import { regions, regionIds, RegionsAndAll } from '../../utils/models';
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import React from 'react';
+import { regionIds, regions, RegionsAndAll } from '../../utils/models';
 
 const useStyles = makeStyles(() => ({
   container: {

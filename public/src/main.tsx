@@ -1,42 +1,39 @@
+import { StyledEngineProvider } from '@mui/material';
+import AppBar from '@mui/material/AppBar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import { Theme, ThemeProvider } from '@mui/material/styles';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import { CSSProperties } from '@mui/styles';
+import { makeStyles, ThemeProvider as StylesThemeProvider } from '@mui/styles';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Switchboard from './components/switchboard';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import BannerDeployDashboard from './components/channelManagement/bannerDeploy/bannerDeployDashboard';
+import Switchboard from './components/switchboard';
 import AmountsForm from './components/amounts/AmountsForm';
 import {
+  AppleNewsEpicTestsForm,
   ArticleEpicTestsForm,
   LiveblogEpicTestsForm,
-  AppleNewsEpicTestsForm,
 } from './components/channelManagement/epicTests/testsForm';
 import {
   BannerTestsForm1,
   BannerTestsForm2,
 } from './components/channelManagement/bannerTests/bannerTestsForm';
 import { GutterTestsForm } from './components/channelManagement/gutterTests/gutterTestsForm';
-
 import { HeaderTestsForm } from './components/channelManagement/headerTests/headerTestsForm';
-
-import { Theme, ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import AppBar from '@mui/material/AppBar';
-import { CSSProperties } from '@mui/styles';
 import NavDrawer from './components/drawer';
-import Button from '@mui/material/Button';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import IndexPage from './components/indexPage';
+import QrCodePage from './components/utilities/QrCodePage';
 import { getTheme } from './utils/theme';
 import ChannelSwitches from './components/channelManagement/ChannelSwitches';
 import CampaignsForm from './components/channelManagement/campaigns/CampaignsForm';
-import { makeStyles, ThemeProvider as StylesThemeProvider } from '@mui/styles';
-import QrCodePage from './components/utilities/QrCodePage';
 import AppsMeteringSwitches from './components/appsMeteringSwitches';
 import { SuperModeDashboard } from './components/channelManagement/superMode/superModeDashboard';
 import BannerDesigns from './components/channelManagement/bannerDesigns/';
 import DefaultPromos from './components/defaultPromos';
-import { StyledEngineProvider } from '@mui/material';
 import { LinkTrackingBuilder } from './components/linkTracking/LinkTrackingBuilder';
 import { SupportLandingPageTestsForm } from './components/channelManagement/supportLandingPage/supportLandingPage';
 import { CheckoutNudgeTestsForm } from './components/channelManagement/checkoutNudge/checkoutNudge';

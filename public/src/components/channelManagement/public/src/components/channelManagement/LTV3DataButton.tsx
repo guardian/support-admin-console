@@ -1,15 +1,15 @@
-import React from 'react';
 import { Button, Dialog, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-import useOpenable from '../../../../../../hooks/useOpenable';
-import { Methodology } from '../../../../helpers/shared';
+import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import { makeStyles } from '@mui/styles';
+import React from 'react';
+import useOpenable from '../../../../../../hooks/useOpenable';
+import { Methodology } from '../../../../helpers/shared';
 
 const useStyles = makeStyles(({}: Theme) => ({
   button: {

@@ -1,14 +1,14 @@
-import React from 'react';
+import EditIcon from '@mui/icons-material/Edit';
 import { ListItem, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { red } from '@mui/material/colors';
+import { makeStyles } from '@mui/styles';
+import React from 'react';
+import useHover from '../../hooks/useHover';
 import { Test } from './helpers/shared';
+import TestListBanditIcon from './testListBanditIcon';
+import TestListTestArticleCountLabel from './testListTestArticleCountLabel';
 import TestListTestLiveLabel from './testListTestLiveLabel';
 import TestListTestName from './testListTestName';
-import TestListTestArticleCountLabel from './testListTestArticleCountLabel';
-import useHover from '../../hooks/useHover';
-import EditIcon from '@mui/icons-material/Edit';
-import TestListBanditIcon from './testListBanditIcon';
 
 const useStyles = makeStyles(({ palette }: Theme) => ({
   test: {

@@ -11,9 +11,7 @@ import {
 
 type ProductName = 'guardianWeekly' | 'paper' | 'digital' | 'supporterPlus' | 'tierThree';
 
-type DefaultPromos = {
-  [key in ProductName]: string[];
-};
+type DefaultPromos = Record<ProductName, string[]>;
 
 const useStyles = makeStyles(() => ({
   container: {

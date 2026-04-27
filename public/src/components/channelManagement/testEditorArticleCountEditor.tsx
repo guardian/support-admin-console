@@ -1,10 +1,9 @@
+import { FormControl, FormControlLabel, Radio, RadioGroup, TextField, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React, { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
-
-import { FormControl, Radio, RadioGroup, FormControlLabel, TextField, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { ArticlesViewedSettings } from './helpers/shared';
-import { notNumberValidator, EMPTY_ERROR_HELPER_TEXT } from './helpers/validation';
+import { EMPTY_ERROR_HELPER_TEXT, notNumberValidator } from './helpers/validation';
 import MultiselectAutocomplete from './MutliSelectTagEditor';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({

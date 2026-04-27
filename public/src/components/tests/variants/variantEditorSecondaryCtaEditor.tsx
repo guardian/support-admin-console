@@ -1,6 +1,6 @@
-import React from 'react';
-import { Theme, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from '@mui/material';
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import React from 'react';
 import { Cta, SecondaryCta, SecondaryCtaType } from '../../channelManagement/helpers/shared';
 import VariantCtaFieldsEditor from './variantCtaFieldsEditor';
 

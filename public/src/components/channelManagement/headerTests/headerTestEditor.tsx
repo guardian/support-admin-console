@@ -1,5 +1,11 @@
+import { Typography } from '@mui/material';
 import React from 'react';
-
+import { HeaderTest, HeaderVariant } from '../../../models/header';
+import TestVariantsSplitEditor from '../../tests/variants/testVariantsSplitEditor';
+import VariantsEditor from '../../tests/variants/variantsEditor';
+import VariantSummary from '../../tests/variants/variantSummary';
+import CampaignSelector from '../CampaignSelector';
+import { ControlProportionSettings } from '../helpers/controlProportionSettings';
 import {
   ConsentStatus,
   DeviceType,
@@ -7,23 +13,12 @@ import {
   SignedInStatus,
   UserCohort,
 } from '../helpers/shared';
-
-import { Typography } from '@mui/material';
-import HeaderTestVariantEditor from './headerTestVariantEditor';
-import VariantsEditor from '../../tests/variants/variantsEditor';
-import CampaignSelector from '../CampaignSelector';
-
-import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
-import { MParticleAudienceEditor } from '../mParticleAudienceEditor';
-
-import { HeaderTest, HeaderVariant } from '../../../models/header';
-import { getDefaultVariant } from './utils/defaults';
-import VariantSummary from '../../tests/variants/variantSummary';
-
-import { ControlProportionSettings } from '../helpers/controlProportionSettings';
-import TestVariantsSplitEditor from '../../tests/variants/testVariantsSplitEditor';
 import { useStyles } from '../helpers/testEditorStyles';
+import { MParticleAudienceEditor } from '../mParticleAudienceEditor';
+import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 import { ValidatedTestEditorProps } from '../validatedTestEditor';
+import HeaderTestVariantEditor from './headerTestVariantEditor';
+import { getDefaultVariant } from './utils/defaults';
 
 const HeaderTestEditor: React.FC<ValidatedTestEditorProps<HeaderTest>> = ({
   test,

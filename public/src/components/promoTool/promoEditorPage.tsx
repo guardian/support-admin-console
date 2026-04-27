@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Button, CircularProgress, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-import { Theme } from '@mui/material/styles';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import PromoEditor from './promoEditor';
-import { Promo, PromoProduct } from './utils/promoModels';
-import { getPromoPreviewUrl } from './utils/previewUrl';
+import { Button, CircularProgress, Typography } from '@mui/material';
+import { Theme } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { hasPermission } from '../../utils/permissions';
 import {
   fetchPromo,
+  fetchPromoCampaign,
   lockPromo,
   unlockPromo,
   updatePromo,
-  fetchPromoCampaign,
 } from '../../utils/requests';
-import { hasPermission } from '../../utils/permissions';
+import PromoEditor from './promoEditor';
+import { getPromoPreviewUrl } from './utils/previewUrl';
+import { Promo, PromoProduct } from './utils/promoModels';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {

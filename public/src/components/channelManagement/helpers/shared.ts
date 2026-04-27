@@ -240,9 +240,7 @@ export interface PageContextTargeting {
 }
 
 // Stores tests which have been modified
-export type ModifiedTests = {
-  [testName: string]: TestStatus;
-};
+export type ModifiedTests = Record<string, TestStatus>;
 
 export interface ArticlesViewedSettings {
   minViews: number;

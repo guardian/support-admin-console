@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import CloseIcon from '@mui/icons-material/Close';
 import {
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  IconButton,
   List,
   ListItem,
-  IconButton,
   Switch,
   Typography,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import CloseIcon from '@mui/icons-material/Close';
-import { Test, Status } from '../helpers/shared';
-import { updateStatuses, FrontendSettingsType } from '../../../utils/requests';
+import React, { useEffect, useState } from 'react';
+import { FrontendSettingsType, updateStatuses } from '../../../utils/requests';
+import { Status, Test } from '../helpers/shared';
 import { testChannelData, testChannelOrder } from './CampaignsEditor';
 
 const useStyles = makeStyles(() => ({
@@ -49,9 +49,7 @@ interface StatusUpdateDialogProps {
   updatePage: () => void;
 }
 
-interface TestStatus {
-  [index: string]: Status;
-}
+type TestStatus = Record<string, Status>;
 
 type UpdateStatusesArguments = [FrontendSettingsType, string[], Status];
 
@@ -97,7 +95,7 @@ const StatusUpdateDialog: React.FC<StatusUpdateDialogProps> = ({
         const { channel, name } = test;
         if (channel != null) {
           const link = testChannelData[channel].link as FrontendSettingsType;
-          const data = testData[key] as Status;
+          const data = testData[key];
           changes.push([link, [name], data]);
         }
       }
@@ -105,7 +103,7 @@ const StatusUpdateDialog: React.FC<StatusUpdateDialogProps> = ({
 
     if (changes.length > 0) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const promises: Promise<any>[] = [];
+      const promises: Array<Promise<any>> = [];
       changes.forEach((change) => {
         promises.push(updateStatuses(...change));
       });

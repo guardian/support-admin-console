@@ -1,14 +1,3 @@
-import React, { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
-import {
-  BoldExtension,
-  EventsExtension,
-  ItalicExtension,
-  LinkExtension,
-  ShortcutHandlerProps,
-  StrikeExtension,
-  TextHighlightExtension,
-  createMarkPositioner,
-} from 'remirror/extensions';
 import {
   EditorComponent,
   FloatingWrapper,
@@ -23,12 +12,18 @@ import {
   useUpdateReason,
 } from '@remirror/react';
 import { CommandButtonGroup, FloatingToolbar } from '@remirror/react-ui';
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
+import {
+  BoldExtension,
+  createMarkPositioner,
+  EventsExtension,
+  ItalicExtension,
+  LinkExtension,
+  ShortcutHandlerProps,
+  StrikeExtension,
+  TextHighlightExtension,
+} from 'remirror/extensions';
 import './remirror-styles.css';
-import { useRTEStyles } from './richTextEditorStyles';
-import { CreateExtensionPlugin, PlainExtension, InputRule } from 'remirror';
-import { Plugin } from 'prosemirror-state';
-import { MarkPasteRule } from '@remirror/pm/paste-rules';
-
 import {
   ARTICLE_COUNT_TEMPLATE,
   CAMPAIGN_DEADLINE_TEMPLATE,
@@ -42,6 +37,10 @@ import {
   PRICE_GUARDIANWEEKLY_MONTHLY,
   PRICE_PRODUCT_WEEKLY,
 } from '../helpers/validation';
+import { useRTEStyles } from './richTextEditorStyles';
+import { CreateExtensionPlugin, InputRule, PlainExtension } from 'remirror';
+import { Plugin } from 'prosemirror-state';
+import { MarkPasteRule } from '@remirror/pm/paste-rules';
 
 // Typescript
 interface RichTextEditorProps<T> {
@@ -587,7 +586,7 @@ const RichTextEditorSingleLine: React.FC<RichTextEditorProps<string>> = ({
   rteMenuConstraints,
 }: RichTextEditorProps<string>) => {
   const onUpdate = (paras: string[] | undefined): void => {
-    if (!!paras) {
+    if (paras) {
       updateCopy(paras.join(' '));
     } else {
       updateCopy(undefined);
@@ -602,7 +601,7 @@ const RichTextEditorSingleLine: React.FC<RichTextEditorProps<string>> = ({
       name={name}
       error={error}
       updateCopy={onUpdate}
-      copyData={!!copyData ? [copyData] : undefined}
+      copyData={copyData ? [copyData] : undefined}
       rteMenuConstraints={rteMenuConstraints}
     />
   );

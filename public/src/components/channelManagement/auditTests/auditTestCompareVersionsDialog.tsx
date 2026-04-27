@@ -1,8 +1,8 @@
-import * as React from 'react';
-import Dialog from '@mui/material/Dialog';
-import { IChange } from 'json-diff-ts';
-import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material';
+import Dialog from '@mui/material/Dialog';
+import { makeStyles } from '@mui/styles';
+import { IChange } from 'json-diff-ts';
+import * as React from 'react';
 
 const useStyles = makeStyles(({}: Theme) => ({
   dialog: {

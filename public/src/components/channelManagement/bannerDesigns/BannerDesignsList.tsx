@@ -1,6 +1,6 @@
-import React from 'react';
 import { List } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import React from 'react';
 import { BannerDesign } from '../../../models/bannerDesign';
 import BannerDesignListItem from './BannerDesignListItem';
 
@@ -34,7 +34,7 @@ const BannerDesignsList = ({
     <div className={classes.container}>
       <List className={classes.list}>
         {designs.map((design) => {
-          const isSelected = Boolean(selectedDesign && selectedDesign.name === design.name);
+          const isSelected = Boolean(selectedDesign?.name === design.name);
 
           return (
             <BannerDesignListItem

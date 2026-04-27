@@ -1,5 +1,12 @@
+import { Typography } from '@mui/material';
 import React from 'react';
 import { GutterTest, GutterVariant } from '../../../models/gutter';
+import TestVariantsSplitEditor from '../../tests/variants/testVariantsSplitEditor';
+import VariantEditorWithPreviewTab from '../../tests/variants/variantEditorWithPreviewTab';
+import VariantsEditor from '../../tests/variants/variantsEditor';
+import VariantSummary from '../../tests/variants/variantSummary';
+import CampaignSelector from '../CampaignSelector';
+import { ControlProportionSettings } from '../helpers/controlProportionSettings';
 import {
   ConsentStatus,
   DeviceType,
@@ -8,20 +15,13 @@ import {
   SignedInStatus,
   UserCohort,
 } from '../helpers/shared';
-import { ValidatedTestEditorProps } from '../validatedTestEditor';
-import GutterVariantEditor from './gutterVariantEditor';
-import { Typography } from '@mui/material';
-import { getDefaultVariant } from './utils/defaults';
-import CampaignSelector from '../CampaignSelector';
+import { useStyles } from '../helpers/testEditorStyles';
 import TestEditorContextTargeting from '../testEditorContextTargeting';
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
-import { ControlProportionSettings } from '../helpers/controlProportionSettings';
+import { ValidatedTestEditorProps } from '../validatedTestEditor';
+import GutterVariantEditor from './gutterVariantEditor';
+import { getDefaultVariant } from './utils/defaults';
 import GutterVariantPreview from './gutterVariantPreview';
-import { useStyles } from '../helpers/testEditorStyles';
-import VariantSummary from '../../tests/variants/variantSummary';
-import VariantsEditor from '../../tests/variants/variantsEditor';
-import TestVariantsSplitEditor from '../../tests/variants/testVariantsSplitEditor';
-import VariantEditorWithPreviewTab from '../../tests/variants/variantEditorWithPreviewTab';
 import { GutterTestPreviewButton } from './gutterTestPreview';
 
 const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({

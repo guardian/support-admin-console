@@ -1,6 +1,6 @@
-import React from 'react';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import React from 'react';
 import VariantCtaEditor from '../../tests/variants/variantCtaEditor';
 import VariantSecondaryCtaEditor from '../../tests/variants/variantEditorSecondaryCtaEditor';
 import { Cta, SecondaryCta } from '../helpers/shared';

@@ -1,6 +1,6 @@
-import React from 'react';
-import { Theme, Card, CardContent, CardActions, Button } from '@mui/material';
+import { Button, Card, CardActions, CardContent, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { Test, Variant } from '../helpers/shared';
 import TestDataButton from './TestDataButton';
@@ -192,10 +192,10 @@ function TestCard({ test, keyId, linkPath }: TestCardProps): React.ReactElement 
   };
 
   const getLocations = (test: Test) => {
-    const locations: (string | number)[] = test.locations || [];
+    const locations: Array<string | number> = test.locations || [];
 
     const checkLocation = (wanted: string) => {
-      if (locations.indexOf(wanted) < 0) {
+      if (!locations.includes(wanted)) {
         return classes.notSelectedSpan;
       }
       return classes.locationSelectedSpan;

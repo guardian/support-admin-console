@@ -1,8 +1,8 @@
-import React from 'react';
 import { Button } from '@mui/material';
-import { Variant } from '../../channelManagement/helpers/shared';
+import React from 'react';
 import useOpenable from '../../../hooks/useOpenable';
 import CreateVariantDialog from '../../channelManagement/createVariantDialog';
+import { Variant } from '../../channelManagement/helpers/shared';
 
 interface CloneVariantButtonProps<V extends Variant> {
   existingNames: string[];

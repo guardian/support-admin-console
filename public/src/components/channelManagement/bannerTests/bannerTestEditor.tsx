@@ -1,31 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import {
-  ArticlesViewedSettings,
-  ConsentStatus,
-  DeviceType,
-  Methodology,
-  RegionTargeting,
-  SignedInStatus,
-  UserCohort,
-} from '../helpers/shared';
-import { ARTICLE_COUNT_TEMPLATE } from '../helpers/validation';
 import { Typography } from '@mui/material';
-import VariantEditor from './variantEditor';
-import CampaignSelector from '../CampaignSelector';
-import VariantsEditor from '../../tests/variants/variantsEditor';
-import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
-import TestEditorArticleCountEditor, {
-  DEFAULT_ARTICLES_VIEWED_SETTINGS,
-} from '../testEditorArticleCountEditor';
+import React, { useEffect, useState } from 'react';
 import {
   BannerContent,
   BannerTest,
   BannerTestDeploySchedule,
   BannerVariant,
 } from '../../../models/banner';
-import { getDefaultVariant } from './utils/defaults';
-import VariantSummary from '../../tests/variants/variantSummary';
-import BannerVariantPreview from './bannerVariantPreview';
 import { ControlProportionSettings } from '../helpers/controlProportionSettings';
 import TestVariantsSplitEditor from '../../tests/variants/testVariantsSplitEditor';
 import { useStyles } from '../helpers/testEditorStyles';
@@ -38,12 +18,32 @@ import {
 } from '../../../utils/requests';
 import TestEditorContextTargeting from '../testEditorContextTargeting';
 import { getDesignForVariant } from '../../../utils/bannerDesigns';
-import { DeployScheduleEditor } from './deployScheduleEditor';
+import VariantsEditor from '../../tests/variants/variantsEditor';
+import VariantSummary from '../../tests/variants/variantSummary';
+import CampaignSelector from '../CampaignSelector';
+import {
+  ArticlesViewedSettings,
+  ConsentStatus,
+  DeviceType,
+  Methodology,
+  RegionTargeting,
+  SignedInStatus,
+  UserCohort,
+} from '../helpers/shared';
+import { ARTICLE_COUNT_TEMPLATE } from '../helpers/validation';
+import TestEditorArticleCountEditor, {
+  DEFAULT_ARTICLES_VIEWED_SETTINGS,
+} from '../testEditorArticleCountEditor';
+import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 import { TestMethodologyEditor } from '../TestMethodologyEditor';
+import BannerVariantPreview from './bannerVariantPreview';
+import { DeployScheduleEditor } from './deployScheduleEditor';
 import { FrontsOnlyEditor } from './frontsOnlyEditor';
+import { getDefaultVariant } from './utils/defaults';
+import VariantEditor from './variantEditor';
 
 const copyHasTemplate = (content: BannerContent, template: string): boolean =>
-  (content.heading && content.heading.includes(template)) ||
+  content.heading?.includes(template) ||
   (content.paragraphs && content.paragraphs.some((para) => para.includes(template))) ||
   (content.messageText != null && content.messageText.includes(template));
 
@@ -77,7 +77,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
   }, []);
 
   const getArticlesViewedSettings = (test: BannerTest): ArticlesViewedSettings | undefined => {
-    if (!!test.articlesViewedSettings) {
+    if (test.articlesViewedSettings) {
       return test.articlesViewedSettings;
     }
     if (testCopyHasTemplate(test, ARTICLE_COUNT_TEMPLATE)) {

@@ -1,4 +1,4 @@
-import { FormControl, FormControlLabel, RadioGroup, Radio } from '@mui/material';
+import { FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 import React from 'react';
 import { FontSize } from '../../../models/bannerDesign';
 

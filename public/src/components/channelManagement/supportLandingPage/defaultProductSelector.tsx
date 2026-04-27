@@ -1,15 +1,15 @@
-import React from 'react';
 import {
   FormControl,
   FormControlLabel,
   FormLabel,
-  RadioGroup,
-  Radio,
-  Typography,
-  Theme,
   Grid,
+  Radio,
+  RadioGroup,
+  Theme,
+  Typography,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import React from 'react';
 import { DefaultProductSelection } from '../../../models/supportLandingPage';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({

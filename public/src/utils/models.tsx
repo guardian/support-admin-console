@@ -1,6 +1,4 @@
-export interface CommonStringObject {
-  [index: string]: string;
-}
+export type CommonStringObject = Record<string, string>;
 
 // This type should match the `ContributionFrequency` type in the `support-dotcom-components` repo, file `packages/shared/src/types/epic.ts`
 // export type ContributionType = 'ONE_OFF' | 'MONTHLY' | 'ANNUAL';
@@ -295,9 +293,7 @@ export interface AmountValuesObject {
   hideChooseYourAmount: boolean;
 }
 
-export type AmountsCardData = {
-  [key in ContributionType]: AmountValuesObject;
-};
+export type AmountsCardData = Record<ContributionType, AmountValuesObject>;
 
 export interface AmountsVariant {
   variantName: string;

@@ -1,16 +1,15 @@
-import React, { useState } from 'react';
-import { Button, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-import { LockStatus, Test } from './helpers/shared';
-import TestList from './testList';
-import TestPriorityLabelList from './testPriorityLabelList';
-import NewTestButton from './newTestButton';
-import BatchProcessTestButton from './batchProcessTestButton';
-
-import TestListSidebarFilterSelector from './testListSidebarFilterSelector';
-import { RegionsAndAll } from '../../utils/models';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
+import { Button, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import React, { useState } from 'react';
+import { RegionsAndAll } from '../../utils/models';
+import BatchProcessTestButton from './batchProcessTestButton';
+import { LockStatus, Test } from './helpers/shared';
+import NewTestButton from './newTestButton';
+import TestList from './testList';
+import TestListSidebarFilterSelector from './testListSidebarFilterSelector';
+import TestPriorityLabelList from './testPriorityLabelList';
 
 const useStyles = makeStyles(() => ({
   root: {

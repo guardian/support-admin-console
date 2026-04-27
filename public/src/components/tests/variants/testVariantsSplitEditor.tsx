@@ -1,13 +1,13 @@
-import React, { ReactElement, useEffect } from 'react';
-import { FormControl, Radio, RadioGroup, FormControlLabel, TextField, Theme } from '@mui/material';
+import { FormControl, FormControlLabel, Radio, RadioGroup, TextField, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Variant } from '../../channelManagement/helpers/shared';
-import { EMPTY_ERROR_HELPER_TEXT } from '../../channelManagement/helpers/validation';
+import React, { ReactElement, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   ControlProportionSettings,
   hasControl,
 } from '../../channelManagement/helpers/controlProportionSettings';
+import { Variant } from '../../channelManagement/helpers/shared';
+import { EMPTY_ERROR_HELPER_TEXT } from '../../channelManagement/helpers/validation';
 
 const MAX_MVT = 1_000_000;
 

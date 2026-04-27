@@ -1,10 +1,9 @@
+import { FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import { fetchFrontendSettings, FrontendSettingsType } from '../../utils/requests';
 import { Campaign, unassignedCampaign } from './campaigns/CampaignsForm';
 import { Test } from './helpers/shared';
-
-import { Select, MenuItem, FormControl, SelectChangeEvent } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles(() => ({
   dialogHeader: {

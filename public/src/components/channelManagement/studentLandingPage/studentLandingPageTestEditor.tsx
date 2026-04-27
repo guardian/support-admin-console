@@ -1,15 +1,15 @@
+import { FormHelperText, Theme, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import {
   StudentLandingPageTest,
   StudentLandingPageVariant,
 } from '../../../models/studentLandingPage';
-import { ValidatedTestEditorProps } from '../validatedTestEditor';
-import { FormHelperText, Theme, Typography } from '@mui/material';
-import { VariantEditor } from './variantEditor';
-import TypedRadioGroup from '../TypedRadioGroup';
-import { makeStyles } from '@mui/styles';
 import { Region } from '../../../utils/models';
+import TypedRadioGroup from '../TypedRadioGroup';
+import { ValidatedTestEditorProps } from '../validatedTestEditor';
 import { StudentLandingPageLinkBuilder } from './studentLandingPageLinkBuilder';
+import { VariantEditor } from './variantEditor';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
