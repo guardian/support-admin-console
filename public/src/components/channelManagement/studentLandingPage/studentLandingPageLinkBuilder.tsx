@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Region } from '../../../utils/models';
-import { Institution } from '../../../models/studentLandingPage';
+import { Institution, StudentLandingPageTest } from '../../../models/studentLandingPage';
 import { getStage } from '../../../utils/stage';
 import URLGeneratorCopyButton from '../../shared/urlGeneratorCopyButton';
 import { makeStyles } from '@mui/styles';
 import { FormHelperText, Link, Theme } from '@mui/material';
 
 interface StudentLandingPageLinkBuilderProps {
-  countryGroupId: Region;
-  institution: Institution;
-  promoCode: string;
+  test: StudentLandingPageTest;
 }
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
@@ -58,9 +56,7 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 }));
 
 export const StudentLandingPageLinkBuilder: React.FC<StudentLandingPageLinkBuilderProps> = ({
-  countryGroupId,
-  institution,
-  promoCode,
+  test,
 }: StudentLandingPageLinkBuilderProps) => {
   const classes = useStyles();
 
@@ -74,15 +70,16 @@ export const StudentLandingPageLinkBuilder: React.FC<StudentLandingPageLinkBuild
     return `https://support.${stage !== 'PROD' ? 'code.dev-' : ''}theguardian.com`;
   };
 
+  const countryGroupId = test.countryGroupId;
+  const promoCode = test.variants[0].promoCodes[0];
+
   const getCountryIdFromRegion = () => {
     return countryGroupId.toString().substring(0, 2).toLowerCase();
   };
 
-  const identifierOrAcronym = institution.identifier ?? institution.acronym; // TODO: once identifier in all tests, switch to identifier only.
-
   const buildFullUrl = () => {
     setUrl(
-      `${buildBaseUrl()}/${getCountryIdFromRegion()}/student/${identifierOrAcronym}?promoCode=${promoCode}`,
+      `${buildBaseUrl()}/${getCountryIdFromRegion()}/student/${test.name}?promoCode=${promoCode}`,
     );
   };
 
@@ -92,14 +89,8 @@ export const StudentLandingPageLinkBuilder: React.FC<StudentLandingPageLinkBuild
     const baseErrorMessage =
       'The link cannot be generated yet because something is missing - please check the following: ';
     const errorMessageBuilder = [baseErrorMessage];
-    if (!countryGroupId) {
+    if (!test.countryGroupId) {
       errorMessageBuilder.push('The Country is required. ');
-    }
-    if (!institution.identifier) {
-      errorMessageBuilder.push("The Institution's Unique Identifier is required. ");
-    }
-    if (!institution.acronym) {
-      errorMessageBuilder.push("The Institution's Acronym is required. ");
     }
     if (!promoCode) {
       errorMessageBuilder.push('The promoCode is missing. ');
@@ -110,7 +101,7 @@ export const StudentLandingPageLinkBuilder: React.FC<StudentLandingPageLinkBuild
       setErrorMessage('');
       buildFullUrl();
     }
-  }, [countryGroupId, institution.acronym, promoCode]);
+  }, [countryGroupId, promoCode]);
 
   return (
     <>
