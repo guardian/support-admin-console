@@ -28,7 +28,6 @@ import Alert from '@mui/material/Alert';
 import PromoCodesEditor from '../../shared/PromoCodesEditor';
 import IsCollapsibleEditor from './isCollapsibleEditor';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {
     width: '100%',

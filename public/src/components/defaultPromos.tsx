@@ -12,7 +12,6 @@ import {
 type ProductName = 'guardianWeekly' | 'paper' | 'digital' | 'supporterPlus' | 'tierThree';
 
 type DefaultPromos = {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   [key in ProductName]: string[];
 };
 
