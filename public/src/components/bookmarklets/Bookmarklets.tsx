@@ -1,7 +1,7 @@
+import { Button, Tooltip, Typography } from '@mui/material';
+import { Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
 import React from 'react';
-import { Theme } from '@mui/material/styles';
-import { Button, Tooltip, Typography } from '@mui/material';
 
 const useStyles = makeStyles(({ typography, palette }: Theme) => ({
   container: {

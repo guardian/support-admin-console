@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { ExclusionRule as ExclusionRuleType, ExclusionSettings } from '../../models/exclusions';
 import { ChannelKey, validateRule } from './util';
 
@@ -46,16 +46,16 @@ export const useExclusionRuleHandlers = ({
   index,
   rule,
 }: UseExclusionRuleHandlersParams): UseExclusionRuleHandlersReturn => {
-  const [isExpanded, setIsExpanded] = useState(!rule.name?.trim());
-  const [isRuleInEditMode, setIsRuleInEditMode] = useState(!rule.name?.trim());
-  const [isRuleUnsaved, setIsRuleUnsaved] = useState(!rule.name?.trim());
+  const [isExpanded, setIsExpanded] = useState(!rule.name.trim());
+  const [isRuleInEditMode, setIsRuleInEditMode] = useState(!rule.name.trim());
+  const [isRuleUnsaved, setIsRuleUnsaved] = useState(!rule.name.trim());
   const [savedRule, setSavedRule] = useState<ExclusionRuleType>(rule);
   const [touchedNameFields, setTouchedNameFields] = useState<Set<number>>(new Set());
   const lastSetRuleRef = useRef(rule);
-  const { watch, reset, setValue } = useForm<ExclusionRuleFormValues>({
+  const { control, reset, setValue } = useForm<ExclusionRuleFormValues>({
     defaultValues: { rule },
   });
-  const formRule = watch('rule');
+  const formRule = useWatch({ control, name: 'rule' });
 
   useEffect(() => {
     const serverRuleMatchesLastSaved = rulesAreEqual(rule, savedRule);
@@ -65,15 +65,18 @@ export const useExclusionRuleHandlers = ({
       return;
     }
 
-    if (rule !== lastSetRuleRef.current) {
-      // A different rule was placed at this index slot (e.g. after a deletion)
-      lastSetRuleRef.current = rule;
-      setIsRuleInEditMode(!rule.name?.trim());
-      setIsRuleUnsaved(!rule.name?.trim());
-      setIsExpanded(!rule.name?.trim());
-      setTouchedNameFields(new Set());
-      setSavedRule(rule);
+    if (rule === lastSetRuleRef.current) {
+      return;
     }
+
+    // A different rule was placed at this index slot (e.g. after a deletion)
+    lastSetRuleRef.current = rule;
+    const isNameEmpty = !lastSetRuleRef.current.name.trim();
+    setIsRuleInEditMode(isNameEmpty);
+    setIsRuleUnsaved(isNameEmpty);
+    setIsExpanded(isNameEmpty);
+    setTouchedNameFields(new Set());
+    setSavedRule(rule);
     reset({ rule });
   }, [isRuleInEditMode, isRuleUnsaved, reset, rule, savedRule]);
 
@@ -116,7 +119,7 @@ export const useExclusionRuleHandlers = ({
   };
 
   const handleCancelRule = () => {
-    const savedRuleIsEmpty = !savedRule.name?.trim();
+    const savedRuleIsEmpty = !savedRule.name.trim();
     const currentRules = data[channel]?.rules ?? [];
 
     if (savedRuleIsEmpty) {

@@ -1,6 +1,3 @@
-import React, { useState, useEffect } from 'react';
-import { Theme } from '@mui/material/styles';
-import { makeStyles } from '@mui/styles';
 import {
   Checkbox,
   Divider,
@@ -11,15 +8,17 @@ import {
   Radio,
   RadioGroup,
 } from '@mui/material';
-import { AmountsVariantEditorRow } from './AmountsVariantEditorRow';
-import { DeleteVariantButton } from './DeleteVariantButton';
-
+import { Theme } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
+import React, { useEffect, useState } from 'react';
 import {
   AmountsVariant,
-  ContributionType,
-  contributionIds,
   AmountValuesObject,
+  contributionIds,
+  ContributionType,
 } from '../../utils/models';
+import { AmountsVariantEditorRow } from './AmountsVariantEditorRow';
+import { DeleteVariantButton } from './DeleteVariantButton';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
@@ -72,11 +71,6 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
     useState(displayContributionType);
 
   useEffect(() => {
-    setCurrentContributionDefault(defaultContributionType);
-    setCurrentContributionDisplay(displayContributionType);
-  }, [variant]);
-
-  useEffect(() => {
     const updatedAmounts: AmountsVariant = {
       variantName,
       defaultContributionType: currentContributionDefault,
@@ -84,63 +78,63 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
       amountsCardData,
     };
     updateVariant(updatedAmounts);
-  }, [currentContributionDefault, currentContributionDisplay]);
+  }, [
+    amountsCardData,
+    currentContributionDefault,
+    currentContributionDisplay,
+    updateVariant,
+    variantName,
+  ]);
 
   const updateAmounts = (label: ContributionType, val: number[]) => {
     const contributionsToUpdate = amountsCardData[label];
-    if (contributionsToUpdate != null) {
-      const updatedAmounts: AmountsVariant = {
-        variantName,
-        defaultContributionType,
-        displayContributionType,
-        amountsCardData: {
-          ...amountsCardData,
-          [label]: {
-            ...contributionsToUpdate,
-            amounts: val,
-          },
+    const updatedAmounts: AmountsVariant = {
+      variantName,
+      defaultContributionType: currentContributionDefault,
+      displayContributionType: currentContributionDisplay,
+      amountsCardData: {
+        ...amountsCardData,
+        [label]: {
+          ...contributionsToUpdate,
+          amounts: val,
         },
-      };
-      updateVariant(updatedAmounts);
-    }
+      },
+    };
+    updateVariant(updatedAmounts);
   };
 
   const updateChooseAmount = (label: ContributionType, val: boolean) => {
     const contributionsToUpdate = amountsCardData[label];
-    if (contributionsToUpdate != null) {
-      const updatedAmounts: AmountsVariant = {
-        variantName,
-        defaultContributionType,
-        displayContributionType,
-        amountsCardData: {
-          ...amountsCardData,
-          [label]: {
-            ...contributionsToUpdate,
-            hideChooseYourAmount: val,
-          },
+    const updatedAmounts: AmountsVariant = {
+      variantName,
+      defaultContributionType: currentContributionDefault,
+      displayContributionType: currentContributionDisplay,
+      amountsCardData: {
+        ...amountsCardData,
+        [label]: {
+          ...contributionsToUpdate,
+          hideChooseYourAmount: val,
         },
-      };
-      updateVariant(updatedAmounts);
-    }
+      },
+    };
+    updateVariant(updatedAmounts);
   };
 
   const updateDefaultAmount = (label: ContributionType, val: number) => {
     const contributionsToUpdate = amountsCardData[label];
-    if (contributionsToUpdate != null) {
-      const updatedAmounts: AmountsVariant = {
-        variantName,
-        defaultContributionType,
-        displayContributionType,
-        amountsCardData: {
-          ...amountsCardData,
-          [label]: {
-            ...contributionsToUpdate,
-            defaultAmount: val,
-          },
+    const updatedAmounts: AmountsVariant = {
+      variantName,
+      defaultContributionType: currentContributionDefault,
+      displayContributionType: currentContributionDisplay,
+      amountsCardData: {
+        ...amountsCardData,
+        [label]: {
+          ...contributionsToUpdate,
+          defaultAmount: val,
         },
-      };
-      updateVariant(updatedAmounts);
-    }
+      },
+    };
+    updateVariant(updatedAmounts);
   };
 
   const updateDefaultContribution = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -173,24 +167,20 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
       <div>
         {contributionIds.map((k) => {
           const cardData: AmountValuesObject = amountsCardData[k as ContributionType];
-          if (cardData != null) {
-            return (
-              <div key={`${variantName}_${k}_row`}>
-                <Divider />
-                <AmountsVariantEditorRow
-                  label={k as ContributionType}
-                  amounts={cardData.amounts}
-                  defaultAmount={cardData.defaultAmount}
-                  hideChooseYourAmount={cardData.hideChooseYourAmount}
-                  updateAmounts={updateAmounts}
-                  updateChooseAmount={updateChooseAmount}
-                  updateDefaultAmount={updateDefaultAmount}
-                />
-              </div>
-            );
-          } else {
-            return <></>;
-          }
+          return (
+            <div key={`${variantName}_${k}_row`}>
+              <Divider />
+              <AmountsVariantEditorRow
+                label={k as ContributionType}
+                amounts={cardData.amounts}
+                defaultAmount={cardData.defaultAmount}
+                hideChooseYourAmount={cardData.hideChooseYourAmount}
+                updateAmounts={updateAmounts}
+                updateChooseAmount={updateChooseAmount}
+                updateDefaultAmount={updateDefaultAmount}
+              />
+            </div>
+          );
         })}
       </div>
     );

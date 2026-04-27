@@ -1,8 +1,8 @@
-import React from 'react';
 import { List, ListItem, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { red } from '@mui/material/colors';
-import { AmountsTests, AmountsTest } from '../../utils/models';
+import { makeStyles } from '@mui/styles';
+import React from 'react';
+import { AmountsTest, AmountsTests } from '../../utils/models';
 import { CreateTestButton } from './CreateTestButton';
 
 const useStyles = makeStyles(({ palette }) => ({
@@ -97,8 +97,8 @@ export const AmountsTestsList: React.FC<AmountsTestsListProps> = ({
   const getRegionTests = () => {
     const regionTests = tests.filter((t) => t.targeting.targetingType === 'Region');
     return regionTests.sort((a, b) => {
-      const A = a.testLabel || a.testName;
-      const B = b.testLabel || b.testName;
+      const A = a.testLabel ?? a.testName;
+      const B = b.testLabel ?? b.testName;
       return A < B ? -1 : 1;
     });
   };
@@ -109,8 +109,8 @@ export const AmountsTestsList: React.FC<AmountsTestsListProps> = ({
       if (a.order !== b.order) {
         return a.order - b.order;
       }
-      const A = a.testLabel || a.testName;
-      const B = b.testLabel || b.testName;
+      const A = a.testLabel ?? a.testName;
+      const B = b.testLabel ?? b.testName;
       return A < B ? -1 : 1;
     });
   };
@@ -142,7 +142,7 @@ export const AmountsTestsList: React.FC<AmountsTestsListProps> = ({
         onClick={(): void => onTestSelected(test.testName)}
         button
       >
-        {test.testLabel || test.testName}
+        {test.testLabel ?? test.testName}
       </ListItem>
     );
   };
