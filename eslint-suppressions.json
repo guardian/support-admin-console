@@ -1,4 +1,9 @@
 {
+  "public/src/components/amounts/AmountsVariantEditor.tsx": {
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 6
+    }
+  },
   "public/src/components/channelManagement/CampaignSelector.tsx": {
     "@typescript-eslint/no-floating-promises": {
       "count": 1
@@ -163,6 +168,11 @@
       "count": 1
     }
   },
+  "public/src/components/channelManagement/bannerDesigns/StickyTopBar.tsx": {
+    "import/order": {
+      "count": 1
+    }
+  },
   "public/src/components/channelManagement/bannerDesigns/index.tsx": {
     "@typescript-eslint/no-floating-promises": {
       "count": 2
@@ -197,6 +207,9 @@
     },
     "@typescript-eslint/prefer-optional-chain": {
       "count": 2
+    },
+    "import/order": {
+      "count": 6
     }
   },
   "public/src/components/channelManagement/bannerTests/deployScheduleEditor.tsx": {
@@ -224,6 +237,9 @@
     },
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 8
+    },
+    "import/order": {
+      "count": 7
     },
     "react-hooks/exhaustive-deps": {
       "count": 3
@@ -274,6 +290,9 @@
     }
   },
   "public/src/components/channelManagement/campaigns/CampaignsList.tsx": {
+    "@typescript-eslint/prefer-optional-chain": {
+      "count": 1
+    },
     "import/no-cycle": {
       "count": 1
     }
@@ -346,6 +365,9 @@
     }
   },
   "public/src/components/channelManagement/campaigns/TestDataDialog.tsx": {
+    "@typescript-eslint/no-explicit-any": {
+      "count": 1
+    },
     "@typescript-eslint/no-floating-promises": {
       "count": 1
     },
@@ -516,6 +538,9 @@
     },
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 1
+    },
+    "import/order": {
+      "count": 1
     }
   },
   "public/src/components/channelManagement/epicTests/testPreview.tsx": {
@@ -541,6 +566,9 @@
   },
   "public/src/components/channelManagement/gutterTests/gutterTestEditor.tsx": {
     "@typescript-eslint/no-unnecessary-condition": {
+      "count": 2
+    },
+    "import/order": {
       "count": 2
     }
   },
@@ -669,6 +697,9 @@
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 5
     },
+    "import/order": {
+      "count": 3
+    },
     "react-hooks/exhaustive-deps": {
       "count": 1
     },
@@ -679,6 +710,9 @@
   "public/src/components/channelManagement/sidebar.tsx": {
     "@typescript-eslint/no-unnecessary-condition": {
       "count": 3
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 1
     },
     "@typescript-eslint/prefer-includes": {
       "count": 2
@@ -721,6 +755,9 @@
     }
   },
   "public/src/components/channelManagement/studentLandingPage/studentLandingPageTestEditor.tsx": {
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 4
+    },
     "react-hooks/exhaustive-deps": {
       "count": 1
     },
@@ -822,10 +859,18 @@
   "public/src/components/channelManagement/testEditorTargetRegionsSelector.tsx": {
     "@typescript-eslint/no-unnecessary-condition": {
       "count": 2
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 2
     }
   },
   "public/src/components/channelManagement/testListBanditIcon.tsx": {
     "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    }
+  },
+  "public/src/components/channelManagement/testListSidebarFilterSelector.tsx": {
+    "@typescript-eslint/no-unnecessary-type-arguments": {
       "count": 1
     }
   },
@@ -1111,6 +1156,9 @@
     },
     "import/no-cycle": {
       "count": 1
+    },
+    "import/order": {
+      "count": 24
     }
   },
   "public/src/utils/models.tsx": {
