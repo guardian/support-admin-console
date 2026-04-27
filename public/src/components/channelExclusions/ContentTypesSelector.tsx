@@ -1,5 +1,5 @@
+import { Box, FormControl, FormControlLabel, Radio, RadioGroup, Typography } from '@mui/material';
 import React, { useEffect } from 'react';
-import { FormControl, FormControlLabel, Radio, RadioGroup, Typography, Box } from '@mui/material';
 import { ExclusionRule } from '../../models/exclusions';
 import { ChannelKey } from './util';
 
