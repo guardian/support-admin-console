@@ -5,7 +5,6 @@ import { makeStyles } from '@mui/styles';
 
 import BannerChannelDeployer from './bannerChannelDeployer';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   scrollableContainer: {
     overflow: 'auto',

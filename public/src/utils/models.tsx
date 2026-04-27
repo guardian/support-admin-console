@@ -1,5 +1,4 @@
 export interface CommonStringObject {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   [index: string]: string;
 }
 
