@@ -1580,7 +1580,7 @@
   },
   "public/src/components/channelManagement/studentLandingPage/studentLandingPageLinkBuilder.tsx": {
     "import/order": {
-      "count": 3
+      "count": 2
     },
     "react-hooks/exhaustive-deps": {
       "count": 1
