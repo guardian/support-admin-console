@@ -1,10 +1,10 @@
-import React from 'react';
-import { Button, Divider, Typography, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import AddIcon from '@mui/icons-material/Add';
+import { Button, Divider, Theme, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import React from 'react';
 import { ExclusionRule as ExclusionRuleType, ExclusionSettings } from '../../models/exclusions';
-import { ChannelKey } from './util';
 import ExclusionRule from './ExclusionRule';
+import { ChannelKey } from './util';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
