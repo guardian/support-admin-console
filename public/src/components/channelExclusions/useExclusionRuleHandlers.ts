@@ -55,6 +55,7 @@ export const useExclusionRuleHandlers = ({
   const { watch, reset, setValue } = useForm<ExclusionRuleFormValues>({
     defaultValues: { rule },
   });
+  // eslint-disable-next-line react-hooks/incompatible-library -- temporary suppression
   const formRule = watch('rule');
 
   useEffect(() => {
