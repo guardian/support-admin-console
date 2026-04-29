@@ -1,3 +1,6 @@
+import React, { useState, useEffect } from 'react';
+import { Theme } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
 import {
   Checkbox,
   Divider,
@@ -8,17 +11,15 @@ import {
   Radio,
   RadioGroup,
 } from '@mui/material';
-import { Theme } from '@mui/material/styles';
-import { makeStyles } from '@mui/styles';
-import React, { useEffect, useState } from 'react';
-import {
-  AmountsVariant,
-  AmountValuesObject,
-  contributionIds,
-  ContributionType,
-} from '../../utils/models';
 import { AmountsVariantEditorRow } from './AmountsVariantEditorRow';
 import { DeleteVariantButton } from './DeleteVariantButton';
+
+import {
+  AmountsVariant,
+  ContributionType,
+  contributionIds,
+  AmountValuesObject,
+} from '../../utils/models';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
@@ -71,6 +72,11 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
     useState(displayContributionType);
 
   useEffect(() => {
+    setCurrentContributionDefault(defaultContributionType);
+    setCurrentContributionDisplay(displayContributionType);
+  }, [variant]);
+
+  useEffect(() => {
     const updatedAmounts: AmountsVariant = {
       variantName,
       defaultContributionType: currentContributionDefault,
@@ -78,63 +84,63 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
       amountsCardData,
     };
     updateVariant(updatedAmounts);
-  }, [
-    amountsCardData,
-    currentContributionDefault,
-    currentContributionDisplay,
-    updateVariant,
-    variantName,
-  ]);
+  }, [currentContributionDefault, currentContributionDisplay]);
 
   const updateAmounts = (label: ContributionType, val: number[]) => {
     const contributionsToUpdate = amountsCardData[label];
-    const updatedAmounts: AmountsVariant = {
-      variantName,
-      defaultContributionType: currentContributionDefault,
-      displayContributionType: currentContributionDisplay,
-      amountsCardData: {
-        ...amountsCardData,
-        [label]: {
-          ...contributionsToUpdate,
-          amounts: val,
+    if (contributionsToUpdate != null) {
+      const updatedAmounts: AmountsVariant = {
+        variantName,
+        defaultContributionType,
+        displayContributionType,
+        amountsCardData: {
+          ...amountsCardData,
+          [label]: {
+            ...contributionsToUpdate,
+            amounts: val,
+          },
         },
-      },
-    };
-    updateVariant(updatedAmounts);
+      };
+      updateVariant(updatedAmounts);
+    }
   };
 
   const updateChooseAmount = (label: ContributionType, val: boolean) => {
     const contributionsToUpdate = amountsCardData[label];
-    const updatedAmounts: AmountsVariant = {
-      variantName,
-      defaultContributionType: currentContributionDefault,
-      displayContributionType: currentContributionDisplay,
-      amountsCardData: {
-        ...amountsCardData,
-        [label]: {
-          ...contributionsToUpdate,
-          hideChooseYourAmount: val,
+    if (contributionsToUpdate != null) {
+      const updatedAmounts: AmountsVariant = {
+        variantName,
+        defaultContributionType,
+        displayContributionType,
+        amountsCardData: {
+          ...amountsCardData,
+          [label]: {
+            ...contributionsToUpdate,
+            hideChooseYourAmount: val,
+          },
         },
-      },
-    };
-    updateVariant(updatedAmounts);
+      };
+      updateVariant(updatedAmounts);
+    }
   };
 
   const updateDefaultAmount = (label: ContributionType, val: number) => {
     const contributionsToUpdate = amountsCardData[label];
-    const updatedAmounts: AmountsVariant = {
-      variantName,
-      defaultContributionType: currentContributionDefault,
-      displayContributionType: currentContributionDisplay,
-      amountsCardData: {
-        ...amountsCardData,
-        [label]: {
-          ...contributionsToUpdate,
-          defaultAmount: val,
+    if (contributionsToUpdate != null) {
+      const updatedAmounts: AmountsVariant = {
+        variantName,
+        defaultContributionType,
+        displayContributionType,
+        amountsCardData: {
+          ...amountsCardData,
+          [label]: {
+            ...contributionsToUpdate,
+            defaultAmount: val,
+          },
         },
-      },
-    };
-    updateVariant(updatedAmounts);
+      };
+      updateVariant(updatedAmounts);
+    }
   };
 
   const updateDefaultContribution = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -167,20 +173,24 @@ export const AmountsVariantEditor: React.FC<AmountsVariantEditorProps> = ({
       <div>
         {contributionIds.map((k) => {
           const cardData: AmountValuesObject = amountsCardData[k as ContributionType];
-          return (
-            <div key={`${variantName}_${k}_row`}>
-              <Divider />
-              <AmountsVariantEditorRow
-                label={k as ContributionType}
-                amounts={cardData.amounts}
-                defaultAmount={cardData.defaultAmount}
-                hideChooseYourAmount={cardData.hideChooseYourAmount}
-                updateAmounts={updateAmounts}
-                updateChooseAmount={updateChooseAmount}
-                updateDefaultAmount={updateDefaultAmount}
-              />
-            </div>
-          );
+          if (cardData != null) {
+            return (
+              <div key={`${variantName}_${k}_row`}>
+                <Divider />
+                <AmountsVariantEditorRow
+                  label={k as ContributionType}
+                  amounts={cardData.amounts}
+                  defaultAmount={cardData.defaultAmount}
+                  hideChooseYourAmount={cardData.hideChooseYourAmount}
+                  updateAmounts={updateAmounts}
+                  updateChooseAmount={updateChooseAmount}
+                  updateDefaultAmount={updateDefaultAmount}
+                />
+              </div>
+            );
+          } else {
+            return <></>;
+          }
         })}
       </div>
     );
