@@ -254,13 +254,11 @@ export default function NavDrawer(): React.ReactElement {
             <ListItemText primary="App Meter Switches" />
           </ListItemButton>
         </Link>
-        {getStage() != 'PROD' && (
-          <Link key="Channel Exclusions" to="/exclusions" className={classes.link}>
-            <ListItemButton className={classes.listItem} key="Channel Exclusions">
-              <ListItemText primary="Channel Exclusions" />
-            </ListItemButton>
-          </Link>
-        )}
+        <Link key="Channel Exclusions" to="/exclusions" className={classes.link}>
+          <ListItemButton className={classes.listItem} key="Channel Exclusions">
+            <ListItemText primary="Channel Exclusions" />
+          </ListItemButton>
+        </Link>
         <Link key="Test Audits" to="/audit-tests" className={classes.link}>
           <ListItemButton className={classes.listItem} key="Test Audits">
             <ListItemText primary="Test Audits" />
