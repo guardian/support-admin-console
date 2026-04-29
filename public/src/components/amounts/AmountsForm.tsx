@@ -1,15 +1,18 @@
-import { Theme } from '@mui/material/styles';
-import { makeStyles } from '@mui/styles';
 import React, { useState } from 'react';
-import withS3Data, { DataFromServer, InnerProps } from '../../hocs/withS3Data';
-import { AmountsTest, AmountsTests, ContributionType } from '../../utils/models';
+import { AmountsTests, AmountsTest, ContributionType } from '../../utils/models';
+
+import { AmountsTestsList } from './AmountsTestsList';
+import { AmountsTestEditor } from './AmountsTestEditor';
+
 import {
+  SupportFrontendSettingsType,
   fetchSupportFrontendSettings,
   saveSupportFrontendSettings,
-  SupportFrontendSettingsType,
 } from '../../utils/requests';
-import { AmountsTestEditor } from './AmountsTestEditor';
-import { AmountsTestsList } from './AmountsTestsList';
+import withS3Data, { InnerProps, DataFromServer } from '../../hocs/withS3Data';
+
+import { Theme } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   body: {
@@ -179,7 +182,8 @@ const AmountsForm: React.FC<InnerProps<AmountsTests>> = ({
   );
 };
 
-const fetchSettings = (): Promise<DataFromServer<AmountsTests>> =>
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const fetchSettings = (): Promise<any> =>
   fetchSupportFrontendSettings(SupportFrontendSettingsType.amounts);
 
 const saveSettings = (data: DataFromServer<AmountsTests>): Promise<Response> =>
