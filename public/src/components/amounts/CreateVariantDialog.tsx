@@ -1,4 +1,4 @@
-import CloseIcon from '@mui/icons-material/Close';
+import React, { useState } from 'react';
 import {
   Button,
   Dialog,
@@ -9,7 +9,7 @@ import {
   TextField,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useState } from 'react';
+import CloseIcon from '@mui/icons-material/Close';
 
 const useStyles = makeStyles(() => ({
   dialogHeader: {
@@ -50,7 +50,7 @@ export const CreateVariantDialog: React.FC<CreateVariantDialogProps> = ({
   const [errorMessage, setErrorMessage] = useState(errorMessages.REQUIRED);
 
   const onSubmit = (): void => {
-    if (name?.length && !existingNames.includes(name)) {
+    if (name && name.length && !existingNames.includes(name)) {
       createVariant(name.toUpperCase());
       setName(undefined);
       setErrorMessage(errorMessages.REQUIRED);

@@ -1,8 +1,8 @@
+import React from 'react';
 import { Button, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React from 'react';
-import useOpenable from '../../hooks/useOpenable';
 import { DeleteVariantDialog } from './DeleteVariantDialog';
+import useOpenable from '../../hooks/useOpenable';
 
 const useStyles = makeStyles(() => ({
   button: {

@@ -1,13 +1,16 @@
+import React, { useState, useEffect } from 'react';
+
+import { Typography, Button, TextField, Autocomplete } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
-import { Autocomplete, Button, TextField, Typography } from '@mui/material';
 import { Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { AmountsTest, AmountsVariant, countries, Country } from '../../utils/models';
 import LiveSwitch from '../shared/liveSwitch';
+
 import { AmountsVariantEditor } from './AmountsVariantEditor';
 import { CreateVariantButton } from './CreateVariantButton';
 import { DeleteTestButton } from './DeleteTestButton';
+
+import { AmountsTest, AmountsVariant, Country, countries } from '../../utils/models';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -87,35 +90,47 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
 }: AmountsTestEditorProps) => {
   const classes = useStyles();
 
+  const { testName, liveTestName, isLive = false, targeting, order = 0, variants } = test || {};
+
+  const [saveButtonIsDisabled, setSaveButtonIsDisabled] = useState<boolean>(true);
+  const [testVariants, setTestVariants] = useState<AmountsVariant[]>([]);
+  const [testIsLive, setTestIsLive] = useState<boolean>(isLive);
+
+  const [currentLiveTestName, setCurrentLiveTestName] = useState<string | undefined>(liveTestName);
+  const [currentLiveTestError, setCurrentLiveTestError] = useState(nameErrorMessages.REQUIRED);
+  const [currentOrder, setCurrentOrder] = useState(order);
+  const [currentOrderError, setCurrentOrderError] = useState(orderErrorMessages.OK);
+  const [currentCountry, setCurrentCountry] = useState<CountryTag[]>([]);
+  const [currentCountryError, setCurrentCountryError] = useState(countryErrorMessages.OK);
+
   const convertToCountryTag = (vals: Country[]): CountryTag[] => {
     const output: CountryTag[] = [];
     vals.forEach((id) => output.push({ id, label: countries[id] }));
     return output;
   };
 
-  const convertFromCountryTag = useCallback((vals: CountryTag[]): Country[] => {
+  const convertFromCountryTag = (vals: CountryTag[]): Country[] => {
     const output: Country[] = [];
     vals.forEach((tag) => output.push(tag.id));
     return output;
-  }, []);
+  };
 
-  const testName = test?.testName;
-  const targeting = test?.targeting;
+  useEffect(() => {
+    if (test != null && variants != null) {
+      setTestVariants([...variants]);
+      setTestIsLive(isLive);
+      updateLiveTestName(liveTestName || '');
+      updateOrder(order || 0);
+      updateCountry(
+        test.targeting.targetingType === 'Country'
+          ? convertToCountryTag(test.targeting.countries)
+          : [],
+      );
+    }
+  }, [test]);
 
-  const [saveButtonIsDisabled, setSaveButtonIsDisabled] = useState<boolean>(true);
-  const [testVariants, setTestVariants] = useState<AmountsVariant[]>([]);
-  const [testIsLive, setTestIsLive] = useState<boolean>(false);
-
-  const [currentLiveTestName, setCurrentLiveTestName] = useState<string>('');
-  const [currentLiveTestError, setCurrentLiveTestError] = useState(nameErrorMessages.REQUIRED);
-  const [currentOrder, setCurrentOrder] = useState(0);
-  const [currentOrderError, setCurrentOrderError] = useState(orderErrorMessages.OK);
-  const [currentCountry, setCurrentCountry] = useState<CountryTag[]>([]);
-  const [currentCountryError, setCurrentCountryError] = useState(countryErrorMessages.OK);
-  const lastTestNameRef = useRef<string>('');
-
-  const syncTestToParent = useCallback(() => {
-    if (test) {
+  useEffect(() => {
+    if (test != null) {
       const t: AmountsTest = {
         ...test,
         variants: [...testVariants],
@@ -132,99 +147,7 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
       };
       updateTest(t);
     }
-  }, [
-    test,
-    testVariants,
-    testIsLive,
-    currentLiveTestName,
-    currentOrder,
-    currentCountry,
-    updateTest,
-    convertFromCountryTag,
-  ]);
-
-  const updateLiveTestName = useCallback(
-    (update: string) => {
-      if (!update.trim()) {
-        setCurrentLiveTestName('');
-        setCurrentLiveTestError(nameErrorMessages.REQUIRED);
-        setSaveButtonIsDisabled(true);
-      } else {
-        setCurrentLiveTestName(update.toUpperCase());
-        if (checkLiveTestNameIsUnique(update, testName ?? '')) {
-          setCurrentLiveTestError(nameErrorMessages.OK);
-        } else {
-          setCurrentLiveTestError(nameErrorMessages.DUPLICATE);
-        }
-        setSaveButtonIsDisabled(false);
-      }
-    },
-    [checkLiveTestNameIsUnique, testName],
-  );
-
-  const updateOrder = useCallback((update: number) => {
-    if (isNaN(update)) {
-      setCurrentOrder(0);
-      setCurrentOrderError(orderErrorMessages.NOTANUMBER);
-      setSaveButtonIsDisabled(true);
-    } else {
-      setCurrentOrder(update);
-      if (update < 0) {
-        setCurrentOrderError(orderErrorMessages.NEGATIVE);
-      } else {
-        setCurrentOrderError(orderErrorMessages.OK);
-      }
-      setSaveButtonIsDisabled(false);
-    }
-  }, []);
-
-  const updateCountry = useCallback((update: CountryTag[]) => {
-    setCurrentCountry([...update]);
-    if (update.length) {
-      setCurrentCountryError(countryErrorMessages.OK);
-      setSaveButtonIsDisabled(false);
-    } else {
-      setCurrentCountryError(countryErrorMessages.REQUIRED);
-      setSaveButtonIsDisabled(true);
-    }
-  }, []);
-
-  // Sync test prop to local state when test changes
-  useEffect(() => {
-    if (test && test.testName !== lastTestNameRef.current) {
-      lastTestNameRef.current = test.testName;
-
-      // Defer state updates to avoid cascading renders
-      queueMicrotask(() => {
-        setTestVariants(test.variants);
-        setTestIsLive(test.isLive);
-        setCurrentLiveTestName(test.liveTestName ?? '');
-        setCurrentOrder(test.order);
-        setCurrentCountry(
-          test.targeting.targetingType === 'Country'
-            ? convertToCountryTag(test.targeting.countries)
-            : [],
-        );
-        setSaveButtonIsDisabled(true);
-
-        if (!test.liveTestName?.trim()) {
-          setCurrentLiveTestError(nameErrorMessages.REQUIRED);
-        } else if (checkLiveTestNameIsUnique(test.liveTestName, test.testName)) {
-          setCurrentLiveTestError(nameErrorMessages.OK);
-        } else {
-          setCurrentLiveTestError(nameErrorMessages.DUPLICATE);
-        }
-
-        setCurrentOrderError(orderErrorMessages.OK);
-
-        const countryCount =
-          test.targeting.targetingType === 'Country' ? test.targeting.countries.length : 0;
-        setCurrentCountryError(
-          countryCount > 0 ? countryErrorMessages.OK : countryErrorMessages.REQUIRED,
-        );
-      });
-    }
-  }, [test, checkLiveTestNameIsUnique]);
+  }, [testVariants, testIsLive, currentLiveTestName, currentOrder, currentCountry]);
 
   const createVariant = (name: string) => {
     const newVariant: AmountsVariant = {
@@ -252,7 +175,38 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
     const newState: AmountsVariant[] = [...testVariants, newVariant];
     setTestVariants(newState);
     setSaveButtonIsDisabled(false);
-    setTimeout(() => syncTestToParent(), 0);
+  };
+
+  const updateLiveTestName = (update: string) => {
+    if (!update || !update.trim()) {
+      setCurrentLiveTestName('');
+      setCurrentLiveTestError(nameErrorMessages.REQUIRED);
+      setSaveButtonIsDisabled(true);
+    } else {
+      setCurrentLiveTestName(update.toUpperCase());
+      if (checkLiveTestNameIsUnique(update, testName || '')) {
+        setCurrentLiveTestError(nameErrorMessages.OK);
+      } else {
+        setCurrentLiveTestError(nameErrorMessages.DUPLICATE);
+      }
+      setSaveButtonIsDisabled(false);
+    }
+  };
+
+  const updateOrder = (update: number) => {
+    if (update == null || isNaN(update)) {
+      setCurrentOrder(0);
+      setCurrentOrderError(orderErrorMessages.NOTANUMBER);
+      setSaveButtonIsDisabled(true);
+    } else {
+      setCurrentOrder(update);
+      if (update < 0) {
+        setCurrentOrderError(orderErrorMessages.NEGATIVE);
+      } else {
+        setCurrentOrderError(orderErrorMessages.OK);
+      }
+      setSaveButtonIsDisabled(false);
+    }
   };
 
   const updateVariant = (variant: AmountsVariant) => {
@@ -266,7 +220,17 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
     });
     setTestVariants(newState);
     setSaveButtonIsDisabled(false);
-    setTimeout(() => syncTestToParent(), 0);
+  };
+
+  const updateCountry = (update: CountryTag[]) => {
+    setCurrentCountry([...update]);
+    if (update.length) {
+      setCurrentCountryError(countryErrorMessages.OK);
+      setSaveButtonIsDisabled(false);
+    } else {
+      setCurrentCountryError(countryErrorMessages.REQUIRED);
+      setSaveButtonIsDisabled(true);
+    }
   };
 
   const getExistingVariantNames = () => {
@@ -278,17 +242,14 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
     const newState = testVariants.filter((v) => deleteName !== v.variantName);
     setTestVariants(newState);
     setSaveButtonIsDisabled(false);
-    setTimeout(() => syncTestToParent(), 0);
   };
 
   const updateTestIsLive = () => {
     setTestIsLive(!testIsLive);
     setSaveButtonIsDisabled(false);
-    setTimeout(() => syncTestToParent(), 0);
   };
 
   const saveCurrentTest = () => {
-    syncTestToParent();
     saveTest();
     setSaveButtonIsDisabled(true);
   };
@@ -319,7 +280,7 @@ export const AmountsTestEditor: React.FC<AmountsTestEditorProps> = ({
     return (
       <div className={classes.buttonBar}>
         {checkIfTestIsCountryTier() && (
-          <DeleteTestButton testName={testName ?? ''} confirmDeletion={deleteCurrentTest} />
+          <DeleteTestButton testName={testName || ''} confirmDeletion={deleteCurrentTest} />
         )}
         <CreateVariantButton
           createVariant={createVariant}
