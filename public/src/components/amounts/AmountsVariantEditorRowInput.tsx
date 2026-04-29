@@ -1,6 +1,6 @@
+import React, { useState } from 'react';
 import { Button, TextField, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useState } from 'react';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   textField: {
@@ -34,20 +34,22 @@ export const AmountsVariantEditorRowInput: React.FC<AmountsVariantEditorRowInput
   };
 
   const checkKey = (event: React.KeyboardEvent<HTMLInputElement>): void => {
-    if (event.key === 'Enter') {
+    if (event && event.key === 'Enter') {
       onSubmit();
     }
   };
 
   const checkInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const update = parseInt(event.target.value, 10);
-    if (isNaN(update)) {
-      setCurrentError('Invalid value');
-    } else if (amounts.includes(update)) {
-      setCurrentError('Duplicate value');
-    } else {
-      setCurrentValue(update);
-      setCurrentError('');
+    if (event && event.target) {
+      const update = parseInt(event.target.value, 10);
+      if (isNaN(update)) {
+        setCurrentError('Invalid value');
+      } else if (amounts.includes(update)) {
+        setCurrentError('Duplicate value');
+      } else {
+        setCurrentValue(update);
+        setCurrentError('');
+      }
     }
   };
 
