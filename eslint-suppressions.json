@@ -131,11 +131,6 @@
       "count": 2
     }
   },
-  "public/src/components/channelManagement/CampaignSelector.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    }
-  },
   "public/src/components/channelManagement/MultiSelectCountryEditor.tsx": {
     "@typescript-eslint/no-base-to-string": {
       "count": 1
@@ -391,36 +386,11 @@
       "count": 2
     }
   },
-  "public/src/components/channelManagement/campaigns/CampaignsEditor.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 4
-    },
-    "@typescript-eslint/no-misused-promises": {
-      "count": 1
-    },
-    "import/no-cycle": {
-      "count": 3
-    },
-    "react-hooks/exhaustive-deps": {
-      "count": 1
-    }
-  },
   "public/src/components/channelManagement/campaigns/CampaignsForm.tsx": {
     "@typescript-eslint/no-floating-promises": {
       "count": 1
     },
-    "import/no-cycle": {
-      "count": 3
-    },
     "react-hooks/set-state-in-effect": {
-      "count": 1
-    }
-  },
-  "public/src/components/channelManagement/campaigns/CampaignsList.tsx": {
-    "@typescript-eslint/prefer-optional-chain": {
-      "count": 1
-    },
-    "import/no-cycle": {
       "count": 1
     }
   },
@@ -430,45 +400,10 @@
     },
     "@typescript-eslint/prefer-optional-chain": {
       "count": 1
-    },
-    "import/no-cycle": {
-      "count": 1
-    }
-  },
-  "public/src/components/channelManagement/campaigns/ChannelCard.tsx": {
-    "import/no-cycle": {
-      "count": 1
     }
   },
   "public/src/components/channelManagement/campaigns/CreateCampaignDialog.tsx": {
     "@typescript-eslint/no-misused-promises": {
-      "count": 1
-    }
-  },
-  "public/src/components/channelManagement/campaigns/NewCampaignButton.tsx": {
-    "import/no-cycle": {
-      "count": 1
-    }
-  },
-  "public/src/components/channelManagement/campaigns/StatusUpdateButton.tsx": {
-    "import/no-cycle": {
-      "count": 1
-    }
-  },
-  "public/src/components/channelManagement/campaigns/StatusUpdateDialog.tsx": {
-    "@eslint-community/eslint-comments/require-description": {
-      "count": 1
-    },
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    },
-    "@typescript-eslint/no-unnecessary-condition": {
-      "count": 1
-    },
-    "import/no-cycle": {
-      "count": 1
-    },
-    "react-hooks/set-state-in-effect": {
       "count": 1
     }
   },
@@ -477,9 +412,6 @@
       "count": 1
     },
     "@typescript-eslint/prefer-nullish-coalescing": {
-      "count": 1
-    },
-    "import/no-cycle": {
       "count": 1
     }
   },
@@ -573,17 +505,6 @@
     },
     "react-hooks/exhaustive-deps": {
       "count": 2
-    }
-  },
-  "public/src/components/channelManagement/createTestDialog.tsx": {
-    "@typescript-eslint/no-floating-promises": {
-      "count": 1
-    },
-    "@typescript-eslint/no-misused-promises": {
-      "count": 1
-    },
-    "@typescript-eslint/prefer-nullish-coalescing": {
-      "count": 3
     }
   },
   "public/src/components/channelManagement/createVariantDialog.tsx": {
@@ -871,14 +792,6 @@
     },
     "react-hooks/exhaustive-deps": {
       "count": 2
-    }
-  },
-  "public/src/components/channelManagement/studentLandingPage/studentLandingPageLinkBuilder.tsx": {
-    "react-hooks/exhaustive-deps": {
-      "count": 1
-    },
-    "react-hooks/set-state-in-effect": {
-      "count": 1
     }
   },
   "public/src/components/channelManagement/studentLandingPage/studentLandingPageTestEditor.tsx": {
@@ -1307,9 +1220,6 @@
       "count": 1
     },
     "@typescript-eslint/no-unsafe-return": {
-      "count": 1
-    },
-    "import/no-cycle": {
       "count": 1
     }
   }

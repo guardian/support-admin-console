@@ -12,10 +12,10 @@ import {
   Typography,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { FrontendSettingsType, updateStatuses } from '../../../utils/requests';
 import { Status, Test } from '../helpers/shared';
-import { testChannelData, testChannelOrder } from './CampaignsEditor';
+import { testChannelData, testChannelOrder } from './CampaignsTypes';
 
 const useStyles = makeStyles(() => ({
   dialogHeader: {
@@ -65,26 +65,22 @@ const StatusUpdateDialog: React.FC<StatusUpdateDialogProps> = ({
     return `${test.channel}|${test.name}`;
   };
 
-  const [testData, setTestData] = useState<TestStatus>({});
-
-  useEffect(() => {
-    const res: TestStatus = {};
-    tests.map((test) => {
+  const [testData, setTestData] = useState<TestStatus>(() => {
+    const initial: TestStatus = {};
+    tests.forEach((test) => {
       const key = getStatusKey(test);
-      res[key] = test.status;
+      initial[key] = test.status;
     });
-    setTestData(res);
-  }, [tests]);
+    return initial;
+  });
 
   const updateSwitch = (e: React.ChangeEvent) => {
     e.persist();
 
-    if (e.target != null) {
-      const key = e.target.id;
-      const newTestData = { ...testData };
-      newTestData[key] = testData[key] === 'Live' ? 'Draft' : 'Live';
-      setTestData(newTestData);
-    }
+    const key = e.target.id;
+    const newTestData = { ...testData };
+    newTestData[key] = testData[key] === 'Live' ? 'Draft' : 'Live';
+    setTestData(newTestData);
   };
 
   const onSubmit = (): void => {
@@ -102,13 +98,12 @@ const StatusUpdateDialog: React.FC<StatusUpdateDialogProps> = ({
     });
 
     if (changes.length > 0) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const promises: Array<Promise<any>> = [];
+      const promises: Array<Promise<unknown>> = [];
       changes.forEach((change) => {
         promises.push(updateStatuses(...change));
       });
 
-      Promise.all(promises).then(() => updatePage());
+      void Promise.all(promises).then(() => updatePage());
     }
     close();
   };

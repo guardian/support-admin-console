@@ -1,15 +1,12 @@
 import { FormHelperText, Link, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useEffect, useState } from 'react';
-import { Institution } from '../../../models/studentLandingPage';
-import { Region } from '../../../utils/models';
+import React from 'react';
+import { StudentLandingPageTest } from '../../../models/studentLandingPage';
 import { getStage } from '../../../utils/stage';
 import URLGeneratorCopyButton from '../../shared/urlGeneratorCopyButton';
 
 interface StudentLandingPageLinkBuilderProps {
-  countryGroupId: Region;
-  institution: Institution;
-  promoCode: string;
+  test: StudentLandingPageTest;
 }
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
@@ -58,54 +55,37 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
 }));
 
 export const StudentLandingPageLinkBuilder: React.FC<StudentLandingPageLinkBuilderProps> = ({
-  countryGroupId,
-  institution,
-  promoCode,
+  test,
 }: StudentLandingPageLinkBuilderProps) => {
   const classes = useStyles();
 
-  const [url, setUrl] = useState('');
-  const [errorMessage, setErrorMessage] = useState(
-    'Please set the fields and save the test - this will create the link which can then be previewed.',
-  );
-
   const stage = getStage();
+  const countryGroupId = test.countryGroupId;
+  const promoCode = test.variants[0].promoCodes[0];
+
   const buildBaseUrl = () => {
     return `https://support.${stage !== 'PROD' ? 'code.dev-' : ''}theguardian.com`;
   };
-
   const getCountryIdFromRegion = () => {
     return countryGroupId.toString().substring(0, 2).toLowerCase();
   };
 
-  const buildFullUrl = () => {
-    setUrl(
-      `${buildBaseUrl()}/${getCountryIdFromRegion()}/student/${institution.acronym}?promoCode=${promoCode}`,
-    );
-  };
+  const baseErrorMessage =
+    'The link cannot be generated yet because something is missing - please check the following: ';
+  const errorMessageBuilder = [baseErrorMessage];
 
-  useEffect(() => {
-    setUrl('');
-    setErrorMessage('');
-    const baseErrorMessage =
-      'The link cannot be generated yet because something is missing - please check the following: ';
-    const errorMessageBuilder = [baseErrorMessage];
-    if (!countryGroupId) {
-      errorMessageBuilder.push('The Country is required. ');
-    }
-    if (!institution.acronym) {
-      errorMessageBuilder.push("The Institution's Acronym is required. ");
-    }
-    if (!promoCode) {
-      errorMessageBuilder.push('The promoCode is missing. ');
-    }
-    if (errorMessageBuilder.length > 1) {
-      setErrorMessage(errorMessageBuilder.join(' '));
-    } else {
-      setErrorMessage('');
-      buildFullUrl();
-    }
-  }, [countryGroupId, institution.acronym, promoCode]);
+  if (!test.countryGroupId) {
+    errorMessageBuilder.push('The Country is required. ');
+  }
+  if (!promoCode) {
+    errorMessageBuilder.push('The promoCode is missing. ');
+  }
+
+  const errorMessage = errorMessageBuilder.length > 1 ? errorMessageBuilder.join(' ') : '';
+  const url =
+    errorMessage === ''
+      ? `${buildBaseUrl()}/${getCountryIdFromRegion()}/student/${test.name}?promoCode=${promoCode}`
+      : '';
 
   return (
     <>

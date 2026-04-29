@@ -3,7 +3,7 @@ import { makeStyles } from '@mui/styles';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Test } from '../helpers/shared';
-import { TestChannelItem } from './CampaignsEditor';
+import { TestChannelItem } from './CampaignsTypes';
 import TestCard from './TestCard';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({

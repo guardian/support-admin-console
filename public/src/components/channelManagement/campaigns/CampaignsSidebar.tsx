@@ -1,8 +1,8 @@
 import { TextField } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useState } from 'react';
-import { Campaign, Campaigns } from './CampaignsForm';
 import CampaignsList from './CampaignsList';
+import { Campaign, Campaigns } from './CampaignsTypes';
 import NewCampaignButton from './NewCampaignButton';
 
 const useStyles = makeStyles(() => ({
