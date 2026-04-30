@@ -17,12 +17,12 @@ import {
 import { grey } from '@mui/material/colors';
 import { makeStyles } from '@mui/styles';
 import React from 'react';
+import useOpenable from '../../../hooks/useOpenable';
 import { BannerDesign, Status } from '../../../models/bannerDesign';
 import LiveSwitch from '../../shared/liveSwitch';
 import { LockStatus } from '../helpers/shared';
 import { BannerDesignPreview } from './BannerDesignPreview';
 import { LockDetails } from './LockDetails';
-import useOpenable from '../../../hooks/useOpenable';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {

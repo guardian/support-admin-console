@@ -10,41 +10,42 @@ import { makeStyles, ThemeProvider as StylesThemeProvider } from '@mui/styles';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import BannerDeployDashboard from './components/channelManagement/bannerDeploy/bannerDeployDashboard';
-import Switchboard from './components/switchboard';
+import AccessManagement from './components/accessManagement/AccessManagement';
 import AmountsForm from './components/amounts/AmountsForm';
+import AppsMeteringSwitches from './components/appsMeteringSwitches';
+import Bookmarklets from './components/bookmarklets/Bookmarklets';
+import ExclusionsBoard from './components/channelExclusions/ExclusionsBoard';
+import { AuditTestsDashboard } from './components/channelManagement/auditTests/auditTestsDashboard';
+import BannerDeployDashboard from './components/channelManagement/bannerDeploy/bannerDeployDashboard';
+import BannerDesigns from './components/channelManagement/bannerDesigns/';
+import {
+  BannerTestsForm1,
+  BannerTestsForm2,
+} from './components/channelManagement/bannerTests/bannerTestsForm';
+import CampaignsForm from './components/channelManagement/campaigns/CampaignsForm';
+import ChannelSwitches from './components/channelManagement/ChannelSwitches';
+import { CheckoutNudgeTestsForm } from './components/channelManagement/checkoutNudge/checkoutNudge';
 import {
   AppleNewsEpicTestsForm,
   ArticleEpicTestsForm,
   LiveblogEpicTestsForm,
 } from './components/channelManagement/epicTests/testsForm';
-import {
-  BannerTestsForm1,
-  BannerTestsForm2,
-} from './components/channelManagement/bannerTests/bannerTestsForm';
 import { GutterTestsForm } from './components/channelManagement/gutterTests/gutterTestsForm';
 import { HeaderTestsForm } from './components/channelManagement/headerTests/headerTestsForm';
+import { OneTimeCheckoutTestsForm } from './components/channelManagement/oneTimeCheckout/oneTimeCheckout';
+import { StudentLandingPageTestsForm } from './components/channelManagement/studentLandingPage/studentLandingPage';
+import { SuperModeDashboard } from './components/channelManagement/superMode/superModeDashboard';
+import { SupportLandingPageTestsForm } from './components/channelManagement/supportLandingPage/supportLandingPage';
+import DefaultPromos from './components/defaultPromos';
 import NavDrawer from './components/drawer';
 import IndexPage from './components/indexPage';
-import QrCodePage from './components/utilities/QrCodePage';
-import { getTheme } from './utils/theme';
-import ChannelSwitches from './components/channelManagement/ChannelSwitches';
-import CampaignsForm from './components/channelManagement/campaigns/CampaignsForm';
-import AppsMeteringSwitches from './components/appsMeteringSwitches';
-import { SuperModeDashboard } from './components/channelManagement/superMode/superModeDashboard';
-import BannerDesigns from './components/channelManagement/bannerDesigns/';
-import DefaultPromos from './components/defaultPromos';
 import { LinkTrackingBuilder } from './components/linkTracking/LinkTrackingBuilder';
-import { SupportLandingPageTestsForm } from './components/channelManagement/supportLandingPage/supportLandingPage';
-import { CheckoutNudgeTestsForm } from './components/channelManagement/checkoutNudge/checkoutNudge';
-import { AuditTestsDashboard } from './components/channelManagement/auditTests/auditTestsDashboard';
-import PromoTool from './components/promoTool/promoTool';
 import PromoEditorPage from './components/promoTool/promoEditorPage';
-import Bookmarklets from './components/bookmarklets/Bookmarklets';
-import AccessManagement from './components/accessManagement/AccessManagement';
-import { StudentLandingPageTestsForm } from './components/channelManagement/studentLandingPage/studentLandingPage';
-import { OneTimeCheckoutTestsForm } from './components/channelManagement/oneTimeCheckout/oneTimeCheckout';
-import ExclusionsBoard from './components/channelExclusions/ExclusionsBoard';
+import PromoTool from './components/promoTool/promoTool';
+import Switchboard from './components/switchboard';
+import QrCodePage from './components/utilities/QrCodePage';
+import { HELP_GUIDE_URL } from './constants';
+import { getTheme } from './utils/theme';
 
 declare module '@mui/styles' {
   // https://mui.com/material-ui/migration/v5-style-changes/#%E2%9C%85-add-module-augmentation-for-defaulttheme-typescript
@@ -112,8 +113,7 @@ const useStyles = makeStyles(({ palette, mixins, typography, transitions }: Them
   },
 }));
 
-export const HELP_GUIDE_URL =
-  'https://docs.google.com/document/d/1ErgEoQJRpiVMHZZpUmAnq3MGY8tJCaHTun0INzLcLRc/edit';
+export { HELP_GUIDE_URL };
 
 const AppRouter = () => {
   const classes = useStyles();

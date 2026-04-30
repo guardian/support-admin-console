@@ -9,7 +9,7 @@ import {
 import { Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useMemo, useState } from 'react';
-import { HELP_GUIDE_URL } from '../../../main';
+import { HELP_GUIDE_URL } from '../../../constants';
 import PalettePreview from './PalettePreview';
 import { colourThemes, ThemeColours, ThemeDefinition, ThemeStyle } from './utils/colourThemes';
 

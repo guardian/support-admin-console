@@ -32,10 +32,10 @@ import { TestMethodologyEditor } from '../TestMethodologyEditor';
 import { TestEditorProps } from '../testsForm';
 import { ValidatedTestEditor, ValidatedTestEditorProps } from '../validatedTestEditor';
 import MaxViewsEditor from './maxViewsEditor';
+import { EpicTestPreviewButton } from './testPreview';
 import { getDefaultVariant } from './utils/defaults';
 import VariantEditor from './variantEditor';
 import VariantPreview from './variantPreview';
-import { EpicTestPreviewButton } from './testPreview';
 
 const copyHasTemplate = (test: EpicTest, template: string): boolean =>
   test.variants.some(

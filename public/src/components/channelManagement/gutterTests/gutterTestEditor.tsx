@@ -19,10 +19,10 @@ import { useStyles } from '../helpers/testEditorStyles';
 import TestEditorContextTargeting from '../testEditorContextTargeting';
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 import { ValidatedTestEditorProps } from '../validatedTestEditor';
-import GutterVariantEditor from './gutterVariantEditor';
-import { getDefaultVariant } from './utils/defaults';
-import GutterVariantPreview from './gutterVariantPreview';
 import { GutterTestPreviewButton } from './gutterTestPreview';
+import GutterVariantEditor from './gutterVariantEditor';
+import GutterVariantPreview from './gutterVariantPreview';
+import { getDefaultVariant } from './utils/defaults';
 
 const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
   test,

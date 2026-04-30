@@ -1,21 +1,15 @@
 import { FormControlLabel, Radio, RadioGroup, Theme, Typography } from '@mui/material';
-import {
-  getRteCopyLength,
-  RichTextEditor,
-  RichTextEditorSingleLine,
-} from '../richTextEditor/richTextEditor';
-import TickerEditor from '../tickerEditor';
-import { BannerDesign } from '../../../models/bannerDesign';
-import VariantSeparateArticleCountEditor from '../../tests/variants/variantSeparateArticleCountEditor';
-import { SeparateArticleCount } from '../../../models/epic';
-import ChoiceCardsEditor from '../choiceCards/ChoiceCardsEditor';
-import { ChoiceCardsSettings } from '../../../models/choiceCards';
 import Alert from '@mui/material/Alert';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { BannerContent, BannerUi, BannerVariant } from '../../../models/banner';
+import { BannerDesign } from '../../../models/bannerDesign';
+import { ChoiceCardsSettings } from '../../../models/choiceCards';
+import { SeparateArticleCount } from '../../../models/epic';
 import PromoCodesEditor from '../../shared/PromoCodesEditor';
+import VariantSeparateArticleCountEditor from '../../tests/variants/variantSeparateArticleCountEditor';
+import ChoiceCardsEditor from '../choiceCards/ChoiceCardsEditor';
 import { Cta, SecondaryCta } from '../helpers/shared';
 import {
   EMPTY_ERROR_HELPER_TEXT,
@@ -23,6 +17,12 @@ import {
   templateValidatorForPlatform,
 } from '../helpers/validation';
 import useValidation from '../hooks/useValidation';
+import {
+  getRteCopyLength,
+  RichTextEditor,
+  RichTextEditorSingleLine,
+} from '../richTextEditor/richTextEditor';
+import TickerEditor from '../tickerEditor';
 import BannerDesignSelector from './bannerDesignSelector';
 import IsCollapsibleEditor from './isCollapsibleEditor';
 import { getDefaultVariant } from './utils/defaults';

@@ -6,21 +6,18 @@ import {
   BannerTestDeploySchedule,
   BannerVariant,
 } from '../../../models/banner';
-import { ControlProportionSettings } from '../helpers/controlProportionSettings';
-import TestVariantsSplitEditor from '../../tests/variants/testVariantsSplitEditor';
-import { useStyles } from '../helpers/testEditorStyles';
-import { ValidatedTestEditorProps } from '../validatedTestEditor';
 import { BannerDesign } from '../../../models/bannerDesign';
+import { getDesignForVariant } from '../../../utils/bannerDesigns';
 import {
   BannerDesignsResponse,
   fetchFrontendSettings,
   FrontendSettingsType,
 } from '../../../utils/requests';
-import TestEditorContextTargeting from '../testEditorContextTargeting';
-import { getDesignForVariant } from '../../../utils/bannerDesigns';
+import TestVariantsSplitEditor from '../../tests/variants/testVariantsSplitEditor';
 import VariantsEditor from '../../tests/variants/variantsEditor';
 import VariantSummary from '../../tests/variants/variantSummary';
 import CampaignSelector from '../CampaignSelector';
+import { ControlProportionSettings } from '../helpers/controlProportionSettings';
 import {
   ArticlesViewedSettings,
   ConsentStatus,
@@ -30,12 +27,15 @@ import {
   SignedInStatus,
   UserCohort,
 } from '../helpers/shared';
+import { useStyles } from '../helpers/testEditorStyles';
 import { ARTICLE_COUNT_TEMPLATE } from '../helpers/validation';
 import TestEditorArticleCountEditor, {
   DEFAULT_ARTICLES_VIEWED_SETTINGS,
 } from '../testEditorArticleCountEditor';
+import TestEditorContextTargeting from '../testEditorContextTargeting';
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 import { TestMethodologyEditor } from '../TestMethodologyEditor';
+import { ValidatedTestEditorProps } from '../validatedTestEditor';
 import BannerVariantPreview from './bannerVariantPreview';
 import { DeployScheduleEditor } from './deployScheduleEditor';
 import { FrontsOnlyEditor } from './frontsOnlyEditor';
