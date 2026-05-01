@@ -90,6 +90,8 @@ export const AcademicInstitutionDetailEditor: React.FC<AcademicInstituteDetailEd
   const ACRONYM_MAX_LENGTH = 4;
   const INSTITUTION_MAX_LENGTH = 150;
   const LOGO_URL_MAX_LENGTH = 150;
+  const LOGO_HELPER_TEXT =
+    'Image dimensions should be 61px wide by 27px high, with a transparent background and the foreground colour needs to be white';
 
   return (
     <div className={classes.container}>
@@ -141,17 +143,14 @@ export const AcademicInstitutionDetailEditor: React.FC<AcademicInstituteDetailEd
 
         <TextField
           {...register('logoUrl', {
-            required: EMPTY_ERROR_HELPER_TEXT,
+            required: `${EMPTY_ERROR_HELPER_TEXT} - ${LOGO_HELPER_TEXT}`,
             maxLength: LOGO_URL_MAX_LENGTH,
             validate: (name) => {
               return noHtmlValidator(name);
             },
           })}
           error={errors.logoUrl !== undefined}
-          helperText={
-            errors?.logoUrl?.message ??
-            'Image dimensions should be 61px wide by 27px high, with a transparent background and the foreground colour needs to be white'
-          }
+          helperText={errors?.logoUrl?.message ?? LOGO_HELPER_TEXT}
           onBlur={handleSubmit(update)}
           label="Logo for Institution"
           margin="normal"
