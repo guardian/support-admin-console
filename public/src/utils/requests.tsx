@@ -7,7 +7,6 @@ import { Product } from '../components/promoTool/utils/productCatalog';
 export enum SupportFrontendSettingsType {
   switches = 'switches',
   contributionTypes = 'contribution-types',
-  amounts = 'amounts',
   defaultPromos = 'default-promos',
 }
 
