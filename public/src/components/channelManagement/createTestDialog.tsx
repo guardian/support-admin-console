@@ -1,33 +1,32 @@
-import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import CloseIcon from '@mui/icons-material/Close';
 import {
   Button,
+  Checkbox,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  IconButton,
-  TextField,
-  InputAdornment,
-  Select,
-  MenuItem,
-  InputLabel,
   FormControl,
-  Checkbox,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  MenuItem,
+  Select,
   SelectChangeEvent,
+  TextField,
 } from '@mui/material';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import { makeStyles } from '@mui/styles';
-import CloseIcon from '@mui/icons-material/Close';
-
+import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { fetchFrontendSettings, FrontendSettingsType } from '../../utils/requests';
+import { Campaign } from './campaigns/CampaignsTypes';
 import {
   createDuplicateValidator,
   EMPTY_ERROR_HELPER_TEXT,
   INVALID_CHARACTERS_ERROR_HELPER_TEXT,
   VALID_CHARACTERS_REGEX,
 } from './helpers/validation';
-import { Campaign } from './campaigns/CampaignsForm';
-import { fetchFrontendSettings, FrontendSettingsType } from '../../utils/requests';
-import FormControlLabel from '@mui/material/FormControlLabel';
 
 const useStyles = makeStyles(() => ({
   dialogHeader: {
@@ -87,8 +86,8 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
   const classes = useStyles();
 
   const defaultValues = {
-    name: sourceName || '',
-    nickname: sourceNickname || '',
+    name: sourceName ?? '',
+    nickname: sourceNickname ?? '',
   };
 
   const {
@@ -105,7 +104,7 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
   const [campaignNamePrefix, setCampaignNamePrefix] = useState<boolean>(false);
 
   useEffect(() => {
-    fetchFrontendSettings(FrontendSettingsType.campaigns).then(setCampaigns);
+    void fetchFrontendSettings(FrontendSettingsType.campaigns).then(setCampaigns);
   }, []);
 
   const buildPrefix = (): string => {
@@ -121,7 +120,7 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
 
   // There should only be one instance of a double-underscore, as this is used by the AB tests dashboard to group together tests with a common prefix
   const doubleUnderscoresValidator = (s: string): string | undefined => {
-    const count = (s.match(/__/g) || []).length;
+    const count = (s.match(/__/g) ?? []).length;
     if (count < 2) {
       return undefined;
     } else {
@@ -158,7 +157,7 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
                   if (campaign === undefined) {
                     return ''; // triggers the displayEmpty behaviour
                   }
-                  return campaign as string;
+                  return campaign;
                 }}
                 onChange={(event: SelectChangeEvent<string | undefined>): void => {
                   setCampaignName(event.target.value);
@@ -233,7 +232,7 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleSubmit(onSubmit)} color="primary">
+        <Button onClick={() => void handleSubmit(onSubmit)()} color="primary">
           {mode === 'NEW' ? 'Create test' : 'Confirm'}
         </Button>
       </DialogActions>

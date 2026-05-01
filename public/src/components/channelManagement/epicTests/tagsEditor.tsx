@@ -1,7 +1,7 @@
 import { Autocomplete } from '@mui/material';
-import React, { useEffect, useCallback } from 'react';
 import { TextField } from '@mui/material';
 import throttle from 'lodash/throttle';
+import React, { useCallback, useEffect } from 'react';
 
 interface Tag {
   id: string;

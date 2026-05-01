@@ -1,17 +1,21 @@
+import { FormControlLabel, Radio, RadioGroup, Theme, Typography } from '@mui/material';
+import Alert from '@mui/material/Alert';
+import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { FormControlLabel, Radio, RadioGroup, Theme, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-import VariantCtasEditor from './variantCtasEditor';
+import { BannerContent, BannerUi, BannerVariant } from '../../../models/banner';
+import { BannerDesign } from '../../../models/bannerDesign';
+import { ChoiceCardsSettings } from '../../../models/choiceCards';
+import { SeparateArticleCount } from '../../../models/epic';
+import PromoCodesEditor from '../../shared/PromoCodesEditor';
+import VariantSeparateArticleCountEditor from '../../tests/variants/variantSeparateArticleCountEditor';
+import ChoiceCardsEditor from '../choiceCards/ChoiceCardsEditor';
+import { Cta, SecondaryCta } from '../helpers/shared';
 import {
   EMPTY_ERROR_HELPER_TEXT,
   getEmptyParagraphsError,
   templateValidatorForPlatform,
 } from '../helpers/validation';
-import { Cta, SecondaryCta } from '../helpers/shared';
-import BannerDesignSelector from './bannerDesignSelector';
-import { BannerContent, BannerUi, BannerVariant } from '../../../models/banner';
-import { getDefaultVariant } from './utils/defaults';
 import useValidation from '../hooks/useValidation';
 import {
   getRteCopyLength,
@@ -19,14 +23,10 @@ import {
   RichTextEditorSingleLine,
 } from '../richTextEditor/richTextEditor';
 import TickerEditor from '../tickerEditor';
-import { BannerDesign } from '../../../models/bannerDesign';
-import VariantSeparateArticleCountEditor from '../../tests/variants/variantSeparateArticleCountEditor';
-import { SeparateArticleCount } from '../../../models/epic';
-import ChoiceCardsEditor from '../choiceCards/ChoiceCardsEditor';
-import { ChoiceCardsSettings } from '../../../models/choiceCards';
-import Alert from '@mui/material/Alert';
-import PromoCodesEditor from '../../shared/PromoCodesEditor';
+import BannerDesignSelector from './bannerDesignSelector';
 import IsCollapsibleEditor from './isCollapsibleEditor';
+import { getDefaultVariant } from './utils/defaults';
+import VariantCtasEditor from './variantCtasEditor';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {

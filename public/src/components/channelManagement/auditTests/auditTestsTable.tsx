@@ -1,8 +1,8 @@
-import React from 'react';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Button, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { diff, IChange } from 'json-diff-ts';
+import React from 'react';
 import { AuditTestCompareVersionsDialog } from './auditTestCompareVersionsDialog';
 
 const useStyles = makeStyles(({}: Theme) => ({

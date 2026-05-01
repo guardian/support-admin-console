@@ -1,8 +1,8 @@
-import React from 'react';
-import { List, ListItem, Theme, Button, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Button, List, ListItem, Theme, Typography } from '@mui/material';
 import { red } from '@mui/material/colors';
-import { Campaigns, Campaign, unassignedCampaign } from './CampaignsForm';
+import { makeStyles } from '@mui/styles';
+import React from 'react';
+import { Campaign, Campaigns, unassignedCampaign } from './CampaignsTypes';
 
 const useStyles = makeStyles(({ palette }: Theme) => ({
   container: {
@@ -111,9 +111,9 @@ const CampaignsList = ({
     return campaignArray.filter((c) => {
       if (!campaignSearch) {
         return true;
-      } else if (c.nickname && c.nickname.indexOf(campaignSearch) >= 0) {
+      } else if (c.nickname.includes(campaignSearch)) {
         return true;
-      } else if (c.name.indexOf(campaignSearch) >= 0) {
+      } else if (c.name.includes(campaignSearch)) {
         return true;
       }
       return false;

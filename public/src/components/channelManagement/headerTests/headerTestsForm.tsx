@@ -1,9 +1,9 @@
+import { HeaderTest } from '../../../models/header';
 import { FrontendSettingsType } from '../../../utils/requests';
 import { TestsForm } from '../testsForm';
-import { HeaderTest } from '../../../models/header';
-import { getDefaultTest } from './utils/defaults';
-import HeaderTestEditor from './headerTestEditor';
 import { ValidatedTestEditor } from '../validatedTestEditor';
+import HeaderTestEditor from './headerTestEditor';
+import { getDefaultTest } from './utils/defaults';
 
 const createDefaultHeaderTest = (newTestName: string, newTestNickname: string): HeaderTest => ({
   ...getDefaultTest(),

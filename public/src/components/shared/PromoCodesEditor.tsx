@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { makeStyles } from '@mui/styles';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
-  TextField,
-  Theme,
-  IconButton,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Box,
-  Typography,
   Chip,
   CircularProgress,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
+  IconButton,
+  TextField,
+  Theme,
+  Typography,
 } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import AddIcon from '@mui/icons-material/Add';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { fetchPromo, PromoResponse, fetchPromoCampaign } from '../../utils/requests';
+import { makeStyles } from '@mui/styles';
+import React, { useEffect, useState } from 'react';
+import { fetchPromo, fetchPromoCampaign, PromoResponse } from '../../utils/requests';
 import { Promo, PromoCampaign } from '../promoTool/utils/promoModels';
 
 interface PromoCodesEditorProps {

@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import CloseIcon from '@mui/icons-material/Close';
 import {
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  IconButton,
   List,
   ListItem,
-  IconButton,
   Switch,
   Typography,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import CloseIcon from '@mui/icons-material/Close';
-import { Test, Status } from '../helpers/shared';
-import { updateStatuses, FrontendSettingsType } from '../../../utils/requests';
-import { testChannelData, testChannelOrder } from './CampaignsEditor';
+import React, { useState } from 'react';
+import { FrontendSettingsType, updateStatuses } from '../../../utils/requests';
+import { Status, Test } from '../helpers/shared';
+import { testChannelData, testChannelOrder } from './CampaignsTypes';
 
 const useStyles = makeStyles(() => ({
   dialogHeader: {
@@ -49,9 +49,7 @@ interface StatusUpdateDialogProps {
   updatePage: () => void;
 }
 
-interface TestStatus {
-  [index: string]: Status;
-}
+type TestStatus = Record<string, Status>;
 
 type UpdateStatusesArguments = [FrontendSettingsType, string[], Status];
 
@@ -67,26 +65,22 @@ const StatusUpdateDialog: React.FC<StatusUpdateDialogProps> = ({
     return `${test.channel}|${test.name}`;
   };
 
-  const [testData, setTestData] = useState<TestStatus>({});
-
-  useEffect(() => {
-    const res: TestStatus = {};
-    tests.map((test) => {
+  const [testData, setTestData] = useState<TestStatus>(() => {
+    const initial: TestStatus = {};
+    tests.forEach((test) => {
       const key = getStatusKey(test);
-      res[key] = test.status;
+      initial[key] = test.status;
     });
-    setTestData(res);
-  }, [tests]);
+    return initial;
+  });
 
   const updateSwitch = (e: React.ChangeEvent) => {
     e.persist();
 
-    if (e.target != null) {
-      const key = e.target.id;
-      const newTestData = { ...testData };
-      newTestData[key] = testData[key] === 'Live' ? 'Draft' : 'Live';
-      setTestData(newTestData);
-    }
+    const key = e.target.id;
+    const newTestData = { ...testData };
+    newTestData[key] = testData[key] === 'Live' ? 'Draft' : 'Live';
+    setTestData(newTestData);
   };
 
   const onSubmit = (): void => {
@@ -97,20 +91,19 @@ const StatusUpdateDialog: React.FC<StatusUpdateDialogProps> = ({
         const { channel, name } = test;
         if (channel != null) {
           const link = testChannelData[channel].link as FrontendSettingsType;
-          const data = testData[key] as Status;
+          const data = testData[key];
           changes.push([link, [name], data]);
         }
       }
     });
 
     if (changes.length > 0) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const promises: Promise<any>[] = [];
+      const promises: Array<Promise<unknown>> = [];
       changes.forEach((change) => {
         promises.push(updateStatuses(...change));
       });
 
-      Promise.all(promises).then(() => updatePage());
+      void Promise.all(promises).then(() => updatePage());
     }
     close();
   };

@@ -1,46 +1,46 @@
+import { FormControlLabel, Switch, Typography } from '@mui/material';
 import React from 'react';
 import { EpicTest, EpicVariant, MaxEpicViews } from '../../../models/epic';
-import {
-  ArticlesViewedSettings,
-  UserCohort,
-  EpicEditorConfig,
-  DeviceType,
-  SignedInStatus,
-  PageContextTargeting,
-  ConsentStatus,
-  Methodology,
-  RegionTargeting,
-} from '../helpers/shared';
-import { FormControlLabel, Switch, Typography } from '@mui/material';
-import CampaignSelector from '../CampaignSelector';
+import TestVariantsSplitEditor from '../../tests/variants/testVariantsSplitEditor';
+import VariantEditorWithPreviewTab from '../../tests/variants/variantEditorWithPreviewTab';
 import VariantsEditor from '../../tests/variants/variantsEditor';
 import VariantSummary from '../../tests/variants/variantSummary';
-import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
-import TestEditorArticleCountEditor, {
-  DEFAULT_ARTICLES_VIEWED_SETTINGS,
-} from '../testEditorArticleCountEditor';
-import VariantEditorWithPreviewTab from '../../tests/variants/variantEditorWithPreviewTab';
-import VariantEditor from './variantEditor';
-import VariantPreview from './variantPreview';
-import TestEditorContextTargeting from '../testEditorContextTargeting';
-import MaxViewsEditor from './maxViewsEditor';
-import { ARTICLE_COUNT_TEMPLATE, COUNTRY_NAME_TEMPLATE } from '../helpers/validation';
-import TestVariantsSplitEditor from '../../tests/variants/testVariantsSplitEditor';
-import { getDefaultVariant } from './utils/defaults';
+import CampaignSelector from '../CampaignSelector';
 import {
   canHaveCustomVariantSplit,
   ControlProportionSettings,
 } from '../helpers/controlProportionSettings';
+import {
+  ArticlesViewedSettings,
+  ConsentStatus,
+  DeviceType,
+  EpicEditorConfig,
+  Methodology,
+  PageContextTargeting,
+  RegionTargeting,
+  SignedInStatus,
+  UserCohort,
+} from '../helpers/shared';
 import { useStyles } from '../helpers/testEditorStyles';
-import { EpicTestPreviewButton } from './testPreview';
-import { ValidatedTestEditor, ValidatedTestEditorProps } from '../validatedTestEditor';
-import { TestEditorProps } from '../testsForm';
+import { ARTICLE_COUNT_TEMPLATE, COUNTRY_NAME_TEMPLATE } from '../helpers/validation';
+import TestEditorArticleCountEditor, {
+  DEFAULT_ARTICLES_VIEWED_SETTINGS,
+} from '../testEditorArticleCountEditor';
+import TestEditorContextTargeting from '../testEditorContextTargeting';
+import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 import { TestMethodologyEditor } from '../TestMethodologyEditor';
+import { TestEditorProps } from '../testsForm';
+import { ValidatedTestEditor, ValidatedTestEditorProps } from '../validatedTestEditor';
+import MaxViewsEditor from './maxViewsEditor';
+import { EpicTestPreviewButton } from './testPreview';
+import { getDefaultVariant } from './utils/defaults';
+import VariantEditor from './variantEditor';
+import VariantPreview from './variantPreview';
 
 const copyHasTemplate = (test: EpicTest, template: string): boolean =>
   test.variants.some(
     (variant) =>
-      (variant.heading && variant.heading.includes(template)) ||
+      variant.heading?.includes(template) ||
       variant.paragraphs.some((para) => para.includes(template)),
   );
 
@@ -65,7 +65,7 @@ export const getEpicTestEditor = (
       setValidationStatusForField('variantsSplitSettings', isValid);
 
     const getArticlesViewedSettings = (test: EpicTest): ArticlesViewedSettings | undefined => {
-      if (!!test.articlesViewedSettings) {
+      if (test.articlesViewedSettings) {
         return test.articlesViewedSettings;
       }
       if (epicEditorConfig.allowArticleCount && copyHasTemplate(test, ARTICLE_COUNT_TEMPLATE)) {

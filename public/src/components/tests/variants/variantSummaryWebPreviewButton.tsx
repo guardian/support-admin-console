@@ -1,8 +1,8 @@
-import React from 'react';
-import { Button } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import { TestPlatform, TestType } from '../../channelManagement/helpers/shared';
+import { Button } from '@mui/material';
+import React from 'react';
 import { getStage, Stage } from '../../../utils/stage';
+import { TestPlatform, TestType } from '../../channelManagement/helpers/shared';
 
 export type ArticleType = 'Standard' | 'Liveblog';
 

@@ -1,8 +1,6 @@
 import { TestPlatform } from './shared';
 
-export type ValidationStatus = {
-  [fieldName: string]: boolean;
-};
+export type ValidationStatus = Record<string, boolean>;
 
 export const INVALID_CHARACTERS_ERROR_HELPER_TEXT =
   'Only letters, numbers, underscores and hyphens are allowed';

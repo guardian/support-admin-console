@@ -1,29 +1,29 @@
-import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
-import PromoCampaignsSidebar from './promoCampaignsSidebar';
-import {
-  PromoCampaign,
-  PromoProduct,
-  Promo,
-  promoProductNames,
-  CountryGroup,
-  mapPromoProductToCatalogProducts,
-} from './utils/promoModels';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
+import { hasPermission } from '../../utils/permissions';
 import {
-  createPromoCampaign,
-  fetchPromoCampaigns,
-  fetchAllPromos,
   createPromo,
+  createPromoCampaign,
+  fetchAllPromos,
   fetchCountryGroups,
   fetchProductDetails,
+  fetchPromoCampaigns,
 } from '../../utils/requests';
-import { RatePlanWithProduct, getAllRatePlansWithProduct } from './utils/productCatalog';
-import PromosList from './promosList';
 import CreatePromoDialog from './createPromoDialog';
-import { hasPermission } from '../../utils/permissions';
+import PromoCampaignsSidebar from './promoCampaignsSidebar';
+import PromosList from './promosList';
+import { getAllRatePlansWithProduct, RatePlanWithProduct } from './utils/productCatalog';
+import {
+  CountryGroup,
+  mapPromoProductToCatalogProducts,
+  Promo,
+  PromoCampaign,
+  PromoProduct,
+  promoProductNames,
+} from './utils/promoModels';
 
 const useStyles = makeStyles(({ spacing, typography }: Theme) => ({
   viewTextContainer: {

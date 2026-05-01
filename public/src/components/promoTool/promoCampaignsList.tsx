@@ -1,8 +1,8 @@
-import React from 'react';
 import { List } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { PromoCampaign, PromoCampaigns, PromoProduct } from './utils/promoModels';
+import React from 'react';
 import { PromoCampaignsListItem } from './promoCampaignsListItem';
+import { PromoCampaign, PromoCampaigns, PromoProduct } from './utils/promoModels';
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -36,9 +36,9 @@ const PromoCampaignsList = ({
     return campaignArray.filter((c) => {
       if (!promoCampaignSearch) {
         return true;
-      } else if (c.name && c.name.indexOf(promoCampaignSearch) >= 0) {
+      } else if (c.name && c.name.includes(promoCampaignSearch)) {
         return true;
-      } else if (c.name.indexOf(promoCampaignSearch) >= 0) {
+      } else if (c.name.includes(promoCampaignSearch)) {
         return true;
       }
       return false;
@@ -78,8 +78,7 @@ const PromoCampaignsList = ({
       <List className={classes.list}>
         {filteredAndSortedPromoCampaigns.map((promoCampaign) => {
           const isSelected = Boolean(
-            selectedPromoCampaign &&
-            selectedPromoCampaign.campaignCode === promoCampaign.campaignCode,
+            selectedPromoCampaign?.campaignCode === promoCampaign.campaignCode,
           );
           return (
             <PromoCampaignsListItem

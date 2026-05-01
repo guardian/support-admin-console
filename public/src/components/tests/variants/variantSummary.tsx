@@ -1,10 +1,10 @@
-import React from 'react';
-import { Theme, Typography, AccordionSummary } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
-import VariantSummaryWebPreviewButton, { ArticleType } from './variantSummaryWebPreviewButton';
+import { AccordionSummary, Theme, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import React from 'react';
 import { TestPlatform, TestType } from '../../channelManagement/helpers/shared';
+import VariantSummaryWebPreviewButton, { ArticleType } from './variantSummaryWebPreviewButton';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {

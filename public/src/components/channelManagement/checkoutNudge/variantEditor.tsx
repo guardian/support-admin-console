@@ -1,16 +1,16 @@
+import { Checkbox, FormControlLabel, MenuItem, TextField, Typography } from '@mui/material';
 import React from 'react';
-import { TextField, Typography, FormControlLabel, Checkbox, MenuItem } from '@mui/material';
 import {
   CheckoutNudgeVariant,
-  Product,
   Copy,
+  Product,
   ProductType,
   RatePlan,
 } from '../../../models/checkoutNudge';
-import { useStyles } from '../helpers/testEditorStyles';
-import { PRODUCTS, getAvailableRatePlans, ONE_TIME_PLANS, RECURRING_PLANS } from './utils/defaults';
 import PromoCodesEditor from '../../shared/PromoCodesEditor';
+import { useStyles } from '../helpers/testEditorStyles';
 import { RichTextEditorSingleLine, RteMenuConstraints } from '../richTextEditor/richTextEditor';
+import { getAvailableRatePlans, ONE_TIME_PLANS, PRODUCTS, RECURRING_PLANS } from './utils/defaults';
 
 interface VariantEditorProps {
   variant: CheckoutNudgeVariant;

@@ -1,5 +1,5 @@
-import React from 'react';
 import { FormControlLabel, Switch } from '@mui/material';
+import React from 'react';
 
 interface FrontsOnlyEditorProps {
   frontsOnly?: boolean;

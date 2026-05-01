@@ -1,6 +1,6 @@
-import React from 'react';
 import { Checkbox, FormControlLabel, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import React from 'react';
 import { Cta } from '../../channelManagement/helpers/shared';
 import VariantCtaFieldsEditor from './variantCtaFieldsEditor';
 

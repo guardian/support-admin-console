@@ -1,4 +1,4 @@
-import React from 'react';
+import CloseIcon from '@mui/icons-material/Close';
 import {
   Button,
   Dialog,
@@ -8,7 +8,7 @@ import {
   IconButton,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import CloseIcon from '@mui/icons-material/Close';
+import React from 'react';
 import { Test } from '../helpers/shared';
 
 const useStyles = makeStyles(() => ({
@@ -264,10 +264,7 @@ const variantFields = {
   },
 };
 
-interface CommonObjectInput {
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-  [index: string]: any;
-}
+type CommonObjectInput = Record<string, any>;
 
 interface TestDataDialogProps {
   isOpen: boolean;

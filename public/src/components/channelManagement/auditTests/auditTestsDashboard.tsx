@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react';
 import {
   Button,
   FormControl,
@@ -9,10 +8,11 @@ import {
   Theme,
   Typography,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { grey } from '@mui/material/colors';
-import { AuditDataRow, AuditTestsTable } from './auditTestsTable';
+import { makeStyles } from '@mui/styles';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { AuditDataRow, AuditTestsTable } from './auditTestsTable';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   mainContainer: {

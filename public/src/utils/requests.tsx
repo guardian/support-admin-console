@@ -1,8 +1,8 @@
-import { Test, Status, UserPermissions } from '../components/channelManagement/helpers/shared';
-import { Campaign } from '../components/channelManagement/campaigns/CampaignsForm';
-import { BannerDesign, Status as BannerDesignStatus } from '../models/bannerDesign';
-import { PromoCampaign, Promo, CountryGroup } from '../components/promoTool/utils/promoModels';
+import { Campaign } from '../components/channelManagement/campaigns/CampaignsTypes';
+import { Status, Test, UserPermissions } from '../components/channelManagement/helpers/shared';
 import { Product } from '../components/promoTool/utils/productCatalog';
+import { CountryGroup, Promo, PromoCampaign } from '../components/promoTool/utils/promoModels';
+import { BannerDesign, Status as BannerDesignStatus } from '../models/bannerDesign';
 
 export enum SupportFrontendSettingsType {
   switches = 'switches',
@@ -204,7 +204,7 @@ export function archiveBannerDesign(designName: string): Promise<Response> {
 
 export function getBannerDesignUsage(
   designName: string,
-): Promise<{ name: string; channel: string }[]> {
+): Promise<Array<{ name: string; channel: string }>> {
   return fetchSettings(`/frontend/${FrontendSettingsType.bannerDesigns}/usage/${designName}`);
 }
 

@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
 import { Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import CampaignsSidebar from './CampaignsSidebar';
-import CampaignsEditor from './CampaignsEditor';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-
 import {
   fetchFrontendSettings,
   FrontendSettingsType,
   sendCreateCampaignRequest,
   sendUpdateCampaignRequest,
 } from '../../../utils/requests';
+import CampaignsEditor from './CampaignsEditor';
+import CampaignsSidebar from './CampaignsSidebar';
+import { Campaign, unassignedCampaign } from './CampaignsTypes';
 
 const useStyles = makeStyles(({ spacing, typography }: Theme) => ({
   viewTextContainer: {
@@ -45,21 +45,6 @@ const useStyles = makeStyles(({ spacing, typography }: Theme) => ({
     justifyContent: 'center',
   },
 }));
-
-export interface Campaign {
-  name: string;
-  nickname: string;
-  description?: string;
-  notes?: string[];
-  isActive?: boolean;
-}
-export type Campaigns = Campaign[];
-
-export const unassignedCampaign = {
-  name: 'NOT_IN_CAMPAIGN',
-  nickname: 'TESTS NOT IN A CAMPAIGN',
-  description: 'Tests not assigned to a campaign',
-};
 
 const CampaignsForm: React.FC = () => {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);

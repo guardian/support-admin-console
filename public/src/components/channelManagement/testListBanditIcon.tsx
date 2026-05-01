@@ -1,6 +1,6 @@
-import React from 'react';
-import { makeStyles } from '@mui/styles';
 import SmartToyIcon from '@mui/icons-material/SmartToy';
+import { makeStyles } from '@mui/styles';
+import React from 'react';
 
 const useStyles = makeStyles(() => ({
   container: {

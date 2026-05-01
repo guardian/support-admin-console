@@ -1,6 +1,6 @@
-import React from 'react';
 import { Button, Dialog, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import React from 'react';
 import useOpenable from '../../../hooks/useOpenable';
 import { GutterTest } from '../../../models/gutter';
 import GutterVariantPreview from './gutterVariantPreview';

@@ -1,7 +1,7 @@
-import React from 'react';
-import { formattedTimestamp } from '../helpers/utilities';
 import { Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import React from 'react';
+import { formattedTimestamp } from '../helpers/utilities';
 
 const useStyles = makeStyles(() => ({
   lockDetailsText: {

@@ -1,5 +1,5 @@
+import { MenuItem, TextField, Typography } from '@mui/material';
 import React from 'react';
-import { ValidatedTestEditorProps } from '../validatedTestEditor';
 import {
   CheckoutNudgeTest,
   CheckoutNudgeVariant,
@@ -7,21 +7,21 @@ import {
   ProductType,
   RatePlan,
 } from '../../../models/checkoutNudge';
-import { Typography, TextField, MenuItem } from '@mui/material';
+import { getStage } from '../../../utils/stage';
 import VariantsEditor from '../../tests/variants/variantsEditor';
+import VariantSummary from '../../tests/variants/variantSummary';
+import { RegionTargeting } from '../helpers/shared';
 import { useStyles } from '../helpers/testEditorStyles';
+import TestEditorTargetRegionsSelector from '../testEditorTargetRegionsSelector';
+import { ValidatedTestEditorProps } from '../validatedTestEditor';
 import {
-  getDefaultVariant,
   getAvailableRatePlans,
-  PRODUCTS,
+  getDefaultVariant,
   ONE_TIME_PLANS,
+  PRODUCTS,
   RECURRING_PLANS,
 } from './utils/defaults';
-import VariantSummary from '../../tests/variants/variantSummary';
 import VariantEditor from './variantEditor';
-import TestEditorTargetRegionsSelector from '../testEditorTargetRegionsSelector';
-import { RegionTargeting } from '../helpers/shared';
-import { getStage } from '../../../utils/stage';
 
 const CheckoutNudgeTestEditor: React.FC<ValidatedTestEditorProps<CheckoutNudgeTest>> = ({
   test,

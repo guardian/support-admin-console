@@ -1,13 +1,12 @@
-import React from 'react';
 import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-
-import { EpicModuleName } from '../helpers/shared';
-import { EpicVariant } from '../../../models/epic';
-import useTickerData, { TickerSettingsWithData } from '../hooks/useTickerData';
-import { SelectedAmountsVariant, mockAmountsCardData } from '../../../utils/models';
-import { buildStorybookUrl } from '../helpers/dcrStorybook';
 import Alert from '@mui/material/Alert';
+import { makeStyles } from '@mui/styles';
+import React from 'react';
+import { EpicVariant } from '../../../models/epic';
+import { mockAmountsCardData, SelectedAmountsVariant } from '../../../utils/models';
+import { buildStorybookUrl } from '../helpers/dcrStorybook';
+import { EpicModuleName } from '../helpers/shared';
+import useTickerData, { TickerSettingsWithData } from '../hooks/useTickerData';
 
 // Article count TS defs
 export interface ArticleCounts {

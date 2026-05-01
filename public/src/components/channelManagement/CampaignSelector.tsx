@@ -1,10 +1,9 @@
+import { FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import { fetchFrontendSettings, FrontendSettingsType } from '../../utils/requests';
-import { Campaign, unassignedCampaign } from './campaigns/CampaignsForm';
+import { Campaign, unassignedCampaign } from './campaigns/CampaignsTypes';
 import { Test } from './helpers/shared';
-
-import { Select, MenuItem, FormControl, SelectChangeEvent } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles(() => ({
   dialogHeader: {
@@ -49,7 +48,9 @@ const CampaignSelector: React.FC<CampaignSelectorProps> = ({
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
 
   useEffect(() => {
-    fetchFrontendSettings(FrontendSettingsType.campaigns).then(setCampaigns);
+    fetchFrontendSettings(FrontendSettingsType.campaigns)
+      .then(setCampaigns)
+      .catch((error) => console.error('Failed to fetch campaigns:', error));
   }, []);
 
   const setCampaignName = (campaign?: string) => onCampaignChange(campaign);

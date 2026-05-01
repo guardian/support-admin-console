@@ -1,24 +1,24 @@
-import React, { useEffect, useState } from 'react';
 import { Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import Sidebar from './sidebar';
-import { LockStatus, Status, Test } from './helpers/shared';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { hasPermission } from '../../utils/permissions';
 import {
+  createTest,
   fetchFrontendSettings,
   fetchTest,
   FrontendSettingsType,
   lockTest,
   requestTestListLock,
   requestTestListTakeControl,
-  updateTest,
   saveTestListOrder,
   unlockTest,
-  createTest,
   updateStatuses,
+  updateTest,
 } from '../../utils/requests';
-import { useParams } from 'react-router-dom';
 import { addMethodologyToTestName } from './helpers/methodology';
-import { hasPermission } from '../../utils/permissions';
+import { LockStatus, Status, Test } from './helpers/shared';
+import Sidebar from './sidebar';
 
 const useStyles = makeStyles(({ spacing, typography }: Theme) => ({
   viewTextContainer: {
