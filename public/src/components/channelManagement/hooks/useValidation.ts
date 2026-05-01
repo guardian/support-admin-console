@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ValidationStatus } from '../helpers/validation';
 
 const allValid = (validationStatus: ValidationStatus): boolean => {
@@ -10,18 +10,23 @@ type FieldValidationChange = (fieldName: string, isValid: boolean) => void;
 const useValidation = (onValidationChanged: (isValid: boolean) => void): FieldValidationChange => {
   const [validationStatus, setValidationStatus] = useState<ValidationStatus>({});
 
-  const [wasValid, setWasValid] = useState(true);
+  const wasValidRef = useRef(true);
 
   useEffect(() => {
     const isValid = allValid(validationStatus);
-    if (isValid !== wasValid) {
-      setWasValid(isValid);
-      onValidationChanged(allValid(validationStatus));
+    if (isValid !== wasValidRef.current) {
+      wasValidRef.current = isValid;
+      onValidationChanged(isValid);
     }
-  }, [validationStatus]);
+  }, [onValidationChanged, validationStatus]);
 
   const setValidationStatusForField = (field: string, isValid: boolean): void => {
-    setValidationStatus((current) => ({ ...current, [field]: isValid }));
+    setValidationStatus((current) => {
+      if (current[field] === isValid) {
+        return current;
+      }
+      return { ...current, [field]: isValid };
+    });
   };
 
   return setValidationStatusForField;
