@@ -3,7 +3,7 @@ import { Typography } from '@mui/material';
 import { useStyles } from '../helpers/testEditorStyles';
 import { ContributionType, contributionTypes } from '../../../utils/models';
 import { OneTimeCheckoutVariant } from '../../../models/oneTimeCheckout';
-import { AmountsVariantEditorRow } from '../../amounts/AmountsVariantEditorRow';
+import { AmountsVariantEditorRow } from './AmountsVariantEditorRow';
 
 interface AmountsSectionProps {
   variant: OneTimeCheckoutVariant;
