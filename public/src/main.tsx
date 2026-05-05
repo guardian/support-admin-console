@@ -4,7 +4,6 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Switchboard from './components/switchboard';
 import BannerDeployDashboard from './components/channelManagement/bannerDeploy/bannerDeployDashboard';
-import AmountsForm from './components/amounts/AmountsForm';
 import {
   ArticleEpicTestsForm,
   LiveblogEpicTestsForm,
@@ -152,7 +151,6 @@ const AppRouter = () => {
         <Routes>
           <Route path="/" element={createComponent(<IndexPage />, 'Home Page')} />
           <Route path="/switches" element={createComponent(<Switchboard />, 'Switches')} />
-          <Route path="/amounts" element={createComponent(<AmountsForm />, 'Amounts')} />
           <Route
             path="/header-tests/:testName?"
             element={createComponent(<HeaderTestsForm />, 'Header Tests')}

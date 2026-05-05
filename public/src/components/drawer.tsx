@@ -210,11 +210,6 @@ export default function NavDrawer(): React.ReactElement {
             <ListItemText primary="Checkout Nudge" />
           </ListItemButton>
         </Link>
-        <Link key="Single Amounts" to="/amounts" className={classes.link}>
-          <ListItemButton className={classes.listItem} key="Single Amounts">
-            <ListItemText primary="Single Amounts" />
-          </ListItemButton>
-        </Link>
         <Link key="Promo Tool" to="/promo-tool" className={classes.link}>
           <ListItemButton className={classes.listItem} key="Promo Tool">
             <ListItemText primary="Promo Tool" />
