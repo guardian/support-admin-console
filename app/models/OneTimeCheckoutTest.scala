@@ -7,6 +7,12 @@ import io.circe.{Decoder, Encoder}
 import models.Methodology.defaultMethodologies
 import models.Channel.OneTimeCheckout
 
+case class AmountValuesObject(
+    amounts: List[Int],
+    defaultAmount: Int,
+    hideChooseYourAmount: Boolean
+)
+
 case class OneTimeCheckoutVariant(
     name: String,
     heading: String,

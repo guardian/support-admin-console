@@ -138,7 +138,6 @@ class AppComponents(context: Context, stage: String)
     new Application(authAction, controllerComponents, stage, permissionsService, sdcUrlOverride),
     new Login(authConfig, wsClient, controllerComponents),
     new SwitchesController(authAction, controllerComponents, stage, runtime),
-    new AmountsController(authAction, controllerComponents, stage, runtime),
     new EpicTestsController(
       authAction,
       controllerComponents,
