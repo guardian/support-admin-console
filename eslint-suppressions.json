@@ -1778,7 +1778,7 @@
   },
   "public/src/components/drawer.tsx": {
     "import/order": {
-      "count": 7
+      "count": 6
     }
   },
   "public/src/components/indexPage.tsx": {
