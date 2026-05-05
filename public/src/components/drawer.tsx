@@ -6,7 +6,6 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import { makeStyles } from '@mui/styles';
 import RRControlPanelLogo from './rrControlPanelLogo';
-import { getStage } from '../utils/stage';
 import ListItemButton from '@mui/material/ListItemButton';
 
 const useStyles = makeStyles({
