@@ -85,7 +85,7 @@ const VariantSummaryWebPreviewButton: React.FC<VariantSummaryPreviewButtonProps>
     return 'WEB PREVIEW';
   };
 
-  const url = webPreviewUrl || getPreviewUrl(testName, name, testType, articleType);
+  const url = webPreviewUrl ?? getPreviewUrl(testName, name, testType, articleType);
 
   return (
     <Button

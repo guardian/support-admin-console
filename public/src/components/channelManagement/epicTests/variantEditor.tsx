@@ -155,20 +155,20 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   });
 
   useEffect(() => {
-    trigger();
-  }, []);
+    void trigger();
+  }, [trigger]);
 
   useEffect(() => {
     onVariantChange((current) => ({
       ...current,
       ...validatedFields,
     }));
-  }, [validatedFields]);
+  }, [validatedFields, onVariantChange]);
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
-  }, [errors.heading, errors.paragraphs, errors.highlightedText, errors.image]);
+  }, [errors, onValidationChange]);
 
   const enableHtml = platform === 'DOTCOM';
   const htmlValidator = enableHtml ? () => undefined : noHtmlValidator;
@@ -257,11 +257,11 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
             return (
               <RichTextEditorSingleLine
                 error={errors.heading !== undefined}
-                helperText={errors.heading ? errors.heading.message || errors.heading.type : ''}
+                helperText={errors.heading ? (errors.heading.message ?? errors.heading.type) : ''}
                 copyData={field.value}
                 updateCopy={(value) => {
                   field.onChange(value);
-                  handleSubmit(setValidatedFields)();
+                  void handleSubmit(setValidatedFields)();
                 }}
                 name="heading"
                 label="Header"
@@ -299,13 +299,13 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
               helperText={
                 errors.paragraphs
                   ? // @ts-ignore -- react-hook-form doesn't believe it has a message field
-                    errors.paragraphs.message || errors.paragraphs.type
+                    (errors.paragraphs.message ?? errors.paragraphs.type)
                   : getParagraphsHelperText()
               }
               copyData={field.value}
               updateCopy={(pars) => {
                 field.onChange(pars);
-                handleSubmit(setValidatedFields)();
+                void handleSubmit(setValidatedFields)();
               }}
               name="paragraphs"
               label="Body copy"
@@ -342,13 +342,13 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                 error={errors.highlightedText !== undefined}
                 helperText={
                   errors.highlightedText
-                    ? errors.highlightedText.message || errors.highlightedText.type
+                    ? (errors.highlightedText.message ?? errors.highlightedText.type)
                     : HIGHTLIGHTED_TEXT_DEFAULT_HELPER_TEXT
                 }
                 copyData={field.value}
                 updateCopy={(pars) => {
                   field.onChange(pars);
-                  handleSubmit(setValidatedFields)();
+                  void handleSubmit(setValidatedFields)();
                 }}
                 name="highlightedText"
                 label="Highlighted text"

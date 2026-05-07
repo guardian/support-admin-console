@@ -73,11 +73,7 @@ const PromoTool: React.FC = () => {
   const [countryGroups, setCountryGroups] = useState<CountryGroup[]>([]);
   const [ratePlans, setRatePlans] = useState<RatePlanWithProduct[]>([]);
   const { campaignCode: promoCampaignCode } = useParams<{ campaignCode?: string }>();
-  const [selectedPromoCampaignCode, setSelectedPromoCampaignCode] = useState<string | undefined>();
   const [selectedPromoProduct, setSelectedPromoProduct] = useState<PromoProduct>(() => {
-    if (globalThis.window === undefined) {
-      return 'SupporterPlus';
-    }
     const stored = globalThis.window.localStorage.getItem('promoToolSelectedProduct');
     const validProducts = Object.keys(promoProductNames) as PromoProduct[];
     return stored && (validProducts as string[]).includes(stored)
@@ -100,7 +96,7 @@ const PromoTool: React.FC = () => {
     createPromoCampaign(newPromoCampaign)
       .then(() => {
         fetchPromoCampaignsList(product); // Refetch campaigns list to update the sidebar
-        navigate(`/promo-tool/campaign/${newPromoCampaign.campaignCode}`);
+        void navigate(`/promo-tool/campaign/${newPromoCampaign.campaignCode}`);
       })
       .catch((error) => {
         alert(`Error while saving new PromoCampaign: ${error}`);
@@ -122,14 +118,14 @@ const PromoTool: React.FC = () => {
       .then((fetchedPromos) => {
         setPromos(fetchedPromos);
       })
-      .catch((error) => {
+      .catch((error: unknown) => {
         console.error('Error fetching promos:', error);
-        alert(`Error fetching promos: ${error.message}`);
+        alert(`Error fetching promos: ${error instanceof Error ? error.message : String(error)}`);
       });
   };
 
   const handleCreatePromo = (promoCode: string, name: string): void => {
-    if (!selectedPromoCampaignCode) {
+    if (!promoCampaignCode) {
       alert('Please select a campaign first');
       return;
     }
@@ -137,7 +133,7 @@ const PromoTool: React.FC = () => {
     const newPromo: Promo = {
       promoCode,
       name,
-      campaignCode: selectedPromoCampaignCode,
+      campaignCode: promoCampaignCode,
       appliesTo: {
         productRatePlanIds: [],
         countries: [],
@@ -150,10 +146,10 @@ const PromoTool: React.FC = () => {
       .then(() => {
         setPromos([...promos, newPromo]);
         // Navigate to the editor page
-        navigate(`/promo-tool/promo/${promoCode}`);
+        void navigate(`/promo-tool/promo/${promoCode}`);
       })
-      .catch((error) => {
-        alert(`Error creating promo: ${error.message}`);
+      .catch((error: unknown) => {
+        alert(`Error creating promo: ${error instanceof Error ? error.message : String(error)}`);
       });
   };
 
@@ -173,10 +169,10 @@ const PromoTool: React.FC = () => {
         setPromos([...promos, clonedPromo]);
         setPromoToClone(undefined);
         // Navigate to the editor page
-        navigate(`/promo-tool/promo/${promoCode}`);
+        void navigate(`/promo-tool/promo/${promoCode}`);
       })
-      .catch((error) => {
-        alert(`Error cloning promo: ${error.message}`);
+      .catch((error: unknown) => {
+        alert(`Error cloning promo: ${error instanceof Error ? error.message : String(error)}`);
       });
   };
 
@@ -186,24 +182,16 @@ const PromoTool: React.FC = () => {
   };
 
   const handleViewPromo = (promoCode: string): void => {
-    navigate(`/promo-tool/promo/${promoCode}`);
+    void navigate(`/promo-tool/promo/${promoCode}`);
   };
 
   const handlePromoCampaignSelected = (campaignCode: string): void => {
-    navigate(`/promo-tool/campaign/${campaignCode}`);
+    void navigate(`/promo-tool/campaign/${campaignCode}`);
   };
 
   useEffect(() => {
-    if (globalThis.window !== undefined) {
-      globalThis.window.localStorage.setItem('promoToolSelectedProduct', selectedPromoProduct);
-    }
+    globalThis.window.localStorage.setItem('promoToolSelectedProduct', selectedPromoProduct);
   }, [selectedPromoProduct]);
-
-  useEffect(() => {
-    if (promoCampaignCode != null) {
-      setSelectedPromoCampaignCode(promoCampaignCode);
-    }
-  }, [promoCampaignCode, promoCampaigns]);
 
   useEffect(() => {
     fetchPromoCampaignsList(selectedPromoProduct);
@@ -216,41 +204,37 @@ const PromoTool: React.FC = () => {
         console.error('Error fetching country groups:', error);
       });
 
-    if (selectedPromoProduct) {
-      const catalogProducts = mapPromoProductToCatalogProducts(selectedPromoProduct);
-      const fetchPromises = catalogProducts.map((catalogProduct) => {
-        return fetchProductDetails(catalogProduct)
-          .then((product) => {
-            return getAllRatePlansWithProduct(product, catalogProduct);
-          })
-          .catch((error) => {
-            console.error(`Error fetching rate plans for ${catalogProduct}:`, error);
-            return [];
-          });
-      });
-
-      Promise.all(fetchPromises)
-        .then((allRatePlansArrays) => {
-          const combinedRatePlans = allRatePlansArrays.flat();
-          setRatePlans(combinedRatePlans);
+    const catalogProducts = mapPromoProductToCatalogProducts(selectedPromoProduct);
+    const fetchPromises = catalogProducts.map((catalogProduct) => {
+      return fetchProductDetails(catalogProduct)
+        .then((product) => {
+          return getAllRatePlansWithProduct(product, catalogProduct);
         })
         .catch((error) => {
-          console.error('Error combining rate plans:', error);
-          setRatePlans([]);
+          console.error(`Error fetching rate plans for ${catalogProduct}:`, error);
+          return [];
         });
-    }
+    });
+
+    Promise.all(fetchPromises)
+      .then((allRatePlansArrays) => {
+        const combinedRatePlans = allRatePlansArrays.flat();
+        setRatePlans(combinedRatePlans);
+      })
+      .catch((error) => {
+        console.error('Error combining rate plans:', error);
+        setRatePlans([]);
+      });
   }, [selectedPromoProduct]);
 
   useEffect(() => {
-    if (selectedPromoCampaignCode) {
-      fetchPromosList(selectedPromoCampaignCode);
-      return;
+    if (promoCampaignCode) {
+      fetchPromosList(promoCampaignCode);
     }
-    setPromos([]);
-  }, [selectedPromoCampaignCode]);
+  }, [promoCampaignCode]);
 
   const selectedPromoCampaign = promoCampaigns.find(
-    (promoCampaign) => promoCampaign.campaignCode === selectedPromoCampaignCode,
+    (promoCampaign) => promoCampaign.campaignCode === promoCampaignCode,
   );
 
   return (

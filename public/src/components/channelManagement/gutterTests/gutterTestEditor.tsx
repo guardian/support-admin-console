@@ -217,18 +217,12 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
         </Typography>
 
         <TestEditorTargetAudienceSelector
-          regionTargeting={
-            test.regionTargeting ?? {
-              // For backwards compatibility with the deprecated locations field
-              targetedCountryGroups: test.locations,
-              targetedCountryCodes: [],
-            }
-          }
+          regionTargeting={test.regionTargeting}
           onRegionTargetingUpdate={onRegionTargetingChange}
           selectedCohort={test.userCohort}
           onCohortChange={onCohortChange}
           showDeviceTypeSelector={false}
-          selectedDeviceType={test.deviceType ?? 'All'} // can't remove but hidden anyway.
+          selectedDeviceType={test.deviceType} // can't remove but hidden anyway.
           onDeviceTypeChange={onDeviceTypeChange} // can't remove but hidden anywat.
           isDisabled={!userHasTestLocked}
           showSupporterStatusSelector={true}

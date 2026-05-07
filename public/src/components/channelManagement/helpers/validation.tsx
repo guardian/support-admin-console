@@ -1,4 +1,4 @@
-import { TestPlatform } from './shared';
+import type { TestPlatform } from './shared';
 
 export type ValidationStatus = Record<string, boolean>;
 

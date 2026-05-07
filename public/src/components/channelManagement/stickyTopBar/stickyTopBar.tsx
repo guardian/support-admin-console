@@ -130,7 +130,7 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
   allowEditing,
 }: StickyTopBarProps) => {
   const classes = useStyles();
-  const mainHeader = nickname ? nickname : name;
+  const mainHeader = nickname ?? name;
   const secondaryHeader = nickname ? name : null;
 
   return (
@@ -146,7 +146,7 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
             variant="outlined"
             startIcon={<Link />}
             onClick={() => {
-              navigator.clipboard.writeText(`${location.origin}/${settingsType}/${name}`);
+              void navigator.clipboard.writeText(`${location.origin}/${settingsType}/${name}`);
             }}
           >
             Copy link

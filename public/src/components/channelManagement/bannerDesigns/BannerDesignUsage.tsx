@@ -31,7 +31,7 @@ export const BannerDesignUsage: React.FC<Props> = ({ designName }: Props) => {
   const [testNames, setTestNames] = useState<Test[]>([]);
 
   useEffect(() => {
-    getBannerDesignUsage(designName).then((tests) => setTestNames(tests));
+    void getBannerDesignUsage(designName).then((tests) => setTestNames(tests));
   }, [designName]);
 
   const TestButton = (test: Test) => {

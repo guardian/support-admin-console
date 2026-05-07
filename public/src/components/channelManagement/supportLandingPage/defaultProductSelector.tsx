@@ -101,7 +101,7 @@ const DefaultProductSelector: React.FC<DefaultProductSelectorProps> = ({
           <FormControl component="fieldset" className={classes.formControl} disabled={!editMode}>
             <FormLabel component="legend">Default Product</FormLabel>
             <RadioGroup
-              value={defaultProductSelection?.productType || ''}
+              value={defaultProductSelection?.productType ?? ''}
               onChange={(e) => {
                 const value = e.target.value as DefaultProductSelection['productType'] | '';
                 handleProductTypeChange(value);

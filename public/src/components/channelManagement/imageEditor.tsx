@@ -41,7 +41,7 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
   onValidationChange,
   guidance,
 }: ImageEditorProps) => {
-  const defaultValues: Image = image;
+  const defaultValues: Image = { ...image };
 
   const {
     register,
@@ -55,13 +55,13 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
   });
 
   useEffect(() => {
-    trigger(); // validate immediately
-  }, []);
+    void trigger(); // validate immediately
+  }, [trigger]);
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
-  }, [errors.altText, errors.mainUrl]);
+  }, [errors, onValidationChange]);
 
   return (
     <div>
@@ -71,7 +71,9 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
         {...register('mainUrl', {
           required: EMPTY_ERROR_HELPER_TEXT,
         })}
-        onBlur={handleSubmit(updateImage)}
+        onBlur={() => {
+          void handleSubmit(updateImage)();
+        }}
         label="Image URL"
         margin="normal"
         variant="outlined"
@@ -84,7 +86,9 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
         {...register('altText', {
           required: EMPTY_ERROR_HELPER_TEXT,
         })}
-        onBlur={handleSubmit(updateImage)}
+        onBlur={() => {
+          void handleSubmit(updateImage)();
+        }}
         label="Image alt-text"
         margin="normal"
         variant="outlined"

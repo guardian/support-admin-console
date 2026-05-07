@@ -89,8 +89,8 @@ function Sidebar<T extends Test>({
 
     return testsToFilter.filter(
       (t) =>
-        t.regionTargeting?.targetedCountryGroups?.indexOf(regionFilter) >= 0 ||
-        t.locations?.indexOf(regionFilter) >= 0,
+        t.regionTargeting.targetedCountryGroups.includes(regionFilter) ||
+        t.locations.includes(regionFilter),
     );
   };
 
@@ -99,7 +99,7 @@ function Sidebar<T extends Test>({
       <div className={classes.buttonsContainer}>
         <NewTestButton
           existingNames={tests.map((t) => t.name)}
-          existingNicknames={tests.map((t) => t.nickname || '')}
+          existingNicknames={tests.map((t) => t.nickname ?? '')}
           testNamePrefix={testNamePrefix}
           createTest={createTest}
           disabled={userHasTestListLocked || !allowEditing}
@@ -163,7 +163,7 @@ function Sidebar<T extends Test>({
 
         {!userHasTestListLocked && (
           <TestListSidebarFilterSelector
-            regionFilter={regionFilter as string}
+            regionFilter={regionFilter}
             handleRegionFilterChange={setRegionFilter}
           />
         )}

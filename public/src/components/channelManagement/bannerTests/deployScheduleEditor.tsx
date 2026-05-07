@@ -81,7 +81,7 @@ const DeployScheduleEditor: React.FC<DeployScheduleEditorProps> = ({
         {deploySchedule && (
           <TextField
             error={errors.daysBetween !== undefined}
-            helperText={errors.daysBetween?.message || 'Must be a number'}
+            helperText={errors.daysBetween?.message ?? 'Must be a number'}
             {...register('daysBetween', {
               required: EMPTY_ERROR_HELPER_TEXT,
               valueAsNumber: true,

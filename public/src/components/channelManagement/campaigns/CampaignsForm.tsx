@@ -57,7 +57,7 @@ const CampaignsForm: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchSettings().then(setCampaigns);
+    void fetchSettings().then(setCampaigns);
   }, []);
 
   useEffect(() => {

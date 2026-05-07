@@ -89,7 +89,7 @@ export const ValidatedTestEditor = <T extends Test>(
           campaignName={test.campaignName}
           isNew={!!test.isNew}
           status={test.status}
-          lockStatus={test.lockStatus || { locked: false }}
+          lockStatus={test.lockStatus ?? { locked: false }}
           userHasTestLocked={userHasTestLocked}
           userHasTestListLocked={userHasTestListLocked}
           existingNames={existingNames}
@@ -108,9 +108,9 @@ export const ValidatedTestEditor = <T extends Test>(
 
         <div className={classes.scrollableContainer}>
           <TestEditor
-            test={testRef.current}
+            test={test}
             userHasTestLocked={userHasTestLocked}
-            onTestChange={(update) => onUpdate(update(testRef.current))}
+            onTestChange={(update) => onUpdate(update(test))}
             setValidationStatusForField={setValidationStatusForField}
           />
         </div>

@@ -33,7 +33,7 @@ export const BannerVisualEditor: React.FC<Props> = ({
   return (
     <div>
       <Select
-        value={visual?.kind || 'None'}
+        value={visual?.kind ?? 'None'}
         onChange={onVisualTypeChange}
         disabled={isDisabled}
         name="visual-type-select"

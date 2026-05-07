@@ -129,7 +129,7 @@ export const PromoListItem = ({
   };
 
   const getRatePlansText = () => {
-    if (!promo.appliesTo.productRatePlanIds || promo.appliesTo.productRatePlanIds.length === 0) {
+    if (promo.appliesTo.productRatePlanIds.length === 0) {
       return 'No rate plans';
     }
 
@@ -145,7 +145,7 @@ export const PromoListItem = ({
   };
 
   const getRegionsText = () => {
-    if (!promo.appliesTo.countries || promo.appliesTo.countries.length === 0) {
+    if (promo.appliesTo.countries.length === 0) {
       return 'All regions';
     }
     const regionNames = promo.appliesTo.countries.map((country) => {
@@ -193,7 +193,7 @@ export const PromoListItem = ({
             <Box>
               <span className={classes.dates}>
                 {formatDate(promo.startTimestamp)} -{' '}
-                <span className={classes.endDate}>{formatDate(promo?.endTimestamp)}</span>
+                <span className={classes.endDate}>{formatDate(promo.endTimestamp)}</span>
               </span>
               <Box className={classes.promoDetails}>
                 <Typography className={classes.detailItem}>

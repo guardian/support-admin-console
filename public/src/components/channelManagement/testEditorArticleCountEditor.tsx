@@ -52,10 +52,10 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
 
   const defaultValues: FormData = useMemo(
     () => ({
-      minViews: articlesViewedSettings?.minViews?.toString() || '',
-      maxViews: articlesViewedSettings?.maxViews?.toString() || '',
-      periodInWeeks: articlesViewedSettings?.periodInWeeks.toString() || '',
-      tagIds: articlesViewedSettings?.tagIds || [],
+      minViews: articlesViewedSettings?.minViews.toString() ?? '',
+      maxViews: articlesViewedSettings?.maxViews?.toString() ?? '',
+      periodInWeeks: articlesViewedSettings?.periodInWeeks.toString() ?? '',
+      tagIds: articlesViewedSettings?.tagIds ?? [],
     }),
     [articlesViewedSettings],
   );
@@ -70,7 +70,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
     mode: 'onChange',
     defaultValues,
   });
-  const tagIds = articlesViewedSettings?.tagIds || [];
+  const tagIds = articlesViewedSettings?.tagIds ?? [];
 
   useEffect(() => {
     reset(defaultValues);
@@ -79,6 +79,8 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
     defaultValues.maxViews,
     defaultValues.periodInWeeks,
     defaultValues.tagIds,
+    reset,
+    defaultValues,
   ]);
 
   const onSubmit = ({ minViews, maxViews, periodInWeeks }: FormData): void => {
@@ -86,14 +88,21 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
       minViews: parseInt(minViews),
       maxViews: parseInt(maxViews) || null,
       periodInWeeks: parseInt(periodInWeeks),
-      tagIds: articlesViewedSettings?.tagIds || null,
+      tagIds: articlesViewedSettings?.tagIds ?? null,
     });
   };
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
-  }, [errors.minViews, errors.maxViews, errors.periodInWeeks, errors.tagIds]);
+  }, [
+    errors.minViews,
+    errors.maxViews,
+    errors.periodInWeeks,
+    errors.tagIds,
+    errors,
+    onValidationChange,
+  ]);
 
   const onRadioGroupChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     if (event.target.value === 'enabled') {
@@ -138,7 +147,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
                   required: EMPTY_ERROR_HELPER_TEXT,
                   validate: notNumberValidator,
                 })}
-                onBlur={handleSubmit(onSubmit)}
+                onBlur={() => void handleSubmit(onSubmit)()}
                 label="Minimum page views"
                 InputLabelProps={{ shrink: true }}
                 variant="filled"
@@ -151,7 +160,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
                 error={errors.maxViews !== undefined}
                 helperText={errors.maxViews?.message}
                 {...register('maxViews', { validate: notNumberValidator })}
-                onBlur={handleSubmit(onSubmit)}
+                onBlur={() => void handleSubmit(onSubmit)()}
                 label="Maximum page views"
                 InputLabelProps={{ shrink: true }}
                 variant="filled"
@@ -167,7 +176,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
                   required: EMPTY_ERROR_HELPER_TEXT,
                   validate: notNumberValidator,
                 })}
-                onBlur={handleSubmit(onSubmit)}
+                onBlur={() => void handleSubmit(onSubmit)()}
                 label="Time period in weeks"
                 InputLabelProps={{ shrink: true }}
                 variant="filled"

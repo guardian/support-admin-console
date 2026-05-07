@@ -83,8 +83,8 @@ const HeaderTestVariantContentEditor: React.FC<HeaderTestVariantContentEditorPro
   const templateValidator = templateValidatorForPlatform('DOTCOM');
 
   const defaultValues: HeaderContent = {
-    heading: content.heading || '',
-    subheading: content.subheading || '',
+    heading: content.heading ?? '',
+    subheading: content.subheading ?? '',
   };
 
   const {
@@ -99,13 +99,13 @@ const HeaderTestVariantContentEditor: React.FC<HeaderTestVariantContentEditorPro
   });
 
   useEffect(() => {
-    trigger();
-  }, []);
+    void trigger();
+  }, [trigger]);
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
-  }, [errors.heading, errors.subheading]);
+  }, [errors, onValidationChange]);
 
   const onSubmit = ({ heading, subheading }: HeaderContent): void => {
     onChange({ ...content, heading, subheading });
@@ -137,7 +137,7 @@ const HeaderTestVariantContentEditor: React.FC<HeaderTestVariantContentEditorPro
                 error={errors.heading !== undefined}
                 helperText={errors.heading ? errors.heading.message : ''}
                 {...register('heading', { validate: templateValidator })}
-                onBlur={handleSubmit(onSubmit)}
+                onBlur={() => void handleSubmit(onSubmit)()}
                 label="Heading"
                 margin="normal"
                 variant="outlined"
@@ -157,7 +157,7 @@ const HeaderTestVariantContentEditor: React.FC<HeaderTestVariantContentEditorPro
                 error={errors.subheading !== undefined}
                 helperText={errors.subheading ? errors.subheading.message : ''}
                 {...register('subheading', { validate: templateValidator })}
-                onBlur={handleSubmit(onSubmit)}
+                onBlur={() => void handleSubmit(onSubmit)()}
                 label="Sub-heading"
                 margin="normal"
                 variant="outlined"

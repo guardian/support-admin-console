@@ -192,7 +192,7 @@ function TestCard({ test, keyId, linkPath }: TestCardProps): React.ReactElement 
   };
 
   const getLocations = (test: Test) => {
-    const locations: Array<string | number> = test.locations || [];
+    const locations: Array<string | number> = test.locations;
 
     const checkLocation = (wanted: string) => {
       if (!locations.includes(wanted)) {
@@ -245,7 +245,7 @@ function TestCard({ test, keyId, linkPath }: TestCardProps): React.ReactElement 
               test.status === 'Archived' ? classes.archivedTestNickname : classes.testNickname
             }
           >
-            {test.nickname ? test.nickname : test.name}
+            {test.nickname ?? test.name}
           </div>
           <div className={classes.testName}>Tracking name: {test.name}</div>
         </div>

@@ -187,13 +187,7 @@ const HeaderTestEditor: React.FC<ValidatedTestEditorProps<HeaderTest>> = ({
         </Typography>
 
         <TestEditorTargetAudienceSelector
-          regionTargeting={
-            test.regionTargeting ?? {
-              // For backwards compatibility with the deprecated locations field
-              targetedCountryGroups: test.locations,
-              targetedCountryCodes: [],
-            }
-          }
+          regionTargeting={test.regionTargeting}
           onRegionTargetingUpdate={onRegionTargetingChange}
           selectedCohort={test.userCohort}
           onCohortChange={onCohortChange}

@@ -40,7 +40,7 @@ import VariantPreview from './variantPreview';
 const copyHasTemplate = (test: EpicTest, template: string): boolean =>
   test.variants.some(
     (variant) =>
-      variant.heading?.includes(template) ||
+      (variant.heading?.includes(template) ?? false) ||
       variant.paragraphs.some((para) => para.includes(template)),
   );
 
@@ -54,6 +54,13 @@ export const getEpicTestEditor = (
     setValidationStatusForField,
   }: ValidatedTestEditorProps<EpicTest>) => {
     const classes = useStyles();
+    const [userExplicitlyDisabledArticleCount, setUserExplicitlyDisabledArticleCount] =
+      React.useState(test.articlesViewedSettings === undefined);
+
+    React.useEffect(() => {
+      setUserExplicitlyDisabledArticleCount(test.articlesViewedSettings === undefined);
+      // eslint-disable-next-line react-hooks/exhaustive-deps -- Only sync when navigating to a different test, not on every re-render
+    }, [test.name]);
 
     const onMaxViewsValidationChange = (isValid: boolean): void =>
       setValidationStatusForField('maxViews', isValid);
@@ -81,7 +88,9 @@ export const getEpicTestEditor = (
           ...updatedTest,
           // To save dotcom from having to work this out
           hasCountryName: copyHasTemplate(updatedTest, COUNTRY_NAME_TEMPLATE),
-          articlesViewedSettings: getArticlesViewedSettings(updatedTest),
+          articlesViewedSettings: userExplicitlyDisabledArticleCount
+            ? undefined
+            : getArticlesViewedSettings(updatedTest),
         };
       });
     };
@@ -198,7 +207,9 @@ export const getEpicTestEditor = (
     const onArticlesViewedSettingsChange = (
       updatedArticlesViewedSettings?: ArticlesViewedSettings,
     ): void => {
-      updateTest((current) => ({
+      setUserExplicitlyDisabledArticleCount(updatedArticlesViewedSettings === undefined);
+      // Bypass updateTest to avoid re-calculation, go directly to onTestChange
+      onTestChange((current) => ({
         ...current,
         articlesViewedSettings: updatedArticlesViewedSettings,
       }));
@@ -371,13 +382,7 @@ export const getEpicTestEditor = (
             </Typography>
 
             <TestEditorTargetAudienceSelector
-              regionTargeting={
-                test.regionTargeting ?? {
-                  // For backwards compatibility with the deprecated locations field
-                  targetedCountryGroups: test.locations,
-                  targetedCountryCodes: [],
-                }
-              }
+              regionTargeting={test.regionTargeting}
               onRegionTargetingUpdate={onRegionTargetingChange}
               selectedCohort={test.userCohort}
               onCohortChange={onCohortChange}

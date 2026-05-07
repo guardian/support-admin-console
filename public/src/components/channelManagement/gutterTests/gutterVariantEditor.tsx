@@ -89,11 +89,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
 
   const getBodyCopyLength = () => {
     const bodyCopyRecommendedLength = BODY_COPY_RECOMMENDED_LENGTH;
-
-    if (variant.bodyCopy != null) {
-      return [getRteCopyLength([...variant.bodyCopy]), bodyCopyRecommendedLength];
-    }
-    return [getRteCopyLength([variant.bodyCopy]), bodyCopyRecommendedLength];
+    return [getRteCopyLength([...variant.bodyCopy]), bodyCopyRecommendedLength];
   };
 
   const [copyLength, recommendedLength] = getBodyCopyLength();
@@ -110,9 +106,9 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
   const templateValidator = templateValidatorForPlatform('DOTCOM');
 
   const defaultValues: FormData = {
-    image: variant.image,
-    bodyCopy: variant.bodyCopy,
-    cta: variant.cta,
+    image: { ...variant.image },
+    bodyCopy: [...variant.bodyCopy],
+    cta: variant.cta ? { ...variant.cta } : undefined,
   };
 
   /**
@@ -135,34 +131,34 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
   });
 
   useEffect(() => {
-    trigger();
-  }, []);
+    void trigger();
+  }, [trigger]);
 
   useEffect(() => {
     onVariantChange({
       ...variant,
       ...validatedFields,
     });
-  }, [validatedFields]);
+  }, [validatedFields, onVariantChange, variant]);
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
-  }, [errors.image, errors.bodyCopy, errors.cta?.baseUrl, errors.cta?.text]);
+  }, [errors, onValidationChange]);
 
   const updateImage = (image?: Image): void => {
     if (image) {
-      onVariantChange({ ...variant, image });
+      setValidatedFields((current) => ({ ...current, image }));
     } else {
-      onVariantChange({
-        ...variant,
+      setValidatedFields((current) => ({
+        ...current,
         image: { mainUrl: DEFAULT_IMAGE_URL, altText: DEFAULT_IMAGE_ALT },
-      });
+      }));
     }
   };
 
   const updatePrimaryCta = (updatedCta?: Cta): void => {
-    onVariantChange({ ...variant, cta: updatedCta });
+    setValidatedFields((current) => ({ ...current, cta: updatedCta }));
   };
 
   return (
@@ -205,13 +201,13 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                 helperText={
                   errors.bodyCopy
                     ? // @ts-ignore -- react-hook-form doesn't believe it has a message field
-                      errors.bodyCopy.message || errors.bodyCopy.type
+                      (errors.bodyCopy.message ?? errors.bodyCopy.type)
                     : getParagraphsHelperText()
                 }
                 copyData={field.value}
                 updateCopy={(paras) => {
                   field.onChange(paras);
-                  handleSubmit(setValidatedFields)();
+                  void handleSubmit(setValidatedFields)();
                 }}
                 name="copy"
                 label="Body copy"

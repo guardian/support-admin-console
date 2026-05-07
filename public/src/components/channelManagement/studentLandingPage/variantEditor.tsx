@@ -1,7 +1,7 @@
 import { Typography } from '@mui/material';
 import { Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Institution, StudentLandingPageVariant } from '../../../models/studentLandingPage';
 import PromoCodesEditor from '../../shared/PromoCodesEditor';
@@ -92,6 +92,19 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
     image: true, // change this back to false when we add the hero image bits back in.
   });
 
+  const {
+    handleSubmit,
+    control,
+    trigger,
+
+    formState: { errors },
+  } = useForm<OfferFormData>({
+    mode: 'onChange',
+    defaultValues,
+  });
+
+  const isCopyValid = useMemo(() => Object.keys(errors).length === 0, [errors]);
+
   const updatePromoCodes = (promoCodes: string[]): void => {
     onVariantChange((current) => ({
       ...current,
@@ -108,46 +121,20 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
   //   onVariantChange((current) => ({ ...current, image }));
   // };
 
-  const {
-    handleSubmit,
-    control,
-    trigger,
-
-    formState: { errors },
-  } = useForm<OfferFormData>({
-    mode: 'onChange',
-    defaultValues,
-  });
-
   useEffect(() => {
-    trigger();
-  }, []);
+    void trigger();
+  }, [trigger]);
 
   useEffect(() => {
     onVariantChange((current) => ({
       ...current,
       ...validatedFields,
     }));
-  }, [validatedFields]);
+  }, [onVariantChange, validatedFields]);
 
   useEffect(() => {
-    const isValid = Object.keys(errors).length === 0;
-    setSectionValidity((current) => ({
-      ...current,
-      copy: isValid,
-    }));
-  }, [errors.heading, errors.subheading]);
-
-  useEffect(() => {
-    onValidationChange(
-      sectionValidity.copy && sectionValidity.institution && sectionValidity.image,
-    );
-  }, [
-    onValidationChange,
-    sectionValidity.copy,
-    sectionValidity.institution,
-    sectionValidity.image,
-  ]);
+    onValidationChange(isCopyValid && sectionValidity.institution && sectionValidity.image);
+  }, [onValidationChange, isCopyValid, sectionValidity.institution, sectionValidity.image]);
 
   const isValidField = (field: string, fieldName: string, maxLength: number, allowHtml = false) => {
     const messages = [];
@@ -165,7 +152,7 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
     }
     if (field.includes('???')) {
       messages.push(
-        `Please update the subheading to include the academic institution\'s acronym instead of the ???`,
+        "Please update the subheading to include the academic institution's acronym instead of the ???",
       );
     }
     if (messages.length > 0) {
@@ -211,11 +198,11 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
               return (
                 <RichTextEditorSingleLine
                   error={errors.heading !== undefined}
-                  helperText={errors.heading ? errors.heading.message || errors.heading.type : ''}
+                  helperText={errors.heading ? (errors.heading.message ?? errors.heading.type) : ''}
                   copyData={field.value}
                   updateCopy={(value) => {
                     field.onChange(value);
-                    handleSubmit(setValidatedFields)();
+                    void handleSubmit(setValidatedFields)();
                   }}
                   name="heading"
                   label="Heading"
@@ -235,12 +222,12 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
                 <RichTextEditorSingleLine
                   error={errors.subheading !== undefined}
                   helperText={
-                    errors.subheading ? errors.subheading.message || errors.subheading.type : ''
+                    errors.subheading ? (errors.subheading.message ?? errors.subheading.type) : ''
                   }
                   copyData={field.value}
                   updateCopy={(value) => {
                     field.onChange(value);
-                    handleSubmit(setValidatedFields)();
+                    void handleSubmit(setValidatedFields)();
                   }}
                   name="subheading"
                   label="Subheading"
@@ -279,7 +266,7 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
           Promo Code
         </Typography>
         <PromoCodesEditor
-          promoCodes={variant.promoCodes ?? []}
+          promoCodes={variant.promoCodes}
           updatePromoCodes={updatePromoCodes}
           isDisabled={!editMode}
         />

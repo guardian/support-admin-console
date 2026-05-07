@@ -85,11 +85,22 @@ const CampaignSelector: React.FC<CampaignSelectorProps> = ({
 
   const availableCampaigns = sortCampaigns(filterCampaigns(campaigns));
 
+  const isCampaignInList = (campaignName?: string): boolean => {
+    if (!campaignName) {
+      return true;
+    }
+    return availableCampaigns.some((c) => c.name === campaignName);
+  };
+
+  const selectedCampaign = isCampaignInList(test.campaignName)
+    ? test.campaignName
+    : unassignedCampaign.name;
+
   return (
     <>
       <FormControl className={classes.campaignSelector} size="small">
         <Select
-          value={test.campaignName}
+          value={selectedCampaign}
           displayEmpty
           name="campaign-selector"
           renderValue={(campaign): string => {

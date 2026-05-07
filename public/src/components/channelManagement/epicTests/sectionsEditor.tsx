@@ -32,15 +32,13 @@ export const SectionsEditor: React.FC<SectionEditorProps> = ({
   useEffect(() => {
     fetch(`/capi/sections`)
       .then((response) => response.json())
-      .then((data) => {
-        const processedOptions = data.response.results.map(
-          (section: { id: string; webTitle: string }) => ({
-            id: section.id,
-            name: section.webTitle,
-          }),
-        );
+      .then((data: { response: { results: Array<{ id: string; webTitle: string }> } }) => {
+        const processedOptions: Section[] = data.response.results.map((section) => ({
+          id: section.id,
+          name: section.webTitle,
+        }));
 
-        processedOptions.sort((a: Section, b: Section) => {
+        processedOptions.sort((a, b) => {
           if (a.name != null && b.name != null && a.name > b.name) {
             return 1;
           }
@@ -48,6 +46,9 @@ export const SectionsEditor: React.FC<SectionEditorProps> = ({
         });
 
         setOptions(processedOptions);
+      })
+      .catch((error) => {
+        console.error('Failed to load sections:', error);
       });
   }, []);
 
@@ -56,12 +57,12 @@ export const SectionsEditor: React.FC<SectionEditorProps> = ({
       id={id}
       disabled={disabled}
       multiple
-      getOptionLabel={(option): string => option.name || option.id}
+      getOptionLabel={(option): string => option.name ?? option.id}
       options={options}
       autoComplete
       includeInputInList
       filterSelectedOptions
-      value={ids.map<Section>((id) => options.find((option) => option.id === id) || { id })}
+      value={ids.map<Section>((id) => options.find((option) => option.id === id) ?? { id })}
       inputValue={inputValue}
       onInputChange={(event, newInputValue, reason): void => {
         if (reason === 'input') {
@@ -72,7 +73,7 @@ export const SectionsEditor: React.FC<SectionEditorProps> = ({
         <TextField {...params} variant="outlined" label={label} />
       )}
       renderOption={(props, option): JSX.Element => {
-        return <li {...props}>{option.name ? option.name : option.id}</li>;
+        return <li {...props}>{option.name ?? option.id}</li>;
       }}
       onChange={(event, values: Section[], reason): void => {
         if (reason === 'selectOption' || reason === 'removeOption') {

@@ -77,7 +77,7 @@ const BatchProcessTestDialog: React.FC<BatchProcessTestDialogProps> = ({
     const test = draftTests.find((t) => name === t.name);
 
     if (test) {
-      return test.nickname || name;
+      return test.nickname ?? name;
     }
     return name;
   };
@@ -111,7 +111,7 @@ const BatchProcessTestDialog: React.FC<BatchProcessTestDialogProps> = ({
                     onChange={handleToggle(t.name)}
                   />
                 </ListItemIcon>
-                <ListItemText id={labelId} primary={t.nickname || t.name} />
+                <ListItemText id={labelId} primary={t.nickname ?? t.name} />
               </ListItem>
             );
           })}

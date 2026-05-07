@@ -95,17 +95,17 @@ export const TestsForm = <T extends Test>(
   createDefaultTest: (name: string, nickname: string) => T,
   testNamePrefix?: string,
 ): React.FC => {
-  return () => {
+  return function TestsFormInner() {
     const classes = useStyles();
     const { testName } = useParams<{ testName?: string }>();
     const [tests, setTests] = useState<T[]>([]);
-    const [selectedTestName, setSelectedTestName] = useState<string | null>(testName || null);
+    const [selectedTestName, setSelectedTestName] = useState<string | null>(testName ?? null);
     const [testListLockStatus, setTestListLockStatus] = useState<LockStatus>({ locked: false });
     const [email, setEmail] = useState<string>('');
     const [savingTestList, setSavingTestList] = useState<boolean>(false);
 
     const fetchTests = (): void => {
-      fetchFrontendSettings(settingsType).then((serverData: ChannelTestsResponse<T>) => {
+      void fetchFrontendSettings(settingsType).then((serverData: ChannelTestsResponse<T>) => {
         setEmail(serverData.userEmail);
         setTests(serverData.tests);
         setTestListLockStatus(serverData.status);
@@ -132,7 +132,7 @@ export const TestsForm = <T extends Test>(
         .then(() => refreshTest(testName))
         .catch((error) => {
           alert(`Error while locking test: ${error}`);
-          refreshTest(testName);
+          void refreshTest(testName);
         });
     };
     const onTestUnlock = (testName: string): void => {
@@ -329,7 +329,7 @@ export const TestsForm = <T extends Test>(
               userHasTestLocked={selectedTest.lockStatus?.email === email}
               userHasTestListLocked={userHasTestListLocked}
               existingNames={tests.map((test) => test.name)}
-              existingNicknames={tests.map((test) => test.nickname || '')}
+              existingNicknames={tests.map((test) => test.nickname ?? '')}
               onTestChange={onTestChange}
               onTestLock={onTestLock}
               onTestUnlock={onTestUnlock}

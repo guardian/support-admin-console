@@ -1,6 +1,6 @@
 import { FormHelperText, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   StudentLandingPageTest,
   StudentLandingPageVariant,
@@ -70,14 +70,11 @@ export const StudentLandingPageTestEditor: React.FC<
 > = ({ test, userHasTestLocked, onTestChange, setValidationStatusForField }) => {
   const classes = useStyles();
 
-  const [helperText, setHelperText] = useState<string>('Please choose a country');
+  const helperText = test.countryGroupId ? '' : 'Please choose a country';
 
   useEffect(() => {
-    setValidationStatusForField('countryGroupId', isFieldSet(test.countryGroupId as string));
-    if (isFieldSet(test.countryGroupId as string)) {
-      setHelperText('');
-    }
-  }, [test.countryGroupId]);
+    setValidationStatusForField('countryGroupId', isFieldSet(test.countryGroupId));
+  }, [setValidationStatusForField, test.countryGroupId]);
 
   const updateTest = (
     update: (current: StudentLandingPageTest) => StudentLandingPageTest,
@@ -91,11 +88,6 @@ export const StudentLandingPageTestEditor: React.FC<
   };
 
   const updateCountryGroupId = (updatedCountryGroupId: Region): void => {
-    if (!isFieldSet(updatedCountryGroupId as string)) {
-      setHelperText('Please choose a country');
-    } else {
-      setHelperText('');
-    }
     onTestChange((current) => ({
       ...current,
       countryGroupId: updatedCountryGroupId,
@@ -168,7 +160,7 @@ export const StudentLandingPageTestEditor: React.FC<
         <FormHelperText className={classes.errorText}>{helperText}</FormHelperText>
         <div className={classes.resetMargin}>
           <TypedRadioGroup
-            selectedValue={test.countryGroupId as string}
+            selectedValue={test.countryGroupId}
             onChange={updateCountryGroupId}
             isDisabled={!userHasTestLocked}
             labels={{

@@ -8,10 +8,9 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { Theme } from '@mui/material/styles';
-import { makeStyles } from '@mui/styles';
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { fetchCountryGroups, fetchProductDetails } from '../../utils/requests';
+import { useStyles } from './promoEditorStyles';
 import { PromoLandingPage } from './promoLandingPage';
 import RatePlanSelector from './ratePlanSelector';
 import {
@@ -27,55 +26,6 @@ import {
   Promo,
   PromoProduct,
 } from './utils/promoModels';
-
-export const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
-  root: {
-    padding: spacing(3),
-    maxWidth: 800,
-    margin: '0 auto',
-  },
-  section: {
-    marginBottom: spacing(3),
-  },
-  sectionTitle: {
-    marginBottom: spacing(2),
-    fontWeight: 600,
-  },
-  formField: {
-    marginBottom: spacing(2),
-  },
-  buttonGroup: {
-    display: 'flex',
-    gap: spacing(1),
-    marginTop: spacing(2),
-    position: 'sticky',
-    bottom: 0,
-    backgroundColor: 'white',
-    padding: spacing(2),
-    borderTop: '1px solid #ddd',
-    marginLeft: -spacing(3),
-    marginRight: -spacing(3),
-    marginBottom: -spacing(3),
-    zIndex: 2,
-  },
-  lockBanner: {
-    padding: spacing(2),
-    marginBottom: spacing(2),
-    backgroundColor: palette.warning.light,
-    borderRadius: 4,
-  },
-  infoBanner: {
-    padding: spacing(1),
-    marginBottom: spacing(1),
-    backgroundColor: palette.info.light,
-    borderRadius: 4,
-  },
-  countryGroupsContainer: {
-    border: '1px solid #ddd',
-    borderRadius: 4,
-    padding: spacing(2),
-  },
-}));
 
 interface PromoEditorProps {
   promo: Promo | null;
@@ -99,15 +49,25 @@ const PromoEditor = ({
   const classes = useStyles();
   const [editedPromo, setEditedPromo] = useState<Promo | null>(promo);
   const [countryGroups, setCountryGroups] = useState<CountryGroup[]>([]);
-  const [selectedCountryGroups, setSelectedCountryGroups] = useState<string[]>([]);
   const [allRatePlans, setAllRatePlans] = useState<RatePlanWithProduct[]>([]);
-  const [loadingProducts, setLoadingProducts] = useState<boolean>(true);
   const [promotionHasLandingPage, setPromotionHasLandingPage] = useState<boolean>(
     !!promo?.landingPage,
   );
   const [backupLandingPage, setBackupLandingPage] = useState<LandingPage | undefined>(
     promo?.landingPage,
   );
+
+  const selectedCountryGroups = useMemo(() => {
+    if (editedPromo && countryGroups.length > 0) {
+      const countryCodes = editedPromo.appliesTo.countries;
+      const matchedGroupIds = countryCodes
+        .map((countryCode) => countryGroups.find((cg) => cg.countries.includes(countryCode)))
+        .filter((group): group is CountryGroup => group != undefined)
+        .map((group) => group.id);
+      return [...new Set(matchedGroupIds)];
+    }
+    return [];
+  }, [editedPromo, countryGroups]);
 
   useEffect(() => {
     fetchCountryGroups()
@@ -116,22 +76,7 @@ const PromoEditor = ({
   }, []);
 
   useEffect(() => {
-    setEditedPromo(promo);
-    if (promo && countryGroups.length > 0) {
-      const countryCodes = promo.appliesTo.countries || [];
-      const matchedGroupIds = countryCodes
-        .map((countryCode) => countryGroups.find((cg) => cg.countries.includes(countryCode)))
-        .filter((group): group is CountryGroup => group != undefined)
-        .map((group) => group.id);
-      setSelectedCountryGroups([...new Set(matchedGroupIds)]);
-    } else {
-      setSelectedCountryGroups([]);
-    }
-  }, [promo, countryGroups]);
-
-  useEffect(() => {
     const catalogProducts = mapPromoProductToCatalogProducts(campaignProduct);
-    setLoadingProducts(true);
 
     Promise.all(catalogProducts.map((productName) => fetchProductDetails(productName)))
       .then((products) => {
@@ -147,9 +92,6 @@ const PromoEditor = ({
       })
       .catch((error) => {
         console.error('Error fetching product details:', error);
-      })
-      .finally(() => {
-        setLoadingProducts(false);
       });
   }, [campaignProduct]);
 
@@ -221,28 +163,30 @@ const PromoEditor = ({
     }
   };
 
-  const updateCountryGroups = (newCountryGroupIds: string[]) => {
-    setSelectedCountryGroups(newCountryGroupIds);
-    if (editedPromo) {
-      const selectedCountries = countryGroups
-        .filter((group) => newCountryGroupIds.includes(group.id))
-        .flatMap((group) => group.countries);
-
-      setEditedPromo({
-        ...editedPromo,
-        appliesTo: {
-          ...editedPromo.appliesTo,
-          countries: selectedCountries,
-        },
-      });
-    }
-  };
-
   const handleCountryGroupToggle = (countryGroupId: string) => {
-    const newCountryGroupIds = selectedCountryGroups.includes(countryGroupId)
-      ? selectedCountryGroups.filter((id) => id !== countryGroupId)
-      : [...selectedCountryGroups, countryGroupId];
-    updateCountryGroups(newCountryGroupIds);
+    if (!editedPromo) {
+      return;
+    }
+
+    const currentCountries = editedPromo.appliesTo.countries;
+    const groupCountries = countryGroups.find((g) => g.id === countryGroupId)?.countries ?? [];
+
+    const isGroupSelected = groupCountries.every((country) => currentCountries.includes(country));
+
+    let newCountries: string[];
+    if (isGroupSelected) {
+      newCountries = currentCountries.filter((country) => !groupCountries.includes(country));
+    } else {
+      newCountries = [...new Set([...currentCountries, ...groupCountries])];
+    }
+
+    setEditedPromo({
+      ...editedPromo,
+      appliesTo: {
+        ...editedPromo.appliesTo,
+        countries: newCountries,
+      },
+    });
   };
 
   const handlePromotionHasLandingPageChange = () => {
@@ -280,17 +224,17 @@ const PromoEditor = ({
     return durationMonths % billingPeriodToMonths(plan.billingPeriod) !== 0;
   });
 
-  const isLockedByOther = promo.lockStatus?.locked && promo.lockStatus?.email !== userEmail;
-  const isLockedByUser = promo.lockStatus?.locked && promo.lockStatus?.email === userEmail;
+  const isLockedByOther = promo.lockStatus?.locked && promo.lockStatus.email !== userEmail;
+  const isLockedByUser = promo.lockStatus?.locked && promo.lockStatus.email === userEmail;
 
   const lockMessage = isLockedByUser
     ? 'This promo is currently locked by you'
     : `This promo is currently locked by ${promo.lockStatus?.email}`;
 
-  const showLandingPageSection = ['Newspaper', 'Weekly'].includes(campaignProduct ?? '');
+  const showLandingPageSection = ['Newspaper', 'Weekly'].includes(campaignProduct);
   return (
     <Paper className={classes.root}>
-      {(isLockedByOther || isLockedByUser) && (
+      {(isLockedByOther ?? isLockedByUser) && (
         <Box className={classes.lockBanner}>
           <Typography variant="body2">{lockMessage}</Typography>
           {isLockedByOther && (
@@ -312,7 +256,7 @@ const PromoEditor = ({
           className={classes.formField}
           fullWidth
           label="Name"
-          value={editedPromo?.name || ''}
+          value={editedPromo?.name ?? ''}
           onChange={(e) => handleFieldChange('name', e.target.value)}
           disabled={!isEditing}
         />
@@ -322,7 +266,7 @@ const PromoEditor = ({
           label="Description"
           multiline
           rows={3}
-          value={editedPromo?.description || ''}
+          value={editedPromo?.description ?? ''}
           onChange={(e) => handleFieldChange('description', e.target.value)}
           disabled={!isEditing}
         />
@@ -368,7 +312,7 @@ const PromoEditor = ({
             <TextField
               name="durationMonths"
               label="Duration (months)"
-              value={editedPromo?.discount?.durationMonths || ''}
+              value={editedPromo?.discount?.durationMonths ?? ''}
               onChange={(e) => handleDiscountChange(e)}
               fullWidth
               disabled={!isEditing}
@@ -383,7 +327,7 @@ const PromoEditor = ({
             <TextField
               name="amount"
               label="Amount (%)"
-              value={editedPromo?.discount?.amount || ''}
+              value={editedPromo?.discount?.amount ?? ''}
               onChange={(e) => handleDiscountChange(e)}
               fullWidth
               disabled={!isEditing}
@@ -397,10 +341,10 @@ const PromoEditor = ({
         </Grid>
       </div>
 
-      {!loadingProducts && allRatePlans.length > 0 && (
+      {allRatePlans.length > 0 && (
         <RatePlanSelector
           ratePlans={allRatePlans}
-          selectedRatePlanIds={editedPromo?.appliesTo.productRatePlanIds || []}
+          selectedRatePlanIds={editedPromo?.appliesTo.productRatePlanIds ?? []}
           onRatePlansSelected={handleRatePlansSelected}
           discountPercentage={editedPromo?.discount?.amount}
           discountDurationMonths={editedPromo?.discount?.durationMonths}

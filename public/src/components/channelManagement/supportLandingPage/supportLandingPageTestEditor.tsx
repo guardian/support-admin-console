@@ -107,74 +107,67 @@ const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLan
     onVariantsChange((current) => [...current, newVariant]);
   };
 
-  if (test) {
-    return (
-      <div className={classes.container}>
-        <div className={classes.sectionContainer}>
-          <Typography variant={'h3'} className={classes.sectionHeader}>
-            Variants
-          </Typography>
-          <div>
-            <VariantsEditor
-              variants={test.variants}
-              createVariant={createVariant}
-              testName={test.name}
-              editMode={userHasTestLocked}
-              renderVariantEditor={renderVariantEditor}
-              renderVariantSummary={renderVariantSummary}
-              onVariantDelete={onVariantDelete}
-              onVariantClone={onVariantClone}
-            />
-          </div>
-        </div>
-
-        <div className={classes.sectionContainer}>
-          <Typography variant={'h3'} className={classes.sectionHeader}>
-            Experiment Methodology
-          </Typography>
-          <TestMethodologyEditor
-            methodologies={test.methodologies}
+  return (
+    <div className={classes.container}>
+      <div className={classes.sectionContainer}>
+        <Typography variant={'h3'} className={classes.sectionHeader}>
+          Variants
+        </Typography>
+        <div>
+          <VariantsEditor
+            variants={test.variants}
+            createVariant={createVariant}
             testName={test.name}
-            channel={test.channel ?? ''}
-            isDisabled={!userHasTestLocked || test.status === 'Live'}
-            onChange={onMethodologyChange}
-          />
-        </div>
-
-        <div className={classes.sectionContainer}>
-          <Typography variant={'h3'} className={classes.sectionHeader}>
-            Target audience
-          </Typography>
-
-          <TestEditorTargetRegionsSelector
-            regionTargeting={test.regionTargeting}
-            onRegionTargetingUpdate={onTargetingChange}
-            isDisabled={!userHasTestLocked}
-          />
-
-          <Typography
-            variant={'h4'}
-            className={classes.sectionHeader}
-            style={{ marginTop: '20px' }}
-          >
-            mParticle Audience
-          </Typography>
-
-          <MParticleAudienceEditor
-            mParticleAudience={test.mParticleAudience}
-            disabled={!userHasTestLocked}
-            onChange={(mParticleAudience) => {
-              onTestChange((current) => ({
-                ...current,
-                mParticleAudience,
-              }));
-            }}
+            editMode={userHasTestLocked}
+            renderVariantEditor={renderVariantEditor}
+            renderVariantSummary={renderVariantSummary}
+            onVariantDelete={onVariantDelete}
+            onVariantClone={onVariantClone}
           />
         </div>
       </div>
-    );
-  }
-  return null;
+
+      <div className={classes.sectionContainer}>
+        <Typography variant={'h3'} className={classes.sectionHeader}>
+          Experiment Methodology
+        </Typography>
+        <TestMethodologyEditor
+          methodologies={test.methodologies}
+          testName={test.name}
+          channel={test.channel ?? ''}
+          isDisabled={!userHasTestLocked || test.status === 'Live'}
+          onChange={onMethodologyChange}
+        />
+      </div>
+
+      <div className={classes.sectionContainer}>
+        <Typography variant={'h3'} className={classes.sectionHeader}>
+          Target audience
+        </Typography>
+
+        <TestEditorTargetRegionsSelector
+          regionTargeting={test.regionTargeting}
+          onRegionTargetingUpdate={onTargetingChange}
+          isDisabled={!userHasTestLocked}
+        />
+
+        <Typography variant={'h4'} className={classes.sectionHeader} style={{ marginTop: '20px' }}>
+          mParticle Audience
+        </Typography>
+
+        <MParticleAudienceEditor
+          mParticleAudience={test.mParticleAudience}
+          disabled={!userHasTestLocked}
+          onChange={(mParticleAudience) => {
+            onTestChange((current) => ({
+              ...current,
+              mParticleAudience,
+            }));
+          }}
+        />
+      </div>
+    </div>
+  );
 };
 
 export default SupportLandingPageTestEditor;
