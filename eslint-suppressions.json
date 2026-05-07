@@ -220,14 +220,6 @@
       "count": 2
     }
   },
-  "public/src/components/channelManagement/bannerDesigns/ImageEditor.tsx": {
-    "@typescript-eslint/no-misused-promises": {
-      "count": 4
-    },
-    "react-hooks/exhaustive-deps": {
-      "count": 2
-    }
-  },
   "public/src/components/channelManagement/bannerTests/bannerDesignSelector.tsx": {
     "react-hooks/exhaustive-deps": {
       "count": 1
