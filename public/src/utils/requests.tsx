@@ -7,7 +7,6 @@ import { BannerDesign, Status as BannerDesignStatus } from '../models/bannerDesi
 export enum SupportFrontendSettingsType {
   switches = 'switches',
   contributionTypes = 'contribution-types',
-  amounts = 'amounts',
   defaultPromos = 'default-promos',
 }
 

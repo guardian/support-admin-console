@@ -11,7 +11,6 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import AccessManagement from './components/accessManagement/AccessManagement';
-import AmountsForm from './components/amounts/AmountsForm';
 import AppsMeteringSwitches from './components/appsMeteringSwitches';
 import Bookmarklets from './components/bookmarklets/Bookmarklets';
 import ExclusionsBoard from './components/channelExclusions/ExclusionsBoard';
@@ -149,7 +148,6 @@ const AppRouter = () => {
         <Routes>
           <Route path="/" element={createComponent(<IndexPage />, 'Home Page')} />
           <Route path="/switches" element={createComponent(<Switchboard />, 'Switches')} />
-          <Route path="/amounts" element={createComponent(<AmountsForm />, 'Amounts')} />
           <Route
             path="/header-tests/:testName?"
             element={createComponent(<HeaderTestsForm />, 'Header Tests')}

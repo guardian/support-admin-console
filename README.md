@@ -8,7 +8,6 @@ Uses [play-googleauth](https://github.com/guardian/play-googleauth) for authoris
 #### For support.theguardian.com:
 - /switches - [switchboard for contributions landing page](/docs/support-frontend-switches.md)
 - /contribution-types - maintains contribution type settings on contributions landing page
-- /amounts - maintains amounts settings on contributions landing page
 
 #### For theguardian.com channel tests ([see here for details](docs/channel-tests.md)):
 - tools for channel test configuration (epic, banner, header)
