@@ -43,9 +43,9 @@ const MaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
   const classes = useStyles();
 
   const defaultValues: FormData = {
-    maxViewsCount: maxEpicViews?.maxViewsCount.toString() || '',
-    maxViewsDays: maxEpicViews?.maxViewsDays.toString() || '',
-    minDaysBetweenViews: maxEpicViews?.minDaysBetweenViews.toString() || '',
+    maxViewsCount: maxEpicViews?.maxViewsCount.toString() ?? '',
+    maxViewsDays: maxEpicViews?.maxViewsDays.toString() ?? '',
+    minDaysBetweenViews: maxEpicViews?.minDaysBetweenViews.toString() ?? '',
   };
 
   const {

@@ -29,9 +29,7 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
   isDisabled,
   onValidationChange,
 }: BylineWithImageEditorProps) => {
-  const defaultValues: BylineWithImage = bylineWithImage ?? {
-    name: '',
-  };
+  const defaultValues: BylineWithImage = bylineWithImage;
 
   const {
     register,
@@ -46,8 +44,8 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
   });
 
   useEffect(() => {
-    trigger(); // validate immediately
-  }, []);
+    void trigger(); // validate immediately
+  }, [trigger]);
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
@@ -94,9 +92,9 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
         should be completed
       </p>
       <TextField
-        error={errors?.headshot?.mainUrl !== undefined}
+        error={errors.headshot?.mainUrl !== undefined}
         helperText={
-          errors?.headshot?.mainUrl?.message ??
+          errors.headshot?.mainUrl?.message ??
           'Image dimensions should be roughly square, with a transparent background'
         }
         {...register('headshot.mainUrl', {
@@ -116,8 +114,8 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
         fullWidth
       />
       <TextField
-        error={errors?.headshot?.altText !== undefined}
-        helperText={errors?.headshot?.altText?.message ?? ''}
+        error={errors.headshot?.altText !== undefined}
+        helperText={errors.headshot?.altText?.message ?? ''}
         {...register('headshot.altText', {
           validate: (altText) => {
             // required if mainUrl is set

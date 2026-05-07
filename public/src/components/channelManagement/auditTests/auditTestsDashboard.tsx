@@ -57,7 +57,7 @@ export const AuditTestsDashboard: React.FC = () => {
 
   const [rows, setRows] = useState<AuditDataRow[]>([]);
   const fetchAuditData = () => {
-    fetch(`/frontend/audit/${channel}/${testName}`)
+    void fetch(`/frontend/audit/${channel}/${testName}`)
       .then((resp) => resp.json())
       .then((rows) => setRows(rows));
   };

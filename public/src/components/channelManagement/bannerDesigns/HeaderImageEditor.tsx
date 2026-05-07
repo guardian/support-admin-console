@@ -97,8 +97,8 @@ export const HeaderImageEditor: React.FC<Props> = ({
       {headerImage && (
         <>
           <TextField
-            error={errors?.mobileUrl !== undefined}
-            helperText={errors?.mobileUrl?.message}
+            error={errors.mobileUrl !== undefined}
+            helperText={errors.mobileUrl?.message}
             {...register('mobileUrl', {
               required: EMPTY_ERROR_HELPER_TEXT,
             })}
@@ -110,8 +110,8 @@ export const HeaderImageEditor: React.FC<Props> = ({
             fullWidth
           />
           <TextField
-            error={errors?.tabletUrl !== undefined}
-            helperText={errors?.tabletUrl?.message}
+            error={errors.tabletUrl !== undefined}
+            helperText={errors.tabletUrl?.message}
             {...register('tabletUrl', {
               required: EMPTY_ERROR_HELPER_TEXT,
             })}
@@ -123,8 +123,8 @@ export const HeaderImageEditor: React.FC<Props> = ({
             fullWidth
           />
           <TextField
-            error={errors?.desktopUrl !== undefined}
-            helperText={errors?.desktopUrl?.message}
+            error={errors.desktopUrl !== undefined}
+            helperText={errors.desktopUrl?.message}
             {...register('desktopUrl', {
               required: EMPTY_ERROR_HELPER_TEXT,
             })}
@@ -136,8 +136,8 @@ export const HeaderImageEditor: React.FC<Props> = ({
             fullWidth
           />
           <TextField
-            error={errors?.altText !== undefined}
-            helperText={errors?.altText?.message}
+            error={errors.altText !== undefined}
+            helperText={errors.altText?.message}
             {...register('altText', {
               required: EMPTY_ERROR_HELPER_TEXT,
             })}

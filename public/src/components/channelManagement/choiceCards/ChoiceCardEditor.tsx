@@ -133,7 +133,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
                         return {
                           supportTier: newSupportTier,
                           // keep existing ratePlan if possible
-                          ratePlan: getValues(`choiceCards.${index}.product.ratePlan`) ?? 'Monthly',
+                          ratePlan: getValues(`choiceCards.${index}.product.ratePlan`),
                         };
                       }
                     };
@@ -250,7 +250,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
           control={control}
           render={({ field }) => (
             <RichTextEditorSingleLine
-              copyData={choiceCard.benefitsLabel || ''}
+              copyData={choiceCard.benefitsLabel ?? ''}
               updateCopy={(value) => {
                 field.onChange(value);
                 handleCardChange();

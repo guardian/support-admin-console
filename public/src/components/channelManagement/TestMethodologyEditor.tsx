@@ -235,7 +235,7 @@ const TestMethodology: React.FC<TestMethodologyProps> = ({
             variant="outlined"
             startIcon={<FileCopyIcon style={{ color: grey[700] }} />}
             onClick={() => {
-              navigator.clipboard.writeText(methodologyTestName);
+              void navigator.clipboard.writeText(methodologyTestName);
             }}
           >
             Copy test name

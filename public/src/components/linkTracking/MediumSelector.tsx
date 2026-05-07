@@ -219,7 +219,7 @@ export const MediumSelector: React.FC<Props> = ({ control, errors, onUpdate }: P
               onUpdate();
               onChange(e);
             }}
-            error={!!errors?.sourceAndMedium}
+            error={!!errors.sourceAndMedium}
           >
             {OPTIONS.map((group) => {
               const groupItem = (

@@ -1,5 +1,5 @@
 import { Region } from '../../../utils/models';
-import { ValidationStatus } from './validation';
+import type { ValidationStatus } from './validation';
 
 export interface Variant {
   name: string;

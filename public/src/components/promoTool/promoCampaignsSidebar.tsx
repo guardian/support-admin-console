@@ -59,9 +59,7 @@ function PromoCampaignsSidebar({
   const [promoCampaignSearch, setPromoCampaignSearch] = useState('');
 
   const searchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e && e.target) {
-      setPromoCampaignSearch(e.target.value);
-    }
+    setPromoCampaignSearch(e.target.value);
   };
 
   return (

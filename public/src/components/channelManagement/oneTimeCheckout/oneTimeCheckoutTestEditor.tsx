@@ -20,31 +20,39 @@ const OneTimeCheckoutTestEditor: React.FC<ValidatedTestEditorProps<OneTimeChecko
 }: ValidatedTestEditorProps<OneTimeCheckoutTest>) => {
   const classes = useStyles();
 
-  const onVariantsChange = (
-    update: (current: OneTimeCheckoutVariant[]) => OneTimeCheckoutVariant[],
-  ): void => {
-    onTestChange((current) => {
-      const updatedVariantList = update(current.variants);
-      return { ...current, variants: updatedVariantList };
-    });
-  };
+  const onVariantsChange = useCallback(
+    (update: (current: OneTimeCheckoutVariant[]) => OneTimeCheckoutVariant[]): void => {
+      onTestChange((current) => {
+        const updatedVariantList = update(current.variants);
+        return { ...current, variants: updatedVariantList };
+      });
+    },
+    [onTestChange],
+  );
 
-  const onVariantChange =
+  const onVariantChange = useCallback(
     (variantName: string) =>
-    (update: (current: OneTimeCheckoutVariant) => OneTimeCheckoutVariant): void => {
-      onVariantsChange((current) =>
-        current.map((variant) => {
-          if (variant.name === variantName) {
-            return update(variant);
-          }
-          return variant;
-        }),
-      );
-    };
+      (update: (current: OneTimeCheckoutVariant) => OneTimeCheckoutVariant): void => {
+        onVariantsChange((current) =>
+          current.map((variant) => {
+            if (variant.name === variantName) {
+              return update(variant);
+            }
+            return variant;
+          }),
+        );
+      },
+    [onVariantsChange],
+  );
 
-  const onVariantDelete = (deletedVariantName: string): void => {
-    onVariantsChange((current) => current.filter((variant) => variant.name !== deletedVariantName));
-  };
+  const onVariantDelete = useCallback(
+    (deletedVariantName: string): void => {
+      onVariantsChange((current) =>
+        current.filter((variant) => variant.name !== deletedVariantName),
+      );
+    },
+    [onVariantsChange],
+  );
 
   const createVariant = (name: string): void => {
     const newVariant: OneTimeCheckoutVariant = {
@@ -61,11 +69,14 @@ const OneTimeCheckoutTestEditor: React.FC<ValidatedTestEditorProps<OneTimeChecko
     }));
   };
 
-  const getWebPreviewUrl = (variantName: string): string => {
-    const stage = getStage();
-    const supportHost = `https://support.${stage !== 'PROD' ? 'code.dev-' : ''}theguardian.com`;
-    return `${supportHost}/one-time-checkout?force-one-time-checkout=${test.name}:${variantName}`;
-  };
+  const getWebPreviewUrl = useCallback(
+    (variantName: string): string => {
+      const stage = getStage();
+      const supportHost = `https://support.${stage !== 'PROD' ? 'code.dev-' : ''}theguardian.com`;
+      return `${supportHost}/one-time-checkout?force-one-time-checkout=${test.name}:${variantName}`;
+    },
+    [test.name],
+  );
 
   const renderVariantEditor = useCallback(
     (variant: OneTimeCheckoutVariant): React.ReactElement => (
@@ -95,7 +106,7 @@ const OneTimeCheckoutTestEditor: React.FC<ValidatedTestEditorProps<OneTimeChecko
         webPreviewUrl={getWebPreviewUrl(variant.name)}
       />
     ),
-    [test.name, userHasTestLocked],
+    [test.name, userHasTestLocked, getWebPreviewUrl],
   );
 
   const onVariantClone = (
@@ -108,10 +119,6 @@ const OneTimeCheckoutTestEditor: React.FC<ValidatedTestEditorProps<OneTimeChecko
     };
     onVariantsChange((current) => [...current, newVariant]);
   };
-
-  if (!test) {
-    return null;
-  }
 
   return (
     <div className={classes.container}>

@@ -76,12 +76,44 @@ export const LinkTrackingBuilder: React.FC = () => {
     control,
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<LinkTrackingFormData>({
     defaultValues: {
       url: 'https://support.theguardian.com',
     },
   });
+
+  // Restore form state from URL parameters on mount
+  React.useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlParam = urlParams.get('url');
+    const campaignParam = urlParams.get('campaign');
+    const contentParam = urlParams.get('content');
+    const termParam = urlParams.get('term');
+
+    if (urlParam || campaignParam || contentParam || termParam) {
+      reset({
+        url: urlParam ?? 'https://support.theguardian.com',
+        campaign: campaignParam ?? '',
+        content: contentParam ?? '',
+        term: termParam ?? '',
+        sourceAndMedium: 'acquisition__footer',
+      });
+
+      // Trigger link generation if we have all required fields
+      if (urlParam && campaignParam && contentParam && termParam) {
+        const sourceAndMedium = 'acquisition__footer';
+        const [source, medium] = sourceAndMedium.split('__');
+        const urlWithHttps = addHttps(urlParam);
+        const trackingParams = `utm_medium=${medium}&utm_campaign=${campaignParam}&utm_content=${contentParam}&utm_term=${termParam}&utm_source=${source}`;
+        const link = urlWithHttps.includes('?')
+          ? `${urlWithHttps}&${trackingParams}`
+          : `${urlWithHttps}?${trackingParams}`;
+        setLink(link);
+      }
+    }
+  }, [reset]);
 
   const urlContainsTrackingParams = (url: URL): boolean => {
     const params = new URLSearchParams(url.search);
@@ -122,7 +154,10 @@ export const LinkTrackingBuilder: React.FC = () => {
     <form
       className={classes.container}
       onChange={() => resetLink()}
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={(e) => {
+        e.preventDefault();
+        void handleSubmit(onSubmit)();
+      }}
     >
       <div className={classes.fieldsContainer}>
         <TextField
@@ -143,7 +178,7 @@ export const LinkTrackingBuilder: React.FC = () => {
           })}
           label="URL (without tracking)"
           error={!!errors.url}
-          helperText={errors?.url?.message}
+          helperText={errors.url?.message}
         />
 
         <Typography className={classes.header} variant="h4">
@@ -153,7 +188,7 @@ export const LinkTrackingBuilder: React.FC = () => {
           {...register('campaign', { required: true })}
           label="Campaign"
           error={!!errors.campaign}
-          helperText={errors?.campaign?.message}
+          helperText={errors.campaign?.message}
         />
 
         <Typography className={classes.header} variant="h4">
@@ -163,13 +198,13 @@ export const LinkTrackingBuilder: React.FC = () => {
           {...register('content', { required: true })}
           label="Creative / utm_content / AB test name"
           error={!!errors.content}
-          helperText={errors?.content?.message}
+          helperText={errors.content?.message}
         />
         <TextField
           {...register('term', { required: true })}
           label="Audience segment / utm_term / AB test variant name"
           error={!!errors.term}
-          helperText={errors?.term?.message}
+          helperText={errors.term?.message}
         />
 
         <Typography className={classes.header} variant="h4">
@@ -190,7 +225,7 @@ export const LinkTrackingBuilder: React.FC = () => {
             variant="outlined"
             startIcon={<LinkIcon />}
             onClick={() => {
-              navigator.clipboard.writeText(link);
+              void navigator.clipboard.writeText(link);
             }}
           >
             Copy

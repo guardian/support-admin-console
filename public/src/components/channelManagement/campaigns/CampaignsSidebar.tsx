@@ -44,9 +44,7 @@ function CampaignsSidebar({
   const [campaignSearch, setCampaignSearch] = useState('');
 
   const searchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e && e.target) {
-      setCampaignSearch(e.target.value.toUpperCase());
-    }
+    setCampaignSearch(e.target.value.toUpperCase());
   };
 
   return (

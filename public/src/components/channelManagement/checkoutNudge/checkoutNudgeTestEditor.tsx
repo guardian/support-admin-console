@@ -137,10 +137,6 @@ const CheckoutNudgeTestEditor: React.FC<ValidatedTestEditorProps<CheckoutNudgeTe
     return getAvailableRatePlans(test.nudgeFromProduct.product);
   };
 
-  if (!test) {
-    return null;
-  }
-
   return (
     <div className={classes.container}>
       <div className={classes.sectionContainer}>
@@ -173,7 +169,7 @@ const CheckoutNudgeTestEditor: React.FC<ValidatedTestEditorProps<CheckoutNudgeTe
         <TextField
           select
           label="Rate Plan (Optional)"
-          value={test.nudgeFromProduct.ratePlan || ''}
+          value={test.nudgeFromProduct.ratePlan ?? ''}
           onChange={(e): void =>
             updateNudgeFromProduct((current) => ({
               ...current,

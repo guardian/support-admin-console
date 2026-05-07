@@ -44,7 +44,7 @@ const VariantCtaFieldsEditor: React.FC<VariantCtaFieldsEditorProps> = ({
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
-  }, [errors.text, errors.baseUrl]);
+  }, [errors.text, errors.baseUrl, errors, onValidationChange]);
 
   const onSubmit = ({ text, baseUrl }: FormData): void => {
     updateCta({ text, baseUrl });
@@ -59,7 +59,7 @@ const VariantCtaFieldsEditor: React.FC<VariantCtaFieldsEditorProps> = ({
           required: EMPTY_ERROR_HELPER_TEXT,
           validate: copyLengthValidator(copyLength),
         })}
-        onBlur={handleSubmit(onSubmit)}
+        onBlur={() => void handleSubmit(onSubmit)()}
         label="Button copy"
         margin="normal"
         variant="outlined"
@@ -70,13 +70,13 @@ const VariantCtaFieldsEditor: React.FC<VariantCtaFieldsEditorProps> = ({
       <TextField
         error={errors.baseUrl !== undefined}
         helperText={
-          errors.baseUrl?.message ||
+          errors.baseUrl?.message ??
           (isPrimaryCtaUrlDisabled ? 'URL is not applied for enabled choice cards.' : undefined)
         }
         {...register('baseUrl', {
           required: EMPTY_ERROR_HELPER_TEXT,
         })}
-        onBlur={handleSubmit(onSubmit)}
+        onBlur={() => void handleSubmit(onSubmit)()}
         label="Button destination"
         margin="normal"
         variant="outlined"

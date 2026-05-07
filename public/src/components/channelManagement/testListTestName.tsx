@@ -37,7 +37,7 @@ const TestListTestName: React.FC<TestListTestNameProps> = ({
 
   return (
     <Typography className={textClasses.join(' ')} noWrap={true}>
-      {nickname ? nickname : name.replace(TEST_NAME_CHARACTERS_TO_STRIP_REGEX, '')}
+      {nickname ?? name.replace(TEST_NAME_CHARACTERS_TO_STRIP_REGEX, '')}
     </Typography>
   );
 };

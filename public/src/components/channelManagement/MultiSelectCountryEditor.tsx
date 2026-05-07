@@ -24,11 +24,24 @@ interface Option {
   value: string;
 }
 
-const options: Option[] = Object.entries(countries).map(([value, label]) => ({ value, label }));
+const options: Option[] = Object.entries(countries).map(([value, label]) => ({
+  value,
+  label,
+}));
+
+const getCountryOptions = (countryCodes: string[] | undefined): Option[] => {
+  if (!countryCodes || !Array.isArray(countryCodes)) {
+    return [];
+  }
+  return countryCodes.map((country) => {
+    const option = options.find((opt) => opt.value === country);
+    return option ?? { label: country, value: country };
+  });
+};
 
 interface MultiselectAutocompleteProps {
   disabled: boolean;
-  regionTargeting: RegionTargeting;
+  regionTargeting?: RegionTargeting;
   onRegionTargetingUpdate: (regionTargeting: RegionTargeting) => void;
 }
 
@@ -41,6 +54,12 @@ const MultiselectAutocomplete: React.FC<MultiselectAutocompleteProps> = ({
 
   const [inputValue, setInputValue] = React.useState<string>('');
 
+  // Guard against undefined regionTargeting during test switching
+  const safeRegionTargeting = regionTargeting ?? {
+    targetedCountryGroups: [],
+    targetedCountryCodes: [],
+  };
+
   return (
     <div className={classes.container}>
       <span style={{ fontSize: '1rem', fontWeight: 'normal' }}>
@@ -52,10 +71,7 @@ const MultiselectAutocomplete: React.FC<MultiselectAutocompleteProps> = ({
         disabled={disabled}
         options={options}
         getOptionLabel={(option) => option.label}
-        value={regionTargeting.targetedCountryCodes?.map((country) => {
-          const option = options.find((option) => option.value === country);
-          return option ?? { label: country, value: country };
-        })}
+        value={getCountryOptions(safeRegionTargeting.targetedCountryCodes)}
         inputValue={inputValue}
         componentsProps={{
           popper: {
@@ -90,7 +106,7 @@ const MultiselectAutocomplete: React.FC<MultiselectAutocompleteProps> = ({
         onChange={(event, values: Option[], reason): void => {
           if (reason === 'selectOption' || reason === 'removeOption') {
             onRegionTargetingUpdate({
-              ...regionTargeting,
+              ...safeRegionTargeting,
               targetedCountryCodes: values.map((value) => value.value),
             });
             setInputValue('');

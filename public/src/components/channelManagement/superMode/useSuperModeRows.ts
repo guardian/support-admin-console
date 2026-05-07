@@ -13,9 +13,9 @@ export const useSuperModeRows = (): SuperModeRow[] => {
   const [rows, setRows] = useState<SuperModeRow[]>([]);
 
   useEffect(() => {
-    fetch(`/frontend/super-mode`)
+    void fetch(`/frontend/super-mode`)
       .then((resp) => resp.json())
-      .then((rows) => setRows(rows));
+      .then((rows) => setRows(rows as SuperModeRow[]));
   }, []);
 
   return rows;

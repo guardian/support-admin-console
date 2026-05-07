@@ -138,9 +138,9 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
   const templateValidator = templateValidatorForPlatform('DOTCOM');
 
   const defaultValues: FormData = {
-    heading: content.heading || '',
+    heading: content.heading ?? '',
     paragraphs: getParagraphsOrMessageText(content.paragraphs, content.messageText),
-    highlightedText: content.highlightedText || '',
+    highlightedText: content.highlightedText ?? '',
   };
 
   /**
@@ -163,8 +163,8 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
   });
 
   useEffect(() => {
-    trigger();
-  }, []);
+    void trigger();
+  }, [trigger]);
 
   useEffect(() => {
     onChange({
@@ -172,12 +172,12 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
       ...validatedFields,
       messageText: undefined,
     });
-  }, [validatedFields]);
+  }, [validatedFields, content, onChange]);
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
-  }, [errors.heading, errors.paragraphs, errors.highlightedText]);
+  }, [errors, onValidationChange]);
 
   const updatePrimaryCta = (updatedCta?: Cta): void => {
     onChange({ ...content, cta: updatedCta });
@@ -193,14 +193,8 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
       ? BODY_COPY_WITH_SECONDARY_CTA_RECOMMENDED_LENGTH
       : BODY_COPY_WITHOUT_SECONDARY_CTA_RECOMMENDED_LENGTH;
 
-    if (content.paragraphs != null) {
-      return [
-        getRteCopyLength([...content.paragraphs, content.highlightedText || '']),
-        bodyCopyRecommendedLength,
-      ];
-    }
     return [
-      getRteCopyLength([content.messageText || '', content.highlightedText || '']),
+      getRteCopyLength([...content.paragraphs, content.highlightedText ?? '']),
       bodyCopyRecommendedLength,
     ];
   };
@@ -234,11 +228,11 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
             return (
               <RichTextEditorSingleLine
                 error={errors.heading !== undefined}
-                helperText={errors.heading ? errors.heading.message || errors.heading.type : ''}
+                helperText={errors.heading ? (errors.heading.message ?? errors.heading.type) : ''}
                 copyData={field.value}
                 updateCopy={(pars) => {
                   field.onChange(pars);
-                  handleSubmit(setValidatedFields)();
+                  void handleSubmit(setValidatedFields)();
                 }}
                 name="heading"
                 label="Header"
@@ -277,13 +271,13 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                   helperText={
                     errors.paragraphs
                       ? // @ts-ignore -- react-hook-form doesn't believe it has a message field
-                        errors.paragraphs.message || errors.paragraphs.type
+                        (errors.paragraphs.message ?? errors.paragraphs.type)
                       : getParagraphsHelperText()
                   }
                   copyData={field.value}
                   updateCopy={(pars) => {
                     field.onChange(pars);
-                    handleSubmit(setValidatedFields)();
+                    void handleSubmit(setValidatedFields)();
                   }}
                   name="paragraphs"
                   label="Body copy"
@@ -318,13 +312,13 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                   error={errors.highlightedText !== undefined}
                   helperText={
                     errors.highlightedText
-                      ? errors.highlightedText.message || errors.highlightedText.type
+                      ? (errors.highlightedText.message ?? errors.highlightedText.type)
                       : HIGHTLIGHTED_TEXT_HELPER_TEXT
                   }
                   copyData={field.value}
                   updateCopy={(pars) => {
                     field.onChange(pars);
-                    handleSubmit(setValidatedFields)();
+                    void handleSubmit(setValidatedFields)();
                   }}
                   name="highlightedText"
                   label="Highlighted text"

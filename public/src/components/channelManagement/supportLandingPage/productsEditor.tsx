@@ -112,7 +112,7 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
-  }, [errors.title, errors.billingPeriodsCopy, errors.cta, errors.label, errors.benefits]);
+  }, [errors, onValidationChange]);
 
   useEffect(() => {
     reset(product);
@@ -126,21 +126,21 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
       <AccordionDetails className={classes.accordionDetails}>
         <TextField
           error={!!errors.title}
-          helperText={errors?.title?.message}
+          helperText={errors.title?.message}
           label="Title"
           {...register('title', { required: EMPTY_ERROR_HELPER_TEXT })}
           required={true}
-          onBlur={handleSubmit(onProductChange)}
+          onBlur={() => void handleSubmit(onProductChange)()}
           disabled={!editMode}
           fullWidth
         />
         <TextField
           error={!!errors.titlePill}
-          helperText={errors?.titlePill?.message}
+          helperText={errors.titlePill?.message}
           label="Title Pill"
           {...register('titlePill')}
           required={false}
-          onBlur={handleSubmit(onProductChange)}
+          onBlur={() => void handleSubmit(onProductChange)()}
           disabled={!editMode}
           fullWidth
         />
@@ -153,11 +153,13 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
           render={({ field }) => (
             <RichTextEditorSingleLine
               error={!!errors.billingPeriodsCopy}
-              helperText={errors.billingPeriodsCopy ? errors.billingPeriodsCopy.message || '' : ''}
+              helperText={
+                errors.billingPeriodsCopy ? (errors.billingPeriodsCopy.message ?? '') : ''
+              }
               copyData={field.value}
               updateCopy={(value) => {
                 field.onChange(value);
-                handleSubmit(onProductChange)();
+                void handleSubmit(onProductChange)();
               }}
               name="billingPeriodsCopy"
               label="Billing Periods Copy"
@@ -174,22 +176,22 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
         />
         <TextField
           error={!!errors.cta?.copy}
-          helperText={errors?.cta?.copy?.message}
+          helperText={errors.cta?.copy?.message}
           label="CTA Copy"
           {...register('cta.copy', { required: EMPTY_ERROR_HELPER_TEXT })}
           required={true}
-          onBlur={handleSubmit(onProductChange)}
+          onBlur={() => void handleSubmit(onProductChange)()}
           disabled={!editMode}
           fullWidth
         />
         <TextField
           error={!!errors.label?.copy}
-          helperText={errors?.label?.copy?.message}
+          helperText={errors.label?.copy?.message}
           label="Pill (optional)"
           {...register('label.copy', {
             validate: copyLengthValidator(30),
           })}
-          onBlur={handleSubmit(onProductChange)}
+          onBlur={() => void handleSubmit(onProductChange)()}
           disabled={!editMode}
           fullWidth
         />
@@ -209,7 +211,7 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
                 error={!!errors.benefits?.[index]?.copy}
                 helperText={errors.benefits?.[index]?.copy?.message}
                 defaultValue={benefit.copy}
-                onBlur={handleSubmit(onProductChange)}
+                onBlur={() => void handleSubmit(onProductChange)()}
                 disabled={!editMode}
                 fullWidth
               />
@@ -220,7 +222,7 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
                 {...register(`benefits.${index}.tooltip`)}
                 error={!!errors.benefits?.[index]?.tooltip}
                 defaultValue={benefit.tooltip}
-                onBlur={handleSubmit(onProductChange)}
+                onBlur={() => void handleSubmit(onProductChange)()}
                 disabled={!editMode}
                 fullWidth
               />
@@ -231,7 +233,7 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
                 {...register(`benefits.${index}.label.copy`)}
                 error={!!errors.benefits?.[index]?.label?.copy}
                 defaultValue={benefit.label?.copy}
-                onBlur={handleSubmit(onProductChange)}
+                onBlur={() => void handleSubmit(onProductChange)()}
                 disabled={!editMode}
                 fullWidth
               />
@@ -299,7 +301,7 @@ export const ProductsEditor: React.FC<ProductsEditorProps> = ({
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
-  }, [errors.Contribution, errors.SupporterPlus, errors.DigitalSubscription]);
+  }, [errors, onValidationChange]);
 
   useEffect(() => {
     reset(products);

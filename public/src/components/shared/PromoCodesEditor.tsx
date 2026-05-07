@@ -115,7 +115,7 @@ const PromoCodesEditor: React.FC<PromoCodesEditorProps> = ({
   const [expandedCodes, setExpandedCodes] = useState<Set<string>>(new Set());
 
   useEffect(() => {
-    const loadPromoDetails = async () => {
+    const loadPromoDetails = () => {
       const newDetails = new Map<string, PromoDetails>();
 
       for (const code of promoCodes) {
@@ -174,7 +174,7 @@ const PromoCodesEditor: React.FC<PromoCodesEditorProps> = ({
     };
 
     loadPromoDetails();
-  }, [promoCodes]);
+  }, [promoCodes, promoDetails]);
 
   const handleAddPromo = async () => {
     const trimmedCode = newPromoCode.trim();
@@ -216,7 +216,7 @@ const PromoCodesEditor: React.FC<PromoCodesEditorProps> = ({
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      handleAddPromo();
+      void handleAddPromo();
     }
   };
 
@@ -295,7 +295,7 @@ const PromoCodesEditor: React.FC<PromoCodesEditorProps> = ({
                   </Typography>
                   <Typography className={classes.promoDetail}>
                     <strong>Campaign:</strong>{' '}
-                    {details.campaign?.name || details.promo.campaignCode}
+                    {details.campaign?.name ?? details.promo.campaignCode}
                   </Typography>
                   <Typography className={classes.promoDetail}>
                     <strong>Discount:</strong> {formatDiscount(details.promo)}
@@ -324,7 +324,7 @@ const PromoCodesEditor: React.FC<PromoCodesEditorProps> = ({
           fullWidth
         />
         <IconButton
-          onClick={handleAddPromo}
+          onClick={() => void handleAddPromo()}
           disabled={isDisabled || !newPromoCode.trim() || addingPromo}
           color="primary"
         >
