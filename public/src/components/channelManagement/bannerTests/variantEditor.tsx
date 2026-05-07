@@ -1,7 +1,7 @@
 import { FormControlLabel, Radio, RadioGroup, Theme, Typography } from '@mui/material';
 import Alert from '@mui/material/Alert';
 import { makeStyles } from '@mui/styles';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { BannerContent, BannerUi, BannerVariant } from '../../../models/banner';
 import { BannerDesign } from '../../../models/bannerDesign';
@@ -151,6 +151,18 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
    * `content` in a useEffect.
    */
   const [validatedFields, setValidatedFields] = useState<FormData>(defaultValues);
+
+  // Use refs to stabilize callback dependencies and prevent infinite render loops
+  const onChangeRef = useRef(onChange);
+  const onValidationChangeRef = useRef(onValidationChange);
+  const contentRef = useRef(content);
+
+  useEffect(() => {
+    onChangeRef.current = onChange;
+    onValidationChangeRef.current = onValidationChange;
+    contentRef.current = content;
+  });
+
   const {
     handleSubmit,
     control,
@@ -167,17 +179,17 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
   }, [trigger]);
 
   useEffect(() => {
-    onChange({
-      ...content,
+    onChangeRef.current({
+      ...contentRef.current,
       ...validatedFields,
       messageText: undefined,
     });
-  }, [validatedFields, content, onChange]);
+  }, [validatedFields]);
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
-    onValidationChange(isValid);
-  }, [errors, onValidationChange]);
+    onValidationChangeRef.current(isValid);
+  }, [errors]);
 
   const updatePrimaryCta = (updatedCta?: Cta): void => {
     onChange({ ...content, cta: updatedCta });
@@ -382,6 +394,39 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
   const classes = useStyles();
   const setValidationStatusForField = useValidation(onValidationChange);
 
+  // Memoize callbacks to prevent infinite render loops in child components
+  const onMainContentChange = useCallback(
+    (updatedContent: BannerContent): void =>
+      onVariantChange((current) => ({ ...current, bannerContent: updatedContent })),
+    [onVariantChange],
+  );
+
+  const onMainContentValidationChange = useCallback(
+    (isValid: boolean): void => setValidationStatusForField('mainContent', isValid),
+    [setValidationStatusForField],
+  );
+
+  const onMobileContentChange = useCallback(
+    (updatedContent: BannerContent): void =>
+      onVariantChange((current) => ({ ...current, mobileBannerContent: updatedContent })),
+    [onVariantChange],
+  );
+
+  const onMobileContentValidationChange = useCallback(
+    (isValid: boolean): void => setValidationStatusForField('mobileContent', isValid),
+    [setValidationStatusForField],
+  );
+
+  const onTemplateValidationChange = useCallback(
+    (isValid: boolean): void => setValidationStatusForField('template', isValid),
+    [setValidationStatusForField],
+  );
+
+  const onChoiceCardsValidationChange = useCallback(
+    (isValid: boolean): void => setValidationStatusForField('choiceCardsSettings', isValid),
+    [setValidationStatusForField],
+  );
+
   const onMobileContentRadioChange = (): void => {
     if (variant.mobileBannerContent === undefined) {
       onVariantChange((current) => ({
@@ -450,7 +495,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
           }
           editMode={editMode}
           designs={designs}
-          onValidationChange={(isValid): void => setValidationStatusForField('template', isValid)}
+          onValidationChange={onTemplateValidationChange}
         />
       </div>
 
@@ -458,12 +503,8 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
         <VariantContentEditor
           content={variant.bannerContent}
           template={variant.template}
-          onChange={(updatedContent: BannerContent): void =>
-            onVariantChange((current) => ({ ...current, bannerContent: updatedContent }))
-          }
-          onValidationChange={(isValid): void =>
-            setValidationStatusForField('mainContent', isValid)
-          }
+          onChange={onMainContentChange}
+          onValidationChange={onMainContentValidationChange}
           editMode={editMode}
           deviceType={variant.mobileBannerContent === undefined ? 'ALL' : 'NOT_MOBILE'}
           isPrimaryCtaUrlDisabled={designHasChoiceCards}
@@ -492,12 +533,8 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
           <VariantContentEditor
             content={variant.mobileBannerContent}
             template={variant.template}
-            onChange={(updatedContent: BannerContent): void =>
-              onVariantChange((current) => ({ ...current, mobileBannerContent: updatedContent }))
-            }
-            onValidationChange={(isValid): void =>
-              setValidationStatusForField('mobileContent', isValid)
-            }
+            onChange={onMobileContentChange}
+            onValidationChange={onMobileContentValidationChange}
             editMode={editMode}
             deviceType={'MOBILE'}
             isPrimaryCtaUrlDisabled={designHasChoiceCards}
@@ -526,9 +563,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
             choiceCardsSettings={variant.choiceCardsSettings}
             updateChoiceCardsSettings={updateChoiceCardsSettings}
             isDisabled={!editMode}
-            onValidationChange={(isValid): void =>
-              setValidationStatusForField('choiceCardsSettings', isValid)
-            }
+            onValidationChange={onChoiceCardsValidationChange}
           />
         )}
       </div>

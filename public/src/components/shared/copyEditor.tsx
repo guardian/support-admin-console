@@ -1,6 +1,6 @@
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import {
   copyLengthValidator,
@@ -47,6 +47,18 @@ export const CopyEditor: React.FC<CopyEditorProps> = ({
   };
 
   const [validatedFields, setValidatedFields] = useState<FormData>(defaultValues);
+
+  // Use refs to stabilize callback dependencies and prevent infinite render loops
+  const onChangeRef = useRef(onChange);
+  const onValidationChangeRef = useRef(onValidationChange);
+  const copyRef = useRef(copy);
+
+  useEffect(() => {
+    onChangeRef.current = onChange;
+    onValidationChangeRef.current = onValidationChange;
+    copyRef.current = copy;
+  });
+
   const {
     handleSubmit,
     control,
@@ -63,18 +75,18 @@ export const CopyEditor: React.FC<CopyEditorProps> = ({
   }, [trigger]);
 
   useEffect(() => {
-    onChange({
-      ...copy,
+    onChangeRef.current({
+      ...copyRef.current,
       ...validatedFields,
     });
-  }, [copy, onChange, validatedFields]);
+  }, [validatedFields]);
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
-    if (onValidationChange) {
-      onValidationChange(isValid);
+    if (onValidationChangeRef.current) {
+      onValidationChangeRef.current(isValid);
     }
-  }, [errors, errors.heading, errors.subheading, onValidationChange]);
+  }, [errors]);
 
   return (
     <>

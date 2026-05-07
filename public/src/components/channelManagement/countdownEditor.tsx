@@ -2,7 +2,7 @@ import { Alert, Checkbox, TextField, Theme, Typography } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import { makeStyles } from '@mui/styles';
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { CountdownSettings } from './helpers/shared';
 import {
@@ -103,17 +103,17 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
     reset(defaultValues);
   }, [reset, defaultValues]);
 
-  const handleValidationChange = useCallback(
-    (isValid: boolean) => {
-      onValidationChange(isValid);
-    },
-    [onValidationChange],
-  );
+  // Use refs to stabilize callback dependencies and prevent infinite render loops
+  const onValidationChangeRef = useRef(onValidationChange);
+
+  useEffect(() => {
+    onValidationChangeRef.current = onValidationChange;
+  });
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
-    handleValidationChange(isValid);
-  }, [errors, handleValidationChange]);
+    onValidationChangeRef.current(isValid);
+  }, [errors]);
 
   const onCheckboxChanged = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const isChecked = event.target.checked;

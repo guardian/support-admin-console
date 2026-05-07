@@ -1,7 +1,7 @@
 import { Typography } from '@mui/material';
 import { Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Institution, StudentLandingPageVariant } from '../../../models/studentLandingPage';
 import PromoCodesEditor from '../../shared/PromoCodesEditor';
@@ -92,6 +92,15 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
     image: true, // change this back to false when we add the hero image bits back in.
   });
 
+  // Use refs to stabilize callback dependencies and prevent infinite render loops
+  const onVariantChangeRef = useRef(onVariantChange);
+  const onValidationChangeRef = useRef(onValidationChange);
+
+  useEffect(() => {
+    onVariantChangeRef.current = onVariantChange;
+    onValidationChangeRef.current = onValidationChange;
+  });
+
   const {
     handleSubmit,
     control,
@@ -126,15 +135,17 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
   }, [trigger]);
 
   useEffect(() => {
-    onVariantChange((current) => ({
+    onVariantChangeRef.current((current) => ({
       ...current,
       ...validatedFields,
     }));
-  }, [onVariantChange, validatedFields]);
+  }, [validatedFields]);
 
   useEffect(() => {
-    onValidationChange(isCopyValid && sectionValidity.institution && sectionValidity.image);
-  }, [onValidationChange, isCopyValid, sectionValidity.institution, sectionValidity.image]);
+    onValidationChangeRef.current(
+      isCopyValid && sectionValidity.institution && sectionValidity.image,
+    );
+  }, [isCopyValid, sectionValidity.institution, sectionValidity.image]);
 
   const isValidField = (field: string, fieldName: string, maxLength: number, allowHtml = false) => {
     const messages = [];

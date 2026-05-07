@@ -1,6 +1,6 @@
 import { Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { GutterContent, GutterVariant } from '../../../models/gutter';
 import PromoCodesEditor from '../../shared/PromoCodesEditor';
@@ -119,6 +119,18 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
    * `content` in a useEffect.
    */
   const [validatedFields, setValidatedFields] = useState<FormData>(defaultValues);
+
+  // Use refs to stabilize callback dependencies and prevent infinite render loops
+  const onVariantChangeRef = useRef(onVariantChange);
+  const onValidationChangeRef = useRef(onValidationChange);
+  const variantRef = useRef(variant);
+
+  useEffect(() => {
+    onVariantChangeRef.current = onVariantChange;
+    onValidationChangeRef.current = onValidationChange;
+    variantRef.current = variant;
+  });
+
   const {
     handleSubmit,
     control,
@@ -135,16 +147,16 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
   }, [trigger]);
 
   useEffect(() => {
-    onVariantChange({
-      ...variant,
+    onVariantChangeRef.current({
+      ...variantRef.current,
       ...validatedFields,
     });
-  }, [validatedFields, onVariantChange, variant]);
+  }, [validatedFields]);
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
-    onValidationChange(isValid);
-  }, [errors, onValidationChange]);
+    onValidationChangeRef.current(isValid);
+  }, [errors]);
 
   const updateImage = (image?: Image): void => {
     if (image) {

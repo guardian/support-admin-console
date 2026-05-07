@@ -1,6 +1,6 @@
 import { FormControl, FormControlLabel, Radio, RadioGroup, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { ChoiceCardsSettings } from '../../../models/choiceCards';
 import { EpicVariant, SeparateArticleCount } from '../../../models/epic';
@@ -143,6 +143,16 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
    * `variant` in a useEffect.
    */
   const [validatedFields, setValidatedFields] = useState<FormData>(defaultValues);
+
+  // Use refs to stabilize callback dependencies and prevent infinite render loops
+  const onVariantChangeRef = useRef(onVariantChange);
+  const onValidationChangeRef = useRef(onValidationChange);
+
+  useEffect(() => {
+    onVariantChangeRef.current = onVariantChange;
+    onValidationChangeRef.current = onValidationChange;
+  });
+
   const {
     handleSubmit,
     control,
@@ -159,16 +169,16 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   }, [trigger]);
 
   useEffect(() => {
-    onVariantChange((current) => ({
+    onVariantChangeRef.current((current) => ({
       ...current,
       ...validatedFields,
     }));
-  }, [validatedFields, onVariantChange]);
+  }, [validatedFields]);
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
-    onValidationChange(isValid);
-  }, [errors, onValidationChange]);
+    onValidationChangeRef.current(isValid);
+  }, [errors]);
 
   const enableHtml = platform === 'DOTCOM';
   const htmlValidator = enableHtml ? () => undefined : noHtmlValidator;

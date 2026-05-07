@@ -1,5 +1,5 @@
 import { Checkbox, FormControlLabel, MenuItem, TextField, Typography } from '@mui/material';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   CheckoutNudgeVariant,
   Copy,
@@ -36,6 +36,15 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
   const classes = useStyles();
 
   const hasNudge = !!variant.nudge;
+
+  // Use refs to stabilize callback dependencies and prevent infinite render loops
+  const onValidationChangeRef = useRef(onValidationChange);
+  const variantRef = useRef(variant);
+
+  useEffect(() => {
+    onValidationChangeRef.current = onValidationChange;
+    variantRef.current = variant;
+  });
 
   const updateNudgeToProduct = (update: (current: Product) => Product): void => {
     onVariantChange((current) => ({
@@ -105,10 +114,10 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
 
   React.useEffect(() => {
     // Basic validation: if nudge exists, heading should be present
-    const nudge = variant.nudge;
+    const nudge = variantRef.current.nudge;
     const isValid = !hasNudge || (!!nudge?.nudgeCopy.heading && !!nudge.thankyouCopy.heading);
-    onValidationChange(isValid);
-  }, [variant, hasNudge, onValidationChange]);
+    onValidationChangeRef.current(isValid);
+  }, [hasNudge]);
 
   return (
     <div className={classes.container}>

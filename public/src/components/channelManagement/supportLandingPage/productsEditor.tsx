@@ -12,7 +12,7 @@ import {
   Typography,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { LandingPageProductDescription, Products } from '../../../models/supportLandingPage';
 import {
@@ -99,6 +99,17 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
     defaultValues: product,
   });
 
+  // Use refs to stabilize callback dependencies and prevent infinite render loops
+  const onProductChangeRef = useRef(onProductChange);
+  const onValidationChangeRef = useRef(onValidationChange);
+  const productRef = useRef(product);
+
+  useEffect(() => {
+    onProductChangeRef.current = onProductChange;
+    onValidationChangeRef.current = onValidationChange;
+    productRef.current = product;
+  });
+
   // Validation specifically for the benefits array
   const {
     fields: benefits,
@@ -111,12 +122,12 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
-    onValidationChange(isValid);
-  }, [errors, onValidationChange]);
+    onValidationChangeRef.current(isValid);
+  }, [errors]);
 
   useEffect(() => {
-    reset(product);
-  }, [product, reset]);
+    reset(productRef.current);
+  }, [reset]);
 
   return (
     <Accordion key={productKey}>
@@ -298,14 +309,25 @@ export const ProductsEditor: React.FC<ProductsEditorProps> = ({
     defaultValues: products,
   });
 
-  useEffect(() => {
-    const isValid = Object.keys(errors).length === 0;
-    onValidationChange(isValid);
-  }, [errors, onValidationChange]);
+  // Use refs to stabilize callback dependencies and prevent infinite render loops
+  const onProductsChangeRef = useRef(onProductsChange);
+  const onValidationChangeRef = useRef(onValidationChange);
+  const productsRef = useRef(products);
 
   useEffect(() => {
-    reset(products);
-  }, [products, reset]);
+    onProductsChangeRef.current = onProductsChange;
+    onValidationChangeRef.current = onValidationChange;
+    productsRef.current = products;
+  });
+
+  useEffect(() => {
+    const isValid = Object.keys(errors).length === 0;
+    onValidationChangeRef.current(isValid);
+  }, [errors]);
+
+  useEffect(() => {
+    reset(productsRef.current);
+  }, [reset]);
 
   return (
     <div>

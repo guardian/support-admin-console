@@ -1,7 +1,9 @@
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
+  DefaultProductSelection,
+  Products,
   SupportLandingPageCopy,
   SupportLandingPageVariant,
 } from '../../../models/supportLandingPage';
@@ -46,52 +48,75 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
 }: VariantEditorProps) => {
   const classes = useStyles();
 
+  // Memoize callbacks to prevent infinite render loops in child components
+  const onCopyChange = useCallback(
+    (updatedCopy: SupportLandingPageCopy): void =>
+      onVariantChange((current) => ({ ...current, copy: updatedCopy })),
+    [onVariantChange],
+  );
+
+  const onDefaultProductSelectionChange = useCallback(
+    (updatedDefaultProductSelection: DefaultProductSelection | undefined) =>
+      onVariantChange((current) => ({
+        ...current,
+        defaultProductSelection: updatedDefaultProductSelection,
+      })),
+    [onVariantChange],
+  );
+
+  const onProductsChange = useCallback(
+    (updatedProducts: Products) =>
+      onVariantChange((current) => ({ ...current, products: updatedProducts })),
+    [onVariantChange],
+  );
+
+  const updateTickerSettings = useCallback(
+    (updatedTickerSettings?: TickerSettings): void => {
+      onVariantChange((current) => ({ ...current, tickerSettings: updatedTickerSettings }));
+    },
+    [onVariantChange],
+  );
+
+  const updateCountdownSettings = useCallback(
+    (updatedCountdownSettings?: CountdownSettings): void => {
+      onVariantChange((current) => ({
+        ...current,
+        countdownSettings: updatedCountdownSettings,
+      }));
+    },
+    [onVariantChange],
+  );
+
   return (
     <div className={classes.container}>
       <div>
         <CopyEditor
           copy={variant.copy}
-          onChange={(updatedCopy: SupportLandingPageCopy): void =>
-            onVariantChange((current) => ({ ...current, copy: updatedCopy }))
-          }
+          onChange={onCopyChange}
           onValidationChange={onValidationChange}
           editMode={editMode}
         />
       </div>
       <DefaultProductSelector
         defaultProductSelection={variant.defaultProductSelection}
-        onDefaultProductSelectionChange={(updatedDefaultProductSelection) =>
-          onVariantChange((current) => ({
-            ...current,
-            defaultProductSelection: updatedDefaultProductSelection,
-          }))
-        }
+        onDefaultProductSelectionChange={onDefaultProductSelectionChange}
         editMode={editMode}
       />
       <ProductsEditor
         products={variant.products}
-        onProductsChange={(updatedProducts) =>
-          onVariantChange((current) => ({ ...current, products: updatedProducts }))
-        }
+        onProductsChange={onProductsChange}
         onValidationChange={onValidationChange}
         editMode={editMode}
       />
       <TickerEditor
         tickerSettings={variant.tickerSettings}
-        updateTickerSettings={(updatedTickerSettings?: TickerSettings): void => {
-          onVariantChange((current) => ({ ...current, tickerSettings: updatedTickerSettings }));
-        }}
+        updateTickerSettings={updateTickerSettings}
         isDisabled={!editMode}
         onValidationChange={onValidationChange}
       />
       <CountdownEditor
         countdownSettings={variant.countdownSettings}
-        updateCountdownSettings={(updatedCountdownSettings?: CountdownSettings): void => {
-          onVariantChange((current) => ({
-            ...current,
-            countdownSettings: updatedCountdownSettings,
-          }));
-        }}
+        updateCountdownSettings={updateCountdownSettings}
         isDisabled={!editMode}
         onValidationChange={onValidationChange}
       />

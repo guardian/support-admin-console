@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { makeStyles } from '@mui/styles';
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { TickerName, TickerSettings } from './helpers/shared';
 import { EMPTY_ERROR_HELPER_TEXT } from './helpers/validation';
@@ -77,6 +77,13 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
     defaultValues,
   });
 
+  // Use refs to stabilize callback dependencies and prevent infinite render loops
+  const onValidationChangeRef = useRef(onValidationChange);
+
+  useEffect(() => {
+    onValidationChangeRef.current = onValidationChange;
+  });
+
   useEffect(() => {
     reset(defaultValues);
   }, [
@@ -89,8 +96,8 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
-    onValidationChange(isValid);
-  }, [errors.countLabel, errors.goalCopy, errors.currencySymbol, onValidationChange, errors]);
+    onValidationChangeRef.current(isValid);
+  }, [errors.countLabel, errors.goalCopy, errors.currencySymbol, errors]);
 
   const onCheckboxChanged = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const isChecked = event.target.checked;
