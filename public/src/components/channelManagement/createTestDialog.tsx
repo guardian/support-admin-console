@@ -104,7 +104,7 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
   const [campaignNamePrefix, setCampaignNamePrefix] = useState<boolean>(false);
 
   useEffect(() => {
-    void fetchFrontendSettings(FrontendSettingsType.campaigns).then(setCampaigns);
+    void fetchFrontendSettings(FrontendSettingsType.Campaigns).then(setCampaigns);
   }, []);
 
   const buildPrefix = (): string => {

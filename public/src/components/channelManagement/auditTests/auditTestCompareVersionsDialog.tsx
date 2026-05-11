@@ -1,10 +1,9 @@
-import { Theme } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import { makeStyles } from '@mui/styles';
-import { IChange } from 'json-diff-ts';
+import { IChange, Operation } from 'json-diff-ts';
 import * as React from 'react';
 
-const useStyles = makeStyles(({}: Theme) => ({
+const useStyles = makeStyles({
   dialog: {
     padding: '10px',
   },
@@ -22,11 +21,11 @@ const useStyles = makeStyles(({}: Theme) => ({
     whiteSpace: 'pre-wrap',
     wordBreak: 'break-all',
   },
-}));
+});
 
 const ListItem = ({ diff }: { diff: IChange }) => {
   const classes = useStyles();
-  if (diff.type === 'ADD') {
+  if (diff.type === Operation.ADD) {
     if (typeof diff.value === 'string') {
       return (
         <li>
@@ -43,8 +42,7 @@ const ListItem = ({ diff }: { diff: IChange }) => {
       </li>
     );
   }
-  if (diff.type === 'REMOVE') {
-    const classes = useStyles();
+  if (diff.type === Operation.REMOVE) {
     if (typeof diff.value === 'string') {
       return (
         <li>

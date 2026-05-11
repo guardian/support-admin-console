@@ -1,6 +1,6 @@
 import { Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
   fetchFrontendSettings,
@@ -51,9 +51,10 @@ const CampaignsForm: React.FC = () => {
   const { campaignName } = useParams<{ campaignName?: string }>(); // querystring parameter
   const [selectedCampaignName, setSelectedCampaignName] = useState<string | undefined>();
   const classes = useStyles();
+  const previousCampaignNameRef = useRef<string | undefined>(campaignName);
 
   const fetchSettings = (): Promise<Campaign[]> => {
-    return fetchFrontendSettings(FrontendSettingsType.campaigns);
+    return fetchFrontendSettings(FrontendSettingsType.Campaigns);
   };
 
   useEffect(() => {
@@ -61,10 +62,11 @@ const CampaignsForm: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (campaignName != null) {
-      setSelectedCampaignName(campaignName);
+    if (campaignName != null && previousCampaignNameRef.current !== campaignName) {
+      previousCampaignNameRef.current = campaignName;
+      requestAnimationFrame(() => setSelectedCampaignName(campaignName));
     }
-  }, [campaignName, campaigns]);
+  }, [campaignName]);
 
   const createCampaign = (campaign: Campaign): void => {
     setCampaigns([...campaigns, campaign]);

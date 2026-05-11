@@ -31,7 +31,9 @@ const TestListSidebarFilterSelector: React.FC<TestListSidebarFilterSelectorProps
         value={regionFilter}
         label="Filter by Region"
         inputProps={{ id: 'filter-region-select' }}
-        onChange={(event: SelectChangeEvent): void => handleRegionFilterChange(event.target.value)}
+        onChange={(event: SelectChangeEvent): void =>
+          handleRegionFilterChange(event.target.value as RegionsAndAll)
+        }
       >
         <MenuItem key="ALL" value="ALL">
           Show all tests

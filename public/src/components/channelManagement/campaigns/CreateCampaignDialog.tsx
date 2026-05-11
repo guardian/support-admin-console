@@ -130,7 +130,13 @@ const CreateCampaignDialog: React.FC<CreateCampaignDialogProps> = ({
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleSubmit(onSubmit)} color="primary">
+        <Button
+          onClick={(e) => {
+            e.preventDefault();
+            void handleSubmit(onSubmit)(e);
+          }}
+          color="primary"
+        >
           Create Campaign
         </Button>
       </DialogActions>

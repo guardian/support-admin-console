@@ -108,7 +108,13 @@ const CreatePromoCampaignDialog: React.FC<CreatePromoCampaignDialogProps> = ({
         />
       </DialogContent>
       <DialogActions>
-        <Button color="primary" onClick={handleSubmit(onSubmit)}>
+        <Button
+          color="primary"
+          onClick={(e) => {
+            e.preventDefault();
+            void handleSubmit(onSubmit)(e);
+          }}
+        >
           Create Promo Campaign
         </Button>
       </DialogActions>

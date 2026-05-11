@@ -16,6 +16,6 @@ const createDefaultCheckoutNudgeTest = (
 
 export const CheckoutNudgeTestsForm = TestsForm(
   ValidatedTestEditor(CheckoutNudgeTestEditor),
-  FrontendSettingsType.checkoutNudgeTests,
+  FrontendSettingsType.CheckoutNudgeTests,
   createDefaultCheckoutNudgeTest,
 );

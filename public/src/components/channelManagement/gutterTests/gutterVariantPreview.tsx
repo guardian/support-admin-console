@@ -1,4 +1,3 @@
-import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React from 'react';
 import { GutterContent, GutterVariant } from '../../../models/gutter';
@@ -26,7 +25,7 @@ const buildProps = (variant: GutterVariant): GutterProps => ({
   onCtaClick: () => {},
 });
 
-const useStyles = makeStyles(({}: Theme) => ({
+const useStyles = makeStyles(() => ({
   container: {
     width: '620px',
   },

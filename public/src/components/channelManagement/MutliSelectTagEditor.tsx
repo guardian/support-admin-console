@@ -11,7 +11,7 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
     '& > * + *': {
       marginTop: spacing(3),
     },
-    borderColor: `2px solid ${{ color: grey[700] }}`,
+    borderColor: `2px solid ${grey[700]}`,
     borderRadius: '2px',
     padding: spacing(2),
   },

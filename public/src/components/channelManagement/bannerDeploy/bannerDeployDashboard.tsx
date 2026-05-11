@@ -19,8 +19,6 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
   },
 }));
 
-export type BannerChannel = 'CHANNEL1' | 'CHANNEL2';
-
 const BannerDeployDashboard: React.FC = () => {
   const classes = useStyles();
   return (

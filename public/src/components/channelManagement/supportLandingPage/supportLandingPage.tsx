@@ -16,6 +16,6 @@ const createDefaultSupportLandingPageTest = (
 
 export const SupportLandingPageTestsForm = TestsForm(
   ValidatedTestEditor(SupportLandingPageTestEditor),
-  FrontendSettingsType.supportLandingPageTests,
+  FrontendSettingsType.SupportLandingPageTests,
   createDefaultSupportLandingPageTest,
 );

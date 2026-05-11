@@ -71,7 +71,7 @@ const BannerDesigns: React.FC = () => {
   const classes = useStyles();
 
   const refreshDesigns = () => {
-    void fetchFrontendSettings(FrontendSettingsType.bannerDesigns).then(
+    void fetchFrontendSettings(FrontendSettingsType.BannerDesigns).then(
       (response: BannerDesignsResponse) => {
         setBannerDesigns(response.bannerDesigns);
         setUserEmail(response.userEmail);

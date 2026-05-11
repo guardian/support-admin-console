@@ -16,6 +16,6 @@ const createDefaultOneTimeCheckoutTest = (
 
 export const OneTimeCheckoutTestsForm = TestsForm(
   ValidatedTestEditor(OneTimeCheckoutTestEditor),
-  FrontendSettingsType.oneTimeCheckout,
+  FrontendSettingsType.OneTimeCheckout,
   createDefaultOneTimeCheckoutTest,
 );

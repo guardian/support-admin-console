@@ -36,8 +36,6 @@ const PromoCampaignsList = ({
     return campaignArray.filter((c) => {
       if (!promoCampaignSearch) {
         return true;
-      } else if (c.name && c.name.includes(promoCampaignSearch)) {
-        return true;
       } else if (c.name.includes(promoCampaignSearch)) {
         return true;
       }

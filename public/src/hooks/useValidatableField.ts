@@ -9,9 +9,11 @@ const useValidatableField = (
   const [helperText, setHelperText] = useState(defaultHelperText);
 
   useEffect(() => {
-    setHelperText(defaultHelperText);
-    setHasError(false);
-  }, [value]);
+    requestAnimationFrame(() => {
+      setHelperText(defaultHelperText);
+      setHasError(false);
+    });
+  }, [value, defaultHelperText]);
 
   const check = (): boolean => {
     let isValid = true;

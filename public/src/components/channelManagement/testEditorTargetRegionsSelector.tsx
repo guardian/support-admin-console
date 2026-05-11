@@ -42,7 +42,7 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
 
   const onSingleRegionChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const checked = event.target.checked;
-    const changedRegion = event.target.value;
+    const changedRegion = event.target.value as Region;
 
     if (checked) {
       onRegionTargetingUpdate({

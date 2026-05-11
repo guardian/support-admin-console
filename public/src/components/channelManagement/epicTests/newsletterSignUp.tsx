@@ -36,7 +36,7 @@ const EpicTestNewsletter: React.FC<EpicTestNewsletterProps> = ({
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
-  }, [errors.newsletterId, errors.successDescription]);
+  }, [errors, onValidationChange]);
 
   const onSubmit = ({ newsletterId, successDescription }: FormData): void => {
     updateNewsletterSignup({ newsletterId, successDescription });
@@ -51,7 +51,10 @@ const EpicTestNewsletter: React.FC<EpicTestNewsletterProps> = ({
           {...register('newsletterId', {
             required: EMPTY_ERROR_HELPER_TEXT,
           })}
-          onBlur={handleSubmit(onSubmit)}
+          onBlur={(e) => {
+            e.preventDefault();
+            void handleSubmit(onSubmit)(e);
+          }}
           label="Newsletter Id"
           margin="normal"
           variant="outlined"
@@ -66,7 +69,10 @@ const EpicTestNewsletter: React.FC<EpicTestNewsletterProps> = ({
           {...register('successDescription', {
             required: EMPTY_ERROR_HELPER_TEXT,
           })}
-          onBlur={handleSubmit(onSubmit)}
+          onBlur={(e) => {
+            e.preventDefault();
+            void handleSubmit(onSubmit)(e);
+          }}
           label="Sign up success message"
           margin="normal"
           variant="outlined"

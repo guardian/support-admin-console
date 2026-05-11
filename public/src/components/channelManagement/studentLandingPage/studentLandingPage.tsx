@@ -17,6 +17,6 @@ const createDefaultStudentLandingPageTest = (
 
 export const StudentLandingPageTestsForm = TestsForm(
   ValidatedTestEditor(StudentLandingPageTestEditor),
-  FrontendSettingsType.studentLandingPageTests,
+  FrontendSettingsType.StudentLandingPageTests,
   createDefaultStudentLandingPageTest,
 );

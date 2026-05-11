@@ -13,6 +13,6 @@ const createDefaultHeaderTest = (newTestName: string, newTestNickname: string): 
 
 export const HeaderTestsForm = TestsForm(
   ValidatedTestEditor(HeaderTestEditor),
-  FrontendSettingsType.headerTests,
+  FrontendSettingsType.HeaderTests,
   createDefaultHeaderTest,
 );

@@ -44,7 +44,7 @@ const DeployScheduleEditor: React.FC<DeployScheduleEditorProps> = ({
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0 || !deploySchedule;
     onValidationChange(isValid);
-  }, [errors.daysBetween]);
+  }, [errors, deploySchedule, onValidationChange]);
 
   const onRadioGroupChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     if (event.target.value === 'enabled') {
@@ -86,7 +86,10 @@ const DeployScheduleEditor: React.FC<DeployScheduleEditorProps> = ({
               required: EMPTY_ERROR_HELPER_TEXT,
               valueAsNumber: true,
             })}
-            onBlur={handleSubmit(onSubmit)}
+            onBlur={(e) => {
+              e.preventDefault();
+              void handleSubmit(onSubmit)(e);
+            }}
             label="Days between deploys"
             InputLabelProps={{ shrink: true }}
             variant="outlined"

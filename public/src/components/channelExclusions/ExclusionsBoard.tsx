@@ -42,7 +42,7 @@ const CHANNEL_LABELS: Record<ChannelKey, string> = {
   header: 'Header',
 };
 
-const canEdit = hasPermission(FrontendSettingsType.exclusionsSettings, 'Write');
+const canEdit = hasPermission(FrontendSettingsType.ExclusionsSettings, 'Write');
 
 const ExclusionsBoard: React.FC<InnerProps<ExclusionSettings>> = ({
   data,
@@ -85,12 +85,12 @@ const ExclusionsBoard: React.FC<InnerProps<ExclusionSettings>> = ({
 
 const fetchSettings = (): Promise<DataFromServer<ExclusionSettings>> => {
   return fetchFrontendSettings<DataFromServer<ExclusionSettings>>(
-    FrontendSettingsType.exclusionsSettings,
+    FrontendSettingsType.ExclusionsSettings,
   );
 };
 
 const saveSettings = (data: DataFromServer<ExclusionSettings>): Promise<Response> => {
-  return saveFrontendSettings(FrontendSettingsType.exclusionsSettings, data);
+  return saveFrontendSettings(FrontendSettingsType.ExclusionsSettings, data);
 };
 
 export default withS3Data<ExclusionSettings>(ExclusionsBoard, fetchSettings, saveSettings);

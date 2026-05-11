@@ -48,7 +48,7 @@ import { getTheme } from './utils/theme';
 
 declare module '@mui/styles' {
   // https://mui.com/material-ui/migration/v5-style-changes/#%E2%9C%85-add-module-augmentation-for-defaulttheme-typescript
-  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type -- MUI module augmentation
   interface DefaultTheme extends Theme {}
 }
 

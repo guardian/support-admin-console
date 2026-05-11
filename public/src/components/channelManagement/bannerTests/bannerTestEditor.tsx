@@ -65,7 +65,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
   const [designs, setDesigns] = useState<BannerDesign[]>([]);
 
   const fetchBannerDesigns = (): void => {
-    void fetchFrontendSettings(FrontendSettingsType.bannerDesigns).then(
+    void fetchFrontendSettings(FrontendSettingsType.BannerDesigns).then(
       (response: BannerDesignsResponse) => {
         setDesigns(response.bannerDesigns.filter((design) => design.status === 'Live'));
       },

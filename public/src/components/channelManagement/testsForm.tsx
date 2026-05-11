@@ -61,9 +61,9 @@ interface ChannelTestsResponse<T> {
 }
 
 const RequirePermission = [
-  FrontendSettingsType.supportLandingPageTests,
-  FrontendSettingsType.checkoutNudgeTests,
-  FrontendSettingsType.studentLandingPageTests,
+  FrontendSettingsType.SupportLandingPageTests,
+  FrontendSettingsType.CheckoutNudgeTests,
+  FrontendSettingsType.StudentLandingPageTests,
 ];
 
 export interface TestEditorProps<T extends Test> {

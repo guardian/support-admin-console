@@ -70,7 +70,7 @@ export const StudentLandingPageTestEditor: React.FC<
 > = ({ test, userHasTestLocked, onTestChange, setValidationStatusForField }) => {
   const classes = useStyles();
 
-  const helperText = test.countryGroupId ? '' : 'Please choose a country';
+  const helperText = '';
 
   // Use ref to stabilize the callback and prevent infinite render loops
   const setValidationStatusRef = useRef(setValidationStatusForField);
@@ -172,7 +172,12 @@ export const StudentLandingPageTestEditor: React.FC<
             isDisabled={!userHasTestLocked}
             labels={{
               AUDCountries: 'Australia',
+              Canada: 'Canada',
+              EURCountries: 'Europe',
               NZDCountries: 'New Zealand',
+              GBPCountries: 'UK',
+              UnitedStates: 'United States',
+              International: 'International',
             }}
           />
         </div>

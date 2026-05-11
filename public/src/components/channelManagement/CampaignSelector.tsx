@@ -48,7 +48,7 @@ const CampaignSelector: React.FC<CampaignSelectorProps> = ({
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
 
   useEffect(() => {
-    fetchFrontendSettings(FrontendSettingsType.campaigns)
+    fetchFrontendSettings(FrontendSettingsType.Campaigns)
       .then(setCampaigns)
       .catch((error) => console.error('Failed to fetch campaigns:', error));
   }, []);

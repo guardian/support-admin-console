@@ -26,7 +26,9 @@ const URLGeneratorCopyButton: React.FC<URLGeneratorCopyButtonProps> = ({
     <Button
       startIcon={<CopyIcon />}
       size="medium"
-      onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleCopy(e)}
+      onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+        void handleCopy(e);
+      }}
     >
       {getButtonCopy()}
     </Button>

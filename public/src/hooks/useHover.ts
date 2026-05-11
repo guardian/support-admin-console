@@ -1,26 +1,25 @@
-import { RefObject, useEffect, useRef, useState } from 'react';
+import { RefObject, useCallback, useEffect, useRef, useState } from 'react';
 
 const useHover = <Element extends HTMLElement>(): [RefObject<Element>, boolean] => {
   const [isHovered, setIsHovered] = useState(false);
 
-  const handleMouseOver = (): void => setIsHovered(true);
-  const handleMouseOut = (): void => setIsHovered(false);
+  const handleMouseOver = useCallback((): void => setIsHovered(true), []);
+  const handleMouseOut = useCallback((): void => setIsHovered(false), []);
 
   const ref = useRef<Element>(null);
 
   useEffect(() => {
-    if (ref.current) {
-      ref.current.addEventListener('mouseover', handleMouseOver);
-      ref.current.addEventListener('mouseout', handleMouseOut);
+    const node = ref.current;
+    if (node) {
+      node.addEventListener('mouseover', handleMouseOver);
+      node.addEventListener('mouseout', handleMouseOut);
 
       return (): void => {
-        if (ref.current) {
-          ref.current.removeEventListener('mouseover', handleMouseOver);
-          ref.current.removeEventListener('mouseout', handleMouseOut);
-        }
+        node.removeEventListener('mouseover', handleMouseOver);
+        node.removeEventListener('mouseout', handleMouseOut);
       };
     }
-  }, [ref.current]);
+  }, [handleMouseOver, handleMouseOut]);
 
   return [ref, isHovered];
 };

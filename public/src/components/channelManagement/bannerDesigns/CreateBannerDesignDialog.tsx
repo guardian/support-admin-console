@@ -98,7 +98,13 @@ const CreateBannerDesignDialog: React.FC<CreateBannerDesignDialogProps> = ({
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleSubmit(onSubmit)} color="primary">
+        <Button
+          onClick={(e) => {
+            e.preventDefault();
+            void handleSubmit(onSubmit)(e);
+          }}
+          color="primary"
+        >
           Create banner design
         </Button>
       </DialogActions>

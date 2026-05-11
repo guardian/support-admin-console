@@ -1,5 +1,5 @@
 import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { BannerUi } from '../../../models/banner';
 import { BannerDesign } from '../../../models/bannerDesign';
 
@@ -18,7 +18,7 @@ const BannerDesignSelector: React.FC<BannerDesignSelectorProps> = ({
   designs,
   onValidationChange,
 }: BannerDesignSelectorProps) => {
-  const [isValid, setIsValid] = useState<boolean>(true);
+  const isValid = designs.map((d) => d.name).includes(designName);
 
   const onChange = (event: SelectChangeEvent): void => {
     const designName = event.target.value;
@@ -27,9 +27,8 @@ const BannerDesignSelector: React.FC<BannerDesignSelectorProps> = ({
 
   useEffect(() => {
     const isValidBannerDesign = designs.map((d) => d.name).includes(designName);
-    setIsValid(isValidBannerDesign);
     onValidationChange(isValidBannerDesign);
-  }, [designName, designs]);
+  }, [designName, designs, onValidationChange]);
 
   return (
     <Select

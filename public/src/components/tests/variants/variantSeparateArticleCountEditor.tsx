@@ -59,7 +59,10 @@ const VariantSeparateArticleCountEditor: React.FC<VariantSeparateArticleCountEdi
         error={errors.copy !== undefined}
         helperText={errors.copy?.message}
         {...register('copy')}
-        onBlur={handleSubmit(onSubmit)}
+        onBlur={(e) => {
+          e.preventDefault();
+          void handleSubmit(onSubmit)(e);
+        }}
         label="Article count copy"
         margin="normal"
         variant="outlined"

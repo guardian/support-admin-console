@@ -171,8 +171,8 @@ const ChannelSwitches: React.FC<InnerProps<ChannelSwitches>> = ({
 };
 
 const fetchSettings = (): Promise<DataFromServer<ChannelSwitches>> =>
-  fetchFrontendSettings(FrontendSettingsType.channelSwitches);
+  fetchFrontendSettings(FrontendSettingsType.ChannelSwitches);
 const saveSettings = (data: DataFromServer<ChannelSwitches>): Promise<Response> =>
-  saveFrontendSettings(FrontendSettingsType.channelSwitches, data);
+  saveFrontendSettings(FrontendSettingsType.ChannelSwitches, data);
 
 export default withS3Data<ChannelSwitches>(ChannelSwitches, fetchSettings, saveSettings);

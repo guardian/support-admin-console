@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { makeStyles } from '@mui/styles';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { AuditDataRow, AuditTestsTable } from './auditTestsTable';
 
@@ -26,7 +26,7 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   sectionContainer: {
     display: 'flexWrap',
     width: '500px',
-    borderColor: `2px solid ${{ color: grey[700] }}`,
+    borderColor: `2px solid ${grey[700]}`,
     borderRadius: '2px',
   },
   heading: {
@@ -45,37 +45,29 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
 
 export const AuditTestsDashboard: React.FC = () => {
   const classes = useStyles();
-  const testNameInQueryParams = useParams().testName;
-  const channelInQueryParams = useParams().channel;
-  const [fromUrl, setFromUrl] = useState(false); // used to trigger initial fetch once if set from url
+  const { testName: testNameInQueryParams, channel: channelInQueryParams } = useParams();
+  const hasFetchedFromUrlRef = useRef(false);
 
-  const [testName, setTestName] = useState('');
-  const [channel, setChannel] = useState('');
+  const [testName, setTestName] = useState(testNameInQueryParams ?? '');
+  const [channel, setChannel] = useState(channelInQueryParams ?? '');
+
   const onSelectChannelChange = (event: SelectChangeEvent) => {
     setChannel(event.target.value);
   };
 
   const [rows, setRows] = useState<AuditDataRow[]>([]);
-  const fetchAuditData = () => {
+  const fetchAuditData = useCallback(() => {
     void fetch(`/frontend/audit/${channel}/${testName}`)
       .then((resp) => resp.json())
-      .then((rows) => setRows(rows));
-  };
+      .then((data: AuditDataRow[]) => setRows(data));
+  }, [channel, testName]);
 
   useEffect(() => {
-    if (testNameInQueryParams && channelInQueryParams) {
-      setTestName(testNameInQueryParams);
-      setChannel(channelInQueryParams);
-      setFromUrl(true);
-    }
-  }, [testNameInQueryParams, channelInQueryParams]);
-
-  useEffect(() => {
-    if (fromUrl && testName && channel) {
-      setFromUrl(false);
+    if (testNameInQueryParams && channelInQueryParams && !hasFetchedFromUrlRef.current) {
+      hasFetchedFromUrlRef.current = true;
       fetchAuditData();
     }
-  }, [testName, channel]);
+  }, [testNameInQueryParams, channelInQueryParams, fetchAuditData]);
 
   return (
     <div className={classes.mainContainer}>

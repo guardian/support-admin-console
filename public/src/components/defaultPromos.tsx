@@ -144,6 +144,6 @@ const DefaultPromos: React.FC<InnerProps<DefaultPromos>> = ({
 
 export default withS3Data<DefaultPromos>(
   DefaultPromos,
-  () => fetchSupportFrontendSettings(SupportFrontendSettingsType.defaultPromos),
-  (data) => saveSupportFrontendSettings(SupportFrontendSettingsType.defaultPromos, data),
+  () => fetchSupportFrontendSettings(SupportFrontendSettingsType.DefaultPromos),
+  (data) => saveSupportFrontendSettings(SupportFrontendSettingsType.DefaultPromos, data),
 );

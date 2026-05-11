@@ -74,9 +74,6 @@ export const StudentLandingPageLinkBuilder: React.FC<StudentLandingPageLinkBuild
     'The link cannot be generated yet because something is missing - please check the following: ';
   const errorMessageBuilder = [baseErrorMessage];
 
-  if (!test.countryGroupId) {
-    errorMessageBuilder.push('The Country is required. ');
-  }
   if (!promoCode) {
     errorMessageBuilder.push('The promoCode is missing. ');
   }

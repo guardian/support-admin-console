@@ -13,15 +13,36 @@ import {
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React from 'react';
-import { BannerDeploys, BannersToRedeploy } from './bannerChannelDeployer';
 import BannerChannelDeployerTableRow from './bannerChannelDeployerTableRow';
-import { BannerChannel } from './bannerDeployDashboard';
+import { BannerDeploys, BannersToRedeploy } from './bannerDeployTypes';
+import { BannerChannel } from './bannerDeployTypes';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   schedule: {
     paddingLeft: spacing(3),
   },
 }));
+
+interface ScheduleProps {
+  isChannel1: boolean;
+  classes: Record<string, string>;
+}
+
+const Schedule = ({ isChannel1, classes }: ScheduleProps): JSX.Element => (
+  <div className={classes.schedule}>
+    This banner is automatically deployed at:
+    {isChannel1 ? (
+      <ul>
+        <li>9am every Sunday</li>
+        <li>9am every Thursday</li>
+      </ul>
+    ) : (
+      <ul>
+        <li>9am every Tuesday</li>
+      </ul>
+    )}
+  </div>
+);
 
 interface BannerChannelDeployerTableProps {
   channel: BannerChannel;
@@ -45,22 +66,6 @@ const BannerChannelDeployerTable: React.FC<BannerChannelDeployerTableProps> = ({
     (shouldRedeploy) => shouldRedeploy,
   );
 
-  const Schedule = (): JSX.Element => (
-    <div className={classes.schedule}>
-      This banner is automatically deployed at:
-      {isChannel1 ? (
-        <ul>
-          <li>9am every Sunday</li>
-          <li>9am every Thursday</li>
-        </ul>
-      ) : (
-        <ul>
-          <li>9am every Tuesday</li>
-        </ul>
-      )}
-    </div>
-  );
-
   return (
     <TableContainer component={Paper}>
       <Toolbar>
@@ -68,7 +73,7 @@ const BannerChannelDeployerTable: React.FC<BannerChannelDeployerTableProps> = ({
           {isChannel1 ? 'Banner 1' : 'Banner 2'}
         </Typography>
       </Toolbar>
-      <Schedule />
+      <Schedule isChannel1={isChannel1} classes={classes} />
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>

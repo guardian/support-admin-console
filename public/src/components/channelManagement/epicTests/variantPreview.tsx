@@ -1,4 +1,3 @@
-import { Theme } from '@mui/material';
 import Alert from '@mui/material/Alert';
 import { makeStyles } from '@mui/styles';
 import React from 'react';
@@ -107,7 +106,7 @@ const StorybookNames: Record<EpicModuleName, string> = {
   ContributionsEpic: 'components-marketing-contributionsepic--default',
 };
 
-const useStyles = makeStyles(({}: Theme) => ({
+const useStyles = makeStyles(() => ({
   container: {
     width: '620px',
   },

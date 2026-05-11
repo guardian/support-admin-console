@@ -32,13 +32,13 @@ const buildEpicTestsForm = (
 
 export const ArticleEpicTestsForm = buildEpicTestsForm(
   ARTICLE_EPIC_CONFIG,
-  FrontendSettingsType.epicTests,
+  FrontendSettingsType.EpicTests,
 );
 export const LiveblogEpicTestsForm = buildEpicTestsForm(
   LIVEBLOG_EPIC_CONFIG,
-  FrontendSettingsType.liveblogEpicTests,
+  FrontendSettingsType.LiveblogEpicTests,
 );
 export const AppleNewsEpicTestsForm = buildEpicTestsForm(
   APPLE_NEWS_EPIC_CONFIG,
-  FrontendSettingsType.appleNewsEpicTests,
+  FrontendSettingsType.AppleNewsEpicTests,
 );
