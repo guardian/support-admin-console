@@ -6,7 +6,7 @@ import io.circe.generic.extras.Configuration
 
 case class DateRange(
     start: String, // ISO date "YYYY-MM-DD", inclusive
-    end: String    // ISO date "YYYY-MM-DD", inclusive
+    end: String // ISO date "YYYY-MM-DD", inclusive
 )
 
 object DateRange {
@@ -16,11 +16,11 @@ object DateRange {
 }
 
 case class ExclusionRule(
-  name: String = "",
-    sectionIds: Option[List[String]] = None,   // suppress if the page's sectionId matches any entry
-    tagIds: Option[List[String]] = None,        // suppress if the page has any of these tag IDs
-    dateRange: Option[DateRange] = None,        // ISO date "YYYY-MM-DD", inclusive
-    contentTypes: Option[List[String]] = None   // e.g. ["Article"], ["Front"]; absent = all content types
+    name: String = "",
+    sectionIds: Option[List[String]] = None, // suppress if the page's sectionId matches any entry
+    tagIds: Option[List[String]] = None, // suppress if the page has any of these tag IDs
+    dateRange: Option[DateRange] = None, // ISO date "YYYY-MM-DD", inclusive
+    contentTypes: Option[List[String]] = None // e.g. ["Article"], ["Front"]; absent = all content types
 )
 
 object ExclusionRule {
