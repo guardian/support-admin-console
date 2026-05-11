@@ -65,7 +65,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
             ticker: {
               filledProgress: '#052962',
               progressBarBackground: '#D4DFE9',
-              headlineColour: '#052962',
+              headlineColour: '#000000',
               totalColour: '#052962',
               goalColour: '#000000',
             },
@@ -205,7 +205,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
             ticker: {
               filledProgress: '#0077B6',
               progressBarBackground: '#B8D6E6',
-              headlineColour: '#0077B6',
+              headlineColour: '#000000',
               totalColour: '#0077B6',
               goalColour: '#000000',
             },
@@ -380,7 +380,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
             ticker: {
               filledProgress: '#C70000',
               progressBarBackground: '#EDC5C5',
-              headlineColour: '#C70000',
+              headlineColour: '#000000',
               totalColour: '#C70000',
               goalColour: '#000000',
             },
