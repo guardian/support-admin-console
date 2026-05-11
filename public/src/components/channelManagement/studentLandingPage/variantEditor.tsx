@@ -187,10 +187,15 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
         editMode={editMode}
         updateInstitutionDetails={updateInstitutionDetails}
         onValidationChange={(isValid) =>
-          setSectionValidity((current) => ({
-            ...current,
-            institution: isValid,
-          }))
+          setSectionValidity((current) => {
+            if (current.institution === isValid) {
+              return current;
+            }
+            return {
+              ...current,
+              institution: isValid,
+            };
+          })
         }
       />
       <hr />
@@ -262,10 +267,15 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
             variant={variant}
             isDisabled={!editMode}
             onValidationChange={(isValid) =>
-              setSectionValidity((current) => ({
-                ...current,
-                image: isValid,
-              }))
+              setSectionValidity((current) => {
+                if (current.image === isValid) {
+                  return current;
+                }
+                return {
+                  ...current,
+                  image: isValid,
+                };
+              })
             }
             onChange={updateImage}
             imageGuidance={imageGuidance}
