@@ -1,5 +1,5 @@
 import { Typography } from '@mui/material';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   BannerContent,
   BannerTest,
@@ -86,19 +86,24 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
     return undefined;
   };
 
-  const updateTest = useCallback(
-    (update: (current: BannerTest) => BannerTest): void => {
-      onTestChange((current) => {
-        const updatedTest = update(current);
-        return {
-          ...updatedTest,
-          // To save dotcom from having to work this out
-          articlesViewedSettings: getArticlesViewedSettings(updatedTest),
-        };
-      });
-    },
-    [onTestChange],
-  );
+  const onTestChangeRef = useRef(onTestChange);
+  const getArticlesViewedSettingsRef = useRef(getArticlesViewedSettings);
+
+  useEffect(() => {
+    onTestChangeRef.current = onTestChange;
+    getArticlesViewedSettingsRef.current = getArticlesViewedSettings;
+  });
+
+  const updateTest = (update: (current: BannerTest) => BannerTest): void => {
+    onTestChangeRef.current((current) => {
+      const updatedTest = update(current);
+      return {
+        ...updatedTest,
+        // To save dotcom from having to work this out
+        articlesViewedSettings: getArticlesViewedSettingsRef.current(updatedTest),
+      };
+    });
+  };
 
   const onCampaignChange = (campaign?: string): void => {
     updateTest((current) => ({
@@ -122,15 +127,12 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
     controlProportionSettings?: ControlProportionSettings,
   ): void => updateTest((current) => ({ ...current, controlProportionSettings }));
 
-  const onVariantsChange = useCallback(
-    (update: (current: BannerVariant[]) => BannerVariant[]): void => {
-      updateTest((current) => {
-        const updatedVariantList = update(current.variants);
-        return { ...current, variants: updatedVariantList };
-      });
-    },
-    [updateTest],
-  );
+  const onVariantsChange = (update: (current: BannerVariant[]) => BannerVariant[]): void => {
+    updateTest((current) => {
+      const updatedVariantList = update(current.variants);
+      return { ...current, variants: updatedVariantList };
+    });
+  };
 
   const onVariantDelete = (deletedVariantName: string): void => {
     onVariantsChange((current) => current.filter((variant) => variant.name !== deletedVariantName));
@@ -188,44 +190,49 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
   };
 
   // Memoize callbacks by variant name to prevent infinite render loops
+  // Using refs to store callbacks to avoid dependency issues with useCallback
   const validationCallbacksRef = useRef<Map<string, (isValid: boolean) => void>>(new Map());
   const variantChangeCallbacksRef = useRef<
     Map<string, (update: (current: BannerVariant) => BannerVariant) => void>
   >(new Map());
+  const setValidationStatusRef = useRef(setValidationStatusForField);
+  const onVariantsChangeRef = useRef(onVariantsChange);
 
-  const getValidationCallback = useCallback(
-    (variantName: string): ((isValid: boolean) => void) => {
-      if (!validationCallbacksRef.current.has(variantName)) {
-        validationCallbacksRef.current.set(variantName, (isValid: boolean): void =>
-          setValidationStatusForField(variantName, isValid),
-        );
-      }
-      return validationCallbacksRef.current.get(variantName)!;
-    },
-    [setValidationStatusForField],
-  );
+  // Keep refs up to date without triggering re-renders
+  useEffect(() => {
+    setValidationStatusRef.current = setValidationStatusForField;
+    onVariantsChangeRef.current = onVariantsChange;
+  });
 
-  const getVariantChangeCallback = useCallback(
-    (variantName: string): ((update: (current: BannerVariant) => BannerVariant) => void) => {
-      if (!variantChangeCallbacksRef.current.has(variantName)) {
-        variantChangeCallbacksRef.current.set(
-          variantName,
-          (update: (current: BannerVariant) => BannerVariant): void => {
-            onVariantsChange((current) =>
-              current.map((variant) => {
-                if (variant.name === variantName) {
-                  return update(variant);
-                }
-                return variant;
-              }),
-            );
-          },
-        );
-      }
-      return variantChangeCallbacksRef.current.get(variantName)!;
-    },
-    [onVariantsChange],
-  );
+  const getValidationCallback = (variantName: string): ((isValid: boolean) => void) => {
+    if (!validationCallbacksRef.current.has(variantName)) {
+      validationCallbacksRef.current.set(variantName, (isValid: boolean): void =>
+        setValidationStatusRef.current(variantName, isValid),
+      );
+    }
+    return validationCallbacksRef.current.get(variantName)!;
+  };
+
+  const getVariantChangeCallback = (
+    variantName: string,
+  ): ((update: (current: BannerVariant) => BannerVariant) => void) => {
+    if (!variantChangeCallbacksRef.current.has(variantName)) {
+      variantChangeCallbacksRef.current.set(
+        variantName,
+        (update: (current: BannerVariant) => BannerVariant): void => {
+          onVariantsChangeRef.current((current) =>
+            current.map((variant) => {
+              if (variant.name === variantName) {
+                return update(variant);
+              }
+              return variant;
+            }),
+          );
+        },
+      );
+    }
+    return variantChangeCallbacksRef.current.get(variantName)!;
+  };
 
   const renderVariantEditor = (variant: BannerVariant): React.ReactElement => (
     <VariantEditor

@@ -530,6 +530,10 @@ const RichTextEditor: React.FC<RichTextEditorProps<string[]>> = ({
   }, [manager]);
 
   const hooks = useMemo(() => {
+    if (disabled) {
+      return [];
+    }
+
     const setupHandler = () => {
       const handleSaveShortcut = () => {
         const { html, text } = getEditorContent();
@@ -544,7 +548,7 @@ const RichTextEditor: React.FC<RichTextEditorProps<string[]>> = ({
     };
 
     return [setupHandler];
-  }, [manager, enableHtml, updateCopy, getEditorContent]);
+  }, [disabled, manager, enableHtml, updateCopy, getEditorContent]);
 
   // Control the look of the ReMirror RTE dependant on whether the user is in Edit or Read-Only Mode
   const wrapperClasses = disabled ? 'remirror-theme editor-disabled' : 'remirror-theme';

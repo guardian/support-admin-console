@@ -1,7 +1,7 @@
 import { Checkbox, TextField, Theme } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { makeStyles } from '@mui/styles';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { BylineWithImage } from './helpers/shared';
 import { EMPTY_ERROR_HELPER_TEXT } from './helpers/validation';
@@ -47,9 +47,22 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
     void trigger(); // validate immediately
   }, [trigger]);
 
+  // Use ref to stabilize callback and prevent infinite render loops
+  const onValidationChangeRef = useRef(onValidationChange);
+  const prevIsValidRef = useRef<boolean | null>(null);
+
+  useEffect(() => {
+    onValidationChangeRef.current = onValidationChange;
+  });
+
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
-    onValidationChange(isValid);
+    // Only call onValidationChange if validity has actually changed
+    if (prevIsValidRef.current !== isValid) {
+      prevIsValidRef.current = isValid;
+      onValidationChangeRef.current(isValid);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- Only check specific error fields to avoid unnecessary effect runs
   }, [errors.name, errors.description, errors.headshot]);
 
   const update = (byline: BylineWithImage): void => {
@@ -71,7 +84,7 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
         {...register('name', {
           required: EMPTY_ERROR_HELPER_TEXT,
         })}
-        onBlur={handleSubmit(update)}
+        onBlur={() => void handleSubmit(update)()}
         label="Name"
         margin="normal"
         variant="outlined"
@@ -80,7 +93,7 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
       />
       <TextField
         {...register('description')}
-        onBlur={handleSubmit(update)}
+        onBlur={() => void handleSubmit(update)()}
         label="Title or description"
         margin="normal"
         variant="outlined"
@@ -106,7 +119,7 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
             return true;
           },
         })}
-        onBlur={handleSubmit(update)}
+        onBlur={() => void handleSubmit(update)()}
         label="Image URL"
         margin="normal"
         variant="outlined"
@@ -125,7 +138,7 @@ const BylineWithImageEditor: React.FC<BylineWithImageEditorProps> = ({
             return true;
           },
         })}
-        onBlur={handleSubmit(update)}
+        onBlur={() => void handleSubmit(update)()}
         label="Image alt-text"
         margin="normal"
         variant="outlined"

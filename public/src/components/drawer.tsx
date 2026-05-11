@@ -5,7 +5,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { makeStyles } from '@mui/styles';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import RRControlPanelLogo from './rrControlPanelLogo';
 
 const useStyles = makeStyles({
@@ -100,6 +100,7 @@ const anchor = 'left';
 
 export default function NavDrawer(): React.ReactElement {
   const classes = useStyles();
+  const navigate = useNavigate();
   const [state, setState] = React.useState({
     left: false,
   });
@@ -118,6 +119,27 @@ export default function NavDrawer(): React.ReactElement {
       setState({ ...state, [anchor]: open });
     };
 
+  const navigateInternalLink =
+    () =>
+    (event: React.MouseEvent): void => {
+      if (
+        event.defaultPrevented ||
+        event.button !== 0 ||
+        event.metaKey ||
+        event.altKey ||
+        event.ctrlKey ||
+        event.shiftKey
+      ) {
+        return;
+      }
+
+      const link = (event.target as HTMLElement).closest<HTMLAnchorElement>('a[href^="/"]');
+      if (link) {
+        event.preventDefault();
+        void navigate(`${link.pathname}${link.search}${link.hash}`);
+      }
+    };
+
   const isHalloween = () => {
     const now = new Date();
     return now.getMonth() == 9 && now.getDate() == 31;
@@ -127,6 +149,7 @@ export default function NavDrawer(): React.ReactElement {
     <div
       className={classes.list}
       role="presentation"
+      onClickCapture={navigateInternalLink()}
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >

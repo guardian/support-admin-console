@@ -1,5 +1,5 @@
 import { Typography } from '@mui/material';
-import React, { useCallback, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   SupportLandingPageTest,
   SupportLandingPageVariant,
@@ -23,61 +23,63 @@ const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLan
 }: ValidatedTestEditorProps<SupportLandingPageTest>) => {
   const classes = useStyles();
 
-  const onVariantsChange = useCallback(
-    (update: (current: SupportLandingPageVariant[]) => SupportLandingPageVariant[]): void => {
-      onTestChange((current) => {
-        const updatedVariantList = update(current.variants);
-        return { ...current, variants: updatedVariantList };
-      });
-    },
-    [onTestChange],
-  );
+  const onVariantsChange = (
+    update: (current: SupportLandingPageVariant[]) => SupportLandingPageVariant[],
+  ): void => {
+    onTestChange((current) => {
+      const updatedVariantList = update(current.variants);
+      return { ...current, variants: updatedVariantList };
+    });
+  };
 
   const onVariantDelete = (deletedVariantName: string): void => {
     onVariantsChange((current) => current.filter((variant) => variant.name !== deletedVariantName));
   };
 
   // Memoize callbacks by variant name to prevent infinite render loops
+  // Using refs to store callbacks to avoid dependency issues with useCallback
   const validationCallbacksRef = useRef<Map<string, (isValid: boolean) => void>>(new Map());
   const variantChangeCallbacksRef = useRef<
     Map<string, (update: (current: SupportLandingPageVariant) => SupportLandingPageVariant) => void>
   >(new Map());
+  const setValidationStatusRef = useRef(setValidationStatusForField);
+  const onVariantsChangeRef = useRef(onVariantsChange);
 
-  const getValidationCallback = useCallback(
-    (variantName: string): ((isValid: boolean) => void) => {
-      if (!validationCallbacksRef.current.has(variantName)) {
-        validationCallbacksRef.current.set(variantName, (isValid: boolean): void =>
-          setValidationStatusForField(variantName, isValid),
-        );
-      }
-      return validationCallbacksRef.current.get(variantName)!;
-    },
-    [setValidationStatusForField],
-  );
+  // Keep refs up to date without triggering re-renders
+  useEffect(() => {
+    setValidationStatusRef.current = setValidationStatusForField;
+    onVariantsChangeRef.current = onVariantsChange;
+  });
 
-  const getVariantChangeCallback = useCallback(
-    (
-      variantName: string,
-    ): ((update: (current: SupportLandingPageVariant) => SupportLandingPageVariant) => void) => {
-      if (!variantChangeCallbacksRef.current.has(variantName)) {
-        variantChangeCallbacksRef.current.set(
-          variantName,
-          (update: (current: SupportLandingPageVariant) => SupportLandingPageVariant): void => {
-            onVariantsChange((current) =>
-              current.map((variant) => {
-                if (variant.name === variantName) {
-                  return update(variant);
-                }
-                return variant;
-              }),
-            );
-          },
-        );
-      }
-      return variantChangeCallbacksRef.current.get(variantName)!;
-    },
-    [onVariantsChange],
-  );
+  const getValidationCallback = (variantName: string): ((isValid: boolean) => void) => {
+    if (!validationCallbacksRef.current.has(variantName)) {
+      validationCallbacksRef.current.set(variantName, (isValid: boolean): void =>
+        setValidationStatusRef.current(variantName, isValid),
+      );
+    }
+    return validationCallbacksRef.current.get(variantName)!;
+  };
+
+  const getVariantChangeCallback = (
+    variantName: string,
+  ): ((update: (current: SupportLandingPageVariant) => SupportLandingPageVariant) => void) => {
+    if (!variantChangeCallbacksRef.current.has(variantName)) {
+      variantChangeCallbacksRef.current.set(
+        variantName,
+        (update: (current: SupportLandingPageVariant) => SupportLandingPageVariant): void => {
+          onVariantsChangeRef.current((current) =>
+            current.map((variant) => {
+              if (variant.name === variantName) {
+                return update(variant);
+              }
+              return variant;
+            }),
+          );
+        },
+      );
+    }
+    return variantChangeCallbacksRef.current.get(variantName)!;
+  };
 
   const createVariant = (name: string): void => {
     const newVariant: SupportLandingPageVariant = {

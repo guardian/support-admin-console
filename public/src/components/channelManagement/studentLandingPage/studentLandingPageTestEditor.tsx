@@ -1,6 +1,6 @@
 import { FormHelperText, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   StudentLandingPageTest,
   StudentLandingPageVariant,
@@ -72,9 +72,16 @@ export const StudentLandingPageTestEditor: React.FC<
 
   const helperText = test.countryGroupId ? '' : 'Please choose a country';
 
+  // Use ref to stabilize the callback and prevent infinite render loops
+  const setValidationStatusRef = useRef(setValidationStatusForField);
+
   useEffect(() => {
-    setValidationStatusForField('countryGroupId', isFieldSet(test.countryGroupId));
-  }, [setValidationStatusForField, test.countryGroupId]);
+    setValidationStatusRef.current = setValidationStatusForField;
+  });
+
+  useEffect(() => {
+    setValidationStatusRef.current('countryGroupId', isFieldSet(test.countryGroupId));
+  }, [test.countryGroupId]);
 
   const updateTest = (
     update: (current: StudentLandingPageTest) => StudentLandingPageTest,

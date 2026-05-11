@@ -1,5 +1,5 @@
 import { MenuItem, TextField, Typography } from '@mui/material';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   CheckoutNudgeTest,
   CheckoutNudgeVariant,
@@ -40,19 +40,6 @@ const CheckoutNudgeTestEditor: React.FC<ValidatedTestEditorProps<CheckoutNudgeTe
     });
   };
 
-  const onVariantChange =
-    (variantName: string) =>
-    (update: (current: CheckoutNudgeVariant) => CheckoutNudgeVariant): void => {
-      onVariantsChange((current) =>
-        current.map((variant) => {
-          if (variant.name === variantName) {
-            return update(variant);
-          }
-          return variant;
-        }),
-      );
-    };
-
   const onVariantDelete = (deletedVariantName: string): void => {
     onVariantsChange((current) => current.filter((variant) => variant.name !== deletedVariantName));
   };
@@ -83,12 +70,10 @@ const CheckoutNudgeTestEditor: React.FC<ValidatedTestEditorProps<CheckoutNudgeTe
     <VariantEditor
       key={`checkout-nudge-${test.name}-${variant.name}`}
       variant={variant}
-      onVariantChange={onVariantChange(variant.name)}
+      onVariantChange={getVariantChangeCallback(variant.name)}
       onDelete={(): void => onVariantDelete(variant.name)}
       editMode={userHasTestLocked}
-      onValidationChange={(isValid: boolean): void =>
-        setValidationStatusForField(variant.name, isValid)
-      }
+      onValidationChange={getValidationCallback(variant.name)}
     />
   );
 
@@ -131,6 +116,51 @@ const CheckoutNudgeTestEditor: React.FC<ValidatedTestEditorProps<CheckoutNudgeTe
       name: clonedVariantName,
     };
     onVariantsChange((current) => [...current, newVariant]);
+  };
+
+  // Memoize callbacks by variant name to prevent infinite render loops
+  // Using refs to store callbacks to avoid dependency issues with useCallback
+  const validationCallbacksRef = useRef<Map<string, (isValid: boolean) => void>>(new Map());
+  const variantChangeCallbacksRef = useRef<
+    Map<string, (update: (current: CheckoutNudgeVariant) => CheckoutNudgeVariant) => void>
+  >(new Map());
+  const setValidationStatusRef = useRef(setValidationStatusForField);
+  const onVariantsChangeRef = useRef(onVariantsChange);
+
+  // Keep refs up to date without triggering re-renders
+  useEffect(() => {
+    setValidationStatusRef.current = setValidationStatusForField;
+    onVariantsChangeRef.current = onVariantsChange;
+  });
+
+  const getValidationCallback = (variantName: string): ((isValid: boolean) => void) => {
+    if (!validationCallbacksRef.current.has(variantName)) {
+      validationCallbacksRef.current.set(variantName, (isValid: boolean): void =>
+        setValidationStatusRef.current(variantName, isValid),
+      );
+    }
+    return validationCallbacksRef.current.get(variantName)!;
+  };
+
+  const getVariantChangeCallback = (
+    variantName: string,
+  ): ((update: (current: CheckoutNudgeVariant) => CheckoutNudgeVariant) => void) => {
+    if (!variantChangeCallbacksRef.current.has(variantName)) {
+      variantChangeCallbacksRef.current.set(
+        variantName,
+        (update: (current: CheckoutNudgeVariant) => CheckoutNudgeVariant): void => {
+          onVariantsChangeRef.current((current) =>
+            current.map((variant) => {
+              if (variant.name === variantName) {
+                return update(variant);
+              }
+              return variant;
+            }),
+          );
+        },
+      );
+    }
+    return variantChangeCallbacksRef.current.get(variantName)!;
   };
 
   const getAvailableRatePlansForProduct = (): typeof ONE_TIME_PLANS | typeof RECURRING_PLANS => {

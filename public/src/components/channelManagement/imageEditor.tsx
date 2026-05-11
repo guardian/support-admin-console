@@ -1,7 +1,7 @@
 import { Checkbox, TextField, Theme } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { makeStyles } from '@mui/styles';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { Image } from './helpers/shared';
 import { EMPTY_ERROR_HELPER_TEXT } from './helpers/validation';
@@ -58,10 +58,22 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
     void trigger(); // validate immediately
   }, [trigger]);
 
+  // Use ref to stabilize callback and prevent infinite render loops
+  const onValidationChangeRef = useRef(onValidationChange);
+  const prevIsValidRef = useRef<boolean | null>(null);
+
+  useEffect(() => {
+    onValidationChangeRef.current = onValidationChange;
+  });
+
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
-    onValidationChange(isValid);
-  }, [errors, onValidationChange]);
+    // Only call onValidationChange if validity has actually changed
+    if (prevIsValidRef.current !== isValid) {
+      prevIsValidRef.current = isValid;
+      onValidationChangeRef.current(isValid);
+    }
+  }, [errors]);
 
   return (
     <div>

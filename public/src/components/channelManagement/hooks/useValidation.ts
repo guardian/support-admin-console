@@ -10,15 +10,20 @@ type FieldValidationChange = (fieldName: string, isValid: boolean) => void;
 const useValidation = (onValidationChanged: (isValid: boolean) => void): FieldValidationChange => {
   const [validationStatus, setValidationStatus] = useState<ValidationStatus>({});
 
+  const onValidationChangedRef = useRef(onValidationChanged);
   const wasValidRef = useRef(true);
+
+  useEffect(() => {
+    onValidationChangedRef.current = onValidationChanged;
+  });
 
   useEffect(() => {
     const isValid = allValid(validationStatus);
     if (isValid !== wasValidRef.current) {
       wasValidRef.current = isValid;
-      onValidationChanged(isValid);
+      onValidationChangedRef.current(isValid);
     }
-  }, [onValidationChanged, validationStatus]);
+  }, [validationStatus]);
 
   const setValidationStatusForField = (field: string, isValid: boolean): void => {
     setValidationStatus((current) => {

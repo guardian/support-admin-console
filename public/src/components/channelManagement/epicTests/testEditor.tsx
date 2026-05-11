@@ -1,5 +1,5 @@
 import { FormControlLabel, Switch, Typography } from '@mui/material';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { EpicTest, EpicVariant, MaxEpicViews } from '../../../models/epic';
 import TestVariantsSplitEditor from '../../tests/variants/testVariantsSplitEditor';
 import VariantEditorWithPreviewTab from '../../tests/variants/variantEditorWithPreviewTab';
@@ -114,19 +114,6 @@ export const getEpicTestEditor = (
       });
     };
 
-    const onVariantChange =
-      (variantName: string) =>
-      (update: (current: EpicVariant) => EpicVariant): void => {
-        onVariantsChange((current) =>
-          current.map((variant) => {
-            if (variant.name === variantName) {
-              return update(variant);
-            }
-            return variant;
-          }),
-        );
-      };
-
     const onVariantDelete = (deletedVariantName: string): void =>
       updateTest((current) => {
         const updatedVariantList = current.variants.filter(
@@ -157,6 +144,50 @@ export const getEpicTestEditor = (
         name: clonedVariantName,
       };
       onVariantsChange((current) => [...current, newVariant]);
+    };
+
+    // Memoize callbacks by variant name to prevent infinite render loops
+    // Using refs to store callbacks to avoid dependency issues with useCallback
+    const validationCallbacksRef = useRef<Map<string, (isValid: boolean) => void>>(new Map());
+    const variantChangeCallbacksRef = useRef<
+      Map<string, (update: (current: EpicVariant) => EpicVariant) => void>
+    >(new Map());
+    const setValidationStatusRef = useRef(setValidationStatusForField);
+    const onVariantsChangeRef = useRef(onVariantsChange);
+
+    useEffect(() => {
+      setValidationStatusRef.current = setValidationStatusForField;
+      onVariantsChangeRef.current = onVariantsChange;
+    });
+
+    const getValidationCallback = (variantName: string): ((isValid: boolean) => void) => {
+      if (!validationCallbacksRef.current.has(variantName)) {
+        validationCallbacksRef.current.set(variantName, (isValid: boolean): void =>
+          setValidationStatusRef.current(variantName, isValid),
+        );
+      }
+      return validationCallbacksRef.current.get(variantName)!;
+    };
+
+    const getVariantChangeCallback = (
+      variantName: string,
+    ): ((update: (current: EpicVariant) => EpicVariant) => void) => {
+      if (!variantChangeCallbacksRef.current.has(variantName)) {
+        variantChangeCallbacksRef.current.set(
+          variantName,
+          (update: (current: EpicVariant) => EpicVariant): void => {
+            onVariantsChangeRef.current((current) =>
+              current.map((variant) => {
+                if (variant.name === variantName) {
+                  return update(variant);
+                }
+                return variant;
+              }),
+            );
+          },
+        );
+      }
+      return variantChangeCallbacksRef.current.get(variantName)!;
     };
 
     const onSwitchChange =
@@ -235,11 +266,9 @@ export const getEpicTestEditor = (
             key={variant.name}
             variant={variant}
             editMode={userHasTestLocked}
-            onVariantChange={onVariantChange(variant.name)}
+            onVariantChange={getVariantChangeCallback(variant.name)}
             onDelete={(): void => onVariantDelete(variant.name)}
-            onValidationChange={(isValid: boolean): void =>
-              setValidationStatusForField(variant.name, isValid)
-            }
+            onValidationChange={getValidationCallback(variant.name)}
           />
         }
         variantPreview={
@@ -333,11 +362,9 @@ export const getEpicTestEditor = (
                 variant={test.variants[0]}
                 epicEditorConfig={epicEditorConfig}
                 editMode={userHasTestLocked}
-                onVariantChange={onVariantChange(test.variants[0].name)}
+                onVariantChange={getVariantChangeCallback(test.variants[0].name)}
                 onDelete={(): void => onVariantDelete(test.variants[0].name)}
-                onValidationChange={(isValid: boolean): void =>
-                  setValidationStatusForField(test.variants[0].name, isValid)
-                }
+                onValidationChange={getValidationCallback(test.variants[0].name)}
               />
             </div>
           </div>

@@ -1,6 +1,6 @@
 import { Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { GutterContent, GutterVariant } from '../../../models/gutter';
 import PromoCodesEditor from '../../shared/PromoCodesEditor';
@@ -105,11 +105,14 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
   };
   const templateValidator = templateValidatorForPlatform('DOTCOM');
 
-  const defaultValues: FormData = {
-    image: { ...variant.image },
-    bodyCopy: [...variant.bodyCopy],
-    cta: variant.cta ? { ...variant.cta } : undefined,
-  };
+  const defaultValues = useMemo<FormData>(
+    () => ({
+      image: { ...variant.image },
+      bodyCopy: [...variant.bodyCopy],
+      cta: variant.cta ? { ...variant.cta } : undefined,
+    }),
+    [variant.image, variant.bodyCopy, variant.cta],
+  );
 
   /**
    * Only some fields are validated by the useForm here.
@@ -131,6 +134,10 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
     variantRef.current = variant;
   });
 
+  const onContentValidationChange = useCallback((isValid: boolean): void => {
+    onValidationChangeRef.current(isValid);
+  }, []);
+
   const {
     handleSubmit,
     control,
@@ -146,21 +153,47 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
     void trigger();
   }, [trigger]);
 
+  const prevValidatedFieldsRef = useRef<FormData>(validatedFields);
+
   useEffect(() => {
-    onVariantChangeRef.current({
-      ...variantRef.current,
-      ...validatedFields,
-    });
+    // Only call onVariantChange if validatedFields has actually changed
+    const prev = prevValidatedFieldsRef.current;
+    const hasChanged =
+      prev.bodyCopy.length !== validatedFields.bodyCopy.length ||
+      prev.bodyCopy.some((p, i) => p !== validatedFields.bodyCopy[i]) ||
+      prev.image.mainUrl !== validatedFields.image.mainUrl ||
+      prev.image.altText !== validatedFields.image.altText ||
+      prev.cta?.text !== validatedFields.cta?.text ||
+      prev.cta?.baseUrl !== validatedFields.cta?.baseUrl;
+
+    if (hasChanged) {
+      prevValidatedFieldsRef.current = validatedFields;
+      onVariantChangeRef.current({
+        ...variantRef.current,
+        ...validatedFields,
+      });
+    }
   }, [validatedFields]);
+
+  const prevIsValidRef = useRef<boolean | null>(null);
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
-    onValidationChangeRef.current(isValid);
+    // Only call onValidationChange if validity has actually changed
+    if (prevIsValidRef.current !== isValid) {
+      prevIsValidRef.current = isValid;
+      onValidationChangeRef.current(isValid);
+    }
   }, [errors]);
 
   const updateImage = (image?: Image): void => {
     if (image) {
-      setValidatedFields((current) => ({ ...current, image }));
+      setValidatedFields((current) => {
+        if (current.image.mainUrl === image.mainUrl && current.image.altText === image.altText) {
+          return current;
+        }
+        return { ...current, image };
+      });
     } else {
       setValidatedFields((current) => ({
         ...current,
@@ -170,7 +203,12 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
   };
 
   const updatePrimaryCta = (updatedCta?: Cta): void => {
-    setValidatedFields((current) => ({ ...current, cta: updatedCta }));
+    setValidatedFields((current) => {
+      if (current.cta?.text === updatedCta?.text && current.cta?.baseUrl === updatedCta?.baseUrl) {
+        return current;
+      }
+      return { ...current, cta: updatedCta };
+    });
   };
 
   return (
@@ -184,7 +222,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
           image={variant.image}
           updateImage={updateImage}
           isDisabled={!editMode}
-          onValidationChange={onValidationChange}
+          onValidationChange={onContentValidationChange}
           label={'Image - appears above copy instead of a heading.'}
           guidance={
             'The viewbox needs dimensions of 0, 0, 150, 100 and the file format should be SVG. The background colour will be Guardian blue.'
@@ -245,7 +283,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
           primaryCta={variant.cta}
           updatePrimaryCta={updatePrimaryCta}
           isDisabled={!editMode}
-          onValidationChange={onValidationChange}
+          onValidationChange={onContentValidationChange}
           copyLength={CTA_COPY_MAX_LENGTH}
         />
       </div>
@@ -269,25 +307,52 @@ const GutterVariantEditor: React.FC<GutterVariantEditorProps> = ({
 }: GutterVariantEditorProps) => {
   const classes = useStyles();
   const setValidationStatusForField = useValidation(onValidationChange);
+  const onVariantChangeRef = useRef(onVariantChange);
+  const setValidationStatusForFieldRef = useRef(setValidationStatusForField);
+
+  useEffect(() => {
+    onVariantChangeRef.current = onVariantChange;
+    setValidationStatusForFieldRef.current = setValidationStatusForField;
+  });
+
+  const onContentChange = useCallback((updatedContent: GutterContent): void => {
+    onVariantChangeRef.current((current) => {
+      if (current.content === updatedContent) {
+        return current;
+      }
+      return { ...current, content: updatedContent };
+    });
+  }, []);
+
+  const onMainContentValidationChange = useCallback((isValid: boolean): void => {
+    setValidationStatusForFieldRef.current('mainContent', isValid);
+  }, []);
+
+  const updatePromoCodes = useCallback((promoCodes: string[]): void => {
+    onVariantChangeRef.current((current) => {
+      const currentPromoCodes = current.promoCodes ?? [];
+      if (
+        currentPromoCodes.length === promoCodes.length &&
+        currentPromoCodes.every((promoCode, index) => promoCode === promoCodes[index])
+      ) {
+        return current;
+      }
+      return { ...current, promoCodes };
+    });
+  }, []);
 
   return (
     <div className={classes.container}>
       <div className={classes.sectionContainer}>
         <VariantContentEditor
           variant={variant.content}
-          onVariantChange={(updatedContent: GutterContent): void =>
-            onVariantChange((current) => ({ ...current, content: updatedContent }))
-          }
-          onValidationChange={(isValid): void =>
-            setValidationStatusForField('mainContent', isValid)
-          }
+          onVariantChange={onContentChange}
+          onValidationChange={onMainContentValidationChange}
           editMode={editMode}
         />
         <PromoCodesEditor
           promoCodes={variant.promoCodes ?? []}
-          updatePromoCodes={(promoCodes) => {
-            onVariantChange((current) => ({ ...current, promoCodes }));
-          }}
+          updatePromoCodes={updatePromoCodes}
           isDisabled={!editMode}
         />
       </div>

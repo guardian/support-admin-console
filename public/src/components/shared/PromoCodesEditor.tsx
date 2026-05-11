@@ -14,7 +14,7 @@ import {
   Typography,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { fetchPromo, fetchPromoCampaign, PromoResponse } from '../../utils/requests';
 import { Promo, PromoCampaign } from '../promoTool/utils/promoModels';
 
@@ -113,68 +113,88 @@ const PromoCodesEditor: React.FC<PromoCodesEditorProps> = ({
   const [promoDetails, setPromoDetails] = useState<Map<string, PromoDetails>>(new Map());
   const [addingPromo, setAddingPromo] = useState(false);
   const [expandedCodes, setExpandedCodes] = useState<Set<string>>(new Set());
+  const requestedPromoCodesRef = useRef<Set<string>>(new Set());
 
   useEffect(() => {
-    const loadPromoDetails = () => {
-      const newDetails = new Map<string, PromoDetails>();
+    const promoCodeSet = new Set(promoCodes);
+    requestedPromoCodesRef.current.forEach((code) => {
+      if (!promoCodeSet.has(code)) {
+        requestedPromoCodesRef.current.delete(code);
+      }
+    });
+
+    const codesToFetch = promoCodes.filter((code) => !requestedPromoCodesRef.current.has(code));
+    codesToFetch.forEach((code) => requestedPromoCodesRef.current.add(code));
+
+    setPromoDetails((prev) => {
+      let hasChanged = prev.size !== promoCodes.length;
+      const next = new Map<string, PromoDetails>();
 
       for (const code of promoCodes) {
-        if (promoDetails.has(code)) {
-          newDetails.set(code, promoDetails.get(code)!);
+        const existingDetails = prev.get(code);
+        if (existingDetails) {
+          next.set(code, existingDetails);
         } else {
-          newDetails.set(code, {
+          hasChanged = true;
+          next.set(code, {
             code,
             promo: null,
             campaign: null,
             loading: true,
             error: false,
           });
-
-          fetchPromo(code)
-            .then(async (response: PromoResponse) => {
-              const promo = response.promo;
-              let campaign: PromoCampaign | null = null;
-
-              // Fetch campaign details
-              try {
-                campaign = await fetchPromoCampaign(promo.campaignCode);
-              } catch (err) {
-                console.error('Failed to fetch campaign:', err);
-              }
-
-              setPromoDetails((prev) => {
-                const updated = new Map(prev);
-                updated.set(code, {
-                  code,
-                  promo,
-                  campaign,
-                  loading: false,
-                  error: false,
-                });
-                return updated;
-              });
-            })
-            .catch(() => {
-              setPromoDetails((prev) => {
-                const updated = new Map(prev);
-                updated.set(code, {
-                  code,
-                  promo: null,
-                  campaign: null,
-                  loading: false,
-                  error: true,
-                });
-                return updated;
-              });
-            });
         }
       }
 
-      setPromoDetails(newDetails);
-    };
+      return hasChanged ? next : prev;
+    });
 
-    loadPromoDetails();
-  }, [promoCodes, promoDetails]);
+    for (const code of codesToFetch) {
+      fetchPromo(code)
+        .then(async (response: PromoResponse) => {
+          const promo = response.promo;
+          let campaign: PromoCampaign | null = null;
+
+          // Fetch campaign details
+          try {
+            campaign = await fetchPromoCampaign(promo.campaignCode);
+          } catch (err) {
+            console.error('Failed to fetch campaign:', err);
+          }
+
+          setPromoDetails((prev) => {
+            if (!prev.has(code)) {
+              return prev;
+            }
+            const updated = new Map(prev);
+            updated.set(code, {
+              code,
+              promo,
+              campaign,
+              loading: false,
+              error: false,
+            });
+            return updated;
+          });
+        })
+        .catch(() => {
+          setPromoDetails((prev) => {
+            if (!prev.has(code)) {
+              return prev;
+            }
+            const updated = new Map(prev);
+            updated.set(code, {
+              code,
+              promo: null,
+              campaign: null,
+              loading: false,
+              error: true,
+            });
+            return updated;
+          });
+        });
+    }
+  }, [promoCodes]);
 
   const handleAddPromo = async () => {
     const trimmedCode = newPromoCode.trim();
