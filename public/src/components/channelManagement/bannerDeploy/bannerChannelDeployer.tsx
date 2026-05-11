@@ -11,7 +11,6 @@ import {
   FrontendSettingsType,
 } from '../../../utils/requests';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
     '& > * + *': {

@@ -4,7 +4,6 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Switchboard from './components/switchboard';
 import BannerDeployDashboard from './components/channelManagement/bannerDeploy/bannerDeployDashboard';
-import AmountsForm from './components/amounts/AmountsForm';
 import {
   ArticleEpicTestsForm,
   LiveblogEpicTestsForm,
@@ -51,7 +50,7 @@ import ExclusionsBoard from './components/channelExclusions/ExclusionsBoard';
 
 declare module '@mui/styles' {
   // https://mui.com/material-ui/migration/v5-style-changes/#%E2%9C%85-add-module-augmentation-for-defaulttheme-typescript
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface, @typescript-eslint/no-empty-object-type
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   interface DefaultTheme extends Theme {}
 }
 
@@ -62,7 +61,6 @@ interface PagePermission {
 
 type Stage = 'DEV' | 'CODE' | 'PROD';
 declare global {
-  /* eslint-disable @typescript-eslint/no-explicit-any */
   interface Window {
     guardian: {
       stage: Stage;
@@ -70,7 +68,6 @@ declare global {
       permissions: PagePermission[];
     };
   }
-  /* eslint-enable @typescript-eslint/no-explicit-any */
 }
 
 const useStyles = makeStyles(({ palette, mixins, typography, transitions }: Theme) => ({
@@ -154,7 +151,6 @@ const AppRouter = () => {
         <Routes>
           <Route path="/" element={createComponent(<IndexPage />, 'Home Page')} />
           <Route path="/switches" element={createComponent(<Switchboard />, 'Switches')} />
-          <Route path="/amounts" element={createComponent(<AmountsForm />, 'Amounts')} />
           <Route
             path="/header-tests/:testName?"
             element={createComponent(<HeaderTestsForm />, 'Header Tests')}

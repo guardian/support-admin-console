@@ -5,9 +5,9 @@ version := "1.0-SNAPSHOT"
 scalaVersion := "2.13.18"
 
 val circeVersion = "0.14.15"
-val awsVersion = "2.42.27"
+val awsVersion = "2.42.41"
 val zioVersion = "2.1.24"
-val jacksonVersion = "2.21.2"
+val jacksonVersion = "2.21.3"
 
 lazy val scalafmtSettings = Seq(
   scalafmtFilter.withRank(KeyRanks.Invisible) := "diff-dirty",
@@ -58,7 +58,7 @@ dependencyOverrides ++= List(
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion,
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
   // Related to Play 3.0.2-6 currently brings in a vulnerable version of commons-io
-  "commons-io" % "commons-io" % "2.21.0" % Test,
+  "commons-io" % "commons-io" % "2.22.0" % Test,
   "commons-beanutils" % "commons-beanutils" % "1.11.0"
 )
 

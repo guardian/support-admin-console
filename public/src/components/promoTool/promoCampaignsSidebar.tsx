@@ -50,7 +50,6 @@ function PromoCampaignsSidebar({
   promoCampaigns,
   selectedPromoCampaign,
   onPromoCampaignSelected,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   createPromoCampaign,
   selectedProduct,
   setSelectedProduct,
