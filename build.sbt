@@ -7,7 +7,7 @@ scalaVersion := "2.13.18"
 val circeVersion = "0.14.15"
 val awsVersion = "2.42.41"
 val zioVersion = "2.1.24"
-val jacksonVersion = "2.21.2"
+val jacksonVersion = "2.21.3"
 
 lazy val scalafmtSettings = Seq(
   scalafmtFilter.withRank(KeyRanks.Invisible) := "diff-dirty",
