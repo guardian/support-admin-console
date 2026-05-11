@@ -109,14 +109,6 @@
       "count": 1
     }
   },
-  "public/src/components/channelManagement/bylineWithImageEditor.tsx": {
-    "@typescript-eslint/no-misused-promises": {
-      "count": 4
-    },
-    "react-hooks/exhaustive-deps": {
-      "count": 1
-    }
-  },
   "public/src/components/channelManagement/campaigns/CampaignsForm.tsx": {
     "react-hooks/set-state-in-effect": {
       "count": 1
