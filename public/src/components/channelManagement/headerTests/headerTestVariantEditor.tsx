@@ -11,7 +11,6 @@ import { HeaderContent, HeaderVariant } from '../../../models/header';
 import useValidation from '../hooks/useValidation';
 import PromoCodesEditor from '../../shared/PromoCodesEditor';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {
     width: '100%',

@@ -116,7 +116,6 @@ const StickyTopBar: React.FC<Props> = ({
             onClick={open}
             disabled={design.status !== 'Draft'}
           >
-            {/* eslint-disable-next-line react/prop-types */}
             <Typography className={classes.buttonText}>Archive banner design</Typography>
           </Button>
           <Dialog

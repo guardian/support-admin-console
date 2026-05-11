@@ -6,7 +6,6 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import { makeStyles } from '@mui/styles';
 import RRControlPanelLogo from './rrControlPanelLogo';
-import { getStage } from '../utils/stage';
 import ListItemButton from '@mui/material/ListItemButton';
 
 const useStyles = makeStyles({
@@ -194,25 +193,18 @@ export default function NavDrawer(): React.ReactElement {
             <ListItemText primary="Landing Page" />
           </ListItemButton>
         </Link>
-        {getStage() != 'PROD' && (
-          <Link
-            key="Student Landing Page Offers"
-            to="/student-landing-page-tests"
-            className={classes.link}
-          >
-            <ListItemButton className={classes.listItem} key="Student Landing Page Offers">
-              <ListItemText primary="Student Landing Page Offers" />
-            </ListItemButton>
-          </Link>
-        )}
+        <Link
+          key="Student Landing Page Offers"
+          to="/student-landing-page-tests"
+          className={classes.link}
+        >
+          <ListItemButton className={classes.listItem} key="Student Landing Page Offers">
+            <ListItemText primary="Student Landing Page Offers" />
+          </ListItemButton>
+        </Link>
         <Link key="Checkout Nudge" to="/checkout-nudge-tests" className={classes.link}>
           <ListItemButton className={classes.listItem} key="Checkout Nudge">
             <ListItemText primary="Checkout Nudge" />
-          </ListItemButton>
-        </Link>
-        <Link key="Single Amounts" to="/amounts" className={classes.link}>
-          <ListItemButton className={classes.listItem} key="Single Amounts">
-            <ListItemText primary="Single Amounts" />
           </ListItemButton>
         </Link>
         <Link key="Promo Tool" to="/promo-tool" className={classes.link}>

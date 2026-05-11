@@ -43,7 +43,6 @@ import EpicTestNewsletter from './newsletterSignUp';
 import { ChoiceCardsSettings } from '../../../models/choiceCards';
 import PromoCodesEditor from '../../shared/PromoCodesEditor';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const getUseStyles = (shouldAddPadding: boolean) => {
   const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
     container: {

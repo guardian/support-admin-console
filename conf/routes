@@ -4,7 +4,6 @@ GET /healthcheck                                    controllers.Application.heal
 # ----- Pages ----- #
 GET /                                               controllers.Application.index
 GET /switches                                       controllers.Application.index
-GET /amounts                                        controllers.Application.index
 GET /promo-tool                                     controllers.Application.index
 GET /promo-tool/campaign/:campaignCode              controllers.Application.indexWithCampaignCode(campaignCode: String)
 GET /promo-tool/promo/:promoCode                    controllers.Application.indexWithPromoCode(promoCode: String)
@@ -75,10 +74,6 @@ GET  /logout                                        controllers.Login.logout
 # ----- support-frontend switches ----- #
 GET   /support-frontend/switches                    controllers.SwitchesController.get
 POST  /support-frontend/switches/update             controllers.SwitchesController.set
-
-# ----- support-frontend amounts ----- #
-GET   /support-frontend/amounts                     controllers.AmountsController.get
-POST  /support-frontend/amounts/update              controllers.AmountsController.set
 
 # ----- Epic tests ----- #
 GET   /frontend/epic-tests                          controllers.epic.EpicTestsController.get

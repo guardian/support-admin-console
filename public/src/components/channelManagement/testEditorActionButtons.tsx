@@ -74,7 +74,6 @@ const TestEditorActionButtons: React.FC<TestEditorActionButtonsProps> = ({
           onClick={open}
           disabled={isDisabled}
         >
-          {/* eslint-disable-next-line react/prop-types */}
           <Typography className={classes.buttonText}>Delete test</Typography>
         </Button>
         <Dialog
@@ -114,7 +113,6 @@ const TestEditorActionButtons: React.FC<TestEditorActionButtonsProps> = ({
           onClick={open}
           disabled={isDisabled}
         >
-          {/* eslint-disable-next-line react/prop-types */}
           <Typography className={classes.buttonText}>Archive test</Typography>
         </Button>
         <Dialog
@@ -154,7 +152,6 @@ const TestEditorActionButtons: React.FC<TestEditorActionButtonsProps> = ({
           size="medium"
           disabled={isDisabled}
         >
-          {/* eslint-disable-next-line react/prop-types */}
           <Typography className={classes.buttonText}>Copy test</Typography>
         </Button>
         <CreateTestDialog
