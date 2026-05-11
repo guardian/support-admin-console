@@ -42,7 +42,6 @@ export const TestArchiveButton: React.FC<TestArchiveButtonProps> = ({
         size="medium"
         onClick={open}
       >
-        {/* eslint-disable-next-line react/prop-types */}
         <Typography className={classes.buttonText}>Archive test</Typography>
       </Button>
       <Dialog

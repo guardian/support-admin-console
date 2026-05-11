@@ -136,11 +136,7 @@ export const StudentLandingPageTestEditor: React.FC<
           </Typography>
           {!userHasTestLocked && (
             <>
-              <StudentLandingPageLinkBuilder
-                countryGroupId={test.countryGroupId}
-                institution={test.variants[0].institution}
-                promoCode={test.variants[0].promoCodes[0]}
-              />
+              <StudentLandingPageLinkBuilder test={test} />
               <p>
                 Please check the preview link is working as expected before adding to any
                 promotional material.

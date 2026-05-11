@@ -25,6 +25,7 @@ export const getDefaultTest = (): StudentLandingPageTest => {
 
 export const getDefaultInstitution = () => {
   return {
+    identifier: '',
     acronym: '',
     name: '',
     logoUrl: '',
@@ -46,7 +47,7 @@ export const getDefaultVariant = (): StudentLandingPageVariant => {
     name: 'offer',
     heading: 'Subscribe to fearless, independent and inspiring journalism',
     subheading:
-      'For a limited time, students with a valid ??? email address can unlock the premium experience of Guardian journalism, including unmetered app access, free for two years.',
+      'For a limited time, students with a valid ??? email address can unlock the premium experience of Guardian journalism, including unmetered app access',
     institution: getDefaultInstitution(),
     promoCodes: [],
     image: DEFAULT_IMAGE,

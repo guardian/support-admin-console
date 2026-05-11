@@ -3,7 +3,6 @@ import { FormControlLabel, FormGroup, Radio, RadioGroup } from '@mui/material';
 
 // For mapping each value in T to a user-friendly label
 type LabeledValues<T extends string> = {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   [value in T]: string;
 };
 

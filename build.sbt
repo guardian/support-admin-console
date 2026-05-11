@@ -5,9 +5,9 @@ version := "1.0-SNAPSHOT"
 scalaVersion := "2.13.18"
 
 val circeVersion = "0.14.15"
-val awsVersion = "2.42.27"
+val awsVersion = "2.42.41"
 val zioVersion = "2.1.25"
-val jacksonVersion = "2.21.2"
+val jacksonVersion = "2.21.3"
 
 lazy val scalafmtSettings = Seq(
   scalafmtFilter.withRank(KeyRanks.Invisible) := "diff-dirty",
@@ -29,7 +29,7 @@ asciiGraphWidth := 999999999 // to ensure Snyk can read the the deeeeep dependen
 libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.6",
   "com.gu.play-googleauth" %% "play-v30" % "32.0.2",
-  "com.google.cloud" % "google-cloud-bigquery" % "2.62.0",
+  "com.google.cloud" % "google-cloud-bigquery" % "2.65.0",
   "com.gu" %% "simple-configuration-ssm" % "9.2.2",
   "software.amazon.awssdk" % "s3" % awsVersion,
   "software.amazon.awssdk" % "dynamodb" % awsVersion,
@@ -58,7 +58,7 @@ dependencyOverrides ++= List(
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion,
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
   // Related to Play 3.0.2-6 currently brings in a vulnerable version of commons-io
-  "commons-io" % "commons-io" % "2.21.0" % Test,
+  "commons-io" % "commons-io" % "2.22.0" % Test,
   "commons-beanutils" % "commons-beanutils" % "1.11.0"
 )
 
