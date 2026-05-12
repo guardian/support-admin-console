@@ -15,9 +15,10 @@ export const getEmptyParagraphsError = (pars: string[]): string | undefined => {
     .map((p) =>
       p
         // CodeQL[js/incomplete-sanitization] - This is validation logic to detect empty
-        // content, not output sanitization. The regex strips HTML tags to check if there's
-        // actual text content. The result is used only for validation, not rendered to users.
-        .replace(/<[^>]+>/g, '')
+        // content, not output sanitization. Remove opening angle bracket and tag content
+        // separately to avoid incomplete multi-character sanitization patterns.
+        .replace(/<[^>]*/g, '')
+        .replace(/>/g, '')
         .replace(/&nbsp;/g, ' ')
         .trim(),
     )
