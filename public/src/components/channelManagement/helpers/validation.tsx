@@ -14,7 +14,7 @@ export const getEmptyParagraphsError = (pars: string[]): string | undefined => {
   const text = pars
     .map((p) =>
       p
-        .replace(/<[^>]*>/g, '')
+        .replace(/[<>]/g, '')
         .replace(/&nbsp;/g, ' ')
         .trim(),
     )
