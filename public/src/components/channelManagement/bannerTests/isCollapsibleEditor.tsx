@@ -1,7 +1,7 @@
-import React from 'react';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import { Checkbox, Theme } from '@mui/material';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import { makeStyles } from '@mui/styles';
+import React from 'react';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -25,7 +25,7 @@ const IsCollapsibleEditor: React.FC<IsCollapsibleEditorProps> = ({
   const classes = useStyles();
 
   const onChange = (): void => {
-    updateIsCollapsibleSettings(!Boolean(isCollapsible));
+    updateIsCollapsibleSettings(!isCollapsible);
   };
 
   return (

@@ -1,15 +1,14 @@
-import React from 'react';
-
 import { Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
-import { ExclusionSettings } from '../../models/exclusions';
+import React from 'react';
 import withS3Data, { DataFromServer, InnerProps } from '../../hocs/withS3Data';
+import { ExclusionSettings } from '../../models/exclusions';
+import { hasPermission } from '../../utils/permissions';
 import {
   fetchFrontendSettings,
   FrontendSettingsType,
   saveFrontendSettings,
 } from '../../utils/requests';
-import { hasPermission } from '../../utils/permissions';
 import ExclusionsSection from './ExclusionsSection';
 import { ChannelKey } from './util';
 
@@ -43,7 +42,7 @@ const CHANNEL_LABELS: Record<ChannelKey, string> = {
   header: 'Header',
 };
 
-const canEdit = hasPermission(FrontendSettingsType.exclusionsSettings, 'Write');
+const canEdit = hasPermission(FrontendSettingsType.ExclusionsSettings, 'Write');
 
 const ExclusionsBoard: React.FC<InnerProps<ExclusionSettings>> = ({
   data,
@@ -70,7 +69,7 @@ const ExclusionsBoard: React.FC<InnerProps<ExclusionSettings>> = ({
               <ExclusionsSection
                 channel={channel}
                 label={CHANNEL_LABELS[channel]}
-                data={data ?? {}}
+                data={data}
                 canEdit={canEdit}
                 saving={saving}
                 onUpdateSettings={handleUpdateSettings}
@@ -86,12 +85,12 @@ const ExclusionsBoard: React.FC<InnerProps<ExclusionSettings>> = ({
 
 const fetchSettings = (): Promise<DataFromServer<ExclusionSettings>> => {
   return fetchFrontendSettings<DataFromServer<ExclusionSettings>>(
-    FrontendSettingsType.exclusionsSettings,
+    FrontendSettingsType.ExclusionsSettings,
   );
 };
 
 const saveSettings = (data: DataFromServer<ExclusionSettings>): Promise<Response> => {
-  return saveFrontendSettings(FrontendSettingsType.exclusionsSettings, data);
+  return saveFrontendSettings(FrontendSettingsType.ExclusionsSettings, data);
 };
 
 export default withS3Data<ExclusionSettings>(ExclusionsBoard, fetchSettings, saveSettings);

@@ -1,11 +1,10 @@
-import React, { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-
-import { FormControl, Radio, RadioGroup, FormControlLabel, TextField, Theme } from '@mui/material';
+import { FormControl, FormControlLabel, Radio, RadioGroup, TextField, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { notNumberValidator, EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
-import { DEFAULT_MAX_EPIC_VIEWS } from './utils/defaults';
+import React, { useEffect, useMemo } from 'react';
+import { useForm } from 'react-hook-form';
 import { MaxEpicViews } from '../../../models/epic';
+import { EMPTY_ERROR_HELPER_TEXT, notNumberValidator } from '../helpers/validation';
+import { DEFAULT_MAX_EPIC_VIEWS } from './utils/defaults';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -43,11 +42,14 @@ const MaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
 }: TestEditorArticleCountEditorProps) => {
   const classes = useStyles();
 
-  const defaultValues: FormData = {
-    maxViewsCount: maxEpicViews?.maxViewsCount.toString() || '',
-    maxViewsDays: maxEpicViews?.maxViewsDays.toString() || '',
-    minDaysBetweenViews: maxEpicViews?.minDaysBetweenViews.toString() || '',
-  };
+  const defaultValues: FormData = useMemo(
+    () => ({
+      maxViewsCount: maxEpicViews?.maxViewsCount.toString() ?? '',
+      maxViewsDays: maxEpicViews?.maxViewsDays.toString() ?? '',
+      minDaysBetweenViews: maxEpicViews?.minDaysBetweenViews.toString() ?? '',
+    }),
+    [maxEpicViews?.maxViewsCount, maxEpicViews?.maxViewsDays, maxEpicViews?.minDaysBetweenViews],
+  );
 
   const {
     register,
@@ -62,7 +64,7 @@ const MaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
 
   useEffect(() => {
     reset(defaultValues);
-  }, [defaultValues.maxViewsCount, defaultValues.maxViewsDays, defaultValues.minDaysBetweenViews]);
+  }, [defaultValues, reset]);
 
   const onSubmit = ({ maxViewsCount, maxViewsDays, minDaysBetweenViews }: FormData): void => {
     onMaxViewsChanged({
@@ -73,9 +75,19 @@ const MaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
   };
 
   useEffect(() => {
-    const isValid = Object.keys(errors).length === 0;
+    const isValid =
+      !maxEpicViews ||
+      (errors.maxViewsCount === undefined &&
+        errors.maxViewsDays === undefined &&
+        errors.minDaysBetweenViews === undefined);
     onValidationChange(isValid);
-  }, [errors.maxViewsCount, errors.maxViewsDays, errors.minDaysBetweenViews]);
+  }, [
+    maxEpicViews,
+    errors.maxViewsCount,
+    errors.maxViewsDays,
+    errors.minDaysBetweenViews,
+    onValidationChange,
+  ]);
 
   const onRadioGroupChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     if (event.target.value === 'enabled') {
@@ -116,7 +128,10 @@ const MaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
                 required: EMPTY_ERROR_HELPER_TEXT,
                 validate: notNumberValidator,
               })}
-              onBlur={handleSubmit(onSubmit)}
+              onBlur={(e) => {
+                e.preventDefault();
+                void handleSubmit(onSubmit)(e);
+              }}
               label="Maximum view counts"
               InputLabelProps={{ shrink: true }}
               variant="filled"
@@ -132,7 +147,10 @@ const MaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
                 required: EMPTY_ERROR_HELPER_TEXT,
                 validate: notNumberValidator,
               })}
-              onBlur={handleSubmit(onSubmit)}
+              onBlur={(e) => {
+                e.preventDefault();
+                void handleSubmit(onSubmit)(e);
+              }}
               label="Number of days"
               InputLabelProps={{ shrink: true }}
               variant="filled"
@@ -148,7 +166,10 @@ const MaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
                 required: EMPTY_ERROR_HELPER_TEXT,
                 validate: notNumberValidator,
               })}
-              onBlur={handleSubmit(onSubmit)}
+              onBlur={(e) => {
+                e.preventDefault();
+                void handleSubmit(onSubmit)(e);
+              }}
               label="Minimum days between views"
               InputLabelProps={{ shrink: true }}
               variant="filled"

@@ -1,21 +1,21 @@
-import React from 'react';
+import { InfoOutlined } from '@mui/icons-material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
+import { Theme } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
+import React from 'react';
 import {
   BannerDesign,
   BannerDesignHeaderImage,
   BannerDesignVisual,
   FontSize,
 } from '../../../models/bannerDesign';
-import { Theme } from '@mui/material/styles';
-import { makeStyles } from '@mui/styles';
+import { stringToHexColour } from '../../../utils/bannerDesigns';
 import { BannerDesignUsage } from './BannerDesignUsage';
-import { HeaderImageEditor } from './HeaderImageEditor';
 import { BannerVisualEditor } from './BannerVisualEditor';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { InfoOutlined } from '@mui/icons-material';
+import { HeaderImageEditor } from './HeaderImageEditor';
 import { HeadlineSizeEditor } from './HeadlineSizeEditor';
 import PaletteSelector, { SelectedPalette } from './PaletteSelector';
-import { stringToHexColour } from '../../../utils/bannerDesigns';
 
 type Props = {
   design: BannerDesign;
@@ -149,30 +149,28 @@ const BannerDesignForm: React.FC<Props> = ({
         },
         closeButton: {
           default: {
-            text: stringToHexColour(selectedPalette.colours.closeButton?.text || '#000000'),
+            text: stringToHexColour(selectedPalette.colours.closeButton.text || '#000000'),
             background: stringToHexColour(
-              selectedPalette.colours.closeButton?.background || selectedPalette.colours.background,
+              selectedPalette.colours.closeButton.background || selectedPalette.colours.background,
             ),
-            border: selectedPalette.colours.closeButton?.border
+            border: selectedPalette.colours.closeButton.border
               ? stringToHexColour(selectedPalette.colours.closeButton.border)
               : stringToHexColour('#000000'),
           },
         },
-        ticker: selectedPalette.colours.ticker
-          ? {
-              filledProgress: stringToHexColour(selectedPalette.colours.ticker.filledProgress),
-              progressBarBackground: stringToHexColour(
-                selectedPalette.colours.ticker.progressBarBackground,
-              ),
-              headlineColour: stringToHexColour(selectedPalette.colours.ticker.headlineColour),
-              totalColour: stringToHexColour(selectedPalette.colours.ticker.totalColour),
-              goalColour: stringToHexColour(selectedPalette.colours.ticker.goalColour),
-            }
-          : design.colours.ticker,
+        ticker: {
+          filledProgress: stringToHexColour(selectedPalette.colours.ticker.filledProgress),
+          progressBarBackground: stringToHexColour(
+            selectedPalette.colours.ticker.progressBarBackground,
+          ),
+          headlineColour: stringToHexColour(selectedPalette.colours.ticker.headlineColour),
+          totalColour: stringToHexColour(selectedPalette.colours.ticker.totalColour),
+          goalColour: stringToHexColour(selectedPalette.colours.ticker.goalColour),
+        },
       },
     };
 
-    if (updated.visual?.kind === 'ChoiceCards' && selectedPalette.colours.choiceCards) {
+    if (updated.visual?.kind === 'ChoiceCards') {
       updated.visual = {
         ...updated.visual,
         buttonColour: stringToHexColour(selectedPalette.colours.choiceCards.buttonColour),
@@ -234,9 +232,10 @@ const BannerDesignForm: React.FC<Props> = ({
               onChange={onVisualChange}
             />
             <PaletteSelector
+              key={`${design.style}-${design.colourTheme}-${design.visual?.kind}`}
               onChange={applySelectedPalette}
-              initialStyleId={design?.style}
-              initialThemeId={design?.colourTheme}
+              initialStyleId={design.style}
+              initialThemeId={design.colourTheme}
               visualKind={design.visual?.kind ?? 'Image'}
               isDisabled={isDisabled}
             />

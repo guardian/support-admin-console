@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { makeStyles } from '@mui/styles';
 import { TextField } from '@mui/material';
-import PromoCampaignsList from './promoCampaignsList';
+import { makeStyles } from '@mui/styles';
+import React, { useState } from 'react';
 import NewPromoCampaignButton from './newPromoCampaignButton';
-import { PromoCampaign, PromoCampaigns, PromoProduct } from './utils/promoModels';
 import { ProductSelector } from './productSelector';
+import PromoCampaignsList from './promoCampaignsList';
+import { PromoCampaign, PromoCampaigns, PromoProduct } from './utils/promoModels';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -59,9 +59,7 @@ function PromoCampaignsSidebar({
   const [promoCampaignSearch, setPromoCampaignSearch] = useState('');
 
   const searchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e && e.target) {
-      setPromoCampaignSearch(e.target.value);
-    }
+    setPromoCampaignSearch(e.target.value);
   };
 
   return (

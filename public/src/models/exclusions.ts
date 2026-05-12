@@ -8,7 +8,7 @@ export interface ExclusionRule {
   sectionIds?: string[];
   tagIds?: string[];
   dateRange?: DateRange;
-  contentTypes?: ('Fronts' | 'Articles')[];
+  contentTypes?: Array<'Fronts' | 'Articles'>;
 }
 
 export interface ChannelExclusions {

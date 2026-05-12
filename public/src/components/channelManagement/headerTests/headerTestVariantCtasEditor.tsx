@@ -1,10 +1,9 @@
-import React from 'react';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import React from 'react';
 import VariantCtaEditor from '../../tests/variants/variantCtaEditor';
-
 import { Cta } from '../helpers/shared';
-
+import useValidation from '../hooks/useValidation';
 import { DEFAULT_PRIMARY_CTA, DEFAULT_SECONDARY_CTA } from './utils/defaults';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
@@ -35,6 +34,7 @@ const HeaderTestVariantCtasEditor: React.FC<HeaderTestVariantCtasEditorProps> = 
   supportSecondaryCta,
 }: HeaderTestVariantCtasEditorProps) => {
   const classes = useStyles();
+  const setValidationStatusForField = useValidation(onValidationChange);
 
   return (
     <div className={classes.container}>
@@ -44,7 +44,7 @@ const HeaderTestVariantCtasEditor: React.FC<HeaderTestVariantCtasEditorProps> = 
         cta={primaryCta}
         updateCta={updatePrimaryCta}
         defaultCta={DEFAULT_PRIMARY_CTA}
-        onValidationChange={onValidationChange}
+        onValidationChange={(isValid) => setValidationStatusForField('primaryCta', isValid)}
       />
 
       {supportSecondaryCta && (
@@ -54,7 +54,7 @@ const HeaderTestVariantCtasEditor: React.FC<HeaderTestVariantCtasEditorProps> = 
           cta={secondaryCta}
           updateCta={updateSecondaryCta}
           defaultCta={DEFAULT_SECONDARY_CTA}
-          onValidationChange={onValidationChange}
+          onValidationChange={(isValid) => setValidationStatusForField('secondaryCta', isValid)}
         />
       )}
     </div>

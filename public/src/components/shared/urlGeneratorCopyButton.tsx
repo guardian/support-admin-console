@@ -1,6 +1,6 @@
-import React from 'react';
-import { Button } from '@mui/material';
 import CopyIcon from '@mui/icons-material/CopyAll';
+import { Button } from '@mui/material';
+import React from 'react';
 
 interface URLGeneratorCopyButtonProps {
   url: string;
@@ -26,7 +26,9 @@ const URLGeneratorCopyButton: React.FC<URLGeneratorCopyButtonProps> = ({
     <Button
       startIcon={<CopyIcon />}
       size="medium"
-      onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleCopy(e)}
+      onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+        void handleCopy(e);
+      }}
     >
       {getButtonCopy()}
     </Button>

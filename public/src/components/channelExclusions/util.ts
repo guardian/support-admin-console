@@ -46,7 +46,7 @@ export const validateRule = (
   channelLabel: string,
   ruleIndex: number,
 ): string | null => {
-  if (!rule.name?.trim()) {
+  if (!rule.name.trim()) {
     return `${channelLabel}: Rule ${ruleIndex + 1} name is required.`;
   }
 

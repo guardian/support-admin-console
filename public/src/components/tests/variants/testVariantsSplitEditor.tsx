@@ -1,13 +1,13 @@
-import React, { ReactElement, useEffect } from 'react';
-import { FormControl, Radio, RadioGroup, FormControlLabel, TextField, Theme } from '@mui/material';
+import { FormControl, FormControlLabel, Radio, RadioGroup, TextField, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Variant } from '../../channelManagement/helpers/shared';
-import { EMPTY_ERROR_HELPER_TEXT } from '../../channelManagement/helpers/validation';
+import React, { ReactElement, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   ControlProportionSettings,
   hasControl,
 } from '../../channelManagement/helpers/controlProportionSettings';
+import { Variant } from '../../channelManagement/helpers/shared';
+import { EMPTY_ERROR_HELPER_TEXT } from '../../channelManagement/helpers/validation';
 
 const MAX_MVT = 1_000_000;
 
@@ -52,10 +52,6 @@ const TestVariantsSplitEditor: React.FC<TestVariantsSplitEditorProps> = ({
 }: TestVariantsSplitEditorProps) => {
   const classes = useStyles();
 
-  const defaultValues = {
-    percentage: controlProportionSettings ? controlProportionSettings.proportion * 100 : undefined,
-  };
-
   const {
     register,
     handleSubmit,
@@ -65,23 +61,31 @@ const TestVariantsSplitEditor: React.FC<TestVariantsSplitEditorProps> = ({
     formState: { errors },
   } = useForm<FormState>({
     mode: 'onChange',
-    defaultValues,
+    defaultValues: {
+      percentage: controlProportionSettings
+        ? controlProportionSettings.proportion * 100
+        : undefined,
+    },
   });
 
   // clears error if necessary
   useEffect(() => {
-    trigger();
-  }, []);
+    void trigger();
+  }, [trigger]);
 
   // display initial value when switching to manual
   useEffect(() => {
-    reset(defaultValues);
-  }, [defaultValues.percentage]);
+    reset({
+      percentage: controlProportionSettings
+        ? controlProportionSettings.proportion * 100
+        : undefined,
+    });
+  }, [controlProportionSettings, reset]);
 
   useEffect(() => {
-    const isValid = Object.keys(errors).length === 0 || !controlProportionSettings;
+    const isValid = errors.percentage === undefined || !controlProportionSettings;
     onValidationChange(isValid);
-  }, [errors.percentage]);
+  }, [controlProportionSettings, errors.percentage, onValidationChange]);
 
   const onRadioGroupChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     if (event.target.value === 'manual') {
@@ -173,13 +177,13 @@ const TestVariantsSplitEditor: React.FC<TestVariantsSplitEditorProps> = ({
             <div>
               <TextField
                 error={errors.percentage !== undefined}
-                helperText={errors.percentage?.message || 'Must be a number'}
+                helperText={errors.percentage?.message ?? 'Must be a number'}
                 {...register('percentage', {
                   required: EMPTY_ERROR_HELPER_TEXT,
                   valueAsNumber: true,
                   validate,
                 })}
-                onBlur={handleSubmit(onSubmit(controlProportionSettings))}
+                onBlur={() => void handleSubmit(onSubmit(controlProportionSettings))()}
                 label="CONTROL"
                 InputLabelProps={{ shrink: true }}
                 variant="outlined"

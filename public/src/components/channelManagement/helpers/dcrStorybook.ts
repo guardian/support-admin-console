@@ -8,11 +8,11 @@ import lzstring from 'lz-string';
 // this is the storybook url for the main branch of DCR
 const dcrStorybookUrl = 'https://main--63e251470cfbe61776b0ef19.chromatic.com';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Props can be any object for storybook
 const compressProps = (props: any): string =>
   lzstring.compressToEncodedURIComponent(JSON.stringify(props));
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Props can be any object for storybook
 const buildStorybookUrl = (storyName: string, props: any): string => {
   const compressedProps = compressProps(props);
   return `${dcrStorybookUrl}/iframe.html?id=${storyName}&viewMode=story&shortcuts=false&singleStory=true&args=json:${compressedProps}`;

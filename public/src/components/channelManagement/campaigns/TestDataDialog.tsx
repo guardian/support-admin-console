@@ -1,4 +1,4 @@
-import React from 'react';
+import CloseIcon from '@mui/icons-material/Close';
 import {
   Button,
   Dialog,
@@ -8,7 +8,7 @@ import {
   IconButton,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import CloseIcon from '@mui/icons-material/Close';
+import React from 'react';
 import { Test } from '../helpers/shared';
 
 const useStyles = makeStyles(() => ({
@@ -264,10 +264,14 @@ const variantFields = {
   },
 };
 
-interface CommonObjectInput {
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-  [index: string]: any;
+interface FieldRule {
+  label: string;
+  type: string;
+  exclude: string[];
+  optional: boolean;
 }
+
+type FieldDefinitions = Record<string, FieldRule>;
 
 interface TestDataDialogProps {
   isOpen: boolean;
@@ -286,18 +290,20 @@ const TestDataDialog: React.FC<TestDataDialogProps> = ({
 
   const parseData = (
     channel: string,
-    fields: CommonObjectInput,
-    data: CommonObjectInput,
+    fields: FieldDefinitions,
+    data: Record<string, unknown>,
   ): string => {
     const keys = Object.keys(fields);
 
     let res = '';
 
     keys.forEach((key) => {
-      const rule = fields[key];
-      const val = data[key];
-
-      if (rule != null && !rule.exclude.includes(channel)) {
+      if (
+        Object.prototype.hasOwnProperty.call(fields, key) &&
+        !fields[key].exclude.includes(channel)
+      ) {
+        const rule = fields[key];
+        const val = data[key];
         let formatter = rule.type;
 
         if ('object-or-other' === formatter) {
@@ -305,79 +311,91 @@ const TestDataDialog: React.FC<TestDataDialogProps> = ({
         }
 
         switch (formatter) {
-          case 'string-block':
+          case 'string-block': {
+            const strVal = val as string | null | undefined;
             res += `${rule.label}:`;
             if (rule.optional) {
-              res += `${val != null ? `\n` + val : ' (Not set)'}`;
+              res += strVal !== undefined && strVal !== null ? `\n${strVal}` : ' (Not set)';
             } else {
-              res += `${val != null ? `\n` + val : ' (Data missing)'}`;
+              res += strVal !== undefined && strVal !== null ? `\n${strVal}` : ' (Data missing)';
             }
             res += `\n\n`;
             break;
+          }
 
-          case 'string-block-array':
+          case 'string-block-array': {
+            const arrVal = val as string[] | null | undefined;
             res += `${rule.label}:`;
-            if (rule.optional && val == null) {
+            if (rule.optional && (arrVal === undefined || arrVal === null)) {
               res += ' (Not set)';
-            } else if (val == null) {
+            } else if (arrVal === undefined || arrVal === null) {
               res += ' (Data missing)';
-            } else if (!val.length) {
+            } else if (!arrVal.length) {
               res += ' (Empty)';
             } else {
-              val.forEach(function (v: string) {
+              arrVal.forEach(function (v: string) {
                 res += `\n${v}`;
               });
             }
             res += `\n\n`;
             break;
+          }
 
-          case 'string-array':
+          case 'string-array': {
+            const arrVal = val as string[] | null | undefined;
             res += `${rule.label}: `;
-            if (rule.optional && val == null) {
+            if (rule.optional && (arrVal === undefined || arrVal === null)) {
               res += '(Not set)';
-            } else if (val == null) {
+            } else if (arrVal === undefined || arrVal === null) {
               res += '(Data missing)';
-            } else if (!val.length) {
+            } else if (!arrVal.length) {
               res += '(Empty)';
             } else {
-              res += `${val.join(', ')}`;
+              res += `${arrVal.join(', ')}`;
             }
             res += `\n`;
             break;
+          }
 
-          case 'object':
+          case 'object': {
+            const objVal = val as Record<string, unknown> | null | undefined;
             res += `${rule.label}:`;
-            if (rule.optional && val == null) {
+            if (rule.optional && (objVal === undefined || objVal === null)) {
               res += ` (Not set)\n`;
-            } else if (val == null) {
+            } else if (objVal === undefined || objVal === null) {
               res += ` (Data missing)\n`;
             } else {
               res += `\n`;
-              for (const [k, v] of Object.entries(val)) {
-                res += `\t${k}: ${v}\n`;
+              for (const [k, v] of Object.entries(objVal)) {
+                res += `\t${k}: ${String(v)}\n`;
               }
             }
             break;
+          }
 
-          default:
+          default: {
+            const defaultVal = val as string | number | boolean | null | undefined;
             res += `${rule.label}: `;
             if (rule.optional) {
-              res += `${val != null ? val : '(Not set)'}`;
+              res += defaultVal !== undefined ? String(defaultVal) : '(Not set)';
             } else {
-              res += `${val != null ? val : '(Data missing)'}`;
+              res += defaultVal !== undefined ? String(defaultVal) : '(Data missing)';
             }
             res += `\n`;
+          }
         }
       }
     });
     return res;
   };
 
-  const parseTestVariantData = (channel: string, variants: CommonObjectInput[]): string => {
+  const parseTestVariantData = (
+    channel: string,
+    variants: Array<Record<string, unknown>>,
+  ): string => {
     let res = '';
 
     if (
-      channel == null ||
       !['Header', 'Epic', 'EpicLiveblog', 'EpicAppleNews', 'Banner1', 'Banner2'].includes(channel)
     ) {
       res += `WARNING: Test channel not recognised!`;
@@ -385,12 +403,12 @@ const TestDataDialog: React.FC<TestDataDialogProps> = ({
       res += `WARNING: no variants have been created for this Test!`;
     } else if (['Header'].includes(channel)) {
       variants.forEach((v) => {
-        res += `Variant: ${v.name}
+        res += `Variant: ${String(v.name)}
 ---------------------------------------------------------------------
 ${parseData(channel, variantFields.core, v)}
 Copy and CTAs
 ~~~~~~~~~~~~~~~~~~~~~~~~
-${parseData(channel, variantFields.copy, v.content)}`;
+${parseData(channel, variantFields.copy, v.content as Record<string, unknown>)}`;
 
         if (v.mobileContent == null) {
           res += `
@@ -403,13 +421,13 @@ Mobile copy and CTAs
           res += `
 Mobile copy and CTAs
 ~~~~~~~~~~~~~~~~~~~~~~~~
-${parseData(channel, variantFields.copy, v.mobileContent)}
+${parseData(channel, variantFields.copy, v.mobileContent as Record<string, unknown>)}
 `;
         }
       });
     } else if (['Epic', 'EpicLiveblog', 'EpicAppleNews'].includes(channel)) {
       variants.forEach((v) => {
-        res += `Variant: ${v.name}
+        res += `Variant: ${String(v.name)}
 ---------------------------------------------------------------------
 ${parseData(channel, variantFields.core, v)}
 Copy and CTAs
@@ -419,12 +437,12 @@ ${parseData(channel, variantFields.copy, v)}
       });
     } else if (['Banner1', 'Banner2'].includes(channel)) {
       variants.forEach((v) => {
-        res += `Variant: ${v.name}
+        res += `Variant: ${String(v.name)}
 ---------------------------------------------------------------------
 ${parseData(channel, variantFields.core, v)}
 Copy and CTAs
 ~~~~~~~~~~~~~~~~~~~~~~~~
-${parseData(channel, variantFields.copy, v.bannerContent)}
+${parseData(channel, variantFields.copy, v.bannerContent as Record<string, unknown>)}
 `;
 
         if (v.mobileBannerContent == null) {
@@ -438,7 +456,7 @@ Mobile copy and CTAs
           res += `
 Mobile copy and CTAs
 ~~~~~~~~~~~~~~~~~~~~~~~~
-${parseData(channel, variantFields.copy, v.mobileBannerContent)}
+${parseData(channel, variantFields.copy, v.mobileBannerContent as Record<string, unknown>)}
 `;
         }
       });
@@ -447,8 +465,8 @@ ${parseData(channel, variantFields.copy, v.mobileBannerContent)}
     return res;
   };
 
-  const parseTestData = (data: CommonObjectInput): string => {
-    const channel = data.channel;
+  const parseTestData = (data: Record<string, unknown>): string => {
+    const channel = String(data.channel);
 
     return `
 TEST CORE DETAILS (${datetimeStamp})
@@ -462,23 +480,23 @@ ${parseData(channel, testFields.targeting, data)}
 TEST VARIANTS
 =====================================================================
 ${parseData(channel, testFields.variants, data)}
-${parseTestVariantData(channel, data.variants)}
+${parseTestVariantData(channel, data.variants as Array<Record<string, unknown>>)}
 `;
   };
 
   // Parse the test's data
-  const parsedTest = parseTestData(test);
+  const parsedTest = parseTestData(test as unknown as Record<string, unknown>);
 
   // Copy parsed data to the clipboard
   const onCopyToClipboard = () => {
-    navigator.clipboard.writeText(parsedTest);
+    void navigator.clipboard.writeText(parsedTest);
   };
 
   return (
     <Dialog open={isOpen} onClose={close} aria-labelledby="create-test-dialog-title">
       <div className={classes.dialogHeader}>
         <DialogTitle id="create-campaign-dialog-title">
-          Viewing: {test.nickname ? test.nickname : test.name}
+          Viewing: {test.nickname ?? test.name}
         </DialogTitle>
         <IconButton onClick={close} aria-label="close">
           <CloseIcon />

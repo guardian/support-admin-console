@@ -1,12 +1,12 @@
-import React from 'react';
-import { Button, Dialog, Theme, Typography } from '@mui/material';
+import { Button, Dialog, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import React from 'react';
 import useOpenable from '../../../hooks/useOpenable';
-import VariantPreview from './variantPreview';
 import { EpicTest } from '../../../models/epic';
 import { EpicModuleName } from '../helpers/shared';
+import VariantPreview from './variantPreview';
 
-const useStyles = makeStyles(({}: Theme) => ({
+const useStyles = makeStyles(() => ({
   dialog: {
     padding: '10px',
   },

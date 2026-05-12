@@ -1,8 +1,8 @@
-import React, { useEffect, useRef } from 'react';
-import { Button, IconButton, TextField, Typography, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import { Button, IconButton, TextField, Theme, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import React, { useEffect, useRef } from 'react';
 import { ExclusionRule } from '../../models/exclusions';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
@@ -63,7 +63,7 @@ const RuleHeader: React.FC<RuleHeaderProps> = ({ state, handlers }) => {
   const hasAutoFocusedRef = useRef(false);
 
   useEffect(() => {
-    if (!editMode || rule.name?.trim()) {
+    if (!editMode || rule.name.trim()) {
       hasAutoFocusedRef.current = false;
       return;
     }
@@ -95,7 +95,7 @@ const RuleHeader: React.FC<RuleHeaderProps> = ({ state, handlers }) => {
         <TextField
           className={classes.field}
           label="Rule Name"
-          value={rule.name ?? ''}
+          value={rule.name}
           inputRef={nameInputRef}
           onClick={(e) => e.stopPropagation()}
           onChange={(e) => onUpdateRule(index, { ...rule, name: e.target.value })}
@@ -103,9 +103,9 @@ const RuleHeader: React.FC<RuleHeaderProps> = ({ state, handlers }) => {
           variant="outlined"
           size="small"
           required
-          error={touchedNameFields.has(index) && !rule.name?.trim()}
+          error={touchedNameFields.has(index) && !rule.name.trim()}
           helperText={
-            touchedNameFields.has(index) && !rule.name?.trim() ? 'Rule name is required' : ''
+            touchedNameFields.has(index) && !rule.name.trim() ? 'Rule name is required' : ''
           }
           FormHelperTextProps={{ className: classes.fieldHelperText }}
           disabled={!editMode}

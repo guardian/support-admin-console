@@ -1,46 +1,46 @@
-import React from 'react';
-import { EpicTest, EpicVariant, MaxEpicViews } from '../../../models/epic';
-import {
-  ArticlesViewedSettings,
-  UserCohort,
-  EpicEditorConfig,
-  DeviceType,
-  SignedInStatus,
-  PageContextTargeting,
-  ConsentStatus,
-  Methodology,
-  RegionTargeting,
-} from '../helpers/shared';
 import { FormControlLabel, Switch, Typography } from '@mui/material';
-import CampaignSelector from '../CampaignSelector';
+import React, { useEffect, useRef } from 'react';
+import { EpicTest, EpicVariant, MaxEpicViews } from '../../../models/epic';
+import TestVariantsSplitEditor from '../../tests/variants/testVariantsSplitEditor';
+import VariantEditorWithPreviewTab from '../../tests/variants/variantEditorWithPreviewTab';
 import VariantsEditor from '../../tests/variants/variantsEditor';
 import VariantSummary from '../../tests/variants/variantSummary';
-import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
-import TestEditorArticleCountEditor, {
-  DEFAULT_ARTICLES_VIEWED_SETTINGS,
-} from '../testEditorArticleCountEditor';
-import VariantEditorWithPreviewTab from '../../tests/variants/variantEditorWithPreviewTab';
-import VariantEditor from './variantEditor';
-import VariantPreview from './variantPreview';
-import TestEditorContextTargeting from '../testEditorContextTargeting';
-import MaxViewsEditor from './maxViewsEditor';
-import { ARTICLE_COUNT_TEMPLATE, COUNTRY_NAME_TEMPLATE } from '../helpers/validation';
-import TestVariantsSplitEditor from '../../tests/variants/testVariantsSplitEditor';
-import { getDefaultVariant } from './utils/defaults';
+import CampaignSelector from '../CampaignSelector';
 import {
   canHaveCustomVariantSplit,
   ControlProportionSettings,
 } from '../helpers/controlProportionSettings';
+import {
+  ArticlesViewedSettings,
+  ConsentStatus,
+  DeviceType,
+  EpicEditorConfig,
+  Methodology,
+  PageContextTargeting,
+  RegionTargeting,
+  SignedInStatus,
+  UserCohort,
+} from '../helpers/shared';
 import { useStyles } from '../helpers/testEditorStyles';
-import { EpicTestPreviewButton } from './testPreview';
-import { ValidatedTestEditor, ValidatedTestEditorProps } from '../validatedTestEditor';
-import { TestEditorProps } from '../testsForm';
+import { ARTICLE_COUNT_TEMPLATE, COUNTRY_NAME_TEMPLATE } from '../helpers/validation';
+import TestEditorArticleCountEditor, {
+  DEFAULT_ARTICLES_VIEWED_SETTINGS,
+} from '../testEditorArticleCountEditor';
+import TestEditorContextTargeting from '../testEditorContextTargeting';
+import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 import { TestMethodologyEditor } from '../TestMethodologyEditor';
+import { TestEditorProps } from '../testsForm';
+import { ValidatedTestEditor, ValidatedTestEditorProps } from '../validatedTestEditor';
+import MaxViewsEditor from './maxViewsEditor';
+import { EpicTestPreviewButton } from './testPreview';
+import { getDefaultVariant } from './utils/defaults';
+import VariantEditor from './variantEditor';
+import VariantPreview from './variantPreview';
 
 const copyHasTemplate = (test: EpicTest, template: string): boolean =>
   test.variants.some(
     (variant) =>
-      (variant.heading && variant.heading.includes(template)) ||
+      (variant.heading?.includes(template) ?? false) ||
       variant.paragraphs.some((para) => para.includes(template)),
   );
 
@@ -54,6 +54,13 @@ export const getEpicTestEditor = (
     setValidationStatusForField,
   }: ValidatedTestEditorProps<EpicTest>) => {
     const classes = useStyles();
+    const [userExplicitlyDisabledArticleCount, setUserExplicitlyDisabledArticleCount] =
+      React.useState(test.articlesViewedSettings === undefined);
+
+    React.useEffect(() => {
+      setUserExplicitlyDisabledArticleCount(test.articlesViewedSettings === undefined);
+      // eslint-disable-next-line react-hooks/exhaustive-deps -- Only sync when navigating to a different test, not on every re-render
+    }, [test.name]);
 
     const onMaxViewsValidationChange = (isValid: boolean): void =>
       setValidationStatusForField('maxViews', isValid);
@@ -65,7 +72,7 @@ export const getEpicTestEditor = (
       setValidationStatusForField('variantsSplitSettings', isValid);
 
     const getArticlesViewedSettings = (test: EpicTest): ArticlesViewedSettings | undefined => {
-      if (!!test.articlesViewedSettings) {
+      if (test.articlesViewedSettings) {
         return test.articlesViewedSettings;
       }
       if (epicEditorConfig.allowArticleCount && copyHasTemplate(test, ARTICLE_COUNT_TEMPLATE)) {
@@ -81,7 +88,9 @@ export const getEpicTestEditor = (
           ...updatedTest,
           // To save dotcom from having to work this out
           hasCountryName: copyHasTemplate(updatedTest, COUNTRY_NAME_TEMPLATE),
-          articlesViewedSettings: getArticlesViewedSettings(updatedTest),
+          articlesViewedSettings: userExplicitlyDisabledArticleCount
+            ? undefined
+            : getArticlesViewedSettings(updatedTest),
         };
       });
     };
@@ -104,19 +113,6 @@ export const getEpicTestEditor = (
         return { ...current, variants: updatedVariantList };
       });
     };
-
-    const onVariantChange =
-      (variantName: string) =>
-      (update: (current: EpicVariant) => EpicVariant): void => {
-        onVariantsChange((current) =>
-          current.map((variant) => {
-            if (variant.name === variantName) {
-              return update(variant);
-            }
-            return variant;
-          }),
-        );
-      };
 
     const onVariantDelete = (deletedVariantName: string): void =>
       updateTest((current) => {
@@ -148,6 +144,50 @@ export const getEpicTestEditor = (
         name: clonedVariantName,
       };
       onVariantsChange((current) => [...current, newVariant]);
+    };
+
+    // Memoize callbacks by variant name to prevent infinite render loops
+    // Using refs to store callbacks to avoid dependency issues with useCallback
+    const validationCallbacksRef = useRef<Map<string, (isValid: boolean) => void>>(new Map());
+    const variantChangeCallbacksRef = useRef<
+      Map<string, (update: (current: EpicVariant) => EpicVariant) => void>
+    >(new Map());
+    const setValidationStatusRef = useRef(setValidationStatusForField);
+    const onVariantsChangeRef = useRef(onVariantsChange);
+
+    useEffect(() => {
+      setValidationStatusRef.current = setValidationStatusForField;
+      onVariantsChangeRef.current = onVariantsChange;
+    });
+
+    const getValidationCallback = (variantName: string): ((isValid: boolean) => void) => {
+      if (!validationCallbacksRef.current.has(variantName)) {
+        validationCallbacksRef.current.set(variantName, (isValid: boolean): void =>
+          setValidationStatusRef.current(variantName, isValid),
+        );
+      }
+      return validationCallbacksRef.current.get(variantName)!;
+    };
+
+    const getVariantChangeCallback = (
+      variantName: string,
+    ): ((update: (current: EpicVariant) => EpicVariant) => void) => {
+      if (!variantChangeCallbacksRef.current.has(variantName)) {
+        variantChangeCallbacksRef.current.set(
+          variantName,
+          (update: (current: EpicVariant) => EpicVariant): void => {
+            onVariantsChangeRef.current((current) =>
+              current.map((variant) => {
+                if (variant.name === variantName) {
+                  return update(variant);
+                }
+                return variant;
+              }),
+            );
+          },
+        );
+      }
+      return variantChangeCallbacksRef.current.get(variantName)!;
     };
 
     const onSwitchChange =
@@ -198,7 +238,9 @@ export const getEpicTestEditor = (
     const onArticlesViewedSettingsChange = (
       updatedArticlesViewedSettings?: ArticlesViewedSettings,
     ): void => {
-      updateTest((current) => ({
+      setUserExplicitlyDisabledArticleCount(updatedArticlesViewedSettings === undefined);
+      // Bypass updateTest to avoid re-calculation, go directly to onTestChange
+      onTestChange((current) => ({
         ...current,
         articlesViewedSettings: updatedArticlesViewedSettings,
       }));
@@ -224,11 +266,9 @@ export const getEpicTestEditor = (
             key={variant.name}
             variant={variant}
             editMode={userHasTestLocked}
-            onVariantChange={onVariantChange(variant.name)}
+            onVariantChange={getVariantChangeCallback(variant.name)}
             onDelete={(): void => onVariantDelete(variant.name)}
-            onValidationChange={(isValid: boolean): void =>
-              setValidationStatusForField(variant.name, isValid)
-            }
+            onValidationChange={getValidationCallback(variant.name)}
           />
         }
         variantPreview={
@@ -322,11 +362,9 @@ export const getEpicTestEditor = (
                 variant={test.variants[0]}
                 epicEditorConfig={epicEditorConfig}
                 editMode={userHasTestLocked}
-                onVariantChange={onVariantChange(test.variants[0].name)}
+                onVariantChange={getVariantChangeCallback(test.variants[0].name)}
                 onDelete={(): void => onVariantDelete(test.variants[0].name)}
-                onValidationChange={(isValid: boolean): void =>
-                  setValidationStatusForField(test.variants[0].name, isValid)
-                }
+                onValidationChange={getValidationCallback(test.variants[0].name)}
               />
             </div>
           </div>
@@ -371,13 +409,7 @@ export const getEpicTestEditor = (
             </Typography>
 
             <TestEditorTargetAudienceSelector
-              regionTargeting={
-                test.regionTargeting ?? {
-                  // For backwards compatibility with the deprecated locations field
-                  targetedCountryGroups: test.locations,
-                  targetedCountryCodes: [],
-                }
-              }
+              regionTargeting={test.regionTargeting}
               onRegionTargetingUpdate={onRegionTargetingChange}
               selectedCohort={test.userCohort}
               onCohortChange={onCohortChange}

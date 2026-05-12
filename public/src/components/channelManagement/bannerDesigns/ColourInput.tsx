@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { TextField, ClassNameMap, ClickAwayListener } from '@mui/material';
+import { ClassNameMap, ClickAwayListener, TextField } from '@mui/material';
+import { Theme } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
 import debounce from 'lodash/debounce';
+import React, { useEffect, useMemo, useState } from 'react';
+import { HexColorPicker } from 'react-colorful';
+import { useForm } from 'react-hook-form';
+import { HexColour } from '../../../models/bannerDesign';
 import {
   hexColourStringRegex,
   hexColourToString,
   stringToHexColour,
 } from '../../../utils/bannerDesigns';
-import { useForm } from 'react-hook-form';
 import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
-import { Theme } from '@mui/material/styles';
-import { makeStyles } from '@mui/styles';
-import { HexColour } from '../../../models/bannerDesign';
-import { HexColorPicker } from 'react-colorful';
 
 const useStyles = makeStyles<Theme, { colour: string; isDisabled: boolean }>(
   ({ palette }: Theme) => ({
@@ -61,7 +61,7 @@ interface GenericProps<T> extends Props<T> {
   convertToString: (colour: T) => string;
   convertFromString: (colourString: string) => T;
   required: boolean;
-  styles: ClassNameMap<string>;
+  styles: ClassNameMap;
 }
 
 const GenericColourInput = <T extends unknown>({
@@ -78,7 +78,10 @@ const GenericColourInput = <T extends unknown>({
 }: GenericProps<T>) => {
   const [isPickerOpen, setIsPickerOpen] = useState<boolean>(false);
 
-  const defaultValues = { colour: convertToString(colour) };
+  const defaultValues = useMemo(
+    () => ({ colour: convertToString(colour) }),
+    [colour, convertToString],
+  );
 
   const {
     register,
@@ -94,12 +97,11 @@ const GenericColourInput = <T extends unknown>({
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
     onValidationChange(name, isValid);
-  }, [errors.colour]);
+  }, [errors, name, onValidationChange]);
 
   useEffect(() => {
-    // necessary to reset fields if user discards changes
     reset(defaultValues);
-  }, [colour]);
+  }, [defaultValues, reset]);
 
   const handleColourChange = (colour: string) => {
     const newColour = convertFromString(colour);
@@ -120,10 +122,12 @@ const GenericColourInput = <T extends unknown>({
           required: required ? EMPTY_ERROR_HELPER_TEXT : false,
           pattern: colourValidation,
         })}
-        onBlur={handleSubmit(({ colour }) => handleColourChange(colour))}
+        onBlur={() => {
+          void handleSubmit(({ colour }) => handleColourChange(colour))();
+        }}
         label={label}
-        error={errors?.colour !== undefined}
-        helperText={errors?.colour?.message}
+        error={errors.colour !== undefined}
+        helperText={errors.colour?.message}
         margin="normal"
         variant="outlined"
         fullWidth={false}

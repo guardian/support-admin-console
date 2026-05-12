@@ -1,5 +1,4 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
+import CloseIcon from '@mui/icons-material/Close';
 import {
   Button,
   Dialog,
@@ -10,7 +9,8 @@ import {
   TextField,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import CloseIcon from '@mui/icons-material/Close';
+import React from 'react';
+import { useForm } from 'react-hook-form';
 import {
   createDuplicateValidator,
   EMPTY_ERROR_HELPER_TEXT,
@@ -105,7 +105,13 @@ const CreateVariantDialog: React.FC<CreateVariantDialogProps> = ({
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleSubmit(onSubmit)} color="primary">
+        <Button
+          onClick={(e) => {
+            e.preventDefault();
+            void handleSubmit(onSubmit)(e);
+          }}
+          color="primary"
+        >
           {mode === 'NEW' ? 'Create variant' : 'Clone variant'}
         </Button>
       </DialogActions>
