@@ -42,9 +42,9 @@ const VariantCtaFieldsEditor: React.FC<VariantCtaFieldsEditorProps> = ({
   } = useForm<FormData>({ mode: 'onChange', defaultValues });
 
   useEffect(() => {
-    const isValid = Object.keys(errors).length === 0;
+    const isValid = errors.text === undefined && errors.baseUrl === undefined;
     onValidationChange(isValid);
-  }, [errors.text, errors.baseUrl, errors, onValidationChange]);
+  }, [errors.text, errors.baseUrl, onValidationChange]);
 
   const onSubmit = ({ text, baseUrl }: FormData): void => {
     updateCta({ text, baseUrl });

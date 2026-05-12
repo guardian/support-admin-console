@@ -67,13 +67,13 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
   });
 
   useEffect(() => {
-    const isValid = Object.keys(errors).length === 0;
+    const isValid = errors.mainUrl === undefined && errors.altText === undefined;
     // Only call onValidationChange if validity has actually changed
     if (prevIsValidRef.current !== isValid) {
       prevIsValidRef.current = isValid;
       onValidationChangeRef.current(isValid);
     }
-  }, [errors]);
+  }, [errors.mainUrl, errors.altText]);
 
   return (
     <div>

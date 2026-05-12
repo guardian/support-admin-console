@@ -47,6 +47,9 @@ const VariantCtaEditor: React.FC<VariantCtaEditorProps> = ({
   const onCheckboxChanged = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const isChecked = event.target.checked;
     updateCta(isChecked ? defaultCta : undefined);
+    if (!isChecked) {
+      onValidationChange(true);
+    }
   };
 
   return (

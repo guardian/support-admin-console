@@ -83,9 +83,9 @@ const TestVariantsSplitEditor: React.FC<TestVariantsSplitEditorProps> = ({
   }, [controlProportionSettings, reset]);
 
   useEffect(() => {
-    const isValid = Object.keys(errors).length === 0 || !controlProportionSettings;
+    const isValid = errors.percentage === undefined || !controlProportionSettings;
     onValidationChange(isValid);
-  }, [controlProportionSettings, errors, errors.percentage, onValidationChange]);
+  }, [controlProportionSettings, errors.percentage, onValidationChange]);
 
   const onRadioGroupChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     if (event.target.value === 'manual') {

@@ -1,6 +1,6 @@
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { Test } from './helpers/shared';
 import useValidation from './hooks/useValidation';
 import StickyTopBar from './stickyTopBar/stickyTopBar';
@@ -63,12 +63,14 @@ export const ValidatedTestEditor = <T extends Test>(
      * In future we should explore refactoring these components to make better use of react-hook-form and react.
      */
     const testRef = useRef(test);
-    const [isValid, setIsValid] = useState<boolean>(true);
+    const isValidRef = useRef<boolean>(true);
 
-    const setValidationStatusForField = useValidation(setIsValid);
+    const setValidationStatusForField = useValidation((updatedIsValid) => {
+      isValidRef.current = updatedIsValid;
+    });
 
     const onSave = (): void => {
-      if (isValid) {
+      if (isValidRef.current) {
         onTestSave(test.name);
       } else {
         alert('Test contains errors. Please fix any errors before saving.');

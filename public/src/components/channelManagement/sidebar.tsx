@@ -89,7 +89,8 @@ function Sidebar<T extends Test>({
 
     return testsToFilter.filter(
       (t) =>
-        t.regionTargeting.targetedCountryGroups.includes(regionFilter) ||
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- gutter-liveblog tests don't have regionTargeting property at runtime
+        t.regionTargeting?.targetedCountryGroups.includes(regionFilter) ||
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- checkout nudge tests don't have locations property at runtime
         t.locations?.includes(regionFilter),
     );

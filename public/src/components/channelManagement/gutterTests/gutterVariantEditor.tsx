@@ -122,21 +122,18 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
    * `content` in a useEffect.
    */
   const [validatedFields, setValidatedFields] = useState<FormData>(defaultValues);
+  const setContentValidationStatusForField = useValidation(onValidationChange);
 
   // Use refs to stabilize callback dependencies and prevent infinite render loops
   const onVariantChangeRef = useRef(onVariantChange);
-  const onValidationChangeRef = useRef(onValidationChange);
+  const setContentValidationStatusForFieldRef = useRef(setContentValidationStatusForField);
   const variantRef = useRef(variant);
 
   useEffect(() => {
     onVariantChangeRef.current = onVariantChange;
-    onValidationChangeRef.current = onValidationChange;
+    setContentValidationStatusForFieldRef.current = setContentValidationStatusForField;
     variantRef.current = variant;
   });
-
-  const onContentValidationChange = useCallback((isValid: boolean): void => {
-    onValidationChangeRef.current(isValid);
-  }, []);
 
   const {
     handleSubmit,
@@ -152,6 +149,24 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
   useEffect(() => {
     void trigger();
   }, [trigger]);
+
+  const prevBodyCopyIsValidRef = useRef<boolean | null>(null);
+
+  useEffect(() => {
+    const isValid = errors.bodyCopy === undefined;
+    if (prevBodyCopyIsValidRef.current !== isValid) {
+      prevBodyCopyIsValidRef.current = isValid;
+      setContentValidationStatusForFieldRef.current('bodyCopy', isValid);
+    }
+  }, [errors.bodyCopy]);
+
+  const onImageValidationChange = useCallback((isValid: boolean): void => {
+    setContentValidationStatusForFieldRef.current('image', isValid);
+  }, []);
+
+  const onCtaValidationChange = useCallback((isValid: boolean): void => {
+    setContentValidationStatusForFieldRef.current('cta', isValid);
+  }, []);
 
   const prevValidatedFieldsRef = useRef<FormData>(validatedFields);
 
@@ -174,17 +189,6 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
       });
     }
   }, [validatedFields]);
-
-  const prevIsValidRef = useRef<boolean | null>(null);
-
-  useEffect(() => {
-    const isValid = Object.keys(errors).length === 0;
-    // Only call onValidationChange if validity has actually changed
-    if (prevIsValidRef.current !== isValid) {
-      prevIsValidRef.current = isValid;
-      onValidationChangeRef.current(isValid);
-    }
-  }, [errors]);
 
   const updateImage = (image?: Image): void => {
     if (image) {
@@ -222,7 +226,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
           image={variant.image}
           updateImage={updateImage}
           isDisabled={!editMode}
-          onValidationChange={onContentValidationChange}
+          onValidationChange={onImageValidationChange}
           label={'Image - appears above copy instead of a heading.'}
           guidance={
             'The viewbox needs dimensions of 0, 0, 150, 100 and the file format should be SVG. The background colour will be Guardian blue.'
@@ -283,7 +287,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
           primaryCta={variant.cta}
           updatePrimaryCta={updatePrimaryCta}
           isDisabled={!editMode}
-          onValidationChange={onContentValidationChange}
+          onValidationChange={onCtaValidationChange}
           copyLength={CTA_COPY_MAX_LENGTH}
         />
       </div>
