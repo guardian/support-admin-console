@@ -1,7 +1,7 @@
 // Note: we developed this component expecting that headers would have the ability to display different copy and CTAs on small screens, thus requiring this form to include fields for that content. However it seems like current functionality of the GU frontend is to only show the main copy and CTAs, whatever the screen size may be. Code to include and action mobile-specific fields can be found in earlier commits in this PR: https://github.com/guardian/support-admin-console/pull/259
 import { FormControlLabel, Radio, RadioGroup, TextField, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { HeaderContent, HeaderVariant } from '../../../models/header';
 import PromoCodesEditor from '../../shared/PromoCodesEditor';
@@ -79,13 +79,7 @@ const HeaderTestVariantContentEditor: React.FC<HeaderTestVariantContentEditorPro
   deviceType,
 }: HeaderTestVariantContentEditorProps) => {
   const classes = useStyles();
-
-  // Use refs to stabilize callback dependencies and prevent infinite render loops
-  const onValidationChangeRef = useRef(onValidationChange);
-
-  useEffect(() => {
-    onValidationChangeRef.current = onValidationChange;
-  });
+  const setValidationStatusForField = useValidation(onValidationChange);
 
   const templateValidator = templateValidatorForPlatform('DOTCOM');
 
@@ -110,9 +104,9 @@ const HeaderTestVariantContentEditor: React.FC<HeaderTestVariantContentEditorPro
   }, [trigger]);
 
   useEffect(() => {
-    const isValid = Object.keys(errors).length === 0;
-    onValidationChangeRef.current(isValid);
-  }, [errors]);
+    const isValid = errors.heading === undefined && errors.subheading === undefined;
+    setValidationStatusForField('copy', isValid);
+  }, [errors.heading, errors.subheading, setValidationStatusForField]);
 
   const onSubmit = ({ heading, subheading }: HeaderContent): void => {
     onChange({ ...content, heading, subheading });
@@ -191,7 +185,7 @@ const HeaderTestVariantContentEditor: React.FC<HeaderTestVariantContentEditorPro
           updatePrimaryCta={updatePrimaryCta}
           updateSecondaryCta={updateSecondaryCta}
           isDisabled={!editMode}
-          onValidationChange={onValidationChange}
+          onValidationChange={(isValid) => setValidationStatusForField('cta', isValid)}
           supportSecondaryCta={deviceType !== 'MOBILE'}
         />
       </div>

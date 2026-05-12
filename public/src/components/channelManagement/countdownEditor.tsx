@@ -111,9 +111,22 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
   });
 
   useEffect(() => {
-    const isValid = Object.keys(errors).length === 0;
+    const isValid =
+      !countdownSettings ||
+      (errors.overwriteHeadingLabel === undefined &&
+        errors.countdownStartTimestamp === undefined &&
+        errors.countdownDeadlineTimestamp === undefined &&
+        errors.backgroundColor === undefined &&
+        errors.foregroundColor === undefined);
     onValidationChangeRef.current(isValid);
-  }, [errors]);
+  }, [
+    countdownSettings,
+    errors.overwriteHeadingLabel,
+    errors.countdownStartTimestamp,
+    errors.countdownDeadlineTimestamp,
+    errors.backgroundColor,
+    errors.foregroundColor,
+  ]);
 
   const onCheckboxChanged = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const isChecked = event.target.checked;

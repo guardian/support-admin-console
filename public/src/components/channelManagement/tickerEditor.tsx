@@ -95,9 +95,13 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
   ]);
 
   useEffect(() => {
-    const isValid = Object.keys(errors).length === 0;
+    const isValid =
+      !tickerSettings ||
+      (errors.countLabel === undefined &&
+        errors.goalCopy === undefined &&
+        errors.currencySymbol === undefined);
     onValidationChangeRef.current(isValid);
-  }, [errors.countLabel, errors.goalCopy, errors.currencySymbol, errors]);
+  }, [tickerSettings, errors.countLabel, errors.goalCopy, errors.currencySymbol]);
 
   const onCheckboxChanged = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const isChecked = event.target.checked;

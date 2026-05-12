@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ValidationStatus } from '../helpers/validation';
 
 const allValid = (validationStatus: ValidationStatus): boolean => {
@@ -25,14 +25,14 @@ const useValidation = (onValidationChanged: (isValid: boolean) => void): FieldVa
     }
   }, [validationStatus]);
 
-  const setValidationStatusForField = (field: string, isValid: boolean): void => {
+  const setValidationStatusForField = useCallback((field: string, isValid: boolean): void => {
     setValidationStatus((current) => {
       if (current[field] === isValid) {
         return current;
       }
       return { ...current, [field]: isValid };
     });
-  };
+  }, []);
 
   return setValidationStatusForField;
 };

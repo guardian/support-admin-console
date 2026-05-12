@@ -154,12 +154,11 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
 
   // Use refs to stabilize callback dependencies and prevent infinite render loops
   const onChangeRef = useRef(onChange);
-  const onValidationChangeRef = useRef(onValidationChange);
   const contentRef = useRef(content);
+  const setValidationStatusForField = useValidation(onValidationChange);
 
   useEffect(() => {
     onChangeRef.current = onChange;
-    onValidationChangeRef.current = onValidationChange;
     contentRef.current = content;
   });
 
@@ -187,9 +186,12 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
   }, [validatedFields]);
 
   useEffect(() => {
-    const isValid = Object.keys(errors).length === 0;
-    onValidationChangeRef.current(isValid);
-  }, [errors]);
+    const isValid =
+      errors.heading === undefined &&
+      errors.paragraphs === undefined &&
+      errors.highlightedText === undefined;
+    setValidationStatusForField('copy', isValid);
+  }, [errors.heading, errors.paragraphs, errors.highlightedText, setValidationStatusForField]);
 
   const updatePrimaryCta = (updatedCta?: Cta): void => {
     onChange({ ...content, cta: updatedCta });
@@ -365,7 +367,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
             updatePrimaryCta={updatePrimaryCta}
             updateSecondaryCta={updateSecondaryCta}
             isDisabled={!editMode}
-            onValidationChange={onValidationChange}
+            onValidationChange={(isValid) => setValidationStatusForField('cta', isValid)}
             supportSecondaryCta={true}
             isPrimaryCtaUrlDisabled={isPrimaryCtaUrlDisabled}
           />
@@ -478,6 +480,12 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
 
   const designHasChoiceCards =
     designs.find((d) => d.name === variant.template.designName)?.visual?.kind === 'ChoiceCards';
+
+  useEffect(() => {
+    if (!designHasChoiceCards) {
+      setValidationStatusForField('choiceCardsSettings', true);
+    }
+  }, [designHasChoiceCards, setValidationStatusForField]);
 
   return (
     <div className={classes.container}>
@@ -594,7 +602,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
             }))
           }
           isDisabled={!editMode}
-          onValidationChange={onValidationChange}
+          onValidationChange={(isValid) => setValidationStatusForField('ticker', isValid)}
         />
       </div>
       <div className={classes.sectionContainer}>

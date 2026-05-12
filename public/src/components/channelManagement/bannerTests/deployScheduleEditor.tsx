@@ -42,9 +42,9 @@ const DeployScheduleEditor: React.FC<DeployScheduleEditorProps> = ({
   });
 
   useEffect(() => {
-    const isValid = Object.keys(errors).length === 0 || !deploySchedule;
+    const isValid = errors.daysBetween === undefined || !deploySchedule;
     onValidationChange(isValid);
-  }, [errors, deploySchedule, onValidationChange]);
+  }, [errors.daysBetween, deploySchedule, onValidationChange]);
 
   const onRadioGroupChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     if (event.target.value === 'enabled') {

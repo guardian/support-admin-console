@@ -10,6 +10,7 @@ import {
 import { CopyEditor } from '../../shared/copyEditor';
 import CountdownEditor from '../countdownEditor';
 import { CountdownSettings, TickerSettings } from '../helpers/shared';
+import useValidation from '../hooks/useValidation';
 import TickerEditor from '../tickerEditor';
 import DefaultProductSelector from './defaultProductSelector';
 import { ProductsEditor } from './productsEditor';
@@ -47,6 +48,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
   testName,
 }: VariantEditorProps) => {
   const classes = useStyles();
+  const setValidationStatusForField = useValidation(onValidationChange);
 
   // Memoize callbacks to prevent infinite render loops in child components
   const onCopyChange = useCallback(
@@ -93,7 +95,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
         <CopyEditor
           copy={variant.copy}
           onChange={onCopyChange}
-          onValidationChange={onValidationChange}
+          onValidationChange={(isValid) => setValidationStatusForField('copy', isValid)}
           editMode={editMode}
         />
       </div>
@@ -105,20 +107,20 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
       <ProductsEditor
         products={variant.products}
         onProductsChange={onProductsChange}
-        onValidationChange={onValidationChange}
+        onValidationChange={(isValid) => setValidationStatusForField('products', isValid)}
         editMode={editMode}
       />
       <TickerEditor
         tickerSettings={variant.tickerSettings}
         updateTickerSettings={updateTickerSettings}
         isDisabled={!editMode}
-        onValidationChange={onValidationChange}
+        onValidationChange={(isValid) => setValidationStatusForField('ticker', isValid)}
       />
       <CountdownEditor
         countdownSettings={variant.countdownSettings}
         updateCountdownSettings={updateCountdownSettings}
         isDisabled={!editMode}
-        onValidationChange={onValidationChange}
+        onValidationChange={(isValid) => setValidationStatusForField('countdown', isValid)}
       />
       <div>
         <URLGenerator variant={variant} testName={testName} />

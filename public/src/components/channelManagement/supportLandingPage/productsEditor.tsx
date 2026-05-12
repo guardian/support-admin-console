@@ -121,9 +121,22 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
   });
 
   useEffect(() => {
-    const isValid = Object.keys(errors).length === 0;
+    const isValid =
+      errors.title === undefined &&
+      errors.titlePill === undefined &&
+      errors.billingPeriodsCopy === undefined &&
+      errors.cta === undefined &&
+      errors.label === undefined &&
+      errors.benefits === undefined;
     onValidationChangeRef.current(isValid);
-  }, [errors]);
+  }, [
+    errors.title,
+    errors.titlePill,
+    errors.billingPeriodsCopy,
+    errors.cta,
+    errors.label,
+    errors.benefits,
+  ]);
 
   useEffect(() => {
     reset(productRef.current);
@@ -321,9 +334,12 @@ export const ProductsEditor: React.FC<ProductsEditorProps> = ({
   });
 
   useEffect(() => {
-    const isValid = Object.keys(errors).length === 0;
+    const isValid =
+      errors.Contribution === undefined &&
+      errors.SupporterPlus === undefined &&
+      errors.DigitalSubscription === undefined;
     onValidationChangeRef.current(isValid);
-  }, [errors]);
+  }, [errors.Contribution, errors.SupporterPlus, errors.DigitalSubscription]);
 
   useEffect(() => {
     reset(productsRef.current);

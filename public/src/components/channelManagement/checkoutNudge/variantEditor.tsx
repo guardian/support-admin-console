@@ -39,11 +39,9 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
 
   // Use refs to stabilize callback dependencies and prevent infinite render loops
   const onValidationChangeRef = useRef(onValidationChange);
-  const variantRef = useRef(variant);
 
   useEffect(() => {
     onValidationChangeRef.current = onValidationChange;
-    variantRef.current = variant;
   });
 
   const updateNudgeToProduct = (update: (current: Product) => Product): void => {
@@ -113,11 +111,10 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
   };
 
   React.useEffect(() => {
-    // Basic validation: if nudge exists, heading should be present
-    const nudge = variantRef.current.nudge;
+    const nudge = variant.nudge;
     const isValid = !hasNudge || (!!nudge?.nudgeCopy.heading && !!nudge.thankyouCopy.heading);
     onValidationChangeRef.current(isValid);
-  }, [hasNudge]);
+  }, [hasNudge, variant.nudge]);
 
   return (
     <div className={classes.container}>

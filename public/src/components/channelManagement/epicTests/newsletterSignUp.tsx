@@ -34,9 +34,9 @@ const EpicTestNewsletter: React.FC<EpicTestNewsletterProps> = ({
   } = useForm<FormData>({ mode: 'onChange', defaultValues });
 
   useEffect(() => {
-    const isValid = Object.keys(errors).length === 0;
+    const isValid = errors.newsletterId === undefined && errors.successDescription === undefined;
     onValidationChange(isValid);
-  }, [errors, onValidationChange]);
+  }, [errors.newsletterId, errors.successDescription, onValidationChange]);
 
   const onSubmit = ({ newsletterId, successDescription }: FormData): void => {
     updateNewsletterSignup({ newsletterId, successDescription });

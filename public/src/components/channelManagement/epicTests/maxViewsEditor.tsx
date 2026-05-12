@@ -75,9 +75,19 @@ const MaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
   };
 
   useEffect(() => {
-    const isValid = Object.keys(errors).length === 0;
+    const isValid =
+      !maxEpicViews ||
+      (errors.maxViewsCount === undefined &&
+        errors.maxViewsDays === undefined &&
+        errors.minDaysBetweenViews === undefined);
     onValidationChange(isValid);
-  }, [errors, onValidationChange]);
+  }, [
+    maxEpicViews,
+    errors.maxViewsCount,
+    errors.maxViewsDays,
+    errors.minDaysBetweenViews,
+    onValidationChange,
+  ]);
 
   const onRadioGroupChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     if (event.target.value === 'enabled') {

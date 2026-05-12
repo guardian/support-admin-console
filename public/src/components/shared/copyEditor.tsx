@@ -82,11 +82,11 @@ export const CopyEditor: React.FC<CopyEditorProps> = ({
   }, [validatedFields]);
 
   useEffect(() => {
-    const isValid = Object.keys(errors).length === 0;
+    const isValid = errors.heading === undefined && errors.subheading === undefined;
     if (onValidationChangeRef.current) {
       onValidationChangeRef.current(isValid);
     }
-  }, [errors]);
+  }, [errors.heading, errors.subheading]);
 
   return (
     <>

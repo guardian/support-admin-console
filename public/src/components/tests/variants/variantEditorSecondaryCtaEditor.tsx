@@ -46,8 +46,10 @@ const VariantEditorSecondaryCtaEditor: React.FC<VariantEditorSecondaryCtaEditorP
       updateCta({ type: SecondaryCtaType.Custom, cta: defaultCta });
     } else if (value === SecondaryCtaType.ContributionsReminder.valueOf()) {
       updateCta({ type: SecondaryCtaType.ContributionsReminder });
+      onValidationChange(true);
     } else {
       updateCta(undefined);
+      onValidationChange(true);
     }
   };
 
