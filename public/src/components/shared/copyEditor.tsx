@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import { Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import React, { useEffect, useRef, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import {
   copyLengthValidator,
   templateValidatorForPlatform,
 } from '../channelManagement/helpers/validation';
-import { Controller, useForm } from 'react-hook-form';
 import { RichTextEditorSingleLine } from '../channelManagement/richTextEditor/richTextEditor';
-import { makeStyles } from '@mui/styles';
-import { Theme } from '@mui/material';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -47,6 +47,18 @@ export const CopyEditor: React.FC<CopyEditorProps> = ({
   };
 
   const [validatedFields, setValidatedFields] = useState<FormData>(defaultValues);
+
+  // Use refs to stabilize callback dependencies and prevent infinite render loops
+  const onChangeRef = useRef(onChange);
+  const onValidationChangeRef = useRef(onValidationChange);
+  const copyRef = useRef(copy);
+
+  useEffect(() => {
+    onChangeRef.current = onChange;
+    onValidationChangeRef.current = onValidationChange;
+    copyRef.current = copy;
+  });
+
   const {
     handleSubmit,
     control,
@@ -59,20 +71,20 @@ export const CopyEditor: React.FC<CopyEditorProps> = ({
   });
 
   useEffect(() => {
-    trigger();
-  }, []);
+    void trigger();
+  }, [trigger]);
 
   useEffect(() => {
-    onChange({
-      ...copy,
+    onChangeRef.current({
+      ...copyRef.current,
       ...validatedFields,
     });
   }, [validatedFields]);
 
   useEffect(() => {
-    const isValid = Object.keys(errors).length === 0;
-    if (onValidationChange) {
-      onValidationChange(isValid);
+    const isValid = errors.heading === undefined && errors.subheading === undefined;
+    if (onValidationChangeRef.current) {
+      onValidationChangeRef.current(isValid);
     }
   }, [errors.heading, errors.subheading]);
 
@@ -90,11 +102,11 @@ export const CopyEditor: React.FC<CopyEditorProps> = ({
             return (
               <RichTextEditorSingleLine
                 error={errors.heading !== undefined}
-                helperText={errors?.heading?.message || errors?.heading?.type}
+                helperText={errors.heading?.message ?? errors.heading?.type}
                 copyData={field.value}
                 updateCopy={(pars) => {
                   field.onChange(pars);
-                  handleSubmit(setValidatedFields)();
+                  void handleSubmit(setValidatedFields)();
                 }}
                 name="heading"
                 label="Heading copy"
@@ -124,11 +136,11 @@ export const CopyEditor: React.FC<CopyEditorProps> = ({
               return (
                 <RichTextEditorSingleLine
                   error={errors.subheading !== undefined}
-                  helperText={errors?.subheading?.message || errors?.subheading?.type}
+                  helperText={errors.subheading?.message ?? errors.subheading?.type}
                   copyData={field.value}
                   updateCopy={(pars) => {
                     field.onChange(pars);
-                    handleSubmit(setValidatedFields)();
+                    void handleSubmit(setValidatedFields)();
                   }}
                   name="subheading"
                   label="Subheading copy"

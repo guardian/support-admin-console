@@ -1,10 +1,10 @@
-import React from 'react';
-import { Theme, Typography, Button } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-import { grey } from '@mui/material/colors';
 import { Link } from '@mui/icons-material';
-import StatusUpdateButton from './StatusUpdateButton';
+import { Button, Theme, Typography } from '@mui/material';
+import { grey } from '@mui/material/colors';
+import { makeStyles } from '@mui/styles';
+import React from 'react';
 import { Test } from '../helpers/shared';
+import StatusUpdateButton from './StatusUpdateButton';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {
@@ -91,7 +91,7 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
   setShowArchivedTests,
 }: StickyTopBarProps) => {
   const classes = useStyles();
-  const mainHeader = nickname ? nickname : name;
+  const mainHeader = nickname ?? name;
   const secondaryHeader = nickname ? name : null;
 
   return (
@@ -107,7 +107,7 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
             variant="outlined"
             startIcon={<Link />}
             onClick={() => {
-              navigator.clipboard.writeText(`${location.origin}/campaigns/${name}`);
+              void navigator.clipboard.writeText(`${location.origin}/campaigns/${name}`);
             }}
           >
             Copy link

@@ -1,5 +1,4 @@
-import React from 'react';
-import useOpenable from '../../../hooks/useOpenable';
+import ArchiveIcon from '@mui/icons-material/Archive';
 import {
   Button,
   Dialog,
@@ -10,9 +9,10 @@ import {
   Theme,
   Typography,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-import ArchiveIcon from '@mui/icons-material/Archive';
 import { grey } from '@mui/material/colors';
+import { makeStyles } from '@mui/styles';
+import React from 'react';
+import useOpenable from '../../../hooks/useOpenable';
 
 const useStyles = makeStyles(({ palette }: Theme) => ({
   buttonText: {

@@ -1,13 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { Theme, TextField, FormControlLabel, Switch, Button, Typography } from '@mui/material';
+import { Button, FormControlLabel, Switch, TextField, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import StickyTopBar from './StickyCampaignBar';
-import { Campaign, unassignedCampaign } from './CampaignsForm';
-import { Test } from '../helpers/shared';
-import ChannelCard from './ChannelCard';
+import React, { useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { fetchCampaignTests } from '../../../utils/requests';
-import { useForm, Controller } from 'react-hook-form';
+import { Test } from '../helpers/shared';
 import { RichTextEditor } from '../richTextEditor/richTextEditor';
+import {
+  Campaign,
+  testChannelData,
+  TestChannelItem,
+  testChannelOrder,
+  unassignedCampaign,
+} from './CampaignsTypes';
+import ChannelCard from './ChannelCard';
+import StickyTopBar from './StickyCampaignBar';
+
+export type { TestChannelItem };
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   testEditorContainer: {
@@ -50,56 +58,6 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   },
 }));
 
-export const testChannelOrder = [
-  'Header',
-  'Epic',
-  'EpicLiveblog',
-  'EpicAppleNews',
-  'Banner1',
-  'Banner2',
-  'GutterLiveblog',
-];
-
-export interface TestChannelItem {
-  name: string;
-  link: string;
-}
-
-export interface TestChannelData {
-  [index: string]: TestChannelItem;
-}
-
-export const testChannelData: TestChannelData = {
-  Header: {
-    name: 'Header',
-    link: 'header-tests',
-  },
-  Epic: {
-    name: 'Epic',
-    link: 'epic-tests',
-  },
-  EpicLiveblog: {
-    name: 'Liveblog Epic',
-    link: 'liveblog-epic-tests',
-  },
-  EpicAppleNews: {
-    name: 'Apple News Epic',
-    link: 'apple-news-epic-tests',
-  },
-  Banner1: {
-    name: 'Banner 1',
-    link: 'banner-tests',
-  },
-  Banner2: {
-    name: 'Banner 2',
-    link: 'banner-tests2',
-  },
-  GutterLiveblog: {
-    name: 'Gutter Liveblog',
-    link: 'gutter-liveblog-tests',
-  },
-};
-
 interface FormData {
   description: string;
   notes: string[];
@@ -121,16 +79,20 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
   const { name, nickname, description, notes, isActive } = campaign;
 
   const doDataFetch = (name: string) => {
-    fetchCampaignTests(name).then((tests) => {
-      // sort by test priority; each channel sets its own priority list
-      const sortedTests = tests.sort((a: Test, b: Test) => {
-        if (a.priority != null && b.priority != null) {
-          return a.priority - b.priority;
-        }
-        return 0;
+    fetchCampaignTests(name)
+      .then((tests) => {
+        // sort by test priority; each channel sets its own priority list
+        const sortedTests = tests.sort((a: Test, b: Test) => {
+          if (a.priority != null && b.priority != null) {
+            return a.priority - b.priority;
+          }
+          return 0;
+        });
+        setTestData(sortedTests);
+      })
+      .catch((error) => {
+        console.error('Failed to fetch campaign tests:', error);
       });
-      setTestData(sortedTests);
-    });
   };
 
   const defaultValues = {
@@ -158,8 +120,8 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
   });
 
   useEffect(() => {
-    trigger();
-  }, []);
+    void trigger();
+  }, [trigger]);
 
   const filterTests = (channel: string) => {
     if (showArchivedTests) {
@@ -201,7 +163,7 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
                 error={errors.description !== undefined}
                 helperText={errors.description ? errors.description.message : ''}
                 {...register('description')}
-                onBlur={handleSubmit(onSubmit)}
+                onBlur={() => void handleSubmit(onSubmit)()}
                 label="Description"
                 margin="normal"
                 variant="outlined"
@@ -219,7 +181,7 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
                         {...register('isActive')}
                         onChange={(e) => {
                           field.onChange(e.target.checked);
-                          handleSubmit(onSubmit)();
+                          void handleSubmit(onSubmit)();
                         }}
                         checked={field.value}
                         disabled={!editMode}
@@ -240,7 +202,7 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
                       copyData={field.value}
                       updateCopy={(pars) => {
                         field.onChange(pars);
-                        handleSubmit(onSubmit)();
+                        void handleSubmit(onSubmit)();
                       }}
                       name="notes"
                       label="Notes and links"

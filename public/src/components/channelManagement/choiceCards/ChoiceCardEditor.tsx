@@ -1,28 +1,28 @@
-import { ChoiceCard, ChoiceCardsSettings, Product } from '../../../models/choiceCards';
-import React from 'react';
-import {
-  Checkbox,
-  MenuItem,
-  Select,
-  FormControl,
-  TextField,
-  RadioGroup,
-  Button,
-  Radio,
-  AccordionSummary,
-  Typography,
-  Accordion,
-  AccordionDetails,
-  Theme,
-} from '@mui/material';
-import { useFieldArray, Controller, UseFormReturn } from 'react-hook-form';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { makeStyles } from '@mui/styles';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
-import { RichTextEditorSingleLine, RteMenuConstraints } from '../richTextEditor/richTextEditor';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Button,
+  Checkbox,
+  FormControl,
+  MenuItem,
+  Radio,
+  RadioGroup,
+  Select,
+  TextField,
+  Theme,
+  Typography,
+} from '@mui/material';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import { makeStyles } from '@mui/styles';
+import React from 'react';
+import { Controller, useFieldArray, UseFormReturn } from 'react-hook-form';
+import { ChoiceCard, ChoiceCardsSettings, Product } from '../../../models/choiceCards';
 import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
+import { RichTextEditorSingleLine, RteMenuConstraints } from '../richTextEditor/richTextEditor';
 import TypedRadioGroup from '../TypedRadioGroup';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
@@ -133,7 +133,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
                         return {
                           supportTier: newSupportTier,
                           // keep existing ratePlan if possible
-                          ratePlan: getValues(`choiceCards.${index}.product.ratePlan`) ?? 'Monthly',
+                          ratePlan: getValues(`choiceCards.${index}.product.ratePlan`),
                         };
                       }
                     };
@@ -250,7 +250,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
           control={control}
           render={({ field }) => (
             <RichTextEditorSingleLine
-              copyData={choiceCard.benefitsLabel || ''}
+              copyData={choiceCard.benefitsLabel ?? ''}
               updateCopy={(value) => {
                 field.onChange(value);
                 handleCardChange();

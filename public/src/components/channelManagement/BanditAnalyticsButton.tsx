@@ -1,11 +1,11 @@
+import { Button, Dialog, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Button, Dialog, Theme, Typography } from '@mui/material';
 import React, { useEffect } from 'react';
+import { CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis } from 'recharts';
 import useOpenable from '../../hooks/useOpenable';
-import { LineChart, CartesianGrid, Line, XAxis, YAxis, Legend, Tooltip } from 'recharts';
 import { buildChartData } from './helpers/utilities';
 
-const useStyles = makeStyles(({}: Theme) => ({
+const useStyles = makeStyles({
   dialog: {
     padding: '10px',
   },
@@ -20,7 +20,7 @@ const useStyles = makeStyles(({}: Theme) => ({
   chartContainer: {
     margin: '12px',
   },
-}));
+});
 
 interface VariantSummary {
   variantName: string;
@@ -86,19 +86,17 @@ export const BanditAnalyticsButton: React.FC<BanditAnalyticsButton> = ({
   const classes = useStyles();
   const [isOpen, open, close] = useOpenable();
   const [data, setData] = React.useState<BanditData>();
-  const [loading, setLoading] = React.useState<boolean>(false);
+  const [loading, setLoading] = React.useState<boolean>(true);
 
   useEffect(() => {
-    setLoading(true);
-
     const queryString = sampleCount ? `?sampleCount=${sampleCount}` : '';
-    fetch(`/frontend/bandit/${channel}/${testName}${queryString}`)
-      .then((resp) => resp.json())
+    void fetch(`/frontend/bandit/${channel}/${testName}${queryString}`)
+      .then((resp) => resp.json() as Promise<BanditData>)
       .then((data) => {
         setData(data);
         setLoading(false);
       });
-  }, [testName, channel]);
+  }, [testName, channel, sampleCount]);
 
   const variantNames = data?.variantSummaries.map((variant) => variant.variantName) ?? [];
 

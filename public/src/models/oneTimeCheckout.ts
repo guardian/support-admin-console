@@ -2,8 +2,8 @@ import {
   Methodology,
   Status,
   Test,
-  Variant,
   TickerSettings,
+  Variant,
 } from '../components/channelManagement/helpers/shared';
 import { AmountValuesObject } from '../utils/models';
 

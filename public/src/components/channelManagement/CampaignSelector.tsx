@@ -1,10 +1,9 @@
+import { FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import { fetchFrontendSettings, FrontendSettingsType } from '../../utils/requests';
-import { Campaign, unassignedCampaign } from './campaigns/CampaignsForm';
+import { Campaign, unassignedCampaign } from './campaigns/CampaignsTypes';
 import { Test } from './helpers/shared';
-
-import { Select, MenuItem, FormControl, SelectChangeEvent } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles(() => ({
   dialogHeader: {
@@ -49,7 +48,9 @@ const CampaignSelector: React.FC<CampaignSelectorProps> = ({
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
 
   useEffect(() => {
-    fetchFrontendSettings(FrontendSettingsType.campaigns).then(setCampaigns);
+    fetchFrontendSettings(FrontendSettingsType.Campaigns)
+      .then(setCampaigns)
+      .catch((error) => console.error('Failed to fetch campaigns:', error));
   }, []);
 
   const setCampaignName = (campaign?: string) => onCampaignChange(campaign);
@@ -84,11 +85,22 @@ const CampaignSelector: React.FC<CampaignSelectorProps> = ({
 
   const availableCampaigns = sortCampaigns(filterCampaigns(campaigns));
 
+  const isCampaignInList = (campaignName?: string): boolean => {
+    if (!campaignName) {
+      return true;
+    }
+    return availableCampaigns.some((c) => c.name === campaignName);
+  };
+
+  const selectedCampaign = isCampaignInList(test.campaignName)
+    ? test.campaignName
+    : unassignedCampaign.name;
+
   return (
     <>
       <FormControl className={classes.campaignSelector} size="small">
         <Select
-          value={test.campaignName}
+          value={selectedCampaign}
           displayEmpty
           name="campaign-selector"
           renderValue={(campaign): string => {

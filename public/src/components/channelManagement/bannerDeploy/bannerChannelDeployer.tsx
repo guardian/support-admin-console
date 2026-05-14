@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from 'react';
-
 import { Button, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { BannerChannel } from './bannerDeployDashboard';
-import BannerChannelDeployerTable from './bannerChannelDeployerTable';
-
+import React, { useEffect, useState } from 'react';
 import {
   fetchFrontendSettings,
-  saveFrontendSettings,
   FrontendSettingsType,
+  saveFrontendSettings,
 } from '../../../utils/requests';
+import BannerChannelDeployerTable from './bannerChannelDeployerTable';
+import { BannerDeploys, BannersToRedeploy, DataFromServer } from './bannerDeployTypes';
+import type { BannerChannel } from './bannerDeployTypes';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -18,33 +17,6 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
     },
   },
 }));
-
-export interface BannerDeployRegion {
-  timestamp: number;
-  email: string;
-}
-
-export interface BannerDeploys {
-  Australia: BannerDeployRegion;
-  EuropeanUnion: BannerDeployRegion;
-  RestOfWorld: BannerDeployRegion;
-  UnitedStates: BannerDeployRegion;
-  UnitedKingdom: BannerDeployRegion;
-}
-
-export interface BannersToRedeploy {
-  Australia: boolean;
-  EuropeanUnion: boolean;
-  RestOfWorld: boolean;
-  UnitedStates: boolean;
-  UnitedKingdom: boolean;
-}
-
-interface DataFromServer {
-  value: BannerDeploys;
-  version: string;
-  email: string;
-}
 
 interface BannerChannelDeployerProps {
   channel: BannerChannel;
@@ -57,8 +29,8 @@ const BannerChannelDeployer: React.FC<BannerChannelDeployerProps> = ({
 
   const isChannel1 = channel === 'CHANNEL1';
   const settingsType = isChannel1
-    ? FrontendSettingsType.bannerDeploy
-    : FrontendSettingsType.bannerDeploy2;
+    ? FrontendSettingsType.BannerDeploy
+    : FrontendSettingsType.BannerDeploy2;
 
   const [dataFromServer, setDataFromServer] = useState<DataFromServer | null>(null);
   const [bannersToRedeploy, setBannersToRedeploy] = useState<BannersToRedeploy>({
@@ -87,9 +59,9 @@ const BannerChannelDeployer: React.FC<BannerChannelDeployerProps> = ({
   };
 
   const fetchDataFromServer = (): void => {
-    fetchFrontendSettings(settingsType)
+    fetchFrontendSettings<DataFromServer>(settingsType)
       .then((data) => setDataFromServer(data))
-      .catch((err) => alert(err));
+      .catch((err) => alert(String(err)));
   };
 
   const resetBannersToDeploy = (): void => {
@@ -127,10 +99,10 @@ const BannerChannelDeployer: React.FC<BannerChannelDeployerProps> = ({
         fetchDataFromServer();
         resetBannersToDeploy();
       })
-      .catch((err) => alert(err));
+      .catch((err) => alert(String(err)));
   };
 
-  useEffect(fetchDataFromServer, []);
+  useEffect(fetchDataFromServer, [settingsType]);
 
   return (
     <div className={classes.container}>

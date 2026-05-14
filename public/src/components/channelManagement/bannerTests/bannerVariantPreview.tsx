@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import { Button, Theme, Alert } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import { Alert, Button, Theme } from '@mui/material';
 import Drawer from '@mui/material/Drawer';
-import { BannerContent, BannerVariant } from '../../../models/banner';
 import Typography from '@mui/material/Typography';
-import useTickerData, { TickerSettingsWithData } from '../hooks/useTickerData';
-import { mockAmountsCardData, SelectedAmountsVariant } from '../../../utils/models';
+import { makeStyles } from '@mui/styles';
+import React, { useState } from 'react';
+import { BannerContent, BannerVariant } from '../../../models/banner';
 import { BannerDesign, BannerDesignProps } from '../../../models/bannerDesign';
-import { ArticleCounts } from '../epicTests/variantPreview';
 import { SeparateArticleCount } from '../../../models/epic';
+import { mockAmountsCardData, SelectedAmountsVariant } from '../../../utils/models';
+import { ArticleCounts } from '../epicTests/variantPreview';
 import { buildStorybookUrl } from '../helpers/dcrStorybook';
+import useTickerData, { TickerSettingsWithData } from '../hooks/useTickerData';
 
 // Mock prices data
 interface ProductPriceData {
@@ -25,9 +25,7 @@ interface CountryGroupPriceData {
   GuardianWeekly: ProductPriceData;
   Digisub: ProductPriceData;
 }
-type Prices = {
-  [index: string]: CountryGroupPriceData;
-};
+type Prices = Record<string, CountryGroupPriceData>;
 const mockPricesData = {
   GBPCountries: {
     GuardianWeekly: {

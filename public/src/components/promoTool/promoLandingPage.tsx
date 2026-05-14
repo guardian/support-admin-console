@@ -1,7 +1,7 @@
-import React from 'react';
-import { LandingPage } from './utils/promoModels';
 import { TextField } from '@mui/material';
-import { useStyles } from './promoEditor';
+import React from 'react';
+import { useStyles } from './promoEditorStyles';
+import { LandingPage } from './utils/promoModels';
 
 type PromoLandingPageProps = {
   landingPage?: LandingPage;
@@ -31,7 +31,7 @@ export const PromoLandingPage = ({
         className={classes.formField}
         fullWidth
         label="Label"
-        value={landingPage?.roundelHtml || ''}
+        value={landingPage?.roundelHtml ?? ''}
         onChange={handleChange}
         disabled={!isEditing}
         name="roundelHtml"
@@ -40,7 +40,7 @@ export const PromoLandingPage = ({
         className={classes.formField}
         fullWidth
         label="Title"
-        value={landingPage?.title || ''}
+        value={landingPage?.title ?? ''}
         onChange={handleChange}
         disabled={!isEditing}
         name="title"
@@ -51,7 +51,7 @@ export const PromoLandingPage = ({
         label="Description (supports Markdown)"
         multiline
         rows={3}
-        value={landingPage?.description || ''}
+        value={landingPage?.description ?? ''}
         onChange={handleChange}
         disabled={!isEditing}
         name="description"

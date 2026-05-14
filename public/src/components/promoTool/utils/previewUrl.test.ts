@@ -1,5 +1,5 @@
-import { getPromoPreviewUrl } from './previewUrl';
 import { getStage } from '../../../utils/stage';
+import { getPromoPreviewUrl } from './previewUrl';
 
 jest.mock('../../../utils/stage');
 

@@ -1,8 +1,6 @@
-import React from 'react';
-
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-
+import React from 'react';
 import BannerChannelDeployer from './bannerChannelDeployer';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
@@ -20,8 +18,6 @@ const useStyles = makeStyles(({ spacing }: Theme) => ({
     width: '45%',
   },
 }));
-
-export type BannerChannel = 'CHANNEL1' | 'CHANNEL2';
 
 const BannerDeployDashboard: React.FC = () => {
   const classes = useStyles();

@@ -1,10 +1,8 @@
-import React from 'react';
 import { FormControlLabel, FormGroup, Radio, RadioGroup } from '@mui/material';
+import React from 'react';
 
 // For mapping each value in T to a user-friendly label
-type LabeledValues<T extends string> = {
-  [value in T]: string;
-};
+type LabeledValues<T extends string> = Record<T, string>;
 
 interface TypedRadioGroupProps<T extends string> {
   selectedValue: T;
@@ -23,7 +21,7 @@ function TypedRadioGroup<T extends string>({
   return (
     <FormGroup>
       <RadioGroup value={selectedValue}>
-        {(Object.entries(labels) as [T, string][]) // Cast necessary because Object.entries loses the types
+        {(Object.entries(labels) as Array<[T, string]>) // Cast necessary because Object.entries loses the types
           .map(([value, label]) => (
             <FormControlLabel
               value={value}

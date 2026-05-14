@@ -1,8 +1,6 @@
-import { TestPlatform } from './shared';
+import type { TestPlatform } from './shared';
 
-export type ValidationStatus = {
-  [fieldName: string]: boolean;
-};
+export type ValidationStatus = Record<string, boolean>;
 
 export const INVALID_CHARACTERS_ERROR_HELPER_TEXT =
   'Only letters, numbers, underscores and hyphens are allowed';
@@ -13,7 +11,15 @@ export const MAXLENGTH_ERROR_HELPER_TEXT =
   'This copy is longer than the recommended length. Please preview across breakpoints before publishing.';
 
 export const getEmptyParagraphsError = (pars: string[]): string | undefined => {
-  if (pars.filter((p) => p).join('').length <= 0) {
+  const text = pars
+    .map((p) =>
+      p
+        .replace(/<[^>]+>/g, '') // CodeQL[js/incomplete-sanitization] - validation logic only, not output sanitization; result is never rendered
+        .replace(/&nbsp;/g, ' ')
+        .trim(),
+    )
+    .join('');
+  if (text.length <= 0) {
     return EMPTY_ERROR_HELPER_TEXT;
   }
   return undefined;

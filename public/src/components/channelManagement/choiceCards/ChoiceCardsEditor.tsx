@@ -1,13 +1,13 @@
-import React from 'react';
-import FormControlLabel from '@mui/material/FormControlLabel';
+import AddIcon from '@mui/icons-material/Add';
+import CloseIcon from '@mui/icons-material/Close';
 import { Button, Radio, RadioGroup, Theme } from '@mui/material';
+import Alert from '@mui/material/Alert';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import { makeStyles } from '@mui/styles';
+import React from 'react';
+import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { ChoiceCard, ChoiceCardsSettings } from '../../../models/choiceCards';
 import { ChoiceCardEditor } from './ChoiceCardEditor';
-import CloseIcon from '@mui/icons-material/Close';
-import AddIcon from '@mui/icons-material/Add';
-import { useFieldArray, useForm, useWatch } from 'react-hook-form';
-import Alert from '@mui/material/Alert';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -73,8 +73,8 @@ const ChoiceCardsEditor: React.FC<ChoiceCardsEditorProps> = ({
 
   const formMethods = useForm<ChoiceCardsSettings & { hasOneDefault: boolean }>({
     defaultValues: {
-      choiceCards: choiceCardsSettings?.choiceCards || [],
-      hasOneDefault: countDefaultCards(choiceCardsSettings?.choiceCards || []) === 1,
+      choiceCards: choiceCardsSettings?.choiceCards ?? [],
+      hasOneDefault: countDefaultCards(choiceCardsSettings?.choiceCards ?? []) === 1,
     },
     mode: 'onChange',
   });
@@ -91,7 +91,7 @@ const ChoiceCardsEditor: React.FC<ChoiceCardsEditorProps> = ({
   });
 
   const choiceCardsSelection = getChoiceCardsSelection(showChoiceCards, choiceCardsSettings);
-  const defaultCardCount = countDefaultCards(choiceCards || []);
+  const defaultCardCount = countDefaultCards(choiceCards);
 
   React.useEffect(() => {
     if (choiceCardsSelection === 'CustomChoiceCards') {
@@ -111,7 +111,7 @@ const ChoiceCardsEditor: React.FC<ChoiceCardsEditorProps> = ({
     } else {
       onValidationChange(true);
     }
-  }, [fields, choiceCardsSelection, formMethods, defaultCardCount]);
+  }, [fields, choiceCardsSelection, formMethods, defaultCardCount, onValidationChange]);
 
   const onRadioGroupChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     if (event.target.value === 'DefaultChoiceCards') {
@@ -167,7 +167,7 @@ const ChoiceCardsEditor: React.FC<ChoiceCardsEditorProps> = ({
       </RadioGroup>
       {choiceCardsSelection === 'CustomChoiceCards' && (
         <>
-          {formMethods.formState.errors?.hasOneDefault && (
+          {formMethods.formState.errors.hasOneDefault && (
             <Alert severity="error">{formMethods.formState.errors.hasOneDefault.message}</Alert>
           )}
           {fields.map((choiceCard, idx) => (
@@ -176,7 +176,7 @@ const ChoiceCardsEditor: React.FC<ChoiceCardsEditorProps> = ({
                 choiceCard={choiceCard}
                 onChange={(updatedCard) => {
                   formMethods.setValue(`choiceCards.${idx}`, updatedCard);
-                  handleFieldChange();
+                  void handleFieldChange();
                 }}
                 isDisabled={isDisabled}
                 index={idx}
@@ -202,7 +202,7 @@ const ChoiceCardsEditor: React.FC<ChoiceCardsEditorProps> = ({
                 benefits: [],
                 isDefault: false,
               });
-              handleFieldChange();
+              void handleFieldChange();
             }}
             disabled={isDisabled || fields.length >= 3}
             variant="contained"

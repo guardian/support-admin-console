@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import CloseIcon from '@mui/icons-material/Close';
 import {
   Button,
   Dialog,
@@ -13,10 +13,10 @@ import {
   RadioGroup,
   Theme,
 } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
 import { makeStyles } from '@mui/styles';
-import { PermissionLevel, UserPermissions } from '../channelManagement/helpers/shared';
+import React, { useState } from 'react'; // eslint-disable-line @typescript-eslint/no-unused-vars -- Required for JSX compilation
 import { saveUserPermissions } from '../../utils/requests';
+import { PermissionLevel, UserPermissions } from '../channelManagement/helpers/shared';
 import { PermissionName, permissions } from './permissions';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
@@ -51,20 +51,22 @@ const AccessManagementDialog = ({
   onUserUpdated,
 }: AccessManagementDialogProps) => {
   const classes = useStyles();
-  const [permissionValues, setPermissionValues] = useState<Record<PermissionName, PermissionLevel>>(
-    {},
-  );
 
-  useEffect(() => {
-    if (user) {
-      const initialValues = permissions.reduce<Record<string, PermissionLevel>>((acc, perm) => {
-        const userPerm = user.permissions.find((p) => p.name === perm.name);
-        acc[perm.name] = userPerm ? userPerm.permission : 'None';
-        return acc;
-      }, {});
-      setPermissionValues(initialValues);
+  const getInitialPermissionValues = (): Record<PermissionName, PermissionLevel> => {
+    if (!user) {
+      return {};
     }
-  }, [user]);
+
+    return permissions.reduce<Record<string, PermissionLevel>>((acc, perm) => {
+      const userPerm = user.permissions.find((p) => p.name === perm.name);
+      acc[perm.name] = userPerm ? userPerm.permission : 'None';
+      return acc;
+    }, {});
+  };
+
+  const [permissionValues, setPermissionValues] = useState<Record<PermissionName, PermissionLevel>>(
+    getInitialPermissionValues(),
+  );
 
   const handleSave = async () => {
     if (!user) {
@@ -85,7 +87,7 @@ const AccessManagementDialog = ({
 
     try {
       const response = await saveUserPermissions(updatedUser);
-      const data = await response.json();
+      const data = (await response.json()) as UserPermissions;
       onUserUpdated(data);
     } catch (error) {
       console.error('Error updating user:', error);
@@ -112,7 +114,7 @@ const AccessManagementDialog = ({
           >
             <FormLabel component="legend">{perm.displayName}</FormLabel>
             <RadioGroup
-              value={permissionValues[perm.name] || 'None'}
+              value={permissionValues[perm.name] ?? 'None'}
               onChange={(e) =>
                 setPermissionValues({
                   ...permissionValues,
@@ -129,7 +131,7 @@ const AccessManagementDialog = ({
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={handleSave} variant="contained" color="primary">
+        <Button onClick={() => void handleSave()} variant="contained" color="primary">
           Save
         </Button>
       </DialogActions>

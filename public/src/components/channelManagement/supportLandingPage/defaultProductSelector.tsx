@@ -1,15 +1,15 @@
-import React from 'react';
 import {
   FormControl,
   FormControlLabel,
   FormLabel,
-  RadioGroup,
-  Radio,
-  Typography,
-  Theme,
   Grid,
+  Radio,
+  RadioGroup,
+  Theme,
+  Typography,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import React from 'react';
 import { DefaultProductSelection } from '../../../models/supportLandingPage';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
@@ -101,7 +101,7 @@ const DefaultProductSelector: React.FC<DefaultProductSelectorProps> = ({
           <FormControl component="fieldset" className={classes.formControl} disabled={!editMode}>
             <FormLabel component="legend">Default Product</FormLabel>
             <RadioGroup
-              value={defaultProductSelection?.productType || ''}
+              value={defaultProductSelection?.productType ?? ''}
               onChange={(e) => {
                 const value = e.target.value as DefaultProductSelection['productType'] | '';
                 handleProductTypeChange(value);
