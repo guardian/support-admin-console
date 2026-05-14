@@ -81,8 +81,8 @@ importers:
         specifier: 7.72.1
         version: 7.72.1(react@18.3.1)
       react-qr-code:
-        specifier: 2.0.7
-        version: 2.0.7(react@18.3.1)
+        specifier: 2.0.21
+        version: 2.0.21(react@18.3.1)
       react-router-dom:
         specifier: 7.15.0
         version: 7.15.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -4269,14 +4269,10 @@ packages:
   react-is@19.2.4:
     resolution: {integrity: sha512-W+EWGn2v0ApPKgKKCy/7s7WHXkboGcsrXE+2joLyVxkbyVQfO3MUEaUQDHoSmb8TFFrSKYa9mw64WZHNHSDzYA==}
 
-  react-qr-code@2.0.7:
-    resolution: {integrity: sha512-NpknL80p7dWbLdHfBSIxQIqLCu3+kBlyzYD692rO0UnVwfCSziIxc1xn/p3JhPEv1RV1lRD8j0w+hR3L7tawTQ==}
+  react-qr-code@2.0.21:
+    resolution: {integrity: sha512-xaywjo0eaF4S3LOz6ns5eoPbM2E+q9HYl4VATYpxK4bBniOhQ9noY2RJ9G4SnZFhUwzx63FUT6KdHzfKgUwyuQ==}
     peerDependencies:
-      react: ^16.x || ^17.x || ^18.x
-      react-native-svg: '*'
-    peerDependenciesMeta:
-      react-native-svg:
-        optional: true
+      react: '*'
 
   react-redux@9.2.0:
     resolution: {integrity: sha512-ROY9fvHhwOD9ySfrF0wmvu//bKCQ6AeZZq1nJNtbDC+kk5DuSuNX/n6YWYF/SYy7bSba4D4FSz8DJeKY/S/r+g==}
@@ -10539,7 +10535,7 @@ snapshots:
 
   react-is@19.2.4: {}
 
-  react-qr-code@2.0.7(react@18.3.1):
+  react-qr-code@2.0.21(react@18.3.1):
     dependencies:
       prop-types: 15.8.1
       qr.js: 0.0.0
