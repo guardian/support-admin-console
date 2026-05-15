@@ -5,8 +5,8 @@ version := "1.0-SNAPSHOT"
 scalaVersion := "2.13.18"
 
 val circeVersion = "0.14.15"
-val awsVersion = "2.42.41"
-val zioVersion = "2.1.24"
+val awsVersion = "2.44.4"
+val zioVersion = "2.1.25"
 val jacksonVersion = "2.21.3"
 
 lazy val scalafmtSettings = Seq(
@@ -29,8 +29,8 @@ asciiGraphWidth := 999999999 // to ensure Snyk can read the the deeeeep dependen
 libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.6",
   "com.gu.play-googleauth" %% "play-v30" % "32.0.2",
-  "com.google.cloud" % "google-cloud-bigquery" % "2.62.0",
-  "com.gu" %% "simple-configuration-ssm" % "9.2.2",
+  "com.google.cloud" % "google-cloud-bigquery" % "2.65.0",
+  "com.gu" %% "simple-configuration-ssm" % "10.0.1",
   "software.amazon.awssdk" % "s3" % awsVersion,
   "software.amazon.awssdk" % "dynamodb" % awsVersion,
   "io.circe" %% "circe-core" % circeVersion,
@@ -38,13 +38,13 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-parser" % circeVersion,
   "io.circe" %% "circe-generic-extras" % "0.14.4",
   "com.dripower" %% "play-circe" % "3014.1",
-  "com.beachape" %% "enumeratum" % "1.9.6",
-  "com.beachape" %% "enumeratum-circe" % "1.9.6",
+  "com.beachape" %% "enumeratum" % "1.9.7",
+  "com.beachape" %% "enumeratum-circe" % "1.9.7",
   ws,
   "dev.zio" %% "zio" % zioVersion,
   "dev.zio" %% "zio-streams" % zioVersion,
   "com.gu" %% "support-internationalisation" % "0.16",
-  "org.scalatest" %% "scalatest" % "3.2.19" % "test",
+  "org.scalatest" %% "scalatest" % "3.2.20" % "test",
   "org.gnieh" %% "diffson-circe" % "4.7.0" % "test"
 )
 

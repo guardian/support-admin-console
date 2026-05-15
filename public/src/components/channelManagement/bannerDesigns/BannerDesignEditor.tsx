@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import StickyTopBar from './StickyTopBar';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import React, { useState } from 'react';
+import { BannerDesign, Status } from '../../../models/bannerDesign';
 import { LockStatus } from '../helpers/shared';
 import useValidation from '../hooks/useValidation';
 import BannerDesignForm from './BannerDesignForm';
-import { BannerDesign, Status } from '../../../models/bannerDesign';
+import StickyTopBar from './StickyTopBar';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {

@@ -1,40 +1,35 @@
-import React, { useState } from 'react';
-
-import { Theme } from '@mui/material/styles';
-import { makeStyles } from '@mui/styles';
-
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
+import SaveIcon from '@mui/icons-material/Save';
 import {
-  Typography,
+  Alert,
   Button,
-  FormLabel,
   FormControl,
   FormControlLabel,
-  TextField,
+  FormLabel,
   IconButton,
   List,
   ListItem,
-  Alert,
+  TextField,
+  Typography,
 } from '@mui/material';
+import ListItemText from '@mui/material/ListItemText';
+import { Theme } from '@mui/material/styles';
 import SwitchUI from '@mui/material/Switch';
-import SaveIcon from '@mui/icons-material/Save';
-
+import { makeStyles } from '@mui/styles';
 import cloneDeep from 'lodash/cloneDeep';
-
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import withS3Data, { DataFromServer, InnerProps } from '../hocs/withS3Data';
 import {
-  SupportFrontendSettingsType,
   fetchSupportFrontendSettings,
   saveSupportFrontendSettings,
+  SupportFrontendSettingsType,
 } from '../utils/requests';
-
-import withS3Data, { InnerProps, DataFromServer } from '../hocs/withS3Data';
-import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
 import {
   createDuplicateValidator,
   EMPTY_ERROR_HELPER_TEXT,
 } from './channelManagement/helpers/validation';
-import { useForm } from 'react-hook-form';
-import ListItemText from '@mui/material/ListItemText';
 
 enum SwitchState {
   On = 'On',
@@ -48,14 +43,10 @@ interface Switch {
 
 interface SwitchGroup {
   description: string;
-  switches: {
-    [switchName: string]: Switch;
-  };
+  switches: Record<string, Switch>;
 }
 
-interface SupportFrontendSwitches {
-  [groupName: string]: SwitchGroup;
-}
+type SupportFrontendSwitches = Record<string, SwitchGroup>;
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   formControl: {
@@ -177,13 +168,13 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     switchData: Switch,
     group: [string, SwitchGroup],
   ): JSX.Element => {
-    const isChecked = switchData.state === 'On';
+    const isChecked = switchData.state === SwitchState.On;
 
     return (
       <div className={classes.switchLayout} key={switchId}>
         <FormControlLabel
           label={switchData.description}
-          checked={switchData.state === 'On'}
+          checked={switchData.state === SwitchState.On}
           control={<SwitchUI />}
           onChange={(): void => updateSwitchSetting(switchId, switchData, group, !isChecked)}
           value={switchId}
@@ -199,7 +190,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     );
   };
 
-  const createGroupsFromData = (group: [string, SwitchGroup]): JSX.Element => {
+  const SwitchGroupForm: React.FC<{ group: [string, SwitchGroup] }> = ({ group }) => {
     const [groupId, groupData] = group;
     type FormData = {
       switchId: string;
@@ -208,7 +199,6 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     const {
       register,
       handleSubmit,
-
       formState: { errors },
     } = useForm<FormData>();
 
@@ -277,7 +267,10 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
             <Button
               aria-label="Add switch"
               variant="contained"
-              onClick={handleSubmit(onSubmit)}
+              onClick={(e) => {
+                e.preventDefault();
+                void handleSubmit(onSubmit)(e);
+              }}
               className={classes.addButton}
               disabled={saving}
             >
@@ -293,7 +286,9 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     <>
       {Object.entries(data)
         .sort(sortByDescription)
-        .map((group) => createGroupsFromData(group))}
+        .map((group) => (
+          <SwitchGroupForm key={group[0]} group={group} />
+        ))}
     </>
   );
 
@@ -358,13 +353,13 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
   );
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- API response type
 const fetchSettings = (): Promise<any> => {
-  return fetchSupportFrontendSettings(SupportFrontendSettingsType.switches);
+  return fetchSupportFrontendSettings(SupportFrontendSettingsType.Switches);
 };
 
 const saveSettings = (data: DataFromServer<SupportFrontendSwitches>): Promise<Response> => {
-  return saveSupportFrontendSettings(SupportFrontendSettingsType.switches, data);
+  return saveSupportFrontendSettings(SupportFrontendSettingsType.Switches, data);
 };
 
 export default withS3Data<SupportFrontendSwitches>(Switchboard, fetchSettings, saveSettings);

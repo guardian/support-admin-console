@@ -1,4 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import { Typography } from '@mui/material';
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  BannerContent,
+  BannerTest,
+  BannerTestDeploySchedule,
+  BannerVariant,
+} from '../../../models/banner';
+import { BannerDesign } from '../../../models/bannerDesign';
+import { getDesignForVariant } from '../../../utils/bannerDesigns';
+import {
+  BannerDesignsResponse,
+  fetchFrontendSettings,
+  FrontendSettingsType,
+} from '../../../utils/requests';
+import TestVariantsSplitEditor from '../../tests/variants/testVariantsSplitEditor';
+import VariantsEditor from '../../tests/variants/variantsEditor';
+import VariantSummary from '../../tests/variants/variantSummary';
+import CampaignSelector from '../CampaignSelector';
+import { ControlProportionSettings } from '../helpers/controlProportionSettings';
 import {
   ArticlesViewedSettings,
   ConsentStatus,
@@ -8,49 +27,30 @@ import {
   SignedInStatus,
   UserCohort,
 } from '../helpers/shared';
+import { useStyles } from '../helpers/testEditorStyles';
 import { ARTICLE_COUNT_TEMPLATE } from '../helpers/validation';
-import { Typography } from '@mui/material';
-import VariantEditor from './variantEditor';
-import CampaignSelector from '../CampaignSelector';
-import VariantsEditor from '../../tests/variants/variantsEditor';
-import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 import TestEditorArticleCountEditor, {
   DEFAULT_ARTICLES_VIEWED_SETTINGS,
 } from '../testEditorArticleCountEditor';
-import {
-  BannerContent,
-  BannerTest,
-  BannerTestDeploySchedule,
-  BannerVariant,
-} from '../../../models/banner';
-import { getDefaultVariant } from './utils/defaults';
-import VariantSummary from '../../tests/variants/variantSummary';
-import BannerVariantPreview from './bannerVariantPreview';
-import { ControlProportionSettings } from '../helpers/controlProportionSettings';
-import TestVariantsSplitEditor from '../../tests/variants/testVariantsSplitEditor';
-import { useStyles } from '../helpers/testEditorStyles';
-import { ValidatedTestEditorProps } from '../validatedTestEditor';
-import { BannerDesign } from '../../../models/bannerDesign';
-import {
-  BannerDesignsResponse,
-  fetchFrontendSettings,
-  FrontendSettingsType,
-} from '../../../utils/requests';
 import TestEditorContextTargeting from '../testEditorContextTargeting';
-import { getDesignForVariant } from '../../../utils/bannerDesigns';
-import { DeployScheduleEditor } from './deployScheduleEditor';
+import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 import { TestMethodologyEditor } from '../TestMethodologyEditor';
+import { ValidatedTestEditorProps } from '../validatedTestEditor';
+import BannerVariantPreview from './bannerVariantPreview';
+import { DeployScheduleEditor } from './deployScheduleEditor';
 import { FrontsOnlyEditor } from './frontsOnlyEditor';
+import { getDefaultVariant } from './utils/defaults';
+import VariantEditor from './variantEditor';
 
 const copyHasTemplate = (content: BannerContent, template: string): boolean =>
-  (content.heading && content.heading.includes(template)) ||
-  (content.paragraphs && content.paragraphs.some((para) => para.includes(template))) ||
-  (content.messageText != null && content.messageText.includes(template));
+  Boolean(content.heading?.includes(template)) ||
+  content.paragraphs.some((para) => para.includes(template)) ||
+  Boolean(content.messageText?.includes(template));
 
 const testCopyHasTemplate = (test: BannerTest, template: string): boolean =>
   test.variants.some(
     (variant) =>
-      (variant.bannerContent && copyHasTemplate(variant.bannerContent, template)) ||
+      copyHasTemplate(variant.bannerContent, template) ||
       (variant.mobileBannerContent && copyHasTemplate(variant.mobileBannerContent, template)),
   );
 
@@ -65,7 +65,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
   const [designs, setDesigns] = useState<BannerDesign[]>([]);
 
   const fetchBannerDesigns = (): void => {
-    fetchFrontendSettings(FrontendSettingsType.bannerDesigns).then(
+    void fetchFrontendSettings(FrontendSettingsType.BannerDesigns).then(
       (response: BannerDesignsResponse) => {
         setDesigns(response.bannerDesigns.filter((design) => design.status === 'Live'));
       },
@@ -77,7 +77,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
   }, []);
 
   const getArticlesViewedSettings = (test: BannerTest): ArticlesViewedSettings | undefined => {
-    if (!!test.articlesViewedSettings) {
+    if (test.articlesViewedSettings) {
       return test.articlesViewedSettings;
     }
     if (testCopyHasTemplate(test, ARTICLE_COUNT_TEMPLATE)) {
@@ -86,13 +86,21 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
     return undefined;
   };
 
+  const onTestChangeRef = useRef(onTestChange);
+  const getArticlesViewedSettingsRef = useRef(getArticlesViewedSettings);
+
+  useEffect(() => {
+    onTestChangeRef.current = onTestChange;
+    getArticlesViewedSettingsRef.current = getArticlesViewedSettings;
+  });
+
   const updateTest = (update: (current: BannerTest) => BannerTest): void => {
-    onTestChange((current) => {
+    onTestChangeRef.current((current) => {
       const updatedTest = update(current);
       return {
         ...updatedTest,
         // To save dotcom from having to work this out
-        articlesViewedSettings: getArticlesViewedSettings(updatedTest),
+        articlesViewedSettings: getArticlesViewedSettingsRef.current(updatedTest),
       };
     });
   };
@@ -125,19 +133,6 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
       return { ...current, variants: updatedVariantList };
     });
   };
-
-  const onVariantChange =
-    (variantName: string) =>
-    (update: (current: BannerVariant) => BannerVariant): void => {
-      onVariantsChange((current) =>
-        current.map((variant) => {
-          if (variant.name === variantName) {
-            return update(variant);
-          }
-          return variant;
-        }),
-      );
-    };
 
   const onVariantDelete = (deletedVariantName: string): void => {
     onVariantsChange((current) => current.filter((variant) => variant.name !== deletedVariantName));
@@ -194,17 +189,60 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
     onTestChange((current) => ({ ...current, mParticleAudience }));
   };
 
+  // Memoize callbacks by variant name to prevent infinite render loops
+  // Using refs to store callbacks to avoid dependency issues with useCallback
+  const validationCallbacksRef = useRef<Map<string, (isValid: boolean) => void>>(new Map());
+  const variantChangeCallbacksRef = useRef<
+    Map<string, (update: (current: BannerVariant) => BannerVariant) => void>
+  >(new Map());
+  const setValidationStatusRef = useRef(setValidationStatusForField);
+  const onVariantsChangeRef = useRef(onVariantsChange);
+
+  // Keep refs up to date without triggering re-renders
+  useEffect(() => {
+    setValidationStatusRef.current = setValidationStatusForField;
+    onVariantsChangeRef.current = onVariantsChange;
+  });
+
+  const getValidationCallback = (variantName: string): ((isValid: boolean) => void) => {
+    if (!validationCallbacksRef.current.has(variantName)) {
+      validationCallbacksRef.current.set(variantName, (isValid: boolean): void =>
+        setValidationStatusRef.current(variantName, isValid),
+      );
+    }
+    return validationCallbacksRef.current.get(variantName)!;
+  };
+
+  const getVariantChangeCallback = (
+    variantName: string,
+  ): ((update: (current: BannerVariant) => BannerVariant) => void) => {
+    if (!variantChangeCallbacksRef.current.has(variantName)) {
+      variantChangeCallbacksRef.current.set(
+        variantName,
+        (update: (current: BannerVariant) => BannerVariant): void => {
+          onVariantsChangeRef.current((current) =>
+            current.map((variant) => {
+              if (variant.name === variantName) {
+                return update(variant);
+              }
+              return variant;
+            }),
+          );
+        },
+      );
+    }
+    return variantChangeCallbacksRef.current.get(variantName)!;
+  };
+
   const renderVariantEditor = (variant: BannerVariant): React.ReactElement => (
     <VariantEditor
       key={`banner-${test.name}-${variant.name}`}
       variant={variant}
-      onVariantChange={onVariantChange(variant.name)}
+      onVariantChange={getVariantChangeCallback(variant.name)}
       onDelete={(): void => onVariantDelete(variant.name)}
       editMode={userHasTestLocked}
       designs={designs}
-      onValidationChange={(isValid: boolean): void =>
-        setValidationStatusForField(variant.name, isValid)
-      }
+      onValidationChange={getValidationCallback(variant.name)}
     />
   );
 
@@ -240,159 +278,150 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
     onVariantsChange((current) => [...current, newVariant]);
   };
 
-  if (test) {
-    return (
-      <div className={classes.container}>
-        <div className={classes.sectionContainer}>
-          <Typography variant={'h3'} className={classes.sectionHeader}>
-            Variants
-          </Typography>
-          <div>
-            <VariantsEditor
-              variants={test.variants}
-              createVariant={createVariant}
-              testName={test.name}
-              editMode={userHasTestLocked}
-              renderVariantEditor={renderVariantEditor}
-              renderVariantSummary={renderVariantSummary}
-              onVariantDelete={onVariantDelete}
-              onVariantClone={onVariantClone}
-            />
-          </div>
-        </div>
-
-        <div className={classes.sectionContainer}>
-          <Typography variant={'h3'} className={classes.sectionHeader}>
-            Experiment Methodology
-          </Typography>
-          <TestMethodologyEditor
-            methodologies={test.methodologies}
+  return (
+    <div className={classes.container}>
+      <div className={classes.sectionContainer}>
+        <Typography variant={'h3'} className={classes.sectionHeader}>
+          Variants
+        </Typography>
+        <div>
+          <VariantsEditor
+            variants={test.variants}
+            createVariant={createVariant}
             testName={test.name}
-            channel={test.channel ?? ''}
-            isDisabled={!userHasTestLocked || test.status === 'Live'}
-            onChange={onMethodologyChange}
-          />
-        </div>
-
-        {test.variants.length > 1 && (
-          <div className={classes.sectionContainer}>
-            <Typography variant={'h3'} className={classes.sectionHeader}>
-              Variants split (applies to AB tests only)
-            </Typography>
-            <div>
-              <TestVariantsSplitEditor
-                variants={test.variants}
-                controlProportionSettings={test.controlProportionSettings}
-                onControlProportionSettingsChange={onControlProportionSettingsChange}
-                onValidationChange={onVariantsSplitSettingsValidationChanged}
-                isDisabled={!userHasTestLocked}
-              />
-            </div>
-          </div>
-        )}
-
-        <div className={classes.sectionContainer}>
-          <Typography variant={'h3'} className={classes.sectionHeader}>
-            Campaign
-          </Typography>
-          <div>
-            <CampaignSelector
-              test={test}
-              onCampaignChange={onCampaignChange}
-              disabled={!userHasTestLocked}
-            />
-          </div>
-        </div>
-
-        <div className={classes.sectionContainer}>
-          <Typography variant={'h3'} className={classes.sectionHeader}>
-            Target context
-          </Typography>
-
-          <TestEditorContextTargeting
-            contextTargeting={test.contextTargeting}
             editMode={userHasTestLocked}
-            updateContextTargeting={(contextTargeting) =>
-              updateTest((current) => ({ ...current, contextTargeting }))
-            }
-          />
-        </div>
-
-        <div className={classes.sectionContainer}>
-          <Typography variant={'h3'} className={classes.sectionHeader}>
-            Target audience
-          </Typography>
-
-          <TestEditorTargetAudienceSelector
-            regionTargeting={
-              test.regionTargeting ?? {
-                // For backwards compatibility with the deprecated locations field
-                targetedCountryGroups: test.locations,
-                targetedCountryCodes: [],
-              }
-            }
-            onRegionTargetingUpdate={onRegionTargetingChange}
-            selectedCohort={test.userCohort}
-            onCohortChange={onCohortChange}
-            selectedDeviceType={test.deviceType ?? 'All'}
-            onDeviceTypeChange={onDeviceTypeChange}
-            isDisabled={!userHasTestLocked}
-            showSupporterStatusSelector={true}
-            showDeviceTypeSelector={true}
-            showSignedInStatusSelector={true}
-            selectedSignedInStatus={test.signedInStatus}
-            onSignedInStatusChange={onSignedInStatusChange}
-            selectedConsentStatus={test.consentStatus}
-            onConsentStatusChange={onConsentStatusChange}
-            showConsentStatusSelector={true}
-            mParticleAudienceEditor={{
-              mParticleAudience: test.mParticleAudience,
-              onMParticleAudienceChange: onMParticleAudienceChange,
-            }}
-          />
-        </div>
-
-        <div className={classes.sectionContainer}>
-          <Typography variant={'h3'} className={classes.sectionHeader}>
-            Article count
-          </Typography>
-
-          <TestEditorArticleCountEditor
-            articlesViewedSettings={test.articlesViewedSettings}
-            onArticlesViewedSettingsChanged={onArticlesViewedSettingsChange}
-            onValidationChange={onArticlesViewedSettingsValidationChanged}
-            isDisabled={!userHasTestLocked}
-          />
-        </div>
-
-        <div className={classes.sectionContainer}>
-          <Typography variant={'h3'} className={classes.sectionHeader}>
-            Deploy schedule override
-          </Typography>
-
-          <DeployScheduleEditor
-            deploySchedule={test.deploySchedule}
-            onDeployScheduleChange={onDeployScheduleChange}
-            onValidationChange={(isValid) => setValidationStatusForField('deploySchedule', isValid)}
-            isDisabled={!userHasTestLocked}
-          />
-        </div>
-
-        <div className={classes.sectionContainer}>
-          <Typography variant={'h3'} className={classes.sectionHeader}>
-            Fronts only
-          </Typography>
-
-          <FrontsOnlyEditor
-            frontsOnly={test.frontsOnly}
-            onFrontsOnlyChange={onFrontsOnlyChange}
-            isDisabled={!userHasTestLocked}
+            renderVariantEditor={renderVariantEditor}
+            renderVariantSummary={renderVariantSummary}
+            onVariantDelete={onVariantDelete}
+            onVariantClone={onVariantClone}
           />
         </div>
       </div>
-    );
-  }
-  return null;
+
+      <div className={classes.sectionContainer}>
+        <Typography variant={'h3'} className={classes.sectionHeader}>
+          Experiment Methodology
+        </Typography>
+        <TestMethodologyEditor
+          methodologies={test.methodologies}
+          testName={test.name}
+          channel={test.channel ?? ''}
+          isDisabled={!userHasTestLocked || test.status === 'Live'}
+          onChange={onMethodologyChange}
+        />
+      </div>
+
+      {test.variants.length > 1 && (
+        <div className={classes.sectionContainer}>
+          <Typography variant={'h3'} className={classes.sectionHeader}>
+            Variants split (applies to AB tests only)
+          </Typography>
+          <div>
+            <TestVariantsSplitEditor
+              variants={test.variants}
+              controlProportionSettings={test.controlProportionSettings}
+              onControlProportionSettingsChange={onControlProportionSettingsChange}
+              onValidationChange={onVariantsSplitSettingsValidationChanged}
+              isDisabled={!userHasTestLocked}
+            />
+          </div>
+        </div>
+      )}
+
+      <div className={classes.sectionContainer}>
+        <Typography variant={'h3'} className={classes.sectionHeader}>
+          Campaign
+        </Typography>
+        <div>
+          <CampaignSelector
+            test={test}
+            onCampaignChange={onCampaignChange}
+            disabled={!userHasTestLocked}
+          />
+        </div>
+      </div>
+
+      <div className={classes.sectionContainer}>
+        <Typography variant={'h3'} className={classes.sectionHeader}>
+          Target context
+        </Typography>
+
+        <TestEditorContextTargeting
+          contextTargeting={test.contextTargeting}
+          editMode={userHasTestLocked}
+          updateContextTargeting={(contextTargeting) =>
+            updateTest((current) => ({ ...current, contextTargeting }))
+          }
+        />
+      </div>
+
+      <div className={classes.sectionContainer}>
+        <Typography variant={'h3'} className={classes.sectionHeader}>
+          Target audience
+        </Typography>
+
+        <TestEditorTargetAudienceSelector
+          regionTargeting={test.regionTargeting}
+          onRegionTargetingUpdate={onRegionTargetingChange}
+          selectedCohort={test.userCohort}
+          onCohortChange={onCohortChange}
+          selectedDeviceType={test.deviceType ?? 'All'}
+          onDeviceTypeChange={onDeviceTypeChange}
+          isDisabled={!userHasTestLocked}
+          showSupporterStatusSelector={true}
+          showDeviceTypeSelector={true}
+          showSignedInStatusSelector={true}
+          selectedSignedInStatus={test.signedInStatus}
+          onSignedInStatusChange={onSignedInStatusChange}
+          selectedConsentStatus={test.consentStatus}
+          onConsentStatusChange={onConsentStatusChange}
+          showConsentStatusSelector={true}
+          mParticleAudienceEditor={{
+            mParticleAudience: test.mParticleAudience,
+            onMParticleAudienceChange: onMParticleAudienceChange,
+          }}
+        />
+      </div>
+
+      <div className={classes.sectionContainer}>
+        <Typography variant={'h3'} className={classes.sectionHeader}>
+          Article count
+        </Typography>
+
+        <TestEditorArticleCountEditor
+          articlesViewedSettings={test.articlesViewedSettings}
+          onArticlesViewedSettingsChanged={onArticlesViewedSettingsChange}
+          onValidationChange={onArticlesViewedSettingsValidationChanged}
+          isDisabled={!userHasTestLocked}
+        />
+      </div>
+
+      <div className={classes.sectionContainer}>
+        <Typography variant={'h3'} className={classes.sectionHeader}>
+          Deploy schedule override
+        </Typography>
+
+        <DeployScheduleEditor
+          deploySchedule={test.deploySchedule}
+          onDeployScheduleChange={onDeployScheduleChange}
+          onValidationChange={(isValid) => setValidationStatusForField('deploySchedule', isValid)}
+          isDisabled={!userHasTestLocked}
+        />
+      </div>
+
+      <div className={classes.sectionContainer}>
+        <Typography variant={'h3'} className={classes.sectionHeader}>
+          Fronts only
+        </Typography>
+
+        <FrontsOnlyEditor
+          frontsOnly={test.frontsOnly}
+          onFrontsOnlyChange={onFrontsOnlyChange}
+          isDisabled={!userHasTestLocked}
+        />
+      </div>
+    </div>
+  );
 };
 
 export default BannerTestEditor;

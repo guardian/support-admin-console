@@ -1,19 +1,19 @@
-import React from 'react';
 import { Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import React from 'react';
 import { Region } from '../../utils/models';
 import {
-  DeviceType,
-  SignedInStatus,
-  UserCohort,
-  TestPlatform,
   ConsentStatus,
+  DeviceType,
   RegionTargeting,
+  SignedInStatus,
+  TestPlatform,
+  UserCohort,
 } from './helpers/shared';
+import { MParticleAudienceEditor } from './mParticleAudienceEditor';
+import MultiSelectCountryEditor from './MultiSelectCountryEditor';
 import TestEditorTargetRegionsSelector from './testEditorTargetRegionsSelector';
 import TypedRadioGroup from './TypedRadioGroup';
-import MultiSelectCountryEditor from './MultiSelectCountryEditor';
-import { MParticleAudienceEditor } from './mParticleAudienceEditor';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {

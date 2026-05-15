@@ -1,6 +1,6 @@
-import React from 'react';
-import { makeStyles } from '@mui/styles';
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import React from 'react';
 import { PromoProduct, promoProductNames } from './utils/promoModels';
 
 const useStyles = makeStyles(() => ({

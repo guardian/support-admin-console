@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export interface DataFromServer<T> {
   value: T;
@@ -34,7 +34,7 @@ function withS3Data<T>(
         .catch((err) => alert(err));
 
     useEffect(() => {
-      fetchData();
+      void fetchData();
     }, []);
 
     const update = (data: T): void => {
@@ -65,7 +65,7 @@ function withS3Data<T>(
       }
       setIsSaving(true);
 
-      saveSettings({ ...dataFromServer, value: data })
+      void saveSettings({ ...dataFromServer, value: data })
         .catch((err) => {
           alert(`Error saving data: ${err}`);
         })

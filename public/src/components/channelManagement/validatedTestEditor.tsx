@@ -1,10 +1,10 @@
-import { Test } from './helpers/shared';
-import React, { useRef, useState } from 'react';
-import { TestEditorProps } from './testsForm';
-import StickyTopBar from './stickyTopBar/stickyTopBar';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import React, { useRef } from 'react';
+import { Test } from './helpers/shared';
 import useValidation from './hooks/useValidation';
+import StickyTopBar from './stickyTopBar/stickyTopBar';
+import { TestEditorProps } from './testsForm';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   testEditorContainer: {
@@ -63,12 +63,14 @@ export const ValidatedTestEditor = <T extends Test>(
      * In future we should explore refactoring these components to make better use of react-hook-form and react.
      */
     const testRef = useRef(test);
-    const [isValid, setIsValid] = useState<boolean>(true);
+    const isValidRef = useRef<boolean>(true);
 
-    const setValidationStatusForField = useValidation(setIsValid);
+    const setValidationStatusForField = useValidation((updatedIsValid) => {
+      isValidRef.current = updatedIsValid;
+    });
 
     const onSave = (): void => {
-      if (isValid) {
+      if (isValidRef.current) {
         onTestSave(test.name);
       } else {
         alert('Test contains errors. Please fix any errors before saving.');
@@ -89,7 +91,7 @@ export const ValidatedTestEditor = <T extends Test>(
           campaignName={test.campaignName}
           isNew={!!test.isNew}
           status={test.status}
-          lockStatus={test.lockStatus || { locked: false }}
+          lockStatus={test.lockStatus ?? { locked: false }}
           userHasTestLocked={userHasTestLocked}
           userHasTestListLocked={userHasTestListLocked}
           existingNames={existingNames}
@@ -108,9 +110,9 @@ export const ValidatedTestEditor = <T extends Test>(
 
         <div className={classes.scrollableContainer}>
           <TestEditor
-            test={testRef.current}
+            test={test}
             userHasTestLocked={userHasTestLocked}
-            onTestChange={(update) => onUpdate(update(testRef.current))}
+            onTestChange={(update) => onUpdate(update(test))}
             setValidationStatusForField={setValidationStatusForField}
           />
         </div>

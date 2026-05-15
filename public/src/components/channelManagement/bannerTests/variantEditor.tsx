@@ -1,17 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
 import { FormControlLabel, Radio, RadioGroup, Theme, Typography } from '@mui/material';
+import Alert from '@mui/material/Alert';
 import { makeStyles } from '@mui/styles';
-import VariantCtasEditor from './variantCtasEditor';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { BannerContent, BannerUi, BannerVariant } from '../../../models/banner';
+import { BannerDesign } from '../../../models/bannerDesign';
+import { ChoiceCardsSettings } from '../../../models/choiceCards';
+import { SeparateArticleCount } from '../../../models/epic';
+import PromoCodesEditor from '../../shared/PromoCodesEditor';
+import VariantSeparateArticleCountEditor from '../../tests/variants/variantSeparateArticleCountEditor';
+import ChoiceCardsEditor from '../choiceCards/ChoiceCardsEditor';
+import { Cta, SecondaryCta } from '../helpers/shared';
 import {
   EMPTY_ERROR_HELPER_TEXT,
   getEmptyParagraphsError,
   templateValidatorForPlatform,
 } from '../helpers/validation';
-import { Cta, SecondaryCta } from '../helpers/shared';
-import BannerDesignSelector from './bannerDesignSelector';
-import { BannerContent, BannerUi, BannerVariant } from '../../../models/banner';
-import { getDefaultVariant } from './utils/defaults';
 import useValidation from '../hooks/useValidation';
 import {
   getRteCopyLength,
@@ -19,14 +23,10 @@ import {
   RichTextEditorSingleLine,
 } from '../richTextEditor/richTextEditor';
 import TickerEditor from '../tickerEditor';
-import { BannerDesign } from '../../../models/bannerDesign';
-import VariantSeparateArticleCountEditor from '../../tests/variants/variantSeparateArticleCountEditor';
-import { SeparateArticleCount } from '../../../models/epic';
-import ChoiceCardsEditor from '../choiceCards/ChoiceCardsEditor';
-import { ChoiceCardsSettings } from '../../../models/choiceCards';
-import Alert from '@mui/material/Alert';
-import PromoCodesEditor from '../../shared/PromoCodesEditor';
+import BannerDesignSelector from './bannerDesignSelector';
 import IsCollapsibleEditor from './isCollapsibleEditor';
+import { getDefaultVariant } from './utils/defaults';
+import VariantCtasEditor from './variantCtasEditor';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {
@@ -138,9 +138,9 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
   const templateValidator = templateValidatorForPlatform('DOTCOM');
 
   const defaultValues: FormData = {
-    heading: content.heading || '',
+    heading: content.heading ?? '',
     paragraphs: getParagraphsOrMessageText(content.paragraphs, content.messageText),
-    highlightedText: content.highlightedText || '',
+    highlightedText: content.highlightedText ?? '',
   };
 
   /**
@@ -151,6 +151,17 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
    * `content` in a useEffect.
    */
   const [validatedFields, setValidatedFields] = useState<FormData>(defaultValues);
+
+  // Use refs to stabilize callback dependencies and prevent infinite render loops
+  const onChangeRef = useRef(onChange);
+  const contentRef = useRef(content);
+  const setValidationStatusForField = useValidation(onValidationChange);
+
+  useEffect(() => {
+    onChangeRef.current = onChange;
+    contentRef.current = content;
+  });
+
   const {
     handleSubmit,
     control,
@@ -163,21 +174,24 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
   });
 
   useEffect(() => {
-    trigger();
-  }, []);
+    void trigger();
+  }, [trigger]);
 
   useEffect(() => {
-    onChange({
-      ...content,
+    onChangeRef.current({
+      ...contentRef.current,
       ...validatedFields,
       messageText: undefined,
     });
   }, [validatedFields]);
 
   useEffect(() => {
-    const isValid = Object.keys(errors).length === 0;
-    onValidationChange(isValid);
-  }, [errors.heading, errors.paragraphs, errors.highlightedText]);
+    const isValid =
+      errors.heading === undefined &&
+      errors.paragraphs === undefined &&
+      errors.highlightedText === undefined;
+    setValidationStatusForField('copy', isValid);
+  }, [errors.heading, errors.paragraphs, errors.highlightedText, setValidationStatusForField]);
 
   const updatePrimaryCta = (updatedCta?: Cta): void => {
     onChange({ ...content, cta: updatedCta });
@@ -193,14 +207,8 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
       ? BODY_COPY_WITH_SECONDARY_CTA_RECOMMENDED_LENGTH
       : BODY_COPY_WITHOUT_SECONDARY_CTA_RECOMMENDED_LENGTH;
 
-    if (content.paragraphs != null) {
-      return [
-        getRteCopyLength([...content.paragraphs, content.highlightedText || '']),
-        bodyCopyRecommendedLength,
-      ];
-    }
     return [
-      getRteCopyLength([content.messageText || '', content.highlightedText || '']),
+      getRteCopyLength([...content.paragraphs, content.highlightedText ?? '']),
       bodyCopyRecommendedLength,
     ];
   };
@@ -234,11 +242,11 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
             return (
               <RichTextEditorSingleLine
                 error={errors.heading !== undefined}
-                helperText={errors.heading ? errors.heading.message || errors.heading.type : ''}
+                helperText={errors.heading ? (errors.heading.message ?? errors.heading.type) : ''}
                 copyData={field.value}
                 updateCopy={(pars) => {
                   field.onChange(pars);
-                  handleSubmit(setValidatedFields)();
+                  void handleSubmit(setValidatedFields)();
                 }}
                 name="heading"
                 label="Header"
@@ -277,13 +285,13 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                   helperText={
                     errors.paragraphs
                       ? // @ts-ignore -- react-hook-form doesn't believe it has a message field
-                        errors.paragraphs.message || errors.paragraphs.type
+                        (errors.paragraphs.message ?? errors.paragraphs.type)
                       : getParagraphsHelperText()
                   }
                   copyData={field.value}
                   updateCopy={(pars) => {
                     field.onChange(pars);
-                    handleSubmit(setValidatedFields)();
+                    void handleSubmit(setValidatedFields)();
                   }}
                   name="paragraphs"
                   label="Body copy"
@@ -318,13 +326,13 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                   error={errors.highlightedText !== undefined}
                   helperText={
                     errors.highlightedText
-                      ? errors.highlightedText.message || errors.highlightedText.type
+                      ? (errors.highlightedText.message ?? errors.highlightedText.type)
                       : HIGHTLIGHTED_TEXT_HELPER_TEXT
                   }
                   copyData={field.value}
                   updateCopy={(pars) => {
                     field.onChange(pars);
-                    handleSubmit(setValidatedFields)();
+                    void handleSubmit(setValidatedFields)();
                   }}
                   name="highlightedText"
                   label="Highlighted text"
@@ -359,7 +367,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
             updatePrimaryCta={updatePrimaryCta}
             updateSecondaryCta={updateSecondaryCta}
             isDisabled={!editMode}
-            onValidationChange={onValidationChange}
+            onValidationChange={(isValid) => setValidationStatusForField('cta', isValid)}
             supportSecondaryCta={true}
             isPrimaryCtaUrlDisabled={isPrimaryCtaUrlDisabled}
           />
@@ -387,6 +395,39 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
 }: VariantEditorProps) => {
   const classes = useStyles();
   const setValidationStatusForField = useValidation(onValidationChange);
+
+  // Memoize callbacks to prevent infinite render loops in child components
+  const onMainContentChange = useCallback(
+    (updatedContent: BannerContent): void =>
+      onVariantChange((current) => ({ ...current, bannerContent: updatedContent })),
+    [onVariantChange],
+  );
+
+  const onMainContentValidationChange = useCallback(
+    (isValid: boolean): void => setValidationStatusForField('mainContent', isValid),
+    [setValidationStatusForField],
+  );
+
+  const onMobileContentChange = useCallback(
+    (updatedContent: BannerContent): void =>
+      onVariantChange((current) => ({ ...current, mobileBannerContent: updatedContent })),
+    [onVariantChange],
+  );
+
+  const onMobileContentValidationChange = useCallback(
+    (isValid: boolean): void => setValidationStatusForField('mobileContent', isValid),
+    [setValidationStatusForField],
+  );
+
+  const onTemplateValidationChange = useCallback(
+    (isValid: boolean): void => setValidationStatusForField('template', isValid),
+    [setValidationStatusForField],
+  );
+
+  const onChoiceCardsValidationChange = useCallback(
+    (isValid: boolean): void => setValidationStatusForField('choiceCardsSettings', isValid),
+    [setValidationStatusForField],
+  );
 
   const onMobileContentRadioChange = (): void => {
     if (variant.mobileBannerContent === undefined) {
@@ -440,6 +481,12 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
   const designHasChoiceCards =
     designs.find((d) => d.name === variant.template.designName)?.visual?.kind === 'ChoiceCards';
 
+  useEffect(() => {
+    if (!designHasChoiceCards) {
+      setValidationStatusForField('choiceCardsSettings', true);
+    }
+  }, [designHasChoiceCards, setValidationStatusForField]);
+
   return (
     <div className={classes.container}>
       <div className={classes.sectionContainer}>
@@ -456,7 +503,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
           }
           editMode={editMode}
           designs={designs}
-          onValidationChange={(isValid): void => setValidationStatusForField('template', isValid)}
+          onValidationChange={onTemplateValidationChange}
         />
       </div>
 
@@ -464,12 +511,8 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
         <VariantContentEditor
           content={variant.bannerContent}
           template={variant.template}
-          onChange={(updatedContent: BannerContent): void =>
-            onVariantChange((current) => ({ ...current, bannerContent: updatedContent }))
-          }
-          onValidationChange={(isValid): void =>
-            setValidationStatusForField('mainContent', isValid)
-          }
+          onChange={onMainContentChange}
+          onValidationChange={onMainContentValidationChange}
           editMode={editMode}
           deviceType={variant.mobileBannerContent === undefined ? 'ALL' : 'NOT_MOBILE'}
           isPrimaryCtaUrlDisabled={designHasChoiceCards}
@@ -498,12 +541,8 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
           <VariantContentEditor
             content={variant.mobileBannerContent}
             template={variant.template}
-            onChange={(updatedContent: BannerContent): void =>
-              onVariantChange((current) => ({ ...current, mobileBannerContent: updatedContent }))
-            }
-            onValidationChange={(isValid): void =>
-              setValidationStatusForField('mobileContent', isValid)
-            }
+            onChange={onMobileContentChange}
+            onValidationChange={onMobileContentValidationChange}
             editMode={editMode}
             deviceType={'MOBILE'}
             isPrimaryCtaUrlDisabled={designHasChoiceCards}
@@ -532,9 +571,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
             choiceCardsSettings={variant.choiceCardsSettings}
             updateChoiceCardsSettings={updateChoiceCardsSettings}
             isDisabled={!editMode}
-            onValidationChange={(isValid): void =>
-              setValidationStatusForField('choiceCardsSettings', isValid)
-            }
+            onValidationChange={onChoiceCardsValidationChange}
           />
         )}
       </div>
@@ -565,7 +602,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
             }))
           }
           isDisabled={!editMode}
-          onValidationChange={onValidationChange}
+          onValidationChange={(isValid) => setValidationStatusForField('ticker', isValid)}
         />
       </div>
       <div className={classes.sectionContainer}>

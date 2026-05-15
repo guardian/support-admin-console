@@ -1,15 +1,15 @@
-import React, { useEffect } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { Checkbox, TextField, Theme, Typography, Alert } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Alert, Checkbox, TextField, Theme, Typography } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import { makeStyles } from '@mui/styles';
+import React, { useEffect, useMemo, useRef } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { CountdownSettings } from './helpers/shared';
 import {
   copyLengthValidator,
   EMPTY_ERROR_HELPER_TEXT,
   templateValidatorForPlatform,
 } from './helpers/validation';
-import Switch from '@mui/material/Switch';
 import { RichTextEditorSingleLine } from './richTextEditor/richTextEditor';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
@@ -72,17 +72,20 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
   const classes = useStyles();
   const templateValidator = templateValidatorForPlatform('SUPPORT');
 
-  const defaultValues: FormData = {
-    overwriteHeadingLabel:
-      countdownSettings?.overwriteHeadingLabel || 'Last chance to claim your 30% discount offer',
-    countdownStartTimestamp:
-      countdownSettings?.countdownStartTimestamp || new Date().toISOString().slice(0, 19),
-    countdownDeadlineTimestamp:
-      countdownSettings?.countdownDeadlineTimestamp || new Date().toISOString().slice(0, 19),
-    useLocalTime: countdownSettings?.useLocalTime || false,
-    backgroundColor: countdownSettings?.theme.backgroundColor || '#1e3e72',
-    foregroundColor: countdownSettings?.theme.foregroundColor || '#ffffff',
-  };
+  const defaultValues = useMemo<FormData>(
+    () => ({
+      overwriteHeadingLabel:
+        countdownSettings?.overwriteHeadingLabel ?? 'Last chance to claim your 30% discount offer',
+      countdownStartTimestamp:
+        countdownSettings?.countdownStartTimestamp ?? new Date().toISOString().slice(0, 19),
+      countdownDeadlineTimestamp:
+        countdownSettings?.countdownDeadlineTimestamp ?? new Date().toISOString().slice(0, 19),
+      useLocalTime: countdownSettings?.useLocalTime ?? false,
+      backgroundColor: countdownSettings?.theme.backgroundColor ?? '#1e3e72',
+      foregroundColor: countdownSettings?.theme.foregroundColor ?? '#ffffff',
+    }),
+    [countdownSettings],
+  );
 
   const {
     register,
@@ -98,23 +101,29 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
 
   useEffect(() => {
     reset(defaultValues);
-  }, [
-    defaultValues.overwriteHeadingLabel,
-    defaultValues.countdownStartTimestamp,
-    defaultValues.countdownDeadlineTimestamp,
-    defaultValues.useLocalTime,
-    defaultValues.backgroundColor,
-    defaultValues.foregroundColor,
-  ]);
+  }, [reset, defaultValues]);
+
+  // Use refs to stabilize callback dependencies and prevent infinite render loops
+  const onValidationChangeRef = useRef(onValidationChange);
 
   useEffect(() => {
-    const isValid = Object.keys(errors).length === 0;
-    onValidationChange(isValid);
+    onValidationChangeRef.current = onValidationChange;
+  });
+
+  useEffect(() => {
+    const isValid =
+      !countdownSettings ||
+      (errors.overwriteHeadingLabel === undefined &&
+        errors.countdownStartTimestamp === undefined &&
+        errors.countdownDeadlineTimestamp === undefined &&
+        errors.backgroundColor === undefined &&
+        errors.foregroundColor === undefined);
+    onValidationChangeRef.current(isValid);
   }, [
+    countdownSettings,
     errors.overwriteHeadingLabel,
     errors.countdownStartTimestamp,
     errors.countdownDeadlineTimestamp,
-    errors.useLocalTime,
     errors.backgroundColor,
     errors.foregroundColor,
   ]);
@@ -182,12 +191,12 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
                 <RichTextEditorSingleLine
                   error={errors.overwriteHeadingLabel !== undefined}
                   helperText={
-                    errors?.overwriteHeadingLabel?.message || errors?.overwriteHeadingLabel?.type
+                    errors.overwriteHeadingLabel?.message ?? errors.overwriteHeadingLabel?.type
                   }
                   copyData={field.value}
                   updateCopy={(pars) => {
                     field.onChange(pars);
-                    handleSubmit(onSubmit)();
+                    void handleSubmit(onSubmit)();
                   }}
                   name="overwriteHeadingLabel"
                   label="Overwrite Heading Text"
@@ -210,7 +219,9 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
             <Switch
               checked={countdownSettings.useLocalTime}
               onChange={onUseLocalTimeChanged}
-              onBlur={handleSubmit(onSubmit)}
+              onBlur={() => {
+                void handleSubmit(onSubmit)();
+              }}
               name="useLocalTime"
               disabled={isDisabled}
             />
@@ -234,9 +245,11 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
 
           <TextField
             error={!!errors.countdownStartTimestamp}
-            helperText={errors?.countdownStartTimestamp?.message}
+            helperText={errors.countdownStartTimestamp?.message}
             {...register('countdownStartTimestamp', { required: EMPTY_ERROR_HELPER_TEXT })}
-            onBlur={handleSubmit(onSubmit)}
+            onBlur={() => {
+              void handleSubmit(onSubmit)();
+            }}
             label="Start Date"
             type={'datetime-local'}
             defaultValue={new Date().toISOString().slice(0, 19)}
@@ -248,9 +261,11 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
 
           <TextField
             error={!!errors.countdownDeadlineTimestamp}
-            helperText={errors?.countdownDeadlineTimestamp?.message}
+            helperText={errors.countdownDeadlineTimestamp?.message}
             {...register('countdownDeadlineTimestamp', { required: EMPTY_ERROR_HELPER_TEXT })}
-            onBlur={handleSubmit(onSubmit)}
+            onBlur={() => {
+              void handleSubmit(onSubmit)();
+            }}
             label="End Date"
             type={'datetime-local'}
             defaultValue={new Date().toISOString().slice(0, 19)}
@@ -262,9 +277,11 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
 
           <TextField
             error={!!errors.backgroundColor}
-            helperText={errors?.backgroundColor?.message}
+            helperText={errors.backgroundColor?.message}
             {...register('backgroundColor', { required: true })}
-            onBlur={handleSubmit(onSubmit)}
+            onBlur={() => {
+              void handleSubmit(onSubmit)();
+            }}
             label="Background Color"
             margin="normal"
             variant="outlined"
@@ -274,9 +291,11 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
 
           <TextField
             error={!!errors.foregroundColor}
-            helperText={errors?.foregroundColor?.message}
+            helperText={errors.foregroundColor?.message}
             {...register('foregroundColor', { required: true })}
-            onBlur={handleSubmit(onSubmit)}
+            onBlur={() => {
+              void handleSubmit(onSubmit)();
+            }}
             label="Foreground Color"
             margin="normal"
             variant="outlined"

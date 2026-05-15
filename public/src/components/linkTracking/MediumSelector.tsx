@@ -1,7 +1,7 @@
 import { FormControl, MenuItem, Select, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React from 'react';
 import { Control, Controller, FieldErrors } from 'react-hook-form';
-import { makeStyles } from '@mui/styles';
 import { LinkTrackingFormData } from './linkTrackingFormData';
 
 interface Option {
@@ -219,7 +219,7 @@ export const MediumSelector: React.FC<Props> = ({ control, errors, onUpdate }: P
               onUpdate();
               onChange(e);
             }}
-            error={!!errors?.sourceAndMedium}
+            error={!!errors.sourceAndMedium}
           >
             {OPTIONS.map((group) => {
               const groupItem = (

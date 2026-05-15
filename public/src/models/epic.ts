@@ -1,21 +1,21 @@
+import { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';
 import {
   ArticlesViewedSettings,
+  BylineWithImage,
   ContributionFrequency,
   Cta,
   DeviceType,
   Image,
+  NewsletterSignup,
+  RegionTargeting,
   SecondaryCta,
   Status,
   Test,
   TickerSettings,
   UserCohort,
-  BylineWithImage,
   Variant,
-  NewsletterSignup,
-  RegionTargeting,
 } from '../components/channelManagement/helpers/shared';
 import { Region } from '../utils/models';
-import { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';
 import { ChoiceCardsSettings } from './choiceCards';
 
 export interface SeparateArticleCount {

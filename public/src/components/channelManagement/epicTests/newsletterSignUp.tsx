@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
 import { TextField } from '@mui/material';
+import React, { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { NewsletterSignup } from '../helpers/shared';
 import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
-import { useForm } from 'react-hook-form';
 
 interface FormData {
   newsletterId: string;
@@ -34,9 +34,9 @@ const EpicTestNewsletter: React.FC<EpicTestNewsletterProps> = ({
   } = useForm<FormData>({ mode: 'onChange', defaultValues });
 
   useEffect(() => {
-    const isValid = Object.keys(errors).length === 0;
+    const isValid = errors.newsletterId === undefined && errors.successDescription === undefined;
     onValidationChange(isValid);
-  }, [errors.newsletterId, errors.successDescription]);
+  }, [errors.newsletterId, errors.successDescription, onValidationChange]);
 
   const onSubmit = ({ newsletterId, successDescription }: FormData): void => {
     updateNewsletterSignup({ newsletterId, successDescription });
@@ -51,7 +51,10 @@ const EpicTestNewsletter: React.FC<EpicTestNewsletterProps> = ({
           {...register('newsletterId', {
             required: EMPTY_ERROR_HELPER_TEXT,
           })}
-          onBlur={handleSubmit(onSubmit)}
+          onBlur={(e) => {
+            e.preventDefault();
+            void handleSubmit(onSubmit)(e);
+          }}
           label="Newsletter Id"
           margin="normal"
           variant="outlined"
@@ -66,7 +69,10 @@ const EpicTestNewsletter: React.FC<EpicTestNewsletterProps> = ({
           {...register('successDescription', {
             required: EMPTY_ERROR_HELPER_TEXT,
           })}
-          onBlur={handleSubmit(onSubmit)}
+          onBlur={(e) => {
+            e.preventDefault();
+            void handleSubmit(onSubmit)(e);
+          }}
           label="Sign up success message"
           margin="normal"
           variant="outlined"

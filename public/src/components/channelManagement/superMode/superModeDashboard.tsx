@@ -1,8 +1,8 @@
-import React from 'react';
 import { Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { useSuperModeRows } from './useSuperModeRows';
+import React from 'react';
 import { SuperModeTable } from './superModeTable';
+import { useSuperModeRows } from './useSuperModeRows';
 
 const useStyles = makeStyles(() => ({
   container: {

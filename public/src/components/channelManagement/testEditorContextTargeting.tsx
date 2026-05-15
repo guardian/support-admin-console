@@ -1,9 +1,8 @@
-import React from 'react';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-
-import { TagsEditor } from './epicTests/tagsEditor';
+import React from 'react';
 import { SectionsEditor } from './epicTests/sectionsEditor';
+import { TagsEditor } from './epicTests/tagsEditor';
 import { PageContextTargeting } from './helpers/shared';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({

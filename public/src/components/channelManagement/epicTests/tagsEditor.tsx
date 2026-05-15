@@ -1,7 +1,7 @@
 import { Autocomplete } from '@mui/material';
-import React, { useEffect, useCallback } from 'react';
 import { TextField } from '@mui/material';
 import throttle from 'lodash/throttle';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 interface Tag {
   id: string;
@@ -28,20 +28,27 @@ export const TagsEditor: React.FC<TagEditorProps> = ({
   ids,
   onUpdate,
 }: TagEditorProps) => {
-  const [inputValue, setInputValue] = React.useState<string>('');
-  const [options, setOptions] = React.useState<Tag[]>([]);
+  const [inputValue, setInputValue] = useState<string>('');
+  const [rawOptions, setRawOptions] = useState<Tag[]>([]);
 
-  const fetchTags = (value: string): Promise<void> =>
+  const options = inputValue === '' ? [] : rawOptions;
+
+  const fetchTags = useCallback((value: string): void => {
     fetch(`/capi/tags?web-title=${value}&page-size=1000`)
-      .then((response) => response.json())
+      .then(
+        (response) =>
+          response.json() as Promise<{
+            response: {
+              results: Array<{ id: string; webTitle: string; sectionId: string | null }>;
+            };
+          }>,
+      )
       .then((data) => {
-        const newOptions = data.response.results.map(
-          (tag: { id: string; webTitle: string; sectionId: string }) => ({
-            id: tag.id,
-            name: tag.webTitle,
-            section: tag.sectionId != null ? tag.sectionId.toUpperCase() : '[no section]',
-          }),
-        );
+        const newOptions = data.response.results.map((tag) => ({
+          id: tag.id,
+          name: tag.webTitle,
+          section: tag.sectionId != null ? tag.sectionId.toUpperCase() : '[no section]',
+        }));
 
         newOptions.sort((a: Tag, b: Tag) => {
           if (a.section != null && b.section != null) {
@@ -59,35 +66,35 @@ export const TagsEditor: React.FC<TagEditorProps> = ({
           return -1;
         });
 
-        // Make the raw input an option, in case user is pasting in tags
-        const inputValueOption = { id: value };
+        const inputValueOption: Tag = { id: value };
 
-        const combinedOptions = [inputValueOption].concat(newOptions);
+        const combinedOptions: Tag[] = [inputValueOption, ...newOptions];
 
-        setOptions(combinedOptions);
+        setRawOptions(combinedOptions);
+      })
+      .catch(() => {
+        // Ignore errors - tags search is non-critical
       });
+  }, []);
 
   // Throttle requests as the user types
-  const throttledFetchTags = useCallback(throttle(fetchTags, 1000), []);
+  const throttledFetchTags = useMemo(() => throttle(fetchTags, 1000), [fetchTags]);
 
   useEffect(() => {
-    if (inputValue === '') {
-      setOptions([]);
-      return undefined;
-    } else if (inputValue.length > 2) {
+    if (inputValue.length > 2) {
       throttledFetchTags(inputValue);
     }
-  }, [inputValue]);
+  }, [inputValue, throttledFetchTags]);
 
   return (
     <Autocomplete
       id={id}
       disabled={disabled}
       multiple
-      getOptionLabel={(option): string => option.name || option.id}
+      getOptionLabel={(option): string => option.name ?? option.id}
       noOptionsText={'Search for tags...'}
       filterOptions={(x): Tag[] => x}
-      groupBy={(option): string => option.section || ''}
+      groupBy={(option): string => option.section ?? ''}
       options={options}
       autoComplete
       includeInputInList

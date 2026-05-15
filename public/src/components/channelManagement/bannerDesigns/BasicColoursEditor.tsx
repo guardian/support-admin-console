@@ -1,10 +1,10 @@
-import React from 'react';
-import { BasicColours } from '../../../models/bannerDesign';
-import { ColourInput } from './ColourInput';
 import { Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
+import React from 'react';
+import { BasicColours } from '../../../models/bannerDesign';
 import { hexColourToString, stringToHexColour } from '../../../utils/bannerDesigns';
 import TypedRadioGroup from '../TypedRadioGroup';
+import { ColourInput } from './ColourInput';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {

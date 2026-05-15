@@ -1,6 +1,6 @@
-import React from 'react';
-import { Theme, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from '@mui/material';
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import React from 'react';
 import { Cta, SecondaryCta, SecondaryCtaType } from '../../channelManagement/helpers/shared';
 import VariantCtaFieldsEditor from './variantCtaFieldsEditor';
 
@@ -42,12 +42,14 @@ const VariantEditorSecondaryCtaEditor: React.FC<VariantEditorSecondaryCtaEditorP
   const handleChange = (event: SelectChangeEvent<SecondaryCtaType | 'None'>): void => {
     const value = event.target.value;
 
-    if (value === SecondaryCtaType.Custom) {
+    if (value === SecondaryCtaType.Custom.valueOf()) {
       updateCta({ type: SecondaryCtaType.Custom, cta: defaultCta });
-    } else if (value === SecondaryCtaType.ContributionsReminder) {
+    } else if (value === SecondaryCtaType.ContributionsReminder.valueOf()) {
       updateCta({ type: SecondaryCtaType.ContributionsReminder });
+      onValidationChange(true);
     } else {
       updateCta(undefined);
+      onValidationChange(true);
     }
   };
 
@@ -67,7 +69,7 @@ const VariantEditorSecondaryCtaEditor: React.FC<VariantEditorSecondaryCtaEditorP
             name="secondary-cta-type"
             labelId={'secondaryCtaTypeLabel'}
             label={label}
-            value={cta?.type || 'None'}
+            value={cta?.type ?? 'None'}
             onChange={handleChange}
             disabled={isDisabled}
             inputProps={{ id: 'secondary-cta-type' }}
