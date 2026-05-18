@@ -1,6 +1,6 @@
+import { makeStyles } from '@mui/styles';
 import { format } from 'date-fns';
 import React, { useEffect, useState } from 'react';
-import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles(() => ({
   webTitle: {
@@ -44,10 +44,10 @@ export const ArticleDetails: React.FC<ArticleDetailsProps> = ({
   const [content, setContent] = useState<Content | null>(null);
 
   useEffect(() => {
-    fetch(`/capi/content/${url}`)
+    void fetch(`/capi/content/${url}`)
       .then((resp) => resp.json())
       .then(setContent);
-  }, []);
+  }, [url]);
 
   if (content) {
     const { webTitle, webPublicationDate } = content.response.content;

@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
-import { makeStyles } from '@mui/styles';
 import { FormControl, FormControlLabel, Radio, RadioGroup, TextField, Theme } from '@mui/material';
-import { BannerTestDeploySchedule } from '../../../models/banner';
+import { makeStyles } from '@mui/styles';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { BannerTestDeploySchedule } from '../../../models/banner';
 import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
@@ -42,9 +42,9 @@ const DeployScheduleEditor: React.FC<DeployScheduleEditorProps> = ({
   });
 
   useEffect(() => {
-    const isValid = Object.keys(errors).length === 0 || !deploySchedule;
+    const isValid = errors.daysBetween === undefined || !deploySchedule;
     onValidationChange(isValid);
-  }, [errors.daysBetween]);
+  }, [errors.daysBetween, deploySchedule, onValidationChange]);
 
   const onRadioGroupChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     if (event.target.value === 'enabled') {
@@ -81,12 +81,15 @@ const DeployScheduleEditor: React.FC<DeployScheduleEditorProps> = ({
         {deploySchedule && (
           <TextField
             error={errors.daysBetween !== undefined}
-            helperText={errors.daysBetween?.message || 'Must be a number'}
+            helperText={errors.daysBetween?.message ?? 'Must be a number'}
             {...register('daysBetween', {
               required: EMPTY_ERROR_HELPER_TEXT,
               valueAsNumber: true,
             })}
-            onBlur={handleSubmit(onSubmit)}
+            onBlur={(e) => {
+              e.preventDefault();
+              void handleSubmit(onSubmit)(e);
+            }}
             label="Days between deploys"
             InputLabelProps={{ shrink: true }}
             variant="outlined"

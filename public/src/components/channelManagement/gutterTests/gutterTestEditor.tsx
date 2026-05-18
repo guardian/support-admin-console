@@ -1,5 +1,12 @@
-import React from 'react';
+import { Typography } from '@mui/material';
+import React, { useEffect, useRef } from 'react';
 import { GutterTest, GutterVariant } from '../../../models/gutter';
+import TestVariantsSplitEditor from '../../tests/variants/testVariantsSplitEditor';
+import VariantEditorWithPreviewTab from '../../tests/variants/variantEditorWithPreviewTab';
+import VariantsEditor from '../../tests/variants/variantsEditor';
+import VariantSummary from '../../tests/variants/variantSummary';
+import CampaignSelector from '../CampaignSelector';
+import { ControlProportionSettings } from '../helpers/controlProportionSettings';
 import {
   ConsentStatus,
   DeviceType,
@@ -8,21 +15,14 @@ import {
   SignedInStatus,
   UserCohort,
 } from '../helpers/shared';
-import { ValidatedTestEditorProps } from '../validatedTestEditor';
-import GutterVariantEditor from './gutterVariantEditor';
-import { Typography } from '@mui/material';
-import { getDefaultVariant } from './utils/defaults';
-import CampaignSelector from '../CampaignSelector';
+import { useStyles } from '../helpers/testEditorStyles';
 import TestEditorContextTargeting from '../testEditorContextTargeting';
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
-import { ControlProportionSettings } from '../helpers/controlProportionSettings';
-import GutterVariantPreview from './gutterVariantPreview';
-import { useStyles } from '../helpers/testEditorStyles';
-import VariantSummary from '../../tests/variants/variantSummary';
-import VariantsEditor from '../../tests/variants/variantsEditor';
-import TestVariantsSplitEditor from '../../tests/variants/testVariantsSplitEditor';
-import VariantEditorWithPreviewTab from '../../tests/variants/variantEditorWithPreviewTab';
+import { ValidatedTestEditorProps } from '../validatedTestEditor';
 import { GutterTestPreviewButton } from './gutterTestPreview';
+import GutterVariantEditor from './gutterVariantEditor';
+import GutterVariantPreview from './gutterVariantPreview';
+import { getDefaultVariant } from './utils/defaults';
 
 const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
   test,
@@ -52,19 +52,6 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
       return { ...current, variants: updatedVariantList };
     });
   };
-
-  const onVariantChange =
-    (variantName: string) =>
-    (update: (current: GutterVariant) => GutterVariant): void => {
-      onVariantsChange((current) =>
-        current.map((variant) => {
-          if (variant.name === variantName) {
-            return update(variant);
-          }
-          return variant;
-        }),
-      );
-    };
 
   const onVariantDelete = (deletedVariantName: string): void => {
     onVariantsChange((current) => current.filter((variant) => variant.name !== deletedVariantName));
@@ -107,10 +94,8 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
           key={`gutter-${test.name}-${variant.name}`}
           variant={variant}
           editMode={userHasTestLocked}
-          onValidationChange={(isValid: boolean): void =>
-            setValidationStatusForField(variant.name, isValid)
-          }
-          onVariantChange={onVariantChange(variant.name)}
+          onValidationChange={getValidationCallback(variant.name)}
+          onVariantChange={getVariantChangeCallback(variant.name)}
           onDelete={(): void => onVariantDelete(variant.name)}
         />
       }
@@ -145,6 +130,51 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
       name: clonedVariantName,
     };
     onVariantsChange((current) => [...current, newVariant]);
+  };
+
+  // Memoize callbacks by variant name to prevent infinite render loops
+  // Using refs to store callbacks to avoid dependency issues with useCallback
+  const validationCallbacksRef = useRef<Map<string, (isValid: boolean) => void>>(new Map());
+  const variantChangeCallbacksRef = useRef<
+    Map<string, (update: (current: GutterVariant) => GutterVariant) => void>
+  >(new Map());
+  const setValidationStatusRef = useRef(setValidationStatusForField);
+  const onVariantsChangeRef = useRef(onVariantsChange);
+
+  // Keep refs up to date without triggering re-renders
+  useEffect(() => {
+    setValidationStatusRef.current = setValidationStatusForField;
+    onVariantsChangeRef.current = onVariantsChange;
+  });
+
+  const getValidationCallback = (variantName: string): ((isValid: boolean) => void) => {
+    if (!validationCallbacksRef.current.has(variantName)) {
+      validationCallbacksRef.current.set(variantName, (isValid: boolean): void =>
+        setValidationStatusRef.current(variantName, isValid),
+      );
+    }
+    return validationCallbacksRef.current.get(variantName)!;
+  };
+
+  const getVariantChangeCallback = (
+    variantName: string,
+  ): ((update: (current: GutterVariant) => GutterVariant) => void) => {
+    if (!variantChangeCallbacksRef.current.has(variantName)) {
+      variantChangeCallbacksRef.current.set(
+        variantName,
+        (update: (current: GutterVariant) => GutterVariant): void => {
+          onVariantsChangeRef.current((current) =>
+            current.map((variant) => {
+              if (variant.name === variantName) {
+                return update(variant);
+              }
+              return variant;
+            }),
+          );
+        },
+      );
+    }
+    return variantChangeCallbacksRef.current.get(variantName)!;
   };
 
   return (
@@ -217,18 +247,12 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
         </Typography>
 
         <TestEditorTargetAudienceSelector
-          regionTargeting={
-            test.regionTargeting ?? {
-              // For backwards compatibility with the deprecated locations field
-              targetedCountryGroups: test.locations,
-              targetedCountryCodes: [],
-            }
-          }
+          regionTargeting={test.regionTargeting}
           onRegionTargetingUpdate={onRegionTargetingChange}
           selectedCohort={test.userCohort}
           onCohortChange={onCohortChange}
           showDeviceTypeSelector={false}
-          selectedDeviceType={test.deviceType ?? 'All'} // can't remove but hidden anyway.
+          selectedDeviceType={test.deviceType} // can't remove but hidden anyway.
           onDeviceTypeChange={onDeviceTypeChange} // can't remove but hidden anywat.
           isDisabled={!userHasTestLocked}
           showSupporterStatusSelector={true}

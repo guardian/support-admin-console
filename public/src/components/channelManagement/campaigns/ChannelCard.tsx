@@ -1,10 +1,10 @@
-import React from 'react';
-import { Theme, Button } from '@mui/material';
+import { Button, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import TestCard from './TestCard';
-import { TestChannelItem } from './CampaignsEditor';
 import { Test } from '../helpers/shared';
+import { TestChannelItem } from './CampaignsTypes';
+import TestCard from './TestCard';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   channelContainer: {

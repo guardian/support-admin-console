@@ -1,9 +1,10 @@
-import React from 'react';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import React from 'react';
 import VariantCtaEditor from '../../tests/variants/variantCtaEditor';
 import VariantEditorSecondaryCtaEditor from '../../tests/variants/variantEditorSecondaryCtaEditor';
 import { Cta, SecondaryCta } from '../helpers/shared';
+import useValidation from '../hooks/useValidation';
 import { DEFAULT_PRIMARY_CTA, DEFAULT_SECONDARY_CTA } from './utils/defaults';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
@@ -38,6 +39,7 @@ const EpicTestVariantEditorButtonsEditor: React.FC<EpicTestVariantEditorButtonsE
   isPrimaryCtaUrlDisabled,
 }: EpicTestVariantEditorButtonsEditorProps) => {
   const classes = useStyles();
+  const setValidationStatusForField = useValidation(onValidationChange);
 
   return (
     <div className={classes.container}>
@@ -47,7 +49,7 @@ const EpicTestVariantEditorButtonsEditor: React.FC<EpicTestVariantEditorButtonsE
         cta={primaryCta}
         updateCta={updatePrimaryCta}
         defaultCta={DEFAULT_PRIMARY_CTA}
-        onValidationChange={onValidationChange}
+        onValidationChange={(isValid) => setValidationStatusForField('primaryCta', isValid)}
         isPrimaryCtaUrlDisabled={isPrimaryCtaUrlDisabled}
       />
 
@@ -59,7 +61,7 @@ const EpicTestVariantEditorButtonsEditor: React.FC<EpicTestVariantEditorButtonsE
           updateCta={updateSecondaryCta}
           allowVariantCustomSecondaryCta={allowVariantCustomSecondaryCta}
           defaultCta={DEFAULT_SECONDARY_CTA}
-          onValidationChange={onValidationChange}
+          onValidationChange={(isValid) => setValidationStatusForField('secondaryCta', isValid)}
         />
       )}
     </div>

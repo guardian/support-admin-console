@@ -1,4 +1,20 @@
-import { templateValidatorForPlatform } from './validation';
+import {
+  EMPTY_ERROR_HELPER_TEXT,
+  getEmptyParagraphsError,
+  templateValidatorForPlatform,
+} from './validation';
+
+describe('getEmptyParagraphsError', () => {
+  it('should return an error when paragraphs contain only empty html', () => {
+    expect(getEmptyParagraphsError(['<br class="ProseMirror-trailingBreak">'])).toEqual(
+      EMPTY_ERROR_HELPER_TEXT,
+    );
+  });
+
+  it('should return undefined when paragraphs contain text inside html', () => {
+    expect(getEmptyParagraphsError(['<strong>Hello</strong>'])).toBeUndefined();
+  });
+});
 
 describe('templateValidatorForPlatform', () => {
   describe('When platform is dotcom', () => {

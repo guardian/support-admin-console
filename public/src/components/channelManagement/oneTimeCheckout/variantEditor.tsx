@@ -1,9 +1,10 @@
 import React from 'react';
-import { AmountsSection } from './AmountsSection';
 import { OneTimeCheckoutVariant } from '../../../models/oneTimeCheckout';
 import { CopyEditor } from '../../shared/copyEditor';
-import TickerEditor from '../tickerEditor';
 import { TickerSettings } from '../helpers/shared';
+import useValidation from '../hooks/useValidation';
+import TickerEditor from '../tickerEditor';
+import { AmountsSection } from './AmountsSection';
 
 interface VariantEditorProps {
   variant: OneTimeCheckoutVariant;
@@ -19,6 +20,8 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
   editMode,
   onValidationChange,
 }: VariantEditorProps) => {
+  const setValidationStatusForField = useValidation(onValidationChange);
+
   return (
     <div>
       <CopyEditor
@@ -30,7 +33,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
             subheading: updatedCopy.subheading,
           }))
         }
-        onValidationChange={onValidationChange}
+        onValidationChange={(isValid) => setValidationStatusForField('copy', isValid)}
         editMode={editMode}
       />
       <AmountsSection variant={variant} onVariantChange={onVariantChange} editMode={editMode} />
@@ -40,7 +43,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
           onVariantChange((current) => ({ ...current, tickerSettings: updatedTickerSettings }));
         }}
         isDisabled={!editMode}
-        onValidationChange={onValidationChange}
+        onValidationChange={(isValid) => setValidationStatusForField('ticker', isValid)}
       />
     </div>
   );

@@ -1,9 +1,9 @@
-import React from 'react';
 import { Typography } from '@mui/material';
-import { useStyles } from '../helpers/testEditorStyles';
-import { ContributionType, contributionTypes } from '../../../utils/models';
+import React from 'react';
 import { OneTimeCheckoutVariant } from '../../../models/oneTimeCheckout';
-import { AmountsVariantEditorRow } from '../../amounts/AmountsVariantEditorRow';
+import { ContributionType, contributionTypes } from '../../../utils/models';
+import { useStyles } from '../helpers/testEditorStyles';
+import { AmountsVariantEditorRow } from './AmountsVariantEditorRow';
 
 interface AmountsSectionProps {
   variant: OneTimeCheckoutVariant;
@@ -19,39 +19,33 @@ export const AmountsSection: React.FC<AmountsSectionProps> = ({
   const classes = useStyles();
 
   const updateAmounts = (label: ContributionType, val: number[]): void => {
-    if (variant.amounts != null) {
-      onVariantChange((current) => ({
-        ...current,
-        amounts: {
-          ...current.amounts,
-          amounts: val,
-        },
-      }));
-    }
+    onVariantChange((current) => ({
+      ...current,
+      amounts: {
+        ...current.amounts,
+        amounts: val,
+      },
+    }));
   };
 
   const updateChooseAmount = (label: ContributionType, val: boolean): void => {
-    if (variant.amounts != null) {
-      onVariantChange((current) => ({
-        ...current,
-        amounts: {
-          ...current.amounts,
-          hideChooseYourAmount: val,
-        },
-      }));
-    }
+    onVariantChange((current) => ({
+      ...current,
+      amounts: {
+        ...current.amounts,
+        hideChooseYourAmount: val,
+      },
+    }));
   };
 
   const updateDefaultAmount = (label: ContributionType, val: number): void => {
-    if (variant.amounts != null) {
-      onVariantChange((current) => ({
-        ...current,
-        amounts: {
-          ...current.amounts,
-          defaultAmount: val,
-        },
-      }));
-    }
+    onVariantChange((current) => ({
+      ...current,
+      amounts: {
+        ...current.amounts,
+        defaultAmount: val,
+      },
+    }));
   };
 
   return (
@@ -61,9 +55,9 @@ export const AmountsSection: React.FC<AmountsSectionProps> = ({
       </Typography>
       <AmountsVariantEditorRow
         label={contributionTypes.OneOff}
-        amounts={variant.amounts.amounts || []}
-        defaultAmount={variant.amounts.defaultAmount || 0}
-        hideChooseYourAmount={variant.amounts.hideChooseYourAmount || false}
+        amounts={variant.amounts.amounts}
+        defaultAmount={variant.amounts.defaultAmount}
+        hideChooseYourAmount={variant.amounts.hideChooseYourAmount}
         updateAmounts={updateAmounts}
         updateChooseAmount={updateChooseAmount}
         updateDefaultAmount={updateDefaultAmount}

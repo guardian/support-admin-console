@@ -1,20 +1,20 @@
-import React, { useEffect } from 'react';
-import { Products, LandingPageProductDescription } from '../../../models/supportLandingPage';
-import {
-  TextField,
-  Typography,
-  Grid,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Theme,
-  Button,
-} from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { makeStyles } from '@mui/styles';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
-import { useFieldArray, useForm, Controller } from 'react-hook-form';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Button,
+  Grid,
+  TextField,
+  Theme,
+  Typography,
+} from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import React, { useEffect, useRef } from 'react';
+import { Controller, useFieldArray, useForm } from 'react-hook-form';
+import { LandingPageProductDescription, Products } from '../../../models/supportLandingPage';
 import {
   copyLengthValidator,
   EMPTY_ERROR_HELPER_TEXT,
@@ -22,7 +22,7 @@ import {
 } from '../helpers/validation';
 import { RichTextEditorSingleLine } from '../richTextEditor/richTextEditor';
 
-const productKeys: (keyof Products)[] = ['Contribution', 'SupporterPlus', 'DigitalSubscription'];
+const productKeys: Array<keyof Products> = ['Contribution', 'SupporterPlus', 'DigitalSubscription'];
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   heading: {
@@ -99,6 +99,17 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
     defaultValues: product,
   });
 
+  // Use refs to stabilize callback dependencies and prevent infinite render loops
+  const onProductChangeRef = useRef(onProductChange);
+  const onValidationChangeRef = useRef(onValidationChange);
+  const productRef = useRef(product);
+
+  useEffect(() => {
+    onProductChangeRef.current = onProductChange;
+    onValidationChangeRef.current = onValidationChange;
+    productRef.current = product;
+  });
+
   // Validation specifically for the benefits array
   const {
     fields: benefits,
@@ -110,13 +121,26 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
   });
 
   useEffect(() => {
-    const isValid = Object.keys(errors).length === 0;
-    onValidationChange(isValid);
-  }, [errors.title, errors.billingPeriodsCopy, errors.cta, errors.label, errors.benefits]);
+    const isValid =
+      errors.title === undefined &&
+      errors.titlePill === undefined &&
+      errors.billingPeriodsCopy === undefined &&
+      errors.cta === undefined &&
+      errors.label === undefined &&
+      errors.benefits === undefined;
+    onValidationChangeRef.current(isValid);
+  }, [
+    errors.title,
+    errors.titlePill,
+    errors.billingPeriodsCopy,
+    errors.cta,
+    errors.label,
+    errors.benefits,
+  ]);
 
   useEffect(() => {
-    reset(product);
-  }, [product, reset]);
+    reset(productRef.current);
+  }, [reset]);
 
   return (
     <Accordion key={productKey}>
@@ -126,21 +150,21 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
       <AccordionDetails className={classes.accordionDetails}>
         <TextField
           error={!!errors.title}
-          helperText={errors?.title?.message}
+          helperText={errors.title?.message}
           label="Title"
           {...register('title', { required: EMPTY_ERROR_HELPER_TEXT })}
           required={true}
-          onBlur={handleSubmit(onProductChange)}
+          onBlur={() => void handleSubmit(onProductChange)()}
           disabled={!editMode}
           fullWidth
         />
         <TextField
           error={!!errors.titlePill}
-          helperText={errors?.titlePill?.message}
+          helperText={errors.titlePill?.message}
           label="Title Pill"
           {...register('titlePill')}
           required={false}
-          onBlur={handleSubmit(onProductChange)}
+          onBlur={() => void handleSubmit(onProductChange)()}
           disabled={!editMode}
           fullWidth
         />
@@ -153,11 +177,13 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
           render={({ field }) => (
             <RichTextEditorSingleLine
               error={!!errors.billingPeriodsCopy}
-              helperText={errors.billingPeriodsCopy ? errors.billingPeriodsCopy.message || '' : ''}
+              helperText={
+                errors.billingPeriodsCopy ? (errors.billingPeriodsCopy.message ?? '') : ''
+              }
               copyData={field.value}
               updateCopy={(value) => {
                 field.onChange(value);
-                handleSubmit(onProductChange)();
+                void handleSubmit(onProductChange)();
               }}
               name="billingPeriodsCopy"
               label="Billing Periods Copy"
@@ -174,22 +200,22 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
         />
         <TextField
           error={!!errors.cta?.copy}
-          helperText={errors?.cta?.copy?.message}
+          helperText={errors.cta?.copy?.message}
           label="CTA Copy"
           {...register('cta.copy', { required: EMPTY_ERROR_HELPER_TEXT })}
           required={true}
-          onBlur={handleSubmit(onProductChange)}
+          onBlur={() => void handleSubmit(onProductChange)()}
           disabled={!editMode}
           fullWidth
         />
         <TextField
           error={!!errors.label?.copy}
-          helperText={errors?.label?.copy?.message}
+          helperText={errors.label?.copy?.message}
           label="Pill (optional)"
           {...register('label.copy', {
             validate: copyLengthValidator(30),
           })}
-          onBlur={handleSubmit(onProductChange)}
+          onBlur={() => void handleSubmit(onProductChange)()}
           disabled={!editMode}
           fullWidth
         />
@@ -209,7 +235,7 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
                 error={!!errors.benefits?.[index]?.copy}
                 helperText={errors.benefits?.[index]?.copy?.message}
                 defaultValue={benefit.copy}
-                onBlur={handleSubmit(onProductChange)}
+                onBlur={() => void handleSubmit(onProductChange)()}
                 disabled={!editMode}
                 fullWidth
               />
@@ -220,7 +246,7 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
                 {...register(`benefits.${index}.tooltip`)}
                 error={!!errors.benefits?.[index]?.tooltip}
                 defaultValue={benefit.tooltip}
-                onBlur={handleSubmit(onProductChange)}
+                onBlur={() => void handleSubmit(onProductChange)()}
                 disabled={!editMode}
                 fullWidth
               />
@@ -231,7 +257,7 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
                 {...register(`benefits.${index}.label.copy`)}
                 error={!!errors.benefits?.[index]?.label?.copy}
                 defaultValue={benefit.label?.copy}
-                onBlur={handleSubmit(onProductChange)}
+                onBlur={() => void handleSubmit(onProductChange)()}
                 disabled={!editMode}
                 fullWidth
               />
@@ -296,14 +322,28 @@ export const ProductsEditor: React.FC<ProductsEditorProps> = ({
     defaultValues: products,
   });
 
+  // Use refs to stabilize callback dependencies and prevent infinite render loops
+  const onProductsChangeRef = useRef(onProductsChange);
+  const onValidationChangeRef = useRef(onValidationChange);
+  const productsRef = useRef(products);
+
   useEffect(() => {
-    const isValid = Object.keys(errors).length === 0;
-    onValidationChange(isValid);
+    onProductsChangeRef.current = onProductsChange;
+    onValidationChangeRef.current = onValidationChange;
+    productsRef.current = products;
+  });
+
+  useEffect(() => {
+    const isValid =
+      errors.Contribution === undefined &&
+      errors.SupporterPlus === undefined &&
+      errors.DigitalSubscription === undefined;
+    onValidationChangeRef.current(isValid);
   }, [errors.Contribution, errors.SupporterPlus, errors.DigitalSubscription]);
 
   useEffect(() => {
-    reset(products);
-  }, [products, reset]);
+    reset(productsRef.current);
+  }, [reset]);
 
   return (
     <div>

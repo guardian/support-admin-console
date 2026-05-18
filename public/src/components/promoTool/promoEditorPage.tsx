@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Button, CircularProgress, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-import { Theme } from '@mui/material/styles';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import PromoEditor from './promoEditor';
-import { Promo, PromoProduct } from './utils/promoModels';
-import { getPromoPreviewUrl } from './utils/previewUrl';
+import { Button, CircularProgress, Typography } from '@mui/material';
+import { Theme } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { hasPermission } from '../../utils/permissions';
 import {
   fetchPromo,
+  fetchPromoCampaign,
   lockPromo,
   unlockPromo,
   updatePromo,
-  fetchPromoCampaign,
 } from '../../utils/requests';
-import { hasPermission } from '../../utils/permissions';
+import PromoEditor from './promoEditor';
+import { getPromoPreviewUrl } from './utils/previewUrl';
+import { Promo, PromoProduct } from './utils/promoModels';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -68,7 +68,7 @@ const PromoEditorPage: React.FC = () => {
 
         if (
           response.promo.lockStatus?.locked &&
-          response.promo.lockStatus?.email === response.userEmail
+          response.promo.lockStatus.email === response.userEmail
         ) {
           setIsEditing(true);
         }
@@ -85,7 +85,7 @@ const PromoEditorPage: React.FC = () => {
       }
     };
 
-    loadPromoAndCampaign();
+    void loadPromoAndCampaign();
   }, [promoCode]);
 
   const handleBack = () => {
@@ -93,9 +93,9 @@ const PromoEditorPage: React.FC = () => {
       window.localStorage.setItem('promoToolSelectedProduct', campaignProduct);
     }
     if (promo) {
-      navigate(`/promo-tool/campaign/${promo.campaignCode}`);
+      void navigate(`/promo-tool/campaign/${promo.campaignCode}`);
     } else {
-      navigate('/promo-tool');
+      void navigate('/promo-tool');
     }
   };
 
@@ -109,7 +109,7 @@ const PromoEditorPage: React.FC = () => {
         .then((response) => {
           setPromo(response.promo);
         })
-        .catch((error) => {
+        .catch((error: Error) => {
           setIsEditing(false);
           alert(`Error locking promo: ${error.message}`);
         });
@@ -126,7 +126,7 @@ const PromoEditorPage: React.FC = () => {
         .then((response) => {
           setPromo(response.promo);
         })
-        .catch((error) => {
+        .catch((error: Error) => {
           setIsEditing(false);
           alert(`Error locking promo: ${error.message}`);
         });
@@ -143,7 +143,7 @@ const PromoEditorPage: React.FC = () => {
         .then((response) => {
           setPromo(response.promo);
         })
-        .catch((error) => {
+        .catch((error: Error) => {
           alert(`Error unlocking promo: ${error.message}`);
         });
     }
@@ -158,7 +158,7 @@ const PromoEditorPage: React.FC = () => {
       .then((response) => {
         setPromo(response.promo);
       })
-      .catch((error) => {
+      .catch((error: Error) => {
         alert(`Error saving promo: ${error.message}`);
       });
   };
@@ -236,7 +236,7 @@ const PromoEditorPage: React.FC = () => {
             Edit
           </Button>
         )}
-        {promo.lockStatus?.locked && promo.lockStatus?.email === userEmail && (
+        {promo.lockStatus?.locked && promo.lockStatus.email === userEmail && (
           <Button
             variant="outlined"
             color="secondary"
@@ -246,7 +246,7 @@ const PromoEditorPage: React.FC = () => {
             Cancel Edit
           </Button>
         )}
-        {promo.lockStatus?.locked && promo.lockStatus?.email !== userEmail && (
+        {promo.lockStatus?.locked && promo.lockStatus.email !== userEmail && (
           <Button variant="outlined" onClick={handleBack}>
             Close
           </Button>
@@ -254,6 +254,7 @@ const PromoEditorPage: React.FC = () => {
       </div>
       {campaignProduct && (
         <PromoEditor
+          key={promo.promoCode}
           promo={promo}
           isEditing={isEditing}
           onSave={handleSavePromo}

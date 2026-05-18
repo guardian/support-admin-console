@@ -75,7 +75,7 @@ const AccessManagement = () => {
   const [editModalOpen, setEditModalOpen] = React.useState(false);
   const [selectedUser, setSelectedUser] = React.useState<UserPermissions | null>(null);
   const [addUserModalOpen, setAddUserModalOpen] = React.useState(false);
-  const canEditPermissions = hasPermission(FrontendSettingsType.accessManagement, 'Write');
+  const canEditPermissions = hasPermission(FrontendSettingsType.AccessManagement, 'Write');
 
   useEffect(() => {
     const getUsers = async () => {

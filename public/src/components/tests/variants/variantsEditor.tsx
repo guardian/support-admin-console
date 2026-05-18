@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import React, { useEffect, useRef, useState } from 'react';
 import { Variant } from '../../channelManagement/helpers/shared';
-import VariantEditorsAccordion from './variantEditorsAccordion';
 import NewVariantButton from './newVariantButton';
+import VariantEditorsAccordion from './variantEditorsAccordion';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -36,10 +36,14 @@ function VariantsEditor<V extends Variant>({
 }: VariantsEditorProps<V>): React.ReactElement<VariantsEditorProps<V>> {
   const classes = useStyles();
   const [selectedVariantKey, setSelectedVariantKey] = useState<string | null>(null);
+  const previousTestNameRef = useRef<string | undefined>(testName);
 
   // unselect a variant if the test changes
   useEffect(() => {
-    setSelectedVariantKey(null);
+    if (previousTestNameRef.current !== testName) {
+      previousTestNameRef.current = testName;
+      requestAnimationFrame(() => setSelectedVariantKey(null));
+    }
   }, [testName]);
 
   const onVariantSelected = (variantKey: string): void =>

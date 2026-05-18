@@ -1,14 +1,4 @@
-import React, { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
-import {
-  BoldExtension,
-  EventsExtension,
-  ItalicExtension,
-  LinkExtension,
-  ShortcutHandlerProps,
-  StrikeExtension,
-  TextHighlightExtension,
-  createMarkPositioner,
-} from 'remirror/extensions';
+import { MarkPasteRule } from '@remirror/pm/paste-rules';
 import {
   EditorComponent,
   FloatingWrapper,
@@ -18,17 +8,23 @@ import {
   useChainedCommands,
   useCurrentSelection,
   useExtension,
-  useHelpers,
   useRemirror,
   useUpdateReason,
 } from '@remirror/react';
 import { CommandButtonGroup, FloatingToolbar } from '@remirror/react-ui';
-import './remirror-styles.css';
-import { useRTEStyles } from './richTextEditorStyles';
-import { CreateExtensionPlugin, PlainExtension, InputRule } from 'remirror';
 import { Plugin } from 'prosemirror-state';
-import { MarkPasteRule } from '@remirror/pm/paste-rules';
-
+import React, { useCallback, useLayoutEffect, useMemo, useState } from 'react';
+import { CreateExtensionPlugin, InputRule, PlainExtension } from 'remirror';
+import {
+  BoldExtension,
+  createMarkPositioner,
+  EventsExtension,
+  ItalicExtension,
+  LinkExtension,
+  ShortcutHandlerProps,
+  StrikeExtension,
+  TextHighlightExtension,
+} from 'remirror/extensions';
 import {
   ARTICLE_COUNT_TEMPLATE,
   CAMPAIGN_DEADLINE_TEMPLATE,
@@ -42,6 +38,8 @@ import {
   PRICE_GUARDIANWEEKLY_MONTHLY,
   PRICE_PRODUCT_WEEKLY,
 } from '../helpers/validation';
+import './remirror-styles.css';
+import { useRTEStyles } from './richTextEditorStyles';
 
 // Typescript
 interface RichTextEditorProps<T> {
@@ -162,8 +160,8 @@ function useFloatingLinkState() {
   const { isEditing, linkShortcut, setIsEditing } = useLinkShortcut();
   const { to, empty } = useCurrentSelection();
 
-  const url = (useAttrs().link()?.href as string) ?? '';
-  const [href, setHref] = useState<string>(url);
+  const url = useAttrs().link()?.href as string | undefined;
+  const [href, setHref] = useState<string>('');
 
   const linkPositioner = useMemo(() => createMarkPositioner({ type: 'link' }), []);
 
@@ -182,10 +180,6 @@ function useFloatingLinkState() {
       setIsEditing(false);
     }
   }, [isEditing, setIsEditing, updateReason.doc, updateReason.selection]);
-
-  useEffect(() => {
-    setHref(url);
-  }, [url]);
 
   const submitHref = useCallback(() => {
     setIsEditing(false);
@@ -208,8 +202,9 @@ function useFloatingLinkState() {
       chain.selectLink();
     }
 
+    setHref(url ?? '');
     setIsEditing(true);
-  }, [chain, empty, setIsEditing]);
+  }, [chain, empty, url, setIsEditing]);
 
   return useMemo(
     () => ({
@@ -253,12 +248,7 @@ const FloatingLinkToolbar = () => {
         </CommandButtonGroup>
       </FloatingToolbar>
 
-      <FloatingWrapper
-        positioner="always"
-        placement="bottom"
-        enabled={isEditing}
-        renderOutsideEditor
-      >
+      <FloatingWrapper positioner="always" placement="bottom" enabled={isEditing}>
         <input
           style={{ zIndex: 20 }}
           autoFocus
@@ -322,7 +312,7 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
 
   return (
     <div>
-      <span className={classes.fieldLabel}>{label != null ? label : 'Editable field'}</span>
+      <span className={classes.fieldLabel}>{label ?? 'Editable field'}</span>
       {!disabled && (
         <>
           {enableHtml && (
@@ -355,7 +345,9 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
           )}
           {enableCopyTemplates && (
             <>
-              {(enableBold || enableItalic || enableStrikethrough) && (
+              {((enableBold ?? false) ||
+                (enableItalic ?? false) ||
+                (enableStrikethrough ?? false)) && (
                 <span className={classes.remirrorButtonSpacer}>&nbsp;</span>
               )}
               {enableArticleCountTemplate && (
@@ -490,15 +482,7 @@ const paragraphsToArray = (html: string): string[] => {
 
   const elements = Array.from(frag.children);
 
-  const paragraphs = elements.filter((p) => {
-    if (p == null) {
-      return false;
-    }
-    if (p.tagName === 'P') {
-      return true;
-    }
-    return false;
-  });
+  const paragraphs = elements.filter((p) => p.tagName === 'P');
 
   return paragraphs.map((p) => p.innerHTML);
 };
@@ -516,33 +500,11 @@ const RichTextEditor: React.FC<RichTextEditorProps<string[]>> = ({
 }: RichTextEditorProps<string[]>) => {
   const classes = useRTEStyles();
 
-  const menuConstraints = rteMenuConstraints || {};
+  const menuConstraints = rteMenuConstraints ?? {};
   const { enableHtml, enableLink } = menuConstraints;
 
   // Make sure the supplied copy is in an Array, for processing
-  if (copyData == null) {
-    copyData = [];
-  }
-
-  const hooks = [
-    () => {
-      const { getHTML, getText } = useHelpers();
-
-      const handleSaveShortcut = useCallback(
-        ({ state }) => {
-          if (!enableHtml) {
-            // getText gives us the plain text representation with line breaks
-            updateCopy(getText(state).split('\n'));
-          } else {
-            updateCopy(paragraphsToArray(getHTML(state)));
-          }
-          return true;
-        },
-        [getHTML, getText, enableHtml],
-      );
-      manager.getExtension(EventsExtension).addHandler('blur', handleSaveShortcut);
-    },
-  ];
+  copyData ??= [];
 
   // Instantiate the Remirror RTE component
   const { manager, state } = useRemirror({
@@ -558,6 +520,35 @@ const RichTextEditor: React.FC<RichTextEditorProps<string[]>> = ({
     selection: 'start',
     stringHandler: 'html',
   });
+
+  const getEditorContent = useCallback(() => {
+    const view = manager.view;
+    const { state } = view;
+    const text = state.doc.textContent;
+    const html = view.dom.innerHTML;
+    return { html, text };
+  }, [manager]);
+
+  const hooks = useMemo(() => {
+    if (disabled) {
+      return [];
+    }
+
+    const setupHandler = () => {
+      const handleSaveShortcut = () => {
+        const { html, text } = getEditorContent();
+        if (!enableHtml) {
+          updateCopy(text.split('\n'));
+        } else {
+          updateCopy(paragraphsToArray(html));
+        }
+        return true;
+      };
+      manager.getExtension(EventsExtension).addHandler('blur', handleSaveShortcut);
+    };
+
+    return [setupHandler];
+  }, [disabled, manager, enableHtml, updateCopy, getEditorContent]);
 
   // Control the look of the ReMirror RTE dependant on whether the user is in Edit or Read-Only Mode
   const wrapperClasses = disabled ? 'remirror-theme editor-disabled' : 'remirror-theme';
@@ -587,7 +578,7 @@ const RichTextEditorSingleLine: React.FC<RichTextEditorProps<string>> = ({
   rteMenuConstraints,
 }: RichTextEditorProps<string>) => {
   const onUpdate = (paras: string[] | undefined): void => {
-    if (!!paras) {
+    if (paras) {
       updateCopy(paras.join(' '));
     } else {
       updateCopy(undefined);
@@ -602,7 +593,7 @@ const RichTextEditorSingleLine: React.FC<RichTextEditorProps<string>> = ({
       name={name}
       error={error}
       updateCopy={onUpdate}
-      copyData={!!copyData ? [copyData] : undefined}
+      copyData={copyData ? [copyData] : undefined}
       rteMenuConstraints={rteMenuConstraints}
     />
   );

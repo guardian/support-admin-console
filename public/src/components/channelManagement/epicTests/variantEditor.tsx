@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
 import { FormControl, FormControlLabel, Radio, RadioGroup, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import React, { useEffect, useRef, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { ChoiceCardsSettings } from '../../../models/choiceCards';
+import { EpicVariant, SeparateArticleCount } from '../../../models/epic';
+import PromoCodesEditor from '../../shared/PromoCodesEditor';
+import VariantSeparateArticleCountEditor from '../../tests/variants/variantSeparateArticleCountEditor';
+import { BylineWithImageEditorToggle } from '../bylineWithImageEditor';
 import ChoiceCardsEditor from '../choiceCards/ChoiceCardsEditor';
-import SignInLinkEditor from './signInLinkEditor';
-import TickerEditor from '../tickerEditor';
-import EpicTestVariantEditorCtasEditor from './variantCtasEditor';
-
 import {
   BylineWithImage,
   Cta,
@@ -29,19 +30,18 @@ import {
   templateValidatorForPlatform,
   VALID_TEMPLATES,
 } from '../helpers/validation';
+import useValidation from '../hooks/useValidation';
+import { ImageEditorToggle } from '../imageEditor';
 import {
   getRteCopyLength,
   RichTextEditor,
   RichTextEditorSingleLine,
 } from '../richTextEditor/richTextEditor';
-import VariantSeparateArticleCountEditor from '../../tests/variants/variantSeparateArticleCountEditor';
-import { ImageEditorToggle } from '../imageEditor';
-import { BylineWithImageEditorToggle } from '../bylineWithImageEditor';
-import { EpicVariant, SeparateArticleCount } from '../../../models/epic';
+import TickerEditor from '../tickerEditor';
 import { AppleNewsChoiceCards } from './appleChoiceCardsEditor';
 import EpicTestNewsletter from './newsletterSignUp';
-import { ChoiceCardsSettings } from '../../../models/choiceCards';
-import PromoCodesEditor from '../../shared/PromoCodesEditor';
+import SignInLinkEditor from './signInLinkEditor';
+import EpicTestVariantEditorCtasEditor from './variantCtasEditor';
 
 const getUseStyles = (shouldAddPadding: boolean) => {
   const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
@@ -120,6 +120,7 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   } = epicEditorConfig;
 
   const classes = getUseStyles(allowMultipleVariants)();
+  const setValidationStatusForField = useValidation(onValidationChange);
 
   const templateValidator = templateValidatorForPlatform(platform);
   const lineValidator = (text: string | undefined) => {
@@ -144,6 +145,14 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
    * `variant` in a useEffect.
    */
   const [validatedFields, setValidatedFields] = useState<FormData>(defaultValues);
+
+  // Use refs to stabilize callback dependencies and prevent infinite render loops
+  const onVariantChangeRef = useRef(onVariantChange);
+
+  useEffect(() => {
+    onVariantChangeRef.current = onVariantChange;
+  });
+
   const {
     handleSubmit,
     control,
@@ -156,20 +165,23 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   });
 
   useEffect(() => {
-    trigger();
-  }, []);
+    void trigger();
+  }, [trigger]);
 
   useEffect(() => {
-    onVariantChange((current) => ({
+    onVariantChangeRef.current((current) => ({
       ...current,
       ...validatedFields,
     }));
   }, [validatedFields]);
 
   useEffect(() => {
-    const isValid = Object.keys(errors).length === 0;
-    onValidationChange(isValid);
-  }, [errors.heading, errors.paragraphs, errors.highlightedText, errors.image]);
+    const isValid =
+      errors.heading === undefined &&
+      errors.paragraphs === undefined &&
+      errors.highlightedText === undefined;
+    setValidationStatusForField('copy', isValid);
+  }, [errors.heading, errors.paragraphs, errors.highlightedText, setValidationStatusForField]);
 
   const enableHtml = platform === 'DOTCOM';
   const htmlValidator = enableHtml ? () => undefined : noHtmlValidator;
@@ -183,11 +195,15 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   const onCtasToggleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const value = event.target.value;
     if (value === 'newsletterSignup') {
+      setValidationStatusForField('cta', true);
+      setValidationStatusForField('choiceCards', true);
+      setValidationStatusForField('appleNewsChoiceCards', true);
       onVariantChange((current) => ({
         ...current,
         newsletterSignup: { newsletterId: '', successDescription: '' },
       }));
     } else {
+      setValidationStatusForField('newsletter', true);
       onVariantChange((current) => ({ ...current, newsletterSignup: undefined }));
     }
   };
@@ -258,11 +274,11 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
             return (
               <RichTextEditorSingleLine
                 error={errors.heading !== undefined}
-                helperText={errors.heading ? errors.heading.message || errors.heading.type : ''}
+                helperText={errors.heading ? (errors.heading.message ?? errors.heading.type) : ''}
                 copyData={field.value}
                 updateCopy={(value) => {
                   field.onChange(value);
-                  handleSubmit(setValidatedFields)();
+                  void handleSubmit(setValidatedFields)();
                 }}
                 name="heading"
                 label="Header"
@@ -300,13 +316,13 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
               helperText={
                 errors.paragraphs
                   ? // @ts-ignore -- react-hook-form doesn't believe it has a message field
-                    errors.paragraphs.message || errors.paragraphs.type
+                    (errors.paragraphs.message ?? errors.paragraphs.type)
                   : getParagraphsHelperText()
               }
               copyData={field.value}
               updateCopy={(pars) => {
                 field.onChange(pars);
-                handleSubmit(setValidatedFields)();
+                void handleSubmit(setValidatedFields)();
               }}
               name="paragraphs"
               label="Body copy"
@@ -343,13 +359,13 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                 error={errors.highlightedText !== undefined}
                 helperText={
                   errors.highlightedText
-                    ? errors.highlightedText.message || errors.highlightedText.type
+                    ? (errors.highlightedText.message ?? errors.highlightedText.type)
                     : HIGHTLIGHTED_TEXT_DEFAULT_HELPER_TEXT
                 }
                 copyData={field.value}
                 updateCopy={(pars) => {
                   field.onChange(pars);
-                  handleSubmit(setValidatedFields)();
+                  void handleSubmit(setValidatedFields)();
                 }}
                 name="highlightedText"
                 label="Highlighted text"
@@ -383,7 +399,7 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
           bylineWithImage={variant.bylineWithImage}
           updateBylineWithImage={updateBylineWithImage}
           isDisabled={!editMode}
-          onValidationChange={onValidationChange}
+          onValidationChange={(isValid) => setValidationStatusForField('byline', isValid)}
           label={'Byline block - appears below the copy, above CTA buttons'}
         />
       )}
@@ -393,7 +409,7 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
           image={variant.image}
           updateImage={updateImage}
           isDisabled={!editMode}
-          onValidationChange={onValidationChange}
+          onValidationChange={(isValid) => setValidationStatusForField('image', isValid)}
           label={'Image - appears below the article count badge and ticker'}
           guidance={'Ratio should be 2.5:1'}
         />
@@ -431,7 +447,7 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
           <EpicTestNewsletter
             newsletterSignup={variant.newsletterSignup}
             updateNewsletterSignup={updateNewsletterSignup}
-            onValidationChange={onValidationChange}
+            onValidationChange={(isValid) => setValidationStatusForField('newsletter', isValid)}
             isDisabled={!editMode}
           />
         </div>
@@ -452,7 +468,7 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                 allowVariantCustomSecondaryCta={allowVariantCustomSecondaryCta}
                 isDisabled={!editMode}
                 isPrimaryCtaUrlDisabled={variant.showChoiceCards ?? false}
-                onValidationChange={onValidationChange}
+                onValidationChange={(isValid) => setValidationStatusForField('cta', isValid)}
                 supportSecondaryCta={allowVariantSecondaryCta}
               />
             </div>
@@ -476,7 +492,9 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                 choiceCardsSettings={variant.choiceCardsSettings}
                 updateChoiceCardsSettings={updateChoiceCardsSettings}
                 isDisabled={!editMode}
-                onValidationChange={onValidationChange}
+                onValidationChange={(isValid) =>
+                  setValidationStatusForField('choiceCards', isValid)
+                }
               />
             </div>
           )}
@@ -507,7 +525,7 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
             tickerSettings={variant.tickerSettings}
             updateTickerSettings={updateTickerSettings}
             isDisabled={!editMode}
-            onValidationChange={onValidationChange}
+            onValidationChange={(isValid) => setValidationStatusForField('ticker', isValid)}
           />
         </div>
       )}
@@ -536,7 +554,9 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
             editMode={editMode}
             updateShowChoiceCards={(showChoiceCards) => updateChoiceCardsSettings(showChoiceCards)}
             updatePrimaryCta={updatePrimaryCta}
-            onValidationChange={onValidationChange}
+            onValidationChange={(isValid) =>
+              setValidationStatusForField('appleNewsChoiceCards', isValid)
+            }
           />
         </div>
       )}

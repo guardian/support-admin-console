@@ -1,10 +1,10 @@
-import { Image } from './helpers/shared';
-import React, { useEffect } from 'react';
 import { Checkbox, TextField, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-import { useForm } from 'react-hook-form';
-import { EMPTY_ERROR_HELPER_TEXT } from './helpers/validation';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import { makeStyles } from '@mui/styles';
+import React, { useEffect, useRef } from 'react';
+import { useForm } from 'react-hook-form';
+import { Image } from './helpers/shared';
+import { EMPTY_ERROR_HELPER_TEXT } from './helpers/validation';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -41,7 +41,7 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
   onValidationChange,
   guidance,
 }: ImageEditorProps) => {
-  const defaultValues: Image = image;
+  const defaultValues: Image = { ...image };
 
   const {
     register,
@@ -55,13 +55,25 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
   });
 
   useEffect(() => {
-    trigger(); // validate immediately
-  }, []);
+    void trigger(); // validate immediately
+  }, [trigger]);
+
+  // Use ref to stabilize callback and prevent infinite render loops
+  const onValidationChangeRef = useRef(onValidationChange);
+  const prevIsValidRef = useRef<boolean | null>(null);
 
   useEffect(() => {
-    const isValid = Object.keys(errors).length === 0;
-    onValidationChange(isValid);
-  }, [errors.altText, errors.mainUrl]);
+    onValidationChangeRef.current = onValidationChange;
+  });
+
+  useEffect(() => {
+    const isValid = errors.mainUrl === undefined && errors.altText === undefined;
+    // Only call onValidationChange if validity has actually changed
+    if (prevIsValidRef.current !== isValid) {
+      prevIsValidRef.current = isValid;
+      onValidationChangeRef.current(isValid);
+    }
+  }, [errors.mainUrl, errors.altText]);
 
   return (
     <div>
@@ -71,7 +83,9 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
         {...register('mainUrl', {
           required: EMPTY_ERROR_HELPER_TEXT,
         })}
-        onBlur={handleSubmit(updateImage)}
+        onBlur={() => {
+          void handleSubmit(updateImage)();
+        }}
         label="Image URL"
         margin="normal"
         variant="outlined"
@@ -84,7 +98,9 @@ const ImageEditor: React.FC<ImageEditorProps> = ({
         {...register('altText', {
           required: EMPTY_ERROR_HELPER_TEXT,
         })}
-        onBlur={handleSubmit(updateImage)}
+        onBlur={() => {
+          void handleSubmit(updateImage)();
+        }}
         label="Image alt-text"
         margin="normal"
         variant="outlined"

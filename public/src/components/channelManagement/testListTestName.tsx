@@ -1,6 +1,6 @@
-import React from 'react';
 import { Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import React from 'react';
 
 const useStyles = makeStyles(() => ({
   text: {
@@ -37,7 +37,7 @@ const TestListTestName: React.FC<TestListTestNameProps> = ({
 
   return (
     <Typography className={textClasses.join(' ')} noWrap={true}>
-      {nickname ? nickname : name.replace(TEST_NAME_CHARACTERS_TO_STRIP_REGEX, '')}
+      {nickname ?? name.replace(TEST_NAME_CHARACTERS_TO_STRIP_REGEX, '')}
     </Typography>
   );
 };

@@ -1,20 +1,20 @@
+import { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';
 import {
   ArticlesViewedSettings,
   Cta,
-  Test,
-  Variant,
-  UserCohort,
-  SecondaryCta,
   DeviceType,
-  Status,
-  TickerSettings,
   PageContextTargeting,
   RegionTargeting,
+  SecondaryCta,
+  Status,
+  Test,
+  TickerSettings,
+  UserCohort,
+  Variant,
 } from '../components/channelManagement/helpers/shared';
 import { Region } from '../utils/models';
-import { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';
-import { SeparateArticleCount } from './epic';
 import { ChoiceCardsSettings } from './choiceCards';
+import { SeparateArticleCount } from './epic';
 
 export interface BannerUi {
   designName: string;

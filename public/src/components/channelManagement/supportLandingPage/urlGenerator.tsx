@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { SupportLandingPageVariant } from '../../../models/supportLandingPage';
-import URLGeneratorCopyButton from '../../shared/urlGeneratorCopyButton';
-import { getStage } from '../../../utils/stage';
-import { Checkbox, FormControlLabel, TextField, Theme, Typography, Box } from '@mui/material';
+import { Box, Checkbox, FormControlLabel, TextField, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import React, { useState } from 'react';
+import { SupportLandingPageVariant } from '../../../models/supportLandingPage';
+import { getStage } from '../../../utils/stage';
+import URLGeneratorCopyButton from '../../shared/urlGeneratorCopyButton';
 
 interface URLGeneratorProps {
   variant: SupportLandingPageVariant;
@@ -94,34 +94,30 @@ const getPreviewUrl = ({
 
 const URLGenerator = ({ variant, testName }: URLGeneratorProps) => {
   const classes = useStyles();
-  const [url, setUrl] = useState('');
   const [promoCode, setPromoCode] = useState('');
   const [enableOneTime, setEnableOneTime] = useState(false);
 
-  useEffect(() => {
-    if (variant && testName) {
-      const builder = getPreviewUrl({ testName, variant });
+  const url = React.useMemo(() => {
+    const builder = getPreviewUrl({ testName, variant });
 
-      const params: Record<string, string> = {};
-      if (variant.defaultProductSelection?.productType) {
-        params.product = variant.defaultProductSelection.productType;
-      }
-      if (variant.defaultProductSelection?.billingPeriod) {
-        params.ratePlan = variant.defaultProductSelection.billingPeriod;
-      }
-      if (promoCode) {
-        params.promoCode = promoCode;
-      }
-      if (enableOneTime) {
-        params.enableOneTime = 'true';
-      }
-
-      const generatedUrl = builder.withParams(params).getUrl();
-      setUrl(generatedUrl);
+    const params: Record<string, string> = {};
+    if (variant.defaultProductSelection?.productType) {
+      params.product = variant.defaultProductSelection.productType;
     }
+    if (variant.defaultProductSelection?.billingPeriod) {
+      params.ratePlan = variant.defaultProductSelection.billingPeriod;
+    }
+    if (promoCode) {
+      params.promoCode = promoCode;
+    }
+    if (enableOneTime) {
+      params.enableOneTime = 'true';
+    }
+
+    return builder.withParams(params).getUrl();
   }, [variant, testName, promoCode, enableOneTime]);
 
-  const defaultProduct = variant.defaultProductSelection?.productType || 'Product not set';
+  const defaultProduct = variant.defaultProductSelection?.productType ?? 'Product not set';
   const ratePlan = variant.defaultProductSelection?.billingPeriod;
 
   return (

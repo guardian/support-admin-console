@@ -1,6 +1,4 @@
-export interface CommonStringObject {
-  [index: string]: string;
-}
+export type CommonStringObject = Record<string, string>;
 
 // This type should match the `ContributionFrequency` type in the `support-dotcom-components` repo, file `packages/shared/src/types/epic.ts`
 // export type ContributionType = 'ONE_OFF' | 'MONTHLY' | 'ANNUAL';
@@ -11,12 +9,10 @@ export const contributionTypes: CommonStringObject = {
   ANNUAL: 'ANNUAL',
 };
 
-export const contributionIds = Object.keys(contributionTypes);
-
 export type ContributionType = keyof typeof contributionTypes;
 
 // This object should match the `CountryGroupId` type in the `support-dotcom-components` repo, file `packages/shared/src/lib/geolocation.ts`
-export const regions: CommonStringObject = {
+export const regions = {
   AUDCountries: 'AUD Countries',
   Canada: 'CN Countries',
   EURCountries: 'EUR Countries',
@@ -26,7 +22,7 @@ export const regions: CommonStringObject = {
   International: 'International',
 };
 
-export const regionIds = Object.keys(regions);
+export const regionIds = Object.keys(regions) as Region[];
 
 export type Region = keyof typeof regions;
 
@@ -295,9 +291,7 @@ export interface AmountValuesObject {
   hideChooseYourAmount: boolean;
 }
 
-export type AmountsCardData = {
-  [key in ContributionType]: AmountValuesObject;
-};
+export type AmountsCardData = Record<ContributionType, AmountValuesObject>;
 
 export interface AmountsVariant {
   variantName: string;
@@ -305,49 +299,6 @@ export interface AmountsVariant {
   displayContributionType: ContributionType[];
   amountsCardData: AmountsCardData;
 }
-
-/*
-An amounts test can be in one of two forms:
-
-Country test:
-  Bespoke tests targeted at one or more geographical countries
-  `targeting` object will include a `countries` attribute
-    - a String array containing 2-letter ISO country codes
-  When the `isLive` boolean is `false`:
-    - the test is ignored; users will see their appropriate region test
-  When the `isLive` boolean is `true`:
-    - users will be randomly segregated into an AB test and see the appropriate variant
-    - analytics will use the `liveTestName` label, if available, else the `testName` label
-  A country can appear in more than one country test:
-    - if 2+ live tests include the country, the test with the lowest `order` value will display
-
-Region test:
-  Evergreen tests, one per geographical region
-  `targeting` object will include a `region` attribute
-    - the region label, as defined by the Region type
-  When the `isLive` boolean is `false`:
-    - the CONTROL variant will display
-    - analytics will use the `testName` label
-  When the `isLive` boolean is `true`:
-    - users will be randomly segregated into an AB test and see the appropriate variant
-    - analytics will use the `liveTestName` label
-*/
-export type AmountsTestTargeting =
-  | { targetingType: 'Region'; region: Region }
-  | { targetingType: 'Country'; countries: Country[] };
-
-export interface AmountsTest {
-  testName: string;
-  liveTestName?: string;
-  testLabel?: string;
-  isLive: boolean;
-  targeting: AmountsTestTargeting;
-  order: number;
-  seed: number;
-  variants: AmountsVariant[];
-}
-
-export type AmountsTests = AmountsTest[];
 
 export interface SelectedAmountsVariant extends AmountsVariant {
   testName: string;

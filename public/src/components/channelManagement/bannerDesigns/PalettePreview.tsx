@@ -1,6 +1,6 @@
-import React from 'react';
 import { Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
+import React from 'react';
 import { withPreviewStyles } from '../previewContainer';
 
 export interface PreviewColours {

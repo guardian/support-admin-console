@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import { FormHelperText, Theme, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import React, { useEffect, useRef } from 'react';
 import {
   StudentLandingPageTest,
   StudentLandingPageVariant,
 } from '../../../models/studentLandingPage';
-import { ValidatedTestEditorProps } from '../validatedTestEditor';
-import { FormHelperText, Theme, Typography } from '@mui/material';
-import { VariantEditor } from './variantEditor';
-import TypedRadioGroup from '../TypedRadioGroup';
-import { makeStyles } from '@mui/styles';
 import { Region } from '../../../utils/models';
+import TypedRadioGroup from '../TypedRadioGroup';
+import { ValidatedTestEditorProps } from '../validatedTestEditor';
 import { StudentLandingPageLinkBuilder } from './studentLandingPageLinkBuilder';
+import { VariantEditor } from './variantEditor';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   container: {
@@ -70,13 +70,17 @@ export const StudentLandingPageTestEditor: React.FC<
 > = ({ test, userHasTestLocked, onTestChange, setValidationStatusForField }) => {
   const classes = useStyles();
 
-  const [helperText, setHelperText] = useState<string>('Please choose a country');
+  const helperText = '';
+
+  // Use ref to stabilize the callback and prevent infinite render loops
+  const setValidationStatusRef = useRef(setValidationStatusForField);
 
   useEffect(() => {
-    setValidationStatusForField('countryGroupId', isFieldSet(test.countryGroupId as string));
-    if (isFieldSet(test.countryGroupId as string)) {
-      setHelperText('');
-    }
+    setValidationStatusRef.current = setValidationStatusForField;
+  });
+
+  useEffect(() => {
+    setValidationStatusRef.current('countryGroupId', isFieldSet(test.countryGroupId));
   }, [test.countryGroupId]);
 
   const updateTest = (
@@ -91,11 +95,6 @@ export const StudentLandingPageTestEditor: React.FC<
   };
 
   const updateCountryGroupId = (updatedCountryGroupId: Region): void => {
-    if (!isFieldSet(updatedCountryGroupId as string)) {
-      setHelperText('Please choose a country');
-    } else {
-      setHelperText('');
-    }
     onTestChange((current) => ({
       ...current,
       countryGroupId: updatedCountryGroupId,
@@ -136,11 +135,7 @@ export const StudentLandingPageTestEditor: React.FC<
           </Typography>
           {!userHasTestLocked && (
             <>
-              <StudentLandingPageLinkBuilder
-                countryGroupId={test.countryGroupId}
-                institution={test.variants[0].institution}
-                promoCode={test.variants[0].promoCodes[0]}
-              />
+              <StudentLandingPageLinkBuilder test={test} />
               <p>
                 Please check the preview link is working as expected before adding to any
                 promotional material.
@@ -172,12 +167,17 @@ export const StudentLandingPageTestEditor: React.FC<
         <FormHelperText className={classes.errorText}>{helperText}</FormHelperText>
         <div className={classes.resetMargin}>
           <TypedRadioGroup
-            selectedValue={test.countryGroupId as string}
+            selectedValue={test.countryGroupId}
             onChange={updateCountryGroupId}
             isDisabled={!userHasTestLocked}
             labels={{
               AUDCountries: 'Australia',
+              Canada: 'Canada',
+              EURCountries: 'Europe',
               NZDCountries: 'New Zealand',
+              GBPCountries: 'UK',
+              UnitedStates: 'United States',
+              International: 'International',
             }}
           />
         </div>

@@ -1,17 +1,17 @@
-import React from 'react';
-import { Button, Dialog, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-import useOpenable from '../../../../../../hooks/useOpenable';
-import { Methodology } from '../../../../helpers/shared';
+import { Button, Dialog } from '@mui/material';
+import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import { makeStyles } from '@mui/styles';
+import React from 'react';
+import useOpenable from '../../../../../../hooks/useOpenable';
+import { Methodology } from '../../../../helpers/shared';
 
-const useStyles = makeStyles(({}: Theme) => ({
+const useStyles = makeStyles(() => ({
   button: {
     height: '100%',
   },
@@ -53,14 +53,12 @@ export const LTV3DataButton: React.FC<LTV3DataButtonProps> = ({
   const [isOpen, open, close] = useOpenable();
 
   const [dataSet, setDataSet] = React.useState<LTV3Data[][]>([]);
-  const testNamesForLTV3Data = methodologies.map((methodology) =>
-    methodology.testName === undefined ? testName : methodology.testName,
-  );
+  const testNamesForLTV3Data = methodologies.map((methodology) => methodology.testName ?? testName);
 
   const handleClick = () => {
     open();
     const fetchData = async () => {
-      const promises = testNamesForLTV3Data?.map(async (testName) => {
+      const promises = testNamesForLTV3Data.map(async (testName) => {
         const response = await fetch(`frontend/bandit/${channel}/${testName}/ltv3`);
         const data = (await response.json()) as LTV3Data[];
         return data;
@@ -69,7 +67,7 @@ export const LTV3DataButton: React.FC<LTV3DataButtonProps> = ({
       const allResults = await Promise.all(promises);
       setDataSet(allResults);
     };
-    fetchData().then(() => console.log('LTV3 Data fetched successfully'));
+    void fetchData().then(() => console.log('LTV3 Data fetched successfully'));
   };
 
   const uniqueVariantNames = [...new Set(dataSet.flat().map((item) => item.variant_name))];
@@ -94,7 +92,7 @@ export const LTV3DataButton: React.FC<LTV3DataButtonProps> = ({
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {uniqueVariantNames?.map((row) => (
+                  {uniqueVariantNames.map((row) => (
                     <TableRow key={row}>
                       <TableCell>{row}</TableCell>
                       {uniqueTestNames.map((testName) => {

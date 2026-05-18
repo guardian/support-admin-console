@@ -1,5 +1,5 @@
-import { TickerSettings } from '../helpers/shared';
 import { useEffect, useState } from 'react';
+import { TickerSettings } from '../helpers/shared';
 
 interface TickerData {
   total: number;
@@ -19,7 +19,7 @@ const useTickerData = (
     if (tickerSettings) {
       fetch(`https://contributions.guardianapis.com/ticker/${tickerSettings.name}`)
         .then((resp) => resp.json())
-        .then((json) => {
+        .then((json: { total: string; goal: string }) => {
           setTickerData({
             total: parseInt(json.total),
             goal: parseInt(json.goal),

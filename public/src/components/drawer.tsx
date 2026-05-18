@@ -1,13 +1,12 @@
-import React from 'react';
-import Drawer from '@mui/material/Drawer';
-import ListItemText from '@mui/material/ListItemText';
-import { Link } from 'react-router-dom';
-import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import { makeStyles } from '@mui/styles';
-import RRControlPanelLogo from './rrControlPanelLogo';
-import { getStage } from '../utils/stage';
+import Drawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
 import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import { makeStyles } from '@mui/styles';
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import RRControlPanelLogo from './rrControlPanelLogo';
 
 const useStyles = makeStyles({
   list: {
@@ -101,6 +100,7 @@ const anchor = 'left';
 
 export default function NavDrawer(): React.ReactElement {
   const classes = useStyles();
+  const navigate = useNavigate();
   const [state, setState] = React.useState({
     left: false,
   });
@@ -119,6 +119,27 @@ export default function NavDrawer(): React.ReactElement {
       setState({ ...state, [anchor]: open });
     };
 
+  const navigateInternalLink =
+    () =>
+    (event: React.MouseEvent): void => {
+      if (
+        event.defaultPrevented ||
+        event.button !== 0 ||
+        event.metaKey ||
+        event.altKey ||
+        event.ctrlKey ||
+        event.shiftKey
+      ) {
+        return;
+      }
+
+      const link = (event.target as HTMLElement).closest<HTMLAnchorElement>('a[href^="/"]');
+      if (link) {
+        event.preventDefault();
+        void navigate(`${link.pathname}${link.search}${link.hash}`);
+      }
+    };
+
   const isHalloween = () => {
     const now = new Date();
     return now.getMonth() == 9 && now.getDate() == 31;
@@ -128,6 +149,7 @@ export default function NavDrawer(): React.ReactElement {
     <div
       className={classes.list}
       role="presentation"
+      onClickCapture={navigateInternalLink()}
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
@@ -194,25 +216,18 @@ export default function NavDrawer(): React.ReactElement {
             <ListItemText primary="Landing Page" />
           </ListItemButton>
         </Link>
-        {getStage() != 'PROD' && (
-          <Link
-            key="Student Landing Page Offers"
-            to="/student-landing-page-tests"
-            className={classes.link}
-          >
-            <ListItemButton className={classes.listItem} key="Student Landing Page Offers">
-              <ListItemText primary="Student Landing Page Offers" />
-            </ListItemButton>
-          </Link>
-        )}
+        <Link
+          key="Student Landing Page Offers"
+          to="/student-landing-page-tests"
+          className={classes.link}
+        >
+          <ListItemButton className={classes.listItem} key="Student Landing Page Offers">
+            <ListItemText primary="Student Landing Page Offers" />
+          </ListItemButton>
+        </Link>
         <Link key="Checkout Nudge" to="/checkout-nudge-tests" className={classes.link}>
           <ListItemButton className={classes.listItem} key="Checkout Nudge">
             <ListItemText primary="Checkout Nudge" />
-          </ListItemButton>
-        </Link>
-        <Link key="Single Amounts" to="/amounts" className={classes.link}>
-          <ListItemButton className={classes.listItem} key="Single Amounts">
-            <ListItemText primary="Single Amounts" />
           </ListItemButton>
         </Link>
         <Link key="Promo Tool" to="/promo-tool" className={classes.link}>

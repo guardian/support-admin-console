@@ -1,10 +1,10 @@
+import { TextField, Theme } from '@mui/material';
 import Typography from '@mui/material/Typography';
-import React, { useEffect } from 'react';
+import { makeStyles } from '@mui/styles';
+import React, { useCallback, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Institution, StudentLandingPageVariant } from '../../../models/studentLandingPage';
 import { EMPTY_ERROR_HELPER_TEXT, noHtmlValidator } from '../helpers/validation';
-import { TextField, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
   container: {
@@ -75,13 +75,20 @@ export const AcademicInstitutionDetailEditor: React.FC<AcademicInstituteDetailEd
   });
 
   useEffect(() => {
-    trigger();
-  }, []);
+    void trigger();
+  }, [trigger]);
+
+  const handleValidationChange = useCallback(
+    (isValid: boolean) => {
+      onValidationChange(isValid);
+    },
+    [onValidationChange],
+  );
 
   useEffect(() => {
     const isValid = Object.keys(errors).length === 0;
-    onValidationChange(isValid);
-  }, [errors.logoUrl, errors.acronym, errors.name]);
+    handleValidationChange(isValid);
+  }, [errors, handleValidationChange]);
 
   const update = (institution: Institution): void => {
     updateInstitutionDetails(institution);
@@ -90,6 +97,8 @@ export const AcademicInstitutionDetailEditor: React.FC<AcademicInstituteDetailEd
   const ACRONYM_MAX_LENGTH = 4;
   const INSTITUTION_MAX_LENGTH = 150;
   const LOGO_URL_MAX_LENGTH = 150;
+  const LOGO_HELPER_TEXT =
+    'Image dimensions should be 61px wide by 27px high, with a transparent background and the foreground colour needs to be white';
 
   return (
     <div className={classes.container}>
@@ -106,8 +115,8 @@ export const AcademicInstitutionDetailEditor: React.FC<AcademicInstituteDetailEd
             },
           })}
           error={errors.name !== undefined}
-          helperText={errors.name ? errors.name.message || errors.name.type : ''}
-          onBlur={handleSubmit(update)}
+          helperText={errors.name ? (errors.name.message ?? errors.name.type) : ''}
+          onBlur={() => void handleSubmit(update)()}
           label="Name of Institution"
           margin="normal"
           variant="outlined"
@@ -117,7 +126,7 @@ export const AcademicInstitutionDetailEditor: React.FC<AcademicInstituteDetailEd
 
         <TextField
           error={errors.acronym !== undefined}
-          helperText={errors.acronym ? errors.acronym.message || errors.acronym.type : ''}
+          helperText={errors.acronym ? (errors.acronym.message ?? errors.acronym.type) : ''}
           {...register('acronym', {
             required: EMPTY_ERROR_HELPER_TEXT,
             validate: (acronym) => {
@@ -125,13 +134,13 @@ export const AcademicInstitutionDetailEditor: React.FC<AcademicInstituteDetailEd
                 return `max length is ${ACRONYM_MAX_LENGTH}`;
               }
               const htmlCheck = noHtmlValidator(acronym);
-              if (!!htmlCheck) {
+              if (htmlCheck) {
                 return htmlCheck;
               }
               return true;
             },
           })}
-          onBlur={handleSubmit(update)}
+          onBlur={() => void handleSubmit(update)()}
           label="Acronym for Institution"
           margin="normal"
           variant="outlined"
@@ -141,18 +150,15 @@ export const AcademicInstitutionDetailEditor: React.FC<AcademicInstituteDetailEd
 
         <TextField
           {...register('logoUrl', {
-            required: EMPTY_ERROR_HELPER_TEXT,
+            required: `${EMPTY_ERROR_HELPER_TEXT} - ${LOGO_HELPER_TEXT}`,
             maxLength: LOGO_URL_MAX_LENGTH,
             validate: (name) => {
               return noHtmlValidator(name);
             },
           })}
           error={errors.logoUrl !== undefined}
-          helperText={
-            errors?.logoUrl?.message ??
-            'Image dimensions should be 61px wide by 27px high, with a transparent background and the foreground colour needs to be white'
-          }
-          onBlur={handleSubmit(update)}
+          helperText={errors.logoUrl?.message ?? LOGO_HELPER_TEXT}
+          onBlur={() => void handleSubmit(update)()}
           label="Logo for Institution"
           margin="normal"
           variant="outlined"

@@ -1,16 +1,16 @@
-import React from 'react';
-import { TextField, Typography, FormControlLabel, Checkbox, MenuItem } from '@mui/material';
+import { Checkbox, FormControlLabel, MenuItem, TextField, Typography } from '@mui/material';
+import React, { useEffect, useRef } from 'react';
 import {
   CheckoutNudgeVariant,
-  Product,
   Copy,
+  Product,
   ProductType,
   RatePlan,
 } from '../../../models/checkoutNudge';
-import { useStyles } from '../helpers/testEditorStyles';
-import { PRODUCTS, getAvailableRatePlans, ONE_TIME_PLANS, RECURRING_PLANS } from './utils/defaults';
 import PromoCodesEditor from '../../shared/PromoCodesEditor';
+import { useStyles } from '../helpers/testEditorStyles';
 import { RichTextEditorSingleLine, RteMenuConstraints } from '../richTextEditor/richTextEditor';
+import { getAvailableRatePlans, ONE_TIME_PLANS, PRODUCTS, RECURRING_PLANS } from './utils/defaults';
 
 interface VariantEditorProps {
   variant: CheckoutNudgeVariant;
@@ -36,6 +36,13 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
   const classes = useStyles();
 
   const hasNudge = !!variant.nudge;
+
+  // Use refs to stabilize callback dependencies and prevent infinite render loops
+  const onValidationChangeRef = useRef(onValidationChange);
+
+  useEffect(() => {
+    onValidationChangeRef.current = onValidationChange;
+  });
 
   const updateNudgeToProduct = (update: (current: Product) => Product): void => {
     onVariantChange((current) => ({
@@ -99,16 +106,15 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
   };
 
   const getAvailableRatePlansForProduct = (): typeof ONE_TIME_PLANS | typeof RECURRING_PLANS => {
-    const { product } = variant.nudge?.nudgeToProduct || { product: 'Contribution' };
+    const { product } = variant.nudge?.nudgeToProduct ?? { product: 'Contribution' };
     return getAvailableRatePlans(product);
   };
 
   React.useEffect(() => {
-    // Basic validation: if nudge exists, heading should be present
-    const isValid =
-      !hasNudge || (!!variant.nudge?.nudgeCopy.heading && !!variant.nudge?.thankyouCopy.heading);
-    onValidationChange(isValid);
-  }, [variant, hasNudge, onValidationChange]);
+    const nudge = variant.nudge;
+    const isValid = !hasNudge || (!!nudge?.nudgeCopy.heading && !!nudge.thankyouCopy.heading);
+    onValidationChangeRef.current(isValid);
+  }, [hasNudge, variant.nudge]);
 
   return (
     <div className={classes.container}>
@@ -153,7 +159,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
             <TextField
               select
               label="Rate Plan (Optional)"
-              value={variant.nudge.nudgeToProduct.ratePlan || ''}
+              value={variant.nudge.nudgeToProduct.ratePlan ?? ''}
               onChange={(e): void =>
                 updateNudgeToProduct((current) => ({
                   ...current,
@@ -183,7 +189,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
               label="Heading"
               copyData={variant.nudge.nudgeCopy.heading}
               updateCopy={(heading): void =>
-                updateNudgeCopy((current) => ({ ...current, heading: heading || '' }))
+                updateNudgeCopy((current) => ({ ...current, heading: heading ?? '' }))
               }
               disabled={!editMode}
               error={!variant.nudge.nudgeCopy.heading}
@@ -191,9 +197,9 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
             />
             <RichTextEditorSingleLine
               label="Body"
-              copyData={variant.nudge.nudgeCopy.body || ''}
+              copyData={variant.nudge.nudgeCopy.body}
               updateCopy={(body): void =>
-                updateNudgeCopy((current) => ({ ...current, body: body || '' }))
+                updateNudgeCopy((current) => ({ ...current, body: body ?? '' }))
               }
               disabled={!editMode}
               error={false}
@@ -209,7 +215,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
               label="Heading"
               copyData={variant.nudge.thankyouCopy.heading}
               updateCopy={(heading): void =>
-                updateThankyouCopy((current) => ({ ...current, heading: heading || '' }))
+                updateThankyouCopy((current) => ({ ...current, heading: heading ?? '' }))
               }
               disabled={!editMode}
               error={!variant.nudge.thankyouCopy.heading}
@@ -217,9 +223,9 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
             />
             <RichTextEditorSingleLine
               label="Body"
-              copyData={variant.nudge.thankyouCopy.body || ''}
+              copyData={variant.nudge.thankyouCopy.body}
               updateCopy={(body): void =>
-                updateThankyouCopy((current) => ({ ...current, body: body || '' }))
+                updateThankyouCopy((current) => ({ ...current, body: body ?? '' }))
               }
               disabled={!editMode}
               error={false}
@@ -233,7 +239,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
             </Typography>
             <TextField
               label="Benefits Label"
-              value={variant.nudge.benefits?.label || ''}
+              value={variant.nudge.benefits?.label ?? ''}
               onChange={(e): void => updateBenefits(e.target.value)}
               disabled={!editMode}
               fullWidth
