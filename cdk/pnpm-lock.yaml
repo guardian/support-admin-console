@@ -52,8 +52,8 @@ importers:
         specifier: 3.8.3
         version: 3.8.3
       source-map-support:
-        specifier: 0.5.20
-        version: 0.5.20
+        specifier: 0.5.21
+        version: 0.5.21
       ts-jest:
         specifier: 29.4.9
         version: 29.4.9(@babel/core@7.29.0)(@jest/transform@30.3.0)(@jest/types@30.4.1)(babel-jest@30.3.0(@babel/core@7.29.0))(jest-util@30.4.1)(jest@30.3.0(@types/node@25.7.0))(typescript@5.9.3)
@@ -2541,8 +2541,8 @@ packages:
   source-map-support@0.5.13:
     resolution: {integrity: sha512-SHSKFHadjVA5oR4PPqhtAVdcBWwRYVd6g6cAXnIbRiIwc2EhPrTuKUBdSLvlEKyIP3GCf89fltvcZiP9MMFA1w==}
 
-  source-map-support@0.5.20:
-    resolution: {integrity: sha512-n1lZZ8Ve4ksRqizaBQgxXDgKwttHDhyfQjA6YZZn8+AroHbsIz+JjwxQDxbp+7y5OYCI8t1Yk7etjD9CRd2hIw==}
+  source-map-support@0.5.21:
+    resolution: {integrity: sha512-uBHU3L3czsIyYXKX88fdrGovxdSCoTGDRZ6SYXtSRxLZUzHg5P/66Ht6uoUlHu9EZod+inXhKo3qQgwXUT/y1w==}
 
   source-map@0.6.1:
     resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
@@ -6291,7 +6291,7 @@ snapshots:
       buffer-from: 1.1.2
       source-map: 0.6.1
 
-  source-map-support@0.5.20:
+  source-map-support@0.5.21:
     dependencies:
       buffer-from: 1.1.2
       source-map: 0.6.1
