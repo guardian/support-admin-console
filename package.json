@@ -9,7 +9,7 @@
     "css-loader": "7.1.4",
     "eslint": "9.39.4",
     "eslint-plugin-prettier": "5.5.5",
-    "globals": "17.5.0",
+    "globals": "17.6.0",
     "jest": "30.3.0",
     "json-diff-ts": "4.10.4",
     "prettier": "3.8.3",
