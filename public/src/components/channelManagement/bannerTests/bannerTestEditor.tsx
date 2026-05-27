@@ -155,19 +155,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
   };
 
   const onSignedInStatusChange = (signedInStatus: SignedInStatus): void => {
-    onTestChange((current) => {
-      const updatedTest = { ...current, signedInStatus };
-      if (current.mParticleAudience !== undefined && signedInStatus !== 'SignedIn') {
-        const minViews = current.articlesViewedSettings?.minViews ?? 0;
-        if (!current.articlesViewedSettings || minViews < 5) {
-          const enforced = current.articlesViewedSettings
-            ? { ...current.articlesViewedSettings, minViews: 5 }
-            : DEFAULT_ARTICLES_VIEWED_SETTINGS;
-          return { ...updatedTest, articlesViewedSettings: enforced };
-        }
-      }
-      return updatedTest;
-    });
+    onTestChange((current) => ({ ...current, signedInStatus }));
   };
 
   const onConsentStatusChange = (consentStatus: ConsentStatus): void => {
@@ -199,19 +187,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
   };
 
   const onMParticleAudienceChange = (mParticleAudience?: number): void => {
-    onTestChange((current) => {
-      const updatedTest = { ...current, mParticleAudience };
-      if (mParticleAudience !== undefined && current.signedInStatus !== 'SignedIn') {
-        const minViews = current.articlesViewedSettings?.minViews ?? 0;
-        if (!current.articlesViewedSettings || minViews < 5) {
-          const enforced = current.articlesViewedSettings
-            ? { ...current.articlesViewedSettings, minViews: 5 }
-            : DEFAULT_ARTICLES_VIEWED_SETTINGS;
-          return { ...updatedTest, articlesViewedSettings: enforced };
-        }
-      }
-      return updatedTest;
-    });
+    onTestChange((current) => ({ ...current, mParticleAudience }));
   };
 
   // Memoize callbacks by variant name to prevent infinite render loops
