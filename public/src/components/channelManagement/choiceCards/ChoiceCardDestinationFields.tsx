@@ -1,5 +1,5 @@
 import { FormControl, MenuItem, Select, Typography } from '@mui/material';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Controller, UseFormReturn } from 'react-hook-form';
 import { ChoiceCardsSettings } from '../../../models/choiceCards';
 import { fetchFrontendSettings, fetchTest, FrontendSettingsType } from '../../../utils/requests';
@@ -29,6 +29,14 @@ enum Destination {
   Checkout = 'Checkout',
 }
 
+const startRequest = (requestRef: React.MutableRefObject<number>): number => {
+  requestRef.current += 1;
+  return requestRef.current;
+};
+
+const isCurrentRequest = (requestRef: React.MutableRefObject<number>, requestId: number): boolean =>
+  requestRef.current === requestId;
+
 const getSettingsTypeForDestination = (destination: Destination) =>
   destination === Destination.LandingPage
     ? FrontendSettingsType.SupportLandingPageTests
@@ -41,7 +49,6 @@ export const ChoiceCardDestinationFields: React.FC<ChoiceCardDestinationFieldsPr
   formMethods,
   onDestinationSectionChange,
 }) => {
-  const shouldInvertColor = false;
   const { control, getValues, setValue } = formMethods;
   const [destinationTestOptions, setDestinationTestOptions] = useState<DestinationTestOption[]>([]);
   const [destinationVariantNames, setDestinationVariantNames] = useState<string[]>([]);
@@ -51,26 +58,35 @@ export const ChoiceCardDestinationFields: React.FC<ChoiceCardDestinationFieldsPr
   const getSafeSelectValue = (value: string | undefined, options: string[]): string =>
     value && options.includes(value) ? value : '';
 
+  const clearVariantSelection = useCallback(() => {
+    setDestinationVariantNames([]);
+    setValue(`choiceCards.${index}.destinationTest.variantName`, '', {
+      shouldValidate: true,
+    });
+  }, [index, setValue]);
+
+  const clearTestAndVariantSelection = useCallback(() => {
+    setValue(`choiceCards.${index}.destinationTest.testName`, '', {
+      shouldValidate: true,
+    });
+    clearVariantSelection();
+  }, [clearVariantSelection, index, setValue]);
+
   const fetchDestinationTest = useCallback(
     (destination: Destination, testName: string) => {
       const trimmedTestName = testName.trim();
 
       if (!trimmedTestName) {
-        setDestinationVariantNames([]);
-        setValue(`choiceCards.${index}.destinationTest.variantName`, '', {
-          shouldValidate: true,
-        });
+        clearVariantSelection();
         return;
       }
 
       const settingsType = getSettingsTypeForDestination(destination);
-
-      const requestId = destinationFetchRequestId.current + 1;
-      destinationFetchRequestId.current = requestId;
+      const requestId = startRequest(destinationFetchRequestId);
 
       fetchTest<Test>(settingsType, trimmedTestName)
         .then((test) => {
-          if (destinationFetchRequestId.current !== requestId) {
+          if (!isCurrentRequest(destinationFetchRequestId, requestId)) {
             return;
           }
 
@@ -80,34 +96,28 @@ export const ChoiceCardDestinationFields: React.FC<ChoiceCardDestinationFieldsPr
           const currentVariantName =
             getValues(`choiceCards.${index}.destinationTest.variantName`) ?? '';
           if (currentVariantName && !variantNames.includes(currentVariantName)) {
-            setValue(`choiceCards.${index}.destinationTest.variantName`, '', {
-              shouldValidate: true,
-            });
+            clearVariantSelection();
           }
         })
         .catch(() => {
-          if (destinationFetchRequestId.current !== requestId) {
+          if (!isCurrentRequest(destinationFetchRequestId, requestId)) {
             return;
           }
 
-          setDestinationVariantNames([]);
-          setValue(`choiceCards.${index}.destinationTest.variantName`, '', {
-            shouldValidate: true,
-          });
+          clearVariantSelection();
         });
     },
-    [getValues, setValue, index],
+    [clearVariantSelection, getValues, index],
   );
 
   const fetchDestinationTests = useCallback(
     (destination: Destination) => {
       const settingsType = getSettingsTypeForDestination(destination);
-      const requestId = destinationListRequestId.current + 1;
-      destinationListRequestId.current = requestId;
+      const requestId = startRequest(destinationListRequestId);
 
       fetchFrontendSettings<DestinationTestsResponse>(settingsType)
         .then((response) => {
-          if (destinationListRequestId.current !== requestId) {
+          if (!isCurrentRequest(destinationListRequestId, requestId)) {
             return;
           }
 
@@ -120,37 +130,25 @@ export const ChoiceCardDestinationFields: React.FC<ChoiceCardDestinationFieldsPr
 
           const currentTestName = getValues(`choiceCards.${index}.destinationTest.testName`) ?? '';
           if (!currentTestName || !testNames.includes(currentTestName)) {
-            setValue(`choiceCards.${index}.destinationTest.testName`, '', {
-              shouldValidate: true,
-            });
-            setDestinationVariantNames([]);
-            setValue(`choiceCards.${index}.destinationTest.variantName`, '', {
-              shouldValidate: true,
-            });
+            clearTestAndVariantSelection();
             return;
           }
 
           fetchDestinationTest(destination, currentTestName);
         })
         .catch(() => {
-          if (destinationListRequestId.current !== requestId) {
+          if (!isCurrentRequest(destinationListRequestId, requestId)) {
             return;
           }
 
           setDestinationTestOptions([]);
-          setDestinationVariantNames([]);
-          setValue(`choiceCards.${index}.destinationTest.testName`, '', {
-            shouldValidate: true,
-          });
-          setValue(`choiceCards.${index}.destinationTest.variantName`, '', {
-            shouldValidate: true,
-          });
+          clearTestAndVariantSelection();
         });
     },
-    [getValues, setValue, fetchDestinationTest, index],
+    [clearTestAndVariantSelection, fetchDestinationTest, getValues, index],
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     const destination =
       (getValues(`choiceCards.${index}.destination`) as Destination | undefined) ??
       Destination.LandingPage;
@@ -206,7 +204,7 @@ export const ChoiceCardDestinationFields: React.FC<ChoiceCardDestinationFieldsPr
                       <Typography>{test.name}</Typography>
                       <TestListTestLiveLabel
                         isLive={test.status === 'Live'}
-                        shouldInvertColor={shouldInvertColor}
+                        shouldInvertColor={false}
                       />
                     </MenuItem>
                   ))}
