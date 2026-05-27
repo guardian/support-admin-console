@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material';
+import { Alert, Typography } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
 import {
   BannerContent,
@@ -165,7 +165,8 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
   const onArticlesViewedSettingsChange = (
     updatedArticlesViewedSettings?: ArticlesViewedSettings,
   ): void => {
-    updateTest((current) => ({
+    // Bypass updateTest to avoid re-calculation, go directly to onTestChange
+    onTestChange((current) => ({
       ...current,
       articlesViewedSettings: updatedArticlesViewedSettings,
     }));
@@ -203,6 +204,22 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
     setValidationStatusRef.current = setValidationStatusForField;
     onVariantsChangeRef.current = onVariantsChange;
   });
+
+  // Validate mParticle audience constraint: if mParticle audience is set and can target signed-out users,
+  // then article count must have minViews >= 5
+  useEffect(() => {
+    const requiresArticleCount =
+      test.mParticleAudience !== undefined && test.signedInStatus !== 'SignedIn';
+    const isValid =
+      !requiresArticleCount ||
+      (test.articlesViewedSettings !== undefined && test.articlesViewedSettings.minViews >= 5);
+    setValidationStatusForField('mParticleAudience', isValid);
+  }, [
+    test.mParticleAudience,
+    test.signedInStatus,
+    test.articlesViewedSettings,
+    setValidationStatusForField,
+  ]);
 
   const getValidationCallback = (variantName: string): ((isValid: boolean) => void) => {
     if (!validationCallbacksRef.current.has(variantName)) {
@@ -380,6 +397,10 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
             mParticleAudience: test.mParticleAudience,
             onMParticleAudienceChange: onMParticleAudienceChange,
           }}
+          mParticleAudienceValidation={
+            !(test.mParticleAudience !== undefined && test.signedInStatus !== 'SignedIn') ||
+            (test.articlesViewedSettings !== undefined && test.articlesViewedSettings.minViews >= 5)
+          }
         />
       </div>
 
@@ -387,6 +408,12 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
         <Typography variant={'h3'} className={classes.sectionHeader}>
           Article count
         </Typography>
+
+        {test.mParticleAudience !== undefined && test.signedInStatus !== 'SignedIn' && (
+          <Alert severity="info" style={{ marginBottom: '16px' }}>
+            mParticle audience targeting of signed-out users requires minimum article count ≥ 5.
+          </Alert>
+        )}
 
         <TestEditorArticleCountEditor
           articlesViewedSettings={test.articlesViewedSettings}

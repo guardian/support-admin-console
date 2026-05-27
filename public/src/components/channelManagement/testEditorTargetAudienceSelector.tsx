@@ -60,6 +60,7 @@ interface TestEditorTargetAudienceSelectorProps {
     mParticleAudience?: number;
     onMParticleAudienceChange: (mParticleAudience?: number) => void;
   };
+  mParticleAudienceValidation?: boolean;
 }
 const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelectorProps> = ({
   regionTargeting,
@@ -80,6 +81,7 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
   showConsentStatusSelector,
   platform,
   mParticleAudienceEditor,
+  mParticleAudienceValidation,
 }: TestEditorTargetAudienceSelectorProps) => {
   const classes = useStyles();
 
@@ -181,6 +183,11 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
               mParticleAudience={mParticleAudienceEditor.mParticleAudience}
               onChange={mParticleAudienceEditor.onMParticleAudienceChange}
             />
+            {mParticleAudienceValidation === false && (
+              <Typography style={{ color: 'red', marginTop: '8px', fontSize: '14px' }}>
+                mParticle audience targeting of signed-out users requires minimum article count ≥ 5.
+              </Typography>
+            )}
           </>
         )}
       </div>
