@@ -7,6 +7,7 @@ import { Test } from '../helpers/shared';
 import TestListTestLiveLabel from '../testListTestLiveLabel';
 import TypedRadioGroup from '../TypedRadioGroup';
 
+
 interface DestinationTestsResponse {
   tests: Test[];
 }
@@ -52,6 +53,7 @@ export const ChoiceCardDestinationFields: React.FC<ChoiceCardDestinationFieldsPr
   const { control, getValues, setValue } = formMethods;
   const [destinationTestOptions, setDestinationTestOptions] = useState<DestinationTestOption[]>([]);
   const [destinationVariantNames, setDestinationVariantNames] = useState<string[]>([]);
+  const[destinationTest, setDestinationTest] = useState<Test[]>([]);
   const destinationListRequestId = useRef(0);
   const destinationFetchRequestId = useRef(0);
 
@@ -73,7 +75,7 @@ export const ChoiceCardDestinationFields: React.FC<ChoiceCardDestinationFieldsPr
   }, [clearVariantSelection, index, setValue]);
 
   const fetchDestinationTest = useCallback(
-    (destination: Destination, testName: string) => {
+    (testName: string) => {
       const trimmedTestName = testName.trim();
 
       if (!trimmedTestName) {
@@ -81,16 +83,15 @@ export const ChoiceCardDestinationFields: React.FC<ChoiceCardDestinationFieldsPr
         return;
       }
 
-      const settingsType = getSettingsTypeForDestination(destination);
-      const requestId = startRequest(destinationFetchRequestId);
+      const selectedTest = destinationTest.find(test => test.name === trimmedTestName) 
+      
+      if(!selectedTest)
+      {
+        clearVariantSelection();
+        return;
+      }
 
-      fetchTest<Test>(settingsType, trimmedTestName)
-        .then((test) => {
-          if (!isCurrentRequest(destinationFetchRequestId, requestId)) {
-            return;
-          }
-
-          const variantNames = test.variants.map((variant) => variant.name);
+      const variantNames = selectedTest.variants.map((variant) => variant.name);
           setDestinationVariantNames(variantNames);
 
           const currentVariantName =
@@ -98,14 +99,7 @@ export const ChoiceCardDestinationFields: React.FC<ChoiceCardDestinationFieldsPr
           if (currentVariantName && !variantNames.includes(currentVariantName)) {
             clearVariantSelection();
           }
-        })
-        .catch(() => {
-          if (!isCurrentRequest(destinationFetchRequestId, requestId)) {
-            return;
-          }
 
-          clearVariantSelection();
-        });
     },
     [clearVariantSelection, getValues, index],
   );
@@ -121,6 +115,7 @@ export const ChoiceCardDestinationFields: React.FC<ChoiceCardDestinationFieldsPr
             return;
           }
 
+          setDestinationTest(response.tests);
           const testOptions = response.tests.map((test) => ({
             name: test.name,
             status: test.status,
@@ -134,7 +129,7 @@ export const ChoiceCardDestinationFields: React.FC<ChoiceCardDestinationFieldsPr
             return;
           }
 
-          fetchDestinationTest(destination, currentTestName);
+          fetchDestinationTest(currentTestName);
         })
         .catch(() => {
           if (!isCurrentRequest(destinationListRequestId, requestId)) {
@@ -192,7 +187,6 @@ export const ChoiceCardDestinationFields: React.FC<ChoiceCardDestinationFieldsPr
                     const selectedTestName = e.target.value;
                     destinationTestNameField.onChange(selectedTestName);
                     fetchDestinationTest(
-                      (field.value as Destination | undefined) ?? Destination.LandingPage,
                       selectedTestName,
                     );
                     onDestinationSectionChange();
