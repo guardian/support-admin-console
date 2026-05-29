@@ -74,7 +74,7 @@ export const ChoiceCardDestinationFields: React.FC<ChoiceCardDestinationFieldsPr
     clearVariantSelection();
   }, [clearVariantSelection, index, setValue]);
 
-  const fetchDestinationTest = useCallback(
+  const setDestinationTest = useCallback(
     (testName: string, tests: Test[]) => {
       const trimmedTestName = testName.trim();
 
@@ -119,7 +119,7 @@ export const ChoiceCardDestinationFields: React.FC<ChoiceCardDestinationFieldsPr
             return;
           }
 
-          fetchDestinationTest(currentTestName, response.tests);
+          setDestinationTest(currentTestName, response.tests);
         })
         .catch(() => {
           if (!isCurrentRequest(destinationListRequestId, requestId)) {
@@ -128,7 +128,7 @@ export const ChoiceCardDestinationFields: React.FC<ChoiceCardDestinationFieldsPr
           clearTestAndVariantSelection();
         });
     },
-    [clearTestAndVariantSelection, fetchDestinationTest, getValues, index],
+    [clearTestAndVariantSelection, setDestinationTest, getValues, index],
   );
 
   useEffect(() => {
@@ -174,7 +174,7 @@ export const ChoiceCardDestinationFields: React.FC<ChoiceCardDestinationFieldsPr
                   onChange={(e) => {
                     const selectedTestName = e.target.value;
                     destinationTestNameField.onChange(selectedTestName);
-                    fetchDestinationTest(selectedTestName, destinationTests);
+                    setDestinationTest(selectedTestName, destinationTests);
                     onDestinationSectionChange();
                   }}
                 >
