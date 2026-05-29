@@ -2,11 +2,10 @@ import { FormControl, MenuItem, Select, Typography } from '@mui/material';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Controller, UseFormReturn } from 'react-hook-form';
 import { ChoiceCardsSettings } from '../../../models/choiceCards';
-import { fetchFrontendSettings, fetchTest, FrontendSettingsType } from '../../../utils/requests';
+import { fetchFrontendSettings, FrontendSettingsType } from '../../../utils/requests';
 import { Test } from '../helpers/shared';
 import TestListTestLiveLabel from '../testListTestLiveLabel';
 import TypedRadioGroup from '../TypedRadioGroup';
-
 
 interface DestinationTestsResponse {
   tests: Test[];
@@ -18,11 +17,6 @@ interface ChoiceCardDestinationFieldsProps {
   subHeadingClassName: string;
   formMethods: UseFormReturn<ChoiceCardsSettings & { hasOneDefault: boolean }>;
   onDestinationSectionChange: () => void;
-}
-
-interface DestinationTestOption {
-  name: string;
-  status: Test['status'];
 }
 
 enum Destination {
@@ -51,21 +45,27 @@ export const ChoiceCardDestinationFields: React.FC<ChoiceCardDestinationFieldsPr
   onDestinationSectionChange,
 }) => {
   const { control, getValues, setValue } = formMethods;
-  const [destinationTestOptions, setDestinationTestOptions] = useState<DestinationTestOption[]>([]);
   const [destinationVariantNames, setDestinationVariantNames] = useState<string[]>([]);
-  const[destinationTest, setDestinationTest] = useState<Test[]>([]);
+  const [destinationTests, setDestinationTests] = useState<Test[]>([]);
   const destinationListRequestId = useRef(0);
-  const destinationFetchRequestId = useRef(0);
 
   const getSafeSelectValue = (value: string | undefined, options: string[]): string =>
     value && options.includes(value) ? value : '';
 
-  const clearVariantSelection = useCallback(() => {
-    setDestinationVariantNames([]);
-    setValue(`choiceCards.${index}.destinationTest.variantName`, '', {
-      shouldValidate: true,
-    });
-  }, [index, setValue]);
+  const clearVariantSelection = useCallback(
+    (selectedTest?: Test) => {
+      if (!selectedTest) {
+        setDestinationVariantNames([]);
+      } else {
+        const variantNames = selectedTest.variants.map((variant) => variant.name);
+        setDestinationVariantNames(variantNames);
+      }
+      setValue(`choiceCards.${index}.destinationTest.variantName`, '', {
+        shouldValidate: true,
+      });
+    },
+    [index, setValue, setDestinationVariantNames],
+  );
 
   const clearTestAndVariantSelection = useCallback(() => {
     setValue(`choiceCards.${index}.destinationTest.testName`, '', {
@@ -75,7 +75,7 @@ export const ChoiceCardDestinationFields: React.FC<ChoiceCardDestinationFieldsPr
   }, [clearVariantSelection, index, setValue]);
 
   const fetchDestinationTest = useCallback(
-    (testName: string) => {
+    (testName: string, tests: Test[]) => {
       const trimmedTestName = testName.trim();
 
       if (!trimmedTestName) {
@@ -83,25 +83,19 @@ export const ChoiceCardDestinationFields: React.FC<ChoiceCardDestinationFieldsPr
         return;
       }
 
-      const selectedTest = destinationTest.find(test => test.name === trimmedTestName) 
-      
-      if(!selectedTest)
-      {
+      const selectedTest = tests.find((test) => test.name === trimmedTestName);
+
+      if (!selectedTest) {
         clearVariantSelection();
         return;
       }
 
       const variantNames = selectedTest.variants.map((variant) => variant.name);
-          setDestinationVariantNames(variantNames);
+      setDestinationVariantNames(variantNames);
 
-          const currentVariantName =
-            getValues(`choiceCards.${index}.destinationTest.variantName`) ?? '';
-          if (currentVariantName && !variantNames.includes(currentVariantName)) {
-            clearVariantSelection();
-          }
-
+      clearVariantSelection(selectedTest);
     },
-    [clearVariantSelection, getValues, index],
+    [clearVariantSelection],
   );
 
   const fetchDestinationTests = useCallback(
@@ -115,13 +109,9 @@ export const ChoiceCardDestinationFields: React.FC<ChoiceCardDestinationFieldsPr
             return;
           }
 
-          setDestinationTest(response.tests);
-          const testOptions = response.tests.map((test) => ({
-            name: test.name,
-            status: test.status,
-          }));
-          const testNames = testOptions.map((test) => test.name);
-          setDestinationTestOptions(testOptions);
+          setDestinationTests(response.tests);
+
+          const testNames = response.tests.map((test) => test.name);
 
           const currentTestName = getValues(`choiceCards.${index}.destinationTest.testName`) ?? '';
           if (!currentTestName || !testNames.includes(currentTestName)) {
@@ -129,14 +119,12 @@ export const ChoiceCardDestinationFields: React.FC<ChoiceCardDestinationFieldsPr
             return;
           }
 
-          fetchDestinationTest(currentTestName);
+          fetchDestinationTest(currentTestName, response.tests);
         })
         .catch(() => {
           if (!isCurrentRequest(destinationListRequestId, requestId)) {
             return;
           }
-
-          setDestinationTestOptions([]);
           clearTestAndVariantSelection();
         });
     },
@@ -181,19 +169,17 @@ export const ChoiceCardDestinationFields: React.FC<ChoiceCardDestinationFieldsPr
                   displayEmpty
                   value={getSafeSelectValue(
                     destinationTestNameField.value,
-                    destinationTestOptions.map((test) => test.name),
+                    destinationTests.map((test) => test.name),
                   )}
                   onChange={(e) => {
                     const selectedTestName = e.target.value;
                     destinationTestNameField.onChange(selectedTestName);
-                    fetchDestinationTest(
-                      selectedTestName,
-                    );
+                    fetchDestinationTest(selectedTestName, destinationTests);
                     onDestinationSectionChange();
                   }}
                 >
                   <MenuItem value="">Destination test name (optional)</MenuItem>
-                  {destinationTestOptions.map((test) => (
+                  {destinationTests.map((test) => (
                     <MenuItem key={test.name} value={test.name}>
                       <Typography>{test.name}</Typography>
                       <TestListTestLiveLabel
