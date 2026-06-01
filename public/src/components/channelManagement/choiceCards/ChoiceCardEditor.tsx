@@ -23,7 +23,7 @@ import { Controller, useFieldArray, UseFormReturn } from 'react-hook-form';
 import { ChoiceCard, ChoiceCardsSettings, Product } from '../../../models/choiceCards';
 import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 import { RichTextEditorSingleLine, RteMenuConstraints } from '../richTextEditor/richTextEditor';
-import TypedRadioGroup from '../TypedRadioGroup';
+import { ChoiceCardDestinationFields } from './ChoiceCardDestinationFields';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -314,66 +314,12 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
           </Button>
         </div>
 
-        <Controller
-          name={`choiceCards.${index}.destination`}
-          control={control}
-          render={({ field }) => (
-            <>
-              <Typography className={classes.subHeading}>Destination</Typography>
-              <TypedRadioGroup
-                selectedValue={field.value ?? 'LandingPage'}
-                onChange={(destination) => {
-                  field.onChange(destination);
-                  handleCardChange();
-                }}
-                isDisabled={isDisabled}
-                labels={{
-                  LandingPage: 'Landing page',
-                  Checkout: 'Checkout',
-                }}
-              />
-
-              <Controller
-                name={`choiceCards.${index}.destinationTest.testName`}
-                control={control}
-                render={({ field: destinationTestNameField }) => (
-                  <TextField
-                    required={false}
-                    label="Destination test name (optional)"
-                    variant="filled"
-                    fullWidth
-                    margin="normal"
-                    disabled={isDisabled}
-                    value={destinationTestNameField.value ?? ''}
-                    onChange={(e) => {
-                      destinationTestNameField.onChange(e.target.value);
-                      handleCardChange();
-                    }}
-                  />
-                )}
-              />
-
-              <Controller
-                name={`choiceCards.${index}.destinationTest.variantName`}
-                control={control}
-                render={({ field: destinationVariantNameField }) => (
-                  <TextField
-                    required={false}
-                    label="Destination variant name (optional)"
-                    variant="filled"
-                    fullWidth
-                    margin="normal"
-                    disabled={isDisabled}
-                    value={destinationVariantNameField.value ?? ''}
-                    onChange={(e) => {
-                      destinationVariantNameField.onChange(e.target.value);
-                      handleCardChange();
-                    }}
-                  />
-                )}
-              />
-            </>
-          )}
+        <ChoiceCardDestinationFields
+          index={index}
+          isDisabled={isDisabled}
+          subHeadingClassName={classes.subHeading}
+          formMethods={formMethods}
+          onDestinationSectionChange={handleCardChange}
         />
       </AccordionDetails>
     </Accordion>
