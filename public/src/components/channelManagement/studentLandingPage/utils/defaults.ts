@@ -3,7 +3,6 @@ import {
   StudentLandingPageTest,
   StudentLandingPageVariant,
 } from '../../../../models/studentLandingPage';
-import { Region } from '../../../../utils/models';
 import { RegionTargeting } from '../../helpers/shared';
 
 export const DEFAULT_REGION_TARGETING: RegionTargeting = {
