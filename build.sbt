@@ -61,7 +61,7 @@ dependencyOverrides ++= List(
   "commons-io" % "commons-io" % "2.22.0" % Test,
   "commons-beanutils" % "commons-beanutils" % "1.11.0",
   // Play-test brings in a vulnerable version of plexus-utils - https://github.com/advisories/GHSA-4368-p58w-2w5w
-  "org.codehaus.plexus" % "plexus-utils" % "3.6.1"
+  "org.codehaus.plexus" % "plexus-utils" % "4.0.3"
 )
 
 excludeDependencies ++= Seq(
