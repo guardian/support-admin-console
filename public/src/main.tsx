@@ -5,7 +5,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { Theme, ThemeProvider } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { CSSProperties } from '@mui/styles';
 import { makeStyles, ThemeProvider as StylesThemeProvider } from '@mui/styles';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
@@ -92,7 +91,7 @@ const useStyles = makeStyles(({ palette, mixins, typography, transitions }: Them
     flexGrow: 1,
     backgroundColor: palette.grey[100],
   },
-  toolbar: mixins.toolbar as CSSProperties, // createStyles expects material-ui's CSSProperties type, not react's
+  toolbar: mixins.toolbar,
   heading: {
     fontSize: typography.pxToRem(24),
     fontWeight: typography.fontWeightMedium,
