@@ -14,7 +14,7 @@ import {
   Typography,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { fetchPromo, fetchPromoCampaign, PromoResponse } from '../../utils/requests';
 import { Promo, PromoCampaign } from '../promoTool/utils/promoModels';
 
@@ -110,10 +110,23 @@ const PromoCodesEditor: React.FC<PromoCodesEditorProps> = ({
 }) => {
   const classes = useStyles();
   const [newPromoCode, setNewPromoCode] = useState<string>('');
-  const [promoDetails, setPromoDetails] = useState<Map<string, PromoDetails>>(new Map());
+  const [fetchedDetails, setFetchedDetails] = useState<Map<string, PromoDetails>>(new Map());
   const [addingPromo, setAddingPromo] = useState(false);
   const [expandedCodes, setExpandedCodes] = useState<Set<string>>(new Set());
   const requestedPromoCodesRef = useRef<Set<string>>(new Set());
+
+  const promoDetails = useMemo(() => {
+    const map = new Map<string, PromoDetails>();
+    for (const code of promoCodes) {
+      const fetched = fetchedDetails.get(code);
+      if (fetched) {
+        map.set(code, fetched);
+      } else {
+        map.set(code, { code, promo: null, campaign: null, loading: true, error: false });
+      }
+    }
+    return map;
+  }, [promoCodes, fetchedDetails]);
 
   useEffect(() => {
     const promoCodeSet = new Set(promoCodes);
@@ -125,29 +138,6 @@ const PromoCodesEditor: React.FC<PromoCodesEditorProps> = ({
 
     const codesToFetch = promoCodes.filter((code) => !requestedPromoCodesRef.current.has(code));
     codesToFetch.forEach((code) => requestedPromoCodesRef.current.add(code));
-
-    setPromoDetails((prev) => {
-      let hasChanged = prev.size !== promoCodes.length;
-      const next = new Map<string, PromoDetails>();
-
-      for (const code of promoCodes) {
-        const existingDetails = prev.get(code);
-        if (existingDetails) {
-          next.set(code, existingDetails);
-        } else {
-          hasChanged = true;
-          next.set(code, {
-            code,
-            promo: null,
-            campaign: null,
-            loading: true,
-            error: false,
-          });
-        }
-      }
-
-      return hasChanged ? next : prev;
-    });
 
     for (const code of codesToFetch) {
       fetchPromo(code)
@@ -162,10 +152,7 @@ const PromoCodesEditor: React.FC<PromoCodesEditorProps> = ({
             console.error('Failed to fetch campaign:', err);
           }
 
-          setPromoDetails((prev) => {
-            if (!prev.has(code)) {
-              return prev;
-            }
+          setFetchedDetails((prev) => {
             const updated = new Map(prev);
             updated.set(code, {
               code,
@@ -178,10 +165,7 @@ const PromoCodesEditor: React.FC<PromoCodesEditorProps> = ({
           });
         })
         .catch(() => {
-          setPromoDetails((prev) => {
-            if (!prev.has(code)) {
-              return prev;
-            }
+          setFetchedDetails((prev) => {
             const updated = new Map(prev);
             updated.set(code, {
               code,
