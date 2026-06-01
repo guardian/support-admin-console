@@ -111,6 +111,23 @@ function sortByDescription<T extends Switch | SwitchGroup>(a: [string, T], b: [s
   return a[1].description > b[1].description ? 1 : -1;
 }
 
+interface SaveButtonProps {
+  saving: boolean;
+  onSave: () => void;
+}
+
+const SaveButton: React.FC<SaveButtonProps> = ({ saving, onSave }) => {
+  const classes = useStyles();
+  return (
+    <div className={classes.buttons}>
+      <Button variant="contained" onClick={onSave} className={classes.button} disabled={saving}>
+        <SaveIcon />
+        Save
+      </Button>
+    </div>
+  );
+};
+
 const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
   data,
   update,
@@ -297,20 +314,6 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     setPendingChanges([]);
   };
 
-  const SaveButton = (): JSX.Element => (
-    <div className={classes.buttons}>
-      <Button
-        variant="contained"
-        onClick={actionSaveData}
-        className={classes.button}
-        disabled={saving}
-      >
-        <SaveIcon />
-        Save
-      </Button>
-    </div>
-  );
-
   const actionRemoveSwitchData = (
     group: [string, SwitchGroup],
     switchId: string,
@@ -343,12 +346,12 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
       </Typography>
 
       {displayNeedToSaveDataWarning()}
-      <SaveButton />
+      <SaveButton saving={saving} onSave={actionSaveData} />
 
       {createSwitchFields()}
 
       {displayNeedToSaveDataWarning()}
-      <SaveButton />
+      <SaveButton saving={saving} onSave={actionSaveData} />
     </form>
   );
 };
