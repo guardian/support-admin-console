@@ -68,52 +68,59 @@ const addHttps = (url: string): string => {
   }
 };
 
+const buildLink = (
+  url: string,
+  campaign: string,
+  content: string,
+  term: string,
+  sourceAndMedium: string,
+): string => {
+  const urlWithHttps = addHttps(url);
+  const [source, medium] = sourceAndMedium.split('__');
+  const trackingParams = `utm_medium=${medium}&utm_campaign=${campaign}&utm_content=${content}&utm_term=${term}&utm_source=${source}`;
+  return urlWithHttps.includes('?')
+    ? `${urlWithHttps}&${trackingParams}`
+    : `${urlWithHttps}?${trackingParams}`;
+};
+
+const getInitialState = (): { formValues: LinkTrackingFormData; initialLink: string } => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const urlParam = urlParams.get('url');
+  const campaignParam = urlParams.get('campaign');
+  const contentParam = urlParams.get('content');
+  const termParam = urlParams.get('term');
+
+  const formValues: LinkTrackingFormData = {
+    url: urlParam ?? 'https://support.theguardian.com',
+    campaign: campaignParam ?? '',
+    content: contentParam ?? '',
+    term: termParam ?? '',
+    sourceAndMedium: 'acquisition__footer',
+  };
+
+  const initialLink =
+    urlParam && campaignParam && contentParam && termParam
+      ? buildLink(urlParam, campaignParam, contentParam, termParam, 'acquisition__footer')
+      : '';
+
+  return { formValues, initialLink };
+};
+
 export const LinkTrackingBuilder: React.FC = () => {
   const classes = useStyles();
-  const [link, setLink] = React.useState<string>('');
+
+  const { formValues, initialLink } = React.useMemo(() => getInitialState(), []);
+
+  const [link, setLink] = React.useState<string>(initialLink);
 
   const {
     control,
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<LinkTrackingFormData>({
-    defaultValues: {
-      url: 'https://support.theguardian.com',
-    },
+    defaultValues: formValues,
   });
-
-  // Restore form state from URL parameters on mount
-  React.useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const urlParam = urlParams.get('url');
-    const campaignParam = urlParams.get('campaign');
-    const contentParam = urlParams.get('content');
-    const termParam = urlParams.get('term');
-
-    if (urlParam || campaignParam || contentParam || termParam) {
-      reset({
-        url: urlParam ?? 'https://support.theguardian.com',
-        campaign: campaignParam ?? '',
-        content: contentParam ?? '',
-        term: termParam ?? '',
-        sourceAndMedium: 'acquisition__footer',
-      });
-
-      // Trigger link generation if we have all required fields
-      if (urlParam && campaignParam && contentParam && termParam) {
-        const sourceAndMedium = 'acquisition__footer';
-        const [source, medium] = sourceAndMedium.split('__');
-        const urlWithHttps = addHttps(urlParam);
-        const trackingParams = `utm_medium=${medium}&utm_campaign=${campaignParam}&utm_content=${contentParam}&utm_term=${termParam}&utm_source=${source}`;
-        const link = urlWithHttps.includes('?')
-          ? `${urlWithHttps}&${trackingParams}`
-          : `${urlWithHttps}?${trackingParams}`;
-        setLink(link);
-      }
-    }
-  }, [reset]);
 
   const urlContainsTrackingParams = (url: URL): boolean => {
     const params = new URLSearchParams(url.search);
@@ -134,15 +141,7 @@ export const LinkTrackingBuilder: React.FC = () => {
     term,
     sourceAndMedium,
   }) => {
-    const urlWithHttps = addHttps(url);
-    const [source, medium] = sourceAndMedium.split('__');
-
-    const trackingParams = `utm_medium=${medium}&utm_campaign=${campaign}&utm_content=${content}&utm_term=${term}&utm_source=${source}`;
-    const link = urlWithHttps.includes('?')
-      ? `${urlWithHttps}&${trackingParams}`
-      : `${urlWithHttps}?${trackingParams}`;
-
-    setLink(link);
+    setLink(buildLink(url, campaign, content, term, sourceAndMedium));
   };
 
   // To be called whenever something changes, and the user needs to re-submit
