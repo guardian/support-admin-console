@@ -16,7 +16,7 @@ export const getDefaultTest = (): StudentLandingPageTest => {
     name: '',
     nickname: '',
     status: 'Draft',
-    countryGroupId: 'International' as Region,
+    countryGroupId: 'International',
     locations: [],
     regionTargeting: DEFAULT_REGION_TARGETING, // unused but required
     variants: [getDefaultVariant()],
