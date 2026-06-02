@@ -3,7 +3,6 @@ import {
   StudentLandingPageTest,
   StudentLandingPageVariant,
 } from '../../../../models/studentLandingPage';
-import { Region } from '../../../../utils/models';
 import { RegionTargeting } from '../../helpers/shared';
 
 export const DEFAULT_REGION_TARGETING: RegionTargeting = {
@@ -16,7 +15,7 @@ export const getDefaultTest = (): StudentLandingPageTest => {
     name: '',
     nickname: '',
     status: 'Draft',
-    countryGroupId: 'International' as Region,
+    countryGroupId: 'International',
     locations: [],
     regionTargeting: DEFAULT_REGION_TARGETING, // unused but required
     variants: [getDefaultVariant()],

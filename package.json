@@ -1,6 +1,6 @@
 {
   "devDependencies": {
-    "@guardian/eslint-config": "14.0.1",
+    "@guardian/eslint-config": "15.0.0",
     "@types/jest": "30.0.0",
     "@types/material-ui": "0.21.16",
     "@types/react": "18.3.12",

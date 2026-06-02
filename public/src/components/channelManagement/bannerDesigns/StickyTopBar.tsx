@@ -88,6 +88,57 @@ interface Props {
   onStatusChange: (status: Status) => void;
 }
 
+interface ArchiveButtonProps {
+  design: BannerDesign;
+  name: string;
+  onArchive: (designName: string) => void;
+}
+
+const ArchiveButton: React.FC<ArchiveButtonProps> = ({ design, name, onArchive }) => {
+  const [isOpen, open, close] = useOpenable();
+  const classes = useStyles();
+
+  return (
+    <Tooltip
+      title={design.status !== 'Draft' ? 'Design must be in draft status before archiving' : ''}
+    >
+      <span>
+        <Button
+          variant="outlined"
+          startIcon={<ArchiveIcon style={{ color: grey[700] }} />}
+          size="medium"
+          onClick={open}
+          disabled={design.status !== 'Draft'}
+        >
+          <Typography className={classes.buttonText}>Archive banner design</Typography>
+        </Button>
+        <Dialog
+          open={isOpen}
+          onClose={close}
+          aria-labelledby="archive-dialog-title"
+          aria-describedby="archive-dialog-description"
+        >
+          <DialogTitle id="archive-dialog-title">Are you sure?</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="archive-dialog-description">
+              Archiving this design will remove it from the banner design tool - you can only
+              restore with an engineer&apos;s help.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button color="primary" onClick={close}>
+              Cancel
+            </Button>
+            <Button color="primary" onClick={() => onArchive(name)}>
+              Archive design
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </span>
+    </Tooltip>
+  );
+};
+
 const StickyTopBar: React.FC<Props> = ({
   name,
   design,
@@ -100,50 +151,6 @@ const StickyTopBar: React.FC<Props> = ({
   onStatusChange,
 }: Props) => {
   const classes = useStyles();
-
-  const ArchiveButton: React.FC = () => {
-    const [isOpen, open, close] = useOpenable();
-
-    return (
-      <Tooltip
-        title={design.status !== 'Draft' ? 'Design must be in draft status before archiving' : ''}
-      >
-        <span>
-          <Button
-            variant="outlined"
-            startIcon={<ArchiveIcon style={{ color: grey[700] }} />}
-            size="medium"
-            onClick={open}
-            disabled={design.status !== 'Draft'}
-          >
-            <Typography className={classes.buttonText}>Archive banner design</Typography>
-          </Button>
-          <Dialog
-            open={isOpen}
-            onClose={close}
-            aria-labelledby="archive-dialog-title"
-            aria-describedby="archive-dialog-description"
-          >
-            <DialogTitle id="archive-dialog-title">Are you sure?</DialogTitle>
-            <DialogContent>
-              <DialogContentText id="archive-dialog-description">
-                Archiving this design will remove it from the banner design tool - you can only
-                restore with an engineer&apos;s help.
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button color="primary" onClick={close}>
-                Cancel
-              </Button>
-              <Button color="primary" onClick={() => onArchive(name)}>
-                Archive design
-              </Button>
-            </DialogActions>
-          </Dialog>
-        </span>
-      </Tooltip>
-    );
-  };
 
   return (
     <header className={classes.container}>
@@ -189,7 +196,7 @@ const StickyTopBar: React.FC<Props> = ({
           )}
           {userHasLock && (
             <>
-              <ArchiveButton />
+              <ArchiveButton design={design} name={name} onArchive={onArchive} />
               <Button
                 variant="outlined"
                 size="medium"

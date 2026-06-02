@@ -9,7 +9,7 @@ import {
   TextField,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   createDuplicateValidator,
@@ -56,10 +56,6 @@ const CreatePromoCampaignDialog: React.FC<CreatePromoCampaignDialogProps> = ({
 }: CreatePromoCampaignDialogProps) => {
   const classes = useStyles();
   const [selectedProduct, setSelectedProduct] = useState<PromoProduct>(initialSelectedProduct);
-
-  useEffect(() => {
-    setSelectedProduct(initialSelectedProduct);
-  }, [initialSelectedProduct]);
 
   const {
     register,

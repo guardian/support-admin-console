@@ -49,6 +49,145 @@ interface TestEditorActionButtonsProps {
   onCopy: (name: string, nickname: string) => void;
 }
 
+interface DeleteButtonProps {
+  isDisabled: boolean;
+  onDelete: () => void;
+}
+
+const DeleteButton: React.FC<DeleteButtonProps> = ({ isDisabled, onDelete }) => {
+  const [isOpen, open, close] = useOpenable();
+  const classes = useStyles();
+
+  return (
+    <>
+      <Button
+        variant="outlined"
+        startIcon={<DeleteIcon style={{ color: grey[700] }} />}
+        size="medium"
+        onClick={open}
+        disabled={isDisabled}
+      >
+        <Typography className={classes.buttonText}>Delete test</Typography>
+      </Button>
+      <Dialog
+        open={isOpen}
+        onClose={close}
+        aria-labelledby="delete-test-dialog-title"
+        aria-describedby="delete-test-dialog-description"
+      >
+        <DialogTitle id="delete-test-dialog-title">Are you sure?</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="delete-test-dialog-description">
+            Deleting this test will remove it from the RRCP permanently.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button color="primary" onClick={close}>
+            Cancel
+          </Button>
+          <Button color="primary" onClick={onDelete}>
+            Delete test
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
+  );
+};
+
+interface ArchiveButtonProps {
+  isDisabled: boolean;
+  onArchive: () => void;
+}
+
+const ArchiveButton: React.FC<ArchiveButtonProps> = ({ isDisabled, onArchive }) => {
+  const [isOpen, open, close] = useOpenable();
+  const classes = useStyles();
+
+  return (
+    <>
+      <Button
+        variant="outlined"
+        startIcon={<ArchiveIcon style={{ color: grey[700] }} />}
+        size="medium"
+        onClick={open}
+        disabled={isDisabled}
+      >
+        <Typography className={classes.buttonText}>Archive test</Typography>
+      </Button>
+      <Dialog
+        open={isOpen}
+        onClose={close}
+        aria-labelledby="archive-test-dialog-title"
+        aria-describedby="archive-test-dialog-description"
+      >
+        <DialogTitle id="archive-test-dialog-title">Are you sure?</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="archive-test-dialog-description">
+            Archiving this test will remove it from the RRCP - you can only restore it with an
+            engineer&apos;s help.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button color="primary" onClick={close}>
+            Cancel
+          </Button>
+          <Button color="primary" onClick={onArchive}>
+            Archive test
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
+  );
+};
+
+interface CopyButtonProps {
+  isDisabled: boolean;
+  existingNames: string[];
+  sourceName?: string | void;
+  existingNicknames: string[];
+  sourceNickname?: string | void;
+  testNamePrefix?: string;
+  onCopy: (name: string, nickname: string) => void;
+}
+
+const CopyButton: React.FC<CopyButtonProps> = ({
+  isDisabled,
+  existingNames,
+  sourceName,
+  existingNicknames,
+  sourceNickname,
+  testNamePrefix,
+  onCopy,
+}) => {
+  const [isOpen, open, close] = useOpenable();
+  const classes = useStyles();
+
+  return (
+    <>
+      <Button
+        onClick={open}
+        variant="outlined"
+        startIcon={<FileCopyIcon style={{ color: grey[700] }} />}
+        size="medium"
+        disabled={isDisabled}
+      >
+        <Typography className={classes.buttonText}>Copy test</Typography>
+      </Button>
+      <CreateTestDialog
+        isOpen={isOpen}
+        close={close}
+        existingNames={existingNames}
+        sourceName={sourceName}
+        existingNicknames={existingNicknames}
+        sourceNickname={sourceNickname}
+        testNamePrefix={testNamePrefix}
+        mode="COPY"
+        createTest={onCopy}
+      />
+    </>
+  );
+};
+
 const TestEditorActionButtons: React.FC<TestEditorActionButtonsProps> = ({
   existingNames,
   sourceName,
@@ -62,119 +201,21 @@ const TestEditorActionButtons: React.FC<TestEditorActionButtonsProps> = ({
 }: TestEditorActionButtonsProps) => {
   const classes = useStyles();
 
-  const DeleteButton: React.FC = () => {
-    const [isOpen, open, close] = useOpenable();
-
-    return (
-      <>
-        <Button
-          variant="outlined"
-          startIcon={<DeleteIcon style={{ color: grey[700] }} />}
-          size="medium"
-          onClick={open}
-          disabled={isDisabled}
-        >
-          <Typography className={classes.buttonText}>Delete test</Typography>
-        </Button>
-        <Dialog
-          open={isOpen}
-          onClose={close}
-          aria-labelledby="delete-test-dialog-title"
-          aria-describedby="delete-test-dialog-description"
-        >
-          <DialogTitle id="delete-test-dialog-title">Are you sure?</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="delete-test-dialog-description">
-              Deleting this test will remove it from the RRCP permanently.
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button color="primary" onClick={close}>
-              Cancel
-            </Button>
-            <Button color="primary" onClick={onDelete}>
-              Delete test
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </>
-    );
-  };
-
-  const ArchiveButton: React.FC = () => {
-    const [isOpen, open, close] = useOpenable();
-
-    return (
-      <>
-        <Button
-          variant="outlined"
-          startIcon={<ArchiveIcon style={{ color: grey[700] }} />}
-          size="medium"
-          onClick={open}
-          disabled={isDisabled}
-        >
-          <Typography className={classes.buttonText}>Archive test</Typography>
-        </Button>
-        <Dialog
-          open={isOpen}
-          onClose={close}
-          aria-labelledby="archive-test-dialog-title"
-          aria-describedby="archive-test-dialog-description"
-        >
-          <DialogTitle id="archive-test-dialog-title">Are you sure?</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="archive-test-dialog-description">
-              Archiving this test will remove it from the RRCP - you can only restore it with an
-              engineer&apos;s help.
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button color="primary" onClick={close}>
-              Cancel
-            </Button>
-            <Button color="primary" onClick={onArchive}>
-              Archive test
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </>
-    );
-  };
-
-  const CopyButton: React.FC = () => {
-    const [isOpen, open, close] = useOpenable();
-    return (
-      <>
-        <Button
-          onClick={open}
-          variant="outlined"
-          startIcon={<FileCopyIcon style={{ color: grey[700] }} />}
-          size="medium"
-          disabled={isDisabled}
-        >
-          <Typography className={classes.buttonText}>Copy test</Typography>
-        </Button>
-        <CreateTestDialog
-          isOpen={isOpen}
-          close={close}
+  return (
+    <div className={classes.container}>
+      <div className={classes.copyAndArchiveContainer}>
+        <CopyButton
+          isDisabled={isDisabled}
           existingNames={existingNames}
           sourceName={sourceName}
           existingNicknames={existingNicknames}
           sourceNickname={sourceNickname}
           testNamePrefix={testNamePrefix}
-          mode="COPY"
-          createTest={onCopy}
+          onCopy={onCopy}
         />
-      </>
-    );
-  };
-  return (
-    <div className={classes.container}>
-      <div className={classes.copyAndArchiveContainer}>
-        <CopyButton />
-        <ArchiveButton />
+        <ArchiveButton isDisabled={isDisabled} onArchive={onArchive} />
       </div>
-      <DeleteButton />
+      <DeleteButton isDisabled={isDisabled} onDelete={onDelete} />
     </div>
   );
 };
