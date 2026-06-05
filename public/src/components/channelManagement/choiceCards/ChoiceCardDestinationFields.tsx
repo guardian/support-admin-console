@@ -92,7 +92,7 @@ export const ChoiceCardDestinationFields: React.FC<ChoiceCardDestinationFieldsPr
 
       const variantNames = selectedTest.variants.map((variant) => variant.name);
       setDestinationVariantNames(variantNames);
-      const isValidVariant = !!variantName?.trim() && variantNames.includes(variantName.trim());
+      const isValidVariant = !!variantName && variantNames.includes(variantName);
       if (!isValidVariant) {
         clearVariantSelection(selectedTest);
         return;
@@ -124,7 +124,7 @@ export const ChoiceCardDestinationFields: React.FC<ChoiceCardDestinationFieldsPr
           const currentVariantName =
             getValues(`choiceCards.${index}.destinationTest.variantName`) ?? '';
 
-          setDestinationTest(currentTestName, response.tests, currentVariantName);
+          setDestinationTest(currentTestName, response.tests, currentVariantName.trim());
         })
         .catch(() => {
           if (!isCurrentRequest(destinationListRequestId, requestId)) {
