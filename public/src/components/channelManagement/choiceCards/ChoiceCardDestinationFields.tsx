@@ -75,7 +75,7 @@ export const ChoiceCardDestinationFields: React.FC<ChoiceCardDestinationFieldsPr
   }, [clearVariantSelection, index, setValue]);
 
   const setDestinationTest = useCallback(
-    (testName: string, tests: Test[]) => {
+    (testName: string, tests: Test[], variantName?: string) => {
       const trimmedTestName = testName.trim();
 
       if (!trimmedTestName) {
@@ -92,8 +92,11 @@ export const ChoiceCardDestinationFields: React.FC<ChoiceCardDestinationFieldsPr
 
       const variantNames = selectedTest.variants.map((variant) => variant.name);
       setDestinationVariantNames(variantNames);
-
-      clearVariantSelection(selectedTest);
+      const isValidVariant = !!variantName && variantNames.includes(variantName);
+      if (!isValidVariant) {
+        clearVariantSelection(selectedTest);
+        return;
+      }
     },
     [clearVariantSelection],
   );
@@ -118,8 +121,10 @@ export const ChoiceCardDestinationFields: React.FC<ChoiceCardDestinationFieldsPr
             clearTestAndVariantSelection();
             return;
           }
+          const currentVariantName =
+            getValues(`choiceCards.${index}.destinationTest.variantName`) ?? '';
 
-          setDestinationTest(currentTestName, response.tests);
+          setDestinationTest(currentTestName, response.tests, currentVariantName.trim());
         })
         .catch(() => {
           if (!isCurrentRequest(destinationListRequestId, requestId)) {
