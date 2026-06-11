@@ -484,7 +484,8 @@ const paragraphsToArray = (html: string): string[] => {
 
   const paragraphs = elements.filter((p) => p.tagName === 'P');
 
-  return paragraphs.map((p) => p.innerHTML);
+  // When a paragraph contains only a <br> (ProseMirror trailing break), treat it as empty
+  return paragraphs.map((p) => (p.textContent === '' ? '' : p.innerHTML));
 };
 
 // Component function

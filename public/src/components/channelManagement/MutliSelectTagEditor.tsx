@@ -70,6 +70,7 @@ const MultiselectAutocomplete: React.FC<MultiselectAutocompleteProps> = ({
         disabled={disabled}
         options={options}
         getOptionLabel={(option) => option.label}
+        isOptionEqualToValue={(option, value) => option.value === value.value}
         value={tagIds?.map<Option>((tag) => ({ label: tag, value: tag }))}
         inputValue={inputValue}
         componentsProps={{
