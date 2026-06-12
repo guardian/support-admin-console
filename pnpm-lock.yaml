@@ -100,8 +100,8 @@ importers:
         specifier: 30.0.0
         version: 30.0.0
       '@types/material-ui':
-        specifier: 0.21.16
-        version: 0.21.16
+        specifier: 0.21.18
+        version: 0.21.18
       '@types/react':
         specifier: 18.3.12
         version: 18.3.12
@@ -1670,8 +1670,8 @@ packages:
   '@types/marked@4.3.2':
     resolution: {integrity: sha512-a79Yc3TOk6dGdituy8hmTTJXjOkZ7zsFYV10L337ttq/rec8lRMDBpV7fL3uLx6TgbFCa5DU/h8FmIBQPSbU0w==}
 
-  '@types/material-ui@0.21.16':
-    resolution: {integrity: sha512-US8P5IsLguspYFDtkG4097KZDyqz/GqBm0uftcZ2h2fTzyzLqJuFk8BliEQ9VS3EviRDJaB6l29gps3hkCTm7Q==}
+  '@types/material-ui@0.21.18':
+    resolution: {integrity: sha512-wGyYlCJaznt0C87Xnqae7v3imh57gsomQvzozsHhZKJHH4QG+i0qE4/h6D4igpXEXr4ooscgclg+O2RIKOP84Q==}
 
   '@types/mime@1.3.5':
     resolution: {integrity: sha512-/pyBZWSLD2n0dcHE3hq8s8ZvcETHtEuF+3E7XVt0Ig2nvsVQXdghHVcEkIWjy9A0wKfTn97a/PSDYohKIlnP/w==}
@@ -7672,7 +7672,7 @@ snapshots:
 
   '@types/marked@4.3.2': {}
 
-  '@types/material-ui@0.21.16':
+  '@types/material-ui@0.21.18':
     dependencies:
       '@types/react': 18.3.12
       '@types/react-addons-linked-state-mixin': 0.14.27
