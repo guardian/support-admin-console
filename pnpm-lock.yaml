@@ -65,9 +65,6 @@ importers:
       lz-string:
         specifier: 1.5.0
         version: 1.5.0
-      panda-session:
-        specifier: ^0.1.6
-        version: 0.1.6
       prosemirror-state:
         specifier: 1.4.4
         version: 1.4.4
@@ -4070,9 +4067,6 @@ packages:
 
   package-json-from-dist@1.0.1:
     resolution: {integrity: sha512-UEZIS3/by4OC8vL3P2dTXRETpebLI2NiI5vIrjaD/5UtrkFX/tNbwjTSRAGC/+7CAo2pIcBaRgWmcBBHcsaCIw==}
-
-  panda-session@0.1.6:
-    resolution: {integrity: sha512-J8xg/9Gw+B0R2BoAX6zxkjZYhVvVQZaBubY1NrLxgQX1UhDx5GnSxPTBpI1t89QzmrSMlI/QzYC+Db/K/47TEg==}
 
   parent-module@1.0.1:
     resolution: {integrity: sha512-GQ2EWRpQV8/o+Aw8YqtfZZPfNRWZYkbidE9k5rpl/hC3vtHHBfGm2Ifi6qWV+coDGkrUKZAxE3Lot5kcsRlh+g==}
@@ -10455,8 +10449,6 @@ snapshots:
   p-try@2.2.0: {}
 
   package-json-from-dist@1.0.1: {}
-
-  panda-session@0.1.6: {}
 
   parent-module@1.0.1:
     dependencies:
