@@ -67,33 +67,43 @@ function reauthViaPopup(): Promise<void> {
   });
 }
 
-function postWithReauth(url: string, config?: RequestInit): Promise<Response> {
+// Shared state for deduplicating auth checks and reauth popups
+let reauthInProgress: Promise<void> | null = null;
+let lastValidCheck = 0;
+const VALID_CHECK_TTL_MS = 30000; // Cache /isValid result for 30 seconds
+
+function ensureAuthenticated(): Promise<void> {
+  // If a reauth is already in progress, wait for it
+  if (reauthInProgress) {
+    return reauthInProgress;
+  }
+
+  // If we checked recently and it was valid, skip the check
+  if (Date.now() - lastValidCheck < VALID_CHECK_TTL_MS) {
+    return Promise.resolve();
+  }
+
   return fetch('/isValid').then((response) => {
     if (response.status === 419) {
-      return reauthViaPopup().then(() => fetch(url, config));
+      reauthInProgress = reauthViaPopup().finally(() => {
+        reauthInProgress = null;
+        lastValidCheck = Date.now();
+      });
+      return reauthInProgress;
     }
-    return fetch(url, config);
+    lastValidCheck = Date.now();
   });
 }
 
 function makeFetch(path: string, options?: RequestInit): Promise<Response> {
-  return fetch(path, options).then((resp) => {
-    if (!resp.ok) {
-      return resp.text().then((msg) => Promise.reject(new Error(msg)));
-    }
-
-    return resp;
-  });
-}
-
-function makeFetchWithReauth(path: string, options?: RequestInit): Promise<Response> {
-  return postWithReauth(path, options).then((resp) => {
-    if (!resp.ok) {
-      return resp.text().then((msg) => Promise.reject(new Error(msg)));
-    }
-
-    return resp;
-  });
+  return ensureAuthenticated().then(() =>
+    fetch(path, options).then((resp) => {
+      if (!resp.ok) {
+        return resp.text().then((msg) => Promise.reject(new Error(msg)));
+      }
+      return resp;
+    }),
+  );
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- API response type
@@ -103,7 +113,7 @@ function fetchSettings(path: string): Promise<any> {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- API request data
 function saveSettings(path: string, data: any): Promise<Response> {
-  return makeFetchWithReauth(path, {
+  return makeFetch(path, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
