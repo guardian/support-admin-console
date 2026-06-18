@@ -35,8 +35,59 @@ export enum AppsSettingsType {
   AppsMeteringSwitches = 'apps-metering-switches',
 }
 
+function reauthViaPopup(): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const popup = window.open('/reauth', 'reauth', 'width=600,height=700');
+
+    if (!popup) {
+      reject(new Error('Popup blocked'));
+      return;
+    }
+
+    const timeout = setTimeout(() => {
+      clearInterval(pollTimer);
+      reject(new Error('Re-authentication timed out'));
+    }, 120000);
+
+    const pollTimer = setInterval(() => {
+      if (popup.closed) {
+        clearInterval(pollTimer);
+        clearTimeout(timeout);
+        fetch('/isValid')
+          .then((resp) => {
+            if (resp.ok) {
+              resolve();
+            } else {
+              reject(new Error('Re-authentication failed'));
+            }
+          })
+          .catch(reject);
+      }
+    }, 500);
+  });
+}
+
+function postWithReauth(url: string, config?: RequestInit): Promise<Response> {
+  return fetch('/isValid').then((response) => {
+    if (response.status === 419) {
+      return reauthViaPopup().then(() => fetch(url, config));
+    }
+    return fetch(url, config);
+  });
+}
+
 function makeFetch(path: string, options?: RequestInit): Promise<Response> {
   return fetch(path, options).then((resp) => {
+    if (!resp.ok) {
+      return resp.text().then((msg) => Promise.reject(new Error(msg)));
+    }
+
+    return resp;
+  });
+}
+
+function makeFetchWithReauth(path: string, options?: RequestInit): Promise<Response> {
+  return postWithReauth(path, options).then((resp) => {
     if (!resp.ok) {
       return resp.text().then((msg) => Promise.reject(new Error(msg)));
     }
@@ -52,7 +103,7 @@ function fetchSettings(path: string): Promise<any> {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- API request data
 function saveSettings(path: string, data: any): Promise<Response> {
-  return makeFetch(path, {
+  return makeFetchWithReauth(path, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
