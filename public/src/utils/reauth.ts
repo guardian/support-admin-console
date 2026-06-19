@@ -17,7 +17,7 @@
 
 let reauthInProgress: Promise<void> | null = null; // avoid concurrent checks
 let lastValidCheck = 0;
-const VALID_CHECK_TTL_MS = 30000;
+const VALID_CHECK_TTL_MS = 60 * 1000;
 
 /** Reset internal state — exported for testing only */
 export function resetAuthState(): void {

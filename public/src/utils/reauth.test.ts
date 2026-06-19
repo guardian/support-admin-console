@@ -46,7 +46,7 @@ describe('ensureAuthenticated', () => {
     mockFetch.mockResolvedValue({ status: 200, ok: true });
 
     await ensureAuthenticated();
-    await jest.advanceTimersByTimeAsync(31000);
+    await jest.advanceTimersByTimeAsync(61000);
     await ensureAuthenticated();
 
     expect(mockFetch).toHaveBeenCalledTimes(2);
