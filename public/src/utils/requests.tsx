@@ -3,6 +3,7 @@ import { Status, Test, UserPermissions } from '../components/channelManagement/h
 import { Product } from '../components/promoTool/utils/productCatalog';
 import { CountryGroup, Promo, PromoCampaign } from '../components/promoTool/utils/promoModels';
 import { BannerDesign, Status as BannerDesignStatus } from '../models/bannerDesign';
+import { ensureAuthenticated } from './reauth';
 
 export enum SupportFrontendSettingsType {
   Switches = 'switches',
@@ -33,66 +34,6 @@ export enum FrontendSettingsType {
 
 export enum AppsSettingsType {
   AppsMeteringSwitches = 'apps-metering-switches',
-}
-
-function reauthViaPopup(): Promise<void> {
-  return new Promise((resolve, reject) => {
-    const popup = window.open('/reauth', 'reauth', 'width=600,height=700');
-
-    if (!popup) {
-      reject(new Error('Popup blocked'));
-      return;
-    }
-
-    const timeout = setTimeout(() => {
-      clearInterval(pollTimer);
-      reject(new Error('Re-authentication timed out'));
-    }, 120000);
-
-    const pollTimer = setInterval(() => {
-      if (popup.closed) {
-        clearInterval(pollTimer);
-        clearTimeout(timeout);
-        fetch('/isValid')
-          .then((resp) => {
-            if (resp.ok) {
-              resolve();
-            } else {
-              reject(new Error('Re-authentication failed'));
-            }
-          })
-          .catch(reject);
-      }
-    }, 500);
-  });
-}
-
-// Shared state for deduplicating auth checks and reauth popups
-let reauthInProgress: Promise<void> | null = null;
-let lastValidCheck = 0;
-const VALID_CHECK_TTL_MS = 30000; // Cache /isValid result for 30 seconds
-
-function ensureAuthenticated(): Promise<void> {
-  // If a reauth is already in progress, wait for it
-  if (reauthInProgress) {
-    return reauthInProgress;
-  }
-
-  // If we checked recently and it was valid, skip the check
-  if (Date.now() - lastValidCheck < VALID_CHECK_TTL_MS) {
-    return Promise.resolve();
-  }
-
-  return fetch('/isValid').then((response) => {
-    if (response.status === 419) {
-      reauthInProgress = reauthViaPopup().finally(() => {
-        reauthInProgress = null;
-        lastValidCheck = Date.now();
-      });
-      return reauthInProgress;
-    }
-    lastValidCheck = Date.now();
-  });
 }
 
 function makeFetch(path: string, options?: RequestInit): Promise<Response> {
