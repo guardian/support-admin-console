@@ -6,7 +6,7 @@ globalThis.fetch = mockFetch;
 const mockPopup = { closed: false };
 const mockWindowOpen = jest.fn().mockReturnValue(mockPopup);
 
-// Provide window.open for Node test environment (reauth.ts only accesses it at call time)
+// Provide window.open for Node test environment
 (globalThis as unknown as Record<string, unknown>).window = {
   open: mockWindowOpen,
   location: { origin: 'http://localhost' },

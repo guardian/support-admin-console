@@ -22,7 +22,7 @@ class Application(
       .withHeaders(CACHE_CONTROL -> "no-cache")
   }
 
-  // Enable re-authentication after session expires (opens in a popup, closes itself on success)
+  // Enable re-authentication after session expires. The client opens this in a popup as it redirects to google
   def reauth = authAction {
     Ok(views.html.reauthComplete())
   }
