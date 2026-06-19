@@ -19,7 +19,6 @@ let reauthInProgress: Promise<void> | null = null; // avoid concurrent checks
 let lastValidCheck = 0;
 const VALID_CHECK_TTL_MS = 60 * 1000;
 
-/** Reset internal state — exported for testing only */
 export function resetAuthState(): void {
   reauthInProgress = null;
   lastValidCheck = 0;
@@ -57,12 +56,16 @@ export function reauthViaPopup(): Promise<void> {
   });
 }
 
+function checkedRecently(): boolean {
+  return Date.now() - lastValidCheck < VALID_CHECK_TTL_MS;
+}
+
 export function ensureAuthenticated(): Promise<void> {
   if (reauthInProgress) {
-    return reauthInProgress;
+    return Promise.resolve();
   }
 
-  if (Date.now() - lastValidCheck < VALID_CHECK_TTL_MS) {
+  if (checkedRecently()) {
     return Promise.resolve();
   }
 
