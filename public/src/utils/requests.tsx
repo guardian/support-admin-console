@@ -3,6 +3,7 @@ import { Status, Test, UserPermissions } from '../components/channelManagement/h
 import { Product } from '../components/promoTool/utils/productCatalog';
 import { CountryGroup, Promo, PromoCampaign } from '../components/promoTool/utils/promoModels';
 import { BannerDesign, Status as BannerDesignStatus } from '../models/bannerDesign';
+import { ensureAuthenticated } from './reauth';
 
 export enum SupportFrontendSettingsType {
   Switches = 'switches',
@@ -36,13 +37,14 @@ export enum AppsSettingsType {
 }
 
 function makeFetch(path: string, options?: RequestInit): Promise<Response> {
-  return fetch(path, options).then((resp) => {
-    if (!resp.ok) {
-      return resp.text().then((msg) => Promise.reject(new Error(msg)));
-    }
-
-    return resp;
-  });
+  return ensureAuthenticated().then(() =>
+    fetch(path, options).then((resp) => {
+      if (!resp.ok) {
+        return resp.text().then((msg) => Promise.reject(new Error(msg)));
+      }
+      return resp;
+    }),
+  );
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- API response type

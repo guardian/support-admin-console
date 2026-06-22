@@ -22,6 +22,11 @@ class Application(
       .withHeaders(CACHE_CONTROL -> "no-cache")
   }
 
+  // Enable re-authentication after session expires. The client opens this in a popup as it redirects to google
+  def reauth = authAction {
+    Ok(views.html.reauthComplete())
+  }
+
   // Handler for endpoints with a resource name in the path. The client takes care of using the name
   def indexWithName(name: String) = index
   def indexWithNameAndChannel(name: String, channel: String) = index
