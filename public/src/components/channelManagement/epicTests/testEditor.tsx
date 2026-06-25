@@ -301,7 +301,9 @@ export const getEpicTestEditor = (
                 Variants
               </Typography>
               <div className={classes.variantsHeaderButtonsContainer}>
-                <EpicTestPreviewButton test={test} moduleName={epicEditorConfig.moduleName} />
+                {epicEditorConfig.allowVariantPreview && (
+                  <EpicTestPreviewButton test={test} moduleName={epicEditorConfig.moduleName} />
+                )}
               </div>
             </div>
             <div>
