@@ -15,6 +15,7 @@ import {
 } from '../helpers/shared';
 import { useStyles } from '../helpers/testEditorStyles';
 import { MParticleAudienceEditor } from '../mParticleAudienceEditor';
+import ScheduleEditor from '../scheduleEditor';
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 import { ValidatedTestEditorProps } from '../validatedTestEditor';
 import HeaderTestVariantEditor from './headerTestVariantEditor';
@@ -247,6 +248,17 @@ const HeaderTestEditor: React.FC<ValidatedTestEditorProps<HeaderTest>> = ({
               mParticleAudience,
             }));
           }}
+        />
+      </div>
+
+      <div className={classes.sectionContainer}>
+        <Typography variant={'h3'} className={classes.sectionHeader}>
+          Schedule
+        </Typography>
+        <ScheduleEditor
+          scheduler={test.scheduler}
+          disabled={!userHasTestLocked}
+          onChange={(scheduler) => onTestChange((current) => ({ ...current, scheduler }))}
         />
       </div>
     </div>

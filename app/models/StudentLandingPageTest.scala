@@ -37,7 +37,8 @@ case class StudentLandingPageTest(
     countryGroupId: Region,
     variants: List[StudentLandingPageVariant],
     campaignName: Option[String] = Some("NOT_IN_CAMPAIGN"),
-    methodologies: List[Methodology] = defaultMethodologies
+    methodologies: List[Methodology] = defaultMethodologies,
+    scheduler: Option[Scheduler] = None
 ) extends ChannelTest[StudentLandingPageTest] {
 
   override def withChannel(channel: Channel): StudentLandingPageTest =
