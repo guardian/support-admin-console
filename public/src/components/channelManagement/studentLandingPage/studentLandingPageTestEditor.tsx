@@ -6,6 +6,7 @@ import {
   StudentLandingPageVariant,
 } from '../../../models/studentLandingPage';
 import { Region } from '../../../utils/models';
+import ScheduleEditor from '../scheduleEditor';
 import TypedRadioGroup from '../TypedRadioGroup';
 import { ValidatedTestEditorProps } from '../validatedTestEditor';
 import { StudentLandingPageLinkBuilder } from './studentLandingPageLinkBuilder';
@@ -181,6 +182,15 @@ export const StudentLandingPageTestEditor: React.FC<
             }}
           />
         </div>
+      </div>
+
+      <div className={classes.sectionContainer}>
+        <Typography className={classes.sectionHeader}>Schedule</Typography>
+        <ScheduleEditor
+          scheduler={test.scheduler}
+          disabled={!userHasTestLocked}
+          onChange={(scheduler) => onTestChange((current) => ({ ...current, scheduler }))}
+        />
       </div>
     </>
   );

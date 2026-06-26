@@ -3,7 +3,7 @@ package models
 import io.circe.Decoder.Result
 import io.circe.{Decoder, DecodingFailure, Encoder, HCursor, Json}
 import io.circe.generic.extras.Configuration
-import io.circe.generic.extras.semiauto.{deriveDecoder, deriveEnumerationDecoder, deriveEnumerationEncoder}
+import io.circe.generic.extras.semiauto.{deriveConfiguredDecoder, deriveConfiguredEncoder, deriveDecoder, deriveEnumerationDecoder, deriveEnumerationEncoder}
 
 sealed trait Status
 
@@ -19,6 +19,17 @@ object Status {
   implicit val statusDecoder: Decoder[Status] = deriveEnumerationDecoder[Status]
 }
 
+case class Scheduler(
+    start: Option[String] = None, // ISO date "YYYY-MM-DD", inclusive
+    end: Option[String] = None // ISO date "YYYY-MM-DD", inclusive
+)
+
+object Scheduler {
+  implicit val customConfig: Configuration = Configuration.default.withDefaults
+  implicit val schedulerDecoder: Decoder[Scheduler] = deriveConfiguredDecoder[Scheduler]
+  implicit val schedulerEncoder: Encoder[Scheduler] = deriveConfiguredEncoder[Scheduler]
+}
+
 trait ChannelTest[T] {
   val name: String
   val channel: Option[Channel] // optional only for the migration
@@ -27,6 +38,7 @@ trait ChannelTest[T] {
   val priority: Option[Int] // 0 is top priority
   val campaignName: Option[String]
   val methodologies: List[Methodology]
+  val scheduler: Option[Scheduler]
 
   def withChannel(channel: Channel): T
   def withPriority(priority: Int): T
