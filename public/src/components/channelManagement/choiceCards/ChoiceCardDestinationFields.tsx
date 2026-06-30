@@ -101,6 +101,14 @@ export const ChoiceCardDestinationFields: React.FC<ChoiceCardDestinationFieldsPr
     [clearVariantSelection],
   );
 
+  const getDestination = useCallback(
+    (destination: Destination): Destination => {
+      const isRecurringProduct = getValues(`choiceCards.${index}.product`).supportTier !== 'OneOff';
+      return isRecurringProduct ? Destination.LandingPage : destination;
+    },
+    [getValues, index],
+  );
+
   const fetchDestinationTests = useCallback(
     (destination: Destination) => {
       const settingsType = getSettingsTypeForDestination(destination);
@@ -137,11 +145,11 @@ export const ChoiceCardDestinationFields: React.FC<ChoiceCardDestinationFieldsPr
   );
 
   useEffect(() => {
-    const destination =
+    const rawDestination =
       (getValues(`choiceCards.${index}.destination`) as Destination | undefined) ??
       Destination.LandingPage;
-    fetchDestinationTests(destination);
-  }, [fetchDestinationTests, getValues, index]);
+    fetchDestinationTests(getDestination(rawDestination));
+  }, [fetchDestinationTests, getDestination, getValues, index]);
 
   return (
     <Controller
@@ -154,7 +162,7 @@ export const ChoiceCardDestinationFields: React.FC<ChoiceCardDestinationFieldsPr
             selectedValue={(field.value as Destination | undefined) ?? Destination.LandingPage}
             onChange={(destination) => {
               field.onChange(destination);
-              fetchDestinationTests(destination);
+              fetchDestinationTests(getDestination(destination));
               onDestinationSectionChange();
             }}
             isDisabled={isDisabled}
