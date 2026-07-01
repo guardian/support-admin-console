@@ -101,9 +101,14 @@ export const ChoiceCardDestinationFields: React.FC<ChoiceCardDestinationFieldsPr
     [clearVariantSelection],
   );
 
+  //
   const getDestination = useCallback(
     (destination: Destination): Destination => {
       const isRecurringProduct = getValues(`choiceCards.${index}.product`).supportTier !== 'OneOff';
+      // For recurring products, both destinations use Landing Page tests. When the landing page
+      // is skipped (i.e. the banner CTA goes directly to checkout), the test journey must
+      // continue on the checkout page — so the Checkout destination is used to carry the test
+      // variant through to checkout.
       return isRecurringProduct ? Destination.LandingPage : destination;
     },
     [getValues, index],
