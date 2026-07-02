@@ -50,15 +50,15 @@ const ScheduleEditor: React.FC<ScheduleEditorProps> = ({ scheduler, disabled, on
       <Typography variant="subtitle2">
         Test scheduler{' '}
         <small>
-          (Start and end dates are inclusive. Leave blank to go live immediately. Note: schedule has
-          no effect on draft tests.)
+          (Start and end times are inclusive and in UTC. Leave blank to go live immediately. Note:
+          schedule has no effect on draft tests.)
         </small>
       </Typography>
       <div className={classes.dateRange}>
         <TextField
           className={classes.field}
-          label="Start Date"
-          type="date"
+          label="Start Date (UTC)"
+          type="datetime-local"
           value={scheduler?.start ?? ''}
           onChange={handleStartChange}
           variant="outlined"
@@ -68,8 +68,8 @@ const ScheduleEditor: React.FC<ScheduleEditorProps> = ({ scheduler, disabled, on
         />
         <TextField
           className={classes.field}
-          label="End Date"
-          type="date"
+          label="End Date (UTC)"
+          type="datetime-local"
           value={scheduler?.end ?? ''}
           onChange={handleEndChange}
           variant="outlined"
