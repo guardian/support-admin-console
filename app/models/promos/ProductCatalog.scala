@@ -115,7 +115,9 @@ object ProductCatalog {
 
   case class SupporterPlusRatePlans(
       Annual: RatePlan,
-      Monthly: RatePlan
+      AnnualTaxExclusive: RatePlan,
+      Monthly: RatePlan,
+      MonthlyTaxExclusive: RatePlan
   ) extends ProductRatePlans
 
   case class TierThreeRatePlans(
