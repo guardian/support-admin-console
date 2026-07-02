@@ -20,8 +20,8 @@ object Status {
 }
 
 case class Scheduler(
-    start: Option[String] = None, // ISO date "YYYY-MM-DD", inclusive
-    end: Option[String] = None // ISO date "YYYY-MM-DD", inclusive
+    start: Option[String] = None, // ISO datetime "YYYY-MM-DDTHH:MM" in UTC, inclusive
+    end: Option[String] = None // ISO datetime "YYYY-MM-DDTHH:MM" in UTC, inclusive
 )
 
 object Scheduler {

@@ -41,8 +41,8 @@ export type Methodology = { testName?: string } & (
 export type BanditMethodology = Exclude<Methodology, { name: 'ABTest' }>;
 
 export interface Scheduler {
-  start?: string; // ISO date "YYYY-MM-DD", inclusive
-  end?: string; // ISO date "YYYY-MM-DD", inclusive
+  start?: string; // ISO datetime "YYYY-MM-DDTHH:MM" in UTC, inclusive
+  end?: string; // ISO datetime "YYYY-MM-DDTHH:MM" in UTC, inclusive
 }
 
 export interface Test {
