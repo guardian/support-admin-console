@@ -4,6 +4,7 @@ import { alpha } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
 import React from 'react';
 import { Scheduler, Status } from './helpers/shared';
+import { isWithinSchedule, parseSchedulerUtc } from './helpers/utilities';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   containerLive: {
@@ -64,28 +65,7 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
   },
 }));
 
-const parseUtc = (value?: string): Date | null => {
-  if (!value) {
-    return null;
-  }
-  const d = new Date(`${value}:00Z`);
-  return isNaN(d.getTime()) ? null : d;
-};
-
 const formatUtc = (value: string): string => `${value} UTC`;
-
-const isWithinSchedule = (scheduler: Scheduler): boolean => {
-  const now = new Date();
-  const start = parseUtc(scheduler.start);
-  const end = parseUtc(scheduler.end);
-  if (start && now < start) {
-    return false;
-  }
-  if (end && now > end) {
-    return false;
-  }
-  return true;
-};
 
 interface TestSchedulerStatusBannerProps {
   scheduler: Scheduler;
@@ -117,8 +97,8 @@ const TestSchedulerStatusBanner: React.FC<TestSchedulerStatusBannerProps> = ({
     reason = '(Test is in Draft status.)';
   } else if (!withinSchedule) {
     const now = new Date();
-    const start = parseUtc(scheduler.start);
-    const end = parseUtc(scheduler.end);
+    const start = parseSchedulerUtc(scheduler.start);
+    const end = parseSchedulerUtc(scheduler.end);
     if (start && now < start) {
       reason = `(Scheduled to start at ${formatUtc(scheduler.start!)}.)`;
     } else if (end && now > end) {
@@ -159,5 +139,5 @@ const TestSchedulerStatusBanner: React.FC<TestSchedulerStatusBannerProps> = ({
     </div>
   );
 };
-
-export default TestSchedulerStatusBanner;
+// Rerender banner only when test is saved
+export default React.memo(TestSchedulerStatusBanner, () => true);

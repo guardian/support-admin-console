@@ -39,6 +39,7 @@ const useStyles = makeStyles(({ palette }: Theme) => ({
   liveInverted: {
     background: `${red[500]}`,
   },
+
   draft: {
     border: `1px solid ${palette.grey[700]}`,
 
@@ -109,6 +110,7 @@ const TestListTest: React.FC<TestListTestProps> = ({
         {test.scheduler && (
           <TestListSchedulerLabel
             scheduler={test.scheduler}
+            isLive={test.status === 'Live'}
             shouldInvertColor={shouldInvertColor}
           />
         )}
