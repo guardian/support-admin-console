@@ -6,6 +6,7 @@ import React from 'react';
 import useHover from '../../hooks/useHover';
 import { Test } from './helpers/shared';
 import TestListBanditIcon from './testListBanditIcon';
+import TestListSchedulerLabel from './testListSchedulerLabel';
 import TestListTestArticleCountLabel from './testListTestArticleCountLabel';
 import TestListTestLiveLabel from './testListTestLiveLabel';
 import TestListTestName from './testListTestName';
@@ -105,6 +106,12 @@ const TestListTest: React.FC<TestListTestProps> = ({
           isLive={test.status === 'Live'}
           shouldInvertColor={shouldInvertColor}
         />
+        {test.scheduler && (
+          <TestListSchedulerLabel
+            scheduler={test.scheduler}
+            shouldInvertColor={shouldInvertColor}
+          />
+        )}
         <TestListTestName
           name={test.name}
           nickname={test.nickname}
