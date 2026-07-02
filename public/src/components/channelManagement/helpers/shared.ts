@@ -40,6 +40,11 @@ export type Methodology = { testName?: string } & (
 );
 export type BanditMethodology = Exclude<Methodology, { name: 'ABTest' }>;
 
+export interface Scheduler {
+  start?: string; // ISO datetime "YYYY-MM-DDTHH:MM" in UTC, inclusive
+  end?: string; // ISO datetime "YYYY-MM-DDTHH:MM" in UTC, inclusive
+}
+
 export interface Test {
   name: string;
   nickname?: string;
@@ -57,6 +62,7 @@ export interface Test {
   signedInStatus?: SignedInStatus;
   consentStatus?: ConsentStatus;
   methodologies: Methodology[];
+  scheduler?: Scheduler;
 }
 
 export interface EpicEditorConfig {

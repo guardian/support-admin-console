@@ -53,7 +53,8 @@ case class BannerTest(
     deploySchedule: Option[BannerTestDeploySchedule] = None,
     methodologies: List[Methodology] = defaultMethodologies,
     frontsOnly: Option[Boolean] = None,
-    mParticleAudience: Option[Int] = None
+    mParticleAudience: Option[Int] = None,
+    scheduler: Option[Scheduler] = None
 ) extends ChannelTest[BannerTest] {
 
   override def withChannel(channel: Channel): BannerTest =

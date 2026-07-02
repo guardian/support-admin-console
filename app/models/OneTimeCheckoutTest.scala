@@ -34,6 +34,7 @@ case class OneTimeCheckoutTest(
     campaignName: Option[String] = Some("NOT_IN_CAMPAIGN"),
     mParticleAudience: Option[Int] = None
 ) extends ChannelTest[OneTimeCheckoutTest] {
+  override val scheduler: Option[Scheduler] = None
 
   override def withChannel(channel: Channel): OneTimeCheckoutTest =
     this.copy(channel = Some(channel))

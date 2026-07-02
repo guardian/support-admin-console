@@ -6,6 +6,7 @@ import React from 'react';
 import useHover from '../../hooks/useHover';
 import { Test } from './helpers/shared';
 import TestListBanditIcon from './testListBanditIcon';
+import TestListSchedulerLabel from './testListSchedulerLabel';
 import TestListTestArticleCountLabel from './testListTestArticleCountLabel';
 import TestListTestLiveLabel from './testListTestLiveLabel';
 import TestListTestName from './testListTestName';
@@ -38,6 +39,7 @@ const useStyles = makeStyles(({ palette }: Theme) => ({
   liveInverted: {
     background: `${red[500]}`,
   },
+
   draft: {
     border: `1px solid ${palette.grey[700]}`,
 
@@ -105,6 +107,13 @@ const TestListTest: React.FC<TestListTestProps> = ({
           isLive={test.status === 'Live'}
           shouldInvertColor={shouldInvertColor}
         />
+        {test.scheduler && (
+          <TestListSchedulerLabel
+            scheduler={test.scheduler}
+            isLive={test.status === 'Live'}
+            shouldInvertColor={shouldInvertColor}
+          />
+        )}
         <TestListTestName
           name={test.name}
           nickname={test.nickname}

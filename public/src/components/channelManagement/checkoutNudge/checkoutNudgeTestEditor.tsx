@@ -12,6 +12,7 @@ import VariantsEditor from '../../tests/variants/variantsEditor';
 import VariantSummary from '../../tests/variants/variantSummary';
 import { RegionTargeting } from '../helpers/shared';
 import { useStyles } from '../helpers/testEditorStyles';
+import ScheduleEditor from '../scheduleEditor';
 import TestEditorTargetRegionsSelector from '../testEditorTargetRegionsSelector';
 import { ValidatedTestEditorProps } from '../validatedTestEditor';
 import {
@@ -246,6 +247,17 @@ const CheckoutNudgeTestEditor: React.FC<ValidatedTestEditorProps<CheckoutNudgeTe
           regionTargeting={test.regionTargeting}
           onRegionTargetingUpdate={onTargetingChange}
           isDisabled={!userHasTestLocked}
+        />
+      </div>
+
+      <div className={classes.sectionContainer}>
+        <Typography variant={'h3'} className={classes.sectionHeader}>
+          Schedule
+        </Typography>
+        <ScheduleEditor
+          scheduler={test.scheduler}
+          disabled={!userHasTestLocked}
+          onChange={(scheduler) => onTestChange((current) => ({ ...current, scheduler }))}
         />
       </div>
     </div>
