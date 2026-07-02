@@ -7,7 +7,6 @@ import VariantSummary from '../../tests/variants/variantSummary';
 import { RegionTargeting } from '../helpers/shared';
 import { useStyles } from '../helpers/testEditorStyles';
 import { MParticleAudienceEditor } from '../mParticleAudienceEditor';
-import ScheduleEditor from '../scheduleEditor';
 import TestEditorTargetRegionsSelector from '../testEditorTargetRegionsSelector';
 import { ValidatedTestEditorProps } from '../validatedTestEditor';
 import { getDefaultVariant } from './utils/defaults';
@@ -177,17 +176,6 @@ const OneTimeCheckoutTestEditor: React.FC<ValidatedTestEditorProps<OneTimeChecko
               mParticleAudience,
             }));
           }}
-        />
-      </div>
-
-      <div className={classes.sectionContainer}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
-          Schedule
-        </Typography>
-        <ScheduleEditor
-          scheduler={test.scheduler}
-          disabled={!userHasTestLocked}
-          onChange={(scheduler) => onTestChange((current) => ({ ...current, scheduler }))}
         />
       </div>
     </div>
