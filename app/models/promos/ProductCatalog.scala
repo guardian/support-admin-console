@@ -129,7 +129,9 @@ object ProductCatalog {
 
   case class DigitalSubscriptionRatePlans(
       Monthly: RatePlan,
+      MonthlyTaxExclusive: RatePlan,
       Annual: RatePlan,
+      AnnualTaxExclusive: RatePlan,
       Quarterly: RatePlan
   ) extends ProductRatePlans
 
