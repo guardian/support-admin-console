@@ -106,3 +106,29 @@ function formatToUtcString(date: Date): string {
     pad(date.getUTCMinutes())
   );
 }
+
+// Parses a "YYYY-MM-DDTHH:MM" UTC string into a Date. Returns null if empty/invalid.
+export const parseSchedulerUtc = (value?: string): Date | null => {
+  if (!value) {
+    return null;
+  }
+  if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(value)) {
+    return null;
+  }
+  const d = new Date(`${value}:00Z`);
+  return isNaN(d.getTime()) ? null : d;
+};
+
+// Returns true if the current time falls within the scheduler's start/end range.
+export const isWithinSchedule = (scheduler: { start?: string; end?: string }): boolean => {
+  const now = new Date();
+  const start = parseSchedulerUtc(scheduler.start);
+  const end = parseSchedulerUtc(scheduler.end);
+  if (start && now < start) {
+    return false;
+  }
+  if (end && now > end) {
+    return false;
+  }
+  return true;
+};

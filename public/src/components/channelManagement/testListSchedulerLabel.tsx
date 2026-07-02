@@ -4,32 +4,43 @@ import { makeStyles } from '@mui/styles';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Required by jsx: "react" in tsconfig.json
 import React from 'react';
 import { Scheduler } from './helpers/shared';
+import { isWithinSchedule } from './helpers/utilities';
 
 const useStyles = makeStyles(() => ({
   container: {
     padding: '1px',
     lineHeight: 0,
   },
+  iconActive: {
+    color: '#F2453D',
+  },
+  iconInactive: {
+    color: '#9e9e9e',
+  },
   iconWhite: {
     color: '#ffffff',
-  },
-  iconBlack: {
-    color: '#000000',
   },
 }));
 
 interface TestListSchedulerLabelProps {
   scheduler: Scheduler;
+  isLive: boolean;
   shouldInvertColor: boolean;
 }
 
 const TestListSchedulerLabel = ({
   scheduler,
+  isLive,
   shouldInvertColor,
 }: TestListSchedulerLabelProps): JSX.Element => {
   const classes = useStyles();
 
-  const iconClass = shouldInvertColor ? classes.iconWhite : classes.iconBlack;
+  const isActive = isLive && isWithinSchedule(scheduler);
+  const iconClass = shouldInvertColor
+    ? classes.iconWhite
+    : isActive
+      ? classes.iconActive
+      : classes.iconInactive;
 
   const lines: string[] = [];
   if (scheduler.start) {
