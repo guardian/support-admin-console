@@ -37,9 +37,9 @@ case class StudentLandingPageTest(
     countryGroupId: Region,
     variants: List[StudentLandingPageVariant],
     campaignName: Option[String] = Some("NOT_IN_CAMPAIGN"),
-    methodologies: List[Methodology] = defaultMethodologies,
-    scheduler: Option[Scheduler] = None
+    methodologies: List[Methodology] = defaultMethodologies
 ) extends ChannelTest[StudentLandingPageTest] {
+  override val scheduler: Option[Scheduler] = None
 
   override def withChannel(channel: Channel): StudentLandingPageTest =
     this.copy(channel = Some(channel))
