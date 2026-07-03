@@ -1,7 +1,6 @@
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import { Tooltip } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars -- Required by jsx: "react" in tsconfig.json
 import React from 'react';
 import { Scheduler } from './helpers/shared';
 import { isWithinSchedule } from './helpers/utilities';
@@ -28,7 +27,7 @@ interface TestListSchedulerLabelProps {
   shouldInvertColor: boolean;
 }
 
-const TestListSchedulerLabel = ({
+const TestListSchedulerLabel: React.FC<TestListSchedulerLabelProps> = ({
   scheduler,
   isLive,
   shouldInvertColor,
