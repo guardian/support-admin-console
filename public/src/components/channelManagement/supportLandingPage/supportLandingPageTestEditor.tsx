@@ -9,6 +9,7 @@ import VariantSummary from '../../tests/variants/variantSummary';
 import { Methodology, RegionTargeting } from '../helpers/shared';
 import { useStyles } from '../helpers/testEditorStyles';
 import { MParticleAudienceEditor } from '../mParticleAudienceEditor';
+import ScheduleEditor from '../scheduleEditor';
 import { SingleMethodologyEditor } from '../SingleMethodologyEditor';
 import TestEditorTargetRegionsSelector from '../testEditorTargetRegionsSelector';
 import { ValidatedTestEditorProps } from '../validatedTestEditor';
@@ -194,6 +195,17 @@ const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLan
               mParticleAudience,
             }));
           }}
+        />
+      </div>
+
+      <div className={classes.sectionContainer}>
+        <Typography variant={'h3'} className={classes.sectionHeader}>
+          Schedule
+        </Typography>
+        <ScheduleEditor
+          scheduler={test.scheduler}
+          disabled={!userHasTestLocked}
+          onChange={(scheduler) => onTestChange((current) => ({ ...current, scheduler }))}
         />
       </div>
     </div>
