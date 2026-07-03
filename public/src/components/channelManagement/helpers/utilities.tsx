@@ -1,6 +1,7 @@
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { Typography } from '@mui/material';
+import { isValid, parseISO } from 'date-fns';
 import React from 'react';
 
 export const renderVisibilityIcons = (isOn: boolean): React.ReactNode => {
@@ -112,11 +113,8 @@ export const parseSchedulerUtc = (value?: string): Date | null => {
   if (!value) {
     return null;
   }
-  if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(value)) {
-    return null;
-  }
-  const d = new Date(`${value}:00Z`);
-  return isNaN(d.getTime()) ? null : d;
+  const d = parseISO(value.endsWith('Z') ? value : `${value}Z`);
+  return isValid(d) ? d : null;
 };
 
 // Returns true if the current time falls within the scheduler's start/end range.
