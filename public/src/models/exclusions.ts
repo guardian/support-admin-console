@@ -7,6 +7,7 @@ export interface ExclusionRule {
   name: string;
   sectionIds?: string[];
   tagIds?: string[];
+  frontIds?: string[];
   dateRange?: DateRange;
   contentTypes?: Array<'Fronts' | 'Articles'>;
 }

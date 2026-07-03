@@ -4,6 +4,9 @@ import {
   AccordionDetails,
   AccordionSummary,
   Alert,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
   TextField,
   Theme,
   Typography,
@@ -17,6 +20,14 @@ import ContentTypesSelector from './ContentTypesSelector';
 import RuleHeader from './RuleHeader';
 import { useExclusionRuleHandlers } from './useExclusionRuleHandlers';
 import { ChannelKey } from './util';
+
+const NETWORK_FRONTS = [
+  { id: 'uk', name: 'UK' },
+  { id: 'us', name: 'US' },
+  { id: 'au', name: 'Australia' },
+  { id: 'europe', name: 'Europe' },
+  { id: 'international', name: 'International' },
+];
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   accordion: {
@@ -129,8 +140,8 @@ const ExclusionRule: React.FC<ExclusionRuleProps> = ({
               onUpdateRule={handleUpdateRuleWithIndex}
             />
             <Alert severity="info" className={classes.fullRowField}>
-              Pages for this exclusion are determined by Section IDs <strong>OR</strong> Tag IDs. If
-              either list matches, the rule exclusion will apply.
+              Pages for this exclusion are determined by Section IDs <strong>OR</strong> Tag IDs
+              <strong> OR</strong> Front IDs. If any list matches, the rule exclusion will apply.
             </Alert>
             <div className={classes.fullRowField}>
               <Typography variant="subtitle2" sx={{ mb: 1 }}>
@@ -164,6 +175,42 @@ const ExclusionRule: React.FC<ExclusionRuleProps> = ({
                   onUpdate={(ids) => handleRuleChange({ ...formRule, tagIds: ids })}
                   disabled={!isRuleInEditMode}
                 />
+              )}
+            </div>
+            <div className={classes.fullRowField}>
+              <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                Network Fronts
+              </Typography>
+              {!isRuleInEditMode && (!formRule.frontIds || formRule.frontIds.length === 0) ? (
+                <Typography variant="body2" color="textSecondary">
+                  No network fronts selected
+                </Typography>
+              ) : (
+                <FormGroup row>
+                  {NETWORK_FRONTS.map((front) => (
+                    <FormControlLabel
+                      key={front.id}
+                      control={
+                        <Checkbox
+                          checked={formRule.frontIds?.includes(front.id) ?? false}
+                          onChange={(e) => {
+                            const currentIds = formRule.frontIds ?? [];
+                            const updatedIds = e.target.checked
+                              ? [...currentIds, front.id]
+                              : currentIds.filter((id) => id !== front.id);
+                            handleRuleChange({
+                              ...formRule,
+                              frontIds: updatedIds.length > 0 ? updatedIds : undefined,
+                            });
+                          }}
+                          disabled={!isRuleInEditMode}
+                          size="small"
+                        />
+                      }
+                      label={front.name}
+                    />
+                  ))}
+                </FormGroup>
               )}
             </div>
           </div>
