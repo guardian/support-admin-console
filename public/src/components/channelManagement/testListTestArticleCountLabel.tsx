@@ -1,6 +1,5 @@
 import { Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars -- Required by jsx: "react" in tsconfig.json
 import React from 'react';
 
 const useStyles = makeStyles(() => ({
@@ -16,7 +15,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const TestListTestArticleCountLabel = (): JSX.Element => {
+const TestListTestArticleCountLabel: React.FC = (): JSX.Element => {
   const classes = useStyles();
   return (
     <div className={classes.container}>

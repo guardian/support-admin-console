@@ -35,7 +35,8 @@ case class GutterTest(
     campaignName: Option[String] = Some("NOT_IN_CAMPAIGN"),
     signedInStatus: Option[SignedInStatus] = Some(SignedInStatus.All),
     consentStatus: Option[ConsentStatus] = Some(ConsentStatus.All),
-    methodologies: List[Methodology] = defaultMethodologies
+    methodologies: List[Methodology] = defaultMethodologies,
+    scheduler: Option[Scheduler] = None
 ) extends ChannelTest[GutterTest] {
 
   override def withChannel(channel: Channel): GutterTest =

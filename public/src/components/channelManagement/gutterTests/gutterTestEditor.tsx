@@ -16,6 +16,7 @@ import {
   UserCohort,
 } from '../helpers/shared';
 import { useStyles } from '../helpers/testEditorStyles';
+import ScheduleEditor from '../scheduleEditor';
 import TestEditorContextTargeting from '../testEditorContextTargeting';
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 import { ValidatedTestEditorProps } from '../validatedTestEditor';
@@ -261,6 +262,17 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
           onSignedInStatusChange={onSignedInStatusChange}
           showConsentStatusSelector={false}
           onConsentStatusChange={onConsentChange} // can't remove but hidden anyway
+        />
+      </div>
+
+      <div className={classes.sectionContainer}>
+        <Typography variant={'h3'} className={classes.sectionHeader}>
+          Schedule
+        </Typography>
+        <ScheduleEditor
+          scheduler={test.scheduler}
+          disabled={!userHasTestLocked}
+          onChange={(scheduler) => onTestChange((current) => ({ ...current, scheduler }))}
         />
       </div>
     </div>
