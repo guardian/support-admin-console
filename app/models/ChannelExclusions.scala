@@ -19,6 +19,8 @@ case class ExclusionRule(
     name: String = "",
     sectionIds: Option[List[String]] = None, // suppress if the page's sectionId matches any entry
     tagIds: Option[List[String]] = None, // suppress if the page has any of these tag IDs
+    frontIds: Option[List[String]] =
+      None, // suppress if the page is one of these network fronts (uk, us, au, europe, international)
     dateRange: Option[DateRange] = None, // ISO date "YYYY-MM-DD", inclusive
     contentTypes: Option[List[String]] = None // e.g. ["Article"], ["Front"]; absent = all content types
 )
