@@ -46,7 +46,7 @@
     "react-router-dom": "7.15.1",
     "recharts": "3.8.1",
     "remirror": "3.0.3",
-    "uuid": "14.0.0"
+    "uuid": "14.0.1"
   },
   "overrides": {
     "prettier": "1.19.1",
