@@ -1,6 +1,7 @@
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { Typography } from '@mui/material';
+import { isValid, parseISO } from 'date-fns';
 import React from 'react';
 
 export const renderVisibilityIcons = (isOn: boolean): React.ReactNode => {
@@ -106,3 +107,26 @@ function formatToUtcString(date: Date): string {
     pad(date.getUTCMinutes())
   );
 }
+
+// Parses a "YYYY-MM-DDTHH:MM" UTC string into a Date. Returns null if empty/invalid.
+export const parseSchedulerUtc = (value?: string): Date | null => {
+  if (!value) {
+    return null;
+  }
+  const d = parseISO(value.endsWith('Z') ? value : `${value}Z`);
+  return isValid(d) ? d : null;
+};
+
+// Returns true if the current time falls within the scheduler's start/end range.
+export const isWithinSchedule = (scheduler: { start?: string; end?: string }): boolean => {
+  const now = new Date();
+  const start = parseSchedulerUtc(scheduler.start);
+  const end = parseSchedulerUtc(scheduler.end);
+  if (start && now < start) {
+    return false;
+  }
+  if (end && now > end) {
+    return false;
+  }
+  return true;
+};

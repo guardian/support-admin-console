@@ -5,9 +5,9 @@ version := "1.0-SNAPSHOT"
 scalaVersion := "2.13.18"
 
 val circeVersion = "0.14.15"
-val awsVersion = "2.44.14"
+val awsVersion = "2.46.13"
 val zioVersion = "2.1.26"
-val jacksonVersion = "2.21.3"
+val jacksonVersion = "2.21.4"
 
 lazy val scalafmtSettings = Seq(
   scalafmtFilter.withRank(KeyRanks.Invisible) := "diff-dirty",
@@ -29,8 +29,8 @@ asciiGraphWidth := 999999999 // to ensure Snyk can read the the deeeeep dependen
 libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.6",
   "com.gu.play-googleauth" %% "play-v30" % "40.1.0",
-  "com.google.cloud" % "google-cloud-bigquery" % "2.66.0",
-  "com.gu" %% "simple-configuration-ssm" % "11.0.0",
+  "com.google.cloud" % "google-cloud-bigquery" % "2.67.0",
+  "com.gu" %% "simple-configuration-ssm" % "12.0.0",
   "software.amazon.awssdk" % "s3" % awsVersion,
   "software.amazon.awssdk" % "dynamodb" % awsVersion,
   "io.circe" %% "circe-core" % circeVersion,

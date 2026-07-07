@@ -65,7 +65,8 @@ case class SupportLandingPageTest(
     variants: List[SupportLandingPageVariant],
     campaignName: Option[String] = Some("NOT_IN_CAMPAIGN"),
     methodologies: List[Methodology] = defaultMethodologies,
-    mParticleAudience: Option[Int] = None
+    mParticleAudience: Option[Int] = None,
+    scheduler: Option[Scheduler] = None
 ) extends ChannelTest[SupportLandingPageTest] {
 
   override def withChannel(channel: Channel): SupportLandingPageTest =

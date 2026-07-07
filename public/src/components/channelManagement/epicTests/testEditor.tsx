@@ -23,6 +23,7 @@ import {
 } from '../helpers/shared';
 import { useStyles } from '../helpers/testEditorStyles';
 import { ARTICLE_COUNT_TEMPLATE, COUNTRY_NAME_TEMPLATE } from '../helpers/validation';
+import ScheduleEditor from '../scheduleEditor';
 import TestEditorArticleCountEditor, {
   DEFAULT_ARTICLES_VIEWED_SETTINGS,
 } from '../testEditorArticleCountEditor';
@@ -301,7 +302,9 @@ export const getEpicTestEditor = (
                 Variants
               </Typography>
               <div className={classes.variantsHeaderButtonsContainer}>
-                <EpicTestPreviewButton test={test} moduleName={epicEditorConfig.moduleName} />
+                {epicEditorConfig.allowVariantPreview && (
+                  <EpicTestPreviewButton test={test} moduleName={epicEditorConfig.moduleName} />
+                )}
               </div>
             </div>
             <div>
@@ -478,6 +481,17 @@ export const getEpicTestEditor = (
             />
           </div>
         )}
+
+        <div className={classes.sectionContainer}>
+          <Typography variant={'h3'} className={classes.sectionHeader}>
+            Schedule
+          </Typography>
+          <ScheduleEditor
+            scheduler={test.scheduler}
+            disabled={!userHasTestLocked}
+            onChange={(scheduler) => onTestChange((current) => ({ ...current, scheduler }))}
+          />
+        </div>
       </div>
     );
   };

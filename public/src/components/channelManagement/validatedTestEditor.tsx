@@ -4,6 +4,7 @@ import React, { useRef } from 'react';
 import { Test } from './helpers/shared';
 import useValidation from './hooks/useValidation';
 import StickyTopBar from './stickyTopBar/stickyTopBar';
+import TestSchedulerStatusBanner from './testSchedulerStatusBanner';
 import { TestEditorProps } from './testsForm';
 
 const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
@@ -109,6 +110,9 @@ export const ValidatedTestEditor = <T extends Test>(
         />
 
         <div className={classes.scrollableContainer}>
+          {test.scheduler && (
+            <TestSchedulerStatusBanner scheduler={test.scheduler} status={test.status} />
+          )}
           <TestEditor
             test={test}
             userHasTestLocked={userHasTestLocked}

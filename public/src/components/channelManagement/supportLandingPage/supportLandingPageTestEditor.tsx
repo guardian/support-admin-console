@@ -9,8 +9,9 @@ import VariantSummary from '../../tests/variants/variantSummary';
 import { Methodology, RegionTargeting } from '../helpers/shared';
 import { useStyles } from '../helpers/testEditorStyles';
 import { MParticleAudienceEditor } from '../mParticleAudienceEditor';
+import ScheduleEditor from '../scheduleEditor';
+import { SingleMethodologyEditor } from '../SingleMethodologyEditor';
 import TestEditorTargetRegionsSelector from '../testEditorTargetRegionsSelector';
-import { TestMethodologyEditor } from '../TestMethodologyEditor';
 import { ValidatedTestEditorProps } from '../validatedTestEditor';
 import { getDefaultVariant } from './utils/defaults';
 import VariantEditor from './variantEditor';
@@ -96,9 +97,9 @@ const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLan
     }));
   };
 
-  const onMethodologyChange = (methodologies: Methodology[]): void => {
-    setValidationStatusForField('methodologies', methodologies.length > 0);
-    onTestChange((current) => ({ ...current, methodologies }));
+  const onMethodologyChange = (methodology: Methodology): void => {
+    setValidationStatusForField('methodologies', true);
+    onTestChange((current) => ({ ...current, methodologies: [methodology] }));
   };
 
   const renderVariantEditor = (variant: SupportLandingPageVariant): React.ReactElement => (
@@ -161,8 +162,8 @@ const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLan
         <Typography variant={'h3'} className={classes.sectionHeader}>
           Experiment Methodology
         </Typography>
-        <TestMethodologyEditor
-          methodologies={test.methodologies}
+        <SingleMethodologyEditor
+          methodology={test.methodologies[0] ?? { name: 'ABTest' }}
           testName={test.name}
           channel={test.channel ?? ''}
           isDisabled={!userHasTestLocked || test.status === 'Live'}
@@ -194,6 +195,17 @@ const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLan
               mParticleAudience,
             }));
           }}
+        />
+      </div>
+
+      <div className={classes.sectionContainer}>
+        <Typography variant={'h3'} className={classes.sectionHeader}>
+          Schedule
+        </Typography>
+        <ScheduleEditor
+          scheduler={test.scheduler}
+          disabled={!userHasTestLocked}
+          onChange={(scheduler) => onTestChange((current) => ({ ...current, scheduler }))}
         />
       </div>
     </div>

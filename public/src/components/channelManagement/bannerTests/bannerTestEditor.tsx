@@ -7,7 +7,6 @@ import {
   BannerVariant,
 } from '../../../models/banner';
 import { BannerDesign } from '../../../models/bannerDesign';
-import { getDesignForVariant } from '../../../utils/bannerDesigns';
 import {
   BannerDesignsResponse,
   fetchFrontendSettings,
@@ -29,6 +28,7 @@ import {
 } from '../helpers/shared';
 import { useStyles } from '../helpers/testEditorStyles';
 import { ARTICLE_COUNT_TEMPLATE } from '../helpers/validation';
+import ScheduleEditor from '../scheduleEditor';
 import TestEditorArticleCountEditor, {
   DEFAULT_ARTICLES_VIEWED_SETTINGS,
 } from '../testEditorArticleCountEditor';
@@ -36,7 +36,6 @@ import TestEditorContextTargeting from '../testEditorContextTargeting';
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 import { TestMethodologyEditor } from '../TestMethodologyEditor';
 import { ValidatedTestEditorProps } from '../validatedTestEditor';
-import BannerVariantPreview from './bannerVariantPreview';
 import { DeployScheduleEditor } from './deployScheduleEditor';
 import { FrontsOnlyEditor } from './frontsOnlyEditor';
 import { getDefaultVariant } from './utils/defaults';
@@ -264,15 +263,12 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
   );
 
   const renderVariantSummary = (variant: BannerVariant): React.ReactElement => {
-    const design = getDesignForVariant(variant, designs);
-
     return (
       <VariantSummary
         name={variant.name}
         testName={test.name}
         testType="BANNER"
         isInEditMode={userHasTestLocked}
-        topButton={<BannerVariantPreview variant={variant} design={design} />}
         platform="DOTCOM" // hardcoded as banners are currently not supported in Apple News
         articleType="Standard"
       />
@@ -445,6 +441,17 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
           frontsOnly={test.frontsOnly}
           onFrontsOnlyChange={onFrontsOnlyChange}
           isDisabled={!userHasTestLocked}
+        />
+      </div>
+
+      <div className={classes.sectionContainer}>
+        <Typography variant={'h3'} className={classes.sectionHeader}>
+          Schedule
+        </Typography>
+        <ScheduleEditor
+          scheduler={test.scheduler}
+          disabled={!userHasTestLocked}
+          onChange={(scheduler) => onTestChange((current) => ({ ...current, scheduler }))}
         />
       </div>
     </div>

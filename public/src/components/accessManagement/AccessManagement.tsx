@@ -191,12 +191,14 @@ const AccessManagement = () => {
         </div>
       )}
 
-      <AccessManagementDialog
-        open={editModalOpen}
-        onClose={handleCloseEditModal}
-        user={selectedUser}
-        onUserUpdated={handleUserUpdated}
-      />
+      {selectedUser && (
+        <AccessManagementDialog
+          open={editModalOpen}
+          onClose={handleCloseEditModal}
+          user={selectedUser}
+          onUserUpdated={handleUserUpdated}
+        />
+      )}
 
       <AddUserDialog
         open={addUserModalOpen}
