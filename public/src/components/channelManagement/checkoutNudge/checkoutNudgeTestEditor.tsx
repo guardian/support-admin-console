@@ -89,7 +89,7 @@ const CheckoutNudgeTestEditor: React.FC<ValidatedTestEditorProps<CheckoutNudgeTe
     queryParams.append('product', product);
     queryParams.append('ratePlan', ratePlan);
 
-    return `${supportHost}/${path}?${queryParams.toString()}&force-checkout-nudge=${
+    return `${supportHost}/${path}?${queryParams.toString()}&preview-checkout-nudge=${
       test.name
     }:${variantName}`;
   };
