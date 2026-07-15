@@ -189,11 +189,16 @@ const PromoEditor = ({
     });
   };
 
-  const handleIsIntroductoryPromotionChange = () => {
+  const handleIsIntroductoryPricingChange = () => {
     if (isEditing && editedPromo) {
-      setEditedPromo({
-        ...editedPromo,
-        isIntroductoryPricing: !editedPromo.isIntroductoryPricing,
+      setEditedPromo((curr) => {
+        if (!curr) {
+          return null;
+        }
+        return {
+          ...curr,
+          isIntroductoryPricing: !curr.isIntroductoryPricing,
+        };
       });
     }
   };
@@ -352,7 +357,7 @@ const PromoEditor = ({
           control={
             <Checkbox
               checked={editedPromo?.isIntroductoryPricing ?? false}
-              onChange={handleIsIntroductoryPromotionChange}
+              onChange={handleIsIntroductoryPricingChange}
               disabled={!isEditing}
             />
           }
