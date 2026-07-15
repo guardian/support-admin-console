@@ -189,6 +189,15 @@ const PromoEditor = ({
     });
   };
 
+  const handleIsIntroductoryPromotionChange = () => {
+    if (isEditing && editedPromo) {
+      setEditedPromo({
+        ...editedPromo,
+        isIntroductoryPricing: !editedPromo.isIntroductoryPricing,
+      });
+    }
+  };
+
   const handlePromotionHasLandingPageChange = () => {
     if (isEditing && editedPromo) {
       setEditedPromo({
@@ -339,6 +348,16 @@ const PromoEditor = ({
             />
           </Grid>
         </Grid>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={editedPromo?.isIntroductoryPricing ?? false}
+              onChange={handleIsIntroductoryPromotionChange}
+              disabled={!isEditing}
+            />
+          }
+          label="Introductory Price (will not display price comparison on the product page)"
+        />
       </div>
 
       {allRatePlans.length > 0 && (

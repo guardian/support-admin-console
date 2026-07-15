@@ -66,6 +66,7 @@ export interface Promo {
   description?: string;
   lockStatus?: LockStatus;
   landingPage?: LandingPage;
+  isIntroductoryPricing?: boolean;
 }
 
 export type PromoCampaigns = PromoCampaign[];
