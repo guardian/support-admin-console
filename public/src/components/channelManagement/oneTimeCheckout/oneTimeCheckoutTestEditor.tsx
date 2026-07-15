@@ -51,7 +51,7 @@ const OneTimeCheckoutTestEditor: React.FC<ValidatedTestEditorProps<OneTimeChecko
   const getWebPreviewUrl = (variantName: string): string => {
     const stage = getStage();
     const supportHost = `https://support.${stage !== 'PROD' ? 'code.dev-' : ''}theguardian.com`;
-    return `${supportHost}/one-time-checkout?force-one-time-checkout=${test.name}:${variantName}`;
+    return `${supportHost}/one-time-checkout?preview-one-time-checkout=${test.name}:${variantName}`;
   };
 
   // Memoize callbacks by variant name to prevent infinite render loops

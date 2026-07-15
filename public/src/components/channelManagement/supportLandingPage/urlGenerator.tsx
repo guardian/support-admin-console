@@ -70,7 +70,7 @@ const getPreviewUrl = ({
   const channelName = 'landing-page';
   const params = new URLSearchParams();
 
-  params.set(`force-${channelName}`, `${testName}:${variant.name}`);
+  params.set(`preview-${channelName}`, `${testName}:${variant.name}`);
 
   const builder: UrlBuilder = {
     withParams: (newParams: Record<string, string>) => {

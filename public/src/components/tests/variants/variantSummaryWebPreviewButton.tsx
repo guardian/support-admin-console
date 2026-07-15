@@ -38,7 +38,7 @@ const getPreviewUrl = (
 ): string => {
   const stage = getStage();
   const channelName = getChannelName(testType, articleType);
-  const queryString = `?force-${channelName}=${testName}:${variantName}`;
+  const queryString = `?preview-${channelName}=${testName}:${variantName}`;
 
   if (testType === 'LANDING_PAGE') {
     // link to the support site landing page
