@@ -258,6 +258,7 @@ const CheckoutNudgeTestEditor: React.FC<ValidatedTestEditorProps<CheckoutNudgeTe
           scheduler={test.scheduler}
           disabled={!userHasTestLocked}
           onChange={(scheduler) => onTestChange((current) => ({ ...current, scheduler }))}
+          onValidationChange={(isValid) => setValidationStatusForField('schedule', isValid)}
         />
       </div>
     </div>

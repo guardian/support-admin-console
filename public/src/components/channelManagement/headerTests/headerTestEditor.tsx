@@ -259,6 +259,7 @@ const HeaderTestEditor: React.FC<ValidatedTestEditorProps<HeaderTest>> = ({
           scheduler={test.scheduler}
           disabled={!userHasTestLocked}
           onChange={(scheduler) => onTestChange((current) => ({ ...current, scheduler }))}
+          onValidationChange={(isValid) => setValidationStatusForField('schedule', isValid)}
         />
       </div>
     </div>
