@@ -206,6 +206,7 @@ const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLan
           scheduler={test.scheduler}
           disabled={!userHasTestLocked}
           onChange={(scheduler) => onTestChange((current) => ({ ...current, scheduler }))}
+          onValidationChange={(isValid) => setValidationStatusForField('schedule', isValid)}
         />
       </div>
     </div>
