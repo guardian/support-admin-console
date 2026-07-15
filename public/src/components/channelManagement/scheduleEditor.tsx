@@ -2,6 +2,7 @@ import { TextField, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React from 'react';
 import { Scheduler } from './helpers/shared';
+import { parseSchedulerUtc } from './helpers/utilities';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
   container: {
@@ -22,10 +23,24 @@ interface ScheduleEditorProps {
   scheduler?: Scheduler;
   disabled: boolean;
   onChange: (scheduler?: Scheduler) => void;
+  onValidationChange?: (isValid: boolean) => void;
 }
 
-const ScheduleEditor: React.FC<ScheduleEditorProps> = ({ scheduler, disabled, onChange }) => {
+const ScheduleEditor: React.FC<ScheduleEditorProps> = ({
+  scheduler,
+  disabled,
+  onChange,
+  onValidationChange,
+}) => {
   const classes = useStyles();
+
+  const startDate = React.useMemo(() => parseSchedulerUtc(scheduler?.start), [scheduler?.start]);
+  const endDate = React.useMemo(() => parseSchedulerUtc(scheduler?.end), [scheduler?.end]);
+  const hasInvalidRange = Boolean(startDate && endDate && endDate < startDate);
+
+  React.useEffect(() => {
+    onValidationChange?.(!hasInvalidRange);
+  }, [hasInvalidRange, onValidationChange]);
 
   const handleStartChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const start = e.target.value || undefined;
@@ -64,6 +79,7 @@ const ScheduleEditor: React.FC<ScheduleEditorProps> = ({ scheduler, disabled, on
           variant="outlined"
           size="small"
           disabled={disabled}
+          error={hasInvalidRange}
           InputLabelProps={{ shrink: true }}
         />
         <TextField
@@ -75,6 +91,8 @@ const ScheduleEditor: React.FC<ScheduleEditorProps> = ({ scheduler, disabled, on
           variant="outlined"
           size="small"
           disabled={disabled}
+          error={hasInvalidRange}
+          helperText={hasInvalidRange ? 'End date must be after the start date' : ' '}
           InputLabelProps={{ shrink: true }}
         />
       </div>
