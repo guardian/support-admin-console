@@ -25,7 +25,8 @@ case class Promo(
     description: Option[String],
     lockStatus: Option[LockStatus],
     discount: Option[DiscountDetails],
-    landingPage: Option[PromoLandingPage]
+    landingPage: Option[PromoLandingPage],
+    isIntroductoryPricing: Option[Boolean]
 )
 
 object Promo {
