@@ -91,8 +91,8 @@ importers:
         specifier: 7.15.1
         version: 7.15.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       recharts:
-        specifier: 3.8.1
-        version: 3.8.1(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react-is@19.2.8)(react@18.3.1)(redux@5.0.1)
+        specifier: 3.9.2
+        version: 3.9.2(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react-is@19.2.8)(react@18.3.1)(redux@5.0.1)
       remirror:
         specifier: 3.0.3
         version: 3.0.3(@remirror/pm@3.0.1)(@types/node@25.9.1)(prettier@3.8.3)
@@ -1092,8 +1092,8 @@ packages:
   '@popperjs/core@2.11.8':
     resolution: {integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==}
 
-  '@reduxjs/toolkit@2.11.2':
-    resolution: {integrity: sha512-Kd6kAHTA6/nUpp8mySPqj3en3dm0tdMIgbttnQ1xFMVpufoj+ADi8pXLBsd4xzTRHQa7t/Jv8W5UnCuW4kuWMQ==}
+  '@reduxjs/toolkit@2.12.0':
+    resolution: {integrity: sha512-KiT+RzZbp6mQET+Mg+h2c97+9j1sNflUxQkIHI7Yuzf6Peu+OYpmkn6nbHWmLLWj+1ZODUJFwGZ7gx3L9R9EOw==}
     peerDependencies:
       react: ^16.9.0 || ^17.0.0 || ^18 || ^19
       react-redux: ^7.2.1 || ^8.1.3 || ^9.0.0
@@ -2733,8 +2733,8 @@ packages:
     resolution: {integrity: sha512-w+5mJ3GuFL+NjVtJlvydShqE1eN3h3PbI7/5LAsYJP/2qtuMXjfL2LpHSRqo4b4eSF5K/DH1JXKUAHSB2UW50g==}
     engines: {node: '>= 0.4'}
 
-  es-toolkit@1.44.0:
-    resolution: {integrity: sha512-6penXeZalaV88MM3cGkFZZfOoLGWshWWfdy0tWw/RlVVyhvMaWSBTOvXNeiW3e5FwdS5ePW0LGEu17zT139ktg==}
+  es-toolkit@1.49.0:
+    resolution: {integrity: sha512-G5iZ6Pc/FNRY/soKZHC+TxGDD83rHUDXxzaWhGCX44vAv/tMs56WMusnm/KMNK+luUPsgA9U28cGr4RDlSzL2g==}
 
   escalade@3.2.0:
     resolution: {integrity: sha512-WUj2qlxaQtO4g6Pq5c29GTcWGDyd8itL8zTlipgECz3JesAiiOKotd8JU6otB3PACgG6xkJUyVhboMS+bje/jA==}
@@ -3247,11 +3247,8 @@ packages:
     resolution: {integrity: sha512-Hs59xBNfUIunMFgWAbGX5cq6893IbWg4KnrjbYwX3tx0ztorVgTDA6B2sxf8ejHJ4wz8BqGUMYlnzNBer5NvGg==}
     engines: {node: '>= 4'}
 
-  immer@10.2.0:
-    resolution: {integrity: sha512-d/+XTN3zfODyjr89gM3mPq1WNX2B8pYsu7eORitdwyA2sBubnTl3laYlBk4sXY5FUa5qTZGBDPJICVbvqzjlbw==}
-
-  immer@11.1.3:
-    resolution: {integrity: sha512-6jQTc5z0KJFtr1UgFpIL3N9XSC3saRaI9PwWtzM2pSqkNGtiNkYY2OSwkOGDK2XcTRcLb1pi/aNkKZz0nxVH4Q==}
+  immer@11.1.15:
+    resolution: {integrity: sha512-VrNANlmnWQnh5COXIIOQXM9oOJw7naGKlBT74ZOOR6lpVXc3gFEu9FJLDFcpCJ2j+NWr8TIwtWD//T6ZX6TKiQ==}
 
   immutability-helper@3.1.1:
     resolution: {integrity: sha512-Q0QaXjPjwIju/28TsugCHNEASwoCcJSyJV3uO1sOIQGI0jKgm9f41Lvz0DZj3n46cNCyAZTsEYoY4C2bVRUzyQ==}
@@ -4376,8 +4373,8 @@ packages:
     peerDependencies:
       react: '*'
 
-  react-redux@9.2.0:
-    resolution: {integrity: sha512-ROY9fvHhwOD9ySfrF0wmvu//bKCQ6AeZZq1nJNtbDC+kk5DuSuNX/n6YWYF/SYy7bSba4D4FSz8DJeKY/S/r+g==}
+  react-redux@9.3.0:
+    resolution: {integrity: sha512-KQopgqFo/p/fgmAs5qz6p5RWaNAzq40WAu7fJIXnQpYxFPbJYtsJPWvGeF2rOBaY/kEuV77AVsX8TsQzKm+A/g==}
     peerDependencies:
       '@types/react': ^18.2.25 || ^19
       react: ^18.0 || ^19
@@ -4439,8 +4436,8 @@ packages:
     resolution: {integrity: sha512-hOS089on8RduqdbhvQ5Z37A0ESjsqz6qnRcffsMU3495FuTdqSm+7bhJ29JvIOsBDEEnan5DPu9t3To9VRlMzA==}
     engines: {node: '>=8.10.0'}
 
-  recharts@3.8.1:
-    resolution: {integrity: sha512-mwzmO1s9sFL0TduUpwndxCUNoXsBw3u3E/0+A+cLcrSfQitSG62L32N69GhqUrrT5qKcAE3pCGVINC6pqkBBQg==}
+  recharts@3.9.2:
+    resolution: {integrity: sha512-G4fy+Pk46RaXgwWMh+Nzhyo/lbFAVqXo9gtetlyehe6Ehge9CsgDuOTwQDD+i1+llaLktNBiNq4bhnGlDRXFtw==}
     engines: {node: '>=18'}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
@@ -4496,8 +4493,8 @@ packages:
   requires-port@1.0.0:
     resolution: {integrity: sha512-KigOCHcocU3XODJxsu8i/j8T9tzT4adHiecwORRQ0ZZFcp7ahwXuRU1m+yuO90C5ZUyGeGfocHDI14M3L3yDAQ==}
 
-  reselect@5.1.1:
-    resolution: {integrity: sha512-K/BG6eIky/SBpzfHZv/dd+9JBFiS4SWV7FIujVyJRux6e45+73RaUHXLmIR1f7WOMaQ0U1km6qwklRQxpJJY0w==}
+  reselect@5.2.0:
+    resolution: {integrity: sha512-AgZ3UOZm3YndfrJ4OYjgrT7bmCm/1iqkjvEfH/oYjzh6PD2qw4QuT3jjnXIrpdt4MTpMXclMT3lXbmRY+XRakw==}
 
   resize-observer-polyfill@1.5.1:
     resolution: {integrity: sha512-LwZrotdHOo12nQuZlHEmtuXdqGoOD0OhaxopaNFxWzInpEgaLWoVuAMbTzixuosCx2nEG58ngzW3vxdWoxIgdg==}
@@ -6461,7 +6458,7 @@ snapshots:
       '@babel/runtime': 7.29.7
       '@mui/utils': 7.3.7(@types/react@18.3.12)(react@18.3.1)
       react: 18.3.1
-      reselect: 5.1.1
+      reselect: 5.2.0
       use-sync-external-store: 1.6.0(react@18.3.1)
     transitivePeerDependencies:
       - '@types/react'
@@ -6590,17 +6587,17 @@ snapshots:
 
   '@popperjs/core@2.11.8': {}
 
-  '@reduxjs/toolkit@2.11.2(react-redux@9.2.0(@types/react@18.3.12)(react@18.3.1)(redux@5.0.1))(react@18.3.1)':
+  '@reduxjs/toolkit@2.12.0(react-redux@9.3.0(@types/react@18.3.12)(react@18.3.1)(redux@5.0.1))(react@18.3.1)':
     dependencies:
       '@standard-schema/spec': 1.1.0
       '@standard-schema/utils': 0.3.0
-      immer: 11.1.3
+      immer: 11.1.15
       redux: 5.0.1
       redux-thunk: 3.1.0(redux@5.0.1)
-      reselect: 5.1.1
+      reselect: 5.2.0
     optionalDependencies:
       react: 18.3.1
-      react-redux: 9.2.0(@types/react@18.3.12)(react@18.3.1)(redux@5.0.1)
+      react-redux: 9.3.0(@types/react@18.3.12)(react@18.3.1)(redux@5.0.1)
 
   '@remirror/core-constants@3.0.0': {}
 
@@ -8873,7 +8870,7 @@ snapshots:
       is-date-object: 1.1.0
       is-symbol: 1.1.1
 
-  es-toolkit@1.44.0: {}
+  es-toolkit@1.49.0: {}
 
   escalade@3.2.0: {}
 
@@ -9460,9 +9457,7 @@ snapshots:
 
   ignore@7.0.5: {}
 
-  immer@10.2.0: {}
-
-  immer@11.1.3: {}
+  immer@11.1.15: {}
 
   immutability-helper@3.1.1: {}
 
@@ -10830,7 +10825,7 @@ snapshots:
       qrcode-generator: 2.0.4
       react: 18.3.1
 
-  react-redux@9.2.0(@types/react@18.3.12)(react@18.3.1)(redux@5.0.1):
+  react-redux@9.3.0(@types/react@18.3.12)(react@18.3.1)(redux@5.0.1):
     dependencies:
       '@types/use-sync-external-store': 0.0.6
       react: 18.3.1
@@ -10905,19 +10900,19 @@ snapshots:
     dependencies:
       picomatch: 2.3.2
 
-  recharts@3.8.1(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react-is@19.2.8)(react@18.3.1)(redux@5.0.1):
+  recharts@3.9.2(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react-is@19.2.8)(react@18.3.1)(redux@5.0.1):
     dependencies:
-      '@reduxjs/toolkit': 2.11.2(react-redux@9.2.0(@types/react@18.3.12)(react@18.3.1)(redux@5.0.1))(react@18.3.1)
+      '@reduxjs/toolkit': 2.12.0(react-redux@9.3.0(@types/react@18.3.12)(react@18.3.1)(redux@5.0.1))(react@18.3.1)
       clsx: 2.1.1
       decimal.js-light: 2.5.1
-      es-toolkit: 1.44.0
+      es-toolkit: 1.49.0
       eventemitter3: 5.0.4
-      immer: 10.2.0
+      immer: 11.1.15
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       react-is: 19.2.8
-      react-redux: 9.2.0(@types/react@18.3.12)(react@18.3.1)(redux@5.0.1)
-      reselect: 5.1.1
+      react-redux: 9.3.0(@types/react@18.3.12)(react@18.3.1)(redux@5.0.1)
+      reselect: 5.2.0
       tiny-invariant: 1.3.3
       use-sync-external-store: 1.6.0(react@18.3.1)
       victory-vendor: 37.3.6
@@ -11044,7 +11039,7 @@ snapshots:
 
   requires-port@1.0.0: {}
 
-  reselect@5.1.1: {}
+  reselect@5.2.0: {}
 
   resize-observer-polyfill@1.5.1: {}
 
