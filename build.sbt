@@ -7,7 +7,6 @@ scalaVersion := "2.13.18"
 val circeVersion = "0.14.16"
 val awsVersion = "2.46.21"
 val zioVersion = "2.1.26"
-val jacksonVersion = "2.21.4"
 
 lazy val scalafmtSettings = Seq(
   scalafmtFilter.withRank(KeyRanks.Invisible) := "diff-dirty",
@@ -49,14 +48,6 @@ libraryDependencies ++= Seq(
 )
 
 dependencyOverrides ++= List(
-  // Play still uses an old version of jackson-core which has a vulnerability - https://security.snyk.io/vuln/SNYK-JAVA-COMFASTERXMLJACKSONCORE-7569538
-  "com.fasterxml.jackson.core" % "jackson-core" % jacksonVersion,
-  "com.fasterxml.jackson.datatype" % "jackson-datatype-jdk8" % jacksonVersion,
-  "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % jacksonVersion,
-  "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % jacksonVersion,
-  "com.fasterxml.jackson.module" % "jackson-module-parameter-names" % jacksonVersion,
-  "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion,
-  "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
   // Related to Play 3.0.2-6 currently brings in a vulnerable version of commons-io
   "commons-io" % "commons-io" % "2.22.0" % Test,
   "commons-beanutils" % "commons-beanutils" % "1.11.0",
