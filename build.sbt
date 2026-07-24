@@ -5,7 +5,7 @@ version := "1.0-SNAPSHOT"
 scalaVersion := "2.13.18"
 
 val circeVersion = "0.14.16"
-val awsVersion = "2.46.13"
+val awsVersion = "2.46.21"
 val zioVersion = "2.1.26"
 val jacksonVersion = "2.21.4"
 
@@ -29,7 +29,7 @@ asciiGraphWidth := 999999999 // to ensure Snyk can read the the deeeeep dependen
 libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.6",
   "com.gu.play-googleauth" %% "play-v30" % "40.1.1",
-  "com.google.cloud" % "google-cloud-bigquery" % "2.67.0",
+  "com.google.cloud" % "google-cloud-bigquery" % "2.68.0",
   "com.gu" %% "simple-configuration-ssm" % "12.0.1",
   "software.amazon.awssdk" % "s3" % awsVersion,
   "software.amazon.awssdk" % "dynamodb" % awsVersion,

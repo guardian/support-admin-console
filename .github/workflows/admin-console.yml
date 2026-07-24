@@ -52,7 +52,7 @@ jobs:
           pnpm synth
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v6.2.1
+        uses: aws-actions/configure-aws-credentials@6.2.2
         with:
           role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
           aws-region: eu-west-1
@@ -65,7 +65,7 @@ jobs:
           cache: 'sbt'
 
       - name: Setup SBT
-        uses: sbt/setup-sbt@v1.4.0
+        uses: sbt/setup-sbt@v1.5.0
 
       - name: riffraff
         run: |
