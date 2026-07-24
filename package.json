@@ -44,7 +44,7 @@
     "react-hook-form": "7.76.0",
     "react-qr-code": "2.2.0",
     "react-router-dom": "7.15.1",
-    "recharts": "3.8.1",
+    "recharts": "3.9.2",
     "remirror": "3.0.3",
     "uuid": "14.0.1"
   },
