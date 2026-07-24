@@ -42,7 +42,7 @@ class Login(
   def isValid: Action[AnyContent] = Action { implicit request =>
     UserIdentity.fromRequest(request).filter(_.isValid) match {
       case Some(_) => Ok("auth is valid")
-      case None => new Status(419)
+      case None    => new Status(419)
     }
   }
 

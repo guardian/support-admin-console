@@ -3,7 +3,13 @@ package models
 import io.circe.Decoder.Result
 import io.circe.{Decoder, DecodingFailure, Encoder, HCursor, Json}
 import io.circe.generic.extras.Configuration
-import io.circe.generic.extras.semiauto.{deriveConfiguredDecoder, deriveConfiguredEncoder, deriveDecoder, deriveEnumerationDecoder, deriveEnumerationEncoder}
+import io.circe.generic.extras.semiauto.{
+  deriveConfiguredDecoder,
+  deriveConfiguredEncoder,
+  deriveDecoder,
+  deriveEnumerationDecoder,
+  deriveEnumerationEncoder
+}
 
 sealed trait Status
 
