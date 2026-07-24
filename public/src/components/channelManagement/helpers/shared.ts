@@ -8,13 +8,7 @@ export interface Variant {
 export type TestPlatform = 'APPLE_NEWS' | 'DOTCOM' | 'SUPPORT';
 
 export type TestType =
-  | 'EPIC'
-  | 'BANNER'
-  | 'GUTTER'
-  | 'HEADER'
-  | 'LANDING_PAGE'
-  | 'CHECKOUT_NUDGE'
-  | 'ONE_TIME_CHECKOUT';
+  'EPIC' | 'BANNER' | 'GUTTER' | 'HEADER' | 'LANDING_PAGE' | 'CHECKOUT_NUDGE' | 'ONE_TIME_CHECKOUT';
 
 export type EpicModuleName = 'ContributionsEpic' | 'ContributionsLiveblogEpic';
 
@@ -34,9 +28,7 @@ interface RouletteMethodology {
 }
 // each methodology may have an optional testName, which should be used for tracking
 export type Methodology = { testName?: string } & (
-  | ABTestMethodology
-  | EpsilonGreedyBanditMethodology
-  | RouletteMethodology
+  ABTestMethodology | EpsilonGreedyBanditMethodology | RouletteMethodology
 );
 export type BanditMethodology = Exclude<Methodology, { name: 'ABTest' }>;
 
