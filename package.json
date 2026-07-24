@@ -12,7 +12,7 @@
     "globals": "17.6.0",
     "jest": "30.4.2",
     "json-diff-ts": "4.10.4",
-    "prettier": "3.8.3",
+    "prettier": "3.9.5",
     "style-loader": "4.0.0",
     "ts-jest": "29.4.11",
     "ts-loader": "9.6.2",

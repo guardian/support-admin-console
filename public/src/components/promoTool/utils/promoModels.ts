@@ -1,11 +1,7 @@
 import { LockStatus } from '../../channelManagement/helpers/shared';
 
 export type PromoProduct =
-  | 'SupporterPlus'
-  | 'TierThree'
-  | 'DigitalSubscription'
-  | 'Newspaper'
-  | 'Weekly';
+  'SupporterPlus' | 'TierThree' | 'DigitalSubscription' | 'Newspaper' | 'Weekly';
 
 export const promoProductNames: Record<PromoProduct, string> = {
   SupporterPlus: 'Supporter Plus',
