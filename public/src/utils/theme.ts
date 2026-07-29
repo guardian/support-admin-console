@@ -3,7 +3,7 @@ import purple from '@mui/material/colors/purple';
 import { createTheme, Theme } from '@mui/material/styles';
 import { getStage } from './stage';
 
-const DEV_AND_CODE_THEME = createTheme({
+const CODE_THEME = createTheme({
   palette: {
     primary: {
       main: purple[500],
@@ -18,8 +18,8 @@ const PROD_THEME = createTheme({});
 
 export const getTheme = (): Theme => {
   const stage = getStage();
-  if (stage == 'DEV' || stage === 'CODE') {
-    return DEV_AND_CODE_THEME;
+  if (stage === 'CODE') {
+    return CODE_THEME;
   }
   return PROD_THEME;
 };
