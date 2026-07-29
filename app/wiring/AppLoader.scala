@@ -16,6 +16,8 @@ class AppLoader extends ApplicationLoader with StrictLogging {
   override def load(context: Context): Application = {
     new LogbackLoggerConfigurator().configure(context.environment)
 
+    val isDev = context.environment.mode == Mode.Dev
+
     def addConfigToContext(identity: AppIdentity): Try[Context] = Try {
       val loadedConfig = ConfigurationLoader.load(identity) {
         case AwsIdentity(app, stack, stage, _) => SSMConfigurationLocation(s"/$app/$stage", Aws.region.id())
@@ -30,12 +32,12 @@ class AppLoader extends ApplicationLoader with StrictLogging {
 
     val application: Try[Application] = for {
       identity <-
-        if (context.environment.mode == Mode.Dev) Success(DevIdentity("admin-console"))
+        if (isDev) Success(DevIdentity("admin-console"))
         else AppIdentity.whoAmI(defaultAppName = "admin-console", Aws.credentialsProvider.build())
       newContext <- addConfigToContext(identity)
       stage = identity match {
         case AwsIdentity(_, _, s, _) => s
-        case _                       => "DEV"
+        case _                       => "CODE"
       }
       application <- Try(new AppComponents(newContext, stage).application)
     } yield application

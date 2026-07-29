@@ -45,8 +45,7 @@ object BanditData {
 }
 
 class DynamoBanditData(stage: String, client: DynamoDbClient) extends StrictLogging {
-  // No DEV table for bandit data
-  private val tableName = s"support-bandit-${if (stage == "PROD") "PROD" else "CODE"}"
+  private val tableName = s"support-bandit-${stage}"
 
   private def query(
       testName: String,

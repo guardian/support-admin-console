@@ -80,7 +80,7 @@ const defaultProducts = {
   },
 };
 
-const DEV_AND_CODE_DEFAULT_VARIANT: SupportLandingPageVariant = {
+const CODE_DEFAULT_VARIANT: SupportLandingPageVariant = {
   name: 'CONTROL',
   copy: {
     heading: 'Support fearless, independent journalism',
@@ -102,8 +102,8 @@ const PROD_DEFAULT_VARIANT: SupportLandingPageVariant = {
 
 export const getDefaultVariant = (): SupportLandingPageVariant => {
   const stage = getStage();
-  if (stage === 'DEV' || stage === 'CODE') {
-    return DEV_AND_CODE_DEFAULT_VARIANT;
+  if (stage === 'CODE') {
+    return CODE_DEFAULT_VARIANT;
   }
   return PROD_DEFAULT_VARIANT;
 };
@@ -113,13 +113,13 @@ export const DEFAULT_REGION_TARGETING: RegionTargeting = {
   targetedCountryCodes: [],
 };
 
-const DEV_AND_CODE_DEFAULT_LANDING_PAGE_TEST: SupportLandingPageTest = {
+const CODE_DEFAULT_LANDING_PAGE_TEST: SupportLandingPageTest = {
   name: 'TEST',
   nickname: 'TEST',
   status: 'Draft',
   locations: [],
   regionTargeting: DEFAULT_REGION_TARGETING,
-  variants: [DEV_AND_CODE_DEFAULT_VARIANT],
+  variants: [CODE_DEFAULT_VARIANT],
   methodologies: [{ name: 'ABTest' }],
 };
 
@@ -135,8 +135,8 @@ const PROD_DEFAULT_LANDING_PAGE: SupportLandingPageTest = {
 
 export const getDefaultTest = (): SupportLandingPageTest => {
   const stage = getStage();
-  if (stage === 'DEV' || stage === 'CODE') {
-    return DEV_AND_CODE_DEFAULT_LANDING_PAGE_TEST;
+  if (stage === 'CODE') {
+    return CODE_DEFAULT_LANDING_PAGE_TEST;
   }
   return PROD_DEFAULT_LANDING_PAGE;
 };
