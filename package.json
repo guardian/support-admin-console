@@ -48,13 +48,7 @@
     "remirror": "3.0.3",
     "uuid": "14.0.1"
   },
-  "overrides": {
-    "prettier": "1.19.1",
-    "prosemirror-model": "1.25.4",
-    "prosemirror-state": "1.4.4",
-    "prosemirror-transform": "1.10.5",
-    "prosemirror-view": "1.41.4"
-  },
+
   "scripts": {
     "build": "webpack --config webpack.prod.js",
     "build-dev": "webpack --config webpack.dev.js",
