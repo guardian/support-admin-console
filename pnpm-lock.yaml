@@ -101,8 +101,8 @@ importers:
         version: 14.0.1
     devDependencies:
       '@guardian/eslint-config':
-        specifier: 15.0.0
-        version: 15.0.0(@typescript-eslint/utils@8.59.3(eslint@9.39.4)(typescript@6.0.3))(eslint@9.39.4)(typescript@6.0.3)
+        specifier: 16.0.0
+        version: 16.0.0(@typescript-eslint/utils@8.59.3(eslint@9.39.4)(typescript@6.0.3))(eslint@9.39.4)(typescript@6.0.3)
       '@types/jest':
         specifier: 30.0.0
         version: 30.0.0
@@ -516,11 +516,11 @@ packages:
   '@floating-ui/utils@0.2.12':
     resolution: {integrity: sha512-HpCo8tmWzLVad5s2d19EhAz5zqrrQ6s69qd6moPMQvkOuSwDT1YgRfWSVuc4ennqrgv3OHppiOGMQ7oC13yIww==}
 
-  '@guardian/eslint-config@15.0.0':
-    resolution: {integrity: sha512-rG217z36CpQvn9R81I1c/YBKqmtgC7rtodtT7EUZMMFy6JlOpH328Kg2CNjo3ewx+5TthUkXRrMgwYgwqGNDnA==}
+  '@guardian/eslint-config@16.0.0':
+    resolution: {integrity: sha512-LTd0evYj9HSj24Z8HBm5Tc4GOlbeY5cRhiyXCSCz5XpdBHjgZSYIXDChqge4hd89iFCWU9ztU1QowD6tqEzM4A==}
     peerDependencies:
       eslint: ^9.39.1
-      eslint-plugin-storybook: ^10.2.13
+      eslint-plugin-storybook: ^10.4.0
     peerDependenciesMeta:
       eslint-plugin-storybook:
         optional: true
@@ -996,6 +996,9 @@ packages:
 
   '@ocavue/svgmoji-cjs@0.1.1':
     resolution: {integrity: sha512-tCP6ggbtgIL4hPM5goVFSjL51jH/BLl/yBLy98wAV9a2L/Sn9iS3abfprPeQw6/nan5lLaz4Vz8ZP37LKh+xfQ==}
+
+  '@package-json/types@0.0.12':
+    resolution: {integrity: sha512-uu43FGU34B5VM9mCNjXCwLaGHYjXdNincqKLaraaCW+7S2+SmiBg1Nv8bPnmschrIfZmfKNY9f3fC376MRrObw==}
 
   '@peculiar/asn1-cms@2.8.0':
     resolution: {integrity: sha512-NgekZOrSJFSBFLFoLfwePguAWAx7z1+f2TEsWFUMyiqqfntZ4+S/S5hzqME3q4pCA0iOsFKdwiQ35dwY24eVqA==}
@@ -2720,12 +2723,12 @@ packages:
       eslint-plugin-import-x:
         optional: true
 
-  eslint-plugin-import-x@4.16.1:
-    resolution: {integrity: sha512-vPZZsiOKaBAIATpFE2uMI4w5IRwdv/FpQ+qZZMR4E+PeOcM4OeoEbqxRMnywdxP19TyB/3h6QBB0EWon7letSQ==}
+  eslint-plugin-import-x@4.16.2:
+    resolution: {integrity: sha512-rM9K8UBHcWKpzQzStn1YRN2T5NvdeIfSVoKu/lKF41znQXHAUcBbYXe5wd6GNjZjTrP7viQ49n1D83x/2gYgIw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
-      '@typescript-eslint/utils': ^8.0.0
-      eslint: ^8.57.0 || ^9.0.0
+      '@typescript-eslint/utils': ^8.56.0
+      eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
       eslint-import-resolver-node: '*'
     peerDependenciesMeta:
       '@typescript-eslint/utils':
@@ -5669,15 +5672,15 @@ snapshots:
 
   '@floating-ui/utils@0.2.12': {}
 
-  '@guardian/eslint-config@15.0.0(@typescript-eslint/utils@8.59.3(eslint@9.39.4)(typescript@6.0.3))(eslint@9.39.4)(typescript@6.0.3)':
+  '@guardian/eslint-config@16.0.0(@typescript-eslint/utils@8.59.3(eslint@9.39.4)(typescript@6.0.3))(eslint@9.39.4)(typescript@6.0.3)':
     dependencies:
       '@eslint-community/eslint-plugin-eslint-comments': 4.7.1(eslint@9.39.4)
       '@eslint/js': 9.39.1
       '@stylistic/eslint-plugin': 5.10.0(eslint@9.39.4)
       eslint: 9.39.4
       eslint-config-prettier: 10.1.8(eslint@9.39.4)
-      eslint-import-resolver-typescript: 4.4.4(eslint-plugin-import-x@4.16.1(@typescript-eslint/utils@8.59.3(eslint@9.39.4)(typescript@6.0.3))(eslint@9.39.4))(eslint@9.39.4)
-      eslint-plugin-import-x: 4.16.1(@typescript-eslint/utils@8.59.3(eslint@9.39.4)(typescript@6.0.3))(eslint@9.39.4)
+      eslint-import-resolver-typescript: 4.4.4(eslint-plugin-import-x@4.16.2(@typescript-eslint/utils@8.59.3(eslint@9.39.4)(typescript@6.0.3))(eslint@9.39.4))(eslint@9.39.4)
+      eslint-plugin-import-x: 4.16.2(@typescript-eslint/utils@8.59.3(eslint@9.39.4)(typescript@6.0.3))(eslint@9.39.4)
       eslint-plugin-jsx-a11y: 6.10.2(eslint@9.39.4)
       eslint-plugin-react: 7.37.5(eslint@9.39.4)
       eslint-plugin-react-hooks: 7.1.1(eslint@9.39.4)
@@ -6315,6 +6318,8 @@ snapshots:
   '@ocavue/svgmoji-cjs@0.1.1':
     dependencies:
       svgmoji: 3.2.0
+
+  '@package-json/types@0.0.12': {}
 
   '@peculiar/asn1-cms@2.8.0':
     dependencies:
@@ -7696,7 +7701,7 @@ snapshots:
   '@typescript-eslint/project-service@8.59.3(typescript@6.0.3)':
     dependencies:
       '@typescript-eslint/tsconfig-utils': 8.59.3(typescript@6.0.3)
-      '@typescript-eslint/types': 8.59.3
+      '@typescript-eslint/types': 8.65.0
       debug: 4.4.3
       typescript: 6.0.3
     transitivePeerDependencies:
@@ -8712,7 +8717,7 @@ snapshots:
     optionalDependencies:
       unrs-resolver: 1.12.2
 
-  eslint-import-resolver-typescript@4.4.4(eslint-plugin-import-x@4.16.1(@typescript-eslint/utils@8.59.3(eslint@9.39.4)(typescript@6.0.3))(eslint@9.39.4))(eslint@9.39.4):
+  eslint-import-resolver-typescript@4.4.4(eslint-plugin-import-x@4.16.2(@typescript-eslint/utils@8.59.3(eslint@9.39.4)(typescript@6.0.3))(eslint@9.39.4))(eslint@9.39.4):
     dependencies:
       debug: 4.4.3
       eslint: 9.39.4
@@ -8723,12 +8728,13 @@ snapshots:
       tinyglobby: 0.2.17
       unrs-resolver: 1.12.2
     optionalDependencies:
-      eslint-plugin-import-x: 4.16.1(@typescript-eslint/utils@8.59.3(eslint@9.39.4)(typescript@6.0.3))(eslint@9.39.4)
+      eslint-plugin-import-x: 4.16.2(@typescript-eslint/utils@8.59.3(eslint@9.39.4)(typescript@6.0.3))(eslint@9.39.4)
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-import-x@4.16.1(@typescript-eslint/utils@8.59.3(eslint@9.39.4)(typescript@6.0.3))(eslint@9.39.4):
+  eslint-plugin-import-x@4.16.2(@typescript-eslint/utils@8.59.3(eslint@9.39.4)(typescript@6.0.3))(eslint@9.39.4):
     dependencies:
+      '@package-json/types': 0.0.12
       '@typescript-eslint/types': 8.65.0
       comment-parser: 1.4.7
       debug: 4.4.3
