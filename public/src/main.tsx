@@ -56,7 +56,7 @@ interface PagePermission {
   permission: 'Read' | 'Write';
 }
 
-type Stage = 'DEV' | 'CODE' | 'PROD';
+type Stage = 'CODE' | 'PROD';
 declare global {
   interface Window {
     guardian: {

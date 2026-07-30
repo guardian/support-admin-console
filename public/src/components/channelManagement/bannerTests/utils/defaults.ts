@@ -12,7 +12,7 @@ export const DEFAULT_SECONDARY_CTA: Cta = {
   baseUrl: 'https://support.theguardian.com/contribute',
 };
 
-const DEV_AND_CODE_DEFAULT_VARIANT: BannerVariant = {
+const CODE_DEFAULT_VARIANT: BannerVariant = {
   name: 'CONTROL',
   template: { designName: 'TEST_NOT_SELECTED' },
   bannerContent: {
@@ -37,8 +37,8 @@ const PROD_DEFAULT_VARIANT: BannerVariant = {
 
 export const getDefaultVariant = (): BannerVariant => {
   const stage = getStage();
-  if (stage === 'DEV' || stage === 'CODE') {
-    return DEV_AND_CODE_DEFAULT_VARIANT;
+  if (stage === 'CODE') {
+    return CODE_DEFAULT_VARIANT;
   }
   return PROD_DEFAULT_VARIANT;
 };
@@ -48,14 +48,14 @@ export const DEFAULT_REGION_TARGETING: RegionTargeting = {
   targetedCountryCodes: [],
 };
 
-const DEV_AND_CODE_DEFAULT_BANNER_TEST: BannerTest = {
+const CODE_DEFAULT_BANNER_TEST: BannerTest = {
   name: 'TEST',
   nickname: 'TEST',
   status: 'Draft',
   userCohort: UserCohort.AllNonSupporters,
   locations: [],
   regionTargeting: DEFAULT_REGION_TARGETING,
-  variants: [DEV_AND_CODE_DEFAULT_VARIANT],
+  variants: [CODE_DEFAULT_VARIANT],
   articlesViewedSettings: undefined,
   contextTargeting: { tagIds: [], sectionIds: [], excludedTagIds: [], excludedSectionIds: [] },
   methodologies: [{ name: 'ABTest' }],
@@ -76,8 +76,8 @@ const PROD_DEFAULT_BANNER: BannerTest = {
 
 export const getDefaultTest = (): BannerTest => {
   const stage = getStage();
-  if (stage === 'DEV' || stage === 'CODE') {
-    return DEV_AND_CODE_DEFAULT_BANNER_TEST;
+  if (stage === 'CODE') {
+    return CODE_DEFAULT_BANNER_TEST;
   }
   return PROD_DEFAULT_BANNER;
 };

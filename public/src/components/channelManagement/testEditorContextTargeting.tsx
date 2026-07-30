@@ -1,4 +1,4 @@
-import { Theme } from '@mui/material';
+import { Alert, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React from 'react';
 import { SectionsEditor } from './epicTests/sectionsEditor';
@@ -32,6 +32,11 @@ const TestEditorContextTargeting: React.FC<TestEditorContextTargetingProps> = ({
 
   return (
     <div className={classes.container}>
+      <Alert severity="info">
+        An article is targeted if it has any of the tags below <strong>or</strong> is in any of the
+        sections below.
+      </Alert>
+
       <TagsEditor
         id="target-tags"
         label="Target tags"
@@ -51,6 +56,11 @@ const TestEditorContextTargeting: React.FC<TestEditorContextTargetingProps> = ({
         }}
         disabled={!editMode}
       />
+
+      <Alert severity="info">
+        An article is excluded if it has any of the tags below <strong>or</strong> is in any of the
+        sections below.
+      </Alert>
 
       <TagsEditor
         id="excluded-tags"

@@ -18,7 +18,7 @@ export const DEFAULT_SECONDARY_CTA: Cta = {
   baseUrl: '',
 };
 
-const DEV_AND_CODE_DEFAULT_VARIANT: EpicVariant = {
+const CODE_DEFAULT_VARIANT: EpicVariant = {
   name: 'CONTROL',
   paragraphs: [
     "… we have a small favour to ask. You've read %%ARTICLE_COUNT%% articles in the last year. And you’re not alone; millions are flocking to the Guardian for quality news every day. We believe everyone deserves access to factual information, and analysis that has authority and integrity. That’s why, unlike many others, we made a choice: to keep Guardian reporting open for all, regardless of where they live or what they can afford to pay.",
@@ -49,8 +49,8 @@ const PROD_DEFAULT_VARIANT: EpicVariant = {
 
 export const getDefaultVariant = (): EpicVariant => {
   const stage = getStage();
-  if (stage === 'DEV' || stage === 'CODE') {
-    return DEV_AND_CODE_DEFAULT_VARIANT;
+  if (stage === 'CODE') {
+    return CODE_DEFAULT_VARIANT;
   }
   return PROD_DEFAULT_VARIANT;
 };
@@ -60,7 +60,7 @@ export const DEFAULT_REGION_TARGETING: RegionTargeting = {
   targetedCountryCodes: [],
 };
 
-const DEV_AND_CODE_DEFAULT_TEST: EpicTest = {
+const CODE_DEFAULT_TEST: EpicTest = {
   name: 'TEST',
   nickname: 'TEST',
   status: 'Draft',
@@ -74,7 +74,7 @@ const DEV_AND_CODE_DEFAULT_TEST: EpicTest = {
   maxViews: DEFAULT_MAX_EPIC_VIEWS,
   userCohort: UserCohort.AllNonSupporters, // matches the default in dotcom
   hasCountryName: false,
-  variants: [DEV_AND_CODE_DEFAULT_VARIANT],
+  variants: [CODE_DEFAULT_VARIANT],
   highPriority: false, // has been removed from form, but might be used in future
   useLocalViewLog: false,
   methodologies: [{ name: 'ABTest' }],
@@ -102,8 +102,8 @@ const PROD_DEFAULT_TEST: EpicTest = {
 
 export const getDefaultTest = (): EpicTest => {
   const stage = getStage();
-  if (stage === 'DEV' || stage === 'CODE') {
-    return DEV_AND_CODE_DEFAULT_TEST;
+  if (stage === 'CODE') {
+    return CODE_DEFAULT_TEST;
   }
   return PROD_DEFAULT_TEST;
 };
