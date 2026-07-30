@@ -20,7 +20,7 @@ importers:
     devDependencies:
       '@guardian/cdk':
         specifier: 62.5.2
-        version: 62.5.2(aws-cdk-lib@2.241.0(constructs@10.6.0))(aws-cdk@2.1108.0)(constructs@10.6.0)
+        version: 62.5.2(aws-cdk-lib@2.241.0(constructs@10.7.1))(aws-cdk@2.1108.0)(constructs@10.7.1)
       '@guardian/eslint-config':
         specifier: 16.0.0
         version: 16.0.0(@typescript-eslint/utils@8.59.3(eslint@9.39.4)(typescript@5.9.3))(eslint@9.39.4)(typescript@5.9.3)
@@ -35,10 +35,10 @@ importers:
         version: 2.1108.0
       aws-cdk-lib:
         specifier: 2.241.0
-        version: 2.241.0(constructs@10.6.0)
+        version: 2.241.0(constructs@10.7.1)
       constructs:
-        specifier: 10.6.0
-        version: 10.6.0
+        specifier: 10.7.1
+        version: 10.7.1
       eslint:
         specifier: 9.39.4
         version: 9.39.4
@@ -1307,8 +1307,8 @@ packages:
   concat-map@0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
 
-  constructs@10.6.0:
-    resolution: {integrity: sha512-TxHOnBO5zMo/G76ykzGF/wMpEHu257TbWiIxP9K0Yv/+t70UzgBQiTqjkAsWOPC6jW91DzJI0+ehQV6xDRNBuQ==}
+  constructs@10.7.1:
+    resolution: {integrity: sha512-ulK25Sg2Nv1jW+A9VeV7fu9GFN9KdVTNWdXMoapNRwqkQzSdToro/Tttk3Ak5BGI80NRA/d2nSzKnoZ27LizLw==}
 
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
@@ -2460,8 +2460,8 @@ packages:
   react-is@18.3.1:
     resolution: {integrity: sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==}
 
-  react-is@19.2.7:
-    resolution: {integrity: sha512-kZFnouyVv7eP/Phmrlo9FK+zcAdriZJvzxXHF1Sl1P377WSGe2G/JxVolhTrB/jeV47lKImhNUsijjHAAbcl/A==}
+  react-is@19.2.8:
+    resolution: {integrity: sha512-s5un28nYxKJw5gvUHyW5PCC28CvBqLu9r3cWgzHT4Vo/5fqqkFcdRYsGcKf50WMPpjjFZS5d76fn3YCo2njKwQ==}
 
   read-package-up@12.0.0:
     resolution: {integrity: sha512-Q5hMVBYur/eQNWDdbF4/Wqqr9Bjvtrw2kjGxxBbKLbx8bVCL8gcArjTy8zDUuLGQicftpMuU0riQNcAsbtOVsw==}
@@ -3727,16 +3727,16 @@ snapshots:
       '@eslint/core': 0.17.0
       levn: 0.4.1
 
-  '@guardian/cdk@62.5.2(aws-cdk-lib@2.241.0(constructs@10.6.0))(aws-cdk@2.1108.0)(constructs@10.6.0)':
+  '@guardian/cdk@62.5.2(aws-cdk-lib@2.241.0(constructs@10.7.1))(aws-cdk@2.1108.0)(constructs@10.7.1)':
     dependencies:
       '@aws-sdk/client-ec2': 3.1045.0
       '@aws-sdk/client-ssm': 3.1045.0
       '@aws-sdk/credential-providers': 3.1045.0
       aws-cdk: 2.1108.0
-      aws-cdk-lib: 2.241.0(constructs@10.6.0)
+      aws-cdk-lib: 2.241.0(constructs@10.7.1)
       chalk: 4.1.2
       codemaker: 1.129.0
-      constructs: 10.6.0
+      constructs: 10.7.1
       git-url-parse: 16.1.0
       js-yaml: 4.1.1
       read-pkg-up: 7.0.1
@@ -4577,12 +4577,12 @@ snapshots:
     dependencies:
       possible-typed-array-names: 1.1.0
 
-  aws-cdk-lib@2.241.0(constructs@10.6.0):
+  aws-cdk-lib@2.241.0(constructs@10.7.1):
     dependencies:
       '@aws-cdk/asset-awscli-v1': 2.2.263
       '@aws-cdk/asset-node-proxy-agent-v6': 2.1.1
       '@aws-cdk/cloud-assembly-schema': 52.2.0
-      constructs: 10.6.0
+      constructs: 10.7.1
 
   aws-cdk@2.1108.0: {}
 
@@ -4743,7 +4743,7 @@ snapshots:
 
   concat-map@0.0.1: {}
 
-  constructs@10.6.0: {}
+  constructs@10.7.1: {}
 
   convert-source-map@2.0.0: {}
 
@@ -6212,7 +6212,7 @@ snapshots:
       '@jest/schemas': 30.4.1
       ansi-styles: 5.2.0
       react-is-18: react-is@18.3.1
-      react-is-19: react-is@19.2.7
+      react-is-19: react-is@19.2.8
 
   prop-types@15.8.1:
     dependencies:
@@ -6230,7 +6230,7 @@ snapshots:
 
   react-is@18.3.1: {}
 
-  react-is@19.2.7: {}
+  react-is@19.2.8: {}
 
   read-package-up@12.0.0:
     dependencies:
