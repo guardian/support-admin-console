@@ -525,9 +525,12 @@ const RichTextEditor: React.FC<RichTextEditorProps<string[]>> = ({
   const getEditorContent = useCallback(() => {
     const view = manager.view;
     const { state } = view;
-    const text = state.doc.textContent;
     const html = view.dom.innerHTML;
-    return { html, text };
+    const textParagraphs: string[] = [];
+    state.doc.forEach((node) => {
+      textParagraphs.push(node.textContent);
+    });
+    return { html, textParagraphs };
   }, [manager]);
 
   const hooks = useMemo(() => {
@@ -537,9 +540,9 @@ const RichTextEditor: React.FC<RichTextEditorProps<string[]>> = ({
 
     const setupHandler = () => {
       const handleSaveShortcut = () => {
-        const { html, text } = getEditorContent();
+        const { html, textParagraphs } = getEditorContent();
         if (!enableHtml) {
-          updateCopy(text.split('\n'));
+          updateCopy(textParagraphs);
         } else {
           updateCopy(paragraphsToArray(html));
         }

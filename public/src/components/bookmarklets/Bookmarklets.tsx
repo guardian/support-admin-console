@@ -62,8 +62,8 @@ const Bookmarklets: React.FC = () => {
       <ol>
         <li>
           Just drag each button below in the grid below to your Chrome bookmarks bar. Then go to{' '}
-          <a href="https://www.theguardian.com">theguardian.com</a> (DEV, CODE, or PROD) and click
-          the one you want.
+          <a href="https://www.theguardian.com">theguardian.com</a> (CODE, or PROD) and click the
+          one you want.
         </li>
         <li>
           If that doesn’t work or you want to import all of them at the same time, download the

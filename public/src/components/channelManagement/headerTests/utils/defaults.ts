@@ -12,7 +12,7 @@ export const DEFAULT_SECONDARY_CTA: Cta = {
   baseUrl: 'https://support.theguardian.com/contribute',
 };
 
-const DEV_AND_CODE_DEFAULT_VARIANT: HeaderVariant = {
+const CODE_DEFAULT_VARIANT: HeaderVariant = {
   name: 'CONTROL',
   content: {
     heading: 'Support the Guardian',
@@ -32,8 +32,8 @@ const PROD_DEFAULT_VARIANT: HeaderVariant = {
 
 export const getDefaultVariant = (): HeaderVariant => {
   const stage = getStage();
-  if (stage === 'DEV' || stage === 'CODE') {
-    return DEV_AND_CODE_DEFAULT_VARIANT;
+  if (stage === 'CODE') {
+    return CODE_DEFAULT_VARIANT;
   }
   return PROD_DEFAULT_VARIANT;
 };
@@ -43,7 +43,7 @@ export const DEFAULT_REGION_TARGETING: RegionTargeting = {
   targetedCountryCodes: [],
 };
 
-const DEV_AND_CODE_DEFAULT_BANNER_TEST: HeaderTest = {
+const CODE_DEFAULT_BANNER_TEST: HeaderTest = {
   name: '',
   nickname: '',
   status: 'Draft',
@@ -67,8 +67,8 @@ const PROD_DEFAULT_BANNER: HeaderTest = {
 
 export const getDefaultTest = (): HeaderTest => {
   const stage = getStage();
-  if (stage === 'DEV' || stage === 'CODE') {
-    return DEV_AND_CODE_DEFAULT_BANNER_TEST;
+  if (stage === 'CODE') {
+    return CODE_DEFAULT_BANNER_TEST;
   }
   return PROD_DEFAULT_BANNER;
 };
