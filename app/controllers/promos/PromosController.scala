@@ -3,7 +3,7 @@ package controllers.promos
 import actions.{AuthAndPermissionActions, PermissionAction}
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.syntax._
-import models.DynamoErrors.{DynamoDuplicateNameError, DynamoNoLockError}
+import models.DynamoErrors.{DynamoDuplicateNameError, DynamoGetError, DynamoNoLockError, DynamoNotFoundError}
 import models.promos.Promo
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, ActionBuilder, AnyContent, ControllerComponents, Result}
@@ -67,6 +67,7 @@ class PromosController(
           ).asJson
           Ok(noNulls(response))
         }
+        .catchSome { case DynamoGetError(_: DynamoNotFoundError) => ZIO.succeed(NotFound(s"Promo $promoCode not found")) }
     }
   }
 

@@ -1,7 +1,7 @@
 package services
 
 import com.typesafe.scalalogging.StrictLogging
-import models.DynamoErrors.{DynamoDuplicateNameError, DynamoError, DynamoGetError, DynamoPutError}
+import models.DynamoErrors.{DynamoDuplicateNameError, DynamoError, DynamoGetError, DynamoNotFoundError, DynamoPutError}
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.dynamodb.model.{
   AttributeValue,
@@ -38,7 +38,7 @@ abstract class DynamoService(stage: String, client: DynamoDbClient) extends Stri
     }.flatMap {
       case Some(item) => ZIO.succeed(item)
       case None       =>
-        ZIO.fail(DynamoGetError(new Exception(s"Item does not exist: ${query.keyConditionExpression()}")))
+        ZIO.fail(DynamoNotFoundError(query.keyConditionExpression()))
     }.mapError(error => DynamoGetError(error))
 
   // Performs a full scan of the table
