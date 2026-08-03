@@ -39,7 +39,7 @@ class DynamoPromos(stage: String, client: DynamoDbClient) extends DynamoService(
       )
       .build()
 
-  def getPromo(promoCode: String): ZIO[Any, DynamoGetError, Promo] =
+  def getPromo(promoCode: String): ZIO[Any, DynamoError, Promo] =
     get(buildQuery(promoCode))
       .map(item => dynamoMapToJson(item).as[Promo])
       .flatMap {
