@@ -65,7 +65,7 @@ jobs:
           cache: 'sbt'
 
       - name: Setup SBT
-        uses: sbt/setup-sbt@v1.5.2
+        uses: sbt/setup-sbt@v1.5.4
 
       - name: riffraff
         run: |
