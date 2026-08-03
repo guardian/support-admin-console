@@ -58,7 +58,7 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
       case other                                => DynamoPutError(other)
     }
 
-  def getBannerDesign(designName: String): ZIO[Any, DynamoGetError, BannerDesign] =
+  def getBannerDesign(designName: String): ZIO[Any, DynamoError, BannerDesign] =
     get(buildQuery(designName))
       .map(item => dynamoMapToJson(item).as[BannerDesign])
       .flatMap {
@@ -210,7 +210,7 @@ class DynamoBannerDesigns(stage: String, client: DynamoDbClient)
   }
 
   // Does not decode the Dynamodb data
-  def getRawDesign(designName: String): ZIO[Any, DynamoGetError, java.util.Map[String, AttributeValue]] =
+  def getRawDesign(designName: String): ZIO[Any, DynamoError, java.util.Map[String, AttributeValue]] =
     get(buildQuery(designName))
 
 }

@@ -99,7 +99,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient)
       case other                                => DynamoPutError(other)
     }
 
-  def getTest[T <: ChannelTest[T]: Decoder](testName: String, channel: Channel): ZIO[Any, DynamoGetError, T] =
+  def getTest[T <: ChannelTest[T]: Decoder](testName: String, channel: Channel): ZIO[Any, DynamoError, T] =
     get(buildQuery(testName, channel))
       .map(item => dynamoMapToJson(item).as[T])
       .flatMap {
