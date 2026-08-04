@@ -297,9 +297,12 @@ export interface BylineWithImage {
 
 export type SignedInStatus = 'SignedIn' | 'SignedOut' | 'All';
 
+export type ContributionsOnlyCountriesTargeting = 'Include' | 'Exclude';
+
 export interface RegionTargeting {
   targetedCountryGroups: Region[];
   targetedCountryCodes?: string[];
+  contributionsOnlyCountriesTargeting?: ContributionsOnlyCountriesTargeting;
 }
 
 export type PermissionLevel = 'Read' | 'Write' | 'None';

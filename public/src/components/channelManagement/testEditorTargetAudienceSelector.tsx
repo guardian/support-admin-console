@@ -4,6 +4,7 @@ import React from 'react';
 import { Region } from '../../utils/models';
 import {
   ConsentStatus,
+  ContributionsOnlyCountriesTargeting,
   DeviceType,
   RegionTargeting,
   SignedInStatus,
@@ -103,6 +104,24 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
             onRegionTargetingUpdate={onRegionTargetingUpdate}
           />
         )}
+        <div style={{ marginTop: 16 }}>
+          <Typography className={classes.heading}>Contributions-only countries</Typography>
+          <TypedRadioGroup<'All' | ContributionsOnlyCountriesTargeting>
+            selectedValue={regionTargeting.contributionsOnlyCountriesTargeting ?? 'All'}
+            onChange={(value) =>
+              onRegionTargetingUpdate({
+                ...regionTargeting,
+                contributionsOnlyCountriesTargeting: value === 'All' ? undefined : value,
+              })
+            }
+            isDisabled={isDisabled}
+            labels={{
+              All: 'All countries (no targeting)',
+              Include: 'Only contributions-only countries',
+              Exclude: 'Exclude contributions-only countries',
+            }}
+          />
+        </div>
       </div>
       <div className={classes.containerSection}>
         {showSupporterStatusSelector && (
