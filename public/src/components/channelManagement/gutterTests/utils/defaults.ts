@@ -49,6 +49,7 @@ export const getDefaultVariant = (): GutterVariant => {
 export const DEFAULT_REGION_TARGETING: RegionTargeting = {
   targetedCountryGroups: [],
   targetedCountryCodes: [],
+  contributionsOnlyCountriesTargeting: 'Exclude',
 };
 
 const CODE_DEFAULT_GUTTER_TEST: GutterTest = {

@@ -40,7 +40,7 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
 }));
 
 interface TestEditorTargetAudienceSelectorProps {
-  regionTargeting: RegionTargeting;
+  regionTargeting?: RegionTargeting;
   onRegionTargetingUpdate: (regionTargeting: RegionTargeting) => void;
   selectedCohort: UserCohort;
   onCohortChange: (updatedCohort: UserCohort) => void;
@@ -85,13 +85,18 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
   mParticleAudienceValidation,
 }: TestEditorTargetAudienceSelectorProps) => {
   const classes = useStyles();
+  const regionTargetingOrDefault: RegionTargeting = regionTargeting ?? {
+    targetedCountryGroups: [],
+    targetedCountryCodes: [],
+    contributionsOnlyCountriesTargeting: 'Exclude',
+  };
 
   return (
     <div className={classes.container}>
       <div className={classes.containerSection}>
         <Typography className={classes.heading}>Region</Typography>
         <TestEditorTargetRegionsSelector
-          regionTargeting={regionTargeting}
+          regionTargeting={regionTargetingOrDefault}
           onRegionTargetingUpdate={onRegionTargetingUpdate}
           supportedRegions={supportedRegions}
           isDisabled={isDisabled}
@@ -100,25 +105,26 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
         {platform !== 'APPLE_NEWS' && (
           <MultiSelectCountryEditor
             disabled={isDisabled}
-            regionTargeting={regionTargeting}
+            regionTargeting={regionTargetingOrDefault}
             onRegionTargetingUpdate={onRegionTargetingUpdate}
           />
         )}
         <div style={{ marginTop: 16 }}>
           <Typography className={classes.heading}>Contributions-only countries</Typography>
-          <TypedRadioGroup<'All' | ContributionsOnlyCountriesTargeting>
-            selectedValue={regionTargeting.contributionsOnlyCountriesTargeting ?? 'All'}
+          <TypedRadioGroup<ContributionsOnlyCountriesTargeting>
+            selectedValue={
+              regionTargetingOrDefault.contributionsOnlyCountriesTargeting ?? 'Exclude'
+            }
             onChange={(value) =>
               onRegionTargetingUpdate({
-                ...regionTargeting,
-                contributionsOnlyCountriesTargeting: value === 'All' ? undefined : value,
+                ...regionTargetingOrDefault,
+                contributionsOnlyCountriesTargeting: value,
               })
             }
             isDisabled={isDisabled}
             labels={{
-              All: 'All countries (no targeting)',
-              Include: 'Only contributions-only countries',
               Exclude: 'Exclude contributions-only countries',
+              Include: 'Only contributions-only countries',
             }}
           />
         </div>
