@@ -6,44 +6,99 @@ import { Theme, ThemeProvider } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { makeStyles, ThemeProvider as StylesThemeProvider } from '@mui/styles';
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import AccessManagement from './components/accessManagement/AccessManagement';
-import AppsMeteringSwitches from './components/appsMeteringSwitches';
-import Bookmarklets from './components/bookmarklets/Bookmarklets';
-import ExclusionsBoard from './components/channelExclusions/ExclusionsBoard';
-import { AuditTestsDashboard } from './components/channelManagement/auditTests/auditTestsDashboard';
-import BannerDeployDashboard from './components/channelManagement/bannerDeploy/bannerDeployDashboard';
-import BannerDesigns from './components/channelManagement/bannerDesigns/';
-import {
-  BannerTestsForm1,
-  BannerTestsForm2,
-} from './components/channelManagement/bannerTests/bannerTestsForm';
-import CampaignsForm from './components/channelManagement/campaigns/CampaignsForm';
-import ChannelSwitches from './components/channelManagement/ChannelSwitches';
-import { CheckoutNudgeTestsForm } from './components/channelManagement/checkoutNudge/checkoutNudge';
-import {
-  AppleNewsEpicTestsForm,
-  ArticleEpicTestsForm,
-  LiveblogEpicTestsForm,
-} from './components/channelManagement/epicTests/testsForm';
-import { GutterTestsForm } from './components/channelManagement/gutterTests/gutterTestsForm';
-import { HeaderTestsForm } from './components/channelManagement/headerTests/headerTestsForm';
-import { OneTimeCheckoutTestsForm } from './components/channelManagement/oneTimeCheckout/oneTimeCheckout';
-import { StudentLandingPageTestsForm } from './components/channelManagement/studentLandingPage/studentLandingPage';
-import { SuperModeDashboard } from './components/channelManagement/superMode/superModeDashboard';
-import { SupportLandingPageTestsForm } from './components/channelManagement/supportLandingPage/supportLandingPage';
-import DefaultPromos from './components/defaultPromos';
 import NavDrawer from './components/drawer';
 import IndexPage from './components/indexPage';
-import { LinkTrackingBuilder } from './components/linkTracking/LinkTrackingBuilder';
-import PromoEditorPage from './components/promoTool/promoEditorPage';
-import PromoTool from './components/promoTool/promoTool';
-import Switchboard from './components/switchboard';
-import QrCodePage from './components/utilities/QrCodePage';
 import { HELP_GUIDE_URL } from './constants';
 import { getTheme } from './utils/theme';
+
+const AccessManagement = lazy(() => import('./components/accessManagement/AccessManagement'));
+const AppsMeteringSwitches = lazy(() => import('./components/appsMeteringSwitches'));
+const Bookmarklets = lazy(() => import('./components/bookmarklets/Bookmarklets'));
+const ExclusionsBoard = lazy(() => import('./components/channelExclusions/ExclusionsBoard'));
+const AuditTestsDashboard = lazy(() =>
+  import('./components/channelManagement/auditTests/auditTestsDashboard').then((m) => ({
+    default: m.AuditTestsDashboard,
+  })),
+);
+const BannerDeployDashboard = lazy(
+  () => import('./components/channelManagement/bannerDeploy/bannerDeployDashboard'),
+);
+const BannerDesigns = lazy(() => import('./components/channelManagement/bannerDesigns/'));
+const BannerTestsForm1 = lazy(() =>
+  import('./components/channelManagement/bannerTests/bannerTestsForm').then((m) => ({
+    default: m.BannerTestsForm1,
+  })),
+);
+const BannerTestsForm2 = lazy(() =>
+  import('./components/channelManagement/bannerTests/bannerTestsForm').then((m) => ({
+    default: m.BannerTestsForm2,
+  })),
+);
+const CampaignsForm = lazy(() => import('./components/channelManagement/campaigns/CampaignsForm'));
+const ChannelSwitches = lazy(() => import('./components/channelManagement/ChannelSwitches'));
+const CheckoutNudgeTestsForm = lazy(() =>
+  import('./components/channelManagement/checkoutNudge/checkoutNudge').then((m) => ({
+    default: m.CheckoutNudgeTestsForm,
+  })),
+);
+const AppleNewsEpicTestsForm = lazy(() =>
+  import('./components/channelManagement/epicTests/testsForm').then((m) => ({
+    default: m.AppleNewsEpicTestsForm,
+  })),
+);
+const ArticleEpicTestsForm = lazy(() =>
+  import('./components/channelManagement/epicTests/testsForm').then((m) => ({
+    default: m.ArticleEpicTestsForm,
+  })),
+);
+const LiveblogEpicTestsForm = lazy(() =>
+  import('./components/channelManagement/epicTests/testsForm').then((m) => ({
+    default: m.LiveblogEpicTestsForm,
+  })),
+);
+const GutterTestsForm = lazy(() =>
+  import('./components/channelManagement/gutterTests/gutterTestsForm').then((m) => ({
+    default: m.GutterTestsForm,
+  })),
+);
+const HeaderTestsForm = lazy(() =>
+  import('./components/channelManagement/headerTests/headerTestsForm').then((m) => ({
+    default: m.HeaderTestsForm,
+  })),
+);
+const OneTimeCheckoutTestsForm = lazy(() =>
+  import('./components/channelManagement/oneTimeCheckout/oneTimeCheckout').then((m) => ({
+    default: m.OneTimeCheckoutTestsForm,
+  })),
+);
+const StudentLandingPageTestsForm = lazy(() =>
+  import('./components/channelManagement/studentLandingPage/studentLandingPage').then((m) => ({
+    default: m.StudentLandingPageTestsForm,
+  })),
+);
+const SuperModeDashboard = lazy(() =>
+  import('./components/channelManagement/superMode/superModeDashboard').then((m) => ({
+    default: m.SuperModeDashboard,
+  })),
+);
+const SupportLandingPageTestsForm = lazy(() =>
+  import('./components/channelManagement/supportLandingPage/supportLandingPage').then((m) => ({
+    default: m.SupportLandingPageTestsForm,
+  })),
+);
+const DefaultPromos = lazy(() => import('./components/defaultPromos'));
+const LinkTrackingBuilder = lazy(() =>
+  import('./components/linkTracking/LinkTrackingBuilder').then((m) => ({
+    default: m.LinkTrackingBuilder,
+  })),
+);
+const PromoEditorPage = lazy(() => import('./components/promoTool/promoEditorPage'));
+const PromoTool = lazy(() => import('./components/promoTool/promoTool'));
+const Switchboard = lazy(() => import('./components/switchboard'));
+const QrCodePage = lazy(() => import('./components/utilities/QrCodePage'));
 
 declare module '@mui/styles' {
   // https://mui.com/material-ui/migration/v5-style-changes/#%E2%9C%85-add-module-augmentation-for-defaulttheme-typescript
@@ -136,7 +191,9 @@ const AppRouter = () => {
           </a>
         </Toolbar>
       </AppBar>
-      <main className={classes.appContent}>{component}</main>
+      <main className={classes.appContent}>
+        <Suspense fallback={<div>Loading…</div>}>{component}</Suspense>
+      </main>
     </div>
   );
 
