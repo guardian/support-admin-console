@@ -28,6 +28,10 @@ export const permissions: Permission[] = [
     name: 'exclusions',
     displayName: 'Channel Exclusions Settings',
   },
+  {
+    name: 'default-choice-cards',
+    displayName: 'Default Choice Cards',
+  },
 ];
 
 export type PermissionName = (typeof permissions)[number]['name'];

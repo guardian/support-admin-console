@@ -52,6 +52,7 @@ GET /lynx                                           controllers.Application.inde
 GET /apps-metering-switches                         controllers.Application.index
 
 GET /default-promos                                 controllers.Application.index
+GET /default-choice-cards                           controllers.Application.index
 
 GET /super-mode                                     controllers.Application.index
 

@@ -274,6 +274,11 @@ export default function NavDrawer(): React.ReactElement {
             <ListItemText primary="Channel Exclusions" />
           </ListItemButton>
         </Link>
+        <Link key="Default Choice Cards" to="/default-choice-cards" className={classes.link}>
+          <ListItemButton className={classes.listItem} key="Default Choice Cards">
+            <ListItemText primary="Default Choice Cards" />
+          </ListItemButton>
+        </Link>
         <Link key="Test Audits" to="/audit-tests" className={classes.link}>
           <ListItemButton className={classes.listItem} key="Test Audits">
             <ListItemText primary="Test Audits" />
