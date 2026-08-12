@@ -20,7 +20,7 @@ importers:
     devDependencies:
       '@guardian/cdk':
         specifier: 62.5.2
-        version: 62.5.2(aws-cdk-lib@2.241.0(constructs@10.7.1))(aws-cdk@2.1108.0)(constructs@10.7.1)
+        version: 62.5.2(aws-cdk-lib@2.263.0(constructs@10.7.1))(aws-cdk@2.1135.1)(constructs@10.7.1)
       '@guardian/eslint-config':
         specifier: 16.0.0
         version: 16.0.0(@typescript-eslint/utils@8.59.3(eslint@9.39.4)(typescript@5.9.3))(eslint@9.39.4)(typescript@5.9.3)
@@ -31,11 +31,11 @@ importers:
         specifier: 26.1.1
         version: 26.1.1
       aws-cdk:
-        specifier: 2.1108.0
-        version: 2.1108.0
+        specifier: 2.1135.1
+        version: 2.1135.1
       aws-cdk-lib:
-        specifier: 2.241.0
-        version: 2.241.0(constructs@10.7.1)
+        specifier: 2.263.0
+        version: 2.263.0(constructs@10.7.1)
       constructs:
         specifier: 10.7.1
         version: 10.7.1
@@ -66,14 +66,14 @@ importers:
 
 packages:
 
-  '@aws-cdk/asset-awscli-v1@2.2.263':
-    resolution: {integrity: sha512-X9JvcJhYcb7PHs8R7m4zMablO5C9PGb/hYfLnxds9h/rKJu6l7MiXE/SabCibuehxPnuO/vk+sVVJiUWrccarQ==}
+  '@aws-cdk/asset-awscli-v1@2.2.282':
+    resolution: {integrity: sha512-7hKMi5tTxDcKGIMIOq14PnY0GBcugW33Uh/2YHDZiEwSxLeFOCYBwhR+BFXONb/EJeVI3RETFgailNZbkcKF6g==}
 
-  '@aws-cdk/asset-node-proxy-agent-v6@2.1.1':
-    resolution: {integrity: sha512-We4bmHaowOPHr+IQR4/FyTGjRfjgBj4ICMjtqmJeBDWad3Q/6St12NT07leNtyuukv2qMhtSZJQorD8KpKTwRA==}
+  '@aws-cdk/asset-node-proxy-agent-v6@2.1.2':
+    resolution: {integrity: sha512-pDiuqH+qY3zM9lhhLjbKJ1tnKOHzQ2V4Wr/3qsxyKeKAkuPMI/BVGvZG1PbrikUw949cGVTfVEt4ETKKYnrj0Q==}
 
-  '@aws-cdk/cloud-assembly-schema@52.2.0':
-    resolution: {integrity: sha512-ourZjixQ/UfsZc7gdk3vt1eHBODMUjQTYYYCY3ZX8fiXyHtWNDAYZPrXUK96jpCC2fLP+tfHTJrBjZ563pmcEw==}
+  '@aws-cdk/cloud-assembly-schema@54.17.0':
+    resolution: {integrity: sha512-wV1GmMM5AvDkiJIenb9aJcBiGTa5KwX/C/mIjFZCsWsB5b1rEMLnwMageqrOpL2mWKicpxqS8ofF/Yte4Lm3Dg==}
     engines: {node: '>= 18.0.0'}
     bundledDependencies:
       - jsonschema
@@ -1139,12 +1139,13 @@ packages:
     resolution: {integrity: sha512-wvUjBtSGN7+7SjNpq/9M2Tg350UZD3q62IFZLbRAR1bSMlCo1ZaeW+BJ+D090e4hIIZLBcTDWe4Mh4jvUDajzQ==}
     engines: {node: '>= 0.4'}
 
-  aws-cdk-lib@2.241.0:
-    resolution: {integrity: sha512-v0uDNDqJt6oJ/ZHRp+KIn4xzhF518uKpZxY8fi12bO+dt505t6fCqCaqXuadznokrAyWwIae6q3ByWJfmZzQjA==}
-    engines: {node: '>= 18.0.0'}
+  aws-cdk-lib@2.263.0:
+    resolution: {integrity: sha512-cXC9wnOr+LknMee9x0kYwofgVs8aN8eBKsbzcE90sDUtpLTgWG2Bd+9koqxBKPeIU8kig/GGBFwJ69Wr+hLKDg==}
+    engines: {node: '>= 20.0.0'}
     peerDependencies:
       constructs: ^10.5.0
     bundledDependencies:
+      - '@aws/cloudformation-validate'
       - '@balena/dockerignore'
       - '@aws-cdk/cloud-assembly-api'
       - case
@@ -1154,12 +1155,11 @@ packages:
       - minimatch
       - punycode
       - semver
-      - table
       - yaml
       - mime-types
 
-  aws-cdk@2.1108.0:
-    resolution: {integrity: sha512-FHnyhnYZoRc2W0C9mNzhNn6fO2vH4xNINsKfJaA7AFDuymgQ39JhEnrM4AHaoikIBqXYeNLWElvvkusY9l3ulw==}
+  aws-cdk@2.1135.1:
+    resolution: {integrity: sha512-g1jcMfWlyYtGamFJ/kPBOCuchl3NfwTF2UwOLTIDN0nJbGm84EAO+c8DlYnaemM8UmKFkdoq4BGdmiNL5nHWwA==}
     engines: {node: '>= 18.0.0'}
     hasBin: true
 
@@ -2930,11 +2930,11 @@ packages:
 
 snapshots:
 
-  '@aws-cdk/asset-awscli-v1@2.2.263': {}
+  '@aws-cdk/asset-awscli-v1@2.2.282': {}
 
-  '@aws-cdk/asset-node-proxy-agent-v6@2.1.1': {}
+  '@aws-cdk/asset-node-proxy-agent-v6@2.1.2': {}
 
-  '@aws-cdk/cloud-assembly-schema@52.2.0': {}
+  '@aws-cdk/cloud-assembly-schema@54.17.0': {}
 
   '@aws-crypto/crc32@5.2.0':
     dependencies:
@@ -3727,13 +3727,13 @@ snapshots:
       '@eslint/core': 0.17.0
       levn: 0.4.1
 
-  '@guardian/cdk@62.5.2(aws-cdk-lib@2.241.0(constructs@10.7.1))(aws-cdk@2.1108.0)(constructs@10.7.1)':
+  '@guardian/cdk@62.5.2(aws-cdk-lib@2.263.0(constructs@10.7.1))(aws-cdk@2.1135.1)(constructs@10.7.1)':
     dependencies:
       '@aws-sdk/client-ec2': 3.1045.0
       '@aws-sdk/client-ssm': 3.1045.0
       '@aws-sdk/credential-providers': 3.1045.0
-      aws-cdk: 2.1108.0
-      aws-cdk-lib: 2.241.0(constructs@10.7.1)
+      aws-cdk: 2.1135.1
+      aws-cdk-lib: 2.263.0(constructs@10.7.1)
       chalk: 4.1.2
       codemaker: 1.129.0
       constructs: 10.7.1
@@ -4577,14 +4577,14 @@ snapshots:
     dependencies:
       possible-typed-array-names: 1.1.0
 
-  aws-cdk-lib@2.241.0(constructs@10.7.1):
+  aws-cdk-lib@2.263.0(constructs@10.7.1):
     dependencies:
-      '@aws-cdk/asset-awscli-v1': 2.2.263
-      '@aws-cdk/asset-node-proxy-agent-v6': 2.1.1
-      '@aws-cdk/cloud-assembly-schema': 52.2.0
+      '@aws-cdk/asset-awscli-v1': 2.2.282
+      '@aws-cdk/asset-node-proxy-agent-v6': 2.1.2
+      '@aws-cdk/cloud-assembly-schema': 54.17.0
       constructs: 10.7.1
 
-  aws-cdk@2.1108.0: {}
+  aws-cdk@2.1135.1: {}
 
   axe-core@4.12.1: {}
 
