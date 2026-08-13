@@ -39,9 +39,8 @@ import {
   PRICE_PRODUCT_WEEKLY,
 } from '../helpers/validation';
 import './remirror-styles.css';
-import { useRTEStyles } from './richTextEditorStyles';
-import { Button } from '@mui/material';
 import { MParticleTemplateMenu } from './mParticleTemplateMenu';
+import { useRTEStyles } from './richTextEditorStyles';
 
 // Typescript
 interface RichTextEditorProps<T> {
@@ -398,9 +397,7 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
                 </button>
               )}
               {enableMParticleTemplates && (
-                <MParticleTemplateMenu
-                insertTemplate = {insertTemplate}
-                />
+                <MParticleTemplateMenu insertTemplate={insertTemplate} />
               )}
               {enableProductWeeklyTemplate && (
                 <button
