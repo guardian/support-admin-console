@@ -79,6 +79,7 @@ interface ChoiceCardEditorProps {
   isDisabled: boolean;
   index: number;
   formMethods: UseFormReturn<ChoiceCardsSettings & { hasOneDefault: boolean }>;
+  hideDestination?: boolean;
 }
 export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
   choiceCard,
@@ -86,6 +87,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
   isDisabled,
   index,
   formMethods,
+  hideDestination = false,
 }) => {
   const classes = useStyles();
   const { control, getValues } = formMethods;
@@ -314,13 +316,15 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
           </Button>
         </div>
 
-        <ChoiceCardDestinationFields
-          index={index}
-          isDisabled={isDisabled}
-          subHeadingClassName={classes.subHeading}
-          formMethods={formMethods}
-          onDestinationSectionChange={handleCardChange}
-        />
+        {!hideDestination && (
+          <ChoiceCardDestinationFields
+            index={index}
+            isDisabled={isDisabled}
+            subHeadingClassName={classes.subHeading}
+            formMethods={formMethods}
+            onDestinationSectionChange={handleCardChange}
+          />
+        )}
       </AccordionDetails>
     </Accordion>
   );

@@ -225,6 +225,7 @@ const ProfileEditor: React.FC<ProfileEditorProps> = ({
               isDisabled={disabled}
               index={idx}
               formMethods={formMethods}
+              hideDestination={true}
             />
             <Button
               className={classes.deleteButton}
