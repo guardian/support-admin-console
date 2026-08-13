@@ -40,6 +40,8 @@ import {
 } from '../helpers/validation';
 import './remirror-styles.css';
 import { useRTEStyles } from './richTextEditorStyles';
+import { Button } from '@mui/material';
+import { MParticleTemplateMenu } from './mParticleTemplateMenu';
 
 // Typescript
 interface RichTextEditorProps<T> {
@@ -74,6 +76,7 @@ interface RteMenuConstraints {
   enableCampaignDeadlineTemplate?: boolean;
   enableLink?: boolean;
   enableStrikethrough?: boolean;
+  enableMParticleTemplates?: boolean;
 }
 
 /**
@@ -296,6 +299,7 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
     enableDateTemplate,
     enableDayTemplate,
     enableCampaignDeadlineTemplate,
+    enableMParticleTemplates,
   } = rteMenuConstraints;
 
   const clickBold = () => {
@@ -392,6 +396,11 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
                 <button className="remirror-button" onClick={() => insertTemplate(DATE)}>
                   Date
                 </button>
+              )}
+              {enableMParticleTemplates && (
+                <MParticleTemplateMenu
+                insertTemplate = {insertTemplate}
+                />
               )}
               {enableProductWeeklyTemplate && (
                 <button
