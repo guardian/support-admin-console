@@ -27,7 +27,7 @@ import {
 } from '../utils/requests';
 import { ChoiceCardEditor } from './channelManagement/choiceCards/ChoiceCardEditor';
 
-const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
+const useStyles = makeStyles(({ breakpoints, spacing, palette }: Theme) => ({
   wrapper: {
     display: 'flex',
     justifyContent: 'center',
@@ -50,9 +50,23 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
     justifyContent: 'flex-end',
   },
   section: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: spacing(2),
+    display: 'grid',
+    gridTemplateColumns: 'minmax(160px, 0.25fr) minmax(0, 1fr)',
+    gap: spacing(3),
+    alignItems: 'start',
+    [breakpoints.down('md')]: {
+      gridTemplateColumns: '1fr',
+    },
+  },
+  sectionHeading: {
+    position: 'sticky',
+    top: 0,
+    padding: spacing(2, 0),
+    backgroundColor: palette.grey[100],
+    zIndex: 1,
+    [breakpoints.down('md')]: {
+      padding: spacing(1, 0),
+    },
   },
   sectionGrid: {
     display: 'grid',
@@ -289,7 +303,7 @@ const Section: React.FC<SectionProps> = ({
 
   return (
     <section className={classes.section}>
-      <div>
+      <div className={classes.sectionHeading}>
         <Typography variant="h4">
           {channel === 'epic' ? 'Epic defaults' : 'Banner defaults'}
         </Typography>
