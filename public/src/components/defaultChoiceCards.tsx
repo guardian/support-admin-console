@@ -127,6 +127,7 @@ const buildLabel = (profile: ChoiceCardsDefaultsProfile): string =>
 
 interface ProfileEditorProps {
   label: string;
+  idPrefix: string;
   settings: ChoiceCardsSettings;
   disabled: boolean;
   onChange: (settings: ChoiceCardsSettings) => void;
@@ -135,6 +136,7 @@ interface ProfileEditorProps {
 
 const ProfileEditor: React.FC<ProfileEditorProps> = ({
   label,
+  idPrefix,
   settings,
   disabled,
   onChange,
@@ -159,13 +161,6 @@ const ProfileEditor: React.FC<ProfileEditorProps> = ({
     control: formMethods.control,
     name: 'choiceCards',
   });
-
-  React.useEffect(() => {
-    formMethods.reset({
-      choiceCards: settings.choiceCards,
-      hasOneDefault: countDefaultCards(settings.choiceCards) === 1,
-    });
-  }, [formMethods, settings]);
 
   const defaultCardCount = countDefaultCards(watchedChoiceCards);
 
@@ -198,9 +193,9 @@ const ProfileEditor: React.FC<ProfileEditorProps> = ({
     onValidationChange,
   ]);
 
-  const handleFieldChange = formMethods.handleSubmit((updatedSettings) => {
-    onChange(sanitizeChoiceCardsSettings(updatedSettings));
-  });
+  const handleFieldChange = () => {
+    onChange(sanitizeChoiceCardsSettings(formMethods.getValues()));
+  };
 
   return (
     <Card className={classes.profileCard} variant="outlined">
@@ -220,18 +215,19 @@ const ProfileEditor: React.FC<ProfileEditorProps> = ({
               choiceCard={choiceCard}
               onChange={(updatedCard) => {
                 formMethods.setValue(`choiceCards.${idx}`, updatedCard, { shouldValidate: true });
-                void handleFieldChange();
+                handleFieldChange();
               }}
               isDisabled={disabled}
               index={idx}
               formMethods={formMethods}
               hideDestination={true}
+              idPrefix={`${idPrefix}-`}
             />
             <Button
               className={classes.deleteButton}
               onClick={() => {
                 remove(idx);
-                void handleFieldChange();
+                handleFieldChange();
               }}
               disabled={disabled}
               variant="outlined"
@@ -251,7 +247,7 @@ const ProfileEditor: React.FC<ProfileEditorProps> = ({
               benefits: [],
               isDefault: false,
             });
-            void handleFieldChange();
+            handleFieldChange();
           }}
           disabled={disabled || fields.length >= 3}
           variant="contained"
@@ -308,6 +304,7 @@ const Section: React.FC<SectionProps> = ({
           <ProfileEditor
             key={`${channel}-${profile}`}
             label={buildLabel(profile)}
+            idPrefix={`${channel}-${profile}`}
             settings={channelSettings[profile]}
             disabled={disabled}
             onChange={(settings) => onChange(channel, profile, settings)}
