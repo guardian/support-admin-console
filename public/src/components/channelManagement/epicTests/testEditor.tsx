@@ -35,6 +35,7 @@ import { ValidatedTestEditor, ValidatedTestEditorProps } from '../validatedTestE
 import MaxViewsEditor from './maxViewsEditor';
 import { EpicTestPreviewButton } from './testPreview';
 import { getDefaultVariant } from './utils/defaults';
+import { findMParticleTemplates } from './utils/findMParticleTemplates';
 import VariantEditor from './variantEditor';
 import VariantPreview from './variantPreview';
 
@@ -89,6 +90,7 @@ export const getEpicTestEditor = (
           ...updatedTest,
           // To save dotcom from having to work this out
           hasCountryName: copyHasTemplate(updatedTest, COUNTRY_NAME_TEMPLATE),
+          mParticleTemplates: findMParticleTemplates(updatedTest),
           articlesViewedSettings: userExplicitlyDisabledArticleCount
             ? undefined
             : getArticlesViewedSettings(updatedTest),

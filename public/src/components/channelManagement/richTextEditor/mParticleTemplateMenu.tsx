@@ -30,7 +30,7 @@ export const MParticleTemplateMenu: React.FC<Props> = ({ insertTemplate }: Props
         onClick={handleButtonClick}
         //endIcon={<KeyboardArrowDownIcon />}
       >
-        Options
+        mParticle
       </Button>
       <Menu id="demo-customized-menu" anchorEl={anchorEl} open={open} onClose={handleClose}>
         <MenuItem onClick={() => handleTemplateClick(MPARTICLE_FIRST_NAME_TEMPLATE)} disableRipple>

@@ -38,9 +38,9 @@ import {
   PRICE_GUARDIANWEEKLY_MONTHLY,
   PRICE_PRODUCT_WEEKLY,
 } from '../helpers/validation';
-import './remirror-styles.css';
 import { MParticleTemplateMenu } from './mParticleTemplateMenu';
 import { useRTEStyles } from './richTextEditorStyles';
+import './remirror-styles.css';
 
 // Typescript
 interface RichTextEditorProps<T> {
@@ -229,6 +229,8 @@ const FloatingLinkToolbar = () => {
     useFloatingLinkState();
   const active = useActive();
   const activeLink = active.link();
+  const chain = useChainedCommands();
+  const insertTemplate = (template: string): void => chain.insertText(template).focus().run();
   return (
     <>
       <FloatingToolbar placement="top">
@@ -247,6 +249,7 @@ const FloatingLinkToolbar = () => {
               Add link
             </button>
           )}
+          <MParticleTemplateMenu insertTemplate={insertTemplate} />
         </CommandButtonGroup>
       </FloatingToolbar>
 

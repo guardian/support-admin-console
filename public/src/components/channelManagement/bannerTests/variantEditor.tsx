@@ -307,6 +307,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                     enableArticleCountTemplate: true,
                     enableDateTemplate: true,
                     enableDayTemplate: true,
+                    enablePriceTemplates: true,
                     enableLink: true,
                   }}
                 />
@@ -348,6 +349,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                     enableArticleCountTemplate: true,
                     enableDateTemplate: true,
                     enableDayTemplate: true,
+                    enableMParticleTemplates: true,
                     enableLink: true,
                   }}
                 />

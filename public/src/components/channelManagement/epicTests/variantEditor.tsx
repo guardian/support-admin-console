@@ -340,6 +340,7 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                 enableArticleCountTemplate,
                 enableDateTemplate,
                 enableDayTemplate,
+                enableMParticleTemplates: true,
               }}
             />
           );
@@ -382,6 +383,7 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                   enableArticleCountTemplate,
                   enableDateTemplate,
                   enableDayTemplate,
+                  enableMParticleTemplates: true,
                 }}
               />
             );
