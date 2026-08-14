@@ -15,6 +15,9 @@ Uses [play-googleauth](https://github.com/guardian/play-googleauth) for authoris
 - /campaigns - for managing groups of channel tests in a "campaign"
 
 ### Running locally
+
+The required Node and Java versions are specified in the `.tool-versions` file in the root of the project. We recommend [Mise](https://mise.jdx.dev/getting-started.html) for managing Java versions. With Mise your [shell can be configured](https://mise.jdx.dev/getting-started.html#activate-mise) to automatically switch versions when in a directory with a `.tool-versions` file.
+
 Fetch DEV config by getting `membership` janus credentials and running:
 `./fetch-config.sh`
 
