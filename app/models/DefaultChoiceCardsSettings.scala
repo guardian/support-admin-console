@@ -6,7 +6,8 @@ import io.circe.generic.extras.semiauto.{deriveConfiguredDecoder, deriveConfigur
 
 case class DefaultChoiceCardsSettings(
     epic: Map[String, ChoiceCardsSettings] = Map.empty,
-    banner: Map[String, ChoiceCardsSettings] = Map.empty
+  banner: Map[String, ChoiceCardsSettings] = Map.empty,
+  lastEditedBy: String = ""
 )
 
 object DefaultChoiceCardsSettings {
@@ -14,7 +15,8 @@ object DefaultChoiceCardsSettings {
 
   val stub: DefaultChoiceCardsSettings = DefaultChoiceCardsSettings(
     epic = Map("Default" -> emptyChoiceCardsSettings),
-    banner = Map("Default" -> emptyChoiceCardsSettings)
+    banner = Map("Default" -> emptyChoiceCardsSettings),
+    lastEditedBy = ""
   )
 
   implicit val customConfig: Configuration = Configuration.default.withDefaults

@@ -42,9 +42,7 @@ export const Section: React.FC<SectionProps> = ({
           {channel === 'epic' ? 'Epic defaults' : 'Banner defaults'}
         </Typography>
         <Typography variant="body2" className={classes.helperText}>
-          {channel === 'epic'
-            ? 'Manage default choice cards for epic variants that do not define custom choice cards.'
-            : 'Manage default choice cards for banner variants that do not define custom choice cards.'}
+          {`Manage default choice cards for ${channel} variants that do not define custom choice cards.`}
         </Typography>
       </div>
       <div className={classes.sectionGrid}>

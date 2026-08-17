@@ -1,20 +1,20 @@
 import { Alert, Button, CircularProgress, Typography } from '@mui/material';
 import React from 'react';
-import withS3Data, { DataFromServer, InnerProps } from '../hocs/withS3Data';
-import { ChoiceCardsSettings } from '../models/choiceCards';
+import withS3Data, { DataFromServer, InnerProps } from '../../hocs/withS3Data';
+import { ChoiceCardsSettings } from '../../models/choiceCards';
 import {
   ChoiceCardsDefaultsProfile,
   DefaultChoiceCardsSettings,
-} from '../models/defaultChoiceCards';
-import { hasPermission } from '../utils/permissions';
+} from '../../models/defaultChoiceCards';
+import { hasPermission } from '../../utils/permissions';
 import {
   fetchFrontendSettings,
   FrontendSettingsType,
   saveFrontendSettings,
-} from '../utils/requests';
-import { Section } from './defaultChoiceCards/Section';
-import { useStyles } from './defaultChoiceCards/styles';
-import { ChannelKey, normalizeSettings } from './defaultChoiceCards/utils';
+} from '../../utils/requests';
+import { Section } from './Section';
+import { useStyles } from './styles';
+import { ChannelKey, normalizeSettings } from './utils';
 
 const canEdit = hasPermission(FrontendSettingsType.DefaultChoiceCards, 'Write');
 
@@ -63,6 +63,9 @@ const DefaultChoiceCards: React.FC<InnerProps<DefaultChoiceCardsSettings>> = ({
             Configure global default choice cards. Variant-level custom settings still have higher
             priority.
           </Typography>
+          {data.lastEditedBy && (
+            <Typography variant="body2">Last edited by {data.lastEditedBy}</Typography>
+          )}
           {!canEdit && (
             <Alert severity="info">
               You have read-only access. Contact an administrator to request write permission for

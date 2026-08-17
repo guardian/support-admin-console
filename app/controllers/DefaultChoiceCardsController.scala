@@ -48,6 +48,11 @@ class DefaultChoiceCardsController(
     )
     with Circe {
 
+  override protected def addEditorMetadata(
+      data: DefaultChoiceCardsSettings,
+      email: String
+  ): DefaultChoiceCardsSettings = data.copy(lastEditedBy = email)
+
   override protected def recoverGetFromS3Error
       : PartialFunction[Throwable, ZIO[Any, Throwable, VersionedS3Data[DefaultChoiceCardsSettings]]] = {
     case S3GetObjectError(_: NoSuchKeyException) =>

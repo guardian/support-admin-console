@@ -81,9 +81,11 @@ export const ProfileEditor: React.FC<ProfileEditorProps> = ({
       <CardContent className={classes.profileContent}>
         <div>
           <Typography variant="h6">{label}</Typography>
-          <Typography variant="body2" className={classes.helperText}>
-            Leave this profile empty to continue using fallback settings for this region.
-          </Typography>
+          {label !== 'Default fallback' && (
+            <Typography variant="body2" className={classes.helperText}>
+              Leave this profile empty to continue using fallback settings for this region.
+            </Typography>
+          )}
         </div>
         {formMethods.formState.errors.hasOneDefault && (
           <Alert severity="error">{formMethods.formState.errors.hasOneDefault.message}</Alert>

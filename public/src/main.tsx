@@ -90,7 +90,7 @@ const SupportLandingPageTestsForm = lazy(() =>
   })),
 );
 const DefaultPromos = lazy(() => import('./components/defaultPromos'));
-const DefaultChoiceCards = lazy(() => import('./components/defaultChoiceCards'));
+const DefaultChoiceCards = lazy(() => import('./components/defaultChoiceCards/defaultChoiceCards'));
 const LinkTrackingBuilder = lazy(() =>
   import('./components/linkTracking/LinkTrackingBuilder').then((m) => ({
     default: m.LinkTrackingBuilder,

@@ -51,6 +51,8 @@ abstract class S3ObjectController[T: Decoder: Encoder](
       }
     }
 
+  protected def addEditorMetadata(data: T, email: String): T = data
+
   /** Returns current version of the object in s3 as json, with the version id. The s3 data is validated against the
     * model.
     */
@@ -73,7 +75,12 @@ abstract class S3ObjectController[T: Decoder: Encoder](
   def set = authActions.write.async(circe.json[VersionedS3Data[T]]) { request =>
     run {
       S3Json
-        .updateAsJson(request.body)(s3Client)
+        .updateAsJson(
+          VersionedS3Data(
+            addEditorMetadata(request.body.value, request.user.email),
+            request.body.version
+          )
+        )(s3Client)
         .apply(dataObjectSettings)
         .map(_ => Ok("updated"))
     }

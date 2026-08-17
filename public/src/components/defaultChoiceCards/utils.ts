@@ -39,6 +39,7 @@ export const normalizeSettings = (
 ): DefaultChoiceCardsSettings => ({
   epic: buildDefaultData(data.epic),
   banner: buildDefaultData(data.banner),
+  lastEditedBy: data.lastEditedBy ?? '',
 });
 
 export const buildLabel = (profile: ChoiceCardsDefaultsProfile): string =>
