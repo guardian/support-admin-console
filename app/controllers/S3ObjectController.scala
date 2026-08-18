@@ -7,7 +7,7 @@ import io.circe.syntax._
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, ControllerComponents, Result}
 import services.S3Client.S3ObjectSettings
-import services.{S3Json, VersionedS3Data}
+import services.{S3, S3Json, VersionedS3Data}
 import utils.Circe.noNulls
 import zio.{Unsafe, ZIO}
 import com.typesafe.scalalogging.LazyLogging
@@ -52,6 +52,7 @@ abstract class S3ObjectController[T: Decoder: Encoder](
     }
 
   protected def addEditorMetadata(data: T, email: String): T = data
+  protected def settingsForSave(email: String): S3ObjectSettings = dataObjectSettings
 
   /** Returns current version of the object in s3 as json, with the version id. The s3 data is validated against the
     * model.
@@ -69,6 +70,14 @@ abstract class S3ObjectController[T: Decoder: Encoder](
     }
   }
 
+  def getVersions = authActions.read.async { _ =>
+    run {
+      S3
+        .listVersions(dataObjectSettings)
+        .map(versions => Ok(noNulls(versions.asJson)))
+    }
+  }
+
   /** Updates the object in s3 if the supplied version matches the current version in s3. The POSTed json is validated
     * against the model.
     */
@@ -81,7 +90,7 @@ abstract class S3ObjectController[T: Decoder: Encoder](
             request.body.version
           )
         )(s3Client)
-        .apply(dataObjectSettings)
+        .apply(settingsForSave(request.user.email))
         .map(_ => Ok("updated"))
     }
   }

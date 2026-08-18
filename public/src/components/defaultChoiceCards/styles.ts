@@ -23,6 +23,21 @@ export const useStyles = makeStyles(({ breakpoints, spacing, palette }: Theme) =
     display: 'flex',
     justifyContent: 'flex-end',
   },
+  versionHistory: {
+    width: '100%',
+    maxWidth: 1100,
+    margin: '0 auto',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: spacing(2),
+  },
+  versionHistoryContent: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing(2),
+  },
   section: {
     display: 'grid',
     gridTemplateColumns: 'minmax(160px, 0.25fr) minmax(0, 1fr)',

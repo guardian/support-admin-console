@@ -8,6 +8,7 @@ import play.api.mvc.{ActionBuilder, AnyContent, ControllerComponents}
 import services.S3Client.S3GetObjectError
 import services.UserPermissions.Permission
 import services.{DynamoPermissionsCache, VersionedS3Data}
+import services.S3Client.S3ObjectSettings
 import software.amazon.awssdk.services.s3.model.NoSuchKeyException
 import software.amazon.awssdk.services.s3.model.S3Exception
 import zio.ZIO
@@ -52,6 +53,9 @@ class DefaultChoiceCardsController(
       data: DefaultChoiceCardsSettings,
       email: String
   ): DefaultChoiceCardsSettings = data.copy(lastEditedBy = email)
+
+  override protected def settingsForSave(email: String): S3ObjectSettings =
+    super.settingsForSave(email).copy(metadata = Map("last-edited-by" -> email))
 
   override protected def recoverGetFromS3Error
       : PartialFunction[Throwable, ZIO[Any, Throwable, VersionedS3Data[DefaultChoiceCardsSettings]]] = {
