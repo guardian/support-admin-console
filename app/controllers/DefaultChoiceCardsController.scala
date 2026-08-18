@@ -8,7 +8,6 @@ import play.api.mvc.{ActionBuilder, AnyContent, ControllerComponents}
 import services.UserPermissions.Permission
 import services.DynamoPermissionsCache
 import services.S3Client.S3ObjectSettings
-
 import scala.concurrent.ExecutionContext
 
 object DefaultChoiceCardsController {
