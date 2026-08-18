@@ -158,6 +158,13 @@ export function fetchFrontendSettingVersions<T = unknown>(
   return fetchSettings<T>(`/frontend/${settingsType}/versions`);
 }
 
+export function fetchFrontendSettingVersion<T = unknown>(
+  settingsType: FrontendSettingsType,
+  versionId: string,
+): Promise<T> {
+  return fetchSettings<T>(`/frontend/${settingsType}/versions/${encodeURIComponent(versionId)}`);
+}
+
 export interface BannerDesignsResponse {
   bannerDesigns: BannerDesign[];
   userEmail: string;

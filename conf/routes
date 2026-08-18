@@ -351,3 +351,4 @@ POST  /frontend/one-time-checkout-tests/test/status/:rawStatus     controllers.O
 GET   /frontend/default-choice-cards                                controllers.DefaultChoiceCardsController.get
 POST  /frontend/default-choice-cards/update                         controllers.DefaultChoiceCardsController.set
 GET   /frontend/default-choice-cards/versions                        controllers.DefaultChoiceCardsController.getVersions
+GET   /frontend/default-choice-cards/versions/:versionId             controllers.DefaultChoiceCardsController.getVersion(versionId: String)

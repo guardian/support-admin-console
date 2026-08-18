@@ -68,6 +68,28 @@ object S3Client {
 
 object S3 extends S3Client with StrictLogging {
 
+  def getVersion(versionId: String): S3Action[RawVersionedS3Data] = { objectSettings =>
+    val request = GetObjectRequest.builder
+      .bucket(objectSettings.bucket)
+      .key(objectSettings.key)
+      .versionId(versionId)
+      .build
+
+    ZIO.scoped {
+      ZIO
+        .fromAutoCloseable(attemptBlocking(s3Client.getObject(request)))
+        .flatMap { s3Object =>
+          ZIO.attempt {
+            VersionedS3Data(
+              value = scala.io.Source.fromInputStream(s3Object).mkString,
+              version = s3Object.response().versionId(),
+            )
+          }
+        }
+        .mapError(S3GetObjectError)
+    }
+  }
+
   def listVersions: S3Action[List[S3VersionHistoryItem]] = { objectSettings =>
     attemptBlocking {
       val request = ListObjectVersionsRequest.builder

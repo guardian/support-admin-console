@@ -3,6 +3,7 @@ package controllers
 import actions.AuthAndPermissionActions
 import io.circe.{Decoder, Encoder}
 import io.circe.generic.auto._
+import io.circe.parser.decode
 import io.circe.syntax._
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, ControllerComponents, Result}
@@ -75,6 +76,19 @@ abstract class S3ObjectController[T: Decoder: Encoder](
       S3
         .listVersions(dataObjectSettings)
         .map(versions => Ok(noNulls(versions.asJson)))
+    }
+  }
+
+  def getVersion(versionId: String) = authActions.read.async { request =>
+    run {
+      S3
+        .getVersion(versionId)(dataObjectSettings)
+        .flatMap { raw =>
+          ZIO
+            .fromEither(decode[T](raw.value))
+            .map(decoded => VersionedS3DataWithEmail(decoded, raw.version, request.user.email))
+        }
+        .map(s3Data => Ok(noNulls(s3Data.asJson)))
     }
   }
 
