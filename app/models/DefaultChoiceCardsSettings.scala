@@ -5,7 +5,7 @@ import io.circe.generic.extras.Configuration
 import io.circe.generic.extras.semiauto.{deriveConfiguredDecoder, deriveConfiguredEncoder}
 
 case class DefaultChoiceCardsSettings(
-  epic: Map[String, ChoiceCardsSettings] = Map.empty,
+    epic: Map[String, ChoiceCardsSettings] = Map.empty,
   banner: Map[String, ChoiceCardsSettings] = Map.empty,
   lastEditedBy: String = ""
 )
