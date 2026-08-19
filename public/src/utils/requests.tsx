@@ -48,9 +48,8 @@ function makeFetch(path: string, options?: RequestInit): Promise<Response> {
   );
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- API response type
-function fetchSettings(path: string): Promise<any> {
-  return makeFetch(path).then((resp) => resp.json());
+function fetchSettings<T = unknown>(path: string): Promise<T> {
+  return makeFetch(path).then((resp) => resp.json() as Promise<T>);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- API request data
@@ -151,6 +150,19 @@ export function saveSupportFrontendSettings(
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- API response type
 export function fetchFrontendSettings<T = any>(settingsType: FrontendSettingsType): Promise<T> {
   return fetchSettings(`/frontend/${settingsType}`);
+}
+
+export function fetchFrontendSettingVersions<T = unknown>(
+  settingsType: FrontendSettingsType,
+): Promise<T> {
+  return fetchSettings<T>(`/frontend/${settingsType}/versions`);
+}
+
+export function fetchFrontendSettingVersion<T = unknown>(
+  settingsType: FrontendSettingsType,
+  versionId: string,
+): Promise<T> {
+  return fetchSettings<T>(`/frontend/${settingsType}/versions/${encodeURIComponent(versionId)}`);
 }
 
 export interface BannerDesignsResponse {

@@ -15,6 +15,7 @@ import {
 } from '../../utils/requests';
 import { Section } from './Section';
 import { useStyles } from './styles';
+import { VersionHistory } from './VersionHistory';
 
 const canEdit = hasPermission(FrontendSettingsType.DefaultChoiceCards, 'Write');
 
@@ -94,6 +95,7 @@ const DefaultChoiceCards: React.FC<InnerProps<DefaultChoiceCardsSettings>> = ({
           onChange={handleProfileChange}
           onValidationChange={handleValidationChange}
         />
+        <VersionHistory />
       </div>
     </div>
   );
