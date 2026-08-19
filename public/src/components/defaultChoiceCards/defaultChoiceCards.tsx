@@ -47,10 +47,13 @@ const DefaultChoiceCards: React.FC<InnerProps<DefaultChoiceCardsSettings>> = ({
     profile: ChoiceCardsDefaultsProfile,
     isValid: boolean,
   ) => {
-    setValidationState((current) => ({
-      ...current,
-      [`${channel}-${profile}`]: isValid,
-    }));
+    setValidationState((current) => {
+      const key = `${channel}-${profile}`;
+      if (current[key] === isValid) {
+        return current;
+      }
+      return { ...current, [key]: isValid };
+    });
   };
 
   const hasInvalidProfile = Object.values(validationState).some((isValid) => !isValid);
