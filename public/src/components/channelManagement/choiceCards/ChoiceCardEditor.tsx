@@ -79,6 +79,8 @@ interface ChoiceCardEditorProps {
   isDisabled: boolean;
   index: number;
   formMethods: UseFormReturn<ChoiceCardsSettings & { hasOneDefault: boolean }>;
+  hideDestination?: boolean;
+  idPrefix?: string;
 }
 export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
   choiceCard,
@@ -86,6 +88,8 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
   isDisabled,
   index,
   formMethods,
+  hideDestination = false,
+  idPrefix = '',
 }) => {
   const classes = useStyles();
   const { control, getValues } = formMethods;
@@ -121,8 +125,8 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
               render={({ field }) => (
                 <Select
                   {...field}
-                  labelId={`supportTier-label-${index}`}
-                  inputProps={{ id: `supportTier-${index}` }}
+                  labelId={`${idPrefix}supportTier-label-${index}`}
+                  inputProps={{ id: `${idPrefix}supportTier-${index}` }}
                   onChange={(e) => {
                     const newSupportTier = e.target.value as Product['supportTier'];
 
@@ -314,13 +318,15 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
           </Button>
         </div>
 
-        <ChoiceCardDestinationFields
-          index={index}
-          isDisabled={isDisabled}
-          subHeadingClassName={classes.subHeading}
-          formMethods={formMethods}
-          onDestinationSectionChange={handleCardChange}
-        />
+        {!hideDestination && (
+          <ChoiceCardDestinationFields
+            index={index}
+            isDisabled={isDisabled}
+            subHeadingClassName={classes.subHeading}
+            formMethods={formMethods}
+            onDestinationSectionChange={handleCardChange}
+          />
+        )}
       </AccordionDetails>
     </Accordion>
   );
