@@ -95,11 +95,12 @@ object S3 extends S3Client with StrictLogging {
       val request = ListObjectVersionsRequest.builder
         .bucket(objectSettings.bucket)
         .prefix(objectSettings.key)
+        .maxKeys(10)
         .build
 
       s3Client.listObjectVersions(request).versions().asScala.toList
     }.flatMap { versions =>
-      ZIO.foreach(versions.filter(_.key() == objectSettings.key)) { version =>
+      ZIO.foreach(versions.filter(_.key() == objectSettings.key).take(10)) { version =>
         val versionId = version.versionId()
         val headRequest = HeadObjectRequest.builder
           .bucket(objectSettings.bucket)
