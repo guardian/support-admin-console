@@ -1,6 +1,6 @@
 import { ChoiceCard, ChoiceCardsSettings } from '../../models/choiceCards';
 import {
-  ChoiceCardsDefaultsProfile,
+  ChoiceCardsDefaultsRegion,
   DefaultChoiceCardsSettings,
 } from '../../models/defaultChoiceCards';
 import { regionIds, regions } from '../../utils/models';
@@ -8,7 +8,7 @@ import { regionIds, regions } from '../../utils/models';
 export type ChannelKey = 'epic' | 'banner';
 export type FormData = ChoiceCardsSettings & { hasOneDefault: boolean };
 
-export const PROFILE_ORDER: ChoiceCardsDefaultsProfile[] = ['Default', ...regionIds];
+export const PROFILE_ORDER: ChoiceCardsDefaultsRegion[] = ['Default', ...regionIds];
 const EMPTY_SETTINGS: ChoiceCardsSettings = { choiceCards: [] };
 
 export const countDefaultCards = (choiceCards: ChoiceCard[]): number =>
@@ -24,14 +24,14 @@ export const sanitizeChoiceCardsSettings = (
 });
 
 const buildDefaultData = (
-  settings?: Partial<Record<ChoiceCardsDefaultsProfile, ChoiceCardsSettings>>,
-): Record<ChoiceCardsDefaultsProfile, ChoiceCardsSettings> =>
+  settings?: Partial<Record<ChoiceCardsDefaultsRegion, ChoiceCardsSettings>>,
+): Record<ChoiceCardsDefaultsRegion, ChoiceCardsSettings> =>
   PROFILE_ORDER.reduce(
     (acc, profile) => ({
       ...acc,
       [profile]: settings?.[profile] ?? EMPTY_SETTINGS,
     }),
-    {} as Record<ChoiceCardsDefaultsProfile, ChoiceCardsSettings>,
+    {} as Record<ChoiceCardsDefaultsRegion, ChoiceCardsSettings>,
   );
 
 export const normalizeSettings = (
@@ -42,7 +42,7 @@ export const normalizeSettings = (
   lastEditedBy: data.lastEditedBy ?? '',
 });
 
-export const buildLabel = (profile: ChoiceCardsDefaultsProfile): string =>
+export const buildLabel = (profile: ChoiceCardsDefaultsRegion): string =>
   profile === 'Default' ? 'Default fallback' : regions[profile];
 
 export interface FlattenedChange {
