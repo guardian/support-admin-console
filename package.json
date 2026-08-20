@@ -18,7 +18,7 @@
     "ts-loader": "9.6.2",
     "tsconfig-paths-webpack-plugin": "4.2.0",
     "typescript": "6.0.3",
-    "webpack": "5.108.4",
+    "webpack": "5.109.1",
     "webpack-cli": "7.2.1",
     "webpack-dev-server": "6.0.0"
   },
@@ -44,7 +44,7 @@
     "react-hook-form": "7.82.0",
     "react-qr-code": "2.2.0",
     "react-router-dom": "7.18.1",
-    "recharts": "3.9.2",
+    "recharts": "3.10.1",
     "remirror": "3.0.3",
     "uuid": "14.0.1"
   },
