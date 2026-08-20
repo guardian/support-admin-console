@@ -5,9 +5,8 @@ import com.gu.googleauth.AuthAction
 import models.DefaultChoiceCardsSettings
 import play.api.libs.circe.Circe
 import play.api.mvc.{ActionBuilder, AnyContent, ControllerComponents}
-import services.S3Client.S3GetObjectError
 import services.UserPermissions.Permission
-import services.{DynamoPermissionsCache, VersionedS3Data}
+import services.DynamoPermissionsCache
 import services.S3Client.S3ObjectSettings
 import scala.concurrent.ExecutionContext
 
@@ -52,15 +51,4 @@ class DefaultChoiceCardsController(
 
   override protected def settingsForSave(email: String): S3ObjectSettings =
     super.settingsForSave(email).copy(metadata = Map("last-edited-by" -> email))
-
-  override protected def recoverGetFromS3Error
-      : PartialFunction[Throwable, ZIO[Any, Throwable, VersionedS3Data[DefaultChoiceCardsSettings]]] = {
-    case S3GetObjectError(_: NoSuchKeyException) =>
-      ZIO.succeed(VersionedS3Data(DefaultChoiceCardsSettings.stub, ""))
-    case S3GetObjectError(error) if Option(error.getMessage).exists(_.contains("The specified key does not exist")) =>
-      ZIO.succeed(VersionedS3Data(DefaultChoiceCardsSettings.stub, ""))
-    case S3GetObjectError(error: S3Exception)
-        if error.statusCode() == 403 && Option(error.getMessage).exists(_.contains("s3:ListBucket")) =>
-      ZIO.succeed(VersionedS3Data(DefaultChoiceCardsSettings.stub, ""))
-  }
 }
