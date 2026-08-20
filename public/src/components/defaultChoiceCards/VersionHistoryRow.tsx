@@ -1,0 +1,62 @@
+import { Button, CircularProgress, TableCell, TableRow, Typography } from '@mui/material';
+import React from 'react';
+import { VersionDiff } from '../../utils/defaultChoiceCards';
+import { useStyles } from './styles';
+import { VersionHistoryItem } from './useVersionHistory';
+import { VersionDiffTable } from './VersionDiffTable';
+
+interface VersionHistoryRowProps {
+  item: VersionHistoryItem;
+  diff?: VersionDiff | null;
+  isDiffVisible: boolean;
+  isDiffLoading: boolean;
+  onToggleDifferences: (versionId: string) => Promise<void>;
+}
+
+export const VersionHistoryRow: React.FC<VersionHistoryRowProps> = ({
+  item,
+  diff,
+  isDiffVisible,
+  isDiffLoading,
+  onToggleDifferences,
+}) => {
+  const classes = useStyles();
+  const hasDiff = diff !== undefined;
+
+  return (
+    <>
+      <TableRow>
+        <TableCell>{new Date(item.lastModified).toLocaleString()}</TableCell>
+        <TableCell>
+          {item.version}
+          {item.isLatest ? ' (current)' : ''}
+        </TableCell>
+        <TableCell>{item.lastEditedBy ?? 'Unknown'}</TableCell>
+        <TableCell align="right">
+          <Button
+            variant="outlined"
+            size="small"
+            disabled={isDiffLoading}
+            onClick={() => void onToggleDifferences(item.version)}
+            startIcon={isDiffLoading ? <CircularProgress size={14} /> : undefined}
+          >
+            {isDiffLoading ? '' : isDiffVisible ? 'Hide differences' : 'Show differences'}
+          </Button>
+        </TableCell>
+      </TableRow>
+      {isDiffVisible && hasDiff && (
+        <TableRow>
+          <TableCell colSpan={4} className={classes.diffCell}>
+            {diff === null ? (
+              <Typography variant="body2">
+                No earlier version is available to compare against.
+              </Typography>
+            ) : (
+              <VersionDiffTable version={item.version} diff={diff} />
+            )}
+          </TableCell>
+        </TableRow>
+      )}
+    </>
+  );
+};
