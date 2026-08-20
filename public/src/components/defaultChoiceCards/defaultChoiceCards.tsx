@@ -69,12 +69,7 @@ const DefaultChoiceCards: React.FC<InnerProps<DefaultChoiceCardsSettings>> = ({
           {data.lastEditedBy && (
             <Typography variant="body2">Last edited by {data.lastEditedBy}</Typography>
           )}
-          {!canEdit && (
-            <Alert severity="info">
-              You have read-only access. Contact an administrator to request write permission for
-              Default Choice Cards.
-            </Alert>
-          )}
+          {!canEdit && <Alert severity="info">You have read-only access.</Alert>}
         </div>
         <div className={classes.actions}>
           <Button
