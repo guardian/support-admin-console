@@ -3,7 +3,7 @@ import {
   buildLabel,
   countDefaultCards,
   normalizeSettings,
-  PROFILE_ORDER,
+  REGION_ORDER,
   sanitizeChoiceCardsSettings,
 } from './defaultChoiceCards';
 
@@ -61,8 +61,8 @@ describe('default choice cards utils', () => {
       });
 
       expect(result.lastEditedBy).toBe('');
-      expect(Object.keys(result.epic)).toEqual(PROFILE_ORDER);
-      expect(Object.keys(result.banner)).toEqual(PROFILE_ORDER);
+      expect(Object.keys(result.epic)).toEqual(REGION_ORDER);
+      expect(Object.keys(result.banner)).toEqual(REGION_ORDER);
       expect(result.epic.Default?.choiceCards).toHaveLength(1);
       expect(result.banner.EURCountries?.choiceCards).toEqual([]);
     });
