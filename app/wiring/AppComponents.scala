@@ -302,6 +302,13 @@ class AppComponents(context: Context, stage: String)
       dynamoArchivedChannelTests,
       dynamoTestsAuditService,
       permissionsService
+    ),
+    new DefaultChoiceCardsController(
+      authAction,
+      controllerComponents,
+      stage,
+      runtime,
+      permissionsService
     )
   )
 }

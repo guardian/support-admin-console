@@ -10,6 +10,7 @@ import software.amazon.awssdk.services.s3.model.{
   GetObjectRequest,
   HeadObjectRequest,
   ListObjectsRequest,
+  ListObjectVersionsRequest,
   NoSuchKeyException,
   ObjectCannedACL,
   PutObjectRequest
@@ -22,6 +23,12 @@ import scala.jdk.CollectionConverters._
 import zio.ZIO.attemptBlocking
 
 case class VersionedS3Data[T](value: T, version: String)
+case class S3VersionHistoryItem(
+  version: String,
+  lastModified: String,
+  isLatest: Boolean,
+  lastEditedBy: Option[String]
+)
 
 trait S3Client {
   def get: S3Action[RawVersionedS3Data]
@@ -39,7 +46,8 @@ object S3Client {
       key: String,
       publicRead: Boolean,
       cacheControl: Option[String] = None,
-      surrogateControl: Option[String] = None
+      surrogateControl: Option[String] = None,
+      metadata: Map[String, String] = Map.empty
   )
 
   sealed trait S3ClientError extends Throwable
@@ -59,6 +67,61 @@ object S3Client {
 }
 
 object S3 extends S3Client with StrictLogging {
+
+  def getVersion(versionId: String): S3Action[RawVersionedS3Data] = { objectSettings =>
+    val request = GetObjectRequest.builder
+      .bucket(objectSettings.bucket)
+      .key(objectSettings.key)
+      .versionId(versionId)
+      .build
+
+    ZIO.scoped {
+      ZIO
+        .fromAutoCloseable(attemptBlocking(s3Client.getObject(request)))
+        .flatMap { s3Object =>
+          ZIO.attempt {
+            VersionedS3Data(
+              value = scala.io.Source.fromInputStream(s3Object).mkString,
+              version = s3Object.response().versionId(),
+            )
+          }
+        }
+        .mapError(S3GetObjectError)
+    }
+  }
+
+  def listVersions: S3Action[List[S3VersionHistoryItem]] = { objectSettings =>
+    attemptBlocking {
+      val request = ListObjectVersionsRequest.builder
+        .bucket(objectSettings.bucket)
+        .prefix(objectSettings.key)
+        .maxKeys(10)
+        .build
+
+      s3Client.listObjectVersions(request).versions().asScala.toList
+    }.flatMap { versions =>
+      ZIO.foreach(versions.filter(_.key() == objectSettings.key).take(10)) { version =>
+        val versionId = version.versionId()
+        val headRequest = HeadObjectRequest.builder
+          .bucket(objectSettings.bucket)
+          .key(objectSettings.key)
+          .versionId(versionId)
+          .build
+
+        attemptBlocking(s3Client.headObject(headRequest)).map { head =>
+          S3VersionHistoryItem(
+            version = versionId,
+            lastModified = version.lastModified().toString,
+            isLatest = version.isLatest(),
+            lastEditedBy = Option(head.metadata().get("last-edited-by"))
+          )
+        }
+      }
+    }.mapError { e =>
+      logger.error(s"Error listing S3 versions for $objectSettings: ${e.getMessage}", e)
+      S3ListObjectsError(e)
+    }
+  }
 
   private def versionMismatch(
       objectSettings: S3ObjectSettings,
@@ -146,6 +209,7 @@ object S3 extends S3Client with StrictLogging {
         val requestModifiers: List[Option[PutObjectRequest.Builder => PutObjectRequest.Builder]] = List(
           objectSettings.cacheControl.map(cc => _.cacheControl(cc)),
           objectSettings.surrogateControl.map(sc => _.metadata(Map("surrogate-control" -> sc).asJava)),
+          if (objectSettings.metadata.nonEmpty) Some(_.metadata(objectSettings.metadata.asJava)) else None,
           if (objectSettings.publicRead) Some(_.acl(ObjectCannedACL.PUBLIC_READ)) else None
         )
 

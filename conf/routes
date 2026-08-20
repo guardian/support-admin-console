@@ -52,6 +52,7 @@ GET /lynx                                           controllers.Application.inde
 GET /apps-metering-switches                         controllers.Application.index
 
 GET /default-promos                                 controllers.Application.index
+GET /default-choice-cards                           controllers.Application.index
 
 GET /super-mode                                     controllers.Application.index
 
@@ -345,3 +346,9 @@ POST  /frontend/one-time-checkout-tests/test/lock/:testName        controllers.O
 POST  /frontend/one-time-checkout-tests/test/unlock/:testName      controllers.OneTimeCheckoutController.unlockTest(testName: String)
 POST  /frontend/one-time-checkout-tests/test/takecontrol/:testName controllers.OneTimeCheckoutController.forceLockTest(testName: String)
 POST  /frontend/one-time-checkout-tests/test/status/:rawStatus     controllers.OneTimeCheckoutController.setStatus(rawStatus: String)
+
+# ----- Default choice cards ----- #
+GET   /frontend/default-choice-cards                                controllers.DefaultChoiceCardsController.get
+POST  /frontend/default-choice-cards/update                         controllers.DefaultChoiceCardsController.set
+GET   /frontend/default-choice-cards/versions                        controllers.DefaultChoiceCardsController.getVersions
+GET   /frontend/default-choice-cards/versions/:versionId             controllers.DefaultChoiceCardsController.getVersion(versionId: String)
