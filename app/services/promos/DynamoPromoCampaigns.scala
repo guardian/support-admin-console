@@ -38,7 +38,7 @@ class DynamoPromoCampaigns(stage: String, client: DynamoDbClient)
       )
       .build()
 
-  def getPromoCampaign(campaignCode: String): ZIO[Any, DynamoGetError, PromoCampaign] =
+  def getPromoCampaign(campaignCode: String): ZIO[Any, DynamoError, PromoCampaign] =
     get(buildQuery(campaignCode))
       .map(item => dynamoMapToJson(item).as[PromoCampaign])
       .flatMap {

@@ -1,7 +1,7 @@
 package services
 
 import com.typesafe.scalalogging.StrictLogging
-import models.DynamoErrors.{DynamoDuplicateNameError, DynamoError, DynamoGetError, DynamoPutError}
+import models.DynamoErrors.{DynamoDuplicateNameError, DynamoError, DynamoGetError, DynamoNotFoundError, DynamoPutError}
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.dynamodb.model.{
   AttributeValue,
@@ -27,19 +27,18 @@ abstract class DynamoService(stage: String, client: DynamoDbClient) extends Stri
   protected val tableName: String
 
   // Attempts to retrieve an item. Fails if the item does not exist.
-  protected def get(query: QueryRequest): ZIO[Any, DynamoGetError, java.util.Map[String, AttributeValue]] =
+  protected def get(query: QueryRequest): ZIO[Any, DynamoError, java.util.Map[String, AttributeValue]] =
     attemptBlocking {
       client
         .query(query)
         .items
         .asScala
         .headOption
-
-    }.flatMap {
-      case Some(item) => ZIO.succeed(item)
-      case None       =>
-        ZIO.fail(DynamoGetError(new Exception(s"Item does not exist: ${query.keyConditionExpression()}")))
-    }.mapError(error => DynamoGetError(error))
+    }.mapError(DynamoGetError(_))
+      .flatMap {
+        case Some(item) => ZIO.succeed(item)
+        case None       => ZIO.fail(DynamoNotFoundError(query.keyConditionExpression()))
+      }
 
   // Performs a full scan of the table
   protected def getAll(): ZIO[Any, DynamoGetError, java.util.List[java.util.Map[String, AttributeValue]]] =
