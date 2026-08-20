@@ -12,7 +12,7 @@ export const VersionHistory: React.FC = () => {
     loading,
     error,
     diffs,
-    diffLoading,
+    loadingDiffs,
     visibleDiffVersions,
     loadVersions,
     toggleDifferences,
@@ -38,7 +38,7 @@ export const VersionHistory: React.FC = () => {
             <VersionHistoryTable
               versions={versions}
               diffs={diffs}
-              diffLoading={diffLoading}
+              loadingDiffs={loadingDiffs}
               visibleDiffVersions={visibleDiffVersions}
               onToggleDifferences={toggleDifferences}
             />

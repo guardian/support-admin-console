@@ -1,15 +1,16 @@
 import { Button, CircularProgress, TableCell, TableRow, Typography } from '@mui/material';
 import React from 'react';
+import { DefaultChoiceCardsVersionHistoryItem } from '../../models/defaultChoiceCards';
 import { VersionDiff } from '../../utils/defaultChoiceCards';
 import { useStyles } from './styles';
-import { VersionHistoryItem } from './useVersionHistory';
 import { VersionDiffTable } from './VersionDiffTable';
 
 interface VersionHistoryRowProps {
-  item: VersionHistoryItem;
+  item: DefaultChoiceCardsVersionHistoryItem;
   diff?: VersionDiff | null;
   isDiffVisible: boolean;
   isDiffLoading: boolean;
+  isAnyDiffLoading: boolean;
   onToggleDifferences: (versionId: string) => Promise<void>;
 }
 
@@ -18,6 +19,7 @@ export const VersionHistoryRow: React.FC<VersionHistoryRowProps> = ({
   diff,
   isDiffVisible,
   isDiffLoading,
+  isAnyDiffLoading,
   onToggleDifferences,
 }) => {
   const classes = useStyles();
@@ -36,7 +38,7 @@ export const VersionHistoryRow: React.FC<VersionHistoryRowProps> = ({
           <Button
             variant="outlined"
             size="small"
-            disabled={isDiffLoading}
+            disabled={isAnyDiffLoading}
             onClick={() => void onToggleDifferences(item.version)}
             startIcon={isDiffLoading ? <CircularProgress size={14} /> : undefined}
           >

@@ -8,3 +8,15 @@ export interface DefaultChoiceCardsSettings {
   banner: Partial<Record<ChoiceCardsDefaultsRegion, ChoiceCardsSettings>>;
   lastEditedBy?: string;
 }
+
+export interface DefaultChoiceCardsVersionHistoryItem {
+  version: string;
+  lastModified: string;
+  isLatest: boolean;
+  lastEditedBy?: string;
+}
+
+export interface VersionedDefaultChoiceCardsSettings {
+  value: DefaultChoiceCardsSettings;
+  version: string;
+}
