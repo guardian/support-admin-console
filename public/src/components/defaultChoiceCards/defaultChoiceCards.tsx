@@ -3,9 +3,10 @@ import React from 'react';
 import withS3Data, { DataFromServer, InnerProps } from '../../hocs/withS3Data';
 import { ChoiceCardsSettings } from '../../models/choiceCards';
 import {
-  ChoiceCardsDefaultsProfile,
+  ChoiceCardsDefaultsRegion,
   DefaultChoiceCardsSettings,
 } from '../../models/defaultChoiceCards';
+import { ChannelKey, normalizeSettings } from '../../utils/defaultChoiceCards';
 import { hasPermission } from '../../utils/permissions';
 import {
   fetchFrontendSettings,
@@ -14,7 +15,6 @@ import {
 } from '../../utils/requests';
 import { Section } from './Section';
 import { useStyles } from './styles';
-import { ChannelKey, normalizeSettings } from './utils';
 
 const canEdit = hasPermission(FrontendSettingsType.DefaultChoiceCards, 'Write');
 
@@ -30,25 +30,25 @@ const DefaultChoiceCards: React.FC<InnerProps<DefaultChoiceCardsSettings>> = ({
 
   const handleProfileChange = (
     channel: ChannelKey,
-    profile: ChoiceCardsDefaultsProfile,
+    region: ChoiceCardsDefaultsRegion,
     settings: ChoiceCardsSettings,
   ) => {
     update({
       ...normalizedData,
       [channel]: {
         ...normalizedData[channel],
-        [profile]: settings,
+        [region]: settings,
       },
     });
   };
 
   const handleValidationChange = (
     channel: ChannelKey,
-    profile: ChoiceCardsDefaultsProfile,
+    region: ChoiceCardsDefaultsRegion,
     isValid: boolean,
   ) => {
     setValidationState((current) => {
-      const key = `${channel}-${profile}`;
+      const key = `${channel}-${region}`;
       if (current[key] === isValid) {
         return current;
       }

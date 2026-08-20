@@ -1,14 +1,14 @@
-import { ChoiceCard, ChoiceCardsSettings } from '../../models/choiceCards';
+import { ChoiceCard, ChoiceCardsSettings } from '../models/choiceCards';
 import {
-  ChoiceCardsDefaultsProfile,
+  ChoiceCardsDefaultsRegion,
   DefaultChoiceCardsSettings,
-} from '../../models/defaultChoiceCards';
-import { regionIds, regions } from '../../utils/models';
+} from '../models/defaultChoiceCards';
+import { regionIds, regions } from './models';
 
 export type ChannelKey = 'epic' | 'banner';
 export type FormData = ChoiceCardsSettings & { hasOneDefault: boolean };
 
-export const PROFILE_ORDER: ChoiceCardsDefaultsProfile[] = ['Default', ...regionIds];
+export const REGION_ORDER: ChoiceCardsDefaultsRegion[] = ['Default', ...regionIds];
 const EMPTY_SETTINGS: ChoiceCardsSettings = { choiceCards: [] };
 
 export const countDefaultCards = (choiceCards: ChoiceCard[]): number =>
@@ -24,14 +24,14 @@ export const sanitizeChoiceCardsSettings = (
 });
 
 const buildDefaultData = (
-  settings?: Partial<Record<ChoiceCardsDefaultsProfile, ChoiceCardsSettings>>,
-): Record<ChoiceCardsDefaultsProfile, ChoiceCardsSettings> =>
-  PROFILE_ORDER.reduce(
-    (acc, profile) => ({
+  settings?: Partial<Record<ChoiceCardsDefaultsRegion, ChoiceCardsSettings>>,
+): Record<ChoiceCardsDefaultsRegion, ChoiceCardsSettings> =>
+  REGION_ORDER.reduce(
+    (acc, region) => ({
       ...acc,
-      [profile]: settings?.[profile] ?? EMPTY_SETTINGS,
+      [region]: settings?.[region] ?? EMPTY_SETTINGS,
     }),
-    {} as Record<ChoiceCardsDefaultsProfile, ChoiceCardsSettings>,
+    {} as Record<ChoiceCardsDefaultsRegion, ChoiceCardsSettings>,
   );
 
 export const normalizeSettings = (
@@ -42,5 +42,5 @@ export const normalizeSettings = (
   lastEditedBy: data.lastEditedBy ?? '',
 });
 
-export const buildLabel = (profile: ChoiceCardsDefaultsProfile): string =>
-  profile === 'Default' ? 'Default fallback' : regions[profile];
+export const buildLabel = (region: ChoiceCardsDefaultsRegion): string =>
+  region === 'Default' ? 'Default fallback' : regions[region];

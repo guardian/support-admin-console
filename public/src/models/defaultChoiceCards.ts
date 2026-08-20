@@ -1,10 +1,10 @@
 import { Region } from '../utils/models';
 import { ChoiceCardsSettings } from './choiceCards';
 
-export type ChoiceCardsDefaultsProfile = Region | 'Default';
+export type ChoiceCardsDefaultsRegion = Region | 'Default';
 
 export interface DefaultChoiceCardsSettings {
-  epic: Partial<Record<ChoiceCardsDefaultsProfile, ChoiceCardsSettings>>;
-  banner: Partial<Record<ChoiceCardsDefaultsProfile, ChoiceCardsSettings>>;
+  epic: Partial<Record<ChoiceCardsDefaultsRegion, ChoiceCardsSettings>>;
+  banner: Partial<Record<ChoiceCardsDefaultsRegion, ChoiceCardsSettings>>;
   lastEditedBy?: string;
 }

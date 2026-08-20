@@ -4,11 +4,15 @@ import { Alert, Button, Card, CardContent, Typography } from '@mui/material';
 import React from 'react';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { ChoiceCardsSettings } from '../../models/choiceCards';
+import {
+  countDefaultCards,
+  FormData,
+  sanitizeChoiceCardsSettings,
+} from '../../utils/defaultChoiceCards';
 import { ChoiceCardEditor } from '../channelManagement/choiceCards/ChoiceCardEditor';
 import { useStyles } from './styles';
-import { countDefaultCards, FormData, sanitizeChoiceCardsSettings } from './utils';
 
-interface ProfileEditorProps {
+interface CardsPerRegionEditorProps {
   label: string;
   idPrefix: string;
   settings: ChoiceCardsSettings;
@@ -17,7 +21,7 @@ interface ProfileEditorProps {
   onValidationChange: (isValid: boolean) => void;
 }
 
-export const ProfileEditor: React.FC<ProfileEditorProps> = ({
+export const CardsPerRegionEditor: React.FC<CardsPerRegionEditorProps> = ({
   label,
   idPrefix,
   settings,

@@ -2,12 +2,12 @@ import { Typography } from '@mui/material';
 import React from 'react';
 import { ChoiceCardsSettings } from '../../models/choiceCards';
 import {
-  ChoiceCardsDefaultsProfile,
+  ChoiceCardsDefaultsRegion,
   DefaultChoiceCardsSettings,
 } from '../../models/defaultChoiceCards';
-import { ProfileEditor } from './ProfileEditor';
+import { buildLabel, ChannelKey, REGION_ORDER } from '../../utils/defaultChoiceCards';
+import { CardsPerRegionEditor } from './CardsPerRegionEditor';
 import { useStyles } from './styles';
-import { buildLabel, ChannelKey, PROFILE_ORDER } from './utils';
 
 interface SectionProps {
   channel: ChannelKey;
@@ -15,12 +15,12 @@ interface SectionProps {
   disabled: boolean;
   onChange: (
     channel: ChannelKey,
-    profile: ChoiceCardsDefaultsProfile,
+    profile: ChoiceCardsDefaultsRegion,
     settings: ChoiceCardsSettings,
   ) => void;
   onValidationChange: (
     channel: ChannelKey,
-    profile: ChoiceCardsDefaultsProfile,
+    profile: ChoiceCardsDefaultsRegion,
     isValid: boolean,
   ) => void;
 }
@@ -33,7 +33,7 @@ export const Section: React.FC<SectionProps> = ({
   onValidationChange,
 }) => {
   const classes = useStyles();
-  const channelSettings = data[channel] as Record<ChoiceCardsDefaultsProfile, ChoiceCardsSettings>;
+  const channelSettings = data[channel] as Record<ChoiceCardsDefaultsRegion, ChoiceCardsSettings>;
 
   return (
     <section className={classes.section}>
@@ -46,15 +46,15 @@ export const Section: React.FC<SectionProps> = ({
         </Typography>
       </div>
       <div className={classes.sectionGrid}>
-        {PROFILE_ORDER.map((profile) => (
-          <ProfileEditor
-            key={`${channel}-${profile}`}
-            label={buildLabel(profile)}
-            idPrefix={`${channel}-${profile}`}
-            settings={channelSettings[profile]}
+        {REGION_ORDER.map((region) => (
+          <CardsPerRegionEditor
+            key={`${channel}-${region}`}
+            label={buildLabel(region)}
+            idPrefix={`${channel}-${region}`}
+            settings={channelSettings[region]}
             disabled={disabled}
-            onChange={(settings) => onChange(channel, profile, settings)}
-            onValidationChange={(isValid) => onValidationChange(channel, profile, isValid)}
+            onChange={(settings) => onChange(channel, region, settings)}
+            onValidationChange={(isValid) => onValidationChange(channel, region, isValid)}
           />
         ))}
       </div>
