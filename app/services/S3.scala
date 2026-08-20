@@ -24,10 +24,10 @@ import zio.ZIO.attemptBlocking
 
 case class VersionedS3Data[T](value: T, version: String)
 case class S3VersionHistoryItem(
-  version: String,
-  lastModified: String,
-  isLatest: Boolean,
-  lastEditedBy: Option[String]
+    version: String,
+    lastModified: String,
+    isLatest: Boolean,
+    lastEditedBy: Option[String]
 )
 
 trait S3Client {
@@ -82,7 +82,7 @@ object S3 extends S3Client with StrictLogging {
           ZIO.attempt {
             VersionedS3Data(
               value = scala.io.Source.fromInputStream(s3Object).mkString,
-              version = s3Object.response().versionId(),
+              version = s3Object.response().versionId()
             )
           }
         }
