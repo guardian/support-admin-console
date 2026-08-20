@@ -3,11 +3,12 @@ package controllers
 import actions.AuthAndPermissionActions
 import io.circe.{Decoder, Encoder}
 import io.circe.generic.auto._
+import io.circe.parser.decode
 import io.circe.syntax._
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, ControllerComponents, Result}
 import services.S3Client.S3ObjectSettings
-import services.{S3Json, VersionedS3Data}
+import services.{S3, S3Json, VersionedS3Data}
 import utils.Circe.noNulls
 import zio.{Unsafe, ZIO}
 import com.typesafe.scalalogging.LazyLogging
@@ -51,6 +52,9 @@ abstract class S3ObjectController[T: Decoder: Encoder](
       }
     }
 
+  protected def addEditorMetadata(data: T, email: String): T = data
+  protected def settingsForSave(email: String): S3ObjectSettings = dataObjectSettings
+
   /** Returns current version of the object in s3 as json, with the version id. The s3 data is validated against the
     * model.
     */
@@ -67,14 +71,40 @@ abstract class S3ObjectController[T: Decoder: Encoder](
     }
   }
 
+  def getVersions = authActions.read.async { _ =>
+    run {
+      S3
+        .listVersions(dataObjectSettings)
+        .map(versions => Ok(noNulls(versions.asJson)))
+    }
+  }
+
+  def getVersion(versionId: String) = authActions.read.async { request =>
+    run {
+      S3
+        .getVersion(versionId)(dataObjectSettings)
+        .flatMap { raw =>
+          ZIO
+            .fromEither(decode[T](raw.value))
+            .map(decoded => VersionedS3DataWithEmail(decoded, raw.version, request.user.email))
+        }
+        .map(s3Data => Ok(noNulls(s3Data.asJson)))
+    }
+  }
+
   /** Updates the object in s3 if the supplied version matches the current version in s3. The POSTed json is validated
     * against the model.
     */
   def set = authActions.write.async(circe.json[VersionedS3Data[T]]) { request =>
     run {
       S3Json
-        .updateAsJson(request.body)(s3Client)
-        .apply(dataObjectSettings)
+        .updateAsJson(
+          VersionedS3Data(
+            addEditorMetadata(request.body.value, request.user.email),
+            request.body.version
+          )
+        )(s3Client)
+        .apply(settingsForSave(request.user.email))
         .map(_ => Ok("updated"))
     }
   }
