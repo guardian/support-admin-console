@@ -15,12 +15,17 @@ import {
 import React from 'react';
 import { DefaultChoiceCardsSettings } from '../../models/defaultChoiceCards';
 import {
+  FlattenedChange,
+  formatChangeValue,
+  getChanges,
+  VersionDiff,
+} from '../../utils/defaultChoiceCards';
+import {
   fetchFrontendSettingVersion,
   fetchFrontendSettingVersions,
   FrontendSettingsType,
 } from '../../utils/requests';
 import { useStyles } from './styles';
-import { FlattenedChange, formatChangeValue, getChanges, VersionDiff } from './utils';
 
 interface VersionHistoryItem {
   version: string;
