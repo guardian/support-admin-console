@@ -8,14 +8,14 @@ import {
   TableRow,
 } from '@mui/material';
 import React from 'react';
+import { DefaultChoiceCardsVersionHistoryItem } from '../../models/defaultChoiceCards';
 import { VersionDiff } from '../../utils/defaultChoiceCards';
-import { VersionHistoryItem } from './useVersionHistory';
 import { VersionHistoryRow } from './VersionHistoryRow';
 
 interface VersionHistoryTableProps {
-  versions: VersionHistoryItem[];
+  versions: DefaultChoiceCardsVersionHistoryItem[];
   diffs: Record<string, VersionDiff | null>;
-  diffLoading: string | null;
+  loadingDiffs: Set<string>;
   visibleDiffVersions: Set<string>;
   onToggleDifferences: (versionId: string) => Promise<void>;
 }
@@ -23,7 +23,7 @@ interface VersionHistoryTableProps {
 export const VersionHistoryTable: React.FC<VersionHistoryTableProps> = ({
   versions,
   diffs,
-  diffLoading,
+  loadingDiffs,
   visibleDiffVersions,
   onToggleDifferences,
 }) => (
@@ -48,7 +48,8 @@ export const VersionHistoryTable: React.FC<VersionHistoryTableProps> = ({
                 : undefined
             }
             isDiffVisible={visibleDiffVersions.has(item.version)}
-            isDiffLoading={diffLoading === item.version}
+            isDiffLoading={loadingDiffs.has(item.version)}
+            isAnyDiffLoading={loadingDiffs.size > 0}
             onToggleDifferences={onToggleDifferences}
           />
         ))}
