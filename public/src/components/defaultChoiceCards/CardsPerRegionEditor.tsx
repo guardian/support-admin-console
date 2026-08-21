@@ -81,13 +81,13 @@ export const CardsPerRegionEditor: React.FC<CardsPerRegionEditorProps> = ({
   };
 
   return (
-    <Card className={classes.profileCard} variant="outlined">
-      <CardContent className={classes.profileContent}>
+    <Card className={classes.regionCard} variant="outlined">
+      <CardContent className={classes.regionContent}>
         <div>
           <Typography variant="h6">{label}</Typography>
           {label !== 'Default fallback' && (
             <Typography variant="body2" className={classes.helperText}>
-              Leave this profile empty to continue using fallback settings for this region.
+              Leave this region empty to continue using fallback settings.
             </Typography>
           )}
         </div>
@@ -95,7 +95,7 @@ export const CardsPerRegionEditor: React.FC<CardsPerRegionEditorProps> = ({
           <Alert severity="error">{formMethods.formState.errors.hasOneDefault.message}</Alert>
         )}
         {fields.map((choiceCard, idx) => (
-          <div className={classes.choiceCardContainer} key={choiceCard.id}>
+          <div className={classes.choiceCardRow} key={choiceCard.id}>
             <ChoiceCardEditor
               choiceCard={choiceCard}
               onChange={(updatedCard) => {

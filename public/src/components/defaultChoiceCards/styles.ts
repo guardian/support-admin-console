@@ -43,6 +43,10 @@ export const useStyles = makeStyles(({ breakpoints, spacing, palette }: Theme) =
     overflowWrap: 'anywhere',
     padding: 0,
   },
+  diffEmptyState: {
+    padding: spacing(2),
+    textAlign: 'center',
+  },
   diffTable: {
     width: '100%',
     tableLayout: 'fixed',
@@ -52,10 +56,12 @@ export const useStyles = makeStyles(({ breakpoints, spacing, palette }: Theme) =
     maxWidth: 0,
     overflowWrap: 'anywhere',
   },
+  diffHeaderCell: {
+    backgroundColor: palette.grey[100],
+  },
   diffValueCell: {
     width: '38%',
     maxWidth: 0,
-    backgroundColor: '#ffffff',
     overflowWrap: 'anywhere',
     whiteSpace: 'pre-wrap',
     '& pre': {
@@ -89,15 +95,15 @@ export const useStyles = makeStyles(({ breakpoints, spacing, palette }: Theme) =
     gap: spacing(2),
     alignItems: 'start',
   },
-  profileCard: {
+  regionCard: {
     height: '100%',
   },
-  profileContent: {
+  regionContent: {
     display: 'flex',
     flexDirection: 'column',
     gap: spacing(2),
   },
-  choiceCardContainer: {
+  choiceCardRow: {
     display: 'flex',
     alignItems: 'flex-start',
   },
