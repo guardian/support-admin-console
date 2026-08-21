@@ -90,6 +90,7 @@ const SupportLandingPageTestsForm = lazy(() =>
   })),
 );
 const DefaultPromos = lazy(() => import('./components/defaultPromos'));
+const DefaultChoiceCards = lazy(() => import('./components/defaultChoiceCards/defaultChoiceCards'));
 const LinkTrackingBuilder = lazy(() =>
   import('./components/linkTracking/LinkTrackingBuilder').then((m) => ({
     default: m.LinkTrackingBuilder,
@@ -284,6 +285,10 @@ const AppRouter = () => {
           <Route
             path="/default-promos"
             element={createComponent(<DefaultPromos />, 'Default Promos')}
+          />
+          <Route
+            path="/default-choice-cards"
+            element={createComponent(<DefaultChoiceCards />, 'Default Choice Cards')}
           />
           <Route
             path="/banner-designs/:bannerDesignName?"

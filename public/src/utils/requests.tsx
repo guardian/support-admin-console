@@ -30,6 +30,7 @@ export enum FrontendSettingsType {
   AccessManagement = 'access-management',
   OneTimeCheckout = 'one-time-checkout-tests',
   ExclusionsSettings = 'exclusions',
+  DefaultChoiceCards = 'default-choice-cards',
 }
 
 export enum AppsSettingsType {

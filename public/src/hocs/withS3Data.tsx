@@ -8,6 +8,7 @@ export interface DataFromServer<T> {
 
 export interface InnerProps<T> {
   data: T;
+  version?: string;
   update: (data: T) => void;
   sendToS3: () => void;
   updateAndSendToS3: (data: T) => void;
@@ -76,6 +77,7 @@ function withS3Data<T>(
     return dataFromServer ? (
       <Inner
         data={dataFromServer.value}
+        version={dataFromServer.version}
         update={update}
         sendToS3={sendToS3}
         updateAndSendToS3={updateAndSendToS3}
