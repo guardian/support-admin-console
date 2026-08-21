@@ -38,8 +38,9 @@ import {
   PRICE_GUARDIANWEEKLY_MONTHLY,
   PRICE_PRODUCT_WEEKLY,
 } from '../helpers/validation';
-import './remirror-styles.css';
+import { MParticleTemplateMenu } from './mParticleTemplateMenu';
 import { useRTEStyles } from './richTextEditorStyles';
+import './remirror-styles.css';
 
 // Typescript
 interface RichTextEditorProps<T> {
@@ -74,6 +75,7 @@ interface RteMenuConstraints {
   enableCampaignDeadlineTemplate?: boolean;
   enableLink?: boolean;
   enableStrikethrough?: boolean;
+  enableMParticleTemplates?: boolean;
 }
 
 /**
@@ -227,6 +229,8 @@ const FloatingLinkToolbar = () => {
     useFloatingLinkState();
   const active = useActive();
   const activeLink = active.link();
+  const chain = useChainedCommands();
+  const insertTemplate = (template: string): void => chain.insertText(template).focus().run();
   return (
     <>
       <FloatingToolbar placement="top">
@@ -245,6 +249,7 @@ const FloatingLinkToolbar = () => {
               Add link
             </button>
           )}
+          <MParticleTemplateMenu insertTemplate={insertTemplate} />
         </CommandButtonGroup>
       </FloatingToolbar>
 
@@ -296,6 +301,7 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
     enableDateTemplate,
     enableDayTemplate,
     enableCampaignDeadlineTemplate,
+    enableMParticleTemplates,
   } = rteMenuConstraints;
 
   const clickBold = () => {
@@ -392,6 +398,9 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
                 <button className="remirror-button" onClick={() => insertTemplate(DATE)}>
                   Date
                 </button>
+              )}
+              {enableMParticleTemplates && (
+                <MParticleTemplateMenu insertTemplate={insertTemplate} />
               )}
               {enableProductWeeklyTemplate && (
                 <button
