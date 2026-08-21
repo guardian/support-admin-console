@@ -2117,12 +2117,36 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
       },
       "Type": "AWS::IAM::Policy",
     },
+    "SettingsBucketGetVersionsD5EDACC3": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:GetObjectVersion",
+              "Effect": "Allow",
+              "Resource": "arn:aws:s3:::support-admin-console/PROD/*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "SettingsBucketGetVersionsD5EDACC3",
+        "Roles": [
+          {
+            "Ref": "InstanceRoleAdminconsole347DA627",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
     "SettingsBucketList82835507": {
       "Properties": {
         "PolicyDocument": {
           "Statement": [
             {
-              "Action": "s3:ListBucket",
+              "Action": [
+                "s3:ListBucket",
+                "s3:ListBucketVersions",
+              ],
               "Effect": "Allow",
               "Resource": "arn:aws:s3:::support-admin-console",
             },
