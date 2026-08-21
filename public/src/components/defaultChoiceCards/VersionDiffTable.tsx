@@ -12,7 +12,11 @@ export const VersionDiffTable: React.FC<VersionDiffTableProps> = ({ version, dif
   const classes = useStyles();
 
   if (diff.changes.length === 0) {
-    return <Typography variant="body2">No differences.</Typography>;
+    return (
+      <Typography variant="body2" className={classes.diffEmptyState}>
+        No differences.
+      </Typography>
+    );
   }
 
   const changes: FlattenedChange[] = diff.changes;
@@ -21,11 +25,15 @@ export const VersionDiffTable: React.FC<VersionDiffTableProps> = ({ version, dif
     <Table size="small" className={classes.diffTable} aria-label={`Differences for ${version}`}>
       <TableHead>
         <TableRow>
-          <TableCell className={classes.diffFieldCell}>Changed field</TableCell>
-          <TableCell className={classes.diffValueCell}>
+          <TableCell className={`${classes.diffFieldCell} ${classes.diffHeaderCell}`}>
+            Changed field
+          </TableCell>
+          <TableCell className={`${classes.diffValueCell} ${classes.diffHeaderCell}`}>
             Previous version ({diff.previousVersionId})
           </TableCell>
-          <TableCell className={classes.diffValueCell}>Current version ({version})</TableCell>
+          <TableCell className={`${classes.diffValueCell} ${classes.diffHeaderCell}`}>
+            Current version ({version})
+          </TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
