@@ -47,6 +47,7 @@ class DynamoChannelTestsSpec extends AsyncFlatSpec with Matchers with BeforeAndA
       priority = priority,
       maxViews = None,
       variants = Nil,
+      regionTargeting = None,
       mParticleTemplates = None
     )
 
