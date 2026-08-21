@@ -15,7 +15,7 @@ import { VersionHistoryRow } from './VersionHistoryRow';
 interface VersionHistoryTableProps {
   versions: DefaultChoiceCardsVersionHistoryItem[];
   diffs: Record<string, VersionDiff | null>;
-  loadingDiffs: Set<string>;
+  loadingDiff: string | null;
   visibleDiffVersions: Set<string>;
   onToggleDifferences: (versionId: string) => Promise<void>;
 }
@@ -23,7 +23,7 @@ interface VersionHistoryTableProps {
 export const VersionHistoryTable: React.FC<VersionHistoryTableProps> = ({
   versions,
   diffs,
-  loadingDiffs,
+  loadingDiff,
   visibleDiffVersions,
   onToggleDifferences,
 }) => (
@@ -48,8 +48,7 @@ export const VersionHistoryTable: React.FC<VersionHistoryTableProps> = ({
                 : undefined
             }
             isDiffVisible={visibleDiffVersions.has(item.version)}
-            isDiffLoading={loadingDiffs.has(item.version)}
-            isAnyDiffLoading={loadingDiffs.size > 0}
+            loadingDiff={loadingDiff}
             onToggleDifferences={onToggleDifferences}
           />
         ))}

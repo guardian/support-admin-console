@@ -9,8 +9,7 @@ interface VersionHistoryRowProps {
   item: DefaultChoiceCardsVersionHistoryItem;
   diff?: VersionDiff | null;
   isDiffVisible: boolean;
-  isDiffLoading: boolean;
-  isAnyDiffLoading: boolean;
+  loadingDiff: string | null;
   onToggleDifferences: (versionId: string) => Promise<void>;
 }
 
@@ -18,12 +17,12 @@ export const VersionHistoryRow: React.FC<VersionHistoryRowProps> = ({
   item,
   diff,
   isDiffVisible,
-  isDiffLoading,
-  isAnyDiffLoading,
+  loadingDiff,
   onToggleDifferences,
 }) => {
   const classes = useStyles();
   const hasDiff = diff !== undefined;
+  const isDiffLoading = loadingDiff === item.version;
 
   return (
     <>
@@ -38,7 +37,7 @@ export const VersionHistoryRow: React.FC<VersionHistoryRowProps> = ({
           <Button
             variant="outlined"
             size="small"
-            disabled={isAnyDiffLoading}
+            disabled={loadingDiff !== null}
             onClick={() => void onToggleDifferences(item.version)}
             startIcon={isDiffLoading ? <CircularProgress size={14} /> : undefined}
           >

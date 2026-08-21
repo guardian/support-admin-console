@@ -15,7 +15,7 @@ interface UseVersionHistoryResult {
   loading: boolean;
   error: string | null;
   diffs: Record<string, VersionDiff | null>;
-  loadingDiffs: Set<string>;
+  loadingDiff: string | null;
   visibleDiffVersions: Set<string>;
   loadVersions: () => Promise<void>;
   toggleDifferences: (versionId: string) => Promise<void>;
@@ -28,7 +28,7 @@ export const useVersionHistory = (): UseVersionHistoryResult => {
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [diffs, setDiffs] = React.useState<Record<string, VersionDiff | null>>({});
-  const [loadingDiffs, setLoadingDiffs] = React.useState<Set<string>>(new Set());
+  const [loadingDiff, setLoadingDiff] = React.useState<string | null>(null);
   const [visibleDiffVersions, setVisibleDiffVersions] = React.useState<Set<string>>(new Set());
 
   const sortedVersions = versions
@@ -46,7 +46,7 @@ export const useVersionHistory = (): UseVersionHistoryResult => {
       );
       setVersions(fetchedVersions);
       setDiffs({});
-      setLoadingDiffs(new Set());
+      setLoadingDiff(null);
       setVisibleDiffVersions(new Set());
     } catch (requestError) {
       setError(requestError instanceof Error ? requestError.message : 'Unknown error');
@@ -66,7 +66,7 @@ export const useVersionHistory = (): UseVersionHistoryResult => {
     }
 
     const previousVersion = sortedVersions[previousVersionIndex];
-    setLoadingDiffs((current) => new Set(current).add(versionId));
+    setLoadingDiff(versionId);
     setError(null);
     try {
       const [previousSettings, selectedSettings] = await Promise.all([
@@ -91,11 +91,7 @@ export const useVersionHistory = (): UseVersionHistoryResult => {
       setError(requestError instanceof Error ? requestError.message : 'Unknown error');
       return false;
     } finally {
-      setLoadingDiffs((current) => {
-        const next = new Set(current);
-        next.delete(versionId);
-        return next;
-      });
+      setLoadingDiff(null);
     }
   };
 
@@ -125,7 +121,7 @@ export const useVersionHistory = (): UseVersionHistoryResult => {
     loading,
     error,
     diffs,
-    loadingDiffs,
+    loadingDiff,
     visibleDiffVersions,
     loadVersions,
     toggleDifferences,
