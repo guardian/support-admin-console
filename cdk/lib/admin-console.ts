@@ -345,7 +345,7 @@ export class AdminConsole extends GuStack {
         paths: [`${this.stage}/*`],
       }),
       new GuAllowPolicy(this, 'SettingsBucketList', {
-        actions: ['s3:ListBucket'],
+        actions: ['s3:ListBucket', 's3:ListBucketVersions'],
         resources: ['arn:aws:s3:::support-admin-console'],
       }),
       new GuAllowPolicy(this, 'PublicSettingsBucketPut', {

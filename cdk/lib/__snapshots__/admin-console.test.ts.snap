@@ -2122,7 +2122,10 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
         "PolicyDocument": {
           "Statement": [
             {
-              "Action": "s3:ListBucket",
+              "Action": [
+                "s3:ListBucket",
+                "s3:ListBucketVersions",
+              ],
               "Effect": "Allow",
               "Resource": "arn:aws:s3:::support-admin-console",
             },
