@@ -340,6 +340,10 @@ export class AdminConsole extends GuStack {
         bucketName: 'support-admin-console',
         paths: [`${this.stage}/*`, 'google-auth-service-account-certificate.json'],
       }),
+      new GuAllowPolicy(this, 'SettingsBucketGetVersions', {
+        actions: ['s3:GetObjectVersion'],
+        resources: [`arn:aws:s3:::support-admin-console/${this.stage}/*`],
+      }),
       new GuPutS3ObjectsPolicy(this, 'SettingsBucketPut', {
         bucketName: 'support-admin-console',
         paths: [`${this.stage}/*`],
