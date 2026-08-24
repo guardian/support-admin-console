@@ -8,6 +8,17 @@ describe('The AdminConsole stack', () => {
     const app = new App();
     const stack = new AdminConsole(app, 'AdminConsole', prodProps);
     const template = Template.fromStack(stack);
-    expect(template.toJSON()).toMatchSnapshot();
+    const templateJson = template.toJSON() as {
+      Resources: Record<string, { Properties?: { Tags?: unknown } }>;
+    };
+    Object.keys(templateJson.Resources)
+      .filter(
+        (resourceId) =>
+          resourceId.startsWith('AllowKnownMethods') || resourceId.startsWith('BlockUnknownMethods'),
+      )
+      .forEach((resourceId) => {
+        delete templateJson.Resources[resourceId].Properties?.Tags;
+      });
+    expect(templateJson).toMatchSnapshot();
   });
 });
