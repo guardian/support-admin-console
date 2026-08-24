@@ -6,7 +6,6 @@ import ListItemText from '@mui/material/ListItemText';
 import { makeStyles } from '@mui/styles';
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { getStage } from '../utils/stage';
 import RRControlPanelLogo from './rrControlPanelLogo';
 
 const useStyles = makeStyles({
@@ -105,7 +104,6 @@ export default function NavDrawer(): React.ReactElement {
   const [state, setState] = React.useState({
     left: false,
   });
-  const stage = getStage();
 
   const toggleDrawer =
     (anchor: string, open: boolean) =>
@@ -276,13 +274,11 @@ export default function NavDrawer(): React.ReactElement {
             <ListItemText primary="Channel Exclusions" />
           </ListItemButton>
         </Link>
-        {stage !== 'PROD' && (
-          <Link key="Default Choice Cards" to="/default-choice-cards" className={classes.link}>
-            <ListItemButton className={classes.listItem} key="Default Choice Cards">
-              <ListItemText primary="Default Choice Cards" />
-            </ListItemButton>
-          </Link>
-        )}
+        <Link key="Default Choice Cards" to="/default-choice-cards" className={classes.link}>
+          <ListItemButton className={classes.listItem} key="Default Choice Cards">
+            <ListItemText primary="Default Choice Cards" />
+          </ListItemButton>
+        </Link>
         <Link key="Test Audits" to="/audit-tests" className={classes.link}>
           <ListItemButton className={classes.listItem} key="Test Audits">
             <ListItemText primary="Test Audits" />
