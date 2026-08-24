@@ -7,6 +7,7 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
       "GuAllowPolicy",
       "GuAllowPolicy",
       "GuGetS3ObjectsPolicy",
+      "GuAllowPolicy",
       "GuPutS3ObjectsPolicy",
       "GuAllowPolicy",
       "GuAllowPolicy",
@@ -138,24 +139,6 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
           "Ref": "ListenerAdminconsole3E633904",
         },
         "Priority": 1,
-        "Tags": [
-          {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          {
-            "Key": "gu:repo",
-            "Value": "guardian/support-admin-console",
-          },
-          {
-            "Key": "Stack",
-            "Value": "support",
-          },
-          {
-            "Key": "Stage",
-            "Value": "PROD",
-          },
-        ],
       },
       "Type": "AWS::ElasticLoadBalancingV2::ListenerRule",
     },
@@ -406,24 +389,6 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
           "Ref": "ListenerAdminconsole3E633904",
         },
         "Priority": 2,
-        "Tags": [
-          {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          {
-            "Key": "gu:repo",
-            "Value": "guardian/support-admin-console",
-          },
-          {
-            "Key": "Stack",
-            "Value": "support",
-          },
-          {
-            "Key": "Stage",
-            "Value": "PROD",
-          },
-        ],
       },
       "Type": "AWS::ElasticLoadBalancingV2::ListenerRule",
     },
