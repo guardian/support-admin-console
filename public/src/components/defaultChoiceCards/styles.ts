@@ -23,6 +23,53 @@ export const useStyles = makeStyles(({ breakpoints, spacing, palette }: Theme) =
     display: 'flex',
     justifyContent: 'flex-end',
   },
+  versionHistory: {
+    width: '100%',
+    maxWidth: 1100,
+    margin: '0 auto',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: spacing(2),
+  },
+  versionHistoryContent: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: spacing(2),
+  },
+  diffCell: {
+    maxWidth: 0,
+    overflowWrap: 'anywhere',
+    padding: 0,
+  },
+  diffEmptyState: {
+    padding: spacing(2),
+    textAlign: 'center',
+  },
+  diffTable: {
+    width: '100%',
+    tableLayout: 'fixed',
+  },
+  diffFieldCell: {
+    width: '24%',
+    maxWidth: 0,
+    overflowWrap: 'anywhere',
+  },
+  diffHeaderCell: {
+    backgroundColor: palette.grey[100],
+  },
+  diffValueCell: {
+    width: '38%',
+    maxWidth: 0,
+    overflowWrap: 'anywhere',
+    whiteSpace: 'pre-wrap',
+    '& pre': {
+      margin: 0,
+      whiteSpace: 'pre-wrap',
+      overflowWrap: 'anywhere',
+    },
+  },
   section: {
     display: 'grid',
     gridTemplateColumns: 'minmax(160px, 0.25fr) minmax(0, 1fr)',
@@ -48,15 +95,15 @@ export const useStyles = makeStyles(({ breakpoints, spacing, palette }: Theme) =
     gap: spacing(2),
     alignItems: 'start',
   },
-  profileCard: {
+  regionCard: {
     height: '100%',
   },
-  profileContent: {
+  regionContent: {
     display: 'flex',
     flexDirection: 'column',
     gap: spacing(2),
   },
-  choiceCardContainer: {
+  choiceCardRow: {
     display: 'flex',
     alignItems: 'flex-start',
   },
