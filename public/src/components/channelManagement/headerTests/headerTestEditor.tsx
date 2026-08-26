@@ -20,6 +20,7 @@ import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelecto
 import { ValidatedTestEditorProps } from '../validatedTestEditor';
 import HeaderTestVariantEditor from './headerTestVariantEditor';
 import { getDefaultVariant } from './utils/defaults';
+import { findMParticleTemplates } from './utils/findMParticleTemplates';
 
 const HeaderTestEditor: React.FC<ValidatedTestEditorProps<HeaderTest>> = ({
   test,
@@ -46,7 +47,8 @@ const HeaderTestEditor: React.FC<ValidatedTestEditorProps<HeaderTest>> = ({
   const onVariantsChange = (update: (current: HeaderVariant[]) => HeaderVariant[]): void => {
     onTestChange((current) => {
       const updatedVariantList = update(current.variants);
-      return { ...current, variants: updatedVariantList };
+      const updatedTest = { ...current, variants: updatedVariantList };
+      return { ...updatedTest, mParticleTemplates: findMParticleTemplates(updatedTest) };
     });
   };
 
