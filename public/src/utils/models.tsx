@@ -285,10 +285,13 @@ export const countries: CommonStringObject = {
 
 export type Country = keyof typeof countries;
 
+export type MParticleAmountAttribute = 'LastContributionAmount';
+
 export interface AmountValuesObject {
   amounts: number[];
   defaultAmount: number;
   hideChooseYourAmount: boolean;
+  mParticleAmountAttribute?: MParticleAmountAttribute;
 }
 
 export type AmountsCardData = Record<ContributionType, AmountValuesObject>;

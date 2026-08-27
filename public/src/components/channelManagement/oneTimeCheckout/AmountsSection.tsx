@@ -1,7 +1,11 @@
 import { Typography } from '@mui/material';
 import React from 'react';
 import { OneTimeCheckoutVariant } from '../../../models/oneTimeCheckout';
-import { ContributionType, contributionTypes } from '../../../utils/models';
+import {
+  ContributionType,
+  contributionTypes,
+  MParticleAmountAttribute,
+} from '../../../utils/models';
 import { useStyles } from '../helpers/testEditorStyles';
 import { AmountsVariantEditorRow } from './AmountsVariantEditorRow';
 
@@ -48,6 +52,19 @@ export const AmountsSection: React.FC<AmountsSectionProps> = ({
     }));
   };
 
+  const updateMParticleAmountAttribute = (
+    label: ContributionType,
+    val?: MParticleAmountAttribute,
+  ): void => {
+    onVariantChange((current) => ({
+      ...current,
+      amounts: {
+        ...current.amounts,
+        mParticleAmountAttribute: val,
+      },
+    }));
+  };
+
   return (
     <div className={classes.sectionContainer}>
       <Typography variant="h4" className={classes.sectionHeader}>
@@ -58,9 +75,11 @@ export const AmountsSection: React.FC<AmountsSectionProps> = ({
         amounts={variant.amounts.amounts}
         defaultAmount={variant.amounts.defaultAmount}
         hideChooseYourAmount={variant.amounts.hideChooseYourAmount}
+        mParticleAmountAttribute={variant.amounts.mParticleAmountAttribute}
         updateAmounts={updateAmounts}
         updateChooseAmount={updateChooseAmount}
         updateDefaultAmount={updateDefaultAmount}
+        updateMParticleAmountAttribute={updateMParticleAmountAttribute}
         disabled={!editMode}
       />
     </div>
