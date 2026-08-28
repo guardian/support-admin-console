@@ -153,7 +153,7 @@ export const AmountsVariantEditorRow: React.FC<AmountsVariantEditorRowProps> = (
             }
           >
             <MenuItem value="">None</MenuItem>
-            <MenuItem value="LastContributionAmount">Last contribution amount</MenuItem>
+            <MenuItem value="last_contribution_amount">Last contribution amount</MenuItem>
           </Select>
         </FormControl>
       </div>

@@ -10,7 +10,7 @@ import models.Channel.OneTimeCheckout
 sealed trait MParticleAmountAttribute
 
 object MParticleAmountAttribute {
-  case object LastContributionAmount extends MParticleAmountAttribute
+  case object last_contribution_amount extends MParticleAmountAttribute
 
   implicit val customConfig: Configuration = Configuration.default.withDefaults
   implicit val encoder: Encoder[MParticleAmountAttribute] = deriveEnumerationEncoder[MParticleAmountAttribute]
