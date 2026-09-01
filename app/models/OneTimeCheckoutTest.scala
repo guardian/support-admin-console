@@ -7,10 +7,21 @@ import io.circe.{Decoder, Encoder}
 import models.Methodology.defaultMethodologies
 import models.Channel.OneTimeCheckout
 
+sealed trait MParticleAmountAttribute
+
+object MParticleAmountAttribute {
+  case object last_contribution_amount extends MParticleAmountAttribute
+
+  implicit val customConfig: Configuration = Configuration.default.withDefaults
+  implicit val encoder: Encoder[MParticleAmountAttribute] = deriveEnumerationEncoder[MParticleAmountAttribute]
+  implicit val decoder: Decoder[MParticleAmountAttribute] = deriveEnumerationDecoder[MParticleAmountAttribute]
+}
+
 case class AmountValuesObject(
     amounts: List[Int],
     defaultAmount: Int,
-    hideChooseYourAmount: Boolean
+    hideChooseYourAmount: Boolean,
+    mParticleAmountAttribute: Option[MParticleAmountAttribute] = None,
 )
 
 case class OneTimeCheckoutVariant(
