@@ -70,4 +70,5 @@ export interface EpicTest extends Test {
   deviceType?: DeviceType;
   campaignName?: string;
   mParticleAudience?: number;
+  mParticleTemplates?: string[];
 }

@@ -38,7 +38,8 @@ case class HeaderTest(
     consentStatus: Option[ConsentStatus] = Some(ConsentStatus.All),
     methodologies: List[Methodology] = defaultMethodologies,
     mParticleAudience: Option[Int] = None,
-    scheduler: Option[Scheduler] = None
+    scheduler: Option[Scheduler] = None,
+    mParticleTemplates: Option[List[String]],
 ) extends ChannelTest[HeaderTest] {
 
   override def withChannel(channel: Channel): HeaderTest = this.copy(channel = Some(channel))

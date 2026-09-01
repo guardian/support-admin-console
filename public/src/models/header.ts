@@ -36,4 +36,5 @@ export interface HeaderTest extends Test {
   deviceType?: DeviceType;
   campaignName?: string;
   mParticleAudience?: number;
+  mParticleTemplates?: string[];
 }

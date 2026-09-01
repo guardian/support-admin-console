@@ -60,4 +60,5 @@ export interface BannerTest extends Test {
   deploySchedule?: BannerTestDeploySchedule;
   frontsOnly?: boolean;
   mParticleAudience?: number;
+  mParticleTemplates?: string[];
 }
