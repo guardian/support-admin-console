@@ -4,6 +4,8 @@ import { MPARTICLE_LAST_SINGLE_CONTRIBUTION } from '../helpers/validation';
 
 interface Props {
   insertTemplate: (template: string) => void;
+  enableMParticleTemplates: boolean;
+  enableMParticleAmountTemplates: boolean;
 }
 
 export const MParticleTemplateMenu: React.FC<Props> = ({ insertTemplate }: Props) => {
