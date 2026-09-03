@@ -1,6 +1,9 @@
 import { FormControlLabel, Switch, Typography } from '@mui/material';
 import React, { useEffect, useRef } from 'react';
+import { ChoiceCardsSettings } from '../../../models/choiceCards';
+import { DefaultChoiceCardsSettings } from '../../../models/defaultChoiceCards';
 import { EpicTest, EpicVariant, MaxEpicViews } from '../../../models/epic';
+import { fetchFrontendSettings, FrontendSettingsType } from '../../../utils/requests';
 import TestVariantsSplitEditor from '../../tests/variants/testVariantsSplitEditor';
 import VariantEditorWithPreviewTab from '../../tests/variants/variantEditorWithPreviewTab';
 import VariantsEditor from '../../tests/variants/variantsEditor';
@@ -55,6 +58,14 @@ export const getEpicTestEditor = (
     setValidationStatusForField,
   }: ValidatedTestEditorProps<EpicTest>) => {
     const classes = useStyles();
+    const [defaultChoiceCardsSettings, setDefaultChoiceCardsSettings] =
+      React.useState<ChoiceCardsSettings>();
+
+    useEffect(() => {
+      void fetchFrontendSettings<{ value: DefaultChoiceCardsSettings }>(
+        FrontendSettingsType.DefaultChoiceCards,
+      ).then((response) => setDefaultChoiceCardsSettings(response.value.epic.Default));
+    }, []);
     const [userExplicitlyDisabledArticleCount, setUserExplicitlyDisabledArticleCount] =
       React.useState(test.articlesViewedSettings === undefined);
 
@@ -270,6 +281,7 @@ export const getEpicTestEditor = (
             onVariantChange={getVariantChangeCallback(variant.name)}
             onDelete={(): void => onVariantDelete(variant.name)}
             onValidationChange={getValidationCallback(variant.name)}
+            defaultChoiceCardsSettings={defaultChoiceCardsSettings}
           />
         }
         variantPreview={
