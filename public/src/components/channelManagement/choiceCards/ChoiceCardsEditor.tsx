@@ -59,6 +59,7 @@ interface ChoiceCardsEditorProps {
   ) => void;
   isDisabled: boolean;
   onValidationChange: (isValid: boolean) => void;
+  defaultChoiceCardsSettings?: ChoiceCardsSettings;
 }
 
 const ChoiceCardsEditor: React.FC<ChoiceCardsEditorProps> = ({
@@ -68,6 +69,7 @@ const ChoiceCardsEditor: React.FC<ChoiceCardsEditorProps> = ({
   allowNoChoiceCards,
   isDisabled,
   onValidationChange,
+  defaultChoiceCardsSettings,
 }: ChoiceCardsEditorProps) => {
   const classes = useStyles();
 
@@ -117,7 +119,11 @@ const ChoiceCardsEditor: React.FC<ChoiceCardsEditorProps> = ({
     if (event.target.value === 'DefaultChoiceCards') {
       updateChoiceCardsSettings(true);
     } else if (event.target.value === 'CustomChoiceCards') {
-      updateChoiceCardsSettings(true, { choiceCards: [] });
+      const defaultChoiceCards = defaultChoiceCardsSettings?.choiceCards ?? [];
+      updateChoiceCardsSettings(true, {
+        choiceCards: defaultChoiceCards,
+      });
+      formMethods.setValue('choiceCards', defaultChoiceCards);
     } else {
       updateChoiceCardsSettings(false);
       formMethods.setValue('choiceCards', []);

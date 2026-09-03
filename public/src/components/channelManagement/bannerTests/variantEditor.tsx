@@ -384,6 +384,7 @@ interface VariantEditorProps {
   onDelete: () => void;
   onValidationChange: (isValid: boolean) => void;
   designs: BannerDesign[];
+  defaultChoiceCardsSettings?: ChoiceCardsSettings;
 }
 
 const VariantEditor: React.FC<VariantEditorProps> = ({
@@ -392,6 +393,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
   onValidationChange,
   onVariantChange,
   designs,
+  defaultChoiceCardsSettings,
 }: VariantEditorProps) => {
   const classes = useStyles();
   const setValidationStatusForField = useValidation(onValidationChange);
@@ -569,6 +571,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
             showChoiceCards={true}
             allowNoChoiceCards={false}
             choiceCardsSettings={variant.choiceCardsSettings}
+            defaultChoiceCardsSettings={defaultChoiceCardsSettings}
             updateChoiceCardsSettings={updateChoiceCardsSettings}
             isDisabled={!editMode}
             onValidationChange={onChoiceCardsValidationChange}
