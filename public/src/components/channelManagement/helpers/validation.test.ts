@@ -28,7 +28,7 @@ describe('templateValidatorForPlatform', () => {
       expect(templateValidator('%%CURRENCY_SYMBOL%%')).toBeUndefined();
       expect(templateValidator('%%COUNTRY_NAME%%')).toBeUndefined();
       expect(templateValidator('%%ARTICLE_COUNT%%')).toBeUndefined();
-      expect(templateValidator('%%mParticle_last_contribution_amount%%')).toBeUndefined();
+      expect(templateValidator('%%mParticle_last_single_contribution_amount%%')).toBeUndefined();
     });
 
     it('should return an error message if template text is not valid', () => {

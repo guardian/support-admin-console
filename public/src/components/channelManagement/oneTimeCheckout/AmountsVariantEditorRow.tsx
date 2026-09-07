@@ -147,13 +147,17 @@ export const AmountsVariantEditorRow: React.FC<AmountsVariantEditorRowProps> = (
             value={mParticleAmountAttribute ?? ''}
             label="mParticle amount attribute"
             displayEmpty
-            renderValue={() => (mParticleAmountAttribute ? 'Last contribution amount' : 'None')}
+            renderValue={() =>
+              mParticleAmountAttribute ? 'Last single contribution amount' : 'None'
+            }
             onChange={(event) =>
               updateMParticleAmount(event.target.value as MParticleAmountAttribute | '')
             }
           >
             <MenuItem value="">None</MenuItem>
-            <MenuItem value="last_contribution_amount">Last contribution amount</MenuItem>
+            <MenuItem value="last_single_contribution_amount">
+              Last single contribution amount
+            </MenuItem>
           </Select>
         </FormControl>
       </div>
