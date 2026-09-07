@@ -87,7 +87,6 @@ interface FormData {
 
 interface EpicTestVariantEditorProps {
   variant: EpicVariant;
-  defaultChoiceCardsSettings?: ChoiceCardsSettings;
   epicEditorConfig: EpicEditorConfig;
   onVariantChange: (update: (current: EpicVariant) => EpicVariant) => void;
   editMode: boolean;
@@ -97,7 +96,6 @@ interface EpicTestVariantEditorProps {
 
 const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   variant,
-  defaultChoiceCardsSettings,
   onVariantChange,
   editMode,
   epicEditorConfig,
@@ -490,9 +488,9 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
 
               <ChoiceCardsEditor
                 showChoiceCards={variant.showChoiceCards ?? false}
+                channel="epic"
                 allowNoChoiceCards={true}
                 choiceCardsSettings={variant.choiceCardsSettings}
-                defaultChoiceCardsSettings={defaultChoiceCardsSettings}
                 updateChoiceCardsSettings={updateChoiceCardsSettings}
                 isDisabled={!editMode}
                 onValidationChange={(isValid) =>

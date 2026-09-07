@@ -7,8 +7,6 @@ import {
   BannerVariant,
 } from '../../../models/banner';
 import { BannerDesign } from '../../../models/bannerDesign';
-import { ChoiceCardsSettings } from '../../../models/choiceCards';
-import { DefaultChoiceCardsSettings } from '../../../models/defaultChoiceCards';
 import {
   BannerDesignsResponse,
   fetchFrontendSettings,
@@ -64,8 +62,6 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
   const classes = useStyles();
 
   const [designs, setDesigns] = useState<BannerDesign[]>([]);
-  const [defaultChoiceCardsSettings, setDefaultChoiceCardsSettings] =
-    useState<ChoiceCardsSettings>();
 
   const fetchBannerDesigns = (): void => {
     void fetchFrontendSettings(FrontendSettingsType.BannerDesigns).then(
@@ -77,9 +73,6 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
 
   useEffect(() => {
     fetchBannerDesigns();
-    void fetchFrontendSettings<{ value: DefaultChoiceCardsSettings }>(
-      FrontendSettingsType.DefaultChoiceCards,
-    ).then((response) => setDefaultChoiceCardsSettings(response.value.banner.Default));
   }, []);
 
   const getArticlesViewedSettings = (test: BannerTest): ArticlesViewedSettings | undefined => {
@@ -266,7 +259,6 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
       editMode={userHasTestLocked}
       designs={designs}
       onValidationChange={getValidationCallback(variant.name)}
-      defaultChoiceCardsSettings={defaultChoiceCardsSettings}
     />
   );
 
