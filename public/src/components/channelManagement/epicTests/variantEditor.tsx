@@ -488,6 +488,7 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
 
               <ChoiceCardsEditor
                 showChoiceCards={variant.showChoiceCards ?? false}
+                channel="epic"
                 allowNoChoiceCards={true}
                 choiceCardsSettings={variant.choiceCardsSettings}
                 updateChoiceCardsSettings={updateChoiceCardsSettings}
