@@ -55,7 +55,7 @@ export const PRICE_PRODUCT_WEEKLY = '%%PRICE_PRODUCT_WEEKLY%%';
 export const DAY_OF_THE_WEEK = '%%DAY_OF_THE_WEEK%%';
 export const DATE = '%%DATE%%';
 export const CAMPAIGN_DEADLINE_TEMPLATE = '%%CAMPAIGN_DEADLINE%%';
-export const MPARTICLE_FIRST_NAME_TEMPLATE = '%%mParticle_$FirstName%%';
+export const MPARTICLE_FIRST_NAME_TEMPLATE = '%%mParticle_$firstname%%';
 
 export const VALID_TEMPLATES = {
   APPLE_NEWS: [CURRENCY_TEMPLATE],
