@@ -24,12 +24,7 @@ export const MParticleTemplateMenu: React.FC<Props> = ({ insertTemplate }: Props
 
   return (
     <div>
-      <Button
-        variant="contained"
-        disableElevation
-        onClick={handleButtonClick}
-        //endIcon={<KeyboardArrowDownIcon />}
-      >
+      <Button variant="contained" disableElevation onClick={handleButtonClick}>
         mParticle
       </Button>
       <Menu id="demo-customized-menu" anchorEl={anchorEl} open={open} onClose={handleClose}>

@@ -45,10 +45,10 @@ describe('findMParticleTemplates', () => {
     const result = findMParticleTemplates({
       ...baseTest,
       variants: [
-        { name: 'control', heading: '%%mParticle_firstName%%', paragraphs: [], showTicker: false },
+        { name: 'control', heading: '%%mParticle_firstname%%', paragraphs: [], showTicker: false },
       ],
     });
-    expect(result).toEqual(['firstName']);
+    expect(result).toEqual(['firstname']);
   });
 
   it('finds a template in a variant paragraph', () => {
@@ -65,13 +65,13 @@ describe('findMParticleTemplates', () => {
       variants: [
         {
           name: 'control',
-          heading: '%%mParticle_firstName%%',
+          heading: '%%mParticle_firstname%%',
           paragraphs: ['You live in %%mParticle_city%%.', 'Your tier is %%mParticle_tier%%.'],
           showTicker: false,
         },
       ],
     });
-    expect(result).toEqual(['firstName', 'city', 'tier']);
+    expect(result).toEqual(['firstname', 'city', 'tier']);
   });
 
   it('deduplicates templates that appear more than once', () => {
@@ -80,24 +80,24 @@ describe('findMParticleTemplates', () => {
       variants: [
         {
           name: 'control',
-          heading: '%%mParticle_firstName%%',
-          paragraphs: ['Hi %%mParticle_firstName%%, welcome to %%mParticle_city%%.'],
+          heading: '%%mParticle_firstname%%',
+          paragraphs: ['Hi %%mParticle_firstname%%, welcome to %%mParticle_city%%.'],
           showTicker: false,
         },
       ],
     });
-    expect(result).toEqual(['firstName', 'city']);
+    expect(result).toEqual(['firstname', 'city']);
   });
 
   it('collects templates across multiple variants', () => {
     const result = findMParticleTemplates({
       ...baseTest,
       variants: [
-        { name: 'control', paragraphs: ['%%mParticle_firstName%%'], showTicker: false },
+        { name: 'control', paragraphs: ['%%mParticle_firstname%%'], showTicker: false },
         { name: 'variant', paragraphs: ['%%mParticle_city%%'], showTicker: false },
       ],
     });
-    expect(result).toEqual(['firstName', 'city']);
+    expect(result).toEqual(['firstname', 'city']);
   });
 
   it('does not match patterns that are not mParticle templates', () => {
