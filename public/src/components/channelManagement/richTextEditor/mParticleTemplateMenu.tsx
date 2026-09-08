@@ -24,7 +24,11 @@ export const MParticleTemplateMenu: React.FC<Props> = ({ insertTemplate }: Props
 
   return (
     <div>
-      <Button variant="contained" disableElevation onClick={handleButtonClick}>
+      <Button
+        className="remirror-button"
+        onClick={handleButtonClick}
+        sx={{ textTransform: 'none' }}
+      >
         mParticle
       </Button>
       <Menu id="demo-customized-menu" anchorEl={anchorEl} open={open} onClose={handleClose}>
