@@ -45,10 +45,15 @@ describe('findMParticleTemplates', () => {
     const result = findMParticleTemplates({
       ...baseTest,
       variants: [
-        { name: 'control', heading: '%%mParticle_firstname%%', paragraphs: [], showTicker: false },
+        {
+          name: 'control',
+          heading: '%%mParticle_last_single_contribution_amount%%',
+          paragraphs: [],
+          showTicker: false,
+        },
       ],
     });
-    expect(result).toEqual(['firstname']);
+    expect(result).toEqual(['last_single_contribution_amount']);
   });
 
   it('finds a template in a variant paragraph', () => {
@@ -65,13 +70,13 @@ describe('findMParticleTemplates', () => {
       variants: [
         {
           name: 'control',
-          heading: '%%mParticle_firstname%%',
+          heading: '%%mParticle_last_single_contribution_amount%%',
           paragraphs: ['You live in %%mParticle_city%%.', 'Your tier is %%mParticle_tier%%.'],
           showTicker: false,
         },
       ],
     });
-    expect(result).toEqual(['firstname', 'city', 'tier']);
+    expect(result).toEqual(['last_single_contribution_amount', 'city', 'tier']);
   });
 
   it('deduplicates templates that appear more than once', () => {
@@ -80,24 +85,30 @@ describe('findMParticleTemplates', () => {
       variants: [
         {
           name: 'control',
-          heading: '%%mParticle_firstname%%',
-          paragraphs: ['Hi %%mParticle_firstname%%, welcome to %%mParticle_city%%.'],
+          heading: '%%mParticle_last_single_contribution_amount%%',
+          paragraphs: [
+            'Hi %%mParticle_last_single_contribution_amount%%, welcome to %%mParticle_city%%.',
+          ],
           showTicker: false,
         },
       ],
     });
-    expect(result).toEqual(['firstname', 'city']);
+    expect(result).toEqual(['last_single_contribution_amount', 'city']);
   });
 
   it('collects templates across multiple variants', () => {
     const result = findMParticleTemplates({
       ...baseTest,
       variants: [
-        { name: 'control', paragraphs: ['%%mParticle_firstname%%'], showTicker: false },
+        {
+          name: 'control',
+          paragraphs: ['%%mParticle_last_single_contribution_amount%%'],
+          showTicker: false,
+        },
         { name: 'variant', paragraphs: ['%%mParticle_city%%'], showTicker: false },
       ],
     });
-    expect(result).toEqual(['firstname', 'city']);
+    expect(result).toEqual(['last_single_contribution_amount', 'city']);
   });
 
   it('does not match patterns that are not mParticle templates', () => {

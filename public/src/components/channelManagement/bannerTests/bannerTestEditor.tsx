@@ -57,6 +57,7 @@ const testCopyHasTemplate = (test: BannerTest, template: string): boolean =>
 const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
   test,
   userHasTestLocked,
+  showMParticleMenu,
   onTestChange,
   setValidationStatusForField,
 }: ValidatedTestEditorProps<BannerTest>) => {
@@ -256,6 +257,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
     <VariantEditor
       key={`banner-${test.name}-${variant.name}`}
       variant={variant}
+      showMParticleMenu={showMParticleMenu}
       onVariantChange={getVariantChangeCallback(variant.name)}
       onDelete={(): void => onVariantDelete(variant.name)}
       editMode={userHasTestLocked}

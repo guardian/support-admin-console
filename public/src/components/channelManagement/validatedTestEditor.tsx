@@ -27,6 +27,7 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
 export interface ValidatedTestEditorProps<T extends Test> {
   test: T;
   userHasTestLocked: boolean;
+  showMParticleMenu: boolean;
   onTestChange: (update: (current: T) => T) => void;
   setValidationStatusForField: (fieldName: string, isValid: boolean) => void;
 }
@@ -116,6 +117,7 @@ export const ValidatedTestEditor = <T extends Test>(
           <TestEditor
             test={test}
             userHasTestLocked={userHasTestLocked}
+            showMParticleMenu={test.name.startsWith('MPARTICLE ATTRIBUTE')}
             onTestChange={(update) => onUpdate(update(test))}
             setValidationStatusForField={setValidationStatusForField}
           />

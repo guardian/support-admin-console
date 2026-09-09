@@ -1,6 +1,6 @@
 import { Button, Menu, MenuItem } from '@mui/material';
 import React from 'react';
-import { MPARTICLE_FIRST_NAME_TEMPLATE } from '../helpers/validation';
+import { MPARTICLE_LAST_SINGLE_CONTRIBUTION } from '../helpers/validation';
 
 interface Props {
   insertTemplate: (template: string) => void;
@@ -32,8 +32,11 @@ export const MParticleTemplateMenu: React.FC<Props> = ({ insertTemplate }: Props
         mParticle
       </Button>
       <Menu id="demo-customized-menu" anchorEl={anchorEl} open={open} onClose={handleClose}>
-        <MenuItem onClick={() => handleTemplateClick(MPARTICLE_FIRST_NAME_TEMPLATE)} disableRipple>
-          First Name
+        <MenuItem
+          onClick={() => handleTemplateClick(MPARTICLE_LAST_SINGLE_CONTRIBUTION)}
+          disableRipple
+        >
+          Last Contribution
         </MenuItem>
       </Menu>
     </div>

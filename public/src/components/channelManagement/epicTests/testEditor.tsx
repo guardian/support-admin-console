@@ -52,6 +52,7 @@ export const getEpicTestEditor = (
   const EpicTestEditor = ({
     test,
     userHasTestLocked,
+    showMParticleMenu,
     onTestChange,
     setValidationStatusForField,
   }: ValidatedTestEditorProps<EpicTest>) => {
@@ -266,6 +267,7 @@ export const getEpicTestEditor = (
         variantEditor={
           <VariantEditor
             epicEditorConfig={epicEditorConfig}
+            showMParticleMenu={showMParticleMenu}
             key={variant.name}
             variant={variant}
             editMode={userHasTestLocked}
@@ -366,6 +368,7 @@ export const getEpicTestEditor = (
                 key={test.variants[0].name}
                 variant={test.variants[0]}
                 epicEditorConfig={epicEditorConfig}
+                showMParticleMenu={showMParticleMenu}
                 editMode={userHasTestLocked}
                 onVariantChange={getVariantChangeCallback(test.variants[0].name)}
                 onDelete={(): void => onVariantDelete(test.variants[0].name)}

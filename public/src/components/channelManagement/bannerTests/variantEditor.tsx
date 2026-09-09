@@ -101,6 +101,7 @@ interface VariantContentEditorProps {
   onValidationChange: (isValid: boolean) => void;
   editMode: boolean;
   deviceType: DeviceType;
+  showMParticleMenu: boolean;
   isPrimaryCtaUrlDisabled?: boolean;
 }
 
@@ -131,6 +132,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
   onValidationChange,
   editMode,
   deviceType,
+  showMParticleMenu,
   isPrimaryCtaUrlDisabled,
 }: VariantContentEditorProps) => {
   const classes = useStyles();
@@ -262,7 +264,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                   enableDateTemplate: true,
                   enableDayTemplate: true,
                   enableLink: true,
-                  enableMParticleTemplates: true,
+                  enableMParticleTemplates: showMParticleMenu,
                 }}
               />
             );
@@ -310,7 +312,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                     enableDayTemplate: true,
                     enablePriceTemplates: true,
                     enableLink: true,
-                    enableMParticleTemplates: true,
+                    enableMParticleTemplates: showMParticleMenu,
                   }}
                 />
               );
@@ -351,7 +353,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                     enableArticleCountTemplate: true,
                     enableDateTemplate: true,
                     enableDayTemplate: true,
-                    enableMParticleTemplates: true,
+                    enableMParticleTemplates: showMParticleMenu,
                     enableLink: true,
                   }}
                 />
@@ -383,6 +385,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
 
 interface VariantEditorProps {
   variant: BannerVariant;
+  showMParticleMenu: boolean;
   onVariantChange: (update: (current: BannerVariant) => BannerVariant) => void;
   editMode: boolean;
   onDelete: () => void;
@@ -392,6 +395,7 @@ interface VariantEditorProps {
 
 const VariantEditor: React.FC<VariantEditorProps> = ({
   variant,
+  showMParticleMenu,
   editMode,
   onValidationChange,
   onVariantChange,
@@ -515,6 +519,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
         <VariantContentEditor
           content={variant.bannerContent}
           template={variant.template}
+          showMParticleMenu={showMParticleMenu}
           onChange={onMainContentChange}
           onValidationChange={onMainContentValidationChange}
           editMode={editMode}
@@ -545,6 +550,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
           <VariantContentEditor
             content={variant.mobileBannerContent}
             template={variant.template}
+            showMParticleMenu={showMParticleMenu}
             onChange={onMobileContentChange}
             onValidationChange={onMobileContentValidationChange}
             editMode={editMode}
