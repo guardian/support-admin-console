@@ -87,3 +87,11 @@ export const getDefaultTest = (): GutterTest => {
   }
   return PROD_DEFAULT_GUTTER_TEST;
 };
+
+export interface GutterSettings {
+  allowVariantPreview: boolean;
+}
+
+export const settings: GutterSettings = {
+  allowVariantPreview: false,
+};

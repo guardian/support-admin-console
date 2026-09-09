@@ -1,4 +1,12 @@
-import { FormControl, FormControlLabel, Radio, RadioGroup, Theme, Typography } from '@mui/material';
+import {
+  Alert,
+  FormControl,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  Theme,
+  Typography,
+} from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -258,8 +266,6 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
     return BODY_DEFAULT_HELPER_TEXT;
   };
 
-  const allowAppleNewsChoiceCards = platform === 'APPLE_NEWS';
-
   return (
     <div className={classes.container}>
       {allowVariantHeader && (
@@ -488,6 +494,7 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
 
               <ChoiceCardsEditor
                 showChoiceCards={variant.showChoiceCards ?? false}
+                channel="epic"
                 allowNoChoiceCards={true}
                 choiceCardsSettings={variant.choiceCardsSettings}
                 updateChoiceCardsSettings={updateChoiceCardsSettings}
@@ -544,7 +551,7 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
         </div>
       )}
 
-      {allowAppleNewsChoiceCards && (
+      {platform === 'APPLE_NEWS' && (
         <div className={classes.sectionContainer}>
           <Typography className={classes.sectionHeader} variant="h4">
             Apple News Choice Cards
@@ -557,6 +564,25 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
             onValidationChange={(isValid) =>
               setValidationStatusForField('appleNewsChoiceCards', isValid)
             }
+          />
+
+          <Typography className={classes.sectionHeader} variant="h4">
+            Promotions
+          </Typography>
+          <Alert severity="info">
+            <p>
+              The Apple News epic does not support regional targeting of promos. If a promo code is
+              added then it must apply for all users in the targeted Apple News channels. This means
+              that, for example, if you apply a promo in the US + Canada channel then it must be
+              available to users in both the US and Canada.
+            </p>
+            <p>Only a single promo code is allowed in the Apple News epic.</p>
+          </Alert>
+          <PromoCodesEditor
+            promoCodes={variant.promoCodes ?? []}
+            updatePromoCodes={updatePromoCodes}
+            isDisabled={!editMode}
+            maxPromoCodes={1}
           />
         </div>
       )}

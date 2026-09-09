@@ -6,7 +6,11 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import { makeStyles } from '@mui/styles';
 import React from 'react';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
+import { DataFromServer } from '../../../hocs/withS3Data';
 import { ChoiceCard, ChoiceCardsSettings } from '../../../models/choiceCards';
+import { DefaultChoiceCardsSettings } from '../../../models/defaultChoiceCards';
+import { ChannelKey } from '../../../utils/defaultChoiceCards';
+import { fetchFrontendSettings, FrontendSettingsType } from '../../../utils/requests';
 import { ChoiceCardEditor } from './ChoiceCardEditor';
 
 const useStyles = makeStyles(({ spacing }: Theme) => ({
@@ -49,8 +53,19 @@ const getChoiceCardsSelection = (
 const countDefaultCards = (choiceCards: ChoiceCard[]): number =>
   choiceCards.filter((card) => card.isDefault).length;
 
+let defaultChoiceCardsSettingsRequest: Promise<DefaultChoiceCardsSettings> | undefined;
+
+const fetchDefaultChoiceCardsSettings = (): Promise<DefaultChoiceCardsSettings> => {
+  defaultChoiceCardsSettingsRequest ??= fetchFrontendSettings<
+    DataFromServer<DefaultChoiceCardsSettings>
+  >(FrontendSettingsType.DefaultChoiceCards).then((response) => response.value);
+
+  return defaultChoiceCardsSettingsRequest;
+};
+
 interface ChoiceCardsEditorProps {
   showChoiceCards: boolean;
+  channel: ChannelKey;
   allowNoChoiceCards: boolean;
   choiceCardsSettings?: ChoiceCardsSettings;
   updateChoiceCardsSettings: (
@@ -63,6 +78,7 @@ interface ChoiceCardsEditorProps {
 
 const ChoiceCardsEditor: React.FC<ChoiceCardsEditorProps> = ({
   showChoiceCards,
+  channel,
   choiceCardsSettings,
   updateChoiceCardsSettings,
   allowNoChoiceCards,
@@ -70,6 +86,8 @@ const ChoiceCardsEditor: React.FC<ChoiceCardsEditorProps> = ({
   onValidationChange,
 }: ChoiceCardsEditorProps) => {
   const classes = useStyles();
+  const [defaultChoiceCardsSettings, setDefaultChoiceCardsSettings] =
+    React.useState<ChoiceCardsSettings>();
 
   const formMethods = useForm<ChoiceCardsSettings & { hasOneDefault: boolean }>({
     defaultValues: {
@@ -92,6 +110,12 @@ const ChoiceCardsEditor: React.FC<ChoiceCardsEditorProps> = ({
 
   const choiceCardsSelection = getChoiceCardsSelection(showChoiceCards, choiceCardsSettings);
   const defaultCardCount = countDefaultCards(choiceCards);
+
+  React.useEffect(() => {
+    void fetchDefaultChoiceCardsSettings().then((settings) =>
+      setDefaultChoiceCardsSettings(settings[channel].Default),
+    );
+  }, [channel]);
 
   React.useEffect(() => {
     if (choiceCardsSelection === 'CustomChoiceCards') {
@@ -117,7 +141,11 @@ const ChoiceCardsEditor: React.FC<ChoiceCardsEditorProps> = ({
     if (event.target.value === 'DefaultChoiceCards') {
       updateChoiceCardsSettings(true);
     } else if (event.target.value === 'CustomChoiceCards') {
-      updateChoiceCardsSettings(true, { choiceCards: [] });
+      const defaultChoiceCards = defaultChoiceCardsSettings?.choiceCards ?? [];
+      updateChoiceCardsSettings(true, {
+        choiceCards: defaultChoiceCards,
+      });
+      formMethods.setValue('choiceCards', defaultChoiceCards);
     } else {
       updateChoiceCardsSettings(false);
       formMethods.setValue('choiceCards', []);
