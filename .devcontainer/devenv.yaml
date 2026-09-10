@@ -50,3 +50,8 @@ postCreateCommand:
     workingDirectory: '.'
   - cmd: 'mise reshim'
     workingDirectory: '.'
+
+
+remoteEnv:
+  - name: 'PATH'
+    value: '/home/vscode/.local/share/mise/shims:${containerEnv:PATH}'

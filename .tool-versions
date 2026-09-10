@@ -2,4 +2,3 @@ java corretto-11
 node 22
 github:guardian/devenv 20260721-123412
 aqua:aws/aws-cli 2
-aqua:cli/cli 2
