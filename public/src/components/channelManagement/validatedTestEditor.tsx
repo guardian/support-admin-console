@@ -117,7 +117,7 @@ export const ValidatedTestEditor = <T extends Test>(
           <TestEditor
             test={test}
             userHasTestLocked={userHasTestLocked}
-            showMParticleMenu={test.name.startsWith('MPARTICLE ATTRIBUTE')}
+            showMParticleMenu={test.name.startsWith('MPARTICLE_ATTRIBUTE_')}
             onTestChange={(update) => onUpdate(update(test))}
             setValidationStatusForField={setValidationStatusForField}
           />
