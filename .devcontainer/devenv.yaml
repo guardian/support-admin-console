@@ -22,9 +22,8 @@ modules:
   - node
 
 # Optional: Ports to forward
-# forwardPorts:
-#   - 8080  # same port on host and container
-#   - "8000:9000"  # hostPort:containerPort
+forwardPorts:
+  - 9000
 
 # Optional: Mount directories from host to container
 # mounts:
@@ -39,6 +38,10 @@ modules:
 # Each command has a 'cmd' field and a 'workingDirectory' field
 # e.g.
 postCreateCommand:
+  # prepare /etc/gu for the fetch-config.sh script
+  - cmd: 'sudo install -d -o vscode -g vscode /etc/gu'
+    logLine: 'create_etc_gu'
+    workingDirectory: '.'
   - cmd: 'mise install'
     logLine: 'mise_install'
     workingDirectory: '.'
