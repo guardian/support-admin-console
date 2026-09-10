@@ -53,7 +53,5 @@ postCreateCommand:
 
 
 remoteEnv:
-  - name: 'PATH'
-    value: '/home/vscode/.local/share/mise/shims:${containerEnv:PATH}'
   - name: GITHUB_TOKEN
     value: "${localEnv:GITHUB_TOKEN}"
