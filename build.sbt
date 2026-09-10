@@ -5,7 +5,7 @@ version := "1.0-SNAPSHOT"
 scalaVersion := "2.13.18"
 
 val circeVersion = "0.14.16"
-val awsVersion = "2.50.1"
+val awsVersion = "2.54.0"
 val zioVersion = "2.1.26"
 val jacksonVersion = "2.22.1"
 
