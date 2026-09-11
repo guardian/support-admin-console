@@ -23,7 +23,7 @@ export const MParticleTemplateMenu: React.FC<Props> = ({ insertTemplate }: Props
   };
 
   return (
-    <div>
+    <>
       <Button
         className="remirror-button"
         onClick={handleButtonClick}
@@ -39,6 +39,6 @@ export const MParticleTemplateMenu: React.FC<Props> = ({ insertTemplate }: Props
           Last Contribution
         </MenuItem>
       </Menu>
-    </div>
+    </>
   );
 };
