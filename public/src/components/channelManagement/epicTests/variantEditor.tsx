@@ -96,6 +96,7 @@ interface FormData {
 interface EpicTestVariantEditorProps {
   variant: EpicVariant;
   epicEditorConfig: EpicEditorConfig;
+  showMParticleMenu: boolean;
   onVariantChange: (update: (current: EpicVariant) => EpicVariant) => void;
   editMode: boolean;
   onDelete: () => void;
@@ -107,6 +108,7 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   onVariantChange,
   editMode,
   epicEditorConfig,
+  showMParticleMenu,
   onValidationChange,
 }: EpicTestVariantEditorProps) => {
   const {
@@ -300,6 +302,7 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                   enableArticleCountTemplate,
                   enableDateTemplate,
                   enableDayTemplate,
+                  enableMParticleTemplates: showMParticleMenu,
                 }}
               />
             );
@@ -345,6 +348,7 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                 enableArticleCountTemplate,
                 enableDateTemplate,
                 enableDayTemplate,
+                enableMParticleTemplates: showMParticleMenu,
               }}
             />
           );
@@ -387,6 +391,7 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                   enableArticleCountTemplate,
                   enableDateTemplate,
                   enableDayTemplate,
+                  enableMParticleTemplates: showMParticleMenu,
                 }}
               />
             );

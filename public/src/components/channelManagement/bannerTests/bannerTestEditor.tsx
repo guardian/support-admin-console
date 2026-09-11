@@ -39,6 +39,7 @@ import { ValidatedTestEditorProps } from '../validatedTestEditor';
 import { DeployScheduleEditor } from './deployScheduleEditor';
 import { FrontsOnlyEditor } from './frontsOnlyEditor';
 import { getDefaultVariant } from './utils/defaults';
+import { findMParticleTemplates } from './utils/findMParticleTemplates';
 import VariantEditor from './variantEditor';
 
 const copyHasTemplate = (content: BannerContent, template: string): boolean =>
@@ -56,6 +57,7 @@ const testCopyHasTemplate = (test: BannerTest, template: string): boolean =>
 const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
   test,
   userHasTestLocked,
+  showMParticleMenu,
   onTestChange,
   setValidationStatusForField,
 }: ValidatedTestEditorProps<BannerTest>) => {
@@ -100,6 +102,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
         ...updatedTest,
         // To save dotcom from having to work this out
         articlesViewedSettings: getArticlesViewedSettingsRef.current(updatedTest),
+        mParticleTemplates: findMParticleTemplates(updatedTest),
       };
     });
   };
@@ -254,6 +257,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
     <VariantEditor
       key={`banner-${test.name}-${variant.name}`}
       variant={variant}
+      showMParticleMenu={showMParticleMenu}
       onVariantChange={getVariantChangeCallback(variant.name)}
       onDelete={(): void => onVariantDelete(variant.name)}
       editMode={userHasTestLocked}
