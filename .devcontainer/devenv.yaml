@@ -14,9 +14,6 @@ name: "support-admin-console"
 # To disable, comment out or remove items from this list
 modules:
   - mise
-  # - docker-in-docker  # (disabled by default)
-  # - scala  # (disabled by default)
-  # - node  # (disabled by default)
   - github-copilot
   - scala
   - node
