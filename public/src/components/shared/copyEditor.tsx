@@ -24,7 +24,7 @@ interface CopyEditorProps {
   onChange: (updatedCopy: Copy) => void;
   onValidationChange?: (isValid: boolean) => void;
   editMode: boolean;
-  enableMParticleAmountTemplates?: boolean;
+  enableMParticleTemplates?: boolean;
 }
 
 interface FormData {
@@ -37,7 +37,7 @@ export const CopyEditor: React.FC<CopyEditorProps> = ({
   onChange,
   onValidationChange,
   editMode,
-  enableMParticleAmountTemplates = false,
+  enableMParticleTemplates = false,
 }: CopyEditorProps) => {
   const classes = useStyles();
 
@@ -120,7 +120,7 @@ export const CopyEditor: React.FC<CopyEditorProps> = ({
                   enableStrikethrough: true,
                   enableCopyTemplates: true,
                   enableLink: true,
-                  enableMParticleAmountTemplates,
+                  enableMParticleTemplates,
                 }}
               />
             );
@@ -155,7 +155,7 @@ export const CopyEditor: React.FC<CopyEditorProps> = ({
                     enableStrikethrough: true,
                     enableCopyTemplates: true,
                     enableLink: true,
-                    enableMParticleAmountTemplates,
+                    enableMParticleTemplates,
                   }}
                 />
               );

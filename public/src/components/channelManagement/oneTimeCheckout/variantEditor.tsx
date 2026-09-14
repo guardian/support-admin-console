@@ -37,9 +37,14 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
         }
         onValidationChange={(isValid) => setValidationStatusForField('copy', isValid)}
         editMode={editMode}
-        enableMParticleAmountTemplates={showMParticleMenu}
+        enableMParticleTemplates={showMParticleMenu}
       />
-      <AmountsSection variant={variant} onVariantChange={onVariantChange} editMode={editMode} />
+      <AmountsSection
+        variant={variant}
+        onVariantChange={onVariantChange}
+        editMode={editMode}
+        showMParticleMenu={showMParticleMenu}
+      />
       <TickerEditor
         tickerSettings={variant.tickerSettings}
         updateTickerSettings={(updatedTickerSettings?: TickerSettings): void => {

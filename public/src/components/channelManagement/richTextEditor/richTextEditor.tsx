@@ -77,7 +77,6 @@ interface RteMenuConstraints {
   enableLink?: boolean;
   enableStrikethrough?: boolean;
   enableMParticleTemplates?: boolean;
-  enableMParticleAmountTemplates?: boolean;
 }
 
 /**
@@ -301,11 +300,7 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
     enableDayTemplate,
     enableCampaignDeadlineTemplate,
     enableMParticleTemplates,
-    enableMParticleAmountTemplates,
   } = rteMenuConstraints;
-  const showMParticleTemplateMenu = [enableMParticleTemplates, enableMParticleAmountTemplates].some(
-    Boolean,
-  );
 
   const clickBold = () => {
     chain.toggleBold().focus().run();
@@ -417,7 +412,7 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
                   Date
                 </button>
               )}
-              {showMParticleTemplateMenu && (
+              {enableMParticleTemplates && (
                 <MParticleTemplateMenu insertTemplate={insertTemplate} />
               )}
               {enableProductWeeklyTemplate && (

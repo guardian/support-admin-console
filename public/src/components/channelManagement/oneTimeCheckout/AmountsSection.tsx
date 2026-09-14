@@ -13,12 +13,14 @@ interface AmountsSectionProps {
   variant: OneTimeCheckoutVariant;
   onVariantChange: (update: (current: OneTimeCheckoutVariant) => OneTimeCheckoutVariant) => void;
   editMode: boolean;
+  showMParticleMenu: boolean;
 }
 
 export const AmountsSection: React.FC<AmountsSectionProps> = ({
   variant,
   onVariantChange,
   editMode,
+  showMParticleMenu,
 }) => {
   const classes = useStyles();
 
@@ -76,6 +78,7 @@ export const AmountsSection: React.FC<AmountsSectionProps> = ({
         defaultAmount={variant.amounts.defaultAmount}
         hideChooseYourAmount={variant.amounts.hideChooseYourAmount}
         mParticleAmountAttribute={variant.amounts.mParticleAmountAttribute}
+        showMParticleMenu={showMParticleMenu}
         updateAmounts={updateAmounts}
         updateChooseAmount={updateChooseAmount}
         updateDefaultAmount={updateDefaultAmount}
