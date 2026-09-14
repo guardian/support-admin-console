@@ -61,7 +61,7 @@ export const DEFAULT_REGION_TARGETING: RegionTargeting = {
   contributionsOnlyCountriesTargeting: 'Exclude',
 };
 
-const CODE_DEFAULT_TEST: EpicTest = {
+export const CODE_DEFAULT_TEST: EpicTest = {
   name: 'TEST',
   nickname: 'TEST',
   status: 'Draft',
