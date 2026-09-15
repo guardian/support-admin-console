@@ -13,3 +13,4 @@ project/project
 dynamodb-local/
 project/metals.sbt
 dynamodb-local-metadata.json
+.pnpm-store/
