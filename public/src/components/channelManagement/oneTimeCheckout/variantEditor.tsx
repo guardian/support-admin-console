@@ -11,6 +11,7 @@ interface VariantEditorProps {
   onVariantChange: (update: (current: OneTimeCheckoutVariant) => OneTimeCheckoutVariant) => void;
   onDelete: () => void;
   editMode: boolean;
+  showMParticleMenu: boolean;
   onValidationChange: (isValid: boolean) => void;
 }
 
@@ -18,6 +19,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
   variant,
   onVariantChange,
   editMode,
+  showMParticleMenu,
   onValidationChange,
 }: VariantEditorProps) => {
   const setValidationStatusForField = useValidation(onValidationChange);
@@ -35,8 +37,14 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
         }
         onValidationChange={(isValid) => setValidationStatusForField('copy', isValid)}
         editMode={editMode}
+        enableMParticleTemplates={showMParticleMenu}
       />
-      <AmountsSection variant={variant} onVariantChange={onVariantChange} editMode={editMode} />
+      <AmountsSection
+        variant={variant}
+        onVariantChange={onVariantChange}
+        editMode={editMode}
+        showMParticleMenu={showMParticleMenu}
+      />
       <TickerEditor
         tickerSettings={variant.tickerSettings}
         updateTickerSettings={(updatedTickerSettings?: TickerSettings): void => {

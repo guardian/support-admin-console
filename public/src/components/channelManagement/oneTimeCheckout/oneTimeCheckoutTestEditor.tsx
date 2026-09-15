@@ -17,6 +17,7 @@ const OneTimeCheckoutTestEditor: React.FC<ValidatedTestEditorProps<OneTimeChecko
   userHasTestLocked,
   onTestChange,
   setValidationStatusForField,
+  showMParticleMenu,
 }: ValidatedTestEditorProps<OneTimeCheckoutTest>) => {
   const classes = useStyles();
 
@@ -107,6 +108,7 @@ const OneTimeCheckoutTestEditor: React.FC<ValidatedTestEditorProps<OneTimeChecko
       onDelete={(): void => onVariantDelete(variant.name)}
       editMode={userHasTestLocked}
       onValidationChange={getValidationCallback(variant.name)}
+      showMParticleMenu={showMParticleMenu}
     />
   );
 

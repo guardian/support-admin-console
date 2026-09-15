@@ -32,6 +32,7 @@ import {
   CURRENCY_TEMPLATE,
   DATE,
   DAY_OF_THE_WEEK,
+  MPARTICLE_LAST_SINGLE_CONTRIBUTION,
   PRICE_DIGISUB_ANNUAL,
   PRICE_DIGISUB_MONTHLY,
   PRICE_GUARDIANWEEKLY_ANNUAL,
@@ -499,6 +500,10 @@ const getRteCopyLength = (copy: string[]): number => {
   paragraphsCheck = paragraphsCheck.replace(/%%CURRENCY_SYMBOL%%/g, ' ');
   paragraphsCheck = paragraphsCheck.replace(/%%ARTICLE_COUNT%%/g, '     ');
   paragraphsCheck = paragraphsCheck.replace(/%%COUNTRY_NAME%%/g, '          ');
+  paragraphsCheck = paragraphsCheck.replace(
+    new RegExp(MPARTICLE_LAST_SINGLE_CONTRIBUTION, 'g'),
+    '    ',
+  );
 
   return paragraphsCheck.length;
 };
