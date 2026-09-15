@@ -13,6 +13,8 @@ interface RichTextEditorV2Props {
   copyData?: string[];
   label?: string;
   name?: string;
+  error?: boolean;
+  helperText?: string;
 }
 
 interface RichTextEditorV2SingleLineProps {
@@ -20,6 +22,8 @@ interface RichTextEditorV2SingleLineProps {
   copyData?: string;
   label?: string;
   name?: string;
+  error?: boolean;
+  helperText?: string;
 }
 
 type ProseKitEditor = ReturnType<typeof createEditor>;
@@ -32,6 +36,8 @@ const RichTextEditorV2Content: React.FC<RichTextEditorV2Props & { editor: ProseK
   editor,
   label,
   name,
+  error,
+  helperText,
 }) => {
   const classes = useRichTextEditorV2Styles();
   const readonlyExtension = useMemo(() => (disabled ? defineReadonly() : null), [disabled]);
@@ -65,6 +71,7 @@ const RichTextEditorV2Content: React.FC<RichTextEditorV2Props & { editor: ProseK
           aria-readonly={disabled}
         />
       </div>
+      {helperText && <p className={error ? classes.errorText : classes.helperText}>{helperText}</p>}
     </div>
   );
 };
