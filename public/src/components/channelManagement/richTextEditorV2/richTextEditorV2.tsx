@@ -15,6 +15,13 @@ interface RichTextEditorV2Props {
   name?: string;
 }
 
+interface RichTextEditorV2SingleLineProps {
+  disabled: boolean;
+  copyData?: string;
+  label?: string;
+  name?: string;
+}
+
 type ProseKitEditor = ReturnType<typeof createEditor>;
 
 const parseCopyForParagraphs = (copy: string[]): string =>
@@ -80,4 +87,9 @@ const RichTextEditorV2: React.FC<RichTextEditorV2Props> = ({ copyData = [], ...p
   );
 };
 
-export { RichTextEditorV2, RichTextEditorV2Props };
+const RichTextEditorV2SingleLine: React.FC<RichTextEditorV2SingleLineProps> = ({
+  copyData,
+  ...props
+}) => <RichTextEditorV2 {...props} copyData={copyData ? [copyData] : undefined} />;
+
+export { RichTextEditorV2, RichTextEditorV2Props, RichTextEditorV2SingleLine };
