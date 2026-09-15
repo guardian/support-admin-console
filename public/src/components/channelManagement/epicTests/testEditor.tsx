@@ -35,6 +35,7 @@ import { ValidatedTestEditor, ValidatedTestEditorProps } from '../validatedTestE
 import MaxViewsEditor from './maxViewsEditor';
 import { EpicTestPreviewButton } from './testPreview';
 import { getDefaultVariant } from './utils/defaults';
+import { findMParticleTemplates } from './utils/findMParticleTemplates';
 import VariantEditor from './variantEditor';
 import VariantPreview from './variantPreview';
 
@@ -51,6 +52,7 @@ export const getEpicTestEditor = (
   const EpicTestEditor = ({
     test,
     userHasTestLocked,
+    showMParticleMenu,
     onTestChange,
     setValidationStatusForField,
   }: ValidatedTestEditorProps<EpicTest>) => {
@@ -89,6 +91,7 @@ export const getEpicTestEditor = (
           ...updatedTest,
           // To save dotcom from having to work this out
           hasCountryName: copyHasTemplate(updatedTest, COUNTRY_NAME_TEMPLATE),
+          mParticleTemplates: findMParticleTemplates(updatedTest),
           articlesViewedSettings: userExplicitlyDisabledArticleCount
             ? undefined
             : getArticlesViewedSettings(updatedTest),
@@ -264,6 +267,7 @@ export const getEpicTestEditor = (
         variantEditor={
           <VariantEditor
             epicEditorConfig={epicEditorConfig}
+            showMParticleMenu={showMParticleMenu}
             key={variant.name}
             variant={variant}
             editMode={userHasTestLocked}
@@ -364,6 +368,7 @@ export const getEpicTestEditor = (
                 key={test.variants[0].name}
                 variant={test.variants[0]}
                 epicEditorConfig={epicEditorConfig}
+                showMParticleMenu={showMParticleMenu}
                 editMode={userHasTestLocked}
                 onVariantChange={getVariantChangeCallback(test.variants[0].name)}
                 onDelete={(): void => onVariantDelete(test.variants[0].name)}

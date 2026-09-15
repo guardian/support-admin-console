@@ -23,7 +23,7 @@ import { ValidatedTestEditorProps } from '../validatedTestEditor';
 import { GutterTestPreviewButton } from './gutterTestPreview';
 import GutterVariantEditor from './gutterVariantEditor';
 import GutterVariantPreview from './gutterVariantPreview';
-import { getDefaultVariant } from './utils/defaults';
+import { getDefaultVariant, settings } from './utils/defaults';
 
 const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
   test,
@@ -100,7 +100,9 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
           onDelete={(): void => onVariantDelete(variant.name)}
         />
       }
-      variantPreview={<GutterVariantPreview variant={variant} />}
+      variantPreview={
+        settings.allowVariantPreview ? <GutterVariantPreview variant={variant} /> : undefined
+      }
     />
   );
 
@@ -184,9 +186,11 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
         <Typography variant={'h3'} className={classes.sectionHeader}>
           Variants
         </Typography>
-        <div className={classes.variantsHeaderButtonsContainer}>
-          <GutterTestPreviewButton test={test} />
-        </div>
+        {settings.allowVariantPreview && (
+          <div className={classes.variantsHeaderButtonsContainer}>
+            <GutterTestPreviewButton test={test} />
+          </div>
+        )}
         <div>
           <VariantsEditor<GutterVariant>
             variants={test.variants}

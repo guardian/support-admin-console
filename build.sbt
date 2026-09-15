@@ -5,9 +5,9 @@ version := "1.0-SNAPSHOT"
 scalaVersion := "2.13.18"
 
 val circeVersion = "0.14.16"
-val awsVersion = "2.50.1"
+val awsVersion = "2.54.0"
 val zioVersion = "2.1.26"
-val jacksonVersion = "2.22.1"
+val jacksonVersion = "2.22.2"
 
 lazy val scalafmtSettings = Seq(
   scalafmtFilter.withRank(KeyRanks.Invisible) := "diff-dirty",
@@ -30,7 +30,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.6",
   "com.gu.play-googleauth" %% "play-v30" % "42.2.0",
   "com.google.cloud" % "google-cloud-bigquery" % "2.69.0",
-  "com.gu" %% "simple-configuration-ssm" % "12.0.2",
+  "com.gu" %% "simple-configuration-ssm" % "13.0.0",
   "software.amazon.awssdk" % "s3" % awsVersion,
   "software.amazon.awssdk" % "dynamodb" % awsVersion,
   "io.circe" %% "circe-core" % circeVersion,
@@ -61,7 +61,7 @@ dependencyOverrides ++= List(
   "commons-io" % "commons-io" % "2.22.0" % Test,
   "commons-beanutils" % "commons-beanutils" % "1.11.0",
   // Play-test brings in a vulnerable version of plexus-utils - https://github.com/advisories/GHSA-4368-p58w-2w5w
-  "org.codehaus.plexus" % "plexus-utils" % "4.0.3"
+  "org.codehaus.plexus" % "plexus-utils" % "4.1.0"
 )
 
 excludeDependencies ++= Seq(

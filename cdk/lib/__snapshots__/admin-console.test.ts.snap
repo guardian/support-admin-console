@@ -36,6 +36,7 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
       "GuCname",
       "GuStringParameter",
       "GuDynamoDBReadPolicy",
+      "GuDynamoDBReadPolicy",
       "GuGetS3ObjectsPolicy",
     ],
     "gu:cdk:version": "TEST",
@@ -2428,6 +2429,57 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
               "Version": "2012-10-17",
             },
             "PolicyName": "dynamoPolicyForCapi",
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "dynamodb:BatchGetItem",
+                    "dynamodb:GetItem",
+                    "dynamodb:Scan",
+                    "dynamodb:Query",
+                    "dynamodb:GetRecords",
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:aws:dynamodb:eu-west-1:",
+                          {
+                            "Ref": "AWS::AccountId",
+                          },
+                          ":table/",
+                          {
+                            "Ref": "PromosDynamoTable471905A5",
+                          },
+                        ],
+                      ],
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:aws:dynamodb:eu-west-1:",
+                          {
+                            "Ref": "AWS::AccountId",
+                          },
+                          ":table/",
+                          {
+                            "Ref": "PromosDynamoTable471905A5",
+                          },
+                          "/index/*",
+                        ],
+                      ],
+                    },
+                  ],
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "dynamoPromosPolicyForCapi",
           },
           {
             "PolicyDocument": {

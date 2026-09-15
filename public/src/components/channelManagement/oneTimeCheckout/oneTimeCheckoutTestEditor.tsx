@@ -10,6 +10,7 @@ import { MParticleAudienceEditor } from '../mParticleAudienceEditor';
 import TestEditorTargetRegionsSelector from '../testEditorTargetRegionsSelector';
 import { ValidatedTestEditorProps } from '../validatedTestEditor';
 import { getDefaultVariant } from './utils/defaults';
+import { findMParticleTemplates } from './utils/findMParticleTemplates';
 import VariantEditor from './variantEditor';
 
 const OneTimeCheckoutTestEditor: React.FC<ValidatedTestEditorProps<OneTimeCheckoutTest>> = ({
@@ -17,6 +18,7 @@ const OneTimeCheckoutTestEditor: React.FC<ValidatedTestEditorProps<OneTimeChecko
   userHasTestLocked,
   onTestChange,
   setValidationStatusForField,
+  showMParticleMenu,
 }: ValidatedTestEditorProps<OneTimeCheckoutTest>) => {
   const classes = useStyles();
 
@@ -25,7 +27,14 @@ const OneTimeCheckoutTestEditor: React.FC<ValidatedTestEditorProps<OneTimeChecko
   ): void => {
     onTestChange((current) => {
       const updatedVariantList = update(current.variants);
-      return { ...current, variants: updatedVariantList };
+      return {
+        ...current,
+        variants: updatedVariantList,
+        mParticleTemplates: findMParticleTemplates({
+          ...current,
+          variants: updatedVariantList,
+        }),
+      };
     });
   };
 
@@ -107,6 +116,7 @@ const OneTimeCheckoutTestEditor: React.FC<ValidatedTestEditorProps<OneTimeChecko
       onDelete={(): void => onVariantDelete(variant.name)}
       editMode={userHasTestLocked}
       onValidationChange={getValidationCallback(variant.name)}
+      showMParticleMenu={showMParticleMenu}
     />
   );
 

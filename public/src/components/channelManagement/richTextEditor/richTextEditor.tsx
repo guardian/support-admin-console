@@ -32,14 +32,16 @@ import {
   CURRENCY_TEMPLATE,
   DATE,
   DAY_OF_THE_WEEK,
+  MPARTICLE_LAST_SINGLE_CONTRIBUTION,
   PRICE_DIGISUB_ANNUAL,
   PRICE_DIGISUB_MONTHLY,
   PRICE_GUARDIANWEEKLY_ANNUAL,
   PRICE_GUARDIANWEEKLY_MONTHLY,
   PRICE_PRODUCT_WEEKLY,
 } from '../helpers/validation';
-import './remirror-styles.css';
+import { MParticleTemplateMenu } from './mParticleTemplateMenu';
 import { useRTEStyles } from './richTextEditorStyles';
+import './remirror-styles.css';
 
 // Typescript
 interface RichTextEditorProps<T> {
@@ -74,6 +76,7 @@ interface RteMenuConstraints {
   enableCampaignDeadlineTemplate?: boolean;
   enableLink?: boolean;
   enableStrikethrough?: boolean;
+  enableMParticleTemplates?: boolean;
 }
 
 /**
@@ -296,6 +299,7 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
     enableDateTemplate,
     enableDayTemplate,
     enableCampaignDeadlineTemplate,
+    enableMParticleTemplates,
   } = rteMenuConstraints;
 
   const clickBold = () => {
@@ -408,6 +412,9 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
                   Date
                 </button>
               )}
+              {enableMParticleTemplates && (
+                <MParticleTemplateMenu insertTemplate={insertTemplate} />
+              )}
               {enableProductWeeklyTemplate && (
                 <button
                   className="remirror-button"
@@ -493,6 +500,10 @@ const getRteCopyLength = (copy: string[]): number => {
   paragraphsCheck = paragraphsCheck.replace(/%%CURRENCY_SYMBOL%%/g, ' ');
   paragraphsCheck = paragraphsCheck.replace(/%%ARTICLE_COUNT%%/g, '     ');
   paragraphsCheck = paragraphsCheck.replace(/%%COUNTRY_NAME%%/g, '          ');
+  paragraphsCheck = paragraphsCheck.replace(
+    new RegExp(MPARTICLE_LAST_SINGLE_CONTRIBUTION, 'g'),
+    '    ',
+  );
 
   return paragraphsCheck.length;
 };
