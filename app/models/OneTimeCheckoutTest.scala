@@ -43,7 +43,8 @@ case class OneTimeCheckoutTest(
     variants: List[OneTimeCheckoutVariant],
     methodologies: List[Methodology] = defaultMethodologies,
     campaignName: Option[String] = Some("NOT_IN_CAMPAIGN"),
-    mParticleAudience: Option[Int] = None
+    mParticleAudience: Option[Int] = None,
+    mParticleTemplates: Option[List[String]] = None
 ) extends ChannelTest[OneTimeCheckoutTest] {
   override val scheduler: Option[Scheduler] = None
 
