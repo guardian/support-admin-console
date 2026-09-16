@@ -31,6 +31,10 @@ describe('templateValidatorForPlatform', () => {
       expect(templateValidator('%%mParticle_last_single_contribution_amount%%')).toBeUndefined();
     });
 
+    it('should return undefined if valid templates are adjacent', () => {
+      expect(templateValidator('%%COUNTRY_NAME%%%%CURRENCY_SYMBOL%%')).toBeUndefined();
+    });
+
     it('should return an error message if template text is not valid', () => {
       expect(templateValidator('I am from %%COUNTRY_NAM%%')).toEqual(
         'Invalid template: %%COUNTRY_NAM%%',
