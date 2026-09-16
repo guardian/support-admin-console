@@ -32,7 +32,6 @@ import {
   CURRENCY_TEMPLATE,
   DATE,
   DAY_OF_THE_WEEK,
-  MPARTICLE_LAST_SINGLE_CONTRIBUTION,
   PRICE_DIGISUB_ANNUAL,
   PRICE_DIGISUB_MONTHLY,
   PRICE_GUARDIANWEEKLY_ANNUAL,
@@ -41,6 +40,7 @@ import {
 } from '../helpers/validation';
 import { MParticleTemplateMenu } from './mParticleTemplateMenu';
 import { useRTEStyles } from './richTextEditorStyles';
+import { paragraphsToArray, parseCopyForParagraphs } from './utils';
 import './remirror-styles.css';
 
 // Typescript
@@ -483,43 +483,6 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
   );
 };
 
-// Helper function - converts an array of strings into a set of (stringified) HTML <p> elements
-const parseCopyForParagraphs = (copy: string[]): string => {
-  let res = '';
-
-  copy.forEach((paragraph) => {
-    res += `<p>${paragraph}</p>`;
-  });
-  return res;
-};
-
-const getRteCopyLength = (copy: string[]): number => {
-  let paragraphsCheck = copy.filter((p) => p).join('');
-
-  paragraphsCheck = paragraphsCheck.replace(/<.*?>/g, '');
-  paragraphsCheck = paragraphsCheck.replace(/%%CURRENCY_SYMBOL%%/g, ' ');
-  paragraphsCheck = paragraphsCheck.replace(/%%ARTICLE_COUNT%%/g, '     ');
-  paragraphsCheck = paragraphsCheck.replace(/%%COUNTRY_NAME%%/g, '          ');
-  paragraphsCheck = paragraphsCheck.replace(
-    new RegExp(MPARTICLE_LAST_SINGLE_CONTRIBUTION, 'g'),
-    '    ',
-  );
-
-  return paragraphsCheck.length;
-};
-
-const paragraphsToArray = (html: string): string[] => {
-  const frag = document.createElement('div');
-  frag.innerHTML = html;
-
-  const elements = Array.from(frag.children);
-
-  const paragraphs = elements.filter((p) => p.tagName === 'P');
-
-  // When a paragraph contains only a <br> (ProseMirror trailing break), treat it as empty
-  return paragraphs.map((p) => (p.textContent === '' ? '' : p.innerHTML));
-};
-
 // Component function
 const RichTextEditor: React.FC<RichTextEditorProps<string[]>> = ({
   disabled,
@@ -635,4 +598,5 @@ const RichTextEditorSingleLine: React.FC<RichTextEditorProps<string>> = ({
   );
 };
 
-export { RichTextEditor, RichTextEditorSingleLine, getRteCopyLength, RteMenuConstraints };
+export { RichTextEditor, RichTextEditorSingleLine, RteMenuConstraints };
+export { getRteCopyLength } from './utils';
