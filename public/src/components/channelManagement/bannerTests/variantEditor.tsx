@@ -567,6 +567,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
         {designHasChoiceCards && (
           <ChoiceCardsEditor
             showChoiceCards={true}
+            channel="banner"
             allowNoChoiceCards={false}
             choiceCardsSettings={variant.choiceCardsSettings}
             updateChoiceCardsSettings={updateChoiceCardsSettings}

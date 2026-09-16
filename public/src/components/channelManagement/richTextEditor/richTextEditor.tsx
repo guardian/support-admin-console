@@ -320,6 +320,7 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
               {enableBold && (
                 <button
                   className={`remirror-button ${active.bold() && 'remirror-button-active'}`}
+                  onMouseDown={(event) => event.preventDefault()}
                   onClick={() => clickBold()}
                 >
                   Bold
@@ -328,6 +329,7 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
               {enableItalic && (
                 <button
                   className={`remirror-button ${active.italic() && 'remirror-button-active'}`}
+                  onMouseDown={(event) => event.preventDefault()}
                   onClick={() => clickItalic()}
                 >
                   Italic
@@ -336,6 +338,7 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
               {enableStrikethrough && (
                 <button
                   className={`remirror-button ${active.strike() && 'remirror-button-active'}`}
+                  onMouseDown={(event) => event.preventDefault()}
                   onClick={() => clickStrikethrough()}
                 >
                   Strikethrough
@@ -353,6 +356,7 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
               {enableArticleCountTemplate && (
                 <button
                   className="remirror-button"
+                  onMouseDown={(event) => event.preventDefault()}
                   onClick={() => insertTemplate(ARTICLE_COUNT_TEMPLATE)}
                 >
                   Articles
@@ -361,6 +365,7 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
               {enableCampaignDeadlineTemplate && (
                 <button
                   className="remirror-button"
+                  onMouseDown={(event) => event.preventDefault()}
                   onClick={() => insertTemplate(CAMPAIGN_DEADLINE_TEMPLATE)}
                   title="This will be swapped out with either: 'Final day', '1 day left' or 'x days left' to match the countdown deadline."
                 >
@@ -370,6 +375,7 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
               {enableCurrencyTemplate && (
                 <button
                   className="remirror-button"
+                  onMouseDown={(event) => event.preventDefault()}
                   onClick={() => insertTemplate(CURRENCY_TEMPLATE)}
                 >
                   Currency
@@ -378,24 +384,34 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
               {enableCountryNameTemplate && (
                 <button
                   className="remirror-button"
+                  onMouseDown={(event) => event.preventDefault()}
                   onClick={() => insertTemplate(COUNTRY_NAME_TEMPLATE)}
                 >
                   Country
                 </button>
               )}
               {enableDayTemplate && (
-                <button className="remirror-button" onClick={() => insertTemplate(DAY_OF_THE_WEEK)}>
+                <button
+                  className="remirror-button"
+                  onMouseDown={(event) => event.preventDefault()}
+                  onClick={() => insertTemplate(DAY_OF_THE_WEEK)}
+                >
                   Day of week
                 </button>
               )}
               {enableDateTemplate && (
-                <button className="remirror-button" onClick={() => insertTemplate(DATE)}>
+                <button
+                  className="remirror-button"
+                  onMouseDown={(event) => event.preventDefault()}
+                  onClick={() => insertTemplate(DATE)}
+                >
                   Date
                 </button>
               )}
               {enableProductWeeklyTemplate && (
                 <button
                   className="remirror-button"
+                  onMouseDown={(event) => event.preventDefault()}
                   onClick={() => insertTemplate(PRICE_PRODUCT_WEEKLY)}
                 >
                   Product weekly price
@@ -407,6 +423,7 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
                   <div className={classes.dropdownMenu}>
                     <button
                       className={`remirror-button ${classes.dropdownMenuToggle}`}
+                      onMouseDown={(event) => event.preventDefault()}
                       onClick={() => setPriceButtonsVisible(!priceButtonsVisible)}
                     >
                       {priceButtonsVisible ? 'Prices ↑' : 'Prices ↓'}
@@ -421,24 +438,28 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
                       <div className={classes.fieldLabelPrices}>Price templates:</div>
                       <button
                         className={`remirror-button ${classes.dropdownMenuItem}`}
+                        onMouseDown={(event) => event.preventDefault()}
                         onClick={() => insertTemplate(PRICE_DIGISUB_MONTHLY)}
                       >
                         Digisub monthly
                       </button>
                       <button
                         className={`remirror-button ${classes.dropdownMenuItem}`}
+                        onMouseDown={(event) => event.preventDefault()}
                         onClick={() => insertTemplate(PRICE_DIGISUB_ANNUAL)}
                       >
                         Digisub annual
                       </button>
                       <button
                         className={`remirror-button ${classes.dropdownMenuItem}`}
+                        onMouseDown={(event) => event.preventDefault()}
                         onClick={() => insertTemplate(PRICE_GUARDIANWEEKLY_MONTHLY)}
                       >
                         GW monthly
                       </button>
                       <button
                         className={`remirror-button ${classes.dropdownMenuItem}`}
+                        onMouseDown={(event) => event.preventDefault()}
                         onClick={() => insertTemplate(PRICE_GUARDIANWEEKLY_ANNUAL)}
                       >
                         GW annual

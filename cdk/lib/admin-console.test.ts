@@ -14,7 +14,8 @@ describe('The AdminConsole stack', () => {
     Object.keys(templateJson.Resources)
       .filter(
         (resourceId) =>
-          resourceId.startsWith('AllowKnownMethods') || resourceId.startsWith('BlockUnknownMethods'),
+          resourceId.startsWith('AllowKnownMethods') ||
+          resourceId.startsWith('BlockUnknownMethods'),
       )
       .forEach((resourceId) => {
         delete templateJson.Resources[resourceId].Properties?.Tags;

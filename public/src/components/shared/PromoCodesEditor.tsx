@@ -107,6 +107,7 @@ const PromoCodesEditor: React.FC<PromoCodesEditorProps> = ({
   promoCodes,
   updatePromoCodes,
   isDisabled,
+  maxPromoCodes,
 }) => {
   const classes = useStyles();
   const [newPromoCode, setNewPromoCode] = useState<string>('');
@@ -242,6 +243,8 @@ const PromoCodesEditor: React.FC<PromoCodesEditorProps> = ({
     return amount + duration || 'No discount details';
   };
 
+  const atPromoCodesLimit = maxPromoCodes !== undefined && promoCodes.length >= maxPromoCodes;
+
   return (
     <div className={classes.container}>
       {promoCodes.map((code) => {
@@ -322,14 +325,14 @@ const PromoCodesEditor: React.FC<PromoCodesEditorProps> = ({
           value={newPromoCode}
           onChange={(e) => setNewPromoCode(e.target.value.toUpperCase())}
           onKeyDown={handleKeyDown}
-          disabled={isDisabled || addingPromo}
+          disabled={isDisabled || addingPromo || atPromoCodesLimit}
           placeholder="e.g. PROMO123"
           size="small"
           fullWidth
         />
         <IconButton
           onClick={() => void handleAddPromo()}
-          disabled={isDisabled || !newPromoCode.trim() || addingPromo}
+          disabled={isDisabled || !newPromoCode.trim() || addingPromo || atPromoCodesLimit}
           color="primary"
         >
           {addingPromo ? <CircularProgress size={24} /> : <AddIcon />}

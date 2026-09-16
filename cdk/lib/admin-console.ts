@@ -425,8 +425,11 @@ export class AdminConsole extends GuStack {
       description: 'ID of the CAPI aws account',
     });
 
-    const dynamoPolicyForCapi = new GuDynamoDBReadPolicy(this, `DynamoRead-for-capi`, {
+    const dynamoTestsPolicyForCapi = new GuDynamoDBReadPolicy(this, `DynamoRead-for-capi`, {
       tableName: channelTestsDynamoTable.tableName,
+    });
+    const dynamoPromosPolicyForCapi = new GuDynamoDBReadPolicy(this, `DynamoPromosRead-for-capi`, {
+      tableName: promosTable.tableName,
     });
     const s3ReadPolicyForCapi = new GuGetS3ObjectsPolicy(this, 's3Get-for-capi', {
       bucketName: 'support-admin-console',
@@ -437,7 +440,8 @@ export class AdminConsole extends GuStack {
       roleName: `support-admin-console-channel-tests-capi-role-${this.stage}`,
       assumedBy: new AccountPrincipal(capiAccountId.valueAsString),
       inlinePolicies: {
-        dynamoPolicyForCapi: dynamoPolicyForCapi.document,
+        dynamoPolicyForCapi: dynamoTestsPolicyForCapi.document,
+        dynamoPromosPolicyForCapi: dynamoPromosPolicyForCapi.document,
         s3ReadPolicyForCapi: s3ReadPolicyForCapi.document,
       },
     });
