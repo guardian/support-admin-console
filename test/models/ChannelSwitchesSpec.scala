@@ -22,17 +22,17 @@ class ChannelSwitchesSpec extends AnyFlatSpec with Matchers with EitherValues {
       |  "enableMParticle": false,
       |  "enableAuxia": true,
       |  "enableAuxiaForBanners": true,
-      |  "gandalfSignInGateCountries": ["NZ", "CA"]
+      |  "enableGandalfSignInGate": true
       |}
       |""".stripMargin
 
-  it should "decode a switch document that includes the Gandalf country list" in {
+  it should "decode a switch document that includes the Gandalf switch" in {
     val decoded = decode[ChannelSwitches](fullJson).toOption.get
 
-    decoded.gandalfSignInGateCountries shouldBe List("NZ", "CA")
+    decoded.enableGandalfSignInGate shouldBe true
   }
 
-  it should "default the Gandalf country list to empty when absent, for backward compatibility with existing S3 documents" in {
+  it should "default the Gandalf switch to off when absent, for backward compatibility with existing S3 documents" in {
     val legacyJson =
       """
         |{
@@ -46,16 +46,16 @@ class ChannelSwitchesSpec extends AnyFlatSpec with Matchers with EitherValues {
 
     val decoded = decode[ChannelSwitches](legacyJson).toOption.get
 
-    decoded.gandalfSignInGateCountries shouldBe Nil
+    decoded.enableGandalfSignInGate shouldBe false
     decoded.enableAuxia shouldBe false
   }
 
-  it should "round-trip the Gandalf country list through the encoder" in {
+  it should "round-trip the Gandalf switch through the encoder" in {
     val decoded = decode[ChannelSwitches](fullJson).toOption.get
     val encoded = ChannelSwitches.encoder.apply(decoded)
     val redecoded = decode[ChannelSwitches](encoded.noSpaces).toOption.get
 
     redecoded shouldBe decoded
-    redecoded.gandalfSignInGateCountries shouldBe List("NZ", "CA")
+    redecoded.enableGandalfSignInGate shouldBe true
   }
 }

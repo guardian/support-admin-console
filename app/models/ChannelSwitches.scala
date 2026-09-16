@@ -17,7 +17,7 @@ case class ChannelSwitches(
     enableMParticle: Boolean = false,
     enableAuxia: Boolean = false,
     enableAuxiaForBanners: Boolean = false,
-    gandalfSignInGateCountries: List[String] = Nil
+    enableGandalfSignInGate: Boolean = false
 )
 
 object ChannelSwitches {

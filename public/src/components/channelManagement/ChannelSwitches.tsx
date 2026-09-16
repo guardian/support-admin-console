@@ -1,7 +1,6 @@
 import Button from '@mui/material/Button';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import TextField from '@mui/material/TextField';
 import { makeStyles } from '@mui/styles';
 import React from 'react';
 import withS3Data, { DataFromServer, InnerProps } from '../../hocs/withS3Data';
@@ -35,14 +34,10 @@ type SwitchName =
   | 'enableGutterLiveblogs'
   | 'enableMParticle'
   | 'enableAuxia'
-  | 'enableAuxiaForBanners';
+  | 'enableAuxiaForBanners'
+  | 'enableGandalfSignInGate';
 
-type ChannelSwitches = Record<SwitchName, boolean> & {
-  // Gandalf: marketing name for the Guardian-managed sign-in gate journey.
-  // Countries listed here (ISO codes) run the journey; an empty list means it
-  // is off everywhere, which is the rollback path.
-  gandalfSignInGateCountries: string[];
-};
+type ChannelSwitches = Record<SwitchName, boolean>;
 
 interface ChannelSwitchProps {
   name: SwitchName;
@@ -161,20 +156,11 @@ const ChannelSwitches: React.FC<InnerProps<ChannelSwitches>> = ({
         enabled={switches.enableAuxiaForBanners}
         setSwitch={onSwitchChange}
       />
-
-      <TextField
-        label="Gandalf sign-in gate countries"
-        helperText="Comma-separated ISO country codes (e.g. NZ, CA) for the Guardian-managed sign-in gate journey. Empty disables it everywhere (rollback)."
-        value={switches.gandalfSignInGateCountries.join(', ')}
-        onChange={(event): void => {
-          update({
-            ...switches,
-            gandalfSignInGateCountries: event.target.value
-              .split(',')
-              .map((country) => country.trim().toUpperCase())
-              .filter((country) => country.length > 0),
-          });
-        }}
+      <ChannelSwitch
+        name="enableGandalfSignInGate"
+        label="Enable Gandalf sign-in gate (New Zealand)"
+        enabled={switches.enableGandalfSignInGate}
+        setSwitch={onSwitchChange}
       />
 
       <Button
