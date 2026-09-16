@@ -6,30 +6,39 @@ import { createEditor } from 'prosekit/core';
 import { defineReadonly } from 'prosekit/extensions/readonly';
 import { ProseKit, useExtension } from 'prosekit/react';
 import React, { useCallback, useMemo, useState } from 'react';
+import { paragraphsToArrayV2, parseCopyForParagraphs } from '../richTextEditor/utils';
 import { useRichTextEditorV2Styles } from './richTextEditorV2Styles';
 
-interface RichTextEditorV2Props {
-  disabled: boolean;
-  copyData?: string[];
-  label?: string;
-  name?: string;
-  error?: boolean;
-  helperText?: string;
+interface RteMenuConstraints {
+  enableHtml?: boolean;
+  enableBold?: boolean;
+  enableItalic?: boolean;
+  enableCopyTemplates?: boolean;
+  enableCurrencyTemplate?: boolean;
+  enableCountryNameTemplate?: boolean;
+  enableArticleCountTemplate?: boolean;
+  enablePriceTemplates?: boolean;
+  enableProductWeeklyTemplate?: boolean;
+  enableDateTemplate?: boolean;
+  enableDayTemplate?: boolean;
+  enableCampaignDeadlineTemplate?: boolean;
+  enableLink?: boolean;
+  enableStrikethrough?: boolean;
+  enableMParticleTemplates?: boolean;
 }
 
-interface RichTextEditorV2SingleLineProps {
+interface RichTextEditorV2Props<T = string[]> {
   disabled: boolean;
-  copyData?: string;
   label?: string;
-  name?: string;
-  error?: boolean;
   helperText?: string;
+  name?: string;
+  error: boolean;
+  updateCopy: (item?: T) => void;
+  copyData?: T;
+  rteMenuConstraints?: RteMenuConstraints;
 }
 
 type ProseKitEditor = ReturnType<typeof createEditor>;
-
-const parseCopyForParagraphs = (copy: string[]): string =>
-  copy.map((paragraph) => `<p>${paragraph}</p>`).join('');
 
 const RichTextEditorV2Content: React.FC<RichTextEditorV2Props & { editor: ProseKitEditor }> = ({
   disabled,
@@ -38,10 +47,19 @@ const RichTextEditorV2Content: React.FC<RichTextEditorV2Props & { editor: ProseK
   name,
   error,
   helperText,
+  updateCopy,
+  rteMenuConstraints,
 }) => {
   const classes = useRichTextEditorV2Styles();
   const readonlyExtension = useMemo(() => (disabled ? defineReadonly() : null), [disabled]);
   useExtension(readonlyExtension);
+
+  const save = () => {
+    if (rteMenuConstraints?.enableHtml) {
+      updateCopy(paragraphsToArrayV2(editor.getDocHTML()));
+      return;
+    }
+  };
 
   const mountEditor = useCallback(
     (element: HTMLDivElement | null) => {
@@ -69,6 +87,7 @@ const RichTextEditorV2Content: React.FC<RichTextEditorV2Props & { editor: ProseK
           ref={mountEditor}
           className={`${classes.remirrorEditorWrapper} ProseMirror`}
           aria-readonly={disabled}
+          onBlur={save}
         />
       </div>
       {helperText && <p className={error ? classes.errorText : classes.helperText}>{helperText}</p>}
@@ -94,9 +113,26 @@ const RichTextEditorV2: React.FC<RichTextEditorV2Props> = ({ copyData = [], ...p
   );
 };
 
-const RichTextEditorV2SingleLine: React.FC<RichTextEditorV2SingleLineProps> = ({
+const RichTextEditorV2SingleLine: React.FC<RichTextEditorV2Props<string>> = ({
   copyData,
+  updateCopy,
   ...props
-}) => <RichTextEditorV2 {...props} copyData={copyData ? [copyData] : undefined} />;
+}) => {
+  const onUpdate = (paras?: string[]): void => {
+    if (paras) {
+      updateCopy(paras.join(' '));
+    } else {
+      updateCopy(undefined);
+    }
+  };
+
+  return (
+    <RichTextEditorV2
+      {...props}
+      updateCopy={onUpdate}
+      copyData={copyData ? [copyData] : undefined}
+    />
+  );
+};
 
 export { RichTextEditorV2, RichTextEditorV2Props, RichTextEditorV2SingleLine };
