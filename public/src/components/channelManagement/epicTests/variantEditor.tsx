@@ -45,7 +45,6 @@ import {
   RichTextEditor,
   RichTextEditorSingleLine,
 } from '../richTextEditor/richTextEditor';
-import { RichTextEditorV2, RichTextEditorV2SingleLine } from '../richTextEditorV2/richTextEditorV2';
 import TickerEditor from '../tickerEditor';
 import { AppleNewsChoiceCards } from './appleChoiceCardsEditor';
 import EpicTestNewsletter from './newsletterSignUp';
@@ -282,37 +281,11 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
           render={({ field }) => {
             return (
               <>
-                <RichTextEditorV2SingleLine
-                  error={errors.heading !== undefined}
-                  helperText={errors.heading ? (errors.heading.message ?? errors.heading.type) : ''}
-                  copyData={field.value}
-                  updateCopy={(value) => {
-                    field.onChange(value);
-                    void handleSubmit(setValidatedFields)();
-                  }}
-                  name="heading"
-                  label="Header"
-                  disabled={!editMode}
-                  rteMenuConstraints={{
-                    enableHtml,
-                    enableItalic: true,
-                    enableStrikethrough: true,
-                    enableCopyTemplates: true,
-                    enableLink: true,
-                    enableCurrencyTemplate,
-                    enableCountryNameTemplate,
-                    enableArticleCountTemplate,
-                    enableDateTemplate,
-                    enableDayTemplate,
-                    enableMParticleTemplates: showMParticleMenu,
-                  }}
-                />
                 <RichTextEditorSingleLine
                   error={errors.heading !== undefined}
                   helperText={errors.heading ? (errors.heading.message ?? errors.heading.type) : ''}
                   copyData={field.value}
                   updateCopy={(value) => {
-                    console.log('updating');
                     field.onChange(value);
                     void handleSubmit(setValidatedFields)();
                   }}
@@ -350,37 +323,6 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
         render={({ field }) => {
           return (
             <>
-              <RichTextEditorV2
-                error={errors.paragraphs !== undefined}
-                helperText={
-                  errors.paragraphs
-                    ? // @ts-ignore -- react-hook-form doesn't believe it has a message field
-                      (errors.paragraphs.message ?? errors.paragraphs.type)
-                    : getParagraphsHelperText()
-                }
-                copyData={field.value}
-                updateCopy={(pars) => {
-                  field.onChange(pars);
-                  void handleSubmit(setValidatedFields)();
-                }}
-                name="paragraphs"
-                label="Body copy"
-                disabled={!editMode}
-                rteMenuConstraints={{
-                  enableHtml,
-                  enableBold: true,
-                  enableItalic: true,
-                  enableStrikethrough: true,
-                  enableCopyTemplates: true,
-                  enableLink: true,
-                  enableCurrencyTemplate,
-                  enableCountryNameTemplate,
-                  enableArticleCountTemplate,
-                  enableDateTemplate,
-                  enableDayTemplate,
-                  enableMParticleTemplates: showMParticleMenu,
-                }}
-              />
               <RichTextEditor
                 error={errors.paragraphs !== undefined}
                 helperText={

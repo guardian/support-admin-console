@@ -159,7 +159,7 @@ const FloatingLinkToolbar: React.FC<{ enabled: boolean }> = ({ enabled }) => {
       }}
     >
       <InlinePopoverPositioner placement="top">
-        <InlinePopoverPopup role="tooltip">
+        <InlinePopoverPopup className={classes.linkPopover} role="tooltip">
           {toolbarState.link ? (
             <>
               <button
@@ -379,28 +379,28 @@ const RichTextMenu: React.FC<{
                       <div className={classes.fieldLabelPrices}>Price templates:</div>
                       <button
                         {...buttonProps}
-                        className={`${buttonProps.className}`}
+                        className={`${buttonProps.className} ${classes.dropdownMenuItem}`}
                         onClick={() => insertTemplate(PRICE_DIGISUB_MONTHLY)}
                       >
                         Digisub monthly
                       </button>
                       <button
                         {...buttonProps}
-                        className={`${buttonProps.className}`}
+                        className={`${buttonProps.className} ${classes.dropdownMenuItem}`}
                         onClick={() => insertTemplate(PRICE_DIGISUB_ANNUAL)}
                       >
                         Digisub annual
                       </button>
                       <button
                         {...buttonProps}
-                        className={`${buttonProps.className}`}
+                        className={`${buttonProps.className} ${classes.dropdownMenuItem}`}
                         onClick={() => insertTemplate(PRICE_GUARDIANWEEKLY_MONTHLY)}
                       >
                         GW monthly
                       </button>
                       <button
                         {...buttonProps}
-                        className={`${buttonProps.className}`}
+                        className={`${buttonProps.className} ${classes.dropdownMenuItem}`}
                         onClick={() => insertTemplate(PRICE_GUARDIANWEEKLY_ANNUAL)}
                       >
                         GW annual
