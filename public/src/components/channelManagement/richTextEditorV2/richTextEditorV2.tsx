@@ -253,7 +253,11 @@ const RichTextMenuV2: React.FC<{
                 </button>
               )}
               {enableCampaignDeadlineTemplate && (
-                <button {...buttonProps} onClick={() => insertTemplate(CAMPAIGN_DEADLINE_TEMPLATE)}>
+                <button
+                  {...buttonProps}
+                  onClick={() => insertTemplate(CAMPAIGN_DEADLINE_TEMPLATE)}
+                  title="This will be swapped out with either: 'Final day', '1 day left' or 'x days left' to match the countdown deadline."
+                >
                   Countdown Deadline
                 </button>
               )}
@@ -278,7 +282,10 @@ const RichTextMenuV2: React.FC<{
                 </button>
               )}
               {enableMParticleTemplates && (
-                <MParticleTemplateMenu insertTemplate={insertTemplate} />
+                <MParticleTemplateMenu
+                  insertTemplate={insertTemplate}
+                  buttonClassName={classes.button}
+                />
               )}
               {enableProductWeeklyTemplate && (
                 <button {...buttonProps} onClick={() => insertTemplate(PRICE_PRODUCT_WEEKLY)}>
@@ -288,37 +295,52 @@ const RichTextMenuV2: React.FC<{
               {enablePriceTemplates && (
                 <>
                   <span className={classes.buttonSpacer}>&nbsp;</span>
-                  <button
-                    {...buttonProps}
-                    onClick={() => setPriceButtonsVisible((visible) => !visible)}
-                  >
-                    {priceButtonsVisible ? 'Prices ↑' : 'Prices ↓'}
-                  </button>
-                  {priceButtonsVisible && (
-                    <>
+                  <div className={classes.dropdownMenu}>
+                    <button
+                      {...buttonProps}
+                      className={`${buttonProps.className} ${classes.dropdownMenuToggle}`}
+                      onClick={() => setPriceButtonsVisible((visible) => !visible)}
+                    >
+                      {priceButtonsVisible ? 'Prices ↑' : 'Prices ↓'}
+                    </button>
+                    <menu
+                      className={
+                        priceButtonsVisible
+                          ? classes.dropdownMenuContent
+                          : classes.dropdownMenuContentHidden
+                      }
+                    >
+                      <div className={classes.fieldLabelPrices}>Price templates:</div>
                       <button
                         {...buttonProps}
+                        className={`${buttonProps.className} ${classes.dropdownMenuItem}`}
                         onClick={() => insertTemplate(PRICE_DIGISUB_MONTHLY)}
                       >
                         Digisub monthly
                       </button>
-                      <button {...buttonProps} onClick={() => insertTemplate(PRICE_DIGISUB_ANNUAL)}>
+                      <button
+                        {...buttonProps}
+                        className={`${buttonProps.className} ${classes.dropdownMenuItem}`}
+                        onClick={() => insertTemplate(PRICE_DIGISUB_ANNUAL)}
+                      >
                         Digisub annual
                       </button>
                       <button
                         {...buttonProps}
+                        className={`${buttonProps.className} ${classes.dropdownMenuItem}`}
                         onClick={() => insertTemplate(PRICE_GUARDIANWEEKLY_MONTHLY)}
                       >
                         GW monthly
                       </button>
                       <button
                         {...buttonProps}
+                        className={`${buttonProps.className} ${classes.dropdownMenuItem}`}
                         onClick={() => insertTemplate(PRICE_GUARDIANWEEKLY_ANNUAL)}
                       >
                         GW annual
                       </button>
-                    </>
-                  )}
+                    </menu>
+                  </div>
                 </>
               )}
             </>
