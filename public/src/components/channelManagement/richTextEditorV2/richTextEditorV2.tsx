@@ -2,7 +2,7 @@ import 'prosekit/basic/style.css';
 import 'prosekit/basic/typography.css';
 
 import { defineBasicExtension } from 'prosekit/basic';
-import { createEditor, type Editor } from 'prosekit/core';
+import { createEditor, definePlugin, type Editor, union } from 'prosekit/core';
 import { defineReadonly } from 'prosekit/extensions/readonly';
 import { ProseKit, useEditor, useEditorDerivedValue, useExtension } from 'prosekit/react';
 import {
@@ -10,6 +10,7 @@ import {
   InlinePopoverPositioner,
   InlinePopoverRoot,
 } from 'prosekit/react/inline-popover';
+import { Plugin } from 'prosemirror-state';
 import React, { useCallback, useMemo, useState } from 'react';
 import {
   ARTICLE_COUNT_TEMPLATE,
@@ -59,6 +60,24 @@ interface RichTextEditorV2Props<T = string[]> {
 
 type ProseKitEditor = ReturnType<typeof createEditor>;
 type ProseKitExtension = ReturnType<typeof defineBasicExtension>;
+
+const removePastedHtmlExtension = definePlugin(
+  () =>
+    new Plugin({
+      props: {
+        transformPastedHTML: (html) => {
+          const doc = new DOMParser().parseFromString(html, 'text/html');
+          const paragraphs = Array.from(doc.getElementsByTagName('p'));
+
+          if (paragraphs.length > 0) {
+            return paragraphs.map((paragraph) => `<p>${paragraph.textContent}</p>`).join(' ');
+          }
+
+          return doc.body.textContent || '';
+        },
+      },
+    }),
+);
 
 const deriveToolbarState = (currentEditor: Editor<ProseKitExtension>) => ({
   bold: currentEditor.marks.bold.isActive(),
@@ -376,7 +395,7 @@ const RichTextEditorV2: React.FC<RichTextEditorV2Props> = ({ copyData = [], ...p
   const editor = useMemo(
     () =>
       createEditor({
-        extension: defineBasicExtension(),
+        extension: union(defineBasicExtension(), removePastedHtmlExtension),
         defaultContent: initialContent,
       }),
     [initialContent],
