@@ -5,6 +5,11 @@ import { defineBasicExtension } from 'prosekit/basic';
 import { createEditor, type Editor } from 'prosekit/core';
 import { defineReadonly } from 'prosekit/extensions/readonly';
 import { ProseKit, useEditor, useEditorDerivedValue, useExtension } from 'prosekit/react';
+import {
+  InlinePopoverPopup,
+  InlinePopoverPositioner,
+  InlinePopoverRoot,
+} from 'prosekit/react/inline-popover';
 import React, { useCallback, useMemo, useState } from 'react';
 import {
   ARTICLE_COUNT_TEMPLATE,
@@ -59,13 +64,91 @@ const deriveToolbarState = (currentEditor: Editor<ProseKitExtension>) => ({
   bold: currentEditor.marks.bold.isActive(),
   italic: currentEditor.marks.italic.isActive(),
   strike: currentEditor.marks.strike.isActive(),
+  link: currentEditor.marks.link.isActive(),
 });
 
 const useProseKitToolbarState = (editor: ProseKitEditor) => {
   return useEditorDerivedValue<
     ProseKitExtension,
-    { bold: boolean; italic: boolean; strike: boolean }
+    { bold: boolean; italic: boolean; strike: boolean; link: boolean }
   >(deriveToolbarState, { editor });
+};
+
+const FloatingLinkToolbar: React.FC<{ enabled: boolean }> = ({ enabled }) => {
+  const classes = useRichTextEditorV2Styles();
+  const editor = useEditor<ProseKitExtension>();
+  const toolbarState = useProseKitToolbarState(editor);
+  const [href, setHref] = useState('');
+  const [editing, setEditing] = useState(false);
+
+  if (!enabled) {
+    return null;
+  }
+  const openEditor = () => {
+    const linkMark = editor.state.selection.$from.marks().find((mark) => mark.type.name === 'link');
+    setHref(typeof linkMark?.attrs.href === 'string' ? linkMark.attrs.href : '');
+    setEditing(true);
+  };
+  const submitLink = () => {
+    if (href === '') {
+      editor.commands.removeLink();
+    } else {
+      editor.commands.addLink({ href });
+    }
+    setEditing(false);
+  };
+
+  return (
+    <InlinePopoverRoot>
+      <InlinePopoverPositioner placement="top">
+        <InlinePopoverPopup className={classes.linkPopover} role="tooltip">
+          {toolbarState.link ? (
+            <>
+              <button
+                className={classes.button}
+                onMouseDown={(event) => event.preventDefault()}
+                onClick={openEditor}
+              >
+                Edit link
+              </button>
+              <button
+                className={classes.button}
+                onMouseDown={(event) => event.preventDefault()}
+                onClick={() => editor.commands.removeLink()}
+              >
+                Remove link
+              </button>
+            </>
+          ) : (
+            <button
+              className={classes.button}
+              onMouseDown={(event) => event.preventDefault()}
+              onClick={openEditor}
+            >
+              Add link
+            </button>
+          )}
+          {editing && (
+            <input
+              className={classes.linkInput}
+              autoFocus
+              placeholder="Enter link..."
+              value={href}
+              onChange={(event) => setHref(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') {
+                  submitLink();
+                }
+                if (event.key === 'Escape') {
+                  setEditing(false);
+                }
+              }}
+            />
+          )}
+        </InlinePopoverPopup>
+      </InlinePopoverPositioner>
+    </InlinePopoverRoot>
+  );
 };
 
 const RichTextMenuV2: React.FC<{
@@ -279,6 +362,9 @@ const RichTextEditorV2Content: React.FC<RichTextEditorV2Props & { editor: ProseK
           aria-readonly={disabled}
           onBlur={save}
         />
+        {!disabled && rteMenuConstraints?.enableHtml && rteMenuConstraints.enableLink && (
+          <FloatingLinkToolbar enabled />
+        )}
       </div>
       {helperText && <p className={error ? classes.errorText : classes.helperText}>{helperText}</p>}
     </div>
