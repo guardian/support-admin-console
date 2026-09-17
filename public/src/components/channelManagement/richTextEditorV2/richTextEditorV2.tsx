@@ -109,40 +109,42 @@ const RichTextMenuV2: React.FC<{
   return (
     <div className={classes.menuContainer}>
       <span className={classes.fieldLabel}>{label ?? 'Editable field'}</span>
-      {!disabled && enableHtml && (
+      {!disabled && (
         <>
-          {enableBold && (
-            <button
-              {...buttonProps}
-              className={`${buttonProps.className} ${toolbarState.bold ? 'button-active' : ''}`}
-              onClick={() => editor.commands.toggleBold()}
-            >
-              Bold
-            </button>
-          )}
-          {enableItalic && (
-            <button
-              {...buttonProps}
-              className={`${buttonProps.className} ${toolbarState.italic ? 'button-active' : ''}`}
-              onClick={() => editor.commands.toggleItalic()}
-            >
-              Italic
-            </button>
-          )}
-          {enableStrikethrough && (
-            <button
-              {...buttonProps}
-              className={`${buttonProps.className} ${toolbarState.strike ? 'button-active' : ''}`}
-              onClick={() => editor.commands.toggleStrike()}
-            >
-              Strikethrough
-            </button>
-          )}
-          {enableCopyTemplates && hasFormatting && (
-            <span className={classes.buttonSpacer}>&nbsp;</span>
+          {enableHtml && (
+            <>
+              {enableBold && (
+                <button
+                  {...buttonProps}
+                  className={`${buttonProps.className} ${toolbarState.bold ? 'button-active' : ''}`}
+                  onClick={() => editor.commands.toggleBold()}
+                >
+                  Bold
+                </button>
+              )}
+              {enableItalic && (
+                <button
+                  {...buttonProps}
+                  className={`${buttonProps.className} ${toolbarState.italic ? 'button-active' : ''}`}
+                  onClick={() => editor.commands.toggleItalic()}
+                >
+                  Italic
+                </button>
+              )}
+              {enableStrikethrough && (
+                <button
+                  {...buttonProps}
+                  className={`${buttonProps.className} ${toolbarState.strike ? 'button-active' : ''}`}
+                  onClick={() => editor.commands.toggleStrike()}
+                >
+                  Strikethrough
+                </button>
+              )}
+            </>
           )}
           {enableCopyTemplates && (
             <>
+              {hasFormatting && <span className={classes.buttonSpacer}>&nbsp;</span>}
               {enableArticleCountTemplate && (
                 <button {...buttonProps} onClick={() => insertTemplate(ARTICLE_COUNT_TEMPLATE)}>
                   Articles
