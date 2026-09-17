@@ -34,7 +34,8 @@ type SwitchName =
   | 'enableGutterLiveblogs'
   | 'enableMParticle'
   | 'enableAuxia'
-  | 'enableAuxiaForBanners';
+  | 'enableAuxiaForBanners'
+  | 'enableGandalfSignInGate';
 
 type ChannelSwitches = Record<SwitchName, boolean>;
 
@@ -153,6 +154,12 @@ const ChannelSwitches: React.FC<InnerProps<ChannelSwitches>> = ({
         name="enableAuxiaForBanners"
         label="Enable Auxia for banners"
         enabled={switches.enableAuxiaForBanners}
+        setSwitch={onSwitchChange}
+      />
+      <ChannelSwitch
+        name="enableGandalfSignInGate"
+        label="Enable Gandalf sign-in gate (New Zealand)"
+        enabled={switches.enableGandalfSignInGate}
         setSwitch={onSwitchChange}
       />
 
