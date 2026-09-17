@@ -28,6 +28,13 @@ export const useRichTextEditorV2Styles = makeStyles(({ palette }: Theme) => ({
   buttonSpacer: {
     paddingLeft: '1em',
   },
+  fieldLabelPrices: {
+    display: 'inline-block',
+    fontSize: '85%',
+    color: 'rgba(0 0 0 / 0.6)',
+    margin: '0 1.5em',
+    paddingLeft: '10em',
+  },
   menuContainer: {
     display: 'flex',
     flexWrap: 'wrap',
@@ -57,6 +64,21 @@ export const useRichTextEditorV2Styles = makeStyles(({ palette }: Theme) => ({
       backgroundColor: alpha(palette.primary.main, 0.9),
     },
   },
+  dropdownMenu: {
+    display: 'inline',
+  },
+  dropdownMenuToggle: {},
+  dropdownMenuContent: {
+    margin: '0.5em 0 0',
+    padding: '0',
+  },
+  dropdownMenuContentHidden: {
+    margin: '0',
+    padding: '0',
+    height: '0',
+    overflowY: 'hidden',
+  },
+  dropdownMenuItem: {},
   linkPopover: {
     display: 'flex',
     gap: '0.25em',
