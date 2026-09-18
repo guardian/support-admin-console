@@ -1,6 +1,7 @@
 import 'prosekit/basic/style.css';
 import 'prosekit/basic/typography.css';
 
+import { Plugin, TextSelection } from '@prosekit/pm/state';
 import { defineBasicExtension } from 'prosekit/basic';
 import { createEditor, definePlugin, type Editor, union } from 'prosekit/core';
 import { defineReadonly } from 'prosekit/extensions/readonly';
@@ -10,7 +11,6 @@ import {
   InlinePopoverPositioner,
   InlinePopoverRoot,
 } from 'prosekit/react/inline-popover';
-import { Plugin } from 'prosemirror-state';
 import React, { useCallback, useMemo, useState } from 'react';
 import {
   ARTICLE_COUNT_TEMPLATE,
@@ -60,6 +60,11 @@ export interface RichTextEditorProps<T = string[]> {
 
 type ProseKitEditor = ReturnType<typeof createEditor>;
 type ProseKitExtension = ReturnType<typeof defineBasicExtension>;
+type LinkMarkAttrs = {
+  href?: string | null;
+  target?: string | null;
+  rel?: string | null;
+};
 
 const removePastedHtmlExtension = definePlugin(
   () =>
@@ -99,14 +104,34 @@ const FloatingLinkToolbar: React.FC<{ enabled: boolean }> = ({ enabled }) => {
   const toolbarState = useProseKitToolbarState(editor);
   const [href, setHref] = useState('');
   const [editing, setEditing] = useState(false);
+  const [linkMenuOpen, setLinkMenuOpen] = useState(false);
 
   if (!enabled) {
     return null;
   }
+  const closeLinkMenu = () => {
+    setEditing(false);
+    setLinkMenuOpen(false);
+  };
   const openEditor = () => {
-    const linkMark = editor.state.selection.$from.marks().find((mark) => mark.type.name === 'link');
-    setHref(typeof linkMark?.attrs.href === 'string' ? linkMark.attrs.href : '');
+    const { $from } = editor.state.selection;
+    const marks = $from.marksAcross($from);
+    if (!marks) {
+      return;
+    }
+    for (const mark of marks) {
+      if (mark.type.name === 'link') {
+        const attrs = mark.attrs as LinkMarkAttrs;
+        const href = typeof attrs.href === 'string' ? attrs.href : '';
+        setHref(href);
+        setEditing(true);
+        setLinkMenuOpen(true);
+        return;
+      }
+    }
+    setHref('');
     setEditing(true);
+    setLinkMenuOpen(true);
   };
   const submitLink = () => {
     if (href === '') {
@@ -114,12 +139,25 @@ const FloatingLinkToolbar: React.FC<{ enabled: boolean }> = ({ enabled }) => {
     } else {
       editor.commands.addLink({ href });
     }
+    closeLinkMenu();
+    const { $to } = editor.state.selection;
+    editor.view.dispatch(
+      editor.state.tr.setSelection(TextSelection.create(editor.state.doc, $to.pos)),
+    );
     editor.focus();
-    setEditing(false);
   };
 
   return (
-    <InlinePopoverRoot>
+    <InlinePopoverRoot
+      open={linkMenuOpen}
+      onOpenChange={(event) => {
+        const nextOpen = Boolean(event.detail);
+        setLinkMenuOpen(nextOpen);
+        if (!nextOpen) {
+          setEditing(false);
+        }
+      }}
+    >
       <InlinePopoverPositioner placement="top">
         <InlinePopoverPopup className={classes.linkPopover} role="tooltip">
           {toolbarState.link ? (
@@ -136,6 +174,11 @@ const FloatingLinkToolbar: React.FC<{ enabled: boolean }> = ({ enabled }) => {
                 onMouseDown={(event) => event.preventDefault()}
                 onClick={() => {
                   editor.commands.removeLink();
+                  closeLinkMenu();
+                  const { $to } = editor.state.selection;
+                  editor.view.dispatch(
+                    editor.state.tr.setSelection(TextSelection.create(editor.state.doc, $to.pos)),
+                  );
                   editor.focus();
                 }}
               >
@@ -160,10 +203,13 @@ const FloatingLinkToolbar: React.FC<{ enabled: boolean }> = ({ enabled }) => {
               onChange={(event) => setHref(event.target.value)}
               onKeyDown={(event) => {
                 if (event.key === 'Enter') {
+                  event.preventDefault();
+                  event.stopPropagation();
                   submitLink();
                 }
                 if (event.key === 'Escape') {
-                  setEditing(false);
+                  event.preventDefault();
+                  closeLinkMenu();
                 }
               }}
             />
