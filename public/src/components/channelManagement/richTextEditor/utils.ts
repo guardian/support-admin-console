@@ -4,9 +4,13 @@ export const parseCopyForParagraphs = (copy: string[]): string =>
   copy.map((paragraph) => `<p>${paragraph}</p>`).join('');
 
 export const getRteCopyLength = (copy: string[]): number => {
-  let paragraphsCheck = copy.filter((paragraph) => paragraph).join('');
+  const documentFragment = new DOMParser().parseFromString(
+    copy.filter((paragraph) => paragraph).join(''),
+    'text/html',
+  );
+  documentFragment.querySelectorAll('script, style').forEach((element) => element.remove());
 
-  paragraphsCheck = paragraphsCheck.replace(/<.*?>/g, '');
+  let paragraphsCheck = documentFragment.body.textContent;
   paragraphsCheck = paragraphsCheck.replace(/%%CURRENCY_SYMBOL%%/g, ' ');
   paragraphsCheck = paragraphsCheck.replace(/%%ARTICLE_COUNT%%/g, '     ');
   paragraphsCheck = paragraphsCheck.replace(/%%COUNTRY_NAME%%/g, '          ');
