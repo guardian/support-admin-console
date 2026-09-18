@@ -27,7 +27,7 @@ import {
 } from '../helpers/validation';
 import { MParticleTemplateMenu } from './mParticleTemplateMenu';
 import { useRTEStyles } from './richTextEditorStyles';
-import { getRteCopyLength, paragraphsToArrayV2, parseCopyForParagraphs } from './utils';
+import { getRteCopyLength, paragraphsToArray, parseCopyForParagraphs } from './utils';
 
 export interface RteMenuConstraints {
   enableHtml?: boolean;
@@ -220,7 +220,7 @@ const FloatingLinkToolbar: React.FC<{ enabled: boolean }> = ({ enabled }) => {
   );
 };
 
-const RichTextMenuV2: React.FC<{
+const RichTextMenu: React.FC<{
   disabled: boolean;
   label?: string;
   constraints: RteMenuConstraints;
@@ -433,7 +433,7 @@ const RichTextEditorContent: React.FC<RichTextEditorProps & { editor: ProseKitEd
 
   const save = () => {
     if (rteMenuConstraints?.enableHtml) {
-      updateCopy(paragraphsToArrayV2(editor.getDocHTML()));
+      updateCopy(paragraphsToArray(editor.getDocHTML()));
       return;
     } else {
       updateCopy(
@@ -461,7 +461,7 @@ const RichTextEditorContent: React.FC<RichTextEditorProps & { editor: ProseKitEd
 
   return (
     <div className={classes.prosekitCustom}>
-      <RichTextMenuV2 disabled={disabled} label={label} constraints={rteMenuConstraints ?? {}} />
+      <RichTextMenu disabled={disabled} label={label} constraints={rteMenuConstraints ?? {}} />
       <div id={name ? `RTE-${name}` : undefined} className={wrapperClasses}>
         <div
           ref={mountEditor}

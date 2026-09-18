@@ -22,16 +22,6 @@ export const paragraphsToArray = (html: string): string[] => {
   const fragment = document.createElement('div');
   fragment.innerHTML = html;
 
-  const paragraphs = Array.from(fragment.querySelectorAll('p'));
-
-  // When a paragraph contains only a <br> (ProseMirror trailing break), treat it as empty.
-  return paragraphs.map((paragraph) => (paragraph.textContent === '' ? '' : paragraph.innerHTML));
-};
-
-export const paragraphsToArrayV2 = (html: string): string[] => {
-  const fragment = document.createElement('div');
-  fragment.innerHTML = html;
-
   const editorContent = fragment.firstElementChild;
   const paragraphs = editorContent ? Array.from(editorContent.querySelectorAll('p')) : [];
 
