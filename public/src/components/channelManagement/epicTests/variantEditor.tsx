@@ -280,33 +280,31 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
           }}
           render={({ field }) => {
             return (
-              <>
-                <RichTextEditorSingleLine
-                  error={errors.heading !== undefined}
-                  helperText={errors.heading ? (errors.heading.message ?? errors.heading.type) : ''}
-                  copyData={field.value}
-                  updateCopy={(value) => {
-                    field.onChange(value);
-                    void handleSubmit(setValidatedFields)();
-                  }}
-                  name="heading"
-                  label="Header"
-                  disabled={!editMode}
-                  rteMenuConstraints={{
-                    enableHtml,
-                    enableItalic: true,
-                    enableStrikethrough: true,
-                    enableCopyTemplates: true,
-                    enableLink: true,
-                    enableCurrencyTemplate,
-                    enableCountryNameTemplate,
-                    enableArticleCountTemplate,
-                    enableDateTemplate,
-                    enableDayTemplate,
-                    enableMParticleTemplates: showMParticleMenu,
-                  }}
-                />
-              </>
+              <RichTextEditorSingleLine
+                error={errors.heading !== undefined}
+                helperText={errors.heading ? (errors.heading.message ?? errors.heading.type) : ''}
+                copyData={field.value}
+                updateCopy={(value) => {
+                  field.onChange(value);
+                  void handleSubmit(setValidatedFields)();
+                }}
+                name="heading"
+                label="Header"
+                disabled={!editMode}
+                rteMenuConstraints={{
+                  enableHtml,
+                  enableItalic: true,
+                  enableStrikethrough: true,
+                  enableCopyTemplates: true,
+                  enableLink: true,
+                  enableCurrencyTemplate,
+                  enableCountryNameTemplate,
+                  enableArticleCountTemplate,
+                  enableDateTemplate,
+                  enableDayTemplate,
+                  enableMParticleTemplates: showMParticleMenu,
+                }}
+              />
             );
           }}
         />
@@ -322,39 +320,37 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
         }}
         render={({ field }) => {
           return (
-            <>
-              <RichTextEditor
-                error={errors.paragraphs !== undefined}
-                helperText={
-                  errors.paragraphs
-                    ? // @ts-ignore -- react-hook-form doesn't believe it has a message field
-                      (errors.paragraphs.message ?? errors.paragraphs.type)
-                    : getParagraphsHelperText()
-                }
-                copyData={field.value}
-                updateCopy={(pars) => {
-                  field.onChange(pars);
-                  void handleSubmit(setValidatedFields)();
-                }}
-                name="paragraphs"
-                label="Body copy"
-                disabled={!editMode}
-                rteMenuConstraints={{
-                  enableHtml,
-                  enableBold: true,
-                  enableItalic: true,
-                  enableStrikethrough: true,
-                  enableCopyTemplates: true,
-                  enableLink: true,
-                  enableCurrencyTemplate,
-                  enableCountryNameTemplate,
-                  enableArticleCountTemplate,
-                  enableDateTemplate,
-                  enableDayTemplate,
-                  enableMParticleTemplates: showMParticleMenu,
-                }}
-              />
-            </>
+            <RichTextEditor
+              error={errors.paragraphs !== undefined}
+              helperText={
+                errors.paragraphs
+                  ? // @ts-ignore -- react-hook-form doesn't believe it has a message field
+                    (errors.paragraphs.message ?? errors.paragraphs.type)
+                  : getParagraphsHelperText()
+              }
+              copyData={field.value}
+              updateCopy={(pars) => {
+                field.onChange(pars);
+                void handleSubmit(setValidatedFields)();
+              }}
+              name="paragraphs"
+              label="Body copy"
+              disabled={!editMode}
+              rteMenuConstraints={{
+                enableHtml,
+                enableBold: true,
+                enableItalic: true,
+                enableStrikethrough: true,
+                enableCopyTemplates: true,
+                enableLink: true,
+                enableCurrencyTemplate,
+                enableCountryNameTemplate,
+                enableArticleCountTemplate,
+                enableDateTemplate,
+                enableDayTemplate,
+                enableMParticleTemplates: showMParticleMenu,
+              }}
+            />
           );
         }}
       />
