@@ -29,6 +29,17 @@ import { MParticleTemplateMenu } from './mParticleTemplateMenu';
 import { useRTEStyles } from './richTextEditorStyles';
 import { getRteCopyLength, paragraphsToArray, parseCopyForParagraphs } from './utils';
 
+export interface RichTextEditorProps<T = string[]> {
+  disabled: boolean;
+  label?: string;
+  helperText?: string;
+  name?: string;
+  error: boolean;
+  updateCopy: (item?: T) => void;
+  copyData?: T;
+  rteMenuConstraints?: RteMenuConstraints;
+}
+
 export interface RteMenuConstraints {
   enableHtml?: boolean;
   enableBold?: boolean;
@@ -45,17 +56,6 @@ export interface RteMenuConstraints {
   enableLink?: boolean;
   enableStrikethrough?: boolean;
   enableMParticleTemplates?: boolean;
-}
-
-export interface RichTextEditorProps<T = string[]> {
-  disabled: boolean;
-  label?: string;
-  helperText?: string;
-  name?: string;
-  error: boolean;
-  updateCopy: (item?: T) => void;
-  copyData?: T;
-  rteMenuConstraints?: RteMenuConstraints;
 }
 
 type ProseKitEditor = ReturnType<typeof createEditor>;
@@ -235,11 +235,11 @@ const RichTextMenu: React.FC<{
     enableItalic,
     enableStrikethrough,
     enableCopyTemplates,
+    enablePriceTemplates,
+    enableProductWeeklyTemplate,
     enableCurrencyTemplate,
     enableCountryNameTemplate,
     enableArticleCountTemplate,
-    enablePriceTemplates,
-    enableProductWeeklyTemplate,
     enableDateTemplate,
     enableDayTemplate,
     enableCampaignDeadlineTemplate,
