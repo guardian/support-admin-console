@@ -1,6 +1,7 @@
+import { alpha, Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
 
-export const useRTEStyles = makeStyles(() => ({
+export const useRTEStyles = makeStyles(({ palette }: Theme) => ({
   fieldLabel: {
     display: 'inline-block',
     fontSize: '85%',
@@ -24,8 +25,37 @@ export const useRTEStyles = makeStyles(() => ({
     backgroundColor: 'rgba(255 255 0 / 1)',
     margin: '0.5em 0 0 1.5em',
   },
-  remirrorButtonSpacer: {
+  buttonSpacer: {
     paddingLeft: '1em',
+  },
+  menuContainer: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    '& .button': {
+      border: '1px solid rgba(0 0 0 / 0.23)',
+      borderRadius: 4,
+      backgroundColor: 'rgba(255 255 255 / 1)',
+      color: 'rgba(0 0 0 / 0.87)',
+      cursor: 'pointer',
+      font: 'inherit',
+      lineHeight: 1.5,
+      padding: '0.375em 0.75em',
+    },
+    '& .button:hover': {
+      color: palette.primary.contrastText,
+      borderColor: palette.primary.main,
+      backgroundColor: palette.primary.main,
+    },
+    '& .button:focus-visible': {
+      outline: '2px solid rgba(25 118 210 / 0.5)',
+      outlineOffset: 1,
+    },
+    '& .button-active': {
+      color: palette.primary.contrastText,
+      borderColor: palette.primary.main,
+      backgroundColor: alpha(palette.primary.main, 0.9),
+    },
   },
   dropdownMenu: {
     display: 'inline',
@@ -42,11 +72,41 @@ export const useRTEStyles = makeStyles(() => ({
     overflowY: 'hidden',
   },
   dropdownMenuItem: {},
-
-  // extra css to style remirror components in RRCP:
-  remirrorCustom: {
+  linkPopover: {
+    display: 'flex',
+    gap: '0.25em',
+    padding: '0.5em',
+    backgroundColor: 'rgba(255 255 255 / 1)',
+    border: '1px solid rgba(0 0 0 / 0.23)',
+    borderRadius: 4,
+    boxShadow: '0 2px 8px rgba(0 0 0 / 0.2)',
+  },
+  button: {
+    border: '1px solid rgba(0 0 0 / 0.23)',
+    borderRadius: 4,
+    backgroundColor: 'rgba(255 255 255 / 1)',
+    color: 'rgba(0 0 0 / 0.87)',
+    cursor: 'pointer',
+    font: 'inherit',
+    lineHeight: 1.5,
+    padding: '0.375em 0.75em',
+    '&:hover': {
+      color: palette.primary.contrastText,
+      borderColor: palette.primary.main,
+      backgroundColor: palette.primary.main,
+    },
+  },
+  linkInput: {
+    minWidth: 180,
+    padding: '0.375em 0.5em',
+    border: '1px solid rgba(0 0 0 / 0.23)',
+    borderRadius: 4,
+  },
+  prosekitCustom: {
+    boxSizing: 'border-box',
+    width: '100%',
     marginBottom: '2em',
-    '& > .remirror-theme .ProseMirror p': {
+    '& > .prosekit-theme .ProseMirror p': {
       marginBottom: '0.5em',
     },
     '& > .editor-disabled': {
@@ -55,11 +115,27 @@ export const useRTEStyles = makeStyles(() => ({
     '& > .editor-disabled p, & > .editor-disabled a': {
       opacity: 0.65,
     },
-    '& > .remirror-theme .remirror-editor-wrapper': {
-      paddingTop: 0,
-    },
-    '& > .remirror-theme .ProseMirror': {
+    '& > .prosekit-theme .ProseMirror': {
       minHeight: '80px',
+    },
+  },
+  editorWrapper: {
+    boxSizing: 'border-box',
+    minHeight: 80,
+    width: '100%',
+    padding: 16,
+    overflowY: 'auto',
+    borderRadius: 4,
+    boxShadow: '0 0 0 1.6px rgba(0 0 0 / 0.25)',
+    color: 'rgba(0 0 0 / 0.87)',
+    fontSize: 16,
+    lineHeight: '24px',
+    outline: 'none',
+    '& p': {
+      margin: '0 0 8px',
+    },
+    '& p:last-child': {
+      marginBottom: 0,
     },
   },
 }));

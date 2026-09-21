@@ -1,30 +1,17 @@
-import { MarkPasteRule } from '@remirror/pm/paste-rules';
+import 'prosekit/basic/style.css';
+import 'prosekit/basic/typography.css';
+
+import { Plugin, TextSelection } from '@prosekit/pm/state';
+import { defineBasicExtension } from 'prosekit/basic';
+import { createEditor, definePlugin, type Editor, union } from 'prosekit/core';
+import { defineReadonly } from 'prosekit/extensions/readonly';
+import { ProseKit, useEditor, useEditorDerivedValue, useExtension } from 'prosekit/react';
 import {
-  EditorComponent,
-  FloatingWrapper,
-  Remirror,
-  useActive,
-  useAttrs,
-  useChainedCommands,
-  useCurrentSelection,
-  useExtension,
-  useRemirror,
-  useUpdateReason,
-} from '@remirror/react';
-import { CommandButtonGroup, FloatingToolbar } from '@remirror/react-ui';
-import { Plugin } from 'prosemirror-state';
-import React, { useCallback, useLayoutEffect, useMemo, useState } from 'react';
-import { CreateExtensionPlugin, InputRule, PlainExtension } from 'remirror';
-import {
-  BoldExtension,
-  createMarkPositioner,
-  EventsExtension,
-  ItalicExtension,
-  LinkExtension,
-  ShortcutHandlerProps,
-  StrikeExtension,
-  TextHighlightExtension,
-} from 'remirror/extensions';
+  InlinePopoverPopup,
+  InlinePopoverPositioner,
+  InlinePopoverRoot,
+} from 'prosekit/react/inline-popover';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
   ARTICLE_COUNT_TEMPLATE,
   CAMPAIGN_DEADLINE_TEMPLATE,
@@ -32,7 +19,6 @@ import {
   CURRENCY_TEMPLATE,
   DATE,
   DAY_OF_THE_WEEK,
-  MPARTICLE_LAST_SINGLE_CONTRIBUTION,
   PRICE_DIGISUB_ANNUAL,
   PRICE_DIGISUB_MONTHLY,
   PRICE_GUARDIANWEEKLY_ANNUAL,
@@ -41,10 +27,9 @@ import {
 } from '../helpers/validation';
 import { MParticleTemplateMenu } from './mParticleTemplateMenu';
 import { useRTEStyles } from './richTextEditorStyles';
-import './remirror-styles.css';
+import { getRteCopyLength, paragraphsToArray, parseCopyForParagraphs } from './utils';
 
-// Typescript
-interface RichTextEditorProps<T> {
+export interface RichTextEditorProps<T = string[]> {
   disabled: boolean;
   label?: string;
   helperText?: string;
@@ -55,13 +40,7 @@ interface RichTextEditorProps<T> {
   rteMenuConstraints?: RteMenuConstraints;
 }
 
-interface RichTextMenuProps {
-  disabled: boolean;
-  label: string | undefined;
-  rteMenuConstraints: RteMenuConstraints;
-}
-
-interface RteMenuConstraints {
+export interface RteMenuConstraints {
   enableHtml?: boolean;
   enableBold?: boolean;
   enableItalic?: boolean;
@@ -79,212 +58,177 @@ interface RteMenuConstraints {
   enableMParticleTemplates?: boolean;
 }
 
-/**
- * Remirror extensions to override the built-in bold and italic extensions
- * These are needed because by default the built-in extensions allow markup-like input:
- * - For bold, __words__ and **words**
- * - For italic, _words_
- *
- * These extensions override that functionality
- * See Remirror discussion on GitHub: https://github.com/remirror/remirror/discussions/1526
- */
-class MyBoldExtension extends BoldExtension {
-  createInputRules(): InputRule[] {
-    return [];
-  }
-}
+type ProseKitEditor = ReturnType<typeof createEditor>;
+type ProseKitExtension = ReturnType<typeof defineBasicExtension>;
+type LinkMarkAttrs = {
+  href?: string | null;
+  target?: string | null;
+  rel?: string | null;
+};
 
-class MyItalicExtension extends ItalicExtension {
-  createInputRules(): InputRule[] {
-    return [];
-  }
-  createPasteRules(): MarkPasteRule[] {
-    return [];
-  }
-}
-
-/**
- * A Remirror Extension to add a prosemirror plugin which removes html from pasted text.
- * This is important because our users often paste from Google Docs, which may inadvertently include markup.
- *
- * transformPastedHTML - https://prosemirror.net/docs/ref/version/0.17.0.html#view.EditorProps.transformPastedHTML
- * createPlugin - https://remirror.io/docs/api/core.pluginsextension.createplugin
- */
-class RemovePastedHtmlExtension extends PlainExtension {
-  get name() {
-    return 'RemovePastedHtmlExtension' as const;
-  }
-  createPlugin(): CreateExtensionPlugin {
-    return new Plugin({
-      key: this.pluginKey,
-
+const removePastedHtmlExtension = definePlugin(
+  () =>
+    new Plugin({
       props: {
         transformPastedHTML: (html) => {
           const doc = new DOMParser().parseFromString(html, 'text/html');
-          const paras = Array.from(doc.getElementsByTagName('p'));
-          /**
-           * It's important to remove all pasted html.
-           * If the html contains any paras then assume all content is in <p> tags.
-           */
-          if (paras.length > 0) {
-            return Array.from(doc.getElementsByTagName('p'))
-              .map((p) => `<p>${p.textContent}</p>`)
-              .join(' ');
-          } else {
-            return doc.body.textContent || '';
+          const paragraphs = Array.from(doc.getElementsByTagName('p'));
+
+          if (paragraphs.length > 0) {
+            return paragraphs.map((paragraph) => `<p>${paragraph.textContent}</p>`).join(' ');
           }
+
+          return doc.body.textContent || '';
         },
       },
-    });
+    }),
+);
+
+const deriveToolbarState = (currentEditor: Editor<ProseKitExtension>) => ({
+  bold: currentEditor.marks.bold.isActive(),
+  italic: currentEditor.marks.italic.isActive(),
+  strike: currentEditor.marks.strike.isActive(),
+  link: currentEditor.marks.link.isActive(),
+});
+
+const useProseKitToolbarState = (editor: ProseKitEditor) => {
+  return useEditorDerivedValue<
+    ProseKitExtension,
+    { bold: boolean; italic: boolean; strike: boolean; link: boolean }
+  >(deriveToolbarState, { editor });
+};
+
+const FloatingLinkToolbar: React.FC<{ enabled: boolean }> = ({ enabled }) => {
+  const classes = useRTEStyles();
+  const editor = useEditor<ProseKitExtension>();
+  const toolbarState = useProseKitToolbarState(editor);
+  const [href, setHref] = useState('');
+  const [editing, setEditing] = useState(false);
+  const [linkMenuOpen, setLinkMenuOpen] = useState(false);
+
+  if (!enabled) {
+    return null;
   }
-}
-
-// ReMirror/ProseMirror LINK functionality
-function useLinkShortcut() {
-  const [linkShortcut, setLinkShortcut] = useState<ShortcutHandlerProps | undefined>();
-  const [isEditing, setIsEditing] = useState(false);
-
-  useExtension(
-    LinkExtension,
-    ({ addHandler }) =>
-      addHandler('onShortcut', (props) => {
-        if (!isEditing) {
-          setIsEditing(true);
-        }
-        return setLinkShortcut(props);
-      }),
-    [isEditing],
-  );
-  return { linkShortcut, isEditing, setIsEditing };
-}
-
-function useFloatingLinkState() {
-  const chain = useChainedCommands();
-  const { isEditing, linkShortcut, setIsEditing } = useLinkShortcut();
-  const { to, empty } = useCurrentSelection();
-
-  const url = useAttrs().link()?.href as string | undefined;
-  const [href, setHref] = useState<string>('');
-
-  const linkPositioner = useMemo(() => createMarkPositioner({ type: 'link' }), []);
-
-  const onRemove = useCallback(() => {
-    return chain.removeLink().focus().run();
-  }, [chain]);
-
-  const updateReason = useUpdateReason();
-
-  useLayoutEffect(() => {
-    if (!isEditing) {
+  const closeLinkMenu = () => {
+    setEditing(false);
+    setLinkMenuOpen(false);
+  };
+  const openEditor = () => {
+    const { $from } = editor.state.selection;
+    const marks = $from.marksAcross($from);
+    if (!marks) {
       return;
     }
-
-    if (updateReason.doc || updateReason.selection) {
-      setIsEditing(false);
+    for (const mark of marks) {
+      if (mark.type.name === 'link') {
+        const attrs = mark.attrs as LinkMarkAttrs;
+        const href = typeof attrs.href === 'string' ? attrs.href : '';
+        setHref(href);
+        setEditing(true);
+        setLinkMenuOpen(true);
+        return;
+      }
     }
-  }, [isEditing, setIsEditing, updateReason.doc, updateReason.selection]);
-
-  const submitHref = useCallback(() => {
-    setIsEditing(false);
-    const range = linkShortcut ?? undefined;
-
+    setHref('');
+    setEditing(true);
+    setLinkMenuOpen(true);
+  };
+  const submitLink = () => {
     if (href === '') {
-      chain.removeLink();
+      editor.commands.removeLink();
     } else {
-      chain.updateLink({ href, auto: false }, range);
+      editor.commands.addLink({ href });
     }
-    chain.focus(range?.to ?? to).run();
-  }, [setIsEditing, linkShortcut, chain, href, to]);
+    closeLinkMenu();
+    const { $to } = editor.state.selection;
+    editor.view.dispatch(
+      editor.state.tr.setSelection(TextSelection.create(editor.state.doc, $to.pos)),
+    );
+    editor.focus();
+  };
 
-  const cancelHref = useCallback(() => {
-    setIsEditing(false);
-  }, [setIsEditing]);
-
-  const clickEdit = useCallback(() => {
-    if (empty) {
-      chain.selectLink();
-    }
-
-    setHref(url ?? '');
-    setIsEditing(true);
-  }, [chain, empty, url, setIsEditing]);
-
-  return useMemo(
-    () => ({
-      href,
-      setHref,
-      linkShortcut,
-      linkPositioner,
-      isEditing,
-      clickEdit,
-      onRemove,
-      submitHref,
-      cancelHref,
-    }),
-    [href, linkShortcut, linkPositioner, isEditing, clickEdit, onRemove, submitHref, cancelHref],
-  );
-}
-
-const FloatingLinkToolbar = () => {
-  const { isEditing, clickEdit, onRemove, submitHref, href, setHref, cancelHref } =
-    useFloatingLinkState();
-  const active = useActive();
-  const activeLink = active.link();
   return (
-    <>
-      <FloatingToolbar placement="top">
-        <CommandButtonGroup>
-          {activeLink ? (
+    <InlinePopoverRoot
+      open={linkMenuOpen}
+      onOpenChange={(event) => {
+        const nextOpen = Boolean(event.detail);
+        setLinkMenuOpen(nextOpen);
+        if (!nextOpen) {
+          setEditing(false);
+        }
+      }}
+    >
+      <InlinePopoverPositioner placement="top">
+        <InlinePopoverPopup className={classes.linkPopover} role="tooltip">
+          {toolbarState.link ? (
             <>
-              <button className="remirror-button" onClick={clickEdit}>
+              <button
+                className={classes.button}
+                onMouseDown={(event) => event.preventDefault()}
+                onClick={openEditor}
+              >
                 Edit link
               </button>
-              <button className="remirror-button" onClick={onRemove}>
+              <button
+                className={classes.button}
+                onMouseDown={(event) => event.preventDefault()}
+                onClick={() => {
+                  editor.commands.removeLink();
+                  closeLinkMenu();
+                  const { $to } = editor.state.selection;
+                  editor.view.dispatch(
+                    editor.state.tr.setSelection(TextSelection.create(editor.state.doc, $to.pos)),
+                  );
+                  editor.focus();
+                }}
+              >
                 Remove link
               </button>
             </>
           ) : (
-            <button className="remirror-button" onClick={clickEdit}>
+            <button
+              className={classes.button}
+              onMouseDown={(event) => event.preventDefault()}
+              onClick={openEditor}
+            >
               Add link
             </button>
           )}
-        </CommandButtonGroup>
-      </FloatingToolbar>
-
-      <FloatingWrapper positioner="always" placement="bottom" enabled={isEditing}>
-        <input
-          style={{ zIndex: 20 }}
-          autoFocus
-          placeholder="Enter link..."
-          onChange={(event) => setHref(event.target.value)}
-          value={href}
-          onKeyDown={(event) => {
-            const { key } = event;
-            if (key === 'Enter') {
-              submitHref();
-            }
-            if (key === 'Escape') {
-              cancelHref();
-            }
-          }}
-        />
-      </FloatingWrapper>
-    </>
+          {editing && (
+            <input
+              className={classes.linkInput}
+              autoFocus
+              placeholder="Enter link..."
+              value={href}
+              onChange={(event) => setHref(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  submitLink();
+                }
+                if (event.key === 'Escape') {
+                  event.preventDefault();
+                  closeLinkMenu();
+                }
+              }}
+            />
+          )}
+        </InlinePopoverPopup>
+      </InlinePopoverPositioner>
+    </InlinePopoverRoot>
   );
 };
 
-// ReMirror/ProseMirror TOP MENU BUTTONS
-const RichTextMenu: React.FC<RichTextMenuProps> = ({
-  disabled,
-  label,
-  rteMenuConstraints,
-}: RichTextMenuProps) => {
+const RichTextMenu: React.FC<{
+  disabled: boolean;
+  label?: string;
+  constraints: RteMenuConstraints;
+}> = ({ disabled, label, constraints }) => {
   const classes = useRTEStyles();
-  const chain = useChainedCommands();
-  const active = useActive();
-
-  const [priceButtonsVisible, setPriceButtonsVisible] = useState<boolean>(false);
-
+  const editor = useEditor<ProseKitExtension>();
+  const toolbarState = useProseKitToolbarState(editor);
+  const [priceButtonsVisible, setPriceButtonsVisible] = useState(false);
   const {
     enableHtml,
     enableBold,
@@ -300,22 +244,38 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
     enableDayTemplate,
     enableCampaignDeadlineTemplate,
     enableMParticleTemplates,
-  } = rteMenuConstraints;
+  } = constraints;
+  const hasFormatting =
+    (enableBold ?? false) || (enableItalic ?? false) || (enableStrikethrough ?? false);
 
-  const clickBold = () => {
-    chain.toggleBold().focus().run();
-  };
-  const clickItalic = () => {
-    chain.toggleItalic().focus().run();
-  };
-  const clickStrikethrough = () => {
-    chain.toggleStrike().focus().run();
+  const insertTemplate = (template: string) => {
+    editor.commands.insertText({ text: template });
+    editor.focus();
   };
 
-  const insertTemplate = (template: string): void => chain.insertText(template).focus().run();
+  const toggleBold = () => {
+    editor.commands.toggleBold();
+    editor.focus();
+  };
+
+  const toggleItalic = () => {
+    editor.commands.toggleItalic();
+    editor.focus();
+  };
+
+  const toggleStrikethrough = () => {
+    editor.commands.toggleStrike();
+    editor.focus();
+  };
+
+  const buttonProps = {
+    type: 'button' as const,
+    className: 'button',
+    onMouseDown: (event: React.MouseEvent<HTMLButtonElement>) => event.preventDefault(),
+  };
 
   return (
-    <div>
+    <div className={classes.menuContainer}>
       <span className={classes.fieldLabel}>{label ?? 'Editable field'}</span>
       {!disabled && (
         <>
@@ -323,27 +283,27 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
             <>
               {enableBold && (
                 <button
-                  className={`remirror-button ${active.bold() && 'remirror-button-active'}`}
-                  onMouseDown={(event) => event.preventDefault()}
-                  onClick={() => clickBold()}
+                  {...buttonProps}
+                  className={`${buttonProps.className} ${toolbarState.bold ? 'button-active' : ''}`}
+                  onClick={toggleBold}
                 >
                   Bold
                 </button>
               )}
               {enableItalic && (
                 <button
-                  className={`remirror-button ${active.italic() && 'remirror-button-active'}`}
-                  onMouseDown={(event) => event.preventDefault()}
-                  onClick={() => clickItalic()}
+                  {...buttonProps}
+                  className={`${buttonProps.className} ${toolbarState.italic ? 'button-active' : ''}`}
+                  onClick={toggleItalic}
                 >
                   Italic
                 </button>
               )}
               {enableStrikethrough && (
                 <button
-                  className={`remirror-button ${active.strike() && 'remirror-button-active'}`}
-                  onMouseDown={(event) => event.preventDefault()}
-                  onClick={() => clickStrikethrough()}
+                  {...buttonProps}
+                  className={`${buttonProps.className} ${toolbarState.strike ? 'button-active' : ''}`}
+                  onClick={toggleStrikethrough}
                 >
                   Strikethrough
                 </button>
@@ -352,24 +312,15 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
           )}
           {enableCopyTemplates && (
             <>
-              {((enableBold ?? false) ||
-                (enableItalic ?? false) ||
-                (enableStrikethrough ?? false)) && (
-                <span className={classes.remirrorButtonSpacer}>&nbsp;</span>
-              )}
+              {hasFormatting && <span className={classes.buttonSpacer}>&nbsp;</span>}
               {enableArticleCountTemplate && (
-                <button
-                  className="remirror-button"
-                  onMouseDown={(event) => event.preventDefault()}
-                  onClick={() => insertTemplate(ARTICLE_COUNT_TEMPLATE)}
-                >
+                <button {...buttonProps} onClick={() => insertTemplate(ARTICLE_COUNT_TEMPLATE)}>
                   Articles
                 </button>
               )}
               {enableCampaignDeadlineTemplate && (
                 <button
-                  className="remirror-button"
-                  onMouseDown={(event) => event.preventDefault()}
+                  {...buttonProps}
                   onClick={() => insertTemplate(CAMPAIGN_DEADLINE_TEMPLATE)}
                   title="This will be swapped out with either: 'Final day', '1 day left' or 'x days left' to match the countdown deadline."
                 >
@@ -377,61 +328,44 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
                 </button>
               )}
               {enableCurrencyTemplate && (
-                <button
-                  className="remirror-button"
-                  onMouseDown={(event) => event.preventDefault()}
-                  onClick={() => insertTemplate(CURRENCY_TEMPLATE)}
-                >
+                <button {...buttonProps} onClick={() => insertTemplate(CURRENCY_TEMPLATE)}>
                   Currency
                 </button>
               )}
               {enableCountryNameTemplate && (
-                <button
-                  className="remirror-button"
-                  onMouseDown={(event) => event.preventDefault()}
-                  onClick={() => insertTemplate(COUNTRY_NAME_TEMPLATE)}
-                >
+                <button {...buttonProps} onClick={() => insertTemplate(COUNTRY_NAME_TEMPLATE)}>
                   Country
                 </button>
               )}
               {enableDayTemplate && (
-                <button
-                  className="remirror-button"
-                  onMouseDown={(event) => event.preventDefault()}
-                  onClick={() => insertTemplate(DAY_OF_THE_WEEK)}
-                >
+                <button {...buttonProps} onClick={() => insertTemplate(DAY_OF_THE_WEEK)}>
                   Day of week
                 </button>
               )}
               {enableDateTemplate && (
-                <button
-                  className="remirror-button"
-                  onMouseDown={(event) => event.preventDefault()}
-                  onClick={() => insertTemplate(DATE)}
-                >
+                <button {...buttonProps} onClick={() => insertTemplate(DATE)}>
                   Date
                 </button>
               )}
               {enableMParticleTemplates && (
-                <MParticleTemplateMenu insertTemplate={insertTemplate} />
+                <MParticleTemplateMenu
+                  insertTemplate={insertTemplate}
+                  buttonClassName={classes.button}
+                />
               )}
               {enableProductWeeklyTemplate && (
-                <button
-                  className="remirror-button"
-                  onMouseDown={(event) => event.preventDefault()}
-                  onClick={() => insertTemplate(PRICE_PRODUCT_WEEKLY)}
-                >
+                <button {...buttonProps} onClick={() => insertTemplate(PRICE_PRODUCT_WEEKLY)}>
                   Product weekly price
                 </button>
               )}
               {enablePriceTemplates && (
                 <>
-                  <span className={classes.remirrorButtonSpacer}>&nbsp;</span>
+                  <span className={classes.buttonSpacer}>&nbsp;</span>
                   <div className={classes.dropdownMenu}>
                     <button
-                      className={`remirror-button ${classes.dropdownMenuToggle}`}
-                      onMouseDown={(event) => event.preventDefault()}
-                      onClick={() => setPriceButtonsVisible(!priceButtonsVisible)}
+                      {...buttonProps}
+                      className={`${buttonProps.className} ${classes.dropdownMenuToggle}`}
+                      onClick={() => setPriceButtonsVisible((visible) => !visible)}
                     >
                       {priceButtonsVisible ? 'Prices ↑' : 'Prices ↓'}
                     </button>
@@ -444,29 +378,29 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
                     >
                       <div className={classes.fieldLabelPrices}>Price templates:</div>
                       <button
-                        className={`remirror-button ${classes.dropdownMenuItem}`}
-                        onMouseDown={(event) => event.preventDefault()}
+                        {...buttonProps}
+                        className={`${buttonProps.className} ${classes.dropdownMenuItem}`}
                         onClick={() => insertTemplate(PRICE_DIGISUB_MONTHLY)}
                       >
                         Digisub monthly
                       </button>
                       <button
-                        className={`remirror-button ${classes.dropdownMenuItem}`}
-                        onMouseDown={(event) => event.preventDefault()}
+                        {...buttonProps}
+                        className={`${buttonProps.className} ${classes.dropdownMenuItem}`}
                         onClick={() => insertTemplate(PRICE_DIGISUB_ANNUAL)}
                       >
                         Digisub annual
                       </button>
                       <button
-                        className={`remirror-button ${classes.dropdownMenuItem}`}
-                        onMouseDown={(event) => event.preventDefault()}
+                        {...buttonProps}
+                        className={`${buttonProps.className} ${classes.dropdownMenuItem}`}
                         onClick={() => insertTemplate(PRICE_GUARDIANWEEKLY_MONTHLY)}
                       >
                         GW monthly
                       </button>
                       <button
-                        className={`remirror-button ${classes.dropdownMenuItem}`}
-                        onMouseDown={(event) => event.preventDefault()}
+                        {...buttonProps}
+                        className={`${buttonProps.className} ${classes.dropdownMenuItem}`}
                         onClick={() => insertTemplate(PRICE_GUARDIANWEEKLY_ANNUAL)}
                       >
                         GW annual
@@ -483,137 +417,91 @@ const RichTextMenu: React.FC<RichTextMenuProps> = ({
   );
 };
 
-// Helper function - converts an array of strings into a set of (stringified) HTML <p> elements
-const parseCopyForParagraphs = (copy: string[]): string => {
-  let res = '';
-
-  copy.forEach((paragraph) => {
-    res += `<p>${paragraph}</p>`;
-  });
-  return res;
-};
-
-const getRteCopyLength = (copy: string[]): number => {
-  let paragraphsCheck = copy.filter((p) => p).join('');
-
-  paragraphsCheck = paragraphsCheck.replace(/<.*?>/g, '');
-  paragraphsCheck = paragraphsCheck.replace(/%%CURRENCY_SYMBOL%%/g, ' ');
-  paragraphsCheck = paragraphsCheck.replace(/%%ARTICLE_COUNT%%/g, '     ');
-  paragraphsCheck = paragraphsCheck.replace(/%%COUNTRY_NAME%%/g, '          ');
-  paragraphsCheck = paragraphsCheck.replace(
-    new RegExp(MPARTICLE_LAST_SINGLE_CONTRIBUTION, 'g'),
-    '    ',
-  );
-
-  return paragraphsCheck.length;
-};
-
-const paragraphsToArray = (html: string): string[] => {
-  const frag = document.createElement('div');
-  frag.innerHTML = html;
-
-  const elements = Array.from(frag.children);
-
-  const paragraphs = elements.filter((p) => p.tagName === 'P');
-
-  // When a paragraph contains only a <br> (ProseMirror trailing break), treat it as empty
-  return paragraphs.map((p) => (p.textContent === '' ? '' : p.innerHTML));
-};
-
-// Component function
-const RichTextEditor: React.FC<RichTextEditorProps<string[]>> = ({
+const RichTextEditorContent: React.FC<RichTextEditorProps & { editor: ProseKitEditor }> = ({
   disabled,
+  editor,
   label,
-  helperText,
   name,
   error,
+  helperText,
   updateCopy,
-  copyData,
   rteMenuConstraints,
-}: RichTextEditorProps<string[]>) => {
+}) => {
   const classes = useRTEStyles();
+  const readonlyExtension = useMemo(() => (disabled ? defineReadonly() : null), [disabled]);
+  useExtension(readonlyExtension);
 
-  const menuConstraints = rteMenuConstraints ?? {};
-  const { enableHtml, enableLink } = menuConstraints;
-
-  // Make sure the supplied copy is in an Array, for processing
-  copyData ??= [];
-
-  // Instantiate the Remirror RTE component
-  const { manager, state } = useRemirror({
-    extensions: () => [
-      new MyBoldExtension({}),
-      new MyItalicExtension(),
-      new StrikeExtension(),
-      new LinkExtension({ autoLink: true }),
-      new TextHighlightExtension({}),
-      new RemovePastedHtmlExtension(),
-    ],
-    content: parseCopyForParagraphs(copyData),
-    selection: 'start',
-    stringHandler: 'html',
-  });
-
-  const getEditorContent = useCallback(() => {
-    const view = manager.view;
-    const { state } = view;
-    const html = view.dom.innerHTML;
-    const textParagraphs: string[] = [];
-    state.doc.forEach((node) => {
-      textParagraphs.push(node.textContent);
-    });
-    return { html, textParagraphs };
-  }, [manager]);
-
-  const hooks = useMemo(() => {
-    if (disabled) {
-      return [];
+  const save = () => {
+    if (rteMenuConstraints?.enableHtml) {
+      updateCopy(paragraphsToArray(editor.getDocHTML()));
+      return;
+    } else {
+      updateCopy(
+        Array.from(
+          { length: editor.state.doc.childCount },
+          (_, index) => editor.state.doc.child(index).textContent,
+        ),
+      );
     }
+  };
 
-    const setupHandler = () => {
-      const handleSaveShortcut = () => {
-        const { html, textParagraphs } = getEditorContent();
-        if (!enableHtml) {
-          updateCopy(textParagraphs);
-        } else {
-          updateCopy(paragraphsToArray(html));
-        }
-        return true;
-      };
-      manager.getExtension(EventsExtension).addHandler('blur', handleSaveShortcut);
-    };
+  const mountEditor = useCallback(
+    (element: HTMLDivElement | null) => {
+      if (element) {
+        editor.mount(element);
+      } else {
+        editor.unmount();
+      }
+    },
+    [editor],
+  );
 
-    return [setupHandler];
-  }, [disabled, manager, enableHtml, updateCopy, getEditorContent]);
-
-  // Control the look of the ReMirror RTE dependant on whether the user is in Edit or Read-Only Mode
-  const wrapperClasses = disabled ? 'remirror-theme editor-disabled' : 'remirror-theme';
+  // Control the look of the editor dependant on whether the user is in Edit or Read-Only Mode
+  const wrapperClasses = disabled ? 'prosekit-theme editor-disabled' : 'prosekit-theme';
 
   return (
-    <div className={classes.remirrorCustom}>
-      <div id={`RTE-${name}`} className={wrapperClasses}>
-        <Remirror manager={manager} initialContent={state} editable={!disabled} hooks={hooks}>
-          <RichTextMenu disabled={disabled} label={label} rteMenuConstraints={menuConstraints} />
-          <EditorComponent />
-          {!disabled && enableHtml && enableLink && <FloatingLinkToolbar />}
-          <p className={error ? classes.errorText : classes.helperText}>{helperText}</p>
-        </Remirror>
+    <div className={classes.prosekitCustom}>
+      <RichTextMenu disabled={disabled} label={label} constraints={rteMenuConstraints ?? {}} />
+      <div id={name ? `RTE-${name}` : undefined} className={wrapperClasses}>
+        <div
+          ref={mountEditor}
+          className={`${classes.editorWrapper} ProseMirror`}
+          aria-readonly={disabled}
+          onBlur={disabled ? undefined : save}
+        />
+        {!disabled && rteMenuConstraints?.enableHtml && rteMenuConstraints.enableLink && (
+          <FloatingLinkToolbar enabled />
+        )}
       </div>
+      {helperText && <p className={error ? classes.errorText : classes.helperText}>{helperText}</p>}
     </div>
   );
 };
 
+const RichTextEditor: React.FC<RichTextEditorProps> = ({ copyData = [], ...props }) => {
+  const [initialContent] = useState(() => parseCopyForParagraphs(copyData));
+  const editor = useMemo(
+    () =>
+      createEditor({
+        extension: union(defineBasicExtension(), removePastedHtmlExtension),
+        defaultContent: initialContent,
+      }),
+    [initialContent],
+  );
+
+  return (
+    <ProseKit editor={editor}>
+      <RichTextEditorContent {...props} copyData={copyData} editor={editor} />
+    </ProseKit>
+  );
+};
+
 const RichTextEditorSingleLine: React.FC<RichTextEditorProps<string>> = ({
-  disabled,
-  label,
-  helperText,
-  name,
-  error,
-  updateCopy,
   copyData,
-  rteMenuConstraints,
-}: RichTextEditorProps<string>) => {
-  const onUpdate = (paras: string[] | undefined): void => {
+  updateCopy,
+  ...props
+}) => {
+  const onUpdate = (paras?: string[]): void => {
     if (paras) {
       updateCopy(paras.join(' '));
     } else {
@@ -622,17 +510,8 @@ const RichTextEditorSingleLine: React.FC<RichTextEditorProps<string>> = ({
   };
 
   return (
-    <RichTextEditor
-      disabled={disabled}
-      label={label}
-      helperText={helperText}
-      name={name}
-      error={error}
-      updateCopy={onUpdate}
-      copyData={copyData ? [copyData] : undefined}
-      rteMenuConstraints={rteMenuConstraints}
-    />
+    <RichTextEditor {...props} updateCopy={onUpdate} copyData={copyData ? [copyData] : undefined} />
   );
 };
 
-export { RichTextEditor, RichTextEditorSingleLine, getRteCopyLength, RteMenuConstraints };
+export { getRteCopyLength, RichTextEditor, RichTextEditorSingleLine };
