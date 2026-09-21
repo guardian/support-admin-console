@@ -100,7 +100,7 @@ const MultiselectAutocomplete: React.FC<MultiselectAutocompleteProps> = ({
             placeholder="Select multiple options "
           />
         )}
-        renderOption={(props, option): JSX.Element => {
+        renderOption={(props, option): React.JSX.Element => {
           return <li {...props}>{option.label ? option.label : option.value}</li>;
         }}
         onChange={(event, values: Option[], reason): void => {

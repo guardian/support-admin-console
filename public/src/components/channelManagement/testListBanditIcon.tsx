@@ -1,7 +1,7 @@
 import SmartToyIcon from '@mui/icons-material/SmartToy';
 import { makeStyles } from '@mui/styles';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Required by jsx: "react" in tsconfig.json
-import React from 'react';
+import React, { JSX } from 'react';
 
 const useStyles = makeStyles(() => ({
   container: {
