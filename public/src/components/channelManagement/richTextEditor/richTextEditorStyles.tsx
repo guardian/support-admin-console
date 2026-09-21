@@ -84,16 +84,6 @@ export const useRTEStyles = makeStyles(({ palette }: Theme) => ({
     height: '0',
     overflowY: 'hidden',
   },
-  dropdownMenuItem: {},
-  linkPopover: {
-    display: 'flex',
-    gap: '0.25em',
-    padding: '0.5em',
-    backgroundColor: 'rgba(255 255 255 / 1)',
-    border: '1px solid rgba(0 0 0 / 0.23)',
-    borderRadius: 4,
-    boxShadow: '0 2px 8px rgba(0 0 0 / 0.2)',
-  },
   button: {
     border: '1px solid rgba(0 0 0 / 0.23)',
     borderRadius: 4,
