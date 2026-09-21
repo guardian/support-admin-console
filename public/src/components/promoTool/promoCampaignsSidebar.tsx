@@ -62,6 +62,10 @@ function PromoCampaignsSidebar({
     setPromoCampaignSearch(e.target.value);
   };
 
+  const searchInputNative = (e: React.InputEvent<HTMLDivElement>) => {
+    setPromoCampaignSearch((e.target as HTMLInputElement).value);
+  };
+
   return (
     <div className={classes.root}>
       <h2 className={classes.headline2}>Select Product to filter Promo Campaigns</h2>
@@ -82,7 +86,7 @@ function PromoCampaignsSidebar({
           label="Filter Promo Campaigns"
           type="search"
           variant="outlined"
-          onInput={searchInput}
+          onInput={searchInputNative}
           onChange={searchInput}
         />
       </div>

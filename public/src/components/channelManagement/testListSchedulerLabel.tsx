@@ -1,7 +1,7 @@
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import { Tooltip } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React from 'react';
+import React, { JSX } from 'react';
 import { Scheduler } from './helpers/shared';
 import { isWithinSchedule } from './helpers/utilities';
 

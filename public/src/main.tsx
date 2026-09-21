@@ -172,7 +172,10 @@ export { HELP_GUIDE_URL };
 const AppRouter = () => {
   const classes = useStyles();
 
-  const createComponent = (component: JSX.Element, displayName: string): React.ReactElement => (
+  const createComponent = (
+    component: React.JSX.Element,
+    displayName: string,
+  ): React.ReactElement => (
     <div className={classes.appContainer}>
       <AppBar position="relative" className={classes.appBar}>
         <Toolbar className={classes.toolbarContent}>

@@ -12,7 +12,7 @@ import {
 import { makeStyles } from '@mui/styles';
 import lzstring from 'lz-string';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars -- React is required for JSX compilation
-import React, { useState } from 'react';
+import React, { JSX, useState } from 'react';
 import QRCode from 'react-qr-code';
 import { useSearchParams } from 'react-router-dom';
 

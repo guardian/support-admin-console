@@ -12,7 +12,7 @@ import {
   Typography,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React from 'react';
+import React, { JSX } from 'react';
 import BannerChannelDeployerTableRow from './bannerChannelDeployerTableRow';
 import { BannerDeploys, BannersToRedeploy } from './bannerDeployTypes';
 import { BannerChannel } from './bannerDeployTypes';
