@@ -18,6 +18,7 @@ import { Theme } from '@mui/material/styles';
 import SwitchUI from '@mui/material/Switch';
 import { makeStyles } from '@mui/styles';
 import cloneDeep from 'lodash/cloneDeep';
+import { JSX } from 'react';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import withS3Data, { DataFromServer, InnerProps } from '../hocs/withS3Data';
