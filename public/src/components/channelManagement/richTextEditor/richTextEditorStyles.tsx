@@ -2,37 +2,31 @@ import { alpha, Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
 
 export const useRTEStyles = makeStyles(({ palette }: Theme) => ({
-  prosekitCustom: {
-    boxSizing: 'border-box',
-    width: '100%',
-    marginBottom: '2em',
-    '& > .prosekit-theme .ProseMirror p': {
-      marginBottom: '0.5em',
-    },
-    '& > .editor-disabled': {
-      whiteSpace: 'pre-wrap',
-    },
-    '& > .editor-disabled p, & > .editor-disabled a': {
-      opacity: 0.65,
-    },
-    '& > .prosekit-theme .ProseMirror': {
-      minHeight: '80px',
-    },
-  },
   fieldLabel: {
     display: 'inline-block',
     fontSize: '85%',
     color: 'rgba(0 0 0 / 0.6)',
     margin: '0 1.5em',
   },
-  buttonSpacer: {
-    paddingLeft: '1em',
-  },
   fieldLabelPrices: {
     display: 'inline-block',
     fontSize: '85%',
     color: 'rgba(0 0 0 / 0.6)',
-    margin: '0 0 0.5em',
+    margin: '0 1.5em',
+    paddingLeft: '10em',
+  },
+  helperText: {
+    fontSize: '85%',
+    color: 'rgba(0 0 0 / 0.6)',
+    margin: '0.5em 0 0 1.5em',
+  },
+  errorText: {
+    color: 'rgba(0 0 0 / 1)',
+    backgroundColor: 'rgba(255 255 0 / 1)',
+    margin: '0.5em 0 0 1.5em',
+  },
+  buttonSpacer: {
+    paddingLeft: '1em',
   },
   menuContainer: {
     display: 'flex',
@@ -64,27 +58,18 @@ export const useRTEStyles = makeStyles(({ palette }: Theme) => ({
     },
   },
   dropdownMenu: {
-    display: 'inline-block',
-    position: 'relative',
+    display: 'inline',
   },
   dropdownMenuToggle: {},
   dropdownMenuContent: {
-    position: 'absolute',
-    top: '100%',
-    left: 0,
-    zIndex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    width: 'max-content',
     margin: '0.5em 0 0',
-    padding: '0.5em',
-    backgroundColor: 'rgba(255 255 255 / 1)',
-    border: '1px solid rgba(0 0 0 / 0.23)',
-    borderRadius: 4,
-    boxShadow: '0 2px 8px rgba(0 0 0 / 0.2)',
+    padding: '0',
   },
   dropdownMenuContentHidden: {
-    display: 'none',
+    margin: '0',
+    padding: '0',
+    height: '0',
+    overflowY: 'hidden',
   },
   dropdownMenuItem: {},
   linkPopover: {
@@ -117,15 +102,22 @@ export const useRTEStyles = makeStyles(({ palette }: Theme) => ({
     border: '1px solid rgba(0 0 0 / 0.23)',
     borderRadius: 4,
   },
-  helperText: {
-    fontSize: '85%',
-    color: 'rgba(0 0 0 / 0.6)',
-    margin: '0.5em 0 0 1.5em',
-  },
-  errorText: {
-    color: 'rgba(0 0 0 / 1)',
-    backgroundColor: 'rgba(255 255 0 / 1)',
-    margin: '0.5em 0 0 1.5em',
+  prosekitCustom: {
+    boxSizing: 'border-box',
+    width: '100%',
+    marginBottom: '2em',
+    '& > .prosekit-theme .ProseMirror p': {
+      marginBottom: '0.5em',
+    },
+    '& > .editor-disabled': {
+      whiteSpace: 'pre-wrap',
+    },
+    '& > .editor-disabled p, & > .editor-disabled a': {
+      opacity: 0.65,
+    },
+    '& > .prosekit-theme .ProseMirror': {
+      minHeight: '80px',
+    },
   },
   editorWrapper: {
     boxSizing: 'border-box',
