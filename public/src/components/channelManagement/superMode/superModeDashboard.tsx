@@ -1,35 +1,31 @@
 import { Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { SuperModeTable } from './superModeTable';
 import { useSuperModeRows } from './useSuperModeRows';
 
-const useStyles = makeStyles(() => ({
-  container: {
-    margin: '10px',
-  },
-  info: {
-    fontSize: '14px',
-    marginBottom: '10px',
-    fontWeight: 500,
-    textAlign: 'right',
-  },
-}));
+const Container = styled('div')({
+  margin: '10px',
+});
+const Info = styled(Typography)({
+  fontSize: '14px',
+  marginBottom: '10px',
+  fontWeight: 500,
+  textAlign: 'right',
+});
 
 export const SuperModeDashboard: React.FC = () => {
-  const classes = useStyles();
-
   const rows = useSuperModeRows();
 
   return (
-    <div className={classes.container}>
+    <Container>
       <div>
-        <Typography variant={'h3'} className={classes.info}>
+        <Info variant={'h3'}>
           Data is from the 3-hour window leading up to an article becoming &apos;Super&apos; in the
           given region.
-        </Typography>
+        </Info>
       </div>
       <SuperModeTable rows={rows} />
-    </div>
+    </Container>
   );
 };

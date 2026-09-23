@@ -13,10 +13,9 @@ export const SectionContainer = styled('div')(({ theme }) => ({
   paddingTop: theme.spacing(1),
   paddingBottom: theme.spacing(6),
   borderBottom: `1px solid ${theme.palette.grey[500]}`,
-
-  '& > * + *': {
-    marginTop: theme.spacing(4),
-  },
+  display: 'flex',
+  flexDirection: 'column',
+  gap: theme.spacing(4),
 }));
 
 export const SectionHeader = styled(Typography)(({ theme }) => ({

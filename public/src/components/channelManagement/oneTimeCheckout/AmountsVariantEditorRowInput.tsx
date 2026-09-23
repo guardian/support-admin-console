@@ -1,15 +1,14 @@
-import { Button, TextField, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Button, TextField } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React, { useState } from 'react';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  textField: {
-    width: '120px',
-  },
-  button: {
-    minWidth: '20px',
-    marginLeft: spacing(2),
-  },
+const StyledTextField = styled(TextField)({
+  width: '120px',
+});
+
+const StyledButton = styled(Button)(({ theme }) => ({
+  minWidth: '20px',
+  marginLeft: theme.spacing(2),
 }));
 
 interface AmountsVariantEditorRowInputProps {
@@ -51,12 +50,10 @@ export const AmountsVariantEditorRowInput: React.FC<AmountsVariantEditorRowInput
     }
   };
 
-  const classes = useStyles();
   return (
     <div>
-      <TextField
+      <StyledTextField
         variant={'standard'}
-        className={classes.textField}
         error={!!currentError}
         helperText={currentError}
         onKeyPress={checkKey}
@@ -65,9 +62,9 @@ export const AmountsVariantEditorRowInput: React.FC<AmountsVariantEditorRowInput
         type="number"
         disabled={disabled}
       />
-      <Button className={classes.button} onClick={onSubmit} variant="outlined" disabled={disabled}>
+      <StyledButton onClick={onSubmit} variant="outlined" disabled={disabled}>
         +
-      </Button>
+      </StyledButton>
     </div>
   );
 };

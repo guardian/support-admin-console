@@ -1,60 +1,64 @@
-import { FormControl, InputLabel, MenuItem, Select, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { ContributionType, MParticleAmountAttribute } from '../../../utils/models';
 import LiveSwitch from '../../shared/liveSwitch';
 import { AmountsVariantEditorRowAmount } from './AmountsVariantEditorRowAmount';
 import { AmountsVariantEditorRowInput } from './AmountsVariantEditorRowInput';
 
-const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  amountsLabelContainer: {
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'flex-start',
-    marginTop: spacing(1),
-    marginBottom: spacing(1),
-  },
-  mParticleAmountContainer: {
-    width: '100%',
-    maxWidth: 400,
-    alignSelf: 'flex-start',
-    marginTop: spacing(2),
-  },
-  otherAmountSwitchContainer: {
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'flex-start',
-    marginTop: spacing(1),
-  },
-  amountsLabel: {
-    width: 80,
-    textTransform: 'uppercase',
-    fontWeight: 'bold',
-    color: palette.grey[800],
-  },
-  amountsAndInputContainer: {
-    flexGrow: 1,
-    display: 'flex',
-    justifyContent: 'space-between',
-    width: '100%',
+const Container = styled(Box)({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+});
 
-    '& > * + *': {
-      marginLeft: spacing(4),
-    },
-  },
-  amountsContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    margin: 0,
+const AmountsLabelContainer = styled(Box)(({ theme }) => ({
+  width: '100%',
+  display: 'flex',
+  justifyContent: 'flex-start',
+  marginTop: theme.spacing(1),
+  marginBottom: theme.spacing(1),
+}));
 
-    '& > * + *': {
-      marginLeft: spacing(2),
-    },
+const MParticleAmountContainer = styled(Box)(({ theme }) => ({
+  width: '100%',
+  maxWidth: 400,
+  alignSelf: 'flex-start',
+  marginTop: theme.spacing(2),
+}));
+
+const OtherAmountSwitchContainer = styled(Box)(({ theme }) => ({
+  width: '100%',
+  display: 'flex',
+  justifyContent: 'flex-start',
+  marginTop: theme.spacing(1),
+}));
+
+const AmountsLabel = styled(Box)(({ theme }) => ({
+  width: 80,
+  textTransform: 'uppercase',
+  fontWeight: 'bold',
+  color: theme.palette.grey[800],
+}));
+
+const AmountsAndInputContainer = styled(Box)(({ theme }) => ({
+  flexGrow: 1,
+  display: 'flex',
+  justifyContent: 'space-between',
+  width: '100%',
+
+  '& > * + *': {
+    marginLeft: theme.spacing(4),
+  },
+}));
+
+const AmountsContainer = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'row',
+  margin: 0,
+
+  '& > * + *': {
+    marginLeft: theme.spacing(2),
   },
 }));
 
@@ -85,8 +89,6 @@ export const AmountsVariantEditorRow: React.FC<AmountsVariantEditorRowProps> = (
   updateMParticleAmountAttribute,
   disabled = false,
 }: AmountsVariantEditorRowProps) => {
-  const classes = useStyles();
-
   const setAmountAsDefault = (val: number) => {
     updateDefaultAmount(label, val);
   };
@@ -112,12 +114,12 @@ export const AmountsVariantEditorRow: React.FC<AmountsVariantEditorRowProps> = (
   };
 
   return (
-    <div className={classes.container}>
-      <div className={classes.amountsLabelContainer}>
-        <div className={classes.amountsLabel}>{label}</div>
-      </div>
-      <div className={classes.amountsAndInputContainer}>
-        <div className={classes.amountsContainer}>
+    <Container>
+      <AmountsLabelContainer>
+        <AmountsLabel>{label}</AmountsLabel>
+      </AmountsLabelContainer>
+      <AmountsAndInputContainer>
+        <AmountsContainer>
           {amounts.map((amount) => (
             <AmountsVariantEditorRowAmount
               key={`${label}_${amount}`}
@@ -128,19 +130,19 @@ export const AmountsVariantEditorRow: React.FC<AmountsVariantEditorRowProps> = (
               disabled={disabled}
             />
           ))}
-        </div>
+        </AmountsContainer>
         <AmountsVariantEditorRowInput amounts={amounts} addAmount={addAmount} disabled={disabled} />
-      </div>
-      <div className={classes.otherAmountSwitchContainer}>
+      </AmountsAndInputContainer>
+      <OtherAmountSwitchContainer>
         <LiveSwitch
           label="Include CHOOSE button"
           isLive={!hideChooseYourAmount}
           onChange={() => updateChooseSwitch(!hideChooseYourAmount)}
           isDisabled={disabled}
         />
-      </div>
+      </OtherAmountSwitchContainer>
       {showMParticleMenu && (
-        <div className={classes.mParticleAmountContainer}>
+        <MParticleAmountContainer>
           <FormControl fullWidth size="small" disabled={disabled}>
             <InputLabel id={`${label}-mParticleAmountAttribute-label`} shrink>
               mParticle amount attribute
@@ -163,8 +165,8 @@ export const AmountsVariantEditorRow: React.FC<AmountsVariantEditorRowProps> = (
               </MenuItem>
             </Select>
           </FormControl>
-        </div>
+        </MParticleAmountContainer>
       )}
-    </div>
+    </Container>
   );
 };

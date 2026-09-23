@@ -1,6 +1,5 @@
 import { Typography } from '@mui/material';
-import { Theme } from '@mui/material/styles';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Institution, StudentLandingPageVariant } from '../../../models/studentLandingPage';
@@ -23,33 +22,20 @@ const SUBHEADING_MAX_LENGTH = 230;
 //   desktopUrlGuidance: '1:1 min width of ? max width of ?',
 // };
 
-const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
-  container: {
-    width: '98%',
-    paddingTop: 0,
-    paddingLeft: 0,
-    paddingRight: 0,
+const Container = styled('div')(({ theme }) => ({
+  width: '98%',
+  paddingTop: 0,
+  paddingLeft: 0,
+  paddingRight: 0,
 
-    '& > * + *': {
-      marginTop: spacing(1),
-    },
+  '& > * + *': {
+    marginTop: theme.spacing(1),
   },
-  sectionHeader: {
-    fontSize: 16,
-    color: palette.grey[900],
-    fontWeight: 500,
-  },
-  sectionContainer: {
-    paddingTop: spacing(1),
-    paddingBottom: spacing(2),
-
-    '& > * + *': {
-      marginTop: spacing(3),
-    },
-  },
-  choiceCardContainer: {
-    display: 'flex',
-  },
+}));
+const SectionHeader = styled(Typography)(({ theme }) => ({
+  fontSize: 16,
+  color: theme.palette.grey[900],
+  fontWeight: 500,
 }));
 
 interface StudentLandingPageVariantEditorProps {
@@ -78,8 +64,6 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
   onVariantChange,
   onValidationChange,
 }: StudentLandingPageVariantEditorProps) => {
-  const classes = useStyles();
-
   const defaultValues: OfferFormData = {
     heading: variant.heading,
     subheading: variant.subheading,
@@ -181,7 +165,7 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
   };
 
   return (
-    <div className={classes.container}>
+    <Container>
       <AcademicInstitutionDetailEditor
         variant={variant}
         editMode={editMode}
@@ -199,11 +183,9 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
         }
       />
       <hr />
-      <div className={classes.container}>
-        <Typography variant={'h4'} className={classes.sectionHeader}>
-          Copy
-        </Typography>
-        <div className={classes.container}>
+      <Container>
+        <SectionHeader variant={'h4'}>Copy</SectionHeader>
+        <Container>
           <Controller
             name="heading"
             control={control}
@@ -256,7 +238,7 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
               );
             }}
           />
-        </div>
+        </Container>
         {/* hidden until we can get the hero image sorted out in support-frontend as part of a future phase
         <div className={classes.container}>
           <Typography variant={'h4'} className={classes.sectionHeader}>
@@ -281,17 +263,15 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
             imageGuidance={imageGuidance}
           />
         </div> */}
-      </div>
-      <div className={classes.container}>
-        <Typography variant={'h4'} className={classes.sectionHeader}>
-          Promo Code
-        </Typography>
+      </Container>
+      <Container>
+        <SectionHeader variant={'h4'}>Promo Code</SectionHeader>
         <PromoCodesEditor
           promoCodes={variant.promoCodes}
           updatePromoCodes={updatePromoCodes}
           isDisabled={!editMode}
         />
-      </div>
-    </div>
+      </Container>
+    </Container>
   );
 };

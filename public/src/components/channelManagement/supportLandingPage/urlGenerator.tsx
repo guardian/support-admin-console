@@ -1,5 +1,5 @@
-import { Box, Checkbox, FormControlLabel, TextField, Theme, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Checkbox, FormControlLabel, TextField, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React, { useState } from 'react';
 import { SupportLandingPageVariant } from '../../../models/supportLandingPage';
 import { getStage } from '../../../utils/stage';
@@ -10,48 +10,46 @@ interface URLGeneratorProps {
   testName: string;
 }
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  container: {
-    width: '100%',
-    paddingTop: spacing(2),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-  },
-  sectionTitle: {
-    marginBottom: spacing(2),
-    fontWeight: 600,
-  },
-  urlPreviewBlock: {
-    marginTop: spacing(2),
-    fontSize: '0.8rem',
-    color: '#555',
-    display: 'flex',
-    gap: spacing(1),
-  },
-  fields: {
-    display: 'flex',
-    flexDirection: 'row',
-    rowGap: spacing(4),
-    columnGap: spacing(2),
-    alignItems: 'center',
-    flexWrap: 'wrap',
-    marginBottom: spacing(4),
-  },
-  infoText: {
-    fontSize: '0.75rem',
-    color: '#666',
-    fontStyle: 'italic',
-    position: 'absolute',
-  },
-  urlPreviewTitle: {
-    fontWeight: 500,
-    whiteSpace: 'nowrap',
-  },
-  urlPreview: {
-    wordBreak: 'break-all',
-  },
+const Container = styled('div')(({ theme }) => ({
+  width: '100%',
+  paddingTop: theme.spacing(2),
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
 }));
+const SectionTitle = styled(Typography)(({ theme }) => ({
+  marginBottom: theme.spacing(2),
+  fontWeight: 600,
+}));
+const UrlPreviewBlock = styled('div')(({ theme }) => ({
+  marginTop: theme.spacing(2),
+  fontSize: '0.8rem',
+  color: '#555',
+  display: 'flex',
+  gap: theme.spacing(1),
+}));
+const Fields = styled('div')(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'row',
+  rowGap: theme.spacing(4),
+  columnGap: theme.spacing(2),
+  alignItems: 'center',
+  flexWrap: 'wrap',
+  marginBottom: theme.spacing(4),
+}));
+const InfoText = styled(Typography)({
+  fontSize: '0.75rem',
+  color: '#666',
+  fontStyle: 'italic',
+  position: 'absolute',
+});
+const UrlPreviewTitle = styled('span')({
+  fontWeight: 500,
+  whiteSpace: 'nowrap',
+});
+const UrlPreview = styled('span')({
+  wordBreak: 'break-all',
+});
 
 type UrlBuilder = {
   withParams: (newParams: Record<string, string>) => UrlBuilder;
@@ -93,7 +91,6 @@ const getPreviewUrl = ({
 };
 
 const URLGenerator = ({ variant, testName }: URLGeneratorProps) => {
-  const classes = useStyles();
   const [promoCode, setPromoCode] = useState('');
   const [enableOneTime, setEnableOneTime] = useState(false);
 
@@ -121,11 +118,9 @@ const URLGenerator = ({ variant, testName }: URLGeneratorProps) => {
   const ratePlan = variant.defaultProductSelection?.billingPeriod;
 
   return (
-    <div className={classes.container}>
-      <Typography className={classes.sectionTitle} variant="h6">
-        Variant URL Generator
-      </Typography>
-      <div className={classes.fields}>
+    <Container>
+      <SectionTitle variant="h6">Variant URL Generator</SectionTitle>
+      <Fields>
         <Box position="relative">
           <TextField
             label="Default product"
@@ -135,9 +130,7 @@ const URLGenerator = ({ variant, testName }: URLGeneratorProps) => {
               style: { width: 'auto', minWidth: '250px' },
             }}
           />
-          <Typography className={classes.infoText}>
-            Can be changed in the &quot;Default Product&quot; section above
-          </Typography>
+          <InfoText>Can be changed in the &quot;Default Product&quot; section above</InfoText>
         </Box>
         <TextField
           label="Promo Code (optional)"
@@ -154,12 +147,12 @@ const URLGenerator = ({ variant, testName }: URLGeneratorProps) => {
           label="Enable One Time"
         />
         <URLGeneratorCopyButton url={url} />
-      </div>
-      <div className={classes.urlPreviewBlock}>
-        <span className={classes.urlPreviewTitle}>URL preview:</span>
-        <span className={classes.urlPreview}>{url}</span>
-      </div>
-    </div>
+      </Fields>
+      <UrlPreviewBlock>
+        <UrlPreviewTitle>URL preview:</UrlPreviewTitle>
+        <UrlPreview>{url}</UrlPreview>
+      </UrlPreviewBlock>
+    </Container>
   );
 };
 

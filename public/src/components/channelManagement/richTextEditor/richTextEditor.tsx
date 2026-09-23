@@ -1,7 +1,6 @@
 import 'prosekit/basic/style.css';
 import 'prosekit/basic/typography.css';
 
-import { useTheme } from '@mui/material/styles';
 import { Plugin, TextSelection } from '@prosekit/pm/state';
 import { defineBasicExtension } from 'prosekit/basic';
 import { createEditor, definePlugin, type Editor, union } from 'prosekit/core';
@@ -30,7 +29,6 @@ import { MParticleTemplateMenu } from './mParticleTemplateMenu';
 import {
   Button,
   ButtonSpacer,
-  buttonSx,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuContentHidden,
@@ -230,7 +228,6 @@ const RichTextMenu: React.FC<{
   label?: string;
   constraints: RteMenuConstraints;
 }> = ({ disabled, label, constraints }) => {
-  const theme = useTheme();
   const editor = useEditor<ProseKitExtension>();
   const toolbarState = useProseKitToolbarState(editor);
   const [priceButtonsVisible, setPriceButtonsVisible] = useState(false);
@@ -353,7 +350,7 @@ const RichTextMenu: React.FC<{
                 </button>
               )}
               {enableMParticleTemplates && (
-                <MParticleTemplateMenu insertTemplate={insertTemplate} buttonSx={buttonSx(theme)} />
+                <MParticleTemplateMenu insertTemplate={insertTemplate} />
               )}
               {enableProductWeeklyTemplate && (
                 <button {...buttonProps} onClick={() => insertTemplate(PRICE_PRODUCT_WEEKLY)}>

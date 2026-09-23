@@ -1,28 +1,29 @@
-import { Button, Dialog, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Button, Dialog, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import useOpenable from '../../../hooks/useOpenable';
 import { EpicTest } from '../../../models/epic';
 import { EpicModuleName } from '../helpers/shared';
 import VariantPreview from './variantPreview';
 
-const useStyles = makeStyles(() => ({
-  dialog: {
-    padding: '10px',
-  },
-  variantPreviewsContainer: {
-    display: 'flex',
-    margin: '5px',
-  },
-  variantPreviewContainer: {
-    margin: '5px',
-  },
-  variantName: {
-    marginBottom: '10px',
-    fontSize: 26,
-    fontWeight: 500,
-  },
-}));
+const StyledDialog = styled(Dialog)({
+  padding: '10px',
+});
+
+const VariantPreviewsContainer = styled(Box)({
+  display: 'flex',
+  margin: '5px',
+});
+
+const VariantPreviewContainer = styled(Box)({
+  margin: '5px',
+});
+
+const VariantName = styled(Typography)({
+  marginBottom: '10px',
+  fontSize: 26,
+  fontWeight: 500,
+});
 
 interface EpicTestPreviewProps {
   test: EpicTest;
@@ -33,7 +34,6 @@ export const EpicTestPreviewButton: React.FC<EpicTestPreviewProps> = ({
   test,
   moduleName,
 }: EpicTestPreviewProps) => {
-  const classes = useStyles();
   const [isOpen, open, close] = useOpenable();
 
   return (
@@ -42,21 +42,16 @@ export const EpicTestPreviewButton: React.FC<EpicTestPreviewProps> = ({
         Preview all variants
       </Button>
 
-      <Dialog open={isOpen} onClose={close} fullWidth maxWidth="xl" className={classes.dialog}>
-        <div className={classes.variantPreviewsContainer}>
+      <StyledDialog open={isOpen} onClose={close} fullWidth maxWidth="xl">
+        <VariantPreviewsContainer>
           {test.variants.map((variant) => (
-            <div
-              className={classes.variantPreviewContainer}
-              key={`variant-preview-${variant.name}`}
-            >
-              <Typography variant={'h3'} className={classes.variantName}>
-                {variant.name}
-              </Typography>
+            <VariantPreviewContainer key={`variant-preview-${variant.name}`}>
+              <VariantName variant={'h3'}>{variant.name}</VariantName>
               <VariantPreview variant={variant} moduleName={moduleName} />
-            </div>
+            </VariantPreviewContainer>
           ))}
-        </div>
-      </Dialog>
+        </VariantPreviewsContainer>
+      </StyledDialog>
     </>
   );
 };

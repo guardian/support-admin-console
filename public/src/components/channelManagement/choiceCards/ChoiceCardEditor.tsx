@@ -39,8 +39,6 @@ const SubHeading = styled(Typography)({
   fontWeight: 700,
 });
 
-const subHeadingSx = { fontWeight: 700 };
-
 const BenefitContainer = styled(Box)({
   display: 'flex',
   alignItems: 'center',
@@ -324,7 +322,6 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
           <ChoiceCardDestinationFields
             index={index}
             isDisabled={isDisabled}
-            subHeadingSx={subHeadingSx}
             formMethods={formMethods}
             onDestinationSectionChange={handleCardChange}
           />

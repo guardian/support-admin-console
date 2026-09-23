@@ -1,4 +1,3 @@
-import { Typography } from '@mui/material';
 import React, { useEffect, useRef } from 'react';
 import { GutterTest, GutterVariant } from '../../../models/gutter';
 import TestVariantsSplitEditor from '../../tests/variants/testVariantsSplitEditor';
@@ -15,7 +14,12 @@ import {
   SignedInStatus,
   UserCohort,
 } from '../helpers/shared';
-import { useStyles } from '../helpers/testEditorStyles';
+import {
+  Container,
+  SectionContainer,
+  SectionHeader,
+  VariantsHeaderButtonsContainer,
+} from '../helpers/testEditorStyles';
 import ScheduleEditor from '../scheduleEditor';
 import TestEditorContextTargeting from '../testEditorContextTargeting';
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
@@ -31,8 +35,6 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
   onTestChange,
   setValidationStatusForField,
 }: ValidatedTestEditorProps<GutterTest>) => {
-  const classes = useStyles();
-
   const onCampaignChange = (campaign?: string): void => {
     onTestChange((current) => ({
       ...current,
@@ -181,15 +183,13 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
   };
 
   return (
-    <div className={classes.container}>
-      <div className={classes.sectionContainer}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
-          Variants
-        </Typography>
+    <Container>
+      <SectionContainer>
+        <SectionHeader variant={'h3'}>Variants</SectionHeader>
         {settings.allowVariantPreview && (
-          <div className={classes.variantsHeaderButtonsContainer}>
+          <VariantsHeaderButtonsContainer>
             <GutterTestPreviewButton test={test} />
-          </div>
+          </VariantsHeaderButtonsContainer>
         )}
         <div>
           <VariantsEditor<GutterVariant>
@@ -203,12 +203,10 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
             onVariantClone={onVariantClone}
           />
         </div>
-      </div>
+      </SectionContainer>
       {test.variants.length > 1 && (
-        <div className={classes.sectionContainer}>
-          <Typography variant={'h3'} className={classes.sectionHeader}>
-            Variants split (applies to AB tests only)
-          </Typography>
+        <SectionContainer>
+          <SectionHeader variant={'h3'}>Variants split (applies to AB tests only)</SectionHeader>
           <div>
             <TestVariantsSplitEditor
               variants={test.variants}
@@ -218,13 +216,11 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
               isDisabled={!userHasTestLocked}
             />
           </div>
-        </div>
+        </SectionContainer>
       )}
 
-      <div className={classes.sectionContainer}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
-          Campaign
-        </Typography>
+      <SectionContainer>
+        <SectionHeader variant={'h3'}>Campaign</SectionHeader>
         <div>
           <CampaignSelector
             test={test}
@@ -232,24 +228,20 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
             disabled={!userHasTestLocked}
           />
         </div>
-      </div>
+      </SectionContainer>
 
-      <div className={classes.sectionContainer}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
-          Target context
-        </Typography>
+      <SectionContainer>
+        <SectionHeader variant={'h3'}>Target context</SectionHeader>
 
         <TestEditorContextTargeting
           contextTargeting={test.contextTargeting}
           editMode={userHasTestLocked}
           updateContextTargeting={updateContextTargeting}
         />
-      </div>
+      </SectionContainer>
 
-      <div className={classes.sectionContainer}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
-          Target audience
-        </Typography>
+      <SectionContainer>
+        <SectionHeader variant={'h3'}>Target audience</SectionHeader>
 
         <TestEditorTargetAudienceSelector
           regionTargeting={test.regionTargeting}
@@ -267,20 +259,18 @@ const GutterTestEditor: React.FC<ValidatedTestEditorProps<GutterTest>> = ({
           showConsentStatusSelector={false}
           onConsentStatusChange={onConsentChange} // can't remove but hidden anyway
         />
-      </div>
+      </SectionContainer>
 
-      <div className={classes.sectionContainer}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
-          Schedule
-        </Typography>
+      <SectionContainer>
+        <SectionHeader variant={'h3'}>Schedule</SectionHeader>
         <ScheduleEditor
           scheduler={test.scheduler}
           disabled={!userHasTestLocked}
           onChange={(scheduler) => onTestChange((current) => ({ ...current, scheduler }))}
           onValidationChange={(isValid) => setValidationStatusForField('schedule', isValid)}
         />
-      </div>
-    </div>
+      </SectionContainer>
+    </Container>
   );
 };
 

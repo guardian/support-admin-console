@@ -1,13 +1,5 @@
-import {
-  Alert,
-  FormControl,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-  Theme,
-  Typography,
-} from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Alert, FormControl, FormControlLabel, Radio, RadioGroup, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React, { useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { ChoiceCardsSettings } from '../../../models/choiceCards';
@@ -51,34 +43,29 @@ import EpicTestNewsletter from './newsletterSignUp';
 import SignInLinkEditor from './signInLinkEditor';
 import EpicTestVariantEditorCtasEditor from './variantCtasEditor';
 
-const getUseStyles = (shouldAddPadding: boolean) => {
-  const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
-    container: {
-      width: '100%',
-      paddingTop: shouldAddPadding ? spacing(2) : 0,
-      paddingLeft: shouldAddPadding ? spacing(4) : 0,
-      paddingRight: shouldAddPadding ? spacing(10) : 0,
-
-      '& > * + *': {
-        marginTop: spacing(1),
-      },
-    },
-    sectionHeader: {
-      fontSize: 16,
-      color: palette.grey[900],
-      fontWeight: 500,
-    },
-    sectionContainer: {
-      paddingTop: spacing(1),
-      paddingBottom: spacing(2),
-
-      '& > * + *': {
-        marginTop: spacing(3),
-      },
-    },
-  }));
-  return useStyles;
-};
+const Container = styled('div', {
+  shouldForwardProp: (prop) => prop !== 'addPadding',
+})<{ addPadding: boolean }>(({ theme, addPadding }) => ({
+  width: '100%',
+  paddingTop: addPadding ? theme.spacing(2) : 0,
+  paddingLeft: addPadding ? theme.spacing(4) : 0,
+  paddingRight: addPadding ? theme.spacing(10) : 0,
+  '& > * + *': {
+    marginTop: theme.spacing(1),
+  },
+}));
+const SectionHeader = styled(Typography)(({ theme }) => ({
+  fontSize: 16,
+  color: theme.palette.grey[900],
+  fontWeight: 500,
+}));
+const SectionContainer = styled('div')(({ theme }) => ({
+  paddingTop: theme.spacing(1),
+  paddingBottom: theme.spacing(2),
+  '& > * + *': {
+    marginTop: theme.spacing(3),
+  },
+}));
 
 const PARAGRAPHS_MAX_LENGTH = 2000;
 
@@ -129,7 +116,6 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
     allowNewsletterSignup,
   } = epicEditorConfig;
 
-  const classes = getUseStyles(allowMultipleVariants)();
   const setValidationStatusForField = useValidation(onValidationChange);
 
   const templateValidator = templateValidatorForPlatform(platform);
@@ -269,7 +255,7 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
   };
 
   return (
-    <div className={classes.container}>
+    <Container addPadding={allowMultipleVariants}>
       {allowVariantHeader && (
         <Controller
           name="heading"
@@ -400,9 +386,7 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
       )}
 
       {(allowVariantImageUrl || allowBylineWithImage) && (
-        <Typography className={classes.sectionHeader} variant="h4">
-          Byline copy and/or images
-        </Typography>
+        <SectionHeader variant="h4">Byline copy and/or images</SectionHeader>
       )}
 
       {allowBylineWithImage && (
@@ -450,10 +434,8 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
         </FormControl>
       )}
       {variant.newsletterSignup && (
-        <div className={classes.sectionContainer}>
-          <Typography className={classes.sectionHeader} variant="h4">
-            Newsletter Signup
-          </Typography>
+        <SectionContainer>
+          <SectionHeader variant="h4">Newsletter Signup</SectionHeader>
 
           <EpicTestNewsletter
             newsletterSignup={variant.newsletterSignup}
@@ -461,15 +443,13 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
             onValidationChange={(isValid) => setValidationStatusForField('newsletter', isValid)}
             isDisabled={!editMode}
           />
-        </div>
+        </SectionContainer>
       )}
       {!variant.newsletterSignup && allowVariantCustomPrimaryCta && (
         <>
           <div>
-            <div className={classes.sectionContainer}>
-              <Typography className={classes.sectionHeader} variant="h4">
-                Buttons
-              </Typography>
+            <SectionContainer>
+              <SectionHeader variant="h4">Buttons</SectionHeader>
 
               <EpicTestVariantEditorCtasEditor
                 primaryCta={variant.cta}
@@ -482,7 +462,7 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                 onValidationChange={(isValid) => setValidationStatusForField('cta', isValid)}
                 supportSecondaryCta={allowVariantSecondaryCta}
               />
-            </div>
+            </SectionContainer>
           </div>
 
           <PromoCodesEditor
@@ -492,10 +472,8 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
           />
 
           {allowVariantChoiceCards && (
-            <div className={classes.sectionContainer}>
-              <Typography className={classes.sectionHeader} variant="h4">
-                Choice Cards
-              </Typography>
+            <SectionContainer>
+              <SectionHeader variant="h4">Choice Cards</SectionHeader>
 
               <ChoiceCardsEditor
                 showChoiceCards={variant.showChoiceCards ?? false}
@@ -508,30 +486,26 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
                   setValidationStatusForField('choiceCards', isValid)
                 }
               />
-            </div>
+            </SectionContainer>
           )}
         </>
       )}
 
       {allowVariantSeparateArticleCount && (
-        <div className={classes.sectionContainer}>
-          <Typography className={classes.sectionHeader} variant="h4">
-            Separate article count
-          </Typography>
+        <SectionContainer>
+          <SectionHeader variant="h4">Separate article count</SectionHeader>
 
           <VariantSeparateArticleCountEditor
             separateArticleCount={variant.separateArticleCount}
             updateSeparateArticleCount={updateSeparateArticleCount}
             isDisabled={!editMode}
           />
-        </div>
+        </SectionContainer>
       )}
 
       {allowVariantTicker && (
-        <div className={classes.sectionContainer}>
-          <Typography className={classes.sectionHeader} variant="h4">
-            Ticker
-          </Typography>
+        <SectionContainer>
+          <SectionHeader variant="h4">Ticker</SectionHeader>
 
           <TickerEditor
             tickerSettings={variant.tickerSettings}
@@ -539,28 +513,24 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
             isDisabled={!editMode}
             onValidationChange={(isValid) => setValidationStatusForField('ticker', isValid)}
           />
-        </div>
+        </SectionContainer>
       )}
 
       {allowVariantSignInLink && (
-        <div className={classes.sectionContainer}>
-          <Typography className={classes.sectionHeader} variant="h4">
-            Sign in link
-          </Typography>
+        <SectionContainer>
+          <SectionHeader variant="h4">Sign in link</SectionHeader>
 
           <SignInLinkEditor
             showSignInLink={variant.showSignInLink}
             updateShowSignInLink={updateShowSignInLink}
             isDisabled={!editMode}
           />
-        </div>
+        </SectionContainer>
       )}
 
       {platform === 'APPLE_NEWS' && (
-        <div className={classes.sectionContainer}>
-          <Typography className={classes.sectionHeader} variant="h4">
-            Apple News Choice Cards
-          </Typography>
+        <SectionContainer>
+          <SectionHeader variant="h4">Apple News Choice Cards</SectionHeader>
           <AppleNewsChoiceCards
             variant={variant}
             editMode={editMode}
@@ -571,9 +541,7 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
             }
           />
 
-          <Typography className={classes.sectionHeader} variant="h4">
-            Promotions
-          </Typography>
+          <SectionHeader variant="h4">Promotions</SectionHeader>
           <Alert severity="info">
             <p>
               The Apple News epic does not support regional targeting of promos. If a promo code is
@@ -589,9 +557,9 @@ const VariantEditor: React.FC<EpicTestVariantEditorProps> = ({
             isDisabled={!editMode}
             maxPromoCodes={1}
           />
-        </div>
+        </SectionContainer>
       )}
-    </div>
+    </Container>
   );
 };
 
