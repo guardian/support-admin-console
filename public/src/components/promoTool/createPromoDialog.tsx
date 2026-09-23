@@ -6,17 +6,14 @@ import {
   DialogTitle,
   TextField,
 } from '@mui/material';
-import { Theme } from '@mui/material/styles';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React, { useState } from 'react';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  dialogContent: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: spacing(2),
-    minWidth: 400,
-  },
+const DialogContentStyled = styled(DialogContent)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: theme.spacing(2),
+  minWidth: 400,
 }));
 
 interface CreatePromoDialogProps {
@@ -32,7 +29,6 @@ const CreatePromoDialog = ({
   onCreate,
   existingCodes,
 }: CreatePromoDialogProps): React.ReactElement => {
-  const classes = useStyles();
   const [promoCode, setPromoCode] = useState('');
   const [name, setName] = useState('');
   const [error, setError] = useState('');
@@ -67,7 +63,7 @@ const CreatePromoDialog = ({
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Create New Promo Code</DialogTitle>
-      <DialogContent className={classes.dialogContent}>
+      <DialogContentStyled>
         <TextField
           autoFocus
           label="Promo Code"
@@ -86,7 +82,7 @@ const CreatePromoDialog = ({
           onChange={(e) => setName(e.target.value)}
           placeholder="Name for internal use..."
         />
-      </DialogContent>
+      </DialogContentStyled>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
         <Button onClick={handleCreate} variant="contained" color="primary">

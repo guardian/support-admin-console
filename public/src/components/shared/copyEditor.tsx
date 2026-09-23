@@ -1,5 +1,4 @@
-import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React, { useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import {
@@ -8,11 +7,7 @@ import {
 } from '../channelManagement/helpers/validation';
 import { RichTextEditorSingleLine } from '../channelManagement/richTextEditor/richTextEditor';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  container: {
-    marginLeft: spacing(2),
-  },
-}));
+const Container = styled('div')(({ theme }) => ({ marginLeft: theme.spacing(2) }));
 
 interface Copy {
   heading: string;
@@ -39,8 +34,6 @@ export const CopyEditor: React.FC<CopyEditorProps> = ({
   editMode,
   enableMParticleTemplates = false,
 }: CopyEditorProps) => {
-  const classes = useStyles();
-
   const templateValidator = templateValidatorForPlatform('DOTCOM');
 
   const defaultValues: FormData = {
@@ -92,7 +85,7 @@ export const CopyEditor: React.FC<CopyEditorProps> = ({
 
   return (
     <>
-      <div className={classes.container}>
+      <Container>
         <Controller
           name="heading"
           control={control}
@@ -162,7 +155,7 @@ export const CopyEditor: React.FC<CopyEditorProps> = ({
             }}
           />
         </div>
-      </div>
+      </Container>
     </>
   );
 };

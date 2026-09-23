@@ -1,12 +1,11 @@
 import HistoryIcon from '@mui/icons-material/History';
 import { Alert, Button, CircularProgress, Typography } from '@mui/material';
 import React from 'react';
-import { useStyles } from './styles';
+import { VersionHistory as VersionHistoryContainer, VersionHistoryContent } from './styles';
 import { useVersionHistory } from './useVersionHistory';
 import { VersionHistoryTable } from './VersionHistoryTable';
 
 export const VersionHistory: React.FC = () => {
-  const classes = useStyles();
   const {
     versions,
     loading,
@@ -19,7 +18,7 @@ export const VersionHistory: React.FC = () => {
   } = useVersionHistory();
 
   return (
-    <div className={classes.versionHistory}>
+    <VersionHistoryContainer>
       <Button
         onClick={() => void loadVersions()}
         disabled={loading}
@@ -30,7 +29,7 @@ export const VersionHistory: React.FC = () => {
       </Button>
       {error && <Alert severity="error">Unable to load version history: {error}</Alert>}
       {versions && !error && (
-        <div className={classes.versionHistoryContent}>
+        <VersionHistoryContent>
           <Typography variant="h6">Version history</Typography>
           {versions.length === 0 ? (
             <Typography variant="body2">No previous versions are available.</Typography>
@@ -43,8 +42,8 @@ export const VersionHistory: React.FC = () => {
               onToggleDifferences={toggleDifferences}
             />
           )}
-        </div>
+        </VersionHistoryContent>
       )}
-    </div>
+    </VersionHistoryContainer>
   );
 };

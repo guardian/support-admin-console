@@ -1,5 +1,4 @@
-import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
@@ -25,49 +24,42 @@ import {
   promoProductNames,
 } from './utils/promoModels';
 
-const useStyles = makeStyles(({ spacing, typography }: Theme) => ({
-  viewTextContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: '-50px',
-  },
-  viewText: {
-    fontSize: typography.pxToRem(16),
-  },
-  body: {
-    display: 'flex',
-    overflow: 'hidden',
-    flexGrow: 1,
-    width: '100%',
-    height: '100%',
-  },
-  headline2: {
-    color: '#555',
-    fontSize: 18,
-  },
-  leftCol: {
-    height: '100%',
-    flexShrink: 0,
-    overflowY: 'auto',
-    background: 'white',
-    paddingTop: spacing(6),
-    paddingLeft: spacing(6),
-    paddingRight: spacing(6),
-  },
-  rightCol: {
-    flexGrow: 1,
-    display: 'flex',
-    justifyContent: 'center',
-    overflowY: 'auto',
-  },
+const ViewTextContainer = styled('div')({
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginTop: '-50px',
+});
+const ViewText = styled('p')(({ theme }) => ({
+  fontSize: theme.typography.pxToRem(16),
 }));
+const Body = styled('div')({
+  display: 'flex',
+  overflow: 'hidden',
+  flexGrow: 1,
+  width: '100%',
+  height: '100%',
+});
+const Headline = styled('h2')({ color: '#555', fontSize: 18 });
+const LeftCol = styled('div')(({ theme }) => ({
+  height: '100%',
+  flexShrink: 0,
+  overflowY: 'auto',
+  background: 'white',
+  paddingTop: theme.spacing(6),
+  paddingLeft: theme.spacing(6),
+  paddingRight: theme.spacing(6),
+}));
+const RightCol = styled('div')({
+  flexGrow: 1,
+  display: 'flex',
+  justifyContent: 'center',
+  overflowY: 'auto',
+});
 
 const PromoTool: React.FC = () => {
-  const classes = useStyles();
   const navigate = useNavigate();
-
   const [promoCampaigns, setPromoCampaigns] = useState<PromoCampaign[]>([]);
   const [promos, setPromos] = useState<Promo[]>([]);
   const [countryGroups, setCountryGroups] = useState<CountryGroup[]>([]);
@@ -238,8 +230,8 @@ const PromoTool: React.FC = () => {
   );
 
   return (
-    <div className={classes.body}>
-      <div className={classes.leftCol}>
+    <Body>
+      <LeftCol>
         <PromoCampaignsSidebar
           promoCampaigns={promoCampaigns}
           selectedPromoCampaign={selectedPromoCampaign}
@@ -249,11 +241,11 @@ const PromoTool: React.FC = () => {
           setSelectedProduct={setSelectedPromoProduct}
           allowEditing={allowEditing}
         />
-      </div>
-      <div className={classes.rightCol}>
+      </LeftCol>
+      <RightCol>
         {selectedPromoCampaign ? (
           <div style={{ width: '100%', padding: '24px' }}>
-            <h2 className={classes.headline2}>Promo codes for {selectedPromoCampaign.name}</h2>
+            <Headline>Promo codes for {selectedPromoCampaign.name}</Headline>
             <PromosList
               promos={promos}
               onCreatePromo={() => setCreateDialogOpen(true)}
@@ -265,11 +257,11 @@ const PromoTool: React.FC = () => {
             />
           </div>
         ) : (
-          <div className={classes.viewTextContainer}>
-            <p className={classes.viewText}>Select a campaign to view promo codes</p>
-          </div>
+          <ViewTextContainer>
+            <ViewText>Select a campaign to view promo codes</ViewText>
+          </ViewTextContainer>
         )}
-      </div>
+      </RightCol>
       <CreatePromoDialog
         open={createDialogOpen}
         onClose={() => setCreateDialogOpen(false)}
@@ -285,7 +277,7 @@ const PromoTool: React.FC = () => {
         onCreate={handleClonePromo}
         existingCodes={promos.map((p) => p.promoCode)}
       />
-    </div>
+    </Body>
   );
 };
 

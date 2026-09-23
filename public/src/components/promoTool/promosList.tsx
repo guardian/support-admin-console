@@ -1,29 +1,26 @@
 import { Box, Button, List } from '@mui/material';
-import { Theme } from '@mui/material/styles';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { PromoListItem } from './promoListItem';
 import { RatePlanWithProduct } from './utils/productCatalog';
 import { CountryGroup, Promo } from './utils/promoModels';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  container: {
-    marginTop: spacing(2),
-    width: '100%',
-  },
-  header: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: spacing(2),
-  },
-  list: {
-    padding: 0,
-    width: '100%',
-    border: '1px solid #ddd',
-    borderRadius: '4px',
-  },
+const Container = styled('div')(({ theme }) => ({
+  marginTop: theme.spacing(2),
+  width: '100%',
 }));
+const Header = styled('div')(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  marginBottom: theme.spacing(2),
+}));
+const StyledList = styled(List)({
+  padding: 0,
+  width: '100%',
+  border: '1px solid #ddd',
+  borderRadius: '4px',
+});
 
 interface PromosListProps {
   promos: Promo[];
@@ -44,11 +41,9 @@ const PromosList = ({
   ratePlans,
   allowEditing,
 }: PromosListProps): React.ReactElement => {
-  const classes = useStyles();
-
   return (
-    <div className={classes.container}>
-      <div className={classes.header}>
+    <Container>
+      <Header>
         <h3>Promo codes</h3>
         <Button
           variant="contained"
@@ -58,13 +53,13 @@ const PromosList = ({
         >
           Create promo code
         </Button>
-      </div>
+      </Header>
       {promos.length === 0 ? (
         <Box p={2} textAlign="center" color="text.secondary">
           No promo codes yet. Click &quot;Create promo code&quot; to add one.
         </Box>
       ) : (
-        <List className={classes.list}>
+        <StyledList>
           {promos.map((promo) => {
             return (
               <PromoListItem
@@ -78,9 +73,9 @@ const PromosList = ({
               />
             );
           })}
-        </List>
+        </StyledList>
       )}
-    </div>
+    </Container>
   );
 };
 
