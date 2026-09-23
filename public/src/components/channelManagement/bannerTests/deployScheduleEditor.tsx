@@ -1,16 +1,14 @@
-import { FormControl, FormControlLabel, Radio, RadioGroup, TextField, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { FormControl, FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { BannerTestDeploySchedule } from '../../../models/banner';
 import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  container: {
-    '& > * + *': {
-      marginTop: spacing(3),
-    },
-  },
+const Container = styled('div')(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: theme.spacing(3),
 }));
 
 interface DeployScheduleEditorProps {
@@ -26,8 +24,6 @@ const DeployScheduleEditor: React.FC<DeployScheduleEditorProps> = ({
   onValidationChange,
   isDisabled,
 }: DeployScheduleEditorProps) => {
-  const classes = useStyles();
-
   const defaultValues: BannerTestDeploySchedule = {
     daysBetween: deploySchedule?.daysBetween ?? 1,
   };
@@ -60,7 +56,7 @@ const DeployScheduleEditor: React.FC<DeployScheduleEditorProps> = ({
 
   return (
     <FormControl>
-      <div className={classes.container}>
+      <Container>
         <RadioGroup value={deploySchedule ? 'enabled' : 'disabled'} onChange={onRadioGroupChange}>
           <FormControlLabel
             value="disabled"
@@ -97,7 +93,7 @@ const DeployScheduleEditor: React.FC<DeployScheduleEditorProps> = ({
             disabled={isDisabled}
           />
         )}
-      </div>
+      </Container>
     </FormControl>
   );
 };

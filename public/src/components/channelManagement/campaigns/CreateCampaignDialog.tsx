@@ -1,5 +1,6 @@
 import CloseIcon from '@mui/icons-material/Close';
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
@@ -8,7 +9,7 @@ import {
   IconButton,
   TextField,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -18,19 +19,18 @@ import {
   VALID_CHARACTERS_REGEX,
 } from '../helpers/validation';
 
-const useStyles = makeStyles(() => ({
-  dialogHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingRight: '8px',
+const DialogHeader = styled(Box)({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  paddingRight: '8px',
+});
+
+const StyledTextField = styled(TextField)({
+  '& input': {
+    textTransform: 'uppercase !important',
   },
-  input: {
-    '& input': {
-      textTransform: 'uppercase !important',
-    },
-  },
-}));
+});
 
 interface FormData {
   name: string;
@@ -53,8 +53,6 @@ const CreateCampaignDialog: React.FC<CreateCampaignDialogProps> = ({
   existingNicknames,
   createCampaign,
 }: CreateCampaignDialogProps) => {
-  const classes = useStyles();
-
   const defaultValues: FormData = {
     name: '',
     nickname: '',
@@ -81,15 +79,14 @@ const CreateCampaignDialog: React.FC<CreateCampaignDialogProps> = ({
 
   return (
     <Dialog open={isOpen} onClose={close} aria-labelledby="create-test-dialog-title">
-      <div className={classes.dialogHeader}>
+      <DialogHeader>
         <DialogTitle id="create-campaign-dialog-title">Create a new campaign</DialogTitle>
         <IconButton onClick={close} aria-label="close">
           <CloseIcon />
         </IconButton>
-      </div>
+      </DialogHeader>
       <DialogContent dividers>
-        <TextField
-          className={classes.input}
+        <StyledTextField
           error={errors.name !== undefined}
           helperText={errors.name ? errors.name.message : ''}
           {...register('name', {
@@ -106,8 +103,7 @@ const CreateCampaignDialog: React.FC<CreateCampaignDialogProps> = ({
           autoFocus
           fullWidth
         />
-        <TextField
-          className={classes.input}
+        <StyledTextField
           error={errors.nickname !== undefined}
           helperText={errors.nickname ? errors.nickname.message : ''}
           {...register('nickname', {

@@ -1,8 +1,8 @@
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import { Alert, Button, Theme } from '@mui/material';
+import { Alert, Box, Button } from '@mui/material';
 import Drawer from '@mui/material/Drawer';
+import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import { makeStyles } from '@mui/styles';
 import React, { useState } from 'react';
 import { BannerContent, BannerVariant } from '../../../models/banner';
 import { BannerDesign, BannerDesignProps } from '../../../models/bannerDesign';
@@ -112,39 +112,34 @@ const buildProps = (
   };
 };
 
-const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
-  drawer: {
+const StyledDrawer = styled(Drawer)({
+  '& .MuiDrawer-paper': {
     height: '400px',
     bottom: 0,
     top: 'auto',
     width: '100%',
   },
-  icon: {
-    width: '40px',
-    height: '40px',
-    background: palette.grey[900],
-    borderRadius: '50%',
-    color: 'white',
-    cursor: 'pointer',
-  },
-  hint: {
-    textAlign: 'center',
-    fontStyle: 'italic',
-    fontSize: '20px',
-  },
-  controlsContainer: {
-    position: 'fixed',
-    backgroundColor: palette.grey[100],
-    borderRadius: '4px',
-    top: spacing(3),
-    left: spacing(3),
-    padding: spacing(3),
-  },
-  iframe: {
-    width: '100vw',
-    height: '100vh',
-  },
+});
+
+const Hint = styled(Box)({
+  textAlign: 'center',
+  fontStyle: 'italic',
+  fontSize: '20px',
+});
+
+const ControlsContainer = styled(Box)(({ theme }) => ({
+  position: 'fixed',
+  backgroundColor: theme.palette.grey[100],
+  borderRadius: '4px',
+  top: theme.spacing(3),
+  left: theme.spacing(3),
+  padding: theme.spacing(3),
 }));
+
+const StyledIframe = styled('iframe')({
+  width: '100vw',
+  height: '100vh',
+});
 
 interface BannerVariantPreviewProps {
   variant: BannerVariant;
@@ -157,8 +152,6 @@ const BannerVariantPreview: React.FC<BannerVariantPreviewProps> = ({
   design,
   controls,
 }: BannerVariantPreviewProps) => {
-  const classes = useStyles();
-
   const [drawerOpen, setDrawerOpen] = useState<boolean>();
   const tickerSettingsWithData = useTickerData(variant.tickerSettings);
 
@@ -179,26 +172,21 @@ const BannerVariantPreview: React.FC<BannerVariantPreviewProps> = ({
         <Button startIcon={<VisibilityIcon />} size="small" onClick={toggleDrawer(true)}>
           Live preview
         </Button>
-        <Drawer
-          anchor={anchor}
-          open={drawerOpen}
-          onClose={toggleDrawer(false)}
-          classes={{ paper: classes.drawer }}
-        >
+        <StyledDrawer anchor={anchor} open={drawerOpen} onClose={toggleDrawer(false)}>
           <div>
-            <div className={classes.hint} onClick={toggleDrawer(false)}>
+            <Hint onClick={toggleDrawer(false)}>
               <Typography>Click anywhere outside the banner to close</Typography>
               <Alert severity="info">
                 The Live Preview does not support choice cards. Please use the Web Preview to view
                 choice cards.
               </Alert>
-            </div>
+            </Hint>
             <div>
-              <iframe className={classes.iframe} src={storybookUrl}></iframe>
+              <StyledIframe src={storybookUrl}></StyledIframe>
             </div>
-            {controls && <div className={classes.controlsContainer}>{controls}</div>}
+            {controls && <ControlsContainer>{controls}</ControlsContainer>}
           </div>
-        </Drawer>
+        </StyledDrawer>
       </React.Fragment>
     </div>
   );

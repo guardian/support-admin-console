@@ -9,10 +9,9 @@ const ScrollableContainer = styled(Box)({
 
 const Container = styled(Box)(({ theme }) => ({
   padding: `${theme.spacing(6)} ${theme.spacing(9)}`,
-
-  '& > * + *': {
-    marginTop: theme.spacing(4),
-  },
+  display: 'flex',
+  flexDirection: 'column',
+  gap: theme.spacing(4),
 }));
 
 const TableContainer = styled(Box)({
