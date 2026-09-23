@@ -1,37 +1,36 @@
-import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import BannerChannelDeployer from './bannerChannelDeployer';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  scrollableContainer: {
-    overflow: 'auto',
-  },
-  container: {
-    padding: `${spacing(6)} ${spacing(9)}`,
+const ScrollableContainer = styled(Box)({
+  overflow: 'auto',
+});
 
-    '& > * + *': {
-      marginTop: spacing(4),
-    },
-  },
-  tableContainer: {
-    width: '45%',
+const Container = styled(Box)(({ theme }) => ({
+  padding: `${theme.spacing(6)} ${theme.spacing(9)}`,
+
+  '& > * + *': {
+    marginTop: theme.spacing(4),
   },
 }));
 
+const TableContainer = styled(Box)({
+  width: '45%',
+});
+
 const BannerDeployDashboard: React.FC = () => {
-  const classes = useStyles();
   return (
-    <div className={classes.scrollableContainer}>
-      <div className={classes.container}>
-        <div className={classes.tableContainer}>
+    <ScrollableContainer>
+      <Container>
+        <TableContainer>
           <BannerChannelDeployer channel="CHANNEL1" />
-        </div>
-        <div className={classes.tableContainer}>
+        </TableContainer>
+        <TableContainer>
           <BannerChannelDeployer channel="CHANNEL2" />
-        </div>
-      </div>
-    </div>
+        </TableContainer>
+      </Container>
+    </ScrollableContainer>
   );
 };
 

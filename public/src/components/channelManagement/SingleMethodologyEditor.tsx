@@ -5,10 +5,9 @@ import {
   SelectChangeEvent,
   Switch,
   TextField,
-  Theme,
   Tooltip,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { BanditAnalyticsButton } from './BanditAnalyticsButton';
 import { BanditMethodology, Methodology } from './helpers/shared';
@@ -16,34 +15,32 @@ import { BanditMethodology, Methodology } from './helpers/shared';
 const isBandit = (methodology: Methodology): methodology is BanditMethodology =>
   methodology.name === 'EpsilonGreedyBandit' || methodology.name === 'Roulette';
 
-const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
-  container: {
-    '& > * + *': {
-      marginTop: spacing(1),
-    },
+const Container = styled('div')(({ theme }) => ({
+  '& > * + *': {
+    marginTop: theme.spacing(1),
   },
-  methodologyContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    border: `1px solid ${palette.grey[800]}`,
-    borderRadius: '4px',
-    padding: spacing(1),
-    '& > * + *': {
-      marginLeft: spacing(2),
-      paddingLeft: spacing(2),
-      borderLeft: `1px solid ${palette.grey[400]}`,
-    },
+}));
+const MethodologyContainer = styled('div')(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'row',
+  border: `1px solid ${theme.palette.grey[800]}`,
+  borderRadius: '4px',
+  padding: theme.spacing(1),
+  '& > * + *': {
+    marginLeft: theme.spacing(2),
+    paddingLeft: theme.spacing(2),
+    borderLeft: `1px solid ${theme.palette.grey[400]}`,
   },
-  sampleCountContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    fontSize: '14px',
-    fontWeight: 500,
-  },
-  sampleCountInput: {
-    maxWidth: '90px',
-    marginLeft: spacing(1),
-  },
+}));
+const SampleCountContainer = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
+  fontSize: '14px',
+  fontWeight: 500,
+});
+const SampleCountInput = styled(TextField)(({ theme }) => ({
+  maxWidth: '90px',
+  marginLeft: theme.spacing(1),
 }));
 
 const defaultEpsilonGreedyBandit: Methodology = {
@@ -62,8 +59,6 @@ const MethodologySampleCount: React.FC<MethodologySampleCountProps> = ({
   onChange,
   isDisabled,
 }: MethodologySampleCountProps) => {
-  const classes = useStyles();
-
   const onSwitchChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     if (event.target.checked) {
       onChange(24);
@@ -73,7 +68,7 @@ const MethodologySampleCount: React.FC<MethodologySampleCountProps> = ({
   };
 
   return (
-    <div className={classes.sampleCountContainer}>
+    <SampleCountContainer>
       <Tooltip
         title={
           'Only look back this many hours. If disabled, uses all data since the start of the test.'
@@ -84,8 +79,7 @@ const MethodologySampleCount: React.FC<MethodologySampleCountProps> = ({
           <Switch checked={!!sampleCount} onChange={onSwitchChange} disabled={isDisabled} />
         </div>
       </Tooltip>
-      <TextField
-        className={classes.sampleCountInput}
+      <SampleCountInput
         type={'number'}
         InputProps={{ inputProps: { min: 6, step: 1 } }}
         value={sampleCount}
@@ -97,7 +91,7 @@ const MethodologySampleCount: React.FC<MethodologySampleCountProps> = ({
           onChange(samples);
         }}
       />
-    </div>
+    </SampleCountContainer>
   );
 };
 
@@ -116,8 +110,6 @@ export const SingleMethodologyEditor: React.FC<SingleMethodologyEditorProps> = (
   onChange,
   isDisabled,
 }: SingleMethodologyEditorProps) => {
-  const classes = useStyles();
-
   const onSelectChange = (event: SelectChangeEvent<Methodology['name']>) => {
     const value = event.target.value as Methodology['name'];
     if (value === 'EpsilonGreedyBandit') {
@@ -130,10 +122,10 @@ export const SingleMethodologyEditor: React.FC<SingleMethodologyEditorProps> = (
   };
 
   return (
-    <div className={classes.container}>
+    <Container>
       <Alert severity="info">Methodologies cannot be changed after a test has been launched</Alert>
 
-      <div className={classes.methodologyContainer}>
+      <MethodologyContainer>
         <div>
           <Select
             value={methodology.name}
@@ -188,7 +180,7 @@ export const SingleMethodologyEditor: React.FC<SingleMethodologyEditorProps> = (
             />
           </div>
         )}
-      </div>
-    </div>
+      </MethodologyContainer>
+    </Container>
   );
 };

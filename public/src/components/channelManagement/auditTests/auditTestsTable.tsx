@@ -1,19 +1,22 @@
 import { Button, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { diff, IChange } from 'json-diff-ts';
 import React from 'react';
 import { AuditTestCompareVersionsDialog } from './auditTestCompareVersionsDialog';
 
-const useStyles = makeStyles({
-  heading: {
-    margin: '6px 12px 0 12px',
-    fontSize: 18,
-    fontWeight: 500,
-  },
-  container: {
-    marginTop: '10px',
-  },
+const Heading = styled(Typography)({
+  margin: '6px 12px 0 12px',
+  fontSize: 18,
+  fontWeight: 500,
+});
+
+const Container = styled('div')({
+  marginTop: '10px',
+});
+
+const FullWidthBox = styled('div')({
+  width: '100%',
 });
 
 export interface AuditDataRow {
@@ -40,8 +43,6 @@ export const AuditTestsTable: React.FC<AuditTestsTableProps> = ({
   testName,
   rows,
 }: AuditTestsTableProps) => {
-  const classes = useStyles();
-
   const [open, setOpen] = React.useState(false);
   const [jsonDiff, setJsonDiff] = React.useState<IChange[]>([]);
   const [versionToCompare, setVersionToCompare] = React.useState<number>(0);
@@ -106,9 +107,9 @@ export const AuditTestsTable: React.FC<AuditTestsTableProps> = ({
 
   return (
     <>
-      <div className={classes.container}>
-        <Typography className={classes.heading}> Audit Details for {testName} </Typography>
-        <div style={{ width: '100%' }}>
+      <Container>
+        <Heading> Audit Details for {testName} </Heading>
+        <FullWidthBox>
           <DataGrid
             autoHeight
             rows={sortedRows.map((row) => ({
@@ -125,7 +126,7 @@ export const AuditTestsTable: React.FC<AuditTestsTableProps> = ({
             }}
             pageSizeOptions={[10]}
           />
-        </div>
+        </FullWidthBox>
         {open && (
           <div>
             <AuditTestCompareVersionsDialog
@@ -136,7 +137,7 @@ export const AuditTestsTable: React.FC<AuditTestsTableProps> = ({
             />
           </div>
         )}
-      </div>
+      </Container>
     </>
   );
 };
