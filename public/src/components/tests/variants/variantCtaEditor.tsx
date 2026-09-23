@@ -1,22 +1,20 @@
-import { Checkbox, FormControlLabel, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Checkbox, FormControlLabel } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { Cta } from '../../channelManagement/helpers/shared';
 import VariantCtaFieldsEditor from './variantCtaFieldsEditor';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  container: {
-    '& > * + *': {
-      marginTop: spacing(1),
-    },
+const Container = styled('div')(({ theme }) => ({
+  '& > * + *': {
+    marginTop: theme.spacing(1),
   },
-  checkboxContainer: {
-    height: '50px',
-  },
-  fieldsContainer: {
-    '& > * + *': {
-      marginTop: spacing(3),
-    },
+}));
+const CheckboxContainer = styled('div')({
+  height: '50px',
+});
+const FieldsContainer = styled('div')(({ theme }) => ({
+  '& > * + *': {
+    marginTop: theme.spacing(3),
   },
 }));
 
@@ -41,7 +39,6 @@ const VariantCtaEditor: React.FC<VariantCtaEditorProps> = ({
   copyLength,
   isPrimaryCtaUrlDisabled,
 }: VariantCtaEditorProps) => {
-  const classes = useStyles();
   const isChecked = cta !== undefined;
 
   const onCheckboxChanged = (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -53,8 +50,8 @@ const VariantCtaEditor: React.FC<VariantCtaEditorProps> = ({
   };
 
   return (
-    <div className={classes.container}>
-      <div className={classes.checkboxContainer}>
+    <Container>
+      <CheckboxContainer>
         <FormControlLabel
           control={
             <Checkbox
@@ -66,10 +63,10 @@ const VariantCtaEditor: React.FC<VariantCtaEditorProps> = ({
           }
           label={label}
         />
-      </div>
+      </CheckboxContainer>
 
       {cta && (
-        <div className={classes.fieldsContainer}>
+        <FieldsContainer>
           <VariantCtaFieldsEditor
             cta={cta}
             updateCta={updateCta}
@@ -78,9 +75,9 @@ const VariantCtaEditor: React.FC<VariantCtaEditorProps> = ({
             copyLength={copyLength}
             isPrimaryCtaUrlDisabled={isPrimaryCtaUrlDisabled}
           />
-        </div>
+        </FieldsContainer>
       )}
-    </div>
+    </Container>
   );
 };
 

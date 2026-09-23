@@ -1,23 +1,22 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Button, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import useOpenable from '../../../hooks/useOpenable';
 import { Campaign } from './CampaignsTypes';
 import CreateCampaignDialog from './CreateCampaignDialog';
 
-const useStyles = makeStyles(() => ({
-  button: {
-    justifyContent: 'start',
-    height: '48px',
-  },
-  text: {
-    fontSize: '12px',
-    fontWeight: 500,
-    textTransform: 'uppercase',
-    letterSpacing: '1px',
-  },
-}));
+const StyledButton = styled(Button)({
+  justifyContent: 'start',
+  height: '48px',
+});
+
+const Text = styled(Typography)({
+  fontSize: '12px',
+  fontWeight: 500,
+  textTransform: 'uppercase',
+  letterSpacing: '1px',
+});
 
 interface NewCampaignButtonProps {
   existingNames: string[];
@@ -31,13 +30,12 @@ const NewCampaignButton: React.FC<NewCampaignButtonProps> = ({
   createCampaign,
 }: NewCampaignButtonProps) => {
   const [isOpen, open, close] = useOpenable();
-  const classes = useStyles();
 
   return (
     <>
-      <Button className={classes.button} variant="outlined" startIcon={<AddIcon />} onClick={open}>
-        <Typography className={classes.text}>Create a new campaign</Typography>
-      </Button>
+      <StyledButton variant="outlined" startIcon={<AddIcon />} onClick={open}>
+        <Text>Create a new campaign</Text>
+      </StyledButton>
       <CreateCampaignDialog
         isOpen={isOpen}
         close={close}

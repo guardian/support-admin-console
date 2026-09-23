@@ -1,9 +1,9 @@
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
-import { Button, Radio, RadioGroup, Theme } from '@mui/material';
+import { Box, Button, Radio, RadioGroup } from '@mui/material';
 import Alert from '@mui/material/Alert';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { DataFromServer } from '../../../hocs/withS3Data';
@@ -13,26 +13,24 @@ import { ChannelKey } from '../../../utils/defaultChoiceCards';
 import { fetchFrontendSettings, FrontendSettingsType } from '../../../utils/requests';
 import { ChoiceCardEditor } from './ChoiceCardEditor';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  container: {
-    '& > * + *': {
-      marginTop: spacing(1),
-    },
-  },
-  fieldsContainer: {
-    '& > * + *': {
-      marginTop: spacing(3),
-    },
-  },
-  choiceCardContainer: {
-    display: 'flex',
-  },
-  deleteButton: {
-    height: '100%',
-    padding: `${spacing(2)} ${spacing(1)}`,
-    marginLeft: spacing(1),
-  },
+const Container = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: theme.spacing(1),
 }));
+
+const ChoiceCardContainer = styled(Box)({
+  display: 'flex',
+});
+
+const DeleteButton = styled(Button)(({ theme }) => ({
+  height: '100%',
+  padding: `${theme.spacing(2)} ${theme.spacing(1)}`,
+  marginLeft: theme.spacing(1),
+}));
+const AddChoiceCardButton = styled(Button)({
+  alignSelf: 'flex-start',
+});
 
 type ChoiceCardsSelection = 'NoChoiceCards' | 'DefaultChoiceCards' | 'CustomChoiceCards';
 const getChoiceCardsSelection = (
@@ -85,7 +83,6 @@ const ChoiceCardsEditor: React.FC<ChoiceCardsEditorProps> = ({
   isDisabled,
   onValidationChange,
 }: ChoiceCardsEditorProps) => {
-  const classes = useStyles();
   const [defaultChoiceCardsSettings, setDefaultChoiceCardsSettings] =
     React.useState<ChoiceCardsSettings>();
 
@@ -167,7 +164,7 @@ const ChoiceCardsEditor: React.FC<ChoiceCardsEditorProps> = ({
   });
 
   return (
-    <div className={classes.container}>
+    <Container>
       <RadioGroup value={choiceCardsSelection} onChange={onRadioGroupChange}>
         {allowNoChoiceCards && (
           <FormControlLabel
@@ -199,7 +196,7 @@ const ChoiceCardsEditor: React.FC<ChoiceCardsEditorProps> = ({
             <Alert severity="error">{formMethods.formState.errors.hasOneDefault.message}</Alert>
           )}
           {fields.map((choiceCard, idx) => (
-            <div className={classes.choiceCardContainer} key={choiceCard.id}>
+            <ChoiceCardContainer key={choiceCard.id}>
               <ChoiceCardEditor
                 choiceCard={choiceCard}
                 onChange={(updatedCard) => {
@@ -210,8 +207,7 @@ const ChoiceCardsEditor: React.FC<ChoiceCardsEditorProps> = ({
                 index={idx}
                 formMethods={formMethods}
               />
-              <Button
-                className={classes.deleteButton}
+              <DeleteButton
                 onClick={() => remove(idx)}
                 disabled={isDisabled}
                 variant="outlined"
@@ -219,10 +215,10 @@ const ChoiceCardsEditor: React.FC<ChoiceCardsEditorProps> = ({
                 startIcon={<CloseIcon />}
               >
                 Delete
-              </Button>
-            </div>
+              </DeleteButton>
+            </ChoiceCardContainer>
           ))}
-          <Button
+          <AddChoiceCardButton
             onClick={() => {
               append({
                 product: { supportTier: 'Contribution', ratePlan: 'Monthly' },
@@ -238,10 +234,10 @@ const ChoiceCardsEditor: React.FC<ChoiceCardsEditorProps> = ({
             startIcon={<AddIcon />}
           >
             Create new choice card
-          </Button>
+          </AddChoiceCardButton>
         </>
       )}
-    </div>
+    </Container>
   );
 };
 

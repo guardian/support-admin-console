@@ -1,6 +1,6 @@
-import { FormControlLabel, Radio, RadioGroup, Theme, Typography } from '@mui/material';
+import { Box, FormControlLabel, Radio, RadioGroup, Typography } from '@mui/material';
 import Alert from '@mui/material/Alert';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { BannerContent, BannerUi, BannerVariant } from '../../../models/banner';
@@ -28,51 +28,41 @@ import IsCollapsibleEditor from './isCollapsibleEditor';
 import { getDefaultVariant } from './utils/defaults';
 import VariantCtasEditor from './variantCtasEditor';
 
-const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
-  container: {
-    width: '100%',
-    paddingTop: spacing(2),
-    paddingLeft: spacing(4),
-    paddingRight: spacing(10),
+const Container = styled(Box)(({ theme }) => ({
+  width: '100%',
+  paddingTop: theme.spacing(2),
+  paddingLeft: theme.spacing(4),
+  paddingRight: theme.spacing(10),
 
-    '& > * + *': {
-      marginTop: spacing(3),
-    },
+  '& > * + *': {
+    marginTop: theme.spacing(3),
   },
-  hook: {
-    maxWidth: '400px',
-  },
-  sectionHeader: {
-    fontSize: 16,
-    color: palette.grey[900],
-    fontWeight: 500,
-  },
-  sectionContainer: {
-    paddingTop: spacing(2),
-    paddingBottom: spacing(2),
-    borderBottom: `1px solid ${palette.grey[500]}`,
-    '& > * + *': {
-      marginTop: spacing(3),
-    },
-  },
-  contentContainer: {
-    marginLeft: spacing(2),
-  },
-  buttonsContainer: {
-    marginTop: spacing(2),
-  },
-  switchContainer: {
-    display: 'flex',
-    alignItems: 'center',
+}));
 
-    '& > * + *': {
-      marginLeft: spacing(1),
-    },
-  },
-  switchLabel: {
-    fontSize: '14px',
-    fontWeight: 500,
-  },
+const SectionHeader = styled(Typography)(({ theme }) => ({
+  fontSize: 16,
+  color: theme.palette.grey[900],
+  fontWeight: 500,
+}));
+
+const SectionContainer = styled(Box)(({ theme }) => ({
+  paddingTop: theme.spacing(2),
+  paddingBottom: theme.spacing(2),
+  borderBottom: `1px solid ${theme.palette.grey[500]}`,
+  display: 'flex',
+  flexDirection: 'column',
+  gap: theme.spacing(3),
+}));
+const BannerDesignSelectorContainer = styled('div')({
+  alignSelf: 'flex-start',
+});
+
+const ContentContainer = styled(Box)(({ theme }) => ({
+  marginLeft: theme.spacing(2),
+}));
+
+const ButtonsContainer = styled(Box)(({ theme }) => ({
+  marginTop: theme.spacing(2),
 }));
 
 const BODY_DEFAULT_HELPER_TEXT = 'Main banner message paragraph';
@@ -135,8 +125,6 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
   showMParticleMenu,
   isPrimaryCtaUrlDisabled,
 }: VariantContentEditorProps) => {
-  const classes = useStyles();
-
   const templateValidator = templateValidatorForPlatform('DOTCOM');
 
   const defaultValues: FormData = {
@@ -229,11 +217,9 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
 
   return (
     <>
-      <Typography className={classes.sectionHeader} variant="h4">
-        {`Content${labelSuffix}`}
-      </Typography>
+      <SectionHeader variant="h4">{`Content${labelSuffix}`}</SectionHeader>
 
-      <div className={classes.contentContainer}>
+      <ContentContainer>
         <Controller
           name="heading"
           control={control}
@@ -362,10 +348,8 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
           />
         </div>
 
-        <div className={classes.buttonsContainer}>
-          <Typography className={classes.sectionHeader} variant="h4">
-            {`Buttons${labelSuffix}`}
-          </Typography>
+        <ButtonsContainer>
+          <SectionHeader variant="h4">{`Buttons${labelSuffix}`}</SectionHeader>
 
           <VariantCtasEditor
             primaryCta={content.cta}
@@ -377,8 +361,8 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
             supportSecondaryCta={true}
             isPrimaryCtaUrlDisabled={isPrimaryCtaUrlDisabled}
           />
-        </div>
-      </div>
+        </ButtonsContainer>
+      </ContentContainer>
     </>
   );
 };
@@ -401,7 +385,6 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
   onVariantChange,
   designs,
 }: VariantEditorProps) => {
-  const classes = useStyles();
   const setValidationStatusForField = useValidation(onValidationChange);
 
   // Memoize callbacks to prevent infinite render loops in child components
@@ -496,26 +479,26 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
   }, [designHasChoiceCards, setValidationStatusForField]);
 
   return (
-    <div className={classes.container}>
-      <div className={classes.sectionContainer}>
-        <Typography className={classes.sectionHeader} variant="h4">
-          Banner design
-        </Typography>
-        <BannerDesignSelector
-          designName={variant.template.designName}
-          onUiChange={(ui: BannerUi): void =>
-            onVariantChange((current) => ({
-              ...current,
-              template: ui,
-            }))
-          }
-          editMode={editMode}
-          designs={designs}
-          onValidationChange={onTemplateValidationChange}
-        />
-      </div>
+    <Container>
+      <SectionContainer>
+        <SectionHeader variant="h4">Banner design</SectionHeader>
+        <BannerDesignSelectorContainer>
+          <BannerDesignSelector
+            designName={variant.template.designName}
+            onUiChange={(ui: BannerUi): void =>
+              onVariantChange((current) => ({
+                ...current,
+                template: ui,
+              }))
+            }
+            editMode={editMode}
+            designs={designs}
+            onValidationChange={onTemplateValidationChange}
+          />
+        </BannerDesignSelectorContainer>
+      </SectionContainer>
 
-      <div className={classes.sectionContainer}>
+      <SectionContainer>
         <VariantContentEditor
           content={variant.bannerContent}
           template={variant.template}
@@ -564,12 +547,10 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
           updatePromoCodes={updatePromoCodes}
           isDisabled={!editMode}
         />
-      </div>
+      </SectionContainer>
 
-      <div className={classes.sectionContainer}>
-        <Typography className={classes.sectionHeader} variant="h4">
-          Choice Cards
-        </Typography>
+      <SectionContainer>
+        <SectionHeader variant="h4">Choice Cards</SectionHeader>
         {!designHasChoiceCards && (
           <Alert severity="info">The selected design does not have choice cards</Alert>
         )}
@@ -585,24 +566,20 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
             onValidationChange={onChoiceCardsValidationChange}
           />
         )}
-      </div>
+      </SectionContainer>
 
-      <div className={classes.sectionContainer}>
-        <Typography className={classes.sectionHeader} variant="h4">
-          Separate article count
-        </Typography>
+      <SectionContainer>
+        <SectionHeader variant="h4">Separate article count</SectionHeader>
 
         <VariantSeparateArticleCountEditor
           separateArticleCount={variant.separateArticleCountSettings}
           updateSeparateArticleCount={updateSeparateArticleCountSettings}
           isDisabled={!editMode}
         />
-      </div>
+      </SectionContainer>
 
-      <div className={classes.sectionContainer}>
-        <Typography className={classes.sectionHeader} variant="h4">
-          Ticker
-        </Typography>
+      <SectionContainer>
+        <SectionHeader variant="h4">Ticker</SectionHeader>
 
         <TickerEditor
           tickerSettings={variant.tickerSettings}
@@ -615,18 +592,16 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
           isDisabled={!editMode}
           onValidationChange={(isValid) => setValidationStatusForField('ticker', isValid)}
         />
-      </div>
-      <div className={classes.sectionContainer}>
-        <Typography className={classes.sectionHeader} variant="h4">
-          Two step banner
-        </Typography>
+      </SectionContainer>
+      <SectionContainer>
+        <SectionHeader variant="h4">Two step banner</SectionHeader>
         <IsCollapsibleEditor
           isCollapsible={variant.isCollapsible}
           isDisabled={!editMode}
           updateIsCollapsibleSettings={updateIsCollapsibleSettings}
         />
-      </div>
-    </div>
+      </SectionContainer>
+    </Container>
   );
 };
 

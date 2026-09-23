@@ -1,25 +1,36 @@
-import { Button, List, ListItem, Theme, Typography } from '@mui/material';
+import { Box, Button, List, ListItem, Typography } from '@mui/material';
 import { red } from '@mui/material/colors';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { Campaign, Campaigns, unassignedCampaign } from './CampaignsTypes';
 
-const useStyles = makeStyles(({ palette }: Theme) => ({
-  container: {
-    marginTop: '16px',
-  },
-  list: {
-    padding: 0,
-    width: '100%',
-  },
-  listItem: {
-    margin: 0,
-    padding: 0,
-    gutter: 0,
-    width: '100%',
-  },
-  button: {
-    position: 'relative',
+const Container = styled(Box)({
+  marginTop: '16px',
+});
+
+const StyledList = styled(List)({
+  padding: 0,
+  width: '100%',
+});
+
+const StyledListItem = styled(ListItem)({
+  margin: 0,
+  padding: 0,
+  width: '100%',
+});
+
+const Text = styled(Typography)({
+  fontSize: '12px',
+  fontWeight: 500,
+  textTransform: 'uppercase',
+  letterSpacing: '1px',
+});
+
+const CampaignButton = styled(Button, {
+  shouldForwardProp: (prop) => prop !== 'isActive' && prop !== 'isCurrent',
+})<{ isActive: boolean; isCurrent: boolean }>(({ theme, isActive, isCurrent }) => {
+  const base = {
+    position: 'relative' as const,
     height: '50px',
     width: '290px',
     display: 'flex',
@@ -29,48 +40,22 @@ const useStyles = makeStyles(({ palette }: Theme) => ({
     borderRadius: '4px',
     padding: '0 12px',
     marginBottom: '4px',
-  },
-  text: {
-    fontSize: '12px',
-    fontWeight: 500,
-    textTransform: 'uppercase',
-    letterSpacing: '1px',
-  },
-  live: {
-    border: `1px solid ${red[500]}`,
-
-    '&:hover': {
-      background: `${red[500]}`,
+  };
+  const accentColour = isActive ? red[500] : theme.palette.grey[700];
+  if (isCurrent) {
+    return {
+      ...base,
+      background: accentColour,
       color: 'white',
-    },
-  },
-  liveInverted: {
-    background: `${red[500]}`,
-    color: 'white',
-
-    '&:hover': {
-      background: `${red[500]}`,
-      color: 'white',
-    },
-  },
-  draft: {
-    border: `1px solid ${palette.grey[700]}`,
-
-    '&:hover': {
-      background: `${palette.grey[700]}`,
-      color: 'white',
-    },
-  },
-  draftInverted: {
-    background: `${palette.grey[700]}`,
-    color: 'white',
-
-    '&:hover': {
-      background: `${palette.grey[700]}`,
-      color: 'white',
-    },
-  },
-}));
+      '&:hover': { background: accentColour, color: 'white' },
+    };
+  }
+  return {
+    ...base,
+    border: `1px solid ${accentColour}`,
+    '&:hover': { background: accentColour, color: 'white' },
+  };
+});
 
 interface CampaignsListProps {
   campaigns: Campaigns;
@@ -85,26 +70,10 @@ const CampaignsList = ({
   selectedCampaign,
   onCampaignSelected,
 }: CampaignsListProps): React.ReactElement => {
-  const classes = useStyles();
-
-  const getAppropriateStylingForCampaign = (campaign: Campaign | undefined) => {
-    if (campaign == null) {
-      return classes.button;
-    }
-    const containerClasses = [classes.button];
-    const isActive = campaign.isActive ?? true;
-    const isCurrent = selectedCampaign != null ? campaign.name === selectedCampaign.name : false;
-
-    if (isActive && isCurrent) {
-      containerClasses.push(classes.liveInverted);
-    } else if (isCurrent) {
-      containerClasses.push(classes.draftInverted);
-    } else if (isActive) {
-      containerClasses.push(classes.live);
-    } else {
-      containerClasses.push(classes.draft);
-    }
-    return containerClasses.join(' ');
+  const getCampaignButtonState = (campaign: Campaign | undefined) => {
+    const isActive = campaign?.isActive ?? true;
+    const isCurrent = selectedCampaign != null ? campaign?.name === selectedCampaign.name : false;
+    return { isActive, isCurrent };
   };
 
   const filterCampaigns = (campaignArray: Campaigns) => {
@@ -139,34 +108,32 @@ const CampaignsList = ({
   const sortedCampaigns = sortCampaigns(filterCampaigns(campaigns));
 
   return (
-    <div className={classes.container}>
-      <List className={classes.list}>
+    <Container>
+      <StyledList>
         {sortedCampaigns.map((campaign) => (
-          <ListItem className={classes.listItem} key={campaign.name}>
-            <Button
+          <StyledListItem key={campaign.name}>
+            <CampaignButton
               key={`${campaign.name}-button`}
-              className={getAppropriateStylingForCampaign(campaign)}
+              {...getCampaignButtonState(campaign)}
               variant="outlined"
               onClick={(): void => onCampaignSelected(campaign.name)}
             >
-              <Typography className={classes.text}>
-                {campaign.nickname ? campaign.nickname : campaign.name}
-              </Typography>
-            </Button>
-          </ListItem>
+              <Text>{campaign.nickname ? campaign.nickname : campaign.name}</Text>
+            </CampaignButton>
+          </StyledListItem>
         ))}
-        <ListItem className={classes.listItem} key={unassignedCampaign.name}>
-          <Button
+        <StyledListItem key={unassignedCampaign.name}>
+          <CampaignButton
             key={`${unassignedCampaign.name}-button`}
-            className={getAppropriateStylingForCampaign(unassignedCampaign)}
+            {...getCampaignButtonState(unassignedCampaign)}
             variant="outlined"
             onClick={(): void => onCampaignSelected(unassignedCampaign.name)}
           >
-            <Typography className={classes.text}>{unassignedCampaign.nickname}</Typography>
-          </Button>
-        </ListItem>
-      </List>
-    </div>
+            <Text>{unassignedCampaign.nickname}</Text>
+          </CampaignButton>
+        </StyledListItem>
+      </StyledList>
+    </Container>
   );
 };
 
