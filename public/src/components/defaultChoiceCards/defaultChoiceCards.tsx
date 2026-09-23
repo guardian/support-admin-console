@@ -14,7 +14,7 @@ import {
   saveFrontendSettings,
 } from '../../utils/requests';
 import { Section } from './Section';
-import { useStyles } from './styles';
+import { Actions, Container, Intro, Wrapper } from './styles';
 import { VersionHistory } from './VersionHistory';
 
 const canEdit = hasPermission(FrontendSettingsType.DefaultChoiceCards, 'Write');
@@ -25,7 +25,6 @@ const DefaultChoiceCards: React.FC<InnerProps<DefaultChoiceCardsSettings>> = ({
   sendToS3,
   saving,
 }) => {
-  const classes = useStyles();
   const normalizedData = React.useMemo(() => normalizeSettings(data), [data]);
   const [validationState, setValidationState] = React.useState<Record<string, boolean>>({});
 
@@ -60,9 +59,9 @@ const DefaultChoiceCards: React.FC<InnerProps<DefaultChoiceCardsSettings>> = ({
   const hasInvalidProfile = Object.values(validationState).some((isValid) => !isValid);
 
   return (
-    <div className={classes.wrapper}>
-      <div className={classes.container}>
-        <div className={classes.intro}>
+    <Wrapper>
+      <Container>
+        <Intro>
           <Typography variant="body1">
             Configure global default choice cards. Variant-level custom settings still have higher
             priority.
@@ -71,8 +70,8 @@ const DefaultChoiceCards: React.FC<InnerProps<DefaultChoiceCardsSettings>> = ({
             <Typography variant="body2">Last edited by {data.lastEditedBy}</Typography>
           )}
           {!canEdit && <Alert severity="info">You have read-only access.</Alert>}
-        </div>
-        <div className={classes.actions}>
+        </Intro>
+        <Actions>
           <Button
             onClick={sendToS3}
             disabled={!canEdit || saving || hasInvalidProfile}
@@ -80,7 +79,7 @@ const DefaultChoiceCards: React.FC<InnerProps<DefaultChoiceCardsSettings>> = ({
           >
             {saving ? <CircularProgress size={20} color="inherit" /> : 'Save changes'}
           </Button>
-        </div>
+        </Actions>
         <Section
           channel="epic"
           data={normalizedData}
@@ -96,8 +95,8 @@ const DefaultChoiceCards: React.FC<InnerProps<DefaultChoiceCardsSettings>> = ({
           onValidationChange={handleValidationChange}
         />
         <VersionHistory />
-      </div>
-    </div>
+      </Container>
+    </Wrapper>
   );
 };
 

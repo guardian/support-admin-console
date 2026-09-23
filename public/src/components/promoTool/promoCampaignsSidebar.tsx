@@ -1,40 +1,35 @@
 import { TextField } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React, { useState } from 'react';
 import NewPromoCampaignButton from './newPromoCampaignButton';
 import { ProductSelector } from './productSelector';
 import PromoCampaignsList from './promoCampaignsList';
 import { PromoCampaign, PromoCampaigns, PromoProduct } from './utils/promoModels';
 
-const useStyles = makeStyles(() => ({
-  root: {
-    display: 'flex',
-    flexDirection: 'column',
-    paddingLeft: '32px',
-  },
-  headline2: {
-    color: '#555',
-    fontSize: 18,
-    marginTop: '20px',
-  },
-  listsContainer: {
-    position: 'relative',
-    display: 'flex',
-    marginTop: '8px',
-  },
-  searchField: {
-    marginTop: '8px',
-  },
-  select: {
-    marginBottom: '50px',
-  },
-  buttonsContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '8px',
-    marginBottom: '10px',
-  },
-}));
+const Root = styled('div')({
+  display: 'flex',
+  flexDirection: 'column',
+  paddingLeft: '32px',
+});
+const Headline = styled('h2')({
+  color: '#555',
+  fontSize: 18,
+  marginTop: '20px',
+});
+const ListsContainer = styled('div')({
+  position: 'relative',
+  display: 'flex',
+  marginTop: '8px',
+});
+const SearchField = styled(TextField)({
+  marginTop: '8px',
+});
+const ButtonsContainer = styled('div')({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '8px',
+  marginBottom: '10px',
+});
 
 interface PromoCampaignsSidebarProps {
   promoCampaigns: PromoCampaigns;
@@ -55,42 +50,43 @@ function PromoCampaignsSidebar({
   setSelectedProduct,
   allowEditing,
 }: PromoCampaignsSidebarProps): React.ReactElement {
-  const classes = useStyles();
   const [promoCampaignSearch, setPromoCampaignSearch] = useState('');
 
   const searchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPromoCampaignSearch(e.target.value);
   };
 
-  const searchInputNative = (e: React.InputEvent<HTMLDivElement>) => {
-    setPromoCampaignSearch((e.target as HTMLInputElement).value);
+  const searchInputNative = (event: React.FormEvent<HTMLDivElement>) => {
+    const target = event.target;
+    if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement) {
+      setPromoCampaignSearch(target.value);
+    }
   };
 
   return (
-    <div className={classes.root}>
-      <h2 className={classes.headline2}>Select Product to filter Promo Campaigns</h2>
+    <Root>
+      <Headline>Select Product to filter Promo Campaigns</Headline>
       <ProductSelector
         selectedValue={selectedProduct.toString()}
         handleSelectedValue={setSelectedProduct}
       />
-      <h2 className={classes.headline2}>Promo Campaigns</h2>
-      <div className={classes.buttonsContainer}>
+      <Headline>Promo Campaigns</Headline>
+      <ButtonsContainer>
         <NewPromoCampaignButton
           createPromoCampaign={createPromoCampaign}
           existingNames={promoCampaigns.map((c) => c.name)}
           selectedProduct={selectedProduct}
           allowEditing={allowEditing}
         />
-        <TextField
-          className={classes.searchField}
+        <SearchField
           label="Filter Promo Campaigns"
           type="search"
           variant="outlined"
           onInput={searchInputNative}
           onChange={searchInput}
         />
-      </div>
-      <div className={classes.listsContainer}>
+      </ButtonsContainer>
+      <ListsContainer>
         <PromoCampaignsList
           promoCampaigns={promoCampaigns}
           promoCampaignSearch={promoCampaignSearch}
@@ -98,8 +94,8 @@ function PromoCampaignsSidebar({
           onPromoCampaignSelected={onPromoCampaignSelected}
           selectedProduct={selectedProduct}
         />
-      </div>
-    </div>
+      </ListsContainer>
+    </Root>
   );
 }
 

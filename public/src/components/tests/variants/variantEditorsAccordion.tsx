@@ -1,21 +1,19 @@
-import { Accordion, AccordionActions, AccordionDetails, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Accordion, AccordionActions, AccordionDetails } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { Variant } from '../../channelManagement/helpers/shared';
 import CloneVariantButton from './cloneVariantButton';
 import DeleteVariantButton from './deleteVariantButton';
 
-const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
-  expansionPanelsContainer: {
-    '& > * + *': {
-      marginTop: spacing(1),
-    },
+const ExpansionPanelsContainer = styled('div')(({ theme }) => ({
+  '& > * + *': {
+    marginTop: theme.spacing(1),
   },
-  expansionPanel: {
-    border: `1px solid ${palette.grey[700]}`,
-    borderRadius: 4,
-    boxShadow: 'none',
-  },
+}));
+const ExpansionPanel = styled(Accordion)(({ theme }) => ({
+  border: `1px solid ${theme.palette.grey[700]}`,
+  borderRadius: 4,
+  boxShadow: 'none',
 }));
 
 interface VariantEditorsAccordionProps<V extends Variant> {
@@ -43,19 +41,16 @@ function VariantEditorsAccordion<V extends Variant>({
   onVariantDelete,
   onVariantClone,
 }: VariantEditorsAccordionProps<V>): React.ReactElement<VariantEditorsAccordionProps<V>> {
-  const classes = useStyles();
-
   return (
-    <div className={classes.expansionPanelsContainer}>
+    <ExpansionPanelsContainer>
       {variants.map((variant, index) => {
         const variantKey = variantKeys[index];
 
         return (
-          <Accordion
+          <ExpansionPanel
             key={variantKey}
             expanded={variantKey === selectedVariantKey}
             onChange={(): void => onVariantSelected(variantKey)}
-            className={classes.expansionPanel}
           >
             {renderVariantSummary(variant)}
             <AccordionDetails>
@@ -73,10 +68,10 @@ function VariantEditorsAccordion<V extends Variant>({
                 onConfirm={(): void => onVariantDelete(variant.name)}
               />
             </AccordionActions>
-          </Accordion>
+          </ExpansionPanel>
         );
       })}
-    </div>
+    </ExpansionPanelsContainer>
   );
 }
 

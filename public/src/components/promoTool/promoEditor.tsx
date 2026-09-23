@@ -1,16 +1,16 @@
-import {
-  Box,
-  Button,
-  Checkbox,
-  FormControlLabel,
-  Grid,
-  Paper,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Button, Checkbox, FormControlLabel, Grid, TextField, Typography } from '@mui/material';
 import React, { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { fetchCountryGroups, fetchProductDetails } from '../../utils/requests';
-import { useStyles } from './promoEditorStyles';
+import {
+  ButtonGroup,
+  CountryGroupsContainer,
+  FormField,
+  InfoBanner,
+  LockBanner,
+  Root,
+  Section,
+  SectionTitle,
+} from './promoEditorStyles';
 import { PromoLandingPage } from './promoLandingPage';
 import RatePlanSelector from './ratePlanSelector';
 import {
@@ -46,7 +46,6 @@ const PromoEditor = ({
   userEmail,
   campaignProduct,
 }: PromoEditorProps): React.ReactElement => {
-  const classes = useStyles();
   const [editedPromo, setEditedPromo] = useState<Promo | null>(promo);
   const [countryGroups, setCountryGroups] = useState<CountryGroup[]>([]);
   const [allRatePlans, setAllRatePlans] = useState<RatePlanWithProduct[]>([]);
@@ -97,11 +96,11 @@ const PromoEditor = ({
 
   if (!promo) {
     return (
-      <Box className={classes.root}>
+      <Root>
         <Typography variant="h6" color="textSecondary">
           Select a promo code to view details
         </Typography>
-      </Box>
+      </Root>
     );
   }
 
@@ -247,9 +246,9 @@ const PromoEditor = ({
 
   const showLandingPageSection = ['Newspaper', 'Weekly'].includes(campaignProduct);
   return (
-    <Paper className={classes.root}>
+    <Root>
       {(isLockedByOther ?? isLockedByUser) && (
-        <Box className={classes.lockBanner}>
+        <LockBanner>
           <Typography variant="body2">{lockMessage}</Typography>
           {isLockedByOther && (
             <Button
@@ -261,21 +260,19 @@ const PromoEditor = ({
               Take Control
             </Button>
           )}
-        </Box>
+        </LockBanner>
       )}
 
-      <div className={classes.section}>
-        <Typography className={classes.sectionTitle}>Basic Information</Typography>
-        <TextField
-          className={classes.formField}
+      <Section>
+        <SectionTitle>Basic Information</SectionTitle>
+        <FormField
           fullWidth
           label="Name"
           value={editedPromo?.name ?? ''}
           onChange={(e) => handleFieldChange('name', e.target.value)}
           disabled={!isEditing}
         />
-        <TextField
-          className={classes.formField}
+        <FormField
           fullWidth
           label="Description"
           multiline
@@ -284,10 +281,10 @@ const PromoEditor = ({
           onChange={(e) => handleFieldChange('description', e.target.value)}
           disabled={!isEditing}
         />
-      </div>
+      </Section>
 
-      <div className={classes.section}>
-        <Typography className={classes.sectionTitle}>Duration (UTC)</Typography>
+      <Section>
+        <SectionTitle>Duration (UTC)</SectionTitle>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
             <TextField
@@ -316,10 +313,10 @@ const PromoEditor = ({
             />
           </Grid>
         </Grid>
-      </div>
+      </Section>
 
-      <div className={classes.section}>
-        <Typography className={classes.sectionTitle}>Discount</Typography>
+      <Section>
+        <SectionTitle>Discount</SectionTitle>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
             {' '}
@@ -363,7 +360,7 @@ const PromoEditor = ({
           }
           label="Introductory Price (will not display price comparison on the product page)"
         />
-      </div>
+      </Section>
 
       {allRatePlans.length > 0 && (
         <RatePlanSelector
@@ -376,12 +373,12 @@ const PromoEditor = ({
         />
       )}
 
-      <div className={classes.section}>
-        <Typography className={classes.sectionTitle}>Availability</Typography>
+      <Section>
+        <SectionTitle>Availability</SectionTitle>
         <Typography variant="subtitle2" gutterBottom>
           Country Groups
         </Typography>
-        <Box className={classes.countryGroupsContainer}>
+        <CountryGroupsContainer>
           <Grid container spacing={2}>
             {countryGroups.map((group) => (
               <Grid item xs={6} key={group.id}>
@@ -398,11 +395,11 @@ const PromoEditor = ({
               </Grid>
             ))}
           </Grid>
-        </Box>
-      </div>
+        </CountryGroupsContainer>
+      </Section>
       {showLandingPageSection && (
-        <div className={classes.section}>
-          <Typography className={classes.sectionTitle}>Landing page</Typography>
+        <Section>
+          <SectionTitle>Landing page</SectionTitle>
           <FormControlLabel
             control={
               <Checkbox
@@ -415,12 +412,12 @@ const PromoEditor = ({
           />
           {promotionHasLandingPage && (
             <>
-              <Box className={classes.infoBanner}>
+              <InfoBanner>
                 <Typography variant="body2">
                   Tip: When this option is enabled, the landing page top section content will be
                   replaced by the data specified below.
                 </Typography>
-              </Box>
+              </InfoBanner>
               <PromoLandingPage
                 landingPage={backupLandingPage}
                 updateLandingPage={handleLandingPageChange}
@@ -428,11 +425,11 @@ const PromoEditor = ({
               />
             </>
           )}
-        </div>
+        </Section>
       )}
 
       {isEditing && (
-        <div className={classes.buttonGroup}>
+        <ButtonGroup>
           <Button
             variant="contained"
             color="primary"
@@ -444,9 +441,9 @@ const PromoEditor = ({
           <Button variant="outlined" onClick={onCancel}>
             Cancel
           </Button>
-        </div>
+        </ButtonGroup>
       )}
-    </Paper>
+    </Root>
   );
 };
 

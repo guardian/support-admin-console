@@ -8,7 +8,7 @@ import {
   IconButton,
   TextField,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -20,25 +20,23 @@ import {
 import { ProductSelector } from './productSelector';
 import { PromoProduct } from './utils/promoModels';
 
-const useStyles = makeStyles(() => ({
-  dialogHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingRight: '8px',
+const DialogHeader = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  paddingRight: '8px',
+});
+const Input = styled(TextField)({
+  '& input': {
+    textTransform: 'uppercase !important',
   },
-  input: {
-    '& input': {
-      textTransform: 'uppercase !important',
-    },
-  },
-}));
+});
 
 interface FormData {
   name: string;
 }
 
-const NAME_DEFAULT_HELPER_TEXT = 'Format: TBC'; // TODO: should there be formatting advice?
+const NAME_DEFAULT_HELPER_TEXT = 'Format: TBC';
 
 interface CreatePromoCampaignDialogProps {
   isOpen: boolean;
@@ -54,7 +52,6 @@ const CreatePromoCampaignDialog: React.FC<CreatePromoCampaignDialogProps> = ({
   existingNames,
   selectedProduct: initialSelectedProduct,
 }: CreatePromoCampaignDialogProps) => {
-  const classes = useStyles();
   const [selectedProduct, setSelectedProduct] = useState<PromoProduct>(initialSelectedProduct);
 
   const {
@@ -71,21 +68,20 @@ const CreatePromoCampaignDialog: React.FC<CreatePromoCampaignDialogProps> = ({
 
   return (
     <Dialog open={isOpen} onClose={close} aria-labelledby="create-test-dialog-title">
-      <div className={classes.dialogHeader}>
+      <DialogHeader>
         <DialogTitle id="create-promo-campaign-dialog-title">
           Create a new promo campaign
         </DialogTitle>
         <IconButton onClick={close} aria-label="close">
           <CloseIcon />
         </IconButton>
-      </div>
+      </DialogHeader>
       <DialogContent dividers>
         <ProductSelector
           selectedValue={selectedProduct.toString()}
           handleSelectedValue={setSelectedProduct}
         />
-        <TextField
-          className={classes.input}
+        <Input
           error={errors.name !== undefined}
           helperText={errors.name ? errors.name.message : NAME_DEFAULT_HELPER_TEXT}
           {...register('name', {

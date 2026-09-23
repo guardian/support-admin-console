@@ -1,8 +1,7 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Button, CircularProgress, Typography } from '@mui/material';
-import { Theme } from '@mui/material/styles';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { hasPermission } from '../../utils/permissions';
@@ -17,34 +16,31 @@ import PromoEditor from './promoEditor';
 import { getPromoPreviewUrl } from './utils/previewUrl';
 import { Promo, PromoProduct } from './utils/promoModels';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  container: {
-    margin: '0 auto',
-    maxWidth: 1200,
-    minWidth: 800,
-    padding: spacing(3),
-    width: '100%',
-  },
-  header: {
-    display: 'flex',
-    alignItems: 'center',
-    marginBottom: spacing(3),
-    gap: spacing(2),
-  },
-  backButton: {
-    minWidth: 'auto',
-  },
-  loading: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    minHeight: '400px',
-    flexDirection: 'column',
-  },
+const Container = styled('div')(({ theme }) => ({
+  margin: '0 auto',
+  maxWidth: 1200,
+  minWidth: 800,
+  padding: theme.spacing(3),
+  width: '100%',
 }));
+const Header = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  marginBottom: theme.spacing(3),
+  gap: theme.spacing(2),
+}));
+const BackButton = styled(Button)({
+  minWidth: 'auto',
+});
+const Loading = styled('div')({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  minHeight: '400px',
+  flexDirection: 'column',
+});
 
 const PromoEditorPage: React.FC = () => {
-  const classes = useStyles();
   const navigate = useNavigate();
   const { promoCode } = useParams<{ promoCode: string }>();
   const [promo, setPromo] = useState<Promo | null>(null);
@@ -182,38 +178,33 @@ const PromoEditorPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className={classes.container}>
-        <div className={classes.loading}>
+      <Container>
+        <Loading>
           <CircularProgress />
-        </div>
-      </div>
+        </Loading>
+      </Container>
     );
   }
 
   if (!promo) {
     return (
-      <div className={classes.container}>
+      <Container>
         <Typography variant="h6" color="error">
           Promo not found
         </Typography>
         <Button onClick={handleBack} startIcon={<ArrowBackIcon />}>
           Back to campaign
         </Button>
-      </div>
+      </Container>
     );
   }
 
   return (
-    <div className={classes.container}>
-      <div className={classes.header}>
-        <Button
-          className={classes.backButton}
-          onClick={handleBack}
-          startIcon={<ArrowBackIcon />}
-          variant="outlined"
-        >
+    <Container>
+      <Header>
+        <BackButton onClick={handleBack} startIcon={<ArrowBackIcon />} variant="outlined">
           Back
-        </Button>
+        </BackButton>
         <Typography variant="h4" style={{ flexGrow: 1 }}>
           {promo.promoCode}
         </Typography>
@@ -251,7 +242,7 @@ const PromoEditorPage: React.FC = () => {
             Close
           </Button>
         )}
-      </div>
+      </Header>
       {campaignProduct && (
         <PromoEditor
           key={promo.promoCode}
@@ -265,24 +256,24 @@ const PromoEditorPage: React.FC = () => {
         />
       )}
       {campaignProductLoading && (
-        <div className={classes.loading}>
+        <Loading>
           <CircularProgress />
           <Typography variant="body2" style={{ marginTop: 16 }}>
             Loading campaign information...
           </Typography>
-        </div>
+        </Loading>
       )}
       {!campaignProductLoading && !campaignProduct && (
-        <div className={classes.loading}>
+        <Loading>
           <Typography variant="h6" color="error">
             Failed to load campaign information
           </Typography>
           <Button onClick={handleBack} startIcon={<ArrowBackIcon />} style={{ marginTop: 16 }}>
             Back to campaign
           </Button>
-        </div>
+        </Loading>
       )}
-    </div>
+    </Container>
   );
 };
 

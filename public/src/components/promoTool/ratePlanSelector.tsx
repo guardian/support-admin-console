@@ -9,8 +9,7 @@ import {
   Paper,
   Typography,
 } from '@mui/material';
-import { Theme } from '@mui/material/styles';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import {
   applyDiscountToPricing,
@@ -19,67 +18,59 @@ import {
   RatePlanWithProduct,
 } from './utils/productCatalog';
 
-const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
-  section: {
-    marginBottom: spacing(3),
+const Section = styled(Box)(({ theme }) => ({ marginBottom: theme.spacing(3) }));
+const SectionTitle = styled(Typography)(({ theme }) => ({
+  marginBottom: theme.spacing(2),
+  fontWeight: 600,
+}));
+const RatePlanCard = styled(Paper, { shouldForwardProp: (prop) => prop !== 'selected' })<{
+  selected: boolean;
+}>(({ theme, selected }) => ({
+  padding: theme.spacing(2),
+  marginBottom: theme.spacing(2),
+  border: '1px solid #ddd',
+  borderRadius: 4,
+  cursor: 'pointer',
+  transition: 'all 0.2s',
+  '&:hover': {
+    backgroundColor: theme.palette.action.hover,
   },
-  sectionTitle: {
-    marginBottom: spacing(2),
-    fontWeight: 600,
-  },
-  ratePlanCard: {
-    padding: spacing(2),
-    marginBottom: spacing(2),
-    border: '1px solid #ddd',
-    borderRadius: 4,
-    cursor: 'pointer',
-    transition: 'all 0.2s',
-    '&:hover': {
-      backgroundColor: palette.action.hover,
-    },
-  },
-  selectedCard: {
-    border: `2px solid ${palette.primary.main}`,
-    backgroundColor: palette.action.selected,
-  },
-  priceList: {
-    marginTop: spacing(1),
-  },
-  priceItem: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: spacing(1),
-    marginBottom: spacing(0.5),
-    fontSize: '0.875rem',
-  },
-  originalPrice: {
-    textDecoration: 'line-through',
-    color: palette.text.disabled,
-  },
-  discountedPrice: {
-    color: palette.success.main,
-    fontWeight: 600,
-  },
-  arrow: {
-    color: palette.text.secondary,
-  },
-  noDiscount: {
-    color: palette.text.primary,
-  },
-  ratePlanTitle: {
-    fontWeight: 500,
-    marginBottom: spacing(1),
-  },
-  fractionalInfo: {
-    marginTop: spacing(0.5),
-    color: palette.info.main,
-    fontSize: '0.8rem',
-  },
-  fractionalError: {
-    marginTop: spacing(0.5),
-    color: palette.error.main,
-    fontSize: '0.8rem',
-  },
+  ...(selected && {
+    border: `2px solid ${theme.palette.primary.main}`,
+    backgroundColor: theme.palette.action.selected,
+  }),
+}));
+const PriceList = styled(Box)(({ theme }) => ({ marginTop: theme.spacing(1) }));
+const PriceItem = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  gap: theme.spacing(1),
+  marginBottom: theme.spacing(0.5),
+  fontSize: '0.875rem',
+}));
+const OriginalPrice = styled('span')(({ theme }) => ({
+  textDecoration: 'line-through',
+  color: theme.palette.text.disabled,
+}));
+const DiscountedPrice = styled('span')(({ theme }) => ({
+  color: theme.palette.success.main,
+  fontWeight: 600,
+}));
+const Arrow = styled('span')(({ theme }) => ({ color: theme.palette.text.secondary }));
+const NoDiscount = styled('span')(({ theme }) => ({ color: theme.palette.text.primary }));
+const RatePlanTitle = styled(Typography)(({ theme }) => ({
+  fontWeight: 500,
+  marginBottom: theme.spacing(1),
+}));
+const FractionalInfo = styled(Typography)(({ theme }) => ({
+  marginTop: theme.spacing(0.5),
+  color: theme.palette.info.main,
+  fontSize: '0.8rem',
+}));
+const FractionalError = styled(Typography)(({ theme }) => ({
+  marginTop: theme.spacing(0.5),
+  color: theme.palette.error.main,
+  fontSize: '0.8rem',
 }));
 
 interface RatePlanSelectorProps {
@@ -99,8 +90,6 @@ const RatePlanSelector: React.FC<RatePlanSelectorProps> = ({
   discountDurationMonths,
   isDisabled,
 }) => {
-  const classes = useStyles();
-
   const handleToggleRatePlan = (ratePlanId: string) => {
     if (selectedRatePlanIds.includes(ratePlanId)) {
       onRatePlansSelected(selectedRatePlanIds.filter((id) => id !== ratePlanId));
@@ -121,32 +110,33 @@ const RatePlanSelector: React.FC<RatePlanSelectorProps> = ({
     }
 
     return (
-      <Box className={classes.priceList}>
+      <PriceList>
         <Grid container spacing={1}>
           {currencies.map((currency) => {
             const originalPrice = pricing[currency];
             const discountedPrice = discountedPricing?.[currency];
+            const Price = discountedPrice ? OriginalPrice : NoDiscount;
 
             return (
               <Grid item xs={12} sm={6} key={currency}>
-                <Box className={classes.priceItem}>
-                  <span className={discountedPrice ? classes.originalPrice : classes.noDiscount}>
+                <PriceItem>
+                  <Price>
                     {currency} {originalPrice.toFixed(2)}
-                  </span>
+                  </Price>
                   {discountedPrice && (
                     <>
-                      <span className={classes.arrow}>→</span>
-                      <span className={classes.discountedPrice}>
+                      <Arrow>→</Arrow>
+                      <DiscountedPrice>
                         {currency} {discountedPrice.toFixed(2)}
-                      </span>
+                      </DiscountedPrice>
                     </>
                   )}
-                </Box>
+                </PriceItem>
               </Grid>
             );
           })}
         </Grid>
-      </Box>
+      </PriceList>
     );
   };
 
@@ -172,11 +162,7 @@ const RatePlanSelector: React.FC<RatePlanSelectorProps> = ({
     const canToggle = !isDisabled && (!isFractionalDuration || isSelected);
 
     return (
-      <Paper
-        key={ratePlan.id}
-        className={`${classes.ratePlanCard} ${isSelected ? classes.selectedCard : ''}`}
-        elevation={isSelected ? 3 : 1}
-      >
+      <RatePlanCard key={ratePlan.id} selected={isSelected} elevation={isSelected ? 3 : 1}>
         <FormControlLabel
           control={
             <Checkbox
@@ -186,45 +172,45 @@ const RatePlanSelector: React.FC<RatePlanSelectorProps> = ({
           }
           label={
             <Box>
-              <Typography className={classes.ratePlanTitle}>
+              <RatePlanTitle>
                 {ratePlan.productDisplayName} ({ratePlan.productName}) - {ratePlan.ratePlanName}
-              </Typography>
+              </RatePlanTitle>
               {renderPricing(ratePlan.pricing, discountedPricing)}
               {isFractionalDuration && isSelected && (
-                <Typography className={classes.fractionalError}>
+                <FractionalError>
                   The promotion is not a whole number of billing periods. Uncheck this billing plan
                   to fix this error.
-                </Typography>
+                </FractionalError>
               )}
               {isFractionalDuration && !isSelected && (
-                <Typography className={classes.fractionalInfo}>
+                <FractionalInfo>
                   The promotion is not a whole number of billing periods.
-                </Typography>
+                </FractionalInfo>
               )}
             </Box>
           }
           disabled={isDisabled || (isFractionalDuration && !isSelected)}
         />
-      </Paper>
+      </RatePlanCard>
     );
   };
 
   if (ratePlans.length === 0) {
     return (
-      <Box className={classes.section}>
+      <Section>
         <Typography color="textSecondary">No rate plans available for this product</Typography>
-      </Box>
+      </Section>
     );
   }
 
   return (
-    <Box className={classes.section}>
-      <Typography className={classes.sectionTitle}>Rate Plans</Typography>
+    <Section>
+      <SectionTitle>Rate Plans</SectionTitle>
       <FormControl component="fieldset" fullWidth disabled={isDisabled}>
         <FormLabel component="legend">Select rate plans</FormLabel>
         <FormGroup>{ratePlans.map((ratePlan) => renderRatePlan(ratePlan))}</FormGroup>
       </FormControl>
-    </Box>
+    </Section>
   );
 };
 

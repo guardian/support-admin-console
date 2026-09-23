@@ -2,7 +2,7 @@ import { Button, CircularProgress, TableCell, TableRow, Typography } from '@mui/
 import React from 'react';
 import { DefaultChoiceCardsVersionHistoryItem } from '../../models/defaultChoiceCards';
 import { VersionDiff } from '../../utils/defaultChoiceCards';
-import { useStyles } from './styles';
+import { DiffCell } from './styles';
 import { VersionDiffTable } from './VersionDiffTable';
 
 interface VersionHistoryRowProps {
@@ -20,7 +20,6 @@ export const VersionHistoryRow: React.FC<VersionHistoryRowProps> = ({
   loadingDiff,
   onToggleDifferences,
 }) => {
-  const classes = useStyles();
   const hasDiff = diff !== undefined;
   const isDiffLoading = loadingDiff === item.version;
 
@@ -47,7 +46,7 @@ export const VersionHistoryRow: React.FC<VersionHistoryRowProps> = ({
       </TableRow>
       {isDiffVisible && hasDiff && (
         <TableRow>
-          <TableCell colSpan={4} className={classes.diffCell}>
+          <DiffCell colSpan={4}>
             {diff === null ? (
               <Typography variant="body2">
                 No earlier version is available to compare against.
@@ -55,7 +54,7 @@ export const VersionHistoryRow: React.FC<VersionHistoryRowProps> = ({
             ) : (
               <VersionDiffTable version={item.version} diff={diff} />
             )}
-          </TableCell>
+          </DiffCell>
         </TableRow>
       )}
     </>

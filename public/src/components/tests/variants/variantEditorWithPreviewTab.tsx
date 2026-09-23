@@ -1,23 +1,13 @@
-import { Tab, Tabs, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Tab, Tabs } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React, { useState } from 'react';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  container: {
-    width: '100%',
-    paddingLeft: spacing(4),
-    paddingRight: spacing(4),
+const Container = styled('div')(({ theme }) => ({
+  width: '100%',
+  paddingLeft: theme.spacing(4),
+  paddingRight: theme.spacing(4),
 
-    '& > * + *': { marginTop: spacing(2) },
-  },
-  splitContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  splitContent: {
-    width: 'calc(50% - 16px)',
-  },
+  '& > * + *': { marginTop: theme.spacing(2) },
 }));
 
 interface VariantEditorProps {
@@ -29,8 +19,6 @@ function VariantEditorWithPreviewTab({
   variantEditor,
   variantPreview,
 }: VariantEditorProps): React.ReactElement<VariantEditorProps> {
-  const classes = useStyles();
-
   const [value, setValue] = useState(0);
 
   const handleChange = (event: React.ChangeEvent<unknown>, newValue: number): void => {
@@ -38,7 +26,7 @@ function VariantEditorWithPreviewTab({
   };
 
   return (
-    <div className={classes.container}>
+    <Container>
       <Tabs
         value={value}
         indicatorColor="primary"
@@ -54,7 +42,7 @@ function VariantEditorWithPreviewTab({
         {value === 0 && variantEditor}
         {value === 1 && variantPreview && variantPreview}
       </div>
-    </div>
+    </Container>
   );
 }
 

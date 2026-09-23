@@ -1,63 +1,55 @@
 import { Link as LinkIcon, OpenInNew } from '@mui/icons-material';
-import { Button, Link, TextField, Theme, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Button, TextField, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import lzstring from 'lz-string';
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { LinkTrackingFormData } from './linkTrackingFormData';
 import { MediumSelector } from './MediumSelector';
 
-const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    maxWidth: '800px',
-    margin: '20px',
-    '& > * + *': {
-      marginTop: spacing(2),
-    },
+const Container = styled('form')(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  maxWidth: '800px',
+  margin: '20px',
+  gap: theme.spacing(2),
+}));
+const FieldsContainer = styled('div')(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: theme.spacing(2),
+  paddingBottom: theme.spacing(3),
+  borderBottom: `3px solid ${theme.palette.grey[500]}`,
+}));
+const LinkContainer = styled('div')({
+  display: 'flex',
+});
+const StyledLink = styled(TextField)({
+  flex: 1,
+  '& input': {
+    '-webkit-text-fill-color': '#22874D !important',
+    fontWeight: 700,
   },
-  fieldsContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    '& > * + *': {
-      marginTop: spacing(2),
-    },
-    paddingBottom: spacing(3),
-    borderBottom: `3px solid ${palette.grey[500]}`,
-  },
-  linkContainer: {
-    display: 'flex',
-  },
-  link: {
-    flex: 1,
-    '& input': {
-      '-webkit-text-fill-color': '#22874D !important',
-      fontWeight: 700,
-    },
-  },
-  copyButton: {
-    marginLeft: spacing(2),
-    padding: '0 8px',
-    fontSize: '14px',
-    fontWeight: 'normal',
-    color: palette.grey[700],
-    lineHeight: 1.5,
-  },
-  header: {
-    marginTop: spacing(3),
-    fontSize: 16,
-    color: palette.grey[900],
-    fontWeight: 500,
-  },
-  qrContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    marginLeft: spacing(2),
-    '& > * + *': {
-      marginLeft: '4px',
-    },
-  },
+});
+const CopyButton = styled(Button)(({ theme }) => ({
+  marginLeft: theme.spacing(2),
+  padding: '0 8px',
+  fontSize: '14px',
+  fontWeight: 'normal',
+  color: theme.palette.grey[700],
+  lineHeight: 1.5,
+}));
+const Header = styled(Typography)(({ theme }) => ({
+  marginTop: theme.spacing(1),
+  fontSize: 16,
+  color: theme.palette.grey[900],
+  fontWeight: 500,
+}));
+const QrContainer = styled('a')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  marginLeft: theme.spacing(2),
+  gap: '4px',
 }));
 
 const addHttps = (url: string): string => {
@@ -107,8 +99,6 @@ const getInitialState = (): { formValues: LinkTrackingFormData; initialLink: str
 };
 
 export const LinkTrackingBuilder: React.FC = () => {
-  const classes = useStyles();
-
   const { formValues, initialLink } = React.useMemo(() => getInitialState(), []);
 
   const [link, setLink] = React.useState<string>(initialLink);
@@ -150,15 +140,14 @@ export const LinkTrackingBuilder: React.FC = () => {
   const linkReady = link.trim() !== '';
 
   return (
-    <form
-      className={classes.container}
+    <Container
       onChange={() => resetLink()}
       onSubmit={(e) => {
         e.preventDefault();
         void handleSubmit(onSubmit)();
       }}
     >
-      <div className={classes.fieldsContainer}>
+      <FieldsContainer>
         <TextField
           {...register('url', {
             required: true,
@@ -180,9 +169,7 @@ export const LinkTrackingBuilder: React.FC = () => {
           helperText={errors.url?.message}
         />
 
-        <Typography className={classes.header} variant="h4">
-          Campaign
-        </Typography>
+        <Header variant="h4">Campaign</Header>
         <TextField
           {...register('campaign', { required: true })}
           label="Campaign"
@@ -190,9 +177,7 @@ export const LinkTrackingBuilder: React.FC = () => {
           helperText={errors.campaign?.message}
         />
 
-        <Typography className={classes.header} variant="h4">
-          Call to action / creative
-        </Typography>
+        <Header variant="h4">Call to action / creative</Header>
         <TextField
           {...register('content', { required: true })}
           label="Creative / utm_content / AB test name"
@@ -206,21 +191,18 @@ export const LinkTrackingBuilder: React.FC = () => {
           helperText={errors.term?.message}
         />
 
-        <Typography className={classes.header} variant="h4">
-          Placement
-        </Typography>
+        <Header variant="h4">Placement</Header>
         <MediumSelector onUpdate={resetLink} errors={errors} control={control} />
-      </div>
+      </FieldsContainer>
 
       <Button type="submit" variant="contained" color="primary" disabled={linkReady}>
         Build link
       </Button>
 
       {linkReady && (
-        <div className={classes.linkContainer}>
-          <TextField className={classes.link} value={link} disabled />
-          <Button
-            className={classes.copyButton}
+        <LinkContainer>
+          <StyledLink value={link} disabled />
+          <CopyButton
             variant="outlined"
             startIcon={<LinkIcon />}
             onClick={() => {
@@ -228,18 +210,17 @@ export const LinkTrackingBuilder: React.FC = () => {
             }}
           >
             Copy
-          </Button>
+          </CopyButton>
 
-          <Link
-            className={classes.qrContainer}
+          <QrContainer
             target="_blank"
             href={`/qr-code?url=${lzstring.compressToEncodedURIComponent(link)}`}
           >
             <OpenInNew />
             <span>QR code</span>
-          </Link>
-        </div>
+          </QrContainer>
+        </LinkContainer>
       )}
-    </form>
+    </Container>
   );
 };
