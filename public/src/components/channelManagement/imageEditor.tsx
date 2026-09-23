@@ -1,15 +1,13 @@
-import { Checkbox, TextField, Theme } from '@mui/material';
+import { Checkbox, TextField } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React, { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { Image } from './helpers/shared';
 import { EMPTY_ERROR_HELPER_TEXT } from './helpers/validation';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  container: {
-    marginBottom: spacing(3),
-  },
+const Container = styled('div')(({ theme }) => ({
+  marginBottom: theme.spacing(3),
 }));
 
 interface ImageEditorProps {
@@ -123,8 +121,6 @@ export const ImageEditorToggle: React.FC<ImageEditorToggleProps> = ({
   label,
   guidance,
 }: ImageEditorToggleProps) => {
-  const classes = useStyles();
-
   const onCheckboxChanged = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const isChecked = event.target.checked;
     if (isChecked) {
@@ -136,7 +132,7 @@ export const ImageEditorToggle: React.FC<ImageEditorToggleProps> = ({
   };
 
   return (
-    <div className={classes.container}>
+    <Container>
       <FormControlLabel
         control={
           <Checkbox
@@ -157,6 +153,6 @@ export const ImageEditorToggle: React.FC<ImageEditorToggleProps> = ({
           guidance={guidance}
         />
       )}
-    </div>
+    </Container>
   );
 };

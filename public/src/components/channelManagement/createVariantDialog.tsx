@@ -8,7 +8,7 @@ import {
   IconButton,
   TextField,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -18,19 +18,18 @@ import {
   VALID_CHARACTERS_REGEX,
 } from './helpers/validation';
 
-const useStyles = makeStyles(() => ({
-  dialogHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingRight: '8px',
+const DialogHeader = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  paddingRight: '8px',
+});
+
+const StyledTextField = styled(TextField)({
+  '& input': {
+    textTransform: 'uppercase !important',
   },
-  input: {
-    '& input': {
-      textTransform: 'uppercase !important',
-    },
-  },
-}));
+});
 
 const NAME_DEFAULT_HELPER_TEXT = "Format: 'control' or 'v1_name'";
 
@@ -54,8 +53,6 @@ const CreateVariantDialog: React.FC<CreateVariantDialogProps> = ({
   mode,
   createVariant,
 }: CreateVariantDialogProps) => {
-  const classes = useStyles();
-
   const {
     register,
     handleSubmit,
@@ -76,17 +73,16 @@ const CreateVariantDialog: React.FC<CreateVariantDialogProps> = ({
       aria-describedby="new-variant-dialog-description"
       fullWidth
     >
-      <div className={classes.dialogHeader}>
+      <DialogHeader>
         <DialogTitle id="new-variant-dialog-title">
           {mode === 'NEW' ? 'Create a new variant' : 'Clone variant'}
         </DialogTitle>
         <IconButton onClick={close} aria-label="close">
           <CloseIcon />
         </IconButton>
-      </div>
+      </DialogHeader>
       <DialogContent dividers>
-        <TextField
-          className={classes.input}
+        <StyledTextField
           error={errors.name !== undefined}
           helperText={errors.name ? errors.name.message : NAME_DEFAULT_HELPER_TEXT}
           {...register('name', {

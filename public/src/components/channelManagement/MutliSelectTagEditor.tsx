@@ -1,20 +1,17 @@
 import Autocomplete from '@mui/material/Autocomplete';
 import { grey } from '@mui/material/colors';
-import { Theme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
-import { makeStyles } from '@mui/styles';
 import React from 'react';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  container: {
-    width: '100%',
-    '& > * + *': {
-      marginTop: spacing(3),
-    },
-    borderColor: `2px solid ${grey[700]}`,
-    borderRadius: '2px',
-    padding: spacing(2),
+const Container = styled('div')(({ theme }) => ({
+  width: '100%',
+  '& > * + *': {
+    marginTop: theme.spacing(3),
   },
+  borderColor: `2px solid ${grey[700]}`,
+  borderRadius: '2px',
+  padding: theme.spacing(2),
 }));
 
 interface Option {
@@ -57,12 +54,10 @@ const MultiselectAutocomplete: React.FC<MultiselectAutocompleteProps> = ({
   tagIds,
   onUpdate,
 }: MultiselectAutocompleteProps) => {
-  const classes = useStyles();
-
   const [inputValue, setInputValue] = React.useState<string>('');
 
   return (
-    <div className={classes.container}>
+    <Container>
       <span style={{ fontSize: '1rem', fontWeight: 'normal' }}>Filter article count by tag</span>
       <Autocomplete
         id={'multi-seelect-tag'}
@@ -110,7 +105,7 @@ const MultiselectAutocomplete: React.FC<MultiselectAutocompleteProps> = ({
           }
         }}
       />
-    </div>
+    </Container>
   );
 };
 

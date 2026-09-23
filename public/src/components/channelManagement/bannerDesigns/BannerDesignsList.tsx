@@ -1,21 +1,20 @@
 import { List } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { BannerDesign } from '../../../models/bannerDesign';
 import BannerDesignListItem from './BannerDesignListItem';
 
-const useStyles = makeStyles(() => ({
-  container: {
-    marginTop: '16px',
-  },
-  list: {
-    padding: 0,
-    marginTop: 0,
-    '& > * + *': {
-      marginTop: '8px',
-    },
-  },
-}));
+const Container = styled('div')({
+  marginTop: '16px',
+});
+
+const StyledList = styled(List)({
+  padding: 0,
+  marginTop: 0,
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '8px',
+});
 
 interface Props {
   designs: BannerDesign[];
@@ -28,11 +27,9 @@ const BannerDesignsList = ({
   selectedDesign,
   onDesignSelected,
 }: Props): React.ReactElement => {
-  const classes = useStyles();
-
   return (
-    <div className={classes.container}>
-      <List className={classes.list}>
+    <Container>
+      <StyledList>
         {designs.map((design) => {
           const isSelected = Boolean(selectedDesign?.name === design.name);
 
@@ -46,8 +43,8 @@ const BannerDesignsList = ({
             />
           );
         })}
-      </List>
-    </div>
+      </StyledList>
+    </Container>
   );
 };
 

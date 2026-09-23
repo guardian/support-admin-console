@@ -1,36 +1,24 @@
 import { FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React, { useEffect, useState } from 'react';
 import { fetchFrontendSettings, FrontendSettingsType } from '../../utils/requests';
 import { Campaign, unassignedCampaign } from './campaigns/CampaignsTypes';
 import { Test } from './helpers/shared';
 
-const useStyles = makeStyles(() => ({
-  dialogHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingRight: '8px',
-  },
-  input: {
-    '& input': {
-      textTransform: 'uppercase !important',
-    },
-  },
-  campaignSelector: {
-    marginBottom: '8px',
-    marginRight: '12px',
-    minWidth: '200px',
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'baseline',
-    justifyContent: 'flex-start',
-  },
-  warning: {
-    color: '#555',
-    marginLeft: '24px',
-  },
-}));
+const StyledFormControl = styled(FormControl)({
+  marginBottom: '8px',
+  marginRight: '12px',
+  minWidth: '200px',
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'baseline',
+  justifyContent: 'flex-start',
+});
+
+const Warning = styled('div')({
+  color: '#555',
+  marginLeft: '24px',
+});
 
 interface CampaignSelectorProps {
   onCampaignChange: (campaign?: string) => void;
@@ -43,8 +31,6 @@ const CampaignSelector: React.FC<CampaignSelectorProps> = ({
   test,
   disabled,
 }: CampaignSelectorProps) => {
-  const classes = useStyles();
-
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
 
   useEffect(() => {
@@ -98,7 +84,7 @@ const CampaignSelector: React.FC<CampaignSelectorProps> = ({
 
   return (
     <>
-      <FormControl className={classes.campaignSelector} size="small">
+      <StyledFormControl size="small">
         <Select
           value={selectedCampaign}
           displayEmpty
@@ -120,11 +106,11 @@ const CampaignSelector: React.FC<CampaignSelectorProps> = ({
             </MenuItem>
           ))}
         </Select>
-        <div className={classes.warning}>
+        <Warning>
           If you want to use this Test in a new or different campaign, please consider copying the
           test rather than changing its campaign value.
-        </div>
-      </FormControl>
+        </Warning>
+      </StyledFormControl>
     </>
   );
 };
