@@ -1,24 +1,21 @@
 import { Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { formattedTimestamp } from '../helpers/utilities';
 
-const useStyles = makeStyles(() => ({
-  lockDetailsText: {
-    alignSelf: 'flex-end',
-  },
-}));
+const LockDetailsText = styled(Typography)({
+  alignSelf: 'flex-end',
+});
 
 interface Props {
   email?: string;
   timestamp?: string;
 }
 export const LockDetails: React.FC<Props> = ({ email, timestamp }: Props) => {
-  const classes = useStyles();
   if (email && timestamp) {
     const text = `Locked by ${email}, since ${formattedTimestamp(timestamp)}`;
 
-    return <Typography className={classes.lockDetailsText}>{text}</Typography>;
+    return <LockDetailsText>{text}</LockDetailsText>;
   }
   return null;
 };

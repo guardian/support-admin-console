@@ -1,16 +1,14 @@
-import { Alert, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Alert } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { SectionsEditor } from './epicTests/sectionsEditor';
 import { TagsEditor } from './epicTests/tagsEditor';
 import { PageContextTargeting } from './helpers/shared';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  container: {
-    width: '100%',
-    '& > * + *': {
-      marginTop: spacing(3),
-    },
+const Container = styled('div')(({ theme }) => ({
+  width: '100%',
+  '& > * + *': {
+    marginTop: theme.spacing(3),
   },
 }));
 
@@ -26,12 +24,10 @@ const TestEditorContextTargeting: React.FC<TestEditorContextTargetingProps> = ({
   editMode,
   updateContextTargeting,
 }: TestEditorContextTargetingProps) => {
-  const classes = useStyles();
-
   const { tagIds, sectionIds, excludedTagIds, excludedSectionIds } = contextTargeting;
 
   return (
-    <div className={classes.container}>
+    <Container>
       <Alert severity="info">
         An article is targeted if it has any of the tags below <strong>or</strong> is in any of the
         sections below.
@@ -84,7 +80,7 @@ const TestEditorContextTargeting: React.FC<TestEditorContextTargetingProps> = ({
         }}
         disabled={!editMode}
       />
-    </div>
+    </Container>
   );
 };
 

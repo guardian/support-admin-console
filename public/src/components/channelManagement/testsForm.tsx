@@ -1,5 +1,5 @@
-import { Theme, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { hasPermission } from '../../utils/permissions';
@@ -20,39 +20,37 @@ import { addMethodologyToTestName } from './helpers/methodology';
 import { LockStatus, Status, Test } from './helpers/shared';
 import Sidebar from './sidebar';
 
-const useStyles = makeStyles(({ spacing, typography }: Theme) => ({
-  viewTextContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: '-50px',
-  },
-  viewText: {
-    fontSize: typography.pxToRem(16),
-  },
-  body: {
-    display: 'flex',
-    overflow: 'hidden',
-    flexGrow: 1,
-    width: '100%',
-    height: '100%',
-  },
-  leftCol: {
-    height: '100%',
-    flexShrink: 0,
-    overflowY: 'auto',
-    background: 'white',
-    paddingTop: spacing(6),
-    paddingLeft: spacing(6),
-    paddingRight: spacing(6),
-  },
-  rightCol: {
-    flexGrow: 1,
-    display: 'flex',
-    justifyContent: 'center',
-  },
+const ViewTextContainer = styled('div')({
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginTop: '-50px',
+});
+const ViewText = styled(Typography)(({ theme }) => ({
+  fontSize: theme.typography.pxToRem(16),
 }));
+const Body = styled('div')({
+  display: 'flex',
+  overflow: 'hidden',
+  flexGrow: 1,
+  width: '100%',
+  height: '100%',
+});
+const LeftCol = styled('div')(({ theme }) => ({
+  height: '100%',
+  flexShrink: 0,
+  overflowY: 'auto',
+  background: 'white',
+  paddingTop: theme.spacing(6),
+  paddingLeft: theme.spacing(6),
+  paddingRight: theme.spacing(6),
+}));
+const RightCol = styled('div')({
+  flexGrow: 1,
+  display: 'flex',
+  justifyContent: 'center',
+});
 
 interface ChannelTestsResponse<T> {
   tests: T[];
@@ -96,7 +94,6 @@ export const TestsForm = <T extends Test>(
   testNamePrefix?: string,
 ): React.FC => {
   return function TestsFormInner() {
-    const classes = useStyles();
     const { testName } = useParams<{ testName?: string }>();
     const [tests, setTests] = useState<T[]>([]);
     const [selectedTestName, setSelectedTestName] = useState<string | null>(testName ?? null);
@@ -302,8 +299,8 @@ export const TestsForm = <T extends Test>(
       : true;
 
     return (
-      <div className={classes.body}>
-        <div className={classes.leftCol}>
+      <Body>
+        <LeftCol>
           <Sidebar<T>
             tests={tests}
             selectedTestName={selectedTestName}
@@ -319,9 +316,9 @@ export const TestsForm = <T extends Test>(
             savingTestList={savingTestList}
             allowEditing={allowEditing}
           />
-        </div>
+        </LeftCol>
 
-        <div className={classes.rightCol}>
+        <RightCol>
           {selectedTest ? (
             <TestEditor
               key={`${selectedTest.name}${selectedTest.lockStatus?.locked ? '-locked' : ''}`}
@@ -342,15 +339,13 @@ export const TestsForm = <T extends Test>(
               allowEditing={allowEditing}
             />
           ) : (
-            <div className={classes.viewTextContainer}>
-              <Typography className={classes.viewText}>
-                Select an existing test from the menu,
-              </Typography>
-              <Typography className={classes.viewText}>or create a new one</Typography>
-            </div>
+            <ViewTextContainer>
+              <ViewText>Select an existing test from the menu,</ViewText>
+              <ViewText>or create a new one</ViewText>
+            </ViewTextContainer>
           )}
-        </div>
-      </div>
+        </RightCol>
+      </Body>
     );
   };
 };

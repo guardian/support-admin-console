@@ -5,46 +5,47 @@ import {
   Select,
   SelectChangeEvent,
   TextField,
-  Theme,
   Typography,
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { AuditDataRow, AuditTestsTable } from './auditTestsTable';
 
-const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
-  mainContainer: {
-    overflow: 'scroll',
-  },
-  searchContainer: {
-    margin: '50px',
-    display: 'flex',
-    gap: spacing(5),
-  },
-  sectionContainer: {
-    display: 'flexWrap',
-    width: '500px',
-    borderColor: `2px solid ${grey[700]}`,
-    borderRadius: '2px',
-  },
-  heading: {
-    fontSize: 20,
-    color: palette.grey[900],
-    fontWeight: 500,
-  },
-  buttonContainer: {
-    marginTop: spacing(7),
-    width: '300px',
-  },
-  tableContainer: {
-    margin: spacing(7),
-  },
+const SectionContainer = styled('div')({
+  display: 'flexWrap',
+  width: '500px',
+  borderColor: `2px solid ${grey[700]}`,
+  borderRadius: '2px',
+});
+
+const SectionHeading = styled(Typography)(({ theme }) => ({
+  fontSize: 20,
+  color: theme.palette.grey[900],
+  fontWeight: 500,
+}));
+
+const MainContainer = styled('div')({
+  overflow: 'scroll',
+});
+
+const SearchContainer = styled('div')(({ theme }) => ({
+  margin: '50px',
+  display: 'flex',
+  gap: theme.spacing(5),
+}));
+
+const ButtonContainer = styled('div')(({ theme }) => ({
+  marginTop: theme.spacing(7),
+  width: '300px',
+}));
+
+const StyledTableContainer = styled('div')(({ theme }) => ({
+  margin: theme.spacing(7),
 }));
 
 export const AuditTestsDashboard: React.FC = () => {
-  const classes = useStyles();
   const { testName: testNameInQueryParams, channel: channelInQueryParams } = useParams();
   const hasFetchedFromUrlRef = useRef(false);
 
@@ -70,11 +71,11 @@ export const AuditTestsDashboard: React.FC = () => {
   }, [testNameInQueryParams, channelInQueryParams, fetchAuditData]);
 
   return (
-    <div className={classes.mainContainer}>
-      <div className={classes.searchContainer}>
+    <MainContainer>
+      <SearchContainer>
         <div>
-          <div className={classes.sectionContainer}>
-            <Typography className={classes.heading}>Test Name</Typography>
+          <SectionContainer>
+            <SectionHeading>Test Name</SectionHeading>
             <TextField
               id="test-name"
               name="name"
@@ -87,9 +88,9 @@ export const AuditTestsDashboard: React.FC = () => {
                 setTestName(event.target.value);
               }}
             />
-          </div>
-          <div className={classes.sectionContainer}>
-            <Typography className={classes.heading}>Channel</Typography>
+          </SectionContainer>
+          <SectionContainer>
+            <SectionHeading>Channel</SectionHeading>
             <FormControl fullWidth>
               <Select
                 labelId="channel"
@@ -124,17 +125,17 @@ export const AuditTestsDashboard: React.FC = () => {
                 </MenuItem>
               </Select>
             </FormControl>
-          </div>
+          </SectionContainer>
         </div>
-        <div className={classes.buttonContainer}>
+        <ButtonContainer>
           <Button variant="outlined" onClick={fetchAuditData}>
             Get audit
           </Button>
-        </div>
-      </div>
-      <div className={classes.tableContainer}>
+        </ButtonContainer>
+      </SearchContainer>
+      <StyledTableContainer>
         <AuditTestsTable testName={testName} rows={rows} />
-      </div>
-    </div>
+      </StyledTableContainer>
+    </MainContainer>
   );
 };

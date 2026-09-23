@@ -1,5 +1,5 @@
-import { Theme, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { Region } from '../../utils/models';
 import {
@@ -16,28 +16,26 @@ import MultiSelectCountryEditor from './MultiSelectCountryEditor';
 import TestEditorTargetRegionsSelector from './testEditorTargetRegionsSelector';
 import TypedRadioGroup from './TypedRadioGroup';
 
-const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
-  container: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  heading: {
-    fontSize: 16,
-    color: palette.grey[900],
-    fontWeight: 500,
-  },
-  containerSection: {
-    display: 'inline',
-    gap: spacing(12),
-    flexWrap: 'wrap',
-    marginRight: spacing(12),
-    marginBottom: spacing(4),
-  },
-  mParticleContainer: {
-    display: 'block',
-    width: '100%',
-  },
+const Container = styled('div')({
+  display: 'flex',
+  flexWrap: 'wrap',
+});
+const Heading = styled(Typography)(({ theme }) => ({
+  fontSize: 16,
+  color: theme.palette.grey[900],
+  fontWeight: 500,
 }));
+const ContainerSection = styled('div')(({ theme }) => ({
+  display: 'inline',
+  gap: theme.spacing(12),
+  flexWrap: 'wrap',
+  marginRight: theme.spacing(12),
+  marginBottom: theme.spacing(4),
+}));
+const MParticleContainer = styled('div')({
+  display: 'block',
+  width: '100%',
+});
 
 interface TestEditorTargetAudienceSelectorProps {
   regionTargeting?: RegionTargeting;
@@ -84,7 +82,6 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
   mParticleAudienceEditor,
   mParticleAudienceValidation,
 }: TestEditorTargetAudienceSelectorProps) => {
-  const classes = useStyles();
   const regionTargetingOrDefault: RegionTargeting = regionTargeting ?? {
     targetedCountryGroups: [],
     targetedCountryCodes: [],
@@ -92,9 +89,9 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
   };
 
   return (
-    <div className={classes.container}>
-      <div className={classes.containerSection}>
-        <Typography className={classes.heading}>Region</Typography>
+    <Container>
+      <ContainerSection>
+        <Heading>Region</Heading>
         <TestEditorTargetRegionsSelector
           regionTargeting={regionTargetingOrDefault}
           onRegionTargetingUpdate={onRegionTargetingUpdate}
@@ -110,7 +107,7 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
           />
         )}
         <div style={{ marginTop: 16 }}>
-          <Typography className={classes.heading}>Contributions-only countries</Typography>
+          <Heading>Contributions-only countries</Heading>
           <TypedRadioGroup<ContributionsOnlyCountriesTargeting>
             selectedValue={
               regionTargetingOrDefault.contributionsOnlyCountriesTargeting ?? 'Exclude'
@@ -128,11 +125,11 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
             }}
           />
         </div>
-      </div>
-      <div className={classes.containerSection}>
+      </ContainerSection>
+      <ContainerSection>
         {showSupporterStatusSelector && (
           <>
-            <Typography className={classes.heading}>Supporter Status</Typography>
+            <Heading>Supporter Status</Heading>
             <TypedRadioGroup
               selectedValue={selectedCohort}
               onChange={onCohortChange}
@@ -145,11 +142,11 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
             />
           </>
         )}
-      </div>
-      <div className={classes.containerSection}>
+      </ContainerSection>
+      <ContainerSection>
         {showDeviceTypeSelector && (
           <>
-            <Typography className={classes.heading}>Device Type</Typography>
+            <Heading>Device Type</Heading>
             <TypedRadioGroup
               selectedValue={selectedDeviceType}
               onChange={onDeviceTypeChange}
@@ -164,11 +161,11 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
             />
           </>
         )}
-      </div>
-      <div className={classes.containerSection}>
+      </ContainerSection>
+      <ContainerSection>
         {showSignedInStatusSelector && (
           <>
-            <Typography className={classes.heading}>Signed In Status</Typography>
+            <Heading>Signed In Status</Heading>
             <TypedRadioGroup
               selectedValue={selectedSignedInStatus ?? 'All'}
               onChange={onSignedInStatusChange}
@@ -181,11 +178,11 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
             />
           </>
         )}
-      </div>
-      <div className={classes.containerSection}>
+      </ContainerSection>
+      <ContainerSection>
         {showConsentStatusSelector && (
           <>
-            <Typography className={classes.heading}>Consent Status</Typography>
+            <Heading>Consent Status</Heading>
             <TypedRadioGroup
               selectedValue={selectedConsentStatus ?? 'All'}
               onChange={onConsentStatusChange}
@@ -198,11 +195,11 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
             />
           </>
         )}
-      </div>
-      <div className={classes.mParticleContainer}>
+      </ContainerSection>
+      <MParticleContainer>
         {mParticleAudienceEditor && (
           <>
-            <Typography className={classes.heading}>mParticle audience ID</Typography>
+            <Heading>mParticle audience ID</Heading>
             <MParticleAudienceEditor
               disabled={isDisabled}
               mParticleAudience={mParticleAudienceEditor.mParticleAudience}
@@ -215,8 +212,8 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
             )}
           </>
         )}
-      </div>
-    </div>
+      </MParticleContainer>
+    </Container>
   );
 };
 
