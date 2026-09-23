@@ -1,51 +1,49 @@
 import EditIcon from '@mui/icons-material/Edit';
-import { ListItem, Theme, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { ListItemButton, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import useHover from '../../../hooks/useHover';
 import { BannerDesign } from '../../../models/bannerDesign';
 
-const useStyles = makeStyles(({ palette }: Theme) => ({
-  listItem: {
-    position: 'relative',
-    height: '50px',
-    width: '290px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    background: 'white',
-    borderRadius: '4px',
-    padding: '0 12px',
-    border: `1px solid ${palette.grey[700]}`,
+const StyledListItemButton = styled(ListItemButton, {
+  shouldForwardProp: (prop) => prop !== 'inverted',
+})<{ inverted: boolean }>(({ theme, inverted }) => ({
+  position: 'relative',
+  height: '50px',
+  width: '290px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  background: inverted ? theme.palette.grey[700] : 'white',
+  borderRadius: '4px',
+  padding: '0 12px',
+  border: `1px solid ${theme.palette.grey[700]}`,
 
-    '&:hover': {
-      background: `${palette.grey[700]}`,
-    },
-  },
-  text: {
-    maxWidth: '190px',
-    fontSize: '12px',
-    fontWeight: 500,
-    lineHeight: '24px',
-    textTransform: 'uppercase',
-  },
-  textInverted: {
-    color: '#FFFFFF',
-  },
-  inverted: {
-    background: `${palette.grey[700]}`,
-  },
-  whitePencil: {
-    color: 'white',
-  },
-  labelAndNameContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    '& > * + *': {
-      marginLeft: '4px',
-    },
+  '&:hover': {
+    background: theme.palette.grey[700],
   },
 }));
+
+const StyledText = styled(Typography, {
+  shouldForwardProp: (prop) => prop !== 'inverted',
+})<{ inverted?: boolean }>(({ inverted }) => ({
+  maxWidth: '190px',
+  fontSize: '12px',
+  fontWeight: 500,
+  lineHeight: '24px',
+  textTransform: 'uppercase',
+  ...(inverted && { color: '#FFFFFF' }),
+}));
+
+const WhitePencil = styled(EditIcon)({
+  color: 'white',
+});
+
+const LabelAndNameContainer = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '4px',
+});
 
 interface Props {
   design: BannerDesign;
@@ -60,36 +58,23 @@ const BannerDesignListItem = ({
   onDesignSelected,
   isLockedForEditing,
 }: Props): React.ReactElement => {
-  const classes = useStyles();
-
   const [ref, isHovered] = useHover<HTMLDivElement>();
 
-  const itemContainerClasses = [classes.listItem];
   const shouldInvertColor = isHovered || isSelected;
-  if (shouldInvertColor) {
-    itemContainerClasses.push(classes.inverted);
-  }
-
-  const textClasses = [classes.text];
-  if (isSelected) {
-    textClasses.push(classes.textInverted);
-  }
 
   return (
-    <ListItem
-      button={true}
-      className={itemContainerClasses.join(' ')}
+    <StyledListItemButton
+      inverted={shouldInvertColor}
       key={design.name}
       onClick={(): void => onDesignSelected(design.name)}
       ref={ref}
     >
-      <div className={classes.labelAndNameContainer}>
-        {isLockedForEditing &&
-          (isSelected ? <EditIcon className={classes.whitePencil} /> : <EditIcon />)}
+      <LabelAndNameContainer>
+        {isLockedForEditing && (isSelected ? <WhitePencil /> : <EditIcon />)}
 
-        <Typography className={textClasses.join(' ')}>{design.name}</Typography>
-      </div>
-    </ListItem>
+        <StyledText inverted={isSelected}>{design.name}</StyledText>
+      </LabelAndNameContainer>
+    </StyledListItemButton>
   );
 };
 

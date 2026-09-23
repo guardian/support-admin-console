@@ -1,7 +1,7 @@
-import { Alert, Checkbox, TextField, Theme, Typography } from '@mui/material';
+import { Alert, Checkbox, TextField, Typography } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import { styled } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
-import { makeStyles } from '@mui/styles';
 import React, { useEffect, useMemo, useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { CountdownSettings } from './helpers/shared';
@@ -12,27 +12,27 @@ import {
 } from './helpers/validation';
 import { RichTextEditorSingleLine } from './richTextEditor/richTextEditor';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  container: {
-    '& > * + *': {
-      marginTop: spacing(1),
-    },
+const Container = styled('div')(({ theme }) => ({
+  '& > * + *': {
+    marginTop: theme.spacing(1),
   },
-  fieldsContainer: {
-    '& > * + *': {
-      marginTop: spacing(3),
-    },
-  },
-  switchContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    '& > p': {
-      fontWeight: 500,
-    },
+}));
 
-    '& > * + *': {
-      marginLeft: spacing(1),
-    },
+const FieldsContainer = styled('div')(({ theme }) => ({
+  '& > * + *': {
+    marginTop: theme.spacing(3),
+  },
+}));
+
+const SwitchContainer = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  '& > p': {
+    fontWeight: 500,
+  },
+
+  '& > * + *': {
+    marginLeft: theme.spacing(1),
   },
 }));
 
@@ -69,7 +69,6 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
   updateCountdownSettings,
   onValidationChange,
 }: CountdownEditorProps) => {
-  const classes = useStyles();
   const templateValidator = templateValidatorForPlatform('SUPPORT');
 
   const defaultValues = useMemo<FormData>(
@@ -164,7 +163,7 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
     }
   };
   return (
-    <div className={classes.container}>
+    <Container>
       <FormControlLabel
         control={
           <Checkbox
@@ -178,7 +177,7 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
       />
 
       {!!countdownSettings && (
-        <div className={classes.fieldsContainer}>
+        <FieldsContainer>
           <Controller
             name="overwriteHeadingLabel"
             control={control}
@@ -214,7 +213,7 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
             }}
           />
 
-          <div className={classes.switchContainer}>
+          <SwitchContainer>
             <Typography>UTC</Typography>
             <Switch
               checked={countdownSettings.useLocalTime}
@@ -226,7 +225,7 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
               disabled={isDisabled}
             />
             <Typography>Local time</Typography>
-          </div>
+          </SwitchContainer>
           <Alert severity="info">
             <p>
               <strong>Local time</strong>: E.g. in a US campaign, to end at midnight in the
@@ -255,6 +254,7 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
             defaultValue={new Date().toISOString().slice(0, 19)}
             margin="normal"
             variant="outlined"
+            InputLabelProps={{ shrink: true }}
             disabled={isDisabled}
             fullWidth
           />
@@ -271,6 +271,7 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
             defaultValue={new Date().toISOString().slice(0, 19)}
             margin="normal"
             variant="outlined"
+            InputLabelProps={{ shrink: true }}
             disabled={isDisabled}
             fullWidth
           />
@@ -302,9 +303,9 @@ const CountdownEditor: React.FC<CountdownEditorProps> = ({
             disabled={isDisabled}
             fullWidth
           />
-        </div>
+        </FieldsContainer>
       )}
-    </div>
+    </Container>
   );
 };
 

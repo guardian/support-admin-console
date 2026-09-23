@@ -1,7 +1,7 @@
 import Button from '@mui/material/Button';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import { styled } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
-import { makeStyles } from '@mui/styles';
 import React from 'react';
 import withS3Data, { DataFromServer, InnerProps } from '../../hocs/withS3Data';
 import {
@@ -10,17 +10,13 @@ import {
   saveFrontendSettings,
 } from '../../utils/requests';
 
-const useStyles = makeStyles(() => ({
-  container: {
-    margin: '30px',
-    maxWidth: '500px',
-    display: 'flex',
-    flexDirection: 'column',
-    '& > * + *': {
-      marginTop: '5px',
-    },
-  },
-}));
+const Container = styled('div')({
+  margin: '30px',
+  maxWidth: '500px',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '5px',
+});
 
 type SwitchName =
   | 'enableBanners'
@@ -73,8 +69,6 @@ const ChannelSwitches: React.FC<InnerProps<ChannelSwitches>> = ({
   sendToS3,
   saving,
 }: InnerProps<ChannelSwitches>) => {
-  const classes = useStyles();
-
   const onSwitchChange = (name: SwitchName, enabled: boolean): void => {
     update({
       ...switches,
@@ -83,7 +77,7 @@ const ChannelSwitches: React.FC<InnerProps<ChannelSwitches>> = ({
   };
 
   return (
-    <div className={classes.container}>
+    <Container>
       <ChannelSwitch
         name="enableEpics"
         label="Enable Epics (this does not include Apple News)"
@@ -173,7 +167,7 @@ const ChannelSwitches: React.FC<InnerProps<ChannelSwitches>> = ({
       >
         Submit
       </Button>
-    </div>
+    </Container>
   );
 };
 
