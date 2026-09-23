@@ -1,22 +1,20 @@
-import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { Cta, SecondaryCta, SecondaryCtaType } from '../../channelManagement/helpers/shared';
 import VariantCtaFieldsEditor from './variantCtaFieldsEditor';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  container: {
-    '& > * + *': {
-      marginTop: spacing(1),
-    },
-  },
-  selectContainer: {
-    height: '50px',
-  },
-  formControl: {
-    minWidth: 240,
+const Container = styled('div')(({ theme }) => ({
+  '& > * + *': {
+    marginTop: theme.spacing(1),
   },
 }));
+const SelectContainer = styled('div')({
+  height: '50px',
+});
+const FormControlStyled = styled(FormControl)({
+  minWidth: 240,
+});
 
 interface VariantEditorSecondaryCtaEditorProps {
   label: string;
@@ -37,8 +35,6 @@ const VariantEditorSecondaryCtaEditor: React.FC<VariantEditorSecondaryCtaEditorP
   isDisabled,
   defaultCta,
 }: VariantEditorSecondaryCtaEditorProps) => {
-  const classes = useStyles();
-
   const handleChange = (event: SelectChangeEvent<SecondaryCtaType | 'None'>): void => {
     const value = event.target.value;
 
@@ -58,9 +54,9 @@ const VariantEditorSecondaryCtaEditor: React.FC<VariantEditorSecondaryCtaEditorP
   };
 
   return (
-    <div className={classes.container}>
-      <div className={classes.selectContainer}>
-        <FormControl className={classes.formControl}>
+    <Container>
+      <SelectContainer>
+        <FormControlStyled>
           <InputLabel id="secondaryCtaTypeLabel" htmlFor="secondary-cta-type">
             {label}
           </InputLabel>
@@ -82,8 +78,8 @@ const VariantEditorSecondaryCtaEditor: React.FC<VariantEditorSecondaryCtaEditorP
               Contributions reminder
             </MenuItem>
           </Select>
-        </FormControl>
-      </div>
+        </FormControlStyled>
+      </SelectContainer>
 
       {cta?.type === SecondaryCtaType.Custom && (
         <VariantCtaFieldsEditor
@@ -93,7 +89,7 @@ const VariantEditorSecondaryCtaEditor: React.FC<VariantEditorSecondaryCtaEditorP
           isDisabled={isDisabled}
         />
       )}
-    </div>
+    </Container>
   );
 };
 

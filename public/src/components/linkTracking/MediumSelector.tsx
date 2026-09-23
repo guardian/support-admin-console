@@ -1,5 +1,5 @@
-import { FormControl, MenuItem, Select, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { FormControl, MenuItem, Select } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { Control, Controller, FieldErrors } from 'react-hook-form';
 import { LinkTrackingFormData } from './linkTrackingFormData';
@@ -183,14 +183,10 @@ const OPTIONS: OptionGroup[] = [
   },
 ];
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  groupHeading: {
-    fontWeight: 700,
-  },
-  item: {
-    marginLeft: spacing(2),
-  },
-}));
+const GroupHeading = styled(MenuItem)({
+  fontWeight: 700,
+});
+const Item = styled(MenuItem)(({ theme }) => ({ marginLeft: theme.spacing(2) }));
 
 interface Props {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any is expected
@@ -204,8 +200,6 @@ interface Props {
  * This is because the link tracking should contain both, but the source should not be chosen directly by the user.
  */
 export const MediumSelector: React.FC<Props> = ({ control, errors, onUpdate }: Props) => {
-  const classes = useStyles();
-
   return (
     <FormControl>
       <Controller
@@ -223,23 +217,17 @@ export const MediumSelector: React.FC<Props> = ({ control, errors, onUpdate }: P
           >
             {OPTIONS.map((group) => {
               const groupItem = (
-                <MenuItem
-                  className={classes.groupHeading}
-                  value={group.group}
-                  key={group.group}
-                  disabled
-                >
+                <GroupHeading value={group.group} key={group.group} disabled>
                   {group.group}
-                </MenuItem>
+                </GroupHeading>
               );
               const items = group.options.map((medium) => (
-                <MenuItem
-                  className={classes.item}
+                <Item
                   value={`${group.group}__${medium.value}`}
                   key={`${group.group}-${medium.value}`}
                 >
                   {medium.label}
-                </MenuItem>
+                </Item>
               ));
               return [groupItem].concat(items);
             })}

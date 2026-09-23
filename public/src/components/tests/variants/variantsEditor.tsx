@@ -1,16 +1,13 @@
-import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React, { useEffect, useRef, useState } from 'react';
 import { Variant } from '../../channelManagement/helpers/shared';
 import NewVariantButton from './newVariantButton';
 import VariantEditorsAccordion from './variantEditorsAccordion';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  container: {
-    '& > * + *': {
-      marginTop: spacing(1),
-    },
-  },
+const Container = styled('div')(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: theme.spacing(1),
 }));
 
 interface VariantsEditorProps<V extends Variant> {
@@ -34,7 +31,6 @@ function VariantsEditor<V extends Variant>({
   onVariantDelete,
   onVariantClone,
 }: VariantsEditorProps<V>): React.ReactElement<VariantsEditorProps<V>> {
-  const classes = useStyles();
   const [selectedVariantKey, setSelectedVariantKey] = useState<string | null>(null);
   const previousTestNameRef = useRef<string | undefined>(testName);
 
@@ -54,7 +50,7 @@ function VariantsEditor<V extends Variant>({
   const variantNames = variants.map((variant) => variant.name);
 
   return (
-    <div className={classes.container}>
+    <Container>
       <VariantEditorsAccordion<V>
         variants={variants}
         variantKeys={variantKeys}
@@ -73,7 +69,7 @@ function VariantsEditor<V extends Variant>({
         createVariant={createVariant}
         isDisabled={!editMode}
       />
-    </div>
+    </Container>
   );
 }
 

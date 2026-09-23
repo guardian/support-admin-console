@@ -1,120 +1,123 @@
-import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Button, Card, CardContent, Table, TableCell, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 
-export const useStyles = makeStyles(({ breakpoints, spacing, palette }: Theme) => ({
-  wrapper: {
-    display: 'flex',
-    justifyContent: 'center',
-  },
-  container: {
-    width: '100%',
-    maxWidth: 1440,
-    padding: spacing(4),
-    display: 'flex',
-    flexDirection: 'column',
-    gap: spacing(4),
-  },
-  intro: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: spacing(1),
-  },
-  actions: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-  },
-  versionHistory: {
-    width: '100%',
-    maxWidth: 1100,
-    margin: '0 auto',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: spacing(2),
-  },
-  versionHistoryContent: {
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: spacing(2),
-  },
-  diffCell: {
-    maxWidth: 0,
-    overflowWrap: 'anywhere',
-    padding: 0,
-  },
-  diffEmptyState: {
-    padding: spacing(2),
-    textAlign: 'center',
-  },
-  diffTable: {
-    width: '100%',
-    tableLayout: 'fixed',
-  },
-  diffFieldCell: {
-    width: '24%',
-    maxWidth: 0,
-    overflowWrap: 'anywhere',
-  },
-  diffHeaderCell: {
-    backgroundColor: palette.grey[100],
-  },
-  diffValueCell: {
-    width: '38%',
-    maxWidth: 0,
-    overflowWrap: 'anywhere',
+export const Wrapper = styled('div')({
+  display: 'flex',
+  justifyContent: 'center',
+});
+export const Container = styled('div')(({ theme }) => ({
+  width: '100%',
+  maxWidth: 1440,
+  padding: theme.spacing(4),
+  display: 'flex',
+  flexDirection: 'column',
+  gap: theme.spacing(4),
+}));
+export const Intro = styled('div')(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: theme.spacing(1),
+}));
+export const Actions = styled('div')({
+  display: 'flex',
+  justifyContent: 'flex-end',
+});
+export const VersionHistory = styled('div')(({ theme }) => ({
+  width: '100%',
+  maxWidth: 1100,
+  margin: '0 auto',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  gap: theme.spacing(2),
+}));
+export const VersionHistoryContent = styled('div')(({ theme }) => ({
+  width: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: theme.spacing(2),
+}));
+export const DiffCell = styled(TableCell)({
+  maxWidth: 0,
+  overflowWrap: 'anywhere',
+  padding: 0,
+});
+export const DiffEmptyState = styled(Typography)(({ theme }) => ({
+  padding: theme.spacing(2),
+  textAlign: 'center',
+}));
+export const DiffTable = styled(Table)({
+  width: '100%',
+  tableLayout: 'fixed',
+});
+export const DiffFieldCell = styled(TableCell)({
+  width: '24%',
+  maxWidth: 0,
+  overflowWrap: 'anywhere',
+});
+export const DiffHeaderCell = styled(TableCell)(({ theme }) => ({
+  backgroundColor: theme.palette.grey[100],
+}));
+export const DiffFieldHeaderCell = styled(DiffHeaderCell)({
+  width: '24%',
+  maxWidth: 0,
+  overflowWrap: 'anywhere',
+});
+export const DiffValueCell = styled(TableCell)({
+  width: '38%',
+  maxWidth: 0,
+  overflowWrap: 'anywhere',
+  whiteSpace: 'pre-wrap',
+  '& pre': {
+    margin: 0,
     whiteSpace: 'pre-wrap',
-    '& pre': {
-      margin: 0,
-      whiteSpace: 'pre-wrap',
-      overflowWrap: 'anywhere',
-    },
+    overflowWrap: 'anywhere',
   },
-  section: {
-    display: 'grid',
-    gridTemplateColumns: 'minmax(160px, 0.25fr) minmax(0, 1fr)',
-    gap: spacing(3),
-    alignItems: 'start',
-    [breakpoints.down('md')]: {
-      gridTemplateColumns: '1fr',
-    },
+});
+export const Section = styled('section')(({ theme }) => ({
+  display: 'grid',
+  gridTemplateColumns: 'minmax(160px, 0.25fr) minmax(0, 1fr)',
+  gap: theme.spacing(3),
+  alignItems: 'start',
+  [theme.breakpoints.down('md')]: {
+    gridTemplateColumns: '1fr',
   },
-  sectionHeading: {
-    position: 'sticky',
-    top: 0,
-    padding: spacing(2, 0),
-    backgroundColor: palette.grey[100],
-    zIndex: 1,
-    [breakpoints.down('md')]: {
-      padding: spacing(1, 0),
-    },
+}));
+export const SectionHeading = styled('div')(({ theme }) => ({
+  position: 'sticky',
+  top: 0,
+  padding: theme.spacing(2, 0),
+  backgroundColor: theme.palette.grey[100],
+  zIndex: 1,
+  [theme.breakpoints.down('md')]: {
+    padding: theme.spacing(1, 0),
   },
-  sectionGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'minmax(0, 1fr)',
-    gap: spacing(2),
-    alignItems: 'start',
-  },
-  regionCard: {
-    height: '100%',
-  },
-  regionContent: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: spacing(2),
-  },
-  choiceCardRow: {
-    display: 'flex',
-    alignItems: 'flex-start',
-  },
-  deleteButton: {
-    marginLeft: spacing(1),
-    marginTop: spacing(1),
-  },
-  addButton: {
-    alignSelf: 'flex-start',
-  },
-  helperText: {
-    color: palette.text.secondary,
-  },
+}));
+export const SectionGrid = styled('div')(({ theme }) => ({
+  display: 'grid',
+  gridTemplateColumns: 'minmax(0, 1fr)',
+  gap: theme.spacing(2),
+  alignItems: 'start',
+}));
+export const RegionCard = styled(Card)({
+  height: '100%',
+});
+export const RegionContent = styled(CardContent)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: theme.spacing(2),
+}));
+export const ChoiceCardRow = styled('div')({
+  display: 'flex',
+  alignItems: 'flex-start',
+});
+export const DeleteButton = styled(Button)(({ theme }) => ({
+  marginLeft: theme.spacing(1),
+  marginTop: theme.spacing(1),
+}));
+export const AddButton = styled(Button)({
+  alignSelf: 'flex-start',
+});
+export const HelperText = styled(Typography)(({ theme }) => ({
+  color: theme.palette.text.secondary,
 }));

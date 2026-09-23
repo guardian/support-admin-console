@@ -7,7 +7,7 @@ import {
 } from '../../models/defaultChoiceCards';
 import { buildLabel, ChannelKey, REGION_ORDER } from '../../utils/defaultChoiceCards';
 import { CardsPerRegionEditor } from './CardsPerRegionEditor';
-import { useStyles } from './styles';
+import { HelperText, SectionGrid, SectionHeading, Section as StyledSection } from './styles';
 
 interface SectionProps {
   channel: ChannelKey;
@@ -32,20 +32,19 @@ export const Section: React.FC<SectionProps> = ({
   onChange,
   onValidationChange,
 }) => {
-  const classes = useStyles();
   const channelSettings = data[channel] as Record<ChoiceCardsDefaultsRegion, ChoiceCardsSettings>;
 
   return (
-    <section className={classes.section}>
-      <div className={classes.sectionHeading}>
+    <StyledSection>
+      <SectionHeading>
         <Typography variant="h4">
           {channel === 'epic' ? 'Epic defaults' : 'Banner defaults'}
         </Typography>
-        <Typography variant="body2" className={classes.helperText}>
+        <HelperText variant="body2">
           {`Manage default choice cards for ${channel} variants that do not define custom choice cards.`}
-        </Typography>
-      </div>
-      <div className={classes.sectionGrid}>
+        </HelperText>
+      </SectionHeading>
+      <SectionGrid>
         {REGION_ORDER.map((region) => (
           <CardsPerRegionEditor
             key={`${channel}-${region}`}
@@ -57,7 +56,7 @@ export const Section: React.FC<SectionProps> = ({
             onValidationChange={(isValid) => onValidationChange(channel, region, isValid)}
           />
         ))}
-      </div>
-    </section>
+      </SectionGrid>
+    </StyledSection>
   );
 };

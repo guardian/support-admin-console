@@ -7,71 +7,62 @@ import {
   ListItemText,
   Typography,
 } from '@mui/material';
-import { Theme } from '@mui/material/styles';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { RatePlanWithProduct } from './utils/productCatalog';
 import { CountryGroup, Promo } from './utils/promoModels';
 
-const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
-  listItem: {
-    padding: 0,
-    borderBottom: '1px solid #eee',
-    '&:last-child': {
-      borderBottom: 'none',
-    },
+const StyledListItem = styled(ListItem, { shouldForwardProp: (prop) => prop !== 'expired' })<{
+  expired: boolean;
+}>(({ expired }) => ({
+  padding: 0,
+  borderBottom: '1px solid #eee',
+  opacity: expired ? 0.8 : 1,
+  '&:last-child': { borderBottom: 'none' },
+}));
+const StyledListItemButton = styled(ListItemButton)(({ theme }) => ({
+  padding: '12px 16px',
+  '&.Mui-selected': {
+    backgroundColor: theme.palette.primary.light,
+    '&:hover': { backgroundColor: theme.palette.primary.light },
   },
-  listItemButton: {
-    padding: '12px 16px',
-    '&.Mui-selected': {
-      backgroundColor: palette.primary.light,
-      '&:hover': {
-        backgroundColor: palette.primary.light,
-      },
-    },
-  },
-  promoCode: {
-    fontWeight: 600,
-    fontSize: '14px',
-  },
-  dates: {
-    fontSize: '12px',
-    color: palette.text.secondary,
-  },
-  endDate: {
-    fontWeight: 'bold',
-  },
-  actionButtons: {
-    display: 'flex',
-    gap: spacing(1),
-  },
-  expired: {
-    backgroundColor: '#ffebee',
-    opacity: 0.8,
-  },
-  expiredChip: {
-    backgroundColor: palette.error.main,
-    color: 'white',
-    fontSize: '10px',
-    height: '20px',
-  },
-  promoDetails: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: spacing(0.5),
-    marginTop: spacing(0.5),
-  },
-  detailItem: {
-    fontSize: '11px',
-    color: palette.text.secondary,
-    display: 'flex',
-    alignItems: 'center',
-    gap: spacing(0.5),
-  },
-  detailLabel: {
-    fontWeight: 500,
-    color: palette.text.primary,
-  },
+}));
+const PromoCode = styled('span')({
+  fontWeight: 600,
+  fontSize: '14px',
+});
+const Dates = styled('span')(({ theme }) => ({
+  fontSize: '12px',
+  color: theme.palette.text.secondary,
+}));
+const EndDate = styled('span')({ fontWeight: 'bold' });
+const ActionButtons = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  gap: theme.spacing(1),
+}));
+const ExpiredChip = styled(Chip)(({ theme }) => ({
+  backgroundColor: theme.palette.error.main,
+  color: 'white',
+  fontSize: '10px',
+  height: '20px',
+  display: 'flex',
+}));
+const PromoDetails = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: theme.spacing(0.5),
+  marginTop: theme.spacing(0.5),
+}));
+const DetailItem = styled(Typography)(({ theme }) => ({
+  fontSize: '11px',
+  color: theme.palette.text.secondary,
+  display: 'flex',
+  alignItems: 'center',
+  gap: theme.spacing(0.5),
+}));
+const DetailLabel = styled('span')(({ theme }) => ({
+  fontWeight: 500,
+  color: theme.palette.text.primary,
 }));
 
 interface PromoListItemProps {
@@ -91,8 +82,6 @@ export const PromoListItem = ({
   ratePlans,
   allowEditing,
 }: PromoListItemProps): React.ReactElement => {
-  const classes = useStyles();
-
   const formatDate = (timestamp?: string) => {
     if (!timestamp || Number.isNaN(Date.parse(timestamp))) {
       return 'N/A';
@@ -160,19 +149,16 @@ export const PromoListItem = ({
   };
 
   return (
-    <ListItem className={`${classes.listItem} ${isExpired ? classes.expired : ''}`} disablePadding>
-      <ListItemButton
-        className={classes.listItemButton}
-        onClick={() => onViewPromo(promo.promoCode)}
-      >
+    <StyledListItem expired={isExpired} disablePadding>
+      <StyledListItemButton onClick={() => onViewPromo(promo.promoCode)}>
         <ListItemText
           primary={
             <Box display="flex" justifyContent="space-between" alignItems="center">
               <Box display="flex" alignItems="center" gap={1}>
-                <span className={classes.promoCode}>{promo.promoCode}</span>
-                {isExpired && <Chip label="Expired" size="small" className={classes.expiredChip} />}
+                <PromoCode>{promo.promoCode}</PromoCode>
+                {isExpired && <ExpiredChip label="Expired" size="small" />}
               </Box>
-              <Box className={classes.actionButtons}>
+              <ActionButtons>
                 {promo.lockStatus?.locked && <Chip label="Locked" size="small" color="warning" />}
                 <Button
                   size="small"
@@ -185,31 +171,31 @@ export const PromoListItem = ({
                 >
                   Clone
                 </Button>
-              </Box>
+              </ActionButtons>
             </Box>
           }
           secondaryTypographyProps={{ component: 'div' }}
           secondary={
             <Box>
-              <span className={classes.dates}>
+              <Dates>
                 {formatDate(promo.startTimestamp)} -{' '}
-                <span className={classes.endDate}>{formatDate(promo.endTimestamp)}</span>
-              </span>
-              <Box className={classes.promoDetails}>
-                <Typography className={classes.detailItem}>
-                  <span className={classes.detailLabel}>Discount:</span> {getDiscountText()}
-                </Typography>
-                <Typography className={classes.detailItem}>
-                  <span className={classes.detailLabel}>Rate plans:</span> {getRatePlansText()}
-                </Typography>
-                <Typography className={classes.detailItem}>
-                  <span className={classes.detailLabel}>Regions:</span> {getRegionsText()}
-                </Typography>
-              </Box>
+                <EndDate>{formatDate(promo.endTimestamp)}</EndDate>
+              </Dates>
+              <PromoDetails>
+                <DetailItem>
+                  <DetailLabel>Discount:</DetailLabel> {getDiscountText()}
+                </DetailItem>
+                <DetailItem>
+                  <DetailLabel>Rate plans:</DetailLabel> {getRatePlansText()}
+                </DetailItem>
+                <DetailItem>
+                  <DetailLabel>Regions:</DetailLabel> {getRegionsText()}
+                </DetailItem>
+              </PromoDetails>
             </Box>
           }
         />
-      </ListItemButton>
-    </ListItem>
+      </StyledListItemButton>
+    </StyledListItem>
   );
 };
