@@ -1,29 +1,21 @@
-import { Switch, Theme, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Switch, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  container: {
-    display: 'flex',
-    alignItems: 'center',
-
-    '& > * + *': {
-      marginLeft: spacing(5),
-    },
-  },
-  switchContainer: {
-    display: 'flex',
-    alignItems: 'center',
-
-    '& > * + *': {
-      marginLeft: spacing(1),
-    },
-  },
-  onOffLabel: {
-    fontSize: '14px',
-    fontWeight: 500,
-  },
+const Container = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  gap: theme.spacing(5),
 }));
+const SwitchContainer = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  gap: theme.spacing(1),
+}));
+const OnOffLabel = styled(Typography)({
+  fontSize: '14px',
+  fontWeight: 500,
+});
 
 interface LiveSwitchProps {
   isLive: boolean;
@@ -38,21 +30,20 @@ const LiveSwitch: React.FC<LiveSwitchProps> = ({
   isDisabled,
   onChange,
 }: LiveSwitchProps) => {
-  const classes = useStyles();
   return (
-    <div className={classes.container}>
+    <Container>
       <Typography>{label}</Typography>
 
-      <div className={classes.switchContainer}>
-        <Typography className={classes.onOffLabel}>Off</Typography>
+      <SwitchContainer>
+        <OnOffLabel>Off</OnOffLabel>
         <Switch
           checked={isLive}
           onChange={(e): void => onChange(e.target.checked)}
           disabled={isDisabled}
         />
-        <Typography className={classes.onOffLabel}>On</Typography>
-      </div>
-    </div>
+        <OnOffLabel>On</OnOffLabel>
+      </SwitchContainer>
+    </Container>
   );
 };
 

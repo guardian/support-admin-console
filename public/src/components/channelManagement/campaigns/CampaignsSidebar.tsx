@@ -1,31 +1,32 @@
-import { TextField } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, TextField } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React, { useState } from 'react';
 import CampaignsList from './CampaignsList';
 import { Campaign, Campaigns } from './CampaignsTypes';
 import NewCampaignButton from './NewCampaignButton';
 
-const useStyles = makeStyles(() => ({
-  root: {
-    display: 'flex',
-    flexDirection: 'column',
-    paddingLeft: '32px',
-  },
-  listsContainer: {
-    position: 'relative',
-    display: 'flex',
-    marginTop: '8px',
-  },
-  searchField: {
-    marginTop: '8px',
-  },
-  buttonsContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '8px',
-    marginBottom: '10px',
-  },
-}));
+const Root = styled(Box)({
+  display: 'flex',
+  flexDirection: 'column',
+  paddingLeft: '32px',
+});
+
+const ListsContainer = styled(Box)({
+  position: 'relative',
+  display: 'flex',
+  marginTop: '8px',
+});
+
+const SearchField = styled(TextField)({
+  marginTop: '8px',
+});
+
+const ButtonsContainer = styled(Box)({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '8px',
+  marginBottom: '10px',
+});
 
 interface CampaignsSidebarProps {
   campaigns: Campaigns;
@@ -40,43 +41,44 @@ function CampaignsSidebar({
   selectedCampaign,
   onCampaignSelected,
 }: CampaignsSidebarProps): React.ReactElement {
-  const classes = useStyles();
   const [campaignSearch, setCampaignSearch] = useState('');
 
   const searchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCampaignSearch(e.target.value.toUpperCase());
   };
 
-  const searchInputNative = (e: React.InputEvent<HTMLDivElement>) => {
-    setCampaignSearch((e.target as HTMLInputElement).value.toUpperCase());
+  const searchInputNative = (event: React.FormEvent<HTMLDivElement>) => {
+    const target = event.target;
+    if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement) {
+      setCampaignSearch(target.value.toUpperCase());
+    }
   };
 
   return (
-    <div className={classes.root}>
-      <div className={classes.buttonsContainer}>
+    <Root>
+      <ButtonsContainer>
         <NewCampaignButton
           existingNames={campaigns.map((c) => c.name)}
           existingNicknames={campaigns.map((c) => c.nickname || '')}
           createCampaign={createCampaign}
         />
-        <TextField
-          className={classes.searchField}
+        <SearchField
           label="Filter campaigns"
           type="search"
           variant="outlined"
           onInput={searchInputNative}
           onChange={searchInput}
         />
-      </div>
-      <div className={classes.listsContainer}>
+      </ButtonsContainer>
+      <ListsContainer>
         <CampaignsList
           campaigns={campaigns}
           campaignSearch={campaignSearch}
           selectedCampaign={selectedCampaign}
           onCampaignSelected={onCampaignSelected}
         />
-      </div>
-    </div>
+      </ListsContainer>
+    </Root>
   );
 }
 

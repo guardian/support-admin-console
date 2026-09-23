@@ -1,13 +1,11 @@
-import { Checkbox, Theme } from '@mui/material';
+import { Box, Checkbox } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  container: {
-    '& > * + *': {
-      marginTop: spacing(1),
-    },
+const Container = styled(Box)(({ theme }) => ({
+  '& > * + *': {
+    marginTop: theme.spacing(1),
   },
 }));
 
@@ -22,14 +20,12 @@ const IsCollapsibleEditor: React.FC<IsCollapsibleEditorProps> = ({
   isDisabled,
   updateIsCollapsibleSettings,
 }: IsCollapsibleEditorProps) => {
-  const classes = useStyles();
-
   const onChange = (): void => {
     updateIsCollapsibleSettings(!isCollapsible);
   };
 
   return (
-    <div className={classes.container}>
+    <Container>
       <FormControlLabel
         control={
           <Checkbox
@@ -41,7 +37,7 @@ const IsCollapsibleEditor: React.FC<IsCollapsibleEditorProps> = ({
         }
         label="Two Step Banner"
       />
-    </div>
+    </Container>
   );
 };
 

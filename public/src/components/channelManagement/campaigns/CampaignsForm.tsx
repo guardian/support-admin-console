@@ -1,5 +1,5 @@
-import { Theme, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
@@ -12,45 +12,46 @@ import CampaignsEditor from './CampaignsEditor';
 import CampaignsSidebar from './CampaignsSidebar';
 import { Campaign, unassignedCampaign } from './CampaignsTypes';
 
-const useStyles = makeStyles(({ spacing, typography }: Theme) => ({
-  viewTextContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: '-50px',
-  },
-  viewText: {
-    fontSize: typography.pxToRem(16),
-  },
-  body: {
-    display: 'flex',
-    overflow: 'hidden',
-    flexGrow: 1,
-    width: '100%',
-    height: '100%',
-  },
-  leftCol: {
-    height: '100%',
-    flexShrink: 0,
-    overflowY: 'auto',
-    background: 'white',
-    paddingTop: spacing(6),
-    paddingLeft: spacing(6),
-    paddingRight: spacing(6),
-  },
-  rightCol: {
-    flexGrow: 1,
-    display: 'flex',
-    justifyContent: 'center',
-  },
+const ViewTextContainer = styled(Box)({
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginTop: '-50px',
+});
+
+const ViewText = styled(Typography)(({ theme }) => ({
+  fontSize: theme.typography.pxToRem(16),
 }));
+
+const Body = styled(Box)({
+  display: 'flex',
+  overflow: 'hidden',
+  flexGrow: 1,
+  width: '100%',
+  height: '100%',
+});
+
+const LeftCol = styled(Box)(({ theme }) => ({
+  height: '100%',
+  flexShrink: 0,
+  overflowY: 'auto',
+  background: 'white',
+  paddingTop: theme.spacing(6),
+  paddingLeft: theme.spacing(6),
+  paddingRight: theme.spacing(6),
+}));
+
+const RightCol = styled(Box)({
+  flexGrow: 1,
+  display: 'flex',
+  justifyContent: 'center',
+});
 
 const CampaignsForm: React.FC = () => {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const { campaignName } = useParams<{ campaignName?: string }>(); // querystring parameter
   const [selectedCampaignName, setSelectedCampaignName] = useState<string | undefined>();
-  const classes = useStyles();
   const previousCampaignNameRef = useRef<string | undefined>(campaignName);
 
   const fetchSettings = (): Promise<Campaign[]> => {
@@ -89,16 +90,16 @@ const CampaignsForm: React.FC = () => {
   }
 
   return (
-    <div className={classes.body}>
-      <div className={classes.leftCol}>
+    <Body>
+      <LeftCol>
         <CampaignsSidebar
           campaigns={campaigns}
           createCampaign={createCampaign}
           selectedCampaign={selectedCampaign}
           onCampaignSelected={setSelectedCampaignName}
         />
-      </div>
-      <div className={classes.rightCol}>
+      </LeftCol>
+      <RightCol>
         {selectedCampaign ? (
           <CampaignsEditor
             key={selectedCampaign.name}
@@ -106,15 +107,13 @@ const CampaignsForm: React.FC = () => {
             updateCampaign={updateCampaign}
           />
         ) : (
-          <div className={classes.viewTextContainer}>
-            <Typography className={classes.viewText}>
-              Select an existing campaign from the menu,
-            </Typography>
-            <Typography className={classes.viewText}>or create a new one</Typography>
-          </div>
+          <ViewTextContainer>
+            <ViewText>Select an existing campaign from the menu,</ViewText>
+            <ViewText>or create a new one</ViewText>
+          </ViewTextContainer>
         )}
-      </div>
-    </div>
+      </RightCol>
+    </Body>
   );
 };
 

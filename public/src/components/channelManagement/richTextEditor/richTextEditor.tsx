@@ -1,6 +1,7 @@
 import 'prosekit/basic/style.css';
 import 'prosekit/basic/typography.css';
 
+import { useTheme } from '@mui/material/styles';
 import { Plugin, TextSelection } from '@prosekit/pm/state';
 import { defineBasicExtension } from 'prosekit/basic';
 import { createEditor, definePlugin, type Editor, union } from 'prosekit/core';
@@ -26,7 +27,22 @@ import {
   PRICE_PRODUCT_WEEKLY,
 } from '../helpers/validation';
 import { MParticleTemplateMenu } from './mParticleTemplateMenu';
-import { useRTEStyles } from './richTextEditorStyles';
+import {
+  Button,
+  ButtonSpacer,
+  buttonSx,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuContentHidden,
+  EditorWrapper,
+  ErrorText,
+  FieldLabel,
+  FieldLabelPrices,
+  HelperText,
+  LinkInput,
+  MenuContainer,
+  ProsekitCustom,
+} from './richTextEditorStyles';
 import { getRteCopyLength, paragraphsToArray, parseCopyForParagraphs } from './utils';
 
 export interface RichTextEditorProps<T = string[]> {
@@ -99,7 +115,6 @@ const useProseKitToolbarState = (editor: ProseKitEditor) => {
 };
 
 const FloatingLinkToolbar: React.FC<{ enabled: boolean }> = ({ enabled }) => {
-  const classes = useRTEStyles();
   const editor = useEditor<ProseKitExtension>();
   const toolbarState = useProseKitToolbarState(editor);
   const [href, setHref] = useState('');
@@ -159,18 +174,13 @@ const FloatingLinkToolbar: React.FC<{ enabled: boolean }> = ({ enabled }) => {
       }}
     >
       <InlinePopoverPositioner placement="top">
-        <InlinePopoverPopup className={classes.linkPopover} role="tooltip">
+        <InlinePopoverPopup role="tooltip">
           {toolbarState.link ? (
             <>
-              <button
-                className={classes.button}
-                onMouseDown={(event) => event.preventDefault()}
-                onClick={openEditor}
-              >
+              <Button onMouseDown={(event) => event.preventDefault()} onClick={openEditor}>
                 Edit link
-              </button>
-              <button
-                className={classes.button}
+              </Button>
+              <Button
                 onMouseDown={(event) => event.preventDefault()}
                 onClick={() => {
                   editor.commands.removeLink();
@@ -183,20 +193,15 @@ const FloatingLinkToolbar: React.FC<{ enabled: boolean }> = ({ enabled }) => {
                 }}
               >
                 Remove link
-              </button>
+              </Button>
             </>
           ) : (
-            <button
-              className={classes.button}
-              onMouseDown={(event) => event.preventDefault()}
-              onClick={openEditor}
-            >
+            <Button onMouseDown={(event) => event.preventDefault()} onClick={openEditor}>
               Add link
-            </button>
+            </Button>
           )}
           {editing && (
-            <input
-              className={classes.linkInput}
+            <LinkInput
               autoFocus
               placeholder="Enter link..."
               value={href}
@@ -225,7 +230,7 @@ const RichTextMenu: React.FC<{
   label?: string;
   constraints: RteMenuConstraints;
 }> = ({ disabled, label, constraints }) => {
-  const classes = useRTEStyles();
+  const theme = useTheme();
   const editor = useEditor<ProseKitExtension>();
   const toolbarState = useProseKitToolbarState(editor);
   const [priceButtonsVisible, setPriceButtonsVisible] = useState(false);
@@ -275,8 +280,8 @@ const RichTextMenu: React.FC<{
   };
 
   return (
-    <div className={classes.menuContainer}>
-      <span className={classes.fieldLabel}>{label ?? 'Editable field'}</span>
+    <MenuContainer>
+      <FieldLabel>{label ?? 'Editable field'}</FieldLabel>
       {!disabled && (
         <>
           {enableHtml && (
@@ -312,7 +317,7 @@ const RichTextMenu: React.FC<{
           )}
           {enableCopyTemplates && (
             <>
-              {hasFormatting && <span className={classes.buttonSpacer}>&nbsp;</span>}
+              {hasFormatting && <ButtonSpacer>&nbsp;</ButtonSpacer>}
               {enableArticleCountTemplate && (
                 <button {...buttonProps} onClick={() => insertTemplate(ARTICLE_COUNT_TEMPLATE)}>
                   Articles
@@ -348,10 +353,7 @@ const RichTextMenu: React.FC<{
                 </button>
               )}
               {enableMParticleTemplates && (
-                <MParticleTemplateMenu
-                  insertTemplate={insertTemplate}
-                  buttonClassName={classes.button}
-                />
+                <MParticleTemplateMenu insertTemplate={insertTemplate} buttonSx={buttonSx(theme)} />
               )}
               {enableProductWeeklyTemplate && (
                 <button {...buttonProps} onClick={() => insertTemplate(PRICE_PRODUCT_WEEKLY)}>
@@ -360,60 +362,79 @@ const RichTextMenu: React.FC<{
               )}
               {enablePriceTemplates && (
                 <>
-                  <span className={classes.buttonSpacer}>&nbsp;</span>
-                  <div className={classes.dropdownMenu}>
+                  <ButtonSpacer>&nbsp;</ButtonSpacer>
+                  <DropdownMenu>
                     <button
                       {...buttonProps}
-                      className={`${buttonProps.className} ${classes.dropdownMenuToggle}`}
                       onClick={() => setPriceButtonsVisible((visible) => !visible)}
                     >
                       {priceButtonsVisible ? 'Prices ↑' : 'Prices ↓'}
                     </button>
-                    <menu
-                      className={
-                        priceButtonsVisible
-                          ? classes.dropdownMenuContent
-                          : classes.dropdownMenuContentHidden
-                      }
-                    >
-                      <div className={classes.fieldLabelPrices}>Price templates:</div>
-                      <button
-                        {...buttonProps}
-                        className={`${buttonProps.className} ${classes.dropdownMenuItem}`}
-                        onClick={() => insertTemplate(PRICE_DIGISUB_MONTHLY)}
-                      >
-                        Digisub monthly
-                      </button>
-                      <button
-                        {...buttonProps}
-                        className={`${buttonProps.className} ${classes.dropdownMenuItem}`}
-                        onClick={() => insertTemplate(PRICE_DIGISUB_ANNUAL)}
-                      >
-                        Digisub annual
-                      </button>
-                      <button
-                        {...buttonProps}
-                        className={`${buttonProps.className} ${classes.dropdownMenuItem}`}
-                        onClick={() => insertTemplate(PRICE_GUARDIANWEEKLY_MONTHLY)}
-                      >
-                        GW monthly
-                      </button>
-                      <button
-                        {...buttonProps}
-                        className={`${buttonProps.className} ${classes.dropdownMenuItem}`}
-                        onClick={() => insertTemplate(PRICE_GUARDIANWEEKLY_ANNUAL)}
-                      >
-                        GW annual
-                      </button>
-                    </menu>
-                  </div>
+                    {priceButtonsVisible ? (
+                      <DropdownMenuContent>
+                        <FieldLabelPrices>Price templates:</FieldLabelPrices>
+                        <button
+                          {...buttonProps}
+                          onClick={() => insertTemplate(PRICE_DIGISUB_MONTHLY)}
+                        >
+                          Digisub monthly
+                        </button>
+                        <button
+                          {...buttonProps}
+                          onClick={() => insertTemplate(PRICE_DIGISUB_ANNUAL)}
+                        >
+                          Digisub annual
+                        </button>
+                        <button
+                          {...buttonProps}
+                          onClick={() => insertTemplate(PRICE_GUARDIANWEEKLY_MONTHLY)}
+                        >
+                          GW monthly
+                        </button>
+                        <button
+                          {...buttonProps}
+                          onClick={() => insertTemplate(PRICE_GUARDIANWEEKLY_ANNUAL)}
+                        >
+                          GW annual
+                        </button>
+                      </DropdownMenuContent>
+                    ) : (
+                      <DropdownMenuContentHidden>
+                        <FieldLabelPrices>Price templates:</FieldLabelPrices>
+                        <button
+                          {...buttonProps}
+                          onClick={() => insertTemplate(PRICE_DIGISUB_MONTHLY)}
+                        >
+                          Digisub monthly
+                        </button>
+                        <button
+                          {...buttonProps}
+                          onClick={() => insertTemplate(PRICE_DIGISUB_ANNUAL)}
+                        >
+                          Digisub annual
+                        </button>
+                        <button
+                          {...buttonProps}
+                          onClick={() => insertTemplate(PRICE_GUARDIANWEEKLY_MONTHLY)}
+                        >
+                          GW monthly
+                        </button>
+                        <button
+                          {...buttonProps}
+                          onClick={() => insertTemplate(PRICE_GUARDIANWEEKLY_ANNUAL)}
+                        >
+                          GW annual
+                        </button>
+                      </DropdownMenuContentHidden>
+                    )}
+                  </DropdownMenu>
                 </>
               )}
             </>
           )}
         </>
       )}
-    </div>
+    </MenuContainer>
   );
 };
 
@@ -427,7 +448,6 @@ const RichTextEditorContent: React.FC<RichTextEditorProps & { editor: ProseKitEd
   updateCopy,
   rteMenuConstraints,
 }) => {
-  const classes = useRTEStyles();
   const readonlyExtension = useMemo(() => (disabled ? defineReadonly() : null), [disabled]);
   useExtension(readonlyExtension);
 
@@ -460,12 +480,12 @@ const RichTextEditorContent: React.FC<RichTextEditorProps & { editor: ProseKitEd
   const wrapperClasses = disabled ? 'prosekit-theme editor-disabled' : 'prosekit-theme';
 
   return (
-    <div className={classes.prosekitCustom}>
+    <ProsekitCustom>
       <RichTextMenu disabled={disabled} label={label} constraints={rteMenuConstraints ?? {}} />
       <div id={name ? `RTE-${name}` : undefined} className={wrapperClasses}>
-        <div
+        <EditorWrapper
           ref={mountEditor}
-          className={`${classes.editorWrapper} ProseMirror`}
+          className="ProseMirror"
           aria-readonly={disabled}
           onBlur={disabled ? undefined : save}
         />
@@ -473,8 +493,9 @@ const RichTextEditorContent: React.FC<RichTextEditorProps & { editor: ProseKitEd
           <FloatingLinkToolbar enabled />
         )}
       </div>
-      {helperText && <p className={error ? classes.errorText : classes.helperText}>{helperText}</p>}
-    </div>
+      {helperText &&
+        (error ? <ErrorText>{helperText}</ErrorText> : <HelperText>{helperText}</HelperText>)}
+    </ProsekitCustom>
   );
 };
 

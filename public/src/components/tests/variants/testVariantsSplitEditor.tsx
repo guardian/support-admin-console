@@ -1,5 +1,5 @@
-import { FormControl, FormControlLabel, Radio, RadioGroup, TextField, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { FormControl, FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React, { ReactElement, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -16,18 +16,18 @@ const randomMvt = (): number => Math.round(Math.random() * MAX_MVT);
 // adapted from https://stackoverflow.com/a/11832950
 const round = (n: number): number => Math.round((n + Number.EPSILON) * MAX_MVT) / MAX_MVT;
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  variantsContainer: {
-    display: 'flex',
-    margin: '15px 30px 0 30px',
-    '& > * + *': {
-      marginLeft: spacing(3),
-    },
-  },
-  variantField: {
-    backgroundColor: '#EEEEEE',
+const VariantsContainer = styled('div')(({ theme }) => ({
+  display: 'flex',
+  margin: '15px 30px 0 30px',
+  '& > * + *': {
+    marginLeft: theme.spacing(3),
   },
 }));
+const VariantField = styled(TextField)({
+  '& .MuiInputBase-root': {
+    backgroundColor: '#EEEEEE',
+  },
+});
 
 interface FormState {
   percentage?: number;
@@ -50,8 +50,6 @@ const TestVariantsSplitEditor: React.FC<TestVariantsSplitEditorProps> = ({
   onValidationChange,
   isDisabled,
 }: TestVariantsSplitEditorProps) => {
-  const classes = useStyles();
-
   const {
     register,
     handleSubmit,
@@ -133,7 +131,7 @@ const TestVariantsSplitEditor: React.FC<TestVariantsSplitEditorProps> = ({
       .filter((v) => v.name.toLowerCase() !== 'control')
       .map((variant) => (
         <div key={`${variant.name}_proportion`}>
-          <TextField
+          <VariantField
             value={+percentage.toFixed(2)}
             label={variant.name}
             helperText="This value cannot be edited"
@@ -141,9 +139,6 @@ const TestVariantsSplitEditor: React.FC<TestVariantsSplitEditorProps> = ({
             variant="outlined"
             fullWidth
             disabled={true}
-            InputProps={{
-              className: classes.variantField,
-            }}
           />
         </div>
       ));
@@ -173,7 +168,7 @@ const TestVariantsSplitEditor: React.FC<TestVariantsSplitEditorProps> = ({
         </RadioGroup>
 
         {controlProportionSettings && (
-          <div className={classes.variantsContainer}>
+          <VariantsContainer>
             <div>
               <TextField
                 error={errors.percentage !== undefined}
@@ -193,7 +188,7 @@ const TestVariantsSplitEditor: React.FC<TestVariantsSplitEditorProps> = ({
             </div>
 
             {renderVariants(controlProportionSettings.proportion)}
-          </div>
+          </VariantsContainer>
         )}
       </FormControl>
     </div>
