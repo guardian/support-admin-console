@@ -11,31 +11,30 @@ import {
   IconButton,
   Radio,
   RadioGroup,
-  Theme,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React, { useState } from 'react'; // eslint-disable-line @typescript-eslint/no-unused-vars -- Required for JSX compilation
 import { saveUserPermissions } from '../../utils/requests';
 import { PermissionLevel, UserPermissions } from '../channelManagement/helpers/shared';
 import { PermissionName, permissions } from './permissions';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  dialogHeader: {
-    display: 'flex',
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    paddingRight: spacing(1),
-  },
-  dialogTitle: {
-    wordBreak: 'break-word',
-    overflowWrap: 'break-word',
-    paddingRight: spacing(1),
-    flexShrink: 1,
-  },
-  formControl: {
-    marginBottom: spacing(3),
-  },
+const DialogHeader = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'flex-start',
+  justifyContent: 'space-between',
+  paddingRight: theme.spacing(1),
 }));
+
+const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
+  wordBreak: 'break-word',
+  overflowWrap: 'break-word',
+  paddingRight: theme.spacing(1),
+  flexShrink: 1,
+}));
+
+const StyledFormControl = styled(FormControl)(({ theme }) => ({
+  marginBottom: theme.spacing(3),
+})) as typeof FormControl;
 
 interface AccessManagementDialogProps {
   open: boolean;
@@ -50,8 +49,6 @@ const AccessManagementDialog = ({
   user,
   onUserUpdated,
 }: AccessManagementDialogProps) => {
-  const classes = useStyles();
-
   const getInitialPermissionValues = (): Record<PermissionName, PermissionLevel> => {
     if (!user) {
       return {};
@@ -96,22 +93,15 @@ const AccessManagementDialog = ({
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <div className={classes.dialogHeader}>
-        <DialogTitle className={classes.dialogTitle}>
-          Edit Permissions for {user?.email}
-        </DialogTitle>
+      <DialogHeader>
+        <StyledDialogTitle>Edit Permissions for {user?.email}</StyledDialogTitle>
         <IconButton onClick={onClose} size="small">
           <CloseIcon />
         </IconButton>
-      </div>
+      </DialogHeader>
       <DialogContent dividers>
         {permissions.map((perm) => (
-          <FormControl
-            key={perm.name}
-            component="fieldset"
-            className={classes.formControl}
-            fullWidth
-          >
+          <StyledFormControl key={perm.name} component="fieldset" fullWidth>
             <FormLabel component="legend">{perm.displayName}</FormLabel>
             <RadioGroup
               value={permissionValues[perm.name] ?? 'None'}
@@ -126,7 +116,7 @@ const AccessManagementDialog = ({
               <FormControlLabel value="Read" control={<Radio />} label="Read Only" />
               <FormControlLabel value="Write" control={<Radio />} label="Read & Write" />
             </RadioGroup>
-          </FormControl>
+          </StyledFormControl>
         ))}
       </DialogContent>
       <DialogActions>

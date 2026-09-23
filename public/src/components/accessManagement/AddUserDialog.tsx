@@ -12,31 +12,34 @@ import {
   Radio,
   RadioGroup,
   TextField,
-  Theme,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React, { useState } from 'react'; // eslint-disable-line @typescript-eslint/no-unused-vars -- Required for JSX compilation
 import { saveUserPermissions } from '../../utils/requests';
 import { PermissionLevel, UserPermissions } from '../channelManagement/helpers/shared';
 import { PermissionName, permissions } from './permissions';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  dialogHeader: {
-    display: 'flex',
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    paddingRight: spacing(1),
-  },
-  dialogTitle: {
-    wordBreak: 'break-word',
-    overflowWrap: 'break-word',
-    paddingRight: spacing(1),
-    flexShrink: 1,
-  },
-  formControl: {
-    marginBottom: spacing(3),
-  },
+const DialogHeader = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'flex-start',
+  justifyContent: 'space-between',
+  paddingRight: theme.spacing(1),
 }));
+
+const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
+  wordBreak: 'break-word',
+  overflowWrap: 'break-word',
+  paddingRight: theme.spacing(1),
+  flexShrink: 1,
+}));
+
+const EmailField = styled(TextField)(({ theme }) => ({
+  marginBottom: theme.spacing(3),
+}));
+
+const StyledFormControl = styled(FormControl)(({ theme }) => ({
+  marginBottom: theme.spacing(3),
+})) as typeof FormControl;
 
 interface AddUserDialogProps {
   open: boolean;
@@ -45,7 +48,6 @@ interface AddUserDialogProps {
 }
 
 const AddUserDialog = ({ open, onClose, onUserAdded }: AddUserDialogProps) => {
-  const classes = useStyles();
   const [email, setEmail] = useState('');
   const [selectedPermissions, setSelectedPermissions] = useState<
     Record<PermissionName, PermissionLevel>
@@ -91,14 +93,14 @@ const AddUserDialog = ({ open, onClose, onUserAdded }: AddUserDialogProps) => {
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-      <div className={classes.dialogHeader}>
-        <DialogTitle className={classes.dialogTitle}>Add New User</DialogTitle>
+      <DialogHeader>
+        <StyledDialogTitle>Add New User</StyledDialogTitle>
         <IconButton onClick={handleClose} size="small">
           <CloseIcon />
         </IconButton>
-      </div>
+      </DialogHeader>
       <DialogContent dividers>
-        <TextField
+        <EmailField
           autoFocus
           margin="dense"
           label="Email Address"
@@ -108,16 +110,10 @@ const AddUserDialog = ({ open, onClose, onUserAdded }: AddUserDialogProps) => {
           onChange={(e) => setEmail(e.target.value)}
           placeholder="user@guardian.co.uk"
           variant="outlined"
-          style={{ marginBottom: '24px' }}
         />
 
         {permissions.map((perm) => (
-          <FormControl
-            key={perm.name}
-            component="fieldset"
-            className={classes.formControl}
-            fullWidth
-          >
+          <StyledFormControl key={perm.name} component="fieldset" fullWidth>
             <FormLabel component="legend">{perm.displayName}</FormLabel>
             <RadioGroup
               value={selectedPermissions[perm.name] ?? 'None'}
@@ -127,7 +123,7 @@ const AddUserDialog = ({ open, onClose, onUserAdded }: AddUserDialogProps) => {
               <FormControlLabel value="Read" control={<Radio />} label="Read Only" />
               <FormControlLabel value="Write" control={<Radio />} label="Read & Write" />
             </RadioGroup>
-          </FormControl>
+          </StyledFormControl>
         ))}
       </DialogContent>
       <DialogActions>

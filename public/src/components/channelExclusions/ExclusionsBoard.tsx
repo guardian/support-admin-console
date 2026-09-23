@@ -1,5 +1,4 @@
-import { Theme } from '@mui/material/styles';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import withS3Data, { DataFromServer, InnerProps } from '../../hocs/withS3Data';
 import { ExclusionSettings } from '../../models/exclusions';
@@ -12,28 +11,28 @@ import {
 import ExclusionsSection from './ExclusionsSection';
 import { ChannelKey } from './util';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  wrapper: {
-    display: 'flex',
-    justifyContent: 'center',
-  },
-  gridContainer: {
-    marginTop: spacing(4),
-    marginLeft: spacing(4),
-    marginRight: spacing(4),
-    marginBottom: spacing(4),
-    overflowY: 'auto',
-    maxWidth: 1400,
-    width: '100%',
-    display: 'grid',
-    gridTemplateColumns: 'repeat(2, 1fr)',
-    alignItems: 'stretch',
-    gap: spacing(3),
-  },
-  gridItem: {
-    height: '100%',
-  },
+const Wrapper = styled('div')({
+  display: 'flex',
+  justifyContent: 'center',
+});
+
+const GridContainer = styled('div')(({ theme }) => ({
+  marginTop: theme.spacing(4),
+  marginLeft: theme.spacing(4),
+  marginRight: theme.spacing(4),
+  marginBottom: theme.spacing(4),
+  overflowY: 'auto',
+  maxWidth: 1400,
+  width: '100%',
+  display: 'grid',
+  gridTemplateColumns: 'repeat(2, 1fr)',
+  alignItems: 'stretch',
+  gap: theme.spacing(3),
 }));
+
+const GridItem = styled('div')({
+  height: '100%',
+});
 
 const CHANNEL_LABELS: Record<ChannelKey, string> = {
   epic: 'Epic',
@@ -50,8 +49,6 @@ const ExclusionsBoard: React.FC<InnerProps<ExclusionSettings>> = ({
   updateAndSendToS3,
   saving,
 }) => {
-  const classes = useStyles();
-
   const handleUpdateSettings = (updatedSettings: ExclusionSettings) => {
     update(updatedSettings);
   };
@@ -61,11 +58,11 @@ const ExclusionsBoard: React.FC<InnerProps<ExclusionSettings>> = ({
   };
 
   return (
-    <div className={classes.wrapper}>
-      <div className={classes.gridContainer}>
+    <Wrapper>
+      <GridContainer>
         {(Object.keys(CHANNEL_LABELS) as ChannelKey[]).map((channel) => {
           return (
-            <div key={channel} className={classes.gridItem}>
+            <GridItem key={channel}>
               <ExclusionsSection
                 channel={channel}
                 label={CHANNEL_LABELS[channel]}
@@ -75,11 +72,11 @@ const ExclusionsBoard: React.FC<InnerProps<ExclusionSettings>> = ({
                 onUpdateSettings={handleUpdateSettings}
                 onPersistSettings={handlePersistSettings}
               />
-            </div>
+            </GridItem>
           );
         })}
-      </div>
-    </div>
+      </GridContainer>
+    </Wrapper>
   );
 };
 

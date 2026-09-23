@@ -1,49 +1,49 @@
 import { Button, Tooltip, Typography } from '@mui/material';
-import { Theme } from '@mui/material/styles';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 
-const useStyles = makeStyles(({ typography, palette }: Theme) => ({
-  container: {
-    margin: 'auto',
-    marginTop: '15px',
-    maxWidth: '70%',
-  },
-  emphasis: {
-    fontWeight: 700,
-  },
-  grid: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    overflow: 'hidden',
-    gap: '15px',
-  },
-  column: {
-    border: `solid 1px ${palette.grey[400]}`,
-    padding: '5px 15px',
-    margin: '5px',
-    justifySelf: 'stretch',
-    flexBasis: '50%',
-    flexGrow: 0,
-  },
-  btn: {
-    display: 'block',
-    border: 'solid 1px #ccc',
-    width: '100%',
-    margin: '15px 0',
-    padding: '5px',
-    borderRadius: '8px',
-    backgroundColor: palette.grey[300],
-    textDecoration: 'none',
-    fontSize: typography.pxToRem(20),
-  },
+const Container = styled('div')({
+  margin: 'auto',
+  marginTop: '15px',
+  maxWidth: '70%',
+});
+
+const Emphasis = styled('em')({
+  fontWeight: 700,
+});
+
+const Grid = styled('div')({
+  display: 'flex',
+  justifyContent: 'space-between',
+  overflow: 'hidden',
+  gap: '15px',
+});
+
+const Column = styled('div')({
+  border: 'solid 1px #bdbdbd',
+  padding: '5px 15px',
+  margin: '5px',
+  justifySelf: 'stretch',
+  flexBasis: '50%',
+  flexGrow: 0,
+});
+
+const Btn = styled(Button)(({ theme }) => ({
+  display: 'block',
+  border: 'solid 1px #ccc',
+  width: '100%',
+  margin: '15px 0',
+  padding: '5px',
+  borderRadius: '8px',
+  backgroundColor: theme.palette.grey[300],
+  textDecoration: 'none',
+  fontSize: theme.typography.pxToRem(20),
 }));
 
 const Bookmarklets: React.FC = () => {
-  const classes = useStyles();
   const instruction = 'Drag me into your bookmarks bar to use when on the Guardian Website';
   return (
-    <div className={classes.container}>
+    <Container>
       <Typography variant="body1" paragraph>
         There are a couple ways to force your browser show you banners or epics on The Guardian
         website, depending on how specific you want it to be. To see a specific banner/epic or
@@ -98,130 +98,109 @@ const Bookmarklets: React.FC = () => {
         </li>
       </ol>
       <Typography variant="body1" paragraph>
-        <em className={classes.emphasis}>
+        <Emphasis>
           NOTE: For use on <a href="https://www.theguardian.com">theguardian.com</a> only (they will
           not do anything when clicked if you’re not on The Guardian’s website)
-        </em>
+        </Emphasis>
       </Typography>
-      <div className={classes.grid}>
-        <div className={classes.column}>
+      <Grid>
+        <Column>
           <Typography variant="h3">As a non-supporter</Typography>
           <em color="text.secondary">(to see normal acquisition messaging)</em>
           <Tooltip title={instruction} arrow placement="bottom-end">
-            <Button
-              href="javascript:window.guardian.readerRevenue.showMeTheEpic()"
-              className={classes.btn}
-              color="primary"
-            >
+            <Btn href="javascript:window.guardian.readerRevenue.showMeTheEpic()" color="primary">
               Show me the epic!
-            </Button>
+            </Btn>
           </Tooltip>
           <Tooltip title={instruction} arrow placement="bottom-end">
-            <Button
-              href="javascript:window.guardian.readerRevenue.showMeTheBanner()"
-              className={classes.btn}
-              color="primary"
-            >
+            <Btn href="javascript:window.guardian.readerRevenue.showMeTheBanner()" color="primary">
               Show me the banner!
-            </Button>
+            </Btn>
           </Tooltip>
           <Tooltip title={instruction} arrow placement="bottom-end">
-            <Button
+            <Btn
               href="javascript:window.guardian.readerRevenue.showMeTheDoubleBanner()"
-              className={classes.btn}
               color="primary"
             >
               Show me the double banner!
-            </Button>
+            </Btn>
           </Tooltip>
           <Tooltip title={instruction} arrow placement="bottom-end">
-            <Button
-              href="javascript:window.guardian.readerRevenue.showNextVariant()"
-              className={classes.btn}
-              color="primary"
-            >
+            <Btn href="javascript:window.guardian.readerRevenue.showNextVariant()" color="primary">
               Next variant
-            </Button>
+            </Btn>
           </Tooltip>
           <Tooltip title={instruction} arrow placement="bottom-end">
-            <Button
+            <Btn
               href="javascript:window.guardian.readerRevenue.showPreviousVariant()"
-              className={classes.btn}
               color="primary"
             >
               Previous variant
-            </Button>
+            </Btn>
           </Tooltip>
           <Tooltip title={instruction} arrow placement="bottom-end">
-            <Button
+            <Btn
               href="javascript:window.guardian.readerRevenue.changeGeolocation()"
-              className={classes.btn}
               color="primary"
             >
               Change geolocation
-            </Button>
+            </Btn>
           </Tooltip>
-        </div>
-        <div className={classes.column}>
+        </Column>
+        <Column>
           <Typography variant="h3">As a supporter</Typography>
           <em>(e.g. to see a supporter specific epic)</em>
           <Tooltip title={instruction} arrow placement="bottom-end">
-            <Button
+            <Btn
               href="javascript:window.guardian.readerRevenue.showMeTheEpic(true);"
-              className={classes.btn}
               color="primary"
             >
               Show me the epic!
-            </Button>
+            </Btn>
           </Tooltip>
           <Tooltip title={instruction} arrow placement="bottom-end">
-            <Button
+            <Btn
               href="javascript:window.guardian.readerRevenue.showMeTheBanner(true)"
-              className={classes.btn}
               color="primary"
             >
               Show me the banner!
-            </Button>
+            </Btn>
           </Tooltip>
           <Tooltip title={instruction} arrow placement="bottom-end">
-            <Button
+            <Btn
               href="javascript:window.guardian.readerRevenue.showMeTheDoubleBanner(true)"
-              className={classes.btn}
               color="primary"
             >
               Show me the double banner!
-            </Button>
+            </Btn>
           </Tooltip>
           <Tooltip title={instruction} arrow placement="bottom-end">
-            <Button
+            <Btn
               href="javascript:window.guardian.readerRevenue.showNextVariant(true)"
-              className={classes.btn}
               color="primary"
             >
               Next variant
-            </Button>
+            </Btn>
           </Tooltip>
           <Tooltip title={instruction} arrow placement="bottom-end">
-            <Button
+            <Btn
               href="javascript:window.guardian.readerRevenue.showPreviousVariant(true)"
-              className={classes.btn}
               color="primary"
             >
               Previous variant
-            </Button>
+            </Btn>
           </Tooltip>
           <Tooltip title={instruction} arrow placement="bottom-end">
-            <Button
+            <Btn
               href="javascript:window.guardian.readerRevenue.changeGeolocation(true)"
-              className={classes.btn}
               color="primary"
             >
               Change geolocation
-            </Button>
+            </Btn>
           </Tooltip>
-        </div>
-      </div>
-    </div>
+        </Column>
+      </Grid>
+    </Container>
   );
 };
 
