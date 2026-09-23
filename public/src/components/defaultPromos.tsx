@@ -1,5 +1,5 @@
 import { Button, TextField } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React, { useState } from 'react';
 import withS3Data, { InnerProps } from '../hocs/withS3Data';
 import { parsePromoInput } from '../utils/parsePromoInput';
@@ -13,17 +13,13 @@ type ProductName = 'guardianWeekly' | 'paper' | 'digital' | 'supporterPlus' | 't
 
 type DefaultPromos = Record<ProductName, string[]>;
 
-const useStyles = makeStyles(() => ({
-  container: {
-    margin: '30px',
-    maxWidth: '500px',
-    display: 'flex',
-    flexDirection: 'column',
-    '& > * + *': {
-      marginTop: '16px',
-    },
-  },
-}));
+const Container = styled('div')({
+  margin: '30px',
+  maxWidth: '500px',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '16px',
+});
 
 const DefaultPromos: React.FC<InnerProps<DefaultPromos>> = ({
   data,
@@ -39,10 +35,8 @@ const DefaultPromos: React.FC<InnerProps<DefaultPromos>> = ({
   );
   const [tierThreePromosString, setTierThreePromos] = useState<string>(data.tierThree.join(', '));
 
-  const classes = useStyles();
-
   return (
-    <div className={classes.container}>
+    <Container>
       <TextField
         value={gwPromosString}
         name="guardianWeeklyDefaultPromos"
@@ -138,7 +132,7 @@ const DefaultPromos: React.FC<InnerProps<DefaultPromos>> = ({
       >
         Submit
       </Button>
-    </div>
+    </Container>
   );
 };
 

@@ -10,10 +10,9 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Theme,
   Typography,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React, { useEffect } from 'react';
 import { hasPermission } from '../../utils/permissions';
 import { fetchUsersWithPermissions, FrontendSettingsType } from '../../utils/requests';
@@ -22,40 +21,31 @@ import AddUserDialog from './AddUserDialog';
 import { permissions } from './permissions';
 import AccessManagementDialog from './UpdatePermissionsDialog';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  container: {
-    padding: spacing(4),
-  },
-  tableContainer: {
-    marginTop: spacing(2),
-  },
-  permissionItem: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: spacing(1),
-    marginBottom: spacing(0.5),
-  },
-  permissionIcon: {
-    fontSize: '18px',
-  },
-  dialogHeader: {
-    display: 'flex',
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    paddingRight: spacing(1),
-  },
-  dialogTitle: {
-    wordBreak: 'break-word',
-    overflowWrap: 'break-word',
-    paddingRight: spacing(1),
-    flexShrink: 1,
-  },
-  formControl: {
-    marginBottom: spacing(3),
-  },
-  addUserButton: {
-    marginTop: spacing(3),
-  },
+const Container = styled('div')(({ theme }) => ({
+  padding: theme.spacing(4),
+}));
+
+const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
+  marginTop: theme.spacing(2),
+})) as typeof TableContainer;
+
+const PermissionItem = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  gap: theme.spacing(1),
+  marginBottom: theme.spacing(0.5),
+}));
+
+const PermissionEditIcon = styled(EditIcon)({
+  fontSize: '18px',
+});
+
+const PermissionVisibilityIcon = styled(VisibilityIcon)({
+  fontSize: '18px',
+});
+
+const AddUserButton = styled(Button)(({ theme }) => ({
+  marginTop: theme.spacing(3),
 }));
 
 const formatPermissionName = (name: string): string => {
@@ -69,7 +59,6 @@ const formatPermissionName = (name: string): string => {
 };
 
 const AccessManagement = () => {
-  const classes = useStyles();
   const [users, setUsers] = React.useState<UserPermissions[]>();
   const [loading, setLoading] = React.useState(false);
   const [editModalOpen, setEditModalOpen] = React.useState(false);
@@ -116,13 +105,13 @@ const AccessManagement = () => {
     setAddUserModalOpen(false);
   };
   return (
-    <div className={classes.container}>
+    <Container>
       {loading ? (
         <Typography>Loading...</Typography>
       ) : (
         <div>
           {users && users.length > 0 ? (
-            <TableContainer component={Paper} className={classes.tableContainer}>
+            <StyledTableContainer component={Paper}>
               <Table>
                 <TableHead>
                   <TableRow>
@@ -137,23 +126,20 @@ const AccessManagement = () => {
                       <TableCell>{user.email}</TableCell>
                       <TableCell>
                         {user.permissions.map((perm) => (
-                          <div
-                            key={`${user.email}-${perm.name}`}
-                            className={classes.permissionItem}
-                          >
+                          <PermissionItem key={`${user.email}-${perm.name}`}>
                             <span>{formatPermissionName(perm.name)}:</span>
                             {perm.permission === 'Write' ? (
                               <>
-                                <EditIcon className={classes.permissionIcon} color="primary" />
+                                <PermissionEditIcon color="primary" />
                                 <strong>Read & Write</strong>
                               </>
                             ) : (
                               <>
-                                <VisibilityIcon className={classes.permissionIcon} color="action" />
+                                <PermissionVisibilityIcon color="action" />
                                 <strong>Read only</strong>
                               </>
                             )}
-                          </div>
+                          </PermissionItem>
                         ))}
                       </TableCell>
                       {canEditPermissions && (
@@ -172,21 +158,20 @@ const AccessManagement = () => {
                   ))}
                 </TableBody>
               </Table>
-            </TableContainer>
+            </StyledTableContainer>
           ) : (
             <Typography>No users found.</Typography>
           )}
 
           {canEditPermissions && (
-            <Button
+            <AddUserButton
               variant="contained"
               color="primary"
               startIcon={<AddIcon />}
               onClick={() => setAddUserModalOpen(true)}
-              className={classes.addUserButton}
             >
               Add user
-            </Button>
+            </AddUserButton>
           )}
         </div>
       )}
@@ -205,7 +190,7 @@ const AccessManagement = () => {
         onClose={() => setAddUserModalOpen(false)}
         onUserAdded={handleUserAdded}
       />
-    </div>
+    </Container>
   );
 };
 

@@ -1,22 +1,18 @@
 import Button from '@mui/material/Button';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import { styled } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
-import { makeStyles } from '@mui/styles';
 import React from 'react';
 import withS3Data, { InnerProps } from '../hocs/withS3Data';
 import { AppsSettingsType, fetchAppsSettings, saveAppsSettings } from '../utils/requests';
 
-const useStyles = makeStyles(() => ({
-  container: {
-    margin: '30px',
-    maxWidth: '500px',
-    display: 'flex',
-    flexDirection: 'column',
-    '& > * + *': {
-      marginTop: '5px',
-    },
-  },
-}));
+const Container = styled('div')({
+  margin: '30px',
+  maxWidth: '500px',
+  display: 'flex',
+  flexDirection: 'column',
+  '& > * + *': { marginTop: '5px' },
+});
 
 type SwitchName = 'enabled' | 'excludeBreakingNews' | 'requireApiKey';
 
@@ -56,8 +52,6 @@ const AppsMeteringSwitches: React.FC<InnerProps<AppsMeteringSwitches>> = ({
   sendToS3,
   saving,
 }: InnerProps<AppsMeteringSwitches>) => {
-  const classes = useStyles();
-
   const onSwitchChange = (name: SwitchName, enabled: boolean): void => {
     update({
       ...switches,
@@ -66,7 +60,7 @@ const AppsMeteringSwitches: React.FC<InnerProps<AppsMeteringSwitches>> = ({
   };
 
   return (
-    <div className={classes.container}>
+    <Container>
       <AppsMeteringSwitch
         name="enabled"
         label="Enable apps metering"
@@ -96,7 +90,7 @@ const AppsMeteringSwitches: React.FC<InnerProps<AppsMeteringSwitches>> = ({
       >
         Submit
       </Button>
-    </div>
+    </Container>
   );
 };
 
